@@ -11,10 +11,11 @@
 require_once 'Intraface/Weblogin.php';
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/Intranet.php';
+require_once 'Intraface/modules/contact/Contact.php';
 require_once 'XML/RPC2/Server.php';
 require_once 'MDB2.php';
 
-class Intraface_Contact {
+class Intraface_XMLRPC_Contact {
 
 	private $credentials;
 	private $kernel;
@@ -32,7 +33,7 @@ class Intraface_Contact {
 
 		$contact = new Contact($this->kernel, $id);
 		if (!$contact->get('id') > 0) { // -4
-			throw Exception('Kontakten findes ikke');
+			throw new XML_RPC2_FaultException('contact does not exist', -4);
 		}
 		$contact_info = array_merge($contact->get(), $contact->address->get());
 		$contact_info['id'] = $contact->get('id');
@@ -47,14 +48,13 @@ class Intraface_Contact {
 	 * Authenticates a contact
 	 *
 	 * @param  struct  $credentials
-	 * @param  string  $type
-	 * @param  string  $value
+	 * @param  string  $contact_key
 	 * @return array
 	 */
-	function authenticateContact($credentials, $type, $value) {
+	function authenticateContact($credentials, $contact_key) {
 		$this->checkCredentials($credentials);
 
-		$contact = Contact::factory($this->kernel, $type, $value);
+		$contact = Contact::factory($this->kernel, 'code', $contact_key);
 		if (!is_object($contact) OR !$contact->get('id') > 0) {
 			return 0;
 		}
@@ -80,7 +80,7 @@ class Intraface_Contact {
 		$this->checkCredentials($credentials);
 
 		if (!is_array($input)) { // -5
-			throw Exception('Det andet parameter er ikke et array');
+			throw new XML_RPC2_FaultException('input is no an array', -5);
 		}
 
 		$values = $input;
@@ -89,7 +89,7 @@ class Intraface_Contact {
 
 		if (!$contact->save($values)) {
 			$contact->error->view(); // -6
-			throw Exception('Du kunne ikke opdatere');
+			throw new XML_RPC2_FaultException('could not update contact', -6);
 		}
 
 		return true;
@@ -201,7 +201,7 @@ class Intraface_Contact {
 			throw new XML_RPC2_FaultException('supply a session_id', -5);
 		}
 
-		$weblogin = new Weblogin();
+		$weblogin = new Weblogin('some session');
 		if (!$intranet_id = $weblogin->auth('private', $credentials['private_key'], $credentials['session_id'])) {
 			throw new XML_RPC2_FaultException('access to intranet denied', -2);
 		}

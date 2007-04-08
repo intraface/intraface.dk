@@ -19,6 +19,6 @@ if (!file_exists($config_file)) {
 	die('The config.local.php file is missing. Please create it.');
 }
 
-require $config_file;
-require PATH_INCLUDE . 'common.php';
+require_once $config_file;
+require_once 'Intraface/common.php';
 ?>

@@ -1,6 +1,6 @@
 <?php
 require('../../include_first.php');
-require(PATH_INCLUDE_COMMON . 'tools/Eniro.php');
+require_once 'Services/Eniro/Eniro.php';
 
 $contact_module = $kernel->module('contact');
 $translation = $kernel->getTranslation('contact');
@@ -12,8 +12,7 @@ $redirect = Redirect::factory($kernel, 'receive');
 if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
 	$contact = new Contact($kernel, $_POST['id']);
 
-
-	$eniro = new Eniro(ENIRO_PINCODE, ENIRO_INDTYPE);
+	$eniro = new Services_Eniro(ENIRO_PINCODE, ENIRO_INDTYPE);
 	$value = $_POST;
 
 	if ($oplysninger = $eniro->find('telefon', $_POST['eniro_phone'])) {

@@ -1,13 +1,11 @@
 <?php
-require_once dirname(__FILE__) . '/../config.local.php';
+require_once dirname(__FILE__) . '/../config.test.php';
 
 require_once 'simpletest/unit_tester.php';
 require_once 'simpletest/reporter.php';
 require_once 'simpletest/mock_objects.php';
 
-require_once PROJECT_PATH_ROOT . 'intraface.dk/config.local.php';
-require_once PATH_INCLUDE . 'common.php';
-require_once PATH_INCLUDE . 'common/core/Module.php';
+require_once 'Intraface/Module.php';
 
 class ModuleTestCase extends UnitTestCase {
 
@@ -23,6 +21,11 @@ class ModuleTestCase extends UnitTestCase {
 
 }
 
-$test = &new ModuleTestCase();
-$test->run(new HtmlReporter());
+if (!isset($this)) {
+	$test = new ModuleTestCase;
+	if (TextReporter::inCli()) {
+		exit($test->run(new TextReporter()) ? 0 : 1);
+	}
+	$test->run(new HtmlReporter());
+}
 ?>

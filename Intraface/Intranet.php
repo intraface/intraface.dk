@@ -7,7 +7,9 @@
  * @version 002
  */
 
-require_once 'Standard.php';
+require_once 'Intraface/Standard.php';
+require_once 'Intraface/Error.php';
+require_once 'Intraface/Address.php';
 
 class Intranet extends Standard {
 	public $address;
@@ -29,7 +31,7 @@ class Intranet extends Standard {
 		*/
 		$this->id = intval($id);
 		// $this->kernel = &$kernel;
-		$this->db = & MDB2::singleton(DB_DSN);
+		$this->db = MDB2::singleton(DB_DSN);
 		$this->error = new Error();
 
 		if(!$this->load()) {
@@ -39,9 +41,9 @@ class Intranet extends Standard {
 
 
 	function load() {
-		$this->db = & MDB2::singleton(DB_DSN);
+		$this->db = MDB2::singleton(DB_DSN);
 
-		$result =& $this->db->query("SELECT
+		$result = $this->db->query("SELECT
 				id,
 				name,
 				identifier,
@@ -83,7 +85,6 @@ class Intranet extends Standard {
 	}
 
 	function hasModuleAccess($module) {
-		//$db = new Db_sql;
 
 		if(is_string($module)) {
 			if (empty($this->modules)) {
@@ -124,33 +125,5 @@ class Intranet extends Standard {
 		}
 		return false;
 	}
-
-	/**
-	 * @param $module kan både være streng og id
-	 */
-	 /*
-	function hasModuleAccess($module) {
-		$db = new Db_sql;
-
-		if(is_string($module)) {
-			$db->query("SELECT id FROM module WHERE name = '".$module."'");
-			if($db->nextRecord()) {
-				$module_id = $db->f('id');
-			}
-			else {
-				trigger_error('Ugyldig modulnavn', E_USER_ERROR);
-			}
-		}
-		else {
-			$module_id = intval($module);
-		}
-
-
-
-		$db->query("SELECT id FROM permission WHERE intranet_id = ".$this->id." AND user_id = 0 AND module_id = ".$module_id);
-		return ($db->nextRecord());
-	}
-	*/
-
 }
 ?>

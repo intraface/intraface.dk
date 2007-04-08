@@ -1,10 +1,10 @@
 <?php
 /**
  * User and rights management
- * 
+ *
  * NOTICE: Keep in mind the relation between User.php, UserAdministration.php and UserMaintenance.php
  * User.php is ONLY for the function that the normal user is allowed to. That means NOT create other users. The user should not be allowed to change is own rights.
- * UserAdministration.php is for the administrator of the intranet. Can create new user. Administrator is not allowed to disable a User, as it will affect all intranets. 
+ * UserAdministration.php is for the administrator of the intranet. Can create new user. Administrator is not allowed to disable a User, as it will affect all intranets.
  * UserMaintenance.php is for overall maintenance team. Should be allowed everthing.
  *
  * @package Intraface
@@ -14,7 +14,10 @@
  * @version @package-version@
  */
 
-require_once 'Standard.php';
+require_once 'Intraface/Standard.php';
+require_once 'Intraface/Error.php';
+require_once 'Intraface/Address.php';
+require_once 'MDB2.php';
 
 class User extends Standard {
 	public $db; // to be accessed from extended UserMaintenance.

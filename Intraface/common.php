@@ -12,11 +12,10 @@
 require_once 'config/configuration.php'; // this is the one in your source control
 
 // errorhandler php5
-require_once PATH_INCLUDE_3PARTY . 'Error'.DIRECTORY_SEPARATOR.'ErrorConfig.php';
-require_once PATH_INCLUDE_3PARTY . 'Error'.DIRECTORY_SEPARATOR.'ErrorHandler.php';
+require_once 'ErrorHandler/ErrorHandler.php';
 
 // settings for theme
-require_once PATH_INCLUDE_CONFIG . 'setting_themes.php';
+require_once 'Intraface/config/setting_themes.php';
 
 // functions
 require_once 'Intraface/functions/functions.php';
@@ -61,9 +60,9 @@ $db->setOption('debug', MDB2_DEBUG);
 if ($db->getOption('debug')) {
 	$db->setOption('log_line_break', "\n\n\n\n\t");
 
-	require_once 'Intraface/ExplainQueries.php';
+	require_once 'MDB2/Debug/ExplainQueries.php';
 
-	$my_debug_handler = new MDB2_ExplainQueries($db);
+	$my_debug_handler = new MDB2_Debug_ExplainQueries($db);
 	$db->setOption('debug_handler', array($my_debug_handler, 'collectInfo'));
 
 	register_shutdown_function(array($my_debug_handler, 'executeAndExplain'));

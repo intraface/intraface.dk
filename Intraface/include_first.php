@@ -45,7 +45,7 @@ $params = array(
 	'strings_default_table' => LANGUAGE_TABLE_PREFIX.'i18n'
 );
 
-require_once('Translation2/Translation2.php');
+require_once 'Translation2.php';
 
 $translation = Translation2::factory('MDB2', $dbinfo, $params);
 //always check for errors. In this examples, error checking is omitted

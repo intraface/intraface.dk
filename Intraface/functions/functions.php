@@ -59,21 +59,23 @@ function dateToDb() {
 }
 
 
-require('3Party/wordpress/functions-formatting.php');
-require('3Party/markdown/markdown.php');
-require('3Party/smartypants/smartypants.php');
-
 function autoop($text) {
+	require_once '3Party/wordpress/functions-formatting.php';
+	require_once 'markdown.php';
+	require_once '3Party/smartypants/smartypants.php';
+
 	$text = MarkDown($text);
 	$text = SmartyPants($text);
 	return wpautop($text); // wordpress function
 }
 
 function email($email) {
+	require_once '3Party/wordpress/functions-formatting.php';
 	return antispambot($email); // wordpress function
 }
 
 function autoclicable($string) {
+	require_once '3Party/wordpress/functions-formatting.php';
 	return make_clickable($string); // wordpress function
 }
 

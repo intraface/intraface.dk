@@ -9,6 +9,8 @@
  * @version @package-version@
  */
 
+require_once 'MDB2.php';
+
 class Weblogin  {
 
 	private $db;
