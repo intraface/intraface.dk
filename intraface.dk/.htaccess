@@ -1,0 +1,18 @@
+# så man ikke kan give variable videre som en reference
+php_flag allow_call_time_pass_reference Off
+
+# register globals må ikke bruges
+php_flag register_globals off
+
+# til at sætte en session_handler
+# bruges sammen med mysq_session_handler - jf. include_first.php
+#php_value session.save_handler 'user'
+#php_value session.save_path 'php_sessions'
+
+# transperante sessions væk
+<IfModule mod_php4.c>
+	php_flag session.use_trans_sid off
+</IfModule>
+
+ErrorDocument 404 /errorpages/404.php
+Options -Indexes

@@ -1,0 +1,54 @@
+#branding {
+	background: black; /*#70C40C;*/ /* 2ED351 B61B0A */
+	display: block;
+}
+
+#branding h1 {
+	font-size: 1.2em;
+	color: #ccc;
+	margin: 0 0 0 2%;
+}
+
+#branding div {
+	display: none;
+}
+
+#navigation-site {
+	background: #BFBFBF; /*#1079e7;*( /* BFBFBF */
+	border-bottom: 1px solid #999;
+}
+	
+#navigation-site a {
+	color: black;
+}
+
+#navigation-site a:hover {
+	color: black;
+}
+	
+ul#navigation-site li:first-child {
+	padding-left: 20px;
+}
+	
+#navigation-sub {
+	background: #f4f4f4;
+	border-bottom: 1px solid #999;
+}
+
+#navigation-sub a {
+	color: #666;
+}
+	
+#navigation-sub a:hover {
+	color: black;
+}
+
+#navigation-user {
+	top: 0.5em;
+}
+
+#navigation-user li a {
+	color: white;
+
+}
+

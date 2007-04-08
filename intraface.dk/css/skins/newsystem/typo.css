@@ -1,0 +1,192 @@
+#branding {
+	background: #003063; /*#70C40C;*/ /* 2ED351 B61B0A */
+	color: black;
+	display: block;
+}
+
+#branding h1 {
+	font-size: 1.2em;
+	color: #FFD700;
+	margin: 0 0 0 2%;
+}
+
+#branding div {
+	display: none;
+}
+
+#navigation-site {
+	border: none;
+	background: #185184; /*#1079e7;*( /* BFBFBF */
+	border-bottom: 1px solid #999;
+}
+
+#navigation-site a {
+	color: #ccc;
+}
+
+#navigation-site a:hover {
+	color: #FFD700;
+}
+
+ul#navigation-site li:first-child {
+	padding-left: 20px;
+}
+
+#navigation-sub {
+	border: none;
+	background: #f4f4f4;
+	border-bottom: 1px solid #999;
+}
+
+#navigation-sub a {
+	color: #666;
+}
+
+#navigation-sub a:hover {
+	color: black;
+}
+
+#navigation-user {
+	top: 0.5em;
+}
+
+#navigation-user li a {
+	color: white;
+
+}
+
+caption {
+	border: none;
+	background: none;
+	text-align: center;
+	font-weight: bold;
+	width: 100%;
+	padding: 0.2em;
+	margin: 0;
+	border-bottom: 1px solid #C1DAD7;
+
+}
+
+fieldset {
+	border: none;
+	border-top: 1px solid #C9DCA6;
+	background: url(../images/fieldset-bg.jpg) left bottom repeat-x;
+
+}
+thead th {
+	color: #4f6b72;
+	background: url(../images/table-thead-th.jpg) left bottom repeat-x;
+}
+
+a.vcard {
+	background: url(../images/icons/silk/vcard.png) no-repeat left top;
+	padding-left: 20px;
+}
+
+a.edit {
+	/*
+	background:#F60;
+	border:1px solid;
+	border-color:#FC9 #630 #330 #F96;
+	padding:0 3px;
+	font:bold 10px verdana,sans-serif;
+	color:#FFF;
+	text-decoration:none;
+	margin:4px;
+	text-transform: uppercase;
+	letter-spacing: 0;
+	*/
+	background: url(../images/icons/silk/page_edit.png) no-repeat left top;
+	padding-left: 20px;
+}
+
+a.delete {
+	/*
+	background:red;
+	border:1px solid;
+	border-color:#FC9 #630 #330 #F96;
+	padding:0 3px;
+	font:bold 10px verdana,sans-serif;
+	color:#FFF;
+	text-decoration:none;
+	margin:4px;
+	text-transform: uppercase;
+	letter-spacing: 0;
+ 	*/
+
+	background: url(../images/icons/silk/delete.png) no-repeat left top;
+	padding-left: 20px;
+
+}
+
+li a.edit {
+	font-size: 100%;
+	padding: 0  0 0 20px;
+background: url(../images/icons/silk/page_edit.png) no-repeat left;
+}
+/*
+a.setting{
+	background: url(../images/icons/silk/setting.png) no-repeat;
+	padding-left: 20px;
+
+}
+*/
+
+a.new {
+	background: url(../images/icons/silk/application_add.png) no-repeat;
+	padding-left: 20px;
+}
+
+a.stylesheet {
+	background: url(../images/icons/silk/css.png) no-repeat;
+	padding-left: 20px;
+}
+
+a.template {
+	background: url(../images/icons/silk/newspaper.png) no-repeat;
+	padding-left: 20px;
+}
+
+.message {
+	background: #F8D3E4;
+	padding: 0.5em;
+	border: 2px solid #F09EC4;
+	/* #FFFF99 #FFFF11 */
+}
+
+.message-dependent {
+	margin-top: 1em;
+	margin-bottom: 1em;
+
+	background: #FFFF99;
+	padding: 0.5em;
+	border: 2px solid #FFFF11;
+}
+
+
+/*
+.advice {
+	background: #CDEAF9;
+	padding: 1em;
+	border: 1px solid #96D4F3;
+}
+
+
+.warning, .alert {
+	padding: 0.5em;
+	border: 2px solid #FFFF5C;
+	font-weight: bold;
+	background: #FFFF99 url(../images/icons/silk/exclamation.png) 10px center no-repeat;
+	padding: 0.5em;
+	padding-left: 35px;
+}
+
+.error {
+	background: #FF6666 url(../images/icons/silk/error.png) 10px center no-repeat;
+	padding: 0.5em;
+	border: 2px solid #FF2929;
+	color: black;
+	font-weight: bold;
+	padding-left: 35px;
+}
+*/

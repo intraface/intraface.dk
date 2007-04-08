@@ -1,0 +1,39 @@
+# don't use " around settings
+# if using backslashes (win) use two each time
+
+project.name = intraface2
+project.root.build = c:\\checkout\\
+project.root.backup = c:\\checkout\\
+project.directory.public = ./intraface.dk/
+project.directory.secure = ./intraface/
+
+svn.ant.dir = C:\\Program Files\\eclipse\\plugins\\svnant-1.1.0-RC2\\lib\\
+svn.projecturl = http://svn.intraface.dk/intraface/release_1_0/trunk
+svn.username = xxx
+svn.password = xxx
+svn.revision = HEAD
+svn.javahl = true
+
+test.acceptance.lib.dir = c:\\wamp\\php\\PEAR\\Testing\\
+test.acceptance.base.url = http://staging.intraface.dk
+test.acceptance.web.host.name = staging.intraface.dk
+test.acceptance.web.port = 80
+test.acceptance.suite = testSuite.html
+test.acceptance.reports.dir = reports/
+test.acceptance.selenium.timeout = 360000
+test.acceptance.selenium.rc.port = 4445
+test.acceptance.browser = *iexplore
+
+ftp.staging.server = xxx
+ftp.staging.user = xxx
+ftp.staging.password = xxx
+ftp.staging.directory = ./
+ftp.staging.directory.public = ./staging.intraface.dk/
+ftp.staging.directory.secure = ./staging_intraface/
+
+ftp.production.server = xxx
+ftp.production.user = xxx
+ftp.production.password = xxx
+ftp.production.directory = ./
+ftp.production.directory.public = ./intraface.dk/
+ftp.production.directory.secure = ./intraface/

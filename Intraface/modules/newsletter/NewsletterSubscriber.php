@@ -1,0 +1,476 @@
+<?php
+/**
+ * NewsletterSubscriber
+ *
+ * This class handles the subscribers to the the different lists.
+ *
+ * @package    Newsletter
+ * @author     Lars Olesen <lars@legestue.net>
+ * @since      1.0
+ * @version    1.0
+ * @copyright  Lars Olesen
+ *
+ */
+
+class NewsletterSubscriber extends Standard {
+
+	var $list; //object
+	var $value;
+	var $error;
+	var $contact;
+	var $id;
+	var $dbquery;
+
+	function __construct($list, $id = 0) {
+		$this->error = new Error;
+
+		if(!is_object($list) OR strtolower(get_class($list)) != 'newsletterlist') {
+			trigger_error('Kræver en liste', E_USER_ERROR);
+		}
+
+		$this->list = &$list;
+		$this->list->kernel->useModule('contact');
+
+		$this->id = (int)$id;
+		$this->dbquery = new DBQuery($this->list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $this->list->get("id") . " AND newsletter_subscriber.intranet_id = " . $this->list->kernel->intranet->get('id') . " AND newsletter_subscriber.optin = 1 AND newsletter_subscriber.active = 1");
+		$this->dbquery->useErrorObject($this->error);
+
+
+		if($this->id > 0) {
+			$this->load();
+		}
+
+
+		/*
+		$args = func_get_args();
+		if (!is_array($args)) {
+			trigger_error('NewsletterSubscriber kræver nogle argumenter', FATAL);
+		}
+		// hvis den får id
+		if (count($args) == 1 AND is_numeric($args[0])) {
+			$this->id = (int)$args[0];
+			$db = new DB_Sql;
+			$db->query("SELECT list_id FROM newsletter_subscriber WHERE id = " . $this->id);
+			if (!$db->nextRecord()) {
+				trigger_error('NewsletterSubscriber kan ikke findes', FATAL);
+			}
+			$this->list = new NewsletterList($kernel, $db->f('list_id'));
+			$this->load();
+		}
+		// hvis den bare får en liste
+		elseif (count($args) == 1 AND is_object($args[0])) {
+			$this->id = 0;
+			$this->list = $args[0];
+		}
+		*/
+	}
+
+	/**
+	 * Starter NewsletterSubscriber ud fra alt andet end list
+	 *
+	 * Skal laves til at have følgende parameter: $kernel, $from_what (code, email, id), $id
+	 */
+
+	function factory($object, $type, $value) {
+		switch ($type) {
+			case 'code':
+				// kernel og kode
+				$code = trim($value);
+				$code = mysql_escape_string($code);
+				$code = strip_tags($code);
+
+				$db = new DB_Sql;
+				$db->query("SELECT id, list_id FROM newsletter_subscriber WHERE code = '".$code."' AND intranet_id = " . $object->intranet->get('id'));
+				if (!$db->nextRecord()) {
+					return false;
+				}
+
+				return new NewsletterSubscriber(new NewsletterList($object, $db->f('list_id')), $db->f('id'));
+
+			break;
+
+			case 'email':
+				// email og list
+				$email = safeToDb($value);
+				$db = new DB_Sql;
+				$db->query("SELECT newsletter_subscriber.id
+					FROM newsletter_subscriber
+					LEFT JOIN contact
+						ON newsletter_subscriber.contact_id = contact.id
+					LEFT JOIN address
+						ON address.belong_to_id = contact.id
+					WHERE address.email = '".$email."'
+						AND newsletter_subscriber.list_id = " . $object->get('id') . "
+						AND newsletter_subscriber.intranet_id = " . $object->kernel->intranet->get('id') . "
+						AND contact.active = 1");
+				if (!$db->nextRecord()) {
+					return 0;
+				}
+
+				return new NewsletterSubscriber($object, $db->f('id'));
+
+			break;
+
+			default:
+				trigger_error('NewsletterSubscriber::factory: Ulovlig Type');
+			break;
+
+
+		}
+
+	}
+
+	function load() {
+		$db = new DB_Sql;
+		$db->query("SELECT * FROM newsletter_subscriber WHERE id = " . $this->id);
+		if (!$db->nextRecord()) {
+
+			$this->id = 0;
+			$this->value['id'] = 0;
+			return 0;
+		}
+
+		$this->value['id'] = $db->f('id');
+		$this->value['contact_id'] = $db->f('contact_id');
+		$this->value['code'] = $db->f('code');
+		$this->contact = new Contact($this->list->kernel, $db->f('contact_id'));
+		$this->value['email'] = $this->contact->get('email');
+
+		return 1;
+	}
+
+	/**
+	 * Bruges hvis posten skal slettes helt, fx hvis kontakten ikke længere findes.
+	 */
+
+	function delete() {
+		$db = new DB_Sql;
+		$db->query('UPDATE newsletter_subscriber SET active = 0 WHERE id = ' . $this->id);
+		return 1;
+	}
+
+
+	/**
+	 * Tilføjer eksisterende kontakt
+	 * Tilføjet af sune
+	 */
+	function addContact($contact_id) {
+		//$this->list->kernel->useModule('contact');
+		$contact = new Contact($this->list->kernel, (int)$contact_id);
+
+
+		if($contact->get('id') == 0) {
+			$this->error->set("Ugyldig kontakt");
+			return 0;
+		}
+
+		$db = new DB_sql;
+
+		$db->query("SELECT id FROM newsletter_subscriber WHERE contact_id = '".$contact_id."' AND list_id = " . $this->list->get("id") . " AND intranet_id = ".$this->list->kernel->intranet->get('id')." AND active = 1");
+		if($db->nextRecord()) {
+			$this->error->set("Kontakten er allerede tilføjet");
+			return 0;
+		}
+
+		#
+		# Spørgsmålet er om vedkommende bør få en e-mail, hvor man kan acceptere?
+		#
+
+		$db->query("INSERT INTO newsletter_subscriber SET
+					contact_id = '".$contact_id."',
+					list_id = " . $this->list->get("id") . ",
+					date_submitted=NOW(),
+					optin = 1,
+					code = '".md5($this->list->get("id") . $this->list->kernel->intranet->get('id') . date('Y-m-d H:i:s') . $contact_id)."',
+					intranet_id = ".$this->list->kernel->intranet->get('id'));
+
+		return $db->insertedId();
+	}
+
+
+
+	/**
+	 * IMPORTANT: To comply with spam legislation we must save the following information:
+	 * - date_submitted
+	 * - ip
+	 */
+	function subscribe($input) {
+		$input = safeToDb($input);
+		$input = array_map('strip_tags', $input);
+
+		$validator = new Validator($this->error);
+		$validator->isEmail($input['email'], $input['email'] . ' er ikke en gyldig e-mail');
+
+		if (empty($input['name'])) {
+			$input['name'] = $input['email'];
+		}
+
+		if (!empty($input['name'])) $validator->isString($input['name'], 'Der er brugt ulovlige tegn i navnet', '', 'allow_empty');
+
+
+
+		if ($this->error->isError()) {
+			return 0;
+		}
+
+		// Det er smartere hvis vi bare loader fra e-mail
+		$db = new DB_Sql;
+
+		// jeg kan dog ikke få lov at reassigne i php5 - så hvad skal jeg gøre i stedet?
+		$which_subscriber_has_email = NewsletterSubscriber::factory($this->list, 'email', $input['email']);
+		if (is_object($which_subscriber_has_email)) {
+			$this->id = $which_subscriber_has_email->get('id');
+		}
+		$this->load();
+
+
+		if ($this->id > 0) {
+			if ($this->get('contact_id') == 0) {
+				$contact = Contact::factory($this->list->kernel, 'email', $input['email']);
+			}
+			else {
+				$contact = new Contact($this->list->kernel, $this->get('contact_id'));
+			}
+			/*
+			if (!$contact->get('name')) {
+				$save_array['name'] = $input['name'];
+			}
+
+			$save_array['email'] = $input['email'];
+
+			if (!$contact_id = $contact->save($save_array)) {
+				$contact->error->view();
+				$this->error->set('Kunne ikke gemme kontaktpersonen');
+			}
+			*/
+			# name og e-mail bør vel ikke nødv. gemmes?
+
+			$db->query("UPDATE newsletter_subscriber
+				SET
+					contact_id = '".$contact->get('id')."',
+					name='".$input['name']."',
+					email = '".$input['email']."',
+					date_submitted = NOW(),
+					ip_submitted = '".$input['ip']."'
+				WHERE id = ".$this->id."
+					AND list_id = " . $this->list->get("id") . "
+					AND intranet_id = " . $this->list->kernel->intranet->get('id'));
+			//code =  '" . md5($input['email'] . date('Y-m-d H:i:s') . $input['ip'])."'
+
+		}
+		else {
+			$contact = Contact::factory($this->list->kernel, 'email', $input['email']);
+
+			if ($contact->get('id') == 0) {
+				if (!$contact_id = $contact->save(array('name' => $input['email'], 'email' => $input['email']))) {
+					//$contact->error->view();
+					$this->error->set('Kunne ikke gemme kontaktpersonen');
+				}
+			}
+
+			$db->query("INSERT INTO newsletter_subscriber
+				SET
+					contact_id = '".$contact->get('id')."',
+					email = '".$input['email']."',
+					name='".$input['name']."',
+					list_id = " . $this->list->get("id") . ",
+					ip_submitted='".$input['ip']."',
+					date_submitted=NOW(),
+					code= '" . md5($input['email'] . date('Y-m-d H:i:s') . $input['ip'])."',
+					intranet_id = ".$this->list->kernel->intranet->get('id'));
+
+		}
+
+
+		if ($this->id == 0) {
+			$this->id = $db->insertedId();
+		}
+
+		// sender kun optinbrev, hvis man ikke er opted in
+		if (!$this->optedIn()) {
+			if (!$this->sendOptInEmail()) {
+				return 0;
+			}
+		}
+
+
+		return 1;
+	}
+
+	function optedIn() {
+		if ($this->id == 0) {
+			return 0;
+		}
+		$db = new DB_Sql;
+		$db->query("SELECT * FROM newsletter_subscriber WHERE id = " . $this->id);
+		if (!$db->nextRecord()) {
+			return 0;
+		}
+
+
+		if (!$db->f('ip_optin')) {
+			return 0;
+		}
+		return 1;
+	}
+
+	/**
+	 * Deletes the user from a newsletter list
+	 *
+	 * IMPORTANT: The user must be deleted, not just deactivated.
+	 */
+	function unsubscribe($email) {
+		$email = strip_tags($email);
+
+		$validator = new Validator($this->error);
+		$validator->isEmail($email, 'E-mailen er ikke gyldig');
+
+		if ($this->error->isError()) {
+			return 0;
+		}
+
+		$which_subscriber_has_email = NewsletterSubscriber::factory($this->list, 'email', $email);
+		if (is_object($which_subscriber_has_email)) {
+			$this->id = $which_subscriber_has_email->get('id');
+		}
+		$this->load();
+
+		$db = new DB_Sql;
+		$db->query("DELETE FROM newsletter_subscriber WHERE id=".$this->id." AND list_id = " . $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id'));
+		return 1;
+	}
+
+	/**
+	 * IMPORTANT: To comply with spam legislation we must save the following information:
+	 * - date_optin
+	 * - ip_optin
+	 */
+	function optIn($code, $ip) {
+		/*
+		if ($this->id == 0) {
+			return 0;
+		}
+		*/
+		$db = new DB_Sql;
+		$db->query("UPDATE newsletter_subscriber SET optin = 1, ip_optin = '".$ip."', date_optin = NOW() WHERE code = '" . $code . "' AND list_id = " . $this->list->get('id'));
+
+		$db->query("SELECT id, ip_submitted FROM newsletter_subscriber WHERE code = '".$code."' AND list_id = " . $this->list->get('id'));
+		if ($db->nextRecord()) {
+			if (!$db->f('ip_submitted')) {
+				$db->query("UPDATE newsletter_subscriber SET ip_submitted = '".$ip."' WHERE id = " . $db->f("id"));
+			}
+		}
+		return 1;
+	}
+
+	function getSubscriberCount() {
+		$db = new DB_Sql("SELECT * FROM newsletter WHERE list_id=".$this->list->get('id') . " AND intranet_id = " . $this->list->kernel->intranet->get('id') . " AND optin = 1");
+		return $db->numRows();
+	}
+
+
+	/**
+	 * The subscriber must receive an e-mail so the subscribtion can be confirmed
+	 * The e-mail should say that the subscription should be confirmed within a week.
+	 *
+	 * E-mailen skal indeholde følgende:
+	 * - url til privacy policy på sitet
+	 * - en kort beskrivelse af mailinglisten
+	 * - url som brugeren følger for at bekræfte tilmeldingen
+	 *
+	 * - I virkeligheden skal den nok nøjes med lige at logge ind i ens personlige webinterface
+	 *   hvor man så kan lave bekræftelsen fra. Det skal altså bare være loginkoden fra
+	 *   den personlige konto, der står der, og så skal nyhedsbreve på forsiden (hvis dette sted
+	 *   har nogle nyhedsbreve).
+	 *
+	 * @see tilføj cleanUp();
+	 */
+	function sendOptInEmail() {
+		if ($this->id == 0) {
+			return 0;
+		}
+
+		$this->load();
+
+
+		$contact = new Contact($this->list->kernel, $this->get('contact_id'));
+
+		$email = new Email($this->list->kernel);
+		if (!$email->save(
+			array(
+				'subject' => 'Bekræft tilmelding',
+				'body' =>
+					$this->list->get('subscribe_message') . "\n\n" .
+					$contact->get('login_url') .
+					"\n\nMed venlig hilsen\n".$this->list->get('sender_name'),
+				'contact_id' => $this->get('contact_id'),
+				'from_email' => $this->list->get('reply_email'),
+				'from_name' => $this->list->get('sender_name'),
+				'type_id' => 7, // nyhedsbreve
+				'belong_to' => $this->list->get('id')
+			)
+		)) {
+			$this->error->set('Kunne ikke gemme bekræftelses-emailen');
+			return 0;
+		}
+
+		if ($email->send()) {
+			$db = new DB_Sql;
+			$db->query("UPDATE newsletter_subscriber SET date_optin_email_sent = NOW() WHERE id = " . $this->id);
+			return 1;
+		}
+		$this->error->set('Kunne ikke sende bekræftelses-emailen');
+		return 0;
+	}
+
+	/**
+	 * @todo - den her får virkelig kørt nogle sql'er :) - det skal reduceres
+	 */
+	function getList() {
+
+		$subscribers = array();
+
+		//$db = new DB_Sql;
+		//$db->query("SELECT id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted FROM newsletter_subscriber WHERE list_id=". $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id') . " AND optin = 1 AND active = 1"); // optin = 1 hvad er det? /Sune
+		$i = 0;
+
+		$db = $this->dbquery->getRecordset("id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted", "", false);
+
+		$contact_module = $this->list->kernel->getModule('contact', true); // true: tjekker kun intranet_access
+
+		while ($db->nextRecord()) {
+			$contact_id = $db->f('contact_id');
+			$subscribers[$i]['id'] = $db->f('id');
+			$subscribers[$i]['contact_id'] = $db->f('contact_id');
+			$subscribers[$i]['dk_date_submitted'] = $db->f('dk_date_submitted');
+			$subscribers[$i]['date_submitted'] = $db->f('date_submitted');
+
+			$contact = new Contact($this->list->kernel, $db->f('contact_id'));
+			$subscribers[$i]['contact_number'] = $contact->get('number');
+			$subscribers[$i]['contact_name'] = $contact->address->get('name');
+			$subscribers[$i]['contact_address'] = $contact->address->get('address');
+			$subscribers[$i]['contact_postcode'] = $contact->address->get('postcode');
+			$subscribers[$i]['contact_city'] = $contact->address->get('city');
+			$subscribers[$i]['contact_email'] = $contact->address->get('email');
+			$subscribers[$i]['contact_country'] = $contact->address->get('country');
+			$i++;
+		}
+
+		$db->free();
+
+		// vi skal have result free
+		return $subscribers;
+	}
+
+	/**
+	 * This function must clean up the list for non-confirmed subscriptions
+	 * This method should delete unconfirmed subscriptions which
+	 * are more than a week old.
+	 */
+
+	 function cleanUp() {
+	 	die('Ikke implementeret');
+	 }
+
+}
+?>

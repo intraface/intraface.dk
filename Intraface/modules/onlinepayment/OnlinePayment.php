@@ -1,0 +1,568 @@
+<?php
+
+/**
+ * Onlinebetaling
+ *
+ * Onlinebetalingerne skal kunne knytte betalinger til debtor. Måske
+ * kan den fungere lidt ligesom elementer i CMS, og så kan vi skrive nogle enkelte
+ * udbydere, hvor vi starter med QuickPay - hvis det hele da skal køre over vores
+ * system. Det kan også være, at kodningen skal foretages hos den enkelte?
+ *
+ * Så det grundlæggende spørgsmål er om selve betalingsløsningen skal programmeres på
+ * klienten eller i systemet.
+ */
+
+class OnlinePayment extends Standard {
+
+	var $id;
+	var $kernel;
+	var $status_types;
+	var $belong_to_types;
+
+	var $implemented_providers;
+
+	// Standard udbyder-transactionsstatus. Er lavet ud fra QuickPay
+	var $transaction_status_types = array(
+		'' => 'Ingen kontakt til udbyder - mangler $eval',
+		'000' => 'Godkendt',
+		'001' => 'Afvist af PBS',
+		'002' => 'Kommunikationsfejl',
+		'003' => 'Kort udløbet',
+		'004' => 'Status er forkert (Ikke autoriseret)',
+		'005' => 'Autorisation er forældet',
+		'006' => 'Fejl hos PBS',
+		'007' => 'Fejl hos udbyder',
+		'008' => 'Fejl i parameter sendt til udbyder'
+	);
+
+	var $transaction_status_authorized = "000";
+
+	/*
+	// Standard udbyder-action. Er lavet ud fra QuickPay
+	var $action_types = array(
+		'1100' => 'authorize', // tjekker
+		'1220' => 'capture', // hæver
+		'credit' => 'credit', // tilbagebetaler
+		'1420' => 'reversal', // ophæver reservationen
+		'status' => 'status' // ophæver reservationen
+
+	);
+	*/
+
+
+	function OnlinePayment(&$kernel, $id = 0) {
+		if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
+			trigger_error('Debtor kræver Kernel som objekt', FATAL);
+		}
+
+		$onlinepayment_module = $kernel->getModule('onlinepayment');
+		$this->status_types = $onlinepayment_module->getSetting('status');
+		$this->belong_to_types = $onlinepayment_module->getSetting('belong_to');
+		$this->implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
+
+		$this->kernel = &$kernel;
+		$this->id = $id;
+		$this->error = new Error;
+
+		// lidt usikker på om det her er det smarteste sted at have den, men den skal være til stede, når der skal gemmes
+		$this->provider_key = $this->kernel->setting->get('intranet', 'onlinepayment.provider_key');
+
+		$this->dbquery = new DBQuery($this->kernel, "onlinepayment", "intranet_id = ".$this->kernel->intranet->get("id"));
+		$this->dbquery->useErrorObject($this->error);
+
+		if($this->id > 0) {
+			$this->load();
+		}
+	}
+
+
+
+	function factory(&$kernel, $type, $value = 0) {
+		if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
+			trigger_error('Debtor kræver Kernel som objekt', E_USER_ERROR);
+		}
+
+		$onlinepayment_module = $kernel->getModule('onlinepayment');
+		$implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
+
+
+		switch($type) {
+			case 'id':
+				$db = new DB_Sql;
+				$db->query("SELECT * FROM onlinepayment WHERE id = ".(int)$value. " AND intranet_id = " . $kernel->intranet->get('id'));
+				if (!$db->nextRecord()) {
+					trigger_error('OnlinePayment::factory: Ikke et gyldigt id', E_USER_ERROR);
+				}
+				$provider = $implemented_providers[$db->f('provider_key')];
+			break;
+
+			case 'provider':
+
+				if (!in_array($value, $implemented_providers)) {
+					trigger_error('Ikke en gyldig provider', E_USER_ERROR);
+				}
+				$provider = $value;
+				// hvis den endnu ikke har en id skal dette være typen for at åbne den
+				// rigtige provider
+			break;
+			case 'transactionnumber':
+				$db = new DB_Sql;
+				$db->query("SELECT id FROM onlinepayment WHERE transaction_number = '".$value."' AND intranet_id = " . $kernel->intranet->get('id'));
+				if (!$db->nextRecord()) {
+					return OnlinePayment::factory($kernel);
+				}
+				else {
+					return OnlinePayment::factory($kernel, $db->f('id'));
+				}
+
+			break;
+
+			default:
+				trigger_error('Ikke gyldig type i Onlinebetaling', E_USER_ERROR);
+			break;
+		}
+
+		//$provider = "QuickPay"; // Den eneste implementeret
+		$onlinepayment_module = $kernel->getModule('onlinepayment');
+
+		switch(strtolower($provider)) {
+			case 'default':
+				$onlinepayment_module->includeFile('provider/Default.php');
+				return new OnlinePaymentDefault($kernel, $value);
+				break;
+			case 'quickpay':
+				$onlinepayment_module->includeFile('provider/QuickPay.php');
+				return new OnlinePaymentQuickPay($kernel, $value);
+				break;
+
+			default:
+				trigger_error("Ugyldig onlinebetalingsudbyder", E_USER_ERROR);
+		}
+	}
+
+
+	function load() {
+
+		$db = new DB_Sql;
+		$db->query("SELECT id, date_created, date_authorized, date_captured, date_reversed, belong_to_key, belong_to_id, text, status_key, amount, original_amount, transaction_number, transaction_status,
+				DATE_FORMAT(date_created, '%d-%m-%Y') AS dk_date_created,
+				DATE_FORMAT(date_authorized, '%d-%m-%Y') AS dk_date_authorized,
+				DATE_FORMAT(date_captured, '%d-%m-%Y') AS dk_date_captured,
+				DATE_FORMAT(date_reversed, '%d-%m-%Y') AS dk_date_reversed
+			FROM onlinepayment WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
+		if($db->nextRecord()) {
+
+			$onlinepayment_module = $this->kernel->getModule('onlinepayment');
+
+			$this->value['id'] = $db->f('id');
+			$this->value['dk_date_created'] = $db->f('dk_date_created');
+			$this->value['date_created'] = $db->f('date_created');
+
+			$this->value['dk_date_authorized'] = $db->f('dk_date_authorized');
+			$this->value['date_authorized'] = $db->f('date_authorized');
+
+			$this->value['dk_date_captured'] = $db->f('dk_date_captured');
+			$this->value['date_captured'] = $db->f('date_captured');
+
+			$this->value['dk_date_reversed'] = $db->f('dk_date_reversed');
+			$this->value['date_reversed'] = $db->f('date_reversed');
+
+			$this->value['belong_to_key'] = $db->f('belong_to_key');
+			$this->value['belong_to'] = $this->belong_to_types[$db->f('belong_to_key')];
+			$this->value['belong_to_id'] = $db->f('belong_to_id');
+			$this->value['text'] = $db->f('text');
+			$this->value['status_key'] = $db->f('status_key');
+			$this->value['status'] = $this->status_types[$db->f('status_key')];
+			$this->value['dk_status'] = $onlinepayment_module->getTranslation($this->status_types[$db->f('status_key')]);
+			$this->value['amount'] = $db->f('amount');
+			$this->value['dk_amount'] = number_format($db->f('amount'), 2, ",", ".");
+
+			$this->value['original_amount'] = $db->f('original_amount');
+			$this->value['dk_original_amount'] = number_format($db->f('original_amount'), 2, ",", ".");
+
+
+			$this->value['transaction_number'] = $db->f('transaction_number');
+			$this->value['transaction_status'] = $db->f('transaction_status');
+			$this->value['transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
+			if($db->f('transaction_status') != $this->transaction_status_authorized) {
+				$this->value['user_transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
+			}
+			else {
+				$this->value['user_transaction_status_translated'] = "";
+			}
+			return $this->id;
+		}
+		else {
+			$this->id = 0;
+			$this->value['id'] = 0;
+			return 0;
+		}
+	}
+
+
+	/**
+	 * Funktion der gemmer onlinebetaling gennem xml-rpc-serveren
+	 * @input: array(belong_to, belong_to_id, transaction_number, transaction_status, amount);
+ 	 */
+
+	function save($input) {
+
+		// jeg har ændret denne fra == til > Det håber jeg er rigtig forstået /LO
+		if($this->id > 0) {
+			$this->error->set("OnlinePayment->save kan ikke køres på en allerede oprettet betaling");
+			return 0;
+		}
+
+		$input = safeToDb($input);
+
+
+		$validator = new Validator($this->error);
+
+		$belong_to_key = array_search($input['belong_to'], $this->belong_to_types);
+		if($input['belong_to'] == '' || $belong_to_key === false) {
+			$this->error->set("Ugyldig belong_to");
+		}
+
+		$validator->isNumeric($input['belong_to_id'], 'belong_to_id er ikke et tal');
+		$validator->isNumeric($input['transaction_number'], 'transaction_number er ikke et tal');
+		$validator->isString($input['transaction_status'], 'transaction_status er ikke udfyldt');
+		if(!isset($this->transaction_status_types[$input['transaction_status']])) {
+			$this->error->set("transaction_status '".$input['transaction_status']."' er ikke en gyldig status");
+		}
+
+		// VÆR LIGE OPMÆRKSOM HER: INDTIL VIDERE KAN KUN ACCEPTEREDE TRANSAKTIONER GEMMES
+		if($input['transaction_status'] != $this->transaction_status_authorized) {
+			$this->error->set("Transactionen er ikke godkendt, så den kan ikke gemmes");
+		}
+
+		if($validator->isDouble($input['amount'], 'amount er ikke et gyldigt beløb')) {
+			$amount = new Amount($input['amount']);
+			if($amount->convert2db()) {
+				$input['amount'] = $amount->get();
+			}
+			else {
+				$this->error->set("Kunne ikke konvertere amount til databasen!");
+			}
+		}
+
+		if (array_key_exists('text', $input)) {
+			$validator->isString($input['text'], 'text er ikke en gyldig streng', '', 'allow_empty');
+		}
+		else {
+			$input['text'] = '';
+		}
+
+		if($this->error->isError()) {
+			return 0;
+		}
+
+
+
+		$db = new DB_Sql;
+
+		// status_key = 2 sættes til authorized med det samme - senere kan vi arbejde med at de først oprettes og senere autoriseres
+
+		$db->query("INSERT INTO onlinepayment SET
+			intranet_id = ".$this->kernel->intranet->get('id').",
+			date_created = NOW(),
+			date_changed = NOW(),
+			status_key = 2,
+			belong_to_key = ".$belong_to_key.",
+			belong_to_id = ".$input['belong_to_id'].",
+			text = \"".$input['text']."\",
+			transaction_number = ".$input['transaction_number'].",
+			transaction_status = \"".$input['transaction_status']."\",
+			amount = ".$input['amount'].",
+			provider_key = ".$this->provider_key.",
+			original_amount = ".$input['amount']);
+
+		return $db->insertedId();
+	}
+
+
+
+	/**
+	 * Funktion til at opdatere betaling inden fra intranettet
+	 *
+	 */
+
+	function update($input) {
+
+		if($this->id == 0) {
+			trigger_error("OnlinePayment->update kan kun køres på en allerede oprettet betaling", FATAL);
+		}
+
+		if($this->get('status') != 'authorized') {
+			trigger_error("OnlinePayment->update kan kun køres på betaling der er authorized", FATAL);
+		}
+
+		$input = safeToDb($input);
+
+		$validator = new Validator($this->error);
+
+		if($validator->isNumeric($input['dk_amount'], 'Beløb er ikke et gyldigt beløb', "integer")) {
+			$amount = new Amount($input['dk_amount']);
+			if($amount->convert2db()) {
+				$input['amount'] = $amount->get();
+			}
+			else {
+				$this->error->set("Kunne ikke konvertere amount til databasen!");
+			}
+		}
+
+		if($input['amount'] > $this->get('original_amount')) {
+			$this->error->set("Du kan ikke sætte beløbet højere end hvad kunden har godkendt: ".$this->get('dk_original_amount'));
+		}
+
+		if($this->error->isError()) {
+			return 0;
+		}
+
+		$db = new DB_Sql;
+		$db->query("UPDATE onlinepayment SET amount = ".$input['amount'].", date_changed = NOW() WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
+		return $this->id;
+	}
+
+	function changeBelongTo($belong_to, $belong_to_id) {
+		if($this->id == 0) {
+			trigger_error("OnlinePayment->setBelongTo kan kun ændre eksisterende betalinger", FATAL);
+		}
+
+		$belong_to = safeToDb($belong_to);
+
+		$belong_to_key = array_search($belong_to, $this->belong_to_types);
+		if($belong_to == '' || $belong_to_key === false) {
+			trigger_error("Ugyldig belong_to i OnlinePayment->changeBelongTo()", FATAL);
+		}
+
+		if(!is_int($belong_to_id)) {
+			trigger_error("Belong_to_id er ikke et tal i OnlinePayment->changeBelongTo()", FATAL);
+		}
+
+		$db = new DB_Sql;
+		$db->query("UPDATE onlinepayment SET belong_to_key = ".$belong_to_key.", belong_to_id = ".$belong_to_id." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
+		return $this->id;
+
+	}
+
+
+
+	function setStatus($status) {
+		if($this->id == 0) {
+			trigger_error("OnlinePayment->setStatus kan kun ændre eksisterende betalinger", FATAL);
+		}
+		$status = safeToDb($status);
+
+		$status_key = array_search($status, $this->status_types);
+		if($status == "" || $status_key === false) {
+			trigger_error("Ugyldig status i OnlinePayment->setStatus()", FATAL);
+		}
+
+		if($status_key <= $this->get('status_key')) {
+			trigger_error("Kan ikke skifte til lavere eller samme status i OnlinePayment->setStatus()", FATAL);
+		}
+
+		switch($status) {
+			case "authorized":
+				$date_field = "date_authorized";
+				break;
+			case "captured":
+				$date_field = "date_captured";
+				break;
+			case "reversed":
+				$date_field = "date_reversed";
+				break;
+
+			case "cancelled":
+				$date_field = "date_cancelled";
+				break;
+		}
+
+		$db = new DB_Sql;
+
+		$db->query("UPDATE onlinepayment SET status_key = ".$status_key.", ".$date_field." = NOW() WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
+
+		return true;
+	}
+
+	/**
+	 * Tilføjer en onlinebetaling som betaling til faktura
+	 *
+	 */
+
+	function addAsPayment() {
+
+
+		if($this->get('status') != 'authorized') {
+			$this->error->set("Der kan kun udføres handlinger på betalinger der er godkendt");
+			return 0;
+		}
+
+		if($this->get('belong_to') != 'invoice') {
+			$this->error->set("Der kan kun udføres handlinger på betalinger der er tilknyttet en faktura");
+			return 0;
+		}
+
+		if(!$this->kernel->intranet->hasModuleAccess('invoice')) {
+			return 0;
+		}
+
+
+
+		$invoice_module = $this->kernel->getModule('debtor', true); // true: tjekker kun intranet adgang
+
+		$invoice = Debtor::factory($this->kernel, $this->get('belong_to_id'));
+
+		if($invoice->get('id') == 0) {
+			$this->error->set("Ugyldig faktura");
+			return 0;
+		}
+
+		$payment = new Payment($invoice);
+
+		$input = array(
+			"payment_date" => date("d-m-Y"),
+			"amount" => $this->get("dk_amount"),
+			"description" => "Transaction ".$this->get('transaction_number'),
+			"type" => 2);
+		// type = 2: credit_card
+
+		if($payment->update($input)) {
+			return true;
+		}
+		else {
+			$payment->error->view();
+			die();
+		}
+	}
+
+	/**
+	 * Så vidt jeg kan se skal disse være ens for de forskellige betalingsløsninger
+	 * Hvis ikke skal funktionen flyttes til den relevante, og der skal kigges
+	 * på /debtor/view.php, som gerne vil have nogle transaktionsmuligheder
+	 *
+	 * Der skal laves en indstilling om man har tilbagebetalingsmuligheder.
+	 *
+	 * Men her skal der være en annuller betalingsknap også.
+	 */
+	function getTransactionActions() {
+		return array(
+			0 => array(
+				'action' => 'capture',
+				'label' => 'Hæv')
+		);
+		/*
+		return array(
+			0 => array(
+				'action' => 'capture',
+				'label' => 'Hæv'),
+			1 => array(
+				'action' => 'reverse',
+				'label' => 'Tilbagebetal')
+		);
+		*/
+	}
+	/*
+	function getTransactionActions() {
+		return array();
+
+		// i formen array(0 => array('action' => 'capture', 'label' => 'Hæv'), 1 => array(...
+	}
+	*/
+	function transactionAction($action) {
+		return false;
+	}
+
+
+	function getList() {
+
+		if($this->dbquery->getFilter('belong_to') != '') {
+			if($this->dbquery->getFilter('belong_to_id') == 0) {
+				trigger_error("belong_to_id er nul i OnlinePayment->getList()", FATAL);
+			}
+			$belong_to_key = array_search($this->dbquery->getFilter('belong_to'), $this->belong_to_types);
+			if($this->dbquery->getFilter('belong_to') == '' || $belong_to_key === false) {
+				trigger_error("belong_to_key er ikke gyldig i OnlinePayment->getList()", FATAL);
+			}
+			$this->dbquery->setCondition("belong_to_key = ".$belong_to_key." AND belong_to_id = ".$this->dbquery->getFilter('belong_to_id'));
+
+			$this->dbquery->setFilter('status', -1);
+
+		}
+
+		if($this->dbquery->getFilter('status') == 0) {
+			$this->dbquery->setFilter('status', 2);
+		}
+
+		if($this->dbquery->getFilter('status') > 0) {
+			$this->dbquery->setCondition("status_key = ".intval($this->dbquery->getFilter('status')));
+		}
+
+		if($this->dbquery->getFilter('text') != "") {
+			$this->dbquery->setCondition("transaction_number LIKE \"%".$this->dbquery->getFilter('text')."%\" OR text LIKE \"%".$this->dbquery->getFilter('text')."%\"");
+		}
+
+		$onlinepayment_module = $this->kernel->getModule('onlinepayment');
+
+		$this->dbquery->setSorting("date_created DESC");
+		$db = $this->dbquery->getRecordset("id, date_created, belong_to_key, belong_to_id, text, status_key, amount, provider_key, transaction_number, transaction_status, DATE_FORMAT(date_created, '%d-%m-%Y %H:%i') AS dk_date_created", "", false);
+		$i = 0;
+		$list = array();
+
+		while($db->nextRecord()) {
+			$list[$i]['id'] = $db->f('id');
+			$list[$i]['dk_date_created'] = $db->f('dk_date_created');
+			$list[$i]['date_created'] = $db->f('date_created');
+			$list[$i]['belong_to_key'] = $db->f('belong_to_key');
+			$list[$i]['belong_to'] = $this->belong_to_types[$db->f('belong_to_key')];
+			$list[$i]['belong_to_id'] = $db->f('belong_to_id');
+			$list[$i]['text'] = $db->f('text');
+			$list[$i]['status_key'] = $db->f('status_key');
+			$list[$i]['status'] = $this->status_types[$db->f('status_key')];
+			//$list[$i]['dk_status'] = $onlinepayment_module->getTranslation($this->status_types[$db->f('status_key')]);
+			$list[$i]['amount'] = $db->f('amount');
+			$list[$i]['provider_key'] = $db->f('provider_key');
+			$list[$i]['dk_amount'] = number_format($db->f('amount'), 2, ",", ".");
+			$list[$i]['transaction_number'] = $db->f('transaction_number');
+			$list[$i]['transaction_status'] = $db->f('transaction_status');
+			$list[$i]['transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
+			if($db->f('transaction_status') != $this->transaction_status_authorized) {
+				$list[$i]['user_transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
+			}
+			else {
+				$list[$i]['user_transaction_status_translated'] = "";
+			}
+
+			$i++;
+		}
+		return $list;
+
+	}
+
+	function isFilledIn() {
+		return 1; // Onlinepyment kan ikke udfyldes.
+	}
+
+	function isSettingsSet() {
+		return 1;
+	}
+
+	function isProviderSet() {
+		return $this->kernel->setting->get('intranet', 'onlinepayment.provider_key');
+	}
+
+	function setProvider($input) {
+		// der skal nok laves et tjek på om alle poster er færdigbehandlet inden man kan skifte
+		// udbyder
+		$this->kernel->setting->set('intranet', 'onlinepayment.provider_key', $input['provider_key']);
+		return 1;
+	}
+
+	function getProvider() {
+		return ($this->value['provider_id'] = $this->kernel->setting->get('intranet', 'onlinepayment.provider_key'));
+	}
+
+
+}
+
+?>

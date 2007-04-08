@@ -1,0 +1,849 @@
+<?php
+/**
+ * Page
+ *
+ * Spørgsmål:
+ * ---------
+ *
+ * 0.
+ * For komplicerede sider kan det måske være en ide at omskrive get() til
+ * at den loader specifikke ting, når der bliver spurgt efter dem:
+ *
+ * Fx kunne stylesheet og navigation være en ting, der først skulle loades, hvis der spørges.
+ *
+ * 1.
+ * Hvordan får vi opbygget URLs fornuftigt - så vi kan have:
+ *
+ * http://www.site.dk/artikler/myteeth/
+ * http://www.site.dk/produkter/dimser/
+ * http://www.site.dk/kundensegetbibliotektilsiden/identifier/
+ *
+ * Det kan måske være et eller andet med at smide de enkelte sider
+ * i nogle kategorier? Men hvad så med de sider, der ikke er i kategorier?
+ * Vi skal have et eller andet der gør det let at sætte op?
+ *
+ * 2.
+ * Hvis vi skal have en side med artikler med alle nøgleordene, der er brugt
+ * på en anden side. Hvordan skal vi så oprette denne faste side?
+ *
+ * 3.
+ * Der skal knyttes billeder til de enkelte sider, så man kan bruge billeder på sidelister.
+ *
+ * 4.
+ * Rettigheder skal vælges til de enkelte sider. Creative commons.
+ * Man skal på siteniveau og templateniveau kunne sætte ens foretrukne licens.
+ *
+ * <!--Creative Commons License-->
+ * <a rel="license" href="http://creativecommons.org/licenses/by-nd/2.5/dk/">
+ *		<img alt="Creative Commons License" style="border-width: 0" src="http://creativecommons.org/images/public/somerights20.png"/></a>
+ *		<br/>Dette værk er licensieret under en <a rel="license" href="http://creativecommons.org/licenses/by-nd/2.5/dk/">Creative Commons Navngivelse-Ingen bearbejdelser 2.5 Danmark Licens</a>.
+ *	<!--/Creative Commons License-->
+ *	<!-- <rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ *	<Work rdf:about="">
+ *		<license rdf:resource="http://creativecommons.org/licenses/by-nd/2.5/dk/" />
+ *	<dc:type rdf:resource="http://purl.org/dc/dcmitype/Text" />
+ *	</Work>
+ *	<License rdf:about="http://creativecommons.org/licenses/by-nd/2.5/dk/"><permits rdf:resource="http://web.resource.org/cc/Reproduction"/><permits rdf:resource="http://web.resource.org/cc/Distribution"/><requires rdf:resource="http://web.resource.org/cc/Notice"/><requires rdf:resource="http://web.resource.org/cc/Attribution"/></License></rdf:RDF> -->
+ *
+ * Se eksempel på /test/update.php
+ *
+ * @package CMS
+ * @author  Lars Olesen <lars@legestue.net>
+ * @since   1.0
+ * @version 1.0
+ *
+ */
+
+class CMS_Page extends Standard {
+
+	var $id;
+	var $kernel;
+	var $position;
+	var $error;
+
+	var $cmssite;
+	var $template;
+	var $navigation;
+	var $message;
+	var $cc_license;
+
+
+	var $value;
+	var $type = array(
+		1 => 'page',
+		2 => 'article',
+		3 => 'news'
+	);
+	var $status = array(
+		0 => 'draft',
+		1 => 'published'
+	);
+
+	function __construct(& $cmssite, $id = 0) {
+		if (!is_object($cmssite) OR strtolower(get_class($cmssite)) != 'cms_site') {
+			 trigger_error('CMS_Page::__construct needs CMS_Site', E_USER_ERROR);
+		}
+
+		// generelle
+		$this->id = (int)$id;
+
+		// cms - relevante
+		$this->cmssite =& $cmssite;
+		$this->navigation = new CMS_Navigation($this);
+		$this->template = & new CMS_Template($this->cmssite);
+
+		// generelle
+		$this->position = new Position("cms_page", "site_id=".$this->cmssite->get('id')." AND active = 1 AND type_key = 1", "position", "id");
+		$this->kernel =& $this->cmssite->kernel;
+		$this->error = new Error();
+		$this->dbquery = new DBQuery($this->kernel, 'cms_page', 'cms_page.intranet_id = '.$this->kernel->intranet->get('id').' AND cms_page.active = 1 AND site_id = ' . $this->cmssite->get('id'));
+
+		// hente settings
+		$cms_module = $this->kernel->module('cms');
+		$this->cc_license = $cms_module->getSetting('cc_license');
+
+
+		if ($this->id > 0) {
+			$this->load();
+		}
+
+	}
+
+	function factory(& $kernel, $type, $value) {
+		switch ($type) {
+			case 'id':
+				$db = new DB_Sql;
+				$db->query("SELECT id, site_id FROM cms_page WHERE id = " . (int)$value . " AND intranet_id = " . $kernel->intranet->get('id'));
+
+				if (!$db->nextRecord()) {
+					return false;
+				}
+				$site = new CMS_Site($kernel, $db->f('site_id'));
+				$object = new CMS_Page($site, (int)$value);
+				return $object;
+				break;
+			case 'identifier':
+				$value['identifier'] = safeToDb($value['identifier']);
+				$value['identifier'] = strip_tags($value['identifier']);
+				$db = new DB_Sql;
+
+				if (!empty($value['identifier'])) {
+					$db->query("SELECT site_id, id FROM cms_page WHERE identifier = '" . $value['identifier'] . "' AND intranet_id = " . $kernel->intranet->get('id') . " AND active = 1 AND site_id = " . $value['site_id']);
+				}
+				else {
+					// choose the default page - vi skal lige have noget med publish og expire date her også
+					$db->query("SELECT site_id, id FROM cms_page WHERE intranet_id = " . $kernel->intranet->get('id') . " AND active = 1 AND status_key = 1 AND site_id = " . $value['site_id'] . " ORDER BY position ASC LIMIT 1");
+				}
+				if (!$db->nextRecord()) {
+					// så prøver vi lige med id i stedet make sure $value så er numerisk
+					$db->query("SELECT site_id, id FROM cms_page WHERE id = " . (int)$value['identifier'] . " AND intranet_id = " . $kernel->intranet->get('id') . " AND active = 1 AND site_id = " . $value['site_id']);
+					if (!$db->nextRecord()) {
+						return false;
+					}
+				}
+				return new CMS_Page(new CMS_Site($kernel, $db->f('site_id')), $db->f('id'));
+				break;
+			default:
+				trigger_error('CMS_Page::factory unknown type', E_USER_ERROR);
+				break;
+		}
+	}
+
+
+	/**
+	 * Valideringsfunktion
+	 */
+
+	function validate($var) {
+
+		$validator = new Validator($this->error);
+		if (!empty($var['navigation_name'])) $validator->isString($var['navigation_name'], 'error in navigation_name - has to be a string', '', 'allow_empty');
+		$validator->isNumeric($var['allow_comments'], 'error in comments - allowed values are 0 and 1');
+		$validator->isNumeric($var['hidden'], 'error in hidden - allowed values are 0 and 1');
+
+		// der skal valideres på type
+		if (!Validate::string($var['identifier'], array('format' => VALIDATE_ALPHA . VALIDATE_NUM . '-_'))) {
+			$this->error->set('error in identifier - allowed values are a-z, 1-9');
+		}
+
+		$db = new DB_Sql;
+		$db->query("SELECT * FROM cms_page WHERE site_id = " . $this->cmssite->get('id') . " AND identifier = '".$var['identifier']."' AND active = 1 AND id != " . (int)$this->get('id'));
+		if ($db->nextRecord()) {
+			$this->error->set('error in identifier - has to be unique');
+		}
+
+		if ($this->error->isError()) {
+			return 0;
+		}
+		return 1;
+	}
+
+	/**
+	 * Vi skal have gemt positionen for siden også
+	 *
+	 * Hvis date_publish ikke er sat, skal den bare tage dd.
+	 * Hvis date_expire ikke er sat, hvad skal den så gøre?
+	 */
+
+	function save($var) {
+		$var = safeToDb($var);
+		if (empty($var['allow_comments'])) {
+			$var['allow_comments'] = 0;
+		}
+		if (empty($var['hidden'])) {
+			$var['hidden'] = 0;
+		}
+
+		if (gettype($var) != 'array') {
+			trigger_error('CMS__Page::save(): $var is not an array array', E_USER_ERROR);
+		}
+
+		if(!isset($var['pic_id'])) {
+			$var['pic_id'] = 0;
+		}
+
+		$type_key = array_search($var['page_type'], $this->type);
+
+		if (empty($var['date_publish'])) {
+			$sql_publish = 'NOW()';
+		}
+		else {
+			$sql_publish = "'".$var['date_publish']."'";
+		}
+
+		if (empty($var['identifier'])) {
+			$var['identifier'] = md5(date('d-m-Y H:i:s') . $type_key . serialize($var));
+		}
+
+		if (!$this->validate($var)) {
+			return 0;
+		}
+
+		if ($this->id == 0) {
+			$sql_type = "INSERT INTO ";
+			$sql_end = ", date_created = NOW()";
+		}
+		else {
+			$sql_type = "UPDATE ";
+			$sql_end = ", date_updated = NOW() WHERE id = " . $this->id;
+		}
+
+		$sql_extra = '';
+
+		if (!empty($var['navigation_name'])) {
+			$sql_extra = "navigation_name = '".$var['navigation_name']."',";
+		}
+		if (!empty($var['child_of_id'])) {
+			$sql_extra = "child_of_id = '".(int)$var['child_of_id']."',";
+		}
+
+		// if the page is to updated
+		$sql = $sql_type . " cms_page SET
+			intranet_id = '".$this->kernel->intranet->get('id')."',
+			user_id = '".$this->kernel->user->get('id')."',
+			title = '" .$var['title']. "',
+			keywords = '" .$var['keywords']. "',
+			description = '".$var['description']."',
+			date_publish = ".$sql_publish.",
+			allow_comments = ".$var['allow_comments'].",
+			hidden = ".$var['hidden'].",
+			date_expire = '".$var['date_expire']."',
+			type_key = ".(int)$type_key.",
+			".$sql_extra."
+			date_updated = NOW(),
+			site_id = '".(int)$this->cmssite->get('id')."',
+			template_id = ".$var['template_id'].",
+
+			pic_id = ".intval($var['pic_id']).",
+			identifier = '".$var['identifier']."'" . $sql_end;
+		// password = '".$var['password']."',
+		$db = new DB_Sql;
+		$db->query($sql);
+
+		$need_to_add_keywords = false;
+
+		if ($this->id == 0) {
+			$this->id = $db->insertedId();
+			$need_to_add_keywords = true;
+		}
+		$this->load();
+
+
+		//position
+		$db->query("SELECT position FROM cms_page WHERE id = " . $this->id);
+		if ($db->nextRecord()) {
+			if ($db->f('position') == 0 AND count($this->getList($this->value['type']) > 0)) {
+				$next_pos = $this->position->maxpos() + 1;
+				$db->query("UPDATE cms_page SET position = " . $next_pos . " WHERE id = " . $this->id);
+
+				$this->position->reposition();
+			}
+		}
+
+		if ($need_to_add_keywords) {
+			$this->template->getKeywords();
+			$keywords_to_add = $this->template->keywords->getConnectedKeywordsAsString();
+			$this->getKeywords();
+			$this->keywords->addKeywordsByString($keywords_to_add);
+		}
+
+
+
+		return $this->id;
+
+	}
+
+
+	/**
+	 * returnerer indholdet af en side!
+	 * hvad skal den helt nøjagtig loade? - skal den fx loadde elementerne også?
+	 * Hvis vi er inde i redigering, kan den loade alt, men hvis vi er ved weblogin, s
+	 * skal den kun kunne loade nogle sider.
+	 * @return (string) Indholdet til en side
+	 */
+	function load() {
+
+		if ($this->id <= 0) {
+			return 0;
+		}
+
+		$sql_expire = '';
+		$sql_publish = '';
+		if (!is_object($this->kernel->user)) {
+			$sql_expire = " AND (date_expire > NOW() OR date_expire = '0000-00-00 00:00:00')";
+			$sql_publish = " AND date_publish < NOW() AND status_key > 0";
+		}
+
+		$sql = "SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE intranet_id = ".$this->cmssite->kernel->intranet->get('id')." AND id = " .$this->id . $sql_expire . $sql_publish;
+
+		//$this->db->query($sql);
+		$db = new DB_Sql();
+		$db->query($sql);
+
+		if (!$db->nextRecord()) {
+			return 0;
+		}
+		// Sætte sideoplysninger
+		$this->value['id'] = $db->f('id');
+		$this->value['site_id'] = $db->f('site_id');
+		$this->value['type_key'] = $db->f('type_key');
+		$this->value['type'] = $this->type[$db->f('type_key')];
+		$this->value['identifier'] = $db->f('identifier');
+		if (empty($this->value['identifier'])) {
+			$this->value['identifier'] = $db->f('id');
+		}
+		$this->value['url'] =  $this->cmssite->get('url') . $this->value['identifier'] . '/';
+		$this->value['url_self'] =  $this->value['identifier'] . '/';
+
+		$this->value['child_of_id'] = $db->f('child_of_id');
+		$this->value['name'] = $db->f('title'); //  bruges til keywords - måske skulle vi have et felt også, så title var webrelateret?
+ 		$this->value['title'] = $db->f('title');
+		$this->value['navigation_name'] = $db->f('navigation_name');
+		if (empty($this->value['navigation_name'])) {
+			$this->value['navigation_name'] = $this->value['title'];
+		}
+		$this->value['description'] = $db->f('description');
+		$this->value['keywords'] = $db->f('keywords');
+		$this->value['date_created'] = $db->f('date_created');
+		$this->value['date_updated'] = $db->f('date_updated');
+		$this->value['date_publish_dk'] = $db->f('date_publish_dk');
+		$this->value['date_publish'] = $db->f('date_publish');
+		$this->value['date_expire'] = $db->f('date_expire');
+		$this->value['status_key'] = $db->f('status_key');
+		$this->value['status'] = $this->status[$db->f('status_key')];
+		$this->value['pic_id'] = $db->f('pic_id');
+		$this->value['allow_comments'] = $db->f('allow_comments');
+		$this->value['hidden'] = $db->f('hidden');
+
+
+		$this->value['cc_license'] = $this->cc_license[$this->cmssite->get('cc_license')];
+
+		$this->value['site']['url'] = $this->cmssite->get('url');
+
+		$this->template->id = $db->f('template_id');
+		$this->template->load();
+
+		$this->value['template_id'] = $db->f('template_id');
+		$this->value['template_identifier'] = $this->template->get('identifier');
+
+
+		if($this->get('type') == 'page') {
+			$i = 0;
+			$page_tree[$i]['navigation_name'] = $this->get('navigation_name');
+			$page_tree[$i]['url'] = $this->get('url');
+			$page_tree[$i]['url_self'] = $this->get('url_self');
+			$page_tree[$i]['id'] = $this->get('id');
+
+			$child_of_id = $this->get('child_of_id');
+			while($child_of_id != 0) {
+				$i++;
+
+				$db->query("SELECT child_of_id, navigation_name, title, id, identifier FROM cms_page WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND active = 1 AND type_key = ".$this->get('type_key')." AND id = ".$child_of_id);
+				if($db->nextRecord()) {
+					$page_tree[$i]['navigation_name'] = $db->f('navigation_name');
+					if(empty($page_tree[$i]['navigation_name'])) {
+						$page_tree[$i]['navigation_name'] = $db->f('title');
+					}
+					$page_tree[$i]['url'] = $this->cmssite->get('url').$db->f('identifier').'/';
+					$page_tree[$i]['url_self'] = $db->f('identifier').'/';
+					$page_tree[$i]['id'] = $db->f('id');
+					$child_of_id = $db->f('child_of_id');
+
+				}
+				else {
+					$child_of_id = 0;
+				}
+
+				if($i == 50) trigger_error("The while loop is runing loose in CMS_Page::load", E_USER_ERROR);
+			}
+
+			// Vi vender arrayet rundt, så key kommer til at passe til level.
+			$this->value['page_tree'] = array_reverse($page_tree);
+
+			/*
+			$i = 0;
+
+			for($j = count($page_tree) - 1; $j >= 0; $j--) {
+
+				$this->value['page_tree'][$i] = $page_tree[$j];
+				$i++;
+				if($i == 50) trigger_error("The for loop is runing loose in CMS_Page::load", E_USER_ERROR);
+			}
+			*/
+
+		}
+
+
+		return 1;
+	}
+
+	function getSections() {
+		// tjekker om de rigtige sektioner er oprettet på siden
+		// måske lidt voldsomt at den tjekker det hver gang
+
+		$template_sections = $this->template->getSections();
+
+		foreach ($template_sections AS $template_section) {
+			$db = new DB_Sql;
+			$db->query("SELECT id FROM cms_section WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND page_id = ".$this->get('id')." AND site_id = ".$this->cmssite->get('id')." AND template_section_id = " . $template_section['id']);
+
+			// opretter de sektioner der ikke er oprettet på siden
+			if (!$db->nextRecord()) {
+				$section = CMS_Section::factory($this, 'type', $template_section['type']);
+				$section->save(array('type_key' => $template_section['type_key'], 'template_section_id' => $template_section['id']));
+			}
+
+		}
+
+		// man kan rende ind i det problem at en sektion er i overskud
+		// jeg vil foreslå, at hvis userobjektet findes, så tages den med og på page.php
+		// gives en mulighed for at slette den. Eksternt skal den ikke med
+
+		$db = new DB_Sql;
+		$db->query("SELECT cms_section.id FROM cms_section INNER JOIN cms_template_section ON cms_section.template_section_id = cms_template_section.id
+			WHERE cms_section.intranet_id = ".$this->kernel->intranet->get('id')."
+				AND cms_section.page_id = " . $this->id . " ORDER BY cms_template_section.position ASC");
+		$i = 0;
+		$section = array();
+		while ($db->nextRecord()) {
+			$section[$i] = CMS_Section::factory($this, 'cmspage_and_id', $db->f('id'));
+			$i++;
+		}
+
+		return $section;
+
+	}
+
+	// dette navn giver ikke nogen mening
+	function collect() {
+		$sections = $this->getSections();
+		$page_sections = array();
+		$i = 0;
+		if (is_array($sections) AND count($sections) > 0) {
+			foreach ($sections AS $key => $section) {
+				$page_sections[$i] = $section->get();
+				$i++;
+			}
+		}
+		return $page_sections;
+
+	}
+
+	/**
+	 * Funktion til at udskrive elementerne
+	 *
+
+	function display($type = '') {
+		$elements = $this->getElements();
+		$display = '';
+
+
+		if (is_array($elements) AND count($elements) > 0) {
+			foreach ($elements AS $key => $element) {
+				$display .= $element->display($type);
+			}
+		}
+
+
+		return $display;
+	}
+	*/
+
+	function getComments() {
+		if (!$this->kernel->intranet->hasModuleAccess('contact')) {
+			return '';
+		}
+
+		$this->kernel->useShared('comment');
+
+		$i = 0;
+		$messages = Comment::getList('cmspage', $this->kernel, $this->get('id'));
+
+		return $messages;
+	}
+
+
+	function getList() { // $type = 'page', $level = 'toplevel'
+
+		$pages = array();
+
+		if($this->dbquery->checkFilter('type') && $this->dbquery->getFilter('page') == 'all') {
+			// der stættes ikke noget condition
+			// $sql_type = "";
+		}
+		else {
+			// int sørger for at det ikke kan blive en falsk søgning
+			$type = $this->dbquery->getFilter('type');
+			if($type == '') $type = 'page'; // Standard
+
+			if($type != 'all') {
+
+				$type_key = array_search($type, $this->type);
+				if($type_key === false) trigger_error("Invalid type '".$type."' set with CMS_PAGE::dbquery::setFilter('type') in CMS_Page::getList", E_USER_ERROR);
+
+				$this->dbquery->setCondition("type_key = ".$type_key);
+			}
+		}
+
+
+		// hvis en henter siderne uden for systemet
+		$sql_expire = '';
+		$sql_publish = '';
+		/* This need to be corrected */
+		if (!is_object($this->kernel->user)) {
+			$this->dbquery->setCondition("(date_expire > NOW() OR date_expire = '0000-00-00 00:00:00') AND (date_publish < NOW() AND status_key > 0 AND hidden = 0)");
+		}
+		/*  */
+
+
+		switch ($this->dbquery->getFilter('type')) {
+			case 'page':
+				$this->dbquery->setSorting("position ASC");
+			break;
+			case 'news':
+				$this->dbquery->setSorting("date_publish DESC");
+			break;
+			case 'article':
+				$this->dbquery->setSorting("position, date_publish DESC");
+			break;
+		}
+
+		// rekursiv funktion til at vise siderne
+		$pages = array();
+		$go = true;
+		$n = 0; // level
+		// $o = 0; //
+		$i = 0; // page counter
+		// $level = 1;
+		$cmspage = array();
+		$cmspage[0] = new DB_Sql;
+
+		// Benyttes til undersider.
+		$dbquery_original = clone $this->dbquery;
+		$dbquery_original->storeResult('','', 'toplevel'); // sikre at der ikke bliver gemt ved undermenuer.
+
+
+		if($this->dbquery->checkFilter('level') && $type == 'page') { // $level == 'sublevel' &&
+
+			// Til at finde hele menuen på valgt level.
+			$page_tree = $this->get('page_tree');
+			$level = (int)$this->dbquery->getFilter('level');
+			if(isset($page_tree[$level - 1]) && is_array($page_tree[$level - 1])) {
+				$child_of_id = $page_tree[$level - 1]['id'];
+			}
+			else {
+				$child_of_id = 0;
+			}
+
+			$this->dbquery->setCondition('child_of_id = '.$child_of_id);
+			// $cmspage[0]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE active=1 AND child_of_id = ".$this->id. $sql_expire . $sql_publish . " ORDER BY id");
+
+		}
+		else {
+			$this->dbquery->setCondition('child_of_id = 0');
+			// $cmspage[0]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE ".$sql_type." site_id = " . $this->cmssite->get('id') . " AND child_of_id = 0 AND active = 1 " . $sql_expire . $sql_publish . $sql_order);
+		}
+
+
+		// print($this->dbquery->getFilter('type'));
+		$cmspage[0] = $this->dbquery->getRecordset("cms_page.id, title, identifier, status_key, navigation_name, date_publish, child_of_id, pic_id, description, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk", '', false); //
+
+		while(TRUE) {
+			while($cmspage[$n]->nextRecord()) {
+
+				$pages[$i]['id'] = $cmspage[$n]->f('id');
+
+				$pages[$i]['title'] = $cmspage[$n]->f('title');
+				$pages[$i]['identifier'] = $cmspage[$n]->f('identifier');
+				$pages[$i]['navigation_name'] = $cmspage[$n]->f('navigation_name');
+				$pages[$i]['date_publish_dk'] = $cmspage[$n]->f('date_publish_dk');
+				$pages[$i]['child_of_id'] = $cmspage[$n]->f('child_of_id');
+				$pages[$i]['level'] = $n;
+
+				if (empty($pages[$i]['identifier'])) {
+					$pages[$i]['identifier'] = $pages[$i]['id'];
+				}
+				if (empty($pages[$i]['navigation_name'])) {
+					$pages[$i]['navigation_name'] = $pages[$i]['title'];
+				}
+
+				$pages[$i]['status'] = $this->status[$cmspage[$n]->f('status_key')];
+
+				// hvad er det her til
+				$pages[$i]['new_status'] = 'published';
+				if ($pages[$i]['status'] == 'published') {
+					$pages[$i]['new_status'] = 'draft';
+				}
+				// hertil slut
+
+				// denne bør laves om til picture - og så får man alle nyttige oplysninger ud
+				$pages[$i]['pic_id'] = $cmspage[$n]->f('pic_id');
+				$pages[$i]['description'] = $cmspage[$n]->f('description');
+
+
+				// til google sitemaps
+				// spørgsmålet er om vi ikke skal starte et objekt op for hver pages
+
+				$pages[$i]['url'] = $this->cmssite->get('url') . $pages[$i]['identifier'] . '/';
+				$pages[$i]['url_self'] = $pages[$i]['identifier'] . '/';
+				$pages[$i]['changefreq'] = 'weekly';
+				$pages[$i]['priority'] = 0.5;
+
+
+
+				$i++;
+				// $o = $n + 1;
+
+
+				if ($this->dbquery->getFilter('type') == 'page' AND $this->dbquery->getFilter('level') == 'alllevels') {
+					$dbquery[$n + 1] = clone $dbquery_original;
+					$dbquery[$n + 1]->setCondition("child_of_id = ".$cmspage[$n]->f("id"));
+					$cmspage[$n + 1] = $dbquery[$n + 1]->getRecordset("id, title, identifier, navigation_name, date_publish, child_of_id, pic_id, status_key, description, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk", '', false);
+
+					// if(!array_key_exists($n + 1, $cmspage) OR !is_object($cmspage[$n + 1])) {
+					//	$cmspage[$n + 1] = new DB_Sql;
+					//}
+					// $cmspage[$n + 1]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE active=1 AND child_of_id = ".$cmspage[$n]->f("id"). $sql_expire . $sql_publish . " ORDER BY id");
+
+					if($cmspage[$n + 1]->numRows() != 0) {
+						$n++;
+						CONTINUE;
+					}
+				}
+
+			}
+
+			if($n == 0) {
+				BREAK;
+			}
+
+			$n--;
+
+		}
+
+		return $pages;
+
+	}
+
+
+/*
+	Gammel getlist uden DBQuery, skal fjernes når ovenstående kører.
+	function getList($type = 'page', $level = 'toplevel') {
+		$pages = array();
+
+		if (!empty($type) AND $type == 'all') {
+			$sql_type = "";
+		}
+		else {
+			// int sørger for at det ikke kan blive en falsk søgning
+			$type_key = (int)array_search($type, $this->type);
+			$sql_type = "type_key = " . $type_key . " AND";
+		}
+
+		// hvis en henter siderne uden for systemet
+		$sql_expire = '';
+		$sql_publish = '';
+		if (!is_object($this->kernel->user)) {
+			$sql_expire = " AND (date_expire > NOW() OR date_expire = '0000-00-00 00:00:00')";
+			$sql_publish = " AND date_publish < NOW() AND status_key > 0 AND hidden = 0";
+		}
+
+
+		switch ($type) {
+			case 'page':
+				$sql_order = " ORDER BY position ASC";
+			break;
+			case 'news':
+				$sql_order = " ORDER BY date_publish DESC";
+			break;
+			case 'article':
+				$sql_order = " ORDER BY position, date_publish DESC";
+			break;
+		}
+
+		// rekursiv funktion til at vise siderne
+		$pages = array();
+		$go = true;
+		$n = 0;
+		$o = 0;
+		$i = 0;
+		$cmspage = array();
+		$cmspage[0] = new DB_Sql;
+
+		// dette giver problemer, når vi skal vise en fast undersidemenu
+		if ($level == 'sublevel') {
+			$cmspage[0]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE active=1 AND child_of_id = ".$this->id. $sql_expire . $sql_publish . " ORDER BY id");
+
+		}
+		else {
+			$cmspage[0]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE ".$sql_type." site_id = " . $this->cmssite->get('id') . " AND child_of_id = 0 AND active = 1 " . $sql_expire . $sql_publish . $sql_order);
+
+		}
+
+		while(TRUE) {
+			while($cmspage[$n]->nextRecord()) {
+
+				$pages[$i]['id'] = $cmspage[$n]->f('id');
+
+				$pages[$i]['title'] = str_repeat("- ", $n) . $cmspage[$n]->f('title');
+				$pages[$i]['identifier'] = $cmspage[$n]->f('identifier');
+				$pages[$i]['navigation_name'] = $cmspage[$n]->f('navigation_name');
+				$pages[$i]['date_publish_dk'] = $cmspage[$n]->f('date_publish_dk');
+
+				if (empty($pages[$i]['identifier'])) {
+					$pages[$i]['identifier'] = $pages[$i]['id'];
+				}
+				if (empty($pages[$i]['navigation_name'])) {
+					$pages[$i]['navigation_name'] = $pages[$i]['title'];
+				}
+
+				$pages[$i]['status'] = $this->status[$cmspage[$n]->f('status_key')];
+
+				// hvad er det her til
+				$pages[$i]['new_status'] = 'published';
+				if ($pages[$i]['status'] == 'published') {
+					$pages[$i]['new_status'] = 'draft';
+				}
+				// hertil slut
+
+				// denne bør laves om til picture - og så får man alle nyttige oplysninger ud
+				$pages[$i]['pic_id'] = $cmspage[$n]->f('pic_id');
+				$pages[$i]['description'] = $cmspage[$n]->f('description');
+
+
+				// til google sitemaps
+				// spørgsmålet er om vi ikke skal starte et objekt op for hver pages
+
+				$pages[$i]['url'] = $this->cmssite->get('url') . $pages[$i]['identifier'] . '/';
+				$pages[$i]['changefreq'] = 'weekly';
+				$pages[$i]['priority'] = 0.5;
+
+
+
+				$i++;
+				$o = $n + 1;
+
+
+				if ($type == 'page' AND $level == 'alllevels') {
+
+					if(!array_key_exists($o, $cmspage) OR !is_object($cmspage[$o])) {
+						$cmspage[$o] = new DB_Sql;
+					}
+					$cmspage[$o]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE active=1 AND child_of_id = ".$cmspage[$n]->f("id"). $sql_expire . $sql_publish . " ORDER BY id");
+
+					if($cmspage[$o]->numRows() != 0) {
+						$n = $o;
+						CONTINUE;
+					}
+				}
+
+			}
+
+			if($n == 0) {
+				BREAK;
+			}
+
+			$n--;
+
+		}
+
+		return $pages;
+
+	}
+*/
+
+	function setStatus($status) {
+		if (empty($status)) {
+			$status = 'draft';
+		}
+		if (!in_array($status, $this->status)) return 0;
+		$db = new DB_Sql;
+		$db->query("UPDATE cms_page SET status_key = " . array_search($status, $this->status) . " WHERE id = " . $this->id . " AND intranet_id = " . $this->cmssite->kernel->intranet->get('id'));
+		return 1;
+	}
+
+	function isLocked() {
+		return 0;
+	}
+
+	/*
+	 * Denne metode kræves af Keyword.
+	 */
+
+	function getKeywords() {
+		return ($this->keywords = new Keyword($this));
+	}
+
+	function moveUp() {
+		$this->position->moveUp($this->id);
+	}
+
+	function moveDown() {
+		$this->position->moveDown($this->id);
+	}
+
+	/**
+	 *
+	 * Funktionen skal tjekke alle siderne igennem for at se, om der findes undersider -
+	 * ellers vil de forsvinde fra oversigten.
+	 */
+  function delete() {
+		$db = new DB_Sql();
+  		$db2 = new DB_Sql;
+  		// egentlig skuille denne måske være rekursiv?
+
+		$sql = "SELECT * FROM cms_page WHERE child_of_id=" . $this->id . " AND site_id = " . $this->cmssite->get('id');
+		$db->query($sql);
+		while($db->nextRecord()) {
+			$db2->query("UPDATE cms_page SET child_of_id = '.$db->f('child_of_id').' WHERE child_of_id = " . $this->id . " AND site_id = " . $this->cmssite->get('id'));
+		}
+
+		$sql = "UPDATE cms_page SET active = 0 WHERE id=" . $this->id . " AND site_id = ".$this->cmssite->get('id');
+		$db->query($sql);
+		return 1;
+
+	}
+
+
+}
+?>
