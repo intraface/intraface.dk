@@ -1,5 +1,5 @@
 <?php
-require_once(PATH_INCLUDE_COMMON . 'tools'.DIRECTORY_SEPARATOR.'Position.php');
+require_once('Intraface/tools/Position.php');
 require('element/Htmltext.php');
 require('element/Flickr.php');
 require('element/Delicious.php');

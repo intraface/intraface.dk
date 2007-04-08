@@ -1,7 +1,7 @@
 <?php
 // der skal gøre sådan at man får en bekræftelse på, at e-mailen er sendt, hvis man sender e-mail
 require('../../include_first.php');
-require(PATH_INCLUDE_COMMON . 'tools/Position.php');
+require_once('Intraface/tools/Position.php');
 
 $module = $kernel->module('todo');
 

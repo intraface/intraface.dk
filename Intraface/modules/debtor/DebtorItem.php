@@ -1,5 +1,5 @@
 <?php
-require_once(PATH_INCLUDE_COMMON . 'tools/Position.php');
+require_once('Intraface/tools/Position.php');
 
 /**
  * Der bør være mulighed for halve antal?

@@ -46,8 +46,8 @@ require_once 'MDB2.php';
 require_once PATH_INCLUDE_SHARED.'systemmessage'.DIRECTORY_SEPARATOR.'SystemDisturbance.php';
 
 // core files
-require_once 'Intraface/tools'.DIRECTORY_SEPARATOR.'Date.php';
-require_once 'Intraface/tools'.DIRECTORY_SEPARATOR.'Amount.php';
+require_once 'Intraface/tools/Date.php';
+require_once 'Intraface/tools/Amount.php';
 
 $db = MDB2::singleton(DB_DSN, array('persistent' => true));
 if (PEAR::isError($db)) {

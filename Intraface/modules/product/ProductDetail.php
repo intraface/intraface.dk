@@ -8,7 +8,7 @@
  * TODO Lige nu gemmer den altid en ny produktdetalje uanset, hvad jeg gør.
  */
 
- require_once(PATH_INCLUDE_COMMON . 'tools/Amount.php');
+ require_once('Intraface/tools/Amount.php');
 
 class ProductDetail extends Standard {
 	var $value = array();

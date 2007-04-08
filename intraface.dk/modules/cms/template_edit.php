@@ -1,6 +1,6 @@
 <?php
 require('../../include_first.php');
-require(PATH_INCLUDE_COMMON . 'tools/Position.php');
+require_once('Intraface/tools/Position.php');
 
 $module = $kernel->module('cms');
 $translation = $kernel->getTranslation('cms');

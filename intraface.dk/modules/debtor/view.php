@@ -5,7 +5,7 @@
  * @author Sune Jensen <sj@sunet.dk>
  */
 require('../../include_first.php');
-require(PATH_INCLUDE_COMMON . 'tools/Position.php');
+require_once('Intraface/tools/Position.php');
 
 $debtor_module = $kernel->module('debtor');
 $translation = $kernel->getTranslation('debtor');
@@ -169,10 +169,10 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$debtor->load();
 		}
 		if($return_redirect->get('identifier') == 'send_email') {
-			
-			
+
+
 			if($return_redirect->getParameter('send_email_status') == 'sent' OR $return_redirect->getParameter('send_email_status') == 'outbox') {
-				
+
 				// hvis faktura er genfremsendt skal den ikke sætte status igen
 				if ($debtor->get('status') != 'sent') {
 					$debtor->setStatus('sent');
