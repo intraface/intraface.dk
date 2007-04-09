@@ -1,4 +1,5 @@
 <?php
+require_once 'MDB2.php"';
 
 class DB_Sql {
 	var $db;
@@ -11,9 +12,6 @@ class DB_Sql {
 		if (PEAR::isError($this->db)) {
 			die($db->getMessage() . ' ' . $db->getUserInfo());
 		}
-
-
-
 	}
 
 	function query($SQL) {
@@ -46,7 +44,7 @@ class DB_Sql {
 		// Går videre til næste post hver gang den kaldes.
 		// Returnere true så længe der er en post
 		// while($db->next_record()) {
-		$this->row = $this->result->fetchRow();
+		$this->row = $this->result->fetchRow(MDB2_FETCHMODE_ASSOC);
 		if (PEAR::isError($this->row)) {
 			die($this->row->getMessage() . '' . $this->row->getUserInfo());
 		}
