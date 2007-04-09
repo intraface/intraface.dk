@@ -23,7 +23,7 @@ $kernel->intranet = new Intranet($intranet_id);
 
 // why are we setting the id?
 $kernel->user->setIntranetId($kernel->intranet->get('id'));
-$kernel->setting = new Setting($kernel->user->get('id'), $kernel->intranet->get('id'));
+$kernel->setting = new Setting($kernel->intranet->get('id'), $kernel->user->get('id'));
 
 $language = $kernel->setting->get('user', 'language');
 
