@@ -63,6 +63,15 @@ class MainContact Extends Main {
 				3 => 'electronic'
 			) 
 		);
+		
+		$this->addSetting('reminder_status',
+			array(
+				0 => '_Invalid type_',
+				1 => 'created',
+				2 => 'seen',
+				3 => 'cancelled'
+			) 
+		);
     
 	}
 

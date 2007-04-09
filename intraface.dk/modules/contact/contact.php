@@ -228,9 +228,9 @@ $page->start(safeToHtml($translation->get('contact information') . ' ' .$contact
 
 <?php
 $reminder = new ContactReminder($contact);
-
+$reminder->createDbquery();
 $reminders = $reminder->getList();
-if($reminders > 0) {
+if(count($reminders) > 0) {
 	?>
 	<h2><?php echo safeToHtml($translation->get('reminders')); ?></h2>
 	
@@ -248,7 +248,16 @@ if($reminders > 0) {
 		foreach($reminders AS $reminder_item) {
 			?>
 			<tr>
-				<td><?php echo safeToHtml($reminder_item['dk_reminder_date']); ?></td>
+				<td class="date">
+					<?php 
+					if(strtotime($reminder_item['reminder_date']) <= time()) {
+						echo '<span class="due">'.safeToHtml($reminder_item['dk_reminder_date']).'</span>';
+					}
+					else {
+						echo safeToHtml($reminder_item['dk_reminder_date']);
+					}
+					?>
+				</td>
 				<td><a href="reminder.php?id=<?php echo intval($reminder_item['id']); ?>"><?php echo safeToHtml($reminder_item['subject']); ?></a></td>
 				<td><a href="reminder_edit.php?id=<?php echo intval($reminder_item['id']); ?>" class="edit"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a> <a href="contact.php?id=<?php echo intval($value['id']); ?>&amp;delete_reminder_id=<?php echo intval($reminder_item['id']); ?>" class="delete"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a></td>
 			</tr>
