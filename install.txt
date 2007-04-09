@@ -11,11 +11,11 @@ Installation
 
 1. Copy all files to your server.
 2. Make sure that all files in intraface.dk is put into the web accessible folder
-3. Set up a database, create a user with all 'data and structure access.
-4. Import strucuture and values from Intraface/intraface.dk/install/
-5. Give access to the webserver to write to Intraface/intraface/log/
-6. Give access to the webserver to write to Intraface/upload/ 
-7. Give access to the webserver to write to Intraface/cache/ 
+3. Set up a database, create a user with all data and structure access.
+4. Import strucuture and values to database from Intraface/intraface.dk/install/
+5. Create and give access to the webserver to write to Intraface/log/
+6. Create and give access to the webserver to write to Intraface/upload/ 
+7. Create and give access to the webserver to write to Intraface/cache/ 
 8. Create a config.local.php on the basis of config.local.default.php
 9. Access intraface through your webbroser.
 10. Login with start@intraface.dk, password: startup.
