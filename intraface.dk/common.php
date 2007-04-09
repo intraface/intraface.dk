@@ -20,5 +20,5 @@ if (!file_exists($config_file)) {
 }
 
 require_once $config_file;
-require_once 'Intraface/common.php';
+require_once PATH_ROOT . 'Intraface/common.php';
 ?>
