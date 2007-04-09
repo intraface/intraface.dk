@@ -3,6 +3,7 @@ require('../../include_first.php');
 
 $contact_module = $kernel->module('contact');
 $translation = $kernel->getTranslation('contact');
+$contact_module->includeFile('ContactReminder.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -224,6 +225,45 @@ $page->start(safeToHtml($translation->get('contact information') . ' ' .$contact
 		<li><a href="contactperson_edit.php?contact_id=<?php echo intval($value['id']); ?>"><?php echo safeToHtml($translation->get('add contact person')); ?></a></li>
 	</ul>
 <?php endif; ?>
+
+<?php
+$reminder = new ContactReminder($contact);
+
+$reminders = $reminder->getList();
+if($reminders > 0) {
+	?>
+	<h2><?php echo safeToHtml($translation->get('reminders')); ?></h2>
+	
+	<table class="stripe">
+		<caption><?php echo safeToHtml($translation->get('reminders')); ?></caption>
+		<thead>
+		<tr>
+			<th><?php echo safeToHtml($translation->get('date')); ?></th>
+			<th><?php echo safeToHtml($translation->get('subject')); ?></th>
+			<th></th>
+		</tr>
+		</thead>
+		<tbody>
+		<?php
+		foreach($reminders AS $reminder_item) {
+			?>
+			<tr>
+				<td><?php echo safeToHtml($reminder_item['dk_reminder_date']); ?></td>
+				<td><a href="reminder.php?id=<?php echo intval($reminder_item['id']); ?>"><?php echo safeToHtml($reminder_item['subject']); ?></a></td>
+				<td><a href="reminder_edit.php?id=<?php echo intval($reminder_item['id']); ?>" class="edit"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a> <a href="contact.php?id=<?php echo intval($value['id']); ?>&amp;delete_reminder_id=<?php echo intval($reminder_item['id']); ?>" class="delete"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a></td>
+			</tr>
+			<?php 
+		}
+		?>
+		</tbody>
+	</table
+	<?php
+}
+?>
+
+<ul class="options">
+	<li><a href="reminder_edit.php?contact_id=<?php echo intval($value['id']); ?>"><?php echo safeToHtml($translation->get('add reminder')); ?></a></li>
+</ul> 
 
 
 </div>
