@@ -13,7 +13,6 @@
  */
 
 require_once 'Standard.php';
-require_once '3Party/Database/DB_Sql.php';
 
 class Address extends Standard {
 
