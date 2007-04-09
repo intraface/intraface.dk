@@ -259,7 +259,7 @@ if(count($reminders) > 0) {
 					?>
 				</td>
 				<td><a href="reminder.php?id=<?php echo intval($reminder_item['id']); ?>"><?php echo safeToHtml($reminder_item['subject']); ?></a></td>
-				<td><a href="reminder_edit.php?id=<?php echo intval($reminder_item['id']); ?>" class="edit"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a> <a href="contact.php?id=<?php echo intval($value['id']); ?>&amp;delete_reminder_id=<?php echo intval($reminder_item['id']); ?>" class="delete"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a></td>
+				<td class="buttons"><a href="reminder_edit.php?id=<?php echo intval($reminder_item['id']); ?>" class="edit"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a></td>
 			</tr>
 			<?php 
 		}
