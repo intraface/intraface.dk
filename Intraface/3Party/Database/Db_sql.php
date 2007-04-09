@@ -10,7 +10,7 @@ class DB_Sql {
 
 		$this->db = MDB2::singleton(DB_DSN);
 		if (PEAR::isError($this->db)) {
-			die($db->getMessage() . ' ' . $db->getUserInfo());
+			die($this->db->getMessage() . ' ' . $this->db->getUserInfo());
 		}
 	}
 
