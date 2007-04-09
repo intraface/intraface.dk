@@ -17,7 +17,7 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 
-require_once('3Party/phpmailer/class.phpmailer.php');
+require_once('phpmailer/class.phpmailer.php');
 
 class Email extends Standard {
 
