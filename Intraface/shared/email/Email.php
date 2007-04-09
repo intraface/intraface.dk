@@ -2,22 +2,23 @@
 /**
  * Email
  *
- * Bruges til at sende alle e-mails med.
- *
  * Klassen skal tage højde for, hvor mange e-mails der bliver sendt i timen,
  * for nogle udbydere (bl.a. Dreamhost) accepterer kun udsendelse af 200 e-mails.
  *
  * E-mails skal knyttes til det modul de sendes fra, så man altid kan koble den
  * tilbage.
  *
- * @todo Gøre det muligt at bruge attachments til de enkelte e-mails. Kræver
- *       vist en ekstra klasse og et bibliotek, hvor attachments gemmes for evigt.
- *       Attachments kan så kun være specifikke ting (fx jpg og pdf).
+ * @package Intraface
+ * @author  Lars Olesen <lars@legestue.net>
+ * @since   0.1.0
+ * @version @package-version@
  *
- * @author Lars Olesen <lars@legestue.net>
  */
 
-require_once('phpmailer/class.phpmailer.php');
+require_once 'phpmailer/class.phpmailer.php';
+require_once 'Intraface/Standard.php';
+require_once 'Intraface/Error.php';
+require_once 'Intraface/DBQuery.php';
 
 class Email extends Standard {
 
@@ -45,18 +46,14 @@ class Email extends Standard {
 	 * @param $id - hvis man skal åbne en bestemt e-mail
 	 */
 
-	function Email(&$kernel, $id=0) {
-		if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
+	function Email($kernel, $id=0) {
+		if (!is_object($kernel)) {
 			trigger_error('E-mail kræver kernel', E_USER_ERROR);
 		}
-		$this->kernel = &$kernel;
-		$this->kernel->useModule('contact');
+		$this->kernel = $kernel;
 
 		$this->id = (int)$id;
 		$this->error = new Error;
-
-		$this->dbquery = new DBQuery($this->kernel, "email", "email.intranet_id = ".$this->kernel->intranet->get("id"));
-		$this->dbquery->useErrorObject($this->error);
 
 		$this->type = array(
 			1 => 'quotation',
@@ -84,10 +81,16 @@ class Email extends Standard {
 		}
 	}
 
+	function createDBQuery() {
+		$this->dbquery = new DBQuery($this->kernel, "email", "email.intranet_id = ".$this->kernel->intranet->get("id"));
+		$this->dbquery->useErrorObject($this->error);
+	}
+
 	/**
    * Loader oplysningerne om e-mailen
    */
 	function load() {
+
 		if ($this->id == 0) {
 			return 0;
 		}
@@ -115,6 +118,7 @@ class Email extends Standard {
 			return 0;
 		}
 
+		$this->kernel->useModule('contact');
 		$this->contact = new Contact($this->kernel, $db->f('contact_id'));
 		if (!is_object($this->contact->address)) return 0;
 		$this->value['contact_email'] = $this->contact->address->get('email');
@@ -470,7 +474,7 @@ class Email extends Standard {
 				$this->error->set('Kan ikke finde #' . $db->f('id') . ' fordi den ikke har noget kontakt_id');
 				continue;
 			}
-
+			$this->kernel->useModule('contact');
 			$contact = new Contact($this->kernel, $db->f('contact_id'));
 			if (!is_object($contact->address)) continue;
 			$list[$i]['contact_name'] = $contact->address->get('name');
