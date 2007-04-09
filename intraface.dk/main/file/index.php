@@ -8,8 +8,6 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 
-session_start();
-
 require('../../common.php');
 
 // den her er klodset - ved ikke om den bruges
@@ -47,6 +45,7 @@ switch($filehandler->get('accessibility')) {
 		// Not implemented - continue to next
 	case 'intranet':
 		// You have to be logged in to access this file
+		session_start();
 		$auth = new Auth(session_id());
 
 		if (!$user_id = $auth->isLoggedIn()) {
@@ -54,7 +53,7 @@ switch($filehandler->get('accessibility')) {
 		}
 
 		$user = new User($user_id);
-		$intranet = new Intranet($user->getActiveIntranet());
+		$intranet = new Intranet($user->getActiveIntranetId());
 
 		if($intranet->get('id') != $intranet_id) {
 			die("FEJL I LÆSNING AF BILLEDE (4)");
