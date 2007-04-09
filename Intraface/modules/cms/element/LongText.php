@@ -3,7 +3,7 @@
  *
  */
 
-require_once(PATH_INCLUDE_3PARTY . 'HTMLPurifier.php');
+require_once 'HTMLPurifier.php';
 
 class CMS_LongText extends CMS_Element {
 

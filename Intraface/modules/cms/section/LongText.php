@@ -16,7 +16,7 @@ class CMS_Section_LongText extends CMS_Section {
 
 	var $allowed_tags = '';
 
-	function __construct(& $cmspage, $id = 0) {
+	function __construct($cmspage, $id = 0) {
 		$this->value['type'] = 'longtext';
 		parent::__construct($cmspage, $id);
 
