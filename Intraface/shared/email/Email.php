@@ -19,6 +19,9 @@ require_once 'phpmailer/class.phpmailer.php';
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/Error.php';
 require_once 'Intraface/DBQuery.php';
+require_once 'Intraface/functions/functions.php';
+require_once 'Intraface/Validator.php';
+require_once 'Intraface/3Party/Database/Db_Sql.php';
 
 class Email extends Standard {
 
@@ -96,7 +99,7 @@ class Email extends Standard {
 		}
 
 		$db = new DB_Sql;
-		$sql = "SELECT id, subject, from_name, from_email, body, status, contact_id, type_id, belong_to_id, status FROM email WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = " . $this->id;
+		$sql = "SELECT id, subject, from_name, from_email, user_id, body, status, contact_id, type_id, belong_to_id, status FROM email WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = " . $this->id;
 		$db->query($sql);
 		if (!$db->nextRecord()) {
 			return 0;
@@ -113,18 +116,22 @@ class Email extends Standard {
 		$this->value['belong_to_id'] = $db->f('belong_to_id');
 		$this->value['status'] = $this->status[$db->f('status')];
 		$this->value['status_key'] = $db->f('status');
+		$this->value['user_id'] = $db->f('user_id');
 
 		if ($db->f('contact_id') == 0) {
 			return 0;
 		}
 
+		return 1;
+	}
+
+	function getContact() {
 		$this->kernel->useModule('contact');
-		$this->contact = new Contact($this->kernel, $db->f('contact_id'));
+		$this->contact = new Contact($this->kernel, $this->get('contact_id'));
 		if (!is_object($this->contact->address)) return 0;
 		$this->value['contact_email'] = $this->contact->address->get('email');
 		$this->value['contact_name'] = $this->contact->address->get('name');
 
-		return 1;
 	}
 
 	/**
@@ -331,9 +338,11 @@ class Email extends Standard {
 			$this->error->set('Der kunne ikke sendes e-mail til email #' . $this->get('id') . ' fordi der ikke var nogen kunde sat');
 		}
 
+		$contact = $this->getContact();
+
 		$phpmailer->AddAddress(
-			$this->contact->address->get('email'),
-			$this->contact->address->get('name')
+			$contact->address->get('email'),
+			$contact->address->get('name')
 		);
 
 
