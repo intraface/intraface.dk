@@ -419,6 +419,7 @@ tr.sum {
 .due {
 	background: url(../images/icons/silk/hourglass.png) no-repeat;
 	padding-left: 20px;
+	color: red;
 }
 
 /* products
