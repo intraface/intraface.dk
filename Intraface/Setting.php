@@ -10,6 +10,8 @@
 
 
 require(PATH_INCLUDE_CONFIG . 'setting_kernel.php');
+require_once 'Intraface/3Party/Database/Db_Sql.php';
+require_once 'Intraface/functions/functions.php';
 
 class Setting {
 
@@ -19,38 +21,33 @@ class Setting {
 	var $intranet_id;
 	protected $settings;
 
-	/*
-	function Setting($intranet_id, $user_id = 0) {
-
-	}
-	*/
-
 	function __construct($intranet_id, $user_id = 0) {
 		global $_setting;
 
 		// Init
 		$this->db = new DB_Sql;
-		$this->system = &$_setting;
+		$this->system = &$_setting; // don't remove the & - otherwise it will not work
 		$this->user_id = (int)$user_id;
 		$this->intranet_id = (int)$intranet_id;
 	}
 
 	/**
-	 * Tjekker om en setting er defineret
-	 *
-	 * @access: private
+	 * @param string $setting to test
 	 */
-	function checkSystem($setting) {
+	private function checkSystem($setting) {
 
 		if(!empty($setting) && is_array($this->system) && isset($this->system[$setting])) {
 			return true;
 		}
 		else {
-			trigger_error('Setting "'.$setting.'" er ikke defineret', E_USER_ERROR);
+			trigger_error('Setting "'.$setting.'" is not defined', E_USER_ERROR);
 		}
 	}
 
-	function checkType($type) {
+	/**
+	 * @param string $type to test
+	 */
+	private function checkType($type) {
 		if($type == 'system' || $type == 'intranet' || $type == 'user') {
 			return true;
 		}
@@ -59,6 +56,9 @@ class Setting {
 		}
 	}
 
+	/**
+	 * @return boolean
+	 */
 	function checkLogin() {
 		if($this->user_id != 0) {
 			return true;
@@ -79,23 +79,23 @@ class Setting {
 					trigger_error('Du kan ikke ændre på systemsetting', E_USER_ERROR);
 					break;
 				case 'intranet':
-					$this->db->query("SELECT id FROM setting WHERE setting = '".$setting."' AND intranet_id = ".$this->intranet_id." AND user_id = 0 AND sub_id = ".intval($sub_id));
+					$this->db->query("SELECT id FROM setting WHERE setting = ".$this->db->quote($setting, 'text')." AND intranet_id = ".$this->intranet_id." AND user_id = 0 AND sub_id = ".intval($sub_id));
 					if($this->db->nextRecord()) {
-						$this->db->query("UPDATE setting SET value = '".$value."' WHERE id = ".$this->db->f("id"));
+						$this->db->query("UPDATE setting SET value = ".$this->db->quote($value, 'text')." WHERE id = ".$this->db->quote($this->db->f("id"), 'integer'));
 					}
 					else {
-						$this->db->query("INSERT INTO setting SET value = '".$value."', setting = '".$setting."', intranet_id = ".$this->intranet_id.", user_id = 0, sub_id = ".intval($sub_id));
+						$this->db->query("INSERT INTO setting SET value = ".$this->db->quote($value, 'text').", setting = ".$this->db->quote($setting, 'text').", intranet_id = ".$this->db->quote($this->intranet_id, 'integer').", user_id = 0, sub_id = ".intval($sub_id));
 					}
 					$this->settings['intranet'][$setting][$sub_id] = $value;
 				break;
 				case 'user':
 					if($this->checkSystem($setting)) {
-						$this->db->query("SELECT id FROM setting WHERE setting = '".$setting."' AND intranet_id = ".$this->intranet_id." AND user_id = ".$this->user_id." AND sub_id = ".intval($sub_id));
+						$this->db->query("SELECT id FROM setting WHERE setting = ".$this->db->quote($setting, 'text')." AND intranet_id = ".$this->db->quote($this->intranet_id, 'integer')." AND user_id = ".$this->db->quote($this->user_id, 'integer')." AND sub_id = ".intval($sub_id));
 						if($this->db->nextRecord()) {
-							$this->db->query("UPDATE setting SET value = '".$value."' WHERE id = ".$this->db->f("id"));
+							$this->db->query("UPDATE setting SET value = ".$this->db->quote($value, 'text')." WHERE id = ".$this->db->quote($this->db->f("id"), 'integer'));
 						}
 						else {
-							$this->db->query("INSERT INTO setting SET value = '".$value."', setting = '".$setting."', intranet_id = ".$this->intranet_id.", user_id = ".$this->user_id.", sub_id = ".intval($sub_id));
+							$this->db->query("INSERT INTO setting SET value = ".$this->db->quote($value, 'text').", setting = ".$this->db->quote($setting, 'text').", intranet_id = ".$this->intranet_id.", user_id = ".$this->db->quote($this->user_id, 'integer').", sub_id = ".intval($sub_id));
 						}
 					}
 					$this->settings['user'][$setting][$sub_id] = $value;
@@ -107,7 +107,7 @@ class Setting {
 	}
 
 	function getSettings() {
-		$this->db->query("SELECT setting, value, sub_id, user_id FROM setting WHERE intranet_id = " . $this->db->quote($this->intranet_id, 'integer'));
+		$this->db->query("SELECT setting, value, sub_id, user_id FROM setting WHERE intranet_id = " . $this->db->quote($this->intranet_id, 'integer')." AND (user_id = ".$this->db->quote($this->user_id, 'integer')." OR user_id = 0)");
 		while($this->db->nextRecord()) {
 			if ($this->db->f('user_id') == 0) {
 				$this->settings['intranet'][$this->db->f('setting')][$this->db->f('sub_id')] = $this->db->f('value');
@@ -119,37 +119,9 @@ class Setting {
 
 	}
 
-	/*
-	function get($type, $setting, $sub_id = 0) {
-
-		if($this->checkSystem($setting) && $this->checkType($type)) {
-			switch($type) {
-				case 'user':
-					if($this->checkLogin()) {
-						$this->db->query("SELECT value FROM setting WHERE setting = '".$setting."' AND intranet_id = ".$this->intranet_id." AND user_id = ".$this->user_id." AND sub_id = ".intval($sub_id));
-						if($this->db->nextRecord()) {
-							return $this->db->f('value');
-						}
-					}
-
-				case 'intranet':
-					$this->db->query("SELECT value FROM setting WHERE setting = '".$setting."' AND intranet_id = ".$this->intranet_id." AND user_id = 0 AND sub_id = ".intval($sub_id));
-					if($this->db->nextRecord()) {
-						return $this->db->f('value');
-					}
-
-				default:
-					return $this->system[$setting];
-					break;
-			}
-		}
-	}
-	*/
 	function get($type, $setting, $sub_id = 0) {
 
 		$this->getSettings();
-
-		//echo $type . $setting . '<br>';
 
 		if($this->checkSystem($setting) && $this->checkType($type)) {
 			switch($type) {
