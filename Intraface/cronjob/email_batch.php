@@ -17,7 +17,7 @@ session_start();
 define(PATH_ROOT, '/home/intraface/');
 define(PATH_INCLUDE, '/home/intraface/intraface/');
 
-require_once('../include_first.php');
+require_once '../common.php';
 
 $db = MDB2::factory(DB_DSN);
 $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
