@@ -12,7 +12,8 @@
  * @author Sune
  */
 
-require_once 'Standard.php';
+require_once 'Intraface/Standard.php';
+require_once 'Intraface/3Party/Database/Db_sql.php';
 
 class Address extends Standard {
 

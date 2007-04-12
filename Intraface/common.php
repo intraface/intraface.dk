@@ -56,6 +56,7 @@ if (PEAR::isError($db)) {
 
 $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
 $db->setOption('debug', MDB2_DEBUG);
+$db->setOption('portability', MDB2_PORTABILITY_NONE);
 
 if ($db->getOption('debug')) {
 	$db->setOption('log_line_break', "\n\n\n\n\t");

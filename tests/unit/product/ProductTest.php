@@ -1,28 +1,28 @@
 <?php
-require_once dirname(__FILE__) . './../config.local.php';
+require_once dirname(__FILE__) . './../config.test.php';
 
 require_once 'simpletest/unit_tester.php';
 require_once 'simpletest/reporter.php';
 require_once 'simpletest/mock_objects.php';
 
-require_once PROJECT_PATH_ROOT . 'intraface.dk/config.local.php';
-require_once PATH_INCLUDE . 'common.php';
-require_once PATH_INCLUDE_MODULE . 'product/Product.php';
-require_once PATH_INCLUDE_MODULE . 'product/ProductDetail.php';
+require_once 'Intraface/modules/product/Product.php';
+require_once 'Intraface/modules/product/ProductDetail.php';
 
+class FakeIntranet {
+	function get() {
+		return 1;
+	}
+}
 
-class MockSession extends Session {
-	function start() {}
+class FakeKernel {
+	public $intranet;
 }
 
 class ProductTestCase extends UnitTestCase {
 
 	function setUp() {
-		$session = new MockSession();
-		$this->kernel = new Kernel($session);
-		$this->kernel->login('start@intraface.dk', 'startup');
-		$this->kernel->isLoggedIn();
-		$this->kernel->useModule('product');
+		$this->kernel = new FakeKernel();
+		$this->kernel->intranet = new FakeIntranet;
 	}
 
 	function testProductCanGetNumberIfOtherProductDontNeedItAnymore() {

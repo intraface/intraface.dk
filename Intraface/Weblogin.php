@@ -21,17 +21,13 @@ class Weblogin  {
 	/**
 	 * @param $session_id
 	 */
-	function __construct($session_id) {
+	function __construct($session_id = '') {
 		$this->db = MDB2::factory(DB_DSN);
 
 		if (PEAR::isError($this->db)) {
 			die($this->db->getMessage());
 		}
 
-		if(strlen(trim($session_id)) < 10) {
-			trigger_error('session id is not valid', E_USER_ERROR);
-			return false;
-		}
 		$this->session_id = $session_id;
 	}
 

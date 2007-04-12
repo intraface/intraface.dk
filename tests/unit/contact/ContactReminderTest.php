@@ -1,13 +1,11 @@
 <?php
-require_once dirname(__FILE__) . './../config.local.php';
+require_once dirname(__FILE__) . './../config.test.php';
 
 require_once 'simpletest/unit_tester.php';
 require_once 'simpletest/reporter.php';
 require_once 'simpletest/mock_objects.php';
 
-require_once PROJECT_PATH_ROOT . 'intraface.dk/config.local.php';
-require_once PATH_INCLUDE . 'common.php';
-require_once PATH_INCLUDE . 'modules/contact/ContactReminder.php';
+require_once 'Intraface/modules/contact/ContactReminder.php';
 
 
 class FakeContact {
@@ -15,7 +13,16 @@ class FakeContact {
 	public function get() {
 		return $this->id;
 	}
+}
 
+class FakeIntranet {
+	public function get() {
+		return 1;
+	}
+}
+
+class FakeKernel {
+	public $intranet;
 }
 
 class ContactReminderTestCase extends UnitTestCase {
@@ -25,14 +32,20 @@ class ContactReminderTestCase extends UnitTestCase {
 	function setUp() {
 	}
 
+	function getContact() {
+		$kernel = new FakeKernel;
+		$kernel->intranet = new FakeIntranet;
+		return new FakeContact($kernel);
+	}
+
 	function testConstruction() {
-		$reminder = new ContactReminder(new FakeContact());
+		$reminder = new ContactReminder($this->getContact());
 		$this->assertTrue(is_object($reminder));
 	}
 
 	function testSettingId() {
 		$id = 2;
-		$reminder = new ContactReminder(new FakeContact, $id);
+		$reminder = new ContactReminder($this->getContact(), $id);
 		$this->assertEqual($id, $reminder->get('id'));
 	}
 

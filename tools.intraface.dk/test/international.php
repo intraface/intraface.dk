@@ -1,5 +1,5 @@
 <?php
-require('/home/intraface/devel_intraface/config/configuration.php');
+require('Intraface/config/configuration.php');
 require_once 'I18Nv2/I18Nv2.php';
 require_once 'Date.php';
 require_once 'MDB2.php';
@@ -7,15 +7,15 @@ require_once 'Validate.php';
 
 // let us say, that we are getting a date from the database
 echo 'Date from db: ';
-echo $db_date = '2006-10-31'; // datetime
+$db_date = '2006-10-31'; // datetime
 echo '<br>Currency from DB';
-echo $db_currency = (200050 / 100); // DKK 2.000,50
+$db_currency = (200050 / 100); // DKK 2.000,50
 
 // we make a date object
 $date = new Date($db_date);
 
 // create a locale - we choose Danish
-$locale = &I18Nv2::createLocale('da_DK');
+$locale = I18Nv2::createLocale('da_DK');
 
 // lets output the values for instance to a form
 echo '<br>Currency value: ';

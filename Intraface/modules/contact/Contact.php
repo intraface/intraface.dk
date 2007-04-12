@@ -21,6 +21,12 @@
  *
  */
 
+require_once 'Intraface/Standard.php';
+require_once 'Intraface/DBQuery.php';
+require_once 'Intraface/Validator.php';
+require_once 'Intraface/Error.php';
+require_once 'Intraface/Address.php';
+
 class Contact extends Standard {
 
 	/**
@@ -79,7 +85,10 @@ class Contact extends Standard {
 	/**
 	 * Mulige typer 0: private 1: corporate
 	 */
-	var $types;
+	var $types = array(
+		0 => 'private',
+		1 => 'corporation'
+	);
 
 	/**
 	 * Init
@@ -90,12 +99,12 @@ class Contact extends Standard {
 	 * @access private
 	 */
 	function __construct($kernel, $id = 0) {
-		if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
+		if (!is_object($kernel)) {
 			trigger_error('Contact kræver kernel - fik ' . get_class($kernel), E_USER_ERROR);
 		}
 		$this->kernel = $kernel;
-		$contact_module = $this->kernel->getModule('contact');
-		$this->types = $contact_module->getSetting('type');
+		//$contact_module = $this->kernel->getModule('contact');
+		//$this->types = $contact_module->getSetting('type');
 
 		$this->error = new Error;
 		$this->id = (int)$id;
@@ -105,11 +114,12 @@ class Contact extends Standard {
 		if($this->id > 0) {
 			$this->load();
 		}
+	}
 
+	function createDBQuery() {
 		$this->dbquery = new DBQuery($this->kernel, "contact", "contact.active = 1 AND contact.intranet_id = ".$this->kernel->intranet->get("id"));
 		$this->dbquery->setJoin("LEFT", "address", "address.belong_to_id = contact.id", "address.active = 1 AND address.type = 3");
 		$this->dbquery->useErrorObject($this->error);
-
 	}
 
 	function factory($kernel, $type, $value) {
@@ -180,15 +190,19 @@ class Contact extends Standard {
 		// name må ikke fjernes - bruges af keywords
 		$this->value['name'] = $this->address->get('name');
 		$this->value['openid_url'] = $this->get('openid_url');
-		$this->value['login_url'] = 'http://' . $this->kernel->intranet->get('identifier') . '.' . $this->kernel->setting->get('intranet', 'contact.login_url') . '/' . $this->get('password');
 
 		$this->value['id'] = $db->f('id'); // må ikke fjernes
 
 		return 1;
 	}
 
-	function validate(& $var) {
-		$var = & $var;
+	function getLoginUrl() {
+		return $this->value['login_url'] = 'http://' . $this->kernel->intranet->get('identifier') . '.' . $this->kernel->setting->get('intranet', 'contact.login_url') . '/' . $this->get('password');
+
+	}
+
+	function validate($var) {
+		$var = $var;
 
 		if (array_key_exists('number', $var) AND !$this->isNumberFree($var['number'])) {
 			$this->error->set('Kundenummeret er ikke frit');
@@ -227,7 +241,8 @@ class Contact extends Standard {
 		settype($var['paymentcondition'], 'integer');
 		$validator->isNumeric($var['paymentcondition'], 'Betalingsbetingelserne er ikke sat', 'allow_empty');
 		if (empty($var['paymentcondition'])) {
-			$var['paymentcondition'] = $this->kernel->setting->get('intranet', 'contact.standard_paymentcondition');
+			//$var['paymentcondition'] = $this->kernel->setting->get('intranet', 'contact.standard_paymentcondition');
+			$var['paymentcondition'] = 8;
 		}
 
 		if (empty($var['preferred_invoice'])) $var['preferred_invoice'] = 0;
@@ -688,11 +703,12 @@ class Contact extends Standard {
 
 	function needNewsletterOptin() {
 		$db = new DB_Sql;
-		$db->query("SELECT * FROM newsletter_subscriber WHERE optin = 0 AND contact_id = " . $this->id . " AND intranet_id =" . $this->kernel->intranet->get('id'));
+		$db->query("SELECT list_id, code FROM newsletter_subscriber WHERE optin = 0 AND contact_id = " . $this->id . " AND intranet_id =" . $this->kernel->intranet->get('id'));
 		$lists = array();
 		$i = 0;
 		while ($db->nextRecord()) {
-			$lists[$db->f('list_id')] = $db->f('code');
+			$lists[$i]['list_id'] = $db->f('list_id');
+			$lists[$i]['code'] = $db->f('code');
 			$i++;
 		}
 		return $lists;

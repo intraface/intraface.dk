@@ -84,7 +84,7 @@ class MainDebtor Extends Main {
 		// $this->addPreloadFile('debtorFactory.php');
 		// $this->addPreloadFile('DebtorSetting.php');
 
-		$this->addControlpanelFile('debtor', '/modules/debtor/setting.php');
+		$this->addControlpanelFile('debtor settings', 'modules/debtor/setting.php');
 
 		$this->addDependentModule('contact');
 		$this->addDependentModule('product');

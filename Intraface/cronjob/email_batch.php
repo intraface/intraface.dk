@@ -25,7 +25,8 @@ $result = $db->query("SELECT name, public_key FROM intranet");
 
 while ($row = $result->fetchRow()) {
 
-	$kernel = new Kernel('weblogin', 'public', $row['public_key'], md5(session_id()));
+	$kernel = new Kernel();
+	$kernel->weblogin('public', $row['public_key'], md5(session_id()));
 	$kernel->useShared('email');
 
 	if (!$kernel->intranet->hasModuleAccess('contact')) {

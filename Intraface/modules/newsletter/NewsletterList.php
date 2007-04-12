@@ -11,6 +11,9 @@
  * @version 1.0
  *
  */
+
+require_once 'Intraface/Standard.php';
+
 class NewsletterList extends Standard {
 
 	var $value;
@@ -25,9 +28,9 @@ class NewsletterList extends Standard {
 
 	function NewsletterList($kernel, $id = 0) {
 		if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
-			trigger_error('Listadministration kræver Kernel', FATAL);
+			trigger_error('Listadministration kræver Kernel', E_USER_ERROR);
 		}
-		$this->kernel = & $kernel;
+		$this->kernel = $kernel;
 
 		$newsletter_module = $this->kernel->getModule('newsletter');
 		// $this->subscribe_option_types = $newsletter_module->getSetting('subscribe_option');

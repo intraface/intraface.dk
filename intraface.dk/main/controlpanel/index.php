@@ -38,7 +38,7 @@ for($i = 0, $max = count($modules); $i < $max; $i++) {
 		echo '<h2>' . safeToDb($translation->get($modules[$i]['name'], $modules[$i]['name'])) . '</h2>';
 		echo '<ul>';
 		foreach($files AS $file) {
-			echo '<li><a href="'. PATH_WWW.safeToHtml($file['url']).'">'.safeToDb($translation->get($file['title'])).'</a></li>';
+			echo '<li><a href="'. PATH_WWW .safeToHtml($file['url']).'">'.safeToDb($translation->get($file['title'])).'</a></li>';
 		}
 		echo '</ul>';
 		echo '</div>';

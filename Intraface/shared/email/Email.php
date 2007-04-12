@@ -168,6 +168,8 @@ class Email extends Standard {
 		if (!$this->validate($var)) {
 			return 0;
 		}
+		$db = new DB_Sql;
+
 		if ($this->id == 0) {
 			$sql_type = "INSERT INTO ";
 			$sql_end = ", date_created = NOW(),
@@ -186,6 +188,13 @@ class Email extends Standard {
 		else {
 			$date_deadline = 'NOW()';
 		}
+		$sql_extra = '';
+		// gemme userid hvis vi er inde i systemet
+		if (is_object($this->kernel->user) AND $this->kernel->user->get('id') > 0) {
+			//$db->query("UPDATE email SET user_id = ".$this->kernel->user->get('id')." WHERE id = " . $this->id);
+			$sql_extra = ', user_id = ' . $db->quote($this->kernel->user->get('id'), 'integer');
+		}
+
 
 		// status 1 = draft
 		$sql = $sql_type . " email SET
@@ -194,7 +203,7 @@ class Email extends Standard {
 			subject = '".$var['subject']."',
 			body = '".$var['body']."',
 			date_deadline = ".$date_deadline.",
-			status = 1 ";
+			status = 1 " . $sql_extra;
 
 		if(isset($var['from_name'])) {
 			$sql .= ", from_name = '".$var['from_name']."'";
@@ -205,17 +214,13 @@ class Email extends Standard {
 
 		$sql .= $sql_end;
 
-		$db = new DB_Sql;
+
 		$db->query($sql);
 
 		if ($this->id == 0) {
 			$this->id = $db->insertedId();
 		}
 
-		// gemme userid hvis vi er inde i systemet
-		if (is_object($this->kernel->user) AND $this->kernel->user->get('id') > 0) {
-			$db->query("UPDATE email SET user_id = ".$this->kernel->user->get('id')." WHERE id = " . $this->id);
-		}
 		if ($this->id > 0) {
 			$this->load();
 		}
@@ -265,7 +270,6 @@ class Email extends Standard {
 			$this->error->set('the message can not be send because it has no id');
 			return 0;
 		}
-
 		if($this->get('from_email') == '' && (!isset($this->kernel->intranet->address) || $this->kernel->intranet->address->get('email') == '')) {
 			$this->error->set('you need to fill in an e-mail address for the intranet, to be able to send mails');
 			return 0;
@@ -283,7 +287,7 @@ class Email extends Standard {
 	function send($what_to_do = 'send') {
 
 		if(!$this->isReadyToSend()) {
-			return 0;
+			return false;
 		}
 
 		$db = new DB_Sql;

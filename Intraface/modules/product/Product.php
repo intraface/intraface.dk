@@ -9,6 +9,10 @@
  * @see Stock
  */
 
+require_once 'Intraface/Standard.php';
+require_once 'Intraface/Error.php';
+require_once 'Intraface/3Party/Database/Db_Sql.php';
+
 class Product extends Standard {
 
 	/**
@@ -83,11 +87,11 @@ class Product extends Standard {
 	 * @param (int) $old_product_detail_id skal kun bruges hvis man skal finde gamle detaljer, fx på fakturaer
    * @return void
 	 */
-	function Product(& $kernel, $product_id = 0, $old_product_detail_id = 0) {
+	function Product($kernel, $product_id = 0, $old_product_detail_id = 0) {
 		if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
 			trigger_error('Produkt-objektet kræver et Kernel-objekt.', E_USER_ERROR);
 		}
-		$this->kernel = & $kernel;
+		$this->kernel = $kernel;
 		$this->db = new Db_sql;
 		$this->id = (int)$product_id;
 		$this->old_product_detail_id = (int)$old_product_detail_id;
@@ -95,6 +99,7 @@ class Product extends Standard {
 		$this->fields = array('do_show', 'stock');
 
 		$this->error = new Error;
+
 		$shared_filehandler = $this->kernel->useShared('filehandler');
 		$shared_filehandler->includeFile('AppendFile.php');
 

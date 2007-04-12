@@ -2,7 +2,7 @@
 /**
  * @author Sune Jensen <sj@sunet.dk>
  */
-require_once('3Party/Cpdf/class.pdf.php');
+require_once 'Cpdf/class.pdf.php';
 
 class PdfMaker extends Cpdf {
 	var $value;
@@ -15,7 +15,6 @@ class PdfMaker extends Cpdf {
 		if(!is_object($kernel) || strtolower(get_class($kernel)) != 'kernel') {
 			trigger_error("Første parameter er ikke kernel i PdfMaker->__construct", E_USER_ERROR);
 		}
-
 
 		$this->kernel = $kernel;
 
@@ -41,7 +40,7 @@ class PdfMaker extends Cpdf {
 		$this->load();
 
 		// Opretter en nyt A4 dokument
-		parent::CorePdf(array(0, 0, $this->page_width, $this->page_height));
+		parent::Cpdf(array(0, 0, $this->page_width, $this->page_height));
 
 	}
 
@@ -92,7 +91,7 @@ class PdfMaker extends Cpdf {
 			$this->value['y'] -= intval(substr($value, 1));
 		}
 		else {
-			trigger_error("Ugyldig værdi i setY: ".$value, FATAL);
+			trigger_error("Ugyldig værdi i setY: ".$value, E_USER_ERROR);
 		}
 	}
 
@@ -121,7 +120,7 @@ class PdfMaker extends Cpdf {
 	function addHeader($headerImg = "") {
 
 		if(file_exists($headerImg)) {
-  		$header = CorePdf::openObject();
+  		$header = Cpdf::openObject();
 			$size = getImageSize($headerImg); // array(0 => width, 1 => height)
 
 			$height = $this->get('header_height');;
@@ -137,11 +136,11 @@ class PdfMaker extends Cpdf {
 			// die($this->get('right_margin_position').' - '.$width.', '.$this->get('top_margin_position').' - '.$height.', '.$width.', '.$height); // , ($this->value["page_width"] - $this->value["margin_left"])/10
 
 			// die($headerImg);
-  		CorePdf::addJpegFromFile($headerImg, $this->get('right_margin_position') - $width, $this->page_height - $this->get('header_margin_top') - $height, $width, $height); // , ($this->value["page_width"] - $this->value["margin_left"])/10
+  		Cpdf::addJpegFromFile($headerImg, $this->get('right_margin_position') - $width, $this->page_height - $this->get('header_margin_top') - $height, $width, $height); // , ($this->value["page_width"] - $this->value["margin_left"])/10
   		//
-			CorePdf::closeObject();
+			Cpdf::closeObject();
 
-  		CorePdf::addObject($header, "all");
+  		Cpdf::addObject($header, "all");
 
 			$this->setValue('margin_top', $height + $this->get('header_margin_top') + $this->get('header_margin_bottom'));
 			$this->setY(0);
@@ -250,35 +249,35 @@ class PdfMaker extends Cpdf {
 		$pointY -= $this->get("font_spacing");
 
 		if($customer["attention_to"] != "") {
-			CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), "Att: ".$customer["attention_to"]);
+			Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), "Att: ".$customer["attention_to"]);
 			$pointY -= $this->get("font_spacing");
 		}
 
 		// elseif($customer["object"]->address->get("contactname") != "" && $customer["object"]->address->get("contactname") != $customer["object"]->address->get("name")) {
-		//	CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), "Att: ".$customer["object"]->address->get("contactname"));
+		//	Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), "Att: ".$customer["object"]->address->get("contactname"));
 		// 	$pointY -= $this->get("font_spacing");
 		// }
 
 		$line = explode("\r\n", $customer["object"]->address->get("address"));
 		for($i = 0; $i < count($line); $i++) {
-			CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), $line[$i]);
+			Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), $line[$i]);
 			$pointY -= $this->get("font_spacing");
 			if($i == 2) $i = count($line);
 		}
 		// $pointY -= $this->get("font_spacing");
-		CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), $customer["object"]->address->get("postcode")." ".$customer["object"]->address->get("city"));
+		Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), $customer["object"]->address->get("postcode")." ".$customer["object"]->address->get("city"));
 		$pointY -= $this->get("font_spacing") * 2;
 
 		if($customer["object"]->address->get("cvr") != "") {
-			CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), "CVR.:");
-			CorePdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $customer["object"]->address->get("cvr"));
+			Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), "CVR.:");
+			Cpdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $customer["object"]->address->get("cvr"));
 			$pointY -= $this->get("font_spacing");
 		}
-		CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), "Kundenr.:");
-		CorePdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $customer["object"]->get("number"));
+		Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), "Kundenr.:");
+		Cpdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $customer["object"]->get("number"));
 		if ($customer["object"]->address->get("ean")) {
-		 CorePdf::addText($pointX + 10, $pointY - 15, $this->get("font_size"), "EANnr.:");
-		 CorePdf::addText($pointX + 10 + 60, $pointY - 15, $this->get("font_size"), $customer["object"]->address->get("ean"));
+		 Cpdf::addText($pointX + 10, $pointY - 15, $this->get("font_size"), "EANnr.:");
+		 Cpdf::addText($pointX + 10 + 60, $pointY - 15, $this->get("font_size"), $customer["object"]->address->get("ean"));
 		}
 
 		$pointY = $box_top - $box_height;
@@ -291,44 +290,44 @@ class PdfMaker extends Cpdf {
 		$pointY -= $box_padding_top;
 		$pointY -= $this->get("font_spacing");
 
-		CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), "<b>".$intranet_address->get("name")."</b>");
-		CorePdf::addText($this->get("page_width") - 40, $pointY + 4, $this->get("font_size") - 4, "Afsender");
+		Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), "<b>".$intranet_address->get("name")."</b>");
+		Cpdf::addText($this->get("page_width") - 40, $pointY + 4, $this->get("font_size") - 4, "Afsender");
 		$pointY -= $this->get("font_spacing");
 		$line = explode("\r\n", $intranet_address->get("address"));
 		for($i = 0; $i < count($line); $i++) {
-			CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), $line[$i]);
+			Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), $line[$i]);
 			$pointY -= $this->get("font_spacing");
 			if($i == 2) $i = count($line);
 		}
-		CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), $intranet_address->get("postcode")." ".$intranet_address->get("city"));
+		Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), $intranet_address->get("postcode")." ".$intranet_address->get("city"));
 		$pointY -= $this->get("font_spacing") * 2;
 
-		CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), "CVR.:");
-		CorePdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $intranet_address->get("cvr"));
+		Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), "CVR.:");
+		Cpdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $intranet_address->get("cvr"));
 		$pointY -= $this->get("font_spacing");
 
 		if($intranet["user_id"] != 0) {
 			$user = new User($intranet["user_id"]);
-			CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), "Kontakt:");
-			CorePdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $user->address->get("name"));
+			Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), "Kontakt:");
+			Cpdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $user->address->get("name"));
 		}
 
 		$pointY -= $this->get("font_spacing");
-		CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), "Telefon:");
+		Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), "Telefon:");
 		if(get_class($user) == "user" && $user->address->get("phone") != "") {
-			CorePdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $user->address->get("phone"));
+			Cpdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $user->address->get("phone"));
 		}
 		else {
-			CorePdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $intranet_address->get("phone"));
+			Cpdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $intranet_address->get("phone"));
 		}
 
 		$pointY -= $this->get("font_spacing");
-		CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), "E-mail:");
+		Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), "E-mail:");
 		if(get_class($user) == "user" && $user->address->get("email") != "") {
-			CorePdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $user->address->get("email"));
+			Cpdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $user->address->get("email"));
 		}
 		else {
-			CorePdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $intranet_address->get("email"));
+			Cpdf::addText($pointX + 10 + 60, $pointY, $this->get("font_size"), $intranet_address->get("email"));
 		}
 
 		$pointY = $box_top - $box_height;
@@ -344,8 +343,8 @@ class PdfMaker extends Cpdf {
 
 			for($i = 0; $i < count($docinfo); $i++) {
 				$pointY -= $this->get("font_spacing");
-				CorePdf::addText($pointX + 10, $pointY, $this->get("font_size"), $docinfo[$i]["label"]);
-				CorePdf::addText($this->get("page_width") - 40 - $this->getTextWidth($this->get("font_size"), $docinfo[$i]["value"]), $pointY, $this->get("font_size"), $docinfo[$i]["value"]);
+				Cpdf::addText($pointX + 10, $pointY, $this->get("font_size"), $docinfo[$i]["label"]);
+				Cpdf::addText($this->get("page_width") - 40 - $this->getTextWidth($this->get("font_size"), $docinfo[$i]["value"]), $pointY, $this->get("font_size"), $docinfo[$i]["value"]);
 			}
 
 			$pointY = $box_small_top - $box_small_height;
@@ -358,7 +357,7 @@ class PdfMaker extends Cpdf {
 		// Udskriver overskrift
 
 		$pointX = $this->get("margin_left");
-		CorePdf::addText($pointX, $pointY, $this->get("font_size") + 8, $title);
+		Cpdf::addText($pointX, $pointY, $this->get("font_size") + 8, $title);
 
 		return($pointY);
 	}

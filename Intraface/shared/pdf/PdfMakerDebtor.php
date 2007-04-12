@@ -46,38 +46,38 @@ class PdfMakerDebtor extends PdfMaker {
 		# Udskrivning af modtager
 
 		$this->setY('-'.$this->get("font_spacing")); // $pointY -= $box_padding_top;
-		CorePdf::addText($this->get('x') + $box_width - 40, $this->get('y') + 4, $this->get("font_size") - 4, "Modtager");
+		CPdf::addText($this->get('x') + $box_width - 40, $this->get('y') + 4, $this->get("font_size") - 4, "Modtager");
 
 		$this->setY('-'.$box_padding_top);
-		CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "<b>".$contact["object"]->address->get("name")."</b>");
+		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "<b>".$contact["object"]->address->get("name")."</b>");
 		$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
 
 		if(isset($contact["attention_to"]) && $contact["attention_to"] != "") {
-			CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Att: ".$contact["attention_to"]);
+			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Att: ".$contact["attention_to"]);
 			$this->setY('-'.$this->get('font_spacing')); // $pointY -= $this->get("font_spacing");
 		}
 
 		$line = explode("\r\n", $contact["object"]->address->get("address"));
 		for($i = 0; $i < count($line); $i++) {
-			CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $line[$i]);
+			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $line[$i]);
 			$this->setY('-'.$this->get("font_spacing"));
 
 			if($i == 2) $i = count($line);
 		}
 		// $pointY -= $this->get("font_spacing");
-		CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $contact["object"]->address->get("postcode")." ".$contact["object"]->address->get("city"));
+		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $contact["object"]->address->get("postcode")." ".$contact["object"]->address->get("city"));
 		$this->setY('-'.($this->get("font_spacing") * 2));
 
 		if($contact["object"]->address->get("cvr") != "") {
-			CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "CVR.:");
-			CorePdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $contact["object"]->address->get("cvr"));
+			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "CVR.:");
+			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $contact["object"]->address->get("cvr"));
 			$this->setY('-'.$this->get("font_spacing"));
 		}
-		CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Kontaktnr.:");
-		CorePdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $contact["object"]->get("number"));
+		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Kontaktnr.:");
+		CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $contact["object"]->get("number"));
 		if ($contact["object"]->address->get("ean")) {
-		 CorePdf::addText($this->get('x') + 10, $this->get('y') - 15, $this->get("font_size"), "EANnr.:");
-		 CorePdf::addText($this->get('x') + 10 + 60, $this->get('y') - 15, $this->get("font_size"), $contact["object"]->address->get("ean"));
+		 CPdf::addText($this->get('x') + 10, $this->get('y') - 15, $this->get("font_size"), "EANnr.:");
+		 CPdf::addText($this->get('x') + 10 + 60, $this->get('y') - 15, $this->get("font_size"), $contact["object"]->address->get("ean"));
 		}
 
 		$box_height = $box_top - $this->get('y') + $box_padding_bottom;
@@ -87,48 +87,48 @@ class PdfMakerDebtor extends PdfMaker {
 		$this->setX($box_width + 10);
 		$this->setValue('y', $box_top); // sætter eksakt position
 		$this->setY('-'.$this->get("font_spacing"));
-		CorePdf::addText($this->get('right_margin_position') - 40, $this->get('y') + 4, $this->get("font_size") - 4, "Afsender");
+		CPdf::addText($this->get('right_margin_position') - 40, $this->get('y') + 4, $this->get("font_size") - 4, "Afsender");
 
 		$this->setY('-'.$box_padding_top); // $pointY -= $box_padding_top;
-		CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "<b>".$intranet_address->get("name")."</b>");
+		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "<b>".$intranet_address->get("name")."</b>");
 
 		$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
 		$line = explode("\r\n", $intranet_address->get("address"));
 		for($i = 0; $i < count($line); $i++) {
-			CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $line[$i]);
+			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $line[$i]);
 			$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
 			if($i == 2) $i = count($line);
 		}
-		CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $intranet_address->get("postcode")." ".$intranet_address->get("city"));
+		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $intranet_address->get("postcode")." ".$intranet_address->get("city"));
 		$this->setY('-'.($this->get("font_spacing") * 2)); // $pointY -= $this->get("font_spacing") * 2;
 
-		CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "CVR.:");
-		CorePdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet_address->get("cvr"));
+		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "CVR.:");
+		CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet_address->get("cvr"));
 		$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
 
 		if($intranet["user_id"] != 0) {
 			$user = new User($intranet["user_id"]);
-			CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Kontakt:");
-			CorePdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $user->address->get("name"));
+			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Kontakt:");
+			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $user->address->get("name"));
 			$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
 		}
 
 
-		CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Telefon:");
+		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Telefon:");
 		if(isset($user) && strtolower(get_class($user)) == "user" && $user->address->get("phone") != "") {
-			CorePdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $user->address->get("phone"));
+			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $user->address->get("phone"));
 		}
 		else {
-			CorePdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet_address->get("phone"));
+			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet_address->get("phone"));
 		}
 		$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
 
-		CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "E-mail:");
+		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "E-mail:");
 		if(isset($user) && strtolower(get_class($user)) == "user" && $user->address->get("email") != "") {
-			CorePdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $user->address->get("email"));
+			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $user->address->get("email"));
 		}
 		else {
-			CorePdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet_address->get("email"));
+			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet_address->get("email"));
 		}
 
 		if($box_top - $this->get('y') + $box_padding_bottom > $box_height) {
@@ -153,8 +153,8 @@ class PdfMakerDebtor extends PdfMaker {
 
 			for($i = 0; $i < count($docinfo); $i++) {
 				$this->setY('-'.$this->get('font_spacing'));
-				CorePdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $docinfo[$i]["label"]);
-				CorePdf::addText($this->get("right_margin_position") - 40 - $this->getTextWidth($this->get("font_size"), $docinfo[$i]["value"]), $this->get('y'), $this->get("font_size"), $docinfo[$i]["value"]);
+				CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $docinfo[$i]["label"]);
+				CPdf::addText($this->get("right_margin_position") - 40 - $this->getTextWidth($this->get("font_size"), $docinfo[$i]["value"]), $this->get('y'), $this->get("font_size"), $docinfo[$i]["value"]);
 			}
 
 			$this->setValue('y', $box_small_top - $box_small_height); // Sætter eksakt position
@@ -168,7 +168,7 @@ class PdfMakerDebtor extends PdfMaker {
 
 		// $pointX = $this->get("margin_left");
 		$this->setX(0);
-		CorePdf::addText($this->get('x'), $this->get('y'), $this->get("font_size") + 8, $title);
+		CPdf::addText($this->get('x'), $this->get('y'), $this->get("font_size") + 8, $title);
 
 		return($this->get('y'));
 	}

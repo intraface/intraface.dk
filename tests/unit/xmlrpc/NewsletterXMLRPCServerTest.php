@@ -4,7 +4,7 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'simpletest/unit_tester.php';
 require_once 'simpletest/reporter.php';
 
-require_once 'Intraface/XMLRPC/Contact/Server.php';
+require_once 'Intraface/XMLRPC/Newsletter/Server.php';
 
 class FakeKernel {
 	public $intranet;
@@ -24,9 +24,12 @@ class FakeIntranet {
 	function get() {
 		return $this->id;
 	}
+	function hasModuleAccess() {
+		return true;
+	}
 }
 
-class ContactXMLRPCTestCase extends UnitTestCase {
+class NewsletterXMLRPCTestCase extends UnitTestCase {
 
 	protected $client;
 	protected $credentials;
@@ -61,45 +64,36 @@ class ContactXMLRPCTestCase extends UnitTestCase {
 			'private_key' => $this->private_key,
 			'session_id' => 'somesessionid'
 		);
-		$server = new Intraface_XMLRPC_Contact;
+		$server = new Intraface_XMLRPC_Newsletter_Server;
 		$this->assertTrue($server->checkCredentials($credentials));
 	}
 
-	function testAuthenticateContact() {
+	function testGetNewsletterList() {
 		$credentials = array(
 			'private_key' => $this->private_key,
 			'session_id' => 'somesessionid'
 		);
 
-		$server = new Intraface_XMLRPC_Contact();
-		$this->assertTrue($server->authenticateContact($credentials, $this->contact_key));
+		$server = new Intraface_XMLRPC_Newsletter_Server();
+		$this->assertTrue(is_array($array = $server->getNewsletterList($credentials)));
+		print_r($array);
 
 	}
-
-	function testGetContact() {
+	function testGetSubscriptions() {
 		$credentials = array(
 			'private_key' => $this->private_key,
 			'session_id' => 'somesessionid'
 		);
-		$server = new Intraface_XMLRPC_Contact();
-		$this->assertTrue($server->getContact($credentials, $this->insert_id));
-	}
 
-	function testSaveContact() {
-		$credentials = array(
-			'private_key' => $this->private_key,
-			'session_id' => 'somesessionid'
-		);
-		$server = new Intraface_XMLRPC_Contact;
-		$data = array(
-			'name' => 'name'
-		);
-		$this->assertTrue($server->saveContact($credentials, $data));
+		$server = new Intraface_XMLRPC_Newsletter_Server();
+		$this->assertTrue(is_array($array = $server->getSubscriptions($credentials, 1)));
+		print_r($array);
+
 	}
 }
 
 if (!isset($this)) {
-	$test = new ContactXMLRPCTestCase();
+	$test = new NewsletterXMLRPCTestCase();
 	if (TextReporter::inCli()) {
 		exit($test->run(new TextReporter()) ? 0 : 1);
 	}

@@ -1,5 +1,6 @@
 <?php
-require '../include_first.php';
+require '../common.php';
+require 'common/core/Auth.php';
 require 'Text/CAPTCHA.php';
 
 $title = 'Intraface.dk -> Login';
@@ -12,7 +13,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if (!Validate::string($_POST['password'], VALIDATE_ALPHA . VALIDATE_NUM)) {
 		$error[] = 'Password ugyldigt';
 	}
-
+	/*
 	if (isset($_POST['phrase']) && isset($_SESSION['phrase']) &&
 		strlen($_POST['phrase']) > 0 && strlen($_SESSION['phrase']) > 0
 		&& $_POST['phrase'] == $_SESSION['phrase']) {
@@ -23,6 +24,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error[] = 'Tekst er forkert';
     }
     unlink(PATH_CAPTCHA . md5(session_id()) . '.png');
+    */
 
 
 	if (!empty($error) AND count($error) > 0) {
@@ -84,6 +86,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 				trigger_error('could not login', E_USER_ERROR);
 				return false;
 			}
+			$auth->isLoggedIn();
 			header('Location: '.PATH_WWW.'main/');
 			exit;
 
@@ -93,7 +96,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 }
 
-
+		/*
         // Set CAPTCHA options (font must exist!)
         $options = array(
             'font_size' => 20,
@@ -126,7 +129,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         	chmod(PATH_CAPTCHA, 644);
         }
         file_put_contents(PATH_CAPTCHA . md5(session_id()) . '.png', $png);
-
+		*/
 
 include(PATH_INCLUDE_IHTML . 'outside/top.php');
 
@@ -154,7 +157,7 @@ include(PATH_INCLUDE_IHTML . 'outside/top.php');
 			<label for="password" id="password_label">Adgangskode:</label>
 			<input tabindex="2" type="password" name="password" id="password" value="" />
 		</div>
-
+	<!--
 		<div class="align-left" style="clear: both;">
 			<?php echo '<img src="file.php?' . time() . '" />'; ?>
 		</div>
@@ -162,7 +165,7 @@ include(PATH_INCLUDE_IHTML . 'outside/top.php');
 			<label for="phrase">Skriv tekst fra billede</label>
 			<input tabindex="3" type="text" name="phrase" id="phrase" />
 		</div>
-
+-->
 		<div style="clear: both;">
 			<input tabindex="4" type="submit" value="Lad mig prøve" id="submit" />
 		</div>

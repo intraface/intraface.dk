@@ -89,7 +89,7 @@ class Intranet extends Standard {
 		if(is_string($module)) {
 			if (empty($this->modules)) {
 				$result = $this->db->query("SELECT id, name FROM module WHERE active = 1");
-				while($row = $result->fetchRow()) {
+				while($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 					$this->modules[$row['name']] = $row['id'];
 				}
 				$result->free();
@@ -99,7 +99,7 @@ class Intranet extends Standard {
 				$module_id = $this->modules[$module];
 			}
 			else {
-				trigger_error('Ugyldig modulnavn '.$module, E_USER_ERROR);
+				trigger_error('intranet says invalid module name '.$module, E_USER_ERROR);
 			}
 		}
 		else {
@@ -115,7 +115,7 @@ class Intranet extends Standard {
 
 
 		$result = $this->db->query("SELECT module_id FROM permission WHERE intranet_id = ".$this->db->quote($this->id, 'integer')." AND user_id = 0");
-		while ($row = $result->fetchRow()) {
+		while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 			$this->permissions['intranet']['module'][$row['module_id']] = true;
 		}
 		$result->free();

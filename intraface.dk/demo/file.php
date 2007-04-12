@@ -1,5 +1,5 @@
 <?php
-require '../include_first.php';
+require '../common.php';
 
 if (session_id() == '') {
 	session_start();

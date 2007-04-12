@@ -11,6 +11,7 @@
 require_once 'Intraface/Weblogin.php';
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/Intranet.php';
+require_once 'Intraface/Setting.php';
 require_once 'Intraface/modules/contact/Contact.php';
 require_once 'XML/RPC2/Server.php';
 require_once 'MDB2.php';
@@ -18,7 +19,12 @@ require_once 'MDB2.php';
 class Intraface_XMLRPC_Contact {
 
 	private $credentials;
-	private $kernel;
+	//private $kernel;
+
+	//function __construct() {
+	function __construct($kernel = '') {
+		//$this->kernel = $kernel;
+	}
 
 	/**
 	 * Gets a contact
@@ -56,7 +62,7 @@ class Intraface_XMLRPC_Contact {
 
 		$contact = Contact::factory($this->kernel, 'code', $contact_key);
 		if (!is_object($contact) OR !$contact->get('id') > 0) {
-			return 0;
+			return false;
 		}
 
 		$contact_info = array_merge($contact->get(), $contact->address->get());
@@ -154,14 +160,18 @@ class Intraface_XMLRPC_Contact {
 		$keywords = $contact->keywords->getConnectedKeywords();
 		return $keywords;
 	}
+	*/
 
-	function getIntranetPermissions($arg) {
-
-		if (count($arg) != 2) {
-			return new IXR_Error(-4, 'Der er ikke det rigtige antal argumenter til getIntranetPermissions. Der var ' . count($arg) . ' argumenter');
-		}
-
-		if (is_object($return = $this->checkCredentials($arg))) {
+	/**
+	 * Gets intranet permissions to use with a menu
+	 *
+	 * Might be deprecated in the future so use with caution
+	 *
+	 * @param  struct $credentials
+	 * @return array
+	 */
+	function getIntranetPermissions($credentials) {
+		if (is_object($return = $this->checkCredentials($credentials))) {
 			return $return;
 		}
 
@@ -181,7 +191,6 @@ class Intraface_XMLRPC_Contact {
 
 		return $permissions;
 	}
-	*/
 
 	/**
 	 * Checking credentials
@@ -190,6 +199,11 @@ class Intraface_XMLRPC_Contact {
 	 * @return array
 	 */
 	function checkCredentials($credentials) {
+		/*
+		if (is_object($this->kernel) AND is_object($this->kernel->intranet)) {
+			return true;
+		}
+		*/
 
 		if (count($credentials) != 2) { // -4
 			throw new XML_RPC2_FaultException('wrong argument count in $credentials - got ' . count($credentials) . ' arguments - need 2', -4);
@@ -203,11 +217,12 @@ class Intraface_XMLRPC_Contact {
 
 		$weblogin = new Weblogin('some session');
 		if (!$intranet_id = $weblogin->auth('private', $credentials['private_key'], $credentials['session_id'])) {
-			throw new XML_RPC2_FaultException('access to intranet denied', -2);
+			throw new XML_RPC2_FaultException('contact says access to intranet - please supply a valid private key', -2);
 		}
 
 		$this->kernel = new Kernel();
 		$this->kernel->intranet = new Intranet($intranet_id);
+		$this->kernel->setting = new Setting($this->kernel->intranet->get('id'));
 
 		if (!is_object($this->kernel->intranet)) { // -2
 			throw new XML_RPC2_FaultException('could not create intranet', -2);

@@ -9,7 +9,7 @@
  */
 
 
-require(PATH_INCLUDE_CONFIG . 'setting_kernel.php');
+require_once 'Intraface/config/setting_kernel.php';
 require_once 'Intraface/3Party/Database/Db_Sql.php';
 require_once 'Intraface/functions/functions.php';
 

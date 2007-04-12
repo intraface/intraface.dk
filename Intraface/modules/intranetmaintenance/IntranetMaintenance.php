@@ -16,7 +16,7 @@
  *
  */
 
-
+require_once 'Intraface/Intranet.php';
 
 class IntranetMaintenance extends Intranet {
 
@@ -28,7 +28,7 @@ class IntranetMaintenance extends Intranet {
 	 * Constructor
 	 */
 
-	function __construct(&$kernel, $intranet_id = 0) {
+	function __construct($kernel, $intranet_id = 0) {
 		if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
 			trigger_error('intranetmaintenance needs a kernel', E_USER_ERROR);
 		}
@@ -36,7 +36,7 @@ class IntranetMaintenance extends Intranet {
 		$this->db = MDB2::singleton(DB_DSN);
 
 		$this->id = (int)$intranet_id;
-		$this->kernel = &$kernel;
+		$this->kernel = $kernel;
 		$this->error = new Error();
 
 		$this->dbquery = New DBQuery($this->kernel, 'intranet');

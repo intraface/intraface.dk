@@ -23,7 +23,7 @@ $query_parts = explode('/', $_SERVER["QUERY_STRING"]);
 // safeToDb er forkert at bruge her
 $query_parts = safeToDb($query_parts);
 
-$weblogin = new Weblogin(session_id());
+$weblogin = new Weblogin();
 if (!$intranet_id = $weblogin->auth('public', $query_parts[1])) {
 	die('FEJL I LÆSNING AF BILLEDE (0)');
 }

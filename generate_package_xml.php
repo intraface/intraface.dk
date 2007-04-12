@@ -54,6 +54,9 @@ $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.0');
 $pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '2.0.0');
 $pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.9.10');
 
+$pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'hp.jpsband.org', '1.6.0');
+
+
 $pfm->generateContents();
 
 if (isset($_GET['make']) || (isset($_SERVER['argv']) && @$_SERVER['argv'][1] == 'make')) {

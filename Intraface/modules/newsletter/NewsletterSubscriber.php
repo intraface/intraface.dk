@@ -12,6 +12,13 @@
  *
  */
 
+require_once 'Intraface/Standard.php';
+require_once 'Intraface/DBQuery.php';
+require_once 'Intraface/functions/functions.php';
+require_once 'Intraface/modules/contact/Contact.php';
+require_once 'Intraface/shared/email/Email.php';
+
+
 class NewsletterSubscriber extends Standard {
 
 	var $list; //object
@@ -24,45 +31,24 @@ class NewsletterSubscriber extends Standard {
 	function __construct($list, $id = 0) {
 		$this->error = new Error;
 
-		if(!is_object($list) OR strtolower(get_class($list)) != 'newsletterlist') {
-			trigger_error('Kræver en liste', E_USER_ERROR);
+		if(!is_object($list)) {
+			trigger_error('subscriber Kræver en liste', E_USER_ERROR);
 		}
 
-		$this->list = &$list;
-		$this->list->kernel->useModule('contact');
+		$this->list = $list;
 
 		$this->id = (int)$id;
-		$this->dbquery = new DBQuery($this->list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $this->list->get("id") . " AND newsletter_subscriber.intranet_id = " . $this->list->kernel->intranet->get('id') . " AND newsletter_subscriber.optin = 1 AND newsletter_subscriber.active = 1");
-		$this->dbquery->useErrorObject($this->error);
-
 
 		if($this->id > 0) {
 			$this->load();
 		}
 
 
-		/*
-		$args = func_get_args();
-		if (!is_array($args)) {
-			trigger_error('NewsletterSubscriber kræver nogle argumenter', FATAL);
-		}
-		// hvis den får id
-		if (count($args) == 1 AND is_numeric($args[0])) {
-			$this->id = (int)$args[0];
-			$db = new DB_Sql;
-			$db->query("SELECT list_id FROM newsletter_subscriber WHERE id = " . $this->id);
-			if (!$db->nextRecord()) {
-				trigger_error('NewsletterSubscriber kan ikke findes', FATAL);
-			}
-			$this->list = new NewsletterList($kernel, $db->f('list_id'));
-			$this->load();
-		}
-		// hvis den bare får en liste
-		elseif (count($args) == 1 AND is_object($args[0])) {
-			$this->id = 0;
-			$this->list = $args[0];
-		}
-		*/
+	}
+
+	function createDBQuery() {
+		$this->dbquery = new DBQuery($this->list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $this->list->get("id") . " AND newsletter_subscriber.intranet_id = " . $this->list->kernel->intranet->get('id') . " AND newsletter_subscriber.optin = 1 AND newsletter_subscriber.active = 1");
+		$this->dbquery->useErrorObject($this->error);
 	}
 
 	/**
@@ -149,12 +135,18 @@ class NewsletterSubscriber extends Standard {
 		return 1;
 	}
 
+	function getContact($contact_id) {
+		$contact_module = $this->list->kernel->getModule('contact', true); // true: tjekker kun intranet_access
+		return new Contact($this->list->kernel, $contact_id);
+	}
+
 
 	/**
 	 * Tilføjer eksisterende kontakt
 	 * Tilføjet af sune
 	 */
 	function addContact($contact_id) {
+		$this->list->kernel->useModule('contact');
 		//$this->list->kernel->useModule('contact');
 		$contact = new Contact($this->list->kernel, (int)$contact_id);
 
@@ -210,7 +202,7 @@ class NewsletterSubscriber extends Standard {
 
 
 		if ($this->error->isError()) {
-			return 0;
+			return false;
 		}
 
 		// Det er smartere hvis vi bare loader fra e-mail
@@ -289,12 +281,13 @@ class NewsletterSubscriber extends Standard {
 		// sender kun optinbrev, hvis man ikke er opted in
 		if (!$this->optedIn()) {
 			if (!$this->sendOptInEmail()) {
-				return 0;
+				$this->error->set('could not send optin email');
+				return false;
 			}
 		}
 
 
-		return 1;
+		return true;
 	}
 
 	function optedIn() {
@@ -387,17 +380,16 @@ class NewsletterSubscriber extends Standard {
 	 */
 	function sendOptInEmail() {
 		if ($this->id == 0) {
-			return 0;
+			$this->error->set('no id');
+			return false;
 		}
 
 		$this->load();
 
-
 		$contact = new Contact($this->list->kernel, $this->get('contact_id'));
 
 		$email = new Email($this->list->kernel);
-		if (!$email->save(
-			array(
+		$data = array(
 				'subject' => 'Bekræft tilmelding',
 				'body' =>
 					$this->list->get('subscribe_message') . "\n\n" .
@@ -408,19 +400,20 @@ class NewsletterSubscriber extends Standard {
 				'from_name' => $this->list->get('sender_name'),
 				'type_id' => 7, // nyhedsbreve
 				'belong_to' => $this->list->get('id')
-			)
-		)) {
-			$this->error->set('Kunne ikke gemme bekræftelses-emailen');
-			return 0;
+			);
+
+		if (!$email->save($data)) {
+			$this->error->set('could not send the e-mail' . implode(',', $email->error->messages));
+			return false;
 		}
 
 		if ($email->send()) {
 			$db = new DB_Sql;
 			$db->query("UPDATE newsletter_subscriber SET date_optin_email_sent = NOW() WHERE id = " . $this->id);
-			return 1;
+			return true;
 		}
-		$this->error->set('Kunne ikke sende bekræftelses-emailen');
-		return 0;
+		$this->error->set('could not send the e-mail' . implode(',', $email->error->message));
+		return false;
 	}
 
 	/**
@@ -436,8 +429,6 @@ class NewsletterSubscriber extends Standard {
 
 		$db = $this->dbquery->getRecordset("id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted", "", false);
 
-		$contact_module = $this->list->kernel->getModule('contact', true); // true: tjekker kun intranet_access
-
 		while ($db->nextRecord()) {
 			$contact_id = $db->f('contact_id');
 			$subscribers[$i]['id'] = $db->f('id');
@@ -445,7 +436,7 @@ class NewsletterSubscriber extends Standard {
 			$subscribers[$i]['dk_date_submitted'] = $db->f('dk_date_submitted');
 			$subscribers[$i]['date_submitted'] = $db->f('date_submitted');
 
-			$contact = new Contact($this->list->kernel, $db->f('contact_id'));
+			$contact = $this->getContact($db->f('contact_id'));
 			$subscribers[$i]['contact_number'] = $contact->get('number');
 			$subscribers[$i]['contact_name'] = $contact->address->get('name');
 			$subscribers[$i]['contact_address'] = $contact->address->get('address');

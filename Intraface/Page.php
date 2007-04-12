@@ -18,16 +18,11 @@ class Page {
 
 	var $primary_module;
 
-	/**
-	 * Init
-	 *
-	 */
-	//function Page(&$object_kernel) {
-	function __construct(&$object_kernel) {
+	function __construct($object_kernel) {
 		if(!is_object($object_kernel)) {
 			trigger_error('Page requires Kernel', E_USER_ERROR);
 		}
-		$this->kernel = &$object_kernel;
+		$this->kernel = $object_kernel;
 		$this->db = new DB_Sql;
 	}
 
@@ -37,7 +32,7 @@ class Page {
 		if (is_object($this->primary_module)) {
 			$name = $this->primary_module->getName();
 		}
-		
+
 		// brugermenuen
 		// Unforntunately the usermenuen has to be before the cache as it is printed in bottom.php.
 		$this->usermenu = array();
@@ -68,7 +63,7 @@ class Page {
 
 
 			$intranet_name = $this->kernel->intranet->get('name');
-	
+
 			if(empty($title)) {
 				$title = $intranet_name;
 			}
@@ -76,11 +71,11 @@ class Page {
 			// temaet
 			$themes = themes();
 			$this->theme_key = $this->kernel->setting->get('user', 'theme');
-	
+
 			// fontsize
 			$this->fontsize = $this->kernel->setting->get('user', 'ptextsize');
-		
-				
+
+
 			// menuen
 			$this->menu = array();
 			$i = 0;
@@ -89,38 +84,38 @@ class Page {
 			$i++;
 			$this->db->query("SELECT name, menu_label, name FROM module WHERE active = 1 AND show_menu = 1 ORDER BY menu_index");
 			while($this->db->nextRecord()) {
-	
+
 				if($this->kernel->user->hasModuleAccess($this->db->f('name'))) {
 					$this->menu[$i]['name'] = $this->kernel->translation->get($this->db->f('name'), $this->db->f('name'));
 					$this->menu[$i]['url'] = PATH_WWW_MODULE.$this->db->f("name").'/';
 					$i++;
 				}
 			}
-	
+
 			$submenu = array();
 			if(is_object($this->primary_module)) {
 				$all_submenu = $this->primary_module->getSubmenu();
 				if(count($all_submenu) > 0) { // added to avoid error messages
 					$j = 0;
 					for($i = 0, $max = count($all_submenu); $i < $max; $i++) {
-						$access = false;	
+						$access = false;
 
 						if($all_submenu[$i]['sub_access'] != '') {
 							$sub = explode(":", $all_submenu[$i]['sub_access']);
-	
+
 							switch($sub[0]) {
 								case 'sub_access':
 									if($this->kernel->user->hasSubAccess($this->primary_module->module_name, $sub[1])) {
 										$access = true;
 									}
 									break;
-	
+
 								case 'module':
 									if($this->kernel->user->hasModuleAccess($sub[1])) {
 										$access = true;
 									}
 									break;
-	
+
 								default:
 									trigger_error('Der er ikke angivet om submenu skal tjekke efter sub_access eller module adgang, for undermenupunktet i Page->start();', E_USER_ERROR);
 									break;
@@ -138,7 +133,7 @@ class Page {
 					}
 				}
 			}
-	
+
 			$javascript = '';
 			if(!empty($this->javascript_path) AND count($this->javascript_path) > 0) {
 				for($i = 0, $max = count($this->javascript_path); $i < $max; $i++) {
@@ -148,35 +143,35 @@ class Page {
 			/*
 			$systemdisturbance = new SystemDisturbance($this->kernel);
 			$now = $systemdisturbance->getActual();
-	
+
 			if(!empty($now) AND count($now) > 0 && $now['important'] == 1) {
 				$system_message = $now['description'];
 			}
 			*/
-	
-	
+
+
 			//header('Vary: Accept');
 			// setting headers to prevent browser to cache page
 			// jf. http://dk.php.net/header/
-	
+
 			//header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
 			//header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
-	
+
 			// HTTP/1.1
 			//header('Cache-Control: no-store, no-cache, must-revalidate');
 			//header('Cache-Control: post-check=0, pre-check=0', false);
-	
+
 			// HTTP/1.0
 			//header('Pragma: no-cache');
-	
+
 			/*
 			if (defined('OB_START') AND OB_START == 'use') {
 				ob_start(); // OB_HANDLER
 			}
 			*/
-	
+
 			//contentNegotiation(CONTENTNEGOTIATION);
-	
+
 			include(PATH_INCLUDE_IHTML.'/intraface/top.php');
 
 			$cache->end();

@@ -49,12 +49,10 @@ $page->start($translation->get('edit intranet'));
 		<label for="name"><?php echo $translation->get('name', 'address'); ?></label>
 		<input type="text" name="name" id="name" value="<?php if (!empty($value['name'])) echo safeToForm($value["name"]); ?>" size="50" />
 	</div>
-	<!--
 	<div class="formrow">
 		<label for="name"><?php echo $translation->get('identifier', 'common'); ?></label>
-		<input type="text" name="name" id="name" value="<?php if (!empty($value['identifier'])) echo safeToForm($value["identifier"]); ?>" size="50" />
+		<input type="text" name="identifier" id="identifier" value="<?php if (!empty($value['identifier'])) echo safeToForm($value["identifier"]); ?>" size="50" />
 	</div>
-	-->
 
 	<div class="formrow">
 		<label for="maintained_by_user_id"><?php echo $translation->get('maintained by'); ?></label>

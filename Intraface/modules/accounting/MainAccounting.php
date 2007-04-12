@@ -34,7 +34,7 @@ class MainAccounting Extends Main {
 		$this->addSubAccessItem('setting', 'Indstillinger');
 
 
-		$this->addControlPanelFile('accounting', '/modules/accounting/setting.php');
+		$this->addControlPanelFile('accounting settings', 'modules/accounting/setting.php');
 
 		$this->addFrontpageFile('include_frontpage.php');
 		/*

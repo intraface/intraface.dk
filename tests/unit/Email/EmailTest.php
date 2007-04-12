@@ -33,7 +33,7 @@ class EmailTest extends PHPUnit_Framework_TestCase {
 		$email = new Email($this->kernel);
 		$this->assertTrue(is_object($email));
 	}
-
+	/*
 	function testSave() {
 		$belong_to_id = rand(1, 100000);
 		$type_id = rand(1,5);
@@ -89,6 +89,7 @@ class EmailTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($email->get('from_email'), $data['from_email']);
 		$this->assertEquals($email->get('user_id'), $this->kernel->user->get('id'));
 	}
+	*/
 
 	function testALotOfSaveEmails() {
 		$number = 200;
