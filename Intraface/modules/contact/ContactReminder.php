@@ -3,8 +3,9 @@
  * Create and maintain reminders for contacts.
  *
  * @package ContactReminder
- * @author Sune Jensen <sj@sunet.dk>
- * @since 0.1.0
+ * @author  Sune Jensen <sj@sunet.dk>
+ * @author  Lars Olesen <lars@legestue.net>
+ * @since   0.1.0
  * @version @package-version@
  */
 
@@ -80,14 +81,16 @@ date_end
 
 Denne måde er rimelig let at finde fremtidige poster, men den er ikke særlig fleksibel. Det
 kan fx ikke lade sig gøre at lave en reminder det kører både den 1. og 15 i en måned. Det skal
-laves som 2 forskellige tilbagevendende remindere. Måske cron metoden er hver at udforske.
+laves som 2 forskellige tilbagevendende remindere. Måske cron metoden er værd at udforske.
+
+LO: Ja, jeg synes vi skal lave det efter den måde et cronjob sættes på!
 
 Arbejdsgang:
 Fordelen ved denne metode er at vi kan starte med at lave en rimelig simpel reminder, blot
 med engangsreminder.
 
 1) Engangsreminder med beskrivelse, og mulighed for at markere som set, og udsættelse af reminder.
-2) E-mail notification
+2) E-mail notification - SKAL LAVES SOM EN OBSERVER
 3) Gengtagende reminder
 4) Fakturaskabelon
 5) Automatisk udsendelse af faktura.
@@ -104,7 +107,11 @@ class ContactReminder extends Standard {
 	private $id;
 	public $contact;
 	private $db;
-	private $status_types;
+	public $status_types = array(
+		1 => 'created',
+		2 => 'seen',
+		3 => 'cancelled'
+	);
 	public $value;
 
 	/**
@@ -172,7 +179,7 @@ class ContactReminder extends Standard {
 		return true;
 	}
 
-	function validate(&$input) {
+	function validate($input) {
 		$validator = new Validator($this->error);
 
 		$validator->isDate($input['reminder_date'], 'Error in date', 'allow_no_year');
@@ -189,7 +196,7 @@ class ContactReminder extends Standard {
 
 		$this->validate($input);
 
-		$date = new Date($input['reminder_date']);
+		$date = new Intraface_Date($input['reminder_date']);
 		if(!$date->convert2db()) {
 			trigger_error("Was not able to convert date in ContactReminder->update", E_USER_ERROR);
 		}
@@ -235,12 +242,27 @@ class ContactReminder extends Standard {
 	 */
 
 	public function postpone($periode) {
+
 		// Please write me.
 		// Jeg ved ikke helt hvilket argument den skal tage, men det kunne værer smart at den
 		// kan tage fx '1 day', '2 day', '3 week'. Tror måske der er noget funktionalitet i
 		// php til det, eller er det kun i mysql?
 
 	}
+
+
+	public function postponeUntil($date) {
+		// validation needed - not crucial as we are setting the postpone date
+
+		$result = $this->db->exec('UPDATE contact_reminder_single SET date_changed = NOW(), reminder_date = ' .$this->db->quote($date, 'date'));
+	 	if (PEAR::isError($result)) {
+	 		trigger_error('Could not postphone reminder' . $result->getUserInfo(), E_USER_ERROR);
+	 		return false;
+	 	}
+	 	$this->load();
+	 	return true;
+	}
+
 
 	/**
 	 * TO BE WRITTEN
@@ -249,24 +271,45 @@ class ContactReminder extends Standard {
 	 * @return array	with reminders.
 	 */
 
-	public function upcomingReminders($new_status) {
+	public function upcomingReminders($kernel) {
 		// Please write me.
 		// Navnet må gerne ændres!
 		// Tænker den skal kaldes således
 		// $upcomingreminders = ContactReminder::upcomingreminders();
 		// da der ikke skal hverken contact eller noget id for at finde dem.
+
+		$db = MDB2::singleton(DB_DSN);
+		$result = $db->query('SELECT * FROM contact_reminder_single WHERE reminder_date < DATE_ADD(NOW(), INTERVAL 30 DAY) AND intranet_id = ' .$db->quote($kernel->intranet->get('id'), 'integer'));
+	 	if (PEAR::isError($result)) {
+	 		die($result->getUserInfo());
+	 		return false;
+	 	}
+	 	if ($result->numRows() == 0) {
+	 		return array();
+	 	}
+	 	return $result->fetchAll(MDB2_FETCHMODE_ASSOC);
+
 	}
 
 	/**
-	 * TO BE WRITTEN
-	 * Change the status from one to another
+	 * setStatus
 	 *
-	 * @param string $new_status	New status as either created, seen, or cancelled
+	 * @param string $status	Status as either created, seen, or cancelled
 	 * @return boolean true or false
 	 */
 
-	public function changeStatus($new_status) {
-		// Please write me.
+	public function setStatus($status) {
+
+		$status_key = array_search($status, $this->status_types);
+
+		$result = $this->db->exec('UPDATE contact_reminder_single SET date_changed = NOW(), status_key = ' .$this->db->quote($status_key, 'integer'));
+	 	if (PEAR::isError($result)) {
+	 		trigger_error('Could not postphone reminder' . $result->getUserInfo(), E_USER_ERROR);
+	 		return false;
+	 	}
+	 	$this->load();
+	 	return true;
+
 	}
 
 	public function createDbquery() {
