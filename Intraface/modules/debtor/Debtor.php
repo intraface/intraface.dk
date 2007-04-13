@@ -434,13 +434,13 @@ class Debtor extends Standard {
 		$validator->isString($input['description'], 'Fejl i descr.', '', 'allow_empty');
 
 		if($validator->isDate($input["this_date"], "Ugyldig dato", "allow_no_year")) {
-			$this_date = new Date($input["this_date"]);
+			$this_date = new Intraface_Date($input["this_date"]);
 			$this_date->convert2db();
 		}
 		if($this->type == "invoice") {
   		// Hvis det er en faktura skal der indtastes en due_date, ellers er det ligegyldigt!
 			if($validator->isDate($input["due_date"], "Ugyldig leveringsdato", "allow_no_year")) {
-				$due_date = new Date($input["due_date"]);
+				$due_date = new Intraface_Date($input["due_date"]);
 				$due_date->convert2db();
 				$due_date_db = $due_date->get();
 			}
@@ -449,7 +449,7 @@ class Debtor extends Standard {
 			if($validator->isDate($input["due_date"], "Ugyldig leveringsdato", "allow_no_year,allow_empty")) {
 				// der skal laves en due-date, som bare bliver dags datoe, hvis ikke der er indtastet nogen.
 				if (!empty($input["due_date"])) {
-					$due_date = new Date($input["due_date"]);
+					$due_date = new Intraface_Date($input["due_date"]);
 					$due_date->convert2db();
 					$due_date_db = $due_date->get();
 				}
@@ -597,7 +597,7 @@ class Debtor extends Standard {
 		}
 
 		if($this->dbquery->checkFilter("from_date")) {
-			$date = new Date($this->dbquery->getFilter("from_date"));
+			$date = new Intraface_Date($this->dbquery->getFilter("from_date"));
 			if($date->convert2db()) {
 				$this->dbquery->setCondition("debtor.this_date >= \"".$date->get()."\"");
 			}
@@ -613,7 +613,7 @@ class Debtor extends Standard {
 
 		// Poster med fakturadato før slutdato.
 		if($this->dbquery->checkFilter("to_date")) {
-			$date = new Date($this->dbquery->getFilter("to_date"));
+			$date = new Intraface_Date($this->dbquery->getFilter("to_date"));
 			if($date->convert2db()) {
 				$this->dbquery->setCondition("debtor.this_date <= \"".$date->get()."\"");
 			}
@@ -637,7 +637,7 @@ class Debtor extends Standard {
 			elseif($this->dbquery->getFilter("status") == "-2") {
 				// Not executed = åbne
 				if($this->dbquery->checkFilter("to_date")) {
-					$date = new Date($this->dbquery->getFilter("to_date"));
+					$date = new Intraface_Date($this->dbquery->getFilter("to_date"));
 					if($date->convert2db()) {
 						// Poster der er executed eller cancelled efter dato, og sikring at executed stadig er det, da faktura kan sættes tilbage.
 						$this->dbquery->setCondition("(debtor.date_executed >= \"".$date->get()."\" AND debtor.status = 2) OR (debtor.date_cancelled >= \"".$date->get()."\") OR debtor.status < 2");
@@ -660,7 +660,7 @@ class Debtor extends Standard {
 				$this->dbquery->setCondition("invoice_payment.type = -1");
 
 				if($this->dbquery->checkFilter("to_date")) {
-					$date = new Date($this->dbquery->getFilter("to_date"));
+					$date = new Intraface_Date($this->dbquery->getFilter("to_date"));
 					if($date->convert2db()) {
 						// alle som er sendte på datoen og som ikke er cancelled
 						$this->dbquery->setCondition("debtor.date_sent <= '".$date->get()."' AND debtor.status != 3");
@@ -692,7 +692,7 @@ class Debtor extends Standard {
 				}
 
 				if($this->dbquery->checkFilter("to_date")) {
-					$date = new Date($this->dbquery->getFilter("to_date"));
+					$date = new Intraface_Date($this->dbquery->getFilter("to_date"));
 					if($date->convert2db()) {
 						$this->dbquery->setCondition("debtor.".$to_date_field." <= \"".$date->get()."\"");
 					}

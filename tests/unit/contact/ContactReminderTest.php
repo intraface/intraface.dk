@@ -43,11 +43,6 @@ class ContactReminderTestCase extends UnitTestCase {
 		$this->assertTrue(is_object($reminder));
 	}
 
-	function testSettingId() {
-		$id = 2;
-		$reminder = new ContactReminder($this->getContact(), $id);
-		$this->assertEqual($id, $reminder->get('id'));
-	}
 
 	function testProductCanGetNumberIfOtherProductDontNeedItAnymore() {
 	}

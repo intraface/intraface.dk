@@ -203,10 +203,10 @@ class Year extends Standard {
 	function save($var) {
 		$var = safeToDb($var);
 
-		$post_date_from = new Date($var['from_date']);
+		$post_date_from = new Intraface_Date($var['from_date']);
 		$post_date_from->convert2db();
 
-		$post_date_to = new Date($var['to_date']);
+		$post_date_to = new Intraface_Date($var['to_date']);
 		$post_date_to->convert2db();
 
 		if (!$this->validate($var)) {

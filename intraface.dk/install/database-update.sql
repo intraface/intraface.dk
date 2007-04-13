@@ -14,5 +14,5 @@ CREATE TABLE `contact_reminder_single` (
 PRIMARY KEY ( `id` )
 ) TYPE = MYISAM ;
 
-ALTER TABLE `contact_reminder_single` ADD `created_by_user` INT NOT NULL AFTER `contact_id` ;
+ALTER TABLE `contact_reminder_single` ADD `created_by_user_id` INT NOT NULL AFTER `contact_id` ;
 

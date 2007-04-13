@@ -878,7 +878,7 @@ class DBQuery {
 								$value = "NOW()";
 							}
 							else {
-								$date = new Date($value);
+								$date = new Intraface_Date($value);
 								if($date->convert2db()) {
 									$value = "\"".$date->get()."\"";
 								}

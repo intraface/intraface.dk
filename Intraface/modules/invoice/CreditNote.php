@@ -54,7 +54,7 @@ class CreditNote extends Debtor {
 function state($year, $voucher_number, $voucher_date) {
 		$validator = new Validator($this->error);
 		if($validator->isDate($voucher_date, "Ugyldig dato")) {
-			$this_date = new Date($voucher_date);
+			$this_date = new Intraface_Date($voucher_date);
 			$this_date->convert2db();
 		}
 		// FIXME check date

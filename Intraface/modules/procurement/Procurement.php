@@ -156,12 +156,12 @@ class Procurement Extends Standard {
 		$validator = new Validator($this->error);
 
 		$validator->isDate($input["dk_invoice_date"], "Fakturadato er ikke en gyldig dato", "allow_empty");
-		$date = new Date($input["dk_invoice_date"]);
+		$date = new Intraface_Date($input["dk_invoice_date"]);
 		if($date->convert2db()) {
 			$input["invoice_date"] = $date->get();
 		}
 		$validator->isDate($input["dk_delivery_date"], "Leveringsdato er ikke en gyldig dato", "allow_empty");
-		$date = new Date($input["dk_delivery_date"]);
+		$date = new Intraface_Date($input["dk_delivery_date"]);
 		if($date->convert2db()) {
 			$input["delivery_date"] = $date->get();
 		}
@@ -169,7 +169,7 @@ class Procurement Extends Standard {
 			$input['delivery_date'] = $input['invoice_date'];
 		}
 		$validator->isDate($input["dk_payment_date"], "Betalingsdato er ikke en gyldig dato", "allow_empty");
-		$date = new Date($input["dk_payment_date"]);
+		$date = new Intraface_Date($input["dk_payment_date"]);
 		if($date->convert2db()) {
 			$input["payment_date"] = $date->get();
 		}
@@ -273,7 +273,7 @@ class Procurement Extends Standard {
 		}
 
 		if($this->dbquery->checkFilter("from_date")) {
-			$date = new Date($this->dbquery->getFilter("from_date"));
+			$date = new Intraface_Date($this->dbquery->getFilter("from_date"));
 			if($date->convert2db()) {
 				$this->dbquery->setCondition("invoice_date >= \"".$date->get()."\"");
 			}
@@ -285,7 +285,7 @@ class Procurement Extends Standard {
 
 		// Poster med fakturadato før slutdato.
 		if($this->dbquery->checkFilter("to_date")) {
-			$date = new Date($this->dbquery->getFilter("to_date"));
+			$date = new Intraface_Date($this->dbquery->getFilter("to_date"));
 			if($date->convert2db()) {
 				$this->dbquery->setCondition("invoice_date <= \"".$date->get()."\"");
 			}
@@ -303,7 +303,7 @@ class Procurement Extends Standard {
 				// Not executed = åbne
 				/*
 				if($this->dbquery->checkFilter("to_date")) {
-					$date = new Date($this->dbquery->getFilter("to_date"));
+					$date = new Intraface_Date($this->dbquery->getFilter("to_date"));
 					if($date->convert2db()) {
 						// Poster der er executed eller canceled efter dato, og sikring at executed stadig er det, da faktura kan sættes tilbage.
 						$this->dbquery->setCondition("(date_executed >= \"".$date->get()."\" AND status_key = 2) OR (date_canceled >= \"".$date->get()."\") OR status_key < 2");
@@ -333,7 +333,7 @@ class Procurement Extends Standard {
 							break;
 					}
 
-					$date = new Date($this->dbquery->getFilter("to_date"));
+					$date = new Intraface_Date($this->dbquery->getFilter("to_date"));
 					if($date->convert2db()) {
 						$this->dbquery->setCondition($to_date_field." <= \"".$date->get()."\"");
 					}
@@ -433,7 +433,7 @@ class Procurement Extends Standard {
 		$validator = new Validator($this->error);
 
 		$validator->isDate($dk_paid_date, "Betalt dato er ikke en gyldig dato");
-		$date = new Date($dk_paid_date);
+		$date = new Intraface_Date($dk_paid_date);
 		if($date->convert2db()) {
 			$paid_date = $date->get();
 		}

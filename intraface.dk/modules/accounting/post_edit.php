@@ -13,7 +13,7 @@ if (!empty($_POST)) {
 	$post = new Post(new Voucher($year, $_POST['voucher_id']), $_POST['id']);
 	$account = Account::factory($year, $_POST['account']);
 
-	$date = new Date($_POST['date']);
+	$date = new Intraface_Date($_POST['date']);
 	$date->convert2db();
 
 

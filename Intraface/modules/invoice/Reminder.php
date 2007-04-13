@@ -174,12 +174,12 @@ class Reminder extends Standard {
 		$validator->isString($input["description"], "Fejl i beskrivelsen", "", "allow_empty");
 
 		if($validator->isDate($input["this_date"], "Ugyldig dato", "allow_no_year")) {
-			$this_date = new Date($input["this_date"]);
+			$this_date = new Intraface_Date($input["this_date"]);
 			$this_date->convert2db();
 		}
 
 		if($validator->isDate($input["due_date"], "Ugyldig forfaldsdato", "allow_no_year")) {
-			$due_date = new Date($input["due_date"]);
+			$due_date = new Intraface_Date($input["due_date"]);
 			$due_date->convert2db();
 		}
 
@@ -430,7 +430,7 @@ class Reminder extends Standard {
 		}
 
 		if($this->dbquery->checkFilter("from_date")) {
-			$date = new Date($this->dbquery->getFilter("from_date"));
+			$date = new Intraface_Date($this->dbquery->getFilter("from_date"));
 			if($date->convert2db()) {
 				$this->dbquery->setCondition("this_date >= \"".$date->get()."\"");
 			}
@@ -441,7 +441,7 @@ class Reminder extends Standard {
 
 		// Poster med fakturadato før slutdato.
 		if($this->dbquery->checkFilter("to_date")) {
-			$date = new Date($this->dbquery->getFilter("to_date"));
+			$date = new Intraface_Date($this->dbquery->getFilter("to_date"));
 			if($date->convert2db()) {
 				$this->dbquery->setCondition("this_date <= \"".$date->get()."\"");
 			}
@@ -458,7 +458,7 @@ class Reminder extends Standard {
 			elseif($this->dbquery->getFilter("status") == "-2") {
 				// Not executed = åbne
 				if($this->dbquery->checkFilter("to_date")) {
-					$date = new Date($this->dbquery->getFilter("to_date"));
+					$date = new Intraface_Date($this->dbquery->getFilter("to_date"));
 					if($date->convert2db()) {
 						// Poster der er executed eller cancelled efter dato, og sikring at executed stadig er det, da faktura kan sættes tilbage.
 						$this->dbquery->setCondition("(date_executed >= \"".$date->get()."\" AND status = 2) OR (date_cancelled >= \"".$date->get()."\") OR status < 2");
@@ -490,7 +490,7 @@ class Reminder extends Standard {
 				}
 
 				if($this->dbquery->checkFilter("to_date")) {
-					$date = new Date($this->dbquery->getFilter("to_date"));
+					$date = new Intraface_Date($this->dbquery->getFilter("to_date"));
 					if($date->convert2db()) {
 						$this->dbquery->setCondition($to_date_field." <= \"".$date->get()."\"");
 					}

@@ -6,9 +6,9 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @version: 1
  */
- 
+
 Class Payment Extends Standard {
-	
+
 	var $id;
 	var $kernel;
 	var $payment_for;
@@ -17,16 +17,16 @@ Class Payment Extends Standard {
 	var $error;
 	var $dbquery;
 	var $types;
-	
+
 	function Payment(&$object, $id = 0) {
-		
+
 		$object_class = strtolower(get_class($object));
-		
+
 		if($object_class == "kernel") {
 			$this->kernel = &$object;
 			$this->payment_for = "";
 			$this->error = new Error;
-			
+
 			$this->payment_for_type_id = 0;
 			$this->payment_for_id = 0;
 		}
@@ -34,7 +34,7 @@ Class Payment Extends Standard {
 			$this->kernel = &$object->kernel;
 			$this->payment_for = &$object;
 			$this->error = &$object->error;
-			
+
 			$module = $this->kernel->getModule("invoice");
 			if($object_class == "invoice") {
 				$this->payment_for_type_id = array_search("invoice", $module->getSetting("payment_for"));
@@ -43,79 +43,79 @@ Class Payment Extends Standard {
 				$this->payment_for_type_id = array_search("reminder", $module->getSetting("payment_for"));
 			}
 			$this->payment_for_id = $this->payment_for->get("id");
-		
-				
+
+
 		}
 		else {
 			trigger_error("Ugyldig object som første parameter. Det skal være Kernel, Invoice eller CreditNote", E_USER_ERROR);
 		}
 		$this->id = intval($id);
-		
+
 		$invoice_module = $this->kernel->getModule("invoice");
 		$this->types = $invoice_module->getSetting("payment_type");
-		
+
    	$this->dbquery = new DBQuery($this->kernel, "invoice_payment", "intranet_id = ".$this->kernel->intranet->get("id")." AND payment_for = ".$this->payment_for_type_id." AND payment_for_id = ".$this->payment_for_id);
 		$this->dbquery->useErrorObject($this->error);
-    
+
 		if($this->id != 0) {
 			$this->load();
 		}
 	}
-	
+
 	function update($input = "") {
-		
+
 		$already_paid = 0;
 		$value = $this->getList();
 		for($i = 0, $max = count($value); $i < $max; $i++) {
 			$already_paid += $value[$i]["amount"];
 		}
 		$payment_for_total = $this->payment_for->get("total");
-		
+
 		if(is_array($input)) {
-			// Man har mulighed for at køre $payment->update() bare for at få den til at 
+			// Man har mulighed for at køre $payment->update() bare for at få den til at
 			// sætte invoice eller reminder til executed
-			
+
 			$input = safeToDb($input);
-			
+
 			$validator = new Validator($this->error);
-			
+
 			if($validator->isDate($input["payment_date"], "Ugyldig dato", "allow_no_year")) {
-				$date = new Date($input["payment_date"]);
+				$date = new Intraface_Date($input["payment_date"]);
 				$date->convert2db();
 			}
-		
+
 			if($validator->isDouble($input["amount"], "Ugyldig beløb")) {
 				$amount = new Amount($input["amount"]);
 				$amount->convert2db();
 				$amount = $amount->get();
 			}
-			
+
 			if (array_key_exists('description', $input)) {
 				$validator->isString($input["description"], "Fejl i beskrivelse", "", "allow_empty");
 			}
 			else {
 				$input['description'] = '';
 			}
-			
+
 			$validator->isNumeric($input["type"], "Type er ikke angivet korrekt");
 			settype($input["type"], "integer");
 			if(!isset($this->types[$input["type"]])) {
 				$this->error->set("Ugyldig type");
 			}
-			
-			
-			// Hermed lovliggjort at registrere større beløb en betalingen. Det er ikke til at kontrollere med kreditnota. 
+
+
+			// Hermed lovliggjort at registrere større beløb en betalingen. Det er ikke til at kontrollere med kreditnota.
 			/*
 			if($amount + $already_paid > $payment_for_total) {
 				$this->error->set("Beløb er større end det skyldige beløb");
 			}
 			*/
-			
+
 			if($this->error->isError()) {
 				return false;
 			}
-		
-			
+
+
 			$sql = "payment_date = \"".$date->get()."\",
 				amount = ".$amount.",
 				type = ".$input["type"].",
@@ -126,38 +126,38 @@ Class Payment Extends Standard {
 			$db = new DB_sql;
 			$db->query("INSERT INTO invoice_payment SET intranet_id = ".$this->kernel->intranet->get("id").", ".$sql);
 		}
-		
+
 		if(is_object($this->payment_for)) {
 			$this->payment_for->updateStatus();
 		}
 		return true;
-	} 
-	
+	}
+
 	function getList() {
-		
+
 		$db = new DB_sql;
 		$value = array(); // type(invoice,payment,credit_note,reminder), description, date, amount
 		$i = 0;
 		$payment = array();
 		$credit_note = array();
 		$invoice_module = $this->kernel->getModule("invoice");
-		
+
 		// Hent betalinger
 		if(is_object($this->payment_for)) {
-      
+
 			if($this->dbquery->checkFilter("to_date")) {
-				$date = new Date($this->dbquery->getFilter("to_date"));
+				$date = new Intraface_Date($this->dbquery->getFilter("to_date"));
 				if($date->convert2db()) {
 					$this->dbquery->setCondition("payment_date <= \"".$date->get()."\"");
 				}
 			}
-			
+
 			$this->dbquery->setSorting("payment_date ASC");
       $db = $this->dbquery->getRecordset("id, amount, type, description, payment_date, payment_for_id, DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date", "", false);
 			while($db->nextRecord()) {
 				$payment[$i]["id"] = $db->f("id");
 				if($db->f("type") == -1) {
-					
+
 					$payment[$i]["type"] = "depriciation";
 					//$payment[$i]["dk_type"] = $invoice_module->getTranslation("deprication");
 					$payment[$i]["amount"] = $db->f("amount");
@@ -173,15 +173,15 @@ Class Payment Extends Standard {
 				}
 				$payment[$i]["payment_date"] = $db->f("payment_date");
 				$payment[$i]["dk_payment_date"] = $db->f("dk_payment_date");
-				
+
 				// $payment[$i]["payment_for"] = $this->payment_for[$db->f("payment_for")];
 				$payment[$i]["payment_for_id"] = $db->f("payment_for_id");
-				
+
 				$i++;
 			}
 		}
-		
-		
+
+
 		// Hent kreditnotaer. Ikke hvis det er en reminder. Den kan ikke krediteres.
 		if(strtolower(get_class($this->payment_for)) !== "reminder") {
 			$debtor = new CreditNote($this->kernel);
@@ -200,48 +200,48 @@ Class Payment Extends Standard {
 			// Det er ret krævende at køre debtor->getList(), måske det burde gøres med direkte sql-udtræk.
 			$credit_note = $debtor->getList();
 		}
-		
-		
+
+
 		$pay = 0; // payment
 		$pay_max = count($payment);
-		
+
 		$inv = 0; // invoice
-		
+
 		$cre = 0; // credit_note
 		$cre_max = count($credit_note);
 		$i = 0;
-		
+
 		while($pay < $pay_max || $cre < $cre_max) {
-			
-			
-			
+
+
+
 			$next = "";
-			
+
 			if(isset($payment[$pay]["payment_date"]) && $payment[$pay]["payment_date"] != "") {
 				$pay_date = strtotime($payment[$pay]["payment_date"]);
 			}
 			else {
 				$pay_date = 0;
 			}
-			
+
 			if(isset($credit_note[$cre]['this_date']) && $credit_note[$cre]["this_date"] != "") {
 				$cre_date = strtotime($credit_note[$cre]["this_date"]);
 			}
 			else {
 				$cre_date = 0;
 			}
-			
+
 			if($pay_date != 0) {
 				$next = "payment";
 			}
 			elseif($cre_date != 0) {
 				$next = "credit_note";
 			}
-			
+
 			if($cre_date != 0 && $cre_date < $pay_date) $next = "credit_note";
-			
+
 			if($next == "payment") {
-				
+
 				$value[$i]["type"] = $payment[$pay]["type"];
 				//$value[$i]["dk_type"] = $payment[$pay]["dk_type"];
 				$value[$i]["id"] = $payment[$pay]["id"];
@@ -266,12 +266,12 @@ Class Payment Extends Standard {
 				$value[$i]["amount"] = $credit_note[$cre]["total"];
 				$cre++;
 			}
-			
-			
-			
+
+
+
 			$i++;
 		}
-		
+
 		return $value;
 	}
 }

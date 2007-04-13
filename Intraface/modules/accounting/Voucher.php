@@ -118,7 +118,7 @@ class Voucher extends Standard {
 
 		$var = safeToDb($var);
 
-		$post_date = new Date($var['date']);
+		$post_date = new Intraface_Date($var['date']);
 		$post_date->convert2db();
 
 		if (empty($var['voucher_number'])) {
@@ -165,7 +165,7 @@ class Voucher extends Standard {
 		if (empty($var['invoice_number'])) $var['invoice_number'] = '';
 		$var = safeToDb($var);
 
-		$post_date = new Date($var['date']);
+		$post_date = new Intraface_Date($var['date']);
 		if (!$post_date->convert2db()) {
 			$this->error->set('Kunne ikke konvertere datoen');
 		}
