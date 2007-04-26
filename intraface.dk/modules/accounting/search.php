@@ -10,7 +10,7 @@ $year->checkYear();
 
 if (!empty($_POST)) {
 
-	$search_terms = ('bilag');
+	$search_terms = array('bilag');
 
 	if (!empty($_POST['search'])) {
 		$search_string = $_POST['search'];
@@ -24,6 +24,7 @@ if (!empty($_POST)) {
 			trigger_error('Ulovlig søgning - ikke bindestreg');
 		}
 
+		$search_term = strtolower($search_term);
 
 		switch ($search_term) {
 			case 'bilag':
