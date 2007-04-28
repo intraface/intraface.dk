@@ -38,7 +38,7 @@ class Auth {
 		$result = $this->db->query("SELECT id FROM user WHERE email = ".$this->db->quote($email, 'text')." AND password = ".$this->db->quote(md5($password), 'text'));
 
 		if(PEAR::isError($result)) {
-			trigger_error('result is an error', E_USER_ERROR);
+			trigger_error('result is an error' . $result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
 			return false;
 		}
 
@@ -48,7 +48,7 @@ class Auth {
 		$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
 		$result = $this->db->exec("UPDATE user SET lastlogin = NOW(), session_id = ".$this->db->quote($this->session_id, 'text')." WHERE id = ". $this->db->quote($row['id'], 'integer'));
 		if (PEAR::isError($result)) {
-			trigger_error('could not update user ' . $result->getError() . $result->getUserInfo(), E_USER_ERROR);
+			trigger_error('could not update user ' . $result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
 			return false;
 		}
 		$this->notifyObservers('login', $email .' logged in');
