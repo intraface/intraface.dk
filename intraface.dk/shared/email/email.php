@@ -2,7 +2,6 @@
 require('../../include_first.php');
 
 $kernel->useShared('email');
-
 $redirect = Redirect::factory($kernel, 'receive');
 
 
@@ -48,6 +47,7 @@ if (!empty($_POST)) {
 else {
   $email = new Email($kernel, (int)$_GET['id']);
   $value = $email->get();
+  $contact = $email->getContact();
 }
 
 $page = new Page($kernel);
@@ -76,7 +76,7 @@ else { ?>
 	<input type="hidden" value="<?php echo $value['id']; ?>" name="id" />
 
 	<fieldset>
-		<pre>Til: <?php echo safeToHtml($value['contact_name']." <".$value['contact_email'].">"); ?></pre>
+		<pre>Til: <?php echo safeToHtml($contact->address->get('name')." <".$contact->address->get('email').">"); ?></pre>
 		<pre><?php echo safeToHtml($value['subject']); ?></pre>
 	</fieldset>
 
