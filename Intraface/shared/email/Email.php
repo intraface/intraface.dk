@@ -128,10 +128,10 @@ class Email extends Standard {
 	function getContact() {
 		$this->kernel->useModule('contact');
 		$this->contact = new Contact($this->kernel, $this->get('contact_id'));
-		if (!is_object($this->contact->address)) return 0;
+
 		$this->value['contact_email'] = $this->contact->address->get('email');
 		$this->value['contact_name'] = $this->contact->address->get('name');
-
+        return $this->contact;
 	}
 
 	/**
@@ -338,11 +338,13 @@ class Email extends Standard {
 		}
 
 		// Modtager
-		if ($this->get('contact_id') == 0 OR !is_object($this->contact)) {
-			$this->error->set('Der kunne ikke sendes e-mail til email #' . $this->get('id') . ' fordi der ikke var nogen kunde sat');
-		}
 
 		$contact = $this->getContact();
+
+        if ($this->get('contact_id') == 0 OR !is_object($contact)) {
+            $this->error->set('Der kunne ikke sendes e-mail til email #' . $this->get('id') . ' fordi der ikke var nogen kunde sat');
+        }
+
 
 		$phpmailer->AddAddress(
 			$contact->address->get('email'),
