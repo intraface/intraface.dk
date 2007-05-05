@@ -279,7 +279,14 @@ class ContactReminder extends Standard {
 		// da der ikke skal hverken contact eller noget id for at finde dem.
 
 		$db = MDB2::singleton(DB_DSN);
-		$result = $db->query('SELECT * FROM contact_reminder_single WHERE reminder_date < DATE_ADD(NOW(), INTERVAL 30 DAY) AND intranet_id = ' .$db->quote($kernel->intranet->get('id'), 'integer'));
+		// 
+		$result = $db->query('SELECT contact_reminder_single.*, DATE_FORMAT(contact_reminder_single.reminder_date, "%d-%m-%Y") AS dk_reminder_date, address.name AS contact_name ' .
+				'FROM contact_reminder_single ' .
+				'INNER JOIN contact ON (contact_reminder_single.contact_id = contact.id AND contact.intranet_id = '.$db->quote($kernel->intranet->get('id'), 'integer') . ' AND contact.active = 1) '.
+				'LEFT JOIN address ON (address.belong_to_id = contact.id AND address.type = 3 AND address.active = 1) ' .
+				'WHERE contact_reminder_single.reminder_date < DATE_ADD(NOW(), INTERVAL 30 DAY) AND contact_reminder_single.intranet_id = ' .$db->quote($kernel->intranet->get('id'), 'integer').' AND contact_reminder_single.active = 1 AND contact_reminder_single.status_key = 1 ' .
+				'ORDER BY contact_reminder_single.reminder_date ASC'
+			);
 	 	if (PEAR::isError($result)) {
 	 		die($result->getUserInfo());
 	 		return false;

@@ -2,6 +2,7 @@
 require('../../include_first.php');
 require_once 'Date.php';
 require_once 'Date/Span.php';
+require_once 'Date/Calc.php';
 
 $contact_module = $kernel->module('contact');
 $translation = $kernel->getTranslation('contact');
@@ -14,35 +15,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		trigger_error('Invalid reminder id', E_USER_ERROR);
 	}
 
-	if ($_POST['mark_as_seen']) {
+	if (isset($_POST['mark_as_seen'])) {
 		$reminder->setStatus('seen');
 	}
-	elseif ($_POST['cancel']) {
+	elseif (isset($_POST['cancel'])) {
 		$reminder->setStatus('cancelled');
 	}
-	elseif ($_POST['postpone_1_day']) {
+	elseif (isset($_POST['postpone_1_day'])) {
 		$date = new Date($reminder->get('reminder_date'));
 		$next_day = $date->getNextDay();
 		$reminder->postponeUntil($next_day->getDate());
 	}
-	elseif ($_POST['postpone_1_week']) {
+	elseif (isset($_POST['postpone_1_week'])) {
 		$date = new Date($reminder->get('reminder_date'));
 		$date_span = new Date_Span();
 		$date_span->setFromDays(7);
 		$date->addSpan($date_span);
 		$reminder->postponeUntil($date->getDate());
 	}
-	elseif ($_POST['postpone_1_month']) {
+	elseif (isset($_POST['postpone_1_month'])) {
 		$date = new Date($reminder->get('reminder_date'));
 		$date_span = new Date_Span();
-		$date_span->setFromDays(30);
+		$date_calc = new Date_Calc();
+		$date_span->setFromDays($date_calc->daysInMonth());
 		$date->addSpan($date_span);
 		$reminder->postponeUntil($date->getDate());
 	}
-	elseif ($_POST['postpone_1_year']) {
+	elseif (isset($_POST['postpone_1_year'])) {
 		$date = new Date($reminder->get('reminder_date'));
 		$date_span = new Date_Span();
-		$date_span->setFromDays(365);
+		$date_span->setFromDays(365); // does not take account of leap year
 		$date->addSpan($date_span);
 		$reminder->postponeUntil($date->getDate());
 	}

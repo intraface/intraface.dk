@@ -14,7 +14,21 @@ endif;
 
 $reminders = ContactReminder::upcomingReminders($kernel);
 foreach ($reminders AS $reminder) {
-	print_r($reminder);
+	if(strtotime($reminder['reminder_date']) > time()) {
+		$text = 'Upcoming';
+	}
+	else {
+		$text = 'URGENT!';
+	}
+	$_attention_needed[] = array(
+		'module' => $contact_module->getName(),
+		'link' => $contact_module->getPath().'reminder.php?id='.$reminder['id'],
+		'msg' => $text.' ('.$reminder['dk_reminder_date'].'): '.$reminder['contact_name'].':  '.$reminder['subject'].'.',
+		'no_translation' => true
+	);
+	
+	
+	// print_r($reminder);
 }
 
 ?>
