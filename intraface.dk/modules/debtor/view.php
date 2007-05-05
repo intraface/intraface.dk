@@ -91,10 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			}
 		}
 	}
-
-
-
-
 }
 
 elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -182,14 +178,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 		}
 	}
-
-
 }
-
-
-
-
-
 
 $page = new Page($kernel);
 $page->includeJavascript('module', 'view.js');
@@ -223,20 +212,63 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 	</div>
 <?php endif; ?>
 
-<?php if($debtor->contact->get('preferred_invoice') == 2 && (!isset($kernel->intranet->address) || $kernel->intranet->address->get("email") == '')): ?>
-	<div class="message-dependent">
-		<?php if($kernel->user->hasModuleAccess('administration')): ?>
-		<?php $module_administration = $kernel->useModule('administration'); ?>
-			<p><?php echo $translation->get('you need to fill in an e-mail address to send e-mail'); ?>. <a href="<?php echo $module_administration->getPath(); ?>intranet_edit.php"><?php echo $translation->get('do it now') ?></a>.</p>
-		<?php else: ?>
-			<p><?php echo $translation->get('you need to ask your administrator to fill in an e-mail address, so that you can send emails'); ?></p>
-		<?php endif; ?>
-	</div>
+<?php if($debtor->contact->get('preferred_invoice') == 2): /* if the customer prefers e-mail */ ?>
+	<?php 
+	
+	if($kernel->user->hasModuleAccess('administration')) {
+		$module_administration = $kernel->useModule('administration');
+	}
+	$error_in_sender = false;
+	
+	switch($kernel->setting->get('intranet', 'debtor.sender')) {
+		case 'intranet':
+			if($kernel->intranet->address->get('name') == '' || $kernel->intranet->address->get('email') == '') {
+				$error_in_sender = true;
+				if($kernel->user->hasModuleAccess('administration')) {
+					echo '<div class="message-dependent"><p>'.$translation->get('you need to fill in an e-mail address to send e-mail').'. <a href="'.$module_administration->getPath().'intranet_edit.php">'.$translation->get('do it now').'</a>.</p></div>';
+				}
+				else {
+					echo '<div class="message-dependent"><p>'.$translation->get('you need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
+		
+				}		
+			}
+			break;
+		case 'user':
+			if($kernel->user->address->get('name') == '' || $kernel->user->address->get('email') == '') {
+				$error_in_sender = true;
+				echo '<div class="message-dependent"><p>'.$translation->get('you need to fill in an e-mail address to send e-mail').'. <a href="'.PATH_WWW.'/main/controlpanel/user_edit.php">'.$translation->get('do it now').'</a>.</p></div>';		
+			}
+			break;
+		case 'defined':
+			if($kernel->setting->get('intranet', 'debtor.sender.name') == '' || $kernel->setting->get('intranet', 'debtor.sender.email') == '') {
+				$error_in_sender = true;
+				if($kernel->user->hasModuleAccess('administration')) {
+					echo '<div class="message-dependent"><p>'.$translation->get('you need to fill in an e-mail address to send e-mail').'. <a href="'.$module_debtor->getPath().'settings.php">'.$translation->get('do it now').'</a>.</p></div>';
+				}
+				else {
+					echo '<div class="message-dependent"><p>'.$translation->get('you need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
+				}
+					
+			}
+			break;
+		default:
+			$error_in_sender = true;
+			trigger_error("Invalid sender!", E_USER_ERROR);
+			exit;
+			
+	}
+	
+	if($debtor->contact->address->get('email') == '') {
+		$error_in_sender = true;
+		echo '<div class="message-dependent"><p>'.$translation->get('you need to register an e-mail to the contact, so you can send e-mails').'</p></div>';		
+			
+	}
+	?>
 <?php endif; ?>
 
 <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
 	<input type="hidden" name="id" value="<?php echo $debtor->get('id'); ?>" />
-	<?php if ($debtor->contact->get('preferred_invoice') == 2 AND  $debtor->get('status') == 'created'): ?>
+	<?php if ($debtor->contact->get('preferred_invoice') == 2 AND  $debtor->get('status') == 'created' AND !$error_in_sender): ?>
 		<input type="submit" value="Send på e-mail" name="send_email" class="confirm" title="Dette vil sende e-mail til kontakten" />
 	<?php elseif ($debtor->contact->get('preferred_invoice') == 2 AND $debtor->get('status') == 'sent'): ?>
 		<input type="submit" value="Genfremsend på e-mail" name="send_email" class="confirm" title="Dette vil sende fakturaen igen" />
@@ -475,6 +507,44 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 		</tbody>
 	</table>
 	</div>
+	
+	<?php if($debtor->get("status") == "created"): ?>
+		<div class="box">
+			<?php 
+			switch($kernel->setting->get('intranet', 'debtor.sender')) {
+				case 'intranet':
+					$from_email = $kernel->intranet->address->get('email');
+					$from_name = $kernel->intranet->address->get('name');
+					break;
+				case 'user':
+					$from_email = $kernel->user->address->get('email');
+					$from_name = $kernel->user->address->get('name');
+					break;
+				case 'defined':
+					$from_email = $kernel->setting->get('intranet', 'debtor.sender.email');
+					$from_name = $kernel->setting->get('intranet', 'debtor.sender.name');
+					break;
+			}
+			?>
+			<table>
+				<caption>Kontaktperson / E-mailafsender</caption>
+				<tbody>
+				<tr>
+					<th>Navn:</th>
+					<td><?php echo safeToHtml($from_name); ?></td>
+				</tr>
+				<tr>
+					<th>E-mail:</th>
+					<td><?php echo safeToHtml($from_email); ?></td>
+				</tr>
+			</table>
+			<?php
+			if($kernel->user->hasModuleAccess('administration')) {
+				echo '<p><a href="'.$debtor_module->getPath().'setting.php">'.safeToHtml($translation->get('Change sender/contact person')).'</a></p>';	
+			} 
+			?>
+		</div>
+	<?php endif; ?>
 
 	<?php
 	if($debtor->get("type") == "invoice" && $debtor->get("status") == "sent") {

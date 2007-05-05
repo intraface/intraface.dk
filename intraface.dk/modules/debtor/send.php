@@ -109,16 +109,26 @@ if (!$file_id = $filehandler->update($input)) {
 
 }
 
-$from_email = $kernel->setting->get('intranet', 'debtor.sender.email');
-$from_name = $kernel->setting->get('intranet', 'debtor.sender.name');
-
-if (empty($from_email)) {
-	$from_email = $kernel->intranet->address->get('email');
+switch($kernel->setting->get('intranet', 'debtor.sender')) {
+	case 'intranet':
+		$from_email = $kernel->intranet->address->get('email');
+		$from_name = $kernel->intranet->address->get('name');
+		break;
+	case 'user':
+		$from_email = $kernel->user->address->get('email');
+		$from_name = $kernel->user->address->get('name');
+		break;
+	case defined:
+		$from_email = $kernel->setting->get('intranet', 'debtor.sender.email');
+		$from_name = $kernel->setting->get('intranet', 'debtor.sender.name');
+		break;
+	default:
+		trigger_error("Invalid sender!", E_USER_ERROR);
 }
-if (empty($from_name)) {
-	$from_name = $kernel->intranet->address->get('name');
-}
 
+if (empty($from_email) || empty($from_name)) {
+	trigger_error("Name or email is not filled in!", E_USER_ERROR);	
+}
 
 # opret e-mailen
 $email = new Email($kernel);

@@ -22,8 +22,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	if (!empty($_POST)) {
 
-		$kernel->setting->set('intranet', 'debtor.sender.email', $_POST['debtor_sender_email']);
-		$kernel->setting->set('intranet', 'debtor.sender.name', $_POST['debtor_sender_name']);
+
+		$error = new Error;
+		$validator = new Validator($error);
+		
+		if($_POST['debtor_sender'] == 'defined') {
+			$validator->isEmail($_POST['debtor_sender_email'], 'Invalid e-mail in Sender e-mail');
+			$validator->isString($_POST['debtor_sender_name'], 'Error in Sender name');	
+		}
+		else {
+			$validator->isEmail($_POST['debtor_sender_email'], 'Invalid e-mail in Sender e-mail', 'allow_empty');
+			$validator->isString($_POST['debtor_sender_name'], 'Error in Sender name', '', 'allow_empty');
+			
+		}
+		
+		if(!$error->isError()) {
+
+			$kernel->setting->set('intranet', 'debtor.sender', $_POST['debtor_sender']);
+		
+			$kernel->setting->set('intranet', 'debtor.sender.email', $_POST['debtor_sender_email']);
+			$kernel->setting->set('intranet', 'debtor.sender.name', $_POST['debtor_sender_name']);
+		}
 
 		// reminder
 		$kernel->setting->set('intranet', 'reminder.first.text', $_POST['reminder_text']);
@@ -82,8 +101,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	}
 
-	header('Location: index.php'); // Changed from setting.php, but don't know what is most right /SJ (14/1 2007)
-	exit;
+	if(!$error->isError()) {
+		header('Location: index.php'); // Changed from setting.php, but don't know what is most right /SJ (14/1 2007)
+		exit;
+	}
+	$values = $_POST;
 
 }
 else {
@@ -97,6 +119,7 @@ else {
 	}
 
 	// find settings frem
+	$values['debtor_sender'] = $kernel->setting->get('intranet', 'debtor.sender');
 	$values['debtor_sender_email'] = $kernel->setting->get('intranet', 'debtor.sender.email');
 	$values['debtor_sender_name'] = $kernel->setting->get('intranet', 'debtor.sender.name');
 	$values['bank_name'] = $kernel->setting->get('intranet', 'bank_name');
@@ -145,13 +168,23 @@ $page->start('Indstillinger');
 
 <h1>Indstillinger</h1>
 
-<?php // echo $oSetting->error->view(); ?>
+<?php if(isset($error)) echo $error->view(); ?>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
 
 	<fieldset>
-		<legend>Oplysninger om e-mails</legend>
+		<legend>Kontaktperson på PDF og afsender af e-mail</legend>
 
+			<div class="formrow">
+				<label for="debtor_sender">Konaktperson/Afsender</label>
+				<select name="debtor_sender">
+					<option value="intranet" <?php if(isset($values['debtor_sender']) && $values['debtor_sender'] == 'intranet') echo 'selected="selected"'; ?> >Intranetoplysninger (<?php echo safeToForm($kernel->intranet->address->get('name').' / '.$kernel->intranet->address->get('email')); ?>)</option>
+					<option value="user" <?php if(isset($values['debtor_sender']) && $values['debtor_sender'] == 'user') echo 'selected="selected"'; ?> >Aktuel brugers oplysninger (<?php echo safeToForm($kernel->user->address->get('name').' / '.$kernel->user->address->get('email')); ?>)</option>
+					<option value="defined" <?php if(isset($values['debtor_sender']) && $values['debtor_sender'] == 'defined') echo 'selected="selected"'; ?> >Brugerdefineret... (Udfyld herunder)</option>
+				</select>
+			</div>
+			
+			
 			<div class="formrow">
 				<label for="debtor_sender_name">Afsendernavn</label>
 				<input type="text" name="debtor_sender_name" id="debtor_sender_name" value="<?php if (!empty($values['debtor_sender_name'])) print safeToForm($values['debtor_sender_name']); ?>" />

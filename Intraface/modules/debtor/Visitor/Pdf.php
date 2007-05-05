@@ -33,7 +33,24 @@ class Debtor_Report_Pdf {
 		}
 
 		$this->doc->setY('-5');
-
+		/*
+		To be implemented...
+		switch($debtor->kernel->setting->get('intranet', 'debtor.sender')) {
+			case 'intranet':
+				$from_email = $kernel->intranet->address->get('email');
+				$from_name = $kernel->intranet->address->get('name');
+				break;
+			case 'user':
+				$from_email = $kernel->user->address->get('email');
+				$from_name = $kernel->user->address->get('name');
+				break;
+			case 'defined':
+				$from_email = $kernel->setting->get('intranet', 'debtor.sender.email');
+				$from_name = $kernel->setting->get('intranet', 'debtor.sender.name');
+				break;
+		}
+		*/
+		
 		$contact["object"] = $debtor->contact;
 		if(strtolower(get_class($debtor->contact_person)) == "contactperson") {
 			$contact["attention_to"] = $debtor->contact_person->get("name");
