@@ -21,7 +21,7 @@ require_once 'Intraface/Error.php';
 require_once 'Intraface/DBQuery.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/Validator.php';
-require_once 'Intraface/3Party/Database/Db_Sql.php';
+require_once 'Intraface/3Party/Database/Db_sql.php';
 
 class Email extends Standard {
 
