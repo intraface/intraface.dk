@@ -234,27 +234,16 @@ class ContactReminder extends Standard {
 	}
 
 	/**
-	 * TO BE WRITTEN
 	 * postpone the reminder at certain periode.
 	 *
-	 * @param string $periode	periode which to be postponed
+	 * @param string $date	date to be postponed to
 	 * @return boolean true or false
 	 */
-
-	public function postpone($periode) {
-
-		// Please write me.
-		// Jeg ved ikke helt hvilket argument den skal tage, men det kunne værer smart at den
-		// kan tage fx '1 day', '2 day', '3 week'. Tror måske der er noget funktionalitet i
-		// php til det, eller er det kun i mysql?
-
-	}
-
 
 	public function postponeUntil($date) {
 		// validation needed - not crucial as we are setting the postpone date
 
-		$result = $this->db->exec('UPDATE contact_reminder_single SET date_changed = NOW(), reminder_date = ' .$this->db->quote($date, 'date'));
+		$result = $this->db->exec('UPDATE contact_reminder_single SET date_changed = NOW(), reminder_date = ' .$this->db->quote($date, 'date').' WHERE intranet_id = '.$this->db->quote($this->contact->kernel->intranet->get('id'), 'integer').' AND id = '.$this->db->quote($this->id, 'integer'));
 	 	if (PEAR::isError($result)) {
 	 		trigger_error('Could not postphone reminder' . $result->getUserInfo(), E_USER_ERROR);
 	 		return false;
@@ -309,7 +298,7 @@ class ContactReminder extends Standard {
 
 		$status_key = array_search($status, $this->status_types);
 
-		$result = $this->db->exec('UPDATE contact_reminder_single SET date_changed = NOW(), status_key = ' .$this->db->quote($status_key, 'integer'));
+		$result = $this->db->exec('UPDATE contact_reminder_single SET date_changed = NOW(), status_key = ' .$this->db->quote($status_key, 'integer').' WHERE intranet_id = '.$this->db->quote($this->contact->kernel->intranet->get('id'), 'integer').' AND id = '.$this->db->quote($this->id, 'integer'));
 	 	if (PEAR::isError($result)) {
 	 		trigger_error('Could not postphone reminder' . $result->getUserInfo(), E_USER_ERROR);
 	 		return false;

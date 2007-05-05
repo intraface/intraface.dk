@@ -15,10 +15,10 @@ endif;
 $reminders = ContactReminder::upcomingReminders($kernel);
 foreach ($reminders AS $reminder) {
 	if(strtotime($reminder['reminder_date']) > time()) {
-		$text = 'Upcoming';
+		$text = $translation->get('Upcoming', 'contact');
 	}
 	else {
-		$text = 'URGENT!';
+		$text = $translation->get('URGENT!', 'contact');
 	}
 	$_attention_needed[] = array(
 		'module' => $contact_module->getName(),
