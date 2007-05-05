@@ -76,11 +76,18 @@ $page->start(safeToHtml($translation->get('dashboard', 'dashboard')));
 		echo '<ul class="message-dependent">';
 
 		foreach ($_attention_needed AS $advice):
-
 			echo '	<li>';
 			if (!empty($advice['link'])) echo '<a href="'.safeToHtml($advice['link']).'">';
-			if (!empty($advice['msg'])) echo safeToHtml($translation->get($advice['msg'], $advice['module']));
+			if (!empty($advice['msg'])) {
+				if(isset($advice['no_translation']) && $advice['no_translation'] == true) {
+					echo safeToHtml($advice['msg']);
+				}
+				else {
+					echo safeToHtml($translation->get($advice['msg'], $advice['module']));	
+				}
+			}
 			if (!empty($advice['link'])) echo '</a>';
+			
 			echo '	</li>';
 
 		endforeach;
