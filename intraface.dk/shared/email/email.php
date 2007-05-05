@@ -77,6 +77,8 @@ else { ?>
 
 	<fieldset>
 		<pre>Til: <?php echo safeToHtml($contact->address->get('name')." <".$contact->address->get('email').">"); ?></pre>
+		<pre>Fra: <?php if(isset($value['from_email'])): echo safeToHtml($value['from_name']." <".$value['from_email'].">"); else: echo safeToHtml($this->kernel->intranet->address->get('name')." <".$this->kernel->intranet->address->get('email').">"); endif; ?></pre>
+		
 		<pre><?php echo safeToHtml($value['subject']); ?></pre>
 	</fieldset>
 
