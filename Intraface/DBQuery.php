@@ -8,7 +8,7 @@
  * @version: 0.1
  */
 
-require_once 'Intraface/3Party/Database/Db_Sql.php';
+require_once 'Intraface/3Party/Database/Db_sql.php';
 
 class DBQuery {
 
