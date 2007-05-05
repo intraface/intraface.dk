@@ -527,7 +527,7 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 			}
 			?>
 			<table>
-				<caption>Kontaktperson / E-mailafsender</caption>
+				<caption>Vores kontaktperson / E-mailafsender</caption>
 				<tbody>
 				<tr>
 					<th>Navn:</th>
