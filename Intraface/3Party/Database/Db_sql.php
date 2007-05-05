@@ -1,5 +1,5 @@
 <?php
-require_once 'MDB2.php"';
+require_once 'MDB2.php';
 
 class DB_Sql {
 	var $db;
