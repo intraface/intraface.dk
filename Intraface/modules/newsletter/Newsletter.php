@@ -21,7 +21,7 @@ require_once 'Intraface/Error.php';
 require_once 'Intraface/Validator.php';
 require_once 'NewsletterSubscriber.php';
 require_once 'Mail/Queue.php';
-require_once 'Mail/Mime.php';
+require_once 'Mail/mime.php';
 
 class Newsletter extends Standard {
 
