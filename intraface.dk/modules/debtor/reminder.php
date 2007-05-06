@@ -110,16 +110,33 @@ $page->start("Rykker");
 						<td><?php print(safeToHtml($reminder->get("send_as"))); ?></td>
 					</tr>
 
-					<tr>
-						<th>Vores ref:</th>
+					
+				<?php if ($kernel->setting->get('intranet', 'debtor.sender') == 'user' || $kernel->setting->get('intranet', 'debtor.sender') == 'defined'): ?>
+				<tr>
+					<th>Vores ref.</th>
 						<td>
 							<?php
-							$user = new User($reminder->get("user_id"));
-							print(safeToHtml($user->address->get("name")));
+							switch($kernel->setting->get('intranet', 'debtor.sender')) {
+								case 'user':
+									echo $kernel->user->address->get('name'). ' &lt;'.$kernel->user->address->get('email').'&gt;';
+									break;
+								case 'defined':
+									echo $kernel->setting->get('intranet', 'debtor.sender.name').' &lt;'.$kernel->setting->get('intranet', 'debtor.sender.email').'&gt;';
+									break;
+							}
+							
+							if($kernel->user->hasModuleAccess('administration')) {
+								$debtor_module = $kernel->useModule('debtor');
+								echo ' <a href="'.$debtor_module->getPath().'setting.php" class="edit">'.safeToHtml($translation->get('change')).'</a></p>';	
+							} 
 							?>
 						</td>
-					</tr>
-						<tr>
+				</tr>
+			<?php endif; ?>
+					
+					
+					
+					<tr>
 						<th>Status:</th>
 						<td><?php print(safeToHtml($translation->get($reminder->get("status")))); ?></td>
 					</tr>
@@ -127,7 +144,7 @@ $page->start("Rykker");
 
 <fieldset>
 	<legend>Tekst</legend>
-	<p><?php print(safeToHtml($reminder->get("text"))); ?></p>
+	<p><?php print(nl2br(safeToHtml($reminder->get("text")))); ?></p>
 </fieldset>
 
 </div>
@@ -161,6 +178,12 @@ $page->start("Rykker");
 				<?php print(safeToHtml($reminder->contact->address->get("postcode")." ".$reminder->contact->address->get("city"))); ?>
 			</td>
 		</tr>
+		<?php if(isset($reminder->contact_person) && strtolower(get_class($reminder->contact_person)) == "contactperson"): ?>
+			<tr>
+				<th>Att.</th>
+				<td><?php echo safeToHtml($reminder->contact_person->get("name")); ?></td>
+			</tr>
+		<?php endif; ?>
 	</table>
 
 </div>
