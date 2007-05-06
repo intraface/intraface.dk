@@ -59,6 +59,21 @@ class Install {
 				echo 'mysql error: ' . mysql_error();
 			}
 		}
+		
+		$sql_structure = file_get_contents(dirname(__FILE__) . '/database-update.sql');
+		$sql_arr = explode(';',$sql_structure);
+
+		foreach($sql_arr as $_sql) {
+			$_sql = trim($_sql);
+			if(empty($_sql)) { continue; }
+			$result = mysql_query(trim($_sql));
+
+			if (!$result) {
+				echo 'could not do query';
+				echo 'mysql error: ' . mysql_error();
+			}
+		}
+		
 		return true;
 
 	}
@@ -106,6 +121,9 @@ class Install {
 
 	}
 }
+/*
+ * Klasse! denne bør ikke køres her, men i stedet benyttes resetServer()
 $install = new Install;
 $install->dropDatabase();
+*/
 ?>
