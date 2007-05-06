@@ -56,8 +56,9 @@ class Page {
 			'lifeTime' => 3600
 		);
 		$cache = new Cache_Lite_Output($options);
-
-		if (!USE_CACHE OR !($cache->start('page_' . $this->kernel->user->get('id') . '_' . $name))) {
+		
+		// unfortunately cache has to be deactivated (true or) as there is problems with titel and javascript. solution: only caching of menu and nothing else.
+		if (true OR !USE_CACHE OR !($cache->start('page_' . $this->kernel->user->get('id') . '_' . $name))) {
 
 			if (!is_object($this->kernel->translation)) $this->kernel->getTranslation();
 
