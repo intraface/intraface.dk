@@ -26,13 +26,29 @@ class Reminder_Report_Pdf {
 			$this->doc->addHeader($this->file->get('file_uri_pdf'));
 		}
 
-		$contact["object"] = $reminder->contact;
+		$contact = $reminder->contact->address->get();
 		if(isset($reminder->contact_person) AND get_class($reminder->contact_person) == "contactperson") {
 			$contact["attention_to"] = $reminder->contact_person->get("name");
 		}
-
-		$intranet["address_id"] = $reminder->get("intranet_address_id");
-		$intranet["user_id"] = $reminder->get("user_id");
+		$contact['number'] = $reminder->contact->get('number');
+		
+		$intranet_address = new Address($reminder->get("intranet_address_id"));
+		$intranet = $intranet_address->get();
+		
+		switch($reminder->kernel->setting->get('intranet', 'debtor.sender')) {
+			case 'intranet':
+				// void
+				break;
+			case 'user':
+				$intranet['email'] = $reminder->kernel->user->address->get('email');
+				$intranet['contact_person'] = $reminder->kernel->user->address->get('name');
+				$intranet['phone'] = $reminder->kernel->user->address->get('phone');
+				break;
+			case 'defined':
+				$intranet['email'] = $reminder->kernel->setting->get('intranet', 'debtor.sender.email');
+				$intranet['contact_person'] = $reminder->kernel->setting->get('intranet', 'debtor.sender.name');
+				break;
+		}
 
 		$this->docinfo[0]["label"] = "Dato:";
 		$this->docinfo[0]["value"] = $reminder->get("dk_this_date");

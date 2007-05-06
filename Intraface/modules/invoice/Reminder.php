@@ -292,12 +292,15 @@ class Reminder extends Standard {
 				$status = $this->allowed_status[$status];
 			}
 			else {
-				trigger_error("Reminder->setStatus(): Ugyldig status (integer)", FATAL);
+				trigger_error("Reminder->setStatus(): Ugyldig status (integer)", E_USER_ERROR);
 			}
 		}
 
 		if($status_id <= $this->get("status_id")) {
-			trigger_error("Du kan ikke sætte status til samme som/lavere end den er i forvejen", ERROR);
+			$this->error->set('Du kan ikke sætte status til samme som/lavere end den er i forvejen');
+			trigger_error("Tried to set status the same or lower than it was before. Can be because of reload. In Reminder->setStatus", E_USER_NOTICE);
+			return false;
+			
 		}
 
 		switch($status) {

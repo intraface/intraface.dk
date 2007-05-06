@@ -33,30 +33,30 @@ class Debtor_Report_Pdf {
 		}
 
 		$this->doc->setY('-5');
-		/*
-		To be implemented...
-		switch($debtor->kernel->setting->get('intranet', 'debtor.sender')) {
-			case 'intranet':
-				$from_email = $kernel->intranet->address->get('email');
-				$from_name = $kernel->intranet->address->get('name');
-				break;
-			case 'user':
-				$from_email = $kernel->user->address->get('email');
-				$from_name = $kernel->user->address->get('name');
-				break;
-			case 'defined':
-				$from_email = $kernel->setting->get('intranet', 'debtor.sender.email');
-				$from_name = $kernel->setting->get('intranet', 'debtor.sender.name');
-				break;
-		}
-		*/
 		
-		$contact["object"] = $debtor->contact;
+		$contact = $debtor->contact->address->get();
 		if(strtolower(get_class($debtor->contact_person)) == "contactperson") {
 			$contact["attention_to"] = $debtor->contact_person->get("name");
 		}
-		$intranet["address_id"] = $debtor->get("intranet_address_id");
-		$intranet["user_id"] = $debtor->get("user_id");
+		$contact['number'] = $debtor->contact->get('number');
+		
+		$intranet_address = new Address($debtor->get("intranet_address_id"));
+		$intranet = $intranet_address->get();
+		
+		switch($debtor->kernel->setting->get('intranet', 'debtor.sender')) {
+			case 'intranet':
+				// void
+				break;
+			case 'user':
+				$intranet['email'] = $debtor->kernel->user->address->get('email');
+				$intranet['contact_person'] = $debtor->kernel->user->address->get('name');
+				$intranet['phone'] = $debtor->kernel->user->address->get('phone');
+				break;
+			case 'defined':
+				$intranet['email'] = $debtor->kernel->setting->get('intranet', 'debtor.sender.email');
+				$intranet['contact_person'] = $debtor->kernel->setting->get('intranet', 'debtor.sender.name');
+				break;
+		}
 
 		$this->docinfo[0]["label"] = $this->translation->get($debtor->get('type').' number').":";
 		$this->docinfo[0]["value"] = $debtor->get("number");
