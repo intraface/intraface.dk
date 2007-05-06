@@ -126,6 +126,7 @@ $page->start(safeToHtml($translation->get($action.' '.$debtor->get('type'))));
 		<?php
 	}
 	?>
+	
 	<div class="formrow">
 		<label for="message">Besked</label>
 		<textarea id="message" type="text" name="message" cols="80" rows="5"><?php if(isset($value["message"])) print(safeToForm($value["message"])); ?></textarea>

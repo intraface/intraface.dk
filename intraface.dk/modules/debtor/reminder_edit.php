@@ -106,6 +106,7 @@ else {
 }
 
 $page = new Page($kernel);
+$page->includeJavascript('module', 'edit.js');
 $page->start($title);
 
 ?>
@@ -125,6 +126,39 @@ $reminder->error->view("html");
     <input type="text" name="number" id="number" value="<?php print(safeToForm($value["number"])); ?>" />
 	</div>
 
+	
+	<div class="formrow">
+		<label for="description">Beskrivelse</label>
+   	<input type="text" name="description" value="<?php if(isset($value['description'])) print(safeToForm($value["description"])); ?>" size="60" />
+	</div>
+
+	<div class="formrow">
+		<label for="date">Dato</label>
+		<input class="input" name="this_date" id="this_date" value="<?php if(isset($value['dk_this_date'])) print(safeToForm($value["dk_this_date"])); ?>" size="10" />
+	</div>
+	<div class="formrow">
+		<label for="due_date">Forfaldsdato</label>
+		<input class="input" name="due_date" id="due_date" value="<?php if(isset($value['dk_due_date'])) print(safeToForm($value["dk_due_date"])); ?>" size="10" />
+	</div>
+	<div class="formrow">
+		<label for="reminder_fee">Rykkergebyr</label>
+		<select id="reminder_fee" name="reminder_fee">
+			<option value="0" <?php if(isset($value["reminder_fee"]) && $value["reminder_fee"] == 0) print("selected=\"selected\""); ?> >Ingen</option>
+			<option value="50" <?php if(isset($value["reminder_fee"]) && $value["reminder_fee"] == 50) print("selected=\"selected\""); ?> >50 kr.</option>
+			<option value="100" <?php if(isset($value["reminder_fee"]) && $value["reminder_fee"] == 100) print("selected=\"selected\""); ?> >100 kr.</option>
+			<?php if(isset($value["reminder_fee"]) && !($value["reminder_fee"] == 0 || $value["reminder_fee"] == 50 || $value["reminder_fee"] == 100)) print("<option value=\"".safeToHtml($value["reminder_fee"])."\" selcted=\"selected\">".safeToHtml($value["reminder_fee"])."</option>"); ?>
+		</select>
+	</div>
+	
+	<div class="formrow">
+		<label for="text">Tekst til modtager</label>
+   		<textarea name="text" id="text" style="width: 400px; height: 100px;"><?php if(isset($value['text'])) print(safeToForm($value["text"])); ?></textarea>
+	</div>
+
+</fieldset>
+
+<fieldset>
+	<legend>Kundeoplysninger</legend>
 	<div class="formrow">
 		<label>Kunde</label>
 		<span><?php print(safeToHtml($contact->address->get("name"))); ?></span>
@@ -149,38 +183,22 @@ $reminder->error->view("html");
 				<option value="-1">Opret ny >></option>
 			</select>
 		</div>
-		<div>Navn: <input type="text" name="contact_person_name" value="" /> E-mail:<input type="text" name="contact_person_email" value="" /></div>
+		
+		<fieldset id="contactperson">
+			<legend>Ny kontaktperson</legend>
+			<div class="formrow">
+				<label for="contact_person_name">Navn:</label>
+				<input type="text" name="contact_person_name" value="" /> 
+			</div>
+			<div class="formrow">
+				<label for="contact_person_email">E-mail:</label>
+				<input type="text" name="contact_person_email" value="" />
+			</div>
+		</fieldset>
+			
 		<?php
 	}
 	?>
-	<div class="formrow">
-		<label for="description">Beskrivelse</label>
-   	<input type="text" name="description" value="<?php if(isset($value['description'])) print(safeToForm($value["description"])); ?>" size="60" />
-	</div>
-
-	<div class="formrow">
-		<label for="date">Dato</label>
-		<input class="input" name="this_date" id="this_date" value="<?php if(isset($value['dk_this_date'])) print(safeToForm($value["dk_this_date"])); ?>" size="10" />
-	</div>
-	<div class="formrow">
-		<label for="due_date">Forfaldsdato</label>
-		<input class="input" name="due_date" id="due_date" value="<?php if(isset($value['dk_due_date'])) print(safeToForm($value["dk_due_date"])); ?>" size="10" />
-	</div>
-	<div class="formrow">
-		<label for="reminder_fee">Rykkergebyr</label>
-		<select id="reminder_fee" name="reminder_fee">
-			<option value="0" <?php if(isset($value["reminder_fee"]) && $value["reminder_fee"] == 0) print("selected=\"selected\""); ?> >Ingen</option>
-			<option value="50" <?php if(isset($value["reminder_fee"]) && $value["reminder_fee"] == 50) print("selected=\"selected\""); ?> >50 kr.</option>
-			<option value="100" <?php if(isset($value["reminder_fee"]) && $value["reminder_fee"] == 100) print("selected=\"selected\""); ?> >100 kr.</option>
-			<?php if(isset($value["reminder_fee"]) && !($value["reminder_fee"] == 0 || $value["reminder_fee"] == 50 || $value["reminder_fee"] == 100)) print("<option value=\"".safeToHtml($value["reminder_fee"])."\" selcted=\"selected\">".safeToHtml($value["reminder_fee"])."</option>"); ?>
-		</select>
-	</div>
-
-	<div class="formrow">
-		<label for="text">Tekst til modtager</label>
-   	<textarea name="text" id="text" style="width: 400px; height: 150px;"><?php if(isset($value['text'])) print(safeToForm($value["text"])); ?></textarea>
-	</div>
-
 </fieldset>
 
 <fieldset>

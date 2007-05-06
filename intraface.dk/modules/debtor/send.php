@@ -111,8 +111,8 @@ if (!$file_id = $filehandler->update($input)) {
 
 switch($kernel->setting->get('intranet', 'debtor.sender')) {
 	case 'intranet':
-		$from_email = $kernel->intranet->address->get('email');
-		$from_name = $kernel->intranet->address->get('name');
+		$from_email = '';
+		$from_name = '';
 		break;
 	case 'user':
 		$from_email = $kernel->user->address->get('email');

@@ -360,30 +360,29 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 			</tr>
 			<?php } ?>
 
+			
 
-
-
-			<?php if ($debtor->get("user_id") > 0) { ?>
+			<?php if ($kernel->setting->get('intranet', 'debtor.sender') == 'user' || $kernel->setting->get('intranet', 'debtor.sender') == 'defined'): ?>
 				<tr>
 					<th>Vores ref.</th>
 						<td>
 							<?php
-							$user = new User($debtor->get("user_id"));
-							if ($user->address->get("name")) {
-								print(safeToHtml($user->address->get("name")));
+							switch($kernel->setting->get('intranet', 'debtor.sender')) {
+								case 'user':
+									echo $kernel->user->address->get('name'). ' &lt;'.$kernel->user->address->get('email').'&gt;';
+									break;
+								case 'defined':
+									echo $kernel->setting->get('intranet', 'debtor.sender.name').' &lt;'.$kernel->setting->get('intranet', 'debtor.sender.email').'&gt;';
+									break;
 							}
-							else {
-								if ($debtor->get('user_id') == $kernel->user->get('id')) {
-									echo '<a href="'.PATH_WWW.'main/controlpanel/user_edit.php">[ikke udfyldt]</a>';
-								}
-								else {
-									echo '[ikke udfyldt]';
-								}
-							}
+							
+							if($kernel->user->hasModuleAccess('administration')) {
+								echo ' <a href="'.$debtor_module->getPath().'setting.php" class="edit">'.safeToHtml($translation->get('change')).'</a></p>';	
+							} 
 							?>
 						</td>
 				</tr>
-			<?php } ?>
+			<?php endif; ?>
 			<tr>
 				<th>Status</th>
 				<td>
@@ -457,11 +456,16 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 				</td>
 			</tr>
 
-<?php endif; ?>
+			<?php endif; ?>
 		</tbody>
 	</table>
 
-
+	<?php if($debtor->get("message") != ''): ?>
+		<fieldset>
+			<legend>Tekst</legend>
+			<p><?php print(nl2br(safeToHtml($debtor->get("message")))); ?></p>
+		</fieldset>
+	<?php endif; ?>
 
 </div>
 
@@ -504,47 +508,15 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 					<td><?php echo safeToHtml($debtor->contact->address->get("cvr")); ?></td>
 				</tr>
 			<?php } ?>
+			<?php if(isset($debtor->contact_person) && strtolower(get_class($debtor->contact_person)) == "contactperson"): ?>
+				<tr>
+					<th>Att.</th>
+					<td><?php echo safeToHtml($debtor->contact_person->get("name")); ?></td>
+				</tr>
+			<?php endif; ?>
 		</tbody>
 	</table>
 	</div>
-	
-	<?php if($debtor->get("status") == "created"): ?>
-		<div class="box">
-			<?php 
-			switch($kernel->setting->get('intranet', 'debtor.sender')) {
-				case 'intranet':
-					$from_email = $kernel->intranet->address->get('email');
-					$from_name = $kernel->intranet->address->get('name');
-					break;
-				case 'user':
-					$from_email = $kernel->user->address->get('email');
-					$from_name = $kernel->user->address->get('name');
-					break;
-				case 'defined':
-					$from_email = $kernel->setting->get('intranet', 'debtor.sender.email');
-					$from_name = $kernel->setting->get('intranet', 'debtor.sender.name');
-					break;
-			}
-			?>
-			<table>
-				<caption>Vores kontaktperson / E-mailafsender</caption>
-				<tbody>
-				<tr>
-					<th>Navn:</th>
-					<td><?php echo safeToHtml($from_name); ?></td>
-				</tr>
-				<tr>
-					<th>E-mail:</th>
-					<td><?php echo safeToHtml($from_email); ?></td>
-				</tr>
-			</table>
-			<?php
-			if($kernel->user->hasModuleAccess('administration')) {
-				echo '<p><a href="'.$debtor_module->getPath().'setting.php">'.safeToHtml($translation->get('Change sender/contact person')).'</a></p>';	
-			} 
-			?>
-		</div>
-	<?php endif; ?>
 
 	<?php
 	if($debtor->get("type") == "invoice" && $debtor->get("status") == "sent") {

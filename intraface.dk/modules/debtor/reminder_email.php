@@ -188,11 +188,30 @@ $reminder_text->visit($reminder);
 
 $body = $reminder_text->getText();
 
+switch($kernel->setting->get('intranet', 'debtor.sender')) {
+	case 'intranet':
+		$from_email = '';
+		$from_name = '';
+		break;
+	case 'user':
+		$from_email = $kernel->user->address->get('email');
+		$from_name = $kernel->user->address->get('name');
+		break;
+	case defined:
+		$from_email = $kernel->setting->get('intranet', 'debtor.sender.email');
+		$from_name = $kernel->setting->get('intranet', 'debtor.sender.name');
+		break;
+	default:
+		trigger_error("Invalid sender!", E_USER_ERROR);
+}
+
 $email = new Email($kernel);
 $var = array(
 	'body' => $body,
 	'subject' => $subject,
 	'contact_id' => $reminder->contact->get('id'),
+	'from_email' => $from_email,
+	'from_name' => $from_name,
 	'type_id' => 5, // type_id 5 er reminder
 	'belong_to' => $reminder->get('id')
 );
