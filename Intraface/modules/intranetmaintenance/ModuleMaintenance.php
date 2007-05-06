@@ -179,19 +179,21 @@ class ModuleMaintenance {
 		$db = new DB_Sql;
 
 		$i = 0;
-		$this->db->query("SELECT id, menu_label, show_menu, menu_index, frontpage_index FROM module WHERE active = 1 ORDER BY menu_index");
+		$this->db->query("SELECT id, name, menu_label, show_menu, menu_index, frontpage_index FROM module WHERE active = 1 ORDER BY menu_index");
 		while($this->db->nextRecord()) {
 
 			$value[$i]["id"] = $this->db->f("id");
+			$value[$i]["name"] = $this->db->f("name");
 			$value[$i]["menu_label"] = $this->db->f("menu_label");
 			$value[$i]["show_menu"] = $this->db->f("show_menu");
 			$value[$i]["menu_index"] = $this->db->f("menu_index");
 			$value[$i]["frontpage_index"] = $this->db->f("frontpage_index");
 
 			$j = 0;
-			$db->query("SELECT id, description FROM module_sub_access WHERE active = 1 AND module_id = ".$this->db->f("id")." ORDER BY description");
+			$db->query("SELECT id, name, description FROM module_sub_access WHERE active = 1 AND module_id = ".$this->db->f("id")." ORDER BY description");
 			while($db->nextRecord()) {
 				$value[$i]["sub_access"][$j]["id"] = $db->f("id");
+				$value[$i]["sub_access"][$j]["name"] = $db->f("name");
 				$value[$i]["sub_access"][$j]["description"] = $db->f("description");
 				$j++;
 			}

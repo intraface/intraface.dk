@@ -36,6 +36,7 @@ if(isset($_POST["submit"])) {
 	else {
 		// Sætter adgang til det redigerede intranet. Id kommer tidligere ved setIntranetId
 		$user->setIntranetAccess();
+		
 
 		// Hvis en bruger retter sig selv, i det aktive intranet, sætter vi adgang til dette modul
 		if($kernel->user->get("id") == $user->get("id") && $kernel->intranet->get("id") == $intranet->get("id")) {
@@ -46,9 +47,11 @@ if(isset($_POST["submit"])) {
 		}
 
 		for($i = 0, $max = count($modules); $i < $max; $i++) {
-			$user->setModuleAccess(intval($modules[$i]));
+			$user->setModuleAccess($modules[$i]);
 			if (!empty($sub_access[$modules[$i]])) {
+				
 				for($j = 0, $max1 = count($sub_access[$modules[$i]]); $j < $max1; $j++) {
+					
 					$user->setSubAccess($modules[$i], $sub_access[$modules[$i]][$j]);
 				}
 			}
@@ -195,8 +198,8 @@ if(isset($intranet)) {
 			if($intranet->hasModuleAccess(intval($modules[$i]["id"]))) {
 				?>
 				<div>
-					<input type="checkbox" name="module[]" id="module<?php print($modules[$i]["id"]); ?>" value="<?php print($modules[$i]["id"]); ?>" <?php if($user->hasModuleAccess(intval($modules[$i]["id"]))) print("checked=\"checked\""); ?> />
-					<label for="module<?php print($modules[$i]["id"]); ?>"><?php print($modules[$i]["menu_label"]); ?></label>
+					<input type="checkbox" name="module[]" id="module_<?php print($modules[$i]["name"]); ?>" value="<?php print($modules[$i]["name"]); ?>" <?php if($user->hasModuleAccess(intval($modules[$i]["id"]))) print("checked=\"checked\""); ?> />
+					<label for="module_<?php print($modules[$i]["name"]); ?>"><?php print($modules[$i]["menu_label"]); ?></label>
   				<?php
 
 
@@ -206,8 +209,8 @@ if(isset($intranet)) {
   					<?php
   					for($j = 0; $j < count($modules[$i]["sub_access"]); $j++) {
   						?>
-  						<input type="checkbox" name="sub_access[<?php print($modules[$i]["id"]); ?>][]" id="sub<?php print($modules[$i]["sub_access"][$j]["id"]); ?>" value="<?php print($modules[$i]["sub_access"][$j]["id"]); ?>"<?php if($user->hasSubAccess(intval($modules[$i]["id"]), intval($modules[$i]["sub_access"][$j]["id"]))) print(" checked=\"checked\""); ?> />
-  						<label for="sub<?php print($modules[$i]["sub_access"][$j]["id"]); ?>"><?php print($modules[$i]["sub_access"][$j]["description"]); ?></label>
+  						<input type="checkbox" name="sub_access[<?php print($modules[$i]["name"]); ?>][]" id="sub_<?php print($modules[$i]["sub_access"][$j]["name"]); ?>" value="<?php print($modules[$i]["sub_access"][$j]["name"]); ?>"<?php if($user->hasSubAccess(intval($modules[$i]["id"]), intval($modules[$i]["sub_access"][$j]["id"]))) print(" checked=\"checked\""); ?> />
+  						<label for="sub_<?php print($modules[$i]["sub_access"][$j]["name"]); ?>"><?php print($modules[$i]["sub_access"][$j]["description"]); ?></label>
   						<?php
   					}
   					?>

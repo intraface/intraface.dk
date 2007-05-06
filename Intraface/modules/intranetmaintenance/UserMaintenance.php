@@ -270,8 +270,11 @@ class UserMaintenance extends User {
 			}
 
 		}
+		
+		$module_name = $module_id;
 
 		if (!is_numeric($module_id)) {
+			
 			$db->query("SELECT id FROM module WHERE name =  '".$module_id."'");
 			if (!$db->nextRecord()) {
 				trigger_error("Ugyldig module_id", E_USER_ERROR);
@@ -294,13 +297,31 @@ class UserMaintenance extends User {
 			}
 		}
 		else {
-			trigger_error("Ugyldig module_id", E_USER_ERROR);
+			trigger_error("Ugyldig module_id '".$module_id."/".$module_name."'", E_USER_ERROR);
 		}
 	}
 
 
 	function setSubAccess($module_id, $sub_access_id, $intranet_id = 0) {
 		$db = new Db_sql;
+		
+		
+		if (!is_numeric($module_id)) {
+			$db->query("SELECT id FROM module WHERE name =  '".$module_id."'");
+			if (!$db->nextRecord()) {
+				trigger_error("Ugyldig module_id", E_USER_ERROR);
+			}
+			$module_id = $db->f('id');
+		}
+		
+		if (!is_numeric($sub_access_id)) {
+			$db->query("SELECT id FROM module_sub_access WHERE name =  '".$sub_access_id."'");
+			if (!$db->nextRecord()) {
+				trigger_error("Ugyldig module_id", E_USER_ERROR);
+			}
+			$sub_access_id = $db->f('id');
+		}
+		
 		settype($intranet_id, "integer");
 		settype($module_id, "integer");
 		settype($sub_access_id, "integer");

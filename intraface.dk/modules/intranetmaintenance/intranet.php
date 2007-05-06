@@ -194,8 +194,8 @@ $page->start($translation->get('Intranet'));
 	for($i = 0; $i < count($modules); $i++) {
 		?>
 		<div>
-			<input type="checkbox" name="module[]" id="module<?php print($modules[$i]["id"]); ?>" value="<?php print($modules[$i]["id"]); ?>"<?php if($intranet->hasModuleAccess(intval($modules[$i]["id"]))) print("checked=\"checked\""); ?> />
-			<label for="module<?php print($modules[$i]["id"]); ?>"><?php print($modules[$i]["menu_label"]); ?></label>
+			<input type="checkbox" name="module[]" id="module_<?php print($modules[$i]["name"]); ?>" value="<?php print($modules[$i]["name"]); ?>"<?php if($intranet->hasModuleAccess(intval($modules[$i]["id"]))) print("checked=\"checked\""); ?> />
+			<label for="module_<?php print($modules[$i]["name"]); ?>"><?php print($modules[$i]["menu_label"]); ?></label>
 		</div>
 		<?php
 	}
