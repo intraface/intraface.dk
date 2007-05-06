@@ -18,22 +18,7 @@ class PdfMakerDebtor extends PdfMaker {
 		// $pointX = $this->get("margin_left");
 
 		if(!is_array($contact)) {
-			trigger_error("Anden parameter skal være et array med konkaktoplysninger i PdfDebtor->addRecieverAndSender", E_USER_ERROR);
-		}
-
-		if(!is_object($contact["object"])) {
-			trigger_error("Der er ikke et contact-object med i arrayet i anden parameter i PdfMakerDebtor->addReciverAndSender", E_USER_ERROR);
-		}
-
-		if(!is_object($contact["object"]->address)) {
-			trigger_error("contact mangler address i PdfDebtor->addReciverAndSender", E_USER_ERROR);
-		}
-
-		if(isset($intranet["address_id"])) {
-			$intranet_address = new Address($intranet["address_id"]);
-		}
-		else {
-			$intranet_address = $this->kernel->intranet->address;
+			trigger_error("Første parameter skal være et array med konkaktoplysninger i PdfDebtor->addRecieverAndSender", E_USER_ERROR);
 		}
 
 		$box_top = $this->get('y'); // $pointY;
@@ -44,12 +29,13 @@ class PdfMakerDebtor extends PdfMaker {
 		$box_small_height = $this->get("font_spacing") * 3 + $box_padding_top + $box_padding_bottom + 2;
 
 		# Udskrivning af modtager
+		
 
 		$this->setY('-'.$this->get("font_spacing")); // $pointY -= $box_padding_top;
 		CPdf::addText($this->get('x') + $box_width - 40, $this->get('y') + 4, $this->get("font_size") - 4, "Modtager");
 
 		$this->setY('-'.$box_padding_top);
-		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "<b>".$contact["object"]->address->get("name")."</b>");
+		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "<b>".$contact["name"]."</b>");
 		$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
 
 		if(isset($contact["attention_to"]) && $contact["attention_to"] != "") {
@@ -57,7 +43,7 @@ class PdfMakerDebtor extends PdfMaker {
 			$this->setY('-'.$this->get('font_spacing')); // $pointY -= $this->get("font_spacing");
 		}
 
-		$line = explode("\r\n", $contact["object"]->address->get("address"));
+		$line = explode("\r\n", $contact["address"]);
 		for($i = 0; $i < count($line); $i++) {
 			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $line[$i]);
 			$this->setY('-'.$this->get("font_spacing"));
@@ -65,74 +51,66 @@ class PdfMakerDebtor extends PdfMaker {
 			if($i == 2) $i = count($line);
 		}
 		// $pointY -= $this->get("font_spacing");
-		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $contact["object"]->address->get("postcode")." ".$contact["object"]->address->get("city"));
+		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $contact["postcode"]." ".$contact["city"]);
 		$this->setY('-'.($this->get("font_spacing") * 2));
 
-		if($contact["object"]->address->get("cvr") != "") {
+		if($contact["cvr"] != "") {
 			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "CVR.:");
-			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $contact["object"]->address->get("cvr"));
+			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $contact["cvr"]);
 			$this->setY('-'.$this->get("font_spacing"));
 		}
 		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Kontaktnr.:");
-		CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $contact["object"]->get("number"));
-		if ($contact["object"]->address->get("ean")) {
+		CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $contact["number"]);
+		if ($contact["ean"]) {
 		 CPdf::addText($this->get('x') + 10, $this->get('y') - 15, $this->get("font_size"), "EANnr.:");
-		 CPdf::addText($this->get('x') + 10 + 60, $this->get('y') - 15, $this->get("font_size"), $contact["object"]->address->get("ean"));
+		 CPdf::addText($this->get('x') + 10 + 60, $this->get('y') - 15, $this->get("font_size"), $contact["ean"]);
 		}
 
 		$box_height = $box_top - $this->get('y') + $box_padding_bottom;
 
 
+		
 		# Udskrivning af Afsender data
-		$this->setX($box_width + 10);
-		$this->setValue('y', $box_top); // sætter eksakt position
-		$this->setY('-'.$this->get("font_spacing"));
-		CPdf::addText($this->get('right_margin_position') - 40, $this->get('y') + 4, $this->get("font_size") - 4, "Afsender");
-
-		$this->setY('-'.$box_padding_top); // $pointY -= $box_padding_top;
-		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "<b>".$intranet_address->get("name")."</b>");
-
-		$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
-		$line = explode("\r\n", $intranet_address->get("address"));
-		for($i = 0; $i < count($line); $i++) {
-			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $line[$i]);
+		if(is_array($intranet) && count($intranet) > 0) {
+			$this->setX($box_width + 10);
+			$this->setValue('y', $box_top); // sætter eksakt position
+			$this->setY('-'.$this->get("font_spacing"));
+			CPdf::addText($this->get('right_margin_position') - 40, $this->get('y') + 4, $this->get("font_size") - 4, "Afsender");
+	
+			$this->setY('-'.$box_padding_top); // $pointY -= $box_padding_top;
+			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "<b>".$intranet["name"]."</b>");
+	
 			$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
-			if($i == 2) $i = count($line);
-		}
-		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $intranet_address->get("postcode")." ".$intranet_address->get("city"));
-		$this->setY('-'.($this->get("font_spacing") * 2)); // $pointY -= $this->get("font_spacing") * 2;
-
-		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "CVR.:");
-		CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet_address->get("cvr"));
-		$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
-
-		if($intranet["user_id"] != 0) {
-			$user = new User($intranet["user_id"]);
-			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Kontakt:");
-			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $user->address->get("name"));
+			$line = explode("\r\n", $intranet["address"]);
+			for($i = 0; $i < count($line); $i++) {
+				CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $line[$i]);
+				$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
+				if($i == 2) $i = count($line);
+			}
+			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $intranet["postcode"]." ".$intranet["city"]);
+			$this->setY('-'.($this->get("font_spacing") * 2)); // $pointY -= $this->get("font_spacing") * 2;
+	
+			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "CVR.:");
+			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet["cvr"]);
 			$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
-		}
-
-
-		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Telefon:");
-		if(isset($user) && strtolower(get_class($user)) == "user" && $user->address->get("phone") != "") {
-			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $user->address->get("phone"));
-		}
-		else {
-			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet_address->get("phone"));
-		}
-		$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
-
-		CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "E-mail:");
-		if(isset($user) && strtolower(get_class($user)) == "user" && $user->address->get("email") != "") {
-			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $user->address->get("email"));
-		}
-		else {
-			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet_address->get("email"));
-		}
-
-		if($box_top - $this->get('y') + $box_padding_bottom > $box_height) {
-			$box_height = $box_top - $this->get('y') + $box_padding_bottom;
+	
+			if($intranet["contact_person"] != '' AND $intranet['contact_person'] != $intranet["name"]) {
+				CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Kontakt:");
+				CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet["contact_person"]);
+				$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
+			}
+	
+	
+			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Telefon:");
+			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet["phone"]);
+			$this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
+	
+			CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "E-mail:");
+			CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet["email"]);
+	
+			if($box_top - $this->get('y') + $box_padding_bottom > $box_height) {
+				$box_height = $box_top - $this->get('y') + $box_padding_bottom;
+			}
 		}
 
 		$this->setValue('y', $box_top - $box_height); // sætter eksakt position
