@@ -108,7 +108,7 @@ $page->start(safeToHtml($translation->get('contact information') . ' ' .$contact
 				<li class="inactive"><a href="<?php print($debtor->getPath()); ?>edit.php?type=invoice&amp;contact_id=<?php print($contact->get("id")); ?>"><?php echo safeToHtml($translation->get('create invoice', 'debtor')); ?></a></li>
 			<?php endif; ?>
 			<?php if ($creditnote->any('contact', $contact->get("id"))): ?>
-				<li><a href="<?php print($debtor->getPath()); ?>list.php?type=creditnote&amp;contact_id=<?php print($contact->get("id")); ?>"><?php echo safeToHtml($translation->get('credit notes', 'debtor')); ?></a></li>
+				<li><a href="<?php print($debtor->getPath()); ?>list.php?type=credit_note&amp;contact_id=<?php print($contact->get("id")); ?>"><?php echo safeToHtml($translation->get('credit notes', 'debtor')); ?></a></li>
 			<?php endif; ?>
 			<?php if($reminder->any($contact->get("id"))): ?>
 				<li><a href="<?php print($debtor->getPath()); ?>reminders.php?contact_id=<?php print($contact->get("id")); ?>"><?php echo safeToHtml($translation->get('reminders', 'debtor')); ?></a></li>
