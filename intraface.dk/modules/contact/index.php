@@ -90,7 +90,7 @@ $page->start(safeToHtml($translation->get('contacts')));
 	<?php if ($kernel->setting->get('user', 'contact.search') == 'hide' AND count($contacts) > 0): ?>
 	<li><a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?search=view"><?php echo safeToHtml($translation->get('show search')); ?></a></li>
 	<?php endif; ?>
-	<li><a class="pdf" href="pdf_label.php?use_stored=true" target="_blank"><?php echo safeToHtml($translation->get('print labels')); ?></a></li>
+	<li><a class="pdf" href="<?php echo safeToHtml('http://'.NET_HOST.NET_DIRECTORY.'modules/contact/'); /* BAD SOLUTION!!! */ ?>pdf_label.php?use_stored=true" target="_blank"><?php echo safeToHtml($translation->get('print labels')); ?></a></li>
 	<li><a class="excel" href="excel.php?use_stored=true"><?php echo safeToHtml($translation->get('excel', 'common')); ?></a></li>
 	<li><a href="email_search.php?use_stored=true"><?php echo safeToHtml($translation->get('email to contacts in search')); ?></a></li>
 

@@ -2,7 +2,8 @@
 require('../../include_first.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	header('Location: pdf.php?id='. intval($_POST['id']));
+	// This is a fairly bad solution! But it is Microsofts fault!!!
+	header('Location: http://'.NET_HOST.NET_DIRECTORY.'modules/debtor/pdf.php?id='. intval($_POST['id']));
 	exit;
 }
 else {
