@@ -17,13 +17,17 @@ define('PATH_INCLUDE_SHARED', PATH_INCLUDE.'shared' . DIRECTORY_SEPARATOR);
 define('PATH_INCLUDE_FUNCTIONS', PATH_INCLUDE_COMMON.'functions' . DIRECTORY_SEPARATOR);
 define('PATH_INCLUDE_CONFIG', PATH_INCLUDE.'config'.DIRECTORY_SEPARATOR);
 
-define('PATH_INCLUDE_3PARTY', PATH_INCLUDE . '3Party' . DIRECTORY_SEPARATOR);
-define('PATH_INCLUDE_PEAR', PATH_INCLUDE_3PARTY . 'PEAR' . DIRECTORY_SEPARATOR);
+// these have moved to config.local.php
+// define('PATH_INCLUDE_3PARTY', PATH_INCLUDE . '3Party' . DIRECTORY_SEPARATOR);
+// define('PATH_INCLUDE_PEAR', PATH_INCLUDE_3PARTY . 'PEAR' . DIRECTORY_SEPARATOR);
+// define('PATH_CAPTCHA', PATH_ROOT . 'captcha/');
+// define('PATH_CACHE', PATH_ROOT . 'cache/');
 
 // path to backup
 define('PATH_INCLUDE_BACKUP', PATH_ROOT . 'backup' . DIRECTORY_SEPARATOR);
 
 // paths on www
+define('PATH_WWW', NET_SCHEME.NET_HOST.NET_DIRECTORY);
 define('PATH_WWW_MODULE', PATH_WWW.'modules/');
 define('PATH_WWW_SHARED', PATH_WWW.'shared/');
 
@@ -34,16 +38,30 @@ define('PATH_WWW_SHARED', PATH_WWW.'shared/');
 if (!defined('MDB2_DEBUG')) {
 	define('MDB2_DEBUG', 0);
 }
-define('PATH_CAPTCHA', PATH_ROOT . 'captcha/');
-define('PATH_CACHE', PATH_ROOT . 'cache/');
+
+$set_include_path = '';
+
+// I guess this one could be left out? /Sune(11-05-2007)
+$set_include_path .= PATH_SEPARATOR . PATH_ROOT;
+
+if(defined('PATH_INCLUDE') && PATH_INCLUDE != '') {
+	$set_include_path .= PATH_SEPARATOR . PATH_INCLUDE;
+}
+
+if(defined('PATH_INCLUDE_3PARTY') && PATH_INCLUDE_3PARTY != '') {
+	$set_include_path .= PATH_SEPARATOR . PATH_INCLUDE_3PARTY;
+}
+
+if(defined('PATH_INCLUDE_PEAR') && PATH_INCLUDE_PEAR != '') {
+	$set_include_path .= PATH_SEPARATOR . PATH_INCLUDE_PEAR;
+}
+
+// 3Party still in core - should be removed soon.
+$set_include_path .= PATH_SEPARATOR . PATH_INCLUDE.'3Party/';
 
 // include path
-set_include_path(
-	PATH_SEPARATOR . PATH_INCLUDE_PEAR
-	. PATH_SEPARATOR . PATH_INCLUDE
-	. PATH_SEPARATOR . PATH_INCLUDE_3PARTY
-	. PATH_SEPARATOR . PATH_ROOT
-	. PATH_SEPARATOR . get_include_path());
+set_include_path($set_include_path. PATH_SEPARATOR . get_include_path());
+unset($set_include_path);
 
 // Filehandler
 define('FILE_VIEWER', PATH_WWW . 'main/file/'); // is this used anymore?

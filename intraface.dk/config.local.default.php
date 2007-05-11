@@ -11,13 +11,20 @@
 define('CONNECTION_INTERNET', true); // if the system has access to dns and more from the internet. true or false
 define('SERVER_STATUS', 'PRODUCTION'); // if the system is in PRODUCTION or TEST mode
 
+// net
+define('NET_SCHEME', 'https://'); // http:// or https://
+define('NET_HOST', 'www.intraface.dk'); // www.intraface.dk
+define('NET_DIRECTORY', '/'); // / (slash) or other subdirectory
+
 // paths
 define('PATH_ROOT', ''); // remember trailing slash
-define('PATH_WWW', 'http://localhost/intraface/intraface.dk/'); // remember trailins slash
-define('PATH_INCLUDE', PATH_ROOT . '');
-
-// upload path
+define('PATH_INCLUDE', PATH_ROOT . 'Intraface/'); // remember trailing slash
+define('PATH_CAPTCHA', PATH_ROOT . 'captcha/'); // don't know what this is for? /Sune (11-05-2007)
+define('PATH_CACHE', PATH_ROOT . 'cache/'); // path to cache
 define('PATH_UPLOAD', '/home/.investor/intraface/upload/'); // remember trailing slash
+
+define('PATH_INCLUDE_PEAR', ''); // can be left empty if PEAR directory is in server setting.
+define('PATH_INCLUDE_3PARTY', ''); // can be left empty if it is the same as PEAR
 
 // database
 define('DB_HOST', 'localhost');
@@ -35,7 +42,7 @@ define('ERROR_HANDLE_LEVEL', E_ALL);
 define('ERROR_LEVEL_CONTINUE_SCRIPT', 10);
 
 // cache
-define('USE_CACHE', true);
+define('USE_CACHE', false); // this is static deactivated in Page.php
 
 // external connection
 

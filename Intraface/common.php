@@ -15,13 +15,13 @@ require_once 'config/configuration.php'; // this is the one in your source contr
 require_once 'ErrorHandler/ErrorHandler.php';
 
 // settings for theme
-require_once 'Intraface/config/setting_themes.php';
+require_once 'config/setting_themes.php';
 
 // functions
-require_once 'Intraface/functions/functions.php';
+require_once 'functions/functions.php';
 
-// third party
-require_once PATH_INCLUDE_3PARTY . 'Database'.DIRECTORY_SEPARATOR.'Db_sql.php';
+// third party // PATH_INCLUDE_3PARTY . 
+require_once 'Database'.DIRECTORY_SEPARATOR.'Db_sql.php';
 //require(PATH_INCLUDE_3PARTY . 'mysql_session_handler'.DIRECTORY_SEPARATOR.'mysql_session_handler.php');
 
 // system files
