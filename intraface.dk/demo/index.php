@@ -1,6 +1,6 @@
 <?php
 require '../common.php';
-require 'common/core/Auth.php';
+require 'Auth.php';
 require 'Text/CAPTCHA.php';
 
 $title = 'Intraface.dk -> Login';

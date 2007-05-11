@@ -318,7 +318,7 @@ class Email extends Standard {
 		// opsætning
 		$phpmailer->Mailer   = 'mail'; // Alternative to IsSMTP()
 		$phpmailer->WordWrap = 75;
-		$phpmailer->setLanguage('en', PATH_INCLUDE_3PARTY.'phpmailer/language/');
+		$phpmailer->setLanguage('en', 'phpmailer/language/');
 		// $phpmailer->ConfirmReadingTo = $this->kernel->intranet->address->get('email');
 
 

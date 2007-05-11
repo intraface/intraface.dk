@@ -1,6 +1,6 @@
 <?php
 require('../include_first.php');
-require(PATH_INCLUDE_3PARTY . 'Intraface/RSS/Parser.php');
+require('Intraface/RSS/Parser.php');
 
 if (!empty($_GET['action']) AND $_GET['action'] == 'deletelog') {
 	unlink(ERROR_LOG);
