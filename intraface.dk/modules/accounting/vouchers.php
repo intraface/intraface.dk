@@ -15,33 +15,31 @@ $page->start('Regnskab');
 
 <h1>Bilag</h1>
 
-<!--
 <ul class="options">
-	<li><a href="voucher_edit.php" class="new">Opret</a></li>
+    <li><a class="excel" href="posts_excel.php" class="new">Poster som excel</a></li>
 </ul>
--->
 
 <?php if (count($posts) == 0): ?>
-	<p>Der er ikke nogen bilag.</p>
+    <p>Der er ikke nogen bilag.</p>
 <?php else: ?>
-	<table>
-		<caption>Bilag</caption>
-		<thead>
-		<tr>
-			<th>Nummer</th>
-			<th>Dato</th>
-			<th>Tekst</th>
-		</tr>
-		</thead>
-	<?php foreach ($posts AS $post): ?>
-		<tr>
-			<td><a href="voucher.php?id=<?php echo $post['id']; ?>"><?php echo $post['number']; ?></a></td>
-			<td><?php echo safeToHtml($post['date_dk']); ?></td>
-			<td><?php echo safeToHtml($post['text']); ?></td>
-		</tr>
+    <table>
+        <caption>Bilag</caption>
+        <thead>
+        <tr>
+            <th>Nummer</th>
+            <th>Dato</th>
+            <th>Tekst</th>
+        </tr>
+        </thead>
+    <?php foreach ($posts AS $post): ?>
+        <tr>
+            <td><a href="voucher.php?id=<?php echo $post['id']; ?>"><?php echo $post['number']; ?></a></td>
+            <td><?php echo safeToHtml($post['date_dk']); ?></td>
+            <td><?php echo safeToHtml($post['text']); ?></td>
+        </tr>
 
-	<?php endforeach; ?>
-	</table>
+    <?php endforeach; ?>
+    </table>
 
 <?php endif; ?>
 
