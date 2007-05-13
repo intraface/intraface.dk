@@ -15,6 +15,7 @@
 session_start();
 
 define(PATH_ROOT, '/home/intraface/');
+// This one should be able to be deleted -if you are testing this, please remove it first
 define(PATH_INCLUDE, '/home/intraface/intraface/');
 
 require_once '../common.php';

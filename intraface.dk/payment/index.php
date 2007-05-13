@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$eval = false;
 		try {
 			$qp = new quickpay;
-			$qp->set_curl_certificate(PATH_INCLUDE . 'certificates/cacert.pem');
+			$qp->set_curl_certificate('Intraface/certificates/cacert.pem');
 			$qp->set_msgtype('1100');
 			$qp->set_md5checkword('73XuwSrE9qM12vb9kAIx26mD1n8K5YQhFyt8U6eGZl66J1NH8fcT3pjCB55L42iP');
 			$qp->set_merchant('29991634');

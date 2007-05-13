@@ -1,5 +1,4 @@
-<?php
-// PATH_INCLUDE_3PARTY . 
+<?php 
 require('Intraface'.DIRECTORY_SEPARATOR.'cms'.DIRECTORY_SEPARATOR.'HTML'.DIRECTORY_SEPARATOR.'Parser.php');
 
 class CMS_Admin_HTML_Parser extends CMS_HTML_Parser {

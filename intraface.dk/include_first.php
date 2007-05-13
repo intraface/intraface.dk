@@ -16,5 +16,5 @@ if (!file_exists($config_file)) {
 }
 
 require $config_file;
-require PATH_INCLUDE . 'include_first.php';
+require PATH_ROOT . 'Intraface/include_first.php';
 ?>

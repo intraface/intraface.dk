@@ -18,13 +18,26 @@ define('NET_DIRECTORY', '/'); // / (slash) or other subdirectory
 
 // paths
 define('PATH_ROOT', ''); // remember trailing slash
-define('PATH_INCLUDE', PATH_ROOT . 'Intraface/'); // remember trailing slash
 define('PATH_CAPTCHA', PATH_ROOT . 'captcha/'); // don't know what this is for? /Sune (11-05-2007)
 define('PATH_CACHE', PATH_ROOT . 'cache/'); // path to cache
 define('PATH_UPLOAD', '/home/.investor/intraface/upload/'); // remember trailing slash
+define('PATH_INCLUDE_BACKUP', PATH_ROOT . 'backup' . DIRECTORY_SEPARATOR);
 
-define('PATH_INCLUDE_PEAR', ''); // can be left empty if PEAR directory is in server setting.
-define('PATH_INCLUDE_3PARTY', ''); // can be left empty if it is the same as PEAR
+
+// This part should have includepathes to:
+// - intraface root: PATH_ROOT
+// - intraface 3party (internal) (depricated)
+// - intrafacePublic
+// - Smartypants,
+// - Pear
+
+set_include_path(
+	PATH_ROOT .
+	PATH_SEPARATOR . PATH_ROOT.'Intraface/3Party/'. 
+	PATH_SEPARATOR . '/usr/share/pear/' . 
+	PATH_SEPARATOR . get_include_path()
+);
+
 
 // database
 define('DB_HOST', 'localhost');

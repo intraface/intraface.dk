@@ -1014,6 +1014,7 @@ class Debtor extends Standard {
 
 		$translation = $this->kernel->getTranslation('debtor');
 
+		// hmm this should be done with the module object
 		require_once PATH_INCLUDE_MODULE . 'debtor/Visitor/Pdf.php';
 
 		$filehandler = '';

@@ -20,9 +20,8 @@ require_once 'config/setting_themes.php';
 // functions
 require_once 'functions/functions.php';
 
-// third party // PATH_INCLUDE_3PARTY . 
+// third party . 
 require_once 'Database'.DIRECTORY_SEPARATOR.'Db_sql.php';
-//require(PATH_INCLUDE_3PARTY . 'mysql_session_handler'.DIRECTORY_SEPARATOR.'mysql_session_handler.php');
 
 // system files
 require_once 'Intraface/Standard.php';
