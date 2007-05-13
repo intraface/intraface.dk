@@ -67,7 +67,7 @@ class UploadHandler extends Standard {
 		
 		$this->upload_path = PATH_UPLOAD.$this->file_handler->kernel->intranet->get('id').'/';
 		
-		$this->upload_setting['max_file_size'] = 300000;
+		$this->upload_setting['max_file_size'] = 500000;
 		$this->upload_setting['allow_only_images'] = 0;
 		$this->upload_setting['allow_only_documents'] = 0;
 		$this->upload_setting['file_accessibility'] = 'intranet';
@@ -110,91 +110,6 @@ class UploadHandler extends Standard {
 		
 		return $return;
 	}
-	
-	/*
-	
-	Udskiftet med nedenstående.
-	
-	function upload($input, $tmp = '') {
-
-		if(is_string($input) && $input != '') {
-			$upload = new HTTP_Upload('en');
-			$file = $upload->getFiles($input);
-			if($file->isError()) {
-				$this->file_handler->error->set($file->getMessage());
-				return false;
-			}
-		}
-		elseif(is_object($input) && get_class($input) == 'http_upload_file') {
-			$file = $input;
-		}
-		else {
-			trigger_error("Ugyldigt input i FileHandler->upload", E_USER_ERROR);
-		}
-		
-		$prop = $file->getProp(); // returnere et array med oplysninger om filen.
-		
-		if(!$file->isValid()) {
-			$this->file_handler->error->set("Filen \"".$prop['real']."\" er ikke en gyldig upload fil");
-			return false;
-		}
-		if(!isset($prop['ext']) || $prop['ext'] == "") {
-			$this->file_handler->error->set("Filen \"".$prop['real']."\" mangler en filtype, f.eks. .pdf");
-			return false;
-		}
-		
-		if($prop['size'] > $this->upload_setting['max_file_size']) {
-			$this->file_handler->error->set("Filen \"".$prop['real']."\" er større end de tilladte ".$this->upload_setting['max_file_size']." Byte");
-		}
-		
-		$mime_type = $this->file_handler->_getMimeType($prop['type'], 'mime_type');
-		if($mime_type === false) {
-			$this->file_handler->error->set("Filen \"".$prop['real']."\" er ikke en gyldig filtype (Det er typen: ".$prop['type'].")");
-			return false;
-		}
-		
-		if($mime_type['allow_user_upload'] == 0) {
-			$this->file_handler->error->set("Filen \"".$prop['real']."\" af typen \"".$mime_type['description']."\" kan ikke uploades");
-			return false;
-		}
-		
-		if($this->upload_setting['allow_only_images'] == 1 && $mime_type['image'] == 0) {
-			$this->file_handler->error->set("Filen \"".$prop['real']."\" er ikke et billede. Du kan kun uploade billeder!");
-			return false;
-		}
-		
-		if($this->upload_setting['allow_only_documents'] == 1 && $mime_type['image'] == 1) {
-			$this->file_handler->error->set("Filen \"".$prop['real']."\" er ikke et dokument. Du kan kun uploade dokumenter!");
-			return false;
-		}
-		
-		// $instance_id = $this->updateInstance(array('type' => 'original', ));
-		
-		$id = $this->file_handler->update(array('file_name' => $prop['real'], 'file_size' => $prop['size'], 'file_type' => $mime_type['mime_type'], 'accessibility' => $this->upload_setting['file_accessibility'], 'tmp' => $tmp));
-		
-		// Vi putter vores egen extension på, det er mere sikkert.
-		$server_file_name = $id.".".$mime_type['extension'];
-		$file->setName($server_file_name);
-		$this->file_handler->update(array('server_file_name' => $server_file_name));
-		
-		if(!is_dir($this->upload_path)) {
-			if(!mkdir($this->upload_path)) {
-				trigger_error("Kunne ikke oprette mappe i FileHandler->upload", E_USER_ERROR);
-			}
-		}
-		
-		$moved = $file->moveTo($this->upload_path);
-		
-		if(PEAR::isError($moved)) {
-			$this->file_handler->error->set('Der opstod en fejl under flytningen af filen');
-			// Vi rydder op efter os selv
-			$this->file_handler->delete();
-			return false;
-		}
-		
-		return $id;
-	}
-	*/
 	
 	/**
 	 * Upload fil
@@ -258,6 +173,10 @@ class UploadHandler extends Standard {
 			return false;
 		}
 		
+		if($this->file_handler->error->isError()) {
+			return false;
+		}
+		
 		
 		if($upload_type == 'do_not_save') {
 			$tmp_server_file_name = date("U").$this->file_handler->kernel->randomKey(10).".".$mime_type['extension'];
@@ -286,7 +205,7 @@ class UploadHandler extends Standard {
 			
 		}
 		elseif($upload_type == 'temporary') {
-			$id = $this->file_handler->save($prop['tmp_name'], $prop['real'], 'temporary');
+			$id = $this->file_handler->save($prop['tmp_name'], $prop['real'], 'temporary', $mime_type['mime_type']);
 			
 			return $id;
 		}

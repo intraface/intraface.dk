@@ -128,7 +128,6 @@ class FileHandler extends Standard {
 		$this->value['file_path'] = $this->upload_path . $db->f('server_file_name');
 		
 		// denne skal kaldes efter getMimeType ellers er $this->file_types ikke instantieret
-		//print_r($this->file_types);
 		$this->value['is_image'] = $this->file_types[$this->get('file_type_key')]['image'];
 		
 		if (file_exists($this->get('file_path'))) {
@@ -318,6 +317,7 @@ class FileHandler extends Standard {
 			$this->error->set('error in filetype');
 			return false;
 		}
+		
 		
 		if($mime_type['image']) {
 			$imagesize = getimagesize($file);

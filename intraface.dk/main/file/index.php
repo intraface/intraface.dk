@@ -45,6 +45,7 @@ switch($filehandler->get('accessibility')) {
 	case 'intranet':
 		// You have to be logged in to access this file
 		session_start();
+		require('Intraface/Auth.php');
 		$auth = new Auth(session_id());
 
 		if (!$user_id = $auth->isLoggedIn()) {
