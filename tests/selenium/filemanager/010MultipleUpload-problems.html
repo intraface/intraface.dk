@@ -1,0 +1,44 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>010MultipleUpload-problems</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">010MultipleUpload-problems</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/modules/filemanager/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=filemanager</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=upload file</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>30</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='save']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>public</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
