@@ -563,7 +563,13 @@ class CMS_Page extends Standard {
 		$dbquery_original->storeResult('','', 'toplevel'); // sikre at der ikke bliver gemt ved undermenuer.
 
 
-		if($this->dbquery->checkFilter('level') && $type == 'page') { // $level == 'sublevel' &&
+		$keywords = $this->dbquery->getKeyword();
+		if(isset($keywords) && is_array($keywords) && count($keywords) > 0 && $type == 'page') {
+		    // If we are looking for pages, and there is keywords, we probaly want from more than one level
+		    // So we add nothing about level to condition.
+		       
+		}
+		elseif($this->dbquery->checkFilter('level') && $type == 'page') { // $level == 'sublevel' &&
 
 			// Til at finde hele menuen på valgt level.
 			$page_tree = $this->get('page_tree');
