@@ -60,7 +60,7 @@ function dateToDb() {
 
 
 function autoop($text) {
-	require_once '3Party/wordpress/functions-formatting.php';
+	require_once 'wordpress/functions-formatting.php';
 	require_once 'Markdown/markdown.php';
 	require_once 'SmartyPants/smartypants.php';
 
