@@ -102,7 +102,7 @@ class InstanceHandler extends Standard {
 				$resize_type = 'relative';
 			}
 
-			$file_handler->loadImage();
+			$file_handler->createImage();
 			$file = $file_handler->image->resize($types[$type_key]['max_width'], $types[$type_key]['max_height'], $resize_type);
 
 			if(!is_file($file)) {
@@ -225,7 +225,7 @@ class InstanceHandler extends Standard {
 				$is_saved = true;
 			}
 
-			$this->file_handler->loadImage();
+			$this->file_handler->createImage();
 
 			for($i = 0, $max = count($types); $i < $max; $i++) {
 

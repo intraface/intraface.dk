@@ -36,7 +36,7 @@ class CMS_Section_Picture extends CMS_Section {
 				$this->value['picture'] = $filemanager->get();
 			}
 			else {
-				$filemanager->loadInstance($size);
+				$filemanager->createInstance($size);
 				$this->value['picture'] = $filemanager->instance->get();
 
 			}

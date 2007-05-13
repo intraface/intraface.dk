@@ -29,6 +29,7 @@ if (empty($_GET['use_stored'])) {
 
 
 $filemanager = new FileManager($kernel);
+$filemanager->createDBQuery();
 $filemanager->dbquery->storeResult('use_stored', 'filemanager', 'toplevel');
 
 $files = $filemanager->getList();
@@ -62,7 +63,7 @@ for($i = 0, $max = count($files); $i < $max; $i++) {
 			<tr>
 				<td rowspan="5" style="width: 280px;">
 					<?php if ($this_filemanager->get('is_picture')): ?>
-						<?php $this_filemanager->loadInstance('small');?>
+						<?php $this_filemanager->createInstance('small');?>
 						<img src="<?php echo $this_filemanager->instance->get('file_uri'); ?>" alt="" />
 					<?php else: ?>
 						<img src="<?php echo $this_filemanager->get('icon_uri'); ?>" alt="" />

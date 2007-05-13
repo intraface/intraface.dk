@@ -87,7 +87,7 @@ $page->start(safeToHtml($translation->get('file')) . ': ' . $filemanager->get('f
 
 	<?php
 	if($file_type['image'] == 1) {
-		$filemanager->loadInstance();
+		$filemanager->createInstance();
 		$instances = $filemanager->instance->getTypes();
 
 		?>
@@ -137,7 +137,7 @@ $page->start(safeToHtml($translation->get('file')) . ': ' . $filemanager->get('f
 
 	<?php
 	if($file_type['image'] == 1) {
-		$filemanager->loadInstance('small');
+		$filemanager->createInstance('small');
 		?>
 		<div class="box" style="text-align: center;">
 			<img src="<?php echo safeToHtml($filemanager->instance->get('file_uri')); ?>" alt="" />

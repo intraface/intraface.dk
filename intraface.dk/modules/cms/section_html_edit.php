@@ -30,7 +30,7 @@ if (!empty($_POST)) {
 		if (!empty($_FILES['new_pic'])) {
 
 			$filehandler = new FileHandler($kernel);
-			$filehandler->loadUpload();
+			$filehandler->createUpload();
 			$filehandler->upload->setSetting('file_accessibility', 'public');
 			$id = $filehandler->upload->upload('new_pic');
 
@@ -45,7 +45,7 @@ if (!empty($_POST)) {
 
 
 			$filehandler = new FileHandler($kernel);
-			$filehandler->loadUpload();
+			$filehandler->createUpload();
 			$filehandler->upload->setSetting('file_accessibility', 'public');
 			$id = $filehandler->upload->upload('new_pic');
 
@@ -59,7 +59,7 @@ if (!empty($_POST)) {
 
 		if (!empty($_FILES['new_file'])) {
 			$filehandler = new FileHandler($kernel);
-			$filehandler->loadUpload();
+			$filehandler->createUpload();
 			$filehandler->upload->setSetting('file_accessibility', 'public');
 			$id = $filehandler->upload->upload('new_file');
 
@@ -291,7 +291,7 @@ switch ($value['type']) {
 
 				<?php
 				$filehandler = new Filehandler($kernel);
-				$filehandler->loadInstance();
+				$filehandler->createInstance();
 				$instances = $filehandler->instance->getTypes();
 
 				?>
@@ -606,7 +606,7 @@ switch ($value['type']) {
 						$filehandlerHTML = new FilehandlerHTML($filehandler);
 						$filehandlerHTML->showFile('section_html_edit.php?id='.$element->get('id').'&delete_gallery_append_file_id='.$file['append_file_id'], array('image_size' => 'small'));
 						/*
-						$filehandler->loadInstance('small');
+						$filehandler->createInstance('small');
 						?>
 						<div style="border: 3px solid blue; padding: 5px;"><img src="<?php print($file['instances'][2]['file_uri']); ?>" width="<?php print($filehandler->instance->get('width')); ?>" height="<?php print($filehandler->instance->get('height')); ?>" /> <a class="delete" href="section_html_edit.php?id=<?php print($element->get('id')); ?>&delete_gallery_append_file_id=<?php print($file['append_file_id']); ?>">Slet</a></div>
 						<?php

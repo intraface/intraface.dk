@@ -37,7 +37,7 @@ class CMS_Picture extends CMS_Element {
 
 				}
 				else {
-					$filemanager->loadInstance($size);
+					$filemanager->createInstance($size);
 					$this->value['picture'] = $filemanager->instance->get();
 
 				}

@@ -8,7 +8,7 @@ $file_dir = $kernel->intranet->get('id').'/import/';
 if(isset($_POST["submit"])) {
 
 	$filemanager = new FileManager($kernel);
-	$filemanager->loadUpload();
+	$filemanager->createUpload();
 
 	$filemanager->upload->setSetting('file_accessibility', $_POST['accessibility']);
 	$filemanager->upload->setSetting('max_file_size', 800000);

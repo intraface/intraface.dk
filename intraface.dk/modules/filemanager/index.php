@@ -20,7 +20,10 @@ elseif (!empty($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
 
 else {
 	$filemanager = new FileManager($kernel);
+	
 }
+
+$filemanager->createDBQuery();
 
 /*
 if(isset($_GET["contact_id"]) && intval($_GET["contact_id"]) != 0 && $kernel->user->hasModuleAccess('contact')) {

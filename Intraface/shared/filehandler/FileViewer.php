@@ -93,7 +93,7 @@ class FileViewer {
 		$instancehandler = new InstanceHandler($filehandler);
 
 		if($instancehandler->_checkType($this->file_type) !== false) {
-			$filehandler->loadInstance($this->file_type);
+			$filehandler->createInstance($this->file_type);
 			$file_path = $filehandler->instance->get('file_path');
 		}
 

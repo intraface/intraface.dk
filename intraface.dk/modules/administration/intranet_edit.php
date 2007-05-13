@@ -32,7 +32,7 @@ if(isset($_POST['submit']) || isset($_POST['choose_file'])) {
 	$values = $_POST;
 
 	$filehandler = new FileHandler($kernel);
-	$filehandler->loadUpload();
+	$filehandler->createUpload();
 	if($id = $filehandler->upload->upload('new_pdf_header_file')) {
 		$filehandler->load();
 

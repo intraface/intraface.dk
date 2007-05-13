@@ -14,7 +14,7 @@ if (!empty($_POST)) {
 
 		if (!empty($_FILES['new_pic'])) {
 			$filehandler = new FileHandler($kernel);
-			$filehandler->loadUpload();
+			$filehandler->createUpload();
 			$filehandler->upload->setSetting('file_accessibility', 'public');
 			$id = $filehandler->upload->upload('new_pic');
 

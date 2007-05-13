@@ -51,6 +51,7 @@ if(isset($_POST['return'])) {
 }
 
 $filemanager = new FileManager($kernel); // has to be loaded here, while it should be able to set an error just below.
+$filemanager->createDBQuery();
 
 if(isset($_POST['submit_close']) || isset($_POST['submit'])) {
 	settype($_POST['selected'], 'array');

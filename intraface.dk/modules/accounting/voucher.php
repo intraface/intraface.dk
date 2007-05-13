@@ -71,7 +71,7 @@ elseif (!empty($_POST) AND !empty($_FILES)) {
 	}
 	elseif (!empty($_FILES['new_file'])) {
 		$filehandler = new FileHandler($kernel);
-		$filehandler->loadUpload();
+		$filehandler->createUpload();
 		$filehandler->upload->setSetting('max_file_size', 2000000);
 		if($id = $filehandler->upload->upload('new_file')) {
 			$var['belong_to_id'] = $id;

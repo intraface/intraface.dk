@@ -218,7 +218,7 @@ class Product extends Standard {
 				$this->value['pictures'][$key]['appended_file_id'] = $appendix['id'];
 
 				if ($tmp_filehandler->get('is_image')) {
-					$tmp_filehandler->loadInstance();
+					$tmp_filehandler->createInstance();
 					$instances = $tmp_filehandler->instance->getTypes();
 					foreach($instances AS $instance) {
 						if($instance['name'] == 'manual') CONTINUE;

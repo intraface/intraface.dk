@@ -119,7 +119,7 @@ switch ($value['type']) {
 	case 'picture':
 		$kernel->useShared('filehandler');
 		$filehandler = new Filehandler($kernel);
-		$filehandler->loadInstance();
+		$filehandler->createInstance();
 		$instances = $filehandler->instance->getTypes();
 
 		?>

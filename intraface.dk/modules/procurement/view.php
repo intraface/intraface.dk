@@ -63,7 +63,7 @@ if(isset($_POST['append_file_choose_file']) && $kernel->user->hasModuleAccess('f
 if(isset($_POST['append_file_submit'])) {
 	if(isset($_FILES['new_append_file'])) {
 
-		$filehandler->loadUpload();
+		$filehandler->createUpload();
 		$filehandler->upload->setSetting('max_file_size', '2000000');
 		if($id = $filehandler->upload->upload('new_append_file')) {
 			$append_file->save(array('file_handler_id' => $id));

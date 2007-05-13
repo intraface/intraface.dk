@@ -9,7 +9,7 @@ $redirect = Redirect::factory($kernel, 'receive');
 if(isset($_POST["submit"])) {
 
 	$filemanager = new FileManager($kernel);
-	$filemanager->loadUpload();
+	$filemanager->createUpload();
 
 	$filemanager->upload->setSetting('file_accessibility', $_POST['accessibility']);
 	$filemanager->upload->setSetting('max_file_size', '1000000');

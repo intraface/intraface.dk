@@ -18,7 +18,7 @@ if (!empty($_POST)) {
 
 			if(!empty($_FILES) && !is_array($files)) {
 				$filehandler = new FileHandler($kernel);
-				$filehandler->loadUpload();
+				$filehandler->createUpload();
 				$files = $filehandler->upload->getFiles();
 			}
 
@@ -27,7 +27,7 @@ if (!empty($_POST)) {
 					if($file->getProp('form_name') == 'new_picture_'.$key) {
 
 						$filehandler = new FileHandler($kernel);
-						$filehandler->loadUpload();
+						$filehandler->createUpload();
 						$filehandler->upload->setSetting('file_accessibility', 'public');
 						$pic_id = $filehandler->upload->upload($file);
 

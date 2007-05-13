@@ -39,7 +39,6 @@ $filehandler = FileHandler::factory($kernel, $query_parts[2]);
 if(!is_object($filehandler)) {
 	trigger_error("FEJL I LÆSNING AF BILLEDE (2)", E_USER_ERROR);
 }
-
 switch($filehandler->get('accessibility')) {
 	case 'personal':
 		// Not implemented - continue to next
@@ -81,7 +80,7 @@ $filehandler_shared->includeFile('InstanceHandler.php');
 $instancehandler = new InstanceHandler($filehandler);
 
 if($instancehandler->_checkType($query_parts[3]) !== false) {
-	$filehandler->loadInstance($query_parts[3]);
+	$filehandler->createInstance($query_parts[3]);
 
 	$file_path = $filehandler->instance->get('file_path');
 }

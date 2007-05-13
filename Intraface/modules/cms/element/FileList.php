@@ -41,6 +41,7 @@ class CMS_FileList extends CMS_Element {
 			$this->value['keyword_id'] = $this->parameter->get('keyword_id');
 
 			$filemanager = new FileManager($this->kernel);
+			$filemanager->createDBQuery();
 			$filemanager->dbquery->setKeyword($this->value['keyword_id']);
 			$files = $filemanager->getList();
 
@@ -67,7 +68,7 @@ class CMS_FileList extends CMS_Element {
 			}
 
 			$filehandler = new FileHandler($this->kernel, $id);
-			$filehandler->loadInstance();
+			$filehandler->createInstance();
 			// HACK lille hack - til at undgå at vi får filer med som ikke har beskrivelser (formentlig slettede filer)
 			if (!$filehandler->get('description')) continue;
 			$this->value['files'][$i] = $filehandler->get();

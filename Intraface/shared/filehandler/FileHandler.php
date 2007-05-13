@@ -69,8 +69,6 @@ class FileHandler extends Standard {
 			$this->load();
 		}
 		
-		$this->dbquery = new DBQuery($this->kernel, "file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->kernel->intranet->get("id"));
-		
 	}
 	
 	function factory(&$kernel, $access_key) {
@@ -184,7 +182,11 @@ class FileHandler extends Standard {
 		return($this->id);
 	}
 	
-	function loadUpload() {
+	function createDBQuery() {
+		$this->dbquery = new DBQuery($this->kernel, "file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->kernel->intranet->get("id"));
+	}	
+	
+	function createUpload() {
 		
 		if(!class_exists('UploadHandler')) {
 			$filehandler_shared = $this->kernel->useShared('filehandler');
@@ -193,7 +195,7 @@ class FileHandler extends Standard {
 		$this->upload = new UploadHandler($this);
 	}
 	
-	function loadInstance($type = "", $param = array()) {
+	function createInstance($type = "", $param = array()) {
 		if(!class_exists('InstanceHandler')) {
 			$filehandler_shared = $this->kernel->useShared('filehandler');
 			$filehandler_shared->includeFile('InstanceHandler.php');
@@ -207,7 +209,7 @@ class FileHandler extends Standard {
 		}
 	}
 	
-	function loadImage() {
+	function createImage() {
 		if(!class_exists('ImageHandler')) {
 			$filehandler_shared = $this->kernel->useShared('filehandler');
 			$filehandler_shared->includeFile('ImageHandler.php');

@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if(isset($_FILES['new_append_file'])) {
 			$filehandler = new FileHandler($kernel);
 
-			$filehandler->loadUpload();
+			$filehandler->createUpload();
 			if ($product->get('do_show') == 1) { // if shown i webshop
 				$filehandler->upload->setSetting('file_accessibility', 'public');
 			}
