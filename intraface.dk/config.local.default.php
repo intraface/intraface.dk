@@ -9,7 +9,7 @@
  */
 
 define('CONNECTION_INTERNET', true); // if the system has access to dns and more from the internet. true or false
-define('SERVER_STATUS', 'PRODUCTION'); // if the system is in PRODUCTION or TEST mode
+define('SERVER_STATUS', 'TEST'); // if the system is in PRODUCTION or TEST mode
 
 // net
 define('NET_SCHEME', 'https://'); // http:// or https://
@@ -18,8 +18,8 @@ define('NET_DIRECTORY', '/'); // / (slash) or other subdirectory
 
 // paths
 define('PATH_ROOT', ''); // remember trailing slash
-define('PATH_CAPTCHA', PATH_ROOT . 'captcha/'); // don't know what this is for? /Sune (11-05-2007)
-define('PATH_CACHE', PATH_ROOT . 'cache/'); // path to cache
+define('PATH_CAPTCHA', PATH_ROOT . 'captcha/'); // remember trailing slash - used for the demo formular
+define('PATH_CACHE', PATH_ROOT . 'cache/'); // remember trailing slash - path to cache
 define('PATH_UPLOAD', '/home/.investor/intraface/upload/'); // remember trailing slash
 define('PATH_INCLUDE_BACKUP', PATH_ROOT . 'backup' . DIRECTORY_SEPARATOR);
 
@@ -32,10 +32,10 @@ define('PATH_INCLUDE_BACKUP', PATH_ROOT . 'backup' . DIRECTORY_SEPARATOR);
 // - Pear
 
 set_include_path(
-	PATH_ROOT .
-	PATH_SEPARATOR . PATH_ROOT.'Intraface/3Party/'. 
-	PATH_SEPARATOR . '/usr/share/pear/' . 
-	PATH_SEPARATOR . get_include_path()
+    PATH_ROOT .
+    PATH_SEPARATOR . PATH_ROOT.'Intraface/3Party/'.
+    PATH_SEPARATOR . '/usr/share/pear/' .
+    PATH_SEPARATOR . get_include_path()
 );
 
 
