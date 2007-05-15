@@ -13,160 +13,159 @@ define('LOGIN_ERROR_ALREADY_LOGGED_IN', -1);
 
 class Auth {
 
-	private $db;
-	private $session_id;
-	private $observers = array();
+    private $db;
+    private $session_id;
+    private $observers = array();
 
-	/**
-	 * @param object $db Databaseobject
-	 * @param string session_id
-	 * @return void
-	 */
-	function __construct($session_id) {
-		$this->db = MDB2::singleton(DB_DSN);
-		$this->session_id = $session_id;
-	}
+    /**
+     * @param object $db Databaseobject
+     * @param string session_id
+     * @return void
+     */
+    function __construct($session_id) {
+        $this->db = MDB2::singleton(DB_DSN);
+        $this->session_id = $session_id;
+    }
 
-	/**
-	 * login()
-	 * @param	string  $email
-	 * @param	string  $password
-	 * @return	boolean
-	 */
-	public function login($email, $password) {
+    /**
+     * login()
+     * @param	string  $email
+     * @param	string  $password
+     * @return	boolean
+     */
+    public function login($email, $password) {
 
-		$result = $this->db->query("SELECT id FROM user WHERE email = ".$this->db->quote($email, 'text')." AND password = ".$this->db->quote(md5($password), 'text'));
+        $result = $this->db->query("SELECT id FROM user WHERE email = ".$this->db->quote($email, 'text')." AND password = ".$this->db->quote(md5($password), 'text'));
 
-		if(PEAR::isError($result)) {
-			trigger_error('result is an error' . $result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
-			return false;
-		}
+        if(PEAR::isError($result)) {
+            trigger_error('result is an error' . $result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
+            return false;
+        }
 
-		if($result->numRows() != 1) {
-			return false;
-		}
-		$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-		$result = $this->db->exec("UPDATE user SET lastlogin = NOW(), session_id = ".$this->db->quote($this->session_id, 'text')." WHERE id = ". $this->db->quote($row['id'], 'integer'));
-		if (PEAR::isError($result)) {
-			trigger_error('could not update user ' . $result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
-			return false;
-		}
-		$this->notifyObservers('login', $email .' logged in');
+        if($result->numRows() != 1) {
+            return false;
+        }
+        $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
+        $result = $this->db->exec("UPDATE user SET lastlogin = NOW(), session_id = ".$this->db->quote($this->session_id, 'text')." WHERE id = ". $this->db->quote($row['id'], 'integer'));
+        if (PEAR::isError($result)) {
+            trigger_error('could not update user ' . $result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
+            return false;
+        }
+        $this->notifyObservers('login', $email .' logged in');
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * weblogin()
-	 * @param string $type
-	 * @param string $key
-	 * @return	mixed / boolean or weblogin object
-	 */
-	public function weblogin($type, $key) {
+    /**
+     * weblogin()
+     * @param string $type
+     * @param string $key
+     * @return	mixed / boolean or weblogin object
+     */
+    public function weblogin($type, $key) {
 
-		switch ($type) {
-			case 'public':
-				$result = $this->db->query("SELECT id FROM intranet WHERE public_key = ".$this->db->quote($key, 'text'));
-				break;
-			case 'private':
-				$result = $this->db->query("SELECT id FROM intranet WHERE private_key = ".$this->db->quote($key, 'text'));
-				break;
-			default:
-				trigger_error('unknown weblogin type', E_USER_ERROR);
-				return false; // this has to be return to make sure script will never continue
-		}
+        switch ($type) {
+            case 'public':
+                $result = $this->db->query("SELECT id FROM intranet WHERE public_key = ".$this->db->quote($key, 'text'));
+                break;
+            case 'private':
+                $result = $this->db->query("SELECT id FROM intranet WHERE private_key = ".$this->db->quote($key, 'text'));
+                break;
+            default:
+                trigger_error('unknown weblogin type', E_USER_ERROR);
+                return false; // this has to be return to make sure script will never continue
+        }
 
-		if(PEAR::isError($result)) {
-			trigger_error('result is an error', E_USER_ERROR);
-			return false;
-		}
+        if(PEAR::isError($result)) {
+            trigger_error('result is an error', E_USER_ERROR);
+            return false;
+        }
 
-		if($result->numRows() == 0) {
-			return false;
-		}
+        if($result->numRows() == 0) {
+            return false;
+        }
 
-		return true;
+        return true;
 
-	}
+    }
 
-	/**
-	 * isLoggedIn()
-	 * @param void
-	 * @return mixed user id or false
-	 */
-	public function isLoggedIn() {
+    /**
+     * isLoggedIn()
+     * @param void
+     * @return mixed user id or false
+     */
+    public function isLoggedIn() {
+        $result = $this->db->query("SELECT id FROM user WHERE session_id = ".$this->db->quote($this->session_id, 'text'));
+        if(PEAR::isError($result)) {
+            trigger_error('could not check if user is logged in ' . $result->getUserInfo(), E_USER_ERROR);
+            return false;
+        }
 
-		$result = $this->db->query("SELECT id FROM user WHERE session_id = ".$this->db->quote($this->session_id, 'text'));
-		if(PEAR::isError($result)) {
-			die('result is error');
-			return false;
-		}
+        if($result->numRows() == 0) {
+            return false;
+        }
 
-		if($result->numRows() == 0) {
-			return false;
-		}
+        $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
+        return $row['id'];
+    }
 
-		$row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-		return $row['id'];
-	}
+    /**
+     * logout()
+     * TODO This should probably be in a user instead
+     * @param void
+     * @return boolean
+     */
+    public function logout() {
+        $result = $this->db->exec("UPDATE user SET session_id = " . $this->db->quote('', 'text') . " WHERE session_id = " . $this->db->quote($this->session_id, 'text'));
 
-	/**
-	 * logout()
-	 * TODO This should probably be in a user instead
-	 * @param void
-	 * @return boolean
-	 */
-	public function logout() {
-		$result = $this->db->exec("UPDATE user SET session_id = " . $this->db->quote('', 'text') . " WHERE session_id = " . $this->db->quote($this->session_id, 'text'));
+         if (PEAR::isError($result)) {
+             trigger_error('could not log user out ' . $result->getUserInfo(), E_USER_ERROR);
+             return false;
+         }
 
-	 	if (PEAR::isError($result)) {
-	 		trigger_error('could not log user out' . $result->getUserInfo(), E_USER_ERROR);
-	 		return false;
-	 	}
+        return true;
+    }
 
-		return true;
-	}
+    /**
+     * @param string $msg
+     */
+    static public function toLogin($msg = '') {
+        if(empty($msg)) {
+            header('Location: '.PATH_WWW.'main/login.php');
+            exit;
+        }
+        else {
+            header('Location: '.PATH_WWW.'main/login.php?msg='.urlencode($msg));
+            exit;
+        }
+    }
 
-	/**
-	 * @param string $msg
-	 */
-	static public function toLogin($msg = '') {
-		if(empty($msg)) {
-			header('Location: '.PATH_WWW.'main/login.php');
-			exit;
-		}
-		else {
-			header('Location: '.PATH_WWW.'main/login.php?msg='.urlencode($msg));
-			exit;
-		}
-	}
+    /**
+     * Implements the observer pattern
+     * @param object $observer
+     */
+    public function attachObserver($observer) {
+        $this->observers[] = $observer;
+        return true;
+    }
 
-	/**
-	 * Implements the observer pattern
-	 * @param object $observer
-	 */
-	public function attachObserver($observer) {
-		$this->observers[] = $observer;
-		return true;
-	}
+    /**
+     * @param string $code
+     * @param string $msg
+     */
+    private function notifyObservers($code, $msg) {
+        foreach ($this->getObservers() AS $observer) {
+            $observer->update($code, $msg);
+        }
+        return true;
+    }
 
-	/**
-	 * @param string $code
-	 * @param string $msg
-	 */
-	private function notifyObservers($code, $msg) {
-		foreach ($this->getObservers() AS $observer) {
-			$observer->update($code, $msg);
-		}
-		return true;
-	}
-
-	/**
-	 * Implements the observer pattern
-	 * @return array with observers
-	 */
-	public function getObservers() {
-		return $this->observers;
-	}
+    /**
+     * Implements the observer pattern
+     * @return array with observers
+     */
+    public function getObservers() {
+        return $this->observers;
+    }
 }
 ?>
