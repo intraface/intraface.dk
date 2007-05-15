@@ -33,7 +33,6 @@ class Intraface_XMLRPC_Shop_Server {
      * @param array $search optional
      * @return array
      */
-
     public function getProducts($credentials, $search) {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
@@ -116,7 +115,7 @@ class Intraface_XMLRPC_Shop_Server {
         $id = intval($id);
 
         if (!is_numeric($id)) {
-            throw new XML_RPC2_FaultException('Produktet er ikke et tal', -5);
+            throw new XML_RPC2_FaultException('product id must be an integer', -5);
         }
 
         $product = new Product($this->kernel, $id);
@@ -139,7 +138,7 @@ class Intraface_XMLRPC_Shop_Server {
         $product_id = intval($id);
 
         if (!is_numeric($product_id)) {
-            throw new XML_RPC2_FaultException('Produktet er ikke et tal', -5);
+            throw new XML_RPC2_FaultException('product id must be an integer', -5);
         }
 
         $product = new Product($this->kernel, $product_id);
@@ -160,7 +159,7 @@ class Intraface_XMLRPC_Shop_Server {
         $product_id = intval($id);
 
         if (!is_numeric($product_id)) {
-            throw new XML_RPC2_FaultException('Produkt_id er ikke et tal', -5);
+            throw new XML_RPC2_FaultException('product id must be an integer', -5);
         }
 
         return $this->webshop->basket->add($product_id);
@@ -183,11 +182,11 @@ class Intraface_XMLRPC_Shop_Server {
         $quantity = intval($quantity);
 
         if (!is_numeric($product_id) AND !is_numeric($quantity)) {
-            throw new XML_RPC2_FaultException('Enten er produktid eller antallet ikke et tal', -5);
+            throw new XML_RPC2_FaultException('product id and quantity must be integers', -5);
         }
 
         if (!$this->webshop->basket->change($product_id, $quantity)) {
-            throw new XML_RPC2_FaultException('Så mange er der ikke på lager', -100);
+            throw new XML_RPC2_FaultException('product quantity is not in stock', -100);
         }
 
         return true;
@@ -226,13 +225,13 @@ class Intraface_XMLRPC_Shop_Server {
         $this->factoryWebshop();
 
         if (!is_array($this->webshop->basket->getItems()) OR count($this->webshop->basket->getItems()) <= 0) {
-            throw new XML_RPC2_FaultException('Der er ikke noget i kurven, så ordren kunne ikke sendes.', -4);
+            throw new XML_RPC2_FaultException('order could not be sent - cart is empty', -4);
         }
 
-        $values['description'] = 'Webshop';
+        $values['description'] = 'Onlineshop';
 
         if (!$order_id = $this->webshop->placeOrder($values)) {
-            throw new XML_RPC2_FaultException('Ordren kunne ikke sendes: ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
+            throw new XML_RPC2_FaultException('order could not be sent ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
         }
 
         return $order_id;
@@ -263,6 +262,44 @@ class Intraface_XMLRPC_Shop_Server {
         }
     }
     */
-}
 
+    /**
+     * Checking credentials
+     *
+     * @param struct $credentials
+     * @return array
+     */
+    function checkCredentials($credentials) {
+        /*
+        if (is_object($this->kernel) AND is_object($this->kernel->intranet)) {
+            return true;
+        }
+        */
+
+        if (count($credentials) != 2) { // -4
+            throw new XML_RPC2_FaultException('wrong argument count in $credentials - got ' . count($credentials) . ' arguments - need 2', -4);
+        }
+        if (empty($credentials['private_key'])) { // -5
+            throw new XML_RPC2_FaultException('supply a private_key', -5);
+        }
+        if (empty($credentials['session_id'])) { // -5
+            throw new XML_RPC2_FaultException('supply a session_id', -5);
+        }
+
+        $weblogin = new Weblogin('some session');
+        if (!$intranet_id = $weblogin->auth('private', $credentials['private_key'], $credentials['session_id'])) {
+            throw new XML_RPC2_FaultException('access to intranet denied', -2);
+        }
+
+        $this->kernel = new Kernel();
+        $this->kernel->intranet = new Intranet($intranet_id);
+        $this->kernel->setting = new Setting($this->kernel->intranet->get('id'));
+
+        if (!is_object($this->kernel->intranet)) { // -2
+            throw new XML_RPC2_FaultException('could not create intranet', -2);
+        }
+
+        return true;
+    }
+}
 ?>
