@@ -16,3 +16,4 @@ PRIMARY KEY ( `id` )
 
 ALTER TABLE `contact_reminder_single` ADD `created_by_user_id` INT NOT NULL AFTER `contact_id` ;
 
+ALTER TABLE `debtor` ADD `internal_note` TEXT NOT NULL AFTER `message` ;
