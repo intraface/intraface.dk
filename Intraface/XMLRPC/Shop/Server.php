@@ -9,6 +9,10 @@
  */
 
 require_once 'XML/RPC2/Server.php';
+require_once 'Intraface/Kernel.php';
+require_once 'Intraface/Setting.php';
+require_once 'Intraface/Intranet.php';
+require_once 'Intraface/Weblogin.php';
 
 class Intraface_XMLRPC_Shop_Server {
 
@@ -41,10 +45,9 @@ class Intraface_XMLRPC_Shop_Server {
         $search = '';
         $offset = 0;
 
-
         $mixed = array();
-        if (!empty($arg[1])) {
-            $mixed = $arg[1];
+        if (!empty($search)) {
+            $mixed = $search;
         }
 
         $this->factoryWebshop();
@@ -266,16 +269,10 @@ class Intraface_XMLRPC_Shop_Server {
     /**
      * Checking credentials
      *
-     * @param struct $credentials
+     * @param  struct $credentials
      * @return array
      */
     function checkCredentials($credentials) {
-        /*
-        if (is_object($this->kernel) AND is_object($this->kernel->intranet)) {
-            return true;
-        }
-        */
-
         if (count($credentials) != 2) { // -4
             throw new XML_RPC2_FaultException('wrong argument count in $credentials - got ' . count($credentials) . ' arguments - need 2', -4);
         }
@@ -286,8 +283,9 @@ class Intraface_XMLRPC_Shop_Server {
             throw new XML_RPC2_FaultException('supply a session_id', -5);
         }
 
-        $weblogin = new Weblogin('some session');
-        if (!$intranet_id = $weblogin->auth('private', $credentials['private_key'], $credentials['session_id'])) {
+        $weblogin = new Weblogin($credentials['session_id']);
+
+        if (!$intranet_id = $weblogin->auth('private', $credentials['private_key'])) {
             throw new XML_RPC2_FaultException('access to intranet denied', -2);
         }
 
