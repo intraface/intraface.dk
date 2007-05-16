@@ -466,6 +466,16 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 			<p><?php print(nl2br(safeToHtml($debtor->get("message")))); ?></p>
 		</fieldset>
 	<?php endif; ?>
+	
+	<?php if($debtor->get("internal_note") != ''): ?>
+		<fieldset>
+			<legend>Intern note</legend>
+			<?php
+			$internal_note = ereg_replace("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]","<a href=\"\\0\" target=\"_blank\">\\0</a>", safeToHtml($debtor->get("internal_note")));
+			?>
+			<p><?php print(nl2br($internal_note)); ?></p>
+		</fieldset>
+	<?php endif; ?>
 
 </div>
 

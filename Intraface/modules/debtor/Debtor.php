@@ -149,7 +149,7 @@ class Debtor extends Standard {
 			return 0;
 		}
 
-		$this->db->query("SELECT id, number, intranet_address_id, contact_id, contact_address_id, contact_person_id, description, payment_method, this_date, due_date, date_stated, voucher_id, date_executed, status, where_from_id, where_from, user_id, round_off, girocode, active, message,
+		$this->db->query("SELECT id, number, intranet_address_id, contact_id, contact_address_id, contact_person_id, description, payment_method, this_date, due_date, date_stated, voucher_id, date_executed, status, where_from_id, where_from, user_id, round_off, girocode, active, message, internal_note,
 				DATE_FORMAT(date_stated, '%d-%m-%Y') AS dk_date_stated,
 				DATE_FORMAT(this_date, '%d-%m-%Y') AS dk_this_date,
 				DATE_FORMAT(due_date, '%d-%m-%Y') AS dk_due_date,
@@ -195,6 +195,7 @@ class Debtor extends Standard {
 		$this->value["round_off"] = $this->db->f("round_off");
 		$this->value["girocode"] = $this->db->f("girocode");
 		$this->value["message"] = $this->db->f("message");
+		$this->value["internal_note"] = $this->db->f("internal_note");
 		$this->value["active"] = $this->db->f("active");
 
 
