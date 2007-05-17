@@ -5,7 +5,8 @@ require_once 'PHPUnit/Framework.php';
 require_once 'NewsletterStubs.php';
 require_once 'Intraface/modules/newsletter/Newsletter.php';
 
-class TestableNewsletter extends Newsletter {
+class TestableNewsletter extends Newsletter
+{
     public $value = array(
         'subject' => 'something',
         'body' => 'something',
@@ -13,11 +14,13 @@ class TestableNewsletter extends Newsletter {
         'id' => 1
     );
 
-    function getContact() {
+    function getContact()
+    {
         return new FakeContact;
     }
 
-    function getSubscribers() {
+    function getSubscribers()
+    {
         for ($i = 0; $i<200;$i++) {
             $array[] = array(
                 'contact_id' => '1',
@@ -28,15 +31,18 @@ class TestableNewsletter extends Newsletter {
     }
 }
 
-class NewsletterTest extends PHPUnit_Framework_TestCase {
+class NewsletterTest extends PHPUnit_Framework_TestCase
+{
 
-    function testConstruction() {
+    function testConstruction()
+    {
         $list = new FakeNewsletterList();
         $newsletter = new Newsletter($list);
         $this->assertTrue(is_object($newsletter));
     }
-    /*
-    function testSubscribe() {
+
+    function testSubscribe()
+    {
         $list = new FakeNewsletterList();
         $list->kernel = new FakeKernel;
         $list->kernel->intranet = new FakeIntranet;
@@ -46,9 +52,9 @@ class NewsletterTest extends PHPUnit_Framework_TestCase {
         $subscriber->subscribe(array('email' => 'test@legestue.net', 'ip' => 'ip'));
         echo $subscriber->error->view();
     }
-    */
 
-    function testQueue() {
+    function testQueue()
+    {
         $list = new FakeNewsletterList();
         $list->kernel = new FakeKernel;
         $list->kernel->intranet = new FakeIntranet;

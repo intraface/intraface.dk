@@ -22,6 +22,8 @@ class FakeKernel
 {
     public $intranet;
     public $user;
+
+    function useModule() {}
 }
 
 class FakeIntranet

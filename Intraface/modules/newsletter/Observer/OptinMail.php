@@ -82,7 +82,7 @@ class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observ
 
         if ($email->send()) {
             $db = new DB_Sql;
-            $db->query("UPDATE newsletter_subscriber SET date_optin_email_sent = NOW() WHERE id = " . $this->id);
+            $db->query("UPDATE newsletter_subscriber SET date_optin_email_sent = NOW() WHERE id = " . $subscriber->get('id'));
             return true;
         }
 
