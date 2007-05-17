@@ -8,6 +8,7 @@
  * @version	1.0
  */
 require_once 'Intraface/Standard.php';
+require_once 'Intraface/Error.php';
 
 class Year extends Standard {
 
