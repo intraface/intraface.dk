@@ -436,14 +436,16 @@ class NewsletterSubscriber extends Standard {
 			$subscribers[$i]['dk_date_submitted'] = $db->f('dk_date_submitted');
 			$subscribers[$i]['date_submitted'] = $db->f('date_submitted');
 
-			$contact = $this->getContact($db->f('contact_id'));
-			$subscribers[$i]['contact_number'] = $contact->get('number');
-			$subscribers[$i]['contact_name'] = $contact->address->get('name');
-			$subscribers[$i]['contact_address'] = $contact->address->get('address');
-			$subscribers[$i]['contact_postcode'] = $contact->address->get('postcode');
-			$subscribers[$i]['contact_city'] = $contact->address->get('city');
-			$subscribers[$i]['contact_email'] = $contact->address->get('email');
-			$subscribers[$i]['contact_country'] = $contact->address->get('country');
+			if(isset($this->list->kernel->user)) { // only if we are logged in.
+				$contact = $this->getContact($db->f('contact_id'));
+				$subscribers[$i]['contact_number'] = $contact->get('number');
+				$subscribers[$i]['contact_name'] = $contact->address->get('name');
+				$subscribers[$i]['contact_address'] = $contact->address->get('address');
+				$subscribers[$i]['contact_postcode'] = $contact->address->get('postcode');
+				$subscribers[$i]['contact_city'] = $contact->address->get('city');
+				$subscribers[$i]['contact_email'] = $contact->address->get('email');
+				$subscribers[$i]['contact_country'] = $contact->address->get('country');
+			}
 			$i++;
 		}
 
