@@ -3,9 +3,18 @@ class FakeNewsletterList
 {
     public $kernel;
 
-    function get()
+    function get($key)
     {
-        return 1;
+        switch ($key) {
+            case 'reply_email':
+                return 'test@legestue.net';
+                break;
+            default:
+                return 1;
+                break;
+        }
+
+
     }
 }
 
@@ -55,6 +64,16 @@ class FakeContact
 
 class FakeSubscriber
 {
+    function load() {}
 
+    function get()
+    {
+        return 1;
+    }
+
+    function getContact()
+    {
+        return new FakeContact;
+    }
 }
 ?>

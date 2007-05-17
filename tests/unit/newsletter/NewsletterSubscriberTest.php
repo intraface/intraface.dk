@@ -3,7 +3,7 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/newsletter/NewsletterSubscriber.php';
-require_once 'Stubs.php';
+require_once 'NewsletterStubs.php';
 
 class FakeObserver
 {
