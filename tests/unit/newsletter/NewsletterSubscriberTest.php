@@ -16,6 +16,8 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
     function createSubscriber()
     {
         $list = new FakeNewsletterList();
+        $list->kernel = new FakeKernel;
+        $list->kernel->intranet = new FakeIntranet;
         return new NewsletterSubscriber($list);
     }
 
@@ -25,9 +27,30 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($subscriber));
     }
 
-    function testAddObserver()
+    function testSubscribe()
     {
         $subscriber = $this->createSubscriber();
+        $data = array('email' => 'test@legestue.net', 'ip' => 'ip');
+        $this->assertTrue($subscriber->subscribe($data));
+    }
+
+    function testOptin()
+    {
+        $subscriber = $this->createSubscriber();
+        $data = array('email' => 'test@legestue.net', 'ip' => 'ip');
+        $this->assertTrue($subscriber->subscribe($data));
+
+        $code = 'wrongcode';
+        $ip = 'ip';
+
+        $this->assertFalse($subscriber->optIn($code, $ip));
+        $code = $subscriber->get('code');
+        $this->assertTrue($subscriber->optIn($code, $ip));
+    }
+
+    function testAddObserver()
+    {
+        $subscriber = new NewsletterSubscriber(new FakeNewsletterList);
         $subscriber->addObserver(new FakeObserver);
         $this->assertEquals(1, count($subscriber->getObservers()));
     }

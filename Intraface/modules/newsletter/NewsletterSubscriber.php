@@ -374,21 +374,22 @@ class NewsletterSubscriber extends Standard {
      * @return boolean
      */
     function optIn($code, $ip) {
-        /*
-        if ($this->id == 0) {
-            return 0;
-        }
-        */
         $db = new DB_Sql;
+        $db->query("SELECT id FROM newsletter_subscriber WHERE code = '".$code."' AND list_id = " . $this->list->get('id'));
+        if (!$db->nextRecord()) {
+            return false;
+        }
+
         $db->query("UPDATE newsletter_subscriber SET optin = 1, ip_optin = '".$ip."', date_optin = NOW() WHERE code = '" . $code . "' AND list_id = " . $this->list->get('id'));
 
+        // makes sure that the submitted ip is also set - not really a port of this method
         $db->query("SELECT id, ip_submitted FROM newsletter_subscriber WHERE code = '".$code."' AND list_id = " . $this->list->get('id'));
         if ($db->nextRecord()) {
             if (!$db->f('ip_submitted')) {
                 $db->query("UPDATE newsletter_subscriber SET ip_submitted = '".$ip."' WHERE id = " . $db->f("id"));
             }
         }
-        return 1;
+        return true;
     }
 
     /**
