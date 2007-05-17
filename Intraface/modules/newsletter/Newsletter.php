@@ -1,27 +1,20 @@
 <?php
 /**
- * Newsletter
+ * Handles the actual newsletter
  *
- * Håndterer det enkelte nyhedsbrev, som skal udsendes til subscriber.
- *
- * Nyhedsbrevet gemmes i databasen, og der er mulighed for at redigere det først
- * over flere omgange og sende det senere.
- *
- * @package     Newsletter
- * @author      Lars Olesen <lars@legestue.net>
- * @version     1.0
- * @access      public
- * @copyright   Lars Olesen
- * @see         NewsletterList
- * @see         NewsletterSubscriber
+ * @package Newsletter
+ * @author  Lars Olesen <lars@legestue.net>
+ * @version @package-version@
+ * @see     NewsletterList
+ * @see     NewsletterSubscriber
  */
-
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/Error.php';
 require_once 'Intraface/Validator.php';
 require_once 'NewsletterSubscriber.php';
 
-class Newsletter extends Standard {
+class Newsletter extends Standard
+{
 
     var $list; //object
     var $value = array();
@@ -34,80 +27,55 @@ class Newsletter extends Standard {
     );
 
     /**
-     * Kan kaldes med:
-     *  new Newsletter($kernel, id);
-     *  new Newsletter($newsletterlist_object);
+     * Constructor
+     *
+     * @param object  $list Newsletter list object
+     * @param integer $id   Newsletter id
+     *
+     * @return void
      */
+    function __construct($list, $id = 0)
+    {
 
-    function Newsletter($list, $id = 0) {
-
-        if(!is_object($list)) {
+        if (!is_object($list)) {
             trigger_error('newsletter wants a list', E_USER_ERROR);
         }
         $this->list = $list;
         $this->id = $id;
         $this->error = new Error;
 
-        if($this->id > 0) {
+        if ($this->id > 0) {
             $this->load();
         }
-
-
-        #
-        # Hvorfor har du lavet det om?
-        #
-        #
-
-
-        /*
-
-        $argument = func_get_args();
-
-        if (!is_array($argument)) {
-             trigger_error('Newsletter skal have nogle argumenter', E_USER_ERROR);
-        }
-        elseif (!empty($argument[1]) AND is_numeric($argument[1])) {
-            $this->id = (int)$argument[1];
-            $kernel = & $argument[0];
-            if ($this->id > 0) {
-                $db = new DB_Sql;
-                $db->query("SELECT list_id, intranet_id FROM newsletter_archieve WHERE id = " . $this->id);
-
-                if ($db->nextRecord()) {
-                    $this->list = new NewsletterList($kernel, $db->f('list_id'));
-                }
-                if (!$this->load()) {
-                    trigger_error('Newsletter kunne ikke loade', E_USER_ERROR);
-                }
-            }
-        }
-        elseif (!empty($argument[0]) AND get_class($argument[0]) == 'newsletterlist') {
-            $this->list = $argument[0];
-        }
-        */
-
-
-
-
     }
 
-    function factory($kernel, $id) {
-
+    /**
+     * Creates a newsletter from a kernel and id
+     *
+     * @param object  $kernel The kernel registry
+     * @param integer $id     Newsletter id
+     *
+     * @return mixed
+     */
+    function factory($kernel, $id)
+    {
         $db = new DB_Sql;
         $db->query("SELECT list_id FROM newsletter_archieve WHERE intranet_id = ".$kernel->intranet->get('id')." AND active = 1 AND id = ".intval($id));
-        if($db->nextRecord()) {
+        if ($db->nextRecord()) {
             $list = new NewsletterList($kernel, $db->f('list_id'));
             $letter = new Newsletter($list, $id);
             return $letter;
         }
         trigger_error('Ugyldigt id', E_USER_ERROR);
+        return false;
     }
 
 
     /**
-     *
+     * @return boolean
      */
-    function load() {
+    function load()
+    {
         $db = new DB_Sql;
          $db->query("SELECT id, list_id, subject, text, deadline, sent_to_receivers, status FROM newsletter_archieve WHERE id = " . $this->id . " AND active = 1 LIMIT 1");
 
@@ -142,8 +110,11 @@ class Newsletter extends Standard {
 
     /**
      * Gets all newsletters on a list
+     *
+     * @return array with newsletters
      */
-    function getList() {
+    function getList()
+    {
         $list = array();
         $db = new DB_Sql;
         $db->query("SELECT * FROM newsletter_archieve WHERE active = 1 AND list_id = " . $this->list->get('id') . " ORDER BY deadline DESC");
@@ -163,7 +134,11 @@ class Newsletter extends Standard {
         return($list);
     }
 
-    function delete() {
+    /**
+     * @return boolean
+     */
+    function delete()
+    {
         if ($this->get('locked') == 1) {
             $this->error->set('Nyhedsbrevet er låst');
             return 0;
@@ -174,8 +149,13 @@ class Newsletter extends Standard {
         return 1;
     }
 
-
-    function save($var) {
+    /**
+     * @param struct $var Values to save
+     *
+     * @return integer of the newly created newsletter
+     */
+    function save($var)
+    {
 
         $var = safeToDb($var);
         $var = array_map('strip_tags', $var);
@@ -191,8 +171,7 @@ class Newsletter extends Standard {
         if ($this->id == 0) {
             $sql_type = "INSERT INTO";
             $sql_end = ', date_created = NOW()';
-        }
-        else {
+        } else {
             $sql_type = "UPDATE";
             $sql_end = " WHERE id = " . $this->id;
         }
@@ -216,12 +195,17 @@ class Newsletter extends Standard {
         return $this->id;
     }
 
-
-    function updateSent($receivers) {
+    /**
+     * @param integer $receivers Number of receivers got the newsletter
+     *
+     * @return boolean
+     */
+    function updateSent($receivers)
+    {
         $db = new DB_Sql;
         $db->query("UPDATE newsletter_archieve SET status = 1, sent_to_receivers = '".(int)$receivers."' WHERE id = " . $this->id . " AND intranet_id = " . $this->list->kernel->intranet->get('id'));
+        return true;
     }
-
 
     /*
     function queue() {
@@ -287,13 +271,23 @@ class Newsletter extends Standard {
     }
     */
 
-    function getSubscribers() {
+    /**
+     * @return array with subscribers
+     */
+    function getSubscribers()
+    {
         $subscriber = new NewsletterSubscriber($this->list);
         $subscriber->createDBQuery();
         return $subscribers = $subscriber->getList();
     }
 
-    function queue() {
+    /**
+     * Puts subscribers in a queue to the newsletter
+     *
+     * @return boolean
+     */
+    function queue()
+    {
         $subscribers = $this->getSubscribers();
 
         if ($this->get('sent') == 1) {
@@ -316,8 +310,8 @@ class Newsletter extends Standard {
         $j = 0;
         $skipped = 0;
         $params = array();
-        foreach($subscribers AS $subscriber) {
-            if(!$validator->isEmail($subscriber['contact_email'], "")) {
+        foreach ($subscribers AS $subscriber) {
+            if (!$validator->isEmail($subscriber['contact_email'], "")) {
                 $skipped++;
                 continue;
             }
@@ -325,9 +319,7 @@ class Newsletter extends Standard {
             $params[] = "(NOW(), NOW(), '".$from."', '".$name."', 8, 2, ". $this->get('id') . ", '".$this->get('deadline'). "', " .$this->list->kernel->intranet->get('id'). " , " .$subscriber['contact_id']. " , " .$this->list->kernel->user->get('id').", '".$this->get('subject')."', '".$this->get('text')."')";
 
             if ($i == 40) {
-                $result = $db->exec(
-                    $sql . implode($params, ',')
-                );
+                $result = $db->exec($sql . implode($params, ','));
 
                 if (PEAR::isError($result)) {
                     echo $result->getMessage() . $result->getUserInfo();
@@ -341,9 +333,7 @@ class Newsletter extends Standard {
             $i++;
             $j++;
         }
-        $result = $db->exec(
-            $sql . implode($params, ',')
-        );
+        $result = $db->exec($sql . implode($params, ','));
 
         if (PEAR::isError($result)) {
             echo $result->getMessage() . $result->getUserInfo();
