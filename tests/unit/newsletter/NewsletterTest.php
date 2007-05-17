@@ -41,18 +41,6 @@ class NewsletterTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($newsletter));
     }
 
-    function testSubscribe()
-    {
-        $list = new FakeNewsletterList();
-        $list->kernel = new FakeKernel;
-        $list->kernel->intranet = new FakeIntranet;
-        $list->kernel->user = new FakeUser;
-        $subscriber = new NewsletterSubscriber($list);
-        $this->assertTrue($subscriber->subscribe(array('email' => 'test@legestue.net', 'ip' => 'ip')));
-        $subscriber->subscribe(array('email' => 'test@legestue.net', 'ip' => 'ip'));
-        echo $subscriber->error->view();
-    }
-
     function testQueue()
     {
         $list = new FakeNewsletterList();
