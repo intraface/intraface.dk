@@ -4,12 +4,10 @@
  *
  * This class handles the subscribers to the the different lists.
  *
- * @package    Newsletter
- * @author     Lars Olesen <lars@legestue.net>
- * @since      1.0
- * @version    1.0
- * @copyright  Lars Olesen
- *
+ * @category  Intraface
+ * @package   Newsletter
+ * @author    Lars Olesen <lars@legestue.net>
+ * @version   @package-version@
  */
 
 require_once 'Intraface/Standard.php';
@@ -29,10 +27,17 @@ class NewsletterSubscriber extends Standard {
     var $dbquery;
     private $observers = array();
 
-    function __construct($list, $id = 0) {
+    /**
+     * @param object  $list List object
+     * @param integer $id   Subscriber id
+     *
+     * @return void
+     */
+    function __construct($list, $id = 0)
+    {
         $this->error = new Error;
 
-        if(!is_object($list)) {
+        if (!is_object($list)) {
             trigger_error('subscriber Kræver en liste', E_USER_ERROR);
         }
 
@@ -40,14 +45,16 @@ class NewsletterSubscriber extends Standard {
 
         $this->id = (int)$id;
 
-        if($this->id > 0) {
+        if ($this->id > 0) {
             $this->load();
         }
-
-
     }
 
-    function createDBQuery() {
+    /**
+     * @return DBQuery object
+     */
+    function createDBQuery()
+    {
         $this->dbquery = new DBQuery($this->list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $this->list->get("id") . " AND newsletter_subscriber.intranet_id = " . $this->list->kernel->intranet->get('id') . " AND newsletter_subscriber.optin = 1 AND newsletter_subscriber.active = 1");
         $this->dbquery->useErrorObject($this->error);
     }
@@ -55,10 +62,16 @@ class NewsletterSubscriber extends Standard {
     /**
      * Starter NewsletterSubscriber ud fra alt andet end list
      *
-     * Skal laves til at have følgende parameter: $kernel, $from_what (code, email, id), $id
+     * @todo Skal laves til at have følgende parameter: $kernel, $from_what (code, email, id), $id
+     *
+     * @param object $object Different objects
+     * @param string $type   What type to create the object from
+     * @param string $value  Which value should be connected to the type
+     *
+     * @return object
      */
-
-    function factory($object, $type, $value) {
+    function factory($object, $type, $value)
+    {
         switch ($type) {
             case 'code':
                 // kernel og kode
@@ -107,7 +120,11 @@ class NewsletterSubscriber extends Standard {
 
     }
 
-    function load() {
+    /**
+     * @return boolean
+     */
+    function load()
+    {
         $db = new DB_Sql;
         $db->query("SELECT * FROM newsletter_subscriber WHERE id = " . $this->id);
         if (!$db->nextRecord()) {
@@ -127,32 +144,41 @@ class NewsletterSubscriber extends Standard {
     }
 
     /**
-     * Bruges hvis posten skal slettes helt, fx hvis kontakten ikke længere findes.
+     * @return boolean
      */
-
-    function delete() {
+    function delete()
+    {
         $db = new DB_Sql;
         $db->query('UPDATE newsletter_subscriber SET active = 0 WHERE id = ' . $this->id);
-        return 1;
+        return true;
     }
 
-    function getContact($contact_id) {
+    /**
+     * @param integer $contact_id Contact id
+     *
+     * @return Contact object
+     */
+    function getContact($contact_id)
+    {
         $contact_module = $this->list->kernel->getModule('contact', true); // true: tjekker kun intranet_access
         return new Contact($this->list->kernel, $contact_id);
     }
 
-
     /**
-     * Tilføjer eksisterende kontakt
-     * Tilføjet af sune
+     * Adds an existing contact
+     *
+     * @param integer $contact_id Contact id
+     *
+     * @return integer of the id of the subscriber
      */
-    function addContact($contact_id) {
+    function addContact($contact_id)
+    {
         $this->list->kernel->useModule('contact');
         //$this->list->kernel->useModule('contact');
         $contact = new Contact($this->list->kernel, (int)$contact_id);
 
 
-        if($contact->get('id') == 0) {
+        if ($contact->get('id') == 0) {
             $this->error->set("Ugyldig kontakt");
             return 0;
         }
@@ -160,14 +186,14 @@ class NewsletterSubscriber extends Standard {
         $db = new DB_sql;
 
         $db->query("SELECT id FROM newsletter_subscriber WHERE contact_id = '".$contact_id."' AND list_id = " . $this->list->get("id") . " AND intranet_id = ".$this->list->kernel->intranet->get('id')." AND active = 1");
-        if($db->nextRecord()) {
+        if ($db->nextRecord()) {
             $this->error->set("Kontakten er allerede tilføjet");
             return 0;
         }
 
-        #
-        # Spørgsmålet er om vedkommende bør få en e-mail, hvor man kan acceptere?
-        #
+        //
+        // Spørgsmålet er om vedkommende bør få en e-mail, hvor man kan acceptere?
+        //
 
         $db->query("INSERT INTO newsletter_subscriber SET
                     contact_id = '".$contact_id."',
@@ -180,14 +206,13 @@ class NewsletterSubscriber extends Standard {
         return $db->insertedId();
     }
 
-
-
     /**
-     * IMPORTANT: To comply with spam legislation we must save the following information:
-     * - date_submitted
-     * - ip
+     * IMPORTANT: To comply with spam legislation we must save which date it is submitted and the ip.
+     *
+     * @param struct $input With all values
      */
-    function subscribe($input) {
+    function subscribe($input)
+    {
         $input = safeToDb($input);
         $input = array_map('strip_tags', $input);
 
@@ -198,9 +223,9 @@ class NewsletterSubscriber extends Standard {
             $input['name'] = $input['email'];
         }
 
-        if (!empty($input['name'])) $validator->isString($input['name'], 'Der er brugt ulovlige tegn i navnet', '', 'allow_empty');
-
-
+        if (!empty($input['name'])) {
+            $validator->isString($input['name'], 'Der er brugt ulovlige tegn i navnet', '', 'allow_empty');
+        }
 
         if ($this->error->isError()) {
             return false;
@@ -216,12 +241,10 @@ class NewsletterSubscriber extends Standard {
         }
         $this->load();
 
-
         if ($this->id > 0) {
             if ($this->get('contact_id') == 0) {
                 $contact = Contact::factory($this->list->kernel, 'email', $input['email']);
-            }
-            else {
+            } else {
                 $contact = new Contact($this->list->kernel, $this->get('contact_id'));
             }
             /*
@@ -236,7 +259,7 @@ class NewsletterSubscriber extends Standard {
                 $this->error->set('Kunne ikke gemme kontaktpersonen');
             }
             */
-            # name og e-mail bør vel ikke nødv. gemmes?
+            // name og e-mail bør vel ikke nødv. gemmes?
 
             $db->query("UPDATE newsletter_subscriber
                 SET
@@ -250,8 +273,7 @@ class NewsletterSubscriber extends Standard {
                     AND intranet_id = " . $this->list->kernel->intranet->get('id'));
             //code =  '" . md5($input['email'] . date('Y-m-d H:i:s') . $input['ip'])."'
 
-        }
-        else {
+        } else {
             $contact = Contact::factory($this->list->kernel, 'email', $input['email']);
 
             if ($contact->get('id') == 0) {
@@ -287,11 +309,15 @@ class NewsletterSubscriber extends Standard {
             }
         }
 
-
         return true;
     }
 
-    function optedIn() {
+    /**
+     *
+     * @return boolean
+     */
+    function optedIn()
+    {
         if ($this->id == 0) {
             return 0;
         }
@@ -312,8 +338,13 @@ class NewsletterSubscriber extends Standard {
      * Deletes the user from a newsletter list
      *
      * IMPORTANT: The user must be deleted, not just deactivated.
+     *
+     * @param string $email Email
+     *
+     * @return boolean
      */
-    function unsubscribe($email) {
+    function unsubscribe($email)
+    {
         $email = strip_tags($email);
 
         $validator = new Validator($this->error);
@@ -335,9 +366,12 @@ class NewsletterSubscriber extends Standard {
     }
 
     /**
-     * IMPORTANT: To comply with spam legislation we must save the following information:
-     * - date_optin
-     * - ip_optin
+     * IMPORTANT: To comply with spam legislation we must save date_optin and ip_optin.
+     *
+     * @param string $code Optin code
+     * @param string $ip   IP
+     *
+     * @return boolean
      */
     function optIn($code, $ip) {
         /*
@@ -357,6 +391,9 @@ class NewsletterSubscriber extends Standard {
         return 1;
     }
 
+    /**
+     * @return integer
+     */
     function getSubscriberCount()
     {
         $db = new DB_Sql("SELECT * FROM newsletter WHERE list_id=".$this->list->get('id') . " AND intranet_id = " . $this->list->kernel->intranet->get('id') . " AND optin = 1");
@@ -379,6 +416,8 @@ class NewsletterSubscriber extends Standard {
      *   har nogle nyhedsbreve).
      *
      * @see tilføj cleanUp();
+     *
+     * @return boolean
      */
     function sendOptInEmail()
     {
@@ -421,10 +460,11 @@ class NewsletterSubscriber extends Standard {
 
     /**
      * @todo - den her får virkelig kørt nogle sql'er :) - det skal reduceres
+     *
+     * @return boolean
      */
     function getList()
     {
-
         $subscribers = array();
 
         //$db = new DB_Sql;
@@ -440,7 +480,7 @@ class NewsletterSubscriber extends Standard {
             $subscribers[$i]['dk_date_submitted'] = $db->f('dk_date_submitted');
             $subscribers[$i]['date_submitted'] = $db->f('date_submitted');
 
-            if(isset($this->list->kernel->user)) { // only if we are logged in.
+            if (isset($this->list->kernel->user)) { // only if we are logged in.
                 $contact = $this->getContact($db->f('contact_id'));
                 $subscribers[$i]['contact_number'] = $contact->get('number');
                 $subscribers[$i]['contact_name'] = $contact->address->get('name');
@@ -463,22 +503,33 @@ class NewsletterSubscriber extends Standard {
      * This function must clean up the list for non-confirmed subscriptions
      * This method should delete unconfirmed subscriptions which
      * are more than a week old.
+     *
+     * @return boolean
      */
     function cleanUp()
     {
         die('Ikke implementeret');
     }
 
+    /**
+     * @param object $observer Must implement an update() method
+     */
     function addObserver($observer)
     {
         $this->observers[] = $observer;
     }
 
+    /**
+     * @return array with observers
+     */
     function getObservers()
     {
         return $this->observers;
     }
 
+    /**
+     * @param string $state Of this object
+     */
     function notifyObservers($state)
     {
         foreach ($this->getObservers() AS $observer) {
