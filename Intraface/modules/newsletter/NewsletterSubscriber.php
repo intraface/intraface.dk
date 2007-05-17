@@ -16,7 +16,6 @@ require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/modules/contact/Contact.php';
 require_once 'Intraface/shared/email/Email.php';
 
-
 class NewsletterSubscriber extends Standard {
 
     var $list; //object
@@ -114,10 +113,7 @@ class NewsletterSubscriber extends Standard {
             default:
                 trigger_error('NewsletterSubscriber::factory: Ulovlig Type');
             break;
-
-
         }
-
     }
 
     /**
@@ -210,6 +206,8 @@ class NewsletterSubscriber extends Standard {
      * IMPORTANT: To comply with spam legislation we must save which date it is submitted and the ip.
      *
      * @param struct $input With all values
+     *
+     * @return boolean
      */
     function subscribe($input)
     {
@@ -296,23 +294,26 @@ class NewsletterSubscriber extends Standard {
 
         }
 
-
         if ($this->id == 0) {
             $this->id = $db->insertedId();
         }
 
         // sender kun optinbrev, hvis man ikke er opted in
         if (!$this->optedIn()) {
+            /*
             if (!$this->sendOptInEmail()) {
                 $this->error->set('could not send optin email');
                 return false;
             }
+            */
+            $this->notifyObservers('new subscriber');
         }
 
         return true;
     }
 
     /**
+     * Checks whether subscriber has opted in yet
      *
      * @return boolean
      */
@@ -326,7 +327,6 @@ class NewsletterSubscriber extends Standard {
         if (!$db->nextRecord()) {
             return 0;
         }
-
 
         if (!$db->f('ip_optin')) {
             return 0;
