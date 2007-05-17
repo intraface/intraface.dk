@@ -2,7 +2,8 @@
 if ($kernel->user->hasModuleAccess('onlinepayment')) {
 
 	$onlinepayment_module = $kernel->useModule('onlinepayment');
-	$onlinepayment = new OnlinePayment($kernel);
+	$implemented_providers = $module->getSetting('implemented_providers');
+	$onlinepayment = OnlinePayment::factory($kernel, 'provider', $implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]);
 	if (($payments = count($onlinepayment->getList())) > 0) {
 		$_attention_needed[] = array(
 			'msg' => 'some online payments has not been processed',

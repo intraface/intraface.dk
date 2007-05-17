@@ -5,7 +5,11 @@ $module = $kernel->module("onlinepayment");
 
 if(isset($_POST['submit'])) {
 
-	$onlinepayment = new OnlinePayment($kernel, $_POST['id']);
+	// $onlinepayment = new OnlinePayment($kernel, $_POST['id']);
+	// $implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
+	// $implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]
+	$onlinepayment = OnlinePayment::factory($kernel, 'id',  $_POST['id']);
+		
 
 	if($onlinepayment->update($_POST)) {
 		$onlinepayment->load();
@@ -18,7 +22,7 @@ if(isset($_POST['submit'])) {
 	}
 }
 elseif(!empty($_GET["id"])) {
-	$onlinepayment = new OnlinePayment($kernel, $_GET['id']);
+	$onlinepayment = OnlinePayment::factory($kernel, 'id',  $_GET['id']);
 
 	if($onlinepayment->get('id') == 0) {
 		trigger_error("Ugyldig onlinebetaling");
@@ -87,7 +91,7 @@ $page->start("Onlinebetaling");
 			<th>Status:</th>
 			<td>
 				<?php
-				print($module->getTranslation($onlinepayment->get("status")));
+				print($translation->get($onlinepayment->get("status")));
 
 				if($onlinepayment->get('status') == 'authorized') {
 					print(" (Ikke <acronym title=\"Betaling kan først hæves når faktura er sendt\">hævet</acronym>)");

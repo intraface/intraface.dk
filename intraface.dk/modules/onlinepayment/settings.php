@@ -7,8 +7,8 @@
 require('../../include_first.php');
 
 $onlinepayment_module = $kernel->module('onlinepayment');
-$implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
 
+$implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
 $onlinepayment = OnlinePayment::factory($kernel, 'provider', $implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]);
 
 
@@ -42,30 +42,46 @@ $page->start('Onlinebetalinger');
 		<p>Du har valgt <strong><?php echo $implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]; ?></strong> som din udbyder. <a href="choose_provider.php">Vælg en anden udbyder</a>.</p>
 	</fieldset>
 
-	<?php switch($implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]):
-		case 'quickpay':
-	?>
-	<fieldset>
-		<legend>Indstillinger</legend>
-		<div class="formrow">
-			<label for="merchant_id">Merchant id</label>
-			<input type="text" name="merchant_id" id="merchant_id" value="<?php echo $value['merchant_id']; ?>" />
-		</div>
-
-		<div class="formrow">
-			<label for="md5_secret">MD5 Secret</label>
-			<input type="text" name="md5_secret" id="md5_secret" value="<?php echo $value['md5_secret']; ?>" />
-		</div>
-	</fieldset>
-
-	<?php
-		break;
+	<?php 
+	switch($implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]):
+		case 'quickpay': 
+			?>
+			<fieldset>
+				<legend>Indstillinger</legend>
+				<div class="formrow">
+					<label for="merchant_id">Merchant id</label>
+					<input type="text" name="merchant_id" id="merchant_id" value="<?php echo $value['merchant_id']; ?>" />
+				</div>
+		
+				<div class="formrow">
+					<label for="md5_secret">MD5 Secret</label>
+					<input type="text" name="md5_secret" id="md5_secret" value="<?php echo $value['md5_secret']; ?>" />
+				</div>
+			</fieldset>
+			<?php 
+			break; 
+		case 'dandomain':	
+			?>
+			<fieldset>
+				<legend>Indstillinger</legend>
+				<div class="formrow">
+					<label for="merchant_id">Merchant id</label>
+					<input type="text" name="merchant_id" id="merchant_id" value="<?php echo $value['merchant_id']; ?>" />
+				</div>
+		
+				<div class="formrow">
+					<label for="password">Password</label>
+					<input type="text" name="password" id="password" value="<?php echo $value['password']; ?>" />
+				</div>
+			</fieldset>
+			<?php
+			break;
 		case 'default':
 			echo '<p>Her behøver du ikke sætte nogen indstillinger.</p>';
-		break;
+			break;
 		default:
 			trigger_error('Ugyldig provider');
-		break;
+			break;
 	endswitch;
 	?>
 

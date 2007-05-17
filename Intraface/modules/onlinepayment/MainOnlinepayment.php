@@ -45,7 +45,8 @@ class MainOnlinepayment Extends Main {
 		$this->addSetting('implemented_providers',  array(
 			0 => '_invalid_',
 			1 => 'default', // reserveret for en custom (altså en hvor det hele kører uden for systemet
-			2 => 'quickpay'
+			2 => 'quickpay',
+			3 => 'dandomain'
 		));
 
 		$this->addFrontpageFile('include_front.php');

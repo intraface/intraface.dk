@@ -24,7 +24,7 @@ class OnlinePayment extends Standard {
 	// Standard udbyder-transactionsstatus. Er lavet ud fra QuickPay
 	var $transaction_status_types = array(
 		'' => 'Ingen kontakt til udbyder - mangler $eval',
-		'000' => 'Godkendt',
+		'000' => '', // Betalingsoplysninger godkendt
 		'001' => 'Afvist af PBS',
 		'002' => 'Kommunikationsfejl',
 		'003' => 'Kort udløbet',
@@ -122,7 +122,6 @@ class OnlinePayment extends Standard {
 			break;
 		}
 
-		//$provider = "QuickPay"; // Den eneste implementeret
 		$onlinepayment_module = $kernel->getModule('onlinepayment');
 
 		switch(strtolower($provider)) {
@@ -133,6 +132,10 @@ class OnlinePayment extends Standard {
 			case 'quickpay':
 				$onlinepayment_module->includeFile('provider/QuickPay.php');
 				return new OnlinePaymentQuickPay($kernel, $value);
+				break;
+			case 'dandomain':
+				$onlinepayment_module->includeFile('provider/DanDomain.php');
+				return new OnlinePaymentDanDomain($kernel, $value);
 				break;
 
 			default:
@@ -173,7 +176,7 @@ class OnlinePayment extends Standard {
 			$this->value['text'] = $db->f('text');
 			$this->value['status_key'] = $db->f('status_key');
 			$this->value['status'] = $this->status_types[$db->f('status_key')];
-			$this->value['dk_status'] = $onlinepayment_module->getTranslation($this->status_types[$db->f('status_key')]);
+			// $this->value['dk_status'] = $onlinepayment_module->getTranslation($this->status_types[$db->f('status_key')]);
 			$this->value['amount'] = $db->f('amount');
 			$this->value['dk_amount'] = number_format($db->f('amount'), 2, ",", ".");
 

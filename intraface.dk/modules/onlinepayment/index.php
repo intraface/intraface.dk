@@ -5,7 +5,8 @@ $module = $kernel->module('onlinepayment');
 $translation = $kernel->getTranslation('onlinepayment');
 
 
-$onlinepayment = new OnlinePayment($kernel);
+$implemented_providers = $module->getSetting('implemented_providers');
+$onlinepayment = OnlinePayment::factory($kernel, 'provider', $implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]);
 
 if(isset($_GET['status'])) {
 	$onlinepayment->dbquery->setFilter('status', $_GET['status']);
@@ -79,6 +80,7 @@ $page->start('Onlinebetalinger');
 	<tbody>
 		<?php
 
+		$saldo = 0;
 		for($i = 0, $max = count($payments); $i < $max; $i++) {
 			?>
 			<tr id="p<?php print($payments[$i]["id"]); ?>" <?php if (!empty($_GET['from_id']) AND $_GET['from_id'] == $payments[$i]["id"]) echo ' class="fade"'; ?>>
@@ -127,7 +129,7 @@ $page->start('Onlinebetalinger');
 					}
 
 
-					print($module->getTranslation($payments[$i]["status"]));
+					print($translation->get($payments[$i]["status"]));
 
 					if($payments[$i]['user_transaction_status_translated'] != "") {
 						print(" (".$p['user_transaction_status_translated'].")");

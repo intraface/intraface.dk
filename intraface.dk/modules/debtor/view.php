@@ -190,7 +190,6 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 <div class="box">
 	<h1><?php print(safeToHtml($translation->get($debtor->get("type")))); ?> #<?php print(safeToHtml($debtor->get("number"))); ?></h1>
 
-	<?php echo $debtor->error->view(); ?>
 
 	<ul class="options">
 		<?php if($debtor->get("locked") == false): ?>
@@ -205,6 +204,9 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 
 	<p><?php print(safeToHtml($debtor->get('description'))); ?></p>
 </div>
+
+<?php echo $debtor->error->view(); ?>
+<?php if(isset($onlinepayment)) echo $onlinepayment->error->view(); ?>
 
 <?php if($kernel->intranet->get("pdf_header_file_id") == 0 && $kernel->user->hasModuleAccess('administration')): ?>
 	<div class="message-dependent">
@@ -638,8 +640,9 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 	if(($debtor->get("type") == "order" || $debtor->get("type") == "invoice") && $kernel->intranet->hasModuleAccess('onlinepayment')) {
 
 		$onlinepayment_module = $kernel->useModule('onlinepayment', true); // true: ignore user permisssion
-		$onlinepayment = new OnlinePayment($kernel);
-
+		$implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
+		$onlinepayment = OnlinePayment::factory($kernel, 'provider', $implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]);
+		
 		$onlinepayment->dbquery->setFilter('belong_to', $debtor->get("type"));
 		$onlinepayment->dbquery->setFilter('belong_to_id', $debtor->get('id'));
 		$actions = $onlinepayment->getTransactionActions();
@@ -671,8 +674,8 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 								<td><?php print(safeToHtml($p['transaction_number'])); ?></td>
 								<td>
 									<?php
-									// print($p['status']);
-									print(safeToHtml($p['dk_status']));
+									
+									print(safeToHtml($translation->get($p['status'], 'onlinepayment')));
 									if($p['user_transaction_status_translated'] != "") {
 										print(" (".safeToHtml($p['user_transaction_status_translated']).")");
 									}

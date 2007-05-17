@@ -268,10 +268,10 @@ class Debtor extends Standard {
 
 		if(($this->value["type"] == "order" || $this->value["type"] == "invoice") && $this->kernel->intranet->hasModuleAccess('onlinepayment')) {
 			$onlinepayment_module = $this->kernel->useModule('onlinepayment', true); // true: ignore user permisssion
-
-
-			$onlinepayment = new OnlinePayment($this->kernel);
-
+			// $onlinepayment = new OnlinePayment($kernel);
+			$implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
+			$onlinepayment = OnlinePayment::factory($this->kernel, 'provider', $implemented_providers[$this->kernel->setting->get('intranet', 'onlinepayment.provider_key')]);
+			
 			$onlinepayment->dbquery->setFilter('belong_to', $this->value["type"]);
 			$onlinepayment->dbquery->setFilter('belong_to_id', $this->value['id']);
 			$onlinepayment->dbquery->setFilter('status', 2);

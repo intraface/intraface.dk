@@ -10,10 +10,11 @@
  *				til vores statuskoder?
  */
 
- require('3Party/Quickpay/Quickpay.php');
+ require('Payment/Quickpay.php');
 
 class OnlinePaymentQuickPay extends OnlinePayment {
 
+	// This should maybe instead be: $transaction_status_types = array(
 	var $statuskoder = array(
 		'' => 'Ingen kontakt til Quickpay - mangler $eval',
 		'000' => 'Godkendt',
