@@ -1,20 +1,18 @@
 <?php
 /**
- * Email
+ * Queues and saves e-mails
  *
- * Klassen skal tage højde for, hvor mange e-mails der bliver sendt i timen,
- * for nogle udbydere (bl.a. Dreamhost) accepterer kun udsendelse af 200 e-mails.
+ * Must have an upper limit for how many emails are sent an hour, as Dreamhost only
+ * accepts sending 200 mails.
  *
- * E-mails skal knyttes til det modul de sendes fra, så man altid kan koble den
- * tilbage.
+ * Emails must be connected to the module from which they are saved, so you are always
+ * able to find an email.
  *
  * @package Intraface
  * @author  Lars Olesen <lars@legestue.net>
- * @since   0.1.0
  * @version @package-version@
  *
  */
-
 require_once 'phpmailer/class.phpmailer.php';
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/Error.php';
@@ -24,7 +22,8 @@ require_once 'Intraface/Validator.php';
 require_once 'Intraface/3Party/Database/Db_sql.php';
 require_once 'Intraface/modules/contact/Contact.php';
 
-class Email extends Standard {
+class Email extends Standard
+{
 
     var $kernel;
     var $error;
@@ -47,10 +46,11 @@ class Email extends Standard {
     /**
      * Konstruktør
      *
-     * @param $id - hvis man skal åbne en bestemt e-mail
+     * @param object  $kernel Kernel object
+     * @param integer $id     E-mail id
      */
-
-    function Email($kernel, $id=0) {
+    function __construct($kernel, $id=0)
+    {
         if (!is_object($kernel)) {
             trigger_error('E-mail kræver kernel', E_USER_ERROR);
         }
@@ -85,15 +85,20 @@ class Email extends Standard {
         }
     }
 
-    function createDBQuery() {
+    /**
+     * @return DBQuery object
+     */
+    function createDBQuery()
+    {
         $this->dbquery = new DBQuery($this->kernel, "email", "email.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->useErrorObject($this->error);
     }
 
     /**
-   * Loader oplysningerne om e-mailen
-   */
-    function load() {
+     * @return boolean
+     */
+    function load()
+    {
 
         if ($this->id == 0) {
             return 0;
@@ -126,7 +131,11 @@ class Email extends Standard {
         return 1;
     }
 
-    function getContact() {
+    /**
+     * @return Contact object
+     */
+    function getContact()
+    {
         $this->kernel->useModule('contact');
         $this->contact = new Contact($this->kernel, $this->get('contact_id'));
 
@@ -136,9 +145,12 @@ class Email extends Standard {
     }
 
     /**
-     * Skal bruges til at validere oplysningerne til e-mailen
+     * @param struct $var Values to validate
+     *
+     * @return boolean
      */
-    function validate($var) {
+    function validate($var)
+    {
         $validator = new Validator($this->error);
         if ($this->id == 0) {
             $validator->isNumeric($var['belong_to'], 'belong_to');
@@ -161,9 +173,12 @@ class Email extends Standard {
     }
 
     /**
-     * Gemmer oplysningerne
+     * @param struct $var Values to save
+     *
+     * @return integer id of the saved email
      */
-    function save($var) {
+    function save($var)
+    {
         $var = safeToDb($var);
 
         if (!$this->validate($var)) {
@@ -177,16 +192,14 @@ class Email extends Standard {
                 belong_to_id = ".(int)$var['belong_to'] . ",
                 type_id = ".(int)$var['type_id'] . ",
                 contact_id=".$var['contact_id'];
-        }
-        else {
+        } else {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;
         }
 
-         if (!empty($var['date_deadline'])) {
+        if (!empty($var['date_deadline'])) {
             $date_deadline = "'".$var['date_deadline']."'";
-        }
-        else {
+        } else {
             $date_deadline = 'NOW()';
         }
         $sql_extra = '';
@@ -206,10 +219,10 @@ class Email extends Standard {
             date_deadline = ".$date_deadline.",
             status = 1 " . $sql_extra;
 
-        if(isset($var['from_name'])) {
+        if (isset($var['from_name'])) {
             $sql .= ", from_name = '".$var['from_name']."'";
         }
-        if(isset($var['from_email'])) {
+        if (isset($var['from_email'])) {
             $sql .= ", from_email = '".$var['from_email']."'";
         }
 
@@ -229,33 +242,42 @@ class Email extends Standard {
     }
 
     /**
-     * Gemme fejlmeddelelser
+     * Saves error msg in the database
+     *
+     * @param string $error Error msg to save
+     *
+     * @return boolean
      */
-
-    function saveErrorMsg($error) {
+    function saveErrorMsg($error)
+    {
         $db = new DB_Sql;
         $db->query("UPDATE email SET error_msg = '".$error."' WHERE id = " . $this->id);
+        return true;
     }
 
     /**
-     * Sætter dato og status, når e-mailen er sendt
+     * Sets date and status when sent
+     *
+     * @return boolean
      */
-    function setIsSent() {
+    function setIsSent()
+    {
         if ($this->id == 0) {
-            return 0;
+            return false;
         }
         $db = new DB_Sql;
         $db->query("UPDATE email SET status = 3, date_sent = NOW() WHERE id = " . $this->id);
-        return 1;
+        return true;
 
     }
 
     /**
-     * Tjekker hvor mange e-mails der er sendt den sidste time.
+     * Checks how many emails has been sent the last hour
      *
+     * @return integer with numbers of e-mails sent
      */
-
-    function sentThisHour() {
+    function sentThisHour()
+    {
         $db = new DB_Sql;
         $db->query("SELECT COUNT(*) AS antal FROM email WHERE DATE_SUB(NOW(), INTERVAL 1 HOUR) < date_sent");
         // print $db->numRows();
@@ -265,48 +287,58 @@ class Email extends Standard {
         return $db->f('antal');
     }
 
-    function isReadyToSend() {
+    /**
+     * Checks if e-mail can be sent
+     *
+     * @return boolean
+     */
+    function isReadyToSend()
+    {
 
         if ($this->id == 0) {
             $this->error->set('the message can not be send because it has no id');
             return 0;
         }
-        if($this->get('from_email') == '' && (!isset($this->kernel->intranet->address) || $this->kernel->intranet->address->get('email') == '')) {
+        if ($this->get('from_email') == '' && (!isset($this->kernel->intranet->address) || $this->kernel->intranet->address->get('email') == '')) {
             $this->error->set('you need to fill in an e-mail address for the intranet, to be able to send mails');
             return 0;
         }
 
         return 1;
-
     }
 
     /**
      * Hvis der er en aktuel e-mail puttes den i outbox'en.
      * Derefter sendes alle e-mails fra outboxen, så længe der ikke er sendt
      * over den timelige grænse.
+     *
+     * @param string $what_to_do Can be either send og queue
+     *
+     * @return boolean
      */
-    function send($what_to_do = 'send') {
+    function send($what_to_do = 'send')
+    {
 
-        if(!$this->isReadyToSend()) {
+        if (!$this->isReadyToSend()) {
             return false;
         }
 
         $db = new DB_Sql;
 
-        #
-        # Putter e-mailen i outboxen
-        # status 2 er outbox
-        #
+        //
+        // Putter e-mailen i outboxen
+        // status 2 er outbox
+        //
         $db->query("UPDATE email SET status = 2 WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = " . $this->id);
 
         if ($what_to_do == 'queue') {
             return 1;
         }
 
-        #
-        # Sørger for at tjekke om der er sendt for mange e-mails. Hvis der er
-        # returneres blot, og så sendes e-mailen senere. Vi lader som om det gik godt.
-        #
+        //
+        // Sørger for at tjekke om der er sendt for mange e-mails. Hvis der er
+        // returneres blot, og så sendes e-mailen senere. Vi lader som om det gik godt.
+        //
 
         $sent_this_hour = $this->sentThisHour();
 
@@ -327,31 +359,23 @@ class Email extends Standard {
             $phpmailer->From = $this->get('from_email');
             if ($this->get('from_name')) {
                 $phpmailer->FromName = $this->get('from_name');
-            }
-            else {
+            } else {
                 $phpmailer->FromName = $this->get('from_email');
             }
-        }
-        # Standardafsender
-        else {
+        } else { // Standardafsender
             $phpmailer->From = $this->kernel->intranet->address->get('email');
             $phpmailer->FromName = $this->kernel->intranet->address->get('name');
         }
 
         // Modtager
-
         $contact = $this->getContact();
 
         if ($this->get('contact_id') == 0 OR !is_object($contact)) {
             $this->error->set('Der kunne ikke sendes e-mail til email #' . $this->get('id') . ' fordi der ikke var nogen kunde sat');
         }
 
-
-        $phpmailer->AddAddress(
-            $contact->address->get('email'),
-            $contact->address->get('name')
-        );
-
+        $phpmailer->AddAddress($contact->address->get('email'),
+                              $contact->address->get('name'));
 
         // E-mail
         $phpmailer->Subject = $this->get('subject');
@@ -377,18 +401,15 @@ class Email extends Standard {
         }
 
         // Sender e-mailen
-        if(!$phpmailer->Send()) {
+        if (!$phpmailer->Send()) {
             $this->error->set('Der blev ikke sendt en e-mail til ' . $this->contact->address->get('email'));
             $this->saveErrorMsg($phpmailer->ErrorInfo);
-        }
-        else {
+        } else {
             $this->setIsSent();
             $this->saveErrorMsg('success');
         }
 
         $phpmailer->clearAddresses();
-
-
 
         return 1;
     }
@@ -398,9 +419,14 @@ class Email extends Standard {
      * Man kan gemme og slette
      *
      * Der skal knyttes flere attachments til en e-mail
+     *
+     * @param integer $file_id  Id of file in the file system
+     * @param string  $filename Which filename to use
+     *
+     * @return boolean
      */
-
-    function attachFile($file_id, $filename) {
+    function attachFile($file_id, $filename)
+    {
         if (!is_numeric($file_id)) {
             $this->error->set('Fil-id skal være et tal');
         }
@@ -422,7 +448,11 @@ class Email extends Standard {
         return 1;
     }
 
-    function getAttachments() {
+    /**
+     * @return array with attachments
+     */
+    function getAttachments()
+    {
 
         $db = new DB_Sql;
         $db->query("SELECT file_id, filename FROM email_attachment
@@ -439,10 +469,13 @@ class Email extends Standard {
     }
 
     /**
-     * Denne funktion bør nok erstatte det meste af funktionen send(), så send()
-     * netop kun sender en e-mail!
+     * @todo Denne funktion bør nok erstatte det meste af funktionen send(), så send()
+     *       netop kun sender en e-mail!
+     *
+     * @return boolean
      */
-    function sendAll() {
+    function sendAll()
+    {
         $sent_this_hour = $this->sentThisHour();
 
         $limit_query = abs($this->allowed_limit-$sent_this_hour-$this->system_buffer);
@@ -465,7 +498,8 @@ class Email extends Standard {
 
     }
 
-    function delete() {
+    function delete()
+    {
         if ($this->get('status') == 'sent' OR $this->id == 0) {
             return 0;
         }
@@ -475,7 +509,8 @@ class Email extends Standard {
     }
 
 
-    function getList() {
+    function getList()
+    {
         $db = new DB_Sql;
         $this->dbquery->setSorting("email.date_created DESC");
         $db = $this->dbquery->getRecordset("email.id, email.subject, email.status, email.contact_id", "", false);
@@ -501,9 +536,10 @@ class Email extends Standard {
     }
 
     /**
-     *
+     * @return integer of how many are in queue ot be sent
      */
-    function countQueue() {
+    function countQueue()
+    {
         $db = new DB_Sql;
         $db->query("SELECT COUNT(*) AS antal FROM email WHERE status = 2 AND intranet_id = " . $this->kernel->intranet->get('id'));
         $this->value['outbox'] = 0;
