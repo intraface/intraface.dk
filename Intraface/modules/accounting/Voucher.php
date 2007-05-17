@@ -8,6 +8,7 @@
  * @version	1.0
  */
 require_once 'Intraface/Standard.php';
+require_once 'Account.php';
 
 class Voucher extends Standard {
 
