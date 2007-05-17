@@ -24,7 +24,7 @@ class Year extends Standard {
      */
 
     function Year(& $kernel, $year_id = 0, $load_active = true) {
-        if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
+        if (!is_object($kernel)) {
             trigger_error('Klassen Year kræver et Kernel-objekt', E_USER_ERROR);
             exit;
         }
