@@ -1,4 +1,8 @@
 <?php
+require_once 'Intraface/3Party/Database/DB_sql.php';
+require_once 'Intraface/Error.php';
+require_once 'Intraface/Main.php';
+
 class ModuleMaintenance
 {
     var $id;
@@ -53,13 +57,13 @@ class ModuleMaintenance
             $this->error->set("Filen ".$main_class_path." eksistere ikke!");
             // $msg[] = $main_class_path." eksistere ikke!";
         } else {
-            if ($module_name == $primary_module->getName()) {
+            //if ($module_name == $primary_module->getName()) {
                 // Hvis modullet er det vi arbejder i nu
-                $module = $primary_module;
-            } else {
-                include $main_class_path;
+                //$module = $primary_module;
+            //} else {
+                include_once $main_class_path;
                 $module = new $main_class_name;
-            }
+            //}
 
             if (!is_object($module)) {
                 $this->error->set($main_class_name." kunne ikke initialiseres!");
