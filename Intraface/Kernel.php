@@ -9,7 +9,8 @@
  * @version @package-version@
  */
 
-require_once 'Weblogin.php';
+require_once 'Intraface/Weblogin.php';
+require_once 'Intraface/Intranet.php';
 
 class Kernel
 {
