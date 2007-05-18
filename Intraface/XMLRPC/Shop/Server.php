@@ -2,9 +2,9 @@
 /**
  * WebshopServer
  *
- * @package  IntrafacePublic_Shop
+ * @category XMLRPC_Server
+ * @package  Intraface_XMLRPC_Shop
  * @author   Lars Olesen <lars@legestue.net>
- * @since    0.1.0
  * @version  @package-version@
  */
 
@@ -15,7 +15,8 @@ require_once 'Intraface/Weblogin.php';
 require_once 'XML/RPC2/Server.php';
 require_once 'Intraface/modules/webshop/Webshop.php';
 
-class Intraface_XMLRPC_Shop_Server {
+class Intraface_XMLRPC_Shop_Server
+{
 
     var $kernel;
     var $webshop;
@@ -23,24 +24,17 @@ class Intraface_XMLRPC_Shop_Server {
     var $product;
     var $credentials;
 
-    private function factoryWebshop() {
-        if (!$this->kernel->intranet->hasModuleAccess('webshop')) {
-            throw new XML_RPC2_FaultException('The intranet does not have access to the module webshop', -2);
-        }
-        $this->kernel->module('webshop');
-        $this->webshop = new Webshop($this->kernel, $this->credentials['session_id']);
-    }
-
     /**
      * Gets a list with products
      *
-     * @param struct $credentials
-     * @param array  $search      optional search array
+     * @param struct $credentials Credentials to use the server
+     * @param array  $search      Optional search array
      *
      * @return array
      */
-    public function getProducts($credentials, $search = array()) {
-        $this->checkCredentials($credentials);
+    public function getProducts($credentials, $search = array())
+    {
+        $this->_checkCredentials($credentials);
 
         $search = '';
         $offset = 0;
@@ -50,7 +44,7 @@ class Intraface_XMLRPC_Shop_Server {
             $mixed = $search;
         }
 
-        $this->factoryWebshop();
+        $this->_factoryWebshop();
 
         $products = array();
 
@@ -71,12 +65,10 @@ class Intraface_XMLRPC_Shop_Server {
             $product->dbquery->useStored(true);
             $product->dbquery->setPagingOffset((int)$mixed['offset']);
             $debug2 .= 'offset ' . $mixed['offset'];
-        }
-        elseif (array_key_exists('use_stored', $mixed) AND $mixed['use_stored'] == 'true') {
+        } elseif (array_key_exists('use_stored', $mixed) AND $mixed['use_stored'] == 'true') {
             $product->dbquery->useStored(true);
             $debug2 .= 'use_stored true';
-        }
-        else {
+        } else {
             if (array_key_exists('search', $mixed) AND !empty($mixed['search'])) {
                 $product->dbquery->setFilter('search', $mixed['search']);
                 $debug2 .= 'search ' . $mixed['search'];
@@ -106,15 +98,16 @@ class Intraface_XMLRPC_Shop_Server {
     /**
      * Gets one product
      *
-     * @param struct  $credentials
-     * @param integer $id
+     * @param struct  $credentials Credentials to use the server
+     * @param integer $id          Product id
      *
      * @return array
      */
-    public function getProduct($credentials, $id) {
-        $this->checkCredentials($credentials);
+    public function getProduct($credentials, $id)
+    {
+        $this->_checkCredentials($credentials);
 
-        $this->factoryWebshop();
+        $this->_factoryWebshop();
 
         $id = intval($id);
 
@@ -130,15 +123,16 @@ class Intraface_XMLRPC_Shop_Server {
     /**
      * Gets related products
      *
-     * @param struct  $credentials
-     * @param integer $id
+     * @param struct  $credentials Credentials to use the server
+     * @param integer $id          Product id
      *
      * @return array
      */
-    public function getRelatedProducts($credentials, $id) {
-        $return = $this->checkCredentials($credentials);
+    public function getRelatedProducts($credentials, $id)
+    {
+        $this->_checkCredentials($credentials);
 
-        $this->factoryWebshop();
+        $this->_factoryWebshop();
 
         $product_id = intval($id);
 
@@ -153,17 +147,18 @@ class Intraface_XMLRPC_Shop_Server {
     /**
      * Add product to basket
      *
-     * @param struct  $credentials
-     * @param integer $id
+     * @param struct  $credentials Credentials to use the server
+     * @param integer $id          Product id to add
      *
      * @return mixed
      */
-    public function addProductToBasket($credentials, $id) {
-        if (is_object($return = $this->checkCredentials($credentials))) {
+    public function addProductToBasket($credentials, $id)
+    {
+        if (is_object($return = $this->_checkCredentials($credentials))) {
             return $return;
         }
 
-        $this->factoryWebshop();
+        $this->_factoryWebshop();
 
         $product_id = intval($id);
 
@@ -177,16 +172,17 @@ class Intraface_XMLRPC_Shop_Server {
     /**
      * Change the quantity of one product in basket
      *
-     * @param struct $credentials
-     * @param integer $product_id
-     * @param integer $quantity
+     * @param struct  $credentials Credentials to use the server
+     * @param integer $product_id  Product id to change
+     * @param integer $quantity    New quantity
      *
      * @return mixed
      */
-    public function changeProductInBasket($credentials, $product_id, $quantity) {
-        $this->checkCredentials($credentials);
+    public function changeProductInBasket($credentials, $product_id, $quantity)
+    {
+        $this->_checkCredentials($credentials);
 
-        $this->factoryWebshop();
+        $this->_factoryWebshop();
 
         $product_id = intval($product_id);
         $quantity = intval($quantity);
@@ -205,14 +201,15 @@ class Intraface_XMLRPC_Shop_Server {
     /**
      * Gets an array with the current basket
      *
-     * @param struct $credentials
+     * @param struct $credentials Credentials to use the server
      *
      * @return array
      */
-    public function getBasket($credentials) {
-        $this->checkCredentials($credentials);
+    public function getBasket($credentials)
+    {
+        $this->_checkCredentials($credentials);
 
-        $this->factoryWebshop();
+        $this->_factoryWebshop();
 
         return array(
             'items' => $this->webshop->basket->getItems(),
@@ -224,18 +221,17 @@ class Intraface_XMLRPC_Shop_Server {
     /**
      * Places an order in Intraface based on the current basket
      *
-     * @todo Der skal ske et eller andet, hvis der er noget, der går galt?
-     *
-     * @param struct $credentials
-     * @param struct $values
+     * @param struct $credentials Credentials to use the server
+     * @param struct $values      Values to save
      *
      * @return integer $order_id
      */
 
-    public function placeOrder($credentials, $values) {
-        $this->checkCredentials($credentials);
+    public function placeOrder($credentials, $values)
+    {
+        $this->_checkCredentials($credentials);
 
-        $this->factoryWebshop();
+        $this->_factoryWebshop();
 
         if (!is_array($this->webshop->basket->getItems()) OR count($this->webshop->basket->getItems()) <= 0) {
             throw new XML_RPC2_FaultException('order could not be sent - cart is empty', -4);
@@ -253,11 +249,11 @@ class Intraface_XMLRPC_Shop_Server {
     /**
      * Checks credentials
      *
-     * @param  struct $credentials
+     * @param struct $credentials Credentials to use the server
      *
      * @return array
      */
-    function checkCredentials($credentials)
+    private function _checkCredentials($credentials)
     {
         if (count($credentials) != 2) { // -4
             throw new XML_RPC2_FaultException('wrong argument count in $credentials - got ' . count($credentials) . ' arguments - need 2', -4);
@@ -285,5 +281,20 @@ class Intraface_XMLRPC_Shop_Server {
 
         return true;
     }
+
+    /**
+     * Initialize the webshop
+     *
+     * @return void
+     */
+    private function _factoryWebshop()
+    {
+        if (!$this->kernel->intranet->hasModuleAccess('webshop')) {
+            throw new XML_RPC2_FaultException('The intranet does not have access to the module webshop', -2);
+        }
+        $this->kernel->module('webshop');
+        $this->webshop = new Webshop($this->kernel, $this->credentials['session_id']);
+    }
+
 }
 ?>
