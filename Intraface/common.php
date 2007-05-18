@@ -20,8 +20,8 @@ require_once 'config/setting_themes.php';
 // functions
 require_once 'functions/functions.php';
 
-// third party . 
-require_once 'Database'.DIRECTORY_SEPARATOR.'Db_sql.php';
+// third party .
+require_once '3Party/Database'.DIRECTORY_SEPARATOR.'Db_sql.php';
 
 // system files
 require_once 'Intraface/Standard.php';
@@ -50,7 +50,7 @@ require_once 'Intraface/tools/Amount.php';
 
 $db = MDB2::singleton(DB_DSN, array('persistent' => true));
 if (PEAR::isError($db)) {
-	trigger_error($db->getMessage(), E_USER_ERROR);
+    trigger_error($db->getMessage(), E_USER_ERROR);
 }
 
 $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
@@ -58,21 +58,21 @@ $db->setOption('debug', MDB2_DEBUG);
 $db->setOption('portability', MDB2_PORTABILITY_NONE);
 
 if ($db->getOption('debug')) {
-	$db->setOption('log_line_break', "\n\n\n\n\t");
+    $db->setOption('log_line_break', "\n\n\n\n\t");
 
-	require_once 'MDB2/Debug/ExplainQueries.php';
+    require_once 'MDB2/Debug/ExplainQueries.php';
 
-	$my_debug_handler = new MDB2_Debug_ExplainQueries($db);
-	$db->setOption('debug_handler', array($my_debug_handler, 'collectInfo'));
+    $my_debug_handler = new MDB2_Debug_ExplainQueries($db);
+    $db->setOption('debug_handler', array($my_debug_handler, 'collectInfo'));
 
-	register_shutdown_function(array($my_debug_handler, 'executeAndExplain'));
-	register_shutdown_function(array($my_debug_handler, 'dumpInfo'));
+    register_shutdown_function(array($my_debug_handler, 'executeAndExplain'));
+    register_shutdown_function(array($my_debug_handler, 'dumpInfo'));
 
 
 }
 
 if(defined('TIMEZONE')) {
-	$db->exec('SET time_zone=\''.TIMEZONE.'\'');
+    $db->exec('SET time_zone=\''.TIMEZONE.'\'');
 }
 
 // vi skal have lavet en fil, der bare sørger for at inkludere filer.
