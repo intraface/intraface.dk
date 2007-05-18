@@ -8,11 +8,12 @@
  * @version  @package-version@
  */
 
-require_once 'XML/RPC2/Server.php';
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/Setting.php';
 require_once 'Intraface/Intranet.php';
 require_once 'Intraface/Weblogin.php';
+require_once 'XML/RPC2/Server.php';
+require_once 'Intraface/modules/webshop/Webshop.php';
 
 class Intraface_XMLRPC_Shop_Server {
 
@@ -22,7 +23,7 @@ class Intraface_XMLRPC_Shop_Server {
     var $product;
     var $credentials;
 
-    function factoryWebshop() {
+    private function factoryWebshop() {
         if (!$this->kernel->intranet->hasModuleAccess('webshop')) {
             throw new XML_RPC2_FaultException('The intranet does not have access to the module webshop', -2);
         }
@@ -34,13 +35,12 @@ class Intraface_XMLRPC_Shop_Server {
      * Gets a list with products
      *
      * @param struct $credentials
-     * @param array $search optional
+     * @param array  $search      optional search array
+     *
      * @return array
      */
-    public function getProducts($credentials, $search) {
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
-        }
+    public function getProducts($credentials, $search = array()) {
+        $this->checkCredentials($credentials);
 
         $search = '';
         $offset = 0;
@@ -104,14 +104,15 @@ class Intraface_XMLRPC_Shop_Server {
     }
 
     /**
-     * @param struct $credentials
+     * Gets one product
+     *
+     * @param struct  $credentials
      * @param integer $id
+     *
      * @return array
      */
-    function getProduct($credentials, $id) {
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
-        }
+    public function getProduct($credentials, $id) {
+        $this->checkCredentials($credentials);
 
         $this->factoryWebshop();
 
@@ -127,14 +128,15 @@ class Intraface_XMLRPC_Shop_Server {
     }
 
     /**
-     * @param struct $credentials
+     * Gets related products
+     *
+     * @param struct  $credentials
      * @param integer $id
+     *
      * @return array
      */
-    function getRelatedProducts($credentials, $id) {
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
-        }
+    public function getRelatedProducts($credentials, $id) {
+        $return = $this->checkCredentials($credentials);
 
         $this->factoryWebshop();
 
@@ -149,10 +151,14 @@ class Intraface_XMLRPC_Shop_Server {
     }
 
     /**
-     * @param struct $credentials
+     * Add product to basket
+     *
+     * @param struct  $credentials
      * @param integer $id
+     *
+     * @return mixed
      */
-    function addProductToBasket($credentials, $id) {
+    public function addProductToBasket($credentials, $id) {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
@@ -169,15 +175,16 @@ class Intraface_XMLRPC_Shop_Server {
     }
 
     /**
+     * Change the quantity of one product in basket
+     *
      * @param struct $credentials
      * @param integer $product_id
      * @param integer $quantity
+     *
      * @return mixed
      */
-    function changeProductInBasket($credentials, $product_id, $quantity) {
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
-        }
+    public function changeProductInBasket($credentials, $product_id, $quantity) {
+        $this->checkCredentials($credentials);
 
         $this->factoryWebshop();
 
@@ -196,13 +203,14 @@ class Intraface_XMLRPC_Shop_Server {
     }
 
     /**
+     * Gets an array with the current basket
+     *
      * @param struct $credentials
+     *
      * @return array
      */
-    function getBasket($credentials) {
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
-        }
+    public function getBasket($credentials) {
+        $this->checkCredentials($credentials);
 
         $this->factoryWebshop();
 
@@ -214,17 +222,19 @@ class Intraface_XMLRPC_Shop_Server {
     }
 
     /**
+     * Places an order in Intraface based on the current basket
+     *
      * @todo Der skal ske et eller andet, hvis der er noget, der går galt?
      *
      * @param struct $credentials
      * @param struct $values
+     *
      * @return integer $order_id
      */
 
-    function placeOrder($credentials, $values) {
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
-        }
+    public function placeOrder($credentials, $values) {
+        $this->checkCredentials($credentials);
+
         $this->factoryWebshop();
 
         if (!is_array($this->webshop->basket->getItems()) OR count($this->webshop->basket->getItems()) <= 0) {
@@ -241,38 +251,14 @@ class Intraface_XMLRPC_Shop_Server {
     }
 
     /**
-     * @param $arg
-     * - [0] credentials
-     * - [1] order_id
-     * - [2] transaction_number
-     * - [3] transaction_status
-     * - [4] amount
-     *
-     */
-    /*
-    function addOnlinePayment($credentials, $order_id, $transaction_number, $transaction_status, $amoung) {
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
-        }
-
-        $this->factoryWebshop();
-
-        if ($this->webshop->addOnlinePayment($order_id, $transaction_number, $transaction_status, $amount)) {
-            return 1;
-        }
-        else {
-            throw new XML_RPC2_FaultException('Onlinebetalingen kunne ikke tilføjes ' . strtolower(implode(', ', $this->webshop->error->message)), -6);
-        }
-    }
-    */
-
-    /**
-     * Checking credentials
+     * Checks credentials
      *
      * @param  struct $credentials
+     *
      * @return array
      */
-    function checkCredentials($credentials) {
+    function checkCredentials($credentials)
+    {
         if (count($credentials) != 2) { // -4
             throw new XML_RPC2_FaultException('wrong argument count in $credentials - got ' . count($credentials) . ' arguments - need 2', -4);
         }
@@ -283,13 +269,13 @@ class Intraface_XMLRPC_Shop_Server {
             throw new XML_RPC2_FaultException('supply a session_id', -5);
         }
 
-        $weblogin = new Weblogin($credentials['session_id']);
-
-        if (!$intranet_id = $weblogin->auth('private', $credentials['private_key'])) {
+        $weblogin = new Weblogin();
+        if (!$intranet_id = $weblogin->auth('private', $credentials['private_key'], $credentials['session_id'])) {
             throw new XML_RPC2_FaultException('access to intranet denied', -2);
         }
 
         $this->kernel = new Kernel();
+        $this->kernel->weblogin = $weblogin;
         $this->kernel->intranet = new Intranet($intranet_id);
         $this->kernel->setting = new Setting($this->kernel->intranet->get('id'));
 
