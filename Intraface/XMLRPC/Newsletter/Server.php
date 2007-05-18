@@ -48,8 +48,14 @@ class Intraface_XMLRPC_Newsletter_Server
      */
     function subscribe($credentials, $list_id, $email, $ip)
     {
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
+        try {
+            $this->checkCredentials($credentials);
+        }
+        catch (XML_RPC2_FaultException $e) {
+            die('Exception #' . $e->getFaultCode() . ' : ' . $e->getFaultString());
+        }
+        catch (Exception $e) {
+            die('Exception : ' . $e->getMessage());
         }
 
         $this->factoryList($list_id);
@@ -181,7 +187,7 @@ class Intraface_XMLRPC_Newsletter_Server
      *
      * @param struct $credentials Must include private_key and session_id
      *
-     * @return array
+     * @return boolean or throws an error
      */
     function checkCredentials($credentials)
     {
