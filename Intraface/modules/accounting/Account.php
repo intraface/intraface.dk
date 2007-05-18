@@ -449,11 +449,6 @@ class Account extends Standard {
 
         $total_saldo = 0;
 
-        /*
-        $date_from = safeEscapeString($date_from);
-        $date_to = safeEscapeString($date_to);
-        */
-
         $primo = array(
             'debet' => '',
             'credit' => '',
