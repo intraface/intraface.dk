@@ -11,9 +11,6 @@
 //configuration
 require_once 'config/configuration.php'; // this is the one in your source control
 
-// errorhandler php5
-require_once 'ErrorHandler/ErrorHandler.php';
-
 // settings for theme
 require_once 'config/setting_themes.php';
 
@@ -21,7 +18,7 @@ require_once 'config/setting_themes.php';
 require_once 'functions/functions.php';
 
 // third party .
-require_once '3Party/Database'.DIRECTORY_SEPARATOR.'Db_sql.php';
+require_once '3Party/Database/Db_sql.php';
 
 // system files
 require_once 'Intraface/Standard.php';
@@ -41,8 +38,8 @@ require_once 'Intraface/Validator.php';
 // database
 require_once 'MDB2.php';
 
-// Systembesked - ikke kønt, men ved ikke lige hvordan vi ellers kunne gøre det
-require_once PATH_INCLUDE_SHARED.'systemmessage'.DIRECTORY_SEPARATOR.'SystemDisturbance.php';
+// Systembesked
+require_once 'Intraface/shared/systemmessage/SystemDisturbance.php';
 
 // core files
 require_once 'Intraface/tools/Date.php';
