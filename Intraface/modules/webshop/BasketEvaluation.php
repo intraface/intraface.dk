@@ -126,7 +126,7 @@ class BasketEvaluation extends Standard
     function save($input)
     {
 
-        $input = safeToDb($input);
+        // $input = safeToDb($input);
         $validator = new Validator($this->error);
 
         $validator->isNumeric($input['running_index'], 'Index is not a valid number');
