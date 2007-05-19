@@ -1,15 +1,11 @@
 <?php
 /**
- * Basket = indkøbskurv.
+ * Basket
  *
  * PHP version 5
  *
  * @package Webshop
  * @author Lars Olesen <lars@legestue.net>
- *
- * @see WebshopServer.php - xmlrpc-server
- * @see Webshop
- * @see Product
  */
 
 require_once 'MDB2.php';
@@ -17,7 +13,8 @@ require_once 'Intraface/3Party/Database/DB_sql.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/modules/product/Product.php';
 
-class Basket {
+class Basket
+{
 
     /**
      * Webshop
@@ -55,7 +52,8 @@ class Basket {
      * @param object $webshop    The webshop object
      * @param string $session_id A session id
      */
-    function __construct($webshop, $session_id) {
+    function __construct($webshop, $session_id)
+    {
         if (!is_object($webshop) AND strtolower(get_class($webshop)) == 'webshop') {
             trigger_error('Basket kræver objektet Webshop', E_USER_ERROR);
         }
@@ -80,7 +78,8 @@ class Basket {
      *
      * @return boolean
      */
-    function add($product_id, $quantity = 1) {
+    function add($product_id, $quantity = 1)
+    {
         $product_id = intval($product_id);
         $quantity = intval($quantity);
         $quantity = $this->getItemCount($product_id) + $quantity;
@@ -95,7 +94,8 @@ class Basket {
      *
      * @return boelean
      */
-    function remove($product_id, $quantity = 1) {
+    function remove($product_id, $quantity = 1)
+    {
         $product_id = intval($product_id);
         $quantity = intval($quantity);
         $quantity = $this->getItemCount($product_id) - $quantity;
@@ -112,7 +112,8 @@ class Basket {
      *
      * @return boolean
      */
-    function change($product_id, $quantity, $text = '', $basketevaluation = 0) {
+    function change($product_id, $quantity, $text = '', $basketevaluation = 0)
+    {
         $db = new DB_Sql;
         $product_id = (int)$product_id;
         $quantity = (int)$quantity;
@@ -165,7 +166,8 @@ class Basket {
      *
      * @return integer
      */
-    function getItemCount($product_id) {
+    function getItemCount($product_id)
+    {
         $product_id = (int)$product_id;
 
         $db = new DB_Sql;
@@ -188,7 +190,8 @@ class Basket {
      *
      * @return float
      */
-    function getTotalPrice() {
+    function getTotalPrice()
+    {
         $price = 0;
 
         $db = new DB_Sql;
@@ -209,7 +212,8 @@ class Basket {
      *
      * @return float
      */
-    function getTotalWeight() {
+    function getTotalWeight()
+    {
         $db = new DB_Sql;
 
         $db->query("SELECT
@@ -243,7 +247,8 @@ class Basket {
      *
      * @return array
      */
-    function getItems() {
+    function getItems()
+    {
         $items = array();
         $db = new DB_Sql;
 
@@ -292,7 +297,8 @@ class Basket {
      *
      * @return boolean
      */
-    function removeEvaluationProducts() {
+    function removeEvaluationProducts()
+    {
         $db = new DB_Sql;
         $db->query("DELETE FROM basket " .
                 "WHERE basketevaluation_product = 1 " .
@@ -307,7 +313,8 @@ class Basket {
      *
      * @return boolean
      */
-    function reset() {
+    function reset()
+    {
         $db = new DB_Sql;
         $db->query("UPDATE basket SET session_id = '' WHERE " . $this->sql_extra . " AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
         return true;
