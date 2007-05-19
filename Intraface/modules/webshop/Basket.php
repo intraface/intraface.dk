@@ -117,9 +117,8 @@ class Basket {
         $product_id = (int)$product_id;
         $quantity = (int)$quantity;
 
-         $this->webshop->kernel->useModule('product');
+        $this->webshop->kernel->useModule('product');
         $product = new Product($this->webshop->kernel, $product_id);
-
 
         if (is_object($product->stock) AND $product->stock->get('for_sale') < $quantity) {
             return false;
@@ -264,7 +263,6 @@ class Basket {
                 AND basket.intranet_id = " . $this->webshop->kernel->intranet->get("id") . "
                 AND basket.quantity > 0
             ");
-
 
         $i = 0;
         while ($db->nextRecord()) {
