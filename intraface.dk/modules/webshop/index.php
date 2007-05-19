@@ -4,6 +4,7 @@ require('../../include_first.php');
 $webshop_module = $kernel->module('webshop');
 $settings = $webshop_module->getSetting('show_online');
 $translation = $kernel->getTranslation('webshop');
+$webshop_module->includeFile('BasketEvaluation.php');
 
 $error = new Error();
 
@@ -34,6 +35,11 @@ else {
 	$value['discount_percent'] = $kernel->setting->get('intranet','webshop.discount_percent');
 	$value['show_online'] = $kernel->setting->get('intranet','webshop.show_online');
 	$value['confirmation_text'] = $kernel->setting->get('intranet','webshop.confirmation_text');
+}
+
+if(isset($_GET['delete_basketevaluation_id'])) {
+	$basketevaluation = new BasketEvaluation($kernel, $_GET['delete_basketevaluation_id']);
+	$basketevaluation->delete();
 }
 
 $page = new Page($kernel);
@@ -93,6 +99,48 @@ $page->start(safeToHtml($translation->get('webshop')));
 	</p>
 
 </form>
+
+<fieldset>
+	<legend><?php echo safeToHtml($translation->get('Basket evaluation')); ?></legend>
+	
+	
+	
+	<?php
+	$basketevaluation = new BasketEvaluation($kernel);
+	$evaluations = $basketevaluation->getList();
+	
+	if(count($evaluations) > 0):
+		?>
+		<table summary="<?php echo safeToHtml($translation->get('basket evaluation')); ?>" class="stripe">
+			<caption><?php echo safeToHtml($translation->get('basket evaluation')); ?></caption>
+			<thead>
+				<tr>
+					<th><?php echo safeToHtml($translation->get('running index')); ?></th>
+					<th><?php echo safeToHtml($translation->get('evaluation')); ?></th>
+					<th><?php echo safeToHtml($translation->get('go to index after')); ?></th>
+					<th><?php echo safeToHtml($translation->get('action')); ?></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach($evaluations AS $evaluation): ?>
+					<tr>
+						<td><?php echo safeToHtml($evaluation['running_index']); ?></td>
+						<td><?php echo safeToHtml($translation->get($evaluation['evaluate_target']).' '.$translation->get($evaluation['evaluate_method']).' '.$evaluation['evaluate_value']); ?></td>
+						<td><?php echo safeToHtml($evaluation['go_to_index_after']); ?></td>
+						<td><?php echo safeToHtml($translation->get($evaluation['action_action']).' '.$evaluation['action_value'].' at '.$translation->get($evaluation['action_unit']).' '.$evaluation['action_quantity']); ?></td>
+						<td><a href="edit_basketevaluation.php?id=<?php echo intval($evaluation['id']); ?>" class="edit"><?php echo safeToHtml($translation->get('edit')); ?></a> <a href="index.php?delete_basketevaluation_id=<?php echo intval($evaluation['id']); ?>" class="delete"><?php echo safeToHtml($translation->get('delete')); ?></a></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php
+	endif;
+	?>					
+	
+	<p><a href="edit_basketevaluation.php"><?php echo safeToHtml($translation->get('add basket evaluation')); ?></a></p>
+		
+</fieldset>
 
 <?php
 $page->end();

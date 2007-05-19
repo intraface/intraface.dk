@@ -112,11 +112,13 @@ class Basket {
 	 * @see add() og remove()
 	 * @param product_id (int)
 	 * @param quantity (int)
+	 * @param (string)text	to add description to product, not yet implemented
+	 * @param (int)basketevaluation	if the product is from basketevaluation
 	 * @access public
 	 * @return boelean
 	 */
 
-	function change($product_id, $quantity) {
+	function change($product_id, $quantity, $text = '', $basketevaluation = 0) {
 		$db = new DB_Sql;
 		$product_id = (int)$product_id;
 		$quantity = (int)$quantity;
@@ -130,6 +132,7 @@ class Basket {
 		}
 
 		$db->query("SELECT id, quantity FROM basket WHERE product_id = $product_id
+				AND basketevaluation_product = " . $basketevaluation . "
 				AND " . $this->sql_extra. "
 				AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
 
@@ -137,12 +140,14 @@ class Basket {
 			if ($quantity <= 0) {
 				$db->query("DELETE FROM basket
 					WHERE id = ".$db->f('id') . "
+						AND basketevaluation_product = " . $basketevaluation . "
 						AND " . $this->sql_extra . "
 						AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
 			}
 			else {
 				$db->query("UPDATE basket SET quantity = $quantity, date_changed = NOW()
 					WHERE id = ".$db->f('id') . "
+						AND basketevaluation_product = " . $basketevaluation . "
 						AND " . $this->sql_extra . "
 						AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
 			}
@@ -153,6 +158,7 @@ class Basket {
 					SET
 						quantity = $quantity,
 						date_changed = NOW(),
+						basketevaluation_product = " . $basketevaluation . ",
 						product_id = $product_id,
 						intranet_id = " . $this->webshop->kernel->intranet->get('id') . ",
 						" . $this->sql_extra);
@@ -293,6 +299,17 @@ class Basket {
 		}
 
 		return $items;
+	}
+	
+	
+	function removeEvaluationProducts() {
+		$db = new DB_Sql;
+		$db->query("DELETE FROM basket " .
+				"WHERE basketevaluation_product = 1 " .
+					"AND " . $this->sql_extra . " " .
+					"AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
+		return true;
+		
 	}
 
 	/**
