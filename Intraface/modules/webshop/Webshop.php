@@ -144,7 +144,7 @@ class Webshop {
 			return 0;
 		}
 		
-		$this->kernel->useModule('onlinepayment');
+		$this->kernel->useModule('onlinepayment', true); // true: only look after intranet access
 		$onlinepayment = new OnlinePayment($this->kernel);
 
 		$values = array(
