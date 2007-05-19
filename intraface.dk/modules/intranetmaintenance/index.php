@@ -2,7 +2,7 @@
 /**
  * @author Sune Jensen <sj@sunet.dk>
  */
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module("intranetmaintenance");
 $translation = $kernel->getTranslation('intranetmaintenance');
@@ -11,12 +11,10 @@ $intranetmaintenance = new IntranetMaintenance($kernel);
 $intranetmaintenance->createDBQuery();
 
 if(isset($_GET["search"])) {
-
     if(isset($_GET["text"]) && $_GET["text"] != "") {
         $intranetmaintenance->dbquery->setFilter("text", $_GET["text"]);
     }
-}
-elseif(isset($_GET['character'])) {
+} elseif(isset($_GET['character'])) {
     $intranetmaintenance->dbquery->useCharacter();
 }
 
@@ -25,10 +23,8 @@ $intranetmaintenance->dbquery->usePaging("paging", $kernel->setting->get('user',
 $intranetmaintenance->dbquery->storeResult("use_stored", "intranetmainenance_intranet", "toplevel");
 $intranets = $intranetmaintenance->getList();
 
-
 $page = new Page($kernel);
 $page->start($translation->get('intranets'));
-
 ?>
 
 <h1><?php echo $translation->get('intranets'); ?></h1>
@@ -48,9 +44,7 @@ $page->start($translation->get('intranets'));
     </fieldset>
 </form>
 
-
 <?php echo $intranetmaintenance->dbquery->display('character'); ?>
-
 
 <table>
 <thead>
