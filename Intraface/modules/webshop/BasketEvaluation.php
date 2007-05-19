@@ -22,6 +22,8 @@
  */
 
 require_once 'Intraface/Standard.php';
+require_once 'Intraface/Error.php';
+require_once 'MDB2.php';
 
 class BasketEvaluation extends Standard
 {
