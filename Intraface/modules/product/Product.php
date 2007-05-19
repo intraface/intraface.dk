@@ -103,16 +103,16 @@ class Product extends Standard {
         $shared_filehandler = $this->kernel->useShared('filehandler');
         $shared_filehandler->includeFile('AppendFile.php');
 
+        if ($this->id > 0) {
+            $this->id = $this->load();
+        }
+    }
+
+    function createDBQuery() {
         $this->dbquery = new DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->setJoin("LEFT", "product_detail detail", "detail.product_id = product.id", "detail.active = 1");
         //$this->dbquery->setFindCharacterFromField("detail.name");
         $this->dbquery->useErrorObject($this->error);
-
-
-
-        if ($this->id > 0) {
-            $this->id = $this->load();
-        }
     }
 
     /**
