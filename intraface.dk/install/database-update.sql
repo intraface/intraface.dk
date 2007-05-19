@@ -3,7 +3,7 @@ CREATE TABLE `contact_reminder_single` (
 `intranet_id` INT NOT NULL ,
 `contact_id` INT NOT NULL ,
 `reminder_date` DATETIME NOT NULL ,
-`status_key` INT NOT NULL ,
+`status` INT NOT NULL ,
 `date_created` DATETIME NOT NULL ,
 `date_changed` DATETIME NOT NULL ,
 `date_viewed` DATETIME NOT NULL ,
@@ -15,6 +15,7 @@ PRIMARY KEY ( `id` )
 ) TYPE = MYISAM ;
 
 ALTER TABLE `contact_reminder_single` ADD `created_by_user_id` INT NOT NULL AFTER `contact_id` ;
+ALTER TABLE `contact_reminder_single` CHANGE `status` `status_key` INT( 11 ) NOT NULL
 
 ALTER TABLE `debtor` ADD `internal_note` TEXT NOT NULL AFTER `message` ;
 
