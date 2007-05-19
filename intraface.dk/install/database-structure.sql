@@ -1027,22 +1027,3 @@ CREATE TABLE `user` (
   KEY `session_id` (`session_id`),
   KEY `email` (`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
-CREATE TABLE `contact_reminder_single` (
-`id` INT NOT NULL AUTO_INCREMENT ,
-`intranet_id` INT NOT NULL ,
-`contact_id` INT NOT NULL ,
-`reminder_date` DATETIME NOT NULL ,
-`status` INT NOT NULL ,
-`date_created` DATETIME NOT NULL ,
-`date_changed` DATETIME NOT NULL ,
-`date_viewed` DATETIME NOT NULL ,
-`date_cancelled` DATETIME NOT NULL ,
-`subject` VARCHAR( 255 ) NOT NULL ,
-`description` TEXT NOT NULL ,
-`active` INT DEFAULT '1' NOT NULL ,
-PRIMARY KEY ( `id` )
-) TYPE = MYISAM ;
-
-ALTER TABLE `contact_reminder_single` ADD `created_by_user` INT NOT NULL AFTER `contact_id` ;
-ALTER TABLE `contact_reminder_single` CHANGE `status` `status_key` INT( 11 ) NOT NULL
