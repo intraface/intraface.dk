@@ -4,6 +4,7 @@ require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/modules/webshop/Basket.php';
+require_once 'Intraface/modules/product/ProductDetail.php';
 
 class FakeKernel
 {
@@ -58,22 +59,40 @@ define('PATH_INCLUDE_CONFIG', 'c:/Users/Lars Olesen/workspace/intraface/Intrafac
 class BasketTest extends PHPUnit_Framework_TestCase
 {
 
+    private $product;
+
     function setUp()
     {
         $this->emptyBasketTable();
+        $kernel = $this->createKernel();
+        $kernel->module('product');
+        $this->product = new Product($kernel);
+        $this->product->save(array('name' => 'test', 'price' => 200));
+    }
+
+    function tearDown() {
+        $this->emptyBasketTable();
+        $this->product->delete();
     }
 
     function emptyBasketTable()
     {
         $db = MDB2::factory(DB_DSN);
-        $db->query('TRUNCATE basket');
+        $result = $db->query('TRUNCATE basket');
+        $result = $db->query('TRUNCATE product');
     }
 
-    function createBasket()
+    function createKernel()
     {
         $kernel = new Kernel;
         $kernel->intranet = new FakeIntranet;
         $kernel->user = new FakeUser;
+        return $kernel;
+    }
+
+    function createBasket()
+    {
+        $kernel = $this->createKernel();
         $webshop = new FakeWebshop();
         $webshop->kernel = $kernel;
         $basket = new Basket($webshop, 'somesessionid');
@@ -86,7 +105,7 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($basket));
     }
 
-    function _testAddToBasket()
+    function testAddToBasket()
     {
         $basket = $this->createBasket();
 
@@ -94,7 +113,12 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $quantity = 1;
 
         $this->assertTrue($basket->add($product_id, $quantity));
-        $this->assertEquals(count($basket->getItems()), 1);
+
+        $items = $basket->getItems();
+
+        $this->assertEquals(count($items), 1);
+        $this->assertEquals($items[0]['quantity'], $quantity);
+        $this->assertEquals($items[0]['product_id'], $product_id);
     }
 
     function testRemoveFromBasket()
@@ -109,7 +133,9 @@ class BasketTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($basket->remove($product_id, $quantity));
 
-        $this->assertEquals(count($basket->getItems()), 0);
+        $items = $basket->getItems();
+
+        $this->assertEquals(count($items), 0);
     }
 
     function testChangeBasket()
