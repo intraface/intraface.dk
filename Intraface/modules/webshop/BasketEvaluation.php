@@ -43,14 +43,14 @@ class BasketEvaluation extends Standard
      */
     function __construct($kernel, $id = 0)
     {
-
-        if (!is_object($kernel) || strtolower(get_class($kernel)) != 'kernel') {
-            trigger_error("First parameter to Address should be kernel", E_USER_ERROR);
+        if (!is_object($kernel)) {
+            trigger_error("First parameter to BasketEvaluation should be kernel", E_USER_ERROR);
+            return false;
         }
 
         $this->error = new Error;
         $this->id = (int)$id;
-        $this->kernel = &$kernel;
+        $this->kernel = $kernel;
 
         $this->db = MDB2::factory(DB_DSN);
 
