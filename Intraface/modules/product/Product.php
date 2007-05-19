@@ -172,40 +172,23 @@ class Product extends Standard {
             $this->value['stock_status'] = $this->stock->get();
         }
 
-
-
-        /*
-        // den gamle billedhåndtering
-        if ($this->db->f('pic_id') > 0) {
-            $filehandler = new FileHandler($this->product->kernel, $this->db->f('pic_id'));
-            $this->value['pic_viewer'] = $filehandler->get('file_uri');
-            $file_type = $filehandler->get('file_type');
-            if ($file_type['image'] == 1) {
-                $filehandler->loadInstance('small');
-                $this->value['pic_viewer_small'] = $filehandler->instance->get('file_uri');
-            }
-            else {
-                $this->value['pic_viewer_small'] = '';
-            }
-        }
-        else {
-            $this->value['pic_viewer_small'] = '';
-            $this->value['pic_viewer'] = '';
-        }
-        */
-
         // desuden skal copy lige opdateres!
         // hvad med at vi bruger det øverste billede som primary. Det betyder dog, at
         // der skal laves noget position på AppendFile, men det er jo også smart nok.
 
+        $this->value['id'] = $this->db->f('id');
+
+        return $this->db->f('id');
+
+    }
+
+    function getPictures() {
         $filehandler = new FileHandler($this->kernel);
         $append_file = new AppendFile($this->kernel, 'product', $this->get('id'));
         $append_file->createDBQuery();
         $appendix_list = $append_file->getList();
 
         $this->value['pictures'] = array();
-
-
 
         if(count($appendix_list) > 0) {
             foreach($appendix_list AS $key => $appendix) {
@@ -232,10 +215,7 @@ class Product extends Standard {
                 }
             }
         }
-        $this->value['id'] = $this->db->f('id');
-
-        return $this->db->f('id');
-
+        return $this->value['pictures'];
     }
 
     function validate($array_var) {
