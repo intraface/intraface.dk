@@ -117,6 +117,7 @@ class Intraface_XMLRPC_Shop_Server
         }
 
         $product = new Product($this->kernel, $id);
+        $product->getPictures();
 
         return $product->get();
     }
