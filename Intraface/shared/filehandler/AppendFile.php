@@ -1,4 +1,5 @@
 <?php
+require_once 'Intraface/DBQuery.php';
 
 class AppendFile {
 
