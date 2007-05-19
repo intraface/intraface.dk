@@ -3,7 +3,7 @@ CREATE TABLE `contact_reminder_single` (
 `intranet_id` INT NOT NULL ,
 `contact_id` INT NOT NULL ,
 `reminder_date` DATETIME NOT NULL ,
-`status` INT NOT NULL ,
+`status_key` INT NOT NULL ,
 `date_created` DATETIME NOT NULL ,
 `date_changed` DATETIME NOT NULL ,
 `date_viewed` DATETIME NOT NULL ,
