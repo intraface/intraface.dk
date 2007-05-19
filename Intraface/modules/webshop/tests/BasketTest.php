@@ -75,5 +75,15 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($basket->add($product_id, $quantity));
     }
 
+    function testRemoveFromBasket()
+    {
+        $basket = $this->createBasket();
+
+        $product_id = 1;
+        $quantity = 1;
+
+        $this->assertTrue($basket->remove($product_id, $quantity));
+    }
+
 }
 ?>
