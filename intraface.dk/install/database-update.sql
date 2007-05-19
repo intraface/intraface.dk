@@ -19,21 +19,20 @@ ALTER TABLE `contact_reminder_single` CHANGE `status` `status_key` INT( 11 ) NOT
 
 ALTER TABLE `debtor` ADD `internal_note` TEXT NOT NULL AFTER `message` ;
 
+CREATE TABLE `webshop_basket_evaluation` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL,
+  `running_index` int(11) NOT NULL,
+  `evaluate_target_key` int(11) NOT NULL,
+  `evaluate_method_key` int(11) NOT NULL,
+  `evaluate_value` varchar(255) NOT NULL,
+  `go_to_index_after` int(11) NOT NULL,
+  `action_action_key` int(11) NOT NULL,
+  `action_value` varchar(255) NOT NULL,
+  `action_quantity` int(11) NOT NULL,
+  `action_unit_key` int(11) NOT NULL,
+  `active` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  ;
 
-CREATE TABLE `webshop_basket_filter` (
-`id` INT NOT NULL AUTO_INCREMENT ,
-`intranet_id` INT NOT NULL ,
-`filter_index` INT NOT NULL ,
-`evaluate_key` INT NOT NULL ,
-`evaluate_method` INT NOT NULL ,
-`evaluate_value` VARCHAR( 255 ) NOT NULL ,
-`exit_after` INT NOT NULL ,
-`action_key` INT NOT NULL ,
-`action_value` VARCHAR( 255 ) NOT NULL ,
-`action_amount` INT NOT NULL ,
-`action_unit` INT NOT NULL ,
-PRIMARY KEY ( `id` )
-) TYPE = MYISAM ;
-
-
-ALTER TABLE `webshop_basket_filter` CHANGE `exit_after` `go_to_index_after` INT( 11 ) NOT NULL ;
+ALTER TABLE `basket` ADD `basketevaluation_product` INT NOT NULL AFTER `date_changed` ;
