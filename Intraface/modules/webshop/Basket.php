@@ -271,6 +271,7 @@ class Basket {
 
             $items[$i]['id'] = $db->f("id");
             $product = new Product($this->webshop->kernel, $db->f("id"));
+            $product->getPictures();
             $items[$i]['product_id'] = $product->get('id');
             $items[$i]['name'] = $product->get('name');
             $items[$i]['price'] = $product->get('price');
