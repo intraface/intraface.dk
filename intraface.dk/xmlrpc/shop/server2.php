@@ -170,6 +170,7 @@ class WebshopServer2 extends XmlRpcServer {
     }
 
     $product = new Product($this->webshop->kernel);
+    $product->createDBQuery();
 
     //if (array_key_exists('use_paging', $mixed) AND $mixed['use_paging'] == 'true') {
       $product->dbquery->usePaging('paging');

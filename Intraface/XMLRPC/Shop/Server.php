@@ -55,6 +55,7 @@ class Intraface_XMLRPC_Shop_Server
         }
 
         $product = new Product($this->webshop->kernel);
+        $product->createDBQuery();
 
         $product->dbquery->usePaging('paging');
 
@@ -142,6 +143,49 @@ class Intraface_XMLRPC_Shop_Server
 
         $product = new Product($this->kernel, $product_id);
         return $product->getRelatedProducts();
+    }
+
+   /**
+     * Gets featured products
+     *
+     * Method is experimental and only used by discimport.dk. If you need to use it
+     * as well, please contact lars@intraface.dk.
+     *
+     * @param struct  $credentials Credentials to use the server
+     *
+     * @return array
+     */
+    public function getFeaturedProducts($credentials)
+    {
+        $related_products = array();
+
+        $this->_checkCredentials($credentials);
+
+        $this->_factoryWebshop();
+
+        // nyheder
+        $product = new Product($this->kernel);
+        $product->createDBQuery();
+        // 265
+        $product->dbquery->setFilter('keywords', array(1));
+
+        $related_products[] = array(
+            'title' => 'Nyheder',
+            'products' => $product->getList()
+        );
+
+        // tilbud
+        $product = new Product($this->kernel);
+        // 266
+        $product->dbquery->setFilter('keywords', array(1));
+
+        $related_products[] = array(
+            'title' => 'Tilbud',
+            'products' => $product->getList()
+        );
+
+        return $related_products;
+
     }
 
     /**

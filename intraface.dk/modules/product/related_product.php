@@ -40,6 +40,7 @@ if (!empty($_POST['product'])) {
 
 
 $product = new Product($kernel, (int)$_GET['id']);
+$product->createDBQuery();
 
 $related_products = $product->getRelatedProducts();
 
