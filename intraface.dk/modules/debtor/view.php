@@ -640,8 +640,7 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 	if(($debtor->get("type") == "order" || $debtor->get("type") == "invoice") && $kernel->intranet->hasModuleAccess('onlinepayment')) {
 
 		$onlinepayment_module = $kernel->useModule('onlinepayment', true); // true: ignore user permisssion
-		$implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
-		$onlinepayment = OnlinePayment::factory($kernel, 'provider', $implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]);
+		$onlinepayment = OnlinePayment::factory($kernel);
 		
 		$onlinepayment->dbquery->setFilter('belong_to', $debtor->get("type"));
 		$onlinepayment->dbquery->setFilter('belong_to_id', $debtor->get('id'));

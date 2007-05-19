@@ -267,11 +267,9 @@ class Debtor extends Standard {
 
 
 		if(($this->value["type"] == "order" || $this->value["type"] == "invoice") && $this->kernel->intranet->hasModuleAccess('onlinepayment')) {
-			$onlinepayment_module = $this->kernel->useModule('onlinepayment', true); // true: ignore user permisssion
-			// $onlinepayment = new OnlinePayment($kernel);
-			$implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
-			$onlinepayment = OnlinePayment::factory($this->kernel, 'provider', $implemented_providers[$this->kernel->setting->get('intranet', 'onlinepayment.provider_key')]);
 			
+			$this->kernel->useModule('onlinepayment', true); // true: only look after intranet access
+			$onlinepayment = OnlinePayment::factory($this->kernel);
 			$onlinepayment->dbquery->setFilter('belong_to', $this->value["type"]);
 			$onlinepayment->dbquery->setFilter('belong_to_id', $this->value['id']);
 			$onlinepayment->dbquery->setFilter('status', 2);
@@ -887,7 +885,7 @@ class Debtor extends Standard {
 			// Overførsel af onlinebetaling fra ordre til faktura.
 			if($debtor_object->get('type') == "order" && $this->kernel->intranet->hasModuleAccess('onlinepayment')) {
 				$onlinepayment_module = $this->kernel->useModule('onlinepayment', true); // true: ignore user permisssion
-				$onlinepayment = new OnlinePayment($this->kernel);
+				$onlinepayment = OnlinePayment::factory($this->kernel);
 
 				$onlinepayment->dbquery->setFilter('belong_to', 'order');
 				$onlinepayment->dbquery->setFilter('belong_to_id', $debtor_object->get('id'));

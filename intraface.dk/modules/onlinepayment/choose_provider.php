@@ -11,7 +11,7 @@ $implemented_providers = $onlinepayment_module->getSetting('implemented_provider
 
 if (!empty($_POST)) {
 
-	$onlinepayment = new OnlinePayment($kernel);
+	$onlinepayment = OnlinePayment::factory($kernel);
 	if ($onlinepayment->setProvider($_POST)) {
 		header('Location: settings.php');
 		exit;
@@ -22,7 +22,7 @@ if (!empty($_POST)) {
 
 }
 else {
-	$onlinepayment = new OnlinePayment($kernel);
+	$onlinepayment = OnlinePayment::factory($kernel);
 	$value = $onlinepayment->getProvider();
 }
 
@@ -44,7 +44,7 @@ $page->start('Onlinebetalinger');
 					foreach($implemented_providers AS $key => $provider):
 						if ($provider == '_invalid_') continue;
 						echo '<option value="'.$key.'"';
-						if ($value['provider_key'] == $key):
+						if (intval($value['provider_key']) == $key):
 							echo ' selected="selected"';
 						endif;
 						echo '>'.$provider.'</option>';

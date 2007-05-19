@@ -25,7 +25,9 @@ class MainOnlinepayment Extends Main {
 		$this->addSubmenuItem('onlinepayments', '../onlinepayment/', 'module:onlinepayment');
 		$this->addSubmenuItem('settings', '../debtor/setting.php');
 
-
+		$this->addControlpanelFile('OnlinePayment settings', 'modules/onlinepayment/settings.php');
+		
+		
  		$this->includeSettingFile('settings.php');
 
 		$this->addSetting('status', array(

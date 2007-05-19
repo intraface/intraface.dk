@@ -7,9 +7,9 @@
 require('../../include_first.php');
 
 $onlinepayment_module = $kernel->module('onlinepayment');
-
 $implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
-$onlinepayment = OnlinePayment::factory($kernel, 'provider', $implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]);
+
+$onlinepayment = OnlinePayment::factory($kernel);
 
 
 if (!empty($_POST)) {

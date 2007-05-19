@@ -77,7 +77,7 @@ class OnlinePayment extends Standard {
 
 
 
-	function factory(&$kernel, $type, $value = 0) {
+	function factory(&$kernel, $type = 'settings', $value = 0) {
 		if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
 			trigger_error('Debtor kræver Kernel som objekt', E_USER_ERROR);
 		}
@@ -86,44 +86,48 @@ class OnlinePayment extends Standard {
 		$implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
 
 
+		
+		// we set the fallback from settings
+		if (!isset($implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')])) {
+			trigger_error('Ikke en gyldig provider fra settings i OnlinePayment->factory', E_USER_ERROR);
+			die;
+		}
+		$provider = $implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')];				
+		
 		switch($type) {
+			case 'settings':
+				// We accept it, but do nothing as we just use fallback provider
+				break;
 			case 'id':
 				$db = new DB_Sql;
-				$db->query("SELECT * FROM onlinepayment WHERE id = ".(int)$value. " AND intranet_id = " . $kernel->intranet->get('id'));
+				$db->query("SELECT provider_key FROM onlinepayment WHERE id = ".(int)$value. " AND intranet_id = " . $kernel->intranet->get('id'));
 				if (!$db->nextRecord()) {
 					trigger_error('OnlinePayment::factory: Ikke et gyldigt id', E_USER_ERROR);
 				}
 				$provider = $implemented_providers[$db->f('provider_key')];
-			break;
-
+				break;
 			case 'provider':
-
 				if (!in_array($value, $implemented_providers)) {
-					trigger_error('Ikke en gyldig provider', E_USER_ERROR);
+					trigger_error('Ikke en gyldig provider i OnlinePayment->factory case: provider', E_USER_ERROR);
+					exit;
 				}
 				$provider = $value;
-				// hvis den endnu ikke har en id skal dette være typen for at åbne den
-				// rigtige provider
-			break;
+				break;
 			case 'transactionnumber':
 				$db = new DB_Sql;
-				$db->query("SELECT id FROM onlinepayment WHERE transaction_number = '".$value."' AND intranet_id = " . $kernel->intranet->get('id'));
+				$db->query("SELECT provider_key FROM onlinepayment WHERE transaction_number = '".$value."' AND intranet_id = " . $kernel->intranet->get('id'));
 				if (!$db->nextRecord()) {
-					return OnlinePayment::factory($kernel);
+					trigger_error('OnlinePayment::factory: Ikke et gyldigt transactionnumber', E_USER_ERROR);
+					exit;
 				}
-				else {
-					return OnlinePayment::factory($kernel, $db->f('id'));
-				}
-
-			break;
-
+				$provider = $implemented_providers[$db->f('provider_key')];
+				break;
 			default:
 				trigger_error('Ikke gyldig type i Onlinebetaling', E_USER_ERROR);
-			break;
+				break;
 		}
 
 		$onlinepayment_module = $kernel->getModule('onlinepayment');
-
 		switch(strtolower($provider)) {
 			case 'default':
 				$onlinepayment_module->includeFile('provider/Default.php');
@@ -528,8 +532,15 @@ class OnlinePayment extends Standard {
 			$list[$i]['dk_amount'] = number_format($db->f('amount'), 2, ",", ".");
 			$list[$i]['transaction_number'] = $db->f('transaction_number');
 			$list[$i]['transaction_status'] = $db->f('transaction_status');
-			$list[$i]['transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
-			if($db->f('transaction_status') != $this->transaction_status_authorized) {
+			if(in_array($list[$i]['transaction_status'], $this->transaction_status_types)) {
+				$list[$i]['transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
+			}
+			else {
+				$list[$i]['transaction_status_translated'] = 'invalid status';
+			}
+			
+			// Don't really know want this is for? /Sune(19-05-2007)
+			if(in_array($list[$i]['transaction_status'], $this->transaction_status_types) && $db->f('transaction_status') != $this->transaction_status_authorized) {
 				$list[$i]['user_transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
 			}
 			else {
@@ -562,7 +573,7 @@ class OnlinePayment extends Standard {
 	}
 
 	function getProvider() {
-		return ($this->value['provider_id'] = $this->kernel->setting->get('intranet', 'onlinepayment.provider_key'));
+		return array('provider_key' => $this->kernel->setting->get('intranet', 'onlinepayment.provider_key'));
 	}
 
 

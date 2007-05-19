@@ -4,9 +4,7 @@ require('../../include_first.php');
 $module = $kernel->module('onlinepayment');
 $translation = $kernel->getTranslation('onlinepayment');
 
-
-$implemented_providers = $module->getSetting('implemented_providers');
-$onlinepayment = OnlinePayment::factory($kernel, 'provider', $implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]);
+$onlinepayment = OnlinePayment::factory($kernel);
 
 if(isset($_GET['status'])) {
 	$onlinepayment->dbquery->setFilter('status', $_GET['status']);
