@@ -136,6 +136,13 @@ class Validator {
 
 	/**
 	 * Validering af streng
+	 * 
+	 * @param string(float) strengen der skal valideres
+	 * @param msg(string) fejlbeskeden
+	 * @param allowed_tags html tags der er tilladte at benytte.
+	 * @param param(string) streng indholdende en eller flere af:
+	 *      "allow_empty": tillader større
+	 * @return (boolean) true eller false
 	 */
 	function isString($string, $msg = '', $allowed_tags = '', $allow_empty = '') {
 		if ($allow_empty == 'allow_empty' AND empty($string)) {
