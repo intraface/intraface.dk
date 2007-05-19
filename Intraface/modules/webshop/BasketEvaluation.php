@@ -167,7 +167,7 @@ action_unit: quantity or percentage.
  	
  	
  	function getList() {
- 		$result = $this->db->query("SELECT * FROM webshop_basket_evaluation WHERE active = 1 AND intranet_id = ".$this->kernel->intranet->get('id'));
+ 		$result = $this->db->query("SELECT * FROM webshop_basket_evaluation WHERE active = 1 AND intranet_id = ".$this->kernel->intranet->get('id').' ORDER BY running_index');
  		
  		if (PEAR::isError($this->id)) {
  			trigger_error($result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
