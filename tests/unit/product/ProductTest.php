@@ -5,21 +5,21 @@ require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/modules/product/Product.php';
 require_once 'Intraface/modules/product/ProductDetail.php';
 
-class FakeIntranet {
+class FakeProductIntranet {
     function get() {
         return 1;
     }
 }
 
-class FakeKernel {
+class FakeProductKernel {
     public $intranet;
 }
 
 class ProductTest extends PHPUnit_Framework_TestCase {
 
     function setUp() {
-        $this->kernel = new FakeKernel();
-        $this->kernel->intranet = new FakeIntranet;
+        $this->kernel = new FakeProductKernel();
+        $this->kernel->intranet = new FakeProductIntranet;
     }
 
     function testProductCanGetNumberIfOtherProductDontNeedItAnymore() {

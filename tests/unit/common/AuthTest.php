@@ -5,7 +5,7 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/Auth.php';
 
-class FakeObserver {}
+class FakeAuthObserver {}
 
 class AuthTest extends PHPUnit_Framework_TestCase {
 
@@ -62,7 +62,7 @@ class AuthTest extends PHPUnit_Framework_TestCase {
 
     function testAttach() {
         $auth = new Auth('session');
-        $auth->attachObserver(new FakeObserver);
+        $auth->attachObserver(new FakeAuthObserver);
         $observers = $auth->getObservers();
         $this->assertTrue(count($observers) == 1);
         // this assert is a

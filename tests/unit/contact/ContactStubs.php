@@ -1,5 +1,5 @@
 <?php
-class FakeContact
+class FakeContactContact
 {
     private $id = 1;
 
@@ -9,7 +9,7 @@ class FakeContact
     }
 }
 
-class FakeIntranet
+class FakeContactIntranet
 {
     public function get()
     {
@@ -17,7 +17,7 @@ class FakeIntranet
     }
 }
 
-class FakeKernel
+class FakeContactKernel
 {
     public $intranet;
 }

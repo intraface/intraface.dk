@@ -16,8 +16,8 @@ class ContactTest extends PHPUnit_Framework_TestCase
 
     function getKernel()
     {
-        $kernel = new FakeKernel;
-        $kernel->intranet = new FakeIntranet;
+        $kernel = new FakeContactKernel;
+        $kernel->intranet = new FakeContactIntranet;
         return $kernel;
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-class FakeUser {
+class FakeCMSUser {
     function get() {
         return 1;
     }
@@ -9,7 +9,7 @@ class FakeUser {
     }
 }
 
-class FakeIntranet {
+class FakeCMSIntranet {
     function get() {
         return 1;
     }
@@ -18,7 +18,7 @@ class FakeIntranet {
     }
 }
 
-class FakeSetting {
+class FakeCMSSetting {
     function get() {
         return 1;
     }
@@ -27,7 +27,7 @@ class FakeSetting {
     }
 }
 
-class FakePage {
+class FakeCMSPage {
     public $kernel;
     function __construct($site) {
         $this->cmssite = $site;
@@ -38,7 +38,7 @@ class FakePage {
     }
 }
 
-class FakeSite {
+class FakeCMSSite {
     public $kernel;
     function __construct($kernel) {
         $this->kernel = $kernel;

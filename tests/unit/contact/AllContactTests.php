@@ -12,7 +12,7 @@ class ContactTests {
     }
 
     public static function suite() {
-        $suite = new PHPUnit_Framework_TestSuite('Contact');
+        $suite = new PHPUnit_Framework_TestSuite('Contacts');
 
         $tests = array('Contact', 'ContactReminder');
 

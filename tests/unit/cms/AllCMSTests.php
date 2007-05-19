@@ -12,7 +12,7 @@ class CMSTests {
     }
 
     public static function suite() {
-        $suite = new PHPUnit_Framework_TestSuite('Common');
+        $suite = new PHPUnit_Framework_TestSuite('CMS');
 
         $tests = array('Section', 'Site');
 

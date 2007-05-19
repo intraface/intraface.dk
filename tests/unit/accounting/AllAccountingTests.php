@@ -12,7 +12,7 @@ class AccountingTests {
     }
 
     public static function suite() {
-        $suite = new PHPUnit_Framework_TestSuite('Common');
+        $suite = new PHPUnit_Framework_TestSuite('Accounting');
 
         $tests = array('Account', 'Voucher', 'Year');
 

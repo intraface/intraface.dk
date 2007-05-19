@@ -5,12 +5,12 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/accounting/Year.php';
 
-class FakeKernel {}
+class FakeYearKernel {}
 
 class YearTest extends PHPUnit_Framework_TestCase {
 
     function setUp() {
-        $this->kernel = new FakeKernel();
+        $this->kernel = new FakeYearKernel();
     }
 
     function testSaveMethod() {

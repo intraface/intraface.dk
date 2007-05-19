@@ -16,9 +16,9 @@ class ContactReminderTest extends PHPUnit_Framework_TestCase
 
     function getContact()
     {
-        $kernel = new FakeKernel;
-        $kernel->intranet = new FakeIntranet;
-        return new FakeContact($kernel);
+        $kernel = new FakeContactKernel;
+        $kernel->intranet = new FakeContactIntranet;
+        return new FakeContactContact($kernel);
     }
 
     function testConstruction()
