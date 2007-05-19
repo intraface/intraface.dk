@@ -200,6 +200,7 @@ class Product extends Standard {
 
         $filehandler = new FileHandler($this->kernel);
         $append_file = new AppendFile($this->kernel, 'product', $this->get('id'));
+        $append_file->createDBQuery();
         $appendix_list = $append_file->getList();
 
         $this->value['pictures'] = array();

@@ -52,6 +52,7 @@ class CMS_FileList extends CMS_Element {
             $shared_filehandler = $this->kernel->useShared('filehandler');
             $shared_filehandler->includeFile('AppendFile.php');
             $append_file = new AppendFile($this->kernel, 'cms_element_filelist', $this->id);
+            $append_file->createDBQuery();
             $files = $append_file->getList();
         }
 
