@@ -33,3 +33,6 @@ CREATE TABLE `webshop_basket_filter` (
 `action_unit` INT NOT NULL ,
 PRIMARY KEY ( `id` )
 ) TYPE = MYISAM ;
+
+
+ALTER TABLE `webshop_basket_filter` CHANGE `exit_after` `go_to_index_after` INT( 11 ) NOT NULL ;
