@@ -2,7 +2,7 @@
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/Standard.php';
-require_once 'Intraface/modules/webshop/BasketFilter.php';
+require_once 'Intraface/modules/webshop/BasketEvaluation.php';
 
 class FakeKernel {
     public $intranet;
@@ -22,7 +22,8 @@ class FakeBasket {
 
 class BasketEvaluationTest extends PHPUnit_Framework_TestCase
 {
-    function createBasketEvaluation() {
+    function createBasketEvaluation()
+    {
         $kernel = new FakeKernel;
         $kernel->intranet = new FakeIntranet;
 
@@ -30,7 +31,7 @@ class BasketEvaluationTest extends PHPUnit_Framework_TestCase
 
         $basket = new FakeBasket($webshop);
 
-        return new WebshopFilter($basket);
+        return new BasketEvaluation($basket);
     }
 
     function testCreateBasketEvaluation()
