@@ -232,6 +232,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
     <div class="box">
         <?php
         //$appendix_list = $append_file->getList();
+        $product->getPictures();
         if(count($product->get('pictures')) > 0) {
             foreach($product->get('pictures') AS $appendix) {
                 echo '<div class="appendix"><img src="'.$appendix['thumbnail']['file_uri'].'" />'.$appendix['original']['name'].' <a class="delete" href="product.php?id='.$product->get('id').'&amp;delete_appended_file_id='.$appendix['appended_file_id'].'">Slet</a></div>';
