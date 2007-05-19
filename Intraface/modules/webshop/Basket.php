@@ -2,6 +2,8 @@
 /**
  * Basket = indkøbskurv.
  *
+ * PHP version 5
+ *
  * @package Webshop
  * @author Lars Olesen <lars@legestue.net>
  *
@@ -50,19 +52,17 @@ class Basket {
      *
      * Konstruktøren sørger også for at rydde op i Kurven.
      *
-     * @param $webshop (object)
-     * @param $session_id
-     * @return object
+     * @param object $webshop    The webshop object
+     * @param string $session_id A session id
      */
-
-    function Basket(& $webshop, $session_id) {
+    function __construct($webshop, $session_id) {
         if (!is_object($webshop) AND strtolower(get_class($webshop)) == 'webshop') {
-            trigger_error('Basket kræver objektet Webshop', FATAL);
+            trigger_error('Basket kræver objektet Webshop', E_USER_ERROR);
         }
 
         $session_id = safeToDb($session_id);
 
-        $this->webshop = & $webshop;
+        $this->webshop = $webshop;
         $this->sql_extra = " session_id = '" . $session_id . "'";
 
         // rydder op i databasen efter fx to timer
@@ -73,16 +73,13 @@ class Basket {
     }
 
     /**
-     * add()
-     * Bruges til at tilføje varer til kurven
+     * Adds a product to the basket
      *
-     * @see change()
-     * @param product_id (int)
-     * @param quantity (int)
-     * @access public
-     * @return boelean
+     * @param integer $product_id Id of product
+     * @param integer $quantity   Number of products to add
+     *
+     * @return boolean
      */
-
     function add($product_id, $quantity = 1) {
         $product_id = intval($product_id);
         $quantity = intval($quantity);
@@ -91,16 +88,13 @@ class Basket {
     }
 
     /**
-     * remove()
-     * Bruges til at tilføje varer til kurven
+     * Removes a product from the basket
      *
-     * @see change()
-     * @param product_id (int)
-     * @param quantity (int)
-     * @access public
+     * @param integer $product_id Product to remove
+     * @param integer $quantity   How many should be removed
+     *
      * @return boelean
      */
-
     function remove($product_id, $quantity = 1) {
         $product_id = intval($product_id);
         $quantity = intval($quantity);
@@ -114,11 +108,10 @@ class Basket {
      * @param integer $product_id       Product id
      * @param integer $quantity         The quantity
      * @param string  $text	            To add description to product, not yet implemented
-     * @param integer $basketevaluation	Wheter the product is from basketevaluation
+     * @param integer $basketevaluation Wheter the product is from basketevaluation
      *
      * @return boolean
      */
-
     function change($product_id, $quantity, $text = '', $basketevaluation = 0) {
         $db = new DB_Sql;
         $product_id = (int)$product_id;
@@ -137,15 +130,14 @@ class Basket {
                 AND " . $this->sql_extra. "
                 AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
 
-        if($db->nextRecord()) {
+        if ($db->nextRecord()) {
             if ($quantity <= 0) {
                 $db->query("DELETE FROM basket
                     WHERE id = ".$db->f('id') . "
                         AND basketevaluation_product = " . $basketevaluation . "
                         AND " . $this->sql_extra . "
                         AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
-            }
-            else {
+            } else {
                 $db->query("UPDATE basket SET quantity = $quantity, date_changed = NOW()
                     WHERE id = ".$db->f('id') . "
                         AND basketevaluation_product = " . $basketevaluation . "
@@ -153,8 +145,7 @@ class Basket {
                         AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
             }
             return true;
-        }
-        else {
+        } else {
             $db->query("INSERT INTO basket
                     SET
                         quantity = $quantity,
@@ -169,11 +160,12 @@ class Basket {
     }
 
     /**
-     * Tæller antallet af varer i kurven.
-     * @param product_id (int)
+     * Counts the number of a certain product in the basket
+     *
+     * @param integer $product_id Product id of the product to count
+     *
      * @return integer
      */
-
     function getItemCount($product_id) {
         $product_id = (int)$product_id;
 
@@ -193,12 +185,10 @@ class Basket {
     }
 
     /**
-     * getTotalPrice()
-     * Henter kurvens totale pris
+     * Gets the total price of the basket
      *
      * @return float
      */
-
     function getTotalPrice() {
         $price = 0;
 
@@ -216,18 +206,16 @@ class Basket {
     }
 
     /**
-     * getTotalWeight()
-     * Henter kurvens totale vægt
+     * Gets the total weight of the basket
      *
      * @return float
      */
-
     function getTotalWeight() {
         $db = new DB_Sql;
 
         $db->query("SELECT
-            product_detail.weight,
-      basket.quantity
+                product_detail.weight,
+                basket.quantity
             FROM basket
             INNER JOIN product
                 ON product.id = basket.product_id
@@ -236,39 +224,36 @@ class Basket {
             WHERE " . $this->sql_extra . "
                 AND product_detail.active = 1
                 AND basket.intranet_id = " . $this->webshop->kernel->intranet->get("id") . "
-      AND basket.quantity > 0
+                AND basket.quantity > 0
             ");
 
 
         $weight = 0;
 
         while ($db->nextRecord()) {
-        $weight += $db->f('weight') * $db->f('quantity');
+            $weight += $db->f('weight') * $db->f('quantity');
+        }
+
+        return $weight;
+
     }
-
-    return $weight;
-
-  }
 
 
     /**
-     * getItems()
-     * Henter varerne i kurven
+     * Gets all items in the basket
      *
-     * Kunne være smart om den returnerede lidt flere oplysnigner - fx billeder til produkterne
-     *
-     * return array
+     * @return array
      */
     function getItems() {
         $items = array();
         $db = new DB_Sql;
 
         $db->query("SELECT
-            product.id,
-          basket.product_id,
-          product_detail.name,
-          product_detail.price,
-          basket.quantity
+                product.id,
+                basket.product_id,
+                product_detail.name,
+                product_detail.price,
+                basket.quantity
             FROM basket
             INNER JOIN product
                 ON product.id = basket.product_id
@@ -277,7 +262,7 @@ class Basket {
             WHERE " . $this->sql_extra . "
                 AND product_detail.active = 1
                 AND basket.intranet_id = " . $this->webshop->kernel->intranet->get("id") . "
-      AND basket.quantity > 0
+                AND basket.quantity > 0
             ");
 
 
@@ -302,7 +287,12 @@ class Basket {
         return $items;
     }
 
-
+    /**
+     * Helperfunction for BasketEvaluation. Removes all products from basket
+     * placed by BasketEvaluation.
+     *
+     * @return boolean
+     */
     function removeEvaluationProducts() {
         $db = new DB_Sql;
         $db->query("DELETE FROM basket " .
@@ -314,21 +304,14 @@ class Basket {
     }
 
     /**
-     * reset()
-   *
-   * Nulstiller indkøbsvognen - det sker ganske enkelt ved at slette sessionid fra databasen.
-   *
-     * @see Webshop->placeOrder();
-     * @param $field mixed
-     * @param $value mixed
+     * Resets the basket for a session
+     *
+     * @return boolean
      */
-
     function reset() {
         $db = new DB_Sql;
         $db->query("UPDATE basket SET session_id = '' WHERE " . $this->sql_extra . " AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
-        return 1;
+        return true;
     }
-
 }
-
 ?>
