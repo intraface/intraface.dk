@@ -5,8 +5,10 @@ require_once 'Intraface/Standard.php';
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/modules/webshop/Basket.php';
 
-class FakeKernel {
+class FakeKernel
+{
     public $intranet;
+    public $user;
     function useModule()
     {
         return true;
@@ -16,8 +18,10 @@ class FakeKernel {
         return true;
     }
 }
-class FakeIntranet {
-    function get() {
+class FakeIntranet
+{
+    function get()
+    {
         return 1;
     }
     function hasModuleAccess()
@@ -25,7 +29,23 @@ class FakeIntranet {
         return true;
     }
 }
-class FakeWebshop {
+
+class FakeUser
+{
+    function hasModuleAccess()
+    {
+        return true;
+    }
+    function get()
+    {
+        return 1;
+    }
+
+
+} // used for DBQuery
+
+class FakeWebshop
+{
     public $kernel;
 }
 
@@ -53,6 +73,7 @@ class BasketTest extends PHPUnit_Framework_TestCase
     {
         $kernel = new Kernel;
         $kernel->intranet = new FakeIntranet;
+        $kernel->user = new FakeUser;
         $webshop = new FakeWebshop();
         $webshop->kernel = $kernel;
         $basket = new Basket($webshop, 'somesessionid');
@@ -65,7 +86,7 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($basket));
     }
 
-    function testAddToBasket()
+    function _testAddToBasket()
     {
         $basket = $this->createBasket();
 
@@ -73,6 +94,7 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $quantity = 1;
 
         $this->assertTrue($basket->add($product_id, $quantity));
+        $this->assertEquals(count($basket->getItems()), 1);
     }
 
     function testRemoveFromBasket()
@@ -82,7 +104,50 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $product_id = 1;
         $quantity = 1;
 
+        $basket->add($product_id, $quantity);
+        $this->assertEquals(count($basket->getItems()), 1);
+
         $this->assertTrue($basket->remove($product_id, $quantity));
+
+        $this->assertEquals(count($basket->getItems()), 0);
+    }
+
+    function testChangeBasket()
+    {
+        $basket = $this->createBasket();
+
+        $product_id = 1;
+        $quantity = 1;
+
+        $basket->change($product_id, $quantity);
+
+        $items = $basket->getItems();
+        $this->assertEquals($items[0]['quantity'], $quantity);
+
+        $new_quantity = 10;
+
+        $this->assertTrue($basket->change($product_id, $new_quantity));
+
+        $items = $basket->getItems();
+
+        $this->assertEquals($items[0]['quantity'], $new_quantity);
+    }
+
+    function testRemoveEvaluationProducts()
+    {
+        $basket = $this->createBasket();
+
+        $product_id = 1;
+        $quantity = 1;
+        $evaluation_product = 1;
+
+        $basket->change($product_id, $quantity, '', $evaluation_product);
+
+        $this->assertEquals(count($basket->getItems()), 1);
+
+        $this->assertTrue($basket->removeEvaluationProducts());
+
+         $this->assertEquals(count($basket->getItems()), 0);
     }
 
 }
