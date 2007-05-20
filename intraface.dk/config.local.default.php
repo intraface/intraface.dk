@@ -8,42 +8,25 @@
  * @author Sune Jensen <sj@sunet.dk>
  */
 
-define('CONNECTION_INTERNET', true); // if the system has access to dns and more from the internet. true or false
-define('SERVER_STATUS', 'TEST'); // if the system is in PRODUCTION or TEST mode
-
-// net
-define('NET_SCHEME', 'https://'); // http:// or https://
-define('NET_HOST', 'www.intraface.dk'); // www.intraface.dk
-define('NET_DIRECTORY', '/'); // / (slash) or other subdirectory
-
-// paths
-define('PATH_ROOT', ''); // remember trailing slash
-define('PATH_CAPTCHA', PATH_ROOT . 'captcha/'); // remember trailing slash - used for the demo formular
-define('PATH_CACHE', PATH_ROOT . 'cache/'); // remember trailing slash - path to cache
-define('PATH_UPLOAD', '/home/.investor/intraface/upload/'); // remember trailing slash
-define('PATH_INCLUDE_BACKUP', PATH_ROOT . 'backup' . DIRECTORY_SEPARATOR);
-
-
-// This part should have includepathes to:
-// - intraface root: PATH_ROOT
-// - intraface 3party (internal) (depricated)
-// - intrafacePublic
-// - Smartypants,
-// - Pear
-
-set_include_path(
-    PATH_ROOT .
-    PATH_SEPARATOR . PATH_ROOT.'Intraface/3Party/'.
-    PATH_SEPARATOR . '/usr/share/pear/' .
-    PATH_SEPARATOR . get_include_path()
-);
-
-
 // database
 define('DB_HOST', 'localhost');
-define('DB_USER', '');
+define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', '');
+define('DB_NAME', 'pear');
+
+// net
+define('NET_SCHEME', 'http://'); // http:// or https://
+define('NET_HOST', 'localhost'); // www.intraface.dk
+define('NET_DIRECTORY', '/intraface/intraface.dk/'); // / (slash) or other subdirectory
+
+// paths
+define('PATH_ROOT', 'c:/Users/Lars Olesen/workspace/intraface/'); // remember trailing slash
+define('PATH_UPLOAD', '/home/.investor/intraface/upload/'); // remember trailing slash
+define('PATH_INCLUDE_PATH', PATH_ROOT . PATH_SEPARATOR . get_include_path());
+
+//
+define('CONNECTION_INTERNET', true); // if the system has access to dns and more from the internet. true or false
+define('SERVER_STATUS', 'TEST'); // if the system is in PRODUCTION or TEST mode
 
 // error log
 define('ERROR_REPORT_EMAIL', '');
@@ -53,15 +36,4 @@ define('ERROR_DISPLAY_USER', true);
 define('ERROR_DISPLAY', true);
 define('ERROR_HANDLE_LEVEL', E_ALL);
 define('ERROR_LEVEL_CONTINUE_SCRIPT', 10);
-
-// cache
-define('USE_CACHE', false); // this is static deactivated in Page.php
-
-// external connection
-
-// lokale indstillinger
-define('TIMEZONE', 'Europe/Copenhagen');
-setlocale(LC_CTYPE, "da_DK");
-putenv("TZ=".TIMEZONE);
-
 ?>
