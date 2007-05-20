@@ -158,7 +158,7 @@ class BasketEvaluationTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($evaluation->run($basket));
 
-        print_r($basket->getItems());
+        $basket->getItems(); // should have the filterproduct
 
     }
 }
