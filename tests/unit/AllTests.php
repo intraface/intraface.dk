@@ -14,7 +14,7 @@ class AllTests {
     public static function suite() {
         $suite = new PHPUnit_Framework_TestSuite('Tests');
 
-        $tests = array('Product', 'Newsletter', 'Email', 'Webshop', 'Intranetmaintenance', 'Filehandler', 'Contact', 'Common', 'Accounting', 'CMS');
+        $tests = array('Product', 'Newsletter', 'Email', 'Webshop', 'Intranetmaintenance', 'Filehandler', 'Contact', 'Common', 'Accounting', 'CMS', 'XMLRPC');
 
         foreach ($tests AS $test) {
             require_once $test . '/All' . $test . 'Tests.php';
