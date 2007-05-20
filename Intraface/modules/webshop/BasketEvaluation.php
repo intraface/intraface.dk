@@ -262,7 +262,7 @@ class BasketEvaluation extends Standard
                 case 'customer_coupon':
                     $evaluate = $customer['coupon'];
                     // coupons can only be evaluated as 'equals' or 'different from'
-                    if ($evaluation['evaluate_method_key'] != 0 || $evaluation['evaluate_method_key'] != 1) {
+                    if ($evaluation['evaluate_method_key'] != 0 && $evaluation['evaluate_method_key'] != 1) {
                         $evaluation['evaluate_method_key'] = 1;
                     }
                     break;
