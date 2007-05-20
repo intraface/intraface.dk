@@ -9,11 +9,6 @@ class AppendFile {
     var $error;
     var $dbquery;
 
-    //  id
-    function AppendFile(& $kernel, $belong_to, $belong_to_id, $id=0) {
-        AppendFile::__construct($kernel, $belong_to, $belong_to_id, $id);
-    }
-
     function __construct(& $kernel, $belong_to, $belong_to_id, $id=0) {
         if (!is_object($kernel) || strtolower(get_class($kernel)) != 'kernel') {
             trigger_error('AppendFile::__construct needs kernel', E_USER_ERROR);
