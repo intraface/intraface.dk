@@ -9,7 +9,7 @@
  */
 
 require_once 'MDB2.php';
-require_once 'Intraface/3Party/Database/DB_sql.php';
+require_once 'Intraface/3Party/Database/Db_sql.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/modules/product/Product.php';
 
