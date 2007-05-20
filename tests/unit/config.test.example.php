@@ -1,7 +1,7 @@
 <?php
 require_once 'MDB2.php';
 define('DB_DSN', 'mysql://root:@localhost/pear');
-define('PATH_ROOT', 'c:\Documents and Settings\lars\workspace\IntrafaceNew\\');
+define('PATH_ROOT', 'c:\Users/Lars Olesen\workspace\Intraface\\');
 define('PATH_INCLUDE_CONFIG', PATH_ROOT . 'Intraface\config\\');
 
 $db = MDB2::singleton(DB_DSN);
