@@ -97,6 +97,8 @@ class Webshop {
         $value['this_date'] = date('d-m-Y');
         $value['due_date'] = date('d-m-Y');
         $value['description'] = $input['description'];
+        $value['message'] = $input['message'];
+        $value['internal_note'] = $input['internal_note'];
 
         $this->order = new Debtor($this->kernel, 'order');
         if (!$order_id = $this->order->update($value, 'webshop')) {
