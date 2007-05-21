@@ -447,7 +447,7 @@ class Year extends Standard {
                     // include($module_accounting->includeFile('standardaccounts.php')); // 'intraface_modules/accounting/standardaccounts.php');
                     // HACK
 
-                    require(PATH_ROOT . 'intraface/modules/accounting/standardaccounts.php');
+                    require(PATH_ROOT . 'pear/php/Intraface/modules/accounting/standardaccounts.php');
 
                     if (empty($standardaccounts)) {
                         return 0;
