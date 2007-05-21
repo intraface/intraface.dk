@@ -168,7 +168,7 @@ class Intraface_XMLRPC_Shop_Server
         $product = new Product($this->kernel);
         $product->createDBQuery();
         // 265
-        $product->dbquery->setFilter('keywords', array(1));
+        $product->dbquery->setFilter('keywords', array(265));
 
         $related_products[] = array(
             'title' => 'Nyheder',
@@ -179,7 +179,7 @@ class Intraface_XMLRPC_Shop_Server
         $product = new Product($this->kernel);
         $product->createDBQuery();
         // 266
-        $product->dbquery->setFilter('keywords', array(1));
+        $product->dbquery->setFilter('keywords', array(266));
 
         $related_products[] = array(
             'title' => 'Tilbud',
@@ -283,6 +283,7 @@ class Intraface_XMLRPC_Shop_Server
             throw new XML_RPC2_FaultException('order could not be sent - cart is empty', -4);
         }
 
+
         $values['description'] = 'Onlineshop';
 
         if (!$order_id = $this->webshop->placeOrder($values)) {
@@ -324,7 +325,7 @@ class Intraface_XMLRPC_Shop_Server
         if (!is_object($this->kernel->intranet)) { // -2
             throw new XML_RPC2_FaultException('could not create intranet', -2);
         }
-
+    $this->credentials = $credentials;
         return true;
     }
 
@@ -339,6 +340,7 @@ class Intraface_XMLRPC_Shop_Server
             throw new XML_RPC2_FaultException('The intranet does not have access to the module webshop', -2);
         }
         $this->kernel->module('webshop');
+
         $this->webshop = new Webshop($this->kernel, $this->credentials['session_id']);
     }
 
