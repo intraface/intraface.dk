@@ -14,6 +14,9 @@ define('PATH_INCLUDE_MODULE', PATH_ROOT.'Intraface/modules' . DIRECTORY_SEPARATO
 define('PATH_INCLUDE_SHARED', PATH_ROOT.'Intraface/shared' . DIRECTORY_SEPARATOR);
 define('PATH_INCLUDE_CONFIG', PATH_ROOT.'/Intraface/config'.DIRECTORY_SEPARATOR);
 define('PATH_UPLOAD_TEMPORARY', 'tempdir/'); // Mappen i Upload_path, under intranetid, hvor temp-filer placeres.
+define('PATH_CAPTCHA', PATH_ROOT . 'captcha/'); // remember trailing slash - used for the demo formular
+define('PATH_CACHE', PATH_ROOT . 'cache/'); // remember trailing slash - path to cache
+define('PATH_INCLUDE_BACKUP', PATH_ROOT . 'backup/');
 
 // paths on www
 define('PATH_WWW', NET_SCHEME.NET_HOST.NET_DIRECTORY);
