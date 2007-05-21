@@ -34,7 +34,7 @@ class Intraface_XMLRPC_Shop_Server
      */
     public function getProducts($credentials, $search = array())
     {
-        $this->_checkCredentials($credentials);
+        $this->checkCredentials($credentials);
 
         $search = '';
         $offset = 0;
@@ -106,7 +106,7 @@ class Intraface_XMLRPC_Shop_Server
      */
     public function getProduct($credentials, $id)
     {
-        $this->_checkCredentials($credentials);
+        $this->checkCredentials($credentials);
 
         $this->_factoryWebshop();
 
@@ -132,7 +132,7 @@ class Intraface_XMLRPC_Shop_Server
      */
     public function getRelatedProducts($credentials, $id)
     {
-        $this->_checkCredentials($credentials);
+        $this->checkCredentials($credentials);
 
         $this->_factoryWebshop();
 
@@ -160,7 +160,7 @@ class Intraface_XMLRPC_Shop_Server
     {
         $related_products = array();
 
-        $this->_checkCredentials($credentials);
+        $this->checkCredentials($credentials);
 
         $this->_factoryWebshop();
 
@@ -177,6 +177,7 @@ class Intraface_XMLRPC_Shop_Server
 
         // tilbud
         $product = new Product($this->kernel);
+        $product->createDBQuery();
         // 266
         $product->dbquery->setFilter('keywords', array(1));
 
@@ -199,7 +200,7 @@ class Intraface_XMLRPC_Shop_Server
      */
     public function addProductToBasket($credentials, $id)
     {
-        if (is_object($return = $this->_checkCredentials($credentials))) {
+        if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
 
@@ -225,7 +226,7 @@ class Intraface_XMLRPC_Shop_Server
      */
     public function changeProductInBasket($credentials, $product_id, $quantity)
     {
-        $this->_checkCredentials($credentials);
+        $this->checkCredentials($credentials);
 
         $this->_factoryWebshop();
 
@@ -252,7 +253,7 @@ class Intraface_XMLRPC_Shop_Server
      */
     public function getBasket($credentials)
     {
-        $this->_checkCredentials($credentials);
+        $this->checkCredentials($credentials);
 
         $this->_factoryWebshop();
 
@@ -274,7 +275,7 @@ class Intraface_XMLRPC_Shop_Server
 
     public function placeOrder($credentials, $values)
     {
-        $this->_checkCredentials($credentials);
+        $this->checkCredentials($credentials);
 
         $this->_factoryWebshop();
 
@@ -298,7 +299,7 @@ class Intraface_XMLRPC_Shop_Server
      *
      * @return array
      */
-    private function _checkCredentials($credentials)
+    public function checkCredentials($credentials)
     {
         if (count($credentials) != 2) { // -4
             throw new XML_RPC2_FaultException('wrong argument count in $credentials - got ' . count($credentials) . ' arguments - need 2', -4);
