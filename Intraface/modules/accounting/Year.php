@@ -381,7 +381,7 @@ class Year extends Standard {
 
     function getBalanceAccounts() {
         // afstemningskonti
-        $balance_accounts = unserialize(stripslashes($this->getSetting('balance_accounts')));
+        $balance_accounts = unserialize($this->getSetting('balance_accounts'));
 
         $sql_where = "";
 
@@ -418,7 +418,6 @@ class Year extends Standard {
     }
 
     function setSetting($setting, $value) {
-        
         return $this->kernel->setting->set('intranet', 'accounting.'.$setting, $value,  $this->get('id'));
     }
 
@@ -448,7 +447,7 @@ class Year extends Standard {
                     // include($module_accounting->includeFile('standardaccounts.php')); // 'intraface_modules/accounting/standardaccounts.php');
                     // HACK
 
-                    require(PATH_ROOT . 'Intraface/modules/accounting/standardaccounts.php');
+                    require(PATH_ROOT . 'intraface/modules/accounting/standardaccounts.php');
 
                     if (empty($standardaccounts)) {
                         return 0;
@@ -544,7 +543,7 @@ class Year extends Standard {
                     $this->transferAccountSetting($last_year, 'balance_account_id_end');
                     $this->transferAccountSetting($last_year, 'capital_account_id');
 
-                    $balance_accounts = unserialize(stripslashed($last_year->getSetting('balance_accounts')));
+                    $balance_accounts = unserialize($last_year->getSetting('balance_accounts'));
 
                     $db = new DB_Sql;
                     $new_balance_accounts = array();
@@ -559,7 +558,7 @@ class Year extends Standard {
                     }
                     $this->setSetting('balance_accounts', serialize($new_balance_accounts));
 
-                    $buy_eu_accounts = unserialize(stripslashes($last_year->getSetting('buy_eu_accounts')));
+                    $buy_eu_accounts = unserialize($last_year->getSetting('buy_eu_accounts'));
 
                     $db = new DB_Sql;
                     $new_buy_eu_accounts = array();
@@ -574,7 +573,7 @@ class Year extends Standard {
                     }
                     $this->setSetting('buy_eu_accounts', serialize($new_buy_eu_accounts));
 
-                    $buy_abroad_accounts = unserialize(stripslashes($last_year->getSetting('buy_abroad_accounts')));
+                    $buy_abroad_accounts = unserialize($last_year->getSetting('buy_abroad_accounts'));
 
                     $db = new DB_Sql;
                     $new_buy_abroad_accounts = array();
@@ -627,9 +626,7 @@ class Year extends Standard {
         return 1;
     }
 
-    function getSettings() {      
-        
-        
+    function getSettings() {
         if ($this->get('vat') > 0) {
             $setting['vat_in_account_id'] = $this->getSetting('vat_in_account_id');
             $setting['vat_out_account_id'] = $this->getSetting('vat_out_account_id');
@@ -643,9 +640,9 @@ class Year extends Standard {
         $setting['result_account_id'] = $this->getSetting('result_account_id');
         $setting['debtor_account_id'] = $this->getSetting('debtor_account_id');
         $setting['credit_account_id'] = $this->getSetting('credit_account_id');
-        $setting['balance_accounts'] = unserialize(stripslashes($this->getSetting('balance_accounts')));
-        $setting['buy_eu_accounts'] = unserialize(stripslashes($this->getSetting('buy_eu_accounts')));
-        $setting['buy_abroad_accounts'] = unserialize(stripslashes($this->getSetting('buy_abroad_accounts')));
+        $setting['balance_accounts'] = unserialize($this->getSetting('balance_accounts'));
+        $setting['buy_eu_accounts'] = unserialize($this->getSetting('buy_eu_accounts'));
+        $setting['buy_abroad_accounts'] = unserialize($this->getSetting('buy_abroad_accounts'));
 
         $setting['result_account_id_start'] = $this->getSetting('result_account_id_start');
         $setting['result_account_id_end'] = $this->getSetting('result_account_id_end');
