@@ -716,8 +716,10 @@ class Account extends Standard {
     }
 
     function getPosts() {
+        $posts = array();
+
         if ($this->id == 0) {
-            return array();
+            return $posts;
         }
         $db2 = new DB_Sql;
 
