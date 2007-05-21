@@ -109,7 +109,7 @@ $page->start(safeToHtml($translation->get('about the intranet')));
 	$filehandler = new FileHandler($kernel, $kernel->intranet->get('pdf_header_file_id'));
 	if($filehandler->get('id') > 0) {
 
-		$filehandler->loadinstance('medium');
+		$filehandler->createInstance('medium');
 		echo '<img src="'.$filehandler->instance->get('file_uri').'" alt="Sidehoved til breve" style="width: '.$filehandler->instance->get('width').'px; height: '.$filehandler->instance->get('height').'px;" />';
 	}
 	else {
