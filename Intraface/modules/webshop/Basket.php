@@ -121,7 +121,7 @@ class Basket
         $this->webshop->kernel->useModule('product');
         $product = new Product($this->webshop->kernel, $product_id);
 
-        if (is_object($product->stock) AND $product->stock->get('for_sale') < $quantity) {
+        if (is_object($product->stock) AND $product->stock->get('for_sale') < $quantity AND $quantity > 0) {
             return false;
         }
 
