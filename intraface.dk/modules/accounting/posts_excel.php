@@ -8,7 +8,7 @@ $year = new Year($kernel);
 $year->checkYear();
 
 $db = new DB_Sql;
-$db->query("SELECT * FROM accounting_voucher WHERE intranet_id = " . $year->kernel->intranet->get('id') . " AND year_id = " . $year->get('id') . " ORDER BY voucher_number ASC");
+$db->query("SELECT * FROM accounting_voucher WHERE intranet_id = " . $year->kernel->intranet->get('id') . " AND year_id = " . $year->get('id') . " ORDER BY number ASC");
 //$i++;
 $posts = array();
 while ($db->nextRecord()) {
@@ -35,18 +35,27 @@ $format_italic->setSize(8);
 
 $format =& $workbook->addFormat();
 $format->setSize(8);
-
+$i = 0;
 $worksheet->write($i, 0, $kernel->intranet->get('name'), $format_bold);
 
 $i = 2;
+
+$worksheet->write($i, 0, 'Dato', $format);
+$worksheet->write($i, 1, 'Bilagsnummer', $format);
+$worksheet->write($i, 2, 'Kontonummer', $format);
+$worksheet->write($i, 3, 'Konto', $format);
+$worksheet->write($i, 4, 'Debet', $format);
+$worksheet->write($i, 5, 'Kredit', $format);
+
+$i = 3;
 if (count($posts) > 0) {
     foreach ($posts AS $post) {
-        $worksheet->write($i, 0, $post['date_dk'], $style);
-        $worksheet->write($i, 1, $post['voucher_number'], $style);
-        $worksheet->write($i, 2, $post['account_number'], $style);
-        $worksheet->write($i, 3, $post['account_name'], $style);
-        $worksheet->write($i, 4, round($post['debet'], 2), $style);
-        $worksheet->write($i, 5, round($post['credit'], 2), $style);
+        $worksheet->write($i, 0, $post['date_dk'], $format);
+        $worksheet->write($i, 1, $post['voucher_number'], $format);
+        $worksheet->write($i, 2, $post['account_number'], $format);
+        $worksheet->write($i, 3, $post['account_name'], $format);
+        $worksheet->write($i, 4, round($post['debet'], 2), $format);
+        $worksheet->write($i, 5, round($post['credit'], 2), $format);
         $i++;
     }
 }
