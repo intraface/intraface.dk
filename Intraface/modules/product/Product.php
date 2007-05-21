@@ -453,6 +453,7 @@ class Product extends Standard {
 
 
             $product = new Product($this->kernel, $db->f("id"));
+            $product->getPictures();
             $products[$i] = $product->get();
 
             if (is_object($product->stock) AND strtolower(get_class($product->stock)) == "stock") {
