@@ -283,8 +283,9 @@ class Intraface_XMLRPC_Shop_Server
             throw new XML_RPC2_FaultException('order could not be sent - cart is empty', -4);
         }
 
-
-        $values['description'] = 'Onlineshop';
+        if (empty($values['description'])) {
+            $values['description'] = 'Onlineshop';
+        }
 
         if (!$order_id = $this->webshop->placeOrder($values)) {
             throw new XML_RPC2_FaultException('order could not be sent ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
