@@ -82,12 +82,12 @@ class Basket
      *
      * @return boolean
      */
-    function add($product_id, $quantity = 1)
+    function add($product_id, $quantity = 1, $text = '')
     {
         $product_id = intval($product_id);
         $quantity = intval($quantity);
         $quantity = $this->getItemCount($product_id) + $quantity;
-        return $this->change($product_id, $quantity);
+        return $this->change($product_id, $quantity, $text);
     }
 
     /**

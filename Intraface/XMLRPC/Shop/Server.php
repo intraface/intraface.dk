@@ -195,10 +195,12 @@ class Intraface_XMLRPC_Shop_Server
      *
      * @param struct  $credentials Credentials to use the server
      * @param integer $id          Product id to add
+     * @param integer $quantity    Optional quantity
+     * @param string  $text        Extra text to the itemline
      *
      * @return mixed
      */
-    public function addProductToBasket($credentials, $id)
+    public function addProductToBasket($credentials, $id, $quantity = 1, $text = '')
     {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
@@ -212,7 +214,7 @@ class Intraface_XMLRPC_Shop_Server
             throw new XML_RPC2_FaultException('product id must be an integer', -5);
         }
 
-        return $this->webshop->basket->add($product_id);
+        return $this->webshop->basket->add(intval($product_id), intval($quantity), $text);
     }
 
     /**
@@ -221,10 +223,11 @@ class Intraface_XMLRPC_Shop_Server
      * @param struct  $credentials Credentials to use the server
      * @param integer $product_id  Product id to change
      * @param integer $quantity    New quantity
+     * @param string  $text        Extra text to the itemline
      *
      * @return mixed
      */
-    public function changeProductInBasket($credentials, $product_id, $quantity)
+    public function changeProductInBasket($credentials, $product_id, $quantity, $text = '')
     {
         $this->checkCredentials($credentials);
 
@@ -237,7 +240,7 @@ class Intraface_XMLRPC_Shop_Server
             throw new XML_RPC2_FaultException('product id and quantity must be integers', -5);
         }
 
-        if (!$this->webshop->basket->change($product_id, $quantity)) {
+        if (!$this->webshop->basket->change($product_id, $quantity, $text)) {
             throw new XML_RPC2_FaultException('product quantity is not in stock', -100);
         }
 
@@ -267,12 +270,15 @@ class Intraface_XMLRPC_Shop_Server
     /**
      * Places an order in Intraface based on the current basket
      *
+     * <code>
+     *
+     * </code>
+     *
      * @param struct $credentials Credentials to use the server
      * @param struct $values      Values to save
      *
      * @return integer $order_id
      */
-
     public function placeOrder($credentials, $values)
     {
         $this->checkCredentials($credentials);
