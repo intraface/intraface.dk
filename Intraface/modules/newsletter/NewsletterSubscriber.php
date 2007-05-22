@@ -300,14 +300,16 @@ class NewsletterSubscriber extends Standard {
 
         // sender kun optinbrev, hvis man ikke er opted in
         if (!$this->optedIn()) {
-            /*
+
+            // TODO replace by observer
             if (!$this->sendOptInEmail()) {
                 $this->error->set('could not send optin email');
                 return false;
             }
-            */
-            $this->notifyObservers('new subscriber');
+
+            // $this->notifyObservers('new subscriber');
         }
+
 
         return true;
     }
@@ -436,7 +438,7 @@ class NewsletterSubscriber extends Standard {
                 'subject' => 'Bekræft tilmelding',
                 'body' =>
                     $this->list->get('subscribe_message') . "\n\n" .
-                    $contact->get('login_url') .
+                    $contact->getLoginUrl() . '/' . $this->get('code').
                     "\n\nMed venlig hilsen\n".$this->list->get('sender_name'),
                 'contact_id' => $this->get('contact_id'),
                 'from_email' => $this->list->get('reply_email'),
