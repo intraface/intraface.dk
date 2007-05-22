@@ -111,6 +111,7 @@ class Webshop {
             $this->order->loadItem();
             $value['product_id'] = $product['id'];
             $value['quantity'] = $product['quantity'];
+            $value['description'] = $product['text'];
             $this->order->item->save($value);
         }
         $this->basket->reset();
@@ -119,7 +120,7 @@ class Webshop {
         if (!$email->save(array(
             'contact_id' => $this->contact->get('id'),
             'subject' => 'Bekræftelse på bestilling #' . $order_id,
-            'body' => $this->kernel->setting->get('intranet', 'webshop.confirmation_text') . "\n" . $this->contact->get('login_url') . "\n\nVenlig hilsen\n" . $this->kernel->intranet->address->get('name'),
+            'body' => $this->kernel->setting->get('intranet', 'webshop.confirmation_text') . "\n" . $this->contact->getLoginUrl() . "\n\nVenlig hilsen\n" . $this->kernel->intranet->address->get('name'),
             'from_email' => $this->kernel->intranet->address->get('email'),
             'from_name' => $this->kernel->intranet->address->get('name'),
             'type_id' => 12, // webshop

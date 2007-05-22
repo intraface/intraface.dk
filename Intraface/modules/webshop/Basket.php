@@ -142,9 +142,13 @@ class Basket
                         AND " . $this->sql_extra . "
                         AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
             } else {
-                $db->query("UPDATE basket SET quantity = $quantity, date_changed = NOW()
+                $db->query("UPDATE basket SET
+                    quantity = $quantity,
+                    date_changed = NOW(),
+                    text = '".$text."'
                     WHERE id = ".$db->f('id') . "
                         AND basketevaluation_product = " . $basketevaluation . "
+
                         AND " . $this->sql_extra . "
                         AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
             }
@@ -154,6 +158,7 @@ class Basket
                     SET
                         quantity = $quantity,
                         date_changed = NOW(),
+                        text = '".$text."',
                         basketevaluation_product = " . $basketevaluation . ",
                         product_id = $product_id,
                         intranet_id = " . $this->webshop->kernel->intranet->get('id') . ",
@@ -261,7 +266,8 @@ class Basket
                 basket.product_id,
                 product_detail.name,
                 product_detail.price,
-                basket.quantity
+                basket.quantity,
+                basket.text
             FROM basket
             INNER JOIN product
                 ON product.id = basket.product_id
@@ -277,6 +283,7 @@ class Basket
         while ($db->nextRecord()) {
 
             $items[$i]['id'] = $db->f("id");
+            $items[$i]['text'] = $db->f("text");
             $product = new Product($this->webshop->kernel, $db->f("id"));
             $product->getPictures();
             $items[$i]['product_id'] = $product->get('id');
@@ -284,6 +291,7 @@ class Basket
             $items[$i]['price'] = $product->get('price');
             $items[$i]['price_incl_vat'] = $product->get('price_incl_vat');
             $items[$i]['pictures'] = $product->get('pictures');
+
             // basket specific
             $items[$i]['quantity'] = $db->f('quantity');
             $items[$i]['totalprice'] = $db->f('quantity') * $items[$i]['price'];
