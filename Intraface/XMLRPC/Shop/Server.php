@@ -260,6 +260,11 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->_factoryWebshop();
 
+        require_once 'Intraface/modules/webshop/BasketEvaluation.php';
+        $basketevaluation = new BasketEvaluation($this->webshop->kernel);
+        if (!$basketevaluation->run($this->webshop->basket)) {
+        }
+
         return array(
             'items' => $this->webshop->basket->getItems(),
             'price_total' => $this->webshop->basket->getTotalPrice(),
