@@ -267,7 +267,8 @@ class Basket
                 product_detail.name,
                 product_detail.price,
                 basket.quantity,
-                basket.text
+                basket.text,
+                basket.basketevaluation_product
             FROM basket
             INNER JOIN product
                 ON product.id = basket.product_id
@@ -284,6 +285,7 @@ class Basket
 
             $items[$i]['id'] = $db->f("id");
             $items[$i]['text'] = $db->f("text");
+            $items[$i]['basketevaluation_product'] = $db->f("basketevaluation_product");
             $product = new Product($this->webshop->kernel, $db->f("id"));
             $product->getPictures();
             $items[$i]['product_id'] = $product->get('id');
@@ -291,6 +293,7 @@ class Basket
             $items[$i]['price'] = $product->get('price');
             $items[$i]['price_incl_vat'] = $product->get('price_incl_vat');
             $items[$i]['pictures'] = $product->get('pictures');
+
 
             // basket specific
             $items[$i]['quantity'] = $db->f('quantity');
