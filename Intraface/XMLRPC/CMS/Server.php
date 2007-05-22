@@ -29,9 +29,10 @@ class Intraface_XMLRPC_CMS_Server {
     /**
      * Gets a page
      *
-     * @param  struct $credentials
+     * @param struct  $credentials
      * @param integer $site_id
-     * @param string $identifier
+     * @param string  $identifier
+     *
      * @return array
      */
     function getPage($credentials, $site_id, $identifier) {

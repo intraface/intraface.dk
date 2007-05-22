@@ -48,15 +48,7 @@ class Intraface_XMLRPC_Newsletter_Server
      */
     function subscribe($credentials, $list_id, $email, $ip)
     {
-        try {
-            $this->checkCredentials($credentials);
-        }
-        catch (XML_RPC2_FaultException $e) {
-            die('Exception #' . $e->getFaultCode() . ' : ' . $e->getFaultString());
-        }
-        catch (Exception $e) {
-            die('Exception : ' . $e->getMessage());
-        }
+        $this->checkCredentials($credentials);
 
         $this->factoryList($list_id);
 
@@ -79,9 +71,7 @@ class Intraface_XMLRPC_Newsletter_Server
      */
     function unsubscribe($credentials, $list_id, $email)
     {
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
-        }
+        $this->checkCredentials($credentials);
 
         $this->factoryList($list_id);
 
@@ -105,9 +95,7 @@ class Intraface_XMLRPC_Newsletter_Server
     function optin($credentials, $list_id, $optin_code, $ip)
     {
 
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
-        }
+        $this->checkCredentials($credentials);
 
         $this->factoryList($list_id);
 
@@ -128,9 +116,7 @@ class Intraface_XMLRPC_Newsletter_Server
      */
     function getNewsletterList($credentials)
     {
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
-        }
+        $this->checkCredentials($credentials);
 
         if (!$this->kernel->intranet->hasModuleAccess('newsletter')) {
             return array();
@@ -152,9 +138,7 @@ class Intraface_XMLRPC_Newsletter_Server
      */
     function getSubscriptions($credentials, $contact_id)
     {
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
-        }
+        $this->checkCredentials($credentials);
 
         $this->kernel->useModule('contact', true);
 
@@ -172,14 +156,33 @@ class Intraface_XMLRPC_Newsletter_Server
      */
     function needOptin($credentials, $contact_id)
     {
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
-        }
+        $this->checkCredentials($credentials);
 
         $this->kernel->useModule('contact', true);
 
         $contact = new Contact($this->kernel, $contact_id);
         return $contact->needNewsletterOptin();
+    }
+
+    /**
+     * Gets the list id from the optin code
+     *
+     * This method is highly experimental, and will probably be deprecated in
+     * the future.
+     *
+     * @param struct  $credentials Must include private_key and session_id
+     * @param string  $code        The optin code
+     *
+     * @return integer with list id
+     */
+    function getListIdFromOptinCode($credentials, $code)
+    {
+        $db = MDB2::factory(DB_DSN);
+        $result = $db->query('SELECT list_id FROM newsletter_subscriber WHERE code = ' . $db->quote($code, 'text'));
+        if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+            return $row['list_id'];
+        }
+        return false;
     }
 
     /**
