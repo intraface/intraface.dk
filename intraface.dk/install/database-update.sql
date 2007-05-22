@@ -36,3 +36,5 @@ CREATE TABLE `webshop_basket_evaluation` (
 ) ENGINE=MyISAM  ;
 
 ALTER TABLE `basket` ADD `basketevaluation_product` INT NOT NULL AFTER `date_changed` ;
+
+ALTER TABLE `basket` ADD `text` TEXT NOT NULL ;
