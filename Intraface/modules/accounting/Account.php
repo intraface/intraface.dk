@@ -97,7 +97,7 @@ class Account extends Standard {
         $sql = "SELECT id FROM accounting_account
             WHERE number = '".$account_number."'
                 AND intranet_id = ".$year->kernel->intranet->get('id')."
-                AND year_id = ".$year->get('id')."
+                AND year_id = ".$year->get('id')." AND active = 1
             LIMIT 1";
 
         $db = new Db_Sql;
@@ -404,6 +404,7 @@ class Account extends Standard {
             FROM accounting_account
             WHERE year_id = " . $this->year->get('id') . "
                 AND id = ".$this->id . "
+                AND active = 1
                 AND intranet_id = ".$this->year->kernel->intranet->get('id');
 
         $db = new Db_Sql;
