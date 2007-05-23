@@ -36,13 +36,14 @@ class Intraface_XMLRPC_Shop_Server
     {
         $this->checkCredentials($credentials);
 
-        $search = '';
         $offset = 0;
 
         $mixed = array();
         if (!empty($search)) {
             $mixed = $search;
         }
+
+        $search = '';
 
         $this->_factoryWebshop();
 
