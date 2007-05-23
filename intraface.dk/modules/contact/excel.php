@@ -6,6 +6,7 @@ $_GET['use_stored'] = 'true';
 
 $module = $kernel->module('contact');
 $contact = new Contact($kernel);
+$contact->createDBQuery();
 
 $keyword = $contact->getKeywords();
 $keywords = $keyword->getAllKeywords();
@@ -20,13 +21,13 @@ $used_keyword = array();
 
 if(is_array($keyword_ids) && count($keyword_ids) > 0) {
 
-	foreach($keyword_ids AS $kid) {
-		foreach($keywords AS $k){
-			if($k['id'] == $kid) {
-				$used_keyword[] = $k['keyword'];
-			}
-		}
-	}
+    foreach($keyword_ids AS $kid) {
+        foreach($keywords AS $k){
+            if($k['id'] == $kid) {
+                $used_keyword[] = $k['keyword'];
+            }
+        }
+    }
 
 }
 
@@ -75,15 +76,15 @@ $worksheet->write($i, 5, 'Email', $format_bold);
 $i++;
 
 if (count($contacts) > 0) {
-	foreach ($contacts AS $contact) {
-		$worksheet->write($i, 0, $contact['name']);
-		$worksheet->write($i, 1, $contact['address']['address']);
-		$worksheet->write($i, 2, $contact['address']['postcode']);
-		$worksheet->write($i, 3, $contact['address']['city']);
-		$worksheet->write($i, 4, $contact['address']['phone']);
-		$worksheet->write($i, 5, $contact['address']['email']);
-		$i++;
-	}
+    foreach ($contacts AS $contact) {
+        $worksheet->write($i, 0, $contact['name']);
+        $worksheet->write($i, 1, $contact['address']['address']);
+        $worksheet->write($i, 2, $contact['address']['postcode']);
+        $worksheet->write($i, 3, $contact['address']['city']);
+        $worksheet->write($i, 4, $contact['address']['phone']);
+        $worksheet->write($i, 5, $contact['address']['email']);
+        $i++;
+    }
 
 }
 $worksheet->hideGridLines();
