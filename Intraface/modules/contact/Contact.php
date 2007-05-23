@@ -672,7 +672,7 @@ class Contact extends Standard {
         if (!$email->save(
             array(
                 'subject' => 'Loginoplysninger',
-                'body' => $this->kernel->setting->get('intranet', 'contact.login_email_text') . "\n\n" . $this->get('login_url') . "\n\nMed venlig hilsen\nEn venlig e-mail-robot\n" . $this->kernel->intranet->get('name'),
+                'body' => $this->kernel->setting->get('intranet', 'contact.login_email_text') . "\n\n" . $this->getLoginUrl() . "\n\nMed venlig hilsen\nEn venlig e-mail-robot\n" . $this->kernel->intranet->get('name'),
                 'contact_id' => $this->id,
                 'from_email' => $this->kernel->intranet->address->get('email'),
                 'from_name' => $this->kernel->intranet->get('name'),
