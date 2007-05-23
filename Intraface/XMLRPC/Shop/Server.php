@@ -190,6 +190,23 @@ class Intraface_XMLRPC_Shop_Server
 
     }
 
+   /**
+     * Gets product keywords which can be used to sort ones webshop
+     *
+     * Method is experimental and only used by nylivsstil.dk. If you need to use it
+     * as well, please contact lars@intraface.dk.
+     *
+     * @param struct  $credentials Credentials to use the server
+     *
+     * @return array with id and keywords
+     */
+    function getProductKeywords()
+    {
+        $array = array(
+            array('id' => 1, 'keyword' => 'First keyword')
+        );
+    }
+
     /**
      * Add product to basket
      *
