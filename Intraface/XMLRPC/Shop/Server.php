@@ -58,11 +58,14 @@ class Intraface_XMLRPC_Shop_Server
         $product = new Product($this->webshop->kernel);
         $product->createDBQuery();
 
-        $product->dbquery->usePaging('paging');
+        if($mixed['use_paging'] == 'true') {
+        	$product->dbquery->usePaging('paging');
+        }
+        
 
         // sublevel has to be used so other searches are not overwritten
         $product->dbquery->storeResult('use_stored', 'webshop_' . $area . '_' .  md5($this->credentials['session_id']), 'sublevel');
-        $debug2 = '';
+        $debug2 = serialize($mixed);
         if (array_key_exists('offset', $mixed) AND is_numeric($mixed['offset'])) {
             $product->dbquery->useStored(true);
             $product->dbquery->setPagingOffset((int)$mixed['offset']);
@@ -78,7 +81,7 @@ class Intraface_XMLRPC_Shop_Server
 
             if (array_key_exists('keywords', $mixed) AND !empty($mixed['keywords'])) {
                 $product->dbquery->setFilter('keywords', $mixed['keywords']);
-                $debug2 .= 'keyword ' . implode($mixed['keywords'], ',');
+                $debug2 .= 'keyword ' . $mixed['keywords'];
             }
 
             if (array_key_exists('sorting', $mixed) AND !empty($mixed['sorting'])) {
