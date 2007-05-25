@@ -201,8 +201,17 @@ class Intraface_XMLRPC_Shop_Server
      *
      * @return array with id and keywords
      */
-    function getProductKeywords()
+    function getProductKeywords($credentials)
     {
+       
+        $this->checkCredentials($credentials);
+        $this->_factoryWebshop();
+        
+        $product = new Product($this->kernel);
+        $keywords = $product->getKeywords();
+        return $keywords->getUsedKeywords();
+        
+        
         $array = array(
             array('id' => 1, 'keyword' => 'First keyword')
         );
