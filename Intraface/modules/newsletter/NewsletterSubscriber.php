@@ -474,7 +474,7 @@ class NewsletterSubscriber extends Standard {
         //$db->query("SELECT id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted FROM newsletter_subscriber WHERE list_id=". $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id') . " AND optin = 1 AND active = 1"); // optin = 1 hvad er det? /Sune
         $i = 0;
 
-        $db = $this->dbquery->getRecordset("id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted", "", false);
+        $db = $this->dbquery->getRecordset("id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted, optin", "", false);
 
         while ($db->nextRecord()) {
             $contact_id = $db->f('contact_id');
@@ -482,6 +482,7 @@ class NewsletterSubscriber extends Standard {
             $subscribers[$i]['contact_id'] = $db->f('contact_id');
             $subscribers[$i]['dk_date_submitted'] = $db->f('dk_date_submitted');
             $subscribers[$i]['date_submitted'] = $db->f('date_submitted');
+            $subscribers[$i]['optin'] = $db->f('optin');
 
             if (isset($this->list->kernel->user)) { // only if we are logged in.
                 $contact = $this->getContact($db->f('contact_id'));
