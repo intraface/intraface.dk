@@ -144,10 +144,11 @@ class Keyword extends Standard {
 		}
 				
 		$db = new DB_Sql;
-		$db->query("SELECT id FROM keyword 
+		$db->query("SELECT id, active FROM keyword 
 			WHERE intranet_id = " . $this->object->kernel->intranet->get('id') . " 
 				AND keyword = '".$var['keyword']."'
-				AND type = '".$this->type."'");
+				AND type = '".$this->type."'
+				AND active = 1");
 		if ($db->nextRecord()) {
 			return $db->f('id');
 		}
