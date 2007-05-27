@@ -7,6 +7,7 @@ require('startpage.php');
 
 require('IntrafacePublic/Shop/Frontend/web/index.php');
 
+
 /*
 if(isset($_GET['page']) && $_GET['page'] != '') {
 	$page = $_GET['page'];

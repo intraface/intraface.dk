@@ -6,7 +6,7 @@
         <link rel="alternate" type="application/rss+xml" title="Alle produkter" href="/demo/shop/rss.php" />
         
         <style type="text/css">
-            @import "http://intraface.dk.asterix/demo/shop/layout.php";
+            @import "shop.css.php";
         </style>
      </head>
      
