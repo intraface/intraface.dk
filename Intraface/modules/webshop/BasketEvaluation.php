@@ -66,7 +66,8 @@ class BasketEvaluation extends Standard
             'evaluate_target' => array(
                 0 => 'price',
                 1 => 'weight',
-                2 => 'customer_coupon'),
+                2 => 'customer_coupon',
+                3 => 'customer_country'),
 
             'evaluate_method' => array(
                 0 => 'equals',
@@ -262,8 +263,15 @@ class BasketEvaluation extends Standard
                 case 'customer_coupon':
                     $evaluate = $customer['coupon'];
                     // coupons can only be evaluated as 'equals' or 'different from'
-                    if ($evaluation['evaluate_method_key'] != 0 && $evaluation['evaluate_method_key'] != 1) {
-                        $evaluation['evaluate_method_key'] = 1;
+                    if ($evaluation['evaluate_method'] != 'equals' && $evaluation['evaluate_method'] != 'different_from') {
+                        $evaluation['evaluate_method'] = 'different_from';
+                    }
+                    break;
+                case 'customer_country':
+                    $evaluate = $customer['country'];
+                    // country can only be evaluated as 'equals' or 'different from'
+                    if ($evaluation['evaluate_method'] != 'equals' && $evaluation['evaluate_method'] != 'different_from') {
+                        $evaluation['evaluate_method'] = 'different_from';
                     }
                     break;
                 default:
