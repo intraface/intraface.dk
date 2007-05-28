@@ -134,6 +134,7 @@ class Webshop {
 
         return $order_id;
     }
+    
 
     function addOnlinePayment($order_id, $transaction_number, $transaction_status, $amount)
     {

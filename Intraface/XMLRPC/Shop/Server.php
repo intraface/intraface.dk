@@ -58,7 +58,7 @@ class Intraface_XMLRPC_Shop_Server
         $product = new Product($this->webshop->kernel);
         $product->createDBQuery();
 
-        if($mixed['use_paging'] == 'true') {
+        if(!isset($mixed['use_paging']) || $mixed['use_paging'] == 'true') {
         	$product->dbquery->usePaging('paging');
         }
         
@@ -284,7 +284,7 @@ class Intraface_XMLRPC_Shop_Server
      *
      * @return array
      */
-    public function getBasket($credentials)
+    public function getBasket($credentials, $customer = array())
     {
         $this->checkCredentials($credentials);
 
@@ -292,7 +292,7 @@ class Intraface_XMLRPC_Shop_Server
 
         require_once 'Intraface/modules/webshop/BasketEvaluation.php';
         $basketevaluation = new BasketEvaluation($this->webshop->kernel);
-        if (!$basketevaluation->run($this->webshop->basket)) {
+        if (!$basketevaluation->run($this->webshop->basket, $customer)) {
         }
 
         return array(
@@ -334,6 +334,49 @@ class Intraface_XMLRPC_Shop_Server
 
         return $order_id;
     }
+    
+    
+    /**
+     * Saves buyer details
+     *
+     * @param struct $values      Values to save
+     *
+     * @return boolean true or false
+     */
+    public function saveDetails($credentials, $values)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop();
+
+        if (!is_array($values)) {
+            throw new XML_RPC2_FaultException('details could not be saved - nothing to save', -4);
+        }
+
+
+        if (!$this->webshop->basket->saveDetails($values)) {
+            throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
+        }
+
+        return true;
+    }
+    
+    /**
+     * Get buyer details
+     *
+     * @param struct  $credentials Credentials to use the server
+     *
+     * @return array
+     */
+    public function getDetails($credentials)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop();
+
+        return $this->webshop->basket->getDetails();
+    }
+    
 
     /**
      * Checks credentials
