@@ -355,7 +355,7 @@ if(count($reminders) > 0) {
 <div class="box">
 	<h2><?php echo safeToHtml($translation->get('tools')); ?></h2>
 <ul>
-	<li><a href="<?php echo $contact->get('login_url'); ?>"><?php echo safeToHtml($translation->get('see contact login')); ?></a></li>
+	<li><a href="<?php echo $contact->getLoginUrl(); ?>"><?php echo safeToHtml($translation->get('see contact login')); ?></a></li>
 </ul>
 </div>
 <?php endif; ?>
