@@ -10,6 +10,7 @@ $_GET['use_stored'] = true;
 $contact = new Contact($kernel);
 $keyword = $contact->getKeywords();
 $keywords = $keyword->getAllKeywords();
+$contact->createDBQuery();
 $contact->dbquery->defineCharacter('character', 'address.name');
 $contact->dbquery->storeResult('use_stored', 'contact', 'toplevel');
 $contacts = $contact->getList("use_address");

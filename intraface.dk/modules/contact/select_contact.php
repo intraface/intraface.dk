@@ -37,6 +37,7 @@ else {
 
 $keywords = $contact->getKeywords();
 $used_keywords = $keywords->getUsedKeywords();
+$contact->createDBQuery();
 
 if(isset($_GET['contact_id'])) {
 	$contact->dbquery->setCondition("contact.id = ".intval($_GET['contact_id']));
