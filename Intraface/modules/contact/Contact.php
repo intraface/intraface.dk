@@ -694,7 +694,7 @@ class Contact extends Standard {
 
     function getNewsletterSubscriptions() {
         $db = new DB_Sql;
-        $db->query("SELECT * FROM newsletter_subscriber WHERE optin = 1 AND contact_id = " . $this->id . " AND intranet_id =" . $this->kernel->intranet->get('id'));
+        $db->query("SELECT * FROM newsletter_subscriber WHERE optin = 1 AND active = 1 AND contact_id = " . $this->id . " AND intranet_id =" . $this->kernel->intranet->get('id'));
         $lists = array();
         while ($db->nextRecord()) {
             $lists[] = $db->f('list_id');
