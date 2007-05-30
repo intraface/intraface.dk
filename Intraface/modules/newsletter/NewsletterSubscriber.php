@@ -54,6 +54,7 @@ class NewsletterSubscriber extends Standard {
      */
     function createDBQuery()
     {
+        // optin = 1 should not be set here
         $this->dbquery = new DBQuery($this->list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $this->list->get("id") . " AND newsletter_subscriber.intranet_id = " . $this->list->kernel->intranet->get('id') . " AND newsletter_subscriber.optin = 1 AND newsletter_subscriber.active = 1");
         $this->dbquery->useErrorObject($this->error);
     }
@@ -79,7 +80,7 @@ class NewsletterSubscriber extends Standard {
                 $code = strip_tags($code);
 
                 $db = new DB_Sql;
-                $db->query("SELECT id, list_id FROM newsletter_subscriber WHERE code = '".$code."' AND intranet_id = " . $object->intranet->get('id'));
+                $db->query("SELECT id, list_id FROM newsletter_subscriber WHERE code = '".$code."' AND intranet_id = " . $object->intranet->get('id')." and active = 1");
                 if (!$db->nextRecord()) {
                     return false;
                 }
@@ -101,6 +102,7 @@ class NewsletterSubscriber extends Standard {
                     WHERE address.email = '".$email."'
                         AND newsletter_subscriber.list_id = " . $object->get('id') . "
                         AND newsletter_subscriber.intranet_id = " . $object->kernel->intranet->get('id') . "
+                        AND newsletter_subscriber.active = 1
                         AND contact.active = 1");
                 if (!$db->nextRecord()) {
                     return 0;
@@ -122,7 +124,7 @@ class NewsletterSubscriber extends Standard {
     function load()
     {
         $db = new DB_Sql;
-        $db->query("SELECT * FROM newsletter_subscriber WHERE id = " . $this->id);
+        $db->query("SELECT * FROM newsletter_subscriber WHERE id = " . $this->id." and active = 1");
         if (!$db->nextRecord()) {
 
             $this->id = 0;
@@ -245,6 +247,8 @@ class NewsletterSubscriber extends Standard {
             } else {
                 $contact = new Contact($this->list->kernel, $this->get('contact_id'));
             }
+            // because of the NewsletterSubscriber::factory($, 'email') we should be sure there actually is a valid contact. But maybe we should do a check anyway.
+            
             /*
             if (!$contact->get('name')) {
                 $save_array['name'] = $input['name'];
@@ -325,7 +329,7 @@ class NewsletterSubscriber extends Standard {
             return 0;
         }
         $db = new DB_Sql;
-        $db->query("SELECT * FROM newsletter_subscriber WHERE id = " . $this->id);
+        $db->query("SELECT * FROM newsletter_subscriber WHERE id = " . $this->id." and active = 1");
         if (!$db->nextRecord()) {
             return 0;
         }
@@ -363,7 +367,7 @@ class NewsletterSubscriber extends Standard {
         $this->load();
 
         $db = new DB_Sql;
-        $db->query("DELETE FROM newsletter_subscriber WHERE id=".$this->id." AND list_id = " . $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id'));
+        $db->query("UPDATE newsletter_subscriber SET active = 0 WHERE id=".$this->id." AND list_id = " . $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id'));
         return 1;
     }
 
@@ -377,14 +381,14 @@ class NewsletterSubscriber extends Standard {
      */
     function optIn($code, $ip) {
         $db = new DB_Sql;
-        $db->query("SELECT id FROM newsletter_subscriber WHERE code = '".$code."' AND list_id = " . $this->list->get('id'));
+        $db->query("SELECT id FROM newsletter_subscriber WHERE code = '".$code."' AND list_id = " . $this->list->get('id')." AND active = 1");
         if (!$db->nextRecord()) {
             return false;
         }
 
-        $db->query("UPDATE newsletter_subscriber SET optin = 1, ip_optin = '".$ip."', date_optin = NOW() WHERE code = '" . $code . "' AND list_id = " . $this->list->get('id'));
+        $db->query("UPDATE newsletter_subscriber SET optin = 1, ip_optin = '".$ip."', date_optin = NOW() WHERE code = '" . $code . "' AND list_id = " . $this->list->get('id')." AND active = 1");
 
-        // makes sure that the submitted ip is also set - not really a port of this method
+        // makes sure that the submitted ip is also set - not really a port of this method. 
         $db->query("SELECT id, ip_submitted FROM newsletter_subscriber WHERE code = '".$code."' AND list_id = " . $this->list->get('id'));
         if ($db->nextRecord()) {
             if (!$db->f('ip_submitted')) {
@@ -399,6 +403,8 @@ class NewsletterSubscriber extends Standard {
      */
     function getSubscriberCount()
     {
+        
+        // There must definitly be an error here. Shouldn't the tabel be newsletter_subscriber, and active = 1 is needed? /Sune(30-05-2007)
         $db = new DB_Sql("SELECT * FROM newsletter WHERE list_id=".$this->list->get('id') . " AND intranet_id = " . $this->list->kernel->intranet->get('id') . " AND optin = 1");
         return $db->numRows();
     }
@@ -471,7 +477,7 @@ class NewsletterSubscriber extends Standard {
         $subscribers = array();
 
         //$db = new DB_Sql;
-        //$db->query("SELECT id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted FROM newsletter_subscriber WHERE list_id=". $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id') . " AND optin = 1 AND active = 1"); // optin = 1 hvad er det? /Sune
+        //$db->query("SELECT id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted FROM newsletter_subscriber WHERE list_id=". $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id') . " AND optin = 1 AND active = 1");
         $i = 0;
 
         $db = $this->dbquery->getRecordset("id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted, optin", "", false);
