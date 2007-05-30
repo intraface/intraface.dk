@@ -60,14 +60,14 @@ class Account extends Standard {
      * @return void
      * @access public
      */
-    function Account(& $year, $account_id = 0) {
-        if (!is_object($year) OR strtolower(get_class($year)) != 'year') {
-            trigger_error('Account::Account kræver objektet Year.', FATAL);
+    function Account($year, $account_id = 0) {
+        if (!is_object($year)) {
+            trigger_error('Account::Account kræver objektet Year.', E_USER_ERROR);
             exit;
         }
 
         $this->error = new Error;
-        $this->year = & $year;
+        $this->year = $year;
         $this->id = (int)$account_id;
 
         $this->vatpercent = $this->year->kernel->setting->get('intranet', 'vatpercent');
