@@ -8,6 +8,11 @@
  * @version	1.0
  */
 require_once 'Intraface/Standard.php';
+require_once 'Intraface/Error.php';
+require_once 'Intraface/tools/Amount.php';
+require_once 'Intraface/3Party/Database/Db_sql.php';
+require_once 'Intraface/functions/functions.php';
+require_once 'Intraface/Validator.php';
 
 class Account extends Standard {
 
@@ -61,7 +66,7 @@ class Account extends Standard {
      * @access public
      */
     function Account($year, $account_id = 0) {
-        if (!is_object($year)) {
+        if (empty($year) OR !is_object($year)) {
             trigger_error('Account::Account kræver objektet Year.', E_USER_ERROR);
             exit;
         }
@@ -242,7 +247,7 @@ class Account extends Standard {
 
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
 
         if ($this->id > 0) {
@@ -297,6 +302,10 @@ class Account extends Standard {
      */
 
     function savePrimosaldo($debet, $credit) {
+        if ($this->id == 0) {
+            return false;
+        }
+
         $amount = new Amount($debet);
         if (!$amount->convert2db()) {
             $this->error->set('Beløbet kunne ikke konverteres');
@@ -314,8 +323,12 @@ class Account extends Standard {
         $credit = (double)$credit;
 
         $db = new DB_Sql;
-        $db->query("UPDATE accounting_account SET primosaldo_debet = '".$debet."', primosaldo_credit = '".$credit."' WHERE id = " . $this->id);
-        return 1;
+        $db->query("UPDATE accounting_account
+            SET
+                primosaldo_debet = '".$debet."',
+                primosaldo_credit = '".$credit."'
+                WHERE id = " . $this->id);
+        return true;
     }
 
     /**
