@@ -38,3 +38,6 @@ CREATE TABLE `webshop_basket_evaluation` (
 ALTER TABLE `basket` ADD `basketevaluation_product` INT NOT NULL AFTER `date_changed` ;
 
 ALTER TABLE `basket` ADD `text` TEXT NOT NULL ;
+
+ALTER TABLE `accounting_account` CHANGE `primosaldo_debet` `primosaldo_debet` DOUBLE( 11, 2 ) NOT NULL DEFAULT '0.00'
+ALTER TABLE `accounting_account` CHANGE `primosaldo_credit` `primosaldo_credit` DOUBLE( 11, 2 ) NOT NULL DEFAULT '0.00'
