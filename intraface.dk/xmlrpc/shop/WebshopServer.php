@@ -1,5 +1,7 @@
 <?php
 
+$HTTP_RAW_POST_DATA = file_get_contents('php://input');
+
 define('FORCE_GZIP', true);
 /**
  * WebshopServer

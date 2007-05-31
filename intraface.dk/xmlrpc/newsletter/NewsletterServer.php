@@ -2,7 +2,7 @@
 /**
  * @author Lars Olesen <lars@legestue.net>
  */
-
+$HTTP_RAW_POST_DATA = file_get_contents('php://input');
 require '../../common.php';
 require '../XmlRpcServer.php';
 

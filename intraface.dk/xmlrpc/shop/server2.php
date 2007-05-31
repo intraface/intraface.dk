@@ -16,7 +16,7 @@
  * @version  1.0
  */
 
-
+$HTTP_RAW_POST_DATA = file_get_contents('php://input');
 require('../../common.php');
 require_once('../XmlRpcServer.php');
 
