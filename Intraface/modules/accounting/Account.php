@@ -775,34 +775,15 @@ class Account extends Standard {
     }
 
     /**
-     * Private: Udregne momsbeløbet
+     * Calculates the vat amount
+     * 
+     * @link http://eforum.idg.se/viewmsg.asp?EntriesId=831525
      *
-     * Denne metode er magen til en metode under Post. Det kunne måske være en
-     * ide at lave en momsklasse. Vil man sikkert også få brug for til faktura.
-     *
-     * @param $amount (float) beløb
-     * @param $vat_percent (float) momsprocent
-     * @return (float) Momsbeløbet
+     * @param float $amount      Amount
+     * @param float $vat_percent Vat percent
+     * 
+     * @return float Vat amount
      */
-    /*
-    function calculateVat($amount, $vat_percent) {
-        $amount = (float)$amount;
-        $vat_percent = (float)$vat_percent;
-
-        if ($this->get('vat') > 0) {
-            return $amount * (($vat_percent-($vat_percent/5))/100);
-        }
-    }*/
-
-    /**
-     * http://eforum.idg.se/viewmsg.asp?EntriesId=831525
-     *
-     * @param $amount (float) beløb
-     * @param $vat_percent (float) momsprocent
-     * @return (float) Momsbeløbet
-     *
-     */
-
     function calculateVat($amount, $vat_percent) {
         $amount = (float)$amount;
         $vat_percent = (float)$vat_percent / 100;
@@ -810,5 +791,4 @@ class Account extends Standard {
         return $amount * ($vat_percent / (1 + $vat_percent));
     }
 }
-
 ?>
