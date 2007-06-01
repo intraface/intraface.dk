@@ -26,6 +26,7 @@ require_once 'Intraface/DBQuery.php';
 require_once 'Intraface/Validator.php';
 require_once 'Intraface/Error.php';
 require_once 'Intraface/Address.php';
+require_once dirname(__FILE__) . '/ContactPerson.php';
 
 class Contact extends Standard {
 
