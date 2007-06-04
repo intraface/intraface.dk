@@ -479,7 +479,7 @@ class Email extends Standard
         $sent_this_hour = $this->sentThisHour();
 
         $limit_query = abs($this->allowed_limit-$sent_this_hour-$this->system_buffer);
-
+        
         $sql = "SELECT id
                 FROM email
                 WHERE status = 2
@@ -492,6 +492,8 @@ class Email extends Standard
 
         while ($db->nextRecord()) {
             $email = new Email($this->kernel, $db->f('id'));
+            // could be good, but stops sending the rest of the emails if one has an error.
+            // $email->error = &$this->error;
             $email->send();
         }
         return 1;
