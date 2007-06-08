@@ -1,4 +1,6 @@
 <?php
+require_once dirname(__FILE__) . '/../config.test.php';
+
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/Standard.php';
@@ -49,12 +51,6 @@ class FakeBasketWebshop
 {
     public $kernel;
 }
-
-
-define('DB_DSN', 'mysql://root:@localhost/pear');
-define('PATH_INCLUDE_MODULE', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/modules/');
-define('PATH_INCLUDE_SHARED', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/shared/');
-define('PATH_INCLUDE_CONFIG', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/config/');
 
 class BasketTest extends PHPUnit_Framework_TestCase
 {
@@ -157,6 +153,31 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $items = $basket->getItems();
 
         $this->assertEquals($items[0]['quantity'], $new_quantity);
+    }
+
+    function testChangeBasketToZeroOnAStockProductWithNegativeValues()
+    {
+        $this->markTestIncomplete('We need to create this test');
+    }
+
+    function testResetBasket()
+    {
+        $basket = $this->createBasket();
+
+        $product_id = 1;
+        $quantity = 1;
+
+        $basket->change($product_id, $quantity);
+
+        $items = $basket->getItems();
+        $this->assertEquals(count($items), 1);
+
+        $basket->reset();
+
+        $items = $basket->getItems();
+
+        $this->assertEquals(count($items), 0);
+
     }
 
     function testRemoveEvaluationProducts()

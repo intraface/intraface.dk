@@ -20,7 +20,7 @@ class NewsletterTests {
 
         $suite->addTestSuite('NewsletterTest');
         $suite->addTestSuite('NewsletterSubscriberTest');
-        $suite->addTestSuite('NewsletterObserverTest');
+        //$suite->addTestSuite('NewsletterObserverTest');
         return $suite;
     }
 }

@@ -62,6 +62,10 @@ class FakeContact
     function get() {
         return 1;
     }
+
+    function getLoginUrl() {
+        return 'loginurl';
+    }
 }
 
 class FakeSubscriber

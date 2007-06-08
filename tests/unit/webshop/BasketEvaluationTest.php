@@ -1,4 +1,6 @@
 <?php
+require_once dirname(__FILE__) . '/../config.test.php';
+
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/Standard.php';
@@ -23,13 +25,6 @@ class FakeEvaluationUser {
 class FakeEvaluationWebshop {
     public $kernel;
 }
-
-
-define('DB_DSN', 'mysql://root:@localhost/pear');
-define('PATH_INCLUDE_MODULE', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/modules/');
-define('PATH_INCLUDE_SHARED', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/shared/');
-define('PATH_INCLUDE_CONFIG', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/config/');
-
 
 class BasketEvaluationTest extends PHPUnit_Framework_TestCase
 {

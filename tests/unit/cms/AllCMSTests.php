@@ -14,7 +14,7 @@ class CMSTests {
     public static function suite() {
         $suite = new PHPUnit_Framework_TestSuite('CMS');
 
-        $tests = array('Section', 'Site');
+        $tests = array('Section', 'Site', 'PageElement');
 
         foreach ($tests AS $test) {
             require_once $test . 'Test.php';

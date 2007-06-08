@@ -21,7 +21,7 @@ class TestableNewsletter extends Newsletter
 
     function getSubscribers()
     {
-        for ($i = 0; $i<200;$i++) {
+        for ($i = 0; $i<10000;$i++) {
             $array[] = array(
                 'contact_id' => '1',
                 'contact_email' => 'test@email.dk'
