@@ -9,11 +9,12 @@ class AppendFile {
     var $error;
     var $dbquery;
 
-    function __construct(& $kernel, $belong_to, $belong_to_id, $id=0) {
-        if (!is_object($kernel) || strtolower(get_class($kernel)) != 'kernel') {
+    function __construct($kernel, $belong_to, $belong_to_id, $id=0) {
+        if (!is_object($kernel)) {
             trigger_error('AppendFile::__construct needs kernel', E_USER_ERROR);
+            return false;
         }
-        $this->kernel = & $kernel;
+        $this->kernel = $kernel;
 
         $shared_filehandler = $this->kernel->useShared('filehandler');
         $this->belong_to_types = $shared_filehandler->getSetting('file_append_belong_to_types');
