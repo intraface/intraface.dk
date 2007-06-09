@@ -107,6 +107,12 @@ class Intraface_XMLRPC_CMS_Server {
         if (isset($search['type'])) {
             $cmspage->dbquery->setFilter('type', $search['type']);
         }
+
+		if (isset($search['level'])) {
+            $cmspage->dbquery->setFilter('level', $search['level']);
+        }
+
+
         return $cmspage->getList();
     }
 
