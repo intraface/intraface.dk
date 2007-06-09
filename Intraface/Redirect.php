@@ -2,8 +2,17 @@
 /**
  * Redirects a user to specific pages
  *
+ * @package Intraface
+ * @author  Sune Jensen <sj@sunet.dk>
+ * @version @package-version@
+ */
+
+require_once 'Intraface/Standard.php';
+
+/**
+ * Redirects a user to specific pages
+ *
  * Usage:
- * ----
  *
  * On the page where the user starts to get into the redirect cycle (not necessary the
  * page the user returns to afterwards):
@@ -95,7 +104,6 @@
  * </code>
  *
  * Notice:
- * ------
  *
  * The system to automatically get redirect_id and return_redirect_id is based on $_GET variables.
  * If there is a need for $_POST write Sune Jensen <sj@sunet.dk>.
@@ -111,8 +119,6 @@
  * @author  Sune Jensen <sj@sunet.dk>
  * @version @package-version@
  */
-
-require_once 'Intraface/Standard.php';
 
 class Redirect extends Standard {
 
@@ -376,7 +382,7 @@ class Redirect extends Standard {
      * @param string $url        Destination url. The url redirect should work from
      * @param string $return_url Url to return to WHAT DOES THAT MEAN - GIVE A CODE EXAMPLE
      *
-     * @return den url der skal benyttes til redirect.
+     * @return string The url which should be used for the redirect
      */
     function setDestination($destination_url, $return_url = '') {
         if (!array_key_exists('SCRIPT_URI', $_SERVER)) {
