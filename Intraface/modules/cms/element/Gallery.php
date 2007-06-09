@@ -103,7 +103,7 @@ class CMS_Gallery extends CMS_Element {
         $this->parameter->save('gallery_select_method', $var['gallery_select_method']);
         $this->parameter->save('thumbnail_size', intval($var['thumbnail_size']));
         $this->parameter->save('popup_size', intval($var['popup_size']));
-        $this->parameter->save('show_description', intval($var['show_description']));
+        $this->parameter->save('show_description', $var['show_description']);
 
         return true;
     }
