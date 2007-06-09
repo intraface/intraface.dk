@@ -1,10 +1,11 @@
 <?php
+require_once 'Intraface/modules/cms/Element.php';
 
 class CMS_Gallery extends CMS_Element {
 
     var $methods = array('single_image');
 
-    function __construct(& $section, $id = 0) {
+    function __construct($section, $id = 0) {
         $this->value['type'] = 'gallery';
 
         parent::__construct($section, $id);
@@ -15,11 +16,24 @@ class CMS_Gallery extends CMS_Element {
     function load_element() {
         $this->value['pictures'] = array();
         $this->value['gallery_select_method'] = $this->parameter->get('gallery_select_method');
+        $this->value['thumbnail_size'] = $this->parameter->get('thumbnail_size');
+        $this->value['show_description'] = $this->parameter->get('show_description');
+        if (empty($this->value['show_description'])) {
+            $this->value['show_description'] = 'hide';
+        }
+
+        if (empty($this->value['thumbnail_size'])) {
+            $this->value['thumbnail_size'] = 3;
+        }
+        $this->value['popup_size'] = $this->parameter->get('popup_size');
+        if (empty($this->value['popup_size'])) {
+            $this->value['popup_size'] = 4;
+        }
 
         if(false) { // benytter keyword
         /*
-            // Dette skal lige implementeres, så hvis man har filemanager, og har benyttet nøgleord, så
-            // skal array returneres ved hjælp af Filemanager. Vær opmærksom på hvis en bruger der ikke har
+            // Dette skal lige implementeres, sï¿½ hvis man har filemanager, og har benyttet nï¿½gleord, sï¿½
+            // skal array returneres ved hjï¿½lp af Filemanager. Vï¿½r opmï¿½rksom pï¿½ hvis en bruger der ikke har
             // Filemanager ser elementet, lavet af en der har filemanager. her i vis, skal der nok overrules om
             // brugeren har filemanager.
             $this->value['keyword_id'] = $this->parameter->get('keyword_id');
@@ -58,7 +72,6 @@ class CMS_Gallery extends CMS_Element {
                 continue;
             }
 
-
             $filehandler->createInstance();
             $this->value['pictures'][$i] = $filehandler->get();
             $this->value['pictures'][$i]['instances'] = $filehandler->instance->getTypes();
@@ -79,17 +92,20 @@ class CMS_Gallery extends CMS_Element {
         }
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
     }
 
     function save_element($var) {
         // Der skal gemmes om man benytter keyword eller enkeltfiler.
         // $this->parameter->save('keyword_id', $var['keyword_id']);
         $this->parameter->save('gallery_select_method', $var['gallery_select_method']);
+        $this->parameter->save('thumbnail_size', intval($var['thumbnail_size']));
+        $this->parameter->save('popup_size', intval($var['popup_size']));
+        $this->parameter->save('show_description', intval($var['show_description']));
 
-        return 1;
+        return true;
     }
     /*
     function getElementHtml() {
