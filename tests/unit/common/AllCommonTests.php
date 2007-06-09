@@ -14,7 +14,7 @@ class CommonTests {
     public static function suite() {
         $suite = new PHPUnit_Framework_TestSuite('Common');
 
-        $tests = array('Auth', 'Kernel', 'Module', 'Setting', 'User', 'Weblogin');
+        $tests = array('Auth', 'Kernel', 'Module', 'Setting', 'User', 'Weblogin', 'Redirect');
 
         foreach ($tests AS $test) {
             require_once $test . 'Test.php';
