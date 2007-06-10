@@ -6,9 +6,11 @@ $translation = $kernel->getTranslation('product');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+        $product = new Product($kernel, $_POST['id']);
+
     if(isset($_POST['append_file_submit'])) {
 
-        $product = new Product($kernel, $_POST['id']);
+
 
         $filehandler = new FileHandler($kernel);
         $append_file = new AppendFile($kernel, 'product', $product->get('id'));
@@ -24,7 +26,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $append_file->save(array('file_handler_id' => $id));
             }
         }
+
+
     }
+
+        if(!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
+            $redirect = Redirect::factory($kernel, 'go');
+            $module_filemanager = $kernel->useModule('filemanager');
+            $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', $module->getPath().'product.php?id='.$product->get('id'));
+            $redirect->setIdentifier('product');
+            $redirect->askParameter('file_handler_id', 'multiple');
+
+            header('Location: '.$url);
+            exit;
+        }
+
 
     header('Location: product.php?id='.$product->get('id'));
     exit;
@@ -73,7 +89,13 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif (!empty($_GET['id'])) {
         $product = new Product($kernel, $_GET['id']);
         $filehandler = new FileHandler($kernel);
-        $append_file = new AppendFile($kernel, 'product', $product->get('id'));
+
+        $redirect = Redirect::factory($kernel, 'return');
+        if($redirect->get('identifier') == 'product') {
+            $append_file = new AppendFile($kernel, 'product', $product->get('id'));
+            $append_file->addFile($redirect->getParameter('file_handler_id'));
+        }
+
     }
 
     else {
@@ -115,7 +137,7 @@ $page->start('Produkt: ' . $product->get('name'));
         <td><?php echo safeToHtml(number_format($product->get('price'), 2, ",", ".")); ?> ex. moms</td>
     </tr>
     <tr>
-        <td>Vægt</td>
+        <td>Vï¿½gt</td>
         <td><?php echo safeToHtml($product->get('weight')); ?> gram</td>
     </tr>
     <tr>
@@ -141,7 +163,7 @@ $page->start('Produkt: ' . $product->get('name'));
         </td>
     </tr>
 
-    <!-- her bør være en tidsangivelse -->
+    <!-- her bï¿½r vï¿½re en tidsangivelse -->
 
     <?php endif; ?>
 
@@ -169,11 +191,11 @@ $page->start('Produkt: ' . $product->get('name'));
             $mainAccounting = $kernel->useModule("accounting");
     ?>
     <tr>
-        <td>Bogføres på</td><td>
+        <td>Bogfï¿½res pï¿½</td><td>
         <?php
             $year = new Year($kernel);
             if ($year->get('id') == 0) {
-                echo 'Året er ikke sat i regnskab';
+                echo 'ï¿½ret er ikke sat i regnskab';
             }
             else {
                 $account = Account::factory($year, $product->get('state_account_id'));
@@ -248,7 +270,9 @@ if($kernel->user->hasModuleAccess('invoice')) {
         <?php
         $filehandler = new Filehandler($kernel);
         $filehandler_html = new FileHandlerHTML($filehandler);
-        $filehandler_html->printFormUploadTag('', 'new_append_file', 'append_file_choose_file', array('type'=>'only_upload', 'include_submit_button_name' => 'append_file_submit', 'filemanager' => false));
+        $filehandler_html->printFormUploadTag('pic_id', 'new_append_file', 'choose_file', array('include_submit_button_name' => 'append_file_submit', 'filemanager' => true));
+
+        //$filehandler_html->printFormUploadTag('pic_id', 'new_pic', 'choose_file', array('image_size' => 'small'));'
         ?>
         </form>
     </div>
@@ -298,7 +322,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
                     <td><?php print($product->stock->get("reserved")); ?> (<?php print($product->stock->get("on_quotation")); ?>)</td>
                 </tr>
             </table>
-            <!-- hvad bliver følgende brugt til -->
+            <!-- hvad bliver fï¿½lgende brugt til -->
             <div id="stock_regulation" style="display: none ; position: absolute; border: 1px solid #666666; background-color: #CCCCCC; padding: 10px; width: 260px;">
                 Reguler med antal: <input type="text" name="regulate_number" size="5" />
                 <br />Beskrivelse: <input type="text" name="regulation_description" />
@@ -319,7 +343,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
 
                 if(count($latest) > 0) {
                     ?>
-                    <h3>Seneste indkøb</h3>
+                    <h3>Seneste indkï¿½b</h3>
 
                     <table>
                         <thead>
