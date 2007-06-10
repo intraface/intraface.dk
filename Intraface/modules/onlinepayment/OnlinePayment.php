@@ -214,14 +214,12 @@ class OnlinePayment extends Standard {
 
 	function save($input) {
 
-		// jeg har ændret denne fra == til > Det håber jeg er rigtig forstået /LO
 		if($this->id > 0) {
 			$this->error->set("OnlinePayment->save kan ikke køres på en allerede oprettet betaling");
 			return 0;
 		}
 
 		$input = safeToDb($input);
-
 
 		$validator = new Validator($this->error);
 

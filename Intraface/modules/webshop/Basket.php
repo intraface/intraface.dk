@@ -176,7 +176,7 @@ class Basket
      * 
      * @return boolean true or false
      */
-    function saveDetails($input)
+    function saveAddress($input)
     {
     	
     	
@@ -190,9 +190,16 @@ class Basket
             "email =\"".$input['email']."\", ".
             "phone = \"".$input['phone']."\", ".
             "coupon = \"".$input['coupon']."\"";
+        
+        return $this->saveToDb($sql);
     	
     	
-    	$db = new DB_Sql;
+    	
+    }
+    
+    function saveToDb($sql) {
+        
+        $db = new DB_Sql;
     	$db->query("SELECT id FROM basket_details WHERE " . $this->sql_extra. "
                 AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
         if ($db->nextRecord()) {

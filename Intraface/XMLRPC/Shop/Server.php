@@ -343,7 +343,7 @@ class Intraface_XMLRPC_Shop_Server
      *
      * @return boolean true or false
      */
-    public function saveDetails($credentials, $values)
+    public function saveAddress($credentials, $values)
     {
         $this->checkCredentials($credentials);
 
@@ -354,7 +354,7 @@ class Intraface_XMLRPC_Shop_Server
         }
 
 
-        if (!$this->webshop->basket->saveDetails($values)) {
+        if (!$this->webshop->basket->saveAddress($values)) {
             throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
         }
 
