@@ -340,6 +340,7 @@ class Intraface_XMLRPC_Shop_Server
     /**
      * Saves buyer details
      *
+     * @param struct $credentials Credentials to use the server
      * @param struct $values      Values to save
      *
      * @return boolean true or false
