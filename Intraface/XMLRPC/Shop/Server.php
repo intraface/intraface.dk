@@ -59,9 +59,9 @@ class Intraface_XMLRPC_Shop_Server
         $product->createDBQuery();
 
         if(!isset($mixed['use_paging']) || $mixed['use_paging'] == 'true') {
-        	$product->dbquery->usePaging('paging');
+            $product->dbquery->usePaging('paging');
         }
-        
+
 
         // sublevel has to be used so other searches are not overwritten
         $product->dbquery->storeResult('use_stored', 'webshop_' . $area . '_' .  md5($this->credentials['session_id']), 'sublevel');
@@ -206,15 +206,15 @@ class Intraface_XMLRPC_Shop_Server
      */
     function getProductKeywords($credentials)
     {
-       
+
         $this->checkCredentials($credentials);
         $this->_factoryWebshop();
-        
+
         $product = new Product($this->kernel);
         $keywords = $product->getKeywords();
         return $keywords->getUsedKeywords();
-        
-        
+
+
         $array = array(
             array('id' => 1, 'keyword' => 'First keyword')
         );
@@ -335,8 +335,8 @@ class Intraface_XMLRPC_Shop_Server
 
         return $order_id;
     }
-    
-    
+
+
     /**
      * Saves buyer details
      *
@@ -349,7 +349,7 @@ class Intraface_XMLRPC_Shop_Server
         $this->checkCredentials($credentials);
 
         $this->_factoryWebshop();
-        
+
         if (!is_array($values)) {
             throw new XML_RPC2_FaultException('details could not be saved - nothing to save', -4);
         }
@@ -361,7 +361,7 @@ class Intraface_XMLRPC_Shop_Server
 
         return true;
     }
-    
+
     /**
      * Get buyer details
      *
@@ -377,33 +377,33 @@ class Intraface_XMLRPC_Shop_Server
 
         return $this->webshop->basket->getAddress();
     }
-    
+
     /**
      * Saves customer coupon
      *
-     * @param struct $customer_coupon      Customer coupon to save
+     * @param struct $credentials     Credentials to use the server
+     * @param string $customer_coupon Customer coupon to save
      *
      * @return boolean true or false
      */
-    
     public function saveCustomerCoupon($credentials, $customer_coupon)
     {
         $this->checkCredentials($credentials);
 
         $this->_factoryWebshop();
-        
+
         if (!$this->webshop->basket->saveCustomerCoupon($customer_coupon)) {
             throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
         }
 
         return true;
     }
-    
-    
+
+
     /**
      * Get customer coupon
      *
-     * @param struct  $credentials Credentials to use the server
+     * @param struct $credentials Credentials to use the server
      *
      * @return array
      */
@@ -415,7 +415,7 @@ class Intraface_XMLRPC_Shop_Server
 
         return $this->webshop->basket->getCustomerCoupon();
     }
-    
+
 
     /**
      * Checks credentials
