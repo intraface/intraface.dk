@@ -41,3 +41,24 @@ ALTER TABLE `basket` ADD `text` TEXT NOT NULL ;
 
 ALTER TABLE `accounting_account` CHANGE `primosaldo_debet` `primosaldo_debet` DOUBLE( 11, 2 ) NOT NULL DEFAULT '0.00'
 ALTER TABLE `accounting_account` CHANGE `primosaldo_credit` `primosaldo_credit` DOUBLE( 11, 2 ) NOT NULL DEFAULT '0.00'
+
+CREATE TABLE `basket_details` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `session_id` varchar(255) NOT NULL,
+  `date_created` datetime NOT NULL,
+  `date_changed` datetime NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `contactperson` varchar(255) NOT NULL,
+  `address` text NOT NULL,
+  `postcode` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `country` varchar(255) NOT NULL,
+  `cvr` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `comment` text NOT NULL,
+  `customer_coupon` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM ;
