@@ -326,6 +326,15 @@ switch ($value['type']) {
                 <input type="text" name="headline" id="headline" value="<?php if (!empty($value['headline'])) echo safeToForm($value['headline']); ?>" />
             </div>
             <div class="formrow">
+                <label for="no_results"><?php echo safeToHtml($translation->get('no results text')); ?></label>
+                <input type="text" name="no_results_text" id="no_results" value="<?php if (!empty($value['no_results_text'])) echo safeToForm($value['no_results_text']); ?>" />
+            </div>
+            <div class="formrow">
+                <label for="read_more_text"><?php echo safeToHtml($translation->get('read more text')); ?></label>
+                <input type="text" name="read_more_text" id="read_more_text" value="<?php if (!empty($value['read_more_text'])) echo safeToForm($value['read_more_text']); ?>" />
+            </div>
+
+            <div class="formrow">
                 <label for="show_type_id"><?php echo safeToHtml($translation->get('show the following pages')); ?></label>
                 <select name="show_type" id="show_type_id">
                     <option value="all"<?php if (!empty($value['show_type']) AND $value['show_type'] == 'all') echo ' selected="selected"'; ?>><?php echo safeToForm($translation->get('all pages')); ?></option>
