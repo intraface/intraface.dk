@@ -271,7 +271,8 @@ class Intraface_XMLRPC_Shop_Server
         }
 
         if (!$this->webshop->basket->change($product_id, $quantity, $text)) {
-            throw new XML_RPC2_FaultException('product quantity is not in stock', -100);
+            return false;
+            // throw new XML_RPC2_FaultException('product quantity is not in stock', -100);
         }
 
         return true;
@@ -348,7 +349,7 @@ class Intraface_XMLRPC_Shop_Server
         $this->checkCredentials($credentials);
 
         $this->_factoryWebshop();
-
+        
         if (!is_array($values)) {
             throw new XML_RPC2_FaultException('details could not be saved - nothing to save', -4);
         }
@@ -368,13 +369,51 @@ class Intraface_XMLRPC_Shop_Server
      *
      * @return array
      */
-    public function getDetails($credentials)
+    public function getAddress($credentials)
     {
         $this->checkCredentials($credentials);
 
         $this->_factoryWebshop();
 
-        return $this->webshop->basket->getDetails();
+        return $this->webshop->basket->getAddress();
+    }
+    
+    /**
+     * Saves customer coupon
+     *
+     * @param struct $customer_coupon      Customer coupon to save
+     *
+     * @return boolean true or false
+     */
+    
+    public function saveCustomerCoupon($credentials, $customer_coupon)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop();
+        
+        if (!$this->webshop->basket->saveCustomerCoupon($customer_coupon)) {
+            throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
+        }
+
+        return true;
+    }
+    
+    
+    /**
+     * Get customer coupon
+     *
+     * @param struct  $credentials Credentials to use the server
+     *
+     * @return array
+     */
+    public function getCustomerCoupon($credentials)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop();
+
+        return $this->webshop->basket->getCustomerCoupon();
     }
     
 

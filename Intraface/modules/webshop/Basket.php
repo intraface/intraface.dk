@@ -178,22 +178,35 @@ class Basket
      */
     function saveAddress($input)
     {
-    	
-    	
+        
         $sql = "name = \"".$input['name']."\"," .
-            "contactname = \"".$input['contactname']."\", " .
+            "contactperson = \"".$input['contactperson']."\", " .
             "address = \"".$input['address']."\", " .
             "postcode = \"".$input['postcode']."\", " .
             "city = \"".$input['city']."\", ".
             "country = \"".$input['country']."\", ".
             "cvr = \"".$input['cvr']."\", ".
             "email =\"".$input['email']."\", ".
-            "phone = \"".$input['phone']."\", ".
-            "coupon = \"".$input['coupon']."\"";
+            "phone = \"".$input['phone']."\"";
         
         return $this->saveToDb($sql);
     	
     	
+    	
+    }
+    
+    /*
+     * Save customer coupon
+     * 
+     * @param (array)input	array with buyer details
+     * 
+     * @return boolean true or false
+     */
+    function saveCustomerCoupon($input)
+    {
+    	$sql = "customer_coupon = \"".$input."\"";
+        
+        return $this->saveToDb($sql);
     	
     }
     
@@ -216,6 +229,7 @@ class Basket
                        	date_created = NOW(),
                         intranet_id = " . $this->webshop->kernel->intranet->get('id') . ",
                         " . $this->sql_extra);
+            
             return true;
         }
     }
@@ -226,7 +240,7 @@ class Basket
      * @return array of buyer details.
      */
     
-    function getDetails() 
+    function getAddress() 
     {
 		$db = new DB_Sql;
         $db->query("SELECT *
@@ -238,15 +252,34 @@ class Basket
         }
         
         return array('name' => $db->f('name'),
-        	'contactname' => $db->f('contactname'),
+        	'contactperson' => $db->f('contactperson'),
         	'address' => $db->f('address'),
         	'postcode' => $db->f('postcode'),
         	'city' => $db->f('city'),
         	'country' => $db->f('country'),
         	'cvr' => $db->f('cvr'),
         	'email' => $db->f('email'),
-        	'phone' => $db->f('phone'),
-        	'coupon' => $db->f('coupon'));
+        	'phone' => $db->f('phone'));
+	}
+	
+	/**
+     * Return customer coupon
+     * 
+     * @return array with customer coupon
+     */
+    
+    function getCustomerCoupon() 
+    {
+		$db = new DB_Sql;
+        $db->query("SELECT customer_coupon
+            FROM basket_details
+            WHERE " . $this->sql_extra . "
+                AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
+        if (!$db->nextRecord()) {
+            return array();
+        }
+        
+        return array('customer_coupon' => $db->f('customer_coupon'));
 	}
     
 
