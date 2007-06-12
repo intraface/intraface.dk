@@ -15,7 +15,8 @@ if (!empty($_POST)) {
 	$validator->isNumeric($_POST['show_online'], 'show_online skal være et tal');
 	//$validator->isNumeric($_POST['discount_limit'], 'discount_limit skal være et tal');
 	//$validator->isNumeric($_POST['discount_percent'], 'discount_percent skal være et tal');
-	$validator->isString($_POST['confirmation_text'], 'confirmation_text skal være et tekst');
+	$validator->isString($_POST['confirmation_text'], 'confirmation text is not valid');
+    $validator->isString($_POST['webshop_receipt'], 'webshop receipt is not valid', '<p><br/><div><ul><ol><li><h2><h3><h4>');
 
 	if (!$error->isError()) {
 
@@ -23,6 +24,8 @@ if (!empty($_POST)) {
 		//$kernel->setting->set('intranet','webshop.discount_limit', $_POST['discount_limit']);
 		//$kernel->setting->set('intranet','webshop.discount_percent', $_POST['discount_percent']);
 		$kernel->setting->set('intranet','webshop.confirmation_text', $_POST['confirmation_text']);
+		$kernel->setting->set('intranet','webshop.webshop_receipt', $_POST['webshop_receipt']);
+		
 		header('Location: index.php');
 		exit;
 	}
@@ -35,6 +38,7 @@ else {
 	$value['discount_percent'] = $kernel->setting->get('intranet','webshop.discount_percent');
 	$value['show_online'] = $kernel->setting->get('intranet','webshop.show_online');
 	$value['confirmation_text'] = $kernel->setting->get('intranet','webshop.confirmation_text');
+	$value['webshop_receipt'] = $kernel->setting->get('intranet','webshop.webshop_receipt');
 }
 
 if(isset($_GET['delete_basketevaluation_id'])) {
@@ -91,6 +95,14 @@ $page->start(safeToHtml($translation->get('webshop')));
 		<div>
 		<label for="confirmation_text"><?php echo safeToHtml($translation->get('text')); ?></label><br />
 		<textarea name="confirmation_text" cols="80" rows="10"><?php echo safeToForm($value['confirmation_text']); ?></textarea>
+		</div>
+	</fieldset>
+	
+	<fieldset>
+		<legend><?php echo safeToHtml($translation->get('webshop receipt')); ?></legend>
+		<div>
+		<label for="webshop_receipt"><?php echo safeToHtml($translation->get('text')); ?></label><br />
+		<textarea name="webshop_receipt" cols="80" rows="10"><?php echo safeToForm($value['webshop_receipt']); ?></textarea>
 		</div>
 	</fieldset>
 
