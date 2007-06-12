@@ -97,8 +97,20 @@ class Webshop {
         $value['this_date'] = date('d-m-Y');
         $value['due_date'] = date('d-m-Y');
         $value['description'] = $input['description'];
+        $value['internal_note'] = $input['internal_note'];      
         $value['message'] = $input['message'];
-        $value['internal_note'] = $input['internal_note'];
+        
+        if(isset($input['customer_coupon']) && $input['customer_coupon'] != '') {
+            if($value['message'] != '') $value['message'] .= "\n\n";
+            $value['message'] .= "Kundekupon:". $input['customer_coupon'];
+        }
+        
+        if(isset($input['customer_comment']) && $input['customer_comment'] != '') {
+            if($value['message'] != '') $value['message'] .= "\n\n";
+            $value['message'] .= "Kommentar:\n". $input['customer_comment'];
+        }
+        
+        
 
         $this->order = new Debtor($this->kernel, 'order');
         if (!$order_id = $this->order->update($value, 'webshop')) {
@@ -169,6 +181,17 @@ class Webshop {
             $onlinepayment->error->view();
             return 0;
         }
+    }
+    
+    /**
+     * Returns receipt text
+     * 
+     * @return array with receipt
+     */
+    
+    function getReceiptText()
+    {
+        return array('receipt_text' => $this->kernel->setting->get('intranet','webshop.webshop_receipt'));
     }
 
     function setSent($order_id)

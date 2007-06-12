@@ -195,20 +195,35 @@ class Basket
     	
     }
     
-    /*
+    /**
      * Save customer coupon
      * 
-     * @param (array)input	array with buyer details
+     * @param (string)$customer_coupon	customer coupon
      * 
      * @return boolean true or false
      */
-    function saveCustomerCoupon($input)
+    function saveCustomerCoupon($customer_coupon)
     {
-    	$sql = "customer_coupon = \"".$input."\"";
+    	$sql = "customer_coupon = \"".$customer_coupon."\"";
         
         return $this->saveToDb($sql);
     	
     }
+ 
+    /**
+     * Save customer comment
+     * 
+     * @param (string) $customer_comment comment
+     * 
+     * @return boolean true or false
+     */
+    function saveCustomerComment($customer_comment)
+    {
+    	$sql = "customer_comment = \"".$customer_comment."\"";
+        
+        return $this->saveToDb($sql);
+    	
+    } 
     
     function saveToDb($sql) {
         
@@ -281,7 +296,26 @@ class Basket
         
         return array('customer_coupon' => $db->f('customer_coupon'));
 	}
+
+	/**
+     * Return customer coupon
+     * 
+     * @return array with customer coupon
+     */
     
+    function getCustomerComment() 
+    {
+		$db = new DB_Sql;
+        $db->query("SELECT customer_comment
+            FROM basket_details
+            WHERE " . $this->sql_extra . "
+                AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
+        if (!$db->nextRecord()) {
+            return array();
+        }
+        
+        return array('customer_comment' => $db->f('customer_comment'));
+	}    
 
     /**
      * Counts the number of a certain product in the basket
@@ -447,6 +481,8 @@ class Basket
     {
         $db = new DB_Sql;
         $db->query("UPDATE basket SET session_id = '' WHERE " . $this->sql_extra . " AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
+        $db->query("UPDATE basket_details SET session_id = '' WHERE " . $this->sql_extra . " AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
+      
         return true;
     }
 }

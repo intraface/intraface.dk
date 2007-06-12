@@ -261,7 +261,7 @@ class BasketEvaluation extends Standard
                     $evaluate = $basket->getTotalWeight();
                     break;
                 case 'customer_coupon':
-                    $evaluate = $customer['coupon'];
+                    $evaluate = $customer['customer_coupon'];
                     // coupons can only be evaluated as 'equals' or 'different from'
                     if ($evaluation['evaluate_method'] != 'equals' && $evaluation['evaluate_method'] != 'different_from') {
                         $evaluation['evaluate_method'] = 'different_from';
