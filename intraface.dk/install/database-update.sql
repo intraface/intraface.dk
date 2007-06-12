@@ -62,3 +62,5 @@ CREATE TABLE `basket_details` (
   `customer_coupon` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
+
+ALTER TABLE `basket_details` CHANGE `comment` `customer_comment` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL 
