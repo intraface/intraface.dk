@@ -282,6 +282,7 @@ class Intraface_XMLRPC_Shop_Server
      * Gets an array with the current basket
      *
      * @param struct $credentials Credentials to use the server
+     * @param struct $customer customer values
      *
      * @return array
      */
@@ -417,6 +418,59 @@ class Intraface_XMLRPC_Shop_Server
         return $this->webshop->basket->getCustomerCoupon();
     }
 
+    /**
+     * Saves customer comment
+     *
+     * @param struct $credentials     Credentials to use the server
+     * @param string $customer_comment Customer coupon to save
+     *
+     * @return boolean true or false
+     */
+    public function saveCustomerComment($credentials, $customer_comment)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop();
+
+        if (!$this->webshop->basket->saveCustomerComment($customer_comment)) {
+            throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Get customer comment
+     *
+     * @param struct $credentials Credentials to use the server
+     *
+     * @return array
+     */
+    public function getCustomerComment($credentials)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop();
+
+        return $this->webshop->basket->getCustomerComment();
+    }
+
+    /**
+     * Get receipt text
+     *
+     * @param struct $credentials Credentials to use the server
+     *
+     * @return array
+     */
+    public function getReceiptText($credentials)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop();
+
+        return $this->webshop->getReceiptText();
+    }
 
     /**
      * Checks credentials
