@@ -78,7 +78,7 @@ $page->start(safeToHtml($translation->get('Basket evaluation')));
 		
 		<div class="formrow">
 			<label for="go_to_index_after"><?php echo safeToHtml($translation->get('Go to index after')); ?></label>
-			<input type="text" name="go_to_index_after" size="6" value="<?php if (!empty($value['go_to_index_after'])) echo safeToForm($value['go_to_index_after']); ?>" />
+			<input type="text" name="go_to_index_after" size="6" value="<?php if (isset($value['go_to_index_after'])) echo safeToForm($value['go_to_index_after']); ?>" />
 		</div>
 		
 	</fieldset>
