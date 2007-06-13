@@ -137,12 +137,14 @@ class BasketEvaluation extends Standard
         $validator->isNumeric($input['running_index'], 'Index is not a valid number');
         $validator->isNumeric($input['evaluate_target_key'], 'Evaluation target is not valid');
         $validator->isNumeric($input['evaluate_method_key'], 'Evaluation method is not valid');
-        $validator->isString($input['evaluate_value'], 'Evaluation value is not valid', '', '');
+        settype($input['evaluate_value'], 'string');
+        $validator->isString($input['evaluate_value'], 'Evaluation value is not valid', '', 'allow_empty');        
         $validator->isNumeric($input['go_to_index_after'], 'Go to index after is not a valid number');
-
         $validator->isNumeric($input['action_action_key'], 'Action is not valid');
-        $validator->isString($input['action_value'], 'Target is not valid', '', '');
-        $validator->isNumeric($input['action_quantity'], 'Action quantity is not a valid number');
+        settype($input['action_value'], 'string');
+        $validator->isString($input['action_value'], 'Target is not valid', '', 'allow_empty');
+        settype($input['action_quantity'], 'integer');
+        $validator->isNumeric($input['action_quantity'], 'Action quantity is not a valid number', 'zero_or_greater');
         $validator->isNumeric($input['action_unit_key'], 'Action unit is not valid');
 
         if ($this->error->isError()) {
@@ -160,6 +162,7 @@ class BasketEvaluation extends Standard
                  "action_quantity = ".$this->db->quote($input['action_quantity'], 'integer').", " .
                  "action_unit_key = ".$this->db->quote($input['action_unit_key'], 'integer');
 
+        // 
         if ($this->id != 0) {
             $result = $this->db->exec("UPDATE webshop_basket_evaluation SET ".$sql." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
 
