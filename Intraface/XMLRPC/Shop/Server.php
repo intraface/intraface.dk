@@ -244,6 +244,7 @@ class Intraface_XMLRPC_Shop_Server
             throw new XML_RPC2_FaultException('product id must be an integer', -5);
         }
 
+        $text = $this->utf8Decode($text);
         return $this->webshop->basket->add(intval($product_id), intval($quantity), $text);
     }
 
@@ -270,6 +271,7 @@ class Intraface_XMLRPC_Shop_Server
             throw new XML_RPC2_FaultException('product id and quantity must be integers', -5);
         }
 
+        $text = $this->utf8Decode($text);
         if (!$this->webshop->basket->change($product_id, $quantity, $text)) {
             return false;
             // throw new XML_RPC2_FaultException('product quantity is not in stock', -100);
@@ -292,9 +294,16 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->_factoryWebshop();
 
-        require_once 'Intraface/modules/webshop/BasketEvaluation.php';
-        $basketevaluation = new BasketEvaluation($this->webshop->kernel);
-        if (!$basketevaluation->run($this->webshop->basket, $customer)) {
+        // we put the possibility for BasketEvaluation not to be run.
+        if(is_string($customer) && $customer == 'no_evaluation') {
+            // nothing happens
+        }
+        elseif(is_array($customer)) {
+        	require_once 'Intraface/modules/webshop/BasketEvaluation.php';
+            $basketevaluation = new BasketEvaluation($this->webshop->kernel);
+            if (!$basketevaluation->run($this->webshop->basket, $customer)) {
+                // We should see to return the result in some way.
+            }
         }
 
         return array(
@@ -330,6 +339,8 @@ class Intraface_XMLRPC_Shop_Server
             $values['description'] = 'Onlineshop';
         }
 
+        $values = $this->utf8Decode($values);
+        
         if (!$order_id = $this->webshop->placeOrder($values)) {
             throw new XML_RPC2_FaultException('order could not be sent ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
         }
@@ -337,6 +348,77 @@ class Intraface_XMLRPC_Shop_Server
         return $order_id;
     }
 
+
+    /**
+     * Saves details for a processed onlineoayment
+     *
+     *
+     * @param struct $credentials Credentials to use the server
+     * @param struct $values      Values to save
+     *
+     * @return integer $payment_id
+     */
+      
+    public function saveOnlinePayment($credentials, $values)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop();
+        
+        if (!$this->kernel->intranet->hasModuleAccess('onlinepayment')) {
+            throw new XML_RPC2_FaultException('The intranet did not have access to OnlinePayment', -4);
+        }
+        
+        $this->kernel->useModule('onlinepayment', true); // true: ignores user access;
+        
+        if(isset($values['payment_id']) && is_int($values['payment_id']) && $values['payment_id'] > 0) {
+           $onlinepayment = OnlinePayment::factory($this->kernel, 'id', $values['payment_id']); 
+        }
+        else {
+            $onlinepayment = OnlinePayment::factory($this->kernel);
+        }
+        
+
+        if (!$payment_id = $onlinepayment->save($values)) {
+        	// this is probably a little to hard reaction.
+            throw new XML_RPC2_FaultException('Onlinebetaling kunne ikke blive gemt' . strtolower(implode(', ', $onlinepayment->error->message)), -4);
+        }
+       
+
+        return $payment_id;
+    }
+
+
+    /**
+     * Returns an onlinepayment id to be processed to the id can be used in payment
+     *
+     *
+     * @param struct $credentials Credentials to use the server
+     *
+     * @return integer $payment_id
+     */
+      
+    public function createOnlinePayment($credentials)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop();
+        
+        if (!$this->kernel->intranet->hasModuleAccess('onlinepayment')) {
+            throw new XML_RPC2_FaultException('The intranet did not have access to OnlinePayment', -4);
+        }
+        
+        $this->kernel->useModule('onlinepayment', true); // true: ignores user access;
+        
+        $onlinepayment = OnlinePayment::factory($this->kernel);
+        
+        if (!$payment_id = $onlinepayment->create()) {
+            // this is probably a little to hard reaction
+            throw new XML_RPC2_FaultException('order could not be sent ' . strtolower(implode(', ', $onlinepayment->error->message)), -4);
+        }
+
+        return $payment_id;
+    }
 
     /**
      * Saves buyer details
@@ -355,8 +437,9 @@ class Intraface_XMLRPC_Shop_Server
         if (!is_array($values)) {
             throw new XML_RPC2_FaultException('details could not be saved - nothing to save', -4);
         }
-
-
+        
+        $values = $this->utf8Decode($values);
+        
         if (!$this->webshop->basket->saveAddress($values)) {
             throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
         }
@@ -394,6 +477,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->_factoryWebshop();
 
+        $customer_coupon = $this->utf8Decode($customer_coupon);
         if (!$this->webshop->basket->saveCustomerCoupon($customer_coupon)) {
             throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
         }
@@ -432,6 +516,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->_factoryWebshop();
 
+        $customer_comment = $this->utf8Decode($customer_comment);
         if (!$this->webshop->basket->saveCustomerComment($customer_comment)) {
             throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
         }
@@ -522,6 +607,19 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->webshop = new Webshop($this->kernel, $this->credentials['session_id']);
     }
-
+    
+    private function utf8Decode($values) 
+    {
+        if(is_array($values)) {
+            return array_map('utf8_decode', $values);
+        }
+        elseif(is_string($values)) {
+            return utf8_decode($values);
+        }
+        else {
+            return $values;
+        }
+        
+    }
 }
 ?>

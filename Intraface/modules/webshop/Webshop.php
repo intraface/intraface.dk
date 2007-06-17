@@ -73,6 +73,9 @@ class Webshop {
             if (!empty($input['contactperson'])) {
                 $input['type'] = 1; // firma
             }
+            
+            // sets preffered invoice to email. Should be a setting in webshop.
+            $input['preferred_invoice'] = 2;
 
             # opdaterer kontakten
             if (!$contact_id = $this->contact->save($input)) {

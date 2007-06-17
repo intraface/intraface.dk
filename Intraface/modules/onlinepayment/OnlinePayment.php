@@ -128,6 +128,7 @@ class OnlinePayment extends Standard {
 		}
 
 		$onlinepayment_module = $kernel->getModule('onlinepayment');
+		
 		switch(strtolower($provider)) {
 			case 'default':
 				$onlinepayment_module->includeFile('provider/Default.php');
@@ -214,11 +215,6 @@ class OnlinePayment extends Standard {
 
 	function save($input) {
 
-		if($this->id > 0) {
-			$this->error->set("OnlinePayment->save kan ikke køres på en allerede oprettet betaling");
-			return 0;
-		}
-
 		$input = safeToDb($input);
 
 		$validator = new Validator($this->error);
@@ -260,17 +256,9 @@ class OnlinePayment extends Standard {
 		if($this->error->isError()) {
 			return 0;
 		}
-
-
-
-		$db = new DB_Sql;
-
-		// status_key = 2 sættes til authorized med det samme - senere kan vi arbejde med at de først oprettes og senere autoriseres
-
-		$db->query("INSERT INTO onlinepayment SET
-			intranet_id = ".$this->kernel->intranet->get('id').",
-			date_created = NOW(),
-			date_changed = NOW(),
+		
+		
+		$sql = "date_changed = NOW(),
 			status_key = 2,
 			belong_to_key = ".$belong_to_key.",
 			belong_to_id = ".$input['belong_to_id'].",
@@ -279,11 +267,43 @@ class OnlinePayment extends Standard {
 			transaction_status = \"".$input['transaction_status']."\",
 			amount = ".$input['amount'].",
 			provider_key = ".$this->provider_key.",
-			original_amount = ".$input['amount']);
+			original_amount = ".$input['amount'];
 
-		return $db->insertedId();
+		$db = new DB_Sql;
+		
+		if($this->id > 0) {
+			$db->query("UPDATE onlinepayment SET ".$sql." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
+			return $this->id;
+		}
+		else {
+			
+			$db->query("INSERT INTO onlinepayment SET ".$sql.",
+				intranet_id = ".$this->kernel->intranet->get('id').",
+				date_created = NOW()");
+			return $db->insertedId();   
+		}
+		
 	}
 
+
+	/**
+	 * Creates an onlinepayment to be processed
+	 * 
+	 * @return integer payment_id
+	 */
+	function create() {
+		
+		$provider_key = $this->kernel->setting->get('intranet', 'onlinepayment.provider_key');				
+		$db = new DB_Sql;
+		
+		$db->query("INSERT INTO onlinepayment SET 
+			status_key = 1,
+			intranet_id = ".$this->kernel->intranet->get('id').",
+			date_created = NOW(),
+			provider_key = ".$provider_key);
+		return $db->insertedId();   
+		
+	}
 
 
 	/**
