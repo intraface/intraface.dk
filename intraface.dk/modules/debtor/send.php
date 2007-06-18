@@ -37,7 +37,13 @@ switch ($send_as) {
 
 		// hvad skal den skrive her?
 		
-		$body = $kernel->setting->get('intranet', 'debtor.order.email.text');
+		if($debtor->get('type') == 'order') {
+		    $body = $kernel->setting->get('intranet', 'debtor.order.email.text');
+		}
+		else {
+		    $body = '';
+		}
+		
 	
 
 		break;
