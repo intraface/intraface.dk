@@ -8,4 +8,5 @@ $_setting['debtor.sender.email'] = '';
 $_setting['debtor.sender.name'] = '';
 
 $_setting['debtor.invoice.text'] = '';
+$_setting['debtor.order.email.text'] = '';
 ?>

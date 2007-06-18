@@ -36,7 +36,9 @@ switch ($send_as) {
 		$subject = $translation->get($debtor->get('type')) . ' #' . $debtor->get('number');
 
 		// hvad skal den skrive her?
-		$body = '';
+		
+		$body = $kernel->setting->get('intranet', 'debtor.order.email.text');
+	
 
 		break;
 

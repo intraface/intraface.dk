@@ -47,7 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// reminder
 		$kernel->setting->set('intranet', 'reminder.first.text', $_POST['reminder_text']);
 		$kernel->setting->set('intranet', 'debtor.invoice.text', $_POST['invoice_text']);
-
+		$kernel->setting->set('intranet', 'debtor.order.email.text', $_POST['order_email_text']);
+		
+		
 		// bank
 		$kernel->setting->set('intranet', 'bank_name', $_POST['bank_name']);
 		$kernel->setting->set('intranet', 'bank_reg_number', $_POST['bank_reg_number']);
@@ -128,7 +130,9 @@ else {
 	$values['giro_account_number'] = $kernel->setting->get('intranet', 'giro_account_number');
 	$values['reminder_text'] = $kernel->setting->get('intranet', 'reminder.first.text');
 	$values['invoice_text'] = $kernel->setting->get('intranet', 'debtor.invoice.text');
-
+	$values['order_email_text'] = $kernel->setting->get('intranet', 'debtor.order.email.text');
+	
+	
 	if ($kernel->setting->get('intranet', 'debtor.scan_in_contact') > 0) {
 		$scan_in_contact = new Contact($kernel, $kernel->setting->get('intranet', 'debtor.scan_in_contact'));
 	}
@@ -235,6 +239,11 @@ $page->start('Indstillinger');
 		<?php else: ?>
 		<strong>Kontakt</strong>: <?php echo safeToHtml($scan_in_contact->get('name') . ' <'.$scan_in_contact->address->get('email').'>'); ?> <input type="submit" name="delete_scan_in_contact" value="Slet kontakt" />
 		<?php endif; ?>
+	</fieldset>
+	
+	<fieldset>
+		<legend>Fast tekst på ordre e-mail</legend>
+		<textarea name="order_email_text" cols="80" rows="8"><?php echo safeToForm($values['order_email_text']); ?></textarea>
 	</fieldset>
 
 	<fieldset>

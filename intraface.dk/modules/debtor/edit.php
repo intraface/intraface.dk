@@ -179,7 +179,7 @@ $page->start(safeToHtml($translation->get($action.' '.$debtor->get('type'))));
 
 <?php
 
-if($debtor->get("type") == "invoice") {
+if($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {
 	?>
 	<fieldset class="radiobuttons">
 		<legend>Betalingsoplysninger</legend>

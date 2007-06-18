@@ -290,11 +290,12 @@ class Debtor_Report_Pdf {
 		$this->doc->line($apointX["enhed"], $this->doc->get('y'), $this->doc->get('right_margin_position'), $this->doc->get('y'));
 
 		// paymentcondition
-		if($debtor->get("type") == "invoice") {
+		if($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {
 
+			
 			$parameter = array(
 				"contact" => $debtor->contact,
-				"payment_text" => "Faktura ".$debtor->get("number"),
+				"payment_text" => ucfirst($this->translation->get($debtor->get('type')))." ".$debtor->get("number"),
 				"amount" => $debtor->get("total"),
 				"payment" => $debtor->get('payment_total'),
 				"payment_online" => $debtor->get('payment_online'),
