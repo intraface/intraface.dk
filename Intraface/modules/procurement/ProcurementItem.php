@@ -136,7 +136,12 @@ class ProcurementItem extends Standard {
 		$i = 0;
 		$item = array();
 		
-		$calculated = ($this->procurement->get("total_price") - $this->procurement->get("total_price_items") - $this->procurement->get("vat")) / $this->procurement->get("total_price_items");
+		if($this->procurement->get("total_price_items") > 0) {
+		    $calculated = ($this->procurement->get("total_price") - $this->procurement->get("total_price_items") - $this->procurement->get("vat")) / $this->procurement->get("total_price_items");
+		}
+		else {
+		    $calculated = 0;
+		}
 		
 		while($db->nextRecord()) {
 			$product = new Product($this->procurement->kernel, $db->f("product_id"), $db->f("product_detail_id"));

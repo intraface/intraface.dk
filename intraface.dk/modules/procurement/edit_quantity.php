@@ -31,6 +31,7 @@ elseif(isset($_GET['id']) && isset($_GET['return_redirect_id'])) {
 
 	if(is_array($product_id) && count($product_id) > 0) {
 		$product = new Product($kernel);
+		$product->createDBQuery();
 		$product->dbquery->setCondition('product.id IN('.implode(',', $product_id).')');
 
 		$products = $product->getList();

@@ -93,6 +93,7 @@ $product->dbquery->setExtraUri('set_quantity='.$quantity);
 
 $list = $product->getList();
 $product_values = $redirect->getParameter('product_id', 'with_extra_value');
+$selected_products = array();
 foreach($product_values AS $selection) {
     $selected_products[$selection['value']] = $selection['extra_value'];
 }
@@ -158,9 +159,9 @@ $page->start("Vælg produkt");
                         <?php if($multiple && $quantity): ?>
                             <input id="<?php echo intval($p['id']); ?>" type="text" name="selected[<?php echo intval($p['id']); ?>]" value="<?php if(isset($selected_products[$p['id']])): print(intval($selected_products[$p['id']])); else: print('0'); endif; ?>" size="2" />
                         <?php elseif($multiple && !$quantity): ?>
-                            <input id="<?php echo intval($p['id']); ?>" type="checkbox" name="selected[<?php echo intval($p['id']); ?>]" value="1" <?php if (array_key_exists($p['id'], $related_products)) echo ' checked="checked"'; ?> />
+                            <input id="<?php echo intval($p['id']); ?>" type="checkbox" name="selected[<?php echo intval($p['id']); ?>]" value="1" <?php if (array_key_exists($p['id'], $selected_products)) echo ' checked="checked"'; ?> />
                         <?php elseif(!$multiple): ?>
-                            <input id="<?php echo intval($p['id']); ?>" type="radio" name="selected" value="<?php echo intval($p['id']); ?>" <?php if (array_key_exists($p['id'], $related_products)) echo ' checked="checked"'; ?> />
+                            <input id="<?php echo intval($p['id']); ?>" type="radio" name="selected" value="<?php echo intval($p['id']); ?>" <?php if (array_key_exists($p['id'], $selected_products)) echo ' checked="checked"'; ?> />
                         <?php endif; ?>
                     </td>
                     <td><?php echo safeToHtml($p['number']); ?></td>
