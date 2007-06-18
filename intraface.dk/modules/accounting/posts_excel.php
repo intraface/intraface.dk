@@ -1,6 +1,6 @@
 <?php
-require('../../include_first.php');
-require('Spreadsheet/Excel/Writer.php');
+require '../../include_first.php';
+require 'Spreadsheet/Excel/Writer.php';
 
 $module = $kernel->module('accounting');
 
@@ -23,17 +23,17 @@ $workbook = new Spreadsheet_Excel_Writer();
 $workbook->send($kernel->intranet->get('name') . ' - poster ' . $year->get('label'));
 
 // Creating a worksheet
-$worksheet =& $workbook->addWorksheet('Konti ' . $year->get('label'));
+$worksheet = $workbook->addWorksheet('Konti ' . $year->get('label'));
 
-$format_bold =& $workbook->addFormat();
+$format_bold = $workbook->addFormat();
 $format_bold->setBold();
 $format_bold->setSize(8);
 
-$format_italic =& $workbook->addFormat();
+$format_italic = $workbook->addFormat();
 $format_italic->setItalic();
 $format_italic->setSize(8);
 
-$format =& $workbook->addFormat();
+$format = $workbook->addFormat();
 $format->setSize(8);
 $i = 0;
 $worksheet->write($i, 0, $kernel->intranet->get('name'), $format_bold);
