@@ -4,6 +4,16 @@ require_once 'Intraface/Standard.php';
 require_once 'Intraface/modules/cms/Parameter.php';
 require_once 'Intraface/Validator.php';
 
+require_once 'Intraface/modules/cms/element/Htmltext.php';
+require_once 'Intraface/modules/cms/element/Flickr.php';
+require_once 'Intraface/modules/cms/element/Delicious.php';
+require_once 'Intraface/modules/cms/element/Picture.php';
+require_once 'Intraface/modules/cms/element/PageList.php';
+require_once 'Intraface/modules/cms/element/FileList.php';
+require_once 'Intraface/modules/cms/element/Gallery.php';
+require_once 'Intraface/modules/cms/element/Video.php';
+require_once 'Intraface/modules/cms/element/Map.php';
+
 class CMS_Element extends Standard {
 
     var $id;
@@ -38,16 +48,6 @@ class CMS_Element extends Standard {
      */
 
     function __construct($section, $id = 0) {
-        require_once 'Intraface/modules/cms/element/Htmltext.php';
-        require_once 'Intraface/modules/cms/element/Flickr.php';
-        require_once 'Intraface/modules/cms/element/Delicious.php';
-        require_once 'Intraface/modules/cms/element/Picture.php';
-        require_once 'Intraface/modules/cms/element/PageList.php';
-        require_once 'Intraface/modules/cms/element/FileList.php';
-        require_once 'Intraface/modules/cms/element/Gallery.php';
-        require_once 'Intraface/modules/cms/element/Video.php';
-        require_once 'Intraface/modules/cms/element/Map.php';
-
         if (!is_object($section)) {
             trigger_error('CMS_Element::CMS_Element needs CMS_Section - got ' . get_class($section), E_USER_ERROR);
         }
