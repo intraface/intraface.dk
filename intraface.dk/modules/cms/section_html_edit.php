@@ -555,8 +555,17 @@ switch ($value['type']) {
             </div>
             <div class="formrow">
                 <label><?php echo safeToHtml($translation->get('map location')); ?></label>
-                <input type="text" value="<?php if (!empty($value['address'])) echo safeToForm($value['address']); ?>" name="address" />
+                <input type="text" value="<?php if (!empty($value['text'])) echo safeToForm($value['text']); ?>" name="text" />
             </div>
+            <div class="formrow">
+                <label><?php echo safeToHtml($translation->get('map latitude')); ?></label>
+                <input type="text" value="<?php if (!empty($value['latitude'])) echo safeToForm($value['latitude']); ?>" name="latitude" />
+            </div>
+            <div class="formrow">
+                <label><?php echo safeToHtml($translation->get('map longitude')); ?></label>
+                <input type="text" value="<?php if (!empty($value['longitude'])) echo safeToForm($value['longitude']); ?>" name="longitude" />
+            </div>
+
         </fieldset>
         <?php
     break;

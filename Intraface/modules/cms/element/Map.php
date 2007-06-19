@@ -12,49 +12,22 @@ require_once 'Intraface/modules/cms/Element.php';
 
 class CMS_Map extends CMS_Element {
 
-    var $services = array('yahoo');
+    var $services = array('yahoo', 'google');
 
-    function __construct(& $section, $id = 0) {
+    function __construct($section, $id = 0) {
         $this->value['type'] = 'map';
         parent::__construct($section, $id);
     }
 
-    function yahoo_geo($location) {
-
-        $q = 'http://api.local.yahoo.com/MapsService/V1/geocode';
-        $q .= '?appid=intraface&location='.rawurlencode(utf8_encode($location));
-
-        $req = new HTTP_Request($q);
-        if (PEAR::isError($req->sendRequest())) {
-            return array();
-        }
-        $xml = $req->getResponseBody();
-
-
-        // create object
-        $unserializer = new XML_Unserializer();
-
-        // unserialize the document
-        $result = $unserializer->unserialize($xml, false);
-
-        // dump the result
-        $data = $unserializer->getUnserializedData();
-
-        //print_r($data);
-
-        return $data;
-    }
-
     function load_element() {
         $this->value['service'] = $this->parameter->get('service');
-        $this->value['address'] = $this->parameter->get('address');
+        $this->value['text'] = $this->parameter->get('text');
+        $this->value['latitude'] = $this->parameter->get('latitude');
+        $this->value['longitude'] = $this->parameter->get('longitude');
 
         $this->value['map'] = '';
 
         if ($this->value['service'] == 'yahoo') {
-            $a = $this->yahoo_geo($this->value['address']);
-            //print_r($a);
-            if (!empty($a['Result']['Longitude']) AND !empty($a['Result']['Latitude'])) {
                 $this->value['map']  = '<script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?'.htmlentities('v=2.0&appid=intraface') .'"></script>';
                 /* flash version
                 $this->value['map'] .= '<script type="text/javascript">';
@@ -71,7 +44,7 @@ class CMS_Map extends CMS_Element {
                 $this->value['map'] .= '		var words = "title";';
                 $this->value['map'] .= '		marker.openSmartWindow(words);';
                 $this->value['map'] .= '	} ';
-                $this->value['map'] .= '	var latlon = new YGeoPoint(' .$a['Result']['Latitude'] . ', '. $a['Result']['Longitude'].');';
+                $this->value['map'] .= '	var latlon = new YGeoPoint(' .$this->get('latitude') . ', '. $this->get('longitude').');';
                 $this->value['map'] .= '	var mymap = new  YMap(document.getElementById("mapContainer"));';
                 $this->value['map'] .= '	var marker = new YMarker(latlon);';
                 $this->value['map'] .= '	marker.addLabel("<b>A</b>"); ';
@@ -82,7 +55,32 @@ class CMS_Map extends CMS_Element {
                 $this->value['map'] .= '	mymap.drawZoomAndCenter(latlon, 3);';
                 //$this->value['map'] .= ']]>';
                 $this->value['map'] .= '</script>';
-            }
+        } elseif ($this->value['service'] == 'google') {
+                $this->value['map']  = '<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAUFgD-PSpsw5MDGYzf-NyqBT5Xij7PtUjdkWMhSxoVKuMOjPcWxR5Rf13LT-bMD4Iiu_tpJ5XdRMJ3g"></script>';
+                $this->value['map'] .= '<div id="mapContainer" style="width: 600px; height: 600px;"></div>';
+
+                $this->value['map'] .= '<script type="text/javascript">';
+                //$this->value['map'] .= '<![CDATA[';
+                $this->value['map'] .= 'function load() {';
+                $this->value['map'] .= '    if (GBrowserIsCompatible()) {';
+                $this->value['map'] .= '        var map = new GMap2(document.getElementById("mapContainer"));';
+                $this->value['map'] .= '        map.setCenter(new GLatLng('.$this->get('latitude').', '.$this->get('longitude').'), 13);';
+                $this->value['map'] .= '        var point = new GLatLng('.$this->get('latitude').', '.$this->get('longitude').');';
+                $this->value['map'] .= '        map.addOverlay(new GMarker(point));';
+                $this->value['map'] .= '    }';
+                $this->value['map'] .= '}';
+                $this->value['map'] .= 'load();';
+                $this->value['map'] .= '    var latlon = new YGeoPoint(' .$this->get('latitude') . ', '. $this->get('longitude').');';
+                $this->value['map'] .= '    var mymap = new  YMap(document.getElementById("mapContainer"));';
+                $this->value['map'] .= '    var marker = new YMarker(latlon);';
+                $this->value['map'] .= '    marker.addLabel("<b>A</b>"); ';
+                $this->value['map'] .= '    YEvent.Capture(marker, EventsList.MouseClick, onSmartWinEvent);';
+                $this->value['map'] .= '    mymap.addOverlay(marker);';
+                $this->value['map'] .= '    mymap.addPanControl();';
+                $this->value['map'] .= '    mymap.addZoomLong();';
+                $this->value['map'] .= '    mymap.drawZoomAndCenter(latlon, 3);';
+                //$this->value['map'] .= ']]>';
+                $this->value['map'] .= '</script>';
         }
 
     }
@@ -94,7 +92,7 @@ class CMS_Map extends CMS_Element {
         }
 
         $validator = new Validator($this->error);
-        $validator->isString($var['address'], 'error in address');
+        $validator->isString($var['text'], 'error in text');
         $validator->isString($var['service'], 'error in service');
 
         if ($this->error->isError()) {
@@ -106,7 +104,9 @@ class CMS_Map extends CMS_Element {
 
     function save_element($var) {
         if (!empty($var['service'])) $this->parameter->save('service', $var['service']);
-        if (!empty($var['address'])) $this->parameter->save('address', $var['address']);
+        if (!empty($var['text'])) $this->parameter->save('text', $var['text']);
+        if (!empty($var['latitude'])) $this->parameter->save('latitude', $var['latitude']);
+        if (!empty($var['longitude'])) $this->parameter->save('longitude', $var['longitude']);
 
         return true;
     }
