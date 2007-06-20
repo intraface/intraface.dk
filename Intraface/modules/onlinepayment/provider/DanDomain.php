@@ -26,7 +26,7 @@ class OnlinePaymentDanDomain extends OnlinePayment {
 	 */
 	
 	var $transaction_status_types = array(
-		'-1' => '',
+		'-1' => 'Godkendt',
 		'' => 'Ingen kontakt til Dandomin',
 		'0' => 'Merchant/forretningsnummer ugyldigt',
 		'1' => 'Ugyldigt kreditkortnummer',
@@ -46,6 +46,7 @@ class OnlinePaymentDanDomain extends OnlinePayment {
 		'15' => 'Customer number for recurring payment must be unique'
 	);
 	
+	var $transaction_status_authorized = "-1";
 
 	var $settings;
 

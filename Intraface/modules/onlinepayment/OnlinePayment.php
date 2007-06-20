@@ -225,7 +225,7 @@ class OnlinePayment extends Standard {
 		}
 
 		$validator->isNumeric($input['belong_to_id'], 'belong_to_id er ikke et tal');
-		$validator->isNumeric($input['transaction_number'], 'transaction_number er ikke et tal');
+		$validator->isString($input['transaction_number'], 'transaction_number er ikke gyldig');
 		$validator->isString($input['transaction_status'], 'transaction_status er ikke udfyldt');
 		if(!isset($this->transaction_status_types[$input['transaction_status']])) {
 			$this->error->set("transaction_status '".$input['transaction_status']."' er ikke en gyldig status");
