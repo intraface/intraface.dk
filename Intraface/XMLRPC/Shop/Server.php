@@ -371,8 +371,8 @@ class Intraface_XMLRPC_Shop_Server
         
         $this->kernel->useModule('onlinepayment', true); // true: ignores user access;
         
-        if(isset($values['payment_id']) && is_int($values['payment_id']) && $values['payment_id'] > 0) {
-           $onlinepayment = OnlinePayment::factory($this->kernel, 'id', $values['payment_id']); 
+        if(isset($values['payment_id']) && intval($values['payment_id']) > 0) {
+           $onlinepayment = OnlinePayment::factory($this->kernel, 'id', intval($values['payment_id'])); 
         }
         else {
             $onlinepayment = OnlinePayment::factory($this->kernel);
