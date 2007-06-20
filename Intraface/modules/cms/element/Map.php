@@ -26,11 +26,12 @@ class CMS_Map extends CMS_Element {
         $this->value['longitude'] = $this->parameter->get('longitude');
         $this->value['width'] = $this->parameter->get('width');
         $this->value['height'] = $this->parameter->get('height');
+        $this->value['api_key'] = $this->parameter->get('api_key');
 
         $this->value['map'] = '';
 
         if ($this->value['service'] == 'yahoo') {
-                $this->value['map']  = '<script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?'.htmlentities('v=2.0&appid=intraface') .'"></script>';
+                $this->value['map']  = '<script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?'.htmlentities('v=2.0&appid=' . $this->get('api_key')) .'"></script>';
                 /* flash version
                 $this->value['map'] .= '<script type="text/javascript">';
                 $this->value['map'] .= '	var latlon = new LatLon(' .$a['ResultSet']['Result']['Latitude'] . ', '. $a['ResultSet']['Result']['Longitude'].');';
@@ -58,7 +59,8 @@ class CMS_Map extends CMS_Element {
                 //$this->value['map'] .= ']]>';
                 $this->value['map'] .= '</script>';
         } elseif ($this->value['service'] == 'google') {
-                $this->value['map']  = '<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAUFgD-PSpsw5MDGYzf-NyqBT5Xij7PtUjdkWMhSxoVKuMOjPcWxR5Rf13LT-bMD4Iiu_tpJ5XdRMJ3g"></script>';
+                // intraface ABQIAAAAUFgD-PSpsw5MDGYzf-NyqBT5Xij7PtUjdkWMhSxoVKuMOjPcWxR5Rf13LT-bMD4Iiu_tpJ5XdRMJ3g
+                $this->value['map']  = '<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->get('api_key').'"></script>';
                 $this->value['map'] .= '<div id="mapContainer" style="width: '.$this->get('width').'px; height: '.$this->get('height').'px;"></div>';
 
                 $this->value['map'] .= '<script type="text/javascript">';
@@ -96,6 +98,7 @@ class CMS_Map extends CMS_Element {
         $validator = new Validator($this->error);
         $validator->isString($var['text'], 'error in text');
         $validator->isString($var['service'], 'error in service');
+        $validator->isString($var['api_key'], 'error in api key');
         $validator->isNumeric($var['width'], 'error in width');
         $validator->isNumeric($var['height'], 'error in height');
         if ($this->error->isError()) {
@@ -112,7 +115,7 @@ class CMS_Map extends CMS_Element {
         if (!empty($var['longitude'])) $this->parameter->save('longitude', $var['longitude']);
         if (!empty($var['height'])) $this->parameter->save('height', $var['height']);
         if (!empty($var['width'])) $this->parameter->save('width', $var['width']);
-
+        if (!empty($var['api_key'])) $this->parameter->save('api_key', $var['api_key']);
         return true;
     }
 

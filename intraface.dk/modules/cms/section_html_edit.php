@@ -554,6 +554,11 @@ switch ($value['type']) {
                 </select>
             </div>
             <div class="formrow">
+                <label><?php echo safeToHtml($translation->get('api key')); ?></label>
+                <input type="text" value="<?php if (!empty($value['api_key'])) echo safeToForm($value['api_key']); ?>" name="api_key" />
+            </div>
+
+            <div class="formrow">
                 <label><?php echo safeToHtml($translation->get('map location')); ?></label>
                 <input type="text" value="<?php if (!empty($value['text'])) echo safeToForm($value['text']); ?>" name="text" />
             </div>
