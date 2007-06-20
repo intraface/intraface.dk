@@ -24,6 +24,8 @@ class CMS_Map extends CMS_Element {
         $this->value['text'] = $this->parameter->get('text');
         $this->value['latitude'] = $this->parameter->get('latitude');
         $this->value['longitude'] = $this->parameter->get('longitude');
+        $this->value['width'] = $this->parameter->get('width');
+        $this->value['height'] = $this->parameter->get('height');
 
         $this->value['map'] = '';
 
@@ -36,7 +38,7 @@ class CMS_Map extends CMS_Element {
                 $this->value['map'] .= '	map.addTool( new PanTool(), true );';
                 $this->value['map'] .= '</script>';
                 */
-                $this->value['map'] .= '<div id="mapContainer" style="width: 600px; height: 600px;"></div>';
+                $this->value['map'] .= '<div id="mapContainer" style="width: '.$this->get('width').'px; height: '.$this->get('height').'px;"></div>';
 
                 $this->value['map'] .= '<script type="text/javascript">';
                 //$this->value['map'] .= '<![CDATA[';
@@ -57,7 +59,7 @@ class CMS_Map extends CMS_Element {
                 $this->value['map'] .= '</script>';
         } elseif ($this->value['service'] == 'google') {
                 $this->value['map']  = '<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAUFgD-PSpsw5MDGYzf-NyqBT5Xij7PtUjdkWMhSxoVKuMOjPcWxR5Rf13LT-bMD4Iiu_tpJ5XdRMJ3g"></script>';
-                $this->value['map'] .= '<div id="mapContainer" style="width: 600px; height: 600px;"></div>';
+                $this->value['map'] .= '<div id="mapContainer" style="width: '.$this->get('width').'px; height: '.$this->get('height').'px;"></div>';
 
                 $this->value['map'] .= '<script type="text/javascript">';
                 //$this->value['map'] .= '<![CDATA[';
@@ -94,7 +96,8 @@ class CMS_Map extends CMS_Element {
         $validator = new Validator($this->error);
         $validator->isString($var['text'], 'error in text');
         $validator->isString($var['service'], 'error in service');
-
+        $validator->isNumeric($var['width'], 'error in width');
+        $validator->isNumeric($var['height'], 'error in height');
         if ($this->error->isError()) {
             return false;
         }
@@ -107,6 +110,8 @@ class CMS_Map extends CMS_Element {
         if (!empty($var['text'])) $this->parameter->save('text', $var['text']);
         if (!empty($var['latitude'])) $this->parameter->save('latitude', $var['latitude']);
         if (!empty($var['longitude'])) $this->parameter->save('longitude', $var['longitude']);
+        if (!empty($var['height'])) $this->parameter->save('height', $var['height']);
+        if (!empty($var['width'])) $this->parameter->save('width', $var['width']);
 
         return true;
     }
