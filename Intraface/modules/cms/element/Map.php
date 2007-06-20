@@ -31,6 +31,10 @@ class CMS_Map extends CMS_Element {
         $this->value['map'] = '';
 
         if ($this->value['service'] == 'yahoo') {
+            if (is_object($this->section->kernel->user)) {
+                $this->value['api_key'] = 'intraface';
+            }
+
                 $this->value['map']  = '<script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?'.htmlentities('v=2.0&appid=' . $this->get('api_key')) .'"></script>';
                 /* flash version
                 $this->value['map'] .= '<script type="text/javascript">';
@@ -59,7 +63,10 @@ class CMS_Map extends CMS_Element {
                 //$this->value['map'] .= ']]>';
                 $this->value['map'] .= '</script>';
         } elseif ($this->value['service'] == 'google') {
-                // intraface ABQIAAAAUFgD-PSpsw5MDGYzf-NyqBT5Xij7PtUjdkWMhSxoVKuMOjPcWxR5Rf13LT-bMD4Iiu_tpJ5XdRMJ3g
+            if (is_object($this->section->kernel->user)) {
+                $this->value['api_key'] = 'ABQIAAAAUFgD-PSpsw5MDGYzf-NyqBT5Xij7PtUjdkWMhSxoVKuMOjPcWxR5Rf13LT-bMD4Iiu_tpJ5XdRMJ3g';
+            }
+
                 $this->value['map']  = '<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->get('api_key').'"></script>';
                 $this->value['map'] .= '<div id="mapContainer" style="width: '.$this->get('width').'px; height: '.$this->get('height').'px;"></div>';
 
