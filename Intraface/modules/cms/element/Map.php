@@ -32,10 +32,13 @@ class CMS_Map extends CMS_Element {
 
         if ($this->value['service'] == 'yahoo') {
             if (is_object($this->section->kernel->user)) {
-                $this->value['api_key'] = 'intraface';
+                $api = 'intraface';
+            }
+            else {
+                $api = $this->get('api_key');
             }
 
-                $this->value['map']  = '<script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?'.htmlentities('v=2.0&appid=' . $this->get('api_key')) .'"></script>';
+                $this->value['map']  = '<script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?'.htmlentities('v=2.0&appid=' . $api) .'"></script>';
                 /* flash version
                 $this->value['map'] .= '<script type="text/javascript">';
                 $this->value['map'] .= '	var latlon = new LatLon(' .$a['ResultSet']['Result']['Latitude'] . ', '. $a['ResultSet']['Result']['Longitude'].');';
@@ -64,10 +67,13 @@ class CMS_Map extends CMS_Element {
                 $this->value['map'] .= '</script>';
         } elseif ($this->value['service'] == 'google') {
             if (is_object($this->section->kernel->user)) {
-                $this->value['api_key'] = 'ABQIAAAAUFgD-PSpsw5MDGYzf-NyqBT5Xij7PtUjdkWMhSxoVKuMOjPcWxR5Rf13LT-bMD4Iiu_tpJ5XdRMJ3g';
+                $api = 'ABQIAAAAUFgD-PSpsw5MDGYzf-NyqBT5Xij7PtUjdkWMhSxoVKuMOjPcWxR5Rf13LT-bMD4Iiu_tpJ5XdRMJ3g';
+            }
+            else {
+                $api = $this->get('api_key');
             }
 
-                $this->value['map']  = '<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->get('api_key').'"></script>';
+                $this->value['map']  = '<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$api.'"></script>';
                 $this->value['map'] .= '<div id="mapContainer" style="width: '.$this->get('width').'px; height: '.$this->get('height').'px;"></div>';
 
                 $this->value['map'] .= '<script type="text/javascript">';
