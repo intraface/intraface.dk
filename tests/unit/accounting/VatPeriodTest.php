@@ -86,5 +86,12 @@ class VatPeriodTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($periods[2]['date_start'] == '0001-07-01' && $periods[2]['date_end'] == '0001-09-30');
         $this->assertTrue($periods[3]['date_start'] == '0001-10-01' && $periods[3]['date_end'] == '0001-12-31');
     }
+
+
+    function testLoadAmounts()
+    {
+        $vat = $this->createPeriod();
+        $this->assertTrue($vat->loadAmounts());
+    }
 }
 ?>
