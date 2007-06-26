@@ -134,7 +134,6 @@ class Intraface_XMLRPC_Contact {
      * Gets available keywords for the contacts
      *
      * @param struct  $credentials Credentials provided by intraface
-     * @param integer $contact_id  Contact id
      *
      * @return array Keywords
      */
