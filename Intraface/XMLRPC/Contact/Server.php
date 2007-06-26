@@ -128,10 +128,17 @@ class Intraface_XMLRPC_Contact {
 
         return 1;
     }
+    */
 
-
-    function getKeywords($arg) {
-        $credentials = $arg;
+    /**
+     * Gets available keywords for the contacts
+     *
+     * @param struct  $credentials Credentials provided by intraface
+     * @param integer $contact_id  Contact id
+     *
+     * @return array Keywords
+     */
+    function getKeywords($credentials) {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
@@ -140,10 +147,9 @@ class Intraface_XMLRPC_Contact {
 
         return $contact->keywords->getAllKeywords();
     }
-    */
 
     /**
-     * Gets intranet permissions to use with a menu
+     * Gets connected keywords to a contact
      *
      * @param struct  $credentials Credentials provided by intraface
      * @param integer $contact_id  Contact id
