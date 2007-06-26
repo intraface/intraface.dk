@@ -141,6 +141,8 @@ class Intraface_XMLRPC_Contact {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
+        $this->kernel->useShared('keyword');
+
         $contact = new Contact($this->kernel);
         $contact->getKeywords();
 
@@ -159,7 +161,7 @@ class Intraface_XMLRPC_Contact {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
-
+        $this->kernel->useShared('keyword');
         $contact = new Contact($this->kernel, $contact_id);
         if (!$contact->get('id') > 0) {
             return 0;
