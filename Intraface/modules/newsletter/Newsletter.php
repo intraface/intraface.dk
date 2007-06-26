@@ -345,6 +345,11 @@ class Newsletter extends Standard
         return true;
     }
 
+    function getContact($id)
+    {
+        return new Contact($this->list->kernel, $id);
+    }
+
 }
 
 ?>
