@@ -318,7 +318,7 @@ class Newsletter extends Standard
 
             $contact = $this->getContact($subscriber['contact_id']);
 
-            $params[] = "(NOW(), NOW(), '".$from."', '".$name."', 8, 2, ". $this->get('id') . ", '".$this->get('deadline'). "', " .$this->list->kernel->intranet->get('id'). " , " .$subscriber['contact_id']. " , " .$this->list->kernel->user->get('id').", '".$this->get('subject')."', '".$this->get('text')."\n\nLogin:".$contact->getLoginUrl()."')";
+            $params[] = "(NOW(), NOW(), '".$from."', '".$name."', 8, 2, ". $this->get('id') . ", '".$this->get('deadline'). "', " .$this->list->kernel->intranet->get('id'). " , " .$subscriber['contact_id']. " , " .$this->list->kernel->user->get('id').", '".$this->get('subject')."', '".$this->get('text')."\n\nLogin: ".$contact->getLoginUrl()."')";
 
             if ($i == 40) {
                 $result = $db->exec($sql . implode($params, ','));
