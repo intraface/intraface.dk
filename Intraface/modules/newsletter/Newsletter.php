@@ -304,12 +304,25 @@ class Newsletter extends Standard
         $from = $this->list->get('reply_email');
         $name = $this->list->get('sender_name');
         $sql = 'INSERT INTO email (date_created, date_updated, from_email, from_name, type_id, status, belong_to_id, date_deadline, intranet_id, contact_id, user_id, subject, body) VALUES ';
-        $db = MDB2::singleton(DB_DSN);
+        $db = MDB2::factory(DB_DSN);
+
+        if (PEAR::isError($db)) {
+            die($result->getMessage() . $result->getUserInfo());
+        }
 
         $i = 0;
         $j = 0;
         $skipped = 0;
         $params = array();
+        $error = array();
+
+        $subject = $db->quote($this->get('subject'), 'text');
+
+        if (PEAR::isError($subject)) {
+            die($subject->getUserInfo());
+        }
+
+        // TODO make escaping properly
         foreach ($subscribers AS $subscriber) {
             if (!$validator->isEmail($subscriber['contact_email'], "")) {
                 $skipped++;
@@ -318,13 +331,32 @@ class Newsletter extends Standard
 
             $contact = $this->getContact($subscriber['contact_id']);
 
-            $params[] = "(NOW(), NOW(), '".$from."', '".$name."', 8, 2, ". $this->get('id') . ", '".$this->get('deadline'). "', " .$this->list->kernel->intranet->get('id'). " , " .$subscriber['contact_id']. " , " .$this->list->kernel->user->get('id').", '".$this->get('subject')."', '".$this->get('text')."\n\nLogin: ".$contact->getLoginUrl()."')";
+            $body = $db->quote($this->get('text')."\n\nLogin: ".$contact->getLoginUrl(), 'text');
+
+            if (PEAR::isError($body)) {
+                die($body->getUserInfo());
+            }
+
+
+            $params[] = "(
+                NOW(),
+                NOW(), '".$from."',
+                '".$name."',
+                8,
+                2,
+                ".$this->get('id') . ",
+                '".$this->get('deadline'). "',
+                " .$this->list->kernel->intranet->get('id'). " ,
+                " .$subscriber['contact_id']. " ,
+                " .$this->list->kernel->user->get('id').",
+                ".$subject.",
+                ".$body.")";
 
             if ($i == 40) {
                 $result = $db->exec($sql . implode($params, ','));
 
                 if (PEAR::isError($result)) {
-                    echo $result->getMessage() . $result->getUserInfo();
+                    $error[] = $result->getMessage() . $result->getUserInfo();
                     return false;
                 }
 
@@ -338,8 +370,10 @@ class Newsletter extends Standard
         $result = $db->exec($sql . implode($params, ','));
 
         if (PEAR::isError($result)) {
-            echo $result->getMessage() . $result->getUserInfo();
+            $error[] = $result->getMessage() . $result->getUserInfo();
         }
+
+        if (!empty($error)) die(implode(' ', $error));
 
         $this->updateSent($j);
         return true;
