@@ -13,6 +13,7 @@ class FakeProductIntranet {
 
 class FakeProductKernel {
     public $intranet;
+    function useShared() {}
 }
 
 class ProductTest extends PHPUnit_Framework_TestCase {
@@ -22,8 +23,9 @@ class ProductTest extends PHPUnit_Framework_TestCase {
         $this->kernel->intranet = new FakeProductIntranet;
     }
 
-    function testProductCanGetNumberIfOtherProductDontNeedItAnymore() {
-
+    function testProductCanGetNumberIfOtherProductDontNeedItAnymore()
+    {
+        // TODO needs to be updated
         $this->markTestIncomplete('product needs to relaxe a bit');
 
         $product = new Product($this->kernel);

@@ -38,7 +38,9 @@ class PageElementTest extends PHPUnit_Framework_TestCase {
             'show_type' => 'article',
             'keyword' => array(1),
             'show' => 1,
-            'lifetime' => 20
+            'lifetime' => 20,
+            'no_results_text' => 'none',
+            'read_more_text' => 'none'
         );
 
         $this->assertTrue($pagelist->save($data) > 0);

@@ -18,6 +18,9 @@ class SettingTest extends PHPUnit_Framework_TestCase
 
     function testSetAndGetUserSetting()
     {
+        // TODO HVORDAN SIKRER VI OS AT ROWS_PR_PAGE ER DEFINERET
+        // SAA SNART VI HAR SETTING INITIALISERET?
+
         $this->markTestIncomplete('needs updating');
 
         $intranet_id = rand(1, 1000000);
@@ -32,6 +35,7 @@ class SettingTest extends PHPUnit_Framework_TestCase
 
     function testRepeatingSetAndGetUserSetting()
     {
+        // TODO needs to be updated        
         $this->markTestIncomplete('needs updating');
 
         $intranet_id = rand(1, 1000000);
@@ -54,6 +58,7 @@ class SettingTest extends PHPUnit_Framework_TestCase
 
     function testSettingIsEitherForLoggedInUserOrIntranet()
     {
+        // TODO needs to be updated        
         $this->markTestIncomplete('needs updating');
 
         $intranet_id = rand(1, 1000000);

@@ -20,6 +20,7 @@ class UserTest extends PHPUnit_Framework_TestCase
 
     function testIntranetAccess()
     {
+        // TODO needs to be updated        
         $this->markTestIncomplete('needs updating');
         $user = new User(1);
         $this->assertTrue($user->hasIntranetAccess(1));
@@ -28,6 +29,7 @@ class UserTest extends PHPUnit_Framework_TestCase
 
     function testUserModuleAccess()
     {
+        // TODO needs to be updated        
         $this->markTestIncomplete('needs updating');
         $user = new User(1);
         $this->assertFalse($user->hasModuleAccess('intranetmaintenance'));
@@ -40,6 +42,7 @@ class UserTest extends PHPUnit_Framework_TestCase
 
     function testSetActiveIntranet()
     {
+        // TODO needs to be updated        
         $this->markTestIncomplete('needs updating');
         $user = new User(1);
         $this->assertTrue($user->setActiveIntranetId(1));

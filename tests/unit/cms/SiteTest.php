@@ -8,6 +8,7 @@ require_once 'Intraface/Kernel.php';
 class SiteTest extends PHPUnit_Framework_TestCase {
 
     function testConstruction() {
+        // TODO needs to be updated
         $this->markTestIncomplete('not completed');
     }
     /*

@@ -61,6 +61,7 @@ class BasketTest extends PHPUnit_Framework_TestCase
 
     function testPlaceOrderResetsBasket()
     {
+        // TODO needs to be updated        
         $this->markTestIncomplete('Needs a test for this');
     }
 

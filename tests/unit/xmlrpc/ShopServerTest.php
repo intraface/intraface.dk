@@ -1,8 +1,7 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once 'c:/Users/Lars Olesen/workspace/intraface/intraface.dk/install/Install.php';
-define('DB_DSN', 'mysql://' . DB_USER . ':' . DB_PASS . '@' . DB_HOST . '/' . DB_NAME);
+require_once dirname(__FILE__) . '/../config.test.php';
 
+require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/XMLRPC/Shop/Server.php';
 require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
 require_once 'Intraface/modules/intranetmaintenance/IntranetMaintenance.php';

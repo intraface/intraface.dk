@@ -2,7 +2,6 @@
 require_once dirname(__FILE__) . '/../config.test.php';
 
 require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/Weblogin.php';
 
 class WebloginTest extends PHPUnit_Framework_TestCase {

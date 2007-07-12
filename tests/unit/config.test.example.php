@@ -1,8 +1,20 @@
 <?php
 require_once 'MDB2.php';
+define('DB_HOST', 'localhost');
+define('DB_PASS', '');
+define('DB_USER', 'root');
+define('DB_NAME', 'pear');
 define('DB_DSN', 'mysql://root:@localhost/pear');
-define('PATH_ROOT', 'c:\Users/Lars Olesen\workspace\Intraface\\');
+define('PATH_ROOT', 'c:\Users/Lars Olesen\workspace\intraface\\');
 define('PATH_INCLUDE_CONFIG', PATH_ROOT . 'Intraface\config\\');
+define('XMLRPC_PATH', PATH_ROOT . 'intraface.dk/xmlrpc/');
+define('PATH_INCLUDE_MODULE', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/modules/');
+define('PATH_INCLUDE_SHARED', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/shared/');
+define('CONNECTION_INTERNET', 'ONLINE');
+define('PATH_UPLOAD', PATH_ROOT . 'upload/');
+define('PATH_UPLOAD_TEMPORARY', PATH_UPLOAD . 'upload/tmp/');
+
+
 
 $db = MDB2::singleton(DB_DSN);
 $db->setOption('debug', 0);

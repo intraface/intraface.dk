@@ -157,7 +157,23 @@ class BasketTest extends PHPUnit_Framework_TestCase
 
     function testChangeBasketToZeroOnAStockProductWithNegativeValues()
     {
-        $this->markTestIncomplete('We need to create this test');
+        $basket = $this->createBasket();
+
+        $product_id = 1;
+        $quantity = 1;
+
+        $basket->change($product_id, $quantity);
+
+        $items = $basket->getItems();
+
+        $this->assertEquals($items[0]['quantity'], $quantity);
+
+
+        $basket->change($product_id, -1);
+        $items = $basket->getItems();
+
+        $this->assertTrue(empty($items));
+
     }
 
     function testResetBasket()

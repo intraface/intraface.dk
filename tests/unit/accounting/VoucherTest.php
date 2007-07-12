@@ -5,8 +5,38 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/accounting/Voucher.php';
 require_once 'Intraface/Kernel.php';
+require_once 'Intraface/tools/Date.php';
 
-class FakeAccountingYear {}
+class FakeVoucherSetting {
+    function get() {}
+}
+
+class FakeVoucherIntranet {
+    function get() { return 1; }
+}
+class FakeVoucherUser {
+    function get() { return 1; }
+}
+
+class FakeVoucherKernel {
+
+    public $setting;
+    public $intranet;
+    public $user;
+    function __construct() {
+        $this->setting = new FakeVoucherSetting;
+        $this->intranet = new FakeVoucherIntranet;
+        $this->user = new FakeVoucherUser;
+    }
+}
+
+class FakeAccountingYear {
+    public $kernel;
+    function __construct() {
+        $this->kernel = new FakeVoucherKernel;
+    }
+    function get() { return 1; }
+}
 
 class VoucherTest extends PHPUnit_Framework_TestCase {
 
@@ -17,12 +47,12 @@ class VoucherTest extends PHPUnit_Framework_TestCase {
     }
 
     function testVoucherCreate() {
-        $this->markTestIncomplete('needs updating');
+        // TODO needs to be updated
         $voucher = new Voucher($this->year);
-        $this->assertFalse($voucher->get('id'));
-        $voucher->save(array('text' => 'Description'));
+        $this->assertFalse($voucher->get('id') > 0);
+        $voucher->save(array('text' => 'Description', 'date' => '2002-10-10'));
         $new_voucher = new Voucher($this->year, $voucher->get('id'));
-        $new_voucher->save(array('text' => 'Description - edited'));
+        $new_voucher->save(array('text' => 'Description - edited', 'date' => '2002-10-10'));
         $this->assertTrue($voucher->get('id') == $new_voucher->get('id'));
         $this->assertTrue($new_voucher->get('text') == 'Description - edited');
     }
