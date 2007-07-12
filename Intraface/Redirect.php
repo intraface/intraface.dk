@@ -8,6 +8,7 @@
  */
 
 require_once 'Intraface/Standard.php';
+require_once 'Intraface/3Party/Database/Db_sql.php';
 
 /**
  * Redirects a user to specific pages
@@ -218,8 +219,8 @@ class Redirect extends Standard {
      */
     function factory($kernel, $type, $query_variable = 'redirect_id', $query_return_variable = 'return_redirect_id') {
 
-        if(!is_object($kernel) || strtolower(get_class($kernel)) != "kernel") {
-            trigger_error("F�rse parameter i redirect::factory er ikke kernel", E_USER_ERROR);
+        if(!is_object($kernel)) {
+            trigger_error("First parameter in redirect::factory is not kernel", E_USER_ERROR);
         }
 
         if(!in_array($type, array('go', 'receive', 'return'))) {
@@ -386,7 +387,13 @@ class Redirect extends Standard {
      */
     function setDestination($destination_url, $return_url = '') {
         if (!array_key_exists('SCRIPT_URI', $_SERVER)) {
-            $_SERVER['SCRIPT_URI'] = $_SERVER['REQUEST_URI'];
+            if (!empty($_SERVER['REQUEST_URI'])) {
+                $_SERVER['SCRIPT_URI'] = $_SERVER['REQUEST_URI'];
+            }
+            else {
+                $_SERVER['SCRIPT_URI'] = '';
+            }
+            //TODO WHAT TO DO WHEN THE REQUEST URI IS EMPTY
         }
 
         if(empty($return_url)) {
