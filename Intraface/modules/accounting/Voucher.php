@@ -24,7 +24,7 @@ class Voucher extends Standard {
      * @param integer $post_id (optional)
      */
     function Voucher($year_object, $post_id = 0) {
-        if(!is_object($year_object) OR strtolower(get_class($year_object)) != 'year') {
+        if(!is_object($year_object)) {
             trigger_error('Klassen Voucher kræver objektet Year', E_USER_ERROR);
             exit;
         }
