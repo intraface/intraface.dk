@@ -195,7 +195,7 @@ class Kernel
      */
     function getModule($name)
     {
-        if (is_object($this->modules[$name])) {
+        if (!empty($this->modules[$name]) AND is_object($this->modules[$name])) {
             return($this->modules[$name]);
         } else {
             trigger_error('Ugyldigt modulnavn eller modulet er ikke loadet i funktionen getModule: '.$name, E_USER_ERROR);
