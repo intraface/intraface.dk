@@ -63,6 +63,10 @@ class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observ
     {
         $subscriber->load();
 
+        $contact = $subscriber->getContact();
+
+        $contact->getLoginUrl();
+
         $email = new Email($this->list->kernel);
         $data = array(
             'subject' => 'Bekræft tilmelding',
