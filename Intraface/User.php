@@ -53,7 +53,7 @@ class User extends Standard {
             trigger_error($result->getUserInfo(), E_USER_ERROR);
         }
         if($result->numRows() == 1) {
-            $row = $result->fetchRow();
+            $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
             $this->value = $row;
             // TODO remove this
             $this->address = Address::factory('user', $this->id);
@@ -83,7 +83,7 @@ class User extends Standard {
             return false;
         }
 
-        while($row = $result->fetchRow()) {
+        while($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             $this->permissions['intranet']['module'][$row['module_id']] = true;
             $this->permissions['user']['module'][$row['module_id']] = true;
             $this->permissions['user']['intranet'][$row['intranet_id']] = true;
@@ -140,7 +140,7 @@ class User extends Standard {
                     trigger_error($result->getUserInfo(), E_USER_ERROR);
                 }
 
-                while($row = $result->fetchRow()) {
+                while($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
                     $this->modules[$row['name']] = $row['id'];
                 }
             }
@@ -219,6 +219,7 @@ class User extends Standard {
                 return true;
             }
         }
+        return false;
     }
 
 
@@ -228,7 +229,6 @@ class User extends Standard {
      * @param intranet_id (når den skal tilgås fra intranetmaintenance (til hvad?)
      * @return boolean
      */
-
     function hasSubAccess($module, $sub_access, $intranet_id = 0) {
         settype($intranet_id, "integer");
         if($intranet_id == 0) $intranet_id = $this->intranet_id;
@@ -492,7 +492,7 @@ class User extends Standard {
     function setIntranetId($id) {
         $this->intranet_id = intval($id);
         if($this->id == 0 || $this->hasIntranetAccess()) {
-            return(true);
+            return true;
         }
         else {
             trigger_error('you do not have access to this intranet', E_USER_ERROR);
@@ -506,7 +506,7 @@ class User extends Standard {
             $this->db->exec("UPDATE user SET active_intranet_id = ". $this->db->quote($id, 'integer')." WHERE id = ". $this->db->quote($this->get('id'), 'integer'));
             return $id;
         }
-        return 0;
+        return false;
     }
 
 }
