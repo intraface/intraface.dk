@@ -12,9 +12,8 @@ class XMLRPCTests {
     }
 
     public static function suite() {
-        $suite = new PHPUnit_Framework_TestSuite('Emails');
+        $suite = new PHPUnit_Framework_TestSuite('XMLRPC');
 
-        $tests = array('CMS', 'Contact', 'Newsletter', 'Shop');
         $tests = array('CMS', 'Contact', 'Newsletter', 'Shop');
 
         foreach ($tests AS $test) {

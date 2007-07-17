@@ -59,16 +59,16 @@ class AccountTest extends PHPUnit_Framework_TestCase {
 
     private $delta = 0.001;
 
+    function createAccount($id = 0)
+    {
+        return new Account(new FakeAccountYear, $id);
+    }
+
     function testVatCalculation()
     {
         $this->assertEquals((80 + Account::calculateVat(100, 25)), 100);
         $this->assertEquals((100 + Account::calculateVat(110, 10)), 110);
         $this->assertEquals(round((93.40 + Account::calculateVat(100.41, 7.5)), 2), 100.41);
-    }
-
-    function createAccount($id = 0)
-    {
-        return new Account(new FakeAccountYear, $id);
     }
 
     function testConstruction()
@@ -96,8 +96,6 @@ class AccountTest extends PHPUnit_Framework_TestCase {
 
     function testSavePrimoSaldo()
     {
-        // TODO needs to be updated
-        $this->markTestIncomplete('We need to figure out how to input and return double values');
         $account = $this->createAccount();
         $account_number = rand(1, 1000000);
         $data = array(
@@ -118,12 +116,12 @@ class AccountTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals($debet, $saldo['debet'], '', $this->delta);
         $this->assertEquals($credit, $saldo['credit'], '', $this->delta);
+
+        // TODO needs to be updated
+        $this->markTestIncomplete('We need to figure out how to input and return double values');
     }
     function testUpdatePrimoSaldo()
     {
-        // TODO needs to be updated
-        $this->markTestIncomplete('We need to figure out how to input and return double values');
-
         $account = $this->createAccount();
         $account_number = rand(1, 1000000);
         $data = array(
@@ -136,6 +134,7 @@ class AccountTest extends PHPUnit_Framework_TestCase {
         );
         $id = $account->save($data);
 
+        // test will fail if primosaldo is not a double (not float)
         $debet = '380071,97';
         $credit = '0';
         $this->assertTrue($account->savePrimoSaldo($debet, $credit));
@@ -148,6 +147,9 @@ class AccountTest extends PHPUnit_Framework_TestCase {
         $saldo = $account->getPrimoSaldo();
 
         $this->assertEquals($debet_new, $saldo['debet'], '', $this->delta);
+
+        // TODO needs to be updated
+        $this->markTestIncomplete('We need to figure out how to input and return double values');
 
     }
 }

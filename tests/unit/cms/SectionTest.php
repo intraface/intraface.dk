@@ -5,30 +5,24 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'CMSStubs.php';
 require_once 'Intraface/Kernel.php';
+require_once 'Intraface/modules/cms/Section.php';
 
 class SectionTest extends PHPUnit_Framework_TestCase {
 
     private $kernel;
     private $page;
-    /*
+
     function setUp() {
         $this->kernel = new Kernel;
-        $this->kernel->user = new FakeUser;
-        $this->kernel->intranet = new FakeIntranet;
-        $this->kernel->setting = new FakeSetting;
+        $this->kernel->user = new FakeCMSUser;
+        $this->kernel->intranet = new FakeCMSIntranet;
+        $this->kernel->setting = new FakeCMSSetting;
         $this->kernel->module('cms');
-        $this->site = new FakeSite($this->kernel);
-        $this->page = new FakePage($this->site);
+        $this->site = new FakeCMSSite($this->kernel);
+        $this->page = new FakeCMSPage($this->site);
 
     }
 
-    */
-    function testConstruction() {
-        // TODO needs to be updated
-        $this->markTestIncomplete('not completed');
-    }
-
-    /*
     function testConstruction() {
         $section = new CMS_Section($this->page);
         $this->assertTrue(is_object($section));
@@ -46,6 +40,9 @@ class SectionTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($section->addParameter('test', 'test'));
     }
 
+    // TODO figure out how to have the template section initialized
+
+    /*
     function testShortTextValidation() {
         $section = CMS_Section::factory($this->page, 'type', 'shorttext');
         $data = array(
@@ -62,9 +59,7 @@ class SectionTest extends PHPUnit_Framework_TestCase {
         );
         $this->assertTrue($section->save($data));
     }
-    */
 
-    /*
     function test() {
         $site = new CMS_Section($this->page);
         $site_array = array(

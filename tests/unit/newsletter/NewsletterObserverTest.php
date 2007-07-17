@@ -15,6 +15,8 @@ class NewsletterObserverTest extends PHPUnit_Framework_TestCase
         return new Intraface_Module_Newsletter_Observer_OptinMail($list);
     }
 
+    ////////////////////////////////////////////////////////////////////
+
     function testCreateObserver()
     {
         $observer = $this->createObserver();
@@ -23,6 +25,7 @@ class NewsletterObserverTest extends PHPUnit_Framework_TestCase
 
     function testAddObserver()
     {
+        $this->markTestIncomplete();
         $observer = $this->createObserver();
         $this->assertTrue($observer->update(new FakeSubscriber));
     }

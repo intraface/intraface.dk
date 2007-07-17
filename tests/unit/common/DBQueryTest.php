@@ -4,6 +4,7 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/DBQuery.php';
+require_once 'Intraface/Error.php';
 
 class FakeDBQueryKernel {
 
@@ -35,7 +36,7 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         if (PEAR::isError($this->db)) {
             die($this->db->getUserInfo());
         }
-
+        $result = $this->db->exec('DROP TABLE ' . $this->table);
         /*
          TODO: DROP THE TABLE IF IT EXISTS
 

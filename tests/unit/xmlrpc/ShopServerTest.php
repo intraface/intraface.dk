@@ -7,8 +7,6 @@ require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
 require_once 'Intraface/modules/intranetmaintenance/IntranetMaintenance.php';
 require_once 'Intraface/Kernel.php';
 
-error_reporting(E_ALL);
-
 
 class ShopServerTest extends PHPUnit_Framework_TestCase
 {

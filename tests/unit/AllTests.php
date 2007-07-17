@@ -12,7 +12,7 @@ class AllTests {
     }
 
     public static function suite() {
-        $suite = new PHPUnit_Framework_TestSuite('Tests');
+        $suite = new PHPUnit_Framework_TestSuite('IntrafaceTests');
 
         $tests = array('Product', 'Newsletter', 'Email', 'Webshop', 'Intranetmaintenance', 'Filehandler', 'Contact', 'Common', 'Accounting', 'CMS', 'XMLRPC');
 
@@ -20,15 +20,15 @@ class AllTests {
             require_once $test . '/All' . $test . 'Tests.php';
         }
 
-        $suite->addTest(ProductTests::suite());
-        $suite->addTest(NewsletterTests::suite());
-        $suite->addTest(IntranetMaintenanceTests::suite());
-        $suite->addTest(FilehandlerTests::suite());
-        $suite->addTest(EmailTests::suite());
-        $suite->addTest(ContactTests::suite());
-        $suite->addTest(CommonTests::suite());
-        $suite->addTest(CMSTests::suite());
         $suite->addTest(AccountingTests::suite());
+        $suite->addTest(CMSTests::suite());
+        $suite->addTest(CommonTests::suite());
+        $suite->addTest(ContactTests::suite());
+        $suite->addTest(EmailTests::suite());
+        $suite->addTest(FilehandlerTests::suite());
+        $suite->addTest(IntranetMaintenanceTests::suite());
+        $suite->addTest(NewsletterTests::suite());
+        $suite->addTest(ProductTests::suite());
         $suite->addTest(WebshopTests::suite());
 
         return $suite;
