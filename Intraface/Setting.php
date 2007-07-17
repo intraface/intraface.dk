@@ -8,8 +8,7 @@
  * @author Sune Jensen <sj@sunet.dk>
  */
 
-
-require_once 'Intraface/config/setting_kernel.php';
+//require_once 'Intraface/config/setting_kernel.php';
 require_once 'Intraface/3Party/Database/Db_sql.php';
 require_once 'Intraface/functions/functions.php';
 
@@ -24,9 +23,12 @@ class Setting {
     function __construct($intranet_id, $user_id = 0) {
         global $_setting;
 
+        require_once 'Intraface/config/setting_kernel.php';
+
         // Init
         $this->db = new DB_Sql;
         $this->system = &$_setting; // don't remove the & - otherwise it will not work
+
         $this->user_id = (int)$user_id;
         $this->intranet_id = (int)$intranet_id;
     }
