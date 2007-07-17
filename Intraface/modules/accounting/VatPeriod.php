@@ -39,13 +39,6 @@ class VatPeriod extends Standard {
         $this->value['date_start_dk'] = $db->f('date_start_dk');
         $this->value['date_end'] = $db->f('date_end');
         $this->value['date_end_dk'] = $db->f('date_end_dk');
-        /*
-        $this->value['amount_vat_in'] = $db->f('amount_vat_in');
-        $this->value['amount_vat_out'] = $db->f('amount_vat_out');
-        $this->value['amount_vat_abroad'] = $db->f('amount_vat_abroad');
-        $this->value['amount_rubrik_a'] = $db->f('amount_rubrik_a');
-        $this->value['amount'] = $this->value['amount_vat_out'] + $this->value['amount_vat_abroad'] - $this->value['amount_vat_in'];
-        */
         $this->value['status_key'] = $db->f('status');
         $this->value['label'] = $db->f('label');
         $this->value['status'] = $this->status[$db->f('status')];
@@ -154,33 +147,7 @@ class VatPeriod extends Standard {
         }
         return $this->id;
     }
-    /*
-    function validateAmounts($input) {
-        return 1;
-    }
 
-    function saveAmounts($input) {
-        $input = safeToDb($input);
-        $input = array_map('round', $input);
-
-        if (!$this->validateAmounts($input)) {
-            return 0;
-        }
-        if ($this->isStated()) {
-            return 0;
-        }
-        $db = new DB_Sql;
-        $db->query("UPDATE accounting_vat_period SET
-                status=1,
-                amount='".$input['amount']."',
-                amount_vat_abroad = '".$input['vat_abroad']."',
-                amount_vat_in = '".$input['vat_in']."',
-                amount_vat_out='".$input['vat_out']."',
-                amount_rubrik_a='".$input['amount_rubrik_a']."'
-            WHERE intranet_id = " . $this->year->kernel->intranet->get('id'). " AND id= ".$this->id." AND year_id=" . $this->year->get('id'));
-        return 1;
-    }
-    */
     function setStated($voucher_id) {
         $db = new DB_Sql;
         $db->query("UPDATE accounting_vat_period SET voucher_id = '".(int)$voucher_id."', status = 2 WHERE id = ".$this->id." AND intranet_id = " . $this->year->kernel->intranet->get('id') . " AND year_id=". $this->year->get('id'));
