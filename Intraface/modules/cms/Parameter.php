@@ -73,7 +73,7 @@ class CMS_Parameter extends Standard {
             $db->query("DELETE FROM cms_parameter WHERE belong_to_id = '".$this->object->get('id')."' AND parameter='".$parameter."' AND intranet_id = ".$this->object->kernel->intranet->get('id') . " AND type_key =" .$this->type_key);
         }
 
-        return 1;
+        return true;
     }
 
     /**
