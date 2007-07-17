@@ -310,7 +310,7 @@ $page->start("Indkøb");
         if(count($appendix_list) > 0) {
             foreach($appendix_list AS $appendix) {
                 $tmp_filehandler = new FileHandler($kernel, $appendix['file_handler_id']);
-                echo '<div class="appendix"><img src="'.$tmp_filehandler->get('icon_uri').'" style="width: 75px; height: 75px; float: left;" /> <div style="padding-left: 10px; width: 50%;">'.$tmp_filehandler->get('file_name').' <a class="delete" href="view.php?id='.$procurement->get('id').'&delete_appended_file_id='.$appendix['id'].'">Slet</a></div><div style="clear: both;"></div></div>';
+                echo '<div class="appendix"><img src="'.$tmp_filehandler->get('icon_uri').'" style="width: 75px; height: 75px; float: left;" /> <div style="padding-left: 10px; width: 50%;"><a target="_blank" href="'.$tmp_filehandler->get('file_uri').'">'.$tmp_filehandler->get('file_name').'</a> <a class="delete" href="view.php?id='.$procurement->get('id').'&delete_appended_file_id='.$appendix['id'].'">Slet</a></div><div style="clear: both;"></div></div>';
             }
         }
         ?>
