@@ -87,6 +87,7 @@ class OnlinePaymentDanDomain extends OnlinePayment {
 		
 		$basis_url = 'https://pay.dandomain.dk/PayApi.asp?username='.$this->settings['merchant_id'].'&password='.$this->settings['password'].'&Transid='.$this->get('transaction_number');
 
+		
 		if($action == "capture") {
 
 			if($this->get('amount') < $this->get('original_amount')) {
@@ -122,7 +123,7 @@ class OnlinePaymentDanDomain extends OnlinePayment {
 			}
 		}
 		elseif($action == "reverse") {
-			$http_request->setURL($basis_url.'&decline=1');
+			$http_request->setURL($basis_url.'&Reject=1');
     		$http_request->sendRequest();
     		
     		if($http_request->getResponseCode() != '200') {
