@@ -97,8 +97,8 @@ class OnlinePaymentDanDomain extends OnlinePayment {
 				$add_url = '';
 			}
 			
-			// 
-			$http_request->setURL($basis_url.$add_url.'&capture=1');
+			 
+			$http_request->setURL($basis_url.$add_url.'&Capture=1');
     		$http_request->sendRequest();
     		
     		if($http_request->getResponseCode() != '200') {
@@ -106,7 +106,9 @@ class OnlinePaymentDanDomain extends OnlinePayment {
     			exit;
     		}
 			
-			if(substr($http_request->getResponseBody(), 0, 3) == '200') { 
+				
+
+			if(substr(trim($http_request->getResponseBody()), 0, 11) == 'Transaktion') { // hmm ikke helt godt, men vel ok. Response er "Transanktion #1111111 er hævet"
 
 				if($this->addAsPayment()) {
 					$this->setStatus("captured");
