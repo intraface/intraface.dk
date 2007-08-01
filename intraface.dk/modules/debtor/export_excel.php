@@ -81,7 +81,7 @@ $worksheet->write($i, 3, 'Beskrivelse', $format_bold);
 $worksheet->write($i, 4, 'Beløb', $format_bold);
 $worksheet->write($i, 5, 'Oprettet', $format_bold);
 $worksheet->write($i, 6, 'Sendt', $format_bold);
-$worksheet->write($i, 7, $translation->get("due_date"), $format_bold);
+//$worksheet->write($i, 7, $translation->get("due_date"), $format_bold);
 $c = 8;
 if($debtor->get('type') == 'invoice') {
     $worksheet->write($i, $c, 'Forfaldsbeløb', $format_bold);
