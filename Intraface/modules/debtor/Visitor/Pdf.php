@@ -10,10 +10,8 @@
  * </code>
  *
  */
-
 class Debtor_Report_Pdf
 {
-
     private $file;
     private $translation;
     private $doc;
@@ -46,7 +44,8 @@ class Debtor_Report_Pdf
         }
         $contact['number'] = $debtor->contact->get('number');
 
-        $intranet_address = new Address($debtor->get("intranet_address_id"));
+        $intranet_address = $debtor->getIntranetAddress();
+        // $intranet_address = new Address($debtor->get("intranet_address_id"));
         $intranet = $intranet_address->get();
 
         switch($debtor->kernel->setting->get('intranet', 'debtor.sender')) {
@@ -81,6 +80,7 @@ class Debtor_Report_Pdf
             $this->doc->nextPage(true);
         }
 
+    if ($debtor->get('message')) {
         $text = explode("\r\n", $debtor->get('message'));
         foreach ($text AS $line) {
             if ($line == "") {
@@ -99,6 +99,7 @@ class Debtor_Report_Pdf
                 }
             }
         }
+    }
 
         // Overskrifter - Vareudskrivning
 
