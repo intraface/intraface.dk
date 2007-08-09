@@ -291,6 +291,10 @@ class Debtor extends Standard {
         return 1;
     }
 
+    function getIntranetAddress()
+    {
+        return new Address($this->get("intranet_address_id"));
+    }
 
   /**
    * Sætter status for debtoren
