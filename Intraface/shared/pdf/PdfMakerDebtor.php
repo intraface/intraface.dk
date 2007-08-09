@@ -53,8 +53,8 @@ class PdfMakerDebtor extends PdfMaker {
         CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Kontaktnr.:");
         CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $contact["number"]);
         if ($contact["ean"]) {
-         CPdf::addText($this->get('x') + 10, $this->get('y') - 15, $this->get("font_size"), "EANnr.:");
-         CPdf::addText($this->get('x') + 10 + 60, $this->get('y') - 15, $this->get("font_size"), $contact["ean"]);
+            CPdf::addText($this->get('x') + 10, $this->get('y') - 15, $this->get("font_size"), "EANnr.:");
+            CPdf::addText($this->get('x') + 10 + 60, $this->get('y') - 15, $this->get("font_size"), $contact["ean"]);
         }
 
         $box_height = $box_top - $this->get('y') + $box_padding_bottom;
@@ -83,7 +83,7 @@ class PdfMakerDebtor extends PdfMaker {
             CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet["cvr"]);
             $this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
 
-            if ($intranet["contact_person"] != '' AND $intranet['contact_person'] != $intranet["name"]) {
+            if (!empty($intranet["contact_person"]) AND $intranet['contact_person'] != $intranet["name"]) {
                 CPdf::addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "Kontakt:");
                 CPdf::addText($this->get('x') + 10 + 60, $this->get('y'), $this->get("font_size"), $intranet["contact_person"]);
                 $this->setY('-'.$this->get("font_spacing")); // $pointY -= $this->get("font_spacing");
@@ -155,11 +155,11 @@ class PdfMakerDebtor extends PdfMaker {
             trigger_error("Arrayet i anden parameter indeholder ikke contact object med Address", E_USER_ERROR);
         }
 
-
-        if ($parameter['payment'] != 0 || isset($parameter['payment_online']) AND $parameter['payment_online'] != 0) {
+        // adding payments
+        if (isset($parameter['payment']) AND $parameter['payment'] != 0 OR isset($parameter['payment_online']) AND $parameter['payment_online'] != 0) {
             $this->setY('-20');
 
-            if ($parameter['payment'] != 0) {
+            if (isset($parameter['payment']) AND $parameter['payment'] != 0) {
                 $this->setLineStyle(1.5);
                 $this->setColor(0, 0, 0);
                 $this->line($this->get("margin_left"), $this->get('y'), $this->get("right_margin_position"), $this->get('y'));
@@ -173,7 +173,8 @@ class PdfMakerDebtor extends PdfMaker {
             if (isset($parameter['payment_online']) AND $parameter['payment_online'] != 0) {
                 $this->setLineStyle(1.5);
                 $this->setColor(0, 0, 0);
-                $this->line($this->get("margin_left"), $this->get('y'), $this->get("page_width"), $this->get('y'));
+                $this->line($this->get("margin_left"), $this->get('y'), $this->get("right_margin_position"), $this->get('y'));
+
                 $this->setY('-'.$this->get("font_padding_top"));
                 $this->setY('-'.$this->get("font_size"));
                 $this->addText($this->get('x') + 4, $this->get('y'), $this->get("font_size"), "Ventende betalinger");
@@ -188,11 +189,10 @@ class PdfMakerDebtor extends PdfMaker {
         if (!isset($parameter['payment_online'])) $parameter['payment_online'] = 0;
         $amount = $parameter["amount"] - $parameter['payment_online'] - $parameter['payment'];
 
+        // Indbetalingsoplysninger
         if ($amount <= 0) {
             $payment_method = 0; // så sætter vi ikke betalingsoplysninger på
         }
-
-        // Indbetalingsoplysninger
 
         if ($payment_method > 0) {
             $this->setY('-20'); // $pointY -= 20; // Afstand ned til betalingsinfo
