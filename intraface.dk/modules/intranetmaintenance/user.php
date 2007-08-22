@@ -249,6 +249,7 @@ if(isset($intranet)) {
 	<tbody>
 	<?php
 	$intranet = new IntranetMaintenance($kernel);
+	$intranet->createDBQuery();
 	$intranet->dbquery->setFilter('user_id', $user->get('id'));
 
 	$intranets = $intranet->getList();
