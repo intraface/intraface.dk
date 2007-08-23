@@ -125,6 +125,7 @@ class OnlinePaymentDanDomain extends OnlinePayment {
 			}
 		}
 		elseif($action == "reverse") {
+			
 			$http_request->setURL($basis_url.'&Reject=1');
     		$http_request->sendRequest();
     		

@@ -91,6 +91,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			}
 		}
 	}
+	
+	// cancel onlinepayment
+	elseif(isset($_POST['onlinepayment_cancel']) && $kernel->user->hasModuleAccess('onlinepayment')) {
+	    $onlinepayment_module = $kernel->useModule('onlinepayment');
+		$onlinepayment = OnlinePayment::factory($kernel, 'id', intval($_POST['onlinepayment_id']));
+		
+		$onlinepayment->setStatus('cancelled');
+		$debtor->load();
+	}
 }
 
 elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -122,13 +131,17 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	}
 
 	// registrere onlinepayment
-	if($debtor->get("type") == "invoice" && $kernel->user->hasModuleAccess('onlinepayment') && isset($_GET['onlinepayment_action']) && $_GET['onlinepayment_action'] != "" && $debtor->get("status") == "sent") {
-		$onlinepayment_module = $kernel->useModule('onlinepayment'); // true: ignore user permisssion
-		$onlinepayment = OnlinePayment::factory($kernel, 'id', intval($_GET['onlinepayment_id']));
+	if($kernel->user->hasModuleAccess('onlinepayment') && isset($_GET['onlinepayment_action']) && $_GET['onlinepayment_action'] != "") {
+		if($_GET['onlinepayment_action'] != 'capture' || ($debtor->get("type") == "invoice" && $debtor->get("status") == "sent")) {
+			$onlinepayment_module = $kernel->useModule('onlinepayment'); // true: ignore user permisssion
+			$onlinepayment = OnlinePayment::factory($kernel, 'id', intval($_GET['onlinepayment_id']));
+	
+			if(!$onlinepayment->transactionAction($_GET['onlinepayment_action'])) {
+			    $onlinepayment_show_cancel_option = true;
+			}
 
-		$onlinepayment->transactionAction($_GET['onlinepayment_action']);
-
-		$debtor->load();
+			$debtor->load();
+		}
 	}
 
 	if(isset($_GET['edit_contact'])) {
@@ -206,7 +219,15 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 </div>
 
 <?php echo $debtor->error->view(); ?>
-<?php if(isset($onlinepayment)) echo $onlinepayment->error->view(); ?>
+<?php 
+// onlinepayment error viewing, also with showing cancel onlinepayment button.  
+if(isset($onlinepayment)) {
+	echo $onlinepayment->error->view(); 
+	if(isset($onlinepayment_show_cancel_option) && $onlinepayment_show_cancel_option == true) {
+		echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'"><ul class="formerrors"><li>Ønsker du i stedet at <input type="submit" name="onlinepayment_cancel" value="Annullere" /><input type="hidden" name="id" value="'.$debtor->get('id').'" /><input type="hidden" name="onlinepayment_id" value="'.$onlinepayment->id.'" /> registreringen af betalingen.</li></ul></form>';
+	}
+}
+?>
 
 <?php if($kernel->intranet->get("pdf_header_file_id") == 0 && $kernel->user->hasModuleAccess('administration')): ?>
 	<div class="message-dependent">
@@ -686,10 +707,13 @@ $page->start(safeToHtml($translation->get($debtor->get('type'))));
 								<td><?php print(safeToHtml($p['dk_amount'])); ?></td>
 								<td class="buttons">
 
-									<?php if($debtor->get("type") == "invoice" && $kernel->user->hasModuleAccess('onlinepayment') && count($actions) > 0 && $debtor->get("status") == "sent" && $p['status'] == "authorized"): //   ?>
+									<?php if(count($actions) > 0 && $p['status'] == "authorized" && $kernel->user->hasModuleAccess('onlinepayment')): // Changed for better usability. $debtor->get("type") == "invoice" && $debtor->get("status") == "sent"    ?>
 										<?php
-
 										foreach($actions AS $a) {
+											if($a['action'] == 'capture' && $debtor->get("type") != "invoice" && $debtor->get("status") != "sent") {
+											    CONTINUE;
+											}
+											
 											?>
 											<a href="view.php?id=<?php print(intval($debtor->get('id'))); ?>&amp;onlinepayment_id=<?php print(intval($p['id'])); ?>&amp;onlinepayment_action=<?php print(safeToHtml($a['action'])); ?>" class="confirm"><?php print(safeToHtml($a['label'])); ?></a>
 											<?php

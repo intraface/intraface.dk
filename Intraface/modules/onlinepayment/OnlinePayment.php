@@ -374,17 +374,17 @@ class OnlinePayment extends Standard {
 
 	function setStatus($status) {
 		if($this->id == 0) {
-			trigger_error("OnlinePayment->setStatus kan kun ændre eksisterende betalinger", FATAL);
+			trigger_error("OnlinePayment->setStatus kan kun ændre eksisterende betalinger", E_USER_ERROR);
 		}
 		$status = safeToDb($status);
 
 		$status_key = array_search($status, $this->status_types);
 		if($status == "" || $status_key === false) {
-			trigger_error("Ugyldig status i OnlinePayment->setStatus()", FATAL);
+			trigger_error("Ugyldig status i OnlinePayment->setStatus()", E_USER_ERROR);
 		}
 
 		if($status_key <= $this->get('status_key')) {
-			trigger_error("Kan ikke skifte til lavere eller samme status i OnlinePayment->setStatus()", FATAL);
+			trigger_error("Kan ikke skifte til lavere eller samme status i OnlinePayment->setStatus()", E_USER_ERROR);
 		}
 
 		switch($status) {
@@ -462,13 +462,12 @@ class OnlinePayment extends Standard {
 	}
 
 	/**
-	 * Så vidt jeg kan se skal disse være ens for de forskellige betalingsløsninger
-	 * Hvis ikke skal funktionen flyttes til den relevante, og der skal kigges
-	 * på /debtor/view.php, som gerne vil have nogle transaktionsmuligheder
-	 *
-	 * Der skal laves en indstilling om man har tilbagebetalingsmuligheder.
-	 *
-	 * Men her skal der være en annuller betalingsknap også.
+	 * Returnes the possible actions to perform on an onlinepayment. 
+	 * These are defined individually to all providers. The actual action is executed in OnlinePayment->transactionAction()
+	 * 
+	 * Nb. the action 'capture' is not shown in debtor (view.php) before it is an sent invoice.
+	 * 
+	 * @return array	with actions to perform on onlinepayment. 
 	 */
 	function getTransactionActions() {
 		return array(
@@ -487,13 +486,7 @@ class OnlinePayment extends Standard {
 		);
 		*/
 	}
-	/*
-	function getTransactionActions() {
-		return array();
-
-		// i formen array(0 => array('action' => 'capture', 'label' => 'Hæv'), 1 => array(...
-	}
-	*/
+	
 	function transactionAction($action) {
 		return false;
 	}
