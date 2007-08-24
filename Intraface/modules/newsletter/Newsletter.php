@@ -367,7 +367,12 @@ class Newsletter extends Standard
             $i++;
             $j++;
         }
-        $result = $db->exec($sql . implode($params, ','));
+        
+        // If the number of contacts can be divided evenly into 40 there will be no more params here.
+        if(count($params) > 0) {
+           $result = $db->exec($sql . implode($params, ','));
+        }
+        
 
         if (PEAR::isError($result)) {
             $error[] = $result->getMessage() . $result->getUserInfo();
