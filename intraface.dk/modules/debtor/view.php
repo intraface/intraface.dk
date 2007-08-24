@@ -519,12 +519,6 @@ if(isset($onlinepayment)) {
 				<th>Kontakt</th>
 				<td><a href="<?php print($contact_module->getPath()); ?>contact.php?id=<?php echo intval($debtor->contact->get('id')); ?>"><?php echo safeToHtml($debtor->contact->address->get("name")); ?></a></td>
 			</tr>
-			<?php if(get_class($debtor->contact_person) == "contactperson") { ?>
-				<tr>
-					<th>Kontaktperson</th>
-					<td><?php echo safeToHtml($debtor->contact_person->get("name")); ?></td>
-				</tr>
-			<?php } ?>
 			<tr>
 				<th>Adresse</th>
 				<td class="adr">
@@ -535,12 +529,17 @@ if(isset($onlinepayment)) {
 					</div>
 				</td>
 			</tr>
-			<?php if($debtor->contact->address->get("cvr") != '' && $debtor->contact->address->get("cvr") != 0) { ?>
+			<tr>
+				<th>E-mail</th>
+				<td><?php print(safeToHtml($debtor->contact->address->get("email"))); ?></td>
+			</tr>
+			<?php if($debtor->contact->address->get("cvr") != '' && $debtor->contact->address->get("cvr") != 0): ?>
 				<tr>
 					<th>CVR</th>
 					<td><?php echo safeToHtml($debtor->contact->address->get("cvr")); ?></td>
 				</tr>
-			<?php } ?>
+			<?php endif; ?>
+			
 			<?php if(isset($debtor->contact_person) && strtolower(get_class($debtor->contact_person)) == "contactperson"): ?>
 				<tr>
 					<th>Att.</th>
