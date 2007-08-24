@@ -243,12 +243,14 @@ $page->start('Rediger produkt');
 	</fieldset>
 	<?php endif; ?>
 
-	<?php if ($product->get('locked') == 0):  ?>
-		<div>
-			<input type="submit" name="submit" value="Gem" class="save" /> eller <a href="<?php echo $redirect->getRedirect('product.php?id='.intval($product->get('id'))); ?>">Fortryd</a>
-		</div>
-
+	<div>
+		<?php if ($product->get('locked') == 0):  ?>
+		
+			<input type="submit" name="submit" value="Gem" class="save" /> eller 
 	<?php endif; ?>
+		<a href="<?php $return = 'index.php'; if(isset($product) && $product->get('id') != 0) $return = 'product.php?id='.intval($product->get('id')); echo $redirect->getRedirect($return); ?>">Fortryd</a>
+		
+	</div>
 
 </form>
 
