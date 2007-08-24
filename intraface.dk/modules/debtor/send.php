@@ -163,7 +163,9 @@ if (!$email->attachFile($file_id, 'invoice' . $debtor->get('number') . '.pdf')) 
 switch ($send_as) {
 	case 'email':
 
-			// Because we are going thru to pages we are making to redirects.
+			/*
+            This is now changed so we only make one redirect
+            // Because we are going thru two pages we are making to redirects.
 			$first_redirect = Redirect::factory($kernel, 'go');
 			$second_redirect = Redirect::factory($kernel, 'go');
 			$shared_email = $kernel->useShared('email');
@@ -177,18 +179,17 @@ switch ($send_as) {
 			$url = $first_redirect->setDestination($shared_email->getPath().'edit.php?id='.$email->get('id'), $shared_email->getPath().'email.php?id='.$email->get('id').'&redirect_id='.$second_redirect->get('id'));
 
 			header('Location: ' . $url);
+            */
+            
+            $redirect = Redirect::factory($kernel, 'go');
+            $shared_email = $kernel->useShared('email');
 
-			/*$redirect = new Redirect($kernel);
-			$shared_email = $kernel->useShared('email');
-
-
-			$url = $redirect->setDestination($shared_email->getPath().'email.php?id='.$email->get('id'), $module_debtor->getPath().'view.php?id='.$debtor->get('id'));
-			$redirect->setIdentifier('send_email');
-			$redirect->askParameter('send_email_status');
-
-			// some redirect stuff should probably be made here.
-			header('Location: ' . $shared_email->getPath().'edit.php?id='.$email->get('id'));
-			*/
+            // First vi set the last, because we need this id to the first.
+            $url = $redirect->setDestination($shared_email->getPath().'edit.php?id='.$email->get('id'), $module_debtor->getPath().'view.php?id='.$debtor->get('id'));
+            $redirect->setIdentifier('send_email');
+            $redirect->askParameter('send_email_status');
+            
+            header('Location: ' . $url);
 			exit;
 		break;
 	case 'electronic_email':

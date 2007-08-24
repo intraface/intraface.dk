@@ -7,15 +7,44 @@ $redirect = Redirect::factory($kernel, 'receive');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-	$email = new Email($kernel, $_POST['id']);
 
-	if ($id = $email->save($_POST)) {
-		header('Location: '.$redirect->getRedirect('email.php?id='.$id));
-		exit;
+	$email = new Email($kernel, $_POST['id']);
+	
+	if(isset($_POST['save']) || isset($_POST['send'])) {
+	    
+        if(isset($_POST['add_contact_login_url'])) {
+            $contact = $email->getContact();
+            $_POST['body'] .= "\n\nLogin: ".$contact->getLoginUrl();
+        }
+        
+        if ($id = $email->save($_POST)) {        
+            
+            if(isset($_POST['send']) && $_POST['send'] != '' && $email->isReadyToSend()) {
+                $email->send();
+                $email->load();
+                if($redirect->get('id') != 0) {
+                    $redirect->setParameter('send_email_status', $email->get('status'));
+                }
+                header('Location: '.$redirect->getRedirect('email.php?id='.$id));
+                exit;
+            }
+            
+            header('Location: '.$redirect->getRedirect('email.php?id='.$id));
+			exit;
+		}
+		else {
+			$value = $_POST;
+		}
 	}
-	else {
-		$value = $_POST;
-	}
+    elseif(isset($_POST['delete'])) {
+        $email->delete();
+        // hmm maybe not the best redirect, but what else?
+        header('Location: '.$redirect->getRedirect('/main/index.php'));
+        exit;
+    }
+	
+    trigger_error("Invalid action to perform on email", E_USER_ERROR);
+	
 }
 else {
 	$email = new Email($kernel, $_GET['id']);
@@ -23,10 +52,11 @@ else {
 }
 
 $page = new Page($kernel);
-$page->start('Email');
+$page->start('Skriv e-mail');
+
 ?>
 
-<h1>Rediger e-mail</h1>
+<h1>Skriv e-mail</h1>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
 
@@ -35,16 +65,89 @@ $page->start('Email');
 	<input type="hidden" name="type_id" value="<?php echo intval($value['type_id']); ?>" />
 
 	<fieldset>
+		<legend>Modtager</legend>
+		
+		<div class="formrow">
+			<label for="contact_person_id">Til:</label> 
+			<?php
+			$email->getContact();
+			if(isset($email->contact->contactperson)) {
+			    $contactpersons = $email->contact->contactperson->getList();
+			}
+			if($email->contact->get('type') == 'corporation' && isset($contactpersons) && count($contactpersons) > 0) {
+			    echo '<select name="contact_person_id" id="contact_person_id">';
+			    echo '<option value="0">'.$email->contact->address->get('name').' &#60'.$email->contact->address->get('email').'&#62</option>';
+			    foreach($contactpersons AS $contactperson) {
+                    echo '<option value="'.$contactperson['id'].'"';
+			       	if($value['contact_person_id'] == $contactperson['id']) {
+			       	    echo ' selected="selected"';
+			       	}	
+				    echo '>'.$contactperson['name'].' &#60'.$contactperson['email'].'&#62</option>'; 
+			    }
+			    echo '</select>';
+			}
+			else {
+			    echo '<span id="contact_person_id">'.$email->contact->address->get('name').' &#60'.$email->contact->address->get('email').'&#62</span>';
+			}
+			?>
+		</div>
+		<div class="formrow">
+			<label for="bcc_to_user">Blind kopi til:</label>
+			<input type="checkbox" name="bcc_to_user" id="bcc_to_user" value="1" <?php if(isset($value['bcc_to_user']) && intval($value['bcc_to_user']) == 1) echo 'checked="checked"'; ?> /> <?php echo $kernel->user->address->get('name').' &#60'.$kernel->user->address->get('email').'&#62'; ?>
+		</div>
+		<div class="formrow">
+			<label for="from">Fra:</label>
+			<span id="from">
+				<?php
+				if ($email->get('from_email')) {
+					echo $email->get('from_name').' &#60'.$email->get('from_email').'&#62';
+				}
+				else {
+				   echo $kernel->intranet->address->get('email').' &#60'.$kernel->intranet->address->get('name').'&#62';
+				}
+				?>
+			</span>
+		</div> 
+		
+	</fieldset>
+	
+	
+	<fieldset>
 		<legend>Overskrift</legend>
 		<input size="80" type="text" name="subject" value="<?php echo htmlentities($value['subject']); ?>" />
 	</fieldset>
 	<fieldset>
 		<legend>Tekst</legend>
-		<textarea cols="80" rows="9" class="resizable" name="body"><?php echo wordwrap(htmlentities($value['body']), 75); ?></textarea>
+		<textarea cols="80" rows="12" class="resizable" name="body"><?php echo wordwrap(htmlentities($value['body']), 75); ?></textarea>
+		<br /><input type="checkbox" name="add_contact_login_url" value="1" /> <label for="add_customer_login_link">Tilføj logininformation til <?php echo $kernel->setting->get('intranet', 'contact.login_url'); ?></label> 
 	</fieldset>
-
+	
+	<?php
+	$attachments = $email->getAttachments();
+	
+	if(count($attachments) > 0) {
+	    ?>
+	    <fieldset>
+			<legend>Vedhæftede filer</legend>
+			<ul>
+				<?php 
+				$kernel->useShared('filehandler');
+				foreach($attachments AS $attachment) {
+				    $file = new FileHandler($kernel, $attachment['id']);
+				    echo '<li><a href="'.$file->get('file_uri').'" target="_blank">'.$attachment['filename'].'</a></li>';
+				} 
+				?>
+			</ul>
+		</fieldset>
+	    <?php
+	}
+	?>
 	<p>
-		<input type="submit" class="save" name="submit" value="Gem" />
+		<input type="submit" class="confirm" name="send" value="Send"  onclick="return confirm('Er du sikker på, at du vil sende denne e-mail?');" /> 
+        <?php if($kernel->user->hasModuleAccess('email')): ?>
+            <input type="submit" class="save" name="save" value="Gem i kladder" /> 
+        <?php endif; ?>
+        <input type="submit" class="save" name="delete" value="Slet" /> 
 		eller <a href="<?php echo $redirect->getRedirect('email.php?id='.intval($value['id'])); ?>">Fortryd</a>
 	</p>
 </form>

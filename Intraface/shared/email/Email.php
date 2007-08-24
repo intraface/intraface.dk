@@ -105,7 +105,7 @@ class Email extends Standard
         }
 
         $db = new DB_Sql;
-        $sql = "SELECT id, subject, from_name, from_email, user_id, body, status, contact_id, type_id, belong_to_id, status FROM email WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = " . $this->id;
+        $sql = "SELECT id, subject, from_name, from_email, user_id, body, status, contact_id, contact_person_id, type_id, belong_to_id, status, bcc_to_user FROM email WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = " . $this->id;
         $db->query($sql);
         if (!$db->nextRecord()) {
             return 0;
@@ -118,11 +118,13 @@ class Email extends Standard
         $this->value['body'] = $db->f('body');
         $this->value['status'] = $db->f('status');
         $this->value['contact_id'] = $db->f('contact_id');
+        $this->value['contact_person_id'] = $db->f('contact_person_id');
         $this->value['type_id'] = $db->f('type_id');
         $this->value['belong_to_id'] = $db->f('belong_to_id');
         $this->value['status'] = $this->status[$db->f('status')];
         $this->value['status_key'] = $db->f('status');
         $this->value['user_id'] = $db->f('user_id');
+        $this->value['bcc_to_user'] = $db->f('bcc_to_user');
 
         if ($db->f('contact_id') == 0) {
             return 0;
@@ -138,6 +140,10 @@ class Email extends Standard
     {
         $this->kernel->useModule('contact');
         $this->contact = new Contact($this->kernel, $this->get('contact_id'));
+        
+        if($this->get('contact_person_id') != 0 && $this->contact->get('type') == 'corporation') {
+            $this->contact->loadContactPerson($this->get('contact_person_id'));
+        }
 
         $this->value['contact_email'] = $this->contact->address->get('email');
         $this->value['contact_name'] = $this->contact->address->get('name');
@@ -208,10 +214,20 @@ class Email extends Standard
             //$db->query("UPDATE email SET user_id = ".$this->kernel->user->get('id')." WHERE id = " . $this->id);
             $sql_extra = ', user_id = ' . $db->quote($this->kernel->user->get('id'), 'integer');
         }
+        
+        if(!isset($var['contact_person_id'])) {
+            $var['contact_person_id'] = 0;
+        }
+        
+        if(!isset($var['bcc_to_user'])) {
+            $var['bcc_to_user'] = 0;
+        }
 
 
         // status 1 = draft
         $sql = $sql_type . " email SET
+        	contact_person_id = ".(int)$var['contact_person_id'].",
+            bcc_to_user = ".(int)$var['bcc_to_user'].",
             date_updated = NOW(),
             intranet_id = " . $this->kernel->intranet->get('id') . ",
             subject = '".$var['subject']."',
@@ -354,7 +370,7 @@ class Email extends Standard
         $phpmailer->setLanguage('en', 'phpmailer/language/');
         // $phpmailer->ConfirmReadingTo = $this->kernel->intranet->address->get('email');
 
-
+		// Sender
         if ($this->get('from_email')) {
             $phpmailer->From = $this->get('from_email');
             if ($this->get('from_name')) {
@@ -367,15 +383,30 @@ class Email extends Standard
             $phpmailer->FromName = $this->kernel->intranet->address->get('name');
         }
 
-        // Modtager
+        // Reciever
         $contact = $this->getContact();
-
         if ($this->get('contact_id') == 0 OR !is_object($contact)) {
             $this->error->set('Der kunne ikke sendes e-mail til email #' . $this->get('id') . ' fordi der ikke var nogen kunde sat');
         }
-
-        $phpmailer->AddAddress($contact->address->get('email'),
-                              $contact->address->get('name'));
+        
+        if($contact->get('type') == 'corporation' && $this->get('contact_person_id') != 0) {
+            $contact->loadContactPerson($this->get('contact_person_id'));
+            $validator = new Validator($this->error);
+            if($validator->isEmail($contact->contactperson->get('email'))) {
+                $phpmailer->AddAddress($contact->contactperson->get('email'), $contact->contactperson->get('name'));
+            }
+            else {
+                $phpmailer->AddAddress($contact->address->get('email'), $contact->address->get('name'));
+            }
+        }
+        else {
+            $phpmailer->AddAddress($contact->address->get('email'), $contact->address->get('name'));
+        }
+        
+        if($this->get('bcc_to_user')) {
+            $phpmailer->addBCC($this->kernel->user->address->get('email'), $this->kernel->user->address->get('name'));
+        }
+        
 
         // E-mail
         $phpmailer->Subject = $this->get('subject');

@@ -76,7 +76,21 @@ else { ?>
 	<input type="hidden" value="<?php echo $value['id']; ?>" name="id" />
 
 	<fieldset>
-		<pre>Til: <?php echo safeToHtml($contact->address->get('name')." <".$contact->address->get('email').">"); ?></pre>
+		<pre>Til: <?php 
+            if($contact->get('type') == 'corporation' && $email->get('contact_person_id') != 0) {
+                
+                $contact->loadContactPerson($email->get('contact_person_id'));
+                if($contact->contactperson->get('email') != '') {
+                    echo safeToHtml($contact->contactperson->get('name')." <".$contact->contactperson->get('email').">");
+                }
+                else {
+                    echo safeToHtml($contact->address->get('name')." <".$contact->address->get('email').">");
+                }
+            }
+            else {
+               echo safeToHtml($contact->address->get('name')." <".$contact->address->get('email').">"); 
+            }
+            ?></pre>
 		<pre>Fra: <?php if(isset($value['from_email']) && $value['from_email'] != ''): echo safeToHtml($value['from_name']." <".$value['from_email'].">"); else: echo safeToHtml($kernel->intranet->address->get('name')." <".$kernel->intranet->address->get('email').">"); endif; ?></pre>
 		
 		<pre><?php echo safeToHtml($value['subject']); ?></pre>
@@ -85,6 +99,27 @@ else { ?>
 	<fieldset>
 		<pre><?php echo wordwrap(safeToHtml($value['body']), 75); ?></pre>
 	</fieldset>
+	
+	<?php
+	$attachments = $email->getAttachments();
+	
+	if(count($attachments) > 0) {
+	    ?>
+	    <fieldset>
+			<legend>Vedhæftede filer</legend>
+			<ul>
+				<?php 
+				$kernel->useShared('filehandler');
+				foreach($attachments AS $attachment) {
+				    $file = new FileHandler($kernel, $attachment['id']);
+				    echo '<li><a href="'.$file->get('file_uri').'" target="_blank">'.$attachment['filename'].'</a></li>';
+				} 
+				?>
+			</ul>
+		</fieldset>
+	    <?php
+	}
+	?>
 
 	<?php if(!$email->isReadyToSend()): ?>
 		<?php echo $email->error->view(); /* errors is first set in isReadyToSend, therefor we show the errors here */  ?>
