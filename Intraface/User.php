@@ -30,7 +30,9 @@ class User extends Standard {
     public $address;
 
     /**
-     * @param $id (int)
+     * Constructor
+     *
+     * @param integer $id User id
      */
     function __construct($id = 0) {
         $this->id = $this->value['id'] = intval($id);
@@ -90,34 +92,10 @@ class User extends Standard {
         }
     }
 
-
     function hasIntranetAccess($intranet_id = 0) {
-
         if($intranet_id == 0) {
             $intranet_id = $this->intranet_id;
         }
-        /*
-        if (empty($this->permissions['user']['intranet'][$intranet_id])) {
-            $result = $this->db->query("SELECT intranet.id
-                FROM permission
-                INNER JOIN intranet
-                ON permission.intranet_id = intranet.id
-                WHERE intranet.id = ".$intranet_id." AND permission.user_id = ".$this->get('id') . " LIMIT 1");
-                // wanted to add " AND module_id = 0 AND module_sub_access_id = 0 " because it
-                // is set in the setIntranetAccess in intranetmaintenance, making the query faster
-                // but wont work
-
-            if(PEAR::isError($result)) {
-                trigger_error($result->getUserInfo(), E_USER_ERROR);
-            }
-
-            if($result->numRows() == 1) {
-                $this->permissions['user']['intranet'][$intranet_id] = true;
-                return true;
-
-            }
-        }
-        */
         $this->getPermissions($intranet_id);
 
         if(!empty($this->permissions['user']['intranet'][$intranet_id])) {
@@ -125,7 +103,6 @@ class User extends Standard {
         }
 
         return false;
-
     }
 
     function clearCachedPermission() {
@@ -134,25 +111,22 @@ class User extends Standard {
     }
 
     function getModuleIdFromString($module) {
-            if(empty($this->modules)) {
-                $result = $this->db->query("SELECT id, name FROM module WHERE active = 1");
-                if(PEAR::isError($result)) {
-                    trigger_error($result->getUserInfo(), E_USER_ERROR);
-                }
-
-                while($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-                    $this->modules[$row['name']] = $row['id'];
-                }
+        if(empty($this->modules)) {
+            $result = $this->db->query("SELECT id, name FROM module WHERE active = 1");
+            if(PEAR::isError($result)) {
+                trigger_error($result->getUserInfo(), E_USER_ERROR);
             }
 
-            if(!empty($this->modules[$module])) {
-                return $module_id = $this->modules[$module];
+            while($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+                $this->modules[$row['name']] = $row['id'];
             }
-            else {
-                trigger_error('user says unknown module '.$module, E_USER_ERROR);
-            }
-
-
+        }
+        if(!empty($this->modules[$module])) {
+            return $module_id = $this->modules[$module];
+        }
+        else {
+           trigger_error('user says unknown module ' . $module, E_USER_ERROR);
+        }
     }
 
     function hasModuleAccess($module, $intranet_id = 0) {
@@ -167,45 +141,6 @@ class User extends Standard {
         else {
             $module_id = intval($module);
         }
-
-        /*
-        if (empty($this->permissions['intranet']['module'])){
-            $result = $this->db->query("SELECT module.id
-                FROM permission
-                INNER JOIN module
-                    ON permission.module_id = module.id
-                WHERE permission.intranet_id = ".$intranet_id." AND permission.user_id = 0");
-
-            if(PEAR::isError($result)) {
-                trigger_error($result->getUserInfo(), E_USER_ERROR);
-            }
-            while($row = $result->fetchRow()) {
-
-                $this->permissions['intranet']['module'][$row['id']] = true;
-            }
-
-        }
-
-
-
-        if (empty($this->permissions['user']['module'])) {
-            $sql = "SELECT module.id
-                FROM permission
-                INNER JOIN module
-                    ON permission.module_id = module.id
-                WHERE permission.intranet_id = ".$intranet_id."
-                AND permission.user_id = ".$this->id;
-            $result = $this->db->query($sql);
-            if(PEAR::isError($result)) {
-                trigger_error($result->getUserInfo(), E_USER_ERROR);
-            }
-            while ($row = $result->fetchRow()) {
-                $this->permissions['user']['module'][$row['id']] = true;
-            }
-
-
-        }
-        */
 
         $this->getPermissions($intranet_id);
         if (!empty($this->permissions) AND is_array($this->permissions)) {
@@ -310,7 +245,6 @@ class User extends Standard {
         return false;
     }
 
-
     function getIntranetList() {
         // Skal denne funktion være her? Måske den istedet skulle være i intranet.
         $result = $this->db->query("SELECT DISTINCT(intranet.id), intranet.name FROM intranet
@@ -348,9 +282,8 @@ class User extends Standard {
 
     }
 
-
     /**
-     * @param array $input
+     * @param array $input Data to update
      */
     function update($input) {
 
