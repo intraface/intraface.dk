@@ -1,14 +1,113 @@
 <?php
 /**
- * Kontakthåndteringsklasse
+ * Handles a contact
  *
- * Klassen håndterer en kontaktperson, eller kan returnere en liste med kontaktperson.
+ * I think we should distinguish between company and contact
  *
- * TODO  Vi skal have lavet det så man kan slette felter igen.
- *       Den er oprindeligt lavet så det kun er satte felter, der ændres,
- *       men den skal egentlig ændre felter, hvor brugeren har haft et felt,
- *       som de kunne ændre værdien med. Gad vide om man kan det?
- *
+
+// www, email, cvr, ean hoerer ikke hertil
+abstract class Address
+{
+    private $types;
+
+    // istedet for belong_to og belong_to_id
+    // skal vaere den samme maade som tags
+
+    public function __construct($data) {
+        $this->init();
+        // data is put into variables
+        // this can be done either from a database or from some form input (remember to validate from forminput)
+    }
+
+    function registerType($id, $type)
+    {
+        // some rules for id and type
+        $this->types[$id] = $type;
+    }
+
+    function getTypes()
+    {
+        return $this->types;
+    }
+
+    abstract function init();
+
+}
+
+// this is the one we use for our application
+class MyAddress extends Address
+{
+    function init()
+    {
+        $this->registerType(1, 'intranet');
+    }
+}
+
+class Contact
+{
+    public $name;
+    public $occupation:
+    public $birthday;
+
+    // et eller andet med et keyword
+    // work, home, delivery, billing etc.
+    function addAddress() {}
+
+    function setPrimaryAddress() {}
+
+    function getPrimaryAddress() {}
+
+    function getAddresses() {}
+
+    ////////////////////////////
+
+    function addEmail() {}
+
+    function getEmails() {}
+
+    function setPrimaryEmail() {}
+
+    function getPrimaryEmail() {}
+
+    ////////////////////////////
+
+    function getBirthday() { // return date object }
+
+    /////////////////////////////
+
+    function addPicture() {}
+
+    function setPrimaryPicture() {}
+
+    function getPictures() {}
+
+    ///////////////////////////////
+
+    function addWebsite() {}
+
+    function getWebsites() {}
+
+    ////////////////////////////////
+
+    // maaske med mobile eller landline, work
+    function addPhone() {}
+
+    function getPhones() {}
+
+}
+
+class Company extends Contact
+{
+    public $ean;
+    public $cvr;
+
+    function addContact() {}
+
+    function getContacts()
+}
+
+
+
  *
  * @package Contact
  * @author	Lars Olesen <lars@legestue.net>
@@ -512,11 +611,31 @@ class Contact extends Standard {
     }
 
     /**
+     * has contact any similar contacts based on phonenumber and email
+     *
+     * @return boolean
+     */
+     public function hasSimilarContacts()
+     {
+        $contacts = $this->getSimilarContacts();
+        return (count($contacts) > 0);
+     }
+
+    /**
+     * Return an array with similar contacts
+     *
+     * @return array
+     */
+     public function getSimilarContacts()
+     {
+         return $this->compare();
+     }
+
+    /**
      * Metoden skal bruges til at sammenligne kunder mhp. på at samle dem til en kunde.
      *
      * @see Contact::merge();
      */
-
     function compare() {
         $similar_contacts = array();
 
@@ -549,55 +668,10 @@ class Contact extends Standard {
         }
 
         return $result->fetchAll();
-  }
-
-    /*
-    function compare() {
-        $similar_contacts = array();
-
-        if ($this->id == 0) {
-            return array();
-        }
-
-        $db = MDB2::singleton(DB_DSN);
-        $sql = "SELECT DISTINCT(contact.id) FROM contact
-                INNER JOIN address
-                    ON contact.id = address.belong_to_id
-                WHERE address.type=3
-                    AND contact.active = 1
-                    AND address.active = 1
-                    AND contact.intranet_id = " . $db->quote($this->kernel->intranet->get('id'), 'integer') . "
-                    AND contact.id != " . $db->quote($this->id, 'integer') . "
-                    AND (
-                        (address.email = " . $db->quote($this->address->get('email'), 'text') . " AND address.email != '')
-                        OR (address.phone = " . $db->quote($this->address->get('phone'), 'text') . " AND address.phone != ''))
-
-                    ";
-        print($sql);
-        $result = $db->query($sql);
-        if (PEAR::isError($result)) {
-            trigger_error($result->getMessage(), E_USER_ERROR);
-        }
-
-        if ($result->numRows() == 0) {
-            return array();
-        }
-
-        print_r($result->fetchAll());
-
-
-        while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-            $contact = new Contact($this->kernel, $row['id']);
-            $similar_contacts[] = $contact;
-        }
-
-        return $similar_contacts;
-  }
-    */
-
+    }
 
     /**
-     * Denne metode skal bruges til at samle to kontaktpersoner til en.
+     * Merges a contact to one contact
      *
      * - debtor
      * - newsletter
@@ -721,7 +795,6 @@ class Contact extends Standard {
      * Der bør sikkert også være en indstilling som ejeren af intranettet kan sætte
      * efter al sandsynlighed skal denne være med som tjek i delete
      */
-
     function canBeDeleted() {
         $db = new DB_Sql;
         $db->query("SELECT * FROM debtor WHERE contact_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
@@ -734,10 +807,9 @@ class Contact extends Standard {
     /**
      * skal tage højde for om intranettet tillader kundelogin
      */
-
     function canLogin() {
         if ($this->get('active') == 0) {
-            return 0;
+            return false;
         }
     }
 
