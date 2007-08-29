@@ -134,13 +134,13 @@ class UploadHandler extends Standard {
 			$file = $input;
 		}
 		else {
-			trigger_error("Ugyldigt input i FileHandler->upload", E_USER_ERROR);
+			trigger_error("Invalid input in FileHandler->upload", E_USER_ERROR);
 		}
 		
 		$prop = $file->getProp(); // returnere et array med oplysninger om filen.
 		
 		if(!$file->isValid()) {
-			$this->file_handler->error->set("error in file " .$file->getMessage());
+			$this->file_handler->error->set($file->getMessage());
 			return false;
 		}
 		if(!isset($prop['ext']) || $prop['ext'] == "") {
@@ -224,6 +224,15 @@ class UploadHandler extends Standard {
 			return $id;
 		}
 	}
+    
+    function isUploadFile($field) {
+        if(isset($_FILES) && isset($_FILES[$field]) && $_FILES[$field]['tmp_name'] != '' && $_FILES[$field]['error'] == 0) {
+            return true;
+        }
+        else {
+            return false;
+        }    
+    }
 	
 	function getFiles() {
 		$upload = new HTTP_Upload('en');
