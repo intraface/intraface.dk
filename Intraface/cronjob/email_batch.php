@@ -28,7 +28,7 @@ set_include_path(
 
 require_once '../common.php';
 
-$db = MDB2::factory(DB_DSN);
+$db = MDB2::singleton(DB_DSN);
 $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
 $result = $db->query("SELECT name, public_key FROM intranet");
 
