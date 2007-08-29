@@ -56,7 +56,7 @@ class BasketEvaluation extends Standard
         $this->id = (int)$id;
         $this->kernel = $kernel;
 
-        $this->db = MDB2::factory(DB_DSN);
+        $this->db = MDB2::singleton(DB_DSN);
 
         if (PEAR::isError($this->db)) {
             die($this->db->getMessage());

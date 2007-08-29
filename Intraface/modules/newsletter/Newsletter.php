@@ -304,7 +304,7 @@ class Newsletter extends Standard
         $from = $this->list->get('reply_email');
         $name = $this->list->get('sender_name');
         $sql = 'INSERT INTO email (date_created, date_updated, from_email, from_name, type_id, status, belong_to_id, date_deadline, intranet_id, contact_id, user_id, subject, body) VALUES ';
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
 
         if (PEAR::isError($db)) {
             die($result->getMessage() . $result->getUserInfo());
