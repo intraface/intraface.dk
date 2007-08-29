@@ -391,5 +391,20 @@ class InstanceHandler extends Standard {
 		$db->query("UPDATE file_handler_instance SET active = 0 WHERE intranet_id = ".$this->file_handler->kernel->intranet->get('id')." AND id = ".$this->id);
 		return true;
 	}
+    
+    function deleteAll() {
+        if($this->file_handler->get('id') == 0) {
+            trigger_error('An file_handler_id is needed to delete instances in InstanceHandler->deleteAll()', E_USER_ERROR);
+        }
+        
+        $db = new DB_sql;
+        $db->query("SELECT id FROM file_handler_instance WHERE intranet_id = ".$this->file_handler->kernel->intranet->get('id')." AND file_handler_id = ".$this->file_handler->get('id')." AND active = 1");
+        while($db->nextRecord()) {
+            $instance = new InstanceHandler($this->file_handler, $db->f('id'));
+            $instance->delete();
+        }
+        
+        return true;
+    }
 }
 ?>

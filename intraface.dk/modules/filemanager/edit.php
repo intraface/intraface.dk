@@ -7,8 +7,17 @@ $translation = $kernel->getTranslation('filemanager');
 if(isset($_POST['submit'])) {
 
 	$filemanager = new FileManager($kernel, intval($_POST['id']));
-
-	if($filemanager->update($_POST)) {
+    
+    $filemanager->createUpload();
+    $filemanager->upload->setSetting('max_file_size', '1000000');
+    if($filemanager->upload->isUploadFile('replace_file')) { // 
+        $upload_result = $filemanager->upload->upload('replace_file');         
+    }
+    else {
+        $upload_result = true;
+    }
+    
+	if($filemanager->update($_POST) && $upload_result) {
 		header('Location: file.php?id='.$filemanager->get('id'));
 	}
 	else {
@@ -32,7 +41,7 @@ $page->start(safeToHtml($translation->get('edit file')));
 
 <?php $filemanager->error->view(); ?>
 
-<form action="edit.php" method="POST">
+<form action="edit.php" method="POST" enctype="multipart/form-data">
 <fieldset>
 	<legend><?php echo safeToHtml($translation->get('file information')); ?></legend>
 
@@ -49,6 +58,16 @@ $page->start(safeToHtml($translation->get('edit file')));
 		<textarea name="description" id="description" style="width: 500px; height: 200px;"><?php echo safeToForm($values['description']); ?></textarea>
 	</div>
 
+</fieldset>
+
+<fieldset>
+    <legend><?php echo safeToHtml($translation->get('Replace file')); ?></legend>
+   
+    <div class="formrow">
+        <label for="replace_file"><?php echo safeToHtml($translation->get('Choose file')); ?></label>
+        <input name="replace_file" type="file" id="replace_file" />
+    </div>
+   
 </fieldset>
 
 <p></p><input type="submit" class="save" name="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" />

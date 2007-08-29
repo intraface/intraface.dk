@@ -309,8 +309,14 @@ class FileHandler extends Standard {
 		
 		$file_size = filesize($file);
 		if($mime_type === NULL) {
-			$mime_type = mime_content_type($file);
-		}
+			// $mime_type = mime_content_type($file);
+            require_once 'MIME/Type.php';
+            $mime_type = MIME_Type::autoDetect($file);
+            if(PEAR::isError($mime_type)) {
+                trigger_error("Error in Filehandler->save() ".$mime_type->getMessage(), E_USER_ERROR);
+                exit;
+            }
+        }
 		
 		$mime_type = $this->_getMimeType($mime_type, 'mime_type');
 		if($mime_type === false) {
@@ -352,10 +358,16 @@ class FileHandler extends Standard {
 		
 		
 		if($this->id != 0) {
-			$db->query("UPDATE file_type SET ".$sql." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
+			$db->query("UPDATE file_handler SET ".$sql." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
 			$id = $this->id;
-			
-			// Her bør vi slette alle instancer!
+            
+            // deleting the old file
+			if(!rename($this->get('file_path'), $this->upload_path.'_deleted_'.$this->get('server_file_name'))) {
+                trigger_error("Was not able to rename file ".$this->get('file_path')." in Filehandler->save()", E_USER_NOTICE);
+            }
+			$this->createInstance();
+            $this->instance->deleteAll();
+            
 		}
 		else {
 			$db->query("INSERT INTO file_handler SET ".$sql.", date_created = NOW(), intranet_id = ".$this->kernel->intranet->get('id').", user_id = ".$this->kernel->user->get('id'));
@@ -365,6 +377,7 @@ class FileHandler extends Standard {
 		if(!is_dir($this->upload_path)) {
 			if(!mkdir($this->upload_path)) {
 				trigger_error("Kunne ikke oprette mappe i FileHandler->save", E_USER_ERROR);
+                Exit;
 			}
 		}
 		

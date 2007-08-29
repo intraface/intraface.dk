@@ -1,4 +1,5 @@
 <?php
+
 require('../../include_first.php');
 $module_debtor = $kernel->module('debtor');
 $kernel->useModule('contact');
@@ -11,7 +12,6 @@ $translation = $kernel->getTranslation('debtor');
 
 $send_as = $_GET['send'];
 $id = intval($_GET['id']);
-
 
 # find debtoren
 $debtor = Debtor::factory($kernel, intval($id));
@@ -101,7 +101,7 @@ $input['file_name'] = $filename;
 $input['file_type'] = 'application/pdf';
 $input['accessibility'] = 'public';
 // $input['server_file_name'] = $filename;
-$input['description'] = 'Faktura ' . $debtor->get('number') . ' sendt som elektronisk faktura';
+// $input['description'] = 'Faktura ' . $debtor->get('number') . ' sendt som elektronisk faktura';
 
 # gem filen med filehandleren
 $filehandler = new FileHandler($kernel);
