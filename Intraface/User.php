@@ -315,7 +315,7 @@ class User extends Standard {
         if (!Validate::email($email)) {
             return 0;
         }
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $result = $db->query("SELECT id FROM user WHERE email = '".$email."'");
         if(PEAR::isError($result)) {
             trigger_error($result->getUserInfo(), E_USER_ERROR);
