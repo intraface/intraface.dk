@@ -30,7 +30,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $msg = 'Vi kunne ikke oprette dig';
     }
     else {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $res = $db->query("SELECT id FROM user WHERE email = ".$db->quote($_POST['email'], 'text'));
         if (PEAR::isError($res)) {
             trigger_error($res->getMessage(), E_USER_ERROR);
