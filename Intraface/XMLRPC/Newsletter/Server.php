@@ -177,7 +177,7 @@ class Intraface_XMLRPC_Newsletter_Server
      */
     function getListIdFromOptinCode($credentials, $code)
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $result = $db->query('SELECT list_id FROM newsletter_subscriber WHERE code = ' . $db->quote($code, 'text'));
         if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             return $row['list_id'];
