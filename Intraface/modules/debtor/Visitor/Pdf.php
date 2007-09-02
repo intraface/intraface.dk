@@ -1,8 +1,10 @@
 <?php
 /**
- * Creates a pdf debtor
+ * Creates a pdf of a debtor
  *
  * PHP version 5
+ *
+ * TODO Put in the doc instead of having it started up.
  *
  * <code>
  * $file = new FileHandler($file_id);
@@ -10,12 +12,21 @@
  * </code>
  *
  */
+
 class Debtor_Report_Pdf
 {
     private $file;
     private $translation;
     private $doc;
 
+    /**
+     * Constructor
+     *
+     * @param object $translation Used to do the translation in the class
+     * @param object $file        File to use for the header
+     *
+     * @return void
+     */
     function __construct($translation, $file = null)
     {
         $this->translation = $translation;
@@ -25,11 +36,14 @@ class Debtor_Report_Pdf
     function visit($debtor)
     {
 
-        $shared_pdf = $debtor->kernel->useShared('pdf');
-        $shared_pdf->includeFile('PdfMakerDebtor.php');
+        //$shared_pdf = $debtor->kernel->useShared('pdf');
+        //$shared_pdf->includeFile('PdfMakerDebtor.php');
+
+        require_once 'Intraface/shared/pdf/PdfMaker.php';
+        require_once 'Intraface/shared/pdf/PdfMakerDebtor.php';
 
         // todo - mon ikke alt fra pdfmakerdebtor kan flyttes hertil?
-        $this->doc = new PdfMakerDebtor($debtor->kernel);
+        $this->doc = new PdfMakerDebtor(/*$debtor->kernel*/);
         $this->doc->start();
 
         if (!empty($this->file) AND $this->file->get('id') > 0) {
@@ -48,6 +62,9 @@ class Debtor_Report_Pdf
         // $intranet_address = new Address($debtor->get("intranet_address_id"));
         $intranet = $intranet_address->get();
 
+        $intranet = array_merge($intranet, $debtor->getContactInformation());
+
+        /*
         switch($debtor->kernel->setting->get('intranet', 'debtor.sender')) {
             case 'intranet':
                 // void
@@ -62,6 +79,7 @@ class Debtor_Report_Pdf
                 $intranet['contact_person'] = $debtor->kernel->setting->get('intranet', 'debtor.sender.name');
                 break;
         }
+        */
 
         $this->docinfo[0]["label"] = $this->translation->get($debtor->get('type').' number').":";
         $this->docinfo[0]["value"] = $debtor->get("number");
@@ -305,7 +323,7 @@ class Debtor_Report_Pdf
                 "due_date" => $debtor->get("dk_due_date"),
                 "girocode" => $debtor->get("girocode"));
 
-            $this->doc->addPaymentCondition($debtor->get("payment_method"), $parameter);
+            $this->doc->addPaymentCondition($debtor->get("payment_method"), $parameter, $debtor->getPaymentInformation());
 
             $this->doc->setY('-'.$this->doc->get("font_spacing"));
 
@@ -313,7 +331,8 @@ class Debtor_Report_Pdf
                 $this->doc->nextPage(true);
             }
 
-            $text = explode("\r\n", $debtor->kernel->setting->get('intranet', 'debtor.invoice.text'));
+            //$text = explode("\r\n", $debtor->kernel->setting->get('intranet', 'debtor.invoice.text'));
+            $text = explode("\r\n", $debtor->getInvoiceText());
             foreach ($text AS $line) {
                 if ($line == "") {
                     $this->doc->setY('-'.$this->doc->get("font_spacing"));
