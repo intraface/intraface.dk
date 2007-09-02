@@ -2,9 +2,11 @@
 
 class PdfMakerDebtor extends PdfMaker {
 
+    /*
     function __construct($kernel) {
         parent::__construct($kernel);
     }
+    */
 
     function addRecieverAndSender($contact, $intranet = array(), $title = "", $docinfo = array()) {
 
@@ -142,11 +144,13 @@ class PdfMakerDebtor extends PdfMaker {
     /**
      * Adds the payment condition to the document
      *
-     * @param parameter: array("contact" => (object), "payment_text" => (string), "amount" => (double), "due_date" => (string), "girocode" => (string));
+     * @param integer $payment_method The chosen payment method
+     * @param array   $parameter      array("contact" => (object), "payment_text" => (string), "amount" => (double), "due_date" => (string), "girocode" => (string));
+     * @param array   $payment_info   The payment information
      *
      * @return void
      */
-    function addPaymentCondition($payment_method, $parameter) {
+    function addPaymentCondition($payment_method, $parameter, $payment_info = array()) {
         if (!is_array($parameter)) {
             trigger_error("den 3. parameter til addPaymentCondition skal være et array!", E_USER_ERROR);
         }
@@ -228,7 +232,8 @@ class PdfMakerDebtor extends PdfMaker {
                 $this->setY('-7'); // $pointY -= 7;
                 $this->addText($this->get('x') + 4, $this->get('y'), $this->get("font_size") - 4, "Bank:");
                 $this->setY('-'.($payment_line - 12)); // $pointY -= $payment_line - 12;
-                $this->addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $this->kernel->setting->get("intranet", "bank_name"));
+                // $this->addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $this->kernel->setting->get("intranet", "bank_name"));
+                $this->addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $payment_info["bank_name"]);
 
                 $this->setValue('y', $payment_start); // $pointY = $payment_start;
                 $this->setY('-7'); // $pointY -= 7;
@@ -257,7 +262,7 @@ class PdfMakerDebtor extends PdfMaker {
 
                 $this->addText($this->get('x') + $payment_left + 4, $this->get('y'), $this->get("font_size") - 4, "Regnr.:            Kontonr.:");
                 $this->setY('-'.($payment_line - 12));
-                $this->addText($this->get('x') + $payment_left + 10, $this->get('y'), $this->get("font_size"), $this->kernel->setting->get("intranet", "bank_reg_number")."       ".$this->kernel->setting->get("intranet", "bank_account_number"));
+                $this->addText($this->get('x') + $payment_left + 10, $this->get('y'), $this->get("font_size"), $payment_info["bank_reg_number"]."       ".$payment_info["bank_account_number"]);
 
             } elseif ($payment_method == 2) {
 
@@ -270,6 +275,7 @@ class PdfMakerDebtor extends PdfMaker {
                 $this->setY('-7');
                 $this->addText($this->get('x') + 4, $this->get('y'), $this->get("font_size") - 4, "Indbetaler:");
                 $this->setY('-'.$this->get('font_spacing'));
+
                 $this->addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), $parameter["contact"]->address->get("name"));
                 $this->setY('-'.$this->get('font_spacing'));
                 $line = explode("\r\n", $parameter["contact"]->address->get("address"));
@@ -307,7 +313,9 @@ class PdfMakerDebtor extends PdfMaker {
 
                 $this->addText($this->get('x') + $payment_left + 4, $this->get('y'), $this->get("font_size") - 4, "Kodelinje: (Ej til maskinel aflæsning)");
                 $this->setY('-'.($payment_line - 12));
-                $this->addText($this->get('x') + $payment_left + 10, $this->get('y'), $this->get("font_size"), "+01<".str_repeat(" ", 20)."+".$this->kernel->setting->get("intranet", "giro_account_number")."<");
+                //$this_text = '+01<'.str_repeat(' ', 20).'+'.$payment_info['giro_account_number'].'<';
+                $this_text = '+01>'.str_repeat(' ', 20).'+'.$payment_info['giro_account_number'].'<';
+                $this->addText($this->get('x') + $payment_left + 10, $this->get('y'), $this->get('font_size'), $this_text);
             } elseif ($payment_method == 3) {
 
                 $this->rectangle($this->get('x'), $this->get('y') - $payment_line * 2, $this->get("right_margin_position") - $this->get("margin_left"), $payment_line * 2);
@@ -332,7 +340,7 @@ class PdfMakerDebtor extends PdfMaker {
 
                 $this->addText($this->get('x') + 4, $this->get('y'), $this->get("font_size") - 4, "Kodelinje: (Ej til maskinel aflæsning)");
                 $this->setY('-'.($payment_line - 12));
-                $this->addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "+71< ".str_repeat("0", 15 - strlen($parameter["girocode"])).$parameter["girocode"]." +".$this->kernel->setting->get("intranet", "giro_account_number")."<");
+                $this->addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "+71< ".str_repeat("0", 15 - strlen($parameter["girocode"])).$parameter["girocode"]." +".$payment_info["giro_account_number"]."<");
 
             }
         }
