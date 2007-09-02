@@ -1010,6 +1010,31 @@ class Debtor extends Standard {
         return $db->numRows();
     }
 
+    function getInvoiceText()
+    {
+        return $this->kernel->setting->get('intranet', 'debtor.invoice.text');
+    }
+
+    function getContactInformation()
+    {
+        $intranet = array();
+        switch($this->kernel->setting->get('intranet', 'debtor.sender')) {
+            case 'intranet':
+                // void
+                break;
+            case 'user':
+                $intranet['email'] = $this->kernel->user->address->get('email');
+                $intranet['contact_person'] = $this->kernel->user->address->get('name');
+                $intranet['phone'] = $this->kernel->user->address->get('phone');
+                break;
+            case 'defined':
+                $intranet['email'] = $this->kernel->setting->get('intranet', 'debtor.sender.email');
+                $intranet['contact_person'] = $this->kernel->setting->get('intranet', 'debtor.sender.name');
+                break;
+        }
+
+        return $intranet;
+    }
 
 
     function pdf($type = '', $filename = '') {
@@ -1034,6 +1059,15 @@ class Debtor extends Standard {
         $report = new Debtor_Report_Pdf($translation, $filehandler);
         $report->visit($this);
         return $report->output($type, $filename);
+    }
+
+    function getPaymentInformation()
+    {
+        $info = array('bank_name'    => $this->kernel->setting->get("intranet", "bank_name"),
+                      'bank_reg_number' => $this->kernel->setting->get("intranet", "bank_reg_number"),
+                      'bank_account_number' => $this->kernel->setting->get("intranet", "bank_account_number"),
+                      'giro_account_number' => $this->kernel->setting->get("intranet", "giro_account_number")
+        );
     }
 
 
