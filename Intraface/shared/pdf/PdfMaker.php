@@ -14,13 +14,15 @@ class PdfMaker extends Cpdf
     var $page_height;
     var $page_width;
 
-    function __construct($kernel)
+    function __construct(/*$kernel*/)
     {
+        /*
         if(!is_object($kernel) || strtolower(get_class($kernel)) != 'kernel') {
             trigger_error("Første parameter er ikke kernel i PdfMaker->__construct", E_USER_ERROR);
         }
 
         $this->kernel = $kernel;
+        */
 
         $this->page_width = 595;
         $this->page_height = 841;
@@ -60,18 +62,18 @@ class PdfMaker extends Cpdf
         // Tabel for deres navn fundet her: http://www.gust.org.pl/fonty/qx-table2.htm
         // Bemærk at placeringen af tegnene er forskellige fra de 2 tabeller. Den øverste har den rigtige placering.
 
-        $diff = array(230=>'ae',
-                      198=>'AE',
-                      248=>'oslash',
-                      216=>'Oslash',
-                      229=>'aring',
-                      197=>'Aring');
+        $diff = array(230 => 'ae',
+                      198 => 'AE',
+                      248 => 'oslash',
+                      216 => 'Oslash',
+                      229 => 'aring',
+                      197 => 'Aring');
 
         // Hmm her burde lige laves en anden måde at tilgå stien på!
-         $shared_pdf = $this->kernel->useShared('pdf');
+        //$shared_pdf = $this->kernel->useShared('pdf');
 
-        parent::selectFont(PATH_INCLUDE_SHARED.'pdf/fonts/Helvetica.afm', array('differences'=>$diff));
-
+        //parent::selectFont(PATH_INCLUDE_SHARED.'pdf/fonts/Helvetica.afm', array('differences'=>$diff));
+        parent::selectFont('Helvetica.afm', array('differences'=>$diff));
         $this->setX(0);
         $this->setY(0);
 
