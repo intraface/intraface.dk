@@ -314,7 +314,8 @@ class PdfMakerDebtor extends PdfMaker {
                 $this->addText($this->get('x') + $payment_left + 4, $this->get('y'), $this->get("font_size") - 4, "Kodelinje: (Ej til maskinel aflæsning)");
                 $this->setY('-'.($payment_line - 12));
                 //$this_text = '+01<'.str_repeat(' ', 20).'+'.$payment_info['giro_account_number'].'<';
-                $this_text = '+01>'.str_repeat(' ', 20).'+'.$payment_info['giro_account_number'].'<';
+                // TODO change the - back to <> but it does not work right now
+                $this_text = '+01-'.str_repeat(' ', 20).'+'.$payment_info['giro_account_number'].'-';
                 $this->addText($this->get('x') + $payment_left + 10, $this->get('y'), $this->get('font_size'), $this_text);
             } elseif ($payment_method == 3) {
 
@@ -340,7 +341,10 @@ class PdfMakerDebtor extends PdfMaker {
 
                 $this->addText($this->get('x') + 4, $this->get('y'), $this->get("font_size") - 4, "Kodelinje: (Ej til maskinel aflæsning)");
                 $this->setY('-'.($payment_line - 12));
-                $this->addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "+71< ".str_repeat("0", 15 - strlen($parameter["girocode"])).$parameter["girocode"]." +".$payment_info["giro_account_number"]."<");
+                // TODO change the - back to <> but it does not work
+
+                // $this->addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "+71< ".str_repeat("0", 15 - strlen($parameter["girocode"])).$parameter["girocode"]." +".$payment_info["giro_account_number"]."<");
+                $this->addText($this->get('x') + 10, $this->get('y'), $this->get("font_size"), "+71- ".str_repeat("0", 15 - strlen($parameter["girocode"])).$parameter["girocode"]." +".$payment_info["giro_account_number"]."-");
 
             }
         }
