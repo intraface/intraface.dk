@@ -1,5 +1,7 @@
 <?php
 /**
+ * PdfMaker for Intraface
+ *
  * @author Sune Jensen <sj@sunet.dk>
  */
 require_once 'Cpdf/class.pdf.php';
@@ -26,16 +28,16 @@ class PdfMaker extends Cpdf
         // Foruddefineret værdier
         $this->value['margin_top'] = 50;
         $this->value['margin_right'] = 42;
-        $this->value["margin_left"] = 42; // Fra 0 til kanten i venstre side
-        $this->value["margin_bottom"] = 50;
+        $this->value['margin_left'] = 42; // Fra 0 til kanten i venstre side
+        $this->value['margin_bottom'] = 50;
 
         $this->value['header_height'] = 51;
         $this->value['header_margin_top'] = 20;
         $this->value['header_margin_bottom'] = 20;
 
-        $this->value["font_size"] = 11;
-        $this->value["font_padding_top"] = 1;
-        $this->value["font_padding_bottom"] = 4;
+        $this->value['font_size'] = 11;
+        $this->value['font_padding_top'] = 1;
+        $this->value['font_padding_bottom'] = 4;
 
         $this->page = 1;
 
@@ -46,61 +48,9 @@ class PdfMaker extends Cpdf
 
     }
 
-    function load()
-    {
-        // Sætter værdier på baggrund af faste værdier
-
-        $this->value["right_margin_position"] = $this->page_width - $this->value['margin_right']; // content_width fra 0 til højre-margin
-        $this->value["top_margin_position"] = $this->page_height - $this->value['margin_top']; // content_height
-
-        $this->value["content_width"] = $this->page_width - $this->value['margin_right'] - $this->value['margin_left']; // content_width fra 0 til højre-margin
-        $this->value["content_height"] = $this->page_height - $this->value['margin_bottom'] - $this->value['margin_top']; // content_height
-
-        $this->value["font_spacing"] = $this->value["font_size"] + $this->value["font_padding_top"] + $this->value["font_padding_bottom"];
-    }
-
-    function setValue($key, $value)
-    {
-        $this->value[$key] = $value;
-    }
-
-    function setX($value)
-    {
-
-        if(is_int($value)) {
-            $this->value['x'] = $this->get('margin_left') + $value;
-        }
-        elseif(is_string($value) && substr($value, 0, 1) == "+") {
-
-            $this->value['x'] +=  intval(substr($value, 1));
-        }
-        elseif(is_string($value) && substr($value, 0, 1) == "-") {
-            $this->value['x'] -= intval(substr($value, 1));
-        }
-        else {
-            trigger_error("Ugyldig værdi i setX: ".$value, FATAL);
-        }
-    }
-
-    function setY($value)
-    {
-
-        if(is_int($value)) {
-
-            $this->value['y'] = $this->page_height - $this->get('margin_top') - $value;
-        }
-        elseif(is_string($value) && substr($value, 0, 1) == "+") {
-            $this->value['y'] += intval(substr($value, 1));
-        }
-        elseif(is_string($value) && substr($value, 0, 1) == "-") {
-
-            $this->value['y'] -= intval(substr($value, 1));
-        }
-        else {
-            trigger_error("Ugyldig værdi i setY: ".$value, E_USER_ERROR);
-        }
-    }
-
+    /**
+     *
+     */
     function start()
     {
 
@@ -125,6 +75,61 @@ class PdfMaker extends Cpdf
         $this->setX(0);
         $this->setY(0);
 
+    }
+
+    function load()
+    {
+        // Sætter værdier på baggrund af faste værdier
+
+        $this->value['right_margin_position'] = $this->page_width - $this->value['margin_right']; // content_width fra 0 til højre-margin
+        $this->value['top_margin_position'] = $this->page_height - $this->value['margin_top']; // content_height
+
+        $this->value['content_width'] = $this->page_width - $this->value['margin_right'] - $this->value['margin_left']; // content_width fra 0 til højre-margin
+        $this->value['content_height'] = $this->page_height - $this->value['margin_bottom'] - $this->value['margin_top']; // content_height
+
+        $this->value['font_spacing'] = $this->value["font_size"] + $this->value['font_padding_top'] + $this->value['font_padding_bottom'];
+    }
+
+    function setValue($key, $value)
+    {
+        $this->value[$key] = $value;
+    }
+
+    function setX($value)
+    {
+
+        if(is_int($value)) {
+            $this->value['x'] = $this->get('margin_left') + $value;
+        }
+        elseif(is_string($value) && substr($value, 0, 1) == "+") {
+
+            $this->value['x'] +=  intval(substr($value, 1));
+        }
+        elseif(is_string($value) && substr($value, 0, 1) == "-") {
+            $this->value['x'] -= intval(substr($value, 1));
+        }
+        else {
+            trigger_error('Ugyldig værdi i setX: '.$value, E_USER_ERROR);
+        }
+    }
+
+    function setY($value)
+    {
+
+        if(is_int($value)) {
+
+            $this->value['y'] = $this->page_height - $this->get('margin_top') - $value;
+        }
+        elseif(is_string($value) && substr($value, 0, 1) == "+") {
+            $this->value['y'] += intval(substr($value, 1));
+        }
+        elseif(is_string($value) && substr($value, 0, 1) == "-") {
+
+            $this->value['y'] -= intval(substr($value, 1));
+        }
+        else {
+            trigger_error("Ugyldig værdi i setY: ".$value, E_USER_ERROR);
+        }
     }
 
     function addHeader($headerImg = "")
@@ -170,7 +175,7 @@ class PdfMaker extends Cpdf
     function writeDocument($data, $filnavn)
     {
         //$file = fopen("files/".$filnavn, "wb");
-        $file = fopen($filnavn, "wb");
+        $file = fopen($filnavn, 'wb');
         fwrite($file, $data);
         fclose($file);
     }
@@ -182,7 +187,7 @@ class PdfMaker extends Cpdf
     {
 
         if($sub_text == true) {
-            parent::addText($this->value["right_margin_position"] - parent::getTextWidth($this->value["font_size"], "<i>Fortsættes på næste side...</i>") - 30, $this->value["margin_bottom"] - $this->value['font_padding_top'] - $this->value['font_size'], $this->value["font_size"], "<i>Fortsættes på næste side...</i>");
+            parent::addText($this->value['right_margin_position'] - parent::getTextWidth($this->value['font_size'], "<i>Fortsættes på næste side...</i>") - 30, $this->value["margin_bottom"] - $this->value['font_padding_top'] - $this->value['font_size'], $this->value['font_size'], "<i>Fortsættes på næste side...</i>");
         }
         parent::newPage();
         $this->setY(0);
@@ -196,8 +201,7 @@ class PdfMaker extends Cpdf
     {
         if(!empty($key)) {
             return($this->value[$key]);
-        }
-        else {
+        } else {
             return $this->value;
         }
     }
