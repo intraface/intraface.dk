@@ -148,11 +148,11 @@ class PdfMaker extends Cpdf
                 $width = $this->get('content_width');
                 $height = $size[1] * ($width/$size[0]);
             }
-            Cpdf::addJpegFromFile($headerImg, $this->get('right_margin_position') - $width, $this->page_height - $this->get('header_margin_top') - $height, $width, $height); // , ($this->value["page_width"] - $this->value["margin_left"])/10
+            parent::addJpegFromFile($headerImg, $this->get('right_margin_position') - $width, $this->page_height - $this->get('header_margin_top') - $height, $width, $height); // , ($this->value["page_width"] - $this->value["margin_left"])/10
 
-            Cpdf::closeObject();
+            parent::closeObject();
 
-            Cpdf::addObject($header, "all");
+            parent::addObject($header, "all");
 
             $this->setValue('margin_top', $height + $this->get('header_margin_top') + $this->get('header_margin_bottom'));
             $this->setY(0);

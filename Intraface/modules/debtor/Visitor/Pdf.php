@@ -15,9 +15,9 @@
 
 class Debtor_Report_Pdf
 {
-    private $file;
-    private $translation;
-    private $doc;
+    protected $file;
+    protected $translation;
+    protected $doc;
 
     /**
      * Constructor
@@ -33,18 +33,25 @@ class Debtor_Report_Pdf
         $this->file = $file;
     }
 
+    function createDocument()
+    {
+        require_once 'Intraface/shared/pdf/PdfMaker.php';
+        require_once 'Intraface/shared/pdf/PdfMakerDebtor.php';
+
+        // todo - mon ikke alt fra pdfmakerdebtor kan flyttes hertil?
+        $doc = new PdfMakerDebtor(/*$debtor->kernel*/);
+        $doc->start();
+        return $doc;
+
+    }
+
     function visit($debtor)
     {
 
         //$shared_pdf = $debtor->kernel->useShared('pdf');
         //$shared_pdf->includeFile('PdfMakerDebtor.php');
 
-        require_once 'Intraface/shared/pdf/PdfMaker.php';
-        require_once 'Intraface/shared/pdf/PdfMakerDebtor.php';
-
-        // todo - mon ikke alt fra pdfmakerdebtor kan flyttes hertil?
-        $this->doc = new PdfMakerDebtor(/*$debtor->kernel*/);
-        $this->doc->start();
+        $this->doc = $this->createDocument();
 
         if (!empty($this->file) AND $this->file->get('id') > 0) {
             $this->doc->addHeader($this->file->get('file_uri_pdf'));
