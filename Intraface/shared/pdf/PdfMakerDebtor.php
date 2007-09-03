@@ -1,5 +1,7 @@
 <?php
 
+die('this is not to be used anymore');
+
 class PdfMakerDebtor extends PdfMaker {
 
     /*
