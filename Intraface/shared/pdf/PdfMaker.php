@@ -43,18 +43,17 @@ class PdfMaker extends Cpdf
 
         $this->page = 1;
 
-        $this->load();
+        // Sætter værdier på baggrund af faste værdier
+        $this->value['right_margin_position'] = $this->page_width - $this->value['margin_right']; // content_width fra 0 til højre-margin
+        $this->value['top_margin_position'] = $this->page_height - $this->value['margin_top']; // content_height
+
+        $this->value['content_width'] = $this->page_width - $this->value['margin_right'] - $this->value['margin_left']; // content_width fra 0 til højre-margin
+        $this->value['content_height'] = $this->page_height - $this->value['margin_bottom'] - $this->value['margin_top']; // content_height
+
+        $this->value['font_spacing'] = $this->value["font_size"] + $this->value['font_padding_top'] + $this->value['font_padding_bottom'];
 
         // Opretter en nyt A4 dokument
         parent::Cpdf(array(0, 0, $this->page_width, $this->page_height));
-
-    }
-
-    /**
-     *
-     */
-    function start()
-    {
 
         // Omskrivning af placering på specielle tegn: æ, ø, å, Æ, Ø, Å
         // Efter Cpdf dokumentation
@@ -76,20 +75,17 @@ class PdfMaker extends Cpdf
         parent::selectFont('Helvetica.afm', array('differences'=>$diff));
         $this->setX(0);
         $this->setY(0);
+    }
 
+    /**
+     *
+     */
+    function start()
+    {
     }
 
     function load()
     {
-        // Sætter værdier på baggrund af faste værdier
-
-        $this->value['right_margin_position'] = $this->page_width - $this->value['margin_right']; // content_width fra 0 til højre-margin
-        $this->value['top_margin_position'] = $this->page_height - $this->value['margin_top']; // content_height
-
-        $this->value['content_width'] = $this->page_width - $this->value['margin_right'] - $this->value['margin_left']; // content_width fra 0 til højre-margin
-        $this->value['content_height'] = $this->page_height - $this->value['margin_bottom'] - $this->value['margin_top']; // content_height
-
-        $this->value['font_spacing'] = $this->value["font_size"] + $this->value['font_padding_top'] + $this->value['font_padding_bottom'];
     }
 
     function setValue($key, $value)
@@ -138,7 +134,7 @@ class PdfMaker extends Cpdf
     {
 
         if(file_exists($headerImg)) {
-            $header = Cpdf::openObject();
+            $header = parent::openObject();
             $size = getImageSize($headerImg); // array(0 => width, 1 => height)
 
             $height = $this->get('header_height');;
