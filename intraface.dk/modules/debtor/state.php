@@ -4,7 +4,7 @@ require('../../include_first.php');
 $debtor_module = $kernel->module('debtor');
 $accounting_module = $kernel->useModule('accounting');
 $product_module = $kernel->useModule('product');
-$translation = $kernel->getTranslation();
+$translation = $kernel->getTranslation('debtor');
 
 
 /*
