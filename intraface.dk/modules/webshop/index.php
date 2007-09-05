@@ -129,8 +129,8 @@ $page->start(safeToHtml($translation->get('webshop')));
 				<tr>
 					<th><?php echo safeToHtml($translation->get('running index')); ?></th>
 					<th><?php echo safeToHtml($translation->get('evaluation')); ?></th>
-					<th><?php echo safeToHtml($translation->get('go to index after')); ?></th>
 					<th><?php echo safeToHtml($translation->get('action')); ?></th>
+                    <th><?php echo safeToHtml($translation->get('go to index after')); ?></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -138,10 +138,10 @@ $page->start(safeToHtml($translation->get('webshop')));
 				<?php foreach($evaluations AS $evaluation): ?>
 					<tr>
 						<td><?php echo safeToHtml($evaluation['running_index']); ?></td>
-						<td><?php echo safeToHtml($translation->get($evaluation['evaluate_target']).' '.$translation->get($evaluation['evaluate_method']).' '.$evaluation['evaluate_value']); ?></td>
+						<td><?php echo safeToHtml($translation->get('if').' '.$translation->get($evaluation['evaluate_target']).' '.$translation->get('is').' '.$translation->get($evaluation['evaluate_method']).' '.$evaluation['evaluate_value']); ?></td>
+						<td><?php echo safeToHtml($translation->get($evaluation['action_action']).' '.$evaluation['action_value'].' '.$translation->get('at').' '.$evaluation['action_quantity'].' '.$translation->get($evaluation['action_unit'])); ?></td>
 						<td><?php echo safeToHtml($evaluation['go_to_index_after']); ?></td>
-						<td><?php echo safeToHtml($translation->get($evaluation['action_action']).' '.$evaluation['action_value'].' at '.$translation->get($evaluation['action_unit']).' '.$evaluation['action_quantity']); ?></td>
-						<td><a href="edit_basketevaluation.php?id=<?php echo intval($evaluation['id']); ?>" class="edit"><?php echo safeToHtml($translation->get('edit')); ?></a> <a href="index.php?delete_basketevaluation_id=<?php echo intval($evaluation['id']); ?>" class="delete"><?php echo safeToHtml($translation->get('delete')); ?></a></td>
+                        <td><a href="edit_basketevaluation.php?id=<?php echo intval($evaluation['id']); ?>" class="edit"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a> <a href="index.php?delete_basketevaluation_id=<?php echo intval($evaluation['id']); ?>" class="delete"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
