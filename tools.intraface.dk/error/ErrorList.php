@@ -29,6 +29,10 @@ class ErrorList {
                 }
                 $unique[] = md5($error['type'].$error['message'].$error['file'].$error['line']);
     
+                if($error['file'] == '') {
+                    $error['file'] = 'URL: '.$error['request'];
+                }
+                
                 $items[] = array(
                     'title' => $error['type'] . ': ' . $error['message'],
                     'description' => $error['file'] . ' - line ' . $error['line'],
