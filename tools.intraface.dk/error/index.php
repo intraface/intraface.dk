@@ -1,8 +1,6 @@
 <?php
 require('../include_first.php');
 
-
-
 if (!empty($_GET['action']) AND $_GET['action'] == 'deletelog') {
 	
 }
