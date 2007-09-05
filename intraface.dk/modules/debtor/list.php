@@ -109,9 +109,12 @@ $page->start(safeToHtml($translation->get($debtor->get('type').'s')));
 	<?php endif; ?>
 
 <?php elseif (!$debtor->isFilledIn()): ?>
-
-	<p>Du har endnu ikke oprettet nogen. <a href="select_contact.php?type=<?php print(safeToHtml($debtor->get("type"))); ?>"><?php print(safeToHtml($translation->get('create '.$debtor->get('type')))); ?></a>.</p>
-
+    
+    <?php if($debtor->get('type') == 'credit_note'): ?>
+        <p>Du har endnu ikke oprettet nogen. Kreditnotaer oprettes fra en fakturaer.</p>
+    <?php else: ?>
+	    <p>Du har endnu ikke oprettet nogen. <a href="select_contact.php?type=<?php print(safeToHtml($debtor->get("type"))); ?>"><?php print(safeToHtml($translation->get('create '.$debtor->get('type')))); ?></a>.</p>
+    <?php endif; ?>
 <?php else: ?>
 
 <ul class="options">
