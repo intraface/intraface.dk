@@ -63,4 +63,46 @@ CREATE TABLE `basket_details` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
 
-ALTER TABLE `basket_details` CHANGE `comment` `customer_comment` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL 
+ALTER TABLE `basket_details` CHANGE `comment` `customer_comment` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+
+CREATE TABLE `module_package` (
+`id` INT NOT NULL AUTO_INCREMENT ,
+`module_package_group_id` INT NOT NULL ,
+`name` VARCHAR( 255 ) NOT NULL ,
+`product_id` INT NOT NULL ,
+PRIMARY KEY ( `id` )
+) TYPE = MYISAM ;
+
+
+CREATE TABLE `module_package_group` (
+`id` INT NOT NULL AUTO_INCREMENT ,
+`name` VARCHAR( 255 ) NOT NULL ,
+PRIMARY KEY ( `id` )
+) TYPE = MYISAM ;
+
+
+CREATE TABLE `module_package_module` (
+`id` INT NOT NULL AUTO_INCREMENT ,
+`module_package_id` INT NOT NULL ,
+`module` VARCHAR( 255 ) NOT NULL ,
+`limiter` VARCHAR( 255 ) NOT NULL ,
+PRIMARY KEY ( `id` )
+) TYPE = MYISAM ;
+
+
+CREATE TABLE `intranet_module_package` (
+`id` INT NOT NULL AUTO_INCREMENT ,
+`intranet_id` INT NOT NULL ,
+`module_package_id` INT NOT NULL ,
+`start_date` DATE NOT NULL ,
+`end_date` DATE NOT NULL ,
+`invoice_debtor_id` INT NOT NULL ,
+`status_key` INT NOT NULL ,
+PRIMARY KEY ( `id` )
+) TYPE = MYISAM ;
+
+ALTER TABLE `module_package` ADD `active` INT NOT NULL AFTER `product_id` ;
+
+ALTER TABLE `module_package_module` ADD `active` INT NOT NULL AFTER `limiter` ;
+
+ALTER TABLE `intranet_module_package` ADD `active` INT NOT NULL AFTER `status_key` ;
