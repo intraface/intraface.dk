@@ -2,6 +2,7 @@
 require('../../include_first.php');
 
 $module = $kernel->module("onlinepayment");
+$translation = $kernel->getTranslation('onlinepayment');
 
 if(isset($_POST['submit'])) {
 
