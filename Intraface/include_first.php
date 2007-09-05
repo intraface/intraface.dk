@@ -1,5 +1,5 @@
 <?php
-require dirname(__FILE__) . '/common.php';
+require_once dirname(__FILE__) . '/common.php';
 
 ob_start(); // ob_gzhandler()
 session_start();

@@ -72,6 +72,15 @@ if(defined('TIMEZONE')) {
     $db->exec('SET time_zone=\''.TIMEZONE.'\'');
 }
 
+define('ERROR_HANDLER_LOGFILE', ERROR_LOG);
+define('ERROR_HANDLER_UNIQUE_LOGFILE', ERROR_LOG_UNIQUE);
+define('ERROR_HANDLER_EMAIL_ADDRESS', ERROR_REPORT_EMAIL);
+define('ERROR_HANDLER_USE_BLUESCREEN', ERROR_USE_BLUESCREEN);
+define('ERROR_HANDLER_LEVEL_CONTINUE_SCRIPT', ERROR_LEVEL_CONTINUE_SCRIPT);
+require_once 'ErrorHandler/ErrorHandler.php';
+set_exception_handler(array('ErrorHandler', 'handleException'));
+set_error_handler(array('ErrorHandler', 'handleError'), ERROR_HANDLE_LEVEL);
+
 // vi skal have lavet en fil, der bare sørger for at inkludere filer.
 // i virkelighede var det måske smart, hvis vi brugte lidt
 // require_once så listen ikke var så lang - på den måde
