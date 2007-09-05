@@ -56,8 +56,8 @@ $page->start(safeToHtml($translation->get('Basket evaluation')));
 		<div class="formrow">
 			<label for="evaluate_target_key"><?php echo safeToHtml($translation->get('evaluation target')); ?></label>
 			<select name="evaluate_target_key">
-				<?php foreach($settings['evaluate_target'] AS $key => $evaluate_target_key): ?>
-					<option value="<?php print(intval($key)); ?>" <?php if (!empty($value['evaluate_target_key']) && $value['evaluate_target_key'] == $key) echo 'selected="selected"'; ?> ><?php echo safeToHtml($evaluate_target_key); ?></option>
+				<?php foreach($settings['evaluate_target'] AS $key => $evaluate_target): ?>
+					<option value="<?php print(intval($key)); ?>" <?php if (!empty($value['evaluate_target_key']) && $value['evaluate_target_key'] == $key) echo 'selected="selected"'; ?> ><?php echo safeToHtml($translation->get($evaluate_target)); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</div>
@@ -65,8 +65,8 @@ $page->start(safeToHtml($translation->get('Basket evaluation')));
 		<div class="formrow">
 			<label for="evaluate_method_key"><?php echo safeToHtml($translation->get('evaluation method')); ?></label>
 			<select name="evaluate_method_key">
-				<?php foreach($settings['evaluate_method'] AS $key => $evaluate_method_key): ?>
-					<option value="<?php print(intval($key)); ?>" <?php if (!empty($value['evaluate_method_key']) && $value['evaluate_method_key'] == $key) echo 'selected="selected"'; ?> ><?php echo safeToHtml($evaluate_method_key); ?></option>
+				<?php foreach($settings['evaluate_method'] AS $key => $evaluate_method): ?>
+					<option value="<?php print(intval($key)); ?>" <?php if (!empty($value['evaluate_method_key']) && $value['evaluate_method_key'] == $key) echo 'selected="selected"'; ?> ><?php echo safeToHtml($translation->get($evaluate_method)); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</div>
@@ -89,8 +89,8 @@ $page->start(safeToHtml($translation->get('Basket evaluation')));
 		<div class="formrow">
 			<label for="action_action_key"><?php echo safeToHtml($translation->get('action')); ?></label>
 			<select name="action_action_key">
-				<?php foreach($settings['action_action'] AS $key => $action_action_key): ?>
-					<option value="<?php print(intval($key)); ?>" <?php if (!empty($value['action_action_key']) && $value['action_action_key'] == $key) echo 'selected="selected"'; ?> ><?php echo safeToHtml($action_action_key); ?></option>
+				<?php foreach($settings['action_action'] AS $key => $action_action): ?>
+					<option value="<?php print(intval($key)); ?>" <?php if (!empty($value['action_action_key']) && $value['action_action_key'] == $key) echo 'selected="selected"'; ?> ><?php echo safeToHtml($translation->get($action_action)); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</div>
@@ -108,14 +108,14 @@ $page->start(safeToHtml($translation->get('Basket evaluation')));
 		<div class="formrow">
 			<label for="action_unit_key"><?php echo safeToHtml($translation->get('action unit')); ?></label>
 			<select name="action_unit_key">
-				<?php foreach($settings['action_unit'] AS $key => $action_unit_key): ?>
-					<option value="<?php print(intval($key)); ?>" <?php if (!empty($value['action_unit_key']) && $value['action_unit_key'] == $key) echo 'selected="selected"'; ?> ><?php echo safeToHtml($action_unit_key); ?></option>
+				<?php foreach($settings['action_unit'] AS $key => $action_unit): ?>
+					<option value="<?php print(intval($key)); ?>" <?php if (!empty($value['action_unit_key']) && $value['action_unit_key'] == $key) echo 'selected="selected"'; ?> ><?php echo safeToHtml($translation->get($action_unit)); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</div>
 	</fieldset>
 
-	<input type="submit" class="save" name="submit" value="<?php echo safeToHtml($translation->get('save'), 'common'); ?>" /> <?php echo safeToHtml($translation->get('or'), 'common'); ?> <a href="index.php"><?php echo safeToHtml($translation->get('cancel')); ?></a>
+	<input type="submit" class="save" name="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" /> <?php echo safeToHtml($translation->get('or', 'common')); ?> <a href="index.php"><?php echo safeToHtml($translation->get('cancel', 'common')); ?></a>
 </form>
 
 <?php
