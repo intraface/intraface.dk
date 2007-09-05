@@ -2,7 +2,7 @@
 require('../../include_first.php');
 
 $module = $kernel->module("intranetmaintenance");
-$translation = $kernel->getTranslation();
+$translation = $kernel->getTranslation('intranetmaintenance');
 
 $user = new UserMaintenance($kernel);
 
@@ -81,11 +81,11 @@ $page->start();
 
 <form method="get" action="users.php">
 	<fieldset>
-		<legend><?php echo safeToHtml($translation->get('search')); ?></legend>
-		<label><?php echo safeToHtml($translation->get('search text')); ?>:
+		<legend><?php echo safeToHtml($translation->get('search'), 'common'); ?></legend>
+		<label><?php echo safeToHtml($translation->get('search text'), 'common'); ?>:
 			<input type="text" name="text" value="<?php echo $user->dbquery->getFilter("text"); ?>" />
 		</label>
-		<span><input type="submit" name="search" value="<?php echo safeToHtml($translation->get('search')); ?>" /></span>
+		<span><input type="submit" name="search" value="<?php echo safeToHtml($translation->get('search', 'common')); ?>" /></span>
 	</fieldset>
 </form>
 
@@ -112,7 +112,7 @@ $page->start();
 			<?php endif; ?>
 			<?php
 			if($users[$i]["name"] == '') {
-				$users[$i]["name"] = '['.$translation->get('not filled in').']';
+				$users[$i]["name"] = '['.$translation->get('not filled in', 'common').']';
 			}
 			?>
 			<td><a href="user.php?id=<?php print($users[$i]["id"]); ?>"><?php print($users[$i]["name"]); ?></a></td>
