@@ -1,5 +1,6 @@
 <?php
 require('../../include_first.php');
+require('Intraface/ModulePackage.php');
 
 $modul = $kernel->module("intranetmaintenance");
 if($kernel->user->hasModuleAccess('contact')) {
@@ -7,77 +8,88 @@ if($kernel->user->hasModuleAccess('contact')) {
 }
 $translation = $kernel->getTranslation('intranetmaintenance');
 
-# add contact
-if(isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
-	$intranet = new IntranetMaintenance($kernel, $_GET['id']);
-	if($kernel->user->hasModuleAccess('contact')) {
-		$contact_module = $kernel->useModule('contact');
-
-		$redirect = Redirect::factory($kernel, 'go');
-		$url = $redirect->setDestination($contact_module->getPath()."select_contact.php", $modul->getPath()."intranet.php?id=".$intranet->get('id'));
-		$redirect->askParameter('contact_id');
-		$redirect->setIdentifier('contact');
-
-		header("location: ".$url);
-		exit;
-	}
-	else {
-		trigger_error("Du har ikke adgang til modulet contact", E_ERROR_ERROR);
-	}
-}
-
-# add existing user
-if(isset($_GET['add_user']) && $_GET['add_user'] == 1) {
-	$intranet = new IntranetMaintenance($kernel, $_GET['id']);
-
-
-	$redirect = Redirect::factory($kernel, 'go');
-	$url = $redirect->setDestination($modul->getPath()."users.php", $modul->getPath()."user.php?intranet_id=".$intranet->get('id'));
-	$redirect->askParameter('user_id');
-	$redirect->setIdentifier('add_user');
-	header("location: ".$url);
-	exit;
-}
-
-#return
-if(isset($_GET['return_redirect_id'])) {
-	$intranet = new IntranetMaintenance($kernel, $_GET['id']);
-	$redirect = Redirect::factory($kernel, 'return');
-	if($redirect->get('identifier') == 'contact') {
-		$intranet->setContact($redirect->getParameter('contact_id'));
-	}
-}
-
-# Update permission
-if(isset($_POST["submit"])) {
-
-	$intranet = new IntranetMaintenance($kernel, intval($_POST["id"]));
-
-	$modules = array();
-	$modules = $_POST["module"];
-
-	$intranet->flushAccess();
-
-	// Hvis man er i det samme intranet som man redigere
-	if($kernel->intranet->get("id") == $intranet->get("id")) {
-		// Finder det aktive modul
-		$active_module = $kernel->getPrimaryModule();
-		// Giver adgang til det
-		$intranet->setModuleAccess($active_module->getId());
-	}
-
-	for($i = 0, $max = count($modules); $i < $max; $i++) {
-		$intranet->setModuleAccess($modules[$i]);
-	}
-
-	header('Location: intranet.php?id='.$intranet->get('id'));
-	exit;
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
+    $intranet = new IntranetMaintenance($kernel, intval($_POST["id"]));
+    
+    if(isset($_POST['add_module_package']) && $_POST['add_module_package'] != '') {
+        
+        $modulepackagemanager = New ModulePackageManager($intranet);
+        $modulepackagemanager->addModulePackage($_POST['module_package_id'], $_POST['start_date'], $_POST['duration_month'].' month');
+               
+    }
+    
+    # Update permission
+    if(isset($_POST["change_permission"])) {
+    
+        $modules = array();
+        $modules = $_POST["module"];
+    
+        $intranet->flushAccess();
+    
+        // Hvis man er i det samme intranet som man redigere
+        if($kernel->intranet->get("id") == $intranet->get("id")) {
+            // Finder det aktive modul
+            $active_module = $kernel->getPrimaryModule();
+            // Giver adgang til det
+            $intranet->setModuleAccess($active_module->getId());
+        }
+    
+        for($i = 0, $max = count($modules); $i < $max; $i++) {
+            $intranet->setModuleAccess($modules[$i]);
+        }
+    
+        header('Location: intranet.php?id='.$intranet->get('id'));
+        exit;
+    }
+    
 }
 else {
-	$intranet = new IntranetMaintenance($kernel, (int)$_GET["id"]);
+    
+    $intranet = new IntranetMaintenance($kernel, $_GET['id']);
+    
+    # add contact
+    if(isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {      
+        if($kernel->user->hasModuleAccess('contact')) {
+            $contact_module = $kernel->useModule('contact');
+    
+            $redirect = Redirect::factory($kernel, 'go');
+            $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", $modul->getPath()."intranet.php?id=".$intranet->get('id'));
+            $redirect->askParameter('contact_id');
+            $redirect->setIdentifier('contact');
+    
+            header("location: ".$url);
+            exit;
+        }
+        else {
+            trigger_error("Du har ikke adgang til modulet contact", E_ERROR_ERROR);
+        }
+    }
+    
+    # add existing user
+    if(isset($_GET['add_user']) && $_GET['add_user'] == 1) {
+        $redirect = Redirect::factory($kernel, 'go');
+        $url = $redirect->setDestination($modul->getPath()."users.php", $modul->getPath()."user.php?intranet_id=".$intranet->get('id'));
+        $redirect->askParameter('user_id');
+        $redirect->setIdentifier('add_user');
+        header("location: ".$url);
+        exit;
+    }
+    
+    #return
+    if(isset($_GET['return_redirect_id'])) {
+        $redirect = Redirect::factory($kernel, 'return');
+        if($redirect->get('identifier') == 'contact') {
+            $intranet->setContact($redirect->getParameter('contact_id'));
+        }
+    }
+    
+    if(isset($_GET['delete_intranet_module_package_id']) && (int)$_GET['delete_intranet_module_package_id'] != 0) {
+        
+        $modulepackagemanager = New ModulePackageManager($intranet);
+        $modulepackagemanager->deleteModulePackage((int)$_GET['delete_intranet_module_package_id']);
+    }   
 }
-
-
 
 $value = $intranet->get();
 if(isset($intranet->address)) {
@@ -86,8 +98,6 @@ if(isset($intranet->address)) {
 else {
 	$address_value = array();
 }
-
-
 
 $user = new UserMaintenance($kernel);
 $user->setIntranetId($intranet->get('id'));
@@ -106,6 +116,7 @@ $page->start($translation->get('Intranet'));
 </ul>
 
 <?php echo $intranet->error->view(); ?>
+<?php if(isset($modulepackagemanager)) echo $modulepackagemanager->error->view(); ?>
 
 <table>
 	<tr>
@@ -182,28 +193,105 @@ $page->start($translation->get('Intranet'));
 
 <form action="intranet.php" method="post">
 
+<input type="hidden" name="id" value="<?php print($intranet->get("id")); ?>" />
+
+
+    <?php
+    $modulepackagemanager = new ModulePackageManager($intranet);
+    $packages = $modulepackagemanager->getModulePackages();
+    
+    if(count($packages) > 0) {
+        ?>
+        <table class="stribe">
+            <caption>Modulpakker</caption>
+            <thead>
+                <tr>
+                    <th>Modulpakke</th>
+                    <th>Startdato</th>
+                    <th>Slutdato</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach($packages AS $package): ?>
+                <tr>
+                    <td><?php echo safeToHtml($package['group_name'].' - '.$package['name']); ?></td>
+                    <td><?php echo safeToHtml($package['start_date']); ?></td>
+                    <td><?php echo safeToHtml($package['end_date']); ?></td>
+                    <td><?php echo safeToHtml($translation->get($package['status'])); ?></td>
+                    <td><a href="edit_module_package.php?id=<?php echo intval($package['id']); ?>" class="edit">Ret</a> <a href="intranet.php?id=<?php echo intval($intranet->get('id')); ?>&amp;delete_intranet_module_package_id=<?php echo intval($package['id']); ?>" class="delete">Slet</a></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+        <?php
+    }
+    
+    ?>
+
+
+
+<fieldset>
+    <legend>Tilføj modulpakke</legend>    
+    <?php
+    $modulepackage = new ModulePackage;
+    $modulepackage->createDBQuery($kernel);
+    $packages = $modulepackage->getList();
+    ?>
+    <div class="formrow">
+        <label for="module_package_id">Vælg pakke</label>
+        <select name="module_package_id" id="module_package_id">
+            <?php
+            
+            foreach($packages AS $package) {
+                echo '<option value="'.intval($package['id']).'">'.safeToHtml($package['group_name'].' - '.$package['name']).'</option>';
+            }
+            ?>
+        </select>
+    </div> 
+    
+    <div class="formrow">
+        <label for="start_date">Start dato</label>
+        <input type="text" name="start_date" id="start_date" value="<?php echo safeToHtml(date('d-m-Y')); ?>" /> 
+    </div>
+    
+    <div class="formrow">
+        <label for="duration_month">Varighed i måneder</label>
+        <select name="duration_month" id="duration_month">
+            <?php
+            for($i = 1; $i < 25; $i++) {
+                echo '<option value="'.intval($i).'">'.intval($i).'</option>';
+            }
+            ?>
+        </select>
+    </div> 
+    <input type="submit" name="add_module_package" value="Tilføj" class="save" />
+    
+</fieldset>
+
 
 <fieldset>
 	<legend>Adgang til moduler</legend>
-
-	<?php
+	<div>
+    <?php
 
 	$module = new ModuleMaintenance($kernel);
 	$modules = $module->getList();
 
 	for($i = 0; $i < count($modules); $i++) {
 		?>
-		<div>
+		<div style="float: left; width: 210px; ">
 			<input type="checkbox" name="module[]" id="module_<?php print($modules[$i]["name"]); ?>" value="<?php print($modules[$i]["name"]); ?>"<?php if($intranet->hasModuleAccess(intval($modules[$i]["id"]))) print("checked=\"checked\""); ?> />
 			<label for="module_<?php print($modules[$i]["name"]); ?>"><?php print($modules[$i]["menu_label"]); ?></label>
 		</div>
 		<?php
 	}
 	?>
+    </div>
+    <div style="clear:both;">
+        <input type="submit" name="change_permission" value="Gem" />
+    </div>
 </fieldset>
-
-<input type="hidden" name="id" value="<?php print($intranet->get("id")); ?>" />
-<input type="submit" name="submit" value="Gem" />
 
 </form>
 

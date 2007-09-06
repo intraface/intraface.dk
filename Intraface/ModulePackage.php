@@ -24,6 +24,8 @@ moduler i de pakker der udløber.
 
 */ 
 
+require_once('Intraface/ModulePackageManager.php');
+
 class ModulePackage extends Standard {
     
     private $db;
@@ -37,12 +39,48 @@ class ModulePackage extends Standard {
      * @param object kernel The kernel object
      * @param int id on a ModulePackage
       */
-    public function __construct($kernel, $id = 0) {
+    public function __construct($id = 0) {
         
         $this->db = MDB2::singleton(DB_DSN);
-        $this->kernel = &$kernel;
         $this->id = (int)$id;
         
+        if($this->id != 0) {
+            $this->load();
+        }
+        
+        
+        
+    }
+    
+    public function load() {
+        
+        $result = $this->db->query("SELECT module_package.id, module_package.name, module_package.product_id, module_package_group.name AS group_name " .
+                "FROM module_package INNER JOIN module_package_group ON module_package.module_package_group_id = module_package_group.id " .
+                "WHERE module_package.id = ".$this->db->quote($this->id, 'integer'));
+        
+        if(PEAR::isError($result)) {
+            trigger_error("Error in db query in ModulePackage->load(): ".$result->getUserInfo(), E_USER_ERROR);
+            exit;
+        }
+        
+        if(!$this->value = $result->fetchRow()) {
+            $this->id = 0;
+            $this->value['id'] = 0;
+            return $this->id;
+        }
+        
+        $result = $this->db->query("SELECT id, module, limiter " .
+                "FROM module_package_module " .
+                "WHERE module_package_module.module_package_id = ".$this->db->quote($this->id, 'integer'));
+        
+        if(PEAR::isError($result)) {
+            trigger_error("Error in db query in ModulePackage->load(): ".$result->getUserInfo(), E_USER_ERROR);
+            exit;
+        }
+        
+        $this->value['modules'] = $result->fetchAll();
+        
+        return $this->id;
     }
     
     /**
@@ -50,39 +88,10 @@ class ModulePackage extends Standard {
      * 
      * @return void
      */
-    public function createDBQuery() {
-        $this->dbquery = new DBQuery($this->kernel, 'module_package');
+    public function createDBQuery($kernel) {
+        $this->dbquery = new DBQuery($kernel, 'module_package');
         $this->dbquery->setJoin('INNER', 'module_package_group', 'module_package.module_package_group_id = module_package_group.id', '');
         
-    }
-    
-    
-    /**
-     * Add a package to an intranet
-     * 
-     * This function should maybe have been a part of intranet class, e.g. $intranet->addModulePackage, but how do we get that to work.
-     */
-    public function intranetAddModulePackage($package_id, $start_date, $end_date, $intranet_id = 0) {
-        
-    }
-    
-    /**
-     * Returns an array of the packages that an intranet has.
-     */
-    public function intranetGetModulePackages($intranet_id = 0) {
-        
-        /*
-        $result = $this->db->query('SELECT intranet_module_package.id, intranet_module_package.module_package_id, intranet_module_package.start_date, intranet_module_package.end_date, intranet_module_package.invoice_debtor.id, intranet_module_package.status FROM intranet_module_package WHERE intranet_id = '.$this->db->quote($intranet_id, 'integer'));
-        if(PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
-            exit;
-        }
-        
-        $modulepackages = $result->fetchAll(MDB2_FETCHMODE_ORDERED);
-        
-        return $modulepackages;
-        */
-        return array();
     }
     
     /**
@@ -103,6 +112,13 @@ class ModulePackage extends Standard {
              $i++;
         }
         return $list;
+    }
+    
+    static public function getStatusTypes() {
+        return array(0 => '_invalid_',
+            1 => 'created',
+            2 => 'active',
+            3 => 'used');
     }
 } 
  
