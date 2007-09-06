@@ -61,18 +61,20 @@ class IntranetMaintenance extends Intranet
         return 1;
     }
 
-    function setModuleAccess($module_id)
+    public function setModuleAccess($module_id)
     {
         if ($this->id == 0) {
-            trigger_error('cannot set access because no id i set', E_USER_ERROR);
+            trigger_error('cannot set access because no id i set in IntranetMaintenance->setModuleAccess', E_USER_ERROR);
+            exit;
         }
 
         if (!is_numeric($module_id)) {
-            $result = $this->db->query("SELECT id FROM module WHERE name='".$module_id."'");
+            $result = $this->db->query("SELECT id FROM module WHERE name=".$this->db->quote($module_id));
             if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
                 $module_id = $row['id'];
             } else {
-                trigger_error("intranet maintenance says unknown module", E_USER_ERROR);
+                trigger_error("intranet maintenance says unknown module in IntranetMaintenance->setModuleAccess", E_USER_ERROR);
+                exit;
             }
 
         }
@@ -83,8 +85,42 @@ class IntranetMaintenance extends Intranet
                 intranet_id = ".intval($this->id).",
                 user_id = 0,
                 module_id = ".intval($row['id']));
-        } else {
-            trigger_error("intranet maintenance says unknown module_id", E_USER_ERROR);
+        } 
+        else {
+            trigger_error("intranet maintenance says unknown module_id in IntranetMaintenance->setModuleAccess", E_USER_ERROR);
+            exit;
+        }
+    }
+    
+    public function removeModuleAccess($module_id)
+    {
+        if ($this->id == 0) {
+            trigger_error('cannot remove access because no id i set in IntranetMaintenance->removeModuleAccess', E_USER_ERROR);
+            exit;
+        }
+
+        if (!is_numeric($module_id)) {
+            $result = $this->db->query("SELECT id FROM module WHERE name=".$this->db->quote($module_id, 'integer'));
+            if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+                $module_id = $row['id'];
+            } else {
+                trigger_error("intranet maintenance says unknown module in IntranetMaintenance->removeModuleAccess", E_USER_ERROR);
+                exit;
+            }
+
+        }
+        else {
+            
+        }
+
+        $res = $this->db->query("SELECT id FROM module WHERE id = ".intval($module_id));
+        if ($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+            $this->db->exec("DELETE FROM permission WHERE
+                intranet_id = ".intval($this->id).",
+                module_id = ".intval($row['id']));
+        } 
+        else {
+            trigger_error("intranet maintenance says unknown module_id in IntranetMaintenance->removeModuleAccess", E_USER_ERROR);
         }
     }
 
