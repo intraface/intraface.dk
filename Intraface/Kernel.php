@@ -146,7 +146,7 @@ class Kernel
     function module($module_name)
     {
         if (!empty($this->primary_module_object) AND is_object($this->primary_module_object)) {
-            trigger_error('Det primære modul er allerede sat', E_USER_ERROR);
+            trigger_error('Det primï¿½re modul er allerede sat', E_USER_ERROR);
         } else {
 
             $module = $this->useModule($module_name);
@@ -154,7 +154,7 @@ class Kernel
             if (is_object($module)) {
                 $this->primary_module_name = $module_name;
 
-                // Finder afhængige moduller - Dette kunne flyttes til useModule, hvorfor er den egentlig ikke det? /Sune 06-07-2006
+                // Finder afhï¿½ngige moduller - Dette kunne flyttes til useModule, hvorfor er den egentlig ikke det? /Sune 06-07-2006
                 $dependent_modules = $module->getDependentModules();
 
                 for ($i = 0, $max = count($dependent_modules); $i < $max; $i++) {
@@ -267,8 +267,8 @@ class Kernel
     /**
      * Use another module besides the primary
      *
-     * @param string  $module_name	      Navn på det modullet der skal loades
-     * @param boolean $ignore_user_access Ved true, tjekker den ikke om brugeren har adgang, men kun om intranettet har. Benyttes bla. til når der skal trækkes vare fra lageret fra gennem faktura.
+     * @param string  $module_name	      Navn pï¿½ det modullet der skal loades
+     * @param boolean $ignore_user_access Ved true, tjekker den ikke om brugeren har adgang, men kun om intranettet har. Benyttes bla. til nï¿½r der skal trï¿½kkes vare fra lageret fra gennem faktura.
      *
      * @return object or false Hvis man har adgang returnere den et object, ellers returnere den 0;
      */
@@ -320,7 +320,7 @@ class Kernel
         } else {
             trigger_error('Du mangler adgang til et modul for at kunne se denne side: '.$module_name, E_USER_ERROR);
             // Det her kan jeg ikke lige finde ud af, om den skal returnere nul eller den skal returnere fejl!
-            // Det fungere fint når den returnere fejl. Hvis det laves om, skal der i hvertfald rettes i /debtor/debtorFactory.php /Sune (21/3 2005)
+            // Det fungere fint nï¿½r den returnere fejl. Hvis det laves om, skal der i hvertfald rettes i /debtor/debtorFactory.php /Sune (21/3 2005)
             // return(0);
         }
 
@@ -330,7 +330,7 @@ class Kernel
     /**
      * Public: Giv adgang til et shared
      *
-     * @param string $shared_name Navn på det shared der skal loades
+     * @param string $shared_name Navn pï¿½ det shared der skal loades
      *
      * @return object or 0 Hvis man har adgang returnere den et object, ellers returnere den 0;
      */
@@ -467,6 +467,10 @@ class KernelLog implements Observer
     {
         $this->db->loadModule('Manager', null, true);
         $tables = $this->db->manager->listTables();
+        if(PEAR::isError($tables)) {
+            trigger_error("Error in query: ".$tables->getUserInfo(), E_USER_ERROR);
+        }
+        
         return in_array(strtolower($table), array_map('strtolower', $tables));
     }
 
