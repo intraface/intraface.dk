@@ -4,11 +4,10 @@
  *
  * @package Intraface
  * @author  Lars Olesen <lars@legestue.net>
- * @since   0.1.0
  * @version @package-version@
  */
 
-$version = '1.4.0';
+$version = '1.4.1';
 $stability = 'stable';
 $notes = '
 * A lot of improvements
@@ -26,7 +25,8 @@ $ignore = array(
             'tests/',
             'tools.intraface.dk/',
             'example/',
-            'cache/'
+            'cache/',
+            '.svn/'
             );
 
 function getFilelist($dir) {
@@ -67,6 +67,7 @@ $pfm->setOptions(
             'intraface.dk/*.*' => 'web'
         ),
         'simpleoutput'      => true,
+        'addhiddenfiles' => true
     )
 );
 
@@ -76,7 +77,7 @@ $pfm->setDescription('Intraface');
 $pfm->setUri('http://localhost/');
 $pfm->setLicense('LGPL License', 'http://www.gnu.org/licenses/lgpl.html');
 $pfm->addMaintainer('lead', 'lsolesen', 'Lars Olesen', 'lars@legestue.net');
-$pfm->addMaintainer('lead', 'sj', 'Sune Jensen', 'sj@sunet.dk');
+$pfm->addMaintainer('lead', 'sune.t.jensen', 'Sune Jensen', 'sj@sunet.dk');
 
 $pfm->setPackageType('php');
 
@@ -91,7 +92,7 @@ $pfm->resetUsesRole();
 $pfm->addUsesRole('web', 'Role_Web', 'pearified.com');
 $pfm->addPackageDepWithChannel('required', 'Role_Web', 'pearified.com', '1.1.1');
 
-$pfm->addGlobalReplacement('package-info', '@package-version@', 'version');
+// $pfm->addGlobalReplacement('package-info', '@package-version@', 'version');
 $pfm->addReplacement('intraface.php', 'pear-config', '@php-dir@', 'php_dir');
 $pfm->addReplacement('intraface.php', 'pear-config', '@web-dir@', 'web_dir');
 $pfm->addReplacement('intraface.php', 'pear-config', '@data-dir@', 'data_dir');
@@ -113,12 +114,10 @@ $pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.9.10');
 $pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.7.0');
 $pfm->addPackageDepWithChannel('required', 'HTTP_Upload', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.1');
+$pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.1');
 
 // XMLRPC
 $pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'pear.php.net', '1.0.1');
-
-
-$pfm->addPackageDepWithUri('required', 'ErrorHandler', 'http://svn.intraface.dk/intrafacepublic/3Party/ErrorHandler/ErrorHandler-0.2.1');
 $pfm->addPackageDepWithUri('required', 'MDB2_Debug_ExplainQueries', 'http://svn.intraface.dk/intrafacepublic/3Party/MDB2/Debug/MDB2_Debug_ExplainQueries-0.1.0');
 $pfm->addPackageDepWithUri('required', 'Translation2_Decorator_LogMissingTranslation', 'http://svn.intraface.dk/intrafacepublic/3Party/Translation2/Decorator/Translation2_Decorator_LogMissingTranslation-0.1.0');
 
@@ -128,18 +127,19 @@ $pfm->addPackageDepWithUri('required', 'phpmailer', 'http://svn.intraface.dk/int
 // cms
 $pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'htmlpurifier.org', '1.6.0');
 $pfm->addPackageDepWithChannel('required', 'Text_Wiki', 'pear.php.net', '1.1.0');
-$pfm->addPackageDepWithUri('required', 'Markdown', 'http://svn.intraface.dk/intrafacepublic/3Party/Markdown/PHPMarkdown-1.0.1');
+
+$pfm->addPackageDepWithChannel('required', 'PHP_Markdown', 'pear.michelf.com', '1.0.1');
+
 $pfm->addPackageDepWithUri('required', 'SmartyPants', 'http://svn.intraface.dk/intrafacepublic/3Party/SmartyPants/PHPSmartyPants-1.5.1');
 $pfm->addPackageDepWithUri('required', 'phpFlickr', 'http://svn.intraface.dk/intrafacepublic/3Party/phpFlickr/phpFlickr-1.6.1');
-$pfm->addPackageDepWithUri('required', 'IntrafacePublic_CMS_HTML', 'http://svn.intraface.dk/intrafacepublic/IntrafacePublic/IntrafacePublic/CMS/HTML/IntrafacePublic_CMS_HTML-0.1.0');
-
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_HTML', 'public.intraface.dk', '0.1.0');
 
 // debtor
-$pfm->addPackageDepWithUri('required', 'CPdf', 'http://svn.intraface.dk/intrafacepublic/3Party/Cpdf/Cpdf-0.0.9');
+$pfm->addPackageDepWithChannel('required', 'Document_CPdf', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithUri('required', 'quickpay', 'http://svn.intraface.dk/intrafacepublic/3Party/Quickpay/Quickpay-1.17.1');
 
 // contact
-$pfm->addPackageDepWithUri('required', 'Services_Eniro', 'http://svn.intraface.dk/intrafacepublic/3Party/Services/Eniro/Services_Eniro-0.1.1');
+$pfm->addPackageDepWithChannel('required', 'Services_Eniro', 'public.intraface.dk', '0.1.4');
 
 // onlinepayment
 $pfm->addPackageDepWithUri('required', 'Payment_Quickpay', 'http://svn.intraface.dk/intrafacepublic/3Party/Quickpay/Payment_Quickpay-1.18.1');
