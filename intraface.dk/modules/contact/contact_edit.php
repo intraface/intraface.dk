@@ -1,6 +1,6 @@
 <?php
 require('../../include_first.php');
-require_once 'Services/Eniro/Eniro.php';
+require_once 'Services/Eniro.php';
 
 $contact_module = $kernel->module('contact');
 $translation = $kernel->getTranslation('contact');
