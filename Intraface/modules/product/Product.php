@@ -418,6 +418,15 @@ class Product extends Standard {
         if ($keywords = $this->dbquery->getFilter("keywords")) {
             $this->dbquery->setKeyword($keywords);
         }
+        
+        if($ids = $this->dbquery->getFilter("ids")) {
+            if(is_array($ids) && count($ids) > 0) {
+                $this->dbquery->setCondition("product.id IN (".implode(', ', $ids).")");
+            }
+            else {
+                $this->dbquery->setCondition('1 = 0');
+            }
+        }
 
         // DEN OUTPUTTER IKKE DET RIGTIGE VED KEYWORD
 
