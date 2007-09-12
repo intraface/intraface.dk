@@ -67,15 +67,19 @@ class ProductDetail extends Standard {
 			// unit skal skrives om til den egentlige unit alt efter settings i produkterne
 			$this->value['detail_id'] = $this->db->f('id');
 			$this->value['unit_id'] = $this->db->f('unit');
+            
+            $this->value['unit_declensions'] = $this->getUnits($this->db->f('unit'));
 
 			$module = $this->product->kernel->getModule('product');
 
-			foreach ($module->getSetting('unit') AS $key=>$keyvalue) {
+			// This is should be removed in favor for the one with declension above!
+            foreach ($module->getSetting('unit') AS $key=>$keyvalue) {
 				if ($key == $this->db->f('unit')) {
 					$this->value['unit'] = $keyvalue;
 					$this->value['unit_key'] = $key;
 				}
 			}
+            
 
      //********************************************************************
      // KIG PÅ HACK OVENOVER
@@ -255,6 +259,37 @@ class ProductDetail extends Standard {
 		}
     */
 	}
+    
+    function getUnits($key = NULL) {
+        
+        $units = array(
+            1 => array('singular' => '',
+                'plural' => '',
+                'combined' => ''), 
+            2=> array('singular' => 'unit',
+                'plural' => 'units',
+                'combined' => 'unit(s)'), 
+            3=> array('singular' => 'day',
+                'plural' => 'days',
+                'combined' => 'day(s)'), 
+            4=> array('singular' => 'month (singular)',
+                'plural' => 'month (plural)',
+                'combined' => 'month (combined)'), 
+            5=> array('singular' => 'year',
+                'plural' => 'years',
+                'combined' => 'year(s)'), 
+            6=> array('singular' => 'hour',
+                'plural' => 'hours',
+                'combined' => 'hour(s)')
+        );
+        
+        if($key === NULL) {
+            return $units;
+        }
+        else {
+            return $units[$key];
+        }
+    }
 
 }
 ?>
