@@ -83,6 +83,11 @@ class Intraface_XMLRPC_Shop_Server
                 $product->dbquery->setFilter('keywords', $mixed['keywords']);
                 $debug2 .= 'keyword ' . $mixed['keywords'];
             }
+            
+            if (array_key_exists('ids', $mixed) AND is_array($mixed['ids'])) {
+                $product->dbquery->setFilter('ids', $mixed['ids']);
+                $debug2 .= 'ids ' . implode(', ', $mixed['ids']);
+            }
 
             if (array_key_exists('sorting', $mixed) AND !empty($mixed['sorting'])) {
                 $product->dbquery->setFilter('sorting', $mixed['sorting']);
