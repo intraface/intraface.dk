@@ -348,7 +348,7 @@ class Basket
      *
      * @return float
      */
-    function getTotalPrice()
+    function getTotalPrice($type = 'including_vat')
     {
         $price = 0;
 
@@ -357,7 +357,13 @@ class Basket
 
         while ($db->nextRecord()) {
             $product = new Product($this->webshop->kernel, $db->f("product_id"));
-            $price += $product->get('price_incl_vat') * $db->f("quantity");
+            if($type == 'exclusive_vat') {
+                $price += $product->get('price') * $db->f("quantity");
+            }
+            else {
+                $price += $product->get('price_incl_vat') * $db->f("quantity");
+            }
+            
 
         }
 
@@ -427,7 +433,7 @@ class Basket
                 AND product_detail.active = 1
                 AND basket.intranet_id = " . $this->webshop->kernel->intranet->get("id") . "
                 AND basket.quantity > 0
-            ");
+            ORDER BY product_detail.vat DESC, basket.basketevaluation_product");
 
         $i = 0;
         while ($db->nextRecord()) {

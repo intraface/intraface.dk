@@ -81,7 +81,8 @@ class BasketEvaluation extends Standard
 
             'action_unit' => array(
                 0 => 'pieces',
-                1 => 'percentage_of_price')
+                1 => 'percentage_of_price_including_vat',
+                2 => 'percentage_of_price_exclusive_vat')
         );
 
         if ($this->id != 0) {
@@ -316,8 +317,11 @@ class BasketEvaluation extends Standard
                     case 'pieces':
                         $quantity = $evaluation['action_quantity'];
                         break;
-                    case 'percentage_of_price':
+                    case 'percentage_of_price_including_vat':
                         $quantity = round(($evaluation['action_quantity']/100)*$basket->getTotalPrice());
+                        break;
+                    case 'percentage_of_price_exclusive_vat':
+                        $quantity = round(($evaluation['action_quantity']/100)*$basket->getTotalPrice('exclusive_vat'));
                         break;
                     default:
                         trigger_error("Invalid action_unit in BasketEvaluation->run", E_USER_ERROR);
