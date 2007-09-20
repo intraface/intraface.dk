@@ -123,7 +123,7 @@ class Product extends Standard {
      * @return integer product id or 0
      */
     private function load() {
-        $this->db->query("SELECT id, locked, changed_date, ".implode(',',$this->fields)." FROM product
+        $this->db->query("SELECT id, active, locked, changed_date, ".implode(',',$this->fields)." FROM product
                 WHERE intranet_id = " . $this->kernel->intranet->get('id') . "
                     AND id = " . $this->id . " LIMIT 1");
 
@@ -149,6 +149,7 @@ class Product extends Standard {
         $this->value['id'] = $this->db->f('id');
         $this->value['locked'] = $this->db->f('locked');
         $this->value['changed_date'] = $this->db->f('changed_date');
+        $this->value['active'] = $this->db->f('active');
 
         // udtræk af produktdetaljer
         for($i = 0, $max = count($this->fields); $i < $max; $i++) {
@@ -422,7 +423,9 @@ class Product extends Standard {
                 AND intranet_id = " . $this->kernel->intranet->get("id") . "
                 AND locked = 0";
         $db->query($sql);
-         return true;
+
+        $this->value['active'] = 0;
+        return true;
     }
 
     /**
@@ -433,6 +436,7 @@ class Product extends Standard {
     public function undelete() {
         if ($this->id == 0) {
             $this->error->set('Produktet kan ikke findes igen, for produktid er ikke sat');
+
             return false;
         }
         $db = new Db_Sql;
@@ -441,6 +445,7 @@ class Product extends Standard {
             WHERE id = " . $this->id. "
                 AND intranet_id = " . $this->kernel->intranet->get("id");
         $db->query($sql);
+        $this->value['active'] = 1;
         return true;
     }
 
@@ -631,6 +636,15 @@ class Product extends Standard {
         $db = new DB_Sql;
         $db->query("SELECT id FROM product WHERE intranet_id = " . $this->kernel->intranet->get('id')." AND active = 1");
         return $db->numRows();
+    }
+
+    public function isActive()
+    {
+        if ($this->value['active'] == 0) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

@@ -50,9 +50,9 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $db->query('TRUNCATE product_detail');
     }
 
-    function createProductObject()
+    function createProductObject($id = 0)
     {
-        return new Product($this->kernel);
+        return new Product($this->kernel, $id);
     }
 
     function createNewProduct()
@@ -64,16 +64,23 @@ class ProductTest extends PHPUnit_Framework_TestCase
 
     ////////////////////////////////////////////////////////////////////////////
 
-    function testSaveReturnsTrue()
+    function testSavesProductsAndReturnsTrueOnSuccess()
     {
         $product = new Product($this->kernel);
-        if (!$result = $product->save(array('name' => 'Test', 'price' => 20, 'unit' => 1))) {
+        $name = 'Test';
+        $price = 20;
+        if (!$result = $product->save(array('name' => $name, 'price' => $price, 'unit' => 1))) {
             $product->error->view();
         }
         $this->assertTrue($result > 0);
+        $values = $product->get();
+
+        $this->assertEquals(1, $values['number']);
+        $this->assertEquals($name, $values['name']);
+        $this->assertEquals($price, $values['price']);
     }
 
-    function testMaxNumberReturnsZeroWithFirstProductAndOneWithNextProduct()
+    function testMaxNumberIncrementsOnePrProductAdded()
     {
         $product = $this->createProductObject();
         $this->assertEquals(0, $product->getMaxNumber());
@@ -106,6 +113,33 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($number, $new_product->get('number'));
     }
 
+    function testDeleteAProduct()
+    {
+        $product = $this->createNewProduct();
+        $this->assertTrue($product->delete());
+        $this->assertFalse($product->isActive());
+    }
 
+    function testUnDeleteAProduct()
+    {
+        $product = $this->createNewProduct();
+        $product->delete();
+        $this->assertFalse($product->isActive());
+        $this->assertTrue($product->undelete());
+        $this->assertTrue($product->isActive());
+    }
+
+    function testAProductCanStillBeLoadedEvenIfDeleted()
+    {
+        $product = $this->createNewProduct();
+        $product_id = $product->get('id');
+        $product->delete();
+
+        $deletedproduct = $this->createProductObject($product_id);
+
+        $this->assertEquals($product->get('id'), $deletedproduct->get('id'));
+        $this->assertEquals($product->get('name'), $deletedproduct->get('name'));
+        $this->assertEquals($product->get('price'), $deletedproduct->get('price'));
+    }
 }
 ?>
