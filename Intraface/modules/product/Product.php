@@ -150,7 +150,6 @@ class Product extends Standard {
         $this->value['locked'] = $this->db->f('locked');
         $this->value['changed_date'] = $this->db->f('changed_date');
 
-
         // udtræk af produktdetaljer
         for($i = 0, $max = count($this->fields); $i < $max; $i++) {
             $this->value[$this->fields[$i]] = $this->db->f($this->fields[$i]);
@@ -196,6 +195,9 @@ class Product extends Standard {
      * @return array
      */
     function getPictures() {
+        $shared_filehandler = $this->kernel->useShared('filehandler');
+        $shared_filehandler->includeFile('AppendFile.php');
+
         $filehandler = new FileHandler($this->kernel);
         $append_file = new AppendFile($this->kernel, 'product', $this->get('id'));
         $append_file->createDBQuery();
