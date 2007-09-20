@@ -61,17 +61,14 @@ class DBQuery {
 
         if(strtolower(get_class($this->kernel->user)) == 'user') {
             $this->rows_pr_page = $this->kernel->setting->get('user', 'rows_pr_page');
-        }
-        else {
+        } else {
             $this->rows_pr_page = 20; // Systemdefault!
         }
-        if(is_object($this->kernel->user)) {
+        if (is_object($this->kernel->user)) {
             $this->store_user_condition = "user_id = ".$this->kernel->user->get("id");
-        }
-        elseif(is_object($this->kernel->weblogin)) {
+        } elseif(is_object($this->kernel->weblogin)) {
             $this->store_user_condition = "weblogin_session_id = \"".$this->kernel->weblogin->get("session_id")."\"";
-        }
-        else {
+        } else {
             trigger_error('Mangler weblogin eller user', E_USER_ERROR);
         }
 
