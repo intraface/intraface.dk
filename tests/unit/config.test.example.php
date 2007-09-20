@@ -14,8 +14,6 @@ define('CONNECTION_INTERNET', 'ONLINE');
 define('PATH_UPLOAD', PATH_ROOT . 'upload/');
 define('PATH_UPLOAD_TEMPORARY', PATH_UPLOAD . 'upload/tmp/');
 
-error_reporting(0);
-
 $db = MDB2::singleton(DB_DSN);
 $db->setOption('debug', 0);
 
