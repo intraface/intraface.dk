@@ -141,5 +141,16 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($product->get('name'), $deletedproduct->get('name'));
         $this->assertEquals($product->get('price'), $deletedproduct->get('price'));
     }
+
+    function testCopyProduct()
+    {
+        $product = $this->createNewProduct();
+        $new_id = $product->copy();
+
+        $newproduct = $this->createProductObject($new_id);
+
+        $this->assertEquals(2, $newproduct->get('number'));
+        $this->assertEquals('Test (kopi)', $newproduct->get('name'));
+    }
 }
 ?>
