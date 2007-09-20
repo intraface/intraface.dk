@@ -428,7 +428,7 @@ class Product extends Standard {
      *
      * @return boolean
      */
-    function undelete() {
+    public function undelete() {
         if ($this->id == 0) {
             $this->error->set('Produktet kan ikke findes igen, for produktid er ikke sat');
             return false;
@@ -447,7 +447,7 @@ class Product extends Standard {
      *
      * @return integer produktnummer
      */
-    function getMaxNumber() {
+    public function getMaxNumber() {
         $db = new DB_Sql;
         $sql = "SELECT product_detail.number
             FROM product
@@ -469,7 +469,7 @@ class Product extends Standard {
      *
      * @return boolean
      */
-    function isNumberFree($product_number) {
+    public function isNumberFree($product_number) {
         $product_number = (int)$product_number;
 
         $db = new DB_Sql;
@@ -495,7 +495,7 @@ class Product extends Standard {
      *
      * @return object
      */
-    function getKeywords() {
+    public function getKeywords() {
         return ($this->keywords = new Keyword($this));
     }
 
@@ -519,7 +519,7 @@ class Product extends Standard {
      *
      * @return boolean
      */
-    function setRelatedProduct($id, $status) {
+    public function setRelatedProduct($id, $status) {
         if (empty($status)) $status = 'remove';
 
         $db = new DB_Sql;
@@ -530,8 +530,7 @@ class Product extends Standard {
             if ($id == $this->id) return false;
             $db->query("INSERT INTO product_related SET product_id = " . $this->id . ", related_product_id = " . (int)$id . ", intranet_id = " . $this->kernel->intranet->get('id'));
             return true;
-        }
-        else {
+        } else {
             $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id') . " AND related_product_id = " . (int)$id);
             return true;
         }
@@ -544,7 +543,7 @@ class Product extends Standard {
      *
      * @return boolean
      */
-    function deleteRelatedProduct($id) {
+    public function deleteRelatedProduct($id) {
         $db = new DB_Sql;
         $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id') . " AND related_product_id = " . (int)$id);
         return true;
@@ -557,7 +556,7 @@ class Product extends Standard {
      *
      * @return boolean
      */
-    function deleteRelatedProducts() {
+    public function deleteRelatedProducts() {
         $db = new DB_Sql;
         $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
         return true;
@@ -568,7 +567,7 @@ class Product extends Standard {
      *
      * @return array
      */
-    function getRelatedProducts() {
+    public function getRelatedProducts() {
         $products = array();
         $ids = array();
         $db = new DB_Sql;
@@ -608,11 +607,11 @@ class Product extends Standard {
     }
 
     /**
-     * Checks whether any products has been created
+     * Checks whether any products has been created before
      *
      * @return integer
      */
-    function isFilledIn() {
+    public function isFilledIn() {
         $db = new DB_Sql;
         $db->query("SELECT count(*) AS antal FROM product WHERE intranet_id = " . $this->kernel->intranet->get('id'));
         if ($db->nextRecord()) {
@@ -622,13 +621,11 @@ class Product extends Standard {
     }
 
     /**
-     * Checks whether any products has been created.
-     *
-     * TODO. This method is created by Sune. Should probably use isFilledIn().
+     * Checks whether there is any active products. Differs from isFilledIn() by checking for active = 1
      *
      * @return integer
      */
-    function any() {
+    public function any() {
         $db = new DB_Sql;
         $db->query("SELECT id FROM product WHERE intranet_id = " . $this->kernel->intranet->get('id')." AND active = 1");
         return $db->numRows();
