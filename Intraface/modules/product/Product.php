@@ -18,78 +18,71 @@ require_once 'Intraface/modules/product/ProductDetail.php';
 class Product extends Standard {
 
     /**
-     * kernel
      * @var object
-     * @access public
      */
-    var $kernel; // kerneobject
+    public $kernel;
 
     /**
-     * id = produktid
      * @var integer
-     * @access public
      */
-    var $id;
-
-    var $detail;
+    private $id;
 
     /**
-     * old_product_detail_id = til at finde gamle produktid'er
+     * @var object
+     */
+    private $detail;
+
+    /**
      * @var integer
-     * @access public
      */
-    var $old_product_detail_id;
+    private $old_product_detail_id;
 
     /**
-     * value = bruges af load() til at loade værdierne ind i
      * @var array
-     * @access public
-   * @see load()
      */
-    var $value = array();
+    public $value = array();
 
     /**
-     * fields = tabelfelter, som automatisk skal opdateres og findes til load
+     * Fields to update
      * @var array
-     * @access public
-   * @see load()
-   * @see update()
      */
-    var $fields;
+    private $fields;
 
     /**
-     * db = databaseobjekt
      * @var object
-     * @access public
      */
-    var $db;
+    private $db;
 
     /**
-     * stock = indeholder produktlageret
      * @var object
-     * @access public
      */
-    var $stock;
+    public $stock;
 
     /**
-     * error = errorobjekt
      * @var object
-     * @access public
      */
-    var $error;
-    var $keywords;
-
-    var $dbquery;
+    public $error;
 
     /**
-     * Init: loader klassen
+     * @var object
+     */
+    public $keywords;
+
+    /**
+     * @var object
+     */
+    public $dbquery;
+
+    /**
+     * Constructor
      *
-     * @param (object) $kernel
-     * @param	(int)	$product_id
-     * @param (int) $old_product_detail_id skal kun bruges hvis man skal finde gamle detaljer, fx på fakturaer
-   * @return void
+     * @param object  $kernel                The kernel object
+     * @param integer $product_id            The product id
+     * @param integer $old_product_detail_id If we want to find old details, e.g. for an invoice
+     *
+     * @return void
      */
-    function Product($kernel, $product_id = 0, $old_product_detail_id = 0) {
+    function __construct($kernel, $product_id = 0, $old_product_detail_id = 0) {
         if (!is_object($kernel)) {
             trigger_error('Produkt-objektet kræver et Kernel-objekt.', E_USER_ERROR);
         }
@@ -110,7 +103,12 @@ class Product extends Standard {
         }
     }
 
-    function createDBQuery() {
+    /**
+     * Creates the dbquery object
+     *
+     * @return void
+     */
+    public function createDBQuery() {
         $this->dbquery = new DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->setJoin("LEFT", "product_detail detail", "detail.product_id = product.id", "detail.active = 1");
         //$this->dbquery->setFindCharacterFromField("detail.name");
@@ -118,17 +116,13 @@ class Product extends Standard {
     }
 
     /**
-     * Private: Loader data ind i array
+     * Loads data into an array
      *
-     * Denne metode skal automatisk loade produktdetaljerne ind i arrayet,
-     * for det giver ikke mening at skulle ind i details for at hente produktoplysningerne.
+     * Should load both the specific product details, but also the product details
      *
-     * @access Private
-     * @return produkt id eller 0
-     *
-     * TODO fjerne hacket
+     * @return integer product id or 0
      */
-    function load() {
+    private function load() {
         $this->db->query("SELECT id, locked, changed_date, ".implode(',',$this->fields)." FROM product
                 WHERE intranet_id = " . $this->kernel->intranet->get('id') . "
                     AND id = " . $this->id . " LIMIT 1");
@@ -137,7 +131,7 @@ class Product extends Standard {
             return 0;
         }
 
-        // HACK::HACK::HACK::HACK::HACK::HACK::HACK*
+        // TODO HACK::HACK::HACK::HACK::HACK::HACK::HACK*
         //
         //  Vi bliver nødt til at hente value['id'] både før og efter,
         //  for når jeg kører arrayet fra produktdetaljerne ind i value
@@ -162,6 +156,25 @@ class Product extends Standard {
             $this->value[$this->fields[$i]] = $this->db->f($this->fields[$i]);
         }
 
+        $this->getStock();
+
+        // desuden skal copy lige opdateres!
+        // hvad med at vi bruger det øverste billede som primary. Det betyder dog, at
+        // der skal laves noget position på AppendFile, men det er jo også smart nok.
+
+        $this->value['id'] = $this->db->f('id');
+
+        return $this->db->f('id');
+
+    }
+
+    /**
+     * Gets the stock module
+     *
+     * @return object
+     */
+    public function getStock()
+    {
         if ($this->value['stock'] == 0 AND $this->value['do_show'] == 1) {
             $this->value['stock_status'] = array('for_sale' => 100); // kun til at stock_status
         }
@@ -174,16 +187,14 @@ class Product extends Standard {
             $this->value['stock_status'] = $this->stock->get();
         }
 
-        // desuden skal copy lige opdateres!
-        // hvad med at vi bruger det øverste billede som primary. Det betyder dog, at
-        // der skal laves noget position på AppendFile, men det er jo også smart nok.
-
-        $this->value['id'] = $this->db->f('id');
-
-        return $this->db->f('id');
-
+        return $this->stock;
     }
 
+    /**
+     * Gets pictures for the product
+     *
+     * @return array
+     */
     function getPictures() {
         $filehandler = new FileHandler($this->kernel);
         $append_file = new AppendFile($this->kernel, 'product', $this->get('id'));
@@ -220,9 +231,16 @@ class Product extends Standard {
         return $this->value['pictures'];
     }
 
-    function validate($array_var) {
+    /**
+     * Gets the stock module
+     *
+     * @param array $array_var The array to validate
+     *
+     * @return boolean
+     */
+    private function validate($array_var) {
         if (!is_array($array_var)) {
-            trigger_error('Product::save() skal have et array', FATAL);
+            trigger_error('Product::save() skal have et array', E_USER_ERROR);
         }
 
         $validator = new Validator($this->error);
@@ -245,18 +263,14 @@ class Product extends Standard {
     }
 
     /**
-     * Public: Opdatere et produkt.
+     * Saves product
      *
-     * @access public
-     * @param	(array)$array_var	et array med felter med adressen. Se felterne i init funktionen: $this->fields
+     * @param array $array_var Array with details to save, @see $this->fields
      *
-     * $return	(int)	Returnerer produktid eller 0 på fejl
+     * @return integer 0 on error
      */
-    function save($array_var) {
+    public function save($array_var) {
         // safeToDb må IKKE bruges i denne som en generel funktion for så dobbeltbehandles
-        // produktoplysningerne
-        //$array_var = safeToDb($array_var);
-        // $array_var = array_map('mysql_escape_string', $array_var); // hvorfor er denne her?
 
         if ($this->id > 0 AND $this->get('locked') == 1) {
             $this->error->set('Produktet er låst og kan ikke opdateres');
@@ -273,11 +287,7 @@ class Product extends Standard {
             return 0;
         }
 
-
-
-
         // lave sql-sætningen
-
         for ($i=0, $max = sizeof($this->fields), $sql = ''; $i<$max; $i++) {
             if (!array_key_exists($this->fields[$i], $array_var)) {
                 continue;
@@ -294,8 +304,7 @@ class Product extends Standard {
         if ($this->id > 0) {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id');
-        }
-        else {
+        } else {
             $sql_type = "INSERT INTO";
             $sql_end = ", intranet_id = " . $this->kernel->intranet->get('id');
         }
@@ -322,11 +331,11 @@ class Product extends Standard {
     }
 
     /**
-     * Funktion til at kopiere et produkt
+     * Copies product to a new product
      *
+     * @return integer Id for the new product
      */
-
-    function copy() {
+    public function copy() {
         $product = new Product($this->kernel);
         $product->getKeywords();
 
@@ -388,6 +397,245 @@ class Product extends Standard {
     }
 
     /**
+     * Deletes product
+     *
+     * Only set active to 0. Products must never be deleted from the database. It should always be
+     * possible to go back to earlier products.
+     *
+     * @return boolean
+     */
+    public function delete() {
+        if ($this->id == 0) {
+            $this->error->set('Produktet kan ikke slettes, for produktid er ikke sat');
+            return false;
+        }
+        if ($this->get('locked') == 1) {
+            $this->error->set('Produktet kan ikke slettes, for det er låst.');
+            return false;
+        }
+
+        $db = new Db_Sql;
+        $sql = "UPDATE product
+            SET active = 0
+            WHERE id = " . $this->id. "
+                AND intranet_id = " . $this->kernel->intranet->get("id") . "
+                AND locked = 0";
+        $db->query($sql);
+         return true;
+    }
+
+    /**
+     * Undeletes a product
+     *
+     * @return boolean
+     */
+    function undelete() {
+        if ($this->id == 0) {
+            $this->error->set('Produktet kan ikke findes igen, for produktid er ikke sat');
+            return false;
+        }
+        $db = new Db_Sql;
+        $sql = "UPDATE product
+            SET active = 1
+            WHERE id = " . $this->id. "
+                AND intranet_id = " . $this->kernel->intranet->get("id");
+        $db->query($sql);
+        return true;
+    }
+
+    /**
+     * Returnerer det højeste produktnummer
+     *
+     * @return integer produktnummer
+     */
+    function getMaxNumber() {
+        $db = new DB_Sql;
+        $sql = "SELECT product_detail.number
+            FROM product
+            INNER JOIN product_detail
+                ON product_detail.product_id = product.id
+            WHERE product.intranet_id = " . $this->kernel->intranet->get("id") . "
+            ORDER BY product_detail.number DESC LIMIT 1";
+        $db->query($sql);
+        if (!$db->nextRecord()) {
+            return 0;
+        }
+        return $db->f('number');
+    }
+
+    /**
+     * Checks whether number is free
+     *
+     * @param integer $product_number Product number to check
+     *
+     * @return boolean
+     */
+    function isNumberFree($product_number) {
+        $product_number = (int)$product_number;
+
+        $db = new DB_Sql;
+         $sql = "SELECT product.id FROM product
+          INNER JOIN product_detail detail
+            ON product.id = detail.product_id
+            WHERE detail.number = '" . $product_number . "'
+                AND detail.product_id <> " . $this->id . "
+                AND detail.active = 1
+                AND product.active=1
+                AND product.intranet_id = ".$this->kernel->intranet->get('id')." LIMIT 1";
+        $db->query($sql);
+        if ($db->numRows() == 0) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Get keywords object
+     *
+     * @return object
+     */
+    function getKeywords() {
+        return ($this->keywords = new Keyword($this));
+    }
+
+    /*
+    function lock() {
+        $db = new DB_Sql;
+        $db->query("UPDATE product SET locked = 1 WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
+    }
+
+    function unlock() {
+        $db = new DB_Sql;
+        $db->query("UPDATE product SET locked = 0 WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
+    }
+    */
+
+    /**
+     * Set related product
+     *
+     * @param integer $id     Product id to relate to this product
+     * @param string  $status Can be relate or remove
+     *
+     * @return boolean
+     */
+    function setRelatedProduct($id, $status) {
+        if (empty($status)) $status = 'remove';
+
+        $db = new DB_Sql;
+
+        if ($status == 'relate') {
+            $db->query("SELECT * FROM product_related WHERE product_id=" . $this->id  . " AND related_product_id = " . (int)$id . " AND intranet_id =" .$this->kernel->intranet->get('id'));
+            if ($db->nextRecord()) return true;
+            if ($id == $this->id) return false;
+            $db->query("INSERT INTO product_related SET product_id = " . $this->id . ", related_product_id = " . (int)$id . ", intranet_id = " . $this->kernel->intranet->get('id'));
+            return true;
+        }
+        else {
+            $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id') . " AND related_product_id = " . (int)$id);
+            return true;
+        }
+    }
+
+    /**
+     * Delete related product
+     *
+     * @param integer $id     Product id to relate to this product
+     *
+     * @return boolean
+     */
+    function deleteRelatedProduct($id) {
+        $db = new DB_Sql;
+        $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id') . " AND related_product_id = " . (int)$id);
+        return true;
+    }
+
+    /**
+     * Delete all related product
+     *
+     * @param integer $id     Product id to relate to this product
+     *
+     * @return boolean
+     */
+    function deleteRelatedProducts() {
+        $db = new DB_Sql;
+        $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
+        return true;
+    }
+
+    /**
+     * Get all related products
+     *
+     * @return array
+     */
+    function getRelatedProducts() {
+        $products = array();
+        $ids = array();
+        $db = new DB_Sql;
+        $sql = "SELECT related_product_id FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id');
+        $db->query($sql);
+        $key = 0;
+        // rækkefølgen er vigtig - først hente fra product og bagefter tilføje nye værdier til arrayet
+        while ($db->nextRecord()) {
+            $key = $db->f('related_product_id');
+            $product = new Product($this->kernel, $db->f('related_product_id'));
+
+            $products[$key] = $product->get();
+
+            $products[$key]['related_id'] = $db->f('related_product_id');
+
+            if (is_object($product->stock) AND strtolower(get_class($product->stock)) == "stock") {
+                $products[$key]['stock_status'] = $product->stock->get();
+            } else {
+                // alle ikke lagervarer der skal vises i webshop skal have en for_sale
+                if ($product->get('stock') == 0 AND $product->get('do_show') == 1) {
+                    $products[$key]['stock_status'] = array('for_sale' => 100); // kun til at stock_status
+                } else {
+                    $products[$key]['stock_status'] = array();
+                }
+            }
+
+            // den her skal vist lige kigges igennem, for den tager jo alt med på nettet?
+            // 0 = only stock
+            if ($this->kernel->setting->get('intranet', 'webshop.show_online') == 0 AND !empty($which) AND $which=='webshop') { // only stock
+                if (array_key_exists('for_sale', $products[$key]['stock_status']) AND $products[$key]['stock_status']['for_sale'] <= 0) {
+                    continue;
+                }
+            }
+
+        }
+        return $products;
+    }
+
+    /**
+     * Checks whether any products has been created
+     *
+     * @return integer
+     */
+    function isFilledIn() {
+        $db = new DB_Sql;
+        $db->query("SELECT count(*) AS antal FROM product WHERE intranet_id = " . $this->kernel->intranet->get('id'));
+        if ($db->nextRecord()) {
+            return $db->f('antal');
+        }
+        return 0;
+    }
+
+    /**
+     * Checks whether any products has been created.
+     *
+     * TODO. This method is created by Sune. Should probably use isFilledIn().
+     *
+     * @return integer
+     */
+    function any() {
+        $db = new DB_Sql;
+        $db->query("SELECT id FROM product WHERE intranet_id = " . $this->kernel->intranet->get('id')." AND active = 1");
+        return $db->numRows();
+    }
+
+    /**
      * Public: Finde data til en liste
      *
      * Hvis den er fra webshop bør den faktisk opsamle oplysninger om søgningen
@@ -418,18 +666,16 @@ class Product extends Standard {
         if ($keywords = $this->dbquery->getFilter("keywords")) {
             $this->dbquery->setKeyword($keywords);
         }
-        
+
         if($ids = $this->dbquery->getFilter("ids")) {
             if(is_array($ids) && count($ids) > 0) {
                 $this->dbquery->setCondition("product.id IN (".implode(', ', $ids).")");
-            }
-            else {
+            } else {
                 $this->dbquery->setCondition('1 = 0');
             }
         }
 
         // DEN OUTPUTTER IKKE DET RIGTIGE VED KEYWORD
-
         switch ($which) {
             case 'webshop':
                 $this->dbquery->setCondition("product.do_show = 1");
@@ -460,7 +706,6 @@ class Product extends Standard {
 
         while ($db->nextRecord()) {
 
-
             $product = new Product($this->kernel, $db->f("id"));
             $product->getPictures();
             $products[$i] = $product->get();
@@ -489,223 +734,6 @@ class Product extends Standard {
             $i++;
         }
         return $products;
-    }
-
-
-
-    /**
-     * Slet produkt
-     *
-     * Sætter active til 0. Produkter må ikke slettes fra databasen, fordi de skal kunne
-     * hentes senere på fakturaer.
-     *
-     * @access public
-     * @return 1
-     */
-
-    function delete() {
-        if ($this->id == 0) {
-            $this->error->set('Produktet kan ikke slettes, for produktid er ikke sat');
-            return 0;
-        }
-        if ($this->get('locked') == 1) {
-            $this->error->set('Produktet kan ikke slettes, for det er låst.');
-            return 0;
-        }
-
-        $db = new Db_Sql;
-        $sql = "UPDATE product
-            SET active = 0
-            WHERE id = " . $this->id. "
-                AND intranet_id = " . $this->kernel->intranet->get("id") . "
-                AND locked = 0";
-        $db->query($sql);
-         return 1;
-    }
-
-    function undelete() {
-        if ($this->id == 0) {
-            $this->error->set('Produktet kan ikke findes igen, for produktid er ikke sat');
-            return 0;
-        }
-        $db = new Db_Sql;
-        $sql = "UPDATE product
-            SET active = 1
-            WHERE id = " . $this->id. "
-                AND intranet_id = " . $this->kernel->intranet->get("id");
-        $db->query($sql);
-        return 1;
-    }
-
-    /**
-     * Returnerer det højeste produktnummer
-     *
-     * @return (int) produktnummer
-     */
-
-    function getMaxNumber() {
-        $db = new DB_Sql;
-        $sql = "SELECT product_detail.number
-            FROM product
-            INNER JOIN product_detail
-                ON product_detail.product_id = product.id
-            WHERE product.intranet_id = " . $this->kernel->intranet->get("id") . "
-            ORDER BY product_detail.number DESC LIMIT 1";
-        $db->query($sql);
-        if (!$db->nextRecord()) {
-            return 0;
-        }
-        return $db->f('number');
-    }
-
-    /**
-     * Returnerer det højeste produktnummer
-     *
-     * @return (booelean) true / false
-     */
-    function isNumberFree($product_number) {
-        $product_number = (int)$product_number;
-
-        $db = new DB_Sql;
-         $sql = "SELECT product.id FROM product
-          INNER JOIN product_detail detail
-            ON product.id = detail.product_id
-            WHERE detail.number = '" . $product_number . "'
-                AND detail.product_id <> " . $this->id . "
-                AND detail.active = 1
-                AND product.active=1
-                AND product.intranet_id = ".$this->kernel->intranet->get('id')." LIMIT 1";
-        $db->query($sql);
-        if ($db->numRows() == 0) {
-            return true;
-        }
-
-        return false;
-
-    }
-
-    function getKeywords() {
-        return ($this->keywords = new Keyword($this));
-    }
-
-    function lock() {
-        $db = new DB_Sql;
-        $db->query("UPDATE product SET locked = 1 WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
-    }
-
-    function unlock() {
-        $db = new DB_Sql;
-        $db->query("UPDATE product SET locked = 0 WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
-    }
-
-    function setRelatedProduct($id, $status) {
-        if (empty($status)) $status = 'remove';
-
-        $db = new DB_Sql;
-
-        if ($status == 'relate') {
-            $db->query("SELECT * FROM product_related WHERE product_id=" . $this->id  . " AND related_product_id = " . (int)$id . " AND intranet_id =" .$this->kernel->intranet->get('id'));
-            if ($db->nextRecord()) return 1;
-            if ($id == $this->id) return 0;
-                $db->query("INSERT INTO product_related SET product_id = " . $this->id . ", related_product_id = " . (int)$id . ", intranet_id = " . $this->kernel->intranet->get('id'));
-            return 1;
-
-        }
-        else {
-            $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id') . " AND related_product_id = " . (int)$id);
-            return 1;
-        }
-    }
-
-    function deleteRelatedProduct($id) {
-        $db = new DB_Sql;
-        $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id') . " AND related_product_id = " . (int)$id);
-    }
-
-    function deleteRelatedProducts() {
-        $db = new DB_Sql;
-        $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
-    }
-
-    /**
-     * Skal skrives om til at tage højde for følgende:
-     *
-     * 			if (is_object($product->stock) AND get_class($product->stock) == "stock") {
-                $products[$i]['stock_status'] = $product->stock->get();
-            }
-            else {
-                $products[$i]['stock_status'] = array();
-            }
-
-            // 0 = only stock
-            if ($this->kernel->setting->get('intranet', 'webshop.show_online') == 0 AND $which=='webshop') { // only stock
-                if (array_key_exists('actual_stock', $products[$i]['stock_status']) AND $products[$i]['stock_status']['actual_stock'] <= 0) {
-                    continue;
-                }
-            }
-     *
-     *
-     */
-
-    function getRelatedProducts() {
-        $products = array();
-        $ids = array();
-        $db = new DB_Sql;
-        $sql = "SELECT related_product_id FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id');
-        $db->query($sql);
-        $key = 0;
-        // rækkefølgen er vigtig - først hente fra product og bagefter tilføje nye værdier til arrayet
-        while ($db->nextRecord()) {
-            $key = $db->f('related_product_id');
-            $product = new Product($this->kernel, $db->f('related_product_id'));
-
-            $products[$key] = $product->get();
-
-            $products[$key]['related_id'] = $db->f('related_product_id');
-
-            if (is_object($product->stock) AND strtolower(get_class($product->stock)) == "stock") {
-                $products[$key]['stock_status'] = $product->stock->get();
-            }
-            else {
-                // alle ikke lagervarer der skal vises i webshop skal have en for_sale
-                if ($product->get('stock') == 0 AND $product->get('do_show') == 1) {
-                    $products[$key]['stock_status'] = array('for_sale' => 100); // kun til at stock_status
-                }
-                else {
-                    $products[$key]['stock_status'] = array();
-                }
-
-            }
-
-            // den her skal vist lige kigges igennem, for den tager jo alt med på nettet?
-            // 0 = only stock
-            if ($this->kernel->setting->get('intranet', 'webshop.show_online') == 0 AND !empty($which) AND $which=='webshop') { // only stock
-                if (array_key_exists('for_sale', $products[$key]['stock_status']) AND $products[$key]['stock_status']['for_sale'] <= 0) {
-                    continue;
-                }
-            }
-
-        }
-        return $products;
-    }
-
-    function isFilledIn() {
-        $db = new DB_Sql;
-        $db->query("SELECT count(*) AS antal FROM product WHERE intranet_id = " . $this->kernel->intranet->get('id'));
-        if ($db->nextRecord()) {
-            return $db->f('antal');
-        }
-        return 0;
-    }
-
-    /**
-     * Hmmm oprettet af Sune. Ved ikke lige hvordan det her skal fungere smartest, men jeg har brug for at vide om der er nogle aktive products i /debtor/item_edit.php
-     * Hvad var der galt med isFilledIn?
-     */
-    function any() {
-        $db = new DB_Sql;
-        $db->query("SELECT id FROM product WHERE intranet_id = " . $this->kernel->intranet->get('id')." AND active = 1");
-        return $db->numRows();
     }
 
 }
