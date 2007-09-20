@@ -1,18 +1,13 @@
 <?php
-if (!defined('PHPUNIT_MAIN_METHOD')) {
-    define('PHPUNIT_MAIN_METHOD', 'WebshopTests::main');
-}
-
 require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
-class WebshopTests {
-    public static function main() {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
-    }
+error_reporting(E_ALL);
 
+class Webshop_AllTests
+{
     public static function suite() {
-        $suite = new PHPUnit_Framework_TestSuite('Emails');
+        $suite = new PHPUnit_Framework_TestSuite('Intraface_Webshop');
 
         $tests = array('Basket', 'BasketEvaluation');
 
@@ -23,9 +18,5 @@ class WebshopTests {
 
         return $suite;
     }
-}
-
-if (PHPUNIT_MAIN_METHOD == 'WebshopTests::main') {
-    WebshopTests::main();
 }
 ?>

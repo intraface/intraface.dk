@@ -16,7 +16,7 @@ class TestableNewsletter extends Newsletter
 
     function getContact()
     {
-        return new FakeContact;
+        return new FakeNewsletterContact;
     }
 
     function getSubscribers()
@@ -44,9 +44,9 @@ class NewsletterTest extends PHPUnit_Framework_TestCase
     function testQueue()
     {
         $list = new FakeNewsletterList();
-        $list->kernel = new FakeKernel;
-        $list->kernel->intranet = new FakeIntranet;
-        $list->kernel->user = new FakeUser;
+        $list->kernel = new FakeNewsletterKernel;
+        $list->kernel->intranet = new FakeNewsletterIntranet;
+        $list->kernel->user = new FakeNewsletterUser;
         $newsletter = new TestableNewsletter($list);
         $this->assertTrue($newsletter->queue());
     }

@@ -18,7 +18,7 @@ class FakeNewsletterList
     }
 }
 
-class FakeKernel
+class FakeNewsletterKernel
 {
     public $intranet;
     public $user;
@@ -26,7 +26,7 @@ class FakeKernel
     function useModule() {}
 }
 
-class FakeIntranet
+class FakeNewsletterIntranet
 {
     public function get()
     {
@@ -34,7 +34,7 @@ class FakeIntranet
     }
 }
 
-class FakeUser
+class FakeNewsletterUser
 {
     public function get()
     {
@@ -42,7 +42,7 @@ class FakeUser
     }
 }
 
-class FakeAddress
+class FakeNewsletterAddress
 {
     function get()
     {
@@ -50,13 +50,13 @@ class FakeAddress
     }
 }
 
-class FakeContact
+class FakeNewsletterContact
 {
     public $address;
 
     function __construct()
     {
-        $this->address = new FakeAddress;
+        $this->address = new FakeNewsletterAddress;
     }
 
     function get() {
@@ -68,7 +68,7 @@ class FakeContact
     }
 }
 
-class FakeSubscriber
+class FakeNewsletterSubscriber
 {
     function load() {}
 
@@ -79,7 +79,7 @@ class FakeSubscriber
 
     function getContact()
     {
-        return new FakeContact;
+        return new FakeNewsletterContact;
     }
 }
 ?>

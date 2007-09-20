@@ -8,6 +8,8 @@ require_once 'Intraface/Kernel.php';
 require_once 'Intraface/modules/webshop/BasketEvaluation.php';
 require_once 'Intraface/modules/webshop/Basket.php';
 
+error_reporting(E_ALL);
+
 class FakeEvaluationIntranet {
     function get() {
         return 1;

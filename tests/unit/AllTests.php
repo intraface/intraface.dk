@@ -1,41 +1,44 @@
 <?php
-if (!defined('PHPUNIT_MAIN_METHOD')) {
-    define('PHPUNIT_MAIN_METHOD', 'AllTests::main');
-}
-
 require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
-class AllTests {
-    public static function main() {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
-    }
+class AllTests
+{
+    public static function suite()
+    {
+        $suite = new PHPUnit_Framework_TestSuite('Intraface');
 
-    public static function suite() {
-        $suite = new PHPUnit_Framework_TestSuite('IntrafaceTests');
-
-        $tests = array('Product', 'Newsletter', 'Email', 'Webshop', 'Intranetmaintenance', 'Filehandler', 'Contact', 'Common', 'Accounting', 'CMS', 'XMLRPC');
+        $tests = array('Product',
+                       'Email',
+                       'Webshop',
+                       'Intranetmaintenance',
+                       'Filehandler',
+                       'Contact',
+                       'Common',
+                       'Accounting',
+                       'CMS',
+                       'Debtor',
+                       'Shared',
+                       'Newsletter'
+        );
 
         foreach ($tests AS $test) {
-            require_once $test . '/All' . $test . 'Tests.php';
+            require_once $test . '/AllTests.php';
         }
 
-        $suite->addTest(AccountingTests::suite());
-        $suite->addTest(CMSTests::suite());
-        $suite->addTest(CommonTests::suite());
-        $suite->addTest(ContactTests::suite());
-        $suite->addTest(EmailTests::suite());
-        $suite->addTest(FilehandlerTests::suite());
-        $suite->addTest(IntranetMaintenanceTests::suite());
-        $suite->addTest(NewsletterTests::suite());
-        $suite->addTest(ProductTests::suite());
-        $suite->addTest(WebshopTests::suite());
-
+        $suite->addTest(Accounting_AllTests::suite());
+        $suite->addTest(CMS_AllTests::suite());
+        $suite->addTest(Common_AllTests::suite());
+        $suite->addTest(Contact_AllTests::suite());
+        $suite->addTest(Email_AllTests::suite());
+        $suite->addTest(Filehandler_AllTests::suite());
+        $suite->addTest(IntranetMaintenance_AllTests::suite());
+        $suite->addTest(Newsletter_AllTests::suite());
+        $suite->addTest(Product_AllTests::suite());
+        $suite->addTest(Webshop_AllTests::suite());
+        $suite->addTest(Debtor_AllTests::suite());
+        $suite->addTest(Shared_AllTests::suite());
         return $suite;
     }
-}
-
-if (PHPUNIT_MAIN_METHOD == 'AllTests::main') {
-    AllTests::main();
 }
 ?>

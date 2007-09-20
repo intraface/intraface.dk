@@ -10,8 +10,8 @@ class NewsletterObserverTest extends PHPUnit_Framework_TestCase
     function createObserver()
     {
         $list = new FakeNewsletterList();
-        $list->kernel = new FakeKernel;
-        $list->kernel->intranet = new FakeIntranet;
+        $list->kernel = new FakeNewsletterKernel;
+        $list->kernel->intranet = new FakeNewsletterIntranet;
         return new Intraface_Module_Newsletter_Observer_OptinMail($list);
     }
 

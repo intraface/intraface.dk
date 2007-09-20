@@ -16,8 +16,8 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
     function createSubscriber()
     {
         $list = new FakeNewsletterList();
-        $list->kernel = new FakeKernel;
-        $list->kernel->intranet = new FakeIntranet;
+        $list->kernel = new FakeNewsletterKernel;
+        $list->kernel->intranet = new FakeNewsletterIntranet;
         return new NewsletterSubscriber($list);
     }
 

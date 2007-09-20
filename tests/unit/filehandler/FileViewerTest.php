@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/shared/filehandler/FileViewer.php';
 
@@ -19,17 +18,17 @@ class FakeFileviewerKernel {
     public $user;
 }
 
-class FileViewerTest extends PHPUnit_Framework_TestCase {
+class FileViewerTest extends PHPUnit_Framework_TestCase
+{
 
-    function setUp() {
-    }
-
-    function testConstruction() {
+    function testConstruction()
+    {
         $fileviewer = new FileViewer();
         $this->assertTrue(is_object($fileviewer));
     }
 
-    function testParseQueryString() {
+    function testParseQueryString()
+    {
         $querystring = '?/QH4X9sbRgRyPApgS/Ci7emeihjcJ3WdNyDMz7vspLq5CeT3QEb5IE9SMBUEKHHrnckM/MountKosciuszko_frontpage.jpg';
         $fileviewer = new FileViewer();
         $fileviewer->parseQueryString($querystring);

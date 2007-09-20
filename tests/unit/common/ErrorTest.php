@@ -9,6 +9,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     function testConstruction()
     {
         $error = new Error;
+        $this->assertTrue(true);
     }
 
 }
