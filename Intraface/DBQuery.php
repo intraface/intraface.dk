@@ -237,7 +237,7 @@ class DBQuery {
                 }
             }
             else {
-                $but['previous'] = "";
+                $but['previous'] = 0;
             }
 
             if($this->paging_start < $this->recordset_num_rows - $this->rows_pr_page) { // $_GET[$this->paging_var_name]
