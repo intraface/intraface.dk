@@ -117,9 +117,8 @@ class AccountTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($debet, $saldo['debet'], '', $this->delta);
         $this->assertEquals($credit, $saldo['credit'], '', $this->delta);
 
-        // TODO needs to be updated
-        $this->markTestIncomplete('We need to figure out how to input and return double values');
     }
+
     function testUpdatePrimoSaldo()
     {
         $account = $this->createAccount();
@@ -147,9 +146,6 @@ class AccountTest extends PHPUnit_Framework_TestCase {
         $saldo = $account->getPrimoSaldo();
 
         $this->assertEquals($debet_new, $saldo['debet'], '', $this->delta);
-
-        // TODO needs to be updated
-        $this->markTestIncomplete('We need to figure out how to input and return double values');
 
     }
 }

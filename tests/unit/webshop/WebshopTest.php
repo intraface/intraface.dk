@@ -13,7 +13,6 @@ define('PATH_INCLUDE_CONFIG', 'c:/Users/Lars Olesen/workspace/intraface/Intrafac
 
 class WebshopTest extends PHPUnit_Framework_TestCase
 {
-
     function testPlaceOrderResetsBasket()
     {
         // TODO needs to be updated

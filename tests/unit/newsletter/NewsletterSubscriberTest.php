@@ -30,7 +30,7 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
     function testSubscribe()
     {
         // TODO We need to figure out to test this without address blowing up
-        $this->markTestIncomplete('We need to figure out to test this without address blowing up');
+        $this->markTestIncomplete();
         $subscriber = $this->createSubscriber();
         $data = array('email' => 'test@legestue.net', 'ip' => 'ip');
         $this->assertTrue($subscriber->subscribe($data));

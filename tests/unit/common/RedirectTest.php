@@ -60,25 +60,26 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     {
         $kernel = new FakeRedirectKernel;
         $redirect = Redirect::factory($kernel, 'go');
-        $return_url      = 'http://http://example.dk/state.php/state.php?id=1';
+        $return_url      = 'http://example.dk/state.php/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
         $parameter_to_return_with = 'add_contact_id'; // activates the parameter sent back to the return page
         $this->assertEquals($destination_url . '?redirect_id=1', $url);
     }
 
+    function testRecieveRedirect()
+    {
     // TODO Saa vidt jeg kan see har vi ingen mulighed for at fake redirect som
     // det ser ud nu, fordi det hele afhaenger af globale variable. Det skal vi have lavet om.
     // men kun med nogle gode tests forst naturligvis.
-    function testRecieveRedirect()
-    {
+
         // go
         $kernel = new FakeRedirectKernel;
         $redirect = Redirect::factory($kernel, 'go');
-        $return_url      = 'http://http://example.dk/state.php/state.php?id=1';
+        $return_url      = 'http://example.dk/state.php/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
-        $parameter_to_return_with = 'add_contact_id'; // activates the parameter sent back to the return page
+        //$parameter_to_return_with = 'add_contact_id'; // activates the parameter sent back to the return page
 
         // receiving
         $redirect = Redirect::factory($kernel, 'receive');
@@ -96,7 +97,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     {
         $kernel = new FakeRedirectKernel;
         $redirect = Redirect::factory($kernel, 'go');
-        $return_url      = 'http://http://example.dk/state.php/state.php?id=1';
+        $return_url      = 'http://example.dk/state.php/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
         $this->assertTrue($redirect->delete());

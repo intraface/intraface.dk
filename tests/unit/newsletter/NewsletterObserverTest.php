@@ -25,7 +25,6 @@ class NewsletterObserverTest extends PHPUnit_Framework_TestCase
 
     function testAddObserver()
     {
-        $this->markTestIncomplete();
         $observer = $this->createObserver();
         $this->assertTrue($observer->update(new FakeSubscriber));
     }
