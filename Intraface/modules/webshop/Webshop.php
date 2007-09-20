@@ -73,14 +73,7 @@ class Webshop
         return $this->basket;
     }
 
-    /**
-     * Places the order and utilizes basket
-     *
-     * @param array $input Array with customer data
-     *
-     * @return integer Order id
-     */
-    public function placeOrder($input)
+    private function createOrder($input)
     {
         // kunne være vakst om denne tjekkede om kontaktpersonen allerede findes
         if (!empty($input['contact_id'])) {
@@ -139,6 +132,100 @@ class Webshop
             $this->error->message = array_merge($this->error->message, $this->order->error->message);
             return false;
         }
+
+        return $order_id;
+
+    }
+
+    /**
+     * Places the order and utilizes basket
+     *
+     * @param array $input    Array with customer data
+     * @param array $products Array with products
+     *
+     * @return integer Order id
+     */
+    public function placeManualOrder($input = array(), $products = array())
+    {
+        $order_id = $this->createOrder($input);
+
+        $this->addOrderLines($products);
+
+        $this->sendEmail($order_id);
+
+        return $order_id;
+    }
+
+    /**
+     * Places the order and utilizes basket
+     *
+     * @param array $input Array with customer data
+     *
+     * @return integer Order id
+     */
+    public function placeOrder($input)
+    {
+        /*
+        // kunne være vakst om denne tjekkede om kontaktpersonen allerede findes
+        if (!empty($input['contact_id'])) {
+            $this->contact = new Contact($this->kernel, $input['contact_id']);
+            $value['contact_id'] = $this->contact->get('id');
+            $value['contact_address_id'] = $this->contact->address->get('id');
+            $value['contact_person_id'] = 0;
+        } else {
+            $this->contact = new Contact($this->kernel);
+
+            // sørger for at tjekke om det er et firma
+            if (!empty($input['contactperson'])) {
+                $input['type'] = 1; // firma
+            }
+
+            // sets preffered invoice to email. Should be a setting in webshop.
+            $input['preferred_invoice'] = 2;
+
+            // opdaterer kontakten
+            if (!$contact_id = $this->contact->save($input)) {
+                $this->error->message = array_merge($this->error->message, $this->contact->error->message);
+                return false;
+            }
+            $contact_person_id = 0;
+
+            if ($input['type'] == 1) { // firma
+                $contactperson = new ContactPerson($this->contact);
+                if (!$contact_person_id = $contactperson->save(array('name'=>$input['contactperson']))) {
+                    $this->error->message = array_merge($this->error->message, $contactperson->error->message);
+                    return false;
+                }
+            }
+            $value['contact_id'] = $contact_id;
+            $value['contact_address_id'] = $this->contact->address->get('id');
+            $value['contact_person_id'] = $contact_person_id;
+        }
+
+        $value['this_date'] = date('d-m-Y');
+        $value['due_date'] = date('d-m-Y');
+        $value['description'] = $input['description'];
+        $value['internal_note'] = $input['internal_note'];
+        $value['message'] = $input['message'];
+
+        if(isset($input['customer_coupon']) && $input['customer_coupon'] != '') {
+            if($value['message'] != '') $value['message'] .= "\n\n";
+            $value['message'] .= "Kundekupon:". $input['customer_coupon'];
+        }
+
+        if(isset($input['customer_comment']) && $input['customer_comment'] != '') {
+            if($value['message'] != '') $value['message'] .= "\n\n";
+            $value['message'] .= "Kommentar:\n". $input['customer_comment'];
+        }
+
+        $this->order = new Debtor($this->kernel, 'order');
+        if (!$order_id = $this->order->update($value, 'webshop')) {
+            $this->error->message = array_merge($this->error->message, $this->order->error->message);
+            return false;
+        }
+        */
+
+        $order_id = $this->createOrder($input);
 
         $products = $this->basket->getItems();
 
