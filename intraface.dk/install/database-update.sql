@@ -80,6 +80,7 @@ CREATE TABLE `module_package_group` (
 PRIMARY KEY ( `id` )
 ) TYPE = MYISAM ;
 
+ALTER TABLE `email` ADD `contact_person_id` INT NOT NULL AFTER `contact_id` ;
 
 CREATE TABLE `module_package_module` (
 `id` INT NOT NULL AUTO_INCREMENT ,
