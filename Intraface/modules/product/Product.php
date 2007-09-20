@@ -95,8 +95,8 @@ class Product extends Standard {
 
         $this->error = new Error;
 
-        $shared_filehandler = $this->kernel->useShared('filehandler');
-        $shared_filehandler->includeFile('AppendFile.php');
+        //$shared_filehandler = $this->kernel->useShared('filehandler');
+        //$shared_filehandler->includeFile('AppendFile.php');
 
         if ($this->id > 0) {
             $this->id = $this->load();
@@ -232,7 +232,7 @@ class Product extends Standard {
     }
 
     /**
-     * Gets the stock module
+     * Validates
      *
      * @param array $array_var The array to validate
      *
@@ -256,10 +256,10 @@ class Product extends Standard {
         $validator->isNumeric($array_var['do_show'], 'do_show', 'allow_empty');
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
 
-        return 1;
+        return true;
     }
 
     /**
@@ -294,8 +294,7 @@ class Product extends Standard {
             }
             if(isset($array_var[$this->fields[$i]])) {
                 $sql .= $this->fields[$i]." = '".safeToDb($array_var[$this->fields[$i]])."', ";
-            }
-            else {
+            } else {
                 $sql .= $this->fields[$i]." = '', ";
             }
 
