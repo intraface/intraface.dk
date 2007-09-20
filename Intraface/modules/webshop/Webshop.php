@@ -73,6 +73,13 @@ class Webshop
         return $this->basket;
     }
 
+    /**
+     * Places the order and utilizes basket
+     *
+     * @param array $input Array with customer data
+     *
+     * @return integer Order id
+     */
     private function createOrder($input)
     {
         // kunne være vakst om denne tjekkede om kontaktpersonen allerede findes
