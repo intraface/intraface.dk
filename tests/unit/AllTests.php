@@ -11,8 +11,8 @@ class AllTests
         $tests = array('Product',
                        'Email',
                        'Webshop',
-                       'Intranetmaintenance',
-                       'Filehandler',
+                       'IntranetMaintenance',
+                       'FileHandler',
                        'Contact',
                        'Common',
                        'Accounting',
@@ -21,9 +21,9 @@ class AllTests
                        'Shared',
                        'Newsletter'
         );
-
+        
         foreach ($tests AS $test) {
-            require_once $test . '/AllTests.php';
+            require_once strtolower($test) . '/AllTests.php';
         }
 
         $suite->addTest(Accounting_AllTests::suite());
