@@ -4,9 +4,9 @@
  *
  * @author Sune Jensen <sj@sunet.dk>
  */
-require_once 'Cpdf/class.pdf.php';
+require_once 'Document/Cpdf.php';
 
-class PdfMaker extends Cpdf
+class PdfMaker extends Document_Cpdf
 {
     var $value;
     var $page;
@@ -53,7 +53,7 @@ class PdfMaker extends Cpdf
         $this->value['font_spacing'] = $this->value["font_size"] + $this->value['font_padding_top'] + $this->value['font_padding_bottom'];
 
         // Opretter en nyt A4 dokument
-        parent::Cpdf(array(0, 0, $this->page_width, $this->page_height));
+        parent::__construct(array(0, 0, $this->page_width, $this->page_height));
 
         // Omskrivning af placering på specielle tegn: æ, ø, å, Æ, Ø, Å
         // Efter Cpdf dokumentation
