@@ -77,7 +77,22 @@ define('ERROR_HANDLER_UNIQUE_LOGFILE', ERROR_LOG_UNIQUE);
 define('ERROR_HANDLER_EMAIL_ADDRESS', ERROR_REPORT_EMAIL);
 define('ERROR_HANDLER_USE_BLUESCREEN', ERROR_USE_BLUESCREEN);
 define('ERROR_HANDLER_LEVEL_CONTINUE_SCRIPT', ERROR_LEVEL_CONTINUE_SCRIPT);
-require_once 'ErrorHandler/ErrorHandler.php';
+
+require_once 'ErrorHandler.php';
+require_once 'ErrorHandler/Observer/User.php';
+require_once 'ErrorHandler/Observer/BlueScreen.php';
+require_once 'ErrorHandler/Observer/File.php';
+
+function errorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
+    $errorhandler = new ErrorHandler;
+    $errorhandler->addObserver(new ErrorHandler_Observer_File);
+    $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen);
+    return $errorhandler->handleError($errno, $errstr, $errfile, $errline, $errcontext);
+}
+
+set_error_handler('errorhandler');
+
+
 set_exception_handler(array('ErrorHandler', 'handleException'));
 set_error_handler(array('ErrorHandler', 'handleError'), ERROR_HANDLE_LEVEL);
 
