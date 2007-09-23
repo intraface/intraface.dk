@@ -33,17 +33,17 @@ if(isset($_POST['submit']) || isset($_POST['choose_file'])) {
 
 	$filehandler = new FileHandler($kernel);
 	$filehandler->createUpload();
-	if($id = $filehandler->upload->upload('new_pdf_header_file')) {
-		$filehandler->load();
+	if($filehandler->upload->isUploadFile('new_pdf_header_file') && $id = $filehandler->upload->upload('new_pdf_header_file')) {    
+        $filehandler->load();
 
-		$type = $filehandler->get('file_type');
-		if($type['mime_type'] == 'image/jpeg' || $type['mime_type'] == 'image/pjpeg') {
-			$values['pdf_header_file_id'] = $id;
-		}
-		else {
-			$intranet->error->set('Header should be a .jpg image - got ' . $type['mime_type']);
-			$filehandler->delete();
-		}
+        $type = $filehandler->get('file_type');
+        if($type['mime_type'] == 'image/jpeg' || $type['mime_type'] == 'image/pjpeg') {
+            $values['pdf_header_file_id'] = $id;
+        }
+        else {
+            $intranet->error->set('Header should be a .jpg image - got ' . $type['mime_type']);
+            $filehandler->delete();
+        }    
 	}
 
 	if($intranet->update($values)) {
