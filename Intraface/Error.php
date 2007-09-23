@@ -37,6 +37,19 @@ class Error {
 			$this->message[] = 'Udefinderet fejlbesked!';
 		}
 	}
+    
+    /*
+     * merge another error array with this 
+     * 
+     * @param (array)$error_array array provided with errormessages
+     * @return void
+     */
+    function merge($error_array) {
+        if(is_array($error_array)) {
+            $this->message = array_merge($this->message, $error_array);
+        }
+        
+    }
 	
 	/**
 	 * Returnere om der er fejl
