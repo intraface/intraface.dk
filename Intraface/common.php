@@ -89,7 +89,7 @@ require_once 'ErrorHandler/Observer/File.php';
 
 function errorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
     $errorhandler = new ErrorHandler;
-    $errorhandler->addObserver(new ErrorHandler_Observer_File);
+    $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
     if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
         $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen);
     }
@@ -101,7 +101,7 @@ function errorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
 
 function exceptionhandler($e) {
     $errorhandler = new ErrorHandler;
-    $errorhandler->addObserver(new ErrorHandler_Observer_File);
+    $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
     if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
         $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen);
     }
