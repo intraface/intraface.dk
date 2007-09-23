@@ -81,6 +81,7 @@ PRIMARY KEY ( `id` )
 ) TYPE = MYISAM ;
 
 ALTER TABLE `email` ADD `contact_person_id` INT NOT NULL AFTER `contact_id` ;
+ALTER TABLE `email` ADD `bcc_to_user` INT NOT NULL AFTER `user_id` ;
 
 CREATE TABLE `module_package_module` (
 `id` INT NOT NULL AUTO_INCREMENT ,
