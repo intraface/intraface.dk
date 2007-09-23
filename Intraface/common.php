@@ -79,22 +79,40 @@ define('ERROR_HANDLER_USE_BLUESCREEN', ERROR_USE_BLUESCREEN);
 define('ERROR_HANDLER_LEVEL_CONTINUE_SCRIPT', ERROR_LEVEL_CONTINUE_SCRIPT);
 
 require_once 'ErrorHandler.php';
-require_once 'ErrorHandler/Observer/User.php';
-require_once 'ErrorHandler/Observer/BlueScreen.php';
+if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
+   require_once 'ErrorHandler/Observer/BlueScreen.php'; 
+}
+else {
+    require_once 'ErrorHandler/Observer/User.php';
+}
 require_once 'ErrorHandler/Observer/File.php';
 
 function errorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
     $errorhandler = new ErrorHandler;
     $errorhandler->addObserver(new ErrorHandler_Observer_File);
-    $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen);
+    if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
+        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen);
+    }
+    else {
+        $errorhandler->addObserver(new ErrorHandler_Observer_User);
+    }
     return $errorhandler->handleError($errno, $errstr, $errfile, $errline, $errcontext);
 }
 
+function exceptionhandler($e) {
+    $errorhandler = new ErrorHandler;
+    $errorhandler->addObserver(new ErrorHandler_Observer_File);
+    if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
+        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen);
+    }
+    else {
+        $errorhandler->addObserver(new ErrorHandler_Observer_User);
+    }
+    return $errorhandler->handleException($e);
+}
+
 set_error_handler('errorhandler');
-
-
-set_exception_handler(array('ErrorHandler', 'handleException'));
-set_error_handler(array('ErrorHandler', 'handleError'), ERROR_HANDLE_LEVEL);
+set_exception_handler('exceptionhandler');
 
 // vi skal have lavet en fil, der bare sørger for at inkludere filer.
 // i virkelighede var det måske smart, hvis vi brugte lidt
