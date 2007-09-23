@@ -68,6 +68,8 @@ if (PEAR::isError($set_language)) {
 $translation = $translation->getDecorator('Lang');
 $translation->setOption('fallbackLang', 'uk');
 $translation = $translation->getDecorator('LogMissingTranslation');
+require_once("ErrorHandler/Observer/File.php");
+$translation->setOption('logger', array(new ErrorHandler_Observer_File(ERROR_LOG), 'update'));
 $translation = $translation->getDecorator('DefaultText');
 
 // %stringID% will be replaced with the stringID
