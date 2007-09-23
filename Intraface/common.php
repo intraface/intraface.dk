@@ -91,10 +91,10 @@ function errorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
     $errorhandler = new ErrorHandler;
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
     if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
-        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen);
+        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
     }
     else {
-        $errorhandler->addObserver(new ErrorHandler_Observer_User);
+        $errorhandler->addObserver(new ErrorHandler_Observer_User, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // See description of ~ above
     }
     return $errorhandler->handleError($errno, $errstr, $errfile, $errline, $errcontext);
 }
@@ -111,7 +111,7 @@ function exceptionhandler($e) {
     return $errorhandler->handleException($e);
 }
 
-set_error_handler('errorhandler');
+set_error_handler('errorhandler', ERROR_HANDLE_LEVEL);
 set_exception_handler('exceptionhandler');
 
 // vi skal have lavet en fil, der bare sørger for at inkludere filer.
