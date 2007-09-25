@@ -122,7 +122,7 @@ class Product extends Standard {
      *
      * @return integer product id or 0
      */
-    private function load() {
+    public function load() {
         $this->db->query("SELECT id, active, locked, changed_date, ".implode(',',$this->fields)." FROM product
                 WHERE intranet_id = " . $this->kernel->intranet->get('id') . "
                     AND id = " . $this->id . " LIMIT 1");
@@ -381,7 +381,9 @@ class Product extends Standard {
         # Billede
         #
 
-        $this->kernel->useShared('filehandler');
+        $shared_filehandler = $this->kernel->useShared('filehandler');
+        $shared_filehandler->includeFile('AppendFile.php');
+
         $filehandler = new FileHandler($this->kernel);
         $append_file = new AppendFile($this->kernel, 'product', $product->get('id'));
 
