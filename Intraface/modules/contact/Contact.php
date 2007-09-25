@@ -130,75 +130,77 @@ require_once dirname(__FILE__) . '/ContactPerson.php';
 class Contact extends Standard {
 
     /**
-     * Brugerobjekt
      * @var object
-     * @access private
      */
-    var $kernel;
+    private $kernel;
 
     /**
-     * Kundeid
      * @var integer
-     * @access public
      */
-    var $id;
+    protected $id;
 
     /**
-     * Værdier for kunden
      * @var array
-     * @access public
      */
-    var $value;
+    public $value;
 
     /**
-     * Adresseobjekt
      * @var object
-     * @access public
      */
-    var $address;
+    public $address;
 
     /**
-     * Leveringsaddresse
      * @var object
-     * @access public
      */
-    var $delivery_address;
+    public $delivery_address;
 
     /**
-     * Errorobjekt
      * @var object
-     * @access public
      */
-    var $error;
-
-    var $contactperson;
-    var $message;
-    var $keywords;
-    var $lock;
-
-    var $addresses = array(
-        0 => 'standard',
-        1 => 'delivery',
-        2 => 'invoice'
-    );
+    public $error;
 
     /**
-     * Mulige typer 0: private 1: corporate
+     * @var object
      */
-    var $types = array(
-        0 => 'private',
-        1 => 'corporation'
-    );
+    public $contactperson;
 
     /**
-     * Init
+     * @var object
+     */
+    private $message;
+
+    /**
+     * @var object
+     */
+    private $keywords;
+
+    /**
+     * @var object
+     */
+    private $lock;
+
+    /**
+     * @var array
+     */
+    private $addresses = array(0 => 'standard',
+                           1 => 'delivery',
+                           2 => 'invoice');
+
+    /**
+     * @var array
+     */
+    private $types = array(0 => 'private',
+                       1 => 'corporation');
+
+    /**
+     * Constructor
      *
-     * @param	object	$kernel
-     * @param	int	$id	Kundeid.
+     * @param object  $kernel
+     * @param integer $id	  Contact id
+     *
      * @return	void
-     * @access private
      */
-    function __construct($kernel, $id = 0) {
+    public function __construct($kernel, $id = 0) {
         if (!is_object($kernel)) {
             trigger_error('Contact kræver kernel - fik ' . get_class($kernel), E_USER_ERROR);
         }
@@ -216,13 +218,27 @@ class Contact extends Standard {
         }
     }
 
-    function createDBQuery() {
+    /**
+     * Creates the dbquery which is used in getList()
+     *
+     * @return  void
+     */
+    public function createDBQuery() {
         $this->dbquery = new DBQuery($this->kernel, "contact", "contact.active = 1 AND contact.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->setJoin("LEFT", "address", "address.belong_to_id = contact.id", "address.active = 1 AND address.type = 3");
         $this->dbquery->useErrorObject($this->error);
     }
 
-    function factory($kernel, $type, $value) {
+    /**
+     * Constructor
+     *
+     * @param object $kernel
+     * @param string $type   What should the contact object be created from
+     * @param string $id     The value which corresponds to the type
+     *
+     * @return  object
+     */
+    public function factory($kernel, $type, $value) {
         // Husk noget validering af de forskellige values og typer
         $db = new DB_Sql;
         switch($type) {
@@ -250,12 +266,11 @@ class Contact extends Standard {
     }
 
     /**
-     * Loader værdierne ind i et array
+     * Loads values for the contact into an array
      *
      * @return true on success
      */
-
-    function load() {
+    private function load() {
         $db = new DB_Sql;
         $this->value = array();
 
@@ -265,7 +280,7 @@ class Contact extends Standard {
                 AND intranet_id =".$this->kernel->intranet->get('id'));
 
         if(!$db->nextRecord()) {
-            return 0;
+            return false;
         }
 
         $this->value['id'] = $db->f('id');
@@ -292,17 +307,42 @@ class Contact extends Standard {
 
         $this->value['id'] = $db->f('id'); // må ikke fjernes
 
-        return 1;
+        return true;
     }
 
-    function getLoginUrl() {
+    /**
+     * Gets the address
+     *
+     * @return object
+     */
+    private function getAddress()
+    {
+        if (!is_object($this->address)) {
+            $this->address = Address::factory('contact', $this->id);
+        }
+        return $this->address;
+    }
+
+    /**
+     * Gets the login url for the contact
+     *
+     * @return string
+     */
+    public function getLoginUrl() {
         // HACK NECCESSARY FOR THE NEWSLETTERSUBSCRIBER
         $this->kernel->useModule('contact');
         return $this->value['login_url'] = 'http://' . $this->kernel->intranet->get('identifier') . '.' . $this->kernel->setting->get('intranet', 'contact.login_url') . '/' . $this->get('password');
 
     }
 
-    function validate($var) {
+    /**
+     * Validates values
+     *
+     * @param array $var Values to validate
+     *
+     * @return true on success
+     */
+    public function validate($var) {
         $var = $var;
 
         if (array_key_exists('number', $var) AND !$this->isNumberFree($var['number'])) {
@@ -360,14 +400,14 @@ class Contact extends Standard {
 
         if ($this->error->isError()) {
             //$this->error->view();
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
     }
 
 
     /**
-     * Public: Opdatere kunden
+     * Saves the contact
      *
      * @param	int $var['id']	Kundeid
      * @param	string $var['company']
@@ -382,12 +422,11 @@ class Contact extends Standard {
      * @param	string $var['deliverypostalcode']
      * @param	string $var['deliverytown']
      * @param	string $var['deliverycountry']
-      * @param	string $var['paymentcondition']
+     * @param	string $var['paymentcondition']
+     *
      * @return void
-      * @access public
      */
-
-    function save($var) {
+    public function save($var) {
         $sql_items = '';
 
         // safe db må ikke være her, for den køres igen i address
@@ -476,60 +515,54 @@ class Contact extends Standard {
     }
 
     /**
-     * Public: Slette en kunde
+     * Deletes a contact
      *
-     * Klassen må aldrig slette kunden helt, men må bare gøre kunden inaktiv
+     * Never delete a contact entirely. Should only be deactivated.
      *
      * @return integer	0 = false eller 1 = true
-     * @access public
      */
-
-    function delete() {
+    public function delete() {
         if ($this->get('locked') == 1) {
             $this->error->set('Posten er låst og kan ikke slettes');
-            return 0;
+            return false;
         }
         if ($this->id == 0) {
             $this->error->set('Kender ikke id, så kan ikke slette kunden');
-            return 0;
+            return false;
         }
         $db = new DB_Sql;
         $db->query("UPDATE contact SET active = 0, date_changed = NOW() WHERE intranet_id = " . $this->kernel->intranet->get("id") . " AND id = " . $this->id);
-        return 1;
+        return true;
     }
 
     /**
-     * Funktionen bruges at fortryde en sletning.
+     * Undelete
+     *
+     * @return boolean
      */
-
-    function undelete() {
+    public function undelete() {
         if ($this->get('locked') == 1) {
             $this->error->set('Posten er låst og kan ikke slettes');
-            return 0;
+            return false;
         }
         if ($this->id == 0) {
             $this->error->set('Kender ikke id, så kan ikke slette kunden');
-            return 0;
+            return false;
         }
         $db = new DB_Sql;
         $db->query("UPDATE contact SET active = 1, date_changed = NOW() WHERE intranet_id = " . $this->kernel->intranet->get("id") . " AND id = " . $this->id);
 
-        return 1;
+        return true;
     }
-
-
-
-
-
-
 
     /**
      * Tjekke om kundenummeret er frit
+     *
+     * @param string $number
+     *
      * @return true hvis det er frit
-     * @access public
      */
-
-    function isNumberFree($number) {
+    public function isNumberFree($number) {
         $number = (int)$number;
         $db = new DB_Sql();
         $sql = "SELECT id
@@ -548,11 +581,10 @@ class Contact extends Standard {
 
     /**
      * Hente det maksimale kundenummer
+     *
      * @return integer
-     * @access public
      */
-
-    function getMaxNumber() {
+    public function getMaxNumber() {
         $db = new DB_Sql();
         $db->query("SELECT number FROM contact WHERE intranet_id = " . $this->kernel->intranet->get("id") . " ORDER BY number DESC");
         if (!$db->nextRecord()) {
@@ -564,12 +596,11 @@ class Contact extends Standard {
     /**
      * Public: Finde data til en liste
      *
+     * @param string $parameter hvad er det?
      *
-     * @param	$parameter hvad er det?
      * @return array indeholdende kundedata til liste
-     * @access public
      */
-    function getList($parameter = "") {
+    public function getList($parameter = "") {
 
         if($this->dbquery->checkFilter("search")) {
             $search = $this->dbquery->getFilter("search");
@@ -628,20 +659,15 @@ class Contact extends Standard {
      */
      public function getSimilarContacts()
      {
-         return $this->compare();
-     }
+        $this->address = $this->getAddress();
 
-    /**
-     * Metoden skal bruges til at sammenligne kunder mhp. på at samle dem til en kunde.
-     *
-     * @see Contact::merge();
-     */
-    function compare() {
         $similar_contacts = array();
 
         if ($this->id == 0) {
             return array();
         }
+
+        $this->load();
 
         $db = MDB2::singleton(DB_DSN);
         $sql = "SELECT DISTINCT(contact.id), contact.number, address.name, address.id AS address_id, address.address, address.postcode, address.phone, address.email, address.city FROM contact
@@ -668,7 +694,7 @@ class Contact extends Standard {
         }
 
         return $result->fetchAll();
-    }
+     }
 
     /**
      * Merges a contact to one contact
@@ -677,6 +703,8 @@ class Contact extends Standard {
      * - newsletter
      * - procurement
      * - intranet
+     *
+     * These needs to implement a common function changeContact($old, $new)
      */
     function merge() {
         die('Contact::merge(): Ikke implementeret');
@@ -687,20 +715,30 @@ class Contact extends Standard {
      * Denne metode kræves af keyword
      *
      * TODO Måske burde denne metode hedde loadKeywords()?
+     *
+     * @return object
      */
     function getKeywords() {
         return $this->keywords = new Keyword($this);
     }
 
-  /**
-   * Start message op
+   /**
+    * Start message op
+    *
+    * @param integer $id Optional id for the message
+    *
+    * @return object
     */
     function loadMessage($id = 0) {
-        $this->message = & new ContactMessage($this, (int)$id);
+        return $this->message = & new ContactMessage($this, (int)$id);
     }
 
     /**
      * Hvis kontakten er et firma, skal den loade og inkludere kontaktpersonerne
+     *
+     * @param integer $id Optional id of the contact person
+     *
+     * @return object
      */
     function loadContactPerson($id = 0) {
         return ($this->contactperson = & new ContactPerson($this, (int)$id));
@@ -709,6 +747,8 @@ class Contact extends Standard {
     /**
      * Funktionen skal tjekke om der er tastet nogen kontaktpersoner ind overhovedet.
      * Funktionen er tiltænkt et tjek, så man hurtigt kan tjekke om brugeren har nogen.
+     *
+     * @return integer
      */
     function isFilledIn() {
         $db = new DB_Sql;
@@ -719,20 +759,30 @@ class Contact extends Standard {
         return 0;
     }
 
+    /**
+     * Generates a password for the contact
+     *
+     * @return boolean
+     */
     function generatePassword() {
         if ($this->id == 0) {
-            return 0;
+            return false;
         }
         $db = new DB_Sql;
         $db->query("UPDATE contact SET password = '".md5($this->id . date('Y-m-d H:i:s') . $this->kernel->intranet->get('id'))."' WHERE id = " . $this->id);
-        return 1;
+        return true;
     }
 
+    /**
+     * Sends the login email for the contact
+     *
+     * @return boolean
+     */
     function sendLoginEmail() {
 
         if ($this->id == 0) {
             $this->error->set('Der er ikke noget id, så kunne ikke sende en e-mail');
-            return 0;
+            return false;
         }
         // opretter en kode, hvis kunden ikke har en kode
         if (!$this->get('password')) {
@@ -756,17 +806,22 @@ class Contact extends Standard {
             )
         )) {
             $this->error->set('Kunne ikke gemme emailen');
-            return 0;
+            return false;
         }
 
         if ($email->send()) {
             $this->error->set('E-mailen er sendt');
-            return 1;
+            return true;
         }
         $this->error->set('Kunne ikke sende emailen');
-        return 0;
+        return false;
     }
 
+    /**
+     * Gets the contacts newsletter subscriptions
+     *
+     * @return array
+     */
     function getNewsletterSubscriptions() {
         $db = new DB_Sql;
         $db->query("SELECT * FROM newsletter_subscriber WHERE optin = 1 AND active = 1 AND contact_id = " . $this->id . " AND intranet_id =" . $this->kernel->intranet->get('id'));
@@ -777,6 +832,11 @@ class Contact extends Standard {
         return $lists;
     }
 
+    /**
+     * Checks whether the contact needs to accept subscriptions
+     *
+     * @return array
+     */
     function needNewsletterOptin() {
         $db = new DB_Sql;
         $db->query("SELECT list_id, code FROM newsletter_subscriber WHERE optin = 0 AND contact_id = " . $this->id . " AND intranet_id =" . $this->kernel->intranet->get('id'));
@@ -794,23 +854,28 @@ class Contact extends Standard {
      * Kontakten kan slettes, hvis man kun er indskrevet i nyhedsbrevet.
      * Der bør sikkert også være en indstilling som ejeren af intranettet kan sætte
      * efter al sandsynlighed skal denne være med som tjek i delete
+     *
+     * @return boolean
      */
     function canBeDeleted() {
         $db = new DB_Sql;
         $db->query("SELECT * FROM debtor WHERE contact_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
     }
 
     /**
      * skal tage højde for om intranettet tillader kundelogin
+     *
+     * @return boolean
      */
     function canLogin() {
         if ($this->get('active') == 0) {
             return false;
         }
+        return true;
     }
 
 }

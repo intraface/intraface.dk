@@ -12,6 +12,9 @@ class ContactTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
+        $db = MDB2::factory(DB_DSN);
+        $db->query('TRUNCATE address');
+        $db->query('TRUNCATE contact');
     }
 
     function getKernel()
@@ -20,6 +23,8 @@ class ContactTest extends PHPUnit_Framework_TestCase
         $kernel->intranet = new FakeContactIntranet;
         return $kernel;
     }
+
+    /////////////////////////////////////////////////////////
 
     function testConstruction()
     {
@@ -32,6 +37,30 @@ class ContactTest extends PHPUnit_Framework_TestCase
         $contact = new Contact($this->getKernel(), 7);
         $array = $contact->needNewsletterOptin();
         $this->assertTrue(is_array($array));
+    }
+
+    function testSave()
+    {
+        $contact = new Contact($this->getKernel(), 7);
+        $data = array('name' => 'Test', 'email' => 'lars@legestue.net', 'phone' => '98468269');
+        $this->assertTrue($contact->save($data) > 0);
+    }
+
+    function testGetSimilarContacts()
+    {
+        $contact = new Contact($this->getKernel());
+        $data = array('name' => 'Test', 'email' => 'lars@legestue.net', 'phone' => '98468269');
+        $contact->save($data);
+
+        $contact = new Contact($this->getKernel());
+        $data = array('name' => 'Tester 1', 'email' => 'lars@legestue.net', 'phone' => '26176860');
+        $contact->save($data);
+
+        $this->assertTrue($contact->hasSimilarContacts());
+
+        $similar_contacts = $contact->getSimilarContacts();
+
+        $this->assertEquals(1, count($similar_contacts));
     }
 }
 ?>
