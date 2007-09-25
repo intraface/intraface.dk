@@ -1,6 +1,8 @@
 <?php
 /**
- * Creates a pdf of a debtor
+ * Creates a pdf of a debtor. The class implements the visitor pattern.
+ *
+ * The debtor must comply with a certain interface.
  *
  * PHP version 5
  *
@@ -9,8 +11,11 @@
  * <code>
  * $file = new FileHandler($file_id);
  * $report = new Debtor_Report_Pdf($file);
+ * $report->visit($debtor);
  * </code>
  *
+ * @author Lars Olesen <lars@legestue.net>
+ * @author Sune Jensen <sj@sunet.dk>
  */
 
 class Debtor_Report_Pdf
@@ -33,7 +38,12 @@ class Debtor_Report_Pdf
         $this->file = $file;
     }
 
-    function createDocument()
+    /**
+     * Creates the document to write
+     *
+     * @return PdfMaker object
+     */
+    protected function createDocument()
     {
         require_once 'Intraface/shared/pdf/PdfMaker.php';
         //require_once 'Intraface/shared/pdf/PdfMakerDebtor.php';
@@ -45,6 +55,13 @@ class Debtor_Report_Pdf
 
     }
 
+    /**
+     * Visitor for the debtor
+     *
+     * @param object $debtor The debtor to be written
+     *
+     * @return void
+     */
     function visit($debtor)
     {
 
@@ -105,29 +122,28 @@ class Debtor_Report_Pdf
             $this->doc->nextPage(true);
         }
 
-    if ($debtor->get('message')) {
-        $text = explode("\r\n", $debtor->get('message'));
-        foreach ($text AS $line) {
-            if ($line == "") {
-                $this->doc->setY('-'.$this->doc->get("font_spacing"));
-                if ($this->doc->get('y') < $this->doc->get("margin_bottom") + $this->doc->get("font_spacing") * 2) {
-                    $this->doc->nextPage(true);
-                }
-            } else {
-                while ($line != "") {
-                    $this->doc->setY('-'.($this->doc->get("font_padding_top") + $this->doc->get("font_size")));
-                    $line = $this->doc->addTextWrap($this->doc->get('margin_left'), $this->doc->get('y'), $this->doc->get('content_width'), $this->doc->get("font_size"), $line);
-                    $this->doc->setY('-'.$this->doc->get("font_padding_bottom"));
+        if ($debtor->get('message')) {
+            $text = explode("\r\n", $debtor->get('message'));
+            foreach ($text AS $line) {
+                if ($line == "") {
+                    $this->doc->setY('-'.$this->doc->get("font_spacing"));
                     if ($this->doc->get('y') < $this->doc->get("margin_bottom") + $this->doc->get("font_spacing") * 2) {
                         $this->doc->nextPage(true);
+                    }
+                } else {
+                    while ($line != "") {
+                        $this->doc->setY('-'.($this->doc->get("font_padding_top") + $this->doc->get("font_size")));
+                        $line = $this->doc->addTextWrap($this->doc->get('margin_left'), $this->doc->get('y'), $this->doc->get('content_width'), $this->doc->get("font_size"), $line);
+                        $this->doc->setY('-'.$this->doc->get("font_padding_bottom"));
+                        if ($this->doc->get('y') < $this->doc->get("margin_bottom") + $this->doc->get("font_spacing") * 2) {
+                            $this->doc->nextPage(true);
+                        }
                     }
                 }
             }
         }
-    }
 
         // Overskrifter - Vareudskrivning
-
         $this->doc->setY('-40'); // mellemrum til vareoversigt
 
         $apointX["varenr"] = 80;
@@ -166,7 +182,6 @@ class Debtor_Report_Pdf
 
         for ($i = 0, $max = count($items); $i <  $max; $i++) {
             $vat = $items[$i]["vat"];
-
 
             if ($bg_color == 1) {
                 $this->doc->setColor(0.8, 0.8, 0.8);
@@ -371,16 +386,16 @@ class Debtor_Report_Pdf
      */
     function output($type = 'string', $filename = 'debtor.pdf') {
         switch ($type) {
-            case 'string':
-                return $this->doc->output();
-                break;
-            case 'file':
-                $data = $this->doc->output();
-                return $this->doc->writeDocument($data, $filename);
-                break;
-            default:
-                return $this->doc->stream();
-                break;
+        case 'string':
+            return $this->doc->output();
+            break;
+        case 'file':
+            $data = $this->doc->output();
+            return $this->doc->writeDocument($data, $filename);
+            break;
+        default:
+            return $this->doc->stream();
+            break;
         }
     }
 
@@ -409,7 +424,7 @@ class Debtor_Report_Pdf
         // $box_height = $this->doc->get("font_spacing") * 10 + $box_padding_top + $box_padding_bottom;
         $box_small_height = $this->doc->get("font_spacing") * 3 + $box_padding_top + $box_padding_bottom + 2;
 
-        # Udskrivning af modtager
+        // Udskrivning af modtager
         $this->doc->setY('-'.$this->doc->get("font_spacing")); // $pointY -= $box_padding_top;
         $this->doc->addText($this->doc->get('x') + $box_width - 40, $this->doc->get('y') + 4, $this->doc->get("font_size") - 4, "Modtager");
 
