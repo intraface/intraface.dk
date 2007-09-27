@@ -18,61 +18,61 @@ $debtor = Debtor::factory($kernel, intval($id));
 
 switch ($send_as) {
 
-	case 'email':
+    case 'email':
 
-		$contact = new Contact($kernel, $debtor->get('contact_id'));
-		if (!$contact->get('id') > 0) {
-			trigger_error('Der er ikke angivet nogen kontakt at sende debtoren til', E_USER_ERROR);
-		}
-		elseif (!$contact->address->get('email')) {
-			trigger_error('Der er ikke angivet nogen e-mail til kunden', E_USER_ERROR);
-		}
+        $contact = new Contact($kernel, $debtor->get('contact_id'));
+        if (!$contact->get('id') > 0) {
+            trigger_error('Der er ikke angivet nogen kontakt at sende debtoren til', E_USER_ERROR);
+        }
+        elseif (!$contact->address->get('email')) {
+            trigger_error('Der er ikke angivet nogen e-mail til kunden', E_USER_ERROR);
+        }
 
-		if ($debtor->contact->get('preferred_invoice') <> 2) { // email
-			trigger_error('Kunden foretrækker ikke post på e-mail', E_USER_ERROR);
-		}
+        if ($debtor->contact->get('preferred_invoice') <> 2) { // email
+            trigger_error('Kunden foretrækker ikke post på e-mail', E_USER_ERROR);
+        }
 
-		// vi skal lige have oversat den her rigtigt
-		$subject = $translation->get($debtor->get('type')) . ' #' . $debtor->get('number');
+        // vi skal lige have oversat den her rigtigt
+        $subject = $translation->get($debtor->get('type')) . ' #' . $debtor->get('number');
 
-		// hvad skal den skrive her?
-		
-		if($debtor->get('type') == 'order') {
-		    $body = $kernel->setting->get('intranet', 'debtor.order.email.text');
-		}
-		else {
-		    $body = '';
-		}
-		
-	
+        // hvad skal den skrive her?
 
-		break;
+        if($debtor->get('type') == 'order') {
+            $body = $kernel->setting->get('intranet', 'debtor.order.email.text');
+        }
+        else {
+            $body = '';
+        }
 
-	case 'electronic_email':
 
-		// find ud af hvem der er scan in contact
-		// måske skal vi lige tjekke om det overhovedet er en faktura
-		$scan_in_contact_id = $kernel->setting->get('intranet', 'debtor.scan_in_contact');
 
-		$contact = new Contact($kernel, $scan_in_contact_id);
-		if (!$contact->get('id') > 0) {
-			trigger_error('Der er ikke angivet nogen kontakt at sende de elektroniske fakturaer til', E_USER_ERROR);
-		}
-		elseif (!$contact->address->get('email')) {
-			trigger_error('Der er ikke angivet nogen e-mail til Læs-Ind bureauet', E_USER_ERROR);
-		}
+        break;
 
-		if ($debtor->contact->get('preferred_invoice') <> 3) { // elektronisk faktura
-			trigger_error('Kunden foretrækker ikke elektronisk faktura!', E_USER_ERROR);
-		}
-		elseif(!$debtor->contact->address->get('ean')) {
-			trigger_error('EAN-nummeret er ikke sat', E_USER_ERROR);
-		}
+    case 'electronic_email':
 
-		$subject = 'Elektronisk faktura';
-		$body = 'Hermed faktura #' . $debtor->get('number') . ' til at læse ind';
+        // find ud af hvem der er scan in contact
+        // måske skal vi lige tjekke om det overhovedet er en faktura
+        $scan_in_contact_id = $kernel->setting->get('intranet', 'debtor.scan_in_contact');
 
-		break;
+        $contact = new Contact($kernel, $scan_in_contact_id);
+        if (!$contact->get('id') > 0) {
+            trigger_error('Der er ikke angivet nogen kontakt at sende de elektroniske fakturaer til', E_USER_ERROR);
+        }
+        elseif (!$contact->address->get('email')) {
+            trigger_error('Der er ikke angivet nogen e-mail til Læs-Ind bureauet', E_USER_ERROR);
+        }
+
+        if ($debtor->contact->get('preferred_invoice') <> 3) { // elektronisk faktura
+            trigger_error('Kunden foretrækker ikke elektronisk faktura!', E_USER_ERROR);
+        }
+        elseif(!$debtor->contact->address->get('ean')) {
+            trigger_error('EAN-nummeret er ikke sat', E_USER_ERROR);
+        }
+
+        $subject = 'Elektronisk faktura';
+        $body = 'Hermed faktura #' . $debtor->get('number') . ' til at læse ind';
+
+        break;
 
 }
 
@@ -82,11 +82,11 @@ $filename = 'invoice' .$debtor->get('number').'.pdf';
 $filepath = PATH_UPLOAD . $kernel->intranet->get('id') . '/';
 
 if(!is_dir($filepath)) {
-	mkdir($filepath);
+    mkdir($filepath);
 }
 $filepath = $filepath .'/tempdir/';
 if(!is_dir($filepath)) {
-	mkdir($filepath);
+    mkdir($filepath);
 }
 
 $upload_filename = $filepath . $filename;
@@ -106,81 +106,81 @@ $input['accessibility'] = 'public';
 # gem filen med filehandleren
 $filehandler = new FileHandler($kernel);
 if (!$file_id = $filehandler->save($full_filename, $filename, 'hidden')) {
-	$filehandler->error->view();
-	trigger_error('Filen kunne ikke gemmes', E_USER_ERROR);
+    $filehandler->error->view();
+    trigger_error('Filen kunne ikke gemmes', E_USER_ERROR);
 }
 
 
 if (!$file_id = $filehandler->update($input)) {
-	$filehandler->error->view();
-	trigger_error('Oplysninger om filen kunne ikke opdateres', E_USER_ERROR);
+    $filehandler->error->view();
+    trigger_error('Oplysninger om filen kunne ikke opdateres', E_USER_ERROR);
 
 }
 
 switch($kernel->setting->get('intranet', 'debtor.sender')) {
-	case 'intranet':
-		$from_email = '';
-		$from_name = '';
-		break;
-	case 'user':
-		$from_email = $kernel->user->address->get('email');
-		$from_name = $kernel->user->address->get('name');
-		break;
-	case defined:
-		$from_email = $kernel->setting->get('intranet', 'debtor.sender.email');
-		$from_name = $kernel->setting->get('intranet', 'debtor.sender.name');
-		break;
-	default:
-		trigger_error("Invalid sender!", E_USER_ERROR);
+    case 'intranet':
+        $from_email = '';
+        $from_name = '';
+        break;
+    case 'user':
+        $from_email = $kernel->user->address->get('email');
+        $from_name = $kernel->user->address->get('name');
+        break;
+    case 'defined':
+        $from_email = $kernel->setting->get('intranet', 'debtor.sender.email');
+        $from_name = $kernel->setting->get('intranet', 'debtor.sender.name');
+        break;
+    default:
+        trigger_error("Invalid sender!", E_USER_ERROR);
 }
 
 if (empty($from_email) || empty($from_name)) {
-	trigger_error("Name or email is not filled in!", E_USER_ERROR);	
+    trigger_error("Name or email is not filled in!", E_USER_ERROR);
 }
 
 # opret e-mailen
 $email = new Email($kernel);
 if (!$email->save(array(
-	'contact_id' => $contact->get('id'),
-	'subject' => $subject,
-	'body' => $body . "\n\n--\n" . $kernel->user->address->get('name') . "\n" . $kernel->intranet->get('name'),
-	'from_email' => $from_email,
-	'from_name' => $from_name,
-	'type_id' => 10, // electronic invoice
-	'belong_to' => $debtor->get('id')
+    'contact_id' => $contact->get('id'),
+    'subject' => $subject,
+    'body' => $body . "\n\n--\n" . $kernel->user->address->get('name') . "\n" . $kernel->intranet->get('name'),
+    'from_email' => $from_email,
+    'from_name' => $from_name,
+    'type_id' => 10, // electronic invoice
+    'belong_to' => $debtor->get('id')
 ))) {
-	$email->error->view();
-	trigger_error('E-mailen kunne ikke gemmes', E_USER_ERROR);
+    $email->error->view();
+    trigger_error('E-mailen kunne ikke gemmes', E_USER_ERROR);
 }
 
 # tilknyt fil
 if (!$email->attachFile($file_id, 'invoice' . $debtor->get('number') . '.pdf')) {
-	$email->error->view();
-	trigger_error('Filen kunne ikke vedhæftes', E_USER_ERROR);
+    $email->error->view();
+    trigger_error('Filen kunne ikke vedhæftes', E_USER_ERROR);
 }
 
 
 switch ($send_as) {
-	case 'email':
+    case 'email':
 
-			/*
+            /*
             This is now changed so we only make one redirect
             // Because we are going thru two pages we are making to redirects.
-			$first_redirect = Redirect::factory($kernel, 'go');
-			$second_redirect = Redirect::factory($kernel, 'go');
-			$shared_email = $kernel->useShared('email');
+            $first_redirect = Redirect::factory($kernel, 'go');
+            $second_redirect = Redirect::factory($kernel, 'go');
+            $shared_email = $kernel->useShared('email');
 
-			// First vi set the last, because we need this id to the first.
-			$second_redirect->setDestination($shared_email->getPath().'email.php?id='.$email->get('id'), $module_debtor->getPath().'view.php?id='.$debtor->get('id'));
-			$second_redirect->setIdentifier('send_email');
-			$second_redirect->askParameter('send_email_status');
+            // First vi set the last, because we need this id to the first.
+            $second_redirect->setDestination($shared_email->getPath().'email.php?id='.$email->get('id'), $module_debtor->getPath().'view.php?id='.$debtor->get('id'));
+            $second_redirect->setIdentifier('send_email');
+            $second_redirect->askParameter('send_email_status');
 
-			// then we set the first redirect, notice we are using the first redirect id, and send that with the page.
-			$url = $first_redirect->setDestination($shared_email->getPath().'edit.php?id='.$email->get('id'), $shared_email->getPath().'email.php?id='.$email->get('id').'&redirect_id='.$second_redirect->get('id'));
+            // then we set the first redirect, notice we are using the first redirect id, and send that with the page.
+            $url = $first_redirect->setDestination($shared_email->getPath().'edit.php?id='.$email->get('id'), $shared_email->getPath().'email.php?id='.$email->get('id').'&redirect_id='.$second_redirect->get('id'));
 
-			header('Location: ' . $url);
+            header('Location: ' . $url);
             */
-            
+
             $redirect = Redirect::factory($kernel, 'go');
             $shared_email = $kernel->useShared('email');
 
@@ -188,28 +188,28 @@ switch ($send_as) {
             $url = $redirect->setDestination($shared_email->getPath().'edit.php?id='.$email->get('id'), $module_debtor->getPath().'view.php?id='.$debtor->get('id'));
             $redirect->setIdentifier('send_email');
             $redirect->askParameter('send_email_status');
-            
-            header('Location: ' . $url);
-			exit;
-		break;
-	case 'electronic_email':
-		// Sender e-mailen
-		if($email->send()) {
-			if ($debtor->get('status') == 'created') {
-				$debtor->setStatus('sent');
-			}
-			header('Location: view.php?id='.$debtor->get('id'));
-			exit;
-		}
-		else {
-			$email->error->view();
-			trigger_error('E-mailen kunne ikke sendes', E_USER_ERROR);
-		}
 
-		break;
-	default:
-			trigger_error('not valid send as', E_USER_ERROR);
-		break;
+            header('Location: ' . $url);
+            exit;
+        break;
+    case 'electronic_email':
+        // Sender e-mailen
+        if($email->send()) {
+            if ($debtor->get('status') == 'created') {
+                $debtor->setStatus('sent');
+            }
+            header('Location: view.php?id='.$debtor->get('id'));
+            exit;
+        }
+        else {
+            $email->error->view();
+            trigger_error('E-mailen kunne ikke sendes', E_USER_ERROR);
+        }
+
+        break;
+    default:
+            trigger_error('not valid send as', E_USER_ERROR);
+        break;
 }
 exit;
 ?>
