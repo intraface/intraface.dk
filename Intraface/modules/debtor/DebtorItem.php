@@ -17,10 +17,10 @@ class DebtorItem extends Standard {
     var $product_id;
     var $error;
 
-    function DebtorItem(&$debtor, $id) {
+    function __construct($debtor, $id = 0) {
         if (!is_object($debtor) AND get_class(strtolower($debtor)) != 'debtor') {
-        trigger_error('Debtor: Item kræver debtor', E_USER_ERROR);
-    }
+            trigger_error('Debtor: Item kræver debtor', E_USER_ERROR);
+        }
 
         $this->debtor = &$debtor;
         $this->db = new Db_sql;
@@ -34,8 +34,8 @@ class DebtorItem extends Standard {
 
     function load() {
         if($this->id == 0) {
-     return;
-    }
+            return;
+        }
         // LIMIT 1 er sådan set noget mærkeligt noget. Der skulle gerne kun være 1 da man søger på id, og hvis der endelig er mere end 1,
         // burde man istedet udskrive en fejlmeddelse, for det må ikke kunne ske /Sune (15/3 2005)
         $this->db->query("SELECT product_id, id, description, quantity FROM debtor_item WHERE id = ".$this->id." AND intranet_id = ".$this->debtor->kernel->intranet->get("id")." LIMIT 1");
