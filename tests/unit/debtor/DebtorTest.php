@@ -8,30 +8,13 @@ require_once 'Intraface/DBQuery.php';
 require_once 'Intraface/modules/debtor/Debtor.php';
 
 
-class FakeAddress {
+class FakeDebtorAddress {
     function get($key = '') {
         $info = array('name' => 'Lars Olesen', 'address' => 'Græsvangen 8, Syvsten', 'postcode' => 9300, 'city' => 'Aarhus N', 'cvr' => '', 'ean' => '', 'phone' => '75820811', 'email' => 'lars@legestue.net');
         if (empty($key)) return $info;
         else return $info[$key];
     }
 }
-
-class FakeContactPerson {
-    function get() {}
-}
-
-class FakeContact
-{
-    public $address;
-    function __construct()
-    {
-        $this->address = new FakeAddress;
-    }
-    function get() {
-        return 'Contact Name';
-    }
-}
-
 
 class FakeDebtorUser
 {
@@ -48,7 +31,7 @@ class FakeDebtorIntranet
 {
     public $address;
     function __construct() {
-        $this->address = new FakeAddress;
+        $this->address = new FakeDebtorAddress;
     }
     function get() {
         return array('name' => 'Intranetname', 'contact_person' => '');

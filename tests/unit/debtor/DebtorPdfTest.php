@@ -6,7 +6,7 @@ require_once 'Intraface/Kernel.php';
 require_once 'Intraface/Setting.php';
 require_once 'Intraface/modules/debtor/Visitor/Pdf.php';
 
-class FakeAddress {
+class FakeDebtorPdfAddress {
     function get($key = '') {
         $info = array('name' => 'Lars Olesen', 'address' => 'Græsvangen 8, Syvsten', 'postcode' => 9300, 'city' => 'Aarhus N', 'cvr' => '', 'ean' => '', 'phone' => '75820811', 'email' => 'lars@legestue.net');
         if (empty($key)) return $info;
@@ -14,31 +14,31 @@ class FakeAddress {
     }
 }
 
-class FakeContactPerson {
+class FakeDebtorPdfContactPerson {
     function get() {}
 }
 
-class FakeContact
+class FakeDebtorPdfContact
 {
     public $address;
     function __construct()
     {
-        $this->address = new FakeAddress;
+        $this->address = new FakeDebtorPdfAddress;
     }
     function get() {
         return 'Contact Name';
     }
 }
 
-class FakeSetting {
+class FakeDebtorPdfSetting {
     function get() {}
 }
 
-class FakeIntranet
+class FakeDebtorPdfIntranet
 {
     public $address;
     function __construct() {
-        $this->address = new FakeAddress;
+        $this->address = new FakeDebtorPdfAddress;
     }
     function get() {
         return array('name' => 'Intranetname', 'contact_person' => '');
@@ -52,10 +52,10 @@ class FakeDebtor {
     function __construct()
     {
         $this->kernel = new Kernel;
-        $this->kernel->setting = new FakeSetting();
-        $this->kernel->intranet = new FakeIntranet;
-        $this->contact = new FakeContact;
-        $this->contact_person = new FakeContactPerson;
+        $this->kernel->setting = new FakeDebtorPdfSetting();
+        $this->kernel->intranet = new FakeDebtorPdfIntranet;
+        $this->contact = new FakeDebtorPdfContact;
+        $this->contact_person = new FakeDebtorPdfContactPerson;
     }
     function get($key) {
         return $this->value[$key];
@@ -63,7 +63,7 @@ class FakeDebtor {
     function getItems() {}
     function getIntranetAddress()
     {
-        return new FakeAddress();
+        return new FakeDebtorPdfAddress();
     }
     function getPaymentInformation()
     {

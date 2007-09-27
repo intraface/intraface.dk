@@ -3,6 +3,7 @@ require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 require_once 'DebtorTest.php';
+require_once 'DebtorItemTest.php';
 require_once 'DebtorPdfTest.php';
 
 class Debtor_AllTests
