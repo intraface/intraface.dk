@@ -34,14 +34,14 @@ class Debtor extends Standard {
      * @param $type (string) - se også $allowed_types
      * @param $id (integer) Debtor-id
      */
-    function Debtor(& $kernel, $type, $id = 0) {
+    function __construct($kernel, $type, $id = 0) {
         // sørger for at vi har det rigtige objekt
         // denne bør ikke have brug for typen.
-        if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
+        if (!is_object($kernel)) {
             trigger_error('Debtor kræver Kernel som objekt', E_USER_ERROR);
         }
 
-        $this->kernel = & $kernel;
+        $this->kernel = $kernel;
 
         #
         # Hente settings
@@ -817,6 +817,7 @@ class Debtor extends Standard {
         $this->loadItem();
         return $this->item->getList();
     }
+
     function addItem() {}
 
 
