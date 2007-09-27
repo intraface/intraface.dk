@@ -333,7 +333,7 @@ class BasketEvaluation extends Standard
                         // fine nothing is done
                         break;
                     case 'add_product_id':
-                        if (!$basket->change($evaluation['action_value'], $quantity, '', 1)) { // 1: it is basketevaluation
+                        if (!$basket->change($evaluation['action_value'], $quantity, '', 0, 1)) { // 1: it is basketevaluation
                             $this->error->set('Could not add product - invalid id or out of stock');
                         }
                         break;
