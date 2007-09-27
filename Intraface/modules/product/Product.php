@@ -128,6 +128,7 @@ class Product extends Standard {
                     AND id = " . $this->id . " LIMIT 1");
 
         if(!$this->db->nextRecord()) {
+            $this->value['id'] = 0;
             return 0;
         }
 
