@@ -65,6 +65,29 @@ class DebtorItem extends Standard {
         }
     }
 
+    function getPrice()
+    {
+        // TODO how do we handle vat? this should return raw prices
+        // and then the tax percent should return the tax to apply
+        // the calculator should handle the final price
+        return $this->product->get('price') * $this->get('quantity');
+    }
+
+    function getWeight()
+    {
+        return $this->product->get('weight') * $this->get('quantity');
+    }
+
+    function getTaxPercent()
+    {
+        if ($this->product->get('vat')) {
+            return 25;
+        } else {
+            return 0;
+        }
+
+    }
+
     function save($input) {
         if($this->debtor->get("locked") == 1) {
             $this->error->set('Posten er låst er låst og der kan ikke opdateres varer på den');
@@ -194,6 +217,7 @@ class DebtorItem extends Standard {
         return(array_merge($item, $item_no_vat));
     }
 
+    // TODO What is this used for?
     function getQuantity($product_id, $from_date, $sent = "") {
 
         /*
