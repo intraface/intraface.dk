@@ -235,7 +235,7 @@ class Intraface_XMLRPC_Shop_Server
      *
      * @return mixed
      */
-    public function addProductToBasket($credentials, $id, $quantity = 1, $text = '')
+    public function addProductToBasket($credentials, $id, $quantity = 1, $text = '', $product_detail_id = 0)
     {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
@@ -250,7 +250,7 @@ class Intraface_XMLRPC_Shop_Server
         }
 
         $text = $this->utf8Decode($text);
-        return $this->webshop->basket->add(intval($product_id), intval($quantity), $text);
+        return $this->webshop->basket->add(intval($product_id), intval($quantity), $text, $product_detail_id);
     }
 
     /**
