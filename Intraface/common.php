@@ -72,12 +72,6 @@ if(defined('TIMEZONE')) {
     $db->exec('SET time_zone=\''.TIMEZONE.'\'');
 }
 
-define('ERROR_HANDLER_LOGFILE', ERROR_LOG);
-define('ERROR_HANDLER_UNIQUE_LOGFILE', ERROR_LOG_UNIQUE);
-define('ERROR_HANDLER_EMAIL_ADDRESS', ERROR_REPORT_EMAIL);
-define('ERROR_HANDLER_USE_BLUESCREEN', ERROR_USE_BLUESCREEN);
-define('ERROR_HANDLER_LEVEL_CONTINUE_SCRIPT', ERROR_LEVEL_CONTINUE_SCRIPT);
-
 require_once 'ErrorHandler.php';
 if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
    require_once 'ErrorHandler/Observer/BlueScreen.php'; 
