@@ -82,12 +82,12 @@ class Basket
      *
      * @return boolean
      */
-    function add($product_id, $quantity = 1, $text = '')
+    function add($product_id, $quantity = 1, $text = '', $product_detail_id = 0)
     {
         $product_id = intval($product_id);
         $quantity = intval($quantity);
         $quantity = $this->getItemCount($product_id) + $quantity;
-        return $this->change($product_id, $quantity, $text);
+        return $this->change($product_id, $quantity, $text, $product_detail_id);
     }
 
     /**
@@ -116,15 +116,19 @@ class Basket
      *
      * @return boolean
      */
-    function change($product_id, $quantity, $text = '', $basketevaluation = 0)
+    function change($product_id, $quantity, $text = '', $product_detail_id = 0, $basketevaluation = 0)
     {
         $db = new DB_Sql;
         $product_id = (int)$product_id;
         $quantity = (int)$quantity;
 
         $this->webshop->kernel->useModule('product');
-        $product = new Product($this->webshop->kernel, $product_id);
+        $product = new Product($this->webshop->kernel, $product_id, $product_detail_id);
 
+        if($product->get('id') == 0) {
+            return false;
+        }
+        
         if (is_object($product->stock) AND $product->stock->get('for_sale') < $quantity AND $quantity > 0) {
             return false;
         }
