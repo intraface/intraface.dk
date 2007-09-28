@@ -204,7 +204,7 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $quantity = 1;
         $evaluation_product = 1;
 
-        $basket->change($product_id, $quantity, '', $evaluation_product);
+        $this->assertTrue($basket->change($product_id, $quantity, '', '', $evaluation_product));
 
         $this->assertEquals(count($basket->getItems()), 1);
 
