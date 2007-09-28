@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Intraface_Debtor
+ */
 
 $_setting['debtor.preferred_payment_method'] = 1;
 $_setting['debtor.scan_in_contact'] = 0;

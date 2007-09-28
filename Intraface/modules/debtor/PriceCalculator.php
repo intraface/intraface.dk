@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @package Intraface_Debtor
+ */
 class Intraface_Debtor_PriceCalculator
 {
     protected $items;

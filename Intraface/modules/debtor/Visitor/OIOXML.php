@@ -1,6 +1,6 @@
 <?php
 interface Debtor_Visitor {
-	function visit(Debtor $debtor);
+    function visit(Debtor $debtor);
 }
 
 /**
@@ -8,22 +8,26 @@ interface Debtor_Visitor {
  *
  * Example usage implementing the Visitor pattern
  *
+ * <code>
  * $debtor = Debtor::factory('invoice', 10);
  * $visitor = new Debtor_Report_OIOXML();
  * $debtor->accept($visitor);
  * echo $visitor->display();
+ * </code>
  *
  * This gives a good example on the methods we need in debtor
  * to make everything readable in the code - for instance.
  *
+ * <code>
  * $debtor->getCurrencyCode();
  * $debtor->getContact();
  * $debtor->getContactPerson();
  * $debtor->getPaymentInfo();
  * $debtor->getTotal();
  * $debtor->getTaxTotal();
+ * </code>
  *
- * @package Accounting
+ * @package Intraface_Debtor
  * @author  Lars Olesen <lars@legestue.net>
  * @since   1.0
  * @version 1.0
@@ -32,147 +36,147 @@ interface Debtor_Visitor {
 
 class Debtor_Report_OIOXML implements Debtor_Visitor {
 
-	private $debtor;
+    private $debtor;
 
-	private static function httpHeader() {
-		header('Content-Type: text/xml; charset=iso-8859-1');
-	}
+    private static function httpHeader() {
+        header('Content-Type: text/xml; charset=iso-8859-1');
+    }
 
-	private function start() {
-		$this->output .= '<?xml version="1.0" encoding="iso-8859-1"?>' . "\n";
-		$this->output .= '<Invoice xmlns="http://rep.oio.dk/ubl/xml/schemas/0p71/pie/" xmlns:com="http://rep.oio.dk/ubl/xml/schemas/0p71/common/" xmlns:main="http://rep.oio.dk/ubl/xml/schemas/0p71/maindoc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://rep.oio.dk/ubl/xml/schemas/0p71/pie/ http://rep.oio.dk/ubl/xml/schemas/0p71/pie/pieStrict.xsd">' . "\n";
-	}
+    private function start() {
+        $this->output .= '<?xml version="1.0" encoding="iso-8859-1"?>' . "\n";
+        $this->output .= '<Invoice xmlns="http://rep.oio.dk/ubl/xml/schemas/0p71/pie/" xmlns:com="http://rep.oio.dk/ubl/xml/schemas/0p71/common/" xmlns:main="http://rep.oio.dk/ubl/xml/schemas/0p71/maindoc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://rep.oio.dk/ubl/xml/schemas/0p71/pie/ http://rep.oio.dk/ubl/xml/schemas/0p71/pie/pieStrict.xsd">' . "\n";
+    }
 
-	private function end() {
-		$this->output .= '</Invoice>';
-	}
+    private function end() {
+        $this->output .= '</Invoice>';
+    }
 
-	public function visit(Debtor $debtor) {
-		$this->start();
-		$this->output .= '<com:ID>'.$debtor->get('id').'</com:ID>' . "\n";
-		$this->output .= '<com:IssueDate>'.$debtor->get('date_due').'</com:IssueDate>';
-		$this->output .= '<com:TypeCode>PIE</com:TypeCode>';
-		$this->output .= '<main:InvoiceCurrencyCode>DKK</main:InvoiceCurrencyCode>';
-		$this->output .= '<com:BuyersReferenceID>'.$debtor->contact->get('ean').'</com:BuyersReferenceID>';
+    public function visit(Debtor $debtor) {
+        $this->start();
+        $this->output .= '<com:ID>'.$debtor->get('id').'</com:ID>' . "\n";
+        $this->output .= '<com:IssueDate>'.$debtor->get('date_due').'</com:IssueDate>';
+        $this->output .= '<com:TypeCode>PIE</com:TypeCode>';
+        $this->output .= '<main:InvoiceCurrencyCode>DKK</main:InvoiceCurrencyCode>';
+        $this->output .= '<com:BuyersReferenceID>'.$debtor->contact->get('ean').'</com:BuyersReferenceID>';
 
-		// referenced order
-		$this->output .= '<com:ReferencedOrder>';
-		$this->output .= '	<com:BuyersOrderID></com:BuyersOrderID>';
-		$this->output .= '	<com:SellersOrderID/>';
-		$this->output .= '	<com:IssueDate>'.$debtor->get('this_date').'</com:IssueDate>';
-		$this->output .= '</com:ReferencedOrder>';
+        // referenced order
+        $this->output .= '<com:ReferencedOrder>';
+        $this->output .= '	<com:BuyersOrderID></com:BuyersOrderID>';
+        $this->output .= '	<com:SellersOrderID/>';
+        $this->output .= '	<com:IssueDate>'.$debtor->get('this_date').'</com:IssueDate>';
+        $this->output .= '</com:ReferencedOrder>';
 
-		// buyer
-		$this->output .= '<com:BuyerParty>';
-		$this->output .= '	<com:ID schemeID="CVR">'.$debtor->contact->get('cvr').'</com:ID>';
-		$this->output .= '	<com:AccountCode></com:AccountCode>';
-		$this->output .= '	<com:PartyName>';
-		$this->output .= '		<com:Name>'.$debtor->contact->get('name').'</com:Name>';
-		$this->output .= '	</com:PartyName>';
-		$this->output .= '	<com:Address>';
-		$this->output .= '		<com:ID>Fakturering</com:ID>';
-		$this->output .= '		<com:Street>'.$debtor->contact->get('address').'</com:Street>';
-		$this->output .= '		<com:HouseNumber></com:HouseNumber>';
-		$this->output .= '		<com:CityName>'.$debtor->contact->get('city').'</com:CityName>';
-		$this->output .= '		<com:PostalZone>'.$debtor->contact->get('postcode').'</com:PostalZone>';
-		$this->output .= '		<com:Country>';
-		$this->output .= '			<com:Code>DK</com:Code>';
-		$this->output .= '		</com:Country>';
-		$this->output .= '	</com:Address>';
-		$this->output .= '	<com:BuyerContact>';
-		$this->output .= '		<com:ID>'.$debtor->contact->get('email').'</com:ID>';
-		$this->output .= '	</com:BuyerContact>';
-		$this->output .= '</com:BuyerParty>';
+        // buyer
+        $this->output .= '<com:BuyerParty>';
+        $this->output .= '	<com:ID schemeID="CVR">'.$debtor->contact->get('cvr').'</com:ID>';
+        $this->output .= '	<com:AccountCode></com:AccountCode>';
+        $this->output .= '	<com:PartyName>';
+        $this->output .= '		<com:Name>'.$debtor->contact->get('name').'</com:Name>';
+        $this->output .= '	</com:PartyName>';
+        $this->output .= '	<com:Address>';
+        $this->output .= '		<com:ID>Fakturering</com:ID>';
+        $this->output .= '		<com:Street>'.$debtor->contact->get('address').'</com:Street>';
+        $this->output .= '		<com:HouseNumber></com:HouseNumber>';
+        $this->output .= '		<com:CityName>'.$debtor->contact->get('city').'</com:CityName>';
+        $this->output .= '		<com:PostalZone>'.$debtor->contact->get('postcode').'</com:PostalZone>';
+        $this->output .= '		<com:Country>';
+        $this->output .= '			<com:Code>DK</com:Code>';
+        $this->output .= '		</com:Country>';
+        $this->output .= '	</com:Address>';
+        $this->output .= '	<com:BuyerContact>';
+        $this->output .= '		<com:ID>'.$debtor->contact->get('email').'</com:ID>';
+        $this->output .= '	</com:BuyerContact>';
+        $this->output .= '</com:BuyerParty>';
 
-		// seller
-		$this->output .= '<com:SellerParty>';
-		$this->output .= '	<com:ID schemeID="CVR">'.$debtor->kernel->intranet->address->get('cvr').'</com:ID>';
-		$this->output .= '	<com:PartyName>';
-		$this->output .= '		<com:Name>'.$debtor->kernel->intranet->get('name').'</com:Name>';
-		$this->output .= '	</com:PartyName>';
-		$this->output .= '	<com:Address>';
-		$this->output .= '		<com:ID>Betaling</com:ID>';
-		$this->output .= '		<com:Street>'.$debtor->kernel->intranet->address->get('address').'</com:Street>';
-		$this->output .= '		<com:HouseNumber></com:HouseNumber>';
-		$this->output .= '		<com:CityName>'.$debtor->kernel->intranet->address->get('city').'</com:CityName>';
-		$this->output .= '		<com:PostalZone>'.$debtor->kernel->intranet->address->get('postcode').'</com:PostalZone>';
-		$this->output .= '	</com:Address>';
-		$this->output .= '	<com:PartyTaxScheme>';
-		$this->output .= '		<com:CompanyTaxID schemeID="CVR">'.$debtor->kernel->intranet->address->get('cvr').'</com:CompanyTaxID>';
-		$this->output .= '	</com:PartyTaxScheme>';
-		$this->output .= '</com:SellerParty>';
+        // seller
+        $this->output .= '<com:SellerParty>';
+        $this->output .= '	<com:ID schemeID="CVR">'.$debtor->kernel->intranet->address->get('cvr').'</com:ID>';
+        $this->output .= '	<com:PartyName>';
+        $this->output .= '		<com:Name>'.$debtor->kernel->intranet->get('name').'</com:Name>';
+        $this->output .= '	</com:PartyName>';
+        $this->output .= '	<com:Address>';
+        $this->output .= '		<com:ID>Betaling</com:ID>';
+        $this->output .= '		<com:Street>'.$debtor->kernel->intranet->address->get('address').'</com:Street>';
+        $this->output .= '		<com:HouseNumber></com:HouseNumber>';
+        $this->output .= '		<com:CityName>'.$debtor->kernel->intranet->address->get('city').'</com:CityName>';
+        $this->output .= '		<com:PostalZone>'.$debtor->kernel->intranet->address->get('postcode').'</com:PostalZone>';
+        $this->output .= '	</com:Address>';
+        $this->output .= '	<com:PartyTaxScheme>';
+        $this->output .= '		<com:CompanyTaxID schemeID="CVR">'.$debtor->kernel->intranet->address->get('cvr').'</com:CompanyTaxID>';
+        $this->output .= '	</com:PartyTaxScheme>';
+        $this->output .= '</com:SellerParty>';
 
-		// payment
-		$this->output .= '<com:PaymentMeans>';
-		$this->output .= '	<com:TypeCodeID>null</com:TypeCodeID>';
-		$this->output .= '	<com:PaymentDueDate>'.$this->debtor->get('date_due').'</com:PaymentDueDate>';
-		$this->output .= '	<com:PaymentChannelCode>KONTOOVERFØRSEL</com:PaymentChannelCode>';
-		$this->output .= '	<com:PayeeFinancialAccount>';
-		$this->output .= '		<com:ID>1111111111</com:ID>';
-		$this->output .= '		<com:TypeCode>BANK</com:TypeCode>';
-		$this->output .= '		<com:FiBranch>';
-		$this->output .= '			<com:ID>1111</com:ID>';
-		$this->output .= '			<com:FinancialInstitution>';
-		$this->output .= '				<com:ID>null</com:ID>';
-		$this->output .= '				<com:Name>Sparakassen</com:Name>';
-		$this->output .= '			</com:FinancialInstitution>';
-		$this->output .= '		</com:FiBranch>';
-		$this->output .= '	</com:PayeeFinancialAccount>';
-		$this->output .= '	<com:PaymentAdvice>';
-		$this->output .= '		<com:AccountToAccount>';
-		$this->output .= '			<com:PayerNote>2296</com:PayerNote>';
-		$this->output .= '		</com:AccountToAccount>';
-		$this->output .= '	</com:PaymentAdvice>';
-		$this->output .= '</com:PaymentMeans>';
+        // payment
+        $this->output .= '<com:PaymentMeans>';
+        $this->output .= '	<com:TypeCodeID>null</com:TypeCodeID>';
+        $this->output .= '	<com:PaymentDueDate>'.$this->debtor->get('date_due').'</com:PaymentDueDate>';
+        $this->output .= '	<com:PaymentChannelCode>KONTOOVERFØRSEL</com:PaymentChannelCode>';
+        $this->output .= '	<com:PayeeFinancialAccount>';
+        $this->output .= '		<com:ID>1111111111</com:ID>';
+        $this->output .= '		<com:TypeCode>BANK</com:TypeCode>';
+        $this->output .= '		<com:FiBranch>';
+        $this->output .= '			<com:ID>1111</com:ID>';
+        $this->output .= '			<com:FinancialInstitution>';
+        $this->output .= '				<com:ID>null</com:ID>';
+        $this->output .= '				<com:Name>Sparakassen</com:Name>';
+        $this->output .= '			</com:FinancialInstitution>';
+        $this->output .= '		</com:FiBranch>';
+        $this->output .= '	</com:PayeeFinancialAccount>';
+        $this->output .= '	<com:PaymentAdvice>';
+        $this->output .= '		<com:AccountToAccount>';
+        $this->output .= '			<com:PayerNote>2296</com:PayerNote>';
+        $this->output .= '		</com:AccountToAccount>';
+        $this->output .= '	</com:PaymentAdvice>';
+        $this->output .= '</com:PaymentMeans>';
 
-		// taxes
-		$this->output .= '<com:TaxTotal>';
-		$this->output .= '	<com:TaxTypeCode>VAT</com:TaxTypeCode>';
-		$this->output .= '	<com:TaxAmounts>';
-		$this->output .= '		<com:TaxableAmount currencyID="DKK">'.$debtor->get('total').'</com:TaxableAmount>';
-		$this->output .= '		<com:TaxAmount currencyID="DKK"></com:TaxAmount>';
-		$this->output .= '	</com:TaxAmounts>';
-		$this->output .= '	<com:CategoryTotal>';
-		$this->output .= '		<com:RateCategoryCodeID>VAT</com:RateCategoryCodeID>';
-		$this->output .= '		<com:RatePercentNumeric>25</com:RatePercentNumeric>';
-		$this->output .= '		<com:TaxAmounts>';
-		$this->output .= '			<com:TaxableAmount currencyID="DKK">5300.00</com:TaxableAmount>';
-		$this->output .= '			<com:TaxAmount currencyID="DKK">1325.00</com:TaxAmount>';
-		$this->output .= '		</com:TaxAmounts>';
-		$this->output .= '	</com:CategoryTotal>';
-		$this->output .= '</com:TaxTotal>';
+        // taxes
+        $this->output .= '<com:TaxTotal>';
+        $this->output .= '	<com:TaxTypeCode>VAT</com:TaxTypeCode>';
+        $this->output .= '	<com:TaxAmounts>';
+        $this->output .= '		<com:TaxableAmount currencyID="DKK">'.$debtor->get('total').'</com:TaxableAmount>';
+        $this->output .= '		<com:TaxAmount currencyID="DKK"></com:TaxAmount>';
+        $this->output .= '	</com:TaxAmounts>';
+        $this->output .= '	<com:CategoryTotal>';
+        $this->output .= '		<com:RateCategoryCodeID>VAT</com:RateCategoryCodeID>';
+        $this->output .= '		<com:RatePercentNumeric>25</com:RatePercentNumeric>';
+        $this->output .= '		<com:TaxAmounts>';
+        $this->output .= '			<com:TaxableAmount currencyID="DKK">5300.00</com:TaxableAmount>';
+        $this->output .= '			<com:TaxAmount currencyID="DKK">1325.00</com:TaxAmount>';
+        $this->output .= '		</com:TaxAmounts>';
+        $this->output .= '	</com:CategoryTotal>';
+        $this->output .= '</com:TaxTotal>';
 
-		// totaler
-		$this->output .= '<com:LegalTotals>';
-		$this->output .= '	<com:LineExtensionTotalAmount currencyID="DKK">5300.00</com:LineExtensionTotalAmount>';
-		$this->output .= '	<com:ToBePaidTotalAmount currencyID="DKK">6625</com:ToBePaidTotalAmount>';
-		$this->output .= '</com:LegalTotals>';
+        // totaler
+        $this->output .= '<com:LegalTotals>';
+        $this->output .= '	<com:LineExtensionTotalAmount currencyID="DKK">5300.00</com:LineExtensionTotalAmount>';
+        $this->output .= '	<com:ToBePaidTotalAmount currencyID="DKK">6625</com:ToBePaidTotalAmount>';
+        $this->output .= '</com:LegalTotals>';
 
-		// invoice lines
-		$i = 1;
-		foreach ($debtor->getItems() AS $item) {
-			$this->output .= '<com:InvoiceLine>';
-			$this->output .= '	<com:ID>'.$i.'</com:ID>';
-			$this->output .= '	<com:InvoicedQuantity unitCode="'.$item['unit'].'" unitCodeListAgencyID="n/a">'.$item['quantity'].'</com:InvoicedQuantity>';
-			$this->output .= '	<com:LineExtensionAmount currencyID="DKK">'.$item['amount'].'</com:LineExtensionAmount>';
-			$this->output .= '	<com:Item>';
-			$this->output .= '		<com:ID>'.$item['id'].'</com:ID>';
-			$this->output .= '		<com:Description>'.$item['description'].'</com:Description>';
-			$this->output .= '	</com:Item>';
-			$this->output .= '	<com:BasePrice>';
-			$this->output .= '		<com:PriceAmount currencyID="DKK">'.$item['price'].'</com:PriceAmount>';
-			$this->output .= '	</com:BasePrice>';
-			$this->output .= '</com:InvoiceLine>';
-			$i++;
-		}
+        // invoice lines
+        $i = 1;
+        foreach ($debtor->getItems() AS $item) {
+            $this->output .= '<com:InvoiceLine>';
+            $this->output .= '	<com:ID>'.$i.'</com:ID>';
+            $this->output .= '	<com:InvoicedQuantity unitCode="'.$item['unit'].'" unitCodeListAgencyID="n/a">'.$item['quantity'].'</com:InvoicedQuantity>';
+            $this->output .= '	<com:LineExtensionAmount currencyID="DKK">'.$item['amount'].'</com:LineExtensionAmount>';
+            $this->output .= '	<com:Item>';
+            $this->output .= '		<com:ID>'.$item['id'].'</com:ID>';
+            $this->output .= '		<com:Description>'.$item['description'].'</com:Description>';
+            $this->output .= '	</com:Item>';
+            $this->output .= '	<com:BasePrice>';
+            $this->output .= '		<com:PriceAmount currencyID="DKK">'.$item['price'].'</com:PriceAmount>';
+            $this->output .= '	</com:BasePrice>';
+            $this->output .= '</com:InvoiceLine>';
+            $i++;
+        }
 
-		$this->end();
-	}
+        $this->end();
+    }
 
-	public function display() {
-		$this->httpHeader();
-		return $this->output;
-	}
+    public function display() {
+        $this->httpHeader();
+        return $this->output;
+    }
 }
 
 
