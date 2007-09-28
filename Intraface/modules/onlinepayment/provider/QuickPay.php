@@ -1,8 +1,8 @@
 <?php
 /**
  * Onlinebetalingsklasse som specifik passer til Quickpay
- *
- *	@author		Sune Jensen
+ * @package Intraface_OnlinePayment
+ * @author		Sune Jensen
  * @author		Lars Olesen <lars@legestue.net>
  * @version	1.0
  *

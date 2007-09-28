@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Intraface_OnlinePayment
+ */
+
 // onlinepayment
 $_setting['onlinepayment.provider_key'] = 1;
 $_setting['onlinepayment.quickpay.merchant_id'] = '';
