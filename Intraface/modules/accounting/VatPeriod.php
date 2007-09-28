@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Intraface_Accounting
+ */
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/Error.php';
 require_once 'Intraface/3Party/Database/Db_sql.php';

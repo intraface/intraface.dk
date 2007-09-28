@@ -2,7 +2,8 @@
 /**
  * Account
  *
- * @package Accounting
+ * @package Intraface_Accounting
+ *
  * @author	Lars Olesen
  * @since	1.0
  * @version	1.0
@@ -776,12 +777,12 @@ class Account extends Standard {
 
     /**
      * Calculates the vat amount
-     * 
+     *
      * @link http://eforum.idg.se/viewmsg.asp?EntriesId=831525
      *
      * @param float $amount      Amount
      * @param float $vat_percent Vat percent
-     * 
+     *
      * @return float Vat amount
      */
     function calculateVat($amount, $vat_percent) {

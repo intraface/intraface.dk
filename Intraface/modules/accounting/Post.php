@@ -7,7 +7,7 @@
  * de bogførte poster, så der skal ikke være metoder til at ændre eller
  * slette i bogføringen.
  *
- * @package Accounting
+ * @package Intraface_Accounting
  * @author Lars Olesen
  * @since 1.0
  * @version 1.0

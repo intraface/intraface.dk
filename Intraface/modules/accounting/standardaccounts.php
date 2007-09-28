@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Standard accounts
  *
  * The accounts are similar to the accounts at SummaSummarum.
- *
+ * @package Intraface_Accounting
  * @author Lars Olesen <lars@legestue.net>
  * @version 1.0
  */
