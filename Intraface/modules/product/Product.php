@@ -4,6 +4,7 @@
  *
  * Bruges til at holde styr på varerne.
  *
+ * @package Intraface_Product
  * @author Lars Olesen <lars@legestue.net>
  * @see ProductDetail
  * @see Stock

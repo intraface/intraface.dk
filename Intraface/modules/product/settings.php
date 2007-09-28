@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Intraface_Product
+ */
+
 /*
 Bruges til overførsel af billeder til kundens egen server
 */

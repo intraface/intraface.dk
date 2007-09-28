@@ -2,6 +2,7 @@
 /**
  * Styrer varer
  *
+ * @package Intraface_Product
  * @version 001
  * @author Lars Olesen <lars@legestue.net>
  *
