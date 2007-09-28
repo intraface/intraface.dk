@@ -1,4 +1,9 @@
 <?php
+/**
+ * TODO make this abstract so the extending classes does it properly
+ *
+ * @package Intraface_CMS
+ */
 require_once 'Intraface/tools/Position.php';
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/modules/cms/Parameter.php';

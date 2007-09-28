@@ -47,7 +47,7 @@
  *
  * Se eksempel p� /test/update.php
  *
- * @package CMS
+ * @package Intraface_CMS
  * @author  Lars Olesen <lars@legestue.net>
  * @since   1.0
  * @version 1.0

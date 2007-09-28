@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Intraface_CMS
+ */
 class CMS_FileList extends CMS_Element {
 
     var $select_methods = array('single_file');

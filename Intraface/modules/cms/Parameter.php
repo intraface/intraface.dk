@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Intraface_CMS
+ */
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/functions/functions.php';
 

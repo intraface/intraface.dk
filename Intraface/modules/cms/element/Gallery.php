@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Intraface_CMS
+ */
 require_once 'Intraface/modules/cms/Element.php';
 
 class CMS_Gallery extends CMS_Element {

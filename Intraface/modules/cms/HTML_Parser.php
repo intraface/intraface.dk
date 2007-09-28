@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Intraface_CMS
+ */
 require_once 'IntrafacePublic/CMS/HTML/Parser.php';
 
 class CMS_Admin_HTML_Parser extends IntrafacePublic_CMS_HTML_Parser {

@@ -6,7 +6,7 @@
  *
  * Vi skal have sat encoding-muligheder (kun iso i �jeblikket) og language her.
  *
- * @package CMS
+ * @package Intraface_CMS
  * @author Lars Olesen <lars@legestue.net>
  * @since	1.0
  * @version	1.0

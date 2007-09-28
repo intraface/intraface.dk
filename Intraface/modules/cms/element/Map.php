@@ -3,7 +3,7 @@
  * This element demands that we are not operating in xml mode
  *
  * neccessary javascript http://api.maps.yahoo.com/v2.0/fl/javascript/apiloader.js
- *
+ * @package Intraface_CMS
  */
 
 require_once 'HTTP/Request.php';

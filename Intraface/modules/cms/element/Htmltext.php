@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Intraface_CMS
+ */
 require_once 'Intraface/modules/cms/Element.php';
 require_once 'HTMLPurifier.php';
 require_once 'HTMLPurifier/Config.php';
