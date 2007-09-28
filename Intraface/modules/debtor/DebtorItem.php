@@ -1,23 +1,60 @@
 <?php
-require_once('Intraface/tools/Position.php');
-
 /**
  * Der bør være mulighed for halve antal?
+ *
+ * @package Intraface_Debtor
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
  */
+require_once('Intraface/tools/Position.php');
 
+class DebtorItem extends Standard
+{
+    /**
+     * @var array
+     */
+    public $value;
 
-class DebtorItem extends Standard {
-    var $value;
-    var $id;
-    var $invoice;
-    var $db;
-    var $product;
-    var $product_id;
-    var $error;
+    /**
+     * @var integer
+     */
+    private $id;
 
-    function __construct($debtor, $id = 0) {
+    /**
+     * @var object
+     */
+    private $invoice;
+
+    /**
+     * @var object
+     */
+    private $db;
+
+    /**
+     * @var object
+     */
+    private $product;
+
+    /**
+     * @var integer
+     */
+    private $product_id;
+
+    /**
+     * @var object
+     */
+    public $error;
+
+    /**
+     * Constructor
+     *
+     * @param object  $debtor Debtor object
+     * @param integer $id     If a special item id is needed
+     *
+     * @return void
+     */
+    public function __construct($debtor, $id = 0)
+    {
         if (!is_object($debtor)) {
             trigger_error('Debtor: Item kræver debtor', E_USER_ERROR);
         }
@@ -32,7 +69,13 @@ class DebtorItem extends Standard {
         }
     }
 
-    function load() {
+    /**
+     * Loads data
+     *
+     * @return void
+     */
+    private function load()
+    {
         if($this->id == 0) {
             return;
         }
@@ -65,7 +108,12 @@ class DebtorItem extends Standard {
         }
     }
 
-    function getPrice()
+    /**
+     * Gets price without taxes
+     *
+     * @return float
+     */
+    public function getPrice()
     {
         // TODO how do we handle vat? this should return raw prices
         // and then the tax percent should return the tax to apply
@@ -73,12 +121,22 @@ class DebtorItem extends Standard {
         return $this->product->get('price') * $this->get('quantity');
     }
 
-    function getWeight()
+    /**
+     * Gets weight
+     *
+     * @return float
+     */
+    public function getWeight()
     {
         return $this->product->get('weight') * $this->get('quantity');
     }
 
-    function getTaxPercent()
+    /**
+     * Gets the tax percent on the individual product
+     *
+     * @return float
+     */
+    public function getTaxPercent()
     {
         if ($this->product->get('vat')) {
             return 25;
@@ -88,7 +146,15 @@ class DebtorItem extends Standard {
 
     }
 
-    function save($input) {
+    /**
+     * Saves data
+     *
+     * @param array $input Values to save
+     *
+     * @return integer
+     */
+    public function save($input)
+    {
         if($this->debtor->get("locked") == 1) {
             $this->error->set('Posten er låst er låst og der kan ikke opdateres varer på den');
             return 0;
@@ -145,7 +211,13 @@ class DebtorItem extends Standard {
         return $this->id;
     }
 
-    function delete() {
+    /**
+     * Deletes a product
+     *
+     * @return boolean
+     */
+    public function delete()
+    {
         if($this->debtor->get("locked") == true) {
             $this->error->set('Du kan ikke slette vare til en låst post');
             return false;
@@ -161,7 +233,13 @@ class DebtorItem extends Standard {
         return true;
     }
 
-    function getList() {
+    /**
+     * Get a list with Debtor items
+     *
+     * @return array
+     */
+    public function getList()
+    {
         $db = new DB_sql;
         $db2 = new DB_sql;
 
@@ -217,8 +295,19 @@ class DebtorItem extends Standard {
         return(array_merge($item, $item_no_vat));
     }
 
-    // TODO What is this used for?
-    function getQuantity($product_id, $from_date, $sent = "") {
+    /**
+     * Method to get quantity of each product
+     *
+     * TODO This should not be in this class
+     *
+     * @param integer $product_id Product id
+     * @param string  $from_date  Which date to start the quantity from
+     * @param string  $sent       TODO WHAT IS THIS
+     *
+     * @return integer
+     */
+    public function getQuantity($product_id, $from_date, $sent = "")
+    {
 
         /*
         0=>'created',
@@ -228,7 +317,7 @@ class DebtorItem extends Standard {
         */
 
         if(!in_array($sent, array("", "not_sent"))) {
-            trigger_error("Ugyldig værdi i 3. parameter til debtor->item->getQuantity()", FATAL);
+            trigger_error("Ugyldig værdi i 3. parameter til debtor->item->getQuantity()", E_USER_ERROR);
         }
 
         if($this->debtor->get('type') == "quotation") {
@@ -265,21 +354,37 @@ class DebtorItem extends Standard {
         return intval($db->f("sum_quantity"));
     }
 
-    function moveUp() {
+    /**
+     * Moves debtor item one up
+     *
+     * @return void
+     */
+    public function moveUp()
+    {
         $position = new Position("debtor_item", "intranet_id=".$this->debtor->kernel->intranet->get('id')." AND debtor_id=".$this->debtor->get('id')." AND active = 1", "position", "id");
         $position->moveUp($this->id);
     }
 
-    function moveDown() {
+    /**
+     * Moves debtor item one down
+     *
+     * @return void
+     */
+    public function moveDown()
+    {
         $position = new Position("debtor_item", "intranet_id=".$this->debtor->kernel->intranet->get('id')." AND debtor_id='".$this->debtor->get('id')."' AND active = 1", "position", "id");
         $position->moveDown($this->id);
     }
 
-    function getMaxPosition() {
+    /**
+     * Gets max position for the debtor
+     *
+     * @return void
+     */
+    function getMaxPosition()
+    {
         $position = new Position("debtor_item", "intranet_id=".$this->debtor->kernel->intranet->get('id')." AND debtor_id='".$this->debtor->get('id')."' AND active = 1", "position", "id");
         return $position->maxpos();
     }
-
-
 }
 ?>
