@@ -10,6 +10,7 @@
  *
  * @todo Bør kunne tage højde for en tidsangivelse på produkterne
  *
+ * @package Intraface_Shop
  * @author Lars Olesen <lars@legestue.net>
  *
  * @see Basket
@@ -20,12 +21,35 @@
 
 class Webshop
 {
-    var $kernel;
-    var $basket;
-    var $order;
-    var $contact;
-    var $error;
-    private $session_id;
+    /**
+     * @var object
+     */
+    public $kernel;
+
+    /**
+     * @var object
+     */
+    public $basket;
+
+    /**
+     * @var object
+     */
+    private $order;
+
+    /**
+     * @var object
+     */
+    private $contact;
+
+    /**
+     * @var object
+     */
+    public $error;
+
+    /**
+     * @var private
+     */
+    public $session_id;
 
     /**
      * Construktor

@@ -4,10 +4,9 @@
  *
  * PHP version 5
  *
- * @package Webshop
+ * @package Intraface_Shop
  * @author Lars Olesen <lars@legestue.net>
  */
-
 require_once 'MDB2.php';
 require_once 'Intraface/3Party/Database/Db_sql.php';
 require_once 'Intraface/functions/functions.php';
@@ -15,34 +14,28 @@ require_once 'Intraface/modules/product/Product.php';
 
 class Basket
 {
-
     /**
-     * Webshop
      * @var object
-     * @access public
      */
-    var $webshop;
+    public $webshop;
 
     /**
-     * Session_id
      * Variablen bruges, fordi webshop almindeligvis bruges uden for systemet.
      * For at kunne holde fx indkøbskurven intakt, så skal den altså kunne fastholde
      * session id'et. Det ville den ikke kunne, fordi hver kontakt over xml-rpc jo
      * er en ny forespørgsel og altså en ny session på serveren.
      *
-     * @var varchar
-     * @access public
+     * @var string
      */
-    var $session_id;
+    public $session_id;
 
     /**
-     * Sql_extra
      * Måske unødvendig, da den efter ændringer i klassen altid er konstant. Men fordi
      * det var lettere at bibeholde den, blev det sådan.
-     * @var varchar
-     * @access public
+     *
+     * @var string
      */
-    var $sql_extra; // bruges så vi ikke behøver at tjekke om der skal skelnes på session eller id
+    public $sql_extra; // bruges så vi ikke behøver at tjekke om der skal skelnes på session eller id
 
     /**
      * Constructor
@@ -51,8 +44,10 @@ class Basket
      *
      * @param object $webshop    The webshop object
      * @param string $session_id A session id
+     *
+     * @return void
      */
-    function __construct($webshop, $session_id)
+    public function __construct($webshop, $session_id)
     {
         if (!is_object($webshop) AND strtolower(get_class($webshop)) == 'webshop') {
             trigger_error('Basket kræver objektet Webshop', E_USER_ERROR);
@@ -82,7 +77,7 @@ class Basket
      *
      * @return boolean
      */
-    function add($product_id, $quantity = 1, $text = '', $product_detail_id = 0)
+    public function add($product_id, $quantity = 1, $text = '', $product_detail_id = 0)
     {
         $product_id = intval($product_id);
         $quantity = intval($quantity);
@@ -98,7 +93,7 @@ class Basket
      *
      * @return boelean
      */
-    function remove($product_id, $quantity = 1)
+    public function remove($product_id, $quantity = 1)
     {
         $product_id = intval($product_id);
         $quantity = intval($quantity);
@@ -116,7 +111,7 @@ class Basket
      *
      * @return boolean
      */
-    function change($product_id, $quantity, $text = '', $product_detail_id = 0, $basketevaluation = 0)
+    public function change($product_id, $quantity, $text = '', $product_detail_id = 0, $basketevaluation = 0)
     {
         $db = new DB_Sql;
         $product_id = (int)$product_id;
@@ -128,7 +123,7 @@ class Basket
         if($product->get('id') == 0) {
             return false;
         }
-        
+
         if (is_object($product->stock) AND $product->stock->get('for_sale') < $quantity AND $quantity > 0) {
             return false;
         }
@@ -171,18 +166,17 @@ class Basket
         }
 
     }
-    
-    
-    /*
+
+
+    /**
      * Save order details
-     * 
+     *
      * @param (array)input	array with buyer details
-     * 
+     *
      * @return boolean true or false
      */
-    function saveAddress($input)
+    public function saveAddress($input)
     {
-        
         $sql = "name = \"".$input['name']."\"," .
             "contactperson = \"".$input['contactperson']."\", " .
             "address = \"".$input['address']."\", " .
@@ -192,47 +186,46 @@ class Basket
             "cvr = \"".$input['cvr']."\", ".
             "email =\"".$input['email']."\", ".
             "phone = \"".$input['phone']."\"";
-        
+
         return $this->saveToDb($sql);
-    	
-    	
-    	
     }
-    
+
     /**
      * Save customer coupon
-     * 
-     * @param (string)$customer_coupon	customer coupon
-     * 
+     *
+     * @param string $customer_coupon customer coupon
+     *
      * @return boolean true or false
      */
-    function saveCustomerCoupon($customer_coupon)
+    public function saveCustomerCoupon($customer_coupon)
     {
-    	$sql = "customer_coupon = \"".$customer_coupon."\"";
-        
+        $sql = "customer_coupon = \"".$customer_coupon."\"";
+
         return $this->saveToDb($sql);
-    	
     }
- 
+
     /**
      * Save customer comment
-     * 
-     * @param (string) $customer_comment comment
-     * 
+     *
+     * @param string $customer_comment comment
+     *
      * @return boolean true or false
      */
-    function saveCustomerComment($customer_comment)
+    public function saveCustomerComment($customer_comment)
     {
-    	$sql = "customer_comment = \"".$customer_comment."\"";
-        
+        $sql = "customer_comment = \"".$customer_comment."\"";
+
         return $this->saveToDb($sql);
-    	
-    } 
-    
-    function saveToDb($sql) {
-        
+
+    }
+
+    /**
+     * @param string $sql Extra sql string to add
+     */
+    public function saveToDb($sql) {
+
         $db = new DB_Sql;
-    	$db->query("SELECT id FROM basket_details WHERE " . $this->sql_extra. "
+        $db->query("SELECT id FROM basket_details WHERE " . $this->sql_extra. "
                 AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
         if ($db->nextRecord()) {
             $db->query("UPDATE basket_details SET ".$sql.",
@@ -245,23 +238,22 @@ class Basket
             $db->query("INSERT INTO basket_details
                     SET ".$sql.",
                         date_changed = NOW(),
-                       	date_created = NOW(),
+                           date_created = NOW(),
                         intranet_id = " . $this->webshop->kernel->intranet->get('id') . ",
                         " . $this->sql_extra);
-            
+
             return true;
         }
     }
-    
+
     /**
      * Return buyer details
-     * 
+     *
      * @return array of buyer details.
      */
-    
-    function getAddress() 
+    public function getAddress()
     {
-		$db = new DB_Sql;
+        $db = new DB_Sql;
         $db->query("SELECT *
             FROM basket_details
             WHERE " . $this->sql_extra . "
@@ -269,27 +261,26 @@ class Basket
         if (!$db->nextRecord()) {
             return array();
         }
-        
+
         return array('name' => $db->f('name'),
-        	'contactperson' => $db->f('contactperson'),
-        	'address' => $db->f('address'),
-        	'postcode' => $db->f('postcode'),
-        	'city' => $db->f('city'),
-        	'country' => $db->f('country'),
-        	'cvr' => $db->f('cvr'),
-        	'email' => $db->f('email'),
-        	'phone' => $db->f('phone'));
-	}
-	
-	/**
+            'contactperson' => $db->f('contactperson'),
+            'address' => $db->f('address'),
+            'postcode' => $db->f('postcode'),
+            'city' => $db->f('city'),
+            'country' => $db->f('country'),
+            'cvr' => $db->f('cvr'),
+            'email' => $db->f('email'),
+            'phone' => $db->f('phone'));
+    }
+
+    /**
      * Return customer coupon
-     * 
+     *
      * @return array with customer coupon
      */
-    
-    function getCustomerCoupon() 
+    public function getCustomerCoupon()
     {
-		$db = new DB_Sql;
+        $db = new DB_Sql;
         $db->query("SELECT customer_coupon
             FROM basket_details
             WHERE " . $this->sql_extra . "
@@ -297,19 +288,18 @@ class Basket
         if (!$db->nextRecord()) {
             return array();
         }
-        
-        return array('customer_coupon' => $db->f('customer_coupon'));
-	}
 
-	/**
+        return array('customer_coupon' => $db->f('customer_coupon'));
+    }
+
+    /**
      * Return customer coupon
-     * 
+     *
      * @return array with customer coupon
      */
-    
-    function getCustomerComment() 
+    public function getCustomerComment()
     {
-		$db = new DB_Sql;
+        $db = new DB_Sql;
         $db->query("SELECT customer_comment
             FROM basket_details
             WHERE " . $this->sql_extra . "
@@ -317,9 +307,9 @@ class Basket
         if (!$db->nextRecord()) {
             return array();
         }
-        
+
         return array('customer_comment' => $db->f('customer_comment'));
-	}    
+    }
 
     /**
      * Counts the number of a certain product in the basket
@@ -328,7 +318,7 @@ class Basket
      *
      * @return integer
      */
-    function getItemCount($product_id)
+    public function getItemCount($product_id)
     {
         $product_id = (int)$product_id;
 
@@ -352,7 +342,7 @@ class Basket
      *
      * @return float
      */
-    function getTotalPrice($type = 'including_vat')
+    public function getTotalPrice($type = 'including_vat')
     {
         $price = 0;
 
@@ -367,7 +357,7 @@ class Basket
             else {
                 $price += $product->get('price_incl_vat') * $db->f("quantity");
             }
-            
+
 
         }
 
@@ -380,7 +370,7 @@ class Basket
      *
      * @return float
      */
-    function getTotalWeight()
+    public function getTotalWeight()
     {
         $db = new DB_Sql;
 
@@ -415,7 +405,7 @@ class Basket
      *
      * @return array
      */
-    function getItems()
+    public function getItems()
     {
         $items = array();
         $db = new DB_Sql;
@@ -471,7 +461,7 @@ class Basket
      *
      * @return boolean
      */
-    function removeEvaluationProducts()
+    public function removeEvaluationProducts()
     {
         $db = new DB_Sql;
         $db->query("DELETE FROM basket " .
@@ -487,12 +477,12 @@ class Basket
      *
      * @return boolean
      */
-    function reset()
+    public function reset()
     {
         $db = new DB_Sql;
         $db->query("UPDATE basket SET session_id = '' WHERE " . $this->sql_extra . " AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
         $db->query("UPDATE basket_details SET session_id = '' WHERE " . $this->sql_extra . " AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
-      
+
         return true;
     }
 }
