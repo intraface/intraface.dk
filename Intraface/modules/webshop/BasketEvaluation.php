@@ -17,7 +17,7 @@
  * PHP version 5
  *
  * @category Application
- * @package  Webshop
+ * @package  Intraface_Shop
  * @author   Sune Jensen <sj@sunet.dk>
  * @version @package-version@
  */
@@ -45,7 +45,7 @@ class BasketEvaluation extends Standard
      *
      * @return void
      */
-    function __construct($kernel, $id = 0)
+    public function __construct($kernel, $id = 0)
     {
         if (!is_object($kernel)) {
             trigger_error("First parameter to BasketEvaluation should be kernel", E_USER_ERROR);
@@ -96,12 +96,12 @@ class BasketEvaluation extends Standard
      *
      * @return boolean
      */
-    function load()
+    private function load()
     {
 
         $result = $this->db->query("SELECT * FROM webshop_basket_evaluation WHERE active = 1 AND intranet_id = ".$this->db->quote($this->kernel->intranet->get('id'), 'integer')." AND id = ".$this->db->quote($this->id, 'integer'));
 
-        if (PEAR::isError($this->id)) {
+        if (PEAR::isError($result)) {
             trigger_error($result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
         }
 
@@ -129,7 +129,7 @@ class BasketEvaluation extends Standard
      *
      * @return boolean
      */
-    function save($input)
+    public function save($input)
     {
 
         // $input = safeToDb($input);
@@ -139,7 +139,7 @@ class BasketEvaluation extends Standard
         $validator->isNumeric($input['evaluate_target_key'], 'Evaluation target is not valid');
         $validator->isNumeric($input['evaluate_method_key'], 'Evaluation method is not valid');
         settype($input['evaluate_value'], 'string');
-        $validator->isString($input['evaluate_value'], 'Evaluation value is not valid', '', 'allow_empty');        
+        $validator->isString($input['evaluate_value'], 'Evaluation value is not valid', '', 'allow_empty');
         $validator->isNumeric($input['go_to_index_after'], 'Go to index after is not a valid number');
         $validator->isNumeric($input['action_action_key'], 'Action is not valid');
         settype($input['action_value'], 'string');
@@ -163,7 +163,7 @@ class BasketEvaluation extends Standard
                  "action_quantity = ".$this->db->quote($input['action_quantity'], 'integer').", " .
                  "action_unit_key = ".$this->db->quote($input['action_unit_key'], 'integer');
 
-        // 
+        //
         if ($this->id != 0) {
             $result = $this->db->exec("UPDATE webshop_basket_evaluation SET ".$sql." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
 
@@ -194,7 +194,7 @@ class BasketEvaluation extends Standard
      *
      * @return boolean
      */
-    function delete()
+    public function delete()
     {
         $result = $this->db->exec("UPDATE webshop_basket_evaluation SET active = 0 WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
         if (PEAR::isError($result)) {
@@ -209,7 +209,7 @@ class BasketEvaluation extends Standard
      *
      * @return boolean
      */
-    function getList()
+    public function getList()
     {
         $result = $this->db->query("SELECT * FROM webshop_basket_evaluation WHERE active = 1 AND intranet_id = ".$this->kernel->intranet->get('id').' ORDER BY running_index');
 
@@ -241,7 +241,7 @@ class BasketEvaluation extends Standard
      *
      * @return boolean
      */
-    function run($basket, $customer = array())
+    public function run($basket, $customer = array())
     {
 
         $evaluations = $this->getList();
