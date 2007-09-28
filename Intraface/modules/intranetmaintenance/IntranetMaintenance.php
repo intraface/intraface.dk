@@ -7,7 +7,7 @@
  *
  * It incorporates the MDB2-database.
  *
- * @package IntranetAdministration
+ * @package Intraface_IntranetMaintenance
  * @author	Sune Jensen <sj@sunet.dk>
  * @author	Lars Olesen <lars@legestue.net>
  *
@@ -85,13 +85,13 @@ class IntranetMaintenance extends Intranet
                 intranet_id = ".intval($this->id).",
                 user_id = 0,
                 module_id = ".intval($row['id']));
-        } 
+        }
         else {
             trigger_error("intranet maintenance says unknown module_id in IntranetMaintenance->setModuleAccess", E_USER_ERROR);
             exit;
         }
     }
-    
+
     public function removeModuleAccess($module_id)
     {
         if ($this->id == 0) {
@@ -110,7 +110,7 @@ class IntranetMaintenance extends Intranet
 
         }
         else {
-            
+
         }
 
         $res = $this->db->query("SELECT id FROM module WHERE id = ".intval($module_id));
@@ -118,7 +118,7 @@ class IntranetMaintenance extends Intranet
             $this->db->exec("DELETE FROM permission WHERE
                 intranet_id = ".intval($this->id).",
                 module_id = ".intval($row['id']));
-        } 
+        }
         else {
             trigger_error("intranet maintenance says unknown module_id in IntranetMaintenance->removeModuleAccess", E_USER_ERROR);
         }
