@@ -5,7 +5,7 @@
  * Must have an update method
  *
  * @category Intraface
- * @package  Newsletter
+ * @package  Intraface_Newsletter
  * @author   Lars Olesen <lars@legestue.net>
  * @version  @package-version@
  */

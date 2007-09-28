@@ -5,7 +5,7 @@
  * This class handles the subscribers to the the different lists.
  *
  * @category  Intraface
- * @package   Newsletter
+ * @package   Intraface_Newsletter
  * @author    Lars Olesen <lars@legestue.net>
  * @version   @package-version@
  */
@@ -248,7 +248,7 @@ class NewsletterSubscriber extends Standard {
                 $contact = new Contact($this->list->kernel, $this->get('contact_id'));
             }
             // because of the NewsletterSubscriber::factory($, 'email') we should be sure there actually is a valid contact. But maybe we should do a check anyway.
-            
+
             /*
             if (!$contact->get('name')) {
                 $save_array['name'] = $input['name'];
@@ -388,7 +388,7 @@ class NewsletterSubscriber extends Standard {
 
         $db->query("UPDATE newsletter_subscriber SET optin = 1, ip_optin = '".$ip."', date_optin = NOW() WHERE code = '" . $code . "' AND list_id = " . $this->list->get('id')." AND active = 1");
 
-        // makes sure that the submitted ip is also set - not really a port of this method. 
+        // makes sure that the submitted ip is also set - not really a port of this method.
         $db->query("SELECT id, ip_submitted FROM newsletter_subscriber WHERE code = '".$code."' AND list_id = " . $this->list->get('id'));
         if ($db->nextRecord()) {
             if (!$db->f('ip_submitted')) {
@@ -403,7 +403,7 @@ class NewsletterSubscriber extends Standard {
      */
     function getSubscriberCount()
     {
-        
+
         // There must definitly be an error here. Shouldn't the tabel be newsletter_subscriber, and active = 1 is needed? /Sune(30-05-2007)
         $db = new DB_Sql("SELECT * FROM newsletter WHERE list_id=".$this->list->get('id') . " AND intranet_id = " . $this->list->kernel->intranet->get('id') . " AND optin = 1");
         return $db->numRows();

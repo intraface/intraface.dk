@@ -2,7 +2,7 @@
 /**
  * Handles the actual newsletter
  *
- * @package Newsletter
+ * @package Intraface_Newsletter
  * @author  Lars Olesen <lars@legestue.net>
  * @version @package-version@
  * @see     NewsletterList
@@ -367,12 +367,12 @@ class Newsletter extends Standard
             $i++;
             $j++;
         }
-        
+
         // If the number of contacts can be divided evenly into 40 there will be no more params here.
         if(count($params) > 0) {
            $result = $db->exec($sql . implode($params, ','));
         }
-        
+
 
         if (PEAR::isError($result)) {
             $error[] = $result->getMessage() . $result->getUserInfo();
