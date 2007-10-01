@@ -12,7 +12,7 @@ class Invoice extends Debtor {
     var $payment;
 
     function __construct(& $kernel, $id = 0) {
-        Debtor::Debtor($kernel, 'invoice', $id);
+        Debtor::__construct($kernel, 'invoice', $id);
     }
 
     function setStatus($status) {
