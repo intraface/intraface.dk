@@ -172,7 +172,7 @@ $post_install_script->addParamGroup('setup',
           $post_install_script->getParam('error_handle_error', 'Error handle error ', 'integer', E_ALL),
           $post_install_script->getParam('error_level_continue_script', 'Error level continue script', 'integer', 10),
           $post_install_script->getParam('path_root', 'Root path', 'string', '/home/intraface/'),
-          $post_install_script->getParam('path_upload', 'Upload path', 'string', '/home/intraface/')
+          $post_install_script->getParam('path_upload', 'Upload path', 'string', '/home/intraface/upload')
 
     ),
     '');
