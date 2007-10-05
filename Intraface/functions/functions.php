@@ -125,4 +125,21 @@ function safeToHtml($data) {
     return htmlspecialchars($data);
 }
 
+/*
+ * Function to convert filesize to readable sizes.
+ * from: http://us3.php.net/filesize
+ */
+function filesize_readable ($size, $retstring = null) {
+        // adapted from code at http://aidanlister.com/repos/v/function.size_readable.php
+        $sizes = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        if ($retstring === null) { $retstring = '%01.2f %s'; }
+        $lastsizestring = end($sizes);
+        foreach ($sizes as $sizestring) {
+                if ($size < 1024) { break; }
+                if ($sizestring != $lastsizestring) { $size /= 1024; }
+        }
+        if ($sizestring == $sizes[0]) { $retstring = '%01d %s'; } // Bytes aren't normally fractional
+        return sprintf($retstring, $size, $sizestring);
+}
+
 ?>
