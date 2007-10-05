@@ -16,13 +16,19 @@ CREATE TABLE `accounting_account` (
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
   `created_from_id` int(11) NOT NULL default '0',
-  `primosaldo_debet` float(11,2) NOT NULL default '0.00',
-  `primosaldo_credit` float(11,2) NOT NULL default '0.00',
+  `primosaldo_debet` double(11,2) NOT NULL default '0.00',
+  `primosaldo_credit` double(11,2) NOT NULL default '0.00',
   PRIMARY KEY  (`id`),
   KEY `kontonummer` (`number`),
-  KEY `intranet_id` (`intranet_id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `user_id` (`user_id`),
+  KEY `intranet_id` (`intranet_id`,`year_id`,`active`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounting_post`
+--
 
 CREATE TABLE `accounting_post` (
   `id` int(11) NOT NULL auto_increment,
@@ -40,8 +46,15 @@ CREATE TABLE `accounting_post` (
   KEY `intranet_id` (`intranet_id`),
   KEY `user_id` (`user_id`),
   KEY `year_id` (`year_id`),
-  KEY `account_id` (`account_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `account_id` (`account_id`),
+  KEY `stated` (`stated`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounting_vat_period`
+--
 
 CREATE TABLE `accounting_vat_period` (
   `id` int(11) NOT NULL auto_increment,
@@ -57,7 +70,13 @@ CREATE TABLE `accounting_vat_period` (
   `voucher_id` int(11) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounting_voucher`
+--
 
 CREATE TABLE `accounting_voucher` (
   `id` int(11) NOT NULL auto_increment,
@@ -73,9 +92,14 @@ CREATE TABLE `accounting_voucher` (
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`),
-  KEY `year_id` (`year_id`),
-  KEY `number` (`number`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `intranet_id` (`intranet_id`,`year_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounting_voucher_file`
+--
 
 CREATE TABLE `accounting_voucher_file` (
   `id` int(11) NOT NULL auto_increment,
@@ -88,7 +112,13 @@ CREATE TABLE `accounting_voucher_file` (
   `description` char(255) NOT NULL default '',
   `active` int(1) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounting_year`
+--
 
 CREATE TABLE `accounting_year` (
   `id` int(11) NOT NULL auto_increment,
@@ -108,7 +138,13 @@ CREATE TABLE `accounting_year` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounting_year_end`
+--
 
 CREATE TABLE `accounting_year_end` (
   `id` int(11) NOT NULL auto_increment,
@@ -121,7 +157,13 @@ CREATE TABLE `accounting_year_end` (
   `result_account_reset_voucher_id` int(11) NOT NULL default '0',
   `_old_type_key` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounting_year_end_action`
+--
 
 CREATE TABLE `accounting_year_end_action` (
   `id` int(11) NOT NULL auto_increment,
@@ -134,7 +176,13 @@ CREATE TABLE `accounting_year_end_action` (
   `voucher_id` int(11) NOT NULL default '0',
   `type_key` tinyint(2) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounting_year_end_statement`
+--
 
 CREATE TABLE `accounting_year_end_statement` (
   `id` int(11) NOT NULL auto_increment,
@@ -144,7 +192,13 @@ CREATE TABLE `accounting_year_end_statement` (
   `amount` float(11,2) NOT NULL default '0.00',
   `type_key` tinyint(2) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `address`
+--
 
 CREATE TABLE `address` (
   `id` int(11) NOT NULL auto_increment,
@@ -167,26 +221,67 @@ CREATE TABLE `address` (
   `ean` varchar(255) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`),
-  KEY `type` (`type`),
-  KEY `belong_to_id` (`belong_to_id`),
   KEY `phone` (`phone`),
   KEY `name` (`name`),
-  KEY `email` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `email` (`email`),
+  KEY `belong_to_id` (`belong_to_id`),
+  KEY `type` (`type`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `basket`
+--
 
 CREATE TABLE `basket` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `order_id` int(11) NOT NULL default '0',
-  `session_id` char(255) NOT NULL default '',
+  `session_id` varchar(255) NOT NULL default '',
   `product_id` int(11) NOT NULL default '0',
   `quantity` int(11) NOT NULL default '0',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
+  `basketevaluation_product` int(11) NOT NULL default '0',
+  `text` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `date_changed` (`date_changed`),
   KEY `intranet_id` (`intranet_id`,`product_id`),
   KEY `session_id` (`session_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `basket_details`
+--
+
+CREATE TABLE `basket_details` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `order_id` int(11) NOT NULL default '0',
+  `session_id` varchar(255) NOT NULL default '',
+  `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
+  `name` varchar(255) NOT NULL default '',
+  `contactperson` varchar(255) NOT NULL default '',
+  `address` text NOT NULL,
+  `postcode` varchar(255) NOT NULL default '',
+  `city` varchar(255) NOT NULL default '',
+  `country` varchar(255) NOT NULL default '',
+  `cvr` varchar(255) NOT NULL default '',
+  `email` varchar(255) NOT NULL default '',
+  `phone` varchar(255) NOT NULL default '',
+  `customer_comment` text NOT NULL,
+  `customer_coupon` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cms_element`
+--
 
 CREATE TABLE `cms_element` (
   `id` int(11) NOT NULL auto_increment,
@@ -202,7 +297,13 @@ CREATE TABLE `cms_element` (
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`section_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=984 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cms_page`
+--
 
 CREATE TABLE `cms_page` (
   `id` int(11) NOT NULL auto_increment,
@@ -232,7 +333,13 @@ CREATE TABLE `cms_page` (
   PRIMARY KEY  (`id`),
   KEY `child_of_id` (`child_of_id`),
   KEY `site_id` (`site_id`,`intranet_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=845 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cms_parameter`
+--
 
 CREATE TABLE `cms_parameter` (
   `id` int(11) NOT NULL auto_increment,
@@ -243,7 +350,13 @@ CREATE TABLE `cms_parameter` (
   `type_key` int(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`belong_to_id`,`type_key`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=4030 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cms_section`
+--
 
 CREATE TABLE `cms_section` (
   `id` int(11) NOT NULL auto_increment,
@@ -256,7 +369,13 @@ CREATE TABLE `cms_section` (
   `type_key` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`page_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=2322 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cms_site`
+--
 
 CREATE TABLE `cms_site` (
   `id` int(11) NOT NULL auto_increment,
@@ -269,7 +388,13 @@ CREATE TABLE `cms_site` (
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=24 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cms_template`
+--
 
 CREATE TABLE `cms_template` (
   `id` int(11) NOT NULL auto_increment,
@@ -283,7 +408,13 @@ CREATE TABLE `cms_template` (
   `position` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`site_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=66 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cms_template_section`
+--
 
 CREATE TABLE `cms_template_section` (
   `id` int(11) NOT NULL auto_increment,
@@ -296,12 +427,18 @@ CREATE TABLE `cms_template_section` (
   `name` varchar(255) NOT NULL default '',
   `type_key` int(11) NOT NULL default '0',
   `position` int(11) NOT NULL default '0',
-  `locked` tinyint(4) NOT NULL default '0',
   `active` tinyint(4) NOT NULL default '1',
+  `locked` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`template_id`,`site_id`),
   KEY `position` (`position`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=93 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comment`
+--
 
 CREATE TABLE `comment` (
   `id` int(11) NOT NULL auto_increment,
@@ -322,7 +459,13 @@ CREATE TABLE `comment` (
   KEY `intranet_id` (`intranet_id`),
   KEY `belong_to_id` (`belong_to_id`),
   KEY `date_created` (`date_created`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contact`
+--
 
 CREATE TABLE `contact` (
   `id` int(11) unsigned NOT NULL auto_increment,
@@ -339,7 +482,13 @@ CREATE TABLE `contact` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `number` (`number`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contact_message`
+--
 
 CREATE TABLE `contact_message` (
   `id` int(11) NOT NULL auto_increment,
@@ -351,7 +500,13 @@ CREATE TABLE `contact_message` (
   `important` tinyint(1) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contact_person`
+--
 
 CREATE TABLE `contact_person` (
   `id` int(11) NOT NULL auto_increment,
@@ -364,7 +519,36 @@ CREATE TABLE `contact_person` (
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contact_reminder_single`
+--
+
+CREATE TABLE `contact_reminder_single` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `contact_id` int(11) NOT NULL default '0',
+  `created_by_user_id` int(11) NOT NULL default '0',
+  `reminder_date` datetime NOT NULL default '0000-00-00 00:00:00',
+  `status_key` int(11) NOT NULL default '0',
+  `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date_viewed` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date_cancelled` datetime NOT NULL default '0000-00-00 00:00:00',
+  `subject` varchar(255) NOT NULL default '',
+  `description` text NOT NULL,
+  `active` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `core_translation_i18n`
+--
 
 CREATE TABLE `core_translation_i18n` (
   `page_id` varchar(50) default NULL,
@@ -376,6 +560,12 @@ CREATE TABLE `core_translation_i18n` (
   KEY `i18n_id_index` (`id`(255))
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `core_translation_langs`
+--
+
 CREATE TABLE `core_translation_langs` (
   `id` varchar(16) default NULL,
   `name` varchar(200) default NULL,
@@ -384,6 +574,12 @@ CREATE TABLE `core_translation_langs` (
   `encoding` varchar(16) default NULL,
   UNIQUE KEY `langs_id_index` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dbquery_result`
+--
 
 CREATE TABLE `dbquery_result` (
   `id` int(11) NOT NULL auto_increment,
@@ -402,7 +598,13 @@ CREATE TABLE `dbquery_result` (
   `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`user_id`,`weblogin_session_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `debtor`
+--
 
 CREATE TABLE `debtor` (
   `id` int(11) NOT NULL auto_increment,
@@ -427,7 +629,6 @@ CREATE TABLE `debtor` (
   `contact_person_id` int(11) NOT NULL default '0',
   `_old_attention_to` varchar(255) NOT NULL default '',
   `description` varchar(255) NOT NULL default '',
-  `message` text NOT NULL default '',
   `status` int(11) NOT NULL default '0',
   `_old_status` int(11) NOT NULL default '0',
   `_old_status_date` date NOT NULL default '0000-00-00',
@@ -443,6 +644,9 @@ CREATE TABLE `debtor` (
   `_old_payed_date` date NOT NULL default '0000-00-00',
   `_old_is_sent_date` date NOT NULL default '0000-00-00',
   `active` int(1) NOT NULL default '1',
+  `comment` text NOT NULL,
+  `message` text NOT NULL,
+  `internal_note` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `type` (`type`),
   KEY `status` (`status`),
@@ -451,7 +655,13 @@ CREATE TABLE `debtor` (
   KEY `contact_address_id` (`contact_address_id`),
   KEY `where_from_id` (`where_from_id`),
   KEY `number` (`number`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `debtor_item`
+--
 
 CREATE TABLE `debtor_item` (
   `id` int(11) NOT NULL auto_increment,
@@ -468,7 +678,13 @@ CREATE TABLE `debtor_item` (
   KEY `debtor_id` (`debtor_id`),
   KEY `product_id` (`product_id`),
   KEY `product_detail_id` (`product_detail_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `email`
+--
 
 CREATE TABLE `email` (
   `id` int(11) NOT NULL auto_increment,
@@ -492,7 +708,13 @@ CREATE TABLE `email` (
   KEY `intranet_id` (`intranet_id`,`contact_id`),
   KEY `date_deadline` (`date_deadline`),
   KEY `date_sent` (`date_sent`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `email_attachment`
+--
 
 CREATE TABLE `email_attachment` (
   `id` int(11) NOT NULL auto_increment,
@@ -502,7 +724,33 @@ CREATE TABLE `email_attachment` (
   `filename` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `email_id` (`email_id`,`intranet_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `filehandler_append_file`
+--
+
+CREATE TABLE `filehandler_append_file` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
+  `belong_to_key` int(11) NOT NULL default '0',
+  `belong_to_id` int(11) NOT NULL default '0',
+  `file_handler_id` int(11) NOT NULL default '0',
+  `description` varchar(255) NOT NULL default '',
+  `active` int(1) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
+  KEY `intranet_id` (`intranet_id`,`belong_to_id`,`file_handler_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `file_handler`
+--
 
 CREATE TABLE `file_handler` (
   `id` int(11) NOT NULL auto_increment,
@@ -523,7 +771,13 @@ CREATE TABLE `file_handler` (
   `temporary` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`access_key`,`active`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `file_handler_instance`
+--
 
 CREATE TABLE `file_handler_instance` (
   `id` int(11) NOT NULL auto_increment,
@@ -539,21 +793,26 @@ CREATE TABLE `file_handler_instance` (
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`file_handler_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE `filehandler_append_file` (
-  `id` int(11) NOT NULL auto_increment,
-  `intranet_id` int(11) NOT NULL default '0',
-  `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
-  `belong_to_key` int(11) NOT NULL default '0',
-  `belong_to_id` int(11) NOT NULL default '0',
-  `file_handler_id` int(11) NOT NULL default '0',
-  `description` varchar(255) NOT NULL default '',
-  `active` int(1) NOT NULL default '1',
-  PRIMARY KEY  (`id`),
-  KEY `intranet_id` (`intranet_id`,`belong_to_id`,`file_handler_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `flickr_cache`
+--
+
+CREATE TABLE `flickr_cache` (
+  `request` varchar(35) NOT NULL default '',
+  `response` mediumtext NOT NULL,
+  `expiration` datetime NOT NULL default '0000-00-00 00:00:00',
+  KEY `request` (`request`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `intranet`
+--
 
 CREATE TABLE `intranet` (
   `id` int(11) NOT NULL auto_increment,
@@ -574,7 +833,13 @@ CREATE TABLE `intranet` (
   PRIMARY KEY  (`id`),
   KEY `private_key` (`private_key`),
   KEY `public_key` (`public_key`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoice_payment`
+--
 
 CREATE TABLE `invoice_payment` (
   `id` int(11) NOT NULL auto_increment,
@@ -590,7 +855,13 @@ CREATE TABLE `invoice_payment` (
   KEY `type` (`type`),
   KEY `payment_for_id` (`payment_for_id`),
   KEY `payment_for` (`payment_for`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoice_reminder`
+--
 
 CREATE TABLE `invoice_reminder` (
   `id` int(11) NOT NULL auto_increment,
@@ -619,7 +890,13 @@ CREATE TABLE `invoice_reminder` (
   `send_as` enum('email','pdf') NOT NULL default 'pdf',
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoice_reminder_item`
+--
 
 CREATE TABLE `invoice_reminder_item` (
   `id` int(11) NOT NULL auto_increment,
@@ -627,7 +904,13 @@ CREATE TABLE `invoice_reminder_item` (
   `invoice_reminder_id` int(11) NOT NULL default '0',
   `invoice_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoice_reminder_unpaid_reminder`
+--
 
 CREATE TABLE `invoice_reminder_unpaid_reminder` (
   `id` int(11) NOT NULL auto_increment,
@@ -635,7 +918,30 @@ CREATE TABLE `invoice_reminder_unpaid_reminder` (
   `invoice_reminder_id` int(11) NOT NULL default '0',
   `unpaid_invoice_reminder_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kernel_log`
+--
+
+CREATE TABLE `kernel_log` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `user_id` int(11) NOT NULL default '0',
+  `primary_module_id` int(11) NOT NULL default '0',
+  `type` int(11) NOT NULL default '0',
+  `page_url` varchar(255) NOT NULL default '',
+  `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `keyword`
+--
 
 CREATE TABLE `keyword` (
   `id` int(11) NOT NULL auto_increment,
@@ -644,8 +950,15 @@ CREATE TABLE `keyword` (
   `type` varchar(255) NOT NULL default '',
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
-  KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `intranet_id` (`intranet_id`,`type`,`active`),
+  KEY `keyword` (`keyword`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `keyword_x_object`
+--
 
 CREATE TABLE `keyword_x_object` (
   `id` int(11) NOT NULL auto_increment,
@@ -656,7 +969,13 @@ CREATE TABLE `keyword_x_object` (
   KEY `intranet_id` (`intranet_id`),
   KEY `belong_to` (`belong_to`),
   KEY `keyword_id` (`keyword_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lock_post`
+--
 
 CREATE TABLE `lock_post` (
   `id` int(11) NOT NULL auto_increment,
@@ -666,7 +985,39 @@ CREATE TABLE `lock_post` (
   `table_name` varchar(255) NOT NULL default '',
   `post_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log_id_seq`
+--
+
+CREATE TABLE `log_id_seq` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log_table`
+--
+
+CREATE TABLE `log_table` (
+  `id` int(11) NOT NULL default '0',
+  `logtime` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `ident` varchar(16) NOT NULL default '',
+  `priority` int(11) NOT NULL default '0',
+  `message` varchar(200) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `module`
+--
 
 CREATE TABLE `module` (
   `id` int(11) NOT NULL auto_increment,
@@ -675,14 +1026,20 @@ CREATE TABLE `module` (
   `show_menu` int(11) NOT NULL default '0',
   `active` tinyint(1) unsigned NOT NULL default '0',
   `position` int(11) NOT NULL default '0',
-  `frontpage_index` int(11) NOT NULL default '0',
   `menu_index` int(11) NOT NULL default '0',
+  `frontpage_index` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `name` (`name`),
   KEY `position` (`position`),
   KEY `menu_label` (`menu_label`),
   KEY `active` (`active`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `module_sub_access`
+--
 
 CREATE TABLE `module_sub_access` (
   `id` int(11) NOT NULL auto_increment,
@@ -693,7 +1050,13 @@ CREATE TABLE `module_sub_access` (
   PRIMARY KEY  (`id`),
   KEY `description` (`description`),
   KEY `module_id` (`module_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `newsletter_archieve`
+--
 
 CREATE TABLE `newsletter_archieve` (
   `id` int(11) NOT NULL auto_increment,
@@ -709,7 +1072,13 @@ CREATE TABLE `newsletter_archieve` (
   `user_id` int(11) NOT NULL default '0',
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `newsletter_list`
+--
 
 CREATE TABLE `newsletter_list` (
   `id` int(11) NOT NULL auto_increment,
@@ -729,7 +1098,13 @@ CREATE TABLE `newsletter_list` (
   `privacy_policy` varchar(255) NOT NULL default '',
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `newsletter_subscriber`
+--
 
 CREATE TABLE `newsletter_subscriber` (
   `id` int(11) NOT NULL auto_increment,
@@ -748,7 +1123,13 @@ CREATE TABLE `newsletter_subscriber` (
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id_optin_active_list_id_contact_id` (`intranet_id`,`optin`,`active`,`list_id`,`contact_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `onlinepayment`
+--
 
 CREATE TABLE `onlinepayment` (
   `id` int(11) NOT NULL auto_increment,
@@ -771,7 +1152,13 @@ CREATE TABLE `onlinepayment` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `belong_to_key` (`belong_to_key`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `permission`
+--
 
 CREATE TABLE `permission` (
   `id` int(11) NOT NULL auto_increment,
@@ -780,9 +1167,14 @@ CREATE TABLE `permission` (
   `module_id` int(11) NOT NULL default '0',
   `module_sub_access_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  KEY `module_sub_access_id` (`module_sub_access_id`),
-  KEY `intranet_id` (`intranet_id`,`user_id`,`module_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `intranet_id` (`intranet_id`,`user_id`,`module_id`,`module_sub_access_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `php_sessions`
+--
 
 CREATE TABLE `php_sessions` (
   `session_id` varchar(40) NOT NULL default '',
@@ -790,6 +1182,12 @@ CREATE TABLE `php_sessions` (
   `data` text NOT NULL,
   PRIMARY KEY  (`session_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `procurement`
+--
 
 CREATE TABLE `procurement` (
   `id` int(11) NOT NULL auto_increment,
@@ -819,7 +1217,13 @@ CREATE TABLE `procurement` (
   `voucher_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `procurement_item`
+--
 
 CREATE TABLE `procurement_item` (
   `id` int(11) NOT NULL auto_increment,
@@ -836,7 +1240,13 @@ CREATE TABLE `procurement_item` (
   KEY `product_id` (`product_id`),
   KEY `product_detail_id` (`product_detail_id`),
   KEY `active` (`active`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product`
+--
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL auto_increment,
@@ -850,7 +1260,13 @@ CREATE TABLE `product` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `active` (`active`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_detail`
+--
 
 CREATE TABLE `product_detail` (
   `id` int(11) NOT NULL auto_increment,
@@ -870,10 +1286,16 @@ CREATE TABLE `product_detail` (
   `active` int(11) NOT NULL default '0',
   `state_account_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  KEY `active` (`active`),
   KEY `number` (`number`),
+  KEY `active` (`active`),
   KEY `intranet_id` (`intranet_id`,`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_related`
+--
 
 CREATE TABLE `product_related` (
   `id` int(11) NOT NULL auto_increment,
@@ -884,7 +1306,13 @@ CREATE TABLE `product_related` (
   KEY `product_id` (`product_id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `related_product_id` (`related_product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `redirect`
+--
 
 CREATE TABLE `redirect` (
   `id` int(11) NOT NULL auto_increment,
@@ -896,7 +1324,13 @@ CREATE TABLE `redirect` (
   `identifier` varchar(255) NOT NULL default '',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `redirect_parameter`
+--
 
 CREATE TABLE `redirect_parameter` (
   `id` int(11) NOT NULL auto_increment,
@@ -905,7 +1339,13 @@ CREATE TABLE `redirect_parameter` (
   `parameter` varchar(255) NOT NULL default '',
   `multiple` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `redirect_parameter_value`
+--
 
 CREATE TABLE `redirect_parameter_value` (
   `id` int(11) NOT NULL auto_increment,
@@ -915,7 +1355,13 @@ CREATE TABLE `redirect_parameter_value` (
   `value` varchar(255) NOT NULL default '',
   `extra_value` varchar(255) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting`
+--
 
 CREATE TABLE `setting` (
   `id` int(11) NOT NULL auto_increment,
@@ -929,7 +1375,13 @@ CREATE TABLE `setting` (
   KEY `setting` (`setting`),
   KEY `user_id` (`user_id`),
   KEY `sub_id` (`sub_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stock_adaptation`
+--
 
 CREATE TABLE `stock_adaptation` (
   `id` int(11) NOT NULL auto_increment,
@@ -940,7 +1392,13 @@ CREATE TABLE `stock_adaptation` (
   `quantity` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stock_regulation`
+--
 
 CREATE TABLE `stock_regulation` (
   `id` int(11) NOT NULL auto_increment,
@@ -952,7 +1410,13 @@ CREATE TABLE `stock_regulation` (
   `quantity` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `systemmessage_disturbance`
+--
 
 CREATE TABLE `systemmessage_disturbance` (
   `id` int(11) NOT NULL auto_increment,
@@ -966,7 +1430,13 @@ CREATE TABLE `systemmessage_disturbance` (
   PRIMARY KEY  (`id`),
   KEY `from_date_time` (`from_date_time`),
   KEY `to_date_time` (`to_date_time`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `systemmessage_news`
+--
 
 CREATE TABLE `systemmessage_news` (
   `id` int(11) NOT NULL auto_increment,
@@ -977,7 +1447,13 @@ CREATE TABLE `systemmessage_news` (
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `date_created` (`date_created`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `todo_contact`
+--
 
 CREATE TABLE `todo_contact` (
   `id` int(11) NOT NULL auto_increment,
@@ -985,7 +1461,13 @@ CREATE TABLE `todo_contact` (
   `contact_id` int(11) NOT NULL default '0',
   `intranet_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `todo_item`
+--
 
 CREATE TABLE `todo_item` (
   `id` int(11) NOT NULL auto_increment,
@@ -1000,7 +1482,13 @@ CREATE TABLE `todo_item` (
   `intranet_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `todo_list_id` (`todo_list_id`,`intranet_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `todo_list`
+--
 
 CREATE TABLE `todo_list` (
   `id` int(255) NOT NULL auto_increment,
@@ -1013,7 +1501,13 @@ CREATE TABLE `todo_list` (
   `public_key` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL auto_increment,
@@ -1026,4 +1520,26 @@ CREATE TABLE `user` (
   PRIMARY KEY  (`id`),
   KEY `session_id` (`session_id`),
   KEY `email` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `webshop_basket_evaluation`
+--
+
+CREATE TABLE `webshop_basket_evaluation` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `running_index` int(11) NOT NULL default '0',
+  `evaluate_target_key` int(11) NOT NULL default '0',
+  `evaluate_method_key` int(11) NOT NULL default '0',
+  `evaluate_value` varchar(255) NOT NULL default '',
+  `go_to_index_after` int(11) NOT NULL default '0',
+  `action_action_key` int(11) NOT NULL default '0',
+  `action_value` varchar(255) NOT NULL default '',
+  `action_quantity` int(11) NOT NULL default '0',
+  `action_unit_key` int(11) NOT NULL default '0',
+  `active` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
