@@ -263,7 +263,7 @@ class Intraface_XMLRPC_Shop_Server
      *
      * @return mixed
      */
-    public function changeProductInBasket($credentials, $product_id, $quantity, $text = '')
+    public function changeProductInBasket($credentials, $product_id, $quantity, $text = '', $product_detail_id = 0)
     {
         $this->checkCredentials($credentials);
 
@@ -277,7 +277,7 @@ class Intraface_XMLRPC_Shop_Server
         }
 
         $text = $this->utf8Decode($text);
-        if (!$this->webshop->basket->change($product_id, $quantity, $text)) {
+        if (!$this->webshop->basket->change($product_id, $quantity, $text, $product_detail_id)) {
             return false;
             // throw new XML_RPC2_FaultException('product quantity is not in stock', -100);
         }
