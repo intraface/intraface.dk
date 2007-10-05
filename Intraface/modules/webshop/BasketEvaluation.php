@@ -259,20 +259,26 @@ class BasketEvaluation extends Standard
 
             switch($evaluation['evaluate_target']) {
                 case 'price':
-                    $evaluate = $basket->getTotalPrice();
+                    $evaluate = (double)$basket->getTotalPrice();
+                    settype($evaluation['evaluate_value'], 'double');
                     break;
                 case 'weight':
-                    $evaluate = $basket->getTotalWeight();
+                    $evaluate = (int)$basket->getTotalWeight();
+                    settype($evaluation['evaluate_value'], 'integer');
                     break;
                 case 'customer_coupon':
-                    $evaluate = $customer['customer_coupon'];
+                    // TODO: It should be possible to determine whether it should be case sensitive
+                    $evaluate = strtolower($customer['customer_coupon']);
+                    $evaluation['evaluate_value'] = strtolower($evaluation['evaluate_value']);
                     // coupons can only be evaluated as 'equals' or 'different from'
                     if ($evaluation['evaluate_method'] != 'equals' && $evaluation['evaluate_method'] != 'different_from') {
                         $evaluation['evaluate_method'] = 'different_from';
                     }
                     break;
                 case 'customer_country':
-                    $evaluate = $customer['country'];
+                    // TODO: It should be possible to determine whether it should be case sensitive
+                    $evaluate = strtolower($customer['country']);
+                    $evaluation['evaluate_value'] = strtolower($evaluation['evaluate_value']);
                     // country can only be evaluated as 'equals' or 'different from'
                     if ($evaluation['evaluate_method'] != 'equals' && $evaluation['evaluate_method'] != 'different_from') {
                         $evaluation['evaluate_method'] = 'different_from';
@@ -283,7 +289,8 @@ class BasketEvaluation extends Standard
                     return false;
 
             }
-
+            
+            
             switch($evaluation['evaluate_method']) {
                 case 'equals':
                     if ($evaluate == $evaluation['evaluate_value']) {
