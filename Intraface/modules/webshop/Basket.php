@@ -115,26 +115,30 @@ class Basket
     {
         $db = new DB_Sql;
         $product_id = (int)$product_id;
+        $product_detail_id = (int)$product_detail_id;
         $quantity = (int)$quantity;
 
         $this->webshop->kernel->useModule('product');
+        
         $product = new Product($this->webshop->kernel, $product_id, $product_detail_id);
 
+        
         if($product->get('id') == 0) {
             return false;
         }
 
-        if (is_object($product->stock) AND $product->stock->get('for_sale') < $quantity AND $quantity > 0) {
+        if (is_object($product->stock) AND $product->stock->get('for_sale') < $quantity AND $quantity != 0) {
             return false;
         }
 
         $db->query("SELECT id, quantity FROM basket WHERE product_id = $product_id
+                AND product_detail_id = " . $product_detail_id . "
                 AND basketevaluation_product = " . $basketevaluation . "
                 AND " . $this->sql_extra. "
                 AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
 
         if ($db->nextRecord()) {
-            if ($quantity <= 0) {
+            if ($quantity == 0) {
                 $db->query("DELETE FROM basket
                     WHERE id = ".$db->f('id') . "
                         AND basketevaluation_product = " . $basketevaluation . "
@@ -160,6 +164,7 @@ class Basket
                         text = '".$text."',
                         basketevaluation_product = " . $basketevaluation . ",
                         product_id = $product_id,
+                        product_detail_id = ".$product_detail_id.",
                         intranet_id = " . $this->webshop->kernel->intranet->get('id') . ",
                         " . $this->sql_extra);
             return true;
@@ -413,6 +418,7 @@ class Basket
         $db->query("SELECT
                 product.id,
                 basket.product_id,
+                basket.product_detail_id,
                 product_detail.name,
                 product_detail.price,
                 basket.quantity,
@@ -426,7 +432,6 @@ class Basket
             WHERE " . $this->sql_extra . "
                 AND product_detail.active = 1
                 AND basket.intranet_id = " . $this->webshop->kernel->intranet->get("id") . "
-                AND basket.quantity > 0
             ORDER BY product_detail.vat DESC, basket.basketevaluation_product");
 
         $i = 0;
@@ -438,6 +443,7 @@ class Basket
             $product = new Product($this->webshop->kernel, $db->f("id"));
             $product->getPictures();
             $items[$i]['product_id'] = $product->get('id');
+            $items[$i]['product_detail_id'] = $product->get('product_detail_id');
             $items[$i]['name'] = $product->get('name');
             $items[$i]['price'] = $product->get('price');
             $items[$i]['price_incl_vat'] = $product->get('price_incl_vat');
