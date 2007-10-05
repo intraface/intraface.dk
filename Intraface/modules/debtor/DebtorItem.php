@@ -165,16 +165,20 @@ class DebtorItem extends Standard
         $validator = new Validator($this->error);
 
         if($validator->isNumeric($input["product_id"], "Du skal vælge et produkt", "greater_than_zero")) {
-            $product = new Product($this->debtor->kernel, $input["product_id"]);
+            if(!isset($input['product_detail_id'])) {
+                $input['product_detail_id'] = 0;
+            }
+            
+            $product = new Product($this->debtor->kernel, $input["product_id"], $input['product_detail_id']);
 
-            if(!is_object($product)) {
+            if(!is_object($product) || $product->get('id') == 0) {
                  $this->error->set("Ugyldigt produkt");
             } else {
                 $product_detail_id = $product->get("detail_id");
             }
         }
 
-        $validator->isDouble($input["quantity"], "Du skal angive et antal", "zero_or_greater");
+        $validator->isDouble($input["quantity"], "Du skal angive et antal", "");
         $quantity = new Amount($input["quantity"]);
         if($quantity->convert2db()) {
             $input["quantity"] = $quantity->get();
@@ -256,6 +260,7 @@ class DebtorItem extends Standard
             if ($db->f('product_detail_id') == 0) {
                 continue;
             }
+            // Todo: This is not really good. Either we join or we get it from Product class
             $sql = "SELECT name, number, unit, price, vat, product_id FROM product_detail
                     WHERE intranet_id = ".$this->debtor->kernel->intranet->get('id')."
                         AND product_id = ".$db->f('product_id')."
@@ -272,7 +277,8 @@ class DebtorItem extends Standard
                     $item_no_vat[$j]["quantity"] = $db->f("quantity");
                     $item_no_vat[$j]["description"] = $db->f("description");
                     $item_no_vat[$j]["vat"] = $db2->f("vat");
-                    $item_no_vat[$j]["product_id"] = $db2->f("product_id");
+                    $item_no_vat[$j]["product_id"] = $db->f("product_id");
+                    $item_no_vat[$j]["product_detail_id"] = $db->f("product_detail_id");
                     $item_no_vat[$j]["amount"] = $db->f("quantity") * $db2->f("price");
                     $j++;
                 } else {
@@ -284,8 +290,10 @@ class DebtorItem extends Standard
                     $item[$i]["quantity"] = $db->f("quantity");
                     $item[$i]["description"] = $db->f("description");
                     $item[$i]["vat"] = $db2->f("vat");
-                    $item[$i]["product_id"] = $db2->f("product_id");
+                    $item[$i]["product_id"] = $db->f("product_id");
+                    $item[$i]["product_detail_id"] = $db->f("product_detail_id");
                     $item[$i]["amount"] = $db->f("quantity") * $db2->f("price") * 1.25;
+    
                     $i++;
                 }
             } else {
