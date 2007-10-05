@@ -10,7 +10,7 @@
  *				til vores statuskoder?
  */
 
- require('Payment/Quickpay.php');
+ require('Quickpay/Quickpay.php');
 
 class OnlinePaymentQuickPay extends OnlinePayment {
 
