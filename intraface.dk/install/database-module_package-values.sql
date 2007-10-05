@@ -1,118 +1,57 @@
-INSERT INTO `module_package_group` ( `id` , `name` )
-VALUES (
-'1', 'Hjemmeside'
-), (
-'2', 'Bogføring'
-), (
-'3', 'Virksomhedsstyring'
-);
+INSERT INTO `module_package` (`id`, `module_package_group_id`, `module_package_plan_id`, `product_id`, `active`) VALUES (1, 1, 1, 0, 1);
+INSERT INTO `module_package` (`id`, `module_package_group_id`, `module_package_plan_id`, `product_id`, `active`) VALUES (2, 1, 2, 1, 1);
+INSERT INTO `module_package` (`id`, `module_package_group_id`, `module_package_plan_id`, `product_id`, `active`) VALUES (3, 1, 4, 3, 1);
+INSERT INTO `module_package` (`id`, `module_package_group_id`, `module_package_plan_id`, `product_id`, `active`) VALUES (4, 2, 1, 0, 1);
+INSERT INTO `module_package` (`id`, `module_package_group_id`, `module_package_plan_id`, `product_id`, `active`) VALUES (5, 2, 2, 0, 1);
+INSERT INTO `module_package` (`id`, `module_package_group_id`, `module_package_plan_id`, `product_id`, `active`) VALUES (6, 2, 4, 0, 1);
+INSERT INTO `module_package` (`id`, `module_package_group_id`, `module_package_plan_id`, `product_id`, `active`) VALUES (7, 3, 1, 0, 1);
+INSERT INTO `module_package` (`id`, `module_package_group_id`, `module_package_plan_id`, `product_id`, `active`) VALUES (8, 3, 2, 0, 1);
+INSERT INTO `module_package` (`id`, `module_package_group_id`, `module_package_plan_id`, `product_id`, `active`) VALUES (9, 3, 4, 0, 1);
+INSERT INTO `module_package` (`id`, `module_package_group_id`, `module_package_plan_id`, `product_id`, `active`) VALUES (10, 1, 3, 2, 1);
 
-INSERT INTO `module_package` ( `id` , `module_package_group_id` , `name` , `product_id` )
-VALUES (
-'1', '1', 'Gratis', '0'
-), (
-'2', '1', 'Mellem', '0'
-), (
-'3', '1', 'Stor', '0'
-), (
-'4', '2', 'Gratis', '0'
-), (
-'5', '2', 'Mellem', '0'
-), (
-'6', '2', 'Stor', '0'
-), (
-'7', '3', 'Gratis', '0'
-), (
-'8', '3', 'Mellem', '0'
-), (
-'9', '3', 'Stor', '0'
-);
+INSERT INTO `module_package_group` (`id`, `group_name`, `sorting_index`, `active`) VALUES (1, 'cms', 10, 1);
+INSERT INTO `module_package_group` (`id`, `group_name`, `sorting_index`, `active`) VALUES (2, 'accounting', 20, 1);
+INSERT INTO `module_package_group` (`id`, `group_name`, `sorting_index`, `active`) VALUES (3, 'business', 30, 1);
 
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (1, 1, 'cms', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (2, 1, 'filemanager', 'a:1:{s:6:"upload";s:6:"512000";}', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (3, 2, 'cms', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (4, 2, 'filemanager', 'a:1:{s:6:"upload";s:7:"5242880";}', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (5, 3, 'cms', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (6, 3, 'filemanager', 'a:1:{s:6:"upload";s:9:"524288000";}', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (7, 4, 'accounting', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (8, 5, 'accounting', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (9, 6, 'accounting', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (10, 7, 'debtor', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (11, 7, 'quotation', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (12, 7, 'order', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (13, 7, 'invoice', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (14, 7, 'contact', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (15, 7, 'product', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (16, 7, 'email', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (17, 7, 'procurement', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (18, 7, 'stock', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (19, 8, 'debtor', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (20, 8, 'quotation', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (21, 8, 'order', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (22, 8, 'invoice', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (23, 8, 'contact', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (24, 8, 'product', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (25, 8, 'email', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (26, 8, 'procurement', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (27, 8, 'stock', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (28, 9, 'debtor', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (29, 9, 'quotation', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (30, 9, 'order', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (31, 9, 'invoice', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (32, 9, 'contact', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (33, 9, 'product', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (34, 9, 'email', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (35, 9, 'procurement', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (36, 9, 'stock', '', 1);
+INSERT INTO `module_package_module` (`id`, `module_package_id`, `module`, `limiter`, `active`) VALUES (37, 3, 'newsletter', '', 1);
 
-INSERT INTO `module_package_module` ( `id` , `module_package_id` , `module` , `limiter` )
-VALUES (
-'1', '1', 'cms', ''
-), (
-'2', '1', 'filemanager', ''
-), (
-
-'3', '2', 'cms', ''
-), (
-'4', '2', 'filemanager', ''
-), (
-
-'5', '3', 'cms', ''
-), (
-'6', '3', 'filemanager', ''
-), (
-
-
-
-'7', '4', 'accounting', ''
-), (
-
-'8', '5', 'accounting', ''
-), (
-
-'9', '6', 'accounting', ''
-), (
-
-
-'10', '7', 'debtor', ''
-), (
-'11', '7', 'quotation', ''
-), (
-'12', '7', 'order', ''
-), (
-'13', '7', 'invoice', ''
-), (
-'14', '7', 'contact', ''
-), (
-'15', '7', 'product', ''
-), (
-'16', '7', 'email', ''
-), (
-'17', '7', 'procurement', ''
-), (
-'18', '7', 'stock', ''
-), (
-
-'19', '8', 'debtor', ''
-), (
-'20', '8', 'quotation', ''
-), (
-'21', '8', 'order', ''
-), (
-'22', '8', 'invoice', ''
-), (
-'23', '8', 'contact', ''
-), (
-'24', '8', 'product', ''
-), (
-'25', '8', 'email', ''
-), (
-'26', '8', 'procurement', ''
-), (
-'27', '8', 'stock', ''
-), (
-
-'28', '9', 'debtor', ''
-), (
-'29', '9', 'quotation', ''
-), (
-'30', '9', 'order', ''
-), (
-'31', '9', 'invoice', ''
-), (
-'32', '9', 'contact', ''
-), (
-'33', '9', 'product', ''
-), (
-'34', '9', 'email', ''
-), (
-'35', '9', 'procurement', ''
-), (
-'36', '9', 'stock', ''
-
-
-);
+INSERT INTO `module_package_plan` (`id`, `plan`, `plan_index`, `active`) VALUES (1, 'free', 10, 1);
+INSERT INTO `module_package_plan` (`id`, `plan`, `plan_index`, `active`) VALUES (2, 'small', 20, 1);
+INSERT INTO `module_package_plan` (`id`, `plan`, `plan_index`, `active`) VALUES (3, 'medium', 30, 1);
+INSERT INTO `module_package_plan` (`id`, `plan`, `plan_index`, `active`) VALUES (4, 'complete', 40, 1);
