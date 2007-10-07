@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if(isset($_POST['add_module_package']) && $_POST['add_module_package'] != '') {
         
         $modulepackagemanager = New Intraface_ModulePackage_Manager($intranet);
-        $modulepackagemanager->addModulePackage($_POST['module_package_id'], $_POST['start_date'], $_POST['duration_month'].' month');
+        $modulepackagemanager->save($_POST['module_package_id'], $_POST['start_date'], $_POST['duration_month'].' month');
                
     }
     
@@ -88,7 +88,7 @@ else {
     if(isset($_GET['delete_intranet_module_package_id']) && (int)$_GET['delete_intranet_module_package_id'] != 0) {
         
         $modulepackagemanager = New Intraface_ModulePackage_Manager($intranet);
-        $modulepackagemanager->deleteModulePackage((int)$_GET['delete_intranet_module_package_id']);
+        $modulepackagemanager->delete((int)$_GET['delete_intranet_module_package_id']);
     }   
 }
 
