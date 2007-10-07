@@ -147,7 +147,7 @@ class ModuleMaintenance
 
                 $updated = $this->registerModule($module_name);
 
-                $updated_module_id[] = $updated['updated_module_id'];
+                $updated_module_id[] = (int)$updated['updated_module_id'];
                 $updated_sub_access_id = array_merge($updated_sub_access_id, $updated['updated_sub_access_id']);
                 $module_msg = array_merge($module_msg, $updated['module_msg']);
 
