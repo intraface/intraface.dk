@@ -1,6 +1,7 @@
 <?php
 require('../../include_first.php');
 require('Intraface/ModulePackage.php');
+require('Intraface/ModulePackage/Manager.php');
 
 $modul = $kernel->module("intranetmaintenance");
 if($kernel->user->hasModuleAccess('contact')) {
@@ -14,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if(isset($_POST['add_module_package']) && $_POST['add_module_package'] != '') {
         
-        $modulepackagemanager = New ModulePackageManager($intranet);
+        $modulepackagemanager = New Intraface_ModulePackage_Manager($intranet);
         $modulepackagemanager->addModulePackage($_POST['module_package_id'], $_POST['start_date'], $_POST['duration_month'].' month');
                
     }
@@ -86,7 +87,7 @@ else {
     
     if(isset($_GET['delete_intranet_module_package_id']) && (int)$_GET['delete_intranet_module_package_id'] != 0) {
         
-        $modulepackagemanager = New ModulePackageManager($intranet);
+        $modulepackagemanager = New Intraface_ModulePackage_Manager($intranet);
         $modulepackagemanager->deleteModulePackage((int)$_GET['delete_intranet_module_package_id']);
     }   
 }
@@ -197,8 +198,9 @@ $page->start($translation->get('Intranet'));
 
 
     <?php
-    $modulepackagemanager = new ModulePackageManager($intranet);
-    $packages = $modulepackagemanager->getModulePackages();
+    $modulepackagemanager = new Intraface_ModulePackage_Manager($intranet);
+    $modulepackagemanager->createDBQuery($kernel);
+    $packages = $modulepackagemanager->getList();
     
     if(count($packages) > 0) {
         ?>
@@ -216,7 +218,7 @@ $page->start($translation->get('Intranet'));
             <tbody>
             <?php foreach($packages AS $package): ?>
                 <tr>
-                    <td><?php echo safeToHtml($package['group_name'].' - '.$package['name']); ?></td>
+                    <td><?php echo safeToHtml($package['plan'].' '.$package['group']); ?></td>
                     <td><?php echo safeToHtml($package['start_date']); ?></td>
                     <td><?php echo safeToHtml($package['end_date']); ?></td>
                     <td><?php echo safeToHtml($translation->get($package['status'])); ?></td>
@@ -234,7 +236,7 @@ $page->start($translation->get('Intranet'));
 <fieldset>
     <legend>Tilføj modulpakke</legend>    
     <?php
-    $modulepackage = new ModulePackage;
+    $modulepackage = new Intraface_ModulePackage;
     $modulepackage->createDBQuery($kernel);
     $packages = $modulepackage->getList();
     ?>
@@ -244,7 +246,7 @@ $page->start($translation->get('Intranet'));
             <?php
             
             foreach($packages AS $package) {
-                echo '<option value="'.intval($package['id']).'">'.safeToHtml($package['group_name'].' - '.$package['name']).'</option>';
+                echo '<option value="'.intval($package['id']).'">'.safeToHtml($package['plan'].' '.$package['group']).'</option>';
             }
             ?>
         </select>
