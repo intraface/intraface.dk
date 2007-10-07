@@ -4,12 +4,11 @@
  * @author	Lars Olesen
  * @since	1.0
  * @version	1.0
- *
- * TODO lave nogle subaccess
  */
-class MainProduct Extends Main {
-
-    function MainProduct() {
+class MainProduct extends Main
+{
+    function __construct()
+    {
         $this->module_name = 'product'; // Navnet der vil stå i menuen
         $this->menu_label = 'Produkter'; // Navnet der vil stå i menuen
         $this->show_menu = 1; // Skal modulet vises i menuen.
@@ -21,10 +20,15 @@ class MainProduct Extends Main {
         $this->addPreloadFile('ProductDetail.php');
 
         $this->addRequiredShared('keyword');
-        $this->addRequiredShared("filehandler");
+        $this->addRequiredShared('filehandler');
 
         // hvilke units kan man vælge imellem?
-        $this->addSetting('unit', array(1=>'', 2=>'stk.', 3=>'dag(e)', 4=>'måned(er)', 5=>'år', 6=>'time(r)'));
+        $this->addSetting('unit', array(1 => '',
+                                        2 => 'stk.',
+                                        3 => 'dag(e)',
+                                        4 => 'måned(er)',
+                                        5 => 'år',
+                                        6 => 'time(r)'));
 
         $this->includeSettingFile('settings.php');
 
