@@ -391,7 +391,7 @@ class Debtor extends Standard
         else {
             $input["contact_person_id"] = 0;
         }
-        $validator->isString($input['description'], 'Fejl i descr.', '', 'allow_empty');
+        $validator->isString($input['description'], 'Fejl i beskrivelse', '', 'allow_empty');
 
         if($validator->isDate($input["this_date"], "Ugyldig dato", "allow_no_year")) {
             $this_date = new Intraface_Date($input["this_date"]);
