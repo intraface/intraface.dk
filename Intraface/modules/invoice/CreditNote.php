@@ -9,12 +9,12 @@
 class CreditNote extends Debtor {
 
     function CreditNote(& $kernel, $id = 0) {
-        Debtor::Debtor($kernel, 'credit_note', $id);
+        parent::__construct($kernel, 'credit_note', $id);
     }
 
     function setStatus($status) {
 
-        $return = Debtor::setStatus($status);
+        $return = parent::setStatus($status);
         if($status == "sent") {
             // Er den sendt, bliver den også låst
             return Debtor::setStatus("executed");
@@ -57,7 +57,7 @@ class CreditNote extends Debtor {
         return 1;
     }
 
-function state($year, $voucher_number, $voucher_date) {
+    function state($year, $voucher_number, $voucher_date) {
         $validator = new Validator($this->error);
         if($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);
