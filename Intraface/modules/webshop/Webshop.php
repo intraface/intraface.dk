@@ -113,7 +113,7 @@ class Webshop
             $contact_person_id = 0;
             // It is a company and contactperson is given. We try to see if we can find the contact person.
             if(isset($input['contactperson']) && $input['contactperson'] != '') {
-                $input['type'] = 1; // company
+                $input['type'] = 'corporation';
                 
                 // If the contact is a company their might already be a contact person.
                 if($this->contact->get('type') == 'company' && isset($this->contact->contactperson)) {
@@ -134,14 +134,13 @@ class Webshop
             
             // sørger for at tjekke om det er et firma
             if(!empty($input['contactperson']) && $input['contactperson'] != '') {
-                $input['type'] = 1; // firma
+                $input['type'] = 'corporation'; // firma
             }
             
             // sets preffered invoice to email. Should be a setting in webshop.
             $input['preferred_invoice'] = 2;
         }
-            
-
+        
         // opdaterer kontakten
         if (!$contact_id = $this->contact->save($input)) {
             $this->error->merge($this->contact->error->message);
@@ -149,13 +148,14 @@ class Webshop
         }
         
         // we update/add the contactperson.     
-        if ($input['type'] == 1) { // firma
+        if (isset($input['type']) && $input['type'] == 'corporation') { // firma
             $this->contact->loadContactPerson($contact_person_id);
             if (!$contact_person_id = $this->contact->contactperson->save(array('name'=>$input['contactperson'], 'email'=>$input['contactemail'], 'phone'=>$input['contactphone']))) {
                 $this->error->merge($this->contact->contactperson->error->message);
                 return false;
             }
         }
+        
         $value['contact_id'] = $this->contact->get('id');
         $value['contact_address_id'] = $this->contact->address->get('id');
         $value['contact_person_id'] = $contact_person_id;
@@ -238,7 +238,7 @@ class Webshop
             $this->error->set('unable add products to the order');
             return false;
         }
-
+        
         $this->basket->reset();
         
         if(!$this->sendEmail($order_id)) {
@@ -246,8 +246,6 @@ class Webshop
             return false;
         }
         
-        
-
         return $order_id;
     }
 
