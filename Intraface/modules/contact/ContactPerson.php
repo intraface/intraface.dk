@@ -41,14 +41,14 @@ class ContactPerson extends Standard {
         $input = safeToDb($input);
 
         $validator = new Validator($this->error);
-        $validator->isString($input['name'], "Fejl i navn");
+        $validator->isString($input['name'], "Fejl i kontaktpersonens navn");
 
         settype($input['email'], 'string');
-        $validator->isEmail($input['email'], "Fejl i e-mail", 'allow_empty');
+        $validator->isEmail($input['email'], "Fejl i kontaktpersonens e-mail", 'allow_empty');
         settype($input['phone'], 'string');
-        $validator->isString($input['phone'], 'Fejl i telefon', '', 'allow_empty');
+        $validator->isString($input['phone'], 'Fejl i kontaktpersonens telefon', '', 'allow_empty');
         settype($input['mobile'], 'string');
-        $validator->isString($input['mobile'], 'Fejl i mobil', '', 'allow_empty');
+        $validator->isString($input['mobile'], 'Fejl i kontaktpersonens mobil', '', 'allow_empty');
 
         if ($this->error->isError()) {
             return 0;
@@ -62,14 +62,34 @@ class ContactPerson extends Standard {
             $sql_type = "INSERT INTO ";
             $sql_end = ", date_created = NOW()";
         }
-
-        $db = new DB_Sql;
-        $db->query($sql_type . "contact_person SET intranet_id = ".$this->contact->kernel->intranet->get("id").", name = '".safeTodb($input['name'])."', email = '".safeToDb($input['email'])."',phone = '".safeToDb($input['phone'])."',mobile = '".safeToDb($input['mobile'])."', contact_id = " . intval($this->contact->get('id')) . ", date_changed = NOW() " . $sql_end);
-
-        if ($this->id == 0) {
-         $this->id = $db->insertedId();
+        
+        
+        $db = MDB2::singleton(DB_DSN);
+        
+        $result = $db->exec($sql_type . "contact_person " .
+                "SET " .
+                "intranet_id = ".$db->quote($this->contact->kernel->intranet->get("id"), 'integer').", " .
+                "name = ".$db->quote($input['name'], 'text').", " .
+                "email = ".$db->quote($input['email'], 'text').", " .
+                "phone = ".$db->quote($input['phone'], 'text').", " .
+                "mobile = ".$db->quote($input['mobile']).", " .
+                "contact_id = " . $db->quote($this->contact->get('id'), 'integer') . ", " .
+                "date_changed = NOW() " . $sql_end);
+        
+        if(PEAR::isError($result)) {
+            trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
+            exit;
         }
-
+        
+        if ($this->id == 0) {
+            $id = $db->lastInsertID('contact_person', 'id');
+            if(PEAR::isError($id)) {
+                trigger_error('Error in query: '.$id->getUserInfo(), E_USER_ERROR);
+                exit;
+            }
+            $this->id = $id;
+        }
+        
         return $this->id;
     }
 
