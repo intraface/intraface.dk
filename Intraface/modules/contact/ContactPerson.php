@@ -3,18 +3,42 @@
  * @package Intraface_Contact
  */
 
-class ContactPerson extends Standard {
+class ContactPerson extends Standard
+{
+    /**
+     * @var integer
+     */
+    private $id;
 
-    var $id;
-    var $contact;
-    var $value;
-    var $error;
+    /**
+     * @var object
+     */
+    private $contact;
 
-    function ContactPerson(& $contact, $id = 0) {
+    /**
+     * @var array
+     */
+    public $value;
+
+    /**
+     * @var object
+     */
+    public $error;
+
+    /**
+     * Constructor
+     *
+     * @param object  $contact
+     * @param integer $id
+     *
+     * @return void
+     */
+    public function __construct($contact, $id = 0)
+    {
         if (!is_object($contact) OR strtolower(get_class($contact)) != 'contact') {
             trigger_error('ContactPerson kræver Contact som object');
         }
-        $this->contact = & $contact;
+        $this->contact = $contact;
         $this->id = (int)$id;
 
         $this->error = $this->contact->error;
@@ -24,7 +48,13 @@ class ContactPerson extends Standard {
         }
     }
 
-    function load() {
+    /**
+     * Loads the contact person
+     *
+     * @return void
+     */
+    private function load()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id, name, email, phone, mobile, contact_id FROM contact_person WHERE id = " . $this->id . " LIMIT 1");
         while ($db->nextRecord()) {
@@ -37,7 +67,14 @@ class ContactPerson extends Standard {
         }
     }
 
-    function save($input) {
+    /**
+     * Saves the contact person
+     *
+     * @param array $input
+     *
+     * @return integer
+     */
+    public function save($input) {
         $input = safeToDb($input);
 
         $validator = new Validator($this->error);
@@ -57,15 +94,14 @@ class ContactPerson extends Standard {
         if ($this->id > 0) {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;
-        }
-        else {
+        } else {
             $sql_type = "INSERT INTO ";
             $sql_end = ", date_created = NOW()";
         }
-        
-        
+
+
         $db = MDB2::singleton(DB_DSN);
-        
+
         $result = $db->exec($sql_type . "contact_person " .
                 "SET " .
                 "intranet_id = ".$db->quote($this->contact->kernel->intranet->get("id"), 'integer').", " .
@@ -75,12 +111,12 @@ class ContactPerson extends Standard {
                 "mobile = ".$db->quote($input['mobile']).", " .
                 "contact_id = " . $db->quote($this->contact->get('id'), 'integer') . ", " .
                 "date_changed = NOW() " . $sql_end);
-        
+
         if(PEAR::isError($result)) {
             trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
             exit;
         }
-        
+
         if ($this->id == 0) {
             $id = $db->lastInsertID('contact_person', 'id');
             if(PEAR::isError($id)) {
@@ -89,11 +125,16 @@ class ContactPerson extends Standard {
             }
             $this->id = $id;
         }
-        
+
         return $this->id;
     }
 
-    function getList() {
+    /**
+     * Gets list with all contact persons
+     *
+     * @return array
+     */
+    public function getList() {
         $db = new DB_Sql;
         $db->query("SELECT * FROM contact_person WHERE contact_id = " . $this->contact->get('id'));
         $persons = array();
