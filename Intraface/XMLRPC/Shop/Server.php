@@ -345,9 +345,8 @@ class Intraface_XMLRPC_Shop_Server
         }
 
         $values = $this->utf8Decode($values);
-        
-        if (!$order_id = $this->webshop->placeOrder($values)) {
-            throw new XML_RPC2_FaultException('order could not be sent ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
+        if ($order_id = $this->webshop->placeOrder($values)) {
+            throw new XML_RPC2_FaultException('order could not be placed. It returned the following error: ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
         }
 
         return $order_id;
@@ -419,7 +418,7 @@ class Intraface_XMLRPC_Shop_Server
         
         if (!$payment_id = $onlinepayment->create()) {
             // this is probably a little to hard reaction
-            throw new XML_RPC2_FaultException('order could not be sent ' . strtolower(implode(', ', $onlinepayment->error->message)), -4);
+            throw new XML_RPC2_FaultException('onlinepayment could not be created' . strtolower(implode(', ', $onlinepayment->error->message)), -4);
         }
 
         return $payment_id;
