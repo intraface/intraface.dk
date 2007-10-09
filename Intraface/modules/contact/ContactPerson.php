@@ -95,7 +95,7 @@ class ContactPerson extends Standard {
 
     function getList() {
         $db = new DB_Sql;
-        $db->query("SELECT * FROM contact_person WHERE contact_id = " . $this->contact->id);
+        $db->query("SELECT * FROM contact_person WHERE contact_id = " . $this->contact->get('id'));
         $persons = array();
         $i = 0;
         while ($db->nextRecord()) {
