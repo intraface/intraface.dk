@@ -38,7 +38,7 @@ class Error {
 		}
 	}
     
-    /*
+    /**
      * merge another error array with this 
      * 
      * @param (array)$error_array array provided with errormessages
