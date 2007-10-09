@@ -106,42 +106,60 @@ class Webshop
      */
     private function createOrder($input)
     {
-        // kunne være vakst om denne tjekkede om kontaktpersonen allerede findes
-        if (!empty($input['contact_id'])) {
-            $this->contact = new Contact($this->kernel, $input['contact_id']);
-            $value['contact_id'] = $this->contact->get('id');
-            $value['contact_address_id'] = $this->contact->address->get('id');
-            $value['contact_person_id'] = 0;
-        } else {
-            $this->contact = new Contact($this->kernel);
-
-            // sørger for at tjekke om det er et firma
-            if (!empty($input['contactperson'])) {
-                $input['type'] = 1; // firma
-            }
-
-            // sets preffered invoice to email. Should be a setting in webshop.
-            $input['preferred_invoice'] = 2;
-
-            // opdaterer kontakten
-            if (!$contact_id = $this->contact->save($input)) {
-                $this->error->message = array_merge($this->error->message, $this->contact->error->message);
-                return false;
-            }
+        
+        if (isset($input['contact_id']) && (int)$input['contact_id'] > 0) {
+            $this->contact = new Contact($this->kernel, (int)$input['contact_id']);
+            
             $contact_person_id = 0;
-
-            if ($input['type'] == 1) { // firma
-                $contactperson = new ContactPerson($this->contact);
-                if (!$contact_person_id = $contactperson->save(array('name'=>$input['contactperson']))) {
-                    $this->error->message = array_merge($this->error->message, $contactperson->error->message);
-                    return false;
+            // It is a company and contactperson is given. We try to see if we can find the contact person.
+            if(isset($input['contactperson']) && $input['contactperson'] != '') {
+                $input['type'] = 1; // company
+                
+                // If the contact is a company their might already be a contact person.
+                if($this->contact->get('type') == 'company' && isset($this->contact->contactperson)) {
+                    $contact_persons = $this->contact->contactperson->getList();
+                    foreach($contact_persons AS $contact_person) {
+                        // This is only a comparing on name, this might not be enough.
+                        if($contact_person['name'] == $input['contactperson']) {
+                            $contact_person_id = $contact_person['id'];
+                            break;
+                        }
+                    }
                 }
             }
-            $value['contact_id'] = $contact_id;
-            $value['contact_address_id'] = $this->contact->address->get('id');
-            $value['contact_person_id'] = $contact_person_id;
+        } 
+        else {
+            $this->contact = new Contact($this->kernel);
+            $contact_person_id = 0;  
+            
+            // sørger for at tjekke om det er et firma
+            if(!empty($input['contactperson']) && $input['contactperson'] != '') {
+                $input['type'] = 1; // firma
+            }
+            
+            // sets preffered invoice to email. Should be a setting in webshop.
+            $input['preferred_invoice'] = 2;
         }
+            
 
+        // opdaterer kontakten
+        if (!$contact_id = $this->contact->save($input)) {
+            $this->error->merge($this->contact->error->message);
+            return false;
+        }
+        
+        // we update/add the contactperson.     
+        if ($input['type'] == 1) { // firma
+            $this->contact->loadContactPerson($contact_person_id);
+            if (!$contact_person_id = $this->contact->contactperson->save(array('name'=>$input['contactperson'], 'email'=>$input['contactemail'], 'phone'=>$input['contactphone']))) {
+                $this->error->merge($this->contact->contactperson->error->message);
+                return false;
+            }
+        }
+        $value['contact_id'] = $this->contact->get('id');
+        $value['contact_address_id'] = $this->contact->address->get('id');
+        $value['contact_person_id'] = $contact_person_id;
+        
         $value['this_date'] = date('d-m-Y');
         $value['due_date'] = date('d-m-Y');
         $value['description'] = $input['description'];
@@ -157,15 +175,17 @@ class Webshop
             if($value['message'] != '') $value['message'] .= "\n\n";
             $value['message'] .= "Kommentar:\n". $input['customer_comment'];
         }
-
+        
+        
         $this->order = new Debtor($this->kernel, 'order');
-        if (!$order_id = $this->order->update($value, 'webshop')) {
-            $this->error->message = array_merge($this->error->message, $this->order->error->message);
+        $order_id = $this->order->update($value, 'webshop');
+        
+        if ($order_id == 0) {
+            $this->error->merge($this->order->error->message);
             return false;
         }
-
+        
         return $order_id;
-
     }
 
     /**
@@ -179,10 +199,20 @@ class Webshop
     public function placeManualOrder($input = array(), $products = array())
     {
         $order_id = $this->createOrder($input);
+        if($order_id == 0) {
+            $this->error->set('unable to create the order');
+            return false;
+        }
 
-        $this->addOrderLines($products);
+        if(!$this->addOrderLines($products)) {
+            $this->error->set('unable add products to the order');
+            return false;
+        }
 
-        $this->sendEmail($order_id);
+        if(!$this->sendEmail($order_id)) {
+            $this->error->set('unable to send email to the customer');
+            return false;
+        }
 
         return $order_id;
     }
@@ -196,75 +226,27 @@ class Webshop
      */
     public function placeOrder($input)
     {
-        /*
-        // kunne være vakst om denne tjekkede om kontaktpersonen allerede findes
-        if (!empty($input['contact_id'])) {
-            $this->contact = new Contact($this->kernel, $input['contact_id']);
-            $value['contact_id'] = $this->contact->get('id');
-            $value['contact_address_id'] = $this->contact->address->get('id');
-            $value['contact_person_id'] = 0;
-        } else {
-            $this->contact = new Contact($this->kernel);
-
-            // sørger for at tjekke om det er et firma
-            if (!empty($input['contactperson'])) {
-                $input['type'] = 1; // firma
-            }
-
-            // sets preffered invoice to email. Should be a setting in webshop.
-            $input['preferred_invoice'] = 2;
-
-            // opdaterer kontakten
-            if (!$contact_id = $this->contact->save($input)) {
-                $this->error->message = array_merge($this->error->message, $this->contact->error->message);
-                return false;
-            }
-            $contact_person_id = 0;
-
-            if ($input['type'] == 1) { // firma
-                $contactperson = new ContactPerson($this->contact);
-                if (!$contact_person_id = $contactperson->save(array('name'=>$input['contactperson']))) {
-                    $this->error->message = array_merge($this->error->message, $contactperson->error->message);
-                    return false;
-                }
-            }
-            $value['contact_id'] = $contact_id;
-            $value['contact_address_id'] = $this->contact->address->get('id');
-            $value['contact_person_id'] = $contact_person_id;
-        }
-
-        $value['this_date'] = date('d-m-Y');
-        $value['due_date'] = date('d-m-Y');
-        $value['description'] = $input['description'];
-        $value['internal_note'] = $input['internal_note'];
-        $value['message'] = $input['message'];
-
-        if(isset($input['customer_coupon']) && $input['customer_coupon'] != '') {
-            if($value['message'] != '') $value['message'] .= "\n\n";
-            $value['message'] .= "Kundekupon:". $input['customer_coupon'];
-        }
-
-        if(isset($input['customer_comment']) && $input['customer_comment'] != '') {
-            if($value['message'] != '') $value['message'] .= "\n\n";
-            $value['message'] .= "Kommentar:\n". $input['customer_comment'];
-        }
-
-        $this->order = new Debtor($this->kernel, 'order');
-        if (!$order_id = $this->order->update($value, 'webshop')) {
-            $this->error->message = array_merge($this->error->message, $this->order->error->message);
+        
+        if(!$order_id = $this->createOrder($input)) {
+            $this->error->set('unable to create the order');
             return false;
         }
-        */
-
-        $order_id = $this->createOrder($input);
 
         $products = $this->basket->getItems();
 
-        $this->addOrderLines($products);
+        if(!$this->addOrderLines($products)) {
+            $this->error->set('unable add products to the order');
+            return false;
+        }
 
         $this->basket->reset();
-
-        $this->sendEmail($order_id);
+        
+        if(!$this->sendEmail($order_id)) {
+            $this->error->set('unable to send email to the customer');
+            return false;
+        }
+        
+        
 
         return $order_id;
     }
@@ -308,11 +290,13 @@ class Webshop
                                 'from_name' => $this->kernel->intranet->address->get('name'),
                                 'type_id' => 12, // webshop
                                 'belong_to' => $order_id))) {
-            echo $email->error->view();
+            $this->error->merge($email->error->message);
+            return false;
         }
 
         if(!$email->send()) {
-            echo $email->error->view();
+            $this->error->merge($email->error->message);
+            return false;
         }
 
         return true;
