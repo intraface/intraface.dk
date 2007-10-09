@@ -436,6 +436,16 @@ class Contact extends Standard {
         if ($this->id == 0 AND empty($var['number'])) {
             $var['number'] = $this->getMaxNumber() + 1;
         }
+        
+        if(isset($var['type'])) {
+            $type_key = array_search($var['type'], $this->types);
+            if($type_key === false) {
+                $this->error->set('invalid type for the contact');
+            }
+            else {
+                $var['type_key'] = $type_key;
+            }
+        }
 
         if (!$this->validate($var)) {
             return 0;
