@@ -132,7 +132,7 @@ class Contact extends Standard {
     /**
      * @var object
      */
-    private $kernel;
+    public $kernel;
 
     /**
      * @var integer
