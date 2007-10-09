@@ -61,7 +61,9 @@ if ($value['type'] == "corporation") {
 	$persons = $contact->contactperson->getList();
 }
 
-$similar_contacts = $contact->compare();
+// The compare function has been removed from the class
+// $similar_contacts = $contact->compare();
+$similar_contacts = array();
 
 $page = new Page($kernel);
 $page->includeJavascript('module', 'viewcontact.js');
