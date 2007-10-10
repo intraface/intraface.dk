@@ -7,43 +7,50 @@ require_once 'Intraface/User.php';
 
 class UserTest extends PHPUnit_Framework_TestCase
 {
+    private $user;
+
     function setUp()
     {
+        // @todo this has the notion with the standard database setup
+        $this->user = new User(1);
     }
 
     function testConstructionOfUser()
     {
-        $user = new User(1);
-        $this->assertTrue(is_object($user));
+        $this->assertTrue(is_object($this->user));
     }
 
-    function testIntranetAccess()
+    function testIntranetAccessReturnsTrueWhenTheUserHasIntranetAccessAndFalseIfNot()
     {
-        $user = new User(1);
-        $this->assertTrue($user->hasIntranetAccess(1));
-        $this->assertFalse($user->hasIntranetAccess(2));
+        $this->assertTrue($this->user->hasIntranetAccess(1));
+        $this->assertFalse($this->user->hasIntranetAccess(2));
     }
 
-    function testUserModuleAccess()
+    function testUserModuleAccessOnlyWorksWhenTheUserHasAnActiveIntranetId()
     {
         // TODO how should we handle unknown modules
-        $user = new User(1);
-        $this->assertFalse($user->hasModuleAccess('intranetmaintenance'));
-        $this->assertFalse($user->hasModuleAccess('cms'));
-        $user->setIntranetId(1); // spørgsmålet er om man bare skal have en init i stedet?
-        $this->assertTrue($user->hasModuleAccess('intranetmaintenance'));
-        $this->assertFalse($user->hasModuleAccess('cms'));
+        $this->assertFalse($this->user->hasModuleAccess('intranetmaintenance'));
+        $this->assertFalse($this->user->hasModuleAccess('cms'));
+        $this->user->setIntranetId(1); // spørgsmålet er om man bare skal have en init i stedet?
+        $this->assertTrue($this->user->hasModuleAccess('intranetmaintenance'));
+        $this->assertFalse($this->user->hasModuleAccess('cms'));
     }
 
-    function testSetActiveIntranet()
+    function testSubAccess()
     {
-        $user = new User(1);
-        $this->assertTrue($user->setActiveIntranetId(1) > 0);
+        // @todo This test should be completed
+        $this->markTestIncomplete('This test should be completed');
+    }
+
+    function testSetActiveIntranetReturnsAValueLargerThanZero()
+    {
+        $this->assertTrue($this->user->setActiveIntranetId(1) > 0);
     }
 
 
     function tearDown()
     {
+        $this->user = null;
     }
 }
 ?>
