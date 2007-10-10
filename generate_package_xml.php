@@ -121,6 +121,10 @@ $pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'pear.php.net', '1.0.1');
 $pfm->addPackageDepWithUri('required', 'MDB2_Debug_ExplainQueries', 'http://svn.intraface.dk/intrafacepublic/3Party/MDB2/Debug/MDB2_Debug_ExplainQueries-0.1.0');
 $pfm->addPackageDepWithUri('required', 'Translation2_Decorator_LogMissingTranslation', 'http://svn.intraface.dk/intrafacepublic/3Party/Translation2/Decorator/Translation2_Decorator_LogMissingTranslation-0.1.0');
 
+// filehandler
+$pfm->addPackageDepWithChannel('required', 'MIME_Type', 'pear.php.net', '1.0.0');
+
+
 // email
 $pfm->addPackageDepWithUri('required', 'phpmailer', 'http://svn.intraface.dk/intrafacepublic/3Party/phpmailer/phpmailer-1.73.0');
 
