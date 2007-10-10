@@ -27,6 +27,8 @@ class NewsletterSubscriber extends Standard {
     private $observers = array();
 
     /**
+     * Constructor
+     *
      * @param object  $list List object
      * @param integer $id   Subscriber id
      *
@@ -468,7 +470,7 @@ class NewsletterSubscriber extends Standard {
     }
 
     /**
-     * @todo - den her får virkelig kørt nogle sql'er :) - det skal reduceres
+     * gets a list
      *
      * @return boolean
      */
