@@ -19,8 +19,8 @@ require_once 'Intraface/modules/cms/element/Gallery.php';
 require_once 'Intraface/modules/cms/element/Video.php';
 require_once 'Intraface/modules/cms/element/Map.php';
 
-class CMS_Element extends Standard {
-
+class CMS_Element extends Standard
+{
     var $id;
     var $section;
     var $kernel;
@@ -45,18 +45,18 @@ class CMS_Element extends Standard {
     );
 
     /**
-     * Constructor:
-     * Construktor skal enten have cmspage eller en kernel.
-     * Hvis den f�r kernel skal den have et id.
-     * Fordelen er, at man ikke beh�ver at vide hvilken side elementet h�rer til,
-     * men blot beh�ver, at have elementid.
+     * Constructor
+     *
+     * @param object  $section Section object
+     * @param integer $id      Optional integer
+     *
+     * @return void
      */
-
     function __construct($section, $id = 0) {
         if (!is_object($section)) {
             trigger_error('CMS_Element::CMS_Element needs CMS_Section - got ' . get_class($section), E_USER_ERROR);
         }
-         $this->value['identify_as'] = 'cms_element';  // bruges af parameter
+        $this->value['identify_as'] = 'cms_element';  // bruges af parameter
 
         $this->id = (int) $id;
         $this->kernel = $section->kernel;
@@ -79,10 +79,26 @@ class CMS_Element extends Standard {
 
     }
 
+    /**
+     * Creates a parameter
+     *
+     * @return object
+     */
     function createParameter() {
         return new CMS_Parameter($this);
     }
 
+    /**
+     * Creates an element
+     *
+     * @todo This should be changed to better names
+     *
+     * @param object $object A fitting object
+     * @param string $type   How do you want to create the element?
+     * @param string $value  Which value do you pass
+     *
+     * @return object
+     */
     function factory($object, $type, $value) {
         $class_prefix = 'CMS_';
         switch ($type) {
@@ -138,7 +154,13 @@ class CMS_Element extends Standard {
         }
     }
 
-    function load() {
+    /**
+     * Loads the values for the Element
+     *
+     * @return integer
+     */
+    function load()
+    {
 
         if ($this->id == 0) {
             return 0;
@@ -177,8 +199,7 @@ class CMS_Element extends Standard {
                 $this->extra_style .= ' width: ' . $this->get('width') . 'px';
             }
             */
-        }
-        elseif ($this->get('elm_properties') == 'newline') {
+        } elseif ($this->get('elm_properties') == 'newline') {
             $this->value['extra_style'] .= ' clear: both;';
 
         }
@@ -197,6 +218,13 @@ class CMS_Element extends Standard {
         return $this->id;
     }
 
+    /**
+     * Validates values
+     *
+     * @param array $var Values to validate
+     *
+     * @return boolean
+     */
     function validate($var) {
         // validere om section overhovedet findes
         // validere type
@@ -221,11 +249,12 @@ class CMS_Element extends Standard {
     }
 
     /**
+     * Saves values
      *
-     * Her m� ikke bruges safeToDb p� hele arrayet, for ellers kommer vi til at behandle
-     * elementerne flere gange - og de bliver jo behandlet i parameter.
+     * @param array $var Values to save
+     *
+     * @return boolean
      */
-
     function save($var) {
 
         if (!isset($var['date_expire'])) {
@@ -238,8 +267,7 @@ class CMS_Element extends Standard {
 
         if (empty($var['date_publish']) OR $var['date_publish'] == '0000-00-00 00:00:00') {
             $date_publish = 'NOW()';
-        }
-        else {
+        } else {
             $date_publish = '"'.safeToDb($var['date_publish']).'"';
         }
 
@@ -248,8 +276,7 @@ class CMS_Element extends Standard {
         if ($this->id == 0) {
             $sql_type = "INSERT INTO ";
             $sql_end = ", date_created = NOW()";
-        }
-        else {
+        } else {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;
         }
@@ -267,15 +294,11 @@ class CMS_Element extends Standard {
         if ($this->id == 0) {
             $this->id = $db->insertedId();
 
-            // s�t position for nye elementer
             $next_pos = $this->position->maxpos() + 1;
             $db->query("UPDATE cms_element SET position = " . $next_pos . " WHERE id = " . $this->id);
-
-
         }
 
         $this->load();
-
 
         // af en eller anden grund er paramterobjektet ikke en ordentlig referencd
         // derfor loader jeg lige objektet med det rigtige id
@@ -285,7 +308,9 @@ class CMS_Element extends Standard {
         $this->parameter->object->load();
 
         $this->parameter->save('elm_width', $var['elm_width']);
-        if (isset($var['elm_box'])) $this->parameter->save('elm_box', intval($var['elm_box']));
+        if (isset($var['elm_box'])) {
+            $this->parameter->save('elm_box', intval($var['elm_box']));
+        }
         $this->parameter->save('elm_properties', $var['elm_properties']);
         $this->parameter->save('elm_adjust', $var['elm_adjust']);
 
@@ -298,32 +323,52 @@ class CMS_Element extends Standard {
         return $this->id;
   }
 
-  /**
-   *
-   * Funktionen skal kun deaktivere, s� intet nogensinde bliver slettet fra databasen.
-    */
+    /**
+     * Deactivates an element
+     *
+     * @return boolean
+     */
     function delete(){
         // Husk kun at deaktivere
         $db = new DB_Sql;
         $db->query("UPDATE cms_element SET active = 0 WHERE id = " . $this->id);
-        return 1;
+        return true;
     }
 
+    /**
+     * Reactivates an element
+     *
+     * @return boolean
+     */
     function undelete() {
-        // Husk kun at deaktivere
         $db = new DB_Sql;
         $db->query("UPDATE cms_element SET active = 1 WHERE id = " . $this->id);
-        return 1;
+        return true;
     }
 
+    /**
+     * Moves element up
+     *
+     * @return void
+     */
     function moveUp() {
         $this->position->moveUp($this->id);
     }
 
+    /**
+     * Moves element down
+     *
+     * @return void
+     */
     function moveDown() {
         $this->position->moveDown($this->id);
     }
 
+    /**
+     * Moves element to a precise position
+     *
+     * @return void
+     */
     function moveTo($position) {
         $this->position->moveTo($this->id, $position);
     }
