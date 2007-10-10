@@ -94,7 +94,7 @@ class PdfMaker extends Document_Cpdf
      *
      * @return void
      */
-    protected function setValue($key, $value)
+    public function setValue($key, $value)
     {
         $this->value[$key] = $value;
     }
@@ -106,7 +106,7 @@ class PdfMaker extends Document_Cpdf
      *
      * @return void
      */
-    protected function setX($value)
+    public function setX($value)
     {
         if(is_int($value)) {
             $this->value['x'] = $this->get('margin_left') + $value;
@@ -126,7 +126,7 @@ class PdfMaker extends Document_Cpdf
      *
      * @return void
      */
-    protected function setY($value)
+    public function setY($value)
     {
 
         if(is_int($value)) {
@@ -147,7 +147,7 @@ class PdfMaker extends Document_Cpdf
      *
      * @return void
      */
-    protected function addHeader($headerImg = '')
+    public function addHeader($headerImg = '')
     {
         if(!file_exists($headerImg)) {
             return false;
@@ -181,7 +181,7 @@ class PdfMaker extends Document_Cpdf
      *
      * @return void
      */
-    protected function roundRectangle($x, $y, $width, $height, $round)
+    public function roundRectangle($x, $y, $width, $height, $round)
     {
         parent::setLineStyle(1);
         parent::line($x, $y+$round, $x, $y+$height-$round);
@@ -202,7 +202,7 @@ class PdfMaker extends Document_Cpdf
      *
      * @return void
      */
-    protected function writeDocument($data, $filnavn)
+    public function writeDocument($data, $filnavn)
     {
         //$file = fopen("files/".$filnavn, "wb");
         $file = fopen($filnavn, 'wb');
@@ -217,7 +217,7 @@ class PdfMaker extends Document_Cpdf
      *
      * @return integer the new y
      */
-    protected function nextPage($sub_text = false)
+    public function nextPage($sub_text = false)
     {
         if($sub_text == true) {
             parent::addText($this->value['right_margin_position'] - parent::getTextWidth($this->value['font_size'], "<i>Fortsættes på næste side...</i>") - 30, $this->value["margin_bottom"] - $this->value['font_padding_top'] - $this->value['font_size'], $this->value['font_size'], "<i>Fortsættes på næste side...</i>");
@@ -236,7 +236,7 @@ class PdfMaker extends Document_Cpdf
      *
      * @return mixed
      */
-    protected function get($key = '')
+    public function get($key = '')
     {
         if(!empty($key)) {
             return($this->value[$key]);
