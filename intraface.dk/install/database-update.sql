@@ -58,3 +58,5 @@ CREATE TABLE `module_package_plan` (
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
+
+ALTER TABLE `webshop_basket_evaluation` ADD `evaluate_value_case_sensitive` INT NOT NULL AFTER `evaluate_value` ;
