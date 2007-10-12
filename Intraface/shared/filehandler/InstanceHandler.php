@@ -288,13 +288,13 @@ class InstanceHandler extends Standard
     /**
      * loads types
      *
+     * @todo I filen main/file/index.php er disse ligeledes skrevet ind SJ
+     *       Mon ikke vi bare kan kalde den her metode direkte i stedet? LO
+     *       Synes det giver mening at have den i denne fil
+     *
      * @return array
      */
-    private function _loadTypes() {
-        // Det her skal der laves om på, så det fungere i indstillingerne i stedet.
-        // Kan ikke lige gennemskue hvordan.
-        // I filen main/file/index.php er disse ligeledes skrevet ind SJ
-        // Det skal da bare gøres i Shared ligesom vi har for modulerne LO
+    private static function _loadTypes() {
         return array(
             0 => array('name' => 'manual', 'max_width' => 3456, 'max_height' => 2304), // Manuelt størrelse
             1 => array('name' => 'square', 'max_width' => 75, 'max_height' => 75),
