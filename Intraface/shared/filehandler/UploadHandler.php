@@ -41,11 +41,27 @@
     *
     */
 
-class UploadHandler extends Standard {
+class UploadHandler extends Standard
+{
 
+    /**
+     * @var object
+     */
     private $file_handler;
+
+    /**
+     * @todo
+     */
     private $upload_setting;
+
+    /**
+     * @var string
+     */
     private $upload_path;
+
+    /**
+     * @var todo
+     */
     private $imported_files;
 
     /**
