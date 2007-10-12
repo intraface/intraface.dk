@@ -43,10 +43,10 @@
 
 class UploadHandler extends Standard {
 
-    var $file_handler;
-    var $upload_setting;
-    var $upload_path;
-    var $imported_files;
+    private $file_handler;
+    private $upload_setting;
+    private $upload_path;
+    private $imported_files;
 
     /**
      * Constructor
