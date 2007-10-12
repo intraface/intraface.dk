@@ -79,6 +79,16 @@ class FileHandler extends Standard {
     public $dbquery;
 
     /**
+     * @var string
+     */
+    private $file_viewer;
+
+    /**
+     * @var string
+     */
+    private $www_path;
+
+    /**
      * Constructor
      *
      * @param object  $kernel  Kernel object
@@ -100,6 +110,8 @@ class FileHandler extends Standard {
         $this->accessibility_types = $filehandler_shared->getSetting('accessibility');
         $this->upload_path = PATH_UPLOAD . $this->kernel->intranet->get('id') . '/';
         $this->tempdir_path = $this->upload_path.PATH_UPLOAD_TEMPORARY;
+        $this->file_viewer = FILE_VIEWER;
+        $this->www_path = PATH_WWW;
 
         if ($this->id > 0) {
             $this->load();
@@ -193,17 +205,17 @@ class FileHandler extends Standard {
             $this->value['last_modified'] = 'Filen findes ikke';
         }
 
-        $this->value['file_uri'] = FILE_VIEWER.'?/'.$this->kernel->intranet->get('public_key').'/'.$this->get('access_key').'/'.urlencode($this->get('file_name'));
+        $this->value['file_uri'] = $this->file_viewer.'?/'.$this->kernel->intranet->get('public_key').'/'.$this->get('access_key').'/'.urlencode($this->get('file_name'));
         // nedenstående bruges til pdf-er
         //$this->value['file_uri_pdf'] = PATH_UPLOAD.$this->kernel->intranet->get('id').'/'.$this->value['server_file_name'];
         $this->value['file_uri_pdf'] = $this->path_upload.$this->value['server_file_name'];
 
         if($this->value['is_image'] == 1) {
-            $this->value['icon_uri'] = FILE_VIEWER.'?/'.$this->kernel->intranet->get('public_key').'/'.$db->f('access_key').'/square/'.urlencode($db->f('file_name'));
+            $this->value['icon_uri'] = $this->file_viewer.'?/'.$this->kernel->intranet->get('public_key').'/'.$db->f('access_key').'/square/'.urlencode($db->f('file_name'));
             $this->value['icon_width'] = 75;
             $this->value['icon_height'] = 75;
         } else {
-            $this->value['icon_uri'] = PATH_WWW.'images/mimetypes/'.$this->value['file_type']['icon'];
+            $this->value['icon_uri'] = $this->www_path.'images/mimetypes/'.$this->value['file_type']['icon'];
             $this->value['icon_width'] = 75;
             $this->value['icon_height'] = 75;
         }
