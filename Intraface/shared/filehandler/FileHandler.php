@@ -234,7 +234,7 @@ class FileHandler extends Standard {
      *
      * @return void
      */
-    function createUpload() {
+    private function createUpload() {
 
         if(!class_exists('UploadHandler')) {
             $filehandler_shared = $this->kernel->useShared('filehandler');
@@ -248,7 +248,7 @@ class FileHandler extends Standard {
      *
      * @return void
      */
-    function createInstance($type = "", $param = array()) {
+    private function createInstance($type = "", $param = array()) {
         if(!class_exists('InstanceHandler')) {
             $filehandler_shared = $this->kernel->useShared('filehandler');
             $filehandler_shared->includeFile('InstanceHandler.php');
@@ -266,7 +266,7 @@ class FileHandler extends Standard {
      *
      * @return void
      */
-    function createImage() {
+    private function createImage() {
         if(!class_exists('ImageHandler')) {
             $filehandler_shared = $this->kernel->useShared('filehandler');
             $filehandler_shared->includeFile('ImageHandler.php');
@@ -308,7 +308,7 @@ class FileHandler extends Standard {
      *
      * @return boolean
      */
-    function undelete() {
+    public function undelete() {
         if($this->id == 0) {
             return false;
         }
@@ -336,7 +336,7 @@ class FileHandler extends Standard {
      *
      * @return integer
      */
-    function save($file, $file_name = '', $status = 'visible', $mime_type = NULL) {
+    public function save($file, $file_name = '', $status = 'visible', $mime_type = NULL) {
         if(!is_file($file)) {
             $this->error->set("error in input - not valid file");
             return false;
@@ -393,15 +393,6 @@ class FileHandler extends Standard {
         }
 
         $accessibility_key = array_search('intranet', $this->accessibility_types);
-
-        /*
-        if($temporary == 'temporary') {
-            $temporary = 1;
-        }
-        else {
-            $temporary = 0;
-        }
-        */
 
         $sql = "date_changed = NOW(),
             access_key = '".$access_key."',
@@ -462,7 +453,7 @@ class FileHandler extends Standard {
      *
      * @return integer
      */
-    function update($input) {
+    public function update($input) {
 
         $db = new DB_sql;
 
@@ -477,27 +468,6 @@ class FileHandler extends Standard {
 
         $sql[] = 'date_changed = NOW()';
 
-        /*
-
-        access key opdateres nu ikke længere hver gang!
-
-        // Vi sikre os at ingen andre har den nøgle
-        $i = 0;
-        do {
-            $access_key = $this->kernel->randomKey(50);
-
-            if($i > 50 || $access_key == '') {
-                trigger_error("Fejl under generering af access_key i FileHandler->update", E_USER_ERROR);
-            }
-            $i++;
-            $db->query("SELECT id FROM file_handler WHERE access_key = \"".$access_key."\"");
-        } while($db->nextRecord());
-
-        // Access key ændre ved hver opdatering. Det behøver den måske ikke, men giver sådan set større sikkerhed.
-        $sql[] = 'access_key = "'.$access_key.'"';
-
-        */
-
         // følgende må ikke slettes - bruges i electronisk faktura
         if(isset($input['file_name'])) {
             $sql[] = 'file_name = "'.$input['file_name'].'"';
@@ -506,27 +476,6 @@ class FileHandler extends Standard {
         if(isset($input['server_file_name'])) {
             $sql[] = 'server_file_name = "'.$input['server_file_name'].'"';
         }
-        /*
-        // udgår
-        if(isset($input['file_size'])) {
-            $sql[] = 'file_size = '.(int)$input['file_size'];
-        }
-
-        // Udgår
-        if(isset($input['tmp'])) {
-            $sql[] = 'tmp = '.(int)$input['tmp'];
-        }
-
-        // Udgår
-        if(isset($input['file_type'])) {
-            $mime_type = $this->_getMimeType($input['file_type'], 'mime_type');
-            if($mime_type === false) {
-                $this->error->set($input['file_type'].' er en ugyldig filtype');
-                return false;
-            }
-            $sql[] = 'file_type_key = '.$mime_type['key'];
-        }
-        */
         if(isset($input['description'])) {
             $validator->isString($input['description'], 'Fejl i udfyldelsen af beskrivelse', '<strong><em>', 'allow_empty');
             $sql[] = 'description = "'.$input['description'].'"';
@@ -602,7 +551,7 @@ class FileHandler extends Standard {
      *
      * @return boolean
      */
-    function moveFromTemporary() {
+    public function moveFromTemporary() {
         $db = new DB_Sql;
         $db->query("UPDATE file_handler SET temporary = 0 WHERE user_id = ".$this->kernel->user->get('id')." AND id = " . $this->id);
         return true;
