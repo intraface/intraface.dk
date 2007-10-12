@@ -18,37 +18,75 @@ require_once('Image/Transform.php');
 
 class FileHandler extends Standard {
 
-    var $id; // file id
-    var $kernel;
-    var $error;
-    var $upload_path;
-    var $tempdir_path;
-    var $values;
-    var $file_types;
-    var $accessibility_types;
-
-    var $status = array(
-        0 => 'visible',
-        1 => 'temporary',
-        2 => 'hidden'
-
-    );
-
-    var $upload;
-
-
-    var $dbquery; // der er muligt, at der kun skal være en getList i filemanager,
-    // men så skal vi have cms til at have filemanager som dependent. Foreløbig
-    // har jeg lavet keywordsøgning i denne LO
+    /**
+     * @var integer
+     */
+    var $id;
 
     /**
-     * Init
-     *
-     * FileUpload og FileHandler initieres med det samme, så man kan bruge
-     * deres funktioner, fx setMaxFileSize uden for klassen.
+     * @var object
      */
+    var $kernel;
 
-    function __construct($kernel, $file_id = 0) {
+    /**
+     * @var object
+     */
+    var $error;
+
+    /**
+     * @var string
+     */
+    var $upload_path;
+
+    /**
+     * @var string
+     */
+    var $tempdir_path;
+
+    /**
+     * @var array
+     */
+    var $values;
+
+    /**
+     * @var array
+     */
+    var $file_types;
+
+    /**
+     * @var array
+     */
+    var $accessibility_types;
+
+    /**
+     * @var array
+     */
+    var $status = array(0 => 'visible',
+                        1 => 'temporary',
+                        2 => 'hidden');
+
+    /**
+     * @var object
+     */
+    var $upload;
+
+    /**
+     * @todo der er muligt, at der kun skal være en getList i filemanager,
+     *       men så skal vi have cms til at have filemanager som dependent. Foreløbig
+     *       har jeg lavet keywordsøgning i denne LO
+     * @var object
+     */
+    var $dbquery;
+
+    /**
+     * Constructor
+     *
+     * @param object  $kernel  Kernel object
+     * @param integer $file_id The file id
+     *
+     * @return void
+     */
+    public function __construct($kernel, $file_id = 0) {
         if (!is_object($kernel)) {
             trigger_error('FileHandler kræver kernel', E_USER_ERROR);
         }
@@ -62,16 +100,20 @@ class FileHandler extends Standard {
         $this->upload_path = PATH_UPLOAD.$this->kernel->intranet->get('id').'/';
         $this->tempdir_path = $this->upload_path.PATH_UPLOAD_TEMPORARY;
 
-
-
         if ($this->id > 0) {
-
             $this->load();
         }
-
     }
 
-    function factory(&$kernel, $access_key) {
+    /**
+     * Creates a filehandler
+     *
+     * @param object $kernel     Kernel object
+     * @param string $access_key The accesskey
+     *
+     * @return object
+     */
+    public function factory($kernel, $access_key) {
 
         $access_key = safeToDb($access_key);
 
@@ -83,8 +125,12 @@ class FileHandler extends Standard {
         return new FileHandler($kernel, $db->f('id'));
     }
 
-
-    function load() {
+    /**
+     * Loads the file
+     *
+     * @return integer
+     */
+    private function load() {
 
         $db = new DB_Sql;
         $db->query("SELECT id, date_created, width, height, date_changed, description, file_name, server_file_name, file_size, access_key, accessibility_key, file_type_key, DATE_FORMAT(date_created, '%d-%m-%Y') AS dk_date_created, DATE_FORMAT(date_changed, '%d-%m-%Y') AS dk_date_changed FROM file_handler WHERE id = ".$this->id." AND intranet_id = ".$this->kernel->intranet->get('id')." AND active = 1");
@@ -115,11 +161,9 @@ class FileHandler extends Standard {
 
         if($this->value['file_size'] >= 1000000) {
             $this->value['dk_file_size'] = number_format(($this->value['file_size']/1000000), 2, ",",".")." Mb";
-        }
-        else if($this->value['file_size'] >= 1000) {
+        } else if($this->value['file_size'] >= 1000) {
             $this->value['dk_file_size'] = number_format(($this->value['file_size']/1000), 2, ",",".")." Kb";
-        }
-        else {
+        } else {
             $this->value['dk_file_size'] = number_format($this->value['file_size'], 2, ",",".")." byte";
         }
 
@@ -132,8 +176,7 @@ class FileHandler extends Standard {
 
         if (file_exists($this->get('file_path'))) {
             $this->value['last_modified'] = filemtime($this->get('file_path'));
-        }
-        else {
+        } else {
             $this->value['last_modified'] = 'Filen findes ikke';
         }
 
@@ -145,8 +188,7 @@ class FileHandler extends Standard {
             $this->value['icon_uri'] = FILE_VIEWER.'?/'.$this->kernel->intranet->get('public_key').'/'.$db->f('access_key').'/square/'.urlencode($db->f('file_name'));
             $this->value['icon_width'] = 75;
             $this->value['icon_height'] = 75;
-        }
-        else {
+        } else {
             $this->value['icon_uri'] = PATH_WWW.'images/mimetypes/'.$this->value['file_type']['icon'];
             $this->value['icon_width'] = 75;
             $this->value['icon_height'] = 75;
@@ -158,8 +200,7 @@ class FileHandler extends Standard {
                 $this->value['width'] = $imagesize[0]; // imagesx($this->get('file_uri'));
                 $db2 = new DB_sql;
                 $db2->query("UPDATE file_handler SET width = ".(int)$this->value['width']." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
-            }
-            else {
+            } else {
                 $this->value['width'] = $db->f('width');
             }
 
@@ -168,23 +209,31 @@ class FileHandler extends Standard {
                 $this->value['height'] = $imagesize[1]; //imagesy($this->get('file_uri'));
                 $db2 = new DB_sql;
                 $db2->query("UPDATE file_handler SET height = ".(int)$this->value['height']." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
-            }
-            else {
+            } else {
                 $this->value['height'] = $db->f('height');
             }
-        }
-        else {
+        } else {
             $this->value['width'] = '';
             $this->value['height'] = '';
         }
 
-        return($this->id);
+        return $this->id;
     }
 
-    function createDBQuery() {
+    /**
+     * Creates the dbquery object so it can be used in the class
+     *
+     * @return void
+     */
+    public function createDBQuery() {
         $this->dbquery = new DBQuery($this->kernel, "file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->kernel->intranet->get("id"));
     }
 
+    /**
+     * Creates the upload object so it can be used in the class
+     *
+     * @return void
+     */
     function createUpload() {
 
         if(!class_exists('UploadHandler')) {
@@ -194,6 +243,11 @@ class FileHandler extends Standard {
         $this->upload = new UploadHandler($this);
     }
 
+    /**
+     * Creates the the instance handler so it can be used directly from the filehandler class
+     *
+     * @return void
+     */
     function createInstance($type = "", $param = array()) {
         if(!class_exists('InstanceHandler')) {
             $filehandler_shared = $this->kernel->useShared('filehandler');
@@ -202,12 +256,16 @@ class FileHandler extends Standard {
 
         if($type == "") {
             $this->instance = new InstanceHandler($this);
-        }
-        else {
+        } else {
             $this->instance = InstanceHandler::factory($this, $type, $param);
         }
     }
 
+    /**
+     * Creates the the image handler so it can be used directly from the filehandler class
+     *
+     * @return void
+     */
     function createImage() {
         if(!class_exists('ImageHandler')) {
             $filehandler_shared = $this->kernel->useShared('filehandler');
@@ -225,10 +283,9 @@ class FileHandler extends Standard {
      * Her bør sikkert være et tjek på om filen bruges nogen steder i systemet.
      * Hvis den bruges skal man måske have at vide hvor?
      *
-     * @access	public
+     * @return boolean
      */
-
-    function delete() {
+    public function delete() {
         if($this->id == 0) {
             return false;
         }
@@ -246,6 +303,11 @@ class FileHandler extends Standard {
         return true;
     }
 
+    /**
+     * Undeletes a file
+     *
+     * @return boolean
+     */
     function undelete() {
         if($this->id == 0) {
             return false;
@@ -264,17 +326,17 @@ class FileHandler extends Standard {
         return true;
     }
 
-
     /**
      * Benyttes til at sætte en uploadet fil ind i systemet
      *
-     *@param file: stien til filen
-     *@param file_name: det originale filnavn, hvis ikke sat, tages der efter det nuværende navn
-     *@param temporary: hvis sat til 'temporary' gemmes filen med temporary sat.
+     * @param string $file      stien til filen
+     * @param string $file_name det originale filnavn, hvis ikke sat, tages der efter det nuværende navn
+     * @param string $status    @todo hvad er det
+     * @param string $mime_type @todo hvad er det
+     *
+     * @return integer
      */
     function save($file, $file_name = '', $status = 'visible', $mime_type = NULL) {
-
-
         if(!is_file($file)) {
             $this->error->set("error in input - not valid file");
             return false;
@@ -288,8 +350,7 @@ class FileHandler extends Standard {
 
         if($file_name == '') {
             $file_name = substr(strrchr($file, '/'), 1);
-        }
-        else {
+        } else {
             $file_name = safeToDb($file_name);
         }
 
@@ -304,8 +365,6 @@ class FileHandler extends Standard {
             $i++;
             $db->query("SELECT id FROM file_handler WHERE access_key = '".$access_key."'");
         } while($db->nextRecord());
-
-
 
         $file_size = filesize($file);
         if($mime_type === NULL) {
@@ -324,13 +383,11 @@ class FileHandler extends Standard {
             return false;
         }
 
-
         if($mime_type['image']) {
             $imagesize = getimagesize($file);
             $width = $imagesize[0]; // imagesx($file);
             $height = $imagesize[1]; // imagesy($file);
-        }
-        else {
+        } else {
             $width = "NULL";
             $height = "NULL";
         }
@@ -356,7 +413,6 @@ class FileHandler extends Standard {
             height = ".$height.",
             temporary = ".array_search($status, $this->status)."";
 
-
         if($this->id != 0) {
             $db->query("UPDATE file_handler SET ".$sql." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
             $id = $this->id;
@@ -368,8 +424,7 @@ class FileHandler extends Standard {
             $this->createInstance();
             $this->instance->deleteAll();
 
-        }
-        else {
+        } else {
             $db->query("INSERT INTO file_handler SET ".$sql.", date_created = NOW(), intranet_id = ".$this->kernel->intranet->get('id').", user_id = ".$this->kernel->user->get('id'));
             $id = $db->insertedId();
         }
@@ -403,7 +458,9 @@ class FileHandler extends Standard {
     /**
      * Benyttes til at opdaterer oplysninger om fil
      *
-     *@param input: array med input
+     * @param array $input array med input
+     *
+     * @return integer
      */
     function update($input) {
 
@@ -440,7 +497,6 @@ class FileHandler extends Standard {
         $sql[] = 'access_key = "'.$access_key.'"';
 
         */
-
 
         // følgende må ikke slettes - bruges i electronisk faktura
         if(isset($input['file_name'])) {
@@ -506,9 +562,17 @@ class FileHandler extends Standard {
         return $this->id;
     }
 
-    function _getMimeType($key, $from = 'key') {
+    /**
+     * Returns the mimetype
+     *
+     * @param string $key  @todo what is this
+     * @param string $from @todo what is this
+     *
+     * @return string
+     */
+    private function _getMimeType($key, $from = 'key') {
 
-        /* hack */
+        /* @todo hack */
         require(PATH_INCLUDE_CONFIG . 'setting_file_type.php');
         $this->file_types = $_file_type;
         /* hack slut */
@@ -534,44 +598,15 @@ class FileHandler extends Standard {
     }
 
     /**
-     * Metoden spytter et image-tag ud og det er xhtml.
+     * Moves file to filesystem from temporary
      *
-     * @author Lars Olesen <lars@legestue.net>
-     *
-     * @param $alt Alternativ tekst, hvis billedet ikke vises
-     * @return img-tag eller en tom streng, hvis der ikke er noget billede at vise
-     **/
-    /*
-    function getImageHtml($alt = '', $attr = '') {
-        if ($this->id == 0) {
-            return '';
-        }
-        return '<img src="'.htmlspecialchars($this->get('file_uri')).'" alt="'.$alt.'" '.$attr.' />';
-    }
-    */
-
+     * @return boolean
+     */
     function moveFromTemporary() {
         $db = new DB_Sql;
         $db->query("UPDATE file_handler SET temporary = 0 WHERE user_id = ".$this->kernel->user->get('id')." AND id = " . $this->id);
-        return 1;
+        return true;
     }
-
-    /**
-     * Foreløbig bruges denne funktion kun af CMS_Gallery, men hvis den ændres,
-     * lav venligst også tilsvarende ændringer i CMS_Gallery
-     */
-    /*
-    function getList() {
-        // husk at sætte permission her også. kan ikke lige huske felterne
-        $db = $this->dbquery->getRecordset("file_handler.id", "", false);
-        $i = 0;
-        while ($db->nextRecord()) {
-            $filehandler[$i] = new FileHandler($this->kernel, $db->f('id'));
-            $i++;
-        }
-        return $filehandler;
-    }
-    */
 
 }
 
