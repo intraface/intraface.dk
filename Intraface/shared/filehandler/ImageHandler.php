@@ -10,8 +10,15 @@
 
 class ImageHandler extends Standard
 {
-
+    /**
+     * @var object
+     */
     private $file_handler;
+
+    /**
+     * @var integer
+     */
+    private $image_library;
 
     /**
      * Constructor
@@ -34,6 +41,8 @@ class ImageHandler extends Standard
         }
 
         $this->file_handler = $file_handler;
+
+        $this->image_library = IMAGE_LIBRARY;
 
         if($this->file_handler->get('is_image') != 1) {
             trigger_error("Filtypen " . $file_handler->get('mime_type') . " er ikke et billede, og kan derfor ikke manipuleres i ImageHandler", E_USER_ERROR);
@@ -59,7 +68,7 @@ class ImageHandler extends Standard
     public function resize($width, $height = NULL, $strict = 'relative')
     {
 
-        $image = Image_Transform::factory(IMAGE_LIBRARY);
+        $image = Image_Transform::factory($this->image_library);
         $error = $image->load($this->file_handler->get('file_path'));
 
         $image->setOption('quality', 100);
