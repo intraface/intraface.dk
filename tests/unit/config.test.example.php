@@ -13,6 +13,8 @@ define('PATH_INCLUDE_SHARED', 'c:/Users/Lars Olesen/workspace/intraface/Intrafac
 define('CONNECTION_INTERNET', 'ONLINE');
 define('PATH_UPLOAD', PATH_ROOT . 'upload/');
 define('PATH_UPLOAD_TEMPORARY', PATH_UPLOAD . 'upload/tmp/');
+define('FILE_VIEWER', '');
+define('PATH_WWW', '');
 
 $db = MDB2::singleton(DB_DSN);
 $db->setOption('debug', 0);
