@@ -21,54 +21,54 @@ class FileHandler extends Standard {
     /**
      * @var integer
      */
-    var $id;
+    private $id;
 
     /**
      * @var object
      */
-    var $kernel;
+    public $kernel;
 
     /**
      * @var object
      */
-    var $error;
+    public $error;
 
     /**
      * @var string
      */
-    var $upload_path;
+    private $upload_path;
 
     /**
      * @var string
      */
-    var $tempdir_path;
+    private $tempdir_path;
 
     /**
      * @var array
      */
-    var $values;
+    protected $values;
 
     /**
      * @var array
      */
-    var $file_types;
+    private $file_types;
 
     /**
      * @var array
      */
-    var $accessibility_types;
+    private $accessibility_types;
 
     /**
      * @var array
      */
-    var $status = array(0 => 'visible',
+    private $status = array(0 => 'visible',
                         1 => 'temporary',
                         2 => 'hidden');
 
     /**
-     * @var object
+     * @var object @todo is this used at all?
      */
-    var $upload;
+    private $upload;
 
     /**
      * @todo der er muligt, at der kun skal være en getList i filemanager,
@@ -76,7 +76,7 @@ class FileHandler extends Standard {
      *       har jeg lavet keywordsøgning i denne LO
      * @var object
      */
-    var $dbquery;
+    public $dbquery;
 
     /**
      * Constructor
@@ -86,7 +86,8 @@ class FileHandler extends Standard {
      *
      * @return void
      */
-    public function __construct($kernel, $file_id = 0) {
+    public function __construct($kernel, $file_id = 0)
+    {
         if (!is_object($kernel)) {
             trigger_error('FileHandler kræver kernel', E_USER_ERROR);
         }
@@ -97,12 +98,22 @@ class FileHandler extends Standard {
         $filehandler_shared = $this->kernel->useShared('filehandler');
         $this->file_types = $filehandler_shared->getSetting('file_type');
         $this->accessibility_types = $filehandler_shared->getSetting('accessibility');
-        $this->upload_path = PATH_UPLOAD.$this->kernel->intranet->get('id').'/';
+        $this->upload_path = PATH_UPLOAD . $this->kernel->intranet->get('id') . '/';
         $this->tempdir_path = $this->upload_path.PATH_UPLOAD_TEMPORARY;
 
         if ($this->id > 0) {
             $this->load();
         }
+    }
+
+    /**
+     * Returns the upload path
+     *
+     * @return string
+     */
+    function getUploadPath()
+    {
+        return $this->upload_path;
     }
 
     /**
@@ -113,7 +124,8 @@ class FileHandler extends Standard {
      *
      * @return object
      */
-    public function factory($kernel, $access_key) {
+    public function factory($kernel, $access_key)
+    {
 
         $access_key = safeToDb($access_key);
 
@@ -130,7 +142,8 @@ class FileHandler extends Standard {
      *
      * @return integer
      */
-    private function load() {
+    private function load()
+    {
 
         $db = new DB_Sql;
         $db->query("SELECT id, date_created, width, height, date_changed, description, file_name, server_file_name, file_size, access_key, accessibility_key, file_type_key, DATE_FORMAT(date_created, '%d-%m-%Y') AS dk_date_created, DATE_FORMAT(date_changed, '%d-%m-%Y') AS dk_date_changed FROM file_handler WHERE id = ".$this->id." AND intranet_id = ".$this->kernel->intranet->get('id')." AND active = 1");
@@ -225,17 +238,20 @@ class FileHandler extends Standard {
      *
      * @return void
      */
-    public function createDBQuery() {
+    public function createDBQuery()
+    {
         $this->dbquery = new DBQuery($this->kernel, "file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->kernel->intranet->get("id"));
     }
 
     /**
      * Creates the upload object so it can be used in the class
      *
+     * @todo is this used at all?
+     *
      * @return void
      */
-    private function createUpload() {
-
+    private function createUpload()
+    {
         if(!class_exists('UploadHandler')) {
             $filehandler_shared = $this->kernel->useShared('filehandler');
             $filehandler_shared->includeFile('UploadHandler.php');
@@ -248,7 +264,8 @@ class FileHandler extends Standard {
      *
      * @return void
      */
-    private function createInstance($type = "", $param = array()) {
+    private function createInstance($type = "", $param = array())
+    {
         if(!class_exists('InstanceHandler')) {
             $filehandler_shared = $this->kernel->useShared('filehandler');
             $filehandler_shared->includeFile('InstanceHandler.php');
@@ -266,7 +283,8 @@ class FileHandler extends Standard {
      *
      * @return void
      */
-    private function createImage() {
+    private function createImage()
+    {
         if(!class_exists('ImageHandler')) {
             $filehandler_shared = $this->kernel->useShared('filehandler');
             $filehandler_shared->includeFile('ImageHandler.php');
@@ -285,7 +303,8 @@ class FileHandler extends Standard {
      *
      * @return boolean
      */
-    public function delete() {
+    public function delete()
+    {
         if($this->id == 0) {
             return false;
         }
@@ -308,7 +327,8 @@ class FileHandler extends Standard {
      *
      * @return boolean
      */
-    public function undelete() {
+    public function undelete()
+    {
         if($this->id == 0) {
             return false;
         }
@@ -336,7 +356,8 @@ class FileHandler extends Standard {
      *
      * @return integer
      */
-    public function save($file, $file_name = '', $status = 'visible', $mime_type = NULL) {
+    public function save($file, $file_name = '', $status = 'visible', $mime_type = NULL)
+    {
         if(!is_file($file)) {
             $this->error->set("error in input - not valid file");
             return false;
@@ -453,7 +474,8 @@ class FileHandler extends Standard {
      *
      * @return integer
      */
-    public function update($input) {
+    public function update($input)
+    {
 
         $db = new DB_sql;
 
@@ -502,8 +524,7 @@ class FileHandler extends Standard {
 
         if($this->id != 0) {
             $db->query("UPDATE file_handler SET ".implode(', ', $sql)." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
-        }
-        else {
+        } else {
             $db->query("INSERT INTO file_handler SET ".implode(', ', $sql).", user_id = ".$this->kernel->user->get('id').", intranet_id = ".$this->kernel->intranet->get('id').", date_created = NOW()");
             $this->id = $db->insertedId();
         }
@@ -519,7 +540,8 @@ class FileHandler extends Standard {
      *
      * @return string
      */
-    private function _getMimeType($key, $from = 'key') {
+    private function _getMimeType($key, $from = 'key')
+    {
 
         /* @todo hack */
         require(PATH_INCLUDE_CONFIG . 'setting_file_type.php');
@@ -551,7 +573,8 @@ class FileHandler extends Standard {
      *
      * @return boolean
      */
-    public function moveFromTemporary() {
+    public function moveFromTemporary()
+    {
         $db = new DB_Sql;
         $db->query("UPDATE file_handler SET temporary = 0 WHERE user_id = ".$this->kernel->user->get('id')." AND id = " . $this->id);
         return true;
