@@ -195,7 +195,8 @@ class FileHandler extends Standard {
 
         $this->value['file_uri'] = FILE_VIEWER.'?/'.$this->kernel->intranet->get('public_key').'/'.$this->get('access_key').'/'.urlencode($this->get('file_name'));
         // nedenstående bruges til pdf-er
-        $this->value['file_uri_pdf'] = PATH_UPLOAD.$this->kernel->intranet->get('id').'/'.$this->value['server_file_name'];
+        //$this->value['file_uri_pdf'] = PATH_UPLOAD.$this->kernel->intranet->get('id').'/'.$this->value['server_file_name'];
+        $this->value['file_uri_pdf'] = $this->path_upload.$this->value['server_file_name'];
 
         if($this->value['is_image'] == 1) {
             $this->value['icon_uri'] = FILE_VIEWER.'?/'.$this->kernel->intranet->get('public_key').'/'.$db->f('access_key').'/square/'.urlencode($db->f('file_name'));
