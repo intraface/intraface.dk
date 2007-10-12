@@ -28,9 +28,8 @@ class InstanceHandler extends Standard
      *
      * @return void
      */
-    function __construct(&$file_handler, $id = 0)
+    function __construct($file_handler, $id = 0)
     {
-
         if(!is_object($file_handler)) {
             trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (1)", E_USER_ERROR);
         }
@@ -42,9 +41,9 @@ class InstanceHandler extends Standard
             trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (2)", E_USER_ERROR);
         }
 
-        $this->file_handler = &$file_handler;
+        $this->file_handler = $file_handler;
         $this->id = (int)$id;
-        $this->instance_path = PATH_UPLOAD.$this->file_handler->kernel->intranet->get('id').'/'.'instance/';
+        $this->instance_path = $this->file_handler->getUploadPath().'instance/';
 
         $this->instance_types = $this->_loadTypes();
 
