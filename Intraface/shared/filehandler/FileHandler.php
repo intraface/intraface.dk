@@ -294,6 +294,8 @@ class FileHandler extends Standard {
     /**
      * Creates the the image handler so it can be used directly from the filehandler class
      *
+     * @todo is this used?
+     *
      * @return void
      */
     private function createImage()
