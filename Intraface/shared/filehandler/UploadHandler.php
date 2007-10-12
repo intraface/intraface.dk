@@ -70,7 +70,8 @@ class UploadHandler extends Standard {
 
         $this->file_handler = $file_handler;
 
-        $this->upload_path = PATH_UPLOAD.$this->file_handler->kernel->intranet->get('id').'/';
+        //$this->upload_path = PATH_UPLOAD.$this->file_handler->kernel->intranet->get('id').'/';
+        $this->upload_path = $this->file_handler->getUploadPath();
 
         $this->upload_setting['max_file_size'] = 500000;
         $this->upload_setting['allow_only_images'] = 0;
