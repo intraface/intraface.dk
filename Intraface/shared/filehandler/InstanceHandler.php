@@ -14,11 +14,30 @@
 
 class InstanceHandler extends Standard
 {
-    var $file_handler;
-    var $instance_path;
-    var $instance_types;
-    var $allowed_transform_image = array('jpg', 'jpeg', 'gif', 'png');
-    var $id;
+    /**
+     * @var object
+     */
+    private $file_handler;
+
+    /**
+     * @var string
+     */
+    private $instance_path;
+
+    /**
+     * @var array
+     */
+    private $instance_types;
+
+    /**
+     * @var array
+     */
+    private $allowed_transform_image = array('jpg', 'jpeg', 'gif', 'png');
+
+    /**
+     * @var integer
+     */
+    private $id;
 
     /**
      * Constructor
