@@ -6,27 +6,22 @@ class AppendFile
     /**
      * @var integer
      */
-    var $id;
-
-    /**
-     * @var object
-     */
-    var $object;
+    private $id;
 
     /**
      * @var array
      */
-    var $belong_to_types = array();
+    private $belong_to_types = array();
 
     /**
      * @var object
      */
-    var $error;
+    public $error;
 
     /**
      * @var object
      */
-    var $dbquery;
+    public $dbquery;
 
     /**
      * Constructor
@@ -58,11 +53,6 @@ class AppendFile
         $this->id = (int)$id;
         $this->error = new Error;
 
-        /*
-        if ($this->id > 0) {
-            $this->load();
-        }
-        */
     }
 
     /**
@@ -82,7 +72,7 @@ class AppendFile
      *
      * @return boolean
      */
-    function validate($var)
+    private function validate($var)
     {
         $filehandler = new Filehandler($this->kernel, (int)$var['file_handler_id']);
         if($filehandler->get('id') == 0) {
@@ -100,7 +90,7 @@ class AppendFile
      *
      * @return integer
      */
-    function save($var)
+    public function save($var)
     {
         $var = safeToDb($var);
 
@@ -146,7 +136,7 @@ class AppendFile
      *
      * @return void
      */
-    function addFile($input)
+    public function addFile($input)
     {
         $input = safeToDb($input);
 
@@ -169,7 +159,7 @@ class AppendFile
      *
      * @return boolean
      */
-    function delete()
+    public function delete()
     {
         $db = new DB_Sql;
         $db->query("UPDATE filehandler_append_file SET active = 0 WHERE id = " . $this->id);
@@ -181,7 +171,7 @@ class AppendFile
      *
      * @return boolean
      */
-    function undelete()
+    public function undelete()
     {
         $db = new DB_Sql;
         $db->query("UPDATE filehandler_append_file SET active = 1 WHERE id = " . $this->id);
@@ -193,13 +183,12 @@ class AppendFile
      *
      * @return array
      */
-    function getList()
+    public function getList()
     {
         if($this->dbquery->checkFilter('order_by') && $this->dbquery->getFilter('order_by') == 'name') {
             $this->dbquery->setJoin('INNER', 'file_handler', 'filehandler_append_file.file_handler_id = file_handler.id', 'file_handler.intranet_id = '.$this->kernel->intranet->get('id').' AND file_handler.active = 1');
             $this->dbquery->setSorting('file_handler.file_name');
-        }
-        else {
+        } else {
             $this->dbquery->setSorting('filehandler_append_file.id');
         }
 
