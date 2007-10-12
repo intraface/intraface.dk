@@ -8,9 +8,10 @@
     *
     */
 
-class ImageHandler extends Standard {
+class ImageHandler extends Standard
+{
 
-    var $file_handler;
+    private $file_handler;
 
     /**
      * Constructor
@@ -19,9 +20,8 @@ class ImageHandler extends Standard {
      *
      * @return void
      */
-    function __construct($file_handler)
+    public function __construct($file_handler)
     {
-
         if(!is_object($file_handler)) {
             trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (1)", E_USER_ERROR);
         }
@@ -36,7 +36,7 @@ class ImageHandler extends Standard {
         $this->file_handler = $file_handler;
 
         if($this->file_handler->get('is_image') != 1) {
-            trigger_error("Filtypen " . $file_type['mime_type'] . " er ikke et billede, og kan derfor ikke manipuleres i ImageHandler", E_USER_ERROR);
+            trigger_error("Filtypen " . $file_handler->get('mime_type') . " er ikke et billede, og kan derfor ikke manipuleres i ImageHandler", E_USER_ERROR);
         }
 
         if(!is_dir($this->file_handler->tempdir_path)) {
@@ -56,7 +56,7 @@ class ImageHandler extends Standard {
      *
      * @return boolean
      */
-    function resize($width, $height = NULL, $strict = 'relative')
+    public function resize($width, $height = NULL, $strict = 'relative')
     {
 
         $image = Image_Transform::factory(IMAGE_LIBRARY);
@@ -114,7 +114,7 @@ class ImageHandler extends Standard {
      * @param integer $max_width  Maximal width
      * @param integer $max_height Maximal height
      */
-    function getRelativeSize($max_width, $max_height)
+    private function getRelativeSize($max_width, $max_height)
     {
         $width = $this->file_handler->get('width'); //1000
         $height = $this->file_handler->get('height'); //502
