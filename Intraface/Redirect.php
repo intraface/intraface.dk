@@ -121,11 +121,27 @@ require_once 'Intraface/3Party/Database/Db_sql.php';
  * @version @package-version@
  */
 
-class Redirect extends Standard {
+class Redirect extends Standard
+{
 
+    /**
+     * @var object
+     */
     private $kernel;
-    private $value;
+
+    /**
+     * @var array
+     */
+    public $value;
+
+    /**
+     * @var array
+     */
     private $querystring = array();
+
+    /**
+     * @var string
+     */
     private $identifier;
 
     /**
@@ -136,7 +152,8 @@ class Redirect extends Standard {
      *
      * @return object
      */
-    function __construct($kernel, $id = 0) { // , $query_variable = "redirect_id", $query_return_variable = 'return_redirect_id'
+    function __construct($kernel, $id = 0)
+    {
         $this->kernel = $kernel;
 
         $this->value['query_variable'] = 'redirect_id';
@@ -146,64 +163,6 @@ class Redirect extends Standard {
         if($this->id > 0) {
             $this->load();
         }
-
-        /*
-        if(intval($id) != 0) {
-            $this->id = intval($id);
-            $this->load();
-            // Her sletter vi ikke andre redirects til denne side, da der kan v�re nogle som referer til denne side.
-        }
-        elseif(isset($_GET[$this->get('query_variable')])) {
-            // Er id'et sat i url'en, s� loader vi fra id'et
-            $this->id = intval($_GET[$this->get('query_variable')]);
-            $this->load();
-
-            // Sletter alle andre redirects til denne side.
-            $this->reset();
-        }
-        elseif(isset($_GET[$this->get('query_return_variable')])) {
-            // Er id'et sat i url'en, s� loader vi fra id'et
-            $this->id = intval($_GET[$this->get('query_return_variable')]);
-            $this->load();
-        }
-        elseif(isset($_SERVER['HTTP_REFERER'])) {
-            $url_parts = explode("?", $_SERVER['HTTP_REFERER']);
-            // print($url_parts[0]." == ".$_SERVER["SCRIPT_URI"]);
-            // print("b");
-
-            if($url_parts[0] == $_SERVER["SCRIPT_URI"]) {
-                // print("c");
-                // Vi arbejder inden for den samme side, s� finder vi id ud fra siden.
-                $db = new DB_sql;
-                //print "SELECT id FROM redirect WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND user_id = ".$this->kernel->user->get('id')." AND destination_url = \"".$_SERVER["SCRIPT_URI"]."\"";
-                $db->query("SELECT id FROM redirect WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND user_id = ".$this->kernel->user->get('id')." AND destination_url = \"".$_SERVER["SCRIPT_URI"]."\" ORDER BY date_created DESC");
-                if($db->nextRecord()) {
-                    $this->id = $db->f('id');
-                    $this->load();
-                    // Sletter alle andre redirects til denne side.
-                    $this->reset();
-                }
-                else {
-                    $this->id = 0;
-                }
-            }
-            else {
-                // print("d");
-                // Der er ikke sat et redirect_id, vi er ikke inden for samme side, s� m� det v�re et kald til siden som ikke benytter redirect. Vi sletter alle redirects til denne side.
-
-                $this->id = 0;
-
-                //
-                // DET KAN VI IKKE BARE. TJEK FX FRA REMINDER_EMAIL.PHP, hvor vi s� ikke vil blive
-                // sendt tilbage, men det kan v�re, at det er fordi den bruges forkert?
-                // Det m� v�re forkert brug, for vi er n�dt til at ryde op her, ellers giver det problemer /Sune (17-10-2006)
-                //
-
-                $this->reset();
-            }
-        }
-        */
-
     }
 
     /**
@@ -277,20 +236,17 @@ class Redirect extends Standard {
         if($type == 'go') {
             // Vi starter en ny redirect p� siden, derfor skal vi ikke her slette eksisterende redirects til denne side.
             $id = 0;
-        }
-        else {
+        } else {
             if(($type == 'receive' && isset($_GET[$query_variable]))) {
                 // Vi modtager en redirect fra url'en. Derfor sletter vi alle andre redirects til denne side.
                 $reset = true;
                 $id = intval($_GET[$query_variable]);
                 $redirect = new Redirect($kernel, $id);
 
-            }
-            elseif($type == 'return' && isset($_GET[$query_return_variable])) {
+            } elseif($type == 'return' && isset($_GET[$query_return_variable])) {
                 // Vi returnerer med en v�rdi. Der kan v�re en eksisterende redirect til denne side, som vi skal benytte igen. Vi sletter ikke andre redirects.
                 $id = intval($_GET[$query_return_variable]);
-            }
-            elseif(isset($_SERVER['HTTP_REFERER'])) {
+            } elseif(isset($_SERVER['HTTP_REFERER'])) {
                 // Vi arbejder inden for samme side. Vi finder forh�bentligt en redirect. Under alle omst�ndigheder sletter vi hvad vi ikke skal bruge.
                 $reset = true;
 
@@ -309,13 +265,11 @@ class Redirect extends Standard {
                     if($db->nextRecord()) {
 
                         $id = $db->f('id');
-                    }
-                    else {
+                    } else {
 
                         $id = 0;
                     }
-                }
-                else {
+                } else {
                     // print("d");
                     // Der er ikke sat et redirect_id, vi er ikke inden for samme side, s� m� det v�re et kald til siden som ikke benytter redirect. Vi sletter alle redirects til denne side.
                     $reset = true;
@@ -341,11 +295,11 @@ class Redirect extends Standard {
      *
      * @return void
      */
-    function set($key, $value) {
+    function set($key, $value)
+    {
         if($key != '') {
             $this->value[$key] = $value;
-        }
-        else {
+        } else {
             trigger_error("Key er ikke sat i Redirect->set", E_USER_ERROR);
         }
     }
@@ -355,7 +309,8 @@ class Redirect extends Standard {
      *
      * @return integer
      */
-    function load() {
+    private function load()
+    {
 
         $db = new DB_Sql;
         $sql = "SELECT * FROM redirect
@@ -390,7 +345,8 @@ class Redirect extends Standard {
      *
      * @return string
      */
-    function parseUrl($url) {
+    function parseUrl($url)
+    {
         return $url;
     }
 
@@ -401,12 +357,12 @@ class Redirect extends Standard {
      *
      * @return string
      */
-    function setIdentifier($identifier) {
+    function setIdentifier($identifier)
+    {
         if($this->id) {
             $db = new DB_sql;
             $db->query("UPDATE redirect SET identifier = \"".safeToDb($identifier)."\" WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
-        }
-        else {
+        } else {
             $this->identifier = safeToDB($identifier);
         }
     }
@@ -416,7 +372,8 @@ class Redirect extends Standard {
      *
      * @return string
      */
-    function thisUri() {
+    function thisUri()
+    {
         $protocol = 'http://';
           if(!empty($_SERVER['HTTPS'])) { $protocol= 'https://'; }
           return $protocol.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME'];
@@ -430,12 +387,12 @@ class Redirect extends Standard {
      *
      * @return string The url which should be used for the redirect
      */
-    function setDestination($destination_url, $return_url = '') {
+    function setDestination($destination_url, $return_url = '')
+    {
         if (!array_key_exists('SCRIPT_URI', $_SERVER)) {
             if (!empty($_SERVER['REQUEST_URI'])) {
                 $_SERVER['SCRIPT_URI'] = $_SERVER['REQUEST_URI'];
-            }
-            else {
+            } else {
                 $_SERVER['SCRIPT_URI'] = '';
             }
             //TODO WHAT TO DO WHEN THE REQUEST URI IS EMPTY
@@ -444,8 +401,7 @@ class Redirect extends Standard {
         if(empty($return_url)) {
 
             $return_url = $this->parseUrl($this->thisUri());
-        }
-        else {
+        } else {
             $return_url = $this->parseUrl($return_url);
         }
 
@@ -479,9 +435,6 @@ class Redirect extends Standard {
 
         $destination_url = $this->mergeQueryString($destination_url, $this->get('redirect_query_string'));
 
-        // $this->reset($this->url_destination); // vi sletter tidligere redirects til denne side.
-        //$this->reset(); // sletter alle tidligere redirects for brugen er vist det rigtige
-
         return $destination_url;
     }
 
@@ -493,13 +446,13 @@ class Redirect extends Standard {
      *
      * @return string
      */
-    function getRedirect($standard_location) {
+    function getRedirect($standard_location)
+    {
 
         if($this->id > 0) {
             $this->addQuerystring($this->get('query_return_variable').'='.$this->id);
             return $this->mergeQuerystring($this->get('return_url'), $this->querystring);
-        }
-        else {
+        } else {
             return $standard_location;
         }
     }
@@ -511,9 +464,10 @@ class Redirect extends Standard {
      *
      * @return void
      */
-    function addQueryString($querystring) {
+    function addQueryString($querystring)
+    {
+        // if querystring already set, do not set it again
         if(in_array($querystring, $this->querystring) === false) {
-            // Hvis den samme querystring allerede er sat, s� s�ttes den ikke igen.
             $this->querystring[] = $querystring;
         }
     }
@@ -526,22 +480,20 @@ class Redirect extends Standard {
      *
      * @return string
      */
-    function mergeQueryString($querystring, $extra) {
+    function mergeQueryString($querystring, $extra)
+    {
 
         if(strstr($querystring, "?") === false) {
             $separator = "?";
-        }
-        else {
+        } else {
             $separator = '&';
         }
 
         if(is_array($extra) && count($extra) > 0) {
             return $querystring.$separator.implode('&', $extra);
-        }
-        elseif(is_string($extra) && $extra != "") {
+        } elseif(is_string($extra) && $extra != "") {
             return $querystring.$separator.$extra;
-        }
-        else {
+        } else {
             return $querystring;
         }
 
@@ -552,15 +504,10 @@ class Redirect extends Standard {
      *
      * @return boolean
      */
-    function reset() {
-        /*
-        if (!array_key_exists('SCRIPT_URI', $_SERVER)) {
-            $_SERVER['SCRIPT_URI'] = $_SERVER['REQUEST_URI'];
-        }
-        */
-
+    function reset()
+    {
         if($this->id == 0) {
-            // Kan de nu ogs� v�re rigtigt at den ikke kan slette hvor id er 0!
+            // @todo Kan de nu ogs� v�re rigtigt at den ikke kan slette hvor id er 0!
             // trigger_error("id er ikke sat i Redirect->reset", E_USER_ERROR);
         }
 
@@ -590,7 +537,8 @@ class Redirect extends Standard {
      *
      * @return boolean true on success
      */
-    function delete($id = NULL) {
+    function delete($id = NULL)
+    {
         if($id === NULL) {
             $id = $this->id;
         }
@@ -605,35 +553,17 @@ class Redirect extends Standard {
     }
 
     /**
-     * Benyttes til at tilf�je en parameter, som skal sendes tilbage til this_url
-     *
-     * Funktionen kaldes umiddelbart efter setDestination
-     **/
-    /*
-    function askParameter($key) {
-        $key = safeToDb($key);
-        if($this->id == 0) {
-            trigger_error("Der skal gemmes en redirect med setDestination f�r der kan s�ttes en askParameter", FATAL);
-            return false;
-        }
-
-        $db = new DB_Sql;
-        $db->query("INSERT INTO redirect_parameter SET intranet_id = ".$this->kernel->intranet->get('id').", redirect_id = ".$this->id.", parameter = \"".$key."\"");
-        return true;
-    }
-    */
-
-    /**
      * Used to set a parameter - if more parameters should be set
      *
-     * WHY IS THIS METHOD CALLED ASK?
+     * @todo WHY IS THIS METHOD CALLED ASK?
      *
      * @param string $key  Identifier of the parameter
      * @param type   $type Can be either mulitple or single
      *
      * @return boolean
      */
-    function askParameter($key, $type = 'single') {
+    function askParameter($key, $type = 'single')
+    {
         $key = safeToDb($key);
         $type = safeToDb($type);
         if($this->id == 0) {
@@ -657,7 +587,8 @@ class Redirect extends Standard {
      *
      * @return boolean
      */
-    function setParameter($key, $value, $extra_value = '') {
+    function setParameter($key, $value, $extra_value = '')
+    {
         if($this->id == 0) {
             trigger_error("id is not set IN Redirect->setParameter. You might want to consider the possibility that redirect id both could and could not be set by the call of setParameter, and therefor want to make a check before.", E_USER_ERROR);
         }
@@ -680,14 +611,12 @@ class Redirect extends Standard {
                 $db->query("SELECT id FROM redirect_parameter_value WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND redirect_id = ".$this->id." AND redirect_parameter_id = ".$db->f('id'));
                 if($db->nextRecord()) {
                     $db->query("UPDATE redirect_parameter_value SET value = \"".$value."\", extra_value = \"".$extra_value."\" WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND redirect_id = ".$this->id." AND  redirect_parameter_id = ".$parameter_id);
-                }
-                else {
+                } else {
                     $db->query("INSERT INTO redirect_parameter_value SET intranet_id = ".$this->kernel->intranet->get('id').", redirect_id = ".$this->id.", redirect_parameter_id = ".$parameter_id.", value = \"".$value."\", extra_value = \"".$extra_value."\"");
                 }
                 return true;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -699,7 +628,8 @@ class Redirect extends Standard {
      *
      * @return boolean
      */
-    function isMultipleParameter($key) {
+    function isMultipleParameter($key)
+    {
         if($this->id == 0) {
             trigger_error("id er ikke sat i Redirect->isMultipleParameter", E_USER_ERROR);
         }
@@ -717,7 +647,8 @@ class Redirect extends Standard {
      *
      * @return mixed
      */
-    function removeParameter($key, $value) {
+    function removeParameter($key, $value)
+    {
         if($this->id == 0) {
             trigger_error("id er ikke sat i Redirect->removeParameter", E_USER_ERROR);
         }
@@ -738,11 +669,12 @@ class Redirect extends Standard {
      * Gets multiple parameter
      *
      * @param string $key              Gets the following parameter
-     * @param array  $with_extra_value WHAT IS THIS
+     * @param array  $with_extra_value @todo WHAT IS THIS
      *
      * @return mixed
      */
-    function getParameter($key, $with_extra_value = '') {
+    function getParameter($key, $with_extra_value = '')
+    {
         if($this->id == 0) {
             trigger_error("id er ikke sat i Redirect->getMultipleParameter", E_USER_ERROR);
         }
@@ -761,8 +693,7 @@ class Redirect extends Standard {
 
                     $parameter[$i]['value'] = $db->f('value');
                     $parameter[$i]['extra_value'] = $db->f('extra_value');
-                }
-                else {
+                } else {
                     $parameter[$i] = $db->f('value');
                 }
                 $i++;
@@ -772,16 +703,12 @@ class Redirect extends Standard {
 
         if($multiple == 1) {
             return $parameter;
-        }
-        else {
+        } else {
             if (array_key_exists(0, $parameter)) {
                 return $parameter[0];
-            }
-            else {
+            } else {
                 return '';
             }
         }
     }
 }
-
-?>
