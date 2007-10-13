@@ -375,8 +375,10 @@ class Redirect extends Standard
     function thisUri()
     {
         $protocol = 'http://';
-          if(!empty($_SERVER['HTTPS'])) { $protocol= 'https://'; }
-          return $protocol.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME'];
+        if(!empty($_SERVER['HTTPS'])) {
+            $protocol= 'https://';
+        }
+        return $protocol. $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
     }
 
     /**
@@ -448,7 +450,6 @@ class Redirect extends Standard
      */
     function getRedirect($standard_location)
     {
-
         if($this->id > 0) {
             $this->addQuerystring($this->get('query_return_variable').'='.$this->id);
             return $this->mergeQuerystring($this->get('return_url'), $this->querystring);
