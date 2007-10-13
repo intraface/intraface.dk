@@ -28,12 +28,12 @@ class IntranetAdministration extends Intranet {
     var $error;
 
 
-    function IntranetAdministration(& $kernel) {
+    function __construct($kernel) {
         if (!is_object($kernel) AND strtolower(get_class($kernel)) != 'kernel') {
             trigger_error('IntranetAdministration kræver kernel', E_USER_ERROR);
         }
 
-        $this->kernel = & $kernel;
+        $this->kernel = $kernel;
         $this->id = $kernel->intranet->get('id');
         $this->id = $this->load();
         $this->error = new Error;
@@ -45,7 +45,7 @@ class IntranetAdministration extends Intranet {
             trigger_error('Input er ikke et array', E_USER_ERROR);
         }
         $input = safeToDb($input);
-        settype($input['pdf_header_file_id'], "integer");
+        settype($input['pdf_header_file_id'], 'integer');
 
         $validator = new Validator($this->error);
         $validator->isString($input['name'], 'Navn skal være en streng', '', '');
