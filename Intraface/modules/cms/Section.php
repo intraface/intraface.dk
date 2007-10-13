@@ -33,11 +33,9 @@ class CMS_Section extends Standard {
      */
 
     function __construct($cmspage, $id = 0) {
-        /*
-        if (!is_object($cmspage) OR strtolower(get_class($cmspage)) != 'cms_page') {
+        if (!is_object($cmspage)) {
             trigger_error('Section::__construct needs CMS_Page - got ' . get_class($cmspage), E_USER_ERROR);
         }
-        */
 
         $this->db = MDB2::singleton(DB_DSN);
         $this->cmspage = $cmspage;
@@ -51,7 +49,7 @@ class CMS_Section extends Standard {
         $cms_module = $this->cmspage->kernel->module('cms');
         $this->section_types = $cms_module->getSetting('section_types');
 
-        if (is_string($this->value['type']) AND in_array($this->value['type'], $this->section_types)) {
+        if (!empty($this->value['type']) AND is_string($this->value['type']) AND in_array($this->value['type'], $this->section_types)) {
             $this->value['type_key'] = array_search($this->value['type'], $this->section_types);
         }
 
