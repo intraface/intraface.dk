@@ -13,8 +13,8 @@
  * @since 1.2
  */
 
-require_once('HTTP/Upload.php');
-require_once('Image/Transform.php');
+require_once 'HTTP/Upload.php';
+require_once 'Image/Transform.php';
 
 class FileHandler extends Standard {
 
@@ -62,8 +62,8 @@ class FileHandler extends Standard {
      * @var array
      */
     private $status = array(0 => 'visible',
-                        1 => 'temporary',
-                        2 => 'hidden');
+                            1 => 'temporary',
+                            2 => 'hidden');
 
     /**
      * @var object @todo is this used at all?
