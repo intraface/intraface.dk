@@ -116,7 +116,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
 
         $redirect = new Redirect($kernel, 1);
         $this->assertEquals(1, $redirect->id);
-        $this->assertEquals($return_url, $redirect->get('return_url'));
+        $this->assertEquals($return_url, $redirect->getReturnUrl());
     }
 
     ////////////////////////////////////////////////////////////////////

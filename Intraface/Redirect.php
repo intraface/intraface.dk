@@ -7,7 +7,6 @@
  * @version @package-version@
  */
 
-require_once 'Intraface/Standard.php';
 require_once 'Intraface/3Party/Database/Db_sql.php';
 
 /**
@@ -121,9 +120,8 @@ require_once 'Intraface/3Party/Database/Db_sql.php';
  * @version @package-version@
  */
 
-class Redirect extends Standard
+class Redirect
 {
-
     /**
      * @var object
      */
@@ -667,6 +665,54 @@ class Redirect extends Standard
     }
 
     /**
+     * Returns the identifier
+     *
+     * @todo replace all instances of calls to $redirect->get('identifier');
+     *
+     * @return string
+     */
+    function getIdentifier()
+    {
+        return $this->get('identifier');
+    }
+
+    /**
+     * Returns the id
+     *
+     * @todo replace all instances of calls to $redirect->get('id');
+     *
+     * @return integer
+     */
+    function getId()
+    {
+        return $this->get('id');
+    }
+
+    /**
+     * Returns the redirect query string
+     *
+     * @todo replace all instances of calls to $redirect->get('redirect_query_string');
+     *
+     * @return string
+     */
+    function getRedirectQueryString()
+    {
+        return $this->get('redirect_query_string');
+    }
+
+    /**
+     * Returns the redirect query string
+     *
+     * @todo replace all instances of calls to $redirect->get('return_url');
+     *
+     * @return string
+     */
+    function getReturnUrl()
+    {
+        return $this->get('return_url');
+    }
+
+    /**
      * Gets multiple parameter
      *
      * @param string $key              Gets the following parameter
@@ -711,5 +757,19 @@ class Redirect extends Standard
                 return '';
             }
         }
+    }
+
+    /**
+     *
+     * @todo this should be private soon
+     */
+    function get($key)
+    {
+        if (!empty($this->value[$key])) {
+            return $this->value[$key];
+        } else {
+            return '';
+        }
+
     }
 }
