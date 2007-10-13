@@ -59,8 +59,8 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     function testGoRedirect()
     {
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::factory($kernel, 'go');
-        $return_url      = 'http://example.dk/state.php/state.php?id=1';
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
         $parameter_to_return_with = 'add_contact_id'; // activates the parameter sent back to the return page
@@ -75,16 +75,19 @@ class RedirectTest extends PHPUnit_Framework_TestCase
 
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::factory($kernel, 'go');
-        $return_url      = 'http://example.dk/state.php/state.php?id=1';
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
-        //$parameter_to_return_with = 'add_contact_id'; // activates the parameter sent back to the return page
 
         // receiving
-        $redirect = Redirect::factory($kernel, 'receive');
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk/';
+        $_SERVER['SCRIPT_NAME']  = 'state.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
         $standard_page_without_redirect = 'standard.php';
-        $this->assertEquals($return_url, $redirect->getRedirect($standard_page_without_redirect));
+        $this->assertEquals($return_url . '&return_redirect_id=1', $redirect->getRedirect($standard_page_without_redirect));
     }
 
     function testDeleteWithNoIdReturnsTrue()
@@ -96,8 +99,8 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     function testDeleteExistingRedirectReturnsTrue()
     {
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::factory($kernel, 'go');
-        $return_url      = 'http://example.dk/state.php/state.php?id=1';
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
         $this->assertTrue($redirect->delete());
@@ -106,8 +109,8 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     function testLoadingARedirect()
     {
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::factory($kernel, 'go');
-        $return_url      = 'http://http://example.dk/state.php/state.php?id=1';
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
 
