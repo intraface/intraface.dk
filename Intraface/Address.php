@@ -16,14 +16,37 @@ require_once 'Intraface/Standard.php';
 require_once 'Intraface/3Party/Database/Db_sql.php';
 require_once 'Intraface/functions/functions.php';
 
-class Address extends Standard {
+class Address extends Standard
+{
+    /**
+     * @var object
+     */
+    //var $kernel;
 
-    var $kernel;
-    var $belong_to_key;
-    var $belong_to_id;
-    var $id;
-    var $value = array();
-    var $fields = array('name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'ean');
+    /**
+     * @var integer
+     */
+    private $belong_to_key;
+
+    /**
+     * @var integer
+     */
+    private $belong_to_id;
+
+    /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @var array
+     */
+    public $value = array();
+
+    /**
+     * @var array
+     */
+    public $fields = array('name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'ean');
 
     /**
      * Init: loader klassen
@@ -33,8 +56,9 @@ class Address extends Standard {
      * engang skal differencieres, så man angvier hvad feltet i tabellen skal svare til navnet i arrayet.
      * Klassen loader også adressens felter
      *
-     * @param (object)$kernel	kernel
-     * @param	(int)$id	Id on address.
+     * @param integer $id Id on address.
+     *
+     * @return void
      */
     function __construct($id) {
         /*
@@ -51,16 +75,15 @@ class Address extends Standard {
     }
 
     /**
-     *  factoy
+     *  factory
      *
      * Returns an instace of Address from belong_to and belong_to_id
      *
-     * @param (object)$kernel	kernel
-     * @param	(string)$belong_to	what the address belongs to, corresponding to the ones in Address::getBelongToTypes()
-     * @param	(int)$id id	from belong_to. NB not id on the address
-     * @return	(object)	Address
+     * @param string  $belong_to what the address belongs to, corresponding to the ones in Address::getBelongToTypes()
+     * @param integer $id id	 from belong_to. NB not id on the address
+     *
+     * @return object Address
      */
-
     function factory($belong_to, $belong_to_id) {
 
         // $kernel = new Kernel;
@@ -76,8 +99,6 @@ class Address extends Standard {
             trigger_error("Invalid belong_to_id in Address::factory", E_USER_ERROR);
         }
 
-
-
         $db = new DB_Sql;
         // intranet_id = ".$kernel->intranet->get('id')." AND
         $db->query("SELECT id FROM address WHERE type = ".$belong_to_key." AND belong_to_id = ".$belong_to_id." AND active = 1");
@@ -86,25 +107,36 @@ class Address extends Standard {
         }
         if($db->nextRecord()) {
             return new Address($db->f('id'));
-        }
-        else {
+        } else {
             $address = new Address(0);
             $address->setBelongTo($belong_to, $belong_to_id);
             return $address;
         }
     }
 
-    function getBelongToTypes() {
+    /**
+     * Returns possible belong to types
+     *
+     * @return array
+     */
+    private static function getBelongToTypes() {
 
         return array(1 => 'intranet',
-            2 => 'user',
-            3 => 'contact',
-            4 => 'contact_delivery',
-            5 => 'contact_invoice',
-            6 => 'contactperson');
+                     2 => 'user',
+                     3 => 'contact',
+                     4 => 'contact_delivery',
+                     5 => 'contact_invoice',
+                     6 => 'contactperson');
     }
 
-
+    /**
+     * Sets belong to @todo used for what?
+     *
+     * @param string  $belong_to    Which type the address belongs to
+     * @param integer $belong_to_id Which id for the type the address belongs to
+     *
+     * @return void
+     */
     function setBelongTo($belong_to, $belong_to_id) {
 
         if($this->id != 0) {
@@ -122,44 +154,14 @@ class Address extends Standard {
         if($this->belong_to_id == 0) {
             trigger_error("Invalid belong_to_id in Address::setBelongTo()", E_USER_ERROR);
         }
-
     }
-
-
-
-    /*
-    function _old_Address($type, $id, $old_address_id = 0) {
-
-        $this->db = new Db_sql;
-        $this->id = (int)$id;
-        $this->old_address_id = (int)$old_address_id;
-
-        $address_type[1] = 'intranet';
-        $address_type[2] = 'user';
-        $address_type[3] = 'contact';
-        $address_type[4] = 'contact_delivery';
-        $address_type[5] = 'contact_invoice';
-        $address_type[6] = 'contactperson';
-
-        // $this->fields = array('name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'contactname', 'ean');
-        $this->fields = array('name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'ean');
-
-        if($i = array_search($type, $address_type)) {
-            $this->type = $i;
-        }
-        else {
-            trigger_error('Ugyldig address type', FATAL);
-        }
-
-        return($this->address_id = $this->load());
-    }
-    */
-
 
     /**
      * Private: Loader data ind i array
+     *
+     * @return integer
      */
-    function load() {
+    private function load() {
         if ($this->id == 0) { return 0; }
 
         $db = MDB2::singleton(DB_DSN);
@@ -194,8 +196,9 @@ class Address extends Standard {
     /**
      * Public: Denne funktion gemmer data. At gemme data vil sige, at den gamle adresse gemmes, men den nye aktiveres.
      *
-     * @param	(array)$array_var	et array med felter med adressen. Se felterne i init funktionen: $this->fields
-     * $return	(int)	Returnere 1 hvis arrayet er gemt, 0 hvis det ikke er. Man kan ikke gemme på en old_address.
+     * @param array $array_var et array med felter med adressen. Se felterne i init funktionen: $this->fields
+     *
+     * @return integer	Returnere id
      */
     function save($array_var) {
 
@@ -217,8 +220,7 @@ class Address extends Standard {
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 // Kun hvis der rent faktisk gemmes nogle værdier opdaterer vi. hvis count($arra_var) > 0 så må der også være noget at opdatere?
                 $do_update = 0;
                 foreach($this->fields AS $i => $field) {
@@ -234,16 +236,14 @@ class Address extends Standard {
             if($do_update == 0) {
                 // There is nothing to save, but that is OK, so we just return 1
                 return 1;
-            }
-            else {
+            } else {
                 $db->exec("UPDATE address SET active = 0 WHERE type = ".$this->belong_to_key." AND belong_to_id = ".$this->belong_to_id);
                 $db->exec("INSERT INTO address SET ".$sql." type = ".$this->belong_to_key.", belong_to_id = ".$this->belong_to_id.", active = 1, changed_date = NOW()");
                 $this->id = $db->lastInsertId('address', 'id');
                 $this->load();
                 return 1;
             }
-        }
-        else {
+        } else {
             // Der var slet ikke noget indhold i arrayet, så vi lader være at opdatere, men siger, at vi gjorde.
             return 1;
         }
@@ -254,8 +254,9 @@ class Address extends Standard {
      *
      * Denne funktion overskriver den nuværende adresse. Benyt som udagangspunkt ikke denne, da historikken på adresser skal gemmes.
      *
-     * @param	(array)$array_var	et array med felter med adressen. Se felterne i init funktionen: $this->fields
-     * $return	(int)	Returnere 1 hvis arrayet er gemt, 0 hvis det ikke er. Man kan ikke gemme på en old_address.
+     * @param array $array_var et array med felter med adressen. Se felterne i init funktionen: $this->fields
+     *
+     * @return integer Returnere 1 hvis arrayet er gemt, 0 hvis det ikke er. Man kan ikke gemme på en old_address.
      */
     function update($array_var) {
         if($this->id == 0) {
