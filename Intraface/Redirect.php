@@ -123,10 +123,10 @@ require_once 'Intraface/3Party/Database/Db_sql.php';
 
 class Redirect extends Standard {
 
-    var $kernel;
-    var $value;
-    var $querystring = array();
-    var $identifier;
+    private $kernel;
+    private $value;
+    private $querystring = array();
+    private $identifier;
 
     /**
      * Constructs a redirect object
@@ -207,9 +207,53 @@ class Redirect extends Standard {
     }
 
     /**
+     * Creates a redirect object on the go page
+     *
+     * @param object $kernel                @todo THIS SHOULD BE SUBSTITUTED WITH SESSION_ID
+     * @param string $query_variable        @todo is this used for go?
+     * @param string $query_return_variable @todo is this used for go?
+     *
+     * @return object
+     */
+    function go($kernel, $query_variable = 'redirect_id', $query_return_variable = 'return_redirect_id')
+    {
+        return self::factory($kernel, 'go', $query_variable, $query_return_variable);
+    }
+
+    /**
+     * Creates a redirect object on the receiving page
+     *
+     * @param object $kernel                @todo THIS SHOULD BE SUBSTITUTED WITH SESSION_ID
+     * @param string $query_variable        EXPLAIN
+     * @param string $query_return_variable EXPLAIN
+     *
+     * @return object
+     */
+    function receive($kernel, $query_variable = 'redirect_id', $query_return_variable = 'return_redirect_id')
+    {
+        return self::factory($kernel, 'receive', $query_variable, $query_return_variable);
+    }
+
+    /**
+     * Creates a redirect object on the returning page
+     *
+     * @param object $kernel                @todo THIS SHOULD BE SUBSTITUTED WITH SESSION_ID
+     * @param string $query_variable        EXPLAIN
+     * @param string $query_return_variable EXPLAIN
+     *
+     * @return object
+     */
+    function returns($kernel, $query_variable = 'redirect_id', $query_return_variable = 'return_redirect_id')
+    {
+        return self::factory($kernel, 'return', $query_variable, $query_return_variable);
+    }
+
+    /**
      * Creates a redirect object
      *
-     * @param object $kernel                THIS SHOULD BE SUBSTITUTED WITH SESSION_ID
+     * This should be substituted with specific methods for the types
+     *
+     * @param object $kernel                @todo THIS SHOULD BE SUBSTITUTED WITH SESSION_ID
      * @param string $type                  Can be either go, receive or return
      *                                      WHAT IS THE DIFFERENCES
      * @param string $query_variable        EXPLAIN
@@ -217,7 +261,8 @@ class Redirect extends Standard {
      *
      * @return object
      */
-    function factory($kernel, $type, $query_variable = 'redirect_id', $query_return_variable = 'return_redirect_id') {
+    function factory($kernel, $type, $query_variable = 'redirect_id', $query_return_variable = 'return_redirect_id')
+    {
 
         if(!is_object($kernel)) {
             trigger_error("First parameter in redirect::factory is not kernel", E_USER_ERROR);
