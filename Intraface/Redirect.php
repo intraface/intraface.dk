@@ -23,7 +23,7 @@ require_once 'Intraface/3Party/Database/Db_sql.php';
  * // optional
  * $other_return_querystring_name = '';
  *
- * $redirect = Redirect::factory($kernel, 'go', $other_querystring_name, $other_return_querystring_name);
+ * $redirect = Redirect::go($kernel, $other_querystring_name, $other_return_querystring_name);
  *
  * $return_url      = 'http://http://example.dk/state.php/state.php?id=1';
  * $destination_url = 'http://example.dk/page.php';
@@ -52,7 +52,7 @@ require_once 'Intraface/3Party/Database/Db_sql.php';
  * $other_return_querystring_name = '';
  *
  * // Must be called on every page show
- * $redirect = Redirect::factory($kernel, 'receive', $other_querystring_name, $other_return_querystring_name = '';);
+ * $redirect = Redirect::receive($kernel, $other_querystring_name, $other_return_querystring_name = '';);
  *
  * if(isset($_POST['submit'])) {
  *     // save something
@@ -62,6 +62,7 @@ require_once 'Intraface/3Party/Database/Db_sql.php';
  *     // the redirect
  *     $standard_page_without_redirect = 'standard.php';
  *     header('Location: '.$redirect->getRedirect($standard_page_without_redirect));
+ *     exit;
  * }
  *
  * <a href="<?php echo $redirect->getRedirect('standard.php'); ?>">Cancel</a>
@@ -71,11 +72,11 @@ require_once 'Intraface/3Party/Database/Db_sql.php';
  *
  * first.php --> second.php --> third.php
  *
- * You can do the following (ON WHICH PAGE?):
+ * You can do the following (@todo ON WHICH PAGE?):
  *
  * <code>
  * if($go_further) {
- * 	   $new_redireict = Redirect::factory($kernel, 'go');
+ * 	   $new_redireict = Redirect::go($kernel);
  * 	   $url = $new_redirect->setDestination('http://example.dk/first.php', 'http://example.dk/second.php?' . $redirect->get('redirect_query_string'));
  * 	   header('Location: ' . $url);
  *     exit;
@@ -83,22 +84,22 @@ require_once 'Intraface/3Party/Database/Db_sql.php';
  * </code>
  *
  * Notice that redirect_query_string has redirect_id=<id> on the page where redirect is set
- * (WHICH PAGE IS THAT?).
+ * (@todo WHICH PAGE IS THAT?).
  *
  * The final page of the redirect cycle (often the same page you started from) you can retrieve
  * the parameter again:
  *
  * <code>
  * if(isset($_GET['return_redirect_id'])) {
- *     $redirect = Redirect($kernel, 'return');
+ *     $redirect = Redirect::return($kernel);
  *     // optional
- *     $redirect->get('identifier'); returns the identifier set in the beginning
+ *     $redirect->getIdentifier(); returns the identifier set in the beginning
  *
  *     // retrieves the value - returns array if ask was 'multiple' else just the value
  *     $selected_values = $redirect->getParameter('add_contact_id');
  *
  *     // deletes the redirect, so that the action is not done again on the
- *     // use of Back button (IS THIS OPTIONAL OR NECCESSARY)
+ *     // use of Back button (@todo IS THIS OPTIONAL OR NECCESSARY)
  *     $redirect->delete();
  * }
  * </code>
@@ -145,7 +146,7 @@ class Redirect
     /**
      * Constructs a redirect object
      *
-     * @param object  $kernel THIS SHOULD BE SUBSTITUTED WITH SESSION_ID
+     * @param object  $kernel @todo THIS SHOULD BE SUBSTITUTED WITH SESSION_ID
      * @param integer $id     Id of the redirect
      *
      * @return object
