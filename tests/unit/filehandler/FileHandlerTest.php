@@ -14,13 +14,43 @@ class FakeFileHandlerIntranet
     }
 }
 
+class FakeFileHandlerUser
+{
+    function get()
+    {
+        return 1;
+    }
+}
+
 class FileHandlerTest extends PHPUnit_Framework_TestCase
 {
-    function createFileHandler()
+    private $file_name = 'tester.jpg';
+
+    function createKernel()
     {
         $kernel = new Kernel;
         $kernel->intranet = new FakeFileHandlerIntranet;
-        return new FileHandler($kernel);
+        $kernel->user = new FakeFileHandlerUser;
+        return $kernel;
+    }
+
+    function createFileHandler()
+    {
+        return new FileHandler($this->createKernel());
+    }
+
+    function createFile()
+    {
+        $data = array('file_name' => $this->file_name);
+        $filehandler = $this->createFileHandler();
+        $this->assertTrue($filehandler->update($data) > 0);
+        return $filehandler;
+    }
+
+    function testUpdate()
+    {
+        $fh = $this->createFile();
+        $this->assertEquals($this->file_name, $fh->get('file_name'));
     }
 
     function testConstruction()
@@ -28,6 +58,15 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
         $filehandler = $this->createFileHandler();
         $this->assertTrue(is_object($filehandler));
     }
+
+    function testFactoryReturnsAValidFileHandlerObject()
+    {
+        $fh = $this->createFile();
+        $accesskey = $fh->getAccessKey();
+        $filehandler = FileHandler::factory($this->createKernel(), $accesskey);
+        $this->assertTrue(is_object($filehandler));
+    }
+
 
 }
 ?>
