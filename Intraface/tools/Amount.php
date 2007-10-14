@@ -87,8 +87,9 @@ class NewAmount
      *
      * @return double
      */
-    function database()
+    function database($type = 'double')
     {
+        return $this->amount / 100;
     }
 
     /**
@@ -98,10 +99,11 @@ class NewAmount
      *
      * @return string
      */
-    public function format($locale = 'en')
+    public function format()
     {
-        $this->amount = number_format($this->amount, 2, ",", ".");
-        return $this->amount;
+        return sprintf("%.2f", $this->amount / 100);
+        //return $this->number_format($this->amount / 100, 2);
+        //return $this->strtonumber($this->amount / 100);
     }
 
     /**

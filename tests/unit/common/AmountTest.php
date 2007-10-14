@@ -21,5 +21,26 @@ class AmountTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('200050', $amount->getRawAmount());
     }
 
+    function testFormatReturnsAccordingToLocale()
+    {
+        setlocale(LC_ALL, 'C');
+        $amount = new NewAmount('2000,50');
+        $this->assertTrue(is_object($amount));
+        $this->assertEquals('2000.50', $amount->format());
+
+        setlocale(LC_ALL, 'da_DK', 'danish');
+
+        $this->assertEquals('2000,50', $amount->format());
+    }
 }
+/*
+$number = 2000.50;
+setlocale(LC_TIME, "C");
+echo number_format($number, 2);
+echo strftime("%A");
+
+echo '<br>' . setlocale(LC_ALL, 'danish');
+echo '<br>' . number_format($number, 2);
+echo strftime("%A");
+*/
 ?>
