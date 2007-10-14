@@ -369,6 +369,8 @@ class FileHandler extends Standard
     /**
      * Benyttes til at sætte en uploadet fil ind i systemet
      *
+     * @todo should be called something else
+     *
      * @param string $file      stien til filen
      * @param string $file_name det originale filnavn, hvis ikke sat, tages der efter det nuværende navn
      * @param string $status    @todo hvad er det
@@ -466,7 +468,7 @@ class FileHandler extends Standard
         if(!is_dir($this->upload_path)) {
             if(!mkdir($this->upload_path)) {
                 trigger_error("Kunne ikke oprette mappe i FileHandler->save", E_USER_ERROR);
-                Exit;
+                exit;
             }
         }
 
@@ -491,6 +493,8 @@ class FileHandler extends Standard
 
     /**
      * Benyttes til at opdaterer oplysninger om fil
+     *
+     * @todo should be called save()
      *
      * @param array $input array med input
      *
@@ -564,7 +568,6 @@ class FileHandler extends Standard
      */
     private function _getMimeType($key, $from = 'key')
     {
-
         /* @todo hack */
         require(PATH_INCLUDE_CONFIG . 'setting_file_type.php');
         $this->file_types = $_file_type;
@@ -588,6 +591,28 @@ class FileHandler extends Standard
         }
 
         return false;
+    }
+
+    /**
+     * Returns the mimetype based on the key in the array
+     *
+     * @param string $key  @todo what is this
+     *
+     * @return string
+     */
+    private function _getMimeTypeFromKey($key)
+    {
+        /* @todo hack */
+        require(PATH_INCLUDE_CONFIG . 'setting_file_type.php');
+        $this->file_types = $_file_type;
+        /* hack slut */
+
+        if($from == 'key') {
+            if(!is_integer($key)) {
+                trigger_error("Når der skal findes mimetype fra key (default), skal første parameter til FileHandler->_getMimeType være en integer", E_USER_ERROR);
+            }
+            return $this->file_types[$key];
+        }
     }
 
     /**
