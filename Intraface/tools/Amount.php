@@ -79,7 +79,7 @@ class NewAmount
         $amount = str_replace('.', '', $amount);
         $amount = str_replace(',', '', $amount);
 
-        $this->amount = $amount;
+        $this->amount = (int)$amount;
     }
 
     /**
@@ -89,7 +89,7 @@ class NewAmount
      */
     function database($type = 'double')
     {
-        return $this->amount / 100;
+        return (double) $this->amount / 100;
     }
 
     /**

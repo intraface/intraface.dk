@@ -32,6 +32,14 @@ class AmountTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('2000,50', $amount->format());
     }
+
+    function testDatabaseReturnsValidDouble()
+    {
+        $amount = new NewAmount('2000,50');
+        $this->assertTrue(is_object($amount));
+        $this->assertEquals('2000.50', $amount->database());
+        $this->assertTrue(is_double($amount->database()));
+    }
 }
 /*
 $number = 2000.50;
