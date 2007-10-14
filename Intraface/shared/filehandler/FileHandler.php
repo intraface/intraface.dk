@@ -15,6 +15,7 @@
 
 require_once 'HTTP/Upload.php';
 require_once 'Image/Transform.php';
+require_once 'Intraface/Validator.php';
 
 class FileHandler extends Standard {
 
@@ -118,6 +119,11 @@ class FileHandler extends Standard {
         }
     }
 
+    function getAccessKey()
+    {
+        return $this->get('access_key');
+    }
+
     /**
      * Returns the upload path
      *
@@ -138,7 +144,6 @@ class FileHandler extends Standard {
      */
     public function factory($kernel, $access_key)
     {
-
         $access_key = safeToDb($access_key);
 
         $db = new DB_Sql;
@@ -208,7 +213,7 @@ class FileHandler extends Standard {
         $this->value['file_uri'] = $this->file_viewer.'?/'.$this->kernel->intranet->get('public_key').'/'.$this->get('access_key').'/'.urlencode($this->get('file_name'));
         // nedenstående bruges til pdf-er
         //$this->value['file_uri_pdf'] = PATH_UPLOAD.$this->kernel->intranet->get('id').'/'.$this->value['server_file_name'];
-        $this->value['file_uri_pdf'] = $this->path_upload.$this->value['server_file_name'];
+        $this->value['file_uri_pdf'] = $this->upload_path.$this->value['server_file_name'];
 
         if($this->value['is_image'] == 1) {
             $this->value['icon_uri'] = $this->file_viewer.'?/'.$this->kernel->intranet->get('public_key').'/'.$db->f('access_key').'/square/'.urlencode($db->f('file_name'));
