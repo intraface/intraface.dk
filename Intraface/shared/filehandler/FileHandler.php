@@ -17,8 +17,8 @@ require_once 'HTTP/Upload.php';
 require_once 'Image/Transform.php';
 require_once 'Intraface/Validator.php';
 
-class FileHandler extends Standard {
-
+class FileHandler extends Standard
+{
     /**
      * @var integer
      */
@@ -408,6 +408,8 @@ class FileHandler extends Standard {
         } while($db->nextRecord());
 
         $file_size = filesize($file);
+
+        // @todo it seems as if the $mime_type is determined twice?
         if($mime_type === NULL) {
             // $mime_type = mime_content_type($file);
             require_once 'MIME/Type.php';
@@ -496,7 +498,6 @@ class FileHandler extends Standard {
      */
     public function update($input)
     {
-
         $db = new DB_sql;
 
         if(!is_array($input)) {
@@ -541,13 +542,14 @@ class FileHandler extends Standard {
             return false;
         }
 
-
         if($this->id != 0) {
             $db->query("UPDATE file_handler SET ".implode(', ', $sql)." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
         } else {
             $db->query("INSERT INTO file_handler SET ".implode(', ', $sql).", user_id = ".$this->kernel->user->get('id').", intranet_id = ".$this->kernel->intranet->get('id').", date_created = NOW()");
             $this->id = $db->insertedId();
         }
+
+        $this->load();
 
         return $this->id;
     }
