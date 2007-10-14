@@ -67,6 +67,10 @@ class UploadHandler extends Standard
     /**
      * Constructor
      *
+     * @todo this file should rather have a config object. Really it does not use the filehandler for much
+     *       then the filehandler->save method should rather accept some kind of file object which this
+     *       object could generate?
+     *
      * @param object $file_handler A filehandler
      *
      * @return void
@@ -142,6 +146,11 @@ class UploadHandler extends Standard
         }
 
         return $return;
+    }
+
+    function uploadAsTemporary()
+    {
+
     }
 
     /**
