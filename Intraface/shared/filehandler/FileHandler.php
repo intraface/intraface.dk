@@ -371,7 +371,7 @@ class FileHandler extends Standard
      *
      * @todo should be called something else
      *
-     * @param string $file      stien til filen
+     * @param string $file      stien til filen @todo what exactly is this?
      * @param string $file_name det originale filnavn, hvis ikke sat, tages der efter det nuværende navn
      * @param string $status    @todo hvad er det
      * @param string $mime_type @todo hvad er det
@@ -477,7 +477,6 @@ class FileHandler extends Standard
         if(!is_file($file)) {
             trigger_error("Filen vi vil flytte er ikke en gyldig fil i filehandler->save", E_USER_ERROR);
         }
-
 
         if(!rename($file, $this->upload_path.$server_file_name)) {
             $this->delete();
@@ -616,7 +615,7 @@ class FileHandler extends Standard
     }
 
     /**
-     * Moves file to filesystem from temporary
+     * Moves file to filesystem from temporary @todo to what, the method name should reflect that
      *
      * @return boolean
      */
