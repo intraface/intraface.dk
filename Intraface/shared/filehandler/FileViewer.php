@@ -18,95 +18,130 @@ require_once 'Intraface/Intranet.php';
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/shared/filehandler/FileHandler.php';
 
-class FileViewer {
+class FileViewer
+{
 
-	private $filehandler;
-	public $public_key;
-	public $file_key;
-	public $file_type;
+    /**
+     * @var object
+     */
+    private $filehandler;
 
-	function __construct() {
-	}
+    /**
+     * @var string
+     */
+    public $public_key;
 
-	function parseQueryString($querystring) {
-		$query_parts = explode('/', $querystring);
-		$this->public_key = addslashes($query_parts[1]);
-		$this->file_key = addslashes($query_parts[2]);
-		$this->file_type = addslashes($query_parts[3]);
-	}
+    /**
+     * @var string
+     */
+    public $file_key;
 
-	function fetch($querystring) {
-		$this->parseQueryString($querystring);
+    /**
+     * @var string
+     */
+    public $file_type;
 
-		$weblogin = new Weblogin();
-		if (!$intranet_id = $weblogin->auth('public', $this->public_key)) {
-			die('FEJL I LÆSNING AF BILLEDE (0)');
-		}
-		if($intranet_id == false) {
-			trigger_error("FEJL I LÆSNING AF BILLEDE (1)", E_USER_ERROR);
-		}
+    function __construct() {
+    }
 
-		$kernel = new Kernel;
-		$kernel->intranet = new Intranet($intranet_id);
-		$filehandler_shared = $kernel->useShared('filehandler');
+    /**
+     * Parses a querystring and sets class variables
+     *
+     * @param string $querystring The querystring to parse
+     *
+     * @return void
+     */
+    public function parseQueryString($querystring)
+    {
+        $query_parts = explode('/', $querystring);
+        $this->public_key = addslashes($query_parts[1]);
+        $this->file_key = addslashes($query_parts[2]);
+        $this->file_type = addslashes($query_parts[3]);
+    }
 
-		$filehandler = FileHandler::factory($kernel, $this->file_key);
-		if(!is_object($filehandler)) {
-			trigger_error("FEJL I LÆSNING AF BILLEDE (2)", E_USER_ERROR);
-		}
+    /**
+     * Fetches the file
+     *
+     * @todo putte skabelsen af en filehandler i en gateway, hvor den finder
+     *       fra querystring automatisk
+     *
+     * @param string $querystring
+     *
+     * @return
+     */
+    function fetch($querystring)
+    {
+        $this->parseQueryString($querystring);
 
-		switch($filehandler->get('accessibility')) {
-			case 'personal':
-				// Not implemented - continue to next
-			case 'intranet':
-				// You have to be logged in to access this file
-				session_start();
-				$auth = new Auth(session_id());
+        $weblogin = new Weblogin();
+        if (!$intranet_id = $weblogin->auth('public', $this->public_key)) {
+            die('FEJL I LÆSNING AF BILLEDE (0)');
+        }
+        if($intranet_id == false) {
+            trigger_error("FEJL I LÆSNING AF BILLEDE (1)", E_USER_ERROR);
+        }
 
-				if (!$user_id = $auth->isLoggedIn()) {
-					die("FEJL I LÆSNING AF BILLEDE (4)");
-				}
+        $kernel = new Kernel;
+        $kernel->intranet = new Intranet($intranet_id);
+        $filehandler_shared = $kernel->useShared('filehandler');
 
-				$user = new User($user_id);
-				$intranet = new Intranet($user->getActiveIntranetId());
+        $filehandler = FileHandler::factory($kernel, $this->file_key);
+        if(!is_object($filehandler)) {
+            trigger_error("FEJL I LÆSNING AF BILLEDE (2)", E_USER_ERROR);
+        }
 
-				if($intranet->get('id') != $intranet_id) {
-					die("FEJL I LÆSNING AF BILLEDE (4)");
-				}
+        switch($filehandler->get('accessibility')) {
+            case 'personal':
+                // Not implemented - continue to next
+            case 'intranet':
+                // You have to be logged in to access this file
+                session_start();
+                $auth = new Auth(session_id());
 
-				break;
-			case 'public':
-				// public alle må se den
-				break;
-			default:
-				// Dette er en ugyldig type
-				trigger_error("FEJL I LÆSNING AF BILLEDE (5)", E_USER_ERROR);
-			break;
-		}
+                if (!$user_id = $auth->isLoggedIn()) {
+                    die("FEJL I LÆSNING AF BILLEDE (4)");
+                }
 
-		$file_id = $filehandler->get('id');
-		$file_name = $filehandler->get('file_name');
-		$mime_type = $_file_type[$filehandler->get('file_type_key')]['mime_type'];
-		$file_path = $filehandler->get('file_path');
+                $user = new User($user_id);
+                $intranet = new Intranet($user->getActiveIntranetId());
 
-		$filehandler_shared->includeFile('InstanceHandler.php');
-		$instancehandler = new InstanceHandler($filehandler);
+                if($intranet->get('id') != $intranet_id) {
+                    die("FEJL I LÆSNING AF BILLEDE (4)");
+                }
 
-		if($instancehandler->_checkType($this->file_type) !== false) {
-			$filehandler->createInstance($this->file_type);
-			$file_path = $filehandler->instance->get('file_path');
-		}
+                break;
+            case 'public':
+                // public alle må se den
+                break;
+            default:
+                // Dette er en ugyldig type
+                trigger_error("FEJL I LÆSNING AF BILLEDE (5)", E_USER_ERROR);
+            break;
+        }
 
-		$last_modified = filemtime($file_path);
+        $file_id = $filehandler->get('id');
+        $file_name = $filehandler->get('file_name');
+        $mime_type = $_file_type[$filehandler->get('file_type_key')]['mime_type'];
+        $file_path = $filehandler->get('file_path');
 
-		header('Content-Type: '.$mime_type);
-		header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $last_modified).' GMT');
-		header('Cache-Control:');
-		header('Content-Disposition: inline; filename='.$file_name);
-		header('Pragma:');
+        $filehandler_shared->includeFile('InstanceHandler.php');
+        $instancehandler = new InstanceHandler($filehandler);
 
-		readfile($file_path);
-		exit;
-	}
+        if($instancehandler->_checkType($this->file_type) !== false) {
+            $filehandler->createInstance($this->file_type);
+            $file_path = $filehandler->instance->get('file_path');
+        }
+
+        $last_modified = filemtime($file_path);
+
+        header('Content-Type: '.$mime_type);
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $last_modified).' GMT');
+        header('Cache-Control:');
+        header('Content-Disposition: inline; filename='.$file_name);
+        header('Pragma:');
+
+        readfile($file_path);
+        exit;
+    }
 }
 ?>
