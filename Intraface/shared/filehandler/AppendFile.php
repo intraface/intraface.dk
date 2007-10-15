@@ -41,8 +41,10 @@ class AppendFile
         }
         $this->kernel = $kernel;
 
-        $shared_filehandler = $this->kernel->useShared('filehandler');
-        $this->belong_to_types = $shared_filehandler->getSetting('file_append_belong_to_types');
+        //$shared_filehandler = $this->kernel->useShared('filehandler');
+        //$this->belong_to_types = $shared_filehandler->getSetting('file_append_belong_to_types');
+
+        $this->belong_to_types = $this->getFileAppendBelongToTypes();
 
         if(!in_array($belong_to, $this->belong_to_types)) {
             trigger_error("AppendFile->__construct unknown type", E_USER_ERROR);
@@ -54,6 +56,16 @@ class AppendFile
         $this->error = new Error;
 
     }
+
+    private static function getFileAppendBelongToTypes()
+    {
+        return array(0 => '_invalid_',
+                     1 => 'cms_element_gallery',
+                     2 => 'procurement_procurement',
+                     3 => 'product',
+                     4 => 'cms_element_filelist');
+    }
+
 
     /**
      * Creates the dbquery so it can be used from everywhere
@@ -74,6 +86,7 @@ class AppendFile
      */
     private function validate($var)
     {
+        // @todo is it really necessary to validate like this?
         $filehandler = new Filehandler($this->kernel, (int)$var['file_handler_id']);
         if($filehandler->get('id') == 0) {
             $this->error->set('error in file');
@@ -95,7 +108,7 @@ class AppendFile
         $var = safeToDb($var);
 
         if (!$this->validate($var)) {
-            return 0;
+            return false;
         }
 
         $db = new DB_Sql();
@@ -103,7 +116,7 @@ class AppendFile
         if ($db->nextRecord()) {
             // hvis filen allerede er tilknyttet lader vi som om alt gik godt, og vi siger go
             // dette skal naturligvis laves lidt anderledes, hvis vi skal have en description med
-            return 1;
+            return $db->f('id');
         }
 
         if ($this->id > 0) {
@@ -142,13 +155,17 @@ class AppendFile
 
         if(is_numeric($input)) {
             $this->id = 0;
-            $this->save(array('file_handler_id' => $input));
+            if ($this->save(array('file_handler_id' => $input)) > 0) {
+                return true;
+            } else {
+                return false;
+            }
         } elseif(is_array($input)) {
             foreach($input AS $id) {
-
                 $this->id = 0;
                 $this->save(array('file_handler_id' => $id));
             }
+            return true;
         } else {
             trigger_error('AppendFile->addFile unknown type', E_USER_ERROR);
         }
