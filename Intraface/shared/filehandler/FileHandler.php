@@ -134,6 +134,11 @@ class FileHandler extends Standard
         return $this->upload_path;
     }
 
+    function getId()
+    {
+        return $this->id;
+    }
+
     /**
      * Creates a filehandler
      *
@@ -565,7 +570,7 @@ class FileHandler extends Standard
      *
      * @return string
      */
-    private function _getMimeType($key, $from = 'key')
+    protected function _getMimeType($key, $from = 'key')
     {
         /* @todo hack */
         require(PATH_INCLUDE_CONFIG . 'setting_file_type.php');
@@ -599,7 +604,7 @@ class FileHandler extends Standard
      *
      * @return string
      */
-    private function _getMimeTypeFromKey($key)
+    protected function _getMimeTypeFromKey($key)
     {
         /* @todo hack */
         require(PATH_INCLUDE_CONFIG . 'setting_file_type.php');
