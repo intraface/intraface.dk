@@ -2,26 +2,53 @@
 /**
  * @package Intraface_FileManager
  */
-class FileManager extends FileHandler {
+class FileManager extends FileHandler
+{
+    /**
+     * @var object
+     */
+    public $keywords;
 
-    var $keywords;
-    var $dbquery;
+    /**
+     * @var object
+     */
+    public $dbquery;
 
-    function FileManager(& $kernel, $file_id = 0) {
-        FileHandler::Filehandler($kernel, $file_id);
+    /**
+     * Constructor
+     *
+     * @param object  $kernel  Kernel object
+     * @param integer $file_id Specific file id
+     *
+     * @return void
+     */
+    function __construct($kernel, $file_id = 0)
+    {
+        parent::__construct($kernel, $file_id);
 
         $this->dbquery = new DBQuery($this->kernel, "file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->useErrorObject($this->error);
-
     }
 
-    function getKeywords() {
+    /**
+     * Creates the keywords object
+     *
+     * @return object
+     */
+    public function getKeywords()
+    {
         return ($this->keywords = new Keyword($this));
     }
 
-    function getList($debug = '') {
-
-
+    /**
+     * Gets a list
+     *
+     * @param string $debug Can be nothing or debug
+     *
+     * @return array
+     */
+    public function getList($debug = '')
+    {
         if($this->dbquery->checkFilter("uploaded_from_date")) {
             $date_parts = explode(" ", $this->dbquery->getFilter("uploaded_from_date"));
             // Der kontrolleres ikke for gyldig tidsformat
@@ -29,8 +56,7 @@ class FileManager extends FileHandler {
             $date = new Intraface_Date($date_parts[0]);
             if($date->convert2db()) {
                 $this->dbquery->setCondition("file_handler.date_created >= \"".$date->get().$time."\"");
-            }
-            else {
+            } else {
                 $this->error->set("error in uploaded from date");
             }
         }
@@ -42,8 +68,7 @@ class FileManager extends FileHandler {
             $date = new Intraface_Date($date_parts[0]);
             if($date->convert2db()) {
                 $this->dbquery->setCondition("file_handler.date_created <= \"".$date->get().$time."\"");
-            }
-            else {
+            } else {
                 $this->error->set("error in uploaded to date");
             }
         }
@@ -55,8 +80,7 @@ class FileManager extends FileHandler {
             $date = new Intraface_Date($date_parts[0]);
             if($date->convert2db()) {
                 $this->dbquery->setCondition("file_handler.date_changed >= \"".$date->get().$time."\"");
-            }
-            else {
+            } else {
                 $this->error->set("error in edited from date");
             }
         }
@@ -68,8 +92,7 @@ class FileManager extends FileHandler {
             $date = new Intraface_Date($date_parts[0]);
             if($date->convert2db()) {
                 $this->dbquery->setCondition("file_handler.date_changed <= \"".$date->get().$time."\"");
-            }
-            else {
+            } else {
                 $this->error->set("error in edited to date");
             }
         }
@@ -109,8 +132,7 @@ class FileManager extends FileHandler {
 
         if($debug == 'debug') {
             $debug = true;
-        }
-        else {
+        } else {
             $debug = false;
         }
 
@@ -131,11 +153,9 @@ class FileManager extends FileHandler {
             $file[$i]['is_picture'] = $this->file_types[$db->f('file_type_key')]['image'];
             if($file[$i]['file_size'] >= 1000000) {
                 $file[$i]['dk_file_size'] = number_format(($file[$i]['file_size']/1000000), 2, ",",".")." Mb";
-            }
-            else if($file[$i]['file_size'] >= 1000) {
+            } else if($file[$i]['file_size'] >= 1000) {
                 $file[$i]['dk_file_size'] = number_format(($file[$i]['file_size']/1000), 2, ",",".")." Kb";
-            }
-            else {
+            } else {
                 $file[$i]['dk_file_size'] = number_format($file[$i]['file_size'], 2, ",",".")." byte";
             }
             $file[$i]['file_uri'] = FILE_VIEWER.'?/'.$this->kernel->intranet->get('public_key').'/'.$db->f('access_key').'/'.urlencode($db->f('file_name'));
@@ -147,8 +167,7 @@ class FileManager extends FileHandler {
                 $file[$i]['icon_uri'] = FILE_VIEWER.'?/'.$this->kernel->intranet->get('public_key').'/'.$db->f('access_key').'/square/'.urlencode($db->f('file_name'));
                 $file[$i]['icon_width'] = 75;
                 $file[$i]['icon_height'] = 75;
-            }
-            else {
+            } else {
                 $file[$i]['icon_uri'] = '/images/mimetypes/'.$file[$i]['file_type']['icon'];
                 $file[$i]['icon_width'] = 75;
                 $file[$i]['icon_height'] = 75;
