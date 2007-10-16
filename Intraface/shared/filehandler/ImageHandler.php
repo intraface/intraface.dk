@@ -48,8 +48,10 @@ class ImageHandler extends Standard
             trigger_error("Filtypen " . $file_handler->get('mime_type') . " er ikke et billede, og kan derfor ikke manipuleres i ImageHandler", E_USER_ERROR);
         }
 
-        if(!is_dir($this->file_handler->tempdir_path)) {
-            if(!mkdir($this->file_handler->tempdir_path)) {
+        $this->tempdir_path = $this->file_handler->getTemporaryDirectory();
+
+        if(!is_dir($this->tempdir_path)) {
+            if(!mkdir($this->tempdir_path)) {
                 trigger_error("Kunne ikke oprette workdir i ImageHandler->imageHandler", E_USER_ERROR);
             }
         }
@@ -111,7 +113,7 @@ class ImageHandler extends Standard
 
         $file_type = $this->file_handler->get('file_type');
 
-        $new_filename = $this->file_handler->tempdir_path.date('U').$this->file_handler->kernel->randomKey(10).'.'.$file_type['extension'];
+        $new_filename = $this->tempdir_path.date('U').$this->file_handler->kernel->randomKey(10).'.'.$file_type['extension'];
 
         if($image->save($new_filename) !== true) {
             trigger_error("Kunne ikke gemme billedet i ImageHandler->resize", E_USER_ERROR);

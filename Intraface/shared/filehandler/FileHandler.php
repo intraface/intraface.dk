@@ -119,7 +119,12 @@ class FileHandler extends Standard
         }
     }
 
-    function getAccessKey()
+    /**
+     * Returns the access key for the file
+     *
+     * @return string
+     */
+    public function getAccessKey()
     {
         return $this->get('access_key');
     }
@@ -129,14 +134,29 @@ class FileHandler extends Standard
      *
      * @return string
      */
-    function getUploadPath()
+    public function getUploadPath()
     {
         return $this->upload_path;
     }
 
-    function getId()
+    /**
+     * Returns the id for the file
+     *
+     * @return integer
+     */
+    public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Returns the temporary directory path
+     *
+     * @return string
+     */
+    public function getTemporaryDirectory()
+    {
+        return $this->tempdir_path;
     }
 
     /**
