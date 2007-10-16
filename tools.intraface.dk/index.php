@@ -19,7 +19,7 @@ require('include_first.php');
 	<li><a href="/translationadmin/">Translationadmin</a> <a href="/translation/" onClick="window.open('/translationadmin/', 'translation', 'menubar=yes,width=600,height=600,scrollbars=yes'); return false;">Åbne i lille vindue</a></li>
 	<li><a href="/phpinfo/">PHP info</a></li>
 	<li><a href="http://mysql.intraface.dk">Mysql database</a></li>
-	<li><a href="/rss/error_html.php?unique=true">Unique errors (html)</a> <a href="/rss/error_html.php">All errors (html)</a> <a href="/rss/error.php">Error RSS-feed</a></li>
+	<li><a href="/errorlog/index.php">Unique errors (html)</a> <a href="/errorlog/index.php?show=all">All errors (html)</a> <a href="/errorlog/rss/index.php">Error RSS-feed</a></li>
 	<li><a href="http://devel.intraface.dk">Intraface Developer</a></li>
 	<li><a href="http://wiki.intraface.dk">Wiki</a></li>
 	<li><a href="http://mysql.wiki.intraface.dk">Wiki-database</a></li>
