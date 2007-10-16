@@ -69,6 +69,11 @@ class ImageHandler extends Standard
     {
 
         $image = Image_Transform::factory($this->image_library);
+        if (PEAR::isError($image)) {
+            trigger_error($image->getMessage() . $image->getUserInfo(), E_USER_ERROR);
+            exit;
+        }
+
         $error = $image->load($this->file_handler->get('file_path'));
 
         $image->setOption('quality', 100);
@@ -123,7 +128,7 @@ class ImageHandler extends Standard
      * @param integer $max_width  Maximal width
      * @param integer $max_height Maximal height
      */
-    private function getRelativeSize($max_width, $max_height)
+    public function getRelativeSize($max_width, $max_height)
     {
         $width = $this->file_handler->get('width'); //1000
         $height = $this->file_handler->get('height'); //502

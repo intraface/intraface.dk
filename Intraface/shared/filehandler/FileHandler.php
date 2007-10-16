@@ -69,7 +69,7 @@ class FileHandler extends Standard
     /**
      * @var object @todo is this used at all?
      */
-    private $upload;
+    public $upload;
 
     /**
      * @todo der er muligt, at der kun skal være en getList i filemanager,
@@ -273,7 +273,7 @@ class FileHandler extends Standard
      *
      * @return void
      */
-    private function createUpload()
+    public function createUpload()
     {
         if(!class_exists('UploadHandler')) {
             $filehandler_shared = $this->kernel->useShared('filehandler');
@@ -287,7 +287,7 @@ class FileHandler extends Standard
      *
      * @return void
      */
-    private function createInstance($type = "", $param = array())
+    public function createInstance($type = "", $param = array())
     {
         if(!class_exists('InstanceHandler')) {
             $filehandler_shared = $this->kernel->useShared('filehandler');
@@ -308,7 +308,7 @@ class FileHandler extends Standard
      *
      * @return void
      */
-    private function createImage()
+    public function createImage()
     {
         if(!class_exists('ImageHandler')) {
             $filehandler_shared = $this->kernel->useShared('filehandler');
@@ -570,7 +570,7 @@ class FileHandler extends Standard
      *
      * @return string
      */
-    protected function _getMimeType($key, $from = 'key')
+    public function _getMimeType($key, $from = 'key')
     {
         /* @todo hack */
         require(PATH_INCLUDE_CONFIG . 'setting_file_type.php');
