@@ -147,6 +147,8 @@ class BasketEvaluation extends Standard
         settype($input['action_quantity'], 'integer');
         $validator->isNumeric($input['action_quantity'], 'Action quantity is not a valid number', 'zero_or_greater');
         $validator->isNumeric($input['action_unit_key'], 'Action unit is not valid');
+        
+        settype($input['evaluate_value_case_sensitive'], 'integer');
 
         if ($this->error->isError()) {
             return false;
@@ -157,6 +159,7 @@ class BasketEvaluation extends Standard
                  "evaluate_target_key = ".$this->db->quote($input['evaluate_target_key'], 'integer').", " .
                  "evaluate_method_key = ".$this->db->quote($input['evaluate_method_key'], 'integer').", " .
                  "evaluate_value = ".$this->db->quote($input['evaluate_value'], 'text').", " .
+                 "evaluate_value_case_sensitive = ".$this->db->quote($input['evaluate_value_case_sensitive'], 'integer').", " .
                  "go_to_index_after = ".$this->db->quote($input['go_to_index_after'], 'integer').", " .
                  "action_action_key = ".$this->db->quote($input['action_action_key'], 'integer').", " .
                  "action_value = ".$this->db->quote($input['action_value'], 'text').", " .
@@ -267,18 +270,26 @@ class BasketEvaluation extends Standard
                     settype($evaluation['evaluate_value'], 'integer');
                     break;
                 case 'customer_coupon':
-                    // TODO: It should be possible to determine whether it should be case sensitive
-                    $evaluate = strtolower($customer['customer_coupon']);
-                    $evaluation['evaluate_value'] = strtolower($evaluation['evaluate_value']);
+                    if($evaluation['evaluate_value_case_sensitive'] != 1) {
+                        $evaluate = strtolower(trim($customer['customer_coupon']));
+                        $evaluation['evaluate_value'] = strtolower($evaluation['evaluate_value']);
+                    }
+                    else {
+                        $evaluate = trim($customer['customer_coupon']);
+                    }
                     // coupons can only be evaluated as 'equals' or 'different from'
                     if ($evaluation['evaluate_method'] != 'equals' && $evaluation['evaluate_method'] != 'different_from') {
                         $evaluation['evaluate_method'] = 'different_from';
                     }
                     break;
                 case 'customer_country':
-                    // TODO: It should be possible to determine whether it should be case sensitive
-                    $evaluate = strtolower($customer['country']);
-                    $evaluation['evaluate_value'] = strtolower($evaluation['evaluate_value']);
+                    if($evaluation['evaluate_value_case_sensitive'] != 1) {
+                        $evaluate = strtolower(trim($customer['country']));
+                        $evaluation['evaluate_value'] = strtolower($evaluation['evaluate_value']);
+                    }
+                    else {
+                        $evaluate = trim($customer['country']);
+                    }
                     // country can only be evaluated as 'equals' or 'different from'
                     if ($evaluation['evaluate_method'] != 'equals' && $evaluation['evaluate_method'] != 'different_from') {
                         $evaluation['evaluate_method'] = 'different_from';

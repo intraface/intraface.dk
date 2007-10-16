@@ -31,10 +31,10 @@ else {
 $settings = $basketevaluation->get('settings');
 
 $page = new Page($kernel);
-$page->start(safeToHtml($translation->get('Basket evaluation')));
+$page->start(safeToHtml($translation->get('basket evaluation')));
 
 ?>
-<h1><?php echo safeToHtml($translation->get('Basket evaluation')); ?></h1>
+<h1><?php echo safeToHtml($translation->get('basket evaluation')); ?></h1>
 
 
 <?php $basketevaluation->error->view($translation); ?>
@@ -45,7 +45,7 @@ $page->start(safeToHtml($translation->get('Basket evaluation')));
 		<input type="hidden" name="id" value="<?php if (!empty($value['id'])) echo intval($value['id']); ?>" />
 		
 		<div class="formrow">
-			<label for="running_index"><?php echo safeToHtml($translation->get('Index')); ?></label>
+			<label for="running_index"><?php echo safeToHtml($translation->get('index')); ?></label>
 			<input type="text" name="running_index" size="6" value="<?php if (!empty($value['running_index'])) echo safeToForm($value['running_index']); ?>" /> <?php echo safeToHtml($translation->get('Number that decides the order for the evaluation')); ?>
 		</div>
 	</fieldset>
@@ -72,12 +72,17 @@ $page->start(safeToHtml($translation->get('Basket evaluation')));
 		</div>
 		
 		<div class="formrow">
-			<label for="evaluate_value"><?php echo safeToHtml($translation->get('Evaluation value')); ?></label>
+			<label for="evaluate_value"><?php echo safeToHtml($translation->get('evaluation value')); ?></label>
 			<input type="text" name="evaluate_value" size="10" value="<?php if (!empty($value['evaluate_value'])) echo safeToForm($value['evaluate_value']); ?>" />
 		</div>
+        
+        <div class="formrow">
+            <label for="evaluate_value_case_sensitive"><?php echo safeToHtml($translation->get('case sensitive')); ?></label>
+            <input type="checkbox" name="evaluate_value_case_sensitive" value="1" <?php if (!empty($value['evaluate_value_case_sensitive']) && (int)$value['evaluate_value_case_sensitive'] == 1) echo 'checked="checked"'; ?> />
+        </div>
 		
 		<div class="formrow">
-			<label for="go_to_index_after"><?php echo safeToHtml($translation->get('Go to index after')); ?></label>
+			<label for="go_to_index_after"><?php echo safeToHtml($translation->get('go to index after')); ?></label>
 			<input type="text" name="go_to_index_after" size="6" value="<?php if (isset($value['go_to_index_after'])) echo safeToForm($value['go_to_index_after']); ?>" />
 		</div>
 		
