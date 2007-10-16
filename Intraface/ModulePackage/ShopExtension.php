@@ -21,6 +21,10 @@ class Intraface_ModulePackage_ShopExtension {
     private $debtor;
     
     /**
+     * @var object error
+     */
+    
+    /**
      * constructor creates the client objects
      * 
      * @return void 
@@ -34,18 +38,33 @@ class Intraface_ModulePackage_ShopExtension {
             return array();
         }
         
+        if(defined('INTRAFACE_XMLRPC_SERVER_URL') && INTRAFACE_XMLRPC_SERVER_URL != '') {
+            $xmlrpc_shop_url = INTRAFACE_XMLRPC_SERVER_URL.'shop/server3.php';
+            $xmlrpc_debtor_url = INTRAFACE_XMLRPC_SERVER_URL.'debtor/server.php';
+        }
+        else {
+            $xmlrpc_shop_url = '';
+            $xmlrpc_debtor_url = '';
+        }
+        
+        if(!defined('INTRAFACE_XMLRPC_DEBUG')) {
+            define('INTRAFACE_XMLRPC_DEBUG', false);
+        }
+        
         require_once('IntrafacePublic/Shop/XMLRPC/Client.php');
         $this->shop = new IntrafacePublic_Shop_XMLRPC_Client(
             array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()), 
-            false, 
-            'http://intraface.dk.asterix/xmlrpc/shop/server3.php');
+            INTRAFACE_XMLRPC_DEBUG, 
+            $xmlrpc_shop_url);
         
         
         require_once('IntrafacePublic/Debtor/XMLRPC/Client.php');
         $this->debtor = new IntrafacePublic_Debtor_XMLRPC_Client(
-            array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()), 
-            false,
-            'http://intraface.dk.asterix/xmlrpc/debtor/server.php');
+            array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()),
+            INTRAFACE_XMLRPC_DEBUG,
+            $xmlrpc_debtor_url);
+        
+        $this->error = new Error;
         
     }
     
@@ -89,14 +108,13 @@ class Intraface_ModulePackage_ShopExtension {
      * Returns detalials of a product
      * Notice the difference between a product, and product detail where the product detail gives specifik information on earlier products
      * 
-     * @todo TODO: rename this function to getProductDetailFromExistingOrder
      * 
      * @param integer debtor id
      * @param integer product id of the product where you want the product detalil
      * 
      * @return mixed on succes returns array of product detail, otherwise returns false 
      */
-    public function getProductDetail($debtor_id, $product_id) 
+    public function getProductDetailFromExistingOrder($debtor_id, $product_id) 
     {
         
         $debtor = $this->getExistingDebtor($debtor_id);
@@ -146,8 +164,10 @@ class Intraface_ModulePackage_ShopExtension {
         // We need to first add the product to the basket and then afterwards place an order from the basket because of Intraface's shop interface.
         
         // first we save the address in the basket to be able to evaluate customer coupon. 
-        // TODO: should we react if it returns false?
-        $this->shop->saveAddress($customer);
+        if(!$this->shop->saveAddress($customer)) {
+            $this->error->set('unable to save the address information');
+            return false;
+        }
         
         
         // then we add the products to the basket
@@ -156,18 +176,26 @@ class Intraface_ModulePackage_ShopExtension {
             if(!isset($product['product_detail_id'])) {
                 $product['product_detail_id'] = 0;
             }
-            // TODO: should we react if there is an error.
-            $this->shop->changeBasket($product['product_id'], $product['quantity'], $product['description'], $product['product_detail_id']);
+            if(!$this->shop->changeBasket($product['product_id'], $product['quantity'], $product['description'], $product['product_detail_id'])) {
+                $this->error->set("unable to add the product to the basket");
+                trigger_error('unable to add the product to the basket', E_USER_NOTICE);
+                false;
+            }
         }
         
         // We get the basket again to get the total price.
         $basket = $this->shop->getBasket();
         
-        
         $customer['description'] = 'Intraface Package Add';
         
         // Then we place the order from the basket. At the moment we need to give the customer again - that is not too clever!
         $order_id = $this->shop->placeOrder($customer);
+        
+        if($order_id == 0) {
+            $this->error->set("unable to place the order");
+            trigger_error('unable to place the order', E_USER_NOTICE);
+            false;
+        }
         
         return array('order_id' => $order_id,
             'total_price' => $basket['price_total']);

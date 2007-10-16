@@ -18,74 +18,137 @@ class Intraface_ModulePackage_AccessUpdate
     private $kernel;
     
     /**
+     * @var error;
+     */
+    
+    /**
      * Constructor
      * 
      * @param object kernel Kernel
      * 
      * @return void
      */
-    function __construct($kernel) 
+    function __construct() 
     {
         
-        $this->kernel = &$kernel;
+        // $this->kernel = &$kernel;
+        $this->error = new Error;
     }
     
     /**
      * Run the AccessUpdate and applies module access acording to module packages
      * 
+     * @param integer intranet_id id on intranet, and the access update will only run on this intranet.
      * @return boolean true on success, false on failure
      */
-    public function run() {
+    public function run($intranet_id = 0) {
         
         $db = MDB2::singleton(DB_DSN);
+        if (PEAR::isError($db)) {
+            trigger_error('Error in connecting to db: '.$db->getUserInfo(), E_USER_ERROR);
+            exit;
+        }
         $package_removed = 0;
         $package_added = 0;
         
-        // TODO: Hvordan får vi adgang til IntranetMaintenance?
+        if($intranet_id != 0) {
+            $sql_extra = 'AND intranet_id = '.$db->quote($intranet_id, 'integer');
+        }
+        else {
+            $sql_extra = '';
+        }
+        
+        // We login to the intranet maintenance intranet.
+        $weblogin = new Weblogin;
+        if(!$intranet_id = $weblogin->auth('private', INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY)) {
+            trigger_error("Unable to log in to intranet maintenance intranet", E_USER_ERROR);
+            exit;
+        }
+        
+        $kernel = new Kernel();
+        $kernel->weblogin = $weblogin;
+        $kernel->intranet = new Intranet($intranet_id);
+        $kernel->setting = new Setting($kernel->intranet->get('id'));
+        $kernel->useModule('intranetmaintenance');
         
         // first we remove access to ended packages.
-        $result = $db->query("SELECT id, intranet_id, module_package_id FROM intranet_module_package WHERE active = 1 AND status = 2 AND end_date < NOW()");
+        $result = $db->query("SELECT id, intranet_id, module_package_id FROM intranet_module_package WHERE active = 1 AND ((status_key = 2 AND end_date < NOW()) OR status_key = 3) ".$sql_extra);
         if(PEAR::isError($result)) {
+            die('HER');
             trigger_error("Error in query for removing acces in ModulePackageManagerAccessUpdate->run :".$result->getUserInfo(), E_USER_ERROR);
             exit;
         }
         
         while($row = $result->fetchRow()) {
-            $modulepackage = new ModulePackage($row['module_package_id']);
-            $intranet = new IntranetMaintenance($this->kernel, $row['intranet_id']);
+            $modulepackage = new Intraface_ModulePackage($row['module_package_id']);
+            $intranet = new IntranetMaintenance($kernel, $row['intranet_id']);
             
             $modules = $modulepackage->get('modules');
             if(is_array($modules) && count($modules) > 0) {
                 foreach($modules AS $module) {
-                    $intranet->removeModuleAccess($module['module']);
+                    if(!$intranet->removeModuleAccess($module['module'])) {
+                        trigger_error('Error in removing access to module '.$module['module'].' for intranet '.$row['intranet_id'], E_USER_NOTICE);
+                    }
                 }
             }
-            $package_removed += $this->db->exec('UPDATE intranet_module_package SET status = 3 WHERE id = '.$this->db->quote($row['id'], 'integer'));
+            $update = $db->exec('UPDATE intranet_module_package SET status_key = 4 WHERE id = '.$db->quote($row['id'], 'integer'));
+            if(PEAR::isError($update)) {
+                trigger_error('Error in exec: '.$update->getUserInfo(), E_USER_ERROR);
+                exit;
+            }
+            $package_removed += $update;
         }
-        
-        
         
         // then we set access to new packages.
-        $result = $db->query("SELECT intranet_id, module_package_id FROM intranet_module_package WHERE active = 1 AND status = 1 AND end_date < NOW()");
+        $result = $db->query("SELECT id, intranet_id, module_package_id FROM intranet_module_package WHERE active = 1 AND status_key = 1 ".$sql_extra);
         if(PEAR::isError($result)) {
             trigger_error("Error in query for removing acces in ModulePackageManagerAccessUpdate->run :".$result->getUserInfo(), E_USER_ERROR);
             exit;
         }
         
         while($row = $result->fetchRow()) {
-            $modulepackage = new ModulePackage($row['module_package_id']);
-            $intranet = new IntranetMaintenance($this->kernel, $row['intranet_id']);
+            $modulepackage = new Intraface_ModulePackage($row['module_package_id']);
+            
+            // we prepare to give the intranet access
+            $intranet = new IntranetMaintenance($kernel, $row['intranet_id']);
+            // we prepage to give the users access
+            $user = new UserMaintenance($kernel);
+            $users = $user->getList();
+            foreach($users AS $key => $user) {
+                $users[$key] = new UserMaintenance($kernel, $user['id']);
+            }
             
             $modules = $modulepackage->get('modules');
             if(is_array($modules) && count($modules) > 0) {
                 foreach($modules AS $module) {
-                    $intranet->setModuleAccess($module['module']);
+                    if(!$intranet->setModuleAccess($module['module'])) {
+                        trigger_error("Error in giving access to module ".$module['module'].' for intranet '.$row['intranet_id'], E_USER_NOTICE);
+                        $this->error->set('we could not give you access to your modules');
+                    }
+                    foreach($users AS $user) {
+                        $user->setModuleAccess($module['module'], $row['intranet_id']);
+                    }
                 }
             }
-            $package_added += $this->db->exec('UPDATE intranet_module_package SET status = 2 WHERE id = '.$this->db->quote($row['id'], 'integer'));
+            $update = $db->exec('UPDATE intranet_module_package SET status_key = 2 WHERE id = '.$db->quote($row['id'], 'integer'));
+            if(PEAR::isError($update)) {
+                trigger_error('Error in exec: '.$update->getUserInfo(), E_USER_ERROR);
+                exit;
+            }
+            $package_added += $update;
+
         }
         
-        // Here it is possible to make a log over the updates.
+        $details = array(
+                'date' => date('r'),
+                'type' => 'AccessUpdate',
+                'message' => 'AccessUpdate successfully run. '.$package_added.' package(s) added, '.$package_removed.' package(s) removed!',
+                'file' => 'ModulePackage/AccessUpdate.php',
+                'line' => '[void]');
+                
+        require_once("ErrorHandler/Observer/File.php");
+        $logger = new ErrorHandler_Observer_File(ERROR_LOG);
+        $logger->update($details);
         
         return true;
         

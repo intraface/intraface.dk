@@ -1,9 +1,8 @@
 <?php
 /**
  * Class to manage which ModulePackages an intranet has.
- * 
- * @todo TODO: Should this class be called Intraface_IntranetModulePackage as this is actually what it is.
- * @todo TODO: rename methods to save, add, extend, upgrade, delete, getList,
+ * Should this class be called Intraface_IntranetModulePackage as this is actually what it is.
+ *  
  * @package Intraface_ModulePackage
  * @author sune
  * @version 0.0.1
@@ -39,6 +38,7 @@ class Intraface_ModulePackage_Manager extends Standard {
      * Constructor
      * 
      * @param object intranet intranet object
+     * @param integer id for intranet module package
      * 
      * @return void 
      */
@@ -116,8 +116,6 @@ class Intraface_ModulePackage_Manager extends Standard {
      * Add a package to an intranet
      * This function should maybe have been a part of intranet class, e.g. $intranet->addModulePackage, but how do we get that to work.
      * 
-     * @todo TODO: Make sure that a package is not added overlapping exiting packages.
-     * 
      * @param integer package_id id on modulepackage
      * @param string start_date The start date of the package in the pattern dd-mm-yyyy
      * @param string duration The duration as either date 'dd-mm-yyyy' or 'yyyy-mm-dd' or a 'X month' where X can be any whole number
@@ -145,6 +143,13 @@ class Intraface_ModulePackage_Manager extends Standard {
         
         $parsed_duration = $this->parseDuration($start_date, $duration);
         $end_date = $parsed_duration['end_date'];
+        
+        // We make sure that it is not possible to add a package before existing is finished.
+        if(strtotime($this->getLastEndDateInGroup($modulepackage)) >= strtotime($start_date)) {
+            $this->error->set('you are trying to add a package in a group before the existing package is finished');
+            trigger_error('you are trying to add a package in a group before the existing package is finished', E_USER_NOTICE);
+            return false;
+        }
         
         if($this->error->isError()) {
             return false;
@@ -242,8 +247,6 @@ class Intraface_ModulePackage_Manager extends Standard {
     /**
      * Returns on the basis of the module package which type of add this is. Can be either add, extend, or upgrade
      * 
-     * @todo TODO: Rewrite this function so that it only takes modulepackage group id as parameter, maybe?
-     * 
      * @param object modulepackage An modulepackage object
      * 
      * @return string either 'add', 'extend' or 'upgrade'
@@ -287,9 +290,7 @@ class Intraface_ModulePackage_Manager extends Standard {
     
     /**
      * Returns the end date of the last modulepacke in a given group
-     * 
-     * @todo TODO: rewrite this function to only take group id as parameter.
-     * 
+     *  
      * @param object modulepackage
      */
     public function getLastEndDateInGroup($modulepackage) 
@@ -492,13 +493,6 @@ class Intraface_ModulePackage_Manager extends Standard {
         require_once('Intraface/ModulePackage/Action.php');
         $action = new Intraface_ModulePackage_Action;
         
-        $action->addAction(array('action' => 'add',
-            'module_package_id' => $modulepackage->get('id'),
-            'product_id' => $modulepackage->get('product_id'),
-            'start_date' => $start_date,
-            'end_date' => $parsed_duration['end_date'],
-            'month' => $parsed_duration['month']));
-        
         require_once('Intraface/ModulePackage/ShopExtension.php');
         $shop = new Intraface_ModulePackage_ShopExtension;
         
@@ -539,7 +533,7 @@ class Intraface_ModulePackage_Manager extends Standard {
             
             
             if($row['order_debtor_id'] != 0 && $modulepackage->get('product_id') != 0) {
-                $product = $shop->getProductDetail($row['order_debtor_id'], $row['product_id']);
+                $product = $shop->getProductDetailFromExistingOrder($row['order_debtor_id'], $row['product_id']);
                 $add_action['product_detail_id'] = $product['product_detail_id'];
                 $add_action['product_id'] = $row['product_id'];
                 
@@ -555,6 +549,12 @@ class Intraface_ModulePackage_Manager extends Standard {
         
         
         // we add the add package action
+        $action->addAction(array('action' => 'add',
+            'module_package_id' => $modulepackage->get('id'),
+            'product_id' => $modulepackage->get('product_id'),
+            'start_date' => $start_date,
+            'end_date' => $parsed_duration['end_date'],
+            'month' => $parsed_duration['month']));
         
         return $action;
      }

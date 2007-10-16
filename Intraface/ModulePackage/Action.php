@@ -73,24 +73,28 @@ class Intraface_ModulePackage_Action
         // Because of the building of Intraface Webshop we need to add the order to the basket first
         // Then afterwards we can place the order from the basket. 
         
-        
         // First we translate the actions into actual products for the order
         $products = array();
         foreach($this->action AS $action) {
             
             if(isset($action['action']) && isset($action['month']) && isset($action['product_id'])) {
                 if($action['action'] == 'add') {
-                    // TODO: we can add a small description for the product. 
+                    if(isset($action['start_date']) && $action['start_date'] != '' && isset($action['end_date']) && $action['end_date'] != '') {
+                        $description = date('d-m-Y', strtotime($action['start_date'])).' - '.date('d-m-Y', strtotime($action['end_date']));
+                    }
+                    else {
+                        $description = '';
+                    }
+                    
                     $products[] = array(
                         'product_id' => $action['product_id'],
-                        'description' => '', 
+                        'description' => $description, 
                         'quantity' => (int)$action['month']);
                 } 
                 elseif(($action['action'] == 'terminate' || $action['action'] == 'delete') 
                         && isset($action['product_id']) && $action['product_id'] != 0 
                         && isset($action['product_detail_id']) && $action['product_detail_id'] != 0) {
                     // we only substract the price id we are able to find a product detail.
-                    // TODO: we can add a small description for the product
                     $products[] = array(
                         'product_id' => $action['product_id'],
                         'description' => '',

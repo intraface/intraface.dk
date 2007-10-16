@@ -108,36 +108,6 @@ class Intraface_ModulePackage_ActionStore {
     }
     
     /**
-     * Restore an Action object from the database on the basis of intranet id, as in onlinepayment order id is the only form of identification
-     * 
-     * @param integer order_id Id on the order attached to the action
-     */
-    public function restoreFromOrderId($order_id) 
-    {
-        
-        $result = $this->db->query('SELECT id, action FROM module_package_action WHERE ' .
-                'intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' AND ' .
-                'order_debtor_id = '.$this->db->quote($order_id, 'integer').' AND ' .
-                'active = 1 ' .
-                'ORDER BY id DESC LIMIT 1'); // could there be a slight chance that there are more than one action per order_id? probably not!
-        
-        if(PEAR::isError($result)) {
-            trigger_error("Error in query in Intraface_ModulePackage_Action::restoreFromOrderId(): ".$result->getUserInfo(), E_USER_ERROR);
-            return false;
-        }
-        
-        $row = $result->fetchRow();
-        
-        if($row['action'] != '') {
-            $this->id = $row['id'];
-            require_once("Intraface/ModulePackage/Action.php");
-            return unserialize($row['action']);
-        }
-        return false;
-        
-    }
-    
-    /**
      * Delete an stored action from the database
      * 
      * @param integer id

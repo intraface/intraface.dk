@@ -1,7 +1,18 @@
 <?php
 require('../../include_first.php');
+require('Intraface/ModulePackage.php');
+require('Intraface/ModulePackage/Action.php');
+require('Intraface/ModulePackage/ActionStore.php');
 
 $translation = $kernel->getTranslation('modulepackage');
+
+$action_store = new Intraface_ModulePackage_ActionStore($kernel->intranet->get('id'));
+$action = $action_store->restore((int)$_GET['action_store_id']);
+        
+if(!is_object($action)) {
+    trigger_error("Problem restoring action from order_id ".$order_id, E_USER_ERROR);
+    exit;
+}
 
 $page = new Page($kernel);
 $page->start(safeToHtml($translation->get('you are now ready to pay your order')));
@@ -10,14 +21,11 @@ $page->start(safeToHtml($translation->get('you are now ready to pay your order')
 
 <p><?php echo safeToHtml($translation->get('we have registered your order, and you are ready to pay for it.')); ?></p>
 
-<?php
-// TODO: The price and order id should be collected from the action store id instead.
-// TODO: Here the price should be shown also
-?>
+<p><strong><?php echo safeToHtml($translation->get('your payment is')); ?> DKK <?php echo safeToHtml($action->getTotalPrice()); ?></strong></p>
 
 <p><?php echo safeToHtml($translation->get('you have 2 options:')); ?></p>
 
-<ul>
+<ul style="padding-left: 30px; list-style: square outside url(/images/icons/silk/accept.png);">
     <li><h2><?php echo safeToHtml($translation->get('pay online')); ?></h2>
         <p><?php echo safeToHtml($translation->get('you can choose to pay the order with creditcard. this will process your order instantly.')); ?></p>
         <p><?php echo safeToHtml($translation->get('the paymend is carried out on a secure connection.')); ?></p>
@@ -28,15 +36,15 @@ $page->start(safeToHtml($translation->get('you are now ready to pay your order')
         $lang = $translation->getLang(); 
         $onlinepayment_language = (isset($lang) && $lang == 'dansk') ? 'da' : 'en';
         $onlinepayment_autocapture = "0";
-        $onlinepayment_ordernum = $_GET['order_id']; // needs to be 4 digit
-        $onlinepayment_amount = $_GET['amount'];
+        $onlinepayment_ordernum = $action->getOrderId(); // needs to be 4 digit
+        $onlinepayment_amount = round($action->getTotalPrice()*100); // amount in øre.
         $onlinepayment_currency = "DKK";
         $onlinepayment_merchant = "29991634";
         $onlinepayment_okpage = NET_SCHEME.NET_HOST.NET_DIRECTORY.'main/account/confirmation.php';
         $onlinepayment_errorpage = NET_SCHEME.NET_HOST.NET_DIRECTORY.'main/account/payment.php';
         $onlinepayment_resultpage = NET_SCHEME.NET_HOST.NET_DIRECTORY.'main/account/process.php';
         $onlinepayment_ccipage = "";
-        $onlinepayment_md5secret = "intrafaceonlinepaymentmd5";
+        $onlinepayment_md5secret = "DdkjPwYjFciQw93YdkFZSjFwFkT2o0oW2kDkd";
         $onlinepayment_md5check = md5($onlinepayment_language.
                 $onlinepayment_autocapture.
                 $onlinepayment_ordernum.
@@ -61,6 +69,8 @@ $page->start(safeToHtml($translation->get('you are now ready to pay your order')
         <input type="hidden" name="resultpage" value="<?php echo safeTohtml($onlinepayment_resultpage); ?>" />
         <input type="hidden" name="ccipage" value="<?php echo safeTohtml($onlinepayment_ccipage); ?>" />
         <input type="hidden" name="md5checkV2" value="<?php echo safeTohtml($onlinepayment_md5check); ?>" />
+        <input type="hidden" name="CUSTOM_action_store_id" value="<?php echo safeTohtml($action_store->getId()); ?>" />
+        <input type="hidden" name="CUSTOM_intranet_public_key" value="<?php echo safeTohtml($kernel->intranet->get('public_key')); ?>" />
         </form>
     </li>
     <li><h2><?php echo safeToHtml($translation->get('pay by bank transfer')); ?></h2>

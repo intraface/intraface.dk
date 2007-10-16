@@ -45,8 +45,22 @@ if(!empty($_POST)) {
                 if($action->hasAddActionWithProduct()) {
                     
                     $contact = $kernel->intranet->address->get();
+                    // The following we do not want to transfer as this can give problems.
+                    unset($contact['id']);
+                    unset($contact['type']);
+                    unset($contact['belong_to_id']);
+                    unset($contact['address_id']);
+                    
+                    // If the intranet address is different from the user it is probably a company.
+                    if($kernel->intranet->address->get('name') != $kernel->user->address->get('name')) {
+                        $contact['contactperson'] = $kernel->user->address->get('name');
+                        $contact['contactemail'] = $kernel->user->address->get('email');
+                        $contact['contactphone'] =  $kernel->user->address->get('phone');
+                    }
+                    
                     // We add the contact_id. But notice, despite of the bad naming the contact_id is the contact_id in the intranet_maintenance intranet!
                     $contact['contact_id'] = (int)$kernel->intranet->get('contact_id'); 
+                    
                     // we place the order.
                     if(!$action->placeOrder($contact)) {
                         trigger_error("Unable to place the order", E_USER_ERROR);
@@ -54,34 +68,29 @@ if(!empty($_POST)) {
                     }
                     $order_id = $action->getOrderId();
                     $total_price = $action->getTotalPrice();
-                    
-                    if(!$action_store_id = $action_store->store($action)) {
-                        trigger_error("Unable to store Action!", E_USER_ERROR);
-                        exit;
-                    }
-                    
-                    // TODO: What do we do if the onlinepayment is not running?
-                    // TODO: Instead of order id and price we should probably send an order identification string.
-                    
-                    // Notice: Only if the price is more than zero we continue to the payment page, otherwise we contibue to the process page further down.
-                    if($total_price > 0) {
-                        header('location: payment.php?order_id='.$order_id.'&amount='.$total_price);
-                        exit;
-                    }
-                    
-                } else {
-                    if(!$action_store_id = $action_store->store($action)) {
-                        trigger_error("Unable to store Action!", E_USER_ERROR);
-                        exit;
-                    }
                 }
-                
-                if(isset($action_store_id) && $action_store_id > 0) {
+                else {
+                    $total_price = 0;
+                }
+                    
+                if(!$action_store_id = $action_store->store($action)) {
+                    trigger_error("Unable to store Action!", E_USER_ERROR);
+                    exit;
+                }
+                    
+                // TODO: What do we do if the onlinepayment is not running?
+                    
+                // Notice: Only if the price is more than zero we continue to the payment page, otherwise we contibue to the process page further down.
+                if(isset($action_store_id) && $action_store_id > 0 && $total_price > 0) {
+                    header('location: payment.php?action_store_id='.$action_store_id);
+                    exit;
+                }
+                elseif(isset($action_store_id) && $action_store_id > 0) {
                     header('location: process.php?action_store_id='.intval($action_store_id));
                     exit;
                 }
                 else {
-                    trigger_error('We did not end up having a action store id!', E_USER_ERROR);
+                    trigger_error('We did not end up having an action store id!', E_USER_ERROR);
                     exit;
                 }
             }

@@ -4,7 +4,6 @@ require_once('Intraface/ModulePackage.php');
 require_once('Intraface/ModulePackage/Manager.php');
 
 if(isset($_GET['unsubscribe_id']) && intval($_GET['unsubscribe_id']) != 0) {
-    
     $modulepackagemanager = new Intraface_ModulePackage_Manager($kernel->intranet, (int)$_GET['unsubscribe_id']);
     if($modulepackagemanager->get('id') != 0) {
         if($modulepackagemanager->get('status') == 'created') {
@@ -12,13 +11,18 @@ if(isset($_GET['unsubscribe_id']) && intval($_GET['unsubscribe_id']) != 0) {
         }
         elseif($modulepackagemanager->get('status') == 'active') {
             $modulepackagemanager->terminate();
+            
+            require_once('Intraface/ModulePackage/AccessUpdate.php');
+            $access_update = new Intraface_ModulePackage_AccessUpdate();
+            $access_update->run($kernel->intranet->get('id'));
+            $kernel->user->clearCachedPermission();
+            
         }
         else {
             $modulepackagemanager->error->set('it is not possible to unsubscribe module packages which is not either created or active');
         }
     }
 }
-
 
 $translation = $kernel->getTranslation('modulepackage');
 
@@ -57,6 +61,7 @@ if(count($packages) > 0) {
                 <th><?php echo safeToHtml($translation->get('modulepackage')); ?></th>
                 <th><?php echo safeToHtml($translation->get('start date')); ?></th>
                 <th><?php echo safeToHtml($translation->get('end date')); ?></th>
+                <th><?php echo safeToHtml($translation->get('status')); ?></th>
                 <th></th>
             </tr>
         </thead>
@@ -66,6 +71,7 @@ if(count($packages) > 0) {
                 <td><?php echo safeToHtml($translation->get($package['plan']).' '.$translation->get($package['group'])); ?></td>
                 <td><?php echo safeToHtml($package['start_date']); ?></td>
                 <td><?php echo safeToHtml($package['end_date']); ?></td>
+                <td><?php echo safeToHtml($translation->get($package['status'])); ?></td>
                 <td><a href="index.php?unsubscribe_id=<?php echo intval($package['id']); ?>" class="delete"><?php echo safeToHtml($translation->get('unsubscribe')); ?></a></td>
             </tr>
         <?php endforeach; ?>
@@ -176,9 +182,6 @@ $packages = $modulepackage->getList('matrix');
     </tbody>
 </table>
 
-
 <?php
-
 $page->end();
 ?>
-
