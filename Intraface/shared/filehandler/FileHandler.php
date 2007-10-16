@@ -164,7 +164,7 @@ class FileHandler extends Standard
      *
      * @return integer
      */
-    private function load()
+    public function load()
     {
 
         $db = new DB_Sql;
