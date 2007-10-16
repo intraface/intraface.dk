@@ -7,9 +7,10 @@
 require('../../include_first.php');
 require_once('Intraface/tools/Position.php');
 
+
 $debtor_module = $kernel->module('debtor');
 $translation = $kernel->getTranslation('debtor');
-
+$contact_module = $kernel->getModule('contact');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -236,17 +237,18 @@ if(isset($onlinepayment)) {
 <?php endif; ?>
 
 <?php if($debtor->contact->get('preferred_invoice') == 2): /* if the customer prefers e-mail */ ?>
-	<?php 
+	
+    <?php 
 	
 	if($kernel->user->hasModuleAccess('administration')) {
 		$module_administration = $kernel->useModule('administration');
 	}
-	$error_in_sender = false;
+	$valid_sender = true;
 	
 	switch($kernel->setting->get('intranet', 'debtor.sender')) {
 		case 'intranet':
 			if($kernel->intranet->address->get('name') == '' || $kernel->intranet->address->get('email') == '') {
-				$error_in_sender = true;
+				$valid_sender = false;
 				if($kernel->user->hasModuleAccess('administration')) {
 					echo '<div class="message-dependent"><p>'.$translation->get('you need to fill in an e-mail address to send e-mail').'. <a href="'.$module_administration->getPath().'intranet_edit.php">'.$translation->get('do it now').'</a>.</p></div>';
 				}
@@ -258,13 +260,13 @@ if(isset($onlinepayment)) {
 			break;
 		case 'user':
 			if($kernel->user->address->get('name') == '' || $kernel->user->address->get('email') == '') {
-				$error_in_sender = true;
+				$valid_sender = false;
 				echo '<div class="message-dependent"><p>'.$translation->get('you need to fill in an e-mail address to send e-mail').'. <a href="'.PATH_WWW.'/main/controlpanel/user_edit.php">'.$translation->get('do it now').'</a>.</p></div>';		
 			}
 			break;
 		case 'defined':
 			if($kernel->setting->get('intranet', 'debtor.sender.name') == '' || $kernel->setting->get('intranet', 'debtor.sender.email') == '') {
-				$error_in_sender = true;
+				$valid_sender = false;
 				if($kernel->user->hasModuleAccess('administration')) {
 					echo '<div class="message-dependent"><p>'.$translation->get('you need to fill in an e-mail address to send e-mail').'. <a href="'.$module_debtor->getPath().'settings.php">'.$translation->get('do it now').'</a>.</p></div>';
 				}
@@ -275,29 +277,59 @@ if(isset($onlinepayment)) {
 			}
 			break;
 		default:
-			$error_in_sender = true;
+			$valid_sender = false;
 			trigger_error("Invalid sender!", E_USER_ERROR);
 			exit;
 			
 	}
 	
 	if($debtor->contact->address->get('email') == '') {
-		$error_in_sender = true;
+		$valid_sender = false;
 		echo '<div class="message-dependent"><p>'.$translation->get('you need to register an e-mail to the contact, so you can send e-mails').'</p></div>';		
 			
 	}
 	?>
+<?php elseif($debtor->contact->get('preferred_invoice') == 3): /* electronic email, we make check that everything is as it should be */ ?> 
+    <?php 
+    
+    if($debtor->contact->address->get('ean') == '') {
+        echo '<div class="message-dependent"><p>'.$translation->get('to be able to send electronic e-mails you need to fill out the EAN location number for the contact').'</p></div>';     
+    }
+    
+    $scan_in_contact_id = $kernel->setting->get('intranet', 'debtor.scan_in_contact');
+    $valid_scan_in_contact = true;
+
+    $scan_in_contact = new Contact($kernel, $scan_in_contact_id);
+    if ($scan_in_contact->get('id') == 0) {
+        $valid_scan_in_contact = false;
+        echo '<div class="message-dependent"><p>';
+        echo $translation->get('a contact for the scan in bureau is needed to send electronic invoices').'. ';
+        if($kernel->user->hasModuleAccess('administration')) {
+            echo '<a href="'.$debtor_module->getPath().'setting.php">'.$translation->get('do it now').'</a>.';
+        }
+        echo '</p></div>';
+          
+    }
+    elseif (!$scan_in_contact->address->get('email')) {
+        $valid_scan_in_contact = false;
+        echo '<div class="message-dependent"><p>';
+        echo $translation->get('you need to provide a valid e-mail address to the contact for the scan in bureau').'.';
+        echo ' <a href="'.$contact_module->getPath().'contact.php?id='.$scan_in_contact->get('id').'">'.$translation->get('do it now').'</a>.';
+        echo '</p></div>';
+    }
+    ?>
 <?php endif; ?>
+
 
 <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
 	<input type="hidden" name="id" value="<?php echo $debtor->get('id'); ?>" />
-	<?php if ($debtor->contact->get('preferred_invoice') == 2 AND  $debtor->get('status') == 'created' AND !$error_in_sender): ?>
+	<?php if ($debtor->contact->get('preferred_invoice') == 2 AND  $debtor->get('status') == 'created' AND isset($valid_sender) AND $valid_sender == true): ?>
 		<input type="submit" value="Send på e-mail" name="send_email" class="confirm" title="Dette vil sende e-mail til kontakten" />
-	<?php elseif ($debtor->contact->get('preferred_invoice') == 2 AND $debtor->get('status') == 'sent'): ?>
+	<?php elseif ($debtor->contact->get('preferred_invoice') == 2 AND $debtor->get('status') == 'sent' AND isset($valid_sender) AND $valid_sender == true): ?>
 		<input type="submit" value="Genfremsend på e-mail" name="send_email" class="confirm" title="Dette vil sende fakturaen igen" />
-	<?php elseif ($debtor->get("type") == 'invoice' AND $debtor->contact->get('preferred_invoice') == 3 AND $debtor->contact->address->get('ean') AND $debtor->get('status') == 'created'): ?>
+	<?php elseif ($debtor->get("type") == 'invoice' AND $debtor->contact->get('preferred_invoice') == 3 AND $debtor->contact->address->get('ean') AND $debtor->get('status') == 'created' AND isset($valid_scan_in_contact) AND $valid_scan_in_contact == true): ?>
 		<input type="submit" value="Send elektronisk faktura" name="send_electronic_invoice" class="confirm" title="Dette vil sende den elektroniske faktura til Læs-ind bureauet" />
-	<?php elseif ($debtor->get("type") == 'invoice' AND $debtor->contact->get('preferred_invoice') == 3 AND $debtor->contact->address->get('ean') AND $debtor->get('status') == 'sent'): ?>
+	<?php elseif ($debtor->get("type") == 'invoice' AND $debtor->contact->get('preferred_invoice') == 3 AND $debtor->contact->address->get('ean') AND $debtor->get('status') == 'sent' AND isset($valid_scan_in_contact) AND $valid_scan_in_contact == true): ?>
 		<input type="submit" value="Genfremsend elektronisk faktura" name="send_electronic_invoice" class="confirm" title="Dette vil sende den elektroniske faktura igen" />
 	<?php endif; ?>
 	<?php if($debtor->get("status") == "created"): // make sure we can always mark as sent	?>
@@ -507,9 +539,7 @@ if(isset($onlinepayment)) {
 	<table>
 		<caption>Kontaktoplysninger</caption>
 		<tbody>
-			<?php
-			$contact_module = $kernel->getModule('contact');
-			?>
+			
 			<tr>
 				<th>Nummer</th>
 
