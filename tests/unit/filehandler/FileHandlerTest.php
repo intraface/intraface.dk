@@ -47,11 +47,7 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
         return $filehandler;
     }
 
-    function testUpdate()
-    {
-        $fh = $this->createFile();
-        $this->assertEquals($this->file_name, $fh->get('file_name'));
-    }
+    ////////////////////////////////////////////////////////////////
 
     function testConstruction()
     {
@@ -67,6 +63,37 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($filehandler));
     }
 
+    function testUpdate()
+    {
+        $fh = $this->createFile();
+        $this->assertEquals($this->file_name, $fh->get('file_name'));
+    }
 
+    function testDelete()
+    {
+        // @todo how do we test precisely that it is deleted
+        $fh = $this->createFile();
+        $id = $fh->getId();
+
+        $fh = new FileHandler($this->createKernel(), $id);
+        $this->assertTrue($fh->delete());
+    }
+
+    function testUnDelete()
+    {
+        // @todo how do we test precisely that it is undeleted
+        $fh = $this->createFile();
+        $fh->delete();
+        $this->assertTrue($fh->undelete());
+
+    }
+
+    function testSave()
+    {
+        $fh = new FileHandler($this->createKernel());
+        $id = $fh->save(dirname(__FILE__) . '/wideonball.jpg', 'Filename');
+        $fh->error->view();
+        $this->assertTrue($id > 0);
+    }
 }
 ?>
