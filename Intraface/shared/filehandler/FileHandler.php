@@ -52,7 +52,7 @@ class FileHandler extends Standard
     /**
      * @var array
      */
-    private $file_types;
+    protected $file_types;
 
     /**
      * @var array
