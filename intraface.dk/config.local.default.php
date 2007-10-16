@@ -36,4 +36,7 @@ define('ERROR_LOG', PATH_ROOT.'intraface/log/error.log'); // exact directory and
 
 // for intranet maintenance
 define('INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY', 'privatekeyshouldbereplaced'); // the private key of the intranet that has intranetmaintenance
+define('INTRAFACE_XMLRPC_SERVER_URL', ''); // the url for intraface xml-rpc server. Empty for the default url.
+define('INTRAFACE_XMLRPC_DEBUG', false);
+
 ?>
