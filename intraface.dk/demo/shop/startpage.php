@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="da" lang="da">
     <head>
         <title>Shop</title>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
         <link rel="alternate" type="application/rss+xml" title="Alle produkter" href="/demo/shop/rss.php" />
         
         <style type="text/css">
