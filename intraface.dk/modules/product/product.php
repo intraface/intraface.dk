@@ -103,14 +103,6 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 }
 
-
-
-
-
-
-
-
-
 $page = new Page($kernel);
 $page->start('Produkt: ' . $product->get('name'));
 ?>
@@ -137,7 +129,7 @@ $page->start('Produkt: ' . $product->get('name'));
         <td><?php echo safeToHtml(number_format($product->get('price'), 2, ",", ".")); ?> ex. moms</td>
     </tr>
     <tr>
-        <td>Vï¿½gt</td>
+        <td>Vægt</td>
         <td><?php echo safeToHtml($product->get('weight')); ?> gram</td>
     </tr>
     <tr>
@@ -163,7 +155,7 @@ $page->start('Produkt: ' . $product->get('name'));
         </td>
     </tr>
 
-    <!-- her bï¿½r vï¿½re en tidsangivelse -->
+    <!-- her bør være en tidsangivelse -->
 
     <?php endif; ?>
 
@@ -191,11 +183,11 @@ $page->start('Produkt: ' . $product->get('name'));
             $mainAccounting = $kernel->useModule("accounting");
     ?>
     <tr>
-        <td>Bogfï¿½res pï¿½</td><td>
+        <td>Bogføres på</td><td>
         <?php
             $year = new Year($kernel);
             if ($year->get('id') == 0) {
-                echo 'ï¿½ret er ikke sat i regnskab';
+                echo 'Året er ikke sat i regnskab';
             }
             else {
                 $account = Account::factory($year, $product->get('state_account_id'));
@@ -322,7 +314,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
                     <td><?php print($product->stock->get("reserved")); ?> (<?php print($product->stock->get("on_quotation")); ?>)</td>
                 </tr>
             </table>
-            <!-- hvad bliver fï¿½lgende brugt til -->
+            <!-- hvad bliver følgende brugt til -->
             <div id="stock_regulation" style="display: none ; position: absolute; border: 1px solid #666666; background-color: #CCCCCC; padding: 10px; width: 260px;">
                 Reguler med antal: <input type="text" name="regulate_number" size="5" />
                 <br />Beskrivelse: <input type="text" name="regulation_description" />
@@ -386,7 +378,6 @@ if($kernel->user->hasModuleAccess('invoice')) {
         <?php
     }
     ?>
-
 </div>
 <?php
 $page->end();
