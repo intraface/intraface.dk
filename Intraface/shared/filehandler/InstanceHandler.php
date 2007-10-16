@@ -313,7 +313,7 @@ class InstanceHandler extends Standard
      *
      * @return @todo
      */
-    private function _checkType($type) {
+    public function _checkType($type) {
 
         for($i = 0, $max = count($this->instance_types); $i < $max; $i++) {
             if(isset($this->instance_types[$i]['name']) && $this->instance_types[$i]['name'] == $type) {
