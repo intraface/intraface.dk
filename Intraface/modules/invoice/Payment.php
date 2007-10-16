@@ -153,7 +153,7 @@ Class Payment Extends Standard {
             }
 
             $this->dbquery->setSorting("payment_date ASC");
-      $db = $this->dbquery->getRecordset("id, amount, type, description, payment_date, payment_for_id, DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date", "", false);
+            $db = $this->dbquery->getRecordset("id, amount, type, description, payment_date, payment_for_id, DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date", "", false);
             while($db->nextRecord()) {
                 $payment[$i]["id"] = $db->f("id");
                 if($db->f("type") == -1) {

@@ -347,7 +347,12 @@ class Reminder extends Standard {
         $payment["deprication"] = 0;
 
         for($i = 0, $max = count($payments); $i < $max; $i++) {
-            $payment[$payments[$i]["type"]] += $payments[$i]["amount"];
+            if($payments[$i]["type"] == 'depriciation') {
+                $payment['depriciation'] += $payments[$i]["amount"];
+            }
+            else {
+                $payment['payment'] += $payments[$i]["amount"];
+            }    
         }
 
         $payment["total"] = $payment["payment"] + $payment["deprication"];
