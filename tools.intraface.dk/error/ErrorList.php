@@ -5,8 +5,6 @@
  
 class ErrorList {
     
-    
-    
     public function get($show = 'unique') {
         
         
@@ -14,16 +12,23 @@ class ErrorList {
         while (!feof($handle)) {
            $buffer = fgets($handle, 4096);
            if (empty($buffer) OR !is_string($buffer)) continue;
-           $errors[] = unserialize($buffer);
+           // $errors[] = unserialize($buffer); if buffer is array.
+           $errors[] = $buffer;
         }
         fclose($handle);
 
         $unique = array();
         $items = array();
 
-        if (!empty($errors)) {
-            foreach ($errors AS $error) {
+        if(!empty($errors)) {
+            foreach ($errors AS $error_string) {
         
+                if(!ereg("^([a-zA-Z]{3})", $error_string, $params)) {
+                    CONTINUE;
+                }
+                
+                $error['date'] = $params[1];
+                
                 if($show == 'unique' && in_array(md5($error['type'].$error['message'].$error['file'].$error['line']), $unique)) {
                     CONTINUE;     
                 }
