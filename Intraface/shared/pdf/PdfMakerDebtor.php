@@ -1,6 +1,7 @@
 <?php
 
-die('this is not to be used anymore');
+trigger_error('this is not to be used anymore', E_USER_ERROR);
+exit;
 
 class PdfMakerDebtor extends PdfMaker {
 
