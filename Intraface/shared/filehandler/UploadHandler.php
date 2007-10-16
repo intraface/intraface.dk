@@ -1,45 +1,46 @@
 <?php
- /**
-  * Upload handler. Klarer upload af både billeder og dokumenter.
-    *
-    * Kan det passe at multiple upload endnu ikke virker? Det behøver den sådan set heller ikke:
-    * Vi skal bare have nedenstående til at fungere.
-    *
-    * Desuden skal jeg bruge sådan en temporaryUpload (en der sættes i gang, så
-    * snart man klikker en fil ind i et fileelement (så den begynder at uploade med det samme).
-    * Derved kan vi få et automatisk preview af temp-filen, så snart den er oppe på serveren.
-    * Vi får dem så skrevet ind på siden med en checkbox for at sige, om man vil uploade
-    * filerne. Dem der er tjekket importerer vi så med import-funktionen i stedet for at uploade
-    * dem på ny. På den måde kommer upload til at gå knalderhurtigt :) Det hele skal naturligvis
-    * laves ud fra et single file-input felt, som det ses på
-    *
-    * http://the-stickman.com/web-development/javascript/upload-multiple-files-with-a-single-file-element/
-    *
-    * Men selve visningen skal foregå lidt ligesom hos http://www.air4web.com/files/upload/
-    *
-    * Der understøttes dog kun billeder, og vi skal understøtte det hele, men hvis det er billeder
-    * vises en thump. Hvis det er andet vises et ikon.
-    *
-    * Alternativt kan man bare se selve filnavnet, som det er på gmail. De uploader også tingene med det samme
-    * - og så har du mulighed for at slette, det der ikke skal sendes med alligevel. Jeg tænkte
-    * at vi gjorde det på nogenlunde samme måde. Vi skal bare have lavet en eller anden måde
-    * at få slettet temporary igen.
-    *
-    * Når man så har uploadet alle sine filer på en gang, sendes man til en batch editeringsside.
-    * Til den mangler vi lige et eller andet med søgning i filsystemet, før vi kan implementere det.
-    *
-    * Endelig skal du lige give et bud på, hvordan filehandleren skal spille sammen med de andre
-    * moduler, når man skal vælge filer derfra!
-    *
-    * Der mangler en funktion til at hente alle billederne ud automatisk - og andre filtyper også.
-    * Den har man brug for også selvom man ikke har adgang til selve filarkivet. For tænk sig
-    * når man er sådan en der måske kun har lov at indsætte billeder på en side, der er oploadet
-    * til filarkivet.
-    *
-    * @author: Sune
-    * @version: 1.0
-    *
-    */
+/**
+ * Upload handler. Klarer upload af både billeder og dokumenter.
+ *
+ * Kan det passe at multiple upload endnu ikke virker? Det behøver den sådan set heller ikke:
+ * Vi skal bare have nedenstående til at fungere.
+ *
+ * Desuden skal jeg bruge sådan en temporaryUpload (en der sættes i gang, så
+ * snart man klikker en fil ind i et fileelement (så den begynder at uploade med det samme).
+ * Derved kan vi få et automatisk preview af temp-filen, så snart den er oppe på serveren.
+ * Vi får dem så skrevet ind på siden med en checkbox for at sige, om man vil uploade
+ * filerne. Dem der er tjekket importerer vi så med import-funktionen i stedet for at uploade
+ * dem på ny. På den måde kommer upload til at gå knalderhurtigt :) Det hele skal naturligvis
+ * laves ud fra et single file-input felt, som det ses på
+ *
+ * http://the-stickman.com/web-development/javascript/upload-multiple-files-with-a-single-file-element/
+ *
+ * Men selve visningen skal foregå lidt ligesom hos http://www.air4web.com/files/upload/
+ *
+ * Der understøttes dog kun billeder, og vi skal understøtte det hele, men hvis det er billeder
+ * vises en thump. Hvis det er andet vises et ikon.
+ *
+ * Alternativt kan man bare se selve filnavnet, som det er på gmail. De uploader også tingene med det samme
+ * - og så har du mulighed for at slette, det der ikke skal sendes med alligevel. Jeg tænkte
+ * at vi gjorde det på nogenlunde samme måde. Vi skal bare have lavet en eller anden måde
+ * at få slettet temporary igen.
+ *
+ * Når man så har uploadet alle sine filer på en gang, sendes man til en batch editeringsside.
+ * Til den mangler vi lige et eller andet med søgning i filsystemet, før vi kan implementere det.
+ *
+ * Endelig skal du lige give et bud på, hvordan filehandleren skal spille sammen med de andre
+ * moduler, når man skal vælge filer derfra!
+ *
+ * Der mangler en funktion til at hente alle billederne ud automatisk - og andre filtyper også.
+ * Den har man brug for også selvom man ikke har adgang til selve filarkivet. For tænk sig
+ * når man er sådan en der måske kun har lov at indsætte billeder på en side, der er oploadet
+ * til filarkivet.
+ *
+ * @package Intraface
+ * @author: Sune
+ * @version: 1.0
+ *
+ */
 
 class UploadHandler extends Standard
 {

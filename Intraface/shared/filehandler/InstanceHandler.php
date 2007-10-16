@@ -7,6 +7,7 @@
  *				billedet, men hvor man også gerne vil have mulighed for at bestemme
  *				hvor bred billedteksten skal være!
  *
+ * @package Intraface
  * @author		Sune
  * @version	1.0
  *

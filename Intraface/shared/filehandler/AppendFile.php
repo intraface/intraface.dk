@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Intraface
+ */
 require_once 'Intraface/DBQuery.php';
 
 class AppendFile

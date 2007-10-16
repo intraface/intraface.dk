@@ -1,12 +1,12 @@
 <?php
-
  /**
   * Image handler. Klarer håndtering af billeder.
-    *
-    * @author: Sune
-    * @version: 1.0
-    *
-    */
+  *
+  * @package Intraface
+  * @author: Sune
+  * @version: 1.0
+  *
+  */
 
 class ImageHandler extends Standard
 {

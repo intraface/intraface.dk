@@ -9,6 +9,7 @@
  * FileManager er modullet hvor man også kan se browse og ændre filerne.
  * Dette vil benytte FileHandler.
  *
+ * @package Intraface
  * @author	Sune Jensen
  * @since 1.2
  */
