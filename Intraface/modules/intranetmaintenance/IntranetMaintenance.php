@@ -69,22 +69,29 @@ class IntranetMaintenance extends Intranet
         }
 
         if (!is_numeric($module_id)) {
-            $result = $this->db->query("SELECT id FROM module WHERE name=".$this->db->quote($module_id));
+            $result = $this->db->query("SELECT id FROM module WHERE name=".$this->db->quote($module_id, 'text'));
             if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
                 $module_id = $row['id'];
             } else {
                 trigger_error("intranet maintenance says unknown module in IntranetMaintenance->setModuleAccess", E_USER_ERROR);
                 exit;
             }
-
         }
-
-        $res = $this->db->query("SELECT id FROM module WHERE id = ".intval($module_id));
-        if ($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-            $this->db->query("INSERT INTO permission SET
+        
+        $result = $this->db->query("SELECT id FROM module WHERE id = ".intval($module_id));
+        if(PEAR::isError($result)) {
+            trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
+            exit;
+        }
+        if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+            $result = $this->db->exec("INSERT INTO permission SET
                 intranet_id = ".intval($this->id).",
                 user_id = 0,
                 module_id = ".intval($row['id']));
+            if(PEAR::isError($result)) {
+                trigger_error('Error in exec: '.$result->getUserInfo(), E_USER_INFO);
+            }
+            return $result;
         }
         else {
             trigger_error("intranet maintenance says unknown module_id in IntranetMaintenance->setModuleAccess", E_USER_ERROR);
@@ -100,27 +107,31 @@ class IntranetMaintenance extends Intranet
         }
 
         if (!is_numeric($module_id)) {
-            $result = $this->db->query("SELECT id FROM module WHERE name=".$this->db->quote($module_id, 'integer'));
+            $result = $this->db->query("SELECT id FROM module WHERE name=".$this->db->quote($module_id, 'text'));
             if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
                 $module_id = $row['id'];
             } else {
                 trigger_error("intranet maintenance says unknown module in IntranetMaintenance->removeModuleAccess", E_USER_ERROR);
                 exit;
             }
-
-        }
-        else {
-
         }
 
         $res = $this->db->query("SELECT id FROM module WHERE id = ".intval($module_id));
         if ($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-            $this->db->exec("DELETE FROM permission WHERE
-                intranet_id = ".intval($this->id).",
+            $delete = $this->db->exec("DELETE FROM permission WHERE
+                intranet_id = ".intval($this->id)." AND
                 module_id = ".intval($row['id']));
+            
+            if(PEAR::isError($delete)) {
+                trigger_error('Error in delete: '.$delete->getUserInfo(), E_USER_ERROR);
+                exit;
+            } 
+            
+            return true;
         }
         else {
             trigger_error("intranet maintenance says unknown module_id in IntranetMaintenance->removeModuleAccess", E_USER_ERROR);
+            exit;
         }
     }
 
