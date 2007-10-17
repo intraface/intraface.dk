@@ -165,6 +165,7 @@ class User extends Standard {
      * @return boolean
      */
     function hasSubAccess($module, $sub_access, $intranet_id = 0) {
+        
         settype($intranet_id, "integer");
         if($intranet_id == 0) $intranet_id = $this->intranet_id;
 
@@ -192,9 +193,8 @@ class User extends Standard {
             $sub_access_id = intval($sub_access);
         }
 
-
-
-        if (empty($this->permissions['intranet']['module'])) {
+        // If the permissions are not loaded, we will do that. 
+        if(empty($this->permissions['intranet']['module'])) {
             // Vi tjekker om intranettet har adgang til modullet.
             // er den ikke unødvendig - det kan vi vel lave i den næste
             // sql-sætning?
@@ -211,15 +211,21 @@ class User extends Standard {
                 $this->permissions['intranet']['module'][$row['id']];
             }
         }
-        else if (empty($this->permissions['intranet']['module'][$module_id]) OR $this->permissions['intranet']['module'][$module_id] !== true) {
+        
+        // first we check whether the use has access to the module.
+        if(empty($this->permissions['intranet']['module'][$module_id]) OR $this->permissions['intranet']['module'][$module_id] !== true) {
             return false;
         }
 
-        if (!empty($this->permissions['user']['module']['subaccess'][$module_id]) AND $this->permissions['user']['module']['subaccess'][$module_id] === true) {
+        // then we check whether there is access to the sub access
+        if (!empty($this->permissions['user']['module']['subaccess'][$sub_access_id]) AND $this->permissions['user']['module']['subaccess'][$sub_access_id] === true) {
+            
             return true;
         }
 
-        $sql = "SELECT permission.id
+        // if the check on the array did not go possitive, we make sure it is because they are not loaded.
+        // @todo: this is probably not a good way to do it.
+        $sql = "SELECT module_sub_access.id
             FROM permission
             INNER JOIN module_sub_access
                 ON permission.module_sub_access_id = module_sub_access.id
@@ -235,7 +241,7 @@ class User extends Standard {
             trigger_error($result->getUserInfo(), E_USER_ERROR);
         }
         while ($row = $result->fetchRow()) {
-            $this->permissions['user']['module']['subaccess'][$sub_access_id] = true;
+            $this->permissions['user']['module']['subaccess'][$row['id']] = true;
         }
 
         if (!empty($this->permissions['user']['module']['subaccess'][$sub_access_id]) AND $this->permissions['user']['module']['subaccess'][$sub_access_id] === true) {
