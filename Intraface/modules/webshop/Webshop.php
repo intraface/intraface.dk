@@ -137,8 +137,18 @@ class Webshop
                 $input['type'] = 'corporation'; // firma
             }
             
-            // sets preffered invoice to email. Should be a setting in webshop.
+            if(!empty($input['customer_ean']) && $input['customer_ean'] != '') {
+                // sets preffered invoice to electronic.
+                $input['preferred_invoice'] = 3;
+            }
+            else {
+                // sets preffered invoice to email. Should be a setting in webshop.
             $input['preferred_invoice'] = 2;
+            }
+        }
+        
+        if(isset($input['customer_ean'])) {
+            $input['ean'] = $input['customer_ean'];
         }
         
         // opdaterer kontakten

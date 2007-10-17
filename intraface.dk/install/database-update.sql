@@ -60,3 +60,5 @@ CREATE TABLE `module_package_plan` (
 ) ENGINE=MyISAM ;
 
 ALTER TABLE `webshop_basket_evaluation` ADD `evaluate_value_case_sensitive` INT NOT NULL AFTER `evaluate_value` ;
+
+ALTER TABLE `basket_details` ADD `customer_ean` VARCHAR( 255 ) NOT NULL AFTER `customer_coupon` ;

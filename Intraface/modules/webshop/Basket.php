@@ -210,6 +210,21 @@ class Basket
     }
 
     /**
+     * Save customer EAN location number
+     *
+     * @param string $customer_ean customer coupon
+     *
+     * @return boolean true or false
+     */
+    public function saveCustomerEan($customer_ean)
+    {
+        $sql = "customer_ean = \"".$customer_ean."\"";
+
+        return $this->saveToDb($sql);
+    }
+
+
+    /**
      * Save customer comment
      *
      * @param string $customer_comment comment
@@ -295,6 +310,25 @@ class Basket
         }
 
         return array('customer_coupon' => $db->f('customer_coupon'));
+    }
+
+    /**
+     * Return customer EAN location number
+     *
+     * @return array with customer ean
+     */
+    public function getCustomerEan()
+    {
+        $db = new DB_Sql;
+        $db->query("SELECT customer_ean
+            FROM basket_details
+            WHERE " . $this->sql_extra . "
+                AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
+        if (!$db->nextRecord()) {
+            return array();
+        }
+
+        return array('customer_ean' => $db->f('customer_ean'));
     }
 
     /**

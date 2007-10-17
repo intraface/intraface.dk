@@ -507,6 +507,45 @@ class Intraface_XMLRPC_Shop_Server
     }
 
     /**
+     * Saves customer EAN location number
+     *
+     * @param struct $credentials     Credentials to use the server
+     * @param string $customer_ean Customer EAN to save
+     *
+     * @return boolean true or false
+     */
+    public function saveCustomerEan($credentials, $customer_ean)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop();
+
+        $customer_ean = $this->utf8Decode($customer_ean);
+        if (!$this->webshop->basket->saveCustomerEan($customer_ean)) {
+            throw new XML_RPC2_FaultException('ean could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Get customer EAN location number
+     *
+     * @param struct $credentials Credentials to use the server
+     *
+     * @return array
+     */
+    public function getCustomerEan($credentials)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop();
+
+        return $this->webshop->basket->getCustomerEan();
+    }
+
+    /**
      * Saves customer comment
      *
      * @param struct $credentials     Credentials to use the server
