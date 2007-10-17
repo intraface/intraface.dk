@@ -37,6 +37,7 @@ if (!empty($_POST)) {
             if($id != 0) {
                 $_POST['pic_id'] = $id;
             }
+            $element->error->merge($filehandler->error->getMessage());
         }
     }
     elseif($element->get('type') == 'gallery') {
@@ -53,6 +54,7 @@ if (!empty($_POST)) {
                 $append_file = new AppendFile($kernel, 'cms_element_gallery', $element->get('id'));
                 $append_file->addFile($id);
             }
+            $element->error->merge($filehandler->error->getMessage());
         }
     }
     elseif($element->get('type') == 'filelist') {
@@ -67,6 +69,7 @@ if (!empty($_POST)) {
                 $append_file = new AppendFile($kernel, 'cms_element_filelist', $element->get('id'));
                 $append_file->addFile($id);
             }
+            $element->error->merge($filehandler->error->getMessage());
         }
     }
 
@@ -155,11 +158,11 @@ elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
     }
 }
 elseif (!empty($_GET['section_id']) AND is_numeric($_GET['section_id'])) {
-    // der skal valideres noget pï¿½ typen ogsï¿½.
+    // der skal valideres noget på typen også.
 
     // FIXME ud fra section bliver cms_site loaded flere gange?
-    // formentlig har det noget med Template at gï¿½re
-    // i ï¿½vrigt er tingene alt for tï¿½t koblet i page
+    // formentlig har det noget med Template at gøre
+    // i øvrigt er tingene alt for tæt koblet i page
     $section = CMS_Section::factory($kernel, 'id', $_GET['section_id']);
     $element = CMS_Element::factory($section, 'type', $_GET['type']);
 
@@ -626,9 +629,7 @@ switch ($value['type']) {
                 $filehandler = new Filehandler($kernel);
                 $filehandler->createInstance();
                 $instances = $filehandler->instance->getTypes();
-
                 ?>
-
                 <select name="thumbnail_size">
                     <?php foreach ($instances AS $key => $instance): ?>
                     <option value="<?php echo safeToForm($key); ?>"<?php if (!empty($value['thumbnail_size']) AND $value['thumbnail_size'] == $key) echo ' selected="selected"'; ?>><?php echo safeToForm($translation->get($instance['name'], 'filehandler')); ?></option>
@@ -680,11 +681,14 @@ switch ($value['type']) {
 
                 if(!empty($value['pictures']) AND is_array($value['pictures'])) {
 
-                    foreach($value['pictures'] AS $file) {
+                    foreach($value['pictures'] AS $key => $file) {
 
                         $filehandler = new Filehandler($kernel, $file['id']);
                         $filehandlerHTML = new FilehandlerHTML($filehandler);
                         $filehandlerHTML->showFile('section_html_edit.php?id='.$element->get('id').'&delete_gallery_append_file_id='.$file['append_file_id'], array('image_size' => 'small'));
+                        
+                        // This means that if there is an error in uploading a new file or other fields, the files will be shown anyway.
+                        echo '<input type="hidden" name="pictures['.$key.'][id]" value="'.$file['id'].'" />';
                         /*
                         $filehandler->createInstance('small');
                         ?>
