@@ -32,6 +32,7 @@ if (!empty($_POST)) {
             $filehandler = new FileHandler($kernel);
             $filehandler->createUpload();
             $filehandler->upload->setSetting('file_accessibility', 'public');
+            $filehandler->upload->setSetting('allow_only_images', 1);
             $id = $filehandler->upload->upload('new_pic');
 
             if($id != 0) {
@@ -42,13 +43,19 @@ if (!empty($_POST)) {
     }
     elseif($element->get('type') == 'gallery') {
 
-        if (!empty($_FILES['new_pic'])) {
+        if (!empty($_FILES['new_pic']) && isset($_POST['upload_new'])) {
 
 
             $filehandler = new FileHandler($kernel);
             $filehandler->createUpload();
             $filehandler->upload->setSetting('file_accessibility', 'public');
+            $filehandler->upload->setSetting('allow_only_images', 1);
             $id = $filehandler->upload->upload('new_pic');
+            
+            // Newly created element which has not been saved yet.
+            if($element->get('id') == 0) {
+                $element->save($_POST);
+            }
 
             if($id != 0) {
                 $append_file = new AppendFile($kernel, 'cms_element_gallery', $element->get('id'));
@@ -59,12 +66,17 @@ if (!empty($_POST)) {
     }
     elseif($element->get('type') == 'filelist') {
 
-        if (!empty($_FILES['new_file'])) {
+        if (!empty($_FILES['new_file']) && isset($_POST['upload_new'])) {
             $filehandler = new FileHandler($kernel);
             $filehandler->createUpload();
             $filehandler->upload->setSetting('file_accessibility', 'public');
             $id = $filehandler->upload->upload('new_file');
 
+            // Newly created element which has not been saved yet.
+            if($element->get('id') == 0) {
+                $element->save($_POST);
+            }
+            
             if($id != 0) {
                 $append_file = new AppendFile($kernel, 'cms_element_filelist', $element->get('id'));
                 $append_file->addFile($id);
@@ -427,7 +439,7 @@ switch ($value['type']) {
 
             <div class="formrow">
                 <?php if($kernel->user->hasModuleAccess('filemanager')): ?>
-                    <!-- hvad bruges den her egentlig til? - hvorfor kan man ikke vï¿½lge uden administration -->
+                    <!-- hvad bruges den her egentlig til? - hvorfor kan man ikke vælge uden administration -->
                     <input type="hidden" name="filelist_select_method" value="single_file" />
                 <?php endif; ?>
 
@@ -453,7 +465,7 @@ switch ($value['type']) {
                 <?php
                 $filehandler = new Filehandler($kernel);
                 $filehandler_html = new FileHandlerHTML($filehandler);
-                $filehandler_html->printFormUploadTag('', 'new_file', 'choose_file', array('type' => 'only_upload', 'include_submit_button_name' => 'submit'));
+                $filehandler_html->printFormUploadTag('', 'new_file', 'choose_file', array('type' => 'only_upload', 'include_submit_button_name' => 'upload_new'));
                 ?>
             </div>
 
@@ -700,7 +712,7 @@ switch ($value['type']) {
 
                 $filehandler = new Filehandler($kernel);
                 $filehandler_html = new FileHandlerHTML($filehandler);
-                $filehandler_html->printFormUploadTag('', 'new_pic', 'choose_file', array('type' => 'only_upload', 'include_submit_button_name' => 'submit'));
+                $filehandler_html->printFormUploadTag('', 'new_pic', 'choose_file', array('type' => 'only_upload', 'include_submit_button_name' => 'upload_new'));
                 ?>
                 <p><?php echo $translation->get('Pictures are sorted by picture name.'); ?></p>
             </div>
