@@ -739,13 +739,11 @@ if(isset($onlinepayment)) {
 									<?php if(count($actions) > 0 && $p['status'] == "authorized" && $kernel->user->hasModuleAccess('onlinepayment')): // Changed for better usability. $debtor->get("type") == "invoice" && $debtor->get("status") == "sent"    ?>
 										<?php
 										foreach($actions AS $a) {
-											if($a['action'] == 'capture' && $debtor->get("type") != "invoice" && $debtor->get("status") != "sent") {
-											    CONTINUE;
-											}
-											
-											?>
-											<a href="view.php?id=<?php print(intval($debtor->get('id'))); ?>&amp;onlinepayment_id=<?php print(intval($p['id'])); ?>&amp;onlinepayment_action=<?php print(safeToHtml($a['action'])); ?>" class="confirm"><?php print(safeToHtml($a['label'])); ?></a>
-											<?php
+											if($a['action'] != 'capture' || ($debtor->get("type") == "invoice" && $debtor->get("status") == "sent")) {
+    											?>
+    											<a href="view.php?id=<?php print(intval($debtor->get('id'))); ?>&amp;onlinepayment_id=<?php print(intval($p['id'])); ?>&amp;onlinepayment_action=<?php print(safeToHtml($a['action'])); ?>" class="confirm"><?php print(safeToHtml($a['label'])); ?></a>
+    											<?php
+                                            }
 										}
 										?>
 									<?php endif; ?>
