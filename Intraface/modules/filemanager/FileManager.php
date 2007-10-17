@@ -110,6 +110,7 @@ class FileManager extends FileHandler
 
         if($this->dbquery->checkFilter('images')) {
             $keys = array();
+            $this->loadMimeTypes();
             foreach($this->file_types AS $key => $mime_type) {
                 if($mime_type['image'] == 1) {
                     $keys[] = $key;

@@ -593,10 +593,7 @@ class FileHandler extends Standard
      */
     public function _getMimeType($key, $from = 'key')
     {
-        /* @todo hack */
-        require(PATH_INCLUDE_CONFIG . 'setting_file_type.php');
-        $this->file_types = $_file_type;
-        /* hack slut */
+        $this->loadMimeTypes();
 
         if($from == 'key') {
             if(!is_integer($key)) {
@@ -627,17 +624,21 @@ class FileHandler extends Standard
      */
     protected function _getMimeTypeFromKey($key)
     {
+        return $this->_getMimeType($key, 'key');
+
+    }
+    
+    /**
+     * Loads the mime types
+     * 
+     * @return boolean true on success
+     */
+    public function loadMimeTypes() {
         /* @todo hack */
         require(PATH_INCLUDE_CONFIG . 'setting_file_type.php');
         $this->file_types = $_file_type;
         /* hack slut */
-
-        if($from == 'key') {
-            if(!is_integer($key)) {
-                trigger_error("Når der skal findes mimetype fra key (default), skal første parameter til FileHandler->_getMimeType være en integer", E_USER_ERROR);
-            }
-            return $this->file_types[$key];
-        }
+        return true;
     }
 
     /**
