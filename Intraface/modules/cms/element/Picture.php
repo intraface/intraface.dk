@@ -93,7 +93,8 @@ class CMS_Picture extends CMS_Element {
         */
 
         //PRINT_R($var);
-        if (!empty($var['pic_id'])) $this->parameter->save('pic_id', $var['pic_id']);
+        if (!isset($var['pic_id'])) $var['pic_id'] = 0;
+        $this->parameter->save('pic_id', $var['pic_id']);
         if (!empty($var['pic_size'])) $this->parameter->save('pic_size', $var['pic_size']);
         if (!empty($var['pic_text'])) $this->parameter->save('pic_text', $var['pic_text']);
         if (!empty($var['pic_url'])) $this->parameter->save('pic_url', $var['pic_url']);
