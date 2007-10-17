@@ -212,6 +212,36 @@ class BasketTest extends PHPUnit_Framework_TestCase
 
          $this->assertEquals(count($basket->getItems()), 0);
     }
+    
+    function testSaveCustomerEan() {
+        $basket = $this->createBasket();
+        
+        $ean = '1234567890123';
+        
+        $this->assertTrue($basket->saveCustomerEan($ean));
+        
+        $this->assertEquals($basket->getCustomerEan(), array('customer_ean' => $ean));
+    }
+    
+    function testSaveCustomerCoupon() {
+        $basket = $this->createBasket();
+        
+        $coupon = '12345';
+        
+        $this->assertTrue($basket->saveCustomerCoupon($coupon));
+        
+        $this->assertEquals($basket->getCustomerCoupon(), array('customer_coupon' => $coupon));
+    }
+    
+    function testSaveCustomerComment() {
+        $basket = $this->createBasket();
+        
+        $comment = 'this is a comment';
+        
+        $this->assertTrue($basket->saveCustomerComment($comment));
+        
+        $this->assertEquals($basket->getCustomerComment(), array('customer_comment' => $comment));
+    }
 
 }
 ?>
