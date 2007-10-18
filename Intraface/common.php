@@ -8,9 +8,36 @@
  * @version @package-version@
  */
 
-//configuration
-require_once 'config/configuration.php'; // this is the one in your source control
+//configuration - this should never be edited - only edit intraface.dk/config.local.php
 
+// paths
+define('PATH_INCLUDE_IHTML', PATH_ROOT.'Intraface/ihtml' . DIRECTORY_SEPARATOR);
+define('PATH_INCLUDE_MODULE', PATH_ROOT.'Intraface/modules' . DIRECTORY_SEPARATOR);
+define('PATH_INCLUDE_SHARED', PATH_ROOT.'Intraface/shared' . DIRECTORY_SEPARATOR);
+define('PATH_INCLUDE_CONFIG', PATH_ROOT.'/Intraface/config'.DIRECTORY_SEPARATOR);
+define('PATH_UPLOAD_TEMPORARY', 'tempdir/'); // Mappen i Upload_path, under intranetid, hvor temp-filer placeres.
+define('PATH_CAPTCHA', PATH_ROOT . 'captcha/'); // remember trailing slash - used for the demo formular
+define('PATH_CACHE', PATH_ROOT . 'cache/'); // remember trailing slash - path to cache
+define('PATH_INCLUDE_BACKUP', PATH_ROOT . 'backup/');
+
+// paths on www
+define('PATH_WWW', NET_SCHEME.NET_HOST.NET_DIRECTORY);
+define('PATH_WWW_MODULE', PATH_WWW.'modules/');
+define('PATH_WWW_SHARED', PATH_WWW.'shared/');
+
+if (!defined('MDB2_DEBUG')) {
+    define('MDB2_DEBUG', false);
+}
+
+// This showed not to be the right solution to change this setting - but what then... /Sune (29-08-2007)
+// define('MDB2_PORTABILITY_EMPTY_TO_NULL', false);
+
+// Filehandler
+define('FILE_VIEWER', PATH_WWW . 'main/file/');
+define('IMAGE_LIBRARY', 'GD');
+
+// database
+define('DB_DSN', 'mysql://'.DB_USER.':'.DB_PASS.'@'.DB_HOST.'/'.DB_NAME.'');
 // settings for theme
 require_once 'config/setting_themes.php';
 
@@ -74,7 +101,7 @@ if(defined('TIMEZONE')) {
 
 require_once 'ErrorHandler.php';
 if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
-   require_once 'ErrorHandler/Observer/BlueScreen.php'; 
+   require_once 'ErrorHandler/Observer/BlueScreen.php';
 }
 else {
     require_once 'ErrorHandler/Observer/User.php';
