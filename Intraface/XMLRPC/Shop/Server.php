@@ -83,7 +83,7 @@ class Intraface_XMLRPC_Shop_Server
                 $product->dbquery->setFilter('keywords', $mixed['keywords']);
                 $debug2 .= 'keyword ' . $mixed['keywords'];
             }
-            
+
             if (array_key_exists('ids', $mixed) AND is_array($mixed['ids'])) {
                 $product->dbquery->setFilter('ids', $mixed['ids']);
                 $debug2 .= 'ids ' . implode(', ', $mixed['ids']);
@@ -104,6 +104,7 @@ class Intraface_XMLRPC_Shop_Server
             'search' => array(),
         );
     }
+
 
     /**
      * Gets one product
@@ -228,12 +229,13 @@ class Intraface_XMLRPC_Shop_Server
     /**
      * Add product to basket
      *
-     * @param struct  $credentials Credentials to use the server
-     * @param integer $id          Product id to add
-     * @param integer $quantity    Optional quantity
-     * @param string  $text        Extra text to the itemline
+     * @param struct  $credentials       Credentials to use the server
+     * @param integer $id                Product id to add
+     * @param integer $quantity          Optional quantity
+     * @param string  $text              Extra text to the itemline
+     * @param integer $product_detail_id Product detail id
      *
-     * @return mixed
+     * @return boolean
      */
     public function addProductToBasket($credentials, $id, $quantity = 1, $text = '', $product_detail_id = 0)
     {
@@ -256,10 +258,11 @@ class Intraface_XMLRPC_Shop_Server
     /**
      * Change the quantity of one product in basket
      *
-     * @param struct  $credentials Credentials to use the server
-     * @param integer $product_id  Product id to change
-     * @param integer $quantity    New quantity
-     * @param string  $text        Extra text to the itemline
+     * @param struct  $credentials       Credentials to use the server
+     * @param integer $product_id        Product id to change
+     * @param integer $quantity          New quantity
+     * @param string  $text              Extra text to the itemline
+     * @param integer $product_detail_id Product detail id
      *
      * @return mixed
      */
@@ -304,7 +307,7 @@ class Intraface_XMLRPC_Shop_Server
             // nothing happens
         }
         elseif(is_array($customer)) {
-        	require_once 'Intraface/modules/webshop/BasketEvaluation.php';
+            require_once 'Intraface/modules/webshop/BasketEvaluation.php';
             $basketevaluation = new BasketEvaluation($this->webshop->kernel);
             if (!$basketevaluation->run($this->webshop->basket, $customer)) {
                 // We should see to return the result in some way.
@@ -362,32 +365,32 @@ class Intraface_XMLRPC_Shop_Server
      *
      * @return integer $payment_id
      */
-      
+
     public function saveOnlinePayment($credentials, $values)
     {
         $this->checkCredentials($credentials);
 
         $this->_factoryWebshop();
-        
+
         if (!$this->kernel->intranet->hasModuleAccess('onlinepayment')) {
             throw new XML_RPC2_FaultException('The intranet did not have access to OnlinePayment', -4);
         }
-        
+
         $this->kernel->useModule('onlinepayment', true); // true: ignores user access;
-        
+
         if(isset($values['payment_id']) && intval($values['payment_id']) > 0) {
-           $onlinepayment = OnlinePayment::factory($this->kernel, 'id', intval($values['payment_id'])); 
+           $onlinepayment = OnlinePayment::factory($this->kernel, 'id', intval($values['payment_id']));
         }
         else {
             $onlinepayment = OnlinePayment::factory($this->kernel);
         }
-        
+
 
         if (!$payment_id = $onlinepayment->save($values)) {
-        	// this is probably a little to hard reaction.
+            // this is probably a little to hard reaction.
             throw new XML_RPC2_FaultException('Onlinebetaling kunne ikke blive gemt' . strtolower(implode(', ', $onlinepayment->error->message)), -4);
         }
-       
+
 
         return $payment_id;
     }
@@ -401,21 +404,21 @@ class Intraface_XMLRPC_Shop_Server
      *
      * @return integer $payment_id
      */
-      
+
     public function createOnlinePayment($credentials)
     {
         $this->checkCredentials($credentials);
 
         $this->_factoryWebshop();
-        
+
         if (!$this->kernel->intranet->hasModuleAccess('onlinepayment')) {
             throw new XML_RPC2_FaultException('The intranet did not have access to OnlinePayment', -4);
         }
-        
+
         $this->kernel->useModule('onlinepayment', true); // true: ignores user access;
-        
+
         $onlinepayment = OnlinePayment::factory($this->kernel);
-        
+
         if (!$payment_id = $onlinepayment->create()) {
             // this is probably a little to hard reaction
             throw new XML_RPC2_FaultException('onlinepayment could not be created' . strtolower(implode(', ', $onlinepayment->error->message)), -4);
@@ -441,9 +444,9 @@ class Intraface_XMLRPC_Shop_Server
         if (!is_array($values)) {
             throw new XML_RPC2_FaultException('details could not be saved - nothing to save', -4);
         }
-        
+
         $values = $this->utf8Decode($values);
-        
+
         if (!$this->webshop->basket->saveAddress($values)) {
             throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
         }
@@ -650,8 +653,8 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->webshop = new Webshop($this->kernel, $this->credentials['session_id']);
     }
-    
-    private function utf8Decode($values) 
+
+    private function utf8Decode($values)
     {
         if(is_array($values)) {
             return array_map('utf8_decode', $values);
@@ -662,7 +665,8 @@ class Intraface_XMLRPC_Shop_Server
         else {
             return $values;
         }
-        
+
     }
+
 }
 ?>
