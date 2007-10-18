@@ -65,7 +65,7 @@ class intraface_postinstall {
         12 => 'error_log_unique',
         13 => 'error_display_user',
         14 => 'error_display',
-        15 => 'error_handle_error',
+        15 => 'error_handle_level',
         16 => 'error_level_continue_script',
         17 => 'path_root',
         18 => 'path_upload',
