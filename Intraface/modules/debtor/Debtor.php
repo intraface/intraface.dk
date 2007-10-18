@@ -207,7 +207,7 @@ class Debtor extends Standard
      *
      * @return integer
      */
-    private function load()
+    public function load()
     {
         if($this->id == 0) {
             return 0;
