@@ -8,9 +8,10 @@
  * @since   1.0
  * @version 1.0
  */
-class MainAccounting Extends Main {
-
-    function MainAccounting() {
+class MainAccounting Extends Main
+{
+    function __construct()
+    {
         $this->module_name = 'accounting'; // Navnet der vil stå i menuen
         $this->menu_label = 'Regnskab'; // Navnet der vil stå i menuen
         $this->show_menu = 1; // Skal modulet vises i menuen.
@@ -35,19 +36,9 @@ class MainAccounting Extends Main {
         $this->addSubAccessItem('vat_report', 'Momsopgivelse');
         $this->addSubAccessItem('setting', 'Indstillinger');
 
-
         $this->addControlPanelFile('accounting settings', 'modules/accounting/setting.php');
 
         $this->addFrontpageFile('include_frontpage.php');
-        /*
-        $this->addSetting('types', array('Headline', 'Drift', 'Status', 'Sum'));
-        $this->addSetting('vat_options', array(
-                                        0 => array('id' =>0, 'label' => 'Ingen moms'),
-                                        1 => array('id' => 1, 'label' => 'Indgående moms'),
-                                        2 => array('id' => 2, 'label' => 'Udgående moms')
-                                )
-        );
-        */
 
         $this->addSetting('vat_periods',
             array(
@@ -103,7 +94,6 @@ class MainAccounting Extends Main {
         );
 
         $this->includeSettingFile('settings.php');
-
         $this->addPreloadFile('Account.php');
         $this->addPreloadFile('Year.php');
         $this->addPreloadFile('Post.php');
@@ -111,9 +101,5 @@ class MainAccounting Extends Main {
         $this->addPreloadFile('Voucher.php');
         $this->addPreloadFile('VoucherFile.php');
         $this->addPreloadFile('VatPeriod.php');
-
     }
-
 }
-
-?>
