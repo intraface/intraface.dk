@@ -7,7 +7,7 @@
  * @version @package-version@
  */
 
-$version = '1.4.1';
+$version = '1.5.0';
 $stability = 'stable';
 $notes = '
 * A lot of improvements
@@ -22,6 +22,7 @@ $ignore = array(
             'config.local.php',
             'config.local.default.php',
             'install/',
+            'install/reset-staging-server.php',
             'intraface.dk/install/',
             'install.txt',
             'tests/',
@@ -99,14 +100,14 @@ $pfm->addReplacement('intraface.php', 'pear-config', '@php-dir@', 'php_dir');
 $pfm->addReplacement('intraface.php', 'pear-config', '@web-dir@', 'web_dir');
 $pfm->addReplacement('intraface.php', 'pear-config', '@data-dir@', 'data_dir');
 
-
 $pfm->clearDeps();
 $pfm->setPhpDep('5.2.0');
 $pfm->setPearinstallerDep('1.5.0');
 
 // installer
 $pfm->addPackageDepWithChannel('required', 'Config', 'pear.php.net', '1.0.0');
-$pfm->addPackageDepWithChannel('required', 'MDB2_Schema', 'pear.php.net', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'MDB2_Schema', 'pear.php.net', '0.8.1');
+$pfm->addPackageDepWithChannel('required', 'System_Command', 'pear.php.net', '1.0.6');
 
 // Kernel
 $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.0');
@@ -116,7 +117,7 @@ $pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.9.10');
 $pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.7.0');
 $pfm->addPackageDepWithChannel('required', 'HTTP_Upload', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.1');
-$pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.1');
+$pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.2');
 
 // XMLRPC
 $pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'pear.php.net', '1.0.1');
@@ -126,7 +127,6 @@ $pfm->addPackageDepWithUri('required', 'Translation2_Decorator_LogMissingTransla
 // filehandler
 $pfm->addPackageDepWithChannel('required', 'MIME_Type', 'pear.php.net', '1.0.0');
 
-
 // email
 $pfm->addPackageDepWithUri('required', 'phpmailer', 'http://svn.intraface.dk/intrafacepublic/3Party/phpmailer/phpmailer-1.73.0');
 
@@ -134,14 +134,14 @@ $pfm->addPackageDepWithUri('required', 'phpmailer', 'http://svn.intraface.dk/int
 $pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'htmlpurifier.org', '1.6.0');
 $pfm->addPackageDepWithChannel('required', 'Text_Wiki', 'pear.php.net', '1.1.0');
 
-$pfm->addPackageDepWithChannel('required', 'PHP_Markdown', 'pear.michelf.com', '1.0.1');
+//$pfm->addPackageDepWithChannel('required', 'PHP_Markdown', 'pear.michelf.com', '1.0.1');
 
-$pfm->addPackageDepWithUri('required', 'SmartyPants', 'http://svn.intraface.dk/intrafacepublic/3Party/SmartyPants/PHPSmartyPants-1.5.1');
+//$pfm->addPackageDepWithUri('required', 'SmartyPants', 'http://svn.intraface.dk/intrafacepublic/3Party/SmartyPants/PHPSmartyPants-1.5.1');
 $pfm->addPackageDepWithUri('required', 'phpFlickr', 'http://svn.intraface.dk/intrafacepublic/3Party/phpFlickr/phpFlickr-1.6.1');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_HTML', 'public.intraface.dk', '0.1.0');
 
 // debtor
-$pfm->addPackageDepWithChannel('required', 'Document_CPdf', 'public.intraface.dk', '0.0.1');
+$pfm->addPackageDepWithChannel('required', 'Document_Cpdf', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithUri('required', 'quickpay', 'http://svn.intraface.dk/intrafacepublic/3Party/Quickpay/Quickpay-1.17.1');
 
 // contact
@@ -152,7 +152,7 @@ $pfm->addPackageDepWithChannel('required', 'Contact_Vcard_Build', 'pear.php.net'
 $pfm->addPackageDepWithUri('required', 'Payment_Quickpay', 'http://svn.intraface.dk/intrafacepublic/3Party/Quickpay/Payment_Quickpay-1.18.1');
 
 // accounting
-$pfm->addPackageDepWithChannel('required', 'OLE', 'pear.php.net', '0.5.0');
+//$pfm->addPackageDepWithChannel('required', 'OLE', 'pear.php.net', '0.5.0');
 $pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php.net', '0.9.0');
 
 foreach ($ignore AS $file) {
@@ -179,8 +179,12 @@ $post_install_script->addParamGroup('setup',
           $post_install_script->getParam('error_handle_error', 'Error handle error ', 'integer', E_ALL),
           $post_install_script->getParam('error_level_continue_script', 'Error level continue script', 'integer', 10),
           $post_install_script->getParam('path_root', 'Root path', 'string', '/home/intraface/'),
-          $post_install_script->getParam('path_upload', 'Upload path', 'string', '/home/intraface/upload/')
-
+          $post_install_script->getParam('path_upload', 'Upload path', 'string', '/home/intraface/'),
+          $post_install_script->getParam('timezone', 'Timezone', 'string', ''),
+          $post_install_script->getParam('local', 'Local', 'string', ''),
+          $post_install_script->getParam('intraface_intranetmaintenance_intranet_private_key', 'Private key', 'string', ''),
+          $post_install_script->getParam('intraface_xmlrpc_server_url', 'XML server url', 'string', ''),
+          $post_install_script->getParam('intraface_xmlrpc_debug', 'XML server url', 'boolean', 'false')
     ),
     '');
 

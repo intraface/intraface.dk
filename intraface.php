@@ -68,7 +68,12 @@ class intraface_postinstall {
         15 => 'error_handle_error',
         16 => 'error_level_continue_script',
         17 => 'path_root',
-        18 => 'path_upload'
+        18 => 'path_upload',
+        19 => 'timezone',
+        20 => 'local',
+        21 => 'intraface_intranetmaintenance_intranet_private_key',
+        22 => 'intraface_xmlrpc_server_url',
+        23 => 'intraface_xmlrpc_debug'
     );
 
     /**
