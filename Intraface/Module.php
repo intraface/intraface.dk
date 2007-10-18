@@ -165,5 +165,39 @@ abstract class Module {
 		return $modules;
 
 	}
+    
+    
+    /**
+     * Function to check whether the module has been registered
+     * Made temporarily for /main/index.php
+     */
+    static function exists($module_id) {
+        
+        $db = MDB2::singleton(DB_DSN);
+        if(PEAR::isError($db)) {
+            trigger_error('Error connecting to db: '.$db->getUserInfo(), E_USER_ERROR);
+            exit;
+        }
+        if(is_numeric($module_id)) {
+            trigger_error("Not yet implemented!", E_USER_ERROR);
+            exit;
+        }
+        else {
+            
+            $result = $db->query('SELECT id FROM module WHERE name = '.$db->quote($module_id, 'text'));
+            if(PEAR::isError($result)) {
+                trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
+                exit;
+            }
+            
+            if($result->numRows() > 0) {
+                return true;
+            }
+            else {
+                return false;
+            }    
+        }
+        
+    }
 }
 ?>
