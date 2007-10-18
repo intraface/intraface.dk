@@ -14,19 +14,7 @@
 
 session_start();
 
-// define(PATH_ROOT, '/home/intraface/');
-// This one should be able to be deleted -if you are testing this, please remove it first
-// define(PATH_INCLUDE, '/home/intraface/intraface/');
-
-require('/home/intraface/intraface.dk/config.local.php');
-
-set_include_path(
-    PATH_ROOT
-    . PATH_SEPARATOR . PATH_ROOT.'pear/php/'
-    . PATH_SEPARATOR . get_include_path()
-);
-
-require_once '../common.php';
+require_once 'common.php';
 
 $db = MDB2::singleton(DB_DSN);
 $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
