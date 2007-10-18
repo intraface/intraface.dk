@@ -100,7 +100,7 @@ class Intraface_ModulePackage_AccessUpdate
         }
         
         // then we set access to new packages.
-        $result = $db->query("SELECT id, intranet_id, module_package_id FROM intranet_module_package WHERE active = 1 AND status_key = 1 ".$sql_extra);
+        $result = $db->query("SELECT id, intranet_id, module_package_id FROM intranet_module_package WHERE active = 1 AND start_date <= NOW() AND status_key = 1 ".$sql_extra);
         if(PEAR::isError($result)) {
             trigger_error("Error in query for removing acces in ModulePackageManagerAccessUpdate->run :".$result->getUserInfo(), E_USER_ERROR);
             exit;

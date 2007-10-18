@@ -74,8 +74,8 @@ if(count($packages) > 0) {
         <?php foreach($packages AS $package): ?>
             <tr>
                 <td><?php echo safeToHtml($translation->get($package['plan']).' '.$translation->get($package['group'])); ?></td>
-                <td><?php echo safeToHtml($package['start_date']); ?></td>
-                <td><?php echo safeToHtml($package['end_date']); ?></td>
+                <td><?php echo safeToHtml($package['dk_start_date']); ?></td>
+                <td><?php echo safeToHtml($package['dk_end_date']); ?></td>
                 <td><?php echo safeToHtml($translation->get($package['status'])); ?></td>
                 <td><a href="index.php?unsubscribe_id=<?php echo intval($package['id']); ?>" class="delete"><?php echo safeToHtml($translation->get('unsubscribe')); ?></a></td>
             </tr>

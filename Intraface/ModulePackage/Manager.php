@@ -591,7 +591,7 @@ class Intraface_ModulePackage_Manager extends Standard {
             }
         }
         else {
-            $this->dbquery->setSorting('module_package_group.sorting_index, module_package_plan.plan_index');
+            $this->dbquery->setSorting('module_package_group.sorting_index, module_package_plan.plan_index, intranet_module_package.start_date');
         }
         
         $db = $this->dbquery->getRecordset('intranet_module_package.id, ' .
