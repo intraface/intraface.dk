@@ -21,6 +21,8 @@ $ignore = array(
             '.project',
             'config.local.php',
             'config.local.default.php',
+            'install/',
+            'intraface.dk/install/',
             'install.txt',
             'tests/',
             'tools.intraface.dk/',
@@ -144,6 +146,7 @@ $pfm->addPackageDepWithUri('required', 'quickpay', 'http://svn.intraface.dk/intr
 
 // contact
 $pfm->addPackageDepWithChannel('required', 'Services_Eniro', 'public.intraface.dk', '0.1.4');
+$pfm->addPackageDepWithChannel('required', 'Contact_Vcard_Build', 'pear.php.net', '1.1.1');
 
 // onlinepayment
 $pfm->addPackageDepWithUri('required', 'Payment_Quickpay', 'http://svn.intraface.dk/intrafacepublic/3Party/Quickpay/Payment_Quickpay-1.18.1');
