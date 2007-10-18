@@ -1,12 +1,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>02CreateIntranetAndGivePermissions</title>
+<title>010CreateIntranetAndGivePermissions</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">02CreateIntranetAndGivePermissions</td></tr>
+<tr><td rowspan="1" colspan="3">010CreateIntranetAndGivePermissions</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -95,97 +95,107 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>module7</td>
+	<td>module_cms</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module3</td>
+	<td>module_filemanager</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module10</td>
+	<td>module_accounting</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module12</td>
+	<td>module_debtor</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module4</td>
+	<td>module_quotation</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module19</td>
+	<td>module_order</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module9</td>
+	<td>module_invoice</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module2</td>
+	<td>module_onlinepayment</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module5</td>
+	<td>module_procurement</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module17</td>
+	<td>module_contact</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module16</td>
+	<td>module_product</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module15</td>
+	<td>module_stock</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module14</td>
+	<td>module_webshop</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module13</td>
+	<td>module_newsletter</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module11</td>
+	<td>module_email</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module20</td>
+	<td>module_todo</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module6</td>
+	<td>module_comment</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>module18</td>
+	<td>module_administration</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>module_intranetmaintenance</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>module_backup</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>submit</td>
+	<td>change_permission</td>
 	<td></td>
 </tr>
 <tr>

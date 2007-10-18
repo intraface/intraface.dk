@@ -20,7 +20,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@href='http://localhost/intraface/intraface.dk//modules/debtor/setting.php']</td>
+	<td>link=debtor settings</td>
 	<td></td>
 </tr>
 <tr>
@@ -36,6 +36,46 @@
 <tr>
 	<td>clickAndWait</td>
 	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Udfyld adresse</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>address_name</td>
+	<td>Intraface</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>address</td>
+	<td>adresse</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>postcode</td>
+	<td>1200</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>city</td>
+	<td>Vejle</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>email</td>
+	<td>sj@sunet.dk</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=debtor</td>
 	<td></td>
 </tr>
 <tr>
@@ -85,22 +125,37 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
+	<td>link=do it now</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>address_name</td>
+	<td>Sune Jensen</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=debtor</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Tester E-mail-afsendelse</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
 	<td>send_email</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertConfirmation</td>
-	<td>Er du sikker på, at du vil sende en e-mail?</td>
+	<td>send</td>
 	<td></td>
 </tr>
 
