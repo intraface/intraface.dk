@@ -69,10 +69,6 @@ class RedirectTest extends PHPUnit_Framework_TestCase
 
     function testRecieveRedirect()
     {
-    // TODO Saa vidt jeg kan see har vi ingen mulighed for at fake redirect som
-    // det ser ud nu, fordi det hele afhaenger af globale variable. Det skal vi have lavet om.
-    // men kun med nogle gode tests forst naturligvis.
-
         // go
         $kernel = new FakeRedirectKernel;
         $redirect = Redirect::go($kernel);
