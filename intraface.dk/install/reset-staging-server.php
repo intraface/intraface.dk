@@ -11,7 +11,7 @@ require $install_class;
 $install = new Intraface_Install;
 
 if ($install->resetServer()) {
-    echo 'staging server reset. Go to <a href="/">login</a>.';
+    echo 'staging server reset. Go to <a href="../main/login.php">login</a>.';
 }
 else {
     echo 'error';
