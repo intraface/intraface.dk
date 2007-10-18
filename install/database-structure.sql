@@ -1,3 +1,24 @@
+-- phpMyAdmin SQL Dump
+-- version 2.11.0
+-- http://www.phpmyadmin.net
+--
+-- Host: mysql.intraface.dk
+-- Generation Time: Oct 18, 2007 at 11:42 AM
+-- Server version: 4.1.16
+-- PHP Version: 4.4.7
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- Database: `intraface`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounting_account`
+--
+
 CREATE TABLE `accounting_account` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
@@ -240,6 +261,7 @@ CREATE TABLE `basket` (
   `order_id` int(11) NOT NULL default '0',
   `session_id` varchar(255) NOT NULL default '',
   `product_id` int(11) NOT NULL default '0',
+  `product_detail_id` int(11) NOT NULL default '0',
   `quantity` int(11) NOT NULL default '0',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
   `basketevaluation_product` int(11) NOT NULL default '0',
@@ -274,6 +296,7 @@ CREATE TABLE `basket_details` (
   `phone` varchar(255) NOT NULL default '',
   `customer_comment` text NOT NULL,
   `customer_coupon` varchar(255) NOT NULL default '',
+  `customer_ean` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -699,7 +722,9 @@ CREATE TABLE `email` (
   `date_sent` datetime NOT NULL default '0000-00-00 00:00:00',
   `intranet_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
+  `contact_person_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
+  `bcc_to_user` int(11) NOT NULL default '0',
   `subject` varchar(255) NOT NULL default '',
   `body` text NOT NULL,
   `error_msg` varchar(255) NOT NULL default '',
@@ -833,6 +858,24 @@ CREATE TABLE `intranet` (
   PRIMARY KEY  (`id`),
   KEY `private_key` (`private_key`),
   KEY `public_key` (`public_key`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `intranet_module_package`
+--
+
+CREATE TABLE `intranet_module_package` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `module_package_id` int(11) NOT NULL default '0',
+  `start_date` date NOT NULL default '0000-00-00',
+  `end_date` date NOT NULL default '0000-00-00',
+  `order_debtor_id` int(11) NOT NULL default '0',
+  `status_key` int(11) NOT NULL default '0',
+  `active` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -1033,6 +1076,80 @@ CREATE TABLE `module` (
   KEY `position` (`position`),
   KEY `menu_label` (`menu_label`),
   KEY `active` (`active`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `module_package`
+--
+
+CREATE TABLE `module_package` (
+  `id` int(11) NOT NULL auto_increment,
+  `module_package_group_id` int(11) NOT NULL default '0',
+  `module_package_plan_id` int(11) NOT NULL default '0',
+  `product_id` int(11) NOT NULL default '0',
+  `active` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `module_package_action`
+--
+
+CREATE TABLE `module_package_action` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `order_debtor_id` int(11) NOT NULL default '0',
+  `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `action` text NOT NULL,
+  `active` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `module_package_group`
+--
+
+CREATE TABLE `module_package_group` (
+  `id` int(11) NOT NULL auto_increment,
+  `group_name` varchar(255) NOT NULL default '',
+  `sorting_index` int(11) NOT NULL default '0',
+  `active` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `module_package_module`
+--
+
+CREATE TABLE `module_package_module` (
+  `id` int(11) NOT NULL auto_increment,
+  `module_package_id` int(11) NOT NULL default '0',
+  `module` varchar(255) NOT NULL default '',
+  `limiter` varchar(255) NOT NULL default '',
+  `active` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `module_package_plan`
+--
+
+CREATE TABLE `module_package_plan` (
+  `id` int(11) NOT NULL auto_increment,
+  `plan` varchar(255) NOT NULL default '',
+  `plan_index` int(11) NOT NULL default '0',
+  `active` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -1535,6 +1652,7 @@ CREATE TABLE `webshop_basket_evaluation` (
   `evaluate_target_key` int(11) NOT NULL default '0',
   `evaluate_method_key` int(11) NOT NULL default '0',
   `evaluate_value` varchar(255) NOT NULL default '',
+  `evaluate_value_case_sensitive` int(11) NOT NULL default '0',
   `go_to_index_after` int(11) NOT NULL default '0',
   `action_action_key` int(11) NOT NULL default '0',
   `action_value` varchar(255) NOT NULL default '',
