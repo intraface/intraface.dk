@@ -1,5 +1,5 @@
 <?php
-require_once '../common.php';
+require_once '../intraface.dk/common.php';
 require_once 'Intraface/Install.php';
 
 $install = new Intraface_Install;
