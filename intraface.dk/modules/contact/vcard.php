@@ -1,6 +1,6 @@
 <?php
 require('../../include_first.php');
-require('Contact/Vcard/Build.php');
+require('Contact_Vcard_Build.php');
 
 if (empty($_GET['id']) OR !is_numeric($_GET['id'])) {
 	trigger_error('Du kan ikke lave et vCard uden et kontakt id', E_USER_ERROR);
@@ -27,7 +27,7 @@ $vcard->addParam('TYPE', 'HOME');
 $vcard->addParam('TYPE', 'PREF');
 
 // add a home/preferred email
-$vcard->addEmail('bolivar@example.net');
+$vcard->addEmail($contact->address->get('email'));
 $vcard->addParam('TYPE', 'HOME');
 $vcard->addParam('TYPE', 'PREF');
 
