@@ -21,7 +21,7 @@ if (!file_exists($config_file)) {
 
 require_once $config_file;
 
-set_include_path(PATH_INCLUDE_PATH.get_include_path());
+set_include_path(PATH_INCLUDE_PATH . PATH_SEPARATOR . get_include_path());
 
 require_once 'Intraface/common.php';
 ?>
