@@ -1,6 +1,5 @@
 <?php
-
-require('../../include_first.php');
+require '../../include_first.php';
 $module_debtor = $kernel->module('debtor');
 $kernel->useModule('contact');
 $kernel->useModule('product');
@@ -23,8 +22,7 @@ switch ($send_as) {
         $contact = new Contact($kernel, $debtor->get('contact_id'));
         if (!$contact->get('id') > 0) {
             trigger_error('Der er ikke angivet nogen kontakt at sende debtoren til', E_USER_ERROR);
-        }
-        elseif (!$contact->address->get('email')) {
+        } elseif (!$contact->address->get('email')) {
             trigger_error('Der er ikke angivet nogen e-mail til kunden', E_USER_ERROR);
         }
 
@@ -39,13 +37,9 @@ switch ($send_as) {
 
         if($debtor->get('type') == 'order') {
             $body = $kernel->setting->get('intranet', 'debtor.order.email.text');
-        }
-        else {
+        } else {
             $body = '';
         }
-
-
-
         break;
 
     case 'electronic_email':
@@ -57,15 +51,13 @@ switch ($send_as) {
         $contact = new Contact($kernel, $scan_in_contact_id);
         if (!$contact->get('id') > 0) {
             trigger_error('Der er ikke angivet nogen kontakt at sende de elektroniske fakturaer til', E_USER_ERROR);
-        }
-        elseif (!$contact->address->get('email')) {
+        } elseif (!$contact->address->get('email')) {
             trigger_error('Der er ikke angivet nogen e-mail til Læs-Ind bureauet', E_USER_ERROR);
         }
 
         if ($debtor->contact->get('preferred_invoice') <> 3) { // elektronisk faktura
             trigger_error('Kunden foretrækker ikke elektronisk faktura!', E_USER_ERROR);
-        }
-        elseif(!$debtor->contact->address->get('ean')) {
+        } elseif(!$debtor->contact->address->get('ean')) {
             trigger_error('EAN-nummeret er ikke sat', E_USER_ERROR);
         }
 
