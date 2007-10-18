@@ -60,16 +60,19 @@ class DebtorTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
     
-    function createDebtor()
-    {
+    function setUp() {
         $kernel = new Kernel;
         $kernel->user = new FakeDebtorUser;
         $kernel->intranet = new FakeDebtorIntranet;
         $kernel->setting = new FakeDebtorSetting;
         $kernel->useModule('debtor');
         $this->kernel = $kernel;
+    }
+    
+    function createDebtor()
+    {
         
-        return new Debtor($kernel, 'order');
+        return new Debtor($this->kernel, 'order');
     }
     
     function createContact() {
@@ -98,6 +101,75 @@ class DebtorTest extends PHPUnit_Framework_TestCase
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'))
             ) > 0);
+    }
+    
+    function testSetStatus() {
+        
+        $debtor = $this->createDebtor();
+        
+        $debtor->update(array(
+                'contact_id' => $this->createContact(), 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y')));
+        
+        $this->assertTrue($debtor->setStatus('sent'));
+    }
+    
+    function testCreate() {
+        
+        $quotation = new Debtor($this->kernel, 'quotation');
+        
+        $quotation->update(array(
+                'contact_id' => $this->createContact(), 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y')));
+       
+        $order = new Debtor($this->kernel, 'order');
+        $this->assertTrue($order->create($quotation) > 0);
+    }
+    
+    function testDelete() {
+        $debtor = $this->createDebtor();
+        
+        $debtor->update(array(
+                'contact_id' => $this->createContact(), 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y')));
+        
+        $this->assertTrue($debtor->delete());
+    }
+    
+    function testAnyWithContact() {
+        
+        // we make sure there is a debtor first
+        
+        $debtor = $this->createDebtor();
+        $contact_id = $this->createContact();
+        $debtor->update(array(
+                'contact_id' => $contact_id, 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y')));
+        
+        $this->assertTrue($debtor->any('contact', $contact_id) > 0);
+    }
+    
+    function testGetMaxNumber() {
+        
+        $debtor = $this->createDebtor();
+        
+        $debtor->update(array(
+                'contact_id' => $this->createContact(), 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y')));
+        
+        
+        
+        $this->assertEquals($debtor->get('number'), $debtor->getMaxNumber());
     }
 }
 
