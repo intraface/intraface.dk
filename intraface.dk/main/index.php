@@ -114,7 +114,9 @@ $page->start(safeToHtml($translation->get('dashboard', 'dashboard')));
 	endif;
 ?>
 
-<?php if($kernel->user->hasModuleAccess('administration')): ?>
+<?php 
+require_once('Intraface/Module.php');
+if(Module::exists('administration') && $kernel->user->hasModuleAccess('administration')): ?>
     <p><a href="account/index.php"><?php echo safeToHtml($translation->get('view and change your intraface account')); ?></a></p>
 <?php endif; ?>
 </div>
