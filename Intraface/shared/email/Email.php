@@ -140,7 +140,7 @@ class Email extends Standard
     {
         $this->kernel->useModule('contact');
         $this->contact = new Contact($this->kernel, $this->get('contact_id'));
-        
+
         if($this->get('contact_person_id') != 0 && $this->contact->get('type') == 'corporation') {
             $this->contact->loadContactPerson($this->get('contact_person_id'));
         }
@@ -214,11 +214,11 @@ class Email extends Standard
             //$db->query("UPDATE email SET user_id = ".$this->kernel->user->get('id')." WHERE id = " . $this->id);
             $sql_extra = ', user_id = ' . $db->quote($this->kernel->user->get('id'), 'integer');
         }
-        
+
         if(!isset($var['contact_person_id'])) {
             $var['contact_person_id'] = 0;
         }
-        
+
         if(!isset($var['bcc_to_user'])) {
             $var['bcc_to_user'] = 0;
         }
@@ -226,7 +226,7 @@ class Email extends Standard
 
         // status 1 = draft
         $sql = $sql_type . " email SET
-        	contact_person_id = ".(int)$var['contact_person_id'].",
+            contact_person_id = ".(int)$var['contact_person_id'].",
             bcc_to_user = ".(int)$var['bcc_to_user'].",
             date_updated = NOW(),
             intranet_id = " . $this->kernel->intranet->get('id') . ",
@@ -370,7 +370,7 @@ class Email extends Standard
         $phpmailer->setLanguage('en', 'phpmailer/language/');
         // $phpmailer->ConfirmReadingTo = $this->kernel->intranet->address->get('email');
 
-		// Sender
+        // Sender
         if ($this->get('from_email')) {
             $phpmailer->From = $this->get('from_email');
             if ($this->get('from_name')) {
@@ -388,7 +388,7 @@ class Email extends Standard
         if ($this->get('contact_id') == 0 OR !is_object($contact)) {
             $this->error->set('Der kunne ikke sendes e-mail til email #' . $this->get('id') . ' fordi der ikke var nogen kunde sat');
         }
-        
+
         if($contact->get('type') == 'corporation' && $this->get('contact_person_id') != 0) {
             $contact->loadContactPerson($this->get('contact_person_id'));
             $validator = new Validator($this->error);
@@ -402,11 +402,11 @@ class Email extends Standard
         else {
             $phpmailer->AddAddress($contact->address->get('email'), $contact->address->get('name'));
         }
-        
+
         if($this->get('bcc_to_user')) {
             $phpmailer->addBCC($this->kernel->user->address->get('email'), $this->kernel->user->address->get('name'));
         }
-        
+
 
         // E-mail
         $phpmailer->Subject = $this->get('subject');
@@ -421,7 +421,7 @@ class Email extends Standard
                 $filehandler = new FileHandler($this->kernel, $file['id']);
                 // lille hack med at sætte uploadpath på
 
-                if (!$phpmailer->addAttachment($filehandler->upload_path . $filehandler->get('server_file_name'), $file['filename'])) {
+                if (!$phpmailer->addAttachment($filehandler->getUploadPath() . $filehandler->get('server_file_name'), $file['filename'])) {
                     $this->error->set('Kunne ikke vedhæfte filen til e-mailen');
                 }
             }
@@ -510,7 +510,7 @@ class Email extends Standard
         $sent_this_hour = $this->sentThisHour();
 
         $limit_query = abs($this->allowed_limit-$sent_this_hour-$this->system_buffer);
-        
+
         $sql = "SELECT id
                 FROM email
                 WHERE status = 2
