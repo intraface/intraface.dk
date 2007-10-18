@@ -53,7 +53,7 @@ class ContactPerson extends Standard
      *
      * @return void
      */
-    private function load()
+    public function load()
     {
         $db = new DB_Sql;
         $db->query("SELECT id, name, email, phone, mobile, contact_id FROM contact_person WHERE id = " . $this->id . " LIMIT 1");
