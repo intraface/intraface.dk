@@ -1,6 +1,6 @@
 <?php
 /**
- * To be included on every page accessible through the webserver
+ * To be included to make intraface work correctly.
  *
  * @package Intraface
  * @author  Lars Olesen <lars@legestue.net>
