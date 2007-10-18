@@ -12,6 +12,7 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 
+// session_start is only used to create a unique id
 session_start();
 
 require_once 'common.php';
