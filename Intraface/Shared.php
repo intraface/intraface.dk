@@ -13,7 +13,7 @@ class Shared {
     var $shared_name;
     var $setting;
     var $controlpanel_files;
-    var $frontpage_files; // til brug pï¿½ forsiden
+    var $frontpage_files; // til brug på forsiden
     var $translation;
 
 
@@ -98,8 +98,8 @@ class Shared {
     }
 
     /**
-   * Bruges til at tilfï¿½je en setting til et modul, som skal vï¿½re hardcoded ind i Main[Modulnavn]
-   */
+     * Bruges til at tilføje en setting til et modul, som skal være hardcoded ind i Main[Modulnavn]
+     */
     function addSetting($key, $value) {
         $this->setting[$key] = $value;
     }
