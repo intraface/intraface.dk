@@ -419,6 +419,10 @@ class Debtor extends Standard
 
         settype($input['payment_method'], 'integer');
         settype($input['girocode'], 'string');
+        $validator->isString($input['girocode'], 'error in girocode', '', 'allow_empty');
+        
+        settype($input['message'], 'string');
+        $validator->isString($input['message'], 'error in message', '', 'allow_empty');
 
         $internal_note_sql = '';
         if (isset($input['internal_note'])) {
