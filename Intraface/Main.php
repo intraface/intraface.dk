@@ -273,18 +273,15 @@ class Main {
         return($this->module_name);
     }
 
-
-    //// @todo Is the following used anywhere?
-
-    /*
+    /**
+     * @return integer
+     */
     function getId() {
         $db = new DB_Sql;
         $db->query("SELECT id FROM module WHERE name = '".$this->module_name."'");
         if ($db->nextRecord()) return $db->f('id');
         return 0;
     }
-
-    */
 }
 
 ?>
