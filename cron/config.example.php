@@ -10,18 +10,15 @@
 
 // database
 define('DB_HOST', 'localhost');
-define('DB_USER', 'intraface');
-define('DB_PASS', 'localhost');
+define('DB_USER', '');
+define('DB_PASS', '');
 define('DB_NAME', 'intraface');
 
 // paths
-define('PATH_INCLUDE_PATH', PATH_ROOT . 
-    PATH_SEPARATOR . '/var/svnprojects/' . 
-    PATH_SEPARATOR . '/var/svnprojects/Intraface_3Party/' . 
-    PATH_SEPARATOR . '/var/svnprojects/Intraface_3Party/ErrorHandler/src/' . 
-    PATH_SEPARATOR . '/var/svnprojects/Intraface_3Party/Translation2/src/' . 
-    PATH_SEPARATOR . get_include_path());
+define('PATH_ROOT', '/home/intraface/'); // remember trailing slash
+define('PATH_INCLUDE_PATH', ''); // remeber to use constant PATH_SEPARATOR after every path
 
+// 
 define('SERVER_STATUS', 'TEST'); // if the system is in PRODUCTION or TEST mode
 
 // error log
