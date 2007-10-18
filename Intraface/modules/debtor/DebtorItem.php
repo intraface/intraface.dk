@@ -33,7 +33,7 @@ class DebtorItem extends Standard
     /**
      * @var object
      */
-    private $product;
+    public $product;
 
     /**
      * @var integer
