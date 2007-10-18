@@ -32,8 +32,9 @@ if (!empty($_POST['add_section']) AND !empty($_POST['new_section_type'])) {
 	exit;
 }
 elseif (!empty($_POST['add_keywords'])) {
-	$template = CMS_Template::factory($kernel, 'id', $_POST['id']);
-	header('Location: /shared/keyword/connect.php?template_id='.$template->get('id'));
+	$shared_keyword = $kernel->useShared('keyword');
+    $template = CMS_Template::factory($kernel, 'id', $_POST['id']);
+	header('Location: '.$shared_keyword->getPath().'/connect.php?template_id='.$template->get('id'));
 	exit;
 }
 elseif (!empty($_REQUEST['id'])) {
