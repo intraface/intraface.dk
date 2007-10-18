@@ -15,7 +15,7 @@ class Debtor extends Standard
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var object
@@ -45,37 +45,37 @@ class Debtor extends Standard
     /**
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * @var integer
      */
-    private $type_key;
+    protected $type_key;
 
     /**
      * @var object
      */
-    private $db;
+    protected $db;
 
     /**
      * @var array
      */
-    private $allowed_from;
+    protected $allowed_from;
 
     /**
      * @var array
      */
-    private $allowed_status;
+    protected $allowed_status;
 
     /**
      * @var array
      */
-    private $allowed_types;
+    protected $allowed_types;
 
     /**
      * @var payment_methods
      */
-    private $payment_methods;
+    protected $payment_methods;
 
     /**
      * @var object
