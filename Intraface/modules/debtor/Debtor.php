@@ -1057,7 +1057,7 @@ class Debtor extends Standard
         }
 
         $shared_pdf = $this->kernel->useShared('pdf');
-        $shared_pdf->includeFile('PdfMakerDebtor.php');
+        // $shared_pdf->includeFile('PdfMakerDebtor.php');
 
         $translation = $this->kernel->getTranslation('debtor');
 
