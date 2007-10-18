@@ -64,16 +64,19 @@ class AccountTest extends PHPUnit_Framework_TestCase {
         return new Account(new FakeAccountYear, $id);
     }
 
-    function testVatCalculation()
+    /////////////////////////////////////////////////////////////////////////////////////
+
+    function testVatCalculationReturnsCorrectValues()
     {
         $this->assertEquals((80 + Account::calculateVat(100, 25)), 100);
         $this->assertEquals((100 + Account::calculateVat(110, 10)), 110);
         $this->assertEquals(round((93.40 + Account::calculateVat(100.41, 7.5)), 2), 100.41);
     }
 
-    function testConstruction()
+    function testConstructionOfAnAccountObjectReturnsAValidObject()
     {
         $account = $this->createAccount();
+        $this->assertTrue(is_object($account));
         $this->assertEquals('Account', get_class($account));
     }
 
