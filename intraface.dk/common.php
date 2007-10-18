@@ -21,13 +21,7 @@ if (!file_exists($config_file)) {
 
 require_once $config_file;
 
-define('TIMEZONE', 'Europe/Copenhagen');
-setlocale(LC_CTYPE, "da_DK");
-putenv("TZ=".TIMEZONE);
-
-set_include_path(
-    PATH_INCLUDE_PATH
-);
+set_include_path(PATH_INCLUDE_PATH.get_include_path());
 
 require_once 'Intraface/common.php';
 ?>

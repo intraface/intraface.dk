@@ -27,4 +27,7 @@ define('ERROR_LEVEL_CONTINUE_SCRIPT', E_NOTICE); // Which level should the scrip
 define('ERROR_REPORT_EMAIL', ''); // if you want to recieve an e-mail on every error.
 define('ERROR_LOG', PATH_ROOT.'log/error.log'); // exact directory and filename
 
+// timezone and local
+define('TIMEZONE', 'Europe/Copenhagen');
+define('COUNTRY_LOCAL', "da_DK");
 ?>

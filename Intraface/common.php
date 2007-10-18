@@ -21,9 +21,13 @@ define('PATH_CACHE', PATH_ROOT . 'cache/'); // remember trailing slash - path to
 define('PATH_INCLUDE_BACKUP', PATH_ROOT . 'backup/');
 
 // paths on www
-define('PATH_WWW', NET_SCHEME.NET_HOST.NET_DIRECTORY);
-define('PATH_WWW_MODULE', PATH_WWW.'modules/');
-define('PATH_WWW_SHARED', PATH_WWW.'shared/');
+if(defined('NET_SCHEME') && defined('NET_HOST') && defined('NET_DIRECTORY')) {
+    define('PATH_WWW', NET_SCHEME.NET_HOST.NET_DIRECTORY);
+    define('PATH_WWW_MODULE', PATH_WWW.'modules/');
+    define('PATH_WWW_SHARED', PATH_WWW.'shared/');
+    // filehandler
+    define('FILE_VIEWER', PATH_WWW . 'main/file/');
+}
 
 if (!defined('MDB2_DEBUG')) {
     define('MDB2_DEBUG', false);
@@ -33,8 +37,13 @@ if (!defined('MDB2_DEBUG')) {
 // define('MDB2_PORTABILITY_EMPTY_TO_NULL', false);
 
 // Filehandler
-define('FILE_VIEWER', PATH_WWW . 'main/file/');
 define('IMAGE_LIBRARY', 'GD');
+
+// timezone and local
+if(!defined('COUNTRY_LOCAL')) define('COUNTRY_LOCAL', 'da_DK');
+if(!defined('TIMEZONE')) define('TIMEZONE', 'Europe/Copenhagen');
+setlocale(LC_CTYPE, COUNTRY_LOCAL);
+putenv("TZ=".TIMEZONE);
 
 // database
 define('DB_DSN', 'mysql://'.DB_USER.':'.DB_PASS.'@'.DB_HOST.'/'.DB_NAME.'');
