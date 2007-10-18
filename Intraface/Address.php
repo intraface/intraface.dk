@@ -302,23 +302,19 @@ class Address extends Standard
 
     /**
      * Public: Opdatere en adresse.
-     *
+     * 
+     * UPDATE: Metoden er udkommenteret fra 18/10 2007 da den ikke ser ud til at blive benyttet!
+     * 
      * Denne funktion overskriver den nuværende adresse. Benyt som udagangspunkt ikke denne, da historikken på adresser skal gemmes.
      *
      * @param array $array_var et array med felter med adressen. Se felterne i init funktionen: $this->fields
      *
      * @return integer Returnere 1 hvis arrayet er gemt, 0 hvis det ikke er. Man kan ikke gemme på en old_address.
      */
+    /*
     function update($array_var) {
         if($this->id == 0) {
             trigger_error("id has to be set to use Address::update, maybe you want to use Address::save IN Address->update", E_USER_ERROR);
-        }
-
-        foreach($this->fields AS $i => $field) {
-            $sql = '';
-            if(isset($array_var[$field])) {
-                $sql .= $field." = ".$db->quote($array_var[$field]).", ";
-            }
         }
 
         $db = MDB2::singleton(DB_DSN);
@@ -326,6 +322,14 @@ class Address extends Standard
             trigger_error("Error db singleton: ".$db->getUserInfo(), E_USER_ERROR);
             return false;
         }
+        
+        foreach($this->fields AS $i => $field) {
+            $sql = '';
+            if(isset($array_var[$field])) {
+                $sql .= $field." = ".$db->quote($array_var[$field]).", ";
+            }
+        }
+        
         $result = $db->exec("UPDATE address SET ".$sql." changed_date = NOW() WHERE id = ".$this->id);
         if(PEAR::isError($result)) {
             trigger_error("Error in exec: ".$result->getUserInfo(), E_USER_ERROR);
@@ -334,5 +338,6 @@ class Address extends Standard
         $this->load();
         return 1;
     }
+    */
 }
 ?>
