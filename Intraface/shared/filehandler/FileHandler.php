@@ -58,7 +58,7 @@ class FileHandler extends Standard
     /**
      * @var array
      */
-    private $accessibility_types;
+    protected $accessibility_types;
 
     /**
      * @var array
@@ -627,10 +627,10 @@ class FileHandler extends Standard
         return $this->_getMimeType($key, 'key');
 
     }
-    
+
     /**
      * Loads the mime types
-     * 
+     *
      * @return boolean true on success
      */
     public function loadMimeTypes() {
