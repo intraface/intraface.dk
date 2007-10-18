@@ -1,0 +1,24 @@
+== CHECK LIST WHEN MAKING AN UPDATE OF THE SYSTEM ==
+
+
+
+
+1) Run all unit tests
+2) Run all selenium tests
+3) Download all files from upload through FTP. TODO: Make a method to first make a tar.gz of the files
+4) Make a complete dump of the database: mysqldump --host mysql.intraface.dk --password intraface > mysql_backup.yyyymmdd.sql (replace ymd)
+5) Download the mysqldump via FTP
+6) Update the generate_package_xml.php so package.xml is created
+7) Create the PEAR package: PEAR package package.xml
+8) Upload the package to server
+9) Backup of the config file on the running server.
+10) Update the database structure from the install/database-updates.sql
+11) Upgrade the intraface package: PEAR upgrade /home/intraface/Intraface-1.x.x.tgz  
+12) Upgrade tools.intraface.dk?
+13) ...
+14) Ensure cron job is correct
+15) Test general use of the system
+17) Test that pdfs are working. Ensure that payment bank information is correct
+18) Test that send invoice as e-mail sender works
+19) Write blog post for website
+20) Goodnight!
