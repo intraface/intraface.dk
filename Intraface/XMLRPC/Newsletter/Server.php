@@ -76,7 +76,7 @@ class Intraface_XMLRPC_Newsletter_Server
         $this->factoryList($list_id);
 
         if (!$this->subscriber->unsubscribe($email)) {
-            throw new XML_RPC2_FaultException('Du kunne ikke framelde dig ' .$arg[1], -4);
+            throw new XML_RPC2_FaultException('Du kunne ikke framelde dig ' .$email, -4);
         }
 
         return 1;
