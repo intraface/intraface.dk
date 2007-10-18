@@ -47,7 +47,12 @@ class Address extends Standard
      * @var array
      */
     public $fields = array('name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'ean');
-
+    
+    /**
+     * @var object error
+     */
+    public $error;
+    
     /**
      * Init: loader klassen
      *
@@ -68,6 +73,8 @@ class Address extends Standard
         */
         // $this->kernel = & Kernel::singleton();
         $this->id = $id;
+        $this->error = new Error;
+        
         $this->load();
 
         $this->belong_to_types = $this->getBelongToTypes();
@@ -182,7 +189,7 @@ class Address extends Standard
 
             return 0;
         }
-        $row = $result->fetchRow();
+        $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
 
         $this->value = $row;
         $this->value['id'] = $row['id'];
@@ -192,13 +199,46 @@ class Address extends Standard
 
         return $this->id;
     }
+    
+    function validate($array_var) {
+        
+        $validator = new Validator($this->error);
+        // public $fields = array('name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'ean');
+    
+        settype($array_var['name'], 'string');
+        $validator->isString($array_var['name'], 'there was an error in name', '');
+        settype($array_var['address'], 'string');
+        $validator->isString($array_var['address'], 'there was an error in address', '');
+        settype($array_var['postcode'], 'string');
+        $validator->isNumeric($array_var['postcode'], 'there was an error in postcode', 'greater_than_zero');
+        settype($array_var['city'], 'string');
+        $validator->isString($array_var['city'], 'there was an error in city', '');
+        settype($array_var['country'], 'string');
+        $validator->isString($array_var['country'], 'there was an error in country', '', 'allow_empty');
+        settype($array_var['cvr'], 'string');
+        $validator->isString($array_var['cvr'], 'there was an error in cvr', '', 'allow_empty');
+        // E-mail is not allowed to be empty do you need that. You should probably consider some places there this is needed before you set it (eg. intranet and user address) maybe make a param more to the function determine that: 'email:allow_empty'
+        settype($array_var['email'], 'string');
+        $validator->isEmail($array_var['email'], 'not a valid e-mail');
+        settype($array_var['website'], 'string');
+        $validator->isUrl($array_var['website'], 'website is not valid', '', 'allow_empty');
+        settype($array_var['phone'], 'string');
+        $validator->isString($array_var['phone'], 'not a valid phone number', '', 'allow_empty');
+        settype($array_var['ean'], 'string');
+        $validator->isString($array_var['ean'], 'ean location number is not valid', '', 'allow_empty');
+        
+        if($this->error->isError()) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Public: Denne funktion gemmer data. At gemme data vil sige, at den gamle adresse gemmes, men den nye aktiveres.
      *
      * @param array $array_var et array med felter med adressen. Se felterne i init funktionen: $this->fields
      *
-     * @return integer	Returnere id
+     * @return bolean	true or false
      */
     function save($array_var) {
 
@@ -207,6 +247,10 @@ class Address extends Standard
         }
 
         $db = MDB2::singleton(DB_DSN);
+        if(PEAR::isError($db)) {
+            trigger_error("Error db singleton: ".$db->getUserInfo(), E_USER_ERROR);
+            return false;
+        }
         $sql = '';
 
         if(count($array_var) > 0) {
@@ -230,22 +274,29 @@ class Address extends Standard
                     }
                 }
             }
-
-
-
+            
             if($do_update == 0) {
                 // There is nothing to save, but that is OK, so we just return 1
-                return 1;
+                return true;
             } else {
-                $db->exec("UPDATE address SET active = 0 WHERE type = ".$this->belong_to_key." AND belong_to_id = ".$this->belong_to_id);
-                $db->exec("INSERT INTO address SET ".$sql." type = ".$this->belong_to_key.", belong_to_id = ".$this->belong_to_id.", active = 1, changed_date = NOW()");
+                $result = $db->exec("UPDATE address SET active = 0 WHERE type = ".$this->belong_to_key." AND belong_to_id = ".$this->belong_to_id);
+                if(PEAR::isError($result)) {
+                    trigger_error("Error in exec: ".$result->getUserInfo(), E_USER_ERROR);
+                    return false;
+                }
+                
+                $result = $db->exec("INSERT INTO address SET ".$sql." type = ".$this->belong_to_key.", belong_to_id = ".$this->belong_to_id.", active = 1, changed_date = NOW()");
+                if(PEAR::isError($result)) {
+                    trigger_error("Error in exec: ".$result->getUserInfo(), E_USER_ERROR);
+                    return false;
+                }
                 $this->id = $db->lastInsertId('address', 'id');
                 $this->load();
-                return 1;
+                return true;
             }
         } else {
             // Der var slet ikke noget indhold i arrayet, så vi lader være at opdatere, men siger, at vi gjorde.
-            return 1;
+            return true;
         }
     }
 
@@ -260,7 +311,7 @@ class Address extends Standard
      */
     function update($array_var) {
         if($this->id == 0) {
-            trigger_error("is has to be set to use Address::update, maybe you want to use Address::save IN Address->update", E_USER_ERROR);
+            trigger_error("id has to be set to use Address::update, maybe you want to use Address::save IN Address->update", E_USER_ERROR);
         }
 
         foreach($this->fields AS $i => $field) {
@@ -271,7 +322,15 @@ class Address extends Standard
         }
 
         $db = MDB2::singleton(DB_DSN);
-        $db->exec("UPDATE address SET ".$sql." changed_date = NOW() WHERE id = ".$this->id);
+        if(PEAR::isError($db)) {
+            trigger_error("Error db singleton: ".$db->getUserInfo(), E_USER_ERROR);
+            return false;
+        }
+        $result = $db->exec("UPDATE address SET ".$sql." changed_date = NOW() WHERE id = ".$this->id);
+        if(PEAR::isError($result)) {
+            trigger_error("Error in exec: ".$result->getUserInfo(), E_USER_ERROR);
+            return false;
+        }
         $this->load();
         return 1;
     }
