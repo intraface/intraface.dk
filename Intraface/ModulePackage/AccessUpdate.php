@@ -120,14 +120,34 @@ class Intraface_ModulePackage_AccessUpdate
             
             $modules = $modulepackage->get('modules');
             if(is_array($modules) && count($modules) > 0) {
+                // First we give access to the intranet
                 foreach($modules AS $module) {
+                    $module_object = ModuleMaintenance::factory($kernel, $module['module']);
                     if(!$intranet->setModuleAccess($module['module'])) {
                         trigger_error("Error in giving access to module ".$module['module'].' for intranet '.$row['intranet_id'], E_USER_NOTICE);
-                        $this->error->set('we could not give you access to your modules');
+                        $this->error->set('we could not give your intrnaet access to your modules');
                     }
-                    foreach($users AS $user) {
-                        $user->setModuleAccess($module['module'], $row['intranet_id']);
+                    else {
+                        // then we give access to alle the users in the intranet
+                        foreach($users AS $user) {
+                            if(!$user->setModuleAccess($module['module'], $row['intranet_id'])) {
+                                trigger_error('Error in giving access to module '.$module['module'].' for user '.$user->get('username').' in intranet '.$row['intranet_id'], E_USER_NOTICE);
+                                $this->error->set('we could not give all users access to your modules');
+                            }
+                            else {
+                                // And lastly we give all subaccess
+                                $sub_access_array = $module_object->get('sub_access');
+                                foreach($sub_access_array AS $sub_access) {
+                                    if(!$user->setSubAccess($module['module'], $sub_access['id'], $row['intranet_id'])) {
+                                        trigger_error('Error in giving subaccess to '.$sub_access['name'].' in module '.$module['module'].' for user '.$user->get('username').' in intranet '.$row['intranet_id'], E_USER_NOTICE);
+                                        $this->error->set('we could not give all users access to your modules');
+                                    }    
+                                }
+                                
+                            }
+                        }    
                     }
+                    
                 }
             }
             $update = $db->exec('UPDATE intranet_module_package SET status_key = 2 WHERE id = '.$db->quote($row['id'], 'integer'));

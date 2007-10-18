@@ -23,8 +23,19 @@ class ModuleMaintenanceTest extends PHPUnit_Framework_TestCase
     function testRegisterModule()
     {
         $modulemaintain = $this->createModuleMaintenance();
-        $return = $modulemaintain->registerModule('webshop');
+        $return = $modulemaintain->registerModule('accounting');
         $this->assertTrue(is_array($return));
     }
+    
+    function testModuleMaintenanceFactory() {
+        
+        $kernel = new Kernel;
+        $object = ModuleMaintenance::factory($kernel, 'accounting');
+        
+        $this->assertTrue(is_object($object));
+        $this->assertEquals('modulemaintenance', strtolower(get_class($object)));
+        
+        
+    } 
 }
 ?>

@@ -3,6 +3,11 @@ require('../../include_first.php');
 require_once('Intraface/ModulePackage.php');
 require_once('Intraface/ModulePackage/Manager.php');
 
+// temp test
+// require('Intraface/ModulePackage/AccessUpdate.php');
+// $access_update = new Intraface_ModulePackage_AccessUpdate();
+// $access_update->run($kernel->intranet->get('id'));
+
 if(isset($_GET['unsubscribe_id']) && intval($_GET['unsubscribe_id']) != 0) {
     $modulepackagemanager = new Intraface_ModulePackage_Manager($kernel->intranet, (int)$_GET['unsubscribe_id']);
     if($modulepackagemanager->get('id') != 0) {

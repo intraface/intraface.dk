@@ -18,12 +18,39 @@ class ModuleMaintenance
     function __construct($kernel, $id = 0)
     {
         $this->id = intval($id);
-        $this->db = new DB_Sql;
+        $this->db = MDB2::singleton(DB_DSN);
+        if(PEAR::isError($this->db)) {
+            trigger_error("Error in creating db: ".$this->db->getUserInfo(), E_USER_ERROR);
+            exit;
+        }
+
         $this->kernel = $kernel;
         $this->error = new Error;
         $this->value = array();
 
         $this->load();
+    }
+    
+    static function factory($kernel, $name) {
+        
+        $db = MDB2::singleton(DB_DSN);
+        if(PEAR::isError($db)) {
+            trigger_error("Error in creating db: ".$db->getUserInfo(), E_USER_ERROR);
+            exit;
+        }
+        $result = $db->query("SELECT id FROM module WHERE name = ".$db->quote($name, 'text'));
+        if(PEAR::isError($result)) {
+            trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
+            exit;
+        }
+        
+        if($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+            
+            return new ModuleMaintenance($kernel, $row['id']);
+        }
+        else {
+            trigger_error("invalid module name!", E_USER_ERROR);
+        }
     }
 
     function load()
@@ -32,18 +59,31 @@ class ModuleMaintenance
         // Starter med at nustille
         $this->value = array();
         $this->sub_access;
-
         if ($this->id != 0) {
-            $this->db->query("SELECT * FROM module WHERE id = ".$this->id);
-            if ($this->db->nextRecord()) {
-                $this->value["id"] = $this->db->f("id");
-                $this->value["name"] = $this->db->f("name");
-                $this->value["menu_label"] = $this->db->f("menu_label");
-                $this->value["show_menu"] = $this->db->f("show_menu");
-                $this->value["active"] = $this->db->f("active");
+            $result = $this->db->query("SELECT * FROM module WHERE id = ".$this->id);
+            if(PEAR::isError($result)) {
+                trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
+                exit;
+            }
+            
+            if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+                $this->value = $row;
 
-                $this->sub_access = new SubAccessMaintenance($this);
-
+                // $this->sub_access = new SubAccessMaintenance($this);
+                
+                $j = 0;
+                $result_sub_access = $this->db->query("SELECT id, name, description FROM module_sub_access WHERE active = 1 AND module_id = ".$row["id"]." ORDER BY description");
+                if(PEAR::isError($result_sub_access)) {
+                    trigger_error("Error in query: ".$result_sub_access->getUserInfo(), E_USER_ERROR);
+                    exit;
+                }
+                $i = 0;
+                $this->value["sub_access"] = array();
+                while ($row = $result_sub_access->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+                    $this->value["sub_access"][$i] = $row;
+                    $i++;
+                }
+                 
             }
         }
     }
@@ -172,18 +212,17 @@ class ModuleMaintenance
         $db = new DB_Sql;
 
         $i = 0;
-        $this->db->query("SELECT id, name, menu_label, show_menu, menu_index, frontpage_index FROM module WHERE active = 1 ORDER BY menu_index");
-
-        while ($this->db->nextRecord()) {
-            $value[$i]["id"] = $this->db->f("id");
-            $value[$i]["name"] = $this->db->f("name");
-            $value[$i]["menu_label"] = $this->db->f("menu_label");
-            $value[$i]["show_menu"] = $this->db->f("show_menu");
-            $value[$i]["menu_index"] = $this->db->f("menu_index");
-            $value[$i]["frontpage_index"] = $this->db->f("frontpage_index");
+        $result = $this->db->query("SELECT id, name, menu_label, show_menu, menu_index, frontpage_index FROM module WHERE active = 1 ORDER BY menu_index");
+        if(PEAR::isError($result)) {
+            trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
+            exit;
+        }
+        
+        while ($row = $result->fetchRow()) {
+            $value[$i] = $row;
 
             $j = 0;
-            $db->query("SELECT id, name, description FROM module_sub_access WHERE active = 1 AND module_id = ".$this->db->f("id")." ORDER BY description");
+            $db->query("SELECT id, name, description FROM module_sub_access WHERE active = 1 AND module_id = ".$row['id']." ORDER BY description");
             while ($db->nextRecord()) {
                 $value[$i]["sub_access"][$j]["id"] = $db->f("id");
                 $value[$i]["sub_access"][$j]["name"] = $db->f("name");
