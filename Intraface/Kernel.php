@@ -146,15 +146,14 @@ class Kernel
     function module($module_name)
     {
         if (!empty($this->primary_module_object) AND is_object($this->primary_module_object)) {
-            trigger_error('Det prim�re modul er allerede sat', E_USER_ERROR);
+            trigger_error('Primary module is already set', E_USER_ERROR);
         } else {
 
             $module = $this->useModule($module_name);
-
             if (is_object($module)) {
                 $this->primary_module_name = $module_name;
 
-                // Finder afh�ngige moduller - Dette kunne flyttes til useModule, hvorfor er den egentlig ikke det? /Sune 06-07-2006
+                // @todo Finder dependent moduller - Dette kunne flyttes til useModule, hvorfor er den egentlig ikke det? /Sune 06-07-2006
                 $dependent_modules = $module->getDependentModules();
 
                 for ($i = 0, $max = count($dependent_modules); $i < $max; $i++) {
@@ -163,7 +162,7 @@ class Kernel
 
                 return($module);
             } else {
-                // Den fejlmeddelse er egentlig irrelevant, da useModul ikke enten returnere et objekt eller trigger_error.
+                // @todo Den fejlmeddelse er egentlig irrelevant, da useModul ikke enten returnere et objekt eller trigger_error.
                 trigger_error('Du har ikke adgang til modulet', E_USER_ERROR);
                 return false;
             }
@@ -304,15 +303,14 @@ class Kernel
         }
 
         if ($access == true) {
-            $main_class_name = "Main".ucfirst($module_name);
-            $main_class_path = PATH_INCLUDE_MODULE.$module_name."/".$main_class_name.".php";
+            $main_class_name = 'Main' . ucfirst($module_name);
+            $main_class_path = PATH_INCLUDE_MODULE . $module_name . '/' . $main_class_name . '.php';
 
             if (file_exists($main_class_path)) {
                 require_once $main_class_path;
                 $object = new $main_class_name;
                 $object->load($this);
                 $this->modules[$module_name] = $object;
-
                 return $object;
             } else {
                 trigger_error($main_class_path.' do not exist', E_USER_ERROR);
@@ -470,7 +468,7 @@ class KernelLog implements Observer
         if(PEAR::isError($tables)) {
             trigger_error("Error in query: ".$tables->getUserInfo(), E_USER_ERROR);
         }
-        
+
         return in_array(strtolower($table), array_map('strtolower', $tables));
     }
 
