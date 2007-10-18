@@ -13,7 +13,16 @@ class Validator {
 		$this->error = $error;
 	}
 
-	function isEmail($email, $msg = '', $allow_empty = '') {
+	/**
+     * Validation of email
+     * @param datatype paramname description
+     * @param string email emailen which should be validated
+     * @param string msg error message
+     * @param string param streng indholdende en eller flere af:
+     *      "allow_empty": allows the string to be empty
+     * @return boolean true or false
+     */
+    function isEmail($email, $msg = '', $allow_empty = '') {
 
 		if ($allow_empty == 'allow_empty' AND empty($email)) {
 			return true;
