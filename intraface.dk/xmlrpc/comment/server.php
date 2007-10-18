@@ -2,7 +2,7 @@
 
 require('../../common.php');
 require_once('../XmlRpcServer.php');
-
+XML_RPC2_Backend::setBackend('php');
 $HTTP_RAW_POST_DATA = file_get_contents('php://input');
 class XMLRPC_Message_Server extends XmlRpcServer {
 
