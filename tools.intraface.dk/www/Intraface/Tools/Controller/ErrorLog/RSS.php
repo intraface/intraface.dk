@@ -38,7 +38,7 @@ class Intraface_Tools_Controller_ErrorLog_RSS extends k_Controller
                         </channel>
                     </rss>";
 
-            // header("Content-Type: application/rss+xml");
+            header("Content-Type: application/rss+xml");
             return $output;
     }
 
