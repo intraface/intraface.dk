@@ -2,7 +2,7 @@
 require_once dirname(__FILE__) . '/../intraface.dk/config.local.php';
 
 
-class Install {
+class Intraface_Install {
 
     function __construct() {
         if (!defined('SERVER_STATUS') OR SERVER_STATUS == 'PRODUCTION') {
@@ -77,6 +77,37 @@ class Install {
         return true;
 
     }
+    
+    function emptyDatabase() {
+        if (!$link = mysql_connect(DB_HOST, DB_USER, DB_PASS)) {
+            echo 'could not connect to mysql';
+            return false;
+        }
+
+        if (!mysql_select_db(DB_NAME, $link)) {
+            echo 'could not select mysql db';
+            return false;
+        }
+
+        // instead of this we want to make a loop through
+
+        $result = mysql_query("SHOW TABLES FROM " . DB_NAME);
+
+        while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
+            $table = $line['Tables_in_'.DB_NAME];
+
+            $sql = 'TRUNCATE TABLE ' . $table . ';';
+            $res = mysql_query($sql, $link);
+
+            if (!$res) {
+                echo 'could not do query';
+                echo 'mysql error: ' . mysql_error();
+                return false;
+            }
+        }
+        return true;
+
+    }
 
     function createStartingValues() {
         $sql_values = file_get_contents(dirname(__FILE__) . '/database-values.sql');
@@ -103,12 +134,19 @@ class Install {
 
     function resetServer() {
 
+        /*
         if (!$this->dropDatabase()) {
             trigger_error('could not drop database', E_USER_ERROR);
             exit;
         }
         if (!$this->createDatabaseSchema()) {
             trigger_error('could not create schema', E_USER_ERROR);
+            exit;
+        }
+        */
+        
+        if (!$this->emptyDatabase()) {
+            trigger_error('could not empty database', E_USER_ERROR);
             exit;
         }
 
