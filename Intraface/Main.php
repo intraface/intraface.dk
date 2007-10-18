@@ -265,6 +265,14 @@ class Main {
         }
     }
 
+    /**
+     * @return string
+     */
+    function getName()
+    {
+        return($this->module_name);
+    }
+
 
     //// @todo Is the following used anywhere?
 
@@ -276,9 +284,6 @@ class Main {
         return 0;
     }
 
-    function getName() {
-        return($this->module_name);
-    }
     */
 }
 
