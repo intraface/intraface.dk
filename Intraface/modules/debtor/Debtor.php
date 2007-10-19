@@ -1129,6 +1129,8 @@ class Debtor extends Standard
                       'bank_account_number' => $this->kernel->setting->get("intranet", "bank_account_number"),
                       'giro_account_number' => $this->kernel->setting->get("intranet", "giro_account_number")
         );
+        
+        return $info;
     }
 
     /**
