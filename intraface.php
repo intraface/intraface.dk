@@ -58,7 +58,7 @@ class intraface_postinstall {
         5 => 'net_scheme',
         6 => 'net_host',
         7 => 'net_directory', 'path_root', 'path_upload',
-        8 => 'connection_intranet',
+        8 => 'connection_internet',
         9 => 'server_status',
         10 => 'error_report_email',
         11 => 'error_log',
