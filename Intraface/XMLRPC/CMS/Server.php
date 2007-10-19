@@ -99,7 +99,7 @@ class Intraface_XMLRPC_CMS_Server {
         $this->checkCredentials($credentials);
 
         $site_id = intval($site_id);
-        $type = strip_tags($type);
+        $type = strip_tags($search['type']);
 
         $this->factory($site_id);
 
@@ -108,7 +108,7 @@ class Intraface_XMLRPC_CMS_Server {
             $cmspage->dbquery->setFilter('type', $search['type']);
         }
 
-		if (isset($search['level'])) {
+        if (isset($search['level'])) {
             $cmspage->dbquery->setFilter('level', $search['level']);
         }
 
