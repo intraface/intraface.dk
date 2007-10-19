@@ -119,10 +119,10 @@ class Basket
         $quantity = (int)$quantity;
 
         $this->webshop->kernel->useModule('product');
-        
+
         $product = new Product($this->webshop->kernel, $product_id, $product_detail_id);
 
-        
+
         if($product->get('id') == 0) {
             return false;
         }
@@ -182,6 +182,10 @@ class Basket
      */
     public function saveAddress($input)
     {
+        if (empty($input['cvr'])) {
+            $input['cvr'] = '';
+        }
+
         $sql = "name = \"".$input['name']."\"," .
             "contactperson = \"".$input['contactperson']."\", " .
             "address = \"".$input['address']."\", " .
