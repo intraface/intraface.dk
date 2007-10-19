@@ -165,7 +165,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	}
 
 
-	// Return fra tilføj produkt
+	// Return fra tilføj produkt og send email
 	if(isset($_GET['return_redirect_id'])) {
 		$return_redirect = Redirect::factory($kernel, 'return');
 
@@ -179,11 +179,9 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$debtor->load();
 		}
 		if($return_redirect->get('identifier') == 'send_email') {
-
-
-			if($return_redirect->getParameter('send_email_status') == 'sent' OR $return_redirect->getParameter('send_email_status') == 'outbox') {
-
-				// hvis faktura er genfremsendt skal den ikke sætte status igen
+            if($return_redirect->getParameter('send_email_status') == 'sent' OR $return_redirect->getParameter('send_email_status') == 'outbox') {
+                $email_send_with_success = true;
+                // hvis faktura er genfremsendt skal den ikke sætte status igen
 				if ($debtor->get('status') != 'sent') {
 					$debtor->setStatus('sent');
 				}
@@ -320,6 +318,9 @@ if(isset($onlinepayment)) {
     ?>
 <?php endif; ?>
 
+<?php if(isset($email_send_with_success) && $email_send_with_success): ?>
+    <div class="message-dependent"><p><?php echo $translation->get('your email was sent with success').'.'; ?></p></div>
+<?php endif; ?>
 
 <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
 	<input type="hidden" name="id" value="<?php echo $debtor->get('id'); ?>" />
