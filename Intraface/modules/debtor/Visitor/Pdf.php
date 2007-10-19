@@ -572,7 +572,7 @@ class Debtor_Report_Pdf
                 $this->doc->setY('-'.$this->doc->get("font_padding_top"));
                 $this->doc->setY('-'.$this->doc->get("font_size"));
                 $this->doc->addText($this->doc->get('x') + 4, $this->doc->get('y'), $this->doc->get("font_size"), "Betalt");
-                $this->doc->addText($this->doc->get("right_margin_position") - $this->getTextWidth($this->doc->get("font_size"), number_format($parameter['payment'], 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($parameter['payment'], 2, ",", "."));
+                $this->doc->addText($this->doc->get("right_margin_position") - $this->doc->getTextWidth($this->doc->get("font_size"), number_format($parameter['payment'], 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($parameter['payment'], 2, ",", "."));
                 $this->doc->setY('-'.$this->doc->get("font_padding_bottom"));
             }
 
@@ -584,7 +584,7 @@ class Debtor_Report_Pdf
                 $this->doc->setY('-'.$this->doc->get("font_padding_top"));
                 $this->doc->setY('-'.$this->doc->get("font_size"));
                 $this->doc->addText($this->doc->get('x') + 4, $this->doc->get('y'), $this->doc->get("font_size"), "Ventende betalinger");
-                $this->doc->addText($this->doc->get("right_margin_position") - $this->getTextWidth($this->doc->get("font_size"), number_format($parameter['payment_online'], 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($parameter['payment_online'], 2, ",", "."));
+                $this->doc->addText($this->doc->get("right_margin_position") - $this->doc->getTextWidth($this->doc->get("font_size"), number_format($parameter['payment_online'], 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($parameter['payment_online'], 2, ",", "."));
                 $this->doc->setY('-'.$this->doc->get("font_padding_bottom"));
             }
 
