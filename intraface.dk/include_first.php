@@ -19,6 +19,43 @@ require $config_file;
 
 require_once dirname(__FILE__) . '/common.php';
 
+// We redefine the errorhandler, to get good user outputs
+require_once 'ErrorHandler.php';
+if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
+   require_once 'ErrorHandler/Observer/BlueScreen.php';
+}
+else {
+    require_once 'ErrorHandler/Observer/User.php';
+}
+require_once 'ErrorHandler/Observer/File.php';
+
+function intrafaceFrontendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
+    $errorhandler = new ErrorHandler;
+    $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
+    if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
+        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
+    }
+    else {
+        $errorhandler->addObserver(new ErrorHandler_Observer_User, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // See description of ~ above
+    }
+    return $errorhandler->handleError($errno, $errstr, $errfile, $errline, $errcontext);
+}
+
+function intrafaceFrontendExceptionhandler($e) {
+    $errorhandler = new ErrorHandler;
+    $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
+    if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
+        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen);
+    }
+    else {
+        $errorhandler->addObserver(new ErrorHandler_Observer_User);
+    }
+    return $errorhandler->handleException($e);
+}
+
+set_error_handler('intrafaceFrontendErrorhandler', ERROR_HANDLE_LEVEL);
+set_exception_handler('intrafaceFrontendExceptionhandler');
+
 ob_start(); // ob_gzhandler()
 session_start();
 

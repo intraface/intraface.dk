@@ -109,40 +109,25 @@ if(defined('TIMEZONE')) {
 }
 
 require_once 'ErrorHandler.php';
-if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
-   require_once 'ErrorHandler/Observer/BlueScreen.php';
-}
-else {
-    require_once 'ErrorHandler/Observer/User.php';
-}
+require_once 'ErrorHandler/Observer/Echo.php';
 require_once 'ErrorHandler/Observer/File.php';
 
-function errorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
+function intrafaceBackendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
     $errorhandler = new ErrorHandler;
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
-    if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
-        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
-    }
-    else {
-        $errorhandler->addObserver(new ErrorHandler_Observer_User, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // See description of ~ above
-    }
+    $errorhandler->addObserver(new ErrorHandler_Observer_Echo, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
     return $errorhandler->handleError($errno, $errstr, $errfile, $errline, $errcontext);
 }
 
-function exceptionhandler($e) {
+function intrafaceBackendExceptionhandler($e) {
     $errorhandler = new ErrorHandler;
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
-    if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
-        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen);
-    }
-    else {
-        $errorhandler->addObserver(new ErrorHandler_Observer_User);
-    }
+    $errorhandler->addObserver(new ErrorHandler_Observer_Echo);
     return $errorhandler->handleException($e);
 }
 
-set_error_handler('errorhandler', ERROR_HANDLE_LEVEL);
-set_exception_handler('exceptionhandler');
+set_error_handler('intrafaceBackendErrorhandler', ERROR_HANDLE_LEVEL);
+set_exception_handler('intrafaceBackendExceptionhandler');
 
 // vi skal have lavet en fil, der bare sørger for at inkludere filer.
 // i virkelighede var det måske smart, hvis vi brugte lidt
