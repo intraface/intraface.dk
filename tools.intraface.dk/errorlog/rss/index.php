@@ -31,7 +31,7 @@ if(is_array($items) && count($items) > 0) {
         $output .= "
             <item>
                 <title>".htmlentities($line['title'])."</title>
-                <link>http://tools.intraface.dk/error/</link>
+                <link>http://tools.intraface.dk/errorlog/</link>
                 <description>".htmlentities(strip_tags($line['description'])).".<br />URL: ".htmlentities($line['link'])."</description>
             </item>";
     }
