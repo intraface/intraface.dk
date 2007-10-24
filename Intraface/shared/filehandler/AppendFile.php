@@ -36,7 +36,7 @@ class AppendFile
      *
      * @return void
      */
-    public function __construct($kernel, $belong_to, $belong_to_id, $id = 0)
+    public function __construct($kernel, $belong_to, $belong_to_id /*, $id = 0 */)
     {
         if (!is_object($kernel)) {
             trigger_error('AppendFile::__construct needs kernel', E_USER_ERROR);
@@ -55,7 +55,7 @@ class AppendFile
         $this->belong_to_key = array_search($belong_to, $this->belong_to_types);
         $this->belong_to_id = (int)$belong_to_id;
 
-        $this->id = (int)$id;
+        //$this->id = (int)$id;
         $this->error = new Error;
 
     }
@@ -122,14 +122,16 @@ class AppendFile
             return $db->f('id');
         }
 
+        /*
         if ($this->id > 0) {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;
 
         } else {
+        */
             $sql_type = "INSERT INTO ";
             $sql_end = " , date_created = NOW()";
-        }
+        //}
 
         $db->query($sql_type . " filehandler_append_file SET
             date_updated = NOW(),
@@ -139,10 +141,15 @@ class AppendFile
             file_handler_id = ".$var['file_handler_id']."
             " . $sql_end);
 
+
+        return $db->insertedId();
+
+        /*
         if ($this->id == 0) {
             $this->id = $db->insertedId();
         }
         return $this->id;
+        */
     }
 
     /**
@@ -157,15 +164,10 @@ class AppendFile
         $input = safeToDb($input);
 
         if(is_numeric($input)) {
-            $this->id = 0;
-            if ($this->save(array('file_handler_id' => $input)) > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            //$this->id = 0;
+            return ($this->save(array('file_handler_id' => $input)) > 0);
         } elseif(is_array($input)) {
             foreach($input AS $id) {
-                $this->id = 0;
                 $this->save(array('file_handler_id' => $id));
             }
             return true;
@@ -179,10 +181,10 @@ class AppendFile
      *
      * @return boolean
      */
-    public function delete()
+    public function delete($id)
     {
         $db = new DB_Sql;
-        $db->query("UPDATE filehandler_append_file SET active = 0 WHERE id = " . $this->id);
+        $db->query("UPDATE filehandler_append_file SET active = 0 WHERE id = " . $id);
         return true;
     }
 
@@ -191,10 +193,10 @@ class AppendFile
      *
      * @return boolean
      */
-    public function undelete()
+    public function undelete($id)
     {
         $db = new DB_Sql;
-        $db->query("UPDATE filehandler_append_file SET active = 1 WHERE id = " . $this->id);
+        $db->query("UPDATE filehandler_append_file SET active = 1 WHERE id = " . $id);
         return true;
     }
 

@@ -22,11 +22,17 @@ class FakeAppendFileIntranet
 
 class AppendFileTest extends PHPUnit_Framework_TestCase
 {
-    function createAppendFile()
+    function setUp()
+    {
+        $db = MDB2::factory(DB_DSN);
+        $db->query('TRUNCATE filehandler_append_file');
+    }
+
+    function createAppendFile($id = 0)
     {
         $kernel = new Kernel;
         $kernel->intranet = new FakeAppendFileIntranet;
-        return new AppendFile($kernel, 'product', 1);
+        return new AppendFile($kernel, 'product', 1, $id);
     }
 
     /////////////////////////////////////////////////////////
@@ -39,15 +45,31 @@ class AppendFileTest extends PHPUnit_Framework_TestCase
 
     function testAddFileAsInteger()
     {
-           $append = $this->createAppendFile();
-           $this->assertTrue($append->addFile(1));
+        $append = $this->createAppendFile();
+        $this->assertTrue($append->addFile(1));
     }
 
     function testAddFileAsArray()
     {
-           $append = $this->createAppendFile();
-           $this->assertTrue($append->addFile(array(1)));
+        $append = $this->createAppendFile();
+        $this->assertTrue($append->addFile(array(1)));
     }
+
+    function testDeleteReturnsTrue()
+    {
+        $append = $this->createAppendFile();
+        $append->addFile(1);
+        $this->assertTrue($append->delete(1));
+    }
+
+    function testUnDeleteReturnsTrue()
+    {
+        $append = $this->createAppendFile();
+        $append->addFile(1);
+        $append->delete(1);
+        $this->assertTrue($append->undelete(1));
+    }
+
 
 }
 ?>
