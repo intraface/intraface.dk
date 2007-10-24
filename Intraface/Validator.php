@@ -99,14 +99,14 @@ class Validator {
             // true
         } else {
             $this->error->set($msg);
-            return(false);
+            return false;
         }
 
         if(checkdate($parts[3], $parts[1], $parts[5])) {
-            return(true);
+            return true;
         } else {
             $this->error->set($msg);
-            return(false);
+            return false;
         }
     }
 
@@ -334,6 +334,23 @@ class Validator {
             $this->error->set($msg);
             return false;
         }
+    }
+
+    /**
+     * Validates as identifier, eg. in an url
+     *
+     * @param string $string To validate
+     * @param string $msg    Error msg
+     * @param string $param  Extra parameters
+     *
+     * @return boolean
+     */
+    function isIdentifier($string, $msg, $param = '')
+    {
+        if (empty($string) OR !eregi("^[-_a-z0-9]$", $string)) {
+            return false;
+        }
+        return true;
     }
 }
 
