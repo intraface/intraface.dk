@@ -96,7 +96,7 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
     {
         $dbquery = $this->createDBQuery();
         $this->assertTrue(is_object($dbquery));
-        $this->assertEquals($this->table, $dbquery->table);
+        $this->assertEquals($this->table, $dbquery->getTableName());
     }
 
     function testRequiredConditions()
@@ -114,7 +114,7 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(10, $db->numRows());
         $dbquery->useCharacter();
         $dbquery->defineCharacter('t', 'name');
-        $this->assertTrue($dbquery->use_character);
+        $this->assertTrue($dbquery->getUseCharacter());
         $characters = $dbquery->getCharacters();
         $this->assertEquals(6, count($characters));
     }
@@ -127,7 +127,7 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         $dbquery->usePaging($paging_name, $rows_pr_page);
         $db = $dbquery->getRecordset('*', '', false);
 
-        $this->assertEquals($paging_name, $dbquery->paging_var_name);
+        $this->assertEquals($paging_name, $dbquery->getPagingVarName());
 
         $paging = $dbquery->getPaging();
         $expected_offset = array(1=>0, 2=>2, 3=>4, 4=>6, 5=>8);

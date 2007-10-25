@@ -1,52 +1,150 @@
 <?php
-
 /**
  * Klasse til at lave filter og paging på getList
  * I idéfasen. Ved endnu ikke om dette er metoden at gøre det på
  *
- * @author: Sune
- * @version: 0.1
+ * @todo Would it be an idea to make this class abstrat instead, so you have to use
+ *       it by exending it?
+ *
+ * @todo Dependency on kernel should be removed. However, if it should later
+ *       be possible to save queries we need something which could help doing
+ *       that.
+ *
+ * @todo This should probably be divided into several classes.
+ *
+ * @author Sune Jensen <sj@sunet.dk>
  */
 
 require_once 'Intraface/3Party/Database/Db_sql.php';
 
 class DBQuery {
 
-    var $kernel;
-    var $table;
-    var $required_condition;
-    var $error;
+    /**
+     * @var object
+     */
+    protected $kernel;
 
-    var $join;
+    /**
+     * @var string
+     */
+    protected $table;
 
-    var $use_stored = false;
+    /**
+     * @var string
+     */
+    protected $required_condition;
 
-    var $condition = array();
-    var $sorting = array();
-    var $filter = array();
-    // var $group_by = array();
-    // var $having_condition = array();
+    /**
+     * @var object
+     */
+    protected $error;
 
-    var $character;
-    var $character_var_name;
-    var $find_character_from_field;
-    var $use_character;
+    /**
+     * @var string
+     */
+    protected $join;
 
-  var $extra_uri;
+    /**
+     * @var boolean
+     */
+    protected $use_stored = false;
 
-    var $keyword_ids = array();
+    /**
+     * @var array
+     */
+    protected $condition = array();
 
-    var $paging_var_name;
-    var $rows_pr_page;
-    var $recordset_num_rows;
-    var $paging_start = NULL;
+    /**
+     * @var array
+     */
+    protected $sorting = array();
 
-    var $store_var_name;
-    var $store_name;
-    var $store_toplevel;
-    var $store_user_condition;
+    /**
+     * @var array
+     */
+    protected $filter = array();
 
-    function DBQuery($kernel, $table, $required_conditions = "") {
+    /**
+     * @var string
+     */
+    protected $character;
+
+    /**
+     * @var string
+     */
+    protected $character_var_name;
+
+    /**
+     * @var string
+     */
+    protected $find_character_from_field;
+
+    /**
+     * @var boolean
+     */
+    protected $use_character;
+
+    /**
+     * @var string
+     */
+    protected $extra_uri;
+
+    /**
+     * @var array
+     */
+    protected $keyword_ids = array();
+
+    /**
+     * @var sring
+     */
+    protected $paging_var_name;
+
+    /**
+     * @var integer
+     */
+    protected $rows_pr_page;
+
+    /**
+     * @var integer
+     */
+    protected $recordset_num_rows;
+
+    /**
+     * @var integer
+     */
+    protected $paging_start = NULL;
+
+    /**
+     * @var string
+     */
+    protected $store_var_name;
+
+    /**
+     * @var string
+     */
+    protected $store_name;
+
+    /**
+     * @var string
+     */
+    protected $store_toplevel;
+
+    /**
+     * @var string
+     */
+    protected $store_user_condition;
+
+    /**
+     * Constructor
+     *
+     * @param object $kernel              Kernel @todo remove dependency
+     * @param string $table               The table
+     * @param string $required_conditions Common conditions
+     *
+     * @return void
+     */
+    public function __construct($kernel, $table, $required_conditions = "")
+    {
         if (!is_object($kernel)) {
             trigger_error('DBQuery needs kernel', E_USER_ERROR);
             return false;
@@ -73,16 +171,20 @@ class DBQuery {
         }
 
         // print("weblogin_session_id = \"".$this->kernel->weblogin->get("session_id")."\"");
-
     }
 
-
     /**
-     * Public
      * Denne funktion benyttes til at definere tabeller, som den skal joines med
      *
+     * @param string $type               @todo What
+     * @param string $table              @todo What
+     * @param string $join_on            @todo What
+     * @param string $required_condition @todo What
+     *
+     * @return void
      */
-    function setJoin($type, $table, $join_on, $required_condition) {
+    public function setJoin($type, $table, $join_on, $required_condition)
+    {
         $i = count($this->join);
 
         $this->join[$i]["type"] = $type;
@@ -94,10 +196,11 @@ class DBQuery {
     /**
      * Private (kan benyttes public hvis man vil lave sin egen sql-streng)
      * Benyttes til at lave sql-streng med join tabeller
+     *
+     * @return array
      */
-    function getJoin() {
-
-
+    private function getJoin()
+    {
         $join["table"] = "";
         $join["condition"] = "";
 
@@ -111,18 +214,29 @@ class DBQuery {
         }
 
         return $join;
-
     }
 
-  function setExtraUri($extra_uri) {
+    /**
+     * Set extra uri
+     *
+     * @param string $extra_uri Used for the outputter
+     *
+     * @return void
+     */
+    public function setExtraUri($extra_uri)
+    {
         $this->extra_uri = $extra_uri;
-  }
+    }
 
     /**
-     * Public
      * Returnere et array med bogstaver til alfabetisering. Hvis $view = "HTML" returnere den array med HTML link
+     *
+     * @param string $view Makes it possible to view as HTML
+     *
+     * @return mixed
      */
-    function getCharacters($view = "") {
+    public function getCharacters($view = "")
+    {
         // Denne funktion kan optimeres med, at hvis den kaldes 2 gange, så benytter den bare det gamle resultat igen.
 
         $chars = array();
@@ -172,27 +286,26 @@ class DBQuery {
             }
         }
 
-
-
         return $chars;
     }
 
     /**
-     * Public
      * Returnere et array med tal til paging. Hvis $view = "HTML" returneres et array med links
+     *
+     * @param string $view Makes it possible to view as HTML
+     *
+     * @return mixed
      */
-    function getPaging($view = "") {
-
+    public function getPaging($view = "")
+    {
         $but = array();
         $j = 1;
 
         if($this->store_name != "") {
             $url = "&amp;".$this->store_var_name."=true";
-        }
-        elseif($this->character_var_name != "" && isset($_GET[$this->character_var_name])) {
+        } elseif($this->character_var_name != "" && isset($_GET[$this->character_var_name])) {
             $url = "&amp;".$this->character_var_name."=".$_GET[$this->character_var_name];
-        }
-        else {
+        } else {
             $url = "";
         }
 
@@ -208,12 +321,10 @@ class DBQuery {
             if($view == "html") {
                 if($this->paging_start == $i*$this->rows_pr_page) {
                     $but[$j] = "<strong>".$j."</strong>";
+                } else {
+                    $but[$j] = "<a href=\"".basename($_SERVER["PHP_SELF"])."?".$this->paging_var_name."=".($i*$this->rows_pr_page).$url."&amp;".$this->extra_uri."\">".$j."</a>";
                 }
-                else {
-        $but[$j] = "<a href=\"".basename($_SERVER["PHP_SELF"])."?".$this->paging_var_name."=".($i*$this->rows_pr_page).$url."&amp;".$this->extra_uri."\">".$j."</a>";
-                }
-            }
-            else {
+            } else {
                 $but['offset'][$j] = $i * $this->rows_pr_page;
             }
             $j++;
@@ -228,40 +339,36 @@ class DBQuery {
             if($this->paging_start > 0) { // $_GET[$this->paging_var_name]
                 if($view == "html") {
                     $but[0] = "<a href=\"".basename($_SERVER["PHP_SELF"])."?".$this->paging_var_name."=".($this->paging_start - $this->rows_pr_page).$url."&amp;".$this->extra_uri."\">Forrige</a>"; // $_GET[$this->paging_var_name]
-                }
-                else {
+                } else {
                     $but['next'] = $this->paging_start - $this->rows_pr_page; // $_GET[$this->paging_var_name]
                 }
-            }
-            else {
+            } else {
                 $but['previous'] = 0;
             }
 
             if($this->paging_start < $this->recordset_num_rows - $this->rows_pr_page) { // $_GET[$this->paging_var_name]
                 if($view == "html") {
                     $but[$j] = "<a href=\"".basename($_SERVER["PHP_SELF"])."?".$this->paging_var_name."=".($this->paging_start + $this->rows_pr_page).$url."&amp;".$this->extra_uri."\">Næste</a>"; // $_GET[$this->paging_var_name]
-                }
-                else {
+                } else {
                     $but['next'] = $this->paging_start + $this->rows_pr_page; // $_GET[$this->paging_var_name]
                 }
             }
         }
 
-
         return $but;
-
     }
 
 
-    /*
+    /**
      * Returnere størrelsen på recordsettet, samt hvorfra og hvormange
      *
+     * @return integer
      */
-    function getRecordsetSize() {
+    protected function getRecordsetSize()
+    {
         if(!isset($_GET[$this->paging_var_name])) {
             $show_from = 0;
-        }
-        else {
+        } else {
             $show_from = intval($_GET[$this->paging_var_name]);
         }
 
@@ -281,35 +388,48 @@ class DBQuery {
      * Sætter en filter parameter
      * Kan f.eks. være key: "seacrh";  value: $_POST["search"]
      * For at filteret kan bruges til noget, skal det kombineres med setCondition inde i getList funktionen
+     *
+     * @param string $key   @todo What
+     * @param string $value @todo what
+     *
+     * @return void
      */
-    function setFilter($key, $value) {
+    public function setFilter($key, $value)
+    {
         $this->filter[$key] = $value;
     }
 
     /**
      * Checker om et filter er sat
+     *
+     * @param string $key   @todo What
+     *
+     * @return boolean
      */
-    function checkFilter($key) {
+    public function checkFilter($key)
+    {
         if(isset($this->filter[$key])) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
     /**
      * Returnere værdien af filteret
+     *
+     * @param string $key   @todo What
+     *
+     * @return string
      */
-    function getFilter($key) {
+    public function getFilter($key)
+    {
         if(isset($this->filter[$key])) {
             return $this->filter[$key];
-        }
-        else {
+        } else {
             return "";
         }
     }
-
 
     /*************************** FUNKTIONER TIL AT DEFINGERE SØGNINGEN ***********************/
 
@@ -318,15 +438,23 @@ class DBQuery {
      * Bruges til at sætte where felterne
      * F.eks.: "date > '12-12-2004' OR paid = 0"
      * Flere setConditions kan kaldes, og så vil hver sql-sætning sættes sammen med et AND
+     *
+     * @param string $string @todo what
+     *
+     * @return void
      */
-    function setCondition($string) {
+    protected function setCondition($string)
+    {
         $this->condition[] = $string;
     }
 
     /**
      * Fjerner alle condition, sortings, og keywords
+     *
+     * @return void
      */
-    function clearAll() {
+    protected function clearAll()
+    {
         $this->condition = array();
         $this->sorting = array();
         $this->keyword_ids = array();
@@ -336,24 +464,36 @@ class DBQuery {
      * Bruges til at sætte order by
      * F.eks. "number, date ASC"
      * Flere sorting kan sættes, og vil blive sat sammen i rækkenfølgen de er sat med et komma.
+     *
+     * @param string $string @todo what
+     *
+     * @return void
      */
-    function setSorting($string) {
+    function setSorting($string)
+    {
         $this->sorting[] = $string;
     }
 
-
     /**
      * Tjekker om sorting er sat
+     *
+     * @return boolean
      */
-    function checkSorting() {
+    public function checkSorting()
+    {
         return count($this->sorting);
     }
 
-
     /**
      * Aktivere alfabetisering. Bruges til at vise poster der starter med character
+     *
+     * @param string $character_var_name @todo what
+     * @param string $field              @todo what
+     *
+     * @return void
      */
-    function defineCharacter($character_var_name, $field) {
+    public function defineCharacter($character_var_name, $field)
+    {
         if($character_var_name != "" && $field != "") {
 
             $this->character_var_name = $character_var_name;
@@ -363,16 +503,27 @@ class DBQuery {
 
     /**
      * Benytter character
+     *
+     * @return void
      */
-    function useCharacter() {
+    public function useCharacter()
+    {
         $this->use_character = true;
     }
 
 
     /**
-     * Aktivere paging.
+     * Aktivere paging
+     *
+     * @todo is $rows_pr_page default sensible?
+     *
+     * @param string  $paging_var_name @todo what
+     * @param integer $rows_pr_page    @todo what
+     *
+     * @return void
      */
-    function usePaging($paging_var_name, $rows_pr_page = 0) {
+    public function usePaging($paging_var_name, $rows_pr_page = 0)
+    {
         if($paging_var_name != "") {
             $this->paging_var_name = $paging_var_name;
             if((int)$rows_pr_page > 0) {
@@ -389,43 +540,61 @@ class DBQuery {
 
     /**
      * Til manuelt at sætte paging offset.
+     *
+     * @param string $offset @todo what
+     *
+     * @return void
      */
-    function setPagingOffset($offset) {
+    public function setPagingOffset($offset)
+    {
         $this->paging_start = intval($offset);
     }
 
 
     /**
      * Til manuelt at sætte hvormange der skal være pr. side
+     *
+     * @param integer $number @todo what
+     *
+     * @return void
      */
-    function setRowsPerPage($number) {
+    public function setRowsPerPage($number)
+    {
         $this->rows_pr_page = (int)$number;
     }
 
-
     /**
      * Vælger keywords som kun poster med disse skal vises
+     *
+     * @param mixed $keyword @todo what
+     *
+     * @return void
      */
-    function setKeyword($keyword) {
-
+    public function setKeyword($keyword)
+    {
         if(is_array($keyword)) {
             $this->keyword_ids = $keyword;
-        }
-        else {
+        } else {
             $this->keyword_ids = array(intval($keyword));
         }
     }
 
-    function getKeyword($key = -1) {
+    /**
+     * Get Keyword @todo which keyword
+     *
+     * @param integer $key @todo what
+     *
+     * @return mixed
+     */
+    public function getKeyword($key = -1)
+    {
         if((int)$key >= 0) {
             if(isset($this->keyword_ids[$key])) {
                 return $this->keyword_ids[$key];
-            }
-            else {
+            } else {
                 return 0;
             }
-        }
-        else {
+        } else {
             return $this->keyword_ids;
         }
     }
@@ -434,11 +603,15 @@ class DBQuery {
 
     /**
      * Importer en anden error klasse
+     *
+     * @param object $error Error object
+     *
+     * @return void
      */
-    function useErrorObject(&$error) {
+    public function useErrorObject(&$error)
+    {
         $this->error = &$error;
     }
-
 
     /**
      * Aktiver gemningen af søgeresultat
@@ -446,8 +619,15 @@ class DBQuery {
      *   Sublevel benyttes når man f.eks. under debtor skal benytte en liste over produkter til at sætte på faktura.
      *   Der vil kun blive stored én toplevel result, mens der vil blive gemt alle sublevel.
      *   Det skyldes at hver gang man har åbnet en toplevel liste, skal skal man ikke se tildigere toplevel søgninger mere.
+     *
+     * @param string $store_var_name @todo what
+     * @param string $store_name     @todo what
+     * @param string $level          @todo what
+     *
+     * @return void
      */
-    function storeResult($store_var_name, $store_name, $level) {
+    public function storeResult($store_var_name, $store_name, $level)
+    {
         $this->store_var_name = $store_var_name;
         $this->store_name = $store_name;
 
@@ -465,7 +645,15 @@ class DBQuery {
         }
     }
 
-    function useStored($value = true) {
+    /**
+     * @todo what
+     *
+     * @param boolean $value @todo what
+     *
+     * @return void
+     */
+    public function useStored($value = true)
+    {
         if(!in_array($value, array(true, false))) {
             trigger_error("Første parameter til DBQuery->useStored() er ikke ente true eller false", E_USER_ERROR);
         }
@@ -473,18 +661,19 @@ class DBQuery {
         $this->use_stored = $value;
     }
 
-
     /*********************** FUNKTIONER TIL AT RETURNERE SQL-STRENG *************************/
 
     /**
-     * Public
      * Returnere db object med recordset
-     *@param fields: fieldst from the tabel you will recive
-     *@param use: 'full': without any paging, '' with paging
-     *@param print: true will show sql query
+     *
+     * @param string  $fields fields from the tabel you will recive
+     * @param string  $use    'full': without any paging, '' with paging
+     * @param boolean $print  true will show sql query
+     *
+     * @return void
      */
-    function getRecordset($fields, $use = "", $print = false) {
-
+    public function getRecordset($fields, $use = "", $print = false)
+    {
         $db = new DB_sql;
         $csql = ""; //Definere variable
         $stored_character = false;
@@ -531,20 +720,17 @@ class DBQuery {
 
             if(isset($_GET[$this->character_var_name]) && $_GET[$this->character_var_name] != "") {
                 $this->character = $_GET[$this->character_var_name];
-            }
-            elseif($stored_character !== false) {
+            } elseif($stored_character !== false) {
                 $this->character = $stored_character;
 
                 // keep it that way
-            }
-            else {
+            } else {
                 // $tmp_dbquery = clone $this;
                 $tmp = $this->getCharacters();
                 // Vi tager det første character
                 if(array_key_exists(0, $tmp) AND $tmp[0] != "") {
                     $this->character = $tmp[0];
-                }
-                else {
+                } else {
                     $this->character = "";
                 }
             }
@@ -595,8 +781,7 @@ class DBQuery {
 
             if($db->f("num_rows") > $this->rows_pr_page) {
                 $sql .= $csql; // tilføjer charater
-            }
-            else {
+            } else {
                 // Så er der ikke nogen grund til at benyttes character
                 $this->character_var_name = "";
             }
@@ -611,8 +796,7 @@ class DBQuery {
             $db->query("SELECT COUNT(DISTINCT(".$this->table.".id)) AS num_rows ".$sql);
             if($db->nextRecord()) { // Dette er vist lige lovlig dræstisk: OR trigger_error("Kunne ikke eksekvere SQL-sætning", FATAL);
                 $this->recordset_num_rows = $db->f("num_rows");
-            }
-            else {
+            } else {
                 $this->recordset_num_rows = 0;
             }
 
@@ -645,19 +829,15 @@ class DBQuery {
                 if($db->nextRecord()) {
 
                     $db->query("UPDATE dbquery_result SET ".$store_sql." WHERE id = ".$db->f("id"));
-                }
-                else {
+                } else {
 
                     $db->query("INSERT INTO dbquery_result SET intranet_id = ".$this->kernel->intranet->get("id").", ".$this->store_user_condition.", toplevel = 1, ".$store_sql);
                 }
-            }
-            else {
+            } else {
                 $db->query("SELECT id FROM dbquery_result WHERE intranet_id = ".$this->kernel->intranet->get("id")." AND ".$this->store_user_condition." AND toplevel = 0 AND name = \"".$this->store_name."\"");
                 if($db->nextRecord()) {
                     $db->query("UPDATE dbquery_result SET ".$store_sql." WHERE id = ".$db->f("id"));
-                }
-                else {
-
+                } else {
                     $db->query("INSERT INTO dbquery_result SET intranet_id = ".$this->kernel->intranet->get("id").", ".$this->store_user_condition.", toplevel = 0, ".$store_sql);
                 }
             }
@@ -676,10 +856,15 @@ class DBQuery {
 
     }
 
-        /**
+    /**
      * Retunere streng der bruges i sql-sætning
+     *
+     * @param string $extra_condition @todo what
+     *
+     * @return string
      */
-    function getSqlString($extra_condition = "") {
+    protected function getSqlString($extra_condition = "")
+    {
 
         $where = $this->getConditionString();
         $order_by = $this->getSortingString();
@@ -708,12 +893,12 @@ class DBQuery {
 
 
     /**
-     * Private
-     *
      * Bruges til at sammensætte condition-strengene
+     *
+     * @return string
      */
-
-    function getConditionString() {
+    protected function getConditionString()
+    {
 
         $condition = $this->condition;
 
@@ -733,8 +918,11 @@ class DBQuery {
 
     /**
      * Benyttes til at sammensætte sorting-strengene.
+     *
+     * @return string
      */
-    function getSortingString() {
+    protected function getSortingString()
+    {
 
         $sorting = $this->sorting;
 
@@ -751,7 +939,15 @@ class DBQuery {
         return $sql;
     }
 
-    function display($type) {
+    /**
+     * @todo what
+     *
+     * @param string $type @todo what
+     *
+     * @return string
+     */
+    public function display($type)
+    {
         switch ($type) {
             case 'paging':
                 $paging = $this->getPaging('html');
@@ -766,160 +962,46 @@ class DBQuery {
                 $size = $this->getRecordsetSize();
 
                 return '<div class="pagingNav">Side: '.$links.'<br />Viser: '.$size['show_from'].' til '.$size['show_to'].' af '.$size['number_of_rows'].'. </div>';
-              break;
-       case 'character':
-                   if (count($this->getCharacters("html")) > 0) {
-              $links = implode(" - ", $this->getCharacters("html"));
-              return '<div class="characterNav">- ' . $links . ' -</div>';
-          }
-          else {
-              return '';
-          }
-           break;
-    }
-  }
-}
-
-/*
-
-    function getConditionString($use = "") {
-        // Her skal hele condition strengen splittes op mellem hvert AND og OR
-        // Felterne skal kontrolleres af de er defineret i defineConditionField
-        // Felternes type kontrolleres. Hvis det er date, laves datoen om til uk-date (2004-12-12)
-        // sql-strengen konstrueres ud fra de validerede og evt. ændrede værdier
-
-        if($use == "default") {
-            $condition = $this->default_condition;
-        }
-        else {
-            $condition = $this->condition;
-        }
-
-        $sql = "";
-
-        for($i = 0, $mi = count($condition); $i < $mi; $i++) {
-
-            if($i != 0) {
-                // Alle andre end den første sættes der et AND før.
-                $sql .= " AND ";
-            }
-
-            // opdeler strengen ved " så vi kan sortere strenge væk.
-            $strings = split('\"', $condition[$i]);
-
-            for($j = 0, $mj = count($strings); $j < $mj; $j++) {
-
-                $strings[$j] = trim($strings[$j]);
-                while($strings[$j] != "") {
-                    // '(payed=2)AND description = '
-
-                    if(substr($strings[$j], 0, 1) == ")") {
-                        // Hvis strengen start med ) tager vi den ud og putter i $sql. Det kan ske i første array efter en streng
-                        $sql .= ")";
-                        $strings[$j] = trim(substr($strings[$j], 1));
-
-                        if($strings[$j] == "") {
-                            // Det kan være at det eneste der er i strengen er en ) så hvis der ikke er mere, køre vi videre til næste.
-                            continue;
-                        }
-
-                    }
-
-                    if(substr($strings[$j], 0, 3) == "AND") {
-                        $sql .= " AND ";
-                        $strings[$j] = trim(substr($strings[$j], 3));
-                    }
-                    elseif(substr($strings[$j], 0, 2) == "OR") {
-                        $strings[$j] = trim(substr($strings[$j], 2));
-                        $sql .= " OR ";
-                    }
-                    else {
-                        // Det er kan være starten på en streng så det er OK.
-                    }
-
-                    if(substr($strings[$j], 0, 1) == "(") {
-                        // Hvis strengen starter med ( tager vi den ud og putter i $sql
-                        $sql .= "(";
-                        $strings[$j] = substr($strings[$j], 1);
-                        $strings[$j] = trim($strings[$j]);
-                    }
-
-                    if(ereg("^([a-z0-9_\.]+) *(=|<|>|<=|>=|!=|LIKE) *$", $strings[$j], $parts)) {
-                        // Hvis det er den sidste før der kommer en streng
-
-                        $field = $parts[1];
-                        $operator = $parts[2];
-                        $operator_after = "";
-                        $j++; // Vi tager den næste der er en streng; Måske lige et tjek her at der findes en streng.
-                        $value = $strings[$j];
-                    }
-                    elseif(ereg("^([a-z0-9_\.]+) *(=|<|>|<=|>=|!=) *(-?[0-9]+|NOW\(\))(.*)$", $strings[$j], $parts)) {
-                        // Alle andre strenge skulle gerne kunne dækkes af denne
-                        $field = $parts[1];
-                        $operator = $parts[2];
-                        $operator_after = "";
-                        $value = $parts[3];
-                    }
-                    elseif(ereg("^([a-z0-9_\.]+) *(IN\()([0-9, ]+)\)(.*)$", $strings[$j], $parts)) {
-                        // Alle andre strenge skulle gerne kunne dækkes af denne
-                        $field = $parts[1];
-                        $operator = $parts[2];
-                        $operator_after = ")";
-                        $value = $parts[3];
-                    }
-                    else {
-                        trigger_error("Fejl: '".$strings[$j]."' opfylder ikke mønstret field = [int] / NOW() / IN([int1],[int2],...)", FATAL);
-                    }
-
-                    if(isset($this->condition_field[$field])) {
-                        if($this->condition_field[$field]["type"] == "date") {
-                            if($value == "NOW()") {
-                                $value = "NOW()";
-                            }
-                            else {
-                                $date = new Intraface_Date($value);
-                                if($date->convert2db()) {
-                                    $value = "\"".$date->get()."\"";
-                                }
-                                else {
-                                    $this->error->set("Ugyldig datoformat '".$value."'");
-                                }
-                            }
-                        }
-                        elseif($this->condition_field[$field]["type"] == "string") {
-                            $value = "\"".$value."\"";
-                        }
-                        else {
-                            // integer
-                            if($operator != "IN(") {
-                                if($value != intval($value)) {
-                                    $this->error->set("Dette skal være et tal '".$value."'");
-                                }
-                            }
-                            $value = intval($value);
-                        }
-
-                        $sql .= $field." ".$operator." ".$value.$operator_after;
-                    }
-                    else {
-                        trigger_error("Feltet '".$field."' er ikke defineret", FATAL);
-                    }
-
-                    $strings[$j] = trim($parts[4]);
-                    if(substr($strings[$j], 0, 1) == ")") {
-                        // Hvis strengen slutter med ) tager vi den ud og putter i $sql
-                        $sql .= ")";
-                        $strings[$j] = substr($strings[$j], 1);
-                        $strings[$j] = trim($strings[$j]);
-                    }
+            break;
+            case 'character':
+                if (count($this->getCharacters("html")) > 0) {
+                    $links = implode(" - ", $this->getCharacters("html"));
+                    return '<div class="characterNav">- ' . $links . ' -</div>';
+                } else {
+                    return '';
                 }
-            }
+            break;
         }
-
-        return($sql);
     }
+
+    /**
+     * get table name
+     *
+     * @return string
+     */
+     public function getTableName()
+     {
+         return $this->table;
+     }
+
+     /**
+      * returns whether dbquery uses characters
+      *
+      * @return boolean
+      */
+     public function getUseCharacter()
+     {
+         return $this->use_character;
+     }
+
+     /**
+      * returns the paging var name
+      *
+      * @return string
+      */
+     public function getPagingVarName()
+     {
+         return $this->paging_var_name;
+     }
 }
-
-*/
-
 ?>
