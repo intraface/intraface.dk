@@ -182,19 +182,25 @@ class Basket
      */
     public function saveAddress($input)
     {
-        if (empty($input['cvr'])) {
-            $input['cvr'] = '';
-        }
+        settype($input['name'], 'string');
+        settype($input['contactperson'], 'string');
+        settype($input['address'], 'string');
+        settype($input['postcode'], 'string');
+        settype($input['city'], 'string');
+        settype($input['country'], 'string');
+        settype($input['cvr'], 'string');
+        settype($input['email'], 'string');
+        settype($input['phone'], 'string');
 
-        $sql = "name = \"".$input['name']."\"," .
-            "contactperson = \"".$input['contactperson']."\", " .
-            "address = \"".$input['address']."\", " .
-            "postcode = \"".$input['postcode']."\", " .
-            "city = \"".$input['city']."\", ".
-            "country = \"".$input['country']."\", ".
-            "cvr = \"".$input['cvr']."\", ".
-            "email =\"".$input['email']."\", ".
-            "phone = \"".$input['phone']."\"";
+        $sql = "name = \"".safeToDb($input['name'])."\"," .
+            "contactperson = \"".safeToDb($input['contactperson'])."\", " .
+            "address = \"".safeToDb($input['address'])."\", " .
+            "postcode = \"".safeToDb($input['postcode'])."\", " .
+            "city = \"".safeToDb($input['city'])."\", ".
+            "country = \"".safeToDb($input['country'])."\", ".
+            "cvr = \"".safeToDb($input['cvr'])."\", ".
+            "email =\"".safeToDb($input['email'])."\", ".
+            "phone = \"".safeToDb($input['phone'])."\"";
 
         return $this->saveToDb($sql);
     }
