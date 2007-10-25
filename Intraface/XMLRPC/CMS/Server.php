@@ -97,14 +97,13 @@ class Intraface_XMLRPC_CMS_Server {
     function getPageList($credentials, $site_id, $search = '') {
 
         $this->checkCredentials($credentials);
-
         $site_id = intval($site_id);
-        $type = strip_tags($search['type']);
 
         $this->factory($site_id);
 
         $cmspage = new CMS_Page($this->cmssite);
         if (isset($search['type'])) {
+            $search['type'] = strip_tags($search['type']);
             $cmspage->dbquery->setFilter('type', $search['type']);
         }
 
