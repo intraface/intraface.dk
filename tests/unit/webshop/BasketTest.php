@@ -75,6 +75,7 @@ class BasketTest extends PHPUnit_Framework_TestCase
     {
         $db = MDB2::factory(DB_DSN);
         $result = $db->query('TRUNCATE basket');
+        $result = $db->query('TRUNCATE basket_details');
         $result = $db->query('TRUNCATE product');
     }
 
@@ -241,6 +242,46 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($basket->saveCustomerComment($comment));
         
         $this->assertEquals($basket->getCustomerComment(), array('customer_comment' => $comment));
+    }
+    
+    function testSaveAddressOnFullAddress() {
+        $basket = $this->createBasket();
+        
+        $address = array('name' => 'my name',
+            'contactperson' => 'my contactperson name',
+            'address' => 'my address',
+            'postcode' => '1234',
+            'city' => 'my city',
+            'country' => 'my country',
+            'cvr' => '12345678',
+            'email' => 'email@intraface.dk',
+            'phone' => '87654321');
+        
+        $this->assertTrue($basket->saveAddress($address));
+        
+        $this->assertEquals($address, $basket->getAddress());
+    }
+    
+        function testSaveAddressOnIncompleteAddress() {
+        $basket = $this->createBasket();
+        
+        $address = array('name' => 'my name',
+            'address' => 'my address',
+            'city' => 'my city');
+        
+        $address_return = array('name' => 'my name',
+            'contactperson' => '',
+            'address' => 'my address',
+            'postcode' => '',
+            'city' => 'my city',
+            'country' => '',
+            'cvr' => '',
+            'email' => '',
+            'phone' => '');
+        
+        $this->assertTrue($basket->saveAddress($address));
+        
+        $this->assertEquals($address_return, $basket->getAddress());
     }
 
 }
