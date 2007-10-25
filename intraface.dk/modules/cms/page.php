@@ -10,46 +10,46 @@ $error = array();
 if (!empty($_POST)) {
 
 	$files = '';
-	if (is_array($_POST['section'])) {
-	foreach ($_POST['section'] AS $key=>$value) {
-		$section = CMS_Section::factory($kernel, 'id', $key);
-
-		if ($section->get('type') == 'picture') {
-
-			if(!empty($_FILES) && !is_array($files)) {
-				$filehandler = new FileHandler($kernel);
-				$filehandler->createUpload();
-				$files = $filehandler->upload->getFiles();
-			}
-
-			if(is_array($files)) {
-				foreach($files AS $file) {
-					if($file->getProp('form_name') == 'new_picture_'.$key) {
-
-						$filehandler = new FileHandler($kernel);
-						$filehandler->createUpload();
-						$filehandler->upload->setSetting('file_accessibility', 'public');
-						$pic_id = $filehandler->upload->upload($file);
-
-						if($pic_id != 0) {
-							$value['pic_id'] = $pic_id;
-						}
-
-						// Vi har fundet filen til som passer til dette felt, så er der ikke nogen grund til at køre videre.
-						break;
-					}
-				}
-			}
-
-			if(!isset($value['pic_id'])) $value['pic_id'] = 0;
-		}
-
-		// print_r($value);
-
-		if (!$section->save($value)) {
-			$error[$section->get('id')] = $translation->get('error in section') . ' ' . strtolower(implode($section->error->message, ', '));
-		}
-	}
+	if (isset($_POST['section']) && is_array($_POST['section'])) {
+    	foreach ($_POST['section'] AS $key=>$value) {
+    		$section = CMS_Section::factory($kernel, 'id', $key);
+    
+    		if ($section->get('type') == 'picture') {
+    
+    			if(!empty($_FILES) && !is_array($files)) {
+    				$filehandler = new FileHandler($kernel);
+    				$filehandler->createUpload();
+    				$files = $filehandler->upload->getFiles();
+    			}
+    
+    			if(is_array($files)) {
+    				foreach($files AS $file) {
+    					if($file->getProp('form_name') == 'new_picture_'.$key) {
+    
+    						$filehandler = new FileHandler($kernel);
+    						$filehandler->createUpload();
+    						$filehandler->upload->setSetting('file_accessibility', 'public');
+    						$pic_id = $filehandler->upload->upload($file);
+    
+    						if($pic_id != 0) {
+    							$value['pic_id'] = $pic_id;
+    						}
+    
+    						// Vi har fundet filen til som passer til dette felt, så er der ikke nogen grund til at køre videre.
+    						break;
+    					}
+    				}
+    			}
+    
+    			if(!isset($value['pic_id'])) $value['pic_id'] = 0;
+    		}
+    
+    		// print_r($value);
+    
+    		if (!$section->save($value)) {
+    			$error[$section->get('id')] = $translation->get('error in section') . ' ' . strtolower(implode($section->error->message, ', '));
+    		}
+    	}
 	}
 	// die();
 	if (empty($error) AND count($error) == 0) {
