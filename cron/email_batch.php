@@ -16,6 +16,7 @@
 session_start();
 
 require_once 'common.php';
+require_once("ErrorHandler/Observer/File.php");
 
 $db = MDB2::singleton(DB_DSN);
 $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
@@ -40,5 +41,12 @@ while ($row = $result->fetchRow()) {
 
 }
 
+$logger = new ErrorHandler_Observer_File(ERROR_LOG);
+$logger->update(array(
+                'date' => date('r'),
+                'type' => 'CronJob',
+                'message' => 'Cronjob run successfully!',
+                'file' => __FILE__,
+                'line' => __LINE__));
 exit;
 ?>
