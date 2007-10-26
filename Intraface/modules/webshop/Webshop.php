@@ -133,11 +133,11 @@ class Webshop
             $contact_person_id = 0;  
             
             // sørger for at tjekke om det er et firma
-            if(!empty($input['contactperson']) && $input['contactperson'] != '') {
+            if(isset($input['contactperson']) && $input['contactperson'] != '') {
                 $input['type'] = 'corporation'; // firma
             }
             
-            if(!empty($input['customer_ean']) && $input['customer_ean'] != '') {
+            if(isset($input['customer_ean']) && $input['customer_ean'] != '') {
                 // sets preffered invoice to electronic.
                 $input['preferred_invoice'] = 3;
             }
@@ -160,6 +160,8 @@ class Webshop
         // we update/add the contactperson.     
         if (isset($input['type']) && $input['type'] == 'corporation') { // firma
             $this->contact->loadContactPerson($contact_person_id);
+            settype($input['contactemail'], 'string');
+            settype($input['contactphone'], 'string');
             if (!$contact_person_id = $this->contact->contactperson->save(array('name'=>$input['contactperson'], 'email'=>$input['contactemail'], 'phone'=>$input['contactphone']))) {
                 $this->error->merge($this->contact->contactperson->error->message);
                 return false;
