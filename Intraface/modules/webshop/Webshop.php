@@ -174,8 +174,11 @@ class Webshop
         
         $value['this_date'] = date('d-m-Y');
         $value['due_date'] = date('d-m-Y');
+        settype($input['description'], 'string');
         $value['description'] = $input['description'];
+        settype($input['internal_note'], 'string');
         $value['internal_note'] = $input['internal_note'];
+        settype($input['message'], 'string');
         $value['message'] = $input['message'];
 
         if(isset($input['customer_coupon']) && $input['customer_coupon'] != '') {
