@@ -57,7 +57,7 @@ require_once 'Intraface/3Party/Database/Db_sql.php';
  * if(isset($_POST['submit'])) {
  *     // save something
  *     // optional parameter
- *     $redirect->setParameter("add_contact_id", $added_id); // Denne sï¿½tter parameter som skal sendes tilbage til siden. Den sendes dog kun tilbage hvis askParameter er sat ved opstart af redirect. Hvis ask er sat til multiple, sï¿½ gemmes der en ny hver gang den aktiveres, hvis ikke, overskrives den
+ *     $redirect->setParameter("add_contact_id", $added_id); // Denne sætter parameter som skal sendes tilbage til siden. Den sendes dog kun tilbage hvis askParameter er sat ved opstart af redirect. Hvis ask er sat til multiple, sï¿½ gemmes der en ny hver gang den aktiveres, hvis ikke, overskrives den
  *
  *     // the redirect
  *     $standard_page_without_redirect = 'standard.php';
@@ -157,6 +157,7 @@ class Redirect
 
         $this->value['query_variable'] = 'redirect_id';
         $this->value['query_return_variable'] = 'return_redirect_id';
+        $this->value['id'] = 0;
 
         $this->id = (int)$id;
         if($this->id > 0) {
@@ -233,50 +234,45 @@ class Redirect
         $reset = false;
         $id = 0;
         if($type == 'go') {
-            // Vi starter en ny redirect pï¿½ siden, derfor skal vi ikke her slette eksisterende redirects til denne side.
+            // Vi starter en ny redirect på siden, derfor skal vi ikke her slette eksisterende redirects til denne side.
             $id = 0;
         } else {
             if(($type == 'receive' && isset($_GET[$query_variable]))) {
                 // Vi modtager en redirect fra url'en. Derfor sletter vi alle andre redirects til denne side.
                 $reset = true;
                 $id = intval($_GET[$query_variable]);
-                $redirect = new Redirect($kernel, $id);
 
             } elseif($type == 'return' && isset($_GET[$query_return_variable])) {
-                // Vi returnerer med en vï¿½rdi. Der kan vï¿½re en eksisterende redirect til denne side, som vi skal benytte igen. Vi sletter ikke andre redirects.
+                // Vi returnerer med en værdi. Der kan være en eksisterende redirect til denne side, som vi skal benytte igen. Vi sletter ikke andre redirects.
                 $id = intval($_GET[$query_return_variable]);
             } elseif(isset($_SERVER['HTTP_REFERER'])) {
-                // Vi arbejder inden for samme side. Vi finder forhï¿½bentligt en redirect. Under alle omstï¿½ndigheder sletter vi hvad vi ikke skal bruge.
+                // Vi arbejder inden for samme side. Vi finder forhåbentligt en redirect. Under alle omstændigheder sletter vi hvad vi ikke skal bruge.
                 $reset = true;
 
                 $url_parts = explode("?", $_SERVER['HTTP_REFERER']);
                 // print("b");
 
-                  $this_uri = Redirect::thisUri();
+                $this_uri = Redirect::thisUri();
 
                 // print($this_uri.' == '.$url_parts[0]);
                 if($this_uri == $url_parts[0]) {
                     // print("c");
-                    // Vi arbejder inden for den samme side, sï¿½ finder vi id ud fra siden.
+                    // Vi arbejder inden for den samme side, så finder vi id ud fra siden.
                     $db = new DB_sql;
                     //print "SELECT id FROM redirect WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND user_id = ".$this->kernel->user->get('id')." AND destination_url = \"".$_SERVER["SCRIPT_URI"]."\"";
                     $db->query("SELECT id FROM redirect WHERE intranet_id = ".$kernel->intranet->get('id')." AND user_id = ".$kernel->user->get('id')." AND destination_url = \"".$this_uri."\" ORDER BY date_created DESC");
                     if($db->nextRecord()) {
-
                         $id = $db->f('id');
                     } else {
-
                         $id = 0;
                     }
                 } else {
                     // print("d");
-                    // Der er ikke sat et redirect_id, vi er ikke inden for samme side, sï¿½ mï¿½ det vï¿½re et kald til siden som ikke benytter redirect. Vi sletter alle redirects til denne side.
+                    // Der er ikke sat et redirect_id, vi er ikke inden for samme side, så må det være et kald til siden som ikke benytter redirect. Vi sletter alle redirects til denne side.
                     $reset = true;
                     $id = 0;
                 }
             }
-
-
         }
 
         $redirect = new Redirect($kernel, $id);
@@ -361,8 +357,10 @@ class Redirect
         if($this->id) {
             $db = new DB_sql;
             $db->query("UPDATE redirect SET identifier = \"".safeToDb($identifier)."\" WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
+            return true;
         } else {
             $this->identifier = safeToDB($identifier);
+            return true;
         }
     }
 
@@ -507,7 +505,7 @@ class Redirect
     function reset()
     {
         if($this->id == 0) {
-            // @todo Kan de nu ogsï¿½ vï¿½re rigtigt at den ikke kan slette hvor id er 0!
+            // @todo Kan de nu også være rigtigt at den ikke kan slette hvor id er 0!
             // trigger_error("id er ikke sat i Redirect->reset", E_USER_ERROR);
         }
 
@@ -562,17 +560,17 @@ class Redirect
      *
      * @return boolean
      */
-    function askParameter($key, $type = 'single')
+    public function askParameter($key, $type = 'single')
     {
         $key = safeToDb($key);
         $type = safeToDb($type);
         if($this->id == 0) {
-            trigger_error("Der skal gemmes en redirect med setDestination fï¿½r der kan sï¿½ttes en askParameter", E_USER_EROR);
+            trigger_error("You need to use setDestination() before you use askParameter()", E_USER_EROR);
             return false;
         }
 
         $multiple = 0;
-        if(!in_array($type, array('single', 'multiple'))) trigger_error('Ugyldig type "'.$type.'" i Redirect->askParameter. Den kan vï¿½re "single" eller "multiple"', E_USER_ERROR);
+        if(!in_array($type, array('single', 'multiple'))) trigger_error('Invalid type "'.$type.'" in Redirect->askParameter. It can either be "single" or "multiple"', E_USER_ERROR);
         if($type == 'multiple') $multiple = 1;
 
         $db = new DB_Sql;
@@ -587,7 +585,7 @@ class Redirect
      *
      * @return boolean
      */
-    function setParameter($key, $value, $extra_value = '')
+    public function setParameter($key, $value, $extra_value = '')
     {
         if($this->id == 0) {
             trigger_error("id is not set IN Redirect->setParameter. You might want to consider the possibility that redirect id both could and could not be set by the call of setParameter, and therefor want to make a check before.", E_USER_ERROR);
@@ -628,7 +626,7 @@ class Redirect
      *
      * @return boolean
      */
-    function isMultipleParameter($key)
+    public function isMultipleParameter($key)
     {
         if($this->id == 0) {
             trigger_error("id er ikke sat i Redirect->isMultipleParameter", E_USER_ERROR);
@@ -647,7 +645,7 @@ class Redirect
      *
      * @return mixed
      */
-    function removeParameter($key, $value)
+    public function removeParameter($key, $value)
     {
         if($this->id == 0) {
             trigger_error("id er ikke sat i Redirect->removeParameter", E_USER_ERROR);
@@ -664,55 +662,7 @@ class Redirect
         }
         return false;
     }
-
-    /**
-     * Returns the identifier
-     *
-     * @todo replace all instances of calls to $redirect->get('identifier');
-     *
-     * @return string
-     */
-    function getIdentifier()
-    {
-        return $this->get('identifier');
-    }
-
-    /**
-     * Returns the id
-     *
-     * @todo replace all instances of calls to $redirect->get('id');
-     *
-     * @return integer
-     */
-    function getId()
-    {
-        return $this->get('id');
-    }
-
-    /**
-     * Returns the redirect query string
-     *
-     * @todo replace all instances of calls to $redirect->get('redirect_query_string');
-     *
-     * @return string
-     */
-    function getRedirectQueryString()
-    {
-        return $this->get('redirect_query_string');
-    }
-
-    /**
-     * Returns the redirect query string
-     *
-     * @todo replace all instances of calls to $redirect->get('return_url');
-     *
-     * @return string
-     */
-    function getReturnUrl()
-    {
-        return $this->get('return_url');
-    }
-
+    
     /**
      * Gets multiple parameter
      *
@@ -721,10 +671,10 @@ class Redirect
      *
      * @return mixed
      */
-    function getParameter($key, $with_extra_value = '')
+    public function getParameter($key, $with_extra_value = '')
     {
         if($this->id == 0) {
-            trigger_error("id er ikke sat i Redirect->getMultipleParameter", E_USER_ERROR);
+            trigger_error('id er ikke sat i Redirect->getMultipleParameter', E_USER_ERROR);
         }
 
         $key = safeToDb($key);
@@ -732,10 +682,10 @@ class Redirect
         $i = 0;
         $parameter = array();
         $multiple = 0;
-        $db->query("SELECT id, multiple FROM redirect_parameter WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND redirect_id = ".$this->id." AND parameter = \"".$key."\"");
+        $db->query('SELECT id, multiple FROM redirect_parameter WHERE intranet_id = '.$this->kernel->intranet->get('id').' AND redirect_id = '.$this->id.' AND parameter = "'.$key.'"');
         if($db->nextRecord()) {
             $multiple = $db->f('multiple');
-            $db->query("SELECT id, value, extra_value FROM redirect_parameter_value WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND redirect_parameter_id = ".$db->f('id'));
+            $db->query('SELECT id, value, extra_value FROM redirect_parameter_value WHERE intranet_id = '.$this->kernel->intranet->get('id').' AND redirect_parameter_id = '.$db->f('id').' ORDER BY id');
             while($db->nextRecord()) {
                 if($with_extra_value == 'with_extra_value') {
 
@@ -761,12 +711,60 @@ class Redirect
     }
 
     /**
+     * Returns the identifier
+     *
+     * @todo replace all instances of calls to $redirect->get('identifier');
+     *
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->get('identifier');
+    }
+
+    /**
+     * Returns the id
+     *
+     * @todo replace all instances of calls to $redirect->get('id');
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->get('id');
+    }
+
+    /**
+     * Returns the redirect query string
+     *
+     * @todo replace all instances of calls to $redirect->get('redirect_query_string');
+     *
+     * @return string
+     */
+    public function getRedirectQueryString()
+    {
+        return $this->get('redirect_query_string');
+    }
+
+    /**
+     * Returns the redirect query string
+     *
+     * @todo replace all instances of calls to $redirect->get('return_url');
+     *
+     * @return string
+     */
+    private function getReturnUrl()
+    {
+        return $this->get('return_url');
+    }
+
+    /**
      *
      * @todo this should be private soon
      */
     function get($key)
     {
-        if (!empty($this->value[$key])) {
+        if (isset($this->value[$key])) {
             return $this->value[$key];
         } else {
             return '';
