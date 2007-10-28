@@ -165,7 +165,7 @@ class User extends Standard {
      * @return boolean
      */
     function hasSubAccess($module, $sub_access, $intranet_id = 0) {
-        
+
         settype($intranet_id, "integer");
         if($intranet_id == 0) $intranet_id = $this->intranet_id;
 
@@ -193,7 +193,7 @@ class User extends Standard {
             $sub_access_id = intval($sub_access);
         }
 
-        // If the permissions are not loaded, we will do that. 
+        // If the permissions are not loaded, we will do that.
         if(empty($this->permissions['intranet']['module'])) {
             // Vi tjekker om intranettet har adgang til modullet.
             // er den ikke unødvendig - det kan vi vel lave i den næste
@@ -211,7 +211,7 @@ class User extends Standard {
                 $this->permissions['intranet']['module'][$row['id']];
             }
         }
-        
+
         // first we check whether the use has access to the module.
         if(empty($this->permissions['intranet']['module'][$module_id]) OR $this->permissions['intranet']['module'][$module_id] !== true) {
             return false;
@@ -219,7 +219,7 @@ class User extends Standard {
 
         // then we check whether there is access to the sub access
         if (!empty($this->permissions['user']['module']['subaccess'][$sub_access_id]) AND $this->permissions['user']['module']['subaccess'][$sub_access_id] === true) {
-            
+
             return true;
         }
 
@@ -407,7 +407,7 @@ class User extends Standard {
 
 
         if($result->numRows() == 1) {
-            $row = $result->fetchRow();
+            $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
             if($this->hasIntranetAccess($row["active_intranet_id"])) {
                 return($row['active_intranet_id']);
             }
@@ -419,7 +419,7 @@ class User extends Standard {
         if(PEAR::isError($result)) {
             trigger_error($result->getUserInfo(), E_USER_ERROR);
         }
-        if($row = $result->fetchRow()) {
+        if($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             return $row['id'];
         }
         else {
