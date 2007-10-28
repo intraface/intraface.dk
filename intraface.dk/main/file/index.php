@@ -10,8 +10,9 @@
 
 require('../../common.php');
 
-// den her er klodset - ved ikke om den bruges
+// den her er klodset - den henter $_file_type;
 require(PATH_INCLUDE_CONFIG.'setting_file_type.php');
+
 
 // file should stop if no querystring
 if (empty($_SERVER["QUERY_STRING"])) {
@@ -80,7 +81,7 @@ $file_path = $filehandler->get('file_path');
 $filehandler_shared->includeFile('InstanceHandler.php');
 $instancehandler = new InstanceHandler($filehandler);
 
-if($instancehandler->_checkType($query_parts[3]) !== false) {
+if($instancehandler->checkType($query_parts[3]) !== false) {
     $filehandler->createInstance($query_parts[3]);
 
     $file_path = $filehandler->instance->get('file_path');
