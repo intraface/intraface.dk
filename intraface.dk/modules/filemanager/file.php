@@ -88,7 +88,7 @@ $page->start(safeToHtml($translation->get('file')) . ': ' . $filemanager->get('f
     <?php
     if($file_type['image'] == 1) {
         $filemanager->createInstance();
-        $instances = $filemanager->instance->getTypes();
+        $instances = $filemanager->instance->getList();
 
         ?>
         <h3><?php echo safeToHtml($translation->get('file sizes')); ?></h3>
@@ -99,6 +99,7 @@ $page->start(safeToHtml($translation->get('file')) . ': ' . $filemanager->get('f
                 <th><?php echo safeToHtml($translation->get('image width')); ?></th>
                 <th><?php echo safeToHtml($translation->get('image height')); ?></th>
                 <th><?php echo safeToHtml($translation->get('file size')); ?></th>
+                <th></th>
             </thead>
             <tbody>
                 <?php
@@ -119,12 +120,21 @@ $page->start(safeToHtml($translation->get('file')) . ': ' . $filemanager->get('f
                             }
                             ?>
                         </td>
+                        <td><a href="crop_image.php?id=<?php echo intval($filemanager->get('id')); ?>&instance_type=<?php echo safeToHtml($instance['name']); ?>"><?php echo safeToHtml($translation->get('custom cropping')); ?></a>
                     </tr>
                     <?php
                 }
                 ?>
             </tbody>
         </table>
+        <?php if($kernel->user->hasModuleAccess('administration')): ?>
+            <?php
+            $shared_filehandler = $kernel->useShared('filehandler');
+            ?>
+            <ul class="options">
+                <li><a href="<?php echo $shared_filehandler->getPath(); ?>settings.php"><?php echo safeToHtml($translation->get('manage your files sizes')); ?></a></li>
+            </ul>
+        <?php endif; ?>
         <?php
     }
     ?>
@@ -137,7 +147,7 @@ $page->start(safeToHtml($translation->get('file')) . ': ' . $filemanager->get('f
 
     <?php
     if($file_type['image'] == 1) {
-        $filemanager->createInstance('small');
+        $filemanager->createInstance('system-small');
         ?>
         <div class="box" style="text-align: center;">
             <img src="<?php echo safeToHtml($filemanager->instance->get('file_uri')); ?>" alt="" />
