@@ -51,7 +51,7 @@ define('DB_DSN', 'mysql://'.DB_USER.':'.DB_PASS.'@'.DB_HOST.'/'.DB_NAME.'');
 require_once 'config/setting_themes.php';
 
 // functions
-require_once 'functions/functions.php';
+require_once 'Intraface/functions/functions.php';
 
 // third party .
 require_once '3Party/Database/Db_sql.php';
@@ -109,20 +109,20 @@ if(defined('TIMEZONE')) {
 }
 
 require_once 'ErrorHandler.php';
-require_once 'ErrorHandler/Observer/Echo.php';
+//require_once 'ErrorHandler/Observer/Echo.php';
 require_once 'ErrorHandler/Observer/File.php';
 
 function intrafaceBackendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
     $errorhandler = new ErrorHandler;
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
-    $errorhandler->addObserver(new ErrorHandler_Observer_Echo, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
+    //$errorhandler->addObserver(new ErrorHandler_Observer_Echo, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
     return $errorhandler->handleError($errno, $errstr, $errfile, $errline, $errcontext);
 }
 
 function intrafaceBackendExceptionhandler($e) {
     $errorhandler = new ErrorHandler;
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
-    $errorhandler->addObserver(new ErrorHandler_Observer_Echo);
+    //$errorhandler->addObserver(new ErrorHandler_Observer_Echo);
     return $errorhandler->handleException($e);
 }
 
