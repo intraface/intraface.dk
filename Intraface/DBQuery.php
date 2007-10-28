@@ -453,7 +453,7 @@ class DBQuery {
      *
      * @return void
      */
-    protected function clearAll()
+    public function clearAll()
     {
         $this->condition = array();
         $this->sorting = array();
