@@ -243,7 +243,7 @@ class Validator {
      *      "allow_empty": tillader større
      *      "greater_than_zero": kun større end nul
      *      "zero_or_greater": 0 eller større
-     *			"integer": tillader kun heltal
+     *	    "integer": tillader kun heltal
      *
      * @return boolean
      */
@@ -347,10 +347,13 @@ class Validator {
      */
     function isIdentifier($string, $msg, $param = '')
     {
-        if (empty($string) OR !eregi("^[-_a-z0-9]$", $string)) {
-            return false;
+        $params = explode(",", $param);
+        if (array_search('allow_empty', $params) !== false && empty($string)) {
+            return true;
+        } elseif (eregi("^[a-z0-9_-]+$", $string)) {
+            return true;
         }
-        return true;
+        return false;
     }
 }
 
