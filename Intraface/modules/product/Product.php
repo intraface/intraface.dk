@@ -221,9 +221,8 @@ class Product extends Standard {
 
                 if ($tmp_filehandler->get('is_image')) {
                     $tmp_filehandler->createInstance();
-                    $instances = $tmp_filehandler->instance->getTypes();
+                    $instances = $tmp_filehandler->instance->getList();
                     foreach($instances AS $instance) {
-                        if($instance['name'] == 'manual') CONTINUE;
                         $this->value['pictures'][$key][$instance['name']]['file_uri'] = $instance['file_uri'];
                         $this->value['pictures'][$key][$instance['name']]['name'] = $instance['name'];
                         $this->value['pictures'][$key][$instance['name']]['width'] = $instance['width'];
