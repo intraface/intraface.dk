@@ -443,7 +443,7 @@ class DBQuery {
      *
      * @return void
      */
-    protected function setCondition($string)
+    public function setCondition($string)
     {
         $this->condition[] = $string;
     }
