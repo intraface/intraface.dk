@@ -32,9 +32,15 @@ class FakeRedirectKernel
     }
 }
 
+function safeToDb($input) {
+    return $input;
+}
+
 class RedirectTest extends PHPUnit_Framework_TestCase
 {
     private $table = 'redirect';
+    private $server_vars = array();
+    private $get_vars = array();
 
     function setUp()
     {
@@ -56,7 +62,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($redirect));
     }
 
-    function testGoRedirect()
+    function testGoRedirectAndsetDestination()
     {
         $kernel = new FakeRedirectKernel;
         $redirect = Redirect::go($kernel);
@@ -67,7 +73,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($destination_url . '?redirect_id=1', $url);
     }
 
-    function testRecieveRedirect()
+    function testRecieveRedirectAndGetRedirect()
     {
         // go
         $kernel = new FakeRedirectKernel;
@@ -84,8 +90,95 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $redirect = Redirect::receive($kernel);
         $standard_page_without_redirect = 'standard.php';
         $this->assertEquals($return_url . '&return_redirect_id=1', $redirect->getRedirect($standard_page_without_redirect));
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
     }
+    
+    function testReturnsRedirect()
+    {
+        // go
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $url = $redirect->setDestination($destination_url, $return_url);
 
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk/';
+        $_SERVER['SCRIPT_NAME']  = 'state.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        $standard_page_without_redirect = 'standard.php';
+        $this->assertEquals($return_url . '&return_redirect_id=1', $redirect->getRedirect($standard_page_without_redirect));
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+        
+        // returning
+        $_GET['return_redirect_id'] = 1;
+        $redirect = Redirect::returns($kernel);
+        $this->assertEquals(1, $redirect->getId());
+    }
+    
+    function testLoadingARedirect()
+    {
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $url = $redirect->setDestination($destination_url, $return_url);
+
+        $redirect = new Redirect($kernel, 1);
+        $this->assertEquals(1, $redirect->id);
+    }
+    
+    function testParseUrl() {
+        $redirect = $this->createRedirect();
+        $url = 'http://example.dk/index.php?id=2&uid=3';
+        $this->assertEquals($url, $redirect->parseUrl($url));
+    }
+    
+    function testSetIdentifierBeforeSetDestination() {
+        $redirect = $this->createRedirect();
+        $this->assertTrue($redirect->setIdentifier('identifier1'));
+        
+    }
+    
+    function testSetIdentifierAfterSetDestination() {
+        $redirect = $this->createRedirect();
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $redirect->setDestination($destination_url, $return_url);
+        $this->assertTrue($redirect->setIdentifier('identifier1'));
+    }
+    
+    function testThisUri() {
+        $_SERVER['HTTPS']       = 'https://example.dk/index.php';
+        $_SERVER['HTTP_HOST']   = 'example.dk';
+        $_SERVER['SCRIPT_NAME'] = '/index.php';
+        
+        $redirect = $this->createRedirect();
+        $this->assertEquals('https://'.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME'], $redirect->thisUri());
+        unset($_SERVER['HTTPS']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+    }
+    
+    function testAddQueryString() {
+        $redirect = $this->createRedirect();
+        // does not return anything at this point
+        $redirect->addQueryString('another_id=3');
+    }
+    
+    function testMergeQueryString() {
+        $redirect = $this->createRedirect();
+        $this->assertEquals('index.php?id=1&another_id=2', $redirect->mergeQueryString('index.php?id=1', 'another_id=2'));
+    }
+    
     function testDeleteWithNoIdReturnsTrue()
     {
         $redirect = $this->createRedirect();
@@ -101,18 +194,408 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $url = $redirect->setDestination($destination_url, $return_url);
         $this->assertTrue($redirect->delete());
     }
-
-    function testLoadingARedirect()
+    
+    function testAskParameter()
     {
+        // go
         $kernel = new FakeRedirectKernel;
         $redirect = Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
+        $this->assertTrue($redirect->askParameter('param'));
+    }
+    
+    function testSetParameterWithValidParameter()
+    {
+        // go
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $url = $redirect->setDestination($destination_url, $return_url);
+        $redirect->askParameter('param');
 
-        $redirect = new Redirect($kernel, 1);
-        $this->assertEquals(1, $redirect->id);
-        $this->assertEquals($return_url, $redirect->getReturnUrl());
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk/';
+        $_SERVER['SCRIPT_NAME']  = 'state.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        $this->assertTrue($redirect->setParameter('param', 120));  
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);      
+    }
+    
+    function testSetParameterWithInvalidParameter()
+    {
+        // go
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $url = $redirect->setDestination($destination_url, $return_url);
+        $redirect->askParameter('param');
+
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk/';
+        $_SERVER['SCRIPT_NAME']  = 'state.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        $this->assertFalse($redirect->setParameter('wrong_param', 120));   
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);    
+    }
+    
+    function testIsMultipleParameter() {
+        // go
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $url = $redirect->setDestination($destination_url, $return_url);
+        $this->assertTrue($redirect->askParameter('param', 'multiple'));
+
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk/';
+        $_SERVER['SCRIPT_NAME']  = 'state.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        $this->assertTrue($redirect->isMultipleParameter('param') > 0);
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+    }
+    
+    function testReturnFromRedirectWithSingleParameter()
+    {
+        // go
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $url = $redirect->setDestination($destination_url, $return_url);
+        $redirect->askParameter('param');
+
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk/';
+        $_SERVER['SCRIPT_NAME']  = 'state.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        $redirect->setParameter('param', 120);
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+        
+        
+        // returning
+        $_GET['return_redirect_id']     = 1;
+        $redirect = Redirect::returns($kernel);
+        // notice that the returned format is string despite that the given is integer.
+        $this->assertEquals('120', $redirect->getParameter('param'));
+    }
+    
+    function testReturnFromRedirectWithMultiParameter()
+    {
+        // go
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $url = $redirect->setDestination($destination_url, $return_url);
+        $redirect->askParameter('param', 'multiple');
+
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk/';
+        $_SERVER['SCRIPT_NAME']  = 'state.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        $redirect->setParameter('param', 120);
+        $redirect->setParameter('param', 140);
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+        
+        // returning
+        $_GET['return_redirect_id']     = 1;
+        $redirect = Redirect::returns($kernel);
+        // print_r($redirect->getParameter('param'));
+        $this->assertEquals(array(120, 140), $redirect->getParameter('param'));
+    }
+    
+    function testGetIdentifier() {
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $redirect->setIdentifier('identifier1');
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $url = $redirect->setDestination($destination_url, $return_url);
+        
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk/';
+        $_SERVER['SCRIPT_NAME']  = 'state.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        $this->assertEquals('identifier1', $redirect->getIdentifier('identifier1'));
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+    }
+    
+    function testGetId() {
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $url = $redirect->setDestination($destination_url, $return_url);
+        
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk/';
+        $_SERVER['SCRIPT_NAME']  = 'state.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        $this->assertEquals(1, $redirect->getId());
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+    }
+    
+    function testGetRedirectQueryString() {
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $url = $redirect->setDestination($destination_url, $return_url);
+        
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk/';
+        $_SERVER['SCRIPT_NAME']  = 'state.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        $this->assertEquals('redirect_id=1', $redirect->getRedirectQueryString());
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+    }
+    
+    function testLoadRedirectAfterSubmit() {
+        
+        // go
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $url = $redirect->setDestination($destination_url, $return_url);
+        
+        // print_r($this->server_vars);
+        // die;
+        
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk';
+        $_SERVER['SCRIPT_NAME']  = '/page.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+        
+        // recieve after submit to same page
+        $_SERVER['HTTP_REFERER'] = $destination_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk';
+        $_SERVER['SCRIPT_NAME']  = '/page.php';
+        $redirect = Redirect::receive($kernel);
+        $this->assertEquals(1, $redirect->getId());
+        
+    }
+    
+    function testLoadRedirectAfterLoadFromAnotherPage() {
+        
+        // go
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $url = $redirect->setDestination($destination_url, $return_url);
+        
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk';
+        $_SERVER['SCRIPT_NAME']  = '/page.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+        
+        // recieve after refer from another page
+        $_SERVER['HTTP_REFERER'] = 'http://example.dk/another_page.php';
+        $_SERVER['HTTP_HOST']    = 'example.dk';
+        $_SERVER['SCRIPT_NAME']  = '/page.php';
+        $redirect = Redirect::receive($kernel);
+        $this->assertEquals(0, $redirect->getId());
+        
+    }
+    
+    
+    function testLoadRedirectAfterLoadFromAnotherPageAndThenFromTheSamePage() {
+        
+        // go
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $url = $redirect->setDestination($destination_url, $return_url);
+        
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk';
+        $_SERVER['SCRIPT_NAME']  = '/page.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+        
+        // recieve after refer from another page
+        $_SERVER['HTTP_REFERER'] = 'http://example.dk/another_page.php';
+        $_SERVER['HTTP_HOST']    = 'example.dk';
+        $_SERVER['SCRIPT_NAME']  = '/page.php';
+        $redirect = Redirect::receive($kernel);
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        
+        // and the recieve after the same page again
+        // recieve after submit to same page
+        $_SERVER['HTTP_REFERER'] = $destination_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk';
+        $_SERVER['SCRIPT_NAME']  = '/page.php';
+        $redirect = Redirect::receive($kernel);
+        $this->assertEquals(0, $redirect->getId());
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']); 
+    }
+    
+    function testLoadRedirectWithSecondRedirectInBetween() {
+        
+        // go
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $return_url      = 'http://example.dk/state.php?id=1';
+        $destination_url = 'http://example.dk/page.php';
+        $redirect->setDestination($destination_url, $return_url);
+        
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $return_url;
+        $_SERVER['HTTP_HOST']    = 'example.dk';
+        $_SERVER['SCRIPT_NAME']  = '/page.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        $this->assertEquals(1, $redirect->getId());
+        $redirect_two = Redirect::go($kernel);
+        $return_url_two      = 'http://example.dk/page.php';
+        $destination_url_two = 'http://example.dk/add_page.php';
+        $url = $redirect_two->setDestination($destination_url_two, $return_url_two.'?'.$redirect->getRedirectQueryString());
+        $this->assertEquals($destination_url_two.'?redirect_id=2', $url);
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+        
+        // second recieve
+        $_SERVER['HTTP_REFERER'] = $return_url_two;
+        $_SERVER['HTTP_HOST']    = 'example.dk';
+        $_SERVER['SCRIPT_NAME']  = '/add_page.php';
+        $_GET['redirect_id']     = 2;
+        $redirect = Redirect::receive($kernel);
+        $default = 'http://example.dk/another_page.php';
+        $this->assertEquals($return_url_two.'?redirect_id=1&return_redirect_id=2', $redirect->getRedirect($default));
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+    }
+    
+    function testLoadRedirectAfterSecondRedirectAndSubmit() {
+        // go
+        $kernel = new FakeRedirectKernel;
+        $redirect = Redirect::go($kernel);
+        $url1      = 'http://example.dk/state.php?id=1';
+        $url2 = 'http://example.dk/page.php';
+        $redirect->setDestination($url2, $url1);
+        
+        // receiving
+        $_SERVER['HTTP_REFERER'] = $url1;
+        $_SERVER['HTTP_HOST']    = 'example.dk';
+        $_SERVER['SCRIPT_NAME']  = '/page.php';
+        $_GET['redirect_id']     = 1;
+        $redirect = Redirect::receive($kernel);
+        $redirect_two = Redirect::go($kernel);
+        $url3 = 'http://example.dk/add_page.php';
+        $redirect_two->setDestination($url3, $url2.'?'.$redirect->getRedirectQueryString());
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+        
+        // second recieve
+        $_SERVER['HTTP_REFERER'] = $url3;
+        $_SERVER['HTTP_HOST']    = 'example.dk';
+        $_SERVER['SCRIPT_NAME']  = '/add_page.php';
+        $_GET['redirect_id']     = 2;
+        $redirect = Redirect::receive($kernel);
+        $default = 'http://example.dk/another_page.php';
+        $this->assertEquals($url2.'?redirect_id=1&return_redirect_id=2', $redirect->getRedirect($default));
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+        
+        // receiving on first page again
+        $_SERVER['HTTP_REFERER'] = $url3;
+        $_SERVER['HTTP_HOST']    = 'example.dk';
+        $_SERVER['SCRIPT_NAME']  = '/page.php';
+        $_GET['redirect_id']     = 1;
+        $_GET['return_redirect_id']     = 2;
+        $redirect = Redirect::receive($kernel);
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        unset($_GET['redirect_id']);
+        unset($_GET['return_redirect_id']);
+        
+        // return after submit
+        $_SERVER['HTTP_REFERER'] = $url2;
+        $_SERVER['HTTP_HOST']    = 'example.dk';
+        $_SERVER['SCRIPT_NAME']  = '/page.php';
+        $redirect = Redirect::receive($kernel);
+        $this->assertEquals(1, $redirect->getId());
+        unset($_SERVER['HTTP_REFERER']);
+        unset($_SERVER['HTTP_HOST']);
+        unset($_SERVER['SCRIPT_NAME']);
+        
     }
 
     ////////////////////////////////////////////////////////////////////
@@ -120,6 +603,28 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     function createRedirect()
     {
         return new Redirect(new FakeRedirectKernel);
+    }
+    
+    function getVarsFromUrl($url) {
+        
+        $parts = explode('?');
+        if(!isset($parts[1])) {
+            return array();
+        }
+        $params = explode('&', $parts[1]);
+        if(!is_array($params)) {
+            return array();
+        }
+        
+        $param = array();
+        foreach($params AS $p) {
+            $parts = explode('=', $p);
+            if(is_array($parts) && count($parts) == 2) {
+                $param[$parts[0]] = $parts[1];
+            }
+        }
+        return $param;
+        
     }
 
 }
