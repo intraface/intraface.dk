@@ -191,7 +191,7 @@ class intraface_postinstall {
 
         $config = new Config();
         $root = $config->getRoot();
-        $root->createItem('directive', strtoupper('path_include_path'), '@php-dir@');
+        $root->createItem('directive', strtoupper('path_include_path'), '@php-dir@'.PATH_SEPARATOR);
 
         foreach ($this->settings AS $setting) {
             $root->createItem('directive', strtoupper($setting), $answers[$setting]);
