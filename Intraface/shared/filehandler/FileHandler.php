@@ -241,7 +241,7 @@ class FileHandler extends Standard
         $this->value['file_uri_pdf'] = $this->upload_path.$this->value['server_file_name'];
 
         if($this->value['is_image'] == 1) {
-            $this->value['icon_uri'] = $this->file_viewer.'?/'.$this->kernel->intranet->get('public_key').'/'.$db->f('access_key').'/square/'.urlencode($db->f('file_name'));
+            $this->value['icon_uri'] = $this->file_viewer.'?/'.$this->kernel->intranet->get('public_key').'/'.$db->f('access_key').'/system-square/'.urlencode($db->f('file_name'));
             $this->value['icon_width'] = 75;
             $this->value['icon_height'] = 75;
         } else {
