@@ -39,7 +39,17 @@ class InstanceHandler extends Standard
      * @var integer
      */
     private $id;
+    
+    /**
+     * @var object db MDB2 object
+     */
+    private $db;
 
+    /**
+     * @var object instanceManager
+     */
+   private $intancemanager;
+    
     /**
      * Constructor
      *
@@ -65,7 +75,8 @@ class InstanceHandler extends Standard
         $this->id = (int)$id;
         $this->instance_path = $this->file_handler->getUploadPath().'instance/';
 
-        $this->instance_types = $this->_loadTypes();
+        
+        $this->db = MDB2::singleton(DB_DSN);
 
         if($this->file_handler->get('is_image') == 0) {
             // trigger_error("InstanceHandler kan kun startes, hvis filen er et billede i IntanceHandler->InstanceHandler", E_USER_ERROR);
@@ -92,12 +103,6 @@ class InstanceHandler extends Standard
         }
 
         if(strtolower(get_class($file_handler)) != 'filehandler' AND strtolower(get_class($file_handler)) != 'filemanager') {
-        /*
-            // TODO HJÆLP MIG, jeg kan ikke vende denne if-sætning rigtigt.
-            // Men her er det ok.
-        }
-        else {
-        */
             trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->factory (2)", E_USER_ERROR);
         }
         /*
@@ -112,30 +117,26 @@ class InstanceHandler extends Standard
             trigger_error("Filen skal være et billede i IntanceHandler->factory", E_USER_ERROR);
         }
 
-        // Vi skal lige benytte lidt funktion fra klassen.
         $instancehandler = new InstanceHandler($file_handler);
-
-        $types = $instancehandler->_loadTypes();
-        $type_key = $instancehandler->_checkType($type);
-
-        if($type_key === false) {
+        $type = $instancehandler->checkType($type);
+        if($type === false) {
             trigger_error("Ugyldig type '".$type."' i InstanceHandler->factory", E_USER_ERROR);
         }
 
         $db = new DB_sql;
-        $db->query("SELECT id FROM file_handler_instance WHERE intranet_id = ".$file_handler->kernel->intranet->get('id')." AND active = 1 AND file_handler_id = ".$file_handler->get('id')." AND type = ".$type_key);
+        $db->query("SELECT id FROM file_handler_instance WHERE intranet_id = ".$file_handler->kernel->intranet->get('id')." AND active = 1 AND file_handler_id = ".$file_handler->get('id')." AND type_key = ".$type['type_key']);
         if($db->nextRecord()) {
             return new InstanceHandler($file_handler, $db->f('id'));
         } else {
 
-            if($type_key == 1) { // square
-                $resize_type = 'strict';
-            } else {
-                $resize_type = 'relative';
-            }
-
             $file_handler->createImage();
-            $file = $file_handler->image->resize($types[$type_key]['max_width'], $types[$type_key]['max_height'], $resize_type);
+            if(!empty($param['crop_width']) && !empty($param['crop_height'])) {
+                settype($param['crop_offset_x'], 'integer');
+                settype($param['crop_offset_y'], 'integer');
+                $file_handler->image->crop($param['crop_width'], $param['crop_height'], $param['crop_offset_x'], $param['crop_offset_y']);
+                
+            }
+            $file = $file_handler->image->resize($type['max_width'], $type['max_height'], $type['resize_type']);
 
             if(!is_file($file)) {
                 trigger_error("Filen blev ikke opretett i InstanceHandler->factory", E_USER_ERROR);
@@ -145,22 +146,17 @@ class InstanceHandler extends Standard
             $imagesize = getimagesize($file);
             $width = $imagesize[0]; // imagesx($file);
             $height = $imagesize[1]; // imagesy($file);
-
-            $type_key = $instancehandler->_checkType($type, 'mime_type');
-            if($type_key === false) {
-                trigger_error("Ugyldig type i Instancehandler->factory", E_USER_ERROR);
-            }
-
+            
             $db->query("INSERT INTO file_handler_instance SET
                 intranet_id = ".$file_handler->kernel->intranet->get('id').",
                 file_handler_id = ".$file_handler->get('id').",
                 date_created = NOW(),
                 date_changed = NOW(),
-                type = ".$type_key.",
+                type_key = ".$type['type_key'].",
                 file_size = ".(int)$file_size.",
                 width = ".(int)$width.",
                 height = ".(int)$height);
-
+            
             $id = $db->insertedId();
 
             $mime_type = $file_handler->get('file_type');
@@ -177,7 +173,7 @@ class InstanceHandler extends Standard
                 trigger_error("Det var ikke muligt at flytte fil i InstanceHandler->factory", E_USER_ERROR);
             }
 
-            $db->query("UPDATE file_handler_instance SET server_file_name = \"".$server_file_name."\" WHERE intranet_id = ".$file_handler->kernel->intranet->get('id')." AND id = ".$id);
+            $db->query("UPDATE file_handler_instance SET server_file_name = \"".$server_file_name."\", active = 1 WHERE intranet_id = ".$file_handler->kernel->intranet->get('id')." AND id = ".$id);
 
             return new InstanceHandler($file_handler, $id);
         }
@@ -198,13 +194,21 @@ class InstanceHandler extends Standard
             $this->value['id'] = 0;
             return false;
         }
+        $type = $this->checkType((int)$db->f('type_key'), 'type_key');
+        if($type === false) {
+            $this->id = 0;
+            $this->value['id'] = 0;
+            return false;
+        }
+        
+        $this->value['instance_properties'] = $type;
+        $this->value['type'] = $type['name'];
 
         $this->id = $db->f('id');
         $this->value['id'] = $db->f('id');
         $this->value['date_created'] = $db->f('date_created');
         $this->value['date_changed'] = $db->f('date_changed');
-        $this->value['type'] = $this->instance_types[$db->f('type')]['name'];
-        $this->value['instance_properties'] = $this->instance_types[$db->f('type')];
+        
 
         //$this->value['predefined_size'] = $db->f('predefined_size');
         $this->value['server_file_name'] = $db->f('server_file_name');
@@ -242,18 +246,23 @@ class InstanceHandler extends Standard
      *
      * @return array
      */
-    function getTypes() {
+    function getList() {
         $db = new DB_Sql;
 
+        
         $shared_filehandler = $this->file_handler->kernel->useShared('filehandler');
-        $types = $shared_filehandler->getSetting('instance_types');
-
+        $shared_filehandler->includeFile('InstanceManager.php');
+        $instancemanager = new InstanceManager($this->file_handler->kernel);
+        $types = $instancemanager->getList();
+        $i = 0;
+        // if filehander has an id we supply the file information to the array.
         if($this->file_handler->get('id') != 0) {
-            $db->query("SELECT id, width, height, type, file_size FROM file_handler_instance WHERE intranet_id = ".$this->file_handler->kernel->intranet->get('id')." AND file_handler_id = ".$this->file_handler->get('id')." AND active = 1 ORDER BY type");
-             $is_saved = false;
-            if($db->nextRecord()){
-                $is_saved = true;
+            $result = $this->db->query("SELECT id, width, height, type_key, file_size FROM file_handler_instance WHERE intranet_id = ".$this->file_handler->kernel->intranet->get('id')." AND file_handler_id = ".$this->file_handler->get('id')." AND active = 1 ORDER BY type_key");
+            if(PEAR::isError($result)) {
+                trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
+                exit;
             }
+            $file_instances = $result->fetchAll(MDB2_FETCHMODE_ASSOC);
 
             $this->file_handler->createImage();
 
@@ -264,22 +273,26 @@ class InstanceHandler extends Standard
                 $types[$i]['file_size'] = '-';
                 $types[$i]['file_uri'] = FILE_VIEWER.'?/'.$this->file_handler->kernel->intranet->get('public_key').'/'.$this->file_handler->get('access_key').'/'.$types[$i]['name'].'/'.urlencode($this->file_handler->get('file_name'));
 
-
-                if($is_saved && $db->f('type') == $i) {
-                    $types[$i]['width'] = $db->f('width');
-                    $types[$i]['height'] = $db->f('height');
-                    $types[$i]['file_size'] = $db->f('file_size');
-
-                    if(!$db->nextRecord()) {
-                        $is_saved = false;
+                $match_file_instance_key = false;
+                foreach($file_instances AS $file_instance_key => $file_instance) {
+                    if($file_instance['type_key'] == $types[$i]['type_key']) {
+                        $match_file_instance_key = $file_instance_key;
+                        break;
                     }
+                }
+                
+                if($match_file_instance_key !== false) {
+                    $types[$i]['width'] = $file_instances[$match_file_instance_key]['width'];
+                    $types[$i]['height'] = $file_instances[$match_file_instance_key]['height'];
+                    $types[$i]['file_size'] = $file_instances[$match_file_instance_key]['file_size'];
+                } elseif(isset($types[$i]['max_width']) && isset($types[$i]['max_height']) && isset($types[$i]['resize_type']) && $types[$i]['resize_type'] == 'strict') {
+                    $types[$i]['width'] = $types[$i]['max_width'];
+                    $types[$i]['height'] = $types[$i]['max_height'];
                 } elseif(isset($types[$i]['max_width']) && isset($types[$i]['max_height'])) {
                     $tmp_size = $this->file_handler->image->getRelativeSize($types[$i]['max_width'], $types[$i]['max_height']);
                     $types[$i]['width'] = $tmp_size['width'];
                     $types[$i]['height'] = $tmp_size['height'];
-
                 }
-
             }
         }
 
@@ -287,38 +300,26 @@ class InstanceHandler extends Standard
     }
 
     /**
-     * loads types
-     *
-     * @todo I filen main/file/index.php er disse ligeledes skrevet ind SJ
-     *       Mon ikke vi bare kan kalde den her metode direkte i stedet? LO
-     *       Synes det giver mening at have den i denne fil
-     *
-     * @return array
-     */
-    private static function _loadTypes() {
-        return array(
-            0 => array('name' => 'manual', 'max_width' => 3456, 'max_height' => 2304), // Manuelt størrelse
-            1 => array('name' => 'square', 'max_width' => 75, 'max_height' => 75),
-            2 => array('name' => 'thumbnail', 'max_width' => 100, 'max_height' => 67),
-            3 => array('name' => 'small', 'max_width' => 240, 'max_height' => 160),
-            4 => array('name' => 'medium', 'max_width' => 500, 'max_height' => 333),
-            5 => array('name' => 'large', 'max_width' => 1024, 'max_height' => 683),
-            6 => array('name' => 'website', 'max_width' => 780, 'max_height' => 550));
-        // Original (3456 x 2304)
-    }
-
-    /**
      * check type
      *
-     * @param string $type @todo
+     * @param string $type name of type
      *
-     * @return @todo
+     * @return array of type or false;
      */
-    public function _checkType($type) {
-
-        for($i = 0, $max = count($this->instance_types); $i < $max; $i++) {
-            if(isset($this->instance_types[$i]['name']) && $this->instance_types[$i]['name'] == $type) {
-                return $i;
+    public function checkType($type, $compare = 'name') {
+        
+        if(!in_array($compare, array('name', 'type_key'))) {
+            trigger_error('Second parameter to InstanceHander->checkType should be either name or type_key', E_USER_ERROR);
+            return false;
+        }
+        $shared_filehandler = $this->file_handler->kernel->useShared('filehandler');
+        $shared_filehandler->includeFile('InstanceManager.php');
+        $instancemanager = new InstanceManager($this->file_handler->kernel);
+        $instance_types = $instancemanager->getList('include_hidden');
+        
+        for($i = 0, $max = count($instance_types); $i < $max; $i++) {
+            if(isset($instance_types[$i][$compare]) && $instance_types[$i][$compare] == $type) {
+                return $instance_types[$i];
                 exit;
             }
         }
@@ -359,6 +360,22 @@ class InstanceHandler extends Standard
 
         $db = new DB_sql;
         $db->query("SELECT id FROM file_handler_instance WHERE intranet_id = ".$this->file_handler->kernel->intranet->get('id')." AND file_handler_id = ".$this->file_handler->get('id')." AND active = 1");
+        while($db->nextRecord()) {
+            $instance = new InstanceHandler($this->file_handler, $db->f('id'));
+            $instance->delete();
+        }
+
+        return true;
+    }
+    
+    static function deleteInstanceType($filehandler, $instance, $compare = 'name') {
+        
+        die('hmmmmm!');
+        
+        $type = $this->checkType($instance, $compare);
+        
+        $db = new DB_sql;
+        $db->query("SELECT id FROM file_handler_instance WHERE intranet_id = ".$this->file_handler->kernel->intranet->get('id')." AND type_key = ".intval($type['type_key'])." AND active = 1");
         while($db->nextRecord()) {
             $instance = new InstanceHandler($this->file_handler, $db->f('id'));
             $instance->delete();

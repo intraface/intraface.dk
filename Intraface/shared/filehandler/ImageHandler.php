@@ -19,6 +19,11 @@ class ImageHandler extends Standard
      * @var integer
      */
     private $image_library;
+    
+    /**
+     * @var string tmp_file_name
+     */
+    private $tmp_file_name = NULL;
 
     /**
      * Constructor
@@ -63,9 +68,9 @@ class ImageHandler extends Standard
      *
      * @param float  $width  Width
      * @param float  $height Height
-     * @param string @todo
+     * @param string $strict strict (the image fits the width and height strictly) or relative (the image fits inside the width and hight, but keeps ratio)
      *
-     * @return boolean
+     * @return string new file name
      */
     public function resize($width, $height = NULL, $strict = 'relative')
     {
@@ -76,48 +81,111 @@ class ImageHandler extends Standard
             exit;
         }
 
-        $error = $image->load($this->file_handler->get('file_path'));
+        if($this->tmp_file_name != NULL && file_exists($this->tmp_file_name)) {
+            $error = $image->load($this->tmp_file_name);
+        }
+        else {
+            $error = $image->load($this->file_handler->get('file_path'));
+        }
+        
+
+        $image->setOption('quality', 100);
+
+        if($error !== true) {
+            trigger_error("Kunne ikke åbne fil i ImageHandler->resize. ".$error->getMessage(), E_USER_ERROR);
+            return false;
+        }
+
+        if(!in_array($strict, array('relative', 'strict'))) trigger_error("Den tredje parameter i ImageHandle->resize er ikke 'strict' eller 'relative'.", E_USER_ERROR);
+
+        // die($image->img_x.':'.$image->img_y.':'.$width.':'.$height);
+        if($strict == 'strict') {
+            // same aspect ratio: doesn't mapper which way to scale
+            if (($image->img_y/$image->img_x) < ($height/$width)) {
+                $image->scaleByY($height);
+
+                $offset_y = 0;
+                $offset_x = floor(($image->new_x - $width)/2);
+            } else {
+                $image->scaleByX($width);
+                $offset_y = floor(($image->new_y - $height)/2);
+                $offset_x = 0;
+            }
+
+            // die($image->new_x.':'.$image->new_y.':'.$width.':'.$height.': '.$offset_x.': '.$offset_y);
+            if($image->crop($width, $height, $offset_x, $offset_y) !== true){
+                trigger_error("Der opstod en fejl under formatering (crop) af billedet i ImageHandler->resize", E_USER_ERROR);
+                return false;
+            }
+        } else {
+
+            if($image->fit($width, $height) !== true) {
+                trigger_error("Der opstod en fejl under formatering (fit) af billedet i ImageHandler->resize", E_USER_ERROR);
+                return false;
+            }
+        }
+
+        $file_type = $this->file_handler->get('file_type');
+        $new_filename = $this->tempdir_path.date('U').$this->file_handler->kernel->randomKey(10).'.'.$file_type['extension'];
+
+        if($image->save($new_filename) !== true) {
+            trigger_error("Kunne ikke gemme billedet i ImageHandler->resize", E_USER_ERROR);
+            return false;
+        }
+        
+        $this->tmp_file_name = $new_filename;
+        return $new_filename;
+    }
+
+
+
+    /**
+     * crop a picture
+     *
+     * @param float  $width  Width
+     * @param float  $height Height
+     * @param float $offset_x offset x
+     * @param float $offset_y offset y
+     *
+     * @return string new file name
+     */    
+    function crop($width, $height, $offset_x = 0, $offset_y = 0) {
+        $image = Image_Transform::factory($this->image_library);
+        if (PEAR::isError($image)) {
+            trigger_error($image->getMessage() . $image->getUserInfo(), E_USER_ERROR);
+            exit;
+        }
+
+        if($this->tmp_file_name != NULL && file_exists($this->tmp_file_name)) {
+            $error = $image->load($this->tmp_file_name);
+        }
+        else {
+            $error = $image->load($this->file_handler->get('file_path'));
+        }
+        
 
         $image->setOption('quality', 100);
 
         if($error !== true) {
             trigger_error("Kunne ikke åbne fil i ImageHandler->resize. ".$error->getMessage(), E_USER_ERROR);
         }
-
-        if(!in_array($strict, array('relative', 'strict'))) trigger_error("Den tredje parameter i ImageHandle->resize er ikke 'strict' eller 'relative'.", E_USER_ERROR);
-
-        // die($width.":".$height.":".$strict);
-
-        if($strict == 'strict') {
-            // skal lige resizes først!
-            if ($image->img_x > $image->img_y) {
-                $image->scaleByY($height);
-
-                $offset_y = 0;
-                $offset_x = ($image->new_x - $width)/2;
-            } else {
-                $image->scaleByX($width);
-                $offset_y = ($image->new_y - $height)/2;
-                $offset_x = 0;
-            }
-
-            if($image->crop($width, $height, $offset_x, $offset_y) !== true){
-                trigger_error("Der opstod en fejl under formatering (crop) af billedet i ImageHandler->resize", E_USER_ERROR);
-            }
-        } else {
-
-            if($image->fit($width, $height) !== true) {
-                trigger_error("Der opstod en fejl under formatering (fit) af billedet i ImageHandler->resize", E_USER_ERROR);
-            }
+        
+        
+        if($image->crop($width, $height, $offset_x, $offset_y) !== true){
+            trigger_error("Der opstod en fejl under formatering (crop) af billedet i ImageHandler->crop", E_USER_ERROR);
+            return false;
         }
-
+        
         $file_type = $this->file_handler->get('file_type');
 
         $new_filename = $this->tempdir_path.date('U').$this->file_handler->kernel->randomKey(10).'.'.$file_type['extension'];
 
         if($image->save($new_filename) !== true) {
-            trigger_error("Kunne ikke gemme billedet i ImageHandler->resize", E_USER_ERROR);
+            trigger_error("Kunne ikke gemme billedet i ImageHandler->crop", E_USER_ERROR);
+            return false;
         }
+        
+        $this->tmp_file_name = $new_filename;
 
         return $new_filename;
     }

@@ -31,7 +31,8 @@ class Sharedfilehandler Extends Shared {
             3 => 'product',
             4 => 'cms_element_filelist'));
 
-
+        /*
+        // Moved to InstanceHandler 
         $this->addSetting('instance_types', array(
             0 => array('name' => 'manual'), // Manuelt størrelse
             1 => array('name' => 'square', 'max_width' => 75, 'max_height' => 75),
@@ -40,7 +41,7 @@ class Sharedfilehandler Extends Shared {
             4 => array('name' => 'medium', 'max_width' => 500, 'max_height' => 333),
             5 => array('name' => 'large', 'max_width' => 1024, 'max_height' => 683),
             6 => array('name' => 'website', 'max_width' => 780, 'max_height' => 550)));
-
+        */
 
         // Filer der skal inkluderes ved opstart af modul.
         $this->addPreloadFile('FileHandler.php');
