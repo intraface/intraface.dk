@@ -29,16 +29,31 @@ class Kernel
 
     /**
      * Init
+     * 
      *
      * @param string $session Session string
      */
     function __construct($session = null)
     {
-        $this->_session = $session;
+        if($session == NULL) {
+            $this->_session = md5(uniqid(rand(), true));
+        }
+        else {
+            $this->_session = $session;
+        }
         $this->db = MDB2:: singleton(DB_DSN);
         if (PEAR::isError($this->db)) {
             trigger_error($this->db->getMessage() . $this->db->getUserInfo(), E_USER_ERROR);
         }
+    }
+    
+    /**
+     * returns an unique user id for this login
+     * 
+     * @todo: session_id is not the correct name, as this is not always session id.
+     */
+    function getSessionId() {
+        return $this->_session;
     }
 
     /**
