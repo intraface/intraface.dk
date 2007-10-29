@@ -385,15 +385,13 @@ class Product extends Standard {
         $shared_filehandler = $this->kernel->useShared('filehandler');
         $shared_filehandler->includeFile('AppendFile.php');
 
-        $filehandler = new FileHandler($this->kernel);
         $append_file = new AppendFile($this->kernel, 'product', $product->get('id'));
 
         $pictures = $this->get('pictures');
         if (is_array($pictures)) {
 
             foreach ($pictures AS $pic) {
-                print_R($pic);
-                $append_file->addFile(array('file_handler_id' => $pic['id']));
+                $append_file->addFile(new FileHandler($this->kernel, $pic['id']));
             }
 
         }

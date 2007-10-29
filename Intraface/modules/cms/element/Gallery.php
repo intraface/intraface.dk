@@ -77,7 +77,7 @@ class CMS_Gallery extends CMS_Element {
 
             $filehandler->createInstance();
             $this->value['pictures'][$i] = $filehandler->get();
-            $this->value['pictures'][$i]['instances'] = $filehandler->instance->getTypes();
+            $this->value['pictures'][$i]['instances'] = $filehandler->instance->getList();
             $this->value['pictures'][$i]['append_file_id'] = $append_file_id;
             // $this->value['pictures'][$i]['show_uri'] = $file_uri;
 
