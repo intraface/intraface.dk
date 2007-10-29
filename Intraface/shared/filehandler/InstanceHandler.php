@@ -28,15 +28,15 @@ class InstanceHandler extends Standard
     /**
      * @var array
      */
-    private $instance_types;
+    // not in use ! private $instance_types;
 
     /**
-     * @var array
+     * @var array allo
      */
-    private $allowed_transform_image = array('jpg', 'jpeg', 'gif', 'png');
+    // not in use! private $allowed_transform_image = array('jpg', 'jpeg', 'gif', 'png');
 
     /**
-     * @var integer
+     * @var integer id
      */
     private $id;
     
@@ -44,11 +44,6 @@ class InstanceHandler extends Standard
      * @var object db MDB2 object
      */
     private $db;
-
-    /**
-     * @var object instanceManager
-     */
-   private $intancemanager;
     
     /**
      * Constructor
@@ -92,12 +87,13 @@ class InstanceHandler extends Standard
      * Factory
      *
      * @param object $file_handler File handler
-     * @param string $type         @todo
-     * @param array  $param        @todo
+     * @param string $type         the instance type
+     * @param array  $param        one or more of crop_width, crop_height, crop_offset_x, crop_offset_y
      *
      * @return object
      */
-    function factory(&$file_handler, $type, $param = array()) {
+    function factory(&$file_handler, $type, $param = array()) 
+    {
         if(!is_object($file_handler)) {
             trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->factory (1)", E_USER_ERROR);
         }
@@ -183,9 +179,10 @@ class InstanceHandler extends Standard
     /**
      * Henter en instance af et billede.
      *
-     * @return boolean
+     * @return boolean true or false
      */
-    private function load() {
+    private function load() 
+    {
 
         $db = new DB_sql;
         $db->query("SELECT * FROM file_handler_instance WHERE intranet_id = ".$this->file_handler->kernel->intranet->get('id')." AND active = 1 AND id = ".$this->id);
@@ -242,14 +239,13 @@ class InstanceHandler extends Standard
     }
 
     /**
-     * Hvad gør denne her egentlig?
+     * Returns an array with instance types included information about the instance
      *
      * @return array
      */
-    function getList() {
-        $db = new DB_Sql;
-
-        
+    function getList() 
+    {
+        $db = new DB_Sql;        
         $shared_filehandler = $this->file_handler->kernel->useShared('filehandler');
         $shared_filehandler->includeFile('InstanceManager.php');
         $instancemanager = new InstanceManager($this->file_handler->kernel);
@@ -300,11 +296,12 @@ class InstanceHandler extends Standard
     }
 
     /**
-     * check type
+     * check the instance type
      *
      * @param string $type name of type
+     * @param string $compare either 'name' or 'type_key'
      *
-     * @return array of type or false;
+     * @return mixed array with the type or false on failure;
      */
     public function checkType($type, $compare = 'name') {
         
@@ -368,12 +365,18 @@ class InstanceHandler extends Standard
         return true;
     }
     
-    static function deleteInstanceType($filehandler, $instance, $compare = 'name') {
+    /**
+     * deletes all instances of a type
+     * 
+     * @param string $instance   instance representation either name or type_key depending on next parameter
+     * @param string $compare either 'name' or 'type_key'
+     * 
+     */
+    public function deleteInstanceType($instance, $compare = 'name') {
         
-        die('hmmmmm!');
-        
-        $type = $this->checkType($instance, $compare);
-        
+        trigger_error('so fare not used!', E_USER_ERROR);
+        exit;
+        $type = $this->checkType($instance, $compare);        
         $db = new DB_sql;
         $db->query("SELECT id FROM file_handler_instance WHERE intranet_id = ".$this->file_handler->kernel->intranet->get('id')." AND type_key = ".intval($type['type_key'])." AND active = 1");
         while($db->nextRecord()) {
