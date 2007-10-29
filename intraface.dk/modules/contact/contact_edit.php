@@ -80,7 +80,8 @@ else {
 }
 
 if($contact->get('id') != 0) {
-    $redirect->addQueryString('contact_id='.$contact->get('id'));
+    // i do not believe this is needed... we try to remove it!
+    // $redirect->addQueryString('contact_id='.$contact->get('id'));
 }
 
 
