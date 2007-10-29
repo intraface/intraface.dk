@@ -67,7 +67,7 @@ if (!$user_id = $auth->isLoggedIn()) {
     $auth->toLogin();
 }
 
-$kernel = new Kernel;
+$kernel = new Kernel(session_id());
 $kernel->user = new User($user_id);
 
 if (!$intranet_id = $kernel->user->getActiveIntranetId('id')) {
