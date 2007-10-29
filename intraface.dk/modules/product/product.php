@@ -93,7 +93,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $redirect = Redirect::factory($kernel, 'return');
         if($redirect->get('identifier') == 'product') {
             $append_file = new AppendFile($kernel, 'product', $product->get('id'));
-            $append_file->addFile($redirect->getParameter('file_handler_id'));
+            $append_file->addFile(new FileHandler($kernel, $redirect->getParameter('file_handler_id')));
         }
 
     }

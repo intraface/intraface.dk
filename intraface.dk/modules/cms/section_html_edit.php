@@ -45,13 +45,12 @@ if (!empty($_POST)) {
 
         if (!empty($_FILES['new_pic']) && isset($_POST['upload_new'])) {
 
-
             $filehandler = new FileHandler($kernel);
             $filehandler->createUpload();
             $filehandler->upload->setSetting('file_accessibility', 'public');
             $filehandler->upload->setSetting('allow_only_images', 1);
             $id = $filehandler->upload->upload('new_pic');
-            
+
             // Newly created element which has not been saved yet.
             if($element->get('id') == 0) {
                 $element->save($_POST);
@@ -59,7 +58,7 @@ if (!empty($_POST)) {
 
             if($id != 0) {
                 $append_file = new AppendFile($kernel, 'cms_element_gallery', $element->get('id'));
-                $append_file->addFile($id);
+                $append_file->addFile($filehandler);
             }
             $element->error->merge($filehandler->error->getMessage());
         }
@@ -76,10 +75,10 @@ if (!empty($_POST)) {
             if($element->get('id') == 0) {
                 $element->save($_POST);
             }
-            
+
             if($id != 0) {
                 $append_file = new AppendFile($kernel, 'cms_element_filelist', $element->get('id'));
-                $append_file->addFile($id);
+                $append_file->addFile($filehandler);
             }
             $element->error->merge($filehandler->error->getMessage());
         }
@@ -135,7 +134,7 @@ elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
         }
         elseif($redirect->get('identifier') == 'gallery') {
             $append_file = new AppendFile($kernel, 'cms_element_gallery', $element->get('id'));
-            $append_file->addFile($redirect->getParameter('file_handler_id'));
+            $append_file->addFile(new FileHandler($kernel, $redirect->getParameter('file_handler_id')));
             $element->load();
             $value = $element->get();
 
@@ -143,7 +142,7 @@ elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
         elseif($redirect->get('identifier') == 'filelist') {
             $append_file = new AppendFile($kernel, 'cms_element_filelist', $element->get('id'));
 
-            $append_file->addFile($redirect->getParameter('file_handler_id'));
+            $append_file->addFile(new FileHandler($kernel, $redirect->getParameter('file_handler_id')));
             $element->load();
             $value = $element->get();
         }
@@ -307,7 +306,7 @@ switch ($value['type']) {
                 <?php
                 $filehandler = new Filehandler($kernel);
                 $filehandler->createInstance();
-                $instances = $filehandler->instance->getTypes();
+                $instances = $filehandler->instance->getList();
 
                 ?>
 
@@ -640,7 +639,7 @@ switch ($value['type']) {
                 <?php
                 $filehandler = new Filehandler($kernel);
                 $filehandler->createInstance();
-                $instances = $filehandler->instance->getTypes();
+                $instances = $filehandler->instance->getList();
                 ?>
                 <select name="thumbnail_size">
                     <?php foreach ($instances AS $key => $instance): ?>
@@ -655,7 +654,7 @@ switch ($value['type']) {
                 <?php
                 $filehandler = new Filehandler($kernel);
                 $filehandler->createInstance();
-                $instances = $filehandler->instance->getTypes();
+                $instances = $filehandler->instance->getList();
 
                 ?>
 
@@ -698,7 +697,7 @@ switch ($value['type']) {
                         $filehandler = new Filehandler($kernel, $file['id']);
                         $filehandlerHTML = new FilehandlerHTML($filehandler);
                         $filehandlerHTML->showFile('section_html_edit.php?id='.$element->get('id').'&delete_gallery_append_file_id='.$file['append_file_id'], array('image_size' => 'small'));
-                        
+
                         // This means that if there is an error in uploading a new file or other fields, the files will be shown anyway.
                         echo '<input type="hidden" name="pictures['.$key.'][id]" value="'.$file['id'].'" />';
                         /*

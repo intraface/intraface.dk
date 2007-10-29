@@ -96,8 +96,8 @@ if(isset($_GET['return_redirect_id'])) {
 
         $file_handler_id = $redirect->getParameter('file_handler_id');
 
-        foreach($file_handler_id AS $id) {
-            $append_file->addFile($id);
+        foreach($file_handler_id as $id) {
+            $append_file->addFile(new FileHandler($kernel, $id));
         }
     }
 }
