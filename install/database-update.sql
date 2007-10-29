@@ -14,3 +14,7 @@ ALTER TABLE `file_handler_instance_type` ADD `type_key` INT NOT NULL AFTER `name
 ALTER TABLE `file_handler_instance_type` ADD `active` INT DEFAULT '1' NOT NULL ;
 
 ALTER TABLE `file_handler_instance_type` ADD `resize_type_key` INT NOT NULL AFTER `max_width` ;
+
+ALTER TABLE `dbquery_result` CHANGE `weblogin_session_id` `session_id` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+
+ALTER TABLE `redirect` CHANGE `user_id` `session_id` VARCHAR( 255 ) NOT NULL ;
