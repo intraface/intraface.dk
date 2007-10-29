@@ -4,15 +4,28 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/DBQuery.php';
+require_once 'DBQuery.php';
 require_once 'Intraface/Error.php';
 
 class FakeDBQueryKernel {
 
     public $user;
 
-    public function __construct()
+    public function __construct($session_id = '')
     {
         $this->user = new FakeDBQueryUser;
+        $this->intranet = new FakeDBQueryIntranet;
+        if($session_id == '') {
+            $this->session_id = 'dkm30dekcmek3dk30dkqdlfrjdi3i2jdnft';
+        }
+        else {
+            $this->session_id = $session_id;
+        }
+        
+    }
+    
+    public function getSessionId() {
+        return $this->session_id;
     }
 
 }
@@ -24,6 +37,12 @@ class FakeDBQueryUser {
     }
 }
 
+class FakeDBQueryIntranet {
+    public function get()
+    {
+        return 1;
+    }
+}
 
 class DBQueryTest extends PHPUnit_Framework_TestCase
 {
@@ -36,6 +55,9 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         if (PEAR::isError($this->db)) {
             die($this->db->getUserInfo());
         }
+        
+        $result = $this->db->exec('TRUNCATE TABLE dbquery_result');
+        
         $result = $this->db->exec('DROP TABLE ' . $this->table);
         /*
          TODO: DROP THE TABLE IF IT EXISTS
@@ -58,20 +80,15 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         $this->insertPosts();
     }
 
-    function createKernel()
+    function createDBQuery($session_id = '')
     {
-        return new FakeDBQueryKernel;
-    }
-
-    function createDBQuery()
-    {
-        $kernel = $this->createKernel();
+        $kernel = new FakeDBQueryKernel($session_id);
         return new DBQuery($kernel, $this->table);
     }
 
     function insertPosts()
     {
-        $data = array('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten');
+        $data = array('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty', 'twentyone');
         foreach ($data as $d) {
             $this->createPost($d);
         }
@@ -102,7 +119,7 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
     function testRequiredConditions()
     {
         $condition = 'name = 1';
-        $kernel = $this->createKernel();
+        $kernel = new FakeDBQueryKernel;
         $dbquery = new DBQuery($kernel, $this->table, $condition);
         $this->assertEquals($condition, $dbquery->required_conditions);
     }
@@ -111,7 +128,7 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
     {
         $dbquery = $this->createDBQuery();
         $db = $dbquery->getRecordset('*', '', false);
-        $this->assertEquals(10, $db->numRows());
+        $this->assertEquals(21, $db->numRows());
         $dbquery->useCharacter();
         $dbquery->defineCharacter('t', 'name');
         $this->assertTrue($dbquery->getUseCharacter());
@@ -130,10 +147,124 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($paging_name, $dbquery->getPagingVarName());
 
         $paging = $dbquery->getPaging();
-        $expected_offset = array(1=>0, 2=>2, 3=>4, 4=>6, 5=>8);
+        $expected_offset = array(1=>0, 2=>2, 3=>4, 4=>6, 5=>8, 6=>10, 7=>12, 8=>14, 9=>16,10=>18,11=>20);
         $this->assertEquals($expected_offset, $paging['offset']);
         $this->assertEquals(0, $paging['previous']);
         $this->assertEquals(2, $paging['next']);
+    }
+    
+    function testGetRecordset() {
+        $dbquery = $this->createDBQuery();
+        
+        $dbquery->setCondition('id > 2');
+        
+        $db = $dbquery->getRecordset('id, name');
+        $i = 0;
+        while($db->nextRecord()) {
+            $result[$i]['id'] = $db->f('id'); 
+            $result[$i]['name'] = $db->f('name');
+            $i++; 
+        }
+        
+        $this->assertEquals(19, count($result));
+    }
+    
+    function testUseStoreOnTopLevel() {
+        $dbquery = $this->createDBQuery();
+        $dbquery->setCondition('id > 10');
+        $dbquery->storeResult("use_stored", 'unittest', "toplevel");
+        $db = $dbquery->getRecordset('id, name');
+        
+        
+        $dbquery = $this->createDBQuery();
+        $_GET['use_stored'] = 'true';
+        $dbquery->storeResult("use_stored", 'unittest', "toplevel");
+        $db = $dbquery->getRecordset('id, name');
+        $i = 0;
+        while($db->nextRecord()) {
+            $result[$i]['id'] = $db->f('id'); 
+            $result[$i]['name'] = $db->f('name');
+            $i++; 
+        }
+        $this->assertEquals(11, count($result));
+    }
+    
+    function testUseStoreOnTopLevelWithAnotherOneInBetween() {
+        // the first page
+        $dbquery = $this->createDBQuery();
+        $dbquery->setCondition('id > 10');
+        $dbquery->storeResult("use_stored", 'unittest', "toplevel");
+        $db = $dbquery->getRecordset('id, name');
+        
+        // another page also with toplevel - overrides the first one saved
+        $dbquery = $this->createDBQuery();
+        $dbquery->storeResult("use_stored", 'unittest-on-another-page', "toplevel");
+        $db = $dbquery->getRecordset('id, name');
+        
+        // then back to the first page again - the result should not be saved
+        $dbquery = $this->createDBQuery();
+        $_GET['use_stored'] = 'true';
+        $dbquery->storeResult("use_stored", 'unittest', "toplevel");
+        $db = $dbquery->getRecordset('id, name');
+        $i = 0;
+        while($db->nextRecord()) {
+            $result[$i]['id'] = $db->f('id'); 
+            $result[$i]['name'] = $db->f('name');
+            $i++; 
+        }
+        $this->assertEquals(21, count($result));
+    }
+    
+    function testUseStoreOnSublevelNotChangingToplevel() {
+        // the first page
+        $dbquery = $this->createDBQuery();
+        $dbquery->setCondition('id > 10');
+        $dbquery->storeResult("use_stored", 'unittest', "toplevel");
+        $db = $dbquery->getRecordset('id, name');
+        
+        // another page with sublevel - does not override the first one saved
+        $dbquery = $this->createDBQuery();
+        $dbquery->storeResult("use_stored", 'unittest-on-another-page', "sublevel");
+        $db = $dbquery->getRecordset('id, name');
+        
+        // then back to the first page again - the result should be saved
+        $dbquery = $this->createDBQuery();
+        $_GET['use_stored'] = 'true';
+        $dbquery->storeResult("use_stored", 'unittest', "toplevel");
+        $db = $dbquery->getRecordset('id, name');
+        $i = 0;
+        while($db->nextRecord()) {
+            $result[$i]['id'] = $db->f('id'); 
+            $result[$i]['name'] = $db->f('name');
+            $i++; 
+        }
+        $this->assertEquals(11, count($result));
+    }
+    
+    function testUseStoreWithTwoDifferentUsers() {
+        // the first page
+        $dbquery = $this->createDBQuery();
+        $dbquery->setCondition('id > 10');
+        $dbquery->storeResult("use_stored", 'unittest', "toplevel");
+        $db = $dbquery->getRecordset('id, name');
+        
+        // another user on the same page
+        $dbquery = $this->createDBQuery('another-session-id-passed-to-kernel-and-then-to-dbquery');
+        $dbquery->storeResult("use_stored", 'unittest', "toplevel");
+        $db = $dbquery->getRecordset('id, name');
+        
+        // then back to the first page again - the result should be saved
+        $dbquery = $this->createDBQuery();
+        $_GET['use_stored'] = 'true';
+        $dbquery->storeResult("use_stored", 'unittest', "toplevel");
+        $db = $dbquery->getRecordset('id, name');
+        $i = 0;
+        while($db->nextRecord()) {
+            $result[$i]['id'] = $db->f('id'); 
+            $result[$i]['name'] = $db->f('name');
+            $i++; 
+        }
+        $this->assertEquals(11, count($result));
     }
 
 }

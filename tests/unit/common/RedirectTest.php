@@ -2,7 +2,6 @@
 require_once dirname(__FILE__) . '/../config.test.php';
 
 require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/Redirect.php';
 
 class FakeRedirectUser
@@ -19,6 +18,7 @@ class FakeRedirectIntranet
     {
         return 1;
     }
+    
 }
 
 class FakeRedirectKernel
@@ -29,6 +29,10 @@ class FakeRedirectKernel
     {
         $this->user = new FakeRedirectUser();
         $this->intranet = new FakeRedirectIntranet();
+    }
+    
+    function getSessionId() {
+        return 'dfp323ewrjif2309f32f30f23vcjtjkjw';
     }
 }
 if (!function_exists('safeToDB')) {
@@ -50,6 +54,8 @@ class RedirectTest extends PHPUnit_Framework_TestCase
             die($this->db->getUserInfo());
         }
         $result = $this->db->exec('TRUNCATE ' . $this->table);
+        
+        $_SERVER['SCRIPT_URI'] = 'http://example.php/from.php';
     }
 
     function tearDown()
@@ -137,11 +143,14 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $redirect->id);
     }
 
+    /*
+    // The method is now private
     function testParseUrl() {
         $redirect = $this->createRedirect();
         $url = 'http://example.dk/index.php?id=2&uid=3';
         $this->assertEquals($url, $redirect->parseUrl($url));
     }
+    */
 
     function testSetIdentifierBeforeSetDestination() {
         $redirect = $this->createRedirect();
@@ -157,6 +166,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($redirect->setIdentifier('identifier1'));
     }
 
+    
     function testThisUri() {
         $_SERVER['HTTPS']       = 'https://example.dk/index.php';
         $_SERVER['HTTP_HOST']   = 'example.dk';
@@ -168,17 +178,23 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         unset($_SERVER['HTTP_HOST']);
         unset($_SERVER['SCRIPT_NAME']);
     }
-
+    
+    /**
+    this method is now private
     function testAddQueryString() {
         $redirect = $this->createRedirect();
         // does not return anything at this point
         $redirect->addQueryString('another_id=3');
     }
+    */
 
+    /**
+    the method is now private 
     function testMergeQueryString() {
         $redirect = $this->createRedirect();
         $this->assertEquals('index.php?id=1&another_id=2', $redirect->mergeQueryString('index.php?id=1', 'another_id=2'));
     }
+    */
 
     function testDeleteWithNoIdReturnsTrue()
     {
