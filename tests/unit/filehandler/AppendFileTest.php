@@ -20,6 +20,14 @@ class FakeAppendFileIntranet
     function get() { return 1; }
 }
 
+class FakeAppendFileFile
+{
+    function getId()
+    {
+        return 1;
+    }
+}
+
 class AppendFileTest extends PHPUnit_Framework_TestCase
 {
     function setUp()
@@ -46,27 +54,27 @@ class AppendFileTest extends PHPUnit_Framework_TestCase
     function testAddFileAsInteger()
     {
         $append = $this->createAppendFile();
-        $this->assertTrue($append->addFile(1));
+        $this->assertTrue($append->addFile(new FakeAppendFileFile) > 0);
     }
 
-    function testAddFileAsArray()
+    function testAddFilesAsArray()
     {
         $append = $this->createAppendFile();
-        $this->assertTrue($append->addFile(array(1)));
+        $this->assertTrue($append->addFiles(array(new FakeAppendFileFile)));
     }
 
     function testDeleteReturnsTrue()
     {
         $append = $this->createAppendFile();
-        $append->addFile(1);
-        $this->assertTrue($append->delete(1));
+        $id = $append->addFile(new FakeAppendFileFile);
+        $this->assertTrue($append->delete($id));
     }
 
     function testUnDeleteReturnsTrue()
     {
         $append = $this->createAppendFile();
-        $append->addFile(1);
-        $append->delete(1);
+        $id = $append->addFile(new FakeAppendFileFile);
+        $append->delete($id);
         $this->assertTrue($append->undelete(1));
     }
 

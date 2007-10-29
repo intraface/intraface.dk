@@ -7,11 +7,6 @@ require_once 'Intraface/DBQuery.php';
 class AppendFile
 {
     /**
-     * @var integer
-     */
-    private $id;
-
-    /**
      * @var array
      */
     private $belong_to_types = array();
@@ -32,43 +27,69 @@ class AppendFile
      * @param object  $kernel       Kernel object
      * @param string  $belong_to    Which type the file belongs to
      * @param integer $belong_to_id The id this appended file belongs to
-     * @param integer $id           @todo what is this used for
      *
      * @return void
      */
-    public function __construct($kernel, $belong_to, $belong_to_id /*, $id = 0 */)
+    public function __construct($kernel, $belong_to, $belong_to_id)
     {
         if (!is_object($kernel)) {
             trigger_error('AppendFile::__construct needs kernel', E_USER_ERROR);
             return false;
         }
-        $this->kernel = $kernel;
-
-        //$shared_filehandler = $this->kernel->useShared('filehandler');
-        //$this->belong_to_types = $shared_filehandler->getSetting('file_append_belong_to_types');
-
-        $this->belong_to_types = $this->getFileAppendBelongToTypes();
+        $this->registerBelongTo(0, '_invalid_');
+        $this->registerBelongTo(1, 'cms_element_gallery');
+        $this->registerBelongTo(2, 'procurement_procurement');
+        $this->registerBelongTo(3, 'product');
+        $this->registerBelongTo(4, 'cms_element_filelist');
 
         if(!in_array($belong_to, $this->belong_to_types)) {
             trigger_error("AppendFile->__construct unknown type", E_USER_ERROR);
         }
-        $this->belong_to_key = array_search($belong_to, $this->belong_to_types);
+
+        $this->belong_to_key = $this->getBelongToKey($belong_to);
         $this->belong_to_id = (int)$belong_to_id;
 
-        //$this->id = (int)$id;
+        $this->kernel = $kernel;
         $this->error = new Error;
 
     }
 
-    private static function getFileAppendBelongToTypes()
+    /**
+     * Register the belong to
+     *
+     * @param integer $key        The key to apply to the belong to
+     * @param integer $identifier The way to know the identifier
+     *
+     * @return void
+     */
+    protected function registerBelongTo($key, $identifier)
     {
-        return array(0 => '_invalid_',
-                     1 => 'cms_element_gallery',
-                     2 => 'procurement_procurement',
-                     3 => 'product',
-                     4 => 'cms_element_filelist');
+        $this->belong_to_types[$key] = $identifier;
     }
 
+    /**
+     * Gets the belon to
+     *
+     * @param integer $key        The key to apply to the belong to
+     *
+     * @return string
+     */
+    protected function getBelongTo($key)
+    {
+        return $this->belong_to_types[$key];
+    }
+
+    /**
+     * Register the belong to key
+     *
+     * @param integer $identifier The way to know the identifier
+     *
+     * @return integer
+     */
+    protected function getBelongToKey($identifier)
+    {
+        return array_search($identifier, $this->belong_to_types);
+    }
 
     /**
      * Creates the dbquery so it can be used from everywhere
@@ -81,110 +102,83 @@ class AppendFile
     }
 
     /**
-     * Validates input for save
+     * Checks whether the file has already been appended
      *
-     * @param array $var Values to validate
+     * @param integer $file_id The file id to check
      *
-     * @return boolean
+     * @return mixed Either integer if, or false if not
      */
-    private function validate($var)
+    protected function fileExists($file_id)
     {
-        // @todo is it really necessary to validate like this?
-        $filehandler = new Filehandler($this->kernel, (int)$var['file_handler_id']);
-        if($filehandler->get('id') == 0) {
-            $this->error->set('error in file');
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * Saves the values
-     *
-     * @param array $var Values to save
-     *
-     * @return integer
-     */
-    public function save($var)
-    {
-        $var = safeToDb($var);
-
-        if (!$this->validate($var)) {
-            return false;
-        }
-
         $db = new DB_Sql();
-        $db->query("SELECT id FROM filehandler_append_file WHERE intranet_id = " . $this->kernel->intranet->get('id') . " AND belong_to_key = ".$this->belong_to_key." AND belong_to_id = ".$this->belong_to_id." AND file_handler_id = ".$var['file_handler_id']." AND active = 1");
+        $db->query("SELECT id FROM filehandler_append_file
+            WHERE intranet_id = " . $this->kernel->intranet->get('id') . "
+                AND belong_to_key = ".$this->belong_to_key."
+                AND belong_to_id = ".$this->belong_to_id."
+                AND file_handler_id = ".$file_id."
+                AND active = 1");
         if ($db->nextRecord()) {
-            // hvis filen allerede er tilknyttet lader vi som om alt gik godt, og vi siger go
-            // dette skal naturligvis laves lidt anderledes, hvis vi skal have en description med
             return $db->f('id');
-        }
-
-        /*
-        if ($this->id > 0) {
-            $sql_type = "UPDATE ";
-            $sql_end = " WHERE id = " . $this->id;
-
         } else {
-        */
-            $sql_type = "INSERT INTO ";
-            $sql_end = " , date_created = NOW()";
-        //}
-
-        $db->query($sql_type . " filehandler_append_file SET
-            date_updated = NOW(),
-            intranet_id = ".$this->kernel->intranet->get('id').",
-            belong_to_key = ".$this->belong_to_key.",
-            belong_to_id = ".$this->belong_to_id.",
-            file_handler_id = ".$var['file_handler_id']."
-            " . $sql_end);
-
-
-        return $db->insertedId();
-
-        /*
-        if ($this->id == 0) {
-            $this->id = $db->insertedId();
+            return false;
         }
-        return $this->id;
-        */
     }
 
     /**
      * Adds a file to this
      *
-     * @param mixed $input Either an id or an array
+     * @param object $file A filehandler file
      *
-     * @return void
+     * @return integer
      */
-    public function addFile($input)
+    public function addFile($file)
     {
-        $input = safeToDb($input);
+        $file_id = $file->getId();
 
-        if(is_numeric($input)) {
-            //$this->id = 0;
-            return ($this->save(array('file_handler_id' => $input)) > 0);
-        } elseif(is_array($input)) {
-            foreach($input AS $id) {
-                $this->save(array('file_handler_id' => $id));
-            }
-            return true;
-        } else {
-            trigger_error('AppendFile->addFile unknown type', E_USER_ERROR);
+        if ($id = $this->fileExists($file_id)) {
+            return $id;
         }
+
+        $db = new DB_Sql();
+        $db->query("INSERT INTO filehandler_append_file SET
+            date_updated = NOW(),
+            intranet_id = ".$this->kernel->intranet->get('id').",
+            belong_to_key = ".$this->belong_to_key.",
+            belong_to_id = ".$this->belong_to_id.",
+            file_handler_id = ".$file_id.",
+            date_created = NOW()");
+
+        return $db->insertedId();
+    }
+
+    /**
+     * Adds an array with files
+     *
+     * @param array $files An array with files
+     *
+     * @return boolean
+     */
+    function addFiles($files = array())
+    {
+        foreach ($files as $file) {
+            $this->addFile($file);
+        }
+        return true;
     }
 
     /**
      * Deletes
+     *
+     * @param integer $id The appended file id to delete
      *
      * @return boolean
      */
     public function delete($id)
     {
         $db = new DB_Sql;
-        $db->query("UPDATE filehandler_append_file SET active = 0 WHERE id = " . $id);
+        $db->query("UPDATE filehandler_append_file
+            SET active = 0
+            WHERE id = " . $id);
         return true;
     }
 
@@ -196,7 +190,9 @@ class AppendFile
     public function undelete($id)
     {
         $db = new DB_Sql;
-        $db->query("UPDATE filehandler_append_file SET active = 1 WHERE id = " . $id);
+        $db->query("UPDATE filehandler_append_file
+            SET active = 1
+            WHERE id = " . $id);
         return true;
     }
 
@@ -214,9 +210,6 @@ class AppendFile
             $this->dbquery->setSorting('filehandler_append_file.id');
         }
 
-
-        // $db = new DB_Sql;
-        // $db->query("SELECT id, file_handler_id, description FROM filehandler_append_file WHERE active = 1 AND intranet_id=".$this->kernel->intranet->get('id')." AND belong_to_key = ".$this->belong_to_key." AND belong_to_id = " . $this->belong_to_id." ORDER BY id");
         $db = $this->dbquery->getRecordset('filehandler_append_file.id, filehandler_append_file.file_handler_id, filehandler_append_file.description');
         $i = 0;
         $files = array();
