@@ -8,6 +8,7 @@
  */
 
 require_once 'Intraface/3Party/Database/Db_sql.php';
+require_once 'Ilib/Redirect.php';
 
 /**
  * Redirects a user to specific pages
@@ -121,7 +122,102 @@ require_once 'Intraface/3Party/Database/Db_sql.php';
  * @version @package-version@
  */
 
-class Redirect
+class Redirect extends Ilib_Redirect
+{
+
+    /**
+     * Constructs a redirect object
+     *
+     * @param object  $kernel kernel
+     * @param integer $id     Id of the redirect
+     *
+     * @return object
+     */
+    public function __construct($kernel, $id = 0)
+    {
+        
+        // 
+        $options = array(
+             'extra_db_condition' => array('intranet_id = '.$kernel->intranet->get('id'))
+        );
+        
+        parent::__construct($kernel->getSessionId(), $id, $options);
+    }
+
+    /**
+     * Creates a redirect object on the go page
+     *
+     * @param object $kernel kernel
+     * @param string $query_variable the variable used in the querystring for going to the redirect page
+     * @param string $query_return_variable the variable  used in the querystring when returning from the redirect page.
+     *
+     * @return object
+     */
+    static function go($kernel, $query_variable = 'redirect_id', $query_return_variable = 'return_redirect_id')
+    {
+        return self::factory($kernel, 'go', $query_variable, $query_return_variable);
+    }
+
+    /**
+     * Creates a redirect object on the receiving page
+     *
+     * @param object $kernel kernel
+     * @param string $query_variable the variable used in the querystring for going to the redirect page
+     * @param string $query_return_variable the variable  used in the querystring when returning from the redirect page.
+     *
+     * @return object
+     */
+    static function receive($kernel, $query_variable = 'redirect_id', $query_return_variable = 'return_redirect_id')
+    {
+        return self::factory($kernel, 'receive', $query_variable, $query_return_variable);
+    }
+
+    /**
+     * Creates a redirect object on the returning page
+     *
+     * @param object $kernel kernel
+     * @param string $query_variable the variable used in the querystring for going to the redirect page
+     * @param string $query_return_variable the variable  used in the querystring when returning from the redirect page.
+     *
+     * @return object
+     */
+    static function returns($kernel, $query_variable = 'redirect_id', $query_return_variable = 'return_redirect_id')
+    {
+        return self::factory($kernel, 'return', $query_variable, $query_return_variable);
+    }
+
+    /**
+     * Creates a redirect object
+     *
+     * This should be substituted with specific methods for the types
+     *
+     * @param object $kernel kernel
+     * @param string $type Can be either go (starting a redirect), receive (on the destination page for redirect) or return (when returning after a redirect)
+     * @param string $query_variable the variable used in the querystring for going to the redirect page
+     * @param string $query_return_variable the variable  used in the querystring when returning from the redirect page.
+     *
+     * @return object
+     */
+    static function factory($kernel, $type, $query_variable = 'redirect_id', $query_return_variable = 'return_redirect_id')
+    {
+
+        if(!is_object($kernel)) {
+            trigger_error("First parameter in redirect::factory is not kernel", E_USER_ERROR);
+        }
+        
+        $options = array(
+            'extra_db_condition' => array('intranet_id = '.$kernel->intranet->get('id')),
+            'query_variable' => $query_variable,
+            'query_return_variable' => $query_return_variable
+        );
+
+        return parent::factory($kernel->getSessionId(), $type, $options);
+    }
+}
+
+
+// can be deleted when intraface 1.7 is running on the server.
+class _old_Redirect
 {
     /**
      * @var object
@@ -772,3 +868,4 @@ class Redirect
 
     }
 }
+?>
