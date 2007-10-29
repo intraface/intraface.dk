@@ -3,16 +3,21 @@
  * To display all errors
  */
 
-define('ERROR_LOG', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/log/error.log');
-define('ERROR_LOG_UNIQUE', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/log/unique-error.log');
-define('PATH_WWW', 'http://');
+class Intraface_Tools_ErrorList
+{
+    private $error_log;
+    private $error_log_unique;
 
-class Intraface_Tools_ErrorList {
+    function __construct($filename, $unique_filename)
+    {
+        $this->error_file = $filename;
+        $this->error_file_unique = $unique_filename;
+    }
 
-    public function get($show = 'unique') {
 
-
-        $handle = fopen(ERROR_LOG, "r");
+    public function get($show = 'unique')
+    {
+        $handle = fopen($this->error_file, "r");
         while (!feof($handle)) {
            $buffer = fgets($handle, 4096);
            if (empty($buffer) OR !is_string($buffer)) continue;
@@ -48,7 +53,7 @@ class Intraface_Tools_ErrorList {
 
 
                 if($show == 'unique' && in_array(md5($error['type'].$error['message'].$error['file'].$error['line']), $unique)) {
-                    CONTINUE;
+                    continue;
                 }
                 $unique[] = md5($error['type'].$error['message'].$error['file'].$error['line']);
 
@@ -70,11 +75,12 @@ class Intraface_Tools_ErrorList {
         return $items;
     }
 
-    public function delete() {
-        unlink(ERROR_LOG);
-        touch(ERROR_LOG);
-        @unlink(ERROR_LOG_UNIQUE);
-        touch(ERROR_LOG_UNIQUE);
+    public function delete()
+    {
+        unlink($this->error_file);
+        touch($this->error_file);
+        @unlink($this->error_file_unique);
+        touch($this->error_file_unique);
     }
 
 }

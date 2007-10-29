@@ -1,44 +1,72 @@
 <?php
-require 'k.php';
 require 'config.local.php';
 
-class User
-{
-    private $user;
-    private $password;
+set_include_path(INTRAFACE_PATH_INCLUDE);
 
-    function checkRight($right)
-    {
-        if (!$this->isLoggedIn()) {
-            return false;
+require 'Intraface/Auth.php';
+require 'Intraface/User.php';
+
+define('DB_DSN', 'mysql://' . DB_USER . ':' . DB_PASS . '@' . DB_HOST . '/' . DB_NAME);
+
+require 'k.php';
+
+class tools_ClassLoader extends k_classLoader
+{
+    static function pear_autoload($classname) {
+        $filename = str_replace('_', '/', $classname).'.php';
+        if (self::SearchIncludePath($filename)) {
+        require_once($filename);
         }
-        return true;
     }
+}
+
+spl_autoload_register(Array('tools_ClassLoader', 'pear_autoload'));
+
+class Tools_User
+{
+    private $auth;
+    private $user;
+    private $is_logged_in = false;
+
+    /*
+    function __construct()
+    {
+        $this->auth = new Auth(md5(session_id()));
+        if ($this->auth->isLoggedIn()) {
+            $this->user = new User($this->auth->isLoggedIn());
+        }
+        if (!$this->user->setIntranetId(1)){}
+    }
+    */
 
     function login($user, $password)
     {
-        $this->user     = $user;
-        $this->password = $password;
+        $credentials = array('lsolesen' => 'klani');
+
+        if (array_key_exists($user, $credentials)) {
+            $this->is_logged_in = true;
+        }
+
+        //$this->auth->login($user, $password);
+        //return ($this->user = new User($this->auth->isLoggedIn()));
     }
 
     function isLoggedIn()
     {
-        if ($this->user) {
-            return true;
-        }
-        return false;
+        return $this->is_logged_in;
+        //return ($this->user->hasModuleAccess('intranetmaintenance') > 1);
     }
 }
 
-
-$db = new DB_Sql;
-
+define('ERROR_LOG', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/log/error.log');
+define('ERROR_LOG_UNIQUE', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/log/unique-error.log');
+define('PATH_WWW', 'http://');
 
 $application = new Intraface_Tools_Controller_Root();
 
 $application->registry->registerConstructor('errorlist', create_function(
   '$className, $args, $registry',
-  'return new Intraface_Tools_ErrorList($args);'
+  'return new Intraface_Tools_ErrorList(ERROR_LOG, ERROR_LOG_UNIQUE);'
 ));
 
 $application->registry->registerConstructor('database', create_function(
