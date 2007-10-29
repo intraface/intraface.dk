@@ -165,7 +165,7 @@ class FileManager extends FileHandler
 
 
             if($file[$i]['is_picture'] == 1) {
-                $file[$i]['icon_uri'] = FILE_VIEWER.'?/'.$this->kernel->intranet->get('public_key').'/'.$db->f('access_key').'/square/'.urlencode($db->f('file_name'));
+                $file[$i]['icon_uri'] = FILE_VIEWER.'?/'.$this->kernel->intranet->get('public_key').'/'.$db->f('access_key').'/system-square/'.urlencode($db->f('file_name'));
                 $file[$i]['icon_width'] = 75;
                 $file[$i]['icon_height'] = 75;
             } else {
