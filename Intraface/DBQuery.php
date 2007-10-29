@@ -1,23 +1,30 @@
 <?php
 /**
- * Klasse til at lave filter og paging på getList
- * I idéfasen. Ved endnu ikke om dette er metoden at gøre det på
- *
- * @todo Would it be an idea to make this class abstrat instead, so you have to use
- *       it by exending it?
- *
- * @todo Dependency on kernel should be removed. However, if it should later
- *       be possible to save queries we need something which could help doing
- *       that.
- *
- * @todo This should probably be divided into several classes.
+ * Extend to the Ilib_DBQuery class to customize it to Intraface
  *
  * @author Sune Jensen <sj@sunet.dk>
  */
 
 require_once 'Intraface/3Party/Database/Db_sql.php';
+require_once 'Ilib/DBQuery.php';
 
-class DBQuery {
+class DBQuery extends Ilib_DBQuery {
+    
+    /**
+     * 
+     */
+    public function __construct($kernel, $table, $required_conditions = "") {
+        
+        parent::__construct($table, $required_conditions);
+        $this->createStore($kernel->getSessionId(), 'intranet_id = '.$kernel->intranet->get('id'));
+        if(strtolower(get_class($kernel->user)) == 'user') {
+            $this->setRowsPerPage($kernel->setting->get('user', 'rows_pr_page'));
+        }    
+    }   
+}
+
+// should be deleted when Intraface 1.7 is running on server!
+class _old_DBQuery {
 
     /**
      * @var object
@@ -175,11 +182,14 @@ class DBQuery {
 
     /**
      * Denne funktion benyttes til at definere tabeller, som den skal joines med
-     *
-     * @param string $type               @todo What
-     * @param string $table              @todo What
-     * @param string $join_on            @todo What
-     * @param string $required_condition @todo What
+     *  
+     * <code>
+     * $dbquery->setJoin('INNER', 'user', 'contact.created_by_user_id=user.id', 'active=1');
+     * </code>
+     * @param string $type               Either 'INNER', 'LEFT' or 'RIGHT'
+     * @param string $table              The table to join
+     * @param string $join_on            The fields you want to join in
+     * @param string $required_condition Required condititions for the table
      *
      * @return void
      */
@@ -194,8 +204,7 @@ class DBQuery {
     }
 
     /**
-     * Private (kan benyttes public hvis man vil lave sin egen sql-streng)
-     * Benyttes til at lave sql-streng med join tabeller
+     * Returns array with join tables and condiditions
      *
      * @return array
      */
@@ -217,7 +226,7 @@ class DBQuery {
     }
 
     /**
-     * Set extra uri
+     * Set extra uri for the getCharacters method
      *
      * @param string $extra_uri Used for the outputter
      *
@@ -389,8 +398,8 @@ class DBQuery {
      * Kan f.eks. være key: "seacrh";  value: $_POST["search"]
      * For at filteret kan bruges til noget, skal det kombineres med setCondition inde i getList funktionen
      *
-     * @param string $key   @todo What
-     * @param string $value @todo what
+     * @param string $key   the identifier for the filter
+     * @param string $value the value of the filter
      *
      * @return void
      */
@@ -402,7 +411,7 @@ class DBQuery {
     /**
      * Checker om et filter er sat
      *
-     * @param string $key   @todo What
+     * @param string $key the identifier on the filter
      *
      * @return boolean
      */
@@ -418,7 +427,7 @@ class DBQuery {
     /**
      * Returnere værdien af filteret
      *
-     * @param string $key   @todo What
+     * @param string $key the identifier on the filter
      *
      * @return string
      */
@@ -434,12 +443,10 @@ class DBQuery {
     /*************************** FUNKTIONER TIL AT DEFINGERE SØGNINGEN ***********************/
 
     /**
-     * Public
      * Bruges til at sætte where felterne
-     * F.eks.: "date > '12-12-2004' OR paid = 0"
      * Flere setConditions kan kaldes, og så vil hver sql-sætning sættes sammen med et AND
      *
-     * @param string $string @todo what
+     * @param string $string the condidition string to set. Eg. "date > '12-12-2004' OR paid = 0"
      *
      * @return void
      */
@@ -465,7 +472,7 @@ class DBQuery {
      * F.eks. "number, date ASC"
      * Flere sorting kan sættes, og vil blive sat sammen i rækkenfølgen de er sat med et komma.
      *
-     * @param string $string @todo what
+     * @param string $string set sorting fields
      *
      * @return void
      */
@@ -487,8 +494,8 @@ class DBQuery {
     /**
      * Aktivere alfabetisering. Bruges til at vise poster der starter med character
      *
-     * @param string $character_var_name @todo what
-     * @param string $field              @todo what
+     * @param string $character_var_name the querystring var name used to set the character
+     * @param string $field the field in the database table to the character on.
      *
      * @return void
      */
@@ -515,10 +522,8 @@ class DBQuery {
     /**
      * Aktivere paging
      *
-     * @todo is $rows_pr_page default sensible?
-     *
-     * @param string  $paging_var_name @todo what
-     * @param integer $rows_pr_page    @todo what
+     * @param string  $paging_var_name the paging querystring variable name. If empty default is used
+     * @param integer $rows_pr_page    the number of rows pr page. if not set, default is used.
      *
      * @return void
      */
@@ -541,7 +546,7 @@ class DBQuery {
     /**
      * Til manuelt at sætte paging offset.
      *
-     * @param string $offset @todo what
+     * @param string $offset sets the offset for paging
      *
      * @return void
      */
@@ -554,7 +559,7 @@ class DBQuery {
     /**
      * Til manuelt at sætte hvormange der skal være pr. side
      *
-     * @param integer $number @todo what
+     * @param integer $number number of rows pr page
      *
      * @return void
      */
@@ -566,7 +571,7 @@ class DBQuery {
     /**
      * Vælger keywords som kun poster med disse skal vises
      *
-     * @param mixed $keyword @todo what
+     * @param mixed $keyword array with keyword ids or float integer with keyword id on keywords to filter for
      *
      * @return void
      */
@@ -580,9 +585,9 @@ class DBQuery {
     }
 
     /**
-     * Get Keyword @todo which keyword
+     * returns the keyword ids that is set for the filter. 
      *
-     * @param integer $key @todo what
+     * @param integer $key key on keywords (i do not know what this is used for)
      *
      * @return mixed
      */
@@ -620,9 +625,9 @@ class DBQuery {
      *   Der vil kun blive stored én toplevel result, mens der vil blive gemt alle sublevel.
      *   Det skyldes at hver gang man har åbnet en toplevel liste, skal skal man ikke se tildigere toplevel søgninger mere.
      *
-     * @param string $store_var_name @todo what
-     * @param string $store_name     @todo what
-     * @param string $level          @todo what
+     * @param string $store_var_name the querystring var name that sets to use stored
+     * @param string $store_name     unique store name, that describes the arrea for which the the dbquery is used
+     * @param string $level          either 'toplevel' (the store is deleted when other toplevels is set) or 'sublevel' (when sublevel is used it does not effect other stored results)
      *
      * @return void
      */
@@ -646,9 +651,9 @@ class DBQuery {
     }
 
     /**
-     * @todo what
+     * sets that you want to use a stored result
      *
-     * @param boolean $value @todo what
+     * @param boolean $value can be set to false to deactivate store.
      *
      * @return void
      */
@@ -859,7 +864,7 @@ class DBQuery {
     /**
      * Retunere streng der bruges i sql-sætning
      *
-     * @param string $extra_condition @todo what
+     * @param string $extra_condition returns the sql string
      *
      * @return string
      */
@@ -940,9 +945,9 @@ class DBQuery {
     }
 
     /**
-     * @todo what
+     * displays either paging or characters
      *
-     * @param string $type @todo what
+     * @param string $type either 'paging' or 'character'
      *
      * @return string
      */
