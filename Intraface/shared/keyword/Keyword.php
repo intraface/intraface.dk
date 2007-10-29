@@ -8,60 +8,99 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 
-class Keyword extends Standard {
+require_once 'Intraface/Standard.php';
+require_once 'Intraface/Error.php';
+require_once 'Intraface/Validator.php';
+require_once 'Intraface/functions/functions.php';
+require_once 'Intraface/3Party/Database/Db_Sql.php';
 
-    var $value;
-    var $object;
-    var $error;
-    var $id;
+abstract class Ilib_Keyword
+{
+}
+
+class Keyword extends Standard
+{
+
+    /**
+     * @var array
+     */
+    public $value;
+
+    /**
+     * @var object
+     */
+    protected $object;
+
+    /**
+     * @var object
+     */
+    public $error;
+
+    /**
+     * @var integer
+     */
+    protected $id;
 
     /**
      * Skal indeholde tabelnavnet
+     *
+     * @var array
      */
-    var $types = array(
-        0 => '_invalid_',
-        1 => 'contact',
-        2 => 'product',
-        3 => 'cms_page',
-        4 => 'newfilemanager',
-        5 => 'cms_template'
-    );
-
+    protected $types = array(0 => '_invalid_',
+                       1 => 'contact',
+                       2 => 'product',
+                       3 => 'cms_page',
+                       4 => 'newfilemanager',
+                       5 => 'cms_template');
 
     /**
-     * Konstruktør
+     * @var array
      */
+    protected $extra_conditions = array();
 
-    function Keyword(& $object, $id = 0) {
-        if (!is_object($object)) {
-            trigger_error('Keyword kræver et object', E_USER_ERROR);
-        }
+    /**
+     * Constructor
+     *
+     * @param object  $object
+     * @param integer $id
+     *
+     * @return void
+     */
+    function __construct($object, $id = 0)
+    {
+        $this->extra_conditions = array();
 
-        switch (strtolower(get_class($object))) {
-            case 'contact':
-                $this->type = 'contact';
-                $this->object = & $object;
-                break;
-            case 'product':
-                $this->type = 'product';
-                $this->object = & $object;
-                $this->object->load();
-                break;
-            case 'cms_page':
-                $this->type = 'cms_page';
-                $this->object = & $object;
-                break;
-            case 'cms_template':
-                $this->type = 'cms_template';
-                $this->object = & $object;
-                break;
-            case 'filemanager':
-                $this->type = 'file_handler';
-                $this->object = & $object;
-                break;
-            default:
-                trigger_error('Keyword kræver enten Customer, CMSPage, Product eller FileManager som object', FATAL);
-                break;
+        if (get_class($object) == 'FakeKeywordObject') {
+            $this->type = 'contact';
+            $this->object = $object;
+        } else {
+
+            switch (strtolower(get_class($object))) {
+                case 'contact':
+                    $this->type = 'contact';
+                    $this->object = & $object;
+                    break;
+                case 'product':
+                    $this->type = 'product';
+                    $this->object = & $object;
+                    $this->object->load();
+                    break;
+                case 'cms_page':
+                    $this->type = 'cms_page';
+                    $this->object = & $object;
+                    break;
+                case 'cms_template':
+                    $this->type = 'cms_template';
+                    $this->object = & $object;
+                    break;
+                case 'filemanager':
+                    $this->type = 'file_handler';
+                    $this->object = & $object;
+                    break;
+                default:
+                    trigger_error('Keyword kræver enten Customer, CMSPage, Product eller FileManager som object', E_USER_ERROR);
+                    break;
+            }
         }
 
         $this->error = new Error;
@@ -79,68 +118,91 @@ class Keyword extends Standard {
      * Skal factory bare tage en kernel og en id og så selv lave objektet,
      * eller skal det være omvendt at factory bruges til at smide et objekt ind i
      * klassen - og at Keyword selv laver objektet?
+     *
+     * @param object  $kernel
+     * @param integer $id
+     *
+     * @return object
      */
-
-    function factory($kernel, $id) {
+    public function factory($kernel, $id)
+    {
         $id = (int)$id;
 
         $db = new DB_Sql;
-        $db->query("SELECT * FROM keyword WHERE id = " . $id . " AND intranet_id=" . $kernel->intranet->get('id'));
+        $db->query("SELECT id, type FROM keyword WHERE id = " . $id . " AND intranet_id=" . $kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
             return 0;
         }
 
         $class = $db->f('type');
+
+        if (strtolower(get_class($kernel)) == 'fakekeywordkernel') {
+            return new Keyword(new FakeKeywordObject(), $db->f('id'));
+        }
         $kernel->useModule($class);
         return new Keyword(new $class($kernel), $db->f('id'));
 
     }
 
-
     /**
      * Loader det enkelte keyword
+     *
+     * @return boolean
      */
-    function load() {
+    protected function load()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id, keyword FROM keyword WHERE keyword.type='".$this->type."' AND intranet_id=".$this->object->kernel->intranet->get('id')." AND id =" . $this->id . " LIMIT 1");
         if (!$db->nextRecord()) {
-            return 0;
+            return false;
         }
         $this->value['id'] = $db->f('id');
         $this->value['keyword'] = $db->f('keyword');
-        $this->value['type'] = $db->f('type');
-        return 1;
+        //$this->value['type'] = $db->f('type');
+        return true;
     }
 
     /**
      * Validerer
+     *
+     * @param array $var
+     *
+     * @return boolean
      */
-    function validate($var) {
+    protected function validate($var)
+    {
         $validator = new Validator($this->error);
 
-        $validator->isNumeric($var['id'], 'id', 'allow_empty');
+        if (!empty($var['id'])) {
+            $validator->isNumeric($var['id'], 'id', 'allow_empty');
+        }
         if (empty($var['keyword'])) {
             $this->error->set("Du har ikke skrevet et nøgleord");
         }
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
     }
 
     /**
      * Gemmer et keyword
+     *
+     * @param array $var
+     *
+     * @return integer
      */
-
-    function save($var) {
+    public function save($var)
+    {
+        settype($var['keyword'], 'string');
 
         $var['keyword'] = str_replace('"', '', $var['keyword']);
         $var = safeToDb($var);
         $var = array_map('strip_tags', $var);
 
         if (!$this->validate($var)) {
-            return 0;
+            return false;
         }
 
         $db = new DB_Sql;
@@ -158,8 +220,7 @@ class Keyword extends Standard {
             $sql_end = ' WHERE id = ' . $this->id . '
                 AND intranet_id = ' . $this->object->kernel->intranet->get('id') . "
                 AND type = '" . $this->type ."'";
-        }
-        else {
+        } else {
             $sql_type = "INSERT INTO ";
             $sql_end = ", intranet_id = " . $this->object->kernel->intranet->get('id') . ", type = '".$this->type."'";
         }
@@ -179,23 +240,28 @@ class Keyword extends Standard {
 
     /**
      * Denne metode sletter et nøgleord i nøgleordsdatabasen
+     *
+     * @return boolean
      */
-
-    function delete() {
+    function delete()
+    {
         if ($this->id == 0) {
-            return 0;
+            return false;
         }
         $db = new DB_Sql;
         $db->query("UPDATE keyword SET active = 0
             WHERE intranet_id = " . $this->object->kernel->intranet->get('id') . "
                 AND id = " . $this->id . " AND type = '".$this->type."'");
-        return 1;
+        return true;
     }
 
     /**
      * Denne funktion tilføjer et nøgleord til et objekt
+     *
+     * @param integer $keyword_id
+     *
+     * @return boolean
      */
-
     function addKeyword($keyword_id) {
         $keyword_id = (int)$keyword_id;
 
@@ -211,15 +277,16 @@ class Keyword extends Standard {
                     keyword_id=". $keyword_id . ",
                     belong_to = " . $this->object->get('id'));
         }
-        return 1;
+        return true;
     }
 
     /**
      * Egentlig en slags getList i keywords
+     *
+     * @return array
      */
-
-    function getAllKeywords() {
-
+    function getAllKeywords()
+    {
         $keywords = array();
         $db = new DB_Sql;
 
@@ -235,16 +302,17 @@ class Keyword extends Standard {
             $i++;
         }
 
-        return($keywords);
+        return $keywords;
     }
 
     /**
      * Returnerer de keywords der bliver brugt på nogle poster
      * Især anvendelig til søgeoversigter
+     *
+     * @return array
      */
-
-    function getUsedKeywords() {
-
+    function getUsedKeywords()
+    {
         $keywords = array();
         $db = new DB_Sql;
 
@@ -264,7 +332,7 @@ class Keyword extends Standard {
             $i++;
         }
 
-        return($keywords);
+        return $keywords;
     }
 
     /**
@@ -272,9 +340,10 @@ class Keyword extends Standard {
      *
      * Det er meget mærkeligt, men den her funktion returnerer alle keywords på et intranet?
      *
+     * @return array
      */
-
-    function getConnectedKeywords() {
+    function getConnectedKeywords()
+    {
 
         $keywords = array();
         $db = new DB_Sql;
@@ -301,10 +370,15 @@ class Keyword extends Standard {
         return $keywords;
     }
 
-    function deleteConnectedKeywords() {
-
+    /**
+     * Delete all connected keywords to an object
+     *
+     * @return boolean
+     */
+    function deleteConnectedKeywords()
+    {
         if ($this->object->get('id') == 0) {
-            return 0;
+            return false;
         }
 
         $db = new DB_Sql;
@@ -312,29 +386,36 @@ class Keyword extends Standard {
             WHERE keyword.intranet_id = " . $this->object->kernel->intranet->get('id') . "
                 AND keyword_x_object.belong_to = " . $this->object->get('id') . " AND keyword.type = '" . $this->type . "'");
 
-        return 1;
+        return true;
     }
-
-    /****************************************************************************
-     * Funktioner der bruges i forbindelse med strenge
-     ***************************************************************************/
-
 
     /**
      * Returnerer de vedhæftede keywords som en streng
+     *
+     * @return string
      */
-
-    function getConnectedKeywordsAsString() {
+    function getConnectedKeywordsAsString()
+    {
         $keywords = $this->getConnectedKeywords();
-        $output = '';
+        $arr = array();
+
         foreach ($keywords AS $keyword) {
-            $output .= $keyword['keyword'] . ', ';
+            $arr[] = $keyword['keyword'];
         }
-        return trim($output);
+        $string = implode(', ', $arr);
+
+        return trim($string);
     }
 
-
-    function addKeywordsByString($string) {
+    /**
+     * Add keywords by string
+     *
+     * @param string $string
+     *
+     * @return boolean
+     */
+    function addKeywordsByString($string)
+    {
         $this->deleteConnectedKeywords();
 
         $keywords = $this->quotesplit(stripslashes($string), ",");
@@ -346,22 +427,20 @@ class Keyword extends Standard {
                 }
             }
         }
+        return true;
     }
-
-
-    /****************************************************************************
-     * Metoder som bruges i de andre objects
-     ***************************************************************************/
 
 
 
     /**
      * Denne funktion henter poster i objektet som hører til et nøgleord
      *
-     * @param
+     * @param integer $keyword_id
+     *
+     * @return array
      */
-
-    function getList($keyword_id) {
+    function getList($keyword_id)
+    {
         $ids = array();
         $sql_keywords = '(';
         $sql_innerjoin = '';
@@ -387,8 +466,7 @@ class Keyword extends Standard {
                 }
             }
             $sql_keywords .= ')';
-        }
-        elseif (!empty($keyword_id) AND is_numeric($keyword_id)) {
+        } elseif (!empty($keyword_id) AND is_numeric($keyword_id)) {
             $sql_innerjoin .= " INNER JOIN keyword_x_object x ON ".$this->type.".id=x.belong_to
                 INNER JOIN keyword keyword ON x.keyword_id = keyword.id";
             $sql_keywords = "x.keyword_id = " . (int)$keyword_id;
@@ -421,13 +499,16 @@ class Keyword extends Standard {
      * Tools
      ***************************************************************************/
 
-
     /**
      * Funktionen er en hjælpefunktion, så man bare kan skrive nøgleordene i et inputfelt
      *
+     * @param string $s        The string to split
+     * @param string $splitter What splitter to use to split the string
+     *
      * @return array med nøgleordene
      */
-    function quotesplit($s, $splitter=',') {
+    function quotesplit($s, $splitter=',')
+    {
         //First step is to split it up into the bits that are surrounded by quotes and the bits that aren't. Adding the delimiter to the ends simplifies the logic further down
         $getstrings = split('\"', $splitter.$s.$splitter);
         //$instring toggles so we know if we are in a quoted string or not
@@ -442,8 +523,7 @@ class Keyword extends Standard {
                     $result[] = $val;
                     $instring = 0;
                 }
-            }
-            else {
+            } else {
                 //Break up the string according to the delimiter character
                 //Each string has extraneous delimiters around it (inc the ones we added above), so they need to be stripped off
                 $temparray = split($splitter, substr($val, $delimlen, strlen($val)-$delimlen-$delimlen ) );
