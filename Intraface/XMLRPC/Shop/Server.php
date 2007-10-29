@@ -627,7 +627,7 @@ class Intraface_XMLRPC_Shop_Server
             throw new XML_RPC2_FaultException('access to intranet denied', -2);
         }
 
-        $this->kernel = new Kernel();
+        $this->kernel = new Kernel($credentials['session_id']);
         $this->kernel->weblogin = $weblogin;
         $this->kernel->intranet = new Intranet($intranet_id);
         $this->kernel->setting = new Setting($this->kernel->intranet->get('id'));
