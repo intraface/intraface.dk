@@ -19,9 +19,10 @@ class AllTests
                        'CMS',
                        'Debtor',
                        'Shared',
-                       'Newsletter'
+                       'Newsletter',
+                       'Keyword'
         );
-        
+
         foreach ($tests AS $test) {
             require_once strtolower($test) . '/AllTests.php';
         }
@@ -38,6 +39,7 @@ class AllTests
         $suite->addTest(Webshop_AllTests::suite());
         $suite->addTest(Debtor_AllTests::suite());
         $suite->addTest(Shared_AllTests::suite());
+        $suite->addTest(Keyword_AllTests::suite());
         return $suite;
     }
 }

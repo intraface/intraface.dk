@@ -20,7 +20,6 @@ abstract class Ilib_Keyword
 
 class Keyword extends Standard
 {
-
     /**
      * @var array
      */
@@ -42,16 +41,9 @@ class Keyword extends Standard
     protected $id;
 
     /**
-     * Skal indeholde tabelnavnet
-     *
      * @var array
      */
-    protected $types = array(0 => '_invalid_',
-                       1 => 'contact',
-                       2 => 'product',
-                       3 => 'cms_page',
-                       4 => 'newfilemanager',
-                       5 => 'cms_template');
+    protected $types = array();
 
     /**
      * @var array
@@ -68,11 +60,11 @@ class Keyword extends Standard
      */
     function __construct($object, $id = 0)
     {
-        $this->extra_conditions = array();
 
         if (get_class($object) == 'FakeKeywordObject') {
             $this->type = 'contact';
             $this->object = $object;
+            $this->kernel = $object->kernel;
         } else {
 
             switch (strtolower(get_class($object))) {
@@ -101,7 +93,12 @@ class Keyword extends Standard
                     trigger_error('Keyword kræver enten Customer, CMSPage, Product eller FileManager som object', E_USER_ERROR);
                     break;
             }
+            $this->kernel = $this->object->kernel;
         }
+
+        $this->type = $this->getTypeKey($this->type);
+
+        $this->extra_conditions = array('intranet_id' => $this->kernel->intranet->get('id'));
 
         $this->error = new Error;
 
@@ -114,6 +111,24 @@ class Keyword extends Standard
         }
     }
 
+    function getType($key)
+    {
+        return $this->types[$key];
+    }
+
+    function getTypeKey($identifier)
+    {
+        if (!$key = array_search($identifier, $this->types)) {
+            throw new Exception('No type registered with this identifier ' . $identifier);
+        }
+        return $key;
+    }
+
+    function registerType($id, $identifier)
+    {
+        $this->types[$id] = $identifier;
+    }
+
     /**
      * Skal factory bare tage en kernel og en id og så selv lave objektet,
      * eller skal det være omvendt at factory bruges til at smide et objekt ind i
@@ -124,6 +139,7 @@ class Keyword extends Standard
      *
      * @return object
      */
+    /*
     public function factory($kernel, $id)
     {
         $id = (int)$id;
@@ -141,8 +157,8 @@ class Keyword extends Standard
         }
         $kernel->useModule($class);
         return new Keyword(new $class($kernel), $db->f('id'));
-
     }
+    */
 
     /**
      * Loader det enkelte keyword
@@ -151,8 +167,24 @@ class Keyword extends Standard
      */
     protected function load()
     {
+        $condition = $this->extra_conditions;
+        $condition['id'] = $this->id;
+        $condition['keyword.type'] = $this->type;
+
+        foreach ($condition as $column => $value) {
+            $c[] = $column . " = '" . $value . "'";
+        }
+
         $db = new DB_Sql;
-        $db->query("SELECT id, keyword FROM keyword WHERE keyword.type='".$this->type."' AND intranet_id=".$this->object->kernel->intranet->get('id')." AND id =" . $this->id . " LIMIT 1");
+        /*
+        $db->query("SELECT id, keyword FROM keyword
+            WHERE keyword.type='" . $this->type . "'
+                AND intranet_id=".$this->object->kernel->intranet->get('id')."
+                AND id = " . $this->id);
+        */
+        $db->query("SELECT id, keyword FROM keyword
+            WHERE " . implode(' AND ', $c));
+
         if (!$db->nextRecord()) {
             return false;
         }
@@ -204,27 +236,64 @@ class Keyword extends Standard
         if (!$this->validate($var)) {
             return false;
         }
+        $c = array();
+        $condition = $this->extra_conditions;
+        $condition['type'] = $this->type;
+        $condition['keyword'] = $var['keyword'];
+        $condition['active'] = 1;
+
+        foreach ($condition as $column => $value) {
+            $c[] = $column . " = '" . $value . "'";
+        }
 
         $db = new DB_Sql;
+        /*
         $db->query("SELECT id, active FROM keyword
             WHERE intranet_id = " . $this->object->kernel->intranet->get('id') . "
                 AND keyword = '".$var['keyword']."'
                 AND type = '".$this->type."'
                 AND active = 1");
+        */
+        $db->query("SELECT id, active FROM keyword
+            WHERE " . implode(' AND ', $c));
+
         if ($db->nextRecord()) {
             return $db->f('id');
         }
 
         if ($this->id > 0) {
+            $c = array();
+            $condition = array();
+            $condition = $this->extra_conditions;
+            $condition['id'] = $this->id;
+            $condition['type'] = $this->type;
+
+            foreach ($condition as $column => $value) {
+                $c[] = $column . " = '" . $value . "'";
+            }
+
             $sql_type = 'UPDATE ';
+            /*
             $sql_end = ' WHERE id = ' . $this->id . '
                 AND intranet_id = ' . $this->object->kernel->intranet->get('id') . "
                 AND type = '" . $this->type ."'";
-        } else {
-            $sql_type = "INSERT INTO ";
-            $sql_end = ", intranet_id = " . $this->object->kernel->intranet->get('id') . ", type = '".$this->type."'";
-        }
+            */
+            $sql_end = ' WHERE ' . implode(' AND ', $c);
 
+        } else {
+            $c = array();
+            $condition = array();
+            $condition = $this->extra_conditions;
+            $condition['type'] = $this->type;
+
+            foreach ($condition as $column => $value) {
+                $c[] = $column . " = '" . $value . "'";
+            }
+
+            $sql_type = "INSERT INTO ";
+            //$sql_end = ", intranet_id = " . $this->object->kernel->intranet->get('id') . ", type = '".$this->type."'";
+            $sql_end = ", " . implode(', ', $c);
+        }
 
         $sql = $sql_type . "keyword SET keyword = '".$var['keyword']."'" . $sql_end;
         $db->query($sql);
@@ -234,9 +303,7 @@ class Keyword extends Standard
         }
         $this->load();
         return $this->id;
-
-  }
-
+    }
 
     /**
      * Denne metode sletter et nøgleord i nøgleordsdatabasen
@@ -248,10 +315,24 @@ class Keyword extends Standard
         if ($this->id == 0) {
             return false;
         }
+
+        $condition = $this->extra_conditions;
+        $condition['id'] = $this->id;
+        $condition['type'] = $this->type;
+        foreach ($condition as $column => $value) {
+            $c[] = $column . " = '" . $value . "'";
+        }
+
         $db = new DB_Sql;
+        /*
         $db->query("UPDATE keyword SET active = 0
             WHERE intranet_id = " . $this->object->kernel->intranet->get('id') . "
-                AND id = " . $this->id . " AND type = '".$this->type."'");
+                AND id = " . $this->id . "
+                AND type = '".$this->type."'");
+        */
+        $db->query("UPDATE keyword SET active = 0
+            WHERE " . implode(' AND ', $c));
+
         return true;
     }
 
@@ -265,17 +346,33 @@ class Keyword extends Standard
     function addKeyword($keyword_id) {
         $keyword_id = (int)$keyword_id;
 
+        $condition = $this->extra_conditions;
+        $condition['keyword_id'] = $keyword_id;
+        $condition['belong_to'] = $this->object->get('id');
+        foreach ($condition as $column => $value) {
+            $c[] = $column . " = '" . $value . "'";
+        }
+
         $db = new DB_Sql;
+        /*
         $db->query("SELECT * FROM keyword_x_object
             WHERE intranet_id = " . $this->object->kernel->intranet->get('id') . "
                 AND keyword_id = " . $keyword_id . "
                 AND belong_to = " . $this->object->get('id'));
+        */
+        $db->query("SELECT * FROM keyword_x_object
+            WHERE " . implode(' AND ', $c));
 
         if (!$db->nextRecord()) {
+            /*
             $db->query("INSERT INTO keyword_x_object
                 SET intranet_id = " . $this->object->kernel->intranet->get('id') . ",
                     keyword_id=". $keyword_id . ",
                     belong_to = " . $this->object->get('id'));
+            */
+            $db->query("INSERT INTO keyword_x_object
+                SET " . implode(', ', $c));
+
         }
         return true;
     }
@@ -288,12 +385,26 @@ class Keyword extends Standard
     function getAllKeywords()
     {
         $keywords = array();
-        $db = new DB_Sql;
 
+        $condition = $this->extra_conditions;
+        $condition['keyword.type'] = $this->type;
+        $condition['keyword.active'] = 1;
+        foreach ($condition as $column => $value) {
+            $c[] = $column . " = '" . $value . "'";
+        }
+
+        $db = new DB_Sql;
+        /*
         $db->query("SELECT * FROM keyword
             WHERE
                 intranet_id = " . $this->object->kernel->intranet->get('id') . "
-                    AND keyword.type = '".$this->type."' AND keyword.active = 1 ORDER BY keyword ASC");
+                    AND keyword.type = '".$this->type."'
+                    AND keyword.active = 1
+            ORDER BY keyword ASC");
+        */
+        $db->query("SELECT * FROM keyword
+            WHERE " . implode(' AND ', $c) . "
+            ORDER BY keyword ASC");
 
         $i = 0;
         while ($db->nextRecord()) {
@@ -314,16 +425,44 @@ class Keyword extends Standard
     function getUsedKeywords()
     {
         $keywords = array();
-        $db = new DB_Sql;
 
+        //$condition = $this->extra_conditions;
+        $condition['keyword.intranet_id'] = $this->object->kernel->intranet->get('id');
+        $condition['keyword.type'] = $this->type;
+        $condition['keyword.active'] = 1;
+        foreach ($condition as $column => $value) {
+            $c[] = $column . " = '" . $value . "'";
+        }
+
+        $db = new DB_Sql;
+        /*
         $db->query("SELECT DISTINCT(keyword.id), keyword.keyword FROM ".$this->type."
-            INNER JOIN keyword_x_object x ON ".$this->type.".id=x.belong_to
-            INNER JOIN keyword keyword ON x.keyword_id = keyword.id
+            INNER JOIN keyword_x_object x
+                ON ".$this->type.".id=x.belong_to
+            INNER JOIN keyword keyword
+                ON x.keyword_id = keyword.id
             WHERE
                 keyword.intranet_id = " . $this->object->kernel->intranet->get('id') . "
                     AND keyword.type = '".$this->type."'
                     AND keyword.active = 1
-                    ORDER BY keyword ASC");
+            ORDER BY keyword ASC");
+        */
+        /*
+        $db->query("SELECT DISTINCT(keyword.id), keyword.keyword
+            FROM ".$this->type."
+            INNER JOIN keyword_x_object x
+                ON ".$this->type.".id=x.belong_to
+            INNER JOIN keyword keyword
+                ON x.keyword_id = keyword.id
+            WHERE " . implode(' AND ', $c) . "
+            ORDER BY keyword ASC");
+        */
+        $db->query("SELECT DISTINCT(keyword.id), keyword.keyword
+            FROM keyword_x_object x
+            INNER JOIN keyword keyword
+                ON x.keyword_id = keyword.id
+            WHERE " . implode(' AND ', $c) . "
+            ORDER BY keyword ASC");
 
         $i = 0;
         while ($db->nextRecord()) {
@@ -344,10 +483,20 @@ class Keyword extends Standard
      */
     function getConnectedKeywords()
     {
-
         $keywords = array();
-        $db = new DB_Sql;
 
+        //$condition = $this->extra_conditions;
+        $condition['keyword_x_object.belong_to'] = $this->object->get('id');
+        $condition['keyword.active '] = 1;
+        $condition['keyword.type '] = $this->type;
+        $condition['keyword.intranet_id '] = $this->object->kernel->intranet->get('id');
+        $condition['keyword_x_object.intranet_id '] = $this->object->kernel->intranet->get('id');
+        foreach ($condition as $column => $value) {
+            $c[] = $column . " = '" . $value . "'";
+        }
+
+        $db = new DB_Sql;
+        /*
         $db->query("SELECT DISTINCT(keyword.id) AS id, keyword.keyword FROM keyword_x_object
             INNER JOIN keyword
             ON keyword_x_object.keyword_id = keyword.id
@@ -358,6 +507,13 @@ class Keyword extends Standard
                 AND keyword.type = '".$this->type."'
                 AND keyword.intranet_id = " . $this->object->kernel->intranet->get('id') . "
                 AND keyword_x_object.intranet_id =  " . $this->object->kernel->intranet->get('id') . "
+            ORDER BY keyword.keyword");
+        */
+        $db->query("SELECT DISTINCT(keyword.id) AS id, keyword.keyword
+            FROM keyword_x_object
+            INNER JOIN keyword
+            ON keyword_x_object.keyword_id = keyword.id
+            WHERE " . implode(' AND ', $c) . " AND keyword.keyword != ''
             ORDER BY keyword.keyword");
 
         $i = 0;
@@ -381,10 +537,26 @@ class Keyword extends Standard
             return false;
         }
 
+        //$condition = $this->extra_conditions;
+        $condition['keyword.intranet_id'] = $this->object->kernel->intranet->get('id');
+        $condition['keyword_x_object.belong_to'] = $this->object->get('id');
+        $condition['keyword.type '] = $this->type;
+        foreach ($condition as $column => $value) {
+            $c[] = $column . " = '" . $value . "'";
+        }
+
+
         $db = new DB_Sql;
+        /*
         $db->query("DELETE keyword_x_object FROM keyword_x_object INNER JOIN keyword ON keyword_x_object.keyword_id = keyword.id
-            WHERE keyword.intranet_id = " . $this->object->kernel->intranet->get('id') . "
-                AND keyword_x_object.belong_to = " . $this->object->get('id') . " AND keyword.type = '" . $this->type . "'");
+            WHERE
+                keyword.intranet_id = " . $this->object->kernel->intranet->get('id') . "
+                AND keyword_x_object.belong_to = " . $this->object->get('id') . "
+                AND keyword.type = '" . $this->type . "'");
+        */
+        $db->query("DELETE keyword_x_object FROM keyword_x_object
+            INNER JOIN keyword ON keyword_x_object.keyword_id = keyword.id
+            WHERE " . implode(' AND ', $c));
 
         return true;
     }
@@ -456,8 +628,10 @@ class Keyword extends Standard
                     $sql_keywordtype = " AND ";
                 }
                 if ($value > 0) {
-                    $sql_innerjoin .= " INNER JOIN keyword_x_object x$i ON $this->type.id=x$i.belong_to
-                        INNER JOIN keyword keyword$i ON x$i.keyword_id = keyword$i.id";
+                    $sql_innerjoin .= " INNER JOIN keyword_x_object x$i
+                            ON $this->type.id=x$i.belong_to
+                        INNER JOIN keyword keyword$i
+                            ON x$i.keyword_id = keyword$i.id";
                     $sql_keywords .= " x$i.keyword_id = " . (int)$value;
                     $sql_keywordtype = " keyword$i.type='".$this->type."'";
                     $sql_extrawhere .= "	keyword$i.intranet_id = " . $this->object->kernel->intranet->get('id');
@@ -467,10 +641,12 @@ class Keyword extends Standard
             }
             $sql_keywords .= ')';
         } elseif (!empty($keyword_id) AND is_numeric($keyword_id)) {
-            $sql_innerjoin .= " INNER JOIN keyword_x_object x ON ".$this->type.".id=x.belong_to
-                INNER JOIN keyword keyword ON x.keyword_id = keyword.id";
+            $sql_innerjoin .= " INNER JOIN keyword_x_object x
+                    ON ".$this->type.".id=x.belong_to
+                INNER JOIN keyword keyword
+                    ON x.keyword_id = keyword.id";
             $sql_keywords = "x.keyword_id = " . (int)$keyword_id;
-           $sql_keywordtype = " keyword.type='".$this->type."'";
+            $sql_keywordtype = " keyword.type='".$this->type."'";
             $sql_extrawhere .= "	keyword.intranet_id = " . $this->object->kernel->intranet->get('id');
         }
 
