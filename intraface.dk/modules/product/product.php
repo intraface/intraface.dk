@@ -4,6 +4,9 @@ require('../../include_first.php');
 $module = $kernel->module('product');
 $translation = $kernel->getTranslation('product');
 
+$shared_filehandler = $kernel->useShared('filehandler');
+$shared_filehandler->includeFile('AppendFile.php');
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $product = new Product($kernel, $_POST['id']);
