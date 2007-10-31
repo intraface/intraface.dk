@@ -33,10 +33,11 @@ if (!empty($_POST)) {
             $filehandler->createUpload();
             $filehandler->upload->setSetting('file_accessibility', 'public');
             $filehandler->upload->setSetting('allow_only_images', 1);
-            $id = $filehandler->upload->upload('new_pic');
-
-            if($id != 0) {
-                $_POST['pic_id'] = $id;
+            if($filehandler->upload->isUploadFile('new_pic')) {
+                $id = $filehandler->upload->upload('new_pic');
+                if($id != 0) {
+                    $_POST['pic_id'] = $id;
+                }
             }
             $element->error->merge($filehandler->error->getMessage());
         }
