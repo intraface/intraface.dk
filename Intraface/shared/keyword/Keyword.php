@@ -43,7 +43,13 @@ class Keyword extends Standard
     /**
      * @var array
      */
-    protected $types = array();
+    protected $types = array(
+        0 => '_invalid_',
+        1 => 'contact',
+        2 => 'product',
+        3 => 'cms_page',
+        4 => 'newfilemanager',
+        5 => 'cms_template');
 
     /**
      * @var array
@@ -61,6 +67,8 @@ class Keyword extends Standard
     function __construct($object, $id = 0)
     {
 
+        
+        
         if (get_class($object) == 'FakeKeywordObject') {
             $this->type = 'contact';
             $this->object = $object;
@@ -95,16 +103,17 @@ class Keyword extends Standard
             }
             $this->kernel = $this->object->kernel;
         }
-
+        
         $this->type = $this->getTypeKey($this->type);
-
+        
         $this->extra_conditions = array('intranet_id' => $this->kernel->intranet->get('id'));
 
         $this->error = new Error;
-
+        
         //$object_id = $this->object->get('id');
 
         $this->id = (int)$id;
+        
 
         if ($this->id > 0) {
             $this->load();
