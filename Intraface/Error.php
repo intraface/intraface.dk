@@ -8,7 +8,17 @@
  * @author Lars Olesen
  * @version 1.1
  */
-class Error {
+
+require_once 'Ilib/Error.php';
+class Error Extends Ilib_Error {
+    
+    public function __construct() {
+        parent::_construct();
+    }
+}
+
+// This can be deleted when intraface 1.7 is running on the server
+class _old_Error {
 
     private $message;
     public $viewer;
@@ -99,7 +109,7 @@ class Error {
  *
  * @author Lars Olesen <lars@legestue.net>
  */
-class ErrorHtmlViewer {
+class _old_ErrorHtmlViewer {
 
     private $error;
 
