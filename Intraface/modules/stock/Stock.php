@@ -2,6 +2,10 @@
 /**
  * @package Intraface_Stock
  */
+
+require_once 'Intraface/Standard.php';
+require_once 'Intraface/3Party/Database/DB_Sql.php';
+
 class Stock extends Standard {
     var $product;
     var $value;
@@ -9,7 +13,7 @@ class Stock extends Standard {
     var $kernel;
 
 
-    function Stock(& $product) {
+    function Stock($product) {
         if (!is_object($product) AND strtolower(get_class($product)) == "product") {
             trigger_error("Stock kræver product", E_USER_ERROR);
         }

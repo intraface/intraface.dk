@@ -20,7 +20,8 @@ class AllTests
                        'Debtor',
                        'Shared',
                        'Newsletter',
-                       'Keyword'
+                       'Keyword',
+                       'Stock'
         );
 
         foreach ($tests AS $test) {
@@ -40,6 +41,7 @@ class AllTests
         $suite->addTest(Debtor_AllTests::suite());
         $suite->addTest(Shared_AllTests::suite());
         $suite->addTest(Keyword_AllTests::suite());
+        $suite->addTest(Stock_AllTests::suite());
         return $suite;
     }
 }
