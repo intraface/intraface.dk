@@ -109,7 +109,7 @@ if(defined('TIMEZONE')) {
 }
 
 require_once 'ErrorHandler.php';
-//require_once 'ErrorHandler/Observer/Echo.php';
+require_once 'ErrorHandler/Observer/Echo.php';
 require_once 'ErrorHandler/Observer/File.php';
 
 function intrafaceBackendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
@@ -128,6 +128,11 @@ function intrafaceBackendExceptionhandler($e) {
 
 set_error_handler('intrafaceBackendErrorhandler', ERROR_HANDLE_LEVEL);
 set_exception_handler('intrafaceBackendExceptionhandler');
+
+// This is probably not the correct place/way to put this, but we should make it as some kind of at global setting - maybe a constant is the way to go.
+// @todo: of some strange reason dreamhost does not support XMLRPCext on the server - why do the cms clients then work on other sites?!
+require_once 'XML/RPC2/Backend.php';
+XML_RPC2_Backend::setBackend('php');
 
 // vi skal have lavet en fil, der bare sørger for at inkludere filer.
 // i virkelighede var det måske smart, hvis vi brugte lidt
