@@ -13,7 +13,7 @@ require_once 'Ilib/Error.php';
 class Error Extends Ilib_Error {
     
     public function __construct() {
-        parent::_construct();
+        parent::__construct();
     }
 }
 
