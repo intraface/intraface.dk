@@ -141,7 +141,9 @@ class Redirect extends Ilib_Redirect
              'extra_db_condition' => array('intranet_id = '.$kernel->intranet->get('id'))
         );
         
-        parent::__construct($kernel->getSessionId(), $id, $options);
+        $db = MDB2::singleton(DB_DSN);
+        
+        parent::__construct($kernel->getSessionId(), $db, $id, $options);
     }
 
     /**
@@ -210,8 +212,10 @@ class Redirect extends Ilib_Redirect
             'query_variable' => $query_variable,
             'query_return_variable' => $query_return_variable
         );
+        
+        $db = MDB2::singleton(DB_DSN);
 
-        return parent::factory($kernel->getSessionId(), $type, $options);
+        return parent::factory($kernel->getSessionId(), $db, $type, $options);
     }
 }
 
