@@ -4,6 +4,11 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/Redirect.php';
 
+/**
+ * Remember this should actually only be tests whether the extend functionality works. 
+ * The tests are in Intraface_3Party
+ */
+
 class FakeRedirectUser
 {
     function get()
