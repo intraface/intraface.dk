@@ -7,6 +7,11 @@ require_once 'Intraface/DBQuery.php';
 require_once 'Ilib/DBQuery.php';
 require_once 'Intraface/Error.php';
 
+/** 
+ * Notice this should only be tests to ensure that the extend from Ilib_DBQuery works
+ * The actual tests of DBQuery should be in Intraface_3Party
+ */
+
 class FakeDBQueryKernel {
 
     public $user;
