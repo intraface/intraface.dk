@@ -66,9 +66,6 @@ class Keyword extends Standard
      */
     function __construct($object, $id = 0)
     {
-
-        
-        
         if (get_class($object) == 'FakeKeywordObject') {
             $this->type = 'contact';
             $this->object = $object;
@@ -103,17 +100,18 @@ class Keyword extends Standard
             }
             $this->kernel = $this->object->kernel;
         }
-        
-        $this->type = $this->getTypeKey($this->type);
-        
+
+        // @todo before this is changed we need to change all the data in the database
+        //$this->type = $this->getTypeKey($this->type);
+
         $this->extra_conditions = array('intranet_id' => $this->kernel->intranet->get('id'));
 
         $this->error = new Error;
-        
+
         //$object_id = $this->object->get('id');
 
         $this->id = (int)$id;
-        
+
 
         if ($this->id > 0) {
             $this->load();
