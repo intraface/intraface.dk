@@ -255,14 +255,9 @@ class Reminder extends Standard {
     }
 
     function delete() {
-        if($this->locked == 0) {
-            $this->db->query("UPDATE invoice_reminder SET active = 0 WHERE id = ".$this->id." AND intranet_id = ".$this->kernel->intranet->get("id"));
-            $this->id = 0;
-            $this->load();
-        }
-        else {
-            trigger_error("Du kan ikke slette en låst rykker", ERROR);
-        }
+        $this->db->query("UPDATE invoice_reminder SET active = 0 WHERE id = ".$this->id." AND intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->id = 0;
+        $this->load();
     }
 
 
