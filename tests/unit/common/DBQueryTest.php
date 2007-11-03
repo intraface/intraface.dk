@@ -4,7 +4,7 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/DBQuery.php';
-require_once 'DBQuery.php';
+require_once 'Ilib/DBQuery.php';
 require_once 'Intraface/Error.php';
 
 class FakeDBQueryKernel {
@@ -21,9 +21,9 @@ class FakeDBQueryKernel {
         else {
             $this->session_id = $session_id;
         }
-        
+
     }
-    
+
     public function getSessionId() {
         return $this->session_id;
     }
@@ -55,9 +55,9 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         if (PEAR::isError($this->db)) {
             die($this->db->getUserInfo());
         }
-        
+
         $result = $this->db->exec('TRUNCATE TABLE dbquery_result');
-        
+
         $result = $this->db->exec('DROP TABLE ' . $this->table);
         /*
          TODO: DROP THE TABLE IF IT EXISTS
@@ -152,55 +152,55 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $paging['previous']);
         $this->assertEquals(2, $paging['next']);
     }
-    
+
     function testGetRecordset() {
         $dbquery = $this->createDBQuery();
-        
+
         $dbquery->setCondition('id > 2');
-        
+
         $db = $dbquery->getRecordset('id, name');
         $i = 0;
         while($db->nextRecord()) {
-            $result[$i]['id'] = $db->f('id'); 
+            $result[$i]['id'] = $db->f('id');
             $result[$i]['name'] = $db->f('name');
-            $i++; 
+            $i++;
         }
-        
+
         $this->assertEquals(19, count($result));
     }
-    
+
     function testUseStoreOnTopLevel() {
         $dbquery = $this->createDBQuery();
         $dbquery->setCondition('id > 10');
         $dbquery->storeResult("use_stored", 'unittest', "toplevel");
         $db = $dbquery->getRecordset('id, name');
-        
-        
+
+
         $dbquery = $this->createDBQuery();
         $_GET['use_stored'] = 'true';
         $dbquery->storeResult("use_stored", 'unittest', "toplevel");
         $db = $dbquery->getRecordset('id, name');
         $i = 0;
         while($db->nextRecord()) {
-            $result[$i]['id'] = $db->f('id'); 
+            $result[$i]['id'] = $db->f('id');
             $result[$i]['name'] = $db->f('name');
-            $i++; 
+            $i++;
         }
         $this->assertEquals(11, count($result));
     }
-    
+
     function testUseStoreOnTopLevelWithAnotherOneInBetween() {
         // the first page
         $dbquery = $this->createDBQuery();
         $dbquery->setCondition('id > 10');
         $dbquery->storeResult("use_stored", 'unittest', "toplevel");
         $db = $dbquery->getRecordset('id, name');
-        
+
         // another page also with toplevel - overrides the first one saved
         $dbquery = $this->createDBQuery();
         $dbquery->storeResult("use_stored", 'unittest-on-another-page', "toplevel");
         $db = $dbquery->getRecordset('id, name');
-        
+
         // then back to the first page again - the result should not be saved
         $dbquery = $this->createDBQuery();
         $_GET['use_stored'] = 'true';
@@ -208,25 +208,25 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         $db = $dbquery->getRecordset('id, name');
         $i = 0;
         while($db->nextRecord()) {
-            $result[$i]['id'] = $db->f('id'); 
+            $result[$i]['id'] = $db->f('id');
             $result[$i]['name'] = $db->f('name');
-            $i++; 
+            $i++;
         }
         $this->assertEquals(21, count($result));
     }
-    
+
     function testUseStoreOnSublevelNotChangingToplevel() {
         // the first page
         $dbquery = $this->createDBQuery();
         $dbquery->setCondition('id > 10');
         $dbquery->storeResult("use_stored", 'unittest', "toplevel");
         $db = $dbquery->getRecordset('id, name');
-        
+
         // another page with sublevel - does not override the first one saved
         $dbquery = $this->createDBQuery();
         $dbquery->storeResult("use_stored", 'unittest-on-another-page', "sublevel");
         $db = $dbquery->getRecordset('id, name');
-        
+
         // then back to the first page again - the result should be saved
         $dbquery = $this->createDBQuery();
         $_GET['use_stored'] = 'true';
@@ -234,25 +234,25 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         $db = $dbquery->getRecordset('id, name');
         $i = 0;
         while($db->nextRecord()) {
-            $result[$i]['id'] = $db->f('id'); 
+            $result[$i]['id'] = $db->f('id');
             $result[$i]['name'] = $db->f('name');
-            $i++; 
+            $i++;
         }
         $this->assertEquals(11, count($result));
     }
-    
+
     function testUseStoreWithTwoDifferentUsers() {
         // the first page
         $dbquery = $this->createDBQuery();
         $dbquery->setCondition('id > 10');
         $dbquery->storeResult("use_stored", 'unittest', "toplevel");
         $db = $dbquery->getRecordset('id, name');
-        
+
         // another user on the same page
         $dbquery = $this->createDBQuery('another-session-id-passed-to-kernel-and-then-to-dbquery');
         $dbquery->storeResult("use_stored", 'unittest', "toplevel");
         $db = $dbquery->getRecordset('id, name');
-        
+
         // then back to the first page again - the result should be saved
         $dbquery = $this->createDBQuery();
         $_GET['use_stored'] = 'true';
@@ -260,9 +260,9 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         $db = $dbquery->getRecordset('id, name');
         $i = 0;
         while($db->nextRecord()) {
-            $result[$i]['id'] = $db->f('id'); 
+            $result[$i]['id'] = $db->f('id');
             $result[$i]['name'] = $db->f('name');
-            $i++; 
+            $i++;
         }
         $this->assertEquals(11, count($result));
     }
