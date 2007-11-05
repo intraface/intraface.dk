@@ -16,13 +16,13 @@ else {
 	trigger_error('Der er ikke angivet noget objekt i /shared/keyword/connect.php', FATAL);
 }
 
-$keywords = $keyword->getList($keyword->get('id'));
+$keywords = $keyword->getList($keyword->getId());
 
 $page = new Page($kernel);
 $page->start('Rediger nøgleord til produkt');
 
 ?>
-<h1>Nøgleord: <?php echo $keyword->get('keyword'); ?></h1>
+<h1>Nøgleord: <?php echo $keyword->getKeyword(); ?></h1>
 
 <?php foreach ($keywords AS $key=>$value): ?>
 	<?php echo $value; ?> er id i et objekt. Jeg skal bare lige finde ud af, hvordan jeg får knyttet objekterne til getList();

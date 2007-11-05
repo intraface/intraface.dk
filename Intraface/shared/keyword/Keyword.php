@@ -18,7 +18,7 @@ abstract class Ilib_Keyword
 {
 }
 
-class Keyword extends Standard
+class Keyword
 {
     /**
      * @var array
@@ -718,6 +718,16 @@ class Keyword extends Standard
             }
         }
         return $result;
+    }
+
+    function getKeyword()
+    {
+        return $this->value['keyword'];
+    }
+
+    function getId()
+    {
+        return $this->value['id'];
     }
 
 }

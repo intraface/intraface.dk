@@ -38,9 +38,9 @@ $page->start(safeToHtml($translation->get('edit keyword')));
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
 	<fieldset>
 		<legend><?php echo safeToHtml($translation->get('edit keyword')); ?></legend>
-		<input type="hidden" name="id" value="<?php echo $keyword->get('id'); ?>" />
-		<label for="keyword"><?php echo safeToHtml($translation->get('keyword')); ?></label>
-		<input type="text" name="keyword" id="keyword" value="<?php echo safeToHtmL($keyword->get('keyword')); ?>" />
+		<input type="hidden" name="id" value="<?php echo $keyword->getId(); ?>" />
+		<label for="keyword"><?php echo safeToHtml($translation->getKeyword()); ?></label>
+		<input type="text" name="keyword" id="keyword" value="<?php echo safeToHtmL($keyword->getKeyword()); ?>" />
 		<input type="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" name="submit" class="save" />
 	</fieldset>
 </form>

@@ -146,7 +146,7 @@ if(count($posts) > 0) {
         if(count($keyword_ids) > 0) {
             foreach($keyword_ids AS $keyword_id) {
                 $keyword = new Keyword($contact, $keyword_id);
-                $keywords[] = $keyword->get('keyword');
+                $keywords[] = $keyword->getKeyword();
             }
             $worksheet->write($i, $c, implode(', ', $keywords));
             $c++;

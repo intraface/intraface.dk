@@ -11,22 +11,22 @@ $kernel->useShared('keyword');
 $translation = $kernel->getTranslation('keyword');
 
 if (!empty($_GET['id'])) {
-	$keyword = Keyword::factory($kernel, $_GET['id']);
+    $keyword = Keyword::factory($kernel, $_GET['id']);
 }
 else {
-	trigger_error($translation->get('no object has been given'), E_USER_EROR);
+    trigger_error($translation->get('no object has been given'), E_USER_EROR);
 }
 
-$keywords = $keyword->getList($keyword->get('id'));
+$keywords = $keyword->getList($keyword->getId());
 
 $page = new Page($kernel);
 $page->start('Rediger nøgleord til produkt');
 
 ?>
-<h1>Nøgleord: <?php echo $keyword->get('keyword'); ?></h1>
+<h1>Nøgleord: <?php echo $keyword->getKeyword(); ?></h1>
 
 <?php foreach ($keywords AS $key=>$value): ?>
-	<?php echo $value; ?> er id i et objekt. Jeg skal bare lige finde ud af, hvordan jeg får knyttet objekterne til getList();
+    <?php echo $value; ?> er id i et objekt. Jeg skal bare lige finde ud af, hvordan jeg får knyttet objekterne til getList();
 <?php endforeach; ?>
 
 <?php

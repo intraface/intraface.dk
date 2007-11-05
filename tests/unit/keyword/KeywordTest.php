@@ -98,8 +98,8 @@ class KeywordTest extends PHPUnit_Framework_TestCase
     {
         $id = $this->saveKeyword();
         $keyword = $this->createKeyword($id);
-        $this->assertEquals(1, $keyword->get('id'));
-        $this->assertEquals('test', $keyword->get('keyword'));
+        $this->assertEquals(1, $keyword->getId());
+        $this->assertEquals('test', $keyword->getKeyword());
     }
 
     /*
@@ -108,8 +108,8 @@ class KeywordTest extends PHPUnit_Framework_TestCase
         $id = $this->saveKeyword();
         $keyword = Keyword::factory(new FakeKeywordKernel, $id);
         $this->assertTrue(is_object($keyword));
-        $this->assertEquals(1, $keyword->get('id'));
-        $this->assertEquals('test', $keyword->get('keyword'));
+        $this->assertEquals(1, $keyword->getId());
+        $this->assertEquals('test', $keyword->getKeyword());
     }
     */
 
