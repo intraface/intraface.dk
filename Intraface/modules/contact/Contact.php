@@ -436,7 +436,7 @@ class Contact extends Standard {
         if ($this->id == 0 AND empty($var['number'])) {
             $var['number'] = $this->getMaxNumber() + 1;
         }
-        
+
         if(isset($var['type'])) {
             $type_key = array_search($var['type'], $this->types);
             if($type_key === false) {
@@ -732,6 +732,11 @@ class Contact extends Standard {
         return $this->keywords = new Keyword($this);
     }
 
+    function getKeywordAppender() {
+        return new Intraface_Keyword_Appender($this);
+    }
+
+
    /**
     * Start message op
     *
@@ -886,6 +891,11 @@ class Contact extends Standard {
             return false;
         }
         return true;
+    }
+
+    function getId()
+    {
+        return $this->id;
     }
 
 }

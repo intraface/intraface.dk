@@ -415,6 +415,7 @@ class Intraface_Keyword_Appender extends Keyword
     protected $type;
     protected $extra_conditions;
     protected $belong_to_id;
+    public $error;
 
     function __construct($object)
     {
@@ -454,6 +455,7 @@ class Intraface_Keyword_Appender extends Keyword
             $this->kernel = $this->object->kernel;
 
             $this->belong_to_id = $this->object->getId();
+            $this->error = new Error;
 
         }
         $this->extra_conditions = array('intranet_id' => $this->object->kernel->intranet->get('id'));

@@ -217,13 +217,9 @@ class Intraface_XMLRPC_Shop_Server
         $this->_factoryWebshop();
 
         $product = new Product($this->kernel);
-        $keywords = $product->getKeywords();
+        $keywords = $product->getKeywordAppender();
         return $keywords->getUsedKeywords();
 
-
-        $array = array(
-            array('id' => 1, 'keyword' => 'First keyword')
-        );
     }
 
     /**

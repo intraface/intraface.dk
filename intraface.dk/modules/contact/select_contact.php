@@ -35,7 +35,7 @@ else {
 
 // hente liste med kunder
 
-$keywords = $contact->getKeywords();
+$keywords = $contact->getKeywordAppender();
 $used_keywords = $keywords->getUsedKeywords();
 $contact->createDBQuery();
 

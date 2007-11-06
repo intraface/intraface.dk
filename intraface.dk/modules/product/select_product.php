@@ -70,7 +70,7 @@ if(isset($_POST['submit']) || isset($_POST['submit_close'])) {
 
 $product = new Product($kernel);
 $product->createDBQuery();
-$keywords = $product->getKeywords();
+$keywords = $product->getKeywordAppender();
 
 if(isset($_GET["search"]) || isset($_GET["keyword_id"])) {
 

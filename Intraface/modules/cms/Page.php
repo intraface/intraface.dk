@@ -814,13 +814,14 @@ class CMS_Page extends Standard {
         return 0;
     }
 
-    /*
-     * Denne metode kr�ves af Keyword.
-     */
-
     function getKeywords() {
         return ($this->keywords = new Keyword($this));
     }
+
+    function getKeywordAppender() {
+        return (new Intraface_Keyword_Appender($this));
+    }
+
 
     function moveUp() {
         $this->position->moveUp($this->id);
@@ -850,6 +851,11 @@ class CMS_Page extends Standard {
         $db->query($sql);
         return 1;
 
+    }
+
+    function getId()
+    {
+        return $this->id;
     }
 
 

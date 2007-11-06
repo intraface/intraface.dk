@@ -164,7 +164,7 @@ $page->start(safeToHtml($translation->get('file')) . ': ' . $filemanager->get('f
         </ul>
 
     <?php
-        $keyword = $filemanager->getKeywords();
+        $keyword = $filemanager->getKeywordAppender();
         $keywords = $keyword->getConnectedKeywords();
         if (is_array($keywords) AND count($keywords) > 0) {
             echo '<ul>';

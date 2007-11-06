@@ -74,7 +74,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 $product = new Product($kernel);
 $product->createDBQuery();
 // $characters = $product->getCharacters();
-$keywords = $product->getKeywords();
+$keywords = $product->getKeywordAppender();
 
 
 // burde bruge query

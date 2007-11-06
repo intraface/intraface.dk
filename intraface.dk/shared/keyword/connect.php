@@ -60,7 +60,7 @@ else {
 
 if (!empty($_POST)) {
 
-    $keyword = $object->getKeywords(); // starter keyword objektet
+    $keyword = $object->getKeywordAppender(); // starter keyword objektet
 
     if (!$keyword->deleteConnectedKeywords()) {
         $keyword->error->set('Kunne ikke slette keywords.');
@@ -68,13 +68,14 @@ if (!empty($_POST)) {
 
     // strengen med keywords
     if (!empty($_POST['keywords'])) {
-        $keyword->addKeywordsByString($_POST['keywords']);
+        $appender = new Intraface_Keyword_StringAppender(new Keyword($object), $keyword);
+        $appender->addKeywordsByString($_POST['keywords']);
     }
 
     // listen med keywords
     if (!empty($_POST['keyword']) AND is_array($_POST['keyword']) AND count($_POST['keyword']) > 0) {
         for($i=0, $max = count($_POST['keyword']); $i < $max; $i++) {
-            $keyword->addKeyword((int)$_POST['keyword'][$i]);
+            $keyword->addKeyword(new Keyword($object, $_POST['keyword'][$i]));
         }
     }
 
@@ -99,7 +100,7 @@ if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
 
 
 
-$keyword = $object->getKeywords(); // starter objektet
+$keyword = $object->getKeywordAppender(); // starter objektet
 $keywords = $keyword->getAllKeywords(); // henter alle keywords
 $keyword_string = $keyword->getConnectedKeywordsAsString();
 

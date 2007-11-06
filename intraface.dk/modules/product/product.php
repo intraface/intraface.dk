@@ -279,7 +279,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
     <ul class="button"><li><a href="<?php echo $shared_keyword->getPath(); ?>connect.php?product_id=<?php echo $product->get('id'); ?>">Tilknyt nøgleord</a></li></ul>
     <?php } ?>
     <?php
-        $keyword = $product->getKeywords();
+        $keyword = $product->getKeywordAppender();
         $keywords = $keyword->getConnectedKeywords();
         if (is_array($keywords) AND count($keywords) > 0) {
             echo '<ul>';

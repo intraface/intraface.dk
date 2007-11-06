@@ -199,7 +199,7 @@ $page->start(safeToHtml($translation->get('files')));
 
 		$selected_keywords = $filemanager->dbquery->getKeyword();
 
-    $keyword = $filemanager->getKeywords();
+    $keyword = $filemanager->getKeywordAppender();
     $keywords = $keyword->getUsedKeywords();
 
     if(count($keywords) > 0) {

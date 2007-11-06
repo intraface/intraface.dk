@@ -40,6 +40,12 @@ class FileManager extends FileHandler
         return ($this->keywords = new Keyword($this));
     }
 
+    public function getKeywordAppender()
+    {
+        return new Intraface_Keyword_Appender($this);
+    }
+
+
     /**
      * Gets a list
      *

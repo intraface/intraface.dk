@@ -65,7 +65,7 @@ elseif (!empty($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
 // hente liste med kunder
 $contact = new Contact($kernel);
 $contact->createDBQuery();
-$keywords = $contact->getKeywords();
+$keywords = $contact->getKeywordAppender();
 $used_keywords = $keywords->getUsedKeywords();
 
 if(isset($_GET['query']) || isset($_GET['keyword_id'])) {

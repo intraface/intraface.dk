@@ -507,6 +507,11 @@ class Product extends Standard {
         return ($this->keywords = new Keyword($this));
     }
 
+    public function getKeywordAppender() {
+        return new Intraface_Keyword_Appender($this);
+    }
+
+
     /*
     function lock() {
         $db = new DB_Sql;
@@ -747,6 +752,11 @@ class Product extends Standard {
             $i++;
         }
         return $products;
+    }
+
+    function getId()
+    {
+        return $this->id;
     }
 
 }
