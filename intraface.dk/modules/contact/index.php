@@ -10,7 +10,6 @@ if (!empty($_GET['search']) AND in_array($_GET['search'], array('hide', 'view'))
 }
 
 // delete
-
 if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
 	$deleted = array();
 	if (!empty($_POST['selected']) AND is_array($_POST['selected'])) {
@@ -40,7 +39,16 @@ elseif (!empty($_POST['undelete'])) {
 	}
 }
 
-
+if(!empty($_GET['import'])) {
+    $redirect = Redirect::go($kernel);
+    $shared_fileimport = $kernel->useShared('fileimport');
+    $url = $redirect->setDestination($shared_fileimport->getPath().'index.php', $module->getPath().'import.php');
+    $redirect->askParameter('session_variable_name');
+    header('location: '.$url);
+    exit;
+    
+}
+ 
 /*
 if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
 	$contact = new Contact($kernel, $_GET['delete']);
@@ -93,7 +101,7 @@ $page->start(safeToHtml($translation->get('contacts')));
 	<li><a class="pdf" href="<?php echo safeToHtml('http://'.NET_HOST.NET_DIRECTORY.'modules/contact/'); /* BAD SOLUTION!!! */ ?>pdf_label.php?use_stored=true" target="_blank"><?php echo safeToHtml($translation->get('print labels')); ?></a></li>
 	<li><a class="excel" href="excel.php?use_stored=true"><?php echo safeToHtml($translation->get('excel', 'common')); ?></a></li>
 	<li><a href="email_search.php?use_stored=true"><?php echo safeToHtml($translation->get('email to contacts in search')); ?></a></li>
-
+    <li><a href="index.php?import=true"><?php echo safeToHtml($translation->get('import contacts')); ?></a></li>    
 </ul>
 
 <?php if (!$contact->isFilledIn()): ?>
