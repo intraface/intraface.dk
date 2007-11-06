@@ -172,7 +172,7 @@ class Contact extends Standard {
     /**
      * @var object
      */
-    private $keywords;
+    public $keywords;
 
     /**
      * @var object
