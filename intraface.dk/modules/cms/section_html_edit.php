@@ -365,7 +365,7 @@ switch ($value['type']) {
         else {
             $selected_keywords = array();
         }
-        $keyword = $element->section->cmspage->getKeywords();
+        $keyword = $element->section->cmspage->getKeywordAppender();
         $keywords = $keyword->getUsedKeywords();
 
         if(count($keywords) > 0) {
