@@ -10,6 +10,10 @@ class FakeCMSKernel extends Kernel {
         $this->intranet = new FakeCMSIntranet;
         $this->user = new FakeCMSUser;
     }
+    
+    function getSessionId() {
+        return 'shouldbeatleast10char';
+    }
 }
 
 
