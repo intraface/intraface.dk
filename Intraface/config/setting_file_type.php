@@ -105,7 +105,14 @@ $_file_type = array(
 				'extension' => 'png',
 				'icon' => 'png.jpg',
 				'image' => 1,
-				'allow_user_upload' => 1),			
+				'allow_user_upload' => 1),
+            
+            15 => array('description' => 'CSV file',
+                'mime_type' => 'text/csv',
+                'extension' => 'csv',
+                'icon' => 'csv.jpg',
+                'image' => 0,
+                'allow_user_upload' => 1) 		
 		);
 		
 		// 12: image/pjpeg er jpg billeder uploadet i IE
