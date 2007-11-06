@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * The allowed mime types of file upload
+ * 
+ * Special windows cases.
+ * 12: image/pjpeg er jpg billeder uploadet i IE
+ * 14: image/x-png er jpg billeder uploadet i IE
+ * 16: application/octet-stream er csv i windows
+ */
 
 $_file_type = array(
 			0 => array('description' => 'Unknown filetype',
@@ -112,9 +120,13 @@ $_file_type = array(
                 'extension' => 'csv',
                 'icon' => 'csv.jpg',
                 'image' => 0,
-                'allow_user_upload' => 1) 		
+                'allow_user_upload' => 1),
+            
+            16 => array('description' => 'CSV file',
+                'mime_type' => 'application/octet-stream',
+                'extension' => 'csv',
+                'icon' => 'csv.jpg',
+                'image' => 0,
+                'allow_user_upload' => 1)    		
 		);
-		
-		// 12: image/pjpeg er jpg billeder uploadet i IE
-		// 14: image/x-png er jpg billeder uploadet i IE
 ?>
