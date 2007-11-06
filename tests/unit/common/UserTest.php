@@ -36,11 +36,13 @@ class UserTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->user->hasModuleAccess('cms'));
     }
 
+    /*
     function testSubAccess()
     {
         // @todo This test should be completed
         $this->markTestIncomplete('This test should be completed');
     }
+    */
 
     function testSetActiveIntranetReturnsAValueLargerThanZero()
     {

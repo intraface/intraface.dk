@@ -28,13 +28,13 @@ class FakeFileViewerHandler{
 
 class FileViewerTest extends PHPUnit_Framework_TestCase
 {
-    /*
+
     function testConstruction()
     {
         $fileviewer = new FileViewer(new FakeFileViewerHandler);
         $this->assertTrue(is_object($fileviewer));
     }
-
+    /*
     function testParseQueryString()
     {
         $querystring = '?/QH4X9sbRgRyPApgS/Ci7emeihjcJ3WdNyDMz7vspLq5CeT3QEb5IE9SMBUEKHHrnckM/MountKosciuszko_frontpage.jpg';
