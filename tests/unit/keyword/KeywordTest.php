@@ -52,6 +52,28 @@ class MyKeyword extends Keyword
     }
 }
 
+class FakeKeywordKeyword
+{
+    public $id;
+    public $keyword;
+
+    function __construct($id = 1, $keyword = 'test')
+    {
+        $this->id = $id;
+        $this->keyword = $keyword;
+    }
+
+    function getId()
+    {
+        return $this->id;
+    }
+
+    function getKeyword()
+    {
+        return $this->keyword;
+    }
+}
+
 class KeywordTest extends PHPUnit_Framework_TestCase
 {
     private $keyword;
@@ -120,66 +142,12 @@ class KeywordTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($keyword->delete());
     }
 
-    function testAddKeyword()
-    {
-        $id = $this->saveKeyword();
-        $this->assertTrue($this->keyword->addKeyword($id));
-        $keywords = $this->keyword->getConnectedKeywords();
-        $this->assertEquals(1, $keywords[0]['id']);
-        $this->assertEquals('test', $keywords[0]['keyword']);
-    }
-
-    function testGetConnectedKeywords()
-    {
-        $id = $this->saveKeyword();
-        $this->keyword->addKeyword($id);
-        $keywords = $this->keyword->getConnectedKeywords();
-        $this->assertEquals(1, $keywords[0]['id']);
-        $this->assertEquals('test', $keywords[0]['keyword']);
-    }
-
     function testGetAllKeywords()
     {
         $id = $this->saveKeyword();
         $keywords = $this->keyword->getAllKeywords();
         $this->assertEquals(1, $keywords[0]['id']);
         $this->assertEquals('test', $keywords[0]['keyword']);
-    }
-
-    function testGetUsedKeywords()
-    {
-        $id = $this->saveKeyword('test');
-        $id = $this->saveKeyword('test 2');
-        $this->keyword->addKeyword($id);
-        $keywords = $this->keyword->getUsedKeywords();
-        $this->assertEquals(2, $keywords[0]['id']);
-        $this->assertEquals('test 2', $keywords[0]['keyword']);
-    }
-
-    function testDeleteConnectedKeywords()
-    {
-        $id = $this->saveKeyword('test');
-        $this->keyword->addKeyword($id);
-        $this->assertTrue($this->keyword->deleteConnectedKeywords());
-        $keywords = $this->keyword->getConnectedKeywords();
-        $this->assertTrue(empty($keywords));
-    }
-
-    function testGetConnectedKeywordsAsString()
-    {
-        $id = $this->saveKeyword('test');
-        $this->keyword->addKeyword($id);
-        $id = $this->saveKeyword('tester');
-        $this->keyword->addKeyword($id);
-        $string = $this->keyword->getConnectedKeywordsAsString();
-        $this->assertEquals('test, tester', $string);
-    }
-
-    function testAddKeywordsByString()
-    {
-        $this->assertTrue($this->keyword->addKeywordsByString('tester, test'));
-        $string = $this->keyword->getConnectedKeywordsAsString();
-        $this->assertEquals('test, tester', $string);
     }
 
     function testRegisterTypeAndGetType()
@@ -189,3 +157,4 @@ class KeywordTest extends PHPUnit_Framework_TestCase
     }
 
 }
+
