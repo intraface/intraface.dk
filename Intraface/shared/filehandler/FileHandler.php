@@ -43,7 +43,7 @@ class FileHandler extends Standard
     /**
      * @var string
      */
-    private $tempdir_path;
+    public $tempdir_path;
 
     /**
      * @var array
