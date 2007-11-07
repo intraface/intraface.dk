@@ -113,11 +113,20 @@ $pfm->addPackageDepWithChannel('required', 'System_Command', 'pear.php.net', '1.
 $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.0');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Driver_mysql', 'pear.php.net', '1.4.0');
 $pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '1.5.0');
+$pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTranslation', 'public.intraface.dk', '0.2.0');
 $pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.9.10');
 $pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.7.0');
 $pfm->addPackageDepWithChannel('required', 'HTTP_Upload', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.2');
+$pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
+
+
+// Ilib
+$pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.0.1');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Error', 'public.intraface.dk', '0.0.1');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Redirect', 'public.intraface.dk', '0.0.1');
+$pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.dk', '0.0.1');
 
 // XMLRPC
 $pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'pear.php.net', '1.0.1');
