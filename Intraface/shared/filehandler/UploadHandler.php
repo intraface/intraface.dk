@@ -199,7 +199,7 @@ class UploadHandler extends Standard
 
         $mime_type = $this->file_handler->_getMimeType($prop['type'], 'mime_type');
         if($mime_type === false) {
-            $this->file_handler->error->set("error in file - not allowed mime_type");
+            $this->file_handler->error->set("error in file - not allowed mime_type (".$prop['ext'].", ".$prop['type'].")");
             return false;
         }
 
