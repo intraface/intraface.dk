@@ -1,5 +1,5 @@
 <?php
-
+die("these settings have been moved");
 /**
  * The allowed mime types of file upload
  * 
