@@ -838,15 +838,22 @@ class CMS_Page extends Standard {
      */
   function delete() {
         $db = new DB_Sql();
-          $db2 = new DB_Sql;
+        $db2 = new DB_Sql;
           // egentlig skuille denne m�ske v�re rekursiv?
 
+        /*
+        // I am not quite sure what this one is suppossed to do - see the next one instead.
         $sql = "SELECT * FROM cms_page WHERE child_of_id=" . $this->id . " AND site_id = " . $this->cmssite->get('id');
         $db->query($sql);
         while($db->nextRecord()) {
-            $db2->query("UPDATE cms_page SET child_of_id = '.$db->f('child_of_id').' WHERE child_of_id = " . $this->id . " AND site_id = " . $this->cmssite->get('id'));
+            $db2->query('UPDATE cms_page SET child_of_id = '.$db->f('child_of_id').' WHERE child_of_id = ' . $this->id . ' AND site_id = ' . $this->cmssite->get('id'));
         }
-
+        */
+        
+        // WE move all subpages to a level under - this also works on recursive sites.
+        // @todo: BUT it can be a mess and the position of the pages is not corrected
+        $db->query('UPDATE cms_page SET child_of_id = '.intval($this->get('child_of_id')).' WHERE child_of_id = '.intval($this->id));
+        
         $sql = "UPDATE cms_page SET active = 0 WHERE id=" . $this->id . " AND site_id = ".$this->cmssite->get('id');
         $db->query($sql);
         return 1;
