@@ -121,6 +121,7 @@ $pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0
 $pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.2');
 $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
 
+$pfm->addPackageDepWithChannel('required', 'DB_Sql', 'public.intraface.dk', '0.0.1'); // the package does not exist in public.intraface.dk
 
 // Ilib
 $pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.0.1');
