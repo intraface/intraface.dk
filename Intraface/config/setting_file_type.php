@@ -7,6 +7,7 @@
  * 12: image/pjpeg er jpg billeder uploadet i IE
  * 14: image/x-png er jpg billeder uploadet i IE
  * 16: application/octet-stream er csv i windows
+ * @todo: csv type applocatio/octet-stream should be checked whether it is a program as this mime_type can also be an exe file
  */
 
 $_file_type = array(
