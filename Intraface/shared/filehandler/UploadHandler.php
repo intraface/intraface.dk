@@ -202,6 +202,8 @@ class UploadHandler extends Standard
             $this->file_handler->error->set("error in file - not allowed mime_type (".$prop['ext'].", ".$prop['type'].")");
             return false;
         }
+        
+        // @todo: we have a problem here because csv files have the same mime type as exe files!
 
         if($mime_type['allow_user_upload'] == 0) {
             $this->file_handler->error->set("error in file - you have no permissions");
