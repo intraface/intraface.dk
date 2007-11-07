@@ -13,11 +13,6 @@
  * @version @package-version@
  */
 
-require_once 'Intraface/Weblogin.php';
-require_once 'Intraface/Intranet.php';
-require_once 'Intraface/Kernel.php';
-require_once 'Intraface/shared/filehandler/FileHandler.php';
-
 
 class FileViewer {
     
@@ -42,7 +37,7 @@ class FileViewer {
     private $filehandler;
     
     
-    public function __construct($filehandler, $instance) {
+    public function __construct($filehandler, $instance = '') {
         
         if(!is_object($filehandler)) {
             trigger_error('the first parameter needs to be filehandler in FileViewet->__construct', E_USER_ERROR);
@@ -52,10 +47,9 @@ class FileViewer {
         $this->filehandler = $filehandler;
         $this->file_path = $filehandler->get('file_path');
         $this->file_name = $filehandler->get('file_name');
-        $_file_type = array();
-        // $file_type is filled by the include_file
-        require(PATH_INCLUDE_CONFIG.'setting_file_type.php');
-        $this->mime_type = $_file_type[$filehandler->get('file_type_key')]['mime_type'];
+        
+        $file_type = $filehandler->get('file_type');
+        $this->mime_type = $file_type['mime_type'];
         
         $this->filehandler->createInstance();
         

@@ -53,12 +53,16 @@ class FileHandler extends Standard
     /**
      * @var array
      */
-    protected $file_types;
+    protected $file_types = array();
 
     /**
      * @var array
      */
-    protected $accessibility_types;
+    protected $accessibility_types = array(
+            0 => '_invalid_',
+            1 => 'user',
+            2 => 'intranet',
+            3 => 'public');
 
     /**
      * @var array
@@ -106,10 +110,7 @@ class FileHandler extends Standard
         $this->kernel = $kernel;
         $this->id = (int)$file_id;
         $this->error = new Error;
-
-        $filehandler_shared = $this->kernel->useShared('filehandler');
-        $this->file_types = $filehandler_shared->getSetting('file_type');
-        $this->accessibility_types = $filehandler_shared->getSetting('accessibility');
+        
         $this->upload_path = PATH_UPLOAD . $this->kernel->intranet->get('id') . '/';
         $this->tempdir_path = $this->upload_path.PATH_UPLOAD_TEMPORARY;
         $this->file_viewer = FILE_VIEWER;
@@ -223,12 +224,11 @@ class FileHandler extends Standard
         }
 
         $this->value['file_type_key'] = (int)$db->f('file_type_key');
+        $this->loadMimeTypes();
         $this->value['file_type'] = $this->_getMimeType((int)$db->f('file_type_key'));
-        $this->value['file_path'] = $this->upload_path . $db->f('server_file_name');
-
-        // denne skal kaldes efter getMimeType ellers er $this->file_types ikke instantieret
         $this->value['is_image'] = $this->file_types[$this->get('file_type_key')]['image'];
-
+        $this->value['file_path'] = $this->upload_path . $db->f('server_file_name');
+        
         if (file_exists($this->get('file_path'))) {
             $this->value['last_modified'] = filemtime($this->get('file_path'));
         } else {
@@ -436,7 +436,7 @@ class FileHandler extends Standard
 
         $file_size = filesize($file);
 
-        // @todo it seems as if the $mime_type is determined twice?
+        // if mime type is not set as the parameter, we try to determine the mimetype
         if($mime_type === NULL) {
             // $mime_type = mime_content_type($file);
             require_once 'MIME/Type.php';
@@ -447,6 +447,7 @@ class FileHandler extends Standard
             }
         }
 
+        // we load our own mimetypes which have more information.
         $mime_type = $this->_getMimeType($mime_type, 'mime_type');
         if($mime_type === false) {
             $this->error->set('error in filetype');
@@ -585,15 +586,17 @@ class FileHandler extends Standard
     /**
      * Returns the mimetype
      *
-     * @param string $key  @todo what is this
-     * @param string $from @todo what is this
+     * @param string $key  the array key you search. See key below
+     * @param string $from the place to search for the key, can be either 'key' (integer), 'mime_type' (string), 'extension' (string) 
      *
      * @return string
      */
     public function _getMimeType($key, $from = 'key')
     {
-        $this->loadMimeTypes();
-
+        if(empty($this->file_types)) {
+            $this->loadMimeTypes();
+        }
+        
         if($from == 'key') {
             if(!is_integer($key)) {
                 trigger_error("Når der skal findes mimetype fra key (default), skal første parameter til FileHandler->_getMimeType være en integer", E_USER_ERROR);
@@ -633,10 +636,13 @@ class FileHandler extends Standard
      * @return boolean true on success
      */
     public function loadMimeTypes() {
-        /* @todo hack */
-        require(PATH_INCLUDE_CONFIG . 'setting_file_type.php');
-        $this->file_types = $_file_type;
-        /* hack slut */
+        
+        // $shared_filehandler = $this->kernel->useShared('filehandler');
+        // $shared_filehandler->includeFile('FileType.php');
+        
+        require_once('Intraface/shared/filehandler/FileType.php');
+        $filetype = new FileType();
+        $this->file_types = $filetype->getList();
         return true;
     }
 
