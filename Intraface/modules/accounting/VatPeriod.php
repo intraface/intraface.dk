@@ -4,7 +4,7 @@
  */
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/Error.php';
-require_once 'Intraface/3Party/Database/Db_sql.php';
+require_once 'DB/Sql.php';
 
 class VatPeriod extends Standard {
 

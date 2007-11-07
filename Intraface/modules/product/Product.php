@@ -13,7 +13,7 @@
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/Error.php';
 require_once 'Intraface/Validator.php';
-require_once 'Intraface/3Party/Database/Db_sql.php';
+require_once 'DB/Sql.php';
 require_once 'Intraface/modules/product/ProductDetail.php';
 
 class Product extends Standard {

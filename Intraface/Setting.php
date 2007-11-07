@@ -9,7 +9,7 @@
  */
 
 //require_once 'Intraface/config/setting_kernel.php';
-require_once 'Intraface/3Party/Database/Db_sql.php';
+require_once 'DB/Sql.php';
 require_once 'Intraface/functions/functions.php';
 
 class Setting {

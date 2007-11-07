@@ -10,7 +10,7 @@
  * @author   Lars Olesen <lars@legestue.net>
  *
  */
-require_once 'Intraface/3Party/Database/Db_sql.php';
+require_once 'DB/Sql.php';
 
 /**
  * Handles custom sorting of a table

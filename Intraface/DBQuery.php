@@ -5,7 +5,6 @@
  * @author Sune Jensen <sj@sunet.dk>
  */
 
-require_once 'Intraface/3Party/Database/Db_sql.php';
 require_once 'Ilib/DBQuery.php';
 
 class DBQuery extends Ilib_DBQuery {

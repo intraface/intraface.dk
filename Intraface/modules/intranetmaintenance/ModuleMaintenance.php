@@ -2,7 +2,7 @@
 /**
  * @package Intraface_IntranetMaintenance
  */
-require_once 'Intraface/3Party/Database/Db_sql.php';
+require_once 'DB/Sql.php';
 require_once 'Intraface/Error.php';
 require_once 'Intraface/Main.php';
 

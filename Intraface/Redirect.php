@@ -7,7 +7,6 @@
  * @version @package-version@
  */
 
-require_once 'Intraface/3Party/Database/Db_sql.php';
 require_once 'Ilib/Redirect.php';
 
 /**

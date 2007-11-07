@@ -10,7 +10,7 @@ $time = getmicrotime2();
 
 //include("../include_first.php");
 
-require('Intraface/3Party/Database/Db_sql.php');
+require_once 'DB/Sql.php';
 require('Intraface/config/configuration.php');
 /*
 require('/home/intraface/deve_intraface/3Party/PEAR/MDB2.php');

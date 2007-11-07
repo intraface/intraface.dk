@@ -11,7 +11,7 @@
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/Error.php';
 require_once 'Intraface/tools/Amount.php';
-require_once 'Intraface/3Party/Database/Db_sql.php';
+require_once 'DB/Sql.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/Validator.php';
 

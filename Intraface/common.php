@@ -54,7 +54,7 @@ require_once 'config/setting_themes.php';
 require_once 'Intraface/functions/functions.php';
 
 // third party .
-require_once '3Party/Database/Db_sql.php';
+require_once 'DB/Sql.php';
 
 // system files
 require_once 'Intraface/Standard.php';

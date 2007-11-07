@@ -7,7 +7,7 @@ require_once 'Intraface/modules/accounting/Year.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/tools/Date.php';
 require_once 'Intraface/Validator.php';
-require_once 'Intraface/3Party/Database/Db_sql.php';
+require_once 'DB/Sql.php';
 
 class FakeYearSetting {
     function get() {}

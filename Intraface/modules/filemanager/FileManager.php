@@ -55,6 +55,9 @@ class FileManager extends FileHandler
      */
     public function getList($debug = '')
     {
+        // we load the mime types as they are going to be used a couple of times 
+        $this->loadMimeTypes();
+        
         if($this->dbquery->checkFilter("uploaded_from_date")) {
             $date_parts = explode(" ", $this->dbquery->getFilter("uploaded_from_date"));
             // Der kontrolleres ikke for gyldig tidsformat
@@ -116,7 +119,6 @@ class FileManager extends FileHandler
 
         if($this->dbquery->checkFilter('images')) {
             $keys = array();
-            $this->loadMimeTypes();
             foreach($this->file_types AS $key => $mime_type) {
                 if($mime_type['image'] == 1) {
                     $keys[] = $key;
