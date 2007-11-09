@@ -84,6 +84,7 @@ class CMS_Map extends CMS_Element {
                 $this->value['map'] .= '        map.setCenter(new GLatLng('.$this->get('latitude').', '.$this->get('longitude').'), 13);';
                 $this->value['map'] .= '        var point = new GLatLng('.$this->get('latitude').', '.$this->get('longitude').');';
                 $this->value['map'] .= '        map.addOverlay(new GMarker(point));';
+                $this->value['map'] .= '        map.addControl(new GSmallMapControl());';
                 $this->value['map'] .= '    }';
                 $this->value['map'] .= '}';
                 $this->value['map'] .= 'load();';
@@ -92,6 +93,7 @@ class CMS_Map extends CMS_Element {
                 $this->value['map'] .= '    var marker = new YMarker(latlon);';
                 $this->value['map'] .= '    marker.addLabel("<b>A</b>"); ';
                 $this->value['map'] .= '    YEvent.Capture(marker, EventsList.MouseClick, onSmartWinEvent);';
+                $this->value['map'] .= '    mymap.addControl(new GSmallMapControl());';
                 $this->value['map'] .= '    mymap.addOverlay(marker);';
                 $this->value['map'] .= '    mymap.addPanControl();';
                 $this->value['map'] .= '    mymap.addZoomLong();';
