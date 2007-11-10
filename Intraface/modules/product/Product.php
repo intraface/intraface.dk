@@ -273,15 +273,12 @@ class Product extends Standard {
      *
      * @return integer 0 on error
      */
-    public function save($array_var) {
-        // safeToDb må IKKE bruges i denne som en generel funktion for så dobbeltbehandles
-
+    public function save($array_var)
+    {
         if ($this->id > 0 AND $this->get('locked') == 1) {
             $this->error->set('Produktet er låst og kan ikke opdateres');
             return 0;
         }
-
-        // hvis der ikke er angivet noget produktnummer tilføjes et
 
         if (empty($array_var['number'])) {
             $array_var['number'] = $this->getMaxNumber() + 1;
@@ -292,16 +289,31 @@ class Product extends Standard {
         }
 
         // lave sql-sætningen
-        for ($i=0, $max = sizeof($this->fields), $sql = ''; $i<$max; $i++) {
+        $sql = '';
+        /*
+        for ($i=0, $max = sizeof($this->fields); $i<$max; $i++) {
             if (!array_key_exists($this->fields[$i], $array_var)) {
                 continue;
             }
+
             if(isset($array_var[$this->fields[$i]])) {
                 $sql .= $this->fields[$i]." = '".safeToDb($array_var[$this->fields[$i]])."', ";
             } else {
                 $sql .= $this->fields[$i]." = '', ";
             }
+        }
+        */
 
+        foreach ($this->fields as $field) {
+            if (!array_key_exists($field, $array_var)) {
+                continue;
+            }
+
+            if(isset($array_var[$field])) {
+                $sql .= $field." = '".safeToDb($array_var[$field])."', ";
+            } else {
+                $sql .= $field." = '', ";
+            }
         }
 
         if ($this->id > 0) {

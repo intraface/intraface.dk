@@ -143,7 +143,7 @@ class ProductDetail extends Standard {
         $validator->isNumeric($array_var['pic_id'], 'Fejl i billedid', 'allow_empty');
         $validator->isNumeric($array_var['weight'], 'Fejl i vægt - skal være et helt tal', 'allow_empty');
 
-        $validator->isNumeric($array_var['price'], 'Fejl i pris', 'allow_empty');
+        if (isset($array_var['price'])) $validator->isNumeric($array_var['price'], 'Fejl i pris', 'allow_empty');
 
         if ($this->product->error->isError()) {
             return false;
@@ -166,9 +166,13 @@ class ProductDetail extends Standard {
 
         $array_var = safeToDb($array_var);
 
-        $amount = new Amount($array_var['price']);
-        $amount->convert2db();
-        $array_var['price'] = $amount->get();
+        if (isset($array_var['price'])) {
+            $amount = new Amount($array_var['price']);
+            $amount->convert2db();
+            $array_var['price'] = $amount->get();
+        } else {
+            $array_var['price'] = 0;
+        }
 
 
         if($this->old_detail_id != 0) {
@@ -187,7 +191,9 @@ class ProductDetail extends Standard {
         if($this->db->nextRecord()) {
             // her skal vi sørge for at få billedet med
             $do_update = 0;
-            for ($i=0, $max = sizeof($this->fields), $sql = ''; $i<$max; $i++) {
+            $sql = '';
+            /*
+            for ($i=0, $max = sizeof($this->fields); $i<$max; $i++) {
                 if (!array_key_exists($this->fields[$i], $array_var)) {
                     continue;
                 }
@@ -200,12 +206,29 @@ class ProductDetail extends Standard {
                     $do_update = 1;
                 }
             }
+            */
+            foreach ($this->fields as $field) {
+                if (!array_key_exists($field, $array_var)) {
+                    continue;
+                }
+                if(isset($array_var[$field])) {
+                    $sql .= $field." = '".$array_var[$field]."', ";
+                } else {
+                    $sql .= $this->fields[$i]." = '', ";
+                }
+                if(isset($array_var[$field]) AND $this->db->f($field) != $array_var[$field] OR (is_numeric($this->db->f($field) AND $this->db->f($field)) > 0)) {
+                    $do_update = 1;
+                }
+
+            }
             if ($this->db->f('pic_id') > 0) {
                 $picture_id = $this->db->f('pic_id');
             }
         } else {
             // der er ikke nogen tidligere poster, så vi opdatere selvfølgelig
             $do_update = 1;
+            $sql = '';
+            /*
             for ($i=0, $max = sizeof($this->fields), $sql = ''; $i<$max; $i++) {
                 if (!array_key_exists($this->fields[$i], $array_var)) {
                     continue;
@@ -216,6 +239,18 @@ class ProductDetail extends Standard {
                     $sql .= $this->fields[$i]." = '', ";
                 }
             }
+            */
+            foreach($this->fields as $field) {
+                if (!array_key_exists($field, $array_var)) {
+                    continue;
+                }
+                if(isset($array_var[$field])) {
+                    $sql .= $field." = '".$array_var[$field]."', ";
+                } else {
+                    $sql .= $field." = '', ";
+                }
+            }
+
         }
 
 
