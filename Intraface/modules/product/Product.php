@@ -145,7 +145,7 @@ class Product extends Standard {
         $this->value['id'] = $this->db->f('id');
 
         // hente produktdetaljerne
-        $this->detail = new ProductDetail($this, $this->old_product_detail_id);
+        $this->detail = $this->getDetails();
         $this->value = $this->detail->get();
         // hente id igen for ovenstående har overskrevet det
         $this->value['id'] = $this->db->f('id');
@@ -770,6 +770,11 @@ class Product extends Standard {
     function getId()
     {
         return $this->id;
+    }
+
+    function getDetails()
+    {
+        return new ProductDetail($this, $this->old_product_detail_id);
     }
 
 }
