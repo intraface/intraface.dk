@@ -170,8 +170,6 @@ class ProductDetail extends Standard {
             $amount = new Amount($array_var['price']);
             $amount->convert2db();
             $array_var['price'] = $amount->get();
-        } else {
-            $array_var['price'] = 0;
         }
 
 
@@ -179,10 +177,10 @@ class ProductDetail extends Standard {
             // save kan ikke bruges hvis man skal opdatere et gammelt produkt
             // men så bør den vel bare automatisk kalde update(), som i øjeblikket
             // er udkommenteret.
-            return 0;
+            return false;
         } elseif (count($array_var) == 0) {
             // Der er ikke noget indhold i arrayet
-            return 0;
+            return false;
         }
 
         $this->db->query("SELECT * FROM product_detail WHERE id = ".$this->detail_id . "
@@ -211,10 +209,12 @@ class ProductDetail extends Standard {
                 if (!array_key_exists($field, $array_var)) {
                     continue;
                 }
-                if(isset($array_var[$field])) {
+                if (!empty($array_var[$field])) {
                     $sql .= $field." = '".$array_var[$field]."', ";
-                } else {
+                } elseif (isset($array_var[$field])) {
                     $sql .= $field." = '', ";
+                } else {
+                    continue;
                 }
                 if(isset($array_var[$field]) AND $this->db->f($field) != $array_var[$field] OR (is_numeric($this->db->f($field) AND $this->db->f($field)) > 0)) {
                     $do_update = 1;
@@ -244,19 +244,20 @@ class ProductDetail extends Standard {
                 if (!array_key_exists($field, $array_var)) {
                     continue;
                 }
-                if(isset($array_var[$field])) {
+                if(!empty($array_var[$field])) {
                     $sql .= $field." = '".$array_var[$field]."', ";
-                } else {
+                } elseif (isset($array_var[$field])) {
                     $sql .= $field." = '', ";
+                } else {
+                    continue;
                 }
             }
 
         }
 
-
         if($do_update == 0) {
             // Hmmmmm, der er slet ikke nogen felter der er ændret! Så gemmer vi ikke, men siger at det gik godt :-)
-            return 1;
+            return true;
         } else {
 
             // vi opdaterer produktet
@@ -265,14 +266,11 @@ class ProductDetail extends Standard {
             $this->detail_id = $this->db->insertedId();
 
             $this->load();
+            $this->product->load();
 
             $this->old_detail_id = $this->detail_id;
-            /*
-            if (!empty($picture_id) AND $picture_id > 0) {
-                $this->setPicture($picture_id);
-            }
-            */
-            return 1;
+
+            return true;
         }
     }
 
@@ -314,6 +312,16 @@ class ProductDetail extends Standard {
                 return '';
             }
         }
+    }
+
+    function setStateAccountId($id)
+    {
+        $db = new DB_Sql;
+        $db->query('UPDATE product_detail SET state_account_id = ' . $id . ' WHERE id = ' . $this->detail_id);
+        $this->load();
+        $this->product->load();
+        return true;
+        //return ($this->save(array('state_account_id' => $id)) > 0);
     }
 
 }

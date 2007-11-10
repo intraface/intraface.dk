@@ -64,7 +64,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
 
     ////////////////////////////////////////////////////////////////////////////
 
-    function testSavesProductsAndReturnsTrueOnSuccess()
+    function testSavesProductsAndReturnsIdOfProductOnSuccess()
     {
         $product = new Product($this->kernel);
         $name = 'Test';
@@ -78,6 +78,97 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $values['number']);
         $this->assertEquals($name, $values['name']);
         $this->assertEquals($price, $values['price']);
+    }
+
+    function testSavePersistsItselfAndCanSaveAgainStillHavingTheSameNumber()
+    {
+        $product = new Product($this->kernel);
+        $name = 'Test';
+        $price = 20;
+        if (!$result = $product->save(array('name' => $name, 'price' => $price, 'unit' => 1))) {
+            $product->error->view();
+        }
+        $this->assertTrue($result > 0);
+        $values = $product->get();
+
+        $this->assertEquals(1, $values['number']);
+        $this->assertEquals($name, $values['name']);
+        $this->assertEquals($price, $values['price']);
+
+        $product = new Product($this->kernel, $result);
+        $name = 'Test';
+        $price = 20;
+        if (!$result = $product->save(array('number' => $values['number'], 'name' => $name . '2', 'price' => $price, 'unit' => 1))) {
+            $product->error->view();
+        }
+        $this->assertTrue($result > 0);
+        $values = $product->get();
+
+        $this->assertEquals(1, $values['number']);
+        $this->assertEquals($name . '2', $values['name']);
+        $this->assertEquals($price, $values['price']);
+    }
+
+    function testSaveStateAccountIdInProductDetailsDoesntChangeOtherValues()
+    {
+        $product = new Product($this->kernel);
+        $name = 'Test';
+        $price = 20;
+        if (!$id = $product->save(array('name' => $name, 'price' => $price, 'unit' => 1, 'state_account_id' => 10))) {
+            $product->error->view();
+        }
+
+        $this->assertTrue($id > 0);
+        $values = $product->get();
+
+        $this->assertEquals(1, $values['number']);
+        $this->assertEquals($name, $values['name']);
+        $this->assertEquals($price, $values['price']);
+        $this->assertEquals(10, $values['state_account_id']);
+
+        $product = new Product($this->kernel, $id);
+        $this->assertEquals($id, $product->getId());
+        $this->assertTrue($product->getDetails()->setStateAccountId(20));
+        $this->assertEquals($id, $product->getId());
+
+        $values = $product->get();
+
+        $this->assertEquals(1, $values['number']);
+        $this->assertEquals($name, $values['name']);
+        $this->assertEquals(20, $values['state_account_id']);
+    }
+
+    function testSaveOnlySavesTheValuesWhichAreGiven()
+    {
+        $product = new Product($this->kernel);
+        $name = 'Test';
+        $price = 20;
+        if (!$id = $product->save(array('name' => $name, 'price' => $price, 'unit' => 1, 'state_account_id' => 10))) {
+            $product->error->view();
+        }
+
+        $this->assertTrue($id > 0);
+        $values = $product->get();
+
+        $this->assertEquals(1, $values['number']);
+        $this->assertEquals($name, $values['name']);
+        $this->assertEquals($price, $values['price']);
+        $this->assertEquals(10, $values['state_account_id']);
+
+        $product = new Product($this->kernel, $id);
+        $values = $product->get();
+        //print_r($values);
+
+
+        $data = array('state_account_id' => 20);
+        $product->save($data);
+        $values = $product->get();
+        //print_r($values);
+
+        $this->assertEquals(1, $values['number']);
+        $this->assertEquals($name, $values['name']);
+        $this->assertEquals(20, $values['state_account_id']);
+
     }
 
     function testMaxNumberIncrementsOnePrProductAdded()
@@ -104,7 +195,6 @@ class ProductTest extends PHPUnit_Framework_TestCase
         }
 
         $new_product = new Product($this->kernel);
-
         $array = array('number' => $number, 'name' => 'Test overtager nummer', 'price' => 20, 'unit' => 1);
         if (!$new_product->save($array)) {
             $new_product->error->view();
