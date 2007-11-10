@@ -14,8 +14,6 @@
  * @since 1.2
  */
 
-require_once 'HTTP/Upload.php';
-require_once 'Image/Transform.php';
 require_once 'Ilib/Validator.php';
 require_once 'Ilib/Error.php';
 
@@ -275,16 +273,6 @@ class FileHandler extends Standard
         }
 
         return $this->id;
-    }
-
-    /**
-     * Creates the dbquery object so it can be used in the class
-     *
-     * @return void
-     */
-    public function createDBQuery()
-    {
-        $this->dbquery = new DBQuery($this->kernel, "file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->kernel->intranet->get("id"));
     }
 
     /**
