@@ -420,7 +420,7 @@ class Debtor extends Standard
         settype($input['payment_method'], 'integer');
         settype($input['girocode'], 'string');
         $validator->isString($input['girocode'], 'error in girocode', '', 'allow_empty');
-        
+
         settype($input['message'], 'string');
         $validator->isString($input['message'], 'error in message', '', 'allow_empty');
 
@@ -998,20 +998,22 @@ class Debtor extends Standard
         if (!$this->kernel->user->hasModuleAccess('accounting')) {
             trigger_error('Brugeren har ikke adgang til accounting og burde aldrig få mulighed for at bogføre', E_USER_ERROR);
         }
+        $return = true;
+
         $accounting_module = $this->kernel->useModule('accounting');
         $year = new Year($this->kernel);
         if (!$year->get('id')) {
             $this->error->set('Der er ikke sat noget år. <a href="'.$accounting_module->getPath().'years.php">Sæt regnskabsår</a>.');
+            $return = false;
         } elseif (!$year->isDateInYear($this->get('this_date'))) {
-                $this->error->set('Datoen er ikke i det år, der er sat i regnskabsmodulet. <a href="'.$accounting_module->getPath().'years.php">Skift regnskabsår</a>.');
+            $this->error->set('Datoen er ikke i det år, der er sat i regnskabsmodulet. <a href="'.$accounting_module->getPath().'years.php">Skift regnskabsår</a>.');
+            $return = false;
         } elseif($year->get('locked') == 1) {
-                $this->error->set('Året er ikke åbent for bogføring.');
+            $this->error->set('Året er ikke åbent for bogføring.');
+            $return = false;
         }
 
-        if ($this->error->isError()) {
-            return false;
-        }
-        return true;
+        return $return;
 
     }
 
@@ -1129,7 +1131,7 @@ class Debtor extends Standard
                       'bank_account_number' => $this->kernel->setting->get("intranet", "bank_account_number"),
                       'giro_account_number' => $this->kernel->setting->get("intranet", "giro_account_number")
         );
-        
+
         return $info;
     }
 
