@@ -18,3 +18,5 @@ ALTER TABLE `file_handler_instance_type` ADD `resize_type_key` INT NOT NULL AFTE
 ALTER TABLE `dbquery_result` CHANGE `weblogin_session_id` `session_id` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
 
 ALTER TABLE `redirect` CHANGE `user_id` `session_id` VARCHAR( 255 ) NOT NULL ;
+
+ ALTER TABLE `procurement` CHANGE `_old_state_account_id` `state_account_id` INT( 11 ) NOT NULL DEFAULT '0'
