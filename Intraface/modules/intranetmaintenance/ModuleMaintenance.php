@@ -30,9 +30,9 @@ class ModuleMaintenance
 
         $this->load();
     }
-    
+
     static function factory($kernel, $name) {
-        
+
         $db = MDB2::singleton(DB_DSN);
         if(PEAR::isError($db)) {
             trigger_error("Error in creating db: ".$db->getUserInfo(), E_USER_ERROR);
@@ -43,9 +43,9 @@ class ModuleMaintenance
             trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
             exit;
         }
-        
+
         if($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-            
+
             return new ModuleMaintenance($kernel, $row['id']);
         }
         else {
@@ -65,12 +65,12 @@ class ModuleMaintenance
                 trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
                 exit;
             }
-            
+
             if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
                 $this->value = $row;
 
                 // $this->sub_access = new SubAccessMaintenance($this);
-                
+
                 $j = 0;
                 $result_sub_access = $this->db->query("SELECT id, name, description FROM module_sub_access WHERE active = 1 AND module_id = ".$row["id"]." ORDER BY description");
                 if(PEAR::isError($result_sub_access)) {
@@ -83,7 +83,7 @@ class ModuleMaintenance
                     $this->value["sub_access"][$i] = $row;
                     $i++;
                 }
-                 
+
             }
         }
     }
@@ -217,7 +217,7 @@ class ModuleMaintenance
             trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
             exit;
         }
-        
+
         while ($row = $result->fetchRow()) {
             $value[$i] = $row;
 

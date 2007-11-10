@@ -369,12 +369,13 @@ class Product extends Standard {
         # Nøgleord
         #
 
+        $appender = $this->getKeywordAppender();
         $this->getKeywords();
-        $keywords = $this->keywords->getConnectedKeywords();
+        $keywords = $appender->getConnectedKeywords();
 
         if (is_array($keywords)) {
             foreach ($keywords AS $k) {
-                $product->keywords->addKeyword($k['id']);
+                $product->keywords->addKeyword(new Keyword($this, $k['id']));
             }
         }
 
