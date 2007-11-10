@@ -25,10 +25,20 @@ class FileManager extends FileHandler
     function __construct($kernel, $file_id = 0)
     {
         parent::__construct($kernel, $file_id);
-
-        $this->dbquery = new DBQuery($this->kernel, "file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->kernel->intranet->get("id"));
+    }
+    
+    /**
+     * Creates the dbquery object so it can be used in the class
+     *
+     * @return void
+     */
+    public function createDBQuery()
+    {
+        $this->dbquery = new Ilib_DBQuery("file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery->createStore($this->kernel->getSessionId(), 'intranet_id = '.intval($this->kernel->intranet->get('id')));
         $this->dbquery->useErrorObject($this->error);
     }
+    
 
     /**
      * Creates the keywords object
