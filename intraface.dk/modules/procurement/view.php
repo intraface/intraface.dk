@@ -163,9 +163,7 @@ $page->start("Indkøb");
         ?>
         <tr>
             <td>Køb fra</td>
-            <td><?php
-                print($procurement->get("dk_from_region"))
-                ?>
+            <td><?php e($translation->get($procurement->get('from_region'), 'procurement')); ?>
             </td>
         </tr>
         <tr>

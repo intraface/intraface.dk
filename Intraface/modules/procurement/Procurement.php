@@ -128,7 +128,7 @@ class Procurement Extends Standard {
         $this->value["vat"] = $db->f("vat");
         $this->value["dk_vat"] = number_format($db->f("vat"), 2, ",",".");
 
-        $this->value["price_shipment_etc"] = $this->value["total_price"] - $this->value["total_price_items"] - $this->value["vat"];
+        $this->value["price_shipment_etc"] = round($this->value["total_price"] - $this->value["total_price_items"] - $this->value["vat"], 2);
         $this->value["dk_price_shipment_etc"] = number_format($this->value["price_shipment_etc"], 2, ",",".");
 
 
@@ -138,8 +138,8 @@ class Procurement Extends Standard {
         //$this->value["paid_key"] = $db->f("paid");
 
 
-        //$this->value["state_account_id"] = $db->f("state_account_id");
-        //$this->value["voucher_number"] = $db->f("voucher_number");
+        $this->value["state_account_id"] = $db->f("state_account_id");
+        $this->value["voucher_number"] = $db->f("voucher_number");
 
         return true;
 
@@ -151,7 +151,7 @@ class Procurement Extends Standard {
 
     function update($input) {
         if (!is_array($input)) {
-            trigger_error('Procurement->update(): $input er ikke et array', FATAL);
+            trigger_error('Procurement->update(): $input er ikke et array', E_USER_ERROR);
         }
         $db = new DB_sql;
 
@@ -530,7 +530,7 @@ class Procurement Extends Standard {
      * @see Debtor::state();
      */
 
-    function state($year, $voucher_number) {
+    function state($year, $voucher_number, $credit_account_id = null) {
         if ($this->isStated()) {
             $this->error->set('Allerede bogført');
             return 0;
@@ -541,7 +541,7 @@ class Procurement Extends Standard {
         }
 
         if (!$this->kernel->user->hasModuleAccess('accounting')) {
-            trigger_error('Ikke rettigheder til at bogføre', FATAL);
+            trigger_error('Ikke rettigheder til at bogføre', E_USER_ERROR);
         }
 
         $this->kernel->useModule('accounting');
@@ -558,8 +558,13 @@ class Procurement Extends Standard {
         $debet_account = new Account($year, $this->get('state_account_id'));
         $debet_account_number = $debet_account->get('number');
 
-        $credit_account = new Account($year, $year->getSetting('credit_account_id'));
-        $credit_account_number = $credit_account->get('number');
+        if (!$credit_account_id) {
+            $credit_account = new Account($year, $year->getSetting('credit_account_id'));
+            $credit_account_number = $credit_account->get('number');
+        } else {
+            $credit_account = new Account($year, $credit_account_id);
+            $credit_account_number = $credit_account->get('number');
+        }
 
         if ($credit_account->get('id') == 0) {
             $this->error->set('Kreditorkontoen ikke sat');
@@ -580,7 +585,7 @@ class Procurement Extends Standard {
 
         if (!$voucher->saveInDaybook($input_values, false)) {
             $this->error->set('Kunne ikke gemme i kassekladden');
-            return 0;
+            return false;
         }
 
         #
@@ -601,14 +606,20 @@ class Procurement Extends Standard {
 
             if (!$voucher->saveInDaybook($input_values, false)) {
                 $this->error->set('Kunne ikke gemme i kassekladden');
-                return 0;
+                return false;
             }
         }
 
         // samlet moms på fakturaen
         // opmærksom på at momsbeløbet her er hardcoded - og det bør egentlig tages fra købet?
         $debet_account = new Account($year, $year->getSetting('vat_out_account_id'));
-        $credit_account = new Account($year, $year->getSetting('credit_account_id'));
+
+        if (!$credit_account_id) {
+            $credit_account = new Account($year, $year->getSetting('credit_account_id'));
+        } else {
+            $credit_account = new Account($year, $credit_account_id);
+        }
+
         $input_values = array(
                 'voucher_number' => $voucher->get('number'),
                 'date' => $this->get('dk_paid_date'),
@@ -679,7 +690,7 @@ class Procurement Extends Standard {
         $db = new DB_Sql;
         $db->query("UPDATE procurement SET state_account_id = " . $id . " WHERE id = " .$this->id);
         $this->load();
-        return 1;
+        return true;
     }
 
 
