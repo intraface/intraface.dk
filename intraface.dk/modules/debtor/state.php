@@ -245,14 +245,14 @@ $page->start($translation->get('State invoice'));
         </tbody>
    </table>
 
-     <?php // if ($debtor->invoiceReadyForState() AND !$debtor->isStated()): ?>
+     <?php  if (!$debtor->isStated()): ?>
      <div>
          <input type="submit" value="Bogfør" /> eller
         <a href="view.php?id=<?php echo intval($value['id']); ?>">fortryd</a>
     </div>
-    <?php /* else: ?>
+    <?php  else: ?>
     <p><a href="<?php echo $accounting_module->getPath(); ?>daybook.php">Gå til kassekladden</a></p>
-    <?php endif; */ ?>
+    <?php endif;  ?>
 </form>
 <?php endif; ?>
 <?php
