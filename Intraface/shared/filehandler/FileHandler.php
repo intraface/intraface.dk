@@ -284,10 +284,7 @@ class FileHandler extends Standard
      */
     public function createUpload()
     {
-        if(!class_exists('UploadHandler')) {
-            $filehandler_shared = $this->kernel->useShared('filehandler');
-            $filehandler_shared->includeFile('UploadHandler.php');
-        }
+        require_once 'Intraface/shared/filehandler/UploadHandler.php';
         $this->upload = new UploadHandler($this);
     }
 
@@ -298,11 +295,8 @@ class FileHandler extends Standard
      */
     public function createInstance($type = "", $param = array())
     {
-        if(!class_exists('InstanceHandler')) {
-            $filehandler_shared = $this->kernel->useShared('filehandler');
-            $filehandler_shared->includeFile('InstanceHandler.php');
-        }
-
+        
+        require_once 'Intraface/shared/filehandler/InstanceHandler.php';
         if($type == "") {
             $this->instance = new InstanceHandler($this);
         } else {
@@ -319,11 +313,7 @@ class FileHandler extends Standard
      */
     public function createImage()
     {
-        if(!class_exists('ImageHandler')) {
-            $filehandler_shared = $this->kernel->useShared('filehandler');
-            $filehandler_shared->includeFile('ImageHandler.php');
-        }
-
+        require_once 'Intraface/shared/filehandler/ImageHandler.php';
         $this->image = new ImageHandler($this);
     }
 
