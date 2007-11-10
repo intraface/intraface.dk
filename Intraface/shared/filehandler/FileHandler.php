@@ -16,7 +16,8 @@
 
 require_once 'HTTP/Upload.php';
 require_once 'Image/Transform.php';
-require_once 'Intraface/Validator.php';
+require_once 'Ilib/Validator.php';
+require_once 'Ilib/Error.php';
 
 class FileHandler extends Standard
 {
@@ -109,7 +110,7 @@ class FileHandler extends Standard
         }
         $this->kernel = $kernel;
         $this->id = (int)$file_id;
-        $this->error = new Error;
+        $this->error = new Ilib_Error;
         
         $this->upload_path = PATH_UPLOAD . $this->kernel->intranet->get('id') . '/';
         $this->tempdir_path = $this->upload_path.PATH_UPLOAD_TEMPORARY;
@@ -534,7 +535,7 @@ class FileHandler extends Standard
         }
 
         $input = safeToDb($input);
-        $validator = new Validator($this->error);
+        $validator = new Ilib_Validator($this->error);
 
         $sql = array();
 

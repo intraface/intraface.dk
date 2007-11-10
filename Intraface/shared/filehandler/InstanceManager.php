@@ -41,7 +41,7 @@ class InstanceManager extends Standard
     
     public function __construct($kernel, $type_key = 0) 
     {
-        $this->error = new Error;
+        $this->error = new Ilib_Error;
         $this->db = MDB2::singleton(DB_DSN);
         $this->type_key = (int)$type_key;
         $this->intranet_id = $kernel->intranet->get('id');
@@ -109,7 +109,7 @@ class InstanceManager extends Standard
     function save($input) 
     {
         
-        $validator = new Validator($this->error);
+        $validator = new Ilib_Validator($this->error);
         
         if($this->type_key != 0) {
             $standard_types = $this->getStandardTypes();

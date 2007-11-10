@@ -42,6 +42,8 @@
  *
  */
 
+require_once 'HTTP/Upload.php';
+
 class UploadHandler extends Standard
 {
 
