@@ -2,6 +2,9 @@
 /**
  * @package Intraface_FileManager
  */
+ 
+require_once 'Intraface/shared/filehandler/FileHandler.php';
+
 class FileManager extends FileHandler
 {
     /**
@@ -34,6 +37,7 @@ class FileManager extends FileHandler
      */
     public function createDBQuery()
     {
+        require_once 'Ilib/DBQuery.php';
         $this->dbquery = new Ilib_DBQuery("file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->createStore($this->kernel->getSessionId(), 'intranet_id = '.intval($this->kernel->intranet->get('id')));
         $this->dbquery->useErrorObject($this->error);
