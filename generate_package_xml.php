@@ -107,7 +107,6 @@ $pfm->setPearinstallerDep('1.5.0');
 // installer
 $pfm->addPackageDepWithChannel('required', 'Config', 'pear.php.net', '1.0.0');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Schema', 'pear.php.net', '0.8.1');
-$pfm->addPackageDepWithChannel('required', 'System_Command', 'pear.php.net', '1.0.6');
 
 // Kernel
 $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.0');
@@ -119,6 +118,8 @@ $pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.7.0');
 $pfm->addPackageDepWithChannel('required', 'HTTP_Upload', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.2');
+$pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTranslation', 'public.intraface.dk', '0.1.1');
+$pfm->addPackageDepWithUri('required', 'MDB2_Debug_ExplainQueries', 'http://svn.intraface.dk/intrafacepublic/3Party/MDB2/Debug/MDB2_Debug_ExplainQueries-0.1.0');
 $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
 
 $pfm->addPackageDepWithChannel('required', 'DB_Sql', 'public.intraface.dk', '0.0.1'); // the package does not exist in public.intraface.dk
@@ -131,11 +132,11 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.
 
 // XMLRPC
 $pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'pear.php.net', '1.0.1');
-$pfm->addPackageDepWithUri('required', 'MDB2_Debug_ExplainQueries', 'http://svn.intraface.dk/intrafacepublic/3Party/MDB2/Debug/MDB2_Debug_ExplainQueries-0.1.0');
-$pfm->addPackageDepWithUri('required', 'Translation2_Decorator_LogMissingTranslation', 'http://svn.intraface.dk/intrafacepublic/3Party/Translation2/Decorator/Translation2_Decorator_LogMissingTranslation-0.1.0');
+
 
 // filehandler
 $pfm->addPackageDepWithChannel('required', 'MIME_Type', 'pear.php.net', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'System_Command', 'pear.php.net', '1.0.6');
 
 // email
 $pfm->addPackageDepWithUri('required', 'phpmailer', 'http://svn.intraface.dk/intrafacepublic/3Party/phpmailer/phpmailer-1.73.0');
@@ -144,9 +145,9 @@ $pfm->addPackageDepWithUri('required', 'phpmailer', 'http://svn.intraface.dk/int
 $pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'htmlpurifier.org', '1.6.0');
 $pfm->addPackageDepWithChannel('required', 'Text_Wiki', 'pear.php.net', '1.1.0');
 
-//$pfm->addPackageDepWithChannel('required', 'PHP_Markdown', 'pear.michelf.com', '1.0.1');
+$pfm->addPackageDepWithChannel('required', 'PHP_Markdown', 'pear.michelf.com', '1.0.1');
 
-//$pfm->addPackageDepWithUri('required', 'SmartyPants', 'http://svn.intraface.dk/intrafacepublic/3Party/SmartyPants/PHPSmartyPants-1.5.1');
+$pfm->addPackageDepWithUri('required', 'SmartyPants', 'http://svn.intraface.dk/intrafacepublic/3Party/SmartyPants/PHPSmartyPants-1.5.1');
 $pfm->addPackageDepWithUri('required', 'phpFlickr', 'http://svn.intraface.dk/intrafacepublic/3Party/phpFlickr/phpFlickr-1.6.1');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_HTML', 'public.intraface.dk', '0.1.0');
 
@@ -162,7 +163,7 @@ $pfm->addPackageDepWithChannel('required', 'Contact_Vcard_Build', 'pear.php.net'
 $pfm->addPackageDepWithUri('required', 'Payment_Quickpay', 'http://svn.intraface.dk/intrafacepublic/3Party/Quickpay/Payment_Quickpay-1.18.1');
 
 // accounting
-//$pfm->addPackageDepWithChannel('required', 'OLE', 'pear.php.net', '0.5.0');
+$pfm->addPackageDepWithChannel('required', 'OLE', 'pear.php.net', '0.5.0');
 $pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php.net', '0.9.0');
 
 foreach ($ignore AS $file) {
