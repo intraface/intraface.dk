@@ -214,7 +214,7 @@ class ProductDetail extends Standard {
                 if(isset($array_var[$field])) {
                     $sql .= $field." = '".$array_var[$field]."', ";
                 } else {
-                    $sql .= $this->fields[$i]." = '', ";
+                    $sql .= $field." = '', ";
                 }
                 if(isset($array_var[$field]) AND $this->db->f($field) != $array_var[$field] OR (is_numeric($this->db->f($field) AND $this->db->f($field)) > 0)) {
                     $do_update = 1;
