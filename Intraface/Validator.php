@@ -6,15 +6,21 @@
  * @author Sune Jensen <sj@sunet.dk>
  */
 
-require_once 'Validate.php';
+// require_once 'Validate.php';
+require_once 'Ilib/Validator.php';
 
-/**
- * Basically a collection of validator methods which logs to a logger
- *
- * @author Lars Olesen <lars@legestue.net>
- * @author Sune Jensen <sj@sunet.dk>
- */
-class Validator {
+class Validator extends Ilib_Validator {
+    
+    public function __construct($error) {
+        
+        $options = array('connection_internet' => CONNECTION_INTERNET);
+        
+        parent::__construct($error, $options);
+    } 
+}
+
+// This can be removed when intraface 1.7 is running on the server.
+class _old_Validator {
 
     /**
      * @var object
