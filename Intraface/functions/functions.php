@@ -15,7 +15,10 @@ function isAjax() {
     return 0;
 }
 
-
+function e($string)
+{
+    echo htmlentities($string);
+}
 
 /**
  * Funktion til at outputte et beløb landespecifik notation
