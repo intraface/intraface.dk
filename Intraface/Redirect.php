@@ -7,6 +7,7 @@
  * @version @package-version@
  */
 
+require_once 'DB/Sql.php';
 require_once 'Ilib/Redirect.php';
 
 /**
@@ -134,14 +135,14 @@ class Redirect extends Ilib_Redirect
      */
     public function __construct($kernel, $id = 0)
     {
-        
-        // 
+
+        //
         $options = array(
              'extra_db_condition' => array('intranet_id = '.$kernel->intranet->get('id'))
         );
-        
+
         $db = MDB2::singleton(DB_DSN);
-        
+
         parent::__construct($kernel->getSessionId(), $db, $id, $options);
     }
 
@@ -205,13 +206,13 @@ class Redirect extends Ilib_Redirect
         if(!is_object($kernel)) {
             trigger_error("First parameter in redirect::factory is not kernel", E_USER_ERROR);
         }
-        
+
         $options = array(
             'extra_db_condition' => array('intranet_id = '.$kernel->intranet->get('id')),
             'query_variable' => $query_variable,
             'query_return_variable' => $query_return_variable
         );
-        
+
         $db = MDB2::singleton(DB_DSN);
 
         return parent::factory($kernel->getSessionId(), $db, $type, $options);
@@ -761,7 +762,7 @@ class _old_Redirect
         }
         return false;
     }
-    
+
     /**
      * Gets multiple parameter
      *

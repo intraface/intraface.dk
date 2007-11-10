@@ -47,12 +47,12 @@ class Address extends Standard
      * @var array
      */
     public $fields = array('name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'ean');
-    
+
     /**
      * @var object error
      */
     public $error;
-    
+
     /**
      * Init: loader klassen
      *
@@ -74,7 +74,7 @@ class Address extends Standard
         // $this->kernel = & Kernel::singleton();
         $this->id = $id;
         $this->error = new Error;
-        
+
         $this->load();
 
         $this->belong_to_types = $this->getBelongToTypes();
@@ -199,12 +199,12 @@ class Address extends Standard
 
         return $this->id;
     }
-    
+
     function validate($array_var) {
-        
+
         $validator = new Validator($this->error);
         // public $fields = array('name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'ean');
-    
+
         settype($array_var['name'], 'string');
         $validator->isString($array_var['name'], 'there was an error in name', '');
         settype($array_var['address'], 'string');
@@ -226,7 +226,7 @@ class Address extends Standard
         $validator->isString($array_var['phone'], 'not a valid phone number', '', 'allow_empty');
         settype($array_var['ean'], 'string');
         $validator->isString($array_var['ean'], 'ean location number is not valid', '', 'allow_empty');
-        
+
         if($this->error->isError()) {
             return false;
         }
@@ -274,7 +274,7 @@ class Address extends Standard
                     }
                 }
             }
-            
+
             if($do_update == 0) {
                 // There is nothing to save, but that is OK, so we just return 1
                 return true;
@@ -284,7 +284,7 @@ class Address extends Standard
                     trigger_error("Error in exec: ".$result->getUserInfo(), E_USER_ERROR);
                     return false;
                 }
-                
+
                 $result = $db->exec("INSERT INTO address SET ".$sql." type = ".$this->belong_to_key.", belong_to_id = ".$this->belong_to_id.", active = 1, changed_date = NOW()");
                 if(PEAR::isError($result)) {
                     trigger_error("Error in exec: ".$result->getUserInfo(), E_USER_ERROR);
@@ -302,9 +302,9 @@ class Address extends Standard
 
     /**
      * Public: Opdatere en adresse.
-     * 
+     *
      * UPDATE: Metoden er udkommenteret fra 18/10 2007 da den ikke ser ud til at blive benyttet!
-     * 
+     *
      * Denne funktion overskriver den nuværende adresse. Benyt som udagangspunkt ikke denne, da historikken på adresser skal gemmes.
      *
      * @param array $array_var et array med felter med adressen. Se felterne i init funktionen: $this->fields
@@ -322,14 +322,14 @@ class Address extends Standard
             trigger_error("Error db singleton: ".$db->getUserInfo(), E_USER_ERROR);
             return false;
         }
-        
+
         foreach($this->fields AS $i => $field) {
             $sql = '';
             if(isset($array_var[$field])) {
                 $sql .= $field." = ".$db->quote($array_var[$field]).", ";
             }
         }
-        
+
         $result = $db->exec("UPDATE address SET ".$sql." changed_date = NOW() WHERE id = ".$this->id);
         if(PEAR::isError($result)) {
             trigger_error("Error in exec: ".$result->getUserInfo(), E_USER_ERROR);

@@ -5,21 +5,22 @@
  * @author Sune Jensen <sj@sunet.dk>
  */
 
+require_once 'DB/Sql.php';
 require_once 'Ilib/DBQuery.php';
 
 class DBQuery extends Ilib_DBQuery {
-    
+
     /**
-     * 
+     *
      */
     public function __construct($kernel, $table, $required_conditions = "") {
-        
+
         parent::__construct($table, $required_conditions);
         $this->createStore($kernel->getSessionId(), 'intranet_id = '.$kernel->intranet->get('id'));
         if(strtolower(get_class($kernel->user)) == 'user') {
             $this->setRowsPerPage($kernel->setting->get('user', 'rows_pr_page'));
-        }    
-    }   
+        }
+    }
 }
 
 // should be deleted when Intraface 1.7 is running on server!
@@ -181,7 +182,7 @@ class _old_DBQuery {
 
     /**
      * Denne funktion benyttes til at definere tabeller, som den skal joines med
-     *  
+     *
      * <code>
      * $dbquery->setJoin('INNER', 'user', 'contact.created_by_user_id=user.id', 'active=1');
      * </code>
@@ -584,7 +585,7 @@ class _old_DBQuery {
     }
 
     /**
-     * returns the keyword ids that is set for the filter. 
+     * returns the keyword ids that is set for the filter.
      *
      * @param integer $key key on keywords (i do not know what this is used for)
      *
