@@ -18,7 +18,7 @@ class Setting {
     var $system;
     var $user_id;
     var $intranet_id;
-    protected $settings;
+    protected $settings = array();
 
     function __construct($intranet_id, $user_id = 0) {
         global $_setting;
@@ -106,21 +106,21 @@ class Setting {
         return 0;
     }
 
-    function getSettings() {
+    function getSettings()
+    {
         $this->db->query("SELECT setting, value, sub_id, user_id FROM setting WHERE intranet_id = " . $this->db->quote($this->intranet_id, 'integer')." AND (user_id = ".$this->db->quote($this->user_id, 'integer')." OR user_id = 0)");
         while($this->db->nextRecord()) {
             if ($this->db->f('user_id') == 0) {
                 $this->settings['intranet'][$this->db->f('setting')][$this->db->f('sub_id')] = $this->db->f('value');
-            }
-            else {
+            } else {
                 $this->settings['user'][$this->db->f('setting')][$this->db->f('sub_id')] = $this->db->f('value');
             }
         }
-
+        return $this->settings;
     }
 
-    function get($type, $setting, $sub_id = 0) {
-
+    function get($type, $setting, $sub_id = 0)
+    {
         $this->getSettings();
 
         if($this->checkSystem($setting) && $this->checkType($type)) {

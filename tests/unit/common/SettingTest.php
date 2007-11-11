@@ -62,6 +62,16 @@ class SettingTest extends PHPUnit_Framework_TestCase
         $setting2->set('user', 'rows_pr_page', $second_user_setting);
         $this->assertEquals($first_user_setting, $setting1->get('user', 'rows_pr_page'));
         $this->assertEquals($second_user_setting, $setting2->get('user', 'rows_pr_page'));
+    }
+
+    function testGetSettings()
+    {
+        $intranet_id = rand(1, 1000000);
+        $user_id = rand(1, 10000);
+        $setting = new Setting($intranet_id, $user_id);
+        $this->assertEquals(0, count($setting->getSettings()));
+        $setting->set('user', 'rows_pr_page', 10);
+        print_r($setting->getSettings());
 
     }
 }
