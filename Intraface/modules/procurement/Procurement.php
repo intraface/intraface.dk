@@ -554,7 +554,6 @@ class Procurement Extends Standard {
             'text' => 'Indkøb: ' . $this->get('number') . ' ' . $this->get('description')
         ));
 
-
         $debet_account = new Account($year, $this->get('state_account_id'));
         $debet_account_number = $debet_account->get('number');
 
@@ -591,7 +590,6 @@ class Procurement Extends Standard {
         #
         # shipment etch
         #
-
         if ($this->get("price_shipment_etc") > 0) {
 
             $input_values = array(
@@ -612,7 +610,7 @@ class Procurement Extends Standard {
 
         // samlet moms på fakturaen
         // opmærksom på at momsbeløbet her er hardcoded - og det bør egentlig tages fra købet?
-        $debet_account = new Account($year, $year->getSetting('vat_out_account_id'));
+        $debet_account = new Account($year, $year->getSetting('vat_in_account_id'));
 
         if (!$credit_account_id) {
             $credit_account = new Account($year, $year->getSetting('credit_account_id'));
