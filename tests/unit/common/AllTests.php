@@ -8,7 +8,7 @@ class Common_AllTests {
     {
         $suite = new PHPUnit_Framework_TestSuite('Intraface_Common');
 
-        $tests = array('Auth', 'Kernel', 'Module', 'Setting', 'User', 'Weblogin', 'Redirect', 'DBQuery', 'Error', 'Position');
+        $tests = array('Auth', 'Kernel', 'Module', 'Setting', 'User', 'Weblogin', 'Redirect', 'DBQuery', 'Error', 'Position', 'Intranet');
 
         foreach ($tests AS $test) {
             require_once $test . 'Test.php';
