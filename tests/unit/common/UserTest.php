@@ -15,6 +15,13 @@ class UserTest extends PHPUnit_Framework_TestCase
         $this->user = new User(1);
     }
 
+    function tearDown()
+    {
+        $this->user = null;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+
     function testConstructionOfUser()
     {
         $this->assertTrue(is_object($this->user));
@@ -29,6 +36,7 @@ class UserTest extends PHPUnit_Framework_TestCase
     function testUserModuleAccessOnlyWorksWhenTheUserHasAnActiveIntranetId()
     {
         // TODO how should we handle unknown modules
+        // TODO and setup modules we can count on for the test
         $this->assertFalse($this->user->hasModuleAccess('intranetmaintenance'));
         $this->assertFalse($this->user->hasModuleAccess('cms'));
         $this->user->setIntranetId(1); // spørgsmålet er om man bare skal have en init i stedet?
@@ -49,10 +57,29 @@ class UserTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->user->setActiveIntranetId(1) > 0);
     }
 
-
-    function tearDown()
+    function testGetPermissionsReturnsAnArray()
     {
-        $this->user = null;
+        $this->assertTrue(is_array($this->user->getPermissions()));
+    }
+
+    function testHasModuleAccessReturnsTrueOnAccess()
+    {
+        $this->user->setIntranetId(1);
+        $this->assertTrue($this->user->hasModuleAccess('intranetmaintenance'));
+    }
+
+    function testHasModuleAccessReturnsFalseIfAccessIsNotGranted()
+    {
+        $this->user->setIntranetId(1);
+        $this->assertFalse($this->user->hasModuleAccess('todo'));
+    }
+
+    function testClearCachedPermissionsEmptiesPermissionArrayAndSetsPermissionLoadedToFalse()
+    {
+        $this->user->setIntranetId(1);
+        $this->user->clearCachedPermission();
+        $this->assertEquals(0, count($this->user->getPermissions()));
+        $this->assertFalse($this->user->permissionsLoaded());
     }
 }
 ?>

@@ -19,22 +19,63 @@ require_once 'Intraface/Error.php';
 require_once 'Intraface/Address.php';
 require_once 'MDB2.php';
 
-class User extends Standard {
+class User extends Standard
+{
+    /**
+     * @var db
+     */
     public $db; // to be accessed from extended UserMaintenance.
+                // @todo then it just have to be protected
+
+    /**
+     * @var integer
+     */
     public $id;
+
+    /**
+     * @var array
+     */
     public $value;
+
+    /**
+     * @var integer
+     */
     public $intranet_id;
+
+    /**
+     * @var error
+     */
     public $error;
-    protected $permissions;
-    protected $modules;
+
+    /**
+     * @var array
+     */
+    protected $permissions = array();
+
+    /**
+     * @var array
+     */
+    protected $modules = array();
+
+    /**
+     * @var address
+     */
     public $address;
+
+    /**
+     * @var boolean
+     */
+    private $permissions_loaded = false;
 
     /**
      * Constructor
      *
      * @param integer $id User id
+     *
+     * @return void
      */
-    function __construct($id = 0) {
+    function __construct($id = 0)
+    {
         $this->id = $this->value['id'] = intval($id);
         $this->db = MDB2::singleton(DB_DSN);
         $this->intranet_id = 0;
@@ -49,7 +90,13 @@ class User extends Standard {
         }
     }
 
-    function load() {
+    /**
+     * Load
+     *
+     * @return void
+     */
+    function load()
+    {
         $result = $this->db->query("SELECT id, email, disabled FROM user WHERE id = " . $this->db->quote($this->id, 'integer'));
         if(PEAR::isError($result)) {
             trigger_error($result->getUserInfo(), E_USER_ERROR);
@@ -60,17 +107,40 @@ class User extends Standard {
             // TODO remove this
             $this->address = Address::factory('user', $this->id);
             return($this->id);
-        }
-        else {
+        } else {
             return($this->id = 0);
         }
     }
 
-    function getAddress() {
+    /**
+     * Gets the address object
+     *
+     * @return object
+     */
+    function getAddress()
+    {
         $this->address = Address::factory('user', $this->id);
     }
 
-    function getPermissions($intranet_id = null) {
+    /**
+     * Gets permissions
+     *
+     * @return array
+     */
+    function getPermissions()
+    {
+        return $this->permissions;
+    }
+
+    /**
+     * Loads permissions
+     *
+     * @param integer $intranet_id
+     *
+     * @return boolean
+     */
+    function loadPermissions($intranet_id = null)
+    {
         if (!$intranet_id) {
             $intranet_id = $this->intranet_id;
         }
@@ -90,13 +160,27 @@ class User extends Standard {
             $this->permissions['user']['module'][$row['module_id']] = true;
             $this->permissions['user']['intranet'][$row['intranet_id']] = true;
         }
+
+        $this->permissions_loaded = true;
+        return true;
     }
 
-    function hasIntranetAccess($intranet_id = 0) {
+    /**
+     * Returns whether the user has intranetaccess
+     *
+     * @param integer $intranet_id
+     *
+     * @return boolean
+     */
+    function hasIntranetAccess($intranet_id = 0)
+    {
         if($intranet_id == 0) {
             $intranet_id = $this->intranet_id;
         }
-        $this->getPermissions($intranet_id);
+
+        //if (!$this->permissionsLoaded()) {
+            $this->loadPermissions($intranet_id);
+        //}
 
         if(!empty($this->permissions['user']['intranet'][$intranet_id])) {
             return $this->permissions['user']['intranet'][$intranet_id];
@@ -105,12 +189,27 @@ class User extends Standard {
         return false;
     }
 
-    function clearCachedPermission() {
-        unset($this->permissions);
-        unset($this->modules);
+    /**
+     * Clears cached permissions
+     *
+     * @return void
+     */
+    public function clearCachedPermission()
+    {
+        $this->permissions = array();
+        $this->modules = array();
+        $this->permissions_loaded = false;
     }
 
-    function getModuleIdFromString($module) {
+    /**
+     * Gets module id from string
+     *
+     * @param integer $module
+     *
+     * @return integer
+     */
+    function getModuleIdFromString($module)
+    {
         if(empty($this->modules)) {
             $result = $this->db->query("SELECT id, name FROM module WHERE active = 1");
             if(PEAR::isError($result)) {
@@ -123,56 +222,77 @@ class User extends Standard {
         }
         if(!empty($this->modules[$module])) {
             return $module_id = $this->modules[$module];
-        }
-        else {
+        } else {
            trigger_error('user says unknown module ' . $module, E_USER_ERROR);
         }
     }
 
-    function hasModuleAccess($module, $intranet_id = 0) {
+    /**
+     * Returns whether user has module Access
+     *
+     * @param integer $module
+     * @param integer $intranet_id
+     *
+     * @return integer
+     */
+    function hasModuleAccess($module, $intranet_id = 0)
+    {
         $intranet_id = intval($intranet_id);
 
-        if($intranet_id == 0) $intranet_id = $this->intranet_id;
+        if($intranet_id == 0) {
+            $intranet_id = $this->intranet_id;
+        }
+
+        if (!$this->permissionsLoaded()) {
+            $this->loadPermissions($intranet_id);
+        }
 
         // getting the module
         if(is_string($module)) {
             $module_id = $this->getModuleIdFromString($module);
-        }
-        else {
+        } else {
             $module_id = intval($module);
         }
 
-        $this->getPermissions($intranet_id);
         if (!empty($this->permissions) AND is_array($this->permissions)) {
             if (empty($this->permissions['intranet']['module'][$module_id]) OR $this->permissions['intranet']['module'][$module_id] !== true) {
                 return false;
-            }
-            else if (empty($this->permissions['user']['module'][$module_id]) OR $this->permissions['user']['module'][$module_id] !== true) {
+            } else if (empty($this->permissions['user']['module'][$module_id]) OR $this->permissions['user']['module'][$module_id] !== true) {
                 return false;
-            }
-            else {
+            } else {
                 return true;
             }
         }
         return false;
     }
 
-
     /**
-     * @param $module
-     * @param $sub_access
-     * @param intranet_id (når den skal tilgås fra intranetmaintenance (til hvad?)
+     * Returns whether the permissions has been loaded
+     *
      * @return boolean
      */
-    function hasSubAccess($module, $sub_access, $intranet_id = 0) {
+    function permissionsLoaded()
+    {
+        return $this->permissions_loaded;
+    }
 
+    /**
+     * Returns whether user has subaccess
+     *
+     * @param integer $module
+     * @param integer $sub_access
+     * @param integer intranet_id (når den skal tilgås fra intranetmaintenance (til hvad?)
+     *
+     * @return boolean
+     */
+    function hasSubAccess($module, $sub_access, $intranet_id = 0)
+    {
         settype($intranet_id, "integer");
         if($intranet_id == 0) $intranet_id = $this->intranet_id;
 
         if(is_string($module)) {
             $module_id = $this->getModuleIdFromString($module);
-        }
-        else {
+        } else {
             $module_id = intval($module);
         }
 
@@ -184,12 +304,10 @@ class User extends Standard {
             }
             if($row = $result->fetchRow()) {
                 $sub_access_id = $row['id'];
-            }
-            else {
+            } else {
                 trigger_error("user says unknown subaccess", E_USER_ERROR);
             }
-        }
-        else {
+        } else {
             $sub_access_id = intval($sub_access);
         }
 
@@ -219,7 +337,6 @@ class User extends Standard {
 
         // then we check whether there is access to the sub access
         if (!empty($this->permissions['user']['module']['subaccess'][$sub_access_id]) AND $this->permissions['user']['module']['subaccess'][$sub_access_id] === true) {
-
             return true;
         }
 
@@ -251,7 +368,81 @@ class User extends Standard {
         return false;
     }
 
-    function getIntranetList() {
+    /**
+     * Returns the active intranet
+     *
+     * @return integer
+     */
+    function getActiveIntranetId()
+    {
+
+        $result = $this->db->query("SELECT active_intranet_id FROM user WHERE id = ".$this->db->quote($this->id, 'integer'));
+        if(PEAR::isError($result)) {
+            trigger_error($result->getUserInfo(), E_USER_ERROR);
+        }
+
+
+        if($result->numRows() == 1) {
+            $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
+            if($this->hasIntranetAccess($row["active_intranet_id"])) {
+                return($row['active_intranet_id']);
+            }
+        }
+
+        $result = $this->db->query("SELECT intranet.id FROM intranet
+            INNER JOIN permission ON permission.intranet_id = intranet.id
+            WHERE permission.user_id = ".$this->id);
+        if(PEAR::isError($result)) {
+            trigger_error($result->getUserInfo(), E_USER_ERROR);
+        }
+        if($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+            return $row['id'];
+        } else {
+            return false;
+        }
+
+    }
+
+    /**
+     * Sets intranet_id
+     *
+     * @todo what is this used for?
+     *
+     * @return boolean
+     */
+    function setIntranetId($id) {
+        $this->intranet_id = intval($id);
+        if($this->id == 0 || $this->hasIntranetAccess()) {
+            return true;
+        } else {
+            trigger_error('you do not have access to this intranet', E_USER_ERROR);
+            return false;
+        }
+    }
+
+    /**
+     * Sets active intranet_id
+     *
+     * @return boolean
+     */
+    function setActiveIntranetId($id) {
+        $id = intval($id);
+        if($this->hasIntranetAccess($id)) {
+            $this->db->exec("UPDATE user SET active_intranet_id = ". $this->db->quote($id, 'integer')." WHERE id = ". $this->db->quote($this->get('id'), 'integer'));
+            return $id;
+        }
+        return false;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Gets a list with the users intranets
+     *
+     * @return array
+     */
+    function getIntranetList()
+    {
         // Skal denne funktion være her? Måske den istedet skulle være i intranet.
         $result = $this->db->query("SELECT DISTINCT(intranet.id), intranet.name FROM intranet
             INNER JOIN permission
@@ -265,7 +456,15 @@ class User extends Standard {
         return $result->fetchAll();
     }
 
-    function validate(&$input) {
+    /**
+     * Validates user info
+     *
+     * @param array $input
+     *
+     * @return boolean
+     */
+    function validate(&$input)
+    {
 
         $input = safeToDb($input);
         $validator = new Validator($this->error);
@@ -281,17 +480,21 @@ class User extends Standard {
 
         if(isset($input["disabled"])) {
             $input["disabled"] = 1;
-        }
-        else {
+        } else {
             $input["disabled"] = 0;
         }
 
     }
 
     /**
+     * Updates the user
+     *
      * @param array $input Data to update
+     *
+     * @return integer
      */
-    function update($input) {
+    function update($input)
+    {
 
         $this->validate($input);
 
@@ -306,18 +509,19 @@ class User extends Standard {
             $this->db->exec("UPDATE user SET ".$sql." WHERE id = ".$this->id);
             $this->load();
             return($this->id);
-        }
-        else {
+        } else {
             trigger_error("An id is needed to update user details in User->Update()", E_USER_ERROR);
         }
     }
 
     /**
-     *
      * Ved ikke om der skal bygges noget mere sikkerhed ind i denne?
      *
+     * @todo this should be an observer instead
+     *
      */
-    function SendForgottenPasswordEmail($email) {
+    function SendForgottenPasswordEmail($email)
+    {
         if (!Validate::email($email)) {
             return 0;
         }
@@ -396,56 +600,6 @@ class User extends Standard {
     function isFilledIn() {
         if ($this->address->get('phone')) return 1;
         return 0;
-    }
-
-    function getActiveIntranetId() {
-
-        $result = $this->db->query("SELECT active_intranet_id FROM user WHERE id = ".$this->db->quote($this->id, 'integer'));
-        if(PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
-        }
-
-
-        if($result->numRows() == 1) {
-            $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-            if($this->hasIntranetAccess($row["active_intranet_id"])) {
-                return($row['active_intranet_id']);
-            }
-        }
-
-        $result = $this->db->query("SELECT intranet.id FROM intranet
-            INNER JOIN permission ON permission.intranet_id = intranet.id
-            WHERE permission.user_id = ".$this->id);
-        if(PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
-        }
-        if($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-            return $row['id'];
-        }
-        else {
-            return false;
-        }
-
-    }
-
-    function setIntranetId($id) {
-        $this->intranet_id = intval($id);
-        if($this->id == 0 || $this->hasIntranetAccess()) {
-            return true;
-        }
-        else {
-            trigger_error('you do not have access to this intranet', E_USER_ERROR);
-            return false;
-        }
-    }
-
-    function setActiveIntranetId($id) {
-        $id = intval($id);
-        if($this->hasIntranetAccess($id)) {
-            $this->db->exec("UPDATE user SET active_intranet_id = ". $this->db->quote($id, 'integer')." WHERE id = ". $this->db->quote($this->get('id'), 'integer'));
-            return $id;
-        }
-        return false;
     }
 
 }
