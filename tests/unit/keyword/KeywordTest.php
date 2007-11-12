@@ -27,6 +27,7 @@ class FakeKeywordKernel
     }
 }
 
+if (!class_exists('FakeKeywordObject')) {
 class FakeKeywordObject
 {
     public $kernel;
@@ -40,6 +41,7 @@ class FakeKeywordObject
     {
         return 1;
     }
+}
 }
 
 class MyKeyword extends Keyword
