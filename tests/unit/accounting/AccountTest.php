@@ -80,7 +80,7 @@ class AccountTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Account', get_class($account));
     }
 
-    function testSave()
+    function testSaveReturnsAnIntegerLargerThanZero()
     {
         $account = $this->createAccount();
         $account_number = rand(1, 1000000);
@@ -149,7 +149,8 @@ class AccountTest extends PHPUnit_Framework_TestCase {
         $saldo = $account->getPrimoSaldo();
 
         $this->assertEquals($debet_new, $saldo['debet'], '', $this->delta);
-
     }
+
+
 }
 ?>
