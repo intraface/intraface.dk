@@ -8,19 +8,52 @@
  * @author Sune Jensen <sj@sunet.dk>
  */
 
-//require_once 'Intraface/config/setting_kernel.php';
 require_once 'DB/Sql.php';
 require_once 'Intraface/functions/functions.php';
 
-class Setting {
+class Setting
+{
+    /**
+     * @var object
+     */
+    private $db;
 
-    var $db;
-    var $system;
-    var $user_id;
-    var $intranet_id;
+    /**
+     * @var array
+     */
+    private $system;
+
+    /**
+     * @var integer
+     */
+    private $user_id;
+
+    /**
+     * @var integer
+     */
+    private $intranet_id;
+
+    /**
+     * @var array
+     */
     protected $settings = array();
 
-    function __construct($intranet_id, $user_id = 0) {
+    /**
+     * @var boolean
+     */
+
+    protected $is_loaded = false;
+
+    /**
+     * Checks whether setting is in system
+     *
+     * @param integer $intranet_id
+     * @param integer $user_id
+     *
+     * @return void
+     */
+    function __construct($intranet_id, $user_id = 0)
+    {
         global $_setting;
 
         require_once 'Intraface/config/setting_kernel.php';
@@ -34,56 +67,75 @@ class Setting {
     }
 
     /**
+     * Checks whether setting is in system
+     *
      * @param string $setting to test
+     *
+     * @return boolean or throws exception
      */
-    private function checkSystem($setting) {
-
+    private function checkSystem($setting)
+    {
         if(!empty($setting) && is_array($this->system) && isset($this->system[$setting])) {
             return true;
-        }
-        else {
-            trigger_error('Setting "'.$setting.'" is not defined', E_USER_ERROR);
+        } else {
+            throw new Exception('Setting "'.$setting.'" is not defined');
         }
     }
 
     /**
+     * Checks whether type is a valid type
+     *
      * @param string $type to test
+     *
+     * @return boolean or throws exception
      */
-    private function checkType($type) {
+    private function checkType($type)
+    {
         if($type == 'system' || $type == 'intranet' || $type == 'user') {
             return true;
-        }
-        else {
+        } else {
             trigger_error('Ugyldig type setting "'.$type.'"', E_USER_ERROR);
         }
     }
 
     /**
+     * Checks whether the user is logged in
+     *
      * @return boolean
      */
-    function checkLogin() {
+    function checkLogin()
+    {
         if($this->user_id != 0) {
             return true;
-        }
-        else {
+        } else {
             trigger_error('Du kan ikke udføre denne handling fra et weblogin', E_USER_ERROR);
         }
     }
 
+    /**
+     * Sets a certain setting
+     *
+     * @access protected, however to be tested we kept it public
+     *
+     * @param string  $type    Can be either system, intranet, user
+     * @param string  $setting The actual setting
+     * @param integer $sub_id  @todo What is this exactly
+     *
+     * @return boolean
+     */
     function set($type, $setting, $value, $sub_id = 0) {
 
         if($this->checkSystem($setting) && $this->checkType($type) && $this->checkLogin()) {
 
             switch($type) {
                 case 'system':
-                    trigger_error('Du kan ikke ændre på systemsetting', E_USER_ERROR);
+                    throw new Exception('Du kan ikke ændre på systemsetting');
                     break;
                 case 'intranet':
                     $this->db->query("SELECT id FROM setting WHERE setting = ".$this->db->quote($setting, 'text')." AND intranet_id = ".$this->intranet_id." AND user_id = 0 AND sub_id = ".intval($sub_id));
                     if($this->db->nextRecord()) {
                         $this->db->query("UPDATE setting SET value = ".$this->db->quote($value, 'text')." WHERE id = ".$this->db->quote($this->db->f("id"), 'integer'));
-                    }
-                    else {
+                    } else {
                         $this->db->query("INSERT INTO setting SET value = ".$this->db->quote($value, 'text').", setting = ".$this->db->quote($setting, 'text').", intranet_id = ".$this->db->quote($this->intranet_id, 'integer').", user_id = 0, sub_id = ".intval($sub_id));
                     }
                     $this->settings['intranet'][$setting][$sub_id] = $value;
@@ -93,21 +145,36 @@ class Setting {
                         $this->db->query("SELECT id FROM setting WHERE setting = ".$this->db->quote($setting, 'text')." AND intranet_id = ".$this->db->quote($this->intranet_id, 'integer')." AND user_id = ".$this->db->quote($this->user_id, 'integer')." AND sub_id = ".intval($sub_id));
                         if($this->db->nextRecord()) {
                             $this->db->query("UPDATE setting SET value = ".$this->db->quote($value, 'text')." WHERE id = ".$this->db->quote($this->db->f("id"), 'integer'));
-                        }
-                        else {
+                        } else {
                             $this->db->query("INSERT INTO setting SET value = ".$this->db->quote($value, 'text').", setting = ".$this->db->quote($setting, 'text').", intranet_id = ".$this->intranet_id.", user_id = ".$this->db->quote($this->user_id, 'integer').", sub_id = ".intval($sub_id));
                         }
                     }
                     $this->settings['user'][$setting][$sub_id] = $value;
                     break;
             }
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
     }
 
-    function getSettings()
+    /**
+     * Checks whether a setting is set
+     *
+     * @return array
+     */
+    public function getSettings()
     {
+        return $this->settings;
+    }
+
+    /**
+     * Loads settings
+     *
+     * @return void
+     */
+    private function loadSettings()
+    {
+        $this->settings = array();
         $this->db->query("SELECT setting, value, sub_id, user_id FROM setting WHERE intranet_id = " . $this->db->quote($this->intranet_id, 'integer')." AND (user_id = ".$this->db->quote($this->user_id, 'integer')." OR user_id = 0)");
         while($this->db->nextRecord()) {
             if ($this->db->f('user_id') == 0) {
@@ -116,12 +183,35 @@ class Setting {
                 $this->settings['user'][$this->db->f('setting')][$this->db->f('sub_id')] = $this->db->f('value');
             }
         }
-        return $this->settings;
+        $this->is_loaded = true;
     }
 
-    function get($type, $setting, $sub_id = 0)
+    /**
+     * Returns whether the settings has already been loaded
+     *
+     * @return boolean
+     */
+    private function isLoaded()
     {
-        $this->getSettings();
+        return $this->is_loaded;
+    }
+
+    /**
+     * Gets a certain setting
+     *
+     * @access protected, however to be tested we kept it public
+     *
+     * @param string  $type    Can be either system, intranet, user
+     * @param string  $setting The actual setting
+     * @param integer $sub_id  @todo What is this exactly
+     *
+     * @return boolean
+     */
+    public function get($type, $setting, $sub_id = 0)
+    {
+        if (!$this->isLoaded()) {
+            $this->loadSettings();
+        }
 
         if($this->checkSystem($setting) && $this->checkType($type)) {
             switch($type) {
@@ -170,19 +260,36 @@ class Setting {
             }
         }
     }
-    function isSettingSet($type, $setting, $sub_id = 0) {
+
+    /**
+     * Checks whether a setting is set
+     *
+     * @access protected, however to be tested we kept it public
+     *
+     * @param string  $type    Can be either system, intranet, user
+     * @param string  $setting The actual setting
+     * @param integer $sub_id  @todo What is this exactly
+     *
+     * @return boolean
+     */
+    function isSettingSet($type, $setting, $sub_id = 0)
+    {
         if($this->checkSystem($setting) && $this->checkType($type)) {
             switch($type) {
                 case 'user':
                     if($this->checkLogin()) {
                         $this->db->query("SELECT value FROM setting WHERE setting = \"".$setting."\" AND intranet_id = ".$this->intranet_id." AND user_id = ".$this->user_id." AND sub_id = ".intval($sub_id));
-                        return $this->db->nextRecord();
+                        if ($this->db->nextRecord()) {
+                            return true;
+                        }
                     }
                     break;
 
                 case 'intranet':
                     $this->db->query("SELECT value FROM setting WHERE setting = \"".$setting."\" AND intranet_id = ".$this->intranet_id." AND user_id = 0 AND sub_id = ".intval($sub_id));
-                    return $this->db->nextRecord();
+                    if ($this->db->nextRecord()) {
+                        return true;
+                    }
                     break;
 
                 default:
@@ -190,28 +297,39 @@ class Setting {
                     break;
             }
         }
+        return false;
     }
 
+    /**
+     * Deletes a setting
+     *
+     * @access protected, however to be tested we kept it public
+     *
+     * @param string  $type    Can be either system, intranet, user
+     * @param string  $setting The actual setting
+     * @param integer $sub_id  @todo What is this exactly
+     *
+     * @return boolean
+     */
     function delete($type, $setting, $sub_id = 0) {
 
         if($this->checkSystem($setting) && $this->checkType($type) && $this->checkLogin()) {
 
             if($sub_id == 'ALL') {
-              $sql_sub = '';
-          }
-          else {
-              $sql_sub = "AND sub_id = ".intval($sub_id);
-          }
+                $sql_sub = '';
+            } else {
+                $sql_sub = "AND sub_id = ".intval($sub_id);
+            }
 
             switch($type) {
                 case 'user':
                     $this->db->query("DELETE FROM setting WHERE setting = \"".$setting."\" AND intranet_id = ".$this->intranet_id." AND user_id = ".$this->user_id." ".$sql_sub);
-                    return true;
+                    $return = true;
                     break;
 
                 case 'intranet':
                     $this->db->query("DELETE FROM setting WHERE setting = \"".$setting."\" AND intranet_id = ".$this->intranet_id." ".$sql_sub);
-                    return true;
+                    $return = true;
                     break;
 
                 default:
@@ -219,6 +337,10 @@ class Setting {
                     return false;
             }
         }
+
+        $this->loadSettings();
+
+        return $return;
     }
 }
 
