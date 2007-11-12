@@ -370,7 +370,7 @@ class Procurement Extends Standard {
             $list[$i]["paid_date"] = $db->f("paid_date");
             $list[$i]["dk_paid_date"] = $db->f("dk_paid_date");
             $list[$i]["contact_id"] = $db->f("contact_id");
-            $list[$i]["price_total"] = $db->f("price_total");
+            $list[$i]["total_price"] = $db->f("total_price");
             if($this->kernel->user->hasModuleAccess('contact') && $db->f("contact_id") != 0) {
                 $this->kernel->useModule('contact');
                 $contact = new Contact($this->kernel, $db->f("contact_id"));
