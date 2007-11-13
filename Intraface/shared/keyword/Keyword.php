@@ -8,8 +8,8 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 
-require_once 'Intraface/Error.php';
-require_once 'Intraface/Validator.php';
+require_once 'Ilib/Error.php';
+require_once 'Ilib/Validator.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'DB/Sql.php';
 
@@ -43,7 +43,7 @@ abstract class Ilib_Keyword
     function __construct($type, $extra_conditions = array(), $id = 0)
     {
         $this->id = (int)$id;
-        $this->error = new Error;
+        $this->error = new Ilib_Error;
         $this->extra_conditions = $extra_conditions;
         $this->type = $type;
         // @todo before this is changed we need to change all the data in the database
@@ -263,7 +263,7 @@ class Keyword extends Ilib_Keyword
      */
     protected function validate($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Ilib_Validator($this->error);
 
         if (!empty($var['id'])) {
             $validator->isNumeric($var['id'], 'id', 'allow_empty');
@@ -455,7 +455,7 @@ class Intraface_Keyword_Appender extends Keyword
             $this->kernel = $this->object->kernel;
 
             $this->belong_to_id = $this->object->getId();
-            $this->error = new Error;
+            $this->error = new Ilib_Error;
 
         }
         $this->extra_conditions = array('intranet_id' => $this->object->kernel->intranet->get('id'));
