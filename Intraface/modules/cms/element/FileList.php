@@ -58,8 +58,7 @@ class CMS_FileList extends CMS_Element {
             $append_file->createDBQuery();
             $files = $append_file->getList();
         }
-
-
+        
         $i = 0;
         foreach ($files AS $file) {
             if(isset($file['file_handler_id'])) {
@@ -89,13 +88,15 @@ class CMS_FileList extends CMS_Element {
     function validate_element($var) {
         $validator = new Validator($this->error);
         $validator->isString($var['caption'], 'error in caption', '', 'allow_empty');
+        
+        /*
         if (!empty($var['files']) AND !is_array($var['files'])) {
             $this->error->set('error in files - has to be an array');
         }
         if (!empty($var['filelist_select_method']) AND !in_array($var['filelist_select_method'], $this->select_methods)) {
             $this->error->set('error in filelist_select_method');
         }
-
+        */
         // egentlig bør de enkelte værdier i arrayet også valideres
 
         if ($this->error->isError()) {
@@ -108,9 +109,11 @@ class CMS_FileList extends CMS_Element {
         $var['caption'] = strip_tags($var['caption']);
 
         if (!$this->validate_element($var)) return 0;
-
+        
+        settype($var['caption'], 'string');
         $this->parameter->save('caption', $var['caption']);
-        $this->parameter->save('chosen_files', serialize($var['files']));
+        // $this->parameter->save('chosen_files', serialize($var['files']));
+        settype($var['filelist_select_method'], 'string');
         $this->parameter->save('chosen_files', $var['filelist_select_method']);
 
 
