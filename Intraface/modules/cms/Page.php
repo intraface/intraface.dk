@@ -82,7 +82,7 @@ class CMS_Page extends Standard {
     );
 
     function __construct($cmssite, $id = 0) {
-        if (!is_object($cmssite) OR strtolower(get_class($cmssite)) != 'cms_site') {
+        if (!is_object($cmssite)) {
              trigger_error('CMS_Page::__construct needs CMS_Site', E_USER_ERROR);
         }
 

@@ -33,7 +33,7 @@ class CMS_Template extends Standard {
     var $position;
 
     function __construct(& $cmssite, $id = 0) {
-        if (!is_object($cmssite) OR strtolower(get_class($cmssite)) != 'cms_site') {
+        if (!is_object($cmssite)) {
             trigger_error('CMS_Template::__construct need CMS_Site', E_USER_ERROR);
         }
         $this->cmssite = & $cmssite;

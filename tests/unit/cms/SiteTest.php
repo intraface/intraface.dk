@@ -5,17 +5,33 @@ require_once 'PHPUnit/Framework.php';
 require_once 'CMSStubs.php';
 require_once 'Intraface/Kernel.php';
 
-class SiteTest extends PHPUnit_Framework_TestCase {
+class SiteTest extends PHPUnit_Framework_TestCase
+{
 
-    function setUp() {
+    function setUp()
+    {
+        $this->kernel = $this->createKernel();
+
+    }
+
+    function createKernel()
+    {
         $this->kernel = new Kernel;
         $this->kernel->intranet = new FakeCMSIntranet;
         $this->kernel->setting = new FakeCMSSetting;
         $this->kernel->module('cms');
 
+        return $this->kernel;
     }
 
-    function testSaveSucceedsWithValidValues() {
+    function testConstruction()
+    {
+        $site = new CMS_Site($this->kernel);
+        $this->assertTrue(is_object($site));
+    }
+
+    function testSaveSucceedsWithValidValues()
+    {
         $site = new CMS_Site($this->kernel);
         $site_array = array(
             'name' => 'Tester',

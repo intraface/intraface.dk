@@ -9,7 +9,7 @@ class CMS_Parameter
     /**
      * @var object
      */
-    private $object;
+    public $object;
 
     /**
      * @var array
