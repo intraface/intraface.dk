@@ -18,10 +18,6 @@ class HTML_Editor {
      * Constructor
      */
 
-    function HTML_Editor($allowed_tags = '') {
-        HTML_Editor::__construct($allowed_tags);
-    }
-
     function __construct($allowed_tags = '') {
         $this->allowed_tags = $allowed_tags;
     }
