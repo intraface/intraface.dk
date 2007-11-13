@@ -49,6 +49,10 @@ class ImageHandler extends Standard
 
         $this->file_handler = $file_handler;
 
+        if(!defined('IMAGE_LIBRARY')) {
+            define('IMAGE_LIBRARY', 'GD');
+        }
+        
         $this->image_library = IMAGE_LIBRARY;
 
         if($this->file_handler->get('is_image') != 1) {

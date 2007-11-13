@@ -2,14 +2,14 @@
 /**
  * @package Intraface
  */
-require_once 'Intraface/DBQuery.php';
+require_once 'Ilib/DBQuery.php';
 
 class AppendFile
 {
     /**
      * @var array
      */
-    private $belong_to_types = array();
+    protected $belong_to_types = array();
 
     /**
      * @var object
@@ -204,6 +204,8 @@ class AppendFile
      */
     public function getList()
     {
+        if(!isset($this->dbquery)) $this->createDBQuery();
+        
         if($this->dbquery->checkFilter('order_by') && $this->dbquery->getFilter('order_by') == 'name') {
             $this->dbquery->setJoin('INNER', 'file_handler', 'filehandler_append_file.file_handler_id = file_handler.id', 'file_handler.intranet_id = '.$this->kernel->intranet->get('id').' AND file_handler.active = 1');
             $this->dbquery->setSorting('file_handler.file_name');

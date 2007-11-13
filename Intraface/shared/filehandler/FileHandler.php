@@ -16,6 +16,8 @@
 
 require_once 'Ilib/Validator.php';
 require_once 'Ilib/Error.php';
+require_once 'DB/Sql.php';
+require_once 'Intraface/Standard.php';
 
 class FileHandler extends Standard
 {

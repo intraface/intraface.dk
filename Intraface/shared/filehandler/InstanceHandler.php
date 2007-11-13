@@ -246,8 +246,7 @@ class InstanceHandler extends Standard
     function getList() 
     {
         $db = new DB_Sql;        
-        $shared_filehandler = $this->file_handler->kernel->useShared('filehandler');
-        $shared_filehandler->includeFile('InstanceManager.php');
+        require_once('Intraface/shared/filehandler/InstanceManager.php');
         $instancemanager = new InstanceManager($this->file_handler->kernel);
         $types = $instancemanager->getList();
         $i = 0;
@@ -309,8 +308,8 @@ class InstanceHandler extends Standard
             trigger_error('Second parameter to InstanceHander->checkType should be either name or type_key', E_USER_ERROR);
             return false;
         }
-        $shared_filehandler = $this->file_handler->kernel->useShared('filehandler');
-        $shared_filehandler->includeFile('InstanceManager.php');
+        
+        require_once 'Intraface/shared/filehandler/InstanceManager.php';
         $instancemanager = new InstanceManager($this->file_handler->kernel);
         $instance_types = $instancemanager->getList('include_hidden');
         
