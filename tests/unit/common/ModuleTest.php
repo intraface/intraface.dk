@@ -9,13 +9,14 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
     function testUseModule()
     {
-        $this->markTestIncomplete('not finished yet');
-        /*
-        $this->expectError('module name invalid');
-        Module::useModule('invalid module name');
+        try {
+            Module::useModule('invalid module name');
+            $this->assertTrue(false, 'Exception should have been thrown');
+        } catch (Exception $e) {
+            $this->assertTrue(true);
+        }
 
-        $this->assertTrue(Module::useModule('test'));
-        */
+        $this->assertTrue(Module::useModule('cms'));
     }
 
 }
