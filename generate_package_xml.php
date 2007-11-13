@@ -122,13 +122,15 @@ $pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTra
 $pfm->addPackageDepWithUri('required', 'MDB2_Debug_ExplainQueries', 'http://svn.intraface.dk/intrafacepublic/3Party/MDB2/Debug/MDB2_Debug_ExplainQueries-0.1.0');
 $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
 
-$pfm->addPackageDepWithChannel('required', 'DB_Sql', 'public.intraface.dk', '0.0.1'); // the package does not exist in public.intraface.dk
-
 // Ilib
 $pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Error', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Redirect', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.dk', '0.0.1');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Validator', 'public.intraface.dk', '0.0.1');
+
+// other intraface 3_Party packages
+$pfm->addPackageDepWithChannel('required', 'DB_Sql', 'public.intraface.dk', '0.0.1');
 
 // XMLRPC
 $pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'pear.php.net', '1.0.1');
