@@ -77,7 +77,7 @@ class IntranetMaintenance extends Intranet
                 exit;
             }
         }
-        
+
         $result = $this->db->query("SELECT id FROM module WHERE id = ".intval($module_id));
         if(PEAR::isError($result)) {
             trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
@@ -121,12 +121,12 @@ class IntranetMaintenance extends Intranet
             $delete = $this->db->exec("DELETE FROM permission WHERE
                 intranet_id = ".intval($this->id)." AND
                 module_id = ".intval($row['id']));
-            
+
             if(PEAR::isError($delete)) {
                 trigger_error('Error in delete: '.$delete->getUserInfo(), E_USER_ERROR);
                 exit;
-            } 
-            
+            }
+
             return true;
         }
         else {
@@ -140,7 +140,7 @@ class IntranetMaintenance extends Intranet
         $validator = new Validator($this->error);
 
         $validator->isString($input["name"], "Navn skal være en streng", "", "");
-        if ($validator->isNumeric($input["maintained_by_user_id"], "Vedligholder er ugyldig", "greater_than_zero")) {
+        if ($validator->isNumeric($input["maintained_by_user_id"], "Vedligeholder er ugyldig", "zero_or_greater")) {
             $temp_user = new User($input["maintained_by_user_id"]);
 
             if (!$temp_user->hasIntranetAccess($this->kernel->intranet->get('id'))) {
