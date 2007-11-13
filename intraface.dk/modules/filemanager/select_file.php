@@ -1,5 +1,6 @@
 <?php
 require('../../include_first.php');
+require_once 'Ilib/Redirect.php';
 
 $module_filemanager = $kernel->module('filemanager');
 $translation = $kernel->getTranslation('filemanager');
@@ -17,7 +18,8 @@ if(isset($_POST['ajax'])) {
 
 	// print($_SERVER['REQUEST_URI']);
 	// exit;
-	$redirect = new Redirect($kernel, intval($_POST['redirect_id']));
+	$options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
+    $redirect = new Ilib_Redirect($kernel->getSessionId(), MDB2::facotory(DB_DSN), intval($_POST['redirect_id']), $options);
 	if(isset($_POST['add_file_id'])) {
 		$filemanager = new Filemanager($kernel, intval($_POST['add_file_id']));
 		if($filemanager->get('id') != 0) {
@@ -35,7 +37,7 @@ if(isset($_POST['ajax'])) {
 	exit;
 }
 
-$receive_redirect = Redirect::factory($kernel, 'receive');
+$receive_redirect = Ilib_Redirect::factory($kernel->getSessionId(), MDB2::singleton(DB_DSN), 'receive');
 if($receive_redirect->isMultipleParameter('file_handler_id')) {
 	$multiple_choice = true;
 }
@@ -77,7 +79,7 @@ if(isset($_POST['submit_close']) || isset($_POST['submit'])) {
 }
 
 if(isset($_GET['upload'])) {
-	$upload_redirect = Redirect::factory($kernel, 'go');
+	$upload_redirect = Ilib_Redirect::factory($kernel->getSessionId(), MDB2::singleton(DB_DSN), 'go');
 
 	if($_GET['upload'] == 'multiple') {
 		$url = $upload_redirect->setDestination($module_filemanager->getPath().'upload_multiple.php', $module_filemanager->getPath().'select_file.php?redirect_id='.$receive_redirect->get('id').'&filtration=1');
