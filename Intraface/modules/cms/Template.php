@@ -162,6 +162,11 @@ class CMS_Template extends Standard {
         return($this->keywords = new Keyword($this));
     }
 
+    function getKeywordAppender()
+    {
+        return new Intraface_Keyword_Appender($this);
+    }
+
     function delete() {
         $db = new DB_Sql;
         $db->query("UPDATE cms_template SET active = 0 WHERE id = " . $this->id);
@@ -172,6 +177,11 @@ class CMS_Template extends Standard {
         $db = new DB_Sql;
         $db->query("SELECT id FROM cms_template WHERE site_id = " . $this->cmssite->get('id') . " AND identifier = '".$identifier."' AND active = 1 AND id != " . $this->id);
         if ($db->numRows() == 0) return 1;
+    }
+
+    function getId()
+    {
+        return $this->id;
     }
 }
 ?>

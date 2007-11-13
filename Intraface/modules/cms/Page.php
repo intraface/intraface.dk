@@ -284,15 +284,11 @@ class CMS_Page extends Standard {
 
         if ($need_to_add_keywords) {
             $this->template->getKeywords();
-            $keywords_to_add = $this->template->keywords->getConnectedKeywordsAsString();
-            $this->getKeywords();
-            $this->keywords->addKeywordsByString($keywords_to_add);
+            $keywords_to_add = $this->template->getKeywordAppender()->getConnectedKeywordsAsString();
+            $string_appender = new Intraface_Keyword_StringAppender();
+            $string_appender->addKeywordsByString($keywords_to_add);
         }
-
-
-
         return $this->id;
-
     }
 
 
@@ -849,11 +845,11 @@ class CMS_Page extends Standard {
             $db2->query('UPDATE cms_page SET child_of_id = '.$db->f('child_of_id').' WHERE child_of_id = ' . $this->id . ' AND site_id = ' . $this->cmssite->get('id'));
         }
         */
-        
+
         // WE move all subpages to a level under - this also works on recursive sites.
         // @todo: BUT it can be a mess and the position of the pages is not corrected
         $db->query('UPDATE cms_page SET child_of_id = '.intval($this->get('child_of_id')).' WHERE child_of_id = '.intval($this->id));
-        
+
         $sql = "UPDATE cms_page SET active = 0 WHERE id=" . $this->id . " AND site_id = ".$this->cmssite->get('id');
         $db->query($sql);
         return 1;
