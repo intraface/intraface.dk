@@ -6,6 +6,12 @@ require_once 'IntrafacePublic/CMS/HTML/Parser.php';
 
 class CMS_HTML_Parser extends IntrafacePublic_CMS_HTML_Parser {
 
+    function __construct() {
+        // this method has to override the parent class
+        // why I am not sure, but make sure section_html.php is
+        // updated accordingly
+    }
+
     function parseElements($elements) {
         $display = '';
         if (empty($elements)) {

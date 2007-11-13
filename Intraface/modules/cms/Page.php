@@ -285,7 +285,7 @@ class CMS_Page extends Standard {
         if ($need_to_add_keywords) {
             $this->template->getKeywords();
             $keywords_to_add = $this->template->getKeywordAppender()->getConnectedKeywordsAsString();
-            $string_appender = new Intraface_Keyword_StringAppender();
+            $string_appender = new Intraface_Keyword_StringAppender($this->getKeywords(), $this->getKeywordAppender());
             $string_appender->addKeywordsByString($keywords_to_add);
         }
         return $this->id;
