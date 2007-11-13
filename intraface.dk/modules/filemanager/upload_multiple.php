@@ -4,7 +4,9 @@ require('../../include_first.php');
 $module = $kernel->module('filemanager');
 $translation = $kernel->getTranslation('filemanager');
 
-$redirect = Redirect::factory($kernel, 'receive');
+require_once('Ilib/Redirect.php');
+$options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
+$redirect = Ilib_Redirect::factory($kernel->getSessionId(), MDB2::factory(DB_DSN), 'receive', $options);
 
 if (!empty($_POST['addfile'])) {
 
