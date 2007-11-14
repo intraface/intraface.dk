@@ -50,7 +50,7 @@ class IntranetAdministration extends Intranet {
         $validator = new Validator($this->error);
         $validator->isString($input['name'], 'Navn skal være en streng', '', '');
         $validator->isString($input['identifier'], 'Identifier skal være en streng', '', '');
-        $validator->isNumeric($input['pdf_header_file_id'], 'Header billede er ikke gyldigt', 'zero_or_higher');
+        $validator->isNumeric($input['pdf_header_file_id'], 'Header billede er ikke gyldigt', 'zero_or_greater');
 
         if (!$this->isIdentifierUnique($input['identifier'])) {
             $this->error->set('identifier has to be unique');
