@@ -37,7 +37,9 @@ if(isset($_POST['ajax'])) {
 	exit;
 }
 
-$receive_redirect = Ilib_Redirect::factory($kernel->getSessionId(), MDB2::singleton(DB_DSN), 'receive');
+
+$options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
+$receive_redirect = Ilib_Redirect::factory($kernel->getSessionId(), MDB2::singleton(DB_DSN), 'receive', $options);
 if($receive_redirect->isMultipleParameter('file_handler_id')) {
 	$multiple_choice = true;
 }
@@ -79,7 +81,8 @@ if(isset($_POST['submit_close']) || isset($_POST['submit'])) {
 }
 
 if(isset($_GET['upload'])) {
-	$upload_redirect = Ilib_Redirect::factory($kernel->getSessionId(), MDB2::singleton(DB_DSN), 'go');
+	$options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
+    $upload_redirect = Ilib_Redirect::factory($kernel->getSessionId(), MDB2::singleton(DB_DSN), 'go', $options);
 
 	if($_GET['upload'] == 'multiple') {
 		$url = $upload_redirect->setDestination($module_filemanager->getPath().'upload_multiple.php', $module_filemanager->getPath().'select_file.php?redirect_id='.$receive_redirect->get('id').'&filtration=1');
