@@ -22,9 +22,15 @@ class FakeAppendFileIntranet
 
 class FakeAppendFileFile
 {
+    
+    public $id;
+    function __construct($id = 1) {
+        $this->id = $id;
+    }
+    
     function getId()
     {
-        return 1;
+        return $this->id;
     }
 }
 
@@ -77,7 +83,43 @@ class AppendFileTest extends PHPUnit_Framework_TestCase
         $append->delete($id);
         $this->assertTrue($append->undelete(1));
     }
-
+    
+    function testCreateDBQuery() {
+        $append = $this->createAppendFile();
+        $append->createDBQuery();
+        
+        $this->assertTrue(isset($append->dbquery));
+        
+        
+    }
+    
+    function testGetList() {
+        $append = $this->createAppendFile();
+        $append->addFile(new FakeAppendFileFile(1));
+        $append->addFile(new FakeAppendFileFile(2));
+        $append->addFile(new FakeAppendFileFile(3));
+        
+        $append->createDBQuery();
+        
+        $expected = array(
+            0 => array(
+                'id' => 1,
+                'file_handler_id' => 1,
+                'description' => ''),
+            1 => array(
+                'id' => 2,
+                'file_handler_id' => 2,
+                'description' => ''),
+            2 => array(
+                'id' => 3,
+                'file_handler_id' => 3,
+                'description' => '')
+        );
+        
+        
+        $this->assertEquals($expected, $append->getList());
+        
+    }
 
 }
 ?>
