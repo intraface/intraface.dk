@@ -89,6 +89,7 @@ class FileManager extends FileHandler
             $date_parts = explode(" ", $this->dbquery->getFilter("uploaded_to_date"));
             // Der kontrolleres ikke for gyldig tidsformat
             if(isset($date_parts[1]) && $date_parts[1] != "") $time = " ".$date_parts[1];
+            require_once 'Intraface/tools/Date.php';
             $date = new Intraface_Date($date_parts[0]);
             if($date->convert2db()) {
                 $this->dbquery->setCondition("file_handler.date_created <= \"".$date->get().$time."\"");
@@ -101,6 +102,7 @@ class FileManager extends FileHandler
             $date_parts = explode(" ", $this->dbquery->getFilter("edited_from_date"));
             // Der kontrolleres ikke for gyldig tidsformat
             if(isset($date_parts[1]) && $date_parts[1] != "") $time = " ".$date_parts[1];
+            require_once 'Intraface/tools/Date.php';
             $date = new Intraface_Date($date_parts[0]);
             if($date->convert2db()) {
                 $this->dbquery->setCondition("file_handler.date_changed >= \"".$date->get().$time."\"");
@@ -113,6 +115,7 @@ class FileManager extends FileHandler
             $date_parts = explode(" ", $this->dbquery->getFilter("edited_to_date"));
             // Der kontrolleres ikke for gyldig tidsformat
             if(isset($date_parts[1]) && $date_parts[1] != "") $time = " ".$date_parts[1];
+            require_once 'Intraface/tools/Date.php';
             $date = new Intraface_Date($date_parts[0]);
             if($date->convert2db()) {
                 $this->dbquery->setCondition("file_handler.date_changed <= \"".$date->get().$time."\"");
