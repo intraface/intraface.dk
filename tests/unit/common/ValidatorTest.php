@@ -6,6 +6,10 @@ require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/Validator.php';
 require_once 'Intraface/Error.php';
 
+/**
+ * this test should only test the extend to Ilib_Validator. The actual test should be in Ilib_Validator
+ */
+
 class ValidatorTest extends PHPUnit_Framework_TestCase
 {
     private $validator;
