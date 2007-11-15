@@ -6,7 +6,7 @@
  * @version 0.0.1
  * @package filehandler
  */
-class InstanceManager extends Standard 
+class InstanceManager
 {
     
     /**
@@ -365,6 +365,27 @@ class InstanceManager extends Standard
      */
     public function getResizeTypes() {
         return array(0 => 'relative', 1 => 'strict'); 
+    }
+    
+    
+    /**
+     * returns values
+     * 
+     * @param string $key
+     * @return mixed value
+     */
+    function get($key = '') 
+    {
+        
+        if(!empty($key)) {
+            if(isset($this->value[$key])) {
+                return($this->value[$key]);
+            }
+            else {
+                return '';
+            }
+        }
+        return $this->value;
     }
  
 }
