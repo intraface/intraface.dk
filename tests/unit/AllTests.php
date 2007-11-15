@@ -13,6 +13,7 @@ class AllTests
                        'Webshop',
                        'IntranetMaintenance',
                        'FileHandler',
+                       'FileManager',
                        'Contact',
                        'Common',
                        'Accounting',
