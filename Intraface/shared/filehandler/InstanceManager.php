@@ -30,15 +30,21 @@ class InstanceManager
     private $intranet_id;
     
     /**
+     * @var array values
+     */
+    private $value;
+    
+    /**
+     * @var constant which id the custom types will start with
+     */
+    const MIN_CUSTOM_TYPE_KEY_VALUE = 1000;
+    
+    /**
      * init function
      * 
      * @param object kernel
      * @param object id
      */
-    
-    
-    const MIN_CUSTOM_TYPE_KEY_VALUE = 1000;
-    
     public function __construct($kernel, $type_key = 0) 
     {
         $this->error = new Ilib_Error;
