@@ -89,7 +89,9 @@ if (!empty($_POST)) {
     }
 }
 
-$redirect = new Redirect($kernel);
+require_once 'Ilib/Redirect.php';
+$options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
+$redirect = Ilib_Redirect::receive($kernel->getSessionId(), MDB2::singleton(DB_DSN), $options);
 $redirect->setDestination(PATH_WWW . 'shared/keyword/edit.php', PATH_WWW . 'shared/keyword/connect.php?'.$id_name.'='.$object->get('id'));
 
 
