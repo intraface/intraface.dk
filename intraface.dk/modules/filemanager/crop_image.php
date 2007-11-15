@@ -8,7 +8,8 @@ if(isset($_POST['id']) && isset($_POST['instance_type'])) {
     $filemanager = new FileManager($kernel, $_POST['id']);
     $instance_type = $_POST['instance_type'];
     
-    $validator = new Validator($filemanager->error);
+    require_once 'Ilib/Validator.php';
+    $validator = new Ilib_Validator($filemanager->error);
     $validator->isNumeric($_POST['width'], 'invalid width', 'greater_than_zero,integer');
     $validator->isNumeric($_POST['height'], 'invalid width', 'greater_than_zero,integer');
     $validator->isNumeric($_POST['x'], 'invalid width', 'zero_or_greater,integer');
