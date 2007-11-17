@@ -12,7 +12,7 @@
 
 ob_start('gz_handler');
 
-require('../include_first.php');
+require '../common.php';
 
 $themes = themes();
 
@@ -22,11 +22,11 @@ readfile('reset.css');
 readfile('./fontsizes/medium.css');
 
 if (!empty($_GET['theme']) AND array_key_exists($_GET['theme'], $themes) AND is_numeric($_GET['theme'])) {
-	readfile('default.css');
-	readfile('forms.css');
+    readfile('default.css');
+    readfile('forms.css');
 
-	$theme = intval($_GET['theme']);
-	readfile('skins/' . $themes[$theme]['label'] . '/typo.css');
+    $theme = intval($_GET['theme']);
+    readfile('skins/' . $themes[$theme]['label'] . '/typo.css');
 }
 
 exit;
