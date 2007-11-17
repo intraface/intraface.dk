@@ -35,6 +35,7 @@ class PageTest extends PHPUnit_Framework_TestCase
     {
         $this->kernel = new Kernel;
         $this->kernel->intranet = new FakeCMSIntranet;
+        $this->kernel->user = new FakeCMSIntranet;
         $this->kernel->setting = new FakeCMSSetting;
         $this->kernel->module('cms');
 
@@ -45,21 +46,20 @@ class PageTest extends PHPUnit_Framework_TestCase
     {
         return new FakeCMSPageSite($this->createKernel());
     }
-    
+
     function createTemplate() {
         $kernel = new FakeCMSKernel();
         $site = new FakeCMSSite($kernel);
-        $template = new Template($site);
-        
+        $template = new CMS_Template($site);
+
         $template->save(array('name' => 'test', 'identifier' => 'test'));
         $template->getKeywords();
-        $template->keywords();
-        
+
         // here we should add som keywords to the template.
     }
 
-    
-    
+
+
     function testConstruction()
     {
         $this->assertTrue(is_object($this->page));
@@ -80,11 +80,11 @@ class PageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($site_array['cc_license'], $site->get('cc_license'));
     }
     */
-    
+
     function testSaveWithSuccessWithTemplateWithKeywords() {
-        
+
         $template_id = $this->createTemplate();
-        
+
         $input = array(
             'allow_comments' => 1,
             'hidden' => 1,
@@ -95,9 +95,9 @@ class PageTest extends PHPUnit_Framework_TestCase
             'keywords' => 'search, words',
             'description' => 'test page',
             'template_id' => $template_id);
-        
+
         $this->assertTrue($this->page->save($input) > 0);
-        
+
     }
 }
 ?>
