@@ -1145,5 +1145,9 @@ class Debtor extends Standard
         return new Address($this->get("intranet_address_id"));
     }
 
+    function getContact()
+    {
+        return new Contact($this->kernel, $this->get("contact_id"), $this->get("contact_address_id"));
+    }
 }
 ?>
