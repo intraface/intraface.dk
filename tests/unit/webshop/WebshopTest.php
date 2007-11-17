@@ -38,14 +38,15 @@ class FakeWebshopSetting {
 class WebshopTest extends PHPUnit_Framework_TestCase
 {
     private $webshop;
+    private $kernel;
 
     function setUp()
     {
-        $kernel = new Kernel;
-        $kernel->intranet = new FakeWebshopIntranet;
-        $kernel->weblogin = new FakeWebshopWeblogin;
-        $kernel->setting = new FakeWebshopSetting;
-        $this->webshop = new Webshop($kernel, 'thissession');
+        $this->kernel = new Kernel;
+        $this->kernel->intranet = new FakeWebshopIntranet;
+        $this->kernel->weblogin = new FakeWebshopWeblogin;
+        $this->kernel->setting = new FakeWebshopSetting;
+        $this->webshop = new Webshop($this->kernel, 'thissession');
     }
 
     ////////////////////////////////////////////////
@@ -71,8 +72,16 @@ class WebshopTest extends PHPUnit_Framework_TestCase
 
         $basket = $this->webshop->getBasket();
         $this->assertTrue(count($basket->getItems()) == 0);
-
     }
 
+    function testPlaceOrderWithAnEanNumberSavesTheEanNumberAndAutomaticallyMakesItACompany()
+    {
+        $ean = '2222222222222';
+        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 0, 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
+        $order_id = $this->webshop->placeOrder($data);
+        $this->assertTrue($order_id > 0);
+        $order = new Order($this->kernel, $order_id);
+        $this->assertEquals($ean, $order->getContact()->getAddress()->get('ean'));
+        $this->assertEquals(1, $order->getContact()->get('type_key'));
+    }
 }
-?>

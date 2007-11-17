@@ -106,15 +106,15 @@ class Webshop
      */
     private function createOrder($input)
     {
-        
+
         if (isset($input['contact_id']) && (int)$input['contact_id'] > 0) {
             $this->contact = new Contact($this->kernel, (int)$input['contact_id']);
-            
+
             $contact_person_id = 0;
             // It is a company and contactperson is given. We try to see if we can find the contact person.
             if(isset($input['contactperson']) && $input['contactperson'] != '') {
                 $input['type'] = 'corporation';
-                
+
                 // If the contact is a company their might already be a contact person.
                 if($this->contact->get('type') == 'company' && isset($this->contact->contactperson)) {
                     $contact_persons = $this->contact->contactperson->getList();
@@ -127,18 +127,19 @@ class Webshop
                     }
                 }
             }
-        } 
+        }
         else {
             $this->contact = new Contact($this->kernel);
-            $contact_person_id = 0;  
-            
+            $contact_person_id = 0;
+
             // sørger for at tjekke om det er et firma
             if(isset($input['contactperson']) && $input['contactperson'] != '') {
                 $input['type'] = 'corporation'; // firma
             }
-            
+
             if(isset($input['customer_ean']) && $input['customer_ean'] != '') {
                 // sets preffered invoice to electronic.
+                $input['type'] = 'corporation'; // firma
                 $input['preferred_invoice'] = 3;
             }
             else {
@@ -146,20 +147,21 @@ class Webshop
             $input['preferred_invoice'] = 2;
             }
         }
-        
+
         if(isset($input['customer_ean'])) {
             $input['ean'] = $input['customer_ean'];
         }
-        
+
         // opdaterer kontakten
         if (!$contact_id = $this->contact->save($input)) {
             $this->error->merge($this->contact->error->message);
             return false;
         }
-        
-        // we update/add the contactperson.     
+
+        // we update/add the contactperson.
         if (isset($input['type']) && $input['type'] == 'corporation') { // firma
             $this->contact->loadContactPerson($contact_person_id);
+            settype($input['contactperson'], 'string');
             settype($input['contactemail'], 'string');
             settype($input['contactphone'], 'string');
             if (!$contact_person_id = $this->contact->contactperson->save(array('name'=>$input['contactperson'], 'email'=>$input['contactemail'], 'phone'=>$input['contactphone']))) {
@@ -167,11 +169,11 @@ class Webshop
                 return false;
             }
         }
-        
+
         $value['contact_id'] = $this->contact->get('id');
         $value['contact_address_id'] = $this->contact->address->get('id');
         $value['contact_person_id'] = $contact_person_id;
-        
+
         $value['this_date'] = date('d-m-Y');
         $value['due_date'] = date('d-m-Y');
         settype($input['description'], 'string');
@@ -190,16 +192,16 @@ class Webshop
             if($value['message'] != '') $value['message'] .= "\n\n";
             $value['message'] .= "Kommentar:\n". $input['customer_comment'];
         }
-        
-        
+
+
         $this->order = new Debtor($this->kernel, 'order');
         $order_id = $this->order->update($value, 'webshop');
-        
+
         if ($order_id == 0) {
             $this->error->merge($this->order->error->message);
             return false;
         }
-        
+
         return $order_id;
     }
 
@@ -241,7 +243,7 @@ class Webshop
      */
     public function placeOrder($input)
     {
-        
+
         if(!$order_id = $this->createOrder($input)) {
             $this->error->set('unable to create the order');
             return false;
@@ -253,14 +255,14 @@ class Webshop
             $this->error->set('unable add products to the order');
             return false;
         }
-        
+
         $this->basket->reset();
-        
+
         if(!$this->sendEmail($order_id)) {
             $this->error->set('unable to send email to the customer');
             return false;
         }
-        
+
         return $order_id;
     }
 
