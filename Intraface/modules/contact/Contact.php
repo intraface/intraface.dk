@@ -315,7 +315,7 @@ class Contact extends Standard {
      *
      * @return object
      */
-    private function getAddress()
+    public function getAddress()
     {
         if (!is_object($this->address)) {
             $this->address = Address::factory('contact', $this->id);
