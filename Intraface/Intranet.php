@@ -155,5 +155,9 @@ class Intranet extends Standard
         }
         return false;
     }
+
+    function getId()
+    {
+        return $this->id;
+    }
 }
-?>
