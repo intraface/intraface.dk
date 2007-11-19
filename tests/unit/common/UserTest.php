@@ -38,10 +38,10 @@ class UserTest extends PHPUnit_Framework_TestCase
         // TODO how should we handle unknown modules
         // TODO and setup modules we can count on for the test
         $this->assertFalse($this->user->hasModuleAccess('intranetmaintenance'));
-        $this->assertFalse($this->user->hasModuleAccess('cms'));
+        $this->assertFalse($this->user->hasModuleAccess('todo'));
         $this->user->setIntranetId(1); // spørgsmålet er om man bare skal have en init i stedet?
         $this->assertTrue($this->user->hasModuleAccess('intranetmaintenance'));
-        $this->assertFalse($this->user->hasModuleAccess('cms'));
+        $this->assertFalse($this->user->hasModuleAccess('todo'));
     }
 
     /*

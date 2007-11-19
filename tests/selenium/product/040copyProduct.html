@@ -9,84 +9,89 @@
 <tr><td rowspan="1" colspan="3">copyProduct</td></tr>
 </thead><tbody>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Opret produkt</td>
-	<td></td>
+    <td>open</td>
+    <td>/modules/product/</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>name</td>
-	<td>Testprodukt til kopiering</td>
+    <td>clickAndWait</td>
+    <td>link=Opret produkt</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>description</td>
-	<td>Testbeskrivelse til kopiering</td>
+    <td>type</td>
+    <td>name</td>
+    <td>Testprodukt til kopiering</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>weight</td>
-	<td>100</td>
+    <td>type</td>
+    <td>description</td>
+    <td>Testbeskrivelse til kopiering</td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>unit</td>
-	<td>label=stk.</td>
+    <td>type</td>
+    <td>weight</td>
+    <td>100</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>price</td>
-	<td>100</td>
+    <td>select</td>
+    <td>unit</td>
+    <td>label=stk.</td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>vat</td>
-	<td>label=Ja</td>
+    <td>type</td>
+    <td>price</td>
+    <td>100</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>select</td>
+    <td>vat</td>
+    <td>label=Ja</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=copy</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Testprodukt til kopiering</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=copy</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Testbeskrivelse til kopiering</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Testprodukt til kopiering</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>100,00</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Testbeskrivelse til kopiering</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>100</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>100,00</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>stk.</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>100</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=delete</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>stk.</td>
+    <td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
-	<td>Er du sikker?</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=delete</td>
+    <td></td>
+</tr>
+<tr>
+    <td>assertConfirmation</td>
+    <td>Er du sikker?</td>
+    <td></td>
 </tr>
 
 </tbody></table>
