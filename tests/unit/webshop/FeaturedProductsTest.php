@@ -46,4 +46,19 @@ class FeaturedProductsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($this->featured->getAll()));
     }
 
+    function testAddOnlyPersistsOneOfEachKeyword()
+    {
+        $this->assertTrue($this->featured->add('Test', new FakeFeaturedProductsKeyword));
+        $this->assertTrue($this->featured->add('Test', new FakeFeaturedProductsKeyword));
+
+        $this->assertEquals(1, count($this->featured->getAll()));
+    }
+
+    function testDeleteActuallyDeletesTheFeaturedProductKeyword()
+    {
+        $this->assertTrue($this->featured->add('Test', new FakeFeaturedProductsKeyword));
+        $this->assertTrue($this->featured->delete(1));
+        $this->assertEquals(0, count($this->featured->getAll()));
+    }
+
 }

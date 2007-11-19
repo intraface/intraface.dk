@@ -14,6 +14,12 @@ if (!empty($_POST)) {
         header('Location: ' . $_SERVER['PHP_SELF']);
         exit;
     }
+} elseif (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
+    $featured = new Intraface_Webshop_FeaturedProducts($kernel->intranet, $db);
+    if ($featured->delete($_GET['delete'])) {
+        header('Location: ' . $_SERVER['PHP_SELF']);
+        exit;
+    }
 }
 
 $featured = new Intraface_Webshop_FeaturedProducts($kernel->intranet, $db);
@@ -23,14 +29,15 @@ $page = new Page($kernel);
 $page->start(safeToHtml($translation->get('featured products')));
 
 ?>
-<h1><?php echo safeToHtml($translation->get('featured products')); ?></h1>
+<h1><?php e($translation->get('featured products')); ?></h1>
 
 <table>
-    <caption><?php echo safeToHtml($translation->get('featured products')); ?></caption>
+    <caption><?php e($translation->get('featured products')); ?></caption>
     <thead>
     <tr>
         <th>Overskrift</th>
         <th>Nøgleord</th>
+        <th></th>
     </tr>
     </thead>
 <?php foreach ($all as $feature): ?>
@@ -42,6 +49,7 @@ $page->start(safeToHtml($translation->get('featured products')));
             e($keyword->getKeyword());
         ?>
         </td>
+        <td><a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php e($feature['id']); ?>" class="delete">Slet</a></td>
     </tr>
 <?php endforeach; ?>
 </table>
@@ -61,7 +69,7 @@ $page->start(safeToHtml($translation->get('featured products')));
         <?php endforeach; ?>
 
     </select>
-    <input type="submit" class="save" name="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" /> <?php echo safeToHtml($translation->get('or', 'common')); ?> <a href="index.php"><?php echo safeToHtml($translation->get('cancel', 'common')); ?></a>
+    <input type="submit" class="save" name="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" /> <?php echo safeToHtml($translation->get('or', 'common')); ?> <a href="./"><?php echo safeToHtml($translation->get('cancel', 'common')); ?></a>
 </form>
 
 <?php
