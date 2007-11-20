@@ -36,7 +36,7 @@ define('ERROR_LOG', PATH_ROOT.'intraface/log/error.log'); // exact directory and
 
 // timezone and local
 define('TIMEZONE', 'Europe/Copenhagen');
-define('LOCAL', 'da_DK');
+define('COUNTRY_LOCAL', 'da_DK');
 
 // for intranet maintenance
 define('INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY', 'privatekeyshouldbereplaced'); // the private key of the intranet that has intranetmaintenance
