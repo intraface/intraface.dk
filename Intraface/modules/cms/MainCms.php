@@ -82,7 +82,7 @@ class MainCMS Extends Main {
         ));
 
         $_cc_license = array();
-        require_once(PATH_INCLUDE_CONFIG.'setting_cc_license.php');
+        require(PATH_INCLUDE_CONFIG.'setting_cc_license.php');
         $this->addSetting('cc_license', $_cc_license);
     }
 
