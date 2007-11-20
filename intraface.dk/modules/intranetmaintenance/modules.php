@@ -32,7 +32,6 @@ else {
 
 $page = new Page($kernel);
 $page->start("Moduler");
-
 ?>
 
 <h1>Moduler</h1>
@@ -60,7 +59,7 @@ $page->start("Moduler");
 		<tr>
 			<td>
 				<?php print($modules[$i]["menu_label"]); ?>
-				<?php if(isset($module_msg[$modules[$i]["id"]])) print("<br /><span class=\"red\">".$module_msg[$modules[$i]["id"]]."</span>"); ?>
+				<?php if(isset($module_msg[$modules[$i]["name"]])) print("<br /><span class=\"red\">".$module_msg[$modules[$i]["name"]]."</span>"); ?>
 			</td>
 			<td>
 				<?php
@@ -89,7 +88,7 @@ $page->start("Moduler");
 
 <?php
 if(isset($module_msg[0])) {
-	print("<p class=\"red\">".$module_msg[0]."</p>");
+	print("<p class=\"red\">".$module_msg['update']."</p>");
 }
 ?>
 
