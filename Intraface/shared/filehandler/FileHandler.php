@@ -423,7 +423,7 @@ class FileHandler extends Standard
             require_once 'MIME/Type.php';
             $mime_type = MIME_Type::autoDetect($file);
             if(PEAR::isError($mime_type)) {
-                trigger_error("Error in Filehandler->save() ".$mime_type->getMessage(), E_USER_ERROR);
+                trigger_error("Error in MIME_Type::autoDetect in Filehandler->save() ".$mime_type->getMessage(), E_USER_ERROR);
                 exit;
             }
         }
@@ -474,7 +474,7 @@ class FileHandler extends Standard
 
         if(!is_dir($this->upload_path)) {
             if(!mkdir($this->upload_path)) {
-                trigger_error("Kunne ikke oprette mappe i FileHandler->save", E_USER_ERROR);
+                trigger_error("Unable to create folder '".$this->upload_path."'", E_USER_ERROR);
                 exit;
             }
         }
@@ -487,7 +487,7 @@ class FileHandler extends Standard
 
         if(!rename($file, $this->upload_path.$server_file_name)) {
             $this->delete();
-            trigger_error("Det var ikke muligt at flytte fil i Filehandler->save", E_USER_ERROR);
+            trigger_error("Unable to move file '".$file."' to '".$this->upload_path.$server_file_name."' in Filehandler->save", E_USER_ERROR);
         }
 
         $db->query("UPDATE file_handler SET server_file_name = \"".$server_file_name."\" WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$id);
