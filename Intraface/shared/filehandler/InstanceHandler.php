@@ -92,7 +92,7 @@ class InstanceHandler extends Standard
      *
      * @return object
      */
-    function factory(&$file_handler, $type, $param = array()) 
+    function factory(&$file_handler, $type_name, $param = array()) 
     {
         if(!is_object($file_handler)) {
             trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->factory (1)", E_USER_ERROR);
@@ -114,9 +114,9 @@ class InstanceHandler extends Standard
         }
 
         $instancehandler = new InstanceHandler($file_handler);
-        $type = $instancehandler->checkType($type);
+        $type = $instancehandler->checkType($type_name);
         if($type === false) {
-            trigger_error("Ugyldig type '".$type."' i InstanceHandler->factory", E_USER_ERROR);
+            trigger_error("Ugyldig type '".$type_name."' i InstanceHandler->factory", E_USER_ERROR);
         }
 
         $db = new DB_sql;
@@ -130,7 +130,12 @@ class InstanceHandler extends Standard
                 settype($param['crop_offset_x'], 'integer');
                 settype($param['crop_offset_y'], 'integer');
                 $file_handler->image->crop($param['crop_width'], $param['crop_height'], $param['crop_offset_x'], $param['crop_offset_y']);
-                
+                // first we filter only crop parameters.
+                $crop_param = array_intersect_key($param, array('crop_width' =>'', 'crop_height' => '', 'crop_offset_x' => '', 'crop_offset_y' => ''));
+                $crop_param_string = serialize($crop_param);
+            }
+            else {
+                $crop_param_string = serialize(array());
             }
             $file = $file_handler->image->resize($type['max_width'], $type['max_height'], $type['resize_type']);
 
@@ -151,7 +156,8 @@ class InstanceHandler extends Standard
                 type_key = ".$type['type_key'].",
                 file_size = ".(int)$file_size.",
                 width = ".(int)$width.",
-                height = ".(int)$height);
+                height = ".(int)$height.", " .
+                "crop_parameter = \"".safeToDb($crop_param_string)."\"");
             
             $id = $db->insertedId();
 
@@ -216,7 +222,8 @@ class InstanceHandler extends Standard
         // $this->value['file_uri'] = FILE_VIEWER.'?id='.$this->get('id').'&type='.$this->get('type').'&name=/'.urlencode($this->file_handler->get('file_name'));
         $this->value['file_uri'] = FILE_VIEWER.'?/'.$this->file_handler->kernel->intranet->get('public_key').'/'.$this->file_handler->get('access_key').'/'.$this->get('type').'/'.urlencode($this->file_handler->get('file_name'));
 
-        // dette er vel kun i en overgangsperiode? LO
+        // dette er vel kun i en overgangsperiode? LO 
+        // Det kan lige så godt være der altid. Det gør jo ingen skade /Sune (20/11 2007)
         if($db->f('width') == 0) {
             $imagesize = getimagesize($this->get('file_path'));
             $this->value['width'] = $imagesize[0]; // imagesx($this->get('file_uri'));
