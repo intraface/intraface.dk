@@ -47,7 +47,10 @@ class Page {
 
 		require_once 'Cache/Lite/Output.php';
 		if (!is_dir(PATH_CACHE)) {
-			mkdir(PATH_CACHE);
+			if(!mkdir(PATH_CACHE)) {
+			    trigger_error('Unable to create dir "'.PATH_CACHE.'" from constant PATH_CACHE', E_USER_ERROR);
+                exit;
+			}
 			chmod(PATH_CACHE, 644);
 		}
 
