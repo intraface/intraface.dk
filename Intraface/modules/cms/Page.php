@@ -216,6 +216,8 @@ class CMS_Page extends Standard {
         if (empty($var['identifier'])) {
             $var['identifier'] = md5(date('d-m-Y H:i:s') . $type_key . serialize($var));
         }
+        
+        settype($var['date_expire'], 'string');
 
         if (!$this->validate($var)) {
             return 0;
