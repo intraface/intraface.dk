@@ -12,7 +12,7 @@ define('PATH_INCLUDE_MODULE', 'c:/Users/Lars Olesen/workspace/intraface/Intrafac
 define('PATH_INCLUDE_SHARED', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/shared/');
 define('CONNECTION_INTERNET', 'ONLINE');
 define('PATH_UPLOAD', PATH_ROOT . 'upload/');
-define('PATH_UPLOAD_TEMPORARY', PATH_UPLOAD . 'upload/tmp/');
+define('PATH_UPLOAD_TEMPORARY', 'tempdir/');
 define('FILE_VIEWER', '');
 define('PATH_WWW', '');
 define('IMAGE_LIBRARY', 'GD');

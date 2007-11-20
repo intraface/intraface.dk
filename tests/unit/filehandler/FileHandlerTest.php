@@ -3,8 +3,16 @@ require_once dirname(__FILE__) . '/../config.test.php';
 
 require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/Standard.php';
-require_once 'Intraface/Kernel.php';
 require_once 'Intraface/shared/filehandler/FileHandler.php';
+
+class FakeFileHandlerKernel {
+    public $intranet;
+    public $user;
+    function randomKey() {
+        return 'thisisnotreallyarandomkey'.microtime();
+    }
+}
+
 
 class FakeFileHandlerIntranet
 {
@@ -26,9 +34,14 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
 {
     private $file_name = 'tester.jpg';
 
+    function setUp() {
+        $db = MDB2::factory(DB_DSN);
+        $db->query('TRUNCATE file_handler');    
+    }
+    
     function createKernel()
     {
-        $kernel = new Kernel;
+        $kernel = new FakeFileHandlerKernel;
         $kernel->intranet = new FakeFileHandlerIntranet;
         $kernel->user = new FakeFileHandlerUser;
         return $kernel;
@@ -91,7 +104,9 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     function testSave()
     {
         $fh = new FileHandler($this->createKernel());
-        $id = $fh->save(dirname(__FILE__) . '/wideonball.jpg', 'Filename');
+        // first we make a copy of the file as it is moved by upload.
+        copy(dirname(__FILE__) . '/wideonball.jpg', PATH_UPLOAD.'wideonball.jpg');
+        $id = $fh->save(PATH_UPLOAD.'wideonball.jpg', 'Filename');
         $fh->error->view();
         $this->assertTrue($id > 0);
     }
