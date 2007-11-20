@@ -92,10 +92,13 @@ class ModuleMaintenance
         $primary_module = $this->kernel->getPrimaryModule();
         $db = new DB_Sql;
         $updated_sub_access_id = array();
+        $module_msg = array();
+        $updated_module_id = 0;
 
         $main_class_name = "Main".ucfirst($module_name);
         $main_class_path = PATH_INCLUDE_MODULE.$module_name."/".$main_class_name.".php";
-
+        
+        
         if (!file_exists($main_class_path)) {
             $this->error->set("Filen ".$main_class_path." eksistere ikke!");
             // $msg[] = $main_class_path." eksistere ikke!";
@@ -114,40 +117,45 @@ class ModuleMaintenance
             } else {
                 // her kan vi oprette tabellerne nødvendige for det enkelte modul i stedet for at have dem i starten.
 
-                $sql = "menu_label = \"".$module->menu_label."\",
-                            show_menu = ".$module->show_menu.",
-                            active = ".$module->active.",
-                            menu_index = ".intval($module->menu_index).",
-                            frontpage_index = ".intval($module->frontpage_index);
-
-                $db->query("SELECT id FROM module WHERE name = \"".$module_name."\"");
-                if ($db->nextRecord()) {
-                    $module_id = $db->f("id");
-                    $db->query("UPDATE module SET ".$sql." WHERE id = ".$module_id);
-                    $module_msg[$module_id] = "Opdateret";
-                } else {
-                    $db->query("INSERT INTO module SET name = \"".$module_name."\", ".$sql);
-                    $module_id = $db->insertedId();
-                    $module_msg[$module_id] = "Registreret";
+                if(empty($module->menu_label) && empty($module->active) && empty($module->menu_index)) {
+                    $this->error->set('Properties for module "'.$module_name.'" er ikke loadet. Kontrol er constructor er sat rigtigt op i modulet');
                 }
-                $db->free();
-
-                $updated_module_id = $module_id;
-
-                // print("med følgende sub access: ");
-                $count_subaccess = count($module->sub_access);
-
-                for ($i = 0; $i < $count_subaccess; $i++) {
-                    $db->query("SELECT id FROM module_sub_access WHERE module_id = ".$module_id." AND name = \"".$module->sub_access[$i]."\"");
+                else {
+                    $sql = "menu_label = \"".$module->menu_label."\",
+                                show_menu = ".$module->show_menu.",
+                                active = ".$module->active.",
+                                menu_index = ".intval($module->menu_index).",
+                                frontpage_index = ".intval($module->frontpage_index);
+    
+                    $db->query("SELECT id FROM module WHERE name = \"".$module_name."\"");
                     if ($db->nextRecord()) {
-                        $updated_sub_access_id[] = $db->f('id');
-                        $db->query("UPDATE module_sub_access SET description = \"".$module->sub_access_description[$i]."\", active = 1 WHERE id = ".$db->f("id"));
+                        $module_id = $db->f("id");
+                        $db->query("UPDATE module SET ".$sql." WHERE id = ".$module_id);
+                        $module_msg[$module_name] = "Opdateret";
                     } else {
-                        $db->query("INSERT INTO module_sub_access SET module_id = ".$module_id.", name = \"".$module->sub_access[$i]."\", description = \"".$module->sub_access_description[$i]."\", active = 1");
-                        $updated_sub_access_id[] = $db->insertedId();
+                        $db->query("INSERT INTO module SET name = \"".$module_name."\", ".$sql);
+                        $module_id = $db->insertedId();
+                        $module_msg[$module_name] = "Registreret";
                     }
                     $db->free();
-                            // print($module->sub_access[$i].", ");
+    
+                    $updated_module_id = $module_id;
+    
+                    // print("med følgende sub access: ");
+                    $count_subaccess = count($module->sub_access);
+    
+                    for ($i = 0; $i < $count_subaccess; $i++) {
+                        $db->query("SELECT id FROM module_sub_access WHERE module_id = ".$module_id." AND name = \"".$module->sub_access[$i]."\"");
+                        if ($db->nextRecord()) {
+                            $updated_sub_access_id[] = $db->f('id');
+                            $db->query("UPDATE module_sub_access SET description = \"".$module->sub_access_description[$i]."\", active = 1 WHERE id = ".$db->f("id"));
+                        } else {
+                            $db->query("INSERT INTO module_sub_access SET module_id = ".$module_id.", name = \"".$module->sub_access[$i]."\", description = \"".$module->sub_access_description[$i]."\", active = 1");
+                            $updated_sub_access_id[] = $db->insertedId();
+                        }
+                        $db->free();
+                                // print($module->sub_access[$i].", ");
+                    }
                 }
             }
         }
@@ -190,20 +198,20 @@ class ModuleMaintenance
                 $updated_module_id[] = (int)$updated['updated_module_id'];
                 $updated_sub_access_id = array_merge($updated_sub_access_id, $updated['updated_sub_access_id']);
                 $module_msg = array_merge($module_msg, $updated['module_msg']);
-
             }
 
             // Sætte alle moduler som ikke længere eksistere til active = 0
             if (count($updated_module_id) > 0) {
                 $db->query("UPDATE module SET active = 0 WHERE id NOT IN (".implode(",", $updated_module_id).")");
-                $module_msg[0] = $db->affectedRows()." moduler er fjernet og blevet deaktiveret.<br />";
+                $module_msg['update'] = $db->affectedRows()." moduler er fjernet og blevet deaktiveret.<br />";
             }
 
             if (count($updated_sub_access_id) > 0) {
                 $db->query("UPDATE module_sub_access SET active = 0 WHERE id NOT IN (".implode(",", $updated_sub_access_id).")");
-                $module_msg[0] .= $db->affectedRows()." sub access' er fjernet og blevet deaktiveret.";
+                $module_msg['update'] .= $db->affectedRows()." sub access' er fjernet og blevet deaktiveret.";
             }
         }
+        
         return $module_msg;
     }
 
