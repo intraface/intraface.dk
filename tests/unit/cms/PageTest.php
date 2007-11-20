@@ -27,6 +27,9 @@ class PageTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
+        $db = MDB2::factory(DB_DSN);
+        $db->query('TRUNCATE cms_template');
+        $db->query('TRUNCATE cms_page');
         $this->page = new CMS_Page($this->createSite());
 
     }
@@ -53,9 +56,13 @@ class PageTest extends PHPUnit_Framework_TestCase
         $template = new CMS_Template($site);
 
         $template->save(array('name' => 'test', 'identifier' => 'test'));
-        $template->getKeywords();
+        
+        $this->assertEquals('', $template->error->view());
+        // $template->getKeywords();
 
         // here we should add som keywords to the template.
+        
+        return $template->get('id');
     }
 
 
