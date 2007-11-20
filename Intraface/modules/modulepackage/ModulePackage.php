@@ -218,7 +218,7 @@ class Intraface_ModulePackage extends Standard {
         }
         
         // get all products in one request and add them to the array
-        require_once('Intraface/ModulePackage/ShopExtension.php');
+        require_once('Intraface/modules/modulepackage/ShopExtension.php');
         $shopextension = new Intraface_ModulePackage_ShopExtension;
         $products = $shopextension->getProduct((array)$product_ids);
         
@@ -239,6 +239,7 @@ class Intraface_ModulePackage extends Standard {
             return $list;
         }
         elseif($list_type == 'matrix') {
+            $matrix = array();
             foreach($list AS $entry) {
                 $matrix[$entry['group_id']][$entry['plan_id']] = $entry;
             }

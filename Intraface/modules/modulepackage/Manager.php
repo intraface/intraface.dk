@@ -448,7 +448,7 @@ class Intraface_ModulePackage_Manager extends Standard {
             return array();
         }
         
-        require_once('Intraface/ModulePackage/Action.php');
+        require_once('Intraface/modules/modulepackage/Action.php');
         $action = new Intraface_ModulePackage_Action;
         
         $action->addAction(array(
@@ -490,10 +490,10 @@ class Intraface_ModulePackage_Manager extends Standard {
             return array();
         }
         
-        require_once('Intraface/ModulePackage/Action.php');
+        require_once('Intraface/modules/modulepackage/Action.php');
         $action = new Intraface_ModulePackage_Action;
         
-        require_once('Intraface/ModulePackage/ShopExtension.php');
+        require_once('Intraface/modules/modulepackage/ShopExtension.php');
         $shop = new Intraface_ModulePackage_ShopExtension;
         
         // TODO: If DBQuery had not needed kernel we could have used it here!

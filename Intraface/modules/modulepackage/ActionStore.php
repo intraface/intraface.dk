@@ -100,7 +100,7 @@ class Intraface_ModulePackage_ActionStore {
         
         if($row['action'] != '') {
             $this->id = $row['id'];
-            require_once("Intraface/ModulePackage/Action.php");
+            require_once("Intraface/modules/modulepackage/Action.php");
             return unserialize($row['action']);
         }
         return false;

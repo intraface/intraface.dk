@@ -52,10 +52,17 @@ class Intraface_ModulePackage_ShopExtension {
         }
         
         require_once('IntrafacePublic/Shop/XMLRPC/Client.php');
-        $this->shop = new IntrafacePublic_Shop_XMLRPC_Client(
-            array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()), 
-            INTRAFACE_XMLRPC_DEBUG, 
-            $xmlrpc_shop_url);
+        
+        try {
+            $this->shop = new IntrafacePublic_Shop_XMLRPC_Client(
+                array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()), 
+                INTRAFACE_XMLRPC_DEBUG, 
+                $xmlrpc_shop_url);
+        }
+        catch(Exception $e) {
+            $this->shop = NULL;
+            trigger_error('Unable to connect to the intranet maintenance webshop', E_USER_ERROR);
+        } 
         
         
         require_once('IntrafacePublic/Debtor/XMLRPC/Client.php');
@@ -84,7 +91,13 @@ class Intraface_ModulePackage_ShopExtension {
         
         if(is_array($product_id)) {
             if(count($product_id) > 0) {
-                $products = $this->shop->getProducts(array('ids' => $product_id, 'use_paging' => false));
+                try {
+                    $products = $this->shop->getProducts(array('ids' => $product_id, 'use_paging' => false));
+                }
+                catch (Exception $e) {
+                    $products = array();
+                    trigger_error('unable to get products from intranet webshop: '.$e->getMessage(), E_USER_NOTICE);
+                }
                 return (array)$products;
             }
             else {
@@ -95,7 +108,13 @@ class Intraface_ModulePackage_ShopExtension {
             if(intval($product_id) == 0) {
                 return array();
             }
-            $product = $this->shop->getProduct($product_id);
+            try {
+                $product = $this->shop->getProduct($product_id);
+            }
+            catch (Exception $e) {
+                $products = array();
+                trigger_error('unable to get product from intranet webshop: '.$e->getMessage(), E_USER_NOTICE);
+            }
             return $product;
         }
         else {
