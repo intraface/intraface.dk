@@ -41,7 +41,7 @@ $page->start("Moduler");
 	<li><a href="modules.php?do=register"><?php echo $translation->get('register modules'); ?></a></li>
 </ul>
 
-<?php $module->error->view(); ?>
+<?php echo $module->error->view(); ?>
 
 <table>
 	<thead>
