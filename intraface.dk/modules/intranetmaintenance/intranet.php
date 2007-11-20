@@ -1,7 +1,9 @@
 <?php
 require('../../include_first.php');
-require('Intraface/ModulePackage.php');
-require('Intraface/ModulePackage/Manager.php');
+
+// This is not a really good way to do it...
+require('Intraface/modules/modulepackage/ModulePackage.php');
+require('Intraface/modules/modulepackage/Manager.php');
 
 $modul = $kernel->module("intranetmaintenance");
 if($kernel->user->hasModuleAccess('contact')) {
@@ -235,39 +237,45 @@ $page->start($translation->get('Intranet'));
 
 <fieldset>
     <legend>Tilføj modulpakke</legend>    
-    <?php
-    $modulepackage = new Intraface_ModulePackage;
-    $modulepackage->createDBQuery($kernel);
-    $packages = $modulepackage->getList();
-    ?>
-    <div class="formrow">
-        <label for="module_package_id">Vælg pakke</label>
-        <select name="module_package_id" id="module_package_id">
-            <?php
-            
-            foreach($packages AS $package) {
-                echo '<option value="'.intval($package['id']).'">'.safeToHtml($package['plan'].' '.$package['group']).'</option>';
-            }
-            ?>
-        </select>
-    </div> 
+    <?php if(!$kernel->intranet->hasModuleAccess('webshop')): ?>
+        This intranet needs to have access to webshop for modulepackage to work!
+    <?php else: ?>
     
-    <div class="formrow">
-        <label for="start_date">Start dato</label>
-        <input type="text" name="start_date" id="start_date" value="<?php echo safeToHtml(date('d-m-Y')); ?>" /> 
-    </div>
+        <?php
+        $modulepackage = new Intraface_ModulePackage;
+        $modulepackage->createDBQuery($kernel);
+        $packages = $modulepackage->getList();
+        ?>
+        <div class="formrow">
+            <label for="module_package_id">Vælg pakke</label>
+            <select name="module_package_id" id="module_package_id">
+                <?php
+                
+                foreach($packages AS $package) {
+                    echo '<option value="'.intval($package['id']).'">'.safeToHtml($package['plan'].' '.$package['group']).'</option>';
+                }
+                ?>
+            </select>
+        </div> 
     
-    <div class="formrow">
-        <label for="duration_month">Varighed i måneder</label>
-        <select name="duration_month" id="duration_month">
-            <?php
-            for($i = 1; $i < 25; $i++) {
-                echo '<option value="'.intval($i).'">'.intval($i).'</option>';
-            }
-            ?>
-        </select>
-    </div> 
-    <input type="submit" name="add_module_package" value="Tilføj" class="save" />
+    
+        <div class="formrow">
+            <label for="start_date">Start dato</label>
+            <input type="text" name="start_date" id="start_date" value="<?php echo safeToHtml(date('d-m-Y')); ?>" /> 
+        </div>
+        
+        <div class="formrow">
+            <label for="duration_month">Varighed i måneder</label>
+            <select name="duration_month" id="duration_month">
+                <?php
+                for($i = 1; $i < 25; $i++) {
+                    echo '<option value="'.intval($i).'">'.intval($i).'</option>';
+                }
+                ?>
+            </select>
+        </div> 
+        <input type="submit" name="add_module_package" value="Tilføj" class="save" />
+    <?php endif; ?>
     
 </fieldset>
 
