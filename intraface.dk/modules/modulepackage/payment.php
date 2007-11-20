@@ -1,8 +1,8 @@
 <?php
 require('../../include_first.php');
-require('Intraface/ModulePackage.php');
-require('Intraface/ModulePackage/Action.php');
-require('Intraface/ModulePackage/ActionStore.php');
+$module = $kernel->module('modulepackage');
+$module->includeFile('Action.php');
+$module->includeFile('ActionStore.php');
 
 $translation = $kernel->getTranslation('modulepackage');
 

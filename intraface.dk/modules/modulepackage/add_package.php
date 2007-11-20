@@ -1,9 +1,9 @@
 <?php
 require('../../include_first.php');
-require('Intraface/ModulePackage.php');
-require('Intraface/ModulePackage/Manager.php');
-require('Intraface/ModulePackage/ShopExtension.php');
-require('Intraface/ModulePackage/ActionStore.php');
+$module = $kernel->module('modulepackage');
+$module->includeFile('Manager.php');
+$module->includeFile('ShopExtension.php');
+$module->includeFile('ActionStore.php');
 
 $translation = $kernel->getTranslation('modulepackage');
 

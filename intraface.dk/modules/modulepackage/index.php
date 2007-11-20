@@ -1,7 +1,8 @@
 <?php
 require('../../include_first.php');
-require_once('Intraface/ModulePackage.php');
-require_once('Intraface/ModulePackage/Manager.php');
+
+$module = $kernel->module('modulepackage');
+$module->includeFile('Manager.php');
 
 // temp test
 // require('Intraface/ModulePackage/AccessUpdate.php');
@@ -17,7 +18,7 @@ if(isset($_GET['unsubscribe_id']) && intval($_GET['unsubscribe_id']) != 0) {
         elseif($modulepackagemanager->get('status') == 'active') {
             $modulepackagemanager->terminate();
             
-            require_once('Intraface/ModulePackage/AccessUpdate.php');
+            $module->includeFile('AccessUpdate.php');
             $access_update = new Intraface_ModulePackage_AccessUpdate();
             $access_update->run($kernel->intranet->get('id'));
             $kernel->user->clearCachedPermission();

@@ -6,11 +6,7 @@
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // When we recieve from Quickpay payment
     require('../../common.php');
-    require('Intraface/ModulePackage.php');
-    require('Intraface/ModulePackage/Manager.php');
-    require('Intraface/ModulePackage/ShopExtension.php');
-    require('Intraface/ModulePackage/ActionStore.php');
-    require('Intraface/ModulePackage/AccessUpdate.php');
+    
     
     if(!isset($_POST['CUSTOM_intanet_public_key']) || $_POST['CUSTOM_intanet_public_key'] == '') {
         trigger_error('A public key is needed!', E_USER_ERROR);
@@ -28,6 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $kernel->weblogin = $weblogin;
     $kernel->intranet = new Intranet($intranet_id);
     $kernel->setting = new Setting($kernel->intranet->get('id'));
+    
+    $module = $kernel->module('modulepackage');
+    $module->includeFile('Manager.php');
+    $module->includeFile('ShopExtension.php');
+    $module->includeFile('ActionStore.php');
+    $module->includeFile('AccessUpdate.php');
+    
     
     $id = (int)$_POST['CUSTOM_action_store_id'];
     
@@ -115,20 +118,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 } 
 elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
-    // Here we are logged in so we can 
+    // Here we are logged in so we can use the normal way to acccess files.
     require('../../include_first.php');
-    require('Intraface/ModulePackage.php');
-    require('Intraface/ModulePackage/Manager.php');
-    require('Intraface/ModulePackage/ShopExtension.php');
-    require('Intraface/ModulePackage/ActionStore.php');
-    require('Intraface/ModulePackage/AccessUpdate.php');
-        
-
+    
+    $module = $kernel->module('modulepackage');
+    $module->includeFile('Manager.php');
+    $module->includeFile('ShopExtension.php');
+    $module->includeFile('ActionStore.php');
+    $module->includeFile('AccessUpdate.php');
 
     // When there is no payment we get this from add_package.php
     $id = (int)$_GET['action_store_id'];
     
-        
     $action_store = new Intraface_ModulePackage_ActionStore($kernel->intranet->get('id'));
     $action = $action_store->restore($id);
         
