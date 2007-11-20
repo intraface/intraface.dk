@@ -19,12 +19,14 @@ ALTER TABLE `dbquery_result` CHANGE `weblogin_session_id` `session_id` VARCHAR( 
 
 ALTER TABLE `redirect` CHANGE `user_id` `session_id` VARCHAR( 255 ) NOT NULL ;
 
-ALTER TABLE `procurement` CHANGE `_old_state_account_id` `state_account_id` INT( 11 ) NOT NULL DEFAULT '0'
-ALTER TABLE `procurement` CHANGE `_old_voucher_number` `voucher_number` INT( 11 ) NOT NULL DEFAULT '0'
+ALTER TABLE `procurement` CHANGE `_old_state_account_id` `state_account_id` INT( 11 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `procurement` CHANGE `_old_voucher_number` `voucher_number` INT( 11 ) NOT NULL DEFAULT '0' ;
 
- CREATE TABLE `intraface`.`shop_featuredproducts` (
+ CREATE TABLE `shop_featuredproducts` (
 `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `intranet_id` INT( 11 ) NOT NULL ,
 `headline` VARCHAR( 255 ) NOT NULL ,
 `keyword_id` INT( 11 ) NOT NULL
-) ENGINE = MYISAM
+) ENGINE = MYISAM ;
+
+ALTER TABLE `file_handler_instance` ADD `crop_parameter` VARCHAR( 255 ) NOT NULL AFTER `file_size` ;
