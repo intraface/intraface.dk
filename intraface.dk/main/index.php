@@ -117,8 +117,11 @@ $page->start(safeToHtml($translation->get('dashboard', 'dashboard')));
 <?php 
 require_once('Intraface/Module.php');
 // false && which means the link is deactivated until we are going to use it!
-if(false && Module::exists('administration') && $kernel->user->hasModuleAccess('administration')): ?>
-    <p><a href="account/index.php"><?php echo safeToHtml($translation->get('view and change your intraface account')); ?></a></p>
+if(Module::exists('modulepackage') && $kernel->user->hasModuleAccess('modulepackage')): ?>
+    <?php 
+    $module_modulepackage = $kernel->useModule('modulepackage');
+    ?>
+    <p><a href="<?php echo safeToHtml($module_modulepackage->getPath()); ?>"><?php echo safeToHtml($translation->get('view and change your intraface account')); ?></a></p>
 <?php endif; ?>
 </div>
 
