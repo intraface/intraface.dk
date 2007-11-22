@@ -70,39 +70,23 @@ switch ($send_as) {
 
 
 # gem debtoren som en fil i filsystemet
-$filename = 'invoice' .$debtor->get('number').'.pdf';
-$filepath = PATH_UPLOAD . $kernel->intranet->get('id') . '/';
-
-if(!is_dir($filepath)) {
-    mkdir($filepath);
-}
-$filepath = $filepath .'/tempdir/';
-if(!is_dir($filepath)) {
-    mkdir($filepath);
-}
-
-$upload_filename = $filepath . $filename;
+$filehandler = new FileHandler($kernel);
+$tmp_file = $filehandler->createTemporaryFile($translation->get($debtor->get("type")).$debtor->get('number').'.pdf');
 
 // Her gemmes filen
-$debtor->pdf('file', $upload_filename);
-
-$full_filename = $filepath . $filename;
-
-$input['file_size'] = filesize($full_filename);
-$input['file_name'] = $filename;
-$input['file_type'] = 'application/pdf';
-$input['accessibility'] = 'public';
-// $input['server_file_name'] = $filename;
-// $input['description'] = 'Faktura ' . $debtor->get('number') . ' sendt som elektronisk faktura';
+$debtor->pdf('file', $tmp_file->getFilePath());
 
 # gem filen med filehandleren
 $filehandler = new FileHandler($kernel);
-if (!$file_id = $filehandler->save($full_filename, $filename, 'hidden')) {
+if (!$file_id = $filehandler->save($tmp_file->getFilePath(), $tmp_file->getFileName(), 'hidden', 'application/pdf')) {
     $filehandler->error->view();
     trigger_error('Filen kunne ikke gemmes', E_USER_ERROR);
 }
 
-
+/**
+ * @TODO: This is not right! the invoice should not be public!
+ */
+$input['accessibility'] = 'public';
 if (!$file_id = $filehandler->update($input)) {
     $filehandler->error->view();
     trigger_error('Oplysninger om filen kunne ikke opdateres', E_USER_ERROR);
@@ -124,6 +108,7 @@ switch($kernel->setting->get('intranet', 'debtor.sender')) {
         break;
     default:
         trigger_error("Invalid sender!", E_USER_ERROR);
+        exit;
 }
 
 if (empty($from_email) || empty($from_name)) {
@@ -133,20 +118,20 @@ if (empty($from_email) || empty($from_name)) {
 # opret e-mailen
 $email = new Email($kernel);
 if (!$email->save(array(
-    'contact_id' => $contact->get('id'),
-    'subject' => $subject,
-    'body' => $body . "\n\n--\n" . $kernel->user->address->get('name') . "\n" . $kernel->intranet->get('name'),
-    'from_email' => $from_email,
-    'from_name' => $from_name,
-    'type_id' => 10, // electronic invoice
-    'belong_to' => $debtor->get('id')
-))) {
+        'contact_id' => $contact->get('id'),
+        'subject' => $subject,
+        'body' => $body . "\n\n--\n" . $kernel->user->address->get('name') . "\n" . $kernel->intranet->get('name'),
+        'from_email' => $from_email,
+        'from_name' => $from_name,
+        'type_id' => 10, // electronic invoice
+        'belong_to' => $debtor->get('id')
+    ))) {
     $email->error->view();
     trigger_error('E-mailen kunne ikke gemmes', E_USER_ERROR);
 }
 
 # tilknyt fil
-if (!$email->attachFile($file_id, 'invoice' . $debtor->get('number') . '.pdf')) {
+if (!$email->attachFile($file_id, $filehandler->get('file_name'))) {
     $email->error->view();
     trigger_error('Filen kunne ikke vedhæftes', E_USER_ERROR);
 }
