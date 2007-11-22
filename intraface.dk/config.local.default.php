@@ -17,7 +17,7 @@ define('DB_NAME', 'pear');
 // net
 define('NET_SCHEME', 'http://'); // http:// or https://
 define('NET_HOST', 'localhost'); // www.intraface.dk
-define('NET_DIRECTORY', '/intraface/intraface.dk/'); // / (slash) or other subdirectory
+define('NET_DIRECTORY', '/intraface/intraface.dk/'); // subdirectory. if non keep empty
 
 // paths
 define('PATH_ROOT', 'c:/Users/Lars Olesen/workspace/intraface/'); // remember trailing slash
