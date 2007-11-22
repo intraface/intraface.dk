@@ -241,8 +241,9 @@ class ContactReminder extends Standard {
      */
 
     public function postponeUntil($date) {
-        // validation needed - not crucial as we are setting the postpone date
-
+        /**
+         * @todo: validation needed - not crucial as we are setting the postpone date
+         */
         $result = $this->db->exec('UPDATE contact_reminder_single SET date_changed = NOW(), reminder_date = ' .$this->db->quote($date, 'date').' WHERE intranet_id = '.$this->db->quote($this->contact->kernel->intranet->get('id'), 'integer').' AND id = '.$this->db->quote($this->id, 'integer'));
          if (PEAR::isError($result)) {
              trigger_error('Could not postphone reminder' . $result->getUserInfo(), E_USER_ERROR);
