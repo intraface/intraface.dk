@@ -110,5 +110,10 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
         $fh->error->view();
         $this->assertTrue($id > 0);
     }
+    
+    function testCreateTemporaryFile() {
+        $fh = new FileHandler($this->createKernel());
+        $this->assertEquals('TemporaryFile', get_class($fh->createTemporaryFile()));
+    }
 }
 ?>
