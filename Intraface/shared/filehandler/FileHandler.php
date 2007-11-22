@@ -39,7 +39,7 @@ class FileHandler extends Standard
     /**
      * @var string
      */
-    private $upload_path;
+    public $upload_path;
 
     /**
      * @var string
@@ -73,10 +73,22 @@ class FileHandler extends Standard
                             2 => 'hidden');
 
     /**
-     * @var object @todo is this used at all?
+     * @var object upload conatians upload handler
      */
     public $upload;
-
+    
+    /**
+     * @var object instance contains the instance handler.
+     */
+    public $instance;
+    
+    
+    /**
+     * @var object image contains the image handler 
+     */
+    public $image;
+    
+    
     /**
      * @todo der er muligt, at der kun skal være en getList i filemanager,
      *       men så skal vi have cms til at have filemanager som dependent. Foreløbig
@@ -318,6 +330,18 @@ class FileHandler extends Standard
         require_once 'Intraface/shared/filehandler/ImageHandler.php';
         $this->image = new ImageHandler($this);
     }
+    
+    /**
+     * creates and temporary file handler
+     * 
+     * @param string optional file name
+     * @return object temporary file
+     */
+    public function createTemporaryFile($file_name = NULL) 
+    {
+        require_once 'Intraface/shared/filehandler/TemporaryFile.php';
+        return new TemporaryFile($this, $file_name);
+    } 
 
     /**
      * Delete
