@@ -183,7 +183,7 @@ if($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {
 	?>
 	<fieldset class="radiobuttons">
 		<legend>Betalingsoplysninger</legend>
-		<p>Hvilke betalingsoplysninger skal vises på fakturaen</p>
+		<p><?php echo safeToHtml($translation->get('which payment method do you want to show on the '.$debtor->get("type"))); ?></p>
 		<div>
 			<label<?php if(isset($value['payment_method']) && $value['payment_method'] == 0) print(" class=\"selected\""); ?>><input class="input" id="none" type="radio" name="payment_method" value="0" <?php if(isset($value['payment_method']) && $value['payment_method'] == 0) print("checked=\"CHECKED\""); ?> />
 			Ingen</label>
