@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$next_day = $date->getNextDay();
 		$reminder->postponeUntil($next_day->getDate());
 	}
-	elseif (isset($_POST['postpone_1_week'])) {
+    elseif (isset($_POST['postpone_1_week'])) {
 		$date = new Date($reminder->get('reminder_date'));
 		$date_span = new Date_Span();
 		$date_span->setFromDays(7);
@@ -36,8 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	elseif (isset($_POST['postpone_1_month'])) {
 		$date = new Date($reminder->get('reminder_date'));
 		$date_span = new Date_Span();
-		$date_calc = new Date_Calc();
-		$date_span->setFromDays($date_calc->daysInMonth());
+        $date_calc = new Date_Calc();
+		$date_parts = explode('-', $reminder->get('reminder_date'));
+        $date_span->setFromDays($date_calc->daysInMonth($date_parts[1], $date_parts[0]));
 		$date->addSpan($date_span);
 		$reminder->postponeUntil($date->getDate());
 	}
