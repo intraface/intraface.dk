@@ -68,7 +68,7 @@ $page->start('User');
 
 <h1><?php print('User'); ?></h1>
 
-<?php $user->error->view(); ?>
+<?php echo $user->error->view(); ?>
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 
