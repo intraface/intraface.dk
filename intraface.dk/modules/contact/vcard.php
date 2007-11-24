@@ -3,7 +3,7 @@ require('../../include_first.php');
 require('Contact_Vcard_Build.php');
 
 if (empty($_GET['id']) OR !is_numeric($_GET['id'])) {
-	trigger_error('Du kan ikke lave et vCard uden et kontakt id', E_USER_ERROR);
+    trigger_error('Du kan ikke lave et vCard uden et kontakt id', E_USER_ERROR);
 }
 
 $kernel->module('contact');
@@ -44,7 +44,7 @@ header('HTTP/1.1 200 OK');
 header('Content-Length: ' . strlen($output));
 //header("Content-Type: application/force-download");
 header('Content-Type: text/x-vCard; name='.$filename);
-header('Content-Disposition: attachment; filename=$filename');
+header('Content-Disposition: attachment; filename='. $filename);
 header('Content-Description: VCard for ' . $contact->get('name'));
 //header("Content-Transfer-Encoding: binary');
 header('Connection: close');
