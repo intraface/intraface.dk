@@ -26,8 +26,11 @@ class IntranetMaintenance extends Intranet
 
     /**
      * Constructor
+     *
+     * @todo remove kernel - it is only used for dbquery and for getting the
+     *       intranet, seems quite stupid considering it extends intranet and
+     *       for a random key :)
      */
-
     function __construct($kernel, $intranet_id = 0)
     {
         if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
@@ -190,6 +193,7 @@ class IntranetMaintenance extends Intranet
                    trigger_error("Error in IntranetMaintenance: ".$id->getMessage(), E_USER_ERROR);
             }
 
+            // @todo this seems quite strange :)
             print('ff'.$this->id.'ff');
 
             $this->load();
