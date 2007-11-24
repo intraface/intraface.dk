@@ -4,15 +4,18 @@
  */
 require_once 'Intraface/modules/cms/Element.php';
 
-class CMS_Pagelist extends CMS_Element {
+class CMS_Pagelist extends CMS_Element
+{
 
-    function __construct($section, $id = 0) {
+    function __construct($section, $id = 0)
+    {
         $this->value['type'] = 'pagelist';
         parent::__construct($section, $id);
         //$this->section->kernel->useShared('filehandler');
     }
 
-    function validate_element($var) {
+    function validate_element($var)
+    {
         $validator = new Validator($this->error);
         $validator->isString($var['headline'], 'error in headline', '', 'allow_empty');
         $validator->isString($var['no_results_text'], 'error in no results text', '', 'allow_empty');
@@ -29,7 +32,8 @@ class CMS_Pagelist extends CMS_Element {
         return true;
     }
 
-    function save_element($var) {
+    function save_element($var)
+    {
         $this->parameter->save('headline', $var['headline']);
         $this->parameter->save('no_results_text', $var['no_results_text']);
         $this->parameter->save('read_more_text', $var['read_more_text']);
@@ -41,8 +45,8 @@ class CMS_Pagelist extends CMS_Element {
         return true;
     }
 
-    function load_element() {
-
+    function load_element()
+    {
         $this->value['headline'] = $this->parameter->get('headline');
         $this->value['read_more_text'] = $this->parameter->get('read_more_text');
         $this->value['no_results_text'] = $this->parameter->get('no_results_text');
@@ -58,9 +62,7 @@ class CMS_Pagelist extends CMS_Element {
         if (!empty($this->value['keyword'])) {
             $this->section->cmspage->dbquery->setKeyword($this->value['keyword']);
         }
-
         $this->value['pages'] = $this->section->cmspage->getList();
-
     }
 }
 ?>
