@@ -38,7 +38,7 @@ p#system_message {
 h1 {
 	text-align: center; 
 	height: 105px;
-	background: url(/images/logo.jpg) no-repeat center center;
+	background: url(../images/logo.jpg) no-repeat center center;
 	font-family: Georgia, sans-serif; 
 	font-size: 1.8em;
 	margin: 0;
