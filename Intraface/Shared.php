@@ -17,7 +17,7 @@ class Shared {
     var $translation;
 
 
-    function Shared() {
+    function __construct() {
         // init
         $this->shared_name = '';
         $this->active = 0;
