@@ -386,7 +386,10 @@ class Account extends Standard {
     function isNumberFree($account_number) {
         $account_number = (int)$account_number;
 
-        $db = new DB_Sql;
+        $db = MDB2::singleton(DB_DSN);
+        if (PEAR::isError($db)) {
+            throw new Exception($db->getMessage() . $db->getUserInfo());
+        }
         $sql = "SELECT
                 id
             FROM accounting_account
@@ -394,8 +397,8 @@ class Account extends Standard {
                 AND intranet_id = " . $this->year->kernel->intranet->get('id') . "
                 AND year_id = " .$this->year->get('id'). "
                 AND id <> " . $this->id . " AND active = 1";
-        $db->query($sql);
-        if ($db->numRows() == 0) {
+        $result = $db->query($sql);
+        if ($result->numRows() == 0) {
             return true;
         }
         return false;
