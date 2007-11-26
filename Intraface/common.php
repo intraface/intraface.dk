@@ -39,7 +39,7 @@ if (!defined('MDB2_DEBUG')) {
 // define('MDB2_PORTABILITY_EMPTY_TO_NULL', false);
 
 // Filehandler
-define('IMAGE_LIBRARY', 'GD');
+if (!defined('IMAGE_LIBRARY')) define('IMAGE_LIBRARY', 'GD');
 
 // timezone and local
 if(!defined('COUNTRY_LOCAL')) define('COUNTRY_LOCAL', 'da_DK');
