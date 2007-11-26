@@ -1,7 +1,10 @@
 <?php
 /**
  * @package Intraface_CMS
+ *
  */
+require_once 'Intraface/modules/cms/Element.php';
+
 class CMS_ShortText extends CMS_Element {
 
     function __construct(& $cmspage, $id = 0) {

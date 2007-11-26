@@ -2,6 +2,8 @@
 /**
  * @package Intraface_CMS
  */
+require_once 'Intraface/modules/cms/Element.php';
+
 class CMS_FileList extends CMS_Element {
 
     var $select_methods = array('single_file');
@@ -58,7 +60,7 @@ class CMS_FileList extends CMS_Element {
             $append_file->createDBQuery();
             $files = $append_file->getList();
         }
-        
+
         $i = 0;
         foreach ($files AS $file) {
             if(isset($file['file_handler_id'])) {
@@ -88,7 +90,7 @@ class CMS_FileList extends CMS_Element {
     function validate_element($var) {
         $validator = new Validator($this->error);
         $validator->isString($var['caption'], 'error in caption', '', 'allow_empty');
-        
+
         /*
         if (!empty($var['files']) AND !is_array($var['files'])) {
             $this->error->set('error in files - has to be an array');
@@ -109,7 +111,7 @@ class CMS_FileList extends CMS_Element {
         $var['caption'] = strip_tags($var['caption']);
 
         if (!$this->validate_element($var)) return 0;
-        
+
         settype($var['caption'], 'string');
         $this->parameter->save('caption', $var['caption']);
         // $this->parameter->save('chosen_files', serialize($var['files']));

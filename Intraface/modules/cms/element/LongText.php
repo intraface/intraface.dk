@@ -4,6 +4,7 @@
  */
 
 require_once 'HTMLPurifier.php';
+require_once 'Intraface/modules/cms/Element.php';
 
 class CMS_LongText extends CMS_Element {
 

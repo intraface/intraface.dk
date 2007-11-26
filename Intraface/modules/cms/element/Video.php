@@ -2,6 +2,8 @@
 /**
  * @package Intraface_CMS
  */
+require_once 'Intraface/modules/cms/Element.php';
+
 class CMS_Video extends CMS_Element {
 
     var $services = array(

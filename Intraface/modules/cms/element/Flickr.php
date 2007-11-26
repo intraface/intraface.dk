@@ -14,6 +14,7 @@
 // use this http://www.airtightinteractive.com/simpleviewer/auto_server_instruct.html
 
 require_once 'phpFlickr/phpFlickr.php';
+require_once 'Intraface/modules/cms/Element.php';
 
 class CMS_Flickr extends CMS_Element {
 

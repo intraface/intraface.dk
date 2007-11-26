@@ -8,7 +8,7 @@
  *
  * @package Intraface_CMS
  */
-
+require_once 'Intraface/modules/cms/Element.php';
 
 class CMS_Picture extends CMS_Element {
 

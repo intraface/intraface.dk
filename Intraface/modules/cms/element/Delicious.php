@@ -2,6 +2,7 @@
 /**
  * @package Intraface_CMS
  */
+require_once 'Intraface/modules/cms/Element.php';
 require_once 'HTTP/Request.php';
 require_once 'XML/Unserializer.php';
 
