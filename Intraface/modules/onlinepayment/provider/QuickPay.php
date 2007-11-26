@@ -1,6 +1,7 @@
 <?php
 /**
  * Onlinebetalingsklasse som specifik passer til Quickpay
+ *
  * @package Intraface_OnlinePayment
  * @author		Sune Jensen
  * @author		Lars Olesen <lars@legestue.net>
@@ -9,13 +10,12 @@
  * @todo		Skal statuskoderne fra den oprindelige quickpayklasse oversættes
  *				til vores statuskoder?
  */
+require 'Payment/Quickpay.php';
 
- require('Quickpay/Quickpay.php');
-
-class OnlinePaymentQuickPay extends OnlinePayment {
-
+class OnlinePaymentQuickPay extends OnlinePayment
+{
     // This should maybe instead be: $transaction_status_types = array(
-    var $statuskoder = array(
+    public $statuskoder = array(
         '' => 'Ingen kontakt til Quickpay - mangler $eval',
         '000' => 'Godkendt',
         '001' => 'Afvist af PBS',
@@ -28,12 +28,12 @@ class OnlinePaymentQuickPay extends OnlinePayment {
         '008' => 'Fejl i parameter sendt til QuickPay'
     );
 
-    var $quickpay;
-    var $settings;
-    var $eval;
-    var $posc = 'K00500K00130';
+    public $quickpay;
+    public $settings;
+    public $eval;
+    public $posc = 'K00500K00130';
 
-    var $msg_types = array(
+    public $msg_types = array(
         '1100' => 'authorize', // tjekker
         '1220' => 'capture', // hæver
         'credit' => 'credit', // tilbagebetaler
@@ -42,7 +42,16 @@ class OnlinePaymentQuickPay extends OnlinePayment {
 
     );
 
-    function OnlinePaymentQuickPay(&$kernel, $id) {
+    /**
+     * Constructor
+     *
+     * @param object  $kernel Kernel object
+     * @param integer $id     Id for the payment
+     *
+     * @return void
+     */
+    function __construct($kernel, $id)
+    {
         OnlinePayment::OnlinePayment($kernel, $id);
 
         // hente settings om quickpay fra settingssystemet
@@ -57,20 +66,6 @@ class OnlinePaymentQuickPay extends OnlinePayment {
         $this->quickpay->set_posc($this->posc);
 
     }
-    /*
-     * Så vidt jeg kan gennemskue skal disse være ens for de forskellige onlinebetalinger
-
-    function getTransactionActions() {
-        return array(
-            0 => array(
-                'action' => 'capture',
-                'label' => 'Hæv'),
-            1 => array(
-                'action' => 'reverse',
-                'label' => 'Tilbagebetal')
-        );
-    }
-    */
 
     /**
      * Denne funktion behøves ikke, for i første omgang i hvert fald sker
@@ -93,8 +88,17 @@ class OnlinePaymentQuickPay extends OnlinePayment {
     }
     **/
 
-    function transactionAction($action) {
-
+    /**
+     * @todo does what?
+     *
+     * @todo what about splitting up to smaller functions?
+     *
+     * @param string $action Which action to perform?
+     *
+     * @return void
+     */
+    function transactionAction($action)
+    {
         $this->quickpay->set_msgtype(array_search($action, $this->msg_types));
 
         if($action == "capture") {
@@ -112,23 +116,18 @@ class OnlinePaymentQuickPay extends OnlinePayment {
 
                 if($this->addAsPayment()) {
                     $this->setStatus("captured");
-                }
-                else {
+                } else {
                     trigger_error("Onlinebetalingen kunne ikke overføres til fakturaen", FATAL);
                 }
 
-                return 1;
+                return true;
 
-            }
-            else {
+            } else {
                 // fiasko
                 $this->error->set('Vi kunne ikke capture betalingen');
-                return 0;
+                return false;
             }
-
-
-        }
-        elseif($action == "reverse") {
+        } elseif($action == "reverse") {
             die('not implemented');
             /*
             $this->quickpay->set_transaction($transaction);
@@ -146,34 +145,60 @@ class OnlinePaymentQuickPay extends OnlinePayment {
             }
             */
 
-        }
-        else {
+        } else {
             trigger_error("Ugyldig handling i Quickpay->transactionAction()", ERROR);
         }
     }
 
-    function addCustomVar($var, $value) {
+    /**
+     * Adds a custom var
+     *
+     * @param string $var   The var to add
+     * @param string $value The value for the var
+     *
+     * @return void
+     */
+    function addCustomVar($var, $value)
+    {
         $this->quickpay->add_customVars($var, $value);
     }
 
-    function setSettings($input) {
+    /**
+     * Adds a custom var
+     *
+     * @param array $input @todo what
+     *
+     * @return boolean
+     */
+    function setSettings($input)
+    {
         $this->kernel->setting->set('intranet', 'onlinepayment.quickpay.md5_secret', $input['md5_secret']);
         $this->kernel->setting->set('intranet', 'onlinepayment.quickpay.merchant_id', $input['merchant_id']);
-        return 1;
+        return true;
     }
 
-    function getSettings() {
+    /**
+     * Gets a setting
+     *
+     * @return string
+     */
+    function getSettings()
+    {
         $this->value['md5_secret'] = 	$this->kernel->setting->get('intranet', 'onlinepayment.quickpay.md5_secret');
         $this->value['merchant_id'] = 	$this->kernel->setting->get('intranet', 'onlinepayment.quickpay.merchant_id');
         return $this->value;
     }
 
-    function isSettingsSet() {
+    /**
+     * Returns whether a setting is set
+     *
+     * @return boolean
+     */
+    function isSettingsSet()
+    {
         if ($this->kernel->setting->get('intranet', 'onlinepayment.quickpay.md5_secret') AND $this->kernel->setting->get('intranet', 'onlinepayment.quickpay.merchant_id')) {
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
     }
-
 }
-?>
