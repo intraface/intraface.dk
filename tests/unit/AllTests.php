@@ -7,6 +7,10 @@ class AllTests
     public static function suite()
     {
         PHPUnit_Util_Filter::addDirectoryToWhitelist(dirname(__FILE__) . '/../../Intraface/', '.php');
+        PHPUnit_Util_Filter::addDirectoryToFilter(dirname(__FILE__) . '/../../Intraface/certificates');
+        PHPUnit_Util_Filter::addDirectoryToFilter(dirname(__FILE__) . '/../../Intraface/3Party');
+        PHPUnit_Util_Filter::addDirectoryToFilter(dirname(__FILE__) . '/../../Intraface/config');
+        PHPUnit_Util_Filter::addDirectoryToFilter(dirname(__FILE__) . '/../../Intraface/ihtml');
         //PHPUnit_Util_Filter::addDirectoryToWhitelist('c:\wamp\cruisecontrol\projects\intraface\source\\', '.php');
 
         $suite = new PHPUnit_Framework_TestSuite('Intraface');
