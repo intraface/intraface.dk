@@ -53,35 +53,34 @@
  * @version 1.0
  *
  */
-
 require_once 'Intraface/Standard.php';
 
 class CMS_Page extends Standard {
 
-    var $id;
-    var $kernel;
-    var $position;
-    var $error;
+    public $id;
+    public $kernel;
+    public $position;
+    public $error;
 
-    var $cmssite;
-    var $template;
-    var $navigation;
-    var $message;
-    var $cc_license;
+    public $cmssite;
+    public $template;
+    public $navigation;
+    public $message;
+    public $cc_license;
 
 
-    var $value;
-    var $type = array(
+    public $value;
+    public $type = array(
         1 => 'page',
         2 => 'article',
         3 => 'news'
     );
-    var $status = array(
+    public $status = array(
         0 => 'draft',
         1 => 'published'
     );
 
-    function __construct($cmssite, $id = 0) {
+    public function __construct($cmssite, $id = 0) {
         if (!is_object($cmssite)) {
              trigger_error('CMS_Page::__construct needs CMS_Site', E_USER_ERROR);
         }
@@ -216,7 +215,7 @@ class CMS_Page extends Standard {
         if (empty($var['identifier'])) {
             $var['identifier'] = md5(date('d-m-Y H:i:s') . $type_key . serialize($var));
         }
-        
+
         settype($var['date_expire'], 'string');
 
         if (!$this->validate($var)) {
