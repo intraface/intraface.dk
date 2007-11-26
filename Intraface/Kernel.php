@@ -29,7 +29,7 @@ class Kernel
 
     /**
      * Init
-     * 
+     *
      *
      * @param string $session Session string
      */
@@ -46,10 +46,10 @@ class Kernel
             trigger_error($this->db->getMessage() . $this->db->getUserInfo(), E_USER_ERROR);
         }
     }
-    
+
     /**
      * returns an unique user id for this login
-     * 
+     *
      * @todo: session_id is not the correct name, as this is not always session id.
      */
     function getSessionId() {
@@ -359,10 +359,8 @@ class Kernel
             return $this->shared[$shared_name];
         }
 
-        // die($shared_name."ss");
-
-        $main_shared_name = "Shared".ucfirst($shared_name);
-        $main_shared_path = PATH_INCLUDE_SHARED.$shared_name."/".$main_shared_name.".php";
+        $main_shared_name = 'Shared' . ucfirst($shared_name);
+        $main_shared_path = PATH_INCLUDE_SHARED . $shared_name . '/' . $main_shared_name . '.php';
 
         if (file_exists($main_shared_path)) {
             require_once $main_shared_path;
@@ -371,7 +369,7 @@ class Kernel
             $this->shared[$shared_name] = $object;
             return $object;
         } else {
-            trigger_error($main_shared_path.' eksisterer ikke', E_USER_ERROR);
+            trigger_error($shared_name . ' cannot be found on ' . $main_shared_path . ' with PATH_INCLUDE_SHARED: ' . PATH_INCLUDE_SHARED, E_USER_ERROR);
         }
     }
 
