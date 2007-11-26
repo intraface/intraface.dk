@@ -11,6 +11,16 @@ class AllTests
         PHPUnit_Util_Filter::removeDirectoryFromWhitelist(dirname(__FILE__) . '/../../Intraface/3Party/', '.php');
         PHPUnit_Util_Filter::removeDirectoryFromWhitelist(dirname(__FILE__) . '/../../Intraface/config/', '.php');
         PHPUnit_Util_Filter::removeDirectoryFromWhitelist(dirname(__FILE__) . '/../../Intraface/ihtml/', '.php');
+        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/accounting/include_frontpage.php');
+        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/administration/include_frontpage.php');
+        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/contact/include_frontpage.php');
+        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/invoice/include_frontpage.php');
+        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/invoice/include_frontpage.php');
+        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/onlinepayment/include_frontpage.php');
+        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/order/include_frontpage.php');
+        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/procurement/include_frontpage.php');
+        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/product/include_frontpage.php');
+        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/todo/include_frontpage.php');
         //PHPUnit_Util_Filter::addDirectoryToWhitelist('c:\wamp\cruisecontrol\projects\intraface\source\\', '.php');
 
         $suite = new PHPUnit_Framework_TestSuite('Intraface');
