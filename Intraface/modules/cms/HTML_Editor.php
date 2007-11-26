@@ -7,12 +7,12 @@
 
 class HTML_Editor {
 
-    var $allowed_tags;
-    var $implemented_editors = array(
+    public $allowed_tags;
+    public $implemented_editors = array(
         'none', 'tinymce', 'wiki'
     );
-    var $editor;
-    var $options;
+    public $editor;
+    public $options;
 
     /**
      * Constructor
