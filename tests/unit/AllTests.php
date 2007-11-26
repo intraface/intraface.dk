@@ -11,7 +11,7 @@ class AllTests
 
         $suite = new PHPUnit_Framework_TestSuite('Intraface');
 
-        $tests = array('Product',
+        $tests = array('Product'/*,
                        'Email',
                        'Webshop',
                        'IntranetMaintenance',
@@ -25,7 +25,7 @@ class AllTests
                        'Shared',
                        'Newsletter',
                        'Keyword',
-                       'Stock'
+                       'Stock'*/
         );
 
         foreach ($tests AS $test) {
