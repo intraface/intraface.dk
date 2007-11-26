@@ -9,16 +9,19 @@
  * @version @package-version@
  */
 
-abstract class Module {
+abstract class Module
+{
 
     private $modules = array();
     private $db;
 
-    public function __construc() {
+    public function __construct()
+    {
         $this->db = MDB2::singleton(DB_DSN);
     }
 
-    function setPrimaryModule($module_name) {
+    function setPrimaryModule($module_name)
+    {
         if(!empty($this->primary_module_object) AND is_object($this->primary_module_object)) {
             trigger_error('Det primære modul er allerede sat', E_USER_ERROR);
         }
@@ -53,7 +56,8 @@ abstract class Module {
      * @param  boolean $ignore_user_access
      * @return object  $module
      */
-    public function useModule($module_name, $ignore_user_access = false) {
+    public function useModule($module_name, $ignore_user_access = false)
+    {
         if(!ereg("^[a-z0-9]+$", $module_name)) {
             throw new Exception('module name invalid');
         }
@@ -117,11 +121,11 @@ abstract class Module {
      * @param  (string) $module_name
      * @return (object)
      */
-    function getModule($name) {
+    function getModule($name)
+    {
         if(is_object($this->modules[$name])) {
             return($this->modules[$name]);
-        }
-        else {
+        } else {
             trigger_error('getModule() module ' . $name . ' not loaded', E_USER_ERROR);
         }
     }
