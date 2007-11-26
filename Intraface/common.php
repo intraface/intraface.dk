@@ -128,6 +128,10 @@ function intrafaceBackendExceptionhandler($e) {
     return $errorhandler->handleException($e);
 }
 
+if (!defined('ERROR_HANDLE_LEVEL')) {
+    define('ERROR_HANDLE_LEVEL', E_ALL);
+}
+
 set_error_handler('intrafaceBackendErrorhandler', ERROR_HANDLE_LEVEL);
 set_exception_handler('intrafaceBackendExceptionhandler');
 
