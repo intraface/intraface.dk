@@ -101,7 +101,7 @@ class OnlinePaymentQuickPay extends OnlinePayment
     {
         $this->quickpay->set_msgtype(array_search($action, $this->msg_types));
 
-        if($action == "capture") {
+        if ($action == "capture") {
 
             // Her kan der laves en capture fra QuickPay;
 
@@ -114,7 +114,7 @@ class OnlinePaymentQuickPay extends OnlinePayment
             if (!empty($this->eval['qpstat']) AND $this->eval['qpstat'] === '000') {
                 // success
 
-                if($this->addAsPayment()) {
+                if ($this->addAsPayment()) {
                     $this->setStatus("captured");
                 } else {
                     trigger_error("Onlinebetalingen kunne ikke overføres til fakturaen", FATAL);
@@ -127,7 +127,7 @@ class OnlinePaymentQuickPay extends OnlinePayment
                 $this->error->set('Vi kunne ikke capture betalingen');
                 return false;
             }
-        } elseif($action == "reverse") {
+        } elseif ($action == "reverse") {
             die('not implemented');
             /*
             $this->quickpay->set_transaction($transaction);
