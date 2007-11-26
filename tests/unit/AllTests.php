@@ -6,7 +6,8 @@ class AllTests
 {
     public static function suite()
     {
-        PHPUnit_Util_Filter::addDirectoryToWhitelist(PATH_ROOT, '.php');
+        PHPUnit_Util_Filter::addDirectoryToWhitelist(dirname(__FILE__) . '/../../', '.php');
+        //PHPUnit_Util_Filter::addDirectoryToWhitelist('c:\wamp\cruisecontrol\projects\intraface\source\\', '.php');
 
         $suite = new PHPUnit_Framework_TestSuite('Intraface');
 
@@ -48,4 +49,3 @@ class AllTests
         return $suite;
     }
 }
-?>
