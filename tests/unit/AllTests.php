@@ -6,8 +6,9 @@ class AllTests
 {
     public static function suite()
     {
-        PHPUnit_Util_Filter::addDirectoryToFilter('c:/wamp/php/', '.php');
         /*
+        PHPUnit_Util_Filter::addDirectoryToFilter('c:/wamp/php/', '.php');
+
         PHPUnit_Util_Filter::addDirectoryToWhitelist(dirname(__FILE__) . '/../../Intraface/', '.php');
         PHPUnit_Util_Filter::removeDirectoryFromWhitelist(dirname(__FILE__) . '/../../Intraface/certificates/', '.php');
         PHPUnit_Util_Filter::removeDirectoryFromWhitelist(dirname(__FILE__) . '/../../Intraface/3Party/', '.php');
