@@ -14,10 +14,9 @@ class AllTests
         PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/accounting/include_frontpage.php');
         PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/administration/include_frontpage.php');
         PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/contact/include_frontpage.php');
-        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/invoice/include_frontpage.php');
-        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/invoice/include_frontpage.php');
-        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/onlinepayment/include_frontpage.php');
-        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/order/include_frontpage.php');
+        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/invoice/include_front.php');
+        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/onlinepayment/include_front.php');
+        PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/order/include_front.php');
         PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/procurement/include_frontpage.php');
         PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/product/include_frontpage.php');
         PHPUnit_Util_Filter::removeFileFromWhitelist(dirname(__FILE__) . '/../../Intraface/modules/todo/include_frontpage.php');
