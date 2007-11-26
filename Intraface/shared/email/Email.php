@@ -25,23 +25,23 @@ require_once 'Intraface/modules/contact/Contact.php';
 class Email extends Standard
 {
 
-    var $kernel;
-    var $error;
-    var $id;
-    var $contact;
-    var $dbquery;
+    public $kernel;
+    public $error;
+    public $id;
+    public $contact;
+    public $dbquery;
 
     /**
      * Bruges til at sætte den øvre grænse for hvor mange e-mails der sendes i timen
      */
-    var $allowed_limit = 180;
+    public $allowed_limit = 180;
 
     /**
      * Bruges til at sætte en buffer i systemet, så den automatiske udsendelse af
      * emails der er bagefter ikke optager hele kapaciteten for udsendelse af e-mails.
      */
 
-    var $system_buffer = 50;
+    public $system_buffer = 50;
 
     /**
      * Konstruktør
