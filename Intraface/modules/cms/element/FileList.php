@@ -6,7 +6,7 @@ require_once 'Intraface/modules/cms/Element.php';
 
 class CMS_FileList extends CMS_Element {
 
-    var $select_methods = array('single_file');
+    public $select_methods = array('single_file');
 
     function __construct(& $section, $id = 0) {
         $this->value['type'] = 'filelist';
@@ -51,8 +51,7 @@ class CMS_FileList extends CMS_Element {
             $files = $filemanager->getList();
 
 
-        }
-        else { // Enkeltfiler
+        } else { // Enkeltfiler
             // print("this->id i gallery: ".$this->id."<br /><br />");
             $shared_filehandler = $this->kernel->useShared('filehandler');
             $shared_filehandler->includeFile('AppendFile.php');
@@ -119,7 +118,6 @@ class CMS_FileList extends CMS_Element {
         $this->parameter->save('chosen_files', $var['filelist_select_method']);
 
 
-        return 1;
+        return true;
     }
 }
-?>
