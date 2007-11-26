@@ -21,24 +21,24 @@ require_once 'Intraface/modules/cms/element/Map.php';
 
 class CMS_Element extends Standard
 {
-    var $id;
-    var $section;
-    var $kernel;
-    var $parameter;
-    var $element_types;
-    var $value;
-    var $extra_css;
-    var $extra_style;
-    var $error;
-    var $position;
+    public $id;
+    public $section;
+    public $kernel;
+    public $parameter;
+    public $element_types;
+    public $value;
+    public $extra_css;
+    public $extra_style;
+    public $error;
+    public $position;
 
-    var $properties = array(
+    public $properties = array(
         'none' => 'none',
         'newline' => 'break before element',
         'float' => 'floating'
     );
 
-    var $alignment = array(
+    public $alignment = array(
         'left' => 'left',
         'center' => 'center',
         'right' => 'right'
