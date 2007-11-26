@@ -6,6 +6,8 @@ class AllTests
 {
     public static function suite()
     {
+        PHPUnit_Util_Filter::addDirectoryToWhitelist(PATH_ROOT, '.php');
+
         $suite = new PHPUnit_Framework_TestSuite('Intraface');
 
         $tests = array('Product',
