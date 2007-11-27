@@ -11,9 +11,8 @@
  *
  * @package Intraface
  * @author	Sune Jensen
- * @since 1.2
+ * @since   1.2
  */
-
 require_once 'Ilib/Validator.php';
 require_once 'Ilib/Error.php';
 require_once 'DB/Sql.php';
@@ -76,19 +75,19 @@ class FileHandler extends Standard
      * @var object upload conatians upload handler
      */
     public $upload;
-    
+
     /**
      * @var object instance contains the instance handler.
      */
     public $instance;
-    
-    
+
+
     /**
-     * @var object image contains the image handler 
+     * @var object image contains the image handler
      */
     public $image;
-    
-    
+
+
     /**
      * @todo der er muligt, at der kun skal være en getList i filemanager,
      *       men så skal vi have cms til at have filemanager som dependent. Foreløbig
@@ -123,7 +122,7 @@ class FileHandler extends Standard
         $this->kernel = $kernel;
         $this->id = (int)$file_id;
         $this->error = new Ilib_Error;
-        
+
         $this->upload_path = PATH_UPLOAD . $this->kernel->intranet->get('id') . '/';
         $this->tempdir_path = $this->upload_path.PATH_UPLOAD_TEMPORARY;
         $this->file_viewer = FILE_VIEWER;
@@ -188,7 +187,7 @@ class FileHandler extends Standard
 
         $db = new DB_Sql;
         $db->query("SELECT id FROM file_handler WHERE intranet_id = ".$kernel->intranet->get('id')." AND active = 1 AND access_key = '".$access_key."'");
-        if(!$db->nextRecord()) {
+        if (!$db->nextRecord()) {
             return false;
         }
         return new FileHandler($kernel, $db->f('id'));
@@ -203,7 +202,7 @@ class FileHandler extends Standard
     {
         $db = new DB_Sql;
         $db->query("SELECT id, date_created, width, height, date_changed, description, file_name, server_file_name, file_size, access_key, accessibility_key, file_type_key, DATE_FORMAT(date_created, '%d-%m-%Y') AS dk_date_created, DATE_FORMAT(date_changed, '%d-%m-%Y') AS dk_date_changed FROM file_handler WHERE id = ".$this->id." AND intranet_id = ".$this->kernel->intranet->get('id'));
-        if(!$db->nextRecord()) {
+        if (!$db->nextRecord()) {
 
             $this->id = 0;
             $this->value['id'] = 0;
@@ -228,9 +227,9 @@ class FileHandler extends Standard
 
         $this->value['accessibility'] = $this->accessibility_types[$db->f('accessibility_key')];
 
-        if($this->value['file_size'] >= 1000000) {
+        if ($this->value['file_size'] >= 1000000) {
             $this->value['dk_file_size'] = number_format(($this->value['file_size']/1000000), 2, ",",".")." Mb";
-        } else if($this->value['file_size'] >= 1000) {
+        } else if ($this->value['file_size'] >= 1000) {
             $this->value['dk_file_size'] = number_format(($this->value['file_size']/1000), 2, ",",".")." Kb";
         } else {
             $this->value['dk_file_size'] = number_format($this->value['file_size'], 2, ",",".")." byte";
@@ -241,7 +240,7 @@ class FileHandler extends Standard
         $this->value['file_type'] = $this->_getMimeType((int)$db->f('file_type_key'));
         $this->value['is_image'] = $this->file_types[$this->get('file_type_key')]['image'];
         $this->value['file_path'] = $this->upload_path . $db->f('server_file_name');
-        
+
         if (file_exists($this->get('file_path'))) {
             $this->value['last_modified'] = filemtime($this->get('file_path'));
         } else {
@@ -253,7 +252,7 @@ class FileHandler extends Standard
         //$this->value['file_uri_pdf'] = PATH_UPLOAD.$this->kernel->intranet->get('id').'/'.$this->value['server_file_name'];
         $this->value['file_uri_pdf'] = $this->upload_path.$this->value['server_file_name'];
 
-        if($this->value['is_image'] == 1) {
+        if ($this->value['is_image'] == 1) {
             $this->value['icon_uri'] = $this->file_viewer.'?/'.$this->kernel->intranet->get('public_key').'/'.$db->f('access_key').'/system-square/'.urlencode($db->f('file_name'));
             $this->value['icon_width'] = 75;
             $this->value['icon_height'] = 75;
@@ -263,8 +262,8 @@ class FileHandler extends Standard
             $this->value['icon_height'] = 75;
         }
 
-        if($this->value['is_image'] == 1) {
-            if($db->f('width') == NULL) {
+        if ($this->value['is_image'] == 1) {
+            if ($db->f('width') == NULL) {
                 $imagesize = getimagesize($this->get('file_path'));
                 $this->value['width'] = $imagesize[0]; // imagesx($this->get('file_uri'));
                 $db2 = new DB_sql;
@@ -273,7 +272,7 @@ class FileHandler extends Standard
                 $this->value['width'] = $db->f('width');
             }
 
-            if($db->f('height') == NULL) {
+            if ($db->f('height') == NULL) {
                 $imagesize = getimagesize($this->get('file_path'));
                 $this->value['height'] = $imagesize[1]; //imagesy($this->get('file_uri'));
                 $db2 = new DB_sql;
@@ -309,9 +308,9 @@ class FileHandler extends Standard
      */
     public function createInstance($type = "", $param = array())
     {
-        
+
         require_once 'Intraface/shared/filehandler/InstanceHandler.php';
-        if($type == "") {
+        if ($type == "") {
             $this->instance = new InstanceHandler($this);
         } else {
             $this->instance = InstanceHandler::factory($this, $type, $param);
@@ -330,18 +329,18 @@ class FileHandler extends Standard
         require_once 'Intraface/shared/filehandler/ImageHandler.php';
         $this->image = new ImageHandler($this);
     }
-    
+
     /**
      * creates and temporary file handler
-     * 
+     *
      * @param string optional file name
      * @return object temporary file
      */
-    public function createTemporaryFile($file_name = NULL) 
+    public function createTemporaryFile($file_name = NULL)
     {
         require_once 'Intraface/shared/filehandler/TemporaryFile.php';
         return new TemporaryFile($this, $file_name);
-    } 
+    }
 
     /**
      * Delete
@@ -355,15 +354,15 @@ class FileHandler extends Standard
      */
     public function delete()
     {
-        if($this->id == 0) {
+        if ($this->id == 0) {
             return false;
         }
 
         $db = new DB_Sql;
 
-        if($this->get('server_file_name') != '' && file_exists($this->get('file_path'))) {
+        if ($this->get('server_file_name') != '' && file_exists($this->get('file_path'))) {
 
-            if(!rename($this->get('file_path'), $this->upload_path.'_deleted_'.$this->get('server_file_name'))) {
+            if (!rename($this->get('file_path'), $this->upload_path.'_deleted_'.$this->get('server_file_name'))) {
                 trigger_error("Kunne ikke omdøbe filen i FileHandler->delete()", E_USER_ERROR);
             }
         }
@@ -379,15 +378,15 @@ class FileHandler extends Standard
      */
     public function undelete()
     {
-        if($this->id == 0) {
+        if ($this->id == 0) {
             return false;
         }
 
         $db = new DB_Sql;
         $deleted_file_name = $this->upload_path . '_deleted_' . $this->get('server_file_name');
-        if(file_exists($deleted_file_name)) {
+        if (file_exists($deleted_file_name)) {
 
-            if(!rename($deleted_file_name, $this->upload_path.$this->get('server_file_name'))) {
+            if (!rename($deleted_file_name, $this->upload_path.$this->get('server_file_name'))) {
                 trigger_error("Kunne ikke omdøbe filen i FileHandler->delete()", E_USER_ERROR);
             }
         }
@@ -410,18 +409,18 @@ class FileHandler extends Standard
      */
     public function save($file, $file_name = '', $status = 'visible', $mime_type = NULL)
     {
-        if(!is_file($file)) {
+        if (!is_file($file)) {
             $this->error->set("error in input - not valid file");
             return false;
         }
 
-        if(!in_array($status, $this->status)) {
+        if (!in_array($status, $this->status)) {
             trigger_error("Trejde parameter '".$status."' er ikke gyldig i Filehandler->save", E_USER_ERROR);
         }
 
         $db = new DB_Sql;
 
-        if($file_name == '') {
+        if ($file_name == '') {
             $file_name = substr(strrchr($file, '/'), 1);
         } else {
             $file_name = safeToDb($file_name);
@@ -432,7 +431,7 @@ class FileHandler extends Standard
         do {
             $access_key = $this->kernel->randomKey(50);
 
-            if($i > 50 || $access_key == '') {
+            if ($i > 50 || $access_key == '') {
                 trigger_error("Fejl under generering af access_key i FileHandler->save", E_USER_ERROR);
             }
             $i++;
@@ -442,11 +441,11 @@ class FileHandler extends Standard
         $file_size = filesize($file);
 
         // if mime type is not set as the parameter, we try to determine the mimetype
-        if($mime_type === NULL) {
+        if ($mime_type === NULL) {
             // $mime_type = mime_content_type($file);
             require_once 'MIME/Type.php';
             $mime_type = MIME_Type::autoDetect($file);
-            if(PEAR::isError($mime_type)) {
+            if (PEAR::isError($mime_type)) {
                 trigger_error("Error in MIME_Type::autoDetect in Filehandler->save() ".$mime_type->getMessage(), E_USER_ERROR);
                 exit;
             }
@@ -454,12 +453,12 @@ class FileHandler extends Standard
 
         // we load our own mimetypes which have more information.
         $mime_type = $this->_getMimeType($mime_type, 'mime_type');
-        if($mime_type === false) {
+        if ($mime_type === false) {
             $this->error->set('error in filetype');
             return false;
         }
 
-        if($mime_type['image']) {
+        if ($mime_type['image']) {
             $imagesize = getimagesize($file);
             $width = $imagesize[0]; // imagesx($file);
             $height = $imagesize[1]; // imagesy($file);
@@ -480,12 +479,12 @@ class FileHandler extends Standard
             height = ".$height.",
             temporary = ".array_search($status, $this->status)."";
 
-        if($this->id != 0) {
+        if ($this->id != 0) {
             $db->query("UPDATE file_handler SET ".$sql." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
             $id = $this->id;
 
             // deleting the old file
-            if(!rename($this->get('file_path'), $this->upload_path.'_deleted_'.$this->get('server_file_name'))) {
+            if (!rename($this->get('file_path'), $this->upload_path.'_deleted_'.$this->get('server_file_name'))) {
                 trigger_error("Was not able to rename file ".$this->get('file_path')." in Filehandler->save()", E_USER_NOTICE);
             }
             $this->createInstance();
@@ -496,8 +495,8 @@ class FileHandler extends Standard
             $id = $db->insertedId();
         }
 
-        if(!is_dir($this->upload_path)) {
-            if(!mkdir($this->upload_path)) {
+        if (!is_dir($this->upload_path)) {
+            if (!mkdir($this->upload_path)) {
                 trigger_error("Unable to create folder '".$this->upload_path."'", E_USER_ERROR);
                 exit;
             }
@@ -505,11 +504,11 @@ class FileHandler extends Standard
 
         $server_file_name = $id.'.'.$mime_type['extension'];
 
-        if(!is_file($file)) {
+        if (!is_file($file)) {
             trigger_error("Filen vi vil flytte er ikke en gyldig fil i filehandler->save", E_USER_ERROR);
         }
 
-        if(!rename($file, $this->upload_path.$server_file_name)) {
+        if (!rename($file, $this->upload_path.$server_file_name)) {
             $this->delete();
             trigger_error("Unable to move file '".$file."' to '".$this->upload_path.$server_file_name."' in Filehandler->save", E_USER_ERROR);
         }
@@ -534,7 +533,7 @@ class FileHandler extends Standard
     {
         $db = new DB_sql;
 
-        if(!is_array($input)) {
+        if (!is_array($input)) {
             trigger_error("Input skal være et array i FileHandler->updateInstance", E_USER_ERROR);
         }
 
@@ -546,37 +545,37 @@ class FileHandler extends Standard
         $sql[] = 'date_changed = NOW()';
 
         // følgende må ikke slettes - bruges i electronisk faktura
-        if(isset($input['file_name'])) {
+        if (isset($input['file_name'])) {
             $sql[] = 'file_name = "'.$input['file_name'].'"';
         }
 
-        if(isset($input['server_file_name'])) {
+        if (isset($input['server_file_name'])) {
             $sql[] = 'server_file_name = "'.$input['server_file_name'].'"';
         }
-        if(isset($input['description'])) {
+        if (isset($input['description'])) {
             $validator->isString($input['description'], 'Fejl i udfyldelsen af beskrivelse', '<strong><em>', 'allow_empty');
             $sql[] = 'description = "'.$input['description'].'"';
         }
 
         // Vi sikre os at den altid bliver sat
-        if($this->id == 0 && !isset($input['accessibility'])) {
+        if ($this->id == 0 && !isset($input['accessibility'])) {
             $input['accessibility'] = 'intranet';
         }
 
-        if(isset($input['accessibility'])) {
+        if (isset($input['accessibility'])) {
             $accessibility_key = array_search($input['accessibility'], $this->accessibility_types);
-            if($accessibility_key === false) {
+            if ($accessibility_key === false) {
                 trigger_error("Ugyldig accessibility ".$input['accessibility']." i FileHandler->update", E_USER_ERROR);
             }
 
             $sql[] = 'accessibility_key = '.$accessibility_key;
         }
 
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             return false;
         }
 
-        if($this->id != 0) {
+        if ($this->id != 0) {
             $db->query("UPDATE file_handler SET ".implode(', ', $sql)." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
         } else {
             $db->query("INSERT INTO file_handler SET ".implode(', ', $sql).", user_id = ".$this->kernel->user->get('id').", intranet_id = ".$this->kernel->intranet->get('id').", date_created = NOW()");
@@ -592,26 +591,26 @@ class FileHandler extends Standard
      * Returns the mimetype
      *
      * @param string $key  the array key you search. See key below
-     * @param string $from the place to search for the key, can be either 'key' (integer), 'mime_type' (string), 'extension' (string) 
+     * @param string $from the place to search for the key, can be either 'key' (integer), 'mime_type' (string), 'extension' (string)
      *
      * @return string
      */
     public function _getMimeType($key, $from = 'key')
     {
-        if(empty($this->file_types)) {
+        if (empty($this->file_types)) {
             $this->loadMimeTypes();
         }
-        
-        if($from == 'key') {
-            if(!is_integer($key)) {
+
+        if ($from == 'key') {
+            if (!is_integer($key)) {
                 trigger_error("Når der skal findes mimetype fra key (default), skal første parameter til FileHandler->_getMimeType være en integer", E_USER_ERROR);
             }
             return $this->file_types[$key];
         }
 
-        if(in_array($from, array('mime_type', 'extension'))) {
-            foreach($this->file_types AS $file_key => $file_type) {
-                if($file_type[$from] == $key) {
+        if (in_array($from, array('mime_type', 'extension'))) {
+            foreach ($this->file_types AS $file_key => $file_type) {
+                if ($file_type[$from] == $key) {
                     // Vi putter lige key med i arrayet
                     $file_type['key'] = $file_key;
                     return $file_type;
@@ -641,10 +640,10 @@ class FileHandler extends Standard
      * @return boolean true on success
      */
     public function loadMimeTypes() {
-        
+
         // $shared_filehandler = $this->kernel->useShared('filehandler');
         // $shared_filehandler->includeFile('FileType.php');
-        
+
         require_once('Intraface/shared/filehandler/FileType.php');
         $filetype = new FileType();
         $this->file_types = $filetype->getList();
