@@ -65,7 +65,8 @@ class Address extends Standard
      *
      * @return void
      */
-    function __construct($id) {
+    function __construct($id)
+    {
         /*
         if(!is_object($kernel) || strtolower(get_class($kernel)) != 'kernel') {
             trigger_error("First parameter to Address should be kernel", E_USER_ERROR);
@@ -91,28 +92,29 @@ class Address extends Standard
      *
      * @return object Address
      */
-    function factory($belong_to, $belong_to_id) {
+    function factory($belong_to, $belong_to_id)
+    {
 
         // $kernel = new Kernel;
         $belong_to_types = Address::getBelongToTypes();
 
         $belong_to_key = array_search($belong_to, $belong_to_types);
-        if($belong_to_key === false) {
+        if ($belong_to_key === false) {
             trigger_error("Invalid address type '".$belong_to."' in Address::factory", E_USER_ERROR);
         }
 
         settype($belong_to_id, 'integer');
-        if($belong_to_id == 0) {
+        if ($belong_to_id == 0) {
             trigger_error("Invalid belong_to_id in Address::factory", E_USER_ERROR);
         }
 
         $db = new DB_Sql;
         // intranet_id = ".$kernel->intranet->get('id')." AND
         $db->query("SELECT id FROM address WHERE type = ".$belong_to_key." AND belong_to_id = ".$belong_to_id." AND active = 1");
-        if($db->numRows() > 1) {
+        if ($db->numRows() > 1) {
             trigger_error('There is more than one active address for '.$belong_to.':'.$belong_to_id.' in Address::facotory', E_USER_ERROR);
         }
-        if($db->nextRecord()) {
+        if ($db->nextRecord()) {
             return new Address($db->f('id'));
         } else {
             $address = new Address(0);
@@ -126,7 +128,8 @@ class Address extends Standard
      *
      * @return array
      */
-    private static function getBelongToTypes() {
+    private static function getBelongToTypes()
+    {
 
         return array(1 => 'intranet',
                      2 => 'user',
@@ -144,21 +147,22 @@ class Address extends Standard
      *
      * @return void
      */
-    function setBelongTo($belong_to, $belong_to_id) {
+    function setBelongTo($belong_to, $belong_to_id)
+    {
 
-        if($this->id != 0) {
+        if ($this->id != 0) {
             // is id already set, then you can not change belong_to
             return;
         }
 
         $belong_to_types = $this->getBelongToTypes();
         $this->belong_to_key = array_search($belong_to, $belong_to_types);
-        if($this->belong_to_key === false) {
+        if ($this->belong_to_key === false) {
             trigger_error("Invalid address type ".$belong_to." in Address::setBelongTo()", E_USER_ERROR);
         }
 
         $this->belong_to_id = (int)$belong_to_id;
-        if($this->belong_to_id == 0) {
+        if ($this->belong_to_id == 0) {
             trigger_error("Invalid belong_to_id in Address::setBelongTo()", E_USER_ERROR);
         }
     }
@@ -168,7 +172,8 @@ class Address extends Standard
      *
      * @return integer
      */
-    private function load() {
+    private function load()
+    {
         if ($this->id == 0) { return 0; }
 
         $db = MDB2::singleton(DB_DSN);
@@ -179,11 +184,11 @@ class Address extends Standard
             trigger_error($result->getUserInfo(), E_USER_ERROR);
         }
 
-        if($result->numRows() > 1) {
+        if ($result->numRows() > 1) {
             trigger_error('There is more than one active address', E_USER_ERROR);
         }
 
-        if($result->numRows() == 0) {
+        if ($result->numRows() == 0) {
             $this->id = 0;
             $this->value['id'] = 0;
 
@@ -200,7 +205,8 @@ class Address extends Standard
         return $this->id;
     }
 
-    function validate($array_var) {
+    function validate($array_var)
+    {
 
         $validator = new Validator($this->error);
         // public $fields = array('name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'ean');
@@ -227,7 +233,7 @@ class Address extends Standard
         settype($array_var['ean'], 'string');
         $validator->isString($array_var['ean'], 'ean location number is not valid', '', 'allow_empty');
 
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             return false;
         }
         return true;
@@ -240,26 +246,27 @@ class Address extends Standard
      *
      * @return bolean	true or false
      */
-    function save($array_var) {
+    function save($array_var)
+    {
 
-        if($this->belong_to_key == 0 || $this->belong_to_id == 0) {
+        if ($this->belong_to_key == 0 || $this->belong_to_id == 0) {
             trigger_error("belong_to or belong_to_id was not set. Maybe because the provided address id was not valid. In Address::save", E_USER_ERROR);
         }
 
         $db = MDB2::singleton(DB_DSN);
-        if(PEAR::isError($db)) {
+        if (PEAR::isError($db)) {
             trigger_error("Error db singleton: ".$db->getUserInfo(), E_USER_ERROR);
             return false;
         }
         $sql = '';
 
-        if(count($array_var) > 0) {
-            if($this->id != 0) {
+        if (count($array_var) > 0) {
+            if ($this->id != 0) {
                 $do_update = 0;
                 foreach($this->fields AS $i => $field) {
-                    if(array_key_exists($field, $array_var) AND isset($array_var[$field])) {
+                    if (array_key_exists($field, $array_var) AND isset($array_var[$field])) {
                         $sql .= $field.' = "'.safeToDb($array_var[$field]).'", ';
-                        if($this->get($field) != $array_var[$field]) {
+                        if ($this->get($field) != $array_var[$field]) {
                             $do_update = 1;
                         }
                     }
@@ -268,25 +275,25 @@ class Address extends Standard
                 // Kun hvis der rent faktisk gemmes nogle værdier opdaterer vi. hvis count($arra_var) > 0 så må der også være noget at opdatere?
                 $do_update = 0;
                 foreach($this->fields AS $i => $field) {
-                    if(array_key_exists($field, $array_var) AND isset($array_var[$field])) {
+                    if (array_key_exists($field, $array_var) AND isset($array_var[$field])) {
                         $sql .= $field.' = "'.safeToDb($array_var[$field]).'", ';
                         $do_update = 1;
                     }
                 }
             }
 
-            if($do_update == 0) {
+            if ($do_update == 0) {
                 // There is nothing to save, but that is OK, so we just return 1
                 return true;
             } else {
                 $result = $db->exec("UPDATE address SET active = 0 WHERE type = ".$this->belong_to_key." AND belong_to_id = ".$this->belong_to_id);
-                if(PEAR::isError($result)) {
+                if (PEAR::isError($result)) {
                     trigger_error("Error in exec: ".$result->getUserInfo(), E_USER_ERROR);
                     return false;
                 }
 
                 $result = $db->exec("INSERT INTO address SET ".$sql." type = ".$this->belong_to_key.", belong_to_id = ".$this->belong_to_id.", active = 1, changed_date = NOW()");
-                if(PEAR::isError($result)) {
+                if (PEAR::isError($result)) {
                     trigger_error("Error in exec: ".$result->getUserInfo(), E_USER_ERROR);
                     return false;
                 }
@@ -313,25 +320,25 @@ class Address extends Standard
      */
     /*
     function update($array_var) {
-        if($this->id == 0) {
+        if ($this->id == 0) {
             trigger_error("id has to be set to use Address::update, maybe you want to use Address::save IN Address->update", E_USER_ERROR);
         }
 
         $db = MDB2::singleton(DB_DSN);
-        if(PEAR::isError($db)) {
+        if (PEAR::isError($db)) {
             trigger_error("Error db singleton: ".$db->getUserInfo(), E_USER_ERROR);
             return false;
         }
 
         foreach($this->fields AS $i => $field) {
             $sql = '';
-            if(isset($array_var[$field])) {
+            if (isset($array_var[$field])) {
                 $sql .= $field." = ".$db->quote($array_var[$field]).", ";
             }
         }
 
         $result = $db->exec("UPDATE address SET ".$sql." changed_date = NOW() WHERE id = ".$this->id);
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error("Error in exec: ".$result->getUserInfo(), E_USER_ERROR);
             return false;
         }
