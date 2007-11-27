@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Styrer adresser til intranet, bruger, kunde og kontaktperson
  *
@@ -8,21 +7,15 @@
  *
  * @todo Skal vi programmere intranet_id ind i klassen? Det kræver at den får Kernel.
  *
- * @version 001
- * @author Sune
+ * @package Intraface
+ * @author  Sune Jensen <sj@sunet.dk>
  */
-
 require_once 'Intraface/Standard.php';
 require_once 'DB/Sql.php';
 require_once 'Intraface/functions/functions.php';
 
 class Address extends Standard
 {
-    /**
-     * @var object
-     */
-    //var $kernel;
-
     /**
      * @var integer
      */
@@ -83,12 +76,12 @@ class Address extends Standard
     }
 
     /**
-     *  factory
+     * Factory
      *
      * Returns an instace of Address from belong_to and belong_to_id
      *
-     * @param string  $belong_to what the address belongs to, corresponding to the ones in Address::getBelongToTypes()
-     * @param integer $id id	 from belong_to. NB not id on the address
+     * @param string  $belong_to    What the address belongs to, corresponding to the ones in Address::getBelongToTypes()
+     * @param integer $belong_to_id From belong_to. NB not id on the address
      *
      * @return object Address
      */
@@ -130,7 +123,6 @@ class Address extends Standard
      */
     private static function getBelongToTypes()
     {
-
         return array(1 => 'intranet',
                      2 => 'user',
                      3 => 'contact',
