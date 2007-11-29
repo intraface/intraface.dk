@@ -161,6 +161,7 @@ $pfm->addPackageDepWithChannel('required', 'Document_Cpdf', 'public.intraface.dk
 // contact
 $pfm->addPackageDepWithChannel('required', 'Services_Eniro', 'public.intraface.dk', '0.1.4');
 $pfm->addPackageDepWithChannel('required', 'Contact_Vcard_Build', 'pear.php.net', '1.1.1');
+$pfm->addPackageDepWithChannel('required', 'Date', 'pear.php.net', '1.4.7');
 
 // onlinepayment
 $pfm->addPackageDepWithChannel('required', 'Payment_Quickpay', 'public.intraface.dk', '1.18.1');
