@@ -29,7 +29,7 @@ class OnlinePaymentDefault extends OnlinePayment {
 
         if($action == "capture") {
 
-            // Her kan der laves en capture fra QuickPay;
+            // Her kan der laves en capture fra Betalingsudbyder;
 
             if($this->addAsPayment()) {
                 $this->setStatus("captured");
@@ -46,7 +46,7 @@ class OnlinePaymentDefault extends OnlinePayment {
             return 1;
         }
         else {
-            trigger_error("Ugyldig handling i Quickpay->transactionAction()", ERROR);
+            trigger_error("Ugyldig handling i Onlinepayment_Provider_Default->transactionAction()", ERROR);
         }
     }
 
