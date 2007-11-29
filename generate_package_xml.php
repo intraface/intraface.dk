@@ -163,7 +163,9 @@ $pfm->addPackageDepWithChannel('required', 'Services_Eniro', 'public.intraface.d
 $pfm->addPackageDepWithChannel('required', 'Contact_Vcard_Build', 'pear.php.net', '1.1.1');
 
 // onlinepayment
-$pfm->addPackageDepWithUri('required', 'Payment_Quickpay', 'http://svn.intraface.dk/intrafacepublic/3Party/Quickpay/Payment_Quickpay-1.18.1');
+$pfm->addPackageDepWithChannel('required', 'Payment_Quickpay', 'public.intraface.dk', '1.18.1');
+$pfm->addPackageDepWithChannel('required', 'Validate_Finance_CreditCard', 'pear.php.net', '0.5.2');
+
 
 // accounting
 $pfm->addPackageDepWithChannel('required', 'OLE', 'pear.php.net', '0.5.0');
