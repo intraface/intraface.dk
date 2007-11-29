@@ -21,8 +21,9 @@ define('NET_DIRECTORY', '/intraface/intraface.dk/'); // subdirectory. if non kee
 
 // paths
 define('PATH_ROOT', 'c:/Users/Lars Olesen/workspace/intraface/'); // remember trailing slash
-define('PATH_UPLOAD', '/home/.investor/intraface/upload/'); // remember trailing slash
-define('PATH_INCLUDE_PATH', ''); // remeber to use constant PATH_SEPARATOR after every path
+define('PATH_INCLUDE_PATH', PATH_ROOT . PATH_SEPARATOR . get_include_path()); // remeber to use constant PATH_SEPARATOR after every path
+// optional: define('PATH_UPLOAD', '/home/.investor/intraface/upload/'); // remember trailing slash
+// optional: define('PATH_CACHE', PATH_ROOT . 'cache/'); // remember trailing slash - path to cache
 
 //
 define('CONNECTION_INTERNET', true); // if the system has access to dns and more from the internet. true or false
