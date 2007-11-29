@@ -7,7 +7,7 @@ $primary_module = $kernel->module("intranetmaintenance");
 $translation = $kernel->getTranslation("intranetmaintenance");
 
 
-$module = new ModuleMaintenance($kernel);
+$module = new ModuleMaintenance;
 $modules = $module->getList();
 /*
 if (isset($_GET['moveup']) AND is_numeric($_GET['moveup'])) {

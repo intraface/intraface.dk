@@ -285,7 +285,7 @@ $page->start($translation->get('Intranet'));
 	<div>
     <?php
 
-	$module = new ModuleMaintenance($kernel);
+	$module = new ModuleMaintenance;
 	$modules = $module->getList();
 
 	for($i = 0; $i < count($modules); $i++) {

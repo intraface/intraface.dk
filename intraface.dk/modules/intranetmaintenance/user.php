@@ -191,7 +191,7 @@ if(isset($intranet)) {
 
 		<?php
 
-		$module = new ModuleMaintenance($kernel);
+		$module = new ModuleMaintenance;
 		$modules = $module->getList();
 
 		for($i = 0; $i < count($modules); $i++) {

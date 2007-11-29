@@ -3,7 +3,6 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
-require_once 'Intraface/Kernel.php';
 
 
 class ModuleMaintenanceTest extends PHPUnit_Framework_TestCase
@@ -11,7 +10,7 @@ class ModuleMaintenanceTest extends PHPUnit_Framework_TestCase
     function createModuleMaintenance()
     {
         $kernel = new Kernel;
-        return new ModuleMaintenance($kernel);
+        return new ModuleMaintenance;
     }
 
     function testCreateModuleMaintenance()
@@ -30,7 +29,7 @@ class ModuleMaintenanceTest extends PHPUnit_Framework_TestCase
     function testModuleMaintenanceFactory() {
         
         $kernel = new Kernel;
-        $object = ModuleMaintenance::factory($kernel, 'accounting');
+        $object = ModuleMaintenance::factory('accounting');
         
         $this->assertTrue(is_object($object));
         $this->assertEquals('modulemaintenance', strtolower(get_class($object)));

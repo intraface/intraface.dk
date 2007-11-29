@@ -15,7 +15,7 @@ class ModuleMaintenance
     var $error;
     var $sub_access;
 
-    function __construct($kernel, $id = 0)
+    function __construct($id = 0)
     {
         $this->id = intval($id);
         $this->db = MDB2::singleton(DB_DSN);
@@ -24,14 +24,13 @@ class ModuleMaintenance
             exit;
         }
 
-        $this->kernel = $kernel;
         $this->error = new Error;
         $this->value = array();
 
         $this->load();
     }
 
-    static function factory($kernel, $name) {
+    static function factory($name) {
 
         $db = MDB2::singleton(DB_DSN);
         if(PEAR::isError($db)) {
@@ -46,7 +45,7 @@ class ModuleMaintenance
 
         if($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 
-            return new ModuleMaintenance($kernel, $row['id']);
+            return new ModuleMaintenance($row['id']);
         }
         else {
             trigger_error("invalid module name!", E_USER_ERROR);
@@ -89,7 +88,6 @@ class ModuleMaintenance
     }
 
     function registerModule($module_name) {
-        $primary_module = $this->kernel->getPrimaryModule();
         $db = new DB_Sql;
         $updated_sub_access_id = array();
         $module_msg = array();
@@ -101,19 +99,13 @@ class ModuleMaintenance
         
         if (!file_exists($main_class_path)) {
             $this->error->set("Filen ".$main_class_path." eksistere ikke!");
-            // $msg[] = $main_class_path." eksistere ikke!";
+            
         } else {
-            //if ($module_name == $primary_module->getName()) {
-                // Hvis modullet er det vi arbejder i nu
-                //$module = $primary_module;
-            //} else {
-                include_once $main_class_path;
-                $module = new $main_class_name;
-            //}
-
+            include_once $main_class_path;
+            $module = new $main_class_name;
+            
             if (!is_object($module)) {
                 $this->error->set($main_class_name." kunne ikke initialiseres!");
-                // $msg[] = $main_class_name." kunne ikke initialiseres!";
             } else {
                 // her kan vi oprette tabellerne nødvendige for det enkelte modul i stedet for at have dem i starten.
 
@@ -174,8 +166,6 @@ class ModuleMaintenance
         if ($handle = opendir(PATH_INCLUDE_MODULE)) {
             $updated_module_id = array();
             $updated_sub_access_id = array();
-
-            //$primary_module = $this->kernel->getPrimaryModule();
 
             while (false !== ($module_name = readdir($handle))) {
                 if (substr($module_name, 0, 1) == ".") {
