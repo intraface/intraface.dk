@@ -105,7 +105,7 @@ class Intraface_ModulePackage_Action
             }
         }
                 
-        require_once('Intraface/ModulePackage/ShopExtension.php');
+        require_once('Intraface/modules/modulepackage/ShopExtension.php');
         $shop = new Intraface_ModulePackage_ShopExtension;
         if(!$order = $shop->placeOrder($customer, $products)) {
             return false;
