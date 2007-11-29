@@ -1,6 +1,6 @@
 <?php
 /**
- * Post install script for SkipCheckIn
+ * Post install script for Intraface
  *
  * @package    SkipCheckIn
  * @author     Lars Olesen <lars@legestue.net>
