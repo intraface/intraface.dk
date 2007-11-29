@@ -40,19 +40,7 @@ class OnlinePayment extends Standard {
 
     var $transaction_status_authorized = "000";
 
-    /*
-    // Standard udbyder-action. Er lavet ud fra QuickPay
-    var $action_types = array(
-        '1100' => 'authorize', // tjekker
-        '1220' => 'capture', // hæver
-        'credit' => 'credit', // tilbagebetaler
-        '1420' => 'reversal', // ophæver reservationen
-        'status' => 'status' // ophæver reservationen
-
-    );
-    */
-
-
+    
     function OnlinePayment(&$kernel, $id = 0) {
         if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
             trigger_error('Debtor kræver Kernel som objekt', FATAL);
