@@ -146,15 +146,9 @@ class OnlinePaymentDanDomain extends OnlinePayment {
 
         }
         else {
-            trigger_error("Ugyldig handling i Quickpay->transactionAction()", E_USER_ERROR);
+            trigger_error("Ugyldig handling i Dandomain->transactionAction()", E_USER_ERROR);
         }
     }
-
-    /*
-    function addCustomVar($var, $value) {
-        $this->quickpay->add_customVars($var, $value);
-    }
-    */
 
     function setSettings($input) {
         $this->kernel->setting->set('intranet', 'onlinepayment.dandomain.password', $input['password']);
