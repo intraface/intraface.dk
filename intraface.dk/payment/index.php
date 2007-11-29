@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 	else {
 		// make transaction with quickpay
-		require_once '3Party/Quickpay/Quickpay.php';
+		require_once 'Payment/Quickpay.php';
 
 		$eval = false;
 		try {
