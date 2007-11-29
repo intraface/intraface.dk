@@ -72,7 +72,7 @@ class EmailGateway {
 
 		$sth = $this->db->autoPrepare(
 			$table_name,
-			$table_fields,
+			$fields,
 			MDB2_AUTOQUERY_INSERT,
 			null,
 			$types
