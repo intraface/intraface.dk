@@ -122,7 +122,7 @@ class Intraface_ModulePackage_AccessUpdate
             if(is_array($modules) && count($modules) > 0) {
                 // First we give access to the intranet
                 foreach($modules AS $module) {
-                    $module_object = ModuleMaintenance::factory($kernel, $module['module']);
+                    $module_object = ModuleMaintenance::factory($module['module']);
                     if(!$intranet->setModuleAccess($module['module'])) {
                         trigger_error("Error in giving access to module ".$module['module'].' for intranet '.$row['intranet_id'], E_USER_NOTICE);
                         $this->error->set('we could not give your intrnaet access to your modules');
