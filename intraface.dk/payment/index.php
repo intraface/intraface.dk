@@ -66,21 +66,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$eval = $qp->authorize();
 		}
 		catch (Exception $e) {
-			echo "<b>Caught an exception in \"". $e->getFile() . "\" at line " .
-$e->getLine() . "</b><br />" . $e->getMessage() . "<br />";
+			echo "<b>Caught an exception in \"". $e->getFile() . "\" at line " . $e->getLine() . "</b><br />" . $e->getMessage() . "<br />";
 		}
 
 		if ($eval) {
 			if ($eval['qpstat'] === '000') { // The authorization was completed
-				echo 'Authorization: ' . $eval['qpstat'] .
-'<br />';
+				echo 'Authorization: ' . $eval['qpstat'] . '<br />';
 				echo "<pre>";
 				var_dump($eval);
 				echo "</pre>";
 			}
 			else { // an error occured
-				echo 'Authorization: ' . $eval['qpstat'] .
-'<br />';
+				echo 'Authorization: ' . $eval['qpstat'] . '<br />';
 				echo "<pre>";
 				var_dump($eval);
 				echo "</pre>";
