@@ -35,7 +35,7 @@ class Kernel
      */
     function __construct($session = null)
     {
-        if($session == NULL) {
+        if ($session == NULL) {
             $this->_session = md5(uniqid(rand(), true));
         }
         else {
@@ -478,7 +478,7 @@ class KernelLog implements Observer
     {
         $this->db->loadModule('Manager', null, true);
         $tables = $this->db->manager->listTables();
-        if(PEAR::isError($tables)) {
+        if (PEAR::isError($tables)) {
             trigger_error("Error in query: ".$tables->getUserInfo(), E_USER_ERROR);
         }
 

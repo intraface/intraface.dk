@@ -255,7 +255,7 @@ class Address extends Standard
         if (count($array_var) > 0) {
             if ($this->id != 0) {
                 $do_update = 0;
-                foreach($this->fields AS $i => $field) {
+                foreach ($this->fields AS $i => $field) {
                     if (array_key_exists($field, $array_var) AND isset($array_var[$field])) {
                         $sql .= $field.' = "'.safeToDb($array_var[$field]).'", ';
                         if ($this->get($field) != $array_var[$field]) {
@@ -266,7 +266,7 @@ class Address extends Standard
             } else {
                 // Kun hvis der rent faktisk gemmes nogle værdier opdaterer vi. hvis count($arra_var) > 0 så må der også være noget at opdatere?
                 $do_update = 0;
-                foreach($this->fields AS $i => $field) {
+                foreach ($this->fields AS $i => $field) {
                     if (array_key_exists($field, $array_var) AND isset($array_var[$field])) {
                         $sql .= $field.' = "'.safeToDb($array_var[$field]).'", ';
                         $do_update = 1;
@@ -322,7 +322,7 @@ class Address extends Standard
             return false;
         }
 
-        foreach($this->fields AS $i => $field) {
+        foreach ($this->fields AS $i => $field) {
             $sql = '';
             if (isset($array_var[$field])) {
                 $sql .= $field." = ".$db->quote($array_var[$field]).", ";

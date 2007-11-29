@@ -11,38 +11,45 @@
 define('LOGIN_ERROR_WRONG_CREDENTIALS', 0);
 define('LOGIN_ERROR_ALREADY_LOGGED_IN', -1);
 
-class Auth {
+class Auth
+{
 
     private $db;
     private $session_id;
     private $observers = array();
 
     /**
+     * Constructor
+     *
      * @param object $db Databaseobject
      * @param string session_id
+     *
      * @return void
      */
-    function __construct($session_id) {
+    function __construct($session_id)
+    {
         $this->db = MDB2::singleton(DB_DSN);
         $this->session_id = $session_id;
     }
 
     /**
      * login()
+     *
      * @param	string  $email
      * @param	string  $password
+     *
      * @return	boolean
      */
-    public function login($email, $password) {
-
+    public function login($email, $password)
+    {
         $result = $this->db->query("SELECT id FROM user WHERE email = ".$this->db->quote($email, 'text')." AND password = ".$this->db->quote(md5($password), 'text'));
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error('result is an error' . $result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
             return false;
         }
 
-        if($result->numRows() != 1) {
+        if ($result->numRows() != 1) {
             return false;
         }
         $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
@@ -58,11 +65,14 @@ class Auth {
 
     /**
      * weblogin()
+     *
      * @param string $type
      * @param string $key
+     *
      * @return	mixed / boolean or weblogin object
      */
-    public function weblogin($type, $key) {
+    public function weblogin($type, $key)
+    {
 
         switch ($type) {
             case 'public':
@@ -76,12 +86,12 @@ class Auth {
                 return false; // this has to be return to make sure script will never continue
         }
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error('result is an error', E_USER_ERROR);
             return false;
         }
 
-        if($result->numRows() == 0) {
+        if ($result->numRows() == 0) {
             return false;
         }
 
@@ -91,17 +101,18 @@ class Auth {
 
     /**
      * isLoggedIn()
-     * @param void
+     *
      * @return mixed user id or false
      */
-    public function isLoggedIn() {
+    public function isLoggedIn()
+    {
         $result = $this->db->query("SELECT id FROM user WHERE session_id = ".$this->db->quote($this->session_id, 'text'));
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error('could not check if user is logged in ' . $result->getUserInfo(), E_USER_ERROR);
             return false;
         }
 
-        if($result->numRows() == 0) {
+        if ($result->numRows() == 0) {
             return false;
         }
 
@@ -115,7 +126,8 @@ class Auth {
      * @param void
      * @return boolean
      */
-    public function logout() {
+    public function logout()
+    {
         $result = $this->db->exec("UPDATE user SET session_id = " . $this->db->quote('', 'text') . " WHERE session_id = " . $this->db->quote($this->session_id, 'text'));
 
          if (PEAR::isError($result)) {
@@ -129,8 +141,9 @@ class Auth {
     /**
      * @param string $msg
      */
-    static public function toLogin($msg = '') {
-        if(empty($msg)) {
+    static public function toLogin($msg = '')
+    {
+        if (empty($msg)) {
             header('Location: '.PATH_WWW.'main/login.php');
             exit;
         }
@@ -142,9 +155,13 @@ class Auth {
 
     /**
      * Implements the observer pattern
+     *
      * @param object $observer
+     *
+     * @return boolean
      */
-    public function attachObserver($observer) {
+    public function attachObserver($observer)
+    {
         $this->observers[] = $observer;
         return true;
     }
@@ -153,7 +170,8 @@ class Auth {
      * @param string $code
      * @param string $msg
      */
-    private function notifyObservers($code, $msg) {
+    private function notifyObservers($code, $msg)
+    {
         foreach ($this->getObservers() AS $observer) {
             $observer->update($code, $msg);
         }
@@ -162,9 +180,11 @@ class Auth {
 
     /**
      * Implements the observer pattern
+     *
      * @return array with observers
      */
-    public function getObservers() {
+    public function getObservers()
+    {
         return $this->observers;
     }
 }
