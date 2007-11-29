@@ -5,8 +5,8 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 
-require('../common.php');
-require_once('3Party/IXR/IXR.php');
+require('../../common.php');
+require_once('IXR/IXR.php');
 
 class TodoServer extends IXR_Server {
 
