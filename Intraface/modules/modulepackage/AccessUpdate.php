@@ -81,7 +81,7 @@ class Intraface_ModulePackage_AccessUpdate
         
         while($row = $result->fetchRow()) {
             $modulepackage = new Intraface_ModulePackage($row['module_package_id']);
-            $intranet = new IntranetMaintenance($kernel, $row['intranet_id']);
+            $intranet = new IntranetMaintenance($row['intranet_id']);
             
             $modules = $modulepackage->get('modules');
             if(is_array($modules) && count($modules) > 0) {
@@ -110,7 +110,7 @@ class Intraface_ModulePackage_AccessUpdate
             $modulepackage = new Intraface_ModulePackage($row['module_package_id']);
             
             // we prepare to give the intranet access
-            $intranet = new IntranetMaintenance($kernel, $row['intranet_id']);
+            $intranet = new IntranetMaintenance($row['intranet_id']);
             // we prepage to give the users access
             $user = new UserMaintenance($kernel);
             $users = $user->getList();

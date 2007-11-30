@@ -6,13 +6,13 @@ $translation = $kernel->getTranslation('intranetmaintenance');
 
 if(isset($_POST["submit"])) {
 
-	$intranet = new IntranetMaintenance($kernel, intval($_POST["id"]));
+	$intranet = new IntranetMaintenance(intval($_POST["id"]));
 
 	$value = $_POST;
 	$address_value = $_POST;
 	$address_value["name"] = $_POST["address_name"];
 
-	if($intranet->save($_POST)) {
+	if($intranet->save($_POST, $kernel->intranet->get('id'))) {
 		if($intranet->address->save($address_value)) {
 			header("Location: intranet.php?id=".$intranet->get('id'));
 			exit;
@@ -22,12 +22,12 @@ if(isset($_POST["submit"])) {
 }
 else {
 	if(isset($_GET["id"])) {
-		$intranet = new IntranetMaintenance($kernel, (int)$_GET["id"]);
+		$intranet = new IntranetMaintenance((int)$_GET["id"]);
 		$value = $intranet->get();
 		$address_value = $intranet->address->get();
 	}
 	else {
-		$intranet = new IntranetMaintenance($kernel);
+		$intranet = new IntranetMaintenance();
 		$value = array();
 		$address_value = array();
 	}

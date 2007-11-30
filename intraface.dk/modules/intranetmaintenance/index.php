@@ -7,8 +7,8 @@ require '../../include_first.php';
 $module = $kernel->module("intranetmaintenance");
 $translation = $kernel->getTranslation('intranetmaintenance');
 
-$intranetmaintenance = new IntranetMaintenance($kernel);
-$intranetmaintenance->createDBQuery();
+$intranetmaintenance = new IntranetMaintenance();
+$intranetmaintenance->createDBQuery($kernel);
 
 if(isset($_GET["search"])) {
     if(isset($_GET["text"]) && $_GET["text"] != "") {

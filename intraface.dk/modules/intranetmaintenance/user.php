@@ -8,7 +8,7 @@ $translation = $kernel->getTranslation('intranetmaintenance');
 if(isset($_POST["submit"])) {
 
 	$user = new UserMaintenance($kernel, intval($_POST["id"]));
-	$intranet = new IntranetMaintenance($kernel, intval($_POST["intranet_id"]));
+	$intranet = new IntranetMaintenance(intval($_POST["intranet_id"]));
 	$user->setIntranetId($intranet->get("id"));
 
 	$modules = array();
@@ -67,7 +67,7 @@ if(isset($_POST["submit"])) {
 }
 elseif(isset($_GET['return_redirect_id'])) {
 	if(isset($_GET['intranet_id'])) {
-		$intranet = new IntranetMaintenance($kernel, $_GET['intranet_id']);
+		$intranet = new IntranetMaintenance($_GET['intranet_id']);
 		$edit_intranet_id = $intranet->get('id');
 	}
 	$redirect = Redirect::factory($kernel, 'return');
@@ -95,7 +95,7 @@ $value_address = array();
 
 if(isset($edit_intranet_id)) {
 	
-	$intranet = new IntranetMaintenance($kernel, intval($edit_intranet_id));
+	$intranet = new IntranetMaintenance(intval($edit_intranet_id));
 	$user->setIntranetId(intval($intranet->get('id')));
 	$user->load();
 	if(isset($user->address)) {
@@ -248,8 +248,8 @@ if(isset($intranet)) {
 
 	<tbody>
 	<?php
-	$intranet = new IntranetMaintenance($kernel);
-	$intranet->createDBQuery();
+	$intranet = new IntranetMaintenance();
+	$intranet->createDBQuery($kernel);
 	$intranet->dbquery->setFilter('user_id', $user->get('id'));
 
 	$intranets = $intranet->getList();

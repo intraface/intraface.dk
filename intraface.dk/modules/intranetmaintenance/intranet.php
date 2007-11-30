@@ -13,7 +13,7 @@ $translation = $kernel->getTranslation('intranetmaintenance');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
-    $intranet = new IntranetMaintenance($kernel, intval($_POST["id"]));
+    $intranet = new IntranetMaintenance(intval($_POST["id"]));
     
     if(isset($_POST['add_module_package']) && $_POST['add_module_package'] != '') {
         
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 else {
     
-    $intranet = new IntranetMaintenance($kernel, $_GET['id']);
+    $intranet = new IntranetMaintenance($_GET['id']);
     
     # add contact
     if(isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {      

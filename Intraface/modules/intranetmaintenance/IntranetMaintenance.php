@@ -8,8 +8,8 @@
  * It incorporates the MDB2-database.
  *
  * @package Intraface_IntranetMaintenance
- * @author	Sune Jensen <sj@sunet.dk>
- * @author	Lars Olesen <lars@legestue.net>
+ * @author  Sune Jensen <sj@sunet.dk>
+ * @author  Lars Olesen <lars@legestue.net>
  *
  * @version	@package-version@
  *
@@ -26,21 +26,14 @@ class IntranetMaintenance extends Intranet
 
     /**
      * Constructor
+     * 
+     * @param integer intranet_id to be updated
      *
-     * @todo remove kernel - it is only used for dbquery and for getting the
-     *       intranet, seems quite stupid considering it extends intranet and
-     *       for a random key :)
      */
-    function __construct($kernel, $intranet_id = 0)
+    public function __construct($intranet_id = 0)
     {
-        if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
-            trigger_error('intranetmaintenance needs a kernel', E_USER_ERROR);
-        }
-
-        $this->db = MDB2::singleton(DB_DSN);
-
-        $this->id = (int)$intranet_id;
-        $this->kernel = $kernel;
+        $this->db    = MDB2::singleton(DB_DSN);
+        $this->id    = (int)$intranet_id;
         $this->error = new Error();
 
         if ($this->id > 0) {
@@ -49,21 +42,38 @@ class IntranetMaintenance extends Intranet
         }
     }
 
-    function createDBQuery()
+    /**
+     * created dbquery
+     * 
+     * @param object $kernel The kernel object
+     * @return object DBQuery
+     */
+    public function createDBQuery($kernel)
     {
-        $this->dbquery = new DBQuery($this->kernel, 'intranet');
+        $this->dbquery = new DBQuery($kernel, 'intranet');
     }
 
-    function flushAccess()
+    /**
+     * flushes the intranets access.
+     * 
+     * @return boolean true on success
+     */
+    public function flushAccess()
     {
         if ($this->id == 0) {
             trigger_error('cannot flush access because no id i set', E_USER_ERROR);
         }
         // Sletter alle permissions som har med intranettet - og kun intranettet at gøre.
         $this->db->query("DELETE FROM permission WHERE user_id = 0 AND intranet_id = ".intval($this->id));
-        return 1;
+        return true;
     }
 
+    /**
+     * Set acces to a module
+     * 
+     * @param mixed module_id either name or id on object
+     * @return integer Creater than zero on success (the number of permission rows added)
+     */
     public function setModuleAccess($module_id)
     {
         if ($this->id == 0) {
@@ -95,13 +105,18 @@ class IntranetMaintenance extends Intranet
                 trigger_error('Error in exec: '.$result->getUserInfo(), E_USER_INFO);
             }
             return $result;
-        }
-        else {
+        } else {
             trigger_error("intranet maintenance says unknown module_id in IntranetMaintenance->setModuleAccess", E_USER_ERROR);
             exit;
         }
     }
 
+    /**
+     * Removes the intranets access to a module
+     * 
+     * @param mixed module_id either name or id on module
+     * @return boolean true on success
+     */
     public function removeModuleAccess($module_id)
     {
         if ($this->id == 0) {
@@ -138,7 +153,15 @@ class IntranetMaintenance extends Intranet
         }
     }
 
-    function validate($input)
+    /**
+     * validate the intranet input
+     * 
+     * @param array $input array with basic information (name, maintainer) on the intranet
+     * @param integer current_intranet_id the id on the intranet which modifies another intranet
+     * 
+     * @return boolean true on success or false.
+     */
+    function validate($input, $current_intranet_id)
     {
         $validator = new Validator($this->error);
 
@@ -146,7 +169,7 @@ class IntranetMaintenance extends Intranet
         if ($validator->isNumeric($input["maintained_by_user_id"], "Vedligeholder er ugyldig", "zero_or_greater")) {
             $temp_user = new User($input["maintained_by_user_id"]);
 
-            if (!$temp_user->hasIntranetAccess($this->kernel->intranet->get('id'))) {
+            if (!$temp_user->hasIntranetAccess($current_intranet_id)) {
                 $this->error->set("Ugyldig bruger som vedligeholder");
             }
         }
@@ -158,16 +181,21 @@ class IntranetMaintenance extends Intranet
 
 
     /**
+     * Saves basic information the intranet
      * This method will only update a few parameters in the intranet.
+     * Please notive that the address is not saved through here.
+     * 
+     * @param array $input the information to save
+     * @param integer current_intranet_id the intranet id on the intranet from where the intranet is edited
+     * @return boolean true on success
      */
-
-    function save($input)
+    function save($input, $current_intranet_id)
     {
         if (!is_array($input)) {
             trigger_error('input is not an array', E_USER_ERROR);
         }
 
-        if (!$this->validate($input)) {
+        if (!$this->validate($input, $current_intranet_id)) {
             return false;
         }
 
@@ -178,11 +206,12 @@ class IntranetMaintenance extends Intranet
             $sql .= ", identifier = \"".$this->db->escape($input['identifier'])."\"";
         }
         if ($this->id == 0 || isset($input["generate_private_key"])) {
-            $sql .= ", private_key = \"".$this->db->escape($this->kernel->randomKey(50))."\"";
+            
+            $sql .= ", private_key = \"".$this->getRandomKeyGenerator(50)->generate()."\"";
         }
 
         if ($this->id == 0 || isset($input["generate_public_key"])) {
-            $sql .= ", public_key = \"".$this->kernel->randomKey(15)."\"";
+            $sql .= ", public_key = \"".$this->getRandomKeyGenerator(15)->generate()."\"";
         }
 
         if ($this->id == 0) {
@@ -192,10 +221,6 @@ class IntranetMaintenance extends Intranet
             if (PEAR::isError($this->id)) {
                    trigger_error("Error in IntranetMaintenance: ".$id->getMessage(), E_USER_ERROR);
             }
-
-            // @todo this seems quite strange :)
-            print('ff'.$this->id.'ff');
-
             $this->load();
         } else {
             $this->db->query("UPDATE intranet SET ".$sql.", date_changed = NOW() WHERE id = ".intval($this->id));
@@ -204,7 +229,13 @@ class IntranetMaintenance extends Intranet
         return true;
     }
 
-    function getList()
+    /**
+     * Returns a list of intranets
+     * The output can be modified with DBQuery.
+     * 
+     * @return array with intranets
+     */
+    public function getList()
     {
 
         if ($this->dbquery->checkFilter('text')) {
@@ -222,7 +253,7 @@ class IntranetMaintenance extends Intranet
         $intranet = array();
         $db = $this->dbquery->getRecordset('DISTINCT(intranet.id), intranet.name');
         while ($db->nextRecord()) {
-            $intranet[$i]['id'] = $db->f('id');
+            $intranet[$i]['id'] =   $db->f('id');
             $intranet[$i]['name'] = $db->f('name');
             $i++;
         }
@@ -241,12 +272,27 @@ class IntranetMaintenance extends Intranet
         return $intranet;
     }
 
+    /**
+     * Sets the contact for the intranet
+     * 
+     * @param integer $contact_id the id of the contact
+     * @return boolean true on success
+     */
     function setContact($contact_id)
     {
         $this->db->query("UPDATE intranet SET contact_id = ".intval($contact_id)." WHERE id = " . intval($this->id));
         return true;
     }
-
+    
+    /**
+     * returns the RandomKeyGenerator
+     * 
+     * @param integer $length the length of the generated key
+     * @return object RandomKeyGenerator
+     */
+    private function getRandomKeyGenerator($length) {
+        require_once 'Ilib/RandomKeyGenerator.php';
+        return new Ilib_RandomKeyGenerator($length);
+    }
 }
-
 ?>
