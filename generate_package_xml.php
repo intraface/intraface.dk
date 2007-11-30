@@ -120,6 +120,7 @@ $pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0
 $pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.3');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Debug_ExplainQueries', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
+$pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.intraface.dk', '0.0.1');
 
 // Ilib
 $pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.0.1');
@@ -149,8 +150,6 @@ $pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'htmlpurifier.org', '
 $pfm->addPackageDepWithChannel('required', 'Text_Wiki', 'pear.php.net', '1.2.0');
 $pfm->addPackageDepWithChannel('required', 'Markdown', 'pear.michelf.com', '1.0.1');
 
-
-
 $pfm->addPackageDepWithChannel('required', 'SmartyPants', 'pear.michelf.com', '1.5.1');
 $pfm->addPackageDepWithChannel('required', 'phpFlickr', 'public.intraface.dk', '1.6.1');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_HTML', 'public.intraface.dk', '0.1.3');
@@ -171,6 +170,14 @@ $pfm->addPackageDepWithChannel('required', 'Validate_Finance_CreditCard', 'pear.
 // accounting
 $pfm->addPackageDepWithChannel('required', 'OLE', 'pear.php.net', '0.5.0');
 $pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php.net', '0.9.1');
+
+// modulepackage
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Debtor_XMLRPC', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_XMLRPC', 'public.intraface.dk', '0.1.1');
+$pfm->addPackageDepWithChannel('required', ' IntrafacePublic_Shop_HTML', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Tools', 'public.intraface.dk', '0.1.0');
+
+
 
 foreach ($ignore AS $file) {
     // $pfm->addIgnoreToRelease($file);
