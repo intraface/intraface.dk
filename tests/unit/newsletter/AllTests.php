@@ -5,6 +5,7 @@ require_once 'PHPUnit/TextUI/TestRunner.php';
 require_once 'NewsletterTest.php';
 require_once 'NewsletterObserverTest.php';
 require_once 'NewsletterSubscriberTest.php';
+require_once 'NewsletterListTest.php';
 
 class Newsletter_AllTests
 {
@@ -15,6 +16,7 @@ class Newsletter_AllTests
 
         $suite->addTestSuite('NewsletterTest');
         $suite->addTestSuite('NewsletterSubscriberTest');
+        $suite->addTestSuite('NewsletterListTest');
         $suite->addTestSuite('NewsletterObserverTest');
         return $suite;
     }

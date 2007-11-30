@@ -33,6 +33,17 @@ class TestableNewsletter extends Newsletter
 
 class NewsletterTest extends PHPUnit_Framework_TestCase
 {
+    function setUp()
+    {
+        $db = MDB2::factory(DB_DSN);
+        $db->exec('TRUNCATE newsletter_archieve');
+    }
+
+    function createEmptyNewsletter()
+    {
+        $list = new FakeNewsletterList();
+        return new Newsletter($list);
+    }
 
     function testConstruction()
     {
@@ -41,7 +52,21 @@ class NewsletterTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($newsletter));
     }
 
-    function testQueue()
+    function testSaveReturnsAnIntegerWhichCorrespondsTheIdOfTheNewsletterAndActuallyPersistsANewsletter()
+    {
+        $newsletter = $this->createEmptyNewsletter();
+        $subject = 'test';
+        $data = array(
+            'subject' => $subject,
+            'text' => 'test',
+            'deadline' => date('Y-m-d')
+        );
+        $this->assertTrue($newsletter->save($data) > 0);
+        $list = $newsletter->getList();
+        $this->assertEquals($subject, $list[0]['subject']);
+    }
+
+    function testQueuingOf10000Subscribers()
     {
         $list = new FakeNewsletterList();
         $list->kernel = new FakeNewsletterKernel;
@@ -49,6 +74,20 @@ class NewsletterTest extends PHPUnit_Framework_TestCase
         $list->kernel->user = new FakeNewsletterUser;
         $newsletter = new TestableNewsletter($list);
         $this->assertTrue($newsletter->queue());
+    }
+
+    function testDelete()
+    {
+        $newsletter = $this->createEmptyNewsletter();
+        $data = array(
+            'subject' => 'test',
+            'text' => 'test',
+            'deadline' => date('Y-m-d')
+        );
+        $newsletter->save($data);
+        $this->assertTrue($newsletter->delete());
+        $this->assertEquals(0, count($newsletter->getList()));
+
     }
 }
 ?>

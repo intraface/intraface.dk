@@ -3,6 +3,11 @@ class FakeNewsletterList
 {
     public $kernel;
 
+    function __construct()
+    {
+        $this->kernel = new FakeNewsletterKernel();
+    }
+
     function get($key)
     {
         switch ($key) {
@@ -16,12 +21,22 @@ class FakeNewsletterList
 
 
     }
+
+    function getIntranet()
+    {
+        return new FakeNewsletterIntranet();
+    }
 }
 
 class FakeNewsletterKernel
 {
     public $intranet;
     public $user;
+
+    function __construct()
+    {
+        $this->intranet = new FakeNewsletterIntranet();
+    }
 
     function useModule() {}
 }
@@ -30,6 +45,10 @@ class FakeNewsletterIntranet
 {
     public function get()
     {
+        return 1;
+    }
+
+    function getId() {
         return 1;
     }
 }

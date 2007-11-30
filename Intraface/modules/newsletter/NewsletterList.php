@@ -11,29 +11,33 @@
  * @version 1.0
  *
  */
-
 require_once 'Intraface/Standard.php';
+require_once 'DB/Sql.php';
+require_once 'Intraface/Error.php';
+require_once 'Intraface/Validator.php';
+require_once 'Intraface/functions/functions.php';
 
-class NewsletterList extends Standard {
-
-    var $value;
-    var $id;
-    var $kernel;
-    var $error;
-    // var $subscription_option_types;
+class NewsletterList extends Standard
+{
+    public $value;
+    private $id;
+    public $kernel;
+    public $error;
 
     /**
-     * Kan det være, at den selv skulle kunne starte kernel op?
+     * Constructor
+     *
+     * @param object  $kernel Kernel object
+     * @param integer $id     Id fo the list
+     *
+     * @return void
      */
-
-    function NewsletterList($kernel, $id = 0) {
-        if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
+    public function __construct($kernel, $id = 0)
+    {
+        if (!is_object($kernel)) {
             trigger_error('Listadministration kræver Kernel', E_USER_ERROR);
         }
         $this->kernel = $kernel;
-
-        $newsletter_module = $this->kernel->getModule('newsletter');
-        // $this->subscribe_option_types = $newsletter_module->getSetting('subscribe_option');
 
         $this->id = (int)$id;
         if ($this->id > 0) {
@@ -42,28 +46,27 @@ class NewsletterList extends Standard {
         $this->error = new Error;
     }
 
-
     /**
-     * Denne skal sikkert kræve Kernel også, så det hele er lukket ind i Kernel. Undersøg lige om det ikke er rigtigt.
+     * loads the list
+     *
+     * @return boolean
      */
-    function load() {
-        $db = new DB_Sql;
+    private function load()
+    {
+        $db  = new DB_Sql;
         $db2 = new DB_Sql;
         $db->query("SELECT * FROM newsletter_list WHERE active = 1 AND id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
-            return 0;
+            return false;
         }
 
-        $this->value['id'] = $db->f('id');
-        $this->value['title'] = $db->f('title');
-        $this->value['description'] = $db->f('description');
-        //$this->value['subscribe_option_key'] = $db->f('subscribe_option_key');
-        //$this->value['subscribe_option'] = $this->subscribe_option_types[$db->f('subscribe_option_key')];
-        $this->value['subscribe_message'] = $db->f('subscribe_message');
+        $this->value['id']                  = $db->f('id');
+        $this->value['title']               = $db->f('title');
+        $this->value['description']         = $db->f('description');
+        $this->value['subscribe_message']   = $db->f('subscribe_message');
         $this->value['unsubscribe_message'] = $db->f("unsubscribe_message");
-        //$this->value['optin_link'] = $this->kernel->setting->get('intranet', 'newsletter.optin_link');
-        $this->value['privacy_policy'] = $db->f('privacy_policy');
-        $this->value['sender_name'] = $db->f('sender_name');
+        $this->value['privacy_policy']      = $db->f('privacy_policy');
+        $this->value['sender_name']         = $db->f('sender_name');
         if (empty($this->value['sender_name'])) {
             $this->value['sender_name'] = $this->kernel->intranet->get('name');
         }
@@ -81,30 +84,28 @@ class NewsletterList extends Standard {
                 AND newsletter_subscriber.active = 1");
         $this->value['subscribers'] = $db2->numRows();
 
-        return 1;
+        return true;
     }
 
-    function getList() {
-        $lists = array();
-        $db = new DB_Sql;
-        $db2 = new DB_Sql;
-        $db->query("SELECT * FROM newsletter_list WHERE intranet_id = " . $this->kernel->intranet->get('id')." AND active = 1");
-        $i = 0;
-        while ($db->nextRecord()) {
-            $list = new Newsletterlist($this->kernel, $db->f('id'));
-            $lists[$i]['id'] = $db->f('id');
-            $lists[$i]['title'] = $db->f('title');
-            $lists[$i]['subscribers'] = $list->get('subscribers');
-            //$lists[$i]['subscribe_option_key'] = $db->f('subscribe_option_key');
-            //$lists[$i]['subscribe_option'] = $this->subscribe_option_types[$db->f('subscribe_option_key')];
-
-
-            $i++;
-        }
-        return $lists;
+    /**
+     * Gets the intranet
+     *
+     * @return object
+     */
+    public function getIntranet()
+    {
+        return $this->kernel->intranet;
     }
 
-    function validate($var) {
+    /**
+     * Validates
+     *
+     * @param array $var Array to validate
+     *
+     * @return boolean
+     */
+    private function validate($var)
+    {
         $validator = new Validator($this->error);
 
         $validator->isString($var['title'], "Titel er ikke ufdyldt korrekt");
@@ -113,7 +114,7 @@ class NewsletterList extends Standard {
         //$validator->isUrl($var['privacy_policy'], "Privatlivspolitisk er ikke en gyldig webadresse", "allow_empty");
         /*
         $validator->isNumeric($var['subscribe_option_key'], "Tilmeldingsmuligheder er ikke et tal", "zero_or_creater");
-        if(!isset($this->subscribe_option_types[$var['subscribe_option_key']])) {
+        if (!isset($this->subscribe_option_types[$var['subscribe_option_key']])) {
             $this->error->set("Tilmeldingsmuligheder er ikke en gyldig mulighed");
         }
         */
@@ -121,18 +122,21 @@ class NewsletterList extends Standard {
         $validator->isString($var['subscribe_message'], "Bekræftelse på tilmelding er ikke udfyldt korrekt", '', "allow_empty");
         //$validator->isString($var['unsubscribe_message'], "Frameldingsbesked er ikke udfyldt korrekt", '', "allow_empty");
 
-        if($this->error->isError()) {
-            return 0;
+        if ($this->error->isError()) {
+            return false;
         }
-        return 1;
+        return true;
     }
 
-
     /**
-     * Gemmer oplysninger om listen
+     * Saves
+     *
+     * @param array $var Array to validate
+     *
+     * @return integer
      */
-    function save($var) {
-
+    function save($var)
+    {
         $var = safeToDb($var);
 
         if (!$this->validate($var)) {
@@ -153,8 +157,7 @@ class NewsletterList extends Standard {
 
         if ($this->id > 0) {
             $db->query("UPDATE newsletter_list SET ".$sql.", date_changed = NOW() WHERE id = " . $this->id);
-        }
-        else {
+        } else {
             $db->query("INSERT INTO newsletter_list SET ".$sql.", intranet_id = " . $this->kernel->intranet->get('id').", date_created = NOW(), date_changed = NOW()");
             $this->id = $db->insertedId();
         }
@@ -163,35 +166,51 @@ class NewsletterList extends Standard {
     }
 
     /**
+     * Deletes
+     *
      * TODO Bør kun kunne slette lister hvor der ikke er breve der ikke er sendt
+     *
+     * @return boolean
      */
-    function delete() {
+    function delete()
+    {
         $db = new DB_Sql;
         $db->query("UPDATE newsletter_list SET active = 0 WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
-
-        /*$db->query("SELECT * FROM newsletter_arhieve WHERE list_id = " . $this->get("id") . " AND intranet_id = " . $this->kernel->intranet->get('id'));
-        while ($db->nextRecord()) {
-            $newsletter = new Newsletter($db->f("id"));
-            if ($newsletter->get('is_sent') == 1) {
-                $this->error->set('Nyhedsbrev er afsendt. Listen kan ikke slettes.');
-            }
-            else {
-                $newsletter->delete();
-            }
-        }
-        if ($this->error->isError()) {
-            return 0;
-        }
-        $db->query("DELETE FROM newsletter_list WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
-        return 1;
-        */
+        return true;
     }
 
-    function doesListExist() {
+    /**
+     * Checks whether the list acutally exists
+     *
+     * @return boolean
+     */
+    function doesListExist()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id FROM newsletter_list WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
-        return $db->numRows();
+        return ($db->numRows() > 0);
+    }
+
+    /**
+     * Gets a list with newsletters
+     *
+     * @return boolean
+     */
+    function getList()
+    {
+        $lists = array();
+        $db    = new DB_Sql;
+        $db2   = new DB_Sql;
+        $i     = 0;
+        $db->query("SELECT * FROM newsletter_list WHERE intranet_id = " . $this->kernel->intranet->get('id')." AND active = 1");
+        while ($db->nextRecord()) {
+            $list                     = new Newsletterlist($this->kernel, $db->f('id'));
+            $lists[$i]['id']          = $db->f('id');
+            $lists[$i]['title']       = $db->f('title');
+            $lists[$i]['subscribers'] = $list->get('subscribers');
+            $i++;
+        }
+        return $lists;
     }
 
 }
-?>

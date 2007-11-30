@@ -5,10 +5,10 @@
  * @since	1.0
  * @version	1.0
  */
-
-class MainNewsletter Extends Main {
-
-    function MainNewsletter() {
+class MainNewsletter extends Main
+{
+    function __construct()
+    {
         $this->module_name = 'newsletter';
         $this->menu_label = 'newsletter';
         $this->show_menu = 1;
@@ -26,9 +26,7 @@ class MainNewsletter Extends Main {
         $this->addRequiredShared('email');
 
         $this->addSubAccessItem('sendnewsletter', 'send newsletter');
-         $this->includeSettingFile('settings.php');
+        $this->includeSettingFile('settings.php');
 
     }
 }
-
-?>
