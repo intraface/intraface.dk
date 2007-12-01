@@ -4,6 +4,40 @@
     <title>Intraface Tools</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <style type="text/css">
+body {
+    font-family: 'Trebuchet MS', Arial;
+}
+
+h1 {
+    font-size: 1.4em;
+}
+
+h2 {
+    font-size: 1.2em;
+}
+
+div.search {
+    border: 3px solid #999999;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+}
+
+caption {
+    background-color: #6666FF;
+}
+
+th {
+    border-bottom: 3px solid green;
+}
+
+td {
+    border-bottom: 1px solid black;
+}
+
 
     </style>
 </head>

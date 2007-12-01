@@ -1,56 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="da">
-<head>
-    <title>Intraface Tools</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-    <style type="text/css">
-
-body {
-    font-family: 'Trebuchet MS', Arial;
-}
-
-h1 {
-    font-size: 1.4em;
-}
-
-h2 {
-    font-size: 1.2em;
-}
-
-div.search {
-    border: 3px solid #999999;
-    padding: 5px;
-    margin-bottom: 20px;
-}
-
-table {
-    width: 100%;
-}
-
-caption {
-    background-color: #6666FF;
-}
-
-th {
-    border-bottom: 3px solid green;
-}
-
-td {
-    border-bottom: 1px solid black;
-}
-
-
-    </style>
-
-</head>
-
-<body>
-
 <h1>Søgning</h1>
 
 <p><a href="<?php echo url('../'); ?>">Tilbage</a></p>
 
-<div class="search"><form action="<?php echo url(); ?>" method="GET">Søg: <input type="text" name="search" value="" /> <input type="submit" value=" > " /></form></div>
+<div class="search"><form action="<?php echo url('./'); ?>" method="GET">Søg: <input type="text" name="search" value="" /> <input type="submit" value=" > " /></form></div>
 
 
 <?php
@@ -85,8 +37,3 @@ if(isset($this->GET['search']) && $this->GET['search'] != '') {
     }
 }
 ?>
-
-
-
-</body>
-</html>

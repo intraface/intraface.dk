@@ -1,80 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="da">
-<head>
-    <title>Intraface Tools</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-    <style type="text/css">
-
-body {
-    font-family: 'Trebuchet MS', Arial;
-}
-
-h1 {
-    font-size: 1.4em;
-}
-
-h2 {
-    font-size: 1.2em;
-}
-
-
-div.formrow {
-    clear: both;
-    display: block;
-    background-color: #DDDDDD;
-    padding: 0.2em 0.2em 0.2em 0.2em;
-    margin-bottom: 0.7em;
-}
-
-div.formrow label {
-    display: block;
-    vertical-align: top;
-    width: 8em;
-    float: left;
-}
-
-div.formrow textarea {
-    width: 80%;
-}
-
-div.message {
-    font-size: 0.8em;
-    background-color: #FF3366;
-    padding: 0.2em 0.2em 0.2em 0.2em;
-    margin: 0.2em 0 0.2em 0;
-}
-
-div.exists {
-    font-size: 0.8em;
-    background-color: #FFAA33;
-    padding: 0.2em 0.2em 0.2em 0.2em;
-    margin: 0.2em 0 0.2em 0;
-}
-
-div.exists p {
-    margin: 0 0 0 0;
-}
-
-div.success {
-    font-size: 0.8em;
-    background-color: #33FF33;
-    padding: 0.2em 0.2em 0.2em 0.2em;
-    margin: 0.2em 0 0.2em 0;
-}
-
-div.success p {
-    margin: 0 0 0 0;
-}
-
-div.search {
-    float:right;
-}
-
-    </style>
-</head>
-
-<body>
-
 <div class="search"><form action="<?php echo $this->url('search'); ?>" method="GET">Søg: <input type="text" name="search" value="" /> <input type="submit" value=" > " /></form></div>
 
 <h1>Translation</h1>
@@ -88,7 +11,7 @@ if(isset($message) && is_array($message) && count($message) > 0) {
 }
 ?>
 
-<form action="<?php echo url(); ?>" method="POST">
+<form action="<?php echo url('./'); ?>" method="POST">
 
 <div class="formrow"><label for="id">Identifier</label><input type="text" name="id" value="<?php if(isset($id)) echo $id; ?>" /> (Simpelt forståeligt engelsk)</div>
 
@@ -143,7 +66,7 @@ if(isset($exists) && is_array($exists) && count($exists) > 0) {
 <?php
 if(isset($overwrite) && $overwrite == 1) {
     ?>
-    <input type="submit" name="submit" value="  Gem alligevel " /> eller <a href="index.php">Fortryd</a>
+    <input type="submit" name="submit" value="  Gem alligevel " /> eller <a href="<?php e(url('./')); ?>">Fortryd</a>
     <input type="hidden" name="overwrite" value="1" />
     <?php
 }
@@ -170,6 +93,3 @@ if(isset($success) && is_array($success)) {
     <?php
 }
 ?>
-
-</body>
-</html>

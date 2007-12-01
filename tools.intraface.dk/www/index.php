@@ -6,6 +6,7 @@ set_include_path(INTRAFACE_PATH_INCLUDE);
 require 'Intraface/Auth.php';
 require 'Intraface/User.php';
 
+define('INTRAFACE_TOOLS_DB_DSN', 'mysql://' . DB_USER . ':' . DB_PASS . '@' . DB_HOST . '/' . DB_NAME);
 define('DB_DSN', 'mysql://' . DB_USER . ':' . DB_PASS . '@' . DB_HOST . '/' . DB_NAME);
 
 require 'k.php';
@@ -28,39 +29,29 @@ class Tools_User
     private $user;
     private $is_logged_in = false;
 
-    /*
-    function __construct()
+    function __construct($session = '')
     {
-        $this->auth = new Auth(md5(session_id()));
+        $this->auth = new Auth(md5($session));
         if ($this->auth->isLoggedIn()) {
             $this->user = new User($this->auth->isLoggedIn());
+            $this->user->setIntranetId(1);
         }
-        if (!$this->user->setIntranetId(1)){}
     }
-    */
 
     function login($user, $password)
     {
-        $credentials = array('lsolesen' => 'klani');
-
-        if (array_key_exists($user, $credentials)) {
-            $this->is_logged_in = true;
-        }
-
-        //$this->auth->login($user, $password);
-        //return ($this->user = new User($this->auth->isLoggedIn()));
+        $this->auth->login($user, $password);
+        return ($this->user = new User($this->auth->isLoggedIn()));
     }
 
     function isLoggedIn()
     {
-        return $this->is_logged_in;
-        //return ($this->user->hasModuleAccess('intranetmaintenance') > 1);
+        if (!is_object($this->user)) {
+            return false;
+        }
+        return $this->user->hasModuleAccess('intranetmaintenance');
     }
 }
-
-define('ERROR_LOG', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/log/error.log');
-define('ERROR_LOG_UNIQUE', 'c:/Users/Lars Olesen/workspace/intraface/Intraface/log/unique-error.log');
-define('PATH_WWW', 'http://');
 
 $application = new Intraface_Tools_Controller_Root();
 
@@ -71,12 +62,17 @@ $application->registry->registerConstructor('errorlist', create_function(
 
 $application->registry->registerConstructor('database', create_function(
   '$className, $args, $registry',
-  'return MDB2::singleton("mysql://root:@localhost/intraface");'
+  'return MDB2::singleton(INTRAFACE_TOOLS_DB_DSN);'
 ));
 
 $application->registry->registerConstructor('db_sql', create_function(
   '$className, $args, $registry',
   'return new DB_Sql;'
+));
+
+$application->registry->registerConstructor('user', create_function(
+  '$className, $args, $registry',
+  'return new Tools_User($registry->get("session")->getSessionId());'
 ));
 
 $application->dispatch();

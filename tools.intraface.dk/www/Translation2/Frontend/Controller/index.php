@@ -26,7 +26,9 @@ class Translation2_Frontend_Controller_Index extends k_Controller
             }
         }
 
-        return $this->render(dirname(__FILE__) . '/../tpl/index-tpl.php', array('message' => $message, 'id' => $id, 'overwrite' => $overwrite, 'db' => $db));
+        $data = array('message' => $message, 'id' => $id, 'overwrite' => $overwrite, 'db' => $db);
+
+        return $this->render(dirname(__FILE__) . '/../tpl/index-tpl.php', $data);
     }
 
     function POST()

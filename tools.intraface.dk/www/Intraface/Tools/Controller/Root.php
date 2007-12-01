@@ -1,8 +1,14 @@
 <?php
-
 class Intraface_Tools_Controller_Root extends k_Dispatcher
 {
-    public $map = array('tools' => 'Intraface_Tools_Controller_Index');
+    public $map = array('tools' => 'Intraface_Tools_Controller_Index',
+                        'login' => 'Intraface_Tools_Controller_Login');
+
+    function __construct()
+    {
+        parent::__construct();
+        $this->document->template = dirname(__FILE__) . '/../tpl/main-tpl.php';
+    }
 
     function execute()
     {
@@ -16,12 +22,16 @@ class Intraface_Tools_Controller_Root extends k_Dispatcher
         return $liveuser;
     }
 
-    function handleRequest()
+    function forward($name)
     {
-        if (!$this->registry->identity->isLoggedIn()) {
-            throw new k_http_Authenticate();
+        if ($name == 'login') {
+            return parent::forward('login');
         }
-        return parent::handleRequest();
+
+        if (!$this->registry->get('user')->isLoggedIn()) {
+            throw new k_http_Redirect($this->url('login'));
+        }
+        return parent::forward('tools');
     }
 
 }
