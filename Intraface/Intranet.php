@@ -26,8 +26,7 @@ class Intranet extends Standard
     /**
      * @var integer
      */
-    public $id; // intranet id. HACK It has to be public othervise it can not be changed from IntranetMaintenance that inherit from this.
-                // @todo that is not correct. It just have to be protected instead.
+    protected $id;
 
     /**
      * @var object
@@ -84,22 +83,10 @@ class Intranet extends Standard
         }
 
         if($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-            $this->value = $row;
-            /*
-            $this->value['id'] = $db->f('id');
-            $this->value['name'] = $db->f('name');
-            $this->value['identifier'] = $db->f('identifier');
-            $this->value['key_code'] = $db->f('key_code');
-            $this->value['public_key'] = $db->f('public_key');
-            $this->value['contact_id'] = $db->f('contact_id');
-            $this->value['private_key'] = $db->f('private_key');
-            $this->value['pdf_header_file_id'] = $db->f('pdf_header_file_id'); // egentlig burde dette vel bare være en indstilling i settings?
-            $this->value['maintained_by_user_id'] = $db->f('maintained_by_user_id');
-            */
+            $this->value   = $row;
             $this->address = Address::factory('intranet', $this->id);
             return $this->id;
         } else {
-            // $this->address = Address::factory('intranet', 0);
             $this->id = 0;
             return 0;
         }
@@ -118,7 +105,6 @@ class Intranet extends Standard
      */
     function hasModuleAccess($module)
     {
-
         if(is_string($module)) {
             if (empty($this->modules)) {
                 $result = $this->db->query("SELECT id, name FROM module WHERE active = 1");
@@ -131,7 +117,7 @@ class Intranet extends Standard
             if (!empty($this->modules[$module])) {
                 $module_id = $this->modules[$module];
             } else {
-                trigger_error('intranet says invalid module name '.$module, E_USER_ERROR);
+                throw new Exception('intranet says invalid module name '.$module);
             }
         } else {
             $module_id = intval($module);
@@ -156,6 +142,11 @@ class Intranet extends Standard
         return false;
     }
 
+    /**
+     * Returns the id of the intranet
+     *
+     * @return integer
+     */
     function getId()
     {
         return $this->id;

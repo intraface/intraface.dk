@@ -31,7 +31,6 @@ class WebloginTest extends PHPUnit_Framework_TestCase {
         $this->assertFalse($weblogin->auth('public', 'wrongkey'));
     }
 
-
     function testAuthWithCorrectPrivateKey() {
         $weblogin = new Weblogin('sessidfsdfdsfdsfdsf');
         $this->assertTrue(($weblogin->auth('private', $this->private_key) > 0));

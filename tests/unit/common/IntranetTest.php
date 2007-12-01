@@ -28,37 +28,25 @@ class IntranetTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($this->intranet));
     }
 
-    function testHasModuleAccess()
+    function testHasModuleAccessReturnsTrueWhenIntranetHasAccess()
     {
         $this->assertTrue($this->intranet->hasModuleAccess('intranetmaintenance'));
+    }
+
+    function testHasModuleAccessReturnsFalseWhenIntranetDoesNotHaveAccess()
+    {
         // @todo temporary hack with a module I know is registered and there is no access to
         $this->assertFalse($this->intranet->hasModuleAccess('todo'));
     }
 
-
-
-    /*
-    function testIntranetAccessReturnsTrueWhenTheUserHasIntranetAccessAndFalseIfNot()
+    function hasModuleAccessThrowsExceptionOnAnInvalidModule()
     {
-        $this->assertTrue($this->user->hasIntranetAccess(1));
-        $this->assertFalse($this->user->hasIntranetAccess(2));
+        try {
+            $this->intranet->hasModuleAccess('nevervalid');
+            $this->assertTrue(false, 'Exception should have been thrown');
+        }
+        catch (Exception $e) {
+            $this->assertTrue(true, 'Exception was correctly thrown');
+        }
     }
-
-    function testUserModuleAccessOnlyWorksWhenTheUserHasAnActiveIntranetId()
-    {
-        // TODO how should we handle unknown modules
-        $this->assertFalse($this->user->hasModuleAccess('intranetmaintenance'));
-        $this->assertFalse($this->user->hasModuleAccess('cms'));
-        $this->user->setIntranetId(1); // spørgsmålet er om man bare skal have en init i stedet?
-        $this->assertTrue($this->user->hasModuleAccess('intranetmaintenance'));
-        $this->assertFalse($this->user->hasModuleAccess('cms'));
-    }
-
-    function testSetActiveIntranetReturnsAValueLargerThanZero()
-    {
-        $this->assertTrue($this->user->setActiveIntranetId(1) > 0);
-    }
-    */
-
 }
-?>

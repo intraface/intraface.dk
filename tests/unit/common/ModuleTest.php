@@ -6,8 +6,7 @@ require_once 'Intraface/Module.php';
 
 class ModuleTest extends PHPUnit_Framework_TestCase
 {
-
-    function testUseModule()
+    function testUseModuleThrowsAnExceptionIfTheModuleIsNotValid()
     {
         try {
             Module::useModule('invalid module name');
@@ -15,9 +14,6 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         } catch (Exception $e) {
             $this->assertTrue(true);
         }
-
-        $this->assertTrue(Module::useModule('cms'));
     }
-
 }
-?>
+

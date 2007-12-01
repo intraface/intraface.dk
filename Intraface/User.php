@@ -24,13 +24,12 @@ class User extends Standard
     /**
      * @var db
      */
-    public $db; // to be accessed from extended UserMaintenance.
-                // @todo then it just have to be protected
+    protected $db;
 
     /**
      * @var integer
      */
-    public $id;
+    protected $id;
 
     /**
      * @var array
@@ -40,7 +39,7 @@ class User extends Standard
     /**
      * @var integer
      */
-    public $intranet_id;
+    protected $intranet_id;
 
     /**
      * @var error
