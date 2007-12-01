@@ -15,7 +15,23 @@ function isAjax() {
     return 0;
 }
 
-function e($string)
+if (!function_exists('e')) {
+  /**
+   * This function is dynamically redefinable.
+   * @see $GLOBALS['_global_function_callback_e']
+   */
+  function e($args) {
+    $args = func_get_args();
+    return call_user_func_array($GLOBALS['_global_function_callback_e'], $args);
+  }
+  if (!isset($GLOBALS['_global_function_callback_e'])) {
+    $GLOBALS['_global_function_callback_e'] = NULL;
+  }
+}
+
+$GLOBALS['_global_function_callback_e'] = 'intraface_e';
+
+function intraface_e($string)
 {
     echo htmlentities($string);
 }
