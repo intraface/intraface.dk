@@ -414,6 +414,8 @@ class FileHandler extends Standard
             return false;
         }
 
+        $file = realpath($file);
+
         if (!in_array($status, $this->status)) {
             trigger_error("Trejde parameter '".$status."' er ikke gyldig i Filehandler->save", E_USER_ERROR);
         }
@@ -452,6 +454,9 @@ class FileHandler extends Standard
         }
 
         // we load our own mimetypes which have more information.
+        // @todo we need to update to the new FileInfo extension
+        //       as soon as possible, as autodetect will not work
+        //       on windows, and that is pretty annoying in tests.
         $mime_type = $this->_getMimeType($mime_type, 'mime_type');
         if ($mime_type === false) {
             $this->error->set('error in filetype');
