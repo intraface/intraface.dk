@@ -10,12 +10,11 @@ class ModuleMaintenance
 {
     var $id;
     var $db;
-    var $kernel;
     var $value;
     var $error;
     var $sub_access;
 
-    function __construct($id = 0)
+    public function __construct($id = 0)
     {
         $this->id = intval($id);
         $this->db = MDB2::singleton(DB_DSN);
@@ -30,7 +29,8 @@ class ModuleMaintenance
         $this->load();
     }
 
-    static function factory($name) {
+    static function factory($name) 
+    {
 
         $db = MDB2::singleton(DB_DSN);
         if(PEAR::isError($db)) {
@@ -44,15 +44,16 @@ class ModuleMaintenance
         }
 
         if($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-
+            
             return new ModuleMaintenance($row['id']);
         }
         else {
-            trigger_error("invalid module name!", E_USER_ERROR);
+            
+            trigger_error("invalid module name ".$name."!", E_USER_ERROR);
         }
     }
 
-    function load()
+    private function load()
     {
 
         // Starter med at nustille
@@ -87,7 +88,8 @@ class ModuleMaintenance
         }
     }
 
-    function registerModule($module_name) {
+    public function registerModule($module_name) 
+    {
         $db = new DB_Sql;
         $updated_sub_access_id = array();
         $module_msg = array();
@@ -155,7 +157,7 @@ class ModuleMaintenance
         return array('module_msg' => $module_msg, 'updated_module_id' => $updated_module_id, 'updated_sub_access_id' => $updated_sub_access_id);
     }
 
-    function register()
+    public function register()
     {
 
         $msg = array();
@@ -205,7 +207,8 @@ class ModuleMaintenance
         return $module_msg;
     }
 
-    function getList() {
+    public function getList() 
+    {
 
         $db = new DB_Sql;
 
@@ -233,7 +236,8 @@ class ModuleMaintenance
         return $value;
     }
 
-    function get($key = '') {
+    public function get($key = '') 
+    {
         if (!empty($key)) {
             return($this->value[$key]);
         } else {
