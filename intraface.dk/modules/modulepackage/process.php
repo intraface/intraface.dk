@@ -8,15 +8,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require('../../common.php');
     
     
-    if(!isset($_POST['CUSTOM_intanet_public_key']) || $_POST['CUSTOM_intanet_public_key'] == '') {
+    if(!isset($_POST['CUSTOM_intranet_public_key']) || $_POST['CUSTOM_intranet_public_key'] == '') {
         trigger_error('A public key is needed!', E_USER_ERROR);
         exit;
     }
     
     // We login to the intranet with the public key
     $weblogin = new Weblogin;
-    if(!$intranet_id = $weblogin->auth('public', $_POST['CUSTOM_intanet_public_key'])) {
-        trigger_error("Unable to log in to the intranet with public key: ".$_POST['CUSTOM_intanet_public_key'], E_USER_ERROR);
+    if(!$intranet_id = $weblogin->auth('public', $_POST['CUSTOM_intranet_public_key'])) {
+        trigger_error("Unable to log in to the intranet with public key: ".$_POST['CUSTOM_intranet_public_key'], E_USER_ERROR);
         exit;
     }
         
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     foreach($payment_vars AS $var) {
         if(!isset($_POST[$var])) {
-            trigger_error("Only payment does not contain the required fields", E_USER_ERROR); 
+            trigger_error("Online payment does not contain the required fields", E_USER_ERROR); 
             exit;
         }
     }
