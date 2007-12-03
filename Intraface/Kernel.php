@@ -212,7 +212,7 @@ class Kernel
         if (!empty($this->modules[$name]) AND is_object($this->modules[$name])) {
             return($this->modules[$name]);
         } else {
-            trigger_error('Ugyldigt modulnavn eller modulet er ikke loadet i funktionen getModule: '.$name, E_USER_ERROR);
+            trigger_error('Ugyldigt modulnavn '.$name.' eller modulet er ikke loadet i funktionen getModule: '.$name, E_USER_ERROR);
         }
     }
 
