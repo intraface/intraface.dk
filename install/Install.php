@@ -193,6 +193,18 @@ class Intraface_Install {
     {
         $functions = explode(',', $functions);
         
+        // We create kernel so it can be used in the helper functions
+        if (session_id() != '') {
+            $kernel = new Kernel(session_id());
+        }
+        else {
+            $kernel = new Kernel;
+        }
+        $kernel->user = new User(1);
+        $kernel->intranet = new Intranet(1);
+        $kernel->setting = new Setting(1, 1);
+        
+        
         foreach($functions AS $function) {
             
             $object_method = explode(':', trim($function));
@@ -200,7 +212,9 @@ class Intraface_Install {
             $object_method[0] = str_replace('\\', '', $object_method[0]);
             
             require_once 'install/Helper/'.$object_method[0].'.php';
-            call_user_func($object_method);
+            $object_name = 'Install_Helper_'.$object_method[0];
+            $object = new $object_name($kernel, $this->db);
+            $object->$object_method[1]();
             
         }
         
