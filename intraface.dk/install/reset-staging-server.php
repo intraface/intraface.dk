@@ -22,14 +22,14 @@ if ($install->resetServer()) {
     
     if(!empty($_GET['login'])) {
         if($install->loginUser()) {
-            header('location: '.PATH_WWW.'/main/index.php');
-            exit;
+            // header('location: '.PATH_WWW.'/main/index.php');
+            // exit;
         }
         else {
             echo 'Error in login';
         }
     }
-    echo 'staging server reset. Go to <a href="../main/login.php">login</a>.';
+    echo 'staging server reset. Go to <a href="../main/index.php">login</a>.';
 }
 else {
     echo 'error';
