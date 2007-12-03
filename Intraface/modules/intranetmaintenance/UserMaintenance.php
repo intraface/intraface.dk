@@ -5,40 +5,52 @@
  * Please read in User.php for description of relations
  *
  * @package Intraface_IntranetMaintenance
- * @author	Sune Jensen <sj@sunet.dk>
- * @author	Lars Olesen <lars@legestue.net>
- * @since	0.1.0
- * @version	@package-version@
- *
+ * @author  Sune Jensen <sj@sunet.dk>
+ * @author  Lars Olesen <lars@legestue.net>
+ * @since   0.1.0
+ * @version @package-version@
  *
  */
 
 class UserMaintenance extends User {
+    
 
-    public $kernel;
+    /**
+     * constructor - extends User
+     * 
+     * @param integer $user_id id of the user to be maintained
+     */
 
-    function __construct($kernel, $user_id = 0) {
-        $this->kernel = $kernel;
+    public function __construct($user_id = 0) 
+    {
         parent::__construct($user_id);
-
     }
 
     /**
      * create DBQuery object
      * 
      * @param object kernel
-     * @return void none
+     * @return void 
+     * 
      */
+
     public function createDBQuery($kernel) 
     {
         $this->dbquery = new DBQuery($kernel, 'user');
         $this->dbquery->setJoin('LEFT', 'address', 'user.id = address.belong_to_id AND address.type = 2', 'address.active = 1 OR address.active IS NULL');
         
     }
+
     /**
      * This function makes it possible to create a new User as User.php do not allow that.
+     * 
+     * @param array paramname description
+     * @return boolean true or false
+     * 
      */
-    function update($input) {
+
+    function update($input) 
+    {
 
         $this->validate($input);
         $validator = new Validator($this->error);
@@ -210,14 +222,22 @@ class UserMaintenance extends User {
      *
      */
 
-    function flushAccess() {
+    function flushAccess() 
+    {
         $db = new Db_sql;
         $db->query("DELETE FROM permission WHERE user_id = ".$this->id." AND intranet_id = ".$this->intranet_id);
     }
 
+    /**
+     * Sets access to an intranet
+     * 
+     * @param integer intranet_id 
+     * @return boolean true on success, false on error.
+     * 
+     */
 
-
-    function setIntranetAccess($intranet_id = 0) {
+    function setIntranetAccess($intranet_id = 0) 
+    {
         $db = new Db_sql;
         settype($intranet_id, "integer");
         if($intranet_id == 0) {
@@ -243,13 +263,20 @@ class UserMaintenance extends User {
         else {
             trigger_error("Ugyldig intranet id", E_USER_ERROR);
         }
+        
+        return true;
     }
 
     /**
-     * Hvad er det den her returnerer?
+     * Sets access to a module
+     * 
+     * @param mixed module_id either name or id
+     * @return boolean true on success
+     * 
      */
 
-    function setModuleAccess($module_id, $intranet_id = 0) {
+    function setModuleAccess($module_id, $intranet_id = 0) 
+    {
 
 
         $db = new Db_sql;
@@ -293,10 +320,21 @@ class UserMaintenance extends User {
         else {
             trigger_error("Ugyldig module_id '".$module_id."/".$module_name."'", E_USER_ERROR);
         }
+        
+        return true;
     }
 
+    /**
+     * Sets sub access in module
+     * 
+     * @param mixed module_id either id or name of module
+     * @param mixed sub_access_id either id or name of sub_access
+     * @param integer intranet_id id of intranet to give access
+     * 
+     */
 
-    function setSubAccess($module_id, $sub_access_id, $intranet_id = 0) {
+    function setSubAccess($module_id, $sub_access_id, $intranet_id = 0) 
+    {
         $db = new Db_sql;
 
 
@@ -340,7 +378,14 @@ class UserMaintenance extends User {
         }
     }
 
-    function getList() {
+    /**
+     * returns list of users
+     * 
+     * @return array list of users
+     */
+
+    function getList() 
+    {
 
         if($this->intranet_id != 0) {
             return User::getList();
@@ -364,8 +409,6 @@ class UserMaintenance extends User {
         }
 
         return($user);
-
     }
 }
-
 ?>
