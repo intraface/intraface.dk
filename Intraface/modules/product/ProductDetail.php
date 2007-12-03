@@ -93,24 +93,30 @@ class ProductDetail extends Standard {
             // unit skal skrives om til den egentlige unit alt efter settings i produkterne
             $this->value['detail_id'] = $this->db->f('id');
             $this->value['unit_id'] = $this->db->f('unit');
-
-            $this->value['unit_declensions'] = $this->getUnits($this->db->f('unit'));
-
-            $module = $this->product->kernel->getModule('product');
-
-            // This is should be removed in favor for the one with declension above!
-            foreach ($module->getSetting('unit') AS $key=>$keyvalue) {
-                if ($key == $this->db->f('unit')) {
-                    $this->value['unit'] = $keyvalue;
-                    $this->value['unit_key'] = $key;
-                }
+            
+            
+            
+            $unit = $this->getUnits($this->db->f('unit'));
+            if(empty($unit)) {
+                trigger_error('invalid unit '.$this->db->f('unit').'!', E_USER_ERROR);
+                exit;
             }
-
-
-            //********************************************************************
-            // KIG PÅ HACK OVENOVER
-            //*****************************************************************
-
+            $this->value['unit_declensions'] = $unit;
+            
+            /**
+             * @todo: Hack her modificeret lidt for at fjerne afhængighed af kernel
+             */
+            
+            $tmp_danish_units = array(1 => '',
+                2 => 'stk.',
+                3 => 'dag(e)',
+                4 => 'måned(er)',
+                5 => 'år',
+                6 => 'time(r)');
+            
+            $this->value['unit_key'] = $this->db->f('unit');
+            $this->value['unit'] = $tmp_danish_units[$this->db->f('unit')];
+            
             // udregne moms priser ud fra prisen, men kun hvis der er moms på den
             if ($this->db->f('vat') == 1) {
                 $this->value['price_incl_vat'] = (float)$this->db->f('price') + ($this->db->f('price') * 0.25);
@@ -214,7 +220,11 @@ class ProductDetail extends Standard {
                 } elseif (isset($array_var[$field])) {
                     $sql .= $field." = '', ";
                 } else {
+                    // why continue? /sune 3/12 2007
                     continue;
+                    // this might be another prober solution also for saving all known details
+                    // but we need to be aware of number also!
+                    //$sql .= $field." = '".$this->db->f($field)."', ";
                 }
                 if(isset($array_var[$field]) AND $this->db->f($field) != $array_var[$field] OR (is_numeric($this->db->f($field) AND $this->db->f($field)) > 0)) {
                     $do_update = 1;
@@ -228,6 +238,8 @@ class ProductDetail extends Standard {
             // der er ikke nogen tidligere poster, så vi opdatere selvfølgelig
             $do_update = 1;
             $sql = '';
+            // we make sure that unit is set to a valid unit.
+            if(empty($array_var['unit'])) $array_var['unit'] = 1;
             /*
             for ($i=0, $max = sizeof($this->fields), $sql = ''; $i<$max; $i++) {
                 if (!array_key_exists($this->fields[$i], $array_var)) {
