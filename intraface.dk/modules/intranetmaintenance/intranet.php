@@ -102,7 +102,7 @@ else {
 	$address_value = array();
 }
 
-$user = new UserMaintenance($kernel);
+$user = new UserMaintenance();
 $user->setIntranetId($intranet->get('id'));
 
 $page = new Page($kernel);

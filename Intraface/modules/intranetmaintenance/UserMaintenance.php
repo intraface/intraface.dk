@@ -21,26 +21,20 @@ class UserMaintenance extends User {
         $this->kernel = $kernel;
         parent::__construct($user_id);
 
-        $this->dbquery = new DBQuery($this->kernel, 'user');
+    }
+
+    /**
+     * create DBQuery object
+     * 
+     * @param object kernel
+     * @return void none
+     */
+    public function createDBQuery($kernel) 
+    {
+        $this->dbquery = new DBQuery($kernel, 'user');
         $this->dbquery->setJoin('LEFT', 'address', 'user.id = address.belong_to_id AND address.type = 2', 'address.active = 1 OR address.active IS NULL');
+        
     }
-
-    /*
-    function load() {
-        $this->db->query("SELECT * FROM user WHERE id = ".$this->id);
-        if($this->db->nextRecord()) {
-            $this->values["id"] = $this->db->f("id");
-            $this->values["email"] = $this->db->f("email");
-            $this->address = new Address("user", $this->id);
-            return($this->id);
-        }
-        else {
-            $this->address = new Address("user", 0);
-            return($this->id = 0);
-        }
-    }
-    */
-
     /**
      * This function makes it possible to create a new User as User.php do not allow that.
      */

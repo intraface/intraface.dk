@@ -4,29 +4,8 @@ require('../../include_first.php');
 $module = $kernel->module("intranetmaintenance");
 $translation = $kernel->getTranslation('intranetmaintenance');
 
-$user = new UserMaintenance($kernel);
-
-/*
-if(isset($_GET["intranet_id"]) && intval($_GET["intranet_id"]) != 0) {
-
-	if(isset($_GET["not_in_intranet"])) {
-		$parameter = "not_in_intranet";
-		$title = "Tilføj bruger";
-	}
-	else {
-		$parameter = "";
-	}
-
-	$user = new UserMaintenance($kernel);
-	$intranet = new Intranet(intval($_GET["intranet_id"]));
-	$user->setIntranetId($intranet->get("id"));
-	$users = $user->getList($parameter);
-}
-else {
-
-
-}
-*/
+$user = new UserMaintenance();
+$user->createDBQuery($kernel);
 
 $redirect = Redirect::factory($kernel, 'receive');
 

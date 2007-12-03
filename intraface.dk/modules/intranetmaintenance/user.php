@@ -7,7 +7,7 @@ $translation = $kernel->getTranslation('intranetmaintenance');
 
 if(isset($_POST["submit"])) {
 
-	$user = new UserMaintenance($kernel, intval($_POST["id"]));
+	$user = new UserMaintenance(intval($_POST["id"]));
 	$intranet = new IntranetMaintenance(intval($_POST["intranet_id"]));
 	$user->setIntranetId($intranet->get("id"));
 
@@ -72,7 +72,7 @@ elseif(isset($_GET['return_redirect_id'])) {
 	}
 	$redirect = Redirect::factory($kernel, 'return');
 	if($redirect->get('identifier') == 'add_user') {
-		$user = new UserMaintenance($kernel, $redirect->getParameter('user_id'));
+		$user = new UserMaintenance($redirect->getParameter('user_id'));
 		$user->setIntranetAccess($intranet->get('id'));
 		$user_id = $user->get('id');
 	}
@@ -88,7 +88,7 @@ else {
 	}
 }
 
-$user = new UserMaintenance($kernel, $user_id);
+$user = new UserMaintenance($user_id);
 
 $value = $user->get();
 $value_address = array();

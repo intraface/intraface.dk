@@ -5,7 +5,7 @@ $modul = $kernel->module("intranetmaintenance");
 
 if(isset($_POST["submit"])) {
 
-	$user = new UserMaintenance($kernel, intval($_POST["id"]));
+	$user = new UserMaintenance(intval($_POST["id"]));
 
 	if(isset($_POST["intranet_id"]) && intval($_POST["intranet_id"]) != 0) {
 		$intranet = new Intranet($_POST["intranet_id"]);
@@ -37,7 +37,7 @@ if(isset($_POST["submit"])) {
 }
 else {
 	if(isset($_GET["id"])) {
-		$user = new UserMaintenance($kernel, intval($_GET["id"]));
+		$user = new UserMaintenance(intval($_GET["id"]));
 		$value = $user->get();
 
 		if(isset($_GET['intranet_id'])) {
@@ -52,7 +52,7 @@ else {
 		}
 	}
 	else {
-		$user = new UserMaintenance($kernel);
+		$user = new UserMaintenance();
 		if(!isset($_GET['intranet_id'])) {
 			trigger_error("When you create an user we require intranet_id", E_USER_ERROR);
 		}

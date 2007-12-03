@@ -112,10 +112,10 @@ class Intraface_ModulePackage_AccessUpdate
             // we prepare to give the intranet access
             $intranet = new IntranetMaintenance($row['intranet_id']);
             // we prepage to give the users access
-            $user = new UserMaintenance($kernel);
+            $user = new UserMaintenance();
             $users = $user->getList();
             foreach($users AS $key => $user) {
-                $users[$key] = new UserMaintenance($kernel, $user['id']);
+                $users[$key] = new UserMaintenance($user['id']);
             }
             
             $modules = $modulepackage->get('modules');
