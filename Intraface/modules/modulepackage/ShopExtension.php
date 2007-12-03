@@ -188,7 +188,6 @@ class Intraface_ModulePackage_ShopExtension {
             return false;
         }
         
-        
         // then we add the products to the basket
         settype($products, 'array');
         foreach($products AS $product) {
@@ -198,12 +197,17 @@ class Intraface_ModulePackage_ShopExtension {
             if(!$this->shop->changeBasket($product['product_id'], $product['quantity'], $product['description'], $product['product_detail_id'])) {
                 $this->error->set("unable to add the product to the basket");
                 trigger_error('unable to add the product to the basket', E_USER_NOTICE);
-                false;
+                return false;
             }
         }
         
         // We get the basket again to get the total price.
         $basket = $this->shop->getBasket();
+        if(empty($basket['items'])) {
+            $this->error->set("Error processing the order");
+            trigger_error('There was no products in the basket', E_USER_NOTICE);
+            return false;
+        }
         
         $customer['description'] = 'Intraface Package Add';
         
