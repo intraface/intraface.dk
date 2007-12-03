@@ -443,6 +443,7 @@ class Intraface_ModulePackage_Manager extends Standard {
         $start_date = date('Y-m-d', strtotime('+1 day', strtotime($this->getLastEndDateInGroup($modulepackage))));
         $parsed_duration = $this->parseDuration($start_date, $duration);
         $end_date = $parsed_duration['end_date'];
+        $month = $parsed_duration['month'];
         
         if($this->error->isError()) {
             return array();
@@ -456,7 +457,8 @@ class Intraface_ModulePackage_Manager extends Standard {
             'module_package_id' => $modulepackage->get('id'),
             'product_id' => $modulepackage->get('product_id'),
             'start_date' => $start_date,
-            'end_date' => $end_date));
+            'end_date' => $end_date,
+            'month' => $month));
         
         
         return $action;
