@@ -30,15 +30,32 @@ class FakeFileHandlerUser
     }
 }
 
+function fht_deltree( $f ){
+
+    if( is_dir( $f ) ){
+        foreach( scandir( $f ) as $item ){
+            if( !strcmp( $item, '.' ) || !strcmp( $item, '..' ) )
+                continue;
+            fht_deltree( $f . "/" . $item );
+        }
+        rmdir( $f );
+    }
+    else{
+        @unlink( $f );
+    }
+}
+
+
 class FileHandlerTest extends PHPUnit_Framework_TestCase
 {
     private $file_name = 'tester.jpg';
 
     function setUp() {
         $db = MDB2::factory(DB_DSN);
-        $db->query('TRUNCATE file_handler');    
+        $db->query('TRUNCATE file_handler');
+        fht_deltree(PATH_UPLOAD . '1');
     }
-    
+
     function createKernel()
     {
         $kernel = new FakeFileHandlerKernel;
@@ -110,7 +127,7 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
         $fh->error->view();
         $this->assertTrue($id > 0);
     }
-    
+
     function testCreateTemporaryFile() {
         $fh = new FileHandler($this->createKernel());
         $this->assertEquals('TemporaryFile', get_class($fh->createTemporaryFile()));
