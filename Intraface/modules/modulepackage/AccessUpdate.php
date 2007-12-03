@@ -113,6 +113,7 @@ class Intraface_ModulePackage_AccessUpdate
             $intranet = new IntranetMaintenance($row['intranet_id']);
             // we prepage to give the users access
             $user = new UserMaintenance();
+            $user->createDBQuery($kernel);
             $users = $user->getList();
             foreach($users AS $key => $user) {
                 $users[$key] = new UserMaintenance($user['id']);
