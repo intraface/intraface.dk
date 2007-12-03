@@ -194,6 +194,8 @@ class IntranetMaintenance extends Intranet
         if (!is_array($input)) {
             trigger_error('input is not an array', E_USER_ERROR);
         }
+        
+        settype($input['maintained_by_user_id'], 'integer');
 
         if (!$this->validate($input, $current_intranet_id)) {
             return false;
