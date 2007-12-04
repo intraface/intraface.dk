@@ -3,14 +3,16 @@ require_once dirname(__FILE__) . '/../config.test.php';
 
 require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/Standard.php';
+require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/shared/filehandler/FileHandler.php';
 
 class FakeFileHandlerKernel {
     public $intranet;
     public $user;
+    /*
     function randomKey() {
         return 'thisisnotreallyarandomkey'.microtime();
-    }
+    }*/
 }
 
 
@@ -126,6 +128,16 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
         $id = $fh->save(PATH_UPLOAD.'wideonball.jpg', 'Filename');
         $fh->error->view();
         $this->assertTrue($id > 0);
+    }
+    
+    function testAccessKeyIsValid()
+    {
+        $fh = new FileHandler($this->createKernel());
+        // first we make a copy of the file as it is moved by upload.
+        copy(dirname(__FILE__) . '/wideonball.jpg', PATH_UPLOAD.'wideonball.jpg');
+        $id = $fh->save(PATH_UPLOAD.'wideonball.jpg', 'Filename');
+        $fh->load();
+        $this->assertEquals(50, strlen($fh->get('access_key')));
     }
 
     function testCreateTemporaryFile() {

@@ -3,6 +3,7 @@ require_once dirname(__FILE__) . '/../config.test.php';
 
 require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/Standard.php';
+require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/shared/filehandler/FileHandler.php';
 
 class FakeInstanceHandlerKernel {
@@ -107,7 +108,7 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
         $filehandler = $this->createFile();
         $filehandler->createInstance('square');
 
-        $this->assertEquals(2863, $filehandler->instance->get('file_size'));
+        $this->assertEquals(3844, $filehandler->instance->get('file_size'));
     }
 
     function testConstructWithTypeSquareAndCropParams() {
@@ -119,7 +120,7 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
             'crop_height' => 100);
 
         $filehandler->createInstance('square', $crop);
-        $this->assertEquals('5ee61cd3a9df67654096290fd20610bf', md5(file_get_contents($filehandler->instance->get('file_path'))));
+        $this->assertEquals('c6fc157c4d2d56ad8be50a71af684fab', md5(file_get_contents($filehandler->instance->get('file_path'))));
 
         // instance handler does not return the crop parameter, so we just find it in the database!
         $db = MDB2::factory(DB_DSN);
