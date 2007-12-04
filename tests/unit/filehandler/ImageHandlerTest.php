@@ -30,18 +30,21 @@ class FakeImageHandlerUser
     }
 }
 
-function iht_deltree( $f ){
-
-    if( is_dir( $f ) ){
-        foreach( scandir( $f ) as $item ){
-            if( !strcmp( $item, '.' ) || !strcmp( $item, '..' ) )
-                continue;
-            iht_deltree( $f . "/" . $item );
+if(!function_exists('iht_deltree')) {
+    
+    function iht_deltree( $f ){
+    
+        if( is_dir( $f ) ){
+            foreach( scandir( $f ) as $item ){
+                if( !strcmp( $item, '.' ) || !strcmp( $item, '..' ) )
+                    continue;
+                iht_deltree( $f . "/" . $item );
+            }
+            rmdir( $f );
         }
-        rmdir( $f );
-    }
-    else{
-        @unlink( $f );
+        else{
+            @unlink( $f );
+        }
     }
 }
 
@@ -127,7 +130,7 @@ class ImageHandlerTest extends PHPUnit_Framework_TestCase
         $file2 = $image->resize(200, 200);
         
         // we accept 10% fall in quality! after several resize
-        $this->assertEquals(filesize($file2), filesize($file1), filesize($file2)/100*10);
+        $this->assertEquals(filesize($file2), filesize($file1), '', filesize($file2)/100*10);
         
     }
 

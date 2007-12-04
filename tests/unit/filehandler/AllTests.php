@@ -8,7 +8,7 @@ class FileHandler_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Intraface_FileHandler');
 
-        $tests = array('FileViewer', 'FileHandler', 'AppendFile', 'InstanceHandler', 'InstanceManager', 'TemporaryFile');
+        $tests = array('FileViewer', 'FileHandler', 'AppendFile', 'InstanceHandler', 'InstanceManager', 'TemporaryFile', 'ImageHandler');
 
         foreach ($tests AS $test) {
             require_once $test . 'Test.php';
