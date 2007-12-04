@@ -199,8 +199,11 @@ class Address extends Standard
 
     function validate($array_var)
     {
-
         $validator = new Validator($this->error);
+        if (empty($array_var)) {
+            $this->error->set('array cannot be empty');
+        }
+
         // public $fields = array('name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'ean');
 
         settype($array_var['name'], 'string');
