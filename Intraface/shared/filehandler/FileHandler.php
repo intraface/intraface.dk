@@ -427,11 +427,14 @@ class FileHandler extends Standard
         } else {
             $file_name = safeToDb($file_name);
         }
+        
+        
+        $random_key_generator = $this->getRandomKeyGenerator(50);
 
         // Vi sikre os at ingen andre har den nøgle
         $i = 0;
         do {
-            $access_key = $this->kernel->randomKey(50);
+            $access_key = $random_key_generator->generate();
 
             if ($i > 50 || $access_key == '') {
                 trigger_error("Fejl under generering af access_key i FileHandler->save", E_USER_ERROR);
@@ -665,6 +668,19 @@ class FileHandler extends Standard
         $db = new DB_Sql;
         $db->query("UPDATE file_handler SET temporary = 0 WHERE user_id = ".$this->kernel->user->get('id')." AND id = " . $this->id);
         return true;
+    }
+    
+    /**
+     * Returns RandomKeyGenerator
+     * 
+     * @param integer $length the length of the random key
+     * @return object RandomKeyGenerator
+     */
+
+    private function getRandomKeyGenerator($length) 
+    {
+        require_once 'Ilib/RandomKeyGenerator.php';
+        return new Ilib_RandomKeyGenerator($length);
     }
 
 }
