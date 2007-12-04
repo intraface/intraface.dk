@@ -78,7 +78,7 @@ class ImageHandler extends Standard
      *
      * @return string new file name
      */
-    public function resize($width, $height = NULL, $strict = 'relative')
+    public function resize($width, $height, $strict = 'relative')
     {
 
         $image = Image_Transform::factory($this->image_library);
@@ -95,7 +95,7 @@ class ImageHandler extends Standard
         }
         
 
-        $image->setOption('quality', 90);
+        $image->setOption('quality', 95);
 
         if($error !== true) {
             trigger_error("Kunne ikke åbne fil i ImageHandler->resize. ".$error->getMessage(), E_USER_ERROR);
@@ -132,15 +132,16 @@ class ImageHandler extends Standard
         }
 
         $file_type = $this->file_handler->get('file_type');
-        $new_filename = $this->tempdir_path.date('U').$this->file_handler->kernel->randomKey(10).'.'.$file_type['extension'];
+        $new_file = $this->file_handler->createTemporaryFile($this->file_handler->get('server_file_name'));
+        // $new_filename = $this->tempdir_path.date('U').$this->file_handler->kernel->randomKey(10).'.'.$file_type['extension'];
 
-        if($image->save($new_filename) !== true) {
+        if($image->save($new_file->getFilePath()) !== true) {
             trigger_error("Kunne ikke gemme billedet i ImageHandler->resize", E_USER_ERROR);
             return false;
         }
         
-        $this->tmp_file_name = $new_filename;
-        return $new_filename;
+        $this->tmp_file_name = $new_file->getFilePath();
+        return $new_file->getFilePath();
     }
 
 
@@ -170,7 +171,7 @@ class ImageHandler extends Standard
         }
         
 
-        $image->setOption('quality', 100);
+        $image->setOption('quality', 95);
 
         if($error !== true) {
             trigger_error("Kunne ikke åbne fil i ImageHandler->resize. ".$error->getMessage(), E_USER_ERROR);
@@ -183,17 +184,17 @@ class ImageHandler extends Standard
         }
         
         $file_type = $this->file_handler->get('file_type');
+        
+        $new_file = $this->file_handler->createTemporaryFile($this->file_handler->get('server_file_name'));
+        // $new_filename = $this->tempdir_path.date('U').$this->file_handler->kernel->randomKey(10).'.'.$file_type['extension'];
 
-        $new_filename = $this->tempdir_path.date('U').$this->file_handler->kernel->randomKey(10).'.'.$file_type['extension'];
-
-        if($image->save($new_filename) !== true) {
+        if($image->save($new_file->getFilePath()) !== true) {
             trigger_error("Kunne ikke gemme billedet i ImageHandler->crop", E_USER_ERROR);
             return false;
         }
         
-        $this->tmp_file_name = $new_filename;
-
-        return $new_filename;
+        $this->tmp_file_name = $new_file->getFilePath();
+        return $new_file->getFilePath();
     }
 
     /**
