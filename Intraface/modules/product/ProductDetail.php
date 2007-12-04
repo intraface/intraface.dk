@@ -57,13 +57,11 @@ class ProductDetail extends Standard {
             trigger_error('ProductDetail-objektet kræver et Product-objekt.', E_USER_ERROR);
         }
 
-        $this->product = $product;
-        $this->db = new Db_sql;
+        $this->product       = $product;
+        $this->db            = new Db_sql;
         $this->old_detail_id = (int)$old_detail_id;
-
-        $this->fields = array('number', 'name', 'description', 'price', 'unit', 'do_show', 'vat', 'weight', 'state_account_id');
-
-        $this->detail_id = $this->load();
+        $this->fields        = array('number', 'name', 'description', 'price', 'unit', 'do_show', 'vat', 'weight', 'state_account_id');
+        $this->detail_id     = $this->load();
     }
 
     /**
@@ -73,7 +71,7 @@ class ProductDetail extends Standard {
      */
     private function load()
     {
-        if($this->old_detail_id != 0) {
+        if ($this->old_detail_id != 0) {
             $sql = "id = ".$this->old_detail_id;
         } else {
             $sql = "active = 1";
@@ -82,41 +80,41 @@ class ProductDetail extends Standard {
         $sql = "SELECT id, ".implode(',', $this->fields)." FROM product_detail WHERE ".$sql . "
             AND product_id = " . $this->product->get('id');
         $this->db->query($sql);
-        if($this->db->numRows() > 1) {
+        if ($this->db->numRows() > 1) {
             trigger_error('Systemfejl', 'Der er mere end en aktiv produktdetalje', E_USER_ERROR);
-        } elseif($this->db->nextRecord()) {
+        } elseif ($this->db->nextRecord()) {
             // hardcoded udtræk af nogle vigtige oplysnigner, som vi ikke kan have i feltlisten
-            for($i = 0, $max = count($this->fields); $i<$max; $i++) {
+            for ($i = 0, $max = count($this->fields); $i<$max; $i++) {
                 $this->value[$this->fields[$i]] = $this->db->f($this->fields[$i]);
             }
 
             // unit skal skrives om til den egentlige unit alt efter settings i produkterne
             $this->value['detail_id'] = $this->db->f('id');
-            $this->value['unit_id'] = $this->db->f('unit');
-            
-            
-            
+            $this->value['unit_id']   = $this->db->f('unit');
+
+
+
             $unit = $this->getUnits($this->db->f('unit'));
-            if(empty($unit)) {
+            if (empty($unit)) {
                 trigger_error('invalid unit '.$this->db->f('unit').'!', E_USER_ERROR);
                 exit;
             }
             $this->value['unit_declensions'] = $unit;
-            
+
             /**
              * @todo: Hack her modificeret lidt for at fjerne afhængighed af kernel
              */
-            
+
             $tmp_danish_units = array(1 => '',
                 2 => 'stk.',
                 3 => 'dag(e)',
                 4 => 'måned(er)',
                 5 => 'år',
                 6 => 'time(r)');
-            
+
             $this->value['unit_key'] = $this->db->f('unit');
-            $this->value['unit'] = $tmp_danish_units[$this->db->f('unit')];
-            
+            $this->value['unit']     = $tmp_danish_units[$this->db->f('unit')];
+
             // udregne moms priser ud fra prisen, men kun hvis der er moms på den
             if ($this->db->f('vat') == 1) {
                 $this->value['price_incl_vat'] = (float)$this->db->f('price') + ($this->db->f('price') * 0.25);
@@ -132,7 +130,7 @@ class ProductDetail extends Standard {
     /**
      * Validates
      *
-     * @param array  $array_var Details to validate
+     * @param array $array_var Details to validate
      *
      * @return boolean
      */
@@ -168,7 +166,8 @@ class ProductDetail extends Standard {
      *
      * @return integer
      */
-    public function save($array_var) {
+    public function save($array_var)
+    {
 
         $array_var = safeToDb($array_var);
 
@@ -179,7 +178,7 @@ class ProductDetail extends Standard {
         }
 
 
-        if($this->old_detail_id != 0) {
+        if ($this->old_detail_id != 0) {
             // save kan ikke bruges hvis man skal opdatere et gammelt produkt
             // men så bør den vel bare automatisk kalde update(), som i øjeblikket
             // er udkommenteret.
@@ -192,22 +191,67 @@ class ProductDetail extends Standard {
         $this->db->query("SELECT * FROM product_detail WHERE id = ".$this->detail_id . "
                 AND product_id = " . $this->product->get('id'));
 
-        if($this->db->nextRecord()) {
+        if ($this->db->nextRecord()) {
             // her skal vi sørge for at få billedet med
             $do_update = 0;
-            $sql = '';
+            $sql       = '';
             /*
             for ($i=0, $max = sizeof($this->fields); $i<$max; $i++) {
                 if (!array_key_exists($this->fields[$i], $array_var)) {
                     continue;
                 }
-                if(isset($array_var[$this->fields[$i]])) {
+                if (isset($array_var[$this->fields[$i]])) {
                     $sql .= $this->fields[$i]." = '".$array_var[$this->fields[$i]]."', ";
                 } else {
                     $sql .= $this->fields[$i]." = '', ";
                 }
-                if(isset($array_var[$this->fields[$i]]) AND $this->db->f($this->fields[$i]) != $array_var[$this->fields[$i]] OR (is_numeric($this->db->f($this->fields[$i]) AND $this->db->f($this->fields[$i])) > 0)) {
+                if (isset($array_var[$this->fields[$i]]) AND $this->db->f($this->fields[$i]) != $array_var[$this->fields[$i]] OR (is_numeric($this->db->f($this->fields[$i]) AND $this->db->f($this->fields[$i])) > 0)) {
                     $do_update = 1;
+                }
+            }
+            */
+            foreach ($this->fields as $field) {
+                /*
+                if (!array_key_exists($field, $array_var)) {
+                    continue;
+                }
+                */
+                if (!empty($array_var[$field])) {
+                    $sql .= $field." = '".$array_var[$field]."', ";
+                } elseif (isset($array_var[$field])) {
+                    $sql .= $field . " = '', ";
+                } else {
+                    // why continue? /sune 3/12 2007
+                    // continue;
+                    // this might be another prober solution also for saving all known details
+                    // but we need to be aware of number also!
+                    $sql .= $field . " = '".$this->db->f($field)."', ";
+                }
+                if (isset($array_var[$field]) AND $this->db->f($field) != $array_var[$field] OR (is_numeric($this->db->f($field) AND $this->db->f($field)) > 0)) {
+                    $do_update = 1;
+                }
+
+            }
+            if ($this->db->f('pic_id') > 0) {
+                $picture_id = $this->db->f('pic_id');
+            }
+        } else {
+            // der er ikke nogen tidligere poster, så vi opdatere selvfølgelig
+            $do_update = 1;
+            $sql       = '';
+            // we make sure that unit is set to a valid unit.
+            if (empty($array_var['unit'])) {
+                $array_var['unit'] = 1;
+            }
+            /*
+            for ($i=0, $max = sizeof($this->fields), $sql = ''; $i<$max; $i++) {
+                if (!array_key_exists($this->fields[$i], $array_var)) {
+                    continue;
+                }
+                if (isset($array_var[$this->fields[$i]])) {
+                    $sql .= $this->fields[$i]." = '".$array_var[$this->fields[$i]]."', ";
+                } else {
+                    $sql .= $this->fields[$i]." = '', ";
                 }
             }
             */
@@ -220,54 +264,12 @@ class ProductDetail extends Standard {
                 } elseif (isset($array_var[$field])) {
                     $sql .= $field." = '', ";
                 } else {
-                    // why continue? /sune 3/12 2007
-                    continue;
-                    // this might be another prober solution also for saving all known details
-                    // but we need to be aware of number also!
-                    //$sql .= $field." = '".$this->db->f($field)."', ";
-                }
-                if(isset($array_var[$field]) AND $this->db->f($field) != $array_var[$field] OR (is_numeric($this->db->f($field) AND $this->db->f($field)) > 0)) {
-                    $do_update = 1;
-                }
-
-            }
-            if ($this->db->f('pic_id') > 0) {
-                $picture_id = $this->db->f('pic_id');
-            }
-        } else {
-            // der er ikke nogen tidligere poster, så vi opdatere selvfølgelig
-            $do_update = 1;
-            $sql = '';
-            // we make sure that unit is set to a valid unit.
-            if(empty($array_var['unit'])) $array_var['unit'] = 1;
-            /*
-            for ($i=0, $max = sizeof($this->fields), $sql = ''; $i<$max; $i++) {
-                if (!array_key_exists($this->fields[$i], $array_var)) {
-                    continue;
-                }
-                if(isset($array_var[$this->fields[$i]])) {
-                    $sql .= $this->fields[$i]." = '".$array_var[$this->fields[$i]]."', ";
-                } else {
-                    $sql .= $this->fields[$i]." = '', ";
-                }
-            }
-            */
-            foreach($this->fields as $field) {
-                if (!array_key_exists($field, $array_var)) {
-                    continue;
-                }
-                if(!empty($array_var[$field])) {
-                    $sql .= $field." = '".$array_var[$field]."', ";
-                } elseif (isset($array_var[$field])) {
-                    $sql .= $field." = '', ";
-                } else {
                     continue;
                 }
             }
-
         }
 
-        if($do_update == 0) {
+        if ($do_update == 0) {
             // Hmmmmm, der er slet ikke nogen felter der er ændret! Så gemmer vi ikke, men siger at det gik godt :-)
             return true;
         } else {
@@ -293,7 +295,7 @@ class ProductDetail extends Standard {
      *
      * @return array
      */
-    private static function getUnits($key = NULL)
+    private static function getUnits($key = null)
     {
         $units = array(1 => array('singular' => '',
                                   'plural' => '',
@@ -315,7 +317,7 @@ class ProductDetail extends Standard {
                                   'combined' => 'hour(s)')
                  );
 
-        if($key === NULL) {
+        if ($key === null) {
             return $units;
         } else {
             if (!empty($units[$key])) {

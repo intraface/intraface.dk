@@ -16,8 +16,8 @@ require_once 'Intraface/Validator.php';
 require_once 'DB/Sql.php';
 require_once 'Intraface/modules/product/ProductDetail.php';
 
-class Product extends Standard {
-
+class Product extends Standard
+{
     /**
      * @var object
      */
@@ -83,21 +83,17 @@ class Product extends Standard {
      *
      * @return void
      */
-    function __construct($kernel, $product_id = 0, $old_product_detail_id = 0) {
+    function __construct($kernel, $product_id = 0, $old_product_detail_id = 0)
+    {
         if (!is_object($kernel)) {
             trigger_error('Produkt-objektet kræver et Kernel-objekt.', E_USER_ERROR);
         }
-        $this->kernel = $kernel;
-        $this->db = new Db_sql;
-        $this->id = (int)$product_id;
+        $this->kernel                = $kernel;
+        $this->db                    = new Db_sql;
+        $this->id                    = (int)$product_id;
         $this->old_product_detail_id = (int)$old_product_detail_id;
-
-        $this->fields = array('do_show', 'stock');
-
-        $this->error = new Error;
-
-        //$shared_filehandler = $this->kernel->useShared('filehandler');
-        //$shared_filehandler->includeFile('AppendFile.php');
+        $this->fields                = array('do_show', 'stock');
+        $this->error                 = new Error;
 
         if ($this->id > 0) {
             $this->id = $this->load();
@@ -109,7 +105,8 @@ class Product extends Standard {
      *
      * @return void
      */
-    public function createDBQuery() {
+    public function createDBQuery()
+    {
         $this->dbquery = new DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->setJoin("LEFT", "product_detail detail", "detail.product_id = product.id", "detail.active = 1");
         //$this->dbquery->setFindCharacterFromField("detail.name");
@@ -123,12 +120,13 @@ class Product extends Standard {
      *
      * @return integer product id or 0
      */
-    public function load() {
-        $this->db->query("SELECT id, active, locked, changed_date, ".implode(',',$this->fields)." FROM product
+    public function load()
+    {
+        $this->db->query("SELECT id, active, locked, changed_date, ".implode(',', $this->fields)." FROM product
                 WHERE intranet_id = " . $this->kernel->intranet->get('id') . "
                     AND id = " . $this->id . " LIMIT 1");
 
-        if(!$this->db->nextRecord()) {
+        if (!$this->db->nextRecord()) {
             $this->value['id'] = 0;
             return 0;
         }
@@ -146,15 +144,15 @@ class Product extends Standard {
 
         // hente produktdetaljerne
         $this->detail = $this->getDetails();
-        $this->value = $this->detail->get();
+        $this->value  = $this->detail->get();
         // hente id igen for ovenstående har overskrevet det
-        $this->value['id'] = $this->db->f('id');
-        $this->value['locked'] = $this->db->f('locked');
+        $this->value['id']           = $this->db->f('id');
+        $this->value['locked']       = $this->db->f('locked');
         $this->value['changed_date'] = $this->db->f('changed_date');
-        $this->value['active'] = $this->db->f('active');
+        $this->value['active']       = $this->db->f('active');
 
         // udtræk af produktdetaljer
-        for($i = 0, $max = count($this->fields); $i < $max; $i++) {
+        for ($i = 0, $max = count($this->fields); $i < $max; $i++) {
             $this->value[$this->fields[$i]] = $this->db->f($this->fields[$i]);
         }
 
@@ -182,10 +180,10 @@ class Product extends Standard {
         }
         // hvis det er en lagervare og intranettet har adgang til stock skal det startes op
 
-        if($this->kernel->intranet->hasModuleAccess('stock') AND $this->get('stock') == 1) {
+        if ($this->kernel->intranet->hasModuleAccess('stock') AND $this->get('stock') == 1) {
             // hvis klassen ikke er startet op skal det ske
             $module = $this->kernel->useModule('stock', true); // true ignorere bruger adgang
-            $this->stock = new Stock($this);
+            $this->stock                 = new Stock($this);
             $this->value['stock_status'] = $this->stock->get();
         }
 
@@ -197,7 +195,8 @@ class Product extends Standard {
      *
      * @return array
      */
-    function getPictures() {
+    function getPictures()
+    {
         $shared_filehandler = $this->kernel->useShared('filehandler');
         $shared_filehandler->includeFile('AppendFile.php');
 
@@ -208,25 +207,25 @@ class Product extends Standard {
 
         $this->value['pictures'] = array();
 
-        if(count($appendix_list) > 0) {
-            foreach($appendix_list AS $key => $appendix) {
+        if (count($appendix_list) > 0) {
+            foreach ($appendix_list AS $key => $appendix) {
                 $tmp_filehandler = new FileHandler($this->kernel, $appendix['file_handler_id']);
-                $this->value['pictures'][$key]['id'] = $appendix['file_handler_id'];
+                $this->value['pictures'][$key]['id']                   = $appendix['file_handler_id'];
                 $this->value['pictures'][$key]['original']['icon_uri'] = $tmp_filehandler->get('icon_uri');
-                $this->value['pictures'][$key]['original']['name'] = $tmp_filehandler->get('file_name');
-                $this->value['pictures'][$key]['original']['width'] = $tmp_filehandler->get('width');
-                $this->value['pictures'][$key]['original']['height'] = $tmp_filehandler->get('height');
+                $this->value['pictures'][$key]['original']['name']     = $tmp_filehandler->get('file_name');
+                $this->value['pictures'][$key]['original']['width']    = $tmp_filehandler->get('width');
+                $this->value['pictures'][$key]['original']['height']   = $tmp_filehandler->get('height');
                 $this->value['pictures'][$key]['original']['file_uri'] = $tmp_filehandler->get('file_uri');
-                $this->value['pictures'][$key]['appended_file_id'] = $appendix['id'];
+                $this->value['pictures'][$key]['appended_file_id']     = $appendix['id'];
 
                 if ($tmp_filehandler->get('is_image')) {
                     $tmp_filehandler->createInstance();
                     $instances = $tmp_filehandler->instance->getList();
-                    foreach($instances AS $instance) {
+                    foreach ($instances AS $instance) {
                         $this->value['pictures'][$key][$instance['name']]['file_uri'] = $instance['file_uri'];
-                        $this->value['pictures'][$key][$instance['name']]['name'] = $instance['name'];
-                        $this->value['pictures'][$key][$instance['name']]['width'] = $instance['width'];
-                        $this->value['pictures'][$key][$instance['name']]['height'] = $instance['height'];
+                        $this->value['pictures'][$key][$instance['name']]['name']     = $instance['name'];
+                        $this->value['pictures'][$key][$instance['name']]['width']    = $instance['width'];
+                        $this->value['pictures'][$key][$instance['name']]['height']   = $instance['height'];
 
                     }
                 }
@@ -242,7 +241,8 @@ class Product extends Standard {
      *
      * @return boolean
      */
-    private function validate($array_var) {
+    private function validate($array_var)
+    {
         if (!is_array($array_var)) {
             trigger_error('Product::save() skal have et array', E_USER_ERROR);
         }
@@ -280,6 +280,10 @@ class Product extends Standard {
             return 0;
         }
 
+        if (empty($array_var['number']) AND $this->get('number') > 0) {
+            $array_var['number'] = $this->get('number');
+        }
+
         if (empty($array_var['number'])) {
             $array_var['number'] = $this->getMaxNumber() + 1;
         }
@@ -296,7 +300,7 @@ class Product extends Standard {
                 continue;
             }
 
-            if(isset($array_var[$this->fields[$i]])) {
+            if (isset($array_var[$this->fields[$i]])) {
                 $sql .= $this->fields[$i]." = '".safeToDb($array_var[$this->fields[$i]])."', ";
             } else {
                 $sql .= $this->fields[$i]." = '', ";
@@ -309,7 +313,7 @@ class Product extends Standard {
                 continue;
             }
 
-            if(isset($array_var[$field])) {
+            if (isset($array_var[$field])) {
                 $sql .= $field." = '".safeToDb($array_var[$field])."', ";
             } else {
                 $sql .= $field." = '', ";
@@ -318,10 +322,10 @@ class Product extends Standard {
 
         if ($this->id > 0) {
             $sql_type = "UPDATE ";
-            $sql_end = " WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id');
+            $sql_end  = " WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id');
         } else {
             $sql_type = "INSERT INTO";
-            $sql_end = ", intranet_id = " . $this->kernel->intranet->get('id');
+            $sql_end  = ", intranet_id = " . $this->kernel->intranet->get('id');
         }
 
         $this->db->query($sql_type . " product SET ".$sql." changed_date = NOW()"	 . $sql_end);
@@ -350,7 +354,8 @@ class Product extends Standard {
      *
      * @return integer Id for the new product
      */
-    public function copy() {
+    public function copy()
+    {
         $product = new Product($this->kernel);
         $product->getKeywords();
 
@@ -366,10 +371,7 @@ class Product extends Standard {
             )
         );
 
-        #
-        # Relaterede produkter
-        #
-
+        // Relaterede produkter
         $related = $this->getRelatedProducts();
         if (is_array($related) AND count($related) > 0) {
             foreach ($related AS $p) {
@@ -377,10 +379,7 @@ class Product extends Standard {
             }
         }
 
-        #
-        # Nøgleord
-        #
-
+        // Nøgleord
         $appender = $this->getKeywordAppender();
         $this->getKeywords();
         $keywords = $appender->getConnectedKeywords();
@@ -391,10 +390,7 @@ class Product extends Standard {
             }
         }
 
-        #
-        # Billede
-        #
-
+        // Billede
         $shared_filehandler = $this->kernel->useShared('filehandler');
         $shared_filehandler->includeFile('AppendFile.php');
 
@@ -420,7 +416,8 @@ class Product extends Standard {
      *
      * @return boolean
      */
-    public function delete() {
+    public function delete()
+    {
         if ($this->id == 0) {
             $this->error->set('Produktet kan ikke slettes, for produktid er ikke sat');
             return false;
@@ -447,7 +444,8 @@ class Product extends Standard {
      *
      * @return boolean
      */
-    public function undelete() {
+    public function undelete()
+    {
         if ($this->id == 0) {
             $this->error->set('Produktet kan ikke findes igen, for produktid er ikke sat');
 
@@ -468,7 +466,8 @@ class Product extends Standard {
      *
      * @return integer produktnummer
      */
-    public function getMaxNumber() {
+    public function getMaxNumber()
+    {
         $db = new DB_Sql;
         $sql = "SELECT product_detail.number
             FROM product
@@ -490,7 +489,8 @@ class Product extends Standard {
      *
      * @return boolean
      */
-    public function isNumberFree($product_number) {
+    public function isNumberFree($product_number)
+    {
         $product_number = (int)$product_number;
 
         $db = new DB_Sql;
@@ -516,26 +516,15 @@ class Product extends Standard {
      *
      * @return object
      */
-    public function getKeywords() {
+    public function getKeywords()
+    {
         return ($this->keywords = new Keyword($this));
     }
 
-    public function getKeywordAppender() {
+    public function getKeywordAppender()
+    {
         return new Intraface_Keyword_Appender($this);
     }
-
-
-    /*
-    function lock() {
-        $db = new DB_Sql;
-        $db->query("UPDATE product SET locked = 1 WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
-    }
-
-    function unlock() {
-        $db = new DB_Sql;
-        $db->query("UPDATE product SET locked = 0 WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
-    }
-    */
 
     /**
      * Set related product
@@ -545,7 +534,8 @@ class Product extends Standard {
      *
      * @return boolean
      */
-    public function setRelatedProduct($id, $status) {
+    public function setRelatedProduct($id, $status)
+    {
         if (empty($status)) $status = 'remove';
 
         $db = new DB_Sql;
@@ -569,7 +559,8 @@ class Product extends Standard {
      *
      * @return boolean
      */
-    public function deleteRelatedProduct($id) {
+    public function deleteRelatedProduct($id)
+    {
         $db = new DB_Sql;
         $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id') . " AND related_product_id = " . (int)$id);
         return true;
@@ -582,7 +573,8 @@ class Product extends Standard {
      *
      * @return boolean
      */
-    public function deleteRelatedProducts() {
+    public function deleteRelatedProducts()
+    {
         $db = new DB_Sql;
         $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
         return true;
@@ -593,20 +585,20 @@ class Product extends Standard {
      *
      * @return array
      */
-    public function getRelatedProducts() {
+    public function getRelatedProducts()
+    {
         $products = array();
-        $ids = array();
-        $db = new DB_Sql;
-        $sql = "SELECT related_product_id FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id');
+        $key      = 0;
+        $ids      = array();
+        $db       = new DB_Sql;
+        $sql      = "SELECT related_product_id FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id');
         $db->query($sql);
-        $key = 0;
+
         // rækkefølgen er vigtig - først hente fra product og bagefter tilføje nye værdier til arrayet
         while ($db->nextRecord()) {
-            $key = $db->f('related_product_id');
-            $product = new Product($this->kernel, $db->f('related_product_id'));
-
-            $products[$key] = $product->get();
-
+            $key                          = $db->f('related_product_id');
+            $product                      = new Product($this->kernel, $db->f('related_product_id'));
+            $products[$key]               = $product->get();
             $products[$key]['related_id'] = $db->f('related_product_id');
 
             if (is_object($product->stock) AND strtolower(get_class($product->stock)) == "stock") {
@@ -637,7 +629,8 @@ class Product extends Standard {
      *
      * @return integer
      */
-    public function isFilledIn() {
+    public function isFilledIn()
+    {
         $db = new DB_Sql;
         $db->query("SELECT count(*) AS antal FROM product WHERE intranet_id = " . $this->kernel->intranet->get('id'));
         if ($db->nextRecord()) {
@@ -651,7 +644,8 @@ class Product extends Standard {
      *
      * @return integer
      */
-    public function any() {
+    public function any()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id FROM product WHERE intranet_id = " . $this->kernel->intranet->get('id')." AND active = 1");
         return $db->numRows();
@@ -673,13 +667,12 @@ class Product extends Standard {
      * så man kan se, hvad folk er interesseret i.
      * Søgemaskinen skal være tolerant for stavefejl
      *
+     * @param string $which valgfri søgeparameter - ikke aktiv endnu
      *
-     * @param	string $search	valgfri søgeparameter - ikke aktiv endnu
      * @return array indeholdende kundedata til liste
-     * @access public
      */
-    function getList($which = 'all') {
-
+    function getList($which = 'all')
+    {
         switch ($this->dbquery->getFilter('sorting')) {
             case 'date':
                     $this->dbquery->setSorting("product.changed_date DESC");
@@ -689,7 +682,7 @@ class Product extends Standard {
                 break;
         }
 
-        if($search = $this->dbquery->getFilter("search")) {
+        if ($search = $this->dbquery->getFilter("search")) {
             $this->dbquery->setCondition("detail.number = '".$search."'
                 OR detail.name LIKE '%".$search."%'
                 OR detail.description LIKE '%".$search."%'");
@@ -698,15 +691,15 @@ class Product extends Standard {
             $this->dbquery->setKeyword($keywords);
         }
 
-        if($ids = $this->dbquery->getFilter("ids")) {
-            if(is_array($ids) && count($ids) > 0) {
+        if ($ids = $this->dbquery->getFilter("ids")) {
+            if (is_array($ids) && count($ids) > 0) {
                 $this->dbquery->setCondition("product.id IN (".implode(', ', $ids).")");
             } else {
                 $this->dbquery->setCondition('1 = 0');
             }
         }
 
-        // DEN OUTPUTTER IKKE DET RIGTIGE VED KEYWORD
+        // @todo DEN OUTPUTTER IKKE DET RIGTIGE VED KEYWORD
         switch ($which) {
             case 'webshop':
                 $this->dbquery->setCondition("product.do_show = 1");
@@ -723,18 +716,11 @@ class Product extends Standard {
              break;
         }
 
-        $i = 0; // til at give arrayet en key
-
-        $db = $this->dbquery->getRecordset("product.id", "", false);
-
-        //$db1 = new DB_Sql;
-
+        $i        = 0; // til at give arrayet en key
+        $db       = $this->dbquery->getRecordset("product.id", "", false);
         $products = array();
 
-        /**
-         * Ved at starte product op hver gang får vi startet dbquery op en masse gange
-        */
-
+        // @todo Ved at starte product op hver gang får vi startet dbquery op en masse gange
         while ($db->nextRecord()) {
 
             $product = new Product($this->kernel, $db->f("id"));
@@ -743,13 +729,11 @@ class Product extends Standard {
 
             if (is_object($product->stock) AND strtolower(get_class($product->stock)) == "stock") {
                 $products[$i]['stock_status'] = $product->stock->get();
-            }
-            else {
+            } else {
                 // alle ikke lagervarer der skal vises i webshop skal have en for_sale
                 if ($product->get('stock') == 0 AND $product->get('do_show') == 1) {
                     $products[$i]['stock_status'] = array('for_sale' => 100); // kun til at stock_status
-                }
-                else {
+                } else {
                     $products[$i]['stock_status'] = array();
                 }
 
@@ -767,15 +751,24 @@ class Product extends Standard {
         return $products;
     }
 
+    /**
+     * Gets id
+     *
+     * @return integer
+     */
     function getId()
     {
         return $this->id;
     }
 
+    /**
+     * Gets the details
+     *
+     * @return object
+     */
     function getDetails()
     {
         return new ProductDetail($this, $this->old_product_detail_id);
     }
 
 }
-?>

@@ -168,7 +168,40 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $values['number']);
         $this->assertEquals($name, $values['name']);
         $this->assertEquals(20, $values['state_account_id']);
+    }
 
+    function testSavesTheValuesGivenAndRemembersOtherValuesFromLastSave()
+    {
+        $product = new Product($this->kernel);
+        $name = 'Test';
+        $price = 20;
+        if (!$id = $product->save(array('name' => $name, 'price' => $price, 'unit' => 1, 'state_account_id' => 10))) {
+            $product->error->view();
+        }
+
+        $this->assertTrue($id > 0);
+        $values = $product->get();
+
+        $this->assertEquals(1, $values['number']);
+        $this->assertEquals($name, $values['name']);
+        $this->assertEquals($price, $values['price']);
+        $this->assertEquals(10, $values['state_account_id']);
+
+        $product = new Product($this->kernel, $id);
+        $values = $product->get();
+        //print_r($values);
+
+
+        $data = array('state_account_id' => 20);
+        $product->save($data);
+        $values = $product->get();
+        //print_r($values);
+
+        $this->assertEquals(1, $values['number']);
+        $this->assertEquals($name, $values['name']);
+        $this->assertEquals($price, $values['price']);
+        $this->assertEquals(1, $values['unit_key']);
+        $this->assertEquals(20, $values['state_account_id']);
     }
 
     function testMaxNumberIncrementsOnePrProductAdded()
