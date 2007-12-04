@@ -20,6 +20,11 @@ class TemporaryFile {
     private $file_path ;
     
     /**
+     * @var string $file_dir
+     */
+    private $file_dir;
+    
+    /**
      * Constructor
      * 
      * @param object $file_handler
@@ -34,6 +39,7 @@ class TemporaryFile {
         $this->filehandler = $filehandler;
         $this->file_name = $file_name;
         $this->file_path = NULL;
+        $this->file_dir = NULL;
        
         if($this->file_name != NULL) {
             $this->load();
@@ -81,8 +87,7 @@ class TemporaryFile {
         }
         
         $this->file_name = $this->parseFileName($this->file_name);
-        
-        
+        $this->file_dir = $this->filehandler->tempdir_path.$unique_name.'/';
         $this->file_path = $this->filehandler->tempdir_path.$unique_name.'/'.$this->file_name;
            
     }
@@ -99,6 +104,7 @@ class TemporaryFile {
         $file_name = str_replace(' ', '_', $file_name);
         $file_name = str_replace('/', '_', $file_name);
         $file_name = str_replace('\\', '_', $file_name);
+        $file_name = str_replace('#', '', $file_name);
         
         if(strlen($file_name) > 50) {
             $extension = strrchr($file_name, '.');
@@ -144,6 +150,16 @@ class TemporaryFile {
     function getFileName() 
     {
         return $this->file_name;
+    }
+    
+    /**
+     * Returns the file name after it has been parsed.
+     * 
+     * @return string parsed file name
+     */
+    function getFileDir() 
+    {
+        return $this->file_dir;
     }   
 }
 ?>
