@@ -228,24 +228,29 @@ class UploadHandler extends Standard
 
 
         if($upload_type == 'do_not_save') {
-            $tmp_server_file_name = date("U").$this->file_handler->kernel->randomKey(10).".".$mime_type['extension'];
-            $file->setName($tmp_server_file_name);
+            // $tmp_server_file_name = date("U").$this->file_handler->kernel->randomKey(10).".".$mime_type['extension'];
+            $tmp_server_file = $this->file_handler->createTemporaryFile($prop['real']);
+            
+            $file->setName($tmp_server_file->getFileName());
 
+            /*
+             * This is now handled by TemporaryFile
             if(!is_dir($this->file_handler->tempdir_path)) {
                 if(!mkdir($this->file_handler->tempdir_path)) {
                     trigger_error("Kunne ikke oprette mappe i FileHandler->upload", E_USER_ERROR);
                 }
             }
+             */
 
-            $moved = $file->moveTo($this->file_handler->tempdir_path);
+            $moved = $file->moveTo($tmp_server_file->getFileDir());
 
             if(PEAR::isError($moved)) {
                 trigger_error("Kunne ikke flytte filen i UploadHandler->upload", E_USER_ERROR);
             }
 
             return array(
-                'tmp_file_path' => $this->file_handler->tempdir_path.$tmp_server_file_name,
-                'tmp_file_name' => $tmp_server_file_name,
+                'tmp_file_path' => $tmp_server_file->getFilePath(),
+                'tmp_file_name' => $tmp_server_file->getFileName(),
                 'file_name' => $prop['real'],
                 'image' => $mime_type['image'],
                 'icon' => $mime_type['icon']
