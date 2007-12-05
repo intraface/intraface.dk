@@ -289,6 +289,7 @@ class CMS_Page extends Standard {
             $string_appender = new Intraface_Keyword_StringAppender($this->getKeywords(), $this->getKeywordAppender());
             $string_appender->addKeywordsByString($keywords_to_add);
         }
+
         return $this->id;
     }
 
@@ -816,9 +817,8 @@ class CMS_Page extends Standard {
     }
 
     function getKeywordAppender() {
-        return (new Intraface_Keyword_Appender($this));
+        return new Intraface_Keyword_Appender($this);
     }
-
 
     function moveUp() {
         $this->position->moveUp($this->id);
@@ -833,7 +833,7 @@ class CMS_Page extends Standard {
      * Funktionen skal tjekke alle siderne igennem for at se, om der findes undersider -
      * ellers vil de forsvinde fra oversigten.
      */
-  function delete() {
+    function delete() {
         $db = new DB_Sql();
         $db2 = new DB_Sql;
           // egentlig skuille denne m�ske v�re rekursiv?
@@ -862,6 +862,4 @@ class CMS_Page extends Standard {
         return $this->id;
     }
 
-
 }
-?>

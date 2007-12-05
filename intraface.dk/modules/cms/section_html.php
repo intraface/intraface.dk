@@ -85,7 +85,7 @@ $page->start('CMS');
     <fieldset>
         <legend><?php echo safeToHtml($translation->get('create new element')); ?></legend>
         <p><?php echo safeToHtml($translation->get('place content on the section by adding elements')); ?></p>
-        <select name="new_element_type_id">
+        <select name="new_element_type_id" id="new_element_type_id">
             <option value=""><?php echo safeToHtml($translation->get('choose', 'common')); ?></option>
             <?php
                 foreach ($element_types AS $key=>$type):

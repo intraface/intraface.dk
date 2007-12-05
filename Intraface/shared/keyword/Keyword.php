@@ -112,7 +112,7 @@ abstract class Ilib_Keyword
      */
     function getId()
     {
-        return $this->value['id'];
+        return $this->id;
     }
 
 }
@@ -311,7 +311,9 @@ class Keyword extends Ilib_Keyword
             WHERE " . implode(' AND ', $c));
 
         if ($db->nextRecord()) {
-            return $db->f('id');
+            $this->id = $db->f('id');
+            $this->load();
+            return $this->id;
         }
 
         if ($this->id > 0) {
@@ -674,7 +676,7 @@ class Intraface_Keyword_StringAppender
         if (is_array($keywords) AND count($keywords) > 0) {
             foreach ($keywords AS $key => $value) {
                 $keyword = $this->cloneKeyword();
-                if ($add_keyword_id = $keyword->save(array('id' => '', 'keyword' => $value))) {
+                if ($add_keyword_id = $keyword->save(array('keyword' => $value))) {
                     $this->appender->addKeyword($keyword);
                 }
             }
