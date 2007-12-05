@@ -57,16 +57,16 @@ class WebshopTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($this->webshop->basket));
     }
 
-    function testPlaceOrderReturnsTrue()
+    function testPlaceOrderReturnsAnOrderNumber()
     {
-        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 0, 'description' => 'test', 'internal_note' => '', 'message' => '');
+        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 'private', 'description' => 'test', 'internal_note' => '', 'message' => '');
         $order_id = $this->webshop->placeOrder($data);
         $this->assertTrue($order_id > 0);
     }
 
-    function testPlaceOrderResetsBasket()
+    function testPlaceOrderResetsBasketSoThereIsNoProductsInBasket()
     {
-        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 0, 'description' => 'test', 'internal_note' => '', 'message' => '');
+        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 'private', 'description' => 'test', 'internal_note' => '', 'message' => '');
         $order_id = $this->webshop->placeOrder($data);
         $this->assertTrue($order_id > 0);
 
@@ -77,7 +77,7 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     function testPlaceOrderWithAnEanNumberSavesTheEanNumberAndAutomaticallyMakesItACompany()
     {
         $ean = '2222222222222';
-        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 0, 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
+        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
         $order_id = $this->webshop->placeOrder($data);
         $this->assertTrue($order_id > 0);
         $order = new Order($this->kernel, $order_id);

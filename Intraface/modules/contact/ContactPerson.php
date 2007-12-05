@@ -48,6 +48,12 @@ class ContactPerson extends Standard
         }
     }
 
+    function getError()
+    {
+        return $this->error;
+    }
+
+
     /**
      * Loads the contact person
      *
@@ -78,10 +84,10 @@ class ContactPerson extends Standard
         $input = safeToDb($input);
 
         $validator = new Validator($this->error);
-        $validator->isString($input['name'], "Fejl i kontaktpersonens navn");
+        $validator->isString($input['name'], 'Fejl i kontaktpersonens navn', '', 'allow_empty');
 
         settype($input['email'], 'string');
-        $validator->isEmail($input['email'], "Fejl i kontaktpersonens e-mail", 'allow_empty');
+        $validator->isEmail($input['email'], 'Fejl i kontaktpersonens e-mail', 'allow_empty');
         settype($input['phone'], 'string');
         $validator->isString($input['phone'], 'Fejl i kontaktpersonens telefon', '', 'allow_empty');
         settype($input['mobile'], 'string');

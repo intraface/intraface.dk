@@ -141,10 +141,9 @@ class Webshop
                 // sets preffered invoice to electronic.
                 $input['type'] = 'corporation'; // firma
                 $input['preferred_invoice'] = 3;
-            }
-            else {
+            } else {
                 // sets preffered invoice to email. Should be a setting in webshop.
-            $input['preferred_invoice'] = 2;
+                $input['preferred_invoice'] = 2;
             }
         }
 
@@ -154,9 +153,10 @@ class Webshop
 
         // opdaterer kontakten
         if (!$contact_id = $this->contact->save($input)) {
-            $this->error->merge($this->contact->error->message);
+            $this->error->merge($this->contact->getError()->getMessage());
             return false;
         }
+
 
         // we update/add the contactperson.
         if (isset($input['type']) && $input['type'] == 'corporation') { // firma
@@ -165,7 +165,7 @@ class Webshop
             settype($input['contactemail'], 'string');
             settype($input['contactphone'], 'string');
             if (!$contact_person_id = $this->contact->contactperson->save(array('name'=>$input['contactperson'], 'email'=>$input['contactemail'], 'phone'=>$input['contactphone']))) {
-                $this->error->merge($this->contact->contactperson->error->message);
+                $this->error->merge($this->contact->getError()->getMessage());
                 return false;
             }
         }

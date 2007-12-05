@@ -218,6 +218,11 @@ class Contact extends Standard {
         }
     }
 
+    function getError()
+    {
+        return $this->error;
+    }
+
     /**
      * Creates the dbquery which is used in getList()
      *
