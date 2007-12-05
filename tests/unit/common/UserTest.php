@@ -2,8 +2,9 @@
 require_once dirname(__FILE__) . '/../config.test.php';
 
 require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/User.php';
+require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
+
 
 class UserTest extends PHPUnit_Framework_TestCase
 {
@@ -13,6 +14,9 @@ class UserTest extends PHPUnit_Framework_TestCase
     {
         // @todo this has the notion with the standard database setup
         $this->user = new User(1);
+        
+        $m = new ModuleMaintenance();
+        $m->register();
     }
 
     function tearDown()

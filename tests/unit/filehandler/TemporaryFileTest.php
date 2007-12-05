@@ -78,15 +78,23 @@ class TemporaryFileTest extends PHPUnit_Framework_TestCase
     
     function testGetFilePath() {
         $tf = new TemporaryFile($this->createFileHandler(), 'file_name.jpg');
-        ereg('^'.PATH_UPLOAD.'1(/|\\\\)'.PATH_UPLOAD_TEMPORARY.'([a-zA-Z0-9]{13})(/|\\\\)file_name.jpg$', str_replace('\\', '\\\\', $tf->getFilePath()), $regs);
-        $this->assertEquals(PATH_UPLOAD.'1'.$regs[1].PATH_UPLOAD_TEMPORARY.$regs[2].$regs[3].'file_name.jpg', $tf->getFilePath());   
+        
+        $this->assertEquals(PATH_UPLOAD.'1'.DIRECTORY_SEPARATOR.PATH_UPLOAD_TEMPORARY, substr($tf->getFilePath(), 0, strlen(PATH_UPLOAD) + 1 + strlen(DIRECTORY_SEPARATOR) + strlen(PATH_UPLOAD_TEMPORARY)));
+        $this->assertEquals(strlen(PATH_UPLOAD) + 1 + strlen(DIRECTORY_SEPARATOR) + strlen(PATH_UPLOAD_TEMPORARY) + 13 + strlen(DIRECTORY_SEPARATOR) + strlen('file_name.jpg'), strlen($tf->getFilePath()));
+        $this->assertEquals('file_name.jpg', substr($tf->getFilePath(), -strlen('file_name.jpg')));
+        
+        // ereg('^'.PATH_UPLOAD.'1(/|\\\\)'.PATH_UPLOAD_TEMPORARY.'([a-zA-Z0-9]{13})(/|\\\\)file_name.jpg$', str_replace('\\', '\\\\', $tf->getFilePath()), $regs);
+        // $this->assertEquals(PATH_UPLOAD.'1'.$regs[1].PATH_UPLOAD_TEMPORARY.$regs[2].$regs[3].'file_name.jpg', $tf->getFilePath());   
     }
     
     function testGetFileDir() {
         $tf = new TemporaryFile($this->createFileHandler(), 'file_name.jpg');
         
-        ereg('^'.PATH_UPLOAD.'1(/|\\\\)'.PATH_UPLOAD_TEMPORARY.'([a-zA-Z0-9]{13})(/|\\\\)$', str_replace('\\', '\\\\', $tf->getFileDir()), $regs);
-        $this->assertEquals(PATH_UPLOAD.'1'.$regs[1].PATH_UPLOAD_TEMPORARY.$regs[2].$regs[3], $tf->getFileDir());   
+        $this->assertEquals(PATH_UPLOAD.'1'.DIRECTORY_SEPARATOR.PATH_UPLOAD_TEMPORARY, substr($tf->getFilePath(), 0, strlen(PATH_UPLOAD) + 1 + strlen(DIRECTORY_SEPARATOR) + strlen(PATH_UPLOAD_TEMPORARY)));
+        $this->assertEquals(strlen(PATH_UPLOAD) + 1 + strlen(DIRECTORY_SEPARATOR) + strlen(PATH_UPLOAD_TEMPORARY) + 13 + strlen(DIRECTORY_SEPARATOR), strlen($tf->getFileDir()));
+        
+        // ereg('^'.PATH_UPLOAD.'1(/|\\\\)'.PATH_UPLOAD_TEMPORARY.'([a-zA-Z0-9]{13})(/|\\\\)$', str_replace('\\', '\\\\', $tf->getFilePath()), $regs);
+        // $this->assertEquals(PATH_UPLOAD.'1'.$regs[1].PATH_UPLOAD_TEMPORARY.$regs[2].$regs[3], $tf->getFileDir());   
     }
     
     function testGetFilePathIsUnique() {
