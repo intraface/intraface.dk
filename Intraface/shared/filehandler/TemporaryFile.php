@@ -93,8 +93,8 @@ class TemporaryFile {
         }
         
         $this->file_name = $this->parseFileName($this->file_name);
-        $this->file_dir = $this->filehandler->tempdir_path.$unique_name.'/';
-        $this->file_path = $this->filehandler->tempdir_path.$unique_name.'/'.$this->file_name;
+        $this->file_dir = $this->filehandler->tempdir_path.$unique_name.DIRECTORY_SEPARATOR;
+        $this->file_path = $this->file_dir.$this->file_name;
     }
     
     /**
