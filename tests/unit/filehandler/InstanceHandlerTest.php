@@ -120,7 +120,13 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
             'crop_height' => 100);
 
         $filehandler->createInstance('square', $crop);
-        $this->assertEquals('c6fc157c4d2d56ad8be50a71af684fab', md5(file_get_contents($filehandler->instance->get('file_path'))));
+        
+        $this->assertEquals(3644, filesize($filehandler->instance->get('file_path')));
+        $size = getimagesize($filehandler->instance->get('file_path')); 
+        $this->assertEquals(75, $size[0]);
+        $this->assertEquals(75, $size[1]);
+        
+        // $this->assertEquals('c6fc157c4d2d56ad8be50a71af684fab', md5(file_get_contents($filehandler->instance->get('file_path'))));
 
         // instance handler does not return the crop parameter, so we just find it in the database!
         $db = MDB2::factory(DB_DSN);
