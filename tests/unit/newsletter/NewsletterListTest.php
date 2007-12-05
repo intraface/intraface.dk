@@ -31,21 +31,23 @@ class NewsletterListTest extends PHPUnit_Framework_TestCase
         $data = array(
             'title' => 'title',
             'sender_name' => 'sender name',
-            'reply_email' => 'reply email',
+            'reply_email' => 'reply@email.dk',
             'description' => 'description',
-            'subscribe_message' => 'subscribe message');
+            'subscribe_message' => 'subscribe message',
+            );
+
         $this->assertTrue($list->save($data) > 0);
         $list = $list->getList();
         $this->assertEquals('title', $list[0]['title']);
     }
 
-    function testDelete()
+    function testDeleteReturnsTrue()
     {
         $list = $this->createEmptyList();
         $data = array(
             'title' => 'title',
             'sender_name' => 'sender name',
-            'reply_email' => 'reply email',
+            'reply_email' => 'reply@email.dk',
             'description' => 'description',
             'subscribe_message' => 'subscribe message');
         $this->assertTrue($list->save($data) > 0);

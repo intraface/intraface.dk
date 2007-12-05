@@ -107,20 +107,11 @@ class NewsletterList extends Standard
     private function validate($var)
     {
         $validator = new Validator($this->error);
-
-        $validator->isString($var['title'], "Titel er ikke ufdyldt korrekt");
-        $validator->isString($var['sender_name'], "Navn på afsender er ikke ufdyldt korrekt", "", "allow_empty");
-        $validator->isEmail($var['reply_email'], "Svar E-mail er ikke en gyldig e-mail", "allow_empty");
-        //$validator->isUrl($var['privacy_policy'], "Privatlivspolitisk er ikke en gyldig webadresse", "allow_empty");
-        /*
-        $validator->isNumeric($var['subscribe_option_key'], "Tilmeldingsmuligheder er ikke et tal", "zero_or_creater");
-        if (!isset($this->subscribe_option_types[$var['subscribe_option_key']])) {
-            $this->error->set("Tilmeldingsmuligheder er ikke en gyldig mulighed");
-        }
-        */
-        $validator->isString($var['description'], 'Beskrivelse er ikke gyldig', "<strong><em>", "allow_empty");
-        $validator->isString($var['subscribe_message'], "Bekræftelse på tilmelding er ikke udfyldt korrekt", '', "allow_empty");
-        //$validator->isString($var['unsubscribe_message'], "Frameldingsbesked er ikke udfyldt korrekt", '', "allow_empty");
+        $validator->isString($var['title'], 'Titel er ikke ufdyldt korrekt');
+        $validator->isString($var['sender_name'], 'Navn på afsender er ikke ufdyldt korrekt', '', 'allow_empty');
+        $validator->isEmail($var['reply_email'], 'E-mail er ikke en gyldig e-mail', 'allow_empty');
+        $validator->isString($var['description'], 'Beskrivelse er ikke gyldig', '<strong><em>', 'allow_empty');
+        $validator->isString($var['subscribe_message'], 'Bekræftelse på tilmelding er ikke udfyldt korrekt', '', 'allow_empty');
 
         if ($this->error->isError()) {
             return false;
