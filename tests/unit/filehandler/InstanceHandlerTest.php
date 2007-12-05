@@ -120,8 +120,8 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
             'crop_height' => 100);
 
         $filehandler->createInstance('square', $crop);
-        
-        $this->assertEquals(3644, filesize($filehandler->instance->get('file_path')));
+        // we add 10 bytes delta
+        $this->assertEquals(3644, filesize($filehandler->instance->get('file_path')), '', 10);
         $size = getimagesize($filehandler->instance->get('file_path')); 
         $this->assertEquals(75, $size[0]);
         $this->assertEquals(75, $size[1]);

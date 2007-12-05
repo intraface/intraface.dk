@@ -36,7 +36,7 @@ class FakeTemporaryFileFileHandler {
     public $tempdir_path;
     
     function __construct() {
-        $this->upload_path = PATH_UPLOAD.'1/';
+        $this->upload_path = PATH_UPLOAD.'1'. DIRECTORY_SEPARATOR;
         $this->tempdir_path = $this->upload_path.PATH_UPLOAD_TEMPORARY;
     }
     
@@ -78,13 +78,14 @@ class TemporaryFileTest extends PHPUnit_Framework_TestCase
     
     function testGetFilePath() {
         $tf = new TemporaryFile($this->createFileHandler(), 'file_name.jpg');
-        ereg('^'.PATH_UPLOAD.'1(/|\\\)'.PATH_UPLOAD_TEMPORARY.'([a-zA-Z0-9]{13})(/|\\\)file_name.jpg$', $tf->getFilePath(), $regs);
+        ereg('^'.PATH_UPLOAD.'1(/|\\\\)'.PATH_UPLOAD_TEMPORARY.'([a-zA-Z0-9]{13})(/|\\\\)file_name.jpg$', str_replace('\\', '\\\\', $tf->getFilePath()), $regs);
         $this->assertEquals(PATH_UPLOAD.'1'.$regs[1].PATH_UPLOAD_TEMPORARY.$regs[2].$regs[3].'file_name.jpg', $tf->getFilePath());   
     }
     
     function testGetFileDir() {
         $tf = new TemporaryFile($this->createFileHandler(), 'file_name.jpg');
-        ereg('^'.PATH_UPLOAD.'1(/|\\\)'.PATH_UPLOAD_TEMPORARY.'([a-zA-Z0-9]{13})(/|\\\)$', $tf->getFileDir(), $regs);
+        
+        ereg('^'.PATH_UPLOAD.'1(/|\\\\)'.PATH_UPLOAD_TEMPORARY.'([a-zA-Z0-9]{13})(/|\\\\)$', str_replace('\\', '\\\\', $tf->getFileDir()), $regs);
         $this->assertEquals(PATH_UPLOAD.'1'.$regs[1].PATH_UPLOAD_TEMPORARY.$regs[2].$regs[3], $tf->getFileDir());   
     }
     
