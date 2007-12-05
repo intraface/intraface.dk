@@ -1,6 +1,12 @@
 <?php
 
-
+/**
+ * TemporaryFile class returns a possible path to a temporary file
+ * 
+ * @author sune jensen
+ * @version 0.0.1
+ * @category filehandler
+ */
 
 class TemporaryFile {
     
@@ -40,7 +46,7 @@ class TemporaryFile {
         $this->file_name = $file_name;
         $this->file_path = NULL;
         $this->file_dir = NULL;
-       
+        
         if($this->file_name != NULL) {
             $this->load();
         } 
@@ -89,7 +95,6 @@ class TemporaryFile {
         $this->file_name = $this->parseFileName($this->file_name);
         $this->file_dir = $this->filehandler->tempdir_path.$unique_name.'/';
         $this->file_path = $this->filehandler->tempdir_path.$unique_name.'/'.$this->file_name;
-           
     }
     
     /**
