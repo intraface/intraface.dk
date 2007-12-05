@@ -74,7 +74,7 @@ $page->start('CMS');
             echo '<p class="message">Elementet er blevet slettet. <a href="'.basename($_SERVER['PHP_SELF']).'?undelete='.$_GET['delete'].'&amp;id='.$section->cmspage->get('id').'">Fortryd</a>.</p>';
         }
 
-        $html = new CMS_HTML_Parser();
+        $html = new CMS_HTML_Parser($translation);
         echo $html->parseElements($section->get('elements'));
     ?>
 
