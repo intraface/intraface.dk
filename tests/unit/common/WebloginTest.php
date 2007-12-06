@@ -9,10 +9,13 @@ class WebloginTest extends PHPUnit_Framework_TestCase {
     const SESSION_LOGIN = 'thissessionfirstlog';
     private $private_key;
 
-    function __construct() {
+    function setUp() {
+        
+        $db = MDB2::singleton(DB_DSN);
+        $db->exec('TRUNCATE intranet');
+        
         $this->private_key = md5('private' . date('d-m-Y H:i:s') . 'test');
         $this->public_key = md5('public' . date('d-m-Y H:i:s') . 'test');
-        $db = MDB2::factory(DB_DSN);
         $db->exec('INSERT INTO intranet SET private_key = ' . $db->quote($this->private_key, 'text') . ', public_key = ' . $db->quote($this->public_key, 'text'));
     }
 

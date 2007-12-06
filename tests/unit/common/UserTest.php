@@ -27,9 +27,8 @@ class UserTest extends PHPUnit_Framework_TestCase
         $u = new UserMaintenance();
         $u->update(array('email' => 'start@intraface.dk', 'password' => '123456', 'confirm_password' => '123456', 'disable' => 0));
         
-        // $i = new IntranetMaintenance();
-        // $i->update(array('name' => 'intraface', 'maintained_by_user_id'))
-        $db->query("INSERT INTO intranet SET name = 'intraface', date_changed = NOW()");
+        $i = new IntranetMaintenance();
+        $i->save(array('name' => 'intraface', 'identifier' => 'intraface'));
         
         $this->user = new User(1);
         

@@ -11,7 +11,12 @@ class Intranetmaintenance_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Intraface_Intranetmaintenance');
 
-        $suite->addTestSuite('ModuleMaintenanceTest');
+        $tests = array('ModuleMaintenance', 'IntranetMaintenance');
+
+        foreach ($tests AS $test) {
+            require_once $test . 'Test.php';
+            $suite->addTestSuite($test . 'Test');
+        }
 
         return $suite;
     }
