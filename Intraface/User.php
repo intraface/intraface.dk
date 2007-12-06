@@ -466,6 +466,7 @@ class User extends Standard
     {
 
         $input = safeToDb($input);
+        require_once 'Intraface/Validator.php';
         $validator = new Validator($this->error);
 
         $validator->isEmail($input["email"], "Ugyldig E-mail");
