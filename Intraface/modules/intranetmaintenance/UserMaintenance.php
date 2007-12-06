@@ -12,6 +12,8 @@
  *
  */
 
+require_once 'Intraface/User.php';
+
 class UserMaintenance extends User {
     
 
