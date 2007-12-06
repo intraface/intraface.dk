@@ -12,7 +12,7 @@ if(isset($_POST["submit"])) {
 	$address_value = $_POST;
 	$address_value["name"] = $_POST["address_name"];
 
-	if($intranet->save($_POST, $kernel->intranet->get('id'))) {
+	if($intranet->save($_POST) && $intranet->setMaintainedByUser($_POST['maintained_by_user_id'], $kernel->intranet->get('id'))) {
 		if($intranet->address->save($address_value)) {
 			header("Location: intranet.php?id=".$intranet->get('id'));
 			exit;

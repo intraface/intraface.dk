@@ -161,18 +161,13 @@ class IntranetMaintenance extends Intranet
      * 
      * @return boolean true on success or false.
      */
-    function validate($input, $current_intranet_id)
+    function validate($input)
     {
+        require_once 'Intraface/Validator.php';
         $validator = new Validator($this->error);
 
         $validator->isString($input["name"], "Navn skal være en streng", "", "");
-        if ($validator->isNumeric($input["maintained_by_user_id"], "Vedligeholder er ugyldig", "zero_or_greater")) {
-            $temp_user = new User($input["maintained_by_user_id"]);
-
-            if (!$temp_user->hasIntranetAccess($current_intranet_id)) {
-                $this->error->set("Ugyldig bruger som vedligeholder");
-            }
-        }
+        
         if ($this->error->isError()) {
             return false;
         }
@@ -189,23 +184,23 @@ class IntranetMaintenance extends Intranet
      * @param integer current_intranet_id the intranet id on the intranet from where the intranet is edited
      * @return boolean true on success
      */
-    function save($input, $current_intranet_id)
+    function save($input)
     {
         if (!is_array($input)) {
             trigger_error('input is not an array', E_USER_ERROR);
         }
         
-        settype($input['maintained_by_user_id'], 'integer');
-
-        if (!$this->validate($input, $current_intranet_id)) {
+        settype($input['name'], 'string');
+        settype($input['identifier'], 'string');
+        
+        if (!$this->validate($input)) {
             return false;
         }
 
-        $sql = "name = \"".$this->db->escape($input["name"])."\",
-            maintained_by_user_id = ".intval($input["maintained_by_user_id"])."";
+        $sql = "name = \"".$this->db->escape($input["name"], 'text')."\"";
 
         if (isset($input["identifier"])) {
-            $sql .= ", identifier = \"".$this->db->escape($input['identifier'])."\"";
+            $sql .= ", identifier = \"".$this->db->escape($input['identifier'], 'text')."\"";
         }
         if ($this->id == 0 || isset($input["generate_private_key"])) {
             
@@ -228,6 +223,41 @@ class IntranetMaintenance extends Intranet
             $this->db->query("UPDATE intranet SET ".$sql.", date_changed = NOW() WHERE id = ".intval($this->id));
             $this->load();
         }
+        return true;
+    }
+    
+    /**
+     * Saves who the intranet is maintained by
+     */
+    public function setMaintainedByUser($id, $current_intranet_id) 
+    {
+        if($this->id == 0) {
+            trigger_error('You need to save the intranet before you can set the maintainer', E_USER_ERROR);
+            return false;
+        }
+        
+        require_once 'Intraface/Validator.php';
+        $validator = new Validator($this->error);
+
+        if ($validator->isNumeric($id, "Maintainer is invalid", "greater_than_zero")) {
+            $temp_user = new User($id);
+
+            if (!$temp_user->hasIntranetAccess($current_intranet_id)) {
+                $this->error->set("Invalid user as maintainer");
+            }
+        }
+        if ($this->error->isError()) {
+            return false;
+        }
+        
+        $update = $this->db->query("UPDATE intranet SET maintained_by_user_id = ".intval($id).", date_changed = NOW() WHERE id = ".intval($this->id));
+        if(PEAR::isError($update)) {
+            trigger_error('Error in update: '.$update->getUserInfo(), E_USER_ERROR);
+            return false;
+        }
+        
+        $this->load();
+        
         return true;
     }
 
