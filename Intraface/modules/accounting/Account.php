@@ -15,8 +15,8 @@ require_once 'DB/Sql.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/Validator.php';
 
-class Account extends Standard {
-
+class Account extends Standard
+{
     var $id; // kontoid
     var $year; // object
     var $value; // holds values for account if loaded
@@ -66,7 +66,8 @@ class Account extends Standard {
      * @return void
      * @access public
      */
-    function Account($year, $account_id = 0) {
+    function __construct($year, $account_id = 0)
+    {
         if (empty($year) OR !is_object($year)) {
             trigger_error('Account::Account kræver objektet Year.', E_USER_ERROR);
             exit;
@@ -84,7 +85,6 @@ class Account extends Standard {
 
     }
 
-
     /**
      * Denne funktion bruges bl.a. under bogføringen, så man bare taster kontonummer
      * og så sættes den rigtige konto.
@@ -92,8 +92,8 @@ class Account extends Standard {
      * @param (integer) $account_number
      * @access public
      */
-
-    function factory($year, $account_number) {
+    public static function factory($year, $account_number)
+    {
         $account_number = (int)$account_number;
 
         if ($year->get('id') == 0) {
@@ -123,9 +123,8 @@ class Account extends Standard {
      * @return (integer) id
      * @access private
      */
-
-    function load() {
-
+    function load()
+    {
         if($this->year->get('id') == 0 || $this->id == 0) {
             $this->value['id'] = 0;
             $this->id = 0;
@@ -210,9 +209,8 @@ class Account extends Standard {
      *
      * @param $var (array) med oplysninger om konto
      */
-
-    function save($var) {
-
+    function save($var)
+    {
         $var = safeToDb($var);
 
         // bruges til sumkonti
@@ -254,8 +252,7 @@ class Account extends Standard {
         if ($this->id > 0) {
             $sql_type = "UPDATE accounting_account ";
             $sql_end = " WHERE id = " . $this->id;
-        }
-        else {
+        } else {
             $sql_type = "INSERT INTO accounting_account ";
             $sql_end = ", date_created=NOW()";
         }
@@ -301,7 +298,6 @@ class Account extends Standard {
      *
      * @access public
      */
-
     function savePrimosaldo($debet, $credit) {
         if ($this->id == 0) {
             return false;
@@ -339,7 +335,8 @@ class Account extends Standard {
      *
      * @return 1 on success
      */
-    function delete() {
+    function delete()
+    {
         if ($this->anyPosts()) {
             $this->error->set('Der er poster på kontoen for dette år, så du kan ikke slette den. Næste år kan du lade være med at bogføre på kontoen, og så kan du slette den.');
             return 0;
@@ -355,11 +352,9 @@ class Account extends Standard {
         return 1;
     }
 
-
     /*************************************************************************************
      * VALIDERINGSFUNKTIONER
      ************************************************************************************/
-
 
     /**
      * Metoden tjekker om kontoen har den rigtige type, så vi må bogføre på den.
@@ -367,7 +362,8 @@ class Account extends Standard {
      * @return 1 = yes; 0 = no
      * @access private
      */
-    function validForState() {
+    function validForState()
+    {
         if ($this->id > 0) {
             if ($this->get('type_key') == array_search('operating', $this->types) OR $this->get('type_key') == array_search('balance, asset', $this->types) OR $this->get('type_key') == array_search('balance, liability', $this->types)) {
                 return 1;
@@ -382,8 +378,8 @@ class Account extends Standard {
      * @see save()
      * @access private
      */
-
-    function isNumberFree($account_number) {
+    function isNumberFree($account_number)
+    {
         $account_number = (int)$account_number;
 
         $db = MDB2::singleton(DB_DSN);
@@ -404,19 +400,17 @@ class Account extends Standard {
         return false;
     }
 
-
-
     /*************************************************************************************
      * SALDOFUNKTIONER
      ************************************************************************************/
-
 
     /**
      * Public: Metoden returnerer primosaldoen for en konto
      *
      * @return (array) med debet, credit og total saldo
      */
-    function getPrimoSaldo() {
+    function getPrimoSaldo()
+    {
         $sql = "SELECT primosaldo_debet, primosaldo_credit
             FROM accounting_account
             WHERE year_id = " . $this->year->get('id') . "
@@ -457,7 +451,8 @@ class Account extends Standard {
      *
      *
      */
-    function getSaldo($type = 'stated', $date_from = '', $date_to = '') {
+    function getSaldo($type = 'stated', $date_from = '', $date_to = '')
+    {
         if (empty($date_from)) {
             $date_from = $this->year->get('from_date');
         }
@@ -554,8 +549,7 @@ class Account extends Standard {
 
             if ($type == 'stated') {
                 $sql .= ' AND post.stated = 1';
-            }
-            elseif ($type == 'draft') {
+            } elseif ($type == 'draft') {
                 $sql .= ' AND post.stated = 0';
             }
 
@@ -580,23 +574,20 @@ class Account extends Standard {
                 }
                 $this->value['saldo'] = $total;
                 $total_saldo = $total_saldo + $total;
-            }
-            else {
+            } else {
 
                 $db->query($sql);
                 if (!$db->nextRecord()) {
                     $this->value['debet'] = $primo['debet'];
                     $this->value['credit'] = $primo['credit'];
                     $this->value['saldo'] = $this->value['debet'] - $this->value['credit'];
-                }
-                else {
+                } else {
 
                     if ($type == 'draft') {
                         $this->value['debet_draft'] = $db->f('debet_total');
                         $this->value['credit_draft'] = $db->f('credit_total');
                         $this->value['saldo_draft'] = $this->value['debet_draft'] - $this->value['credit_draft'];
-                    }
-                    else {
+                    } else {
                         $this->value['debet'] = $primo['debet'] + $db->f('debet_total');
                         $this->value['credit'] = $primo['credit'] + $db->f('credit_total');
                         $this->value['saldo'] = $this->value['debet'] - $this->value['credit'];
@@ -710,7 +701,8 @@ class Account extends Standard {
         return $accounts;
     }
 
-    function anyAccounts() {
+    function anyAccounts()
+    {
         $db = new DB_Sql;
         $sql = "SELECT id
             FROM accounting_account
@@ -721,7 +713,8 @@ class Account extends Standard {
 
     }
 
-    function anyPosts() {
+    function anyPosts()
+    {
         $db = new DB_Sql;
         $db->query("SELECT
                 id
@@ -733,7 +726,8 @@ class Account extends Standard {
         return $db->numRows();
     }
 
-    function getPosts() {
+    function getPosts()
+    {
         $posts = array();
 
         if ($this->id == 0) {
@@ -757,22 +751,18 @@ class Account extends Standard {
                     ORDER BY date ASC, id ASC");
         $i = 1;
         while ($db2->nextRecord()) {
-                  $posts[$i]['id'] = $db2->f('id');
-                  $posts[$i]['dk_date'] = $db2->f('dk_date');
-                  $posts[$i]['date'] = $db2->f('date');
-                  $posts[$i]['voucher_id'] = $db2->f('voucher_id');
-                $voucher = new Voucher($this->year, $db2->f('voucher_id'));
-                  $posts[$i]['voucher_number'] = $voucher->get('number');
-                  $posts[$i]['text'] = $db2->f('text');
-                  $posts[$i]['debet'] = $db2->f('debet');
-                  $posts[$i]['credit'] = $db2->f('credit');
-                  $posts[$i]['stated'] = $db2->f('stated');
-                $posts[$i]['account_id'] = $db2->f('account_id');
-                /*
-                $account = new Account($this->year, $db2->f('account_id'));
-                $posts[$i]['account_number'] = $account->get('number');
-                */
-                $i++;
+            $posts[$i]['id'] = $db2->f('id');
+            $posts[$i]['dk_date'] = $db2->f('dk_date');
+            $posts[$i]['date'] = $db2->f('date');
+            $posts[$i]['voucher_id'] = $db2->f('voucher_id');
+            $voucher = new Voucher($this->year, $db2->f('voucher_id'));
+            $posts[$i]['voucher_number'] = $voucher->get('number');
+            $posts[$i]['text'] = $db2->f('text');
+            $posts[$i]['debet'] = $db2->f('debet');
+            $posts[$i]['credit'] = $db2->f('credit');
+            //$posts[$i]['stated'] = $db2->f('stated');
+            $posts[$i]['account_id'] = $db2->f('account_id');
+            $i++;
 
         } // while
         return $posts;
@@ -788,7 +778,8 @@ class Account extends Standard {
      *
      * @return float Vat amount
      */
-    function calculateVat($amount, $vat_percent) {
+    function calculateVat($amount, $vat_percent)
+    {
         $amount = (float)$amount;
         $vat_percent = (float)$vat_percent / 100;
 
