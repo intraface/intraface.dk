@@ -117,7 +117,7 @@ class AccountTest extends PHPUnit_Framework_TestCase {
 
         $saldo = $account->getPrimoSaldo();
 
-        $this->assertEquals($debet, $saldo['debet'], '', $this->delta);
+        $this->assertEquals('380071.97', $saldo['debet'], '', $this->delta);
         $this->assertEquals($credit, $saldo['credit'], '', $this->delta);
 
     }
@@ -136,7 +136,7 @@ class AccountTest extends PHPUnit_Framework_TestCase {
         );
         $id = $account->save($data);
 
-        // test will fail if primosaldo is not a double (not float)
+        // ATTENTION: test will fail if primosaldo is not a double (not float)
         $debet = '380071,97';
         $credit = '0';
         $this->assertTrue($account->savePrimoSaldo($debet, $credit));
@@ -148,7 +148,7 @@ class AccountTest extends PHPUnit_Framework_TestCase {
 
         $saldo = $account->getPrimoSaldo();
 
-        $this->assertEquals($debet_new, $saldo['debet'], '', $this->delta);
+        $this->assertEquals('380071.96', $saldo['debet'], '', $this->delta);
     }
 
 

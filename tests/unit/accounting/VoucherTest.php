@@ -38,15 +38,18 @@ class FakeAccountingYear {
     function get() { return 1; }
 }
 
-class VoucherTest extends PHPUnit_Framework_TestCase {
+class VoucherTest extends PHPUnit_Framework_TestCase
+{
 
     private $year;
 
-    function setUp() {
+    function setUp()
+    {
         $this->year = new FakeAccountingYear;
     }
 
-    function testVoucherCreate() {
+    function testVoucherCreate()
+    {
         // TODO needs to be updated
         $voucher = new Voucher($this->year);
         $this->assertFalse($voucher->get('id') > 0);
@@ -57,7 +60,8 @@ class VoucherTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($new_voucher->get('text') == 'Description - edited');
     }
 
-    function testVatCalculation() {
+    function testVatCalculation()
+    {
         $this->assertTrue((80 + Voucher::calculateVat(100, 25)) == 100);
         $this->assertTrue((100 + Voucher::calculateVat(110, 10)) == 110);
         $this->assertTrue(round((93.40 + Voucher::calculateVat(100.41, 7.5)), 2) == 100.41);
