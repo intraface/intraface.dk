@@ -27,16 +27,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         if($contact_object->save($contact)) {
 
             $appender = $contact_object->getKeywordAppender();
-            $string_appender = new Intraface_Keyword_StringAppender($contact_object->getKeyword(), $appender);
+            $string_appender = new Intraface_Keyword_StringAppender($contact_object->getKeywords(), $appender);
 
             $string_appender->addKeywordsByString($_POST['keyword']);
             $success++;
         }
         else {
-            $errors[$e]['line'] = $line;
+            $errors[$e]['line'] = $line+1; /* line starts at 0 */
             $errors[$e]['name'] = $contact['name'];
             $errors[$e]['email'] = $contact['email'];
             $errors[$e]['error'] = $contact_object->error;
+            $e++;
         }
     }
 
