@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $filehandler->upload->setSetting('file_accessibility', 'public');
             }
             if($id = $filehandler->upload->upload('new_append_file')) {
-                $append_file->save(array('file_handler_id' => $id));
+                $append_file->addFile(new FileHandler($kernel, $id));
             }
         }
 
