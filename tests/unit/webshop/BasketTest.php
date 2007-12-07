@@ -156,7 +156,7 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($items[0]['quantity'], $new_quantity);
     }
 
-    function testChangeBasketToZeroOnAStockProductWithNegativeValues()
+    function testBasketCanContainANegativeQuanityOfProducts()
     {
         $basket = $this->createBasket();
 
@@ -173,7 +173,7 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $basket->change($product_id, -1);
         $items = $basket->getItems();
 
-        $this->assertTrue(empty($items));
+        $this->assertEquals($items[0]['quantity'], -1);
 
     }
 
@@ -213,40 +213,40 @@ class BasketTest extends PHPUnit_Framework_TestCase
 
          $this->assertEquals(count($basket->getItems()), 0);
     }
-    
+
     function testSaveCustomerEan() {
         $basket = $this->createBasket();
-        
+
         $ean = '1234567890123';
-        
+
         $this->assertTrue($basket->saveCustomerEan($ean));
-        
+
         $this->assertEquals($basket->getCustomerEan(), array('customer_ean' => $ean));
     }
-    
+
     function testSaveCustomerCoupon() {
         $basket = $this->createBasket();
-        
+
         $coupon = '12345';
-        
+
         $this->assertTrue($basket->saveCustomerCoupon($coupon));
-        
+
         $this->assertEquals($basket->getCustomerCoupon(), array('customer_coupon' => $coupon));
     }
-    
+
     function testSaveCustomerComment() {
         $basket = $this->createBasket();
-        
+
         $comment = 'this is a comment';
-        
+
         $this->assertTrue($basket->saveCustomerComment($comment));
-        
+
         $this->assertEquals($basket->getCustomerComment(), array('customer_comment' => $comment));
     }
-    
+
     function testSaveAddressOnFullAddress() {
         $basket = $this->createBasket();
-        
+
         $address = array('name' => 'my name',
             'contactperson' => 'my contactperson name',
             'address' => 'my address',
@@ -256,19 +256,19 @@ class BasketTest extends PHPUnit_Framework_TestCase
             'cvr' => '12345678',
             'email' => 'email@intraface.dk',
             'phone' => '87654321');
-        
+
         $this->assertTrue($basket->saveAddress($address));
-        
+
         $this->assertEquals($address, $basket->getAddress());
     }
-    
-        function testSaveAddressOnIncompleteAddress() {
+
+    function testSaveAddressOnIncompleteAddress() {
         $basket = $this->createBasket();
-        
+
         $address = array('name' => 'my name',
             'address' => 'my address',
             'city' => 'my city');
-        
+
         $address_return = array('name' => 'my name',
             'contactperson' => '',
             'address' => 'my address',
@@ -278,9 +278,9 @@ class BasketTest extends PHPUnit_Framework_TestCase
             'cvr' => '',
             'email' => '',
             'phone' => '');
-        
+
         $this->assertTrue($basket->saveAddress($address));
-        
+
         $this->assertEquals($address_return, $basket->getAddress());
     }
 
