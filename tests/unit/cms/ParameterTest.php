@@ -51,6 +51,8 @@ class ParameterTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
+        $db = MDB2::factory(DB_DSN);
+        $db->exec('TRUNCATE cms_parameter');
         $this->parameter = $this->createParameter();
     }
 
