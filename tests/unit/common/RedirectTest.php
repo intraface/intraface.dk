@@ -58,7 +58,9 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         if (PEAR::isError($this->db)) {
             die($this->db->getUserInfo());
         }
-        $result = $this->db->exec('TRUNCATE ' . $this->table);
+        $result = $this->db->exec('TRUNCATE redirect');
+        $result = $this->db->exec('TRUNCATE redirect_parameter');
+        $result = $this->db->exec('TRUNCATE redirect_parameter_value');
         
         $_SERVER['SCRIPT_URI'] = 'http://example.php/from.php';
     }
