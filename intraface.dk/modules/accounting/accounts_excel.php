@@ -33,6 +33,7 @@ $format_italic->setSize(8);
 $format =& $workbook->addFormat();
 $format->setSize(8);
 
+$i = 0;
 $worksheet->write($i, 0, $kernel->intranet->get('name'), $format_bold);
 
 $i = 2;
