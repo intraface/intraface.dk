@@ -175,7 +175,7 @@ class Voucher extends Standard
 
     function saveInDaybook($var, $skip_draft = false)
     {
-        if (empty($var['invoice_number'])) $var['invoice_number'] = '';
+        //if (empty($var['invoice_number'])) $var['invoice_number'] = '';
         $var = safeToDb($var);
 
         $post_date = new Intraface_Date($var['date']);
@@ -253,7 +253,7 @@ class Voucher extends Standard
         $this->value['credit_account_id'] = $creditaccount->get('id');
         $this->value['credit_account_number'] = $creditaccount->get('number');
         $this->value['credit_account_name'] = $creditaccount->get('name');
-        $this->value['invoice_number'] = $var['invoice_number'];
+        //$this->value['invoice_number'] = $var['invoice_number'];
         $this->value['vat_off'] = $var['vat_off'];
         $this->value['saldo'] = 0;
 
@@ -314,7 +314,7 @@ class Voucher extends Standard
             $list[$i]['number'] = $db->f('number');
             $list[$i]['text'] = $db->f('text');
             $list[$i]['date_dk'] = $db->f('date_dk');
-            $list[$i]['invoice_number'] = $db->f('invoice_number');
+            //$list[$i]['invoice_number'] = $db->f('invoice_number');
             $i++;
         }
         return $list;
@@ -401,7 +401,6 @@ class Voucher extends Standard
      * @param $account_id (int)
      * @param $debet (float)
      * @param $credit (float)
-     * @param $invoice_number (string)
      *
      * @access private
      */
@@ -589,7 +588,7 @@ class Voucher extends Standard
             $list[$i]['debet'] = $db->f('debet');
             $list[$i]['credit'] = $db->f('credit');
             $list[$i]['voucher_number'] = $this->get('number');
-            $list[$i]['invoice_number'] = $this->get('invoice_number'); // vist depreciated
+            //$list[$i]['invoice_number'] = $this->get('invoice_number'); // vist depreciated
             $list[$i]['reference'] = $this->get('reference');
             $list[$i]['voucher_id'] = $this->get('id');
             $list[$i]['account_id'] = $db->f('account_id');
