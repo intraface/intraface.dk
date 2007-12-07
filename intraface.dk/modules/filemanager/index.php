@@ -96,8 +96,17 @@ $page = new Page($kernel);
 $page->start(safeToHtml($translation->get('file manager')));
 ?>
 
-
 <h1><?php echo safeToHtml($translation->get('file manager')); ?></h1>
+
+<?php
+/*
+ * Prepared to use Limiter!    
+if($kernel->intranet->hasModuleAccess('ModulePackage')) {
+	require_once 'Intraface/modules/modulepackage/Limiter.php';
+    $limiter = new ModulePackage_Limiter();
+}
+*/
+?>
 
 <ul class="options">
     <li><a href="upload.php" onclick="location.href='upload_multiple.php'; return false;"><?php echo safeToHtml($translation->get('upload file')); ?></a></li>
