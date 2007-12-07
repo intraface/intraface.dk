@@ -4,82 +4,40 @@ require('../../include_first.php');
 $module = $kernel->module('product');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-
-
-if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
-    $deleted = array();
-    if (!empty($_POST['selected']) AND is_array($_POST['selected'])) {
-        foreach ($_POST['selected'] AS $key=>$id) {
-            $product = new Product($kernel, intval($id));
-            if ($product->delete()) {
-                $deleted[] = $id;
+    if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
+        $deleted = array();
+        if (!empty($_POST['selected']) AND is_array($_POST['selected'])) {
+            foreach ($_POST['selected'] AS $key=>$id) {
+                $product = new Product($kernel, intval($id));
+                if ($product->delete()) {
+                    $deleted[] = $id;
+                }
+            }
+        }
+    } elseif (!empty($_POST['undelete'])) {
+        if (!empty($_POST['deleted']) AND is_string($_POST['deleted'])) {
+            $undelete = unserialize(base64_decode($_POST['deleted']));
+        } else {
+            trigger_error('could not undelete', E_USER_ERROR);
+        }
+        if (!empty($undelete) AND is_array($undelete)) {
+            foreach ($undelete AS $key=>$id) {
+                $product = new Product($kernel, intval($id));
+                if (!$product->undelete()) {
+                    // void
+                }
             }
         }
     }
 }
-elseif (!empty($_POST['undelete'])) {
-
-    if (!empty($_POST['deleted']) AND is_string($_POST['deleted'])) {
-        $undelete = unserialize(base64_decode($_POST['deleted']));
-    }
-    else {
-        trigger_error('could not undelete', E_USER_ERROR);
-    }
-    if (!empty($undelete) AND is_array($undelete)) {
-        foreach ($undelete AS $key=>$id) {
-            $product = new Product($kernel, intval($id));
-            if (!$product->undelete()) {
-            // void
-            }
-        }
-    }
-}
-/*
-
-    if (isset($_GET['delete']) AND is_numeric($_GET['delete'])) {
-        $product = new Product($kernel, $_GET['delete']);
-        if ($delete = $product->delete()) {
-        }
-        else {
-            trigger_error('Kunne ikke slettes');
-        }
-    }
-    elseif (isset($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
-        $product = new Product($kernel, $_GET['undelete']);
-        if ($product->undelete()) {
-        }
-    }
-
-*/
-}
-elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    /*
-    if (isset($_GET['lock']) AND is_numeric($_GET['lock'])) {
-        $product = new Product($kernel, $_GET['lock']);
-        $product->lock();
-    }
-    elseif (isset($_GET['unlock']) AND is_numeric($_GET['unlock'])) {
-        $product = new Product($kernel, $_GET['unlock']);
-        $product->unlock();
-    }
-    */
-
-}
-
-
-
-// hente liste med produkter - bør hentes med getList!
 
 $product = new Product($kernel);
 $product->createDBQuery();
 // $characters = $product->getCharacters();
 $keywords = $product->getKeywordAppender();
 
-
 // burde bruge query
 if(isset($_GET["search"]) || isset($_GET["keyword_id"])) {
-
     if(isset($_GET["search"])) {
         $product->dbquery->setFilter("search", $_GET["search"]);
     }
@@ -87,8 +45,7 @@ if(isset($_GET["search"]) || isset($_GET["keyword_id"])) {
     if(isset($_GET["keyword_id"])) {
         $product->dbquery->setKeyword($_GET["keyword_id"]);
     }
-}
-else {
+} else {
     $product->dbquery->useCharacter();
 }
 
