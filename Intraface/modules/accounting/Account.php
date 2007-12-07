@@ -761,7 +761,7 @@ class Account extends Standard
             $posts[$i]['debet'] = $db2->f('debet');
             $posts[$i]['credit'] = $db2->f('credit');
             //$posts[$i]['stated'] = $db2->f('stated');
-            $posts[$i]['account_id'] = $db2->f('account_id');
+            //$posts[$i]['account_id'] = $db2->f('account_id');
             $i++;
 
         } // while
