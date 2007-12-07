@@ -100,6 +100,8 @@ class CMS_Parameter
             $db->query("DELETE FROM cms_parameter WHERE belong_to_id = '".$this->object->get('id')."' AND parameter='".$parameter."' AND intranet_id = ".$this->object->kernel->intranet->get('id') . " AND type_key =" .$this->type_key);
         }
 
+        $this->load();
+
         return true;
     }
 
