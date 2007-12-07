@@ -32,7 +32,7 @@ class Intraface_Tools_ErrorList
 
         if(!empty($errors)) {
             foreach ($errors AS $error_string) {
-                if(!ereg("^([a-zA-Z]{3} [0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}) ([a-zA-Z0-9]+) \[([a-zA-Z0-9]+)\] ([a-zA-Z0-9]+): (.+) in ([][a-zA-Z0-9/\_.-]*) line ([][a-zA-Z0-9]*) \(Request: ([][a-zA-Z0-9/\._-]*)\)", $error_string, $params)) {
+                if(!ereg("^([a-zA-Z]{3} [0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}) ([a-zA-Z0-9]+) \[([a-zA-Z0-9]+)\] ([a-zA-Z0-9]+): (.+) in ([][a-zA-Z0-9/\_.-]*) line ([][a-zA-Z0-9]*) \(Request: ([][a-zA-Z0-9/\._%+&?-]*)\)", $error_string, $params)) {
                     $error['message'] = 'Unable to parse error line!';
                 }
 
