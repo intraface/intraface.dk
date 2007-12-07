@@ -7,22 +7,21 @@
  * @author   Lars Olesen <lars@legestue.net>
  * @version  @package-version@
  */
-
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/Setting.php';
 require_once 'Intraface/Intranet.php';
 require_once 'Intraface/Weblogin.php';
 require_once 'XML/RPC2/Server.php';
 require_once 'Intraface/modules/webshop/Webshop.php';
+require_once 'Intraface/modules/webshop/FeaturedProducts.php';
 
 class Intraface_XMLRPC_Shop_Server
 {
-
-    var $kernel;
-    var $webshop;
-    var $basket;
-    var $product;
-    var $credentials;
+    private $kernel;
+    private $webshop;
+    private $basket;
+    private $product;
+    private $credentials;
 
     /**
      * Gets a list with products
@@ -174,6 +173,31 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->_factoryWebshop();
 
+        $db =  MDB2::factory(DB_DSN);
+
+        if (PEAR::isError($db)) {
+            return $db->getMessage() . $db->getUserInfo();
+        }
+
+        $featured = new Intraface_Webshop_FeaturedProducts($this->kernel->intranet, $db);
+        $all = $featured->getAll();
+
+        $related_products = array();
+
+        foreach ($all as $row) {
+            $product = new Product($this->kernel);
+            $product->createDBQuery();
+            // 265
+            $product->dbquery->setFilter('keywords', array($row['keyword_id']));
+
+            $related_products[] = array(
+                'title' => $row['headline'],
+                'products' => $product->getList()
+            );
+
+        }
+
+        /*
         // nyheder
         $product = new Product($this->kernel);
         $product->createDBQuery();
@@ -195,7 +219,7 @@ class Intraface_XMLRPC_Shop_Server
             'title' => 'Tilbud',
             'products' => $product->getList()
         );
-
+        */
         return $related_products;
 
     }
