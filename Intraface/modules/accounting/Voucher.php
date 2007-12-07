@@ -10,40 +10,48 @@
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/modules/accounting/Account.php';
 
-class Voucher extends Standard {
-
-    var $id; // integer
-    var $year; // object
-    var $error; // object
-    var $value; // array
-    var $vatpercent; // float
-
+class Voucher extends Standard
+{
+    private $id; // integer
+    public $year; // object
+    public $error; // object
+    public $value; // array
+    private $vatpercent; // float
 
     /**
+     * Constructor
+     *
      * @param object  $year_object
      * @param integer $post_id (optional)
+     *
+     * @return void
      */
-    function Voucher($year_object, $post_id = 0) {
+    function __construct($year_object, $post_id = 0)
+    {
         if(!is_object($year_object)) {
             trigger_error('Klassen Voucher kræver objektet Year', E_USER_ERROR);
             exit;
         }
         $this->error = new Error;
-        $this->year = & $year_object;
+        $this->year = $year_object;
         $this->id = (int)$post_id;
         $this->vatpercent = $this->year->kernel->setting->get('intranet', 'vatpercent');
 
         if ($this->id > 0) {
             $this->load();
         }
-
     }
 
     /**
+     * Creates a voucher
+     *
      * @param object $year
      * @param string $voucher_number
+     *
+     * @return void
      */
-    function factory($year, $voucher_number) {
+    function factory($year, $voucher_number)
+    {
         if (!is_object($year)) {
             trigger_error('Voucher::factory must have year object', E_USER_ERROR);
         }
@@ -58,8 +66,8 @@ class Voucher extends Standard {
 
     }
 
-    function load() {
-
+    private function load()
+    {
         $sql = "SELECT
                     voucher.id AS id,
                     voucher.number,
@@ -84,14 +92,17 @@ class Voucher extends Standard {
         $this->value['date_dk'] = $db->f('date_dk');
 
         return 1;
-
     }
 
     /**
      * Valideringsfunktioner
+     *
+     * @param array $var Array to validate
+     *
+     * @return boolean
      */
-
-    function validate($var) {
+    function validate($var)
+    {
 
         $validator = new Validator($this->error);
         if (!empty($var['voucher_number'])) $validator->isNumeric($var['voucher_number'], 'Voucher er ikke et tal', 'allow_empty');
@@ -99,9 +110,9 @@ class Voucher extends Standard {
         $validator->isString($var['text'], 'Beskrivelsen skal være en tekststreng');
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
     }
 
     /**
@@ -114,8 +125,8 @@ class Voucher extends Standard {
      *
      * @return 0 = error; 1 = success
      */
-
-    function save($var) {
+    function save($var)
+    {
         if (empty($var['reference'])) $var['reference'] = '';
 
         $var = safeToDb($var);
@@ -134,8 +145,7 @@ class Voucher extends Standard {
         if (empty($this->id)) {
             $sql_type = "INSERT INTO";
             $sql_end = ", date_created = NOW()";
-        }
-        else {
+        } else {
             $sql_type = "UPDATE";
             $sql_end = " WHERE id = " . (int)$this->id;
         }
@@ -163,7 +173,8 @@ class Voucher extends Standard {
 
     }
 
-    function saveInDaybook($var, $skip_draft = false) {
+    function saveInDaybook($var, $skip_draft = false)
+    {
         if (empty($var['invoice_number'])) $var['invoice_number'] = '';
         $var = safeToDb($var);
 
@@ -184,8 +195,7 @@ class Voucher extends Standard {
 
         if (!$this->year->isYearOpen()) {
             $this->error->set('Dette år er ikke åbent til bogføring');
-        }
-        elseif (!$this->year->isDateInYear($post_date->get())) {
+        } elseif (!$this->year->isDateInYear($post_date->get())) {
             $this->error->set('Denne dato er ikke i det pågældende år');
         }
 
@@ -254,11 +264,11 @@ class Voucher extends Standard {
 
     }
 
-
     /**
      * @return boolean
      */
-    function delete() {
+    function delete()
+    {
         if ($this->id == 0) {
             return 0;
         }
@@ -272,11 +282,11 @@ class Voucher extends Standard {
         return 1;
     }
 
-
     /**
      * @return (array)
      */
-     function getList($filter = '') {
+     function getList($filter = '')
+     {
         $sql = "SELECT *, DATE_FORMAT(voucher.date, '%d-%m-%Y') AS date_dk
             FROM accounting_voucher voucher
             WHERE voucher.active = 1 AND voucher.year_id = ".$this->year->get('id')."
@@ -310,8 +320,6 @@ class Voucher extends Standard {
         return $list;
      }
 
-
-
     /**
      * Funktionen skal have et id.
      *
@@ -320,8 +328,8 @@ class Voucher extends Standard {
      *
      * @param $skip_draft (hvis kasssekladden skal springes over)
      */
-
-    function state($skip_draft = false) {
+    function state($skip_draft = false)
+    {
 
         #
         # Bogføring af almindeligt køb i Danmark
@@ -346,14 +354,11 @@ class Voucher extends Standard {
 
         if (is_array($buy_eu) AND is_array($buy_abroad)) {
             $buy_all_abroad = array_merge($buy_abroad, $buy_eu);
-        }
-        elseif (is_array($buy_eu)) {
+        } elseif (is_array($buy_eu)) {
             $buy_all_abroad = $buy_eu;
-        }
-        elseif (is_array($buy_abroad)) {
+        } elseif (is_array($buy_abroad)) {
             $buy_all_abroad = $buy_abroad;
         }
-
 
         $amount = $this->get('amount') * ($this->vatpercent / 100);
 
@@ -371,9 +376,8 @@ class Voucher extends Standard {
                 $credit->save($this->get('date'), $this->year->getSetting('vat_abroad_account_id'), 'Moms af varekøb i udland', 0, $amount, $skip_draft);
                 $debet = new Post($this);
                 $debet->save($this->get('date'), $this->year->getSetting('vat_in_account_id'), 'Moms af varekøb i udland', $amount, 0, $skip_draft);
-            }
-                # tilbageføring af moms hvis nødevndigt
-            elseif (is_array($buy_all_abroad) AND in_array($this->get('credit_account_id'), $buy_all_abroad)) {
+            } elseif (!empty($buy_all_abroad) AND is_array($buy_all_abroad) AND in_array($this->get('credit_account_id'), $buy_all_abroad)) {
+                // tilbageføring af moms hvis nødevndigt
                 // så skal beløbet ganges med momsprocenten og smides på moms af varekøb i udlandet
                 $debet = new Post($this);
                 $debet->save($this->get('date'), $this->year->getSetting('vat_abroad_account_id'), 'Tilbageført: Moms af varekøb i udland', $amount, 0, $skip_draft);
