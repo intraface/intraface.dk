@@ -6,14 +6,15 @@
  * @version	1.0
  *
  */
-class MainOrder Extends Main {
-
-    function MainOrder() {
-        $this->module_name = 'order'; // Navnet der vil stå i menuen
-        $this->menu_label = 'order'; // Navnet der vil stå i menuen
-        $this->show_menu = 0; // Skal modulet vises i menuen.
-        $this->active = 1; // Er modulet aktivt.
-        $this->menu_index = 64;
+class MainOrder extends Main
+{
+    function __construct()
+    {
+        $this->module_name     = 'order'; // Navnet der vil stå i menuen
+        $this->menu_label      = 'order'; // Navnet der vil stå i menuen
+        $this->show_menu       = 0; // Skal modulet vises i menuen.
+        $this->active          = 1; // Er modulet aktivt.
+        $this->menu_index      = 64;
         $this->frontpage_index = 52;
 
         $this->addFrontpageFile('include_front.php');
@@ -33,4 +34,3 @@ class MainOrder Extends Main {
 
     }
 }
-?>
