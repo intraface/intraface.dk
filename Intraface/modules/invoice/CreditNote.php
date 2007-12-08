@@ -6,35 +6,38 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
  */
-class CreditNote extends Debtor {
-
-    function CreditNote(& $kernel, $id = 0) {
+class CreditNote extends Debtor
+{
+    function __construct($kernel, $id = 0)
+    {
         parent::__construct($kernel, 'credit_note', $id);
     }
 
-    function setStatus($status) {
+    function setStatus($status)
+    {
 
         $return = parent::setStatus($status);
         if($status == "sent") {
             // Er den sendt, bliver den også låst
-            return Debtor::setStatus("executed");
-        }
-        else {
+            return parent::setStatus("executed");
+        } else {
             return $return;
         }
     }
 
-    function delete() {
+    function delete()
+    {
         if($this->get("where_from") == "invoice" && $this->get("where_from_id") != 0) {
-            $invoice = Debtor::factory($this->kernel, $this->get("where_from_id"));
+            $invoice = parent::factory($this->kernel, $this->get("where_from_id"));
         }
-        Debtor::delete();
+        parent::delete();
         if(isset($invoice)) {
             $invoice->updateStatus();
         }
     }
 
-    function creditnoteReadyForState() {
+    function creditnoteReadyForState()
+    {
         if (!$this->readyForState()) {
             return 0;
         }
@@ -57,7 +60,8 @@ class CreditNote extends Debtor {
         return 1;
     }
 
-    function state($year, $voucher_number, $voucher_date) {
+    function state($year, $voucher_number, $voucher_date)
+    {
         $validator = new Validator($this->error);
         if($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);

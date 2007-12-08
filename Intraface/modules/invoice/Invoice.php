@@ -7,15 +7,18 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 
-class Invoice extends Debtor {
+class Invoice extends Debtor
+{
 
     var $payment;
 
-    function __construct(& $kernel, $id = 0) {
+    function __construct(& $kernel, $id = 0)
+    {
         Debtor::__construct($kernel, 'invoice', $id);
     }
 
-    function setStatus($status) {
+    function setStatus($status)
+    {
 
         if($status == 'cancelled') {
             trigger_error('En faktura kan ikke annulleres!', E_USER_ERROR);
@@ -50,7 +53,8 @@ class Invoice extends Debtor {
         return $is_true;
     }
 
-    function anyDue($contact_id) {
+    function anyDue($contact_id)
+    {
         //$invoice = new Invoice($this->kernel);
         $db = new DB_Sql;
         $sql = "SELECT id FROM debtor
@@ -64,7 +68,8 @@ class Invoice extends Debtor {
      * Sørger for at sætte status til eller fra executed, ved registrering af betaling og kreditering
      */
 
-    function updateStatus() {
+    function updateStatus()
+    {
 
         $payment = $this->getPayments();
         // print($payment["total"].' == '.$this->get("total"));
@@ -81,7 +86,8 @@ class Invoice extends Debtor {
         return true;
     }
 
-    function getPayments($to_date = "") {
+    function getPayments($to_date = "")
+    {
 
         $this->payment = new Payment($this);
         $this->payment->dbquery->setFilter("to_date", $to_date);
@@ -105,17 +111,18 @@ class Invoice extends Debtor {
         return $payment;
     }
 
-    function delete() {
+    function delete()
+    {
         if($this->get("status") == "created") {
             return Debtor::delete();
-        }
-        else {
+        } else {
             $this->error->set('Fakturaen må ikke være sendt eller annulleret');
             return false;
         }
     }
 
-    function invoiceReadyForState() {
+    function invoiceReadyForState()
+    {
         if (!$this->readyForState()) {
             return 0;
         }
@@ -138,7 +145,8 @@ class Invoice extends Debtor {
         return 1;
     }
 
-    function state($year, $voucher_number, $voucher_date) {
+    function state($year, $voucher_number, $voucher_date)
+    {
         $validator = new Validator($this->error);
         if($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);
@@ -267,10 +275,10 @@ class Invoice extends Debtor {
      * @param  object  Visitor
      * @return void
      */
-    function accept(Visitor $visitor) {
+    function accept(Visitor $visitor)
+    {
         $visitor->visit($this);
     }
-
 
 }
 

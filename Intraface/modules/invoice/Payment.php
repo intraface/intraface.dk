@@ -7,7 +7,7 @@
  * @version: 1
  */
 
-Class Payment Extends Standard {
+Class Payment extends Standard {
 
     var $id;
     var $kernel;
@@ -18,35 +18,32 @@ Class Payment Extends Standard {
     var $dbquery;
     var $types;
 
-    function Payment(&$object, $id = 0) {
+    function __construct($object, $id = 0) {
 
         $object_class = strtolower(get_class($object));
 
         if($object_class == "kernel") {
-            $this->kernel = &$object;
+            $this->kernel      = $object;
             $this->payment_for = "";
-            $this->error = new Error;
+            $this->error       = new Error;
 
             $this->payment_for_type_id = 0;
             $this->payment_for_id = 0;
-        }
-        elseif($object_class == "invoice" || $object_class == "reminder") {
-            $this->kernel = &$object->kernel;
-            $this->payment_for = &$object;
-            $this->error = &$object->error;
+        } elseif($object_class == "invoice" || $object_class == "reminder") {
+            $this->kernel      = $object->kernel;
+            $this->payment_for = $object;
+            $this->error       = $object->error;
 
             $module = $this->kernel->getModule("invoice");
             if($object_class == "invoice") {
                 $this->payment_for_type_id = array_search("invoice", $module->getSetting("payment_for"));
-            }
-            else {
+            } else {
                 $this->payment_for_type_id = array_search("reminder", $module->getSetting("payment_for"));
             }
             $this->payment_for_id = $this->payment_for->get("id");
 
 
-        }
-        else {
+        } else {
             trigger_error("Ugyldig object som første parameter. Det skal være Kernel, Invoice eller CreditNote", E_USER_ERROR);
         }
         $this->id = intval($id);
@@ -54,7 +51,7 @@ Class Payment Extends Standard {
         $invoice_module = $this->kernel->getModule("invoice");
         $this->types = $invoice_module->getSetting("payment_type");
 
-       $this->dbquery = new DBQuery($this->kernel, "invoice_payment", "intranet_id = ".$this->kernel->intranet->get("id")." AND payment_for = ".$this->payment_for_type_id." AND payment_for_id = ".$this->payment_for_id);
+        $this->dbquery = new DBQuery($this->kernel, "invoice_payment", "intranet_id = ".$this->kernel->intranet->get("id")." AND payment_for = ".$this->payment_for_type_id." AND payment_for_id = ".$this->payment_for_id);
         $this->dbquery->useErrorObject($this->error);
 
         if($this->id != 0) {
@@ -62,8 +59,8 @@ Class Payment Extends Standard {
         }
     }
 
-    function update($input = "") {
-
+    function update($input = "")
+    {
         $already_paid = 0;
         $value = $this->getList();
         for($i = 0, $max = count($value); $i < $max; $i++) {
@@ -92,8 +89,7 @@ Class Payment Extends Standard {
 
             if (array_key_exists('description', $input)) {
                 $validator->isString($input["description"], "Fejl i beskrivelse", "", "allow_empty");
-            }
-            else {
+            } else {
                 $input['description'] = '';
             }
 
@@ -133,7 +129,8 @@ Class Payment Extends Standard {
         return true;
     }
 
-    function getList() {
+    function getList()
+    {
 
         $db = new DB_sql;
         $value = array(); // type(invoice,payment,credit_note,reminder), description, date, amount
@@ -162,8 +159,7 @@ Class Payment Extends Standard {
                     //$payment[$i]["dk_type"] = $invoice_module->getTranslation("deprication");
                     $payment[$i]["amount"] = $db->f("amount");
                     $payment[$i]["description"] = $db->f("description");
-                }
-                else {
+                } else {
                     $payment[$i]["type"] = $this->types[$db->f('type')];
                     // $payment[$i]["type"] = "payment";
                     //$payment[$i]["dk_type"] = $invoice_module->getTranslation("payment");
@@ -189,8 +185,7 @@ Class Payment Extends Standard {
             if(strtolower(get_class($this->payment_for)) == "invoice") {
                 $debtor->dbquery->setCondition("where_from = 5 AND where_from_id = ".$this->payment_for->get("id"));
                 $debtor->dbquery->setSorting("this_date");
-            }
-            else {
+            } else {
                 // Hvis det ikke er faktura, så er det en søgning på alle betalinger for kontakt.
                 trigger_error("Betalinger for en contact er ikke implementeret", E_USER_ERROR);
                 // Følgende kan vist kun være noget lort. contact_id og intranet_id
@@ -219,22 +214,19 @@ Class Payment Extends Standard {
 
             if(isset($payment[$pay]["payment_date"]) && $payment[$pay]["payment_date"] != "") {
                 $pay_date = strtotime($payment[$pay]["payment_date"]);
-            }
-            else {
+            } else {
                 $pay_date = 0;
             }
 
             if(isset($credit_note[$cre]['this_date']) && $credit_note[$cre]["this_date"] != "") {
                 $cre_date = strtotime($credit_note[$cre]["this_date"]);
-            }
-            else {
+            } else {
                 $cre_date = 0;
             }
 
             if($pay_date != 0) {
                 $next = "payment";
-            }
-            elseif($cre_date != 0) {
+            } elseif($cre_date != 0) {
                 $next = "credit_note";
             }
 
@@ -250,8 +242,7 @@ Class Payment Extends Standard {
                 $value[$i]["description"] = $payment[$pay]["description"];
                 $value[$i]["amount"] = $payment[$pay]["amount"];
                 $pay++;
-            }
-            elseif($next == "credit_note") {
+            } elseif($next == "credit_note") {
                 $value[$i]["type"] = "credit_note";
                 //$value[$i]["dk_type"] = $invoice_module->getTranslation("credit_note");
                 $value[$i]["id"] = $credit_note[$cre]["id"];
@@ -266,8 +257,6 @@ Class Payment Extends Standard {
                 $value[$i]["amount"] = $credit_note[$cre]["total"];
                 $cre++;
             }
-
-
 
             $i++;
         }

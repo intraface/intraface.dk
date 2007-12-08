@@ -6,14 +6,15 @@
  * @version	1.0
  *
  */
-class MainInvoice Extends Main {
-
-    function MainInvoice() {
-        $this->module_name = 'invoice'; // Navnet der vil stå i menuen
-        $this->menu_label = 'invoice'; // Navnet der vil stå i menuen
-        $this->show_menu = 0; // Skal modulet vises i menuen.
-        $this->active = 1; // Er modulet aktivt.
-        $this->menu_index = 66;
+class MainInvoice extends Main
+{
+    function __construct()
+    {
+        $this->module_name     = 'invoice'; // Navnet der vil stå i menuen
+        $this->menu_label      = 'invoice'; // Navnet der vil stå i menuen
+        $this->show_menu       = 0; // Skal modulet vises i menuen.
+        $this->active          = 1; // Er modulet aktivt.
+        $this->menu_index      = 66;
         $this->frontpage_index = 53;
 
         $this->addPreloadFile('Invoice.php');

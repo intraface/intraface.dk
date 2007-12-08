@@ -16,18 +16,18 @@ class Reminder extends Standard {
     var $dbquery;
 
 
-    function Reminder(&$kernel, $id = 0) {
+    function __construct($kernel, $id = 0) {
 
-        $this->id = intval($id);
-        $this->kernel = &$kernel;
-        $this->db = new Db_sql;
-        $this->error = new Error;
+        $this->id     = intval($id);
+        $this->kernel = $kernel;
+        $this->db     = new Db_sql;
+        $this->error  = new Error;
 
-        $debtorModule = $this->kernel->getModule('debtor');
-        $this->allowed_status = $debtorModule->getSetting('status');
+        $debtorModule          = $this->kernel->getModule('debtor');
+        $this->allowed_status  = $debtorModule->getSetting('status');
         $this->payment_methods = $debtorModule->getSetting('payment_method');
 
-       $this->dbquery = new DBQuery($this->kernel, "invoice_reminder", "intranet_id = ".$this->kernel->intranet->get("id")." AND active = 1");
+        $this->dbquery = new DBQuery($this->kernel, "invoice_reminder", "intranet_id = ".$this->kernel->intranet->get("id")." AND active = 1");
         $this->dbquery->useErrorObject($this->error);
 
         if($this->id) {
@@ -90,8 +90,7 @@ class Reminder extends Standard {
 
                 if($this->get("status") == "executed" || $this->get("status") == "cancelled") {
                     $this->value["locked"] = true;
-                }
-                else {
+                } else {
                     $this->value["locked"] = false;
                 }
 
@@ -103,47 +102,50 @@ class Reminder extends Standard {
                 }
                 $this->value["arrears"] = $this->value['total'] - $this->value['payment_total'];
 
-
-
-                return(true);
+                return true;
             }
         }
         $this->id = 0;
-        return(false);
+        return false;
     }
 
-    function loadItem($id = 0) {
-        $this->item = New ReminderItem($this, (int)$id);
+    function loadItem($id = 0)
+    {
+        $this->item = new ReminderItem($this, (int)$id);
     }
 
-    function getMaxNumber() {
+    function getMaxNumber()
+    {
         $this->db->query("SELECT MAX(number) AS max_number FROM invoice_reminder WHERE intranet_id = ".$this->kernel->intranet->get("id"));
         $this->db->nextRecord(); // Hvis der ikke er nogle poster er dette bare den første
         $number = $this->db->f("max_number") + 1;
         return($number);
     }
 
-    function isNumberFree($number) {
+    function isNumberFree($number)
+    {
         $sql = "SELECT id FROM invoice_reminder WHERE number = ".intval($number)." AND id != ".$this->id . " AND intranet_id = " . $this->kernel->intranet->get('id');
-    $this->db->query($sql);
+        $this->db->query($sql);
         if($this->db->nextRecord()) {
-        return(FALSE);
-        }
-        else {
-            return(TRUE);
+        return false;
+        } else {
+            return true;
         }
     }
 
-    function save($input) {
+    function save($input)
+    {
         if($this->get("locked") == 1) {
             return(false);
         }
 
-        if (!isset($input['payment_method_key'])) $input['payment_method_key'] = 0;
+        if (!isset($input['payment_method_key'])) {
+            $input['payment_method_key'] = 0;
+        }
 
         if(!is_array($input)) {
-          trigger_error("Input er ikke et array", E_USER_ERROR);
-      }
+            trigger_error("Input er ikke et array", E_USER_ERROR);
+        }
 
         $input = safeToDb($input);
 
@@ -160,16 +162,14 @@ class Reminder extends Standard {
             if(is_object($contact->address)) {
                 $contact_id = $contact->get("id");
               $contact_address_id = $contact->address->get("address_id");
-          }
-          else {
+          } else {
               $this->error->set("Ugyldig kunde");
           }
         }
 
         if($contact->get("type") == "corporation") {
             $validator->isNumeric($input["contact_person_id"], "Der er ikke angivet en kontaktperson");
-        }
-        else {
+        } else {
             $input["contact_person_id"] = 0;
         }
 
@@ -195,8 +195,7 @@ class Reminder extends Standard {
         settype($input['girocode'], 'string');
         if($input["payment_method_key"] == 3) {
             $validator->isString($input["girocode"], "Du skal udfylde girokode");
-        }
-        else {
+        } else {
             $validator->isString($input["girocode"], "Ugyldig girokode", "", "allow_empty");
         }
 
@@ -227,8 +226,7 @@ class Reminder extends Standard {
         if($this->id) {
             $this->db->query("UPDATE invoice_reminder SET ".$sql." WHERE id = ".$this->id);
             $this->load();
-        }
-        else {
+        } else {
             $this->db->query("INSERT INTO invoice_reminder SET ".$sql.", intranet_id = ".$this->kernel->intranet->get("id").", date_created = NOW(), user_id = ".$this->kernel->user->get("id"));
             $this->id = $this->db->insertedId();
             $this->load();
@@ -254,7 +252,8 @@ class Reminder extends Standard {
         return true;
     }
 
-    function delete() {
+    function delete()
+    {
         $this->db->query("UPDATE invoice_reminder SET active = 0 WHERE id = ".$this->id." AND intranet_id = ".$this->kernel->intranet->get("id"));
         $this->id = 0;
         $this->load();
@@ -272,24 +271,22 @@ class Reminder extends Standard {
     */
 
     /**
-   * Sætter status for rykkeren
-   *
-   * @return true / false
-   */
-  function setStatus($status) {
+     * Sætter status for rykkeren
+     *
+     * @return true / false
+     */
+    function setStatus($status) {
 
         if(is_string($status)) {
             $status_id = array_search($status, $this->allowed_status);
             if($status_id === false) {
                 trigger_error("Reminder->setStatus(): Ugyldig status (streng)", FATAL);
             }
-        }
-        else{
+        } else{
             $status_id = intval($status);
             if(isset($sthis->allowed_status[$status_id])) {
                 $status = $this->allowed_status[$status];
-            }
-            else {
+            } else {
                 trigger_error("Reminder->setStatus(): Ugyldig status (integer)", E_USER_ERROR);
             }
         }
@@ -318,13 +315,14 @@ class Reminder extends Standard {
                 trigger_error("Dette kan ikke lade sig gøre! Reminder->setStatus()", FATAL);
         }
 
-    $db = new Db_Sql;
-    $db->query("UPDATE invoice_reminder SET status = ".$status_id.", ".$sql."  WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
+        $db = new Db_Sql;
+        $db->query("UPDATE invoice_reminder SET status = ".$status_id.", ".$sql."  WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
         $this->load();
         return true;
     }
 
-    function updateStatus() {
+    function updateStatus()
+    {
 
         $payment = $this->getPayments();
         if($payment["total"] == $this->get("total") && $this->get("status") == "sent") {
@@ -333,7 +331,8 @@ class Reminder extends Standard {
         return true;
     }
 
-    function getPayments() {
+    function getPayments()
+    {
 
         $this->payment = new Payment($this);
         $payments = $this->payment->getList();
@@ -344,10 +343,9 @@ class Reminder extends Standard {
         for($i = 0, $max = count($payments); $i < $max; $i++) {
             if($payments[$i]["type"] == 'depriciation') {
                 $payment['depriciation'] += $payments[$i]["amount"];
-            }
-            else {
+            } else {
                 $payment['payment'] += $payments[$i]["amount"];
-            }    
+            }
         }
 
         $payment["total"] = $payment["payment"] + $payment["deprication"];
@@ -423,7 +421,8 @@ class Reminder extends Standard {
     }
     */
 
-    function getList() {
+    function getList()
+    {
         $this->dbquery->setSorting("number DESC, this_date DESC");
         $i = 0;
 
@@ -439,8 +438,7 @@ class Reminder extends Standard {
             $date = new Intraface_Date($this->dbquery->getFilter("from_date"));
             if($date->convert2db()) {
                 $this->dbquery->setCondition("this_date >= \"".$date->get()."\"");
-            }
-            else {
+            } else {
                 $this->error->set("Fra dato er ikke gyldig");
             }
         }
@@ -450,8 +448,7 @@ class Reminder extends Standard {
             $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
             if($date->convert2db()) {
                 $this->dbquery->setCondition("this_date <= \"".$date->get()."\"");
-            }
-            else {
+            } else {
                 $this->error->set("Til dato er ikke gyldig");
             }
         }
@@ -460,8 +457,7 @@ class Reminder extends Standard {
             if($this->dbquery->getFilter("status") == "-1") {
                 // Behøves ikke, den tager alle.
                 // $this->dbquery->setCondition("status >= 0");
-            }
-            elseif($this->dbquery->getFilter("status") == "-2") {
+            } elseif($this->dbquery->getFilter("status") == "-2") {
                 // Not executed = åbne
                 if($this->dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
@@ -469,14 +465,12 @@ class Reminder extends Standard {
                         // Poster der er executed eller cancelled efter dato, og sikring at executed stadig er det, da faktura kan sættes tilbage.
                         $this->dbquery->setCondition("(date_executed >= \"".$date->get()."\" AND status = 2) OR (date_cancelled >= \"".$date->get()."\") OR status < 2");
                     }
-                }
-                else {
+                } else {
                     // Hvis der ikke er nogen dato så tager vi alle dem som på nuværende tidspunkt har status under
                     $this->dbquery->setCondition("status < 2");
                 }
 
-            }
-            else {
+            } else {
                 switch($this->dbquery->getFilter("status")) {
                     case "0":
                         $to_date_field = "date_created";
@@ -500,8 +494,7 @@ class Reminder extends Standard {
                     if($date->convert2db()) {
                         $this->dbquery->setCondition($to_date_field." <= \"".$date->get()."\"");
                     }
-                }
-                else {
+                } else {
                     // tager dem som på nuværende tidspunkt har den angivet status
                     $this->dbquery->setCondition("status = ".intval($this->dbquery->getFilter("status")));
                 }
@@ -530,7 +523,8 @@ class Reminder extends Standard {
     /**
      * Bruges ift. kontakter
      */
-    function any($contact_id) {
+    function any($contact_id)
+    {
         $contact_id = (int)$contact_id;
         if ($contact_id == 0) {
             return 0;
@@ -541,7 +535,8 @@ class Reminder extends Standard {
         return $db->numRows();
     }
 
-    function isFilledIn() {
+    function isFilledIn()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id FROM invoice_reminder WHERE intranet_id = " . $this->kernel->intranet->get('id'));
         return $db->numRows();
@@ -762,7 +757,8 @@ class Reminder extends Standard {
 
     }
     */
-    function pdf($type = 'stream', $filename='') {
+    function pdf($type = 'stream', $filename='')
+    {
         if($this->get('id') == 0) {
             trigger_error('Cannot create pdf from debtor without valid id', E_USER_ERROR);
         }

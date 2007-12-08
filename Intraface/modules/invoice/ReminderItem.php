@@ -3,7 +3,8 @@
  * @package Intraface_Invoice
  */
 
-class ReminderItem extends Standard {
+class ReminderItem extends Standard
+{
     var $reminder;
     var $id;
     var $value;
@@ -11,20 +12,20 @@ class ReminderItem extends Standard {
     var $db;
     var $error;
 
-
-    function ReminderItem(&$reminder, $id = 0) {
-        $this->reminder = &$reminder;
-        $this->id  = (int)$id;
-        $this->db = new Db_sql;
-
-        $this->error = &$this->reminder->error;
+    function __construct($reminder, $id = 0)
+    {
+        $this->reminder = $reminder;
+        $this->id       = (int)$id;
+        $this->db       = new Db_sql;
+        $this->error    = $this->reminder->error;
 
         if($this->id) {
             $this->load();
         }
     }
 
-    function load() {
+    function load()
+    {
         die("mangler support for ubetalte reminders");
         if($this->id) {
             $this->db->query("SELECT * FROM invoice_reminder_item WHERE id = ".$this->id." AND invoice_reminder_id = ".$this->reminder->get("id"));
@@ -42,12 +43,14 @@ class ReminderItem extends Standard {
         return(0);
     }
 
-    function clear() {
+    function clear()
+    {
         $this->db->query("DELETE FROM invoice_reminder_item WHERE intranet_id = ".$this->reminder->kernel->intranet->get("id")." AND invoice_reminder_id = ".$this->reminder->get("id"));
         $this->db->query("DELETE FROM invoice_reminder_unpaid_reminder WHERE intranet_id = ".$this->reminder->kernel->intranet->get("id")." AND invoice_reminder_id = ".$this->reminder->get("id"));
     }
 
-    function save($input) {
+    function save($input)
+    {
 
         $input = safeToDb($input);
 
@@ -68,9 +71,8 @@ class ReminderItem extends Standard {
                 invoice_id = ".$invoice->get("id")."";
 
             $this->db->query("INSERT INTO invoice_reminder_item SET ".$sql);
-            return(true);
-        }
-        elseif(isset($input["reminder_id"])) {
+            return true;
+        } elseif(isset($input["reminder_id"])) {
 
             $reminder = new Reminder($this->reminder->kernel, (int)$input["reminder_id"]);
             if($reminder->get("id") == 0) {
@@ -78,7 +80,7 @@ class ReminderItem extends Standard {
             }
 
             if($this->error->isError()) {
-                return(false);
+                return false;
             }
 
             $sql = "intranet_id = ".$this->reminder->kernel->intranet->get("id").",
@@ -86,14 +88,14 @@ class ReminderItem extends Standard {
                 unpaid_invoice_reminder_id = ".$reminder->get("id")."";
 
             $this->db->query("INSERT INTO invoice_reminder_unpaid_reminder SET ".$sql);
-            return(true);
-        }
-        else {
+            return true;
+        } else {
             $this->error->set("Item er hverken defineret som faktura eller rykker i ReminderItem->save()");
         }
     }
 
-    function getList($type) {
+    function getList($type)
+    {
         $i = 0;
         $value = array();
 
@@ -115,8 +117,7 @@ class ReminderItem extends Standard {
 
                 $i++;
             }
-        }
-        elseif($type == "reminder") {
+        } elseif($type == "reminder") {
             $this->db->query("SELECT * FROM invoice_reminder_unpaid_reminder WHERE invoice_reminder_id = ".$this->reminder->get("id")." ORDER BY id");
             while($this->db->nextRecord()) {
                 $value[$i]["id"] = $this->db->f("id");
