@@ -2,15 +2,14 @@
 /**
  * @package Intraface_Quotation
  */
-
-class MainQuotation Extends Main {
-
-    function MainQuotation() {
-        $this->module_name = 'quotation'; // Navnet der vil stå i menuen
-        $this->menu_label = 'quotation'; // Navnet der vil stå i menuen
-        $this->show_menu = 0; // Skal modulet vises i menuen.
-        $this->active = 1; // Er modulet aktivt.
-        $this->menu_index = 62;
+class MainQuotation extends Main
+{
+    function __construct() {
+        $this->module_name     = 'quotation'; // Navnet der vil stå i menuen
+        $this->menu_label      = 'quotation'; // Navnet der vil stå i menuen
+        $this->show_menu       = 0; // Skal modulet vises i menuen.
+        $this->active          = 1; // Er modulet aktivt.
+        $this->menu_index      = 62;
         $this->frontpage_index = 51;
 
         $this->addPreloadFile('Quotation.php');
@@ -30,4 +29,3 @@ class MainQuotation Extends Main {
 
     }
 }
-?>

@@ -5,11 +5,9 @@
 class Quotation extends Debtor
 {
 
-    function Quotation($kernel, $id = 0)
+    function __construct($kernel, $id = 0)
     {
         parent::__construct($kernel, 'quotation', $id);
     }
 
 }
-
-?>
