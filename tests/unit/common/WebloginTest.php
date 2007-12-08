@@ -16,6 +16,7 @@ class WebloginTest extends PHPUnit_Framework_TestCase {
         
         $this->private_key = md5('private' . date('d-m-Y H:i:s') . 'test');
         $this->public_key = md5('public' . date('d-m-Y H:i:s') . 'test');
+        $db->exec('TRUNCATE intranet');
         $db->exec('INSERT INTO intranet SET private_key = ' . $db->quote($this->private_key, 'text') . ', public_key = ' . $db->quote($this->public_key, 'text'));
     }
 
