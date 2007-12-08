@@ -152,7 +152,7 @@ class Intraface_XMLRPC_CMS_Server {
             throw new XML_RPC2_FaultException('Du skal skrive en kode', -5);
         }
 
-        $this->kernel = new Kernel();
+        $this->kernel = new Kernel($credentials['session_id']);
         if (!$this->kernel->weblogin('private', $credentials['private_key'], $credentials['session_id'])) { // -2
             throw new XML_RPC2_FaultException('Du har ikke adgang til intranettet', -2);
         }
