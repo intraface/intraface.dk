@@ -7,7 +7,7 @@
  * @version @package-version@
  */
 
-$version = '1.5.0';
+$version = '1.6.0';
 $stability = 'stable';
 $notes = '
 * A lot of improvements
