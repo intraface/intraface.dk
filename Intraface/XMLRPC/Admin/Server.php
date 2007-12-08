@@ -32,7 +32,7 @@ class Intraface_XMLRPC_Admin_Server
         $db = MDB2::singleton(DB_DSN);
 
         if (PEAR::isError($db)) {
-            die('error accessing the database ' . $db->getUserInfo());
+            throw new XML_RPC2_Exception('error accessing the database ' . $db->getUserInfo());
         }
 
         $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
@@ -40,7 +40,7 @@ class Intraface_XMLRPC_Admin_Server
         $result = $db->query("SELECT id, name, private_key FROM intranet WHERE identifier = ".$db->quote($intranet_identifier, 'text')." AND identifier <> ''");
 
         if (PEAR::isError($result)) {
-            die('error querying the database ' . $result->getUserInfo());
+            throw new XML_RPC2_Exception('error querying the database ' . $result->getUserInfo());
         }
 
         if ($result->numRows() <> 1) {
