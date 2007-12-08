@@ -179,6 +179,8 @@ $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_XMLRPC', 'publi
 $pfm->addPackageDepWithChannel('required', ' IntrafacePublic_Shop_HTML', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Tools', 'public.intraface.dk', '0.1.0');
 
+// demo
+$pfm->addPackageDepWithChannel('required', 'konstrukt', 'public.intraface.dk', '0.4.0');
 
 
 foreach ($ignore AS $file) {
