@@ -16,7 +16,8 @@ class DBQuery extends Ilib_DBQuery {
     public function __construct($kernel, $table, $required_conditions = "") {
 
         parent::__construct($table, $required_conditions);
-        $this->createStore($kernel->getSessionId(), 'intranet_id = '.$kernel->intranet->get('id'));
+        $session_id = $kernel->getSessionId();
+        $this->createStore(md5($session_id), 'intranet_id = '.$kernel->intranet->get('id'));
         if(strtolower(get_class($kernel->user)) == 'user') {
             $this->setRowsPerPage($kernel->setting->get('user', 'rows_pr_page'));
         }
