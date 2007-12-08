@@ -13,6 +13,7 @@ require_once 'Intraface/Weblogin.php';
 require_once 'Intraface/Intranet.php';
 require_once 'Intraface/Main.php';
 require_once 'Intraface/Shared.php';
+require_once 'Intraface/Setting.php';
 
 class Kernel
 {
@@ -37,8 +38,7 @@ class Kernel
     {
         if ($session == NULL) {
             $this->_session = md5(uniqid(rand(), true));
-        }
-        else {
+        } else {
             $this->_session = $session;
         }
         $this->db = MDB2:: singleton(DB_DSN);
@@ -120,7 +120,7 @@ class Kernel
             if ($result->numRows() == 0) {
                 return ($intranet_id = false);
             }
-            $row = $result->fetchRow();
+            $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
             $intranet_id = $row['id'];
 
         } elseif ($type == 'public') {
@@ -132,7 +132,7 @@ class Kernel
             if ($result->numRows() == 0) {
                 return ($intranet_id = false);
             }
-            $row = $result->fetchRow();
+            $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
             $intranet_id = $row['id'];
 
         } else {
@@ -146,6 +146,8 @@ class Kernel
             $this->setting = $this->createSetting($this->intranet->get('id'));
         }
         $this->weblogin = $this->createWeblogin($session_id);
+
+        $this->_session = $session_id;
 
         return true;
 
