@@ -6,24 +6,22 @@
  * @package Intraface_CMS
  */
 
-class CMS_Navigation extends Standard {
+class CMS_Navigation extends Standard
+{
 
     var $cmspage;
     var $value;
 
-    function CMS_Navigation(&$cmspage) {
-        CMS_Navigation::__construct($cmspage);
-    }
-
-    function __construct(&$cmspage) {
+    function __construct($cmspage)
+    {
         if (!is_object($cmspage) OR strtolower(get_class($cmspage)) != 'cms_page') {
             trigger_error('CMS_Navigation::__construct needs CMS_Page', E_USER_ERROR);
         }
         $this->cmspage = & $cmspage;
     }
 
-
-    function build($level = 'toplevel') { // 'toplevel'
+    function build($level = 'toplevel')
+    { // 'toplevel'
 
         $i = 0;
         $this->cmspage->dbquery->clearAll();
@@ -36,8 +34,7 @@ class CMS_Navigation extends Standard {
         foreach ($pages AS $page) {
             if ($this->cmspage->get('id') == $page['id']) {
                 $output[$i]['current'] = 'yes';
-            }
-            else {
+            } else {
                 $output[$i]['current'] = 'no';
             }
 
@@ -51,4 +48,3 @@ class CMS_Navigation extends Standard {
         return $output;
     }
 }
-?>
