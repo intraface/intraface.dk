@@ -116,6 +116,7 @@ require_once 'ErrorHandler/Observer/File.php';
 function intrafaceBackendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
     if (!defined('ERROR_LOG')) define('ERROR_LOG', dirname(__FILE__) . '/../log/error.log');
     $errorhandler = new ErrorHandler;
+    if (!defined('ERROR_LEVEL_CONTINUE_SCRIPT')) define('ERROR_LEVEL_CONTINUE_SCRIPT', E_ALL);
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
     $errorhandler->addObserver(new ErrorHandler_Observer_Echo, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
     return $errorhandler->handleError($errno, $errstr, $errfile, $errline, $errcontext);
