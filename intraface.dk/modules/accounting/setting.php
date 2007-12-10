@@ -12,8 +12,11 @@ if (!empty($_POST)) {
 
     // måske noget validering
     $year->setSettings($_POST);
+    /**
+     * Seems to not be used anymore
     $kernel->setting->set('intranet', 'accounting.vat_period', $_POST['vat_period']);
-
+     */
+    
     header('Location: setting.php');
     exit;
 
