@@ -48,32 +48,32 @@ $page->start('Rediger kontaktperson');
 
 <fieldset>
 	<legend>Kontaktoplysninger</legend>
-  <input type="hidden" name="id" value="<?php echo $value['id']; ?>" />
-  <input type="hidden" name="contact_id" value="<?php echo $value['contact_id']; ?>" />
+  <input type="hidden" name="id" value="<?php if(isset($value['id'])) echo $value['id']; ?>" />
+  <input type="hidden" name="contact_id" value="<?php if(isset($value['contact_id'])) echo $value['contact_id']; ?>" />
 
 	<div class="formrow">
 	  <label for="company">Navn</label>
-    <input type="text" name="name" id="name" value="<?php echo $value['name']; ?>" />
+    <input type="text" name="name" id="name" value="<?php if(isset($value['name'])) echo $value['name']; ?>" />
 	</div>
 
 	<div class="formrow">
     <label for="email">E-mail</label>
-    <input type="text" name="email" id="email" value="<?php echo $value['email']; ?>" />
+    <input type="text" name="email" id="email" value="<?php if(isset($value['email'])) echo $value['email']; ?>" />
 	</div>
 	<div class="formrow">
     <label for="phone">Telefon</label>
-    <input type="text" name="phone" id="phone" value="<?php echo $value['phone']; ?>" />
+    <input type="text" name="phone" id="phone" value="<?php if(isset($value['phone'])) echo $value['phone']; ?>" />
 	</div>
 	<div class="formrow">
     <label for="mobile">Mobil</label>
-    <input type="text" name="mobile" id="mobile" value="<?php echo $value['mobile']; ?>" />
+    <input type="text" name="mobile" id="mobile" value="<?php if(isset($value['mobile'])) echo $value['mobile']; ?>" />
 	</div>
 
 </fieldset>
 
 	<div>
 		<input type="submit" name="submit" value="Gem" id="save" class="save" />
-		<a href="contact.php?id=<?php echo $value['contact_id'] ?>&from_person_id=<?php echo $value['id']; ?>#contactpersons">Fortryd</a>
+		<a href="contact.php?id=<?php if(isset($value['contact_id'])) echo $value['contact_id'] ?>&from_person_id=<?php if(isset($value['id'])) echo $value['id']; ?>#contactpersons">Fortryd</a>
 	</div>
 </form>
 
