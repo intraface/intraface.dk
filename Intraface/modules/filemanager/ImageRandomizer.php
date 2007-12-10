@@ -4,9 +4,9 @@ class ImageRandomizer
 {
     
     /**
-     * @var object $file_handler file handler
+     * @var object $file_manager file handler
      */
-    private $file_handler;
+    private $file_manager;
     
     /**
      * @var object $error
@@ -21,12 +21,12 @@ class ImageRandomizer
     /**
      * constructor
      * 
-     * @param object $file_handler file handler
+     * @param object $file_manager file handler
      * @param array $keywords array with keywords
      */
-    public function __construct($file_handler, $keywords) {
+    public function __construct($file_manager, $keywords) {
         
-        $this->file_handler = $file_handler;
+        $this->file_manager = $file_manager;
         
         require_once 'Ilib/Error.php';
         $this->error = new Ilib_Error;
@@ -41,7 +41,7 @@ class ImageRandomizer
         
         $keyword_ids = array();
         foreach($keywords AS $keyword) {
-            $keyword_object = new Keyword($this->file_handler);
+            $keyword_object = new Keyword($this->file_manager);
             /**
              * @todo: This is not really good, but the only way to identify keyword on name!
              */
@@ -82,7 +82,7 @@ class ImageRandomizer
     private function getDBQuery() 
     {
         require_once 'Ilib/DBQuery.php';
-        $dbquery = new Ilib_DBQuery("file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->file_handler->kernel->intranet->get('id'));
+        $dbquery = new Ilib_DBQuery("file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->file_manager->kernel->intranet->get('id'));
         $dbquery->useErrorObject($this->error);
         return $dbquery;
     }
@@ -91,13 +91,13 @@ class ImageRandomizer
     /**
      * return an file object with random image
      * 
-     * @return object file_handler with random image loaded
+     * @return object file_manager with random image loaded
      */
     public function getRandomImage() 
     {
         
         $key = rand(0, count($this->file_list)-1);
-        return new FileHandler($this->file_handler->kernel, $this->file_list[$key]);
+        return new FileHandler($this->file_manager->kernel, $this->file_list[$key]);
         
     }
   
