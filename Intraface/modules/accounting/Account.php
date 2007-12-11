@@ -216,6 +216,7 @@ class Account extends Standard
         // bruges til sumkonti
         if (empty($var['sum_to'])) { $var['sum_to'] = ''; }
         if (empty($var['sum_from'])) { $var['sum_from'] = ''; }
+        if (empty($var['vat_percent'])) { $var['vat_percent'] = 0; }
 
         if (!$this->isNumberFree($var['number'])) {
             $this->error->set('Du kan ikke bruge det samme kontonummer flere gange');
@@ -256,7 +257,7 @@ class Account extends Standard
             $sql_type = "INSERT INTO accounting_account ";
             $sql_end = ", date_created=NOW()";
         }
-
+        
         $sql = $sql_type . "SET
             number = '".(int)$var['number']."',
             intranet_id = ".$this->year->kernel->intranet->get('id').",
