@@ -7,7 +7,7 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
  */
-
+ob_start();
 require('../../common.php');
 
 // file should stop if no querystring
@@ -29,9 +29,7 @@ $filehandler_shared->includeFile('FileViewer.php');
 
 $filehandler = FileHandler::factory($kernel, $query_parts[2]);
 if(!is_object($filehandler) || $filehandler->get('id') == 0) {
-    
-    header('Status: 404 Not Found');
-    header('HTTP/1.0 404 Not Found');
+    header("HTTP/1.0 404 Not Found", true, '404');
     // trigger_error('Invalid image: '.$_SERVER['QUERY_STRING'], E_USER_WARNING);
     exit;
 }
