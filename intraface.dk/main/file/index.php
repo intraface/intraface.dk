@@ -29,7 +29,10 @@ $filehandler_shared->includeFile('FileViewer.php');
 
 $filehandler = FileHandler::factory($kernel, $query_parts[2]);
 if(!is_object($filehandler) || $filehandler->get('id') == 0) {
-    trigger_error('Invalid image: '.$_SERVER['QUERY_STRING'], E_USER_WARNING);
+    
+    header('Status: 404 Not Found');
+    header('HTTP/1.0 404 Not Found');
+    // trigger_error('Invalid image: '.$_SERVER['QUERY_STRING'], E_USER_WARNING);
     exit;
 }
 
