@@ -9,8 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     session_start();
     
-    require_once 'Payment/Html.php';
-    $payment_postprocess = Payment_Html::factory(INTRAFACE_ONLINEPAYMENT_PROVIDER, 'postprocess', INTRAFACE_ONLINEPAYMENT_MERCHANT);
+    require_once 'Ilib/Payment/Html.php';
+    $payment_postprocess = Ilib_Payment_Html::factory(INTRAFACE_ONLINEPAYMENT_PROVIDER, 'postprocess', INTRAFACE_ONLINEPAYMENT_MERCHANT);
     $payment_postprocess->set($_POST);
     $payment_postprocess->setCompareValue(array('md5secret' => INTRAFACE_ONLINEPAYMENT_MD5SECRET));
     
