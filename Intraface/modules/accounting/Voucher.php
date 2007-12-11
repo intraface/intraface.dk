@@ -370,7 +370,7 @@ class Voucher extends Standard
 
         if ($this->get('vat_off') == 0) {
             // gemme moms hvis det er nødvendigt
-            if (is_array($buy_all_abroad) AND in_array($this->get('debet_account_id'), $buy_all_abroad)) {
+            if (isset($buy_all_abroad) && is_array($buy_all_abroad) AND in_array($this->get('debet_account_id'), $buy_all_abroad)) {
                 // så skal beløbet ganges med momsprocenten og smides på moms af varekøb i udlandet
                 $credit = new Post($this);
                 $credit->save($this->get('date'), $this->year->getSetting('vat_abroad_account_id'), 'Moms af varekøb i udland', 0, $amount, $skip_draft);
