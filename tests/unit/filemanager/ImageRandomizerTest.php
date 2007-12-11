@@ -76,10 +76,10 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
         return $kernel;
     }
 
-    function createImageRandomizer()
+    function createImageRandomizer($keyword = array('test'))
     {
         
-        return new ImageRandomizer(new FileManager($this->createKernel()), array('test1'));
+        return new ImageRandomizer(new FileManager($this->createKernel()), $keyword);
     }
     
     function createImages() {
@@ -90,7 +90,13 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
             $appender = $filemanager->getKeywordAppender();
             
             $string_appender = new Intraface_Keyword_StringAppender(new Keyword($filemanager), $appender);
-            $string_appender->addKeywordsByString('test1, test2');
+            if(round($i/2) == $i/2) {
+                $t = 'A';
+            }
+            else {
+                $t = 'B';
+            }
+            $string_appender->addKeywordsByString('test, test_'.$t);
         }
     }
 
@@ -126,6 +132,20 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
         $file1 = $r->getRandomImage();
         $file2 = $r->getRandomImage();
         $this->assertNotEquals($file1->get('file_name'), $file2->get('file_name'));
+    }
+    
+    function testGetRandomImageDoesNotTriggerErrorOnDeletedKeyword() {
+        // first we add and delete a keyword used later
+        $filemanager = new FileManager($this->createKernel()); 
+        $keyword = new Keyword($filemanager);
+        $keyword->save(array('keyword' => 'test_A'));
+        $keyword->delete();
+        
+        $this->createImages();
+        $r = $this->createImageRandomizer(array('test', 'test_A'));
+        $file = $r->getRandomImage();
+        $this->assertEquals('FileHandler', get_class($file));
+                
     }
 
 }
