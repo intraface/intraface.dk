@@ -30,12 +30,11 @@ $filehandler_shared->includeFile('FileViewer.php');
 $filehandler = FileHandler::factory($kernel, $query_parts[2]);
 if(!is_object($filehandler) || $filehandler->get('id') == 0) {
     
-    require_once 'HTTP/Header.php';
-    $h = new HTTP_Header;
-    $h->sendStatusCode(404);
+    // require_once 'HTTP/Header.php';
+    // $h = new HTTP_Header;
+    // $h->sendStatusCode(404);
     
-    // header('HTTP/1.1 404 Not Found');
-    // header('HTTP/1.0 404 Not Found');
+    header('HTTP/1.0 404 Not Found');
     // header('Status: 404 Not Found');
     // print_r(headers_list());
     // trigger_error('Invalid image: '.$_SERVER['QUERY_STRING'], E_USER_WARNING);
