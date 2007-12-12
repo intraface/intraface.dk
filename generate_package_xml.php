@@ -157,7 +157,7 @@ $pfm->addPackageDepWithChannel('required', 'Markdown', 'pear.michelf.com', '1.0.
 
 $pfm->addPackageDepWithChannel('required', 'SmartyPants', 'pear.michelf.com', '1.5.0');
 $pfm->addPackageDepWithChannel('required', 'phpFlickr', 'public.intraface.dk', '1.6.1');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_HTML', 'public.intraface.dk', '0.1.3');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_HTML', 'public.intraface.dk', '0.1.4');
 
 // debtor
 $pfm->addPackageDepWithChannel('required', 'Document_Cpdf', 'public.intraface.dk', '0.0.1');
