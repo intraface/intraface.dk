@@ -32,6 +32,8 @@ class FakeProductIntranet {
 
 class FakeProductKernel {
     public $intranet;
+    public $user;
+    public $setting;
     function useShared() {}
 }
 
@@ -43,6 +45,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $this->kernel = new Kernel();
         $this->kernel->user = new FakeProductUser;
         $this->kernel->intranet = new FakeProductIntranet;
+        $this->kernel->setting = new FakeProductIntranet;
         $this->kernel->module('product', 1);
 
         $db = MDB2::factory(DB_DSN);
@@ -275,5 +278,22 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $newproduct->get('number'));
         $this->assertEquals('Test (kopi)', $newproduct->get('name'));
     }
+
+    function testIsFilledInReturnsZeroWhenNoProductsHasBeenCreated()
+    {
+        $product = $this->createProductObject();
+        $this->assertEquals(0, $product->isFilledIn());
+    }
+
+    function testSetRelatedProductReturnsTrueOnSuccessAndOneProductIsReturned()
+    {
+        $product = $this->createNewProduct();
+        $product_to_relate = $this->createNewProduct();
+
+        $this->assertTrue($product->setRelatedProduct($product_to_relate->getId()));
+
+        $this->assertEquals(1, count($product->getRelatedProducts()));
+    }
+
+
 }
-?>

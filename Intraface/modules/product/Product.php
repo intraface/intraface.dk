@@ -534,7 +534,7 @@ class Product extends Standard
      *
      * @return boolean
      */
-    public function setRelatedProduct($id, $status)
+    public function setRelatedProduct($id, $status = 'relate')
     {
         if (empty($status)) $status = 'remove';
 
