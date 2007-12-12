@@ -128,6 +128,9 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_Error', 'public.intraface.dk', 
 $pfm->addPackageDepWithChannel('required', 'Ilib_Redirect', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Validator', 'public.intraface.dk', '0.0.2');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html', 'public.intraface.dk', '0.0.1');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html_Provider_Quickpay', 'public.intraface.dk', '0.0.1');
+
 
 // other intraface 3_Party packages
 $pfm->addPackageDepWithChannel('required', 'DB_Sql', 'public.intraface.dk', '0.0.1');
