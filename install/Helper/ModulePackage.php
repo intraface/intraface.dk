@@ -41,6 +41,26 @@ class Install_Helper_ModulePackage
         
     }
     
+    public function addModulePackageExperingWithinAMonthForAlternativIntranet() {
+        
+        require_once 'Intraface/Intranet.php';
+        $intranet = new Intranet(2);
+        
+        require_once 'Intraface/modules/modulepackage/Manager.php';
+        $manager = new Intraface_ModulePackage_Manager($intranet);
+        
+        require_once 'Intraface/modules/modulepackage/ModulePackage.php';
+        $modulepackage = new Intraface_ModulePackage(1); // free cms
+        
+        $action = $manager->add($modulepackage, date('Y-m-d', strtotime('+14 days')));
+        $action->execute($intranet);
+        
+        require_once 'Intraface/modules/modulepackage/AccessUpdate.php';
+        $access_update = new Intraface_ModulePackage_AccessUpdate(); 
+        $access_update->run(2);
+        
+    } 
+    
 }
 
 ?>
