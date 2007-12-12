@@ -16,6 +16,10 @@ class CMS_FileList extends CMS_Element {
 
     function load_element() {
         $this->value['filelist_select_method'] = $this->parameter->get('filelist_select_method');
+        $this->value['caption'] = $this->parameter->get('caption');
+        /*
+
+        
         /*
 
         if (!$this->parameter->get('chosen_files')) {
