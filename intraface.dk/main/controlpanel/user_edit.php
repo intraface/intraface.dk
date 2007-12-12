@@ -11,6 +11,7 @@ if(!empty($_POST)) {
 	$value = $_POST;
 	$address_value = $_POST;
 	$address_value['name'] = $_POST['address_name'];
+    $address_value['email'] = $_POST['address_email'];
 
 	// hvis man ændrer e-mail skal man have en e-mail som en sikkerhedsforanstaltning
 	// på den gamle e-mail
@@ -75,7 +76,7 @@ $page->start(safeToHtml($translation->get('edit user')));
 	</div>
 	<div class="formrow">
 		<label for="address_email"><?php echo safeToHtml($translation->get('e-mail', 'address')); ?></label>
-		<input type="text" name="address_email" id="address_email" value="<?php if (!empty($address_value["email"])) echo safeToHtml($address_value["email"]); ?>" disabled="disabled" />
+		<input type="text" name="address_email" id="address_email" value="<?php if (!empty($address_value["email"])) echo safeToHtml($address_value["email"]); ?>" />
 	</div>
 	<div class="formrow">
 		<label for="website"><?php echo safeToHtml($translation->get('website', 'address')); ?></label>

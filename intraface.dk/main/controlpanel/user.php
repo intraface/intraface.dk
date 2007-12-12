@@ -19,9 +19,17 @@ $page->start(safeToHtml($translation->get('user settings')));
 	<li><a href="user_change_password.php"><?php echo $translation->get('change password'); ?></a></li>
 </ul>
 
+<table class="vcard">
+    <caption><?php echo safeToHtml($translation->get('information about user')); ?></caption>
+    <tbody>
+    <tr>
+        <th><?php echo safeToHtml($translation->get('e-mail for login', 'address')); ?></th>
+        <td><span class="email"><?php if (!empty($value["email"])) echo safeToHtml($value["email"]); ?></span></td>
+    </tr>
+</table>
 
 <table class="vcard">
-	<caption><?php echo safeToHtml($translation->get('information about user')); ?></caption>
+	<caption><?php echo safeToHtml($translation->get('user contact information for intranet').' '.$kernel->intranet->get('name')); ?></caption>
 	<tbody>
 	<tr>
 		<th><?php echo safeToHtml($translation->get('name', 'address')); ?></th>
@@ -29,7 +37,7 @@ $page->start(safeToHtml($translation->get('user settings')));
 	</tr>
 	<tr>
 		<th><?php echo safeToHtml($translation->get('e-mail', 'address')); ?></th>
-		<td><span class="email"><?php if (!empty($value["email"])) echo safeToHtml($value["email"]); ?></span> (<?php echo safeToHtml($translation->get('your e-mail is also your username')); ?>)</td>
+		<td><span class="email"><?php if (!empty($address_value["email"])) echo safeToHtml($address_value["email"]); ?></span></td>
 	</tr>
 
 	<tr>
