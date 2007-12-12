@@ -15,7 +15,7 @@ require_once 'NewsletterSubscriber.php';
 
 class Newsletter extends Standard
 {
-    private $list; //object
+    public $list; //object
     public $value = array();
     private $id;
     public $error;
