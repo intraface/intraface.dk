@@ -1,0 +1,109 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testFrontpageNoticeOnExperingIntranet</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testFrontpageNoticeOnExperingIntranet</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=administration,webshop,contact,product,debtor,order,invoice,onlinepayment&helper_function=ModulePackage:loadPackages,IntranetMaintenance:createAlternativeIntranet,ModulePackage:addModulePackageExperingWithinAMonthForAlternativIntranet&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=change intranet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>intranet_2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='change']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=dashboard</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>you have modules that expire within a month! click here to extend the modules now to keep the functionality of your intranet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=you have modules that expire within a month! click here to extend the modules now to keep the functionality of your intranet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=choose</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>extend package</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Sune Jensen</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>address</td>
+	<td>test</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>postcode</td>
+	<td>1200</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>city</td>
+	<td>Test</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>email</td>
+	<td>start@intraface.dk</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>accept_conditions</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=dashboard</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>you have modules that expire within a month! click here to extend the modules now to keep the functionality of your intranet</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testEditUserDetails</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testEditUserDetails</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=control panel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=user</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>email</td>
+	<td>sune@intraface.dk</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>address_name</td>
+	<td>Sune Jensen</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>address</td>
+	<td>Jens Baggesens Vej 42, 3. th</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>postcode</td>
+	<td>8210</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>city</td>
+	<td>Århus V</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>country</td>
+	<td>Danmark</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>address_email</td>
+	<td>test@intraface.dk</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>website</td>
+	<td>www.intraface.dk</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>phone</td>
+	<td>12345678</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>sune@intraface.dk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Sune Jensen</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>test@intraface.dk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Jens Baggesens Vej 42, 3. th</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>8210 Århus V</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Danmark</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>12345678</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>www.intraface.dk</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
