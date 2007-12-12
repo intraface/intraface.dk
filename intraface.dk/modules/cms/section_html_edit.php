@@ -151,8 +151,8 @@ elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
 
     if(isset($_GET['delete_gallery_append_file_id'])) {
 
-        $append_file = new AppendFile($kernel, 'cms_element_gallery', $element->get('id'), (int)$_GET['delete_gallery_append_file_id']);
-        $append_file->delete();
+        $append_file = new AppendFile($kernel, 'cms_element_gallery', $element->get('id'));
+        $append_file->delete((int)$_GET['delete_gallery_append_file_id']);
 
 
         $element->load();
@@ -162,8 +162,8 @@ elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
 
     if(isset($_GET['delete_filelist_append_file_id'])) {
 
-        $append_file = new AppendFile($kernel, 'cms_element_filelist', $element->get('id'), (int)$_GET['delete_filelist_append_file_id']);
-        $append_file->delete();
+        $append_file = new AppendFile($kernel, 'cms_element_filelist', $element->get('id'));
+        $append_file->delete((int)$_GET['delete_filelist_append_file_id']);
 
         $element->load();
         $value = $element->get();
