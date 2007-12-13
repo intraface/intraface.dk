@@ -1,16 +1,26 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>020CreateUserAndAddExistingUser</title>
+<title>testCreateUserAndAddExistingUser</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">020CreateUserAndAddExistingUser</td></tr>
+<tr><td rowspan="1" colspan="3">testCreateUserAndAddExistingUser</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/modules/intranetmaintenance/</td>
+	<td>/install/reset-staging-server.php?modules=intranetmaintenance&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=intranetmaintenance</td>
 	<td></td>
 </tr>
 <tr>
@@ -160,7 +170,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Add</td>
+	<td>link=add</td>
 	<td></td>
 </tr>
 <tr>
