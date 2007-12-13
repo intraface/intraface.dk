@@ -165,7 +165,7 @@ $page->start(safeToHtml($translation->get('pages')));
 			<a href="<?php echo $p['url']; ?>" target="_blank"><?php echo safeToHtml($translation->get('show page', 'common')); ?></a>
 		<?php endif; ?>
 		</td>
-		<td class="options"><a class="edit" href="page_edit.php?id=<?php echo $p['id']; ?>">Ret</a>
+		<td class="options"><a class="edit" href="page_edit.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a>
 		<a class="delete" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo $p['id']; ?>"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a></td>
 	</tr>
 <?php endforeach; ?>
