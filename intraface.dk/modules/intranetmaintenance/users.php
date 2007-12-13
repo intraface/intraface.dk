@@ -87,7 +87,7 @@ $page->start();
 		?>
 		<tr>
 			<?php if($add_user): ?>
-			<td><a href="users.php?add_user_id=<?php print($users[$i]["id"]); ?>"><?php echo $translation->get('Add'); ?></a></td>
+			<td><a href="users.php?add_user_id=<?php print($users[$i]["id"]); ?>"><?php echo $translation->get('add'); ?></a></td>
 			<?php endif; ?>
 			<?php
 			if($users[$i]["name"] == '') {
