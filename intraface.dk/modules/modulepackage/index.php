@@ -33,9 +33,9 @@ if(isset($_GET['unsubscribe_id']) && intval($_GET['unsubscribe_id']) != 0) {
 $translation = $kernel->getTranslation('modulepackage');
 
 $page = new Page($kernel);
-$page->start(safeToHtml($translation->get('account')));
+$page->start(safeToHtml($translation->get('your account')));
 ?>
-<h1><?php echo safeToHtml($translation->get('account')); ?></h1>
+<h1><?php echo safeToHtml($translation->get('your account')); ?></h1>
 
 <?php if(isset($modulepackagemanager)) $modulepackagemanager->error->view(); ?>
 
