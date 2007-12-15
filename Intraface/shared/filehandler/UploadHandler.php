@@ -204,7 +204,7 @@ class UploadHandler extends Standard
             $this->file_handler->error->set("error in file - not allowed mime_type (".$prop['ext'].", ".$prop['type'].")");
             return false;
         }
-        
+
         // @todo: we have a problem here because csv files have the same mime type as exe files!
 
         if($mime_type['allow_user_upload'] == 0) {
@@ -230,7 +230,7 @@ class UploadHandler extends Standard
         if($upload_type == 'do_not_save') {
             // $tmp_server_file_name = date("U").$this->file_handler->kernel->randomKey(10).".".$mime_type['extension'];
             $tmp_server_file = $this->file_handler->createTemporaryFile($prop['real']);
-            
+
             $file->setName($tmp_server_file->getFileName());
 
             /*
@@ -269,8 +269,10 @@ class UploadHandler extends Standard
 
             if($this->upload_setting['add_keyword'] != '' && strtolower(get_class($this->file_handler)) == 'filemanager') {
                 $this->file_handler->load();
-                $this->file_handler->getKeywords();
-                $this->file_handler->keywords->addKeywordsByString($this->upload_setting['add_keyword']);
+                $keyword = $this->file_handler->getKeywords();
+                $appender = $this->file_handler->getKeywordAppender();
+                $string_appender = new Intraface_Keyword_StringAppender($keyword, $appender);
+                $string_appender->addKeywordsByString($this->upload_setting['add_keyword']);
             }
 
             return $id;
