@@ -26,7 +26,7 @@ class IntranetMaintenance extends Intranet
 
     /**
      * Constructor
-     * 
+     *
      * @param integer intranet_id to be updated
      *
      */
@@ -44,7 +44,7 @@ class IntranetMaintenance extends Intranet
 
     /**
      * created dbquery
-     * 
+     *
      * @param object $kernel The kernel object
      * @return object DBQuery
      */
@@ -55,7 +55,7 @@ class IntranetMaintenance extends Intranet
 
     /**
      * flushes the intranets access.
-     * 
+     *
      * @return boolean true on success
      */
     public function flushAccess()
@@ -70,7 +70,7 @@ class IntranetMaintenance extends Intranet
 
     /**
      * Set acces to a module
-     * 
+     *
      * @param mixed module_id either name or id on object
      * @return integer Creater than zero on success (the number of permission rows added)
      */
@@ -113,7 +113,7 @@ class IntranetMaintenance extends Intranet
 
     /**
      * Removes the intranets access to a module
-     * 
+     *
      * @param mixed module_id either name or id on module
      * @return boolean true on success
      */
@@ -155,10 +155,10 @@ class IntranetMaintenance extends Intranet
 
     /**
      * validate the intranet input
-     * 
+     *
      * @param array $input array with basic information (name, maintainer) on the intranet
      * @param integer current_intranet_id the id on the intranet which modifies another intranet
-     * 
+     *
      * @return boolean true on success or false.
      */
     function validate($input)
@@ -166,8 +166,12 @@ class IntranetMaintenance extends Intranet
         require_once 'Intraface/Validator.php';
         $validator = new Validator($this->error);
 
-        $validator->isString($input["name"], "Navn skal være en streng", "", "");
-        
+        $validator->isString($input['name'], 'Navn skal være en streng', '', '');
+
+        if (!$this->identifierIsUnique($input['identifier'])) {
+            $this->error->set('identifier is not unique');
+        }
+
         if ($this->error->isError()) {
             return false;
         }
@@ -179,7 +183,7 @@ class IntranetMaintenance extends Intranet
      * Saves basic information the intranet
      * This method will only update a few parameters in the intranet.
      * Please notive that the address is not saved through here.
-     * 
+     *
      * @param array $input the information to save
      * @param integer current_intranet_id the intranet id on the intranet from where the intranet is edited
      * @return boolean true on success
@@ -189,10 +193,10 @@ class IntranetMaintenance extends Intranet
         if (!is_array($input)) {
             trigger_error('input is not an array', E_USER_ERROR);
         }
-        
+
         settype($input['name'], 'string');
         settype($input['identifier'], 'string');
-        
+
         if (!$this->validate($input)) {
             return false;
         }
@@ -203,7 +207,7 @@ class IntranetMaintenance extends Intranet
             $sql .= ", identifier = \"".$this->db->escape($input['identifier'], 'text')."\"";
         }
         if ($this->id == 0 || isset($input["generate_private_key"])) {
-            
+
             $sql .= ", private_key = \"".$this->getRandomKeyGenerator(50)->generate()."\"";
         }
 
@@ -225,17 +229,17 @@ class IntranetMaintenance extends Intranet
         }
         return true;
     }
-    
+
     /**
      * Saves who the intranet is maintained by
      */
-    public function setMaintainedByUser($id, $current_intranet_id) 
+    public function setMaintainedByUser($id, $current_intranet_id)
     {
         if($this->id == 0) {
             trigger_error('You need to save the intranet before you can set the maintainer', E_USER_ERROR);
             return false;
         }
-        
+
         require_once 'Intraface/Validator.php';
         $validator = new Validator($this->error);
 
@@ -249,22 +253,22 @@ class IntranetMaintenance extends Intranet
         if ($this->error->isError()) {
             return false;
         }
-        
+
         $update = $this->db->query("UPDATE intranet SET maintained_by_user_id = ".intval($id).", date_changed = NOW() WHERE id = ".intval($this->id));
         if(PEAR::isError($update)) {
             trigger_error('Error in update: '.$update->getUserInfo(), E_USER_ERROR);
             return false;
         }
-        
+
         $this->load();
-        
+
         return true;
     }
 
     /**
      * Returns a list of intranets
      * The output can be modified with DBQuery.
-     * 
+     *
      * @return array with intranets
      */
     public function getList()
@@ -306,7 +310,7 @@ class IntranetMaintenance extends Intranet
 
     /**
      * Sets the contact for the intranet
-     * 
+     *
      * @param integer $contact_id the id of the contact
      * @return boolean true on success
      */
@@ -315,16 +319,27 @@ class IntranetMaintenance extends Intranet
         $this->db->query("UPDATE intranet SET contact_id = ".intval($contact_id)." WHERE id = " . intval($this->id));
         return true;
     }
-    
+
     /**
      * returns the RandomKeyGenerator
-     * 
+     *
      * @param integer $length the length of the generated key
      * @return object RandomKeyGenerator
      */
-    private function getRandomKeyGenerator($length) {
+    private function getRandomKeyGenerator($length)
+    {
         require_once 'Ilib/RandomKeyGenerator.php';
         return new Ilib_RandomKeyGenerator($length);
     }
+
+    private function identifierIsUnique($identifier)
+    {
+        $result = $this->db->query("SELECT identifier FROM intranet WHERE identifier = ".$this->db->quote($identifier, 'text')." AND id <> " . intval($this->id));
+        if ($result->numRows() > 1) {
+            return false;
+        }
+        return true;
+
+    }
 }
-?>
+
