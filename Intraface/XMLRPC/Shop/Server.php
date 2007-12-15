@@ -367,7 +367,9 @@ class Intraface_XMLRPC_Shop_Server
             $values['description'] = 'Onlineshop';
         }
 
+
         $values = $this->utf8Decode($values);
+
         if (!$order_id = $this->webshop->placeOrder($values)) {
             throw new XML_RPC2_FaultException('order could not be placed. It returned the following error: ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
         }
@@ -655,7 +657,7 @@ class Intraface_XMLRPC_Shop_Server
         if (!is_object($this->kernel->intranet)) { // -2
             throw new XML_RPC2_FaultException('could not create intranet', -2);
         }
-    $this->credentials = $credentials;
+        $this->credentials = $credentials;
         return true;
     }
 
@@ -678,15 +680,12 @@ class Intraface_XMLRPC_Shop_Server
     {
         if(is_array($values)) {
             return array_map('utf8_decode', $values);
-        }
-        elseif(is_string($values)) {
+        } elseif(is_string($values)) {
             return utf8_decode($values);
-        }
-        else {
+        } else {
             return $values;
         }
 
     }
 
 }
-?>
