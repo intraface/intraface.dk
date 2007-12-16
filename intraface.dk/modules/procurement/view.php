@@ -48,7 +48,7 @@ if(isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
     }
 }
 
-# tilføj bilag med redirect til filemanager
+// tilføj bilag med redirect til filemanager
 if(isset($_POST['append_file_choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
     $redirect = new Redirect($kernel);
     $module_filemanager = $kernel->useModule('filemanager');
@@ -59,14 +59,14 @@ if(isset($_POST['append_file_choose_file']) && $kernel->user->hasModuleAccess('f
     exit;
 }
 
-# upload billag
+// upload billag
 if(isset($_POST['append_file_submit'])) {
     if(isset($_FILES['new_append_file'])) {
 
         $filehandler->createUpload();
         $filehandler->upload->setSetting('max_file_size', '2000000');
         if($id = $filehandler->upload->upload('new_append_file')) {
-            $append_file->save(array('file_handler_id' => $id));
+            $append_file->addFile(new FileHandler($kernel, $id));
         }
     }
 }
