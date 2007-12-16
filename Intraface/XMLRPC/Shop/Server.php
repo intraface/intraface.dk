@@ -367,11 +367,10 @@ class Intraface_XMLRPC_Shop_Server
             $values['description'] = 'Onlineshop';
         }
 
-
         $values = $this->utf8Decode($values);
 
         if (!$order_id = $this->webshop->placeOrder($values)) {
-            throw new XML_RPC2_FaultException('order could not be placed. It returned the following error: ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
+            throw new XML_RPC2_FaultException('order could not be placed. It returned the following error: ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
         }
 
         return $order_id;
@@ -402,17 +401,14 @@ class Intraface_XMLRPC_Shop_Server
 
         if(isset($values['payment_id']) && intval($values['payment_id']) > 0) {
            $onlinepayment = OnlinePayment::factory($this->kernel, 'id', intval($values['payment_id']));
-        }
-        else {
+        } else {
             $onlinepayment = OnlinePayment::factory($this->kernel);
         }
 
-
         if (!$payment_id = $onlinepayment->save($values)) {
             // this is probably a little to hard reaction.
-            throw new XML_RPC2_FaultException('Onlinebetaling kunne ikke blive gemt' . strtolower(implode(', ', $onlinepayment->error->message)), -4);
+            throw new XML_RPC2_FaultException('Onlinebetaling kunne ikke blive gemt' . strtolower(implode(', ', $onlinepayment->error->getMessage())), -4);
         }
-
 
         return $payment_id;
     }
@@ -443,7 +439,7 @@ class Intraface_XMLRPC_Shop_Server
 
         if (!$payment_id = $onlinepayment->create()) {
             // this is probably a little to hard reaction
-            throw new XML_RPC2_FaultException('onlinepayment could not be created' . strtolower(implode(', ', $onlinepayment->error->message)), -4);
+            throw new XML_RPC2_FaultException('onlinepayment could not be created' . strtolower(implode(', ', $onlinepayment->error->getMessage())), -4);
         }
 
         return $payment_id;
@@ -470,7 +466,7 @@ class Intraface_XMLRPC_Shop_Server
         $values = $this->utf8Decode($values);
 
         if (!$this->webshop->basket->saveAddress($values)) {
-            throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
+            throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
         }
 
         return true;
@@ -508,7 +504,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $customer_coupon = $this->utf8Decode($customer_coupon);
         if (!$this->webshop->basket->saveCustomerCoupon($customer_coupon)) {
-            throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
+            throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
         }
 
         return true;
@@ -547,7 +543,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $customer_ean = $this->utf8Decode($customer_ean);
         if (!$this->webshop->basket->saveCustomerEan($customer_ean)) {
-            throw new XML_RPC2_FaultException('ean could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
+            throw new XML_RPC2_FaultException('ean could not be saved ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
         }
 
         return true;
@@ -586,7 +582,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $customer_comment = $this->utf8Decode($customer_comment);
         if (!$this->webshop->basket->saveCustomerComment($customer_comment)) {
-            throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->message)), -4);
+            throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
         }
 
         return true;
