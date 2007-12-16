@@ -127,8 +127,7 @@ class Webshop
                     }
                 }
             }
-        }
-        else {
+        } else {
             $this->contact = new Contact($this->kernel);
             $contact_person_id = 0;
 
@@ -243,7 +242,6 @@ class Webshop
      */
     public function placeOrder($input)
     {
-
         if(!$order_id = $this->createOrder($input)) {
             $this->error->set('unable to create the order');
             return false;
