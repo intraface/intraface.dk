@@ -34,7 +34,7 @@ $page->start('Regnskab');
 
 <h1>Rediger bilag #<?php echo safeToHtml($voucher->get('number')); ?> på <?php echo safeToHtml($year->get('label')); ?></h1>
 
-<?php $voucher->error->view(); ?>
+<?php echo $voucher->error->view(); ?>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
 
