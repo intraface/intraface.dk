@@ -347,7 +347,8 @@ class VatPeriod extends Standard {
             'description' => 'Momsafregning ' . $this->get('date_start_dk') . ' til ' . $this->get('date_end_dk'),
             'belong_to'=>'vat',
             'belong_to_id'=>$this->get('id')))) {
-            $voucher_file->error->view();
+            // $voucher_file->error->view();
+            $this->error->merge($voucher_file->error->getMessage());
             $this->error->set('Filen blev ikke overflyttet');
         }
 
