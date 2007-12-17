@@ -24,7 +24,7 @@ $page->start('Nyhedsbrevslister');
 	<li><a class="new" href="list_edit.php">Opret liste</a></li>
 </ul>
 
-<?php if (is_object($list->error)) $list->error->view(); ?>
+<?php if (is_object($list->error)) echo $list->error->view(); ?>
 
 <?php if (count($lists) == 0): ?>
 <p>Der er ikke oprettet nogen lister.</p>

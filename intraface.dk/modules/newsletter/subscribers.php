@@ -66,7 +66,7 @@ $page->start('Modtagere');
 
 </ul>
 
-<?php $subscriber->error->view(); ?>
+<?php echo $subscriber->error->view(); ?>
 
 <?php if (count($subscribers) == 0): ?>
 	<p>Der er ikke tilføjet nogen modtager endnu.</p>

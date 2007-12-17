@@ -30,7 +30,7 @@ $page->start('Breve');
 
 </ul>
 
-<?php $letter->error->view(); ?>
+<?php echo $letter->error->view(); ?>
 
 <?php if (count($letters) == 0): ?>
 	<p>Der er ikke oprettet nogen breve endnu.</p>
