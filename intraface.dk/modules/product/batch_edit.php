@@ -23,7 +23,7 @@ if (!empty($_POST)) {
 
             $product->keywords->addKeywordsByString($_POST['keywords'][$key]);
         }
-        $product->error->view();
+        echo $product->error->view();
     }
 
     header('Location: index.php?use_stored=true');

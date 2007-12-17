@@ -63,7 +63,7 @@ $page->start('Overfør billeder');
 
 
 <?php if ($setting_is_ok AND !$transfer_ok) { ?>
-  <?php if (is_object($error)) $error->view(); ?>
+  <?php if (is_object($error)) echo $error->view(); ?>
   <p><a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=transfer">Overfør billeder</a></p>
 <?php } elseif ($setting_is_ok AND $transfer_ok) {?>
 	<p>Billederne er overført</p>

@@ -38,7 +38,7 @@ $page->start("Lager regulering");
 
 <p>#<?php print($product_object->get('number').' '.$product_object->get('name')); ?></p>
 
-<?php $product_object->error->view(); ?>
+<?php echo $product_object->error->view(); ?>
 
 <form method="POST" action="stock_regulation.php">
 <fieldset>
