@@ -70,7 +70,7 @@ else { ?>
 </ul>
 <?php } ?>
 
-<?php $email->error->view(); ?>
+<?php echo $email->error->view(); ?>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
 	<input type="hidden" value="<?php echo $value['id']; ?>" name="id" />
