@@ -102,6 +102,7 @@ $pfm->addReplacement('intraface.php', 'pear-config', '@data-dir@', 'data_dir');
 
 $pfm->clearDeps();
 $pfm->setPhpDep('5.2.0');
+// there is a PEAR 1.6.2 now
 $pfm->setPearinstallerDep('1.5.0');
 
 // installer
@@ -113,14 +114,15 @@ $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.1');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Driver_mysql', 'pear.php.net', '1.4.1');
 $pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '2.0.0');
 $pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTranslation', 'public.intraface.dk', '0.1.1');
-$pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.9.11');
+$pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.9.13');
+// there is a Validate 0.8.1 now!
 $pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.7.0');
 $pfm->addPackageDepWithChannel('required', 'HTTP_Upload', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.3');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Debug_ExplainQueries', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
-$pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.intraface.dk', '0.0.2');
+$pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.intraface.dk', '0.0.3');
 
 // Ilib
 $pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.0.1');
@@ -173,6 +175,7 @@ $pfm->addPackageDepWithChannel('required', 'Validate_Finance_CreditCard', 'pear.
 
 
 // accounting
+// There is a OLE 0.6.0 now!
 $pfm->addPackageDepWithChannel('required', 'OLE', 'pear.php.net', '0.5.0');
 $pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php.net', '0.9.1');
 
