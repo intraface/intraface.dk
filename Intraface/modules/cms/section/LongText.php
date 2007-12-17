@@ -82,8 +82,19 @@ class CMS_Section_LongText extends CMS_Section {
     function save_section($var) {
         if (empty($var['text'])) $var['text'] = '';
         // only used until we change encoding to utf8
+        
+        $purifier_cache_dir = PATH_CACHE.'htmlpurifier/';
+        if(!is_dir($purifier_cache_dir)) {
+            mkdir($purifier_cache_dir);
+            if(!is_dir($purifier_cache_dir)) {
+                trigger_error('Unable to create HTML Purifier cache dir!', E_USER_ERROR);
+                exit;
+            }
+        }
+        
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Core', 'Encoding', 'ISO-8859-1');
+        $config->set('Cache', 'SerializerPath', $purifier_cache_dir);
 
         // allowing attributes
 
@@ -91,7 +102,7 @@ class CMS_Section_LongText extends CMS_Section {
         $this->allowed_tags[] = 'p';
 
         $config->set('HTML', 'AllowedElements', $this->allowed_tags);
-        if (!in_array('a', $this->allowed_tags)) {
+        if (in_array('a', $this->allowed_tags)) {
             $config->set('HTML', 'AllowedAttributes', array('a.href'));
         }
 
