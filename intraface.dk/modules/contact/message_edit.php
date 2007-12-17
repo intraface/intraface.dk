@@ -45,7 +45,7 @@ $page->start("Rediger besked");
 
 <?php // echo $contact->infoHeader(); ?>
 
-<?php $contact->message->error->view(); ?>
+<?php echo $contact->message->error->view(); ?>
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 

@@ -77,7 +77,7 @@ $page->start(safeToHtml($translation->get('contact information') . ' ' .$contact
 
     <h1>#<?php echo safeToHtmL($value['number']); ?> <?php echo safeToHtml($address['name']); ?></h1>
 
-    <?php $contact->error->view(); ?>
+    <?php echo $contact->error->view(); ?>
 
     <ul class="options">
         <li><a href="contact_edit.php?id=<?php print($contact->get("id")); ?>"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a></li>
