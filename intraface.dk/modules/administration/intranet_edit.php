@@ -47,8 +47,9 @@ if(isset($_POST['submit']) || isset($_POST['choose_file'])) {
 	}
 
 	if($intranet->update($values)) {
-		$values['name'] = $_POST['address_name'];
-		if($intranet->address->save($values)) {
+		$address_values = $_POST;
+        $address_values['name'] = $_POST['address_name'];
+		if($intranet->address->validate($address_values) && $intranet->address->save($address_values)) {
 			if(isset($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
 				$module_filemanager = $kernel->useModule('filemanager');
 				$redirect = Redirect::factory($kernel, 'go');
@@ -80,6 +81,7 @@ $page->start(safeToHtml($translation->get('edit intranet')));
 <h1><?php echo safeToHtml($translation->get('edit intranet')); ?></h1>
 
 <?php echo $intranet->error->view(); ?>
+<?php echo $intranet->address->error->view(); ?>
 <?php if(isset($filehandler)) echo $filehandler->error->view(); ?>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post" enctype="multipart/form-data">
