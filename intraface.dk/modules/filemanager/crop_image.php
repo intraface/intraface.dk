@@ -87,7 +87,7 @@ $page->start($translation->get('crop image').' '.$filemanager->get('file_name'))
       
 </ul>
 
-<?php $filemanager->error->view(); ?>
+<?php echo $filemanager->error->view(); ?>
 
 <fieldset>
     <legend><?php echo safeToHtml($translation->get('cropping')); ?></legend>

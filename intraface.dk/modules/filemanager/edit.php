@@ -39,7 +39,7 @@ $page->start(safeToHtml($translation->get('edit file')));
 
 <h1><?php echo safeToHtml($translation->get('edit file')); ?></h1>
 
-<?php $filemanager->error->view(); ?>
+<?php echo $filemanager->error->view(); ?>
 
 <form action="edit.php" method="POST" enctype="multipart/form-data">
 <fieldset>

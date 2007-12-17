@@ -32,7 +32,7 @@ $page->start();
 
 <h1>Importer filer</h1>
 
-<?php $filemanager->error->view(); ?>
+<?php echo $filemanager->error->view(); ?>
 
 <p>Importere fra <?php print($file_dir); ?></p>
 

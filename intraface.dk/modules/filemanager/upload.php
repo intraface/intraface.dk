@@ -30,7 +30,7 @@ $page->start(safeToHtml($translation->get('upload file')));
 
 <h1><?php echo safeToHtml($translation->get('upload file')); ?></h1>
 
-<?php $filemanager->error->view(); ?>
+<?php echo $filemanager->error->view(); ?>
 
 <form action="upload.php" method="POST" enctype="multipart/form-data">
 <fieldset>

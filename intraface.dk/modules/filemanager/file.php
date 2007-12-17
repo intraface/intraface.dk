@@ -22,7 +22,7 @@ $page->start(safeToHtml($translation->get('file')) . ': ' . $filemanager->get('f
 
     <h1><?php echo safeToHtml($translation->get('file')); ?></h1>
 
-    <?php $filemanager->error->view(); ?>
+    <?php echo $filemanager->error->view(); ?>
 
     <ul class="options">
         <li><a href="edit.php?id=<?php print($filemanager->get("id")); ?>"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a></li>

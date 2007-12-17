@@ -41,7 +41,7 @@ $page->start(safeToHtml($translation->get('import files')));
 
 <h1><?php echo safeToHtml($translation->get('import files')); ?></h1>
 
-<?php $filemanager->error->view(); ?>
+<?php echo $filemanager->error->view(); ?>
 
 <p><?php echo safeToHtml($translation->get('import files from directory')); ?> <?php print($file_dir); ?></p>
 

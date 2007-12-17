@@ -16,7 +16,7 @@ if (!empty($_POST)) {
             $string_appender = new Intraface_Keyword_StringAppender($filemanager->getKeywords(), $appender);
             $string_appender->addKeywordsByString($_POST['keywords'][$key]);
         }
-        $filemanager->error->view();
+        echo $filemanager->error->view();
     }
 
     header('Location: index.php?use_stored=true');
