@@ -17,6 +17,8 @@ define('FILE_VIEWER', '');
 define('PATH_WWW', '');
 define('IMAGE_LIBRARY', 'GD');
 
+set_include_path(PATH_ROOT. PATH_SEPARATOR . get_include_path());
+
 $db = MDB2::singleton(DB_DSN);
 $db->setOption('debug', 0);
 $db->setOption('portability', MDB2_PORTABILITY_NONE);

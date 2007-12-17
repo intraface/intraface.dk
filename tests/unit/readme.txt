@@ -7,7 +7,7 @@ If you get the error:
 Fatal error:  Call to a member function getDSN() on a non-object 
 in /usr/share/php5/PEAR/MDB2.php on line 489
 
-Set $this->backukGlobals = false;
+Set $this->backupGlobals = false;
 in Phpunit/Framework/Testcase.php 
 
 If you get error
