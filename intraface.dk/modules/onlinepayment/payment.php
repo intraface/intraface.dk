@@ -48,7 +48,7 @@ $page->start("Onlinebetaling");
 	<li><a href="index.php?from_id=<?php print($onlinepayment->get('id')); ?>">Luk</a></li>
 </ul>
 
-<?php $onlinepayment->error->view(); ?>
+<?php echo $onlinepayment->error->view(); ?>
 
 
 <table>
