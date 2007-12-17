@@ -17,7 +17,7 @@ if(!empty($_POST)) {
 	// på den gamle e-mail
 
 	if($user->update($_POST)) {
-		if($user->address->save($address_value)) {
+		if($user->address->validate($address_value) && $user->address->save($address_value)) {
 			header("Location: user.php");
 			exit;
 		}
@@ -41,7 +41,8 @@ $page->start(safeToHtml($translation->get('edit user')));
 	<li><a href="index.php"><?php echo safeToHtml($translation->get('close')); ?></a></li>
 </ul>
 
-<?php  $user->error->view(); ?>
+<?php echo $user->error->view(); ?>
+<?php echo $user->address->error->view(); ?>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
 
