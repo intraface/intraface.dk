@@ -37,7 +37,7 @@ $page->start(safeToHtml($translation->get('basket evaluation')));
 <h1><?php echo safeToHtml($translation->get('basket evaluation')); ?></h1>
 
 
-<?php $basketevaluation->error->view($translation); ?>
+<?php echo $basketevaluation->error->view($translation); ?>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="POST">
 	<fieldset>
