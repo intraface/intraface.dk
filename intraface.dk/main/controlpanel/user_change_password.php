@@ -30,7 +30,7 @@ $page->start(safeToHtml($translation->get('change user password')));
 	<li><a href="index.php"><?php echo safeToHtml($translation->get('close')); ?></a></li>
 </ul>
 
-<?php  $user->error->view(); ?>
+<?php echo $user->error->view(); ?>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
 
