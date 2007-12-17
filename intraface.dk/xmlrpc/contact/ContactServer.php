@@ -143,7 +143,7 @@ class ContactServer extends IXR_Server {
         $contact = new Contact($this->kernel, $values['id']);
 
         if (!$contact->save($values)) {
-            $contact->error->view();
+            
             return new IXR_Error(-6, 'Du kunne ikke opdatere ' . $arg[1]);
 
         }
