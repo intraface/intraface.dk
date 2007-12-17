@@ -14,9 +14,10 @@ if(!empty($_POST)) {
     $add_type = $modulepackagemanager->getAddType($modulepackage);
     
     $values = $_POST;
-    if(!$kernel->intranet->address->save($values)) {
+    if(!$kernel->intranet->address->validate($values) || !$kernel->intranet->address->save($values)) {
         // Here we need to know the errors from address, but it does not validate now!
         $modulepackagemanager->error->set('there was an error in your address informations');
+        $modulepackagemanager->error->merge($kernel->intranet->address->error->getMessage());
     }
     else {
         if(!isset($_POST['accept_conditions']) || $_POST['accept_conditions'] != '1') {
@@ -122,7 +123,7 @@ $page->start(safeToHtml($translation->get($add_type).' '.$translation->get('pack
 
 <h1><?php echo safeToHtml($translation->get($add_type).' '.$translation->get('package')); ?></h1>
 
-<?php $modulepackagemanager->error->view(); ?>
+<?php echo $modulepackagemanager->error->view(); ?>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
 
