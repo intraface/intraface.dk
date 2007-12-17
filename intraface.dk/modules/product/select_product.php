@@ -94,8 +94,10 @@ $product->dbquery->setExtraUri('set_quantity='.$quantity);
 $list = $product->getList();
 $product_values = $redirect->getParameter('product_id', 'with_extra_value');
 $selected_products = array();
-foreach($product_values AS $selection) {
-    $selected_products[$selection['value']] = $selection['extra_value'];
+if(is_array($product_values)) {
+    foreach($product_values AS $selection) {
+        $selected_products[$selection['value']] = $selection['extra_value'];
+    }
 }
 
 $page = new Page($kernel);
