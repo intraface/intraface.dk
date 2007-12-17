@@ -73,8 +73,8 @@ if(isset($_POST['append_file_submit'])) {
 
 # slet bilag
 if(isset($_GET['delete_appended_file_id'])) {
-    $append_file = new AppendFile($kernel, 'procurement_procurement', $procurement->get('id'), (int)$_GET['delete_appended_file_id']);
-    $append_file->delete();
+    $append_file = new AppendFile($kernel, 'procurement_procurement', $procurement->get('id'));
+    $append_file->delete((int)$_GET['delete_appended_file_id']);
 }
 
 # tilføj produkt
