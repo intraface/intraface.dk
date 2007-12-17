@@ -73,8 +73,8 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // this has to be moved to post
     elseif(isset($_GET['delete_appended_file_id'])) {
         $product = new Product($kernel, $_GET['id']);
-        $append_file = new AppendFile($kernel, 'product', $product->get('id'), (int)$_GET['delete_appended_file_id']);
-        $append_file->delete();
+        $append_file = new AppendFile($kernel, 'product', $product->get('id'));
+        $append_file->delete((int)$_GET['delete_appended_file_id']);
         header('Location: product.php?id='.$product->get('id'));
         exit;
 
@@ -252,7 +252,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
         $product->getPictures();
         if(count($product->get('pictures')) > 0) {
             foreach($product->get('pictures') AS $appendix) {
-                echo '<div class="appendix"><img src="'.$appendix['thumbnail']['file_uri'].'" />'.$appendix['original']['name'].' <a class="delete" href="product.php?id='.$product->get('id').'&amp;delete_appended_file_id='.$appendix['appended_file_id'].'">Slet</a></div>';
+                echo '<div class="appendix"><img src="'.$appendix['system-square']['file_uri'].'" />'.$appendix['original']['name'].' <a class="delete" href="product.php?id='.$product->get('id').'&amp;delete_appended_file_id='.$appendix['appended_file_id'].'">Slet</a></div>';
             }
         }
         ?>
@@ -338,7 +338,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
 
                 if(count($latest) > 0) {
                     ?>
-                    <h3>Seneste indkï¿½b</h3>
+                    <h3>Seneste indkøb</h3>
 
                     <table>
                         <thead>
