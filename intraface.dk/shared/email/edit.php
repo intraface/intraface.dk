@@ -10,6 +10,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	$email = new Email($kernel, $_POST['id']);
 	
+    if($kernel->user->hasModuleAccess('email')) {
+        $email_module = $kernel->useModule('email');
+        $standard_location = $email_module->getPath();
+    }
+    else {
+        $standard_location = '/main/index.php';
+    }
+    
 	if(isset($_POST['save']) || isset($_POST['send'])) {
 	    
         if(isset($_POST['add_contact_login_url'])) {
@@ -19,17 +27,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         if ($id = $email->save($_POST)) {        
             
+            
+            
             if(isset($_POST['send']) && $_POST['send'] != '' && $email->isReadyToSend()) {
                 $email->send();
                 $email->load();
                 if($redirect->get('id') != 0) {
                     $redirect->setParameter('send_email_status', $email->get('status'));
                 }
-                header('Location: '.$redirect->getRedirect('email.php?id='.$id));
+                header('Location: '.$redirect->getRedirect($standard_location));
                 exit;
             }
             
-            header('Location: '.$redirect->getRedirect('email.php?id='.$id));
+            header('Location: '.$redirect->getRedirect($standard_location));
 			exit;
 		}
 		else {
@@ -39,11 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     elseif(isset($_POST['delete'])) {
         $email->delete();
         // hmm maybe not the best redirect, but what else?
-        header('Location: '.$redirect->getRedirect('/main/index.php'));
+        header('Location: '.$redirect->getRedirect($standard_location));
         exit;
     }
 	
-    trigger_error("Invalid action to perform on email", E_USER_ERROR);
+    trigger_error("Invalid action to perform on email (POST: ".implode(',', $_POST).")", E_USER_ERROR);
 	
 }
 else {
