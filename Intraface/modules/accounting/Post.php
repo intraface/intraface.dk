@@ -101,7 +101,8 @@ class Post extends Standard {
         //$validator->isDouble($credit, 'Kreditbeløbet '.$credit .' er ikke gyldigt');
 
         if ($this->error->isError()) {
-            $this->error->view();
+            // this must be wrong!
+            // echo $this->error->view();
             return 0;
         }
 
