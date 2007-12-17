@@ -250,12 +250,17 @@ class InstanceHandler extends Standard
      *
      * @return array
      */
-    function getList() 
+    function getList($show) 
     {
+        if(!in_array($show, array('visible', 'include_hidden'))) {
+            trigger_error('First parameter to InstanceManager->getList should either be visibe or include_hidden', E_USER_ERROR);
+            exit;
+        }
+        
         $db = new DB_Sql;        
         require_once('Intraface/shared/filehandler/InstanceManager.php');
         $instancemanager = new InstanceManager($this->file_handler->kernel);
-        $types = $instancemanager->getList();
+        $types = $instancemanager->getList($show);
         $i = 0;
         // if filehander has an id we supply the file information to the array.
         if($this->file_handler->get('id') != 0) {
