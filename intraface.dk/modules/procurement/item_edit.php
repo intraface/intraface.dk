@@ -58,14 +58,14 @@ $page->start("Ret vare");
 <form method="POST" action="item_edit.php" id="form_items">
 <fieldset>
 	<legend>Produkt</legend>
-	<input type="hidden" name="product_id" value="<?php if (!emtpy($product_values['id'])) echo intval($product_values['id']); ?>" />
+	<input type="hidden" name="product_id" value="<?php if (!empty($product_values['id'])) echo intval($product_values['id']); ?>" />
 
 	<div class="formrow">
-		<label for="number">Nummer</label><span id="number"><?php if (!emtpy($product_values['number'])) echo safeToForm($product_values['number']); ?></span>
+		<label for="number">Nummer</label><span id="number"><?php if (!empty($product_values['number'])) echo safeToForm($product_values['number']); ?></span>
 	</div>
 
 	<div class="formrow">
-		<label for="name">Navn</label><span id="name"><?php if (!emtpy($product_values['name'])) echo safeToForm($product_values['name']); ?> <a href="item_edit.php?procurement_id=<?php echo intval($procurement->get('id')); ?>&amp;id=<?php echo intval($procurement->item->get('id')); ?>&amp;change_product=1" class="edit">Skift</a></span>
+		<label for="name">Navn</label><span id="name"><?php if (!empty($product_values['name'])) echo safeToForm($product_values['name']); ?> <a href="item_edit.php?procurement_id=<?php echo intval($procurement->get('id')); ?>&amp;id=<?php echo intval($procurement->item->get('id')); ?>&amp;change_product=1" class="edit">Skift</a></span>
 	</div>
 
 	<div class="formrow">
