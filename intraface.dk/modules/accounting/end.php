@@ -52,7 +52,7 @@ elseif (!empty($_POST['step_transfer_result'])) {
 elseif (!empty($_POST['step_reverse_result_account_reset'])) {
 	$year_end = new YearEnd($year);
 	if (!$year_end->resetYearResult('reverse')) {
-		$year_end->error->view();
+		echo $year_end->error->view();
 		trigger_error('Kunne ikke tilbageføre årets resultat årets resultat', E_USER_ERROR);
 	}
 	$year_end->setStep($_POST['step'] - 1);
@@ -76,7 +76,7 @@ elseif (!empty($_POST['step_result'])) {
 	}
 
 	else {
-		$year_end->error->view();
+		echo $year_end->error->view();
 	}
 
 
