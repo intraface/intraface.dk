@@ -62,7 +62,7 @@ $page->start(safeToHtml($translation->get('edit template section')));
 <h1><?php echo safeToHtml($translation->get('edit template section')); ?></h1>
 
 <?php
-$section->error->view($translation);
+echo $section->error->view($translation);
 ?>
 
 <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>"  enctype="multipart/form-data">
@@ -118,10 +118,10 @@ switch ($value['type']) {
 
     case 'picture':
         $kernel->useShared('filehandler');
-        $filehandler = new Filehandler($kernel);
-        $filehandler->createInstance();
-        $instances = $filehandler->instance->getTypes();
-
+        require_once('Intraface/shared/filehandler/InstanceManager.php');
+        $instancemanager = new InstanceManager($kernel);
+        $instances = $instancemanager->getList();
+        
         ?>
         <fieldset>
             <legend><?php echo safeToHtml($translation->get('information about picture')); ?></legend>

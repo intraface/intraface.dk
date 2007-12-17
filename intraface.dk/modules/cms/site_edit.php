@@ -28,9 +28,7 @@ $page->start(safeToHtml($translation->get('edit site')));
 
 <h1><?php echo safeToHtml($translation->get('edit site')); ?></h1>
 
-<?php
-	$cmssite->error->view($translation);
-?>
+<?php echo $cmssite->error->view($translation); ?>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="POST">
 	<fieldset>

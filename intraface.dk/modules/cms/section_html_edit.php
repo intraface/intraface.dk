@@ -195,7 +195,7 @@ $page->start(safeToHtml($translation->get('edit element')));
 <h1><?php echo safeToHtml($translation->get('edit element')); ?></h1>
 
 <?php
-$element->error->view($translation);
+echo $element->error->view($translation);
 ?>
 
 <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>"  enctype="multipart/form-data">

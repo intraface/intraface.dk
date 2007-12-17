@@ -54,7 +54,7 @@ $page->start(safeToHtml($translation->get('edit template')));
 <?php endif; ?>
 
 <?php
-	$template->error->view($translation);
+	echo $template->error->view($translation);
 ?>
 
 <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">

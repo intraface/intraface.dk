@@ -114,7 +114,7 @@ $page->start(safeToHtml($translation->get('edit page')));
 	<?php endif; ?>
 </ul>
 
-<?php $cmspage->error->view($translation); ?>
+<?php echo $cmspage->error->view($translation); ?>
 
 <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>"  enctype="multipart/form-data">
 	<input name="id" type="hidden" value="<?php if (!empty($value['id'])) echo intval($value['id']); ?>" />
