@@ -37,7 +37,7 @@ $page->start(safeToHtml($translation->get('your account')));
 ?>
 <h1><?php echo safeToHtml($translation->get('your account')); ?></h1>
 
-<?php if(isset($modulepackagemanager)) $modulepackagemanager->error->view(); ?>
+<?php if(isset($modulepackagemanager)) echo $modulepackagemanager->error->view(); ?>
 
 <div class="message">
     <?php if(isset($_GET['status']) && $_GET['status'] == 'success'): ?>
