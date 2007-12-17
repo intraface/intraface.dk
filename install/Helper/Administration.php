@@ -11,7 +11,7 @@ class Install_Helper_Administration
         $this->db = $db;
     }
     
-    public function FillInIntranetAddress() {
+    public function fillInIntranetAddress() {
         
         $this->kernel->intranet->address->save(array('name' => 'Intraface', 
             'address' => "Gade 1\nNørre Snede", 
