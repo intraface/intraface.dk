@@ -39,7 +39,7 @@ $page->start($translation->get('edit instance type'));
 
 <h1><?php echo safeToHtml($translation->get('edit instance type')); ?></h1>
 
-<?php $instance_manager->error->view(); ?>
+<?php echo $instance_manager->error->view(); ?>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
 

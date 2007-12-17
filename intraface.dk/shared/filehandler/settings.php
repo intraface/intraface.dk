@@ -22,7 +22,7 @@ $page->start($translation->get('filehandler settings'));
 ?>
 <h1><?php echo safeToHtml($translation->get('filehandler settings')); ?></h1>
 
-<?php $instance_manager->error->view(); ?>
+<?php echo $instance_manager->error->view(); ?>
 
 <?php
 // $filehandler->createInstance();
