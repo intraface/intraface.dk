@@ -48,7 +48,7 @@ $page->start();
 ?>
 <h1><?php print($title); ?></h1>
 
-<?php $procurement->error->view(); ?>
+<?php echo $procurement->error->view(); ?>
 
 <form action="edit.php" method="POST">
 <fieldset>

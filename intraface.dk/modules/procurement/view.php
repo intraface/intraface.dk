@@ -111,8 +111,8 @@ $page->start("Indkøb");
 
     <h1>Indkøb</h1>
 
-    <?php $procurement->error->view(); ?>
-    <?php $filehandler->error->view(); ?>
+    <?php echo $procurement->error->view(); ?>
+    <?php echo $filehandler->error->view(); ?>
 
     <ul class="options">
         <li><a href="edit.php?id=<?php print($procurement->get("id")); ?>">Ret</a></li>

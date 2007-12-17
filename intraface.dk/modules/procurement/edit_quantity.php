@@ -54,7 +54,7 @@ $page->start("Sæt antal");
 
 <h1>Sæt antal</h1>
 
-<?php if(!empty($_POST)): $procurement->item->error->view(); endif; ?>
+<?php if(!empty($_POST)): echo $procurement->item->error->view(); endif; ?>
 
 <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="form_items">
 <fieldset>

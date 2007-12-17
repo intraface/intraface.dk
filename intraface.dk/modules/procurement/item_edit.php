@@ -51,7 +51,7 @@ $page->start("Ret vare");
 
 <h1>Ret vare</h1>
 
-<?php $procurement->item->error->view(); ?>
+<?php echo $procurement->item->error->view(); ?>
 
 
 
