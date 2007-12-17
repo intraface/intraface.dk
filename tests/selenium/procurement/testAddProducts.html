@@ -1,0 +1,164 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testAddProducts</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testAddProducts</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=procurement,product&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=procurement</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Opret nyt indkøb</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description</td>
+	<td>Testindkøb</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_invoice_date</td>
+	<td>10-10-2006</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>vendor</td>
+	<td>Ingen</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_total_price</td>
+	<td>1250</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_total_price_items</td>
+	<td>1000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>vat</td>
+	<td>250</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Testindkøb</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Registrer varer til lager</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Opret produkt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Produkt 1</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>unit</td>
+	<td>label=stk.</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>price</td>
+	<td>200</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>vat</td>
+	<td>label=Ja</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit_close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>quantity[1]</td>
+	<td>11</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>price[1]</td>
+	<td>100</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Prisen for varerne registreret på lageret overstiger prisen for varerne angivet på indkøbet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@href, 'item_edit.php?procurement_id=1&id=1')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>quantity</td>
+	<td>10</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Produkt 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Prisen for varerne registreret på lageret overstiger prisen for varerne angivet på indkøbet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Testindkøb</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
