@@ -218,8 +218,11 @@ $post_install_script->addParamGroup('setup',
           $post_install_script->getParam('local', 'Local', 'string', ''),
           $post_install_script->getParam('intraface_intranetmaintenance_intranet_private_key', 'Private key', 'string', ''),
           $post_install_script->getParam('intraface_xmlrpc_server_url', 'XML server url', 'string', ''),
-          $post_install_script->getParam('intraface_xmlrpc_debug', 'XML server url', 'boolean', 'false')
-    ),
+          $post_install_script->getParam('intraface_xmlrpc_debug', 'XML server url', 'boolean', 'false'),
+          $post_install_script->getParam('intraface_onlinepayment_provider', 'Online payment provider', 'string', 'Quickpay'),
+          $post_install_script->getParam('intraface_onlinepayment_merchant', 'Online payment merchant number', 'string', ''),
+          $post_install_script->getParam('intraface_onlinepayment_md5secret', 'Online payment md5secret', 'string', '')
+              ),
     '');
 
 $pfm->addPostInstallTask($post_install_script, 'intraface.php');

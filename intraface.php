@@ -73,7 +73,10 @@ class intraface_postinstall {
         20 => 'local',
         21 => 'intraface_intranetmaintenance_intranet_private_key',
         22 => 'intraface_xmlrpc_server_url',
-        23 => 'intraface_xmlrpc_debug'
+        23 => 'intraface_xmlrpc_debug',
+        24 => 'intraface_onlinepayment_provider',
+        25 => 'intraface_onlinepayment_merchant',
+        26 => 'intraface_onlinepayment_md5secret'
     );
 
     /**
