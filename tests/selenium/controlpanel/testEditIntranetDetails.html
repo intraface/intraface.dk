@@ -1,0 +1,119 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testEditIntranetDetails</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testEditIntranetDetails</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=administration&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=control panel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=intranet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>there was an error in name</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>there was an error in address</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>there was an error in postcode</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>there was an error in city</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>not a valid e-mail</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>address_name</td>
+	<td>Intraface</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>address</td>
+	<td>Min vej 12</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>postcode</td>
+	<td>1200</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>city</td>
+	<td>Århus</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>email</td>
+	<td>start@intraface.dk</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Intraface</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Min vej 12</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Århus</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>start@intraface.dk</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
