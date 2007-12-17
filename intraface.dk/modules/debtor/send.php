@@ -79,7 +79,7 @@ $debtor->pdf('file', $tmp_file->getFilePath());
 # gem filen med filehandleren
 $filehandler = new FileHandler($kernel);
 if (!$file_id = $filehandler->save($tmp_file->getFilePath(), $tmp_file->getFileName(), 'hidden', 'application/pdf')) {
-    $filehandler->error->view();
+    echo $filehandler->error->view();
     trigger_error('Filen kunne ikke gemmes', E_USER_ERROR);
 }
 
@@ -88,7 +88,7 @@ if (!$file_id = $filehandler->save($tmp_file->getFilePath(), $tmp_file->getFileN
  */
 $input['accessibility'] = 'public';
 if (!$file_id = $filehandler->update($input)) {
-    $filehandler->error->view();
+    echo $filehandler->error->view();
     trigger_error('Oplysninger om filen kunne ikke opdateres', E_USER_ERROR);
 
 }
@@ -126,13 +126,13 @@ if (!$email->save(array(
         'type_id' => 10, // electronic invoice
         'belong_to' => $debtor->get('id')
     ))) {
-    $email->error->view();
+    echo $email->error->view();
     trigger_error('E-mailen kunne ikke gemmes', E_USER_ERROR);
 }
 
 # tilknyt fil
 if (!$email->attachFile($file_id, $filehandler->get('file_name'))) {
-    $email->error->view();
+    echo $email->error->view();
     trigger_error('Filen kunne ikke vedhæftes', E_USER_ERROR);
 }
 
@@ -179,7 +179,7 @@ switch ($send_as) {
             exit;
         }
         else {
-            $email->error->view();
+            echo $email->error->view();
             trigger_error('E-mailen kunne ikke sendes', E_USER_ERROR);
         }
 

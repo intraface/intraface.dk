@@ -113,7 +113,7 @@ $page->start($title);
 <h1><?php print(safeToHtml($title)); ?></h1>
 
 <?php
-$reminder->error->view("html");
+echo $reminder->error->view("html");
 ?>
 
 <form action="<?php echo safeToHtml($_SERVER['PHP_SELF']); ?>" method="post">

@@ -106,7 +106,7 @@ $page->start('Opret ny');
 
 <h1>Opret tilbud, ordre eller faktura</h1>
 
-<?php $error->view(); ?>
+<?php echo $error->view(); ?>
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="clearfix" id="new">
 <table>

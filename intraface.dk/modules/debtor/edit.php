@@ -93,7 +93,7 @@ $page->start(safeToHtml($translation->get($action.' '.$debtor->get('type'))));
 <?php else: ?>
 
 
-<?php $debtor->error->view($translation); ?>
+<?php echo $debtor->error->view($translation); ?>
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 

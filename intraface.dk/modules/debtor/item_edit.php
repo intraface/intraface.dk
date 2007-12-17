@@ -53,7 +53,7 @@ $page->start($translation->get($debtor->get('type').' content'));
 
 <h1><?php echo safeToHtml($translation->get($debtor->get('type').' content')); ?></h1>
 
-<?php $debtor->item->error->view(); ?>
+<?php echo $debtor->item->error->view(); ?>
 
 
 

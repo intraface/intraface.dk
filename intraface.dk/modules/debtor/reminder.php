@@ -70,7 +70,7 @@ $page->start("Rykker");
 
 </div>
 
-<?php $reminder->error->view(); ?>
+<?php echo $reminder->error->view(); ?>
 
 
 				<table>

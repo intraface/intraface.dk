@@ -71,7 +71,7 @@ $page->start("Rykkere");
 <?php else: ?>
 
 <?php
-$reminder->error->view();
+echo $reminder->error->view();
 ?>
 
 <?php
