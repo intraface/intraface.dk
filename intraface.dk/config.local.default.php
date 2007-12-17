@@ -44,4 +44,8 @@ define('INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY', 'privatekeyshouldbe
 define('INTRAFACE_XMLRPC_SERVER_URL', ''); // the url for intraface xml-rpc server. Empty for the default url.
 define('INTRAFACE_XMLRPC_DEBUG', false);
 
+define('INTRAFACE_ONLINEPAYMENT_PROVIDER', 'FakeQuickpay');
+define('INTRAFACE_ONLINEPAYMENT_MERCHANT', '123');
+define('INTRAFACE_ONLINEPAYMENT_MD5SECRET', 'fake');
+
 ?>
