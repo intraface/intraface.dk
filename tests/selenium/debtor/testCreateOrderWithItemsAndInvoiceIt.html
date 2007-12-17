@@ -1,0 +1,579 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>010CreateOrderWithItemsAndInvoiceIt</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">010CreateOrderWithItemsAndInvoiceIt</td></tr>
+</thead><tbody>
+<tr>
+    <td>open</td>
+    <td>/install/reset-staging-server.php?modules=order,debtor,invoice,contact,product,administration&login=true</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=login</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=you can create new orders under debtor</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=Udfyld adresse</td>
+    <td></td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>identifier</td>
+    <td>selenium</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>address_name</td>
+    <td>Intraface</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>address</td>
+    <td>Gade 1</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>postcode</td>
+    <td>1000</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>city</td>
+    <td>By</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>country</td>
+    <td>Land</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>cvr</td>
+    <td>12345678</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>email</td>
+    <td>info@intraface.dk</td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=dashboard</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=you can create new orders under debtor</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=create order</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>go_search</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>new_contact</td>
+    <td></td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>name</td>
+    <td>Firma Hansen</td>
+</tr>
+<tr>
+    <td>select</td>
+    <td>contact-type</td>
+    <td>label=corporation</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>cvr</td>
+    <td>22334455</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>address</td>
+    <td>Hans Peters Vej 42</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>postalcode</td>
+    <td>4000</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>town</td>
+    <td>Odense C</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>email</td>
+    <td>sune@intraface.dk</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>phone</td>
+    <td>12345678</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>deliveryname</td>
+    <td>Firma Hansen</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>deliveryaddress</td>
+    <td>Hans Peters vej 23</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>deliverypostcode</td>
+    <td>4000</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>deliverytown</td>
+    <td>Odense C</td>
+</tr>
+<tr>
+    <td>select</td>
+    <td>paymentcondition</td>
+    <td>label=14</td>
+</tr>
+<tr>
+    <td>select</td>
+    <td>preferred-invoice</td>
+    <td>label=pdf</td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>save</td>
+    <td></td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>description</td>
+    <td>First order</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>due_date</td>
+    <td>21-01-2007</td>
+</tr>
+<tr>
+    <td>select</td>
+    <td>contact_person_id</td>
+    <td>label=Opret ny &gt;&gt;</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>contactperson-name</td>
+    <td>Jens Peter</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>contactperson-email</td>
+    <td>ss@intraface.dk</td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>order #1</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=Tilføj vare</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=Opret produkt</td>
+    <td></td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>name</td>
+    <td>First product</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>description</td>
+    <td>This is a long description</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>weight</td>
+    <td>100</td>
+</tr>
+<tr>
+    <td>select</td>
+    <td>unit</td>
+    <td>label=stk.</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>price</td>
+    <td>200</td>
+</tr>
+<tr>
+    <td>select</td>
+    <td>vat</td>
+    <td>label=Ja</td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>First product</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=Opret produkt</td>
+    <td></td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>name</td>
+    <td>Secont product - service</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>description</td>
+    <td>Service for product</td>
+</tr>
+<tr>
+    <td>select</td>
+    <td>unit</td>
+    <td>label=måned(er)</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>price</td>
+    <td>100</td>
+</tr>
+<tr>
+    <td>select</td>
+    <td>vat</td>
+    <td>label=Ja</td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>Secont product - service</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=Opret produkt</td>
+    <td></td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>name</td>
+    <td>Third product</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>name</td>
+    <td>Third product - shipping</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>description</td>
+    <td>Shipping the product</td>
+</tr>
+<tr>
+    <td>select</td>
+    <td>unit</td>
+    <td>label=stk.</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>price</td>
+    <td>40</td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>Third product - shipping</td>
+    <td></td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>1</td>
+    <td>2</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>2</td>
+    <td>12</td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>submit_close</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>order #1</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>//a[contains(@href, 'view.php?id=1&action=moveup&item_id=2')]</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>Secont product - service Tilføj tekst</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>//a[contains(@href, 'view.php?id=1&edit_contact=1')]</td>
+    <td></td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>address</td>
+    <td>Hans Peters Vej 44</td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>save</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>order #1</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>sent</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>sent</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>invoice</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>invoice #1</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=Tilføj tekst</td>
+    <td></td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>description</td>
+    <td>Added text for invoice item</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>quantity</td>
+    <td>14,00</td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>Added text for invoice item</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>sent</td>
+    <td></td>
+</tr>
+<tr>
+    <td>select</td>
+    <td>type</td>
+    <td>label=cash</td>
+</tr>
+<tr>
+    <td>select</td>
+    <td>type</td>
+    <td>label=depriciation</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>amount</td>
+    <td>100</td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>payment</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>depriciation</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>payment</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>0,00</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=order</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>order #1</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=invoice</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>invoice #1</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=Luk</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>invoice title</td>
+    <td></td>
+</tr>
+<tr>
+    <td>select</td>
+    <td>status</td>
+    <td>label=Alle</td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>search</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>First order</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=First order</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>invoice #1</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=Luk</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=Firma Hansen</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>Firma Hansen</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=invoices</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>Firma Hansen</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=Vis kontakten</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>#1 Firma Hansen</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=orders</td>
+    <td></td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>link=dashboard</td>
+    <td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

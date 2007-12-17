@@ -1,31 +1,51 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>010createAndUpdateSite</title>
+<title>testCreateAndUpdateSite</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">010createAndUpdateSite</td></tr>
+<tr><td rowspan="1" colspan="3">testCreateAndUpdateSite</td></tr>
 </thead><tbody>
 <tr>
-    <td>open</td>
-    <td>/install/reset-staging-server.php?modules=cms&login=true</td>
-    <td></td>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=cms&login=true</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=login</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=cms</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=cms</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>link=create site</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='save']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>error in name</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>error in url - has to end with a slash</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>error in url - start with http</td>
 	<td></td>
 </tr>
 <tr>

@@ -1,0 +1,349 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testCreateSiteAndTemplateWithAllElements</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testCreateSiteAndTemplateWithAllElements</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=cms&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=cms</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=create site</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Test</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>url</td>
+	<td>http://www.test.dk/</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='save']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=create template</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>standard</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>identifier</td>
+	<td>standard</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='save']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>new_section_type</td>
+	<td>label=shorttext</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>add_section</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>text1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>identifier</td>
+	<td>text1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>size</td>
+	<td>100</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>new_section_type</td>
+	<td>label=longtext</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>add_section</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>text2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>identifier</td>
+	<td>text2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>size</td>
+	<td>1000</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>html_format[]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>document.forms[0].elements['html_format[]'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>document.forms[0].elements['html_format[]'][2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>new_section_type</td>
+	<td>label=picture</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>add_section</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>picture</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>identifier</td>
+	<td>picture</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>new_section_type</td>
+	<td>label=mixed</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>add_section</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>text3</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>identifier</td>
+	<td>text3</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>allowed_element_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>allowed_element_2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>allowed_element_3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>allowed_element_4</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>allowed_element_5</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>allowed_element_6</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>allowed_element_7</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>allowed_element_8</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>allowed_element_9</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=create page</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>title</td>
+	<td>Frontpage</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>shortlink</td>
+	<td>frontpage</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>navigation-name</td>
+	<td>Frontpage</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>text1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>text2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>picture</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>text3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>edit_html[4]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>htmltext</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>picture</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>flickr</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>delicious</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>pagelist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>filelist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>gallery</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>video</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>map</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
