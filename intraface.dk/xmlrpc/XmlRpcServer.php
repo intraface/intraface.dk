@@ -5,7 +5,7 @@
  *
  */
 
-require_once('Intraface/3Party/IXR/IXR.php');
+require_once('IXR/IXR.php');
 
 class XmlRpcServer extends IXR_IntrospectionServer {
 
