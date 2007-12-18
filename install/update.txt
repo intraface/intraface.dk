@@ -1,7 +1,5 @@
+
 == CHECK LIST WHEN MAKING AN UPDATE OF THE SYSTEM ==
-
-
-
 
 1) Run all unit tests
 2) Run all selenium tests
