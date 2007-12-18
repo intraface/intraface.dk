@@ -7,6 +7,9 @@ class ErrorList {
     
     public function get($show = 'unique') {
         
+        if(!is_file(ERROR_LOG)) {
+            return array();
+        }
         
         $handle = fopen(ERROR_LOG, "r");
         while (!feof($handle)) {
@@ -70,10 +73,14 @@ class ErrorList {
     }
     
     public function delete() {
-        unlink(ERROR_LOG);
-        touch(ERROR_LOG);
-        unlink(ERROR_LOG_UNIQUE);
-        touch(ERROR_LOG_UNIQUE);
+        if(file_exists(ERROR_LOG)) {
+            unlink(ERROR_LOG);
+            touch(ERROR_LOG);
+        }
+        if(file_exists(ERROR_LOG_UNIQUE)) {
+            unlink(ERROR_LOG_UNIQUE);
+            touch(ERROR_LOG_UNIQUE);
+        }
     }
     
 }
