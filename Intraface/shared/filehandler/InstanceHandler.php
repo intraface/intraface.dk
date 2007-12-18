@@ -250,7 +250,7 @@ class InstanceHandler extends Standard
      *
      * @return array
      */
-    function getList($show) 
+    function getList($show = 'visible') 
     {
         if(!in_array($show, array('visible', 'include_hidden'))) {
             trigger_error('First parameter to InstanceManager->getList should either be visibe or include_hidden', E_USER_ERROR);
