@@ -190,32 +190,32 @@ foreach ($ignore AS $file) {
     // $pfm->addIgnoreToRelease($file);
 }
 
+/**
+ * @todo: path_include_path: what to set it to?
+ */
+
 $post_install_script = $pfm->initPostinstallScript('intraface.php');
 $post_install_script->addParamGroup('setup',
-    array($post_install_script->getParam('db_driver', 'Driver', 'string', 'mysql'),
-          $post_install_script->getParam('db_user', 'User', 'string', 'root'),
+    array($post_install_script->getParam('db_user', 'User', 'string', 'root'),
           $post_install_script->getParam('db_pass', 'Password', 'string', ''),
           $post_install_script->getParam('db_host', 'Host', 'string', 'localhost'),
           $post_install_script->getParam('db_name', 'Database', 'string', 'intraface'),
           $post_install_script->getParam('net_scheme', 'Net scheme', 'string', 'http://'),
           $post_install_script->getParam('net_host', 'Net host', 'string', 'localhost'),
           $post_install_script->getParam('net_directory', 'Net directory', 'string', '/'),
+          $post_install_script->getParam('path_root', 'Root path', 'string', '/home/intraface/'),
+          $post_install_script->getParam('path_include_path', 'Include path', 'string', ''),
+          $post_install_script->getParam('path_upload', 'Upload path', 'string', '/home/intraface/upload/'),
+          $post_install_script->getParam('path_cache', 'Cache path', 'string', '/home/intraface/cache'),
           $post_install_script->getParam('connection_internet', 'Connection to intranet', 'boolean', true),
           $post_install_script->getParam('server_status', 'Server status', 'string', 'PRODUCTION'),
+          $post_install_script->getParam('error_handle_level', 'Error handle error ', 'integer', E_ALL),
+          $post_install_script->getParam('error_level_continue_script', 'Error level continue script', 'integer', E_USER_NOTICE ^ E_NOTICE),
           $post_install_script->getParam('error_report_email', 'Error report email', 'string', 'support@intraface.dk'),
           $post_install_script->getParam('error_log', 'Error log', 'string', 'log/error.log'),
-          $post_install_script->getParam('error_log_unique', 'Error log unique ', 'string', 'log/error-unique.log'),
-          $post_install_script->getParam('error_display_user', 'Display error to user ', 'boolean', false),
-          $post_install_script->getParam('error_display', 'Display error ', 'boolean', false),
-          $post_install_script->getParam('error_handle_level', 'Error handle error ', 'integer', E_ALL),
-          $post_install_script->getParam('error_level_continue_script', 'Error level continue script', 'integer', 10),
-          $post_install_script->getParam('path_root', 'Root path', 'string', '/home/intraface/'),
-          $post_install_script->getParam('path_upload', 'Upload path', 'string', '/home/intraface/'),
-          $post_install_script->getParam('timezone', 'Timezone', 'string', ''),
-          $post_install_script->getParam('local', 'Local', 'string', ''),
+          $post_install_script->getParam('timezone', 'Timezone', 'string', 'Europe/Copenhagen'),
+          $post_install_script->getParam('country_local', 'Country local', 'string', 'da_DK'),
           $post_install_script->getParam('intraface_intranetmaintenance_intranet_private_key', 'Private key', 'string', ''),
-          $post_install_script->getParam('intraface_xmlrpc_server_url', 'XML server url', 'string', ''),
-          $post_install_script->getParam('intraface_xmlrpc_debug', 'XML server url', 'boolean', 'false'),
           $post_install_script->getParam('intraface_onlinepayment_provider', 'Online payment provider', 'string', 'Quickpay'),
           $post_install_script->getParam('intraface_onlinepayment_merchant', 'Online payment merchant number', 'string', ''),
           $post_install_script->getParam('intraface_onlinepayment_md5secret', 'Online payment md5secret', 'string', '')
