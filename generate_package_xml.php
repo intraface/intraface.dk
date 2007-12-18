@@ -7,10 +7,12 @@
  * @version @package-version@
  */
 
-$version = '1.6.0';
+$version = '1.6.1';
 $stability = 'stable';
 $notes = '
-* A lot of improvements
+* Small fixes of undefined variables
+* Missing echoes of error messages
+* Implemented Onlinepayment
 ';
 $web_dir = 'intraface.dk';
 
@@ -19,12 +21,14 @@ $ignore = array(
             '*.tgz',
             '.amateras',
             '.project',
-            'config.local.php',
-            'config.local.default.php',
+            'project.properties.default',
             'install/',
-            'install/reset-staging-server.php',
-            'intraface.dk/install/',
             'install.txt',
+            'intraface.dk/config.local.php',
+            'intraface.dk/config.local.default.php',
+            'intraface.dk/install/',
+            'intraface.dk/install/reset-staging-server.php',
+            'intraface.dk/modules/modulepackage/fake_quickpay_server.php',
             'tests/',
             'tools.intraface.dk/',
             'example/',
@@ -33,19 +37,12 @@ $ignore = array(
             );
 
 function getFilelist($dir) {
-
     global $rFiles;
-
     $files = glob($dir.'/*');
-
     foreach($files as $f) {
-
         if(is_dir($f)) { getFileList($f); continue; }
-
         $rFiles[] = $f;
-
     }
-
 }
 
 getFilelist($web_dir);
@@ -229,7 +226,7 @@ $pfm->addPostInstallTask($post_install_script, 'intraface.php');
 
 foreach ($web_files AS $file) {
     $formatted_file = substr($file, strlen($web_dir . '/'));
-    if (in_array($formatted_file, $ignore)) continue;
+    if (in_array($file, $ignore)) continue;
     $pfm->addInstallAs($file, $formatted_file);
 }
 
