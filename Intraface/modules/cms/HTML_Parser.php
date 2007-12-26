@@ -51,12 +51,10 @@ class CMS_HTML_Parser extends IntrafacePublic_CMS_HTML_Parser
                     $display .= '		<li><a href="'.$_SERVER['PHP_SELF'].'?moveto='.$element['position'].'&amp;element_id='.(int)$_GET['element_id'].'&amp;id='.$element['section_id'].'">'.$this->translation->get('insert before').'</a></li>';
                     $position_after = $element['position'] + 1;
                     $display .= '		<li><a href="'.$_SERVER['PHP_SELF'].'?moveto='.$position_after.'&amp;element_id='.(int)$_GET['element_id'].'&amp;id='.$element['section_id'].'">'.$this->translation->get('insert after').'</a></li>';
-                }
-                else {
+                } else {
                     $display .= '		<li><a href="'.$_SERVER['PHP_SELF'].'?id='.$element['section_id'].'">'.$this->translation->get('regret').'</a></li>';
                 }
-            }
-            else {
+            } else {
                 $display .= '		<li><a href="'.$_SERVER['PHP_SELF'].'?action=move&amp;element_id='.$element['id'].'&amp;id='.$element['section_id'].'">'.$this->translation->get('move').'</a></li>';
             }
             $display .= '		<li><a class="confirm" href="' . $_SERVER['PHP_SELF'] . '?delete='.$element['id'].'">'.$this->translation->get('delete').'</a></li>';
