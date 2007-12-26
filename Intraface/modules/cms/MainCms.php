@@ -5,13 +5,10 @@
  * @since	1.0
  * @version	1.0
  */
-class MainCMS Extends Main {
-
-    function MainCMS() {
-        MainCMS::__construct();
-    }
-
-    function __construct() {
+class MainCMS Extends Main
+{
+    function __construct()
+    {
         $this->module_name = 'cms'; // Navnet der vil stå i menuen
         $this->menu_label = 'CMS'; // Navnet der vil stå i menuen
         $this->show_menu = 1; // Skal modulet vises i menuen.
@@ -85,6 +82,4 @@ class MainCMS Extends Main {
         require(PATH_INCLUDE_CONFIG.'setting_cc_license.php');
         $this->addSetting('cc_license', $_cc_license);
     }
-
 }
-?>
