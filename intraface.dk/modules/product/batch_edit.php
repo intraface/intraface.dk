@@ -44,12 +44,12 @@ $product->dbquery->storeResult("use_stored", "products", "toplevel");
 $products = $product->getList();
 
 $page = new Page($kernel);
-$page->start("Varer");
+$page->start(t('products'));
 ?>
-<h1>Varer</h1>
+<h1><?php e(t('products')); ?></h1>
 
 <ul class="options">
-    <li><a href="index.php?use_stored=true">Luk</a></li>
+    <li><a href="index.php?use_stored=true"><?php e(t('close')); ?></a></li>
 </ul>
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
@@ -62,31 +62,19 @@ $page->start("Varer");
 <table <?php if ($i == 1) { echo ' class="even"'; $i = -1; } ?>>
     <tbody>
         <tr>
-            <th>Navn</th>
+            <th><?php e(t('name')); ?></th>
             <td><input size="50" type="text" name="name[<?php echo $p['id']; ?>]" value="<?php echo htmlentities($p['name']); ?>" /></td>
         </tr>
         <tr>
-            <th>Beskrivelse</th>
+            <th><?php e(t('description')); ?></th>
             <td><textarea cols="80" rows="5" name="description[<?php echo $p['id']; ?>]"><?php echo htmlentities($p['description']); ?></textarea></td>
         </tr>
         <tr>
-            <th>Pris</th>
+            <th><?php e(t('price')); ?></th>
             <td><input size="10" type="text" value="<?php echo number_format($p['price'], 2, ",", "."); ?>" name="price[<?php echo $p['id']; ?>]" /> kroner excl. moms</td>
         </tr>
-
-        <?php
-        /*
-        Gammelt lager - udgår
-        if ($kernel->user->hasModuleAccess('stock') AND $p['stock'] == 1) { ?>
         <tr>
-            <th>Lager</th>
-            <td><input size="10"  type="text" value="<?php echo $p['quantity']; ?>" name="quantity[<?php echo $p['id']; ?>]" /> - <?php echo $p['invoice_reserved'] + $p['webshop_reserved']; ?> reserveret = <strong><?php echo $p['actual_stock']; ?> på lager</strong></td>
-        </tr>
-        <?php }
-        */
-        ?>
-        <tr>
-            <th>Nøgleord</th>
+            <th><?php e(t('keywords')); ?></th>
             <td><input size="50"  type="text" value="<?php echo $p['keywords']; ?>" name="keywords[<?php echo $p['id']; ?>]" /></td>
         </tr>
     </tbody>
@@ -94,8 +82,8 @@ $page->start("Varer");
 <br />
 <?php $i++; } // end foreach ?>
 <div>
-    <input type="submit" class="save" value="Gem" />
-    eller <a href="index.php?use_stored=true">Fortryd</a>
+    <input type="submit" class="save" value="<?php e(t('save')); ?>" />
+    eller <a href="index.php?use_stored=true"><?php e(t('regret')); ?></a>
 </div>
 </form>
 

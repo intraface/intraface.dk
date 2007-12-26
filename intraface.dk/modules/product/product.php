@@ -107,16 +107,16 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 
 $page = new Page($kernel);
-$page->start('Produkt: ' . $product->get('name'));
+$page->start(t('product') . ': ' . $product->get('name'));
 ?>
 
 <div id="colOne">
 
 <div class="box">
-    <h2>#<?php echo safeToHtml($product->get('number'));  ?> <?php echo safeToHtml($product->get('name')); ?></h2>
+    <h2>#<?php e($product->get('number'));  ?> <?php e($product->get('name')); ?></h2>
     <ul class="options">
         <?php if ($product->get('locked') != 1) { ?>
-        <li><a href="product_edit.php?id=<?php echo $product->get('id'); ?>"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a></li>
+        <li><a href="product_edit.php?id=<?php echo $product->get('id'); ?>"><?php e($translation->get('edit', 'common')); ?></a></li>
 
         <li><a class="confirm" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo intval($product->get('id')); ?>"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a></li>
         <?php } ?>
@@ -128,15 +128,15 @@ $page->start('Produkt: ' . $product->get('name'));
 
 <table>
     <tr>
-        <td>Pris</td>
-        <td><?php echo safeToHtml(number_format($product->get('price'), 2, ",", ".")); ?> ex. moms</td>
+        <td><?php e(t('price')); ?></td>
+        <td><?php echo safeToHtml(number_format($product->get('price'), 2, ",", ".")); ?> <?php e(t('excl. vat')); ?></td>
     </tr>
     <tr>
-        <td>Vægt</td>
+        <td><?php e(t('weight')); ?></td>
         <td><?php echo safeToHtml($product->get('weight')); ?> gram</td>
     </tr>
     <tr>
-        <td>Enhed</td>
+        <td><?php e(t('unit')); ?></td>
         <td>
             <?php
                 // getting settings
@@ -149,7 +149,7 @@ $page->start('Produkt: ' . $product->get('name'));
     <?php if ($kernel->user->hasModuleAccess("webshop")): ?>
 
     <tr>
-        <td>Vis i webshop</td>
+        <td><?php e(t('show in webshop')); ?></td>
         <td>
             <?php
                 $show_choises = array(0=>"Nej", 1=>"Ja");
@@ -163,7 +163,7 @@ $page->start('Produkt: ' . $product->get('name'));
     <?php endif; ?>
 
     <tr>
-        <td>Moms</td>
+        <td><?php e(t('vat')); ?></td>
         <td>
             <?php
                 $vat_choises = array(0=>"Nej", 1=>"Ja");
@@ -173,7 +173,7 @@ $page->start('Produkt: ' . $product->get('name'));
     </tr>
     <?php if ($kernel->intranet->hasModuleAccess('stock')): ?>
     <tr>
-        <td>Lagervare</td><td>
+        <td><?php e(t('stock product')); ?></td><td>
             <?php
                 $stock_choises = array(0=>"Nej", 1=>"Ja");
                 echo safeToHtml($stock_choises[$product->get('stock')]);
@@ -186,19 +186,17 @@ $page->start('Produkt: ' . $product->get('name'));
             $mainAccounting = $kernel->useModule("accounting");
     ?>
     <tr>
-        <td>Bogføres på</td><td>
+        <td><?php e(t('state on')); ?></td><td>
         <?php
             $year = new Year($kernel);
             if ($year->get('id') == 0) {
-                echo 'Året er ikke sat i regnskab';
-            }
-            else {
+                echo t('year is not set in accounting');
+            } else {
                 $account = Account::factory($year, $product->get('state_account_id'));
                 if ($account->get('name')) {
                     echo safeToHtml($account->get('number') . ' ' . $account->get('name'));
-                }
-                else {
-                    echo 'Ikke sat';
+                } else {
+                    echo t('not set');
                 }
             }
         ?>
@@ -214,7 +212,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
     if($invoice->any('product', $product->get('id'))) {
         ?>
         <ul class="options">
-            <li><a href="<?php print($debtor_module->getPath().'list.php?type=invoice&amp;status=-1&amp;product_id='.$product->get('id')); ?>">Fakturaer med dette produkt</a></li>
+            <li><a href="<?php print($debtor_module->getPath().'list.php?type=invoice&amp;status=-1&amp;product_id='.$product->get('id')); ?>"><?php e(t('invoices with this product')); ?></a></li>
         </ul>
         <?php
     }
@@ -223,9 +221,9 @@ if($kernel->user->hasModuleAccess('invoice')) {
 
 
 <div id="related_products" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'related') echo ' fade'; ?>">
-    <h2>Relaterede produkter</h2>
+    <h2><?php e(t('related products')); ?></h2>
     <?php if ($product->get('locked') == 0) { ?>
-        <ul class="button"><li><a href="related_product.php?id=<?php echo $product->get('id'); ?>">Tilknyt produkter</a></li></ul>
+        <ul class="button"><li><a href="related_product.php?id=<?php echo $product->get('id'); ?>"><?php e(t('add products')); ?></a></li></ul>
     <?php } ?>
     <?php
         $related = $product->getRelatedProducts();
@@ -233,7 +231,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
             foreach ($related AS $p) {
                 echo '<li>'. $p['name'];
                 if ($p['locked'] == 0) {
-                    echo ' <a class="delete" href="product.php?id='.$product->get('id').'&amp;del_related='.$p['related_id'].'&amp;from=related#related">Slet</a>';
+                    echo ' <a class="delete" href="product.php?id='.$product->get('id').'&amp;del_related='.$p['related_id'].'&amp;from=related#related">'.t('delete').'</a>';
                 }
                 echo '</li>';
             }
@@ -274,7 +272,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
 
 
     <div id="keywords" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'keywords') echo ' fade'; ?>">
-      <h2>Nøgleord</h2>
+      <h2><?php e(t('keywords')); ?></h2>
     <?php if ($product->get('locked') == 0) { $shared_keyword = $kernel->useShared('keyword'); ?>
     <ul class="button"><li><a href="<?php echo $shared_keyword->getPath(); ?>connect.php?product_id=<?php echo $product->get('id'); ?>">Tilknyt nøgleord</a></li></ul>
     <?php } ?>
@@ -301,27 +299,27 @@ if($kernel->user->hasModuleAccess('invoice')) {
         }
         ?>
         <div id="stock" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'stock') echo ' fade'; ?>">
-            <h2>Lager</h2>
+            <h2><?php e(t('stock')); ?></h2>
 
             <table>
                 <tr>
-                    <td>Lagerstatus</td>
+                    <td><?php e(t('stock status')); ?></td>
                     <td><?php print($product->stock->get("actual_stock")); ?></td>
                 </tr>
                 <tr>
-                    <td>Bestilt hjem</td>
+                    <td><?php e(t('ordered')); ?></td>
                     <td><?php print($product->stock->get("on_order")); ?></td>
                 </tr>
                 <tr>
-                    <td>Reserveret</td>
+                    <td><?php e(t('reserved')); ?></td>
                     <td><?php print($product->stock->get("reserved")); ?> (<?php print($product->stock->get("on_quotation")); ?>)</td>
                 </tr>
             </table>
             <!-- hvad bliver følgende brugt til -->
             <div id="stock_regulation" style="display: none ; position: absolute; border: 1px solid #666666; background-color: #CCCCCC; padding: 10px; width: 260px;">
-                Reguler med antal: <input type="text" name="regulate_number" size="5" />
-                <br />Beskrivelse: <input type="text" name="regulation_description" />
-                <br /><input type="submit" name="regulate" value="Gem" /> <a href="javascript:;" onclick="document.getElementById('stock_regulation').style.display='none';return false">[Skjul]</a>
+                <?php e(t('requlate with quantity')); ?>: <input type="text" name="regulate_number" size="5" />
+                <br /><?php e(t('description')); ?>: <input type="text" name="regulation_description" />
+                <br /><input type="submit" name="regulate" value="<?php e(t('save')); ?>" /> <a href="javascript:;" onclick="document.getElementById('stock_regulation').style.display='none';return false"><?php e(t('hide')); ?></a>
 
             </div>
 
@@ -338,14 +336,14 @@ if($kernel->user->hasModuleAccess('invoice')) {
 
                 if(count($latest) > 0) {
                     ?>
-                    <h3>Seneste indkøb</h3>
+                    <h3><?php e(t('latest purchases')); ?></h3>
 
                     <table>
                         <thead>
                             <tr>
-                                <th>Dato</th>
-                                <th class="amount">Kostpris</th>
-                                <th class="amount">Antal</th>
+                                <th><?php e(t('date')); ?></th>
+                                <th class="amount"><?php e(t('price')); ?></th>
+                                <th class="amount"><?php e(t('quantity')); ?></th>
                                 <th>&nbsp;</th>
                             </tr>
                         </thead>

@@ -56,24 +56,24 @@ $product->dbquery->storeResult("use_stored", "products", "toplevel");
 $products = $product->getList();
 
 $page = new Page($kernel);
-$page->start("Varer");
+$page->start(t('products'));
 ?>
-<h1>Varer</h1>
+<h1><?php e(t('products')); ?></h1>
 
 <ul class="options">
-    <li><a class="new" href="product_edit.php">Opret produkt</a></li>
+    <li><a class="new" href="product_edit.php"><?php e(t('create product')); ?></a></li>
     <?php if (count($products) > 0): ?>
-    <li><a href="batch_edit.php?use_stored=true">Rediger alle produkter i søgningen</a></li>
+    <li><a href="batch_edit.php?use_stored=true"><?php e(t('edit all products in search')); ?></a></li>
     <?php endif; ?>
 </ul>
 
 <?php if (!$product->isFilledIn()): ?>
-    <p>Der er ikke oprettet nogen produkter. <a href="product_edit.php">Opret et produkt</a>.</p>
+    <p><?php e(t('no products has been created.')); ?> <a href="product_edit.php"><?php e(t('create product')); ?></a>.</p>
 <?php else: ?>
 
 <form action="index.php" method="get" class="search-filter">
     <fieldset>
-        <legend>Søgning</legend>
+        <legend><?php e(t('search')); ?></legend>
         <!--
         <label for="filter">Filter
             <select name="filter" id="filter">
@@ -84,20 +84,20 @@ $page->start("Varer");
             </select>
         </label>
         -->
-        <label for="search">Søg efter
+        <label for="search"><?php e(t('search for')); ?>
             <input name="search" id="search" type="text" value="<?php echo safeToForm($product->dbquery->getFilter("search")); ?>" />
         </label>
 
-        <label for="keyword_id">Vis med nøgleord
+        <label for="keyword_id"><?php e(t('show with keywords')); ?>
             <select name="keyword_id" id="keyword_id">
-                <option value="">Ingen</option>
+                <option value=""><?php e(t('none')); ?></option>
                 <?php foreach ($keywords->getUsedKeywords() AS $k) { ?>
                 <option value="<?php echo $k['id']; ?>" <?php if($k['id'] == $product->dbquery->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo safeToForm($k['keyword']); ?></option>
                 <?php } ?>
             </select>
         </label>
         <span>
-            <input type="submit" value="Afsted!" />	<input type="reset" value="Nulstil" />
+            <input type="submit" value="<?php e(t('go')); ?>" />	<input type="reset" value="<?php e(t('reset')); ?>" />
         </span>
     </fieldset>
 </form>
@@ -105,38 +105,38 @@ $page->start("Varer");
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
 <?php if(!empty($deleted)): ?>
-        <p class="message">Du har slettet produkter. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="Fortryd" /></p>
+        <p class="message"><?php e(t('products has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('regret')); ?>" /></p>
 <?php endif; ?>
 
 <?php echo $product->dbquery->display('character'); ?>
 
     <?php if (!is_array($products) OR count($products) == 0): ?>
-        <p>Der er ikke nogen produkter i den pågældende søgning.</p>
+        <p><?php e(t('no products in search')); ?>.</p>
     <?php else: ?>
 
     <table summary="Produkter" id="product_table" class="stripe">
-        <caption>Produkter</caption>
+        <caption><?php e(t('products')); ?></caption>
         <thead>
             <tr>
                 <th></th>
-                <th>Varenummer</th>
-                <th>Navn</th>
-                <th>Enhed</th>
+                <th><?php e(t('product number')); ?></th>
+                <th><?php e(t('name')); ?></th>
+                <th><?php e(t('unit')); ?></th>
                 <?php if ($kernel->user->hasModuleAccess("webshop")) { ?>
-                    <th>Udgivet</th>
+                    <th><?php e(t('published')); ?></th>
                 <?php } ?>
                 <?php if ($kernel->user->hasModuleAccess("stock")) { ?>
-                    <th>Lagerstatus</th>
+                    <th><?php e(t('stock status')); ?></th>
                 <?php } ?>
-                <th>Moms</th>
-                <th>Pris</th>
+                <th><?php e(t('vat')); ?></th>
+                <th><?php e(t('price')); ?></th>
                 <th></th>
             </tr>
         </thead>
         <tfoot>
             <tr>
                 <td colspan="8">
-                    Priser ex. moms
+                    <?php e(t('prices excl. vat')); ?>
                 </td>
             </tr>
         </tfoot>
@@ -151,7 +151,7 @@ $page->start("Varer");
                 <td><a href="product.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml($p['name']); ?></a></td>
                 <td><?php echo $p['unit'] ?></td>
                  <?php if ($kernel->user->hasModuleAccess("webshop")) { ?>
-              <td><?php if ($p['do_show'] == 1) echo 'Ja'; else echo 'Nej'; ?></td>
+              <td><?php if ($p['do_show'] == 1) e(t('yes')); else e(t('no')); ?></td>
                 <?php } ?>
                 <?php if ($kernel->user->hasModuleAccess("stock")) { ?>
                     <td>
@@ -166,29 +166,29 @@ $page->start("Varer");
                         ?>
                     </td>
                 <?php } ?>
-                <td><?php if ($p['vat'] == 1) echo 'Ja'; else echo 'Nej'; ?></td>
+                <td><?php if ($p['vat'] == 1) e(t('yes')); else e(t('no')); ?></td>
                 <td class="amount"><?php echo number_format($p['price'], 2, ",", "."); ?></td>
 
                 <td class="options">
           <?php if ($p['locked'] == 0) { ?>
                   <!-- nedenstående bør sættes på produktsiden - muligheden skal ikke findes her
-                    <a href="index.php?lock=<?php echo $p['id']; ?>&amp;use_stored=true">[Lås]</a>
+                    <a href="index.php?lock=<?php echo $p['id']; ?>&amp;use_stored=true"><?php e(t('lock')); ?></a>
                     -->
-                    <a class="button edit" href="product_edit.php?id=<?php echo $p['id']; ?>">Ret</a>
+                    <a class="button edit" href="product_edit.php?id=<?php echo $p['id']; ?>"><?php e(t('edit')); ?></a>
                     <!--<a class="button delete ajaxdelete" title="Dette sletter produktet" id="delete<?php echo intval($p['id']); ?>" href="index.php?use_stored=true&amp;delete=<?php echo intval($p['id']); ?>">Slet</a>--></td>
        <?php } else { ?>
-          <a href="index.php?unlock=<?php echo $p['id']; ?>&amp;use_stored=true">[Lås op]</a>
+          <a href="index.php?unlock=<?php echo $p['id']; ?>&amp;use_stored=true"><?php e(t('unlock')); ?></a>
        <?php } ?>
             </tr>
             <?php } // end foreach ?>
         </tbody>
     </table>
-<select name="action">
-        <option value="">Vælg</option>
-        <option value="delete">Slet valgte</option>
+    <select name="action">
+        <option value=""><?php e(t('choose...')); ?></option>
+        <option value="delete"><?php e(t('delete selected')); ?></option>
     </select>
 
-    <input type="submit" value="Udfør" />
+    <input type="submit" value="<?php e(t('go')); ?>" />
 </form>
 
     <?php endif; ?>

@@ -10,21 +10,11 @@ $module = $kernel->module("product");
 // hente liste med produkter - bør hentes med getList!
 
 if (!empty($_POST['product'])) {
-        foreach ($_POST['product'] AS $key=>$value) {
-
-
+    foreach ($_POST['product'] AS $key=>$value) {
         $product = new Product($kernel, $_POST['id']);
         if (!empty($_POST['relate'][$key]) AND $product->setRelatedProduct($_POST['product'][$key], $_POST['relate'][$key])) {
         }
     }
-    /*
-    if (isAjax()) {
-        echo '1';
-        exit;
-    }
-
-    else {
-    */
     if (!empty($_POST['close'])) {
         header ('Location: product.php?id='.intval($_POST['id']));
         exit;
@@ -33,8 +23,6 @@ if (!empty($_POST['product'])) {
 
         header('Location: related_product.php?id='.(int)$_POST['id']);
         exit;
-    //}
-
 }
 
 
@@ -54,8 +42,7 @@ if(isset($_GET["search"]) || isset($_GET["keyword_id"])) {
     if(isset($_GET["keyword_id"])) {
         $product->dbquery->setKeyword($_GET["keyword_id"]);
     }
-}
-else {
+} else {
     $product->dbquery->useCharacter();
 }
 
@@ -69,18 +56,18 @@ $list = $product->getList();
 
 $page = new Page($kernel);
 //$page->includeJavascript('module', 'add_related.js');
-$page->start("Tilføj relaterede varer");
+$page->start(t('add related products'));
 ?>
-<h1>Tilføj relaterede varer</h1>
-<p>... til <?php echo $product->get('name'); ?></p>
+<h1><?php e(t('add related products')); ?></h1>
+<p>... <?php e(t('to')); ?> <?php e($product->get('name')); ?></p>
 
 <ul class="options">
-    <li><a href="product.php?id=<?php echo $_GET['id']; ?>&amp;from=related&amp;use_stored=true#related">Luk</a></li>
+    <li><a href="product.php?id=<?php e($_GET['id']); ?>&amp;from=related&amp;use_stored=true#related"><?php e(t('close')); ?></a></li>
 </ul>
 
 <form action="<?php echo basename(__FILE__); ?>" method="get">
     <fieldset>
-        <legend>Søgning</legend>
+        <legend><?php e(t('search')); ?></legend>
         <!--
         <label>Filter
         <select name="filter" id="filter">
@@ -91,20 +78,20 @@ $page->start("Tilføj relaterede varer");
         </select>
         </label>
         -->
-        <label>Søg efter
+        <label><?php e(t('search for')); ?>
         <input type="text" value="<?php print($product->dbquery->getFilter("search")); ?>" name="search" id="search" />
     </label>
     <label>
         Vis med nøgleord
         <select name="keyword_id" id="keyword_id">
-            <option value="">Ingen</option>
+            <option value=""><?php e(t('none')); ?></option>
             <?php foreach ($keywords->getUsedKeywords() AS $k) { ?>
             <option value="<?php echo $k['id']; ?>" <?php if($k['id'] == $product->dbquery->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo $k['keyword']; ?></option>
             <?php } ?>
         </select>
     </label>
     <span>
-        <input type="submit" value="Afsted!" class="search" />
+        <input type="submit" value="<?php e(t('go!')); ?>" class="search" />
     <input type="hidden" value="<?php echo $product->get('id'); ?>" name="id" />
         </span>
     </fieldset>
@@ -117,12 +104,12 @@ echo $product->dbquery->display('character');
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
     <input type="hidden" name="id" value="<?php echo $product->get('id'); ?>" id="product_id" />
     <table summary="Produkter" class="stripe">
-        <caption>Produkter</caption>
+        <caption><?php e(t('products')); ?></caption>
         <thead>
             <tr>
-                <th>Vælg</th>
-                <th>Varenummer</th>
-                <th>Navn</th>
+                <th><?php e(t('choose')); ?></th>
+                <th><?php e(t('product number')); ?></th>
+                <th><?php e(t('name')); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -139,8 +126,8 @@ echo $product->dbquery->display('character');
         </tbody>
     </table>
       <p>
-          <input type="submit" value="Gem" />
-          <input type="submit" value="Gem og luk" name="close" />
+          <input type="submit" value="<?php e(t('save')); ?>" />
+          <input type="submit" value="<?php e(t('save and close')); ?>" name="close" />
       </p>
 
   <?php echo $product->dbquery->display('paging'); ?>

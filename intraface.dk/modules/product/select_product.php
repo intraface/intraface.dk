@@ -102,12 +102,12 @@ if(is_array($product_values)) {
 
 $page = new Page($kernel);
 //$page->includeJavascript('module', 'add_related.js');
-$page->start("Vælg produkt");
+$page->start(t('select product'));
 ?>
-<h1>Vælg produkt</h1>
+<h1><?php e(t('select product')); ?></h1>
 
 <?php if ($product->isFilledIn() == 0): ?>
-    <p>Der er ikke oprettet nogen produkter. <a href="select_product.php?add_new=true&amp;set_quantity=<?php print(intval($quantity)); ?>">Opret produkt</a>.</p>
+    <p><?php e(t('no products to select.')); ?> <a href="select_product.php?add_new=true&amp;set_quantity=<?php print(intval($quantity)); ?>"><?php e(t('create product')); ?></a>.</p>
 <?php else: ?>
 
     <ul class="options">
@@ -116,20 +116,20 @@ $page->start("Vælg produkt");
 
     <form action="<?php echo basename(__FILE__); ?>" method="get">
         <fieldset>
-            <legend>Søgning</legend>
-            <label>Søg efter
+            <legend><?php e(t('search')); ?></legend>
+            <label><?php e(t('search for')); ?>
             <input type="text" value="<?php print(safeToForm($product->dbquery->getFilter("search"))); ?>" name="search" id="search" />
         </label>
         <label>
-            Vis med nøgleord
+            <?php e(t('show with keywords')); ?>
             <select name="keyword_id" id="keyword_id">
-                <option value="">Ingen</option>
+                <option value=""><?php e(t('none')); ?></option>
                 <?php foreach ($keywords->getUsedKeywords() AS $k) { ?>
                 <option value="<?php echo intval($k['id']); ?>" <?php if($k['id'] == $product->dbquery->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo safeToForm($k['keyword']); ?></option>
                 <?php } ?>
             </select>
         </label>
-        <span><input type="submit" value="Søg" class="search" /><input type="hidden" name="set_quantity" value="<?php echo intval($quantity); ?>" /></span>
+        <span><input type="submit" value="<?php e(t('search')); ?>" class="search" /><input type="hidden" name="set_quantity" value="<?php echo intval($quantity); ?>" /></span>
         </fieldset>
         <br style="clear: both;" />
     </form>
@@ -139,19 +139,18 @@ $page->start("Vælg produkt");
     ?>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>?set_quantity=<?php echo intval($quantity); ?>" method="post">
         <table summary="Produkter" class="stripe">
-            <caption>Produkter</caption>
+            <caption><?php e(t('products')); ?></caption>
             <thead>
                 <tr>
                     <th><?php if($multiple && $quantity): echo 'Antal'; else: echo 'Vælg'; endif; ?></th>
-                    <th>Varenummer</th>
-                    <th>Navn</th>
-                      <th>Enhed</th>
+                    <th><?php e(t('product number')); ?></th>
+                    <th><?php e(t('name')); ?></th>
+                    <th><?php e(t('unit')); ?></th>
                     <?php if($kernel->user->hasModuleAccess('stock')): ?>
-                        <th>Lager</th>
+                    <th><?php e(t('stock')); ?>r</th>
                     <?php endif; ?>
-                    <th>Moms</th>
-                  <th>Pris</th>
-
+                    <th><?php e(t('vat')); ?></th>
+                    <th><?php e(t('price')); ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -172,7 +171,7 @@ $page->start("Vælg produkt");
                     <?php if($kernel->user->hasModuleAccess('stock')): ?>
                         <td><?php if($p['stock'] == 0): print("-"); elseif(isset($p['stock_status']['for_sale'])): echo safeToHtml($p['stock_status']['for_sale']); else: echo 0; endif; ?></td>
                     <?php endif; ?>
-                    <td><?php if ($p['vat'] == 1) echo 'Ja'; else echo 'Nej'; ?></td>
+                    <td><?php if ($p['vat'] == 1) e('yes'); else e('no'); ?></td>
                   <td class="amount"><?php echo number_format($p['price'], 2, ",", "."); ?></td>
                 </tr>
                 <?php  endforeach; ?>
@@ -180,12 +179,12 @@ $page->start("Vælg produkt");
         </table>
       <p>
         <?php if(!$multiple && $quantity): ?>
-            Antal: <input type="text" name="quantity" value="1" />
+            <?php e(t('quantity')); ?>: <input type="text" name="quantity" value="1" />
         <?php endif; ?>
         <?php if($multiple): ?>
-        <input type="submit" name="submit" value="Gem" />
+        <input type="submit" name="submit" value="<?php e(t('save')); ?>" />
         <?php endif; ?>
-        <input type="submit" name="submit_close" value="Gem og Luk" /></p>
+        <input type="submit" name="submit_close" value="<?php e(t('save and close')); ?>" /></p>
 
       <?php echo $product->dbquery->display('paging'); ?>
     </form>
