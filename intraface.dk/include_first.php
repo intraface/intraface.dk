@@ -4,7 +4,6 @@
  *
  * @author Lars Olesen <lars@legestue.net>
  */
-
 if (basename($_SERVER['SCRIPT_NAME']) == basename(__FILE__)) {
     trigger_error('This file cannot be accessed directly', E_USER_ERROR);
 }
@@ -139,4 +138,24 @@ $translation->emptyPostfix = '';  //default: empty string
 
 $kernel->translation = $translation;
 
-?>
+if (!function_exists('t')) {
+  /**
+   * This function is dynamically redefinable.
+   * @see $GLOBALS['_global_function_callback_e']
+   */
+  function t($args) {
+    $args = func_get_args();
+    return call_user_func_array($GLOBALS['_global_function_callback_t'], $args);
+  }
+  if (!isset($GLOBALS['_global_function_callback_t'])) {
+    $GLOBALS['_global_function_callback_t'] = NULL;
+  }
+}
+
+$GLOBALS['_global_function_callback_t'] = 'intraface_t';
+
+function intraface_t($string, $page = '')
+{
+    global $translation;
+    return $translation->get($string, $page);
+}
