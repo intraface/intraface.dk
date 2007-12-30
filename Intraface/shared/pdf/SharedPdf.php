@@ -15,10 +15,7 @@ class SharedPdf Extends Shared {
 	function sharedPdf() {
 		$this->shared_name = "pdf"; // Navn på på mappen med modullet
 		$this->active = 1; // Er shared aktivt
-		
-		// Tilføjer en setting, som er ens for alle intranet. Se længere nede
-		// $this->addSetting("payment_method", array("Dankort", "Kontant");
-	
+			
 		// Filer der skal inkluderes ved opstart af modul. 
 		$this->addPreloadFile("PdfMaker.php");
 		
