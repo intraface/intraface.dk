@@ -15,10 +15,7 @@ class SharedSystemmessage Extends Shared {
 	function SharedSystemmessage() {
 		$this->shared_name = "systemmessage"; // Navn på på mappen med modullet
 		$this->active = 1; // Er shared aktivt
-		
-		// Tilføjer en setting, som er ens for alle intranet. Se længere nede
-		// $this->addSetting("payment_method", array("Dankort", "Kontant");
-	
+			
 		// Filer der skal inkluderes ved opstart af modul. 
 		$this->addPreloadFile("IntranetNews.php");
 		
