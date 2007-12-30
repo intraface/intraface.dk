@@ -42,8 +42,6 @@ if (!empty($_POST)) {
 		}
 	}
 
-	// $kernel->setting->set('intranet', 'debtor.preferred_payment_method', $_POST['preferred_payment_method']);
-
 	header('Location: setting.php');
  	exit;
 
@@ -60,8 +58,7 @@ else {
 		$contact = new Contact($kernel, $values['scan_in_contact']);
 		$values['scan_in_email'] = $contact->address->get('email');
 	}
-	//$values['preferred_payment_method'] = $kernel->setting->get('intranet', 'debtor.preferred_payment_method');
-
+	
 }
 
 $page = new Page($kernel);
