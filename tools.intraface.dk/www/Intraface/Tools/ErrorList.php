@@ -2,7 +2,6 @@
 /*
  * To display all errors
  */
-
 class Intraface_Tools_ErrorList
 {
     private $error_log;
@@ -11,9 +10,14 @@ class Intraface_Tools_ErrorList
     function __construct($filename, $unique_filename)
     {
         $this->error_file = $filename;
+        if (!file_exists($filename)) {
+            throw new Exception('error log not found ' . $filename);
+        }
         $this->error_file_unique = $unique_filename;
+        if (!file_exists($unique_filename)) {
+            touch($unique_filename);
+        }
     }
-
 
     public function get($show = 'unique')
     {
@@ -23,7 +27,6 @@ class Intraface_Tools_ErrorList
            if (empty($buffer) OR !is_string($buffer)) continue;
            // $errors[] = unserialize($buffer); if buffer is array.
            $errors[] = $buffer;
-
         }
         fclose($handle);
 
@@ -79,9 +82,8 @@ class Intraface_Tools_ErrorList
     {
         unlink($this->error_file);
         touch($this->error_file);
-        @unlink($this->error_file_unique);
+        unlink($this->error_file_unique);
         touch($this->error_file_unique);
     }
 
 }
-?>

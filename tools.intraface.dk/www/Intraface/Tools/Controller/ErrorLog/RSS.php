@@ -5,9 +5,9 @@ class Intraface_Tools_Controller_ErrorLog_RSS extends k_Controller
     {
         $errorlist = $this->registry->get('errorlist');
 
-            $now = date("D, d M Y H:i:s T");
+        $now = date("D, d M Y H:i:s T");
 
-            $output = "<?xml version=\"1.0\"?>
+        $output = "<?xml version=\"1.0\"?>
                 <rss version=\"2.0\">
                     <channel>
                         <title>Errorlog for intraface.dk</title>
@@ -21,11 +21,11 @@ class Intraface_Tools_Controller_ErrorLog_RSS extends k_Controller
                         <webMaster>support@intraface.dk</webMaster>";
 
 
-            $items = $errorlist->get();
+        $items = $errorlist->get();
 
-            if(is_array($items) && count($items) > 0) {
-                foreach ($items as $line) {
-                    $output .= "
+        if(is_array($items) && count($items) > 0) {
+            foreach ($items as $line) {
+                $output .= "
                         <item>
                             <title>".htmlentities($line['title'])."</title>
                             <link>http://tools.intraface.dk/error/</link>
@@ -34,12 +34,16 @@ class Intraface_Tools_Controller_ErrorLog_RSS extends k_Controller
                 }
             }
 
-            $output .= "
+        $output .= "
                         </channel>
                     </rss>";
 
-            header("Content-Type: application/rss+xml");
-            return $output;
+        $response = new k_http_Response(200, $output);
+        $response->setEncoding(NULL);
+        $response->setContentType("Content-Type: application/rss+xml");
+
+        throw $response;
+
     }
 
 }

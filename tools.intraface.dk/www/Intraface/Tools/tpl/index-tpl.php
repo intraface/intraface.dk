@@ -49,7 +49,7 @@ td {
     <li><a href="<?php echo url('translation'); ?>">Translationadmin</a> <a href="<?php echo url('translation'); ?>" onClick="window.open('<?php echo url('translation'); ?>', 'translation', 'menubar=yes,width=600,height=600,scrollbars=yes'); return false;">Åbne i lille vindue</a></li>
     <li><a href="<?php echo url('phpinfo'); ?>">PHP info</a></li>
     <li><a href="http://mysql.intraface.dk">Mysql database</a></li>
-    <li><a href="<?php echo url('errorlog'); ?>">Unique errors (html)</a> <a href="<?php echo url('errorlog/?show=all'); ?>">All errors (html)</a> <a href="<?php echo url('errorlog/rss'); ?>">Error RSS-feed</a></li>
+    <li><a href="<?php echo url('errorlog'); ?>">Unique errors (html)</a> <a href="<?php echo url('errorlog', array('show' => 'all')); ?>">All errors (html)</a> <a href="<?php echo url('errorlog/rss'); ?>">Error RSS-feed</a></li>
     <li><a href="http://devel.intraface.dk">Intraface Developer</a></li>
     <li><a href="http://wiki.intraface.dk">Wiki</a></li>
     <li><a href="http://mysql.wiki.intraface.dk">Wiki-database</a></li>
