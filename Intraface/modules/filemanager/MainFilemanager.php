@@ -26,9 +26,6 @@ class MainFileManager Extends Main {
         // Tilføjer en subaccess
         // $this->addSubAccessItem("canCreate", "Rettighed til at oprette");
 
-        // Tilføjer en setting, som er ens for alle intranet. Se længere nede
-        // $this->addSetting("payment_method", array("Dankort", "Kontant");
-
         // Filer der skal inkluderes ved opstart af modul.
         $this->addPreloadFile('FileManager.php');
 
@@ -49,14 +46,4 @@ class MainFileManager Extends Main {
         $this->addRequiredShared("keyword");
     }
 }
-
-
-/*
-SETTING:
-Setting kan bruges til at sætte indstillinger, som er ens for alle intranet.
-En setting kan hentes igen ved hjælp af $module_object->getSetting("payment_method")
-
-
-
-*/
 ?>
