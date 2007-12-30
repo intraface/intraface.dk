@@ -1106,6 +1106,7 @@ class Debtor extends Standard
                 // void
                 break;
             case 'user':
+                // @todo needs to be changed in order to work with contactlogin
                 $intranet['email'] = $this->kernel->user->address->get('email');
                 $intranet['contact_person'] = $this->kernel->user->address->get('name');
                 $intranet['phone'] = $this->kernel->user->address->get('phone');
