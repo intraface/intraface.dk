@@ -65,6 +65,7 @@ class CMS_TemplateSection extends Standard {
     }
 
     function createParameterObject() {
+        require_once 'Parameter.php';
         return new CMS_Parameter($this);
     }
 
