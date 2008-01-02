@@ -1,6 +1,6 @@
 <?php
 /**
- * Spï¿½rgsmï¿½let er hvornï¿½r stylesheet og sitemap skal loades
+ * Spørgsmålet er hvornår stylesheet og sitemap skal loades
  * - Vi kan loade dem pï¿½ request i load()?
  * Navigation skal vel fï¿½lge den enkelte side?
  *
@@ -13,6 +13,7 @@
  */
 
 require_once 'Intraface/Standard.php';
+require_once 'Stylesheet.php';
 
 class CMS_Site extends Standard {
 
@@ -61,6 +62,7 @@ class CMS_Site extends Standard {
     function save($var) {
         $var = safeToDb($var);
 
+        settype($var['cc_license'], 'integer');
         if (!$this->validate($var)) {
             return 0;
         }
