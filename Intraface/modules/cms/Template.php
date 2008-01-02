@@ -22,6 +22,8 @@
  *
  */
 
+require_once 'Intraface/tools/Position.php';
+
 class CMS_Template extends Standard {
 
     var $id;
