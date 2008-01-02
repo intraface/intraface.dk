@@ -1,16 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>testUploadFileToFileList-notComleted</title>
+<title>testElementFileListUploadFileAndAdFromFileManager</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">testUploadFileToFileList-notComleted</td></tr>
+<tr><td rowspan="1" colspan="3">testElementFileListUploadFileAndAdFromFileManager</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/install/reset-staging-server.php?modules=cms&login=true</td>
+	<td>/install/reset-staging-server.php?modules=cms,filemanager&helper_function=CMS:createPageWithMixedSection&login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -25,117 +25,12 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=create site</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>name</td>
-	<td>Test</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>url</td>
-	<td>http://localhost/</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>//input[@value='save']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
 	<td>link=Test</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=create template</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>name</td>
-	<td>test</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>identifier</td>
-	<td>test</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>close</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=test</td>
-	<td></td>
-</tr>
-<tr>
-	<td>select</td>
-	<td>new_section_type</td>
-	<td>label=mixed</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>add_section</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>name</td>
-	<td>test</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>identifier</td>
-	<td>test</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>allowed_element_6</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>close</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=close</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=close</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=create page</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>title</td>
-	<td>test</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>shortlink</td>
-	<td>test</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>navigation-name</td>
-	<td>test</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>close</td>
+	<td>link=Test</td>
 	<td></td>
 </tr>
 <tr>
@@ -151,7 +46,7 @@
 <tr>
 	<td>type</td>
 	<td>new_file</td>
-	<td>/srv/www/svnprojects/intraface/tests/selenium/cms/example.csv</td>
+	<td>/srv/www/svnprojects/intraface/tests/selenium/cms/example1.csv</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -160,7 +55,22 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>example.csv</td>
+	<td>example1.csv</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>new_file</td>
+	<td>/srv/www/svnprojects/intraface/tests/selenium/cms/example2.csv</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>upload_new</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>example2.csv</td>
 	<td></td>
 </tr>
 <tr>
@@ -175,7 +85,12 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>example.csv: example.csv (text/csv</td>
+	<td>example1.csv: example1.csv (text/csv</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>example2.csv: example2.csv (text/csv</td>
 	<td></td>
 </tr>
 <tr>
@@ -189,7 +104,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=delete</td>
 	<td></td>
 </tr>
@@ -199,18 +114,63 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
-	<td>close</td>
+	<td>link=delete</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextNotPresent</td>
-	<td>example.csv</td>
+	<td>example1.csv</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextNotPresent</td>
-	<td>Test list</td>
+	<td>example2.csv</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>choose_file</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit_close-select_file</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>example1.csv</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>example2.csv</td>
 	<td></td>
 </tr>
 
