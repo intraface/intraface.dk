@@ -201,6 +201,7 @@ class Intraface_Install {
             $kernel = new Kernel;
         }
         $kernel->user = new User(1);
+        $kernel->user->setIntranetId(1);
         $kernel->intranet = new Intranet(1);
         $kernel->setting = new Setting(1, 1);
         
