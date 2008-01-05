@@ -52,9 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: '.$redirect->getRedirect($standard_location));
         exit;
     }
-	
-    trigger_error("Invalid action to perform on email (POST: ".implode(',', $_POST).")", E_USER_ERROR);
-	
+	else {
+        trigger_error("Invalid action to perform on email", E_USER_ERROR);
+        exit;
+    }
 }
 else {
 	$email = new Email($kernel, $_GET['id']);
@@ -67,6 +68,8 @@ $page->start('Skriv e-mail');
 ?>
 
 <h1>Skriv e-mail</h1>
+
+<?php echo $email->error->view(); ?>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
 
