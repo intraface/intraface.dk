@@ -316,7 +316,7 @@ class OnlinePayment extends Standard {
 
         $validator = new Validator($this->error);
 
-        if($validator->isDouble($input['dk_amount'], 'Beløb er ikke et gyldigt beløb', "integer")) {
+        if($validator->isDouble($input['dk_amount'], 'Beløb er ikke et gyldigt beløb', 'greater_than_zero')) {
             $amount = new Amount($input['dk_amount']);
             if($amount->convert2db()) {
                 $input['amount'] = $amount->get();
