@@ -1,0 +1,254 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testBatchEditProducts</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testBatchEditProducts</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=product&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=create product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Testprodukt1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description</td>
+	<td>Testbeskrivelse1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>weight</td>
+	<td>101</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>unit</td>
+	<td>label=unit(s)</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>price</td>
+	<td>102</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>vat</td>
+	<td>label=yes</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Testprodukt1</td>
+	<td> </td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=create product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Testprodukt2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description</td>
+	<td>Testbeskrivelse2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>weight</td>
+	<td>201</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>unit</td>
+	<td>label=unit(s)</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>price</td>
+	<td>202</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>vat</td>
+	<td>label=yes</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Testprodukt2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=edit all products in search</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name[1]</td>
+	<td>Testprodukt1</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>description[1]</td>
+	<td>Testbeskrivelse1</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>price[1]</td>
+	<td>102,00</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name[2]</td>
+	<td>Testprodukt2</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>description[2]</td>
+	<td>Testbeskrivelse2</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>price[2]</td>
+	<td>202,00</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name[1]</td>
+	<td>Testprodukt3</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description[1]</td>
+	<td>Testbeskrivelse3</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>price[1]</td>
+	<td>302,00</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>keywords[1]</td>
+	<td>test1 test2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name[2]</td>
+	<td>Testprodukt4</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description[2]</td>
+	<td>Testbeskrivelse4</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>price[2]</td>
+	<td>402,00</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>keywords[2]</td>
+	<td>test3 test4</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='save']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=edit all products in search</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name[1]</td>
+	<td>Testprodukt3</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>description[1]</td>
+	<td>Testbeskrivelse3</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>price[1]</td>
+	<td>302,00</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>keywords[1]</td>
+	<td>test1 test2</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name[2]</td>
+	<td>Testprodukt4</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>description[2]</td>
+	<td>Testbeskrivelse4</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>price[2]</td>
+	<td>402,00</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>keywords[2]</td>
+	<td>test3 test4</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

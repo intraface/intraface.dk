@@ -9,129 +9,169 @@
 <tr><td rowspan="1" colspan="3">testAddPhotoOnProductFromFileManager</td></tr>
 </thead><tbody>
 <tr>
-    <td>open</td>
-    <td>/install/reset-staging-server.php?modules=product,filemanager&login=true</td>
-    <td></td>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=product,filemanager&login=true</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=login</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=product</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=product</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=create product</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=create product</td>
+	<td></td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>name</td>
-    <td>Testprodukt</td>
+	<td>type</td>
+	<td>name</td>
+	<td>Testprodukt</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>description</td>
-    <td>Testbeskrivelse</td>
+	<td>type</td>
+	<td>description</td>
+	<td>Testbeskrivelse</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>weight</td>
-    <td>100</td>
+	<td>type</td>
+	<td>weight</td>
+	<td>100</td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>unit</td>
-    <td>label=stk.</td>
+	<td>select</td>
+	<td>unit</td>
+	<td>label=unit(s)</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>price</td>
-    <td>100</td>
+	<td>type</td>
+	<td>price</td>
+	<td>100</td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>vat</td>
-    <td>label=yes</td>
+	<td>select</td>
+	<td>vat</td>
+	<td>label=yes</td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>submit</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
 </tr>
 <tr>
-    <td>verifyText</td>
-    <td>xpath=//title</td>
-    <td>product: Testprodukt</td>
+	<td>verifyText</td>
+	<td>xpath=//title</td>
+	<td>product: Testprodukt</td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>choose_file</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>choose_file</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=upload file</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=upload file</td>
+	<td></td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>file</td>
-    <td>/srv/www/svnprojects/intraface/tests/selenium/product/wideonball.jpg</td>
+	<td>type</td>
+	<td>file</td>
+	<td>/srv/www/svnprojects/intraface/tests/selenium/product/wideonball1.jpg</td>
 </tr>
 <tr>
-    <td>pause</td>
-    <td>9000</td>
-    <td></td>
+	<td>pause</td>
+	<td>9000</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>//input[@value='save']</td>
-    <td></td>
+	<td>type</td>
+	<td>file</td>
+	<td>/srv/www/svnprojects/intraface/tests/selenium/product/wideonball2.jpg</td>
 </tr>
 <tr>
-    <td>click</td>
-    <td>1</td>
-    <td></td>
+	<td>pause</td>
+	<td>9000</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>submit_close-select_file</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>//input[@value='save']</td>
+	<td></td>
 </tr>
 <tr>
-    <td>verifyTextPresent</td>
-    <td>wideonball.jpg</td>
-    <td></td>
+	<td>click</td>
+	<td>1</td>
+	<td></td>
 </tr>
 <tr>
-    <td>click</td>
-    <td>link=delete</td>
-    <td></td>
+	<td>click</td>
+	<td>2</td>
+	<td></td>
 </tr>
 <tr>
-    <td>assertConfirmation</td>
-    <td>Er du sikker?</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>submit_close-select_file</td>
+	<td></td>
 </tr>
 <tr>
-    <td>verifyTextPresent</td>
-    <td>choose file</td>
-    <td></td>
+	<td>verifyTextPresent</td>
+	<td>wideonball1.jpg</td>
+	<td></td>
 </tr>
 <tr>
-    <td>pause</td>
-    <td>1000</td>
-    <td></td>
+	<td>verifyTextPresent</td>
+	<td>wideonball2.jpg</td>
+	<td></td>
 </tr>
 <tr>
-    <td>verifyTextNotPresent</td>
-    <td>wideonball.jpg</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=Slet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>wideonball2.jpg</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Slet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>wideonball1.jpg</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>choose file</td>
+	<td></td>
 </tr>
 
 </tbody></table>
