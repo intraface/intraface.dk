@@ -23,7 +23,7 @@ $page->start(safeToHtml($translation->get('user settings')));
     <caption><?php echo safeToHtml($translation->get('information about user')); ?></caption>
     <tbody>
     <tr>
-        <th><?php echo safeToHtml($translation->get('e-mail for login', 'address')); ?></th>
+        <th><?php echo safeToHtml($translation->get('e-mail for login')); ?></th>
         <td><span class="email"><?php if (!empty($value["email"])) echo safeToHtml($value["email"]); ?></span></td>
     </tr>
 </table>
