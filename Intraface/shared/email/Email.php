@@ -164,12 +164,12 @@ class Email extends Standard
             $validator->isNumeric($var['contact_id'], 'contact_id');
         }
 
-        $validator->isString($var['subject'], 'subject', '');
-        $validator->isString($var['body'], 'body', '');
+        $validator->isString($var['subject'], 'there was an error in subject', '');
+        $validator->isString($var['body'], 'there was an error in body', '');
         settype($var['from_email'], 'string'); //
-        $validator->isEmail($var['from_email'], 'from_email', 'allow_empty');
+        $validator->isEmail($var['from_email'], 'there was an error in from email', 'allow_empty');
         settype($var['from_name'], 'string'); //
-        $validator->isString($var['from_name'], 'from_name', '', 'allow_empty');
+        $validator->isString($var['from_name'], 'there was and error in from name', '', 'allow_empty');
 
         if ($this->error->isError()) {
             return 0;
