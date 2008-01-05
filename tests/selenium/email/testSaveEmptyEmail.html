@@ -1,0 +1,139 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testSaveEmptyEmail</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testSaveEmptyEmail</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=contact,email&helper_function=Email:create,Administration:fillInIntranetAddress&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=email</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Contact 1 &lt;test@intraface.dk&gt;</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>body</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>subject</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>there was an error in subject</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>there was an error in body</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Contact 1 &lt;test@intraface.dk&gt;</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>start@intraface.dk &lt;Intraface&gt;</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>subject</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>body</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>send</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker på, at du vil sende denne e-mail?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>there was an error in subject</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>there was an error in body</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Contact 1 &lt;test@intraface.dk&gt;</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>start@intraface.dk &lt;Intraface&gt;</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>subject</td>
+	<td>Ny overskrift</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>body</td>
+	<td>Ny tekst</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>send</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker på, at du vil sende denne e-mail?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>sent</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
