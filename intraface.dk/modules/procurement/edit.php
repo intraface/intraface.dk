@@ -15,6 +15,7 @@ if(isset($_POST["submit"])) {
 		}
 
 		header("location: view.php?id=".$procurement->get("id"));
+        exit;
 	}
 	else {
 		$values = $_POST;
