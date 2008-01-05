@@ -19,9 +19,9 @@ if (!empty($_POST)) {
             'state_account_id' => $product->get('state_account_id')
         ))) {
             // 'quantity' => $_POST['quantity'][$key], gammelt lager - udgår
-            $product->getKeywords();
-
-            $product->keywords->addKeywordsByString($_POST['keywords'][$key]);
+            
+            $string_appender = new Intraface_Keyword_StringAppender($product->getKeywords(), $product->getKeywordAppender());
+            $string_appender->addKeywordsByString($_POST['keywords'][$key]);
         }
         echo $product->error->view();
     }
@@ -56,7 +56,7 @@ $page->start(t('products'));
 <?php $i = 0; foreach ($products AS $p) {
     if ($p['locked'] == 1) { continue; }
     $this_product = new Product($kernel, $p['id']);
-    $keyword_object = $this_product->getKeywords();
+    $keyword_object = $this_product->getKeywordAppender();
     $p['keywords'] = $keyword_object->getConnectedKeywordsAsString();
 ?>
 <table <?php if ($i == 1) { echo ' class="even"'; $i = -1; } ?>>
