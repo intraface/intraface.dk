@@ -135,15 +135,20 @@ elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
         }
         elseif($redirect->get('identifier') == 'gallery') {
             $append_file = new AppendFile($kernel, 'cms_element_gallery', $element->get('id'));
-            $append_file->addFile(new FileHandler($kernel, $redirect->getParameter('file_handler_id')));
+            $array_files = $redirect->getParameter('file_handler_id');
+            foreach($array_files AS $file_id) {
+                $append_file->addFile(new FileHandler($kernel, $file_id));
+            }
             $element->load();
             $value = $element->get();
 
         }
         elseif($redirect->get('identifier') == 'filelist') {
             $append_file = new AppendFile($kernel, 'cms_element_filelist', $element->get('id'));
-
-            $append_file->addFile(new FileHandler($kernel, $redirect->getParameter('file_handler_id')));
+            $array_files = $redirect->getParameter('file_handler_id');
+            foreach($array_files AS $file_id) {
+                $append_file->addFile(new FileHandler($kernel, $file_id));
+            }
             $element->load();
             $value = $element->get();
         }
