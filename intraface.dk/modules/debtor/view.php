@@ -23,6 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if(isset($_POST["payment"])) {
 			$payment->update($_POST);
 			$debtor->load();
+            
+            if ($kernel->user->hasModuleAccess('accounting')) {
+                header('location: state_payment.php?debtor_id=' . intval($debtor->get("id")).'&payment_id='.$payment->get('id'));
+            }
 		}
 	}
 
@@ -54,7 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	// sæt status til sendt
 	elseif(!empty($_POST['sent'])) {
 		$debtor->setStatus('sent');
-	}
+        
+        if (($debtor->get("type") == 'credit_note' || $debtor->get("type") == 'invoice') AND $kernel->user->hasModuleAccess('accounting')) {
+            header('location: state_'.$debtor->get('type').'.php?id=' . intval($debtor->get("id")));
+        }
+    }
 
 
 	// Overføre tilbud til ordre
@@ -145,7 +153,8 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		}
 	}
 
-	if(isset($_GET['edit_contact'])) {
+	// edit contact
+    if(isset($_GET['edit_contact'])) {
 		$contact_module = $kernel->getModule('contact');
 		$redirect = Redirect::factory($kernel, 'go');
 		$url = $redirect->setDestination($contact_module->getPath().'contact_edit.php?id='.intval($debtor->contact->get('id')), $debtor_module->getPath().'view.php?id='.$debtor->get('id'));
@@ -178,7 +187,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$return_redirect->delete();
 			$debtor->load();
 		}
-		if($return_redirect->get('identifier') == 'send_email') {
+		elseif($return_redirect->get('identifier') == 'send_email') {
             if($return_redirect->getParameter('send_email_status') == 'sent' OR $return_redirect->getParameter('send_email_status') == 'outbox') {
                 $email_send_with_success = true;
                 // hvis faktura er genfremsendt skal den ikke sætte status igen
@@ -186,6 +195,10 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 					$debtor->setStatus('sent');
 				}
 				$return_redirect->delete();
+                
+                if (($debtor->get("type") == 'credit_note' || $debtor->get("type") == 'invoice') AND !$debtor->isStated() AND $kernel->user->hasModuleAccess('accounting')) {
+                    header('location: state_'.$debtor->get('type').'.php?id=' . intval($debtor->get("id")));
+                }
 			}
 
 		}
@@ -483,36 +496,26 @@ if(isset($onlinepayment)) {
 				<td><a href="view.php?id=<?php echo intval($debtor->get('where_to_id')); ?>"><?php echo safeToHtml($translation->get($debtor->get('where_to'))); ?></a></td>
 			</tr>
 			<?php endif; ?>
-			<?php if ($debtor->get("type") == 'invoice' AND $kernel->user->hasModuleAccess('accounting')): ?>
+			<?php if (($debtor->get("type") == 'credit_note' || $debtor->get("type") == 'invoice') AND $kernel->user->hasModuleAccess('accounting')): ?>
 			<tr>
 				<th>Bogført</th>
 				<td>
 					<?php
-						if ($debtor->get('dk_date_stated') != '00-00-0000') {
-							echo safeToHtml($debtor->get('dk_date_stated')) . ' <a href="/modules/accounting/voucher.php?id='.$debtor->get('voucher_id').'">Se bilag</a>';
+						if ($debtor->isStated()) {
+							$module_accounting = $kernel->useModule('accounting');
+                            echo safeToHtml($debtor->get('dk_date_stated')) . ' <a href="'.$module_accounting->getPath().'voucher.php?id='.$debtor->get('voucher_id').'">Se bilag</a>';
 						}
 						else {
-							echo 'Ikke bogført <a href="state.php?id=' . intval($debtor->get("id")) . '">Bogfør faktura</a>';
+							echo 'Ikke bogført';
+                            if($debtor->get('status') == 'sent' || $debtor->get('status') == 'executed') {
+                                echo ' <a href="state_'.$debtor->get('type').'.php?id=' . intval($debtor->get("id")) . '">'.safeToHtml($translation->get('state '.$debtor->get('type'))).'</a>';
+                            }
+                            
 						}
 					?>
 				</td>
 			</tr>
-			<?php elseif ($debtor->get("type") == 'credit_note' AND $kernel->user->hasModuleAccess('accounting')):?>
-			<tr>
-				<th>Bogført</th>
-				<td>
-					<?php
-						if ($debtor->get('dk_date_stated') != '00-00-0000') {
-							echo safeToHtml($debtor->get('dk_date_stated')) . ' <a href="/modules/accounting/voucher.php?id='.$debtor->get('voucher_id').'">Se bilag</a>';
-						}
-						else {
-							echo 'Ikke bogført <a href="state_creditnote.php?id=' . intval($debtor->get("id")) . '">Bogfør kreditnota</a>';
-						}
-					?>
-				</td>
-			</tr>
-
-			<?php endif; ?>
+            <?php endif; ?>
 		</tbody>
 	</table>
 
@@ -597,8 +600,8 @@ if(isset($onlinepayment)) {
 						<label for="type" class="tight">Type</label>
 						<select name="type" id="type">
 							<?php
-							$invoice_module = $kernel->getModule('invoice');
-							$types = $invoice_module->getSetting('payment_type');
+							$payment = new Payment($debtor);
+                            $types = $payment->getTypes();
 							foreach($types AS $key => $value) {
 								?>
 								<option value="<?php print(safeToHtml($key)); ?>" <?php if($key == 0) print("selected='selected'"); ?> ><?php echo safeToHtml($translation->get($value)); ?></option>
@@ -821,7 +824,7 @@ if(isset($onlinepayment)) {
 					if($items[$i]["unit"] != "") {
 						?>
 						<td><?php echo number_format($items[$i]["quantity"], 2, ",", "."); ?></td>
-						<td><?php echo safeToHtml($items[$i]["unit"]); ?></td>
+						<td><?php echo safeToHtml($translation->get($items[$i]["unit"])); ?></td>
 						<td class="amount"><?php print(number_format($items[$i]["price"], 2, ",", ".")); ?></td>
 						<?php
 					}
