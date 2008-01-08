@@ -167,7 +167,7 @@ $page->start(t('select product'));
                     </td>
                     <td><?php echo safeToHtml($p['number']); ?></td>
                     <td><?php echo safeToHtml($p['name']); ?></td>
-                    <td><?php echo safeToHtml($p['unit']); ?></td>
+                    <td><?php echo safeToHtml(t($p['unit']['combined'])); ?></td>
                     <?php if($kernel->user->hasModuleAccess('stock')): ?>
                         <td><?php if($p['stock'] == 0): print("-"); elseif(isset($p['stock_status']['for_sale'])): echo safeToHtml($p['stock_status']['for_sale']); else: echo 0; endif; ?></td>
                     <?php endif; ?>
