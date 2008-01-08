@@ -194,7 +194,7 @@ class Debtor_Report_Pdf
             $this->doc->addText($apointX["varenr"] - $this->doc->getTextWidth($this->doc->get("font_size"), $items[$i]["number"]), $this->doc->get('y'), $this->doc->get("font_size"), $items[$i]["number"]);
             if ($items[$i]["unit"] != "") {
                 $this->doc->addText($apointX["antal"] - $this->doc->getTextWidth($this->doc->get("font_size"), number_format($items[$i]["quantity"], 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($items[$i]["quantity"], 2, ",", "."));
-                $this->doc->addText($apointX["enhed"], $this->doc->get('y'), $this->doc->get("font_size"), $items[$i]["unit"]);
+                $this->doc->addText($apointX["enhed"], $this->doc->get('y'), $this->doc->get("font_size"), $this->translation->get($items[$i]["unit"]));
                 $this->doc->addText($apointX["pris"] - $this->doc->getTextWidth($this->doc->get("font_size"), number_format($items[$i]["price"], 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($items[$i]["price"], 2, ",", "."));
             }
             $amount =  $items[$i]["quantity"] * $items[$i]["price"];
