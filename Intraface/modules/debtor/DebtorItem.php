@@ -252,9 +252,9 @@ class DebtorItem extends Standard
         $j = 0;
         $item_no_vat = array();
         $item = array();
-
-        $product_module = $this->debtor->kernel->useModule('product');
-        $units = $product_module->getSetting('unit');
+        
+        require_once 'Intraface/modules/product/Product.php';
+        $units = Product::getUnits();
 
         while($db->nextRecord()) {
             if ($db->f('product_detail_id') == 0) {
@@ -272,7 +272,11 @@ class DebtorItem extends Standard
                     $item_no_vat[$j]["id"] = $db->f("id");
                     $item_no_vat[$j]["name"] = $db2->f("name");
                     $item_no_vat[$j]["number"]= $db2->f("number");
-                    $item_no_vat[$j]["unit"] = $units[$db2->f("unit")];
+                    if($db->f("quantity") == 1) {
+                        $item_no_vat[$j]["unit"] = $units[$db2->f("unit")]['singular']; 
+                    } else {
+                        $item_no_vat[$j]["unit"] = $units[$db2->f("unit")]['plural'];
+                    }
                     $item_no_vat[$j]["price"] = $db2->f("price");
                     $item_no_vat[$j]["quantity"] = $db->f("quantity");
                     $item_no_vat[$j]["description"] = $db->f("description");
@@ -285,7 +289,11 @@ class DebtorItem extends Standard
                     $item[$i]["id"] = $db->f("id");
                     $item[$i]["name"] = $db2->f("name");
                     $item[$i]["number"]= $db2->f("number");
-                    $item[$i]["unit"] = $units[$db2->f("unit")];
+                    if($db->f("quantity") == 1) {
+                        $item[$i]["unit"] = $units[$db2->f("unit")]['singular'];
+                    } else {
+                        $item[$i]["unit"] = $units[$db2->f("unit")]['plural'];
+                    }
                     $item[$i]["price"] = $db2->f("price");
                     $item[$i]["quantity"] = $db->f("quantity");
                     $item[$i]["description"] = $db->f("description");
