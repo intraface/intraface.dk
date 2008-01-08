@@ -4,6 +4,7 @@ require('../../include_first.php');
 $module_procurement = $kernel->module("procurement");
 $shared_filehandler = $kernel->useShared('filehandler');
 $shared_filehandler->includeFile('AppendFile.php');
+$translation = $kernel->getTranslation('procurement');
 
 $procurement = new Procurement($kernel, $_GET["id"]);
 
@@ -369,7 +370,7 @@ if (count($items) > 0):
                 <td><?php print($items[$i]["number"]); ?></td>
                 <td><?php print(htmlentities($items[$i]["name"])); ?></td>
                 <td class="amount"><?php echo number_format($items[$i]["quantity"], 2, ",", "."); ?></td>
-                <td><?php echo $items[$i]["unit"]; ?></td>
+                <td><?php echo $translation->get($items[$i]["unit"]); ?></td>
                 <td class="amount"><?php print(number_format($items[$i]["unit_purchase_price"], 2, ",", ".")); ?></td>
                 <td class="amount"><?php print(number_format($items[$i]["quantity"]*$items[$i]["unit_purchase_price"], 2, ",", ".")); ?></td>
                 <td class="amount"><?php print(number_format($items[$i]["calculated_unit_price"], 2, ",", ".")); ?></td>
