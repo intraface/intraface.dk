@@ -770,5 +770,15 @@ class Product extends Standard
     {
         return new ProductDetail($this, $this->old_product_detail_id);
     }
+    
+    /**
+     * returns the possible units
+     * 
+     * @return array units
+     */
+    public static function getUnits()
+    {
+        return ProductDetail::getUnits();
+    }
 
 }
