@@ -22,6 +22,7 @@ class MainProduct extends Main
         $this->addRequiredShared('keyword');
         $this->addRequiredShared('filehandler');
 
+        /*
         // hvilke units kan man vælge imellem?
         $this->addSetting('unit', array(1 => '',
                                         2 => 'stk.',
@@ -29,7 +30,7 @@ class MainProduct extends Main
                                         4 => 'måned(er)',
                                         5 => 'år',
                                         6 => 'time(r)'));
-
+        */
         $this->includeSettingFile('settings.php');
 
         // i øjeblikket er der ingen relevante settings at lave her
