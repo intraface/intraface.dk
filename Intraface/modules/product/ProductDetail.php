@@ -99,21 +99,9 @@ class ProductDetail extends Standard {
                 trigger_error('invalid unit '.$this->db->f('unit').'!', E_USER_ERROR);
                 exit;
             }
-            $this->value['unit_declensions'] = $unit;
-
-            /**
-             * @todo: Hack her modificeret lidt for at fjerne afhængighed af kernel
-             */
-
-            $tmp_danish_units = array(1 => '',
-                2 => 'stk.',
-                3 => 'dag(e)',
-                4 => 'måned(er)',
-                5 => 'år',
-                6 => 'time(r)');
-
+            
             $this->value['unit_key'] = $this->db->f('unit');
-            $this->value['unit']     = $tmp_danish_units[$this->db->f('unit')];
+            $this->value['unit']     = $unit;
 
             // udregne moms priser ud fra prisen, men kun hvis der er moms på den
             if ($this->db->f('vat') == 1) {
@@ -295,7 +283,7 @@ class ProductDetail extends Standard {
      *
      * @return array
      */
-    private static function getUnits($key = null)
+    public static function getUnits($key = null)
     {
         $units = array(1 => array('singular' => '',
                                   'plural' => '',
