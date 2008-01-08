@@ -23,14 +23,16 @@ class MainDebtor Extends Main {
         $this->addSubmenuItem('onlinepayments', '../onlinepayment/', 'module:onlinepayment');
         //$this->addSubmenuItem('Indstillinger', 'setting.php');
 
-
+        /*
         $this->addSetting('type', array(
             1=>'quotation',
             2=>'order',
             3=>'invoice',
             4=>'credit_note'
         ));
-
+        */
+        
+        /*
         $this->addSetting('from', array(
             1=>'manuel',
             2=>'webshop',
@@ -38,14 +40,8 @@ class MainDebtor Extends Main {
             4=>'order',
             5=>'invoice'
         ));
-
-        $this->addSetting('status_old', array(
-            1=>'received',
-            2=>'cancelled',
-            3=>'executed',
-            4=>'ordered',
-            5=>'billed'
-        ));
+        */
+        
 
         // Denne status skal vi lige kigge på
         // Følgende status skal til:
@@ -62,6 +58,7 @@ class MainDebtor Extends Main {
 
          $this->includeSettingFile('settings.php');
 
+        /*
         // Følgende er et nyt forslag til status:
         $this->addSetting('status', array(
             0=>'created',
@@ -69,13 +66,17 @@ class MainDebtor Extends Main {
             2=>'executed',
             3=>'cancelled'
         ));
+        */
 
+        /*
+         * this can be removed after intraface 1.7 is up running.
         $this->addSetting('payment_method', array(
             0=>'Ingen',
             1=>'Kontooverførsel',
             2=>'Girokort +01',
             3=>'Girokort +71'
         ));
+        */
 
 
 
