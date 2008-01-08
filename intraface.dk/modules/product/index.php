@@ -149,7 +149,7 @@ $page->start(t('products'));
 
                 <td><?php echo safeToHtml($p['number']); ?></td>
                 <td><a href="product.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml($p['name']); ?></a></td>
-                <td><?php echo $p['unit'] ?></td>
+                <td><?php echo t($p['unit']['combined']); ?></td>
                  <?php if ($kernel->user->hasModuleAccess("webshop")) { ?>
               <td><?php if ($p['do_show'] == 1) e(t('yes')); else e(t('no')); ?></td>
                 <?php } ?>
