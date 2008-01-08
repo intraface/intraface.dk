@@ -61,6 +61,13 @@ class DebtorTest extends PHPUnit_Framework_TestCase
     private $kernel;
     
     function setUp() {
+        
+        $db = MDB2::factory(DB_DSN);
+        $db->query('TRUNCATE debtor');
+        $db->query('TRUNCATE debtor_item');
+        
+        
+        
         $kernel = new Kernel;
         $kernel->user = new FakeDebtorUser;
         $kernel->intranet = new FakeDebtorIntranet;
@@ -170,6 +177,17 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         
         
         $this->assertEquals($debtor->get('number'), $debtor->getMaxNumber());
+    }
+    
+    function testSetFrom() {
+        $debtor = $this->createDebtor();
+        $this->assertEquals(1, $debtor->update(array(
+                'contact_id' => $this->createContact(), 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y')), 'quotation'));
+        
+        
     }
 }
 
