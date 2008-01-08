@@ -92,12 +92,12 @@ $page->start(t('edit product'));
             <?php
                 // getting settings
                 $unit_options = '';
-                $unit_choises  = $module->getSetting("unit");
+                $unit_choises  = Product::getUnits();
 
                 foreach ($unit_choises AS $key=>$v) {
                     $unit_options .= '<option value="' . $key . '"';
                     if (!empty($value['unit_id']) AND $value['unit_id'] == $key) { $unit_options .= ' selected="selected"'; }
-                        $unit_options .= '>' . htmlentities($v) . '</option>';
+                        $unit_options .= '>' . htmlentities(t($v['combined'])) . '</option>';
                     }
                     echo $unit_options;
 
