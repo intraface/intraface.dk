@@ -7,6 +7,7 @@ $kernel->useModule('stock');
 $product = new Product($kernel);
 $product->createDBQuery();
 $products = $product->getList();
+$translation = $kernel->getTranslation('product');
 
 
 
@@ -38,7 +39,7 @@ foreach ($products AS $p) {
 
     $worksheet->write($i, 0, $p['number'], $style);
     $worksheet->write($i, 1, $p['name'], $style);
-    $worksheet->write($i, 2, $p['unit'], $style);
+    $worksheet->write($i, 2, $translation->get($p['unit']['combined']), $style);
     $worksheet->write($i, 3, $p['price'], $style);
     if($p['stock'] != 0) {
         $worksheet->write($i, 3, $p['stock_status']['for_sale'], $style);
