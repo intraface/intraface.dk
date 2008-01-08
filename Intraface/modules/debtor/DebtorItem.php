@@ -7,6 +7,7 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 require_once('Intraface/tools/Position.php');
+require_once 'Intraface/Standard.php';
 
 class DebtorItem extends Standard
 {
@@ -61,6 +62,7 @@ class DebtorItem extends Standard
 
         $this->debtor = &$debtor;
         $this->db = new Db_sql;
+        require_once 'Intraface/Error.php';
         $this->error = new Error;
         $this->id = (int)$id;
 
@@ -148,6 +150,8 @@ class DebtorItem extends Standard
 
     /**
      * Saves data
+     * 
+     * @TODO: Should have product object instead of product id in the param array.
      *
      * @param array $input Values to save
      *
@@ -162,13 +166,16 @@ class DebtorItem extends Standard
 
         $input = safeToDb($input);
 
+        require_once 'Intraface/Validator.php';
         $validator = new Validator($this->error);
 
+        settype($input["product_id"], 'integer');
         if($validator->isNumeric($input["product_id"], "Du skal vælge et produkt", "greater_than_zero")) {
             if(!isset($input['product_detail_id'])) {
                 $input['product_detail_id'] = 0;
             }
             
+            require_once 'Intraface/modules/product/Product.php';
             $product = new Product($this->debtor->kernel, $input["product_id"], $input['product_detail_id']);
 
             if(!is_object($product) || $product->get('id') == 0) {
@@ -178,13 +185,16 @@ class DebtorItem extends Standard
             }
         }
 
+        if(!isset($input["quantity"])) $input["quantity"] = 0;
         $validator->isDouble($input["quantity"], "Du skal angive et antal", "");
+        require_once 'Intraface/tools/Amount.php';
         $quantity = new Amount($input["quantity"]);
         if($quantity->convert2db()) {
             $input["quantity"] = $quantity->get();
         } else {
             $this->error->set("Ugyligt antal");
         }
+        if(!isset($input['description'])) $input['description'] = '';
         $validator->isString($input["description"], "Fejl i beskrivelse", "<b><i>", "allow_empty");
 
         if($this->error->isError()) {
