@@ -30,6 +30,7 @@ class MainOnlinepayment Extends Main {
 
          $this->includeSettingFile('settings.php');
 
+        /*
         $this->addSetting('status', array(
             0 => '',
             1 => 'created',
@@ -37,13 +38,15 @@ class MainOnlinepayment Extends Main {
             3 => 'captured',
             4 => 'reversed',
             5 => 'cancelled'));
+        */
 
-
+        /*
         $this->addSetting('belong_to', array(
             0 => '',
             1 => 'order',
             2 => 'invoice'));
-
+        */
+        
         $this->addSetting('implemented_providers',  array(
             0 => '_invalid_',
             1 => 'default', // reserveret for en custom (altså en hvor det hele kører uden for systemet

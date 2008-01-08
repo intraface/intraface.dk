@@ -3,6 +3,8 @@
  * @package Intraface_OnlinePayment
  */
 
+require_once 'Intraface/Standard.php';
+
 /**
  * Onlinebetaling
  *
@@ -19,10 +21,6 @@ class OnlinePayment extends Standard {
 
     var $id;
     var $kernel;
-    var $status_types;
-    var $belong_to_types;
-
-    var $implemented_providers;
 
     // Standard udbyder-transactionsstatus. Er lavet ud fra QuickPay
     var $transaction_status_types = array(
@@ -42,22 +40,22 @@ class OnlinePayment extends Standard {
 
     
     function OnlinePayment(&$kernel, $id = 0) {
-        if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
-            trigger_error('Debtor kræver Kernel som objekt', FATAL);
+        /**
+         * @TODO: Because of tests it was necessary to remove OR strtolower(get_class($kernel)) != 'kernel'
+         */
+        if (!is_object($kernel)) {
+            trigger_error('Debtor requires Kernel, got:'.get_class($kernel), E_USER_ERROR);
         }
-
-        $onlinepayment_module = $kernel->getModule('onlinepayment');
-        $this->status_types = $onlinepayment_module->getSetting('status');
-        $this->belong_to_types = $onlinepayment_module->getSetting('belong_to');
-        $this->implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
 
         $this->kernel = &$kernel;
         $this->id = $id;
+        require_once 'Intraface/Error.php';
         $this->error = new Error;
 
         // lidt usikker på om det her er det smarteste sted at have den, men den skal være til stede, når der skal gemmes
         $this->provider_key = $this->kernel->setting->get('intranet', 'onlinepayment.provider_key');
 
+        require_once 'Intraface/DBQuery.php';
         $this->dbquery = new DBQuery($this->kernel, "onlinepayment", "intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->useErrorObject($this->error);
 
@@ -69,15 +67,14 @@ class OnlinePayment extends Standard {
 
 
     function factory(&$kernel, $type = 'settings', $value = 0) {
-        if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
+        /*
+         * @TODO: had to remove the following to get it woring with tests: OR strtolower(get_class($kernel)) != 'kernel'
+         */
+        if (!is_object($kernel)) {
             trigger_error('Debtor kræver Kernel som objekt', E_USER_ERROR);
         }
-
-        $onlinepayment_module = $kernel->getModule('onlinepayment');
-        $implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
-
-
-
+        
+        $implemented_providers = OnlinePayment::getImplementedProviders();
         // we set the fallback from settings
         if (!isset($implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')])) {
             trigger_error('Ikke en gyldig provider fra settings i OnlinePayment->factory', E_USER_ERROR);
@@ -118,19 +115,17 @@ class OnlinePayment extends Standard {
                 break;
         }
 
-        $onlinepayment_module = $kernel->getModule('onlinepayment');
-
         switch(strtolower($provider)) {
             case 'default':
-                $onlinepayment_module->includeFile('provider/Default.php');
+                require_once 'Intraface/modules/onlinepayment/provider/Default.php';
                 return new OnlinePaymentDefault($kernel, $value);
                 break;
             case 'quickpay':
-                $onlinepayment_module->includeFile('provider/QuickPay.php');
+                require_once 'Intraface/modules/onlinepayment/provider/QuickPay.php';
                 return new OnlinePaymentQuickPay($kernel, $value);
                 break;
             case 'dandomain':
-                $onlinepayment_module->includeFile('provider/DanDomain.php');
+                require_once 'Intraface/modules/onlinepayment/provider/DanDomain.php';
                 return new OnlinePaymentDanDomain($kernel, $value);
                 break;
 
@@ -151,8 +146,6 @@ class OnlinePayment extends Standard {
             FROM onlinepayment WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
         if($db->nextRecord()) {
 
-            $onlinepayment_module = $this->kernel->getModule('onlinepayment');
-
             $this->value['id'] = $db->f('id');
             $this->value['dk_date_created'] = $db->f('dk_date_created');
             $this->value['date_created'] = $db->f('date_created');
@@ -167,12 +160,13 @@ class OnlinePayment extends Standard {
             $this->value['date_reversed'] = $db->f('date_reversed');
 
             $this->value['belong_to_key'] = $db->f('belong_to_key');
-            $this->value['belong_to'] = $this->belong_to_types[$db->f('belong_to_key')];
+            $belong_to_types = $this->getBelongToTypes();
+            $this->value['belong_to'] = $belong_to_types[$db->f('belong_to_key')];
             $this->value['belong_to_id'] = $db->f('belong_to_id');
             $this->value['text'] = $db->f('text');
             $this->value['status_key'] = $db->f('status_key');
-            $this->value['status'] = $this->status_types[$db->f('status_key')];
-            // $this->value['dk_status'] = $onlinepayment_module->getTranslation($this->status_types[$db->f('status_key')]);
+            $status_types = OnlinePayment::getStatusTypes();
+            $this->value['status'] = $status_types[$db->f('status_key')];
             $this->value['amount'] = $db->f('amount');
             $this->value['dk_amount'] = number_format($db->f('amount'), 2, ",", ".");
 
@@ -208,15 +202,20 @@ class OnlinePayment extends Standard {
 
         $input = safeToDb($input);
 
+        require_once 'Intraface/Validator.php';
         $validator = new Validator($this->error);
 
-        $belong_to_key = array_search($input['belong_to'], $this->belong_to_types);
+        if(!isset($input['belong_to'])) $input['belong_to'] = 0;
+        $belong_to_key = array_search($input['belong_to'], $this->getBelongToTypes());
         if($input['belong_to'] == '' || $belong_to_key === false) {
             $this->error->set("Ugyldig belong_to");
         }
 
+        if(!isset($input['belong_to_id'])) $input['belong_to_id'] = 0;
         $validator->isNumeric($input['belong_to_id'], 'belong_to_id er ikke et tal');
+        if(!isset($input['transaction_number'])) $input['transaction_number'] = 0;
         $validator->isString($input['transaction_number'], 'transaction_number er ikke gyldig');
+        if(!isset($input['transaction_status'])) $input['transaction_status'] = '';
         $validator->isString($input['transaction_status'], 'transaction_status er ikke udfyldt');
         if(!isset($this->transaction_status_types[$input['transaction_status']])) {
             $this->error->set("transaction_status '".$input['transaction_status']."' er ikke en gyldig status");
@@ -227,7 +226,9 @@ class OnlinePayment extends Standard {
             $this->error->set("Transactionen er ikke godkendt, så den kan ikke gemmes");
         }
 
+        if(!isset($input['amount'])) $input['amount'] = 0;
         if($validator->isDouble($input['amount'], 'amount er ikke et gyldigt beløb')) {
+            require_once 'Intraface/tools/Amount.php';
             $amount = new Amount($input['amount']);
             if($amount->convert2db()) {
                 $input['amount'] = $amount->get();
@@ -247,7 +248,6 @@ class OnlinePayment extends Standard {
         if($this->error->isError()) {
             return 0;
         }
-
 
         $sql = "date_changed = NOW(),
             status_key = 2,
@@ -346,7 +346,7 @@ class OnlinePayment extends Standard {
 
         $belong_to = safeToDb($belong_to);
 
-        $belong_to_key = array_search($belong_to, $this->belong_to_types);
+        $belong_to_key = array_search($belong_to, $this->getBelongToTypes());
         if($belong_to == '' || $belong_to_key === false) {
             trigger_error("Ugyldig belong_to i OnlinePayment->changeBelongTo()", FATAL);
         }
@@ -369,7 +369,8 @@ class OnlinePayment extends Standard {
         }
         $status = safeToDb($status);
 
-        $status_key = array_search($status, $this->status_types);
+        
+        $status_key = array_search($status, OnlinePayment::getStatusTypes());
         if($status == "" || $status_key === false) {
             trigger_error("Ugyldig status i OnlinePayment->setStatus()", E_USER_ERROR);
         }
@@ -489,7 +490,7 @@ class OnlinePayment extends Standard {
             if($this->dbquery->getFilter('belong_to_id') == 0) {
                 trigger_error("belong_to_id er nul i OnlinePayment->getList()", FATAL);
             }
-            $belong_to_key = array_search($this->dbquery->getFilter('belong_to'), $this->belong_to_types);
+            $belong_to_key = array_search($this->dbquery->getFilter('belong_to'), $this->getBelongToTypes());
             if($this->dbquery->getFilter('belong_to') == '' || $belong_to_key === false) {
                 trigger_error("belong_to_key er ikke gyldig i OnlinePayment->getList()", FATAL);
             }
@@ -511,8 +512,6 @@ class OnlinePayment extends Standard {
             $this->dbquery->setCondition("transaction_number LIKE \"%".$this->dbquery->getFilter('text')."%\" OR text LIKE \"%".$this->dbquery->getFilter('text')."%\"");
         }
 
-        $onlinepayment_module = $this->kernel->getModule('onlinepayment');
-
         $this->dbquery->setSorting("date_created DESC");
         $db = $this->dbquery->getRecordset("id, date_created, belong_to_key, belong_to_id, text, status_key, amount, provider_key, transaction_number, transaction_status, DATE_FORMAT(date_created, '%d-%m-%Y %H:%i') AS dk_date_created", "", false);
         $i = 0;
@@ -523,12 +522,13 @@ class OnlinePayment extends Standard {
             $list[$i]['dk_date_created'] = $db->f('dk_date_created');
             $list[$i]['date_created'] = $db->f('date_created');
             $list[$i]['belong_to_key'] = $db->f('belong_to_key');
-            $list[$i]['belong_to'] = $this->belong_to_types[$db->f('belong_to_key')];
+            $belong_to_types = $this->getBelongToTypes();
+            $list[$i]['belong_to'] = $belong_to_types[$db->f('belong_to_key')];
             $list[$i]['belong_to_id'] = $db->f('belong_to_id');
             $list[$i]['text'] = $db->f('text');
             $list[$i]['status_key'] = $db->f('status_key');
-            $list[$i]['status'] = $this->status_types[$db->f('status_key')];
-            //$list[$i]['dk_status'] = $onlinepayment_module->getTranslation($this->status_types[$db->f('status_key')]);
+            $status_types = OnlinePayment::getStatusTypes();
+            $list[$i]['status'] = $status_types[$db->f('status_key')];
             $list[$i]['amount'] = $db->f('amount');
             $list[$i]['provider_key'] = $db->f('provider_key');
             $list[$i]['dk_amount'] = number_format($db->f('amount'), 2, ",", ".");
@@ -553,6 +553,50 @@ class OnlinePayment extends Standard {
         }
         return $list;
 
+    }
+    
+    /**
+     * returns the possible status types
+     * 
+     * @return array with status types
+     */
+    static function getStatusTypes() 
+    {
+        return array(
+            0 => '',
+            1 => 'created',
+            2 => 'authorized',
+            3 => 'captured',
+            4 => 'reversed',
+            5 => 'cancelled');
+    }
+    
+    /**
+     * returns possible belong to types
+     * 
+     * @return array with belong to types
+     */
+    private function getBelongToTypes() 
+    {
+        return array(
+            0 => '',
+            1 => 'order',
+            2 => 'invoice');
+    }
+    
+    /**
+     * returns the implemented providers
+     * 
+     * @return array with providers
+     */
+    static function getImplementedProviders() 
+    {
+        return array(
+            0 => '_invalid_',
+            1 => 'default', // reserveret for a custom provider, where everythinh runs outside the system.
+            2 => 'quickpay',
+            3 => 'dandomain'
+        );
     }
 
     function isFilledIn() {
