@@ -46,7 +46,7 @@ $page->start('Onlinebetalinger');
 		<select name="status">
 			<option value="-1">Alle</option>
 			<?php
-			$status_types = $module->getSetting('status');
+			$status_types = OnlinePayment::getStatusTypes();
 			for($i = 1, $max = count($status_types); $i < $max; $i++) {
 				?>
 				<option value="<?php print($i); ?>" <?php if ($onlinepayment->dbquery->getFilter("status") == $i) echo ' selected="selected"';?>><?php print($translation->get($status_types[$i])); ?></option>
