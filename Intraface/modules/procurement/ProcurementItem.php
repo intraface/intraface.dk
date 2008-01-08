@@ -148,7 +148,13 @@ class ProcurementItem extends Standard {
             $item[$i]["id"] = $db->f("id");
             $item[$i]["name"] = $product->get("name");
             $item[$i]["number"]= $product->get("number");
-            $item[$i]["unit"] = $product->get("unit");
+            $unit = $product->get("unit");
+            if($db->f("quantity") == 1) {
+                $item[$i]["unit"] = $unit['singular'];
+            }
+            else {
+                $item[$i]["unit"] = $unit['plural'];
+            }
             $item[$i]["unit_purchase_price"] = $db->f("unit_purchase_price");
             $item[$i]["calculated_unit_price"] = $db->f("unit_purchase_price") + $db->f("unit_purchase_price") * $calculated;
             $item[$i]["quantity"] = $db->f("quantity");
