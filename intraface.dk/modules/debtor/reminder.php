@@ -209,8 +209,7 @@ $page->start("Rykker");
 			<label for="type">Type</label>
 			<select name="type" id="type">
 				<?php
-				$invoice_module = $kernel->getModule("invoice");
-				$types = $invoice_module->getSetting("payment_type");
+				$types = $payment->getTypes();
 				foreach($types AS $key => $value) {
 					?>
 					<option value="<?php print(safeToHtml($key)); ?>" <?php if($key == 0) print("selected='selected'"); ?> ><?php print(safeToHtml($translation->get($value))); ?></option>
