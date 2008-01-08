@@ -8,12 +8,9 @@ $shared_filehandler = $kernel->useShared('filehandler');
 $shared_filehandler->includeFile('AppendFile.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-        $product = new Product($kernel, $_POST['id']);
-
+    $product = new Product($kernel, $_POST['id']);
+    
     if(isset($_POST['append_file_submit'])) {
-
-
 
         $filehandler = new FileHandler($kernel);
         $append_file = new AppendFile($kernel, 'product', $product->get('id'));
@@ -33,22 +30,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     }
 
-        if(!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
-            $redirect = Redirect::factory($kernel, 'go');
-            $module_filemanager = $kernel->useModule('filemanager');
-            $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', $module->getPath().'product.php?id='.$product->get('id'));
-            $redirect->setIdentifier('product');
-            $redirect->askParameter('file_handler_id', 'multiple');
+    if(!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
+        $redirect = Redirect::factory($kernel, 'go');
+        $module_filemanager = $kernel->useModule('filemanager');
+        $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', $module->getPath().'product.php?id='.$product->get('id'));
+        $redirect->setIdentifier('product');
+        $redirect->askParameter('file_handler_id', 'multiple');
 
-            header('Location: '.$url);
-            exit;
-        }
-
-
+        header('Location: '.$url);
+        exit;
+    }
+    
     header('Location: product.php?id='.$product->get('id'));
     exit;
-
-
 }
 elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
@@ -93,10 +87,18 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $product = new Product($kernel, $_GET['id']);
         $filehandler = new FileHandler($kernel);
 
-        $redirect = Redirect::factory($kernel, 'return');
-        if($redirect->get('identifier') == 'product') {
-            $append_file = new AppendFile($kernel, 'product', $product->get('id'));
-            $append_file->addFile(new FileHandler($kernel, $redirect->getParameter('file_handler_id')));
+        if(isset($_GET['return_redirect_id'])) {
+            $redirect = Redirect::factory($kernel, 'return');
+            if($redirect->get('identifier') == 'product') {
+                $append_file = new AppendFile($kernel, 'product', $product->get('id'));
+                $array_files = $redirect->getParameter('file_handler_id');
+                if(is_array($array_files)) {
+                    foreach($array_files AS $file_id) {
+                        $append_file->addFile(new FileHandler($kernel, $file_id));
+                    }
+                }
+                
+            }
         }
 
     }
@@ -140,8 +142,8 @@ $page->start(t('product') . ': ' . $product->get('name'));
         <td>
             <?php
                 // getting settings
-                $unit_choises  = $module->getSetting("unit");
-                echo safeToHtml($unit_choises[$product->get('unit_id')]);
+                $unit_choises  = Product::getUnits();
+                echo safeToHtml(t($unit_choises[$product->get('unit_id')]['combined']));
             ?>
         </td>
     </tr>
