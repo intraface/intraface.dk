@@ -175,7 +175,7 @@ $packages = $modulepackage->getList('matrix');
                     }
                     
                     if(is_array($packages[$group['id']][$plan['id']]['product']) && count($packages[$group['id']][$plan['id']]['product']) > 0) {
-                        echo '<p> DKK '.safeToHtml($packages[$group['id']][$plan['id']]['product']['price_incl_vat']).' '.$translation->get('per').' '.$translation->get($packages[$group['id']][$plan['id']]['product']['unit_declensions']['singular']).'</p>';
+                        echo '<p> DKK '.safeToHtml($packages[$group['id']][$plan['id']]['product']['price_incl_vat']).' '.$translation->get('per').' '.$translation->get($packages[$group['id']][$plan['id']]['product']['unit']['singular']).'</p>';
                     }
                     
                     echo '<a href="add_package.php?id='.$packages[$group['id']][$plan['id']]['id'].'">'.$translation->get('choose', 'common').'</a>';

@@ -139,7 +139,7 @@ $page->start(safeToHtml($translation->get($add_type).' '.$translation->get('pack
         
         ?>
         <label for="price"><?php echo safeToHtml($translation->get('price')); ?></label>
-        <span id="price"><?php $product = $modulepackageshop->getProduct((int)$modulepackage->get('product_id')); if(isset($product['price_incl_vat'])): echo safeToHtml('DKK '.$product['price_incl_vat']).' '.$translation->get('per').' '.$translation->get($product['unit_declensions']['singular']); else: echo 'free!'; endif; ?></span>
+        <span id="price"><?php $product = $modulepackageshop->getProduct((int)$modulepackage->get('product_id')); if(isset($product['price_incl_vat'])): echo safeToHtml('DKK '.$product['price_incl_vat']).' '.$translation->get('per').' '.$translation->get($product['unit']['singular']); else: echo 'free!'; endif; ?></span>
     </div>
     
     <div class="formrow">
