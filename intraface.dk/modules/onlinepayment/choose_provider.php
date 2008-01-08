@@ -7,7 +7,6 @@
 require('../../include_first.php');
 
 $onlinepayment_module = $kernel->module('onlinepayment');
-$implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
 
 if (!empty($_POST)) {
 
@@ -40,8 +39,9 @@ $page->start('Onlinebetalinger');
 			<label for="provider">Udbyder</label>
 			<select name="provider_key" id="provider">
 				<option value="">Vælg</option>
-				<?php
-					foreach($implemented_providers AS $key => $provider):
+				    <?php
+					$implemented_providers = OnlinePayment::getImplementedProviders();
+                    foreach($implemented_providers AS $key => $provider):
 						if ($provider == '_invalid_') continue;
 						echo '<option value="'.$key.'"';
 						if (intval($value['provider_key']) == $key):
@@ -49,7 +49,7 @@ $page->start('Onlinebetalinger');
 						endif;
 						echo '>'.$provider.'</option>';
 					endforeach;
-				?>
+				    ?>
 			</select>
 		</div>
 	</fieldset>
