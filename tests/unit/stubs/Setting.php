@@ -1,17 +1,20 @@
 <?php
 class FakeSetting {
     
+    var $setting;
+    
     function get($type, $setting) {
         
-        $info = array(
-            'intranet' => array('onlinepayment.provider_key' => 1));
-        
-        if(!isset($info[$type][$setting])) {
-            trigger_error('You need to create the setting '.$type.':'.$setting.' in stubs/Setting.php', E_USER_ERROR);
+        if(!isset($this->setting[$type][$setting])) {
+            trigger_error('You need to create the setting '.$type.':'.$setting.' in with set(type, key, value) before use', E_USER_ERROR);
             exit;
         }
         
-        return $info[$type][$setting];
+        return $this->setting[$type][$setting];
+    }
+    
+    function set($type, $key, $value) {
+        $this->setting[$type][$key] = $value;
     }
     
 }

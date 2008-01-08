@@ -13,6 +13,11 @@ class FakeKernel {
         exit;
     }
     
+    function getModule() {
+        trigger_error('kernel->getModule should not be used in classes. Please rewrite the method!', E_USER_ERROR);
+        exit;
+    }
+    
     public function getSessionId() {
         return $this->session_id = 'notreallyauniquesessionid';
     }
