@@ -8,7 +8,7 @@ class OnlinePayment_AllTests
 {
 
     public static function suite() {
-        $suite = new PHPUnit_Framework_TestSuite('Intraface_Debtor');
+        $suite = new PHPUnit_Framework_TestSuite('Intraface_Onlinepayment');
 
         $suite->addTestSuite('OnlinePaymentTest');
         return $suite;

@@ -46,8 +46,13 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
         $pdf = $this->createPdf();
         $pdf->visit($this->createDebtor());
         $pdf->output('file', TEST_PATH_TEMP.'debtor.pdf');
-        $this->assertEquals(file_get_contents('expected_debtor.pdf'), file_get_contents(TEST_PATH_TEMP.'debtor.pdf'));
-        $this->assertTrue(is_string($pdf->output('string')));
+        $expected = file_get_contents('tests/unit/debtor/expected_debtor.pdf', 1);
+        $actual = file_get_contents(TEST_PATH_TEMP.'debtor.pdf');
+        
+        
+        $this->assertEquals(strlen($expected), strlen($actual));
+        $this->assertEquals($expected, $actual);
+        
     }
 
 }

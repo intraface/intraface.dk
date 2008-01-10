@@ -4,6 +4,7 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'tests/unit/stubs/Kernel.php';
 require_once 'tests/unit/stubs/Intranet.php';
+require_once 'tests/unit/stubs/Address.php';
 require_once 'tests/unit/stubs/User.php';
 require_once 'tests/unit/stubs/Setting.php';
 require_once 'Intraface/modules/invoice/Payment.php';
@@ -30,6 +31,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         $kernel = new FakeKernel;
         $kernel->user = new FakeUser;
         $kernel->intranet = new FakeIntranet;
+        $kernel->intranet->address = new FakeAddress;
         $kernel->setting = new FakeSetting;
         $kernel->setting->set('intranet', 'onlinepayment.provider_key', 1);
         $kernel->setting->set('user', 'accounting.active_year', 1);
