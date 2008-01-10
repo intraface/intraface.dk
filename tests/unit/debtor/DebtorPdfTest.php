@@ -3,10 +3,10 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/debtor/Visitor/Pdf.php';
-require_once '../stubs/Translation.php';
-require_once '../stubs/Address.php';
-require_once '../contact/stubs/Contact.php';
-require_once '../contact/stubs/ContactPerson.php';
+require_once 'tests/unit/stubs/Translation.php';
+require_once 'tests/unit/stubs/Address.php';
+require_once 'tests/unit/contact/stubs/Contact.php';
+require_once 'tests/unit/contact/stubs/ContactPerson.php';
 require_once 'stubs/Debtor.php';
 
 

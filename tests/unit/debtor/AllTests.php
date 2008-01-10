@@ -15,6 +15,7 @@ class Debtor_AllTests
         $suite->addTestSuite('DebtorTest');
         $suite->addTestSuite('DebtorItemTest');
         $suite->addTestSuite('DebtorPdfTest');
+        $suite->addTestSuite('DebtorPaymentTest');
         return $suite;
     }
 }

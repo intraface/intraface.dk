@@ -2,13 +2,13 @@
 require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
-require_once '../stubs/Kernel.php';
-require_once '../stubs/Intranet.php';
-require_once '../stubs/User.php';
-require_once '../stubs/Setting.php';
+require_once 'tests/unit/stubs/Kernel.php';
+require_once 'tests/unit/stubs/Intranet.php';
+require_once 'tests/unit/stubs/User.php';
+require_once 'tests/unit/stubs/Setting.php';
 require_once 'Intraface/modules/invoice/Payment.php';
 
-class PaymentTest extends PHPUnit_Framework_TestCase
+class DebtorPaymentTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
     
