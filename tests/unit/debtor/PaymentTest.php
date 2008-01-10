@@ -8,7 +8,7 @@ require_once 'tests/unit/stubs/User.php';
 require_once 'tests/unit/stubs/Setting.php';
 require_once 'Intraface/modules/invoice/Payment.php';
 
-class DebtorPaymentTest extends PHPUnit_Framework_TestCase
+class PaymentTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
     
