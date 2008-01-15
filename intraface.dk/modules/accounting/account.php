@@ -78,8 +78,8 @@ $page->start('Kontooversigt');
 		<tbody>
 			<?php foreach ($posts AS $post) { $saldo = $saldo + $post['debet'] - $post['credit']; ?>
 			<tr>
-				<td><?php echo $post['dk_date']; ?></td>
-				<td><a href="voucher.php?id=<?php echo $post['voucher_id']; ?>"><?php echo $post['voucher_number']; ?></a></td>
+				<td><?php if(isset($post['dk_date'])) echo $post['dk_date']; ?></td>
+				<td><?php if(isset($post['voucher_id'])): ?><a href="voucher.php?id=<?php echo $post['voucher_id']; ?>"><?php echo $post['voucher_number']; ?></a><?php endif; ?></td>
 				<td><?php echo $post['text']; ?></td>
 				<td class="amount"><?php echo amountToOutput($post['debet']); ?></td>
 				<td class="amount"><?php echo amountToOutput($post['credit']); ?></td>
