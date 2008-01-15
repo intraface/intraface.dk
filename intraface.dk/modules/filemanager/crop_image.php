@@ -45,7 +45,6 @@ else {
 }
 
 
-$filemanager = new FileManager($kernel, $_GET['id']);
 
 $page = new Page($kernel);
 
@@ -62,6 +61,19 @@ $size_ratio = $editor_img_width/$img_width;
 $filemanager->createInstance($instance_type);
 $type = $filemanager->instance->get('instance_properties');
 
+$editor_min_width = $type['max_width'] * $size_ratio;
+$editor_min_height = $type['max_height'] * $size_ratio;
+
+if($editor_min_width > $editor_img_width) {
+    $editor_min_width = $editor_img_width;
+    $editor_min_height = ($editor_img_width/$editor_min_width)*$editor_min_height;
+}
+
+if($editor_min_height > $editor_img_height) {
+    $editor_min_height = $editor_img_height;
+    $editor_min_width = ($editor_img_height/$editor_min_height)*$editor_min_width;
+}
+
 if($type['resize_type'] != 'strict' && !empty($_GET['unlock_ratio'])) {
     $unlock_ratio = 1;
 }
@@ -72,7 +84,7 @@ else {
 $page->includeJavascript('module', 'cropper/lib/prototype.js');
 $page->includeJavascript('module', 'cropper/lib/scriptaculous.js?load=builder,dragdrop');
 $page->includeJavascript('module', 'cropper/cropper.js');
-$page->includeJavascript('module', 'crop_image.js.php?size_ratio='.doubleval(1/$size_ratio).'&max_width='.round($type['max_width']*$size_ratio).'&max_height='.round($type['max_height']*$size_ratio).'&unlock_ratio='.$unlock_ratio);
+$page->includeJavascript('module', 'crop_image.js.php?size_ratio='.doubleval(1/$size_ratio).'&max_width='.round($editor_min_width).'&max_height='.round($editor_min_height).'&unlock_ratio='.$unlock_ratio);
 
 $page->start($translation->get('crop image').' '.$filemanager->get('file_name'));
 ?>
