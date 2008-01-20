@@ -52,7 +52,29 @@ abstract class Ilib_Keyword
         if ($this->id > 0) {
             $this->load();
         }
+    }
 
+    static function createFromKeyword($type, $extra_conditions = array(), $keyword)
+    {
+        $condition = $extra_conditions;
+        $condition['type'] = $type;
+        $condition['keyword'] = $keyword;
+        $condition['active'] = 1;
+
+        foreach ($condition as $column => $value) {
+            $c[] = $column . " = '" . $value . "'";
+        }
+
+        $db = MDB2::singleton(DB_DSN);
+
+        $result = $db->query("SELECT id FROM keyword WHERE "  .  implode(' AND ', $c));
+
+        if (!PEAR::isError($result)) {
+            if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC))
+            return new Ilib_Keyword($type, $extra_conditions, $row['id']);
+        }
+
+        throw new Exception('Error in query');
     }
 
     /**
@@ -651,13 +673,13 @@ class Intraface_Keyword_StringAppender
 
     function __construct($keyword, $appender)
     {
-        $this->keyword = $keyword;
+        $this->keyword_class = $keyword;
         $this->appender = $appender;
     }
 
-    function cloneKeyword()
+    private function cloneKeyword()
     {
-        return clone $this->keyword;
+        return clone $this->keyword_class;
     }
 
     /**
@@ -667,7 +689,7 @@ class Intraface_Keyword_StringAppender
      *
      * @return boolean
      */
-    function addKeywordsByString($string)
+    public function addKeywordsByString($string)
     {
         $this->appender->deleteConnectedKeywords();
 
@@ -676,7 +698,7 @@ class Intraface_Keyword_StringAppender
         if (is_array($keywords) AND count($keywords) > 0) {
             foreach ($keywords AS $key => $value) {
                 $keyword = $this->cloneKeyword();
-                if ($add_keyword_id = $keyword->save(array('keyword' => $value))) {
+                if ($keyword->save(array('keyword' => $value))) {
                     $this->appender->addKeyword($keyword);
                 }
             }
