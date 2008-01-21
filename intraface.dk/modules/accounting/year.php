@@ -60,7 +60,7 @@ else {
 }
 
 if (!$year->_isValid()) {
-	trigger_error('Året er ikke gyldigt', FATAL);
+	trigger_error('Året er ikke gyldigt', E_USER_ERROR);
 }
 
 $years = $year->getList();
