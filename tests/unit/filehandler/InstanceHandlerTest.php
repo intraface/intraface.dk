@@ -5,6 +5,7 @@ require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/shared/filehandler/FileHandler.php';
+require_once 'Intraface/shared/filehandler/InstanceManager.php';
 
 class FakeInstanceHandlerKernel {
     public $intranet;
@@ -50,13 +51,12 @@ function iht_deltree( $f ){
 class InstanceHandlerTest extends PHPUnit_Framework_TestCase
 {
 
-    private $file_name = 'wideonball.jpg';
-
     function setUp()
     {
         $db = MDB2::factory(DB_DSN);
         $db->query('TRUNCATE file_handler');
         $db->query('TRUNCATE file_handler_instance');
+        $db->query('TRUNCATE file_handler_instance_type');
         iht_deltree(PATH_UPLOAD.'1');
         if(file_exists(PATH_UPLOAD.'/1/1.jpeg')) {
             unlink(PATH_UPLOAD.'/1/1.jpeg');
@@ -77,12 +77,12 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
         return new FileHandler($this->createKernel());
     }
 
-    function createFile()
+    function createFile($file)
     {
-        $data = array('file_name' => $this->file_name);
+        $data = array('file_name' => $file);
         $filehandler = $this->createFileHandler();
-        copy(dirname(__FILE__) . '/'.$this->file_name, PATH_UPLOAD.$this->file_name);
-        $filehandler->save(PATH_UPLOAD.$this->file_name, $this->file_name);
+        copy(dirname(__FILE__) . '/'.$file, PATH_UPLOAD.$file);
+        $filehandler->save(PATH_UPLOAD.$file, $file);
         $filehandler->load();
         $this->assertEquals('', $filehandler->error->view());
         return $filehandler;
@@ -90,29 +90,29 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
     ////////////////////////////////////////////////////////////////
 
     function testCreateFile() {
-        $file = $this->createFile();
+        $file = $this->createFile('wideonball.jpg');
 
-        $this->assertEquals($this->file_name, $file->get('file_name'));
+        $this->assertEquals('wideonball.jpg', $file->get('file_name'));
     }
 
 
     function testConstructWithoutParameters() {
 
-        $filehandler = $this->createFile();
+        $filehandler = $this->createFile('wideonball.jpg');
         $filehandler->createInstance();
         $this->assertTrue(is_object($filehandler->instance));
 
     }
 
     function testConstructWithTypeSquare() {
-        $filehandler = $this->createFile();
+        $filehandler = $this->createFile('wideonball.jpg');
         $filehandler->createInstance('square');
 
         $this->assertEquals(3844, $filehandler->instance->get('file_size'));
     }
 
     function testConstructWithTypeSquareAndCropParams() {
-        $filehandler = $this->createFile();
+        $filehandler = $this->createFile('wideonball.jpg');
 
         $crop = array('crop_offset_x' => 200,
             'crop_offset_y' => 20,
@@ -134,6 +134,21 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
         $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
         $this->assertEquals($crop, unserialize($row['crop_parameter']));
 
+    }
+    
+    function testCreateCustomInstanceCreaterThanImage() {
+        
+        $im = new InstanceManager($this->createKernel());
+        
+        $this->assertEquals(1000, $im->save(array('name' => 'wide', 'max_height' => 280, 'max_width' => 720, 'resize_type' => 'strict')));
+        
+        $filehandler = $this->createFile('idraetshoejskolen9.jpg');
+        $filehandler->createInstance('wide');
+        // we add 10 bytes delta
+        $this->assertEquals(54498, filesize($filehandler->instance->get('file_path')), '', 10);
+        $size = getimagesize($filehandler->instance->get('file_path')); 
+        $this->assertEquals(720, $size[0]);
+        $this->assertEquals(280, $size[1]);
     }
 
 
