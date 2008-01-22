@@ -300,24 +300,6 @@ class Debtor extends Standard
             }
         }
 
-        if(($this->value["type"] == "order" || $this->value["type"] == "invoice") && $this->kernel->intranet->hasModuleAccess('onlinepayment')) {
-            require_once 'Intraface/modules/onlinepayment/OnlinePayment.php';
-            $onlinepayment = OnlinePayment::factory($this->kernel);
-            $onlinepayment->dbquery->setFilter('belong_to', $this->value["type"]);
-            $onlinepayment->dbquery->setFilter('belong_to_id', $this->value['id']);
-            $onlinepayment->dbquery->setFilter('status', 2);
-
-            // $actions = $onlinepayment->getTransactionActions();
-
-            $payment_list = $onlinepayment->getlist();
-            foreach($payment_list AS $p) {
-                if($p['status'] == 'authorized') {
-                    // Det er kune ikke hævede beløb der skal regnes med. Hævede beløb regnes med under betalinger.
-                    $this->value['payment_online'] += $p["amount"];
-                }
-            }
-        }
-
         $this->value['arrears'] = $this->value['total'] - $this->value['payment_total'];
 
         return true;
@@ -1013,41 +995,6 @@ class Debtor extends Standard
             return true;
         }
         return false;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Returns the pdf
-     *
-     * @param string $type     How to output the pdf
-     * @param string $filename Optional. Only fill in if pdf should be outputted as a file
-     *
-     * @return array
-     */
-    public function pdf($type = '', $filename = '')
-    {
-        if($this->get('id') == 0) {
-            trigger_error('Cannot create pdf from debtor without valid id', E_USER_ERROR);
-        }
-
-        $shared_pdf = $this->kernel->useShared('pdf');
-        // $shared_pdf->includeFile('PdfMakerDebtor.php');
-
-        $translation = $this->kernel->getTranslation('debtor');
-
-        // hmm this should be done with the module object
-        require_once PATH_INCLUDE_MODULE . 'debtor/Visitor/Pdf.php';
-
-        $filehandler = '';
-
-        if($this->kernel->intranet->get("pdf_header_file_id") != 0) {
-            $filehandler = new FileHandler($this->kernel, $this->kernel->intranet->get("pdf_header_file_id"));
-        }
-
-        $report = new Debtor_Report_Pdf($translation, $filehandler);
-        $report->visit($this);
-        return $report->output($type, $filename);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
