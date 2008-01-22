@@ -76,10 +76,10 @@ class Intraface_XMLRPC_Newsletter_Server
         $this->factoryList($list_id);
 
         if (!$this->subscriber->unsubscribe($email)) {
-            throw new XML_RPC2_FaultException('Du kunne ikke framelde dig ' .$email, -4);
+            throw new XML_RPC2_FaultException('you could not unsubscribe with ' .$email, -4);
         }
 
-        return 1;
+        return true;
     }
 
     /**
@@ -94,13 +94,12 @@ class Intraface_XMLRPC_Newsletter_Server
      */
     function optin($credentials, $list_id, $optin_code, $ip)
     {
-
         $this->checkCredentials($credentials);
 
         $this->factoryList($list_id);
 
         if (!$this->subscriber->optIn($optin_code, $ip)) {
-            throw new XML_RPC2_FaultException('Du kunne ikke bekræfte din tilmelding', -4);
+            throw new XML_RPC2_FaultException('your submission could not be confirmed', -4);
         }
 
         return true;
