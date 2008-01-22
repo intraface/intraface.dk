@@ -613,7 +613,7 @@ if(isset($onlinepayment)) {
 
 					<div class="formrow">
 						<label for="amount" class="tight">Beløb</label>
-						<input type="text" name="amount" id="amount" value="<?php print(number_format($debtor->get("arrears"), 2, ",", ".")); ?>" /> <!-- $debtor->get("total") - $debtor->get('payment_total') - $debtor->get('payment_online') -->
+						<input type="text" name="amount" id="amount" value="<?php print(number_format($debtor->get("arrears"), 2, ",", ".")); ?>" />
 					</div>
 
 					<div style="clear: both;">
