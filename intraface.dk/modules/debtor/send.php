@@ -68,13 +68,30 @@ switch ($send_as) {
 
 }
 
+if(($debtor->  get("type") == "order" || $debtor->get("type") == "invoice") && $kernel->intranet->hasModuleAccess('onlinepayment')) {
+    $kernel->useModule('onlinepayment');
+    $onlinepayment = OnlinePayment::factory($kernel);
+}
+else {
+    $onlinepayment = NULL;
+}
+
+if($kernel->intranet->get("pdf_header_file_id") != 0) {
+    $file = new FileHandler($kernel, $kernel->intranet->get("pdf_header_file_id"));
+}
+else {
+    $file = NULL;
+}
 
 # gem debtoren som en fil i filsystemet
 $filehandler = new FileHandler($kernel);
 $tmp_file = $filehandler->createTemporaryFile($translation->get($debtor->get("type")).$debtor->get('number').'.pdf');
 
 // Her gemmes filen
-$debtor->pdf('file', $tmp_file->getFilePath());
+require_once 'Intraface/modules/debtor/Visitor/Pdf.php';
+$report = new Debtor_Report_Pdf($translation, $file);
+$report->visit($debtor, $onlinepayment);
+$report->output('file', $tmp_file->getFilePath());
 
 # gem filen med filehandleren
 $filehandler = new FileHandler($kernel);
