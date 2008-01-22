@@ -633,6 +633,9 @@ if(isset($onlinepayment)) {
 	if($debtor->get("type") == "invoice") {
 		$payments = $payment->getList();
 		$payment_total = 0;
+        if($kernel->user->hasModuleAccess('accounting')) {
+            $module_accounting = $kernel->useModule('accounting');      
+        }
 		if(count($payments) > 0) {
 			?>
 				<table class="stripe">
@@ -643,6 +646,9 @@ if(isset($onlinepayment)) {
 							<th>Type</th>
 							<th>Beskrivelse</th>
 							<th>Beløb</th>
+                            <?php if($kernel->user->hasModuleAccess('accounting')): ?>
+                                <th>Bogført</th>
+                            <?php endif; ?>
 						</tr>
 					</thead>
 					<tbody>
@@ -666,7 +672,18 @@ if(isset($onlinepayment)) {
 								?>
 							</td>
 							<td><?php print(number_format($payments[$i]["amount"], 2, ",", ".")); ?></td>
-						</tr>
+						    <?php if($kernel->user->hasModuleAccess('accounting')): ?>
+                                <td>
+                                    <?php if($payments[$i]['is_stated']): ?>
+                                        <a href="<?php e($module_accounting->getPath().'voucher.php?id='.$payments[$i]['voucher_id']); ?>"><?php e($translation->get('voucher')); ?></a>
+                                    <?php elseif($payments[$i]['type'] == 'credit_note'): ?>
+                                        <a href="state_credit_note.php?id=<?php e($payments[$i]['id']) ?>"><?php e($translation->get('state credit note')); ?></a>
+                                    <?php else: ?>
+                                        <a href="state_payment.php?debtor_id=<?php e($debtor->get('id')); ?>&amp;payment_id=<?php e($payments[$i]['id']) ?>"><?php e($translation->get('state payment')); ?></a>
+                                    <?php endif; ?>
+                                </td>
+                            <?php endif; ?>  
+                        </tr>
 						<?php
 					}
 					?>
@@ -676,13 +693,15 @@ if(isset($onlinepayment)) {
 						<td>&nbsp;</td>
 						<td><strong>I alt</strong></td>
 						<td><?php print(number_format($payment_total, 2, ",", ".")); ?></td>
+                        <td>&nbsp;</td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<th>Manglende betaling</th>
 						<td><?php echo number_format($debtor->get("total") - $payment_total, 2, ",", "."); ?></td>
-					</tr>
+					    <td>&nbsp;</td>
+                    </tr>
 				</table>
 			<?php
 		}
