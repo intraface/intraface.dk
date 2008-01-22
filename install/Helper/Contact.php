@@ -14,7 +14,7 @@ class Install_Helper_Contact {
         require_once 'Intraface/modules/contact/Contact.php';
         $contact = new Contact($this->kernel);
         
-        return $contact->save(array('name' => 'Contact 1', 'email' => 'test@intraface.dk'));
+        return $contact->save(array('name' => 'Contact 1', 'address' => 'Testroad 1', 'postcode' => '1000', 'city' => 'Aarhus', 'email' => 'test@intraface.dk'));
     }
 }
 ?>
