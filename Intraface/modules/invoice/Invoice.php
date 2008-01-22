@@ -97,10 +97,20 @@ class Invoice extends Debtor
         }
     }
 
-    function readyForState($check_products = 'check_products')
+    function readyForState($year, $check_products = 'check_products')
     {
+        if(!is_object($year)) {
+            trigger_error('First parameter to readyForState needs to be a Year object!', E_USER_ERROR);
+            return false;
+        }
+        
         if(!in_array($check_products, array('check_products', 'skip_check_products'))) {
-            trigger_error('First paramenter in Invice->readyForState should be either "check_products" or "skip_check_products"', E_USER_ERROR);
+            trigger_error('Second paramenter in Invice->readyForState should be either "check_products" or "skip_check_products"', E_USER_ERROR);
+            return false;
+        }
+        
+        if (!$year->readyForState()) {
+            $this->error->set('Regnskabåret er ikke klar til bogføring');
             return false;
         }
         
@@ -128,6 +138,13 @@ class Invoice extends Debtor
                 if ($product->get('state_account_id') == 0) {
                     $this->error->set('Produktet ' . $product->get('name') . ' ved ikke hvor den skal bogføres');
                 }
+                else {
+                    require_once 'Intraface/modules/accounting/Account.php';
+                    $account = Account::factory($year, $product->get('state_account_id'));
+                    if($account->get('id') == 0 || $account->get('type') != 'operating') {
+                        $this->error->set('Ugyldig konto for bogføring af produktet ' . $product->get('name'));
+                    }
+                }
             }
         }
         
@@ -139,6 +156,11 @@ class Invoice extends Debtor
 
     function state($year, $voucher_number, $voucher_date)
     {
+        if(!is_object($year)) {
+            trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
+            return false;
+        }
+        
         $validator = new Validator($this->error);
         if($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);
@@ -149,31 +171,10 @@ class Invoice extends Debtor
             return false;
         }
 
-
-        // FIXME - der skal laves tjek på datoen
-        if ($this->isStated()) {
-            $this->error->set('Allerede bogført');
-            return false;
-        }
-        if (!$this->readyForState()) {
+        if (!$this->readyForState($year)) {
             $this->error->set('Faktura er ikke klar til bogføring');
             return false;
         }
-        
-        if (!$year->readyForState()) {
-            $this->error->set('Regnskabåret er ikke klar til bogføring');
-            return false;
-        }
-        
-        if ($this->get('type') != 'invoice') {
-            $this->error->set('Ikke en faktura');
-            return false;
-        }
-
-        if (!$this->kernel->user->hasModuleAccess('accounting')) {
-            trigger_error('Ikke rettigheder til at bogføre', E_USER_ERROR);
-        }
-
         
         // hente alle produkterne på debtor
         $this->loadItem();
@@ -191,7 +192,7 @@ class Invoice extends Debtor
 
 
         $total = 0;
-
+        
         foreach($items AS $item) {
 
             // produkterne
@@ -256,6 +257,13 @@ class Invoice extends Debtor
         if (!$voucher_file->save(array('description' => 'Faktura ' . $this->get('number'), 'belong_to'=>'invoice','belong_to_id'=>$this->get('id')))) {
             $this->error->merge($voucher_file->error->getMessage());
             $this->error->set('Filen blev ikke overflyttet');
+        }
+        
+        if($this->error->isError()) {
+            $this->error->set('Der er opstået en fejl under bogføringen af fakturaen. Det kan betyde at dele af den er bogført, men ikke det hele. Du bedes manuelt tjekke bilaget');
+            // I am not quite sure if the invoice should be set as stated, but it can give trouble to state it again, if some of it was stated...
+            $this->setStated($voucher->get('id'), $this_date->get());
+            return false;
         }
 
         $this->setStated($voucher->get('id'), $this_date->get());
