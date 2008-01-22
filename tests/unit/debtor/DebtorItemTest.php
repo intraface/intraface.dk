@@ -6,7 +6,7 @@ require_once 'Intraface/modules/debtor/DebtorItem.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'tests/unit/stubs/Kernel.php';
 require_once 'tests/unit/stubs/Intranet.php';
-require_once 'stubs/Debtor.php';
+require_once 'tests/unit/debtor/stubs/Debtor.php';
 // require_once 'Intraface/DBQuery.php';
 
 
