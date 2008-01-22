@@ -19,10 +19,14 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
     function setUp() {
         
         $db = MDB2::factory(DB_DSN);
-        $db->query('TRUNCATE debtor');
-        $db->query('TRUNCATE debtor_item');
-        $db->query('TRUNCATE product');
-        $db->query('TRUNCATE product_detail');
+        $db->exec('TRUNCATE debtor');
+        $db->exec('TRUNCATE debtor_item');
+        $db->exec('TRUNCATE product');
+        $db->exec('TRUNCATE product_detail');
+        $db->exec('TRUNCATE accounting_account');
+        $db->exec('TRUNCATE accounting_post');
+        $db->exec('TRUNCATE accounting_year');
+        $db->exec('TRUNCATE accounting_voucher');
         
     }
     
@@ -57,7 +61,7 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
         $invoice->loadItem();
         
         $product = new Product($this->createKernel());
-        $product->save(array('name' => 'test', 'vat' => 1, 'price' => '100', 'state_account_id' => 2));
+        $product->save(array('name' => 'test', 'vat' => 1, 'price' => '100', 'state_account_id' => 1110));
         $invoice->item->save(array('product_id' => 1, 'quantity' => 2, 'description' => 'This is a test'));
         
         return $invoice;
@@ -93,25 +97,95 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
     
     function testReadyForStateWithoutCheckingProducts() {
         $invoice = $this->createAnInvoiceWithOneItem();
-        $this->assertFalse($invoice->readyForState('skip_check_products'));
+        $this->assertFalse($invoice->readyForState($this->createAccountingYear(), 'skip_check_products'));
         
         // needed otherwise errors are transfered...
         $invoice = $this->createAnInvoiceWithOneItem();
         $invoice->setStatus('sent');
-        $this->assertTrue($invoice->readyForState('skip_check_products'), $invoice->error->view());
+        $this->assertTrue($invoice->readyForState($this->createAccountingYear(), 'skip_check_products'), $invoice->error->view());
     }
     
     function testReadyForStateWithCheckingProducts() {
         
         $invoice = $this->createAnInvoiceWithOneItem();
         $invoice->setStatus('sent');
-        $this->assertTrue($invoice->readyForState(), $invoice->error->view());
+        $this->assertTrue($invoice->readyForState($this->createAccountingYear()), $invoice->error->view());
     }
     
     function testState() {
         $invoice = $this->createAnInvoiceWithOneItem();
         $invoice->setStatus('sent');
-        $this->assertTrue($invoice->state($this->createAccountingYear(), 1, '10-01-2008'), $invoice->error->view());
+        $year = $this->createAccountingYear();
+        $this->assertTrue($invoice->state($year, 1, '10-01-2008'), $invoice->error->view());
+        
+        $voucher = Voucher::factory($year, 1);
+        
+        $expected = array(
+            0 => array(
+                'id' => 1,
+                'date_dk' => '10-01-2008',
+                'date' => '2008-01-10',
+                'text' => 'Faktura #1 - test',
+                'debet' => 200.00,
+                'credit' => 0.00,
+                'voucher_number' => 1,
+                'reference' => '',
+                'voucher_id' => 1,
+                'account_id' => 32,
+                'stated' => 1,
+                'account_number' => 56100,
+                'account_name' => 'Debitor'
+            ),
+            1 => array(
+                'id' => 2,
+                'date_dk' => '10-01-2008',
+                'date' => '2008-01-10',
+                'text' => 'Faktura #1 - test',
+                'debet' => 0.00,
+                'credit' => 200.00,
+                'voucher_number' => 1,
+                'reference' => '',
+                'voucher_id' => 1,
+                'account_id' => 2,
+                'stated' => 1,
+                'account_number' => 1110,
+                'account_name' => 'Salg med moms'
+            ),
+            2 => array(
+                'id' => 3,
+                'date_dk' => '10-01-2008',
+                'date' => '2008-01-10',
+                'text' => 'Faktura #1 - Moms, udgående, salg',
+                'debet' => 50.00,
+                'credit' => 0.00,
+                'voucher_number' => 1,
+                'reference' => '',
+                'voucher_id' => 1,
+                'account_id' => 32,
+                'stated' => 1,
+                'account_number' => 56100,
+                'account_name' => 'Debitor'
+            ),
+            3 => array(
+                'id' => 4,
+                'date_dk' => '10-01-2008',
+                'date' => '2008-01-10',
+                'text' => 'Faktura #1 - Moms, udgående, salg',
+                'debet' => 0.00,
+                'credit' => 50.00,
+                'voucher_number' => 1,
+                'reference' => '',
+                'voucher_id' => 1,
+                'account_id' => 46,
+                'stated' => 1,
+                'account_number' => 66200,
+                'account_name' => 'Moms, udgående, salg'
+            )
+        );
+        
+        $this->assertEquals($expected, $voucher->getPosts());
+        $this->assertTrue($invoice->isStated());
+        $this->assertFalse($invoice->readyForState($year));
     }
 
 }
