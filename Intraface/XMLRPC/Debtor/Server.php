@@ -91,13 +91,33 @@ class Intraface_XMLRPC_Debtor_Server {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
-        $this->kernel->useShared('pdf');
+        
         $debtor = Debtor::factory($this->kernel, $debtor_id);
         if (!$debtor->get('id') > 0) {
             return '';
         }
-
-        $encoded = XML_RPC2_Value::createFromNative($debtor->pdf('string'), 'base64');
+        
+        if(($debtor->get("type") == "order" || $debtor->get("type") == "invoice") && $this->kernel->intranet->hasModuleAccess('onlinepayment')) {
+            $this->kernel->useModule('onlinepayment');
+            $onlinepayment = OnlinePayment::factory($this->kernel);
+        }
+        else {
+            $onlinepayment = NULL;
+        }
+        
+        if($this->kernel->intranet->get("pdf_header_file_id") != 0) {
+            $this->kernel->useShared('filehandler');
+            $filehandler = new FileHandler($this->kernel, $this->kernel->intranet->get("pdf_header_file_id"));
+        }
+        else {
+            $filehandler = NULL;
+        }
+        
+        require_once 'Intraface/modules/debtor/Visitor/Pdf.php';
+        $report = new Debtor_Report_Pdf($this->kernel->getTranslation('debtor'), $filehandler);
+        $report->visit($debtor, $onlinepayment);
+        
+        $encoded = XML_RPC2_Value::createFromNative($report->output('string'), 'base64');
         return $encoded;
 
     }
