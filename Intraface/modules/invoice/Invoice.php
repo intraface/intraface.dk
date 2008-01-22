@@ -7,6 +7,8 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 
+require_once 'Intraface/modules/debtor/Debtor.php';
+
 class Invoice extends Debtor
 {
 
@@ -25,30 +27,6 @@ class Invoice extends Debtor
         }
 
         $is_true = Debtor::setStatus($status);
-
-        /**
-         * Midlertidig HACK:
-         * Da status nu godt kan gå fra executed til sent, er vi nødt til at sikre os at den ikke tidligere har været executed
-         *
-         * NU VÆK, nyt stock erstatter denne.
-         */
-        /*
-        if($is_true && $this->get("type") == 3 && $status == "executed" && $this->get("date_executed") == "0000-00-00") {
-
-            if($this->kernel->intranet->hasModuleAccess("stock")) {
-                $main_stock = $this->kernel->useModule("stock", true);
-
-                $this->loadItem();
-                $items = $this->item->getList();
-
-                foreach ($items AS $item) {
-                    $product = new Product($this->kernel, $item['product_id']);
-                    $stock = new Stock($product);
-                    $stock->reduce($item['quantity']);
-                }
-            }
-        }
-        */
 
         return $is_true;
     }
@@ -92,9 +70,7 @@ class Invoice extends Debtor
         $this->payment = new Payment($this);
         $this->payment->dbquery->setFilter("to_date", $to_date);
         $payments = $this->payment->getList();
-
-        $module_invoice = $this->kernel->useModule('invoice');
-        $payment_types = $module_invoice->getSetting('payment_type');
+        $payment_types = $this->payment->getTypes();
 
         foreach($payment_types AS $type) {
             $payment[$type] = 0;
@@ -121,28 +97,44 @@ class Invoice extends Debtor
         }
     }
 
-    function invoiceReadyForState()
+    function readyForState($check_products = 'check_products')
     {
-        if (!$this->readyForState()) {
-            return 0;
+        if(!in_array($check_products, array('check_products', 'skip_check_products'))) {
+            trigger_error('First paramenter in Invice->readyForState should be either "check_products" or "skip_check_products"', E_USER_ERROR);
+            return false;
         }
+        
+        
         if ($this->type != 'invoice') {
             $this->error->set('Du kan kun bogføre fakturaer');
-            return 0;
+            return false;
+        }
+        
+        if($this->isStated()) {
+            $this->error->set('Fakturaen er allerede bogført');
+            return false;
+        }
+        
+        if($this->get('status') != 'sent' && $this->get('status') != 'executed') {
+            $this->error->set('Fakturaen skal være sendt eller afsluttet for at den kan bogføres');
+            return false;
         }
 
-        $this->loadItem();
-        $items = $this->item->getList();
-        for ($i = 0, $max = count($items); $i < $max; $i++) {
-            $product = new Product($this->kernel, $items[$i]['product_id']);
-            if ($product->get('state_account_id') == 0) {
-                $this->error->set('Produktet ' . $product->get('name') . ' ved ikke hvor den skal bogføres');
+        if($check_products == 'check_products') {
+            $this->loadItem();
+            $items = $this->item->getList();
+            for ($i = 0, $max = count($items); $i < $max; $i++) {
+                $product = new Product($this->kernel, $items[$i]['product_id']);
+                if ($product->get('state_account_id') == 0) {
+                    $this->error->set('Produktet ' . $product->get('name') . ' ved ikke hvor den skal bogføres');
+                }
             }
         }
+        
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
     }
 
     function state($year, $voucher_number, $voucher_date)
@@ -154,36 +146,41 @@ class Invoice extends Debtor
         }
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
 
 
         // FIXME - der skal laves tjek på datoen
         if ($this->isStated()) {
             $this->error->set('Allerede bogført');
-            return 0;
+            return false;
         }
-        if (!$this->invoiceReadyForState()) {
-            $this->error->set('Ikke klar til bogføring');
-            return 0;
+        if (!$this->readyForState()) {
+            $this->error->set('Faktura er ikke klar til bogføring');
+            return false;
         }
+        
+        if (!$year->readyForState()) {
+            $this->error->set('Regnskabåret er ikke klar til bogføring');
+            return false;
+        }
+        
         if ($this->get('type') != 'invoice') {
             $this->error->set('Ikke en faktura');
-            return 0;
+            return false;
         }
 
         if (!$this->kernel->user->hasModuleAccess('accounting')) {
             trigger_error('Ikke rettigheder til at bogføre', E_USER_ERROR);
         }
 
-        $this->kernel->useModule('accounting');
-
-
-
+        
         // hente alle produkterne på debtor
         $this->loadItem();
         $items = $this->item->getList();
 
+        require_once 'Intraface/modules/accounting/Voucher.php';
+        require_once 'Intraface/modules/accounting/Account.php';
         $voucher = Voucher::factory($year, $voucher_number);
         $voucher->save(array(
             'voucher_number' => $voucher_number,
@@ -230,7 +227,7 @@ class Invoice extends Debtor
             }
 
             if (!$voucher->saveInDaybook($input_values, true)) {
-                $voucher->error->view();
+                $this->error->merge($voucher->error->getMessage());
             }
         }
         // samlet moms på fakturaen
@@ -251,22 +248,19 @@ class Invoice extends Debtor
 
 
         if (!$voucher->saveInDaybook($input_values, true)) {
-            $voucher->error->view();
+            $this->error->merge($voucher->error->getMessage());
         }
 
+        require_once 'Intraface/modules/accounting/VoucherFile.php';
         $voucher_file = new VoucherFile($voucher);
         if (!$voucher_file->save(array('description' => 'Faktura ' . $this->get('number'), 'belong_to'=>'invoice','belong_to_id'=>$this->get('id')))) {
-            $voucher_file->error->view();
+            $this->error->merge($voucher_file->error->getMessage());
             $this->error->set('Filen blev ikke overflyttet');
         }
 
-
         $this->setStated($voucher->get('id'), $this_date->get());
-
         $this->load();
-
-
-        return 1;
+        return true;
 
     }
 
