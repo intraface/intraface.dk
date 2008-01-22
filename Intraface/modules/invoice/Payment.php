@@ -301,7 +301,6 @@ Class Payment extends Standard {
     function readyForState() {
         
         
-        
         if($this->get('id') == 0) {
             $this->error->set('Betaling er ikke gemt eller loaded');
             return false;
@@ -346,6 +345,11 @@ Class Payment extends Standard {
      * @return boolean true on succes or false.
      */
     public function state($year, $voucher_number, $voucher_date, $state_account_number) {
+        
+        if(!is_object($year)) {
+            trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
+            return false;
+        }
         
         if($this->payment_for_type_id == 0) {
             trigger_error('Invalid paymet_for_type_id in Payment->state', E_USER_ERROR);
