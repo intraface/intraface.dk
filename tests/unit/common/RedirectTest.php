@@ -3,6 +3,7 @@ require_once dirname(__FILE__) . '/../config.test.php';
 
 require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/Redirect.php';
+require_once 'Intraface/functions/functions.php';
 
 /**
  * Remember this should actually only be tests whether the extend functionality works. 
@@ -39,11 +40,6 @@ class FakeRedirectKernel
     function getSessionId() {
         return 'dfp323ewrjif2309f32f30f23vcjtjkjw';
     }
-}
-if (!function_exists('safeToDB')) {
-function safeToDb($input) {
-    return $input;
-}
 }
 
 class RedirectTest extends PHPUnit_Framework_TestCase
