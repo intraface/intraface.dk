@@ -176,6 +176,10 @@ class Year extends Standard {
             $this->value['locked'] = $db->f('locked');
             $this->value['vat'] = $db->f('vat');
         }
+        else {
+            $this->id = 0;
+            $this->value['id'] = 0;
+        }
 
     }
 
@@ -210,6 +214,8 @@ class Year extends Standard {
 
         $post_date_to = new Intraface_Date($var['to_date']);
         $post_date_to->convert2db();
+        
+        if(!isset($var['last_year_id'])) $var['last_year_id'] = 0;
 
         if (!$this->validate($var)) {
             return 0;
@@ -236,16 +242,16 @@ class Year extends Standard {
             vat = '".(int)$var['vat']."'
             $sql_after";
 
-            $db = new DB_Sql;
-            $db->query($sql);
+        $db = new DB_Sql;
+        $db->query($sql);
 
-            if ($this->id == 0) {
-                $this->id = $db->insertedId();
-            }
+        if ($this->id == 0) {
+            $this->id = $db->insertedId();
+        }
 
-            $this->load();
+        $this->load();
 
-            return $this->id;
+        return $this->id;
 
     }
 
@@ -322,8 +328,33 @@ class Year extends Standard {
         }
         return 0;
     }
+    
+    /**
+     * Checks whether the year is ready to use for stating
+     *
+     * @return boolean
+     */
+    public function readyForState($date = NULL)
+    {
+        if($date === NULL) {
+            $date = date('Y-m-d');
+        }
+        
+        $return = true;
 
+        if (!$this->get('id')) {
+            $this->error->set('Der er ikke sat noget år.');
+            $return = false;
+        } elseif (!$this->isDateInYear($date)) {
+            $this->error->set('Datoen er ikke i det år, der er sat i regnskabsmodulet.');
+            $return = false;
+        } elseif($this->get('locked') == 1) {
+            $this->error->set('Året er ikke åbent for bogføring.');
+            $return = false;
+        }
 
+        return $return;
+    }
 
     /**************************************************************************
         ØVRIGE METODER
@@ -458,6 +489,7 @@ class Year extends Standard {
                     $buy_eu = array();
 
                     foreach ($standardaccounts AS $input) {
+                        require_once 'Intraface/modules/accounting/Account.php';
                         $account = new Account($this);
                         $input['vat_percent'] = $this->kernel->setting->get('intranet', 'vatpercent');
                         $id = $account->save($input);
