@@ -1,12 +1,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>testCreateInvoiceAndState</title>
+<title>testCreateInvoiceRegisterPaymentAndStatePayment</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">testCreateInvoiceAndState</td></tr>
+<tr><td rowspan="1" colspan="3">testCreateInvoiceRegisterPaymentAndStatePayment</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -104,8 +104,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Bogfør faktura #1</td>
+	<td>clickAndWait</td>
+	<td>link=Luk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>payment</td>
 	<td></td>
 </tr>
 <tr>
@@ -121,7 +126,7 @@
 <tr>
 	<td>type</td>
 	<td>label</td>
-	<td>Current</td>
+	<td>Test</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -140,12 +145,17 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>start</td>
+	<td>link=debtor</td>
 	<td></td>
 </tr>
 <tr>
+	<td>select</td>
+	<td>status</td>
+	<td>label=Alle</td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
-	<td>link=debtor</td>
+	<td>search</td>
 	<td></td>
 </tr>
 <tr>
@@ -154,14 +164,24 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=state invoice</td>
+	<td>verifyTextPresent</td>
+	<td>state payment</td>
 	<td></td>
 </tr>
 <tr>
+	<td>clickAndWait</td>
+	<td>link=state payment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>date_state</td>
+	<td>10-01-2008</td>
+</tr>
+<tr>
 	<td>select</td>
-	<td>state_account_id[1]</td>
-	<td>label=Salg med moms</td>
+	<td>state_account</td>
+	<td>label=Bank, folio</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -169,23 +189,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>verifyTextPresent</td>
+	<td>voucher</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
-	<td>link=Se bilag</td>
+	<td>link=voucher</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>Bilag #1 på Current</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Faktura #1 - State test</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Faktura #1 - Moms, udgående, salg</td>
+	<td>Bank, folio</td>
 	<td></td>
 </tr>
 <tr>
@@ -195,32 +210,7 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>Salg med moms</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Moms, udgående, salg</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>100,00</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>0,00</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>25,00</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Bogført</td>
+	<td>125,00</td>
 	<td></td>
 </tr>
 <tr>
@@ -229,23 +219,23 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>-100,00</td>
+	<td>clickAndWait</td>
+	<td>link=Debitor</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>125,00</td>
+	<td>-125,00</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>-25,00</td>
+	<td>Betaling for invoice #1</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=dashboard</td>
+	<td>link=Luk</td>
 	<td></td>
 </tr>
 
