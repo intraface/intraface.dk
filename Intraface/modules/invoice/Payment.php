@@ -7,6 +7,8 @@
  * @version: 1
  */
 
+require_once 'Intraface/Standard.php';
+
 Class Payment extends Standard {
 
     var $id;
@@ -16,7 +18,7 @@ Class Payment extends Standard {
     var $payment_for_id;
     var $error;
     var $dbquery;
-    var $types;
+    var $db;
 
     function __construct($object, $id = 0) {
 
@@ -33,13 +35,7 @@ Class Payment extends Standard {
             $this->kernel      = $object->kernel;
             $this->payment_for = $object;
             $this->error       = $object->error;
-
-            $module = $this->kernel->getModule("invoice");
-            if($object_class == "invoice") {
-                $this->payment_for_type_id = array_search("invoice", $module->getSetting("payment_for"));
-            } else {
-                $this->payment_for_type_id = array_search("reminder", $module->getSetting("payment_for"));
-            }
+            $this->payment_for_type_id = array_search($object_class, $this->getPaymentForTypes());
             $this->payment_for_id = $this->payment_for->get("id");
 
 
@@ -47,82 +43,119 @@ Class Payment extends Standard {
             trigger_error("Ugyldig object som første parameter. Det skal være Kernel, Invoice eller CreditNote", E_USER_ERROR);
         }
         $this->id = intval($id);
-
-        $invoice_module = $this->kernel->getModule("invoice");
-        $this->types = $invoice_module->getSetting("payment_type");
-
+        
         $this->dbquery = new DBQuery($this->kernel, "invoice_payment", "intranet_id = ".$this->kernel->intranet->get("id")." AND payment_for = ".$this->payment_for_type_id." AND payment_for_id = ".$this->payment_for_id);
         $this->dbquery->useErrorObject($this->error);
+        $this->db = MDB2::singleton(DB_DSN);
 
         if($this->id != 0) {
             $this->load();
         }
     }
+    
+    public function load() {
+        
+        $result = $this->db->query('SELECT id, amount, type, description, payment_date, payment_for_id, DATE_FORMAT(payment_date, "%d-%m-%Y") AS dk_payment_date, date_stated, voucher_id FROM invoice_payment ' .
+            'WHERE intranet_id = '.$this->kernel->intranet->get('id').' ' .
+                'AND payment_for = '.$this->payment_for_type_id.' ' .
+                'AND payment_for_id = '.$this->payment_for_id.' ' .
+                'AND id = '.$this->id);
+        
+        if(PEAR::isError($result)) {
+            trigger_error('Error in query '.$result->getUserInfo(), E_USER_ERROR);
+            return false;
+        }
+        
+        if(!$this->value = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+            $this->value['id'] = 0;
+            return false;
+        }
+        
+        $this->value['type_key'] = $this->value['type'];
+        $types = $this->getTypes();
+        $this->value['type'] = $types[$this->value['type_key']];
+        
+    }
 
     function update($input = "")
     {
+        if($this->payment_for_type_id == 0) {
+            trigger_error('Invalid paymet_for_type_id in Payment->update', E_USER_ERROR);
+            return false;
+        }
+        if($this->payment_for_id == 0) {
+            trigger_error('Invalid paymet_for_id in Payment->update', E_USER_ERROR);
+            return false;
+        }
+        
+        // Man har mulighed for at køre $payment->update() bare for at få den til at
+        // sætte invoice eller reminder til executed
+        if(!is_array($input)) {
+            if(is_object($this->payment_for)) {
+                $this->payment_for->updateStatus();
+                return true;
+            }
+        }
+        
+        $input = safeToDb($input);
+        $validator = new Validator($this->error);
+
+        if(!isset($input["payment_date"])) $input["payment_date"] = '';
+        if($validator->isDate($input["payment_date"], "Ugyldig dato", "allow_no_year")) {
+            $date = new Intraface_Date($input["payment_date"]);
+            $date->convert2db();
+        }
+        
+        if(!isset($input["amount"])) $input["amount"] = 0;
+        if($validator->isDouble($input["amount"], "Ugyldig beløb")) {
+            $amount = new Amount($input["amount"]);
+            $amount->convert2db();
+            $amount = $amount->get();
+        }
+
+        if(!isset($input['description'])) $input['description'] = '';
+        $validator->isString($input["description"], "Fejl i beskrivelse", "", "allow_empty");
+
+        if(!isset($input['type'])) $input['type'] = NULL;
+        $validator->isNumeric($input["type"], "Type er ikke angivet korrekt");
+        $types = $this->getTypes();
+        if(!isset($types[$input["type"]])) {
+            $this->error->set("Ugyldig type");
+        }
+
+
+        // Hermed lovliggjort at registrere større beløb en betalingen. Det er ikke til at kontrollere med kreditnota.
+        /*
+        
         $already_paid = 0;
         $value = $this->getList();
         for($i = 0, $max = count($value); $i < $max; $i++) {
             $already_paid += $value[$i]["amount"];
         }
         $payment_for_total = $this->payment_for->get("total");
+        
+        if($amount + $already_paid > $payment_for_total) {
+            $this->error->set("Beløb er større end det skyldige beløb");
+        }
+        */
 
-        if(is_array($input)) {
-            // Man har mulighed for at køre $payment->update() bare for at få den til at
-            // sætte invoice eller reminder til executed
-
-            $input = safeToDb($input);
-
-            $validator = new Validator($this->error);
-
-            if($validator->isDate($input["payment_date"], "Ugyldig dato", "allow_no_year")) {
-                $date = new Intraface_Date($input["payment_date"]);
-                $date->convert2db();
-            }
-
-            if($validator->isDouble($input["amount"], "Ugyldig beløb")) {
-                $amount = new Amount($input["amount"]);
-                $amount->convert2db();
-                $amount = $amount->get();
-            }
-
-            if (array_key_exists('description', $input)) {
-                $validator->isString($input["description"], "Fejl i beskrivelse", "", "allow_empty");
-            } else {
-                $input['description'] = '';
-            }
-
-            $validator->isNumeric($input["type"], "Type er ikke angivet korrekt");
-            settype($input["type"], "integer");
-            if(!isset($this->types[$input["type"]])) {
-                $this->error->set("Ugyldig type");
-            }
-
-
-            // Hermed lovliggjort at registrere større beløb en betalingen. Det er ikke til at kontrollere med kreditnota.
-            /*
-            if($amount + $already_paid > $payment_for_total) {
-                $this->error->set("Beløb er større end det skyldige beløb");
-            }
-            */
-
-            if($this->error->isError()) {
-                return false;
-            }
-
-
-            $sql = "payment_date = \"".$date->get()."\",
-                amount = ".$amount.",
-                type = ".$input["type"].",
-                description = \"".$input["description"]."\",
-                payment_for = ".$this->payment_for_type_id.",
-                payment_for_id = ".$this->payment_for_id;
-
-            $db = new DB_sql;
-            $db->query("INSERT INTO invoice_payment SET intranet_id = ".$this->kernel->intranet->get("id").", ".$sql);
+        if($this->error->isError()) {
+            return false;
         }
 
+        $sql = "payment_date = \"".$date->get()."\",
+            amount = ".$amount.",
+            type = ".$input["type"].",
+            description = \"".$input["description"]."\",
+            payment_for = ".$this->payment_for_type_id.",
+            payment_for_id = ".$this->payment_for_id;
+
+        $db = new DB_sql;
+        $db->query("INSERT INTO invoice_payment SET intranet_id = ".$this->kernel->intranet->get("id").", ".$sql);
+
+        $this->id = $db->insertedId();
+        $this->load();
+        
         if(is_object($this->payment_for)) {
             $this->payment_for->updateStatus();
         }
@@ -137,8 +170,7 @@ Class Payment extends Standard {
         $i = 0;
         $payment = array();
         $credit_note = array();
-        $invoice_module = $this->kernel->getModule("invoice");
-
+        
         // Hent betalinger
         if(is_object($this->payment_for)) {
 
@@ -150,25 +182,25 @@ Class Payment extends Standard {
             }
 
             $this->dbquery->setSorting("payment_date ASC");
-            $db = $this->dbquery->getRecordset("id, amount, type, description, payment_date, payment_for_id, DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date", "", false);
+            $db = $this->dbquery->getRecordset("id, amount, type, description, payment_date, payment_for_id, DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date, date_stated, voucher_id", "", false);
             while($db->nextRecord()) {
                 $payment[$i]["id"] = $db->f("id");
                 if($db->f("type") == -1) {
 
                     $payment[$i]["type"] = "depriciation";
-                    //$payment[$i]["dk_type"] = $invoice_module->getTranslation("deprication");
                     $payment[$i]["amount"] = $db->f("amount");
                     $payment[$i]["description"] = $db->f("description");
                 } else {
-                    $payment[$i]["type"] = $this->types[$db->f('type')];
+                    $types = $this->getTypes();
+                    $payment[$i]["type"] = $types[$db->f('type')];
                     // $payment[$i]["type"] = "payment";
-                    //$payment[$i]["dk_type"] = $invoice_module->getTranslation("payment");
                     $payment[$i]["amount"] = $db->f("amount");
-                    //$payment[$i]["description"] = "(".$invoice_module->getTranslation($this->types[$db->f("type")]).") ".$db->f("description");
                     $payment[$i]["description"] = $db->f("description");
                 }
                 $payment[$i]["payment_date"] = $db->f("payment_date");
                 $payment[$i]["dk_payment_date"] = $db->f("dk_payment_date");
+                $payment[$i]["is_stated"] = ($db->f('date_stated') > '0000-00-00'); 
+                $payment[$i]["voucher_id"] = $db->f("voucher_id");
 
                 // $payment[$i]["payment_for"] = $this->payment_for[$db->f("payment_for")];
                 $payment[$i]["payment_for_id"] = $db->f("payment_for_id");
@@ -180,6 +212,7 @@ Class Payment extends Standard {
 
         // Hent kreditnotaer. Ikke hvis det er en reminder. Den kan ikke krediteres.
         if(strtolower(get_class($this->payment_for)) !== "reminder") {
+            require_once 'Intraface/modules/invoice/CreditNote.php';
             $debtor = new CreditNote($this->kernel);
             // Hvis det er en faktura
             if(strtolower(get_class($this->payment_for)) == "invoice") {
@@ -241,10 +274,11 @@ Class Payment extends Standard {
                 $value[$i]["dk_date"] = $payment[$pay]["dk_payment_date"];
                 $value[$i]["description"] = $payment[$pay]["description"];
                 $value[$i]["amount"] = $payment[$pay]["amount"];
+                $value[$i]['is_stated'] = $payment[$pay]['is_stated'];
+                $value[$i]['voucher_id'] = $payment[$pay]['voucher_id'];
                 $pay++;
             } elseif($next == "credit_note") {
                 $value[$i]["type"] = "credit_note";
-                //$value[$i]["dk_type"] = $invoice_module->getTranslation("credit_note");
                 $value[$i]["id"] = $credit_note[$cre]["id"];
                 $value[$i]["date"] = $credit_note[$cre]["this_date"];
                 $value[$i]["dk_date"] = $credit_note[$cre]["dk_this_date"];
@@ -262,6 +296,159 @@ Class Payment extends Standard {
         }
 
         return $value;
+    }
+    
+    function readyForState() {
+        
+        
+        
+        if($this->get('id') == 0) {
+            $this->error->set('Betaling er ikke gemt eller loaded');
+            return false;
+            
+        }
+        
+        if($this->isStated()) {
+            $this->error->set('Betalingen er allerede bogført');
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * return whether the payment is stated
+     * 
+     * @return boolean true or false
+     */
+    function isStated() {
+        
+        if($this->id == 0) {
+            return false;
+        }
+        elseif($this->get('date_stated') > '0000-00-00') {
+            return true;
+        }
+        else {
+            return false;
+        }
+        
+    }
+    
+    /**
+     * States the payment i the given year
+     * 
+     * @param object $year Accounting Year object
+     * @param integer $voucher_number
+     * @param string $voucher_date
+     * @param integer $state_account_number
+     * 
+     * @return boolean true on succes or false.
+     */
+    public function state($year, $voucher_number, $voucher_date, $state_account_number) {
+        
+        if($this->payment_for_type_id == 0) {
+            trigger_error('Invalid paymet_for_type_id in Payment->state', E_USER_ERROR);
+            return false;
+        }
+        
+        $validator = new Validator($this->error);
+        if($validator->isDate($voucher_date, "Ugyldig dato")) {
+            $this_date = new Intraface_Date($voucher_date);
+            $this_date->convert2db();
+        }
+        
+        $validator->isNumeric($voucher_number, 'Ugyldigt bilagsnummer', 'greater_than_zero');
+        $validator->isNumeric($state_account_number, 'Ugyldig bogføringskonto', 'greater_than_zero');
+
+        if (!$this->readyForState()) {
+            return false;
+        }
+        
+        if (!$year->readyForState()) {
+            $this->error->merge($year->error->getMessage());
+            return false;
+        }
+        
+        // this should be a method in Year instead
+        require_once 'Intraface/modules/accounting/Account.php';
+        $credit_account = new Account($year, $year->getSetting('debtor_account_id'));
+        if(!$credit_account->validForState()) {
+            $this->error->set('Den gemte debitorkonto er ikke gyldig til bogføring');
+            return false;
+        }
+        $credit_account_number = $credit_account->get('number');
+        
+        $debet_account = Account::factory($year, $state_account_number);
+        if(!$debet_account->validForState()) {
+            $this->error->set('Den valgte konto for bogføring er ikke gyldig');
+            return false;
+        }
+        $debet_account_number = $debet_account->get('number');
+        
+        require_once 'Intraface/modules/accounting/Voucher.php';
+        $voucher = Voucher::factory($year, $voucher_number);
+        $amount = $this->get('amount');
+
+        // hvis beløbet er mindre end nul, skal konti byttes om og beløbet skal gøres positivt
+        if ($amount < 0) {
+            $debet_account_number = $credit_account->get('number');
+            $credit_account_number = $debet_account->get('number');
+            $amount = abs($amount);
+        }
+        
+        $types = $this->getPaymentForTypes();
+        // translation is needed!
+        $text = 'Betaling for '.$types[$this->payment_for_type_id].' #'.$this->payment_for->get('number');
+        
+        $input_values = array(
+            'voucher_number' => $voucher_number,
+            'date' => $voucher_date,
+            'amount' => number_format($amount, 2, ",", "."),
+            'debet_account_number' => $debet_account_number,
+            'credit_account_number' => $credit_account_number,
+            'text' => $text
+        );
+        
+        if (!$voucher->saveInDaybook($input_values, true)) {
+            $this->error->merge($voucher->error->getMessage());
+            return false;
+        }
+        
+        $db = new DB_sql;
+        $db->query("UPDATE invoice_payment SET date_stated = NOW(), voucher_id = ".$voucher->get('id'));
+        
+        $this->load();
+        return true;
+    }
+    
+    /**
+     * returns possible payment types
+     * 
+     * @return array payment types
+     * 
+     */
+    public function getTypes() 
+    {
+        return array(
+            -1=>'depriciation',
+            0=>'bank_transfer',
+            1=>'giro_transfer',
+            2=>'credit_card',
+            3=>'cash');
+    }
+    
+    /**
+     * returns the possible types payments can be for.
+     * 
+     * @return array payment for types
+     */
+    private function getPaymentForTypes() 
+    {
+        return array(
+            0=>'manuel',
+            1=>'invoice',
+            2=>'reminder');
     }
 }
 
