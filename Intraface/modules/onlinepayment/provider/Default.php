@@ -33,9 +33,11 @@ class OnlinePaymentDefault extends OnlinePayment {
 
             if($this->addAsPayment()) {
                 $this->setStatus("captured");
+                return true;
             }
             else {
-                trigger_error("Onlinebetalingen kunne ikke overføres til fakturaen", FATAL);
+                trigger_error("Onlinebetalingen kunne ikke overføres til fakturaen", E_USER_ERROR);
+                return false;
             }
         }
         elseif($action == "reverse") {
@@ -43,10 +45,11 @@ class OnlinePaymentDefault extends OnlinePayment {
             // her skal reverse så laves?
 
             $this->setStatus("reversed");
-            return 1;
+            return true;
         }
         else {
-            trigger_error("Ugyldig handling i Onlinepayment_Provider_Default->transactionAction()", ERROR);
+            trigger_error("Ugyldig handling i Onlinepayment_Provider_Default->transactionAction()", E_USER_ERROR);
+            return false;
         }
     }
 
