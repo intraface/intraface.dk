@@ -78,7 +78,7 @@ class Debtor_Report_Pdf
         $this->doc->setY('-5');
 
         $contact = $debtor->contact->address->get();
-        if (strtolower(get_class($debtor->contact_person)) == "contactperson") {
+        if (is_object($debtor->contact_person)) {
             $contact["attention_to"] = $debtor->contact_person->get("name");
         }
         $contact['number'] = $debtor->contact->get('number');
