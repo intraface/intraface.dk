@@ -78,7 +78,7 @@ $page->start($translation->get('State invoice'));
 
     <p class="message">Når du bogfører fakturaerne vil det skyldige beløb blive sat på debitorkontoen. Når kunden har betalt, skal betalingen bogføres for at overføre beløbet fra debitorkontoen til din indkomst konto (fx Bankkonto).</p>
     
-    <?php $debtor->readyForState('skip_check_products'); ?>  
+    <?php $debtor->readyForState($year, 'skip_check_products'); ?>  
     <?php echo $debtor->error->view(); ?>
     
     <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
@@ -205,7 +205,7 @@ $page->start($translation->get('State invoice'));
         </tbody>
     </table>
 
-    <?php  if (!$debtor->readyForState()): ?>
+    <?php  if (!$debtor->readyForState($year)): ?>
         <div>
             <input type="submit" value="Bogfør" /> eller
             <a href="view.php?id=<?php echo intval($value['id']); ?>">fortryd</a>
