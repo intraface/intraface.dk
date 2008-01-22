@@ -47,11 +47,7 @@ class Debtor_Report_Pdf
     protected function createDocument()
     {
         require_once 'Intraface/shared/pdf/PdfMaker.php';
-        //require_once 'Intraface/shared/pdf/PdfMakerDebtor.php';
-
-        // todo - mon ikke alt fra pdfmakerdebtor kan flyttes hertil?
-        $doc = new PdfMaker(/*$debtor->kernel*/);
-        //$doc->start();
+        $doc = new PdfMaker();
         return $doc;
 
     }
@@ -63,12 +59,8 @@ class Debtor_Report_Pdf
      *
      * @return void
      */
-    function visit($debtor)
+    function visit($debtor, $onlinepayment = NULL)
     {
-
-        //$shared_pdf = $debtor->kernel->useShared('pdf');
-        //$shared_pdf->includeFile('PdfMakerDebtor.php');
-
         $this->doc = $this->createDocument();
 
         if (!empty($this->file) AND $this->file->get('id') > 0) {
@@ -336,16 +328,26 @@ class Debtor_Report_Pdf
         // paymentcondition
         if ($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {
 
-
             $parameter = array(
                 "contact" => $debtor->contact,
                 "payment_text" => ucfirst($this->translation->get($debtor->get('type')))." ".$debtor->get("number"),
                 "amount" => $debtor->get("total"),
                 "payment" => $debtor->get('payment_total'),
-                "payment_online" => $debtor->get('payment_online'),
+                "payment_online" => 0,
                 "due_date" => $debtor->get("dk_due_date"),
                 "girocode" => $debtor->get("girocode"));
 
+            if(is_object($onlinepayment)) {
+                $onlinepayment->dbquery->setFilter('belong_to', $debtor->get("type"));
+                $onlinepayment->dbquery->setFilter('belong_to_id', $debtor->get('id'));
+                $onlinepayment->dbquery->setFilter('status', 2);
+                
+                foreach($onlinepayment->getlist() AS $p) {
+                    $parameter['payment_online'] += $p["amount"];
+                }
+            }
+            
+            
             $this->addPaymentCondition($debtor->get("payment_method"), $parameter, $debtor->getPaymentInformation());
 
             $this->doc->setY('-'.$this->doc->get("font_spacing"));
@@ -394,6 +396,7 @@ class Debtor_Report_Pdf
             $data = $this->doc->output();
             return $this->doc->writeDocument($data, $filename);
             break;
+        case 'stream':
         default:
             return $this->doc->stream();
             break;
@@ -577,6 +580,8 @@ class Debtor_Report_Pdf
             }
 
             if (isset($parameter['payment_online']) AND $parameter['payment_online'] != 0) {
+                
+                
                 $this->doc->setLineStyle(1.5);
                 $this->doc->setColor(0, 0, 0);
                 $this->doc->line($this->doc->get("margin_left"), $this->doc->get('y'), $this->doc->get("right_margin_position"), $this->doc->get('y'));
