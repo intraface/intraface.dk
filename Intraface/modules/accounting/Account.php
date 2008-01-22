@@ -395,6 +395,10 @@ class Account extends Standard
                 AND year_id = " .$this->year->get('id'). "
                 AND id <> " . $this->id . " AND active = 1";
         $result = $db->query($sql);
+        if (PEAR::isError($result)) {
+            throw new Exception('Error in query: '.$result->getUserInfo());
+        }
+        
         if ($result->numRows() == 0) {
             return true;
         }
