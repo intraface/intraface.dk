@@ -9,6 +9,7 @@
  */
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/modules/accounting/Account.php';
+require_once 'Intraface/modules/accounting/Post.php';
 
 class Voucher extends Standard
 {
