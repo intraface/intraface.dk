@@ -11,8 +11,6 @@ class Reminder extends Standard {
     var $db;
     var $item;
     var $error;
-    var $allowed_status;
-    var $payment_methods;
     var $dbquery;
 
 
@@ -22,10 +20,6 @@ class Reminder extends Standard {
         $this->kernel = $kernel;
         $this->db     = new Db_sql;
         $this->error  = new Error;
-
-        $debtorModule          = $this->kernel->getModule('debtor');
-        $this->allowed_status  = $debtorModule->getSetting('status');
-        $this->payment_methods = $debtorModule->getSetting('payment_method');
 
         $this->dbquery = new DBQuery($this->kernel, "invoice_reminder", "intranet_id = ".$this->kernel->intranet->get("id")." AND active = 1");
         $this->dbquery->useErrorObject($this->error);
@@ -54,7 +48,8 @@ class Reminder extends Standard {
                 $this->value["contact_address_id"] = $this->db->f("contact_address_id");
                 $this->value["contact_person_id"] = $this->db->f("contact_person_id");
                 $this->value["user_id"] = $this->db->f("user_id");
-                $this->value["status"] = $this->allowed_status[$this->db->f("status")]; // skal laves om til db->f('status_key')
+                $status_types = $this->getStatusTypes();
+                $this->value["status"] = $status_types[$this->db->f("status")]; // skal laves om til db->f('status_key')
                 $this->value["status_id"] = $this->db->f("status"); // skal slettes i næste version
                 $this->value["status_key"] = $this->db->f("status");
                 $this->value["this_date"] = $this->db->f("this_date");
@@ -67,7 +62,8 @@ class Reminder extends Standard {
                 // $this->value["attention_to"] = $this->db->f("attention_to");
                 $this->value["number"] = $this->db->f("number");
                 $this->value["payment_method_key"] = $this->db->f("payment_method");
-                $this->value["payment_method"] = $this->payment_methods[$this->db->f("payment_method")];
+                $payment_methods = $this->getPaymentMethods();
+                $this->value["payment_method"] = $payment_methods[$this->db->f("payment_method")];
                 $this->value["reminder_fee"] = $this->db->f("reminder_fee");
                 // Denne skal laves, så den udregner hele værdien af hele rykkeren
                 $this->value["total"] = $this->db->f("reminder_fee");
@@ -278,14 +274,15 @@ class Reminder extends Standard {
     function setStatus($status) {
 
         if(is_string($status)) {
-            $status_id = array_search($status, $this->allowed_status);
+            $status_id = array_search($status, $this->getStatusTypes());
             if($status_id === false) {
                 trigger_error("Reminder->setStatus(): Ugyldig status (streng)", FATAL);
             }
         } else{
             $status_id = intval($status);
-            if(isset($sthis->allowed_status[$status_id])) {
-                $status = $this->allowed_status[$status];
+            $status_types = $this->getStatusTypes();
+            if(isset($status_types[$status_id])) {
+                $status = $status_types[$status];
             } else {
                 trigger_error("Reminder->setStatus(): Ugyldig status (integer)", E_USER_ERROR);
             }
@@ -780,6 +777,36 @@ class Reminder extends Standard {
         $report = new Reminder_Report_Pdf($translation, $filehandler);
         $report->visit($this);
         return $report->output($type, $filename);
+    }
+    
+    /**
+     * returns possible status types
+     * 
+     * @return array possible status types
+     */
+    private function getStatusTypes() 
+    {
+        return array(
+            0=>'created',
+            1=>'sent',
+            2=>'executed',
+            3=>'cancelled'
+        );
+    }
+    
+    /**
+     * returns possible payment methods
+     * 
+     * @return array possible payment methods
+     */
+    private function getPaymentMethods() 
+    {
+        return array(
+            0=>'Ingen',
+            1=>'Kontooverførsel',
+            2=>'Girokort +01',
+            3=>'Girokort +71'
+        );
     }
 }
 ?>
