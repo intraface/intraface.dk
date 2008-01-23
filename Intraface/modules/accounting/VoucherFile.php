@@ -136,6 +136,13 @@ class VoucherFile {
                     $files[$i]['description'] = $filehandler->get('file_name');
                     $files[$i]['file_uri'] = $filehandler->get('file_uri');
                 break;
+                case 'credit_note':
+                    if (empty($files[$i]['description'])) {
+                        $files[$i]['description'] = 'Kreditnota';
+                    }
+                    $files[$i]['name'] = 'Kreditnota';
+                    $files[$i]['file_uri'] = '/modules/debtor/pdf.php?id=' . $db->f('belong_to_id');
+                break;
                 default:
                     trigger_error('VoucherFile::getList: ugyldig belong to');
                 break;
