@@ -12,7 +12,8 @@ class VoucherFile {
         2 => 'procurement',
         3 => 'file',
         4 => 'vat',
-        5 => 'credit_note'
+        5 => 'credit_note',
+        6 => 'reminder'
     );
     var $error;
 
@@ -142,6 +143,13 @@ class VoucherFile {
                     }
                     $files[$i]['name'] = 'Kreditnota';
                     $files[$i]['file_uri'] = '/modules/debtor/pdf.php?id=' . $db->f('belong_to_id');
+                break;
+                case 'reminder':
+                    if (empty($files[$i]['description'])) {
+                        $files[$i]['description'] = 'Rykker';
+                    }
+                    $files[$i]['name'] = 'Rykker';
+                    $files[$i]['file_uri'] = '/modules/debtor/reminder_pdf.php?id=' . $db->f('belong_to_id');
                 break;
                 default:
                     trigger_error('VoucherFile::getList: ugyldig belong to');
