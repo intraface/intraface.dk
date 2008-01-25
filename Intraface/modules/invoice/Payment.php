@@ -9,7 +9,7 @@
 
 require_once 'Intraface/Standard.php';
 
-Class Payment extends Standard {
+class Payment extends Standard {
 
     var $id;
     var $kernel;
@@ -22,29 +22,25 @@ Class Payment extends Standard {
 
     function __construct($object, $id = 0) {
 
-        $object_class = strtolower(get_class($object));
-
-        if($object_class == "kernel") {
-            $this->kernel      = $object;
-            $this->payment_for = "";
-            $this->error       = new Error;
-
-            $this->payment_for_type_id = 0;
-            $this->payment_for_id = 0;
-        } elseif($object_class == "invoice" || $object_class == "reminder") {
-            $this->kernel      = $object->kernel;
-            $this->payment_for = $object;
-            $this->error       = $object->error;
-            $this->payment_for_type_id = array_search($object_class, $this->getPaymentForTypes());
-            $this->payment_for_id = $this->payment_for->get("id");
-
-
-        } else {
-            trigger_error("Ugyldig object som første parameter. Det skal være Kernel, Invoice eller CreditNote", E_USER_ERROR);
+        if(!is_object($object)) {
+            trigger_error('First parameter for Payment needs to be a invoice or reminder object', E_USER_ERROR);
+            return false;
         }
+
+        $this->kernel      = $object->kernel;
+        $this->payment_for = $object;
+        $this->error       = $object->error;
+        $this->payment_for_type_id = array_search(strtolower(get_class($object)), $this->getPaymentForTypes());
+        $this->payment_for_id = $this->payment_for->get("id");
+        
+        if($this->payment_for_type_id === false) {
+            trigger_error('Payment can only be for either Invoice or reminder', E_USER_ERROR);
+            return false;
+        }
+
         $this->id = intval($id);
         
-        $this->dbquery = new DBQuery($this->kernel, "invoice_payment", "intranet_id = ".$this->kernel->intranet->get("id")." AND payment_for = ".$this->payment_for_type_id." AND payment_for_id = ".$this->payment_for_id);
+        $this->dbquery = new DBQuery($this->kernel, "invoice_payment", "intranet_id = ".$this->kernel->intranet->get("id")." AND payment_for = ".$this->payment_for_type_id." AND payment_for_id = ".$this->payment_for_id.' AND type IN ('.implode(',', array_keys($this->getTypes())).')');
         $this->dbquery->useErrorObject($this->error);
         $this->db = MDB2::singleton(DB_DSN);
 
@@ -59,6 +55,7 @@ Class Payment extends Standard {
             'WHERE intranet_id = '.$this->kernel->intranet->get('id').' ' .
                 'AND payment_for = '.$this->payment_for_type_id.' ' .
                 'AND payment_for_id = '.$this->payment_for_id.' ' .
+                'AND type IN ('.implode(',', array_keys($this->getTypes())).')' .
                 'AND id = '.$this->id);
         
         if(PEAR::isError($result)) {
@@ -122,23 +119,7 @@ Class Payment extends Standard {
         if(!isset($types[$input["type"]])) {
             $this->error->set("Ugyldig type");
         }
-
-
-        // Hermed lovliggjort at registrere større beløb en betalingen. Det er ikke til at kontrollere med kreditnota.
-        /*
         
-        $already_paid = 0;
-        $value = $this->getList();
-        for($i = 0, $max = count($value); $i < $max; $i++) {
-            $already_paid += $value[$i]["amount"];
-        }
-        $payment_for_total = $this->payment_for->get("total");
-        
-        if($amount + $already_paid > $payment_for_total) {
-            $this->error->set("Beløb er større end det skyldige beløb");
-        }
-        */
-
         if($this->error->isError()) {
             return false;
         }
@@ -157,11 +138,50 @@ Class Payment extends Standard {
         $this->load();
         
         if(is_object($this->payment_for)) {
+            $this->payment_for->load();
             $this->payment_for->updateStatus();
         }
         return true;
     }
+    
+    function getList()
+    {
 
+        $db = new DB_sql;
+        $i = 0;
+        $payment = array();
+        $credit_note = array();
+        
+        
+
+        if($this->dbquery->checkFilter("to_date")) {
+            $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
+            if($date->convert2db()) {
+                $this->dbquery->setCondition("payment_date <= \"".$date->get()."\"");
+            }
+        }
+
+        $this->dbquery->setSorting("payment_date ASC");
+        $db = $this->dbquery->getRecordset("id, amount, type, description, payment_date, payment_for_id, DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date, date_stated, voucher_id", "", false);
+        while($db->nextRecord()) {
+            $payment[$i]["id"] = $db->f("id");
+            $types = $this->getTypes();
+            $payment[$i]["type"] = $types[$db->f('type')];
+            $payment[$i]["amount"] = $db->f("amount");
+            $payment[$i]["description"] = $db->f("description");
+            $payment[$i]["payment_date"] = $db->f("payment_date");
+            $payment[$i]["dk_payment_date"] = $db->f("dk_payment_date");
+            $payment[$i]["is_stated"] = ($db->f('date_stated') > '0000-00-00'); 
+            $payment[$i]["voucher_id"] = $db->f("voucher_id");
+            $payment[$i]["payment_for_id"] = $db->f("payment_for_id");
+            $i++;
+        }
+        
+        return $payment;
+    }
+
+    /*
+    // Old getList. 22/1 2008
     function getList()
     {
 
@@ -289,6 +309,8 @@ Class Payment extends Standard {
                     $value[$i]["description"] = "[Ingen beskrivelse]";
                 }
                 $value[$i]["amount"] = $credit_note[$cre]["total"];
+                $value[$i]['is_stated'] = $credit_note[$cre]['is_stated'];
+                $value[$i]['voucher_id'] = $credit_note[$cre]['voucher_id'];
                 $cre++;
             }
 
@@ -297,6 +319,7 @@ Class Payment extends Standard {
 
         return $value;
     }
+    */
     
     function readyForState() {
         
@@ -344,10 +367,15 @@ Class Payment extends Standard {
      * 
      * @return boolean true on succes or false.
      */
-    public function state($year, $voucher_number, $voucher_date, $state_account_number) {
+    public function state($year, $voucher_number, $voucher_date, $state_account_number, $translation) {
         
         if(!is_object($year)) {
             trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
+            return false;
+        }
+        
+        if(!is_object($translation)) {
+            trigger_error('5th parameter to state needs to be a translation object!', E_USER_ERROR);
             return false;
         }
         
@@ -403,7 +431,7 @@ Class Payment extends Standard {
         
         $types = $this->getPaymentForTypes();
         // translation is needed!
-        $text = 'Betaling for '.$types[$this->payment_for_type_id].' #'.$this->payment_for->get('number');
+        $text = $translation->get('payment for').' '.$translation->get($types[$this->payment_for_type_id]).' #'.$this->payment_for->get('number');
         
         $input_values = array(
             'voucher_number' => $voucher_number,
@@ -435,7 +463,6 @@ Class Payment extends Standard {
     public function getTypes() 
     {
         return array(
-            -1=>'depriciation',
             0=>'bank_transfer',
             1=>'giro_transfer',
             2=>'credit_card',

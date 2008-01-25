@@ -16,20 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	$debtor = Debtor::factory($kernel, intval($_POST['id']));
 
-	// opdatere payment
-	if($debtor->get("type") == "invoice") {
-		$payment = new Payment($debtor);
-
-		if(isset($_POST["payment"])) {
-			$payment->update($_POST);
-			$debtor->load();
-            
-            if ($kernel->user->hasModuleAccess('accounting')) {
-                header('location: state_payment.php?debtor_id=' . intval($debtor->get("id")).'&payment_id='.$payment->get('id'));
-            }
-		}
-	}
-
 	// slet debtoren
 	if(!empty($_POST['delete'])) {
 
@@ -110,16 +96,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$debtor->load();
 	}
 }
-
 elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 	$debtor = Debtor::factory($kernel, intval($_GET["id"]));
 
-
-	// payment
-	if($debtor->get("type") == "invoice") {
-		$payment = new Payment($debtor);
-	}
 
 	// delete item
 	if(isset($_GET["action"]) && $_GET["action"] == "delete_item") {
@@ -148,8 +128,13 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			if(!$onlinepayment->transactionAction($_GET['onlinepayment_action'])) {
 			    $onlinepayment_show_cancel_option = true;
 			}
-
-			$debtor->load();
+            
+            $debtor->load();
+            
+            if ($kernel->user->hasModuleAccess('accounting')) {
+                header('location: state_payment.php?for=invoice&id=' . intval($debtor->get("id")).'&payment_id='.$onlinepayment->get('created_payment_id'));
+                exit;
+            }
 		}
 	}
 
@@ -589,37 +574,45 @@ if(isset($onlinepayment)) {
 		?>
 		<div class="box">
 			<h2>Registrér betaling</h2>
-				<form method="post" action="view.php">
-					<input type="hidden" value="<?php echo $debtor->get('id'); ?>" name="id" />
-					<div class="formrow">
-						<label for="payment_date" class="tight">Dato</label>
-						<input type="text" name="payment_date" id="payment_date" value="<?php print(safeToHtml(date("d-m-Y"))); ?>" />
-					</div>
+			<form method="post" action="register_payment.php">
+				<?php
+                /**
+                 * @TODO: hack as long as the payment types are not the same as on the invoice
+                 */
+                if($debtor->get('payment_method') == 2 || $debtor->get('payment_method') == 3) {
+                    $payment_method = 1; // giro
+                }
+                elseif($debtor->get('round_off')) {
+                    $payment_method = 3; // cash
+                }
+                else {
+                    $payment_method = 0; // bank_transfer
+                }
+                
+                $payment = new Payment($debtor);
+                $types = $payment->getTypes();
+                ?>
+                <input type="hidden" value="<?php echo $debtor->get('id'); ?>" name="id" />
+				<input type="hidden" value="invoice" name="for" />
+                <input type="hidden" name="amount" value="<?php print(number_format($debtor->get("arrears"), 2, ",", ".")); ?>" />
+                <input type="hidden" name="type" value="<?php e($payment_method); ?>" />
+                
+                <div>
+                    <?php e(t('register')); ?> DKK <strong><?php e(number_format($debtor->get("arrears"), 2, ",", ".")); ?></strong> <?php e(t('paid by')); ?> <strong><?php e(t($types[$payment_method])); ?></strong>:
+                </div>
+                
+                <div class="formrow">
+					<label for="payment_date" class="tight">Dato</label>
+					<input type="text" name="payment_date" id="payment_date" value="<?php print(safeToHtml(date("d-m-Y"))); ?>" size="8" />
+				</div>
 
-					<div class="formrow">
-						<label for="type" class="tight">Type</label>
-						<select name="type" id="type">
-							<?php
-							$payment = new Payment($debtor);
-                            $types = $payment->getTypes();
-							foreach($types AS $key => $value) {
-								?>
-								<option value="<?php print(safeToHtml($key)); ?>" <?php if($key == 0) print("selected='selected'"); ?> ><?php echo safeToHtml($translation->get($value)); ?></option>
-								<?php
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="formrow">
-						<label for="amount" class="tight">Beløb</label>
-						<input type="text" name="amount" id="amount" value="<?php print(number_format($debtor->get("arrears"), 2, ",", ".")); ?>" />
-					</div>
-
-					<div style="clear: both;">
-						<input class="confirm" type="submit" name="payment" value="Registrér" title="Dette vil registrere betalingen" />
-					</div>
-				</form>
+				<div style="clear: both;">
+					<input class="confirm" type="submit" name="payment" value="Registrér" title="Dette vil registrere betalingen" />
+				    <?php e(t('or')); ?> 
+                    <a href="register_payment.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>"><?php e(t('give me more choices')); ?></a>.
+                </div>
+            </form>
+            <p><a href="register_depreciation.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>"><?php e(t('I am not going to recieve the full payment...')); ?></a></p>
 		</div>
 		<?php
 	}
@@ -631,12 +624,13 @@ if(isset($onlinepayment)) {
 
 	<?php
 	if($debtor->get("type") == "invoice") {
-		$payments = $payment->getList();
-		$payment_total = 0;
-        if($kernel->user->hasModuleAccess('accounting')) {
+		if($kernel->user->hasModuleAccess('accounting')) {
             $module_accounting = $kernel->useModule('accounting');      
         }
-		if(count($payments) > 0) {
+        
+        $payments = $debtor->getDebtorAccount()->getList();
+		$payment_total = 0;
+        if(count($payments) > 0) {
 			?>
 				<table class="stripe">
 					<caption>Betalinger</caption>
@@ -678,8 +672,10 @@ if(isset($onlinepayment)) {
                                         <a href="<?php e($module_accounting->getPath().'voucher.php?id='.$payments[$i]['voucher_id']); ?>"><?php e($translation->get('voucher')); ?></a>
                                     <?php elseif($payments[$i]['type'] == 'credit_note'): ?>
                                         <a href="state_credit_note.php?id=<?php e($payments[$i]['id']) ?>"><?php e($translation->get('state credit note')); ?></a>
+                                    <?php elseif($payments[$i]['type'] == 'depreciation'): ?>
+                                        <a href="state_depreciation.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>&amp;depreciation_id=<?php e($payments[$i]['id']) ?>"><?php e($translation->get('state depreciation')); ?></a>
                                     <?php else: ?>
-                                        <a href="state_payment.php?debtor_id=<?php e($debtor->get('id')); ?>&amp;payment_id=<?php e($payments[$i]['id']) ?>"><?php e($translation->get('state payment')); ?></a>
+                                        <a href="state_payment.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>&amp;payment_id=<?php e($payments[$i]['id']) ?>"><?php e($translation->get('state payment')); ?></a>
                                     <?php endif; ?>
                                 </td>
                             <?php endif; ?>  
@@ -693,14 +689,18 @@ if(isset($onlinepayment)) {
 						<td>&nbsp;</td>
 						<td><strong>I alt</strong></td>
 						<td><?php print(number_format($payment_total, 2, ",", ".")); ?></td>
-                        <td>&nbsp;</td>
+                        <?php if($kernel->user->hasModuleAccess('accounting')): ?>
+                            <td>&nbsp;</td>
+                        <?php endif; ?>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<th>Manglende betaling</th>
 						<td><?php echo number_format($debtor->get("total") - $payment_total, 2, ",", "."); ?></td>
-					    <td>&nbsp;</td>
+					    <?php if($kernel->user->hasModuleAccess('accounting')): ?>
+                            <td>&nbsp;</td>
+                        <?php endif; ?>
                     </tr>
 				</table>
 			<?php

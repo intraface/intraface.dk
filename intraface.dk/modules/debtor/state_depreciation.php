@@ -1,4 +1,10 @@
 <?php
+/**
+ * selenium test not finished
+ * 
+ */
+
+
 require('../../include_first.php');
 
 $debtor_module = $kernel->module('debtor');
@@ -12,7 +18,7 @@ $voucher = new Voucher($year);
 if (!empty($_POST)) {
     
     if(empty($_POST['for'])) {
-        trigger_error('you need to provide what the payment is for', E_USER_ERROR);
+        trigger_error('you need to provide what the depreciation is for', E_USER_ERROR);
         exit;
     }
     
@@ -34,18 +40,18 @@ if (!empty($_POST)) {
         trigger_error('Invalid '.$for.' #'. $_POST["id"], E_USER_ERROR);
         exit;
     }
-    $payment = new Payment($object, intval($_POST['payment_id']));
-    if($payment->get('id') == 0) {
-        trigger_error('Invalid payment #'. $_POST["payment_id"], E_USER_ERROR);
+    $depreciation = new Depreciation($object, intval($_POST['depreciation_id']));
+    if($depreciation->get('id') == 0) {
+        trigger_error('Invalid depreciation #'. $_POST["depreciation_id"], E_USER_ERROR);
         exit;
     }
     
-    $kernel->setting->set('intranet', 'payment.state.'.$payment->get('type').'.account', intval($_POST['state_account_id']));
+    $kernel->setting->set('intranet', 'depreciation.state.account', intval($_POST['state_account_id']));
     
-    if ($payment->error->isError()) {
+    if ($depreciation->error->isError()) {
         // nothing, we continue
-    } elseif (!$payment->state($year, $_POST['voucher_number'], $_POST['date_state'], $_POST['state_account_id'], $translation)) {
-        $payment->error->set('Kunne ikke bogføre posten');
+    } elseif (!$depreciation->state($year, $_POST['voucher_number'], $_POST['date_state'], $_POST['state_account_id'], $translation)) {
+        $depreciation->error->set('Kunne ikke bogføre posten');
     } else {
         
         if($for == 'invoice') {
@@ -58,7 +64,7 @@ if (!empty($_POST)) {
     }
 } else {
     if(empty($_GET['for'])) {
-        trigger_error('you need to provide what the payment is for', E_USER_ERROR);
+        trigger_error('you need to provide what the depreciation is for', E_USER_ERROR);
         exit;
     }
     
@@ -76,15 +82,15 @@ if (!empty($_POST)) {
             exit;
     }
     
-    $payment = new Payment($object, $_GET['payment_id']);
+    $depreciation = new Depreciation($object, $_GET['depreciation_id']);
     
 }
 
 $page = new Page($kernel);
-$page->start($translation->get('state payment for '.$for));
+$page->start($translation->get('state depreciation for '.$for));
 
 ?>
-<h1><?php echo safeToHtml($translation->get('state payment for '.$for)); ?> #<?php echo safeToHtml($object->get('number')); ?></h1>
+<h1><?php echo safeToHtml($translation->get('state depreciation for '.$for)); ?> #<?php echo safeToHtml($object->get('number')); ?></h1>
 
 <ul class="options">
     <?php if($for == 'invoice'): ?>
@@ -95,36 +101,32 @@ $page->start($translation->get('state payment for '.$for));
 </ul>
 
 
-<?php if (!$year->readyForState($payment->get('payment_date'))): ?>
+<?php if (!$year->readyForState($depreciation->get('payment_date'))): ?>
     <?php echo $year->error->view(); ?>
     <p>Gå til <a href="<?php echo $accounting_module->getPath().'years.php'; ?>">regnskabet</a></p>
-<?php elseif($payment->isStated()): ?>
-    <p><?php e(t('the payment is alredy stated')); ?>. <a href="<?php echo $accounting_module->getPath().'voucher.php?id='.$payment->get('voucher_id'); ?>"><?php e(t('see the voucher')); ?></a>.</p>
+<?php elseif($depreciation->isStated()): ?>
+    <p><?php e(t('the depreciation is alredy stated')); ?>. <a href="<?php echo $accounting_module->getPath().'voucher.php?id='.$depreciation->get('voucher_id'); ?>"><?php e(t('see the voucher')); ?></a>.</p>
 <?php else: ?>
     <?php
     // need to be executed to generate errors!
-    $payment->readyForState(); 
-    echo $payment->error->view(); 
+    $depreciation->readyForState(); 
+    echo $depreciation->error->view(); 
     ?>
     
     <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
     <input type="hidden" value="<?php echo intval($object->get('id')); ?>" name="id" />
     <input type="hidden" value="<?php echo $for; ?>" name="for" />
-    <input type="hidden" value="<?php echo intval($payment->get('id')); ?>" name="payment_id" />
+    <input type="hidden" value="<?php echo intval($depreciation->get('id')); ?>" name="depreciation_id" />
     <fieldset>
-        <legend><?php e('payment'); ?></legend>
+        <legend><?php e('depreciation'); ?></legend>
         <table>
             <tr>
-                <th><?php print(safeToHtml($translation->get("payment type"))); ?></th>
-                <td><?php print(safeToHtml($translation->get($payment->get("type")))); ?></td>
-            </tr>
-            <tr>
                 <th><?php print(safeToHtml($translation->get("date"))); ?></th>
-                <td><?php print(safeToHtml($payment->get("dk_payment_date"))); ?></td>
+                <td><?php print(safeToHtml($depreciation->get("dk_payment_date"))); ?></td>
             </tr>
             <tr>
                 <th><?php print(safeToHtml($translation->get("amount"))); ?></th>
-                <td><?php print(safeToHtml(number_format($payment->get("amount"), 2, ',', '.'))); ?></td>
+                <td><?php print(safeToHtml(number_format($depreciation->get("amount"), 2, ',', '.'))); ?></td>
             </tr>
         </table>
     </fieldset>
@@ -139,7 +141,7 @@ $page->start($translation->get('state payment for '.$for));
         
         <div class="formrow">
             <label for="date_stated">Bogfør på dato</label>
-            <input type="text" name="date_state" id="date_stated" value="<?php echo safeToHtml($payment->get("dk_payment_date")); ?>" />
+            <input type="text" name="date_state" id="date_stated" value="<?php echo safeToHtml($depreciation->get("dk_payment_date")); ?>" />
         </div>
         
         <p>Beløbet vil blive trukket fra debitorkontoen og blive sat på kontoen, du vælger herunder:</p>
@@ -151,13 +153,13 @@ $page->start($translation->get('state payment for '.$for));
         
             $year = new Year($kernel);
             $year->loadActiveYear();
-            $accounts =  $account->getList('finance');
+            $accounts =  $account->getList('operating');
             ?>
             <select id="state_account" name="state_account_id">
                 <option value="">Vælg...</option>
                 <?php
                 $x = 0;
-                $default_account_id = $kernel->setting->get('intranet', 'payment.state.'.$payment->get('type').'.account');
+                $default_account_id = $kernel->setting->get('intranet', 'depreciation.state.account');
                 
                 foreach($accounts AS $a):
                     if (strtolower($a['type']) == 'sum') continue;
@@ -172,7 +174,7 @@ $page->start($translation->get('state payment for '.$for));
         </div>
     </fieldset>
 
-    <?php  if ($payment->readyForState()): ?>
+    <?php  if ($depreciation->readyForState()): ?>
         <div>
             <input type="submit" value="Bogfør" /> eller
             <a href="view.php?id=<?php echo intval($object->get('id')); ?>">fortryd</a>
