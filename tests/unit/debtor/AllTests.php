@@ -8,7 +8,7 @@ class Debtor_AllTests
     public static function suite() {
         $suite = new PHPUnit_Framework_TestSuite('Intraface_Debtor');
 
-        $tests = array('Debtor', 'DebtorItem', 'DebtorPdf', 'Payment', 'Invoice', 'CreditNote', 'Reminder', 'Payment', 'Depreciation');
+        $tests = array('Debtor', 'DebtorItem', 'DebtorPdf', 'Invoice', 'CreditNote', 'Reminder', 'Payment', 'Depreciation');
 
         foreach ($tests AS $test) {
             require_once $test . 'Test.php';
