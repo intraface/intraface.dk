@@ -444,12 +444,15 @@ class OnlinePayment extends Standard {
             "type" => 2);
         // type = 2: credit_card
 
+        
         if($payment->update($input)) {
+            $this->value['create_payment_id'] = $payment->get('id');
             return true;
+            
         }
         else {
-            $payment->error->view();
-            die();
+            $this->error->merge($payment->error->getMessage());
+            return false;
         }
     }
 
