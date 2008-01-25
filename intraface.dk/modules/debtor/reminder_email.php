@@ -9,7 +9,7 @@ class Reminder_Text {
     private $output;
     function __construct() {}
     function visit(Reminder $reminder) {
-        $this->output .= "Rykkernr. " . $reminder->get('number') . ", dato: " . $reminder->get("dk_this_date") ."\n\n";
+        $this->output .= "Dato: " . $reminder->get("dk_this_date") ."\n\n";
         $this->output .= $reminder->contact->address->get("name") . "\n";
         if($reminder->get("attention_to") != "") {
             $this->output .= "Att.: ".$reminder->get("attention_to")."\n";
@@ -101,87 +101,6 @@ if ($reminder->contact->address->get("email") == '') {
 }
 
 $subject  =	"Påmindelse om betaling";
-/*
-$body     =	"Rykkernr. " . $reminder->get('number') . ", dato: " . $reminder->get("dk_this_date") ."\n\n";
-$body    .= $reminder->contact->address->get("name") . "\n";
-if($reminder->get("attention_to") != "") {
-    $body    .= "Att.: ".$reminder->get("attention_to")."\n";
-}
-$body    .= $reminder->contact->address->get("address") . "\n";
-$body    .= $reminder->contact->address->get("postcode") . "  " .  $reminder->contact->address->get("city") ."\n\n";
-
-$body    .= $reminder->get("text") . "\n\n";
-
-// Overskrifter - Vareudskrivning
-
-$body .= "Beskrivelse          Dato        Forfaldsdato    Beløb\n";
-
-// vareoversigt
-$reminder->loadItem();
-$items = $reminder->item->getList("invoice");
-$total = 0;
-for($i = 0, $max = count($items); $i < $max; $i++) {
-    $body .= "\nFak# ".$items[$i]["number"];
-  $spaces = -strlen($items[$i]["number"]) - 5 + 20;
-  for ($j = 0; $j < $spaces; $j++) { $body .= ' ';  }
-    $body .= ' ' . $items[$i]["dk_this_date"];
-    $body .= '  ' . $items[$i]["dk_due_date"];
-    $body .= '      ' . number_format($items[$i]["arrears"], 2, ",", ".");
-
-    $total += $items[$i]["arrears"];
-}
-
-$items = $reminder->item->getList("reminder");
-for($i = 0, $max = count($items); $i < $max; $i++) {
-    $body .= "\nTidl. rykkkergebyr  ";
-  //if (strlen($items[$i]["number"]) < 8) { $body .= "\t";  }
-    $body .= ' ' . $items[$i]["dk_this_date"];
-    $body .= '  ' .$items[$i]["dk_due_date"];
-    $body .= '      ' . number_format($items[$i]["reminder_fee"], 2, ",", ".");
-
-    $total += $items[$i]["reminder_fee"];
-
-}
-
-if($reminder->get("reminder_fee") != 0) {
-    $body .= "\nRykkergebyr                                      ".number_format($reminder->get("reminder_fee"), 2, ",", ".");
-    $total += $reminder->get("reminder_fee");
-}
-
-$body .= "\n\nTotal:                                           " . number_format($total, 2, ",", ".");
-
-$parameter = array(
-    "contact" => $reminder->contact,
-    "payment_text" => "Rykker #".$reminder->get("number"),
-    "amount" => $total,
-    "due_date" => $reminder->get("dk_due_date"),
-    "girocode" => $reminder->get("girocode"));
-
-
-$body .= "\n\nDet skyldige beløb betales senest: " . $parameter['due_date'];
-
-// TODO: change to payment_method
-
-switch ($reminder->get('payment_method_key')) {
-
-    case 1: // fall through - ingen valgt
-    case 2: // kontooverførsel
-    $body .= "\n\nBetales på konto:";
-        $body .= "\nBank:                ".$kernel->setting->get('intranet', 'bank_name');
-        $body .= "\nRegnr.:              ".$kernel->setting->get('intranet', 'bank_reg_number');
-        $body .= "\nKontonr.:            ".$kernel->setting->get('intranet', 'bank_account_number');
-        $body .= "\nBesked til modtager: " . "Kunde #" . $reminder->contact->get("number");
-      break;
-  case 3:
-        $body .= "\n\nBetaling via homebanking\n+71< ".str_repeat("0", 15 - strlen($parameter["girocode"])).$parameter["girocode"]." +".$kernel->setting->get('intranet', 'giro_account_number')."<";
-      break;
-
-}
-
-$body .= "\n\nMed venlig hilsen\n\n" . $kernel->user->address->get("name") . "\n" .$kernel->intranet->get("name");
-$body .= "\n" . $kernel->intranet->address->get("address");
-$body .= "\n" . $kernel->intranet->address->get("postcode") . "  " . $kernel->intranet->address->get("city");
-*/
 
 $reminder_text = new Reminder_Text();
 $reminder_text->visit($reminder);

@@ -3,6 +3,11 @@
  * @package Intraface_Invoice
  */
 
+require_once 'Intraface/Standard.php';
+require_once 'DB/Sql.php';
+require_once 'Intraface/Error.php';
+require_once 'Intraface/DBQuery.php';
+
 class Reminder extends Standard {
     var $id;
     var $kernel;
@@ -18,6 +23,7 @@ class Reminder extends Standard {
 
         $this->id     = intval($id);
         $this->kernel = $kernel;
+        
         $this->db     = new Db_sql;
         $this->error  = new Error;
 
@@ -30,83 +36,77 @@ class Reminder extends Standard {
     }
 
     function load() {
-        if($this->id) {
-            $this->db->query("SELECT *,
-                    DATE_FORMAT(this_date, '%d-%m-%Y') AS dk_this_date,
-                    DATE_FORMAT(due_date, '%d-%m-%Y') AS dk_due_date,
-                    DATE_FORMAT(date_sent, '%d-%m-%Y') AS dk_date_sent,
-                    DATE_FORMAT(date_executed, '%d-%m-%Y') AS dk_date_executed,
-                    DATE_FORMAT(date_cancelled, '%d-%m-%Y') AS dk_date_cancelled
-                FROM invoice_reminder WHERE id = ".$this->id." AND intranet_id = ".$this->kernel->intranet->get("id"));
-            if($this->db->nextRecord()) {
-
-                $this->value["id"] = $this->db->f("id");
-                $this->value["invoice_id"] = $this->db->f("invoice_id");
-                $this->value["intranet_id"] = $this->db->f("intranet_id");
-                $this->value["intranet_address_id"] = $this->db->f("intranet_address_id");
-                $this->value["contact_id"] = $this->db->f("contact_id");
-                $this->value["contact_address_id"] = $this->db->f("contact_address_id");
-                $this->value["contact_person_id"] = $this->db->f("contact_person_id");
-                $this->value["user_id"] = $this->db->f("user_id");
-                $status_types = $this->getStatusTypes();
-                $this->value["status"] = $status_types[$this->db->f("status")]; // skal laves om til db->f('status_key')
-                $this->value["status_id"] = $this->db->f("status"); // skal slettes i næste version
-                $this->value["status_key"] = $this->db->f("status");
-                $this->value["this_date"] = $this->db->f("this_date");
-                $this->value["dk_this_date"] = $this->db->f("dk_this_date");
-                $this->value["due_date"] = $this->db->f("due_date");
-                $this->value["dk_due_date"] = $this->db->f("dk_due_date");
-                $this->value["dk_date_sent"] = $this->db->f("dk_date_sent");
-                $this->value["dk_date_executed"] = $this->db->f("dk_date_executed");
-                $this->value["description"] = $this->db->f("description");
-                // $this->value["attention_to"] = $this->db->f("attention_to");
-                $this->value["number"] = $this->db->f("number");
-                $this->value["payment_method_key"] = $this->db->f("payment_method");
-                $payment_methods = $this->getPaymentMethods();
-                $this->value["payment_method"] = $payment_methods[$this->db->f("payment_method")];
-                $this->value["reminder_fee"] = $this->db->f("reminder_fee");
-                // Denne skal laves, så den udregner hele værdien af hele rykkeren
-                $this->value["total"] = $this->db->f("reminder_fee");
-                $this->value["text"] = $this->db->f("text");
-                $this->value["girocode"] = $this->db->f("girocode");
-                $this->value["send_as"] = $this->db->f("send_as");
-                // $this->value["is_send"] = $this->db->f("is_send");
-                // $this->value["is_send_date"] = $this->db->f("is_send_date");
-                // $this->value["dk_is_send_date"] = $this->db->f("dk_is_send_date");
-                // $this->value["payed"] = $this->db->f("payed");
-                // $this->value["payed_date"] = $this->db->f("payed_date");
-                // $this->value["dk_payed_date"] = $this->db->f("dk_payed_date");
-                // $this->value["locked"] = $this->db->f("locked");
-
-                $this->contact = new Contact($this->kernel, $this->db->f("contact_id"), $this->db->f("contact_address_id"));
-                if($this->contact->get("type") == "corporation" && $this->db->f("contact_person_id") != 0) {
-                    $this->contact_person = new ContactPerson($this->contact, $this->db->f("contact_person_id"));
-                }
-
-
-                if($this->get("status") == "executed" || $this->get("status") == "cancelled") {
-                    $this->value["locked"] = true;
-                } else {
-                    $this->value["locked"] = false;
-                }
-
-                $payment = new Payment($this);
-                $payments = $payment->getList();
-                $this->value["payment_total"] = 0;
-                foreach($payments AS $pay) {
-                    $this->value["payment_total"] += $pay['amount'];
-                }
-                $this->value["arrears"] = $this->value['total'] - $this->value['payment_total'];
-
-                return true;
-            }
+        
+        $this->db->query("SELECT *,
+                DATE_FORMAT(this_date, '%d-%m-%Y') AS dk_this_date,
+                DATE_FORMAT(due_date, '%d-%m-%Y') AS dk_due_date,
+                DATE_FORMAT(date_sent, '%d-%m-%Y') AS dk_date_sent,
+                DATE_FORMAT(date_executed, '%d-%m-%Y') AS dk_date_executed,
+                DATE_FORMAT(date_cancelled, '%d-%m-%Y') AS dk_date_cancelled
+            FROM invoice_reminder WHERE id = ".$this->id." AND intranet_id = ".$this->kernel->intranet->get("id")."");
+        if(!$this->db->nextRecord()) {
+            $this->id = 0;
+            $this->value['id'] = 0;
+            return false;
         }
-        $this->id = 0;
-        return false;
+
+        $this->value["id"] = $this->db->f("id");
+        $this->value["invoice_id"] = $this->db->f("invoice_id");
+        $this->value["intranet_id"] = $this->db->f("intranet_id");
+        $this->value["intranet_address_id"] = $this->db->f("intranet_address_id");
+        $this->value["contact_id"] = $this->db->f("contact_id");
+        $this->value["contact_address_id"] = $this->db->f("contact_address_id");
+        $this->value["contact_person_id"] = $this->db->f("contact_person_id");
+        $this->value["user_id"] = $this->db->f("user_id");
+        $status_types = $this->getStatusTypes();
+        $this->value["status"] = $status_types[$this->db->f("status")]; // skal laves om til db->f('status_key')
+        $this->value["status_id"] = $this->db->f("status"); // skal slettes i næste version
+        $this->value["status_key"] = $this->db->f("status");
+        $this->value["this_date"] = $this->db->f("this_date");
+        $this->value["dk_this_date"] = $this->db->f("dk_this_date");
+        $this->value["due_date"] = $this->db->f("due_date");
+        $this->value["dk_due_date"] = $this->db->f("dk_due_date");
+        $this->value["dk_date_sent"] = $this->db->f("dk_date_sent");
+        $this->value["dk_date_executed"] = $this->db->f("dk_date_executed");
+        $this->value["date_stated"] = $this->db->f("date_stated");
+        $this->value["voucher_id"] = $this->db->f("voucher_id");
+        $this->value["description"] = $this->db->f("description");
+        $this->value["number"] = $this->db->f("number");
+        $this->value["payment_method_key"] = $this->db->f("payment_method");
+        $payment_methods = $this->getPaymentMethods();
+        $this->value["payment_method"] = $payment_methods[$this->db->f("payment_method")];
+        $this->value["reminder_fee"] = $this->db->f("reminder_fee");
+        // Denne skal laves, så den udregner hele værdien af hele rykkeren
+        $this->value["total"] = $this->db->f("reminder_fee");
+        $this->value["text"] = $this->db->f("text");
+        $this->value["girocode"] = $this->db->f("girocode");
+        $this->value["send_as"] = $this->db->f("send_as");
+
+        $this->contact = new Contact($this->kernel, $this->db->f("contact_id"), $this->db->f("contact_address_id"));
+        if($this->contact->get("type") == "corporation" && $this->db->f("contact_person_id") != 0) {
+            $this->contact_person = new ContactPerson($this->contact, $this->db->f("contact_person_id"));
+        }
+
+
+        if($this->get("status") == "executed" || $this->get("status") == "cancelled") {
+            $this->value["locked"] = true;
+        } else {
+            $this->value["locked"] = false;
+        }
+
+        $this->value['payment_total'] = 0;
+        foreach($this->getDebtorAccount()->getList() AS $payment) {
+            $this->value['payment_total'] += $payment["amount"];
+        }
+        $this->value["arrears"] = $this->value['total'] - $this->value['payment_total'];
+
+        return true;
+        
     }
 
     function loadItem($id = 0)
     {
+        require_once 'Intraface/modules/invoice/ReminderItem.php';
         $this->item = new ReminderItem($this, (int)$id);
     }
 
@@ -145,56 +145,65 @@ class Reminder extends Standard {
 
         $input = safeToDb($input);
 
+        require_once 'Intraface/Validator.php';
         $validator = new Validator($this->error);
 
+        if(!isset($input['number'])) $input['number'] = 0;
         if($validator->isNumeric($input["number"], "Rykkernummer skal være et tal større end nul", "greater_than_zero")) {
             if(!$this->isNumberFree($input["number"])) {
                 $this->error->set("Rykkernummer er allerede brugt");
             }
         }
-
+        
+        if(!isset($input['contact_id'])) $input['contact_id'] = 0;
+        if(!isset($input["contact_person_id"])) $input["contact_person_id"] = 0;
         if($validator->isNumeric($input["contact_id"], "Du skal angive en kunde", "greater_than_zero")) {
             $contact = new Contact($this->kernel, (int)$input["contact_id"]);
             if(is_object($contact->address)) {
                 $contact_id = $contact->get("id");
-              $contact_address_id = $contact->address->get("address_id");
-          } else {
-              $this->error->set("Ugyldig kunde");
-          }
+                $contact_address_id = $contact->address->get("address_id");
+            } else {
+                $this->error->set("Ugyldig kunde");
+            }
+            
+            if($contact->get("type") == "corporation") {
+                $validator->isNumeric($input["contact_person_id"], "Der er ikke angivet en kontaktperson");
+            }
         }
-
-        if($contact->get("type") == "corporation") {
-            $validator->isNumeric($input["contact_person_id"], "Der er ikke angivet en kontaktperson");
-        } else {
-            $input["contact_person_id"] = 0;
-        }
-
+        
         // $validator->isString($input["attention_to"], "Fejl i att.", "", "allow_empty");
+        if(!isset($input['description'])) $input['description'] = '';
         $validator->isString($input["description"], "Fejl i beskrivelsen", "", "allow_empty");
 
+        if(!isset($input['this_date'])) $input['this_date'] = '';
         if($validator->isDate($input["this_date"], "Ugyldig dato", "allow_no_year")) {
             $this_date = new Intraface_Date($input["this_date"]);
             $this_date->convert2db();
         }
 
+        if(!isset($input['due_date'])) $input['due_date'] = '';
         if($validator->isDate($input["due_date"], "Ugyldig forfaldsdato", "allow_no_year")) {
             $due_date = new Intraface_Date($input["due_date"]);
             $due_date->convert2db();
         }
 
+        if(!isset($input['reminder_fee'])) $input['reminder_fee'] = 0;
         $validator->isNumeric($input["reminder_fee"], "Rykkerbebyr skal være et tal");
+        if(!isset($input['text'])) $input['text'] = '';
         $validator->isString($input["text"], "Fejl i teksten", "<b><i>", "allow_empty");
-        settype($input['send_as'], 'string');
+        if(!isset($input['send_as'])) $input['send_as'] = '';
         $validator->isString($input["send_as"], "Ugyldig måde at sende rykkeren på");
 
+        if(!isset($input['payment_method_key'])) $input['payment_method_key'] = 0;
         $validator->isNumeric($input["payment_method_key"], "Du skal angive en betalingsmetode");
-        settype($input['girocode'], 'string');
+        if(!isset($input['girocode'])) $input['girocode'] = '';
         if($input["payment_method_key"] == 3) {
             $validator->isString($input["girocode"], "Du skal udfylde girokode");
         } else {
             $validator->isString($input["girocode"], "Ugyldig girokode", "", "allow_empty");
         }
 
+        if(!isset($input['checked_invoice'])) $input['checked_invoice'] = array();
         if(!is_array($input["checked_invoice"]) || count($input["checked_invoice"]) == 0) {
             $this->error->set("Der er ikke valgt nogle fakturaer til rykkeren");
         }
@@ -253,6 +262,7 @@ class Reminder extends Standard {
         $this->db->query("UPDATE invoice_reminder SET active = 0 WHERE id = ".$this->id." AND intranet_id = ".$this->kernel->intranet->get("id"));
         $this->id = 0;
         $this->load();
+        return true;
     }
 
 
@@ -321,13 +331,25 @@ class Reminder extends Standard {
     function updateStatus()
     {
 
-        $payment = $this->getPayments();
-        if($payment["total"] == $this->get("total") && $this->get("status") == "sent") {
+        if($this->get("arrears") == 0 && $this->get("status") == "sent") {
             $this->setStatus("executed");
         }
         return true;
     }
+    
+    /**
+     * returns DebtorAccount object
+     * 
+     * @return object DebtorAccount
+     */
+    public function getDebtorAccount() 
+    {
+        require_once 'Intraface/modules/invoice/DebtorAccount.php';
+        return new DebtorAccount($this);
+    }
 
+    /*
+    removed 22/1 2008
     function getPayments()
     {
 
@@ -347,74 +369,6 @@ class Reminder extends Standard {
 
         $payment["total"] = $payment["payment"] + $payment["deprication"];
         return $payment;
-    }
-
-    /*
-    function setPayed($date, $status = 1) {
-        if($this->get("locked") == 1) {
-            return(false);
-        }
-
-        $this->setIsSend($date);
-        $this->setLocked();
-        $this->db->query("UPDATE invoice_reminder SET payed = ".(int)$status.", payed_date = \"".$date."\" WHERE id = ".$this->id);
-        $this->load();
-
-    }
-
-    function setIsSend($date) {
-        if($this->get("is_send") == 0) {
-            $this->db->query("UPDATE invoice_reminder SET is_send = 1, is_send_date = \"".$date."\" WHERE id = ".$this->id);
-            $this->load();
-        }
-    }
-    */
-    /*
-    function getList($listfilter) {
-        $db = new DB_Sql;
-
-
-        if(!is_object($listfilter) || get_class($listfilter) != "listfilter") {
-            $listfilter = new ListFilter("reminder");
-        }
-
-        $listfilter->useErrorObject($this->error);
-
-        $listfilter->defineConditionField("id", "int", 0);
-        $listfilter->defineConditionField("description", "string", "");
-        $listfilter->defineConditionField("girocode", "string", "");
-        $listfilter->defineConditionField("number", "int", 0);
-        $listfilter->defineConditionField("status", "int", -1);
-        $listfilter->defineConditionField("this_date", "date", "");
-        $listfilter->defineConditionField("due_date", "date", "");
-        $listfilter->defineConditionField("contact_id", "int", 0);
-        $listfilter->defineConditionField("reminder_fee", "int", 0);
-
-        $listfilter->defineSortingField("number");
-        $listfilter->defineSortingField("this_date");
-
-        $listfilter->setDefaultCondition("(status = 0 OR status = 1)");
-        $listfilter->setDefaultSorting("this_date DESC");
-
-
-        $sql = "SELECT id FROM invoice_reminder WHERE intranet_id = ".$this->kernel->intranet->get("id")." ".$listfilter->getSqlString();
-        $i = 0;
-
-        $db->query($sql);
-        while($db->nextRecord()) {
-
-            $reminder = new Reminder($this->kernel, $db->f("id"));
-            $list[$i] = $reminder->get();
-            if (is_object($reminder->contact->address)) {
-                $list[$i]['contact_id'] = $reminder->contact->get('id');
-                $list[$i]['name'] = $reminder->contact->address->get('name');
-                $list[$i]['address'] = $reminder->contact->address->get('address');
-                $list[$i]['postalcode'] = $reminder->contact->address->get('postcode');
-                $list[$i]['city'] = $reminder->contact->address->get('city');
-            }
-            $i++;
-        }
-        return $list;
     }
     */
 
@@ -538,222 +492,185 @@ class Reminder extends Standard {
         $db->query("SELECT id FROM invoice_reminder WHERE intranet_id = " . $this->kernel->intranet->get('id'));
         return $db->numRows();
     }
+    
+    /**
+     * Set the reminder as stated
+     *
+     * @param integer $voucher_id   The voucher id
+     * @param string  $voucher_date Which date is it stated
+     *
+     * @return boolean
+     */
+    public function setStated($voucher_id, $voucher_date)
+    {
+        // FIXME - check on date
+        $db = new DB_Sql;
+        $db->query("UPDATE invoice_reminder SET date_stated = '" . $voucher_date . "', voucher_id = '".$voucher_id."' WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
+        return true;
+    }
 
     /**
-     * Til at oprette pdf.
+     * Check whether reminder has been stated
+     *
+     * @return boolean
      */
-/*
-    function _pdf($type = 'stream', $filename='') {
-
-        if($this->get('id') == 0) {
-            trigger_error("Reminder->pdf skal være loaded for at lave pdf", E_USER_ERROR);
+    public function isStated()
+    {
+        if ($this->get("date_stated") > '0000-00-00') {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * returns whether there is something to state on the reminder
+     * 
+     * @return boolean true or false
+     */
+    public function somethingToState() 
+    {
+        
+        if ($this->get('total') == 0) {
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Returns whether the reminder is ready for state
+     * 
+     * @param object accounting year
+     * @return boolean true or false
+     */
+    function readyForState($year)
+    {
+        if($this->isStated()) {
+            $this->error->set('reminder is already stated');
+            return false;
+        }
+        
+        if(!$this->somethingToState()) {
+            $this->error->set('there is nothing to state on the reminder');
         }
 
-        $this->kernel->useShared('filehandler');
-        $shared_pdf = $this->kernel->useShared('pdf');
-        $shared_pdf->includeFile('PdfMakerDebtor.php');
+        if($this->get('status') != 'sent' && $this->get('status') != 'executed') {
+            $this->error->set('the reminder should be sent of executed to be stated');
+            return false;
+        }
+        
+        if (!$year->readyForState()) {
+            $this->error->set('accounting year is not ready for state');
+            return false;
+        }
+        
+        $debtor_account = new Account($year, $year->getSetting('debtor_account_id'));
+        if($debtor_account->get('id') == 0 || $debtor_account->get('type') != 'balance, asset') {
+            $this->error->set('invalid debtor account set in the accounting settings');
+        }
+        
+        if ($this->error->isError()) {
+            return false;
+        }
+        return true;
+    }
 
-        $doc = new PdfMakerDebtor($this->kernel);
-        $doc->start();
-
-
-        if($this->kernel->intranet->get("pdf_header_file_id") != 0) {
-            $filehandler = new FileHandler($this->kernel, $this->kernel->intranet->get("pdf_header_file_id"));
-            $doc->addHeader($filehandler->get('file_uri_pdf'));
+    /**
+     * State reminder
+     * 
+     * @param object year stating year
+     * @param integer voucher_number
+     * @param string voucher_date
+     * @return boolean true or false
+     */
+    function state($year, $voucher_number, $voucher_date, $credit_account_number, $translation)
+    {
+        if(!is_object($year)) {
+            trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
+            return false;
+        }
+        
+        if(!is_object($translation)) {
+            trigger_error('5th parameter to state needs to be a translation object!', E_USER_ERROR);
+            return false;
+        }
+        
+        $validator = new Validator($this->error);
+        if($validator->isDate($voucher_date, "Ugyldig dato")) {
+            $this_date = new Intraface_Date($voucher_date);
+            $this_date->convert2db();
+        }
+        
+        $validator->isNumeric($voucher_number, 'invalid voucher number', 'greater_than_zero');
+        $validator->isNumeric($credit_account_number, 'invalid account number for stating reminder', 'greater_than_zero');
+        
+        if ($this->error->isError()) {
+            return false;
         }
 
-        $contact["object"] = $this->contact;
-        if(isset($this->contact_person) AND get_class($this->contact_person) == "contactperson") {
-            $contact["attention_to"] = $reminder->contact_person->get("name");
+        if (!$this->readyForState($year)) {
+            $this->error->set('Reminder is not ready for state');
+            return false;
+        }
+        
+        $text = $translation->get('reminder').' #'.$this->get('number');
+        
+        require_once 'Intraface/modules/accounting/Voucher.php';
+        require_once 'Intraface/modules/accounting/Account.php';
+        $voucher = Voucher::factory($year, $voucher_number);
+        $voucher->save(array(
+            'voucher_number' => $voucher_number,
+            'date' => $voucher_date,
+            'text' => $text 
+        ));
+
+
+        $credit_account = Account::factory($year, $credit_account_number);
+        if($credit_account->get('id') == 0 || $credit_account->get('type') != 'operating') {
+            $this->error->set('invalid account for stating reminder');
+        }
+        $credit_account_number = $credit_account->get('number');
+        
+        $debet_account = new Account($year, $year->getSetting('debtor_account_id'));
+        $debet_account_number = $debet_account->get('number');
+        
+        $voucher = Voucher::factory($year, $voucher_number);
+        $amount = $this->get('total');
+
+        
+        $input_values = array(
+            'voucher_number' => $voucher_number,
+            'date' => $voucher_date,
+            'amount' => number_format($amount, 2, ",", "."),
+            'debet_account_number' => $debet_account_number,
+            'credit_account_number' => $credit_account_number,
+            'text' => $text
+        );
+            
+        if (!$voucher->saveInDaybook($input_values, true)) {
+            $this->error->merge($voucher->error->getMessage());
+        }
+        
+        require_once 'Intraface/modules/accounting/VoucherFile.php';
+        $voucher_file = new VoucherFile($voucher);
+        if (!$voucher_file->save(array('description' => $text, 'belong_to'=>'reminder','belong_to_id'=>$this->get('id')))) {
+            $this->error->merge($voucher_file->error->getMessage());
+            $this->error->set('Filen blev ikke overflyttet');
+        }
+        
+        if($this->error->isError()) {
+            $this->error->set('An error occured while stating the reminder. This can mean that parts of the reminder was not state correct. Please check the voucher.');
+            // I am not quite sure if the invoice should be set as stated, but it can give trouble to state it again, if some of it was stated...
+            $this->setStated($voucher->get('id'), $this_date->get());
+            return false;
         }
 
-        $intranet["address_id"] = $this->get("intranet_address_id");
-        $intranet["user_id"] = $this->get("user_id");
-
-        $docinfo[0]["label"] = "Dato:";
-        $docinfo[0]["value"] = $this->get("dk_this_date");
-
-        $doc->addRecieverAndSender($contact , $intranet, "Påmindelse om betaling", $docinfo);
-
-        $doc->setY('-20'); // mellemrum til vareoversigt
-
-        $text = explode("\r\n", $this->get("text"));
-        foreach($text AS $line) {
-            if($line == "") {
-                $doc->setY('-'.$doc->get('font_spacing'));
-
-                if($doc->get('y') < $doc->get("margin_bottom") + $doc->get("font_spacing") * 2) {
-                    $doc->nextPage(true);
-                }
-            }
-            else {
-                while($line != "") {
-
-                    $doc->setY('-'.($doc->get("font_padding_top") + $doc->get("font_size")));
-                    $line = $doc->addTextWrap($doc->get('x'), $doc->get('y'), $doc->get("right_margin_position") - $doc->get('x'), $doc->get("font_size"), $line); // $doc->get("right_margin_position") - $doc->get('x')
-                    // $doc->line($doc->get('x'), $doc->get('y'), $doc->get('x') + $doc->get("right_margin_position") - $doc->get('x'), $doc->get('y'));
-
-                    $doc->setY('-'.$doc->get("font_padding_bottom"));
-
-                    if($doc->get('y') < $doc->get("margin_bottom") + $doc->get("font_spacing") * 2) {
-                        $doc->nextPage(true);
-                    }
-                }
-            }
-        }
-
-        // Overskrifter - Vareudskrivning
-
-        $doc->setY('-20'); // mellemrum til vareoversigt
-
-        if($doc->get('y') < $doc->get("margin_bottom") + $doc->get("font_spacing") * 3) {
-            $doc->nextPage(true);
-        }
-
-        $apointX["text"] = $doc->get("margin_left");
-        $apointX["invoice_date"] = $doc->get("right_margin_position") - 225;
-        $apointX["due_date"] = $doc->get("right_margin_position") - 150;
-        $apointX["amount"] = $doc->get("right_margin_position");
-        $apointX["text_width"] = $doc->get("right_margin_position") - $doc->get("margin_left") - $apointX["text"] - 60;
-
-
-        $doc->addText($apointX["text"], $doc->get('y'), $doc->get("font_size"), "Beskrivelse");
-        //$doc->addText($apointX["tekst"], $doc->get('y'), $doc->get("font_size"), "Tekst");
-        $doc->addText($apointX["invoice_date"], $doc->get('y'), $doc->get("font_size"), "Dato");
-        $doc->addText($apointX["due_date"], $doc->get('y'), $doc->get("font_size"), "Forfaldsdato");
-        $doc->addText($apointX["amount"] - $doc->getTextWidth($doc->get("font_size"), "Beløb") -3, $doc->get('y'), $doc->get("font_size"), "Beløb");
-
-        $doc->setY('-'.($doc->get("font_spacing") - $doc->get("font_size")));
-
-        $doc->line($doc->get("margin_left"), $doc->get('y'), $doc->get("right_margin_position"), $doc->get('y'));
-
-        // vareoversigt
-
-        $this->loadItem();
-        $items = $this->item->getList("invoice");
-
-        $total = 0;
-        $color = 0;
-
-        for($i = 0, $max = count($items); $i < $max; $i++) {
-
-            if($color == 1) {
-                $doc->setColor(0.8, 0.8, 0.8);
-                $doc->filledRectangle($doc->get("margin_left"), $doc->get('y') - $doc->get("font_spacing"), $doc->get("right_margin_position") - $doc->get("margin_left"), $doc->get("font_spacing"));
-                $doc->setColor(0, 0, 0);
-                $color = 0;
-            }
-            else {
-                $color = 1;
-            }
-
-            $doc->setY('-'.($doc->get("font_size") + $doc->get("font_padding_top")));
-
-            $doc->addText($apointX["text"], $doc->get('y'), $doc->get("font_size"), "Faktura nr. ".$items[$i]["number"]);
-            $doc->addText($apointX["invoice_date"], $doc->get('y'), $doc->get("font_size"), $items[$i]["dk_this_date"]);
-            $doc->addText($apointX["due_date"], $doc->get('y'), $doc->get("font_size"), $items[$i]["dk_due_date"]);
-            $doc->addText($apointX["amount"] - $doc->getTextWidth($doc->get("font_size"), number_format($items[$i]["arrears"], 2, ",", ".")), $doc->get('y'), $doc->get("font_size"), number_format($items[$i]["arrears"], 2, ",", "."));
-            $doc->setY('-'.$doc->get("font_padding_bottom"));
-            $total += $items[$i]["arrears"];
-
-            if($doc->get('y') < $doc->get("margin_bottom") + $doc->get("font_spacing") * 2) {
-                $doc->nextPage(true);
-            }
-        }
-
-        $items = $this->item->getList("reminder");
-
-        for($i = 0, $max = count($items); $i < $max; $i++) {
-
-            if($color == 1) {
-                $doc->setColor(0.8, 0.8, 0.8);
-                $doc->filledRectangle($doc->get("margin_left"), $doc->get('y') - $doc->get("font_spacing"), $doc->get("right_margin_position") - $doc->get("margin_left"), $doc->get("font_spacing"));
-                $doc->setColor(0, 0, 0);
-                $color = 0;
-            }
-            else {
-                $color = 1;
-            }
-
-            $doc->setY('-'.($doc->get("font_size") + $doc->get("font_padding_top")));
-            $doc->addText($apointX["text"], $doc->get('y'), $doc->get("font_size"), "Rykkkergebyr fra tidligere rykker");
-            $doc->addText($apointX["invoice_date"], $doc->get('y'), $doc->get("font_size"), $items[$i]["dk_this_date"]);
-            $doc->addText($apointX["due_date"], $doc->get('y'), $doc->get("font_size"), $items[$i]["dk_due_date"]);
-            $doc->addText($apointX["amount"] - $doc->getTextWidth($doc->get("font_size"), number_format($items[$i]["reminder_fee"], 2, ",", ".")), $doc->get('y'), $doc->get("font_size"), number_format($items[$i]["reminder_fee"], 2, ",", "."));
-            $doc->setY('-'.$doc->get("font_padding_bottom"));
-            $total += $items[$i]["reminder_fee"];
-
-            if($doc->get('y') < $doc->get("margin_bottom") + $doc->get("font_spacing") * 2) {
-                $doc->nextPage(true);
-            }
-        }
-
-
-        if($this->get("reminder_fee") > 0) {
-
-            if($color == 1) {
-                $doc->setColor(0.8, 0.8, 0.8);
-                $doc->filledRectangle($doc->get("margin_left"), $doc->get('y') - $doc->get("font_spacing"), $doc->get("right_margin_position") - $doc->get("margin_left"), $doc->get("font_spacing"));
-                $doc->setColor(0, 0, 0);
-                $color = 0;
-            }
-            else {
-                $color = 1;
-            }
-
-
-            $doc->setY('-'.($doc->get("font_size") + $doc->get("font_padding_top")));
-            $doc->addText($apointX["text"], $doc->get('y'), $doc->get("font_size"), "Rykkergebyr pålagt denne rykker");
-            $doc->addText($apointX["amount"] - $doc->getTextWidth($doc->get("font_size"), number_format($this->get("reminder_fee"), 2, ",", ".")), $doc->get('y'), $doc->get("font_size"), number_format($this->get("reminder_fee"), 2, ",", "."));
-            $doc->setY('-'.$doc->get("font_padding_bottom"));
-            $total += $this->get("reminder_fee");
-
-            if($doc->get('y') < $doc->get("margin_bottom") + $doc->get("font_spacing") * 2) {
-                $doc->nextPage(true);
-            }
-        }
-
-        $doc->setLineStyle(1);
-        $doc->line($doc->get("margin_left"), $doc->get('y'), $doc->get("right_margin_position"), $doc->get('y'));
-        $doc->setY('-'.($doc->get("font_size") + $doc->get("font_padding_top")));
-        $doc->addText($apointX["due_date"], $doc->get('y'), $doc->get("font_size"), "<b>Total:</b>");
-        $doc->addText($apointX["amount"] - $doc->getTextWidth($doc->get("font_size"), "<b>".number_format($total, 2, ",", ".")."</b>"), $doc->get('y'), $doc->get("font_size"), "<b>".number_format($total, 2, ",", ".")."</b>");
-        $doc->setY('-'.$doc->get("font_padding_bottom"));
-        $doc->line($apointX["due_date"], $doc->get('y'), $doc->get("right_margin_position"), $doc->get('y'));
-
-
-        $parameter = array(
-            "contact" => $this->contact,
-            "payment_text" => "Kontakt ".$this->contact->get("number"),
-            "amount" => $total,
-            "payment" => $this->get('payment_total'),
-            "due_date" => $this->get("dk_due_date"),
-            "girocode" => $this->get("girocode"));
-
-
-        $doc->addPaymentCondition($this->get("payment_method_key"), $parameter);
-
-
-        switch ($type) {
-            case 'string':
-                    return $doc->output();
-                break;
-            case 'file':
-                    if (empty($filename)) {
-                        return 0;
-                    }
-                    $data = $doc->output();
-                    return $doc->writeDocument($data, $filename);
-                break;
-            default:
-                    return $doc->stream();
-                break;
-        }
-
-        // $doc->stream();
+        $this->setStated($voucher->get('id'), $this_date->get());
+        $this->load();
+        return true;
 
     }
-    */
+
+    
     function pdf($type = 'stream', $filename='')
     {
         if($this->get('id') == 0) {
