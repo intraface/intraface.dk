@@ -1,10 +1,4 @@
 <?php
-/**
- * selenium test not finished
- * 
- */
-
-
 require('../../include_first.php');
 
 $debtor_module = $kernel->module('debtor');
