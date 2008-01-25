@@ -289,14 +289,10 @@ class Debtor extends Standard
 
         $this->value["total"] = round($total, 2);
         $this->value['payment_total'] = 0;
-        $this->value['payment_online'] = 0;
-
+        
         if($this->value["type"] == "invoice") {
-            require_once 'Intraface/modules/invoice/Payment.php';
-            $payment = new Payment($this);
-            $payments = $payment->getList();
-            for($i = 0, $max = count($payments); $i < $max; $i++) {
-                $this->value['payment_total'] += $payments[$i]["amount"];
+            foreach($this->getDebtorAccount()->getList() AS $payment) {
+                $this->value['payment_total'] += $payment["amount"];
             }
         }
 
@@ -870,17 +866,7 @@ class Debtor extends Standard
                 $list[$i]['city'] = $debtor->contact->address->get('city');
 
             }
-
-            /*
-            if($this->get("type") == "invoice") {
-                $payments = $debtor->getPayments($this->dbquery->getFilter("to_date"));
-                $list[$i]['deprication'] = $payments["deprication"]; // denne skal væk
-
-                $list[$i]['payment'] = $payments;
-                $list[$i]['arrears'] = $list[$i]['total'] - $payments['total'];
-            }
-            */
-
+            
             $i++;
 
         }
@@ -996,7 +982,7 @@ class Debtor extends Standard
         }
         return false;
     }
-
+    
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
