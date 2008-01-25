@@ -6,6 +6,9 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
  */
+
+require_once 'Intraface/modules/debtor/Debtor.php'; 
+
 class CreditNote extends Debtor
 {
     function __construct($kernel, $id = 0)
@@ -36,63 +39,99 @@ class CreditNote extends Debtor
         }
     }
 
-    function creditnoteReadyForState()
+    function readyForState($year, $check_products = 'check_products')
     {
-        if (!$this->readyForState()) {
-            return 0;
+        if(!is_object($year)) {
+            trigger_error('First parameter to readyForState needs to be a Year object!', E_USER_ERROR);
+            return false;
         }
+        
+        if(!in_array($check_products, array('check_products', 'skip_check_products'))) {
+            trigger_error('Second paramenter in creditnote->readyForState should be either "check_products" or "skip_check_products"', E_USER_ERROR);
+            return false;
+        }
+        
+        if (!$year->readyForState()) {
+            $this->error->set('Regnskabåret er ikke klar til bogføring');
+            return false;
+        }
+        
+        
         if ($this->type != 'credit_note') {
             $this->error->set('Du kan kun bogføre kreditnotaer');
-            return 0;
+            return false;
+        }
+        
+        if($this->isStated()) {
+            $this->error->set('Kreditnotaen er allerede bogført');
+            return false;
+        }
+        
+        if($this->get('status') != 'sent' && $this->get('status') != 'executed') {
+            $this->error->set('Kreditnotaen skal være sendt eller afsluttet for at den kan bogføres');
+            return false;
         }
 
-        $this->loadItem();
-        $items = $this->item->getList();
-        for ($i = 0, $max = count($items); $i < $max; $i++) {
-            $product = new Product($this->kernel, $items[$i]['product_id']);
-            if ($product->get('state_account_id') == 0) {
-                $this->error->set('Produktet ' . $product->get('name') . ' ved ikke hvor den skal bogføres');
+        if($check_products == 'check_products') {
+            $this->loadItem();
+            $items = $this->item->getList();
+            for ($i = 0, $max = count($items); $i < $max; $i++) {
+                $product = new Product($this->kernel, $items[$i]['product_id']);
+                if ($product->get('state_account_id') == 0) {
+                    $this->error->set('Produktet ' . $product->get('name') . ' ved ikke hvor den skal bogføres');
+                }
+                else {
+                    require_once 'Intraface/modules/accounting/Account.php';
+                    $account = Account::factory($year, $product->get('state_account_id'));
+                    if($account->get('id') == 0 || $account->get('type') != 'operating') {
+                        $this->error->set('Ugyldig konto for bogføring af produktet ' . $product->get('name'));
+                    }
+                }
             }
         }
+        
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
+        
     }
 
-    function state($year, $voucher_number, $voucher_date)
+    function state($year, $voucher_number, $voucher_date, $translation)
     {
+        if(!is_object($year)) {
+            trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
+            return false;
+        }
+        
+        if(!is_object($translation)) {
+            trigger_error('4th parameter to state needs to be a translation object!', E_USER_ERROR);
+            return false;
+        }
+        
+        $text = $translation->get('credit note');
+        
         $validator = new Validator($this->error);
         if($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);
             $this_date->convert2db();
         }
-        // FIXME check date
-        if ($this->isStated()) {
-            $this->error->set('Allerede bogført');
-            return 0;
+        
+        if ($this->error->isError()) {
+            return false;
         }
-        if (!$this->creditnoteReadyForState()) {
-            $this->error->set('Ikke klar til bogføring');
-            return 0;
+        
+        if (!$this->readyForState($year)) {
+            $this->error->set('Kreditnotaen er ikke klar til bogføring');
+            return false;
         }
-        if ($this->get('type') != 'credit_note') {
-            $this->error->set('Ikke en Kreditnota');
-            return 0;
-        }
-
-        if (!$this->kernel->user->hasModuleAccess('accounting')) {
-            trigger_error('Ikke rettigheder til at bogføre', E_USER_ERROR);
-        }
-
-        $this->kernel->useModule('accounting');
-
-
-
+        
         // hente alle produkterne på debtor
         $this->loadItem();
         $items = $this->item->getList();
 
+        require_once 'Intraface/modules/accounting/Voucher.php';
+        require_once 'Intraface/modules/accounting/Account.php';
         $voucher = Voucher::factory($year, $voucher_number);
         $voucher->save(array(
             'voucher_number' => $voucher_number,
@@ -102,7 +141,6 @@ class CreditNote extends Debtor
 
 
         $total = 0;
-
         foreach($items AS $item) {
 
             // produkterne
@@ -131,7 +169,7 @@ class CreditNote extends Debtor
                 'debet_account_number' => $debet_account_number,
                 'credit_account_number' => $credit_account_number,
                 'vat_off' => 1,
-                'text' => 'Kreditnota #' . $this->get('number') . ' - ' . $item['name']
+                'text' => $text.' #' . $this->get('number') . ' - ' . $item['name']
             );
             if ($credit_account->get('vat_off') == 0) {
                 $total += $item["quantity"] * $item["price"];
@@ -142,7 +180,6 @@ class CreditNote extends Debtor
             }
         }
         // samlet moms på fakturaen
-        // opmærksom på at momsbeløbet her er hardcoded - og det bør egentlig tages fra fakturaen?
         $voucher = Voucher::factory($year, $voucher_number);
         $debet_account = new Account($year, $year->getSetting('vat_out_account_id'));
         $credit_account = new Account($year, $year->getSetting('debtor_account_id'));
@@ -154,25 +191,31 @@ class CreditNote extends Debtor
                 'debet_account_number' => $debet_account->get('number'),
                 'credit_account_number' => $credit_account->get('number'),
                 'vat_off' => 1,
-                'text' => 'Kreditnota #' . $this->get('number') . ' - ' . $debet_account->get('name')
+                'text' => $text.' #' . $this->get('number') . ' - ' . $debet_account->get('name')
         );
 
 
         if (!$voucher->saveInDaybook($input_values, true)) {
             $voucher->error->view();
         }
-
-        $this->setStated($voucher->get('id'), $this_date->get());
-
+        
+        require_once 'Intraface/modules/accounting/VoucherFile.php';
         $voucher_file = new VoucherFile($voucher);
-        if (!$voucher_file->save(array('description' => 'Kreditnota ' . $this->get('number'), 'belong_to'=>'credit_note','belong_to_id'=>$this->get('id')))) {
-            $voucher_file->error->view();
+        if (!$voucher_file->save(array('description' => $text.' #' . $this->get('number'), 'belong_to'=>'credit_note','belong_to_id'=>$this->get('id')))) {
+            $this->error->merge($voucher_file->error->getMessage());
             $this->error->set('Filen blev ikke overflyttet');
         }
+        
+        if($this->error->isError()) {
+            $this->error->set('Der er opstået en fejl under bogføringen af kreditnotaen. Det kan betyde at dele af den er bogført, men ikke det hele. Du bedes manuelt tjekke bilaget');
+            // I am not quite sure if the credit note should be set as stated, but it can give trouble to state it again, if some of it was stated...
+            $this->setStated($voucher->get('id'), $this_date->get());
+            return false;
+        }
 
+        $this->setStated($voucher->get('id'), $this_date->get());
         $this->load();
-
-        return 1;
+        return true;
 
     }
 
