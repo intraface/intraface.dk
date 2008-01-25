@@ -35,6 +35,10 @@ class Debtor_Report_Pdf
      */
     function __construct($translation, $file = null)
     {
+        if (!is_object($translation)) {
+            throw new Exception('translation is not an object');
+        }
+
         $this->translation = $translation;
         $this->file = $file;
     }
