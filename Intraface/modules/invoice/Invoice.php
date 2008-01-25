@@ -49,9 +49,7 @@ class Invoice extends Debtor
     function updateStatus()
     {
 
-        $payment = $this->getPayments();
-        // print($payment["total"].' == '.$this->get("total"));
-        if($payment["total"] == $this->get("total")) {
+        if(round($this->get("arrears")) == 0) {
             $go_status = "executed";
         }
         else {
@@ -63,7 +61,20 @@ class Invoice extends Debtor
         }
         return true;
     }
+    
+    /**
+     * returns DebtorAccount object
+     * 
+     * @return object DebtorAccount
+     */
+    public function getDebtorAccount() 
+    {
+        require_once 'Intraface/modules/invoice/DebtorAccount.php';
+        return new DebtorAccount($this);
+    }
 
+    /*
+     * removed 22/1 2008
     function getPayments($to_date = "")
     {
 
@@ -86,6 +97,7 @@ class Invoice extends Debtor
 
         return $payment;
     }
+    */
 
     function delete()
     {
@@ -97,6 +109,13 @@ class Invoice extends Debtor
         }
     }
 
+    /**
+     * Returns whether the invoice is ready for state
+     * 
+     * @param object year
+     * @param string 'check_product' if it should check that the products have a valid account, or 'skip_check_products'
+     * @return boolean true or false
+     */
     function readyForState($year, $check_products = 'check_products')
     {
         if(!is_object($year)) {
@@ -129,6 +148,12 @@ class Invoice extends Debtor
             $this->error->set('Fakturaen skal være sendt eller afsluttet for at den kan bogføres');
             return false;
         }
+        
+        $debtor_account = new Account($year, $year->getSetting('debtor_account_id'));
+        if($debtor_account->get('id') == 0 || $debtor_account->get('type') != 'balance, asset') {
+            $this->error->set('Ugyldig debitor konto sat i regnskabsindstillingerne.');
+            return false;
+        }
 
         if($check_products == 'check_products') {
             $this->loadItem();
@@ -154,10 +179,23 @@ class Invoice extends Debtor
         return true;
     }
 
-    function state($year, $voucher_number, $voucher_date)
+    /**
+     * State invoice
+     * 
+     * @param object year stating year
+     * @param integer voucher_number
+     * @param string voucher_date
+     * @return boolean true or false
+     */
+    function state($year, $voucher_number, $voucher_date, $translation)
     {
         if(!is_object($year)) {
             trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
+            return false;
+        }
+        
+        if(!is_object($translation)) {
+            trigger_error('4th parameter to state needs to be a translation object!', E_USER_ERROR);
             return false;
         }
         
@@ -166,6 +204,8 @@ class Invoice extends Debtor
             $this_date = new Intraface_Date($voucher_date);
             $this_date->convert2db();
         }
+        
+        $validator->isNumeric($voucher_number, 'Ugyldigt bilagsnummer', 'greater_than_zero');
 
         if ($this->error->isError()) {
             return false;
@@ -179,6 +219,8 @@ class Invoice extends Debtor
         // hente alle produkterne på debtor
         $this->loadItem();
         $items = $this->item->getList();
+        
+        $text = $translation->get('invoice').' #'.$this->get('number');
 
         require_once 'Intraface/modules/accounting/Voucher.php';
         require_once 'Intraface/modules/accounting/Account.php';
@@ -186,13 +228,12 @@ class Invoice extends Debtor
         $voucher->save(array(
             'voucher_number' => $voucher_number,
             'date' => $voucher_date,
-            'text' => 'Faktura #' . $this->get('number'),
+            'text' => $text,
             'invoice_number' =>  $this->get('number')
         ));
 
 
         $total = 0;
-        
         foreach($items AS $item) {
 
             // produkterne
@@ -221,7 +262,7 @@ class Invoice extends Debtor
                 'debet_account_number' => $debet_account_number,
                 'credit_account_number' => $credit_account_number,
                 'vat_off' => 1,
-                'text' => 'Faktura #' . $this->get('number') . ' - ' . $item['name']
+                'text' => $text . ' - ' . $item['name']
             );
             if ($credit_account->get('vat_off') == 0) {
                 $total += $item["quantity"] * $item["price"];
@@ -232,9 +273,8 @@ class Invoice extends Debtor
             }
         }
         // samlet moms på fakturaen
-        // opmærksom på at momsbeløbet her er hardcoded - og det bør egentlig tages fra fakturaen?
         $voucher = Voucher::factory($year, $voucher_number);
-        $account = new Account($year, $year->getSetting('vat_out_account_id'));
+        $credit_account = new Account($year, $year->getSetting('vat_out_account_id'));
         $debet_account = 	new Account($year, $year->getSetting('debtor_account_id'));
         $input_values = array(
                 'voucher_number' => $voucher_number,
@@ -242,9 +282,9 @@ class Invoice extends Debtor
                 'date' => $voucher_date,
                 'amount' => number_format($total * $this->kernel->setting->get('intranet', 'vatpercent') / 100, 2, ",", "."), // opmærksom på at vat bliver rigtig defineret
                 'debet_account_number' => $debet_account->get('number'),
-                'credit_account_number' => $account->get('number'),
+                'credit_account_number' => $credit_account->get('number'),
                 'vat_off' => 1,
-                'text' => 'Faktura #' . $this->get('number') . ' - ' . $account->get('name')
+                'text' => $text . ' - ' . $credit_account->get('name')
         );
 
 
@@ -254,7 +294,7 @@ class Invoice extends Debtor
 
         require_once 'Intraface/modules/accounting/VoucherFile.php';
         $voucher_file = new VoucherFile($voucher);
-        if (!$voucher_file->save(array('description' => 'Faktura ' . $this->get('number'), 'belong_to'=>'invoice','belong_to_id'=>$this->get('id')))) {
+        if (!$voucher_file->save(array('description' => $text, 'belong_to'=>'invoice','belong_to_id'=>$this->get('id')))) {
             $this->error->merge($voucher_file->error->getMessage());
             $this->error->set('Filen blev ikke overflyttet');
         }
