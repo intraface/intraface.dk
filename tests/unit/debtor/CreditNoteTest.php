@@ -2,7 +2,7 @@
 require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
-require_once 'Intraface/modules/invoice/Invoice.php';
+require_once 'Intraface/modules/invoice/CreditNote.php';
 require_once 'Intraface/tools/Date.php';
 require_once 'tests/unit/stubs/Kernel.php';
 require_once 'tests/unit/stubs/User.php';
@@ -13,7 +13,7 @@ require_once 'tests/unit/stubs/Translation.php';
 require_once 'Intraface/modules/product/Product.php';
 require_once 'Intraface/modules/contact/Contact.php';
 
-class InvoiceTest extends PHPUnit_Framework_TestCase
+class CreditNoteTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
     
@@ -44,28 +44,28 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
         return $kernel;
     }
     
-    function createInvoice()
+    function createCreditNote()
     {
         
-        return new Invoice($this->createKernel());
+        return new CreditNote($this->createKernel());
     }
     
-    function createAnInvoiceWithOneItem() {
+    function createAnCreditNoteWithOneItem() {
         
-        $invoice = $this->createInvoice();
-        $invoice->update(array(
+        $creditnote = $this->createCreditNote();
+        $creditnote->update(array(
                 'contact_id' => $this->createContact(), 
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y')));
         
-        $invoice->loadItem();
+        $creditnote->loadItem();
         
         $product = new Product($this->createKernel());
         $product->save(array('name' => 'test', 'vat' => 1, 'price' => '100', 'state_account_id' => 1110));
-        $invoice->item->save(array('product_id' => 1, 'quantity' => 2, 'description' => 'This is a test'));
+        $creditnote->item->save(array('product_id' => 1, 'quantity' => 2, 'description' => 'This is a test'));
         
-        return $invoice;
+        return $creditnote;
     }
     
     function createAccountingYear() {
@@ -85,40 +85,46 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
     function testConstruct()
     {
         
-        $invoice = $this->createInvoice();
-        $this->assertTrue(is_object($invoice));
+        $creditnote = $this->createCreditNote();
+        $this->assertTrue(is_object($creditnote));
     }
     
-    function testSetStatus() {
-        $invoice = $this->createAnInvoiceWithOneItem();
-        $this->assertTrue($invoice->setStatus('sent'));
-        $invoice->load();
-        $this->assertEquals('sent', $invoice->get('status'));
+    function testSetStatusToSent() {
+        $creditnote = $this->createAnCreditNoteWithOneItem();
+        $this->assertTrue($creditnote->setStatus('sent'));
+        $creditnote->load();
+        $this->assertEquals('executed', $creditnote->get('status'));
+    }
+    
+    function testSetStatusToExecuted() {
+        $creditnote = $this->createAnCreditNoteWithOneItem();
+        $this->assertTrue($creditnote->setStatus('executed'));
+        $creditnote->load();
+        $this->assertEquals('executed', $creditnote->get('status'));
     }
     
     function testReadyForStateWithoutCheckingProducts() {
-        $invoice = $this->createAnInvoiceWithOneItem();
-        $year = $this->createAccountingYear();
-        $this->assertFalse($invoice->readyForState($year, 'skip_check_products'));
+        $creditnote = $this->createAnCreditNoteWithOneItem();
+        $this->assertFalse($creditnote->readyForState($this->createAccountingYear(), 'skip_check_products'));
         
         // needed otherwise errors are transfered...
-        $invoice = $this->createAnInvoiceWithOneItem();
-        $invoice->setStatus('sent');
-        $this->assertTrue($invoice->readyForState($year, 'skip_check_products'), $invoice->error->view());
+        $creditnote = $this->createAnCreditNoteWithOneItem();
+        $creditnote->setStatus('sent');
+        $this->assertTrue($creditnote->readyForState($this->createAccountingYear(), 'skip_check_products'), $creditnote->error->view());
     }
     
     function testReadyForStateWithCheckingProducts() {
         
-        $invoice = $this->createAnInvoiceWithOneItem();
-        $invoice->setStatus('sent');
-        $this->assertTrue($invoice->readyForState($this->createAccountingYear()), $invoice->error->view());
+        $creditnote = $this->createAnCreditNoteWithOneItem();
+        $creditnote->setStatus('sent');
+        $this->assertTrue($creditnote->readyForState($this->createAccountingYear()), $creditnote->error->view());
     }
     
     function testState() {
-        $invoice = $this->createAnInvoiceWithOneItem();
-        $invoice->setStatus('sent');
+        $creditnote = $this->createAnCreditNoteWithOneItem();
+        $creditnote->setStatus('sent');
         $year = $this->createAccountingYear();
-        $this->assertTrue($invoice->state($year, 1, '10-01-2008', new FakeTranslation), $invoice->error->view());
+        $this->assertTrue($creditnote->state($year, 1, '10-01-2008', new FakeTranslation), 'state: '.$creditnote->error->view());
         
         $voucher = Voucher::factory($year, 1);
         
@@ -127,24 +133,9 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
                 'id' => 1,
                 'date_dk' => '10-01-2008',
                 'date' => '2008-01-10',
-                'text' => 'invoice #1 - test',
-                'debet' => 200.00,
-                'credit' => 0.00,
-                'voucher_number' => 1,
-                'reference' => '',
-                'voucher_id' => 1,
-                'account_id' => 32,
-                'stated' => 1,
-                'account_number' => 56100,
-                'account_name' => 'Debitor'
-            ),
-            1 => array(
-                'id' => 2,
-                'date_dk' => '10-01-2008',
-                'date' => '2008-01-10',
-                'text' => 'invoice #1 - test',
-                'debet' => 0.00,
-                'credit' => 200.00,
+                'text' => 'credit note #1 - test',
+                'debet' => 200,
+                'credit' => 0,
                 'voucher_number' => 1,
                 'reference' => '',
                 'voucher_id' => 1,
@@ -153,13 +144,13 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
                 'account_number' => 1110,
                 'account_name' => 'Salg med moms'
             ),
-            2 => array(
-                'id' => 3,
+            1 => array(
+                'id' => 2,
                 'date_dk' => '10-01-2008',
                 'date' => '2008-01-10',
-                'text' => 'invoice #1 - Moms, udgående, salg',
-                'debet' => 50.00,
-                'credit' => 0.00,
+                'text' => 'credit note #1 - test',
+                'debet' => 0,
+                'credit' => 200,
                 'voucher_number' => 1,
                 'reference' => '',
                 'voucher_id' => 1,
@@ -168,13 +159,13 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
                 'account_number' => 56100,
                 'account_name' => 'Debitor'
             ),
-            3 => array(
-                'id' => 4,
+            2 => array(
+                'id' => 3,
                 'date_dk' => '10-01-2008',
                 'date' => '2008-01-10',
-                'text' => 'invoice #1 - Moms, udgående, salg',
-                'debet' => 0.00,
-                'credit' => 50.00,
+                'text' => 'credit note #1 - Moms, udgående, salg',
+                'debet' => 50.00,
+                'credit' => 0.00,
                 'voucher_number' => 1,
                 'reference' => '',
                 'voucher_id' => 1,
@@ -182,12 +173,27 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
                 'stated' => 1,
                 'account_number' => 66200,
                 'account_name' => 'Moms, udgående, salg'
+            ),
+            3 => array(
+                'id' => 4,
+                'date_dk' => '10-01-2008',
+                'date' => '2008-01-10',
+                'text' => 'credit note #1 - Moms, udgående, salg',
+                'debet' => 0,
+                'credit' => 50,
+                'voucher_number' => 1,
+                'reference' => '',
+                'voucher_id' => 1,
+                'account_id' => 32,
+                'stated' => 1,
+                'account_number' => 56100,
+                'account_name' => 'Debitor'
             )
         );
         
         $this->assertEquals($expected, $voucher->getPosts());
-        $this->assertTrue($invoice->isStated());
-        $this->assertFalse($invoice->readyForState($year));
+        $this->assertTrue($creditnote->isStated());
+        $this->assertFalse($creditnote->readyForState($year));
     }
 
 }

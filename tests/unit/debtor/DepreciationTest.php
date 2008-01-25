@@ -8,9 +8,9 @@ require_once 'tests/unit/stubs/Address.php';
 require_once 'tests/unit/stubs/User.php';
 require_once 'tests/unit/stubs/Setting.php';
 require_once 'tests/unit/stubs/Translation.php';
-require_once 'Intraface/modules/invoice/Payment.php';
+require_once 'Intraface/modules/invoice/Depreciation.php';
 
-class PaymentTest extends PHPUnit_Framework_TestCase
+class DepreciationTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
     
@@ -34,7 +34,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         $kernel->intranet = new FakeIntranet;
         $kernel->intranet->address = new FakeAddress;
         $kernel->setting = new FakeSetting;
-        $kernel->setting->set('intranet', 'onlinepayment.provider_key', 1);
+        // $kernel->setting->set('intranet', 'onlinepayment.provider_key', 1);
         $kernel->setting->set('user', 'accounting.active_year', 1);
         $kernel->setting->set('intranet', 'vatpercent', 25);
         
@@ -75,67 +75,67 @@ class PaymentTest extends PHPUnit_Framework_TestCase
     
     function testConstruct() {
         
-        $payment = new Payment($this->createDebtor());
-        $this->assertEquals('Payment', get_class($payment));
+        $depreciation = new Depreciation($this->createDebtor());
+        $this->assertEquals('Depreciation', get_class($depreciation));
     }
     
     function testUpdateWithEmptyArray() {
-        $payment = new Payment($this->createDebtor());
+        $depreciation = new Depreciation($this->createDebtor());
         
-        $this->assertFalse($payment->update(array()));
-        $this->assertEquals(3, $payment->error->count());
+        $this->assertFalse($depreciation->update(array()));
+        $this->assertEquals(1, $depreciation->error->count(), $depreciation->error->view());
         
     }
     
     function testUpdateWithValidInput() {
-        $payment = new Payment($this->createDebtor());
-        $this->assertTrue($payment->update(array('payment_date' => '01-01-2007', 'amount' => 100, 'type' => 1)));
+        $depreciation = new Depreciation($this->createDebtor());
+        $this->assertTrue($depreciation->update(array('payment_date' => '01-01-2007', 'amount' => 100)));
     }
     
     function testLoad() {
         $debtor = $this->createDebtor();
-        $payment = new Payment($debtor);
-        $this->assertTrue($payment->update(array('payment_date' => '01-01-2007', 'amount' => 100, 'type' => 1)));
+        $depreciation = new Depreciation($debtor);
+        $this->assertTrue($depreciation->update(array('payment_date' => '01-01-2007', 'amount' => 100)));
     
-        $payment = new Payment($debtor, 1);
+        $depreciation = new Depreciation($debtor, 1);
         $expected = array(
             'id' => 1,
             'amount' => '100.00',
-            'type' => 'giro_transfer',
+            'type' => 'depreciation',
             'description' => '',
             'payment_date' => '2007-01-01',
             'payment_for_id' => 1,
             'dk_payment_date' => '01-01-2007', 
             'date_stated' => '0000-00-00', 
             'voucher_id' => 0,
-            'type_key' => 1
+            'type_key' => -1
         );
         
-        $this->assertEquals($expected, $payment->get());
+        $this->assertEquals($expected, $depreciation->get());
         
     }
     
     function testReadyForStateBeforeSaved() {
-        $payment = new Payment($this->createDebtor());
-        $this->assertFalse($payment->readyForState());
+        $depreciation = new Depreciation($this->createDebtor());
+        $this->assertFalse($depreciation->readyForState());
     }
     
     function testReadyForStateWhenReady() {
-        $payment = new Payment($this->createDebtor());
-        $payment->update(array('payment_date' => '01-01-2007', 'amount' => 100, 'type' => 1));
-        $this->assertTrue($payment->readyForState());
+        $depreciation = new Depreciation($this->createDebtor());
+        $depreciation->update(array('payment_date' => '01-01-2007', 'amount' => 100));
+        $this->assertTrue($depreciation->readyForState());
     }
     
     function testIsStateBeforeStated() {
-        $payment = new Payment($this->createDebtor());
-        $this->assertFalse($payment->isStated());
+        $depreciation = new Depreciation($this->createDebtor());
+        $this->assertFalse($depreciation->isStated());
     }
     
     function testState() {
-        $payment = new Payment($this->createDebtor());
-        $payment->update(array('payment_date' => '01-01-'.date('Y'), 'amount' => 100, 'type' => 0));
+        $depreciation = new Depreciation($this->createDebtor());
+        $depreciation->update(array('payment_date' => '01-01-'.date('Y'), 'amount' => 100));
         $year = $this->createAccountingYear();
-        $this->assertTrue($payment->state($year, 1, date('d-m-Y'), 58000, new FakeTranslation));
+        $this->assertTrue($depreciation->state($year, 1, date('d-m-Y'), 7900, new FakeTranslation));
         
         $voucher = Voucher::factory($year, 1);
         $expected = array(
@@ -143,22 +143,22 @@ class PaymentTest extends PHPUnit_Framework_TestCase
                 'id' => 1,
                 'date_dk' => date('d-m-Y'),
                 'date' => date('Y-m-d'),
-                'text' => 'payment for invoice #1',
+                'text' => 'depreciation for invoice #1',
                 'debet' => '100.00',
                 'credit' => '0.00',
                 'voucher_number' => 1,
                 'reference' => '',
                 'voucher_id' => 1,
-                'account_id' => 33,
+                'account_id' => 16,
                 'stated' => 1,
-                'account_number' => 58000,
-                'account_name' => 'Bank, folio'
+                'account_number' => 7900,
+                'account_name' => 'Diverse excl. moms'
             ),
             1 => array(
                 'id' => 2,
                 'date_dk' => date('d-m-Y'),
                 'date' => date('Y-m-d'),
-                'text' => 'payment for invoice #1',
+                'text' => 'depreciation for invoice #1',
                 'debet' => '0.00',
                 'credit' => '100.00',
                 'voucher_number' => 1,
@@ -173,8 +173,8 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($expected, $voucher->getPosts());
         
-        $this->assertTrue($payment->isStated());
-        $this->assertFalse($payment->readyForState());
+        $this->assertTrue($depreciation->isStated());
+        $this->assertFalse($depreciation->readyForState());
     }
     
 }

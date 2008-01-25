@@ -7,6 +7,7 @@ require_once 'Intraface/Setting.php';
 require_once 'Intraface/DBQuery.php';
 require_once 'Intraface/modules/debtor/Debtor.php';
 require_once 'Intraface/tools/Date.php';
+require_once 'tests/unit/stubs/Translation.php';
 
 
 class FakeDebtorAddress {
@@ -186,8 +187,6 @@ class DebtorTest extends PHPUnit_Framework_TestCase
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y')), 'quotation'));
-        
-        
     }
 }
 
