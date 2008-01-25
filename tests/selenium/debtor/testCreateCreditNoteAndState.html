@@ -1,16 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>testCreateInvoiceAndState</title>
+<title>testCreateCreditNoteAndState</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">testCreateInvoiceAndState</td></tr>
+<tr><td rowspan="1" colspan="3">testCreateCreditNoteAndState</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/install/reset-staging-server.php?modules=debtor,invoice,contact,product,administration,accounting&helper_function=Administration:fillInIntranetAddress&login=true</td>
+	<td>/install/reset-staging-server.php?modules=debtor,invoice,contact,product,accounting&helper_function=Administration:fillInIntranetAddress,Contact:create,Product:create&login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -29,18 +29,28 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>new_contact</td>
+	<td>type</td>
+	<td>search</td>
+	<td>tes</td>
+</tr>
+<tr>
+	<td>keyUp</td>
+	<td>search</td>
+	<td>t</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
 	<td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>name</td>
-	<td>State</td>
+	<td>select</td>
+	<td>contact_select</td>
+	<td>label=Contact 1</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>save</td>
+	<td>go_search</td>
 	<td></td>
 </tr>
 <tr>
@@ -64,38 +74,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=create product</td>
-	<td></td>
-</tr>
-<tr>
 	<td>type</td>
-	<td>name</td>
-	<td>State test</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>price</td>
-	<td>100</td>
-</tr>
-<tr>
-	<td>select</td>
-	<td>vat</td>
-	<td>label=yes</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+	<td>1</td>
+	<td>2</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>submit_close</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>State test Tilføj tekst</td>
 	<td></td>
 </tr>
 <tr>
@@ -104,8 +89,43 @@
 	<td></td>
 </tr>
 <tr>
+	<td>clickAndWait</td>
+	<td>link=Luk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>credit_note</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>quantity</td>
+	<td>1,00</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>sent</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextPresent</td>
-	<td>Bogfør faktura #1</td>
+	<td>Bogfør kreditnota #1</td>
 	<td></td>
 </tr>
 <tr>
@@ -150,12 +170,32 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=State test</td>
+	<td>link=credit notes</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>status</td>
+	<td>label=Alle</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>search</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=state invoice</td>
+	<td>link=State test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectFrame</td>
+	<td>relative=up</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=state credit_note</td>
 	<td></td>
 </tr>
 <tr>
@@ -180,17 +220,7 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>invoice #1 - State test</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>invoice #1 - Moms, udgående, salg</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Debitor</td>
+	<td>credit note #1 - Product 1</td>
 	<td></td>
 </tr>
 <tr>
@@ -200,17 +230,22 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>Moms, udgående, salg</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
 	<td>100,00</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>0,00</td>
+	<td>Debitor</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>credit note #1 - Moms, udgående, salg</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Moms, udgående, salg</td>
 	<td></td>
 </tr>
 <tr>
@@ -224,28 +259,68 @@
 	<td></td>
 </tr>
 <tr>
+	<td>verifyTextPresent</td>
+	<td>credit note #1</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>link=accounts</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>-100,00</td>
+	<td>clickAndWait</td>
+	<td>link=Salg med moms</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>125,00</td>
+	<td>credit note #1 - Product 1</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>-25,00</td>
+	<td>100,00</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=dashboard</td>
+	<td>link=Luk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Debitor</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>credit note #1 - Product 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>credit note #1 - Moms, udgående, salg</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Luk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Moms, udgående, salg</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>credit note #1 - Moms, udgående, salg</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>25,00</td>
 	<td></td>
 </tr>
 

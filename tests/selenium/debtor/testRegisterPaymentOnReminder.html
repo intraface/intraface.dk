@@ -1,0 +1,164 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testRegisterPaymentOnReminder</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testRegisterPaymentOnReminder</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=debtor,invoice,contact,product&helper_function=Administration:fillInIntranetAddress,Debtor:createInvoice&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=debtor</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Ret</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>this_date</td>
+	<td>1-01-2007</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>due_date</td>
+	<td>1-01-2007</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>sent</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Opret rykker</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Opret rykker</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description</td>
+	<td>Test reminder</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>reminder_fee</td>
+	<td>label=100 kr.</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Test invoice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>send_as_pdf</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>none</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>send_as_pdf</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Rykker #1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>375,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>created</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>mark_as_sent</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>sent</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=give me more choices</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>type</td>
+	<td>label=giro_transfer</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>amount</td>
+	<td>50,00</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>payment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>giro_transfer</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>payment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>bank_transfer</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>executed</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

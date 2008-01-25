@@ -1,16 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>testCreateInvoiceAndState</title>
+<title>testOrderWithOnlinepaymentAndState</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">testCreateInvoiceAndState</td></tr>
+<tr><td rowspan="1" colspan="3">testOrderWithOnlinepaymentAndState</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/install/reset-staging-server.php?modules=debtor,invoice,contact,product,administration,accounting&helper_function=Administration:fillInIntranetAddress&login=true</td>
+	<td>/install/reset-staging-server.php?modules=debtor,invoice,order,contact,product,onlinepayment,accounting&helper_function=Administration:fillInIntranetAddress,Debtor:createOrder,OnlinePayment:createAndAttachToOrder,Contact:create,Product:create&login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -25,77 +25,17 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=create invoice</td>
+	<td>link=orders</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>new_contact</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>name</td>
-	<td>State</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>save</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>description</td>
-	<td>State test</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>none</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=Tilføj vare</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=create product</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>name</td>
-	<td>State test</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>price</td>
-	<td>100</td>
-</tr>
-<tr>
-	<td>select</td>
-	<td>vat</td>
-	<td>label=yes</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>submit_close</td>
+	<td>link=Test invoice</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>State test Tilføj tekst</td>
+	<td>order #1</td>
 	<td></td>
 </tr>
 <tr>
@@ -105,7 +45,102 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>Bogfør faktura #1</td>
+	<td>Transactionsnummer</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>authorized (Ikke hævet)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[@href='http://intraface.asterix/intraface.dk/modules/onlinepayment/payment.php?id=1']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_amount</td>
+	<td>125,00</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>125,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Oprindeligt beløb:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>200,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Ordre</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>invoice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>invoice #1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Transactionsnummer</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>authorized (Ikke hævet)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>sent</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Luk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>invoice #1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Hæv</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>state payment for invoice #1</td>
 	<td></td>
 </tr>
 <tr>
@@ -150,18 +185,18 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=State test</td>
+	<td>link=Test invoice</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=state invoice</td>
+	<td>link=state payment</td>
 	<td></td>
 </tr>
 <tr>
 	<td>select</td>
-	<td>state_account_id[1]</td>
-	<td>label=Salg med moms</td>
+	<td>state_account</td>
+	<td>label=Bank, folio</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -170,22 +205,12 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Se bilag</td>
+	<td>link=voucher</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>Bilag #1 på Current</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>invoice #1 - State test</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>invoice #1 - Moms, udgående, salg</td>
+	<td>Bank, folio</td>
 	<td></td>
 </tr>
 <tr>
@@ -195,42 +220,7 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>Salg med moms</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Moms, udgående, salg</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>100,00</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>0,00</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>25,00</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Bogført</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=accounts</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>-100,00</td>
+	<td>payment for invoice #1</td>
 	<td></td>
 </tr>
 <tr>
@@ -240,12 +230,42 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>-25,00</td>
+	<td>0,00</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=dashboard</td>
+	<td>link=accounts</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Debitor</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>-125,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Luk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Bank, folio</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>125,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Luk</td>
 	<td></td>
 </tr>
 

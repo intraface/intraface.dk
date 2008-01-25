@@ -1,0 +1,239 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testRegisterPaymentOnInvoice</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testRegisterPaymentOnInvoice</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=debtor,invoice,contact,product,administration&helper_function=Administration:fillInIntranetAddress,Debtor:createInvoice&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=debtor</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Test invoice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>sent</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Registrér betaling</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=give me more choices</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payment_date</td>
+	<td>10-10-2008</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>type</td>
+	<td>label=cash</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>amount</td>
+	<td>200,00</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>payment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>10-10-2008</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>cash</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>200,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>175,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Ret</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Indstillingerne</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>bankname</td>
+	<td>Danske Bank</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>regnumber</td>
+	<td>0909</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>accountnumber</td>
+	<td>12345678</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>giroaccountnumber</td>
+	<td>987654321</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Test invoice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Ret</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>giro01</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>giro_transfer:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Ret</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>giro71</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>giro_transfer</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Ret</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>account</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>round_off</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>cash</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Ret</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>round_off</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>bank_transfer</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>payment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>executed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>bank_transfer</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>cash</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Registrér betaling</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
