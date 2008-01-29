@@ -47,8 +47,6 @@ class MainProcurement Extends Main {
         $this->addPreloadFile('Procurement.php');
         $this->addPreloadFile('ProcurementItem.php');
 
-        $this->addDependentModule('product');
-
         // Fil til med indstillinger man kan sætte i modullet
         // $this->addControlpanelFile('Regnskab', '/modules/accounting/setting.php');
 

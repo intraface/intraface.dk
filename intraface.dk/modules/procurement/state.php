@@ -1,8 +1,8 @@
 <?php
 require('../../include_first.php');
 
-$mDebtor = $kernel->module('procurement');
-$kernel->useModule('accounting');
+$procurement_module = $kernel->module('procurement');
+$accounting_module = $kernel->useModule('accounting');
 
 $year = new Year($kernel);
 $voucher = new Voucher($year);
@@ -27,36 +27,60 @@ $page->start('Bogfør indkøb #' . $procurement->get('number'));
 ?>
 <h1>Bogfør indkøb #<?php echo $procurement->get('number'); ?></h1>
 
-<p class="warning">
-    <strong>Betafuntion - under test</strong>: Du skal være opmærksom på at denne funktion altid sætter fakturaerne på kreditorkontoen, og at den bruger betalingsdatoen som bogføringsdato. Desuden sætter den automatisk beløbet for forsendelse mv. på den valgte bogføringskonto.
-</p>
-
 <ul class="options">
     <li><a href="view.php?id=<?php print($procurement->get("id")); ?>">Luk</a></li>
     <li><a href="index.php?type=invoice&amp;id=<?php print($procurement->get("id")); ?>&amp;use_stored=true">Tilbage til indkøbslisten</a></li>
 </ul>
 
-<?php echo $procurement->error->view(); ?>
+
+<?php if(!$year->readyForState()): ?>
+    <?php echo $year->error->view(); ?>
+    <p>Gå til <a href="<?php echo $accounting_module->getPath().'years.php'; ?>">regnskabet</a></p>
+
+
+<?php else: ?>
+
+    <?php echo $procurement->error->view(); ?>
+
+    <p class="warning">
+        <strong>Betafuntion - under test</strong>: Du skal være opmærksom på at denne funktion altid sætter fakturaerne på kreditorkontoen, og at den bruger betalingsdatoen som bogføringsdato. Desuden sætter den automatisk beløbet for forsendelse mv. på den valgte bogføringskonto.
+    </p>
+    
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 <input type="hidden" value="<?php echo $value['id']; ?>" name="id" />
+
+    <fieldset>
+        <legend><?php e(t('procurement')); ?></legend>
+        <table>
+            <tr>
+                <th><?php print(safeToHtml($translation->get("number"))); ?></th>
+                <td><?php print(safeToHtml($procurement->get("number"))); ?></td>
+            </tr>
+            <tr>
+                <th><?php e(t('description')) ?></th>
+                <td><?php print(nl2br(safeToHtml($procurement->get("description")))); ?></td>
+            </tr>
+            <tr>
+                <th><?php e(t('date recieved')) ?></th>
+                <td><?php print(safeToHtml($procurement->get("dk_date_recieved"))); ?></td>
+            </tr>
+        </table>
+    </fieldset>
+
+
+
 <fieldset>
     <legend>Oplysninger der bogføres</legend>
 
         <table>
                     <tr>
                         <th>Bilagsnummer</th>
-                        <td>
-                            <?php if (!$procurement->isStated()): ?>
-                            <input type="text" name="voucher_number" value="<?php echo $voucher->getMaxNumber() + 1; ?>" />
-                            <?php else: ?>
-                            <?php echo $procurement->get("voucher_number"); ?>
-                            <?php endif; ?>
-                        </td>
+                        <td><input type="text" name="voucher_number" value="<?php echo $voucher->getMaxNumber() + 1; ?>" /></td>
                     </tr>
                     <tr>
                         <th>Dato</th>
-                        <td><?php print($procurement->get("dk_paid_date")); ?></td>
+                        <td><input type="text" name=""<?php print($procurement->get("dk_paid_date")); ?></td>
                     </tr>
                     <tr>
                         <th>Beløb</th>
@@ -134,6 +158,9 @@ $page->start('Bogfør indkøb #' . $procurement->get('number'));
     <p><a href="/modules/accounting/daybook.php">Gå til kassekladden</a></p>
     <?php endif; ?>
 </form>
+
+<?php endif; ?>
+
 <?php
 $page->end();
 ?>

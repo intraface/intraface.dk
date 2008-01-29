@@ -77,7 +77,7 @@ $page->start("Sæt antal");
   		for($i = 0, $max = count($products); $i < $max; $i++) {
 				?>
   			<tr>
-  				<td><input type="input" name="quantity[<?php print($products[$i]["id"]); ?>]" value="1" size="3" /> <?php print($translation->get($products[$i]["unit"])) ?></td>
+  				<td><input type="input" name="quantity[<?php print($products[$i]["id"]); ?>]" value="1" size="3" /> <?php print($translation->get($products[$i]["unit"]['combined'])) ?></td>
 					<td align="right"><?php print($products[$i]["number"]); ?></td>
   				<td><?php print(safeToHtml($products[$i]["name"])) ?></td>
 					<td><input type="input" name="price[<?php print($products[$i]["id"]); ?>]" value="0,00" size="8" /></td>

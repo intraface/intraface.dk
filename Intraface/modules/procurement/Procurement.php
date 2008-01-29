@@ -23,10 +23,6 @@ class Procurement Extends Standard {
         $this->error = new Error;
         $this->id = intval($id);
 
-        $module_procurement = $this->kernel->getModule("procurement");
-        $this->status_types = $module_procurement->getSetting("status");
-        $this->from_region_types = $module_procurement->getSetting("from_region");
-
         $this->dbquery = new DBQuery($this->kernel, "procurement", "active = 1 AND intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->useErrorObject($this->error);
 
@@ -47,7 +43,7 @@ class Procurement Extends Standard {
             DATE_FORMAT(date_recieved, '%d-%m-%Y') AS dk_date_recieved,
             DATE_FORMAT(date_canceled, '%d-%m-%Y') AS dk_date_canceled,
             DATE_FORMAT(date_stated, '%d-%m-%Y') AS date_stated,
-            DATE_FORMAT(date_stated, '%d-%m-%Y') AS date_stated_dk
+            DATE_FORMAT(date_stated, '%d-%m-%Y') AS dk_date_stated
 
             FROM procurement WHERE intranet_id = ".$this->kernel->intranet->get("id")." AND id = ".$this->id);
         if(!$db->nextRecord()) {
@@ -97,46 +93,33 @@ class Procurement Extends Standard {
         }
 
         $this->value["date_stated"] = $db->f('date_stated');
-        $this->value["date_stated_dk"] = $db->f('date_stated_dk');
+        $this->value["dk_date_stated"] = $db->f('dk_date_stated');
 
         $this->value["paid_date"] = $db->f("paid_date");
         $this->value["dk_paid_date"] = $db->f("dk_paid_date");
         $this->value["number"] = $db->f("number");
         $this->value["contact_id"] = $db->f("contact_id");
 
-        $this->value['contact'] = "";
-        if($this->kernel->user->hasModuleAccess('contact')) {
-            $this->kernel->useModule('contact');
-            $contact = new Contact($this->kernel, $db->f('contact_id'));
-            if($contact->get('id') > 0) {
-                $this->value['contact'] = $contact->address->get('name');
-            }
-        }
-
+        
         $this->value["vendor"] = $db->f("vendor");
         $this->value["description"] = $db->f("description");
         $this->value["from_region_key"] = $db->f("from_region_key");
-        $this->value["from_region"] = $this->from_region_types[$db->f("from_region_key")];
-        $module_procurement = $this->kernel->getModule("procurement");
-        //$this->value["dk_from_region"] = $module_procurement->getTranslation($this->from_region_types[$db->f("from_region_key")]);
-
-
-        $this->value["total_price"] = $db->f("total_price");
-        $this->value["dk_total_price"] = number_format($db->f("total_price"), 2, ",",".");
-        $this->value["total_price_items"] = $db->f("total_price_items");
-        $this->value["dk_total_price_items"] = number_format($db->f("total_price_items"), 2, ",",".");
+        $region_types = $this->getRegionTypes();
+        $this->value["from_region"] = $region_types[$db->f("from_region_key")];
+        
+        $this->value["price_items"] = $db->f("price_items");
+        $this->value["dk_price_items"] = number_format($db->f("price_items"), 2, ",",".");
+        $this->value["price_shipment_etc"] = $db->f("price_shipment_etc");
+        $this->value["dk_price_shipment_etc"] = number_format($this->value["price_shipment_etc"], 2, ",",".");
         $this->value["vat"] = $db->f("vat");
         $this->value["dk_vat"] = number_format($db->f("vat"), 2, ",",".");
-
-        $this->value["price_shipment_etc"] = round($this->value["total_price"] - $this->value["total_price_items"] - $this->value["vat"], 2);
-        $this->value["dk_price_shipment_etc"] = number_format($this->value["price_shipment_etc"], 2, ",",".");
-
-
-
+        $this->value["total_price"] = round($this->value["price_items"] + $this->value["price_shipment_etc"] + $this->value["vat"], 2);
+        $this->value["dk_total_price"] = number_format($this->value["total_price"], 2, ",",".");
+        
         $this->value["status_key"] = $db->f("status_key");
-        $this->value["status"] = $this->status_types[$db->f("status_key")];
+        $types = $this->getStatusTypes();
+        $this->value["status"] = $types[$db->f("status_key")];
         //$this->value["paid_key"] = $db->f("paid");
-
 
         $this->value["state_account_id"] = $db->f("state_account_id");
         $this->value["voucher_number"] = $db->f("voucher_number");
@@ -187,39 +170,24 @@ class Procurement Extends Standard {
             $this->error->set("Nummeret er allerede benyttet");
         }
 
-        /*
-        settype($input["contact_id"], "integer");
-        if($input["contact_id"] != 0) {
-            if($this->kernel->user->hasModuleAccess("contact")) {
-                $this->kernel->useModule("contact");
-                $contact = new Contact($this->kernel, $input["contact_id"]);
-                if($contact->get("id") == 0) {
-                    $this->error->set("Ugydligt kontakt");
-                }
-            }
-            else {
-                $input["contact_id"] = 0;
-            }
-        }
-        */
-
         $validator->isString($input["vendor"], "Fejl i leverandør", "", "allow_empty");
         $validator->isString($input["description"], "Fejl i beskrivelse", "", "");
 
         settype($input["from_region_key"], "integer");
-        if(!isset($this->from_region_types[$input["from_region_key"]])) {
+        $region_types = $this->getRegionTypes();
+        if(!isset($region_types[$input["from_region_key"]])) {
             $this->error->set("Ugyldig købsregion");
         }
 
-        $validator->isDouble($input["dk_total_price"], "Samlet pris er ikke et gyldigt beløb");
-        $amount = new Amount($input["dk_total_price"]);
+        $validator->isDouble($input["dk_price_items"], "Varerpris er ikke et gyldigt beløb");
+        $amount = new Amount($input["dk_price_items"]);
         if($amount->convert2db()) {
-            $input["total_price"] = $amount->get();
+            $input["price_items"] = $amount->get();
         }
-        $validator->isDouble($input["dk_total_price_items"], "Varerpris er ikke et gyldigt beløb");
-        $amount = new Amount($input["dk_total_price_items"]);
+        $validator->isDouble($input["dk_price_shipment_etc"], "Pris for forsendelse og andet er ikke et gyldigt beløb");
+        $amount = new Amount($input["dk_price_shipment_etc"]);
         if($amount->convert2db()) {
-            $input["total_price_items"] = $amount->get();
+            $input["price_shipment_etc"] = $amount->get();
         }
         $validator->isDouble($input["dk_vat"], "Moms er ikke et gyldigt beløb");
         $amount = new Amount($input["dk_vat"]);
@@ -245,8 +213,8 @@ class Procurement Extends Standard {
             vendor = \"".$input["vendor"]."\",
             description = \"".$input["description"]."\",
             from_region_key = ".$input["from_region"].",
-            total_price = ".$input["total_price"].",
-            total_price_items = ".$input["total_price_items"].",
+            price_items = ".$input["price_items"].",
+            price_shipment_etc = ".$input["price_shipment_etc"].",
             vat = ".$input["vat"]."";
 
 
@@ -356,13 +324,15 @@ class Procurement Extends Standard {
             DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date,
             DATE_FORMAT(paid_date, '%d-%m-%Y') AS dk_paid_date");
 
+        $status_types = $this->getStatusTypes();
         while($db->nextRecord()) {
             $list[$i]["id"] = $db->f("id");
             $list[$i]["description"] = $db->f("description");
             $list[$i]["number"] = $db->f("number");
             $list[$i]["vendor"] = $db->f("vendor");
             $list[$i]["status_key"] = $db->f("status_key");
-            $list[$i]["status"] = $this->status_types[$db->f("status_key")];
+            
+            $list[$i]["status"] = $status_types[$db->f("status_key")];
             $list[$i]["delivery_date"] = $db->f("delivery_date");
             $list[$i]["dk_delivery_date"] = $db->f("dk_delivery_date");
             $list[$i]["payment_date"] = $db->f("payment_date");
@@ -370,15 +340,8 @@ class Procurement Extends Standard {
             $list[$i]["paid_date"] = $db->f("paid_date");
             $list[$i]["dk_paid_date"] = $db->f("dk_paid_date");
             $list[$i]["contact_id"] = $db->f("contact_id");
-            $list[$i]["total_price"] = $db->f("total_price");
-            if($this->kernel->user->hasModuleAccess('contact') && $db->f("contact_id") != 0) {
-                $this->kernel->useModule('contact');
-                $contact = new Contact($this->kernel, $db->f("contact_id"));
-                $list[$i]["contact"] = $contact->address->get('name');
-            }
-            else {
-                $list[$i]["contact"] = "";
-            }
+            $list[$i]["total_price"] = round($db->f("price_items") + $db->f("price_shipment_etc") + $db->f("vat"), 2);;
+            
             $i++;
         }
 
@@ -395,7 +358,7 @@ class Procurement Extends Standard {
     }
 
     function setStatus($status) {
-        $status_key = array_search($status, $this->status_types);
+        $status_key = array_search($status, $this->getStatusTypes());
         if($status_key === false) {
             trigger_error("Ugyldigt status: ".$status, FATAL);
         }
@@ -450,29 +413,28 @@ class Procurement Extends Standard {
 
     }
 
-    function setContact($contact_id) {
+    function setContact($contact) {
 
         if($this->id == 0) {
             return 0;
         }
-
-        if($this->kernel->user->hasModuleAccess('contact')) {
-            $this->kernel->useModule('contact');
-            $contact = new Contact($this->kernel, $contact_id);
-
-            if($contact->get('id') != 0) {
-                $db = new DB_sql;
-                $db->query("UPDATE procurement SET contact_id = ".$contact->get('id').", date_changed = NOW() WHERE id = ".$this->id);
-                $this->load();
-                return 1;
-            }
-            else {
-                return 0;
-            }
+        
+        if(!is_object($contact)) {
+            trigger_error('The parameter to set Contact need to be a contact object!', E_USER_ERROR);
+            return false;
         }
-        else {
-            return 0;
+
+        if($contact->get('id') == 0) {
+            trigger_error('The given contact is not valid!', E_USER_ERROR);
+            return false;
         }
+
+            
+        $db = new DB_sql;
+        $db->query("UPDATE procurement SET contact_id = ".$contact->get('id').", date_changed = NOW() WHERE id = ".$this->id);
+        $this->load();
+        return true;
+        
     }
 
     function getLatest($product_id, $up_to_quantity = 0) {
@@ -689,6 +651,34 @@ class Procurement Extends Standard {
         $db->query("UPDATE procurement SET state_account_id = " . $id . " WHERE id = " .$this->id);
         $this->load();
         return true;
+    }
+    
+    /**
+     * returns possible status types
+     * 
+     * @return array status types
+     */
+    private function getStatusTypes() {
+        return array(
+            0=>'ordered',
+            1=>'recieved',
+            2=>'canceled'
+        );
+    }
+    
+    /**
+     * returns the possible regions where procurement is bought
+     * 
+     * @return array possible regions
+     */
+    public function getRegionTypes() 
+    {
+        return array(
+            0=>'denmark',
+            1=>'eu',
+            2=>'eu_vat_registered',
+            3=>'outside_eu'
+        );
     }
 
 

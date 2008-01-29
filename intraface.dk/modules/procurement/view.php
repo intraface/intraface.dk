@@ -7,7 +7,6 @@ $shared_filehandler->includeFile('AppendFile.php');
 $translation = $kernel->getTranslation('procurement');
 
 $procurement = new Procurement($kernel, $_GET["id"]);
-
 $filehandler = new FileHandler($kernel);
 $append_file = new AppendFile($kernel, 'procurement_procurement', $procurement->get('id'));
 
@@ -45,7 +44,7 @@ if(isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
         }
     }
     else {
-        trigger_error("Du har ikke adgang til modullet contact", E_ERROR_ERROR);
+        trigger_error("Du har ikke adgang til modulet contact", E_ERROR_ERROR);
     }
 }
 
@@ -69,37 +68,59 @@ if(isset($_POST['append_file_submit'])) {
         if($id = $filehandler->upload->upload('new_append_file')) {
             $append_file->addFile(new FileHandler($kernel, $id));
         }
+        $procurement->error->merge($filehandler->error->getMessage());
+        
     }
 }
 
 # slet bilag
 if(isset($_GET['delete_appended_file_id'])) {
-    $append_file = new AppendFile($kernel, 'procurement_procurement', $procurement->get('id'));
     $append_file->delete((int)$_GET['delete_appended_file_id']);
 }
 
 # tilføj produkt
 if(isset($_GET['add_item'])) {
-    $redirect = Redirect::factory($kernel, 'go');
-    $module_product = $kernel->useModule('product');
-    $url = $redirect->setDestination($module_product->getPath().'select_product.php', $module_procurement->getPath().'edit_quantity.php?id='.$procurement->get('id'));
-    $redirect->askParameter('product_id', 'multiple');
-    header('location: '.$url);
+    if($kernel->user->hasModuleAccess('product')) {
+        $redirect = Redirect::factory($kernel, 'go');
+        $module_product = $kernel->useModule('product');
+        $url = $redirect->setDestination($module_product->getPath().'select_product.php', $module_procurement->getPath().'edit_quantity.php?id='.$procurement->get('id'));
+        $redirect->askParameter('product_id', 'multiple');
+        header('location: '.$url);
+        exit;
+    }
+    else {
+        trigger_error('You need access to the product module to do this!', E_USER_ERROR);
+        exit;
+    }
 }
 
 #retur
 if(isset($_GET['return_redirect_id'])) {
     $redirect = Redirect::factory($kernel, 'return');
     if($redirect->get('identifier') == 'contact') {
-        $procurement->setContact($redirect->getParameter('contact_id'));
+        if($kernel->user->hasModuleAccess('contact')) {
+            $contact_module = $kernel->useModule('contact');
+            $contact = new Contact($kernel, $redirect->getParameter('contact_id'));
+            if($contact->get('id') != 0) {
+                $procurement->setContact($contact);
+            }
+            else {
+                $procurement->error->set('Ingen gyldig kontakt blev valgt');
+            }
+            
+        }
+        else {
+            trigger_error('You need access to the contact module!', E_USER_ERROR);
+            exit;
+        }
     }
     elseif($redirect->get('identifier') == 'file_handler') {
 
         $file_handler_id = $redirect->getParameter('file_handler_id');
-
         foreach($file_handler_id as $id) {
             $append_file->addFile(new FileHandler($kernel, $id));
         }
+        
     }
 }
 
@@ -113,8 +134,7 @@ $page->start("Indkøb");
     <h1>Indkøb</h1>
 
     <?php echo $procurement->error->view(); ?>
-    <?php echo $filehandler->error->view(); ?>
-
+    
     <ul class="options">
         <li><a href="edit.php?id=<?php print($procurement->get("id")); ?>">Ret</a></li>
         <li><a href="index.php?use_stored=true">Luk</a></li>
@@ -152,9 +172,18 @@ $page->start("Indkøb");
                     }
                     else {
                         $module_contact = $kernel->useModule('contact');
+                        $contact = new Contact($kernel, $procurement->get('contact_id'));
+                        if($contact->get('id') != 0) {
+                            ?>
+                            <a href="<?php print($module_contact->getPath()."contact.php?id=".$procurement->get('contact_id')); ?>"><?php print($contact->get('name')); ?></a>
+                            <?php
+                        }
+                        else {
+                            echo 'Ugyldig kontakt';
+                        }
                         ?>
-                        <a href="<?php print($module_contact->getPath()."contact.php?id=".$procurement->get('contact_id')); ?>"><?php print($procurement->get('contact')); ?></a> <a class="edit" href="view.php?id=<?php print($procurement->get('id')); ?>&amp;add_contact=1">Ændre</a>
-                        <?php
+                        <a class="edit" href="view.php?id=<?php print($procurement->get('id')); ?>&amp;add_contact=1">Ændre</a>
+                        <?php 
                     }
                     ?>
                 </td>
@@ -173,7 +202,11 @@ $page->start("Indkøb");
         </tr>
         <tr>
             <td>Pris for varer (eks. administrationsgebyr og forsendelse)</td>
-            <td><?php print($procurement->get("dk_total_price_items")); ?> (excl. moms)</td>
+            <td><?php print($procurement->get("dk_price_items")); ?> (excl. moms)</td>
+        </tr>
+        <tr>
+            <td>Pris for forsendelse, gebyr osv</td>
+            <td><?php print($procurement->get("dk_price_shipment_etc")); ?></td>
         </tr>
         <tr>
             <td>Moms</td>
@@ -183,30 +216,14 @@ $page->start("Indkøb");
         <tr>
             <td>Bogført</td>
             <td>
-                <?php if ($procurement->get('date_stated_dk') == '00-00-0000'): ?>
+                <?php if (!$procurement->isStated()): ?>
                     <a href="state.php?id=<?php echo $procurement->get('id'); ?>">Bogfør</a>
                 <?php else: ?>
                     <?php print($procurement->get("date_stated_dk")); ?>
                 <?php endif; ?>
             </td>
         </tr>
-        <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
-        <tr>
-            <td>Bogføres på</td>
-            <td>
-                <?php
-                    $kernel->useModule('accounting');
-                    $account = new Account(new Year($kernel), $procurement->get('state_account_id'));
-                    if ($account->get('id') > 0):
-                        echo $account->get('number') . ' ' . $account->get('name');
-                    else:
-                        echo 'Ikke sat';
-                    endif;
-                ?>
-            </td>
-        </tr>
-
-        <?php endif; ?>
+        
         -->
         </tbody>
     </table>
@@ -327,89 +344,89 @@ $page->start("Indkøb");
 
 <div style="clear: both;">
 
-<?php
-
-if($procurement->get("locked") == false) {
-    ?>
-    <ul class="options">
-        <li><a href="view.php?id=<?php print($procurement->get("id")); ?>&amp;add_item=1">Registrer varer til lager</a></li>
-    </ul>
+<?php if($kernel->user->hasModuleAccess('product')): ?>
     <?php
-}
-?>
-
-<?php
-$procurement->loadItem();
-$items = $procurement->item->getList();
-
-if (count($items) > 0):
-?>
-<table class="stripe">
-    <caption>Varer</caption>
-    <thead>
-        <tr>
-            <th>Varenr.</th>
-            <th>Beskrivelse</th>
-            <th style="text-align: right">Antal</th>
-            <th>&nbsp;</th>
-            <th style="text-align: right">Indkøbspris</th>
-            <th style="text-align: right">I alt</th>
-            <th style="text-align: right">Kostpris</th>
-            <th>&nbsp;</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        $total = 0;
-
-
-        for($i = 0, $max = count($items); $i<$max; $i++) {
-            $total += $items[$i]["quantity"] * $items[$i]["unit_purchase_price"];
-            ?>
-            <tr id="i<?php echo $items[$i]["id"]; ?>" <?php if(isset($_GET['item_id']) && $_GET['item_id'] == $items[$i]['id']) print(' class="fade"'); ?>>
-                <td><?php print($items[$i]["number"]); ?></td>
-                <td><?php print(htmlentities($items[$i]["name"])); ?></td>
-                <td class="amount"><?php echo number_format($items[$i]["quantity"], 2, ",", "."); ?></td>
-                <td><?php echo $translation->get($items[$i]["unit"]); ?></td>
-                <td class="amount"><?php print(number_format($items[$i]["unit_purchase_price"], 2, ",", ".")); ?></td>
-                <td class="amount"><?php print(number_format($items[$i]["quantity"]*$items[$i]["unit_purchase_price"], 2, ",", ".")); ?></td>
-                <td class="amount"><?php print(number_format($items[$i]["calculated_unit_price"], 2, ",", ".")); ?></td>
-                <td class="buttons">
-                    <?php
-                    if($procurement->get("locked") == false) {
-                        ?>
-                        <a class="edit" href="item_edit.php?procurement_id=<?php echo $procurement->get('id'); ?>&amp;id=<?php print($items[$i]["id"]); ?>">Ret</a>
-                        <a class="delete" href="view.php?id=<?php print($procurement->get("id")); ?>&amp;delete_item_id=<?php print($items[$i]["id"]); ?>">Slet</a>
-                        <?php
-                    }
-                    ?>&nbsp;
-                </td>
-            </tr>
-            <?php
-        }
-
+    if($procurement->get("locked") == false) {
         ?>
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td colspan="3">Total:</td>
-            <td class="amount"><?php print(number_format($total, 2, ",", ".")); ?></td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-    </tbody>
-</table>
-
-<?php
-if($total > $procurement->get("total_price_items")) {
+        <ul class="options">
+            <li><a href="view.php?id=<?php print($procurement->get("id")); ?>&amp;add_item=1">Registrer varer til lager</a></li>
+        </ul>
+        <?php
+    }
     ?>
-    <div class="box">
-        <p>Prisen for varerne registreret på lageret overstiger prisen for varerne angivet på indkøbet.</p>
-    </div>
+    
     <?php
-}
-?>
-
+    $procurement->loadItem();
+    $items = $procurement->item->getList();
+    
+    if (count($items) > 0):
+    ?>
+    <table class="stripe">
+        <caption>Varer</caption>
+        <thead>
+            <tr>
+                <th>Varenr.</th>
+                <th>Beskrivelse</th>
+                <th style="text-align: right">Antal</th>
+                <th>&nbsp;</th>
+                <th style="text-align: right">Indkøbspris</th>
+                <th style="text-align: right">I alt</th>
+                <th style="text-align: right">Kostpris</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $total = 0;
+    
+    
+            for($i = 0, $max = count($items); $i<$max; $i++) {
+                $total += $items[$i]["quantity"] * $items[$i]["unit_purchase_price"];
+                ?>
+                <tr id="i<?php echo $items[$i]["id"]; ?>" <?php if(isset($_GET['item_id']) && $_GET['item_id'] == $items[$i]['id']) print(' class="fade"'); ?>>
+                    <td><?php print($items[$i]["number"]); ?></td>
+                    <td><?php print(htmlentities($items[$i]["name"])); ?></td>
+                    <td class="amount"><?php echo number_format($items[$i]["quantity"], 2, ",", "."); ?></td>
+                    <td><?php echo $translation->get($items[$i]["unit"]); ?></td>
+                    <td class="amount"><?php print(number_format($items[$i]["unit_purchase_price"], 2, ",", ".")); ?></td>
+                    <td class="amount"><?php print(number_format($items[$i]["quantity"]*$items[$i]["unit_purchase_price"], 2, ",", ".")); ?></td>
+                    <td class="amount"><?php print(number_format($items[$i]["calculated_unit_price"], 2, ",", ".")); ?></td>
+                    <td class="buttons">
+                        <?php
+                        if($procurement->get("locked") == false) {
+                            ?>
+                            <a class="edit" href="item_edit.php?procurement_id=<?php echo $procurement->get('id'); ?>&amp;id=<?php print($items[$i]["id"]); ?>">Ret</a>
+                            <a class="delete" href="view.php?id=<?php print($procurement->get("id")); ?>&amp;delete_item_id=<?php print($items[$i]["id"]); ?>">Slet</a>
+                            <?php
+                        }
+                        ?>&nbsp;
+                    </td>
+                </tr>
+                <?php
+            }
+    
+            ?>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td colspan="3">Total:</td>
+                <td class="amount"><?php print(number_format($total, 2, ",", ".")); ?></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <?php
+    if($total > $procurement->get("price_items")) {
+        ?>
+        <div class="box">
+            <p>Prisen for varerne registreret på lageret overstiger prisen for varerne angivet på indkøbet.</p>
+        </div>
+        <?php
+    }
+    ?>
+<?php endif; ?>
 
 <?php endif; ?>
 </div>

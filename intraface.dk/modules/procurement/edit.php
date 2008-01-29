@@ -26,15 +26,6 @@ elseif(isset($_GET["id"])) {
 
 	$procurement = new Procurement($kernel, intval($_GET["id"]));
 	$values = $procurement->get();
-
-	$values["invoice_date"] = $values["dk_invoice_date"];
-	$values["delivery_date"] = $values["dk_delivery_date"];
-	$values["payment_date"] = $values["dk_payment_date"];
-	$values["total_price"]= $values["dk_total_price"];
-	$values["total_price_items"]= $values["dk_total_price_items"];
-	$values["vat"]= $values["dk_vat"];
-	$values["paid_date"] = $values["dk_paid_date"];
-
 	$title = "Ret indkøb";
 }
 else {
@@ -105,14 +96,14 @@ $page->start();
 	<legend>Pris</legend>
 
 	<div class="formrow">
-		<label for="dk_total_price">Pris samlet</label>
-		<input type="text" name="dk_total_price" id="dk_total_price" value="<?php  if (!empty($values['dk_total_price'])) echo safeToForm($values["dk_total_price"]); ?>" size="10" /> Kr. (inkl. moms)
+		<label for="dk_price_items">Pris for varer (eks. forsendelse, gebyr osv.)</label>
+		<input type="text" name="dk_price_items" id="dk_price_items" value="<?php if (!empty($values['dk_price_items'])) print($values["dk_price_items"]); ?>" size="10" /> Kr. (eks. moms)
 	</div>
-
-	<div class="formrow">
-		<label for="dk_total_price_items">Pris for varer (eks. administrationsgebyr og forsendelse)</label>
-		<input type="text" name="dk_total_price_items" id="dk_total_price_items" value="<?php if (!empty($values['dk_total_price_items'])) print($values["dk_total_price_items"]); ?>" size="10" /> Kr. (eks. moms)
-	</div>
+    
+    <div class="formrow">
+        <label for="dk_price_shipment_etc">Pris for forsendelse, gebyr osv.</label>
+        <input type="text" name="dk_price_shipment_etc" id="dk_price_shipment_etc" value="<?php  if (!empty($values['dk_price_shipment_etc'])) echo safeToForm($values["dk_price_shipment_etc"]); ?>" size="10" /> Kr. (eks. evt. moms)
+    </div>
 
 	<div class="formrow">
 		<label for="dk_vat">Moms</label>

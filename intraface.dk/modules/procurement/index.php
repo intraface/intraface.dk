@@ -2,9 +2,6 @@
 require('../../include_first.php');
 
 $module = $kernel->module("procurement");
-
-
-
 $procurement = new Procurement($kernel);
 
 
