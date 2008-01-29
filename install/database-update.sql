@@ -8,5 +8,5 @@ ALTER TABLE `procurement` CHANGE `total_price` `_old_total_price` DOUBLE( 11, 2 
 ALTER TABLE `procurement` CHANGE `total_price_items` `price_items` DOUBLE( 11, 2 ) UNSIGNED NOT NULL DEFAULT '0.00' ;
 ALTER TABLE `procurement` ADD `price_shipment_etc` DOUBLE( 11, 2 ) UNSIGNED NOT NULL AFTER `price_items` ;
 
-
+## notice that values are changed!!!
  UPDATE procurement SET `price_shipment_etc` = IF( `_old_total_price` - `price_items` - `vat` <0, 0, `_old_total_price` - `price_items` - `vat` )  ; 
