@@ -171,6 +171,7 @@ class Main {
      */
     function includeFile($file)
     {
+        // @todo constant should be removed
         $file = PATH_INCLUDE_MODULE . $this->module_name . '/' . $file;
         if (!file_exists($file)) {
             return false;
@@ -216,9 +217,6 @@ class Main {
     function getRequiredShared()
     {
         return $this->required_shared;
-
-        // print_r($this->required_shared);
-        // die();
     }
 
     /**
@@ -230,7 +228,9 @@ class Main {
      */
     function includeSettingFile($file)
     {
-        global $_setting; // den globaliseres ogs� andre steder?
+        // @todo global should be removed
+        global $_setting; // globalized other places also
+        // @todo constant should be removed
         include(PATH_INCLUDE_MODULE.$this->module_name."/".$file);
     }
 
@@ -239,6 +239,7 @@ class Main {
      */
     function getPath()
     {
+        // @todo constant should be removed
         return(PATH_WWW_MODULE.$this->module_name."/");
     }
 
@@ -276,12 +277,13 @@ class Main {
     /**
      * @return integer
      */
-    function getId() {
+    function getId()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id FROM module WHERE name = '".$this->module_name."'");
-        if ($db->nextRecord()) return $db->f('id');
+        if ($db->nextRecord()) {
+            return $db->f('id');
+        }
         return 0;
     }
 }
-
-?>
