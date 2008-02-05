@@ -24,8 +24,7 @@ abstract class Module
     {
         if(!empty($this->primary_module_object) AND is_object($this->primary_module_object)) {
             trigger_error('Det primære modul er allerede sat', E_USER_ERROR);
-        }
-        else {
+        } else {
             $module = $this->useModule($module_name);
 
             if(is_object($module)) {
@@ -40,8 +39,7 @@ abstract class Module
 
 
                 return($module);
-            }
-            else {
+            } else {
                 // Den fejlmeddelse er egentlig irrelevant, da useModul ikke enten returnere et objekt eller trigger_error.
                 trigger_error('Du har ikke adgang til modulet', E_USER_ERROR);
                 return false;
@@ -176,8 +174,8 @@ abstract class Module
      * Function to check whether the module has been registered
      * Made temporarily for /main/index.php
      */
-    static function exists($module_id) {
-
+    static function exists($module_id)
+    {
         $db = MDB2::singleton(DB_DSN);
         if(PEAR::isError($db)) {
             trigger_error('Error connecting to db: '.$db->getUserInfo(), E_USER_ERROR);
@@ -186,8 +184,7 @@ abstract class Module
         if(is_numeric($module_id)) {
             trigger_error("Not yet implemented!", E_USER_ERROR);
             exit;
-        }
-        else {
+        } else {
 
             $result = $db->query('SELECT id FROM module WHERE name = '.$db->quote($module_id, 'text'));
             if(PEAR::isError($result)) {
@@ -197,12 +194,10 @@ abstract class Module
 
             if($result->numRows() > 0) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
 
     }
 }
-?>
