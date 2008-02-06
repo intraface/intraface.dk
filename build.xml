@@ -1,60 +1,56 @@
 <project name="intraface" default="build" basedir=".">
 
-  <property name="source.dir" value="./" />
-  <property name="build.dir" value="./build/" />
-  <property name="reports.dir" value="${build.dir}logs/" />
-  <property name="tests.dir" value="${source.dir}tests/unit/" />
+    <property name="source.dir" value="./" />
+    <property name="build.dir" value="./build/" />
+    <property name="reports.dir" value="${build.dir}logs/" />
+    <property name="tests.dir" value="${source.dir}tests/unit/" />
 
+    <target name="prepare">
+        <delete dir="${build.dir}" />
+        <mkdir dir="${build.dir}" />
+    </target>
 
-  <target name="prepare">
-    <delete dir="${build.dir}logs" />
-    <mkdir dir="${build.dir}logs" />
+    <target name="build" depends="prepare,checkout,phpcs,php-documentor,test">
+        <copy todir="${build.dir}" >
+            <fileset dir="${source.dir}">
+                 <include name="**/*.*" />
+            </fileset>
+        </copy>
+        <phingcall target="pear-create" />
+    </target>
 
-  </target>
+    <target name="checkout">
+        <exec dir="${source.dir}" command="svn export ${source.dir} ${build.dir}" />
+    </target>
 
-  <target name="build" depends="prepare,checkout,phpcs,php-documentor,test">
-    <copy todir="${build.dir}" >
-      <fileset dir="${source.dir}">
-        <include name="**/*.*" />
-      </fileset>
-    </copy>
-    <phingcall target="pear-create" />
-  </target>
+    <target name="test">
+        <delete dir="${reports.coverage.dir}" />
+        <mkdir dir="${reports.coverage.dir}" />
 
-  <target name="checkout">
-    <exec dir="${source.dir}" command="svn export ./ ${build.dir}" />
+        <exec dir="${source.dir}tests/unit/" command="phpunit
+           --log-xml ${reports.phpunit.dir}/phpunit.xml
+           --log-pmd ${reports.phpunit.dir}/phpunit.pmd.xml
+           --coverage-xml ${reports.phpunit.dir}/phpunit.coverage.xml
+           --coverage-html ${reports.coverage.dir}/
+           AllTests" />
+    </target>
 
-  </target>
+    <target name="phpcs">
+        <exec output="${reports.dir}/checkstyle.xml" dir="${source.dir}Intraface/"
+            command="phpcs --report=checkstyle . --standard=PEAR" />
+    </target>
 
-  <target name="test">
-    <delete dir="${build.dir}coverage/" />
-    <mkdir dir="${build.dir}coverage/" />
-
-    <exec dir="${source.dir}tests/unit/" command="phpunit
-      --log-xml ../../../build/logs/phpunit.xml
-      --log-pmd ../../../build/logs/phpunit.pmd.xml
-      --coverage-xml ../../../build/logs/phpunit.coverage.xml
-      --coverage-html ../../../build/coverage/
-      AllTests" />
-  </target>
-
-  <target name="phpcs">
-    <exec output="${reports.dir}checkstyle.xml" dir="${source.dir}Intraface/"
-      command="phpcs --report=checkstyle . --standard=PEAR" />
-  </target>
-
-  <target name="php-documentor">
-
-    <exec dir="${source.dir}" command="phpdoc -ue on -t ../build/api -d ./Intraface" passthru="true" />
-  </target>
+    <target name="php-documentor">
+        <exec dir="${source.dir}" command="phpdoc -ue on -t ${api.dir} -d ./Intraface" passthru="true" />
+    </target>
 
     <target name="pear">
-        <exec dir="./build/" checkreturn="true" command="php generate_package_xml.php make" />
+        <exec dir="${build.dir}" checkreturn="true" command="php generate_package_xml.php make" />
     </target>
 
     <target name="pear-create">
         <phingcall target="pear" />
-        <exec dir="./build/" checkreturn="true" command="pear package package.xml" />
+        <exec dir="${build.dir}" checkreturn="true" command="pear package package.xml" />
     </target>
 
 </project>
