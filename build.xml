@@ -1,8 +1,8 @@
+<?xml version="1.0" ?>
 <project name="intraface" default="build" basedir=".">
+    <property file="./build.properties" />
 
     <property name="source.dir" value="./" />
-    <property name="build.dir" value="./build/" />
-    <property name="reports.dir" value="${build.dir}logs/" />
     <property name="tests.dir" value="${source.dir}tests/unit/" />
 
     <target name="prepare">
