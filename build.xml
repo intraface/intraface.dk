@@ -1,6 +1,6 @@
 <project name="intraface" default="build" basedir=".">
 
-  <property name="source.dir" value="./source/" />
+  <property name="source.dir" value="./" />
   <property name="build.dir" value="./build/" />
   <property name="reports.dir" value="${build.dir}logs/" />
   <property name="tests.dir" value="${source.dir}tests/unit/" />
@@ -45,7 +45,7 @@
 
   <target name="php-documentor">
 
-    <exec dir="./source/" command="phpdoc -ue on -t ../build/api -d ./Intraface" passthru="true" />
+    <exec dir="${source.dir}" command="phpdoc -ue on -t ../build/api -d ./Intraface" passthru="true" />
   </target>
 
     <target name="pear">
