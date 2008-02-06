@@ -4,19 +4,17 @@
 
     <property name="source.dir" value="./" />
     <property name="tests.dir" value="${source.dir}tests/unit/" />
+    <property name="build.dir" value="../build" />
+    <property name="reports.dir" value="../build/logs" />
+    <property name="reports.phpunit.dir" value="../../../build/logs" />
+    <property name="reports.coverage.dir" value="../../../build/logs/coverage" />
+    <property name="api.dir" value="../build/api" />
 
     <target name="prepare">
         <delete dir="${build.dir}" />
-        <mkdir dir="${build.dir}" />
     </target>
 
-    <target name="build" depends="prepare,checkout,phpcs,php-documentor,test">
-        <copy todir="${build.dir}" >
-            <fileset dir="${source.dir}">
-                 <include name="**/*.*" />
-            </fileset>
-        </copy>
-        <phingcall target="pear-create" />
+    <target name="build" depends="prepare,checkout,test,phpcs,php-documentor,pear-create">
     </target>
 
     <target name="checkout">
@@ -24,15 +22,12 @@
     </target>
 
     <target name="test">
-        <delete dir="${reports.coverage.dir}" />
-        <mkdir dir="${reports.coverage.dir}" />
-
         <exec dir="${source.dir}tests/unit/" command="phpunit
            --log-xml ${reports.phpunit.dir}/phpunit.xml
            --log-pmd ${reports.phpunit.dir}/phpunit.pmd.xml
            --coverage-xml ${reports.phpunit.dir}/phpunit.coverage.xml
            --coverage-html ${reports.coverage.dir}/
-           AllTests" />
+           AllTests" passthru="true" />
     </target>
 
     <target name="phpcs">
