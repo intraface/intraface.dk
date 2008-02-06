@@ -1,0 +1,60 @@
+<project name="intraface" default="build" basedir=".">
+
+  <property name="source.dir" value="./source/" />
+  <property name="build.dir" value="./build/" />
+  <property name="reports.dir" value="${build.dir}logs/" />
+  <property name="tests.dir" value="${source.dir}tests/unit/" />
+
+
+  <target name="prepare">
+    <delete dir="${build.dir}logs" />
+    <mkdir dir="${build.dir}logs" />
+
+  </target>
+
+  <target name="build" depends="prepare,checkout,phpcs,php-documentor,test">
+    <copy todir="${build.dir}" >
+      <fileset dir="${source.dir}">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>
+    <phingcall target="pear-create" />
+  </target>
+
+  <target name="checkout">
+    <exec dir="${source.dir}" command="svn export ./ ${build.dir}" />
+
+  </target>
+
+  <target name="test">
+    <delete dir="${build.dir}coverage/" />
+    <mkdir dir="${build.dir}coverage/" />
+
+    <exec dir="${source.dir}tests/unit/" command="phpunit
+      --log-xml ../../../build/logs/phpunit.xml
+      --log-pmd ../../../build/logs/phpunit.pmd.xml
+      --coverage-xml ../../../build/logs/phpunit.coverage.xml
+      --coverage-html ../../../build/coverage/
+      AllTests" />
+  </target>
+
+  <target name="phpcs">
+    <exec output="${reports.dir}checkstyle.xml" dir="${source.dir}Intraface/"
+      command="phpcs --report=checkstyle . --standard=PEAR" />
+  </target>
+
+  <target name="php-documentor">
+
+    <exec dir="./source/" command="phpdoc -ue on -t ../build/api -d ./Intraface" passthru="true" />
+  </target>
+
+    <target name="pear">
+        <exec dir="./build/" checkreturn="true" command="php generate_package_xml.php make" />
+    </target>
+
+    <target name="pear-create">
+        <phingcall target="pear" />
+        <exec dir="./build/" checkreturn="true" command="pear package package.xml" />
+    </target>
+
+</project>
