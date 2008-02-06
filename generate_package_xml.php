@@ -143,6 +143,8 @@ $pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'public.intraface.dk', '0
 // filehandler
 $pfm->addPackageDepWithChannel('required', 'MIME_Type', 'pear.php.net', '1.0.0');
 $pfm->addPackageDepWithChannel('required', 'System_Command', 'pear.php.net', '1.0.6');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Keyword', 'public.intraface.dk', '0.1.0');
 
 // email
 $pfm->addPackageDepWithChannel('required', 'phpmailer', 'public.intraface.dk', '1.73.1');
@@ -184,6 +186,8 @@ $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Tools', 'public
 
 // demo
 $pfm->addPackageDepWithChannel('required', 'konstrukt', 'public.intraface.dk', '0.4.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'recurive_array_map', 'public.intraface.dk', '0.1.0');
 
 
 foreach ($ignore AS $file) {
