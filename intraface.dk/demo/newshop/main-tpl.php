@@ -6,16 +6,15 @@
         <link rel="alternate" type="application/rss+xml" title="Alle produkter" href="/demo/shop/rss.php" />
 
         <style type="text/css">
-            @import "<?php e(url('/shop.css.php')); ?>";
+        <?php foreach ($this->document->styles as $style): ?>
+            @import "<?php e($style); ?>";
+        <?php endforeach;?>
         </style>
      </head>
 
-     <body style="background-color: #CC0000;">
-
-     <div style="background-color: white; margin: 20px auto; border: 4px solid #666666; width: 600px; padding: 20px;">
-
-        <?php echo $content; ?>
-    <div style="clear:both;"></<div>
-    </div>
+     <body>
+        <div id="container">
+            <?php echo $content; ?>
+        </div>
     </body>
 </html>

@@ -1,0 +1,7 @@
+body {
+    background-color: #CC0000;
+}
+
+#container {
+    background-color: white; margin: 20px auto; border: 4px solid #666666; width: 600px; padding: 20px;
+}
