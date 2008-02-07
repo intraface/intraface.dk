@@ -20,7 +20,6 @@ class Invoice extends Debtor
 
     function setStatus($status)
     {
-
         if($status == 'cancelled') {
             trigger_error('En faktura kan ikke annulleres!', E_USER_ERROR);
         }
@@ -32,7 +31,6 @@ class Invoice extends Debtor
 
     function anyDue($contact_id)
     {
-        //$invoice = new Invoice($this->kernel);
         $db = new DB_Sql;
         $sql = "SELECT id FROM debtor
             WHERE type=3 AND status=1 AND due_date < NOW() AND intranet_id = ".$this->kernel->intranet->get("id")." AND contact_id = " . $contact_id;
@@ -44,10 +42,8 @@ class Invoice extends Debtor
     /**
      * Sørger for at sætte status til eller fra executed, ved registrering af betaling og kreditering
      */
-
     function updateStatus()
     {
-
         if(round($this->get("arrears")) == 0) {
             $go_status = "executed";
         } else {
