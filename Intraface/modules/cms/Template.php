@@ -34,12 +34,13 @@ class CMS_Template extends Standard {
     var $error;
     var $position;
 
-    function __construct(& $cmssite, $id = 0) {
+    function __construct($cmssite, $id = 0)
+    {
         if (!is_object($cmssite)) {
             trigger_error('CMS_Template::__construct need CMS_Site', E_USER_ERROR);
         }
-        $this->cmssite = & $cmssite;
-        $this->kernel = & $cmssite->kernel;
+        $this->cmssite = $cmssite;
+        $this->kernel = $cmssite->kernel;
         $this->kernel->useShared('keyword');
 
         $this->id = (int)$id;
@@ -56,7 +57,8 @@ class CMS_Template extends Standard {
     /**
      *
      */
-    function factory(& $kernel, $type = 'id', $id) {
+    function factory($kernel, $type = 'id', $id)
+    {
         switch ($type) {
             case 'id':
                 $db = new DB_Sql;
@@ -76,7 +78,8 @@ class CMS_Template extends Standard {
     }
 
 
-    function load() {
+    function load()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id, name, site_id, identifier FROM cms_template WHERE intranet_id = " . $this->cmssite->kernel->intranet->get('id') . " AND id = " . $this->id);
 
