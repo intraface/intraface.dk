@@ -11,12 +11,11 @@ require_once 'Intraface/modules/debtor/Debtor.php';
 
 class Invoice extends Debtor
 {
-
-    var $payment;
+    private $payment;
 
     function __construct(& $kernel, $id = 0)
     {
-        Debtor::__construct($kernel, 'invoice', $id);
+        parent::__construct($kernel, 'invoice', $id);
     }
 
     function setStatus($status)
@@ -26,7 +25,7 @@ class Invoice extends Debtor
             trigger_error('En faktura kan ikke annulleres!', E_USER_ERROR);
         }
 
-        $is_true = Debtor::setStatus($status);
+        $is_true = parent::setStatus($status);
 
         return $is_true;
     }
@@ -51,8 +50,7 @@ class Invoice extends Debtor
 
         if(round($this->get("arrears")) == 0) {
             $go_status = "executed";
-        }
-        else {
+        } else {
             $go_status = "sent";
         }
 
@@ -61,13 +59,13 @@ class Invoice extends Debtor
         }
         return true;
     }
-    
+
     /**
      * returns DebtorAccount object
-     * 
+     *
      * @return object DebtorAccount
      */
-    public function getDebtorAccount() 
+    public function getDebtorAccount()
     {
         require_once 'Intraface/modules/invoice/DebtorAccount.php';
         return new DebtorAccount($this);
@@ -111,7 +109,7 @@ class Invoice extends Debtor
 
     /**
      * Returns whether the invoice is ready for state
-     * 
+     *
      * @param object year
      * @param string 'check_product' if it should check that the products have a valid account, or 'skip_check_products'
      * @return boolean true or false
@@ -122,33 +120,33 @@ class Invoice extends Debtor
             trigger_error('First parameter to readyForState needs to be a Year object!', E_USER_ERROR);
             return false;
         }
-        
+
         if(!in_array($check_products, array('check_products', 'skip_check_products'))) {
             trigger_error('Second paramenter in Invice->readyForState should be either "check_products" or "skip_check_products"', E_USER_ERROR);
             return false;
         }
-        
+
         if (!$year->readyForState()) {
             $this->error->set('Regnskabåret er ikke klar til bogføring');
             return false;
         }
-        
-        
+
+
         if ($this->type != 'invoice') {
             $this->error->set('Du kan kun bogføre fakturaer');
             return false;
         }
-        
+
         if($this->isStated()) {
             $this->error->set('Fakturaen er allerede bogført');
             return false;
         }
-        
+
         if($this->get('status') != 'sent' && $this->get('status') != 'executed') {
             $this->error->set('Fakturaen skal være sendt eller afsluttet for at den kan bogføres');
             return false;
         }
-        
+
         $debtor_account = new Account($year, $year->getSetting('debtor_account_id'));
         if($debtor_account->get('id') == 0 || $debtor_account->get('type') != 'balance, asset') {
             $this->error->set('Ugyldig debitor konto sat i regnskabsindstillingerne.');
@@ -162,8 +160,7 @@ class Invoice extends Debtor
                 $product = new Product($this->kernel, $items[$i]['product_id']);
                 if ($product->get('state_account_id') == 0) {
                     $this->error->set('Produktet ' . $product->get('name') . ' ved ikke hvor den skal bogføres');
-                }
-                else {
+                } else {
                     require_once 'Intraface/modules/accounting/Account.php';
                     $account = Account::factory($year, $product->get('state_account_id'));
                     if($account->get('id') == 0 || $account->get('type') != 'operating') {
@@ -172,7 +169,7 @@ class Invoice extends Debtor
                 }
             }
         }
-        
+
         if ($this->error->isError()) {
             return false;
         }
@@ -181,7 +178,7 @@ class Invoice extends Debtor
 
     /**
      * State invoice
-     * 
+     *
      * @param object year stating year
      * @param integer voucher_number
      * @param string voucher_date
@@ -193,18 +190,18 @@ class Invoice extends Debtor
             trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
             return false;
         }
-        
+
         if(!is_object($translation)) {
             trigger_error('4th parameter to state needs to be a translation object!', E_USER_ERROR);
             return false;
         }
-        
+
         $validator = new Validator($this->error);
         if($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);
             $this_date->convert2db();
         }
-        
+
         $validator->isNumeric($voucher_number, 'Ugyldigt bilagsnummer', 'greater_than_zero');
 
         if ($this->error->isError()) {
@@ -215,11 +212,11 @@ class Invoice extends Debtor
             $this->error->set('Faktura er ikke klar til bogføring');
             return false;
         }
-        
+
         // hente alle produkterne på debtor
         $this->loadItem();
         $items = $this->item->getList();
-        
+
         $text = $translation->get('invoice').' #'.$this->get('number');
 
         require_once 'Intraface/modules/accounting/Voucher.php';
@@ -298,7 +295,7 @@ class Invoice extends Debtor
             $this->error->merge($voucher_file->error->getMessage());
             $this->error->set('Filen blev ikke overflyttet');
         }
-        
+
         if($this->error->isError()) {
             $this->error->set('Der er opstået en fejl under bogføringen af fakturaen. Det kan betyde at dele af den er bogført, men ikke det hele. Du bedes manuelt tjekke bilaget');
             // I am not quite sure if the invoice should be set as stated, but it can give trouble to state it again, if some of it was stated...
@@ -323,5 +320,3 @@ class Invoice extends Debtor
     }
 
 }
-
-?>
