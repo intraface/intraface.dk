@@ -2,16 +2,13 @@
 /**
  * @package Intraface_CMS
  */
-class CMS_Stylesheet extends Standard {
-
+class CMS_Stylesheet extends Standard
+{
     var $cmssite;
     var $error;
 
-    function CMS_Stylesheet(&$cmssite) {
-        CMS_Stylesheet::__construct($cmssite);
-    }
-
-    function __construct(&$cmssite) {
+    function __construct(&$cmssite)
+    {
         if (!is_object($cmssite) OR strtolower(get_class($cmssite)) != 'cms_site') {
             trigger_error('CMS_Stylesheet::__construct needs CMS_Site - got ' . get_class($cmssite), E_USER_ERROR);
         }
@@ -21,7 +18,8 @@ class CMS_Stylesheet extends Standard {
 
     }
 
-    function validate($input) {
+    function validate($input)
+    {
         /*
         $validate_string = VALIDATE_ALPHA . VALIDATE_NUM . '{}:*';
         if (!Validate::string($input['css'], array('format' => $validate_string))) {
@@ -32,7 +30,8 @@ class CMS_Stylesheet extends Standard {
         return 1;
     }
 
-    function save($input) {
+    function save($input)
+    {
         //$input = safeToDb($input);
         if (!$this->validate($input)) {
             return 0;
@@ -44,7 +43,8 @@ class CMS_Stylesheet extends Standard {
         return 1;
     }
 
-    function load() {
+    function load()
+    {
         if ($this->cmssite->id == 0) {
             $this->cmssite->load();
         }
@@ -56,6 +56,3 @@ class CMS_Stylesheet extends Standard {
     }
 
 }
-
-
-?>
