@@ -16,6 +16,7 @@ PHPUnit_Util_Filter::removeFileFromWhitelist(realpath(dirname(__FILE__) . '/../.
 PHPUnit_Util_Filter::removeFileFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/modules/procurement/include_frontpage.php'));
 PHPUnit_Util_Filter::removeFileFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/modules/product/include_frontpage.php'));
 PHPUnit_Util_Filter::removeFileFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/modules/todo/include_frontpage.php'));
+PHPUnit_Util_Filter::removeFileFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/modules/modulepackage/include_frontpage.php'));
 
 class AllTests
 {
