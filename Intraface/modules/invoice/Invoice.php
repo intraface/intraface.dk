@@ -11,7 +11,7 @@ require_once 'Intraface/modules/debtor/Debtor.php';
 
 class Invoice extends Debtor
 {
-    private $payment;
+    public $payment;
 
     function __construct(& $kernel, $id = 0)
     {
