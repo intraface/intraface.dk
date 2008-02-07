@@ -13,8 +13,8 @@ require_once('template_section/Picture.php');
 require_once('template_section/Mixed.php');
 
 
-class CMS_TemplateSection extends Standard {
-
+class CMS_TemplateSection extends Standard
+{
     var $id;
     var $kernel;
     var $template;
@@ -31,19 +31,15 @@ class CMS_TemplateSection extends Standard {
      * Fordelen er, at man ikke behøver at vide hvilken side elementet hører til,
      * men blot behøver, at have elementid.
      */
-
-    function CMS_TemplateSection(& $template, $id = 0) {
-        CMS_TemplateSection::__construct($template, $id);
-    }
-
-    function __construct(& $template, $id = 0) {
+    function __construct($template, $id = 0)
+    {
         if (!is_object($template) OR strtolower(get_class($template)) != 'cms_template') {
             trigger_error('TemplateSection::__construct skal bruge cmstemplate', E_USER_ERROR);
         }
-        $this->error = new Error;
-        $this->id = (int) $id;
-        $this->template = & $template;
-        $this->kernel = & $template->kernel;
+        $this->error    = new Error;
+        $this->id       = (int) $id;
+        $this->template = $template;
+        $this->kernel   = $template->kernel;
 
         $this->value['identify_as'] = 'cms_template_section';  // bruges af parameter
 
@@ -64,16 +60,19 @@ class CMS_TemplateSection extends Standard {
 
     }
 
-    function createParameterObject() {
+    function createParameterObject()
+    {
         require_once 'Parameter.php';
         return new CMS_Parameter($this);
     }
 
-    function addParameter($key, $value) {
+    function addParameter($key, $value)
+    {
         $this->parameter->save($key, $value);
     }
 
-    function factory($object, $type, $value) {
+    function factory($object, $type, $value)
+    {
         $class_prefix = 'CMS_Template_';
         switch ($type) {
             case 'type':
@@ -119,7 +118,8 @@ class CMS_TemplateSection extends Standard {
         }
     }
 
-    function load() {
+    function load()
+    {
 
         $db = new DB_Sql;
         $db->query("SELECT id, name, identifier, type_key, locked FROM cms_template_section WHERE cms_template_section.intranet_id = ".$this->template->cmssite->kernel->intranet->get('id')." AND cms_template_section.id = " . $this->id);
@@ -141,7 +141,8 @@ class CMS_TemplateSection extends Standard {
         return $this->id;
     }
 
-    function validate($var) {
+    function validate($var)
+    {
 
         $validator = new Validator($this->error);
         $validator->isString($var['name'], 'error in name', '', '');
@@ -166,7 +167,8 @@ class CMS_TemplateSection extends Standard {
         return 1;
     }
 
-    function save($var) {
+    function save($var)
+    {
         $var['identifier'] = trim($var['identifier']);
         if (!isset($var['locked'])) $var['locked'] = 0;
 
@@ -178,8 +180,7 @@ class CMS_TemplateSection extends Standard {
         if ($this->id == 0) {
             $sql_type = "INSERT INTO ";
             $sql_end = ", date_created = NOW()";
-        }
-        else {
+        } else {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;
         }
@@ -213,15 +214,15 @@ class CMS_TemplateSection extends Standard {
         return $this->id;
     }
 
-    function delete() {
+    function delete()
+    {
         $db = new DB_Sql;
         $db->query("UPDATE cms_template_section SET active = 0 WHERE id = " . $this->id);
         return 1;
     }
 
-
-
-    function getList() {
+    function getList()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id, name, identifier, type_key FROM cms_template_section WHERE template_id = " . $this->template->get('id') . " AND intranet_id = " . $this->kernel->intranet->get('id') . " AND active = 1 ORDER BY position ASC");
 
@@ -243,15 +244,18 @@ class CMS_TemplateSection extends Standard {
      *
      */
 
-    function moveUp() {
+    function moveUp()
+    {
         $this->position->moveUp($this->id);
     }
 
-    function moveDown() {
+    function moveDown()
+    {
         $this->position->moveDown($this->id);
     }
 
-    function isIdentifierUnique($identifier) {
+    function isIdentifierUnique($identifier)
+    {
         $db = new DB_Sql;
         $db->query("SELECT count(*) AS antal FROM cms_template_section WHERE identifier = '".$identifier."' AND intranet_id = " . $this->kernel->intranet->get('id') . " AND template_id = " . $this->template->get('id') . " AND active = 1 AND id != " . $this->id);
         if (!$db->nextRecord()) {
@@ -261,5 +265,3 @@ class CMS_TemplateSection extends Standard {
 
     }
 }
-
-?>
