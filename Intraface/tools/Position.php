@@ -27,7 +27,8 @@ require_once 'DB/Sql.php';
  * @author   Sune Jensen <sj@sunet.dk>
  * @author   Lars Olesen <lars@legestue.net>
  */
-class Position {
+class Position
+{
     var $tabel;
     var $ekstrawhere;
     var $postionsfelt;
@@ -47,7 +48,8 @@ class Position {
      *
      * @return void
      */
-    function Position($tabel = '', $ekstrawhere = '', $positionsfelt='position', $idfelt='id') {
+    function __construct($tabel = '', $ekstrawhere = '', $positionsfelt='position', $idfelt='id')
+    {
         $this->tabel = $tabel;
         $this->ekstrawhere = $ekstrawhere;
         $this->positionsfelt = $positionsfelt;
@@ -65,7 +67,8 @@ class Position {
      *
      * @return void
      */
-    function new_where($ekstrawhere) {
+    function new_where($ekstrawhere)
+    {
         $this->ekstrawhere = $ekstrawhere;
     }
 
@@ -104,8 +107,8 @@ class Position {
      *
      * @return boolean
      */
-    function moveUp($id) {
-
+    function moveUp($id)
+    {
         $db = new DB_Sql;
         $db2 = new DB_Sql;
 
@@ -158,13 +161,13 @@ class Position {
      *
      * @return boolean
      */
-    function moveDown($id) {
+    function moveDown($id)
+    {
 
         $db = new DB_Sql;
         $db2 = new DB_Sql;
 
         $this->reposition();
-
 
         if ($this->ekstrawhere != '') {
             $ekstrawhere = " AND ".$this->ekstrawhere;
@@ -211,7 +214,8 @@ class Position {
      *
      * @return boolean
      */
-    function moveTo($id, $position) {
+    function moveTo($id, $position)
+    {
         // først lægger vi en til alle posterne fra det nummer denne post vil have
         $this->reposition($position, $position+1);
         $db = new DB_Sql;
@@ -239,7 +243,8 @@ class Position {
      *
      * @return boolean
      */
-    function moveToMax($id) {
+    function moveToMax($id)
+    {
         $db = new DB_Sql;
 
         if ($this->ekstrawhere != '') {
@@ -267,7 +272,8 @@ class Position {
      *
      * @return void
      */
-    function reposition($start_from_position = 0, $new_position = 1) {
+    function reposition($start_from_position = 0, $new_position = 1)
+    {
 
         $db = new DB_Sql;
         $db2 = new DB_Sql;
@@ -299,7 +305,8 @@ class Position {
      *
      * @return	integer	Returnere tal med den højeste position
      */
-    function maxpos() {
+    function maxpos()
+    {
         $db = new DB_Sql;
 
         if ($this->ekstrawhere != "") {
@@ -317,4 +324,3 @@ class Position {
         return 0;
     }
 }
-?>
