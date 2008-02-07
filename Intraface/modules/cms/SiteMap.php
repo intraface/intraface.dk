@@ -16,12 +16,8 @@ class CMS_SiteMap {
 
     var $cmssite;
 
-    function CMS_SiteMap(& $cmssite) {
-        CMS_SiteMap::__construct();
-    }
-
-    function __construct(& $cmssite) {
-        $this->cmssite = & $cmssite;
+    function __construct($cmssite) {
+        $this->cmssite = $cmssite;
     }
 
     function build() {
