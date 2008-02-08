@@ -9,134 +9,139 @@
 <tr><td rowspan="1" colspan="3">testDeleteProductsFromList</td></tr>
 </thead><tbody>
 <tr>
-    <td>open</td>
-    <td>/install/reset-staging-server.php?modules=product&login=true</td>
-    <td></td>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=product&login=true</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=login</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=product</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=product</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=create product</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=create product</td>
+	<td></td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>name</td>
-    <td>Test - til sletning #1</td>
+	<td>type</td>
+	<td>name</td>
+	<td>Test - til sletning #1</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>description</td>
-    <td>Tester</td>
+	<td>type</td>
+	<td>description</td>
+	<td>Tester</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>price</td>
-    <td>100</td>
+	<td>type</td>
+	<td>price</td>
+	<td>100</td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>vat</td>
-    <td>label=yes</td>
+	<td>select</td>
+	<td>vat</td>
+	<td>label=yes</td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>submit</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=close</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=close</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=create product</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=create product</td>
+	<td></td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>name</td>
-    <td>Test - til sletning #2</td>
+	<td>type</td>
+	<td>name</td>
+	<td>Test - til sletning #2</td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>unit</td>
-    <td>label=stk.</td>
+	<td>select</td>
+	<td>unit</td>
+	<td>label=unit(s)</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>weight</td>
-    <td>100</td>
+	<td>type</td>
+	<td>weight</td>
+	<td>100</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>price</td>
-    <td>1000</td>
+	<td>type</td>
+	<td>price</td>
+	<td>1000</td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>vat</td>
-    <td>label=yes</td>
+	<td>select</td>
+	<td>vat</td>
+	<td>label=yes</td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>submit</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=close</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=close</td>
+	<td></td>
 </tr>
 <tr>
-    <td>verifyTextPresent</td>
-    <td>Test - til sletning #1</td>
-    <td></td>
+	<td>verifyTextPresent</td>
+	<td>Test - til sletning #1</td>
+	<td></td>
 </tr>
 <tr>
-    <td>verifyTextPresent</td>
-    <td>Test - til sletning #2</td>
-    <td></td>
+	<td>verifyTextPresent</td>
+	<td>Test - til sletning #2</td>
+	<td></td>
 </tr>
 <tr>
-    <td>click</td>
-    <td>selected[]</td>
-    <td></td>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
 </tr>
 <tr>
-    <td>click</td>
-    <td>document.forms[1].elements['selected[]'][1]</td>
-    <td></td>
+	<td>click</td>
+	<td>selected[]</td>
+	<td></td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>action</td>
-    <td>label=delete selected</td>
+	<td>click</td>
+	<td>document.forms[1].elements['selected[]'][1]</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>//input[@value='go']</td>
-    <td></td>
+	<td>select</td>
+	<td>action</td>
+	<td>label=delete selected</td>
 </tr>
 <tr>
-    <td>verifyTextNotPresent</td>
-    <td>Test - til sletning #1</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>//input[@value='go']</td>
+	<td></td>
 </tr>
 <tr>
-    <td>verifyTextNotPresent</td>
-    <td>Test - til sletning #2</td>
-    <td></td>
+	<td>verifyTextNotPresent</td>
+	<td>Test - til sletning #1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Test - til sletning #2</td>
+	<td></td>
 </tr>
 
 </tbody></table>

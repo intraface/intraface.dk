@@ -9,159 +9,159 @@
 <tr><td rowspan="1" colspan="3">testAddRelatedProduct</td></tr>
 </thead><tbody>
 <tr>
-    <td>open</td>
-    <td>/install/reset-staging-server.php?modules=product&login=true</td>
-    <td></td>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=product&login=true</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=login</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=product</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=product</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=create product</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=create product</td>
+	<td></td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>name</td>
-    <td>Relateret produkt</td>
+	<td>type</td>
+	<td>name</td>
+	<td>Relateret produkt</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>description</td>
-    <td>Dette produkt skal relateres til et andet produkt.</td>
+	<td>type</td>
+	<td>description</td>
+	<td>Dette produkt skal relateres til et andet produkt.</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>weight</td>
-    <td>100</td>
+	<td>type</td>
+	<td>weight</td>
+	<td>100</td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>unit</td>
-    <td>label=stk.</td>
+	<td>select</td>
+	<td>unit</td>
+	<td>label=unit(s)</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>price</td>
-    <td>1000</td>
+	<td>type</td>
+	<td>price</td>
+	<td>1000</td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>vat</td>
-    <td>label=yes</td>
+	<td>select</td>
+	<td>vat</td>
+	<td>label=yes</td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>submit</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=close</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=close</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=create product</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=create product</td>
+	<td></td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>name</td>
-    <td>Et produkt vil relateres til dette</td>
+	<td>type</td>
+	<td>name</td>
+	<td>Et produkt vil relateres til dette</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>description</td>
-    <td>Dette produkt få et produkt der relateres</td>
+	<td>type</td>
+	<td>description</td>
+	<td>Dette produkt få et produkt der relateres</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>weight</td>
-    <td>100</td>
+	<td>type</td>
+	<td>weight</td>
+	<td>100</td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>unit</td>
-    <td>label=stk.</td>
+	<td>select</td>
+	<td>unit</td>
+	<td>label=unit(s)</td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>vat</td>
-    <td>label=yes</td>
+	<td>select</td>
+	<td>vat</td>
+	<td>label=yes</td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>submit</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=add products</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=add products</td>
+	<td></td>
 </tr>
 <tr>
-    <td>click</td>
-    <td>1</td>
-    <td></td>
+	<td>click</td>
+	<td>1</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>close</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>close</td>
+	<td></td>
 </tr>
 <tr>
-    <td>verifyTextPresent</td>
-    <td>Relateret produkt</td>
-    <td></td>
+	<td>verifyTextPresent</td>
+	<td>Relateret produkt</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=delete</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=delete</td>
+	<td></td>
 </tr>
 <tr>
-    <td>assertConfirmation</td>
-    <td>Er du sikker?</td>
-    <td></td>
+	<td>assertConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
 </tr>
 <tr>
-    <td>verifyTextNotPresent</td>
-    <td>Relateret produkt</td>
-    <td></td>
+	<td>verifyTextNotPresent</td>
+	<td>Relateret produkt</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=delete</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=delete</td>
+	<td></td>
 </tr>
 <tr>
-    <td>assertConfirmation</td>
-    <td>Er du sikker?</td>
-    <td></td>
+	<td>assertConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
 </tr>
 <tr>
-    <td>click</td>
-    <td>selected[]</td>
-    <td></td>
+	<td>click</td>
+	<td>selected[]</td>
+	<td></td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>action</td>
-    <td>label=delete chosen</td>
+	<td>select</td>
+	<td>action</td>
+	<td>label=delete chosen</td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>//input[@value='Go']</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>//input[@value='Go']</td>
+	<td></td>
 </tr>
 
 </tbody></table>
