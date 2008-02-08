@@ -10,8 +10,8 @@ require_once 'XML/RPC2/Server.php';
 
 class Intraface_XMLRPC_Debtor_Server {
 
-    var $kernel;
-    var $debtor;
+    private $kernel;
+    private $debtor;
 
     /**
      * Checks if user has credentials to ask server
@@ -19,7 +19,6 @@ class Intraface_XMLRPC_Debtor_Server {
      * @param struct $credentials
      * @return true ved succes ellers object med fejlen
      */
-
     function checkCredentials($credentials) {
 
         if (count($credentials) != 2) {
@@ -38,15 +37,14 @@ class Intraface_XMLRPC_Debtor_Server {
         }
 
         $debtor_module = $this->kernel->module('debtor');
-
-
     }
 
     /**
      * @param struct $credentials
      * @param integer $debtor_id
      */
-    function getDebtor($credentials, $debtor_id) {
+    function getDebtor($credentials, $debtor_id)
+    {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
@@ -69,7 +67,8 @@ class Intraface_XMLRPC_Debtor_Server {
      * @param string $type
      * @param integer $contact_id
      */
-    function getDebtorList($credentials, $type, $contact_id) {
+    function getDebtorList($credentials, $type, $contact_id)
+    {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
@@ -87,36 +86,35 @@ class Intraface_XMLRPC_Debtor_Server {
      * @param struct $credentials
      * @param integer $debtor_id
      */
-    function getDebtorPdf($credentials, $debtor_id) {
+    function getDebtorPdf($credentials, $debtor_id)
+    {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
-        
+
         $debtor = Debtor::factory($this->kernel, $debtor_id);
         if (!$debtor->get('id') > 0) {
             return '';
         }
-        
-        if(($debtor->get("type") == "order" || $debtor->get("type") == "invoice") && $this->kernel->intranet->hasModuleAccess('onlinepayment')) {
+
+        if (($debtor->get("type") == "order" || $debtor->get("type") == "invoice") && $this->kernel->intranet->hasModuleAccess('onlinepayment')) {
             $this->kernel->useModule('onlinepayment');
             $onlinepayment = OnlinePayment::factory($this->kernel);
-        }
-        else {
+        } else {
             $onlinepayment = NULL;
         }
-        
-        if($this->kernel->intranet->get("pdf_header_file_id") != 0) {
+
+        if ($this->kernel->intranet->get("pdf_header_file_id") != 0) {
             $this->kernel->useShared('filehandler');
             $filehandler = new FileHandler($this->kernel, $this->kernel->intranet->get("pdf_header_file_id"));
-        }
-        else {
+        } else {
             $filehandler = NULL;
         }
-        
+
         require_once 'Intraface/modules/debtor/Visitor/Pdf.php';
         $report = new Debtor_Report_Pdf($this->kernel->getTranslation('debtor'), $filehandler);
         $report->visit($debtor, $onlinepayment);
-        
+
         $encoded = XML_RPC2_Value::createFromNative($report->output('string'), 'base64');
         return $encoded;
 
@@ -143,7 +141,7 @@ class Intraface_XMLRPC_Debtor_Server {
         $order = Debtor::factory($this->kernel, $arg[1]);
 
         $invoice = new Invoice($this->kernel);
-        if($id = $invoice->create($order)) {
+        if ($id = $invoice->create($order)) {
             return $id;
         }
         return 0;
@@ -161,4 +159,3 @@ class Intraface_XMLRPC_Debtor_Server {
     }
     */
 }
-?>

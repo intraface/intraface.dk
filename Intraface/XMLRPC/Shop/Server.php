@@ -57,7 +57,7 @@ class Intraface_XMLRPC_Shop_Server
         $product = new Product($this->webshop->kernel);
         $product->createDBQuery();
 
-        if(!isset($mixed['use_paging']) || $mixed['use_paging'] == 'true') {
+        if (!isset($mixed['use_paging']) || $mixed['use_paging'] == 'true') {
             $product->dbquery->usePaging('paging');
         }
 
@@ -323,10 +323,10 @@ class Intraface_XMLRPC_Shop_Server
         $this->_factoryWebshop();
 
         // we put the possibility for BasketEvaluation not to be run.
-        if(is_string($customer) && $customer == 'no_evaluation') {
+        if (is_string($customer) && $customer == 'no_evaluation') {
             // nothing happens
         }
-        elseif(is_array($customer)) {
+        elseif (is_array($customer)) {
             require_once 'Intraface/modules/webshop/BasketEvaluation.php';
             $basketevaluation = new BasketEvaluation($this->webshop->kernel);
             if (!$basketevaluation->run($this->webshop->basket, $customer)) {
@@ -399,7 +399,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->kernel->useModule('onlinepayment', true); // true: ignores user access;
 
-        if(isset($values['payment_id']) && intval($values['payment_id']) > 0) {
+        if (isset($values['payment_id']) && intval($values['payment_id']) > 0) {
            $onlinepayment = OnlinePayment::factory($this->kernel, 'id', intval($values['payment_id']));
         } else {
             $onlinepayment = OnlinePayment::factory($this->kernel);
@@ -674,9 +674,9 @@ class Intraface_XMLRPC_Shop_Server
 
     private function utf8Decode($values)
     {
-        if(is_array($values)) {
+        if (is_array($values)) {
             return array_map('utf8_decode', $values);
-        } elseif(is_string($values)) {
+        } elseif (is_string($values)) {
             return utf8_decode($values);
         } else {
             return $values;
