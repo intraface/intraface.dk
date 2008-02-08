@@ -23,7 +23,7 @@ class Intraface_Webshop_FeaturedProducts
     function __construct($intranet, $db)
     {
         $this->intranet = $intranet;
-        $this->db = $db;
+        $this->db       = $db;
     }
 
     /**

@@ -169,9 +169,7 @@ class Basket
                         " . $this->sql_extra);
             return true;
         }
-
     }
-
 
     /**
      * Save order details
@@ -233,7 +231,6 @@ class Basket
         return $this->saveToDb($sql);
     }
 
-
     /**
      * Save customer comment
      *
@@ -250,6 +247,9 @@ class Basket
     }
 
     /**
+     * @todo Is this really public
+     * @todo Strange name
+     *
      * @param string $sql Extra sql string to add
      */
     public function saveToDb($sql) {
@@ -279,6 +279,8 @@ class Basket
     /**
      * Return buyer details
      *
+     * @todo Should return an object
+     *
      * @return array of buyer details.
      */
     public function getAddress()
@@ -306,6 +308,8 @@ class Basket
     /**
      * Return customer coupon
      *
+     * @todo Why return an array
+     *
      * @return array with customer coupon
      */
     public function getCustomerCoupon()
@@ -325,6 +329,8 @@ class Basket
     /**
      * Return customer EAN location number
      *
+     * @todo Why return an array
+     *
      * @return array with customer ean
      */
     public function getCustomerEan()
@@ -343,6 +349,8 @@ class Basket
 
     /**
      * Return customer coupon
+     *
+     * @todo Why return an array
      *
      * @return array with customer coupon
      */
@@ -402,16 +410,12 @@ class Basket
             $product = new Product($this->webshop->kernel, $db->f("product_id"));
             if($type == 'exclusive_vat') {
                 $price += $product->get('price') * $db->f("quantity");
-            }
-            else {
+            } else {
                 $price += $product->get('price_incl_vat') * $db->f("quantity");
             }
-
-
         }
 
         return $price;
-
     }
 
     /**
@@ -447,7 +451,6 @@ class Basket
         return $weight;
 
     }
-
 
     /**
      * Gets all items in the basket
@@ -536,4 +539,3 @@ class Basket
         return true;
     }
 }
-?>

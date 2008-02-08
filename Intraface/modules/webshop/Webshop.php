@@ -106,7 +106,6 @@ class Webshop
      */
     private function createOrder($input)
     {
-
         if (isset($input['contact_id']) && (int)$input['contact_id'] > 0) {
             $this->contact = new Contact($this->kernel, (int)$input['contact_id']);
 
@@ -360,6 +359,8 @@ class Webshop
     /**
      * Returns receipt text
      *
+     * @todo why return an array
+     *
      * @return array with receipt
      */
     public function getReceiptText()
@@ -384,4 +385,3 @@ class Webshop
         return $debtor->setSent();
     }
 }
-?>

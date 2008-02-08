@@ -29,7 +29,6 @@ require_once 'Intraface/Validator.php';
 
 class BasketEvaluation extends Standard
 {
-
      public $kernel;
      public $error;
      private $db;
@@ -98,7 +97,6 @@ class BasketEvaluation extends Standard
      */
     private function load()
     {
-
         $result = $this->db->query("SELECT * FROM webshop_basket_evaluation WHERE active = 1 AND intranet_id = ".$this->db->quote($this->kernel->intranet->get('id'), 'integer')." AND id = ".$this->db->quote($this->id, 'integer'));
 
         if (PEAR::isError($result)) {
@@ -111,7 +109,6 @@ class BasketEvaluation extends Standard
         }
 
         $this->value = array_merge($this->value, $result->fetchRow(MDB2_FETCHMODE_ASSOC));
-
 
         $this->value['evaluate_target'] = $this->value['settings']['evaluate_target'][$this->value['evaluate_target_key']];
         $this->value['evaluate_method'] = $this->value['settings']['evaluate_method'][$this->value['evaluate_method_key']];
@@ -131,8 +128,6 @@ class BasketEvaluation extends Standard
      */
     public function save($input)
     {
-
-        // $input = safeToDb($input);
         $validator = new Validator($this->error);
 
         $validator->isNumeric($input['running_index'], 'Index is not a valid number');
@@ -147,13 +142,12 @@ class BasketEvaluation extends Standard
         settype($input['action_quantity'], 'integer');
         $validator->isNumeric($input['action_quantity'], 'Action quantity is not a valid number', 'zero_or_greater');
         $validator->isNumeric($input['action_unit_key'], 'Action unit is not valid');
-        
+
         settype($input['evaluate_value_case_sensitive'], 'integer');
 
         if ($this->error->isError()) {
             return false;
         }
-
 
         $sql = "running_index = ".$this->db->quote($input['running_index'], 'integer').", " .
                  "evaluate_target_key = ".$this->db->quote($input['evaluate_target_key'], 'integer').", " .
@@ -166,7 +160,6 @@ class BasketEvaluation extends Standard
                  "action_quantity = ".$this->db->quote($input['action_quantity'], 'integer').", " .
                  "action_unit_key = ".$this->db->quote($input['action_unit_key'], 'integer');
 
-        //
         if ($this->id != 0) {
             $result = $this->db->exec("UPDATE webshop_basket_evaluation SET ".$sql." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
 
@@ -246,7 +239,6 @@ class BasketEvaluation extends Standard
      */
     public function run($basket, $customer = array())
     {
-
         $evaluations = $this->getList();
         $go_to_index = 0;
 
@@ -300,10 +292,8 @@ class BasketEvaluation extends Standard
                 default:
                     trigger_error("Invalid evaluation_target in BasketEvaluation->run", E_USER_ERROR);
                     return false;
-
             }
-            
-            
+
             switch($evaluation['evaluate_method']) {
                 case 'equals':
                     if ($evaluate == $evaluation['evaluate_value']) {
@@ -366,4 +356,3 @@ class BasketEvaluation extends Standard
         return true;
     }
 }
-?>
