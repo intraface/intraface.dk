@@ -1,7 +1,5 @@
 <?xml version="1.0" ?>
 <project name="intraface" default="build" basedir=".">
-    <property file="./build.properties" />
-
     <property name="source.dir" value="./" />
     <property name="tests.dir" value="./tests/unit/" />
     <property name="build.dir" value="../build" />
@@ -46,6 +44,10 @@
     <target name="pear-create">
         <phingcall target="pear" />
         <exec dir="${build.dir}" command="pear package package.xml" />
+    </target>
+
+    <target name="deploy">
+        <property file="./build.properties" />
     </target>
 
 </project>
