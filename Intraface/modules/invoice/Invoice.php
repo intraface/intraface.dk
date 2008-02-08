@@ -20,7 +20,7 @@ class Invoice extends Debtor
 
     function setStatus($status)
     {
-        if($status == 'cancelled') {
+        if ($status == 'cancelled') {
             trigger_error('En faktura kan ikke annulleres!', E_USER_ERROR);
         }
 
@@ -44,13 +44,13 @@ class Invoice extends Debtor
      */
     function updateStatus()
     {
-        if(round($this->get("arrears")) == 0) {
+        if (round($this->get("arrears")) == 0) {
             $go_status = "executed";
         } else {
             $go_status = "sent";
         }
 
-        if($go_status != $this->get("status") && ($this->get("status") == "sent" || $this->get("status") == "executed")) {
+        if ($go_status != $this->get("status") && ($this->get("status") == "sent" || $this->get("status") == "executed")) {
             $this->setStatus($go_status);
         }
         return true;
@@ -95,7 +95,7 @@ class Invoice extends Debtor
 
     function delete()
     {
-        if($this->get("status") == "created") {
+        if ($this->get("status") == "created") {
             return Debtor::delete();
         } else {
             $this->error->set('Fakturaen må ikke være sendt eller annulleret');
@@ -112,12 +112,12 @@ class Invoice extends Debtor
      */
     function readyForState($year, $check_products = 'check_products')
     {
-        if(!is_object($year)) {
+        if (!is_object($year)) {
             trigger_error('First parameter to readyForState needs to be a Year object!', E_USER_ERROR);
             return false;
         }
 
-        if(!in_array($check_products, array('check_products', 'skip_check_products'))) {
+        if (!in_array($check_products, array('check_products', 'skip_check_products'))) {
             trigger_error('Second paramenter in Invice->readyForState should be either "check_products" or "skip_check_products"', E_USER_ERROR);
             return false;
         }
@@ -133,23 +133,23 @@ class Invoice extends Debtor
             return false;
         }
 
-        if($this->isStated()) {
+        if ($this->isStated()) {
             $this->error->set('Fakturaen er allerede bogført');
             return false;
         }
 
-        if($this->get('status') != 'sent' && $this->get('status') != 'executed') {
+        if ($this->get('status') != 'sent' && $this->get('status') != 'executed') {
             $this->error->set('Fakturaen skal være sendt eller afsluttet for at den kan bogføres');
             return false;
         }
 
         $debtor_account = new Account($year, $year->getSetting('debtor_account_id'));
-        if($debtor_account->get('id') == 0 || $debtor_account->get('type') != 'balance, asset') {
+        if ($debtor_account->get('id') == 0 || $debtor_account->get('type') != 'balance, asset') {
             $this->error->set('Ugyldig debitor konto sat i regnskabsindstillingerne.');
             return false;
         }
 
-        if($check_products == 'check_products') {
+        if ($check_products == 'check_products') {
             $this->loadItem();
             $items = $this->item->getList();
             for ($i = 0, $max = count($items); $i < $max; $i++) {
@@ -159,7 +159,7 @@ class Invoice extends Debtor
                 } else {
                     require_once 'Intraface/modules/accounting/Account.php';
                     $account = Account::factory($year, $product->get('state_account_id'));
-                    if($account->get('id') == 0 || $account->get('type') != 'operating') {
+                    if ($account->get('id') == 0 || $account->get('type') != 'operating') {
                         $this->error->set('Ugyldig konto for bogføring af produktet ' . $product->get('name'));
                     }
                 }
@@ -182,18 +182,18 @@ class Invoice extends Debtor
      */
     function state($year, $voucher_number, $voucher_date, $translation)
     {
-        if(!is_object($year)) {
+        if (!is_object($year)) {
             trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
             return false;
         }
 
-        if(!is_object($translation)) {
+        if (!is_object($translation)) {
             trigger_error('4th parameter to state needs to be a translation object!', E_USER_ERROR);
             return false;
         }
 
         $validator = new Validator($this->error);
-        if($validator->isDate($voucher_date, "Ugyldig dato")) {
+        if ($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);
             $this_date->convert2db();
         }
@@ -292,7 +292,7 @@ class Invoice extends Debtor
             $this->error->set('Filen blev ikke overflyttet');
         }
 
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             $this->error->set('Der er opstået en fejl under bogføringen af fakturaen. Det kan betyde at dele af den er bogført, men ikke det hele. Du bedes manuelt tjekke bilaget');
             // I am not quite sure if the invoice should be set as stated, but it can give trouble to state it again, if some of it was stated...
             $this->setStated($voucher->get('id'), $this_date->get());
@@ -310,7 +310,7 @@ class Invoice extends Debtor
      * @param  object  Visitor
      * @return void
      */
-    function accept(Visitor $visitor)
+    function accept($visitor)
     {
         $visitor->visit($this);
     }
