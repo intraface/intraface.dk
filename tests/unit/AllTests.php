@@ -4,7 +4,6 @@ require_once 'PHPUnit/TextUI/TestRunner.php';
 
 PHPUnit_Util_Filter::addDirectoryToWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/'), '.php');
 PHPUnit_Util_Filter::removeDirectoryFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/certificates/'), '.php');
-PHPUnit_Util_Filter::removeDirectoryFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/3Party/'), '.php');
 PHPUnit_Util_Filter::removeDirectoryFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/config/'), '.php');
 PHPUnit_Util_Filter::removeDirectoryFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/ihtml/'), '.php');
 PHPUnit_Util_Filter::removeFileFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/modules/accounting/include_frontpage.php'));
@@ -24,12 +23,13 @@ class AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Intraface');
 
+        //'FileHandler',
+        //'FileManager',
+
         $tests = array('Product',
                        'Email',
                        'Webshop',
                        'IntranetMaintenance',
-                       //'FileHandler',
-                       //'FileManager',
                        'Contact',
                        'Common',
                        'Accounting',
