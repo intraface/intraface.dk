@@ -29,10 +29,10 @@ require_once 'DB/Sql.php';
  */
 class Position
 {
-    var $tabel;
-    var $ekstrawhere;
-    var $postionsfelt;
-    var $idfelt;
+    private $tabel;
+    private $ekstrawhere;
+    private $postionsfelt;
+    private $idfelt;
 
     /**
      * Constructor
