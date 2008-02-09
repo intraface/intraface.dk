@@ -8,8 +8,9 @@
  * @author Sune
  * @version 001
  */
-class Amount {
-    var $amount;
+class Amount
+{
+    private $amount;
 
     /**
      * indskriv det beløb det drejer sig om
@@ -116,6 +117,3 @@ class NewAmount
         return $this->amount;
     }
 }
-
-
-?>
