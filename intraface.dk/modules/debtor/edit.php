@@ -21,36 +21,31 @@ if(!empty($_POST)) {
 	if($debtor->update($_POST)) {
 		header("Location: view.php?id=".$debtor->get("id"));
 		exit;
-	}
-	else {
+	} else {
 		$value = $_POST;
 
 		$action = 'edit';
 		$value["dk_due_date"] = $value["due_date"];
 		$value["dk_this_date"] = $value["this_date"];
 	}
-}
-elseif(!empty($_GET["id"])) {
+} elseif(!empty($_GET["id"])) {
 	$debtor = Debtor::factory($kernel, intval($_GET["id"]));
 
 	$action = 'edit';
 	$contact = new Contact($kernel, $debtor->get('contact_id'));
 	$value = $debtor->get();
 
-}
-else {
+} else {
 	$debtor = Debtor::factory($kernel, 0, $_GET["type"]);
 
 	$action = 'create';
 	if(isset($_GET['contact_id'])) {
 		$contact = new Contact($kernel, intval($_GET['contact_id']));
-	}
-	elseif(isset($_GET['return_redirect_id'])) {
+	} elseif(isset($_GET['return_redirect_id'])) {
 		$redirect = Redirect::factory($kernel, 'return');
 		$contact_id = $redirect->getParameter('contact_id');
 		$contact = new Contact($kernel, intval($contact_id));
-	}
-	else {
+	} else {
 		trigger_error("A contact id i needed to create a new debtor", E_USER_ERROR);
 	}
 
