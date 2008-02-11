@@ -43,7 +43,6 @@ class PositionTest extends PHPUnit_Framework_TestCase
     {
         $position = $this->createPosition();
         $this->assertTrue(is_object($position));
-        $this->assertEquals($this->table, $position->tabel);
     }
 
     function testMoveUp()
