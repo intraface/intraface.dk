@@ -11,7 +11,6 @@ class CMS_Pagelist extends CMS_Element
     {
         $this->value['type'] = 'pagelist';
         parent::__construct($section, $id);
-        //$this->section->kernel->useShared('filehandler');
     }
 
     function validate_element($var)
@@ -22,7 +21,9 @@ class CMS_Pagelist extends CMS_Element
         $validator->isString($var['read_more_text'], 'error in read more text', '', 'allow_empty');
         $validator->isString($var['show_type'], 'error in Show type', '', 'allow_empty');
         //$validator->isString($var['show_keyword'], 'error in show keyword', '', 'allow_empty');
-        $validator->isString($var['show'], 'error in show', '', 'allow_empty');
+        if (isset($var['show'])) {
+            $validator->isString($var['show'], 'error in show', '', 'allow_empty');
+        }
         //$validator->isString($var['lifetime'], 'error in lifetime', '', 'allow_empty');
 
         if ($this->error->isError()) {
@@ -65,4 +66,3 @@ class CMS_Pagelist extends CMS_Element
         $this->value['pages'] = $this->section->cmspage->getList();
     }
 }
-?>
