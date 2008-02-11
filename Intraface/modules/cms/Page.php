@@ -55,8 +55,8 @@
  */
 require_once 'Intraface/Standard.php';
 
-class CMS_Page extends Standard {
-
+class CMS_Page extends Standard
+{
     public $id;
     public $kernel;
     public $position;
@@ -80,7 +80,8 @@ class CMS_Page extends Standard {
         1 => 'published'
     );
 
-    public function __construct($cmssite, $id = 0) {
+    public function __construct($cmssite, $id = 0)
+    {
         if (!is_object($cmssite)) {
              trigger_error('CMS_Page::__construct needs CMS_Site', E_USER_ERROR);
         }
@@ -110,7 +111,8 @@ class CMS_Page extends Standard {
 
     }
 
-    function factory(& $kernel, $type, $value) {
+    function factory(& $kernel, $type, $value)
+    {
         switch ($type) {
             case 'id':
                 $db = new DB_Sql;
@@ -130,8 +132,7 @@ class CMS_Page extends Standard {
 
                 if (!empty($value['identifier'])) {
                     $db->query("SELECT site_id, id FROM cms_page WHERE identifier = '" . $value['identifier'] . "' AND intranet_id = " . $kernel->intranet->get('id') . " AND active = 1 AND site_id = " . $value['site_id']);
-                }
-                else {
+                } else {
                     // choose the default page - vi skal lige have noget med publish og expire date her ogs�
                     $db->query("SELECT site_id, id FROM cms_page WHERE intranet_id = " . $kernel->intranet->get('id') . " AND active = 1 AND status_key = 1 AND site_id = " . $value['site_id'] . " ORDER BY position ASC LIMIT 1");
                 }
@@ -155,8 +156,8 @@ class CMS_Page extends Standard {
      * Valideringsfunktion
      */
 
-    function validate($var) {
-
+    function validate($var)
+    {
         $validator = new Validator($this->error);
         if (!empty($var['navigation_name'])) $validator->isString($var['navigation_name'], 'error in navigation_name - has to be a string', '', 'allow_empty');
         $validator->isNumeric($var['allow_comments'], 'error in comments - allowed values are 0 and 1');
@@ -186,7 +187,8 @@ class CMS_Page extends Standard {
      * Hvis date_expire ikke er sat, hvad skal den s� g�re?
      */
 
-    function save($var) {
+    function save($var)
+    {
         $var = safeToDb($var);
         if (empty($var['allow_comments'])) {
             $var['allow_comments'] = 0;
@@ -207,8 +209,7 @@ class CMS_Page extends Standard {
 
         if (empty($var['date_publish'])) {
             $sql_publish = 'NOW()';
-        }
-        else {
+        } else {
             $sql_publish = "'".$var['date_publish']."'";
         }
 
@@ -225,8 +226,7 @@ class CMS_Page extends Standard {
         if ($this->id == 0) {
             $sql_type = "INSERT INTO ";
             $sql_end = ", date_created = NOW()";
-        }
-        else {
+        } else {
             $sql_type = "UPDATE ";
             $sql_end = ", date_updated = NOW() WHERE id = " . $this->id;
         }
@@ -301,8 +301,8 @@ class CMS_Page extends Standard {
      * skal den kun kunne loade nogle sider.
      * @return (string) Indholdet til en side
      */
-    function load() {
-
+    function load()
+    {
         if ($this->id <= 0) {
             return 0;
         }
@@ -354,10 +354,7 @@ class CMS_Page extends Standard {
         $this->value['pic_id'] = $db->f('pic_id');
         $this->value['allow_comments'] = $db->f('allow_comments');
         $this->value['hidden'] = $db->f('hidden');
-
-
         $this->value['cc_license'] = $this->cc_license[$this->cmssite->get('cc_license')];
-
         $this->value['site']['url'] = $this->cmssite->get('url');
 
         $this->template->id = $db->f('template_id');
@@ -365,7 +362,6 @@ class CMS_Page extends Standard {
 
         $this->value['template_id'] = $db->f('template_id');
         $this->value['template_identifier'] = $this->template->get('identifier');
-
 
         if($this->get('type') == 'page') {
             $i = 0;
@@ -389,8 +385,7 @@ class CMS_Page extends Standard {
                     $page_tree[$i]['id'] = $db->f('id');
                     $child_of_id = $db->f('child_of_id');
 
-                }
-                else {
+                } else {
                     $child_of_id = 0;
                 }
 
@@ -417,10 +412,12 @@ class CMS_Page extends Standard {
         return 1;
     }
 
-    function getSections() {
-        // tjekker om de rigtige sektioner er oprettet p� siden
-        // m�ske lidt voldsomt at den tjekker det hver gang
-
+    /**
+     * Checks whether the correct sections has been created on the page.
+     * Maybe a bit ot much that it is checked each time
+     */
+    function getSections()
+    {
         $template_sections = $this->template->getSections();
 
         foreach ($template_sections AS $template_section) {
@@ -454,8 +451,9 @@ class CMS_Page extends Standard {
 
     }
 
-    // dette navn giver ikke nogen mening
-    function collect() {
+    // @todo dette navn giver ikke nogen mening
+    function collect()
+    {
         $sections = $this->getSections();
         $page_sections = array();
         $i = 0;
@@ -466,7 +464,6 @@ class CMS_Page extends Standard {
             }
         }
         return $page_sections;
-
     }
 
     /**
@@ -488,8 +485,8 @@ class CMS_Page extends Standard {
         return $display;
     }
     */
-
-    function getComments() {
+    function getComments()
+    {
         if (!$this->kernel->intranet->hasModuleAccess('contact')) {
             return '';
         }
@@ -503,23 +500,25 @@ class CMS_Page extends Standard {
     }
 
 
-    function getList() { // $type = 'page', $level = 'toplevel'
-
+    function getList()
+    {
         $pages = array();
 
         if($this->dbquery->checkFilter('type') && $this->dbquery->getFilter('page') == 'all') {
-            // der st�ttes ikke noget condition
+            // no condition isset
             // $sql_type = "";
-        }
-        else {
-            // int s�rger for at det ikke kan blive en falsk s�gning
+        } else {
+            // with int it will never be a fake searcy
             $type = $this->dbquery->getFilter('type');
-            if($type == '') $type = 'page'; // Standard
+            if($type == '') {
+                $type = 'page'; // Standard
+            }
 
             if($type != 'all') {
-
                 $type_key = array_search($type, $this->type);
-                if($type_key === false) trigger_error("Invalid type '".$type."' set with CMS_PAGE::dbquery::setFilter('type') in CMS_Page::getList", E_USER_ERROR);
+                if($type_key === false) {
+                    trigger_error("Invalid type '".$type."' set with CMS_PAGE::dbquery::setFilter('type') in CMS_Page::getList", E_USER_ERROR);
+                }
 
                 $this->dbquery->setCondition("type_key = ".$type_key);
             }
@@ -568,28 +567,24 @@ class CMS_Page extends Standard {
             // If we are looking for pages, and there is keywords, we probaly want from more than one level
             // So we add nothing about level to condition.
 
-        }
-        elseif($this->dbquery->checkFilter('level') && $type == 'page') { // $level == 'sublevel' &&
+        } elseif($this->dbquery->checkFilter('level') && $type == 'page') { // $level == 'sublevel' &&
 
             // Til at finde hele menuen p� valgt level.
             $page_tree = $this->get('page_tree');
             $level = (int)$this->dbquery->getFilter('level');
             if(isset($page_tree[$level - 1]) && is_array($page_tree[$level - 1])) {
                 $child_of_id = $page_tree[$level - 1]['id'];
-            }
-            else {
+            } else {
                 $child_of_id = 0;
             }
 
             $this->dbquery->setCondition('child_of_id = '.$child_of_id);
             // $cmspage[0]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE active=1 AND child_of_id = ".$this->id. $sql_expire . $sql_publish . " ORDER BY id");
 
-        }
-        else {
+        } else {
             $this->dbquery->setCondition('child_of_id = 0');
             // $cmspage[0]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE ".$sql_type." site_id = " . $this->cmssite->get('id') . " AND child_of_id = 0 AND active = 1 " . $sql_expire . $sql_publish . $sql_order);
         }
-
 
         // print($this->dbquery->getFilter('type'));
         $cmspage[0] = $this->dbquery->getRecordset("cms_page.id, title, identifier, status_key, navigation_name, date_publish, child_of_id, pic_id, description, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk", '', false); //
@@ -671,134 +666,8 @@ class CMS_Page extends Standard {
 
     }
 
-
-/*
-    Gammel getlist uden DBQuery, skal fjernes n�r ovenst�ende k�rer.
-    function getList($type = 'page', $level = 'toplevel') {
-        $pages = array();
-
-        if (!empty($type) AND $type == 'all') {
-            $sql_type = "";
-        }
-        else {
-            // int s�rger for at det ikke kan blive en falsk s�gning
-            $type_key = (int)array_search($type, $this->type);
-            $sql_type = "type_key = " . $type_key . " AND";
-        }
-
-        // hvis en henter siderne uden for systemet
-        $sql_expire = '';
-        $sql_publish = '';
-        if (!is_object($this->kernel->user)) {
-            $sql_expire = " AND (date_expire > NOW() OR date_expire = '0000-00-00 00:00:00')";
-            $sql_publish = " AND date_publish < NOW() AND status_key > 0 AND hidden = 0";
-        }
-
-
-        switch ($type) {
-            case 'page':
-                $sql_order = " ORDER BY position ASC";
-            break;
-            case 'news':
-                $sql_order = " ORDER BY date_publish DESC";
-            break;
-            case 'article':
-                $sql_order = " ORDER BY position, date_publish DESC";
-            break;
-        }
-
-        // rekursiv funktion til at vise siderne
-        $pages = array();
-        $go = true;
-        $n = 0;
-        $o = 0;
-        $i = 0;
-        $cmspage = array();
-        $cmspage[0] = new DB_Sql;
-
-        // dette giver problemer, n�r vi skal vise en fast undersidemenu
-        if ($level == 'sublevel') {
-            $cmspage[0]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE active=1 AND child_of_id = ".$this->id. $sql_expire . $sql_publish . " ORDER BY id");
-
-        }
-        else {
-            $cmspage[0]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE ".$sql_type." site_id = " . $this->cmssite->get('id') . " AND child_of_id = 0 AND active = 1 " . $sql_expire . $sql_publish . $sql_order);
-
-        }
-
-        while(TRUE) {
-            while($cmspage[$n]->nextRecord()) {
-
-                $pages[$i]['id'] = $cmspage[$n]->f('id');
-
-                $pages[$i]['title'] = str_repeat("- ", $n) . $cmspage[$n]->f('title');
-                $pages[$i]['identifier'] = $cmspage[$n]->f('identifier');
-                $pages[$i]['navigation_name'] = $cmspage[$n]->f('navigation_name');
-                $pages[$i]['date_publish_dk'] = $cmspage[$n]->f('date_publish_dk');
-
-                if (empty($pages[$i]['identifier'])) {
-                    $pages[$i]['identifier'] = $pages[$i]['id'];
-                }
-                if (empty($pages[$i]['navigation_name'])) {
-                    $pages[$i]['navigation_name'] = $pages[$i]['title'];
-                }
-
-                $pages[$i]['status'] = $this->status[$cmspage[$n]->f('status_key')];
-
-                // hvad er det her til
-                $pages[$i]['new_status'] = 'published';
-                if ($pages[$i]['status'] == 'published') {
-                    $pages[$i]['new_status'] = 'draft';
-                }
-                // hertil slut
-
-                // denne b�r laves om til picture - og s� f�r man alle nyttige oplysninger ud
-                $pages[$i]['pic_id'] = $cmspage[$n]->f('pic_id');
-                $pages[$i]['description'] = $cmspage[$n]->f('description');
-
-
-                // til google sitemaps
-                // sp�rgsm�let er om vi ikke skal starte et objekt op for hver pages
-
-                $pages[$i]['url'] = $this->cmssite->get('url') . $pages[$i]['identifier'] . '/';
-                $pages[$i]['changefreq'] = 'weekly';
-                $pages[$i]['priority'] = 0.5;
-
-
-
-                $i++;
-                $o = $n + 1;
-
-
-                if ($type == 'page' AND $level == 'alllevels') {
-
-                    if(!array_key_exists($o, $cmspage) OR !is_object($cmspage[$o])) {
-                        $cmspage[$o] = new DB_Sql;
-                    }
-                    $cmspage[$o]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE active=1 AND child_of_id = ".$cmspage[$n]->f("id"). $sql_expire . $sql_publish . " ORDER BY id");
-
-                    if($cmspage[$o]->numRows() != 0) {
-                        $n = $o;
-                        CONTINUE;
-                    }
-                }
-
-            }
-
-            if($n == 0) {
-                BREAK;
-            }
-
-            $n--;
-
-        }
-
-        return $pages;
-
-    }
-*/
-
-    function setStatus($status) {
+    function setStatus($status)
+    {
         if (empty($status)) {
             $status = 'draft';
         }
@@ -808,23 +677,28 @@ class CMS_Page extends Standard {
         return 1;
     }
 
-    function isLocked() {
+    function isLocked()
+    {
         return 0;
     }
 
-    function getKeywords() {
+    function getKeywords()
+    {
         return ($this->keywords = new Keyword($this));
     }
 
-    function getKeywordAppender() {
+    function getKeywordAppender()
+    {
         return new Intraface_Keyword_Appender($this);
     }
 
-    function moveUp() {
+    function moveUp()
+    {
         $this->position->moveUp($this->id);
     }
 
-    function moveDown() {
+    function moveDown()
+    {
         $this->position->moveDown($this->id);
     }
 
@@ -833,7 +707,8 @@ class CMS_Page extends Standard {
      * Funktionen skal tjekke alle siderne igennem for at se, om der findes undersider -
      * ellers vil de forsvinde fra oversigten.
      */
-    function delete() {
+    function delete()
+    {
         $db = new DB_Sql();
         $db2 = new DB_Sql;
           // egentlig skuille denne m�ske v�re rekursiv?
