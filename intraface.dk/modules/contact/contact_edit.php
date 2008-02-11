@@ -12,7 +12,7 @@ $redirect = Redirect::factory($kernel, 'receive');
 if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
     $contact = new Contact($kernel, $_POST['id']);
 
-    $eniro = new Services_Eniro(ENIRO_PINCODE, ENIRO_INDTYPE);
+    $eniro = new Services_Eniro();
     $value = $_POST;
 
     if ($oplysninger = $eniro->query('telefon', $_POST['eniro_phone'])) {
@@ -24,8 +24,7 @@ if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
         $address['city'] = $oplysninger['postby'];
         $address['phone'] = $_POST['eniro_phone'];
     }
-}
-else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+} elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // for a new contact we want to check if similar contacts alreade exists
     if (empty($_POST['id'])) {
@@ -36,16 +35,13 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $similar_contacts = $contact->getList();
         }
 
-    }
-    // if it is already saved
-    else {
+    } else {
         $contact = new Contact($kernel, $_POST['id']);
     }
 
     // checking if similiar contacts exists
     if (!empty($similar_contacts) AND count($similar_contacts) > 0 AND empty($_POST['force_save'])) {
-    }
-    elseif ($id = $contact->save($_POST)) {
+    } elseif ($id = $contact->save($_POST)) {
 
         // $redirect->addQueryString('contact_id='.$id);
         if($redirect->get('id') != 0) {
@@ -65,16 +61,12 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $delivery_address['city'] = $_POST['delivery_city'];
     $delivery_address['country'] = $_POST['delivery_country'];
 
-}
-
-elseif (isset($_GET['id'])) {
+} elseif (isset($_GET['id'])) {
     $contact = new Contact($kernel, (int)$_GET['id']);
     $value = $contact->get();
     $address = $contact->address->get();
     $delivery_address = $contact->delivery_address->get();
-}
-
-else {
+} else {
     $contact = new Contact($kernel);
     $value['number'] = $contact->getMaxNumber() + 1;
 }
