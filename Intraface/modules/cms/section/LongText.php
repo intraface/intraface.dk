@@ -8,7 +8,6 @@
  * @version @package-version@
  *
  */
-
 require_once 'HTMLPurifier.php';
 require_once 'Intraface/modules/cms/Section.php';
 
@@ -20,21 +19,6 @@ class CMS_Section_LongText extends CMS_Section
     {
         $this->value['type'] = 'longtext';
         parent::__construct($cmspage, $id);
-
-        // dette skal laves noget smartere
-        /*
-        foreach ($this->template_section->get('html_format') AS $format) {
-            if ($format == 'strong') {
-                $this->allowed_tags .= '<strong><b>';
-            }
-            if ($format == 'em') {
-                $this->allowed_tags .= '<em><i>';
-            }
-            if ($format == 'a') {
-                $this->allowed_tags .= '<a>';
-            }
-        }
-        */
     }
 
     function load_section()
@@ -73,7 +57,7 @@ class CMS_Section_LongText extends CMS_Section
         return true;
     }
 
-    function convertArrayToTags($array)
+    public static function convertArrayToTags($array)
     {
         $tags = '';
         foreach ($array AS $tag) {

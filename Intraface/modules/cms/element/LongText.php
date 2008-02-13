@@ -42,7 +42,7 @@ class CMS_LongText extends CMS_Element
         return true;
     }
 
-    function convertArrayToTags($array)
+    public static function convertArrayToTags($array)
     {
         $tags = '';
         foreach ($array AS $tag) {
