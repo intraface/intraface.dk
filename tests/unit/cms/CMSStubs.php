@@ -10,7 +10,7 @@ class FakeCMSKernel extends Kernel {
         $this->intranet = new FakeCMSIntranet;
         $this->user = new FakeCMSUser;
     }
-    
+
     function getSessionId() {
         return 'shouldbeatleast10char';
     }
@@ -79,4 +79,18 @@ class FakeCMSSection {
         return 1;
     }
 }
-?>
+
+class FakeCMSTemplateSection
+{
+    public $cmssite;
+
+    function __construct($site)
+    {
+        $this->site = $site;
+    }
+
+    function get()
+    {
+        return '';
+    }
+}

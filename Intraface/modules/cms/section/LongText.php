@@ -86,8 +86,12 @@ class CMS_Section_LongText extends CMS_Section
         $config->set('Cache', 'SerializerPath', $purifier_cache_dir);
 
         // allowing attributes
+        $this->allowed_tags = array();
 
-        $this->allowed_tags = $this->template_section->get('html_format');
+        if (is_array($this->template_section->get('html_format'))) {
+            $this->allowed_tags = $this->template_section->get('html_format');
+        }
+
         $this->allowed_tags[] = 'p';
 
         $config->set('HTML', 'AllowedElements', $this->allowed_tags);
