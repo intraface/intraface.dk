@@ -80,6 +80,22 @@ class FakeCMSSection {
     }
 }
 
+class FakeCMSTemplate
+{
+    public $kernel;
+
+    function __construct()
+    {
+        $this->kernel = new FakeCMSKernel;
+        $this->cmssite = new FakeCMSSite($this->kernel);
+    }
+
+    function get()
+    {
+        return 1;
+    }
+}
+
 class FakeCMSTemplateSection
 {
     public $cmssite;

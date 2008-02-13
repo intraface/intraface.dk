@@ -7,22 +7,21 @@
  * @author Lars Olesen <lars@legestue.net>
  * @package Intraface_CMS
  */
-require_once('template_section/ShortText.php');
-require_once('template_section/LongText.php');
-require_once('template_section/Picture.php');
-require_once('template_section/Mixed.php');
-
+require_once 'template_section/ShortText.php';
+require_once 'template_section/LongText.php';
+require_once 'template_section/Picture.php';
+require_once 'template_section/Mixed.php';
 
 class CMS_TemplateSection extends Standard
 {
-    var $id;
-    var $kernel;
-    var $template;
-    var $parameter;
-    var $section_types;
-    var $value;
-    var $error;
-    var $position;
+    protected $id;
+    public $kernel;
+    protected $template;
+    protected $parameter;
+    protected $section_types;
+    public $value;
+    public $error;
+    protected $position;
 
     /**
      * Constructor:
@@ -33,7 +32,7 @@ class CMS_TemplateSection extends Standard
      */
     function __construct($template, $id = 0)
     {
-        if (!is_object($template) OR strtolower(get_class($template)) != 'cms_template') {
+        if (!is_object($template)) {
             trigger_error('TemplateSection::__construct skal bruge cmstemplate', E_USER_ERROR);
         }
         $this->error    = new Error;
@@ -160,20 +159,21 @@ class CMS_TemplateSection extends Standard
         }
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
 
-
-        return 1;
+        return true;
     }
 
     function save($var)
     {
         $var['identifier'] = trim($var['identifier']);
-        if (!isset($var['locked'])) $var['locked'] = 0;
+        if (!isset($var['locked'])) {
+            $var['locked'] = 0;
+        }
 
         if (!$this->validate($var)) {
-            return 0;
+            return false;
         }
         $db = new DB_Sql;
 
@@ -262,6 +262,21 @@ class CMS_TemplateSection extends Standard
             return 0;
         }
         return $db->f('antal');
+    }
 
+    /**
+     * Has to be overridden in sub classes
+     */
+    function validate_section()
+    {
+        return true;
+    }
+
+    /**
+     * Has to be overridden in sub classes
+     */
+    function save_section()
+    {
+        return true;
     }
 }
