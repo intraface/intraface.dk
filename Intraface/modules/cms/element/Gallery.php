@@ -6,17 +6,18 @@ require_once 'Intraface/modules/cms/Element.php';
 
 class CMS_Gallery extends CMS_Element {
 
-    var $methods = array('single_image');
+    public $methods = array('single_image');
 
-    function __construct($section, $id = 0) {
+    function __construct($section, $id = 0)
+    {
         $this->value['type'] = 'gallery';
 
         parent::__construct($section, $id);
         $this->section->kernel->useShared('filehandler');
     }
 
-
-    function load_element() {
+    function load_element()
+    {
         $this->value['pictures'] = array();
         $this->value['gallery_select_method'] = $this->parameter->get('gallery_select_method');
         $this->value['thumbnail_size'] = $this->parameter->get('thumbnail_size');
@@ -46,8 +47,7 @@ class CMS_Gallery extends CMS_Element {
             $files = $filemanager->getList();
 
         */
-        }
-        else { // Enkeltfiler
+        } else { // Enkeltfiler
             // print("this->id i gallery: ".$this->id."<br /><br />");
             $shared_filehandler = $this->kernel->useShared('filehandler');
             $shared_filehandler->includeFile('AppendFile.php');
@@ -64,8 +64,7 @@ class CMS_Gallery extends CMS_Element {
             if(isset($file['file_handler_id'])) {
                 $id = $file['file_handler_id'];
                 $append_file_id = $file['id'];
-            }
-            else {
+            } else {
                 $id = $file['id'];
                 $append_file_id = 0;
             }
@@ -85,8 +84,8 @@ class CMS_Gallery extends CMS_Element {
         }
     }
 
-
-    function validate_element($var) {
+    function validate_element($var)
+    {
         $validator = new Validator($this->error);
         $validator->isString($var['gallery_select_method'], 'error in gallery_select_method');
 
@@ -100,7 +99,8 @@ class CMS_Gallery extends CMS_Element {
         return true;
     }
 
-    function save_element($var) {
+    function save_element($var)
+    {
         // Der skal gemmes om man benytter keyword eller enkeltfiler.
         // $this->parameter->save('keyword_id', $var['keyword_id']);
         $this->parameter->save('gallery_select_method', $var['gallery_select_method']);
@@ -110,39 +110,4 @@ class CMS_Gallery extends CMS_Element {
 
         return true;
     }
-    /*
-    function getElementHtml() {
-        $filemanager = new FileHandler($this->kernel);
-        $filemanager->dbquery->setKeyword($this->value['keyword_id']);
-        $files = $filemanager->getList();
-
-        $output  = '<div class="cms-gallery">';
-
-        foreach ($files AS $file) {
-            $fm = new FileHandler($this->kernel, $file->get('id'));
-            if ($fm->value['file_type']['image'] == 0) {
-                continue;
-            }
-
-            $fm->loadInstance('small');
-            $thumb_uri = $fm->instance->get('file_uri');
-            $fm->loadInstance('medium');
-            $file_uri = $fm->instance->get('file_uri');
-
-            $output .= '<div class="cms-gallery-item">';
-            $output .= '	<a href="'.$file_uri .'">';
-            $output .= '		<img src="'.$thumb_uri.'" alt="" />';
-            $output .= '	</a>';
-            $output .= '</div>';
-
-        }
-
-        $output .= '</div>';
-
-        return $output;
-    }
-    */
-
 }
-
-?>
