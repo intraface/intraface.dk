@@ -14,7 +14,7 @@ require_once 'template_section/Mixed.php';
 
 class CMS_TemplateSection extends Standard
 {
-    protected $id;
+    public $id;
     public $kernel;
     protected $template;
     protected $parameter;
