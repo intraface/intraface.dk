@@ -14,15 +14,15 @@ require_once('section/Mixed.php');
 
 class CMS_Section extends Standard {
 
-    var $id;
+    public $id;
     private $db;
-    var $cmspage;
-    var $kernel;
-    var $parameter;
-    var $template_section;
-    var $value;
-    var $error;
-    var $section_types;
+    public $cmspage;
+    public $kernel;
+    protected $parameter;
+    protected $template_section;
+    public $value;
+    public $error;
+    protected $section_types;
 
     /**
      * Constructor:
@@ -31,8 +31,8 @@ class CMS_Section extends Standard {
      * Fordelen er, at man ikke behøver at vide hvilken side elementet hører til,
      * men blot behøver, at have elementid.
      */
-
-    function __construct($cmspage, $id = 0) {
+    function __construct($cmspage, $id = 0)
+    {
         if (!is_object($cmspage)) {
             trigger_error('Section::__construct needs CMS_Page - got ' . get_class($cmspage), E_USER_ERROR);
         }
@@ -64,15 +64,18 @@ class CMS_Section extends Standard {
 
     }
 
-    function createParameter() {
+    function createParameter()
+    {
         return new CMS_Parameter($this);
     }
 
-    function addParameter($key, $value) {
+    function addParameter($key, $value)
+    {
         return $this->parameter->save($key, $value);
     }
 
-    function factory(& $object, $type, $value) {
+    function factory(& $object, $type, $value)
+    {
         $class_prefix = 'CMS_Section_';
         switch ($type) {
             case 'type':
@@ -118,12 +121,11 @@ class CMS_Section extends Standard {
         }
     }
 
-    function load() {
-
+    function load()
+    {
         if ($this->id == 0) {
             return 0;
         }
-
 
         $result = $this->db->query("SELECT
                 cms_section.page_id,
@@ -148,11 +150,13 @@ class CMS_Section extends Standard {
         return $this->id;
     }
 
-    function createTemplateSection($template_section_id) {
+    function createTemplateSection($template_section_id)
+    {
         return CMS_TemplateSection::factory($this->kernel, 'id', $template_section_id);
     }
 
-    function validate($var) {
+    function validate($var)
+    {
         /*
         $validator = new Validator($this->error);
         $validator->isNumeric($var['type_key'], 'type_key');
@@ -164,7 +168,8 @@ class CMS_Section extends Standard {
         return 1;
     }
 
-    function save($var) {
+    function save($var)
+    {
         if (!$this->validate($var)) {
             return 0;
         }
@@ -175,8 +180,7 @@ class CMS_Section extends Standard {
             $sql_end = ", date_created = NOW(),
                 type_key = ".$var['type_key'] . ",
                 template_section_id = ".$var['template_section_id'];
-        }
-        else {
+        } else {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;
         }
@@ -207,7 +211,14 @@ class CMS_Section extends Standard {
 
         return $this->id;
     }
+
+    function validate_section()
+    {
+        return true;
+    }
+
+    function save_section()
+    {
+        return true;
+    }
 }
-
-
-?>
