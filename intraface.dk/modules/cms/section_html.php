@@ -8,45 +8,29 @@ $translation = $kernel->getTranslation('cms');
 if (!empty($_GET['moveto']) AND is_numeric($_GET['moveto'])) {
     $element = CMS_Element::factory($kernel, 'id', $_GET['element_id']);
     $element->moveTo($_GET['moveto']);
-    $section = & $element->section;
+    $section = $element->section;
     header('Location: section_html.php?id='.$section->get('id'));
     exit;
 
-}
-/*
-elseif (!empty($_GET['movedown']) AND is_numeric($_GET['movedown'])) {
-    $element = CMS_Element::factory($kernel, 'id', $_GET['movedown']);
-    $element->moveDown();
-    $section = & $element->section;
-}
-elseif (!empty($_GET['moveup']) AND is_numeric($_GET['moveup'])) {
-    $element = CMS_Element::factory($kernel, 'id', $_GET['moveup']);
-    $element->moveUp();
-    $section = & $element->section;
-}
-*/
-elseif (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
+} elseif (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
     $element = CMS_Element::factory($kernel, 'id', $_GET['delete']);
     $element->delete();
-    $section = & $element->section;
+    $section = $element->section;
     header('Location: section_html.php?id='.$section->get('id'));
     exit;
 
-}
-elseif (!empty($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
+} elseif (!empty($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
     $element = CMS_Element::factory($kernel, 'id', $_GET['undelete']);
     $element->undelete();
-    $section = & $element->section;
+    $section = $element->section;
     header('Location: section_html.php?id='.$section->get('id'));
     exit;
 
-}
-elseif (!empty($_POST)) {
+} elseif (!empty($_POST)) {
     $section = CMS_Section::factory($kernel, 'id', $_POST['id']);
     header('Location: section_html_edit.php?section_id='.$section->get('id').'&type='.$_POST['new_element_type_id']);
     exit;
-}
-elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
+} elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
     $section = CMS_Section::factory($kernel, 'id', $_GET['id']);
 }
 

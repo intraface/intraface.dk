@@ -52,7 +52,8 @@ class CMS_Element extends Standard
      *
      * @return void
      */
-    function __construct($section, $id = 0) {
+    function __construct($section, $id = 0)
+    {
         if (!is_object($section)) {
             trigger_error('CMS_Element::CMS_Element needs CMS_Section - got ' . get_class($section), E_USER_ERROR);
         }
@@ -67,7 +68,7 @@ class CMS_Element extends Standard
 
         $cms_module = $this->section->kernel->module('cms');
         $this->element_types = $cms_module->getSetting('element_types');
-        $this->position = new Position("cms_element", "section_id=".$this->section->get('id')." AND active = 1 AND intranet_id = " . $this->kernel->intranet->get('id'), "position", "id");
+        $this->position = $this->getPosition();
 
         if (is_string($this->value['type']) AND in_array($this->value['type'], $this->element_types)) {
             $this->value['type_key'] = array_search($this->value['type'], $this->element_types);
@@ -76,7 +77,11 @@ class CMS_Element extends Standard
         if ($this->id > 0) {
             $this->load();
         }
+    }
 
+    function getPosition()
+    {
+        return new Position("cms_element", "section_id=".$this->section->get('id')." AND active = 1 AND intranet_id = " . $this->kernel->intranet->get('id'), "position", "id");
     }
 
     /**
@@ -84,7 +89,8 @@ class CMS_Element extends Standard
      *
      * @return object
      */
-    function createParameter() {
+    function createParameter()
+    {
         return new CMS_Parameter($this);
     }
 
@@ -99,7 +105,8 @@ class CMS_Element extends Standard
      *
      * @return object
      */
-    function factory($object, $type, $value) {
+    function factory($object, $type, $value)
+    {
         $class_prefix = 'CMS_';
         switch ($type) {
             case 'type':
@@ -225,7 +232,8 @@ class CMS_Element extends Standard
      *
      * @return boolean
      */
-    function validate($var) {
+    function validate($var)
+    {
         // validere om section overhovedet findes
         // validere type
         if (!empty($var['elm_box']) AND $var['elm_box'] != 'box') {
@@ -255,7 +263,8 @@ class CMS_Element extends Standard
      *
      * @return boolean
      */
-    function save($var) {
+    function save($var)
+    {
 
         if (!isset($var['date_expire'])) {
             $var['date_expire'] = '0000-00-00 00:00';
@@ -328,7 +337,8 @@ class CMS_Element extends Standard
      *
      * @return boolean
      */
-    function delete(){
+    function delete()
+    {
         // Husk kun at deaktivere
         $db = new DB_Sql;
         $db->query("UPDATE cms_element SET active = 0 WHERE id = " . $this->id);
@@ -340,7 +350,8 @@ class CMS_Element extends Standard
      *
      * @return boolean
      */
-    function undelete() {
+    function undelete()
+    {
         $db = new DB_Sql;
         $db->query("UPDATE cms_element SET active = 1 WHERE id = " . $this->id);
         return true;
@@ -351,7 +362,8 @@ class CMS_Element extends Standard
      *
      * @return void
      */
-    function moveUp() {
+    function moveUp()
+    {
         $this->position->moveUp($this->id);
     }
 
@@ -360,7 +372,8 @@ class CMS_Element extends Standard
      *
      * @return void
      */
-    function moveDown() {
+    function moveDown()
+    {
         $this->position->moveDown($this->id);
     }
 
@@ -369,8 +382,8 @@ class CMS_Element extends Standard
      *
      * @return void
      */
-    function moveTo($position) {
+    function moveTo($position)
+    {
         $this->position->moveTo($this->id, $position);
     }
 }
-?>
