@@ -10,16 +10,19 @@ require_once 'HTTP/Request.php';
 require_once 'XML/Unserializer.php';
 require_once 'Intraface/modules/cms/Element.php';
 
-class CMS_Map extends CMS_Element {
+class CMS_Map extends CMS_Element
+{
 
-    var $services = array('yahoo', 'google');
+    public $services = array('yahoo', 'google');
 
-    function __construct($section, $id = 0) {
+    function __construct($section, $id = 0)
+    {
         $this->value['type'] = 'map';
         parent::__construct($section, $id);
     }
 
-    function load_element() {
+    function load_element()
+    {
         $this->value['service'] = $this->parameter->get('service');
         $this->value['text'] = $this->parameter->get('text');
         $this->value['latitude'] = $this->parameter->get('latitude');
@@ -33,8 +36,7 @@ class CMS_Map extends CMS_Element {
         if ($this->value['service'] == 'yahoo') {
             if (is_object($this->section->kernel->user)) {
                 $api = 'intraface';
-            }
-            else {
+            } else {
                 $api = $this->get('api_key');
             }
 
@@ -68,8 +70,7 @@ class CMS_Map extends CMS_Element {
         } elseif ($this->value['service'] == 'google') {
             if (is_object($this->section->kernel->user)) {
                 $api = 'ABQIAAAAUFgD-PSpsw5MDGYzf-NyqBT5Xij7PtUjdkWMhSxoVKuMOjPcWxR5Rf13LT-bMD4Iiu_tpJ5XdRMJ3g';
-            }
-            else {
+            } else {
                 $api = $this->get('api_key');
             }
 
@@ -104,8 +105,8 @@ class CMS_Map extends CMS_Element {
 
     }
 
-    function validate_element($var) {
-
+    function validate_element($var)
+    {
         if (!in_array($var['service'], $this->services)) {
             $this->error->set('error in service - unknown');
         }
@@ -123,7 +124,8 @@ class CMS_Map extends CMS_Element {
         return true;
     }
 
-    function save_element($var) {
+    function save_element($var)
+    {
         if (!empty($var['service'])) $this->parameter->save('service', $var['service']);
         if (!empty($var['text'])) $this->parameter->save('text', $var['text']);
         if (!empty($var['latitude'])) $this->parameter->save('latitude', $var['latitude']);
@@ -133,6 +135,4 @@ class CMS_Map extends CMS_Element {
         if (!empty($var['api_key'])) $this->parameter->save('api_key', $var['api_key']);
         return true;
     }
-
 }
-?>
