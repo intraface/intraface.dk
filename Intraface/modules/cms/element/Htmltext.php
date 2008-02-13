@@ -7,17 +7,19 @@ require_once 'HTMLPurifier.php';
 require_once 'HTMLPurifier/Config.php';
 require_once 'Text/Wiki.php';
 
-class CMS_Htmltext extends CMS_Element {
+class CMS_Htmltext extends CMS_Element
+{
+    protected $clean_text;
+    protected $allowed_tags;
 
-    var $clean_text;
-    var $allowed_tags;
-
-    function __construct($section, $id = 0) {
+    function __construct($section, $id = 0)
+    {
         $this->value['type'] = 'htmltext';
         parent::__construct($section, $id);
     }
 
-    function load_element() {
+    function load_element()
+    {
         $this->value['text'] = $this->parameter->get('text');
         $this->value['saved_with'] = $this->parameter->get('saved_with');
 
@@ -41,8 +43,7 @@ class CMS_Htmltext extends CMS_Element {
             $xhtml = $wiki->transform($this->parameter->get('text'), 'Xhtml');
 
             $this->value['html'] = $xhtml;
-        }
-        else {
+        } else {
             $this->value['html'] = autoop($this->parameter->get('text'));
         }
     }
@@ -53,8 +54,8 @@ class CMS_Htmltext extends CMS_Element {
      *
      */
 
-    function validate_element($var) {
-
+    function validate_element($var)
+    {
         if ($this->error->isError()){
             return 0;
         }
@@ -62,7 +63,8 @@ class CMS_Htmltext extends CMS_Element {
         return 1;
     }
 
-    function convertArrayToTags($array) {
+    function convertArrayToTags($array)
+    {
         $tags = '';
         foreach ($array AS $tag) {
             $tags .= '<'.$tag.'>';
@@ -71,7 +73,8 @@ class CMS_Htmltext extends CMS_Element {
     }
 
 
-    function save_element($var) {
+    function save_element($var)
+    {
         // should probably purify
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Core', 'Encoding', 'ISO-8859-1');
@@ -84,7 +87,4 @@ class CMS_Htmltext extends CMS_Element {
 
         return 1;
     }
-
 }
-
-?>
