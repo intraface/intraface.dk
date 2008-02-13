@@ -24,15 +24,16 @@
 
 require_once 'Intraface/tools/Position.php';
 
-class CMS_Template extends Standard {
+class CMS_Template extends Standard
+{
 
-    var $id;
-    var $value;
-    var $cmssite;
-    var $kernel;
-    var $keywords;
-    var $error;
-    var $position;
+    public $id;
+    public $value;
+    public $cmssite;
+    public $kernel;
+    protected $keywords;
+    public $error;
+    protected $position;
 
     function __construct($cmssite, $id = 0)
     {
@@ -94,7 +95,8 @@ class CMS_Template extends Standard {
         return 1;
     }
 
-    function validate($var) {
+    function validate($var)
+    {
         $validator = new Validator($this->error);
         $validator->isString($var['name'], 'error in name');
         $validator->isString($var['identifier'], 'error in identifier');
@@ -108,8 +110,8 @@ class CMS_Template extends Standard {
     }
 
 
-    function save($var) {
-
+    function save($var)
+    {
         if (!$this->validate($var)) {
             return 0;
         }
@@ -142,8 +144,8 @@ class CMS_Template extends Standard {
         return $this->id;
     }
 
-
-    function getList() {
+    function getList()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id, name, identifier FROM cms_template WHERE intranet_id = " . $this->cmssite->kernel->intranet->get('id') . " AND site_id = " . $this->cmssite->get('id') . " AND active = 1 ORDER BY name");
         $i = 0;
@@ -158,12 +160,14 @@ class CMS_Template extends Standard {
         return $templates;
     }
 
-    function getSections() {
+    function getSections()
+    {
         $this->section = new CMS_TemplateSection($this);
         return ($sections = $this->section->getList());
     }
 
-    function getKeywords() {
+    function getKeywords()
+    {
         return($this->keywords = new Keyword($this));
     }
 
@@ -189,4 +193,3 @@ class CMS_Template extends Standard {
         return $this->id;
     }
 }
-?>
