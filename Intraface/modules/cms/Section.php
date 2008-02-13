@@ -19,7 +19,7 @@ class CMS_Section extends Standard {
     public $cmspage;
     public $kernel;
     protected $parameter;
-    protected $template_section;
+    public $template_section;
     public $value;
     public $error;
     protected $section_types;
