@@ -15,15 +15,16 @@
 require_once 'Intraface/Standard.php';
 require_once 'Stylesheet.php';
 
-class CMS_Site extends Standard {
+class CMS_Site extends Standard
+{
+    public $id;
+    public $kernel;
+    public $error;
+    public $stylesheet;
+    public $value;
 
-    var $id;
-    var $kernel;
-    var $error;
-    var $stylesheet;
-    var $value;
-
-    function __construct($kernel, $id = 0) {
+    function __construct($kernel, $id = 0)
+    {
         if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
             trigger_error('CMS_Site::__construct needs kernel', E_USER_ERROR);
         }
@@ -39,7 +40,8 @@ class CMS_Site extends Standard {
         $this->stylesheet = new CMS_Stylesheet($this);
     }
 
-    function validate($var) {
+    function validate($var)
+    {
         $validator = new Validator($this->error);
         $validator->isString($var['name'], 'error in name', '');
         $validator->isUrl($var['url'], 'error in url', 'allow_empty');
@@ -59,7 +61,8 @@ class CMS_Site extends Standard {
         return 1;
     }
 
-    function save($var) {
+    function save($var)
+    {
         $var = safeToDb($var);
 
         settype($var['cc_license'], 'integer');
@@ -70,8 +73,7 @@ class CMS_Site extends Standard {
         if ($this->id > 0) {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;
-        }
-        else {
+        } else {
             $sql_type = "INSERT INTO ";
             $sql_end = " , date_created = NOW()";
         }
@@ -83,7 +85,6 @@ class CMS_Site extends Standard {
             url = '".$var['url']."',
             date_updated = NOW()" . $sql_end);
 
-
         if ($this->id == 0) {
             $this->id = $db->insertedId();
         }
@@ -93,11 +94,10 @@ class CMS_Site extends Standard {
         $this->load();
 
         return $this->id;
-
-
     }
 
-    function load() {
+    function load()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id, name, url FROM cms_site WHERE id = " . $this->id . " AND intranet_id = ".$this->kernel->intranet->get('id')." LIMIT 1");
         if (!$db->nextRecord()) {
@@ -110,7 +110,8 @@ class CMS_Site extends Standard {
 
     }
 
-    function delete() {
+    function delete()
+    {
         if ($this->id == 0) {
             $this->error->set('Kunne ikke slette');
             return 0;
@@ -120,7 +121,8 @@ class CMS_Site extends Standard {
         return 1;
     }
 
-    function getList() {
+    function getList()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id, name FROM cms_site WHERE intranet_id = " . $this->kernel->intranet->get('id'). " AND active = 1");
         $i = 0;
@@ -132,7 +134,4 @@ class CMS_Site extends Standard {
         }
         return $sites;
     }
-
 }
-
-?>
