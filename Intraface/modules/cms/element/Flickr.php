@@ -18,19 +18,20 @@ require_once 'Intraface/modules/cms/Element.php';
 
 class CMS_Flickr extends CMS_Element {
 
-    var $allowed_sizes = array(
+    public $allowed_sizes = array(
         'square' => 'Små firkanter',
         'thumbnail' => 'Thumbnail',
         'small' => 'Små',
         'medium' => 'Medium'
     );
 
-    var $services = array(
+    public $services = array(
         '23' => '23hq',
         'flickr' => 'flickr'
     );
 
-    function __construct(& $section, $id = 0) {
+    function __construct(& $section, $id = 0)
+    {
         $this->value['type'] = 'flickr';
         parent::__construct($section, $id);
     }
@@ -38,7 +39,8 @@ class CMS_Flickr extends CMS_Element {
 
     // tror måske bare jeg skal returnere links med billeder og så
     // lave et eller andet end den her pictobrowser
-    function load_element() {
+    function load_element()
+    {
         //$this->value['user'] = $this->parameter->get('user');
         //$this->parameter->save('api_key', $var['api_key']);
         //$this->value['tags'] = $this->parameter->get('tags');
@@ -78,9 +80,8 @@ class CMS_Flickr extends CMS_Element {
             $this->value['set']['info'] = $f->photosets_getInfo($this->value['photoset_id']);
 
             if ($this->value['service'] == 'flickr') {
-            $this->value['set']['url'] = 'http://www.flickr.com/photos/'.$flickr_photos['owner'].'/sets/'.$this->value['photoset_id'] . '/';
-            }
-            elseif ($this->value['service'] == '23') {
+                $this->value['set']['url'] = 'http://www.flickr.com/photos/'.$flickr_photos['owner'].'/sets/'.$this->value['photoset_id'] . '/';
+            } elseif ($this->value['service'] == '23') {
                 // HACK et lille hack - $flickr_photos['photo'][0]['ownername'] indeholder kun det rigtige ownername hvis man både har album og billeder
                 $this->value['set']['url'] = 'http://23hq.com/'.$flickr_photos['photo'][0]['ownername'].'/album/'.$this->value['photoset_id'];
             }
@@ -137,7 +138,8 @@ Change user_id from 12345678@N00 to your Flickr id, which you can find out with 
         */
     }
 
-    function validate_element($var) {
+    function validate_element($var)
+    {
         $validator = new Validator($this->error);
         $validator->isNumeric($var['photoset_id'], 'error in photoset id');
         $validator->isString($var['size'], 'error in size', '', 'allow_empty');
@@ -159,7 +161,8 @@ Change user_id from 12345678@N00 to your Flickr id, which you can find out with 
         return 1;
     }
 
-    function save_element($var) {
+    function save_element($var)
+    {
         $this->parameter->save('photoset_id', $var['photoset_id']);
         $this->parameter->save('user', $var['user']);
         //$this->parameter->save('api_key', $var['api_key']);
@@ -168,5 +171,3 @@ Change user_id from 12345678@N00 to your Flickr id, which you can find out with 
         $this->parameter->save('service', $var['service']);
     }
 }
-
-?>
