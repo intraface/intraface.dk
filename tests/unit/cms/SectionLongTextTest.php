@@ -9,6 +9,14 @@ require_once 'Intraface/modules/cms/Section.php';
 
 define('PATH_CACHE', './');
 
+class Testable_CMS_Section_LongText extends CMS_Section_LongText
+{
+    function createTemplateSection()
+    {
+        return new FakeCMSTemplateSection($this->kernel);
+    }
+}
+
 class SectionLongTextTest extends PHPUnit_Framework_TestCase {
 
     private $kernel;
@@ -34,7 +42,7 @@ class SectionLongTextTest extends PHPUnit_Framework_TestCase {
     function testSaveReturnsTrue()
     {
 
-        $section = new CMS_Section_LongText($this->page);
+        $section = new Testable_CMS_Section_LongText($this->page);
         $section->createParameter();
         $data = array('type_key' => 1, 'template_section_id' => 1);
         $section->save($data);
