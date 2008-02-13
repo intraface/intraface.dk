@@ -10,13 +10,14 @@
  */
 
 require_once 'HTMLPurifier.php';
-require_once dirname(__FILE__) . '/../Section.php';
+require_once 'Intraface/modules/cms/Section.php';
 
-class CMS_Section_LongText extends CMS_Section {
+class CMS_Section_LongText extends CMS_Section
+{
+    private $allowed_tags = '';
 
-    var $allowed_tags = '';
-
-    function __construct($cmspage, $id = 0) {
+    function __construct($cmspage, $id = 0)
+    {
         $this->value['type'] = 'longtext';
         parent::__construct($cmspage, $id);
 
@@ -36,23 +37,24 @@ class CMS_Section_LongText extends CMS_Section {
         */
     }
 
-    function load_section() {
+    function load_section()
+    {
         $this->value['text'] = $this->parameter->get('text');
 
         if ($this->parameter->get('saved_with') == 'tinymce') {
             $this->value['html'] = $this->parameter->get('text');
-        }
-        else {
+        } else {
             $this->value['html'] = autoop($this->parameter->get('text'));
         }
 
     }
 
-
-    function validate_section($var) {
-
+    function validate_section($var)
+    {
         // don't validate if there is no text
-        if (empty($var['text'])) return 1;
+        if (empty($var['text'])) {
+            return 1;
+        }
 
         $this->allowed_tags = $this->template_section->get('html_format');
         $this->allowed_tags[] = 'p';
@@ -65,13 +67,14 @@ class CMS_Section_LongText extends CMS_Section {
 
         // if error return 0
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
 
-        return 1;
+        return true;
     }
 
-    function convertArrayToTags($array) {
+    function convertArrayToTags($array)
+    {
         $tags = '';
         foreach ($array AS $tag) {
             $tags .= '<'.$tag.'>';
@@ -79,10 +82,12 @@ class CMS_Section_LongText extends CMS_Section {
         return $tags;
     }
 
-    function save_section($var) {
-        if (empty($var['text'])) $var['text'] = '';
+    function save_section($var)
+    {
+        if (empty($var['text'])) {
+            $var['text'] = '';
+        }
         // only used until we change encoding to utf8
-        
         $purifier_cache_dir = PATH_CACHE.'htmlpurifier/';
         if(!is_dir($purifier_cache_dir)) {
             mkdir($purifier_cache_dir);
@@ -91,7 +96,7 @@ class CMS_Section_LongText extends CMS_Section {
                 exit;
             }
         }
-        
+
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Core', 'Encoding', 'ISO-8859-1');
         $config->set('Cache', 'SerializerPath', $purifier_cache_dir);
@@ -113,9 +118,6 @@ class CMS_Section_LongText extends CMS_Section {
         // should probably purify instead of strip_tags
         $this->addParameter('saved_with', $this->kernel->setting->get('user', 'htmleditor'));
         $this->addParameter('text', $clean_text);
-        return 1;
+        return true;
     }
-
 }
-
-?>
