@@ -384,14 +384,4 @@ class DebtorItem extends Standard
         require_once 'Ilib/Position.php';
         return new Ilib_Position($db, "debtor_item", $this->id, "intranet_id=".$this->debtor->kernel->intranet->get('id')." AND debtor_id=".$this->debtor->get('id')." AND active = 1", "position", "id");
     }
-
-    /**
-     * Moves debtor item one up
-     *
-     * @return void
-     */
-    public function moveUp()
-    {
-        $this->getPosition()->moveUp($this->id);
-    }
 }
