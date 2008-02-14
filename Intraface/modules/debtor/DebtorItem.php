@@ -206,7 +206,7 @@ class DebtorItem extends Standard
             description = '".$input["description"]."'";
 
         if($this->id == 0) {
-            $position = $this->getMaxPosition() + 1;
+            $position = $this->getPosition(MDB2::singleton(DB_DSN))->maxPosition() + 1;
             $sql = $sql.', position = '.$position;
 
             $this->db->query("INSERT INTO debtor_item SET ".$sql.", intranet_id = ".$this->debtor->kernel->intranet->get("id").", debtor_id = ".$this->debtor->get("id").", active = 1");
@@ -379,10 +379,10 @@ class DebtorItem extends Standard
         return intval($db->f("sum_quantity"));
     }
 
-    function getPosition()
+    function getPosition($db)
     {
-        require_once'Intraface/tools/Position.php';
-        return new Position("debtor_item", "intranet_id=".$this->debtor->kernel->intranet->get('id')." AND debtor_id=".$this->debtor->get('id')." AND active = 1", "position", "id");
+        require_once 'Ilib/Position.php';
+        return new Ilib_Position($db, "debtor_item", $this->id, "intranet_id=".$this->debtor->kernel->intranet->get('id')." AND debtor_id=".$this->debtor->get('id')." AND active = 1", "position", "id");
     }
 
     /**
@@ -393,25 +393,5 @@ class DebtorItem extends Standard
     public function moveUp()
     {
         $this->getPosition()->moveUp($this->id);
-    }
-
-    /**
-     * Moves debtor item one down
-     *
-     * @return void
-     */
-    public function moveDown()
-    {
-        $this->getPosition()->moveDown($this->id);
-    }
-
-    /**
-     * Gets max position for the debtor
-     *
-     * @return void
-     */
-    function getMaxPosition()
-    {
-        return $this->getPosition()->maxpos();
     }
 }
