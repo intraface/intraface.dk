@@ -3,15 +3,17 @@
  * @package Intraface_Todo
  * @author Lars Olesen <lars@legestue.net>
  */
+require_once 'Intraface/Standard.php';
 
-class TodoItem extends Standard {
+class TodoItem extends Standard
+{
+    public $todo;
+    public $value;
 
-    var $todo;
-    var $value;
-
-    function TodoItem(& $todo, $id = 0) {
+    function __construct($todo, $id = 0)
+    {
         if (!is_object($todo) OR strtolower(get_class($todo)) != 'todolist') {
-            trigger_error('Todo kræver Kernel', FATAL);
+            trigger_error('Todo kræver Kernel', E_USER_ERROR);
         }
         $this->todo = & $todo;
         $this->id = (int) $id;
@@ -24,7 +26,8 @@ class TodoItem extends Standard {
     /**
      * @access private
      */
-    function load() {
+    function load()
+    {
         $db = new Db_Sql;
         $db->query("SELECT * FROM todo_item WHERE id = " . $this->id . " LIMIT 1");
         if ($db->nextRecord()) {
@@ -33,15 +36,14 @@ class TodoItem extends Standard {
             $this->value['status'] = $db->f('status');
             return 1;
         }
-    return 0;
+        return 0;
+    }
 
-  }
-
-    function getList($type="all") {
+    function getList($type="all")
+    {
         if ($type == "undone") {
             $sql_status = "status = 0 AND";
-        }
-        else {
+        } else {
             $sql_status = "status >= 0 AND";
         }
 
@@ -59,7 +61,8 @@ class TodoItem extends Standard {
         return $ids;
     }
 
-    function save($var, $user_id = 0) {
+    function save($var, $user_id = 0)
+    {
         if (empty($var)) return;
         $var = safeToDb($var);
         $user_id = intval($user_id);
@@ -75,8 +78,7 @@ class TodoItem extends Standard {
         if ($this->id == 0) {
             $sql_type = "INSERT INTO ";
             $sql_end = ", date_created = NOW(), position = " . $new_position;
-        }
-        else {
+        } else {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;
         }
@@ -89,22 +91,25 @@ class TodoItem extends Standard {
         return $this->id;
     }
 
-    function setDone() {
+    function setDone()
+    {
         if ($this->id == 0) {
             return 0;
         }
-       $db = new DB_Sql;
+        $db = new DB_Sql;
         $db->query("UPDATE todo_item SET status = 1 WHERE id = " . $this->id);
         return 1;
     }
 
-    function setAllUndone() {
-       $db = new DB_Sql;
+    function setAllUndone()
+    {
+        $db = new DB_Sql;
         $db->query("UPDATE todo_item SET status = 0 WHERE todo_list_id = " . $this->todo->get('id'));
         return 1;
     }
 
-    function delete() {
+    function delete()
+    {
         if ($this->id <= 0) {
             return 0;
         }
@@ -113,14 +118,9 @@ class TodoItem extends Standard {
         return 1;
     }
 
-    function moveUp() {
-        $position = new Position("todo_item", "todo_list_id=".$this->todo->get('id')." AND status = 0", "position", "id");
-        $position->moveUp($this->id);
-    }
-
-    function moveDown() {
-        $position = new Position("todo_item", "todo_list_id=".$this->todo->get('id')." AND status = 0", "position", "id");
-        $position->moveDown($this->id);
+    function getPosition($db)
+    {
+        require_once 'Ilib/Position.php';
+        return new Ilib_Position($db, "todo_item", $this->id, "todo_list_id=".$this->todo->get('id')." AND status = 0", "position", "id");
     }
 }
-?>
