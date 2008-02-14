@@ -120,6 +120,8 @@ $pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk'
 $pfm->addPackageDepWithChannel('required', 'MDB2_Debug_ExplainQueries', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.intraface.dk', '0.0.3');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk', '0.2.0');
+
 
 // Ilib
 $pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.0.1');
