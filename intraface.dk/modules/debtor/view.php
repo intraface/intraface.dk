@@ -5,7 +5,6 @@
  * @author Sune Jensen <sj@sunet.dk>
  */
 require('../../include_first.php');
-require_once('Intraface/tools/Position.php');
 
 
 $debtor_module = $kernel->module('debtor');
@@ -23,14 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $debtor->delete();
         header("Location: list.php?type=".$type."&amp;use_stored=true");
         exit;
-    }
-
-
-    elseif (!empty($_POST['send_electronic_invoice'])) {
+    } elseif (!empty($_POST['send_electronic_invoice'])) {
         header('Location: send.php?send=electronic_email&id=' . intval($debtor->get('id')));
         exit;
-    }
-    elseif (!empty($_POST['send_email'])) {
+    } elseif (!empty($_POST['send_email'])) {
         header('Location: send.php?send=email&id=' . intval($debtor->get('id')));
         exit;
 
