@@ -1,6 +1,5 @@
 <?php
 require('../../include_first.php');
-require_once('Intraface/tools/Position.php');
 
 $primary_module = $kernel->module("intranetmaintenance");
 
