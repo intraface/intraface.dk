@@ -1,6 +1,5 @@
 <?php
 require('../../include_first.php');
-require_once('Intraface/tools/Position.php');
 
 $module_cms = $kernel->module('cms');
 $translation = $kernel->getTranslation('cms');
