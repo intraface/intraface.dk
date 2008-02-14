@@ -6,7 +6,6 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
  */
-require_once('Intraface/tools/Position.php');
 require_once 'Intraface/Standard.php';
 
 class DebtorItem extends Standard
@@ -150,7 +149,7 @@ class DebtorItem extends Standard
 
     /**
      * Saves data
-     * 
+     *
      * @TODO: Should have product object instead of product id in the param array.
      *
      * @param array $input Values to save
@@ -174,7 +173,7 @@ class DebtorItem extends Standard
             if(!isset($input['product_detail_id'])) {
                 $input['product_detail_id'] = 0;
             }
-            
+
             require_once 'Intraface/modules/product/Product.php';
             $product = new Product($this->debtor->kernel, $input["product_id"], $input['product_detail_id']);
 
@@ -262,7 +261,7 @@ class DebtorItem extends Standard
         $j = 0;
         $item_no_vat = array();
         $item = array();
-        
+
         require_once 'Intraface/modules/product/Product.php';
         $units = Product::getUnits();
 
@@ -283,7 +282,7 @@ class DebtorItem extends Standard
                     $item_no_vat[$j]["name"] = $db2->f("name");
                     $item_no_vat[$j]["number"]= $db2->f("number");
                     if($db->f("quantity") == 1) {
-                        $item_no_vat[$j]["unit"] = $units[$db2->f("unit")]['singular']; 
+                        $item_no_vat[$j]["unit"] = $units[$db2->f("unit")]['singular'];
                     } else {
                         $item_no_vat[$j]["unit"] = $units[$db2->f("unit")]['plural'];
                     }
@@ -311,7 +310,7 @@ class DebtorItem extends Standard
                     $item[$i]["product_id"] = $db->f("product_id");
                     $item[$i]["product_detail_id"] = $db->f("product_detail_id");
                     $item[$i]["amount"] = $db->f("quantity") * $db2->f("price") * 1.25;
-    
+
                     $i++;
                 }
             } else {
@@ -380,6 +379,12 @@ class DebtorItem extends Standard
         return intval($db->f("sum_quantity"));
     }
 
+    function getPosition()
+    {
+        require_once'Intraface/tools/Position.php';
+        return new Position("debtor_item", "intranet_id=".$this->debtor->kernel->intranet->get('id')." AND debtor_id=".$this->debtor->get('id')." AND active = 1", "position", "id");
+    }
+
     /**
      * Moves debtor item one up
      *
@@ -387,8 +392,7 @@ class DebtorItem extends Standard
      */
     public function moveUp()
     {
-        $position = new Position("debtor_item", "intranet_id=".$this->debtor->kernel->intranet->get('id')." AND debtor_id=".$this->debtor->get('id')." AND active = 1", "position", "id");
-        $position->moveUp($this->id);
+        $this->getPosition()->moveUp($this->id);
     }
 
     /**
@@ -398,8 +402,7 @@ class DebtorItem extends Standard
      */
     public function moveDown()
     {
-        $position = new Position("debtor_item", "intranet_id=".$this->debtor->kernel->intranet->get('id')." AND debtor_id='".$this->debtor->get('id')."' AND active = 1", "position", "id");
-        $position->moveDown($this->id);
+        $this->getPosition()->moveDown($this->id);
     }
 
     /**
@@ -409,8 +412,6 @@ class DebtorItem extends Standard
      */
     function getMaxPosition()
     {
-        $position = new Position("debtor_item", "intranet_id=".$this->debtor->kernel->intranet->get('id')." AND debtor_id='".$this->debtor->get('id')."' AND active = 1", "position", "id");
-        return $position->maxpos();
+        return $this->getPosition()->maxpos();
     }
 }
-?>
