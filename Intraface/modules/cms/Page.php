@@ -95,7 +95,6 @@ class CMS_Page extends Standard
         $this->template = new CMS_Template($this->cmssite);
 
         // generelle
-        $this->position = $this->getPosition();
         $this->kernel = $this->cmssite->kernel;
         $this->error = new Error();
         $this->dbquery = new DBQuery($this->kernel, 'cms_page', 'cms_page.intranet_id = '.$this->kernel->intranet->get('id').' AND cms_page.active = 1 AND site_id = ' . $this->cmssite->get('id'));
@@ -281,10 +280,10 @@ class CMS_Page extends Standard
         $db->query("SELECT position FROM cms_page WHERE id = " . $this->id);
         if ($db->nextRecord()) {
             if ($db->f('position') == 0 AND count($this->getList($this->value['type']) > 0)) {
-                $next_pos = $this->position->maxPosition() + 1;
+                $next_pos = $this->getPosition(MDB2::singleton(DB_DSN))->maxPosition() + 1;
                 $db->query("UPDATE cms_page SET position = " . $next_pos . " WHERE id = " . $this->id);
 
-                $this->position->reposition();
+                $this->getPosition(MDB2::singleton(DB_DSN))->reposition();
             }
         }
 
