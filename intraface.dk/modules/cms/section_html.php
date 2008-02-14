@@ -7,7 +7,7 @@ $translation = $kernel->getTranslation('cms');
 
 if (!empty($_GET['moveto']) AND is_numeric($_GET['moveto'])) {
     $element = CMS_Element::factory($kernel, 'id', $_GET['element_id']);
-    $element->moveTo($_GET['moveto']);
+    $element->getPosition(MDB2::singleton(DB_DSN))->moveToPosition($_GET['moveto']);
     $section = $element->section;
     header('Location: section_html.php?id='.$section->get('id'));
     exit;

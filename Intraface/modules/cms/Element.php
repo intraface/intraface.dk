@@ -4,7 +4,6 @@
  *
  * @package Intraface_CMS
  */
-require_once 'Intraface/tools/Position.php';
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/modules/cms/Parameter.php';
 require_once 'Intraface/Validator.php';
@@ -68,7 +67,6 @@ class CMS_Element extends Standard
 
         $cms_module = $this->section->kernel->module('cms');
         $this->element_types = $cms_module->getSetting('element_types');
-        $this->position = $this->getPosition();
 
         if (is_string($this->value['type']) AND in_array($this->value['type'], $this->element_types)) {
             $this->value['type_key'] = array_search($this->value['type'], $this->element_types);
@@ -79,9 +77,10 @@ class CMS_Element extends Standard
         }
     }
 
-    function getPosition()
+    function getPosition($db)
     {
-        return new Position("cms_element", "section_id=".$this->section->get('id')." AND active = 1 AND intranet_id = " . $this->kernel->intranet->get('id'), "position", "id");
+        require_once 'Ilib/Position.php';
+        return new Ilib_Position($db, "cms_element", $this->id, "section_id=".$this->section->get('id')." AND active = 1 AND intranet_id = " . $this->kernel->intranet->get('id'), "position", "id");
     }
 
     /**
@@ -303,7 +302,7 @@ class CMS_Element extends Standard
         if ($this->id == 0) {
             $this->id = $db->insertedId();
 
-            $next_pos = $this->position->maxpos() + 1;
+            $next_pos = $this->getPosition()->maxPosition() + 1;
             $db->query("UPDATE cms_element SET position = " . $next_pos . " WHERE id = " . $this->id);
         }
 
@@ -355,35 +354,5 @@ class CMS_Element extends Standard
         $db = new DB_Sql;
         $db->query("UPDATE cms_element SET active = 1 WHERE id = " . $this->id);
         return true;
-    }
-
-    /**
-     * Moves element up
-     *
-     * @return void
-     */
-    function moveUp()
-    {
-        $this->position->moveUp($this->id);
-    }
-
-    /**
-     * Moves element down
-     *
-     * @return void
-     */
-    function moveDown()
-    {
-        $this->position->moveDown($this->id);
-    }
-
-    /**
-     * Moves element to a precise position
-     *
-     * @return void
-     */
-    function moveTo($position)
-    {
-        $this->position->moveTo($this->id, $position);
     }
 }
