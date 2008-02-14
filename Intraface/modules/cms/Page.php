@@ -95,7 +95,7 @@ class CMS_Page extends Standard
         $this->template = new CMS_Template($this->cmssite);
 
         // generelle
-        $this->position = new Position("cms_page", "site_id=".$this->cmssite->get('id')." AND active = 1 AND type_key = 1", "position", "id");
+        $this->position = $this->getPosition();
         $this->kernel = $this->cmssite->kernel;
         $this->error = new Error();
         $this->dbquery = new DBQuery($this->kernel, 'cms_page', 'cms_page.intranet_id = '.$this->kernel->intranet->get('id').' AND cms_page.active = 1 AND site_id = ' . $this->cmssite->get('id'));
@@ -108,7 +108,12 @@ class CMS_Page extends Standard
         if ($this->id > 0) {
             $this->load();
         }
+    }
 
+    function getPosition($db)
+    {
+        require_once 'Ilib/Position.php';
+        return new Ilib_Position($db, "cms_page", $this->id, "site_id=".$this->cmssite->get('id')." AND active = 1 AND type_key = 1", "position", "id");
     }
 
     function factory(& $kernel, $type, $value)
@@ -276,7 +281,7 @@ class CMS_Page extends Standard
         $db->query("SELECT position FROM cms_page WHERE id = " . $this->id);
         if ($db->nextRecord()) {
             if ($db->f('position') == 0 AND count($this->getList($this->value['type']) > 0)) {
-                $next_pos = $this->position->maxpos() + 1;
+                $next_pos = $this->position->maxPosition() + 1;
                 $db->query("UPDATE cms_page SET position = " . $next_pos . " WHERE id = " . $this->id);
 
                 $this->position->reposition();
@@ -690,16 +695,6 @@ class CMS_Page extends Standard
     function getKeywordAppender()
     {
         return new Intraface_Keyword_Appender($this);
-    }
-
-    function moveUp()
-    {
-        $this->position->moveUp($this->id);
-    }
-
-    function moveDown()
-    {
-        $this->position->moveDown($this->id);
     }
 
     /**
