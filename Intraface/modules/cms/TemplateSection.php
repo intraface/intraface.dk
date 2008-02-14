@@ -16,7 +16,7 @@ class CMS_TemplateSection extends Standard
 {
     public $id;
     public $kernel;
-    protected $template;
+    public $template;
     protected $parameter;
     protected $section_types;
     public $value;
