@@ -51,12 +51,15 @@ class CMS_TemplateSection extends Standard
             $this->value['type_key'] = array_search($this->value['type'], $this->section_types);
         }
 
-        $this->position = new Position("cms_template_section", "template_id = ".$this->template->get('id')." AND active = 1", "position", "id");
-
         if ($this->id > 0) {
             $this->load();
         }
+    }
 
+    function getPosition($db)
+    {
+        require_once 'Ilib/Position.php';
+        return new Ilib_Position($db, "cms_template_section", $this->id, "template_id = ".$this->template->get('id')." AND active = 1", "position", "id");
     }
 
     function createParameterObject()
@@ -198,7 +201,7 @@ class CMS_TemplateSection extends Standard
 
         if ($this->id == 0) {
             $this->id = $db->insertedId();
-            $this->position->moveToMax($this->id);
+            $this->getPosition(MDB2::singleton(DB_DSN))->moveToMax($this->id);
         }
 
         $this->load();
@@ -239,20 +242,6 @@ class CMS_TemplateSection extends Standard
         return $sections;
     }
 
-    /**
-     * Følgende to funktioner kan jeg vel egentlig bare slette og bruge position
-     *
-     */
-
-    function moveUp()
-    {
-        $this->position->moveUp($this->id);
-    }
-
-    function moveDown()
-    {
-        $this->position->moveDown($this->id);
-    }
 
     function isIdentifierUnique($identifier)
     {
