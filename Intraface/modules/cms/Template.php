@@ -21,8 +21,7 @@
  * @version  2.0
  *
  */
-
-require_once 'Intraface/tools/Position.php';
+require_once 'Intraface/Standard.php';
 
 class CMS_Template extends Standard
 {
@@ -47,12 +46,15 @@ class CMS_Template extends Standard
         $this->id = (int)$id;
         $this->error = new Error;
 
-        $this->position = new Position('cms_template', 'site_id = ' . $this->cmssite->get('id'), 'id', 'position');
-
         if ($this->id > 0) {
             $this->load();
         }
+    }
 
+    function getPosition($db)
+    {
+        require_once 'Ilib/Position.php';
+        return new Ilib_Position($db, 'cms_template', $this->id, 'site_id = ' . $this->cmssite->get('id'), 'id', 'position');
     }
 
     /**
