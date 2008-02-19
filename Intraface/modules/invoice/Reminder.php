@@ -8,22 +8,22 @@ require_once 'DB/Sql.php';
 require_once 'Intraface/Error.php';
 require_once 'Intraface/DBQuery.php';
 
-class Reminder extends Standard {
-    var $id;
-    var $kernel;
-    var $value;
-    var $contact;
-    var $db;
-    var $item;
-    var $error;
-    var $dbquery;
+class Reminder extends Standard
+{
+    public $id;
+    public $kernel;
+    public $value;
+    public $contact;
+    private $db;
+    public $item;
+    public $error;
+    public $dbquery;
 
-
-    function __construct($kernel, $id = 0) {
-
+    function __construct($kernel, $id = 0)
+    {
         $this->id     = intval($id);
         $this->kernel = $kernel;
-        
+
         $this->db     = new Db_sql;
         $this->error  = new Error;
 
@@ -35,8 +35,8 @@ class Reminder extends Standard {
         }
     }
 
-    function load() {
-        
+    function load()
+    {
         $this->db->query("SELECT *,
                 DATE_FORMAT(this_date, '%d-%m-%Y') AS dk_this_date,
                 DATE_FORMAT(due_date, '%d-%m-%Y') AS dk_due_date,
@@ -101,7 +101,7 @@ class Reminder extends Standard {
         $this->value["arrears"] = $this->value['total'] - $this->value['payment_total'];
 
         return true;
-        
+
     }
 
     function loadItem($id = 0)
@@ -115,7 +115,7 @@ class Reminder extends Standard {
         $this->db->query("SELECT MAX(number) AS max_number FROM invoice_reminder WHERE intranet_id = ".$this->kernel->intranet->get("id"));
         $this->db->nextRecord(); // Hvis der ikke er nogle poster er dette bare den første
         $number = $this->db->f("max_number") + 1;
-        return($number);
+        return $number;
     }
 
     function isNumberFree($number)
@@ -123,7 +123,7 @@ class Reminder extends Standard {
         $sql = "SELECT id FROM invoice_reminder WHERE number = ".intval($number)." AND id != ".$this->id . " AND intranet_id = " . $this->kernel->intranet->get('id');
         $this->db->query($sql);
         if($this->db->nextRecord()) {
-        return false;
+            return false;
         } else {
             return true;
         }
@@ -154,7 +154,7 @@ class Reminder extends Standard {
                 $this->error->set("Rykkernummer er allerede brugt");
             }
         }
-        
+
         if(!isset($input['contact_id'])) $input['contact_id'] = 0;
         if(!isset($input["contact_person_id"])) $input["contact_person_id"] = 0;
         if($validator->isNumeric($input["contact_id"], "Du skal angive en kunde", "greater_than_zero")) {
@@ -165,12 +165,12 @@ class Reminder extends Standard {
             } else {
                 $this->error->set("Ugyldig kunde");
             }
-            
+
             if($contact->get("type") == "corporation") {
                 $validator->isNumeric($input["contact_person_id"], "Der er ikke angivet en kontaktperson");
             }
         }
-        
+
         // $validator->isString($input["attention_to"], "Fejl i att.", "", "allow_empty");
         if(!isset($input['description'])) $input['description'] = '';
         $validator->isString($input["description"], "Fejl i beskrivelsen", "", "allow_empty");
@@ -336,13 +336,13 @@ class Reminder extends Standard {
         }
         return true;
     }
-    
+
     /**
      * returns DebtorAccount object
-     * 
+     *
      * @return object DebtorAccount
      */
-    public function getDebtorAccount() 
+    public function getDebtorAccount()
     {
         require_once 'Intraface/modules/invoice/DebtorAccount.php';
         return new DebtorAccount($this);
@@ -492,7 +492,7 @@ class Reminder extends Standard {
         $db->query("SELECT id FROM invoice_reminder WHERE intranet_id = " . $this->kernel->intranet->get('id'));
         return $db->numRows();
     }
-    
+
     /**
      * Set the reminder as stated
      *
@@ -521,24 +521,24 @@ class Reminder extends Standard {
         }
         return false;
     }
-    
+
     /**
      * returns whether there is something to state on the reminder
-     * 
+     *
      * @return boolean true or false
      */
-    public function somethingToState() 
+    public function somethingToState()
     {
-        
+
         if ($this->get('total') == 0) {
             return false;
         }
         return true;
     }
-    
+
     /**
      * Returns whether the reminder is ready for state
-     * 
+     *
      * @param object accounting year
      * @return boolean true or false
      */
@@ -548,7 +548,7 @@ class Reminder extends Standard {
             $this->error->set('reminder is already stated');
             return false;
         }
-        
+
         if(!$this->somethingToState()) {
             $this->error->set('there is nothing to state on the reminder');
         }
@@ -557,17 +557,17 @@ class Reminder extends Standard {
             $this->error->set('the reminder should be sent of executed to be stated');
             return false;
         }
-        
+
         if (!$year->readyForState()) {
             $this->error->set('accounting year is not ready for state');
             return false;
         }
-        
+
         $debtor_account = new Account($year, $year->getSetting('debtor_account_id'));
         if($debtor_account->get('id') == 0 || $debtor_account->get('type') != 'balance, asset') {
             $this->error->set('invalid debtor account set in the accounting settings');
         }
-        
+
         if ($this->error->isError()) {
             return false;
         }
@@ -576,7 +576,7 @@ class Reminder extends Standard {
 
     /**
      * State reminder
-     * 
+     *
      * @param object year stating year
      * @param integer voucher_number
      * @param string voucher_date
@@ -588,21 +588,21 @@ class Reminder extends Standard {
             trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
             return false;
         }
-        
+
         if(!is_object($translation)) {
             trigger_error('5th parameter to state needs to be a translation object!', E_USER_ERROR);
             return false;
         }
-        
+
         $validator = new Validator($this->error);
         if($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);
             $this_date->convert2db();
         }
-        
+
         $validator->isNumeric($voucher_number, 'invalid voucher number', 'greater_than_zero');
         $validator->isNumeric($credit_account_number, 'invalid account number for stating reminder', 'greater_than_zero');
-        
+
         if ($this->error->isError()) {
             return false;
         }
@@ -611,16 +611,16 @@ class Reminder extends Standard {
             $this->error->set('Reminder is not ready for state');
             return false;
         }
-        
+
         $text = $translation->get('reminder').' #'.$this->get('number');
-        
+
         require_once 'Intraface/modules/accounting/Voucher.php';
         require_once 'Intraface/modules/accounting/Account.php';
         $voucher = Voucher::factory($year, $voucher_number);
         $voucher->save(array(
             'voucher_number' => $voucher_number,
             'date' => $voucher_date,
-            'text' => $text 
+            'text' => $text
         ));
 
 
@@ -629,14 +629,14 @@ class Reminder extends Standard {
             $this->error->set('invalid account for stating reminder');
         }
         $credit_account_number = $credit_account->get('number');
-        
+
         $debet_account = new Account($year, $year->getSetting('debtor_account_id'));
         $debet_account_number = $debet_account->get('number');
-        
+
         $voucher = Voucher::factory($year, $voucher_number);
         $amount = $this->get('total');
 
-        
+
         $input_values = array(
             'voucher_number' => $voucher_number,
             'date' => $voucher_date,
@@ -645,18 +645,18 @@ class Reminder extends Standard {
             'credit_account_number' => $credit_account_number,
             'text' => $text
         );
-            
+
         if (!$voucher->saveInDaybook($input_values, true)) {
             $this->error->merge($voucher->error->getMessage());
         }
-        
+
         require_once 'Intraface/modules/accounting/VoucherFile.php';
         $voucher_file = new VoucherFile($voucher);
         if (!$voucher_file->save(array('description' => $text, 'belong_to'=>'reminder','belong_to_id'=>$this->get('id')))) {
             $this->error->merge($voucher_file->error->getMessage());
             $this->error->set('Filen blev ikke overflyttet');
         }
-        
+
         if($this->error->isError()) {
             $this->error->set('An error occured while stating the reminder. This can mean that parts of the reminder was not state correct. Please check the voucher.');
             // I am not quite sure if the invoice should be set as stated, but it can give trouble to state it again, if some of it was stated...
@@ -670,7 +670,6 @@ class Reminder extends Standard {
 
     }
 
-    
     function pdf($type = 'stream', $filename='')
     {
         if($this->get('id') == 0) {
@@ -695,13 +694,13 @@ class Reminder extends Standard {
         $report->visit($this);
         return $report->output($type, $filename);
     }
-    
+
     /**
      * returns possible status types
-     * 
+     *
      * @return array possible status types
      */
-    private function getStatusTypes() 
+    private static function getStatusTypes()
     {
         return array(
             0=>'created',
@@ -710,13 +709,13 @@ class Reminder extends Standard {
             3=>'cancelled'
         );
     }
-    
+
     /**
      * returns possible payment methods
-     * 
+     *
      * @return array possible payment methods
      */
-    private function getPaymentMethods() 
+    private static function getPaymentMethods()
     {
         return array(
             0=>'Ingen',
@@ -726,4 +725,3 @@ class Reminder extends Standard {
         );
     }
 }
-?>
