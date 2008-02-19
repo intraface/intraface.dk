@@ -34,7 +34,7 @@ if (!defined('MDB2_DEBUG')) {
     define('MDB2_DEBUG', false);
 }
 
-// This showed not to be the right solution to change this setting - but what then... /Sune (29-08-2007)
+// @todo This showed not to be the right solution to change this setting - but what then... /Sune (29-08-2007)
 // define('MDB2_PORTABILITY_EMPTY_TO_NULL', false);
 
 // Filehandler
