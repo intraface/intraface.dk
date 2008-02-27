@@ -8,25 +8,25 @@
  * @example MainExample.php
  */
 
-class Main {
-
-    var $menu_label;
-    var $show_menu;
-    var $active;
-    var $menu_index;
-    var $frontpage_index;
-    var $submenu = array();
-    var $sub_access = array();
-    var $sub_access_description = array();
-    var $preload_file = array();
-    var $dependent_module = array();
-    var $required_shared = array();
-    var $module_name;
-    var $setting;
-    var $controlpanel_files;
-    var $frontpage_files; // til brug p� forsiden
-    var $translation;
-    var $kernel;
+class Main
+{
+    public $menu_label;
+    public $show_menu;
+    public $active;
+    public $menu_index;
+    public $frontpage_index;
+    public $submenu = array();
+    public $sub_access = array();
+    public $sub_access_description = array();
+    public $preload_file = array();
+    public $dependent_module = array();
+    public $required_shared = array();
+    public $module_name;
+    public $setting;
+    public $controlpanel_files;
+    public $frontpage_files; // til brug p� forsiden
+    public $translation;
+    public $kernel;
 
     /**
      * Constructor
@@ -285,5 +285,20 @@ class Main {
             return $db->f('id');
         }
         return 0;
+    }
+
+    function getMenuLabel()
+    {
+        return $this->menu_label;
+    }
+
+    function getMenuIndex()
+    {
+        return $this->menu_index;
+    }
+
+    function isActive()
+    {
+        return empty($this->active);
     }
 }
