@@ -8,11 +8,11 @@ require_once 'Intraface/Main.php';
 
 class ModuleMaintenance
 {
-    var $id;
-    var $db;
-    var $value;
-    var $error;
-    var $sub_access;
+    private $id;
+    private $db;
+    private $value;
+    public $error;
+    private $sub_access;
 
     public function __construct($id = 0)
     {
@@ -29,7 +29,7 @@ class ModuleMaintenance
         $this->load();
     }
 
-    static function factory($name) 
+    static function factory($name)
     {
 
         $db = MDB2::singleton(DB_DSN);
@@ -44,11 +44,11 @@ class ModuleMaintenance
         }
 
         if($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-            
+
             return new ModuleMaintenance($row['id']);
         }
         else {
-            
+
             trigger_error("invalid module name ".$name."!", E_USER_ERROR);
         }
     }
@@ -88,7 +88,7 @@ class ModuleMaintenance
         }
     }
 
-    public function registerModule($module_name) 
+    public function registerModule($module_name)
     {
         $db = new DB_Sql;
         $updated_sub_access_id = array();
@@ -97,15 +97,15 @@ class ModuleMaintenance
 
         $main_class_name = "Main".ucfirst($module_name);
         $main_class_path = PATH_INCLUDE_MODULE.$module_name."/".$main_class_name.".php";
-        
-        
+
+
         if (!file_exists($main_class_path)) {
             $this->error->set("Filen ".$main_class_path." eksistere ikke!");
-            
+
         } else {
             include_once $main_class_path;
             $module = new $main_class_name;
-            
+
             if (!is_object($module)) {
                 $this->error->set($main_class_name." kunne ikke initialiseres!");
             } else {
@@ -120,7 +120,7 @@ class ModuleMaintenance
                                 active = ".$module->active.",
                                 menu_index = ".intval($module->menu_index).",
                                 frontpage_index = ".intval($module->frontpage_index);
-    
+
                     $db->query("SELECT id FROM module WHERE name = \"".$module_name."\"");
                     if ($db->nextRecord()) {
                         $module_id = $db->f("id");
@@ -132,12 +132,12 @@ class ModuleMaintenance
                         $module_msg[$module_name] = "Registreret";
                     }
                     $db->free();
-    
+
                     $updated_module_id = $module_id;
-    
+
                     // print("med følgende sub access: ");
                     $count_subaccess = count($module->sub_access);
-    
+
                     for ($i = 0; $i < $count_subaccess; $i++) {
                         $db->query("SELECT id FROM module_sub_access WHERE module_id = ".$module_id." AND name = \"".$module->sub_access[$i]."\"");
                         if ($db->nextRecord()) {
@@ -203,11 +203,11 @@ class ModuleMaintenance
                 $module_msg['update'] .= $db->affectedRows()." sub access' er fjernet og blevet deaktiveret.";
             }
         }
-        
+
         return $module_msg;
     }
 
-    public function getList() 
+    public function getList()
     {
 
         $db = new DB_Sql;
@@ -236,7 +236,7 @@ class ModuleMaintenance
         return $value;
     }
 
-    public function get($key = '') 
+    public function get($key = '')
     {
         if (!empty($key)) {
             return($this->value[$key]);
