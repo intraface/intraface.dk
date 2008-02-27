@@ -8,14 +8,15 @@
 5) Download the mysqldump via FTP
 6) Update the generate_package_xml.php and generate package.xml (see below)
 7) Create the PEAR package: PEAR package package.xml
-8) Upload the package to server
-9) Backup of the config file on the running server.
-10) Update the database structure from the install/database-updates.sql
-11) Upgrade the intraface package: PEAR upgrade /home/intraface/Intraface-1.x.x.tgz  
-12) Upgrade tools.intraface.dk?
-13) ...
-14) Ensure cron job is correct and they do not generate error.
-15) Test general use of the system
+8) Install the package on your local machine and tjek that it is working
+9) Upload the package to server
+10) Backup of the config file on the running server.
+11) Update the database structure from the install/database-updates.sql
+12) Upgrade the intraface package: PEAR upgrade /home/intraface/Intraface-1.x.x.tgz  
+13) Upgrade tools.intraface.dk?
+14) ...
+15) Ensure cron job is correct and they do not generate error.
+16) Test general use of the system
 17) Test that pdfs are working. Ensure that payment bank information is correct
 18) Test that send invoice as e-mail sender works
 19) Write blog post for website
