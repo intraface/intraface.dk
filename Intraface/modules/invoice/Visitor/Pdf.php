@@ -6,14 +6,14 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
  */
-class Reminder_Report_Pdf {
-    private $file;
-    private $translation;
-    private $doc;
 
+require_once 'Intraface/modules/debtor/Pdf.php';
+
+class Reminder_Report_Pdf extends Debtor_Pdf
+{
+    
     function __construct($translation, $file = null) {
-        $this->translation = $translation;
-        $this->file = $file;
+        parent::__construct($translation, $file);
     }
 
     function visit(Reminder $reminder) {
@@ -22,11 +22,7 @@ class Reminder_Report_Pdf {
             trigger_error("Reminder->pdf skal være loaded for at lave pdf", E_USER_ERROR);
         }
 
-        $shared_pdf = $reminder->kernel->useShared('pdf');
-        $shared_pdf->includeFile('PdfMakerDebtor.php');
-
-        $this->doc = new PdfMakerDebtor($reminder->kernel);
-        $this->doc->start();
+        $this->doc = $this->createDocument();
 
 
         if (!empty($this->file) AND $this->file->get('id') > 0) {
@@ -60,7 +56,7 @@ class Reminder_Report_Pdf {
         $this->docinfo[0]["label"] = "Dato:";
         $this->docinfo[0]["value"] = $reminder->get("dk_this_date");
 
-        $this->doc->addRecieverAndSender($contact , $intranet, "Påmindelse om betaling", $this->docinfo);
+        $this->addRecieverAndSender($contact , $intranet, "Påmindelse om betaling", $this->docinfo);
 
         $this->doc->setY('-20'); // mellemrum til vareoversigt
 
@@ -218,31 +214,9 @@ class Reminder_Report_Pdf {
             "girocode" => $reminder->get("girocode"));
 
 
-        $this->doc->addPaymentCondition($reminder->get("payment_method_key"), $parameter);
-
-
-
+        $this->addPaymentCondition($reminder->get("payment_method_key"), $parameter);
         // $this->doc->stream();
 
-    }
-
-    function output($type = 'stream', $filename='') {
-
-        switch ($type) {
-            case 'string':
-                    return $this->doc->output();
-                break;
-            case 'file':
-                    if (empty($filename)) {
-                        return 0;
-                    }
-                    $data = $this->doc->output();
-                    return $this->doc->writeDocument($data, $filename);
-                break;
-            default:
-                    return $this->doc->stream();
-                break;
-        }
     }
 }
 
