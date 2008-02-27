@@ -70,11 +70,6 @@ class CMS_Page extends Standard
 
 
     public $value;
-    public $type = array(
-        1 => 'page',
-        2 => 'article',
-        3 => 'news'
-    );
     public $status = array(
         0 => 'draft',
         1 => 'published'
@@ -209,7 +204,7 @@ class CMS_Page extends Standard
             $var['pic_id'] = 0;
         }
 
-        $type_key = array_search($var['page_type'], $this->type);
+        $type_key = array_search($var['page_type'], $this->getTypes());
 
         if (empty($var['date_publish'])) {
             $sql_publish = 'NOW()';
@@ -327,11 +322,12 @@ class CMS_Page extends Standard
         if (!$db->nextRecord()) {
             return 0;
         }
-        // S�tte sideoplysninger
+        // sets sideoplysninger
         $this->value['id'] = $db->f('id');
         $this->value['site_id'] = $db->f('site_id');
         $this->value['type_key'] = $db->f('type_key');
-        $this->value['type'] = $this->type[$db->f('type_key')];
+        $types = $this->getTypes();
+        $this->value['type'] = $types[$db->f('type_key')];
         $this->value['identifier'] = $db->f('identifier');
         if (empty($this->value['identifier'])) {
             $this->value['identifier'] = $db->f('id');
@@ -519,7 +515,7 @@ class CMS_Page extends Standard
             }
 
             if($type != 'all') {
-                $type_key = array_search($type, $this->type);
+                $type_key = array_search($type, $this->getTypes());
                 if($type_key === false) {
                     trigger_error("Invalid type '".$type."' set with CMS_PAGE::dbquery::setFilter('type') in CMS_Page::getList", E_USER_ERROR);
                 }
@@ -729,6 +725,19 @@ class CMS_Page extends Standard
     function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * Returns the possible page types
+     * 
+     * @return array possible page types
+     */
+    public function getTypes() 
+    {
+        return array(
+            1 => 'page',
+            2 => 'article',
+            3 => 'news');
     }
 
 }

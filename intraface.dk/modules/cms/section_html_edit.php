@@ -358,7 +358,7 @@ switch ($value['type']) {
                 <label for="show_type_id"><?php echo safeToHtml($translation->get('show the following pages')); ?></label>
                 <select name="show_type" id="show_type_id">
                     <option value="all"<?php if (!empty($value['show_type']) AND $value['show_type'] == 'all') echo ' selected="selected"'; ?>><?php echo safeToForm($translation->get('all pages')); ?></option>
-                    <?php foreach ($element->section->cmspage->type AS $page_type): ?>
+                    <?php foreach ($element->section->cmspage->getTypes() AS $page_type): ?>
                         <option value="<?php echo $page_type; ?>"<?php if (isset($value['show_type']) AND $value['show_type'] == $page_type) echo ' selected="selected"'; ?>><?php echo safeToForm($translation->get($page_type)); ?></option>
                     <?php endforeach; ?>
                 </select>
