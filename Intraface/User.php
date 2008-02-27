@@ -118,7 +118,7 @@ class User extends Standard
      */
     function getAddress()
     {
-        $this->address = Address::factory('user', $this->id);
+        return ($this->address = Address::factory('user', $this->id));
     }
 
     /**
@@ -287,7 +287,9 @@ class User extends Standard
     function hasSubAccess($module, $sub_access, $intranet_id = 0)
     {
         settype($intranet_id, "integer");
-        if($intranet_id == 0) $intranet_id = $this->intranet_id;
+        if($intranet_id == 0) {
+            $intranet_id = $this->intranet_id;
+        }
 
         if(is_string($module)) {
             $module_id = $this->getModuleIdFromString($module);
