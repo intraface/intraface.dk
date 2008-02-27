@@ -9,10 +9,15 @@ class CMS_Template_LongText extends CMS_TemplateSection
         'strong', 'a', 'em'
     );
 
-    function __construct(& $cmspage, $id = 0)
+    function __construct($cmspage, $id = 0)
     {
         $this->value['type'] = 'longtext';
         parent::__construct($cmspage, $id);
+    }
+
+    function getAllowedHTMLOptions()
+    {
+        return $this->possible_allowed_html;
     }
 
     function load_section()

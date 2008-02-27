@@ -1,57 +1,53 @@
 <?php
+
 /**
  * Elementredigering
  *
  * Webinterfacet til de enkelte elementer programmeres alle i denne fil.
  */
-require('../../include_first.php');
+require ('../../include_first.php');
 
 $cms_module = $kernel->module('cms');
 $translation = $kernel->getTranslation('cms');
 
-
 // saving
-if (!empty($_POST)) {
+if (!empty ($_POST)) {
 
-    $template = CMS_Template::factory($kernel, 'id', $_POST['template_id']);
+    $template = CMS_Template :: factory($kernel, 'id', $_POST['template_id']);
 
-    if (!empty($_POST['id'])) {
-        $section = CMS_TemplateSection::factory($template, 'template_and_id', $_POST['id']);
-    }
-    else {
-        $section = CMS_TemplateSection::factory($template, 'type', $_POST['type']);
+    if (!empty ($_POST['id'])) {
+        $section = CMS_TemplateSection :: factory($template, 'template_and_id', $_POST['id']);
+    } else {
+        $section = CMS_TemplateSection :: factory($template, 'type', $_POST['type']);
     }
 
     if ($section->save($_POST)) {
-        if (!empty($_POST['close'])) {
-            header('Location: template.php?id='.$section->template->get('id'));
+        if (!empty ($_POST['close'])) {
+            header('Location: template.php?id=' . $section->template->get('id'));
+            exit;
+        } else {
+            header('Location: template_section_edit.php?id=' . $section->get('id'));
             exit;
         }
-        else {
-            header('Location: template_section_edit.php?id='.$section->get('id'));
-            exit;
-        }
-    }
-    else {
+    } else {
         $value = $_POST;
     }
 }
-elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
-    $section = CMS_TemplateSection::factory($kernel, 'id', $_GET['id']);
+elseif (!empty ($_GET['id']) AND is_numeric($_GET['id'])) {
+    $section = CMS_TemplateSection :: factory($kernel, 'id', $_GET['id']);
     $value = $section->get();
 
 }
-elseif (!empty($_GET['template_id']) AND is_numeric($_GET['template_id'])) {
+elseif (!empty ($_GET['template_id']) AND is_numeric($_GET['template_id'])) {
     // der skal valideres noget på typen også.
 
-    $template = CMS_Template::factory($kernel, 'id', $_GET['template_id']);
-    $section = CMS_TemplateSection::factory($template, 'type', $_GET['type']);
+    $template = CMS_Template :: factory($kernel, 'id', $_GET['template_id']);
+    $section = CMS_TemplateSection :: factory($template, 'type', $_GET['type']);
 
     $value['type'] = $section->get('type');
     $value['template_id'] = $section->get('template_id');
 
-}
-else {
+} else {
     trigger_error($translation->get('not allowed', 'common'), E_USER_ERROR);
 }
 
@@ -62,6 +58,7 @@ $page->start(safeToHtml($translation->get('edit template section')));
 <h1><?php echo safeToHtml($translation->get('edit template section')); ?></h1>
 
 <?php
+
 echo $section->error->view($translation);
 ?>
 
@@ -82,11 +79,12 @@ echo $section->error->view($translation);
     </fieldset>
 
 <?php
+
 // disse elementtyper skal svare til en elementtype i en eller anden fil.
 switch ($value['type']) {
 
-    case 'shorttext':
-        ?>
+    case 'shorttext' :
+?>
         <fieldset>
             <legend><?php echo safeToHtml($translation->get('information about shorttext')); ?></legend>
             <div class="formrow">
@@ -95,11 +93,13 @@ switch ($value['type']) {
             </div>
         </fieldset>
         <?php
-    break;
 
-    case 'longtext':
-        if (empty($value['html_format'])) $value['html_format'] = array();
-        ?>
+        break;
+
+    case 'longtext' :
+        if (empty ($value['html_format']))
+            $value['html_format'] = array ();
+?>
         <fieldset>
             <legend><?php echo safeToHtml($translation->get('information about longtext')); ?></legend>
             <div class="formrow">
@@ -109,20 +109,20 @@ switch ($value['type']) {
         </fieldset>
         <fieldset>
             <legend><?php echo safeToHtml($translation->get('allowed html tags')); ?></legend>
-            <?php foreach ($section->possible_allowed_html AS $html): ?>
+            <?php foreach ($section->getAllowedHTMLOptions() AS $html): ?>
                 <input type="checkbox" value="<?php echo $html; ?>" name="html_format[]" <?php if (in_array($html, $value['html_format'])) echo ' checked="checked"'; ?> /> <label for="<?php echo $html; ?>"><<?php echo $html; ?>><?php echo safeToHtml($translation->get($html)); ?></<?php echo $html; ?>></label>
             <?php endforeach; ?>
         </fieldset>
         <?php
-    break;
 
-    case 'picture':
+        break;
+
+    case 'picture' :
         $kernel->useShared('filehandler');
-        require_once('Intraface/shared/filehandler/InstanceManager.php');
+        require_once ('Intraface/shared/filehandler/InstanceManager.php');
         $instancemanager = new InstanceManager($kernel);
         $instances = $instancemanager->getList();
-        
-        ?>
+?>
         <fieldset>
             <legend><?php echo safeToHtml($translation->get('information about picture')); ?></legend>
             <div class="formrow">
@@ -136,33 +136,36 @@ switch ($value['type']) {
             </div>
         </fieldset>
         <?php
-    break;
-        case 'mixed':
-        ?>
+
+        break;
+    case 'mixed' :
+?>
         <fieldset>
             <legend><?php echo safeToHtml($translation->get('mixed allowed elements')); ?></legend>
                 <?php
-                    $element_types = $cms_module->getSetting('element_types');
-                    foreach ($element_types AS $key=>$v):
-                        echo '<div class="radio">';
-                        echo '<input name="allowed_element[]" type="checkbox" id="allowed_element_'.$key.'" value="'. $key . '"';
 
-                        if (isset($value['allowed_element']) && is_array($value['allowed_element']) AND in_array($key, $value['allowed_element']))  {
-                            echo ' checked="checked"';
-                        }
-                        echo '/>';
-                        echo ' <label for="allowed_element_'.$key.'">' . safeToForm($translation->get($v)) . '</label>';
-                        echo '</div>';
-                    endforeach;
-                ?>
+        $element_types = $cms_module->getSetting('element_types');
+        foreach ($element_types AS $key => $v)
+            : echo '<div class="radio">';
+        echo '<input name="allowed_element[]" type="checkbox" id="allowed_element_' . $key . '" value="' . $key . '"';
+
+        if (isset ($value['allowed_element']) && is_array($value['allowed_element']) AND in_array($key, $value['allowed_element'])) {
+            echo ' checked="checked"';
+        }
+        echo '/>';
+        echo ' <label for="allowed_element_' . $key . '">' . safeToForm($translation->get($v)) . '</label>';
+        echo '</div>';
+        endforeach;
+?>
 
         </fieldset>
         <?php
-    break;
 
-    default:
+        break;
+
+    default :
         trigger_error($translation->get('not allowed', 'common'), E_USER_ERROR);
-    break;
+        break;
 
 }
 ?>
@@ -176,5 +179,6 @@ switch ($value['type']) {
 </form>
 
 <?php
+
 $page->end();
 ?>
