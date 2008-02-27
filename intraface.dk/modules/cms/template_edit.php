@@ -16,27 +16,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!empty($_POST['close'])) {
             header('Location: templates.php?site_id='.$cmssite->get('id'));
             exit;
-        }
-        else {
+        } else {
             header('Location: template.php?id='.$template->get('id'));
             exit;
         }
-    }
-    else {
+    } else {
         $value = $_POST;
     }
-}
-elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
+} elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
     $template = CMS_Template::factory($kernel, 'id', $_GET['id']);
     $value = $template->get();
 
-}
-elseif (!empty($_GET['site_id']) AND is_numeric($_GET['site_id'])) {
+} elseif (!empty($_GET['site_id']) AND is_numeric($_GET['site_id'])) {
     $cmssite = new CMS_Site($kernel, $_GET['site_id']);
     $template = new CMS_Template($cmssite);
     $value['site_id'] = $_GET['site_id'];
-}
-else {
+} else {
     trigger_error($translation->get('not allowed', 'common'), E_USER_ERROR);
 }
 
@@ -44,11 +39,11 @@ $page = new Page($kernel);
 $page->start(safeToHtml($translation->get('edit template')));
 ?>
 
-<h1><?php echo safeToHtml($translation->get('edit template')); ?></h1>
+<h1><?php e($translation->get('edit template')); ?></h1>
 
 <?php if (!empty($value['id'])): ?>
 <ul class="options">
-    <li><a href="template.php?id=<?php echo intval($value['id']); ?>"><?php echo safeToHtml($translation->get('view template')); ?></a></li>
+    <li><a href="template.php?id=<?php echo intval($value['id']); ?>"><?php e($translation->get('view template')); ?></a></li>
 </ul>
 <?php endif; ?>
 
@@ -62,26 +57,26 @@ $page->start(safeToHtml($translation->get('edit template')));
 
     <fieldset>
 
-        <legend><?php echo safeToHtml($translation->get('template')); ?></legend>
+        <legend><?php e($translation->get('template')); ?></legend>
 
         <div class="formrow" id="titlerow">
-            <label for="name"><?php echo safeToHtml($translation->get('template name')); ?></label>
+            <label for="name"><?php e($translation->get('template name')); ?></label>
             <input name="name" type="text" id="name" value="<?php if (!empty($value['name'])) echo safeToForm($value['name']); ?>" size="50" maxlength="255" />
         </div>
         <div class="formrow" id="titlerow">
-            <label for="name"><?php echo safeToHtml($translation->get('identifier', 'common')); ?></label>
+            <label for="name"><?php e($translation->get('identifier', 'common')); ?></label>
             <input name="identifier" type="text" id="name" value="<?php if (!empty($value['identifier'])) echo safeToForm($value['identifier']); ?>" size="50" maxlength="255" />
         </div>
 
     </fieldset>
 
     <div style="clear: both;">
-        <input type="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" />
-        <input type="submit" name="close" value="<?php echo safeToHtml($translation->get('save and close', 'common')); ?>" />
+        <input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
+        <input type="submit" name="close" value="<?php e($translation->get('save and close', 'common')); ?>" />
         <?php if (!empty($value['id'])): ?>
-            <a href="template.php?id=<?php echo intval($value['id']); ?>"><?php echo safeToHtml($translation->get('regret')); ?></a>
+            <a href="template.php?id=<?php echo intval($value['id']); ?>"><?php e($translation->get('regret')); ?></a>
         <?php else: ?>
-            <a href="templates.php?site_id=<?php echo intval($value['site_id']); ?>"><?php echo safeToHtml($translation->get('regret', 'common')); ?></a>
+            <a href="templates.php?site_id=<?php echo intval($value['site_id']); ?>"><?php e($translation->get('regret', 'common')); ?></a>
         <?php endif; ?>
     </div>
 </form>
