@@ -1,6 +1,6 @@
 <?php
 /**
- * Main class for Debtor pdfs. Debtor_Report_Pdf and 
+ * Main class for Debtor pdfs. Debtor_Report_Pdf and
  * Reminder_Report_Pdf extends from this
  *
  * @package Intraface_Debtor
@@ -42,7 +42,6 @@ class Debtor_Pdf
         require_once 'Intraface/shared/pdf/PdfMaker.php';
         $doc = new PdfMaker();
         return $doc;
-
     }
 
     /**
@@ -53,7 +52,8 @@ class Debtor_Pdf
      *
      * @return void
      */
-    function output($type = 'string', $filename = 'debtor.pdf') {
+    function output($type = 'string', $filename = 'debtor.pdf')
+    {
         switch ($type) {
         case 'string':
             return $this->doc->output();
@@ -79,8 +79,8 @@ class Debtor_Pdf
      *
      * @return The y-coordinate after payment condition has been added
      */
-    function addRecieverAndSender($contact, $intranet = array(), $title = "", $docinfo = array()) {
-
+    function addRecieverAndSender($contact, $intranet = array(), $title = "", $docinfo = array())
+    {
         // $pointX = $this->doc->get("margin_left");
 
         if (!is_array($contact)) {
@@ -215,13 +215,17 @@ class Debtor_Pdf
     /**
      * Adds the payment condition to the document
      *
+     * @todo Make the use of payment info better so it will not crash the server
+     *       Create some checks.
+     *
      * @param integer $payment_method The chosen payment method
      * @param array   $parameter      array("contact" => (object), "payment_text" => (string), "amount" => (double), "due_date" => (string), "girocode" => (string));
      * @param array   $payment_info   The payment information
      *
      * @return The y-coordinate after payment condition has been added
      */
-    function addPaymentCondition($payment_method, $parameter, $payment_info = array()) {
+    function addPaymentCondition($payment_method, $parameter, $payment_info = array())
+    {
         if (!is_array($parameter)) {
             trigger_error("den 3. parameter til addPaymentCondition skal være et array!", E_USER_ERROR);
         }
@@ -246,8 +250,6 @@ class Debtor_Pdf
             }
 
             if (isset($parameter['payment_online']) AND $parameter['payment_online'] != 0) {
-                
-                
                 $this->doc->setLineStyle(1.5);
                 $this->doc->setColor(0, 0, 0);
                 $this->doc->line($this->doc->get("margin_left"), $this->doc->get('y'), $this->doc->get("right_margin_position"), $this->doc->get('y'));
@@ -263,7 +265,9 @@ class Debtor_Pdf
 
         }
 
-        if (!isset($parameter['payment_online'])) $parameter['payment_online'] = 0;
+        if (!isset($parameter['payment_online'])) {
+            $parameter['payment_online'] = 0;
+        }
         $amount = $parameter["amount"] - $parameter['payment_online'] - $parameter['payment'];
 
         // Indbetalingsoplysninger
@@ -421,8 +425,6 @@ class Debtor_Pdf
 
             }
         }
-        return($this->doc->get('y'));
+        return $this->doc->get('y');
     }
-
 }
-?>
