@@ -4,15 +4,15 @@
  */
 class CMS_Stylesheet extends Standard
 {
-    var $cmssite;
-    var $error;
+    private $cmssite;
+    public $error;
 
-    function __construct(&$cmssite)
+    function __construct($cmssite)
     {
         if (!is_object($cmssite) OR strtolower(get_class($cmssite)) != 'cms_site') {
             trigger_error('CMS_Stylesheet::__construct needs CMS_Site - got ' . get_class($cmssite), E_USER_ERROR);
         }
-        $this->cmssite = &$cmssite;
+        $this->cmssite = $cmssite;
         $this->error = new Error;
         $this->load();
 
