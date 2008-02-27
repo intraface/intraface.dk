@@ -1,8 +1,9 @@
 <?php
 /**
  * @package Intraface_Contact
+ * @todo Not used anymore
  */
-
+/*
 class ContactMessage extends Standard {
 
     var $error;
@@ -91,3 +92,4 @@ class ContactMessage extends Standard {
         $db->query($sql);
   }
 }
+*/
