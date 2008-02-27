@@ -2,18 +2,21 @@
 /**
  * @package Intraface_CMS
  */
-class CMS_Template_ShortText extends CMS_TemplateSection {
-
-    function __construct(& $cmspage, $id = 0) {
+class CMS_Template_ShortText extends CMS_TemplateSection
+{
+    public function __construct($cmspage, $id = 0)
+    {
         $this->value['type'] = 'shorttext';
         parent::__construct($cmspage, $id);
     }
 
-    function load_section() {
+    protected function load_section()
+    {
         $this->value['size'] = $this->parameter->get('size');
     }
 
-    function validate_section(& $var) {
+    protected function validate_section($var)
+    {
         $validator = new Validator($this->error);
         $validator->isNumeric($var['size'], 'error in size', 'allow_empty');
 
@@ -24,12 +27,12 @@ class CMS_Template_ShortText extends CMS_TemplateSection {
         return 1;
     }
 
-    function save_section($var) {
-        if (empty($var['size'])) $var['size'] = 255;
+    protected function save_section($var)
+    {
+        if (empty($var['size'])) {
+            $var['size'] = 255;
+        }
         $this->addParameter('size', $var['size']);
         return 1;
     }
-
 }
-
-?>

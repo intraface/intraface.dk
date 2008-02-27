@@ -11,7 +11,7 @@ define('PATH_CACHE', './');
 
 class Testable_CMS_Section_LongText extends CMS_Section_LongText
 {
-    function createTemplateSection()
+    function getTemplateSection()
     {
         return new FakeCMSTemplateSection($this->kernel);
     }
@@ -43,7 +43,7 @@ class SectionLongTextTest extends PHPUnit_Framework_TestCase {
     {
 
         $section = new Testable_CMS_Section_LongText($this->page);
-        $section->createParameter();
+        $section->getParameter();
         $data = array('type_key' => 1, 'template_section_id' => 1);
         $section->save($data);
         $section->template_section = new FakeCMSTemplateSection($this->kernel);

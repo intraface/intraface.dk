@@ -137,7 +137,7 @@ class CMS_Parameter
      */
     public function get($parameter)
     {
-        if (!$this->loaded AND $this->object->id > 0) {
+        if (!$this->loaded AND $this->object->getId() > 0) {
             $this->load();
         }
         if (array_key_exists($parameter, $this->value)) {
@@ -147,4 +147,3 @@ class CMS_Parameter
         }
     }
 }
-?>

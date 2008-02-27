@@ -6,14 +6,14 @@
  *
  * @package Intraface_CMS
  */
-require_once('section/ShortText.php');
-require_once('section/LongText.php');
-require_once('section/Picture.php');
-require_once('section/Mixed.php');
+require_once 'section/ShortText.php';
+require_once 'section/LongText.php';
+require_once 'section/Picture.php';
+require_once 'section/Mixed.php';
 //require_once('FormFilter.php');
 
-class CMS_Section extends Standard {
-
+class CMS_Section extends Standard
+{
     public $id;
     private $db;
     public $cmspage;
@@ -31,7 +31,7 @@ class CMS_Section extends Standard {
      * Fordelen er, at man ikke behøver at vide hvilken side elementet hører til,
      * men blot behøver, at have elementid.
      */
-    function __construct($cmspage, $id = 0)
+    public function __construct($cmspage, $id = 0)
     {
         if (!is_object($cmspage)) {
             trigger_error('Section::__construct needs CMS_Page - got ' . get_class($cmspage), E_USER_ERROR);
@@ -53,7 +53,7 @@ class CMS_Section extends Standard {
             $this->value['type_key'] = array_search($this->value['type'], $this->section_types);
         }
 
-        $this->parameter = $this->createParameter();
+        $this->parameter = $this->getParameter();
 
         if ($this->id > 0) {
             $this->load();
@@ -61,20 +61,19 @@ class CMS_Section extends Standard {
                 $this->load_section();
             }
         }
-
     }
 
-    function createParameter()
+    public function getParameter()
     {
         return new CMS_Parameter($this);
     }
 
-    function addParameter($key, $value)
+    public function addParameter($key, $value)
     {
         return $this->parameter->save($key, $value);
     }
 
-    function factory(& $object, $type, $value)
+    public function factory($object, $type, $value)
     {
         $class_prefix = 'CMS_Section_';
         switch ($type) {
@@ -121,7 +120,7 @@ class CMS_Section extends Standard {
         }
     }
 
-    function load()
+    private function load()
     {
         if ($this->id == 0) {
             return 0;
@@ -143,19 +142,19 @@ class CMS_Section extends Standard {
 
         $this->value = array_merge($this->value, $row);
         $this->value['type'] = $this->section_types[$this->get('type_key')];
-        $this->template_section = $this->createTemplateSection($this->get('template_section_id'));
+        $this->template_section = $this->getTemplateSection($this->get('template_section_id'));
         $this->value['section_name'] = $this->template_section->get('name');
         $this->value['section_identifier'] = $this->template_section->get('identifier');
 
         return $this->id;
     }
 
-    function createTemplateSection($template_section_id)
+    private function getTemplateSection($template_section_id)
     {
         return CMS_TemplateSection::factory($this->kernel, 'id', $template_section_id);
     }
 
-    function validate($var)
+    private function validate($var)
     {
         /*
         $validator = new Validator($this->error);
@@ -168,7 +167,7 @@ class CMS_Section extends Standard {
         return 1;
     }
 
-    function save($var)
+    public function save($var)
     {
         if (!$this->validate($var)) {
             return 0;
@@ -212,13 +211,18 @@ class CMS_Section extends Standard {
         return $this->id;
     }
 
-    function validate_section()
+    protected function validate_section()
     {
         return true;
     }
 
-    function save_section()
+    protected function save_section()
     {
         return true;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 }

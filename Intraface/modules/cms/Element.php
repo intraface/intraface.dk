@@ -302,7 +302,7 @@ class CMS_Element extends Standard
         if ($this->id == 0) {
             $this->id = $db->insertedId();
 
-            $next_pos = $this->getPosition()->maxPosition() + 1;
+            $next_pos = $this->getPosition($db)->maxPosition() + 1;
             $db->query("UPDATE cms_element SET position = " . $next_pos . " WHERE id = " . $this->id);
         }
 
@@ -336,7 +336,7 @@ class CMS_Element extends Standard
      *
      * @return boolean
      */
-    function delete()
+    public function delete()
     {
         // Husk kun at deaktivere
         $db = new DB_Sql;
@@ -349,10 +349,15 @@ class CMS_Element extends Standard
      *
      * @return boolean
      */
-    function undelete()
+    public function undelete()
     {
         $db = new DB_Sql;
         $db->query("UPDATE cms_element SET active = 1 WHERE id = " . $this->id);
         return true;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 }

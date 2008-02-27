@@ -135,7 +135,7 @@ class CMS_Template extends Standard
 
         if ($this->id == 0) {
             $this->id = $db->insertedId();
-            $this->getPosition()->moveToMax($this->id);
+            $this->getPosition($db)->moveToMax($this->id);
 
         }
 

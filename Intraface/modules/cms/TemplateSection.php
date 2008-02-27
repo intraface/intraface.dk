@@ -14,7 +14,7 @@ require_once 'template_section/Mixed.php';
 
 class CMS_TemplateSection extends Standard
 {
-    public $id;
+    protected $id;
     public $kernel;
     public $template;
     protected $parameter;
@@ -122,7 +122,6 @@ class CMS_TemplateSection extends Standard
 
     function load()
     {
-
         $db = new DB_Sql;
         $db->query("SELECT id, name, identifier, type_key, locked FROM cms_template_section WHERE cms_template_section.intranet_id = ".$this->template->cmssite->kernel->intranet->get('id')." AND cms_template_section.id = " . $this->id);
         if (!$db->nextRecord()) {
@@ -143,9 +142,8 @@ class CMS_TemplateSection extends Standard
         return $this->id;
     }
 
-    function validate($var)
+    private function validate($var)
     {
-
         $validator = new Validator($this->error);
         $validator->isString($var['name'], 'error in name', '', '');
 
@@ -158,7 +156,6 @@ class CMS_TemplateSection extends Standard
         }
         if ($this->isIdentifierUnique($var['identifier'])) {
             $this->error->set('error in identifier - has to be unique');
-
         }
 
         if ($this->error->isError()) {
@@ -168,7 +165,7 @@ class CMS_TemplateSection extends Standard
         return true;
     }
 
-    function save($var)
+    public function save($var)
     {
         $var['identifier'] = trim($var['identifier']);
         if (!isset($var['locked'])) {
@@ -256,7 +253,7 @@ class CMS_TemplateSection extends Standard
     /**
      * Has to be overridden in sub classes
      */
-    function validate_section()
+    protected function validate_section()
     {
         return true;
     }
@@ -264,8 +261,13 @@ class CMS_TemplateSection extends Standard
     /**
      * Has to be overridden in sub classes
      */
-    function save_section()
+    protected function save_section()
     {
         return true;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 }
