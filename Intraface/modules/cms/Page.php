@@ -165,7 +165,7 @@ class CMS_Page extends Standard
         if (!Validate::string($var['identifier'], array('format' => VALIDATE_ALPHA . VALIDATE_NUM . '-_'))) {
             $this->error->set('error in identifier - allowed values are a-z, 1-9');
         }
-        if ($this->isIdentifierAvailable($var['identifier'])) {
+        if (!$this->isIdentifierAvailable($var['identifier'])) {
             $this->error->set('error in identifier - has to be unique');
         }
 
