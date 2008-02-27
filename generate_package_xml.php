@@ -7,7 +7,7 @@
  * @version @package-version@
  */
 
-$version = '1.7.1';
+$version = '1.7.2';
 $stability = 'stable';
 $notes = '
 * Small fixes of undefined variables
