@@ -113,7 +113,7 @@ class HTML_Editor
 
                 if (!empty($editor_attributes['plugins']) AND is_array($editor_attributes['plugins'])) {
                     if (in_array('spellchecker', $editor_attributes['plugins'])) {
-                        $button[] = 'spellchecker';
+                        // $button[] = 'spellchecker';
                     }
 
                     if (in_array('table', $editor_attributes['plugins']) AND in_array('table', $this->allowed_tags)) {
@@ -133,7 +133,12 @@ class HTML_Editor
                 if (!empty($editor_attributes['plugins']) AND is_array($editor_attributes['plugins'])) {
                     $output .= '    plugins : "'.implode($editor_attributes['plugins'], ',').'",';
                 }
-
+                $output .= '    theme_advanced_buttons1 : "'.implode($button, ',').'",';
+                $output .= '    theme_advanced_buttons2 : "",';
+                $output .= '    theme_advanced_buttons3 : "",';
+                $output .= '    theme_advanced_blockformats : "'.implode($blockformat, ',').'",';
+                $output .= '    theme_advanced_toolbar_location : "top",';
+                $output .= '    theme_advanced_toolbar_align : "left",';
                 $output .= '	cleanup : true,';
                 $output .= '	clean_on_startup : true,';
                 $output .= '	verify_html : true,';
@@ -141,14 +146,7 @@ class HTML_Editor
                 $output .= '	relative_urls : false,';
                 $output .= '	entity_encoding : "raw",';
                 $output .= '	remove_linebreaks : true,';
-                $output .= '	theme_advanced_toolbar_location : "top",';
-                $output .= '	theme_advanced_toolbar_align : "left",';
-                $output .= '	theme_advanced_layout_manager : "SimpleLayout",';
-                $output .= '	theme_advanced_buttons1 : "'.implode($button, ',').'",';
-                $output .= '	theme_advanced_buttons2 : "",';
-                $output .= '	theme_advanced_buttons3 : "",';
-                $output .= '	theme_advanced_blockformats : "'.implode($blockformat, ',').'",';
-                $output .= '	spellchecker_languages : "+Danish=da, English=en"';
+                //$output .= '	spellchecker_languages : "+Danish=da, English=en"';
 
                 $output .= '});';
                 $output .= '</script>';
