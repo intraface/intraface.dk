@@ -2,6 +2,7 @@
 require('../../include_first.php');
 
 $kernel->module("procurement");
+$product_module = $kernel->useModule('product');
 $translation = $kernel->getTranslation('procurement');
 
 settype($_GET['id'], 'integer');

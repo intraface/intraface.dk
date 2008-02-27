@@ -358,6 +358,8 @@ $page->start("Indkøb");
 
 <?php if($kernel->user->hasModuleAccess('product')): ?>
     <?php
+    $product_module = $kernel->useModule('product');
+    
     if($procurement->get("locked") == false) {
         ?>
         <ul class="options">
