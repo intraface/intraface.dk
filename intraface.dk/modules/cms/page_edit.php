@@ -118,7 +118,7 @@ $page->start(safeToHtml($translation->get('edit page')));
         <div class="formrow">
             <label for="page-type"><?php echo safeToHtml($translation->get('choose page type')); ?></label>
             <select name="page_type" id="cms-page-type">
-                <?php foreach ($cmspage->type AS $key => $type): ?>
+                <?php foreach ($cmspage->getTypes() AS $key => $type): ?>
                 <option value="<?php echo $type; ?>"<?php if (!empty($value['type']) AND $value['type'] == $type) echo ' selected="selected"' ?>><?php echo safeToForm($translation->get($type)); ?></option>
                 <?php endforeach; ?>
             </select>
