@@ -4,9 +4,8 @@
  *
  * @package Intraface_CMS
  */
-
-class HTML_Editor {
-
+class HTML_Editor
+{
     public $allowed_tags;
     public $implemented_editors = array(
         'none', 'tinymce', 'wiki'
@@ -17,13 +16,13 @@ class HTML_Editor {
     /**
      * Constructor
      */
-
-    function __construct($allowed_tags = '') {
+    function __construct($allowed_tags = '')
+    {
         $this->allowed_tags = $allowed_tags;
     }
 
-
-    function setEditor($editor) {
+    function setEditor($editor)
+    {
         if (!in_array($editor, $this->implemented_editors)) {
             trigger_error($editor . 'editor not implemented', E_USER_ERROR);
         }
@@ -31,7 +30,8 @@ class HTML_Editor {
         $this->editor = $editor;
     }
 
-    function get($textarea_attributes, $initial_value = '', $editor_attributes = array()) {
+    function get($textarea_attributes, $initial_value = '', $editor_attributes = array())
+    {
         $output = '';
         switch($this->editor) {
             case 'tinymce':
@@ -75,19 +75,15 @@ class HTML_Editor {
                         $blockformat[] = 'blockquote';
                     }
 
-
                     if (in_array('strong', $this->allowed_tags)) {
                         $button[] = ', bold';
-                    }
-
-                    elseif (in_array('b', $this->allowed_tags)) {
+                    } elseif (in_array('b', $this->allowed_tags)) {
                         $button[] = ', bold';
                     }
 
                     if (in_array('em', $this->allowed_tags)) {
                         $button[] = ', italic';
-                    }
-                    elseif (in_array('i', $this->allowed_tags)) {
+                    } elseif (in_array('i', $this->allowed_tags)) {
                         $button[] = ', italic';
                     }
 
@@ -101,14 +97,11 @@ class HTML_Editor {
                     if (in_array('ol', $this->allowed_tags)) {
                         $button[] = 'numlist';
                     }
-
-
                 }
 
                 if (!empty($blockformat)) {
                     $button[] = 'formatselect';
                 }
-
 
                 // link, unlink - hvis link er tilladte
                 // bold, italic - hvis de er tilladte
@@ -117,9 +110,6 @@ class HTML_Editor {
                 // spellchecker - if it is turned on
 
                 // original list of buttons1: , bold, italic, formatselect, separator, bullist,numlist,separator,undo,redo,separator,link,unlink,separator,sub,sup,separator, tablecontrols, separator,charmap,separator,cleanup,code,spellchecker,separator,help,pasteword
-
-
-                //print_r($editor_attributes['plugins']);
 
                 if (!empty($editor_attributes['plugins']) AND is_array($editor_attributes['plugins'])) {
                     if (in_array('spellchecker', $editor_attributes['plugins'])) {
@@ -132,7 +122,6 @@ class HTML_Editor {
                     }
                 }
 
-
                 $button[] = 'code';
 
                 $output = '<textarea'.$this->_parseTextareaAttributes($textarea_attributes).'>'.htmlentities($initial_value).'</textarea>';
@@ -141,8 +130,10 @@ class HTML_Editor {
                 $output .= '	mode : "exact",';
                 $output .= '	elements : "'.$textarea_attributes['id'].'",';
                 $output .= '	theme : "advanced",';
-                if (!empty($editor_attributes['plugins']) AND is_array($editor_attributes['plugins']))
-                    $output .= '	plugins : "'.implode($editor_attributes['plugins'], ',').'",';
+                if (!empty($editor_attributes['plugins']) AND is_array($editor_attributes['plugins'])) {
+                    $output .= '    plugins : "'.implode($editor_attributes['plugins'], ',').'",';
+                }
+
                 $output .= '	cleanup : true,';
                 $output .= '	clean_on_startup : true,';
                 $output .= '	verify_html : true,';
@@ -179,10 +170,10 @@ class HTML_Editor {
 
         }
         return $output;
-
     }
 
-    function _parseTextareaAttributes($textarea_attributes) {
+    function _parseTextareaAttributes($textarea_attributes)
+    {
         $output = '';
         if (array_key_exists('id', $textarea_attributes)) {
             $output .= ' id="'.$textarea_attributes['id'].'"';
@@ -202,4 +193,3 @@ class HTML_Editor {
         return $output;
     }
 }
-?>
