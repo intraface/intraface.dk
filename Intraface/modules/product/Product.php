@@ -367,7 +367,8 @@ class Product extends Standard
                 'weight' => (float)$this->get('weight'),
                 'unit' => $this->get('unit_key'),
                 'vat' => $this->get('vat'),
-                'state_account_id' => $this->get('state_account_id')
+                'state_account_id' => $this->get('state_account_id'),
+                'stock' => $this->get('stock')
             )
         );
 
@@ -384,9 +385,10 @@ class Product extends Standard
         $this->getKeywords();
         $keywords = $appender->getConnectedKeywords();
 
+        // @todo does not transfer keywords correctly
         if (is_array($keywords)) {
             foreach ($keywords AS $k) {
-                $product->keywords->addKeyword(new Keyword($this, $k['id']));
+                $appender->addKeyword(new Keyword($this, $k['id']));
             }
         }
 
@@ -770,10 +772,10 @@ class Product extends Standard
     {
         return new ProductDetail($this, $this->old_product_detail_id);
     }
-    
+
     /**
      * returns the possible units
-     * 
+     *
      * @return array units
      */
     public static function getUnits()
