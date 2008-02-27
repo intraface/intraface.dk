@@ -1,0 +1,244 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>030createPageWithMixedElements</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">030createPageWithMixedElements</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=cms&helper_function=CMS:createSiteWithTemplate&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/modules/cms/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=create site</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>TestSite - page</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>url</td>
+	<td>http://localhost/</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>cc-license</td>
+	<td>label=by</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='save']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>you have to create a template</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=create template</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>TestTemplate - page</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>identifier</td>
+	<td>test_template</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='save and close']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>new_section_type</td>
+	<td>label=mixed</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>add_section</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>TestTemplateSection</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>identifier</td>
+	<td>test_template_section</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>allowed_element_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>allowed_element_2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>TestTemplate - edited</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='save and close']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>TestTemplate - edited</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=delete</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>new_section_type</td>
+	<td>label=mixed</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>add_section</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>TestTemplateSection - new</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>allowed_element_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>allowed_element_2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>identifier</td>
+	<td>test_template_section</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>TestTemplateSection - new</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=create a new page</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>title</td>
+	<td>TestPage</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>shortlink</td>
+	<td>test_page</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>navigation-name</td>
+	<td>TestPage</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>new_element_type_id</td>
+	<td>label=htmltext</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>add_element</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='save']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>edit section TestTemplateSection - new</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
