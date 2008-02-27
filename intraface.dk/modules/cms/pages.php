@@ -63,7 +63,7 @@ if (!empty($_GET['moveup']) AND is_numeric($_GET['moveup'])) {
             exit;
         }
     }
-    
+
 }
 
 $page_types_plural = CMS_Page::getTypesPlural();
@@ -76,24 +76,24 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
 
 ?>
 
-<h1><?php echo safeToHtml($translation->get($page_types_plural[$type])); ?> <?php echo safeToHtml($translation->get('on', 'common')); ?> <?php echo $cmssite->get('name'); ?></h1>
+<h1><?php e($translation->get($page_types_plural[$type])); ?> <?php e($translation->get('on', 'common')); ?> <?php echo $cmssite->get('name'); ?></h1>
 
 <?php if (count($cmspage->getTemplate()->getList()) == 0): ?>
 
     <p class="message-dependent">
-        <?php echo safeToHtml($translation->get('you have to create a template')); ?>
+        <?php e($translation->get('you have to create a template')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="template_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('create template')); ?></a>.
+            <a href="template_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('create template')); ?></a>.
         <?php else: ?>
-            <strong><?php echo safeToHtml($translation->get('you cannot create templates')); ?></strong>
+            <strong><?php e($translation->get('you cannot create templates')); ?></strong>
         <?php endif; ?>
     </p>
 
 <?php else: ?>
 <ul class="options">
-    <li><a class="new" href="page_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('create page')); ?></a></li>
-    <li><a class="edit" href="site_edit.php?id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('edit site settings')); ?></a></li>
-    <li><a  href="site.php?id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('go to site overview')); ?></a></li>
+    <li><a class="new" href="page_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('create page')); ?></a></li>
+    <li><a class="edit" href="site_edit.php?id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('edit site settings')); ?></a></li>
+    <li><a  href="site.php?id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('go to site overview')); ?></a></li>
 </ul>
 
 
@@ -107,39 +107,39 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
     $cmspage->dbquery->setFilter('type', 'page');
     $cmspage->dbquery->setFilter('level', 'alllevels');
     $pages = $cmspage->getList('page', 'alllevels');
-    
-    if (!is_array($pages) OR count($pages) == 0): 
+
+    if (!is_array($pages) OR count($pages) == 0):
         echo '<p>'.safeToHtml($translation->get('no pages found')).'</p>';
     else: ?>
         <table>
-            <caption><?php echo safeToHtml($translation->get('pages')); ?></caption>
+            <caption><?php e($translation->get('pages')); ?></caption>
             <thead>
                 <tr>
-                    <th><?php echo safeToHtml($translation->get('navigation name')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('identifier', 'common')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('published', 'common')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('show', 'common')); ?></th>
+                    <th><?php e($translation->get('navigation name')); ?></th>
+                    <th><?php e($translation->get('identifier', 'common')); ?></th>
+                    <th><?php e($translation->get('published', 'common')); ?></th>
+                    <th><?php e($translation->get('show', 'common')); ?></th>
                     <th colspan="4"></th>
                 </tr>
             </thead>
             <?php foreach ($pages AS $p):?>
                 <tr>
-                    <td><a href="page.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml(str_repeat("- ", $p['level']) . $p['navigation_name']); ?></a></td>
-                    <td><?php echo safeToHtml($p['identifier']); ?></td>
+                    <td><a href="page.php?id=<?php echo $p['id']; ?>"><?php e(str_repeat("- ", $p['level']) . $p['navigation_name']); ?></a></td>
+                    <td><?php e($p['identifier']); ?></td>
                     <td>
                         <input type="hidden" name="page[<?php echo $p['id']; ?>]" value="<?php echo $p['id']; ?>" />
                         <input class="input-publish" id="<?php echo $p['id']; ?>" type="checkbox" name="status[<?php echo $p['id']; ?>]" value="published" <?php if ($p['status'] == 'published') echo ' checked="checked"'; ?> />
                     </td>
                     <td>
                         <?php if ($p['status'] == 'published'): // hack siden kan kun vises, hvis den er udgivet. Der bør laves et eller andet, så det er muligt anyways - fx en hemmelig kode på siden ?>
-                            <a href="<?php echo $p['url']; ?>" target="_blank"><?php echo safeToHtml($translation->get('show page')); ?></a>
+                            <a href="<?php echo $p['url']; ?>" target="_blank"><?php e($translation->get('show page')); ?></a>
                         <?php endif; ?>
                     </td>
                     <td class="options">
-                        <a class="moveup" href="site.php?id=<?php echo $cmssite->get("id"); ?>&amp;moveup=<?php echo $p['id']; ?>"><?php echo safeToHtml($translation->get('up', 'common')); ?></a>
-                        <a class="moveup" href="site.php?id=<?php echo $cmssite->get("id"); ?>&amp;movedown=<?php echo $p['id']; ?>"><?php echo safeToHtml($translation->get('down', 'common')); ?></a>
-                        <a class="edit" href="page_edit.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml($translation->get('edit settings', 'common')); ?></a>
-                        <a class="delete" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo $p['id']; ?>"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a>
+                        <a class="moveup" href="<?php e(basename($_SERVER['PHP_SELF'])); ?>?id=<?php e($cmssite->get("id")); ?>&amp;moveup=<?php e($p['id']); ?>&amp;type=<?php e($type); ?>"><?php e($translation->get('up', 'common')); ?></a>
+                        <a class="moveup" href="<?php e(basename($_SERVER['PHP_SELF'])); ?>?id=<?php e($cmssite->get("id")); ?>&amp;movedown=<?php e($p['id']); ?>&amp;type=<?php e($type); ?>"><?php e($translation->get('down', 'common')); ?></a>
+                        <a class="edit" href="page_edit.php?id=<?php e($p['id']); ?>"><?php e($translation->get('edit settings', 'common')); ?></a>
+                        <a class="delete" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php e($p['id']); ?>&amp;type=<?php e($type); ?>"><?php e($translation->get('delete', 'common')); ?></a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -150,35 +150,35 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
     $cmsarticles = new CMS_Page($cmssite);
     $cmsarticles->dbquery->setFilter('type', 'article');
     $articles = $cmsarticles->getList();
-    if (!is_array($articles) OR count($articles) == 0): 
+    if (!is_array($articles) OR count($articles) == 0):
         echo '<p>'.safeToHtml($translation->get('no articles found')).'</p>';
     else: ?>
         <table>
-            <caption><?php echo safeToHtml($translation->get('articles')); ?></caption>
+            <caption><?php e($translation->get('articles')); ?></caption>
             <thead>
                 <tr>
-                    <th><?php echo safeToHtml($translation->get('title')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('identifier', 'common')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('published', 'common')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('show', 'common')); ?></th>
+                    <th><?php e($translation->get('title')); ?></th>
+                    <th><?php e($translation->get('identifier', 'common')); ?></th>
+                    <th><?php e($translation->get('published', 'common')); ?></th>
+                    <th><?php e($translation->get('show', 'common')); ?></th>
                     <th colspan="2"></th>
                 </tr>
             </thead>
             <?php foreach ($articles AS $p):?>
                 <tr>
-                    <td><a href="page.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml($p['title']); ?></a></td>
-                    <td><?php echo safeToHtml($p['identifier']); ?></td>
+                    <td><a href="page.php?id=<?php echo $p['id']; ?>"><?php e($p['title']); ?></a></td>
+                    <td><?php e($p['identifier']); ?></td>
                     <td>
                         <input type="hidden" name="page[<?php echo $p['id']; ?>]" value="<?php echo $p['id']; ?>" />
                         <input class="input-publish" id="<?php echo $p['id']; ?>" type="checkbox" name="status[<?php echo $p['id']; ?>]" value="published" <?php if ($p['status'] == 'published') echo ' checked="checked"'; ?> />
                     </td>
                     <td>
                     <?php if ($p['status'] == 'published'): // hack siden kan kun vises, hvis den er udgivet. Der bør laves et eller andet, så det er muligt anyways - fx en hemmelig kode på siden ?>
-                        <a href="<?php echo $p['url']; ?>" target="_blank"><?php echo safeToHtml($translation->get('show page', 'common')); ?></a>
+                        <a href="<?php echo $p['url']; ?>" target="_blank"><?php e($translation->get('show page', 'common')); ?></a>
                     <?php endif; ?>
                     </td>
-                    <td class="options"><a class="edit" href="page_edit.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml($translation->get('edit settings', 'common')); ?></a>
-                    <a class="delete" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo $p['id']; ?>"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a></td>
+                    <td class="options"><a class="edit" href="page_edit.php?id=<?php echo $p['id']; ?>"><?php e($translation->get('edit settings', 'common')); ?></a>
+                    <a class="delete" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo $p['id']; ?>"><?php e($translation->get('delete', 'common')); ?></a></td>
                 </tr>
             <?php endforeach; ?>
         </table>
@@ -188,38 +188,38 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
     $cmsnews = new CMS_Page($cmssite);
     $cmsnews->dbquery->setFilter('type', 'news');
     $news = $cmsnews->getList();
-    if (!is_array($news) OR count($news) == 0): 
+    if (!is_array($news) OR count($news) == 0):
         echo '<p>'.safeToHtml($translation->get('no news found')).'</p>';
     else: ?>
         <table>
-            <caption><?php echo safeToHtml($translation->get('news')); ?></caption>
+            <caption><?php e($translation->get('news')); ?></caption>
             <thead>
                 <tr>
-                    <th><?php echo safeToHtml($translation->get('date', 'common')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('title')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('identifier', 'common')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('published', 'common')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('show', 'common')); ?></th>
+                    <th><?php e($translation->get('date', 'common')); ?></th>
+                    <th><?php e($translation->get('title')); ?></th>
+                    <th><?php e($translation->get('identifier', 'common')); ?></th>
+                    <th><?php e($translation->get('published', 'common')); ?></th>
+                    <th><?php e($translation->get('show', 'common')); ?></th>
                     <th colspan="2"></th>
                 </tr>
             </thead>
             <?php foreach ($news AS $p):?>
                 <tr>
-                    <td><?php echo safeToHtml($p['date_publish_dk']); ?></td>
-                    <td><a href="page.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml($p['title']); ?></a></td>
-                    <td><?php echo safeToHtml($p['identifier']); ?></td>
+                    <td><?php e($p['date_publish_dk']); ?></td>
+                    <td><a href="page.php?id=<?php echo $p['id']; ?>"><?php e($p['title']); ?></a></td>
+                    <td><?php e($p['identifier']); ?></td>
                     <td>
                         <input type="hidden" name="page[<?php echo $p['id']; ?>]" value="<?php echo $p['id']; ?>" />
                         <input class="input-publish" id="<?php echo $p['id']; ?>" type="checkbox" name="status[<?php echo $p['id']; ?>]" value="published" <?php if ($p['status'] == 'published') echo ' checked="checked"'; ?> />
                     </td>
                     <td>
                         <?php if ($p['status'] == 'published'): // hack siden kan kun vises, hvis den er udgivet. Der bør laves et eller andet, så det er muligt anyways - fx en hemmelig kode på siden ?>
-                            <a href="<?php echo $p['url']; ?>" target="_blank"><?php echo safeToHtml($translation->get('show page')); ?></a>
+                            <a href="<?php echo $p['url']; ?>" target="_blank"><?php e($translation->get('show page')); ?></a>
                         <?php endif; ?>
                     </td>
-            
-                    <td class="options"><a class="edit" href="page_edit.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml($translation->get('edit settings', 'common')); ?></a>
-                        <a class="delete" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo $p['id']; ?>"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a>
+
+                    <td class="options"><a class="edit" href="page_edit.php?id=<?php echo $p['id']; ?>"><?php e($translation->get('edit settings', 'common')); ?></a>
+                        <a class="delete" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo $p['id']; ?>"><?php e($translation->get('delete', 'common')); ?></a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -227,7 +227,7 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
     <?php endif; ?>
 <?php endif; ?>
 
-<p><input type="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" id="submit-publish" /></p>
+<p><input type="submit" value="<?php e($translation->get('save', 'common')); ?>" id="submit-publish" /></p>
 <?php endif; ?>
 
 </form>
