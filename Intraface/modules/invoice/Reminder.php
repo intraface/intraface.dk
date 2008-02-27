@@ -675,6 +675,7 @@ class Reminder extends Standard
         if($this->get('id') == 0) {
             trigger_error('Cannot create pdf from debtor without valid id', E_USER_ERROR);
         }
+        
 
         $shared_pdf = $this->kernel->useShared('pdf');
         $shared_pdf->includeFile('PdfMakerDebtor.php');
@@ -723,5 +724,21 @@ class Reminder extends Standard
             2=>'Girokort +01',
             3=>'Girokort +71'
         );
+    }
+    
+    /**
+     * Gets the payment information
+     *
+     * @return array
+     */
+    function getPaymentInformation()
+    {
+        $info = array('bank_name'    => $this->kernel->setting->get("intranet", "bank_name"),
+                      'bank_reg_number' => $this->kernel->setting->get("intranet", "bank_reg_number"),
+                      'bank_account_number' => $this->kernel->setting->get("intranet", "bank_account_number"),
+                      'giro_account_number' => $this->kernel->setting->get("intranet", "giro_account_number")
+        );
+
+        return $info;
     }
 }
