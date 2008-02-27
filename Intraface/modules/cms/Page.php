@@ -103,11 +103,27 @@ class CMS_Page extends Standard
             $this->load();
         }
     }
-
-    function getPosition($db)
+    
+    /**
+     * Returns position object
+     * 
+     * @param object $db database object
+     * @return object Position
+     */
+    public function getPosition($db)
     {
         require_once 'Ilib/Position.php';
         return new Ilib_Position($db, "cms_page", $this->id, "site_id=".$this->cmssite->get('id')." AND active = 1 AND type_key = 1", "position", "id");
+    }
+    
+    /**
+     * returns Template object
+     * 
+     * @return object Template
+     */
+    public function getTemplate() 
+    {
+        return $this->template;
     }
 
     function factory(& $kernel, $type, $value)
@@ -741,6 +757,19 @@ class CMS_Page extends Standard
             1 => 'page',
             2 => 'article',
             3 => 'news');
+    }
+    
+    /**
+     * Returns the possible page types in plural
+     * 
+     * @return array page types in plural
+     */
+    static public function getTypesPlural() 
+    {
+        return array(
+            'page' => 'pages',
+            'article' => 'articles',
+            'news' => 'news');
     }
 
     function isPublished()
