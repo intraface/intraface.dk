@@ -52,22 +52,22 @@ $page->start(t('site').' '.$cmssite->get('name'));
 
 <ul class="options">
     <li><a href="pages.php?type=page&amp;id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('go to pages'));  ?></a></li>
-    <li><a href="edit_page.php?type=page&amp;site_id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('create a new page'));  ?></a></li>
-</ul>   
+    <li><a href="page_edit.php?type=page&amp;site_id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('create a new page'));  ?></a></li>
+</ul>
 
 <h2><?php e(t('articles')); ?></h2>
 
 <ul class="options">
     <li><a href="pages.php?type=article&amp;id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('go to articles'));  ?></a></li>
-    <li><a href="edit_page.php?type=article&amp;site_id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('create a new article'));  ?></a></li>
-</ul>   
+    <li><a href="page_edit.php?type=article&amp;site_id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('create a new article'));  ?></a></li>
+</ul>
 
 <h2><?php e(t('news')); ?></h2>
 
 <ul class="options">
     <li><a href="pages.php?type=news&amp;id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('go to news'));  ?></a></li>
-    <li><a href="edit_page.php?type=news&amp;site_id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('create a news'));  ?></a></li>
-</ul>   
+    <li><a href="page_edit.php?type=news&amp;site_id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('create a news'));  ?></a></li>
+</ul>
 
 <?php endif; ?>
 
