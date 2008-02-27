@@ -192,7 +192,7 @@ elseif (!empty($_GET['section_id']) AND is_numeric($_GET['section_id'])) {
 
 $page = new Page($kernel);
 if ($kernel->setting->get('user', 'htmleditor') == 'tinymce') {
-    $page->includeJavascript('global', 'tinymce/jscripts/tiny_mce/tiny_mce.js');
+    $page->includeJavascript('global', 'tiny_mce/tiny_mce.js');
 }
 $page->start(safeToHtml($translation->get('edit element')));
 ?>
