@@ -20,9 +20,9 @@ require_once 'Intraface/DBQuery.php';
 class IntranetMaintenance extends Intranet
 {
 
-    var $db; // databaseobject mdb2
-    var $id; // intranet id
-    var $address; // address object
+    private $db; // databaseobject mdb2
+    protected $id; // intranet id
+    public $address; // address object
 
     /**
      * Constructor
@@ -37,7 +37,7 @@ class IntranetMaintenance extends Intranet
         $this->error = new Error();
 
         if ($this->id > 0) {
-            Intranet::__construct($intranet_id);
+            parent::__construct($intranet_id);
             $this->load();
         }
     }
