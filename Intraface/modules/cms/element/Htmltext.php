@@ -12,21 +12,20 @@ class CMS_Htmltext extends CMS_Element
     protected $clean_text;
     protected $allowed_tags;
 
-    function __construct($section, $id = 0)
+    public function __construct($section, $id = 0)
     {
         $this->value['type'] = 'htmltext';
         parent::__construct($section, $id);
     }
 
-    function load_element()
+    protected function load_element()
     {
         $this->value['text'] = $this->parameter->get('text');
         $this->value['saved_with'] = $this->parameter->get('saved_with');
 
         if ($this->value['saved_with'] == 'tinymce') {
             $this->value['html'] = $this->parameter->get('text');
-        }
-        elseif ($this->value['saved_with'] == 'wiki') {
+        } elseif ($this->value['saved_with'] == 'wiki') {
             $wiki = new Text_Wiki();
 
             // when rendering XHTML, make sure wiki links point to a
@@ -54,16 +53,16 @@ class CMS_Htmltext extends CMS_Element
      *
      */
 
-    function validate_element($var)
+    protected function validate_element($var)
     {
         if ($this->error->isError()){
-            return 0;
+            return false;
         }
 
-        return 1;
+        return true;
     }
 
-    function convertArrayToTags($array)
+    private static function convertArrayToTags($array)
     {
         $tags = '';
         foreach ($array AS $tag) {
@@ -72,12 +71,12 @@ class CMS_Htmltext extends CMS_Element
         return $tags;
     }
 
-
-    function save_element($var)
+    protected function save_element($var)
     {
         // should probably purify
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Core', 'Encoding', 'ISO-8859-1');
+        $config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
 
         $purifier = new HTMLPurifier($config);
         $clean_text = $purifier->purify($var['text']);
@@ -85,6 +84,6 @@ class CMS_Htmltext extends CMS_Element
         $this->parameter->save('saved_with', $this->kernel->setting->get('user', 'htmleditor'));
         $this->parameter->save('text', $clean_text);
 
-        return 1;
+        return true;
     }
 }
