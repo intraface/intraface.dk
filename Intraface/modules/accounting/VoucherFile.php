@@ -151,6 +151,13 @@ class VoucherFile {
                     $files[$i]['name'] = 'Rykker';
                     $files[$i]['file_uri'] = '/modules/debtor/reminder_pdf.php?id=' . $db->f('belong_to_id');
                 break;
+                case 'procurement':
+                    if (empty($files[$i]['description'])) {
+                        $files[$i]['description'] = 'Indkøb';
+                    }
+                    $files[$i]['name'] = 'Indkøb';
+                    $files[$i]['file_uri'] = '/modules/procurement/view.php?id=' . $db->f('belong_to_id');
+                break;
                 default:
                     trigger_error('VoucherFile::getList: ugyldig belong to');
                 break;

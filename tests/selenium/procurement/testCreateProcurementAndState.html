@@ -1,0 +1,409 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testCreateProcurementAndState</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testCreateProcurementAndState</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=procurement,product,accounting&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=procurement</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Opret nyt indkøb</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description</td>
+	<td>Testindkøb</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_invoice_date</td>
+	<td>10-10-2006</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>vendor</td>
+	<td>Ingen</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_price_items</td>
+	<td>100</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_price_shipment_etc</td>
+	<td>40</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>vat</td>
+	<td>25</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Testindkøb</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>165,00 (incl. moms)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>100,00 (excl. moms)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Varen er modtaget</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Forventet levering</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>paid</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=regnskabet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Opret regnskabsår</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>label</td>
+	<td>Current</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>vat</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>standard_accountplan</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=procurement</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>status</td>
+	<td>label=Alle</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>search</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Testindkøb</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=state</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>credit_account_number</td>
+	<td>label=Bank, folio</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>add_line</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>debet_account[0][text]</td>
+	<td>Vare 1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>debet_account[0][amount]</td>
+	<td>50</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>state_account</td>
+	<td>label=Kontorartikler</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>debet_account[1][state_account_id]</td>
+	<td>label=Porto</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>debet_account[2][text]</td>
+	<td>Vare 2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>debet_account[2][amount]</td>
+	<td>50</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>debet_account[2][state_account_id]</td>
+	<td>label=Telefon</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>state</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Se bilag</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectFrame</td>
+	<td>relative=up</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>procurement# 1: Testindkøb - Vare 1 - købsmoms</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>procurement# 1: Testindkøb - shipment etc</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>procurement# 1: Testindkøb - Vare 2 - købsmoms</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Moms, indgående, køb</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Kontorartikler</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Bank, folio</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Porto</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Telefon</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>12,50</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>50,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>62,50</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>40,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>procurement# 1: Testindkøb</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Filnavn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=accounts</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Kontorartikler</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>procurement# 1: Testindkøb - Vare 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>50,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Luk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Porto</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>procurement# 1: Testindkøb - shipment etc</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>40,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Luk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Telefon</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>procurement# 1: Testindkøb - Vare 2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>50,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Luk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Bank, folio</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>procurement# 1: Testindkøb - Vare 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>procurement# 1: Testindkøb - shipment etc</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>procurement# 1: Testindkøb - Vare 2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>-165,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Luk</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Moms, indgående, køb</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>procurement# 1: Testindkøb - Vare 1 - købsmoms</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>procurement# 1: Testindkøb - Vare 2 - købsmoms</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>12,50</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>25,00</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

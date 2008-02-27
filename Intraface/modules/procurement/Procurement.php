@@ -1,7 +1,15 @@
 <?php
+
+/**
+ * unit test not finished!
+ */
+
+
 /**
  * @package Intraface_Procurement
  */
+
+require_once 'Intraface/Standard.php';
 
 class Procurement Extends Standard {
 
@@ -15,14 +23,16 @@ class Procurement Extends Standard {
 
     function __construct($kernel, $id = 0) {
 
-        if(!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
-            trigger_error("Porcurement kræver kernel", E_USER_ERROR);
+        if(!is_object($kernel)) {
+            trigger_error("Procurement requires kernel", E_USER_ERROR);
         }
 
         $this->kernel = &$kernel;
+        require_once 'Intraface/Error.php';
         $this->error = new Error;
         $this->id = intval($id);
 
+        require_once 'Intraface/DBQuery.php';
         $this->dbquery = new DBQuery($this->kernel, "procurement", "active = 1 AND intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->useErrorObject($this->error);
 
@@ -122,7 +132,7 @@ class Procurement Extends Standard {
         //$this->value["paid_key"] = $db->f("paid");
 
         $this->value["state_account_id"] = $db->f("state_account_id");
-        $this->value["voucher_number"] = $db->f("voucher_number");
+        $this->value["voucher_id"] = $db->f("voucher_id");
 
         return true;
 
@@ -139,13 +149,21 @@ class Procurement Extends Standard {
         $db = new DB_sql;
 
         $input = safeToDb($input);
+        require_once 'Intraface/Validator.php';
         $validator = new Validator($this->error);
 
-        $validator->isDate($input["dk_invoice_date"], "Fakturadato er ikke en gyldig dato", "allow_empty");
+        if(!isset($input['dk_invoice_date'])) $input['dk_invoice_date'] = '';
+        $validator->isDate($input["dk_invoice_date"], "Fakturadato er ikke en gyldig dato");
+        require_once 'Intraface/tools/Date.php';
         $date = new Intraface_Date($input["dk_invoice_date"]);
         if($date->convert2db()) {
             $input["invoice_date"] = $date->get();
         }
+        else {
+            $input["invoice_date"] = '';
+        }
+        
+        if(!isset($input['dk_delivery_date'])) $input['dk_delivery_date'] = '';
         $validator->isDate($input["dk_delivery_date"], "Leveringsdato er ikke en gyldig dato", "allow_empty");
         $date = new Intraface_Date($input["dk_delivery_date"]);
         if($date->convert2db()) {
@@ -154,6 +172,8 @@ class Procurement Extends Standard {
         else {
             $input['delivery_date'] = $input['invoice_date'];
         }
+        
+        if(!isset($input['dk_payment_date'])) $input['dk_payment_date'] = '';
         $validator->isDate($input["dk_payment_date"], "Betalingsdato er ikke en gyldig dato", "allow_empty");
         $date = new Intraface_Date($input["dk_payment_date"]);
         if($date->convert2db()) {
@@ -163,33 +183,42 @@ class Procurement Extends Standard {
             $input['payment_date'] = $input['delivery_date'];
         }
 
-        settype($input["number"], "integer");
+        if(!isset($input['number'])) $input['number'] = 0;
         $validator->isNumeric($input["number"], "Nummer er ikke et gyldigt nummer", "greater_than_zero");
         $db->query("SELECT id FROM procurement WHERE id != ".$this->id." AND intranet_id = ".$this->kernel->intranet->get("id")." AND number = ".$input["number"]);
         if($db->nextRecord()) {
             $this->error->set("Nummeret er allerede benyttet");
         }
 
+        if(!isset($input['vendor'])) $input['vendor'] = '';
         $validator->isString($input["vendor"], "Fejl i leverandør", "", "allow_empty");
+        
+        if(!isset($input['description'])) $input['description'] = '';
         $validator->isString($input["description"], "Fejl i beskrivelse", "", "");
 
-        settype($input["from_region_key"], "integer");
+        if(!isset($input['from_region_key'])) $input['from_region_key'] = 0;
         $region_types = $this->getRegionTypes();
         if(!isset($region_types[$input["from_region_key"]])) {
             $this->error->set("Ugyldig købsregion");
         }
 
-        $validator->isDouble($input["dk_price_items"], "Varerpris er ikke et gyldigt beløb");
+        if(!isset($input['dk_price_items'])) $input['dk_price_items'] = 0;
+        $validator->isDouble($input["dk_price_items"], "Varerpris er ikke et gyldigt beløb", 'zero_or_greater');
+        require_once 'Intraface/tools/Amount.php';
         $amount = new Amount($input["dk_price_items"]);
         if($amount->convert2db()) {
             $input["price_items"] = $amount->get();
         }
-        $validator->isDouble($input["dk_price_shipment_etc"], "Pris for forsendelse og andet er ikke et gyldigt beløb");
+        
+        if(!isset($input['dk_price_shipment_etc'])) $input['dk_price_shipment_etc'] = 0;
+        $validator->isDouble($input["dk_price_shipment_etc"], "Pris for forsendelse og andet er ikke et gyldigt beløb", 'zero_or_greater');
         $amount = new Amount($input["dk_price_shipment_etc"]);
         if($amount->convert2db()) {
             $input["price_shipment_etc"] = $amount->get();
         }
-        $validator->isDouble($input["dk_vat"], "Moms er ikke et gyldigt beløb");
+        
+        if(!isset($input['dk_vat'])) $input['dk_vat'] = 0;
+        $validator->isDouble($input["dk_vat"], "Moms er ikke et gyldigt beløb", 'zero_or_greater');
         $amount = new Amount($input["dk_vat"]);
         if($amount->convert2db()) {
             $input["vat"] = $amount->get();
@@ -212,7 +241,7 @@ class Procurement Extends Standard {
             number = ".$input["number"].",
             vendor = \"".$input["vendor"]."\",
             description = \"".$input["description"]."\",
-            from_region_key = ".$input["from_region"].",
+            from_region_key = ".$input["from_region_key"].",
             price_items = ".$input["price_items"].",
             price_shipment_etc = ".$input["price_shipment_etc"].",
             vat = ".$input["vat"]."";
@@ -489,169 +518,311 @@ class Procurement Extends Standard {
     }
 
     /**
-     * @see Debtor::state();
+     * State procurement
+     * 
+     * @param object year year object
+     * @param integer voucher_number
+     * 
      */
 
-    function state($year, $voucher_number, $credit_account_id = null) {
-        if ($this->isStated()) {
-            $this->error->set('Allerede bogført');
-            return 0;
+    function state($year, $voucher_number, $voucher_date, $debet_accounts, $credit_account_id, $translation) {
+        
+        if (!is_object($year)) {
+            trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
+            return false;
         }
-        if (!$this->readyForState()) {
+        
+        if (!is_object($year)) {
+            trigger_error('Sixth parameter to state needs to be a Translation object!', E_USER_ERROR);
+            return false;
+        }
+        
+        if (!$this->readyForState($year)) {
             $this->error->set('Ikke klar til bogføring');
-            return 0;
+            return false;
         }
-
-        if (!$this->kernel->user->hasModuleAccess('accounting')) {
-            trigger_error('Ikke rettigheder til at bogføre', E_USER_ERROR);
+        
+        if(!$this->checkStateDebetAccounts($year, $debet_accounts, 'skip_amount_check')) {
+            return false;
         }
-
-        $this->kernel->useModule('accounting');
-
-
-        $voucher = Voucher::factory($year, $voucher_number);
-        $voucher->save(array(
-            'voucher_number' => $voucher_number,
-            'date' => $this->get('dk_paid_date'),
-            'text' => 'Indkøb: ' . $this->get('number') . ' ' . $this->get('description')
-        ));
-
-        $debet_account = new Account($year, $this->get('state_account_id'));
-        $debet_account_number = $debet_account->get('number');
-
-        if (!$credit_account_id) {
-            $credit_account = new Account($year, $year->getSetting('credit_account_id'));
-            $credit_account_number = $credit_account->get('number');
-        } else {
-            $credit_account = new Account($year, $credit_account_id);
-            $credit_account_number = $credit_account->get('number');
+        
+        $validator = new Validator($this->error);
+        if($validator->isDate($voucher_date, "Ugyldig dato")) {
+            require_once 'Intraface/tools/Date.php';
+            $voucher_date_object = new Intraface_Date($voucher_date);
+            $voucher_date_object->convert2db();
         }
-
-        if ($credit_account->get('id') == 0) {
-            $this->error->set('Kreditorkontoen ikke sat');
-            return 0;
+        
+        if (!$year->isDateInYear($voucher_date_object->get())) {
+            $this->error->set('Datoen er ikke i det år, der er sat i regnskabsmodulet.');
         }
-
-        // items
-
-        $input_values = array(
-            'voucher_number' => $voucher->get('number'),
-            'date' => $this->get('dk_paid_date'),
-            'amount' => $this->get("dk_total_price_items"),
-            'debet_account_number' => $debet_account_number,
-            'credit_account_number' => $credit_account_number,
-            'vat_off' => 1,
-            'text' => 'Indkøb #' . $this->get('number') . ' - ' . $this->get('description')
-        );
-
-        if (!$voucher->saveInDaybook($input_values, false)) {
-            $this->error->set('Kunne ikke gemme i kassekladden');
+        
+        $credit_account = Account::factory($year, $credit_account_id);
+        if(!$credit_account->validForState()) {
+            $this->error->set('Ugyldig konto hvor indkøbet er betalt fra');
             return false;
         }
 
-        #
-        # shipment etch
-        #
-        if ($this->get("price_shipment_etc") > 0) {
+        $validator->isNumeric($voucher_number, 'Ugyldigt bilagsnummer', 'greater_than_zero');
 
+        if ($this->error->isError()) {
+            return false;
+        }
+        
+        
+        $text = $translation->get('procurement').'# ' . $this->get('number') . ': ' . $this->get('description');
+        require_once 'Intraface/modules/accounting/Voucher.php';
+        $voucher = Voucher::factory($year, $voucher_number);
+        $voucher->save(array(
+            'voucher_number' => $voucher_number,
+            'date' => $voucher_date,
+            'text' => $text
+        ));
+        
+        $credit_total = 0;
+        foreach($debet_accounts AS $key => $line) {
+            $debet_account = Account::factory($year, $line['state_account_id']);
+            
+            $amount = new Amount($line['amount']);
+            $amount->convert2db();
+            $amount = $amount->get();
+            $credit_total += $amount;
+            
+            if(!empty($line['text'])) {
+                $line_text = $text. ' - ' . $line['text'];
+            }
+            else {
+                $line_text = $text;
+            }
+            
+            // if the amount is stated on an account with vat we add the vat on the amount!
+            if($debet_account->get('vat') == 'in') {
+                $amount += round($amount/100*$debet_account->get('vat_percent'), 2); 
+            }
+            
             $input_values = array(
                 'voucher_number' => $voucher->get('number'),
-                'date' => $this->get('dk_paid_date'),
-                'amount' => $this->get("dk_price_shipment_etc"),
-                'debet_account_number' => $debet_account_number,
-                'credit_account_number' => $credit_account_number,
-                'vat_off' => 1,
-                'text' => 'Indkøb #' . $this->get('number') . ' - forsendelse mv.'
-            );
-
-            if (!$voucher->saveInDaybook($input_values, false)) {
-                $this->error->set('Kunne ikke gemme i kassekladden');
-                return false;
-            }
-        }
-
-        // samlet moms på fakturaen
-        // opmærksom på at momsbeløbet her er hardcoded - og det bør egentlig tages fra købet?
-        $debet_account = new Account($year, $year->getSetting('vat_in_account_id'));
-
-        if (!$credit_account_id) {
-            $credit_account = new Account($year, $year->getSetting('credit_account_id'));
-        } else {
-            $credit_account = new Account($year, $credit_account_id);
-        }
-
-        $input_values = array(
-                'voucher_number' => $voucher->get('number'),
-                'date' => $this->get('dk_paid_date'),
-                'amount' => $this->get('dk_vat'), // opmærksom på at vat bliver rigtig defineret
+                'date' => $voucher_date,
+                'amount' => number_format($amount, 2, ',', ''),
                 'debet_account_number' => $debet_account->get('number'),
                 'credit_account_number' => $credit_account->get('number'),
+                'vat_off' => 0,
+                'text' => $line_text
+            );
+    
+            if (!$voucher->saveInDaybook($input_values, true)) {
+                $this->error->merge($voucher->error->getMessage());
+            }
+        
+        }
+        /*
+         * Changed so that Accounting automatically handles vat.
+        // vat
+        if($this->get('vat') > 0) {
+            $debet_account = Account::factory($year, $year->getSetting('vat_in_account_id'));
+            $credit_total += $this->get('vat');
+            
+            $input_values = array(
+                'voucher_number' => $voucher->get('number'),
+                'date' => $voucher_date,
+                'amount' => $this->get('vat'),
+                'debet_account_number' => $debet_account->get('number'),
+                'credit_account_number' => 0,
                 'vat_off' => 1,
-                'text' => 'Indkøb #'.$this->get('number').' - ' . $debet_account->get('name')
+                'text' => $text - $translation->get('vat')
+            );
+            
+            if (!$voucher->saveInDaybook($input_values, false)) {
+                $this->error->merge($voucher->error->getMessage());
+            }
+        }
+        */
+        
+        /**
+         * Changed so that the amount is credited on every post
+        // credit amount
+        $input_values = array(
+                'voucher_number' => $voucher->get('number'),
+                'date' => $voucher_date,
+                'amount' => $credit_total,
+                'debet_account_number' => 0,
+                'credit_account_number' => $credit_account->get('number'),
+                'vat_off' => 1,
+                'text' => $text
         );
+        
 
 
         if (!$voucher->saveInDaybook($input_values, false)) {
-            $this->error->set('Kunne ikke gemme i kassekladden');
-            return 0;
+            $this->error->merge($voucher->error->getMessage());
+        }
+        */
+        
+        require_once 'Intraface/modules/accounting/VoucherFile.php';
+        $voucher_file = new VoucherFile($voucher);
+        if (!$voucher_file->save(array('description' => $text, 'belong_to'=>'procurement','belong_to_id'=>$this->get('id')))) {
+            $this->error->merge($voucher_file->error->getMessage());
+            $this->error->set('Filen blev ikke overflyttet');
         }
 
-        $this->setStated($voucher_number);
+        if ($this->error->isError()) {
+            $this->error->set('Der er opstået en fejl under bogføringen af indkøbet. Det kan betyde at dele af den er bogført, men ikke det hele. Du bedes manuelt tjekke bilaget');
+            // I am not quite sure if the procurement should be set as stated, but it can give trouble to state it again, if some of it was stated...
+            $this->setStated($voucher->get('id'), $voucher_date);
+            return false;
+        }
 
+        $this->setStated($voucher->get('id'), $voucher_date);
         $this->load();
-
-        return 1;
+        return true;
 
 
     }
 
-    function setStated($voucher_number) {
+    function setStated($voucher_number, $voucher_date) {
         $db = new DB_Sql;
-        $db->query("UPDATE procurement SET date_stated = '" . $this->get('paid_date') . "', voucher_number = '".$voucher_number."' WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
+        
+        $validator = new Validator($this->error);
+        if($validator->isDate($voucher_date, "Ugyldig dato")) {
+            require_once 'Intraface/tools/Date.php';
+            $voucher_date = new Intraface_Date($voucher_date);
+            $voucher_date->convert2db();
+        }
+        
+        $db->query("UPDATE procurement SET date_stated = '".$voucher_date->get()."', voucher_id = ".intval($voucher_number)." WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
         return 1;
     }
 
     function isStated() {
         if ($this->get("date_stated") > '0000-00-00') {
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
     }
 
-    function readyForState() {
-        if (!$this->kernel->user->hasModuleAccess('accounting')) {
-            trigger_error('Brugeren har ikke adgang til accounting og burde aldrig få mulighed for at bogføre', FATAL);
+    /**
+     * returns whether the procurement is ready for state
+     * 
+     * @param object year accounting year
+     * @return boolean true or false
+     */
+    function readyForState($year) {
+        
+        if (!is_object($year)) {
+            trigger_error('First parameter to readyForState needs to be a Year object!', E_USER_ERROR);
+            return false;
         }
-
-        $this->kernel->useModule('accounting');
-        $year = new Year($this->kernel);
-        if (!$year->get('id')) {
-            $this->error->set('Der er ikke sat noget år. <a href="/modules/accounting/years.php">Sæt regnskabsår</a>.');
-            return 0;
+        
+        if (!$year->readyForState()) {
+            $this->error->set('Regnskabåret er ikke klar til bogføring.');
+            return false;
         }
-        // HACK i selve linket
-        if (!$year->isDateInYear($this->get('paid_date'))) {
-            $this->error->set('Datoen er ikke i det år, der er sat i regnskabsmodulet. <a href="/modules/accounting/years.php">Skift regnskabsår</a>.');
-            return 0;
+        
+        if($this->get('id') == 0) {
+            $this->error->set('Indkøbet er ikke gemt');
+            return false;
         }
-
-        if ($this->get('state_account_id') == 0) {
-            $this->error->set('Der er ikke sat nogen konto at bogføre på!');
+        
+        if($this->get("paid_date") == "0000-00-00") {
+            $this->error->set('Indkøbet skal være betalt for at det kan bogføres.');
         }
-
+        
+        if ($this->isStated()) {
+            $this->error->set('Indkøbet er allerede bogført');
+            return false;
+        }
+        
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
 
     }
+    
+    /**
+     * Checks whether the debet accounts is valid
+     */
+    public function checkStateDebetAccounts($year, $debet_accounts, $skip_amount_check = 'do_amount_check')
+    {
+        if (!is_object($year)) {
+            trigger_error('First parameter to checkStateDebetAccounts needs to be a Year object!', E_USER_ERROR);
+            return false;
+        }
+        
+        if(!is_array($debet_accounts)) {
+            trigger_error('Second parameter to checkStateDebetAccounts needs to be an array', E_USER_ERROR);
+            return false;
+        }
+        
+        if(!in_array($skip_amount_check, array('do_amount_check', 'skip_amount_check'))) {
+            trigger_error('Third parameter to checkStateDebetAccounts needs to be either do_amount_check or skip_amount_check', E_USER_ERROR);
+            return false;
+        }
+        
+        if(empty($debet_accounts)) {
+            $this->error->set('you have not set any debet accounts');
+            return false;
+        }
+        
+        $validator = new Validator($this->error);
+        
+        $total = 0;
+        $vat = 0;
+        foreach($debet_accounts AS $key => $debet_account) {
+            require_once 'Intraface/tools/Amount.php';
+            if($validator->isNumeric($debet_account['amount'], 'Ugyldig beløb i linje '.($key+1).' "'.$debet_account['text'].'"', 'greater_than_zero')) {
+                
+                $amount = new Amount($debet_account['amount']);
+                $amount->convert2db();
+                $total += $amount->get();
+                
+                $validator->isString($debet_account['text'], 'Ugyldig tekst i linje '.($key+1).' "'.$debet_account['text'].'"', '', 'allow_empty');
+                
+                if (empty($debet_account['state_account_id']) ) {
+                    $this->error->set('Linje '.($key+1).' "'.$debet_account['text'].'" ved ikke hvor den skal bogføres');
+                } else {
+                    require_once 'Intraface/modules/accounting/Account.php';
+                    $account = Account::factory($year, $debet_account['state_account_id']);
+                    if ($account->get('id') == 0 || $account->get('type') != 'operating') {
+                        $this->error->set('Ugyldig konto for bogføring af linje '.($key+1).' "'.$debet_account['text'].'"');
+                    }
+                    elseif($account->get('vat') == 'in') {
+                        
+                        $vat += $amount->get()/100*$account->get('vat_percent');
+                    }
+                }
+            }
+        }
+        
+        if ($this->error->isError()) {
+            return false;
+        }
+        
+        if($skip_amount_check == 'do_amount_check') {
+            if($total + $this->get('vat') != $this->get('total_price')) {
+                $this->error->set('Det samlede beløb til bogføring stemmer ikke overens med det samlede beløb på indkøbet. Har du fået alle vare på indkøbet med?');
+            }
+            if($vat != $this->get('vat')) {
+                $this->error->set('Momsen af de beløb du bogføre på konti med moms stemmer ikke overens med momsen på det samlede indkøb. Har du fået alle vare med? Har du husket at skrive beløbet uden moms for varerne?');
+            }
+            
+        }
+        
+        if ($this->error->isError()) {
+            return false;
+        }
+        return true;
+    }
+    
 
+    /*
     function setStateAccountId($id) {
         $db = new DB_Sql;
         $db->query("UPDATE procurement SET state_account_id = " . $id . " WHERE id = " .$this->id);
         $this->load();
         return true;
     }
+    */
     
     /**
      * returns possible status types

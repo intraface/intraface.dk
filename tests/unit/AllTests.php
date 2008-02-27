@@ -39,7 +39,8 @@ class AllTests
                        'Newsletter',
                        'Keyword',
                        'Stock',
-                       'OnlinePayment'
+                       'OnlinePayment',
+                       'Procurement'
         );
 
         foreach ($tests AS $test) {

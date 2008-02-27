@@ -18,6 +18,10 @@ if(isset($_GET['status'])) {
 # set betalt
 if(isset($_POST['dk_paid_date'])) {
     $procurement->setPaid($_POST['dk_paid_date']);
+    if ($kernel->user->hasModuleAccess('accounting')) {
+        header('location: state.php?id=' . intval($procurement->get("id")));
+        exit;
+    }
 }
 
 # slet item
@@ -212,19 +216,27 @@ $page->start("Indkøb");
             <td>Moms</td>
             <td><?php print($procurement->get("dk_vat")); ?></td>
         </tr>
-        <!--
-        <tr>
-            <td>Bogført</td>
-            <td>
-                <?php if (!$procurement->isStated()): ?>
-                    <a href="state.php?id=<?php echo $procurement->get('id'); ?>">Bogfør</a>
-                <?php else: ?>
-                    <?php print($procurement->get("date_stated_dk")); ?>
-                <?php endif; ?>
-            </td>
-        </tr>
+        <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
+            <tr>
+                <th>Bogført</th>
+                <td>
+                    <?php
+                        if ($procurement->isStated()) {
+                            $module_accounting = $kernel->useModule('accounting');
+                            echo safeToHtml($procurement->get('dk_date_stated')) . ' <a href="'.$module_accounting->getPath().'voucher.php?id='.$procurement->get('voucher_id').'">Se bilag</a>';
+                        }
+                        else {
+                            echo 'Ikke bogført';
+                            if($procurement->get('paid_date') != '0000-00-00') {
+                                echo ' <a href="state.php?id=' . intval($procurement->get("id")) . '">'.safeToHtml($translation->get('state')).'</a>';
+                            }
+                            
+                        }
+                    ?>
+                </td>
+            </tr>
+        <?php endif; ?>
         
-        -->
         </tbody>
     </table>
 </div>
