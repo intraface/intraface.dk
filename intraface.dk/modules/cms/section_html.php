@@ -48,7 +48,7 @@ $page->start('CMS');
     <li><a href="page.php?id=<?php echo $section->cmspage->get('id'); ?>"><?php echo safeToHtml($translation->get('close', 'common')); ?></a></li>
     <?php else: ?>
     <li><a class="edit" href="page_edit.php?id=<?php echo $section->cmspage->get('id'); ?>"><?php echo safeToHtml($translation->get('edit page')); ?></a></li>
-    <li><a href="site.php?id=<?php echo $section->cmspage->cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('close')); ?></a></li>
+    <li><a href="pages.php?type=<?php e($section->cmspage->get('type')); ?>&amp;id=<?php echo $section->cmspage->cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('close')); ?></a></li>
     <?php endif; ?>
 </ul>
 

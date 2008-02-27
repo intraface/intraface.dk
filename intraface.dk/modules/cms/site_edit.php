@@ -7,7 +7,7 @@ $translation = $kernel->getTranslation('cms');
 if (!empty($_POST)) {
 	$cmssite = new CMS_Site($kernel, (int)$_POST['id']);
 	if ($cmssite->save($_POST)) {
-		header('Location: index.php');
+		header('Location: site.php?id='.$cmssite->get('id'));
 		exit;
 	}
 	else {

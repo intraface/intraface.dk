@@ -83,7 +83,7 @@ if (!empty($_POST)) {
             header('Location: section_html.php?id='. $keys[0]);
             exit;
         } elseif (!empty($_POST['close'])) {
-            header('Location: site.php?id='.$section->cmspage->cmssite->get('id'));
+            header('Location: pages.php?type='.$section->cmspage->get('type').'&id='.$section->cmspage->cmssite->get('id'));
             exit;
         } else {
             header('Location: page.php?id='.$section->cmspage->get('id'));
@@ -129,8 +129,8 @@ $page->start(safeToHtml($translation->get('pages')));
 <h1><?php e($translation->get('pages')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="page_edit.php?id=<?php echo $cmspage->get('id'); ?>"><?php e($translation->get('edit settings', 'common')); ?></a></li>
-    <li><a href="site.php?id=<?php echo $cmspage->cmssite->get('id'); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
+    <li><a class="edit" href="page_edit.php?id=<?php echo $cmspage->get('id'); ?>"><?php echo safeToHtml($translation->get('edit settings', 'common')); ?></a></li>
+    <li><a href="pages.php?type=<?php e($cmspage->get('type')); ?>&amp;id=<?php echo $cmspage->cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('close', 'common')); ?></a></li>
     <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
     <li><a href="template.php?id=<?php echo $cmspage->get('template_id'); ?>"><?php e($translation->get('edit template')); ?></a></li>
     <?php endif; ?>
@@ -302,9 +302,9 @@ $page->start(safeToHtml($translation->get('pages')));
     <!-- sektionerne kan lige så godt blive vist direkte - på nær html-elementet men hvorfor ikke også html elementet? -->
 
     <div>
-        <input type="submit" value="<?php echo e($translation->get('save', 'common')); ?>" />
-        <input type="submit" name="close" value="<?php echo e($translation->get('save and close', 'common')); ?>" />
-        <a href="site.php?id=<?php echo $cmspage->cmssite->get('id'); ?>"><?php echo e($translation->get('regret', 'common')); ?></a>
+        <input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
+        <input type="submit" name="close" value="<?php e($translation->get('save and close', 'common')); ?>" />
+        <a href="pages.php?type=<?php e($cmspage->get('type')); ?>&amp;id=<?php echo $cmspage->cmssite->get('id'); ?>"><?php e($translation->get('regret', 'common')); ?></a>
     </div>
 
 </form>

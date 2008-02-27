@@ -32,15 +32,15 @@ $page->start(safeToHtml($translation->get('cms')));
 <thead>
 	<tr>
 		<th><?php echo safeToHtml($translation->get('name')); ?></th>
-		<th></th>
+		<th><?php e(t('go directly to')); ?></th>
         <th></th>
 	</tr>
 </thead>
 <tbody>
 <?php foreach ($sites AS $s): ?>
 <tr>
-	<td><a href="site.php?type=page&id=<?php echo intval($s['id']); ?>"><?php echo safeToHtml($s['name']);  ?></a></td>
-	<td><a href="site.php?type=page&amp;id=<?php echo intval($s['id']); ?>"><?php e(t('pages'));  ?></a>, <a href="site.php?type=article&amp;id=<?php echo intval($s['id']); ?>"><?php e(t('articles'));  ?></a>, <a href="site.php?type=news&amp;id=<?php echo intval($s['id']); ?>"><?php e(t('news'));  ?></a></td>
+	<td><a href="site.php?id=<?php echo intval($s['id']); ?>"><?php echo safeToHtml($s['name']);  ?></a></td>
+	<td><a href="pages.php?type=page&amp;id=<?php echo intval($s['id']); ?>"><?php e(t('pages'));  ?></a>, <a href="pages.php?type=article&amp;id=<?php echo intval($s['id']); ?>"><?php e(t('articles'));  ?></a>, <a href="pages.php?type=news&amp;id=<?php echo intval($s['id']); ?>"><?php e(t('news'));  ?></a></td>
     <td class="options">
 		<a class="edit" href="site_edit.php?id=<?php echo intval($s['id']); ?>"><?php echo safeToHtmL($translation->get('edit settings', 'common')); ?></a>
 		<a class="delete" href="index.php?delete=<?php echo intval($s['id']); ?>"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a>

@@ -47,14 +47,26 @@ if (!empty($_GET['moveup']) AND is_numeric($_GET['moveup'])) {
     $cmspage->delete();
     $cmssite = $cmspage->cmssite;
 } else {
-    $cmssite = new CMS_Site($kernel, (int)$_GET['id']);
-    $cmspage = new CMS_Page($cmssite);
+    if(!empty($_GET['id'])) {
+        $cmssite = new CMS_Site($kernel, (int)$_GET['id']);
+        $cmspage = new CMS_Page($cmssite);
+        $kernel->setting->set('user', 'cms.active.site_id', (int)$_GET['id']);
+    }
+    else {
+        $site_id = $kernel->setting->get('user', 'cms.active.site_id');
+        if($site_id != 0) {
+            $cmssite = new CMS_Site($kernel, $site_id);
+            $cmspage = new CMS_Page($cmssite);
+        }
+        else {
+            header('location: index.php');
+            exit;
+        }
+    }
+    
 }
 
-$page_types_plural = array(
-    'page' => 'pages',
-    'article' => 'articles',
-    'news' => 'news');
+$page_types_plural = CMS_Page::getTypesPlural();
 
 $page = new Page($kernel);
 $page->includeJavascript('global', 'yui/connection/connection-min.js');
@@ -81,13 +93,7 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
 <ul class="options">
     <li><a class="new" href="page_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('create page')); ?></a></li>
     <li><a class="edit" href="site_edit.php?id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('edit site settings')); ?></a></li>
-
-    <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-    <li><a class="template" href="templates.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('templates')); ?></a></li>
-    <?php endif; ?>
-    <?php if ($kernel->user->hasSubAccess('cms', 'edit_stylesheet')): ?>
-    <li><a class="stylesheet" href="stylesheet_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('stylesheet')); ?></a></li>
-    <?php endif; ?>
+    <li><a  href="site.php?id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('go to site overview')); ?></a></li>
 </ul>
 
 
