@@ -8,9 +8,8 @@
 
 class CMS_Navigation extends Standard
 {
-
-    var $cmspage;
-    var $value;
+    private $cmspage;
+    public $value;
 
     function __construct($cmspage)
     {
