@@ -513,6 +513,13 @@ table#accounting-cheatsheet th {
 	border: 2px solid #FFFF11;
 }
 
+.message ul {
+    list-style-type: disc;
+    padding-left: 1em;
+    list-style-position: inside;
+    
+}
+
 
 
 .advice {
