@@ -31,7 +31,9 @@ class Depreciation extends Payment
      */
     function update($input = "")
     {
-        if(is_array($input)) $input['type'] = -1;
+        if (is_array($input)) {
+            $input['type'] = -1;
+        }
         return parent::update($input);
     }
 
@@ -47,23 +49,23 @@ class Depreciation extends Payment
      */
     public function state($year, $voucher_number, $voucher_date, $state_account_number, $translation)
     {
-        if(!is_object($year)) {
+        if (!is_object($year)) {
             trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
             return false;
         }
 
-        if($this->payment_for_type_id == 0) {
+        if ($this->payment_for_type_id == 0) {
             trigger_error('Invalid paymet_for_type_id in Payment->state', E_USER_ERROR);
             return false;
         }
 
-        if(!is_object($translation)) {
+        if (!is_object($translation)) {
             trigger_error('5th parameter to state needs to be a translation object!', E_USER_ERROR);
             return false;
         }
 
         $validator = new Validator($this->error);
-        if($validator->isDate($voucher_date, "Ugyldig dato")) {
+        if ($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);
             $this_date->convert2db();
         }
@@ -83,14 +85,14 @@ class Depreciation extends Payment
         // this should be a method in Year instead
         require_once 'Intraface/modules/accounting/Account.php';
         $credit_account = new Account($year, $year->getSetting('debtor_account_id'));
-        if(!$credit_account->validForState()) {
+        if (!$credit_account->validForState()) {
             $this->error->set('Den gemte debitorkonto er ikke gyldig til bogføring');
             return false;
         }
         $credit_account_number = $credit_account->get('number');
 
         $debet_account = Account::factory($year, $state_account_number);
-        if(!$debet_account->validForState()) {
+        if (!$debet_account->validForState()) {
             $this->error->set('Den valgte konto for bogføring er ikke gyldig');
             return false;
         }

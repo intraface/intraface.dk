@@ -11,11 +11,11 @@ require_once 'Intraface/Standard.php';
 
 class Payment extends Standard
 {
-    private $id;
+    protected $id;
     public $kernel;
-    private $payment_for;
-    private $payment_for_type_id;
-    private $payment_for_id;
+    protected $payment_for;
+    protected $payment_for_type_id;
+    protected $payment_for_id;
     public $error;
     public $dbquery;
     private $db;
