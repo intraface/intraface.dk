@@ -136,7 +136,6 @@ class CMS_Page extends Standard
                     $db->query("SELECT site_id, id FROM cms_page WHERE intranet_id = " . $kernel->intranet->get('id') . " AND active = 1 AND status_key = 1 AND site_id = " . $value['site_id'] . " ORDER BY position ASC LIMIT 1");
                 }
                 if (!$db->nextRecord()) {
-                    // s� pr�ver vi lige med id i stedet make sure $value s� er numerisk
                     $db->query("SELECT site_id, id FROM cms_page WHERE id = " . (int)$value['identifier'] . " AND intranet_id = " . $kernel->intranet->get('id') . " AND active = 1 AND site_id = " . $value['site_id']);
                     if (!$db->nextRecord()) {
                         return false;
@@ -154,29 +153,33 @@ class CMS_Page extends Standard
     /**
      * Valideringsfunktion
      */
-
     function validate($var)
     {
         $validator = new Validator($this->error);
-        if (!empty($var['navigation_name'])) $validator->isString($var['navigation_name'], 'error in navigation_name - has to be a string', '', 'allow_empty');
+        if (!empty($var['navigation_name'])) {
+            $validator->isString($var['navigation_name'], 'error in navigation_name - has to be a string', '', 'allow_empty');
+        }
         $validator->isNumeric($var['allow_comments'], 'error in comments - allowed values are 0 and 1');
         $validator->isNumeric($var['hidden'], 'error in hidden - allowed values are 0 and 1');
 
-        // der skal valideres p� type
         if (!Validate::string($var['identifier'], array('format' => VALIDATE_ALPHA . VALIDATE_NUM . '-_'))) {
             $this->error->set('error in identifier - allowed values are a-z, 1-9');
         }
-
-        $db = new DB_Sql;
-        $db->query("SELECT * FROM cms_page WHERE site_id = " . $this->cmssite->get('id') . " AND identifier = '".$var['identifier']."' AND active = 1 AND id != " . (int)$this->get('id'));
-        if ($db->nextRecord()) {
+        if ($this->isIdentifierAvailable($var['identifier'])) {
             $this->error->set('error in identifier - has to be unique');
         }
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
+    }
+
+    function isIdentifierAvailable($identifier)
+    {
+        $db = new DB_Sql;
+        $db->query("SELECT * FROM cms_page WHERE site_id = " . $this->cmssite->get('id') . " AND identifier = '".$identifier."' AND active = 1 AND id != " . (int)$this->get('id'));
+        return ($db->numRows() == 0);
     }
 
     /**
@@ -185,7 +188,6 @@ class CMS_Page extends Standard
      * Hvis date_publish ikke er sat, skal den bare tage dd.
      * Hvis date_expire ikke er sat, hvad skal den s� g�re?
      */
-
     function save($var)
     {
         $var = safeToDb($var);
@@ -200,7 +202,7 @@ class CMS_Page extends Standard
             trigger_error('CMS__Page::save(): $var is not an array array', E_USER_ERROR);
         }
 
-        if(!isset($var['pic_id'])) {
+        if (!isset($var['pic_id'])) {
             $var['pic_id'] = 0;
         }
 
@@ -322,7 +324,7 @@ class CMS_Page extends Standard
         if (!$db->nextRecord()) {
             return 0;
         }
-        // sets sideoplysninger
+
         $this->value['id'] = $db->f('id');
         $this->value['site_id'] = $db->f('site_id');
         $this->value['type_key'] = $db->f('type_key');
@@ -337,7 +339,7 @@ class CMS_Page extends Standard
 
         $this->value['child_of_id'] = $db->f('child_of_id');
         $this->value['name'] = $db->f('title'); //  bruges til keywords - m�ske skulle vi have et felt ogs�, s� title var webrelateret?
-         $this->value['title'] = $db->f('title');
+        $this->value['title'] = $db->f('title');
         $this->value['navigation_name'] = $db->f('navigation_name');
         if (empty($this->value['navigation_name'])) {
             $this->value['navigation_name'] = $this->value['title'];
@@ -363,7 +365,7 @@ class CMS_Page extends Standard
         $this->value['template_id'] = $db->f('template_id');
         $this->value['template_identifier'] = $this->template->get('identifier');
 
-        if($this->get('type') == 'page') {
+        if ($this->get('type') == 'page') {
             $i = 0;
             $page_tree[$i]['navigation_name'] = $this->get('navigation_name');
             $page_tree[$i]['url'] = $this->get('url');
@@ -375,9 +377,9 @@ class CMS_Page extends Standard
                 $i++;
 
                 $db->query("SELECT child_of_id, navigation_name, title, id, identifier FROM cms_page WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND active = 1 AND type_key = ".$this->get('type_key')." AND id = ".$child_of_id);
-                if($db->nextRecord()) {
+                if ($db->nextRecord()) {
                     $page_tree[$i]['navigation_name'] = $db->f('navigation_name');
-                    if(empty($page_tree[$i]['navigation_name'])) {
+                    if (empty($page_tree[$i]['navigation_name'])) {
                         $page_tree[$i]['navigation_name'] = $db->f('title');
                     }
                     $page_tree[$i]['url'] = $this->cmssite->get('url').$db->f('identifier').'/';
@@ -389,7 +391,7 @@ class CMS_Page extends Standard
                     $child_of_id = 0;
                 }
 
-                if($i == 50) trigger_error("The while loop is runing loose in CMS_Page::load", E_USER_ERROR);
+                if ($i == 50) trigger_error("The while loop is runing loose in CMS_Page::load", E_USER_ERROR);
             }
 
             // Vi vender arrayet rundt, s� key kommer til at passe til level.
@@ -402,7 +404,7 @@ class CMS_Page extends Standard
 
                 $this->value['page_tree'][$i] = $page_tree[$j];
                 $i++;
-                if($i == 50) trigger_error("The for loop is runing loose in CMS_Page::load", E_USER_ERROR);
+                if ($i == 50) trigger_error("The for loop is runing loose in CMS_Page::load", E_USER_ERROR);
             }
             */
 
@@ -504,19 +506,19 @@ class CMS_Page extends Standard
     {
         $pages = array();
 
-        if($this->dbquery->checkFilter('type') && $this->dbquery->getFilter('page') == 'all') {
+        if ($this->dbquery->checkFilter('type') && $this->dbquery->getFilter('page') == 'all') {
             // no condition isset
             // $sql_type = "";
         } else {
             // with int it will never be a fake searcy
             $type = $this->dbquery->getFilter('type');
-            if($type == '') {
+            if ($type == '') {
                 $type = 'page'; // Standard
             }
 
-            if($type != 'all') {
+            if ($type != 'all') {
                 $type_key = array_search($type, $this->getTypes());
-                if($type_key === false) {
+                if ($type_key === false) {
                     trigger_error("Invalid type '".$type."' set with CMS_PAGE::dbquery::setFilter('type') in CMS_Page::getList", E_USER_ERROR);
                 }
 
@@ -563,16 +565,16 @@ class CMS_Page extends Standard
 
 
         $keywords = $this->dbquery->getKeyword();
-        if(isset($keywords) && is_array($keywords) && count($keywords) > 0 && $type == 'page') {
+        if (isset($keywords) && is_array($keywords) && count($keywords) > 0 && $type == 'page') {
             // If we are looking for pages, and there is keywords, we probaly want from more than one level
             // So we add nothing about level to condition.
 
-        } elseif($this->dbquery->checkFilter('level') && $type == 'page') { // $level == 'sublevel' &&
+        } elseif ($this->dbquery->checkFilter('level') && $type == 'page') { // $level == 'sublevel' &&
 
             // Til at finde hele menuen p� valgt level.
             $page_tree = $this->get('page_tree');
             $level = (int)$this->dbquery->getFilter('level');
-            if(isset($page_tree[$level - 1]) && is_array($page_tree[$level - 1])) {
+            if (isset($page_tree[$level - 1]) && is_array($page_tree[$level - 1])) {
                 $child_of_id = $page_tree[$level - 1]['id'];
             } else {
                 $child_of_id = 0;
@@ -641,12 +643,12 @@ class CMS_Page extends Standard
                     $dbquery[$n + 1]->setCondition("child_of_id = ".$cmspage[$n]->f("id"));
                     $cmspage[$n + 1] = $dbquery[$n + 1]->getRecordset("id, title, identifier, navigation_name, date_publish, child_of_id, pic_id, status_key, description, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk", '', false);
 
-                    // if(!array_key_exists($n + 1, $cmspage) OR !is_object($cmspage[$n + 1])) {
+                    // if (!array_key_exists($n + 1, $cmspage) OR !is_object($cmspage[$n + 1])) {
                     //	$cmspage[$n + 1] = new DB_Sql;
                     //}
                     // $cmspage[$n + 1]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE active=1 AND child_of_id = ".$cmspage[$n]->f("id"). $sql_expire . $sql_publish . " ORDER BY id");
 
-                    if($cmspage[$n + 1]->numRows() != 0) {
+                    if ($cmspage[$n + 1]->numRows() != 0) {
                         $n++;
                         CONTINUE;
                     }
@@ -654,12 +656,11 @@ class CMS_Page extends Standard
 
             }
 
-            if($n == 0) {
+            if ($n == 0) {
                 BREAK;
             }
 
             $n--;
-
         }
 
         return $pages;
@@ -671,10 +672,12 @@ class CMS_Page extends Standard
         if (empty($status)) {
             $status = 'draft';
         }
-        if (!in_array($status, $this->status)) return 0;
+        if (!in_array($status, $this->status)) {
+            return false;
+        }
         $db = new DB_Sql;
         $db->query("UPDATE cms_page SET status_key = " . array_search($status, $this->status) . " WHERE id = " . $this->id . " AND intranet_id = " . $this->cmssite->kernel->intranet->get('id'));
-        return 1;
+        return true;
     }
 
     function isLocked()
@@ -726,18 +729,42 @@ class CMS_Page extends Standard
     {
         return $this->id;
     }
-    
+
     /**
      * Returns the possible page types
-     * 
+     *
      * @return array possible page types
      */
-    public function getTypes() 
+    public function getTypes()
     {
         return array(
             1 => 'page',
             2 => 'article',
             3 => 'news');
+    }
+
+    function isPublished()
+    {
+        return ($this->get('status_key') == 1);
+    }
+
+    function getStatus()
+    {
+        return $this->get('status');
+    }
+
+    function publish()
+    {
+        $db = new DB_Sql;
+        $db->query("UPDATE cms_page SET status_key = " . array_search('published', $this->status) . " WHERE id = " . $this->id . " AND intranet_id = " . $this->cmssite->kernel->intranet->get('id'));
+        return true;
+    }
+
+    function unpublish()
+    {
+        $db = new DB_Sql;
+        $db->query("UPDATE cms_page SET status_key = " . array_search('draft', $this->status) . " WHERE id = " . $this->id . " AND intranet_id = " . $this->cmssite->kernel->intranet->get('id'));
+        return true;
     }
 
 }

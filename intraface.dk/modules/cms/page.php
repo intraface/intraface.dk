@@ -9,6 +9,20 @@ $error = array();
 
 if (!empty($_POST)) {
 
+    if (!empty($_POST['publish'])) {
+        $cmspage = CMS_Page::factory($kernel, 'id', $_POST['id']);
+        if ($cmspage->publish()) {
+            header('Location: page.php?id='.$cmspage->get('id'));
+            exit;
+        }
+    } elseif (!empty($_POST['unpublish'])) {
+        $cmspage = CMS_Page::factory($kernel, 'id', $_POST['id']);
+        if ($cmspage->unpublish()) {
+            header('Location: page.php?id='.$cmspage->get('id'));
+            exit;
+        }
+    }
+
     $files = '';
     if (isset($_POST['section']) && is_array($_POST['section'])) {
         foreach ($_POST['section'] AS $key=>$value) {
@@ -43,15 +57,11 @@ if (!empty($_POST)) {
 
                 if(!isset($value['pic_id'])) $value['pic_id'] = 0;
             }
-
-            // print_r($value);
-
             if (!$section->save($value)) {
                 $error[$section->get('id')] = $translation->get('error in section') . ' ' . strtolower(implode($section->error->message, ', '));
             }
         }
     }
-    // die();
     if (empty($error) AND count($error) == 0) {
         if(!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
 
@@ -116,23 +126,38 @@ if ($kernel->setting->get('user', 'htmleditor') == 'tinymce') {
 $page->start(safeToHtml($translation->get('pages')));
 ?>
 
-<h1><?php echo safeToHtml($translation->get('pages')); ?></h1>
+<h1><?php e($translation->get('pages')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="page_edit.php?id=<?php echo $cmspage->get('id'); ?>"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a></li>
-    <li><a href="site.php?id=<?php echo $cmspage->cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('close', 'common')); ?></a></li>
+    <li><a class="edit" href="page_edit.php?id=<?php echo $cmspage->get('id'); ?>"><?php e($translation->get('edit settings', 'common')); ?></a></li>
+    <li><a href="site.php?id=<?php echo $cmspage->cmssite->get('id'); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
     <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-    <li><a href="template.php?id=<?php echo $cmspage->get('template_id'); ?>"><?php echo safeToHtml($translation->get('edit template')); ?></a></li>
+    <li><a href="template.php?id=<?php echo $cmspage->get('template_id'); ?>"><?php e($translation->get('edit template')); ?></a></li>
     <?php endif; ?>
 </ul>
 
+<form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>" id="publish-form">
+    <fieldset class="<?php e($cmspage->getStatus()); ?>">
+    <?php if (!$cmspage->isPublished()): ?>
+    <?php e('this page is not published'); ?>
+    <input type="submit" value="<?php e(t('publish now')); ?>" name="publish" />
+    <?php else: ?>
+    <?php e('this page is published'); ?>
+    <input type="submit" value="<?php e(t('set as draft')); ?>" name="unpublish" />
+    <?php endif; ?>
+    <input type="hidden" value="<?php e($_GET['id']); ?>" name="id" />
+    </fieldset>
+</form>
+
+<br style="clear: both;" />
+
 <?php if (count($sections) == 0): ?>
     <p class="warning">
-        <?php echo safeToHtml($translation->get('no sections added to the template')); ?>
+        <?php echo e($translation->get('no sections added to the template')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="template.php?id=<?php echo $cmspage->get('template_id'); ?>"><?php echo safeToHtml($translation->get('edit template')); ?></a>.
+            <a href="template.php?id=<?php echo $cmspage->get('template_id'); ?>"><?php echo e($translation->get('edit template')); ?></a>.
         <?php else: ?>
-            <strong><?php echo safeToHtml($translation->get('you cannot edit templates')); ?></strong>
+            <strong><?php echo e($translation->get('you cannot edit templates')); ?></strong>
         <?php endif; ?>
 
     </p>
@@ -140,7 +165,7 @@ $page->start(safeToHtml($translation->get('pages')));
 
 <?php
     if (!empty($error) AND is_array($error) AND array_key_exists($section->get('id'), $error)) {
-        echo '<p class="error">'.safeToHtml($translation->get('error in a section - please see below')).'</p>';
+        echo '<p class="error">'.e($translation->get('error in a section - please see below')).'</p>';
     }
 ?>
 
@@ -258,7 +283,7 @@ $page->start(safeToHtml($translation->get('pages')));
                     if (!array_key_exists($section->get('id'), $error)) echo '</fieldset>';
                     echo '<fieldset>';
                     echo '<legend>' . $section->get('section_name') . '</legend>';
-                    echo '<p>'. safeToHtml($translation->get('there is a html element on the page')).'</p>';
+                    echo '<p>'. e($translation->get('there is a html element on the page')).'</p>';
                     echo '<input type="submit" value="'.safeToForm($translation->get('show element')).'" name="edit_html['.$section->get('id').']" />';
 
                     //echo '<p><a class="confirm" title="Dette link forlader siden uden at gemme ændringer på den." href="section_html.php?id='.$section->get('id').'">Rediger det blandede HTML-element &rarr;</a></p>';
@@ -277,9 +302,9 @@ $page->start(safeToHtml($translation->get('pages')));
     <!-- sektionerne kan lige så godt blive vist direkte - på nær html-elementet men hvorfor ikke også html elementet? -->
 
     <div>
-        <input type="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" />
-        <input type="submit" name="close" value="<?php echo safeToHtml($translation->get('save and close', 'common')); ?>" />
-        <a href="site.php?id=<?php echo $cmspage->cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('regret', 'common')); ?></a>
+        <input type="submit" value="<?php echo e($translation->get('save', 'common')); ?>" />
+        <input type="submit" name="close" value="<?php echo e($translation->get('save and close', 'common')); ?>" />
+        <a href="site.php?id=<?php echo $cmspage->cmssite->get('id'); ?>"><?php echo e($translation->get('regret', 'common')); ?></a>
     </div>
 
 </form>
