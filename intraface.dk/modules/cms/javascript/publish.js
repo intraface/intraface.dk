@@ -27,13 +27,13 @@ var publish = {
 	}, 
 	
 	startRequest:function() { 
-		// YAHOO.util.Connect.asyncRequest('POST', 'site.php', callback, "id=" + publish.site_id+"&page="+this.id+"&status="+this.value+"&ajax=true");
+		// YAHOO.util.Connect.asyncRequest('POST', 'pages.php', callback, "id=" + publish.site_id+"&page="+this.id+"&status="+this.value+"&ajax=true");
 		//alert("id=" + publish.site_id+"&page["+$this.id+"]="+this.id+"&status="+this.value+"&ajax=true");
 		var value = '';
 		if (this.checked) { 
 			value = 'published';
 		} 
-		YAHOO.util.Connect.asyncRequest('POST', 'site.php', callback, "id=" + publish.site_id + "&page[" + this.id + "]=" + this.id + "&status[" + this.id + "]=" + value + "&ajax=true");		 
+		YAHOO.util.Connect.asyncRequest('POST', 'pages.php', callback, "id=" + publish.site_id + "&page[" + this.id + "]=" + this.id + "&status[" + this.id + "]=" + value + "&ajax=true");		 
 
 	} 
  
