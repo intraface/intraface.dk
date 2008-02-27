@@ -64,7 +64,7 @@ $page->start(safeToHtml($translation->get('edit template')));
             <input name="name" type="text" id="name" value="<?php if (!empty($value['name'])) echo safeToForm($value['name']); ?>" size="50" maxlength="255" />
         </div>
         <div class="formrow" id="titlerow">
-            <label for="name"><?php e($translation->get('identifier', 'common')); ?></label>
+            <label for="identifier"><?php e($translation->get('identifier', 'common')); ?></label>
             <input name="identifier" type="text" id="name" value="<?php if (!empty($value['identifier'])) echo safeToForm($value['identifier']); ?>" size="50" maxlength="255" />
         </div>
 
