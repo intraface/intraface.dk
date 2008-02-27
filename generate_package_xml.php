@@ -7,7 +7,7 @@
  * @version @package-version@
  */
 
-$version = '1.6.1';
+$version = '1.7.1';
 $stability = 'stable';
 $notes = '
 * Small fixes of undefined variables
@@ -109,7 +109,7 @@ $pfm->addPackageDepWithChannel('required', 'MDB2_Schema', 'pear.php.net', '0.8.1
 // Kernel
 $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.1');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Driver_mysql', 'pear.php.net', '1.4.1');
-$pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '2.0.0');
+$pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTranslation', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.9.13');
 // there is a Validate 0.8.1 now!
@@ -145,8 +145,8 @@ $pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'public.intraface.dk', '0
 // filehandler
 $pfm->addPackageDepWithChannel('required', 'MIME_Type', 'pear.php.net', '1.0.0');
 $pfm->addPackageDepWithChannel('required', 'System_Command', 'pear.php.net', '1.0.6');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Keyword', 'public.intraface.dk', '0.1.0');
+//$pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler', 'public.intraface.dk', '0.1.0');
+//$pfm->addPackageDepWithChannel('required', 'Ilib_Keyword', 'public.intraface.dk', '0.1.0');
 
 // email
 $pfm->addPackageDepWithChannel('required', 'phpmailer', 'public.intraface.dk', '1.73.1');
@@ -183,13 +183,13 @@ $pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php
 // modulepackage
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Debtor_XMLRPC', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_XMLRPC', 'public.intraface.dk', '0.1.1');
-$pfm->addPackageDepWithChannel('required', ' IntrafacePublic_Shop_HTML', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_HTML', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Tools', 'public.intraface.dk', '0.1.0');
 
 // demo
 $pfm->addPackageDepWithChannel('required', 'konstrukt', 'public.intraface.dk', '0.4.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'recurive_array_map', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.intraface.dk', '0.1.0');
 
 
 foreach ($ignore AS $file) {
