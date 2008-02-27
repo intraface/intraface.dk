@@ -5,12 +5,12 @@
 
 class ReminderItem extends Standard
 {
-    var $reminder;
-    var $id;
-    var $value;
-    var $invoice;
-    var $db;
-    var $error;
+    private $reminder;
+    private $id;
+    public $value;
+    private $invoice;
+    private $db;
+    public $error;
 
     function __construct($reminder, $id = 0)
     {
@@ -134,5 +134,3 @@ class ReminderItem extends Standard
         return $value;
     }
 }
-
-?>
