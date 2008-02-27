@@ -14,10 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($template->save($_POST)) {
         if (!empty($_POST['close'])) {
-            header('Location: templates.php?site_id='.$cmssite->get('id'));
+            header('Location: template.php?id='.$template->get('id'));
             exit;
         } else {
-            header('Location: template.php?id='.$template->get('id'));
+            header('Location: template_edit.php?id='.$template->get('id'));
             exit;
         }
     } else {
