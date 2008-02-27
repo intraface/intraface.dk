@@ -21,10 +21,9 @@ class UserTest extends PHPUnit_Framework_TestCase
         $db->exec('TRUNCATE modules');
         $db->exec('TRUNCATE permission');
 
-
         // @todo this has the notion with the standard database setup
         $u = new UserMaintenance();
-        $u->update(array('email' => 'start@intraface.dk', 'password' => '123456', 'confirm_password' => '123456', 'disable' => 0));
+        $u->update(array('email' => 'start@intraface.dk', 'password' => '123456', 'confirm_password' => '123456', 'disabled' => 0));
 
         $i = new IntranetMaintenance();
         $i->save(array('name' => 'intraface', 'identifier' => 'intraface'));
@@ -121,5 +120,14 @@ class UserTest extends PHPUnit_Framework_TestCase
     function testGetAddressReturnsObject()
     {
         $this->assertTrue(is_object($this->user->getAddress()));
+    }
+
+    function getActiveIntranetIdReturnsActiveId()
+    {
+        $u = new UserMaintenance(1);
+        $u->setIntranetAccess(1);
+
+        $this->user->setIntranetId(1);
+        $this->assertEquals(1, $this->user->getActiveIntranetId());
     }
 }
