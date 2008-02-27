@@ -233,7 +233,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
             foreach ($related AS $p) {
                 echo '<li>'. $p['name'];
                 if ($p['locked'] == 0) {
-                    echo ' <a class="delete" href="product.php?id='.$product->get('id').'&amp;del_related='.$p['related_id'].'&amp;from=related#related">'.t('delete').'</a>';
+                    echo ' <a class="delete" href="product.php?id='.$product->get('id').'&amp;del_related='.$p['related_id'].'&amp;from=related#related">'.t('remove').'</a>';
                 }
                 echo '</li>';
             }
