@@ -14,17 +14,18 @@
 
 class CMS_SiteMap {
 
-    var $cmssite;
+    private $cmssite;
 
-    function __construct($cmssite) {
+    function __construct($cmssite)
+    {
         $this->cmssite = $cmssite;
     }
 
-    function build() {
+    function build()
+    {
         $cmspage = new CMS_Page($this->cmssite);
         return $cmspage->getList('page');
     }
-
 }
 
 /*
