@@ -603,7 +603,7 @@ if(isset($onlinepayment)) {
 
                 <div style="clear: both;">
                     <input class="confirm" type="submit" name="payment" value="Registrér" title="Dette vil registrere betalingen" />
-                    <?php e(t('or')); ?>
+                    <?php e(t('or', 'common')); ?>
                     <a href="register_payment.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>"><?php e(t('give me more choices')); ?></a>.
                 </div>
             </form>
