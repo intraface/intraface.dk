@@ -154,8 +154,13 @@ if (!function_exists('t')) {
 
 $GLOBALS['_global_function_callback_t'] = 'intraface_t';
 
-function intraface_t($string, $page = '')
+function intraface_t($string, $page = NULL)
 {
     global $translation;
-    return $translation->get($string, $page);
+    if($page !== NULL) {
+        return $translation->get($string, $page);
+    }
+    else {
+        return $translation->get($string);
+    }
 }
