@@ -499,14 +499,16 @@ class OnlinePayment extends Standard {
             }
             $this->dbquery->setCondition("belong_to_key = ".$belong_to_key." AND belong_to_id = ".$this->dbquery->getFilter('belong_to_id'));
 
-            $this->dbquery->setFilter('status', -1);
+            // $this->dbquery->setFilter('status', -1);
 
-        }
-
+        } 
+        
+        /*
         if($this->dbquery->getFilter('status') == 0) {
             $this->dbquery->setFilter('status', 2);
         }
-
+        */
+        
         if($this->dbquery->getFilter('status') > 0) {
             $this->dbquery->setCondition("status_key = ".intval($this->dbquery->getFilter('status')));
         }

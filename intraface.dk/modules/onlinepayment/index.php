@@ -9,6 +9,9 @@ $onlinepayment = OnlinePayment::factory($kernel);
 if(isset($_GET['status'])) {
 	$onlinepayment->dbquery->setFilter('status', $_GET['status']);
 }
+else {
+    $onlinepayment->dbquery->setFilter('status', 2);
+}
 
 if(isset($_GET['text'])) {
 	$onlinepayment->dbquery->setFilter('text', $_GET['text']);
