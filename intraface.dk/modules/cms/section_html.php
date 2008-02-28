@@ -47,10 +47,14 @@ $page->start('CMS');
     <?php if (count($section->cmspage->getSections()) > 1): ?>
     <li><a href="page.php?id=<?php echo $section->cmspage->get('id'); ?>"><?php echo safeToHtml($translation->get('close', 'common')); ?></a></li>
     <?php else: ?>
-    <li><a class="edit" href="page_edit.php?id=<?php echo $section->cmspage->get('id'); ?>"><?php echo safeToHtml($translation->get('edit page')); ?></a></li>
+    <li><a class="edit" href="page_edit.php?id=<?php echo $section->cmspage->get('id'); ?>"><?php echo safeToHtml($translation->get('edit page settings')); ?></a></li>
     <li><a href="pages.php?type=<?php e($section->cmspage->get('type')); ?>&amp;id=<?php echo $section->cmspage->cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('close')); ?></a></li>
     <?php endif; ?>
 </ul>
+
+<div class="message">
+    <p><?php e(t('this section can contain a number of elements. in the bottom of the page you can add new elements. to edit an element move your mouse over the element, and a yellow box will appear.')); ?></p>
+</div>
 
 <div id="cmspage" style="padding: 1em; border: 4px solid #ccc;">
     <?php
