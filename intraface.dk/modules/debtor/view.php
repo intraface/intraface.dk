@@ -838,7 +838,7 @@ if(isset($onlinepayment)) {
                     if($items[$i]["unit"] != "") {
                         ?>
                         <td><?php echo number_format($items[$i]["quantity"], 2, ",", "."); ?></td>
-                        <td><?php echo safeToHtml($translation->get($items[$i]["unit"])); ?></td>
+                        <td><?php echo safeToHtml($translation->get($items[$i]["unit"], 'product')); ?></td>
                         <td class="amount"><?php print(number_format($items[$i]["price"], 2, ",", ".")); ?></td>
                         <?php
                     }
