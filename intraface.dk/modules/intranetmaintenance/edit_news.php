@@ -17,8 +17,7 @@ if(isset($_POST['submit'])) {
 }
 elseif(isset($_GET['id'])) {
 	$intranetnews = new IntranetNews($kernel, intval($_GET['id']));
-
-	$values = $intranetnews->get();
+    $values = $intranetnews->get();
 
 }
 else {
@@ -44,12 +43,12 @@ $page->start("Intranet nyhed");
 
 	<div class="formrow">
 		<label for="area">Område</label>
-		<input type="text" name="area" id="area" value="<?php print($values['area']); ?>" />
+		<input type="text" name="area" id="area" value="<?php if(isset($values['area'])) print($values['area']); ?>" />
 	</div>
 
 	<div class="formrow">
 		<label for="description">Nyhed</label>
-		<textarea name="description" id="description" style="width: 400px; height: 70px;"><?php print($values['description']); ?></textarea>
+		<textarea name="description" id="description" style="width: 400px; height: 70px;"><?php if(isset($values['description'])) print($values['description']); ?></textarea>
 	</div>
 
 </fieldset>
