@@ -270,17 +270,20 @@ class Voucher extends Standard
      */
     function delete()
     {
+        return true;
+        // @todo not to be used right now
+        /*
         if ($this->id == 0) {
             return 0;
         }
 
-        trigger_error('HER SKAL VI LIGE HAVE LAVET ET TJEK PÅ OM BILAGET MÅ SLETTES IFT. OM BILAG ER BOGFØRT', FATAL);
-
+        trigger_error('HER SKAL VI LIGE HAVE LAVET ET TJEK PÅ OM BILAGET MÅ SLETTES IFT. OM BILAG ER BOGFØRT', E_USER_NOTICE);
 
         $db = new DB_Sql;
         $sql = "UPDATE accounting_voucher SET active = 0 WHERE id = " . (int)$this->id . " AND year_id = " . $this->year->get('id') . " AND intranet_id=" . $this->year->kernel->intranet->get('id');
         $db->query($sql);
         return 1;
+        */
     }
 
     /**
@@ -503,8 +506,8 @@ class Voucher extends Standard
      *
      * @return 1 = success; 0 = failure
      */
-
-    function stateDraft() {
+    function stateDraft()
+    {
         if (!$this->year->vatAccountIsSet()) {
             $this->error->set('Du skal først sætte momskonti, inden du kan bogføre.');
         }

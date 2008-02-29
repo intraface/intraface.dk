@@ -171,4 +171,18 @@ class AccountTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $account->anyPosts());
     }
 
+    function testGetPostReturnsAnArray()
+    {
+        $account = $this->createAccount();
+        $this->assertTrue(is_array($account->getPosts()));
+
+    }
+
+    function testAnyAccountsReturnsAnIntegerGreaterThanZero()
+    {
+        $account = $this->createAccount();
+        $this->assertTrue($account->anyAccounts() > 0);
+
+    }
+
 }

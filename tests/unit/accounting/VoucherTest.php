@@ -36,6 +36,7 @@ class FakeAccountingYear {
         $this->kernel = new FakeVoucherKernel;
     }
     function get() { return 1; }
+    function vatAccountIsSet() { return true; }
 }
 
 class VoucherTest extends PHPUnit_Framework_TestCase
@@ -67,5 +68,25 @@ class VoucherTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(round((93.40 + Voucher::calculateVat(100.41, 7.5)), 2) == 100.41);
     }
 
+    function testDeleteReturnsTrue()
+    {
+        $voucher = new Voucher($this->year);
+        $voucher->save(array('text' => 'Description', 'date' => '2002-10-10'));
+        $this->assertTrue($voucher->delete());
+    }
+
+    function testStateDraftReturnsZeroWhenNoPostsAreFound()
+    {
+        $voucher = new Voucher($this->year);
+        $voucher->save(array('text' => 'Description', 'date' => '2002-10-10'));
+        $this->assertTrue($voucher->stateDraft() == 0);
+    }
+
+    function testStateVoucherReturnsOneWhenNoPostsAreFound()
+    {
+        $voucher = new Voucher($this->year);
+        $voucher->save(array('text' => 'Description', 'date' => '2002-10-10'));
+        $this->assertTrue($voucher->stateVoucher() == 1);
+    }
+
 }
-?>
