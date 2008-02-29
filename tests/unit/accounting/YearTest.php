@@ -114,4 +114,12 @@ class YearTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($new_year->get('id') == $year->get('id'));
         $this->assertTrue($new_year->get('label') == '2000 - edited');
     }
+
+    function testIsBalancedReturnsTrueWhenNoPostsHasBeenAdded()
+    {
+        $year = new Year($this->kernel);
+        $id = $year->save(array('label' => '2000', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0));
+        $this->assertTrue($year->isBalanced());
+    }
+
 }
