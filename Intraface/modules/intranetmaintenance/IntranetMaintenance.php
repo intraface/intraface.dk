@@ -19,7 +19,6 @@ require_once 'Intraface/DBQuery.php';
 
 class IntranetMaintenance extends Intranet
 {
-
     private $db; // databaseobject mdb2
     protected $id; // intranet id
     public $address; // address object
@@ -92,7 +91,7 @@ class IntranetMaintenance extends Intranet
         }
 
         $result = $this->db->query("SELECT id FROM module WHERE id = ".intval($module_id));
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
             exit;
         }
@@ -101,7 +100,7 @@ class IntranetMaintenance extends Intranet
                 intranet_id = ".intval($this->id).",
                 user_id = 0,
                 module_id = ".intval($row['id']));
-            if(PEAR::isError($result)) {
+            if (PEAR::isError($result)) {
                 trigger_error('Error in exec: '.$result->getUserInfo(), E_USER_INFO);
             }
             return $result;
@@ -140,7 +139,7 @@ class IntranetMaintenance extends Intranet
                 intranet_id = ".intval($this->id)." AND
                 module_id = ".intval($row['id']));
 
-            if(PEAR::isError($delete)) {
+            if (PEAR::isError($delete)) {
                 trigger_error('Error in delete: '.$delete->getUserInfo(), E_USER_ERROR);
                 exit;
             }
@@ -235,7 +234,7 @@ class IntranetMaintenance extends Intranet
      */
     public function setMaintainedByUser($id, $current_intranet_id)
     {
-        if($this->id == 0) {
+        if ($this->id == 0) {
             trigger_error('You need to save the intranet before you can set the maintainer', E_USER_ERROR);
             return false;
         }
@@ -250,12 +249,13 @@ class IntranetMaintenance extends Intranet
                 $this->error->set("Invalid user as maintainer");
             }
         }
+
         if ($this->error->isError()) {
             return false;
         }
 
         $update = $this->db->query("UPDATE intranet SET maintained_by_user_id = ".intval($id).", date_changed = NOW() WHERE id = ".intval($this->id));
-        if(PEAR::isError($update)) {
+        if (PEAR::isError($update)) {
             trigger_error('Error in update: '.$update->getUserInfo(), E_USER_ERROR);
             return false;
         }
