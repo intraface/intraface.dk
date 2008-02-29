@@ -158,4 +158,11 @@ class AccountTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $account->get('active'));
     }
 
+    function testGetSaldo()
+    {
+        $account = $this->createAccount();
+        // @todo this is strange behaviour
+        $this->assertTrue($account->getSaldo());
+    }
+
 }

@@ -471,45 +471,11 @@ class Account extends Standard
             'saldo' => ''
         );
 
-        #
-        # Tjekker på om datoerne er i indeværende år
-        #
-
-        /*
-        $validator = new Validator($this->error);
-        $validator->isDate($this->year->get("year") . '-' . $date_from, "Fra-datoen er ikke en gyldig dato", "allow_empty");
-        $validator->isDate($this->year->get("year") . '-' . $date_to, "Til-datoen er ikke en gyldig dato", "allow_empty");
-
-        if ($this->error->isError()) {
-            return 0;
-        }
-        */
+        // Tjekker på om datoerne er i indeværende år
 
         $db = new DB_Sql;
-        /*
-        if ($this->get('type_key') == array_search('sum', $this->types)) {
-            $sql = "SELECT id FROM accounting_account
-                        WHERE number >= " . $this->get('sum_from') . "
-                            AND number <= " . $this->get('sum_to') . "
-                            AND year_id = ".$this->year->get('id')."
-                            AND intranet_id = " . $this->year->kernel->intranet->get('id');
-            $db->query($sql);
-            $total = 0;
-            while ($db->nextRecord()) {
-                // $sub = 0;
-                $account = new Account($this->year, $db->f('id'));
-                $account->getSaldo($date_from, $date_to);
-                $total = $total + $account->get('saldo');
-            }
-            $this->value['saldo'] = $total;
-            //$total_saldo = $total_saldo + $total;
-        }
-        else {
-        */
             // henter primosaldoen for kontoen
             $primo = $this->getPrimoSaldo();
-            /*
-            // henter saldoen for kontoen
             $sql = "SELECT
                     SUM(post.debet) AS debet_total,
                     SUM(post.credit) AS credit_total
@@ -522,40 +488,11 @@ class Account extends Standard
                     AND DATE_FORMAT(post.date, '%Y-%m-%d') >= '".$date_from."'
                     AND DATE_FORMAT(post.date, '%Y-%m-%d') <= '".$date_to."'
                     AND account.year_id = ".$this->year->get('id');
-            */
-            $sql = "SELECT
-                    SUM(post.debet) AS debet_total,
-                    SUM(post.credit) AS credit_total
-                FROM accounting_post post
-                INNER JOIN accounting_account account
-                    ON account.id = post.account_id
-                WHERE account.id = ".$this->id."
-                    AND post.year_id = ".$this->year->get('id')."
-                    AND post.intranet_id = ".$this->year->kernel->intranet->get('id')."
-                    AND DATE_FORMAT(post.date, '%Y-%m-%d') >= '".$date_from."'
-                    AND DATE_FORMAT(post.date, '%Y-%m-%d') <= '".$date_to."'
-                    AND account.year_id = ".$this->year->get('id');
-
-            /*
-            $sql = "SELECT
-                    SUM(post.debet) AS debet_total,
-                    SUM(post.credit) AS credit_total
-                FROM accounting_post post
-                INNER JOIN accounting_account account
-                    ON account.id = post.account_id
-                WHERE account.id = ".$this->id."
-                    AND post.year_id = ".$this->year->get('id')."
-                    AND post.intranet_id = ".$this->year->kernel->intranet->get('id')."
-                    AND (post.date BETWEEN '".$date_from."' AND '".$date_to."')
-                    AND account.year_id = ".$this->year->get('id');
-            */
-
             if ($type == 'stated') {
                 $sql .= ' AND post.stated = 1';
             } elseif ($type == 'draft') {
                 $sql .= ' AND post.stated = 0';
             }
-
 
             $sql .= " GROUP BY post.account_id";
 
@@ -600,9 +537,7 @@ class Account extends Standard
                 // alt det ovenover tror jeg - alstå if-sætningen
             }
 
-            return 1;
-
-        //} //if
+            return true;
     }
 
     /***************************************************************************
@@ -670,8 +605,6 @@ class Account extends Standard
                 AND active = 1 AND year_id = ".$this->year->get('id')." ORDER BY number ASC";
 
         $db->query($sql);
-
-
 
         $i = 0;
         while ($db->nextRecord()) {
