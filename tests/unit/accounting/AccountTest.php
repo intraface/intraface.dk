@@ -165,4 +165,10 @@ class AccountTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($account->getSaldo());
     }
 
+    function testAnyPostsReturnsZeroWhenNoPostsAreFound()
+    {
+        $account = $this->createAccount();
+        $this->assertEquals(0, $account->anyPosts());
+    }
+
 }
