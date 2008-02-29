@@ -10,28 +10,31 @@
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/Error.php';
 
-class Year extends Standard {
-
+class Year extends Standard
+{
     var $id; // årsid
     var $kernel; // object
     var $value; // array
     var $error; // error object
 
     /**
+     * Constructor
+     *
      * @param $kernel
      * @param $year_id (integer)
      * @param $load_acttive (booelean) bruges fx når et nyt år skal oprettes
+     *
      * @return void
      */
-
-    function Year(& $kernel, $year_id = 0, $load_active = true) {
+    function __construct($kernel, $year_id = 0, $load_active = true)
+    {
         if (!is_object($kernel)) {
             trigger_error('Klassen Year kræver et Kernel-objekt', E_USER_ERROR);
             exit;
         }
-        $this->error = new Error;
-        $this->kernel = & $kernel;
-        $this->id = (int)$year_id;
+        $this->error  = new Error;
+        $this->kernel = $kernel;
+        $this->id     = (int)$year_id;
 
         if ($this->id > 0) {
             $this->load();
