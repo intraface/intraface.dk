@@ -214,7 +214,7 @@ class Year extends Standard {
 
         $post_date_to = new Intraface_Date($var['to_date']);
         $post_date_to->convert2db();
-        
+
         if(!isset($var['last_year_id'])) $var['last_year_id'] = 0;
 
         if (!$this->validate($var)) {
@@ -328,7 +328,7 @@ class Year extends Standard {
         }
         return 0;
     }
-    
+
     /**
      * Checks whether the year is ready to use for stating
      *
@@ -339,7 +339,7 @@ class Year extends Standard {
         if($date === NULL) {
             $date = date('Y-m-d');
         }
-        
+
         $return = true;
 
         if (!$this->get('id')) {
@@ -759,16 +759,17 @@ class Year extends Standard {
      *
      * Mærkeligt nok ser den ud til ike at returnere rigtigt!
      *
-     * @return boolean	Hvis nogen er fundet returneres 0 / Hvis ingen er fundet returneres 1
-     *
+     * @return boolean
      */
-    function isStated($type, $date_start, $date_end) {
+    function isStated($type, $date_start, $date_end)
+    {
         if (!$this->kernel->user->hasModuleAccess('debtor')) {
-            return 1;
+            return true;
         }
 
-        $debtor_module = $this->kernel->useModule('debtor');
-        $types = $debtor_module->getSetting('type');
+        require_once 'Intraface/modules/debtor/Debtor.php';
+
+        $types = Debtor::getDebtorTypes();
         $type_key = array_search($type, $types);
         if (empty($type_key)) {
             trigger_error('Ugyldig type', E_USER_ERROR);
@@ -782,16 +783,15 @@ class Year extends Standard {
                 AND voucher_id = 0";
         $db->query($sql);
         if ($db->numRows() == 0) {
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
     }
 
-    function lock()  {
+    function lock()
+    {
         $db = new DB_Sql;
         $db->query("UPDATE accounting_year SET locked = 1 WHERE id = " . $this->id);
-        return 1;
+        return true;
     }
 }
-
-?>
