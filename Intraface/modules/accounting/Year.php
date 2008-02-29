@@ -49,74 +49,69 @@ class Year extends Standard
     /**
      * Funktion til at sætte et regnskabsår, som brugeren redigerer i.
      *
+     * @return true
      */
-    function setYear() {
+    function setYear()
+    {
         if ($this->id == 0) {
-            return 0;
+            return false;
         }
-
         $this->reset();
 
         $this->kernel->setting->set('user', 'accounting.active_year', $this->id);
 
-        /*
-        $db = new DB_sql;
-        $db->query("INSERT INTO accounting_year_active SET year_id = ".$this->id.", intranet_id = " . $this->kernel->intranet->get('id') . ", user_id = " . $this->kernel->user->get('id'));
-        */
-        return 1;
+        return true;
     }
 
     /**
      * Finder det aktive år.
      *
+     * @todo should be deprecated in favor of getActiveYear
+     *
      * @return year / false
-     * @access public
      */
-    function loadActiveYear() {
+    public function loadActiveYear()
+    {
         return($this->id = $this->kernel->setting->get('user', 'accounting.active_year'));
-        /*
-        $db = new DB_Sql;
-
-        $sql = "SELECT id FROM accounting_year
-            WHERE
-            intranet_id = " . $this->kernel->intranet->get('id') . "
-                AND user_id = " . $this->kernel->user->get('id') . " AND id = '".$active_year_id."' LIMIT 1";
-
-        $db->query($sql);
-
-        if ($db->nextRecord()) {
-            $this->load();
-            return ($this->id = $db->f('id'));
-        }
-
-        return 0;
-        */
     }
 
     /**
-     * Funktion til at tjekke det enkelte år. Funktionen skal køres på alle siderne
-     * under accounting
+     * Finds the ative year
+     *
+     * @return integer
      */
+    function getActiveYear()
+    {
+        return $this->kernel->setting->get('user', 'accounting.active_year');
+    }
 
-    function checkYear($redirect = true) {
+    /**
+     * Checks whether a year isset.
+     *
+     * @param boolean $redirect Set to true if a redirect should occur if no year isset
+     *
+     * @return boolean
+     */
+    function checkYear($redirect = true)
+    {
         // hvis ikke der er sat noget aktivt år, skal det sættes
-        $active_year = $this->loadActiveYear();
+        $active_year = $this->getActiveYear();
         if (!$this->_isValid()) {
             $active_year = 0;
         }
 
-        // if (!$active_year && basename($_SERVER['PHP_SELF']) != 'year.php') {
         if (!$active_year) {
             if ($redirect) {
                 header('Location: years.php');
                 exit;
             }
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
     }
 
-    function isYearSet() {
+    function isYearSet()
+    {
         // hvis ikke der er sat noget aktivt år, skal det sættes
         $active_year = $this->loadActiveYear();
         if (!$this->_isValid()) {
@@ -124,7 +119,6 @@ class Year extends Standard
         }
 
         return true;
-
     }
 
     /**
@@ -133,7 +127,8 @@ class Year extends Standard
      * @access private
      */
 
-    function reset() {
+    function reset()
+    {
         $this->kernel->setting->set('user', 'accounting.active_year', 0);
         /*
         $db = new DB_Sql;
@@ -145,8 +140,8 @@ class Year extends Standard
         OPDATERING OG LOAD
     *******************************************************************************/
 
-    function load() {
-
+    function load()
+    {
         if($this->id == 0) {
             $this->value['id'] = 0;
             return;
@@ -178,15 +173,14 @@ class Year extends Standard
             $this->value['to_date_dk'] = $db->f('to_date_dk');
             $this->value['locked'] = $db->f('locked');
             $this->value['vat'] = $db->f('vat');
-        }
-        else {
+        } else {
             $this->id = 0;
             $this->value['id'] = 0;
         }
-
     }
 
-    function validate(&$var) {
+    function validate(&$var)
+    {
         $validator = new Validator($this->error);
         // I could not find any use of the following, so i commented it out /SJ (22-01-2007)
         // $validator->isNumeric($var['year'], "year", "allow_empty");
@@ -208,8 +202,8 @@ class Year extends Standard
      *
      * @param $var (array) Oplysninger om året
      */
-
-    function save($var) {
+    function save($var)
+    {
         $var = safeToDb($var);
 
         $post_date_from = new Intraface_Date($var['from_date']);
@@ -218,7 +212,9 @@ class Year extends Standard
         $post_date_to = new Intraface_Date($var['to_date']);
         $post_date_to->convert2db();
 
-        if(!isset($var['last_year_id'])) $var['last_year_id'] = 0;
+        if(!isset($var['last_year_id'])) {
+            $var['last_year_id'] = 0;
+        }
 
         if (!$this->validate($var)) {
             return 0;
@@ -228,8 +224,7 @@ class Year extends Standard
         if($this->id > 0) {
             $sql="UPDATE accounting_year ";
             $sql_after=" WHERE id='".$this->id."' AND intranet_id = ".$this->kernel->intranet->get('id')."";
-        }
-        else {
+        } else {
             $sql="INSERT INTO accounting_year ";
             $sql_after = ', date_created = NOW()';
         }
@@ -264,12 +259,12 @@ class Year extends Standard
     ****************************************************************************/
 
     /**
-     * Private: Metode til at tjekke om året findes
+     * Metode til at tjekke om året findes
      *
      * @return 1 = year set; 0 = year NOT set
-     * @access private
      */
-    function _isValid() {
+    private function _isValid()
+    {
         $sql = "SELECT id FROM accounting_year
             WHERE id = ".$this->id."
                 AND intranet_id = ". $this->kernel->intranet->get('id') . " AND active = 1";
@@ -286,7 +281,8 @@ class Year extends Standard
 
     }
 
-    function vatAccountIsSet() {
+    function vatAccountIsSet()
+    {
         if ($this->get('vat') == 0) {
             return 1; // vi lader som om de er sat, når der ikke er moms på selve regnskabet
         }
@@ -302,7 +298,8 @@ class Year extends Standard
      *
      * @access public
      */
-    function isYearOpen() {
+    function isYearOpen()
+    {
         $db = new Db_Sql;
         $db->query("SELECT locked FROM accounting_year WHERE id = " . $this->id . " AND intranet_id = ".$this->kernel->intranet->get('id'));
         if ($db->nextRecord()) {
@@ -319,7 +316,8 @@ class Year extends Standard
      * @param (date) 0000-00-00
      * @access public
      */
-    function isDateInYear($date) {
+    function isDateInYear($date)
+    {
         $date = safeToDb($date);
 
         $db = new Db_Sql;
@@ -366,10 +364,10 @@ class Year extends Standard
 
     /**
      *
-     * @return (array)
+     * @return array
      */
-
-    function getList() {
+    function getList()
+    {
         if (!is_object($this->kernel)) {
             trigger_error('Du kan ikke køre Year::getList() uden at have instatieret klassen', FATAL);
         }
@@ -392,28 +390,8 @@ class Year extends Standard
         return $account_years;
     }
 
-
-    /**
-     * TODO Skriv denne om til bare at hente fra get("last_year_id");
-     *
-     * @return (int) Sidste års regnskabsår regnskabår
-     * @access public
-     */
-     /*
-    function getLastYearId() {
-        die("Bør bare hente fra get");
-        $db = new Db_Sql;
-        $db->query("SELECT last_year_id FROM accounting_year WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id') . " LIMIT 1");
-        if ($db->nextRecord()) {
-            return $db->f("last_year_id");
-        }
-        else {
-            return 0;
-        }
-    }
-    */
-
-    function getBalanceAccounts() {
+    function getBalanceAccounts()
+    {
         // afstemningskonti
         $balance_accounts = unserialize($this->getSetting('balance_accounts'));
 
@@ -451,15 +429,18 @@ class Year extends Standard
         return $accounts;
     }
 
-    function setSetting($setting, $value) {
+    function setSetting($setting, $value)
+    {
         return $this->kernel->setting->set('intranet', 'accounting.'.$setting, $value,  $this->get('id'));
     }
 
-    function getSetting($setting) {
+    function getSetting($setting)
+    {
         return $this->kernel->setting->get('intranet', 'accounting.' . $setting, $this->get('id'));
     }
 
-    function createAccounts($type, $last_year_id = 0) {
+    function createAccounts($type, $last_year_id = 0)
+    {
         $last_year_id = (int)$last_year_id;
         switch ($type) {
             case 'standard':
@@ -633,7 +614,8 @@ class Year extends Standard
 
     }
 
-    function setSettings($input) {
+    function setSettings($input)
+    {
         if ($this->get('vat') > 0) {
             $this->setSetting('vat_in_account_id', (int)$input['vat_in_account_id']);
             $this->setSetting('vat_out_account_id', (int)$input['vat_out_account_id']);
@@ -661,7 +643,8 @@ class Year extends Standard
         return 1;
     }
 
-    function getSettings() {
+    function getSettings()
+    {
         if ($this->get('vat') > 0) {
             $setting['vat_in_account_id'] = $this->getSetting('vat_in_account_id');
             $setting['vat_out_account_id'] = $this->getSetting('vat_out_account_id');
@@ -693,7 +676,8 @@ class Year extends Standard
      * @param $from->year (object)
      * @param $setting (string)
      */
-    function transferAccountSetting($from_year, $setting) {
+    function transferAccountSetting($from_year, $setting)
+    {
         $account_id = $from_year->getSetting($setting);
         $db = new DB_Sql;
         $db->query("SELECT id FROM accounting_account WHERE year_id = ".$this->get('id')." AND intranet_id = ".$this->kernel->intranet->get('id')." AND created_from_id = " . $account_id);
@@ -702,7 +686,8 @@ class Year extends Standard
         }
     }
 
-    function isSettingsSet() {
+    function isSettingsSet()
+    {
         if (!$this->getSetting('result_account_id_start') OR !$this->getSetting('result_account_id_end') OR !$this->getSetting('balance_account_id_start') OR !$this->getSetting('balance_account_id_end') OR !$this->getSetting('capital_account_id')) {
             return 0;
         }
@@ -712,8 +697,8 @@ class Year extends Standard
     /**
      *
      */
-
-    function isBalanced() {
+    function isBalanced()
+    {
         $this->value['year_saldo'] = 0;
 
         $db = new DB_Sql;
@@ -745,17 +730,14 @@ class Year extends Standard
         // HACK midlertidigt hack round() indtil alle beløb er integers i stedet for floats
         if (round($this->value['year_saldo']) == 0) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
-
     }
 
     /**************************************************************************
      * VALIDATE FUNCTIONS - IKKE EGENTLIG ÅRSRELATEREDE
      **************************************************************************/
-
 
     /**
      * Bruges i momsafregning og årsafslutning
@@ -771,7 +753,6 @@ class Year extends Standard
         }
 
         require_once 'Intraface/modules/debtor/Debtor.php';
-
         $types = Debtor::getDebtorTypes();
         $type_key = array_search($type, $types);
         if (empty($type_key)) {

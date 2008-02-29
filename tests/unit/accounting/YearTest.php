@@ -9,41 +9,101 @@ require_once 'Intraface/tools/Date.php';
 require_once 'Intraface/Validator.php';
 require_once 'DB/Sql.php';
 
-class FakeYearSetting {
-    function get() {}
+class FakeYearSetting
+{
+    private $setting = array();
+    function get($none, $key)
+    {
+        if (!isset($this->setting[$key])) {
+            return '';
+        }
+        return $this->setting[$key];
+    }
+    function set($none, $key, $value)
+    {
+        $this->setting[$key] = $value;
+    }
 }
 
-class FakeYearIntranet {
-    function get() {
+class FakeYearIntranet
+{
+    function get()
+    {
         return 1;
     }
 }
 
-class FakeYearUser {
-    function get() {
+class FakeYearUser
+{
+    function get()
+    {
         return 1;
     }
 }
 
-class FakeYearKernel {
+class FakeYearKernel
+{
     public $setting;
     public $intranet;
     public $user;
 
-    function __construct() {
+    function __construct()
+    {
         $this->setting = new FakeYearSetting;
         $this->intranet = new FakeYearIntranet;
         $this->user = new FakeYearUser;
     }
 }
 
-class YearTest extends PHPUnit_Framework_TestCase {
-
-    function setUp() {
+class YearTest extends PHPUnit_Framework_TestCase
+{
+    function setUp()
+    {
         $this->kernel = new FakeYearKernel();
     }
 
-    function testSaveMethod() {
+    function testSetYearReturnsFalseWhenYearObjectIsNotSet()
+    {
+        $year = new Year($this->kernel);
+        $this->assertFalse($year->setYear());
+    }
+
+    function testSetYearReturnsTrueWhenYearObjectIsSet()
+    {
+        $year = new Year($this->kernel);
+        $id = $year->save(array('label' => '2000', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0));
+        $this->assertTrue($id > 0);
+        $this->assertTrue($year->setYear());
+        $this->assertEquals($id, $year->getActiveYear());
+    }
+
+    function testCheckYearReturnsTrueIfActiveYearIsset()
+    {
+        $year = new Year($this->kernel);
+        $id = $year->save(array('label' => '2000', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0));
+        $this->assertTrue($id > 0);
+        $this->assertTrue($year->setYear());
+        $this->assertTrue($year->checkYear());
+    }
+
+    function testCheckYearReturnsFalseIfActiveYearIsNotset()
+    {
+        $year = new Year($this->kernel);
+        $id = $year->save(array('label' => '2000', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0));
+        $this->assertFalse($year->checkYear(false));
+    }
+
+    function testIsYearSetReturnsTrueWhenYearIsset()
+    {
+        $year = new Year($this->kernel);
+        $id = $year->save(array('label' => '2000', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0));
+        $this->assertTrue($id > 0);
+        $this->assertTrue($year->setYear());
+        $this->assertTrue($year->isYearSet());
+    }
+
+    function testSaveMethod()
+    {
         // TODO needs to be updated
         $year = new Year($this->kernel);
         $this->assertFalse($year->get('id') > 0);
@@ -53,8 +113,5 @@ class YearTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($new_year->save(array('label' => '2000 - edited', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0)) > 0);
         $this->assertTrue($new_year->get('id') == $year->get('id'));
         $this->assertTrue($new_year->get('label') == '2000 - edited');
-
     }
-
 }
-?>
