@@ -54,13 +54,13 @@ class Main
         // Inkluder preload filerne
         $this->kernel = $kernel;
 
-        if(is_array($this->required_shared) && count($this->required_shared) > 0) {
+        if (is_array($this->required_shared) && count($this->required_shared) > 0) {
             foreach($this->required_shared AS $shared_name) {
                 $this->kernel->useShared($shared_name);
             }
         }
 
-        for($i = 0, $max = count($this->preload_file); $i<$max; $i++) {
+        for ($i = 0, $max = count($this->preload_file); $i<$max; $i++) {
             $this->includeFile($this->preload_file[$i]);
         }
 
@@ -261,8 +261,8 @@ class Main
      */
     function getSetting($key)
     {
-        if(isset($this->setting[$key])) {
-            return($this->setting[$key]);
+        if (isset($this->setting[$key])) {
+            return $this->setting[$key];
         }
     }
 
@@ -271,7 +271,7 @@ class Main
      */
     function getName()
     {
-        return($this->module_name);
+        return $this->module_name;
     }
 
     /**
