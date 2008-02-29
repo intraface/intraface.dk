@@ -98,8 +98,8 @@ if(isset($edit_intranet_id)) {
 	$intranet = new IntranetMaintenance(intval($edit_intranet_id));
 	$user->setIntranetId(intval($intranet->get('id')));
 	$user->load();
-	if(isset($user->address)) {
-		$value_address = $user->address->get();
+	if(isset($user->getAddress())) {
+		$value_address = $user->getAddress()->get();
 	}
 }
 

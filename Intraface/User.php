@@ -2,9 +2,18 @@
 /**
  * User and rights management
  *
- * NOTICE: Keep in mind the relation between User.php, UserAdministration.php and UserMaintenance.php
- * User.php is ONLY for the function that the normal user is allowed to. That means NOT create other users. The user should not be allowed to change is own rights.
- * UserAdministration.php is for the administrator of the intranet. Can create new user. Administrator is not allowed to disable a User, as it will affect all intranets.
+ * NOTICE:
+ * Keep in mind the relation between User.php, UserAdministration.php and
+ * UserMaintenance.php
+ *
+ * User.php is ONLY for the function that the normal user is allowed to. That
+ * means NOT create other users. The user should not be allowed to change is
+ * own rights.
+ *
+ * UserAdministration.php is for the administrator of the intranet. Can create
+ * new user. Administrator is not allowed to disable a User, as it will affect
+ * all intranets.
+ *
  * UserMaintenance.php is for overall maintenance team. Should be allowed everthing.
  *
  * @package Intraface
@@ -13,10 +22,7 @@
  * @since   0.1.0
  * @version @package-version@
  */
-
 require_once 'Intraface/Standard.php';
-require_once 'Intraface/Error.php';
-require_once 'Intraface/Address.php';
 require_once 'MDB2.php';
 
 class User extends Standard
@@ -59,7 +65,7 @@ class User extends Standard
     /**
      * @var address
      */
-    public $address;
+    private $address;
 
     /**
      * @var boolean
@@ -75,18 +81,27 @@ class User extends Standard
      */
     public function __construct($id = 0)
     {
-        $this->id = $this->value['id'] = intval($id);
-        $this->db = MDB2::singleton(DB_DSN);
-        $this->intranet_id = 0;
-        $this->error = new Error;
+        $this->id          = $this->value['id'] = intval($id);
+        $this->db          = MDB2::singleton(DB_DSN);
+        $this->intranet_id = 0;         // @todo hvad laver den her?
+        $this->error       = $this->getError();
 
         if (PEAR::isError($this->db)) {
             throw new Exception($this->db->getMessage() . $this->db->getUserInfo());
         }
 
-        if ($this->load()) {
-            // Oprettet!
+        if ($this->id > 0) {
+            $this->load();
         }
+    }
+
+    function getError()
+    {
+        if ($this->error) {
+            return $this->error;
+        }
+        require_once 'Intraface/Error.php';
+        return ($this->error = new Error);
     }
 
     /**
@@ -103,11 +118,9 @@ class User extends Standard
         if ($result->numRows() == 1) {
             $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
             $this->value = $row;
-            // TODO remove this
-            $this->address = Address::factory('user', $this->id);
-            return($this->id);
+            return $this->id;
         } else {
-            return($this->id = 0);
+            return ($this->id = 0);
         }
     }
 
@@ -118,6 +131,10 @@ class User extends Standard
      */
     function getAddress()
     {
+        if (!empty($this->address)) {
+            return $this->address;
+        }
+        require_once 'Intraface/Address.php';
         return ($this->address = Address::factory('user', $this->id));
     }
 
@@ -411,7 +428,8 @@ class User extends Standard
      *
      * @return boolean
      */
-    function setIntranetId($id) {
+    function setIntranetId($id)
+    {
         $this->intranet_id = intval($id);
         if ($this->id == 0 || $this->hasIntranetAccess()) {
             return true;
@@ -426,7 +444,8 @@ class User extends Standard
      *
      * @return boolean
      */
-    function setActiveIntranetId($id) {
+    function setActiveIntranetId($id)
+    {
         $id = intval($id);
         if ($this->hasIntranetAccess($id)) {
             $this->db->exec("UPDATE user SET active_intranet_id = ". $this->db->quote($id, 'integer')." WHERE id = ". $this->db->quote($this->get('id'), 'integer'));
@@ -460,11 +479,14 @@ class User extends Standard
     /**
      * Validates user info
      *
+     * NOTICE: As it is created now, $input has to be injected by reference,
+     * because of the little hack with disabled.
+     *
      * @param array $input
      *
      * @return boolean
      */
-    function validate($input)
+    function validate(&$input)
     {
         $input = safeToDb($input);
         require_once 'Intraface/Validator.php';
@@ -502,13 +524,13 @@ class User extends Standard
             disabled = ".$input["disabled"]."";
 
         if ($this->error->isError()) {
-            return(false);
+            return false;
         }
 
         if ($this->id) {
             $this->db->exec("UPDATE user SET ".$sql." WHERE id = ".$this->id);
             $this->load();
-            return($this->id);
+            return $this->id;
         } else {
             trigger_error("An id is needed to update user details in User->Update()", E_USER_ERROR);
         }
@@ -523,7 +545,7 @@ class User extends Standard
     function SendForgottenPasswordEmail($email)
     {
         if (!Validate::email($email)) {
-            return 0;
+            return false;
         }
         $db = MDB2::singleton(DB_DSN);
         $result = $db->query("SELECT id FROM user WHERE email = '".$email."'");
@@ -531,7 +553,7 @@ class User extends Standard
             trigger_error($result->getUserInfo(), E_USER_ERROR);
         }
         if ($result->numRows() != 1) {
-            return 0;
+            return false;
         }
         $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
         $new_password = Kernel::randomKey(8);
@@ -541,21 +563,21 @@ class User extends Standard
 
         $subject = 'Tsk, glemt din adgangskode?';
 
-        $body 	= "Huha, det var heldigt, at vi stod på spring i kulissen, så vi kan hjælpe dig med at lave en ny adgangskode.\n\n";
+        $body  = "Huha, det var heldigt, at vi stod på spring i kulissen, så vi kan hjælpe dig med at lave en ny adgangskode.\n\n";
         $body .= "Din nye adgangskode er: " . $new_password . "\n\n";
         $body .= "Du kan logge ind fra:\n\n";
         $body .= "<".PATH_WWW.">\n\n";
         $body .= "Med venlig hilsen\nDin hengivne webserver";
 
         if (mail($email, $subject, $body, "From: Intraface.dk <robot@intraface.dk>\nReturn-Path: robot@intraface.dk")) {
-                return 1;
+            return true;
         }
     }
 
     function updatePassword($old_password, $new_password, $repeat_password)
     {
         if ($this->id == 0) {
-            return 0;
+            return false;
         }
 
         $result = $this->db->query("SELECT * FROM user WHERE password = '".safeToDb(md5($old_password))."' AND id = " . $this->get('id'));
@@ -576,7 +598,7 @@ class User extends Standard
 
         $this->db->query("UPDATE user SET password = '".safeToDb(md5($new_password))."' WHERE id = " . $this->get('id'));
 
-        return 1;
+        return true;
 
     }
 

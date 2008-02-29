@@ -98,7 +98,7 @@ $page->start('Ret Todo');
             <?php if ($i['status'] == 1 AND empty($headline)) { echo '<h4>Afsluttet</h4>'; $headline = true; } ?>
           <label <?php  if ($i['status'] == 1) echo ' class="completed"'; ?>>
             <input type="checkbox" name="done[]" value="<?php echo $i['id']; ?>" <?php if ($i['status'] == 1) echo ' checked="checked"'; ?>/>
-          <?php if ($i['responsible_user_id'] > 0) {  $user = new User($i['responsible_user_id']); echo '<strong class="responsible">' . $user->address->get('name') . '</strong>: ';  } ?> <?php echo $i['item'] ?>
+          <?php if ($i['responsible_user_id'] > 0) {  $user = new User($i['responsible_user_id']); echo '<strong class="responsible">' . $user->getAddress()->get('name') . '</strong>: ';  } ?> <?php echo $i['item'] ?>
             </label>
 
             <?php if ($i['status'] == 0): ?>

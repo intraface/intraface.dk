@@ -25,7 +25,7 @@ if(isset($_POST["submit"])) {
 			$user->setIntranetAccess($intranet->get('id'));
 			$user->setIntranetId($intranet->get('id'));
 			$user->load();
-			$user->address->save($address_value);
+			$user->getAddress()->save($address_value);
 
 
 			header("location: user.php?id=".$user->get("id")."&intranet_id=".$intranet->get("id"));
@@ -44,7 +44,7 @@ else {
 			$intranet_id = intval($_GET["intranet_id"]);
 			$user->setIntranetId($intranet_id);
 			$user->load();
-			$address_value = $user->address->get();
+			$address_value = $user->getAddress()->get();
 		}
 		else {
 			$intranet_id = 0;
