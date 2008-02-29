@@ -45,7 +45,7 @@ class UserMaintenance extends User
      *
      * @return boolean true or false
      */
-    function update($input)
+    public function update($input)
     {
         $this->validate($input);
         $validator = new Validator($this->error);
@@ -116,10 +116,10 @@ class UserMaintenance extends User
         if ($db->nextRecord()) {
             $db->query("SELECT id FROM permission WHERE intranet_id = ".$intranet_id." AND user_id = ".$this->id." AND module_id = 0 AND module_sub_access_id = 0");
             if ($db->nextRecord()) {
-                return($db->f("id"));
+                return $db->f("id");
             } else {
                 $db->query("INSERT INTO permission SET intranet_id = ".$intranet_id.", user_id = ".$this->id);
-                return($db->insertedId());
+                return $db->insertedId();
             }
         } else {
             trigger_error("Ugyldig intranet id", E_USER_ERROR);
@@ -146,7 +146,6 @@ class UserMaintenance extends User
             } else {
                 $intranet_id = $this->intranet_id;
             }
-
         }
 
         $module_name = $module_id;

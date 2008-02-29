@@ -314,7 +314,6 @@ class User extends Standard
             $module_id = intval($module);
         }
 
-
         if (is_string($sub_access)) {
             $result = $this->db->query("SELECT id FROM module_sub_access WHERE module_id = ".$module_id." AND name = \"".$sub_access."\"");
             if (PEAR::isError($result)) {
@@ -623,9 +622,14 @@ class User extends Standard
 
     function isFilledIn()
     {
-        if ($this->address->get('phone')) {
+        if ($this->getAddress()->get('phone')) {
             return true;
         }
         return false;
+    }
+
+    function getId()
+    {
+        return $this->id;
     }
 }
