@@ -55,8 +55,8 @@ class FakeAccountYear
     }
 }
 
-class AccountTest extends PHPUnit_Framework_TestCase {
-
+class AccountTest extends PHPUnit_Framework_TestCase
+{
     private $delta = 0.001;
 
     function createAccount($id = 0)
@@ -151,6 +151,11 @@ class AccountTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('380071.96', $saldo['debet'], '', $this->delta);
     }
 
+    function testDeleteActuallyDeletesTheAccount()
+    {
+        $account = $this->createAccount();
+        $this->assertTrue($account->delete());
+        $this->assertEquals(0, $account->get('active'));
+    }
 
 }
-?>

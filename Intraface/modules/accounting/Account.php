@@ -144,7 +144,8 @@ class Account extends Standard
                 account.vat_key,
                 account.vat_percent,
                 account.primosaldo_debet,
-                account.primosaldo_credit
+                account.primosaldo_credit,
+                account.active
             FROM
                 accounting_account account
             WHERE account.id = " . $this->id . "
@@ -168,6 +169,7 @@ class Account extends Standard
             $this->value['primosaldo_debet'] = $db->f('primosaldo_debet');
             $this->value['primosaldo_credit'] = $db->f('primosaldo_credit');
             $this->value['vat_key'] = $db->f('vat_key');
+            $this->value['active'] = $db->f('active');
 
             // hvis der ikke er moms på året skal alle momsindstillinger nulstilles
             if ($this->year->get('vat') == 0) {
@@ -176,26 +178,21 @@ class Account extends Standard
                 $this->value['vat_percent'] = 0;
                 $this->value['vat_shorthand'] = 'ingen';
 
-            }
-            // hvis der er moms på året
-            else {
+            } else { // hvis der er moms på året
 
                 $this->value['vat_key'] = $db->f('vat_key');
                 $this->value['vat'] = $this->vat[$db->f('vat_key')];
                 if ($this->value['vat'] == 'none') {
                     $this->value['vat_percent'] = 0;
-                }
-                else {
+                } else {
                     $this->value['vat_percent'] = $db->f('vat_percent');
                 }
 
                 if ($this->value['vat'] == 'in') {
                     $this->value['vat_account_id'] = $this->year->getSetting('vat_in_account_id');
-                }
-                elseif ($this->value['vat'] == 'out') {
+                } elseif ($this->value['vat'] == 'out') {
                     $this->value['vat_account_id'] = $this->year->getSetting('vat_out_account_id');
-                }
-                else {
+                } else {
                     $this->value['vat_account_id'] = 0;
                 }
                 $this->value['vat_shorthand'] = $this->value['vat'];
@@ -257,7 +254,7 @@ class Account extends Standard
             $sql_type = "INSERT INTO accounting_account ";
             $sql_end = ", date_created=NOW()";
         }
-        
+
         $sql = $sql_type . "SET
             number = '".(int)$var['number']."',
             intranet_id = ".$this->year->kernel->intranet->get('id').",
@@ -340,17 +337,18 @@ class Account extends Standard
     {
         if ($this->anyPosts()) {
             $this->error->set('Der er poster på kontoen for dette år, så du kan ikke slette den. Næste år kan du lade være med at bogføre på kontoen, og så kan du slette den.');
-            return 0;
+            return false;
         }
         $this->getSaldo();
         if ($this->get('saldo') != 0) {
             $this->error->set('Der er registreret noget på primosaldoen på kontoen, så du kan ikke slette den. Du kan slette kontoen, hvis du nulstiller primosaldoen.');
-            return 0;
+            return false;
         }
 
         $db = new DB_Sql;
         $db->query("UPDATE accounting_account SET active = 0, date_changed=NOW() WHERE intranet_id = " . $this->year->kernel->intranet->get('id') . " AND year_id = ".$this->year->get('id')." AND id = " . $this->id);
-        return 1;
+        $this->value['active'] = 0;
+        return true;
     }
 
     /*************************************************************************************
@@ -398,7 +396,7 @@ class Account extends Standard
         if (PEAR::isError($result)) {
             throw new Exception('Error in query: '.$result->getUserInfo());
         }
-        
+
         if ($result->numRows() == 0) {
             return true;
         }
