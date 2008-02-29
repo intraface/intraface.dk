@@ -312,7 +312,7 @@ if(isset($onlinepayment)) {
 <?php endif; ?>
 
 <?php if(isset($email_send_with_success) && $email_send_with_success): ?>
-    <div class="message-dependent"><p><?php echo $translation->get('your email was sent with success').'.'; ?></p></div>
+    <div class="message-dependent"><p><?php echo $translation->get('your email was sent').'.'; ?></p></div>
 <?php endif; ?>
 
 <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
