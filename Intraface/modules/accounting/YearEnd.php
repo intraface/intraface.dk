@@ -4,6 +4,7 @@
  * Meget af det der er i year_end tabellen kan vist lige så godt indkorporeres i selve årstabellen
  * @package Intraface_Accounting
  */
+require_once 'Intraface/Standard.php';
 
 class YearEnd extends Standard {
 
@@ -31,15 +32,11 @@ class YearEnd extends Standard {
         2 => 'result_account_reset'
     );
 
-    function YearEnd(& $year) {
-        YearEnd::__construct($year);
-    }
-
-    function __construct(& $year) {
-        if (!is_object($year) OR strtolower(get_class($year)) != 'year') {
+    function __construct($year) {
+        if (!is_object($year)) {
             trigger_error('Year::__construct: Ikke et gyldigt Year object', E_USER_ERROR);
         }
-        $this->year = & $year;
+        $this->year = $year;
         $this->error = new Error;
         if (!$this->load()) {
             $this->start();
