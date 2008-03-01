@@ -33,7 +33,7 @@ class CMS_TemplateSection extends Standard
     function __construct($template, $id = 0)
     {
         if (!is_object($template)) {
-            trigger_error('TemplateSection::__construct skal bruge cmstemplate', E_USER_ERROR);
+            trigger_error('TemplateSection::__construct skal bruge CMS_Template', E_USER_ERROR);
         }
         $this->error    = new Error;
         $this->id       = (int) $id;

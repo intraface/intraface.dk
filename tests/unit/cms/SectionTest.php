@@ -48,9 +48,17 @@ class SectionTest extends PHPUnit_Framework_TestCase
         $t->cmssite = $this->site;
         $template = new CMS_TemplateSection($t);
         $template->value['type_key'] = 1;
-        $data = array('identifier' => uniqid(), 'name' => 'test');
+        $data = array('identifier' => uniqid(), 'name' => 'test', 'template_id' => $this->saveTemplate());
         $template->save($data);
         return $template->getId();
+    }
+
+    function saveTemplate()
+    {
+        $t = new CMS_Template($this->site);
+        $data = array('name' => 'test', 'identifier' => 'name');
+        $t->save($data);
+        return $t->getId();
     }
 
     function testConstruction()
@@ -75,12 +83,12 @@ class SectionTest extends PHPUnit_Framework_TestCase
 
     function testSave()
     {
-        $site = new CMS_Section($this->page);
-        $site_array = array(
+        $section = new CMS_Section($this->page);
+        $section_array = array(
             'type_key' => 1,
             'template_section_id' => $this->saveTemplateSection()
         );
-        $this->assertTrue($site->save($site_array) > 0);
+        $this->assertTrue($section->save($section_array) > 0);
     }
 
 }

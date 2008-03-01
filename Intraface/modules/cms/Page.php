@@ -68,7 +68,6 @@ class CMS_Page extends Standard
     public $message;
     public $cc_license;
 
-
     public $value;
     public $status = array(
         0 => 'draft',

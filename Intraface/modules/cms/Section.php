@@ -10,7 +10,6 @@ require_once 'section/ShortText.php';
 require_once 'section/LongText.php';
 require_once 'section/Picture.php';
 require_once 'section/Mixed.php';
-//require_once('FormFilter.php');
 
 class CMS_Section extends Standard
 {
@@ -34,7 +33,7 @@ class CMS_Section extends Standard
     public function __construct($cmspage, $id = 0)
     {
         if (!is_object($cmspage)) {
-            trigger_error('Section::__construct needs CMS_Page - got ' . get_class($cmspage), E_USER_ERROR);
+            trigger_error('Section::__construct needs CMS_Page', E_USER_ERROR);
         }
 
         $this->db = MDB2::singleton(DB_DSN);
