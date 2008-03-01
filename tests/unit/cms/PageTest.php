@@ -56,12 +56,12 @@ class PageTest extends PHPUnit_Framework_TestCase
         $template = new CMS_Template($site);
 
         $template->save(array('name' => 'test', 'identifier' => 'test'));
-        
+
         $this->assertEquals('', $template->error->view());
         // $template->getKeywords();
 
         // here we should add som keywords to the template.
-        
+
         return $template->get('id');
     }
 
@@ -106,5 +106,9 @@ class PageTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->page->save($input) > 0);
 
     }
+
+    function testDeleteReturnsTrue()
+    {
+        $this->assertTrue($this->page->delete());
+    }
 }
-?>

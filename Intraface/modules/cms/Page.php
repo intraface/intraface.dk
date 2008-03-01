@@ -103,10 +103,10 @@ class CMS_Page extends Standard
             $this->load();
         }
     }
-    
+
     /**
      * Returns position object
-     * 
+     *
      * @param object $db database object
      * @return object Position
      */
@@ -115,13 +115,13 @@ class CMS_Page extends Standard
         require_once 'Ilib/Position.php';
         return new Ilib_Position($db, "cms_page", $this->id, "site_id=".$this->cmssite->get('id')." AND active = 1 AND type_key = 1", "position", "id");
     }
-    
+
     /**
      * returns Template object
-     * 
+     *
      * @return object Template
      */
-    public function getTemplate() 
+    public function getTemplate()
     {
         return $this->template;
     }
@@ -737,7 +737,7 @@ class CMS_Page extends Standard
 
         $sql = "UPDATE cms_page SET active = 0 WHERE id=" . $this->id . " AND site_id = ".$this->cmssite->get('id');
         $db->query($sql);
-        return 1;
+        return true;
 
     }
 
@@ -758,13 +758,13 @@ class CMS_Page extends Standard
             2 => 'article',
             3 => 'news');
     }
-    
+
     /**
      * Returns the possible page types in plural
-     * 
+     *
      * @return array page types in plural
      */
-    static public function getTypesPlural() 
+    static public function getTypesPlural()
     {
         return array(
             'page' => 'pages',
