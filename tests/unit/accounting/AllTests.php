@@ -9,7 +9,7 @@ class Accounting_AllTests extends PHPUnit_Framework_TestSuite
     {
         $suite = new PHPUnit_Framework_TestSuite('Intraface_Accounting');
 
-        $tests = array('Account', 'Voucher', 'Year');
+        $tests = array('Account', 'Voucher', 'Year', 'VatPeriod');
 
         foreach ($tests AS $test) {
             require_once $test . 'Test.php';
