@@ -45,5 +45,18 @@ class PageElementTest extends PHPUnit_Framework_TestCase {
 
         $this->assertTrue($pagelist->save($data) > 0);
     }
+
+    function testDeleteReturnsTrue()
+    {
+        $pagelist = $this->createPageList();
+        $this->assertTrue($pagelist->delete());
+    }
+
+    function testUnDeleteReturnsTrue()
+    {
+        $pagelist = $this->createPageList();
+        $this->assertTrue($pagelist->delete());
+        $this->assertTrue($pagelist->undelete());
+    }
+
 }
-?>

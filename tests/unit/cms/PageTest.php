@@ -72,7 +72,6 @@ class PageTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($this->page));
     }
 
-    /*
     function testSaveSucceedsWithValidValues()
     {
         $site = new CMS_Site($this->kernel);
@@ -86,7 +85,6 @@ class PageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($site_array['url'], $site->get('url'));
         $this->assertEquals($site_array['cc_license'], $site->get('cc_license'));
     }
-    */
 
     function testSaveWithSuccessWithTemplateWithKeywords() {
 
@@ -111,4 +109,5 @@ class PageTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->page->delete());
     }
+
 }
