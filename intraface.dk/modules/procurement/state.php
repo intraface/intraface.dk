@@ -3,6 +3,7 @@ require('../../include_first.php');
 
 $procurement_module = $kernel->module('procurement');
 $accounting_module = $kernel->useModule('accounting');
+$translation = $kernel->getTranslation('procurement');
 
 $year = new Year($kernel);
 $voucher = new Voucher($year);

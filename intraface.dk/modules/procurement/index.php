@@ -3,7 +3,7 @@ require('../../include_first.php');
 
 $module = $kernel->module("procurement");
 $procurement = new Procurement($kernel);
-
+$translation = $kernel->getTranslation('procurement');
 
 if(isset($_GET["contact_id"]) && intval($_GET["contact_id"]) != 0 && $kernel->user->hasModuleAccess('contact')) {
     $contact_module = $kernel->useModule('contact');
