@@ -2,6 +2,7 @@
 require('../../include_first.php');
 
 $product_module = $kernel->module("product");
+$translation = $kernel->getTranslation('product');
 
 // hente liste med produkter - bør hentes med getList!
 
