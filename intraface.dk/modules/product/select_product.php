@@ -117,14 +117,14 @@ $page->start(t('select product'));
 
     <form action="<?php echo basename(__FILE__); ?>" method="get">
         <fieldset>
-            <legend><?php e(t('search')); ?></legend>
+            <legend><?php e(t('search', 'common')); ?></legend>
             <label><?php e(t('search for')); ?>
             <input type="text" value="<?php print(safeToForm($product->dbquery->getFilter("search"))); ?>" name="search" id="search" />
         </label>
         <label>
             <?php e(t('show with keywords')); ?>
             <select name="keyword_id" id="keyword_id">
-                <option value=""><?php e(t('none')); ?></option>
+                <option value=""><?php e(t('none', 'common')); ?></option>
                 <?php foreach ($keywords->getUsedKeywords() AS $k) { ?>
                 <option value="<?php echo intval($k['id']); ?>" <?php if($k['id'] == $product->dbquery->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo safeToForm($k['keyword']); ?></option>
                 <?php } ?>
@@ -183,9 +183,9 @@ $page->start(t('select product'));
             <?php e(t('quantity')); ?>: <input type="text" name="quantity" value="1" />
         <?php endif; ?>
         <?php if($multiple): ?>
-        <input type="submit" name="submit" value="<?php e(t('save')); ?>" />
+        <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />
         <?php endif; ?>
-        <input type="submit" name="submit_close" value="<?php e(t('save and close')); ?>" /></p>
+        <input type="submit" name="submit_close" value="<?php e(t('save and close', 'common')); ?>" /></p>
 
       <?php echo $product->dbquery->display('paging'); ?>
     </form>
