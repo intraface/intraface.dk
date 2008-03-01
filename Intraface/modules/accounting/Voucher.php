@@ -334,24 +334,19 @@ class Voucher extends Standard
      */
     function state($skip_draft = false)
     {
+        // Bogføring af almindeligt køb i Danmark
+        // Ifølge det dobbelte bogholderis princip skal alle poster bogføres på mindst to
+        // konti.
 
-        #
-        # Bogføring af almindeligt køb i Danmark
-        # Ifølge det dobbelte bogholderis princip skal alle poster bogføres på mindst to
-        # konti.
-        #
-
-        # debetkontoen
+        // debetkontoen
         $this->_stateHelper($this->get('date'), $this->get('text'), $this->get('debet_account_id'), $this->get('amount'), 0, $this->get('vat_off'), $skip_draft);
 
-        # kreditkontoen
+        // kreditkontoen
         $this->_stateHelper($this->get('date'), $this->get("text"), $this->get('credit_account_id'), 0, $this->get('amount'), $this->get('vat_off'), $skip_draft);
 
-        #
-        # Varekøb i udlandet
-        # Der skal udregnes moms af alle varekøb i udlandet, og de skal bogføres
-        # på den tilhørende konto
-        #
+        // Varekøb i udlandet
+        // Der skal udregnes moms af alle varekøb i udlandet, og de skal bogføres
+        // på den tilhørende konto
 
         $buy_abroad = unserialize($this->year->getSetting('buy_abroad_accounts'));
         $buy_eu = unserialize($this->year->getSetting('buy_eu_accounts'));
@@ -366,11 +361,9 @@ class Voucher extends Standard
 
         $amount = $this->get('amount') * ($this->vatpercent / 100);
 
-        #
-        # I det omfang du har fradragsret for momsen, kan du medregne det beregnede
-        # momsbeløb til konto for indgående moms. Det beregnede momsbeløb af EU-varekøb
-        # behandles dermed på samme måde som momsen af varekøb foretaget i Danmark.
-        #
+        // I det omfang du har fradragsret for momsen, kan du medregne det beregnede
+        // momsbeløb til konto for indgående moms. Det beregnede momsbeløb af EU-varekøb
+        // behandles dermed på samme måde som momsen af varekøb foretaget i Danmark.
 
         if ($this->get('vat_off') == 0) {
             // gemme moms hvis det er nødvendigt
@@ -410,31 +403,23 @@ class Voucher extends Standard
      */
     function _stateHelper($date, $text, $account_id, $debet, $credit, $vat_off = 0, $skip_draft = false) {
 
-        # validering og behandling af værdier
+        // validering og behandling af værdier
 
         $text = safeToDb($text);
         $vat_percent = $this->vatpercent;
 
-        # Kontoen
+        // Kontoen
 
         $account = new Account($this->year, $account_id);
         $vat_account_id = $account->get('vat_account_id');
 
-
-        #
-        # Konti uden moms
-        #
+        // Konti uden moms
 
         if ($vat_off == 1) {
             $post = new Post($this);
             $post->save($date, $account_id, $text, $debet, $credit, $skip_draft);
-        }
-
-        #
-        # Konti med moms
-        #
-
-        elseif ($vat_off == 0) {
+        } elseif ($vat_off == 0) {
+            // Konti med moms
 
             // Hvis der er moms på kontoen skal den trækkes fra beløbet først
             switch ($account->get('vat')) {
@@ -445,8 +430,7 @@ class Voucher extends Standard
                             // bogfør momsen
                             $post = new Post($this);
                             $post->save($date, $vat_account_id, $text . " - købsmoms", $vat_amount, 0, $skip_draft);
-                        }
-                        else {
+                        } else {
                             $vat_amount = $this->calculateVat($credit, $vat_percent);
                             $credit = $credit - $vat_amount;
                             // bogføre udgående moms
@@ -468,8 +452,7 @@ class Voucher extends Standard
                             // bogføre udgående moms
                             $post = new Post($this);
                             $post->save($date, $vat_account_id, $text . " - salgsmoms", 0, $vat_amount, $skip_draft);
-                        }
-                        else {
+                        } else {
                             // tilbagefører momsen hvis det er et debet beløb
                             $vat_amount = $this->calculateVat($debet, $vat_percent);
                             $debet = $debet - $vat_amount;
@@ -541,7 +524,8 @@ class Voucher extends Standard
         return 1;
     }
 
-    function stateVoucher() {
+    function stateVoucher()
+    {
         if (!$this->year->vatAccountIsSet()) {
             $this->error->set('Du skal først sætte momskonti, inden du kan bogføre.');
         }
@@ -557,7 +541,6 @@ class Voucher extends Standard
         if ($this->error->isError()) {
             return 0;
         }
-
 
         $posts = $this->getPosts();
 
@@ -578,7 +561,8 @@ class Voucher extends Standard
         return 1;
     }
 
-    function getPosts() {
+    function getPosts()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id, text, debet, credit, account_id, stated, date, DATE_FORMAT(date, '%d-%m-%Y') AS date_dk FROM accounting_post WHERE voucher_id = " . $this->id . " AND intranet_id=".$this->year->kernel->intranet->get('id'));
         $list = array();
@@ -610,15 +594,15 @@ class Voucher extends Standard
     }
 
     /**
-     * Private: Udregner momsbeløbet
+     * Udregner momsbeløbet
      *
      * @param $amount (float)
      * @param $vat_percent (float)
+     *
      * @return (float) Momsbeløbet
-     * @access private
      */
-
-    function calculateVat($amount, $vat_percent) {
+    private function calculateVat($amount, $vat_percent)
+    {
         return Account::calculateVat($amount, $vat_percent);
         /*
         $amount = (float)$amount;
@@ -632,8 +616,8 @@ class Voucher extends Standard
      *
      * @return (int) maks vouchernumber
      */
-
-    function getMaxNumber() {
+    function getMaxNumber()
+    {
         $db = new DB_Sql;
 
         $db->query("SELECT MAX(number) AS max_voucher_number
@@ -645,7 +629,4 @@ class Voucher extends Standard
         }
         return $db->f('max_voucher_number');
     }
-
 }
-
-?>

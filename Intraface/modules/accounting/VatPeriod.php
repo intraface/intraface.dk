@@ -6,7 +6,8 @@ require_once 'Intraface/Standard.php';
 require_once 'Intraface/Error.php';
 require_once 'DB/Sql.php';
 
-class VatPeriod extends Standard {
+class VatPeriod extends Standard
+{
 
     var $error;
     var $year;
@@ -18,7 +19,8 @@ class VatPeriod extends Standard {
         2 => 'stated'
     );
 
-    function __construct($year_object, $id = 0) {
+    function __construct($year_object, $id = 0)
+    {
         if (!is_object($year_object)) {
             trigger_error('Vat::Vat skal have Year', E_USER_ERROR);
         }
@@ -31,7 +33,8 @@ class VatPeriod extends Standard {
         }
     }
 
-    function load() {
+    function load()
+    {
         $db = new DB_Sql;
         $db->query("SELECT *, DATE_FORMAT(date_start, '%d-%m-%Y') AS date_start_dk, DATE_FORMAT(date_end, '%d-%m-%Y') AS date_end_dk FROM accounting_vat_period WHERE id = " . $this->id . " AND intranet_id = " . $this->year->kernel->intranet->get('id'));
 
@@ -52,7 +55,8 @@ class VatPeriod extends Standard {
         return true;
     }
 
-    function isStated() {
+    function isStated()
+    {
 
         $db = new DB_Sql;
         $db->query("SELECT status FROM accounting_vat_period WHERE status = 2 AND id = " . $this->id . " AND intranet_id=" . $this->year->kernel->intranet->get('id'). " AND active = 1");
@@ -67,8 +71,8 @@ class VatPeriod extends Standard {
      *
      *
      */
-
-    function getList() {
+    function getList()
+    {
         $db = new DB_Sql;
         $db->query("SELECT *, DATE_FORMAT(date_start, '%d-%m-%Y') AS date_start_dk, DATE_FORMAT(date_end, '%d-%m-%Y') AS date_end_dk FROM accounting_vat_period WHERE year_id = " . $this->year->get('id') . " AND intranet_id=" . $this->year->kernel->intranet->get('id') . " AND active = 1 ORDER BY date_start ASC");
         $i = 0;
@@ -86,13 +90,15 @@ class VatPeriod extends Standard {
         return $vat;
     }
 
-    function periodsCreated() {
+    function periodsCreated()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id FROM accounting_vat_period WHERE year_id = " . $this->year->get('id') . " AND intranet_id=" . $this->year->kernel->intranet->get('id'). " AND active=1");
         return $db->numRows();
     }
 
-    function createPeriods() {
+    function createPeriods()
+    {
         if ($this->periodsCreated()) {
             // we will just pretend everything went fine
             return true;
@@ -116,7 +122,8 @@ class VatPeriod extends Standard {
         return true;
     }
 
-    function validate($input) {
+    function validate($input)
+    {
         // bør også validere type
         return true;
     }
@@ -125,7 +132,8 @@ class VatPeriod extends Standard {
      *
      * @param type mulige (insert) bruges af create så den ikke bare opdaterer tidligere
      */
-    function save($input, $type='') {
+    function save($input, $type='')
+    {
         $input = safeToDB($input);
 
         if (!$this->validate($input)) {
@@ -135,8 +143,7 @@ class VatPeriod extends Standard {
         if ($this->id == 0 OR $type=='insert') {
             $sql_type = "INSERT INTO ";
             $sql_end = ", date_created = NOW()";
-        }
-        else {
+        } else {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;
         }
@@ -151,13 +158,15 @@ class VatPeriod extends Standard {
         return $this->id;
     }
 
-    function setStated($voucher_id) {
+    function setStated($voucher_id)
+    {
         $db = new DB_Sql;
         $db->query("UPDATE accounting_vat_period SET voucher_id = '".(int)$voucher_id."', status = 2 WHERE id = ".$this->id." AND intranet_id = " . $this->year->kernel->intranet->get('id') . " AND year_id=". $this->year->get('id'));
         return true;
     }
 
-    function delete() {
+    function delete()
+    {
         $db = new DB_Sql;
         if ($this->isStated()) {
             $this->error->set('Du kan ikke slette en periode, der er bogført');
@@ -167,42 +176,36 @@ class VatPeriod extends Standard {
         return true;
     }
 
-    function loadAmounts() {
+    function loadAmounts()
+    {
         $saldo_total = 0; // integer med total saldo
         $saldo_rubrik_a = 0;
 
         $date_from = $this->get('date_start');
         $date_to = $this->get('date_end');
 
-        #
-        # Salgsmoms - udgående
-        #
+        // Salgsmoms - udgående
         $account_vat_in = new Account($this->year, $this->year->getSetting('vat_out_account_id'));
         $account_vat_in->getSaldo('stated', $date_from, $date_to);
         $this->value['account_vat_out'] = $account_vat_in;
 
-        # ganges med -1 for at få rigtigt fortegn til udregning
+        // ganges med -1 for at få rigtigt fortegn til udregning
         $this->value['saldo_vat_out'] = $account_vat_in->get('saldo');
         $saldo_total += -1 * $this->value['saldo_vat_out']; // total
 
-
-        #
-        # Moms af varekøb i udlandet
-        # Dette beløb er et udregnet beløb, som udregnes under bogføringen
-        #
+        // Moms af varekøb i udlandet
+        // Dette beløb er et udregnet beløb, som udregnes under bogføringen
         $account_vat_abroad = new Account($this->year, $this->year->getSetting('vat_abroad_account_id'));
         $account_vat_abroad->getSaldo('stated', $date_from, $date_to);
         $this->value['account_vat_abroad'] = $account_vat_abroad;
 
-        # ganges med -1 for at få rigtigt fortegn til udregning
+        // ganges med -1 for at få rigtigt fortegn til udregning
         $this->value['saldo_vat_abroad'] = $account_vat_abroad->get('saldo');
         $saldo_total += -1 * $this->value['saldo_vat_abroad'];
 
-        #
-        # Købsmoms
-        # Købsmomsen inkluderer også den udregnede moms af moms af varekøb i udlandet.
-        # Dette beløb er lagt på kontoen under bogføringen.
-        #
+        // Købsmoms
+        // Købsmomsen inkluderer også den udregnede moms af moms af varekøb i udlandet.
+        // Dette beløb er lagt på kontoen under bogføringen.
         $account_vat_out = new Account($this->year, $this->year->getSetting('vat_in_account_id'));
         $account_vat_out->getSaldo('stated', $date_from, $date_to);
         $this->value['account_vat_in'] = $account_vat_out;
@@ -210,19 +213,14 @@ class VatPeriod extends Standard {
         $this->value['saldo_vat_in'] = $account_vat_out->get('saldo');
         $saldo_total -= $this->value['saldo_vat_in'];
 
-
-        #
-        # Rubrik A
-        # EU-erhvervelser - her samles forskellige konti og beløbet udregnes.
-        # Primosaldoen skal ikke medregnes
-        #
+        // Rubrik A
+        // EU-erhvervelser - her samles forskellige konti og beløbet udregnes.
+        // Primosaldoen skal ikke medregnes
         $buy_eu_accounts = unserialize($this->year->getSetting('buy_eu_accounts'));
         $this->value['saldo_rubrik_a'] = 0;
         $saldo_rubrik_a = 0;
 
-
         if (is_array($buy_eu_accounts) AND count($buy_eu_accounts) > 0) {
-
             foreach ($buy_eu_accounts AS $key=>$id) {
                 $account_eu_buy = new Account($this->year, $id);
                 $primo = $account_eu_buy->getPrimoSaldo();
@@ -234,19 +232,15 @@ class VatPeriod extends Standard {
         }
         $this->value['saldo_rubrik_a'] = $saldo_rubrik_a;
 
-        #
-        # Rubrik B
-        # Værdien af varesalg uden moms til andre EU-lande (EU-leverancer). Udfyldes
-        # denne rubrik, skal der indsendes en liste med varesalgene uden moms.
-        #
+        // Rubrik B
+        // Værdien af varesalg uden moms til andre EU-lande (EU-leverancer). Udfyldes
+        // denne rubrik, skal der indsendes en liste med varesalgene uden moms.
 
         // Vi understøtter ikke rubrikken
 
-        #
-        # Rubrik C
-        # Værdien af varesalg uden moms til andre EU-lande (EU-leverancer). Udfyldes
-        # denne rubrik, skal der indsendes en liste med varesalgene uden moms.
-        #
+        // Rubrik C
+        // Værdien af varesalg uden moms til andre EU-lande (EU-leverancer). Udfyldes
+        // denne rubrik, skal der indsendes en liste med varesalgene uden moms.
 
         // Vi understøtter ikke rubrikken
 
@@ -255,7 +249,8 @@ class VatPeriod extends Standard {
         return true;
     }
 
-    function state($date, $voucher_number) {
+    function state($date, $voucher_number)
+    {
         $skip_daybook = true; // bør kun være false i testsituationer
         if ($this->id == 0) {
             return 0;
@@ -273,9 +268,7 @@ class VatPeriod extends Standard {
         $var['date'] = $date;
         $var['voucher_number'] = $voucher_number;
 
-        #
-        # Bogføring af udgående moms (salg)
-        #
+        // Bogføring af udgående moms (salg)
 
         $var['text'] = 'Momsafregning - udgående moms, salg';
         // hvis beløbet er mindre end nul, skal der byttes om på konti
@@ -283,8 +276,7 @@ class VatPeriod extends Standard {
         if ($this->get('saldo_vat_out') > 0) {
             $var['debet_account_number'] = $account_vat_balance->get('number');
             $var['credit_account_number'] = $account_vat_out->get('number');
-        }
-        else {
+        } else {
             $var['debet_account_number'] = $account_vat_out->get('number');
             $var['credit_account_number'] = $account_vat_balance->get('number');
         }
@@ -295,9 +287,7 @@ class VatPeriod extends Standard {
             $this->error->set('Systemet kunne ikke opdatere udgående moms');
         }
 
-        #
-        # Moms af varekøb i udlandet
-        #
+        // Moms af varekøb i udlandet
 
         $var['text'] = 'Momsafregning - moms af køb i udlandet';
         /*
@@ -309,8 +299,7 @@ class VatPeriod extends Standard {
         if ($this->get('saldo_vat_abroad') < 0) {
             $var['debet_account_number'] = $account_vat_balance->get('number');
             $var['credit_account_number'] = $account_vat_abroad->get('number');
-        }
-        else {
+        } else {
             $var['debet_account_number'] = $account_vat_abroad->get('number');
             $var['credit_account_number'] = $account_vat_balance->get('number');
         }
@@ -320,17 +309,14 @@ class VatPeriod extends Standard {
             $this->error->set('Systemet kunne ikke opdatere moms moms af varekøb i andre lande');
         }
 
-        #
-        # Indgående moms (køb)
-        #
+        // Indgående moms (køb)
 
         $var['text'] = 'Momsafregning - indgående moms, køb';
         if ($this->get('saldo_vat_in') > 0) {
             $var['debet_account_number'] = $account_vat_balance->get('number');
             $var['credit_account_number'] = $account_vat_in->get('number');
 
-        }
-        else {
+        } else {
             $var['debet_account_number'] = $account_vat_in->get('number');
             $var['credit_account_number'] = $account_vat_balance->get('number');
         }
@@ -356,7 +342,8 @@ class VatPeriod extends Standard {
 
     }
 
-    function compareAmounts() {
+    function compareAmounts()
+    {
         if (!$this->isStated()) {
             // beløbene er ikke bogført endnu, så vi lader som om at det hele passer
             return true;
@@ -370,4 +357,3 @@ class VatPeriod extends Standard {
         return true;
     }
 }
-?>

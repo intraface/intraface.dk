@@ -6,8 +6,8 @@
  */
 require_once 'Intraface/Standard.php';
 
-class YearEnd extends Standard {
-
+class YearEnd extends Standard
+{
     var $error;
     var $value;
     var $year;
@@ -32,7 +32,8 @@ class YearEnd extends Standard {
         2 => 'result_account_reset'
     );
 
-    function __construct($year) {
+    function __construct($year)
+    {
         if (!is_object($year)) {
             trigger_error('Year::__construct: Ikke et gyldigt Year object', E_USER_ERROR);
         }
@@ -43,7 +44,8 @@ class YearEnd extends Standard {
         }
     }
 
-    function load() {
+    function load()
+    {
         $db = new DB_Sql;
         $db->query("SELECT * FROM accounting_year_end WHERE year_id = " . $this->year->get('id') . " AND intranet_id =" . $this->year->kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
@@ -57,7 +59,8 @@ class YearEnd extends Standard {
         return $db->f('id');
     }
 
-    function start() {
+    function start()
+    {
         if ($this->get('id') > 0) {
             return;
         }
@@ -66,13 +69,15 @@ class YearEnd extends Standard {
         return 1;
     }
 
-    function setStep($step) {
+    function setStep($step)
+    {
         $db = new DB_Sql;
         $db->query("UPDATE accounting_year_end SET date_updated=NOW(), step_key = " . (int)$step . " WHERE year_id = " . $this->year->get('id'));
         return 1;
     }
 
-    function setStated($action, $voucher_id) {
+    function setStated($action, $voucher_id)
+    {
         $db = new DB_Sql;
 
         switch ($action) {
@@ -107,19 +112,22 @@ class YearEnd extends Standard {
      * amount
      *
      */
-    function saveStatedAction($action, $voucher_id, $debet_account_id, $credit_account_id, $amount) {
+    function saveStatedAction($action, $voucher_id, $debet_account_id, $credit_account_id, $amount)
+    {
         $db = new Db_Sql;
         $db->query("INSERT INTO accounting_year_end_action SET date_created = NOW(), voucher_id = ".$voucher_id.", debet_account_id = ".$debet_account_id.", credit_account_id = ".$credit_account_id.", amount=".$amount.", intranet_id=".$this->year->kernel->intranet->get('id').", type_key = ".array_search($action, $this->actions).", year_id = ".$this->year->get('id'));
         return 1;
     }
 
-    function deleteStatedAction($id) {
+    function deleteStatedAction($id)
+    {
         $db = new DB_Sql;
         $db->query("DELETE FROM accounting_year_end_action WHERE id = " . (int)$id);
         return 1;
     }
 
-    function getStatedActions($action) {
+    function getStatedActions($action)
+    {
 
         $db = new DB_Sql;
         $db->query("SELECT * FROM accounting_year_end_action WHERE year_id = " . $this->year->get('id') . " AND type_key = ".array_search($action, $this->actions)." AND intranet_id = " . $this->year->kernel->intranet->get('id'));
@@ -138,7 +146,8 @@ class YearEnd extends Standard {
         return $actions;
     }
 
-    function flushStatement($type) {
+    function flushStatement($type)
+    {
         $db = new DB_Sql;
         $db->query("DELETE FROM accounting_year_end_statement WHERE intranet_id = ".$this->year->kernel->intranet->get('id')." AND year_id = " . $this->year->get('id') . " AND type_key = " . array_search($type, $this->types));
         return 1;
@@ -152,8 +161,8 @@ class YearEnd extends Standard {
      * gemmer videre og at den ved get lægger tallene i amount sammen?
      *
      */
-
-    function saveStatement($type) {
+    function saveStatement($type)
+    {
 
         $this->flushStatement($type);
 
@@ -197,7 +206,8 @@ class YearEnd extends Standard {
         return 1;
     }
 
-    function getStatement($type) {
+    function getStatement($type)
+    {
 
         switch ($type) {
             case 'operating':
@@ -260,8 +270,8 @@ class YearEnd extends Standard {
      *				dog skal det jo stadig bogføres
      */
 
-    function resetOperatingAccounts($type = 'do') {
-
+    function resetOperatingAccounts($type = 'do')
+    {
         switch($type) {
             case 'do':
                 break;
@@ -328,15 +338,11 @@ class YearEnd extends Standard {
                     if (!empty($save_array)) {
                         if ($voucher->saveInDayBook($save_array, true)) {
                             $this->deleteStatedAction($a['id']);
-                        }
-                        else {
+                        } else {
                             $voucher->error->view();
                         }
                     }
-
-
                 }
-
             break;
             default:
 
@@ -370,8 +376,7 @@ class YearEnd extends Standard {
                         );
                         $debet_account = $result_account;
                         $credit_account = $account;
-                    }
-                    elseif ($account->get('saldo') <= 0) {
+                    } elseif ($account->get('saldo') <= 0) {
                         $save_array = array(
                             'date' => $this->year->get('to_date_dk'),
                             'debet_account_number' => $account->get('number'),
@@ -400,8 +405,8 @@ class YearEnd extends Standard {
     }
 
 
-    function resetYearResult($type = 'do') {
-
+    function resetYearResult($type = 'do')
+    {
         switch($type) {
             case 'do':
                 // her sker ikke noget
@@ -413,7 +418,6 @@ class YearEnd extends Standard {
                 trigger_error('YearEnd::resetOperatingAccounts ugyldig type', E_USER_ERROR);
                 break;
         }
-
 
         if ($this->year->getSetting('result_account_id') <= 0) {
             $this->error->set('Resultatkontoen er ikke sat');
@@ -489,8 +493,7 @@ class YearEnd extends Standard {
                         'date' => $this->year->get('to_date_dk'),
                         'text' => 'Årsafslutning. Årets resultat overføres til egenkapitalen'
                     ));
-                }
-                else {
+                } else {
                     $voucher = new Voucher($this->year, $this->get('result_account_reset_voucher_id'));
                 }
 
@@ -512,8 +515,7 @@ class YearEnd extends Standard {
                     );
                     $debet_account = $result_account;
                     $credit_account = $capital_account;
-                }
-                elseif ($result_account->get('saldo') >= 0) {
+                } elseif ($result_account->get('saldo') >= 0) {
                     $save_array = array(
                         'date' => $this->year->get('to_date_dk'),
                         'debet_account_number' => $capital_account->get('number'),
@@ -530,8 +532,7 @@ class YearEnd extends Standard {
                 if (!empty($save_array)) {
                     if ($voucher->saveInDayBook($save_array, true)) {
                         $this->saveStatedAction('result_account_reset', $voucher->get('id'), $debet_account->get('id'), $credit_account->get('id'), abs(amountToForm($result_account->get('saldo'))));
-                    }
-                    else {
+                    } else {
                         $voucher->error->view();
                     }
                 }
@@ -541,9 +542,4 @@ class YearEnd extends Standard {
         }
 
     }
-
-
 }
-
-
-?>

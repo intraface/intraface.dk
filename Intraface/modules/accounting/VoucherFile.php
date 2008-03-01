@@ -2,7 +2,8 @@
 /**
  * @package Intraface_Accounting
  */
-class VoucherFile {
+class VoucherFile
+{
 
     var $id;
     var $voucher;
@@ -17,13 +18,8 @@ class VoucherFile {
     );
     var $error;
 
-    /*
-    function VoucherFile(& $voucher, $id=0) {
-        VoucherFile::__construct($voucher, $id);
-    }
-    */
-
-    function __construct(& $voucher, $id=0) {
+    function __construct(& $voucher, $id=0)
+    {
         if (!is_object($voucher)) {
             trigger_error('VoucherFile:: Voucher ikke gyldig', E_USER_ERROR);
         }
@@ -37,7 +33,8 @@ class VoucherFile {
         */
     }
 
-    function validate($var) {
+    function validate($var)
+    {
         $validator = new Validator($this->error);
         if (!empty($var['description'])) $validator->isString($var['description'], 'Beskrivelsen ulovlig', '', 'allow_empty');
         if ($this->error->isError()) {
@@ -46,7 +43,8 @@ class VoucherFile {
         return 1;
     }
 
-    function save($var) {
+    function save($var)
+    {
         $var = safeToDb($var);
 
         if (!$this->validate($var)) {
@@ -70,8 +68,7 @@ class VoucherFile {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;
 
-        }
-        else {
+        } else {
             $sql_type = "INSERT INTO ";
             $sql_end = " , date_created = NOW()";
         }
@@ -93,19 +90,22 @@ class VoucherFile {
         return $this->id;
     }
 
-    function delete() {
+    function delete()
+    {
         $db = new DB_Sql;
         $db->query("UPDATE accounting_voucher_file SET active = 0 WHERE id = " . $this->id);
         return 1;
     }
 
-    function undelete() {
+    function undelete()
+    {
         $db = new DB_Sql;
         $db->query("UPDATE accounting_voucher_file SET active = 1 WHERE id = " . $this->id);
         return 1;
     }
 
-    function getList() {
+    function getList()
+    {
         $db = new DB_Sql;
         $db->query("SELECT * FROM accounting_voucher_file WHERE active = 1 AND voucher_id = " . $this->voucher->get('id') . " AND intranet_id=" . $this->voucher->year->kernel->intranet->get('id'));
         $i = 0;
@@ -167,7 +167,4 @@ class VoucherFile {
         }
         return $files;
     }
-
 }
-
-?>

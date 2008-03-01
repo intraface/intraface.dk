@@ -26,13 +26,14 @@ class Post extends Standard {
      * @param $year_object (object)
      * @param $post_id (int) refererer til en enkelt post
      */
-    function Post(& $voucher, $post_id = 0) {
+    function __construct($voucher, $post_id = 0)
+    {
 
         if(!is_object($voucher) OR strtolower(get_class($voucher)) != 'voucher') {
             trigger_error('Klassen Post kræver objektet Voucher', E_USER_ERROR);
             exit;
         }
-        $this->voucher = & $voucher;
+        $this->voucher = $voucher;
         $this->id = (int)$post_id;
         $this->error = new Error;
 
@@ -41,7 +42,8 @@ class Post extends Standard {
         }
     }
 
-    function factory($year, $post_id) {
+    function factory($year, $post_id)
+    {
         $post_id = (int)$post_id;
         $db = new Db_sql;
         $db->query("SELECT voucher_id FROM accounting_post WHERE id = " . $post_id . " AND year_id = " . $year->get('id') . " AND intranet_id=" . $year->kernel->intranet->get('id'));
@@ -53,7 +55,8 @@ class Post extends Standard {
 
     }
 
-    function load() {
+    function load()
+    {
         $db = new DB_Sql;
         $db->query("SELECT *, DATE_FORMAT(date, '%d-%m-%Y') AS date_dk FROM accounting_post WHERE id = " . $this->id . " AND intranet_id=" .$this->voucher->year->kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
@@ -82,21 +85,16 @@ class Post extends Standard {
         return 1;
     }
 
-    function validate($date, $account_id, $text, $debet, $credit) {
+    function validate($date, $account_id, $text, $debet, $credit)
+    {
         $validator = new Validator($this->error);
 
-        #
-        # Mærkeligt at denne ikke validerer korrekt - isDate accepterer ikke: 2006-07-15
-        #
-
+        // Mærkeligt at denne ikke validerer korrekt - isDate accepterer ikke: 2006-07-15
         // $validator->isDate($date, 'Datoen ' . $date .  ' er ikke en gyldig dato');
         $validator->isNumeric($account_id, 'Kontoen er ikke et tal');
         $validator->isString($text, 'Teksten er ikke gyldig');
 
-        #
-        # Validerer 29.5 forkert
-        #
-
+        // Validerer 29.5 forkert
         //$validator->isDouble($debet, 'Debetbeløbet '.$debet.' er ikke gyldigt');
         //$validator->isDouble($credit, 'Kreditbeløbet '.$credit .' er ikke gyldigt');
 
@@ -121,7 +119,8 @@ class Post extends Standard {
      * @param $credit (float)
      * @access private
      */
-    function save($date, $account_id, $text, $debet, $credit, $skip_draft = false) {
+    function save($date, $account_id, $text, $debet, $credit, $skip_draft = false)
+    {
 
         $debet = (float)$debet;
         $credit = (float)$credit;
@@ -139,8 +138,7 @@ class Post extends Standard {
             $sql_type = "UPDATE";
             $sql_end = " WHERE id = " . $this->id;
 
-        }
-        else {
+        } else {
             $sql_type = "INSERT INTO";
             $sql_end = "";
         }
@@ -169,13 +167,13 @@ class Post extends Standard {
         return 1;
     }
 
-    function getList($type = 'stated') {
+    function getList($type = 'stated')
+    {
         $db = new DB_Sql;
         $sql = "SELECT voucher.reference, post.id, post.text, post.voucher_id, post.date, post.account_id, post.debet, post.credit, post.stated, DATE_FORMAT(post.date, '%d-%m-%Y') AS date_dk FROM accounting_post post INNER JOIN accounting_voucher voucher ON post.voucher_id = voucher.id WHERE post.year_id = " . $this->voucher->year->get('id') . " AND post.intranet_id = " . $this->voucher->year->kernel->intranet->get('id');
         if ($type == 'stated') {
             $sql .= " AND post.stated = 1";
-        }
-        elseif ($type == 'draft') {
+        } elseif ($type == 'draft') {
             $sql .= " AND post.stated = 0";
         }
         $db->query($sql . " ORDER BY post.voucher_id DESC, post.id DESC");
@@ -204,30 +202,28 @@ class Post extends Standard {
         return $list;
     }
 
-    function setStated() {
+    function setStated()
+    {
         if ($this->id == 0) {
             $this->error->set('Kan ikke sætte stated, når id = o');
-            return 0;
+            return false;
         }
 
         $db = new DB_Sql;
         $db->query("UPDATE accounting_post SET stated = 1 WHERE id = " . $this->id . " AND intranet_id =" .$this->voucher->year->kernel->intranet->get('id'));
 
-        return 1;
+        return true;
     }
 
-    function delete() {
+    function delete()
+    {
         if ($this->id == 0 OR $this->get('stated') == 1) {
-            return 0;
+            return false;
         }
 
         $db = new DB_Sql;
         $db->query("DELETE FROM accounting_post WHERE id = " . $this->id);
-        return 1;
+        return true;
 
     }
-
-
 }
-
-?>
