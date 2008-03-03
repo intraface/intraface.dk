@@ -54,7 +54,7 @@ elseif ($_GET['id']) {
     $todo = new TodoList($kernel, $_GET['id']);
     $value['id'] = $todo->get('id');
     $value['subject'] = 'Todoliste';
-    $value['body'] = $kernel->setting->get('user','todo.email.standardtext') . "\n\nMed venlig hilsen\n".$kernel->user->address->get('name') . "\n" . $kernel->intranet->get('name');
+    $value['body'] = $kernel->setting->get('user','todo.email.standardtext') . "\n\nMed venlig hilsen\n".$kernel->user->getAddress()->get('name') . "\n" . $kernel->intranet->get('name');
 
     $contacts = $todo->getContacts();
 

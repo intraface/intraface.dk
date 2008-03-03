@@ -53,10 +53,10 @@ if(!empty($_POST)) {
                     unset($contact['address_id']);
                     
                     // If the intranet address is different from the user it is probably a company.
-                    if($kernel->intranet->address->get('name') != $kernel->user->address->get('name')) {
-                        $contact['contactperson'] = $kernel->user->address->get('name');
-                        $contact['contactemail'] = $kernel->user->address->get('email');
-                        $contact['contactphone'] =  $kernel->user->address->get('phone');
+                    if($kernel->intranet->address->get('name') != $kernel->user->getAddress()->get('name')) {
+                        $contact['contactperson'] = $kernel->user->getAddress()->get('name');
+                        $contact['contactemail'] = $kernel->user->getAddress()->get('email');
+                        $contact['contactphone'] =  $kernel->user->getAddress()->get('phone');
                     }
                     
                     // We add the contact_id. But notice, despite of the bad naming the contact_id is the contact_id in the intranet_maintenance intranet!

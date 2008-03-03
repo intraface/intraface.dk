@@ -70,7 +70,7 @@ class Reminder_Text {
                 break;
             }
 
-            $this->output .= "\n\nMed venlig hilsen\n\n" . $reminder->kernel->user->address->get("name") . "\n" .$reminder->kernel->intranet->get("name");
+            $this->output .= "\n\nMed venlig hilsen\n\n" . $reminder->kernel->user->getAddress()->get("name") . "\n" .$reminder->kernel->intranet->get("name");
             $this->output .= "\n" . $reminder->kernel->intranet->address->get("address");
             $this->output .= "\n" . $reminder->kernel->intranet->address->get("postcode") . "  " . $reminder->kernel->intranet->address->get("city");
     }
@@ -113,8 +113,8 @@ switch($kernel->setting->get('intranet', 'debtor.sender')) {
         $from_name = '';
         break;
     case 'user':
-        $from_email = $kernel->user->address->get('email');
-        $from_name = $kernel->user->address->get('name');
+        $from_email = $kernel->user->getAddress()->get('email');
+        $from_name = $kernel->user->getAddress()->get('name');
         break;
     case 'defined':
         $from_email = $kernel->setting->get('intranet', 'debtor.sender.email');

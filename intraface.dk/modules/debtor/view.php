@@ -250,7 +250,7 @@ if(isset($onlinepayment)) {
             }
             break;
         case 'user':
-            if($kernel->user->address->get('name') == '' || $kernel->user->address->get('email') == '') {
+            if($kernel->user->getAddress()->get('name') == '' || $kernel->user->getAddress()->get('email') == '') {
                 $valid_sender = false;
                 echo '<div class="message-dependent"><p>'.$translation->get('you need to fill in an e-mail address to send e-mail').'. <a href="'.PATH_WWW.'/main/controlpanel/user_edit.php">'.$translation->get('do it now').'</a>.</p></div>';
             }
@@ -418,7 +418,7 @@ if(isset($onlinepayment)) {
                             <?php
                             switch($kernel->setting->get('intranet', 'debtor.sender')) {
                                 case 'user':
-                                    echo $kernel->user->address->get('name'). ' &lt;'.$kernel->user->address->get('email').'&gt;';
+                                    echo $kernel->user->getAddress()->get('name'). ' &lt;'.$kernel->user->getAddress()->get('email').'&gt;';
                                     break;
                                 case 'defined':
                                     echo $kernel->setting->get('intranet', 'debtor.sender.name').' &lt;'.$kernel->setting->get('intranet', 'debtor.sender.email').'&gt;';
@@ -759,14 +759,14 @@ if(isset($onlinepayment)) {
                                         foreach($actions AS $a) {
                                             if($a['action'] != 'capture' || ($debtor->get("type") == "invoice" && $debtor->get("status") == "sent")) {
                                                 ?>
-                                                <a href="view.php?id=<?php print(intval($debtor->get('id'))); ?>&amp;onlinepayment_id=<?php print(intval($p['id'])); ?>&amp;onlinepayment_action=<?php print(safeToHtml($a['action'])); ?>" class="confirm"><?php print(safeToHtml($a['label'])); ?></a>
+                                                <a href="view.php?id=<?php print(intval($debtor->get('id'))); ?>&amp;onlinepayment_id=<?php print(intval($p['id'])); ?>&amp;onlinepayment_action=<?php e($a['action']); ?>" class="confirm"><?php print(safeToHtml($a['label'])); ?></a>
                                                 <?php
                                             }
                                         }
                                         ?>
                                     <?php endif; ?>
                                     <?php if($p['status'] == 'authorized'): ?>
-                                        <a href="<?php print($onlinepayment_module->getPath()); ?>payment.php?id=<?php print(intval($p['id'])); ?>" class="edit">Ret</a>
+                                        <a href="<?php print($onlinepayment_module->getPath()); ?>payment.php?id=<?php print(intval($p['id'])); ?>" class="edit"><?php e(t('edit payment')); ?></a>
                                     <?php endif; ?>
                                 </td>
                             </tr>

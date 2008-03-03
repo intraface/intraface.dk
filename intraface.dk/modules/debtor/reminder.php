@@ -133,7 +133,7 @@ $page->start("Rykker");
 					<?php
 					switch($kernel->setting->get('intranet', 'debtor.sender')) {
 						case 'user':
-							echo $kernel->user->address->get('name'). ' &lt;'.$kernel->user->address->get('email').'&gt;';
+							echo $kernel->user->getAddress()->get('name'). ' &lt;'.$kernel->user->getAddress()->get('email').'&gt;';
 							break;
 						case 'defined':
 							echo $kernel->setting->get('intranet', 'debtor.sender.name').' &lt;'.$kernel->setting->get('intranet', 'debtor.sender.email').'&gt;';

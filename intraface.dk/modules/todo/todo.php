@@ -39,7 +39,7 @@ if (!empty($_POST)) {
         $email->From = $kernel->intranet->address->get('email');
         $email->FromName = $kernel->intranet->get('name');
         $email->addAddress($_POST['send_list_email']);
-        $email->Body = $kernel->setting->get('user', 'todo.email.standardtext') . "\n\n" . $kernel->setting->get('intranet', 'todo.publiclist') . '?public_key=' . $todo->get('public_key'). "&intranet_key=".$kernel->intranet->get('private_key')."\n\nMed venlig hilsen\n".$kernel->user->address->get('name') . "\n" . $kernel->intranet->get('name');
+        $email->Body = $kernel->setting->get('user', 'todo.email.standardtext') . "\n\n" . $kernel->setting->get('intranet', 'todo.publiclist') . '?public_key=' . $todo->get('public_key'). "&intranet_key=".$kernel->intranet->get('private_key')."\n\nMed venlig hilsen\n".$kernel->user->getAddress()->get('name') . "\n" . $kernel->intranet->get('name');
 
         if ($email->Send()) {
             $email_msg = 'E-mailen er sendt';

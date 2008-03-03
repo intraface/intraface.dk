@@ -106,7 +106,7 @@ $page->start('Skriv e-mail');
 		</div>
 		<div class="formrow">
 			<label for="bcc_to_user">Blind kopi til:</label>
-			<input type="checkbox" name="bcc_to_user" id="bcc_to_user" value="1" <?php if(isset($value['bcc_to_user']) && intval($value['bcc_to_user']) == 1) echo 'checked="checked"'; ?> /> <?php echo $kernel->user->address->get('name').' &#60'.$kernel->user->address->get('email').'&#62'; ?>
+			<input type="checkbox" name="bcc_to_user" id="bcc_to_user" value="1" <?php if(isset($value['bcc_to_user']) && intval($value['bcc_to_user']) == 1) echo 'checked="checked"'; ?> /> <?php echo $kernel->user->getAddress()->get('name').' &#60'.$kernel->user->getAddress()->get('email').'&#62'; ?>
 		</div>
 		<div class="formrow">
 			<label for="from">Fra:</label>

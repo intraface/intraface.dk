@@ -116,8 +116,8 @@ switch($kernel->setting->get('intranet', 'debtor.sender')) {
         $from_name = '';
         break;
     case 'user':
-        $from_email = $kernel->user->address->get('email');
-        $from_name = $kernel->user->address->get('name');
+        $from_email = $kernel->user->getAddress()->get('email');
+        $from_name = $kernel->user->getAddress()->get('name');
         break;
     case 'defined':
         $from_email = $kernel->setting->get('intranet', 'debtor.sender.email');
@@ -137,7 +137,7 @@ $email = new Email($kernel);
 if (!$email->save(array(
         'contact_id' => $contact->get('id'),
         'subject' => $subject,
-        'body' => $body . "\n\n--\n" . $kernel->user->address->get('name') . "\n" . $kernel->intranet->get('name'),
+        'body' => $body . "\n\n--\n" . $kernel->user->getAddress()->get('name') . "\n" . $kernel->intranet->get('name'),
         'from_email' => $from_email,
         'from_name' => $from_name,
         'type_id' => 10, // electronic invoice
