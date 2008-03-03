@@ -50,7 +50,7 @@ class IntranetNews extends Standard {
 			return 0;
 		}
 		
-		$sql = "user_name = \"".$this->kernel->user->address->get('name')."\",
+		$sql = "user_name = \"".$this->kernel->user->getAddress()->get('name')."\",
 			area = \"".$input['area']."\",
 			description = \"".$input['description']."\",
 			active = 1";

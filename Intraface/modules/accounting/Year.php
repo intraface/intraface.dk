@@ -38,8 +38,7 @@ class Year extends Standard
 
         if ($this->id > 0) {
             $this->load();
-        }
-        elseif ($load_active) {
+        } elseif ($load_active) {
             if ($this->loadActiveyear() > 0) {
                 $this->load();
             }
@@ -257,6 +256,11 @@ class Year extends Standard
     /****************************************************************************
     VALIDERINGSFUNKTIONER
     ****************************************************************************/
+
+    public function isValid()
+    {
+        return $this->_isValid();
+    }
 
     /**
      * Metode til at tjekke om året findes

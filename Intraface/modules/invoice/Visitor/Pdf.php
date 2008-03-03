@@ -42,9 +42,9 @@ class Reminder_Report_Pdf extends Debtor_Pdf
                 // void
                 break;
             case 'user':
-                $intranet['email'] = $reminder->kernel->user->address->get('email');
-                $intranet['contact_person'] = $reminder->kernel->user->address->get('name');
-                $intranet['phone'] = $reminder->kernel->user->address->get('phone');
+                $intranet['email'] = $reminder->kernel->user->getAddress()->get('email');
+                $intranet['contact_person'] = $reminder->kernel->user->getAddress()->get('name');
+                $intranet['phone'] = $reminder->kernel->user->getAddress()->get('phone');
                 break;
             case 'defined':
                 $intranet['email'] = $reminder->kernel->setting->get('intranet', 'debtor.sender.email');

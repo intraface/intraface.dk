@@ -66,23 +66,6 @@ class Debtor_Report_Pdf extends Debtor_Pdf
 
         $intranet = array_merge($intranet, $debtor->getContactInformation());
 
-        /*
-        switch($debtor->kernel->setting->get('intranet', 'debtor.sender')) {
-            case 'intranet':
-                // void
-                break;
-            case 'user':
-                $intranet['email'] = $debtor->kernel->user->address->get('email');
-                $intranet['contact_person'] = $debtor->kernel->user->address->get('name');
-                $intranet['phone'] = $debtor->kernel->user->address->get('phone');
-                break;
-            case 'defined':
-                $intranet['email'] = $debtor->kernel->setting->get('intranet', 'debtor.sender.email');
-                $intranet['contact_person'] = $debtor->kernel->setting->get('intranet', 'debtor.sender.name');
-                break;
-        }
-        */
-
         $this->docinfo[0]["label"] = $this->translation->get($debtor->get('type').' number').":";
         $this->docinfo[0]["value"] = $debtor->get("number");
         $this->docinfo[1]["label"] = "Dato:";

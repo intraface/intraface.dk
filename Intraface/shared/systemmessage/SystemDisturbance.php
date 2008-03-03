@@ -76,7 +76,7 @@ class SystemDisturbance extends Standard {
 			return 0;
 		}
 
-		$sql = "user_name = \"".$this->kernel->user->address->get('name')."\",
+		$sql = "user_name = \"".$this->kernel->user->getAddress()->get('name')."\",
 			from_date_time = \"".$db_from->get()." ".$from[1]."\",
 			to_date_time = \"".$db_to->get()." ".$to[1]."\",
 			important = \"".$input['important']."\",

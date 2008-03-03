@@ -404,7 +404,7 @@ class Email extends Standard
         }
 
         if($this->get('bcc_to_user')) {
-            $phpmailer->addBCC($this->kernel->user->address->get('email'), $this->kernel->user->address->get('name'));
+            $phpmailer->addBCC($this->kernel->user->getAddress()->get('email'), $this->kernel->user->getAddress()->get('name'));
         }
 
 

@@ -1009,9 +1009,9 @@ class Debtor extends Standard
                 break;
             case 'user':
                 // @todo needs to be changed in order to work with contactlogin
-                $intranet['email'] = $this->kernel->user->address->get('email');
-                $intranet['contact_person'] = $this->kernel->user->address->get('name');
-                $intranet['phone'] = $this->kernel->user->address->get('phone');
+                $intranet['email'] = $this->kernel->user->getAddress()->get('email');
+                $intranet['contact_person'] = $this->kernel->user->getAddress()->get('name');
+                $intranet['phone'] = $this->kernel->user->getAddress()->get('phone');
                 break;
             case 'defined':
                 $intranet['email'] = $this->kernel->setting->get('intranet', 'debtor.sender.email');
