@@ -30,7 +30,9 @@ foreach(scandir( $f ) as $folder ){
                     if(substr($generate_file, strlen($generate_file) - 5) == '.html') {
 
                         $generate_file_content = file_get_contents($generate_dir.DIRECTORY_SEPARATOR.$generate_file);
-                        $generate_file_content = str_replace('##path_test_root##', realpath(dirname(__FILE__)), $generate_file_content);
+                        $generate_file_content = str_replace('##path_test_root##', dirname(__FILE__), $generate_file_content);
+                        $generate_file_content = str_replace('@@dirctory_separator@@', DIRECTORY_SEPARATOR, $generate_file_content);
+
                         if(!is_dir($f.DIRECTORY_SEPARATOR.'.tmp')) {
                             mkdir($f.DIRECTORY_SEPARATOR.'.tmp');
                         }

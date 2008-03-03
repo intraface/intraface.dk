@@ -9,124 +9,124 @@
 <tr><td rowspan="1" colspan="3">testCustomCroppingCreaterThanImage</td></tr>
 </thead><tbody>
 <tr>
-	<td>open</td>
-	<td>/install/reset-staging-server.php?modules=filemanager,administration&login=true</td>
-	<td></td>
+    <td>open</td>
+    <td>/install/reset-staging-server.php?modules=filemanager,administration&login=true</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=login</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=login</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=filemanager</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=filemanager</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=upload file</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=upload file</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>file</td>
-	<td>##path_test_root##/filemanager/idraetshoejskolen9.jpg</td>
+    <td>type</td>
+    <td>file</td>
+    <td>##path_test_root##@@dirctory_separator@@filemanager@@dirctory_separator@@idraetshoejskolen9.jpg</td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>9000</td>
-	<td></td>
+    <td>pause</td>
+    <td>9000</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//input[@value='save']</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>//input[@value='save']</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>idraetshoejskolen9.jpg</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>idraetshoejskolen9.jpg</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=idraetshoejskolen9.jpg</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=idraetshoejskolen9.jpg</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=manage your files sizes</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=manage your files sizes</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=add new instance type</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=add new instance type</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>name</td>
-	<td>wide</td>
+    <td>type</td>
+    <td>name</td>
+    <td>wide</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>max_width</td>
-	<td>720</td>
+    <td>type</td>
+    <td>max_width</td>
+    <td>720</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>max_height</td>
-	<td>280</td>
+    <td>type</td>
+    <td>max_height</td>
+    <td>280</td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>resize_type</td>
-	<td>label=strict</td>
+    <td>select</td>
+    <td>resize_type</td>
+    <td>label=strict</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>wide</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>wide</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=filemanager</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=filemanager</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=idraetshoejskolen9.jpg</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=idraetshoejskolen9.jpg</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//a[contains(@href, 'crop_image.php?id=1&instance_type=wide')]</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>//a[contains(@href, 'crop_image.php?id=1&instance_type=wide')]</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>y</td>
-	<td>226</td>
+    <td>type</td>
+    <td>y</td>
+    <td>226</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>720px</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>720px</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>280px</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>280px</td>
+    <td></td>
 </tr>
 
 </tbody></table>

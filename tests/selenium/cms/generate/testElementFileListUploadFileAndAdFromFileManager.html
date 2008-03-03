@@ -9,169 +9,174 @@
 <tr><td rowspan="1" colspan="3">testElementFileListUploadFileAndAdFromFileManager</td></tr>
 </thead><tbody>
 <tr>
-	<td>open</td>
-	<td>/install/reset-staging-server.php?modules=cms,filemanager&helper_function=CMS:createPageWithMixedSection&login=true</td>
-	<td></td>
+    <td>open</td>
+    <td>/install/reset-staging-server.php?modules=cms,filemanager&helper_function=CMS:createPageWithMixedSection&login=true</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=login</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=login</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=cms</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=cms</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Test</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Test</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Test</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=go to pages</td>
+    <td></td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>new_element_type_id</td>
-	<td>label=filelist</td>
+    <td>clickAndWait</td>
+    <td>link=Test</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>add_element</td>
-	<td></td>
+    <td>select</td>
+    <td>new_element_type_id</td>
+    <td>label=filelist</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>new_file</td>
-	<td>##path_test_root##/cms/example1.doc</td>
+    <td>clickAndWait</td>
+    <td>add_element</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>upload_new</td>
-	<td></td>
+    <td>type</td>
+    <td>new_file</td>
+    <td>##path_test_root##@@dirctory_separator@@cms@@dirctory_separator@@example1.doc</td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>example1.csv</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>upload_new</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>new_file</td>
-	<td>##path_test_root##/cms/example2.doc</td>
+    <td>verifyTextPresent</td>
+    <td>example1.doc</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>upload_new</td>
-	<td></td>
+    <td>type</td>
+    <td>new_file</td>
+    <td>##path_test_root##@@dirctory_separator@@cms@@dirctory_separator@@example2.doc</td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>example2.csv</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>upload_new</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>caption</td>
-	<td>Test list</td>
+    <td>verifyTextPresent</td>
+    <td>example2.doc</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>close</td>
-	<td></td>
+    <td>type</td>
+    <td>caption</td>
+    <td>Test list</td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>example1.csv: example1.doc (text/csv</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>close</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>example2.csv: example2.doc (text/csv</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>example1.doc: example1.doc (application/msword</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Test list</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>example2.doc: example2.doc (application/msword</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=edit</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Test list</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=delete</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=edit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
-	<td>Er du sikker?</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=delete</td>
+    <td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>1000</td>
-	<td></td>
+    <td>assertConfirmation</td>
+    <td>Er du sikker?</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=delete</td>
-	<td></td>
+    <td>pause</td>
+    <td>1000</td>
+    <td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
-	<td>Er du sikker?</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=delete</td>
+    <td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>1000</td>
-	<td></td>
+    <td>assertConfirmation</td>
+    <td>Er du sikker?</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextNotPresent</td>
-	<td>example1.doc</td>
-	<td></td>
+    <td>pause</td>
+    <td>1000</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextNotPresent</td>
-	<td>example2.doc</td>
-	<td></td>
+    <td>verifyTextNotPresent</td>
+    <td>example1.doc</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>choose_file</td>
-	<td></td>
+    <td>verifyTextNotPresent</td>
+    <td>example2.doc</td>
+    <td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>2</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>choose_file</td>
+    <td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>1</td>
-	<td></td>
+    <td>click</td>
+    <td>2</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit_close-select_file</td>
-	<td></td>
+    <td>click</td>
+    <td>1</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>example1.doc</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit_close-select_file</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>example2.doc</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>example1.doc</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>example2.doc</td>
+    <td></td>
 </tr>
 
 </tbody></table>

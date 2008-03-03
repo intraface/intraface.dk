@@ -9,159 +9,159 @@
 <tr><td rowspan="1" colspan="3">testSendInvoiceAsEmail</td></tr>
 </thead><tbody>
 <tr>
-	<td>open</td>
-	<td>/install/reset-staging-server.php?modules=debtor,invoice,contact,product&helper_function=Administration:fillInIntranetAddress&login=true</td>
-	<td></td>
+    <td>open</td>
+    <td>/install/reset-staging-server.php?modules=debtor,invoice,contact,product&helper_function=Administration:fillInIntranetAddress&login=true</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=login</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=login</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=control panel</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=control panel</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=debtor settings</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=debtor settings</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>debtor_sender_name</td>
-	<td>Tester</td>
+    <td>type</td>
+    <td>debtor_sender_name</td>
+    <td>Tester</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>debtor_sender_email</td>
-	<td>start@intraface.dk</td>
+    <td>type</td>
+    <td>debtor_sender_email</td>
+    <td>start@intraface.dk</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=create invoice</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=create invoice</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>new_contact</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>new_contact</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>name</td>
-	<td>Tester</td>
+    <td>type</td>
+    <td>name</td>
+    <td>Tester</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>email</td>
-	<td>lars@legestue.net</td>
+    <td>type</td>
+    <td>email</td>
+    <td>lars@legestue.net</td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>preferred-invoice</td>
-	<td>label=email</td>
+    <td>select</td>
+    <td>preferred-invoice</td>
+    <td>label=email</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>save</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>save</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>description</td>
-	<td>Tester E-mail-afsendelse</td>
+    <td>type</td>
+    <td>description</td>
+    <td>Tester E-mail-afsendelse</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>none</td>
-	<td></td>
+    <td>click</td>
+    <td>none</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=do it now</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=do it now</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>address_name</td>
-	<td>Sune Jensen</td>
+    <td>type</td>
+    <td>address_name</td>
+    <td>Sune Jensen</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>address</td>
-	<td>Min vej 12</td>
+    <td>type</td>
+    <td>address</td>
+    <td>Min vej 12</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>postcode</td>
-	<td>1200</td>
+    <td>type</td>
+    <td>postcode</td>
+    <td>1200</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>city</td>
-	<td>Odense</td>
+    <td>type</td>
+    <td>city</td>
+    <td>Odense</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>address_email</td>
-	<td>start@intraface.dk</td>
+    <td>type</td>
+    <td>address_email</td>
+    <td>start@intraface.dk</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Sune Jensen</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Sune Jensen</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>start@intraface.dk</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>start@intraface.dk</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=debtor</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=debtor</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Tester E-mail-afsendelse</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Tester E-mail-afsendelse</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>send_email</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>send_email</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>send</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>send</td>
+    <td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
-	<td>Er du sikker på, at du vil sende denne e-mail?</td>
-	<td></td>
+    <td>assertConfirmation</td>
+    <td>Er du sikker på, at du vil sende denne e-mail?</td>
+    <td></td>
 </tr>
 <tr>
-	<td>assertTextPresent</td>
-	<td>your email was sent with success.</td>
-	<td></td>
+    <td>assertTextPresent</td>
+    <td>your email was sent</td>
+    <td></td>
 </tr>
 
 </tbody></table>

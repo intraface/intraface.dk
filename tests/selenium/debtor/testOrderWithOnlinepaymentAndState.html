@@ -9,264 +9,264 @@
 <tr><td rowspan="1" colspan="3">testOrderWithOnlinepaymentAndState</td></tr>
 </thead><tbody>
 <tr>
-	<td>open</td>
-	<td>/install/reset-staging-server.php?modules=debtor,invoice,order,contact,product,onlinepayment,accounting&helper_function=Administration:fillInIntranetAddress,Debtor:createOrder,OnlinePayment:createAndAttachToOrder,Contact:create,Product:create&login=true</td>
-	<td></td>
+    <td>open</td>
+    <td>/install/reset-staging-server.php?modules=debtor,invoice,order,contact,product,onlinepayment,accounting&helper_function=Administration:fillInIntranetAddress,Debtor:createOrder,OnlinePayment:createAndAttachToOrder,Contact:create,Product:create&login=true</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=login</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=login</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=debtor</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=debtor</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=orders</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=orders</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Test invoice</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Test invoice</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>order #1</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>order #1</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>sent</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>sent</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Transactionsnummer</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Transactionsnummer</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>authorized (Ikke hævet)</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>authorized (Ikke hævet)</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//a[@href='http://intraface.asterix/intraface.dk/modules/onlinepayment/payment.php?id=1']</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=edit payment</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>dk_amount</td>
-	<td>125,00</td>
+    <td>type</td>
+    <td>dk_amount</td>
+    <td>125,00</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>125,00</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>125,00</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Oprindeligt beløb:</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Oprindeligt beløb:</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>200,00</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>200,00</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Ordre</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Ordre</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>invoice</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>invoice</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>invoice #1</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>invoice #1</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Transactionsnummer</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Transactionsnummer</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>authorized (Ikke hævet)</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>authorized (Ikke hævet)</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>sent</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>sent</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Luk</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Luk</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>invoice #1</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>invoice #1</td>
+    <td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>link=Hæv</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Hæv</td>
+    <td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
-	<td>Er du sikker?</td>
-	<td></td>
+    <td>assertConfirmation</td>
+    <td>Er du sikker?</td>
+    <td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>1000</td>
-	<td></td>
+    <td>pause</td>
+    <td>2000</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>state payment for invoice #1</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>state payment for invoice #1</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=regnskabet</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=regnskabet</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Opret regnskabsår</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Opret regnskabsår</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>label</td>
-	<td>Current</td>
+    <td>type</td>
+    <td>label</td>
+    <td>Current</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>vat</td>
-	<td></td>
+    <td>click</td>
+    <td>vat</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>standard_accountplan</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>standard_accountplan</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>start</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>start</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=debtor</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=debtor</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Test invoice</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Test invoice</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=state payment</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=state payment</td>
+    <td></td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>state_account</td>
-	<td>label=Bank, folio</td>
+    <td>select</td>
+    <td>state_account</td>
+    <td>label=Bank, folio</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//input[@value='Bogfør']</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>//input[@value='Bogfør']</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=voucher</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=voucher</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Bank, folio</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Bank, folio</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Debitor</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Debitor</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>payment for invoice #1</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>payment for invoice #1</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>125,00</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>125,00</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>0,00</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>0,00</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=accounts</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=accounts</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Debitor</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Debitor</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>-125,00</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>-125,00</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Luk</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Luk</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Bank, folio</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Bank, folio</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>125,00</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>125,00</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Luk</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Luk</td>
+    <td></td>
 </tr>
 
 </tbody></table>

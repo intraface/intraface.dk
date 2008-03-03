@@ -9,384 +9,384 @@
 <tr><td rowspan="1" colspan="3">testChangeContactPersonAndSender</td></tr>
 </thead><tbody>
 <tr>
-	<td>open</td>
-	<td>/install/reset-staging-server.php?modules=debtor,invoice,contact,product,administration&login=true</td>
-	<td></td>
+    <td>open</td>
+    <td>/install/reset-staging-server.php?modules=debtor,invoice,contact,product,administration&login=true</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=login</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=login</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=debtor</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=debtor</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Udfyld adresse</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Udfyld adresse</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>identifier</td>
-	<td>selenium</td>
+    <td>type</td>
+    <td>identifier</td>
+    <td>selenium</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>address_name</td>
-	<td>Intraface</td>
+    <td>type</td>
+    <td>address_name</td>
+    <td>Intraface</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>address</td>
-	<td>Street 1</td>
+    <td>type</td>
+    <td>address</td>
+    <td>Street 1</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>postcode</td>
-	<td>1000</td>
+    <td>type</td>
+    <td>postcode</td>
+    <td>1000</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>city</td>
-	<td>City</td>
+    <td>type</td>
+    <td>city</td>
+    <td>City</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>country</td>
-	<td>Country</td>
+    <td>type</td>
+    <td>country</td>
+    <td>Country</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>cvr</td>
-	<td>12345678</td>
+    <td>type</td>
+    <td>cvr</td>
+    <td>12345678</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>email</td>
-	<td>start@intraface.dk</td>
+    <td>type</td>
+    <td>email</td>
+    <td>start@intraface.dk</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>phone</td>
-	<td>71625345</td>
+    <td>type</td>
+    <td>phone</td>
+    <td>71625345</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Intraface</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Intraface</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Street 1</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Street 1</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>1000 City</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>1000 City</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>start@intraface.dk</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>start@intraface.dk</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=debtor</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=debtor</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=create invoice</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=create invoice</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>new_contact</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>new_contact</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>name</td>
-	<td>Contact</td>
+    <td>type</td>
+    <td>name</td>
+    <td>Contact</td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>contact-type</td>
-	<td>label=corporation</td>
+    <td>select</td>
+    <td>contact-type</td>
+    <td>label=corporation</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>email</td>
-	<td>test@intraface.dk</td>
+    <td>type</td>
+    <td>email</td>
+    <td>test@intraface.dk</td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>preferred-invoice</td>
-	<td>label=email</td>
+    <td>select</td>
+    <td>preferred-invoice</td>
+    <td>label=email</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>save</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>save</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>description</td>
-	<td>Test</td>
+    <td>type</td>
+    <td>description</td>
+    <td>Test</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>none</td>
-	<td></td>
+    <td>click</td>
+    <td>none</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>you need to fill in an e-mail address to send e-mail</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>you need to fill in an e-mail address to send e-mail</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=do it now</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=do it now</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>address_name</td>
-	<td>start</td>
+    <td>type</td>
+    <td>address_name</td>
+    <td>start</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>there was an error in address</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>there was an error in address</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>there was an error in postcode</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>there was an error in postcode</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>there was an error in city</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>there was an error in city</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>not a valid e-mail</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>not a valid e-mail</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>address</td>
-	<td>Gade 1</td>
+    <td>type</td>
+    <td>address</td>
+    <td>Gade 1</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>postcode</td>
-	<td>1000</td>
+    <td>type</td>
+    <td>postcode</td>
+    <td>1000</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>city</td>
-	<td>Odense C</td>
+    <td>type</td>
+    <td>city</td>
+    <td>Odense C</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>address_email</td>
-	<td>test@intraface.dk</td>
+    <td>type</td>
+    <td>address_email</td>
+    <td>test@intraface.dk</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>test@intraface.dk</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>test@intraface.dk</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>1000 Odense C</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>1000 Odense C</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Gade 1</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Gade 1</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=debtor</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=debtor</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Test</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Test</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>start &lt;test@intraface.dk&gt;</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>start &lt;test@intraface.dk&gt;</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=change</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=change</td>
+    <td></td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>debtor_sender</td>
-	<td>label=Brugerdefineret... (Udfyld herunder)</td>
+    <td>select</td>
+    <td>debtor_sender</td>
+    <td>label=Brugerdefineret... (Udfyld herunder)</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Invalid e-mail in Sender e-mail</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Invalid e-mail in Sender e-mail</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Error in Sender name</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Error in Sender name</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>debtor_sender_name</td>
-	<td>Support</td>
+    <td>type</td>
+    <td>debtor_sender_name</td>
+    <td>Support</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>debtor_sender_email</td>
-	<td>support@intraface.dk</td>
+    <td>type</td>
+    <td>debtor_sender_email</td>
+    <td>support@intraface.dk</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Test</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Test</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Support &lt;support@intraface.dk&gt;</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Support &lt;support@intraface.dk&gt;</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=change</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=change</td>
+    <td></td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>debtor_sender</td>
-	<td>label=Intranetoplysninger (Intraface / start@intraface.dk)</td>
+    <td>select</td>
+    <td>debtor_sender</td>
+    <td>label=Intranetoplysninger (Intraface / start@intraface.dk)</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Test</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Test</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextNotPresent</td>
-	<td>Vores ref.</td>
-	<td></td>
+    <td>verifyTextNotPresent</td>
+    <td>Vores ref.</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyValue</td>
-	<td>send_email</td>
-	<td>Send på e-mail</td>
+    <td>verifyValue</td>
+    <td>send_email</td>
+    <td>Send på e-mail</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=control panel</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=control panel</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=debtor settings</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=debtor settings</td>
+    <td></td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>debtor_sender</td>
-	<td>label=Brugerdefineret... (Udfyld herunder)</td>
+    <td>select</td>
+    <td>debtor_sender</td>
+    <td>label=Brugerdefineret... (Udfyld herunder)</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>submit</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Test</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=Test</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>send_email</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>send_email</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Support &lt;support@intraface.dk&gt;</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Support &lt;support@intraface.dk&gt;</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>start &lt;test@intraface.dk&gt;</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>start &lt;test@intraface.dk&gt;</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Contact &lt;test@intraface.dk&gt;</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Contact &lt;test@intraface.dk&gt;</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>send</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>send</td>
+    <td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
-	<td>Er du sikker på, at du vil sende denne e-mail?</td>
-	<td></td>
+    <td>assertConfirmation</td>
+    <td>Er du sikker på, at du vil sende denne e-mail?</td>
+    <td></td>
 </tr>
 <tr>
-	<td>assertTextPresent</td>
-	<td>your email was sent with success</td>
-	<td></td>
+    <td>assertTextPresent</td>
+    <td>your email was sent</td>
+    <td></td>
 </tr>
 
 </tbody></table>
