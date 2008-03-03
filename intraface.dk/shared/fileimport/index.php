@@ -100,9 +100,9 @@ $page->start($translation->get('import contacts'));
             <div class="formrow">
                 <label for="fields_<?php echo safeToHtml($key); ?>"><?php echo safeToHtml($value); ?></label>
                 <select name="fields[<?php echo safeToHtml($key); ?>]" id="fields_<?php echo safeToHtml($key); ?>">
-                    <option value="">[<?php echo safeToHtml($translation->get('ignore')); ?>]</option>
+                    <option value="">[<?php echo safeToHtml($translation->get('ignore', 'common')); ?>]</option>
                     <?php foreach($fields AS $field): ?>
-                        <option value="<?php echo safeToHtml($field); ?>"><?php echo safeToHtml($translation->get($field), $translation_page_id); ?></option>
+                        <option value="<?php echo safeToHtml($field); ?>"><?php echo safeToHtml($translation->get($field, $translation_page_id)); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -110,9 +110,9 @@ $page->start($translation->get('import contacts'));
     </fieldset>
     
     <fieldset>
-        <legend><?php echo safeToHtml($translation->get('header')); ?></legend>
+        <legend><?php echo safeToHtml($translation->get('column header')); ?></legend>
         <div class="formrow">
-            <label for="header"><?php echo safeToHtml($translation->get('dataset has header')); ?></label>
+            <label for="header"><?php echo safeToHtml($translation->get('dataset has column header')); ?></label>
             <input type="checkbox" name="header" id="header" value="1" />
         </div>
         <div style="clear:both;"><?php echo safeToHtml($translation->get('tip: if the fieldnames you see in the left column above is the first data record you want to import, your dataset does not have a header')); ?>.</div>  
@@ -120,7 +120,7 @@ $page->start($translation->get('import contacts'));
     
     <input type="hidden" name="file_id" value="<?php echo intval($filehandler->get('id')); ?>" />
     
-    <input type="submit" class="save" name="save" value="<?php echo safeToHtml($translation->get('select').'...'); ?>" />
+    <input type="submit" class="save" name="save" value="<?php echo safeToHtml($translation->get('select', 'common').'...'); ?>" />
     <?php echo safeToHtml($translation->get('or', 'common')); ?> 
     <a href="<?php echo 'index.php'; ?>"><?php echo safeToHtml($translation->get('regret', 'common')); ?></a>
     
