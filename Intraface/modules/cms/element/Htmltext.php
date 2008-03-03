@@ -77,6 +77,16 @@ class CMS_Htmltext extends CMS_Element
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Core', 'Encoding', 'ISO-8859-1');
         $config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
+        // only used until we change encoding to utf8
+        $purifier_cache_dir = PATH_CACHE.'htmlpurifier/';
+        if(!is_dir($purifier_cache_dir)) {
+            mkdir($purifier_cache_dir);
+            if(!is_dir($purifier_cache_dir)) {
+                trigger_error('Unable to create HTML Purifier cache dir!', E_USER_ERROR);
+                exit;
+            }
+        }
+        $config->set('Cache', 'SerializerPath', $purifier_cache_dir);
 
         $purifier = new HTMLPurifier($config);
         $clean_text = $purifier->purify($var['text']);
