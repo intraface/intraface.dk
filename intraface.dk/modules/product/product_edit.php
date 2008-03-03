@@ -8,7 +8,7 @@ require('../../include_first.php');
 $module = $kernel->module('product');
 
 $redirect = Redirect::factory($kernel, 'receive');
-$translation = $kernel->getTranslation();
+$translation = $kernel->getTranslation('product');
 
 if ($kernel->user->hasModuleAccess('accounting')) {
     $mainAccounting = $kernel->useModule('accounting');

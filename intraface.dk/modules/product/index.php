@@ -2,6 +2,7 @@
 require('../../include_first.php');
 
 $module = $kernel->module('product');
+$translation = $kernel->getTranslation('product');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
@@ -97,7 +98,7 @@ $page->start(t('products'));
             </select>
         </label>
         <span>
-            <input type="submit" value="<?php e(t('go')); ?>" />	<input type="reset" value="<?php e(t('reset')); ?>" />
+            <input type="submit" value="<?php e(t('go', 'common')); ?>" />	<input type="reset" value="<?php e(t('reset', 'reset')); ?>" />
         </span>
     </fieldset>
 </form>
@@ -188,7 +189,7 @@ $page->start(t('products'));
         <option value="delete"><?php e(t('delete selected')); ?></option>
     </select>
 
-    <input type="submit" value="<?php e(t('go')); ?>" />
+    <input type="submit" value="<?php e(t('go', 'common')); ?>" />
 </form>
 
     <?php endif; ?>
