@@ -4,16 +4,6 @@
  */
 require_once('Ilib/FileImport.php');
 
-class FileImport extends Ilib_FileImport {
-    
-    
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        parent::__construct();
-    }
-        
+class FileImport extends Ilib_FileImport
+{
 }
-
-?>
