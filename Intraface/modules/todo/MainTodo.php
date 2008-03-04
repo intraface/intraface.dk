@@ -3,9 +3,10 @@
  * @package Intraface_Todo
  */
 
-class MainTodo Extends Main {
+class MainTodo extends Main {
 
-    function MainTodo() {
+    function __construct()
+    {
         $this->module_name = 'todo';
         $this->menu_label = 'todo'; // Navnet der vil stå i menuen
         $this->show_menu = 1; // Skal modulet vises i menuen.
@@ -25,7 +26,4 @@ class MainTodo Extends Main {
 
         $this->addFrontpageFile('include_frontpage.php');
     }
-
 }
-
-?>
