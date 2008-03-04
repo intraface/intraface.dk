@@ -6,9 +6,10 @@
  * @version	1.0
  *
  */
-class MainProcurement Extends Main {
-
-    function mainProcurement() {
+class MainProcurement extends Main
+{
+    function __construct()
+    {
         $this->module_name = 'procurement'; // Navn på på mappen med modullet
         $this->menu_label = 'procurement'; // Navn er det skal stå i menuen
         $this->show_menu = 1; // Skal modullet være vist i menuen
@@ -59,10 +60,5 @@ class MainProcurement Extends Main {
         // Dependent module vil automatisk blive inkluderet på siden. (Hvis man ikke har rettighed til det vil der komme en fejl)
         // $this->addDependentModule("pdf");
 
-
-
-
-
     }
 }
-?>
