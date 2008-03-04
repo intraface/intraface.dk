@@ -123,25 +123,25 @@ class Year extends Standard
     /**
      * Metode til at resette det aktive år for den enkelte bruger.
      *
-     * @access private
+     * @return boolean
      */
-
-    function reset()
+    private function reset()
     {
         $this->kernel->setting->set('user', 'accounting.active_year', 0);
         /*
         $db = new DB_Sql;
         $db->query("DELETE FROM accounting_year_active WHERE intranet_id = " . $this->kernel->intranet->get('id') . " AND user_id = " . $this->kernel->user->get('id'));
         */
+        return true;
     }
 
     /*******************************************************************************
         OPDATERING OG LOAD
     *******************************************************************************/
 
-    function load()
+    private function load()
     {
-        if($this->id == 0) {
+        if ($this->id == 0) {
             $this->value['id'] = 0;
             return;
         }
@@ -178,7 +178,7 @@ class Year extends Standard
         }
     }
 
-    function validate(&$var)
+    private function validate(&$var)
     {
         $validator = new Validator($this->error);
         // I could not find any use of the following, so i commented it out /SJ (22-01-2007)
@@ -211,7 +211,7 @@ class Year extends Standard
         $post_date_to = new Intraface_Date($var['to_date']);
         $post_date_to->convert2db();
 
-        if(!isset($var['last_year_id'])) {
+        if (!isset($var['last_year_id'])) {
             $var['last_year_id'] = 0;
         }
 
@@ -220,7 +220,7 @@ class Year extends Standard
         }
 
 
-        if($this->id > 0) {
+        if ($this->id > 0) {
             $sql="UPDATE accounting_year ";
             $sql_after=" WHERE id='".$this->id."' AND intranet_id = ".$this->kernel->intranet->get('id')."";
         } else {
@@ -300,27 +300,28 @@ class Year extends Standard
     /**
      * Funktion til at tjekke om året er låst?
      *
-     * @access public
+     * @return boolean
      */
-    function isYearOpen()
+    public function isYearOpen()
     {
         $db = new Db_Sql;
         $db->query("SELECT locked FROM accounting_year WHERE id = " . $this->id . " AND intranet_id = ".$this->kernel->intranet->get('id'));
         if ($db->nextRecord()) {
             if ($db->f('locked') == 1) {
-                return 0;
+                return false;
             }
         }
-        return 1;
+        return true;
     }
 
     /**
      * Public: funktion til at tjekke om datoen er i aktuelle år?
      *
      * @param (date) 0000-00-00
-     * @access public
+     *
+     * @return boolean
      */
-    function isDateInYear($date)
+    public function isDateInYear($date)
     {
         $date = safeToDb($date);
 
@@ -328,10 +329,10 @@ class Year extends Standard
         $db->query("SELECT from_date, to_date FROM accounting_year WHERE id= " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id') . " LIMIT 1");
         if ($db->nextRecord()) {
           if ($db->f('from_date') <= $date AND $date <= $db->f('to_date')) {
-              return 1;
+              return true;
           }
         }
-        return 0;
+        return false;
     }
 
     /**
@@ -341,7 +342,7 @@ class Year extends Standard
      */
     public function readyForState($date = NULL)
     {
-        if($date === NULL) {
+        if ($date === NULL) {
             $date = date('Y-m-d');
         }
 
@@ -353,7 +354,7 @@ class Year extends Standard
         } elseif (!$this->isDateInYear($date)) {
             $this->error->set('Datoen er ikke i det år, der er sat i regnskabsmodulet.');
             $return = false;
-        } elseif($this->get('locked') == 1) {
+        } elseif ($this->get('locked') == 1) {
             $this->error->set('Året er ikke åbent for bogføring.');
             $return = false;
         }
@@ -367,6 +368,7 @@ class Year extends Standard
 
 
     /**
+     * Gets a list
      *
      * @return array
      */

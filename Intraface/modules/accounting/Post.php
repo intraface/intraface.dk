@@ -117,11 +117,11 @@ class Post extends Standard {
      * @param $account_id (int)
      * @param $debet (float)
      * @param $credit (float)
-     * @access private
+     *
+     * @return boolean
      */
-    function save($date, $account_id, $text, $debet, $credit, $skip_draft = false)
+    public function save($date, $account_id, $text, $debet, $credit, $skip_draft = false)
     {
-
         $debet = (float)$debet;
         $credit = (float)$credit;
 

@@ -121,9 +121,8 @@ class Account extends Standard
      * Public: Henter detaljer om konti - sætter lokale variable i klassen
      *
      * @return (integer) id
-     * @access private
      */
-    function load()
+    private function load()
     {
         if($this->year->get('id') == 0 || $this->id == 0) {
             $this->value['id'] = 0;
@@ -358,26 +357,24 @@ class Account extends Standard
     /**
      * Metoden tjekker om kontoen har den rigtige type, så vi må bogføre på den.
      *
-     * @return 1 = yes; 0 = no
-     * @access private
+     * @return boolean
      */
-    function validForState()
+    public function validForState()
     {
         if ($this->id > 0) {
             if ($this->get('type_key') == array_search('operating', $this->types) OR $this->get('type_key') == array_search('balance, asset', $this->types) OR $this->get('type_key') == array_search('balance, liability', $this->types)) {
-                return 1;
+                return true;
             }
         }
-        return 0;
+        return false;
     }
 
     /**
      * Metode til at tjekke om kontonummeret er fri.
      *
      * @see save()
-     * @access private
      */
-    function isNumberFree($account_number)
+    private function isNumberFree($account_number)
     {
         $account_number = (int)$account_number;
 

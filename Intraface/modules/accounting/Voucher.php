@@ -399,9 +399,9 @@ class Voucher extends Standard
      * @param $debet (float)
      * @param $credit (float)
      *
-     * @access private
+     * @return boolean
      */
-    function _stateHelper($date, $text, $account_id, $debet, $credit, $vat_off = 0, $skip_draft = false) {
+    private function _stateHelper($date, $text, $account_id, $debet, $credit, $vat_off = 0, $skip_draft = false) {
 
         // validering og behandling af værdier
 
