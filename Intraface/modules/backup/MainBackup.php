@@ -7,10 +7,10 @@
  * @since	1.0
  * @version	1.0
  */
+class MainBackup extends Main {
 
-class MainBackup Extends Main {
-
-    function MainBackup() {
+    function __construct()
+    {
         $this->module_name = 'backup';
         $this->menu_label = 'backup'; // Navnet der vil stå i menuen
         $this->show_menu = 1; // Skal modulet vises i menuen.
@@ -28,7 +28,4 @@ class MainBackup Extends Main {
         //$this->addSubAccessItem("opretkunde", "Opret ny kunde");
 
     }
-
 }
-
-?>
