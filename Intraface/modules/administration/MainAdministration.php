@@ -7,9 +7,10 @@
  * @version	1.0
  *
  */
-class MainAdministration Extends Main {
-
-    function MainAdministration() {
+class MainAdministration extends Main
+{
+    function __constructor()
+    {
         $this->module_name = 'administration';
         $this->menu_label = 'administration';
         $this->show_menu = 0;
@@ -29,5 +30,3 @@ class MainAdministration Extends Main {
         */
     }
 }
-
-?>
