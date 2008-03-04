@@ -130,17 +130,16 @@ class Debtor extends Standard
      * @param integer $id     Debtor id
      * @param type    $tpye   String TODO What is this used for as a last parameter?
      */
-    public static function factory(&$kernel, $id = 0, $type = "")
+    public static function factory($kernel, $id = 0, $type = "")
     {
         if ((int)$id != 0) {
-            $types = Debtor::getDebtorTypes();
+            $types = self::getDebtorTypes();
 
             $db = new DB_Sql;
             $db->query("SELECT type FROM debtor WHERE intranet_id = ".$kernel->intranet->get('id')." AND id = ".$id);
             if ($db->nextRecord()) {
                 $type = $types[$db->f("type")];
-            }
-            else {
+            } else {
                 trigger_error("Invalid id for debtor in Debtor::factory", E_USER_ERROR);
 
             }
@@ -276,7 +275,7 @@ class Debtor extends Standard
         $item = $this->item->getList();
         $this->value['items'] = $item;
 
-        for($i = 0, $max = count($item), $total = 0; $i<$max; $i++) {
+        for ($i = 0, $max = count($item), $total = 0; $i<$max; $i++) {
             $total += $item[$i]["amount"];
         }
 
@@ -291,7 +290,7 @@ class Debtor extends Standard
         $this->value['payment_total'] = 0;
 
         if ($this->value["type"] == "invoice") {
-            foreach($this->getDebtorAccount()->getList() AS $payment) {
+            foreach ($this->getDebtorAccount()->getList() AS $payment) {
                 $this->value['payment_total'] += $payment["amount"];
             }
         }
@@ -308,7 +307,8 @@ class Debtor extends Standard
      * @param string  $from    Bruges til at fortælle, hvor debtoren kommer fra, fx webshop eller quotation
      * @param integer $from_id Hvis debtoren kommer fra en anden debtor.
      */
-    public function update($input, $from = 'manuel', $from_id = 0) {
+    public function update($input, $from = 'manuel', $from_id = 0)
+    {
         if (!is_array($input)) {
             trigger_error('Debtor->update(): $input er ikke et array', E_USER_ERROR);
         }
@@ -447,7 +447,8 @@ class Debtor extends Standard
      *
      * @return boolean
      */
-    public function delete() {
+    public function delete()
+    {
         if ($this->id > 0 AND $this->get("locked") == true) {
             $this->error->set('Posten er låst og kan ikke slettes');
             return false;
@@ -480,7 +481,8 @@ class Debtor extends Standard
      *
      * @return int = id på den nye debtor, der skabes.
      */
-    public function create(& $debtor_object) {
+    public function create($debtor_object)
+    {
         if (!is_object($debtor_object)) {
             trigger_error('Debtor: create() har brug for et debtor-objekt, jeg kan skabe et nyt debtorobjekt med', E_USER_ERROR);
         }
@@ -543,7 +545,7 @@ class Debtor extends Standard
                 $onlinepayment->dbquery->setFilter('belong_to_id', $debtor_object->get('id'));
                 $payment_list = $onlinepayment->getlist();
 
-                foreach($payment_list AS $p) {
+                foreach ($payment_list AS $p) {
                     $tmp_onlinepayment = OnlinePayment::factory($this->kernel, 'id', $p['id']);
                     $tmp_onlinepayment->changeBelongTo('invoice', $new_debtor_id);
                 }
@@ -621,7 +623,8 @@ class Debtor extends Standard
      *
      * @return true / false
      */
-    private function setFrom($from = 'manuel', $from_id = 0) {
+    private function setFrom($from = 'manuel', $from_id = 0)
+    {
         $from = array_search($from, $this->getFromTypes());
         if ($from === false) {
             trigger_error('Debtor->setFrom(): Ugyldig from', E_USER_ERROR);
@@ -646,7 +649,8 @@ class Debtor extends Standard
      *
      * @return boolean
      */
-    public function setNewContact($contact_id) {
+    public function setNewContact($contact_id)
+    {
         if ($this->id == 0) {
             return false;
         }
@@ -667,8 +671,8 @@ class Debtor extends Standard
      *
      * @return integer
      */
-    public function any($type, $type_id) {
-
+    public function any($type, $type_id)
+    {
         switch ($type) {
             case 'contact':
                 $sql = "SELECT id
