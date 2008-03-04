@@ -2,7 +2,6 @@
 /**
  * @package Intraface_OnlinePayment
  */
-
 require_once 'Intraface/Standard.php';
 
 /**
@@ -17,8 +16,8 @@ require_once 'Intraface/Standard.php';
  * klienten eller i systemet.
  */
 
-class OnlinePayment extends Standard {
-
+class OnlinePayment extends Standard
+{
     var $id;
     var $kernel;
 
@@ -38,8 +37,9 @@ class OnlinePayment extends Standard {
 
     var $transaction_status_authorized = "000";
 
-    
-    function OnlinePayment(&$kernel, $id = 0) {
+
+    function __construct($kernel, $id = 0)
+    {
         /**
          * @TODO: Because of tests it was necessary to remove OR strtolower(get_class($kernel)) != 'kernel'
          */
@@ -47,7 +47,7 @@ class OnlinePayment extends Standard {
             trigger_error('Debtor requires Kernel, got:'.get_class($kernel), E_USER_ERROR);
         }
 
-        $this->kernel = &$kernel;
+        $this->kernel = $kernel;
         $this->id = $id;
         require_once 'Intraface/Error.php';
         $this->error = new Error;
@@ -59,21 +59,20 @@ class OnlinePayment extends Standard {
         $this->dbquery = new DBQuery($this->kernel, "onlinepayment", "intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->useErrorObject($this->error);
 
-        if($this->id > 0) {
+        if ($this->id > 0) {
             $this->load();
         }
     }
 
-
-
-    function factory(&$kernel, $type = 'settings', $value = 0) {
+    function factory($kernel, $type = 'settings', $value = 0)
+    {
         /*
          * @TODO: had to remove the following to get it woring with tests: OR strtolower(get_class($kernel)) != 'kernel'
          */
         if (!is_object($kernel)) {
             trigger_error('Debtor kræver Kernel som objekt', E_USER_ERROR);
         }
-        
+
         $implemented_providers = OnlinePayment::getImplementedProviders();
         // we set the fallback from settings
         if (!isset($implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')])) {
@@ -134,9 +133,8 @@ class OnlinePayment extends Standard {
         }
     }
 
-
-    function load() {
-
+    function load()
+    {
         $db = new DB_Sql;
         $db->query("SELECT id, date_created, date_authorized, date_captured, date_reversed, belong_to_key, belong_to_id, text, status_key, amount, original_amount, transaction_number, transaction_status,
                 DATE_FORMAT(date_created, '%d-%m-%Y') AS dk_date_created,
@@ -144,7 +142,7 @@ class OnlinePayment extends Standard {
                 DATE_FORMAT(date_captured, '%d-%m-%Y') AS dk_date_captured,
                 DATE_FORMAT(date_reversed, '%d-%m-%Y') AS dk_date_reversed
             FROM onlinepayment WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
-        if($db->nextRecord()) {
+        if ($db->nextRecord()) {
 
             $this->value['id'] = $db->f('id');
             $this->value['dk_date_created'] = $db->f('dk_date_created');
@@ -177,60 +175,56 @@ class OnlinePayment extends Standard {
             $this->value['transaction_number'] = $db->f('transaction_number');
             $this->value['transaction_status'] = $db->f('transaction_status');
             $this->value['transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
-            if($db->f('transaction_status') != $this->transaction_status_authorized) {
+            if ($db->f('transaction_status') != $this->transaction_status_authorized) {
                 $this->value['user_transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
-            }
-            else {
+            } else {
                 $this->value['user_transaction_status_translated'] = "";
             }
             return $this->id;
-        }
-        else {
+        } else {
             $this->id = 0;
             $this->value['id'] = 0;
             return 0;
         }
     }
 
-
     /**
      * Funktion der gemmer onlinebetaling gennem xml-rpc-serveren
      * @input: array(belong_to, belong_to_id, transaction_number, transaction_status, amount);
       */
-
-    function save($input) {
-
+    function save($input)
+    {
         $input = safeToDb($input);
 
         require_once 'Intraface/Validator.php';
         $validator = new Validator($this->error);
 
-        if(!isset($input['belong_to'])) $input['belong_to'] = 0;
+        if (!isset($input['belong_to'])) $input['belong_to'] = 0;
         $belong_to_key = array_search($input['belong_to'], $this->getBelongToTypes());
-        if($input['belong_to'] == '' || $belong_to_key === false) {
+        if ($input['belong_to'] == '' || $belong_to_key === false) {
             $this->error->set("Ugyldig belong_to");
         }
 
-        if(!isset($input['belong_to_id'])) $input['belong_to_id'] = 0;
+        if (!isset($input['belong_to_id'])) $input['belong_to_id'] = 0;
         $validator->isNumeric($input['belong_to_id'], 'belong_to_id er ikke et tal');
-        if(!isset($input['transaction_number'])) $input['transaction_number'] = 0;
+        if (!isset($input['transaction_number'])) $input['transaction_number'] = 0;
         $validator->isString($input['transaction_number'], 'transaction_number er ikke gyldig');
-        if(!isset($input['transaction_status'])) $input['transaction_status'] = '';
+        if (!isset($input['transaction_status'])) $input['transaction_status'] = '';
         $validator->isString($input['transaction_status'], 'transaction_status er ikke udfyldt');
-        if(!isset($this->transaction_status_types[$input['transaction_status']])) {
+        if (!isset($this->transaction_status_types[$input['transaction_status']])) {
             $this->error->set("transaction_status '".$input['transaction_status']."' er ikke en gyldig status");
         }
 
         // VÆR LIGE OPMÆRKSOM HER: INDTIL VIDERE KAN KUN ACCEPTEREDE TRANSAKTIONER GEMMES
-        if($input['transaction_status'] != $this->transaction_status_authorized) {
+        if ($input['transaction_status'] != $this->transaction_status_authorized) {
             $this->error->set("Transactionen er ikke godkendt, så den kan ikke gemmes");
         }
 
-        if(!isset($input['amount'])) $input['amount'] = 0;
-        if($validator->isDouble($input['amount'], 'amount er ikke et gyldigt beløb')) {
+        if (!isset($input['amount'])) $input['amount'] = 0;
+        if ($validator->isDouble($input['amount'], 'amount er ikke et gyldigt beløb')) {
             require_once 'Intraface/tools/Amount.php';
             $amount = new Amount($input['amount']);
-            if($amount->convert2db()) {
+            if ($amount->convert2db()) {
                 $input['amount'] = $amount->get();
             }
             else {
@@ -240,12 +234,11 @@ class OnlinePayment extends Standard {
 
         if (array_key_exists('text', $input)) {
             $validator->isString($input['text'], 'text er ikke en gyldig streng', '', 'allow_empty');
-        }
-        else {
+        } else {
             $input['text'] = '';
         }
 
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             return 0;
         }
 
@@ -262,11 +255,10 @@ class OnlinePayment extends Standard {
 
         $db = new DB_Sql;
 
-        if($this->id > 0) {
+        if ($this->id > 0) {
             $db->query("UPDATE onlinepayment SET ".$sql." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
             return $this->id;
-        }
-        else {
+        } else {
 
             $db->query("INSERT INTO onlinepayment SET ".$sql.",
                 intranet_id = ".$this->kernel->intranet->get('id').",
@@ -282,8 +274,8 @@ class OnlinePayment extends Standard {
      *
      * @return integer payment_id
      */
-    function create() {
-
+    function create()
+    {
         $provider_key = $this->kernel->setting->get('intranet', 'onlinepayment.provider_key');
         $db = new DB_Sql;
 
@@ -302,13 +294,13 @@ class OnlinePayment extends Standard {
      *
      */
 
-    function update($input) {
-
-        if($this->id == 0) {
+    function update($input)
+    {
+        if ($this->id == 0) {
             trigger_error("OnlinePayment->update kan kun køres på en allerede oprettet betaling", FATAL);
         }
 
-        if($this->get('status') != 'authorized') {
+        if ($this->get('status') != 'authorized') {
             trigger_error("OnlinePayment->update kan kun køres på betaling der er authorized", FATAL);
         }
 
@@ -316,21 +308,20 @@ class OnlinePayment extends Standard {
 
         $validator = new Validator($this->error);
 
-        if($validator->isDouble($input['dk_amount'], 'Beløb er ikke et gyldigt beløb', 'greater_than_zero')) {
+        if ($validator->isDouble($input['dk_amount'], 'Beløb er ikke et gyldigt beløb', 'greater_than_zero')) {
             $amount = new Amount($input['dk_amount']);
-            if($amount->convert2db()) {
+            if ($amount->convert2db()) {
                 $input['amount'] = $amount->get();
-            }
-            else {
+            } else {
                 $this->error->set("Kunne ikke konvertere amount til databasen!");
             }
         }
 
-        if($input['amount'] > $this->get('original_amount')) {
+        if ($input['amount'] > $this->get('original_amount')) {
             $this->error->set("Du kan ikke sætte beløbet højere end hvad kunden har godkendt: ".$this->get('dk_original_amount'));
         }
 
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             return 0;
         }
 
@@ -339,19 +330,20 @@ class OnlinePayment extends Standard {
         return $this->id;
     }
 
-    function changeBelongTo($belong_to, $belong_to_id) {
-        if($this->id == 0) {
+    function changeBelongTo($belong_to, $belong_to_id)
+    {
+        if ($this->id == 0) {
             trigger_error("OnlinePayment->setBelongTo kan kun ændre eksisterende betalinger", FATAL);
         }
 
         $belong_to = safeToDb($belong_to);
 
         $belong_to_key = array_search($belong_to, $this->getBelongToTypes());
-        if($belong_to == '' || $belong_to_key === false) {
+        if ($belong_to == '' || $belong_to_key === false) {
             trigger_error("Ugyldig belong_to i OnlinePayment->changeBelongTo()", FATAL);
         }
 
-        if(!is_int($belong_to_id)) {
+        if (!is_int($belong_to_id)) {
             trigger_error("Belong_to_id er ikke et tal i OnlinePayment->changeBelongTo()", FATAL);
         }
 
@@ -361,21 +353,20 @@ class OnlinePayment extends Standard {
 
     }
 
-
-
-    function setStatus($status) {
-        if($this->id == 0) {
+    function setStatus($status)
+    {
+        if ($this->id == 0) {
             trigger_error("OnlinePayment->setStatus kan kun ændre eksisterende betalinger", E_USER_ERROR);
         }
         $status = safeToDb($status);
 
-        
+
         $status_key = array_search($status, OnlinePayment::getStatusTypes());
-        if($status == "" || $status_key === false) {
+        if ($status == "" || $status_key === false) {
             trigger_error("Ugyldig status i OnlinePayment->setStatus()", E_USER_ERROR);
         }
 
-        if($status_key <= $this->get('status_key')) {
+        if ($status_key <= $this->get('status_key')) {
             trigger_error("Kan ikke skifte til lavere eller samme status i OnlinePayment->setStatus()", E_USER_ERROR);
         }
 
@@ -407,30 +398,27 @@ class OnlinePayment extends Standard {
      *
      */
 
-    function addAsPayment() {
-
-
-        if($this->get('status') != 'authorized') {
+    function addAsPayment()
+    {
+        if ($this->get('status') != 'authorized') {
             $this->error->set("Der kan kun udføres handlinger på betalinger der er godkendt");
             return 0;
         }
 
-        if($this->get('belong_to') != 'invoice') {
+        if ($this->get('belong_to') != 'invoice') {
             $this->error->set("Der kan kun udføres handlinger på betalinger der er tilknyttet en faktura");
             return 0;
         }
 
-        if(!$this->kernel->intranet->hasModuleAccess('invoice')) {
+        if (!$this->kernel->intranet->hasModuleAccess('invoice')) {
             return 0;
         }
-
-
 
         $invoice_module = $this->kernel->getModule('debtor', true); // true: tjekker kun intranet adgang
 
         $invoice = Debtor::factory($this->kernel, $this->get('belong_to_id'));
 
-        if($invoice->get('id') == 0) {
+        if ($invoice->get('id') == 0) {
             $this->error->set("Ugyldig faktura");
             return 0;
         }
@@ -444,13 +432,12 @@ class OnlinePayment extends Standard {
             "type" => 2);
         // type = 2: credit_card
 
-        
-        if($payment->update($input)) {
+
+        if ($payment->update($input)) {
             $this->value['create_payment_id'] = $payment->get('id');
             return true;
-            
-        }
-        else {
+
+        } else {
             $this->error->merge($payment->error->getMessage());
             return false;
         }
@@ -464,7 +451,8 @@ class OnlinePayment extends Standard {
      *
      * @return array	with actions to perform on onlinepayment.
      */
-    function getTransactionActions() {
+    function getTransactionActions()
+    {
         return array(
             0 => array(
                 'action' => 'capture',
@@ -482,38 +470,38 @@ class OnlinePayment extends Standard {
         */
     }
 
-    function transactionAction($action) {
+    function transactionAction($action)
+    {
         return false;
     }
 
-
-    function getList() {
-
-        if($this->dbquery->getFilter('belong_to') != '') {
-            if($this->dbquery->getFilter('belong_to_id') == 0) {
+    function getList()
+    {
+        if ($this->dbquery->getFilter('belong_to') != '') {
+            if ($this->dbquery->getFilter('belong_to_id') == 0) {
                 trigger_error("belong_to_id er nul i OnlinePayment->getList()", FATAL);
             }
             $belong_to_key = array_search($this->dbquery->getFilter('belong_to'), $this->getBelongToTypes());
-            if($this->dbquery->getFilter('belong_to') == '' || $belong_to_key === false) {
+            if ($this->dbquery->getFilter('belong_to') == '' || $belong_to_key === false) {
                 trigger_error("belong_to_key er ikke gyldig i OnlinePayment->getList()", FATAL);
             }
             $this->dbquery->setCondition("belong_to_key = ".$belong_to_key." AND belong_to_id = ".$this->dbquery->getFilter('belong_to_id'));
 
             // $this->dbquery->setFilter('status', -1);
 
-        } 
-        
+        }
+
         /*
-        if($this->dbquery->getFilter('status') == 0) {
+        if ($this->dbquery->getFilter('status') == 0) {
             $this->dbquery->setFilter('status', 2);
         }
         */
-        
-        if($this->dbquery->getFilter('status') > 0) {
+
+        if ($this->dbquery->getFilter('status') > 0) {
             $this->dbquery->setCondition("status_key = ".intval($this->dbquery->getFilter('status')));
         }
 
-        if($this->dbquery->getFilter('text') != "") {
+        if ($this->dbquery->getFilter('text') != "") {
             $this->dbquery->setCondition("transaction_number LIKE \"%".$this->dbquery->getFilter('text')."%\" OR text LIKE \"%".$this->dbquery->getFilter('text')."%\"");
         }
 
@@ -522,7 +510,7 @@ class OnlinePayment extends Standard {
         $i = 0;
         $list = array();
 
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
             $list[$i]['id'] = $db->f('id');
             $list[$i]['dk_date_created'] = $db->f('dk_date_created');
             $list[$i]['date_created'] = $db->f('date_created');
@@ -539,18 +527,16 @@ class OnlinePayment extends Standard {
             $list[$i]['dk_amount'] = number_format($db->f('amount'), 2, ",", ".");
             $list[$i]['transaction_number'] = $db->f('transaction_number');
             $list[$i]['transaction_status'] = $db->f('transaction_status');
-            if(in_array($list[$i]['transaction_status'], $this->transaction_status_types)) {
+            if (in_array($list[$i]['transaction_status'], $this->transaction_status_types)) {
                 $list[$i]['transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
-            }
-            else {
+            } else {
                 $list[$i]['transaction_status_translated'] = 'invalid status';
             }
 
             // Don't really know want this is for? /Sune(19-05-2007)
-            if(in_array($list[$i]['transaction_status'], $this->transaction_status_types) && $db->f('transaction_status') != $this->transaction_status_authorized) {
+            if (in_array($list[$i]['transaction_status'], $this->transaction_status_types) && $db->f('transaction_status') != $this->transaction_status_authorized) {
                 $list[$i]['user_transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
-            }
-            else {
+            } else {
                 $list[$i]['user_transaction_status_translated'] = "";
             }
 
@@ -559,13 +545,13 @@ class OnlinePayment extends Standard {
         return $list;
 
     }
-    
+
     /**
      * returns the possible status types
-     * 
+     *
      * @return array with status types
      */
-    static function getStatusTypes() 
+    static function getStatusTypes()
     {
         return array(
             0 => '',
@@ -575,26 +561,26 @@ class OnlinePayment extends Standard {
             4 => 'reversed',
             5 => 'cancelled');
     }
-    
+
     /**
      * returns possible belong to types
-     * 
+     *
      * @return array with belong to types
      */
-    private function getBelongToTypes() 
+    private function getBelongToTypes()
     {
         return array(
             0 => '',
             1 => 'order',
             2 => 'invoice');
     }
-    
+
     /**
      * returns the implemented providers
-     * 
+     *
      * @return array with providers
      */
-    static function getImplementedProviders() 
+    static function getImplementedProviders()
     {
         return array(
             0 => '_invalid_',
@@ -604,30 +590,32 @@ class OnlinePayment extends Standard {
         );
     }
 
-    function isFilledIn() {
+    function isFilledIn()
+    {
         return 1; // Onlinepyment kan ikke udfyldes.
     }
 
-    function isSettingsSet() {
+    function isSettingsSet()
+    {
         return 1;
     }
 
-    function isProviderSet() {
+    function isProviderSet()
+    {
         return $this->kernel->setting->get('intranet', 'onlinepayment.provider_key');
     }
 
-    function setProvider($input) {
+    function setProvider($input)
+    {
         // der skal nok laves et tjek på om alle poster er færdigbehandlet inden man kan skifte
         // udbyder
         $this->kernel->setting->set('intranet', 'onlinepayment.provider_key', $input['provider_key']);
         return 1;
     }
 
-    function getProvider() {
+    function getProvider()
+    {
         return array('provider_key' => $this->kernel->setting->get('intranet', 'onlinepayment.provider_key'));
     }
 
-
 }
-
-?>
