@@ -2,15 +2,10 @@
 /**
  * @package Intraface_Comment
  */
-
-
-class MainComment Extends Main {
-
-    function MainComment() {
-        MainComment::__construct();
-    }
-
-    function __construct() {
+class MainComment Extends Main
+{
+    function __construct()
+    {
         $this->module_name = 'comment';
         $this->menu_label = 'comment'; // Navnet der vil stå i menuen
         $this->show_menu = 1; // Skal modulet vises i menuen.
@@ -21,7 +16,4 @@ class MainComment Extends Main {
         $this->addRequiredShared('comment');
 
     }
-
 }
-
-?>
