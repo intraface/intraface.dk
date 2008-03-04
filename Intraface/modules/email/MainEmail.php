@@ -2,11 +2,10 @@
 /**
  * @package Intraface_Email
  */
-
-
-class MainEmail Extends Main {
-
-    function MainEmail() {
+class MainEmail extends Main
+{
+    function __construct()
+    {
         $this->module_name = 'email';
         $this->menu_label = 'email'; // Navnet der vil stå i menuen
         $this->show_menu = 1; // Skal modulet vises i menuen.
@@ -16,7 +15,4 @@ class MainEmail Extends Main {
 
         $this->addRequiredShared('email');
     }
-
 }
-
-?>
