@@ -93,7 +93,7 @@ class Debtor extends Standard
         $this->kernel = $kernel;
         $this->type = $type;
         $this->type_key = array_search($type, Debtor::getDebtorTypes());
-        if(!isset($this->type_key)) {
+        if (!isset($this->type_key)) {
             trigger_error('Debtor: Ugyldig type', E_USER_ERROR);
         }
 
@@ -132,12 +132,12 @@ class Debtor extends Standard
      */
     public static function factory(&$kernel, $id = 0, $type = "")
     {
-        if((int)$id != 0) {
+        if ((int)$id != 0) {
             $types = Debtor::getDebtorTypes();
 
             $db = new DB_Sql;
             $db->query("SELECT type FROM debtor WHERE intranet_id = ".$kernel->intranet->get('id')." AND id = ".$id);
-            if($db->nextRecord()) {
+            if ($db->nextRecord()) {
                 $type = $types[$db->f("type")];
             }
             else {
@@ -146,7 +146,7 @@ class Debtor extends Standard
             }
         }
 
-        switch($type) {
+        switch ($type) {
             case "quotation":
                 $kernel->useModule("quotation");
                 $object = new Quotation($kernel, intval($id));
@@ -186,7 +186,7 @@ class Debtor extends Standard
      */
     public function load()
     {
-        if($this->id == 0) {
+        if ($this->id == 0) {
             return 0;
         }
 
@@ -199,7 +199,7 @@ class Debtor extends Standard
                 DATE_FORMAT(date_cancelled, '%d-%m-%Y') AS dk_date_cancelled
             FROM debtor WHERE id = ".$this->id." AND intranet_id = ".$this->kernel->intranet->get("id"));
 
-        if(!$this->db->nextRecord()) {
+        if (!$this->db->nextRecord()) {
             $this->error->set('Debtoren findes ikke');
             return 0;
         }
@@ -259,7 +259,7 @@ class Debtor extends Standard
             $this->value['where_to_id'] = 0;
         }
 
-        if($this->get("status") == "executed" || $this->get("status") == "cancelled") {
+        if ($this->get("status") == "executed" || $this->get("status") == "cancelled") {
             $this->value["locked"] = true;
         } else {
             $this->value["locked"] = false;
@@ -267,7 +267,7 @@ class Debtor extends Standard
 
         // henter kunden
         $this->contact = new Contact($this->kernel, $this->db->f("contact_id"), $this->db->f("contact_address_id"));
-        if($this->contact->get("type") == "corporation" && $this->db->f("contact_person_id") != 0) {
+        if ($this->contact->get("type") == "corporation" && $this->db->f("contact_person_id") != 0) {
             $this->contact_person = new ContactPerson($this->contact, $this->db->f("contact_person_id"));
         }
 
@@ -280,7 +280,7 @@ class Debtor extends Standard
             $total += $item[$i]["amount"];
         }
 
-        if($this->get("round_off") == 1 && $this->get("type") == "invoice") {
+        if ($this->get("round_off") == 1 && $this->get("type") == "invoice") {
             $decimal = $total - floor($total);
             $decimal *= 4;
             $decimal = round($decimal)/4;
@@ -289,8 +289,8 @@ class Debtor extends Standard
 
         $this->value["total"] = round($total, 2);
         $this->value['payment_total'] = 0;
-        
-        if($this->value["type"] == "invoice") {
+
+        if ($this->value["type"] == "invoice") {
             foreach($this->getDebtorAccount()->getList() AS $payment) {
                 $this->value['payment_total'] += $payment["amount"];
             }
@@ -331,21 +331,21 @@ class Debtor extends Standard
             $input["number"] = $this->getMaxNumber() + 1;
         }
         $validator->isNumeric($input["number"], "Nummeret (".$input["number"].")  skal være et tal", "greater_than_zero");
-        if(!$this->isNumberFree($input["number"])) {
+        if (!$this->isNumberFree($input["number"])) {
             $this->error->set("Nummeret er allerede benyttet");
         }
 
         // kunde
         $validator->isNumeric($input["contact_id"], "Du skal angive en kunde", "greater_than_zero");
         $contact = new Contact($this->kernel, $input["contact_id"]);
-        if(is_object($contact->address)) {
+        if (is_object($contact->address)) {
             $contact_address_id = $contact->address->get("address_id");
         }
         else {
             $this->error->set("Ugyldig kunde");
         }
 
-        if($contact->get("type") == "corporation") {
+        if ($contact->get("type") == "corporation") {
             $validator->isNumeric($input["contact_person_id"], "Der er ikke angivet en kontaktperson");
         }
         else {
@@ -353,20 +353,20 @@ class Debtor extends Standard
         }
         $validator->isString($input['description'], 'Fejl i beskrivelse', '', 'allow_empty');
 
-        if($validator->isDate($input["this_date"], "Ugyldig dato", "allow_no_year")) {
+        if ($validator->isDate($input["this_date"], "Ugyldig dato", "allow_no_year")) {
             require_once 'Intraface/tools/Date.php';
             $this_date = new Intraface_Date($input["this_date"]);
             $this_date->convert2db();
         }
-        if($this->type == "invoice") {
+        if ($this->type == "invoice") {
           // Hvis det er en faktura skal der indtastes en due_date, ellers er det ligegyldigt!
-            if($validator->isDate($input["due_date"], "Ugyldig leveringsdato", "allow_no_year")) {
+            if ($validator->isDate($input["due_date"], "Ugyldig leveringsdato", "allow_no_year")) {
                 $due_date = new Intraface_Date($input["due_date"]);
                 $due_date->convert2db();
                 $due_date_db = $due_date->get();
             }
         } else {
-            if($validator->isDate($input["due_date"], "Ugyldig leveringsdato", "allow_no_year,allow_empty")) {
+            if ($validator->isDate($input["due_date"], "Ugyldig leveringsdato", "allow_no_year,allow_empty")) {
                 // der skal laves en due-date, som bare bliver dags datoe, hvis ikke der er indtastet nogen.
                 if (!empty($input["due_date"])) {
                     $due_date = new Intraface_Date($input["due_date"]);
@@ -391,13 +391,13 @@ class Debtor extends Standard
         }
 
 
-        if(isset($input["round_off"]) && intval($input["round_off"])) {
+        if (isset($input["round_off"]) && intval($input["round_off"])) {
             $input["round_off"] = 1;
         } else {
             $input["round_off"] = 0;
         }
 
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             return 0;
         }
       // user_id = ".$this->kernel->user->get('id').", // skal puttes på, men kun hvis det ikke er fra webshop.
@@ -428,7 +428,7 @@ class Debtor extends Standard
 
         $db->query($sql);
 
-        if($this->id == 0) {
+        if ($this->id == 0) {
             $this->id = $db->insertedId();
             $this->setFrom($from, $from_id);
         }
@@ -485,15 +485,15 @@ class Debtor extends Standard
             trigger_error('Debtor: create() har brug for et debtor-objekt, jeg kan skabe et nyt debtorobjekt med', E_USER_ERROR);
         }
 
-        if($debtor_object->get("type") == "invoice") {
+        if ($debtor_object->get("type") == "invoice") {
             // Faktura kan godt krediteres selvom den er låst.
-            if($debtor_object->get("status") == "created" || $debtor_object->get("status") == "cancelled") {
+            if ($debtor_object->get("status") == "created" || $debtor_object->get("status") == "cancelled") {
                 $this->error->set('Debtor::Created kan ikke lave kreditnota fra faktura, når fakturaen ikke er sendt eller færdigbehandlet', E_USER_ERROR);
                 return false;
             }
         }
         else {
-            if($debtor_object->get('locked') == true) {
+            if ($debtor_object->get('locked') == true) {
                 $this->error->set('Objektet er låst, så du kan ikke lave et nyt objekt fra det.', E_USER_ERROR);
                 return false;
             }
@@ -503,7 +503,7 @@ class Debtor extends Standard
         $values['this_date'] = date('d-m-Y');
         $values['number'] = ''; // nulstiller nummeret ellers vil den få samme nummer
 
-        switch($this->type) {
+        switch ($this->type) {
             case "invoice":
                 $values['due_date'] = date("d-m-Y", time() + 24 * 60 * 60 * $debtor_object->contact->get("paymentcondition"));
                 if ($this->kernel->setting->get('intranet', 'bank_account_number')) {
@@ -516,7 +516,7 @@ class Debtor extends Standard
                 break;
         }
 
-        if($new_debtor_id = $this->update($values, $debtor_object->get("type"), $debtor_object->get('id'))) {
+        if ($new_debtor_id = $this->update($values, $debtor_object->get("type"), $debtor_object->get('id'))) {
             $debtor_object->loadItem();
             $items = $debtor_object->item->getList();
 
@@ -528,14 +528,14 @@ class Debtor extends Standard
                 $this->item->save($item_values);
             }
 
-            if($this->type != "credit_note") {
+            if ($this->type != "credit_note") {
                 // Hvis det er en credit_note, så skal fakturanet ikke låses, da man ikke ved om kreditnotaen er på hele fakturaen
                 $debtor_object->setStatus('executed');
             }
 
 
             // Overførsel af onlinebetaling fra ordre til faktura.
-            if($debtor_object->get('type') == "order" && $this->kernel->intranet->hasModuleAccess('onlinepayment')) {
+            if ($debtor_object->get('type') == "order" && $this->kernel->intranet->hasModuleAccess('onlinepayment')) {
                 $onlinepayment_module = $this->kernel->useModule('onlinepayment', true); // true: ignore user permisssion
                 $onlinepayment = OnlinePayment::factory($this->kernel);
 
@@ -565,30 +565,30 @@ class Debtor extends Standard
      */
     public function setStatus($status)
     {
-        if(is_string($status)) {
+        if (is_string($status)) {
             $status_id = array_search($status, $this->getStatusTypes());
-            if($status_id === false) {
+            if ($status_id === false) {
                 trigger_error("Debtor->setStatus(): Ugyldig status (streng)", E_USER_ERROR);
             }
         } else{
             $status_id = intval($status);
-            $status_types = $this->getStatusTypes(); 
-            if(isset($status_types[$status_id])) {
+            $status_types = $this->getStatusTypes();
+            if (isset($status_types[$status_id])) {
                 $status = $status_types[$status];
             } else {
                 trigger_error("Debtor->setStatus(): Ugyldig status (integer)", E_USER_ERROR);
             }
         }
 
-        if($status_id == $this->get("status_id")) {
+        if ($status_id == $this->get("status_id")) {
             trigger_error("Du kan ikke sætte status til samme som den er i forvejen", E_USER_ERROR);
         }
-        if(($this->get("type") != "invoice" && $status_id < $this->get("status_id")) || ($this->get("type") == "invoice" && $this->get("status") != "executed" && $status_id < $this->get("status_id"))) {
+        if (($this->get("type") != "invoice" && $status_id < $this->get("status_id")) || ($this->get("type") == "invoice" && $this->get("status") != "executed" && $status_id < $this->get("status_id"))) {
             // Man kan godt gå fra executed til sent, hvis f.eks. en betalt faktura bliver efterfølgende bliver krediteret
             trigger_error("Du kan ikke sætte status lavere end den er i forvejen", E_USER_ERROR);
         }
 
-        switch($status) {
+        switch ($status) {
             case "sent":
                 $sql = "date_sent = NOW()";
                 break;
@@ -623,7 +623,7 @@ class Debtor extends Standard
      */
     private function setFrom($from = 'manuel', $from_id = 0) {
         $from = array_search($from, $this->getFromTypes());
-        if($from === false) {
+        if ($from === false) {
             trigger_error('Debtor->setFrom(): Ugyldig from', E_USER_ERROR);
         }
         $from_id = (int)$from_id;
@@ -669,7 +669,7 @@ class Debtor extends Standard
      */
     public function any($type, $type_id) {
 
-        switch($type) {
+        switch ($type) {
             case 'contact':
                 $sql = "SELECT id
                 FROM debtor
@@ -722,54 +722,54 @@ class Debtor extends Standard
 
         $this->dbquery->setCondition("debtor.type = ".$this->get("type_key"));
 
-        if($this->dbquery->checkFilter("contact_id")) {
+        if ($this->dbquery->checkFilter("contact_id")) {
             $this->dbquery->setCondition("debtor.contact_id = ".intval($this->dbquery->getFilter("contact_id")));
         }
 
-        if($this->dbquery->checkFilter("text")) {
+        if ($this->dbquery->checkFilter("text")) {
             $this->dbquery->setCondition("(debtor.description LIKE \"%".$this->dbquery->getFilter("text")."%\" OR debtor.girocode = \"".$this->dbquery->getFilter("text")."\" OR debtor.number = \"".$this->dbquery->getFilter("text")."\" OR address.name LIKE \"%".$this->dbquery->getFilter("text")."%\")");
         }
 
-        if($this->dbquery->checkFilter("from_date")) {
+        if ($this->dbquery->checkFilter("from_date")) {
             $date = new Intraface_Date($this->dbquery->getFilter("from_date"));
-            if($date->convert2db()) {
+            if ($date->convert2db()) {
                 $this->dbquery->setCondition("debtor.this_date >= \"".$date->get()."\"");
             } else {
                 $this->error->set("Fra dato er ikke gyldig");
             }
         }
 
-        if($this->dbquery->checkFilter("product_id")) {
+        if ($this->dbquery->checkFilter("product_id")) {
             $this->dbquery->setCondition("debtor_item.product_id = ".$this->dbquery->getFilter('product_id'));
         }
 
 
         // Poster med fakturadato før slutdato.
-        if($this->dbquery->checkFilter("to_date")) {
+        if ($this->dbquery->checkFilter("to_date")) {
             $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
-            if($date->convert2db()) {
+            if ($date->convert2db()) {
                 $this->dbquery->setCondition("debtor.this_date <= \"".$date->get()."\"");
             } else {
                 $this->error->set("Til dato er ikke gyldig");
             }
         }
         // alle ikke bogførte skal findes
-        if($this->dbquery->checkFilter("not_stated")) {
+        if ($this->dbquery->checkFilter("not_stated")) {
             $this->dbquery->setCondition("voucher_id = 0");
 
         }
 
 
-        if($this->dbquery->checkFilter("status")) {
-            if($this->dbquery->getFilter("status") == "-1") {
+        if ($this->dbquery->checkFilter("status")) {
+            if ($this->dbquery->getFilter("status") == "-1") {
                 // Behøves ikke, den tager alle.
                 // $this->dbquery->setCondition("status >= 0");
 
-            } elseif($this->dbquery->getFilter("status") == "-2") {
+            } elseif ($this->dbquery->getFilter("status") == "-2") {
                 // Not executed = åbne
-                if($this->dbquery->checkFilter("to_date")) {
+                if ($this->dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
-                    if($date->convert2db()) {
+                    if ($date->convert2db()) {
                         // Poster der er executed eller cancelled efter dato, og sikring at executed stadig er det, da faktura kan sættes tilbage.
                         $this->dbquery->setCondition("(debtor.date_executed >= \"".$date->get()."\" AND debtor.status = 2) OR (debtor.date_cancelled >= \"".$date->get()."\") OR debtor.status < 2");
                     }
@@ -778,19 +778,19 @@ class Debtor extends Standard
                     $this->dbquery->setCondition("debtor.status < 2");
                 }
 
-            } elseif($this->dbquery->getFilter("status") == "-3") {
+            } elseif ($this->dbquery->getFilter("status") == "-3") {
                 //  Afskrevne. Vi tager først alle sendte og executed.
 
-                if($this->get("type") != "invoice") {
+                if ($this->get("type") != "invoice") {
                     trigger_error("Afskrevne kan kun benyttes ved faktura", E_USER_ERROR);
                 }
 
                 $this->dbquery->setJoin("INNER", "invoice_payment", "invoice_payment.payment_for_id = debtor.id", "invoice_payment.intranet_id = ".$this->kernel->intranet->get("id")." AND invoice_payment.payment_for = 1");
                 $this->dbquery->setCondition("invoice_payment.type = -1");
 
-                if($this->dbquery->checkFilter("to_date")) {
+                if ($this->dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
-                    if($date->convert2db()) {
+                    if ($date->convert2db()) {
                         // alle som er sendte på datoen og som ikke er cancelled
                         $this->dbquery->setCondition("debtor.date_sent <= '".$date->get()."' AND debtor.status != 3");
                         $this->dbquery->setCondition("invoice_payment.payment_date <= '".$date->get()."'");
@@ -800,7 +800,7 @@ class Debtor extends Standard
                     $this->dbquery->setCondition("status = 1 OR status = 2");
                 }
             } else {
-                switch($this->dbquery->getFilter("status")) {
+                switch ($this->dbquery->getFilter("status")) {
                     case "0":
                         $to_date_field = "date_created";
                         break;
@@ -818,9 +818,9 @@ class Debtor extends Standard
                         break;
                 }
 
-                if($this->dbquery->checkFilter("to_date")) {
+                if ($this->dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
-                    if($date->convert2db()) {
+                    if ($date->convert2db()) {
                         $this->dbquery->setCondition("debtor.".$to_date_field." <= \"".$date->get()."\"");
                     }
                 } else {
@@ -830,7 +830,7 @@ class Debtor extends Standard
             }
         }
 
-        switch($this->dbquery->getFilter("sorting")) {
+        switch ($this->dbquery->getFilter("sorting")) {
             case 1:
                 $this->dbquery->setSorting("debtor.number ASC");
                 break;
@@ -866,7 +866,7 @@ class Debtor extends Standard
                 $list[$i]['city'] = $debtor->contact->address->get('city');
 
             }
-            
+
             $i++;
 
         }
@@ -982,7 +982,7 @@ class Debtor extends Standard
         }
         return false;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -1003,7 +1003,7 @@ class Debtor extends Standard
     public function getContactInformation()
     {
         $intranet = array();
-        switch($this->kernel->setting->get('intranet', 'debtor.sender')) {
+        switch ($this->kernel->setting->get('intranet', 'debtor.sender')) {
             case 'intranet':
                 // void
                 break;
@@ -1052,13 +1052,13 @@ class Debtor extends Standard
     {
         return new Contact($this->kernel, $this->get("contact_id"), $this->get("contact_address_id"));
     }
-    
+
     /**
      * returns the possible debtor types!
-     * 
+     *
      * @return array types
      */
-    static function getDebtorTypes() 
+    static function getDebtorTypes()
     {
         return array(
             1=>'quotation',
@@ -1066,13 +1066,13 @@ class Debtor extends Standard
             3=>'invoice',
             4=>'credit_note');
     }
-    
+
     /**
      * returns the possible places where the debtor comes from
-     * 
+     *
      * @return array with the allowed froms
      */
-    private function getFromTypes() 
+    private function getFromTypes()
     {
         return array(
             1=>'manuel',
@@ -1082,13 +1082,13 @@ class Debtor extends Standard
             5=>'invoice'
         );
     }
-    
+
     /**
      * returns possible status types
-     * 
+     *
      * @return array possible status types
      */
-    private function getStatusTypes() 
+    private function getStatusTypes()
     {
         return array(
             0=>'created',
@@ -1097,13 +1097,13 @@ class Debtor extends Standard
             3=>'cancelled'
         );
     }
-    
+
     /**
      * returns possible payment methods
-     * 
+     *
      * @return array possible payment methods
      */
-    private function getPaymentMethods() 
+    private function getPaymentMethods()
     {
         return array(
             0=>'Ingen',
