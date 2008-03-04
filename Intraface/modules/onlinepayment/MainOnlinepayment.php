@@ -6,8 +6,10 @@
  * @version	1.0
  *
  */
-class MainOnlinepayment Extends Main {
-    function MainOnlinepayment() {
+class MainOnlinepayment extends Main
+{
+    function __construct()
+    {
         $this->module_name = 'onlinepayment';
         $this->menu_label = 'onlinepayment'; // Navnet der vil stå i menuen
         $this->show_menu = 0; // Skal modulet vises i menuen.
@@ -46,7 +48,7 @@ class MainOnlinepayment Extends Main {
             1 => 'order',
             2 => 'invoice'));
         */
-        
+
         $this->addSetting('implemented_providers',  array(
             0 => '_invalid_',
             1 => 'default', // reserveret for en custom (altså en hvor det hele kører uden for systemet
@@ -57,4 +59,3 @@ class MainOnlinepayment Extends Main {
         $this->addFrontpageFile('include_front.php');
     }
 }
-?>
