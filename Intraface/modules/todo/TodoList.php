@@ -3,41 +3,41 @@
  * @package Intraface_Todo
  */
 
-class TodoList extends Standard {
-    var $kernel;
-    var $item;
-    var $value;
+class TodoList extends Standard
+{
+    public $kernel;
+    public $item;
+    public $value;
 
-    function TodoList(& $kernel, $id = 0) {
-        TodoList::__construct($kernel, $id);
-    }
-
-    function __construct(&$kernel, $id = 0) {
+    function __construct($kernel, $id = 0)
+    {
         if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
-            trigger_error('Todo kræver Kernel', FATAL);
+            trigger_error('Todo kræver Kernel', E_USER_ERROR);
         }
 
-        $this->kernel = & $kernel;
+        $this->kernel = $kernel;
         $this->id = (int) $id;
 
         if ($this->id > 0) {
             $this->load();
-        }
-        else {
+        } else {
             $this->item = $this->loadItem();
         }
     }
 
-    function loadItem($id = 0) {
+    function loadItem($id = 0)
+    {
         return ($this->item = new TodoItem($this, (int)$id));
     }
 
-    function deleteAllItems() {
+    function deleteAllItems()
+    {
         $db = new DB_Sql;
         $db->query("DELETE FROM todo_item WHERE todo_list_id = " . $this->id. " AND active = 1 AND status = 0");
     }
 
-    function load() {
+    private function load()
+    {
         $db = new Db_Sql;
         $db->query("SELECT * FROM todo_list WHERE id = " . $this->id . " LIMIT 1");
         if ($db->nextRecord()) {
@@ -52,14 +52,14 @@ class TodoList extends Standard {
         return 0;
     }
 
-    function save($var) {
+    function save($var)
+    {
         $var = safeToDb($var);
 
         if ($this->id == 0) {
             $sql_type = "INSERT INTO ";
             $sql_end = ", date_created = NOW(), public_key = '" .$this->kernel->randomKey(10) . "'";
-        }
-        else {
+        } else {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;
         }
@@ -75,7 +75,8 @@ class TodoList extends Standard {
         return $this->id;
     }
 
-    function getList($type = 'undone') {
+    function getList($type = 'undone')
+    {
         $db = new DB_sql;
         $db->query("SELECT * FROM todo_list
             WHERE intranet_id = " . $this->kernel->intranet->get('id'));
@@ -83,8 +84,11 @@ class TodoList extends Standard {
         $i=0;
         while ($db->nextRecord()) {
             $todo = new TodoList($this->kernel, $db->f('id'));
-            if($type == 'done' and $todo->howManyLeft() > 0) continue;
-            elseif ($type != 'done'  AND $todo->howManyLeft() == 0) continue;
+            if($type == 'done' and $todo->howManyLeft() > 0) {
+                continue;
+            } elseif ($type != 'done'  AND $todo->howManyLeft() == 0) {
+                continue;
+            }
             $ids[$i]['id'] = $db->f('id');
             $ids[$i]['name'] = $db->f('name');
             $ids[$i]['left'] = $todo->howManyLeft();
@@ -93,22 +97,27 @@ class TodoList extends Standard {
         return $ids;
     }
 
-    function howManyLeft() {
+    function howManyLeft()
+    {
         $db = new DB_Sql;
         $db->query("SELECT * FROM todo_item WHERE status = 0 AND active = 1 AND todo_list_id = " . $this->id);
         return $db->numRows();
     }
 
-    function addContact($id) {
+    function addContact($id)
+    {
         $id = (int)$id;
         $db = new DB_Sql;
         $db->query("SELECT * FROM todo_contact WHERE contact_id = " . $id);
-        if ($db->nextRecord()) return 1;
+        if ($db->nextRecord()) {
+            return true;
+        }
         $db->query("INSERT INTO todo_contact SET contact_id = " . $id . ", list_id = ".$this->get('id').", intranet_id = " . $this->kernel->intranet->get('id'));
-        return 1;
+        return true;
     }
 
-    function getContacts() {
+    function getContacts()
+    {
         $db = new DB_Sql;
         $i = 0;
         $contacts = array();
@@ -119,6 +128,4 @@ class TodoList extends Standard {
         }
         return $contacts;
     }
-
 }
-?>

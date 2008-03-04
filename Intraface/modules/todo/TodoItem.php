@@ -24,9 +24,9 @@ class TodoItem extends Standard
     }
 
     /**
-     * @access private
+     * @return boolean
      */
-    function load()
+    private function load()
     {
         $db = new Db_Sql;
         $db->query("SELECT * FROM todo_item WHERE id = " . $this->id . " LIMIT 1");
@@ -34,9 +34,9 @@ class TodoItem extends Standard
             $this->value['id'] = $db->f('id');
             $this->value['item'] = $db->f('item');
             $this->value['status'] = $db->f('status');
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
     }
 
     function getList($type="all")
