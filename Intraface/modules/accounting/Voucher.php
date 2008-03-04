@@ -601,7 +601,7 @@ class Voucher extends Standard
      *
      * @return (float) Momsbeløbet
      */
-    private function calculateVat($amount, $vat_percent)
+    public function calculateVat($amount, $vat_percent)
     {
         return Account::calculateVat($amount, $vat_percent);
         /*
