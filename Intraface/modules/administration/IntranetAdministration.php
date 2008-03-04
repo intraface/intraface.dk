@@ -16,10 +16,8 @@
  *       at man bare lige kan komme til dem?
  *
  */
-
-
-class IntranetAdministration extends Intranet {
-
+class IntranetAdministration extends Intranet
+{
     var $db; // databaseobject
     var $id; // intranet id
     var $address; // adresse object
@@ -27,8 +25,8 @@ class IntranetAdministration extends Intranet {
     var $kernel;
     var $error;
 
-
-    function __construct($kernel) {
+    function __construct($kernel)
+    {
         if (!is_object($kernel) AND strtolower(get_class($kernel)) != 'kernel') {
             trigger_error('IntranetAdministration kræver kernel', E_USER_ERROR);
         }
@@ -39,9 +37,9 @@ class IntranetAdministration extends Intranet {
         $this->error = new Error;
     }
 
-    function update($input) {
-
-        if(!is_array($input)) {
+    function update($input)
+    {
+        if (!is_array($input)) {
             trigger_error('Input er ikke et array', E_USER_ERROR);
         }
         $input = safeToDb($input);
@@ -56,7 +54,7 @@ class IntranetAdministration extends Intranet {
             $this->error->set('identifier has to be unique');
         }
 
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             return 0;
         }
 
@@ -71,21 +69,8 @@ class IntranetAdministration extends Intranet {
         return $this->id;
     }
 
-    /*
-    function setPicture($pic_id) {
-        $db = new DB_Sql;
-        $db->query("UPDATE intranet SET invoice_pic_id = '".(int)$pic_id."' WHERE id = " . $this->id);
-        return 1;
-    }
-
-    function deletePicture() {
-        $db = new DB_Sql;
-        $db->query("UPDATE intranet SET invoice_pic_id = 0 WHERE id = " . $this->id);
-        return 1;
-    }
-    */
-
-    function isIdentifierUnique($identifier) {
+    function isIdentifierUnique($identifier)
+    {
         $this->db = & MDB2::singleton(DB_DSN);
         $res =& $this->db->query("SELECT id FROM intranet WHERE identifier='".$this->db->escape($identifier, 'string')."' AND id != " . $this->db->escape($this->id, 'integer'));
         if ($res->numRows() > 0) {
@@ -94,11 +79,10 @@ class IntranetAdministration extends Intranet {
         return true;
     }
 
-    function isFilledIn() {
-        if(empty($this->value['name']) || !isset($this->address) || !$this->address->get('address') || !$this->address->get('email')) return 0;
+    function isFilledIn()
+    {
+        if (empty($this->value['name']) || !isset($this->address) || !$this->address->get('address') || !$this->address->get('email')) return 0;
         return 1;
     }
 
 }
-
-?>
