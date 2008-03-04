@@ -7,10 +7,8 @@
  * @version	1.0
  *
  */
-
-
-class OnlinePaymentDanDomain extends OnlinePayment {
-
+class OnlinePaymentDanDomain extends OnlinePayment
+{
 
     /*
         '' => 'Ingen kontakt til Dandomin - mangler $eval',
@@ -61,15 +59,17 @@ class OnlinePaymentDanDomain extends OnlinePayment {
     );
     */
 
-    function OnlinePaymentDanDomain(&$kernel, $id) {
-        OnlinePayment::OnlinePayment($kernel, $id);
+    function __construct($kernel, $id)
+    {
+        parent::__construct($kernel, $id);
 
         // hente settings om DanDomain fra settingssystemet
         $this->settings = $this->getSettings();
 
     }
 
-    function getTransactionActions() {
+    function getTransactionActions()
+    {
         return array(
             0 => array(
                 'action' => 'capture',
@@ -80,7 +80,8 @@ class OnlinePaymentDanDomain extends OnlinePayment {
         );
     }
 
-    function transactionAction($action) {
+    function transactionAction($action)
+    {
 
         require_once "HTTP/Request.php";
         $http_request = new HTTP_Request("");
@@ -88,12 +89,11 @@ class OnlinePaymentDanDomain extends OnlinePayment {
         $basis_url = 'https://pay.dandomain.dk/PayApi.asp?username='.$this->settings['merchant_id'].'&password='.$this->settings['password'].'&Transid='.$this->get('transaction_number');
 
 
-        if($action == "capture") {
+        if ($action == "capture") {
 
-            if($this->get('amount') < $this->get('original_amount')) {
+            if ($this->get('amount') < $this->get('original_amount')) {
                 $add_url = '&ChangeAmount=1&amount='.number_format($this->get('amount'), 2, ",", '');
-            }
-            else {
+            } else {
                 $add_url = '';
             }
 
@@ -101,73 +101,67 @@ class OnlinePaymentDanDomain extends OnlinePayment {
             $http_request->setURL($basis_url.$add_url.'&Capture=1');
             $http_request->sendRequest();
 
-            if($http_request->getResponseCode() != '200') {
+            if ($http_request->getResponseCode() != '200') {
                 trigger_error("DanDomain serveren er nede, eller fejl i capture adresse", E_USER_WARNING);
                 exit;
             }
 
+            if (substr(trim($http_request->getResponseBody()), 0, 11) == 'Transaktion') { // hmm ikke helt godt, men vel ok. Response er "Transanktion #1111111 er hævet"
 
-
-            if(substr(trim($http_request->getResponseBody()), 0, 11) == 'Transaktion') { // hmm ikke helt godt, men vel ok. Response er "Transanktion #1111111 er hævet"
-
-                if($this->addAsPayment()) {
+                if ($this->addAsPayment()) {
                     $this->setStatus("captured");
-                }
-                else {
+                } else {
                     trigger_error("Onlinebetalingen er hævet, men kunne ikke overføres som betaling til fakturaen", FATAL);
                 }
                 return 1;
-            }
-            else {
+            } else {
                 // fiasko
                 $this->error->set('Vi kunne ikke hæve betalingen, vi fik følgende fejl: '.$http_request->getResponseBody());
                 return 0;
             }
-        }
-        elseif($action == "reverse") {
+        } elseif ($action == "reverse") {
 
             $http_request->setURL($basis_url.'&Reject=1');
             $http_request->sendRequest();
 
-            if($http_request->getResponseCode() != '200') {
+            if ($http_request->getResponseCode() != '200') {
                 trigger_error("DanDomain serveren er nede, eller fejl i capture adresse", E_USER_WARNING);
                 exit;
             }
 
-            if(substr($http_request->getResponseBody(), 0, 3) == '200') {
+            if (substr($http_request->getResponseBody(), 0, 3) == '200') {
                 $this->setStatus("reversed");
                 return 1;
-            }
-            else {
+            } else {
                 // fiasko
                 $this->error->set('Vi kunne ikke tilbagebetale betalingen, vi fik følgende fejl: '.$http_request->getResponseBody());
                 return 0;
             }
 
-        }
-        else {
+        } else {
             trigger_error("Ugyldig handling i Dandomain->transactionAction()", E_USER_ERROR);
         }
     }
 
-    function setSettings($input) {
+    function setSettings($input)
+    {
         $this->kernel->setting->set('intranet', 'onlinepayment.dandomain.password', $input['password']);
         $this->kernel->setting->set('intranet', 'onlinepayment.dandomain.merchant_id', $input['merchant_id']);
         return 1;
     }
 
-    function getSettings() {
+    function getSettings()
+    {
         $this->value['password'] = 	$this->kernel->setting->get('intranet', 'onlinepayment.dandomain.password');
         $this->value['merchant_id'] = 	$this->kernel->setting->get('intranet', 'onlinepayment.dandomain.merchant_id');
         return $this->value;
     }
 
-    function isSettingsSet() {
+    function isSettingsSet()
+    {
         if ($this->kernel->setting->get('intranet', 'onlinepayment.dandomain.password') AND $this->kernel->setting->get('intranet', 'onlinepayment.dandomain.merchant_id')) {
             return 1;
         }
         return 0;
     }
-
 }
-?>

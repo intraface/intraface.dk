@@ -6,26 +6,15 @@
  * @version	1.0
  */
 
-class OnlinePaymentDefault extends OnlinePayment {
+class OnlinePaymentDefault extends OnlinePayment
+{
+    function __construct($kernel, $id) {
 
-
-    function OnlinePaymentDefault(&$kernel, $id) {
-
-        OnlinePayment::OnlinePayment($kernel, $id);
+        parent::__construct($kernel, $id);
     }
-    /*
-    function getTransactionActions() {
-        return array(
-            0 => array(
-                'action' => 'capture',
-                'label' => 'Hæv'),
-            1 => array(
-                'action' => 'reverse',
-                'label' => 'Tilbagebetal')
-        );
-    }
-    */
-    function transactionAction($action) {
+
+    function transactionAction($action)
+    {
 
         if($action == "capture") {
 
@@ -34,36 +23,34 @@ class OnlinePaymentDefault extends OnlinePayment {
             if($this->addAsPayment()) {
                 $this->setStatus("captured");
                 return true;
-            }
-            else {
+            } else {
                 trigger_error("Onlinebetalingen kunne ikke overføres til fakturaen", E_USER_ERROR);
                 return false;
             }
-        }
-        elseif($action == "reverse") {
+        } elseif($action == "reverse") {
 
             // her skal reverse så laves?
 
             $this->setStatus("reversed");
             return true;
-        }
-        else {
+        } else {
             trigger_error("Ugyldig handling i Onlinepayment_Provider_Default->transactionAction()", E_USER_ERROR);
             return false;
         }
     }
 
-    function setSettings() {
+    function setSettings()
+    {
         // void
     }
 
-    function getSettings() {
+    function getSettings()
+    {
         // void
     }
 
-    function isSettingsSet() {
+    function isSettingsSet()
+    {
         return 1;
     }
-
 }
-?>

@@ -52,7 +52,7 @@ class OnlinePaymentQuickPay extends OnlinePayment
      */
     function __construct($kernel, $id)
     {
-        OnlinePayment::OnlinePayment($kernel, $id);
+        parent::__construct($kernel, $id);
 
         // hente settings om quickpay fra settingssystemet
         $this->settings = $this->getSettings();
