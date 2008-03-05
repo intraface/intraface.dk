@@ -9,7 +9,7 @@
  */
 class MainAdministration extends Main
 {
-    function __constructor()
+    function __construct()
     {
         $this->module_name = 'administration';
         $this->menu_label = 'administration';
