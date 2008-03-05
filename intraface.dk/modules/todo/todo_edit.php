@@ -10,22 +10,17 @@ if (!empty($_POST)) {
         'list_description' => $_POST['list_description']
     ))) {
 
-      foreach ($_POST['todo'] AS $key=>$value) {
-            $todo->loadItem($_POST['item_id'][$key]);
-
-          if ($todo->item->save($_POST['todo'][$key], $_POST['responsible_user_id'][$key])) {
-      }
-
+    foreach ($_POST['todo'] AS $key=>$value) {
+        if ($todo->getItem($_POST['item_id'][$key])->save($_POST['todo'][$key], $_POST['responsible_user_id'][$key])) {
+        }
     }
-
-         header('Location: todo.php?id='.$todo->get('id'));
+    header('Location: todo.php?id='.$todo->get('id'));
     exit;
   }
-}
-else {
+} else {
     $todo = new TodoList($kernel, $_GET['id']);
-  $value = $todo->get();
-  $value['todo'] = $todo->item->getList("undone");
+    $value = $todo->get();
+    $value['todo'] = $todo->getUndoneItems();
 }
 
 $page = new Page($kernel);

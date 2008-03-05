@@ -7,8 +7,7 @@ $module = $kernel->module('todo');
 // Delete
 if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
     $todo = new TodoList($kernel, $_GET['id']);
-    $todo->loadItem($_GET['delete']);
-    $todo->item->delete();
+    $todo->getItem($_GET['delete'])->delete();
     header('Location: todo.php?id='.$_GET['id']);
     exit;
 }
@@ -18,16 +17,15 @@ if (!empty($_POST)) {
 
     // new item
     if (!empty($_POST['new_item'])) {
-        $todo->item->save($_POST['new_item'], $_POST['responsible_user_id']);
+        $todo->getItem()->save($_POST['new_item'], $_POST['responsible_user_id']);
     }
 
     // Set done
-    $todo->item->setAllUndone();
+    $todo->setAllItemsUndone();
     if (!empty($_POST['done'])) {
 
         foreach ($_POST['done'] AS $key=>$value) {
-            $todo->loadItem($_POST['done'][$key]);
-            if ($todo->item->setDone()) {
+            if ($todo->getItem($_POST['done'][$key])->setDone()) {
             }
         }
     }
@@ -58,17 +56,15 @@ if (!empty($_POST)) {
 } else {
     $todo = new TodoList($kernel, $_REQUEST['id']);
     if(isset($_GET['action']) && $_GET['action'] == "moveup") {
-        $todo->loadItem($_GET['item_id']);
-        $todo->item->getPosition(MDB2::singleton(DB_DSN))->moveUp();
+        $todo->getItem($_GET['item_id'])->getPosition(MDB2::singleton(DB_DSN))->moveUp();
     }
 
     if(isset($_GET['action']) && $_GET['action'] == "movedown") {
-        $todo->loadItem($_GET['item_id']);
-        $todo->item->getPosition(MDB2::singleton(DB_DSN))->moveDown();
+        $todo->getItem($_GET['item_id'])->getPosition(MDB2::singleton(DB_DSN))->moveDown();
     }
 
     $value = $todo->get();
-    $value['todo'] = $todo->item->getList();
+    $value['todo'] = $todo->getAllItems();
 }
 
 $page = new Page($kernel);

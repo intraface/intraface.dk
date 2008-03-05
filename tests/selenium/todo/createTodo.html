@@ -1,0 +1,119 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>createTodo</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">createTodo</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=todo&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=todo</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Create list</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>list_name</td>
+	<td>Tester</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=More fields</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>list_description</td>
+	<td>Something</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>document.forms[0].elements['todo[]'][1]</td>
+	<td>Tester</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Save list']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Tester</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Something</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Add item</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>new_item</td>
+	<td>Tester</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>responsible_user_id</td>
+	<td>label=</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>responsible_user_id</td>
+	<td>label=Choose a responsible person</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Add']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Remove</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Remove</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

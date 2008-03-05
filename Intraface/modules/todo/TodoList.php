@@ -26,6 +26,51 @@ class TodoList extends Standard
         }
     }
 
+    private function getItems($type)
+    {
+        if ($type == "undone") {
+            $sql_status = "status = 0 AND";
+        } else {
+            $sql_status = "status >= 0 AND";
+        }
+
+        $db = new DB_Sql;
+        $db->query("SELECT * FROM todo_item WHERE " . $sql_status . " todo_list_id =" . (int)$this->getId() . "  AND active = 1 ORDER BY status ASC, position ASC");
+        $ids = array();
+        $i = 0;
+        while ($db->nextRecord()) {
+            $ids[$i]['id'] = $db->f('id');
+            $ids[$i]['item'] = $db->f('item');
+            $ids[$i]['status'] = $db->f('status');
+            $ids[$i]['responsible_user_id'] = $db->f('responsible_user_id');
+            $i++;
+        }
+        return $ids;
+    }
+
+    function getUndoneItems()
+    {
+        return $this->getItems('undone');
+    }
+
+    function getAllItems()
+    {
+        return $this->getItems('all');
+    }
+
+    function setAllItemsUndone()
+    {
+        $db = new DB_Sql;
+        $db->query("UPDATE todo_item SET status = 0 WHERE todo_list_id = " . $this->getId());
+        return 1;
+    }
+
+    function getItem($id = 0)
+    {
+        require_once 'Intraface/modules/todo/TodoItem.php';
+        return new TodoItem($this, (int)$id);
+    }
+
     function loadItem($id = 0)
     {
         require_once 'Intraface/modules/todo/TodoItem.php';
@@ -52,6 +97,11 @@ class TodoList extends Standard
             return ($this->id = $db->f('id'));
         }
         return 0;
+    }
+
+    function getId()
+    {
+        return $this->id;
     }
 
     function save($var)

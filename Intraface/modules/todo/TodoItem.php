@@ -7,15 +7,15 @@ require_once 'Intraface/Standard.php';
 
 class TodoItem extends Standard
 {
-    public $todo;
-    public $value;
+    private $todo;
+    public  $value;
 
     function __construct($todo, $id = 0)
     {
-        if (!is_object($todo) OR strtolower(get_class($todo)) != 'todolist') {
+        if (!is_object($todo)) {
             trigger_error('Todo kræver Kernel', E_USER_ERROR);
         }
-        $this->todo = & $todo;
+        $this->todo = $todo;
         $this->id = (int) $id;
 
         if ($this->id > 0) {
@@ -29,7 +29,7 @@ class TodoItem extends Standard
     private function load()
     {
         $db = new Db_Sql;
-        $db->query("SELECT * FROM todo_item WHERE id = " . $this->id . " LIMIT 1");
+        $db->query("SELECT * FROM todo_item WHERE id = " . $this->id);
         if ($db->nextRecord()) {
             $this->value['id'] = $db->f('id');
             $this->value['item'] = $db->f('item');
@@ -37,28 +37,6 @@ class TodoItem extends Standard
             return true;
         }
         return false;
-    }
-
-    function getList($type="all")
-    {
-        if ($type == "undone") {
-            $sql_status = "status = 0 AND";
-        } else {
-            $sql_status = "status >= 0 AND";
-        }
-
-        $db = new DB_Sql;
-        $db->query("SELECT * FROM todo_item WHERE " . $sql_status . " todo_list_id =" . (int)$this->todo->get('id') . "  AND active = 1 ORDER BY status ASC, position ASC");
-        $ids = array();
-        $i = 0;
-        while ($db->nextRecord()) {
-            $ids[$i]['id'] = $db->f('id');
-            $ids[$i]['item'] = $db->f('item');
-            $ids[$i]['status'] = $db->f('status');
-            $ids[$i]['responsible_user_id'] = $db->f('responsible_user_id');
-            $i++;
-        }
-        return $ids;
     }
 
     function save($var, $user_id = 0)
@@ -98,13 +76,6 @@ class TodoItem extends Standard
         }
         $db = new DB_Sql;
         $db->query("UPDATE todo_item SET status = 1 WHERE id = " . $this->id);
-        return 1;
-    }
-
-    function setAllUndone()
-    {
-        $db = new DB_Sql;
-        $db->query("UPDATE todo_item SET status = 0 WHERE todo_list_id = " . $this->todo->get('id'));
         return 1;
     }
 
