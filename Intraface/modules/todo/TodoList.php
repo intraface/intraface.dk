@@ -2,6 +2,7 @@
 /**
  * @package Intraface_Todo
  */
+require_once 'Intraface/Standard.php';
 
 class TodoList extends Standard
 {
@@ -11,7 +12,7 @@ class TodoList extends Standard
 
     function __construct($kernel, $id = 0)
     {
-        if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
+        if (!is_object($kernel)) {
             trigger_error('Todo kræver Kernel', E_USER_ERROR);
         }
 
@@ -27,6 +28,7 @@ class TodoList extends Standard
 
     function loadItem($id = 0)
     {
+        require_once 'Intraface/modules/todo/TodoItem.php';
         return ($this->item = new TodoItem($this, (int)$id));
     }
 
