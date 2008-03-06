@@ -27,26 +27,29 @@ if (!empty($_POST['page'])) {
 
 }
 
-if(empty($_GET['type']) || !in_array($_GET['type'], CMS_Page::getTypes())) {
-    trigger_error('A valid type of page is needed', E_USER_ERROR);
-} else {
-    $type = $_GET['type'];
-}
-
 
 if (!empty($_GET['moveup']) AND is_numeric($_GET['moveup'])) {
     $cmspage = CMS_Page::factory($kernel, 'id', $_GET['moveup']);
     $cmspage->getPosition(MDB2::singleton(DB_DSN))->moveUp();
     $cmssite = $cmspage->cmssite;
+    $type = $cmspage->get('type');
 } elseif (!empty($_GET['movedown']) AND is_numeric($_GET['movedown'])) {
     $cmspage = CMS_Page::factory($kernel, 'id', $_GET['movedown']);
     $cmspage->getPosition(MDB2::singleton(DB_DSN))->moveDown();
     $cmssite = $cmspage->cmssite;
+    $type = $cmspage->get('type');
 } elseif (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
     $cmspage = CMS_Page::factory($kernel, 'id', $_GET['delete']);
     $cmspage->delete();
     $cmssite = $cmspage->cmssite;
+    $type = $cmspage->get('type');
 } else {
+    if(empty($_GET['type']) || !in_array($_GET['type'], CMS_Page::getTypes())) {
+        trigger_error('A valid type of page is needed', E_USER_ERROR);
+    } else {
+        $type = $_GET['type'];
+    }
+    
     if(!empty($_GET['id'])) {
         $cmssite = new CMS_Site($kernel, (int)$_GET['id']);
         $cmspage = new CMS_Page($cmssite);
