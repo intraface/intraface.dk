@@ -76,19 +76,20 @@ class HTML_Editor
                     }
 
                     if (in_array('strong', $this->allowed_tags)) {
-                        $button[] = ', bold';
+                        $button[] = 'bold';
                     } elseif (in_array('b', $this->allowed_tags)) {
-                        $button[] = ', bold';
+                        $button[] = 'bold';
                     }
 
                     if (in_array('em', $this->allowed_tags)) {
-                        $button[] = ', italic';
+                        $button[] = 'italic';
                     } elseif (in_array('i', $this->allowed_tags)) {
-                        $button[] = ', italic';
+                        $button[] = 'italic';
                     }
 
                     if (in_array('a', $this->allowed_tags)) {
-                        $button[]= ', link, unlink';
+                        $button[]= 'link';
+                        $button[]= 'unlink';
                     }
 
                     if (in_array('ul', $this->allowed_tags)) {
@@ -124,32 +125,32 @@ class HTML_Editor
 
                 $button[] = 'code';
 
-                $output = '<textarea'.$this->_parseTextareaAttributes($textarea_attributes).'>'.htmlentities($initial_value).'</textarea>';
-                $output .= '<script language="javascript" type="text/javascript">';
-                $output .= 'tinyMCE.init({';
-                $output .= '	mode : "exact",';
-                $output .= '	elements : "'.$textarea_attributes['id'].'",';
-                $output .= '	theme : "advanced",';
+                $output = '<textarea'.$this->_parseTextareaAttributes($textarea_attributes).'>'.htmlentities($initial_value).'</textarea>'."\n";
+                $output .= '<script language="javascript" type="text/javascript">'."\n";
+                $output .= 'tinyMCE.init({'."\n";
+                $output .= '	mode : "exact",'."\n";
+                $output .= '	elements : "'.$textarea_attributes['id'].'",'."\n";
+                $output .= '	theme : "advanced",'."\n";
                 if (!empty($editor_attributes['plugins']) AND is_array($editor_attributes['plugins'])) {
-                    $output .= '    plugins : "'.implode($editor_attributes['plugins'], ',').'",';
+                    $output .= '    plugins : "'.implode($editor_attributes['plugins'], ',').'",'."\n";
                 }
-                $output .= '    theme_advanced_buttons1 : "'.implode($button, ',').'",';
-                $output .= '    theme_advanced_buttons2 : "",';
-                $output .= '    theme_advanced_buttons3 : "",';
-                $output .= '    theme_advanced_blockformats : "'.implode($blockformat, ',').'",';
-                $output .= '    theme_advanced_toolbar_location : "top",';
-                $output .= '    theme_advanced_toolbar_align : "left",';
-                $output .= '	cleanup : true,';
-                $output .= '	clean_on_startup : true,';
-                $output .= '	verify_html : true,';
-                $output .= '	apply_source_formatting : true,';
-                $output .= '	relative_urls : false,';
-                $output .= '	entity_encoding : "raw",';
-                $output .= '	remove_linebreaks : true,';
+                $output .= '    theme_advanced_buttons1 : "'.implode($button, ',').'",'."\n";
+                $output .= '    theme_advanced_buttons2 : "",'."\n";
+                $output .= '    theme_advanced_buttons3 : "",'."\n";
+                $output .= '    theme_advanced_blockformats : "'.implode($blockformat, ',').'",'."\n";
+                $output .= '    theme_advanced_toolbar_location : "top",'."\n";
+                $output .= '    theme_advanced_toolbar_align : "left",'."\n";
+                $output .= '	cleanup : true,'."\n";
+                $output .= '	clean_on_startup : true,'."\n";
+                $output .= '	verify_html : true,'."\n";
+                $output .= '	apply_source_formatting : true,'."\n";
+                $output .= '	relative_urls : false,'."\n";
+                $output .= '	entity_encoding : "raw",'."\n";
+                $output .= '	remove_linebreaks : true'."\n";
                 //$output .= '	spellchecker_languages : "+Danish=da, English=en"';
 
-                $output .= '});';
-                $output .= '</script>';
+                $output .= '});'."\n";
+                $output .= '</script>'."\n";
 
                 break;
                 /*
