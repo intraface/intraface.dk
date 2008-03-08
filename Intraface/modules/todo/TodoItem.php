@@ -7,10 +7,25 @@ require_once 'Intraface/Standard.php';
 
 class TodoItem extends Standard
 {
+    /**
+     * @var object
+     */
     private $todo;
-    public  $value;
 
-    function __construct($todo, $id = 0)
+    /**
+     * @var array
+     */
+    public $value;
+
+    /**
+     * Constructor
+     *
+     * @param object  $todo Todo liste
+     * @param integer $id   Id for item
+     *
+     * @return void
+     */
+    public function __construct($todo, $id = 0)
     {
         if (!is_object($todo)) {
             trigger_error('Todo kræver Kernel', E_USER_ERROR);
@@ -24,6 +39,8 @@ class TodoItem extends Standard
     }
 
     /**
+     * Loads values into $value
+     *
      * @return boolean
      */
     private function load()
@@ -39,7 +56,45 @@ class TodoItem extends Standard
         return false;
     }
 
-    function save($var, $user_id = 0)
+    /**
+     * Gets status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->value['status'];
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string
+     */
+    public function getItem()
+    {
+        return $this->value['item'];
+    }
+
+    /**
+     * Saves values
+     *
+     * @param array   $var     Values to save
+     * @param integer $user_id User id to save
+     *
+     * @return integer
+     */
+    public function save($var, $user_id = 0)
     {
         if (empty($var)) return;
         $var = safeToDb($var);
@@ -69,27 +124,44 @@ class TodoItem extends Standard
         return $this->id;
     }
 
-    function setDone()
+    /**
+     * Sets the item to done
+     *
+     * @return boolean
+     */
+    public function setDone()
     {
         if ($this->id == 0) {
-            return 0;
+            return false;
         }
         $db = new DB_Sql;
         $db->query("UPDATE todo_item SET status = 1 WHERE id = " . $this->id);
-        return 1;
+        return true;
     }
 
-    function delete()
+    /**
+     * Deletes item
+     *
+     * @return boolean
+     */
+    public function delete()
     {
         if ($this->id <= 0) {
-            return 0;
+            return false;
         }
         $db = new DB_Sql;
         $db->query("UPDATE todo_item SET active = 0 WHERE id = " . $this->id);
-        return 1;
+        return true;
     }
 
-    function getPosition($db)
+    /**
+     * Gets position object
+     *
+     * @param object $db Database object
+     *
+     * @return object
+     */
+    public function getPosition($db)
     {
         require_once 'Ilib/Position.php';
         return new Ilib_Position($db, "todo_item", $this->id, "todo_list_id=".$this->todo->get('id')." AND status = 0", "position", "id");

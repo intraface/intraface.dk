@@ -6,10 +6,29 @@ require_once 'Intraface/Standard.php';
 
 class TodoList extends Standard
 {
+    /**
+     * @var object
+     */
     public $kernel;
-    public $item;
+
+    /**
+     * @var object
+     */
+    private $item;
+
+    /**
+     * @var object
+     */
     public $value;
 
+    /**
+     * Constructor
+     *
+     * @param object  $kernel Kernel object
+     * @param integer $id     Id for todo list
+     *
+     * @return string
+     */
     function __construct($kernel, $id = 0)
     {
         if (!is_object($kernel)) {
@@ -26,6 +45,13 @@ class TodoList extends Standard
         }
     }
 
+    /**
+     * Gets items
+     *
+     * @param string $type
+     *
+     * @return array
+     */
     private function getItems($type)
     {
         if ($type == "undone") {
@@ -48,41 +74,83 @@ class TodoList extends Standard
         return $ids;
     }
 
-    function getUndoneItems()
+    /**
+     * Gets items
+     *
+     * @return array
+     */
+    public function getUndoneItems()
     {
         return $this->getItems('undone');
     }
 
+    /**
+     * Gets items
+     *
+     * @return array
+     */
     function getAllItems()
     {
         return $this->getItems('all');
     }
 
-    function setAllItemsUndone()
+    /**
+     * Gets items
+     *
+     * @return boolean
+     */
+    public function setAllItemsUndone()
     {
         $db = new DB_Sql;
         $db->query("UPDATE todo_item SET status = 0 WHERE todo_list_id = " . $this->getId());
-        return 1;
+        return true;
     }
 
-    function getItem($id = 0)
+    /**
+     * Gets item
+     *
+     * @param integer $id Id for specific item
+     *
+     * @return array
+     */
+    public function getItem($id = 0)
     {
         require_once 'Intraface/modules/todo/TodoItem.php';
         return new TodoItem($this, (int)$id);
     }
 
-    function loadItem($id = 0)
+    /**
+     * Gets item
+     *
+     * @param integer $id Id for specific item
+     *
+     * @deprecated
+     *
+     * @return array
+     */
+    private function loadItem($id = 0)
     {
         require_once 'Intraface/modules/todo/TodoItem.php';
         return ($this->item = new TodoItem($this, (int)$id));
     }
 
-    function deleteAllItems()
+    /**
+     * Deletes all items
+     *
+     * @return boolean
+     */
+    public function deleteAllItems()
     {
         $db = new DB_Sql;
         $db->query("DELETE FROM todo_item WHERE todo_list_id = " . $this->id. " AND active = 1 AND status = 0");
+        return true;
     }
 
+    /**
+     * Gets item
+     *
+     * @return boolean
+     */
     private function load()
     {
         $db = new Db_Sql;
@@ -93,18 +161,60 @@ class TodoList extends Standard
             $this->value['list_description'] = $db->f('description');
             $this->value['public_key'] = $db->f('public_key');
 
-            $this->item = $this->loadItem();
-            return ($this->id = $db->f('id'));
+            $this->item = $this->getItem();
+            return true;
         }
-        return 0;
+        return false;
     }
 
-    function getId()
+    /**
+     * Gets id
+     *
+     * @return integer
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    function save($var)
+    /**
+     * Gets ListName
+     *
+     * @return string
+     */
+    public function getListName()
+    {
+        $this->value['list_name'];
+    }
+
+    /**
+     * Gets list description
+     *
+     * @return string
+     */
+    public function getListDescription()
+    {
+        $this->value['list_description'];
+    }
+
+    /**
+     * Gets public key
+     *
+     * @return string
+     */
+    public function getPublicKey()
+    {
+        $this->value['public_key'];
+    }
+
+    /**
+     * Saves todolist
+     *
+     * @param array $var Vars to save
+     *
+     * @return integer
+     */
+    public function save($var)
     {
         $var = safeToDb($var);
 
@@ -127,7 +237,12 @@ class TodoList extends Standard
         return $this->id;
     }
 
-    function getList($type = 'undone')
+    /**
+     * Gets all todo lists
+     *
+     * @return string
+     */
+    public function getList($type = 'undone')
     {
         $db = new DB_sql;
         $db->query("SELECT * FROM todo_list
@@ -149,14 +264,24 @@ class TodoList extends Standard
         return $ids;
     }
 
-    function howManyLeft()
+    /**
+     * Gets how many items left on list
+     *
+     * @return integer
+     */
+    public function howManyLeft()
     {
         $db = new DB_Sql;
         $db->query("SELECT * FROM todo_item WHERE status = 0 AND active = 1 AND todo_list_id = " . $this->id);
         return $db->numRows();
     }
 
-    function addContact($id)
+    /**
+     * Adds a contact
+     *
+     * @return boolean
+     */
+    public function addContact($id)
     {
         $id = (int)$id;
         $db = new DB_Sql;
@@ -168,6 +293,11 @@ class TodoList extends Standard
         return true;
     }
 
+    /**
+     * Gets the added contacts
+     *
+     * @return array
+     */
     function getContacts()
     {
         $db = new DB_Sql;
