@@ -292,10 +292,8 @@ class CMS_Page extends Standard
         $db->query("SELECT position FROM cms_page WHERE id = " . $this->id);
         if ($db->nextRecord()) {
             if ($db->f('position') == 0 AND count($this->getList($this->value['type']) > 0)) {
-                $next_pos = $this->getPosition(MDB2::singleton(DB_DSN))->maxPosition() + 1;
+                $next_pos = $this->getPosition(MDB2::singleton(DB_DSN))->getMaxPosition() + 1;
                 $db->query("UPDATE cms_page SET position = " . $next_pos . " WHERE id = " . $this->id);
-
-                $this->getPosition(MDB2::singleton(DB_DSN))->reposition();
             }
         }
 

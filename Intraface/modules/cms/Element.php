@@ -302,7 +302,7 @@ class CMS_Element extends Standard
         if ($this->id == 0) {
             $this->id = $db->insertedId();
 
-            $next_pos = $this->getPosition($db)->maxPosition() + 1;
+            $next_pos = $this->getPosition($db)->getMaxPosition() + 1;
             $db->query("UPDATE cms_element SET position = " . $next_pos . " WHERE id = " . $this->id);
         }
 

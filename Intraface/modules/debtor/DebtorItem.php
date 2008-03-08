@@ -206,7 +206,7 @@ class DebtorItem extends Standard
             description = '".$input["description"]."'";
 
         if($this->id == 0) {
-            $position = $this->getPosition(MDB2::singleton(DB_DSN))->maxPosition() + 1;
+            $position = $this->getPosition(MDB2::singleton(DB_DSN))->getMaxPosition() + 1;
             $sql = $sql.', position = '.$position;
 
             $this->db->query("INSERT INTO debtor_item SET ".$sql.", intranet_id = ".$this->debtor->kernel->intranet->get("id").", debtor_id = ".$this->debtor->get("id").", active = 1");
