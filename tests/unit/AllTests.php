@@ -40,7 +40,8 @@ class AllTests
                        'Keyword',
                        'Stock',
                        'OnlinePayment',
-                       'Procurement'
+                       'Procurement',
+                       'Project'
         );
 
         foreach ($tests AS $test) {
