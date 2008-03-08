@@ -1,0 +1,124 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testStateProcurementWithAmountWithDecimalNumbers</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testStateProcurementWithAmountWithDecimalNumbers</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=procurement,product,accounting&helper_function=Procurement:create,Accounting:createYearWithVatAndStandardAccounts&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=procurement</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Ret</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_price_items</td>
+	<td>2.118,40</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_price_shipment_etc</td>
+	<td>50,53</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>vat</td>
+	<td>542,23</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>paid</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>credit_account_number</td>
+	<td>label=Bank, folio</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>add_line</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>state_account</td>
+	<td>label=Småanskaffelser (vat: in)</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>debet_account[1][text]</td>
+	<td>shipment</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>debet_account[1][amount]</td>
+	<td>47,20</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>debet_account[1][state_account_id]</td>
+	<td>label=Diverse incl. moms (vat: in)</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>debet_account[2][text]</td>
+	<td>payment fee</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>debet_account[2][amount]</td>
+	<td>3,33</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>debet_account[2][state_account_id]</td>
+	<td>label=Diverse incl. moms (vat: in)</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>state</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Se bilag</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Se bilag</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

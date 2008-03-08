@@ -51,7 +51,7 @@ if (!empty($_POST)) {
     }
     
     if($procurement->get('price_items') - $items_amount > 0) {
-        $value['debet_account'][$i++] = array('text' => '', 'amount' => $procurement->get('dk_price_items') - $items_amount);
+        $value['debet_account'][$i++] = array('text' => '', 'amount' => number_format($procurement->get('price_items') - $items_amount, 2, ',', '.'));
     }
         
     if($procurement->get('price_shipment_etc') > 0) {
