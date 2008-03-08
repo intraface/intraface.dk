@@ -786,8 +786,8 @@ class Procurement Extends Standard
         }
 
         if ($skip_amount_check == 'do_amount_check') {
-            if ($total + $this->get('vat') != $this->get('total_price')) {
-                $this->error->set('Det samlede beløb til bogføring stemmer ikke overens med det samlede beløb på indkøbet. Har du fået alle vare på indkøbet med?');
+            if (round($total + $this->get('vat'), 2) != $this->get('total_price')) {
+                $this->error->set('Det samlede beløb ('.number_format($total + $this->get('vat'), 2, ',', '.').') til bogføring stemmer ikke overens med det samlede beløb på indkøbet. Har du fået alle vare på indkøbet med?');
             }
             
             if (round($vat, 2) != $this->get('vat')) {
