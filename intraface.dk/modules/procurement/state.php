@@ -200,7 +200,7 @@ $page->start('Bogfør indkøb #' . $procurement->get('number'));
                                     if (strtolower($a['type']) == 'headline') continue;
                                     echo '<option value="'. $a['number'].'"';
                                     if (isset($line['state_account_id']) && $line['state_account_id'] == $a['number']) echo ' selected="selected"';
-                                    echo '>'.safeToForm($a['name']).'</option>';
+                                    echo '>'.safeToForm($a['name'].' ('.t('vat', 'accounting').': '.t($a['vat_shorthand'], 'accounting').')').'</option>';
                                 }
                                 ?>
                             </select>
