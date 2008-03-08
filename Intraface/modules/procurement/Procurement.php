@@ -791,7 +791,7 @@ class Procurement Extends Standard
             }
             
             if (round($vat, 2) != $this->get('vat')) {
-                $this->error->set('Momsen af de beløb du bogføre på konti med moms stemmer ikke overens med momsen på det samlede indkøb. Har du fået alle vare med? Har du husket at skrive beløbet uden moms for varerne?');
+                $this->error->set('Momsen af de beløb du bogføre på konti med moms stemmer ('.number_format($vat, 2, ',', '.').') ikke overens med momsen på det samlede indkøb. Har du fået alle vare med? Har du husket at skrive beløbet uden moms for varerne?');
             }
 
         }
