@@ -789,7 +789,8 @@ class Procurement Extends Standard
             if ($total + $this->get('vat') != $this->get('total_price')) {
                 $this->error->set('Det samlede beløb til bogføring stemmer ikke overens med det samlede beløb på indkøbet. Har du fået alle vare på indkøbet med?');
             }
-            if ($vat != $this->get('vat')) {
+            
+            if (round($vat, 2) != $this->get('vat')) {
                 $this->error->set('Momsen af de beløb du bogføre på konti med moms stemmer ikke overens med momsen på det samlede indkøb. Har du fået alle vare med? Har du husket at skrive beløbet uden moms for varerne?');
             }
 
