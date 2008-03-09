@@ -18,12 +18,12 @@
  */
 class IntranetAdministration extends Intranet
 {
-    var $db; // databaseobject
-    var $id; // intranet id
-    var $address; // adresse object
-    var $value; // array med oplysninger om intranettet
-    var $kernel;
-    var $error;
+    protected $db; // databaseobject
+    public $id; // intranet id
+    public $address; // adresse object
+    public $value; // array med oplysninger om intranettet
+    public $kernel;
+    public $error;
 
     function __construct($kernel)
     {
