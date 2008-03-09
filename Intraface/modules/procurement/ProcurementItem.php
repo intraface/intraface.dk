@@ -7,13 +7,13 @@
  */
 class ProcurementItem extends Standard
 {
-    var $value;
-    var $id;
-    var $db;
-    var $procurement;
-    var $product;
-    var $product_id;
-    var $error;
+    public $value;
+    public $id;
+    private $db;
+    public $procurement;
+    public $product;
+    public $product_id;
+    public $error;
 
     function __construct($procurement, $id)
     {

@@ -11,15 +11,15 @@
 
 require_once 'Intraface/Standard.php';
 
-class Procurement Extends Standard
+class Procurement extends Standard
 {
-    var $kernel;
-    var $id;
-    var $error;
-    var $from_region_types;
-    var $status_types;
-    var $value;
-    var $dbquery;
+    public $kernel;
+    public $id;
+    public $error;
+    public $from_region_types;
+    public $status_types;
+    public $value;
+    public $dbquery;
 
     function __construct($kernel, $id = 0)
     {
@@ -789,7 +789,7 @@ class Procurement Extends Standard
             if (round($total + $this->get('vat'), 2) != $this->get('total_price')) {
                 $this->error->set('Det samlede beløb ('.number_format($total + $this->get('vat'), 2, ',', '.').') til bogføring stemmer ikke overens med det samlede beløb på indkøbet. Har du fået alle vare på indkøbet med?');
             }
-            
+
             if (round($vat, 2) != $this->get('vat')) {
                 $this->error->set('Momsen af de beløb du bogføre på konti med moms stemmer ('.number_format($vat, 2, ',', '.').') ikke overens med momsen på det samlede indkøb. Har du fået alle vare med? Har du husket at skrive beløbet uden moms for varerne?');
             }
