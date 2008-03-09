@@ -16,14 +16,14 @@ require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/modules/contact/Contact.php';
 require_once 'Intraface/shared/email/Email.php';
 
-class NewsletterSubscriber extends Standard {
-
-    var $list; //object
-    var $value;
-    var $error;
-    var $contact;
-    var $id;
-    var $dbquery;
+class NewsletterSubscriber extends Standard
+{
+    public $list; //object
+    public $value;
+    public $error;
+    public $contact;
+    public $id;
+    public $dbquery;
     private $observers = array();
 
     /**
