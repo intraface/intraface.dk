@@ -9,144 +9,144 @@
 <tr><td rowspan="1" colspan="3">testDeleteNews</td></tr>
 </thead><tbody>
 <tr>
-	<td>open</td>
-	<td>/install/reset-staging-server.php?modules=cms&login=true</td>
-	<td></td>
+    <td>open</td>
+    <td>/install/reset-staging-server.php?modules=cms&login=true</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=login</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=login</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=cms</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=cms</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=create site</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=create site</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>name</td>
-	<td>Test</td>
+    <td>type</td>
+    <td>name</td>
+    <td>Test</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>url</td>
-	<td>http://test.dk</td>
+    <td>type</td>
+    <td>url</td>
+    <td>http://test.dk</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//input[@value='save']</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>//input[@value='save']</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>url</td>
-	<td>http://test.dk/</td>
+    <td>type</td>
+    <td>url</td>
+    <td>http://test.dk/</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//input[@value='save']</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>//input[@value='save']</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=create template</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=create template</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>name</td>
-	<td>test</td>
+    <td>type</td>
+    <td>name</td>
+    <td>test</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>identifier</td>
-	<td>test</td>
+    <td>type</td>
+    <td>identifier</td>
+    <td>test</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>close</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>close</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=close</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=close</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=close</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=close</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=create a news</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=create a news</td>
+    <td></td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>cms-page-type</td>
-	<td>label=news</td>
+    <td>select</td>
+    <td>cms-page-type</td>
+    <td>label=news</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>title</td>
-	<td>test news</td>
+    <td>type</td>
+    <td>title</td>
+    <td>test news</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>shortlink</td>
-	<td>test</td>
+    <td>type</td>
+    <td>shortlink</td>
+    <td>test</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>navigation-name</td>
-	<td>test</td>
+    <td>type</td>
+    <td>navigation-name</td>
+    <td>test</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>close</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>close</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=close</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=close</td>
+    <td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>link=delete</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=delete</td>
+    <td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
-	<td>Er du sikker?</td>
-	<td></td>
+    <td>assertConfirmation</td>
+    <td>Er du sikker?</td>
+    <td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>500</td>
-	<td></td>
+    <td>pause</td>
+    <td>2000</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextNotPresent</td>
-	<td>test news</td>
-	<td></td>
+    <td>verifyTextNotPresent</td>
+    <td>test news</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>no news found</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>no news found</td>
+    <td></td>
 </tr>
 <tr>
-	<td></td>
-	<td></td>
-	<td></td>
+    <td></td>
+    <td></td>
+    <td></td>
 </tr>
 
 </tbody></table>
