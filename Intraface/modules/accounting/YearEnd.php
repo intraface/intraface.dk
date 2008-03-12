@@ -8,9 +8,9 @@ require_once 'Intraface/Standard.php';
 
 class YearEnd extends Standard
 {
-    var $error;
-    var $value;
-    var $year;
+    public $error;
+    public $value;
+    public $year;
 
     /*
     var $step = array(
@@ -22,12 +22,12 @@ class YearEnd extends Standard
     */
 
     // disse typer bruges i forbindelse med om statements er drift eller status
-    var $types = array(
+    public $types = array(
         1 => 'operating',
         2 => 'balance'
     );
 
-    var $actions = array(
+    public $actions = array(
         1 => 'operating_reset',
         2 => 'result_account_reset'
     );

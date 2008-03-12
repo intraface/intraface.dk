@@ -4,10 +4,9 @@
  */
 class VoucherFile
 {
-
-    var $id;
-    var $voucher;
-    var $what_can_i_belong_to = array(
+    public $id;
+    public $voucher;
+    public $what_can_i_belong_to = array(
         0 => '_invalid_',
         1 => 'invoice',
         2 => 'procurement',
@@ -16,7 +15,7 @@ class VoucherFile
         5 => 'credit_note',
         6 => 'reminder'
     );
-    var $error;
+    public $error;
 
     function __construct(& $voucher, $id=0)
     {

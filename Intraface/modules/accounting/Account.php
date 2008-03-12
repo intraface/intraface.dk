@@ -17,14 +17,14 @@ require_once 'Intraface/Validator.php';
 
 class Account extends Standard
 {
-    var $id; // kontoid
-    var $year; // object
-    var $value; // holds values for account if loaded
-    var $error; // errorobject
+    public $id; // kontoid
+    public $year; // object
+    public $value; // holds values for account if loaded
+    public $error; // errorobject
 
-    var $vat_percent;
+    public $vat_percent;
 
-    var $vat = array(
+    public $vat = array(
         0 => 'none',
         1 => 'in',
         2 => 'out'
@@ -35,7 +35,7 @@ class Account extends Standard
     // splittes op i to konti (aktiver og passiver)
     // husk at opdatere databasen til alle sum-konti skal have nummer 5 i stedet
 
-    var $types = array(
+    public $types = array(
         1 => 'headline',
         2 => 'operating', // drift
         3 => 'balance, asset', // aktiv
@@ -43,7 +43,7 @@ class Account extends Standard
         5 => 'sum'
     );
 
-    var $use = array(
+    public $use = array(
         1 => 'none',
         2 => 'income',
         3 => 'expenses',
@@ -51,8 +51,6 @@ class Account extends Standard
     );
 
     /**
-     * Init:
-     *
      * Account objektet repræsenterer _en_ konto.
      * Man kan finde kontonummeret ud fra kontonummeret også.
      *
@@ -60,11 +58,10 @@ class Account extends Standard
      * del udregningskraft. Værdierne smides imidlertid også bare i values,
      * så man kan hente dem med $this->get()
      *
-     * @param $intranet (object)
-     * @param $user (object)
-     * @param $account_id (int) valgfri konto id
+     * @param object  $year
+     * @param integer $account_id
+     *
      * @return void
-     * @access public
      */
     function __construct($year, $account_id = 0)
     {
@@ -89,8 +86,9 @@ class Account extends Standard
      * Denne funktion bruges bl.a. under bogføringen, så man bare taster kontonummer
      * og så sættes den rigtige konto.
      *
-     * @param (integer) $account_number
-     * @access public
+     * @param integer $account_number
+     *
+     * @return object
      */
     public static function factory($year, $account_number)
     {
@@ -118,9 +116,9 @@ class Account extends Standard
     }
 
     /**
-     * Public: Henter detaljer om konti - sætter lokale variable i klassen
+     * Henter detaljer om konti - sætter lokale variable i klassen
      *
-     * @return (integer) id
+     * @return integer id
      */
     private function load()
     {
@@ -178,7 +176,6 @@ class Account extends Standard
                 $this->value['vat_shorthand'] = 'ingen';
 
             } else { // hvis der er moms på året
-
                 $this->value['vat_key'] = $db->f('vat_key');
                 $this->value['vat'] = $this->vat[$db->f('vat_key')];
                 if ($this->value['vat'] == 'none') {
@@ -197,23 +194,30 @@ class Account extends Standard
                 $this->value['vat_shorthand'] = $this->value['vat'];
              }
         }
+
         return $this->get('id');
     }
 
     /**
-     * Public: Opdaterer kontooplysninger
+     * Updateds account
      *
-     * @param $var (array) med oplysninger om konto
+     * @param array $var info about account
+     *
+     * @return integer
      */
-    function save($var)
+    public function save($var)
     {
         $var = safeToDb($var);
 
-        // bruges til sumkonti
-        if (empty($var['sum_to'])) { $var['sum_to'] = ''; }
-        if (empty($var['sum_from'])) { $var['sum_from'] = ''; }
-        if (empty($var['vat_percent'])) { $var['vat_percent'] = 0; }
-
+        if (empty($var['sum_to'])) {
+            $var['sum_to'] = '';
+        }
+        if (empty($var['sum_from'])) {
+            $var['sum_from'] = '';
+        }
+        if (empty($var['vat_percent'])) {
+            $var['vat_percent'] = 0;
+        }
         if (!$this->isNumberFree($var['number'])) {
             $this->error->set('Du kan ikke bruge det samme kontonummer flere gange');
         }
@@ -280,6 +284,7 @@ class Account extends Standard
             $db->query("UPDATE accounting_account SET created_from_id = ".$var['created_from_id']." WHERE id = " . $this->id);
         }
 
+        $this->load();
 
         return $this->id;
     }
@@ -290,12 +295,13 @@ class Account extends Standard
      * Denne opdatering af primosaldoen bør ikke gemmes i save(), da det ikke
      * skal være let at ændre primosaldoen.
      *
-     * @param (float) $debet
-     * @param (float) $credit
+     * @param float $debet
+     * @param float $credit
      *
-     * @access public
+     * @return boolean
      */
-    function savePrimosaldo($debet, $credit) {
+    public function savePrimosaldo($debet, $credit)
+    {
         if ($this->id == 0) {
             return false;
         }
@@ -330,9 +336,9 @@ class Account extends Standard
      *
      * Skal tjekke om der er poster i året på kontoen.
      *
-     * @return 1 on success
+     * @return boolean
      */
-    function delete()
+    public function delete()
     {
         if ($this->anyPosts()) {
             $this->error->set('Der er poster på kontoen for dette år, så du kan ikke slette den. Næste år kan du lade være med at bogføre på kontoen, og så kan du slette den.');
@@ -719,4 +725,3 @@ class Account extends Standard
         return $amount * ($vat_percent / (1 + $vat_percent));
     }
 }
-?>

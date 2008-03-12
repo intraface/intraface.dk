@@ -13,12 +13,12 @@
  * @version 1.0
  */
 
-class Post extends Standard {
-
-    var $id; // integer
-    var $voucher; // object
-    var $error;
-    var $value;
+class Post extends Standard
+{
+    public $id; // integer
+    public $voucher; // object
+    public $error;
+    public $value;
 
     /**
      * Init

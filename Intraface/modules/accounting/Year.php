@@ -12,10 +12,10 @@ require_once 'Intraface/Error.php';
 
 class Year extends Standard
 {
-    var $id; // årsid
-    var $kernel; // object
-    var $value; // array
-    var $error; // error object
+    public $id; // årsid
+    public $kernel; // object
+    public $value; // array
+    public $error; // error object
 
     /**
      * Constructor

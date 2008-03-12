@@ -8,12 +8,11 @@ require_once 'DB/Sql.php';
 
 class VatPeriod extends Standard
 {
-
-    var $error;
-    var $year;
-    var $id;
-    var $value;
-    var $status = array(
+    public $error;
+    public $year;
+    public $id;
+    public $value;
+    public $status = array(
         0 => 'created',
         1 => 'saved',
         2 => 'stated'
