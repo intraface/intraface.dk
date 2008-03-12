@@ -53,11 +53,22 @@ class FakeAccountYear
     {
         return 1;
     }
+
+    function getSetting()
+    {
+        return 1;
+    }
 }
 
 class AccountTest extends PHPUnit_Framework_TestCase
 {
     private $delta = 0.001;
+
+    function setUp()
+    {
+        $db = MDB2::singleton(DB_DSN);
+        $db->exec('TRUNCATE accounting_account');
+    }
 
     function createAccount($id = 0)
     {
@@ -178,11 +189,50 @@ class AccountTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function testAnyAccountsReturnsAnIntegerGreaterThanZero()
+    function testAnyAccountsReturnsZeroWhenNoAccountIsSaved()
     {
         $account = $this->createAccount();
-        $this->assertTrue($account->anyAccounts() > 0);
+        $this->assertTrue($account->anyAccounts() == 0);
+    }
 
+
+    function testAnyAccountsReturnsAnIntegerGreaterThanZeroWhenOneAccountIsSaved()
+    {
+        $account = $this->createAccount();
+        $account_number = rand(1, 1000000);
+        $data = array(
+            'number' => $account_number,
+            'name' => 'test',
+            'type_key' => 1,
+            'use_key' => 1,
+            'vat_key' => 1,
+            'vat_percent' => 25
+        );
+        $this->assertTrue($account->save($data) > 0);
+
+        $this->assertTrue($account->anyAccounts() > 0);
+    }
+
+    function testVatPercentIsTransferredWhenSavingAnAccountFromTheValuesOfAnotherAccount()
+    {
+        $account = $this->createAccount();
+        $account_number = rand(1, 1000000);
+        $data = array(
+            'number' => $account_number,
+            'name' => 'test',
+            'type_key' => 1,
+            'use_key' => 1,
+            'vat_key' => 1,
+            'vat_percent' => 25
+        );
+        $this->assertTrue($account->save($data) > 0);
+        $this->assertEquals(25, $account->get('vat_percent'));
+
+        $account_new = $this->createAccount();
+        $data = $account->get();
+        $data['number'] = rand(1, 1000000);;
+        $account_new->save($data);
+        $this->assertEquals(25, $account_new->get('vat_percent'));
     }
 
 }
