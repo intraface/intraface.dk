@@ -399,7 +399,7 @@ class Product extends Standard
 
         $append_file = new AppendFile($this->kernel, 'product', $product->get('id'));
 
-        $pictures = $this->get('pictures');
+        $pictures = $this->getPictures();
         if (is_array($pictures)) {
             foreach ($pictures AS $pic) {
                 $append_file->addFile(new FileHandler($this->kernel, $pic['id']));
