@@ -387,6 +387,7 @@ class Product extends Standard
 
         // @todo does not transfer keywords correctly
         if (is_array($keywords)) {
+            $appender = $product->getKeywordAppender();
             foreach ($keywords AS $k) {
                 $appender->addKeyword(new Keyword($this, $k['id']));
             }
@@ -400,11 +401,9 @@ class Product extends Standard
 
         $pictures = $this->get('pictures');
         if (is_array($pictures)) {
-
             foreach ($pictures AS $pic) {
                 $append_file->addFile(new FileHandler($this->kernel, $pic['id']));
             }
-
         }
 
         return $new_id;
