@@ -166,7 +166,9 @@ class Address extends Standard
      */
     private function load()
     {
-        if ($this->id == 0) { return 0; }
+        if ($this->id == 0) {
+            return 0;
+        }
 
         $db = MDB2::singleton(DB_DSN);
         $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
@@ -197,6 +199,13 @@ class Address extends Standard
         return $this->id;
     }
 
+    /**
+     * Validates
+     *
+     * @param array $array_var Values
+     *
+     * @return boolean
+     */
     function validate($array_var)
     {
         $validator = new Validator($this->error);

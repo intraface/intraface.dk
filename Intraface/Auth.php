@@ -13,7 +13,6 @@ define('LOGIN_ERROR_ALREADY_LOGGED_IN', -1);
 
 class Auth
 {
-
     private $db;
     private $session_id;
     private $observers = array();
@@ -21,8 +20,8 @@ class Auth
     /**
      * Constructor
      *
-     * @param object $db Databaseobject
-     * @param string session_id
+     * @param object $db         Databaseobject
+     * @param string $session_id Session id
      *
      * @return void
      */
@@ -35,8 +34,8 @@ class Auth
     /**
      * login()
      *
-     * @param	string  $email
-     * @param	string  $password
+     * @param string $email    Email
+     * @param string $password Password
      *
      * @return	boolean
      */
@@ -66,8 +65,8 @@ class Auth
     /**
      * weblogin()
      *
-     * @param string $type
-     * @param string $key
+     * @param string $type Which type
+     * @param string $key  The key
      *
      * @return	mixed / boolean or weblogin object
      */
@@ -122,8 +121,11 @@ class Auth
 
     /**
      * logout()
+     *
      * TODO This should probably be in a user instead
+     *
      * @param void
+     *
      * @return boolean
      */
     public function logout()
@@ -139,15 +141,18 @@ class Auth
     }
 
     /**
-     * @param string $msg
+     * Redirects to login
+     *
+     * @param string $msg Explanation
+     *
+     * @return void
      */
     static public function toLogin($msg = '')
     {
         if (empty($msg)) {
             header('Location: '.PATH_WWW.'main/login.php');
             exit;
-        }
-        else {
+        } else {
             header('Location: '.PATH_WWW.'main/login.php?msg='.urlencode($msg));
             exit;
         }
@@ -167,8 +172,10 @@ class Auth
     }
 
     /**
-     * @param string $code
-     * @param string $msg
+     * Notifies observers
+     *
+     * @param string $code Which code
+     * @param string $msg  Which message to pass to observers
      */
     private function notifyObservers($code, $msg)
     {
@@ -188,4 +195,3 @@ class Auth
         return $this->observers;
     }
 }
-?>
