@@ -4,7 +4,7 @@ require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/modules/accounting/YearEnd.php';
 require_once 'Intraface/Kernel.php';
 
-class FakYearEndIntranet
+class FakeYearEndIntranet
 {
     function get()
     {
