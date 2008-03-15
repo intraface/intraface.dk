@@ -12,12 +12,10 @@ if($redirect->get('id') != 0) {
     $multiple = $redirect->isMultipleParameter('product_id');
     if(isset($_GET['set_quantity']) && (int)$_GET['set_quantity'] == 1) {
         $quantity = 1;
-    }
-    else {
+    } else {
         $quantity = 0;
     }
-}
-else {
+} else {
     trigger_error("Der mangler en gyldig redirect", E_USER_ERROR);
 }
 
@@ -45,18 +43,15 @@ if(isset($_POST['submit']) || isset($_POST['submit_close'])) {
                 $redirect->removeParameter('product_id', $selected_id);
                 if($quantity) {
                     $redirect->setParameter('product_id', $selected_id, $selected_value);
-                }
-                else {
+                } else {
                     $redirect->setParameter('product_id', $selected_id);
                 }
             }
         }
-    }
-    elseif(!$multiple && (int)$_POST['selected'] != 0) {
+    } elseif(!$multiple && (int)$_POST['selected'] != 0) {
         if($quantity) {
             $redirect->setParameter('product_id', (int)$_POST['selected'], (int)$_POST['quantity']);
-        }
-        else {
+        } else {
             $redirect->setParameter('product_id', (int)$_POST['selected']);
         }
     }
@@ -66,8 +61,6 @@ if(isset($_POST['submit']) || isset($_POST['submit_close'])) {
         exit;
     }
 }
-
-
 
 $product = new Product($kernel);
 $keywords = $product->getKeywordAppender();
@@ -117,14 +110,14 @@ $page->start(t('select product'));
         <fieldset>
             <legend><?php e(t('search', 'common')); ?></legend>
             <label><?php e(t('search for')); ?>
-            <input type="text" value="<?php print(safeToForm($product->dbquery->getFilter("search"))); ?>" name="search" id="search" />
+            <input type="text" value="<?php print(safeToForm($product->getDBQuery()->getFilter("search"))); ?>" name="search" id="search" />
         </label>
         <label>
             <?php e(t('show with keywords')); ?>
             <select name="keyword_id" id="keyword_id">
                 <option value=""><?php e(t('none', 'common')); ?></option>
                 <?php foreach ($keywords->getUsedKeywords() AS $k) { ?>
-                <option value="<?php echo intval($k['id']); ?>" <?php if($k['id'] == $product->dbquery->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo safeToForm($k['keyword']); ?></option>
+                <option value="<?php echo intval($k['id']); ?>" <?php if($k['id'] == $product->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo safeToForm($k['keyword']); ?></option>
                 <?php } ?>
             </select>
         </label>
@@ -134,7 +127,7 @@ $page->start(t('select product'));
     </form>
 
     <?php
-    echo $product->dbquery->display('character');
+    echo $product->getDBQuery()->display('character');
     ?>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>?set_quantity=<?php echo intval($quantity); ?>" method="post">
         <table summary="Produkter" class="stripe">
@@ -185,7 +178,7 @@ $page->start(t('select product'));
         <?php endif; ?>
         <input type="submit" name="submit_close" value="<?php e(t('save and close', 'common')); ?>" /></p>
 
-      <?php echo $product->dbquery->display('paging'); ?>
+      <?php echo $product->getDBQuery()->display('paging'); ?>
     </form>
 <?php endif; ?>
 <?php
