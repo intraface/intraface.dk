@@ -17,7 +17,7 @@ require_once 'Intraface/Validator.php';
 
 class Account extends Standard
 {
-    public $id; // kontoid
+    protected $id; // kontoid
     public $year; // object
     public $value; // holds values for account if loaded
     public $error; // errorobject
@@ -723,5 +723,10 @@ class Account extends Standard
         $vat_percent = (float)$vat_percent / 100;
 
         return $amount * ($vat_percent / (1 + $vat_percent));
+    }
+
+    function getId()
+    {
+        return $this->id;
     }
 }

@@ -10,6 +10,7 @@
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/modules/accounting/Account.php';
 require_once 'Intraface/modules/accounting/Post.php';
+require_once 'Intraface/tools/Date.php';
 
 class Voucher extends Standard
 {
@@ -27,15 +28,15 @@ class Voucher extends Standard
      *
      * @return void
      */
-    function __construct($year_object, $post_id = 0)
+    function __construct($year_object, $id = 0)
     {
         if(!is_object($year_object)) {
             trigger_error('Klassen Voucher kræver objektet Year', E_USER_ERROR);
             exit;
         }
-        $this->error = new Error;
-        $this->year = $year_object;
-        $this->id = (int)$post_id;
+        $this->error      = new Error;
+        $this->year       = $year_object;
+        $this->id         = (int)$id;
         $this->vatpercent = $this->year->kernel->setting->get('intranet', 'vatpercent');
 
         if ($this->id > 0) {
@@ -64,7 +65,6 @@ class Voucher extends Standard
         }
 
         return new Voucher($year, $db->f('id'));
-
     }
 
     private function load()
@@ -83,7 +83,7 @@ class Voucher extends Standard
         $db->query($sql);
 
         if (!$db->nextRecord()) {
-            return 0;
+            return false;
         }
         $this->value['id'] = $db->f('id');
         $this->value['number'] = $db->f('number');
@@ -92,7 +92,7 @@ class Voucher extends Standard
         $this->value['date'] = $db->f('date');
         $this->value['date_dk'] = $db->f('date_dk');
 
-        return 1;
+        return true;
     }
 
     /**
@@ -104,10 +104,13 @@ class Voucher extends Standard
      */
     function validate($var)
     {
-
         $validator = new Validator($this->error);
-        if (!empty($var['voucher_number'])) $validator->isNumeric($var['voucher_number'], 'Voucher er ikke et tal', 'allow_empty');
-        if (!empty($var['reference'])) $validator->isString($var['reference'], 'Reference er ikke en streng', '', 'allow_empty');
+        if (!empty($var['voucher_number'])) {
+            $validator->isNumeric($var['voucher_number'], 'Voucher er ikke et tal', 'allow_empty');
+        }
+        if (!empty($var['reference'])) {
+            $validator->isString($var['reference'], 'Reference er ikke en streng', '', 'allow_empty');
+        }
         $validator->isString($var['text'], 'Beskrivelsen skal være en tekststreng');
 
         if ($this->error->isError()) {
@@ -128,7 +131,9 @@ class Voucher extends Standard
      */
     function save($var)
     {
-        if (empty($var['reference'])) $var['reference'] = '';
+        if (empty($var['reference'])) {
+            $var['reference'] = '';
+        }
 
         $var = safeToDb($var);
 
@@ -176,7 +181,6 @@ class Voucher extends Standard
 
     function saveInDaybook($var, $skip_draft = false)
     {
-        //if (empty($var['invoice_number'])) $var['invoice_number'] = '';
         $var = safeToDb($var);
 
         $post_date = new Intraface_Date($var['date']);
@@ -192,7 +196,6 @@ class Voucher extends Standard
         if ($var['vat_off'] != 0 AND $var['vat_off'] != 1) {
             $this->error->set('vat_off');
         }
-
 
         if (!$this->year->isYearOpen()) {
             $this->error->set('Dette år er ikke åbent til bogføring');
@@ -220,17 +223,16 @@ class Voucher extends Standard
         $var = safeToDb($var);
 
         if (!$this->validate($var)) {
-            //$this->error->view();
             return 0;
         }
 
-        $debetaccount = Account::factory($this->year, $var['debet_account_number']);
+        $debetaccount = $this->getAccount($var['debet_account_number']);
 
         if (!$debetaccount->validForState()) {
             $this->error->set('Du kan ikke bogføre på den valgte debetkonto');
         }
 
-        $creditaccount = Account::factory($this->year, $var['credit_account_number']);
+        $creditaccount = $this->getAccount($var['credit_account_number']);
 
         if (!$creditaccount->validForState()) {
             $this->error->set('Du kan ikke bogføre på den valgte kreditkonto');
@@ -260,9 +262,12 @@ class Voucher extends Standard
 
         $this->state($skip_draft);
 
-
         return $this->id;
+    }
 
+    protected function getAccount($id)
+    {
+        return Account::factory($this->year, $id);
     }
 
     /**
@@ -628,5 +633,10 @@ class Voucher extends Standard
             return 0;
         }
         return $db->f('max_voucher_number');
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 }

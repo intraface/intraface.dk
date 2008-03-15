@@ -44,7 +44,7 @@ class YearEnd extends Standard
         }
     }
 
-    function load()
+    private function load()
     {
         $db = new DB_Sql;
         $db->query("SELECT * FROM accounting_year_end WHERE year_id = " . $this->year->get('id') . " AND intranet_id =" . $this->year->kernel->intranet->get('id'));
@@ -62,18 +62,18 @@ class YearEnd extends Standard
     function start()
     {
         if ($this->get('id') > 0) {
-            return;
+            return false;
         }
         $db = new DB_Sql;
         $db->query("INSERT INTO accounting_year_end SET date_created=NOW(), year_id = " . $this->year->get('id') . ", intranet_id =" .$this->year->kernel->intranet->get('id'));
-        return 1;
+        return true;
     }
 
     function setStep($step)
     {
         $db = new DB_Sql;
         $db->query("UPDATE accounting_year_end SET date_updated=NOW(), step_key = " . (int)$step . " WHERE year_id = " . $this->year->get('id'));
-        return 1;
+        return true;
     }
 
     function setStated($action, $voucher_id)
@@ -84,14 +84,12 @@ class YearEnd extends Standard
             // bruges i forbindelse med nulstilling af resultatkontoen
             case 'operating_reset':
                 $db->query("UPDATE accounting_year_end SET date_updated=NOW(), operating_reset_voucher_id = " . (int)$voucher_id . " WHERE year_id = " . $this->year->get('id'));
-                return 1;
-
-            break;
+                return true;
+                break;
             // bruges i forbindelse med overførelse af kapitalkontoen
             case 'result_account_reset':
                 $db->query("UPDATE accounting_year_end SET date_updated=NOW(), result_account_reset_voucher_id = " . (int)$voucher_id . " WHERE year_id = " . $this->year->get('id'));
-                return 1;
-
+                return true;
                 break;
 
             default:
@@ -116,19 +114,18 @@ class YearEnd extends Standard
     {
         $db = new Db_Sql;
         $db->query("INSERT INTO accounting_year_end_action SET date_created = NOW(), voucher_id = ".$voucher_id.", debet_account_id = ".$debet_account_id.", credit_account_id = ".$credit_account_id.", amount=".$amount.", intranet_id=".$this->year->kernel->intranet->get('id').", type_key = ".array_search($action, $this->actions).", year_id = ".$this->year->get('id'));
-        return 1;
+        return true;
     }
 
     function deleteStatedAction($id)
     {
         $db = new DB_Sql;
         $db->query("DELETE FROM accounting_year_end_action WHERE id = " . (int)$id);
-        return 1;
+        return true;
     }
 
     function getStatedActions($action)
     {
-
         $db = new DB_Sql;
         $db->query("SELECT * FROM accounting_year_end_action WHERE year_id = " . $this->year->get('id') . " AND type_key = ".array_search($action, $this->actions)." AND intranet_id = " . $this->year->kernel->intranet->get('id'));
         $actions = array();
@@ -150,20 +147,19 @@ class YearEnd extends Standard
     {
         $db = new DB_Sql;
         $db->query("DELETE FROM accounting_year_end_statement WHERE intranet_id = ".$this->year->kernel->intranet->get('id')." AND year_id = " . $this->year->get('id') . " AND type_key = " . array_search($type, $this->types));
-        return 1;
+        return true;
     }
 
     /**
      * Gemme resultatopgørelsen
      *
-     * Der er problemer hvis man gemmer resultatopgørelsen flere gange (hvis man også nulstiller kontiene), så det
+     * @todo Der er problemer hvis man gemmer resultatopgørelsen flere gange (hvis man også nulstiller kontiene), så det
      * bør vel egentlig ikke være muligt! Måske kan man forestille sig, at den så bare
      * gemmer videre og at den ved get lægger tallene i amount sammen?
      *
      */
     function saveStatement($type)
     {
-
         $this->flushStatement($type);
 
         switch ($type) {
@@ -172,8 +168,6 @@ class YearEnd extends Standard
                 // hvad gør vi ved det?
                 $account_start = new Account($this->year, $this->year->getSetting('result_account_id_start'));
                 $account_end = new Account($this->year,$this->year->getSetting('result_account_id_end'));
-
-
                 break;
             case 'balance':
                 // her kunne det måske være en ide at flushe
@@ -182,15 +176,13 @@ class YearEnd extends Standard
                 $account_end = new Account($this->year,$this->year->getSetting('balance_account_id_end'));
                 break;
             default:
-                    trigger_error('YearEnd::getStatement: Ugyldig type');
+                trigger_error('YearEnd::getStatement: Ugyldig type');
                 break;
 
         }
 
-
         $db = new DB_Sql;
         $db2 = new DB_Sql;
-
 
         $db->query("SELECT id FROM accounting_account WHERE year_id = " .$this->year->get('id'). " AND intranet_id = " . $this->year->kernel->intranet->get('id') . " AND number >= " . $account_start->get('number') . " AND number <= " . $account_end->get('number') . " ORDER BY number ASC");
 
@@ -203,7 +195,7 @@ class YearEnd extends Standard
             $db2->query("INSERT INTO accounting_year_end_statement SET type_key = ".array_search($type, $this->types).", intranet_id = ".$this->year->kernel->intranet->get('id').", year_id = ".$this->year->get('id').", account_id = " . $account->get('id') . ", amount = '".-1 * $account->get('saldo')."'");
         }
 
-        return 1;
+        return true;
     }
 
     function getStatement($type)
@@ -215,9 +207,8 @@ class YearEnd extends Standard
             case 'balance':
                 break;
             default:
-                    trigger_error('YearEnd::getStatement: Ugyldig type');
+                trigger_error('YearEnd::getStatement: Ugyldig type');
                 break;
-
         }
 
         // hvis jeg kunne få den her til at håndtere summen af det der er gemt,
@@ -269,7 +260,6 @@ class YearEnd extends Standard
      * @param $type (kan være do og reverse) - reverse er hvis man fortryder at man har gemt
      *				dog skal det jo stadig bogføres
      */
-
     function resetOperatingAccounts($type = 'do')
     {
         switch($type) {
@@ -287,7 +277,7 @@ class YearEnd extends Standard
         }
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
         $account = new Account($this->year);
         $result_account = new Account($this->year, $this->year->getSetting('result_account_id'));
@@ -305,7 +295,6 @@ class YearEnd extends Standard
                 $voucher = new Voucher($this->year, $this->get('operating_reset_voucher_id'));
 
                 $actions = $this->getStatedActions('operating_reset');
-
 
                 if (!is_array($actions) OR count($actions) == 0) {
                     $this->error->set('Du kan ikke lave en reverse, når der ikke er gemt nogen actions');
@@ -355,7 +344,7 @@ class YearEnd extends Standard
                 $accounts = $account->getList('operating', true);
                 if (!is_array($accounts) OR count($accounts) == 0){
                     $this->error->set('Du kan ikke nulstille nogle konti der ikke findes');
-                    return 0;
+                    return false;
                 }
 
                 foreach ($accounts AS $a) {
@@ -398,7 +387,7 @@ class YearEnd extends Standard
                     $this->setStated('operating_reset', $voucher->get('id'));
 
                 }
-                return 1;
+                return true;
             break;
         }
 
@@ -429,8 +418,7 @@ class YearEnd extends Standard
 
 
         if ($this->error->isError()) {
-            $this->error->view();
-            return 0;
+            return false;
         }
 
         switch ($type) {
@@ -454,8 +442,7 @@ class YearEnd extends Standard
                 }
 
                 if ($this->error->isError()) {
-                    $this->error->view();
-                    return 0;
+                    return false;
                 }
 
                 foreach ($actions AS $a) {
@@ -484,7 +471,7 @@ class YearEnd extends Standard
 
 
                 }
-                return 1;
+                return true;
             break;
             default:
                 if (!$this->get('result_account_reset_voucher_id')) {
@@ -537,7 +524,7 @@ class YearEnd extends Standard
                     }
                 }
                 $this->setStated('result_account_reset', $voucher->get('id'));
-                return 1;
+                return true;
             break;
         }
 

@@ -17,29 +17,26 @@ class VoucherFile
     );
     public $error;
 
-    function __construct(& $voucher, $id=0)
+    function __construct($voucher, $id=0)
     {
         if (!is_object($voucher)) {
             trigger_error('VoucherFile:: Voucher ikke gyldig', E_USER_ERROR);
         }
-        $this->voucher = & $voucher;
-        $this->id = (int) $id;
-        $this->error = new Error;
-        /*
-        if ($this->id > 0) {
-            $this->load();
-        }
-        */
+        $this->voucher = $voucher;
+        $this->id      = (int) $id;
+        $this->error   = new Error;
     }
 
     function validate($var)
     {
         $validator = new Validator($this->error);
-        if (!empty($var['description'])) $validator->isString($var['description'], 'Beskrivelsen ulovlig', '', 'allow_empty');
-        if ($this->error->isError()) {
-            return 0;
+        if (!empty($var['description'])) {
+            $validator->isString($var['description'], 'Beskrivelsen ulovlig', '', 'allow_empty');
         }
-        return 1;
+        if ($this->error->isError()) {
+            return false;
+        }
+        return true;
     }
 
     function save($var)
@@ -55,7 +52,7 @@ class VoucherFile
             WHERE intranet_id = " . $this->voucher->year->kernel->intranet->get('id') . "
                 AND belong_to_key = ".array_search($var['belong_to'], $this->what_can_i_belong_to)."
                 AND belong_to_id = ".$var['belong_to_id']."
-                AND voucher_id = ".$this->voucher->get('id') . " AND active = 1";
+                AND voucher_id = ".$this->voucher->getId() . " AND active = 1";
         $db->query($sql);
         if ($db->nextRecord()) {
             // hvis filen allerede er tilknyttet lader vi som om alt gik godt, og vi siger go

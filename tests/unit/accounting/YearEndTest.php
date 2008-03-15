@@ -59,6 +59,16 @@ class FakeYearEndYear
     {
         return 1;
     }
+
+    function isYearOpen()
+    {
+        return true;
+    }
+
+    function isDateInYear()
+    {
+        return true;
+    }
 }
 
 class FakeVatPeriodAccount
@@ -72,46 +82,64 @@ class FakeVatPeriodAccount
 class YearEndTest extends PHPUnit_Framework_TestCase
 {
 
+    private $end;
+
+    function setUp()
+    {
+        $db = MDB2::singleton(DB_DSN);
+        $db->exec('TRUNCATE accounting_year_end');
+        $db->exec('TRUNCATE accounting_year_end_action');
+        $db->exec('TRUNCATE accounting_year_end_statement');
+        $this->end = $this->createYearEnd();
+    }
+
     function createYearEnd()
     {
         return new YearEnd(new FakeYearEndYear);
     }
-
 
     function testConstruction()
     {
         $vat = $this->createYearEnd();
         $this->assertTrue(is_object($vat));
     }
-    /*
-    function testCreatePeriods()
-    {
-        $vat = $this->createPeriod();
-        $this->assertTrue($vat->createPeriods());
-        $periods = $vat->getList();
-        $this->assertTrue(count($periods) == 4);
-        $this->assertTrue($periods[0]['date_start'] == '0001-01-01' && $periods[0]['date_end'] == '0001-03-31');
-        $this->assertTrue($periods[1]['date_start'] == '0001-04-01' && $periods[1]['date_end'] == '0001-06-30');
-        $this->assertTrue($periods[2]['date_start'] == '0001-07-01' && $periods[2]['date_end'] == '0001-09-30');
-        $this->assertTrue($periods[3]['date_start'] == '0001-10-01' && $periods[3]['date_end'] == '0001-12-31');
-    }
-    */
 
-    /*
-    function testLoadAmounts()
+    function testStartReturnsTrue()
     {
-        // TODO needs to be updated
-        $this->markTestIncomplete('could not seem to get this under test - to many strange dependencies');
-        $vat = $this->createPeriod();
-        $this->assertTrue($vat->loadAmounts());
+        $this->assertTrue($this->end->start());
     }
-    */
-    /*
-    function testState()
-    {
-        $vat = $this->createPeriodWithFakeLoadAmounts();
-        // $this->assertTrue($vat->state());
-    }
-    */
 
+    function testSetStepReturnsTrue()
+    {
+        $this->assertTrue($this->end->setStep(1));
+    }
+
+    function testSetStatedReturnsTrue()
+    {
+        $this->assertTrue($this->end->setStated('operating_reset', 100));
+        $this->assertTrue($this->end->setStated('result_account_reset', 100));
+    }
+
+    function testGetStatedActionsReturnsArray()
+    {
+        $this->assertTrue(is_array($this->end->getStatedActions('operating_reset')));
+        $this->assertTrue(is_array($this->end->getStatedActions('result_account_reset')));
+    }
+
+    function testSaveStatement()
+    {
+        $this->assertTrue($this->end->saveStatement('operating'));
+        $this->assertTrue($this->end->saveStatement('balance'));
+    }
+
+    function testResetOperatingAccountsReturnsTrue()
+    {
+        $this->assertTrue($this->end->resetOperatingAccounts());
+    }
+
+    function testResetYearResultReturnsTrue()
+    {
+        $this->assertTrue($this->end->resetYearResult());
+
+    }
 }
