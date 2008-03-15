@@ -5,7 +5,6 @@ $kernel->module('product');
 $kernel->useModule('stock');
 
 $product = new Product($kernel);
-$product->createDBQuery();
 $products = $product->getList();
 $translation = $kernel->getTranslation('product');
 

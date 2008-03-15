@@ -55,41 +55,40 @@ class Intraface_XMLRPC_Shop_Server
         }
 
         $product = new Product($this->webshop->kernel);
-        $product->createDBQuery();
 
         if (!isset($mixed['use_paging']) || $mixed['use_paging'] == 'true') {
-            $product->dbquery->usePaging('paging');
+            $product->getDBQuery()->usePaging('paging');
         }
 
 
         // sublevel has to be used so other searches are not overwritten
-        $product->dbquery->storeResult('use_stored', 'webshop_' . $area . '_' .  md5($this->credentials['session_id']), 'sublevel');
+        $product->getDBQuery()->storeResult('use_stored', 'webshop_' . $area . '_' .  md5($this->credentials['session_id']), 'sublevel');
         $debug2 = serialize($mixed);
         if (array_key_exists('offset', $mixed) AND is_numeric($mixed['offset'])) {
-            $product->dbquery->useStored(true);
-            $product->dbquery->setPagingOffset((int)$mixed['offset']);
+            $product->getDBQuery()->useStored(true);
+            $product->getDBQuery()->setPagingOffset((int)$mixed['offset']);
             $debug2 .= 'offset ' . $mixed['offset'];
         } elseif (array_key_exists('use_stored', $mixed) AND $mixed['use_stored'] == 'true') {
-            $product->dbquery->useStored(true);
+            $product->getDBQuery()->useStored(true);
             $debug2 .= 'use_stored true';
         } else {
             if (array_key_exists('search', $mixed) AND !empty($mixed['search'])) {
-                $product->dbquery->setFilter('search', $mixed['search']);
+                $product->getDBQuery()->setFilter('search', $mixed['search']);
                 $debug2 .= 'search ' . $mixed['search'];
             }
 
             if (array_key_exists('keywords', $mixed) AND !empty($mixed['keywords'])) {
-                $product->dbquery->setFilter('keywords', $mixed['keywords']);
+                $product->getDBQuery()->setFilter('keywords', $mixed['keywords']);
                 $debug2 .= 'keyword ' . $mixed['keywords'];
             }
 
             if (array_key_exists('ids', $mixed) AND is_array($mixed['ids'])) {
-                $product->dbquery->setFilter('ids', $mixed['ids']);
+                $product->getDBQuery()->setFilter('ids', $mixed['ids']);
                 $debug2 .= 'ids ' . implode(', ', $mixed['ids']);
             }
 
             if (array_key_exists('sorting', $mixed) AND !empty($mixed['sorting'])) {
-                $product->dbquery->setFilter('sorting', $mixed['sorting']);
+                $product->getDBQuery()->setFilter('sorting', $mixed['sorting']);
                 $debug2 .= 'sorting ' . $mixed['sorting'];
             }
 
@@ -99,7 +98,7 @@ class Intraface_XMLRPC_Shop_Server
             'parameter' => $mixed,
             'debug2' => $debug2,
             'products' => $product->getList('webshop'),
-            'paging' => $product->dbquery->getPaging(),
+            'paging' => $product->getDBQuery()->getPaging(),
             'search' => array(),
         );
     }
@@ -186,9 +185,8 @@ class Intraface_XMLRPC_Shop_Server
 
         foreach ($all as $row) {
             $product = new Product($this->kernel);
-            $product->createDBQuery();
             // 265
-            $product->dbquery->setFilter('keywords', array($row['keyword_id']));
+            $product->getDBQuery()>setFilter('keywords', array($row['keyword_id']));
 
             $related_products[] = array(
                 'title' => $row['headline'],

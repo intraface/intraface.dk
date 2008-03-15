@@ -33,26 +33,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $product = new Product($kernel);
-$product->createDBQuery();
 // $characters = $product->getCharacters();
 $keywords = $product->getKeywordAppender();
 
 // burde bruge query
 if(isset($_GET["search"]) || isset($_GET["keyword_id"])) {
     if(isset($_GET["search"])) {
-        $product->dbquery->setFilter("search", $_GET["search"]);
+        $product->getDBQuery()->setFilter("search", $_GET["search"]);
     }
 
     if(isset($_GET["keyword_id"])) {
-        $product->dbquery->setKeyword($_GET["keyword_id"]);
+        $product->getDBQuery()->setKeyword($_GET["keyword_id"]);
     }
 } else {
-    $product->dbquery->useCharacter();
+    $product->getDBQuery()->useCharacter();
 }
 
-$product->dbquery->defineCharacter("character", "detail.name");
-$product->dbquery->usePaging("paging");
-$product->dbquery->storeResult("use_stored", "products", "toplevel");
+$product->getDBQuery()->defineCharacter("character", "detail.name");
+$product->getDBQuery()->usePaging("paging");
+$product->getDBQuery()->storeResult("use_stored", "products", "toplevel");
 
 $products = $product->getList();
 

@@ -23,7 +23,6 @@ if ($kernel->setting->get('intranet', 'product.ftp.hostname') && $kernel->settin
 if (!empty($_GET['action']) AND $_GET['action'] == 'transfer' AND $setting_is_ok) {
   // hente liste med produkter - bør hentes med getList!
   $product = new Product($kernel, $p['id']);
-  $product->createDBQuery();
   $list = $product->getList('webshop');
 
   $ftp = new Net_FTP();

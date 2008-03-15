@@ -24,8 +24,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "") {
   exit;
 
 
-}
-elseif(isset($_GET['id']) && isset($_GET['return_redirect_id'])) {
+} elseif(isset($_GET['id']) && isset($_GET['return_redirect_id'])) {
 	$procurement = new Procurement($kernel, $_GET["id"]);
 	$redirect = Redirect::factory($kernel, 'return');
 
@@ -33,27 +32,21 @@ elseif(isset($_GET['id']) && isset($_GET['return_redirect_id'])) {
 
 	if(is_array($product_id) && count($product_id) > 0) {
 		$product = new Product($kernel);
-		$product->createDBQuery();
-		$product->dbquery->setCondition('product.id IN('.implode(',', $product_id).')');
+		$product->getDBQuery()->setCondition('product.id IN('.implode(',', $product_id).')');
 
 		$products = $product->getList();
-	}
-	else {
+	} else {
 		header('location: view.php?id='.$procurement->get('id'));
 		exit;
 	}
-}
-else {
+} else {
 	trigger_error("Der mangler id eller return_redirect_id", E_USER_ERROR);
 }
 
 
 $page = new Page($kernel);
 $page->start("Sæt antal");
-
 ?>
-
-
 <h1>Sæt antal</h1>
 
 <?php if(!empty($_POST)): echo $procurement->item->error->view(); endif; ?>

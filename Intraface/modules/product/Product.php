@@ -72,7 +72,7 @@ class Product extends Standard
     /**
      * @var object
      */
-    public $dbquery;
+    protected $dbquery;
 
     /**
      * Constructor
@@ -103,14 +103,29 @@ class Product extends Standard
     /**
      * Creates the dbquery object
      *
+     * @deprecated should be removed as soon as possible
+     *
      * @return void
      */
-    public function createDBQuery()
+    private function createDBQuery()
     {
         $this->dbquery = new DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->setJoin("LEFT", "product_detail detail", "detail.product_id = product.id", "detail.active = 1");
         //$this->dbquery->setFindCharacterFromField("detail.name");
         $this->dbquery->useErrorObject($this->error);
+    }
+
+    public function getDBQuery()
+    {
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
+
+        $this->dbquery = new DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery->setJoin("LEFT", "product_detail detail", "detail.product_id = product.id", "detail.active = 1");
+        //$this->dbquery->setFindCharacterFromField("detail.name");
+        $this->dbquery->useErrorObject($this->error);
+        return $this->dbquery;
     }
 
     /**
@@ -674,42 +689,42 @@ class Product extends Standard
      */
     function getList($which = 'all')
     {
-        switch ($this->dbquery->getFilter('sorting')) {
+        switch ($this->getDBQuery()->getFilter('sorting')) {
             case 'date':
-                    $this->dbquery->setSorting("product.changed_date DESC");
+                    $this->getDBQuery()->setSorting("product.changed_date DESC");
                 break;
             default:
-                    $this->dbquery->setSorting("detail.name ASC");
+                    $this->getDBQuery()->setSorting("detail.name ASC");
                 break;
         }
 
-        if ($search = $this->dbquery->getFilter("search")) {
-            $this->dbquery->setCondition("detail.number = '".$search."'
+        if ($search = $this->getDBQuery()->getFilter("search")) {
+            $this->getDBQuery()->setCondition("detail.number = '".$search."'
                 OR detail.name LIKE '%".$search."%'
                 OR detail.description LIKE '%".$search."%'");
         }
-        if ($keywords = $this->dbquery->getFilter("keywords")) {
-            $this->dbquery->setKeyword($keywords);
+        if ($keywords = $this->getDBQuery()->getFilter("keywords")) {
+            $this->getDBQuery()->setKeyword($keywords);
         }
 
-        if ($ids = $this->dbquery->getFilter("ids")) {
+        if ($ids = $this->getDBQuery()->getFilter("ids")) {
             if (is_array($ids) && count($ids) > 0) {
-                $this->dbquery->setCondition("product.id IN (".implode(', ', $ids).")");
+                $this->getDBQuery()->setCondition("product.id IN (".implode(', ', $ids).")");
             } else {
-                $this->dbquery->setCondition('1 = 0');
+                $this->getDBQuery()->setCondition('1 = 0');
             }
         }
 
         // @todo DEN OUTPUTTER IKKE DET RIGTIGE VED KEYWORD
         switch ($which) {
             case 'webshop':
-                $this->dbquery->setCondition("product.do_show = 1");
+                $this->getDBQuery()->setCondition("product.do_show = 1");
                 break;
             case 'stock':
-                $this->dbquery->setCondition("product.stock = 1");
+                $this->getDBQuery()->setCondition("product.stock = 1");
                 break;
             case 'notpublished':
-                $this->dbquery->setCondition("product.do_show = 0");
+                $this->getDBQuery()->setCondition("product.do_show = 0");
                 break;
             case 'all': // fall through
             default:
@@ -718,7 +733,7 @@ class Product extends Standard
         }
 
         $i        = 0; // til at give arrayet en key
-        $db       = $this->dbquery->getRecordset("product.id", "", false);
+        $db       = $this->getDBQuery()->getRecordset("product.id", "", false);
         $products = array();
 
         // @todo Ved at starte product op hver gang får vi startet dbquery op en masse gange

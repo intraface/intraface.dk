@@ -27,7 +27,6 @@ if (!empty($_POST['product'])) {
 
 
 $product = new Product($kernel, (int)$_GET['id']);
-$product->createDBQuery();
 
 $related_products = $product->getRelatedProducts();
 
@@ -36,21 +35,21 @@ $keywords = $product->getKeywordAppender();
 if(isset($_GET["search"]) || isset($_GET["keyword_id"])) {
 
     if(isset($_GET["search"])) {
-        $product->dbquery->setFilter("search", $_GET["search"]);
+        $product->getDBQuery()->setFilter("search", $_GET["search"]);
     }
 
     if(isset($_GET["keyword_id"])) {
-        $product->dbquery->setKeyword($_GET["keyword_id"]);
+        $product->getDBQuery()->setKeyword($_GET["keyword_id"]);
     }
 } else {
-    $product->dbquery->useCharacter();
+    $product->getDBQuery()->useCharacter();
 }
 
-$product->dbquery->defineCharacter("character", "detail.name");
-$product->dbquery->setCondition("product.id != " . $_GET['id']);
-$product->dbquery->setExtraUri("&amp;id=".(int)$_GET['id']);
-$product->dbquery->usePaging("paging");
-$product->dbquery->storeResult("use_stored", "related_products", "sublevel");
+$product->getDBQuery()->defineCharacter("character", "detail.name");
+$product->getDBQuery()->setCondition("product.id != " . $_GET['id']);
+$product->getDBQuery()->setExtraUri("&amp;id=".(int)$_GET['id']);
+$product->getDBQuery()->usePaging("paging");
+$product->getDBQuery()->storeResult("use_stored", "related_products", "sublevel");
 
 $list = $product->getList();
 

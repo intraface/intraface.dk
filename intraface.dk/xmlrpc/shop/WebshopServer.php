@@ -153,8 +153,7 @@ class WebshopServer extends XmlRpcServer {
         $products = array();
 
         $product = new Product($this->webshop->kernel);
-        $product->createDBQuery();
-        $product->dbquery->setFilter('search', $search);
+        $product->getDBQuery()->setFilter('search', $search);
         $products = $product->getList('webshop');
 
         return $products;

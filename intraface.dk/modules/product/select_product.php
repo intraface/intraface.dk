@@ -70,27 +70,25 @@ if(isset($_POST['submit']) || isset($_POST['submit_close'])) {
 
 
 $product = new Product($kernel);
-$product->createDBQuery();
 $keywords = $product->getKeywordAppender();
 
 if(isset($_GET["search"]) || isset($_GET["keyword_id"])) {
 
     if(isset($_GET["search"])) {
-        $product->dbquery->setFilter("search", $_GET["search"]);
+        $product->getDBQuery()->setFilter("search", $_GET["search"]);
     }
 
     if(isset($_GET["keyword_id"])) {
-        $product->dbquery->setKeyword($_GET["keyword_id"]);
+        $product->getDBQuery()->setKeyword($_GET["keyword_id"]);
     }
-}
-else {
-    $product->dbquery->useCharacter();
+} else {
+    $product->getDBQuery()->useCharacter();
 }
 
-$product->dbquery->defineCharacter("character", "detail.name");
-$product->dbquery->usePaging("paging");
-$product->dbquery->storeResult("use_stored", "select_product", "sublevel");
-$product->dbquery->setExtraUri('set_quantity='.$quantity);
+$product->getDBQuery()->defineCharacter("character", "detail.name");
+$product->getDBQuery()->usePaging("paging");
+$product->getDBQuery()->storeResult("use_stored", "select_product", "sublevel");
+$product->getDBQuery()->setExtraUri('set_quantity='.$quantity);
 
 $list = $product->getList();
 $product_values = $redirect->getParameter('product_id', 'with_extra_value');

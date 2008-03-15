@@ -37,10 +37,9 @@ if (empty($_GET['use_stored'])) {
 
 // hente liste med produkter - bør hentes med getList!
 $product = new Product($kernel);
-$product->createDBQuery();
-$product->dbquery->defineCharacter("character", "detail.name");
-$product->dbquery->usePaging("paging");
-$product->dbquery->storeResult("use_stored", "products", "toplevel");
+$product->getDBQuery()->defineCharacter("character", "detail.name");
+$product->getDBQuery()->usePaging("paging");
+$product->getDBQuery()->storeResult("use_stored", "products", "toplevel");
 $products = $product->getList();
 
 $page = new Page($kernel);
