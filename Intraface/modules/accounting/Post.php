@@ -28,14 +28,13 @@ class Post extends Standard
      */
     function __construct($voucher, $post_id = 0)
     {
-
-        if(!is_object($voucher) OR strtolower(get_class($voucher)) != 'voucher') {
+        if(!is_object($voucher)) {
             trigger_error('Klassen Post kræver objektet Voucher', E_USER_ERROR);
             exit;
         }
         $this->voucher = $voucher;
-        $this->id = (int)$post_id;
-        $this->error = new Error;
+        $this->id      = (int)$post_id;
+        $this->error   = new Error;
 
         if ($this->id > 0) {
             $this->load();
