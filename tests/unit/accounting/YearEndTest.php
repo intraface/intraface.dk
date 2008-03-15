@@ -1,6 +1,7 @@
 <?php
 require_once dirname(__FILE__) . './../config.test.php';
 require_once 'PHPUnit/Framework.php';
+require_once 'Intraface/modules/accounting/Account.php';
 require_once 'Intraface/modules/accounting/YearEnd.php';
 require_once 'Intraface/Kernel.php';
 
@@ -71,11 +72,20 @@ class FakeYearEndYear
     }
 }
 
-class FakeYearEndAccount
+class FakeYearEndAccount extends Account
 {
-    function __construct()
+    function __construct($year)
     {
+        $this->value['number'] = 100;
+        parent::__construct($year);
+    }
+}
 
+class TestableYearEnd extends YearEnd
+{
+    function getAccount()
+    {
+        return new FakeYearEndAccount($this->year);
     }
 }
 
@@ -128,13 +138,15 @@ class YearEndTest extends PHPUnit_Framework_TestCase
 
     function testSaveStatement()
     {
-        $this->assertTrue($this->end->saveStatement('operating'));
-        $this->assertTrue($this->end->saveStatement('balance'));
+        $end = new TestableYearEnd(new FakeYearEndYear);
+        $this->assertTrue($end->saveStatement('operating'));
+        $this->assertTrue($end->saveStatement('balance'));
     }
 
-    function testResetOperatingAccountsReturnsTrue()
+    function testResetOperatingAccountsReturnsFalseWhenNoAccountsIsFound()
     {
-        $this->assertTrue($this->end->resetOperatingAccounts());
+        $result = $this->end->resetOperatingAccounts();
+        $this->assertFalse($result);
     }
 
     function testResetYearResultReturnsTrue()
