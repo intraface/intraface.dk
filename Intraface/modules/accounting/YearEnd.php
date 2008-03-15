@@ -166,14 +166,14 @@ class YearEnd extends Standard
             case 'operating':
                 // disse konti bliver nulstillet, så vi kan ikke bare gemme løs
                 // hvad gør vi ved det?
-                $account_start = new Account($this->year, $this->year->getSetting('result_account_id_start'));
-                $account_end = new Account($this->year,$this->year->getSetting('result_account_id_end'));
+                $account_start = $this->getAccount($this->year->getSetting('result_account_id_start'));
+                $account_end = $this->getAccount($this->year->getSetting('result_account_id_end'));
                 break;
             case 'balance':
                 // her kunne det måske være en ide at flushe
                 // for de bliver ikke nulstillet
-                $account_start = new Account($this->year, $this->year->getSetting('balance_account_id_start'));
-                $account_end = new Account($this->year,$this->year->getSetting('balance_account_id_end'));
+                $account_start = $this->getAccount($this->year->getSetting('balance_account_id_start'));
+                $account_end = $this->getAccount($this->year->getSetting('balance_account_id_end'));
                 break;
             default:
                 trigger_error('YearEnd::getStatement: Ugyldig type');
@@ -196,6 +196,11 @@ class YearEnd extends Standard
         }
 
         return true;
+    }
+
+    function getAccount($id = 0)
+    {
+        return new Account($this->year, $id);
     }
 
     function getStatement($type)
@@ -279,8 +284,8 @@ class YearEnd extends Standard
         if ($this->error->isError()) {
             return false;
         }
-        $account = new Account($this->year);
-        $result_account = new Account($this->year, $this->year->getSetting('result_account_id'));
+        $account = $this->getAccount();
+        $result_account = $this->getAccount($this->year->getSetting('result_account_id'));
 
         switch ($type) {
             case 'reverse':
