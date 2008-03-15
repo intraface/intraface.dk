@@ -207,7 +207,7 @@ class VatPeriod extends Standard
     /**
      * @return boolean
      */
-    protected function loadAmounts()
+    public function loadAmounts()
     {
         $saldo_total    = 0; // integer med total saldo
         $saldo_rubrik_a = 0;
