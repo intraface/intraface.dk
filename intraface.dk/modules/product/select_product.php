@@ -110,18 +110,18 @@ $page->start(t('select product'));
         <fieldset>
             <legend><?php e(t('search', 'common')); ?></legend>
             <label><?php e(t('search for')); ?>
-            <input type="text" value="<?php print(safeToForm($product->getDBQuery()->getFilter("search"))); ?>" name="search" id="search" />
+            <input type="text" value="<?php e($product->getDBQuery()->getFilter("search")); ?>" name="search" id="search" />
         </label>
         <label>
             <?php e(t('show with keywords')); ?>
             <select name="keyword_id" id="keyword_id">
                 <option value=""><?php e(t('none', 'common')); ?></option>
                 <?php foreach ($keywords->getUsedKeywords() AS $k) { ?>
-                <option value="<?php echo intval($k['id']); ?>" <?php if($k['id'] == $product->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo safeToForm($k['keyword']); ?></option>
+                <option value="<?php e($k['id']); ?>" <?php if($k['id'] == $product->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php e($k['keyword']); ?></option>
                 <?php } ?>
             </select>
         </label>
-        <span><input type="submit" value="<?php e(t('search')); ?>" class="search" /><input type="hidden" name="set_quantity" value="<?php echo intval($quantity); ?>" /></span>
+        <span><input type="submit" value="<?php e(t('search')); ?>" class="search" /><input type="hidden" name="set_quantity" value="<?php e($quantity); ?>" /></span>
         </fieldset>
         <br style="clear: both;" />
     </form>
@@ -129,20 +129,20 @@ $page->start(t('select product'));
     <?php
     echo $product->getDBQuery()->display('character');
     ?>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>?set_quantity=<?php echo intval($quantity); ?>" method="post">
+    <form action="<?php e($_SERVER['PHP_SELF']); ?>?set_quantity=<?php e($quantity); ?>" method="post">
         <table summary="Produkter" class="stripe">
             <caption><?php e(t('products')); ?></caption>
             <thead>
                 <tr>
-                    <th><?php if($multiple && $quantity): echo 'Antal'; else: echo 'Vælg'; endif; ?></th>
-                    <th><?php e(t('product number')); ?></th>
-                    <th><?php e(t('name')); ?></th>
-                    <th><?php e(t('unit')); ?></th>
+                    <th><?php if($multiple && $quantity): e(t('Quantity')); else: echo e(t('Choose')); endif; ?></th>
+                    <th><?php e(t('Product number')); ?></th>
+                    <th><?php e(t('Name')); ?></th>
+                    <th><?php e(t('Unit')); ?></th>
                     <?php if($kernel->user->hasModuleAccess('stock')): ?>
-                    <th><?php e(t('stock')); ?>r</th>
+                    <th><?php e(t('Stock')); ?>r</th>
                     <?php endif; ?>
-                    <th><?php e(t('vat')); ?></th>
-                    <th><?php e(t('price')); ?></th>
+                    <th><?php e(t('Vat')); ?></th>
+                    <th><?php e(t('Price')); ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -150,21 +150,21 @@ $page->start(t('select product'));
                 <tr>
                     <td>
                         <?php if($multiple && $quantity): ?>
-                            <input id="<?php echo intval($p['id']); ?>" type="text" name="selected[<?php echo intval($p['id']); ?>]" value="<?php if(isset($selected_products[$p['id']])): print(intval($selected_products[$p['id']])); else: print('0'); endif; ?>" size="2" />
+                            <input id="<?php e($p['id']); ?>" type="text" name="selected[<?php echo intval($p['id']); ?>]" value="<?php if(isset($selected_products[$p['id']])): print(intval($selected_products[$p['id']])); else: print('0'); endif; ?>" size="2" />
                         <?php elseif($multiple && !$quantity): ?>
-                            <input id="<?php echo intval($p['id']); ?>" type="checkbox" name="selected[<?php echo intval($p['id']); ?>]" value="1" <?php if (array_key_exists($p['id'], $selected_products)) echo ' checked="checked"'; ?> />
+                            <input id="<?php e($p['id']); ?>" type="checkbox" name="selected[<?php echo intval($p['id']); ?>]" value="1" <?php if (array_key_exists($p['id'], $selected_products)) echo ' checked="checked"'; ?> />
                         <?php elseif(!$multiple): ?>
-                            <input id="<?php echo intval($p['id']); ?>" type="radio" name="selected" value="<?php echo intval($p['id']); ?>" <?php if (array_key_exists($p['id'], $selected_products)) echo ' checked="checked"'; ?> />
+                            <input id="<?php e($p['id']); ?>" type="radio" name="selected" value="<?php echo intval($p['id']); ?>" <?php if (array_key_exists($p['id'], $selected_products)) echo ' checked="checked"'; ?> />
                         <?php endif; ?>
                     </td>
-                    <td><?php echo safeToHtml($p['number']); ?></td>
-                    <td><?php echo safeToHtml($p['name']); ?></td>
-                    <td><?php echo safeToHtml(t($p['unit']['combined'])); ?></td>
+                    <td><?php e($p['number']); ?></td>
+                    <td><?php e($p['name']); ?></td>
+                    <td><?php e(t($p['unit']['combined'])); ?></td>
                     <?php if($kernel->user->hasModuleAccess('stock')): ?>
-                        <td><?php if($p['stock'] == 0): print("-"); elseif(isset($p['stock_status']['for_sale'])): echo safeToHtml($p['stock_status']['for_sale']); else: echo 0; endif; ?></td>
+                        <td><?php if($p['stock'] == 0): e("-"); elseif(isset($p['stock_status']['for_sale'])): e($p['stock_status']['for_sale']); else: echo 0; endif; ?></td>
                     <?php endif; ?>
                     <td><?php if ($p['vat'] == 1) e('yes'); else e('no'); ?></td>
-                  <td class="amount"><?php echo number_format($p['price'], 2, ",", "."); ?></td>
+                  <td class="amount"><?php e(number_format($p['price'], 2, ",", ".")); ?></td>
                 </tr>
                 <?php  endforeach; ?>
             </tbody>
