@@ -85,14 +85,14 @@ $page->start(t('products'));
         </label>
         -->
         <label for="search"><?php e(t('search for')); ?>
-            <input name="search" id="search" type="text" value="<?php echo safeToForm($product->dbquery->getFilter("search")); ?>" />
+            <input name="search" id="search" type="text" value="<?php echo safeToForm($product->getDBQuery()->getFilter("search")); ?>" />
         </label>
 
         <label for="keyword_id"><?php e(t('show with keywords')); ?>
             <select name="keyword_id" id="keyword_id">
                 <option value=""><?php e(t('none')); ?></option>
                 <?php foreach ($keywords->getUsedKeywords() AS $k) { ?>
-                <option value="<?php echo $k['id']; ?>" <?php if($k['id'] == $product->dbquery->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo safeToForm($k['keyword']); ?></option>
+                <option value="<?php echo $k['id']; ?>" <?php if($k['id'] == $product->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo safeToForm($k['keyword']); ?></option>
                 <?php } ?>
             </select>
         </label>
@@ -108,7 +108,7 @@ $page->start(t('products'));
         <p class="message"><?php e(t('products has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('regret')); ?>" /></p>
 <?php endif; ?>
 
-<?php echo $product->dbquery->display('character'); ?>
+<?php echo $product->getDBQuery()->display('character'); ?>
 
     <?php if (!is_array($products) OR count($products) == 0): ?>
         <p><?php e(t('no products in search')); ?>.</p>
@@ -193,7 +193,7 @@ $page->start(t('products'));
 
     <?php endif; ?>
 
-<?php echo $product->dbquery->display('paging'); ?>
+<?php echo $product->getDBQuery()->display('paging'); ?>
 
 <?php endif; ?>
 
