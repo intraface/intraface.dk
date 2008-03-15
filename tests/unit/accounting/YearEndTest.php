@@ -4,7 +4,7 @@ require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/modules/accounting/YearEnd.php';
 require_once 'Intraface/Kernel.php';
 
-class FakeVatPeriodIntranet
+class FakYearEndIntranet
 {
     function get()
     {
@@ -17,7 +17,7 @@ class FakeVatPeriodIntranet
     }
 }
 
-class FakeVatPeriodUser
+class FakeYearEndUser
 {
     function hasModuleAccess()
     {
@@ -30,7 +30,7 @@ class FakeVatPeriodUser
     }
 }
 
-class FakeVatPeriodSetting
+class FakeYearEndSetting
 {
     function get()
     {
@@ -44,10 +44,10 @@ class FakeYearEndYear
     function __construct()
     {
         $this->kernel = new Kernel;
-        $this->kernel->user = new FakeVatPeriodUser;
+        $this->kernel->user = new FakeYearEndUser;
         $this->kernel->module('accounting');
-        $this->kernel->intranet = new FakeVatPeriodIntranet;
-        $this->kernel->setting = new FakeVatPeriodSetting;
+        $this->kernel->intranet = new FakeYearEndIntranet;
+        $this->kernel->setting = new FakeYearEndSetting;
 
     }
     function get()
@@ -71,7 +71,7 @@ class FakeYearEndYear
     }
 }
 
-class FakeVatPeriodAccount
+class FakeYearEndAccount
 {
     function __construct()
     {
