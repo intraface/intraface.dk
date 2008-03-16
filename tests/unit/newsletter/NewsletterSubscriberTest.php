@@ -74,6 +74,25 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($subscriber->addContact(new FakeSubscriberContact) > 0);
     }
 
+    function testGetContactReturnsContactObject()
+    {
+        $subscriber = new NewsletterSubscriber(new FakeNewsletterList);
+        $contact = new FakeSubscriberContact;
+        $subscriber->addContact($contact);
+        $this->assertTrue(is_object($subscriber->getContact($contact->getId())));
+    }
+
+    function testDeleteSubscriber()
+    {
+        $subscriber = new NewsletterSubscriber(new FakeNewsletterList);
+        $this->assertTrue($subscriber->delete());
+    }
+
+    function testGetListReturnsArray()
+    {
+        $subscriber = new NewsletterSubscriber(new FakeNewsletterList);
+        $this->assertTrue(is_array($subscriber->getList()));
+    }
 }
 
 class FakeSubscriberContact

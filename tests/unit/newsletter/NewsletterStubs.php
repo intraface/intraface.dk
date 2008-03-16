@@ -41,6 +41,7 @@ class FakeNewsletterKernel
     }
 
     function useModule() {}
+    function getSessionId() {}
 }
 
 class FakeNewsletterSettting

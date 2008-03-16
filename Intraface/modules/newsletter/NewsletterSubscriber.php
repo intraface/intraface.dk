@@ -174,7 +174,8 @@ class NewsletterSubscriber extends Standard
      */
     public function getContact($contact_id)
     {
-        $contact_module = $this->list->kernel->getModule('contact', true); // true: tjekker kun intranet_access
+        // $contact_module = $this->list->kernel->getModule('contact', true); // true: tjekker kun intranet_access
+        require_once 'Intraface/modules/contact/Contact.php';
         return new Contact($this->list->kernel, $contact_id);
     }
 
