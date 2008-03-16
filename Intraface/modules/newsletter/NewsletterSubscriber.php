@@ -171,32 +171,19 @@ class NewsletterSubscriber extends Standard
      *
      * @return integer of the id of the subscriber
      */
-    function addContact($contact_id)
+    function addContact($contact)
     {
-        $this->list->kernel->useModule('contact');
-        //$this->list->kernel->useModule('contact');
-        $contact = new Contact($this->list->kernel, (int)$contact_id);
-
-
-        if ($contact->get('id') == 0) {
-            $this->error->set("Ugyldig kontakt");
-            return 0;
-        }
-
         $db = new DB_sql;
 
-        $db->query("SELECT id FROM newsletter_subscriber WHERE contact_id = '".$contact_id."' AND list_id = " . $this->list->get("id") . " AND intranet_id = ".$this->list->kernel->intranet->get('id')." AND active = 1");
+        $db->query("SELECT id FROM newsletter_subscriber WHERE contact_id = '".$contact->getId()."' AND list_id = " . $this->list->get("id") . " AND intranet_id = ".$this->list->kernel->intranet->get('id')." AND active = 1");
         if ($db->nextRecord()) {
             $this->error->set("Kontakten er allerede tilføjet");
             return 0;
         }
 
-        //
         // Spørgsmålet er om vedkommende bør få en e-mail, hvor man kan acceptere?
-        //
-
         $db->query("INSERT INTO newsletter_subscriber SET
-                    contact_id = '".$contact_id."',
+                    contact_id = '".$contact->getId()."',
                     list_id = " . $this->list->get("id") . ",
                     date_submitted=NOW(),
                     optin = 1,
