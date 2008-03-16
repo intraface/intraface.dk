@@ -99,7 +99,7 @@ class Intraface_XMLRPC_Contact
             throw new XML_RPC2_FaultException('input must contain an id key', -5);
         }
 
-        $values = $this->utf8Decode($input);
+        $input = $this->utf8Decode($input);
 
         $contact = new Contact($this->kernel, $input['id']);
 
