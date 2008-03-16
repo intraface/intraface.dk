@@ -57,8 +57,11 @@ class FakeVatPeriodYear
         return 1;
     }
 
-    function getSetting()
+    function getSetting($key = '')
     {
+        if ($key == 'vat_period') {
+            return 1;
+        }
         return serialize(array());
     }
 

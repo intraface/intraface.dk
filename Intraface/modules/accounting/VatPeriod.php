@@ -100,6 +100,60 @@ class VatPeriod extends Standard
         return $db->numRows();
     }
 
+    public static function getPeriodsArray()
+    {
+        return array(
+                // halvårlig
+                0 => array(
+                    'name' => 'Halvårlig',
+                    'periods' => array(
+                        // 1. halvår
+                        1 => array(
+                            'name' => '1. halvår',
+                            'date_from' => '01-01',
+                            'date_to' => '06-30'
+                        ),
+                        // 2. halvår
+                        2 => array(
+                            'name' => '2. halvår',
+                            'date_from' => '07-01',
+                            'date_to' => '12-31'
+                        )
+                    )
+                ),
+                // kvartalsvis
+                1 => array(
+                    'name' => 'Kvartalsvis',
+                    'periods' => array(
+                        // januarkvartal
+                        1 => array(
+                            'name' => '1. kvartal',
+                            'date_from' => '01-01',
+                            'date_to' => '03-31'
+                        ),
+                        // februarkvartal
+                        2 => array(
+                            'name' => '2. kvartal',
+                            'date_from' => '04-01',
+                            'date_to' => '06-30'
+                        ),
+                        // februarkvartal
+                        3 => array(
+                            'name' => '3. kvartal',
+                            'date_from' => '07-01',
+                            'date_to' => '09-30'
+                        ),
+                        // februarkvartal
+                        4 => array(
+                            'name' => '4. kvartal',
+                            'date_from' => '10-01',
+                            'date_to' => '12-31'
+                        )
+                    )
+                )
+            );
+    }
+
     /**
      * @return boolean
      */
@@ -113,8 +167,9 @@ class VatPeriod extends Standard
         $db = new DB_Sql;
 
         // momsperiode
-        $module  = $this->year->kernel->getPrimaryModule();
-        $periods = $module->getSetting('vat_periods');
+        //$module  = $this->year->kernel->getPrimaryModule();
+        //$periods = $module->getSetting('vat_periods');
+        $periods = self::getPeriodsArray();
         $periods = $periods[$this->year->getSetting('vat_period')];
         foreach ($periods['periods'] AS $key=>$value) {
             $input = array(
