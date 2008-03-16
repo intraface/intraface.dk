@@ -32,13 +32,20 @@ class FakeNewsletterKernel
 {
     public $intranet;
     public $user;
+    public $setting;
 
     function __construct()
     {
         $this->intranet = new FakeNewsletterIntranet();
+        $this->setting = new FakeNewsletterSettting;
     }
 
     function useModule() {}
+}
+
+class FakeNewsletterSettting
+{
+    function get() {}
 }
 
 class FakeNewsletterIntranet

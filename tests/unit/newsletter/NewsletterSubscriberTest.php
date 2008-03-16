@@ -27,22 +27,15 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($subscriber));
     }
 
-    /*
     function testSubscribe()
     {
-        // TODO We need to figure out to test this without address blowing up
-        $this->markTestIncomplete();
         $subscriber = $this->createSubscriber();
         $data = array('email' => 'test@legestue.net', 'ip' => 'ip');
         $this->assertTrue($subscriber->subscribe($data));
     }
-    */
 
-    /*
     function testOptin()
     {
-        // TODO We need to figure out to test this without address blowing up
-        $this->markTestIncomplete('We need to figure out to test this without address blowing up');
         $subscriber = $this->createSubscriber();
         $data = array('email' => 'test@legestue.net', 'ip' => 'ip');
         $this->assertTrue($subscriber->subscribe($data));
@@ -54,7 +47,6 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
         $code = $subscriber->get('code');
         $this->assertTrue($subscriber->optIn($code, $ip));
     }
-    */
 
     function testAddObserver()
     {
@@ -63,4 +55,3 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($subscriber->getObservers()));
     }
 }
-?>
