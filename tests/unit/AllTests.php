@@ -41,7 +41,8 @@ class AllTests
                        'Stock',
                        'OnlinePayment',
                        'Procurement',
-                       'Project'
+                       'Project',
+                       'Xmlrpc'
         );
 
         foreach ($tests AS $test) {
