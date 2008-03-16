@@ -384,7 +384,6 @@ class Intraface_XMLRPC_Shop_Server
      *
      * @return integer $payment_id
      */
-
     public function saveOnlinePayment($credentials, $values)
     {
         $this->checkCredentials($credentials);
@@ -415,12 +414,10 @@ class Intraface_XMLRPC_Shop_Server
     /**
      * Returns an onlinepayment id to be processed to the id can be used in payment
      *
-     *
      * @param struct $credentials Credentials to use the server
      *
      * @return integer $payment_id
      */
-
     public function createOnlinePayment($credentials)
     {
         $this->checkCredentials($credentials);
