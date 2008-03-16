@@ -35,6 +35,9 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
         $kernel->setting = new FakeSetting;
         $kernel->setting->set('user', 'accounting.active_year', '1');
         $kernel->setting->set('intranet', 'vatpercent', 25);
+        $kernel->setting->set('intranet', 'accounting.vat_out_account_id', 46);
+        $kernel->setting->set('intranet', 'accounting.vat_in_account_id', 44);
+        
         return $kernel;
     }
     
@@ -228,6 +231,25 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue($procurement->isStated());
         $this->assertFalse($procurement->readyForState($year));
+    }
+    
+    function testStateWithNoShipment() {
+        
+        
+        $procurement = new Procurement($this->createKernel());
+        $procurement->update(array('dk_invoice_date' => '01-01-'.date('Y'), 'delivery_date' => '02-01-'.date('Y'), 'dk_payment_date' => '03-01-'.date('Y'), 'number' => 1, 'description' => 'test', 'dk_price_items' => '135,96', 'dk_price_shipment_etc' => '0', 'dk_vat' => '33,99'));
+        $year = $this->createAccountingYear();
+        $procurement->setPaid('04-01-'.date('Y'));
+        
+        $state = array(
+            0 => array('text' => '', 'amount' => '135,96', 'state_account_id' => 7000),
+        
+        );
+        
+        
+        $this->assertTrue($procurement->state($year, 1, '05-01-'.date('Y'), $state,  58000, new FakeTranslation), $procurement->error->view());
+        
+        
     }
     
 }
