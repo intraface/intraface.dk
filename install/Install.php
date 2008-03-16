@@ -1,6 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../intraface.dk/common.php';
-
 class Intraface_Install
 {
     /**
