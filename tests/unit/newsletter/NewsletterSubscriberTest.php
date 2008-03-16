@@ -12,6 +12,12 @@ class FakeObserver
 
 class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
 {
+    function setUp()
+    {
+        $db = MDB2::factory(DB_DSN);
+        $db->exec('TRUNCATE newsletter_subscriber');
+        $db->exec('TRUNCATE newsletter_archieve');
+    }
 
     function createSubscriber()
     {
@@ -67,6 +73,7 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
         $subscriber = new NewsletterSubscriber(new FakeNewsletterList);
         $this->assertTrue($subscriber->addContact(new FakeSubscriberContact) > 0);
     }
+
 }
 
 class FakeSubscriberContact
