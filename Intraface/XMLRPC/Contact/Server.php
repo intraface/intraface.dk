@@ -30,8 +30,9 @@ class Intraface_XMLRPC_Contact
     /**
      * Gets a contact
      *
-     * @param  struct  $credentials
-     * @param  integer $id
+     * @param  struct  $credentials Struct with credentials
+     * @param  integer $id          Contact id
+     *
      * @return array
      */
     public function getContact($credentials, $id)
@@ -54,8 +55,9 @@ class Intraface_XMLRPC_Contact
     /**
      * Authenticates a contact
      *
-     * @param  struct  $credentials
-     * @param  string  $contact_key
+     * @param  struct  $credentials Credentials provided by intraface
+     * @param  string  $contact_key The contact's key
+     *
      * @return array
      */
     public function authenticateContact($credentials, $contact_key)
@@ -80,8 +82,9 @@ class Intraface_XMLRPC_Contact
     /**
      * Saves a contact
      *
-     * @param  struct $credentials
-     * @param  array  $input       (remember to include id key)
+     * @param  struct $credentials Credentials provided by intraface
+     * @param  array  $input       Remember to include id key
+     *
      * @return boolean
      */
     public function saveContact($credentials, $input)
@@ -90,6 +93,10 @@ class Intraface_XMLRPC_Contact
 
         if (!is_array($input)) { // -5
             throw new XML_RPC2_FaultException('input is not an array', -5);
+        }
+
+        if (!isset($input['id'])) { // -5
+            throw new XML_RPC2_FaultException('input must contain an id key', -5);
         }
 
         $values = $this->utf8Decode($input);
@@ -154,7 +161,7 @@ class Intraface_XMLRPC_Contact
      *
      * Might be deprecated in the future so use with caution
      *
-     * @param  struct $credentials
+     * @param  struct $credentials Credentials provided by intraface
      *
      * @return array
      */
@@ -215,6 +222,13 @@ class Intraface_XMLRPC_Contact
         return true;
     }
 
+    /**
+     * Decodes values
+     *
+     * @param array $values Values
+     *
+     * @return mixed
+     */
     private function utf8Decode($values)
     {
         if (is_array($values)) {
