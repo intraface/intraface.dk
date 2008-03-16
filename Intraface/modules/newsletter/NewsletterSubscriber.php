@@ -314,18 +314,18 @@ class NewsletterSubscriber extends Standard
     function optedIn()
     {
         if ($this->id == 0) {
-            return 0;
+            return false;
         }
         $db = new DB_Sql;
         $db->query("SELECT * FROM newsletter_subscriber WHERE id = " . $this->id." and active = 1");
         if (!$db->nextRecord()) {
-            return 0;
+            return false;
         }
 
         if (!$db->f('ip_optin')) {
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
     }
 
     /**
@@ -356,7 +356,7 @@ class NewsletterSubscriber extends Standard
 
         $db = new DB_Sql;
         $db->query("UPDATE newsletter_subscriber SET active = 0 WHERE id=".$this->id." AND list_id = " . $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id'));
-        return 1;
+        return true;
     }
 
     /**
