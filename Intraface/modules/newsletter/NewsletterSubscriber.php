@@ -177,8 +177,7 @@ class NewsletterSubscriber extends Standard
 
         $db->query("SELECT id FROM newsletter_subscriber WHERE contact_id = '".$contact->getId()."' AND list_id = " . $this->list->get("id") . " AND intranet_id = ".$this->list->kernel->intranet->get('id')." AND active = 1");
         if ($db->nextRecord()) {
-            $this->error->set("Kontakten er allerede tilføjet");
-            return 0;
+            return $db->f('id');
         }
 
         // Spørgsmålet er om vedkommende bør få en e-mail, hvor man kan acceptere?
@@ -187,7 +186,7 @@ class NewsletterSubscriber extends Standard
                     list_id = " . $this->list->get("id") . ",
                     date_submitted=NOW(),
                     optin = 1,
-                    code = '".md5($this->list->get("id") . $this->list->kernel->intranet->get('id') . date('Y-m-d H:i:s') . $contact_id)."',
+                    code = '".md5($this->list->get("id") . $this->list->kernel->intranet->get('id') . date('Y-m-d H:i:s') . $contact->getId())."',
                     intranet_id = ".$this->list->kernel->intranet->get('id'));
 
         return $db->insertedId();

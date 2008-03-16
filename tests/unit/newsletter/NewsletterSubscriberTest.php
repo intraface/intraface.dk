@@ -54,4 +54,15 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
         $subscriber->addObserver(new FakeObserver);
         $this->assertEquals(1, count($subscriber->getObservers()));
     }
+
+    function testAddContactReturnsInteger()
+    {
+        $subscriber = new NewsletterSubscriber(new FakeNewsletterList);
+        $this->assertTrue($subscriber->addContact(new FakeSubscriberContact) > 0);
+    }
+}
+
+class FakeSubscriberContact
+{
+    function getId() { return 1000; }
 }
