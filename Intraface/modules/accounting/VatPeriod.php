@@ -173,8 +173,8 @@ class VatPeriod extends Standard
         $periods = $periods[$this->year->getSetting('vat_period')];
         foreach ($periods['periods'] AS $key=>$value) {
             $input = array(
-                'label'      =>  $value['name'],
-                'date_start' =>  $this->year->get('year') . '-' . $value['date_from'],
+                'label'      => $value['name'],
+                'date_start' => $this->year->get('year') . '-' . $value['date_from'],
                 'date_end'   => $this->year->get('year') . '-' . $value['date_to'],
             );
             $this->save($input, 'insert');
