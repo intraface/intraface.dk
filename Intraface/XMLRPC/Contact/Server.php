@@ -22,7 +22,7 @@ class Intraface_XMLRPC_Contact
      */
     private $credentials;
 
-    function __construct($kernel = '')
+    public function __construct($kernel = '')
     {
         //$this->kernel = $kernel;
     }
@@ -34,7 +34,7 @@ class Intraface_XMLRPC_Contact
      * @param  integer $id
      * @return array
      */
-    function getContact($credentials, $id)
+    public function getContact($credentials, $id)
     {
         $this->checkCredentials($credentials);
 
@@ -58,7 +58,7 @@ class Intraface_XMLRPC_Contact
      * @param  string  $contact_key
      * @return array
      */
-    function authenticateContact($credentials, $contact_key)
+    public function authenticateContact($credentials, $contact_key)
     {
         $this->checkCredentials($credentials);
 
@@ -81,10 +81,10 @@ class Intraface_XMLRPC_Contact
      * Saves a contact
      *
      * @param  struct $credentials
-     * @param  array  $input (remember to include id key)
+     * @param  array  $input       (remember to include id key)
      * @return boolean
      */
-    function saveContact($credentials, $input)
+    public function saveContact($credentials, $input)
     {
         $this->checkCredentials($credentials);
 
@@ -92,11 +92,11 @@ class Intraface_XMLRPC_Contact
             throw new XML_RPC2_FaultException('input is not an array', -5);
         }
 
-        $values = $input;
+        $values = $this->utf8Decode($input);
 
-        $contact = new Contact($this->kernel, $values['id']);
+        $contact = new Contact($this->kernel, $input['id']);
 
-        if (!$contact->save($values)) {
+        if (!$contact->save($input)) {
             $contact->error->view(); // -6
             throw new XML_RPC2_FaultException('could not update contact', -6);
         }
@@ -111,7 +111,7 @@ class Intraface_XMLRPC_Contact
      *
      * @return array Keywords
      */
-    function getKeywords($credentials)
+    public function getKeywords($credentials)
     {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
@@ -132,7 +132,7 @@ class Intraface_XMLRPC_Contact
      *
      * @return array Keywords
      */
-    function getConnectedKeywords($credentials, $contact_id)
+    public function getConnectedKeywords($credentials, $contact_id)
     {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
@@ -187,14 +187,8 @@ class Intraface_XMLRPC_Contact
      * @param struct $credentials
      * @return array
      */
-    function checkCredentials($credentials)
+    private function checkCredentials($credentials)
     {
-        /*
-        if (is_object($this->kernel) AND is_object($this->kernel->intranet)) {
-            return true;
-        }
-        */
-
         if (count($credentials) != 2) { // -4
             throw new XML_RPC2_FaultException('wrong argument count in $credentials - got ' . count($credentials) . ' arguments - need 2', -4);
         }
@@ -219,5 +213,17 @@ class Intraface_XMLRPC_Contact
         }
 
         return true;
+    }
+
+    private function utf8Decode($values)
+    {
+        if (is_array($values)) {
+            return array_map('utf8_decode', $values);
+        } elseif (is_string($values)) {
+            return utf8_decode($values);
+        } else {
+            return $values;
+        }
+
     }
 }
