@@ -29,6 +29,10 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
     function setUp()
     {
         $this->server = new Intraface_XMLRPC_Contact;
+        $db = MDB2::factory(DB_DSN);
+        $db->exec('TRUNCATE contact');
+        $db->exec('TRUNCATE address');
+        
     }
 
     function tearDown()
@@ -79,25 +83,33 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
 
         require_once 'XML/RPC2/Client.php';
         $options = array('prefix' => 'contact.');
-        return XML_RPC2_Client::create(XMLRPC_SERVER_URL, $options);;
+        return XML_RPC2_Client::create(XMLRPC_SERVER_URL.'contact/server.php', $options);;
+    }
+    
+    function testGetContactWithDanishCharactersWorks()
+    {
+        $client = $this->getClient();
+        $credentials = array('private_key' => 'privatekeyshouldbereplaced', 'session_id' => 'something');
+
+        $contact = new Contact(new ContactXMLRPCServerKernel);
+        $data = array('name' => 'Tester זרו');
+        $contact->save($data);
+
+        $this->assertEquals('Tester זרו', $client->getContact($credentials, $contact->getId())); 
+
     }
 
     function testSaveContactWorksWithDanishCharacters()
     {
         $client = $this->getClient();
-
         $credentials = array('private_key' => 'privatekeyshouldbereplaced', 'session_id' => 'something');
 
         $contact = new Contact(new ContactXMLRPCServerKernel);
-
         $data = array('name' => 'Tester');
-
         $contact->save($data);
 
-        $new_name = 'Tester זרו';
-
+        $new_name = 'Tester aaa';
         $data = array('id' => $contact->getId(), 'name' => $new_name);
-
         $this->assertTrue($client->saveContact($credentials, $data));
 
         $saved_contact = new Contact(new ContactXMLRPCServerKernel, $contact->getId());
