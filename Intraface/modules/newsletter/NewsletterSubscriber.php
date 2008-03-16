@@ -381,7 +381,8 @@ class NewsletterSubscriber extends Standard
      *
      * @return boolean
      */
-    function optIn($code, $ip) {
+    function optIn($code, $ip)
+   {
         $db = new DB_Sql;
         $db->query("SELECT id FROM newsletter_subscriber WHERE code = '".$code."' AND list_id = " . $this->list->get('id')." AND active = 1");
         if (!$db->nextRecord()) {
@@ -410,7 +411,6 @@ class NewsletterSubscriber extends Standard
         $db = new DB_Sql("SELECT * FROM newsletter WHERE list_id=".$this->list->get('id') . " AND intranet_id = " . $this->list->kernel->intranet->get('id') . " AND optin = 1");
         return $db->numRows();
     }
-
 
     /**
      * The subscriber must receive an e-mail so the subscribtion can be confirmed
@@ -512,18 +512,6 @@ class NewsletterSubscriber extends Standard
     }
 
     /**
-     * This function must clean up the list for non-confirmed subscriptions
-     * This method should delete unconfirmed subscriptions which
-     * are more than a week old.
-     *
-     * @return boolean
-     */
-    function cleanUp()
-    {
-        die('Ikke implementeret');
-    }
-
-    /**
      * @param object $observer Must implement an update() method
      */
     function addObserver($observer)
@@ -549,4 +537,3 @@ class NewsletterSubscriber extends Standard
         }
     }
 }
-?>
