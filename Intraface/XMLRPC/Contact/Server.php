@@ -7,7 +7,6 @@
  * @since   0.1.0
  * @version @package-version@
  */
-
 require_once 'Intraface/Weblogin.php';
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/Intranet.php';
@@ -16,13 +15,15 @@ require_once 'Intraface/modules/contact/Contact.php';
 require_once 'XML/RPC2/Server.php';
 require_once 'MDB2.php';
 
-class Intraface_XMLRPC_Contact {
-
+class Intraface_XMLRPC_Contact
+{
+    /**
+     * @var string
+     */
     private $credentials;
-    //private $kernel;
 
-    //function __construct() {
-    function __construct($kernel = '') {
+    function __construct($kernel = '')
+    {
         //$this->kernel = $kernel;
     }
 
@@ -33,8 +34,8 @@ class Intraface_XMLRPC_Contact {
      * @param  integer $id
      * @return array
      */
-    function getContact($credentials, $id) {
-
+    function getContact($credentials, $id)
+    {
         $this->checkCredentials($credentials);
 
         $contact = new Contact($this->kernel, $id);
@@ -57,7 +58,8 @@ class Intraface_XMLRPC_Contact {
      * @param  string  $contact_key
      * @return array
      */
-    function authenticateContact($credentials, $contact_key) {
+    function authenticateContact($credentials, $contact_key)
+    {
         $this->checkCredentials($credentials);
 
         $contact = Contact::factory($this->kernel, 'code', $contact_key);
@@ -82,11 +84,12 @@ class Intraface_XMLRPC_Contact {
      * @param  array  $input (remember to include id key)
      * @return boolean
      */
-    function saveContact($credentials, $input) {
+    function saveContact($credentials, $input)
+    {
         $this->checkCredentials($credentials);
 
         if (!is_array($input)) { // -5
-            throw new XML_RPC2_FaultException('input is no an array', -5);
+            throw new XML_RPC2_FaultException('input is not an array', -5);
         }
 
         $values = $input;
@@ -100,35 +103,6 @@ class Intraface_XMLRPC_Contact {
 
         return true;
     }
-    /*
-    function sendLoginEmail($arg) {
-        if (count($arg) != 2) {
-            return new IXR_Error(-4, 'Der er ikke det rigtige antal argumenter til sendLoginEmail()');
-        }
-
-        if (is_object($return = $this->checkCredentials($arg[0]))) {
-            return $return;
-        }
-
-        if (!is_numeric($arg[1])) {
-            return new IXR_Error(-5, 'Det andet parameter er ikke et numerisk');
-        }
-
-        $id = $arg[1];
-
-        $contact = new Contact($this->kernel, $id);
-
-        if (!is_object($contact) OR !$contact->get('id') > 0) {
-            return new IXR_Error(-5, 'Kontakten fandtes ikke ' .$arg[1]);
-        }
-
-        if (!$contact->sendLoginEmail()) {
-            return new IXR_Error(-6, 'Du kunne ikke sende email ' .$arg[1]);
-        }
-
-        return 1;
-    }
-    */
 
     /**
      * Gets available keywords for the contacts
@@ -137,7 +111,8 @@ class Intraface_XMLRPC_Contact {
      *
      * @return array Keywords
      */
-    function getKeywords($credentials) {
+    function getKeywords($credentials)
+    {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
@@ -157,7 +132,8 @@ class Intraface_XMLRPC_Contact {
      *
      * @return array Keywords
      */
-     function getConnectedKeywords($credentials, $contact_id) {
+    function getConnectedKeywords($credentials, $contact_id)
+    {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
@@ -182,7 +158,8 @@ class Intraface_XMLRPC_Contact {
      *
      * @return array
      */
-    public function getIntranetPermissions($credentials) {
+    public function getIntranetPermissions($credentials)
+    {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
@@ -210,7 +187,8 @@ class Intraface_XMLRPC_Contact {
      * @param struct $credentials
      * @return array
      */
-    function checkCredentials($credentials) {
+    function checkCredentials($credentials)
+    {
         /*
         if (is_object($this->kernel) AND is_object($this->kernel->intranet)) {
             return true;
@@ -242,6 +220,4 @@ class Intraface_XMLRPC_Contact {
 
         return true;
     }
-
 }
-?>
