@@ -388,17 +388,6 @@ class NewsletterSubscriber extends Standard
     }
 
     /**
-     * @return integer
-     */
-    function getSubscriberCount()
-    {
-
-        // There must definitly be an error here. Shouldn't the tabel be newsletter_subscriber, and active = 1 is needed? /Sune(30-05-2007)
-        $db = new DB_Sql("SELECT * FROM newsletter WHERE list_id=".$this->list->get('id') . " AND intranet_id = " . $this->list->kernel->intranet->get('id') . " AND optin = 1");
-        return $db->numRows();
-    }
-
-    /**
      * The subscriber must receive an e-mail so the subscribtion can be confirmed
      * The e-mail should say that the subscription should be confirmed within a week.
      *
