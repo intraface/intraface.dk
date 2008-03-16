@@ -19,10 +19,8 @@ if (!empty($_POST['product'])) {
         header ('Location: product.php?id='.intval($_POST['id']));
         exit;
     }
-
-
-        header('Location: related_product.php?id='.(int)$_POST['id']);
-        exit;
+    header('Location: related_product.php?id='.(int)$_POST['id']);
+    exit;
 }
 
 
@@ -78,30 +76,30 @@ $page->start(t('add related products'));
         </label>
         -->
         <label><?php e(t('search for')); ?>
-        <input type="text" value="<?php print($product->dbquery->getFilter("search")); ?>" name="search" id="search" />
+        <input type="text" value="<?php e($product->getDBQuery()->getFilter("search")); ?>" name="search" id="search" />
     </label>
     <label>
         Vis med nøgleord
         <select name="keyword_id" id="keyword_id">
             <option value=""><?php e(t('none')); ?></option>
             <?php foreach ($keywords->getUsedKeywords() AS $k) { ?>
-            <option value="<?php echo $k['id']; ?>" <?php if($k['id'] == $product->dbquery->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo $k['keyword']; ?></option>
+            <option value="<?php e($k['id']); ?>" <?php if($k['id'] == $product->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo $k['keyword']; ?></option>
             <?php } ?>
         </select>
     </label>
     <span>
         <input type="submit" value="<?php e(t('go!')); ?>" class="search" />
-    <input type="hidden" value="<?php echo $product->get('id'); ?>" name="id" />
-        </span>
+        <input type="hidden" value="<?php e($product->get('id')); ?>" name="id" />
+    </span>
     </fieldset>
     <br style="clear: both;" />
 </form>
 
 <?php
-echo $product->dbquery->display('character');
+echo $product->getDBQuery()->display('character');
 ?>
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
-    <input type="hidden" name="id" value="<?php echo $product->get('id'); ?>" id="product_id" />
+<form action="<?php e(basename($_SERVER['PHP_SELF'])); ?>" method="post">
+    <input type="hidden" name="id" value="<?php e($product->get('id')); ?>" id="product_id" />
     <table summary="Produkter" class="stripe">
         <caption><?php e(t('products')); ?></caption>
         <thead>
@@ -115,11 +113,11 @@ echo $product->dbquery->display('character');
             <?php foreach ($list AS $p) { ?>
             <tr>
                 <td>
-                    <input type="hidden" name="product[<?php echo $p['id']; ?>]" value="<?php echo $p['id']; ?>" />
-                    <input class="input-relate" id="<?php echo $p['id']; ?>" type="checkbox" name="relate[<?php echo $p['id']; ?>]" value="relate" <?php if (array_key_exists($p['id'], $related_products)) echo ' checked="checked"'; ?> />
+                    <input type="hidden" name="product[<?php e($p['id']); ?>]" value="<?php e($p['id']); ?>" />
+                    <input class="input-relate" id="<?php e($p['id']); ?>" type="checkbox" name="relate[<?php e($p['id']); ?>]" value="relate" <?php if (array_key_exists($p['id'], $related_products)) echo ' checked="checked"'; ?> />
                 </td>
-                <td><?php echo htmlentities($p['number']); ?></td>
-                <td><?php echo htmlentities($p['name']); ?></td>
+                <td><?php e($p['number']); ?></td>
+                <td><?php e($p['name']); ?></td>
             </tr>
             <?php } // end foreach ?>
         </tbody>
@@ -129,7 +127,7 @@ echo $product->dbquery->display('character');
           <input type="submit" value="<?php e(t('save and close')); ?>" name="close" />
       </p>
 
-  <?php echo $product->dbquery->display('paging'); ?>
+  <?php echo $product->getDBQuery()->display('paging'); ?>
     </form>
 <?php
 $page->end();
