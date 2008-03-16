@@ -1,9 +1,8 @@
 <?php
 require_once dirname(__FILE__) . '/../intraface.dk/common.php';
 
-
-class Intraface_Install {
-
+class Intraface_Install
+{
     /**
      * @var object database connection
      */
@@ -15,8 +14,7 @@ class Intraface_Install {
     function __construct() {
         if (!defined('SERVER_STATUS') OR SERVER_STATUS == 'PRODUCTION') {
             die('Can not be performed on PRODUCTION SERVER');
-        }
-        elseif (!empty($_SERVER['HTTP_HOST']) AND $_SERVER['HTTP_HOST'] == 'www.intraface.dk') {
+        } elseif (!empty($_SERVER['HTTP_HOST']) AND $_SERVER['HTTP_HOST'] == 'www.intraface.dk') {
             die('Can not be performed on www.intraface.dk');
         }
 
@@ -26,12 +24,10 @@ class Intraface_Install {
             trigger_error($this->db->getUserInfo(), E_USER_ERROR);
             exit;
         }
-
-
     }
 
-    function dropDatabase() {
-
+    function dropDatabase()
+    {
         $result = $this->db->query("SHOW TABLES FROM " . DB_NAME);
         if(PEAR::isError($result)) {
             trigger_error($result->getUserInfo(), E_USER_ERROR);
@@ -46,10 +42,10 @@ class Intraface_Install {
             }
         }
         return true;
-
     }
 
-    function createDatabaseSchema() {
+    function createDatabaseSchema()
+    {
         $sql_structure = file_get_contents(dirname(__FILE__) . '/database-structure.sql');
         $sql_arr = Intraface_Install::splitSql($sql_structure);
 
@@ -73,13 +69,11 @@ class Intraface_Install {
                 exit;
             }
         }
-
         return true;
-
     }
 
-    function emptyDatabase() {
-
+    function emptyDatabase()
+    {
         $result = $this->db->query("SHOW TABLES FROM " . DB_NAME);
         if(PEAR::isError($result)) {
             trigger_error($result->getUserInfo(), E_USER_ERROR);
@@ -96,7 +90,8 @@ class Intraface_Install {
 
     }
 
-    function createStartingValues() {
+    function createStartingValues()
+    {
         $sql_values = file_get_contents(dirname(__FILE__) . '/database-values.sql');
         $sql_arr = Intraface_Install::splitSql($sql_values);
 
@@ -111,8 +106,8 @@ class Intraface_Install {
         return true;
     }
 
-    function resetServer() {
-
+    function resetServer()
+    {
         /*
         if (!$this->dropDatabase()) {
             trigger_error('could not drop database', E_USER_ERROR);
@@ -194,8 +189,8 @@ class Intraface_Install {
     /**
      * login the user
      */
-    function loginUser() {
-
+    function loginUser()
+    {
         session_start();
         require_once 'Intraface/Auth.php';
         $auth = new Auth(session_id());
@@ -206,7 +201,6 @@ class Intraface_Install {
     /**
      * run helper functions
      */
-
     public function runHelperFunction($functions)
     {
         $functions = explode(',', $functions);
@@ -214,8 +208,7 @@ class Intraface_Install {
         // We create kernel so it can be used in the helper functions
         if (session_id() != '') {
             $kernel = new Kernel(session_id());
-        }
-        else {
+        } else {
             $kernel = new Kernel;
         }
         $kernel->user = new User(1);
@@ -225,7 +218,6 @@ class Intraface_Install {
 
 
         foreach($functions AS $function) {
-
             $object_method = explode(':', trim($function));
             $object_method[0] = str_replace('/', '', $object_method[0]);
             $object_method[0] = str_replace('\\', '', $object_method[0]);
@@ -242,7 +234,8 @@ class Intraface_Install {
     /**
      * register modules
      */
-    private function registerModules() {
+    private function registerModules()
+    {
         require_once('Intraface/modules/intranetmaintenance/ModuleMaintenance.php');
         $modulemaintenance = new ModuleMaintenance;
         $modulemaintenance->register();
@@ -255,8 +248,7 @@ class Intraface_Install {
     {
         if(strpos($sql, "\r\n")) {
             $str_sep = "\r\n";
-        }
-        else {
+        } else {
             $str_sep = "\n";
         }
         if(substr($sql, 0, 2) == '--') {
@@ -269,4 +261,3 @@ class Intraface_Install {
 
     }
 }
-?>
