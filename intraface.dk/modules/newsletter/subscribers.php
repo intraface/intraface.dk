@@ -41,12 +41,12 @@ if (isset($_GET['delete']) AND intval($_GET['delete']) != 0) {
     $subscriber->delete();
 }
 // HACK - Denne bliver her sat uden at de skal være opted in i modsætning til constructor
-$subscriber->dbquery = new DBQuery($list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $list->get("id") . " AND newsletter_subscriber.intranet_id = " . $list->kernel->intranet->get('id') . " AND newsletter_subscriber.active = 1");
+$subscriber->setDBQuery(new DBQuery($list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $list->get("id") . " AND newsletter_subscriber.intranet_id = " . $list->kernel->intranet->get('id') . " AND newsletter_subscriber.active = 1"));
 
-$subscriber->dbquery->useCharacter();
-$subscriber->dbquery->defineCharacter('character', 'newsletter_subscriber.id');
-$subscriber->dbquery->usePaging('paging');
-$subscriber->dbquery->setExtraUri('&amp;list_id='.$list->get('id'));
+$subscriber->getDBQuery()->useCharacter();
+$subscriber->getDBQuery()->defineCharacter('character', 'newsletter_subscriber.id');
+$subscriber->getDBQuery()->usePaging('paging');
+$subscriber->getDBQuery()->setExtraUri('&amp;list_id='.$list->get('id'));
 
 
 $subscribers = $subscriber->getList();
@@ -56,12 +56,12 @@ $page = new Page($kernel);
 $page->start('Modtagere');
 ?>
 
-<h1>Modtagere på listen <?php print($list->get('title')); ?></h1>
+<h1>Modtagere på listen <?php e($list->get('title')); ?></h1>
 
 <ul class="options">
 
-    <li><a href="subscribers.php?list_id=<?php echo $list->get('id'); ?>&amp;add_contact=1">Tilføj kontakt</a></li>
-    <li><a href="list.php?id=<?php echo $list->get('id'); ?>">Luk</a></li>
+    <li><a href="subscribers.php?list_id=<?php e($list->get('id')); ?>&amp;add_contact=1">Tilføj kontakt</a></li>
+    <li><a href="list.php?id=<?php e($list->get('id')); ?>">Luk</a></li>
 
 </ul>
 
@@ -71,7 +71,7 @@ $page->start('Modtagere');
     <p>Der er ikke tilføjet nogen modtager endnu.</p>
 <?php else: ?>
 
-    <?php echo $subscriber->dbquery->display('character'); ?>
+    <?php echo $subscriber->getDBQuery()->display('character'); ?>
 <table class="stripe">
     <caption>Breve</caption>
     <thead>
@@ -86,19 +86,19 @@ $page->start('Modtagere');
     <tbody>
     <?php foreach ($subscribers AS $s): ?>
     <tr>
-        <td><?php echo safeToHtml($s['contact_name']); ?></td>
-        <td><?php echo safeToHtml($s['contact_email']); ?></td>
-        <td><?php echo safeToHtml($s['dk_date_submitted']); ?></td>
-        <td><?php echo safeToHtml($s['optin']); ?></td>
+        <td><?php e($s['contact_name']); ?></td>
+        <td><?php e($s['contact_email']); ?></td>
+        <td><?php e($s['dk_date_submitted']); ?></td>
+        <td><?php e($s['optin']); ?></td>
         <td>
-            <a class="delete" href="subscribers.php?delete=<?php echo intval($s['id']); ?>&amp;list_id=<?php echo $list->get('id'); ?>" title="Dette sletter nyhedsbrevet">Slet</a>
+            <a class="delete" href="subscribers.php?delete=<?php e($s['id']); ?>&amp;list_id=<?php e($list->get('id')); ?>" title="Dette sletter nyhedsbrevet">Slet</a>
         </td>
     </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
 
-    <?php echo $subscriber->dbquery->display('paging'); ?></td>
+    <?php echo $subscriber->getDBQuery()->display('paging'); ?></td>
 <?php endif; ?>
 
 <?php

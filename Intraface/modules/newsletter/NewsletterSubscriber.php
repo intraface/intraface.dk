@@ -23,7 +23,7 @@ class NewsletterSubscriber extends Standard
     public $error;
     public $contact;
     public $id;
-    public $dbquery;
+    private $dbquery;
     private $observers = array();
 
     /**
@@ -34,7 +34,7 @@ class NewsletterSubscriber extends Standard
      *
      * @return void
      */
-    function __construct($list, $id = 0)
+    public function __construct($list, $id = 0)
     {
         $this->error = new Error;
 
@@ -54,11 +54,25 @@ class NewsletterSubscriber extends Standard
     /**
      * @return DBQuery object
      */
-    function createDBQuery()
+    public function getDBQuery()
     {
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
         // optin = 1 should not be set here
         $this->dbquery = new DBQuery($this->list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $this->list->get("id") . " AND newsletter_subscriber.intranet_id = " . $this->list->kernel->intranet->get('id') . " AND newsletter_subscriber.optin = 1 AND newsletter_subscriber.active = 1");
         $this->dbquery->useErrorObject($this->error);
+        return $this->dbquery;
+    }
+
+    /**
+     * HACK: Only used in subscribers. Added as a hack
+     *
+     * @return void
+     */
+    function setDBQuery($dbquery)
+    {
+        $this->dbquery = $dbquery;
     }
 
     /**
@@ -72,7 +86,7 @@ class NewsletterSubscriber extends Standard
      *
      * @return object
      */
-    function factory($object, $type, $value)
+    public function factory($object, $type, $value)
     {
         switch ($type) {
             case 'code':
@@ -123,7 +137,7 @@ class NewsletterSubscriber extends Standard
     /**
      * @return boolean
      */
-    function load()
+    private function load()
     {
         $db = new DB_Sql;
         $db->query("SELECT * FROM newsletter_subscriber WHERE id = " . $this->id." and active = 1");
@@ -146,7 +160,7 @@ class NewsletterSubscriber extends Standard
     /**
      * @return boolean
      */
-    function delete()
+    public function delete()
     {
         $db = new DB_Sql;
         $db->query('UPDATE newsletter_subscriber SET active = 0 WHERE id = ' . $this->id);
@@ -158,7 +172,7 @@ class NewsletterSubscriber extends Standard
      *
      * @return Contact object
      */
-    function getContact($contact_id)
+    public function getContact($contact_id)
     {
         $contact_module = $this->list->kernel->getModule('contact', true); // true: tjekker kun intranet_access
         return new Contact($this->list->kernel, $contact_id);
@@ -171,7 +185,7 @@ class NewsletterSubscriber extends Standard
      *
      * @return integer of the id of the subscriber
      */
-    function addContact($contact)
+    public function addContact($contact)
     {
         $db = new DB_sql;
 
@@ -199,7 +213,7 @@ class NewsletterSubscriber extends Standard
      *
      * @return boolean
      */
-    function subscribe($input)
+    public function subscribe($input)
     {
         $input = safeToDb($input);
         $input = array_map('strip_tags', $input);
@@ -311,7 +325,7 @@ class NewsletterSubscriber extends Standard
      *
      * @return boolean
      */
-    function optedIn()
+    public function optedIn()
     {
         if ($this->id == 0) {
             return false;
@@ -337,7 +351,7 @@ class NewsletterSubscriber extends Standard
      *
      * @return boolean
      */
-    function unsubscribe($email)
+    public function unsubscribe($email)
     {
         $email = strip_tags($email);
 
@@ -367,8 +381,8 @@ class NewsletterSubscriber extends Standard
      *
      * @return boolean
      */
-    function optIn($code, $ip)
-   {
+    public function optIn($code, $ip)
+    {
         $db = new DB_Sql;
         $db->query("SELECT id FROM newsletter_subscriber WHERE code = '".$code."' AND list_id = " . $this->list->get('id')." AND active = 1");
         if (!$db->nextRecord()) {
@@ -405,7 +419,7 @@ class NewsletterSubscriber extends Standard
      *
      * @return boolean
      */
-    function sendOptInEmail()
+    public function sendOptInEmail()
     {
         if ($this->id == 0) {
             $this->error->set('no id');
@@ -449,7 +463,7 @@ class NewsletterSubscriber extends Standard
      *
      * @return boolean
      */
-    function getList()
+    public function getList()
     {
         $subscribers = array();
 
@@ -457,7 +471,7 @@ class NewsletterSubscriber extends Standard
         //$db->query("SELECT id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted FROM newsletter_subscriber WHERE list_id=". $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id') . " AND optin = 1 AND active = 1");
         $i = 0;
 
-        $db = $this->dbquery->getRecordset("id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted, optin", "", false);
+        $db = $this->getDBQuery()->getRecordset("id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted, optin", "", false);
 
         while ($db->nextRecord()) {
             $contact_id = $db->f('contact_id');
@@ -489,7 +503,7 @@ class NewsletterSubscriber extends Standard
     /**
      * @param object $observer Must implement an update() method
      */
-    function addObserver($observer)
+    public function addObserver($observer)
     {
         $this->observers[] = $observer;
     }
@@ -497,7 +511,7 @@ class NewsletterSubscriber extends Standard
     /**
      * @return array with observers
      */
-    function getObservers()
+    public function getObservers()
     {
         return $this->observers;
     }
@@ -505,7 +519,7 @@ class NewsletterSubscriber extends Standard
     /**
      * @param string $state Of this object
      */
-    function notifyObservers($state)
+    public function notifyObservers($state)
     {
         foreach ($this->getObservers() AS $observer) {
             $observer->update($this, $state);

@@ -193,8 +193,7 @@ class Newsletter extends Standard
     function getSubscribers()
     {
         $subscriber = new NewsletterSubscriber($this->list);
-        $subscriber->createDBQuery();
-        return ($subscribers = $subscriber->getList());
+        return $subscriber->getList();
     }
 
     /**

@@ -16,15 +16,15 @@ $page->start('Rediger nyhedsbrev');
 
 <ul class="options">
 	<?php if ($letter['status'] != 'sent'): ?>
-	<li><a href="letter_edit.php?id=<?php echo $letter['id']; ?>">Ret</a></li>
+	<li><a href="letter_edit.php?id=<?php e($letter['id']); ?>">Ret</a></li>
 	<?php endif; ?>
-	<li><a href="letters.php?list_id=<?php echo $letter['list_id']; ?>">Luk</a></li>
+	<li><a href="letters.php?list_id=<?php e($letter['list_id']); ?>">Luk</a></li>
 </ul>
 
 <div class="box">
-	<pre><h2>Overskift: <?php echo $letter['subject']; ?></h2></pre>
+	<pre><h2>Overskift: <?php e($letter['subject']); ?></h2></pre>
 
-	<pre><?php echo wordwrap($letter['text'], 80); ?></pre>
+	<pre><?php e(wordwrap($letter['text'], 80)); ?></pre>
 
 </div>
 

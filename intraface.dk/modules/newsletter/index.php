@@ -3,12 +3,10 @@ require('../../include_first.php');
 
 $module = $kernel->module("newsletter");
 
-
 if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
 	$list = new NewsletterList($kernel, $_GET['delete']);
 	$list->delete();
-}
-else {
+} else {
 	$list = new NewsletterList($kernel);
 }
 
@@ -41,12 +39,12 @@ $page->start('Nyhedsbrevslister');
 	</thead>
 	<tbody>
 	<?php foreach ($lists AS $list): ?>
-	<tr <?php if (!empty($_GET['from_id']) AND $_GET['from_id'] == $list['id']) echo 'id="list" class="fade"'; ?>>
-		<td><a href="list.php?id=<?php echo intval($list['id']); ?>"><?php echo safeToForm($list['title']); ?></a></td>
+	<tr>
+		<td><a href="list.php?id=<?php e($list['id']); ?>"><?php e($list['title']); ?></a></td>
 		<td><?php echo intval($list['subscribers']); ?></td>
 		<td class="options">
-			<a class="edit" href="list_edit.php?id=<?php echo intval($list['id']); ?>">Ret</a>
-			<a class="delete" href="index.php?delete=<?php echo intval($list['id']); ?>&amp;id=<?php echo intval($list['id']); ?>">Slet</a>
+			<a class="edit" href="list_edit.php?id=<?php e($list['id']); ?>">Ret</a>
+			<a class="delete" href="index.php?delete=<?php e($list['id']); ?>&amp;id=<?php e($list['id']); ?>">Slet</a>
 		</td>
 
 	</tr>

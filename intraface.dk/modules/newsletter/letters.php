@@ -22,11 +22,11 @@ $page = new Page($kernel);
 $page->start('Breve');
 ?>
 
-<h1>Breve <?php echo $list->get('title'); ?></h1>
+<h1>Breve <?php e($list->get('title')); ?></h1>
 
 <ul class="options">
-	<li><a class="new" href="letter_edit.php?list_id=<?php echo $list->get('id'); ?>">Opret brev</a></li>
-	<li><a href="list.php?id=<?php echo $list->get('id'); ?>">Tilbage til liste</a></li>
+	<li><a class="new" href="letter_edit.php?list_id=<?php e($list->get('id')); ?>">Opret brev</a></li>
+	<li><a href="list.php?id=<?php e($list->get('id')); ?>">Tilbage til liste</a></li>
 
 </ul>
 
@@ -47,23 +47,23 @@ $page->start('Breve');
 	</thead>
 	<tbody>
 	<?php foreach ($letters AS $letter): ?>
-	<tr<?php if (!empty($_GET['from_id']) AND $_GET['from_id'] == $letter['id']) echo ' id="fader" class="fade"'; ?>>
-		<td><a href="letter.php?id=<?php echo $letter['id']; ?>"><?php echo $letter['subject']; ?></a></td>
-		<td><?php echo $translation->get($letter['status']); ?></td>
+	<tr>
+		<td><a href="letter.php?id=<?php e($letter['id']); ?>"><?php e($letter['subject']); ?></a></td>
+		<td><?php e($translation->get($letter['status'])); ?></td>
 		<td>
 			<?php
 				if ($letter['status'] == 'sent'):
-					echo $letter['sent_to_receivers'];
+					e($letter['sent_to_receivers']);
 				else:
-					echo 'Ikke sendt endnu';
+					e('Ikke sendt endnu');
 				endif;
 			?>
 		</td>
 		<td class="buttons">
 			<?php if ($letter['status'] != 'sent'): ?>
-				<a href="send.php?id=<?php echo $letter['id']; ?>">Send</a>
-				<a class="edit" href="letter_edit.php?id=<?php echo $letter['id']; ?>">Ret</a>
-				<a class="delete" href="letters.php?list_id=<?php echo $list->get('id'); ?>&amp;delete=<?php echo $letter['id']; ?>" title="Dette sletter nyhedsbrevet">Slet</a>
+				<a href="send.php?id=<?php e($letter['id']); ?>">Send</a>
+				<a class="edit" href="letter_edit.php?id=<?php e($letter['id']); ?>">Ret</a>
+				<a class="delete" href="letters.php?list_id=<?php e($list->get('id')); ?>&amp;delete=<?php e($letter['id']); ?>" title="Dette sletter nyhedsbrevet">Slet</a>
 			<?php endif; ?>
 		</td>
 	</tr>
