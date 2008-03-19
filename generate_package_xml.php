@@ -124,7 +124,7 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk
 
 
 // Ilib
-$pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.0.1');
+$pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Error', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Redirect', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.dk', '0.0.1');
