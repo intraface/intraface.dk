@@ -128,6 +128,13 @@ class FileHandler extends Standard
         $this->file_viewer = FILE_VIEWER;
         $this->www_path = PATH_WWW;
 
+        if (!is_dir($this->upload_path)) {
+            if (!mkdir($this->upload_path)) {
+                trigger_error("Unable to create folder '".$this->upload_path."'", E_USER_ERROR);
+                exit;
+            }
+        }
+        
         if ($this->id > 0) {
             $this->load();
         }
@@ -501,13 +508,6 @@ class FileHandler extends Standard
         } else {
             $db->query("INSERT INTO file_handler SET ".$sql.", date_created = NOW(), intranet_id = ".$this->kernel->intranet->get('id').", user_id = ".$this->kernel->user->get('id'));
             $id = $db->insertedId();
-        }
-
-        if (!is_dir($this->upload_path)) {
-            if (!mkdir($this->upload_path)) {
-                trigger_error("Unable to create folder '".$this->upload_path."'", E_USER_ERROR);
-                exit;
-            }
         }
 
         $server_file_name = $id.'.'.$mime_type['extension'];
