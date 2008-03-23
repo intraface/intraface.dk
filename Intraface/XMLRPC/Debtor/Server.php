@@ -5,22 +5,39 @@
  * @since   0.1.0
  * @version @package-version@
  */
-
 require_once 'XML/RPC2/Server.php';
 
-class Intraface_XMLRPC_Debtor_Server {
+class Intraface_XMLRPC_Debtor_Server_Translation
+{
+    function get($key)
+    {
+        return $key;
+    }
 
+    function setPageID() {}
+}
+
+class Intraface_XMLRPC_Debtor_Server
+{
+    /**
+     * @var object
+     */
     private $kernel;
+
+    /**
+     * @var object
+     */
     private $debtor;
 
     /**
      * Checks if user has credentials to ask server
      *
-     * @param struct $credentials
+     * @param struct $credentials Provided by intraface
+     *
      * @return true ved succes ellers object med fejlen
      */
-    function checkCredentials($credentials) {
-
+    private function checkCredentials($credentials)
+    {
         if (count($credentials) != 2) {
             throw new XML_RPC2_FaultException('Der er et forkert antal argumenter i credentials', -2);
         }
@@ -40,10 +57,14 @@ class Intraface_XMLRPC_Debtor_Server {
     }
 
     /**
-     * @param struct $credentials
-     * @param integer $debtor_id
+     * Get array with debtor information
+     *
+     * @param struct $credentials Provided by intraface
+     * @param integer $debtor_id  Debtor id
+     *
+     * @return array
      */
-    function getDebtor($credentials, $debtor_id)
+    public function getDebtor($credentials, $debtor_id)
     {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
@@ -63,11 +84,15 @@ class Intraface_XMLRPC_Debtor_Server {
     }
 
     /**
-     * @param struct $credentials
-     * @param string $type
-     * @param integer $contact_id
+     * Gets list with debtors
+     *
+     * @param struct $credentials Provided by intraface
+     * @param string $type        Which type of list (quotation, order, invoice)
+     * @param integer $contact_id Contact id
+     *
+     * @return array
      */
-    function getDebtorList($credentials, $type, $contact_id)
+    public function getDebtorList($credentials, $type, $contact_id)
     {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
@@ -75,7 +100,7 @@ class Intraface_XMLRPC_Debtor_Server {
 
         $debtor = Debtor::factory($this->kernel, 0, $type);
         $debtor->dbquery->setFilter('contact_id', $contact_id);
-          $debtor->dbquery->setFilter('status', '-1');
+        $debtor->dbquery->setFilter('status', '-1');
         return $debtor->getList();
 
     }
@@ -83,14 +108,61 @@ class Intraface_XMLRPC_Debtor_Server {
     /**
      * Alpha - will probably be deprecated shortly
      *
-     * @param struct $credentials
-     * @param integer $debtor_id
+     * @param struct $credentials Credentials provided by intraface
+     * @param integer $debtor_id  Id of the debtor
+     *
+     * @return string
      */
-    function getDebtorPdf($credentials, $debtor_id)
+    public function getDebtorPdf($credentials, $debtor_id)
     {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
+
+        /*
+        // set the parameters to connect to your db
+        $dbinfo = array(
+            'hostspec' => DB_HOST,
+            'database' => DB_NAME,
+            'phptype'  => 'mysql',
+            'username' => DB_USER,
+            'password' => DB_PASS
+        );
+
+        if (!defined('LANGUAGE_TABLE_PREFIX')) {
+            define('LANGUAGE_TABLE_PREFIX', 'core_translation_');
+        }
+
+        $params = array(
+            'langs_avail_table' => LANGUAGE_TABLE_PREFIX.'langs',
+            'strings_default_table' => LANGUAGE_TABLE_PREFIX.'i18n'
+        );
+
+        require_once 'Translation2.php';
+
+        $translation = Translation2::factory('MDB2', $dbinfo, $params);
+        if (PEAR::isError($translation)) {
+            trigger_error('Could not start Translation ' . $translation->getMessage(), E_USER_ERROR);
+        }
+
+        $set_language = $translation->setLang($this->kernel->setting->get('user', 'language'));
+
+        if (PEAR::isError($set_language)) {
+            trigger_error($set_language->getMessage(), E_USER_ERROR);
+        }
+
+        $translation = $translation->getDecorator('Lang');
+        $translation->setOption('fallbackLang', 'uk');
+        $translation = $translation->getDecorator('DefaultText');
+        $translation->outputString = '%stringID%';
+        $translation->url = '';           //same as default
+        $translation->emptyPrefix  = '';  //default: empty string
+        $translation->emptyPostfix = '';  //default: empty string
+
+        $this->kernel->translation = $translation;
+        */
+
+        $this->kernel->translation = new Intraface_XMLRPC_Debtor_Server_Translation;
 
         $debtor = Debtor::factory($this->kernel, $debtor_id);
         if (!$debtor->get('id') > 0) {
@@ -112,6 +184,8 @@ class Intraface_XMLRPC_Debtor_Server {
         }
 
         require_once 'Intraface/modules/debtor/Visitor/Pdf.php';
+
+
         $report = new Debtor_Report_Pdf($this->kernel->getTranslation('debtor'), $filehandler);
         $report->visit($debtor, $onlinepayment);
 
