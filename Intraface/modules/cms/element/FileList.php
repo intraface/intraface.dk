@@ -4,44 +4,23 @@
  */
 require_once 'Intraface/modules/cms/Element.php';
 
-class CMS_FileList extends CMS_Element {
-
+class CMS_FileList extends CMS_Element
+{
     public $select_methods = array('single_file');
 
-    function __construct(& $section, $id = 0) {
+    function __construct($section, $id = 0)
+    {
         $this->value['type'] = 'filelist';
         parent::__construct($section, $id);
         $this->section->kernel->useShared('filehandler');
     }
 
-    function load_element() {
+    function load_element()
+    {
         $this->value['filelist_select_method'] = $this->parameter->get('filelist_select_method');
         $this->value['caption'] = $this->parameter->get('caption');
-        /*
 
-        
-        /*
-
-        if (!$this->parameter->get('chosen_files')) {
-            $this->value['chosen_files'] = array();
-        }
-        else {
-            $this->value['chosen_files'] = unserialize($this->parameter->get('chosen_files'));
-        }
-        $this->value['caption'] = $this->parameter->get('caption');
-        $this->value['files'] = array();
-        if (!empty($this->value['chosen_files']) AND is_array($this->value['chosen_files']) AND count($this->value['chosen_files']) > 0) {
-            $i = 0;
-             foreach ($this->value['chosen_files'] AS $file_id) {
-                $filehandler = new FileHandler($this->section->kernel, $file_id);
-                $file_type = $filehandler->get('file_type');
-                $this->value['files'][$i] = $filehandler->get();
-                $i++;
-            }
-        }
-        */
-
-        if(false) { // benytter keyword
+        if (false) { // benytter keyword
 
             // Dette skal lige implementeres, så hvis man har filemanager, og har benyttet nøgleord, så
             // skal array returneres ved hjælp af Filemanager. Vær opmærksom på hvis en bruger der ikke har
@@ -66,11 +45,10 @@ class CMS_FileList extends CMS_Element {
 
         $i = 0;
         foreach ($files AS $file) {
-            if(isset($file['file_handler_id'])) {
+            if (isset($file['file_handler_id'])) {
                 $id = $file['file_handler_id'];
                 $append_file_id = $file['id'];
-            }
-            else {
+            } else {
                 $id = $file['id'];
                 $append_file_id = 0;
             }
@@ -90,7 +68,8 @@ class CMS_FileList extends CMS_Element {
 
     }
 
-    function validate_element($var) {
+    function validate_element($var)
+    {
         $validator = new Validator($this->error);
         $validator->isString($var['caption'], 'error in caption', '', 'allow_empty');
 
@@ -110,18 +89,19 @@ class CMS_FileList extends CMS_Element {
         return 1;
     }
 
-    function save_element($var) {
+    function save_element($var)
+    {
         $var['caption'] = strip_tags($var['caption']);
 
-        if (!$this->validate_element($var)) return 0;
+        if (!$this->validate_element($var)) {
+            return 0;
+        }
 
         settype($var['caption'], 'string');
         $this->parameter->save('caption', $var['caption']);
         // $this->parameter->save('chosen_files', serialize($var['files']));
         settype($var['filelist_select_method'], 'string');
         $this->parameter->save('chosen_files', $var['filelist_select_method']);
-
-
         return true;
     }
 }
