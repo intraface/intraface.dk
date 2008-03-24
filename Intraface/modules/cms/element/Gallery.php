@@ -4,8 +4,8 @@
  */
 require_once 'Intraface/modules/cms/Element.php';
 
-class CMS_Gallery extends CMS_Element {
-
+class CMS_Gallery extends CMS_Element
+{
     public $methods = array('single_image');
 
     function __construct($section, $id = 0)
@@ -34,10 +34,10 @@ class CMS_Gallery extends CMS_Element {
             $this->value['popup_size'] = 4;
         }
 
-        if(false) { // benytter keyword
+        if (false) { // benytter keyword
         /*
-            // Dette skal lige implementeres, s� hvis man har filemanager, og har benyttet n�gleord, s�
-            // skal array returneres ved hj�lp af Filemanager. V�r opm�rksom p� hvis en bruger der ikke har
+            //@todo Dette skal lige implementeres: hvis man har filemanager, og har benyttet n�gleord, s�
+            // skal array returneres ved hjaelp af Filemanager. Vaer opmaerksom paa hvis en bruger der ikke har
             // Filemanager ser elementet, lavet af en der har filemanager. her i vis, skal der nok overrules om
             // brugeren har filemanager.
             $this->value['keyword_id'] = $this->parameter->get('keyword_id');
@@ -56,12 +56,11 @@ class CMS_Gallery extends CMS_Element {
             $append_file->dbquery->setFilter('order_by', 'name');
             $files = $append_file->getList();
         }
-        // print_r($files);
-        // print("<br /><br />");
+
         $i = 0;
         foreach ($files AS $file) {
 
-            if(isset($file['file_handler_id'])) {
+            if (isset($file['file_handler_id'])) {
                 $id = $file['file_handler_id'];
                 $append_file_id = $file['id'];
             } else {
