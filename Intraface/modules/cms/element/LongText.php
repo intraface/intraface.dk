@@ -10,7 +10,7 @@ class CMS_LongText extends CMS_Element
 {
     private $allowed_tags = '';
 
-    function __construct(& $section, $id = 0)
+    function __construct($section, $id = 0)
     {
         $this->value['type'] = 'longtext';
         parent::__construct($section, $id);
@@ -53,7 +53,7 @@ class CMS_LongText extends CMS_Element
 
     function save_element($var)
     {
-        
+
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Core', 'Encoding', 'ISO-8859-1');
         $config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
@@ -66,7 +66,7 @@ class CMS_LongText extends CMS_Element
             }
         }
         $config->set('Cache', 'SerializerPath', $purifier_cache_dir);
-        
+
         $purifier = new HTMLPurifier();
         $clean_text = $purifier->purify($var['text']);
 
