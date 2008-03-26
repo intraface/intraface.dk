@@ -2,6 +2,7 @@
 require('../../include_first.php');
 
 $module = $kernel->module("product");
+$translation = $kernel->getTranslation('product');
 
 if(!$kernel->user->hasModuleAccess('stock')) {
     trigger_error("Du har ikke adgang til disse sider", ERROR);
@@ -62,7 +63,7 @@ $page->start(t('regulate stock'));
 </fieldset>
 
 <input type="hidden" name="product_id" value="<?php e($product_object->get('id')); ?>" />
-<input type="submit" name="submit" value="<?php e(t('save')); ?>" />  <a href="product.php?id=<?php print($product_object->get('id')); ?>&from=stock#stock"><?php e(t('regret')); ?></a>
+<input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />  <a href="product.php?id=<?php print($product_object->get('id')); ?>&from=stock#stock"><?php e(t('regret', 'common')); ?></a>
 </form>
 
 <?php

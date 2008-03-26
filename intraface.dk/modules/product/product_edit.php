@@ -87,7 +87,7 @@ $page->start(t('edit product'));
             <input type="text" name="weight" id="weight" value="<?php if (!empty($value['weight'])) e($value['weight']); ?>" /> <?php e(t('grams')); ?>
         </div>
         <div class="formrow">
-            <label for="unit"><?php e(t('unit')); ?></label>
+            <label for="unit"><?php e(t('unit type')); ?></label>
             <select name="unit" id="unit">
             <?php
                 // getting settings

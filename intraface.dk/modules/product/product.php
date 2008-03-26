@@ -138,7 +138,7 @@ $page->start(t('product') . ': ' . $product->get('name'));
         <td><?php echo safeToHtml($product->get('weight')); ?> gram</td>
     </tr>
     <tr>
-        <td><?php e(t('unit')); ?></td>
+        <td><?php e(t('unit type')); ?></td>
         <td>
             <?php
                 // getting settings
@@ -321,7 +321,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
             <div id="stock_regulation" style="display: none ; position: absolute; border: 1px solid #666666; background-color: #CCCCCC; padding: 10px; width: 260px;">
                 <?php e(t('requlate with quantity')); ?>: <input type="text" name="regulate_number" size="5" />
                 <br /><?php e(t('description')); ?>: <input type="text" name="regulation_description" />
-                <br /><input type="submit" name="regulate" value="<?php e(t('save')); ?>" /> <a href="javascript:;" onclick="document.getElementById('stock_regulation').style.display='none';return false"><?php e(t('hide')); ?></a>
+                <br /><input type="submit" name="regulate" value="<?php e(t('save', 'common')); ?>" /> <a href="javascript:;" onclick="document.getElementById('stock_regulation').style.display='none';return false"><?php e(t('hide', 'common')); ?></a>
 
             </div>
 

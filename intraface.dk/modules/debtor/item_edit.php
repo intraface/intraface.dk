@@ -17,6 +17,7 @@ if(!empty($_POST)) {
 	}
 	else {
 		$values = $_POST;
+        $product_values = $debtor->item->product->get();
 	}
 }
 elseif(isset($_GET['debtor_id']) && isset($_GET['id'])) {
@@ -60,22 +61,22 @@ $page->start($translation->get($debtor->get('type').' content'));
 <form method="POST" action="item_edit.php" id="form_items">
 <fieldset>
 	<legend>Produkt</legend>
-	<input type="hidden" name="product_id" value="<?php echo intval($product_values['id']); ?>" />
+	<input type="hidden" name="product_id" value="<?php if(isset($product_values['id'])) echo intval($product_values['id']); ?>" />
 
 	<div class="formrow">
-		<label for="number">Nummer</label><span id="number"><?php echo safeToHtml($product_values['number']); ?></span>
+		<label for="number">Nummer</label><span id="number"><?php if(isset($product_values['number'])) echo safeToHtml($product_values['number']); ?></span>
 	</div>
 
 	<div class="formrow">
-		<label for="name">Navn</label><span id="name"><?php echo safeToHtml($product_values['name']); ?> <a href="item_edit.php?debtor_id=<?php echo intval($debtor->get('id')); ?>&amp;id=<?php echo intval($debtor->item->get('id')); ?>&amp;change_product=1" class="edit">Skift</a></span>
+		<label for="name">Navn</label><span id="name"><?php if(isset($product_values['name'])) echo safeToHtml($product_values['name']); ?> <a href="item_edit.php?debtor_id=<?php echo intval($debtor->get('id')); ?>&amp;id=<?php echo intval($debtor->item->get('id')); ?>&amp;change_product=1" class="edit">Skift</a></span>
 	</div>
 
 	<div class="formrow">
-		<label for="price">Pris</label><span id="price"><?php echo number_format($product_values['price'], 2, ",", "."); ?></span>
+		<label for="price">Pris</label><span id="price"><?php if(isset($product_values['price'])) echo number_format($product_values['price'], 2, ",", "."); ?></span>
 	</div>
 
 	<div class="formrow">
-		<label for="vat">Moms</label><span id="vat"><?php if($product_values['vat'] == 1): echo "Ja"; else: echo "Nej"; endif; ?></span>
+		<label for="vat">Moms</label><span id="vat"><?php if(isset($product_values['vat']) && $product_values['vat'] == 1): echo "Ja"; else: echo "Nej"; endif; ?></span>
 	</div>
 </fieldset>
 

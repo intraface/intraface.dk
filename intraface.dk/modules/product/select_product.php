@@ -121,7 +121,7 @@ $page->start(t('select product'));
                 <?php } ?>
             </select>
         </label>
-        <span><input type="submit" value="<?php e(t('search')); ?>" class="search" /><input type="hidden" name="set_quantity" value="<?php e($quantity); ?>" /></span>
+        <span><input type="submit" value="<?php e(t('search', 'common')); ?>" class="search" /><input type="hidden" name="set_quantity" value="<?php e($quantity); ?>" /></span>
         </fieldset>
         <br style="clear: both;" />
     </form>
@@ -137,7 +137,7 @@ $page->start(t('select product'));
                     <th><?php if($multiple && $quantity): e(t('Quantity')); else: echo e(t('Choose')); endif; ?></th>
                     <th><?php e(t('Product number')); ?></th>
                     <th><?php e(t('Name')); ?></th>
-                    <th><?php e(t('Unit')); ?></th>
+                    <th><?php e(t('Unit type')); ?></th>
                     <?php if($kernel->user->hasModuleAccess('stock')): ?>
                     <th><?php e(t('Stock')); ?>r</th>
                     <?php endif; ?>

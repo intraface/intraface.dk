@@ -73,7 +73,7 @@ $page->start(t('products'));
 
 <form action="index.php" method="get" class="search-filter">
     <fieldset>
-        <legend><?php e(t('search')); ?></legend>
+        <legend><?php e(t('search', 'common')); ?></legend>
         <!--
         <label for="filter">Filter
             <select name="filter" id="filter">
@@ -84,20 +84,20 @@ $page->start(t('products'));
             </select>
         </label>
         -->
-        <label for="search"><?php e(t('search for')); ?>
+        <label for="search"><?php e(t('search for', 'common')); ?>
             <input name="search" id="search" type="text" value="<?php echo safeToForm($product->getDBQuery()->getFilter("search")); ?>" />
         </label>
 
-        <label for="keyword_id"><?php e(t('show with keywords')); ?>
+        <label for="keyword_id"><?php e(t('show with keywords', 'common')); ?>
             <select name="keyword_id" id="keyword_id">
-                <option value=""><?php e(t('none')); ?></option>
+                <option value=""><?php e(t('none', 'common')); ?></option>
                 <?php foreach ($keywords->getUsedKeywords() AS $k) { ?>
                 <option value="<?php echo $k['id']; ?>" <?php if($k['id'] == $product->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo safeToForm($k['keyword']); ?></option>
                 <?php } ?>
             </select>
         </label>
         <span>
-            <input type="submit" value="<?php e(t('go', 'common')); ?>" />	<input type="reset" value="<?php e(t('reset', 'reset')); ?>" />
+            <input type="submit" value="<?php e(t('go', 'common')); ?>" />	<input type="reset" value="<?php e(t('reset', 'common')); ?>" />
         </span>
     </fieldset>
 </form>
@@ -121,14 +121,14 @@ $page->start(t('products'));
                 <th></th>
                 <th><?php e(t('product number')); ?></th>
                 <th><?php e(t('name')); ?></th>
-                <th><?php e(t('unit')); ?></th>
+                <th><?php e(t('unit type')); ?></th>
                 <?php if ($kernel->user->hasModuleAccess("webshop")) { ?>
                     <th><?php e(t('published')); ?></th>
                 <?php } ?>
                 <?php if ($kernel->user->hasModuleAccess("stock")) { ?>
                     <th><?php e(t('stock status')); ?></th>
                 <?php } ?>
-                <th><?php e(t('vat')); ?></th>
+                <th><?php e(t('vat', 'common')); ?></th>
                 <th><?php e(t('price')); ?></th>
                 <th></th>
             </tr>
@@ -151,7 +151,7 @@ $page->start(t('products'));
                 <td><a href="product.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml($p['name']); ?></a></td>
                 <td><?php echo t($p['unit']['combined']); ?></td>
                  <?php if ($kernel->user->hasModuleAccess("webshop")) { ?>
-              <td><?php if ($p['do_show'] == 1) e(t('yes')); else e(t('no')); ?></td>
+              <td><?php if ($p['do_show'] == 1) e(t('yes', 'common')); else e(t('no', 'common')); ?></td>
                 <?php } ?>
                 <?php if ($kernel->user->hasModuleAccess("stock")) { ?>
                     <td>
@@ -172,19 +172,19 @@ $page->start(t('products'));
                 <td class="options">
           <?php if ($p['locked'] == 0) { ?>
                   <!-- nedenstående bør sættes på produktsiden - muligheden skal ikke findes her
-                    <a href="index.php?lock=<?php echo $p['id']; ?>&amp;use_stored=true"><?php e(t('lock')); ?></a>
+                    <a href="index.php?lock=<?php echo $p['id']; ?>&amp;use_stored=true"><?php e(t('lock', 'common')); ?></a>
                     -->
-                    <a class="button edit" href="product_edit.php?id=<?php echo $p['id']; ?>"><?php e(t('edit')); ?></a>
+                    <a class="button edit" href="product_edit.php?id=<?php echo $p['id']; ?>"><?php e(t('edit', 'common')); ?></a>
                     <!--<a class="button delete ajaxdelete" title="Dette sletter produktet" id="delete<?php echo intval($p['id']); ?>" href="index.php?use_stored=true&amp;delete=<?php echo intval($p['id']); ?>">Slet</a>--></td>
        <?php } else { ?>
-          <a href="index.php?unlock=<?php echo $p['id']; ?>&amp;use_stored=true"><?php e(t('unlock')); ?></a>
+          <a href="index.php?unlock=<?php echo $p['id']; ?>&amp;use_stored=true"><?php e(t('unlock', 'common')); ?></a>
        <?php } ?>
             </tr>
             <?php } // end foreach ?>
         </tbody>
     </table>
     <select name="action">
-        <option value=""><?php e(t('choose...')); ?></option>
+        <option value=""><?php e(t('choose...', 'common')); ?></option>
         <option value="delete"><?php e(t('delete selected')); ?></option>
     </select>
 
