@@ -186,7 +186,7 @@ class Intraface_XMLRPC_Shop_Server
         foreach ($all as $row) {
             $product = new Product($this->kernel);
             // 265
-            $product->getDBQuery()>setFilter('keywords', array($row['keyword_id']));
+            $product->getDBQuery()->setFilter('keywords', array($row['keyword_id']));
 
             $related_products[] = array(
                 'title' => $row['headline'],
