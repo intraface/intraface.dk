@@ -115,14 +115,14 @@ $page->start(safeToHtml($translation->get('contacts')));
 
 <form action="index.php" method="get" class="search-filter">
 	<fieldset>
-		<legend><?php echo safeToHtml($translation->get('search')); ?></legend>
+		<legend><?php echo safeToHtml($translation->get('search', 'common')); ?></legend>
 
-		<label for="query"><?php echo safeToHtml($translation->get('search for')); ?>
+		<label for="query"><?php echo safeToHtml($translation->get('search for', 'common')); ?>
 			<input name="query" id="query" type="text" value="<?php print($contact->dbquery->getFilter('search')); ?>" />
 		</label>
 
 		<?php if (is_array($used_keywords) AND count($used_keywords)): ?>
-		<label for="keyword_id"><?php echo safeToHtml($translation->get('show with keywords')); ?>
+		<label for="keyword_id"><?php echo safeToHtml($translation->get('show with keywords', 'common')); ?>
 			<select name="keyword_id" id="keyword_id">
 				<option value="">Alle</option>
 				<?php foreach ($used_keywords AS $k) { ?>
@@ -131,7 +131,7 @@ $page->start(safeToHtml($translation->get('contacts')));
 			</select>
 		</label>
 		<?php endif; ?>
-		<span><input type="submit" value="Afsted!" /></span>
+		<span><input type="submit" value="<?php e(t('go', 'common')); ?>" /></span>
 		<!-- <a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?search=hide">Skjul søgemulighederne</a>  -->
 	</fieldset>
 </form>
