@@ -128,7 +128,7 @@ $page->start(t('products'));
                 <?php if ($kernel->user->hasModuleAccess("stock")) { ?>
                     <th><?php e(t('stock status')); ?></th>
                 <?php } ?>
-                <th><?php e(t('vat', 'common')); ?></th>
+                <th><?php e(t('vat')); ?></th>
                 <th><?php e(t('price')); ?></th>
                 <th></th>
             </tr>
@@ -166,7 +166,7 @@ $page->start(t('products'));
                         ?>
                     </td>
                 <?php } ?>
-                <td><?php if ($p['vat'] == 1) e(t('yes')); else e(t('no')); ?></td>
+                <td><?php if ($p['vat'] == 1) e(t('yes', 'common')); else e(t('no', 'common')); ?></td>
                 <td class="amount"><?php echo number_format($p['price'], 2, ",", "."); ?></td>
 
                 <td class="options">
@@ -185,7 +185,7 @@ $page->start(t('products'));
     </table>
     <select name="action">
         <option value=""><?php e(t('choose...', 'common')); ?></option>
-        <option value="delete"><?php e(t('delete selected')); ?></option>
+        <option value="delete"><?php e(t('delete selected', 'common')); ?></option>
     </select>
 
     <input type="submit" value="<?php e(t('go', 'common')); ?>" />
