@@ -17,7 +17,7 @@ if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
 
     if ($oplysninger = $eniro->query('telefon', $_POST['eniro_phone'])) {
         // skal kun bruges så længe vi ikke er utf8
-        $oplysninger = array_map('utf8_decode', $oplysninger);
+        // $oplysninger = array_map('utf8_decode', $oplysninger);
         $address['name'] = $oplysninger['navn'];
         $address['address'] = $oplysninger['adresse'];
         $address['postcode'] = $oplysninger['postnr'];
