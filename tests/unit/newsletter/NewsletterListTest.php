@@ -34,6 +34,7 @@ class NewsletterListTest extends PHPUnit_Framework_TestCase
             'reply_email' => 'reply@email.dk',
             'description' => 'description',
             'subscribe_message' => 'subscribe message',
+            'subscribe_subject' => 'subscribe subject'
             );
 
         $this->assertTrue($list->save($data) > 0);
@@ -49,6 +50,7 @@ class NewsletterListTest extends PHPUnit_Framework_TestCase
             'sender_name' => 'sender name',
             'reply_email' => 'reply@email.dk',
             'description' => 'description',
+            'subscribe_subject' => 'subscribe subject',
             'subscribe_message' => 'subscribe message');
         $this->assertTrue($list->save($data) > 0);
         $this->assertTrue($list->delete());
