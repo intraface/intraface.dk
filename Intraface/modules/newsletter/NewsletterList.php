@@ -63,8 +63,9 @@ class NewsletterList extends Standard
         $this->value['id']                  = $db->f('id');
         $this->value['title']               = $db->f('title');
         $this->value['description']         = $db->f('description');
+        $this->value['subscribe_subject']   = $db->f('subscribe_subject');
         $this->value['subscribe_message']   = $db->f('subscribe_message');
-        $this->value['unsubscribe_message'] = $db->f("unsubscribe_message");
+        $this->value['unsubscribe_message'] = $db->f('unsubscribe_message');
         $this->value['privacy_policy']      = $db->f('privacy_policy');
         $this->value['sender_name']         = $db->f('sender_name');
         if (empty($this->value['sender_name'])) {
@@ -111,6 +112,7 @@ class NewsletterList extends Standard
         $validator->isString($var['sender_name'], 'Navn på afsender er ikke ufdyldt korrekt', '', 'allow_empty');
         $validator->isEmail($var['reply_email'], 'E-mail er ikke en gyldig e-mail', 'allow_empty');
         $validator->isString($var['description'], 'Beskrivelse er ikke gyldig', '<strong><em>', 'allow_empty');
+        $validator->isString($var['subscribe_subject'], 'Subject til bekræftelse på tilmelding er ikke udfyldt korrekt', '', 'allow_empty');
         $validator->isString($var['subscribe_message'], 'Bekræftelse på tilmelding er ikke udfyldt korrekt', '', 'allow_empty');
 
         if ($this->error->isError()) {
@@ -136,13 +138,13 @@ class NewsletterList extends Standard
 
         $db = new DB_Sql;
         // privacy_policy = \"".$var['privacy_policy']."\",
-        //	unsubscribe_message = \"".$var['unsubscribe_message']."\",
+        // unsubscribe_message = \"".$var['unsubscribe_message']."\",
 
         $sql = "sender_name = \"".$var['sender_name']."\",
             reply_email = \"".$var['reply_email']."\",
             description = \"".$var['description']."\",
             title = \"".$var['title']."\",
-
+            subscribe_subject = \"".$var['subscribe_subject']."\",
             subscribe_message = \"".$var['subscribe_message']."\"";
             // subscribe_option_key = ".$var['subscribe_option_key'].",
 

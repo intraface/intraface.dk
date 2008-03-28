@@ -427,17 +427,24 @@ class NewsletterSubscriber extends Standard
             return false;
         }
 
+        // @todo hack for legacy purposes, could also just update the db
+        $subscribe_subject = $this->list->get('subscribe_subject');
+        if (empty($subscribe_subject)) {
+            $subscribe_subject = 'Bekræft tilmelding';
+        }
+
         $this->load();
 
         $contact = new Contact($this->list->kernel, $this->get('contact_id'));
 
+        // @todo should probably also introduce some kind of greeting setting in list
         $email = new Email($this->list->kernel);
         $data = array(
-                'subject' => 'Bekræft tilmelding',
+                'subject' => $subscribe_subject,
                 'body' =>
                     $this->list->get('subscribe_message') . "\n\n" .
                     $contact->getLoginUrl() . '/' . $this->get('code').
-                    "\n\nMed venlig hilsen\n".$this->list->get('sender_name'),
+                    "\n\n".$this->list->get('sender_name'),
                 'contact_id' => $this->get('contact_id'),
                 'from_email' => $this->list->get('reply_email'),
                 'from_name' => $this->list->get('sender_name'),
