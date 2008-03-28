@@ -102,7 +102,8 @@ require_once 'Intraface/Error.php';
 require_once 'Intraface/Validator.php';
 require_once 'MDB2.php';
 
-class ContactReminder extends Standard {
+class ContactReminder extends Standard
+{
 
     private $id;
     public $contact;
@@ -118,36 +119,38 @@ class ContactReminder extends Standard {
      * @param 	object contact: Class contact
      * @param 	int id: id of reminder.
      */
-    function __construct($contact, $id = 0) {
+    function __construct($contact, $id = 0)
+    {
         $this->db = MDB2::singleton(DB_DSN);
         $this->contact = $contact;
         $this->error = new Error;
         $this->id = intval($id);
 
-        if($this->id != 0) {
+        if ($this->id != 0) {
             $this->load();
         }
     }
 
-    public function factory($kernel, $id) {
-        if($id == 0) {
+    public function factory($kernel, $id)
+    {
+        if ($id == 0) {
             trigger_error("Invalid id in ContactReminder->factory", E_USER_ERROR);
             return false;
         }
 
-        if(strtolower(get_class($kernel)) != 'kernel') {
+        if (strtolower(get_class($kernel)) != 'kernel') {
             trigger_error("Kernel is needed in ContactReminder->factory");
         }
         $db = MDB2::singleton(DB_DSN);
         $result = $db->query("SELECT contact_id FROM contact_reminder_single WHERE intranet_id = ".$db->quote($kernel->intranet->get('id'), 'integer')." AND id = ".$db->quote($id, 'integer')."");
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error('result is an error in Contact_reminder_single->factory', E_USER_ERROR);
             return false;
         }
 
         $row = $result->fetchRow();
         $contact = new Contact($kernel, $row['contact_id']);
-        if($contact->get('id') == 0) {
+        if ($contact->get('id') == 0) {
             trigger_error("Invalid contact id in ContactReminder->factory", E_USER_ERROR);
         }
 
@@ -158,13 +161,14 @@ class ContactReminder extends Standard {
     /**
      * @return boolean true or false
      */
-    public function load() {
+    public function load()
+    {
         $result = $this->db->query("SELECT *, DATE_FORMAT(reminder_date, '%d-%m-%Y') AS dk_reminder_date, DATE_FORMAT(date_created, '%d-%m-%Y') AS dk_date_created FROM contact_reminder_single
             WHERE
                 intranet_id = ".$this->db->quote($this->contact->kernel->intranet->get('id'), 'integer')."
                 AND id = ".$this->db->quote($this->id, 'integer'));
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error('result is an error in Contact_reminder_single->load', E_USER_ERROR);
             return false;
         }
@@ -179,7 +183,8 @@ class ContactReminder extends Standard {
         return true;
     }
 
-    function validate($input) {
+    function validate($input)
+    {
         $validator = new Validator($this->error);
 
         $validator->isDate($input['reminder_date'], 'Error in date', 'allow_no_year');
@@ -192,12 +197,12 @@ class ContactReminder extends Standard {
      * @param 	array $input: array of data to store/update
      * @return	boolean true or false
      */
-    public function update($input) {
-
+    public function update($input)
+    {
         $this->validate($input);
 
         $date = new Intraface_Date($input['reminder_date']);
-        if(!$date->convert2db()) {
+        if (!$date->convert2db()) {
             trigger_error("Was not able to convert date in ContactReminder->update", E_USER_ERROR);
         }
 
@@ -206,15 +211,14 @@ class ContactReminder extends Standard {
                 "subject = ".$this->db->quote($input['subject'], 'text')."," .
                 "description = ".$this->db->quote($input['description'], 'text')."";
 
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             return false;
         }
 
-        if($this->id != 0) {
+        if ($this->id != 0) {
             $result = $this->db->exec("UPDATE contact_reminder_single SET ".$sql." WHERE intranet_id = ".$this->db->quote($this->contact->kernel->intranet->get('id'), 'integer')." AND id = ".$this->db->quote($this->id, 'integer'));
 
-        }
-        else {
+        } else {
 
             $result = $this->db->exec("INSERT INTO contact_reminder_single SET ".$sql.", ".
                 "intranet_id = ".$this->db->quote($this->contact->kernel->intranet->get('id'), 'integer')."," .
@@ -240,7 +244,8 @@ class ContactReminder extends Standard {
      * @return boolean true or false
      */
 
-    public function postponeUntil($date) {
+    public function postponeUntil($date)
+    {
         /**
          * @todo: validation needed - not crucial as we are setting the postpone date
          */
@@ -253,15 +258,14 @@ class ContactReminder extends Standard {
          return true;
     }
 
-
     /**
      * TO BE WRITTEN
      * Return all upcoming reminders on all contacts
      *
      * @return array	with reminders.
      */
-
-    public function upcomingReminders($kernel) {
+    public function upcomingReminders($kernel)
+    {
         // Please write me.
         // Navnet må gerne ændres!
         // Tænker den skal kaldes således
@@ -294,9 +298,8 @@ class ContactReminder extends Standard {
      * @param string $status	Status as either created, seen, or cancelled
      * @return boolean true or false
      */
-
-    public function setStatus($status) {
-
+    public function setStatus($status)
+    {
         $status_key = array_search($status, $this->status_types);
 
         $result = $this->db->exec('UPDATE contact_reminder_single SET date_changed = NOW(), status_key = ' .$this->db->quote($status_key, 'integer').' WHERE intranet_id = '.$this->db->quote($this->contact->kernel->intranet->get('id'), 'integer').' AND id = '.$this->db->quote($this->id, 'integer'));
@@ -309,14 +312,16 @@ class ContactReminder extends Standard {
 
     }
 
-    public function createDbquery() {
+    public function createDbquery()
+    {
         $this->dbquery = new DBQuery($this->contact->kernel, "contact_reminder_single", "contact_reminder_single.active = 1 AND contact_reminder_single.intranet_id = ".$this->db->quote($this->contact->kernel->intranet->get("id"), 'integer'));
         $this->dbquery->setJoin("INNER", "contact", "contact_reminder_single.contact_id = contact.id", "contact.active = 1 AND contact.intranet_id = ".$this->db->quote($this->contact->kernel->intranet->get("id"), 'integer'));
         $this->dbquery->useErrorObject($this->error);
 
     }
 
-    public function getList() {
+    public function getList()
+    {
         $this->dbquery->setSorting('reminder_date');
         $this->dbquery->setCondition('contact_id = '.$this->db->quote($this->contact->get('id'), 'integer'));
         $this->dbquery->setCondition('status_key = '.$this->db->quote(1, 'integer'));
@@ -336,4 +341,3 @@ class ContactReminder extends Standard {
         return $reminders;
     }
 }
-?>
