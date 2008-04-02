@@ -2,6 +2,7 @@
 require('../../include_first.php');
 
 $module = $kernel->module("product");
+$translation = $kernel->getTranslation('product');
 
 if (!empty($_POST)) {
     foreach ($_POST['name'] AS $key=>$value) {
