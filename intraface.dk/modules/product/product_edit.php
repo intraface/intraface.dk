@@ -205,9 +205,9 @@ $page->start(t('edit product'));
         <?php else: ?>
 
         <div class="formrow">
-            <label for="state_account"><?php e(t('stated on account')); ?></label>
+            <label for="state_account"><?php e(t('state on account')); ?></label>
             <select if="state_account" name="state_account_id">
-                <option value=""><?php e(t('choose...')); ?></option>
+                <option value=""><?php e(t('choose...', 'common')); ?></option>
                 <?php
                     $x = 0;
                     $optgroup = 1;
