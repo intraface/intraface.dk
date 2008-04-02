@@ -16,6 +16,9 @@ class intraface_ClassLoader extends k_ClassLoader
     if (self::SearchIncludePath($filename)) {
       require_once($filename);
     }
+    else {
+        throw new Exception('Unable to include file '.$filename);
+    }
   }
 }
 
