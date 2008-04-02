@@ -97,9 +97,16 @@ $page->start(t('edit product'));
                 foreach ($unit_choises AS $key=>$v) {
                     $unit_options .= '<option value="' . $key . '"';
                     if (!empty($value['unit_id']) AND $value['unit_id'] == $key) { $unit_options .= ' selected="selected"'; }
+                    
+                    // to avoid trying to translate empty string.
+                    if(!empty($v['combined'])) {
                         $unit_options .= '>' . htmlentities(t($v['combined'])) . '</option>';
                     }
-                    echo $unit_options;
+                    else {
+                        $unit_options .= '></option>';
+                    }
+                }
+                echo $unit_options;
 
             ?>
             </select>
@@ -117,7 +124,7 @@ $page->start(t('edit product'));
             <label for="vat"><?php e(t('vat')); ?></label>
             <select name="vat" id="vat">
             <?php
-                $vat_choises = array(0 => t('no'), 1 => t('yes'));
+                $vat_choises = array(0 => t('no', 'common'), 1 => t('yes', 'common'));
                 $vat_options = '';
                 foreach ($vat_choises AS $key=>$v) {
                     $vat_options .= '<option value="' . $key . '"';
@@ -141,7 +148,7 @@ $page->start(t('edit product'));
             <select name="do_show" id="do_show">
             <?php
                 $show_options = '';
-                $show_choises = array(0 => t('no'), 1 => t('yes'));
+                $show_choises = array(0 => t('no', 'common'), 1 => t('yes', 'common'));
 
                 foreach ($show_choises AS $key=>$v) {
                     $show_options .= '<option value="' . $key . '"';
@@ -166,7 +173,7 @@ $page->start(t('edit product'));
             <select name="stock" id="stock">
             <?php
                 $stock_options = '';
-                $stock_choises = array(0 => t('no'), 1 => t('yes'));
+                $stock_choises = array(0 => t('no', 'common'), 1 => t('yes', 'common'));
                 foreach ($stock_choises AS $key=>$v) {
                     $stock_options .= '<option value="' . $key . '"';
                     if (!empty($value['stock']) AND $value['stock'] == $key) { $stock_options .= ' selected="selected"'; }
@@ -237,9 +244,9 @@ $page->start(t('edit product'));
     <div>
         <?php if ($product->get('locked') == 0):  ?>
 
-            <input type="submit" name="submit" value="<?php e(t('save')); ?>" class="save" /> or
+            <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" class="save" /> <?php e(t('or', 'common')); ?>
     <?php endif; ?>
-        <a href="<?php $return = 'index.php'; if(isset($product) && $product->get('id') != 0) $return = 'product.php?id='.intval($product->get('id')); echo $redirect->getRedirect($return); ?>"><?php e(t('regret')); ?></a>
+        <a href="<?php $return = 'index.php'; if(isset($product) && $product->get('id') != 0) $return = 'product.php?id='.intval($product->get('id')); echo $redirect->getRedirect($return); ?>"><?php e(t('regret', 'common')); ?></a>
 
     </div>
 
