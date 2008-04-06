@@ -282,7 +282,12 @@ class NewsletterSubscriber extends Standard
             $contact = Contact::factory($this->list->kernel, 'email', $input['email']);
 
             if ($contact->get('id') == 0) {
-                if (!$contact_id = $contact->save(array('name' => $input['email'], 'email' => $input['email']))) {
+                if (empty($input['name'])) {
+                    $name = $input['email'];
+                } else {
+                    $name = $input['name'];
+                }
+                if (!$contact_id = $contact->save(array('name' => $name, 'email' => $input['email']))) {
                     //$contact->error->view();
                     $this->error->set('Kunne ikke gemme kontaktpersonen');
                 }
@@ -443,7 +448,7 @@ class NewsletterSubscriber extends Standard
                 'subject' => $subscribe_subject,
                 'body' =>
                     $this->list->get('subscribe_message') . "\n\n" .
-                    $contact->getLoginUrl() . '/' . $this->get('code').
+                    $contact->getLoginUrl() . '&optin=' . $this->get('code').
                     "\n\n".$this->list->get('sender_name'),
                 'contact_id' => $this->get('contact_id'),
                 'from_email' => $this->list->get('reply_email'),
