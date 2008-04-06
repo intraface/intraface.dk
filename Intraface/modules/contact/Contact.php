@@ -200,7 +200,8 @@ class Contact extends Standard {
      *
      * @return	void
      */
-    public function __construct($kernel, $id = 0) {
+    public function __construct($kernel, $id = 0)
+    {
         if (!is_object($kernel)) {
             trigger_error('Contact kræver kernel - fik ' . get_class($kernel), E_USER_ERROR);
         }
@@ -213,7 +214,7 @@ class Contact extends Standard {
 
         $this->fields = array('type_key', 'paymentcondition', 'number', 'preferred_invoice', 'openid_url');
 
-        if($this->id > 0) {
+        if ($this->id > 0) {
             $this->load();
         }
     }
@@ -228,7 +229,8 @@ class Contact extends Standard {
      *
      * @return  void
      */
-    public function createDBQuery() {
+    public function createDBQuery()
+    {
         $this->dbquery = new DBQuery($this->kernel, "contact", "contact.active = 1 AND contact.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->setJoin("LEFT", "address", "address.belong_to_id = contact.id", "address.active = 1 AND address.type = 3");
         $this->dbquery->useErrorObject($this->error);
@@ -243,7 +245,8 @@ class Contact extends Standard {
      *
      * @return  object
      */
-    public function factory($kernel, $type, $value) {
+    public function factory($kernel, $type, $value)
+    {
         // Husk noget validering af de forskellige values og typer
         $db = new DB_Sql;
         switch($type) {
@@ -275,7 +278,8 @@ class Contact extends Standard {
      *
      * @return true on success
      */
-    private function load() {
+    private function load()
+    {
         $db = new DB_Sql;
         $this->value = array();
 
@@ -284,13 +288,13 @@ class Contact extends Standard {
             WHERE contact.id=".$this->id."
                 AND intranet_id =".$this->kernel->intranet->get('id'));
 
-        if(!$db->nextRecord()) {
+        if (!$db->nextRecord()) {
             return false;
         }
 
         $this->value['id'] = $db->f('id');
 
-        for($i=0, $max=count($this->fields); $i<$max; $i++) {
+        for ($i=0, $max=count($this->fields); $i<$max; $i++) {
             $this->value[$this->fields[$i]] = $db->f($this->fields[$i]);
         }
         $this->value['type'] = $this->types[$db->f('type_key')];
@@ -299,7 +303,7 @@ class Contact extends Standard {
         $this->value['number'] = $db->f('number');
         $this->value['code'] = $db->f('password');
 
-        if($this->get('type') == 'corporation') {
+        if ($this->get('type') == 'corporation') {
             $this->contactperson = new ContactPerson($this);
         }
 
@@ -333,11 +337,11 @@ class Contact extends Standard {
      *
      * @return string
      */
-    public function getLoginUrl() {
+    public function getLoginUrl()
+    {
         // HACK NECCESSARY FOR THE NEWSLETTERSUBSCRIBER
         $this->kernel->useModule('contact');
-        return $this->value['login_url'] = 'http://' . $this->kernel->intranet->get('identifier') . '.' . $this->kernel->setting->get('intranet', 'contact.login_url') . '/' . $this->get('password');
-
+        return ($this->value['login_url'] = 'http://' . $this->kernel->setting->get('intranet', 'contact.login_url') . '/' .$this->kernel->intranet->get('identifier') . '/login?code='. $this->get('password'));
     }
 
     /**
@@ -347,7 +351,8 @@ class Contact extends Standard {
      *
      * @return true on success
      */
-    public function validate($var) {
+    public function validate($var)
+    {
         $var = $var;
 
         if (array_key_exists('number', $var) AND !$this->isNumberFree($var['number'])) {
@@ -355,35 +360,69 @@ class Contact extends Standard {
         }
 
         $validator = new Validator($this->error);
-        if (!empty($var['type_key'])) $validator->isNumeric($var['type_key'], 'Fejl i typen', 'allow_empty');
-        if (!empty($var['openid_url'])) $validator->isUrl($var['openid_url'], 'Openid_url', 'allow_empty');
+        if (!empty($var['type_key'])) {
+            $validator->isNumeric($var['type_key'], 'Fejl i typen', 'allow_empty');
+        }
+        if (!empty($var['openid_url'])) {
+            $validator->isUrl($var['openid_url'], 'Openid_url', 'allow_empty');
+        }
 
         // address
         $validator->isString($var['name'], 'Navnet er ikke en gyldig streng');
-        if (!empty($var['address'])) $validator->isString($var['address'], 'Adressen er ikke en streng', '', 'allow_empty');
-        if (!empty($var['postcode'])) $validator->isNumeric($var['postcode'], 'Postkoden er ikke et tal', 'allow_empty');
-        if (!empty($var['city'])) $validator->isString($var['city'], 'Byen er ikke en by', '', 'allow_empty');
-        if (!empty($var['country'])) $validator->isString($var['country'], 'Der er fejl i landet', '', 'allow_empty');
-        if (!empty($var['phone'])) $validator->isString($var['phone'], 'Telefonnummeret et ikke rigtigt.', '', 'allow_empty');
-        if (!empty($var['email'])) $validator->isEmail($var['email'], 'E-mailen er ikke en rigtig e-mail', 'allow_empty');
-        if (!empty($var['website'])) $validator->isUrl($var['website'], 'Der er fejl i urlen', 'allow_empty');
-        if (!empty($var['cvr'])) $validator->isNumeric($var['cvr'], 'Fejl i cvr-nummeret', 'allow_empty');
+        if (!empty($var['address'])) {
+            $validator->isString($var['address'], 'Adressen er ikke en streng', '', 'allow_empty');
+        }
+        if (!empty($var['postcode'])) {
+            $validator->isNumeric($var['postcode'], 'Postkoden er ikke et tal', 'allow_empty');
+        }
+        if (!empty($var['city'])) {
+            $validator->isString($var['city'], 'Byen er ikke en by', '', 'allow_empty');
+        }
+        if (!empty($var['country'])) {
+            $validator->isString($var['country'], 'Der er fejl i landet', '', 'allow_empty');
+        }
+        if (!empty($var['phone'])) {
+            $validator->isString($var['phone'], 'Telefonnummeret et ikke rigtigt.', '', 'allow_empty');
+        }
+        if (!empty($var['email'])) {
+            $validator->isEmail($var['email'], 'E-mailen er ikke en rigtig e-mail', 'allow_empty');
+        }
+        if (!empty($var['website'])) {
+            $validator->isUrl($var['website'], 'Der er fejl i urlen', 'allow_empty');
+        }
+        if (!empty($var['cvr'])) {
+            $validator->isNumeric($var['cvr'], 'Fejl i cvr-nummeret', 'allow_empty');
+        }
         settype($var['ean'], 'string');
-        if (!empty($var['ean'])) $validator->isNumeric($var['ean'], 'Fejl i ean-nummeret', 'allow_empty');
+        if (!empty($var['ean'])) {
+            $validator->isNumeric($var['ean'], 'Fejl i ean-nummeret', 'allow_empty');
+        }
 
         if (!empty($var['ean']) AND strlen($var['ean']) != 13) {
             $this->error->set('EAN-nummeret skal præcis være 13 tal');
         }
 
         //deliveryaddress
-        if (!empty($var['delivery_name'])) $validator->isString($var['delivery_name'], 'Leveringsadressen forkert', '', 'allow_empty');
-        if (!empty($var['delivery_address'])) $validator->isString($var['delivery_address'], 'Leveringsadressen forkert', '', 'allow_empty');
-        if (!empty($var['delivery_postcode'])) $validator->isNumeric($var['delivery_postcode'], 'Leveringsadressens postnummer', 'allow_empty');
-        if (!empty($var['delivery_city'])) $validator->isString($var['delivery_city'], 'Leveringsadressens by', '', 'allow_empty');
-        if (!empty($var['delivery_country'])) $validator->isString($var['delivery_country'], 'Leveringsadressens land', '', 'allow_empty');
+        if (!empty($var['delivery_name'])) {
+            $validator->isString($var['delivery_name'], 'Leveringsadressen forkert', '', 'allow_empty');
+        }
+        if (!empty($var['delivery_address'])) {
+            $validator->isString($var['delivery_address'], 'Leveringsadressen forkert', '', 'allow_empty');
+        }
+        if (!empty($var['delivery_postcode'])) {
+            $validator->isNumeric($var['delivery_postcode'], 'Leveringsadressens postnummer', 'allow_empty');
+        }
+        if (!empty($var['delivery_city'])) {
+            $validator->isString($var['delivery_city'], 'Leveringsadressens by', '', 'allow_empty');
+        }
+        if (!empty($var['delivery_country'])) {
+            $validator->isString($var['delivery_country'], 'Leveringsadressens land', '', 'allow_empty');
+        }
 
         // other
-        if (!empty($var['paymentcondition'])) $var['paymentcondition'] = 0;
+        if (!empty($var['paymentcondition'])) {
+            $var['paymentcondition'] = 0;
+        }
         settype($var['paymentcondition'], 'integer');
         $validator->isNumeric($var['paymentcondition'], 'Betalingsbetingelserne er ikke sat', 'allow_empty');
         if (empty($var['paymentcondition'])) {
@@ -391,7 +430,9 @@ class Contact extends Standard {
             $var['paymentcondition'] = 8;
         }
 
-        if (empty($var['preferred_invoice'])) $var['preferred_invoice'] = 0;
+        if (empty($var['preferred_invoice'])) {
+            $var['preferred_invoice'] = 0;
+        }
         settype($var['preferred_invoice'], 'integer');
         $validator->isNumeric($var['preferred_invoice'], 'Fejl i preferred_invoice', 'allow_empty');
         if ($var['preferred_invoice'] == 3 AND empty($var['ean'])) {
@@ -401,7 +442,6 @@ class Contact extends Standard {
         if ($var['preferred_invoice'] == 2 AND empty($var['email'])) {
             $this->error->set('E-mailen skal udfyldes, hvis kontakten foretrækker e-mail.');
         }
-
 
         if ($this->error->isError()) {
             //$this->error->view();
@@ -431,9 +471,9 @@ class Contact extends Standard {
      *
      * @return void
      */
-    public function save($var) {
+    public function save($var)
+    {
         $sql_items = '';
-
         // safe db må ikke være her, for den køres igen i address
         // vi skal søreg for blot at køre den på selve feltet.
         //$var = safeToDb($var);
@@ -442,12 +482,11 @@ class Contact extends Standard {
             $var['number'] = $this->getMaxNumber() + 1;
         }
 
-        if(isset($var['type'])) {
+        if (isset($var['type'])) {
             $type_key = array_search($var['type'], $this->types);
-            if($type_key === false) {
+            if ($type_key === false) {
                 $this->error->set('invalid type for the contact');
-            }
-            else {
+            } else {
                 $var['type_key'] = $type_key;
             }
         }
@@ -457,21 +496,22 @@ class Contact extends Standard {
         }
 
         // skrive sql
-        for($i = 0, $max = count($this->fields); $i<$max; $i++) {
-            if(!array_key_exists($this->fields[$i], $var)) continue;
-            if(isset($var[$this->fields[$i]])) {
+        for ($i = 0, $max = count($this->fields); $i<$max; $i++) {
+            if (!array_key_exists($this->fields[$i], $var)) {
+                continue;
+            }
+            if (isset($var[$this->fields[$i]])) {
                 $sql_items .= $this->fields[$i]." = '".safeToDb($var[$this->fields[$i]])."', ";
             }
         }
 
 
         // prepare sql to update or insert
-        if($this->id > 0) {
+        if ($this->id > 0) {
             $sql="UPDATE contact ";
             $sql_after=" WHERE id='".$this->id."'";
             $sql_create = "";
-        }
-        else {
+        } else {
             $sql="INSERT INTO contact ";
             $sql_after = ", password='".safeToDb(md5(date('Y-m-d H:i:s') . $sql_items))."'";
             $sql_create = "date_created = NOW(),";
@@ -489,10 +529,7 @@ class Contact extends Standard {
             $this->id = $db->insertedId();
         }
 
-        #
-        # Standardadresse
-        #
-
+        // Standardadresse
         $address_object = Address::factory('contact', $this->id);
         $address_fields = $address_object->fields;
 
@@ -506,10 +543,8 @@ class Contact extends Standard {
                 return 0;
             }
         }
-        #
-        # Delivery Address
-        #
 
+        // Delivery Address
         foreach ($address_fields AS $key=>$value) {
             if (array_key_exists('delivery_'.$value, $var)) {
                 $delivery_address_to_save[$value] = $var['delivery_' . $value];
@@ -517,7 +552,6 @@ class Contact extends Standard {
         }
 
         $delivery_address_object = Address::factory('contact_delivery', $this->id);
-
 
         if (!empty($delivery_address_to_save)) {
             if (!$delivery_address_object->save($delivery_address_to_save)) {
@@ -536,7 +570,8 @@ class Contact extends Standard {
      *
      * @return integer	0 = false eller 1 = true
      */
-    public function delete() {
+    public function delete()
+    {
         if ($this->get('locked') == 1) {
             $this->error->set('Posten er låst og kan ikke slettes');
             return false;
@@ -555,7 +590,8 @@ class Contact extends Standard {
      *
      * @return boolean
      */
-    public function undelete() {
+    public function undelete()
+    {
         if ($this->get('locked') == 1) {
             $this->error->set('Posten er låst og kan ikke slettes');
             return false;
@@ -577,7 +613,8 @@ class Contact extends Standard {
      *
      * @return true hvis det er frit
      */
-    public function isNumberFree($number) {
+    public function isNumberFree($number)
+    {
         $number = (int)$number;
         $db = new DB_Sql();
         $sql = "SELECT id
@@ -599,7 +636,8 @@ class Contact extends Standard {
      *
      * @return integer
      */
-    public function getMaxNumber() {
+    public function getMaxNumber()
+    {
         $db = new DB_Sql();
         $db->query("SELECT number FROM contact WHERE intranet_id = " . $this->kernel->intranet->get("id") . " ORDER BY number DESC");
         if (!$db->nextRecord()) {
@@ -615,9 +653,9 @@ class Contact extends Standard {
      *
      * @return array indeholdende kundedata til liste
      */
-    public function getList($parameter = "") {
-
-        if($this->dbquery->checkFilter("search")) {
+    public function getList($parameter = "")
+    {
+        if ($this->dbquery->checkFilter("search")) {
             $search = $this->dbquery->getFilter("search");
             $this->dbquery->setCondition("
                 contact.number = '".$search."' OR
@@ -646,7 +684,7 @@ class Contact extends Standard {
             $contacts[$i]['phone'] = $db->f("phone");
             $contacts[$i]['email'] = $db->f("email");
 
-            if($parameter == "use_address") {
+            if ($parameter == "use_address") {
                 $address = Address::factory("contact", $db->f("id"));
                 $contacts[$i]['address'] = $address->get();
             }
@@ -721,7 +759,8 @@ class Contact extends Standard {
      *
      * These needs to implement a common function changeContact($old, $new)
      */
-    function merge() {
+    function merge()
+    {
         die('Contact::merge(): Ikke implementeret');
     }
 
@@ -733,23 +772,27 @@ class Contact extends Standard {
      *
      * @return object
      */
-    function getKeywords() {
+    function getKeywords()
+    {
         return $this->keywords = new Keyword($this);
     }
 
-    function getKeywordAppender() {
+    function getKeywordAppender()
+    {
         return new Intraface_Keyword_Appender($this);
     }
 
-
    /**
     * Start message op
+    *
+    * @deprecated
     *
     * @param integer $id Optional id for the message
     *
     * @return object
     */
-    function loadMessage($id = 0) {
+    private function loadMessage($id = 0)
+    {
         return $this->message = & new ContactMessage($this, (int)$id);
     }
 
@@ -760,7 +803,8 @@ class Contact extends Standard {
      *
      * @return object
      */
-    function loadContactPerson($id = 0) {
+    function loadContactPerson($id = 0)
+    {
         return ($this->contactperson = & new ContactPerson($this, (int)$id));
     }
 
@@ -770,7 +814,8 @@ class Contact extends Standard {
      *
      * @return integer
      */
-    function isFilledIn() {
+    function isFilledIn()
+    {
         $db = new DB_Sql;
         $db->query("SELECT count(*) AS antal FROM contact WHERE intranet_id = " . $this->kernel->intranet->get('id'));
         if ($db->nextRecord()) {
@@ -784,7 +829,8 @@ class Contact extends Standard {
      *
      * @return boolean
      */
-    function generatePassword() {
+    function generatePassword()
+    {
         if ($this->id == 0) {
             return false;
         }
@@ -798,8 +844,8 @@ class Contact extends Standard {
      *
      * @return boolean
      */
-    function sendLoginEmail() {
-
+    function sendLoginEmail()
+    {
         if ($this->id == 0) {
             $this->error->set('Der er ikke noget id, så kunne ikke sende en e-mail');
             return false;
@@ -842,7 +888,8 @@ class Contact extends Standard {
      *
      * @return array
      */
-    function getNewsletterSubscriptions() {
+    function getNewsletterSubscriptions()
+    {
         $db = new DB_Sql;
         $db->query("SELECT * FROM newsletter_subscriber WHERE optin = 1 AND active = 1 AND contact_id = " . $this->id . " AND intranet_id =" . $this->kernel->intranet->get('id'));
         $lists = array();
@@ -857,7 +904,8 @@ class Contact extends Standard {
      *
      * @return array
      */
-    function needNewsletterOptin() {
+    function needNewsletterOptin()
+    {
         $db = new DB_Sql;
         $db->query("SELECT list_id, code FROM newsletter_subscriber WHERE optin = 0 AND contact_id = " . $this->id . " AND intranet_id =" . $this->kernel->intranet->get('id'));
         $lists = array();
@@ -877,7 +925,8 @@ class Contact extends Standard {
      *
      * @return boolean
      */
-    function canBeDeleted() {
+    function canBeDeleted()
+    {
         $db = new DB_Sql;
         $db->query("SELECT * FROM debtor WHERE contact_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
@@ -891,7 +940,8 @@ class Contact extends Standard {
      *
      * @return boolean
      */
-    function canLogin() {
+    function canLogin()
+    {
         if ($this->get('active') == 0) {
             return false;
         }
@@ -902,6 +952,4 @@ class Contact extends Standard {
     {
         return $this->id;
     }
-
 }
-?>
