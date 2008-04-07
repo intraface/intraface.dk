@@ -78,6 +78,14 @@ $page->start('Rediger liste');
   </div>
 -->
 
+
+    <div style="clear: both;">
+        <p>Enten kan du vælge følgende link: <strong><?php e('http://' . $kernel->setting->get('intranet', 'contact.login_url') . '/' .$kernel->intranet->get('identifier') . '/login'); ?></strong> eller du kan skrive dit eget:</p>
+        <label for="optin_link">Link til optin link</label><br />
+        <input type="text" name="optin_link" value="<?php if (!empty($value['optin_link'])) e($value['optin_link']); ?>" />
+    </div>
+
+
     <div style="clear: both;">
         <label for="subscribe_subject">Subject til e-mailen hvor man skal bekræfte sin tilmelding</label><br />
         <input type="text" name="subscribe_subject" value="<?php if (!empty($value['subscribe_subject'])) e($value['subscribe_subject']); ?>" />
