@@ -175,7 +175,7 @@ class Intraface_XMLRPC_Shop_Server
         $db =  MDB2::factory(DB_DSN);
 
         if (PEAR::isError($db)) {
-            return $db->getMessage() . $db->getUserInfo();
+            throw new XML_RPC2_FaultException($db->getMessage() . $db->getUserInfo(), -1);
         }
 
         $featured = new Intraface_Webshop_FeaturedProducts($this->kernel->intranet, $db);
