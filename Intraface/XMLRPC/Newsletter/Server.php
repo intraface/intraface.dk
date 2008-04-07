@@ -42,17 +42,18 @@ class Intraface_XMLRPC_Newsletter_Server
      * @param struct  $credentials Must include private_key and session_id
      * @param integer $list_id     List to subscribe to
      * @param string  $email       Email to subscribe
+     * @param string  $name        Name to subscribe
      * @param string  $ip          Which email subscribes
      *
      * @return boolean
      */
-    function subscribe($credentials, $list_id, $email, $ip)
+    function subscribe($credentials, $list_id, $email, $name, $ip = '')
     {
         $this->checkCredentials($credentials);
 
         $this->factoryList($list_id);
 
-        if (!$this->subscriber->subscribe(array('email' => $email, 'ip' => $ip))) {
+        if (!$this->subscriber->subscribe(array('name' => $name, 'email' => $email, 'ip' => $ip))) {
             throw new XML_RPC2_FaultException('an error occurred when trying to subscribe: ' . implode(',', $this->subscriber->error->message), -4);
         }
 
