@@ -68,6 +68,7 @@ class NewsletterList extends Standard
         $this->value['unsubscribe_message'] = $db->f('unsubscribe_message');
         $this->value['privacy_policy']      = $db->f('privacy_policy');
         $this->value['sender_name']         = $db->f('sender_name');
+        $this->value['optin_link']          = $db->f('optin_link');
         if (empty($this->value['sender_name'])) {
             $this->value['sender_name'] = $this->kernel->intranet->get('name');
         }
@@ -144,6 +145,7 @@ class NewsletterList extends Standard
             reply_email = \"".$var['reply_email']."\",
             description = \"".$var['description']."\",
             title = \"".$var['title']."\",
+            optin_link = \"".$var['optin_link']."\",
             subscribe_subject = \"".$var['subscribe_subject']."\",
             subscribe_message = \"".$var['subscribe_message']."\"";
             // subscribe_option_key = ".$var['subscribe_option_key'].",

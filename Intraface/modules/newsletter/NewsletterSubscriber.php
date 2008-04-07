@@ -448,7 +448,7 @@ class NewsletterSubscriber extends Standard
                 'subject' => $subscribe_subject,
                 'body' =>
                     $this->list->get('subscribe_message') . "\n\n" .
-                    $contact->getLoginUrl() . '&optin=' . $this->get('code').
+                    $this->getLoginUrl($contact) .
                     "\n\n".$this->list->get('sender_name'),
                 'contact_id' => $this->get('contact_id'),
                 'from_email' => $this->list->get('reply_email'),
@@ -469,6 +469,14 @@ class NewsletterSubscriber extends Standard
         }
         $this->error->set('could not send the e-mail' . implode(',', $email->error->message));
         return false;
+    }
+
+    private function getLoginUrl($contact)
+    {
+        if (!$link = $this->list->get('optin_link')) {
+            return $contact->getLoginUrl() . '&optin=' . $this->get('code');
+        }
+        return $link . '?optin=' . $this->get('code');
     }
 
     /**
