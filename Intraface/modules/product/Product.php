@@ -70,9 +70,11 @@ class Product extends Standard
     public $keywords;
 
     /**
+     * @todo should be private
+     *
      * @var object
      */
-    protected $dbquery;
+    public $dbquery;
 
     /**
      * Constructor
@@ -103,11 +105,13 @@ class Product extends Standard
     /**
      * Creates the dbquery object
      *
+     * @todo should be private and deleted
+     *
      * @deprecated should be removed as soon as possible
      *
      * @return void
      */
-    private function createDBQuery()
+    public function createDBQuery()
     {
         $this->dbquery = new DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->setJoin("LEFT", "product_detail detail", "detail.product_id = product.id", "detail.active = 1");
@@ -179,7 +183,8 @@ class Product extends Standard
 
         $this->value['id'] = $this->db->f('id');
 
-        return $this->db->f('id');
+        $this->db->free();
+        return $this->value['id'];
 
     }
 
@@ -764,6 +769,7 @@ class Product extends Standard
             }
             $i++;
         }
+        $db->free();
         return $products;
     }
 
