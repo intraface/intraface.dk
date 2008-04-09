@@ -20,7 +20,7 @@ else {
 }
 
 if(($debtor->get("type") == "order" || $debtor->get("type") == "invoice") && $kernel->intranet->hasModuleAccess('onlinepayment')) {
-    $kernel->useModule('onlinepayment');
+    $kernel->useModule('onlinepayment', true); // true: ignore_user_access
     $onlinepayment = OnlinePayment::factory($kernel);
 }
 else {
