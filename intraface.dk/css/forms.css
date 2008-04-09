@@ -46,6 +46,10 @@ div.formrow label {
 	margin-bottom: 0.7em;
 }
 
+div.formrow div.formrow-description {
+    padding-left: 15em;
+    font-size: 0.9em;
+}
 
 /* Hvad bruges den her til */
 div.formrow label.tight {
@@ -67,7 +71,6 @@ div.formrow input, div.formrow textarea {
 div.formrow input {
 	margin-right: 0.7em;
 }
-
 
 fieldset.select {
 	/*

@@ -178,10 +178,10 @@ class CMS_Page extends Standard
         $validator->isNumeric($var['hidden'], 'error in hidden - allowed values are 0 and 1');
 
         if (!Validate::string($var['identifier'], array('format' => VALIDATE_ALPHA . VALIDATE_NUM . '-_'))) {
-            $this->error->set('error in identifier - allowed values are a-z, 1-9');
+            $this->error->set('error in unique page address. allowed values are a-z 1-9 _ -');
         }
         if (!$this->isIdentifierAvailable($var['identifier'])) {
-            $this->error->set('error in identifier - has to be unique');
+            $this->error->set('the choosen unique page address is already used for another page, article or news. please select another one');
         }
 
         if ($this->error->isError()) {

@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     } else {
         $value = $_POST;
+        $value['for_page_type'] = array_sum($_POST['for_page_type']);
     }
 } elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
     $template = CMS_Template::factory($kernel, 'id', $_GET['id']);

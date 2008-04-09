@@ -93,9 +93,21 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
     </p>
 
 <?php else: ?>
+
+<ul class="options">
+    <?php foreach($cmspage->getTypes() AS $page_type): ?>
+        <li>
+            <?php if($page_type == $type): ?>
+                <strong><?php e(t($page_types_plural[$page_type])); ?></strong>
+            <?php else: ?>
+                <a  href="pages.php?type=<?php e($page_type); ?>&amp;id=<?php echo $cmssite->get('id'); ?>"><?php e(t($page_types_plural[$page_type])); ?></a>
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
+
 <ul class="options">
     <li><a class="new" href="page_edit.php?type=<?php e($type); ?>&amp;site_id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('create '.$type)); ?></a></li>
-    <li><a class="edit" href="site_edit.php?id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('edit site settings')); ?></a></li>
     <li><a  href="site.php?id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('go to site overview')); ?></a></li>
 </ul>
 

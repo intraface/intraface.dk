@@ -43,12 +43,15 @@ if (!empty($_POST)) {
         }
     } else {
         $value = $_POST;
+        $type = $value['type'];
         $template = & $cmspage->template;
     }
 } elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
     $cmspage = CMS_Page::factory($kernel, 'id', $_GET['id']);
+    $cmssite = $cmspage->cmssite;
 
     $value = $cmspage->get();
+    $type = $value['type'];
     $template = $cmspage->template;
 
     // til select - denne kan uden problemer fortrydes ved blot at have et link til samme side
@@ -61,7 +64,8 @@ if (!empty($_POST)) {
         trigger_error('you need to provide at page type for what you want to create', E_USER_ERROR);
         exit;
     }
-    $value['type'] = $_GET['type'];
+    $type = $_GET['type'];
+    $value['type'] = $type;
     $cmssite = new CMS_Site($kernel, $_GET['site_id']);
     $cmspage = new CMS_Page($cmssite);
     $value['site_id'] = $_GET['site_id'];
@@ -71,12 +75,13 @@ if (!empty($_POST)) {
 }
 
 
-if (!empty($value['type'])) {
+if (!empty($type)) {
     $page_types = CMS_Page::getTypesWithBinaryIndex();
-    $binary_bage_type = array_search($value['type'], $page_types);
+    $binary_bage_type = array_search($type, $page_types);
 }
 else {
-    $binary_bage_type = NULL;
+    trigger_error('no type is given!', E_USER_ERROR);
+    exit;
 }
 
 $templates = $template->getList($binary_bage_type);
@@ -84,13 +89,14 @@ $cmspages = $cmspage->getList();
 
 $page = new Page($kernel);
 $page->includeJavascript('module', 'page_edit.js');
+$page->includeJavascript('module', 'parseUrlIdentifier.js');
 $page->start(safeToHtml($translation->get('edit page')));
 ?>
 
-<h1><?php e($translation->get('edit page')); ?></h1>
+<h1><?php e($translation->get('edit '.$type)); ?></h1>
 
 <ul class="options">
-    <li><a href="site.php?id=<?php e($cmspage->cmssite->get('id')); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
+    <li><a href="pages.php?type=<?php e($type); ?>&amp;id=<?php e($cmspage->cmssite->get('id')); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
     <?php if ($cmspage->get('id') > 0): ?>
     <li><a href="page.php?id=<?php e($cmspage->get('id')); ?>"><?php e($translation->get('view page')); ?></a></li>
     <?php endif; ?>
@@ -117,32 +123,32 @@ $page->start(safeToHtml($translation->get('edit page')));
     
         <fieldset>
             <legend><?php e($translation->get('about the behavior of the page')); ?></legend>
-        <?php if (!empty($value['template_id'])): ?>
-            <input type="hidden" name="template_id" value="<?php  if (!empty($value['template_id'])) echo intval($value['template_id']); ?>" />
-    
-        <?php elseif (is_array($templates) AND count($templates) > 1): ?>
-    
+            
             <div class="formrow">
-                <label><?php e($translation->get('choose template')); ?></label>
-                <select name="template_id">
-                <?php foreach ($templates AS $template): ?>
-                    <option value="<?php echo intval($template['id']); ?>"><?php echo safeToForm($template['name']); ?></option>
-                <?php endforeach; ?>
-                </select>
-            </div>
-    
-        <?php else: ?>
-            <input type="hidden" name="template_id" value="<?php echo intval($templates[0]['id']); ?>" />
-        <?php endif; ?>
-    
-            <div class="formrow">
-                <label for="page-type"><?php e($translation->get('choose page type')); ?></label>
+                <label for="page-type"><?php e($translation->get('type')); ?></label>
+                <div id="static-cms-page-type" style="display: none;"><?php e(t($type)); ?> <?php if(!empty($value['id'])): ?><a href="#" onClick="page_edit.show_select();" class="edit"><?php e(t('change')); ?></a><?php endif; ?></div>
                 <select name="page_type" id="cms-page-type">
                     <?php foreach ($cmspage->getTypes() AS $key => $type): ?>
                     <option value="<?php echo $type; ?>"<?php if (!empty($value['type']) AND $value['type'] == $type) echo ' selected="selected"' ?>><?php echo safeToForm($translation->get($type)); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
+            
+            
+            <?php if (!empty($value['template_id'])): ?>
+                <input type="hidden" name="template_id" value="<?php  if (!empty($value['template_id'])) echo intval($value['template_id']); ?>" />
+            <?php elseif (is_array($templates) AND count($templates) > 1): ?>
+                <div class="formrow">
+                    <label><?php e($translation->get('choose template')); ?></label>
+                    <select name="template_id">
+                    <?php foreach ($templates AS $template): ?>
+                        <option value="<?php echo intval($template['id']); ?>"><?php echo safeToForm($template['name']); ?></option>
+                    <?php endforeach; ?>
+                    </select>
+                </div>
+            <?php else: ?>
+                <input type="hidden" name="template_id" value="<?php echo intval($templates[0]['id']); ?>" />
+            <?php endif; ?>
         </fieldset>
     
         <fieldset>
@@ -151,19 +157,26 @@ $page->start(safeToHtml($translation->get('edit page')));
     
             <div class="formrow" id="titlerow">
                 <label for="title"><?php e($translation->get('title')); ?></label>
-                <input name="title" type="text" id="title" value="<?php if (!empty($value['title'])) echo safeToForm($value['title']); ?>" size="50" maxlength="50" />
+                <input name="title" type="text" id="title" value="<?php if (!empty($value['title'])) echo safeToForm($value['title']); ?>" size="50" maxlength="50" onBlur="page_edit.fill_shortlink();" />
             </div>
     
             <div class="formrow">
-                <label for="shortlink"><?php e($translation->get('url identifier')); ?></label>
-                <input name="identifier" type="text" id="shortlink" value="<?php if (!empty($value['identifier'])) echo safeToForm($value['identifier']); ?>" size="50" maxlength="50" />
+                <label for="shortlink"><?php e($translation->get('unique page address')); ?></label>
+                <?php e($cmssite->get('url')); ?><input name="identifier" type="text" id="shortlink" value="<?php if (!empty($value['identifier'])) echo safeToForm($value['identifier']); ?>" size="35" maxlength="50" /> (<?php e(t('only the characters').': a-z 0-9 _ -'); ?>)
+                <div class="formrow-description">
+                <?php e(t('the url identifier is used in the unique address for this particular page.')); ?>
+                <br /><?php e(t('you can also leave it blank and a unique identifier will be generated')); ?>
+                
+                
+                </div>
+            
             </div>
     
         </fieldset>
     
         <?php if (empty($value['type']) OR $value['type'] == 'page'): ?>
         <fieldset id="cms-page-info">
-            <legend><?php e($translation->get('page information')); ?></legend>
+            <legend><?php e($translation->get('menu information')); ?></legend>
             <div class="formrow">
                 <label for="navigation-name"><?php e($translation->get('name in the navigation')); ?></label>
                 <input name="navigation_name" type="text" id="navigation-name" value="<?php if (!empty($value['navigation_name'])) echo safeToForm($value['navigation_name']); ?>" size="50" maxlength="50" />
@@ -256,7 +269,7 @@ $page->start(safeToHtml($translation->get('edit page')));
         <div style="clear: both;">
             <input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
             <input type="submit" name="close" value="<?php e($translation->get('save and close', 'common')); ?>" />
-            <input type="submit" name="add_keywords" value="<?php e($translation->get('add keywords', 'keyword')); ?>" />
+            <input type="submit" name="add_keywords" value="<?php e($translation->get('save and add keywords')); ?>" />
         </div>
     </form>
 <?php endif; ?>
