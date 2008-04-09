@@ -25,8 +25,20 @@ if (!empty($_GET['moveto']) AND is_numeric($_GET['moveto'])) {
     $section = $element->section;
     header('Location: section_html.php?id='.$section->get('id'));
     exit;
+} elseif (!empty($_POST['publish'])) {
+    $section = CMS_Section::factory($kernel, 'id', $_POST['id']);
+    if ($section->cmspage->publish()) {
+        header('location: section_html.php?id='.$section->get('id'));
+        exit;
+    }
+} elseif (!empty($_POST['unpublish'])) {
+    $section = CMS_Section::factory($kernel, 'id', $_POST['id']);
+    if ($section->cmspage->unpublish()) {
+        header('location: section_html.php?id='.$section->get('id'));
+        exit;
+    }
 
-} elseif (!empty($_POST)) {
+} elseif (!empty($_POST['add_element'])) {
     $section = CMS_Section::factory($kernel, 'id', $_POST['id']);
     header('Location: section_html_edit.php?section_id='.$section->get('id').'&type='.$_POST['new_element_type_id']);
     exit;
@@ -51,6 +63,19 @@ $page->start('CMS');
     <li><a href="pages.php?type=<?php e($section->cmspage->get('type')); ?>&amp;id=<?php echo $section->cmspage->cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('close')); ?></a></li>
     <?php endif; ?>
 </ul>
+
+<form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>" id="publish-form">
+    <fieldset class="<?php e($section->cmspage->getStatus()); ?>">
+    <?php if (!$section->cmspage->isPublished()): ?>
+    <?php e('this page is not published'); ?>
+    <input type="submit" value="<?php e(t('publish now')); ?>" name="publish" />
+    <?php else: ?>
+    <?php e('this page is published'); ?>
+    <input type="submit" value="<?php e(t('set as draft')); ?>" name="unpublish" />
+    <?php endif; ?>
+    <input type="hidden" value="<?php echo intval($section->get('id')); ?>" name="id" />
+    </fieldset>
+</form>
 
 <div class="message">
     <p><?php e(t('this section can contain a number of elements. in the bottom of the page you can add new elements. to edit an element move your mouse over the element, and a yellow box will appear.')); ?></p>
