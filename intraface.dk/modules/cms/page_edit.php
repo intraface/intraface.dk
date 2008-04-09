@@ -57,6 +57,11 @@ if (!empty($_POST)) {
         $value['pic_id'] = $redirect->getParameter('file_handler_id');
     }
 } elseif (!empty($_GET['site_id']) AND is_numeric($_GET['site_id'])) {
+    if(empty($_GET['type'])) {
+        trigger_error('you need to provide at page type for what you want to create', E_USER_ERROR);
+        exit;
+    }
+    $value['type'] = $_GET['type'];
     $cmssite = new CMS_Site($kernel, $_GET['site_id']);
     $cmspage = new CMS_Page($cmssite);
     $value['site_id'] = $_GET['site_id'];
@@ -65,7 +70,16 @@ if (!empty($_POST)) {
     trigger_error($translation->get('not allowed', 'common'), E_USER_ERROR);
 }
 
-$templates = $template->getList();
+
+if (!empty($value['type'])) {
+    $page_types = CMS_Page::getTypesWithBinaryIndex();
+    $binary_bage_type = array_search($value['type'], $page_types);
+}
+else {
+    $binary_bage_type = NULL;
+}
+
+$templates = $template->getList($binary_bage_type);
 $cmspages = $cmspage->getList();
 
 $page = new Page($kernel);
@@ -84,154 +98,168 @@ $page->start(safeToHtml($translation->get('edit page')));
 
 <?php echo $cmspage->error->view($translation); ?>
 
-<form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>"  enctype="multipart/form-data">
-    <input name="id" type="hidden" value="<?php if (!empty($value['id'])) e($value['id']); ?>" />
-    <input name="site_id" type="hidden" value="<?php if (!empty($value['site_id'])) e($value['site_id']); ?>" />
+<?php if (!is_array($templates) OR count($templates) == 0): ?>
 
-    <fieldset>
-        <legend><?php e($translation->get('about the behavior of the page')); ?></legend>
-    <?php if (!empty($value['template_id'])): ?>
-        <input type="hidden" name="template_id" value="<?php  if (!empty($value['template_id'])) echo intval($value['template_id']); ?>" />
-
-    <?php elseif (is_array($templates) AND count($templates) > 1): ?>
-
-        <div class="formrow">
-            <label><?php e($translation->get('choose template')); ?></label>
-            <select name="template_id">
-            <?php foreach ($templates AS $template): ?>
-                <option value="<?php echo intval($template['id']); ?>"><?php echo safeToForm($template['name']); ?></option>
-            <?php endforeach; ?>
-            </select>
-        </div>
-
-    <?php else: ?>
-        <input type="hidden" name="template_id" value="<?php echo intval($templates[0]['id']); ?>" />
-    <?php endif; ?>
-
-        <div class="formrow">
-            <label for="page-type"><?php e($translation->get('choose page type')); ?></label>
-            <select name="page_type" id="cms-page-type">
-                <?php foreach ($cmspage->getTypes() AS $key => $type): ?>
-                <option value="<?php echo $type; ?>"<?php if (!empty($value['type']) AND $value['type'] == $type) echo ' selected="selected"' ?>><?php echo safeToForm($translation->get($type)); ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-    </fieldset>
-
-    <fieldset>
-
-        <legend><?php e($translation->get('page information')); ?></legend>
-
-        <div class="formrow" id="titlerow">
-            <label for="title"><?php e($translation->get('title')); ?></label>
-            <input name="title" type="text" id="title" value="<?php if (!empty($value['title'])) echo safeToForm($value['title']); ?>" size="50" maxlength="50" />
-        </div>
-
-        <div class="formrow">
-            <label for="shortlink"><?php e($translation->get('url identifier')); ?></label>
-            <input name="identifier" type="text" id="shortlink" value="<?php if (!empty($value['identifier'])) echo safeToForm($value['identifier']); ?>" size="50" maxlength="50" />
-        </div>
-
-    </fieldset>
-
-    <?php if (empty($value['type']) OR $value['type'] == 'page'): ?>
-    <fieldset id="cms-page-info">
-        <legend><?php e($translation->get('page information')); ?></legend>
-        <div class="formrow">
-            <label for="navigation-name"><?php e($translation->get('name in the navigation')); ?></label>
-            <input name="navigation_name" type="text" id="navigation-name" value="<?php if (!empty($value['navigation_name'])) echo safeToForm($value['navigation_name']); ?>" size="50" maxlength="50" />
-        </div>
-
-        <?php if (is_array($cmspages) AND count($cmspages) > 0): ?>
-
-        <div class="formrow" id="childof">
-            <label for="child_of_id"><?php e($translation->get('choose page is child of')); ?></label>
-            <select name="child_of_id" id="child_of_id">
-                <option value="0"><?php echo safeToForm($translation->get('none', 'common')); ?></option>
-                <?php
-                    foreach ($cmspages AS $p) {
-                        if (!empty($value['id']) AND $p['id'] == $value['id']) continue;
-                        echo '<option value="'.$p['id'].'"';
-                        if (!empty($value['child_of_id']) AND $value['child_of_id'] == $p['id']) echo ' selected="selected"';
-                        echo '>'.safeToForm($p['title']).'</option>';
-                    }
-                ?>
-            </select>
-        </div>
+    <p class="message-dependent">
+        <?php echo safeToHtml($translation->get('you have to create a template for this page type')); ?>
+        <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
+            <a href="template_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('create template')); ?></a>.
+        <?php else: ?>
+            <strong><?php echo safeToHtml($translation->get('please ask your administrator to do that')); ?></strong>
         <?php endif; ?>
-    </fieldset>
-    <?php endif; ?>
+    </p>
 
-    <?php
-    /*
-    <fieldset>
-            <legend><?php e($translation->get('choose picture')); ?></legend>
-            <?php
-                if (empty($value['pic_id'])) $value['pic_id'] = 0;
-                $filehandler = new FileHandler($kernel, $value['pic_id']);
-                $filehandler_html = new FileHandlerHTML($filehandler);
-                $filehandler_html->printFormUploadTag('pic_id', 'new_pic', 'choose_file', array('image_size' => 'small'));
-            ?>
+<?php else: ?>
+
+    <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>"  enctype="multipart/form-data">
+        <input name="id" type="hidden" value="<?php if (!empty($value['id'])) e($value['id']); ?>" />
+        <input name="site_id" type="hidden" value="<?php if (!empty($value['site_id'])) e($value['site_id']); ?>" />
+    
+        <fieldset>
+            <legend><?php e($translation->get('about the behavior of the page')); ?></legend>
+        <?php if (!empty($value['template_id'])): ?>
+            <input type="hidden" name="template_id" value="<?php  if (!empty($value['template_id'])) echo intval($value['template_id']); ?>" />
+    
+        <?php elseif (is_array($templates) AND count($templates) > 1): ?>
+    
+            <div class="formrow">
+                <label><?php e($translation->get('choose template')); ?></label>
+                <select name="template_id">
+                <?php foreach ($templates AS $template): ?>
+                    <option value="<?php echo intval($template['id']); ?>"><?php echo safeToForm($template['name']); ?></option>
+                <?php endforeach; ?>
+                </select>
+            </div>
+    
+        <?php else: ?>
+            <input type="hidden" name="template_id" value="<?php echo intval($templates[0]['id']); ?>" />
+        <?php endif; ?>
+    
+            <div class="formrow">
+                <label for="page-type"><?php e($translation->get('choose page type')); ?></label>
+                <select name="page_type" id="cms-page-type">
+                    <?php foreach ($cmspage->getTypes() AS $key => $type): ?>
+                    <option value="<?php echo $type; ?>"<?php if (!empty($value['type']) AND $value['type'] == $type) echo ' selected="selected"' ?>><?php echo safeToForm($translation->get($type)); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
         </fieldset>
-    */
-    ?>
-
-    <fieldset id="searchengine-info">
-        <legend><?php e($translation->get('metatags for the search engines')); ?></legend>
-        <p><?php e($translation->get('this info is directed towards the search engines')); ?></p>
-        <div class="formrow">
-            <label for="description"><?php e($translation->get('search engine description')); ?></label>
-            <textarea name="description" id="description" cols="50" rows="3"><?php  if (!empty($value['description'])) echo safeToForm($value['description']); ?></textarea>
-        </div>
-
-        <div class="formrow">
-            <label for="keywords"><?php e($translation->get('search engine keywords')); ?></label>
-            <input name="keywords" id="keywords" type="text" value="<?php if (!empty($value['keywords'])) echo safeToForm($value['keywords']); ?>" size="50" maxlength="225" />
-        </div>
-    </fieldset>
-
-    <?php if ($kernel->intranet->hasModuleAccess('comment')): ?>
-    <fieldset>
-        <legend><?php e($translation->get('comments')); ?></legend>
+    
+        <fieldset>
+    
+            <legend><?php e($translation->get('page information')); ?></legend>
+    
+            <div class="formrow" id="titlerow">
+                <label for="title"><?php e($translation->get('title')); ?></label>
+                <input name="title" type="text" id="title" value="<?php if (!empty($value['title'])) echo safeToForm($value['title']); ?>" size="50" maxlength="50" />
+            </div>
+    
+            <div class="formrow">
+                <label for="shortlink"><?php e($translation->get('url identifier')); ?></label>
+                <input name="identifier" type="text" id="shortlink" value="<?php if (!empty($value['identifier'])) echo safeToForm($value['identifier']); ?>" size="50" maxlength="50" />
+            </div>
+    
+        </fieldset>
+    
+        <?php if (empty($value['type']) OR $value['type'] == 'page'): ?>
+        <fieldset id="cms-page-info">
+            <legend><?php e($translation->get('page information')); ?></legend>
+            <div class="formrow">
+                <label for="navigation-name"><?php e($translation->get('name in the navigation')); ?></label>
+                <input name="navigation_name" type="text" id="navigation-name" value="<?php if (!empty($value['navigation_name'])) echo safeToForm($value['navigation_name']); ?>" size="50" maxlength="50" />
+            </div>
+    
+            <?php if (is_array($cmspages) AND count($cmspages) > 0): ?>
+    
+            <div class="formrow" id="childof">
+                <label for="child_of_id"><?php e($translation->get('choose page is child of')); ?></label>
+                <select name="child_of_id" id="child_of_id">
+                    <option value="0"><?php echo safeToForm($translation->get('none', 'common')); ?></option>
+                    <?php
+                        foreach ($cmspages AS $p) {
+                            if (!empty($value['id']) AND $p['id'] == $value['id']) continue;
+                            echo '<option value="'.$p['id'].'"';
+                            if (!empty($value['child_of_id']) AND $value['child_of_id'] == $p['id']) echo ' selected="selected"';
+                            echo '>'.safeToForm($p['title']).'</option>';
+                        }
+                    ?>
+                </select>
+            </div>
+            <?php endif; ?>
+        </fieldset>
+        <?php endif; ?>
+    
+        <?php
+        /*
+        <fieldset>
+                <legend><?php e($translation->get('choose picture')); ?></legend>
+                <?php
+                    if (empty($value['pic_id'])) $value['pic_id'] = 0;
+                    $filehandler = new FileHandler($kernel, $value['pic_id']);
+                    $filehandler_html = new FileHandlerHTML($filehandler);
+                    $filehandler_html->printFormUploadTag('pic_id', 'new_pic', 'choose_file', array('image_size' => 'small'));
+                ?>
+            </fieldset>
+        */
+        ?>
+    
+        <fieldset id="searchengine-info">
+            <legend><?php e($translation->get('metatags for the search engines')); ?></legend>
+            <p><?php e($translation->get('this info is directed towards the search engines')); ?></p>
+            <div class="formrow">
+                <label for="description"><?php e($translation->get('search engine description')); ?></label>
+                <textarea name="description" id="description" cols="50" rows="3"><?php  if (!empty($value['description'])) echo safeToForm($value['description']); ?></textarea>
+            </div>
+    
+            <div class="formrow">
+                <label for="keywords"><?php e($translation->get('search engine keywords')); ?></label>
+                <input name="keywords" id="keywords" type="text" value="<?php if (!empty($value['keywords'])) echo safeToForm($value['keywords']); ?>" size="50" maxlength="225" />
+            </div>
+        </fieldset>
+    
+        <?php if ($kernel->intranet->hasModuleAccess('comment')): ?>
+        <fieldset>
+            <legend><?php e($translation->get('comments')); ?></legend>
+                <div class="radiorow">
+                <label><input type="checkbox" value="1" name="allow_comments"<?php if (!empty($value['allow_comments']) AND $value['allow_comments'] == 1) echo ' checked="checked"'; ?> /> <?php e($translation->get('users can comment page')); ?></label>
+            </div>
+        </fieldset>
+        <?php endif; ?>
+    
+        <fieldset id="date-settings">
+            <legend><?php e($translation->get('publish properties')); ?></legend>
+    
+            <div class="formrow">
+                <label for="date-publish"><?php e($translation->get('publish date')); ?></label>
+                <input name="date_publish" id="date-publish" type="text" value="<?php if (!empty($value['date_publish'])) echo safeToForm($value['date_publish']); ?>" size="30" maxlength="225" /> <span id="dateFieldMsg1"><?php e($translation->get('empty is today')); ?></span>
+            </div>
+    
+            <div class="formrow">
+                <label for="date-expire"><?php e($translation->get('expire date')); ?></label>
+                <input name="date_expire" id="date-expire" type="text" value="<?php if (!empty($value['date_expire']))  echo safeToForm($value['date_expire']); ?>" size="30" maxlength="225" /> <span id="dateFieldMsg2"><?php e($translation->get('empty never expires')); ?></span>
+            </div>
+    
             <div class="radiorow">
-            <label><input type="checkbox" value="1" name="allow_comments"<?php if (!empty($value['allow_comments']) AND $value['allow_comments'] == 1) echo ' checked="checked"'; ?> /> <?php e($translation->get('users can comment page')); ?></label>
+                <label><input type="checkbox" value="1" name="hidden" <?php if (!empty($value['hidden']) AND $value['hidden'] == 1) echo ' checked="checked"'; ?> /> <?php e($translation->get('hide page')); ?></label>
+            </div>
+    
+            <!--
+            <div class="formrow">
+                <label for="password"><?php e($translation->get('password', 'common')); ?></label>
+                <input type="text" value="<?php if(!empty($value['password'])) echo safeToForm($value['password']); ?>" name="password" />
+            </div>
+            -->
+    
+    
+        </fieldset>
+    
+        <div style="clear: both;">
+            <input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
+            <input type="submit" name="close" value="<?php e($translation->get('save and close', 'common')); ?>" />
+            <input type="submit" name="add_keywords" value="<?php e($translation->get('add keywords', 'keyword')); ?>" />
         </div>
-    </fieldset>
-    <?php endif; ?>
-
-    <fieldset id="date-settings">
-        <legend><?php e($translation->get('publish properties')); ?></legend>
-
-        <div class="formrow">
-            <label for="date-publish"><?php e($translation->get('publish date')); ?></label>
-            <input name="date_publish" id="date-publish" type="text" value="<?php if (!empty($value['date_publish'])) echo safeToForm($value['date_publish']); ?>" size="30" maxlength="225" /> <span id="dateFieldMsg1"><?php e($translation->get('empty is today')); ?></span>
-        </div>
-
-        <div class="formrow">
-            <label for="date-expire"><?php e($translation->get('expire date')); ?></label>
-            <input name="date_expire" id="date-expire" type="text" value="<?php if (!empty($value['date_expire']))  echo safeToForm($value['date_expire']); ?>" size="30" maxlength="225" /> <span id="dateFieldMsg2"><?php e($translation->get('empty never expires')); ?></span>
-        </div>
-
-        <div class="radiorow">
-            <label><input type="checkbox" value="1" name="hidden" <?php if (!empty($value['hidden']) AND $value['hidden'] == 1) echo ' checked="checked"'; ?> /> <?php e($translation->get('hide page')); ?></label>
-        </div>
-
-        <!--
-        <div class="formrow">
-            <label for="password"><?php e($translation->get('password', 'common')); ?></label>
-            <input type="text" value="<?php if(!empty($value['password'])) echo safeToForm($value['password']); ?>" name="password" />
-        </div>
-        -->
-
-
-    </fieldset>
-
-    <div style="clear: both;">
-        <input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
-        <input type="submit" name="close" value="<?php e($translation->get('save and close', 'common')); ?>" />
-        <input type="submit" name="add_keywords" value="<?php e($translation->get('add keywords', 'keyword')); ?>" />
-    </div>
-</form>
+    </form>
+<?php endif; ?>
 
 <?php
 $page->end();

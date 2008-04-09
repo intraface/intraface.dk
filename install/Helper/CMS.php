@@ -9,6 +9,14 @@ class Install_Helper_CMS {
         $this->db = $db;
     }
     
+    public function createSite() {
+        require_once 'Intraface/modules/cms/Site.php';
+        $site = new CMS_Site($this->kernel);
+        $site_id = $site->save(array('name' => 'Test', 'url' => 'http://localhost/'));
+        
+        
+    }
+    
     public function createSiteWithTemplate() {
         require_once 'Intraface/modules/cms/Site.php';
         $site = new CMS_Site($this->kernel);
@@ -16,7 +24,7 @@ class Install_Helper_CMS {
         
         require_once 'Intraface/modules/cms/Template.php';
         $template = new CMS_Template($site);
-        $template_id = $template->save(array('name' => 'Test', 'identifier' => 'test'));
+        $template_id = $template->save(array('name' => 'Test', 'identifier' => 'test', 'for_page_type' => array(1, 2, 4)));
         
         require_once 'Intraface/modules/cms/TemplateSection.php';
         require_once 'Intraface/modules/cms/template_section/Mixed.php';
@@ -33,7 +41,7 @@ class Install_Helper_CMS {
         
         require_once 'Intraface/modules/cms/Template.php';
         $template = new CMS_Template($site);
-        $template_id = $template->save(array('name' => 'Test', 'identifier' => 'test'));
+        $template_id = $template->save(array('name' => 'Test', 'identifier' => 'test', 'for_page_type' => array(1, 2, 4)));
         
         require_once 'Intraface/modules/cms/TemplateSection.php';
         require_once 'Intraface/modules/cms/template_section/Mixed.php';

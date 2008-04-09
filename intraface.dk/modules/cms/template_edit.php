@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $cmssite = new CMS_Site($kernel, $_GET['site_id']);
     $template = new CMS_Template($cmssite);
     $value['site_id'] = $_GET['site_id'];
+    $value['for_page_type'] = 7; // all types;
 } else {
     trigger_error($translation->get('not allowed', 'common'), E_USER_ERROR);
 }
@@ -66,6 +67,16 @@ $page->start(safeToHtml($translation->get('edit template')));
         <div class="formrow" id="titlerow">
             <label for="identifier"><?php e($translation->get('identifier', 'common')); ?></label>
             <input name="identifier" type="text" id="name" value="<?php if (!empty($value['identifier'])) echo safeToForm($value['identifier']); ?>" size="50" maxlength="255" />
+        </div>
+        
+        <div class="formrow" id="titlerow">
+            <label><?php e($translation->get('for page type')); ?></label>
+            <?php
+            require_once 'Intraface/modules/cms/Page.php';
+            $page_types = CMS_Page::getTypesWithBinaryIndex();
+            foreach($page_types AS $key => $page_type): ?>
+                <label for="for_page_type_<?php echo intval($key); ?>"><input name="for_page_type[]" type="checkbox" id="for_page_type_<?php echo intval($key); ?>" value="<?php echo intval($key); ?>" <?php if (!empty($value['for_page_type']) && $value['for_page_type'] & $key) echo 'checked="checked"'; ?> /><?php e($translation->get($page_type)); ?></label>
+            <?php endforeach; ?>
         </div>
 
     </fieldset>

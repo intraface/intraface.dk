@@ -38,14 +38,33 @@ $page->start(safeToHtml($translation->get('templates')));
 <tr>
     <th><?php e($translation->get('template name')); ?></th>
     <th><?php e($translation->get('identifier', 'common')); ?></th>
+    <th><?php e($translation->get('for page type')); ?></th>
     <th></th>
 </tr>
 </thead>
 <tbody>
+<?php
+require_once 'Intraface/modules/cms/Page.php';
+$page_types = CMS_Page::getTypesWithBinaryIndex();
+?>
+
 <?php foreach ($templates AS $s): ?>
     <tr>
         <td><a href="template.php?id=<?php echo $s['id']; ?>"><?php e($s['name']);  ?></a></td>
         <td><?php e($s['identifier']); ?></td>
+        <td>
+            <?php 
+            $return = '';
+            foreach($page_types AS $page_key => $page_type){
+                if($page_key & $s['for_page_type']) {
+                    if($return != '') $return .= ', ';
+                    $return .= t($page_type);
+                }
+            }
+            e($return); 
+            ?>
+            
+        </td>
         <td class="options">
             <a class="edit" href="template_edit.php?id=<?php echo $s['id']; ?>"><?php e($translation->get('edit settings', 'common')); ?></a>
             <a class="delete" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo $s['id']; ?>"><?php e($translation->get('delete', 'common')); ?></a>

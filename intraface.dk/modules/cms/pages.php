@@ -94,7 +94,7 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
 
 <?php else: ?>
 <ul class="options">
-    <li><a class="new" href="page_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('create page')); ?></a></li>
+    <li><a class="new" href="page_edit.php?type=<?php e($type); ?>&amp;site_id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('create '.$type)); ?></a></li>
     <li><a class="edit" href="site_edit.php?id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('edit site settings')); ?></a></li>
     <li><a  href="site.php?id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('go to site overview')); ?></a></li>
 </ul>

@@ -83,7 +83,7 @@ class CMS_Template extends Standard
     function load()
     {
         $db = new DB_Sql;
-        $db->query("SELECT id, name, site_id, identifier FROM cms_template WHERE intranet_id = " . $this->cmssite->kernel->intranet->get('id') . " AND id = " . $this->id);
+        $db->query("SELECT id, name, site_id, identifier, for_page_type FROM cms_template WHERE intranet_id = " . $this->cmssite->kernel->intranet->get('id') . " AND id = " . $this->id);
 
         if (!$db->nextRecord()) {
             return 0;
@@ -92,6 +92,7 @@ class CMS_Template extends Standard
         $this->value['name'] = $db->f('name');
         $this->value['site_id'] = $db->f('site_id');
         $this->value['identifier'] = $db->f('identifier');
+        $this->value['for_page_type'] = $db->f('for_page_type');
 
         return 1;
     }
@@ -104,15 +105,28 @@ class CMS_Template extends Standard
         if (!$this->isIdentifierUnique($var['identifier'])) {
             $this->error->set('error in identifier - has to be unique');
         }
+        if(empty($var['for_page_type_integer'])) {
+            $this->error->set('you should select at least one page type that the template is used on');
+        }
+        
         if ($this->error->isError()) {
             return 0;
         }
+        
         return 1;
     }
 
 
     function save($var)
     {
+        
+        if(!empty($var['for_page_type']) && is_array($var['for_page_type'])) {
+            $var['for_page_type_integer'] = array_sum($var['for_page_type']);
+        }
+        else {
+            $var['for_page_type_integer'] = 0;
+        }
+        
         if (!$this->validate($var)) {
             return 0;
         }
@@ -130,8 +144,9 @@ class CMS_Template extends Standard
             date_updated = NOW(),
             intranet_id = ".safeToDb($this->cmssite->kernel->intranet->get('id')).",
             site_id = ".safeToDb($this->cmssite->get('id')).",
-            identifier = '".safeToDb($var['identifier'])."'
-        " . $sql_end);
+            identifier = '".safeToDb($var['identifier'])."',
+            for_page_type = ".$var['for_page_type_integer']."
+            " . $sql_end);
 
         if ($this->id == 0) {
             $this->id = $db->insertedId();
@@ -144,16 +159,24 @@ class CMS_Template extends Standard
         return $this->id;
     }
 
-    function getList()
+    function getList($for_page_type = NULL)
     {
         $db = new DB_Sql;
-        $db->query("SELECT id, name, identifier FROM cms_template WHERE intranet_id = " . $this->cmssite->kernel->intranet->get('id') . " AND site_id = " . $this->cmssite->get('id') . " AND active = 1 ORDER BY name");
+        if(is_int($for_page_type)) {
+            $sql_extra = 'for_page_type & '.intval($for_page_type).' AND';
+        }
+        else {
+            $sql_extra = '';
+        }
+        
+        $db->query("SELECT id, name, identifier, for_page_type FROM cms_template WHERE ".$sql_extra." intranet_id = " . $this->cmssite->kernel->intranet->get('id') . " AND site_id = " . $this->cmssite->get('id') . " AND active = 1 ORDER BY name");
         $i = 0;
         $templates = array();
         while ($db->nextRecord()) {
             $templates[$i]['id'] = $db->f('id');
             $templates[$i]['name'] = $db->f('name');
             $templates[$i]['identifier'] = $db->f('identifier');
+            $templates[$i]['for_page_type'] = $db->f('for_page_type');
             //$templates[$i]['sections'] = count($this->getSections());
             $i++;
         }

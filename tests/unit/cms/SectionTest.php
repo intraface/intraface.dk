@@ -24,6 +24,16 @@ class FakeThisSectionTemplate
     }
 }
 
+class Testable_CMS_Section extends CMS_Section {
+    
+    protected function getTemplateSection($template_section_id)
+    {
+        return new FakeCMSTemplateSection(NULL);
+        // return CMS_TemplateSection::factory($this->kernel, 'id', $template_section_id);
+    }
+    
+}
+
 class SectionTest extends PHPUnit_Framework_TestCase
 {
 
@@ -83,7 +93,7 @@ class SectionTest extends PHPUnit_Framework_TestCase
 
     function testSave()
     {
-        $section = new CMS_Section($this->page);
+        $section = new Testable_CMS_Section($this->page);
         $section_array = array(
             'type_key' => 1,
             'template_section_id' => $this->saveTemplateSection()

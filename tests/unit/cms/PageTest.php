@@ -55,7 +55,7 @@ class PageTest extends PHPUnit_Framework_TestCase
         $site = new FakeCMSSite($kernel);
         $template = new CMS_Template($site);
 
-        $template->save(array('name' => 'test', 'identifier' => 'test'));
+        $template->save(array('name' => 'test', 'identifier' => 'test', 'for_page_type' => array(1, 2, 4)));
 
         $this->assertEquals('', $template->error->view());
         // $template->getKeywords();
