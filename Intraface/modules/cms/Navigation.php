@@ -5,7 +5,6 @@
  *       bliver der på undersiderne til en undermenu.
  * @package Intraface_CMS
  */
-
 class CMS_Navigation extends Standard
 {
     private $cmspage;
@@ -16,7 +15,7 @@ class CMS_Navigation extends Standard
         if (!is_object($cmspage) OR strtolower(get_class($cmspage)) != 'cms_page') {
             trigger_error('CMS_Navigation::__construct needs CMS_Page', E_USER_ERROR);
         }
-        $this->cmspage = & $cmspage;
+        $this->cmspage = $cmspage;
     }
 
     function build($level = 'toplevel')
