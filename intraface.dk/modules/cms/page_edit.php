@@ -107,11 +107,11 @@ $page->start(safeToHtml($translation->get('edit page')));
 <?php if (!is_array($templates) OR count($templates) == 0): ?>
 
     <p class="message-dependent">
-        <?php echo safeToHtml($translation->get('you have to create a template for this page type')); ?>
+        <?php e($translation->get('you have to create a template for this page type')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="template_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('create template')); ?></a>.
+            <a href="template_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('create template')); ?></a>.
         <?php else: ?>
-            <strong><?php echo safeToHtml($translation->get('please ask your administrator to do that')); ?></strong>
+            <strong><?php e($translation->get('please ask your administrator to do that')); ?></strong>
         <?php endif; ?>
     </p>
 
@@ -120,10 +120,10 @@ $page->start(safeToHtml($translation->get('edit page')));
     <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>"  enctype="multipart/form-data">
         <input name="id" type="hidden" value="<?php if (!empty($value['id'])) e($value['id']); ?>" />
         <input name="site_id" type="hidden" value="<?php if (!empty($value['site_id'])) e($value['site_id']); ?>" />
-    
+
         <fieldset>
             <legend><?php e($translation->get('about the behavior of the page')); ?></legend>
-            
+
             <div class="formrow">
                 <label for="page-type"><?php e($translation->get('type')); ?></label>
                 <div id="static-cms-page-type" style="display: none;"><?php e(t($type)); ?> <?php if(!empty($value['id'])): ?><a href="#" onClick="page_edit.show_select();" class="edit"><?php e(t('change')); ?></a><?php endif; ?></div>
@@ -133,8 +133,8 @@ $page->start(safeToHtml($translation->get('edit page')));
                     <?php endforeach; ?>
                 </select>
             </div>
-            
-            
+
+
             <?php if (!empty($value['template_id'])): ?>
                 <input type="hidden" name="template_id" value="<?php  if (!empty($value['template_id'])) echo intval($value['template_id']); ?>" />
             <?php elseif (is_array($templates) AND count($templates) > 1): ?>
@@ -150,30 +150,30 @@ $page->start(safeToHtml($translation->get('edit page')));
                 <input type="hidden" name="template_id" value="<?php echo intval($templates[0]['id']); ?>" />
             <?php endif; ?>
         </fieldset>
-    
+
         <fieldset>
-    
+
             <legend><?php e($translation->get('page information')); ?></legend>
-    
+
             <div class="formrow" id="titlerow">
                 <label for="title"><?php e($translation->get('title')); ?></label>
-                <input name="title" type="text" id="title" value="<?php if (!empty($value['title'])) echo safeToForm($value['title']); ?>" size="50" maxlength="50" onBlur="page_edit.fill_shortlink();" />
+                <input name="title" type="text" id="title" value="<?php if (!empty($value['title'])) echo safeToForm($value['title']); ?>" size="50" maxlength="255" onBlur="page_edit.fill_shortlink();" />
             </div>
-    
+
             <div class="formrow">
                 <label for="shortlink"><?php e($translation->get('unique page address')); ?></label>
                 <?php e($cmssite->get('url')); ?><input name="identifier" type="text" id="shortlink" value="<?php if (!empty($value['identifier'])) echo safeToForm($value['identifier']); ?>" size="35" maxlength="50" /> (<?php e(t('only the characters').': a-z 0-9 _ -'); ?>)
                 <div class="formrow-description">
                 <?php e(t('the url identifier is used in the unique address for this particular page.')); ?>
                 <br /><?php e(t('you can also leave it blank and a unique identifier will be generated')); ?>
-                
-                
+
+
                 </div>
-            
+
             </div>
-    
+
         </fieldset>
-    
+
         <?php if (empty($value['type']) OR $value['type'] == 'page'): ?>
         <fieldset id="cms-page-info">
             <legend><?php e($translation->get('menu information')); ?></legend>
@@ -181,9 +181,9 @@ $page->start(safeToHtml($translation->get('edit page')));
                 <label for="navigation-name"><?php e($translation->get('name in the navigation')); ?></label>
                 <input name="navigation_name" type="text" id="navigation-name" value="<?php if (!empty($value['navigation_name'])) echo safeToForm($value['navigation_name']); ?>" size="50" maxlength="50" />
             </div>
-    
+
             <?php if (is_array($cmspages) AND count($cmspages) > 0): ?>
-    
+
             <div class="formrow" id="childof">
                 <label for="child_of_id"><?php e($translation->get('choose page is child of')); ?></label>
                 <select name="child_of_id" id="child_of_id">
@@ -201,7 +201,7 @@ $page->start(safeToHtml($translation->get('edit page')));
             <?php endif; ?>
         </fieldset>
         <?php endif; ?>
-    
+
         <?php
         /*
         <fieldset>
@@ -215,7 +215,7 @@ $page->start(safeToHtml($translation->get('edit page')));
             </fieldset>
         */
         ?>
-    
+
         <fieldset id="searchengine-info">
             <legend><?php e($translation->get('metatags for the search engines')); ?></legend>
             <p><?php e($translation->get('this info is directed towards the search engines')); ?></p>
@@ -223,13 +223,13 @@ $page->start(safeToHtml($translation->get('edit page')));
                 <label for="description"><?php e($translation->get('search engine description')); ?></label>
                 <textarea name="description" id="description" cols="50" rows="3"><?php  if (!empty($value['description'])) echo safeToForm($value['description']); ?></textarea>
             </div>
-    
+
             <div class="formrow">
                 <label for="keywords"><?php e($translation->get('search engine keywords')); ?></label>
                 <input name="keywords" id="keywords" type="text" value="<?php if (!empty($value['keywords'])) echo safeToForm($value['keywords']); ?>" size="50" maxlength="225" />
             </div>
         </fieldset>
-    
+
         <?php if ($kernel->intranet->hasModuleAccess('comment')): ?>
         <fieldset>
             <legend><?php e($translation->get('comments')); ?></legend>
@@ -238,34 +238,34 @@ $page->start(safeToHtml($translation->get('edit page')));
             </div>
         </fieldset>
         <?php endif; ?>
-    
+
         <fieldset id="date-settings">
             <legend><?php e($translation->get('publish properties')); ?></legend>
-    
+
             <div class="formrow">
                 <label for="date-publish"><?php e($translation->get('publish date')); ?></label>
                 <input name="date_publish" id="date-publish" type="text" value="<?php if (!empty($value['date_publish'])) echo safeToForm($value['date_publish']); ?>" size="30" maxlength="225" /> <span id="dateFieldMsg1"><?php e($translation->get('empty is today')); ?></span>
             </div>
-    
+
             <div class="formrow">
                 <label for="date-expire"><?php e($translation->get('expire date')); ?></label>
                 <input name="date_expire" id="date-expire" type="text" value="<?php if (!empty($value['date_expire']))  echo safeToForm($value['date_expire']); ?>" size="30" maxlength="225" /> <span id="dateFieldMsg2"><?php e($translation->get('empty never expires')); ?></span>
             </div>
-    
+
             <div class="radiorow">
                 <label><input type="checkbox" value="1" name="hidden" <?php if (!empty($value['hidden']) AND $value['hidden'] == 1) echo ' checked="checked"'; ?> /> <?php e($translation->get('hide page')); ?></label>
             </div>
-    
+
             <!--
             <div class="formrow">
                 <label for="password"><?php e($translation->get('password', 'common')); ?></label>
                 <input type="text" value="<?php if(!empty($value['password'])) echo safeToForm($value['password']); ?>" name="password" />
             </div>
             -->
-    
-    
+
+
         </fieldset>
-    
+
         <div style="clear: both;">
             <input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
             <input type="submit" name="close" value="<?php e($translation->get('save and close', 'common')); ?>" />
