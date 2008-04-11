@@ -22,9 +22,9 @@ class CMS_Navigation extends Standard
     { // 'toplevel'
 
         $i = 0;
-        $this->cmspage->dbquery->clearAll();
-        $this->cmspage->dbquery->setFilter('type', 'page');
-        $this->cmspage->dbquery->setFilter('level', $level);
+        $this->cmspage->getDBQuery()->clearAll();
+        $this->cmspage->getDBQuery()->setFilter('type', 'page');
+        $this->cmspage->getDBQuery()->setFilter('level', $level);
         $pages = $this->cmspage->getList();
         if (!is_array($pages) OR count($pages) == 0) {
             return array();

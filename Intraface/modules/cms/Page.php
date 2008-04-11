@@ -91,7 +91,7 @@ class CMS_Page extends Standard
         // generelle
         $this->kernel = $this->cmssite->kernel;
         $this->error = new Error();
-        $this->dbquery = new DBQuery($this->kernel, 'cms_page', 'cms_page.intranet_id = '.$this->kernel->intranet->get('id').' AND cms_page.active = 1 AND site_id = ' . $this->cmssite->get('id'));
+        $this->dbquery = $this->getDBQuery();
 
         // hente settings
         $cms_module = $this->kernel->module('cms');
@@ -101,6 +101,14 @@ class CMS_Page extends Standard
         if ($this->id > 0) {
             $this->load();
         }
+    }
+
+    function getDBQuery()
+    {
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
+        return ($this->dbquery = new DBQuery($this->kernel, 'cms_page', 'cms_page.intranet_id = '.$this->kernel->intranet->get('id').' AND cms_page.active = 1 AND site_id = ' . $this->cmssite->get('id')));
     }
 
     /**
@@ -755,7 +763,7 @@ class CMS_Page extends Standard
             2 => 'article',
             3 => 'news');
     }
-    
+
     /**
      * Returns the possible page types but with a binary index
      *
