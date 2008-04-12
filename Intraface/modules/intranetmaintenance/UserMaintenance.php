@@ -235,10 +235,8 @@ class UserMaintenance extends User
      *
      * @return array list of users
      */
-
     function getList()
     {
-
         if ($this->intranet_id != 0) {
             return User::getList();
         }
@@ -252,12 +250,11 @@ class UserMaintenance extends User
         $db = $this->dbquery->getRecordset('address.name, user.id, user.email', '', false);
         $i = 0;
         $user = array();
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
             $user[$i]["id"] = $db->f("id");
             $user[$i]["email"] = $db->f("email");
             $user[$i]["name"] = $db->f("name");
             $i++;
-
         }
 
         return $user;

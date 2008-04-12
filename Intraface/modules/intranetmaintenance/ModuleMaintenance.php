@@ -18,7 +18,7 @@ class ModuleMaintenance
     {
         $this->id = intval($id);
         $this->db = MDB2::singleton(DB_DSN);
-        if(PEAR::isError($this->db)) {
+        if (PEAR::isError($this->db)) {
             trigger_error("Error in creating db: ".$this->db->getUserInfo(), E_USER_ERROR);
             exit;
         }
@@ -33,21 +33,20 @@ class ModuleMaintenance
     {
 
         $db = MDB2::singleton(DB_DSN);
-        if(PEAR::isError($db)) {
+        if (PEAR::isError($db)) {
             trigger_error("Error in creating db: ".$db->getUserInfo(), E_USER_ERROR);
             exit;
         }
         $result = $db->query("SELECT id FROM module WHERE name = ".$db->quote($name, 'text'));
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
             exit;
         }
 
-        if($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+        if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 
             return new ModuleMaintenance($row['id']);
-        }
-        else {
+        } else {
 
             trigger_error("invalid module name ".$name."!", E_USER_ERROR);
         }
@@ -55,13 +54,12 @@ class ModuleMaintenance
 
     private function load()
     {
-
         // Starter med at nustille
         $this->value = array();
         $this->sub_access;
         if ($this->id != 0) {
             $result = $this->db->query("SELECT * FROM module WHERE id = ".$this->id);
-            if(PEAR::isError($result)) {
+            if (PEAR::isError($result)) {
                 trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
                 exit;
             }
@@ -73,7 +71,7 @@ class ModuleMaintenance
 
                 $j = 0;
                 $result_sub_access = $this->db->query("SELECT id, name, description FROM module_sub_access WHERE active = 1 AND module_id = ".$row["id"]." ORDER BY description");
-                if(PEAR::isError($result_sub_access)) {
+                if (PEAR::isError($result_sub_access)) {
                     trigger_error("Error in query: ".$result_sub_access->getUserInfo(), E_USER_ERROR);
                     exit;
                 }
@@ -83,7 +81,6 @@ class ModuleMaintenance
                     $this->value["sub_access"][$i] = $row;
                     $i++;
                 }
-
             }
         }
     }
@@ -111,7 +108,7 @@ class ModuleMaintenance
             } else {
                 // her kan vi oprette tabellerne nødvendige for det enkelte modul i stedet for at have dem i starten.
 
-                if(empty($module->menu_label) && empty($module->active) && empty($module->menu_index)) {
+                if (empty($module->menu_label) && empty($module->active) && empty($module->menu_index)) {
                     $this->error->set('Properties for module "'.$module_name.'" er ikke loadet. Kontrol er constructor er sat rigtigt op i modulet');
                 }
                 else {
@@ -214,7 +211,7 @@ class ModuleMaintenance
 
         $i = 0;
         $result = $this->db->query("SELECT id, name, menu_label, show_menu, menu_index, frontpage_index FROM module WHERE active = 1 ORDER BY menu_index");
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
             exit;
         }
@@ -245,5 +242,3 @@ class ModuleMaintenance
         }
     }
 }
-
-?>

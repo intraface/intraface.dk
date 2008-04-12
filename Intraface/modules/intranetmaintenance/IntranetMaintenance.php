@@ -145,8 +145,7 @@ class IntranetMaintenance extends Intranet
             }
 
             return true;
-        }
-        else {
+        } else {
             trigger_error("intranet maintenance says unknown module_id in IntranetMaintenance->removeModuleAccess", E_USER_ERROR);
             exit;
         }
@@ -342,4 +341,3 @@ class IntranetMaintenance extends Intranet
 
     }
 }
-
