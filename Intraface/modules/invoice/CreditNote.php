@@ -7,7 +7,7 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 
-require_once 'Intraface/modules/debtor/Debtor.php'; 
+require_once 'Intraface/modules/debtor/Debtor.php';
 
 class CreditNote extends Debtor
 {
@@ -20,7 +20,7 @@ class CreditNote extends Debtor
     {
 
         $return = parent::setStatus($status);
-        if($status == "sent") {
+        if ($status == "sent") {
             // Er den sendt, bliver den også låst
             return parent::setStatus("executed");
         } else {
@@ -30,49 +30,49 @@ class CreditNote extends Debtor
 
     function delete()
     {
-        if($this->get("where_from") == "invoice" && $this->get("where_from_id") != 0) {
+        if ($this->get("where_from") == "invoice" && $this->get("where_from_id") != 0) {
             $invoice = parent::factory($this->kernel, $this->get("where_from_id"));
         }
         parent::delete();
-        if(isset($invoice)) {
+        if (isset($invoice)) {
             $invoice->updateStatus();
         }
     }
 
     function readyForState($year, $check_products = 'check_products')
     {
-        if(!is_object($year)) {
+        if (!is_object($year)) {
             trigger_error('First parameter to readyForState needs to be a Year object!', E_USER_ERROR);
             return false;
         }
-        
-        if(!in_array($check_products, array('check_products', 'skip_check_products'))) {
+
+        if (!in_array($check_products, array('check_products', 'skip_check_products'))) {
             trigger_error('Second paramenter in creditnote->readyForState should be either "check_products" or "skip_check_products"', E_USER_ERROR);
             return false;
         }
-        
+
         if (!$year->readyForState()) {
             $this->error->set('Regnskabåret er ikke klar til bogføring');
             return false;
         }
-        
-        
+
+
         if ($this->type != 'credit_note') {
             $this->error->set('Du kan kun bogføre kreditnotaer');
             return false;
         }
-        
-        if($this->isStated()) {
+
+        if ($this->isStated()) {
             $this->error->set('Kreditnotaen er allerede bogført');
             return false;
         }
-        
-        if($this->get('status') != 'sent' && $this->get('status') != 'executed') {
+
+        if ($this->get('status') != 'sent' && $this->get('status') != 'executed') {
             $this->error->set('Kreditnotaen skal være sendt eller afsluttet for at den kan bogføres');
             return false;
         }
 
-        if($check_products == 'check_products') {
+        if ($check_products == 'check_products') {
             $this->loadItem();
             $items = $this->item->getList();
             for ($i = 0, $max = count($items); $i < $max; $i++) {
@@ -83,49 +83,49 @@ class CreditNote extends Debtor
                 else {
                     require_once 'Intraface/modules/accounting/Account.php';
                     $account = Account::factory($year, $product->get('state_account_id'));
-                    if($account->get('id') == 0 || $account->get('type') != 'operating') {
+                    if ($account->get('id') == 0 || $account->get('type') != 'operating') {
                         $this->error->set('Ugyldig konto for bogføring af produktet ' . $product->get('name'));
                     }
                 }
             }
         }
-        
+
         if ($this->error->isError()) {
             return false;
         }
         return true;
-        
+
     }
 
     function state($year, $voucher_number, $voucher_date, $translation)
     {
-        if(!is_object($year)) {
+        if (!is_object($year)) {
             trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
             return false;
         }
-        
-        if(!is_object($translation)) {
+
+        if (!is_object($translation)) {
             trigger_error('4th parameter to state needs to be a translation object!', E_USER_ERROR);
             return false;
         }
-        
+
         $text = $translation->get('credit note');
-        
+
         $validator = new Validator($this->error);
-        if($validator->isDate($voucher_date, "Ugyldig dato")) {
+        if ($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);
             $this_date->convert2db();
         }
-        
+
         if ($this->error->isError()) {
             return false;
         }
-        
+
         if (!$this->readyForState($year)) {
             $this->error->set('Kreditnotaen er ikke klar til bogføring');
             return false;
         }
-        
+
         // hente alle produkterne på debtor
         $this->loadItem();
         $items = $this->item->getList();
@@ -141,7 +141,7 @@ class CreditNote extends Debtor
 
 
         $total = 0;
-        foreach($items AS $item) {
+        foreach ($items AS $item) {
 
             // produkterne
             // bemærk at denne går ud fra at alt skal overføres til debtorkontoen som standard
@@ -198,15 +198,15 @@ class CreditNote extends Debtor
         if (!$voucher->saveInDaybook($input_values, true)) {
             $voucher->error->view();
         }
-        
+
         require_once 'Intraface/modules/accounting/VoucherFile.php';
         $voucher_file = new VoucherFile($voucher);
         if (!$voucher_file->save(array('description' => $text.' #' . $this->get('number'), 'belong_to'=>'credit_note','belong_to_id'=>$this->get('id')))) {
             $this->error->merge($voucher_file->error->getMessage());
             $this->error->set('Filen blev ikke overflyttet');
         }
-        
-        if($this->error->isError()) {
+
+        if ($this->error->isError()) {
             $this->error->set('Der er opstået en fejl under bogføringen af kreditnotaen. Det kan betyde at dele af den er bogført, men ikke det hele. Du bedes manuelt tjekke bilaget');
             // I am not quite sure if the credit note should be set as stated, but it can give trouble to state it again, if some of it was stated...
             $this->setStated($voucher->get('id'), $this_date->get());
@@ -218,8 +218,4 @@ class CreditNote extends Debtor
         return true;
 
     }
-
-
 }
-
-?>
