@@ -105,28 +105,26 @@ class CMS_Template extends Standard
         if (!$this->isIdentifierUnique($var['identifier'])) {
             $this->error->set('error in identifier - has to be unique');
         }
-        if(empty($var['for_page_type_integer'])) {
+        if (empty($var['for_page_type_integer'])) {
             $this->error->set('you should select at least one page type that the template is used on');
         }
-        
+
         if ($this->error->isError()) {
             return 0;
         }
-        
+
         return 1;
     }
 
 
     function save($var)
     {
-        
-        if(!empty($var['for_page_type']) && is_array($var['for_page_type'])) {
+        if (!empty($var['for_page_type']) && is_array($var['for_page_type'])) {
             $var['for_page_type_integer'] = array_sum($var['for_page_type']);
-        }
-        else {
+        } else {
             $var['for_page_type_integer'] = 0;
         }
-        
+
         if (!$this->validate($var)) {
             return 0;
         }
@@ -162,13 +160,12 @@ class CMS_Template extends Standard
     function getList($for_page_type = NULL)
     {
         $db = new DB_Sql;
-        if(is_int($for_page_type)) {
+        if (is_int($for_page_type)) {
             $sql_extra = 'for_page_type & '.intval($for_page_type).' AND';
-        }
-        else {
+        } else {
             $sql_extra = '';
         }
-        
+
         $db->query("SELECT id, name, identifier, for_page_type FROM cms_template WHERE ".$sql_extra." intranet_id = " . $this->cmssite->kernel->intranet->get('id') . " AND site_id = " . $this->cmssite->get('id') . " AND active = 1 ORDER BY name");
         $i = 0;
         $templates = array();
