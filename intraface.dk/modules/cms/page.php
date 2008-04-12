@@ -123,10 +123,10 @@ $page = new Page($kernel);
 if ($kernel->setting->get('user', 'htmleditor') == 'tinymce') {
     $page->includeJavascript('global', 'tinymce/jscripts/tiny_mce/tiny_mce.js');
 }
-$page->start(safeToHtml($translation->get('pages')));
+$page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('title')));
 ?>
 
-<h1><?php e($translation->get('pages')); ?></h1>
+<h1><?php e($translation->get('content on page').' '.$cmspage->get('title')); ?></h1>
 
 <ul class="options">
     <li><a class="edit" href="page_edit.php?id=<?php echo $cmspage->get('id'); ?>"><?php echo safeToHtml($translation->get('edit settings', 'common')); ?></a></li>

@@ -53,7 +53,7 @@ $page->includeJavascript('module', 'section_html.js');
 $page->start('CMS');
 ?>
 
-<h1><?php echo safeToHtml($translation->get('edit section')); ?> <?php echo $section->get('section_name'); ?></h1>
+<h1><?php echo safeToHtml($translation->get('edit section')); ?> <?php echo $section->get('section_name'); ?> <?php echo e(t('on page')); ?> <?php e($section->cmspage->get('title')); ?></h1>
 
 <ul class="options">
     <?php if (count($section->cmspage->getSections()) > 1): ?>
