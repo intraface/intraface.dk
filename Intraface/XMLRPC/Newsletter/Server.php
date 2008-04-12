@@ -14,26 +14,25 @@ require_once 'Intraface/Kernel.php';
 require_once 'Intraface/Intranet.php';
 require_once 'Intraface/Setting.php';
 require_once 'Intraface/modules/contact/Contact.php';
+require_once 'Intraface/modules/newsletter/NewsletterList.php';
+require_once 'Intraface/modules/newsletter/NewsletterSubscriber.php';
 
 class Intraface_XMLRPC_Newsletter_Server
 {
-
     private $kernel;
     private $list;
     private $subscriber;
     private $credentials;
 
-    function factoryList($list_id)
+    private function factoryList($list_id)
     {
-        $this->kernel->useModule('newsletter');
-
         $this->list = new NewsletterList($this->kernel, $list_id);
 
         if (!$this->list->doesListExist()) {
             throw new XML_RPC2_FaultException('the newsletter list does not exist', -2);
         }
 
-        $this->subscriber = new NewsletterSubscriber($this->list);
+        return ($this->subscriber = new NewsletterSubscriber($this->list));
     }
 
     /**
@@ -47,13 +46,13 @@ class Intraface_XMLRPC_Newsletter_Server
      *
      * @return boolean
      */
-    function subscribe($credentials, $list_id, $email, $name, $ip = '')
+    public function subscribe($credentials, $list_id, $email, $name = '', $ip = '')
     {
         $this->checkCredentials($credentials);
 
-        $this->factoryList($list_id);
+        $subscriber = $this->factoryList($list_id);
 
-        if (!$this->subscriber->subscribe(array('name' => $name, 'email' => $email, 'ip' => $ip))) {
+        if (!$subscriber->subscribe(array('name' => $name, 'email' => $email, 'ip' => $ip))) {
             throw new XML_RPC2_FaultException('an error occurred when trying to subscribe: ' . implode(',', $this->subscriber->error->message), -4);
         }
 
@@ -70,7 +69,7 @@ class Intraface_XMLRPC_Newsletter_Server
      *
      * @return boolean
      */
-    function unsubscribe($credentials, $list_id, $email)
+    public function unsubscribe($credentials, $list_id, $email)
     {
         $this->checkCredentials($credentials);
 
@@ -192,7 +191,7 @@ class Intraface_XMLRPC_Newsletter_Server
      *
      * @return boolean or throws an error
      */
-    function checkCredentials($credentials)
+    private function checkCredentials($credentials)
     {
         if (count($credentials) != 2) { // -4
             throw new XML_RPC2_FaultException('wrong argument count in $credentials - got ' . count($credentials) . ' arguments - need 2', -4);
@@ -220,4 +219,3 @@ class Intraface_XMLRPC_Newsletter_Server
         return true;
     }
 }
-?>
