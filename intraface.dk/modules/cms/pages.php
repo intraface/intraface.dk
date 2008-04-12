@@ -49,7 +49,7 @@ if (!empty($_GET['moveup']) AND is_numeric($_GET['moveup'])) {
     } else {
         $type = $_GET['type'];
     }
-    
+
     if(!empty($_GET['id'])) {
         $cmssite = new CMS_Site($kernel, (int)$_GET['id']);
         $cmspage = new CMS_Page($cmssite);
@@ -119,8 +119,8 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
 <?php if($type == 'page'): ?>
     <?php
     $cmspage = new CMS_Page($cmssite);
-    $cmspage->dbquery->setFilter('type', 'page');
-    $cmspage->dbquery->setFilter('level', 'alllevels');
+    $cmspage->getDBQuery()->setFilter('type', 'page');
+    $cmspage->getDBQuery()->setFilter('level', 'alllevels');
     $pages = $cmspage->getList('page', 'alllevels');
 
     if (!is_array($pages) OR count($pages) == 0):
@@ -163,7 +163,7 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
 <?php elseif($type == 'article'): ?>
     <?php
     $cmsarticles = new CMS_Page($cmssite);
-    $cmsarticles->dbquery->setFilter('type', 'article');
+    $cmsarticles->getDBQuery()->setFilter('type', 'article');
     $articles = $cmsarticles->getList();
     if (!is_array($articles) OR count($articles) == 0):
         echo '<p>'.safeToHtml($translation->get('no articles found')).'</p>';
@@ -201,7 +201,7 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
 <?php elseif($type == 'news'): ?>
     <?php
     $cmsnews = new CMS_Page($cmssite);
-    $cmsnews->dbquery->setFilter('type', 'news');
+    $cmsnews->getDBQuery()->setFilter('type', 'news');
     $news = $cmsnews->getList();
     if (!is_array($news) OR count($news) == 0):
         echo '<p>'.safeToHtml($translation->get('no news found')).'</p>';
