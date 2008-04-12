@@ -25,7 +25,7 @@ class CMS_Flickr extends CMS_Element
     );
 
     public $services = array(
-        '23'     => '23hq',
+         // '23'     => '23hq',
         'flickr' => 'flickr'
     );
 
