@@ -28,11 +28,11 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->server = new Intraface_XMLRPC_Contact;
+        $this->server = new Intraface_XMLRPC_Contact_Server;
         $db = MDB2::factory(DB_DSN);
         $db->exec('TRUNCATE contact');
         $db->exec('TRUNCATE address');
-        
+
     }
 
     function tearDown()
@@ -85,7 +85,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         $options = array('prefix' => 'contact.');
         return XML_RPC2_Client::create(XMLRPC_SERVER_URL.'contact/server.php', $options);;
     }
-    
+
     function testGetContactWithDanishCharactersWorks()
     {
         $client = $this->getClient();
@@ -95,7 +95,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         $data = array('name' => 'Tester זרו');
         $contact->save($data);
 
-        $this->assertEquals('Tester זרו', $client->getContact($credentials, $contact->getId())); 
+        $this->assertEquals('Tester זרו', $client->getContact($credentials, $contact->getId()));
 
     }
 

@@ -15,7 +15,7 @@ require_once 'Intraface/modules/contact/Contact.php';
 require_once 'XML/RPC2/Server.php';
 require_once 'MDB2.php';
 
-class Intraface_XMLRPC_Contact
+class Intraface_XMLRPC_Contact_Server
 {
     /**
      * @var string
