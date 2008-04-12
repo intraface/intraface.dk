@@ -1,0 +1,94 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testUploadAndEditFile</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testUploadAndEditFile</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=filemanager,administration&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=filemanager</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=upload file</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>file</td>
+	<td>##path_test_root##@@dirctory_separator@@filemanager@@dirctory_separator@@idraetshoejskolen9.jpg</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>9000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>keywords</td>
+	<td>test1</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='save']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>idraetshoejskolen9.jpg</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>description</td>
+	<td>idraetshoejskolen9.jpg</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description</td>
+	<td>New Description</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>New Description</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>New Description</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

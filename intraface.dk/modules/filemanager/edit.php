@@ -7,6 +7,10 @@ $translation = $kernel->getTranslation('filemanager');
 if(isset($_POST['submit'])) {
 
 	$filemanager = new FileManager($kernel, intval($_POST['id']));
+    if($filemanager->get('id') == 0) {
+        trigger_error('Invalid id!', E_USER_ERROR);
+        exit;
+    }
     
     $filemanager->createUpload();
     $filemanager->upload->setSetting('max_file_size', '1000000');
@@ -27,6 +31,10 @@ if(isset($_POST['submit'])) {
 elseif(isset($_GET['id'])) {
 
 	$filemanager = new FileManager($kernel, intval($_GET["id"]));
+    if($filemanager->get('id') == 0) {
+        trigger_error('Invalid id!', E_USER_ERROR);
+        exit;
+    }
 	$values = $filemanager->get();
 }
 else {
