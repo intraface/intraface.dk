@@ -56,12 +56,12 @@ class CMS_Pagelist extends CMS_Element
         $this->value['show'] = $this->parameter->get('show');
         //$this->value['lifetime'] = $this->parameter->get('lifetime');
 
-        $this->section->cmspage->dbquery->clearAll();
+        $this->section->cmspage->getDBQuery()->clearAll();
         if (!empty($this->value['show_type'])) {
-            $this->section->cmspage->dbquery->setFilter('type', $this->value['show_type']);
+            $this->section->cmspage->getDBQuery()->setFilter('type', $this->value['show_type']);
         }
         if (!empty($this->value['keyword'])) {
-            $this->section->cmspage->dbquery->setKeyword($this->value['keyword']);
+            $this->section->cmspage->getDBQuery()->setKeyword($this->value['keyword']);
         }
         $this->value['pages'] = $this->section->cmspage->getList();
     }
