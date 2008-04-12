@@ -141,8 +141,8 @@ if(count($posts) > 0) {
 
         $keywords = array();
         $contact = new Contact($kernel, $posts[$j]['contact']['id']);
-        $keyword = $contact->getKeywords();
-        $keyword_ids = $keyword->getConnectedKeywords();
+        $appender = $contact->getKeywordAppender($keyword);
+        $keyword_ids = $appender->getConnectedKeywords();
         if(count($keyword_ids) > 0) {
             foreach($keyword_ids AS $keyword_id) {
                 $keyword = new Keyword($contact, $keyword_id);
