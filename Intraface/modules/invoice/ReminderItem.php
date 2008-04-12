@@ -19,7 +19,7 @@ class ReminderItem extends Standard
         $this->db       = new Db_sql;
         $this->error    = $this->reminder->error;
 
-        if($this->id) {
+        if ($this->id) {
             $this->load();
         }
     }
@@ -27,9 +27,9 @@ class ReminderItem extends Standard
     function load()
     {
         die("mangler support for ubetalte reminders");
-        if($this->id) {
+        if ($this->id) {
             $this->db->query("SELECT * FROM invoice_reminder_item WHERE id = ".$this->id." AND invoice_reminder_id = ".$this->reminder->get("id"));
-            if($this->db->nextRecord()) {
+            if ($this->db->nextRecord()) {
                 $this->value["id"] = $this->db->f("id");
                 $this->value["intranet_id"] = $this->db->f("intranet_id");
                 $this->value["invoice_reminder_id"] = $this->db->f("invoice_reminder_id");
@@ -54,15 +54,15 @@ class ReminderItem extends Standard
 
         $input = safeToDb($input);
 
-        if(isset($input["invoice_id"])) {
+        if (isset($input["invoice_id"])) {
 
 
             $invoice = new Invoice($this->reminder->kernel, (int)$input["invoice_id"]);
-            if($invoice->get("id") == 0) {
+            if ($invoice->get("id") == 0) {
                 $this->error->set("Ugyldig faktura i ReminderItem->save();");
             }
 
-            if($this->error->isError()) {
+            if ($this->error->isError()) {
                 return(false);
             }
 
@@ -72,14 +72,14 @@ class ReminderItem extends Standard
 
             $this->db->query("INSERT INTO invoice_reminder_item SET ".$sql);
             return true;
-        } elseif(isset($input["reminder_id"])) {
+        } elseif (isset($input["reminder_id"])) {
 
             $reminder = new Reminder($this->reminder->kernel, (int)$input["reminder_id"]);
-            if($reminder->get("id") == 0) {
+            if ($reminder->get("id") == 0) {
                 $this->error->set("Ugyldig rykker i RemindeItem->save()");
             }
 
-            if($this->error->isError()) {
+            if ($this->error->isError()) {
                 return false;
             }
 
@@ -101,10 +101,10 @@ class ReminderItem extends Standard
 
 
 
-        if($type == "invoice") {
+        if ($type == "invoice") {
 
             $this->db->query("SELECT * FROM invoice_reminder_item WHERE invoice_reminder_id = ".$this->reminder->get("id")." ORDER BY id");
-            while($this->db->nextRecord()) {
+            while ($this->db->nextRecord()) {
                 $value[$i]["id"] = $this->db->f("id");
                 $tmp = new Invoice($this->reminder->kernel, $this->db->f("invoice_id"));
                 $value[$i]["invoice_id"] = $tmp->get("id");
@@ -117,9 +117,9 @@ class ReminderItem extends Standard
 
                 $i++;
             }
-        } elseif($type == "reminder") {
+        } elseif ($type == "reminder") {
             $this->db->query("SELECT * FROM invoice_reminder_unpaid_reminder WHERE invoice_reminder_id = ".$this->reminder->get("id")." ORDER BY id");
-            while($this->db->nextRecord()) {
+            while ($this->db->nextRecord()) {
                 $value[$i]["id"] = $this->db->f("id");
                 $tmp = new Reminder($this->reminder->kernel, $this->db->f("unpaid_invoice_reminder_id"));
                 $value[$i]["reminder_id"] = $tmp->get("id");
