@@ -30,3 +30,4 @@ ALTER TABLE `newsletter_list` ADD `subscribe_subject` VARCHAR( 255 ) NOT NULL ;
 ALTER TABLE `cms_template` ADD `for_page_type` INT NOT NULL AFTER `site_id` ;
 UPDATE cms_template SET for_page_type = 7 ;
 
+ALTER TABLE `redirect` ADD `cancel_url` VARCHAR( 255 ) NOT NULL ;
