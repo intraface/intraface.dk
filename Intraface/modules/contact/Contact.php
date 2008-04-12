@@ -193,6 +193,11 @@ class Contact extends Standard {
                        1 => 'corporation');
 
     /**
+     * @todo has to be made private
+     */
+    public $dbquery;
+
+    /**
      * Constructor
      *
      * @param object  $kernel
@@ -222,6 +227,18 @@ class Contact extends Standard {
     function getError()
     {
         return $this->error;
+    }
+
+    function getDBQuery()
+    {
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
+        $this->dbquery = new DBQuery($this->kernel, "contact", "contact.active = 1 AND contact.intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery->setJoin("LEFT", "address", "address.belong_to_id = contact.id", "address.active = 1 AND address.type = 3");
+        $this->dbquery->useErrorObject($this->error);
+
+        return $this->dbquery;
     }
 
     /**
