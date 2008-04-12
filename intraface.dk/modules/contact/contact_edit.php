@@ -288,7 +288,7 @@ $page->start('Rediger kontakt');
             $url = 'index.php';
         }
         ?>
-        <a href="<?php echo $redirect->getRedirect($url); ?>" title="Dette vil slette alle dine ændringer">Fortryd</a>
+        <a href="<?php echo $redirect->getCancelUrl($url); ?>" title="Dette vil slette alle dine ændringer">Fortryd</a>
     </div>
 </form>
 
