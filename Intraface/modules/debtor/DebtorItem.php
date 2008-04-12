@@ -65,7 +65,7 @@ class DebtorItem extends Standard
         $this->error = new Error;
         $this->id = (int)$id;
 
-        if($this->id > 0) {
+        if ($this->id > 0) {
             $this->load();
         }
     }
@@ -77,13 +77,13 @@ class DebtorItem extends Standard
      */
     private function load()
     {
-        if($this->id == 0) {
+        if ($this->id == 0) {
             return;
         }
         // TODO LIMIT 1 er sådan set noget mærkeligt noget. Der skulle gerne kun være 1 da man søger på id, og hvis der endelig er mere end 1,
         // burde man istedet udskrive en fejlmeddelse, for det må ikke kunne ske /Sune (15/3 2005)
         $this->db->query("SELECT product_id, id, description, quantity FROM debtor_item WHERE id = ".$this->id." AND intranet_id = ".$this->debtor->kernel->intranet->get("id")." LIMIT 1");
-        if($this->db->nextRecord()) {
+        if ($this->db->nextRecord()) {
             $this->product_id = $this->db->f("product_id");
 
             $this->value["id"] = $this->db->f("id");
@@ -99,7 +99,7 @@ class DebtorItem extends Standard
             // gøre det på før, da man sagtens kan nøjes med at sende et id, og nu giver kun mulighed for fejl at sende begge, og
             // sørger for at de rent faktisk tilhører sammen faktura /Sune (15/3 2005)
 
-            // if($this->debtor->get("id") != $this->db->f("debtor_id")) {
+            // if ($this->debtor->get("id") != $this->db->f("debtor_id")) {
             //	 $this->debtor->id = $this->db->f("debtor_id");
             // 	 $this->debtor->load();
             // }
@@ -158,7 +158,7 @@ class DebtorItem extends Standard
      */
     public function save($input)
     {
-        if($this->debtor->get("locked") == 1) {
+        if ($this->debtor->get("locked") == 1) {
             $this->error->set('Posten er låst er låst og der kan ikke opdateres varer på den');
             return 0;
         }
@@ -169,34 +169,34 @@ class DebtorItem extends Standard
         $validator = new Validator($this->error);
 
         settype($input["product_id"], 'integer');
-        if($validator->isNumeric($input["product_id"], "Du skal vælge et produkt", "greater_than_zero")) {
-            if(!isset($input['product_detail_id'])) {
+        if ($validator->isNumeric($input["product_id"], "Du skal vælge et produkt", "greater_than_zero")) {
+            if (!isset($input['product_detail_id'])) {
                 $input['product_detail_id'] = 0;
             }
 
             require_once 'Intraface/modules/product/Product.php';
             $product = new Product($this->debtor->kernel, $input["product_id"], $input['product_detail_id']);
 
-            if(!is_object($product) || $product->get('id') == 0) {
+            if (!is_object($product) || $product->get('id') == 0) {
                  $this->error->set("Ugyldigt produkt");
             } else {
                 $product_detail_id = $product->get("detail_id");
             }
         }
 
-        if(!isset($input["quantity"])) $input["quantity"] = 0;
+        if (!isset($input["quantity"])) $input["quantity"] = 0;
         $validator->isDouble($input["quantity"], "Du skal angive et antal", "");
         require_once 'Intraface/tools/Amount.php';
         $quantity = new Amount($input["quantity"]);
-        if($quantity->convert2db()) {
+        if ($quantity->convert2db()) {
             $input["quantity"] = $quantity->get();
         } else {
             $this->error->set("Ugyligt antal");
         }
-        if(!isset($input['description'])) $input['description'] = '';
+        if (!isset($input['description'])) $input['description'] = '';
         $validator->isString($input["description"], "Fejl i beskrivelse", "<b><i>", "allow_empty");
 
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             return(false);
         }
 
@@ -205,7 +205,7 @@ class DebtorItem extends Standard
             quantity = ".$input["quantity"].",
             description = '".$input["description"]."'";
 
-        if($this->id == 0) {
+        if ($this->id == 0) {
             $position = $this->getPosition(MDB2::singleton(DB_DSN))->getMaxPosition() + 1;
             $sql = $sql.', position = '.$position;
 
@@ -216,7 +216,7 @@ class DebtorItem extends Standard
         }
 
         // hvis det er et kreditnota, skal fakturastatus opdateres
-        if($this->debtor->get("type") == "credit_note" && $this->debtor->get("where_from") == "invoice" && $this->debtor->get("where_from_id") != 0) {
+        if ($this->debtor->get("type") == "credit_note" && $this->debtor->get("where_from") == "invoice" && $this->debtor->get("where_from_id") != 0) {
             $invoice = Debtor::factory($this->debtor->kernel, $this->debtor->get("where_from_id"));
             $invoice->updateStatus();
         }
@@ -231,14 +231,14 @@ class DebtorItem extends Standard
      */
     public function delete()
     {
-        if($this->debtor->get("locked") == true) {
+        if ($this->debtor->get("locked") == true) {
             $this->error->set('Du kan ikke slette vare til en låst post');
             return false;
         }
         $this->db->query("UPDATE debtor_item SET active = 0 WHERE id = ".$this->id." AND debtor_id = ".$this->debtor->get("id"));
         $this->id = 0;
 
-        if($this->debtor->get("type") == "credit_note" && $this->debtor->get("where_from") == "invoice" && $this->debtor->get("where_from_id") != 0) {
+        if ($this->debtor->get("type") == "credit_note" && $this->debtor->get("where_from") == "invoice" && $this->debtor->get("where_from_id") != 0) {
             $invoice = Debtor::factory($this->debtor->kernel, $this->debtor->get("where_from_id"));
             $invoice->updateStatus();
         }
@@ -277,11 +277,11 @@ class DebtorItem extends Standard
             $db2->query($sql);
 
             if ($db2->nextRecord()) {
-                if($db2->f("vat") == 0) {
+                if ($db2->f("vat") == 0) {
                     $item_no_vat[$j]["id"] = $db->f("id");
                     $item_no_vat[$j]["name"] = $db2->f("name");
                     $item_no_vat[$j]["number"]= $db2->f("number");
-                    if($db->f("quantity") == 1) {
+                    if ($db->f("quantity") == 1) {
                         $item_no_vat[$j]["unit"] = $units[$db2->f("unit")]['singular'];
                     } else {
                         $item_no_vat[$j]["unit"] = $units[$db2->f("unit")]['plural'];
@@ -298,7 +298,7 @@ class DebtorItem extends Standard
                     $item[$i]["id"] = $db->f("id");
                     $item[$i]["name"] = $db2->f("name");
                     $item[$i]["number"]= $db2->f("number");
-                    if($db->f("quantity") == 1) {
+                    if ($db->f("quantity") == 1) {
                         $item[$i]["unit"] = $units[$db2->f("unit")]['singular'];
                     } else {
                         $item[$i]["unit"] = $units[$db2->f("unit")]['plural'];
@@ -341,23 +341,23 @@ class DebtorItem extends Standard
             3=>'cancelled'
         */
 
-        if(!in_array($sent, array("", "not_sent"))) {
+        if (!in_array($sent, array("", "not_sent"))) {
             trigger_error("Ugyldig værdi i 3. parameter til debtor->item->getQuantity()", E_USER_ERROR);
         }
 
-        if($this->debtor->get('type') == "quotation") {
+        if ($this->debtor->get('type') == "quotation") {
             $status_sql = "debtor.status = 0 OR debtor.status = 1"; // tilbud der er oprettet eller sent.
             $date_sql = "";
-        } elseif($this->debtor->get('type') == "order") {
+        } elseif ($this->debtor->get('type') == "order") {
             $status_sql = "debtor.status = 0 OR debtor.status = 1"; // ordre der er oprettet eller sent.
             $date_sql = "";
-        } elseif($this->debtor->get('type') == "invoice" && $sent == "") {
+        } elseif ($this->debtor->get('type') == "invoice" && $sent == "") {
             $status_sql = "debtor.status = 1 OR debtor.status = 2"; // fakturaer der er sent eller færdigbehandlet
             $date_sql = "AND debtor.date_sent > \"".$from_date."\"";
-        } elseif($this->debtor->get('type') == "invoice" && $sent == "not_sent") {
+        } elseif ($this->debtor->get('type') == "invoice" && $sent == "not_sent") {
             $status_sql = "debtor.status = 0"; // fakturaer der er oprettet.
             $date_sql = "";
-        } elseif($this->debtor->get('type') == "credit_note") {
+        } elseif ($this->debtor->get('type') == "credit_note") {
             $status_sql = "debtor.status = 2"; // kredit notaer der er færdigbehandlet
             $date_sql = "AND debtor.date_executed > \"".$from_date."\"";
         } else {
