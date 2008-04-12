@@ -40,8 +40,7 @@ if (!empty($_POST)) {
                 $email->send();
                 header('Location: index.php?id='.$todo->get('id'));
                 exit;
-            }
-            else {
+            } else {
                 header('Location: todo_email.php?id='. $todo->get('id'));
                 exit;
             }
@@ -49,8 +48,7 @@ if (!empty($_POST)) {
     }
 
 
-}
-elseif ($_GET['id']) {
+} elseif ($_GET['id']) {
     $todo = new TodoList($kernel, $_GET['id']);
     $value['id'] = $todo->get('id');
     $value['subject'] = 'Todoliste';
@@ -60,7 +58,7 @@ elseif ($_GET['id']) {
 
     $contact = new Contact($kernel);
     $keywords = $contact->getKeywords();
-    $contact->dbquery->setKeyword('todo');
+    $contact->getDBQuery()->setKeyword('todo');
     $contact_list = $contact->getList();
 }
 
