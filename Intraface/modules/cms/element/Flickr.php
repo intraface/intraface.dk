@@ -17,16 +17,15 @@ require_once 'Intraface/modules/cms/Element.php';
 
 class CMS_Flickr extends CMS_Element
 {
-
     public $allowed_sizes = array(
-        'square' => 'Små firkanter',
+        'square'    => 'Små firkanter',
         'thumbnail' => 'Thumbnail',
-        'small' => 'Små',
-        'medium' => 'Medium'
+        'small'     => 'Små',
+        'medium'    => 'Medium'
     );
 
     public $services = array(
-        '23' => '23hq',
+        '23'     => '23hq',
         'flickr' => 'flickr'
     );
 
@@ -44,10 +43,8 @@ class CMS_Flickr extends CMS_Element
         //$this->parameter->save('api_key', $var['api_key']);
         //$this->value['tags'] = $this->parameter->get('tags');
         $this->value['photoset_id'] = $this->parameter->get('photoset_id');
-        $this->value['size'] = $this->parameter->get('size');
-
-
-        $this->value['service'] = $this->parameter->get('service');
+        $this->value['size']        = $this->parameter->get('size');
+        $this->value['service']     = $this->parameter->get('service');
 
         if (empty($this->value['service'])) {
             $this->parameter->save('service', 'flickr');
@@ -57,13 +54,16 @@ class CMS_Flickr extends CMS_Element
         $this->value['set'] = array();
 
 
+        // @todo / hack
         // det virker som om den bliver startet vel mange gange den her
         // dette er nødvendig for at få det hele gemt.
         // de mange starter er nok også grunden til at det går lidt langsomt
         // hvis man fx skriver en værdi ud her, kommer den frem flere gange.
+        /*
         if (empty($this->value['service'])) {
             return;
         }
+        */
 
         $f = new phpFlickr($this->kernel->setting->get('system', 'flickr.api_key'), NULL, false);
         $f->setService($this->value['service']);
@@ -71,8 +71,10 @@ class CMS_Flickr extends CMS_Element
 
         // her skal nok lige være lidt fejlhåndtering på servicen
         // hvis det virker, så forstætter vi bare, ellers skal vi fail gracefully
+        /*
+         * @todo nu virker 23hq vist ikke laengere. det skal vi lige have ordnet.
+         *
         if ($f->getErrorCode() == 0) {
-
             $flickr_photos = $f->photosets_getPhotos($this->value['photoset_id'], 'owner_name');
 
             //$photos_url = $f->urls_getUserPhotos($flickr_photos['owner']);
@@ -89,18 +91,8 @@ class CMS_Flickr extends CMS_Element
             $photos = $flickr_photos['photo'];
 
             $i = 0;
-            /*
-            foreach ($photos as $photo) {
-                //echo $photo;
-                $this->value['set']['owner'] = $f->people_getInfo($photo['ownername']);
-                $this->value['pictures'][$i]['url'] = $photos_url . $photo['id'] . '/';
-                $this->value['pictures'][$i]['thumb_url'] = $f->buildPhotoURL($photo, $element['size']);
-                $this->value['pictures'][$i]['title'] = $photo['title'];
-                $i++;
-
-            }
-            */
         }
+        */
 
         if ($this->value['service'] == 'flickr') {
             $this->value['pictobrowser'] = '
