@@ -128,10 +128,6 @@ switch($kernel->setting->get('intranet', 'debtor.sender')) {
         exit;
 }
 
-if (empty($from_email) || empty($from_name)) {
-    trigger_error("Name or email is not filled in!", E_USER_ERROR);
-}
-
 # opret e-mailen
 $email = new Email($kernel);
 if (!$email->save(array(
