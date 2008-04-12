@@ -30,7 +30,7 @@ class Reminder extends Standard
         $this->dbquery = new DBQuery($this->kernel, "invoice_reminder", "intranet_id = ".$this->kernel->intranet->get("id")." AND active = 1");
         $this->dbquery->useErrorObject($this->error);
 
-        if($this->id) {
+        if ($this->id) {
             $this->load();
         }
     }
@@ -44,7 +44,7 @@ class Reminder extends Standard
                 DATE_FORMAT(date_executed, '%d-%m-%Y') AS dk_date_executed,
                 DATE_FORMAT(date_cancelled, '%d-%m-%Y') AS dk_date_cancelled
             FROM invoice_reminder WHERE id = ".$this->id." AND intranet_id = ".$this->kernel->intranet->get("id")."");
-        if(!$this->db->nextRecord()) {
+        if (!$this->db->nextRecord()) {
             $this->id = 0;
             $this->value['id'] = 0;
             return false;
@@ -83,19 +83,19 @@ class Reminder extends Standard
         $this->value["send_as"] = $this->db->f("send_as");
 
         $this->contact = new Contact($this->kernel, $this->db->f("contact_id"), $this->db->f("contact_address_id"));
-        if($this->contact->get("type") == "corporation" && $this->db->f("contact_person_id") != 0) {
+        if ($this->contact->get("type") == "corporation" && $this->db->f("contact_person_id") != 0) {
             $this->contact_person = new ContactPerson($this->contact, $this->db->f("contact_person_id"));
         }
 
 
-        if($this->get("status") == "executed" || $this->get("status") == "cancelled") {
+        if ($this->get("status") == "executed" || $this->get("status") == "cancelled") {
             $this->value["locked"] = true;
         } else {
             $this->value["locked"] = false;
         }
 
         $this->value['payment_total'] = 0;
-        foreach($this->getDebtorAccount()->getList() AS $payment) {
+        foreach ($this->getDebtorAccount()->getList() AS $payment) {
             $this->value['payment_total'] += $payment["amount"];
         }
         $this->value["arrears"] = $this->value['total'] - $this->value['payment_total'];
@@ -122,7 +122,7 @@ class Reminder extends Standard
     {
         $sql = "SELECT id FROM invoice_reminder WHERE number = ".intval($number)." AND id != ".$this->id . " AND intranet_id = " . $this->kernel->intranet->get('id');
         $this->db->query($sql);
-        if($this->db->nextRecord()) {
+        if ($this->db->nextRecord()) {
             return false;
         } else {
             return true;
@@ -131,7 +131,7 @@ class Reminder extends Standard
 
     function save($input)
     {
-        if($this->get("locked") == 1) {
+        if ($this->get("locked") == 1) {
             return(false);
         }
 
@@ -139,7 +139,7 @@ class Reminder extends Standard
             $input['payment_method_key'] = 0;
         }
 
-        if(!is_array($input)) {
+        if (!is_array($input)) {
             trigger_error("Input er ikke et array", E_USER_ERROR);
         }
 
@@ -148,67 +148,67 @@ class Reminder extends Standard
         require_once 'Intraface/Validator.php';
         $validator = new Validator($this->error);
 
-        if(!isset($input['number'])) $input['number'] = 0;
-        if($validator->isNumeric($input["number"], "Rykkernummer skal være et tal større end nul", "greater_than_zero")) {
-            if(!$this->isNumberFree($input["number"])) {
+        if (!isset($input['number'])) $input['number'] = 0;
+        if ($validator->isNumeric($input["number"], "Rykkernummer skal være et tal større end nul", "greater_than_zero")) {
+            if (!$this->isNumberFree($input["number"])) {
                 $this->error->set("Rykkernummer er allerede brugt");
             }
         }
 
-        if(!isset($input['contact_id'])) $input['contact_id'] = 0;
-        if(!isset($input["contact_person_id"])) $input["contact_person_id"] = 0;
-        if($validator->isNumeric($input["contact_id"], "Du skal angive en kunde", "greater_than_zero")) {
+        if (!isset($input['contact_id'])) $input['contact_id'] = 0;
+        if (!isset($input["contact_person_id"])) $input["contact_person_id"] = 0;
+        if ($validator->isNumeric($input["contact_id"], "Du skal angive en kunde", "greater_than_zero")) {
             $contact = new Contact($this->kernel, (int)$input["contact_id"]);
-            if(is_object($contact->address)) {
+            if (is_object($contact->address)) {
                 $contact_id = $contact->get("id");
                 $contact_address_id = $contact->address->get("address_id");
             } else {
                 $this->error->set("Ugyldig kunde");
             }
 
-            if($contact->get("type") == "corporation") {
+            if ($contact->get("type") == "corporation") {
                 $validator->isNumeric($input["contact_person_id"], "Der er ikke angivet en kontaktperson");
             }
         }
 
         // $validator->isString($input["attention_to"], "Fejl i att.", "", "allow_empty");
-        if(!isset($input['description'])) $input['description'] = '';
+        if (!isset($input['description'])) $input['description'] = '';
         $validator->isString($input["description"], "Fejl i beskrivelsen", "", "allow_empty");
 
-        if(!isset($input['this_date'])) $input['this_date'] = '';
-        if($validator->isDate($input["this_date"], "Ugyldig dato", "allow_no_year")) {
+        if (!isset($input['this_date'])) $input['this_date'] = '';
+        if ($validator->isDate($input["this_date"], "Ugyldig dato", "allow_no_year")) {
             $this_date = new Intraface_Date($input["this_date"]);
             $this_date->convert2db();
         }
 
-        if(!isset($input['due_date'])) $input['due_date'] = '';
-        if($validator->isDate($input["due_date"], "Ugyldig forfaldsdato", "allow_no_year")) {
+        if (!isset($input['due_date'])) $input['due_date'] = '';
+        if ($validator->isDate($input["due_date"], "Ugyldig forfaldsdato", "allow_no_year")) {
             $due_date = new Intraface_Date($input["due_date"]);
             $due_date->convert2db();
         }
 
-        if(!isset($input['reminder_fee'])) $input['reminder_fee'] = 0;
+        if (!isset($input['reminder_fee'])) $input['reminder_fee'] = 0;
         $validator->isNumeric($input["reminder_fee"], "Rykkerbebyr skal være et tal");
-        if(!isset($input['text'])) $input['text'] = '';
+        if (!isset($input['text'])) $input['text'] = '';
         $validator->isString($input["text"], "Fejl i teksten", "<b><i>", "allow_empty");
-        if(!isset($input['send_as'])) $input['send_as'] = '';
+        if (!isset($input['send_as'])) $input['send_as'] = '';
         $validator->isString($input["send_as"], "Ugyldig måde at sende rykkeren på");
 
-        if(!isset($input['payment_method_key'])) $input['payment_method_key'] = 0;
+        if (!isset($input['payment_method_key'])) $input['payment_method_key'] = 0;
         $validator->isNumeric($input["payment_method_key"], "Du skal angive en betalingsmetode");
-        if(!isset($input['girocode'])) $input['girocode'] = '';
-        if($input["payment_method_key"] == 3) {
+        if (!isset($input['girocode'])) $input['girocode'] = '';
+        if ($input["payment_method_key"] == 3) {
             $validator->isString($input["girocode"], "Du skal udfylde girokode");
         } else {
             $validator->isString($input["girocode"], "Ugyldig girokode", "", "allow_empty");
         }
 
-        if(!isset($input['checked_invoice'])) $input['checked_invoice'] = array();
-        if(!is_array($input["checked_invoice"]) || count($input["checked_invoice"]) == 0) {
+        if (!isset($input['checked_invoice'])) $input['checked_invoice'] = array();
+        if (!is_array($input["checked_invoice"]) || count($input["checked_invoice"]) == 0) {
             $this->error->set("Der er ikke valgt nogle fakturaer til rykkeren");
         }
 
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             return(false);
         }
 
@@ -228,7 +228,7 @@ class Reminder extends Standard
             date_changed = NOW()";
 
         // attention_to = \"".$input["attention_to"]."\",
-        if($this->id) {
+        if ($this->id) {
             $this->db->query("UPDATE invoice_reminder SET ".$sql." WHERE id = ".$this->id);
             $this->load();
         } else {
@@ -240,15 +240,15 @@ class Reminder extends Standard
         $this->loadItem();
         $this->item->clear();
 
-        if(isset($input["checked_invoice"]) && is_array($input["checked_invoice"])) {
-            foreach($input["checked_invoice"] AS $invoice_id) {
+        if (isset($input["checked_invoice"]) && is_array($input["checked_invoice"])) {
+            foreach ($input["checked_invoice"] AS $invoice_id) {
                 $this->loadItem();
                 $this->item->save(array("invoice_id" => $invoice_id));
             }
         }
 
-        if(isset($input["checked_reminder"]) && is_array($input["checked_reminder"])) {
-            foreach($input["checked_reminder"] AS $reminder_id) {
+        if (isset($input["checked_reminder"]) && is_array($input["checked_reminder"])) {
+            foreach ($input["checked_reminder"] AS $reminder_id) {
                 $this->loadItem();
                 $this->item->save(array("reminder_id" => $reminder_id));
             }
@@ -268,7 +268,7 @@ class Reminder extends Standard
 
     /*
     function setLocked() {
-        if($this->get("locked") == 0) {
+        if ($this->get("locked") == 0) {
 
             $this->db->query("UPDATE invoice_reminder SET locked = 1 WHERE id = ".$this->id);
             $this->load();
@@ -283,22 +283,22 @@ class Reminder extends Standard
      */
     function setStatus($status) {
 
-        if(is_string($status)) {
+        if (is_string($status)) {
             $status_id = array_search($status, $this->getStatusTypes());
-            if($status_id === false) {
+            if ($status_id === false) {
                 trigger_error("Reminder->setStatus(): Ugyldig status (streng)", FATAL);
             }
-        } else{
+        } else {
             $status_id = intval($status);
             $status_types = $this->getStatusTypes();
-            if(isset($status_types[$status_id])) {
+            if (isset($status_types[$status_id])) {
                 $status = $status_types[$status];
             } else {
                 trigger_error("Reminder->setStatus(): Ugyldig status (integer)", E_USER_ERROR);
             }
         }
 
-        if($status_id <= $this->get("status_id")) {
+        if ($status_id <= $this->get("status_id")) {
             $this->error->set('Du kan ikke sætte status til samme som/lavere end den er i forvejen');
             trigger_error("Tried to set status the same or lower than it was before. Can be because of reload. In Reminder->setStatus", E_USER_NOTICE);
             return false;
@@ -331,7 +331,7 @@ class Reminder extends Standard
     function updateStatus()
     {
 
-        if($this->get("arrears") == 0 && $this->get("status") == "sent") {
+        if ($this->get("arrears") == 0 && $this->get("status") == "sent") {
             $this->setStatus("executed");
         }
         return true;
@@ -360,7 +360,7 @@ class Reminder extends Standard
         $payment["deprication"] = 0;
 
         for($i = 0, $max = count($payments); $i < $max; $i++) {
-            if($payments[$i]["type"] == 'depriciation') {
+            if ($payments[$i]["type"] == 'depriciation') {
                 $payment['depriciation'] += $payments[$i]["amount"];
             } else {
                 $payment['payment'] += $payments[$i]["amount"];
@@ -377,17 +377,17 @@ class Reminder extends Standard
         $this->dbquery->setSorting("number DESC, this_date DESC");
         $i = 0;
 
-        if($this->dbquery->checkFilter("contact_id")) {
+        if ($this->dbquery->checkFilter("contact_id")) {
             $this->dbquery->setCondition("contact_id = ".intval($this->dbquery->getFilter("contact_id")));
         }
 
-        if($this->dbquery->checkFilter("text")) {
+        if ($this->dbquery->checkFilter("text")) {
             $this->dbquery->setCondition("(description LIKE \"%".$this->dbquery->getFilter("text")."%\" OR girocode = \"".$this->dbquery->getFilter("text")."\" OR number = \"".$this->dbquery->getFilter("text")."\")");
         }
 
-        if($this->dbquery->checkFilter("from_date")) {
+        if ($this->dbquery->checkFilter("from_date")) {
             $date = new Intraface_Date($this->dbquery->getFilter("from_date"));
-            if($date->convert2db()) {
+            if ($date->convert2db()) {
                 $this->dbquery->setCondition("this_date >= \"".$date->get()."\"");
             } else {
                 $this->error->set("Fra dato er ikke gyldig");
@@ -395,24 +395,24 @@ class Reminder extends Standard
         }
 
         // Poster med fakturadato før slutdato.
-        if($this->dbquery->checkFilter("to_date")) {
+        if ($this->dbquery->checkFilter("to_date")) {
             $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
-            if($date->convert2db()) {
+            if ($date->convert2db()) {
                 $this->dbquery->setCondition("this_date <= \"".$date->get()."\"");
             } else {
                 $this->error->set("Til dato er ikke gyldig");
             }
         }
 
-        if($this->dbquery->checkFilter("status")) {
-            if($this->dbquery->getFilter("status") == "-1") {
+        if ($this->dbquery->checkFilter("status")) {
+            if ($this->dbquery->getFilter("status") == "-1") {
                 // Behøves ikke, den tager alle.
                 // $this->dbquery->setCondition("status >= 0");
-            } elseif($this->dbquery->getFilter("status") == "-2") {
+            } elseif ($this->dbquery->getFilter("status") == "-2") {
                 // Not executed = åbne
-                if($this->dbquery->checkFilter("to_date")) {
+                if ($this->dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
-                    if($date->convert2db()) {
+                    if ($date->convert2db()) {
                         // Poster der er executed eller cancelled efter dato, og sikring at executed stadig er det, da faktura kan sættes tilbage.
                         $this->dbquery->setCondition("(date_executed >= \"".$date->get()."\" AND status = 2) OR (date_cancelled >= \"".$date->get()."\") OR status < 2");
                     }
@@ -440,9 +440,9 @@ class Reminder extends Standard
                         break;
                 }
 
-                if($this->dbquery->checkFilter("to_date")) {
+                if ($this->dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
-                    if($date->convert2db()) {
+                    if ($date->convert2db()) {
                         $this->dbquery->setCondition($to_date_field." <= \"".$date->get()."\"");
                     }
                 } else {
@@ -544,16 +544,16 @@ class Reminder extends Standard
      */
     function readyForState($year)
     {
-        if($this->isStated()) {
+        if ($this->isStated()) {
             $this->error->set('reminder is already stated');
             return false;
         }
 
-        if(!$this->somethingToState()) {
+        if (!$this->somethingToState()) {
             $this->error->set('there is nothing to state on the reminder');
         }
 
-        if($this->get('status') != 'sent' && $this->get('status') != 'executed') {
+        if ($this->get('status') != 'sent' && $this->get('status') != 'executed') {
             $this->error->set('the reminder should be sent of executed to be stated');
             return false;
         }
@@ -564,7 +564,7 @@ class Reminder extends Standard
         }
 
         $debtor_account = new Account($year, $year->getSetting('debtor_account_id'));
-        if($debtor_account->get('id') == 0 || $debtor_account->get('type') != 'balance, asset') {
+        if ($debtor_account->get('id') == 0 || $debtor_account->get('type') != 'balance, asset') {
             $this->error->set('invalid debtor account set in the accounting settings');
         }
 
@@ -584,18 +584,18 @@ class Reminder extends Standard
      */
     function state($year, $voucher_number, $voucher_date, $credit_account_number, $translation)
     {
-        if(!is_object($year)) {
+        if (!is_object($year)) {
             trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
             return false;
         }
 
-        if(!is_object($translation)) {
+        if (!is_object($translation)) {
             trigger_error('5th parameter to state needs to be a translation object!', E_USER_ERROR);
             return false;
         }
 
         $validator = new Validator($this->error);
-        if($validator->isDate($voucher_date, "Ugyldig dato")) {
+        if ($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);
             $this_date->convert2db();
         }
@@ -625,7 +625,7 @@ class Reminder extends Standard
 
 
         $credit_account = Account::factory($year, $credit_account_number);
-        if($credit_account->get('id') == 0 || $credit_account->get('type') != 'operating') {
+        if ($credit_account->get('id') == 0 || $credit_account->get('type') != 'operating') {
             $this->error->set('invalid account for stating reminder');
         }
         $credit_account_number = $credit_account->get('number');
@@ -657,7 +657,7 @@ class Reminder extends Standard
             $this->error->set('Filen blev ikke overflyttet');
         }
 
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             $this->error->set('An error occured while stating the reminder. This can mean that parts of the reminder was not state correct. Please check the voucher.');
             // I am not quite sure if the invoice should be set as stated, but it can give trouble to state it again, if some of it was stated...
             $this->setStated($voucher->get('id'), $this_date->get());
@@ -672,10 +672,10 @@ class Reminder extends Standard
 
     function pdf($type = 'stream', $filename='')
     {
-        if($this->get('id') == 0) {
+        if ($this->get('id') == 0) {
             trigger_error('Cannot create pdf from debtor without valid id', E_USER_ERROR);
         }
-        
+
 
         $shared_pdf = $this->kernel->useShared('pdf');
         $shared_pdf->includeFile('PdfMakerDebtor.php');
@@ -687,7 +687,7 @@ class Reminder extends Standard
 
         $filehandler = '';
 
-        if($this->kernel->intranet->get("pdf_header_file_id") != 0) {
+        if ($this->kernel->intranet->get("pdf_header_file_id") != 0) {
             $filehandler = new FileHandler($this->kernel, $this->kernel->intranet->get("pdf_header_file_id"));
         }
 
@@ -725,7 +725,7 @@ class Reminder extends Standard
             3=>'Girokort +71'
         );
     }
-    
+
     /**
      * Gets the payment information
      *
