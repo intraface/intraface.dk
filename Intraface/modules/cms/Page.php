@@ -91,7 +91,7 @@ class CMS_Page extends Standard
         // generelle
         $this->kernel = $this->cmssite->kernel;
         $this->error = new Error();
-        $this->dbquery = $this->getDBQuery();
+        // $this->dbquery = $this->getDBQuery();
 
         // hente settings
         $cms_module = $this->kernel->module('cms');
@@ -133,7 +133,7 @@ class CMS_Page extends Standard
         return $this->template;
     }
 
-    function factory(& $kernel, $type, $value)
+    function factory($kernel, $type, $value)
     {
         switch ($type) {
             case 'id':
@@ -526,6 +526,8 @@ class CMS_Page extends Standard
     function getList()
     {
         $pages = array();
+
+        $this->dbquery = $this->getDBQuery();
 
         if ($this->dbquery->checkFilter('type') && $this->dbquery->getFilter('page') == 'all') {
             // no condition isset
