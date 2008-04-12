@@ -9,74 +9,74 @@
 <tr><td rowspan="1" colspan="3">testStateProcurementWithTotalDifferentFromGiven</td></tr>
 </thead><tbody>
 <tr>
-	<td>open</td>
-	<td>/install/reset-staging-server.php?modules=procurement,product,accounting&helper_function=Procurement:create,Accounting:createYearWithVatAndStandardAccounts&login=true</td>
-	<td></td>
+    <td>open</td>
+    <td>/install/reset-staging-server.php?modules=procurement,product,accounting&helper_function=Procurement:create,Accounting:createYearWithVatAndStandardAccounts&login=true</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=login</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=login</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=procurement</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=procurement</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=test</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>link=test</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>paid</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>paid</td>
+    <td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>add_line</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>add_line</td>
+    <td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>debet_account[0][text]</td>
-	<td>Vare 1</td>
+    <td>type</td>
+    <td>debet_account[0][text]</td>
+    <td>Vare 1</td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>state_account</td>
-	<td>label=Småanskaffelser (vat: in)</td>
+    <td>select</td>
+    <td>state_account</td>
+    <td>label=Småanskaffelser (vat: in)</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>debet_account[2][text]</td>
-	<td>Vare 2</td>
+    <td>type</td>
+    <td>debet_account[2][text]</td>
+    <td>Vare 2</td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>debet_account[2][state_account_id]</td>
-	<td>label=Porto (vat: none)</td>
+    <td>select</td>
+    <td>debet_account[2][state_account_id]</td>
+    <td>label=Porto (vat: none)</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>debet_account[2][amount]</td>
-	<td>20,00</td>
+    <td>type</td>
+    <td>debet_account[2][amount]</td>
+    <td>20,00</td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>debet_account[1][state_account_id]</td>
-	<td>label=Porto (vat: none)</td>
+    <td>select</td>
+    <td>debet_account[1][state_account_id]</td>
+    <td>label=Porto (vat: none)</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>state</td>
-	<td></td>
+    <td>clickAndWait</td>
+    <td>state</td>
+    <td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Det samlede beløb til bogføring stemmer ikke overens med det samlede beløb på indkøbet. Har du fået alle vare på indkøbet med?</td>
-	<td></td>
+    <td>verifyTextPresent</td>
+    <td>Det samlede beløb (185,00) til bogføring stemmer ikke overens med det samlede beløb på indkøbet. Har du fået alle vare på indkøbet med?</td>
+    <td></td>
 </tr>
 
 </tbody></table>
