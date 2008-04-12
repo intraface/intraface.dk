@@ -61,6 +61,7 @@ class CMS_Page extends Standard
     public $kernel;
     public $position;
     public $error;
+    private $dbquery;
 
     public $cmssite;
     public $template;
@@ -80,23 +81,17 @@ class CMS_Page extends Standard
              trigger_error('CMS_Page::__construct needs CMS_Site', E_USER_ERROR);
         }
 
-        // generelle
-        $this->id = (int)$id;
-
-        // cms - relevante
-        $this->cmssite =  $cmssite;
+        $this->id         = (int)$id;
+        $this->cmssite    =  $cmssite;
         $this->navigation = new CMS_Navigation($this);
-        $this->template = new CMS_Template($this->cmssite);
-
-        // generelle
-        $this->kernel = $this->cmssite->kernel;
-        $this->error = new Error();
+        $this->template   = new CMS_Template($this->cmssite);
+        $this->kernel     = $this->cmssite->kernel;
+        $this->error      = new Error();
         // $this->dbquery = $this->getDBQuery();
 
-        // hente settings
-        $cms_module = $this->kernel->module('cms');
+        // get settings
+        $cms_module       = $this->kernel->module('cms');
         $this->cc_license = $cms_module->getSetting('cc_license');
-
 
         if ($this->id > 0) {
             $this->load();
@@ -338,7 +333,6 @@ class CMS_Page extends Standard
 
         $sql = "SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE intranet_id = ".$this->cmssite->kernel->intranet->get('id')." AND id = " .$this->id . $sql_expire . $sql_publish;
 
-        //$this->db->query($sql);
         $db = new DB_Sql();
         $db->query($sql);
 
