@@ -157,7 +157,7 @@ $page->start(safeToHtml($translation->get('edit page')));
 
             <div class="formrow" id="titlerow">
                 <label for="title"><?php e($translation->get('title')); ?></label>
-                <input name="title" type="text" id="title" value="<?php if (!empty($value['title'])) echo safeToForm($value['title']); ?>" size="50" maxlength="255" onBlur="page_edit.fill_shortlink();" />
+                <input name="title" type="text" id="title" value="<?php if (!empty($value['title'])) echo safeToForm($value['title']); ?>" size="50" maxlength="50" onBlur="page_edit.fill_shortlink();" />
             </div>
 
             <div class="formrow">
