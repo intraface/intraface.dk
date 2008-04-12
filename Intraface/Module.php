@@ -8,10 +8,8 @@
  * @since   0.1.0
  * @version @package-version@
  */
-
 abstract class Module
 {
-
     private $modules = array();
     private $db;
 
@@ -22,21 +20,20 @@ abstract class Module
 
     function setPrimaryModule($module_name)
     {
-        if(!empty($this->primary_module_object) AND is_object($this->primary_module_object)) {
+        if (!empty($this->primary_module_object) AND is_object($this->primary_module_object)) {
             trigger_error('Det primære modul er allerede sat', E_USER_ERROR);
         } else {
             $module = $this->useModule($module_name);
 
-            if(is_object($module)) {
+            if (is_object($module)) {
                 $this->primary_module_name = $module_name;
 
                 // Finder afhængige moduller - Dette kunne flyttes til useModule, hvorfor er den egentlig ikke det? /Sune 06-07-2006
                 $dependent_modules = $module->getDependentModules();
 
-                for($i = 0, $max = count($dependent_modules); $i < $max; $i++) {
+                for ($i = 0, $max = count($dependent_modules); $i < $max; $i++) {
                     $no_use = $this->useModule($dependent_modules[$i]);
                 }
-
 
                 return($module);
             } else {
@@ -56,11 +53,11 @@ abstract class Module
      */
     public function useModule($module_name, $ignore_user_access = false)
     {
-        if(!ereg("^[a-z0-9]+$", $module_name)) {
+        if (!ereg("^[a-z0-9]+$", $module_name)) {
             throw new Exception('module name invalid');
         }
 
-        if(!empty($this->modules[$module_name]) AND is_object($this->modules[$module_name])) {
+        if (!empty($this->modules[$module_name]) AND is_object($this->modules[$module_name])) {
             return $this->modules[$module_name];
         }
 
@@ -69,30 +66,30 @@ abstract class Module
         return true;
 
         /*
-        if(!is_object($this->user)) {
+        if (!is_object($this->user)) {
             // Det er et weblogin.
-            if($this->intranet->hasModuleAccess($module_name)) {
+            if ($this->intranet->hasModuleAccess($module_name)) {
                 $access = true;
             }
         }
-        elseif($ignore_user_access) {
+        elseif ($ignore_user_access) {
             // Skal kun kontrollere om intranettet har adgang, for at benytte modullet
-            if($this->intranet->hasModuleAccess($module_name)) {
+            if ($this->intranet->hasModuleAccess($module_name)) {
                 $access = true;
             }
         }
         else {
             // Almindelig login
-            if($this->user->hasModuleAccess($module_name)) {
+            if ($this->user->hasModuleAccess($module_name)) {
                 $access = true;
             }
         }
 
-        if($access == true) {
+        if ($access == true) {
             $main_class_name = "Main".ucfirst($module_name);
             $main_class_path = PATH_INCLUDE_MODULE.$module_name."/".$main_class_name.".php";
 
-            if(file_exists($main_class_path)) {
+            if (file_exists($main_class_path)) {
                 require_once($main_class_path);
                 $object = new $main_class_name;
                 $object->load($this);
@@ -121,7 +118,7 @@ abstract class Module
      */
     function getModule($name)
     {
-        if(is_object($this->modules[$name])) {
+        if (is_object($this->modules[$name])) {
             return($this->modules[$name]);
         } else {
             trigger_error('getModule() module ' . $name . ' not loaded', E_USER_ERROR);
@@ -136,16 +133,16 @@ abstract class Module
     function getModules($order_by = 'frontpage_inddex') {
         $modules = array();
 
-        if($order_by != '') {
+        if ($order_by != '') {
             $order_by = "ORDER BY ".$this->db->quoteIdentifier($order_by, 'text');
         }
 
         $i = 0;
         $result = $this->db->query("SELECT id, menu_label, name, show_menu FROM module WHERE active = 1 ".$order_by);
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error($result->getUserInfo(), E_USER_ERROR);
         }
-        while($row = $result->fetchRow()) {
+        while ($row = $result->fetchRow()) {
             $modules[$i]['id'] = $row['id'];
             $modules[$i]['name'] = $row['name'];
             $modules[$i]['menu_label'] = $row['menu_label'];
@@ -153,11 +150,11 @@ abstract class Module
 
             $j = 0;
             $result_sub = $db->query("SELECT id, description FROM module_sub_access WHERE active = 1 AND module_id = ".$db->quote($row["id"], 'integer')." ORDER BY description");
-            if(PEAR::isError($result_sub)) {
+            if (PEAR::isError($result_sub)) {
                 trigger_error($result_sub->getUserInfo(), E_USER_ERROR);
             }
 
-            while($row_sub = $result_sub->fetchRow()) {
+            while ($row_sub = $result_sub->fetchRow()) {
                 $modules[$i]['sub_access'][$j]['id'] = $row_sub['id'];
                 $modules[$i]['sub_access'][$j]['description'] = $row_sub['description'];
                 $j++;
@@ -177,22 +174,22 @@ abstract class Module
     static function exists($module_id)
     {
         $db = MDB2::singleton(DB_DSN);
-        if(PEAR::isError($db)) {
+        if (PEAR::isError($db)) {
             trigger_error('Error connecting to db: '.$db->getUserInfo(), E_USER_ERROR);
             exit;
         }
-        if(is_numeric($module_id)) {
+        if (is_numeric($module_id)) {
             trigger_error("Not yet implemented!", E_USER_ERROR);
             exit;
         } else {
 
             $result = $db->query('SELECT id FROM module WHERE name = '.$db->quote($module_id, 'text'));
-            if(PEAR::isError($result)) {
+            if (PEAR::isError($result)) {
                 trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
                 exit;
             }
 
-            if($result->numRows() > 0) {
+            if ($result->numRows() > 0) {
                 return true;
             } else {
                 return false;
