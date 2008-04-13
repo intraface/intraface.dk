@@ -11,7 +11,12 @@ $year->checkYear();
 if (!empty($_POST)) {
 
 	$account = new Account($year, (int)$_POST['id']);
-	if ($id = $account->save($_POST)) {
+	
+    if(isset($_POST['vat_key']) && $_POST['vat_key'] != 0) {
+	    $_POST['vat_percent'] = 25;
+	}
+    
+    if ($id = $account->save($_POST)) {
 		header('Location: accounts.php');
 		exit;
 	}

@@ -1,0 +1,99 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testCreateAccountWithIngoingVat</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testCreateAccountWithIngoingVat</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=accounting,administration&helper_function=Accounting:createYearWithVatAndStandardAccounts&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=accounting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=accounts</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Opret konto</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>account_number</td>
+	<td>7100</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>account_name</td>
+	<td>Some buyes</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>account_type</td>
+	<td>label=operating</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>account_usage</td>
+	<td>label=expenses</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>vat_id</td>
+	<td>label=in</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Gem']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>7100</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Some buyes</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Some buyes</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>7100: Some buyes</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>vat: in 25,00%</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

@@ -61,6 +61,7 @@ $page->start('Kontooversigt');
 </table>
 -->
 
+<p><?php e(t('vat')); ?>: <?php e(t($account->get('vat'))); ?> <?php if($account->get('vat') != 'none'): ?><?php e(number_format($account->get('vat_percent'), 2, ',', '.').'%'); ?><?php endif; ?></p> 
 
 <?php if (!empty($posts) AND is_array($posts) AND count($posts) > 0) { ?>
 	<table>
