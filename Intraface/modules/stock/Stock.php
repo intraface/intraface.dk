@@ -8,10 +8,10 @@ require_once 'DB/Sql.php';
 
 class Stock extends Standard
 {
-    var $product;
-    var $value;
-    var $error;
-    var $kernel;
+    private $product;
+    public $value;
+    public $error;
+    private $kernel;
 
     function __construct($product)
     {
