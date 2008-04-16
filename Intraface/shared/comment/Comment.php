@@ -8,12 +8,13 @@
  *
  * @author Lars Olesen <lars@legestue.net>
  */
-class Comment extends Standard {
-    var $value;
-    var $object;
-    var $contact;
-    var $error;
-    var $id;
+class Comment extends Standard
+{
+    public $value;
+    private $object;
+    private $contact;
+    private $error;
+    private $id;
 
     /**
      * Konstruktør
