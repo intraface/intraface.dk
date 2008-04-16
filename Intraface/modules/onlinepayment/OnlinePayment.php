@@ -18,11 +18,11 @@ require_once 'Intraface/Standard.php';
 
 class OnlinePayment extends Standard
 {
-    var $id;
-    var $kernel;
+    public $id;
+    public $kernel;
 
     // Standard udbyder-transactionsstatus. Er lavet ud fra QuickPay
-    var $transaction_status_types = array(
+    public $transaction_status_types = array(
         '' => 'Ingen kontakt til udbyder - mangler $eval',
         '000' => '', // Betalingsoplysninger godkendt
         '001' => 'Afvist af PBS',
@@ -35,7 +35,7 @@ class OnlinePayment extends Standard
         '008' => 'Fejl i parameter sendt til udbyder'
     );
 
-    var $transaction_status_authorized = "000";
+    public $transaction_status_authorized = "000";
 
 
     function __construct($kernel, $id = 0)
