@@ -86,7 +86,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         return XML_RPC2_Client::create(XMLRPC_SERVER_URL.'contact/server.php', $options);;
     }
 
-    function testGetContactWithDanishCharactersWorks()
+    function testGetContactWithDanishCharactersIsReturnedInUTF8FromTheClient()
     {
         $client = $this->getClient();
         $credentials = array('private_key' => 'privatekeyshouldbereplaced', 'session_id' => 'something');
@@ -97,7 +97,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
 
         $retrieved = $client->getContact($credentials, $contact->getId());
 
-        $this->assertEquals('Tester זרו', $retrieved['name']);
+        $this->assertEquals('Tester זרו', utf8_decode($retrieved['name']));
 
     }
 
@@ -110,7 +110,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         $data = array('name' => 'Tester');
         $contact->save($data);
 
-        $new_name = 'Tester aaa';
+        $new_name = 'Tester זרו';
         $data = array('id' => $contact->getId(), 'name' => $new_name);
         $this->assertTrue($client->saveContact($credentials, $data));
 
