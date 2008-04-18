@@ -335,10 +335,8 @@ class Kernel
                 trigger_error($main_class_path.' do not exist', E_USER_ERROR);
             }
         } else {
+            throw new Exception('You need access to a required module to see this page');
             trigger_error('Du mangler adgang til et modul for at kunne se denne side: '.$module_name, E_USER_ERROR);
-            // Det her kan jeg ikke lige finde ud af, om den skal returnere nul eller den skal returnere fejl!
-            // Det fungere fint n�r den returnere fejl. Hvis det laves om, skal der i hvertfald rettes i /debtor/debtorFactory.php /Sune (21/3 2005)
-            // return(0);
         }
     }
 
