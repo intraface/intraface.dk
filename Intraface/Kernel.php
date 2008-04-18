@@ -232,7 +232,7 @@ class Kernel
         $modules = array();
 
         if ($order_by != '') {
-            $order_by = "ORDER BY ".safeToDB($order_by); // $this->db->quote can not be used here, while the text is not to be quoted
+            $order_by = "ORDER BY ".$this->db->quoteIdentifier($order_by);
         }
 
         $i = 0;
