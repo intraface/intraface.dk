@@ -355,4 +355,9 @@ class BasketEvaluation extends Standard
         }
         return true;
     }
+
+    function getId()
+    {
+        return $this->id;
+    }
 }
