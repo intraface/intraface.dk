@@ -113,9 +113,21 @@ class KernelTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    function testUseModuleThrownAnExceptionWhenNoIntranetIsset()
+    function testUseModuleThrowsAnExceptionWhenNoIntranetIssetAndNoUserIsset()
     {
         $kernel = new Kernel;
+        try {
+            $kernel->useModule('intranetmaintenance');
+            $this->assertFalse(true, 'Should have thrown an exception');
+        } catch (Exception $e) {
+            $this->assertTrue(true);
+        }
+    }
+
+    function testUseModuleDoesNotThrowAnExceptionWhenNoIntranetIssetAndTheUserIsset()
+    {
+        $kernel = new Kernel;
+        $kernel->user = new FakeKernelIntranet;
         try {
             $kernel->useModule('intranetmaintenance');
             $this->assertFalse(true, 'Should have thrown an exception');
