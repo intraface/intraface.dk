@@ -12,6 +12,14 @@ class FakeKernelIntranet
     }
 }
 
+class FakeKernelIntranetWithNoAccess
+{
+    function hasModuleAccess()
+    {
+        return false;
+    }
+}
+
 class KernelTest extends PHPUnit_Framework_TestCase
 {
 
@@ -76,9 +84,34 @@ class KernelTest extends PHPUnit_Framework_TestCase
         $kernel->intranet = new FakeKernelIntranet;
         $this->assertFalse($kernel->getPrimaryModule());
         $this->assertTrue(is_object($kernel->module('intranetmaintenance')));
-        $this->assertTrue(is_object($kernel->getPrimaryModule()));
+        $this->assertTrue(is_object($primary = $kernel->getPrimaryModule()));
+        $this->assertEquals('intranetmaintenance', $primary->getName());
     }
 
+    function testUseModuleThrowsAnExceptionIfIntranetHasNoAccess()
+    {
+        $kernel = new Kernel;
+        $kernel->intranet = new FakeKernelIntranetWithNoAccess;
+        try {
+            $kernel->useModule('intranetmaintenance');
+            $this->assertTrue(false);
+        } catch (Exception $e) {
+            $this->assertTrue(true);
+        }
+    }
+
+    function testUseModuleThrowsAnExceptionIfUserHasNoAccess()
+    {
+        $kernel = new Kernel;
+        $kernel->intranet = new FakeKernelIntranet;
+        $kernel->user = new FakeKernelIntranetWithNoAccess;
+        try {
+            $kernel->useModule('intranetmaintenance');
+            $this->assertTrue(false);
+        } catch (Exception $e) {
+            $this->assertTrue(true);
+        }
+    }
 
     function testUseModuleThrownAnExceptionWhenNoIntranetIsset()
     {
@@ -95,7 +128,8 @@ class KernelTest extends PHPUnit_Framework_TestCase
     {
         $kernel = new Kernel;
         $kernel->intranet = new FakeKernelIntranet;
-        $this->assertTrue(is_object($kernel->useModule('intranetmaintenance')));
+        $this->assertTrue(is_object($module = $kernel->useModule('intranetmaintenance')));
+        $this->assertEquals('intranetmaintenance', $module->getName());
     }
 
     function testGetModule()
@@ -103,7 +137,9 @@ class KernelTest extends PHPUnit_Framework_TestCase
         $kernel = new Kernel;
         $kernel->intranet = new FakeKernelIntranet;
         $this->assertTrue(is_object($kernel->useModule('intranetmaintenance')));
-        $this->assertTrue(is_object($kernel->getModule('intranetmaintenance')));
+        $this->assertTrue(is_object($module = $kernel->getModule('intranetmaintenance')));
+        $this->assertEquals('intranetmaintenance', $module->getName());
+
     }
 
     function testGetModules()
@@ -111,6 +147,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
         $kernel = new Kernel;
         $kernel->intranet = new FakeKernelIntranet;
         $this->assertTrue(is_array($kernel->getModules()));
+        $this->assertEquals(22, count($kernel->getModules()));
     }
 
 }
