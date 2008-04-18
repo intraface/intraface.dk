@@ -20,7 +20,7 @@ class Kernel
     private $db;
     public $intranet;
     public $user;
-    public $primary_module_name;
+    private $primary_module_name;
     private $_session;
     public $session_id;
     public $modules = array();
@@ -29,10 +29,11 @@ class Kernel
     private $observers = array();
 
     /**
-     * Init
-     *
+     * Constructor
      *
      * @param string $session Session string
+     *
+     * @return void
      */
     function __construct($session = null)
     {
@@ -52,7 +53,8 @@ class Kernel
      *
      * @todo: session_id is not the correct name, as this is not always session id.
      */
-    function getSessionId() {
+    function getSessionId()
+    {
         return $this->_session;
     }
 
@@ -177,7 +179,7 @@ class Kernel
                     $no_use = $this->useModule($dependent_modules[$i]);
                 }
 
-                return($module);
+                return $module;
             } else {
                 // @todo Den fejlmeddelse er egentlig irrelevant, da useModul ikke enten returnere et objekt eller trigger_error.
                 trigger_error('Du har ikke adgang til modulet', E_USER_ERROR);
@@ -227,7 +229,6 @@ class Kernel
      */
     function getModules($order_by = 'frontpage_index')
     {
-
         $modules = array();
 
         if ($order_by != '') {
@@ -239,14 +240,11 @@ class Kernel
         if (PEAR::isError($result)) {
             trigger_error($result->getUserInfo(), E_USER_ERROR);
         }
-        while ($row = $result->fetchRow()) {
-            // $module[$i] = $row;
-
+        while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             $modules[$i]['id'] = $row['id'];
             $modules[$i]['name'] = $row['name'];
             $modules[$i]['menu_label'] = $row['menu_label'];
             $modules[$i]['show_menu'] = $row['show_menu'];
-
 
             $j = 0;
 
@@ -260,7 +258,7 @@ class Kernel
                 }
                 // $modules[$i]['sub_access'] = $result_sub->fetchAll();
 
-                while ($row_sub = $result_sub->fetchRow()) {
+                while ($row_sub = $result_sub->fetchRow(MDB2_FETCHMODE_ASSOC)) {
                     $sub_modules[$row_sub['module_id']][$row_sub['id']]['id'] = $row_sub['id'];
                     $sub_modules[$row_sub['module_id']][$row_sub['id']]['description'] = $row_sub['description'];
                 }
@@ -302,6 +300,10 @@ class Kernel
 
         $access = false;
 
+        if (!is_object($this->intranet)) {
+            throw new Exception('Cannot use a module when no intranet is available');
+        }
+
         if (!is_object($this->user)) {
             // Det er et weblogin.
             if ($this->intranet->hasModuleAccess($module_name)) {
@@ -338,9 +340,7 @@ class Kernel
             // Det fungere fint n�r den returnere fejl. Hvis det laves om, skal der i hvertfald rettes i /debtor/debtorFactory.php /Sune (21/3 2005)
             // return(0);
         }
-
     }
-
 
     /**
      * Public: Giv adgang til et shared

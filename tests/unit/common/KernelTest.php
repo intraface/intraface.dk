@@ -2,8 +2,15 @@
 require_once dirname(__FILE__) . '/../config.test.php';
 
 require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/Kernel.php';
+
+class FakeKernelIntranet
+{
+    function hasModuleAccess()
+    {
+        return true;
+    }
+}
 
 class KernelTest extends PHPUnit_Framework_TestCase
 {
@@ -52,5 +59,58 @@ class KernelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($session_id, $kernel->getSessionId());
     }
 
+    function testModuleThrowsAnExceptionWhenNoIntranetIsset()
+    {
+        $kernel = new Kernel;
+        try {
+            $kernel->module('intranetmaintenance');
+            $this->assertFalse(true, 'Should have thrown an exception');
+        } catch (Exception $e) {
+            $this->assertTrue(true);
+        }
+    }
+
+    function testModuleReturnsTheModuleAsAnObjectTrueWhenModuleIsAvailableAndSetsPrimaryModule()
+    {
+        $kernel = new Kernel;
+        $kernel->intranet = new FakeKernelIntranet;
+        $this->assertFalse($kernel->getPrimaryModule());
+        $this->assertTrue(is_object($kernel->module('intranetmaintenance')));
+        $this->assertTrue(is_object($kernel->getPrimaryModule()));
+    }
+
+
+    function testUseModuleThrownAnExceptionWhenNoIntranetIsset()
+    {
+        $kernel = new Kernel;
+        try {
+            $kernel->useModule('intranetmaintenance');
+            $this->assertFalse(true, 'Should have thrown an exception');
+        } catch (Exception $e) {
+            $this->assertTrue(true);
+        }
+    }
+
+    function testUseModuleReturnsTheModuleAsAnObjectTrueWhenModuleIsAvailable()
+    {
+        $kernel = new Kernel;
+        $kernel->intranet = new FakeKernelIntranet;
+        $this->assertTrue(is_object($kernel->useModule('intranetmaintenance')));
+    }
+
+    function testGetModule()
+    {
+        $kernel = new Kernel;
+        $kernel->intranet = new FakeKernelIntranet;
+        $this->assertTrue(is_object($kernel->useModule('intranetmaintenance')));
+        $this->assertTrue(is_object($kernel->getModule('intranetmaintenance')));
+    }
+
+    function testGetModules()
+    {
+        $kernel = new Kernel;
+        $kernel->intranet = new FakeKernelIntranet;
+        $this->assertTrue(is_array($kernel->getModules()));
+    }
+
 }
-?>
