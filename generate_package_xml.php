@@ -116,7 +116,7 @@ $pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.9.13');
 $pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.7.0');
 $pfm->addPackageDepWithChannel('required', 'HTTP_Upload', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.1');
-$pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.3');
+$pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.4');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Debug_ExplainQueries', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.intraface.dk', '0.0.3');
