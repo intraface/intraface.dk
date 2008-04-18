@@ -110,7 +110,7 @@ $pfm->addPackageDepWithChannel('required', 'MDB2_Schema', 'pear.php.net', '0.8.1
 $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.1');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Driver_mysql', 'pear.php.net', '1.4.1');
 $pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '0.0.1');
-$pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTranslation', 'public.intraface.dk', '0.1.1');
+$pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTranslation', 'public.intraface.dk', '0.1.3');
 $pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.9.13');
 // there is a Validate 0.8.1 now!
 $pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.7.0');
