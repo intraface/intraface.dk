@@ -111,15 +111,15 @@ class Webshop
 
             $contact_person_id = 0;
             // It is a company and contactperson is given. We try to see if we can find the contact person.
-            if(isset($input['contactperson']) && $input['contactperson'] != '') {
+            if (isset($input['contactperson']) && $input['contactperson'] != '') {
                 $input['type'] = 'corporation';
 
                 // If the contact is a company their might already be a contact person.
-                if($this->contact->get('type') == 'company' && isset($this->contact->contactperson)) {
+                if ($this->contact->get('type') == 'company' && isset($this->contact->contactperson)) {
                     $contact_persons = $this->contact->contactperson->getList();
-                    foreach($contact_persons AS $contact_person) {
+                    foreach ($contact_persons AS $contact_person) {
                         // This is only a comparing on name, this might not be enough.
-                        if($contact_person['name'] == $input['contactperson']) {
+                        if ($contact_person['name'] == $input['contactperson']) {
                             $contact_person_id = $contact_person['id'];
                             break;
                         }
@@ -131,11 +131,11 @@ class Webshop
             $contact_person_id = 0;
 
             // sørger for at tjekke om det er et firma
-            if(isset($input['contactperson']) && $input['contactperson'] != '') {
+            if (isset($input['contactperson']) && $input['contactperson'] != '') {
                 $input['type'] = 'corporation'; // firma
             }
 
-            if(isset($input['customer_ean']) && $input['customer_ean'] != '') {
+            if (isset($input['customer_ean']) && $input['customer_ean'] != '') {
                 // sets preffered invoice to electronic.
                 $input['type'] = 'corporation'; // firma
                 $input['preferred_invoice'] = 3;
@@ -145,7 +145,7 @@ class Webshop
             }
         }
 
-        if(isset($input['customer_ean'])) {
+        if (isset($input['customer_ean'])) {
             $input['ean'] = $input['customer_ean'];
         }
 
@@ -181,13 +181,13 @@ class Webshop
         settype($input['message'], 'string');
         $value['message'] = $input['message'];
 
-        if(isset($input['customer_coupon']) && $input['customer_coupon'] != '') {
-            if($value['message'] != '') $value['message'] .= "\n\n";
+        if (isset($input['customer_coupon']) && $input['customer_coupon'] != '') {
+            if ($value['message'] != '') $value['message'] .= "\n\n";
             $value['message'] .= "Kundekupon:". $input['customer_coupon'];
         }
 
-        if(isset($input['customer_comment']) && $input['customer_comment'] != '') {
-            if($value['message'] != '') $value['message'] .= "\n\n";
+        if (isset($input['customer_comment']) && $input['customer_comment'] != '') {
+            if ($value['message'] != '') $value['message'] .= "\n\n";
             $value['message'] .= "Kommentar:\n". $input['customer_comment'];
         }
 
@@ -214,17 +214,17 @@ class Webshop
     public function placeManualOrder($input = array(), $products = array())
     {
         $order_id = $this->createOrder($input);
-        if($order_id == 0) {
+        if ($order_id == 0) {
             $this->error->set('unable to create the order');
             return false;
         }
 
-        if(!$this->addOrderLines($products)) {
+        if (!$this->addOrderLines($products)) {
             $this->error->set('unable add products to the order');
             return false;
         }
 
-        if(!$this->sendEmail($order_id)) {
+        if (!$this->sendEmail($order_id)) {
             $this->error->set('unable to send email to the customer');
             return false;
         }
@@ -241,21 +241,21 @@ class Webshop
      */
     public function placeOrder($input)
     {
-        if(!$order_id = $this->createOrder($input)) {
+        if (!$order_id = $this->createOrder($input)) {
             $this->error->set('unable to create the order');
             return false;
         }
 
         $products = $this->basket->getItems();
 
-        if(!$this->addOrderLines($products)) {
+        if (!$this->addOrderLines($products)) {
             $this->error->set('unable add products to the order');
             return false;
         }
 
         $this->basket->reset();
 
-        if(!$this->sendEmail($order_id)) {
+        if (!$this->sendEmail($order_id)) {
             $this->error->set('unable to send email to the customer');
             return false;
         }
@@ -306,7 +306,7 @@ class Webshop
             return false;
         }
 
-        if(!$email->send()) {
+        if (!$email->send()) {
             $this->error->merge($email->error->message);
             return false;
         }

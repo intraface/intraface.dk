@@ -84,4 +84,24 @@ class WebshopTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($ean, $order->getContact()->getAddress()->get('ean'));
         $this->assertEquals(1, $order->getContact()->get('type_key'));
     }
+
+    function testPlaceManualOrder()
+    {
+        $ean = '2222222222222';
+        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
+        $order_id = $this->webshop->placeManualOrder($data);
+        $this->assertTrue($order_id > 0);
+
+    }
+
+    function testAddOnlinePaymentReturnsZeroWhenNoAccessToOnlinepayment()
+    {
+        $ean = '2222222222222';
+        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
+        $order_id = $this->webshop->placeOrder($data);
+        $transaction_number = 1000;
+        $transaction_status = 'captured';
+        $amount = 1000;
+        $this->assertTrue($this->webshop->addOnlinePayment($order_id, $transaction_number, $transaction_status, $amount) == 0);
+    }
 }

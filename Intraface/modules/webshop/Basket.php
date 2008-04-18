@@ -53,14 +53,12 @@ class Basket
             trigger_error('Basket kræver objektet Webshop', E_USER_ERROR);
         }
 
-        $session_id = safeToDb($session_id);
-
         if (empty($session_id)) {
             trigger_error('basket needs that session id', E_USER_ERROR);
         }
 
         $this->webshop = $webshop;
-        $this->sql_extra = " session_id = '" . $session_id . "'";
+        $this->sql_extra = " session_id = '" . safeToDb($session_id) . "'";
 
         // rydder op i databasen efter fx to timer
         $clean_up_after = 2; // timer
