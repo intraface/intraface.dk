@@ -56,10 +56,10 @@ class BasketEvaluationTest extends PHPUnit_Framework_TestCase
         return $kernel;
     }
 
-    function createBasketEvaluation()
+    function createBasketEvaluation($id = 0)
     {
         $kernel = $this->createKernel();
-        return new BasketEvaluation($kernel);
+        return new BasketEvaluation($kernel, $id);
     }
 
     function createBasket()
@@ -100,6 +100,30 @@ class BasketEvaluationTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($evaluation->save($valid_data));
         $this->assertEquals(count($evaluation->getList()), 1);
+    }
+
+    function testItIsPossibleToLoadAnEvaluationAgainAndItIsLoadedAutomatically()
+    {
+        $evaluation = $this->createBasketEvaluation();
+
+        $valid_data = array(
+            'running_index' => 1,
+            'evaluate_target_key' => 0,
+            'evaluate_method_key' => 2,
+            'evaluate_value' => 1000,
+            'go_to_index_after' => 10000,
+            'action_action_key' => 1,
+            'action_value' => 10,
+            'action_quantity' => 10,
+            'action_unit_key' => 0
+        );
+
+        $evaluation->save($valid_data);
+        $id = $evaluation->getId();
+
+        $evaluation = $this->createBasketEvaluation($id);
+        $this->assertEquals('price', $evaluation->get('evaluate_target'));
+        $this->assertEquals('at_least', $evaluation->get('evaluate_method'));
     }
 
     function testDelete() {
