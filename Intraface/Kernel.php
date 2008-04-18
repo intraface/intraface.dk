@@ -300,16 +300,18 @@ class Kernel
 
         $access = false;
 
-        if (!is_object($this->intranet)) {
-            throw new Exception('Cannot use a module when no intranet is available');
-        }
-
         if (!is_object($this->user)) {
+            if (!is_object($this->intranet)) {
+                throw new Exception('Cannot use a module when no intranet is available');
+            }
             // Det er et weblogin.
             if ($this->intranet->hasModuleAccess($module_name)) {
                 $access = true;
             }
         } elseif ($ignore_user_access) {
+            if (!is_object($this->intranet)) {
+                throw new Exception('Cannot use a module when no intranet is available');
+            }
             // Skal kun kontrollere om intranettet har adgang, for at benytte modullet
             if ($this->intranet->hasModuleAccess($module_name)) {
                 $access = true;
