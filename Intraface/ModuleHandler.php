@@ -15,7 +15,7 @@ class Intraface_ModuleHandler
     private $modules = array();
     private $user;
 
-    public function __construct($user)
+    public function __construct($user = '')
     {
         $this->user = $user;
     }
@@ -237,6 +237,6 @@ class Intraface_ModuleHandler
 
     private static function isValidModuleName($name)
     {
-
+        return ereg("^[a-z0-9]+$", $name);
     }
 }
