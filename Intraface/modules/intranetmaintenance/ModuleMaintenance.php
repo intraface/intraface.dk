@@ -112,11 +112,11 @@ class ModuleMaintenance
                     $this->error->set('Properties for module "'.$module_name.'" er ikke loadet. Kontrol er constructor er sat rigtigt op i modulet');
                 }
                 else {
-                    $sql = "menu_label = \"".$module->menu_label."\",
-                                show_menu = ".$module->show_menu.",
-                                active = ".$module->active.",
-                                menu_index = ".intval($module->menu_index).",
-                                frontpage_index = ".intval($module->frontpage_index);
+                    $sql = "menu_label = \"".$module->getMenuLabel()."\",
+                                show_menu = ".$module->getShowMenu().",
+                                active = ".$module->isActive().",
+                                menu_index = ".intval($module->getMenuIndex()).",
+                                frontpage_index = ".intval($module->getFrontpageIndex());
 
                     $db->query("SELECT id FROM module WHERE name = \"".$module_name."\"");
                     if ($db->nextRecord()) {
@@ -156,7 +156,6 @@ class ModuleMaintenance
 
     public function register()
     {
-
         $msg = array();
         $module_msg = array();
         $db = new DB_Sql;
