@@ -108,7 +108,7 @@ $total = 0;
 if(count($posts) > 0) {
     for($j = 0, $max = count($posts); $j < $max; $j++) {
 
-        if($posts[$j]["due_date"] < date("Y-m-d") && ($posts[$j]["status"] == "created" OR $posts[$i]["status"] == "sent")) {
+        if($posts[$j]["due_date"] < date("Y-m-d") && ($posts[$j]["status"] == "created" OR $posts[$j]["status"] == "sent")) {
             $due_total += $posts[$i]["total"];
         }
         if($posts[$j]["status"] == "sent") {
