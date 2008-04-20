@@ -11,15 +11,15 @@ require_once 'tests/unit/stubs/Setting.php';
 class OnlinePaymentTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
-    
-    function setUp() {
-        
+
+    function setUp()
+    {
         $db = MDB2::factory(DB_DSN);
         $db->query('TRUNCATE onlinepayment');
-        
     }
-    
-    function createKernel() {
+
+    function createKernel()
+    {
         $kernel = new FakeKernel;
         $kernel->setting = new FakeSetting;
         $kernel->setting->set('intranet', 'onlinepayment.provider_key', 1);
@@ -28,36 +28,58 @@ class OnlinePaymentTest extends PHPUnit_Framework_TestCase
         $kernel->intranet = new FakeIntranet();
         return $kernel;
     }
-    
-    function testConstruct() {
-        
+
+    function testConstruct()
+    {
         $onlinepayment = new OnlinePayment($this->createKernel());
         $this->assertEquals('OnlinePayment', get_class($onlinepayment));
     }
-    
-    function testFactoryWithTypeProvider() {
+
+    function testFactoryWithTypeProvider()
+    {
         $onlinepayment = OnlinePayment::factory($this->createKernel(), 'provider', 'quickpay');
         $this->assertEquals('OnlinePaymentQuickPay', get_class($onlinepayment));
     }
-    
-    function testSaveWithEmptyArray() {
+
+    function testSaveWithEmptyArray()
+    {
         $onlinepayment = new OnlinePayment($this->createKernel());
         $this->assertEquals(0, $onlinepayment->save(array()));
         $this->assertEquals(4, $onlinepayment->error->count());
-        
+
     }
-    
-    function testSaveWithValidData() {
+
+    function testSaveWithValidDataReturnsInteger()
+    {
         $onlinepayment = new OnlinePayment($this->createKernel());
-        $this->assertEquals(1, $onlinepayment->save(array(
+        $this->assertTrue($onlinepayment->save(array(
             'belong_to' => 'invoice',
             'belong_to_id' => 1,
             'transaction_number' => 1,
             'transaction_status' => '000',
-            'amount' => 100)));
+            'amount' => 100)) > 0);
     }
-    
-    function testLoad() {
+
+    function testUpdateWithValidDataReturnsInteger()
+    {
+        $onlinepayment = new OnlinePayment($this->createKernel());
+        $data = array(
+            'belong_to' => 'invoice',
+            'belong_to_id' => 1,
+            'transaction_number' => 1,
+            'transaction_status' => '000',
+            'amount' => 100,
+            'original_amount' => 100,
+            'dk_original_amount' => 100,
+            'dk_amount' => 100);
+        $this->assertTrue($onlinepayment->save($data) > 0);
+        // $this->assertTrue($onlinepayment->setStatus('authorized'));
+        $id = $onlinepayment->update($data);
+        $this->assertTrue($id > 0);
+    }
+
+    function testLoad()
+    {
         $onlinepayment = new OnlinePayment($this->createKernel());
         $onlinepayment->save(array(
             'belong_to' => 'invoice',
@@ -65,9 +87,9 @@ class OnlinePaymentTest extends PHPUnit_Framework_TestCase
             'transaction_number' => 1,
             'transaction_status' => '000',
             'amount' => 100));
-            
+
         $onlinepayment = new OnlinePayment($this->createKernel(), 1);
-        
+
         $this->assertEquals(1, $onlinepayment->get('id'));
         $this->assertEquals(date('d-m-Y'), $onlinepayment->get('dk_date_created'));
         $this->assertEquals(2, $onlinepayment->get('belong_to_key'));
@@ -76,8 +98,12 @@ class OnlinePaymentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('authorized', $onlinepayment->get('status'));
         $this->assertEquals(100, $onlinepayment->get('amount'));
         $this->assertEquals('100,00', $onlinepayment->get('dk_amount'));
-        
     }
-    
+
+    function testCreateReturnsAPaymentIdLargerThanZero()
+    {
+        $onlinepayment = new OnlinePayment($this->createKernel());
+        $id = $onlinepayment->create();
+        $this->assertTrue($id > 0);
+    }
 }
-?>

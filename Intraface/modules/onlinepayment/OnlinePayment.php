@@ -190,7 +190,10 @@ class OnlinePayment extends Standard
 
     /**
      * Funktion der gemmer onlinebetaling gennem xml-rpc-serveren
+     *
      * @input: array(belong_to, belong_to_id, transaction_number, transaction_status, amount);
+     *
+     * @return integer
       */
     function save($input)
     {
@@ -199,17 +202,25 @@ class OnlinePayment extends Standard
         require_once 'Intraface/Validator.php';
         $validator = new Validator($this->error);
 
-        if (!isset($input['belong_to'])) $input['belong_to'] = 0;
+        if (!isset($input['belong_to'])) {
+            $input['belong_to'] = 0;
+        }
         $belong_to_key = array_search($input['belong_to'], $this->getBelongToTypes());
         if ($input['belong_to'] == '' || $belong_to_key === false) {
             $this->error->set("Ugyldig belong_to");
         }
 
-        if (!isset($input['belong_to_id'])) $input['belong_to_id'] = 0;
+        if (!isset($input['belong_to_id'])) {
+            $input['belong_to_id'] = 0;
+        }
         $validator->isNumeric($input['belong_to_id'], 'belong_to_id er ikke et tal');
-        if (!isset($input['transaction_number'])) $input['transaction_number'] = 0;
+        if (!isset($input['transaction_number'])) {
+            $input['transaction_number'] = 0;
+        }
         $validator->isString($input['transaction_number'], 'transaction_number er ikke gyldig');
-        if (!isset($input['transaction_status'])) $input['transaction_status'] = '';
+        if (!isset($input['transaction_status'])) {
+            $input['transaction_status'] = '';
+        }
         $validator->isString($input['transaction_status'], 'transaction_status er ikke udfyldt');
         if (!isset($this->transaction_status_types[$input['transaction_status']])) {
             $this->error->set("transaction_status '".$input['transaction_status']."' er ikke en gyldig status");
@@ -220,14 +231,15 @@ class OnlinePayment extends Standard
             $this->error->set("Transactionen er ikke godkendt, så den kan ikke gemmes");
         }
 
-        if (!isset($input['amount'])) $input['amount'] = 0;
+        if (!isset($input['amount'])) {
+            $input['amount'] = 0;
+        }
         if ($validator->isDouble($input['amount'], 'amount er ikke et gyldigt beløb')) {
             require_once 'Intraface/tools/Amount.php';
             $amount = new Amount($input['amount']);
             if ($amount->convert2db()) {
                 $input['amount'] = $amount->get();
-            }
-            else {
+            } else {
                 $this->error->set("Kunne ikke konvertere amount til databasen!");
             }
         }
@@ -257,14 +269,16 @@ class OnlinePayment extends Standard
 
         if ($this->id > 0) {
             $db->query("UPDATE onlinepayment SET ".$sql." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
-            return $this->id;
         } else {
 
             $db->query("INSERT INTO onlinepayment SET ".$sql.",
                 intranet_id = ".$this->kernel->intranet->get('id').",
                 date_created = NOW()");
-            return $db->insertedId();
+            $this->id = $db->insertedId();
         }
+        $this->load();
+
+        return $this->id;
 
     }
 
@@ -285,7 +299,6 @@ class OnlinePayment extends Standard
             date_created = NOW(),
             provider_key = ".$provider_key);
         return $db->insertedId();
-
     }
 
 
@@ -297,11 +310,11 @@ class OnlinePayment extends Standard
     function update($input)
     {
         if ($this->id == 0) {
-            trigger_error("OnlinePayment->update kan kun køres på en allerede oprettet betaling", FATAL);
+            trigger_error("OnlinePayment->update kan kun køres på en allerede oprettet betaling", E_USER_ERROR);
         }
 
-        if ($this->get('status') != 'authorized') {
-            trigger_error("OnlinePayment->update kan kun køres på betaling der er authorized", FATAL);
+        if ($this->getStatus() != 'authorized') {
+            trigger_error("OnlinePayment->update kan kun køres på betaling der er authorized", E_USER_ERROR);
         }
 
         $input = safeToDb($input);
@@ -390,6 +403,8 @@ class OnlinePayment extends Standard
 
         $db->query("UPDATE onlinepayment SET status_key = ".$status_key.", ".$date_field." = NOW() WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
 
+        $this->value['status_key'] = $status_key;
+
         return true;
     }
 
@@ -444,10 +459,13 @@ class OnlinePayment extends Standard
     }
 
     /**
-     * Returnes the possible actions to perform on an onlinepayment.
+     * Returns the possible actions to perform on an onlinepayment.
      * These are defined individually to all providers. The actual action is executed in OnlinePayment->transactionAction()
      *
      * Nb. the action 'capture' is not shown in debtor (view.php) before it is an sent invoice.
+     * 
+     * @todo better description of this, what is it used for. I think that the label
+     *       has to go by the way.
      *
      * @return array	with actions to perform on onlinepayment.
      */
@@ -470,6 +488,9 @@ class OnlinePayment extends Standard
         */
     }
 
+    /**
+     * @todo remove this or is it just an abstract method which the providers must have?
+     */
     function transactionAction($action)
     {
         return false;
@@ -590,14 +611,20 @@ class OnlinePayment extends Standard
         );
     }
 
+    /**
+     * @todo remove this?
+     */
     function isFilledIn()
     {
-        return 1; // Onlinepyment kan ikke udfyldes.
+        return true; // Onlinepyment kan ikke udfyldes.
     }
 
+    /**
+     * @todo remove this?
+     */
     function isSettingsSet()
     {
-        return 1;
+        return true;
     }
 
     function isProviderSet()
@@ -616,6 +643,12 @@ class OnlinePayment extends Standard
     function getProvider()
     {
         return array('provider_key' => $this->kernel->setting->get('intranet', 'onlinepayment.provider_key'));
+    }
+
+    function getStatus()
+    {
+        $status =  $this->getStatusTypes();
+        return $status[$this->value['status_key']];
     }
 
 }
