@@ -8,7 +8,7 @@ class CMS_AllTests {
     {
         $suite = new PHPUnit_Framework_TestSuite('Intraface_CMS');
 
-        $tests = array('Site', 'Page', 'Parameter', 'Section', 'PageElement', 'GalleryElement', 'SectionLongText', 'TemplateSection');
+        $tests = array('Template', 'Site', 'Page', 'Parameter', 'Section', 'PageElement', 'GalleryElement', 'SectionLongText', 'TemplateSection');
 
         foreach ($tests AS $test) {
             require_once $test . 'Test.php';
