@@ -75,6 +75,7 @@ $page->start('Rediger post på bilag #' . $post->voucher->get('number'));
 <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
     <input type="hidden" name="id" value="<?php echo $post->get('id'); ?>" />
     <input type="hidden" name="voucher_id" value="<?php echo $post->voucher->get('id'); ?>" />
+    <input type="hidden" name="invoice_number" value="<?php e($values['invoice_number']); ?>" />
 
     <?php echo $post->error->view(); ?>
 
