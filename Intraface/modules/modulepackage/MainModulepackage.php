@@ -6,8 +6,10 @@
  * @version	1.0
  *
  */
-class MainModulepackage extends Main {
-    function __construct() {
+class MainModulepackage extends Main
+{
+    function __construct()
+    {
         $this->module_name = 'modulepackage';
         $this->menu_label = 'modulepackage'; // Navnet der vil stå i menuen
         $this->show_menu = 0; // Skal modulet vises i menuen.
@@ -19,4 +21,3 @@ class MainModulepackage extends Main {
         $this->addFrontpageFile('include_front.php');
     }
 }
-?>
