@@ -223,13 +223,15 @@ switch ($value['type']) {
                 // TODO we should tell the user which editor is chosen
                 $allowed_html = array('strong', 'em', 'ol', 'ul', 'p', 'h1', 'h2', 'h3', 'h4', 'a', 'blockquote', 'table');
                 $editor = new HTML_Editor($allowed_html);
+                /*
                 if (!empty($value['saved_with'])) {
                     $editor->setEditor($value['saved_with']);
-                }
-                else {
+                } else {
                     $editor->setEditor($kernel->setting->get('user', 'htmleditor'));
                 }
-                if (empty($value['text'])) $value['text'] = '';
+                */
+                $editor->setEditor('tinymce');
+                if (empty($value['text'])) {$value['text'] = ''; }
 
                 $textarea_attr = array(
                     'id' => 'text',
@@ -287,6 +289,18 @@ switch ($value['type']) {
             </script>
         */
         ?>
+        </fieldset>
+
+        <?php
+    break;
+
+    case 'wikitext':
+        ?>
+        <fieldset>
+            <legend><?php e($translation->get('html text')); ?></legend>
+            <label for="cms-wiki-editor"><?php e($translation->get('wiki text')); ?></label>
+            <br />
+            <textarea id="cms-wiki-editor" tabindex="1" name="text" cols="100" rows="15" style="width: 100%"><?php if (!empty($value['text'])) e($value['text']); ?></textarea>
         </fieldset>
 
         <?php

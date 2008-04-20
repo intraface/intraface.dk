@@ -9,6 +9,7 @@ require_once 'Intraface/modules/cms/Parameter.php';
 require_once 'Intraface/Validator.php';
 
 require_once 'Intraface/modules/cms/element/Htmltext.php';
+require_once 'Intraface/modules/cms/element/Wikitext.php';
 require_once 'Intraface/modules/cms/element/Flickr.php';
 require_once 'Intraface/modules/cms/element/Delicious.php';
 require_once 'Intraface/modules/cms/element/Picture.php';
@@ -32,15 +33,15 @@ class CMS_Element extends Standard
     public $position;
 
     public $properties = array(
-        'none' => 'none',
+        'none'    => 'none',
         'newline' => 'break before element',
-        'float' => 'floating'
+        'float'   => 'floating'
     );
 
     public $alignment = array(
-        'left' => 'left',
+        'left'   => 'left',
         'center' => 'center',
-        'right' => 'right'
+        'right'  => 'right'
     );
 
     /**
@@ -58,11 +59,10 @@ class CMS_Element extends Standard
         }
         $this->value['identify_as'] = 'cms_element';  // bruges af parameter
 
-        $this->id = (int) $id;
-        $this->kernel = $section->kernel;
-        $this->section = $section;
-        $this->error = new Error;
-
+        $this->id        = (int) $id;
+        $this->kernel    = $section->kernel;
+        $this->section   = $section;
+        $this->error     = new Error;
         $this->parameter = $this->createParameter();
 
         $cms_module = $this->section->kernel->module('cms');
