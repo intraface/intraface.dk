@@ -5,9 +5,10 @@
  * @since	1.0
  * @version	1.0
  */
-class MainDebtor Extends Main {
-
-    function MainDebtor() {
+class MainDebtor extends Main
+{
+    function __construct()
+    {
         $this->module_name = 'debtor'; // modulets slugnavn
         $this->menu_label = 'Debitor'; // Navnet der vil stå i menuen
         $this->show_menu = 1; // Skal modulet vises i menuen.
@@ -31,7 +32,7 @@ class MainDebtor Extends Main {
             4=>'credit_note'
         ));
         */
-        
+
         /*
         $this->addSetting('from', array(
             1=>'manuel',
@@ -41,7 +42,7 @@ class MainDebtor Extends Main {
             5=>'invoice'
         ));
         */
-        
+
 
         // Denne status skal vi lige kigge på
         // Følgende status skal til:
