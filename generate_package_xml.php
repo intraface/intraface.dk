@@ -109,9 +109,9 @@ $pfm->addPackageDepWithChannel('required', 'MDB2_Schema', 'pear.php.net', '0.8.1
 // Kernel
 $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.1');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Driver_mysql', 'pear.php.net', '1.4.1');
-$pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '0.0.1');
+$pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '2.0.0RC4');
 $pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTranslation', 'public.intraface.dk', '0.1.3');
-$pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.9.13');
+$pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.10.0');
 // there is a Validate 0.8.1 now!
 $pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.7.0');
 $pfm->addPackageDepWithChannel('required', 'HTTP_Upload', 'pear.php.net', '0.9.1');
@@ -176,8 +176,7 @@ $pfm->addPackageDepWithChannel('required', 'Validate_Finance_CreditCard', 'pear.
 
 
 // accounting
-// There is a OLE 0.6.0 now!
-$pfm->addPackageDepWithChannel('required', 'OLE', 'pear.php.net', '0.5.0');
+$pfm->addPackageDepWithChannel('required', 'OLE', 'pear.php.net', '0.6.1');
 $pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php.net', '0.9.1');
 
 // modulepackage
