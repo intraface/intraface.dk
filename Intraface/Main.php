@@ -11,22 +11,22 @@
 class Main
 {
     public $menu_label;
-    public $show_menu;
+    protected $show_menu;
     public $active;
     public $menu_index;
-    public $frontpage_index;
-    public $submenu = array();
+    protected $frontpage_index;
+    protected $submenu = array();
     public $sub_access = array();
     public $sub_access_description = array();
-    public $preload_file = array();
-    public $dependent_module = array();
-    public $required_shared = array();
-    public $module_name;
-    public $setting;
-    public $controlpanel_files;
-    public $frontpage_files; // til brug p� forsiden
-    public $translation;
-    public $kernel;
+    protected $preload_file = array();
+    protected $dependent_module = array();
+    protected $required_shared = array();
+    protected $module_name;
+    protected $setting;
+    protected $controlpanel_files;
+    protected $frontpage_files;
+    private $translation; // @todo used for what
+    private $kernel; // @todo used for what
 
     /**
      * Constructor
@@ -52,6 +52,8 @@ class Main
     function load($kernel)
     {
         // Inkluder preload filerne
+        // @todo kernel is as far as I can tell only used here.
+        //       therefore it should be made local
         $this->kernel = $kernel;
 
         if (is_array($this->required_shared) && count($this->required_shared) > 0) {
@@ -287,6 +289,16 @@ class Main
         return 0;
     }
 
+    function getShowMenu()
+    {
+        return $this->show_menu;
+    }
+
+    function getFrontpageIndex()
+    {
+        return $this->show_menu;
+    }
+
     function getMenuLabel()
     {
         return $this->menu_label;
@@ -299,6 +311,6 @@ class Main
 
     function isActive()
     {
-        return empty($this->active);
+        return $this->active;
     }
 }
