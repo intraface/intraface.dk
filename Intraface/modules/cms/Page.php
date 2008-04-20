@@ -87,6 +87,8 @@ class CMS_Page extends Standard
         $this->template   = new CMS_Template($this->cmssite);
         $this->kernel     = $this->cmssite->kernel;
         $this->error      = new Error();
+        $this->value['active'] = 1;
+        $this->value['status_key'] = 0;
         // $this->dbquery = $this->getDBQuery();
 
         // get settings
@@ -282,7 +284,6 @@ class CMS_Page extends Standard
             date_updated = NOW(),
             site_id = '".(int)$this->cmssite->get('id')."',
             template_id = ".$var['template_id'].",
-
             pic_id = ".intval($var['pic_id']).",
             identifier = '".$var['identifier']."'" . $sql_end;
         // password = '".$var['password']."',
@@ -319,16 +320,18 @@ class CMS_Page extends Standard
 
 
     /**
-     * returnerer indholdet af en side!
-     * hvad skal den helt n�jagtig loade? - skal den fx loadde elementerne ogs�?
+     * loads the content for a page
+     *
+     * @todo hvad skal den helt n�jagtig loade? - skal den fx loadde elementerne ogs�?
      * Hvis vi er inde i redigering, kan den loade alt, men hvis vi er ved weblogin, s
      * skal den kun kunne loade nogle sider.
-     * @return (string) Indholdet til en side
+     *
+     * @return boolean
      */
     function load()
     {
         if ($this->id <= 0) {
-            return 0;
+            return false;
         }
 
         $sql_expire = '';
@@ -344,10 +347,11 @@ class CMS_Page extends Standard
         $db->query($sql);
 
         if (!$db->nextRecord()) {
-            return 0;
+            return false;
         }
 
         $this->value['id'] = $db->f('id');
+        $this->value['active'] = $db->f('active');
         $this->value['site_id'] = $db->f('site_id');
         $this->value['type_key'] = $db->f('type_key');
         $types = $this->getTypes();
@@ -413,7 +417,9 @@ class CMS_Page extends Standard
                     $child_of_id = 0;
                 }
 
-                if ($i == 50) trigger_error("The while loop is runing loose in CMS_Page::load", E_USER_ERROR);
+                if ($i == 50) {
+                    trigger_error("The while loop is runing loose in CMS_Page::load", E_USER_ERROR);
+                }
             }
 
             // Vi vender arrayet rundt, s� key kommer til at passe til level.
@@ -432,8 +438,7 @@ class CMS_Page extends Standard
 
         }
 
-
-        return 1;
+        return true;
     }
 
     /**
@@ -691,6 +696,9 @@ class CMS_Page extends Standard
 
     }
 
+    /**
+     * @todo is this still used after the introduction of publish and unpublish
+     */
     function setStatus($status)
     {
         if (empty($status)) {
@@ -701,6 +709,7 @@ class CMS_Page extends Standard
         }
         $db = new DB_Sql;
         $db->query("UPDATE cms_page SET status_key = " . array_search($status, $this->status) . " WHERE id = " . $this->id . " AND intranet_id = " . $this->cmssite->kernel->intranet->get('id'));
+        $this->value['status_key'] = array_search($status, $this->status);
         return true;
     }
 
@@ -745,6 +754,8 @@ class CMS_Page extends Standard
 
         $sql = "UPDATE cms_page SET active = 0 WHERE id=" . $this->id . " AND site_id = ".$this->cmssite->get('id');
         $db->query($sql);
+        $this->value['active'] = 0;
+        $this->load();
         return true;
 
     }
@@ -800,13 +811,15 @@ class CMS_Page extends Standard
 
     function getStatus()
     {
-        return $this->get('status');
+        return $this->status[$this->value['status_key']];
     }
 
     function publish()
     {
         $db = new DB_Sql;
         $db->query("UPDATE cms_page SET status_key = " . array_search('published', $this->status) . " WHERE id = " . $this->id . " AND intranet_id = " . $this->cmssite->kernel->intranet->get('id'));
+        $this->value['status_key'] = 1;
+        $this->load();
         return true;
     }
 
@@ -814,7 +827,14 @@ class CMS_Page extends Standard
     {
         $db = new DB_Sql;
         $db->query("UPDATE cms_page SET status_key = " . array_search('draft', $this->status) . " WHERE id = " . $this->id . " AND intranet_id = " . $this->cmssite->kernel->intranet->get('id'));
+        $this->value['status_key'] = 0;
+        $this->load();
         return true;
+    }
+
+    function isActive()
+    {
+        return ($this->value['active'] == 1);
     }
 
 }

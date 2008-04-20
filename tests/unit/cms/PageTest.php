@@ -107,7 +107,32 @@ class PageTest extends PHPUnit_Framework_TestCase
 
     function testDeleteReturnsTrue()
     {
+        $this->assertTrue($this->page->isActive());
         $this->assertTrue($this->page->delete());
+        $this->assertFalse($this->page->isActive());
+    }
+
+    function testPublishReturnsTrue()
+    {
+        $this->assertFalse($this->page->isPublished());
+        $this->assertTrue($this->page->publish());
+        $this->assertTrue($this->page->isPublished());
+    }
+
+    function testUnPublishReturnsTrue()
+    {
+        $this->assertFalse($this->page->isPublished());
+        $this->assertTrue($this->page->publish());
+        $this->assertTrue($this->page->isPublished());
+        $this->assertTrue($this->page->unpublish());
+        $this->assertFalse($this->page->isPublished());
+    }
+
+    function testGetStatus()
+    {
+        $this->assertEquals('draft', $this->page->getStatus());
+        $this->assertTrue($this->page->setStatus('published'));
+        $this->assertEquals('published', $this->page->getStatus());
     }
 
 }
