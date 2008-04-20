@@ -9,11 +9,11 @@ class MainCMS Extends Main
 {
     function __construct()
     {
-        $this->module_name = 'cms'; // Navnet der vil stå i menuen
-        $this->menu_label = 'CMS'; // Navnet der vil stå i menuen
-        $this->show_menu = 1; // Skal modulet vises i menuen.
-        $this->active = 1; // Er modulet aktivt.
-        $this->menu_index = 10;
+        $this->module_name     = 'cms'; // Navnet der vil stå i menuen
+        $this->menu_label      = 'CMS'; // Navnet der vil stå i menuen
+        $this->show_menu       = 1; // Skal modulet vises i menuen.
+        $this->active          = 1; // Er modulet aktivt.
+        $this->menu_index      = 10;
         $this->frontpage_index = 70;
 
         //$this->addControlPanelFile('accounting', $this->getPath() . 'settings.php');
@@ -63,7 +63,8 @@ class MainCMS Extends Main
             8 => 'video', // revver og google
             9 => 'map',
             //10 => 'shorttext',
-            //11 => 'longtext'
+            //11 => 'longtext',
+            12 => 'wikitext'
             )
         );
 
@@ -77,8 +78,8 @@ class MainCMS Extends Main
 
         $this->addSetting('htmleditors', array(
             'tinymce' => 'tinymce',
-            'none' => 'none',
-            'wiki' => 'wiki'
+            'none'    => 'none',
+            'wiki'    => 'wiki'
         ));
 
         $_cc_license = array();
