@@ -4,7 +4,8 @@
  */
 class MainQuotation extends Main
 {
-    function __construct() {
+    function __construct()
+    {
         $this->module_name     = 'quotation'; // Navnet der vil stå i menuen
         $this->menu_label      = 'quotation'; // Navnet der vil stå i menuen
         $this->show_menu       = 0; // Skal modulet vises i menuen.
