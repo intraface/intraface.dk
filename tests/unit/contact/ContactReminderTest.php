@@ -29,7 +29,7 @@ class ContactReminderTest extends PHPUnit_Framework_TestCase
     function testPostPhoneUntil()
     {
         $reminder = new ContactReminder($this->getContact());
-        echo $reminder->postponeUntil(date('Y-') . date('m') + 1 . date('-d'));
+        $this->assertTrue($reminder->postponeUntil(date('Y-') . date('m') + 1 . date('-d')));
     }
 
 
