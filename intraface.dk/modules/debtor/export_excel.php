@@ -5,6 +5,9 @@ require('Spreadsheet/Excel/Writer.php');
 $translation = $kernel->getTranslation('debtor');
 $debtor_module = $kernel->module('debtor');
 
+if (empty($_GET['id'])) $_GET['id'] = '';
+if (empty($_GET['type'])) $_GET['type'] = '';
+
 $debtor = Debtor::factory($kernel, intval($_GET["id"]), $_GET["type"]);
 $debtor->dbquery->storeResult("use_stored", $debtor->get("type"), "toplevel");
 
@@ -141,7 +144,7 @@ if(count($posts) > 0) {
 
         $keywords = array();
         $contact = new Contact($kernel, $posts[$j]['contact']['id']);
-        $appender = $contact->getKeywordAppender($keyword);
+        $appender = $contact->getKeywordAppender();
         $keyword_ids = $appender->getConnectedKeywords();
         if(count($keyword_ids) > 0) {
             foreach($keyword_ids AS $keyword_id) {
