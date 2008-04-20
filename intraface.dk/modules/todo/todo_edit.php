@@ -18,7 +18,13 @@ if (!empty($_POST)) {
     exit;
   }
 } else {
-    $todo = new TodoList($kernel, $_GET['id']);
+    if(!empty($_GET['id'])) {
+        $todo = new TodoList($kernel, $_GET['id']);
+    }
+    else {
+        $todo = new TodoList($kernel);
+    }
+    
     $value = $todo->get();
     $value['todo'] = $todo->getUndoneItems();
 }
@@ -30,10 +36,10 @@ $page->start(t('Edit todo'));
 <h1><?php e(t('Edit todo')); ?></h1>
 
 <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
-    <input type="hidden" name="id" value="<?php e($value['id']); ?>" />
+    <input type="hidden" name="id" value="<?php e($todo->get('id')); ?>" />
     <fieldset id="todolist">
       <h2><?php e(t('Edit todo')); ?></h2>
-      <label><input style="font-size: 2em;" type="text" name="list_name" value="<?php e($value['list_name']); ?>" /></label>
+      <label><input style="font-size: 2em;" type="text" name="list_name" value="<?php if(!empty($value['list_name'])) e($value['list_name']); ?>" /></label>
 
       <h2><?php e(t('Items')); ?></h2>
     <?php foreach($value['todo'] AS $i): ?>
@@ -62,7 +68,7 @@ $page->start(t('Edit todo'));
         </div>
     <?php endforeach; ?>
         <div id="readroot">
-        <label><input type="text" style="width:50%;" name="todo[]" value="" /></label> <!--<a href="edit_todo.php?id=<?php echo $value['id']; ?>&amp;delete=<?php echo $i['id']; ?>">Slet</a><br />-->
+        <label><input type="text" style="width:50%;" name="todo[]" value="" /></label>
     <label>
         <select name="responsible_user_id[]">
           <option value="0"><?php e(t('Who is responsible?')); ?></option>
@@ -106,12 +112,12 @@ function moreFields() {
     <p><a href="" onclick="moreFields(); return false;"><?php e(t('More fields')); ?></a></p>
 
   <h2><?php e(t('Description (optional)')); ?></h2>
-  <label><textarea cols="80" rows="4" name="list_description"><?php e($value['list_description']); ?></textarea></label>
+  <label><textarea cols="80" rows="4" name="list_description"><?php if(!empty($value['list_description'])) e($value['list_description']); ?></textarea></label>
 
   </fieldset>
 
     <div>
-        <input type="submit" value="<?php e(t('Save list')); ?>" class="save" /> <?php e(t('or')); ?> <a href="todo.php?id=<?php e($value['id']); ?>"><?php e(t('Cancel')); ?></a>
+        <input type="submit" value="<?php e(t('Save list')); ?>" class="save" /> <?php e(t('or')); ?> <a href="todo.php?id=<?php e($todo->get('id')); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 </form>
 
