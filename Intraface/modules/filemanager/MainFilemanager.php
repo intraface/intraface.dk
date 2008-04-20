@@ -6,9 +6,10 @@
  * @version	1.0
  *
  */
-class MainFileManager Extends Main {
-
-    function MainFileManager() {
+class MainFileManager extends Main
+{
+    function __construct()
+    {
         $this->module_name = 'filemanager'; // Navn på på mappen med modullet
         $this->menu_label = 'Filer'; // Navn er det skal stå i menuen
         $this->show_menu = 1; // Skal modullet være vist i menuen
