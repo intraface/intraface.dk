@@ -1,4 +1,7 @@
 <?php
+
+require_once 'Intraface/modules/debtor/Debtor.php';
+
 /**
  * @package Intraface_Quotation
  */
