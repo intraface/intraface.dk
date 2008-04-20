@@ -37,7 +37,7 @@ class Auth
      * @param string $email    Email
      * @param string $password Password
      *
-     * @return	boolean
+     * @return mixed | boolean of user object
      */
     public function login($email, $password)
     {
@@ -65,6 +65,9 @@ class Auth
     /**
      * weblogin()
      *
+     * @todo how do we make this more clever, so you can ask afterwards whether
+     *       a user is logged in
+     *
      * @param string $type Which type
      * @param string $key  The key
      *
@@ -72,7 +75,6 @@ class Auth
      */
     public function weblogin($type, $key)
     {
-
         switch ($type) {
             case 'public':
                 $result = $this->db->query("SELECT id FROM intranet WHERE public_key = ".$this->db->quote($key, 'text'));
