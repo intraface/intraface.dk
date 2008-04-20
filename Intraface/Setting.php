@@ -75,7 +75,7 @@ class Setting
      */
     private function checkSystem($setting)
     {
-        if(!empty($setting) && is_array($this->system) && isset($this->system[$setting])) {
+        if (!empty($setting) && is_array($this->system) && isset($this->system[$setting])) {
             return true;
         } else {
             throw new Exception('Setting "'.$setting.'" is not defined');
@@ -91,7 +91,7 @@ class Setting
      */
     private function checkType($type)
     {
-        if($type == 'system' || $type == 'intranet' || $type == 'user') {
+        if ($type == 'system' || $type == 'intranet' || $type == 'user') {
             return true;
         } else {
             trigger_error('Ugyldig type setting "'.$type.'"', E_USER_ERROR);
@@ -103,9 +103,9 @@ class Setting
      *
      * @return boolean
      */
-    function checkLogin()
+    private function checkLogin()
     {
-        if($this->user_id != 0) {
+        if ($this->user_id != 0) {
             return true;
         } else {
             trigger_error('Du kan ikke udføre denne handling fra et weblogin', E_USER_ERROR);
@@ -125,15 +125,15 @@ class Setting
      */
     function set($type, $setting, $value, $sub_id = 0) {
 
-        if($this->checkSystem($setting) && $this->checkType($type) && $this->checkLogin()) {
+        if ($this->checkSystem($setting) && $this->checkType($type) && $this->checkLogin()) {
 
-            switch($type) {
+            switch ($type) {
                 case 'system':
                     throw new Exception('Du kan ikke ændre på systemsetting');
                     break;
                 case 'intranet':
                     $this->db->query("SELECT id FROM setting WHERE setting = ".$this->db->quote($setting, 'text')." AND intranet_id = ".$this->intranet_id." AND user_id = 0 AND sub_id = ".intval($sub_id));
-                    if($this->db->nextRecord()) {
+                    if ($this->db->nextRecord()) {
                         $this->db->query("UPDATE setting SET value = ".$this->db->quote($value, 'text')." WHERE id = ".$this->db->quote($this->db->f("id"), 'integer'));
                     } else {
                         $this->db->query("INSERT INTO setting SET value = ".$this->db->quote($value, 'text').", setting = ".$this->db->quote($setting, 'text').", intranet_id = ".$this->db->quote($this->intranet_id, 'integer').", user_id = 0, sub_id = ".intval($sub_id));
@@ -141,9 +141,9 @@ class Setting
                     $this->settings['intranet'][$setting][$sub_id] = $value;
                 break;
                 case 'user':
-                    if($this->checkSystem($setting)) {
+                    if ($this->checkSystem($setting)) {
                         $this->db->query("SELECT id FROM setting WHERE setting = ".$this->db->quote($setting, 'text')." AND intranet_id = ".$this->db->quote($this->intranet_id, 'integer')." AND user_id = ".$this->db->quote($this->user_id, 'integer')." AND sub_id = ".intval($sub_id));
-                        if($this->db->nextRecord()) {
+                        if ($this->db->nextRecord()) {
                             $this->db->query("UPDATE setting SET value = ".$this->db->quote($value, 'text')." WHERE id = ".$this->db->quote($this->db->f("id"), 'integer'));
                         } else {
                             $this->db->query("INSERT INTO setting SET value = ".$this->db->quote($value, 'text').", setting = ".$this->db->quote($setting, 'text').", intranet_id = ".$this->intranet_id.", user_id = ".$this->db->quote($this->user_id, 'integer').", sub_id = ".intval($sub_id));
@@ -213,10 +213,10 @@ class Setting
             $this->loadSettings();
         }
 
-        if($this->checkSystem($setting) && $this->checkType($type)) {
+        if ($this->checkSystem($setting) && $this->checkType($type)) {
             switch($type) {
                 case 'user':
-                    if($this->checkLogin()) {
+                    if ($this->checkLogin()) {
                         // hvis der ikke er nogen intranet-indstillinger på posten vil den stadig
                         // blive ved med at lave opslaget. Hvordan undgår vi lige det på en god og sikker måde?
                         /*
@@ -274,10 +274,10 @@ class Setting
      */
     function isSettingSet($type, $setting, $sub_id = 0)
     {
-        if($this->checkSystem($setting) && $this->checkType($type)) {
+        if ($this->checkSystem($setting) && $this->checkType($type)) {
             switch($type) {
                 case 'user':
-                    if($this->checkLogin()) {
+                    if ($this->checkLogin()) {
                         $this->db->query("SELECT value FROM setting WHERE setting = \"".$setting."\" AND intranet_id = ".$this->intranet_id." AND user_id = ".$this->user_id." AND sub_id = ".intval($sub_id));
                         if ($this->db->nextRecord()) {
                             return true;
@@ -313,15 +313,15 @@ class Setting
      */
     function delete($type, $setting, $sub_id = 0) {
 
-        if($this->checkSystem($setting) && $this->checkType($type) && $this->checkLogin()) {
+        if ($this->checkSystem($setting) && $this->checkType($type) && $this->checkLogin()) {
 
-            if($sub_id == 'ALL') {
+            if ($sub_id == 'ALL') {
                 $sql_sub = '';
             } else {
                 $sql_sub = "AND sub_id = ".intval($sub_id);
             }
 
-            switch($type) {
+            switch ($type) {
                 case 'user':
                     $this->db->query("DELETE FROM setting WHERE setting = \"".$setting."\" AND intranet_id = ".$this->intranet_id." AND user_id = ".$this->user_id." ".$sql_sub);
                     $return = true;
@@ -343,5 +343,3 @@ class Setting
         return $return;
     }
 }
-
-?>
