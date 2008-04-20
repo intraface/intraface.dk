@@ -29,7 +29,8 @@ if (!empty($_POST)) {
     }
     $credit = $credit->get();
 
-
+    if(empty($_POST['invoice_number'])) $_POST['invoice_number'] = '';
+    
     if ($id = $post->save($date->get(), $account->get('id'), $_POST['text'], $debet, $credit, $_POST['invoice_number'])) {
         header('Location: voucher.php?id='.$post->voucher->get('id').'&from_post_id='.$id);
         exit;
