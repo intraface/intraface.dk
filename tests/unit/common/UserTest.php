@@ -28,10 +28,11 @@ class UserTest extends PHPUnit_Framework_TestCase
         $i = new IntranetMaintenance();
         $i->save(array('name' => 'intraface', 'identifier' => 'intraface'));
 
+        $m = new ModuleMaintenance();
+        $result = $m->register();
+
         $this->user = new User(1);
 
-        $m = new ModuleMaintenance();
-        $m->register();
     }
 
     function tearDown()
@@ -122,12 +123,57 @@ class UserTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($this->user->getAddress()));
     }
 
-    function getActiveIntranetIdReturnsActiveId()
+    /**
+     * @todo Is this correct?
+     */
+    function testGetActiveIntranetIdReturnsCorrectIntranetIdEvenBeforeItIsSpecificallySetBySetActiveIntranetId()
+    {
+        $u = new UserMaintenance(1);
+        $u->setIntranetAccess(1);
+        $this->assertEquals(1, $this->user->getActiveIntranetId());
+    }
+
+    function testGetActiveIntranetIdReturnsActiveIdWhenFirstSetBySetActiveIntranetId()
     {
         $u = new UserMaintenance(1);
         $u->setIntranetAccess(1);
 
-        $this->user->setIntranetId(1);
+        $this->user->setActiveIntranetId(1);
         $this->assertEquals(1, $this->user->getActiveIntranetId());
+    }
+
+    function testIsFilledInReturnsFalseWhenNothingHasBeenDoneToSetupTheUser()
+    {
+        $u = new UserMaintenance(1);
+        $u->setIntranetAccess(1);
+        $this->assertFalse($this->user->isFilledIn());
+    }
+
+    function testUpdatePasswordReturnsTrue()
+    {
+        $u = new UserMaintenance(1);
+        $u->setIntranetAccess(1);
+
+        $old = '123456';
+        $new = 'newpass';
+
+        $this->assertTrue($this->user->updatePassword($old, $new, $new));
+    }
+
+    function testUpdatePasswordReturnsFalseIfNewPasswordsDoNotMatch()
+    {
+        $u = new UserMaintenance(1);
+        $u->setIntranetAccess(1);
+
+        $old = '123456';
+        $new = 'newpass';
+        $new1 = 'nomatch';
+
+        $this->assertFalse($this->user->updatePassword($old, $new, $new1));
+    }
+
+    function testGetIdReturnsTheIdOfTheUSer()
+    {
+        $this->assertEquals(1, $this->user->getId());
     }
 }

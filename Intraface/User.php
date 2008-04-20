@@ -392,17 +392,15 @@ class User extends Standard
      */
     function getActiveIntranetId()
     {
-
         $result = $this->db->query("SELECT active_intranet_id FROM user WHERE id = ".$this->db->quote($this->id, 'integer'));
         if (PEAR::isError($result)) {
             trigger_error($result->getUserInfo(), E_USER_ERROR);
         }
 
-
         if ($result->numRows() == 1) {
             $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-            if ($this->hasIntranetAccess($row["active_intranet_id"])) {
-                return($row['active_intranet_id']);
+            if ($this->hasIntranetAccess($row['active_intranet_id'])) {
+                return $row['active_intranet_id'];
             }
         }
 
