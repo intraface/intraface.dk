@@ -177,6 +177,10 @@ class CMS_Page extends Standard
         if (!empty($var['navigation_name'])) {
             $validator->isString($var['navigation_name'], 'error in navigation_name - has to be a string', '', 'allow_empty');
         }
+        
+        $validator->isString($var['keywords'], 'error in keywords', '', 'allow_empty');
+        $validator->isString($var['description'], 'error in description', '', 'allow_empty');
+        
         $validator->isNumeric($var['allow_comments'], 'error in comments - allowed values are 0 and 1');
         $validator->isNumeric($var['hidden'], 'error in hidden - allowed values are 0 and 1');
 
@@ -215,6 +219,9 @@ class CMS_Page extends Standard
         if (empty($var['hidden'])) {
             $var['hidden'] = 0;
         }
+        
+        if(empty($var['keywords'])) $var['keywords'] = '';
+        if(empty($var['description'])) $var['description'] = '';
 
         if (gettype($var) != 'array') {
             trigger_error('CMS__Page::save(): $var is not an array array', E_USER_ERROR);
