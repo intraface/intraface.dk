@@ -21,7 +21,7 @@ class Main
     protected $preload_file = array();
     protected $dependent_module = array();
     protected $required_shared = array();
-    protected $module_name;
+    public $module_name;
     protected $setting;
     protected $controlpanel_files;
     protected $frontpage_files;
