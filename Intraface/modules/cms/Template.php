@@ -200,14 +200,18 @@ class CMS_Template extends Standard
     {
         $db = new DB_Sql;
         $db->query("UPDATE cms_template SET active = 0 WHERE id = " . $this->id);
-        return 1;
+        return true;
     }
 
     function isIdentifierUnique($identifier)
     {
         $db = new DB_Sql;
         $db->query("SELECT id FROM cms_template WHERE site_id = " . $this->cmssite->get('id') . " AND identifier = '".$identifier."' AND active = 1 AND id != " . $this->id);
-        if ($db->numRows() == 0) return 1;
+        if ($db->numRows() == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     function getId()
