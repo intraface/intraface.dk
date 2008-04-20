@@ -70,7 +70,7 @@ class CMS_TemplateSection extends Standard
 
     function addParameter($key, $value)
     {
-        $this->parameter->save($key, $value);
+        return $this->parameter->save($key, $value);
     }
 
     function factory($object, $type, $value)
@@ -218,7 +218,7 @@ class CMS_TemplateSection extends Standard
     {
         $db = new DB_Sql;
         $db->query("UPDATE cms_template_section SET active = 0 WHERE id = " . $this->id);
-        return 1;
+        return true;
     }
 
     function getList()

@@ -48,4 +48,21 @@ class TemplateSectionTest extends PHPUnit_Framework_TestCase
         $data = array('identifier' => uniqid(), 'name' => 'name');
         $this->assertTrue($section->save($data) > 0);
     }
+
+    function testAddParameterReturnsTrue()
+    {
+        $section = new CMS_TemplateSection($this->createTemplate());
+        $section->value['type_key'] = 1;
+        $data = array('identifier' => uniqid(), 'name' => 'name');
+        $this->assertTrue($section->save($data) > 0);
+        $this->assertTrue($section->addParameter('test', 'test'));
+    }
+
+    function testDelete()
+    {
+        $section = new CMS_TemplateSection($this->createTemplate());
+        $section->value['type_key'] = 1;
+        $data = array('identifier' => uniqid(), 'name' => 'name');
+        $this->assertTrue($section->delete($data));
+    }
 }
