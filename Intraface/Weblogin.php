@@ -2,6 +2,8 @@
 /**
  * Weblogin
  *
+ * @todo this should be a special case of user
+ *
  * @package Intraface
  * @author  Sune Jensen <sj@sunet.dk>
  * @author  Lars Olesen <lars@legestue.net>
@@ -107,4 +109,14 @@ class Weblogin
         return $this->session_id;
     }
 
+    function getActiveIntranetId()
+    {
+        return 'active intranet id';
+    }
+
+    function hasModuleAccess($modulename)
+    {
+        // only needs to check whether the intranet has module access
+        return true;
+    }
 }
