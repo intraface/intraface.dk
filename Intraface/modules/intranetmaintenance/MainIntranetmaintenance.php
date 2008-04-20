@@ -7,9 +7,10 @@
  * @version	1.1
  *
  */
-class MainIntranetMaintenance Extends Main {
-
-    function MainIntranetMaintenance() {
+class MainIntranetMaintenance extends Main
+{
+    function __construct()
+    {
         $this->module_name = 'intranetmaintenance';
         $this->menu_label = 'intranetmaintenance';
         $this->show_menu = 1;
@@ -29,5 +30,3 @@ class MainIntranetMaintenance Extends Main {
         $this->addPreloadFile('UserMaintenance.php');
     }
 }
-
-?>
