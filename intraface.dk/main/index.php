@@ -115,9 +115,9 @@ $page->start(safeToHtml($translation->get('dashboard', 'dashboard')));
 ?>
 
 <?php 
-require_once('Intraface/Module.php');
+require_once('Intraface/ModuleHandler.php');
 // false && which means the link is deactivated until we are going to use it!
-if(Module::exists('modulepackage') && $kernel->user->hasModuleAccess('modulepackage')): ?>
+if(Intraface_ModuleHandler::exists(MDB2::singleton(DB_DSN), 'modulepackage') && $kernel->user->hasModuleAccess('modulepackage')): ?>
     <?php 
     $module_modulepackage = $kernel->useModule('modulepackage');
     ?>
