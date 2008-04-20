@@ -7,7 +7,6 @@ require_once 'ContactStubs.php';
 
 class ContactReminderTest extends PHPUnit_Framework_TestCase
 {
-
     private $kernel;
 
     function setUp()
@@ -27,6 +26,11 @@ class ContactReminderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($reminder));
     }
 
+    function testPostPhoneUntil()
+    {
+        $reminder = new ContactReminder($this->getContact());
+        echo $reminder->postponeUntil(date('Y-') . date('m') + 1 . date('-d'));
+    }
+
 
 }
-?>
