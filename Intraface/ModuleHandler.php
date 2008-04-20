@@ -13,9 +13,11 @@ require_once 'Intraface/Main.php';
 class Intraface_ModuleHandler
 {
     private $modules = array();
+    private $user;
 
-    public function __construct()
+    public function __construct($user)
     {
+        $this->user = $user;
     }
 
     function setPrimaryModule($module_name)
@@ -57,8 +59,8 @@ class Intraface_ModuleHandler
      */
     public function useModule($module_name, $ignore_user_access = false)
     {
-        if (!ereg("^[a-z0-9]+$", $module_name)) {
-            throw new Exception('module name invalid');
+        if (!self::isValidModuleName($module_name)) {
+            throw new Exception($module_name . ' is not a valid module name');
         }
 
         if (!empty($this->modules[$module_name]) AND is_object($this->modules[$module_name])) {
@@ -66,6 +68,39 @@ class Intraface_ModuleHandler
         }
 
         $this->modules[$module_name] = $module_name;
+
+        // access control here
+
+        /*
+        $access = false;
+
+        if (!is_object($this->user)) {
+            if (!is_object($this->intranet)) {
+                throw new Exception('Cannot use a module when no intranet is available');
+            }
+            // Det er et weblogin.
+            if ($this->intranet->hasModuleAccess($module_name)) {
+                $access = true;
+            }
+        } elseif ($ignore_user_access) {
+            if (!is_object($this->intranet)) {
+                throw new Exception('Cannot use a module when no intranet is available');
+            }
+            // Skal kun kontrollere om intranettet har adgang, for at benytte modullet
+            if ($this->intranet->hasModuleAccess($module_name)) {
+                $access = true;
+            }
+        } else {
+            // Almindelig login
+            if ($this->user->hasModuleAccess($module_name)) {
+                $access = true;
+            }
+        }
+
+        if ($access !== true) {
+            throw new Exception('You need access to a required module to see this page');
+        }
+        */
 
         $main_class_name = "Main".ucfirst($module_name);
         $main_class_path = PATH_INCLUDE_MODULE.$module_name."/".$main_class_name.".php";
@@ -80,53 +115,40 @@ class Intraface_ModuleHandler
             trigger_error('ModuleHandler: ' . $main_class_path . ' does not exist', E_USER_ERROR);
             return false;
         }
-
-        //return true;
-
-        /*
-        if (!is_object($this->user)) {
-            // Det er et weblogin.
-            if ($this->intranet->hasModuleAccess($module_name)) {
-                $access = true;
-            }
-        }
-        elseif ($ignore_user_access) {
-            // Skal kun kontrollere om intranettet har adgang, for at benytte modullet
-            if ($this->intranet->hasModuleAccess($module_name)) {
-                $access = true;
-            }
-        }
-        else {
-            // Almindelig login
-            if ($this->user->hasModuleAccess($module_name)) {
-                $access = true;
-            }
-        }
-
-        if ($access == true) {
-            $main_class_name = "Main".ucfirst($module_name);
-            $main_class_path = PATH_INCLUDE_MODULE.$module_name."/".$main_class_name.".php";
-
-            if (file_exists($main_class_path)) {
-                require_once($main_class_path);
-                $object = new $main_class_name;
-                $object->load($this);
-                $this->modules[$module_name] = $object;
-
-                return $object;
-            }
-            else {
-                trigger_error($main_class_path.' eksisterer ikke', E_USER_ERROR);
-            }
-        }
-        else {
-            trigger_error('Du mangler adgang til et modul for at kunne se denne side: '.$module_name, E_USER_ERROR);
-            // Det her kan jeg ikke lige finde ud af, om den skal returnere nul eller den skal returnere fejl!
-            // Det fungere fint når den returnere fejl. Hvis det laves om, skal der i hvertfald rettes i /debtor/debtorFactory.php /Sune (21/3 2005)
-            // return(0);
-        }
-        */
     }
+
+    /**
+     * Gives access to a shared module
+     *
+     * @param string $shared_name Name on module to load
+     *
+     * @return object or false
+     */
+    public function useShared($shared_name)
+    {
+        if (!self::isValidModuleName($shared_name)) {
+            throw new Exception($shared_name. ' is not a valid shared module name', E_USER_ERROR);
+        }
+
+        // Tjekker om shared allerede er loaded
+        if (!empty($this->shared[$shared_name]) AND is_object($this->shared[$shared_name])) {
+            return $this->shared[$shared_name];
+        }
+
+        $main_shared_name = 'Shared' . ucfirst($shared_name);
+        $main_shared_path = PATH_INCLUDE_SHARED . $shared_name . '/' . $main_shared_name . '.php';
+
+        if (file_exists($main_shared_path)) {
+            require_once $main_shared_path;
+            $object = new $main_shared_name;
+            $object->load();
+            $this->shared[$shared_name] = $object;
+            return $object;
+        } else {
+            trigger_error($shared_name . ' cannot be found on ' . $main_shared_path . ' with PATH_INCLUDE_SHARED: ' . PATH_INCLUDE_SHARED, E_USER_ERROR);
+        }
+    }
+
 
     /**
      * getModule()
@@ -211,5 +233,10 @@ class Intraface_ModuleHandler
             }
         }
         return false;
+    }
+
+    private static function isValidModuleName($name)
+    {
+
     }
 }
