@@ -56,12 +56,12 @@ $page->start("Driftforstyrrelse");
 
 	<div class="formrow">
 		<label for="description">Beskrivelse</label>
-		<textarea name="description" id="description" style="width: 400px; height: 70px;"><?php print($values['description']); ?></textarea>
+		<textarea name="description" id="description" style="width: 400px; height: 70px;"><?php if(isset($values['description'])) e($values['description']); ?></textarea>
 	</div>
 
 	<div class="formrow">
 		<label for="important">Slem forstyrrelse!</label>
-		<input type="checkbox" name="important" id="important" value="1" <?php if(intval($values['important']) == 1) print("checked=\"checked\""); ?> />
+		<input type="checkbox" name="important" id="important" value="1" <?php if(isset($values['important']) && intval($values['important']) == 1) print("checked=\"checked\""); ?> />
 	</div>
 
 
