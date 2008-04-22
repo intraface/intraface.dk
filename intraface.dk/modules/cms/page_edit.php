@@ -126,7 +126,7 @@ $page->start(safeToHtml($translation->get('edit page')));
 
             <div class="formrow">
                 <label for="page-type"><?php e($translation->get('type')); ?></label>
-                <div id="static-cms-page-type" style="display: none;"><?php e(t($type)); ?> <?php if(!empty($value['id'])): ?><a href="#" onClick="page_edit.show_select();" class="edit"><?php e(t('change')); ?></a><?php endif; ?></div>
+                <div id="static-cms-page-type" style="display: none;"><?php e(t($type)); ?> <?php if(!empty($value['id'])): ?><a href="#" onClick="page_edit.show_select();" class="edit"><?php e(t('change', 'common')); ?></a><?php endif; ?></div>
                 <select name="page_type" id="cms-page-type">
                     <?php foreach ($cmspage->getTypes() AS $key => $type): ?>
                     <option value="<?php echo $type; ?>"<?php if (!empty($value['type']) AND $value['type'] == $type) echo ' selected="selected"' ?>><?php echo safeToForm($translation->get($type)); ?></option>
