@@ -7,12 +7,11 @@
  * @version @package-version@
  */
 
-$version = '1.7.2';
+$version = '1.7.4';
 $stability = 'stable';
 $notes = '
-* Small fixes of undefined variables
-* Missing echoes of error messages
-* Implemented Onlinepayment
+* Fixed undefined variable keys
+* Bug fix in XMLRPC/CMS/Server.php
 ';
 $web_dir = 'intraface.dk';
 
