@@ -131,7 +131,7 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
             <thead>
                 <tr>
                     <th><?php e($translation->get('navigation name')); ?></th>
-                    <th><?php e($translation->get('identifier', 'common')); ?></th>
+                    <th><?php e($translation->get('unique page address')); ?></th>
                     <th><?php e($translation->get('published', 'common')); ?></th>
                     <th><?php e($translation->get('show', 'common')); ?></th>
                     <th colspan="4"></th>
@@ -173,7 +173,7 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
             <thead>
                 <tr>
                     <th><?php e($translation->get('title')); ?></th>
-                    <th><?php e($translation->get('identifier', 'common')); ?></th>
+                    <th><?php e($translation->get('unique page address')); ?></th>
                     <th><?php e($translation->get('published', 'common')); ?></th>
                     <th><?php e($translation->get('show', 'common')); ?></th>
                     <th colspan="2"></th>
@@ -212,7 +212,7 @@ $page->start(safeToHtml($translation->get($page_types_plural[$type])));
                 <tr>
                     <th><?php e($translation->get('date', 'common')); ?></th>
                     <th><?php e($translation->get('title')); ?></th>
-                    <th><?php e($translation->get('identifier', 'common')); ?></th>
+                    <th><?php e($translation->get('unique page address')); ?></th>
                     <th><?php e($translation->get('published', 'common')); ?></th>
                     <th><?php e($translation->get('show', 'common')); ?></th>
                     <th colspan="2"></th>
