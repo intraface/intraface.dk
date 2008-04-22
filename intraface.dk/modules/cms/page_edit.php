@@ -163,12 +163,7 @@ $page->start(safeToHtml($translation->get('edit page')));
             <div class="formrow">
                 <label for="shortlink"><?php e($translation->get('unique page address')); ?></label>
                 <?php e($cmssite->get('url')); ?><input name="identifier" type="text" id="shortlink" value="<?php if (!empty($value['identifier'])) echo safeToForm($value['identifier']); ?>" size="35" maxlength="50" /> (<?php e(t('only the characters').': a-z 0-9 _ -'); ?>)
-                <div class="formrow-description">
-                <?php e(t('the url identifier is used in the unique address for this particular page.')); ?>
-                <br /><?php e(t('you can also leave it blank and a unique identifier will be generated')); ?>
-
-
-                </div>
+                <div class="formrow-description"></div>
 
             </div>
 
@@ -226,7 +221,7 @@ $page->start(safeToHtml($translation->get('edit page')));
 
             <div class="formrow">
                 <label for="keywords"><?php e($translation->get('search engine keywords')); ?></label>
-                <input name="keywords" id="keywords" type="text" value="<?php if (!empty($value['keywords'])) echo safeToForm($value['keywords']); ?>" size="50" maxlength="225" />
+                <input name="keywords" id="keywords" type="text" value="<?php if (!empty($value['keywords'])) echo safeToForm($value['keywords']); ?>" size="50" maxlength="225" /> <?php e(t('separated by comma')); ?>
             </div>
         </fieldset>
 
