@@ -139,10 +139,10 @@ $page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('
 <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>" id="publish-form">
     <fieldset class="<?php e($cmspage->getStatus()); ?>">
     <?php if (!$cmspage->isPublished()): ?>
-    <?php e('this page is not published'); ?>
+    <?php e(t('this page is not published')); ?>
     <input type="submit" value="<?php e(t('publish now')); ?>" name="publish" />
     <?php else: ?>
-    <?php e('this page is published'); ?>
+    <?php e(t('this page is published')); ?>
     <input type="submit" value="<?php e(t('set as draft')); ?>" name="unpublish" />
     <?php endif; ?>
     <input type="hidden" value="<?php e($_GET['id']); ?>" name="id" />
