@@ -104,11 +104,11 @@ class Intraface_XMLRPC_CMS_Server {
         $cmspage = new CMS_Page($this->cmssite);
         if (isset($search['type'])) {
             $search['type'] = strip_tags($search['type']);
-            $cmspage->dbquery->setFilter('type', $search['type']);
+            $cmspage->getDBQuery()->setFilter('type', $search['type']);
         }
 
         if (isset($search['level'])) {
-            $cmspage->dbquery->setFilter('level', $search['level']);
+            $cmspage->getDBQuery()->setFilter('level', $search['level']);
         }
 
 
