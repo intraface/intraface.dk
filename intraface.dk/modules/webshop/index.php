@@ -80,6 +80,34 @@ $page->start(safeToHtml($translation->get('webshop')));
             </select>
         </div>
     </fieldset>
+    
+    <fieldset>
+        <legend><?php echo safeToHtml($translation->get('which payment methods are available')); ?></legend>
+        
+        <?php if ($kernel->setting->get('intranet', 'bank_account_number')): ?>
+            <div class="formrow">
+                <label for="payment_method_bank_transfer"><?php e(t('bank transfer')); ?></label>
+                <input type="checkbox" name="payment_method_bank_transfer" id="payment_method_bank_transfer" value="bank_transfer" />
+            </div>
+        <?php endif; ?>
+        
+        
+         <?php if ($kernel->setting->get('intranet', 'giro_account_number')): ?>
+            <div class="formrow">
+                <label for="payment_method_giro_payment"><?php e(t('giro payment')); ?></label>
+                <input type="checkbox" name="payment_method_giro_payment" id="payment_method_giro_payment" value="giro_payment" />
+            </div>
+        <?php endif; ?>
+        
+        <?php if ($kernel->intranet->hasModuleAccess('onlinepayment')): ?>
+            <div class="formrow">
+                <label for="payment_method_online_payment"><?php e(t('online payment')); ?></label>
+                <input type="checkbox" name="payment_method_online_payment" id="payment_method_online_payment" value="online_payment" />
+            </div>
+        <?php endif; ?>
+        
+    </fieldset>
+    
     <!--
     <fieldset>
         <legend>Rabat</legend>
