@@ -48,6 +48,8 @@ if (!defined('DB_DSN')) {
 }
 
 $GLOBALS['kernel'] = $kernel;
+$GLOBALS['db'] = $db;
+
 
 $application = new Intraface_Shop_Root();
 
@@ -56,8 +58,18 @@ $application->registry->registerConstructor('doctrine', create_function(
   'return Doctrine_Manager::connection(DB_DSN);'
 ));
 
+$application->registry->registerConstructor('kernel', create_function(
+  '$className, $args, $registry',
+  'return $GLOBALS["kernel"];'
+));
+
+$application->registry->registerConstructor('db', create_function(
+  '$className, $args, $registry',
+  'return $GLOBALS["db"];'
+));
+
 $application->registry->registerConstructor('page', create_function(
   '$className, $args, $registry',
-  'return new Page($GLOBALS["kernel"]);'
+  'return new Page($registry->get("kernel"));'
 ));
 $application->dispatch();

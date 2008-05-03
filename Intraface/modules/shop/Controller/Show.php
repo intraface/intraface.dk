@@ -1,10 +1,37 @@
 <?php
 class Intraface_modules_shop_Controller_Show extends k_Controller
 {
-    public $map = array('edit' => 'Intraface_modules_shop_Controller_Edit');
+    public $map = array('edit' => 'Intraface_modules_shop_Controller_Edit',
+                        'basketevaluation' => 'Intraface_modules_shop_Controller_EvaluationEdit',
+                        'featuredproducts' => 'Intraface_modules_shop_Controller_FeaturedProducts');
 
     function GET()
     {
-        return 'show';
+        $doctrine = $this->registry->get('doctrine');
+        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->name);
+
+        require_once 'Intraface/modules/webshop/BasketEvaluation.php';
+        $basketevaluation = new BasketEvaluation($this->registry->get('kernel'));
+        $evaluations = $basketevaluation->getList();
+
+        $data = array('shop' => $shop, 'evaluations' => $evaluations);
+
+        return $this->render(dirname(__FILE__) . '/tpl/show.tpl.php', $data);
+    }
+
+    function forward($name)
+    {
+        if ($name == 'edit') {
+            $next = new Intraface_modules_shop_Controller_Edit($this, $name);
+            return $next->handleRequest();
+        } elseif ($name == 'basketevaluation') {
+            $next = new Intraface_modules_shop_Controller_EvaluationEdit($this, $name);
+            return $next->handleRequest();
+        } elseif ($name == 'featuredproducts') {
+            $next = new Intraface_modules_shop_Controller_FeaturedProducts($this, $name);
+            return $next->handleRequest();
+        }
+
+        throw new Exception('Unknown forward');
     }
 }
