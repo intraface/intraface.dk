@@ -49,96 +49,6 @@ if (!empty($_POST)) {
 
 }
 
-// søg
-/*
-if (!empty($_POST['submit']) OR isset($_REQUEST['voucher_number'])) {
-
-	$sql = "";
-
-	if (!empty($_POST['date_from']) OR !empty($_POST['date_to'])) {
-		if (!empty($_POST['date_from'])) { $date_from = $_POST['date_from']; }
-		else { $date_from = date('Y-m-d'); }
-		if (!empty($_POST['date_to'])) { $date_to = $_POST['date_to']; }
-		else { $date_to = date('Y') . "-12-31"; }
-
-		if (isset($date_from) OR isset($date_to)) {
-			$sql = "SELECT post.date, post.voucher_number, account.account_number, post.text, post.debet, post.credit
-				FROM accounting_post post
-				LEFT JOIN accounting_account account
-					ON account.id = post.account_id
-				WHERE
-					post.date >= '".$date_from."'
-					AND post.date <= '".$date_to."'
-					AND post.year_id = " . $year->get('id') . "
-					AND post.intranet_id = " . $kernel->intranet->get('id') . "
-				ORDER BY post.voucher_number ASC";
-		}
-	}
-
-	if (!empty($_POST['voucher_number_from']) OR !empty($_POST['voucher_number_to'])) {
-
-		$sql = "SELECT post.*
-			FROM accounting_post post
-			LEFT JOIN accounting_account account
-				ON account.id = post.account_id
-			WHERE
-				post.voucher_number >= ".(int)$_POST['voucher_number_from']."
-				AND post.voucher_number <= ".(int)$_POST['voucher_number_to']."
-				AND post.year_id = " . $year->get('id') . "
-				AND post.intranet_id = " . $kernel->intranet->get('id') . "
-			ORDER BY post.voucher_number ASC";
-	}
-	// denne virker fint nok
-	if (!empty($_POST['invoice_number'])) {
-		$sql = "SELECT * FROM accounting_post post
-			LEFT JOIN accounting_account account ON account.id = post.account_id
-			WHERE invoice_number = '".$_POST['invoice_number']."'
-			AND post.year_id = " . $year->get('id') . " AND post.intranet_id = " . $kernel->intranet->get('id');
-	}
-
-	// så bilagsnumrene bliver umiddelbart klikbare fra søgningen
-	if (!empty($_REQUEST['voucher_number'])) {
-		$sql = "SELECT post.*
-			FROM accounting_post post
-				LEFT JOIN accounting_account account
-					ON account.id = post.account_id
-			WHERE voucher_number = '".$_REQUEST['voucher_number']."'
-				AND post.year_id = " . $year->get('id') . "
-				AND post.intranet_id = " . $kernel->intranet->get('id');
-	}
-
-	// set values
-	$date_from = $_POST['date_from'];
-	$date_to = $_POST['date_to'];
-	$voucher_number_to = $_POST['voucher_number_to'];
-	$voucher_number_from = $_POST['voucher_number_from'];
-	$invoice_number = $_POST['invoice_number'];
-
-}
-
-$posts = array();
-
-if (!empty($sql)) {
-
-	$db = new DB_Sql;
-	$db->query($sql);
-
-	// print("Antal poster: ".$db->numRows());
-	$i = 0;
-	while ($db->nextRecord()) {
-		$posts[$i]["date"] = $db->f("date");
-		$posts[$i]["voucher_number"] = $db->f("voucher_number");
-    $account = new Account($year, $db->f('account_id'));
-		$posts[$i]["account_number"] = $account->get('number');
-    $posts[$i]["account_name"] = $account->get('name');
-		$posts[$i]["debet"] = $db->f("debet");
-		$posts[$i]["credit"] = $db->f("credit");
-		$i++;
-	}
-
-}
-*/
-
 $page = new Page($kernel);
 $page->start('Find posteringer');
 ?>
@@ -173,8 +83,8 @@ $page->start('Find posteringer');
 	<fieldset>
 		<legend>Faktura</legend>
 		<div>
-			<label for="invoice_number">Nummer</label>
-			<input type="text" name="invoice_number" id="invoice_number" value="<?php if (!empty($invoice_number)) echo safeToHtml($invoice_number); ?>" />
+			<label for="reference">Nummer</label>
+			<input type="text" name="refernce" id="reference" value="<?php if (!empty($reference)) echo safeToHtml($reference); ?>" />
 		</div>
 	</fieldset>
 </fieldset>
