@@ -222,7 +222,7 @@ class Invoice extends Debtor
             'voucher_number' => $voucher_number,
             'date' => $voucher_date,
             'text' => $text,
-            'invoice_number' =>  $this->get('number')
+            'reference' =>  $this->get('number')
         ));
 
 
@@ -249,7 +249,7 @@ class Invoice extends Debtor
 
             $input_values = array(
                 'voucher_number' => $voucher_number,
-                'invoice_number' => $this->get('number'),
+                'reference' => $this->get('number'),
                 'date' => $voucher_date,
                 'amount' => number_format($amount, 2, ",", "."),
                 'debet_account_number' => $debet_account_number,
@@ -271,7 +271,7 @@ class Invoice extends Debtor
         $debet_account = 	new Account($year, $year->getSetting('debtor_account_id'));
         $input_values = array(
                 'voucher_number' => $voucher_number,
-                'invoice_number' => $this->get('number'),
+                'reference' => $this->get('number'),
                 'date' => $voucher_date,
                 'amount' => number_format($total * $this->kernel->setting->get('intranet', 'vatpercent') / 100, 2, ",", "."), // opmærksom på at vat bliver rigtig defineret
                 'debet_account_number' => $debet_account->get('number'),
