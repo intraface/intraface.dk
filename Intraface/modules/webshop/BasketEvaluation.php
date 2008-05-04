@@ -118,15 +118,7 @@ class BasketEvaluation extends Standard
         return true;
     }
 
-
-    /**
-     * Saves and validates the evaluation
-     *
-     * @param struct $input Values to save
-     *
-     * @return boolean
-     */
-    public function save($input)
+    function validate($input)
     {
         $validator = new Validator($this->error);
 
@@ -146,6 +138,23 @@ class BasketEvaluation extends Standard
         settype($input['evaluate_value_case_sensitive'], 'integer');
 
         if ($this->error->isError()) {
+            return false;
+        }
+
+        return true;
+
+    }
+
+    /**
+     * Saves and validates the evaluation
+     *
+     * @param struct $input Values to save
+     *
+     * @return boolean
+     */
+    public function save($input)
+    {
+        if (!$this->validate($input)) {
             return false;
         }
 
@@ -266,8 +275,7 @@ class BasketEvaluation extends Standard
                     if($evaluation['evaluate_value_case_sensitive'] != 1) {
                         $evaluate = strtolower(trim($customer['customer_coupon']));
                         $evaluation['evaluate_value'] = strtolower($evaluation['evaluate_value']);
-                    }
-                    else {
+                    } else {
                         $evaluate = trim($customer['customer_coupon']);
                     }
                     // coupons can only be evaluated as 'equals' or 'different from'
@@ -280,8 +288,7 @@ class BasketEvaluation extends Standard
                     if($evaluation['evaluate_value_case_sensitive'] != 1) {
                         $evaluate = strtolower(trim($customer['country']));
                         $evaluation['evaluate_value'] = strtolower($evaluation['evaluate_value']);
-                    }
-                    else {
+                    } else {
                         $evaluate = trim($customer['country']);
                     }
                     // country can only be evaluated as 'equals' or 'different from'
