@@ -28,10 +28,8 @@ if (!empty($_POST)) {
         $this->error->set('Beløbet kunne ikke konverteres');
     }
     $credit = $credit->get();
-
-    if(empty($_POST['invoice_number'])) $_POST['invoice_number'] = '';
     
-    if ($id = $post->save($date->get(), $account->get('id'), $_POST['text'], $debet, $credit, $_POST['invoice_number'])) {
+    if ($id = $post->save($date->get(), $account->get('id'), $_POST['text'], $debet, $credit)) {
         header('Location: voucher.php?id='.$post->voucher->get('id').'&from_post_id='.$id);
         exit;
     }
@@ -59,7 +57,6 @@ else {
     $values['credit_account_number'] = '';
     $values['amount'] = '';
     $values['text'] = '';
-    $values['invoice_number'] = '';
     $values['id'] = '';
 }
 
@@ -75,7 +72,6 @@ $page->start('Rediger post på bilag #' . $post->voucher->get('number'));
 <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
     <input type="hidden" name="id" value="<?php echo $post->get('id'); ?>" />
     <input type="hidden" name="voucher_id" value="<?php echo $post->voucher->get('id'); ?>" />
-    <input type="hidden" name="invoice_number" value="<?php e($values['invoice_number']); ?>" />
 
     <?php echo $post->error->view(); ?>
 
