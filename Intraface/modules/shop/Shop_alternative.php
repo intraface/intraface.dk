@@ -10,6 +10,7 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
         $this->error = new Error();
         $this->user = $user;
         
+        
     }
     
     public function setTableDefinition()
@@ -39,8 +40,8 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
         if(!$this->validate()) {
             return false;
         }
-        
         $this->intranet_id = $user->getActiveIntranetId();
+        
         parent::save();
         
     }
