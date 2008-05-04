@@ -1,0 +1,99 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testStateBuyAndEditPost</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testStateBuyAndEditPost</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=accounting,administration&helper_function=Accounting:createYearWithVatAndStandardAccounts&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=accounting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>text</td>
+	<td>Buy</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>debet_account_number</td>
+	<td>7000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>credit_account_number</td>
+	<td>58000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>amount</td>
+	<td>1000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>reference</td>
+	<td>333</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>333</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Se bilag</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>333</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@href, 'post_edit.php?id=2')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>account</td>
+	<td>label=Småanskaffelser</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=daybook</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>333</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
