@@ -125,17 +125,12 @@ class BasketEvaluation extends Standard
         $validator->isNumeric($input['running_index'], 'Index is not a valid number');
         $validator->isNumeric($input['evaluate_target_key'], 'Evaluation target is not valid');
         $validator->isNumeric($input['evaluate_method_key'], 'Evaluation method is not valid');
-        settype($input['evaluate_value'], 'string');
         $validator->isString($input['evaluate_value'], 'Evaluation value is not valid', '', 'allow_empty');
         $validator->isNumeric($input['go_to_index_after'], 'Go to index after is not a valid number');
         $validator->isNumeric($input['action_action_key'], 'Action is not valid');
-        settype($input['action_value'], 'string');
         $validator->isString($input['action_value'], 'Target is not valid', '', 'allow_empty');
-        settype($input['action_quantity'], 'integer');
         $validator->isNumeric($input['action_quantity'], 'Action quantity is not a valid number', 'zero_or_greater');
         $validator->isNumeric($input['action_unit_key'], 'Action unit is not valid');
-
-        settype($input['evaluate_value_case_sensitive'], 'integer');
 
         if ($this->error->isError()) {
             return false;
@@ -154,6 +149,11 @@ class BasketEvaluation extends Standard
      */
     public function save($input)
     {
+        settype($input['evaluate_value'], 'string');
+        settype($input['action_value'], 'string');
+        settype($input['action_quantity'], 'integer');
+        settype($input['evaluate_value_case_sensitive'], 'integer');
+
         if (!$this->validate($input)) {
             return false;
         }
