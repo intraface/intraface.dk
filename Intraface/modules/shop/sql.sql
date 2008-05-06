@@ -10,3 +10,6 @@ CREATE TABLE `shop` (
   `intranet_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+
+ALTER TABLE `webshop_basket_evaluation` ADD `shop_id` INT( 11 ) NOT NULL ;
+ALTER TABLE `shop_featuredproducts` ADD `shop_id` INT( 11 ) NOT NULL ;

@@ -9,17 +9,20 @@ class Intraface_modules_shop_Controller_FeaturedProducts extends k_Controller
     {
         $kernel = $this->registry->get('kernel');
         $db = $this->registry->get('db');
+        $doctrine = $this->registry->get('doctrine');
         $webshop_module = $kernel->module('webshop');
         $translation = $kernel->getTranslation('webshop');
 
+        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->context->name);
+
         if (!empty($this->GET['delete']) AND is_numeric($this->GET['delete'])) {
-            $featured = new Intraface_Webshop_FeaturedProducts($kernel->intranet, $db);
+            $featured = new Intraface_modules_shop_FeaturedProducts($kernel->intranet, $shop, $db);
             if ($featured->delete($this->GET['delete'])) {
                 throw new k_http_Redirect($this->url());
             }
         }
 
-        $featured = new Intraface_Webshop_FeaturedProducts($kernel->intranet, $db);
+        $featured = new Intraface_modules_shop_FeaturedProducts($kernel->intranet, $shop, $db);
         $all = $featured->getAll();
 
         $keyword_object = new Intraface_Keyword_Appender(new Product($kernel));
@@ -34,7 +37,9 @@ class Intraface_modules_shop_Controller_FeaturedProducts extends k_Controller
     {
         $db = $this->registry->get('db');
         $kernel = $this->registry->get('kernel');
-        $featured = new Intraface_Webshop_FeaturedProducts($kernel->intranet, $db);
+        $doctrine = $this->registry->get('doctrine');
+        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->context->name);
+        $featured = new Intraface_modules_shop_FeaturedProducts($kernel->intranet, $shop, $db);
         if ($featured->add($this->POST['headline'], new Keyword(new Product($this->registry->get('kernel')), $this->POST['keyword_id']))) {
             throw new k_http_Redirect($this->url());
         }

@@ -10,8 +10,7 @@ class Intraface_modules_shop_Controller_Show extends k_Controller
         $doctrine = $this->registry->get('doctrine');
         $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->name);
 
-        require_once 'Intraface/modules/webshop/BasketEvaluation.php';
-        $basketevaluation = new BasketEvaluation($this->registry->get('kernel'));
+        $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $shop);
         $evaluations = $basketevaluation->getList();
 
         $data = array('shop' => $shop, 'evaluations' => $evaluations);
