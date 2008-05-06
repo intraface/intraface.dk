@@ -48,6 +48,7 @@ if (!defined('DB_DSN')) {
 }
 
 $GLOBALS['kernel'] = $kernel;
+$GLOBALS['intranet'] = $kernel->intranet;
 $GLOBALS['db'] = $db;
 
 
@@ -61,6 +62,11 @@ $application->registry->registerConstructor('doctrine', create_function(
 $application->registry->registerConstructor('kernel', create_function(
   '$className, $args, $registry',
   'return $GLOBALS["kernel"];'
+));
+
+$application->registry->registerConstructor('intranet', create_function(
+  '$className, $args, $registry',
+  'return $GLOBALS["intranet"];'
 ));
 
 $application->registry->registerConstructor('db', create_function(
