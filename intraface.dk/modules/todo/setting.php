@@ -2,6 +2,7 @@
 require('../../include_first.php');
 
 $module = $kernel->module('todo');
+$translation = $kernel->getTranslation('todo');
 
 if (!empty($_POST)) {
 	$kernel->setting->set('intranet','todo.publiclist', $_POST['publiclist']);

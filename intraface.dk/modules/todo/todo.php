@@ -3,6 +3,7 @@
 require('../../include_first.php');
 
 $module = $kernel->module('todo');
+$translation = $kernel->getTranslation('todo');
 
 // Delete
 if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {

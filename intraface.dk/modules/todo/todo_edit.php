@@ -2,6 +2,7 @@
 require('../../include_first.php');
 
 $module = $kernel->module('todo');
+$translation = $kernel->getTranslation('todo');
 
 if (!empty($_POST)) {
     $todo = new TodoList($kernel, $_POST['id']);

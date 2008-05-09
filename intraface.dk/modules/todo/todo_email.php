@@ -9,6 +9,7 @@
 require('../../include_first.php');
 
 $kernel->module('todo');
+$translation = $kernel->getTranslation('todo');
 $kernel->useModule('contact');
 $kernel->useShared('email');
 
