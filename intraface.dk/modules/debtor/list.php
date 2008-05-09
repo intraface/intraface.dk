@@ -254,7 +254,6 @@ $page->start(safeToHtml($translation->get($debtor->get('type').'s')));
 		$total = 0;
 		$due_total = 0;
 		$sent_total = 0;
-		$deprication_total = 0;
 		for($i = 0, $max = count($posts); $i < $max; $i++) {
 			?>
 			<tr id="i<?php print(intval($posts[$i]["id"])); ?>" class="<?php if(isset($_GET['id']) && $_GET['id'] == $posts[$i]['id']) echo 'fade'; ?>">
@@ -267,7 +266,6 @@ $page->start(safeToHtml($translation->get($debtor->get('type').'s')));
 
 				<?php
 				if($debtor->dbquery->getFilter("status") == -3) {
-					$deprication_total += $posts[$i]["deprication"];
 					?>
 					<td class="amount"><?php print(number_format($posts[$i]["deprication"], 2, ",",".")); ?> &nbsp; </td>
 					<?php
