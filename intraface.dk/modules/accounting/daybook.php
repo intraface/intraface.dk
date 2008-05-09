@@ -61,7 +61,7 @@ $posts = $post->getList('draft');
 $page = new Page($kernel);
 $page->includeJavascript('global', 'XMLHttp.js');
 $page->includeJavascript('global', 'focusField.js');
-$page->includeJavascript('global', 'getElementsByClass.js');
+// $page->includeJavascript('global', 'getElementByClass.js');
 $page->includeJavascript('module', 'daybook.js');
 $page->start('Kassekladde');
 ?>
