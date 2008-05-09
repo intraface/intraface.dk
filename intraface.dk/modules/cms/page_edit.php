@@ -43,7 +43,7 @@ if (!empty($_POST)) {
         }
     } else {
         $value = $_POST;
-        $type = $value['type'];
+        $type = $_POST['page_type'];
         $template = & $cmspage->template;
     }
 } elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
