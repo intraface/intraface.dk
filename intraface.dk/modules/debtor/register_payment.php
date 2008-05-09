@@ -131,7 +131,7 @@ $page->start(t('register payment for').' '.t($for));
     </div>
 </fieldset>
 <input type="submit" name="payment" value="Registrér" />
-<?php e(t('or')); ?>
+<?php e(t('or', 'common')); ?>
 <?php if($for == 'invoice'): ?>
     <a href="view.php?id=<?php e($object->get('id')); ?>"><?php e(t('regret', 'common')); ?></a>
 <?php elseif($for == 'reminder'): ?>

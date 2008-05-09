@@ -120,7 +120,7 @@ $page->start(t('register depreciation for').' '.t($for));
     </div>
 </fieldset>
 <input type="submit" name="depreciation" value="Registrér" />
-<?php e(t('or')); ?>
+<?php e(t('or', 'common')); ?>
 <?php if($for == 'invoice'): ?>
     <a href="view.php?id=<?php e($object->get('id')); ?>"><?php e(t('regret', 'common')); ?></a>
 <?php elseif($for == 'reminder'): ?>
