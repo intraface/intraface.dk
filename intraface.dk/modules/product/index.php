@@ -105,7 +105,7 @@ $page->start(t('products'));
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
 <?php if(!empty($deleted)): ?>
-        <p class="message"><?php e(t('products has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('regret')); ?>" /></p>
+        <p class="message"><?php e(t('products has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('regret', 'common')); ?>" /></p>
 <?php endif; ?>
 
 <?php echo $product->getDBQuery()->display('character'); ?>
