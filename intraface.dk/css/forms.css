@@ -88,7 +88,7 @@ fieldset.select {
 	
 .formerrors li {
 	padding-left: 20px; 
-	background: url(/images/icons/i.p.attention.gif) no-repeat; 
+	background: url(/images/icons/silk/exclamation.png) no-repeat; 
 }
 
 input[type="text"], input.text { 
