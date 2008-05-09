@@ -49,6 +49,10 @@
 		YAHOO.util.Event.addListener(window, "load", init);
 
 	</script>
+    
+    <link href="<?php echo PATH_WWW; ?>images/favicon.ico" rel="icon" />
+    <link href="<?php echo PATH_WWW; ?>images/favicon.ico" rel="shortcut icon"/>
+    <link rel="shortcut icon" href="<?php echo PATH_WWW; ?>images/favicon.ico" type="image/x-icon" />
 
 </head>
 

@@ -19,6 +19,11 @@
 
 	<?php print($javascript); ?>
 	<link rel="start" href="http://www.intraface.dk/" title="Home" />
+    
+    <link href="<?php echo PATH_WWW; ?>images/favicon.ico" rel="icon" />
+    <link href="<?php echo PATH_WWW; ?>images/favicon.ico" rel="shortcut icon"/>
+    <link rel="shortcut icon" href="<?php echo PATH_WWW; ?>images/favicon.ico" type="image/x-icon" />
+    
 </head>
 
 <body id="onlinefaktura-dk"<?php if(!empty($module_name)) echo ' class="' . $module_name . '"'; ?>>
