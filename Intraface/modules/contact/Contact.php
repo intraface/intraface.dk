@@ -672,9 +672,9 @@ class Contact extends Standard {
      */
     public function getList($parameter = "")
     {
-        if ($this->dbquery->checkFilter("search")) {
-            $search = $this->dbquery->getFilter("search");
-            $this->dbquery->setCondition("
+        if ($this->getDBQuery()->checkFilter("search")) {
+            $search = $this->getDBQuery()->getFilter("search");
+            $this->getDBQuery()->setCondition("
                 contact.number = '".$search."' OR
                 address.name LIKE '%".$search."%' OR
                 address.address LIKE '%".$search."%' OR
@@ -682,11 +682,11 @@ class Contact extends Standard {
                 address.phone = '".$search."'");
         }
 
-        $this->dbquery->setSorting("address.name");
+        $this->getDBQuery()->setSorting("address.name");
 
         $i = 0; // til at give arrayet en key
 
-        $db = $this->dbquery->getRecordset("contact.id, contact.number, contact.paymentcondition, address.name, address.email, address.phone, address.address, address.postcode, address.city", "", false);
+        $db = $this->getDBQuery()->getRecordset("contact.id, contact.number, contact.paymentcondition, address.name, address.email, address.phone, address.address, address.postcode, address.city", "", false);
 
         $contacts = array();
         while ($db->nextRecord()) {
