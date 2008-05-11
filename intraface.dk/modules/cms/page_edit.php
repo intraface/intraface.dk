@@ -44,7 +44,7 @@ if (!empty($_POST)) {
     } else {
         $value = $_POST;
         $type = $_POST['page_type'];
-        $template = & $cmspage->template;
+        $template = $cmspage->template;
     }
 } elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
     $cmspage = CMS_Page::factory($kernel, 'id', $_GET['id']);
