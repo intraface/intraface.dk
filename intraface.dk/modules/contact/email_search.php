@@ -10,9 +10,9 @@ $_GET['use_stored'] = true;
 $contact = new Contact($kernel);
 $keyword = $contact->getKeywords();
 $keywords = $keyword->getAllKeywords();
-$contact->createDBQuery();
-$contact->dbquery->defineCharacter('character', 'address.name');
-$contact->dbquery->storeResult('use_stored', 'contact', 'toplevel');
+//$contact->createDBQuery();
+$contact->getDBQuery()->defineCharacter('character', 'address.name');
+$contact->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
 $contacts = $contact->getList("use_address");
 
 if (!empty($_POST)) {
@@ -26,12 +26,9 @@ if (!empty($_POST)) {
 		$j = 0;
 
 		for($i = 0, $max = count($contacts); $i < $max; $i++) {
-
-
-
 			if(!$validator->isEmail($contacts[$i]['email'], "")) {
 				// Hvis de ikke har en mail, kører vi videre med næste.
-				CONTINUE;
+				continue;
 			}
 
 			$contact = new Contact($kernel, $contacts[$i]['id']);
@@ -48,18 +45,16 @@ if (!empty($_POST)) {
 			);
 
 			$email->save($input);
-			# E-mailen sættes i kø - hvis vi sender den med det samme tager det
-			# alt for lang tid.
+			// E-mailen sættes i kø - hvis vi sender den med det samme tager det
+			// alt for lang tid.
 			$email->send('queue');
 			$j++;
 		}
 		$msg = 'Emailen blev i alt sendt til ' . $j . ' kontakter. <a href="index.php">Tilbage til kontakter</a>.';
-	}
-	else {
+	} else {
 		$value = $_POST;
 	}
 }
-
 
 $page = new Page($kernel);
 $page->start('Rediger e-mail');
