@@ -10,7 +10,7 @@ require_once 'Intraface/modules/shop/Basket.php';
 
 error_reporting(E_ALL);
 
-class FakeEvaluationIntranet {
+class FakeShopEvaluationIntranet {
     function getId() {
         return 1;
     }
@@ -23,7 +23,7 @@ class FakeEvaluationIntranet {
     }
 }
 
-class FakeEvaluationShop
+class FakeShopEvaluationShop
 {
     function getId()
     {
@@ -31,16 +31,16 @@ class FakeEvaluationShop
     }
 }
 
-class FakeEvaluationUser {
+class FakeShopEvaluationUser {
     function hasModuleAccess() { return true; }
     function get() { return 1; }
 
 }
-class FakeEvaluationWebshop {
+class FakeShopEvaluationWebshop {
     public $kernel;
 }
 
-class BasketEvaluationTest extends PHPUnit_Framework_TestCase
+class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
 {
 
     function setUp()
@@ -63,14 +63,14 @@ class BasketEvaluationTest extends PHPUnit_Framework_TestCase
     function createKernel()
     {
         $kernel = new Kernel;
-        $kernel->intranet = new FakeEvaluationIntranet;
-        $kernel->user = new FakeEvaluationUser;
+        $kernel->intranet = new FakeShopEvaluationIntranet;
+        $kernel->user = new FakeShopEvaluationUser;
         return $kernel;
     }
 
     function createBasketEvaluation($id = 0)
     {
-        return new Intraface_modules_shop_BasketEvaluation(MDB2::singleton(DB_DSN), new FakeEvaluationIntranet, new FakeEvaluationShop, $id);
+        return new Intraface_modules_shop_BasketEvaluation(MDB2::singleton(DB_DSN), new FakeShopEvaluationIntranet, new FakeShopEvaluationShop, $id);
     }
 
     function createBasket()

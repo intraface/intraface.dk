@@ -8,7 +8,7 @@ require_once 'Intraface/Kernel.php';
 require_once 'Intraface/modules/shop/Basket.php';
 require_once 'Intraface/modules/product/ProductDetail.php';
 
-class FakeBasketKernel
+class FakeShopBasketKernel
 {
     public $intranet;
     public $user;
@@ -21,7 +21,7 @@ class FakeBasketKernel
         return true;
     }
 }
-class FakeBasketIntranet
+class FakeShopBasketIntranet
 {
     function get()
     {
@@ -33,7 +33,7 @@ class FakeBasketIntranet
     }
 }
 
-class FakeBasketUser
+class FakeShopBasketUser
 {
     function hasModuleAccess()
     {
@@ -47,12 +47,12 @@ class FakeBasketUser
 
 } // used for DBQuery
 
-class FakeBasketWebshop
+class FakeShopBasketWebshop
 {
     public $kernel;
 }
 
-class BasketTest extends PHPUnit_Framework_TestCase
+class ShopBasketTest extends PHPUnit_Framework_TestCase
 {
 
     private $product;
@@ -82,17 +82,17 @@ class BasketTest extends PHPUnit_Framework_TestCase
     function createKernel()
     {
         $kernel = new Kernel;
-        $kernel->intranet = new FakeBasketIntranet;
-        $kernel->user = new FakeBasketUser;
+        $kernel->intranet = new FakeShopBasketIntranet;
+        $kernel->user = new FakeShopBasketUser;
         return $kernel;
     }
 
     function createBasket()
     {
         $kernel = $this->createKernel();
-        $webshop = new FakeBasketWebshop();
+        $webshop = new FakeShopBasketWebshop();
         $webshop->kernel = $kernel;
-        $basket = new Basket($webshop, 'somesessionid');
+        $basket = new Intraface_modules_shop_Basket($webshop, 'somesessionid');
         return $basket;
     }
 

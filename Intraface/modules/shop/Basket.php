@@ -12,7 +12,7 @@ require_once 'DB/Sql.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/modules/product/Product.php';
 
-class Basket
+class Intraface_modules_shop_Basket
 {
     /**
      * @var object

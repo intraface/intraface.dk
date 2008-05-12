@@ -12,7 +12,7 @@ require_once 'Intraface/modules/product/ProductDetail.php';
 
 error_reporting(E_ALL);
 
-class FakeWebshopIntranet
+class FakeShopIntranet
 {
     public $address;
     function __construct() {
@@ -22,20 +22,20 @@ class FakeWebshopIntranet
     function get() { return '1'; }
 }
 
-class FakeWebshopWeblogin {
+class FakeShopWeblogin {
     function get() { return 1; }
 }
 
-class FakeWebshopAddress
+class FakeShopAddress
 {
     function get($key = '') { if ($key == 'email') return 'lars@legestue.net'; else return 1; }
 }
 
-class FakeWebshopSetting {
+class FakeShopSetting {
     function get() { return 1; }
 }
 
-class WebshopTest extends PHPUnit_Framework_TestCase
+class ShopTest extends PHPUnit_Framework_TestCase
 {
     private $webshop;
     private $kernel;
@@ -43,10 +43,10 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     function setUp()
     {
         $this->kernel = new Kernel;
-        $this->kernel->intranet = new FakeWebshopIntranet;
-        $this->kernel->weblogin = new FakeWebshopWeblogin;
-        $this->kernel->setting = new FakeWebshopSetting;
-        $this->webshop = new Webshop($this->kernel, 'thissession');
+        $this->kernel->intranet = new FakeShopIntranet;
+        $this->kernel->weblogin = new FakeShopWeblogin;
+        $this->kernel->setting = new FakeShopSetting;
+        $this->webshop = new Intraface_modules_shop_Webshop($this->kernel, 'thissession');
     }
 
     ////////////////////////////////////////////////

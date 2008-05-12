@@ -20,7 +20,7 @@
  * @see Order
  * @see Contact
  */
-class Webshop
+class Intraface_modules_shop_Webshop
 {
     /**
      * @var object

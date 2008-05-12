@@ -7,7 +7,7 @@ require_once 'Intraface/Standard.php';
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/modules/shop/FeaturedProducts.php';
 
-class FakeFeaturedProductsIntranet
+class FakeShopFeaturedProductsIntranet
 {
     function getId()
     {
@@ -15,7 +15,7 @@ class FakeFeaturedProductsIntranet
     }
 }
 
-class FakeFeaturedProductsKeyword
+class FakeShopFeaturedProductsKeyword
 {
     function getId()
     {
@@ -23,7 +23,7 @@ class FakeFeaturedProductsKeyword
     }
 }
 
-class FeaturedProductsTest extends PHPUnit_Framework_TestCase
+class ShopFeaturedProductsTest extends PHPUnit_Framework_TestCase
 {
     private $featured;
 
@@ -41,22 +41,22 @@ class FeaturedProductsTest extends PHPUnit_Framework_TestCase
 
     function testAddReturnsTrueAndPersistsTheAddedStuff()
     {
-        $this->assertTrue($this->featured->add('Test', new FakeFeaturedProductsKeyword));
+        $this->assertTrue($this->featured->add('Test', new FakeShopFeaturedProductsKeyword));
         $this->assertTrue(is_array($this->featured->getAll()));
         $this->assertEquals(1, count($this->featured->getAll()));
     }
 
     function testAddOnlyPersistsOneOfEachKeyword()
     {
-        $this->assertTrue($this->featured->add('Test', new FakeFeaturedProductsKeyword));
-        $this->assertTrue($this->featured->add('Test', new FakeFeaturedProductsKeyword));
+        $this->assertTrue($this->featured->add('Test', new FakeShopFeaturedProductsKeyword));
+        $this->assertTrue($this->featured->add('Test', new FakeShopFeaturedProductsKeyword));
 
         $this->assertEquals(1, count($this->featured->getAll()));
     }
 
     function testDeleteActuallyDeletesTheFeaturedProductKeyword()
     {
-        $this->assertTrue($this->featured->add('Test', new FakeFeaturedProductsKeyword));
+        $this->assertTrue($this->featured->add('Test', new FakeShopFeaturedProductsKeyword));
         $this->assertTrue($this->featured->delete(1));
         $this->assertEquals(0, count($this->featured->getAll()));
     }
