@@ -156,10 +156,16 @@ class KernelTest extends PHPUnit_Framework_TestCase
 
     function testGetModules()
     {
+        $db = MDB2::factory(DB_DSN);
+        $result = $db->query('SELECT * FROM module');
+        if (PEAR::isError($result)) {
+            die($result->getMessage() . $result->getUserInfo());
+        }
+
         $kernel = new Kernel;
         $kernel->intranet = new FakeKernelIntranet;
         $this->assertTrue(is_array($kernel->getModules()));
-        $this->assertEquals(22, count($kernel->getModules()));
+        $this->assertEquals($result->numRows(), count($kernel->getModules()));
     }
 
 }
