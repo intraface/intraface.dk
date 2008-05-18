@@ -17,7 +17,12 @@ class Intraface_modules_shop_Basket
     /**
      * @var object
      */
-    public $webshop;
+    private $webshop;
+
+    /**
+     * @var object
+     */
+    private $intranet;
 
     /**
      * Variablen bruges, fordi webshop almindeligvis bruges uden for systemet.
@@ -27,44 +32,45 @@ class Intraface_modules_shop_Basket
      *
      * @var string
      */
-    public $session_id;
+    private $session_id;
 
     /**
-     * Måske unødvendig, da den efter ændringer i klassen altid er konstant. Men fordi
-     * det var lettere at bibeholde den, blev det sådan.
-     *
-     * @var string
+     * @var object
      */
-    public $sql_extra; // bruges så vi ikke behøver at tjekke om der skal skelnes på session eller id
+    private $db;
+
+    const CLEAN_UP_AFTER = 2;
 
     /**
      * Constructor
      *
-     * Konstruktøren sørger også for at rydde op i Kurven.
-     *
+     * @param object $db         The webshop object
+     * @param object $intranet   The webshop object
      * @param object $webshop    The webshop object
      * @param string $session_id A session id
      *
      * @return void
      */
-    public function __construct($webshop, $session_id)
+    public function __construct($db, $intranet, $webshop, $session_id)
     {
-        if (!is_object($webshop) AND strtolower(get_class($webshop)) == 'webshop') {
-            trigger_error('Basket kræver objektet Webshop', E_USER_ERROR);
-        }
+        $this->db          = $db;
+        $this->intranet    = $intranet;
+        $this->webshop     = $webshop;
+        $this->session_id  = $session_id;
 
-        if (empty($session_id)) {
-            trigger_error('basket needs that session id', E_USER_ERROR);
-        }
-
-        $this->webshop = $webshop;
-        $this->sql_extra = " session_id = '" . safeToDb($session_id) . "'";
+        $this->conditions = array('session_id = ' . $this->db->quote($this->session_id, 'text'),
+                                  'shop_id = ' . $this->db->quote($this->webshop->getId(), 'integer'),
+                                  'intranet_id = ' . $this->db->quote($this->intranet->getId(), 'integer'));
 
         // rydder op i databasen efter fx to timer
         $clean_up_after = 2; // timer
 
-        $db = new DB_Sql;
-        $db->query("DELETE FROM basket WHERE DATE_ADD(date_changed, INTERVAL " . $clean_up_after . " HOUR) < NOW()");
+        $this->cleanUp();
+    }
+
+    private function cleanUp()
+    {
+        return $this->db->query("DELETE FROM basket WHERE DATE_ADD(date_changed, INTERVAL " . $this->db->quote(self::CLEAN_UP_AFTER, 'integer') . " HOUR) < NOW()");
     }
 
     /**
@@ -120,7 +126,6 @@ class Intraface_modules_shop_Basket
 
         $product = new Product($this->webshop->kernel, $product_id, $product_detail_id);
 
-
         if($product->get('id') == 0) {
             return false;
         }
@@ -129,19 +134,20 @@ class Intraface_modules_shop_Basket
             return false;
         }
 
-        $db->query("SELECT id, quantity FROM basket WHERE product_id = $product_id
+        $sql_extra = implode(" AND ", $this->conditions);
+
+        $db->query("SELECT id, quantity
+                FROM basket WHERE product_id = $product_id
                 AND product_detail_id = " . $product_detail_id . "
                 AND basketevaluation_product = " . $basketevaluation . "
-                AND " . $this->sql_extra. "
-                AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
+                AND " . $sql_extra);
 
         if ($db->nextRecord()) {
             if ($quantity == 0) {
                 $db->query("DELETE FROM basket
                     WHERE id = ".$db->f('id') . "
                         AND basketevaluation_product = " . $basketevaluation . "
-                        AND " . $this->sql_extra . "
-                        AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
+                        AND " . $sql_extra);
             } else {
                 $db->query("UPDATE basket SET
                     quantity = $quantity,
@@ -149,12 +155,11 @@ class Intraface_modules_shop_Basket
                     text = '".$text."'
                     WHERE id = ".$db->f('id') . "
                         AND basketevaluation_product = " . $basketevaluation . "
-
-                        AND " . $this->sql_extra . "
-                        AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
+                        AND " . $sql_extra);
             }
             return true;
         } else {
+            $sql_extra = implode(', ', $this->conditions);
             $db->query("INSERT INTO basket
                     SET
                         quantity = $quantity,
@@ -163,8 +168,7 @@ class Intraface_modules_shop_Basket
                         basketevaluation_product = " . $basketevaluation . ",
                         product_id = $product_id,
                         product_detail_id = ".$product_detail_id.",
-                        intranet_id = " . $this->webshop->kernel->intranet->get('id') . ",
-                        " . $this->sql_extra);
+                        " . $sql_extra);
             return true;
         }
     }
@@ -250,25 +254,27 @@ class Intraface_modules_shop_Basket
      *
      * @param string $sql Extra sql string to add
      */
-    public function saveToDb($sql) {
+    public function saveToDb($sql)
+    {
+        $sql_extra = implode(" AND ", $this->conditions);
 
         $db = new DB_Sql;
-        $db->query("SELECT id FROM basket_details WHERE " . $this->sql_extra. "
+        $db->query("SELECT id FROM basket_details WHERE " . $sql_extra. "
                 AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
         if ($db->nextRecord()) {
             $db->query("UPDATE basket_details SET ".$sql.",
                 date_changed = NOW()
                 WHERE id = ".$db->f('id') . "
-                    AND " . $this->sql_extra . "
+                    AND " . $sql_extra . "
                     AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
             return true;
         } else {
+            $sql_extra = implode(", ", $this->conditions);
             $db->query("INSERT INTO basket_details
                     SET ".$sql.",
                         date_changed = NOW(),
-                           date_created = NOW(),
-                        intranet_id = " . $this->webshop->kernel->intranet->get('id') . ",
-                        " . $this->sql_extra);
+                        date_created = NOW(),
+                        " . $sql_extra);
 
             return true;
         }
@@ -283,10 +289,11 @@ class Intraface_modules_shop_Basket
      */
     public function getAddress()
     {
+        $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
         $db->query("SELECT *
             FROM basket_details
-            WHERE " . $this->sql_extra . "
+            WHERE " . $sql_extra . "
                 AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
             return array();
@@ -312,10 +319,11 @@ class Intraface_modules_shop_Basket
      */
     public function getCustomerCoupon()
     {
+        $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
         $db->query("SELECT customer_coupon
             FROM basket_details
-            WHERE " . $this->sql_extra . "
+            WHERE " . $sql_extra . "
                 AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
             return array();
@@ -333,10 +341,11 @@ class Intraface_modules_shop_Basket
      */
     public function getCustomerEan()
     {
+        $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
         $db->query("SELECT customer_ean
             FROM basket_details
-            WHERE " . $this->sql_extra . "
+            WHERE " . $sql_extra . "
                 AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
             return array();
@@ -354,10 +363,11 @@ class Intraface_modules_shop_Basket
      */
     public function getCustomerComment()
     {
+        $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
         $db->query("SELECT customer_comment
             FROM basket_details
-            WHERE " . $this->sql_extra . "
+            WHERE " . $sql_extra . "
                 AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
             return array();
@@ -377,10 +387,11 @@ class Intraface_modules_shop_Basket
     {
         $product_id = (int)$product_id;
 
+        $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
         $db->query("SELECT *
             FROM basket
-            WHERE " . $this->sql_extra . "
+            WHERE " . $sql_extra . "
                 AND product_id = " . $product_id . "
                 AND intranet_id = " . $this->webshop->kernel->intranet->get('id') . "
       AND quantity > 0 LIMIT 1");
@@ -401,8 +412,9 @@ class Intraface_modules_shop_Basket
     {
         $price = 0;
 
+        $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
-        $db->query("SELECT product_id, quantity FROM basket WHERE " . $this->sql_extra);
+        $db->query("SELECT product_id, quantity FROM basket WHERE " . $sql_extra);
 
         while ($db->nextRecord()) {
             $product = new Product($this->webshop->kernel, $db->f("product_id"));
@@ -423,6 +435,7 @@ class Intraface_modules_shop_Basket
      */
     public function getTotalWeight()
     {
+        $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
 
         $db->query("SELECT
@@ -433,7 +446,7 @@ class Intraface_modules_shop_Basket
                 ON product.id = basket.product_id
             INNER JOIN product_detail
                 ON product.id = product_detail.product_id
-            WHERE " . $this->sql_extra . "
+            WHERE " . $sql_extra . "
                 AND product_detail.active = 1
                 AND basket.intranet_id = " . $this->webshop->kernel->intranet->get("id") . "
                 AND basket.quantity > 0
@@ -457,6 +470,7 @@ class Intraface_modules_shop_Basket
      */
     public function getItems()
     {
+        $sql_extra = implode(" AND basket.", $this->conditions);
         $items = array();
         $db = new DB_Sql;
 
@@ -474,7 +488,7 @@ class Intraface_modules_shop_Basket
                 ON product.id = basket.product_id
             INNER JOIN product_detail
                 ON product.id = product_detail.product_id
-            WHERE " . $this->sql_extra . "
+            WHERE " . $sql_extra . "
                 AND product_detail.active = 1
                 AND basket.intranet_id = " . $this->webshop->kernel->intranet->get("id") . "
             ORDER BY product_detail.vat DESC, basket.basketevaluation_product");
@@ -514,10 +528,11 @@ class Intraface_modules_shop_Basket
      */
     public function removeEvaluationProducts()
     {
+        $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
         $db->query("DELETE FROM basket " .
                 "WHERE basketevaluation_product = 1 " .
-                    "AND " . $this->sql_extra . " " .
+                    "AND " . $sql_extra . " " .
                     "AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
         return true;
 
@@ -530,9 +545,10 @@ class Intraface_modules_shop_Basket
      */
     public function reset()
     {
+        $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
-        $db->query("UPDATE basket SET session_id = '' WHERE " . $this->sql_extra . " AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
-        $db->query("UPDATE basket_details SET session_id = '' WHERE " . $this->sql_extra . " AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
+        $db->query("UPDATE basket SET session_id = '' WHERE " . $sql_extra . " AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
+        $db->query("UPDATE basket_details SET session_id = '' WHERE " . $sql_extra . " AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
 
         return true;
     }
