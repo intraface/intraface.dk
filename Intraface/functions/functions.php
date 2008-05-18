@@ -70,7 +70,21 @@ function amountToDb($amount) {
 
 }
 
-function autoop($text) {
+if (!function_exists('autoop')) {
+  /**
+   * This function is dynamically redefinable.
+   * @see $GLOBALS['_global_function_callback_email']
+   */
+  function autoop($args) {
+    $args = func_get_args();
+    return call_user_func_array($GLOBALS['_global_function_callback_autoop'], $args);
+  }
+  if (!isset($GLOBALS['_global_function_callback_autoop'])) {
+    $GLOBALS['_global_function_callback_autoop'] = NULL;
+  }
+}
+
+function intraface_autoop($text) {
     require_once 'markdown.php';
     require_once 'smartypants.php';
 
@@ -79,6 +93,7 @@ function autoop($text) {
     return $text;
 }
 
+$GLOBALS['_global_function_callback_autoop'] = 'intraface_autoop';
 
 if(!function_exists('mime_content_type')) {
     // mime_content_type først fra PHP 4.3
