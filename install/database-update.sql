@@ -1,5 +1,8 @@
 ALTER TABLE `basket` ADD `shop_id` INT( 11 ) NOT NULL ;
 ALTER TABLE `basket_details` ADD `shop_id` INT( 11 ) NOT NULL ;
+ALTER TABLE `shop_featuredproducts` ADD `shop_id` INT( 11 ) NOT NULL ;
+ALTER TABLE `webshop_basket_evaluation` ADD `shop_id` INT( 11 ) NOT NULL ;
+
 
 CREATE TABLE `project_task` (
   `id` int(11) NOT NULL auto_increment,
