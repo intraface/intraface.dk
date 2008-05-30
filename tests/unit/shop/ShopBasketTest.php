@@ -31,6 +31,11 @@ class FakeShopBasketIntranet
     {
         return true;
     }
+
+    function getId()
+    {
+        return 1;
+    }
 }
 
 class FakeShopBasketUser
@@ -50,6 +55,11 @@ class FakeShopBasketUser
 class FakeShopBasketWebshop
 {
     public $kernel;
+
+    function getId()
+    {
+        return 1;
+    }
 }
 
 class ShopBasketTest extends PHPUnit_Framework_TestCase
@@ -92,7 +102,7 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $kernel = $this->createKernel();
         $webshop = new FakeShopBasketWebshop();
         $webshop->kernel = $kernel;
-        $basket = new Intraface_modules_shop_Basket($webshop, 'somesessionid');
+        $basket = new Intraface_modules_shop_Basket(MDB2::factory(DB_DSN), new FakeShopBasketIntranet, $webshop, 'somesessionid');
         return $basket;
     }
 
