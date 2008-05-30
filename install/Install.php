@@ -165,7 +165,7 @@ class Intraface_Install
         $user->setIntranetAccess(1);
 
         require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
-        foreach($modules AS $module_name) {
+        foreach ($modules AS $module_name) {
             $module = ModuleMaintenance::factory($module_name);
 
             if($module->get('id') == 0) {
