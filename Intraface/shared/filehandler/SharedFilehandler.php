@@ -7,7 +7,7 @@
  * @version	1.0
  *
  */
-class SharedFilehandler extends Shared 
+class SharedFilehandler extends Intraface_Shared 
 {
     function __construct() 
     {
