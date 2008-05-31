@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     
     // We login to the intranet with the public key
-    $weblogin = new Weblogin;
+    $weblogin = new Intraface_Weblogin;
     if(!$intranet_id = $weblogin->auth('public', $payment_postprocess->get('intranet_public_key', 'optional'))) {
         trigger_error("Unable to log in to the intranet with public key: ".$payment_postprocess->get('intranet_public_key', 'optional'), E_USER_ERROR);
         exit;
