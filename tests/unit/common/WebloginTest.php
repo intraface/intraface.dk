@@ -21,28 +21,28 @@ class WebloginTest extends PHPUnit_Framework_TestCase {
     }
 
     function testConstructionOfWeblogin() {
-        $weblogin = new Weblogin(self::SESSION_LOGIN);
+        $weblogin = new Intraface_Weblogin(self::SESSION_LOGIN);
         $this->assertTrue(is_object($weblogin));
     }
 
     function testAuthWithWrongPrivateKey() {
-        $weblogin = new Weblogin('sessidfsdfdsfdsfdsf');
+        $weblogin = new Intraface_Weblogin('sessidfsdfdsfdsfdsf');
         $this->assertFalse($weblogin->auth('private', 'wrongkey'));
     }
 
     function testAuthWithWrongPublicKey() {
-        $weblogin = new Weblogin('sessidfsdfdsfdsfdsf');
+        $weblogin = new Intraface_Weblogin('sessidfsdfdsfdsfdsf');
         $this->assertFalse($weblogin->auth('public', 'wrongkey'));
     }
 
     function testAuthWithCorrectPrivateKey() {
-        $weblogin = new Weblogin('sessidfsdfdsfdsfdsf');
+        $weblogin = new Intraface_Weblogin('sessidfsdfdsfdsfdsf');
         $this->assertTrue(($weblogin->auth('private', $this->private_key) > 0));
 
     }
 
     function testAuthWithCorrectPublicKey() {
-        $weblogin = new Weblogin('sessidfsdfdsfdsfdsf');
+        $weblogin = new Intraface_Weblogin('sessidfsdfdsfdsfdsf');
         $this->assertTrue(($weblogin->auth('public', $this->public_key) > 0));
 
     }

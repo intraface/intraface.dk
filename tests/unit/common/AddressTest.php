@@ -22,23 +22,23 @@ class AddressTest extends PHPUnit_Framework_TestCase
 
     function testValidateWithValidAddress() {
         
-        $address = Address::factory('intranet', 1);
+        $address = Intraface_Address::factory('intranet', 1);
         $this->assertTrue($address->validate($this->getValidAddress()));
     }
     
     function testValidateWithInvalidAddress() {
-        $address = Address::factory('intranet', 1);
+        $address = Intraface_Address::factory('intranet', 1);
         $this->assertFalse($address->validate(array()));
     }
     
     function testSaveOnEmptyDB() {
-        $address = Address::factory('intranet', 1);
+        $address = Intraface_Address::factory('intranet', 1);
         $this->assertTrue($address->save($this->getValidAddress()));
         $this->assertEquals(1, $address->get('address_id')); // on empty database this must be 1
     }
     
     function testSaveWithSaveTwoTimeWithSameData() {    
-        $address = Address::factory('intranet', 1);
+        $address = Intraface_Address::factory('intranet', 1);
         $address->save($this->getValidAddress());
         
         
@@ -48,11 +48,11 @@ class AddressTest extends PHPUnit_Framework_TestCase
     }
     
     function testSaveWithChangeInName() {    
-        $address = Address::factory('intranet', 1);
+        $address = Intraface_Address::factory('intranet', 1);
         
         $address_array = $this->getValidAddress();
         
-        $address = Address::factory('intranet', 1);
+        $address = Intraface_Address::factory('intranet', 1);
         $address->save($address_array);
         
         $address_array['name'] = 'test 2';
@@ -71,10 +71,10 @@ class AddressTest extends PHPUnit_Framework_TestCase
     }
     
     function testLoad() {
-        $address = Address::factory('intranet', 1);
+        $address = Intraface_Address::factory('intranet', 1);
         $address->save($this->getValidAddress());
         
-        $address = new Address(1);
+        $address = new Intraface_Address(1);
         $this->assertEquals(1, $address->get('address_id'));
     }
 }

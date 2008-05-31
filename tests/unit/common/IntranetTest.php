@@ -27,7 +27,7 @@ class IntranetTest extends PHPUnit_Framework_TestCase
         $m = new ModuleMaintenance();
         $m->register();
         
-        $this->intranet = new Intranet(1);
+        $this->intranet = new Intraface_Intranet(1);
         
     }
 
