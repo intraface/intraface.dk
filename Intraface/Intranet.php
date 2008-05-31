@@ -10,7 +10,7 @@
 require_once 'Intraface/Error.php';
 require_once 'Intraface/Address.php';
 
-class Intranet extends Intraface_Standard
+class Intraface_Intranet extends Intraface_Standard
 {
     /**
      * @var object

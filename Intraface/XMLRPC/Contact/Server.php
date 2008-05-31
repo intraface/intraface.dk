@@ -212,7 +212,7 @@ class Intraface_XMLRPC_Contact_Server
         }
 
         $this->kernel = new Intraface_Kernel();
-        $this->kernel->intranet = new Intranet($intranet_id);
+        $this->kernel->intranet = new Intraface_Intranet($intranet_id);
         $this->kernel->setting = new Setting($this->kernel->intranet->get('id'));
 
         if (!is_object($this->kernel->intranet)) { // -2

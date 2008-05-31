@@ -16,7 +16,7 @@
  *       at man bare lige kan komme til dem?
  *
  */
-class IntranetAdministration extends Intranet
+class IntranetAdministration extends Intraface_Intranet
 {
     protected $db; // databaseobject
     public $id; // intranet id

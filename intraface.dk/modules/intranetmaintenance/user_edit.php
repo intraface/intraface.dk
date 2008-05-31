@@ -8,7 +8,7 @@ if(isset($_POST["submit"])) {
     $user = new UserMaintenance(intval($_POST["id"]));
 
     if(isset($_POST["intranet_id"]) && intval($_POST["intranet_id"]) != 0) {
-        $intranet = new Intranet($_POST["intranet_id"]);
+        $intranet = new Intraface_Intranet($_POST["intranet_id"]);
         $intranet_id = $intranet->get("id");
         $address_value = $_POST;
         $address_value["name"] = $_POST["address_name"];

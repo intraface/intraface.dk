@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
     $kernel = new Intraface_Kernel();
     $kernel->weblogin = $weblogin;
-    $kernel->intranet = new Intranet($intranet_id);
+    $kernel->intranet = new Intraface_Intranet($intranet_id);
     $kernel->setting = new Setting($kernel->intranet->get('id'));
     
     $module = $kernel->module('modulepackage');

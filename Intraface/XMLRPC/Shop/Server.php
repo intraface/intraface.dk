@@ -642,7 +642,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->kernel = new Intraface_Kernel($credentials['session_id']);
         $this->kernel->weblogin = $weblogin;
-        $this->kernel->intranet = new Intranet($intranet_id);
+        $this->kernel->intranet = new Intraface_Intranet($intranet_id);
         $this->kernel->setting = new Setting($this->kernel->intranet->get('id'));
 
         if (!is_object($this->kernel->intranet)) { // -2

@@ -14,10 +14,7 @@
  * @version	@package-version@
  *
  */
-require_once 'Intraface/Intranet.php';
-require_once 'Intraface/DBQuery.php';
-
-class IntranetMaintenance extends Intranet
+class IntranetMaintenance extends Intraface_Intranet
 {
     private $db; // databaseobject mdb2
     protected $id; // intranet id

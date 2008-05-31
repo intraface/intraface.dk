@@ -75,7 +75,7 @@ class Intraface_Kernel
      */
     function createIntranet($id)
     {
-        return new Intranet($id);
+        return new Intraface_Intranet($id);
     }
 
     /**
