@@ -11,14 +11,14 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        return new Setting($intranet_id, $user_id);
+        return new Intraface_Setting($intranet_id, $user_id);
     }
 
     function testConstructionOfUser()
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 1000000);
-        $setting = new Setting($intranet_id, $user_id);
+        $setting = new Intraface_Setting($intranet_id, $user_id);
         $this->assertTrue(is_object($setting));
     }
 
@@ -26,7 +26,7 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        $setting = new Setting($intranet_id, $user_id);
+        $setting = new Intraface_Setting($intranet_id, $user_id);
 
         $setting->set('user', 'rows_pr_page', 10);
         $setting->set('intranet', 'rows_pr_page', 15);
@@ -39,7 +39,7 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        $setting = new Setting($intranet_id, $user_id);
+        $setting = new Intraface_Setting($intranet_id, $user_id);
         $setting->set('user', 'rows_pr_page', 10);
         $setting->set('intranet', 'rows_pr_page', 15);
         $this->assertEquals(20, $setting->get('system', 'rows_pr_page'));
@@ -55,11 +55,11 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        $setting = new Setting($intranet_id, $user_id);
+        $setting = new Intraface_Setting($intranet_id, $user_id);
         $setting->set('user', 'rows_pr_page', 30);
         $setting->set('intranet', 'rows_pr_page', 50);
         // making sure that it still works next time we get the Setting object
-        $setting = new Setting($intranet_id, $user_id);
+        $setting = new Intraface_Setting($intranet_id, $user_id);
         $this->assertEquals(50, $setting->get('intranet', 'rows_pr_page'));
         $this->assertEquals(30, $setting->get('user', 'rows_pr_page'));
     }
@@ -68,7 +68,7 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        $setting1 = new Setting($intranet_id, $user_id);
+        $setting1 = new Intraface_Setting($intranet_id, $user_id);
         $first_user_setting = 10;
         $setting1->set('user', 'rows_pr_page', $first_user_setting);
         $this->assertEquals($first_user_setting, $setting1->get('user', 'rows_pr_page'));
@@ -78,12 +78,12 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        $setting1 = new Setting($intranet_id, $user_id);
+        $setting1 = new Intraface_Setting($intranet_id, $user_id);
         $first_user_setting = 10;
         $setting1->set('user', 'rows_pr_page', $first_user_setting);
 
         $another_user_id = $user_id = rand(10001, 100000);
-        $setting2 = new Setting($intranet_id, $another_user_id);
+        $setting2 = new Intraface_Setting($intranet_id, $another_user_id);
         $second_user_setting = 15;
         $setting2->set('user', 'rows_pr_page', $second_user_setting);
 
@@ -95,7 +95,7 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        $setting1 = new Setting($intranet_id, $user_id);
+        $setting1 = new Intraface_Setting($intranet_id, $user_id);
         $first_user_setting = 10;
         $this->assertTrue($setting1->set('user', 'rows_pr_page', $first_user_setting));
     }
@@ -104,7 +104,7 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        $setting1 = new Setting($intranet_id, $user_id);
+        $setting1 = new Intraface_Setting($intranet_id, $user_id);
         $first_user_setting = 10;
         try {
             $setting1->set('user', 'somereallystrangesettingwhichwillneverbevalid', $first_user_setting);
@@ -119,7 +119,7 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        $setting1 = new Setting($intranet_id, $user_id);
+        $setting1 = new Intraface_Setting($intranet_id, $user_id);
         $first_user_setting = 10;
         try {
             $setting1->set('system', 'rows_pr_page', $first_user_setting);
@@ -134,7 +134,7 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        $setting = new Setting($intranet_id, $user_id);
+        $setting = new Intraface_Setting($intranet_id, $user_id);
         $intranet_setting = 10;
         $setting->set('intranet', 'rows_pr_page', $intranet_setting);
         $this->assertEquals($intranet_setting, $setting->get('user', 'rows_pr_page'));
@@ -144,7 +144,7 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        $setting = new Setting($intranet_id, $user_id);
+        $setting = new Intraface_Setting($intranet_id, $user_id);
         $this->assertEquals(0, count($setting->getSettings()));
         $setting->set('user', 'rows_pr_page', 10);
         $this->assertTrue(is_array($setting->getSettings()));
@@ -154,7 +154,7 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        $setting = new Setting($intranet_id, $user_id);
+        $setting = new Intraface_Setting($intranet_id, $user_id);
         $this->assertFalse($setting->isSettingSet('user', 'rows_pr_page'));
     }
 
@@ -162,7 +162,7 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        $setting = new Setting($intranet_id, $user_id);
+        $setting = new Intraface_Setting($intranet_id, $user_id);
         $setting->set('user', 'rows_pr_page', 10);
         $this->assertTrue($setting->isSettingSet('user', 'rows_pr_page'));
     }
@@ -171,7 +171,7 @@ class SettingTest extends PHPUnit_Framework_TestCase
     {
         $intranet_id = rand(1, 1000000);
         $user_id = rand(1, 10000);
-        $setting = new Setting($intranet_id, $user_id);
+        $setting = new Intraface_Setting($intranet_id, $user_id);
         $user_setting = 10;
         $setting->set('user', 'rows_pr_page', $user_setting);
         $this->assertTrue($setting->delete('user', 'rows_pr_page'));
