@@ -635,7 +635,7 @@ class Intraface_XMLRPC_Shop_Server
             throw new XML_RPC2_FaultException('supply a session_id', -5);
         }
 
-        $weblogin = new Weblogin();
+        $weblogin = new Intraface_Weblogin();
         if (!$intranet_id = $weblogin->auth('private', $credentials['private_key'], $credentials['session_id'])) {
             throw new XML_RPC2_FaultException('access to intranet denied', -2);
         }

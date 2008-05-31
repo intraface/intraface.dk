@@ -54,7 +54,7 @@ class Intraface_ModulePackage_AccessUpdate
         }
 
         // We login to the intranet maintenance intranet.
-        $weblogin = new Weblogin;
+        $weblogin = new Intraface_Weblogin;
         if (!$intranet_id = $weblogin->auth('private', INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY)) {
             trigger_error("Unable to log in to intranet maintenance intranet", E_USER_ERROR);
             exit;
