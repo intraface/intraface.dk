@@ -61,7 +61,7 @@ class Debtor_Report_Pdf extends Debtor_Pdf
         $contact['number'] = $debtor->contact->get('number');
 
         $intranet_address = $debtor->getIntranetAddress();
-        // $intranet_address = new Address($debtor->get("intranet_address_id"));
+        // $intranet_address = new Intraface_Address($debtor->get("intranet_address_id"));
         $intranet = $intranet_address->get();
 
         $intranet = array_merge($intranet, $debtor->getContactInformation());

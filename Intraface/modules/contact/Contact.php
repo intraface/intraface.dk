@@ -324,8 +324,8 @@ class Contact extends Intraface_Standard {
             $this->contactperson = new ContactPerson($this);
         }
 
-        $this->address = Address::factory('contact', $db->f('id'));
-        $this->delivery_address = Address::factory('contact_delivery', $db->f('id'));
+        $this->address = Intraface_Address::factory('contact', $db->f('id'));
+        $this->delivery_address = Intraface_Address::factory('contact_delivery', $db->f('id'));
 
         // name må ikke fjernes - bruges af keywords
         $this->value['name'] = $this->address->get('name');
@@ -344,7 +344,7 @@ class Contact extends Intraface_Standard {
     public function getAddress()
     {
         if (!is_object($this->address)) {
-            $this->address = Address::factory('contact', $this->id);
+            $this->address = Intraface_Address::factory('contact', $this->id);
         }
         return $this->address;
     }
@@ -547,7 +547,7 @@ class Contact extends Intraface_Standard {
         }
 
         // Standardadresse
-        $address_object = Address::factory('contact', $this->id);
+        $address_object = Intraface_Address::factory('contact', $this->id);
         $address_fields = $address_object->fields;
 
         foreach ($address_fields AS $key=>$value) {
@@ -568,7 +568,7 @@ class Contact extends Intraface_Standard {
             }
         }
 
-        $delivery_address_object = Address::factory('contact_delivery', $this->id);
+        $delivery_address_object = Intraface_Address::factory('contact_delivery', $this->id);
 
         if (!empty($delivery_address_to_save)) {
             if (!$delivery_address_object->save($delivery_address_to_save)) {
@@ -702,7 +702,7 @@ class Contact extends Intraface_Standard {
             $contacts[$i]['email'] = $db->f("email");
 
             if ($parameter == "use_address") {
-                $address = Address::factory("contact", $db->f("id"));
+                $address = Intraface_Address::factory("contact", $db->f("id"));
                 $contacts[$i]['address'] = $address->get();
             }
 

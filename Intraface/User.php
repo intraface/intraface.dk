@@ -129,8 +129,7 @@ class Intraface_User extends Intraface_Standard
         if (!empty($this->address)) {
             return $this->address;
         }
-        require_once 'Intraface/Address.php';
-        return ($this->address = Address::factory('user', $this->id));
+        return ($this->address = Intraface_Address::factory('user', $this->id));
     }
 
     /**

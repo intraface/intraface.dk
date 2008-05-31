@@ -8,8 +8,6 @@
  * @since   0.1.0
  * @version @package-version@
  */
-require_once 'Intraface/Main.php';
-
 class Intraface_ModuleHandler
 {
     private $modules = array();

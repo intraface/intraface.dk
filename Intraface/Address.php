@@ -12,7 +12,7 @@
  */
 require_once 'Intraface/functions/functions.php';
 
-class Address extends Intraface_Standard
+class Intraface_Address extends Intraface_Standard
 {
     /**
      * @var integer
@@ -79,7 +79,7 @@ class Address extends Intraface_Standard
      */
     function factory($belong_to, $belong_to_id)
     {
-        $belong_to_types = Address::getBelongToTypes();
+        $belong_to_types = Intraface_Address::getBelongToTypes();
 
         $belong_to_key = array_search($belong_to, $belong_to_types);
         if ($belong_to_key === false) {
@@ -98,9 +98,9 @@ class Address extends Intraface_Standard
             trigger_error('There is more than one active address for '.$belong_to.':'.$belong_to_id.' in Address::facotory', E_USER_ERROR);
         }
         if ($db->nextRecord()) {
-            return new Address($db->f('id'));
+            return new Intraface_Address($db->f('id'));
         } else {
-            $address = new Address(0);
+            $address = new Intraface_Address(0);
             $address->setBelongTo($belong_to, $belong_to_id);
             return $address;
         }

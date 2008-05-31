@@ -1049,7 +1049,7 @@ class Debtor extends Intraface_Standard
      */
     public function getIntranetAddress()
     {
-        return new Address($this->get("intranet_address_id"));
+        return new Intraface_Address($this->get("intranet_address_id"));
     }
 
     function getContact()

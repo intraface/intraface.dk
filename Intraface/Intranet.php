@@ -83,7 +83,7 @@ class Intraface_Intranet extends Intraface_Standard
 
         if($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             $this->value   = $row;
-            $this->address = Address::factory('intranet', $this->id);
+            $this->address = Intraface_Address::factory('intranet', $this->id);
             return $this->id;
         } else {
             $this->id = 0;

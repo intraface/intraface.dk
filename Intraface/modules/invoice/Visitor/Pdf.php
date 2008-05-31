@@ -34,7 +34,7 @@ class Reminder_Report_Pdf extends Debtor_Pdf
         }
         $contact['number'] = $reminder->contact->get('number');
 
-        $intranet_address = new Address($reminder->get("intranet_address_id"));
+        $intranet_address = new Intraface_Address($reminder->get("intranet_address_id"));
         $intranet = $intranet_address->get();
 
         switch($reminder->kernel->setting->get('intranet', 'debtor.sender')) {
