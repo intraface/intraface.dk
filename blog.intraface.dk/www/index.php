@@ -4,21 +4,7 @@ require_once 'config.local.php';
 ini_set('include_path', $GLOBALS['include_path']);
 
 require_once 'k.php';
-
-class monaskim_ClassLoader extends k_ClassLoader
-{
-  /**
-    * Default autoloader for Konstrukt naming scheme.
-    */
-  static function autoload($classname) {
-    $filename = str_replace('_', '/', $classname).'.php';
-    if (self::SearchIncludePath($filename)) {
-      require_once($filename);
-    }
-  }
-}
-
-spl_autoload_register(Array('monaskim_ClassLoader', 'autoload'));
+require_once 'Ilib/ClassLoader.php';
 
 $application = new Intraface_Blog_Root();
 
