@@ -8,8 +8,6 @@
  * @author Lars Olesen
  * @version 1.1
  */
-require_once 'Ilib/Error.php';
-
-class Error Extends Ilib_Error
+class Intraface_Error Extends Ilib_Error
 {
 }
