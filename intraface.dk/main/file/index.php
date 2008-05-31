@@ -29,11 +29,11 @@ $filehandler_shared->includeFile('FileViewer.php');
 
 $filehandler = FileHandler::factory($kernel, $query_parts[2]);
 if(!is_object($filehandler) || $filehandler->get('id') == 0) {
-    
+
     // require_once 'HTTP/Header.php';
     // $h = new HTTP_Header;
     // $h->sendStatusCode(404);
-    
+
     header('HTTP/1.0 404 Not Found');
     // header('Status: 404 Not Found');
     // print_r(headers_list());
@@ -47,13 +47,13 @@ $fileviewer = new FileViewer($filehandler, $query_parts[3]);
 if($fileviewer->needLogin()) {
     session_start();
     require('Intraface/Auth.php');
-    $auth = new Auth(session_id());
+    $auth = new Intraface_Auth(session_id());
     // the user is logged in but...
     if (!$user_id = $auth->isLoggedIn()) {
         trigger_error('You need to be logged in to view the file', E_USER_WARNING);
         exit;
     }
-     
+
     // ...we need to check that it is the right intranet
     $user = new User($user_id);
     $intranet = new Intranet($user->getActiveIntranetId());
