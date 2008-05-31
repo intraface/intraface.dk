@@ -209,10 +209,10 @@ class Intraface_Install
         } else {
             $kernel = new Intraface_Kernel;
         }
-        $kernel->user = new User(1);
+        $kernel->user = new Intraface_User(1);
         $kernel->user->setIntranetId(1);
-        $kernel->intranet = new Intranet(1);
-        $kernel->setting = new Setting(1, 1);
+        $kernel->intranet = new Intraface_Intranet(1);
+        $kernel->setting = new Intraface_Setting(1, 1);
 
 
         foreach($functions AS $function) {
