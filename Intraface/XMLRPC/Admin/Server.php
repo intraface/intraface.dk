@@ -7,13 +7,8 @@
  * @since   0.1.0
  * @version @package-version@
  */
-
-require_once 'XML/RPC2/Server.php';
-require_once 'MDB2.php';
-
 class Intraface_XMLRPC_Admin_Server
 {
-
     /**
      * Gets the private_key for an intranet supplied with the master password
      *
@@ -70,6 +65,4 @@ class Intraface_XMLRPC_Admin_Server
         }
         return true;
     }
-
 }
-?>

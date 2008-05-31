@@ -39,19 +39,23 @@ class Intraface_XMLRPC_Debtor_Server
     private function checkCredentials($credentials)
     {
         if (count($credentials) != 2) {
-            throw new XML_RPC2_FaultException('Der er et forkert antal argumenter i credentials', -2);
+            throw new XML_RPC2_FaultException('Wrong number of parameters.', -2);
         }
 
-        if (empty($credentials['private_key']) AND is_string($credentials['private_key'])) {
-            throw new XML_RPC2_FaultException('Du skal skrive en kode', -2);
+        if (empty($credentials['private_key'])) {
+            throw new XML_RPC2_FaultException('You must supply a private key.', -2);
         }
 
-        $this->kernel = new Intraface_Kernel('weblogin');
-        $this->kernel->weblogin('private', $credentials['private_key'], $credentials['session_id']);
+		$auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
+		$weblogin = $auth_adapter->auth();
+		
+		if (!$weblogin) {
+		    throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
+		} 
 
-        if (!is_object($this->kernel->intranet) AND get_class($this->kernel->intranet) != 'intranet') {
-            throw new XML_RPC2_FaultException('Du har ikke adgang til intranettet', -2);
-        }
+        $this->kernel = new Intraface_Kernel();
+        $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
+        $this->kernel->setting = new Intraface_Setting($this->kernel->intranet->get('id'));
 
         $debtor_module = $this->kernel->module('debtor');
     }
@@ -184,7 +188,6 @@ class Intraface_XMLRPC_Debtor_Server
         }
 
         require_once 'Intraface/modules/debtor/Visitor/Pdf.php';
-
 
         $report = new Debtor_Report_Pdf($this->kernel->getTranslation('debtor'), $filehandler);
         $report->visit($debtor, $onlinepayment);

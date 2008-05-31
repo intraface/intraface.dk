@@ -7,11 +7,6 @@
  * @author   Lars Olesen <lars@legestue.net>
  * @version  @package-version@
  */
-require_once 'Intraface/Kernel.php';
-require_once 'Intraface/Setting.php';
-require_once 'Intraface/Intranet.php';
-require_once 'Intraface/Weblogin.php';
-require_once 'XML/RPC2/Server.php';
 require_once 'Intraface/modules/webshop/Webshop.php';
 require_once 'Intraface/modules/webshop/FeaturedProducts.php';
 
@@ -172,7 +167,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->_factoryWebshop();
 
-        $db =  MDB2::factory(DB_DSN);
+        $db = MDB2::factory(DB_DSN);
 
         if (PEAR::isError($db)) {
             throw new XML_RPC2_FaultException($db->getMessage() . $db->getUserInfo(), -1);
@@ -195,29 +190,6 @@ class Intraface_XMLRPC_Shop_Server
 
         }
 
-        /*
-        // nyheder
-        $product = new Product($this->kernel);
-        $product->createDBQuery();
-        // 265
-        $product->dbquery->setFilter('keywords', array(265));
-
-        $related_products[] = array(
-            'title' => 'Nyheder',
-            'products' => $product->getList()
-        );
-
-        // tilbud
-        $product = new Product($this->kernel);
-        $product->createDBQuery();
-        // 266
-        $product->dbquery->setFilter('keywords', array(266));
-
-        $related_products[] = array(
-            'title' => 'Tilbud',
-            'products' => $product->getList()
-        );
-        */
         return $related_products;
 
     }
@@ -635,20 +607,19 @@ class Intraface_XMLRPC_Shop_Server
             throw new XML_RPC2_FaultException('supply a session_id', -5);
         }
 
-        $weblogin = new Intraface_Weblogin();
-        if (!$intranet_id = $weblogin->auth('private', $credentials['private_key'], $credentials['session_id'])) {
+        $auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
+        $weblogin = $auth_adapter->auth();
+        
+        if (!$weblogin) {
             throw new XML_RPC2_FaultException('access to intranet denied', -2);
-        }
+        } 
 
         $this->kernel = new Intraface_Kernel($credentials['session_id']);
         $this->kernel->weblogin = $weblogin;
-        $this->kernel->intranet = new Intraface_Intranet($intranet_id);
+        $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
         $this->kernel->setting = new Intraface_Setting($this->kernel->intranet->get('id'));
-
-        if (!is_object($this->kernel->intranet)) { // -2
-            throw new XML_RPC2_FaultException('could not create intranet', -2);
-        }
         $this->credentials = $credentials;
+
         return true;
     }
 

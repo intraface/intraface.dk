@@ -7,20 +7,18 @@
  * @since   0.1.0
  * @version @package-version@
  */
-
-require_once 'XML/RPC2/Server.php';
-
-class Intraface_XMLRPC_CMS_Server {
-
+class Intraface_XMLRPC_CMS_Server 
+{
     private $credentials;
     private $kernel;
 
-    function factory($site_id) {
-        if (!$this->kernel->intranet->hasModuleAccess('cms')) { // -2
-            throw new XML_RPC2_FaultException('Intranettet har ikke adgang til modulet cms', -2);
+    private function factory($site_id) 
+    {
+        if (!$this->kernel->weblogin->hasModuleAccess('cms')) { // -2
+            throw new XML_RPC2_FaultException('The intranet does not have access to the cms module', -2);
         }
         if (empty($site_id) OR !is_numeric($site_id)) { // -5
-            throw new XML_RPC2_FaultException('Siteid er ikke gyldigt', -5);
+            throw new XML_RPC2_FaultException('Invalid site id supplied', -5);
         }
         $cms_module = $this->kernel->module('cms');
         $this->cmssite = new CMS_Site($this->kernel, $site_id);
@@ -35,8 +33,8 @@ class Intraface_XMLRPC_CMS_Server {
      *
      * @return array
      */
-    function getPage($credentials, $site_id, $identifier) {
-
+    public function getPage($credentials, $site_id, $identifier) 
+    {
         $this->checkCredentials($credentials);
 
         // validate
@@ -61,8 +59,7 @@ class Intraface_XMLRPC_CMS_Server {
             $values['sections'] = array(); // this could be the 404
             $values['comments'] = array();
 
-        }
-        else {
+        } else {
 
             $cmspage->value['http_header_status'] = 'HTTP/1.0 200 OK';
 
@@ -81,8 +78,6 @@ class Intraface_XMLRPC_CMS_Server {
             $values = $cmspage->get();
         }
 
-
-
         return $values;
     }
 
@@ -94,8 +89,8 @@ class Intraface_XMLRPC_CMS_Server {
      * @param array $search
      * @return array
      */
-    function getPageList($credentials, $site_id, $search = '') {
-
+    public function getPageList($credentials, $site_id, $search = '') 
+    {
         $this->checkCredentials($credentials);
         $site_id = intval($site_id);
 
@@ -111,7 +106,6 @@ class Intraface_XMLRPC_CMS_Server {
             $cmspage->getDBQuery()->setFilter('level', $search['level']);
         }
 
-
         return $cmspage->getList();
     }
 
@@ -122,7 +116,8 @@ class Intraface_XMLRPC_CMS_Server {
      * @param integer $site_id
      * @return array
      */
-    function getSitemap($credentials, $site_id) {
+    public function getSitemap($credentials, $site_id) 
+    {
         $this->checkCredentials($credentials);
 
         $site_id = intval($site_id);
@@ -140,27 +135,29 @@ class Intraface_XMLRPC_CMS_Server {
      * @param struct $credentials
      * @return array
      */
-    function checkCredentials($credentials) {
-
+    private function checkCredentials($credentials) 
+    {
         $this->credentials = $credentials;
 
         if ($count = count($credentials) != 2) { // -4
-            throw new XML_RPC2_FaultException('Der er et forkert antal argumenter i credentials ('.$count.')', -4);
+            throw new XML_RPC2_FaultException('Wrong number of parameters in credentials ('.$count.'). Check the documentation.', -4);
         }
 
         if (empty($credentials['private_key'])) { // -5
-            throw new XML_RPC2_FaultException('Du skal skrive en kode', -5);
+            throw new XML_RPC2_FaultException('Wrong parameters. You need to specify the private key.', -5);
         }
 
-        $this->kernel = new Intraface_Kernel($credentials['session_id']);
-        if (!$this->kernel->weblogin('private', $credentials['private_key'], $credentials['session_id'])) { // -2
-            throw new XML_RPC2_FaultException('Du har ikke adgang til intranettet', -2);
-        }
+		$auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
+		$weblogin = $auth_adapter->auth();
+		
+		if (!$weblogin) {
+		    throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
+		} 
 
-        if (!is_object($this->kernel->intranet) AND get_class($this->kernel->intranet) != 'intranet') { // -2
-            throw Exception('Du har ikke adgang til intranettet');
-        }
+        $this->kernel = new Intraface_Kernel();
+        $this->kernel->weblogin = $weblogin;
+        $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
+        $this->kernel->setting = new Intraface_Setting($this->kernel->intranet->get('id'));
+
     }
-
 }
-?>

@@ -7,12 +7,6 @@
  * @since   0.1.0
  * @version @package-version@
  */
-
-require_once 'XML/RPC2/Server.php';
-require_once 'Intraface/Weblogin.php';
-require_once 'Intraface/Kernel.php';
-require_once 'Intraface/Intranet.php';
-require_once 'Intraface/Setting.php';
 require_once 'Intraface/modules/contact/Contact.php';
 require_once 'Intraface/modules/newsletter/NewsletterList.php';
 require_once 'Intraface/modules/newsletter/NewsletterSubscriber.php';
@@ -53,7 +47,8 @@ class Intraface_XMLRPC_Newsletter_Server
         $subscriber = $this->factoryList($list_id);
 
         if (!$subscriber->subscribe(array('name' => $name, 'email' => $email, 'ip' => $ip))) {
-            throw new XML_RPC2_FaultException('an error occurred when trying to subscribe: ' . implode(',', $this->subscriber->error->message), -4);
+            echo $subscriber->error->view();
+            throw new XML_RPC2_FaultException('an error occurred when trying to subscribe', -4);
         }
 
         return true;
@@ -203,18 +198,16 @@ class Intraface_XMLRPC_Newsletter_Server
             throw new XML_RPC2_FaultException('supply a session_id', -5);
         }
 
-        $weblogin = new Intraface_Weblogin();
-        if (!$intranet_id = $weblogin->auth('private', $credentials['private_key'], $credentials['session_id'])) {
+        $auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
+        $weblogin = $auth_adapter->auth();
+        
+        if (!$weblogin) {
             throw new XML_RPC2_FaultException('access to intranet denied', -2);
         }
-
+        
         $this->kernel = new Intraface_Kernel();
-        $this->kernel->intranet = new Intraface_Intranet($intranet_id);
+        $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
         $this->kernel->setting = new Intraface_Setting($this->kernel->intranet->get('id'));
-
-        if (!is_object($this->kernel->intranet)) { // -2
-            throw new XML_RPC2_FaultException('could not create intranet', -2);
-        }
 
         return true;
     }
