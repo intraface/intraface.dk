@@ -42,7 +42,7 @@ class Intraface_ModulePackage extends Intraface_Standard {
     {
         $this->db = MDB2::singleton(DB_DSN);
         $this->id = (int)$id;
-        $this->error = New Error;
+        $this->error = new Intraface_Error;
 
         if ($this->id != 0) {
             $this->load();
