@@ -27,7 +27,8 @@ if(isset($_POST['email']) AND isset($_POST['password'])) {
             break;
         }
     }
-
+} elseif (!empty($_GET['msg'])) {
+	$msg = $_GET['msg'];
 }
 include(PATH_INCLUDE_IHTML . 'outside/top.php');
 
