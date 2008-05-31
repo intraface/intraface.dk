@@ -97,7 +97,7 @@ class Intraface_Kernel
      */
     function createWeblogin($session_id)
     {
-        return new Weblogin($session_id);
+        return new Intraface_Weblogin($session_id);
     }
 
     /**
