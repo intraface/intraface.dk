@@ -5,7 +5,7 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/accounting/Year.php';
 require_once 'Intraface/functions/functions.php';
-require_once 'Intraface/tools/Date.php';
+require_once 'Intraface/Date.php';
 require_once 'Intraface/Validator.php';
 require_once 'DB/Sql.php';
 

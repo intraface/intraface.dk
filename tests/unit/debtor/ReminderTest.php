@@ -10,7 +10,7 @@ require_once 'tests/unit/stubs/Address.php';
 require_once 'tests/unit/stubs/Translation.php';
 require_once 'Intraface/modules/invoice/Reminder.php';
 require_once 'Intraface/modules/invoice/Invoice.php';
-require_once 'Intraface/tools/Date.php';
+require_once 'Intraface/Date.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/modules/contact/Contact.php';
 

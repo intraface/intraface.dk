@@ -3,7 +3,7 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/invoice/Invoice.php';
-require_once 'Intraface/tools/Date.php';
+require_once 'Intraface/Date.php';
 require_once 'tests/unit/stubs/Kernel.php';
 require_once 'tests/unit/stubs/User.php';
 require_once 'tests/unit/stubs/Intranet.php';

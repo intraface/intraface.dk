@@ -6,7 +6,7 @@ require_once 'Intraface/Kernel.php';
 require_once 'Intraface/Setting.php';
 require_once 'Intraface/DBQuery.php';
 require_once 'Intraface/modules/debtor/Debtor.php';
-require_once 'Intraface/tools/Date.php';
+require_once 'Intraface/Date.php';
 require_once 'tests/unit/stubs/Translation.php';
 
 

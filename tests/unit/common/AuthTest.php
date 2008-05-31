@@ -11,50 +11,56 @@ class AuthTest extends PHPUnit_Framework_TestCase {
 
     const SESSION_LOGIN = 'thissessionfirstlog';
 
-    function setUp() {
-        
+    function setUp()
+    {
+
         $db = MDB2::singleton(DB_DSN);
         $db->exec('TRUNCATE user');
-        
-        $auth = new Auth(self::SESSION_LOGIN);
+
+        $auth = new Intraface_Auth(self::SESSION_LOGIN);
         if ($auth->isLoggedIn()) {
             $auth->logout();
         }
     }
-    
-    function tearDown() {
-        $auth = new Auth(self::SESSION_LOGIN);
+
+    function tearDown()
+    {
+        $auth = new Intraface_Auth(self::SESSION_LOGIN);
         if ($auth->isLoggedIn()) {
             $auth->logout();
         }
     }
-    
-    function createUserInDatabase() {
+
+    function createUserInDatabase()
+    {
         // first we add a user.
         require_once 'Intraface/modules/intranetmaintenance/UserMaintenance.php';
         $u = new UserMaintenance();
         $this->assertEquals(1, $u->update(array('email' => 'start@intraface.dk', 'password' => 'startup', 'confirm_password' => 'startup')));
-        
+
     }
-    
-    function createLoggedInAuth() {
+
+    function createLoggedInAuth()
+    {
         $this->createUserInDatabase();
-        $auth = new Auth(self::SESSION_LOGIN);
+        $auth = new Intraface_Auth(self::SESSION_LOGIN);
         $auth->login('start@intraface.dk', 'startup');
         $auth->isLoggedIn();
         return $auth;
     }
-    
+
     ////////////////////////////////////////////////
 
-    function testConstructionOfAuth() {
-        $auth = new Auth(self::SESSION_LOGIN);
+    function testConstructionOfAuth()
+    {
+        $auth = new Intraface_Auth(self::SESSION_LOGIN);
         $this->assertTrue(is_object($auth));
     }
 
-    function testLoginFailsOnIncorrectCredentials() {
+    function testLoginFailsOnIncorrectCredentials()
+    {
         $this->createUserInDatabase();
-        $auth = new Auth(self::SESSION_LOGIN);
+        $auth = new Intraface_Auth(self::SESSION_LOGIN);
         $this->assertFalse($auth->login('incorrect@email.dk', 'incorrectpass'));
         $this->assertFalse($auth->isLoggedIn());
         $this->assertFalse($auth->login('incorrect@email.dk', 'startup'));
@@ -64,35 +70,36 @@ class AuthTest extends PHPUnit_Framework_TestCase {
 
     }
 
-    function testLoginSucceedsOnCorrectCredentials() {
+    function testLoginSucceedsOnCorrectCredentials()
+    {
         $this->createUserInDatabase();
-        $auth = new Auth(self::SESSION_LOGIN);
+        $auth = new Intraface_Auth(self::SESSION_LOGIN);
         $this->assertTrue($auth->login('start@intraface.dk', 'startup'));
         $this->assertTrue(($auth->isLoggedIn() > 0));
     }
 
-    function testLogout() {
+    function testLogout()
+    {
         $auth = $this->createLoggedInAuth();
         $this->assertTrue($auth->logout());
         $this->assertFalse($auth->isLoggedIn());
     }
 
 
-    function testChangeOfSessionIsNotLoggedIn() {
+    function testChangeOfSessionIsNotLoggedIn()
+    {
         $auth = $this->createLoggedInAuth();
-        $auth = new Auth('anotherdifferntsession');
+        $auth = new Intraface_Auth('anotherdifferntsession');
         $this->assertFalse($auth->isLoggedIn());
     }
 
-    
-    function testAttach() {
-        $auth = new Auth('session');
+
+    function testAttach()
+    {
+        $auth = new Intraface_Auth('session');
         $auth->attachObserver(new FakeAuthObserver);
         $observers = $auth->getObservers();
         $this->assertTrue(count($observers) == 1);
         // this assert is a
     }
-
-    
 }
-?>

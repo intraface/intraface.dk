@@ -5,7 +5,7 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/accounting/Voucher.php';
 require_once 'Intraface/Kernel.php';
-require_once 'Intraface/tools/Date.php';
+require_once 'Intraface/Date.php';
 
 class FakeVoucherSetting {
     function get() {}

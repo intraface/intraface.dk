@@ -115,7 +115,6 @@ class UserTest extends PHPUnit_Framework_TestCase
         $this->user->setIntranetId(1);
         $this->user->clearCachedPermission();
         $this->assertEquals(0, count($this->user->getPermissions()));
-        $this->assertFalse($this->user->permissionsLoaded());
     }
 
     function testGetAddressReturnsObject()
