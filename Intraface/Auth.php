@@ -11,7 +11,7 @@
 define('LOGIN_ERROR_WRONG_CREDENTIALS', 0);
 define('LOGIN_ERROR_ALREADY_LOGGED_IN', -1);
 
-class Auth
+class Intraface_Auth
 {
     private $db;
     private $session_id;
