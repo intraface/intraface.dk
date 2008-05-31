@@ -42,7 +42,7 @@ class SystemDisturbance extends Intraface_Standard
     {
         $input = safeToDb($input);
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         $from = split(' ', $input['from_date_time']);
 

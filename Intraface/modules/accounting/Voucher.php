@@ -104,7 +104,7 @@ class Voucher extends Intraface_Standard
      */
     function validate($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         if (!empty($var['voucher_number'])) {
             $validator->isNumeric($var['voucher_number'], 'Voucher er ikke et tal', 'allow_empty');
         }
@@ -188,7 +188,7 @@ class Voucher extends Intraface_Standard
             $this->error->set('Kunne ikke konvertere datoen');
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isNumeric($var['debet_account_number'], 'Debetkontoen er ikke et tal');
         $validator->isNumeric($var['credit_account_number'], 'Kreditkontoen er ikke et tal');
         $validator->isDouble($var['amount'], 'Beløbet skal være et tal');

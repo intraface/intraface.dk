@@ -158,8 +158,7 @@ class IntranetMaintenance extends Intraface_Intranet
      */
     function validate($input)
     {
-        require_once 'Intraface/Validator.php';
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         $validator->isString($input['name'], 'Navn skal være en streng', '', '');
 
@@ -235,8 +234,7 @@ class IntranetMaintenance extends Intraface_Intranet
             return false;
         }
 
-        require_once 'Intraface/Validator.php';
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         if ($validator->isNumeric($id, "Maintainer is invalid", "greater_than_zero")) {
             $temp_user = new Intraface_User($id);

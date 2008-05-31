@@ -144,12 +144,10 @@ class Procurement extends Intraface_Standard
         $db = new DB_sql;
 
         $input = safeToDb($input);
-        require_once 'Intraface/Validator.php';
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         if (!isset($input['dk_invoice_date'])) $input['dk_invoice_date'] = '';
         $validator->isDate($input["dk_invoice_date"], "Fakturadato er ikke en gyldig dato");
-        require_once 'Intraface/Date.php';
         $date = new Intraface_Date($input["dk_invoice_date"]);
         if ($date->convert2db()) {
             $input["invoice_date"] = $date->get();
@@ -410,7 +408,7 @@ class Procurement extends Intraface_Standard
             return false;
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         $validator->isDate($dk_paid_date, "Betalt dato er ikke en gyldig dato");
         $date = new Intraface_Date($dk_paid_date);
@@ -531,9 +529,8 @@ class Procurement extends Intraface_Standard
             return false;
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         if ($validator->isDate($voucher_date, "Ugyldig dato")) {
-            require_once 'Intraface/Date.php';
             $voucher_date_object = new Intraface_Date($voucher_date);
             $voucher_date_object->convert2db();
         }
@@ -667,9 +664,8 @@ class Procurement extends Intraface_Standard
     {
         $db = new DB_Sql;
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         if ($validator->isDate($voucher_date, "Ugyldig dato")) {
-            require_once 'Intraface/Date.php';
             $voucher_date = new Intraface_Date($voucher_date);
             $voucher_date->convert2db();
         }
@@ -750,12 +746,11 @@ class Procurement extends Intraface_Standard
             return false;
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         $total = 0;
         $vat = 0;
         foreach ($debet_accounts AS $key => $debet_account) {
-            require_once 'Intraface/Amount.php';
             if ($validator->isNumeric($debet_account['amount'], 'Ugyldig beløb i linje '.($key+1).' "'.$debet_account['text'].'"', 'greater_than_zero')) {
 
                 $amount = new Intraface_Amount($debet_account['amount']);

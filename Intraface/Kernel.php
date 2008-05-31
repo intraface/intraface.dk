@@ -86,7 +86,7 @@ class Intraface_Kernel
      */
     function createSetting($intranet_id, $user_id = 0)
     {
-        return new Setting($intranet_id, $user_id);
+        return new Intraface_Setting($intranet_id, $user_id);
 
     }
 

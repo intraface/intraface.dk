@@ -85,7 +85,7 @@ class CMS_Gallery extends CMS_Element
 
     function validate_element($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($var['gallery_select_method'], 'error in gallery_select_method');
 
         if (!in_array($var['gallery_select_method'], $this->methods)) {

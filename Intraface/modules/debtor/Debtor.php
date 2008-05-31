@@ -324,7 +324,7 @@ class Debtor extends Intraface_Standard
 
 
         // starte validatoren
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         // nummeret
         if (empty($input["number"])) {

@@ -70,7 +70,7 @@ class CMS_FileList extends CMS_Element
 
     function validate_element($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($var['caption'], 'error in caption', '', 'allow_empty');
 
         /*

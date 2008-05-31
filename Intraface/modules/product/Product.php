@@ -267,7 +267,7 @@ class Product extends Intraface_Standard
             trigger_error('Product::save() skal have et array', E_USER_ERROR);
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         if (!$this->isNumberFree($array_var['number'])) {
             $this->error->set('Produktnummeret er ikke frit');

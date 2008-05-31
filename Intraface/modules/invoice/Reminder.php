@@ -145,8 +145,7 @@ class Reminder extends Intraface_Standard
 
         $input = safeToDb($input);
 
-        require_once 'Intraface/Validator.php';
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         if (!isset($input['number'])) $input['number'] = 0;
         if ($validator->isNumeric($input["number"], "Rykkernummer skal være et tal større end nul", "greater_than_zero")) {
@@ -594,7 +593,7 @@ class Reminder extends Intraface_Standard
             return false;
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         if ($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);
             $this_date->convert2db();

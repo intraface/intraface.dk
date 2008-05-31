@@ -111,7 +111,7 @@ class CMS_Map extends CMS_Element
             $this->error->set('error in service - unknown');
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($var['text'], 'error in text');
         $validator->isString($var['service'], 'error in service');
         $validator->isString($var['api_key'], 'error in api key');

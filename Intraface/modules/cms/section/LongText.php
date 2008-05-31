@@ -46,7 +46,7 @@ class CMS_Section_LongText extends CMS_Section
 
         //print_r($this->allowed_tags);
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($var['text'], 'error in text', $this->convertArrayToTags($this->allowed_tags));
 
         // if error return 0

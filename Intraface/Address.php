@@ -198,7 +198,7 @@ class Address extends Intraface_Standard
      */
     function validate($array_var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         if (empty($array_var)) {
             $this->error->set('array cannot be empty');
         }

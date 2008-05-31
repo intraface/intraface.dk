@@ -164,8 +164,7 @@ class DebtorItem extends Intraface_Standard
 
         $input = safeToDb($input);
 
-        require_once 'Intraface/Validator.php';
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         settype($input["product_id"], 'integer');
         if ($validator->isNumeric($input["product_id"], "Du skal vælge et produkt", "greater_than_zero")) {

@@ -129,7 +129,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
             $this->error->set('Invalid module package in');
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         if (!$validator->isDate($start_date, 'Invalid start date')) {
             return false;
@@ -335,7 +335,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
 
         // first we check for danish format of duration
         if (ereg('^[0-9]{2}-[0-9]{2}-[0-9]{4}$', $duration)) {
-            $validator = new Validator($this->error);
+            $validator = new Intraface_Validator($this->error);
             if ($validator->isDate($duration, 'Invalid end date')) {
                 $end_date = new Intraface_Date($duration);
                 $end_date->convert2db();

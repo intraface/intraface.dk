@@ -376,7 +376,7 @@ class Contact extends Intraface_Standard {
             $this->error->set('Kundenummeret er ikke frit');
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         if (!empty($var['type_key'])) {
             $validator->isNumeric($var['type_key'], 'Fejl i typen', 'allow_empty');
         }

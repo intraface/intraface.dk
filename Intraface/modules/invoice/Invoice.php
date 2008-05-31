@@ -192,7 +192,7 @@ class Invoice extends Debtor
             return false;
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         if ($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);
             $this_date->convert2db();

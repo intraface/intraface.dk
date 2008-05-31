@@ -219,7 +219,7 @@ class NewsletterSubscriber extends Intraface_Standard
         $input = safeToDb($input);
         $input = array_map('strip_tags', $input);
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isEmail($input['email'], $input['email'] . ' er ikke en gyldig e-mail');
 
         if (empty($input['name'])) {
@@ -361,7 +361,7 @@ class NewsletterSubscriber extends Intraface_Standard
     {
         $email = strip_tags($email);
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isEmail($email, 'E-mailen er ikke gyldig');
 
         if ($this->error->isError()) {

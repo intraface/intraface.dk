@@ -80,10 +80,11 @@ class ContactPerson extends Intraface_Standard
      *
      * @return integer
      */
-    public function save($input) {
+    public function save($input) 
+    {
         $input = safeToDb($input);
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($input['name'], 'Fejl i kontaktpersonens navn', '', 'allow_empty');
 
         settype($input['email'], 'string');

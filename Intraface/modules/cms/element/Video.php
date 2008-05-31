@@ -53,7 +53,7 @@ class CMS_Video extends CMS_Element
      */
     function validate_element($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($var['doc_id'], 'error in doc id');
         $validator->isString($var['service'], 'error in service');
         if (!array_key_exists($var['service'], $this->services)) {

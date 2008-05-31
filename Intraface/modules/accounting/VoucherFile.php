@@ -29,7 +29,7 @@ class VoucherFile
 
     function validate($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         if (!empty($var['description'])) {
             $validator->isString($var['description'], 'Beskrivelsen ulovlig', '', 'allow_empty');
         }

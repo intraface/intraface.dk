@@ -69,7 +69,7 @@ class ProcurementItem extends Intraface_Standard
 
         $input = safeToDb($input);
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         if ($validator->isNumeric($input["product_id"], "Du skal vælge et produkt", "greater_than_zero")) {
             $product = new Product($this->procurement->kernel, $input["product_id"]);

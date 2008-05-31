@@ -86,7 +86,7 @@ class Post extends Intraface_Standard
 
     function validate($date, $account_id, $text, $debet, $credit)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         // Mærkeligt at denne ikke validerer korrekt - isDate accepterer ikke: 2006-07-15
         // $validator->isDate($date, 'Datoen ' . $date .  ' er ikke en gyldig dato');

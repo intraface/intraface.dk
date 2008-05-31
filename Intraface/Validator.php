@@ -5,10 +5,7 @@
  * @author Lars Olesen <lars@legestue.net>
  * @author Sune Jensen <sj@sunet.dk>
  */
-
-require_once 'Ilib/Validator.php';
-
-class Validator extends Ilib_Validator
+class Intraface_Validator extends Ilib_Validator
 {
     public function __construct($error)
     {

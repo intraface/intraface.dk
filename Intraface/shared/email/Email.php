@@ -157,7 +157,7 @@ class Email extends Intraface_Standard
      */
     function validate($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         if ($this->id == 0) {
             $validator->isNumeric($var['belong_to'], 'belong_to');
             $validator->isNumeric($var['type_id'], 'type_id');
@@ -391,7 +391,7 @@ class Email extends Intraface_Standard
 
         if($contact->get('type') == 'corporation' && $this->get('contact_person_id') != 0) {
             $contact->loadContactPerson($this->get('contact_person_id'));
-            $validator = new Validator($this->error);
+            $validator = new Intraface_Validator($this->error);
             if($validator->isEmail($contact->contactperson->get('email'))) {
                 $phpmailer->AddAddress($contact->contactperson->get('email'), $contact->contactperson->get('name'));
             }

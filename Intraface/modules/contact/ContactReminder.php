@@ -185,7 +185,7 @@ class ContactReminder extends Intraface_Standard
 
     function validate($input)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         $validator->isDate($input['reminder_date'], 'Error in date', 'allow_no_year');
         $validator->isString($input['subject'], 'Error in subject', '');

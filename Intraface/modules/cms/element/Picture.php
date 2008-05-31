@@ -10,18 +10,18 @@
  */
 require_once 'Intraface/modules/cms/Element.php';
 
-class CMS_Picture extends CMS_Element {
-
-    function __construct(& $section, $id = 0) {
+class CMS_Picture extends CMS_Element 
+{
+    function __construct($section, $id = 0) 
+    {
         $this->value['type'] = 'picture';
         parent::__construct($section, $id);
         $this->section->kernel->useShared('filehandler');
-
     }
 
-    function load_element() {
+    function load_element() 
+    {
         $this->section->kernel->useShared('filehandler');
-
         $this->value['pic_id'] = $this->parameter->get('pic_id');
         $this->value['pic_size'] = $this->parameter->get('pic_size');
         $this->value['pic_text'] = $this->parameter->get('pic_text');
@@ -37,8 +37,7 @@ class CMS_Picture extends CMS_Element {
                 if ($size == 'original') {
                     $this->value['picture'] = $filemanager->get();
 
-                }
-                else {
+                } else {
                     $filemanager->createInstance($size);
                     $this->value['picture'] = $filemanager->instance->get();
 
@@ -48,8 +47,9 @@ class CMS_Picture extends CMS_Element {
 
     }
 
-    function validate_element($var) {
-        $validator = new Validator($this->error);
+    function validate_element($var) 
+    {
+        $validator = new Intraface_Validator($this->error);
 
         if (!empty($var['pic_text'])) $validator->isString($var['pic_text'], 'error in pic_text', '', 'allow_empty');
         if (!empty($var['pic_id'])) $validator->isNumeric($var['pic_id'], 'error in pic_id', 'allow_empty');
@@ -58,14 +58,15 @@ class CMS_Picture extends CMS_Element {
         // størrelsen skal også valideres
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
 
-        return 1;
+        return true;
     }
 
 
-    function save_element($var) {
+    function save_element($var) 
+    {
         $var = array_map('strip_tags', $var);
         //$var = safeToDb($var);
         /*
@@ -99,8 +100,6 @@ class CMS_Picture extends CMS_Element {
         if (!empty($var['pic_text'])) $this->parameter->save('pic_text', $var['pic_text']);
         if (!empty($var['pic_url'])) $this->parameter->save('pic_url', $var['pic_url']);
 
-        return 1;
+        return true;
     }
 }
-
-?>

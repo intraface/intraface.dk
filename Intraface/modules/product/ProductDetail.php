@@ -124,7 +124,7 @@ class ProductDetail extends Intraface_Standard {
      */
     private function validate($array_var)
     {
-        $validator = new Validator($this->product->error);
+        $validator = new Intraface_Validator($this->product->error);
         $validator->isString($array_var['name'], 'Du har brugt ulovlige tegn i beskrivelsen');
         $validator->isString($array_var['description'], 'Du har brugt ulovlige tegn i beskrivelsen', '<strong><em>', 'allow_empty');
         $validator->isNumeric($array_var['unit'], 'Fejl i unit');

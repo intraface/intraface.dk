@@ -27,7 +27,7 @@ class ContactMessage extends Intraface_Standard {
     function update($var) {
         $var = safeToDb($var);
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isNumeric($var['important'], "Fejl i important", "allow_empty");
         $validator->isString($var['message'], "Du har brugt ulovlige tegn i beskeden.");
 

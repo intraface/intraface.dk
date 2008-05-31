@@ -481,8 +481,7 @@ class Intraface_User extends Intraface_Standard
     protected function validate(&$input)
     {
         $input = safeToDb($input);
-        require_once 'Intraface/Validator.php';
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         $validator->isEmail($input["email"], "Ugyldig E-mail");
         $result = $this->db->query("SELECT id FROM user WHERE email = \"".$input["email"]."\" AND id != ".$this->id);
@@ -577,7 +576,7 @@ class Intraface_User extends Intraface_Standard
             $this->error->set('error in old password');
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isPassword($new_password, 6, 16, "error in new password");
 
         if ($new_password != $repeat_password) {

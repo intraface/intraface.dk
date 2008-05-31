@@ -15,7 +15,7 @@ class CMS_Pagelist extends CMS_Element
 
     function validate_element($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($var['headline'], 'error in headline', '', 'allow_empty');
         $validator->isString($var['no_results_text'], 'error in no results text', '', 'allow_empty');
         $validator->isString($var['read_more_text'], 'error in read more text', '', 'allow_empty');

@@ -222,7 +222,7 @@ class Account extends Intraface_Standard
             $this->error->set('Du kan ikke bruge det samme kontonummer flere gange');
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isNumeric($var['number'], 'Kontonummeret er ikke et tal');
 
         $validator->isNumeric($var['type_key'], 'Kontotypen er ikke rigtig');

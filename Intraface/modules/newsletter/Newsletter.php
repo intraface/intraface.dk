@@ -135,7 +135,7 @@ class Newsletter extends Intraface_Standard
         $var = safeToDb($var);
         $var = array_map('strip_tags', $var);
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($var['text'], 'Ugyldige tegn brug i tekst');
         $validator->isString($var['subject'], 'Ugyldige tegn brugt i emne');
 
@@ -215,14 +215,14 @@ class Newsletter extends Intraface_Standard
             return false;
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $from      = $this->list->get('reply_email');
         $name      = $this->list->get('sender_name');
         $sql       = 'INSERT INTO email (date_created, date_updated, from_email, from_name, type_id, status, belong_to_id, date_deadline, intranet_id, contact_id, user_id, subject, body) VALUES ';
         $db        = MDB2::singleton(DB_DSN);
 
         if (PEAR::isError($db)) {
-            die($result->getMessage() . $result->getUserInfo());
+            throw new Exception($result->getMessage() . $result->getUserInfo());
         }
 
         $i       = 0;

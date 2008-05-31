@@ -35,7 +35,7 @@ class IntranetNews extends Intraface_Standard
     {
         $input = safeToDb($input);
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         $validator->isString($input['area'], 'Område er ikke udfylde korrekt', '', 'allow_empty');
         $validator->isString($input['description'], 'Beskrivelsen er ikke udfyldt korrekt', '<strong>');
@@ -49,7 +49,7 @@ class IntranetNews extends Intraface_Standard
             description = \"".$input['description']."\",
             active = 1";
 
-        $db = new DB_sql;
+        $db = new DB_Sql;
 
         if($this->id != 0) {
             $db->query("UPDATE systemmessage_news SET ".$sql." WHERE id = ".$this->id);

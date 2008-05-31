@@ -48,7 +48,7 @@ class UserMaintenance extends Intraface_User
     public function update($input)
     {
         $this->validate($input);
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         if ($this->id == 0) {
             $validator->isPassword($input["password"], 6, 16, "Ugyldig adgangskode. Den skal være mellem 6 og 16 tegn, og må indeholde store og små bogstaver samt tal");

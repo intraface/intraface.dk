@@ -108,7 +108,7 @@ class NewsletterList extends Intraface_Standard
      */
     private function validate($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($var['title'], 'Titel er ikke ufdyldt korrekt');
         $validator->isString($var['sender_name'], 'Navn på afsender er ikke ufdyldt korrekt', '', 'allow_empty');
         $validator->isEmail($var['reply_email'], 'E-mail er ikke en gyldig e-mail', 'allow_empty');

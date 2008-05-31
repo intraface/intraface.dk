@@ -99,7 +99,7 @@ class CMS_Template extends Intraface_Standard
 
     function validate($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($var['name'], 'error in name');
         $validator->isString($var['identifier'], 'error in identifier');
         if (!$this->isIdentifierUnique($var['identifier'])) {

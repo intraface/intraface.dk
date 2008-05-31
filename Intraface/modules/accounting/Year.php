@@ -180,7 +180,7 @@ class Year extends Intraface_Standard
 
     private function validate(&$var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         // I could not find any use of the following, so i commented it out /SJ (22-01-2007)
         // $validator->isNumeric($var['year'], "year", "allow_empty");
         $validator->isNumeric($var['last_year_id'], "last_year_id", "allow_empty");

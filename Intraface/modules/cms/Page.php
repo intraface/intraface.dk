@@ -175,7 +175,7 @@ class CMS_Page extends Intraface_Standard
      */
     function validate($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         if (!empty($var['navigation_name'])) {
             $validator->isString($var['navigation_name'], 'error in navigation_name - has to be a string', '', 'allow_empty');
         }

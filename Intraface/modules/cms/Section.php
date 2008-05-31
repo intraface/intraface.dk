@@ -163,7 +163,7 @@ class CMS_Section extends Intraface_Standard
     private function validate($var)
     {
         /*
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isNumeric($var['type_key'], 'type_key');
         $validator->isNumeric($var['template_section_id'], 'template_section_id');
         if ($this->error->isError()) {

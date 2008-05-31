@@ -7,11 +7,9 @@
  *
  * @author Sune Jensen <sj@sunet.dk>
  */
-
-require_once 'DB/Sql.php';
 require_once 'Intraface/functions/functions.php';
 
-class Setting
+class Intraface_Setting
 {
     /**
      * @var object

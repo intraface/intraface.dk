@@ -144,7 +144,7 @@ class CMS_TemplateSection extends Intraface_Standard
 
     private function validate($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($var['name'], 'error in name', '', '');
 
         if (empty($var['identifier'])) {

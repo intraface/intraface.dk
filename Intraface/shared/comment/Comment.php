@@ -146,7 +146,7 @@ class Comment extends Intraface_Standard
      */
     function validate($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($var['name'], 'Navn', '');
         $validator->isEmail($var['email'], 'E-mail', '');
         $validator->isString($var['headline'], 'Headline', '');

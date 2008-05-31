@@ -42,7 +42,7 @@ class CMS_Site extends Intraface_Standard
 
     function validate($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($var['name'], 'error in name', '');
         $validator->isUrl($var['url'], 'error in url', 'allow_empty');
         if (substr($var['url'], -1) != '/') {

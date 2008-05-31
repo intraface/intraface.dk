@@ -95,7 +95,7 @@ class Payment extends Intraface_Standard
         }
 
         $input = safeToDb($input);
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         if (!isset($input["payment_date"])) $input["payment_date"] = '';
         if ($validator->isDate($input["payment_date"], "Ugyldig dato", "allow_no_year")) {
@@ -378,7 +378,7 @@ class Payment extends Intraface_Standard
             return false;
         }
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         if ($validator->isDate($voucher_date, "Ugyldig dato")) {
             $this_date = new Intraface_Date($voucher_date);
             $this_date->convert2db();

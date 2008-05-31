@@ -45,7 +45,7 @@ class IntranetAdministration extends Intraface_Intranet
         $input = safeToDb($input);
         settype($input['pdf_header_file_id'], 'integer');
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isString($input['name'], 'Navn skal være en streng', '', '');
         $validator->isString($input['identifier'], 'Identifier skal være en streng', '', '');
         $validator->isNumeric($input['pdf_header_file_id'], 'Header billede er ikke gyldigt', 'zero_or_greater');

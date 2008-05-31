@@ -112,7 +112,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
 
     function validate($input)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         $validator->isNumeric($input['running_index'], 'Index is not a valid number');
         $validator->isNumeric($input['evaluate_target_key'], 'Evaluation target is not valid');

@@ -197,8 +197,7 @@ class OnlinePayment extends Intraface_Standard
     {
         $input = safeToDb($input);
 
-        require_once 'Intraface/Validator.php';
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         if (!isset($input['belong_to'])) {
             $input['belong_to'] = 0;
@@ -317,7 +316,7 @@ class OnlinePayment extends Intraface_Standard
 
         $input = safeToDb($input);
 
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
 
         if ($validator->isDouble($input['dk_amount'], 'Beløb er ikke et gyldigt beløb', 'greater_than_zero')) {
             $amount = new Intraface_Amount($input['dk_amount']);

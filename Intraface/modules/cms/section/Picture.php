@@ -44,7 +44,7 @@ class CMS_Section_Picture extends CMS_Section {
     }
 
     function validate_section(& $var) {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         if (!empty($var['pic_id'])) $validator->isNumeric($var['pic_id'], 'error in pic_id', 'allow_empty');
 
         if ($this->error->isError()) {

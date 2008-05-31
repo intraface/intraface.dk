@@ -136,7 +136,7 @@ class Stock extends Intraface_Standard
 
         $input = safeToDb($input);
 
-        $validator = New Validator($this->product->error);
+        $validator = new Intraface_Validator($this->product->error);
 
         $validator->isNumeric($input['quantity'], 'Antal er ikke et gyldigt tal', 'integer');
         $validator->isString($input['description'], 'Du skal angive en beskrivelse');
@@ -145,7 +145,7 @@ class Stock extends Intraface_Standard
             return false;
         }
 
-        $db = new DB_sql;
+        $db = new DB_Sql;
 
         $db->query("INSERT INTO stock_regulation SET
             intranet_id = ".$this->product->kernel->intranet->get('id').",

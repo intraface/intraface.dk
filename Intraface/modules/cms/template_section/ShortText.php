@@ -17,7 +17,7 @@ class CMS_Template_ShortText extends CMS_TemplateSection
 
     protected function validate_section($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isNumeric($var['size'], 'error in size', 'allow_empty');
 
         if ($this->error->isError()) {

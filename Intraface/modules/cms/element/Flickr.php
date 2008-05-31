@@ -112,7 +112,7 @@ class CMS_Flickr extends CMS_Element
 
     function validate_element($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isNumeric($var['photoset_id'], 'error in photoset id');
         $validator->isString($var['size'], 'error in size', '', 'allow_empty');
         /*

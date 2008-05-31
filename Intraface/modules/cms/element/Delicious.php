@@ -44,7 +44,7 @@ class CMS_Delicious extends CMS_Element {
      *
      */
     function validate_element($var) {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         $validator->isUrl($var['url'], 'error in url');
 
         if (substr($var['url'], 0, 23) != 'http://del.icio.us/rss/') {

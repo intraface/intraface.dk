@@ -35,7 +35,7 @@ class CMS_Template_LongText extends CMS_TemplateSection
 
     function validate_section($var)
     {
-        $validator = new Validator($this->error);
+        $validator = new Intraface_Validator($this->error);
         if (!empty($var['size'])) {
             $validator->isNumeric($var['size'], 'error in size', 'allow_empty');
         }
