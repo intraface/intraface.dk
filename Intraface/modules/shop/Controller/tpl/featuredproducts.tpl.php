@@ -23,7 +23,7 @@
 <?php endforeach; ?>
 </table>
 
-<form action="<?php e(url()); ?>" method="POST">
+<form action="<?php e(url(null)); ?>" method="POST">
     <label for="headline">Headline</label> <input id="headline" type="text" name="headline" />
     <label for="keyword_id">Keyword</label>
         <?php
