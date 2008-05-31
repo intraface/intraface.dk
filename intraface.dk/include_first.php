@@ -22,8 +22,7 @@ require_once dirname(__FILE__) . '/common.php';
 require_once 'ErrorHandler.php';
 if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
    require_once 'ErrorHandler/Observer/BlueScreen.php';
-}
-else {
+} else {
     require_once 'ErrorHandler/Observer/User.php';
 }
 require_once 'ErrorHandler/Observer/File.php';
@@ -95,8 +94,6 @@ $params = array(
     'langs_avail_table' => LANGUAGE_TABLE_PREFIX.'langs',
     'strings_default_table' => LANGUAGE_TABLE_PREFIX.'i18n'
 );
-
-require_once 'Translation2.php';
 
 $translation = Translation2::factory('MDB2', $dbinfo, $params);
 //always check for errors. In this examples, error checking is omitted
