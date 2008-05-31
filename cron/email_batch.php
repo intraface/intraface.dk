@@ -24,8 +24,17 @@ $result = $db->query("SELECT name, public_key FROM intranet");
 
 while ($row = $result->fetchRow()) {
 
-	$kernel = new Intraface_Kernel();
-	$kernel->weblogin('public', $row['public_key'], md5(session_id()));
+	$auth_adapter = new Intraface_Auth_PublicKeyLogin(MDB2::singleton(DB_DSN), md5(session_id()), $row['public_key']);
+	$weblogin = $auth_adapter->auth();
+		
+	if (!$weblogin) {
+	    throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
+	} 
+
+    $this->kernel = new Intraface_Kernel();
+    $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
+    $this->kernel->setting = new Intraface_Setting($kernel->intranet->get('id'));
+
 	$kernel->useShared('email');
 
 	if (!$kernel->intranet->hasModuleAccess('contact')) {
