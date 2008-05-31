@@ -10,18 +10,7 @@ define('INTRAFACE_TOOLS_DB_DSN', 'mysql://' . DB_USER . ':' . DB_PASS . '@' . DB
 define('DB_DSN', 'mysql://' . DB_USER . ':' . DB_PASS . '@' . DB_HOST . '/' . DB_NAME);
 
 require 'k.php';
-
-class tools_ClassLoader extends k_classLoader
-{
-    static function pear_autoload($classname) {
-        $filename = str_replace('_', '/', $classname).'.php';
-        if (self::SearchIncludePath($filename)) {
-        require_once($filename);
-        }
-    }
-}
-
-spl_autoload_register(Array('tools_ClassLoader', 'pear_autoload'));
+require_once 'Ilib/ClassLoader.php';
 
 class Tools_User
 {
@@ -31,7 +20,7 @@ class Tools_User
 
     function __construct($session = '')
     {
-        $this->auth = new Auth(md5($session));
+        $this->auth = new Intraface_Auth(md5($session));
         if ($this->auth->isLoggedIn()) {
             $this->user = new User($this->auth->isLoggedIn());
             $this->user->setIntranetId(1);
