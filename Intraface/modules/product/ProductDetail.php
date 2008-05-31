@@ -9,7 +9,7 @@
  * TODO Lige nu gemmer den altid en ny produktdetalje uanset, hvad jeg gør.
  */
 
-require_once 'Intraface/tools/Amount.php';
+require_once 'Intraface/Amount.php';
 
 class ProductDetail extends Standard {
 
@@ -160,7 +160,7 @@ class ProductDetail extends Standard {
         $array_var = safeToDb($array_var);
 
         if (isset($array_var['price'])) {
-            $amount = new Amount($array_var['price']);
+            $amount = new Intraface_Amount($array_var['price']);
             $amount->convert2db();
             $array_var['price'] = $amount->get();
         }
