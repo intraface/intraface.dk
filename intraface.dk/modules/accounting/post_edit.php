@@ -17,13 +17,13 @@ if (!empty($_POST)) {
     $date->convert2db();
 
 
-    $debet = new Amount($_POST['debet']);
+    $debet = new Intraface_Amount($_POST['debet']);
     if (!$debet->convert2db()) {
         $this->error->set('Beløbet kunne ikke konverteres');
     }
     $debet = $debet->get();
 
-    $credit = new Amount($_POST['credit']);
+    $credit = new Intraface_Amount($_POST['credit']);
     if (!$credit->convert2db()) {
         $this->error->set('Beløbet kunne ikke konverteres');
     }
