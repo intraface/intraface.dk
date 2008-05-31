@@ -22,7 +22,7 @@ class Tools_User
     {
         $this->auth = new Intraface_Auth(md5($session));
         if ($this->auth->isLoggedIn()) {
-            $this->user = new User($this->auth->isLoggedIn());
+            $this->user = new Intraface_User($this->auth->isLoggedIn());
             $this->user->setIntranetId(1);
         }
     }
@@ -30,7 +30,7 @@ class Tools_User
     function login($user, $password)
     {
         $this->auth->login($user, $password);
-        return ($this->user = new User($this->auth->isLoggedIn()));
+        return ($this->user = new Intraface_User($this->auth->isLoggedIn()));
     }
 
     function isLoggedIn()
