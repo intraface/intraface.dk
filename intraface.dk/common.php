@@ -24,4 +24,4 @@ require_once $config_file;
 set_include_path(PATH_INCLUDE_PATH);
 
 require_once 'Intraface/common.php';
-?>
+require_once 'Ilib/ClassLoader.php';
