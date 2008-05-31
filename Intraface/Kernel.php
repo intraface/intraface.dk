@@ -8,13 +8,6 @@
  * @since   0.1.0
  * @version @package-version@
  */
-
-require_once 'Intraface/Weblogin.php';
-require_once 'Intraface/Intranet.php';
-require_once 'Intraface/Main.php';
-require_once 'Intraface/Shared.php';
-require_once 'Intraface/Setting.php';
-
 class Intraface_Kernel
 {
     private $db;
@@ -63,20 +56,24 @@ class Intraface_Kernel
      *
      * @return User object
      */
+    /*
     function createUser($id)
     {
         return new Intraface_User($id);
     }
+    */
 
     /**
      * @param integer $id The intranet id to created
      *
      * @return Intranet object
      */
+    /*
     function createIntranet($id)
     {
         return new Intraface_Intranet($id);
     }
+    */
 
     /**
      * @param integer $intranet_id The intranet id
@@ -84,21 +81,25 @@ class Intraface_Kernel
      *
      * @return Setting object
      */
+    /*
     function createSetting($intranet_id, $user_id = 0)
     {
         return new Intraface_Setting($intranet_id, $user_id);
 
     }
+    */
 
     /**
      * @param string $session_id The session id
      *
      * @return Weblogin object
      */
+    /*
     function createWeblogin($session_id)
     {
         return new Intraface_Weblogin($session_id);
     }
+    */
 
     /**
      * Should not be used anymore
@@ -109,6 +110,7 @@ class Intraface_Kernel
      *
      * @deprecated
      */
+    /*
     function weblogin($type, $key, $session_id)
     {
         require_once 'Weblogin.php';
@@ -154,6 +156,7 @@ class Intraface_Kernel
         return true;
 
     }
+    */
 
     /**
      * Sets primary module for a page

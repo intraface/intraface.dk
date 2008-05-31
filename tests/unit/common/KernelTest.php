@@ -28,6 +28,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(strlen(Intraface_Kernel::randomKey(9)) == 9);
     }
 
+	/*
     function testWebloginReturnsTrueOnValidLoginAndCreatesTheCorrectObjectsInsideKernel()
     {
         $db = MDB2::singleton(DB_DSN);
@@ -50,7 +51,9 @@ class KernelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(get_class($kernel->intranet), 'Intranet');
         $this->assertEquals(get_class($kernel->setting), 'Setting');
     }
+    */
 
+	/*
     function testWebloginMakesSureThatSessionIssetInsideKernelAsTheSameAsTheOneWebloginGetsWhenUsingWeblogin()
     {
         $db = MDB2::singleton(DB_DSN);
@@ -66,6 +69,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
         $kernel->weblogin('private', $this->private_key, $session_id);
         $this->assertEquals($session_id, $kernel->getSessionId());
     }
+    */
 
     function testModuleThrowsAnExceptionWhenNoIntranetIsset()
     {

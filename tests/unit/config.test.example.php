@@ -1,7 +1,6 @@
 <?php
-ini_set("memory_limit","12M");
+ini_set("memory_limit","512M");
 
-require_once 'MDB2.php';
 define('DB_HOST', 'localhost');
 define('DB_PASS', '');
 define('DB_USER', 'root');
@@ -24,6 +23,8 @@ define('XMLRPC_SERVER_URL', 'http://intraface.dk/xmlrpc/');
 define('TEST_PATH_TEMP', '/var/lib/www/intraface_test/tmp/');
 
 set_include_path(PATH_ROOT. PATH_SEPARATOR . get_include_path());
+
+require_once 'Ilib/ClassLoader.php';
 
 $db = MDB2::singleton(DB_DSN);
 $db->setOption('debug', 0);

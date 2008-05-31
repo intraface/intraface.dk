@@ -13,88 +13,27 @@
 class Intraface_Weblogin
 {
     /**
-     * @var object
-     */
-    private $db;
-
-    /**
      * @var string
      */
     private $session_id;
 
-    //public $intranet;
-    //public $setting;
+    /**
+     * @var object
+     */
+    private $intranet;
 
     /**
      * Constructor
      *
-     * @param $session_id
+     * @param $session_id Session id
+     * @param $intranet   Intranet
      *
      * @return void
      */
-    function __construct($session_id = '')
+    function __construct($session_id, $intranet)
     {
-        $this->db = MDB2::singleton(DB_DSN);
-
-        if (PEAR::isError($this->db)) {
-            throw new Exception($this->db->getMessage());
-        }
-
         $this->session_id = $session_id;
-    }
-
-    /**
-     * Auth
-     *
-     * @param string $type Can be private and public
-     * @param string $key  The keyw to use
-     *
-     * @return integer (intranet id)
-     */
-    public function auth($type, $key)
-    {
-        if($type == 'private') {
-            $result = $this->db->query("SELECT id FROM intranet WHERE private_key = " . $this->db->quote($key, 'text'));
-            if(PEAR::isError($result)) {
-                trigger_error($result->getUserInfo(), E_USER_ERROR);
-            }
-            if($result->numRows() == 0) {
-                return false;
-            }
-            $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-            return $row['id'];
-
-        } elseif($type == 'public') {
-
-            $result = $this->db->query("SELECT id FROM intranet WHERE public_key = ".$this->db->quote($key, 'text'));
-            if(PEAR::isError($result)) {
-                trigger_error($result->getUserInfo(), E_USER_ERROR);
-            }
-            if($result->numRows() == 0) {
-                return false;
-            }
-            $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-            return $row['id'];
-
-        } else {
-            trigger_error('Ugyldig type weblogin', E_USER_ERROR);
-            return false;
-        }
-
-    }
-
-    /**
-     * Gets the session id
-     *
-     * @todo Should be renamed
-     *
-     * @deprecated
-     *
-     * @return string
-     */
-    function get()
-    {
-        return $this->session_id;
+        $this->intranet = $intranet;
     }
 
     /**
@@ -109,18 +48,19 @@ class Intraface_Weblogin
 
     function getActiveIntranetId()
     {
-        return 'active intranet id';
+        return $this->intranet->getId();
     }
 
     function hasModuleAccess($modulename)
     {
-        // only needs to check whether the intranet has module access
-        return true;
+		return $this->intranet->hasModuleAccess($modulename);
     }
 
     function hasIntranetAccess($intranet_id)
     {
-        // only needs to check whether the intranet has module access
-        return true;
+        if ($this->intranet->getId() == $intranet_id) {
+            return true;
+        }
+        return false;
     }
 }

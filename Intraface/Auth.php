@@ -1,6 +1,6 @@
 <?php
 /**
- * Authenticates a user
+ * Keeps track of logged in users
  *
  * @package  Intraface
  * @author   Lars Olesen <lars@legestue.net>
@@ -21,6 +21,23 @@ class Intraface_Auth
     {
 
     }
+    
+    /*
+    function isLoggedIn()
+    {
+        return true;
+    }
+
+    function logout()
+    {
+        return true;
+    }
+    
+    function login()
+    {
+        return true;
+    }
+    */
 
     public function authenticate($adapter)
     {

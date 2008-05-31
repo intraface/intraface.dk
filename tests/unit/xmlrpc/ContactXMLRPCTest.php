@@ -37,7 +37,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
 
     function tearDown()
     {
-
+		unset($this->server);
     }
 
     function testConstruction()
