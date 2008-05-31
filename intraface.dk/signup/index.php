@@ -73,7 +73,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                         }
                     }
                 }
-                $user = new User($user_id);
+                $user = new Intraface_User($user_id);
                 $user->setActiveIntranetId($intranet_id);
 
                 $auth = new Intraface_Auth(session_id());

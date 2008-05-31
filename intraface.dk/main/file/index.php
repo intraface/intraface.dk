@@ -55,7 +55,7 @@ if($fileviewer->needLogin()) {
     }
 
     // ...we need to check that it is the right intranet
-    $user = new User($user_id);
+    $user = new Intraface_User($user_id);
     $intranet = new Intranet($user->getActiveIntranetId());
     if($intranet->get('id') != $intranet_id) {
         trigger_error('You where not logged into the correct intranet to view the file', E_USER_WARNING);

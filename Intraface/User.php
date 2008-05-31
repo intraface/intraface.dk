@@ -25,7 +25,7 @@
 require_once 'Intraface/Standard.php';
 require_once 'MDB2.php';
 
-class User extends Standard
+class Intraface_User extends Standard
 {
     /**
      * @var db
@@ -45,7 +45,7 @@ class User extends Standard
     /**
      * @var integer
      */
-    protected $intranet_id;
+    protected $intranet_id = 0;
 
     /**
      * @var error
@@ -83,7 +83,6 @@ class User extends Standard
     {
         $this->id          = $this->value['id'] = intval($id);
         $this->db          = MDB2::singleton(DB_DSN);
-        $this->intranet_id = 0;         // @todo hvad laver den her?
         $this->error       = $this->getError();
 
         if (PEAR::isError($this->db)) {
@@ -394,7 +393,7 @@ class User extends Standard
     {
         $result = $this->db->query("SELECT active_intranet_id FROM user WHERE id = ".$this->db->quote($this->id, 'integer'));
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getUserInfo());
         }
 
         if ($result->numRows() == 1) {
@@ -406,16 +405,15 @@ class User extends Standard
 
         $result = $this->db->query("SELECT intranet.id FROM intranet
             INNER JOIN permission ON permission.intranet_id = intranet.id
-            WHERE permission.user_id = ".$this->id);
+            WHERE permission.user_id = " . $this->db->quote($this->getId(), 'integer'));
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getUserInfo());
         }
         if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             return $row['id'];
         } else {
             return false;
         }
-
     }
 
     /**

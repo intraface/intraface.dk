@@ -6,7 +6,7 @@ $translation = $kernel->getTranslation('controlpanel');
 
 if(!empty($_POST)) {
 
-	$user = new User($kernel->user->get('id'));
+	$user = new Intraface_User($kernel->user->get('id'));
 
 	if($user->updatePassword($_POST['old_password'], $_POST['new_password'], $_POST['repeat_password'])) {
 		header("Location: user.php");
@@ -16,7 +16,7 @@ if(!empty($_POST)) {
 }
 else {
 
-		$user = new User($kernel->user->get('id'));
+		$user = new Intraface_User($kernel->user->get('id'));
 }
 
 

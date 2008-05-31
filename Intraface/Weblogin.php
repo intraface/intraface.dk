@@ -10,9 +10,7 @@
  * @since   0.1.0
  * @version @package-version@
  */
-require_once 'MDB2.php';
-
-class Weblogin
+class Intraface_Weblogin
 {
     /**
      * @var object
@@ -39,7 +37,7 @@ class Weblogin
         $this->db = MDB2::singleton(DB_DSN);
 
         if (PEAR::isError($this->db)) {
-            throw Exception($this->db->getMessage());
+            throw new Exception($this->db->getMessage());
         }
 
         $this->session_id = $session_id;

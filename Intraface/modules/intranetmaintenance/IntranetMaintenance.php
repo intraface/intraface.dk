@@ -242,7 +242,7 @@ class IntranetMaintenance extends Intranet
         $validator = new Validator($this->error);
 
         if ($validator->isNumeric($id, "Maintainer is invalid", "greater_than_zero")) {
-            $temp_user = new User($id);
+            $temp_user = new Intraface_User($id);
 
             if (!$temp_user->hasIntranetAccess($current_intranet_id)) {
                 $this->error->set("Invalid user as maintainer");

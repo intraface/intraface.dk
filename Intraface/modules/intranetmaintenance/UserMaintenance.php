@@ -10,14 +10,14 @@
  * @version @package-version@
  *
  */
-require_once 'Intraface/User.php';
-
-class UserMaintenance extends User
+class UserMaintenance extends Intraface_User
 {
     /**
-     * constructor - extends User
+     * constructor
      *
      * @param integer $user_id id of the user to be maintained
+     * 
+     * @return void
      */
     public function __construct($user_id = 0)
     {
@@ -238,7 +238,7 @@ class UserMaintenance extends User
     function getList()
     {
         if ($this->intranet_id != 0) {
-            return User::getList();
+            return Intraface_User::getList();
         }
 
         if ($this->dbquery->checkFilter('text')) {

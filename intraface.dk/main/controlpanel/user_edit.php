@@ -6,7 +6,7 @@ $translation = $kernel->getTranslation('controlpanel');
 
 if(!empty($_POST)) {
 
-	$user = new User($kernel->user->get('id'));
+	$user = new Intraface_User($kernel->user->get('id'));
 
 	$value = $_POST;
 	$address_value = $_POST;
@@ -23,9 +23,8 @@ if(!empty($_POST)) {
 		}
 	}
 
-}
-else {
-		$user = new User($kernel->user->get('id'));
+} else {
+		$user = new Intraface_User($kernel->user->get('id'));
 		$value = $user->get();
 		$address_value = $user->getAddress()->get();
 }

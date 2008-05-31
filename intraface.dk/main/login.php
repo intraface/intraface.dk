@@ -1,19 +1,23 @@
 <?php
 require '../common.php';
-require_once 'Intraface/Auth.php';
 
 $title = 'Intraface.dk -> Login';
 
-if(isset($_POST['email']) AND isset($_POST['password'])) {
+if (isset($_POST['email']) AND isset($_POST['password'])) {
     session_start();
 
-    require_once 'Intraface/Log.php';
-    $log = new Intraface_Log;
+	$adapter = new Intraface_Auth_User(MDB2::singleton(DB_DSN), session_id(), $_POST['email'], $_POST['password']);
 
-    $auth = new Intraface_Auth(session_id());
-    $auth->attachObserver($log);
+    $auth = new Intraface_Auth();
+    $auth->attachObserver(new Intraface_Log);
+    
+    $user = $auth->authenticate($adapter);
 
-    $error = $auth->login($_POST['email'], $_POST['password']);
+	if (is_object($user)) {
+	    header('Location: '.PATH_WWW.'main/index.php');
+        exit;
+	}
+
     if ($error === true) {
         header('Location: '.PATH_WWW.'main/index.php');
         exit;
