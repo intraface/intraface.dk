@@ -8,9 +8,6 @@
  * @see     NewsletterList
  * @see     NewsletterSubscriber
  */
-require_once 'Intraface/Standard.php';
-require_once 'Intraface/Error.php';
-require_once 'Intraface/Validator.php';
 require_once 'NewsletterSubscriber.php';
 
 class Newsletter extends Intraface_Standard

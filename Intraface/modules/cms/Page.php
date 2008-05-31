@@ -53,8 +53,6 @@
  * @version 1.0
  *
  */
-require_once 'Intraface/Standard.php';
-
 class CMS_Page extends Intraface_Standard
 {
     public $id;

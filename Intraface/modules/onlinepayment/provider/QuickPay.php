@@ -10,8 +10,6 @@
  * @todo		Skal statuskoderne fra den oprindelige quickpayklasse oversættes
  *				til vores statuskoder?
  */
-require 'Payment/Quickpay.php';
-
 class OnlinePaymentQuickPay extends OnlinePayment
 {
     // This should maybe instead be: $transaction_status_types = array(

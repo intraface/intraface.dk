@@ -4,10 +4,7 @@
  *
  * @package Intraface_CMS
  */
-require_once 'Intraface/Standard.php';
 require_once 'Intraface/modules/cms/Parameter.php';
-require_once 'Intraface/Validator.php';
-
 require_once 'Intraface/modules/cms/element/Htmltext.php';
 require_once 'Intraface/modules/cms/element/Wikitext.php';
 require_once 'Intraface/modules/cms/element/Flickr.php';

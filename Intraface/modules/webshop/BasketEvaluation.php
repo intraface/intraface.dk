@@ -21,12 +21,6 @@
  * @author   Sune Jensen <sj@sunet.dk>
  * @version @package-version@
  */
-
-require_once 'Intraface/Standard.php';
-require_once 'Intraface/Error.php';
-require_once 'MDB2.php';
-require_once 'Intraface/Validator.php';
-
 class BasketEvaluation extends Intraface_Standard
 {
      public $kernel;

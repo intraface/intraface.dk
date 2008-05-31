@@ -1,7 +1,4 @@
 <?php
-
-
-
 class DebtorAccount extends Intraface_Standard {
     
     /**

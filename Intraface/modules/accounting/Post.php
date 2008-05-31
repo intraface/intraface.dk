@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Håndterer poster i kladden
  *
@@ -12,7 +11,6 @@
  * @since 1.0
  * @version 1.0
  */
-
 class Post extends Intraface_Standard
 {
     public $id; // integer

@@ -7,7 +7,6 @@
  * @author Lars Olesen <lars@legestue.net>
  * @author Sune Jensen <sj@sunet.dk>
  */
-
 class Debtor_Pdf
 {
     protected $file;

@@ -11,10 +11,6 @@
  * @version 1.0
  *
  */
-require_once 'Intraface/Standard.php';
-require_once 'DB/Sql.php';
-require_once 'Intraface/Error.php';
-require_once 'Intraface/Validator.php';
 require_once 'Intraface/functions/functions.php';
 
 class NewsletterList extends Intraface_Standard

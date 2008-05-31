@@ -2,10 +2,6 @@
 /**
  * @package Intraface_Accounting
  */
-require_once 'Intraface/Standard.php';
-require_once 'Intraface/Error.php';
-require_once 'DB/Sql.php';
-
 class VatPeriod extends Intraface_Standard
 {
     public $error;

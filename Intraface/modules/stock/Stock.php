@@ -2,10 +2,6 @@
 /**
  * @package Intraface_Stock
  */
-
-require_once 'Intraface/Standard.php';
-require_once 'DB/Sql.php';
-
 class Stock extends Intraface_Standard
 {
     private $product;

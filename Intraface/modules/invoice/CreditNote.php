@@ -6,7 +6,6 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
  */
-
 require_once 'Intraface/modules/debtor/Debtor.php';
 
 class CreditNote extends Debtor

@@ -2,8 +2,6 @@
 /**
  * @package Intraface_Todo
  */
-require_once 'Intraface/Standard.php';
-
 class TodoList extends Intraface_Standard
 {
     /**

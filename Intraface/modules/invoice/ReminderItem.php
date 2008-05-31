@@ -2,7 +2,6 @@
 /**
  * @package Intraface_Invoice
  */
-
 class ReminderItem extends Intraface_Standard
 {
     private $reminder;

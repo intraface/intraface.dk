@@ -1,16 +1,11 @@
 <?php
-
 /**
- * unit test not finished!
+ * @todo unit test not finished!
  */
-
 
 /**
  * @package Intraface_Procurement
  */
-
-require_once 'Intraface/Standard.php';
-
 class Procurement extends Intraface_Standard
 {
     public $kernel;

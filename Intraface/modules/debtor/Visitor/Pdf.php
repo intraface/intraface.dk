@@ -18,7 +18,6 @@
  * @author Lars Olesen <lars@legestue.net>
  * @author Sune Jensen <sj@sunet.dk>
  */
-
 require_once 'Intraface/modules/debtor/Pdf.php';
 
 class Debtor_Report_Pdf extends Debtor_Pdf

@@ -11,8 +11,6 @@
  * @since	1.0
  * @version	1.0
  */
-
-require_once 'Intraface/Standard.php';
 require_once 'Stylesheet.php';
 
 class CMS_Site extends Intraface_Standard

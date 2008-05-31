@@ -2,12 +2,6 @@
 /**
  * @package Intraface_Invoice
  */
-
-require_once 'Intraface/Standard.php';
-require_once 'DB/Sql.php';
-require_once 'Intraface/Error.php';
-require_once 'Intraface/DBQuery.php';
-
 class Reminder extends Intraface_Standard
 {
     public $id;

@@ -7,7 +7,6 @@
  * @since	1.0
  * @version	1.0
  */
-
 class MainContact extends Intraface_Main 
 {
     function __construct() 

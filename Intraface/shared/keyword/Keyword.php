@@ -7,11 +7,7 @@
  *
  * @author Lars Olesen <lars@legestue.net>
  */
-
-require_once 'Ilib/Error.php';
-require_once 'Ilib/Validator.php';
 require_once 'Intraface/functions/functions.php';
-require_once 'DB/Sql.php';
 
 abstract class Ilib_Keyword
 {

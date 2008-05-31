@@ -1,5 +1,4 @@
 <?php
-
 require_once 'Intraface/modules/debtor/Debtor.php';
 
 /**

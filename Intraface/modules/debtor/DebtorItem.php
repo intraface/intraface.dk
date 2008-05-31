@@ -6,8 +6,6 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
  */
-require_once 'Intraface/Standard.php';
-
 class DebtorItem extends Intraface_Standard
 {
     /**

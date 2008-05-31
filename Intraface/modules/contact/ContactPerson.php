@@ -2,7 +2,6 @@
 /**
  * @package Intraface_Contact
  */
-
 class ContactPerson extends Intraface_Standard
 {
     /**

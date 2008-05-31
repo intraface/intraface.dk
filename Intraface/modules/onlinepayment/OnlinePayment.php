@@ -2,8 +2,6 @@
 /**
  * @package Intraface_OnlinePayment
  */
-require_once 'Intraface/Standard.php';
-
 /**
  * Onlinebetaling
  *
@@ -15,7 +13,6 @@ require_once 'Intraface/Standard.php';
  * Så det grundlæggende spørgsmål er om selve betalingsløsningen skal programmeres på
  * klienten eller i systemet.
  */
-
 class OnlinePayment extends Intraface_Standard
 {
     public $id;

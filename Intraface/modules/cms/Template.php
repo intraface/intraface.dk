@@ -21,8 +21,6 @@
  * @version  2.0
  *
  */
-require_once 'Intraface/Standard.php';
-
 class CMS_Template extends Intraface_Standard
 {
     public $id;

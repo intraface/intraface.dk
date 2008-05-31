@@ -1,9 +1,4 @@
 <?php
-require_once 'DB/Sql.php';
-require_once 'Intraface/Error.php';
-require_once 'Intraface/DBQuery.php';
-require_once 'Intraface/Standard.php';
-
 /**
  * Debtor = debitor
  *
@@ -15,7 +10,6 @@ require_once 'Intraface/Standard.php';
  * @package Intraface_Debtor
  * @author Lars Olesen <lars@legestue.net>
  */
-
 class Debtor extends Intraface_Standard
 {
     /**

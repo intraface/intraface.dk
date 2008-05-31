@@ -8,8 +8,6 @@
   *
   */
 
-require_once 'Image/Transform.php';
-
 class ImageHandler extends Intraface_Standard
 {
     /**

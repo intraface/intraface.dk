@@ -2,8 +2,6 @@
 /**
  * @package Intraface
  */
-require_once 'Ilib/DBQuery.php';
-
 class AppendFile
 {
     /**

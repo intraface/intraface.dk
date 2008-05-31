@@ -6,7 +6,6 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
  */
-
 require_once 'Intraface/modules/debtor/Pdf.php';
 
 class Reminder_Report_Pdf extends Debtor_Pdf

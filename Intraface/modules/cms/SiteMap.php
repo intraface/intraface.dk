@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Klassen skal returnere et array med et sitemap
  * Desuden skal klassen kunne lave et google-sitemap
@@ -11,7 +10,6 @@
  *
  * @package Intraface_CMS
  */
-
 class CMS_SiteMap {
 
     private $cmssite;

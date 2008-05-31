@@ -8,9 +8,6 @@
  *
  * TODO Lige nu gemmer den altid en ny produktdetalje uanset, hvad jeg gør.
  */
-
-require_once 'Intraface/Amount.php';
-
 class ProductDetail extends Intraface_Standard {
 
     /**

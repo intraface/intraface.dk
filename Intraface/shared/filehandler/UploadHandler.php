@@ -41,9 +41,6 @@
  * @version: 1.0
  *
  */
-
-require_once 'HTTP/Upload.php';
-
 class UploadHandler extends Intraface_Standard
 {
 

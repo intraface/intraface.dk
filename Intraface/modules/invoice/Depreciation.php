@@ -6,7 +6,6 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @version: 1
  */
-
 require_once 'Intraface/modules/invoice/Payment.php';
 
 class Depreciation extends Payment

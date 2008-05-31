@@ -1,11 +1,8 @@
 <?php
-
 /**
  * Meget af det der er i year_end tabellen kan vist lige så godt indkorporeres i selve årstabellen
  * @package Intraface_Accounting
  */
-require_once 'Intraface/Standard.php';
-
 class YearEnd extends Intraface_Standard
 {
     public $error;

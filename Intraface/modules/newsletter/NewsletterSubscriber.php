@@ -9,9 +9,6 @@
  * @author    Lars Olesen <lars@legestue.net>
  * @version   @package-version@
  */
-
-require_once 'Intraface/Standard.php';
-require_once 'Intraface/DBQuery.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/modules/contact/Contact.php';
 require_once 'Intraface/shared/email/Email.php';

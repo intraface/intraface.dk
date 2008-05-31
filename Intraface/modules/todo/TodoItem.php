@@ -3,8 +3,6 @@
  * @package Intraface_Todo
  * @author Lars Olesen <lars@legestue.net>
  */
-require_once 'Intraface/Standard.php';
-
 class TodoItem extends Intraface_Standard
 {
     /**

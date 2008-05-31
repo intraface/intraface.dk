@@ -14,12 +14,7 @@
  *
  */
 require_once 'phpmailer/class.phpmailer.php';
-require_once 'Intraface/Standard.php';
-require_once 'Intraface/Error.php';
-require_once 'Intraface/DBQuery.php';
 require_once 'Intraface/functions/functions.php';
-require_once 'Intraface/Validator.php';
-require_once 'DB/Sql.php';
 require_once 'Intraface/modules/contact/Contact.php';
 
 class Email extends Intraface_Standard

@@ -12,7 +12,6 @@
  *
  *
  */
-
 class UserAdministration extends Intraface_User
 {
     function __construct($kernel,$id)

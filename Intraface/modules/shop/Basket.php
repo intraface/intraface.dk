@@ -7,8 +7,6 @@
  * @package Intraface_Shop
  * @author Lars Olesen <lars@legestue.net>
  */
-require_once 'MDB2.php';
-require_once 'DB/Sql.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/modules/product/Product.php';
 

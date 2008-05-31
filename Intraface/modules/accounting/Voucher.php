@@ -7,10 +7,8 @@
  * @since	1.0
  * @version	1.0
  */
-require_once 'Intraface/Standard.php';
 require_once 'Intraface/modules/accounting/Account.php';
 require_once 'Intraface/modules/accounting/Post.php';
-require_once 'Intraface/Date.php';
 
 class Voucher extends Intraface_Standard
 {

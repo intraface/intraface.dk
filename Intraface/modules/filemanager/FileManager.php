@@ -2,8 +2,7 @@
 /**
  * @package Intraface_FileManager
  */
- 
-require_once 'Intraface/shared/filehandler/FileHandler.php';
+ require_once 'Intraface/shared/filehandler/FileHandler.php';
 
 class FileManager extends FileHandler
 {

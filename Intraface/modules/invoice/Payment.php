@@ -6,9 +6,6 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @version: 1
  */
-
-require_once 'Intraface/Standard.php';
-
 class Payment extends Intraface_Standard
 {
     protected $id;

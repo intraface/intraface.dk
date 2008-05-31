@@ -9,7 +9,6 @@
  */
 class MainBackup extends Intraface_Main 
 {
-
     function __construct()
     {
         $this->module_name = 'backup';

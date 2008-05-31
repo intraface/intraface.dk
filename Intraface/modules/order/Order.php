@@ -2,7 +2,6 @@
 /**
  * @package Intraface_Order
  */
-
 require_once 'Intraface/modules/debtor/Debtor.php';
 
 class Order extends Debtor

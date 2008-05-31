@@ -4,8 +4,6 @@
  *
  * @author Sune Jensen <sj@sunet.dk>
  */
-require_once 'Document/Cpdf.php';
-
 class PdfMaker extends Document_Cpdf
 {
     protected $value;
