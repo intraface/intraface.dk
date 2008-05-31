@@ -17,7 +17,7 @@ if (empty($_SERVER["QUERY_STRING"])) {
 }
 $query_parts = explode('/', $_SERVER["QUERY_STRING"]);
 
-$weblogin = new Weblogin();
+$weblogin = new Intraface_Weblogin();
 if (!$intranet_id = $weblogin->auth('public', $query_parts[1])) {
     trigger_error('Error logging in to intranet with public key '.$query_parts[1], E_USER_WARNING);
     exit;
