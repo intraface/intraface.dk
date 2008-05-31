@@ -43,7 +43,7 @@ class CMS_Template extends Intraface_Standard
         $this->kernel->useShared('keyword');
 
         $this->id = (int)$id;
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
 
         if ($this->id > 0) {
             $this->load();

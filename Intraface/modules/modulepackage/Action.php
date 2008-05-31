@@ -43,7 +43,7 @@ class Intraface_ModulePackage_Action
      */
     public function __construct() 
     {
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
     }
     
     /**

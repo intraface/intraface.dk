@@ -123,7 +123,7 @@ class ContactReminder extends Intraface_Standard
     {
         $this->db = MDB2::singleton(DB_DSN);
         $this->contact = $contact;
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
         $this->id = intval($id);
 
         if ($this->id != 0) {

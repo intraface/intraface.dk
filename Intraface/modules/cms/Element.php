@@ -62,7 +62,7 @@ class CMS_Element extends Intraface_Standard
         $this->id        = (int) $id;
         $this->kernel    = $section->kernel;
         $this->section   = $section;
-        $this->error     = new Error;
+        $this->error     = new Intraface_Error;
         $this->parameter = $this->createParameter();
 
         $cms_module = $this->section->kernel->module('cms');

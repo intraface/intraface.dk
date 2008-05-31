@@ -95,7 +95,7 @@ class Product extends Intraface_Standard
         $this->id                    = (int)$product_id;
         $this->old_product_detail_id = (int)$old_product_detail_id;
         $this->fields                = array('do_show', 'stock');
-        $this->error                 = new Error;
+        $this->error                 = new Intraface_Error;
 
         if ($this->id > 0) {
             $this->id = $this->load();

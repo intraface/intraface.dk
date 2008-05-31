@@ -36,7 +36,7 @@ class NewsletterSubscriber extends Intraface_Standard
      */
     public function __construct($list, $id = 0)
     {
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
 
         if (!is_object($list)) {
             trigger_error('subscriber Kræver en liste', E_USER_ERROR);

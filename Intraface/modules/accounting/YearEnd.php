@@ -38,7 +38,7 @@ class YearEnd extends Intraface_Standard
             trigger_error('Year::__construct: Ikke et gyldigt Year object', E_USER_ERROR);
         }
         $this->year = $year;
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
         if (!$this->load()) {
             $this->start();
         }

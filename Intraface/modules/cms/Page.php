@@ -86,7 +86,7 @@ class CMS_Page extends Intraface_Standard
         $this->navigation = new CMS_Navigation($this);
         $this->template   = new CMS_Template($this->cmssite);
         $this->kernel     = $this->cmssite->kernel;
-        $this->error      = new Error();
+        $this->error      = new Intraface_Error();
         $this->value['active'] = 1;
         $this->value['status_key'] = 0;
         // $this->dbquery = $this->getDBQuery();

@@ -32,7 +32,7 @@ class Year extends Intraface_Standard
             trigger_error('Klassen Year kræver et Kernel-objekt', E_USER_ERROR);
             exit;
         }
-        $this->error  = new Error;
+        $this->error  = new Intraface_Error;
         $this->kernel = $kernel;
         $this->id     = (int)$year_id;
 

@@ -24,7 +24,7 @@ class VoucherFile
         }
         $this->voucher = $voucher;
         $this->id      = (int) $id;
-        $this->error   = new Error;
+        $this->error   = new Intraface_Error;
     }
 
     function validate($var)

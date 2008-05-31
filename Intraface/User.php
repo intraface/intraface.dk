@@ -96,8 +96,7 @@ class Intraface_User extends Intraface_Standard
         if ($this->error) {
             return $this->error;
         }
-        require_once 'Intraface/Error.php';
-        return ($this->error = new Error);
+        return ($this->error = new Intraface_Error);
     }
 
     /**

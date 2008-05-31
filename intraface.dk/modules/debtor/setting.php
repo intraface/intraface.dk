@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($_POST)) {
 
 
-        $error = new Error;
+        $error = new Intraface_Error;
         $validator = new Validator($error);
 
         if($_POST['debtor_sender'] == 'defined') {

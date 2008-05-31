@@ -60,9 +60,8 @@ class DebtorItem extends Intraface_Standard
         }
 
         $this->debtor = &$debtor;
-        $this->db = new Db_sql;
-        require_once 'Intraface/Error.php';
-        $this->error = new Error;
+        $this->db = new DB_Sql;
+        $this->error = new Intraface_Error;
         $this->id = (int)$id;
 
         if ($this->id > 0) {

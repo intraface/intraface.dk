@@ -43,7 +43,7 @@ class NewsletterList extends Intraface_Standard
         if ($this->id > 0) {
             $this->load();
         }
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
     }
 
     /**

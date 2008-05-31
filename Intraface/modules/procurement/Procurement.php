@@ -29,8 +29,7 @@ class Procurement extends Intraface_Standard
         }
 
         $this->kernel = $kernel;
-        require_once 'Intraface/Error.php';
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
         $this->id = intval($id);
 
         $this->dbquery = new Intraface_DBQuery($this->kernel, "procurement", "active = 1 AND intranet_id = ".$this->kernel->intranet->get("id"));

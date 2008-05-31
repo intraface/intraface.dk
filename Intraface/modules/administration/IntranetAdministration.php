@@ -34,7 +34,7 @@ class IntranetAdministration extends Intranet
         $this->kernel = $kernel;
         $this->id = $kernel->intranet->get('id');
         $this->id = $this->load();
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
     }
 
     function update($input)

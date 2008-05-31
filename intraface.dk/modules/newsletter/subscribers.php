@@ -41,7 +41,7 @@ if (isset($_GET['delete']) AND intval($_GET['delete']) != 0) {
     $subscriber->delete();
 }
 // HACK - Denne bliver her sat uden at de skal være opted in i modsætning til constructor
-$subscriber->setDBQuery(new DBQuery($list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $list->get("id") . " AND newsletter_subscriber.intranet_id = " . $list->kernel->intranet->get('id') . " AND newsletter_subscriber.active = 1"));
+$subscriber->setDBQuery(new Intraface_DBQuery($list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $list->get("id") . " AND newsletter_subscriber.intranet_id = " . $list->kernel->intranet->get('id') . " AND newsletter_subscriber.active = 1"));
 
 $subscriber->getDBQuery()->useCharacter();
 $subscriber->getDBQuery()->defineCharacter('character', 'newsletter_subscriber.id');

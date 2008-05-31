@@ -214,7 +214,7 @@ class Contact extends Intraface_Standard {
         //$contact_module = $this->kernel->getModule('contact');
         //$this->types = $contact_module->getSetting('type');
 
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
         $this->id = (int)$id;
 
         $this->fields = array('type_key', 'paymentcondition', 'number', 'preferred_invoice', 'openid_url');

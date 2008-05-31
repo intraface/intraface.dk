@@ -28,9 +28,7 @@ class Intraface_ModulePackage_AccessUpdate
      */
     function __construct()
     {
-
-        // $this->kernel = &$kernel;
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
     }
 
     /**
@@ -39,8 +37,8 @@ class Intraface_ModulePackage_AccessUpdate
      * @param integer intranet_id id on intranet, and the access update will only run on this intranet.
      * @return boolean true on success, false on failure
      */
-    public function run($intranet_id = 0) {
-
+    public function run($intranet_id = 0) 
+    {
         $db = MDB2::singleton(DB_DSN);
         if (PEAR::isError($db)) {
             trigger_error('Error in connecting to db: '.$db->getUserInfo(), E_USER_ERROR);
@@ -172,4 +170,3 @@ class Intraface_ModulePackage_AccessUpdate
 
     }
 }
-?>

@@ -6,7 +6,7 @@ $settings = $webshop_module->getSetting('show_online');
 $translation = $kernel->getTranslation('webshop');
 $webshop_module->includeFile('BasketEvaluation.php');
 
-$error = new Error();
+$error = new Intraface_Error();
 
 if (!empty($_POST)) {
     // mangler validering

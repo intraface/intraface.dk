@@ -3,7 +3,7 @@ require('../../include_first.php');
 $module = $kernel->module("debtor");
 $contact_module = $kernel->useModule('contact');
 
-$error = new Error();
+$error = new Intraface_Error();
 
 if(isset($_POST["search"]) && $_POST["search"] != "") {
     $contact = new Contact($kernel);

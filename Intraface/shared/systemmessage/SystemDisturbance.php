@@ -11,7 +11,7 @@ class SystemDisturbance extends Intraface_Standard
     {
         $this->kernel = &$kernel;
         $this->id = intval($id);
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
         $this->actual_id = 0;
 
         if($this->id != 0) {

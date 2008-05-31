@@ -46,7 +46,7 @@ class Comment extends Intraface_Standard
         $comment_shared = $this->object->kernel->useShared('comment');
         $this->types = $comment_shared->getSetting('types');
 
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
 
         $this->id = (int) $id;
 

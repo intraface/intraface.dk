@@ -70,7 +70,7 @@ class Account extends Intraface_Standard
             exit;
         }
 
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
         $this->year = $year;
         $this->id = (int)$account_id;
 

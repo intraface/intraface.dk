@@ -34,7 +34,7 @@ class Voucher extends Intraface_Standard
             trigger_error('Klassen Voucher kræver objektet Year', E_USER_ERROR);
             exit;
         }
-        $this->error      = new Error;
+        $this->error      = new Intraface_Error;
         $this->year       = $year_object;
         $this->id         = (int)$id;
         $this->vatpercent = $this->year->kernel->setting->get('intranet', 'vatpercent');

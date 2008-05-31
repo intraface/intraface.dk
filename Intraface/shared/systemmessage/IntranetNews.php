@@ -10,7 +10,7 @@ class IntranetNews extends Intraface_Standard
     {
         $this->kernel = &$kernel;
         $this->id = intval($id);
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
 
         if($this->id != 0) {
             $this->load();

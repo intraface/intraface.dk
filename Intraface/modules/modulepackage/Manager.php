@@ -47,7 +47,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
         // Should we rather just take intranet_id as parameter?
         $this->intranet = &$intranet;
         $this->db = MDB2::singleton(DB_DSN);
-        $this->error =  new Error;
+        $this->error =  new Intraface_Error;
         $this->id = (int)$id;
 
         if ($this->id > 0) {

@@ -50,7 +50,7 @@ class AppendFile
         $this->belong_to_id = (int)$belong_to_id;
 
         $this->kernel = $kernel;
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
 
     }
 

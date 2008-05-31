@@ -59,7 +59,7 @@ class Address extends Intraface_Standard
     function __construct($id)
     {
         $this->id = $id;
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
 
         $this->load();
 

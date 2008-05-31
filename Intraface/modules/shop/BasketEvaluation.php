@@ -47,7 +47,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
      */
     public function __construct($db, $intranet, $shop, $id = 0)
     {
-        $this->error    = new Error;
+        $this->error    = new Intraface_Error;
         $this->db       = $db;
         $this->intranet = $intranet;
         $this->shop     = $shop;

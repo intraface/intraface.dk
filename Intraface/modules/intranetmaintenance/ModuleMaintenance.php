@@ -25,7 +25,7 @@ class ModuleMaintenance
             exit;
         }
 
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
         $this->value = array();
 
         $this->load();

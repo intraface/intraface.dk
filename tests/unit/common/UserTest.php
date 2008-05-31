@@ -31,7 +31,7 @@ class UserTest extends PHPUnit_Framework_TestCase
         $m = new ModuleMaintenance();
         $result = $m->register();
 
-        $this->user = new User(1);
+        $this->user = new Intraface_User(1);
 
     }
 

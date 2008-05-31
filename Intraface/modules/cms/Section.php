@@ -42,7 +42,7 @@ class CMS_Section extends Intraface_Standard
         $this->id = (int) $id;
         //$template_class = 'CMS_Template_' . $this->value['type'];
 
-        $this->error = new Error();
+        $this->error = new Intraface_Error();
         $this->value['identify_as'] = 'cms_section'; // bruges af parameter
 
         $cms_module = $this->cmspage->kernel->module('cms');

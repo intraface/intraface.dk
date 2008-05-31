@@ -57,7 +57,7 @@ class Email extends Intraface_Standard
         $this->kernel = $kernel;
 
         $this->id = (int)$id;
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
 
         $this->type = array(
             1 => 'quotation',

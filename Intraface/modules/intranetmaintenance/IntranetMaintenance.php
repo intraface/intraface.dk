@@ -33,7 +33,7 @@ class IntranetMaintenance extends Intranet
     {
         $this->db    = MDB2::singleton(DB_DSN);
         $this->id    = (int)$intranet_id;
-        $this->error = new Error();
+        $this->error = new Intraface_Error();
 
         if ($this->id > 0) {
             parent::__construct($intranet_id);

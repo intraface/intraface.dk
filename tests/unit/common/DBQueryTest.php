@@ -88,7 +88,7 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
     function createDBQuery($session_id = '')
     {
         $kernel = new FakeDBQueryKernel($session_id);
-        return new DBQuery($kernel, $this->table);
+        return new Intraface_DBQuery($kernel, $this->table);
     }
 
     function insertPosts()
@@ -125,7 +125,7 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
     {
         $condition = 'name = 1';
         $kernel = new FakeDBQueryKernel;
-        $dbquery = new DBQuery($kernel, $this->table, $condition);
+        $dbquery = new Intraface_DBQuery($kernel, $this->table, $condition);
         $this->assertEquals($condition, $dbquery->required_conditions);
     }
 

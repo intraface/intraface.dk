@@ -28,7 +28,7 @@ require('../../include_first.php');
 $module = $kernel->module('accounting');
 $translation = $kernel->getTranslation('accounting');
 
-$error = new Error;
+$error = new Intraface_Error;
 
 $year = new Year($kernel);
 $year->checkYear();

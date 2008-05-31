@@ -48,7 +48,7 @@ class Intranet extends Intraface_Standard
     {
         $this->id = intval($id);
         $this->db = MDB2::singleton(DB_DSN);
-        $this->error = new Error();
+        $this->error = new Intraface_Error();
 
         if(!$this->load()) {
             trigger_error('unknown intranet', E_USER_ERROR);

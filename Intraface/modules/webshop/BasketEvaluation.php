@@ -51,7 +51,7 @@ class BasketEvaluation extends Intraface_Standard
             return false;
         }
 
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
         $this->id = (int)$id;
         $this->kernel = $kernel;
 

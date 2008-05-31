@@ -75,7 +75,7 @@ class Intraface_modules_shop_Webshop
         $this->session_id = $session_id;
         $this->basket = $this->createBasket();
 
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
     }
 
     /**

@@ -22,7 +22,7 @@ class ProcurementItem extends Intraface_Standard
         }
 
         $this->procurement = & $procurement;
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
         $this->id = (int) $id;
 
         if ($this->id > 0) {

@@ -11,9 +11,8 @@ class ErrorTest extends PHPUnit_Framework_TestCase
 {
     function testConstruction()
     {
-        $error = new Error;
+        $error = new Intraface_Error;
         $this->assertTrue(is_object($error));
     }
 
 }
-?>

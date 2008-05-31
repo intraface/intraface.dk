@@ -68,7 +68,7 @@ class Intraface_ModulePackage_ShopExtension {
             INTRAFACE_XMLRPC_DEBUG,
             $xmlrpc_debtor_url);
 
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
 
     }
 

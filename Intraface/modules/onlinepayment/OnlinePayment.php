@@ -49,8 +49,7 @@ class OnlinePayment extends Intraface_Standard
 
         $this->kernel = $kernel;
         $this->id = $id;
-        require_once 'Intraface/Error.php';
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
 
         // lidt usikker på om det her er det smarteste sted at have den, men den skal være til stede, når der skal gemmes
         $this->provider_key = $this->kernel->setting->get('intranet', 'onlinepayment.provider_key');

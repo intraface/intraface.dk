@@ -46,6 +46,4 @@ class WebloginTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue(($weblogin->auth('public', $this->public_key) > 0));
 
     }
-
 }
-?>

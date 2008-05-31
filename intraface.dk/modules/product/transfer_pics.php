@@ -11,7 +11,7 @@ include('Net/FTP.php');
 
 $module = $kernel->module('product');
 
-$error = new Error;
+$error = new Intraface_Error;
 
 $setting_is_ok = false;
 $transfer_ok = false;

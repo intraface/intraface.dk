@@ -105,7 +105,7 @@ class Debtor extends Intraface_Standard
         // sætter variable
         $this->id = (int)$id;
         $this->db = new DB_Sql;
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
 
         $this->dbquery = new Intraface_DBQuery($this->kernel, "debtor", "debtor.active = 1 AND debtor.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->setJoin("LEFT", "contact", "debtor.contact_id = contact.id AND contact.intranet_id = ".$this->kernel->intranet->get("id"), '');

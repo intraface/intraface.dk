@@ -26,7 +26,7 @@ class VatPeriod extends Intraface_Standard
 
         $this->year  = $year_object;
         $this->id    = (int) $id;
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
         if ($this->id > 0) {
             $this->load();
         }

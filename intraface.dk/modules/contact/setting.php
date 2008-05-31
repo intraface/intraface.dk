@@ -7,7 +7,7 @@ $translation = $kernel->getTranslation('contact');
 
 $url_options = $contact_module->getSetting('contact_login_url');
 
-$error = new Error();
+$error = new Intraface_Error();
 
 if (!empty($_POST)) {
 

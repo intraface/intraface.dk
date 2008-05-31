@@ -17,25 +17,25 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->validator = new Validator(new Error);
+        $this->validator = new Validator(new Intraface_Error);
     }
 
     function testIdentifierReturnsFalseOnInvalidIdentifier()
     {
-        $this->validator = new Validator(new Error);
+        $this->validator = new Validator(new Intraface_Error);
         $this->assertFalse($this->validator->isIdentifier('this.*.is.pretty/invalid', 'Not valid'));
     }
 
     function testIdentifierReturnsFalseOnEmptyIdentifier()
     {
-        $this->validator = new Validator(new Error);
+        $this->validator = new Validator(new Intraface_Error);
         $this->assertFalse($this->validator->isIdentifier('', 'Not valid'));
     }
 
 
     function testIdentifierReturnsTrueOnValidIdentifier()
     {
-        $this->validator = new Validator(new Error);
+        $this->validator = new Validator(new Intraface_Error);
         $this->assertTrue($this->validator->isIdentifier('this-is-a-valid-identifier', 'Not valid'));
     }
 }

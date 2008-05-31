@@ -13,7 +13,7 @@ class CMS_Stylesheet extends Intraface_Standard
             trigger_error('CMS_Stylesheet::__construct needs CMS_Site - got ' . get_class($cmssite), E_USER_ERROR);
         }
         $this->cmssite = $cmssite;
-        $this->error = new Error;
+        $this->error = new Intraface_Error;
         $this->load();
 
     }

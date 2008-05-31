@@ -34,7 +34,7 @@ class Post extends Intraface_Standard
         }
         $this->voucher = $voucher;
         $this->id      = (int)$post_id;
-        $this->error   = new Error;
+        $this->error   = new Intraface_Error;
 
         if ($this->id > 0) {
             $this->load();
