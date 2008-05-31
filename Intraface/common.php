@@ -54,33 +54,8 @@ require_once 'config/setting_themes.php';
 // functions
 require_once 'Intraface/functions/functions.php';
 
-// third party .
-require_once 'DB/Sql.php';
-
-// system files
-require_once 'Intraface/Standard.php';
-require_once 'Intraface/Main.php';
-require_once 'Intraface/Shared.php';
-require_once 'Intraface/Kernel.php';
-require_once 'Intraface/Intranet.php';
-require_once 'Intraface/User.php';
-require_once 'Intraface/Setting.php';
-require_once 'Intraface/Address.php';
-require_once 'Intraface/Page.php';
-require_once 'Intraface/DBQuery.php';
-require_once 'Intraface/Redirect.php';
-require_once 'Intraface/Error.php';
-require_once 'Intraface/Validator.php';
-
-// database
-require_once 'MDB2.php';
-
 // Systembesked
 require_once 'Intraface/shared/systemmessage/SystemDisturbance.php';
-
-// core files
-require_once 'Intraface/Date.php';
-require_once 'Intraface/Amount.php';
 
 $db = MDB2::singleton(DB_DSN, array('persistent' => true));
 if (PEAR::isError($db)) {
@@ -136,7 +111,6 @@ set_exception_handler('intrafaceBackendExceptionhandler');
 
 // This is probably not the correct place/way to put this, but we should make it as some kind of at global setting - maybe a constant is the way to go.
 // @todo: of some strange reason dreamhost does not support XMLRPCext on the server - why do the cms clients then work on other sites?!
-require_once 'XML/RPC2/Backend.php';
 XML_RPC2_Backend::setBackend('php');
 
 // vi skal have lavet en fil, der bare sørger for at inkludere filer.
@@ -145,8 +119,3 @@ XML_RPC2_Backend::setBackend('php');
 // fandt vi også mere grundigt ud af, hvilke viler der behøver
 // hvilke filer i stedet for bare en stor sikkerhedshalløj.
 // på den måde kan vi også flytte authentication is logged in til denne fil
-
-
-//require 'auth.php';
-
-?>
