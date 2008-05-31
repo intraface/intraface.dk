@@ -17,7 +17,7 @@ class UserAdministration extends User
 {
     function __construct($kernel,$id)
     {
-        if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
+        if (!is_object($kernel)) {
             trigger_error('UserAdministration kræver Kernel', E_USER_ERROR);
         }
 

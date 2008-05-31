@@ -554,7 +554,7 @@ class User extends Standard
             return false;
         }
         $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-        $new_password = Kernel::randomKey(8);
+        $new_password = Intraface_Kernel::randomKey(8);
 
 
         $db->exec("UPDATE user SET password = '".md5($new_password)."' WHERE id =" . $row['id']);

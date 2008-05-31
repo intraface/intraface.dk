@@ -28,7 +28,7 @@ require_once 'Intraface/modules/newsletter/NewsletterList.php';
 $i = 0;
 while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 
-    $kernel = new Kernel();
+    $kernel = new Intraface_Kernel();
     if (!$kernel->weblogin('public', $row['public_key'], md5(session_id()))) {
         trigger_error('could not login', E_USER_ERROR);
     }

@@ -24,7 +24,7 @@ $result = $db->query("SELECT name, public_key FROM intranet");
 
 while ($row = $result->fetchRow()) {
 
-	$kernel = new Kernel();
+	$kernel = new Intraface_Kernel();
 	$kernel->weblogin('public', $row['public_key'], md5(session_id()));
 	$kernel->useShared('email');
 

@@ -42,7 +42,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->kernel = new Kernel();
+        $this->kernel = new Intraface_Kernel();
         $this->kernel->user = new FakeProductUser;
         $this->kernel->intranet = new FakeProductIntranet;
         $this->kernel->setting = new FakeProductIntranet;

@@ -205,9 +205,9 @@ class Intraface_Install
 
         // We create kernel so it can be used in the helper functions
         if (session_id() != '') {
-            $kernel = new Kernel(session_id());
+            $kernel = new Intraface_Kernel(session_id());
         } else {
-            $kernel = new Kernel;
+            $kernel = new Intraface_Kernel;
         }
         $kernel->user = new User(1);
         $kernel->user->setIntranetId(1);

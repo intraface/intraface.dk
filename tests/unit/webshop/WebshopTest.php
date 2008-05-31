@@ -42,7 +42,7 @@ class WebshopTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->kernel = new Kernel;
+        $this->kernel = new Intraface_Kernel;
         $this->kernel->intranet = new FakeWebshopIntranet;
         $this->kernel->weblogin = new FakeWebshopWeblogin;
         $this->kernel->setting = new FakeWebshopSetting;

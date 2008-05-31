@@ -15,7 +15,7 @@ require_once 'Intraface/Main.php';
 require_once 'Intraface/Shared.php';
 require_once 'Intraface/Setting.php';
 
-class Kernel
+class Intraface_Kernel
 {
     private $db;
     public $intranet;

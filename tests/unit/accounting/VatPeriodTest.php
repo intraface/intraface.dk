@@ -45,7 +45,7 @@ class FakeVatPeriodYear
     public $kernel;
     function __construct()
     {
-        $this->kernel = new Kernel;
+        $this->kernel = new Intraface_Kernel;
         $this->kernel->user = new FakeVatPeriodUser;
         $this->kernel->module('accounting');
         $this->kernel->intranet = new FakeVatPeriodIntranet;

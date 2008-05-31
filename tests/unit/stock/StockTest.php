@@ -48,7 +48,7 @@ class StockTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->kernel = new Kernel();
+        $this->kernel = new Intraface_Kernel();
         $this->kernel->user = new FakeStockUser;
         $this->kernel->intranet = new FakeStockIntranet;
         /*

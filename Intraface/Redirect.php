@@ -135,8 +135,6 @@ class Redirect extends Ilib_Redirect
      */
     public function __construct($kernel, $id = 0)
     {
-
-        //
         $options = array(
              'extra_db_condition' => array('intranet_id = '.$kernel->intranet->get('id'))
         );

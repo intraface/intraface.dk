@@ -22,7 +22,7 @@ if (!$intranet_id = $weblogin->auth('public', $query_parts[1])) {
     trigger_error('Error logging in to intranet with public key '.$query_parts[1], E_USER_WARNING);
     exit;
 }
-$kernel = new Kernel;
+$kernel = new Intraface_Kernel;
 $kernel->intranet = new Intranet($intranet_id);
 $filehandler_shared = $kernel->useShared('filehandler');
 $filehandler_shared->includeFile('FileViewer.php');

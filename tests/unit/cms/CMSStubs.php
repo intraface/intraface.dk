@@ -3,7 +3,7 @@ require_once 'Intraface/Kernel.php';
 require_once 'Intraface/DBQuery.php';
 require_once 'Intraface/modules/cms/Page.php';
 
-class FakeCMSKernel extends Kernel {
+class FakeCMSKernel extends Intraface_Kernel {
     public $intranet;
     public $user;
     function __construct() {

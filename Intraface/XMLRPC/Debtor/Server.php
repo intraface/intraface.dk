@@ -46,7 +46,7 @@ class Intraface_XMLRPC_Debtor_Server
             throw new XML_RPC2_FaultException('Du skal skrive en kode', -2);
         }
 
-        $this->kernel = new Kernel('weblogin');
+        $this->kernel = new Intraface_Kernel('weblogin');
         $this->kernel->weblogin('private', $credentials['private_key'], $credentials['session_id']);
 
         if (!is_object($this->kernel->intranet) AND get_class($this->kernel->intranet) != 'intranet') {

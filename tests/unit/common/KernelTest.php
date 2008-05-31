@@ -25,7 +25,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
 
     function testRandomKey()
     {
-        $this->assertTrue(strlen(Kernel::randomKey(9)) == 9);
+        $this->assertTrue(strlen(Intraface_Kernel::randomKey(9)) == 9);
     }
 
     function testWebloginReturnsTrueOnValidLoginAndCreatesTheCorrectObjectsInsideKernel()
@@ -39,7 +39,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
         $db->exec('INSERT INTO intranet SET private_key = ' . $db->quote($this->private_key, 'text') . ', public_key = ' . $db->quote($this->public_key, 'text'));
 
         $session_id = 'somerandomsession';
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         $this->assertFalse($kernel->weblogin('private', 'wrongkey', $session_id));
         $this->assertTrue($kernel->weblogin('private', $this->private_key, $session_id));
         $this->assertEquals(get_class($kernel->weblogin), 'Weblogin');
@@ -62,14 +62,14 @@ class KernelTest extends PHPUnit_Framework_TestCase
         $db->exec('INSERT INTO intranet SET private_key = ' . $db->quote($this->private_key, 'text') . ', public_key = ' . $db->quote($this->public_key, 'text'));
 
         $session_id = 'somerandomsession';
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         $kernel->weblogin('private', $this->private_key, $session_id);
         $this->assertEquals($session_id, $kernel->getSessionId());
     }
 
     function testModuleThrowsAnExceptionWhenNoIntranetIsset()
     {
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         try {
             $kernel->module('intranetmaintenance');
             $this->assertFalse(true, 'Should have thrown an exception');
@@ -80,7 +80,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
 
     function testModuleReturnsTheModuleAsAnObjectTrueWhenModuleIsAvailableAndSetsPrimaryModule()
     {
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         $kernel->intranet = new FakeKernelIntranet;
         $this->assertFalse($kernel->getPrimaryModule());
         $this->assertTrue(is_object($kernel->module('intranetmaintenance')));
@@ -90,7 +90,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
 
     function testUseModuleThrowsAnExceptionIfIntranetHasNoAccess()
     {
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         $kernel->intranet = new FakeKernelIntranetWithNoAccess;
         try {
             $kernel->useModule('intranetmaintenance');
@@ -102,7 +102,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
 
     function testUseModuleThrowsAnExceptionIfUserHasNoAccess()
     {
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         $kernel->intranet = new FakeKernelIntranet;
         $kernel->user = new FakeKernelIntranetWithNoAccess;
         try {
@@ -115,7 +115,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
 
     function testUseModuleThrowsAnExceptionWhenNoIntranetIssetAndNoUserIsset()
     {
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         try {
             $kernel->useModule('intranetmaintenance');
             $this->assertFalse(true, 'Should have thrown an exception');
@@ -126,7 +126,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
 
     function testUseModuleDoesNotThrowAnExceptionWhenNoIntranetIssetAndTheUserIsset()
     {
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         $kernel->user = new FakeKernelIntranet;
         try {
             $kernel->useModule('intranetmaintenance');
@@ -138,7 +138,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
 
     function testUseModuleReturnsTheModuleAsAnObjectTrueWhenModuleIsAvailable()
     {
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         $kernel->intranet = new FakeKernelIntranet;
         $this->assertTrue(is_object($module = $kernel->useModule('intranetmaintenance')));
         $this->assertEquals('intranetmaintenance', $module->getName());
@@ -146,7 +146,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
 
     function testGetModule()
     {
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         $kernel->intranet = new FakeKernelIntranet;
         $this->assertTrue(is_object($kernel->useModule('intranetmaintenance')));
         $this->assertTrue(is_object($module = $kernel->getModule('intranetmaintenance')));
@@ -162,7 +162,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
             die($result->getMessage() . $result->getUserInfo());
         }
 
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         $kernel->intranet = new FakeKernelIntranet;
         $this->assertTrue(is_array($kernel->getModules()));
         $this->assertEquals($result->numRows(), count($kernel->getModules()));

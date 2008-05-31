@@ -27,7 +27,7 @@ class IntranetAdministration extends Intranet
 
     function __construct($kernel)
     {
-        if (!is_object($kernel) AND strtolower(get_class($kernel)) != 'kernel') {
+        if (!is_object($kernel)) {
             trigger_error('IntranetAdministration kræver kernel', E_USER_ERROR);
         }
 

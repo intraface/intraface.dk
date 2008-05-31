@@ -50,7 +50,7 @@ class BasketEvaluationTest extends PHPUnit_Framework_TestCase
 
     function createKernel()
     {
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         $kernel->intranet = new FakeEvaluationIntranet;
         $kernel->user = new FakeEvaluationUser;
         return $kernel;

@@ -27,7 +27,7 @@ class ModuleMaintenanceTest extends PHPUnit_Framework_TestCase
 
     function testModuleMaintenanceFactory() {
 
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         $object = ModuleMaintenance::factory('accounting');
 
         $this->assertTrue(is_object($object));

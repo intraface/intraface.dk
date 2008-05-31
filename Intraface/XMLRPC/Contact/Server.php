@@ -211,7 +211,7 @@ class Intraface_XMLRPC_Contact_Server
             throw new XML_RPC2_FaultException('contact says access to intranet - please supply a valid private key', -2);
         }
 
-        $this->kernel = new Kernel();
+        $this->kernel = new Intraface_Kernel();
         $this->kernel->intranet = new Intranet($intranet_id);
         $this->kernel->setting = new Setting($this->kernel->intranet->get('id'));
 

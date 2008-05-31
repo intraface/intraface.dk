@@ -44,7 +44,7 @@ class FakeYearEndYear
     public $kernel;
     function __construct()
     {
-        $this->kernel = new Kernel;
+        $this->kernel = new Intraface_Kernel;
         $this->kernel->user = new FakeYearEndUser;
         $this->kernel->module('accounting');
         $this->kernel->intranet = new FakeYearEndIntranet;

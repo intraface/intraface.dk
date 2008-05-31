@@ -44,7 +44,7 @@ class AppendFileTest extends PHPUnit_Framework_TestCase
 
     function createAppendFile($id = 0)
     {
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         $kernel->intranet = new FakeAppendFileIntranet;
         return new AppendFile($kernel, 'product', 1, $id);
     }

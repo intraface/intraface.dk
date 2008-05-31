@@ -36,7 +36,7 @@ class PageTest extends PHPUnit_Framework_TestCase
 
     function createKernel()
     {
-        $this->kernel = new Kernel;
+        $this->kernel = new Intraface_Kernel;
         $this->kernel->intranet = new FakeCMSIntranet;
         $this->kernel->user = new FakeCMSIntranet;
         $this->kernel->setting = new FakeCMSSetting;

@@ -60,12 +60,6 @@ class Address extends Standard
      */
     function __construct($id)
     {
-        /*
-        if(!is_object($kernel) || strtolower(get_class($kernel)) != 'kernel') {
-            trigger_error("First parameter to Address should be kernel", E_USER_ERROR);
-        }
-        */
-        // $this->kernel = & Kernel::singleton();
         $this->id = $id;
         $this->error = new Error;
 
@@ -87,8 +81,6 @@ class Address extends Standard
      */
     function factory($belong_to, $belong_to_id)
     {
-
-        // $kernel = new Kernel;
         $belong_to_types = Address::getBelongToTypes();
 
         $belong_to_key = array_search($belong_to, $belong_to_types);

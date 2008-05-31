@@ -69,7 +69,7 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         
         
         
-        $kernel = new Kernel;
+        $kernel = new Intraface_Kernel;
         $kernel->user = new FakeDebtorUser;
         $kernel->intranet = new FakeDebtorIntranet;
         $kernel->setting = new FakeDebtorSetting;

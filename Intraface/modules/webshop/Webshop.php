@@ -61,7 +61,7 @@ class Webshop
      */
     public function __construct($kernel, $session_id)
     {
-        if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
+        if (!is_object($kernel)) {
             trigger_error('Webshopmodulet har brug for Kernel', E_USER_ERROR);
         }
 

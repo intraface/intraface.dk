@@ -25,7 +25,7 @@ class CMS_Site extends Standard
 
     function __construct($kernel, $id = 0)
     {
-        if (!is_object($kernel) OR strtolower(get_class($kernel)) != 'kernel') {
+        if (!is_object($kernel)) {
             trigger_error('CMS_Site::__construct needs kernel', E_USER_ERROR);
         }
 

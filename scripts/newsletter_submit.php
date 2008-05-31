@@ -39,7 +39,7 @@ class ElevforeningenUser extends User
 
 }
 
-$kernel = new Kernel;
+$kernel = new Intraface_Kernel;
 $kernel->intranet = new ElevforeningenIntranet;
 $kernel->user = new ElevforeningenUser;
 $kernel->setting = new Setting($kernel->intranet->get('id'), $kernel->user->get('id'));
