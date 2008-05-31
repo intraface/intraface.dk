@@ -76,7 +76,7 @@ $contact = new Contact($kernel, $_GET['id']);
 $similar_contacts = $contact->compare();
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Kontakter');
 ?>
 <h1>Flet kontakter</h1>

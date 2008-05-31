@@ -29,7 +29,7 @@ else {
 	$values['to_date_time'] = date('d-m-Y H:i', time() + 2 * 60 * 60);
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start("Driftforstyrrelse");
 ?>
 

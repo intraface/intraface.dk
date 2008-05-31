@@ -25,7 +25,7 @@ else {
 	$value = $onlinepayment->getProvider();
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Onlinebetalinger');
 ?>
 

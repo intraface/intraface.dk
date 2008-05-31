@@ -119,7 +119,7 @@ if (!empty($sections) AND count($sections) == 1 AND array_key_exists(0, $section
 };
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 if ($kernel->setting->get('user', 'htmleditor') == 'tinymce') {
     $page->includeJavascript('global', 'tinymce/jscripts/tiny_mce/tiny_mce.js');
 }

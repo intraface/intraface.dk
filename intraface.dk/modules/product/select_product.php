@@ -92,7 +92,7 @@ if(is_array($product_values)) {
     }
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 //$page->includeJavascript('module', 'add_related.js');
 $page->start(t('select product'));
 ?>

@@ -99,7 +99,7 @@ else {
     }
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('global', 'XMLHttp.js');
 $page->includeJavascript('module', 'select_contact.js');
 $page->start('Opret ny');

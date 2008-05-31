@@ -24,7 +24,7 @@ else {
 
 //$accounts = $account->getSaldoList($values['from_date'], $values['to_date']);
 $accounts = $account->getList('stated', true);
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Kontooversigt');
 
 ?>

@@ -88,7 +88,7 @@ $contact->dbquery->storeResult('use_stored', 'contact', 'toplevel');
 
 $contacts = $contact->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('contacts')));
 ?>
 <h1><?php echo safeToHtml($translation->get('contacts')); ?></h1>

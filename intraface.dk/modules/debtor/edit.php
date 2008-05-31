@@ -68,7 +68,7 @@ if(!empty($_POST)) {
 
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'edit.js');
 $page->start(safeToHtml($translation->get($action.' '.$debtor->get('type'))));
 

@@ -84,7 +84,7 @@ if (!empty($_FILES['userfile']['name'])) {
 
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Importer varer');
 ?>
 <h1>Importer varer</h1>

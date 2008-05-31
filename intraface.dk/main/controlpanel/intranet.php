@@ -16,7 +16,7 @@ $translation = $kernel->getTranslation('controlpanel');
 $values = $kernel->intranet->get();
 $address = $kernel->intranet->address->get();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 
 $page->start(safeToHtml($translation->get('about the intranet')));
 

@@ -17,7 +17,7 @@ $contacts = $contact->getList("use_address");
 
 if (!empty($_POST)) {
 
-	$validator = new Validator($contact->error);
+	$validator = new Intraface_Validator($contact->error);
 	$validator->isString($_POST['subject'], 'error in subject');
 	$validator->isString($_POST['text'], 'error in text');
 
@@ -56,7 +56,7 @@ if (!empty($_POST)) {
 	}
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Rediger e-mail');
 
 ?>

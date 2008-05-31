@@ -14,7 +14,7 @@ if(!is_object($action)) {
     exit;
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('you are now ready to pay your order')));
 ?>
 <h1><?php echo safeToHtml($translation->get('you are now ready to pay your order')); ?></h1>

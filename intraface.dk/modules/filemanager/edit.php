@@ -41,7 +41,7 @@ else {
 	trigger_error($translation->get('you cannot edit a file without an id'), E_USER_ERROR);
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('edit file')));
 ?>
 

@@ -78,7 +78,7 @@ if(intval($debtor->dbquery->getFilter('contact_id')) != 0) {
     $contact = new Contact($kernel, $debtor->dbquery->getFilter('contact_id'));
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'list.js');
 $page->start(safeToHtml($translation->get($debtor->get('type').'s')));
 

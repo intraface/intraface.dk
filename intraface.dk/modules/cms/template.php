@@ -40,7 +40,7 @@ if (!empty($_POST['add_section']) AND !empty($_POST['new_section_type'])) {
 $sections = $template->getSections();
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('template')));
 ?>
 

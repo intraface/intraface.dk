@@ -27,7 +27,7 @@ $queue = $email_object->countQueue();
 
 $comments = Comment::getList('all', $kernel);
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Kommentarer');
 ?>
 <h1>Kommentarer</h1>

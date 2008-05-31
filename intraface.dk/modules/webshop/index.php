@@ -11,7 +11,7 @@ $error = new Intraface_Error();
 if (!empty($_POST)) {
     // mangler validering
 
-    $validator = new Validator($error);
+    $validator = new Intraface_Validator($error);
     $validator->isNumeric($_POST['show_online'], 'show_online skal være et tal');
     //$validator->isNumeric($_POST['discount_limit'], 'discount_limit skal være et tal');
     //$validator->isNumeric($_POST['discount_percent'], 'discount_percent skal være et tal');
@@ -46,7 +46,7 @@ if(isset($_GET['delete_basketevaluation_id'])) {
     $basketevaluation->delete();
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('webshop')));
 
 ?>

@@ -66,7 +66,7 @@ $accounts = $account->getList('balance');
 $total_debet = 0;
 $total_credit = 0;
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Primosaldo');
 ?>
 

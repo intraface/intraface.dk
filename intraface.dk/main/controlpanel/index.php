@@ -3,7 +3,7 @@ require('../../include_first.php');
 
 $translation = $kernel->getTranslation('controlpanel');
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('control panel')));
 ?>
 <h1><?php echo safeToHtml($translation->get('control panel')); ?></h1>

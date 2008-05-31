@@ -16,7 +16,7 @@ if (!empty($_POST)) {
     trigger_error('Der mangler et nyhedsbrev', FATAL);
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Send nyhedsbrev');
 ?>
 

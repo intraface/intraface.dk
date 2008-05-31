@@ -80,7 +80,7 @@ if (!empty($_POST)) {
     
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start($translation->get('state payment for '.$for));
 
 ?>

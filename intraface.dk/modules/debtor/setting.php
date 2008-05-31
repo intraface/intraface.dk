@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         $error = new Intraface_Error;
-        $validator = new Validator($error);
+        $validator = new Intraface_Validator($error);
 
         if($_POST['debtor_sender'] == 'defined') {
             $validator->isEmail($_POST['debtor_sender_email'], 'Invalid e-mail in Sender e-mail');
@@ -166,7 +166,7 @@ else {
     $string = 'Det er gratis for små og mellemstore virksomheder at bruge Læs-ind bureauer. <a href="http://www.eogs.dk/sw7483.asp">Tjek her om det gælder for din virksomhed</a>.';
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Indstillinger');
 ?>
 

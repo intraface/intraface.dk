@@ -47,7 +47,7 @@ else {
     }   
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start("Rykker");
 ?>
 <div id="colOne"> <!-- style="float: left; width: 45%;" -->

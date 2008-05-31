@@ -99,7 +99,7 @@ $year_end = new YearEnd($year);
 $post = new Post(new Voucher($year));
 $vat_period = new VatPeriod($year);
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Årsafslutning');
 ?>
 

@@ -30,7 +30,7 @@ if(!empty($_POST)) {
 }
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('edit user')));
 ?>
 

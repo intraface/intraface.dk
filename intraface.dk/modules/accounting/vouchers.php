@@ -9,7 +9,7 @@ $year = new Year($kernel);
 $voucher = new Voucher($year);
 $posts = $voucher->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Regnskab');
 ?>
 

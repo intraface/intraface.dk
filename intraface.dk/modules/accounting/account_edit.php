@@ -34,7 +34,7 @@ else {
 	$values = array();
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'edit_account.js');
 $page->start('Rediger konto');
 ?>

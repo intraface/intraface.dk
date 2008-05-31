@@ -79,6 +79,6 @@ $application->registry->registerConstructor('db', create_function(
 
 $application->registry->registerConstructor('page', create_function(
   '$className, $args, $registry',
-  'return new Page($registry->get("kernel"));'
+  'return new Intraface_Page($registry->get("kernel"));'
 ));
 $application->dispatch();

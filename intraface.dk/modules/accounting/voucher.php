@@ -104,7 +104,7 @@ $voucher_files = $voucher_file->getList();
 
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Regnskab');
 ?>
 

@@ -52,7 +52,7 @@ $subscriber->getDBQuery()->setExtraUri('&amp;list_id='.$list->get('id'));
 $subscribers = $subscriber->getList();
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Modtagere');
 ?>
 

@@ -13,7 +13,7 @@ else {
 
 $filemanager = new FileManager($kernel, $id);
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('file')) . ': ' . $filemanager->get('file_name'));
 
 ?>

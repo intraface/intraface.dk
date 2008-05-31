@@ -51,7 +51,7 @@ $product->getDBQuery()->storeResult("use_stored", "related_products", "sublevel"
 
 $list = $product->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 //$page->includeJavascript('module', 'add_related.js');
 $page->start(t('add related products'));
 ?>

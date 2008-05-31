@@ -7,7 +7,7 @@ $translation = $kernel->getTranslation('cms');
 $cmssite = new CMS_Site($kernel, (int)$_GET['id']);
 $cmspage = new CMS_Page($cmssite);
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(t('site').' '.$cmssite->get('name'));
 
 ?>

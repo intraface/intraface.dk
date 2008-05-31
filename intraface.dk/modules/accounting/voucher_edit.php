@@ -28,7 +28,7 @@ else {
 	$value['number'] = $voucher->getMaxNumber() + 1;
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Regnskab');
 ?>
 

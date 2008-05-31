@@ -19,7 +19,7 @@ if (!empty($_POST['id']) AND is_numeric($_POST['id'])) {
 $year = new Year($kernel);
 $years = $year->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 
 $page->start('Vælg regnskab');
 ?>

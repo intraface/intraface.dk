@@ -41,7 +41,7 @@ $accounts = $year->getBalanceAccounts();
 
 
 // starting page
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Bogfør');
 ?>
 

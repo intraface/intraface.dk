@@ -33,7 +33,7 @@ $posts[0]['saldo'] = $primo['debet'] - $primo['credit'];
 
 $posts = array_merge($posts, $account->getPosts());
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Kontooversigt');
 
 ?>

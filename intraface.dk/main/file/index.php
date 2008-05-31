@@ -23,7 +23,7 @@ if (!$intranet_id = $weblogin->auth('public', $query_parts[1])) {
     exit;
 }
 $kernel = new Intraface_Kernel;
-$kernel->intranet = new Intranet($intranet_id);
+$kernel->intranet = new Intraface_Intranet($intranet_id);
 $filehandler_shared = $kernel->useShared('filehandler');
 $filehandler_shared->includeFile('FileViewer.php');
 
@@ -56,7 +56,7 @@ if($fileviewer->needLogin()) {
 
     // ...we need to check that it is the right intranet
     $user = new Intraface_User($user_id);
-    $intranet = new Intranet($user->getActiveIntranetId());
+    $intranet = new Intraface_Intranet($user->getActiveIntranetId());
     if($intranet->get('id') != $intranet_id) {
         trigger_error('You where not logged into the correct intranet to view the file', E_USER_WARNING);
         exit;

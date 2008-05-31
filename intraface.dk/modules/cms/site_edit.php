@@ -22,7 +22,7 @@ else {
 	$cmssite = new CMS_Site($kernel);
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('edit site')));
 ?>
 

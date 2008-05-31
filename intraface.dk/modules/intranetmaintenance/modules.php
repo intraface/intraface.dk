@@ -18,7 +18,7 @@ else {
     $module_msg = array();
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start("Moduler");
 ?>
 

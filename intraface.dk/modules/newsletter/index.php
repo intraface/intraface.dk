@@ -12,7 +12,7 @@ if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
 
 $lists = $list->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Nyhedsbrevslister');
 ?>
 

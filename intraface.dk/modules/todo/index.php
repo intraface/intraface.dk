@@ -9,7 +9,7 @@ $todo = new TodoList($kernel);
 $todo_list = $todo->getList();
 $todo_done = $todo->getList('done');
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(t('Todo'));
 ?>
 <h1><?php e(t('Todo')); ?></h1>

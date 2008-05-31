@@ -17,7 +17,7 @@ elseif($kernel->user->hasModulesAccess("quotation")) {
 	exit;
 }
 else {
-	$page = new Page($kernel);
+	$page = new Intraface_Page($kernel);
 	$page->start();
 	?>
 	<H1>Debitor</h1>

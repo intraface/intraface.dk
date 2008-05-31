@@ -67,7 +67,7 @@ $years = $year->getList();
 $account = new Account($year);
 $vat_period = new VatPeriod($year);
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Regnskab');
 ?>
 <h1>Regnskab <?php echo $year->get('label'); ?></h1>

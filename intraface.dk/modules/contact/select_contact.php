@@ -70,7 +70,7 @@ elseif(isset($_GET['last_contact_id']) && intval($_GET['last_contact_id']) != 0)
 
 $contacts = $contact->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Vælg kontakt');
 ?>
 <h1>Vælg kontakt</h1>

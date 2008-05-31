@@ -35,7 +35,7 @@ else {
 	$value['contact_id'] = (int)$_GET['contact_id'];
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Rediger kontaktperson');
 ?>
 

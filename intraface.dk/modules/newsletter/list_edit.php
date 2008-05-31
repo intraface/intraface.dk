@@ -20,7 +20,7 @@ if(isset($_POST['submit'])) {
     $value = array();
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Rediger liste');
 ?>
 

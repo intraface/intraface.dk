@@ -190,7 +190,7 @@ elseif (!empty($_GET['section_id']) AND is_numeric($_GET['section_id'])) {
 }
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 if ($kernel->setting->get('user', 'htmleditor') == 'tinymce') {
     $page->includeJavascript('global', 'tiny_mce/tiny_mce.js');
 }

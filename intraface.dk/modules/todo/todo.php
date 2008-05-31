@@ -68,7 +68,7 @@ if (!empty($_POST)) {
     $value['todo'] = $todo->getAllItems();
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'todo.js');
 $page->start(t('Edit todo'));
 ?>

@@ -59,7 +59,7 @@ else {
     $data = $_SESSION['shared_fileimport_data'];
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start($translation->get('import contacts'));
 ?>
 <h1><?php echo safeToHtml($translation->get('import contacts')); ?></h1>

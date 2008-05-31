@@ -65,7 +65,7 @@ if ($value['type'] == "corporation") {
 // $similar_contacts = $contact->compare();
 $similar_contacts = array();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'viewcontact.js');
 $page->start(safeToHtml($translation->get('contact information') . ' ' .$contact->get('name')));
 ?>

@@ -19,7 +19,7 @@ $textsizes = array(
 );
 */
 
-$error = new Error();
+$error = new Intraface_Error();
 
 /*
 if ($kernel->user->hasModuleAccess('cms')) {
@@ -65,7 +65,7 @@ if(!empty($_POST)) {
 
     /*
     if ($kernel->user->hasModuleAccess('cms')) {
-        $validator = new Validator($error);
+        $validator = new Intraface_Validator($error);
         $validator->isString($_POST['htmleditor'], 'error in htmleditor not a string', '');
 
         if (!array_key_exists($_POST['htmleditor'], $editors)) {
@@ -95,7 +95,7 @@ else {
     //$value['htmleditor'] = $kernel->setting->get('user', 'htmleditor');
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('user preferences')));
 ?>
 

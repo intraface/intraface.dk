@@ -15,7 +15,7 @@ if (empty($_GET['id']) OR !is_numeric($_GET['id'])) {
 // set up product
 $oProduct = new Product($kernel, $_GET['id']);
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(t('stock history'));
 ?>
 

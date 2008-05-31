@@ -50,7 +50,7 @@ $reminder->dbquery->usePaging("paging");
 $reminder->dbquery->storeResult("use_stored", "reminder", "toplevel");
 $reminders = $reminder->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start("Rykkere");
 ?>
 

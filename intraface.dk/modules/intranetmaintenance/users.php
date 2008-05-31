@@ -38,7 +38,7 @@ $user->dbquery->storeResult("use_stored", "intranetmainenance_user", "sublevel")
 
 $users = $user->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start();
 ?>
 

@@ -49,7 +49,7 @@ if (!empty($_POST)) {
 
 $items = $debtor->item->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start($translation->get('State invoice'));
 
 ?>

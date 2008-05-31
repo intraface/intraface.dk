@@ -52,7 +52,7 @@ else {
 $periods = $vat_period->getList();
 $post = new Post(new Voucher($year));
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Momsoversigt');
 ?>
 

@@ -56,7 +56,7 @@ if ($kernel->user->countModuleAccess() == 1) {
 }
 */
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('dashboard', 'dashboard')));
 ?>
 <div id="colOne">

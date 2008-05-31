@@ -34,7 +34,7 @@ else {
     $title = "Opret indløb";
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'edit.js');
 $page->start();
 ?>

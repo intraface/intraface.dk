@@ -87,7 +87,7 @@ else {
 $templates = $template->getList($binary_bage_type);
 $cmspages = $cmspage->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'page_edit.js');
 $page->includeJavascript('module', 'parseUrlIdentifier.js');
 $page->start(safeToHtml($translation->get('edit page')));

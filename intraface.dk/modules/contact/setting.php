@@ -12,7 +12,7 @@ $error = new Intraface_Error();
 if (!empty($_POST)) {
 
 	// validering
-	$validator = new Validator($error);
+	$validator = new Intraface_Validator($error);
 	$validator->isUrl($_POST['contact_login_url'], 'Ikke gyldigt url');
 	$validator->isString($_POST['text'], 'Ikke gyldig tekst', '');
 
@@ -33,7 +33,7 @@ else {
 	$values['text'] = $kernel->setting->get('intranet', 'contact.login_email_text');
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Indstillinger');
 ?>
 

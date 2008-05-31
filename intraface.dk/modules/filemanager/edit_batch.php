@@ -34,7 +34,7 @@ $filemanager->dbquery->storeResult('use_stored', 'filemanager', 'toplevel');
 
 $files = $filemanager->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('files')));
 ?>
 

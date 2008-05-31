@@ -51,7 +51,7 @@ $items = $debtor->item->getList();
 $value = $debtor->get();
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start($translation->get('State invoice'));
 
 ?>

@@ -63,7 +63,7 @@ else {
 $account = new Account($year);
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Rediger post på bilag #' . $post->voucher->get('number'));
 ?>
 

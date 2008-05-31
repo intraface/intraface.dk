@@ -105,7 +105,7 @@ else {
     $value["number"] = $reminder->getMaxNumber();
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'edit.js');
 $page->start($title);
 

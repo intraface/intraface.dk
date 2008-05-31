@@ -35,7 +35,7 @@ else {
 	trigger_error("Der er ikke angivet et betalingsid", ERROR);
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start("Onlinebetaling");
 
 ?>

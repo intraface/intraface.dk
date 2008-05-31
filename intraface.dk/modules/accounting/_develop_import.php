@@ -29,7 +29,7 @@ $debtor->dbquery->setFilter('to_date', $year->get('to_date_dk'));
 
 $invoices = $debtor->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Regnskab');
 ?>
 

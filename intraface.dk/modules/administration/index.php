@@ -4,7 +4,7 @@ require('../../include_first.php');
 $kernel->module('administration');
 $translation = $kernel->getTranslation('administration');
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('administration')));
 ?>
 <h1><?php echo safeToHtml($translation->get('administration')); ?></h1>

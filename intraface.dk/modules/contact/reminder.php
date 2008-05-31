@@ -63,7 +63,7 @@ if($reminder->get('id') == 0) {
 }
 $contact = $reminder->contact;
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start($translation->get('reminder'));
 ?>
 

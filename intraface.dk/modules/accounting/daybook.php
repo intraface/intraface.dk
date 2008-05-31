@@ -58,7 +58,7 @@ $account = new Account($year);
 $post = new Post($voucher);
 $posts = $post->getList('draft');
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('global', 'XMLHttp.js');
 $page->includeJavascript('global', 'focusField.js');
 // $page->includeJavascript('global', 'getElementByClass.js');

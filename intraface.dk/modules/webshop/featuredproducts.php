@@ -25,7 +25,7 @@ if (!empty($_POST)) {
 $featured = new Intraface_Webshop_FeaturedProducts($kernel->intranet, $db);
 $all = $featured->getAll();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('featured products')));
 
 ?>

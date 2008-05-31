@@ -26,7 +26,7 @@ else {
     $value['css'] = $cmssite->stylesheet->get('css_own');
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('edit stylesheet')));
 ?>
 

@@ -6,8 +6,8 @@
  * @author Lars Olesen <lars@legestue.net>
  *
  */
-
-class Page {
+class Intraface_Page 
+{
     public $kernel;
     public $db;
     public $theme;
@@ -17,7 +17,8 @@ class Page {
     public $javascript_path = array();
     public $primary_module;
 
-    function __construct($object_kernel) {
+    function __construct($object_kernel) 
+    {
         if(!is_object($object_kernel)) {
             trigger_error('Page requires Kernel', E_USER_ERROR);
         }
@@ -25,7 +26,8 @@ class Page {
         $this->db = new DB_Sql;
     }
 
-    function start($title = '') {
+    function start($title = '') 
+    {
         $this->primary_module = $this->kernel->getPrimaryModule();
         $name = '';
         if (is_object($this->primary_module)) {
@@ -182,7 +184,8 @@ class Page {
 
     }
 
-    function end() {
+    function end() 
+    {
         // printer sidens slut
 
         include(PATH_INCLUDE_IHTML.'/intraface/bottom.php');
@@ -192,7 +195,8 @@ class Page {
         }
     }
 
-    function includeJavascript($scope, $filename) {
+    function includeJavascript($scope, $filename) 
+    {
 
         if(!in_array($scope, array('global', 'module'), true)) {
             trigger_error("Første parameter er ikke enten 'global' eller 'module' i Page->includeJavascript", E_USER_ERROR);
@@ -206,5 +210,3 @@ class Page {
         }
     }
 }
-
-?>

@@ -3,7 +3,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/include_first.php');
 
 $kernel->module('accounting');
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Hjælp til bogføring');
 ?>
 <h1>Om at lave regnskab</h1>

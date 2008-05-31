@@ -46,7 +46,7 @@ else {
 
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 
 $img_height = $filemanager->get('height');
 $img_width = $filemanager->get('width');

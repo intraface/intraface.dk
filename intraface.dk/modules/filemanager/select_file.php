@@ -160,7 +160,7 @@ $filemanager->dbquery->storeResult("use_stored", "filemanager", "sublevel");
 
 $files = $filemanager->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 if($multiple_choice) {
 	// Kun hvis man skal kunne vælge flere er der behov for javascript
 	$page->includeJavascript('module', 'select_file.js');

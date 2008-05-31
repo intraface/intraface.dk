@@ -14,7 +14,7 @@ if ($year->get('id') > 0) {
 $year = new Year($kernel);
 $years = $year->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Regnskab');
 ?>
 

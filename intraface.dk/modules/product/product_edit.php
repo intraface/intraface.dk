@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(t('edit product'));
 ?>
 

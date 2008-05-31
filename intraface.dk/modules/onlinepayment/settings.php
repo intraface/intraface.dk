@@ -29,7 +29,7 @@ else {
 
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Onlinebetalinger');
 ?>
 

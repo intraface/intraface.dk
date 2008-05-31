@@ -25,7 +25,7 @@ if (!empty($_POST['mysql'])) {
     }
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Backup');
 ?>
 

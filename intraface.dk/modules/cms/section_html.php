@@ -47,7 +47,7 @@ if (!empty($_GET['moveto']) AND is_numeric($_GET['moveto'])) {
 }
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('global', 'getElementsBySelector.js');
 $page->includeJavascript('module', 'section_html.js');
 $page->start('CMS');

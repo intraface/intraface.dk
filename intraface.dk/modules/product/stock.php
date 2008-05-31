@@ -22,7 +22,7 @@ if (!empty($_POST['submit'])) {
 $stock = new Product($kernel);
 $list = $stock->getList("stock", '', @$_GET['c']);
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(t('stock'));
 ?>
 <h1><?php e(t('stock')); ?></h1>

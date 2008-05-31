@@ -34,7 +34,7 @@ $buy_accounts = $account->getList('expenses');
 $finance_accounts = $account->getList('finance');
 $accounts = $account->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Indstillinger');
 ?>
 

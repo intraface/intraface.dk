@@ -22,7 +22,7 @@ if(isset($_GET['delete_disturbance'])) {
 	$systemdisturbance = new SystemDisturbance($kernel, intval($_GET['delete_disturbance']));
 	$systemdisturbance->delete();
 }
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start("System beskeder");
 
 ?>

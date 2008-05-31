@@ -7,7 +7,7 @@ $newsletter = Newsletter::factory($kernel, $_GET['id']);
 $letter = $newsletter->get();
 $letter['list_id'] = $newsletter->list->get('id');
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Rediger nyhedsbrev');
 
 ?>

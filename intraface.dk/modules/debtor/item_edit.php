@@ -48,7 +48,7 @@ if(isset($_GET['return_redirect_id'])) {
 	}
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start($translation->get($debtor->get('type').' content'));
 ?>
 

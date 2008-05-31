@@ -117,7 +117,7 @@ else {
 
 $modulepackageshop = new Intraface_ModulePackage_ShopExtension();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get($add_type).' '.$translation->get('package')));
 ?>
 

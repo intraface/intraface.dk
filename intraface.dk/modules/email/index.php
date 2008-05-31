@@ -23,7 +23,7 @@ $email_object->dbquery->usePaging('paging');
 $emails = $email_object->getList();
 $queue = $email_object->countQueue();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('e-mails')));
 ?>
 <h1><?php echo safeToHtml($translation->get('e-mails')); ?></h1>

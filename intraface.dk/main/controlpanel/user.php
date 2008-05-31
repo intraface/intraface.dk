@@ -7,7 +7,7 @@ $user = $kernel->user;
 $value = $user->get();
 $address_value = $user->getAddress()->get();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('user settings')));
 ?>
 

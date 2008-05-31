@@ -84,7 +84,7 @@ else {
 }
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Momsoversigt');
 ?>
 <h1>Moms <?php echo $year->get('label'); ?></h1>

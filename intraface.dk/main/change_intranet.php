@@ -19,7 +19,7 @@ if (isset($_GET["id"]) && $kernel->user->hasIntranetAccess($_GET['id'])) {
 	}
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('change intranet')));
 
 ?>

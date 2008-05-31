@@ -108,7 +108,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(t('product') . ': ' . $product->get('name'));
 ?>
 

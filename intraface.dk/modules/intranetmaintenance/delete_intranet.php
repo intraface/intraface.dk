@@ -122,7 +122,7 @@ if (!empty($_POST)) {
 }
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Slet intranet');
 
 ?>

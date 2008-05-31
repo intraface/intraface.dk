@@ -71,7 +71,7 @@ if (!empty($_GET['moveup']) AND is_numeric($_GET['moveup'])) {
 
 $page_types_plural = CMS_Page::getTypesPlural();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('global', 'yui/connection/connection-min.js');
 $page->includeJavascript('global', 'checkboxes.js');
 $page->includeJavascript('module', 'publish.js');

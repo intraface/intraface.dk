@@ -55,7 +55,7 @@ $product->getDBQuery()->storeResult("use_stored", "products", "toplevel");
 
 $products = $product->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(t('products'));
 ?>
 <h1><?php e(t('products')); ?></h1>

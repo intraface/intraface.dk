@@ -14,7 +14,7 @@ if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
 $site = new CMS_Site($kernel);
 $sites = $site->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('cms')));
 ?>
 

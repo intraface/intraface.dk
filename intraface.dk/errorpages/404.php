@@ -1,7 +1,7 @@
 <?php
 require('../include_first.php');
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start("Fejl");
 ?>
 <h1>Fejl</h1>

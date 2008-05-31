@@ -55,7 +55,7 @@ if (!empty($_GET['action']) AND $_GET['action'] == 'transfer' AND $setting_is_ok
 	}
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Overfør billeder');
 ?>
 <h1>Overfør billeder</h1>

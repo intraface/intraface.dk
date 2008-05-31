@@ -63,7 +63,7 @@ if (!empty($_POST)) {
     $contact_list = $contact->getList();
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Todo E-mail');
 ?>
 <h1>Hvem skal todo-listen sendes til?</h1>

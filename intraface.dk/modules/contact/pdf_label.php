@@ -52,7 +52,7 @@ switch($kernel->setting->get("user", "label")) {
 
 $doc->start();
 
-$validator = new Validator(new Intraface_Error);
+$validator = new Intraface_Validator(new Intraface_Error);
 
 $doc->addText($doc->get('x') + $label_padding_left, $doc->get('y') - $label_padding_top , $doc->get('font_size'), "<b>Søgning</b>");
 $line = 1;

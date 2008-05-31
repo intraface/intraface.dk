@@ -185,7 +185,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'view.js');
 $page->start(safeToHtml($translation->get($debtor->get('type'))));
 

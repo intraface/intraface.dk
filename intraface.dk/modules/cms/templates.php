@@ -18,7 +18,7 @@ if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
 
 $templates = $template->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('templates')));
 ?>
 

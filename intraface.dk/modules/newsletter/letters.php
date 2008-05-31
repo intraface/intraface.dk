@@ -18,7 +18,7 @@ if (!empty($_GET['delete']) AND is_numeric($_GET['list_id'])) {
 $letter = new Newsletter($list);
 $letters = $letter->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Breve');
 ?>
 

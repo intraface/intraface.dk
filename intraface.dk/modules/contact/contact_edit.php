@@ -77,7 +77,7 @@ if($contact->get('id') != 0) {
 }
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'contact_edit.js');
 $page->start('Rediger kontakt');
 ?>

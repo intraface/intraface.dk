@@ -48,7 +48,7 @@ $procurements = $procurement->getList();
 
 // $procurement->dbquery->setCondition("paid = 0 OR status = 0");
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Indkøb');
 ?>
 

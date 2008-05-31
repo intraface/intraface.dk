@@ -23,7 +23,7 @@ $intranetmaintenance->dbquery->usePaging("paging", $kernel->setting->get('user',
 $intranetmaintenance->dbquery->storeResult("use_stored", "intranetmainenance_intranet", "toplevel");
 $intranets = $intranetmaintenance->getList();
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start($translation->get('intranets'));
 ?>
 

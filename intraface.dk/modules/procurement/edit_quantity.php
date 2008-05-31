@@ -44,7 +44,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "") {
 }
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start("Sæt antal");
 ?>
 <h1>Sæt antal</h1>
