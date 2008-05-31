@@ -393,14 +393,16 @@ class Intraface_User extends Intraface_Standard
 
         if ($result->numRows() == 1) {
             $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-            if ($this->hasIntranetAccess($row['active_intranet_id'])) {
+            if ($this->hasIntranetAccess($row['active_intranet_id']) AND $row['active_intranet_id'] != 0) {
                 return $row['active_intranet_id'];
             }
         }
 
-        $result = $this->db->query("SELECT intranet.id FROM intranet
-            INNER JOIN permission ON permission.intranet_id = intranet.id
-            WHERE permission.user_id = " . $this->db->quote($this->getId(), 'integer'));
+        $result = $this->db->query("SELECT intranet.id 
+			FROM intranet
+            INNER JOIN permission 
+				ON permission.intranet_id = intranet.id
+            WHERE permission.user_id = " . $this->db->quote($this->id, 'integer'));
         if (PEAR::isError($result)) {
             throw new Exception($result->getUserInfo());
         }
