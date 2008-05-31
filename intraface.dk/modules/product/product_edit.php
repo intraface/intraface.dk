@@ -7,7 +7,7 @@ require('../../include_first.php');
 
 $module = $kernel->module('product');
 
-$redirect = Redirect::factory($kernel, 'receive');
+$redirect = Intraface_Redirect::factory($kernel, 'receive');
 $translation = $kernel->getTranslation('product');
 
 if ($kernel->user->hasModuleAccess('accounting')) {

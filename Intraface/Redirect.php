@@ -7,9 +7,6 @@
  * @version @package-version@
  */
 
-require_once 'DB/Sql.php';
-require_once 'Ilib/Redirect.php';
-
 /**
  * Redirects a user to specific pages
  *
@@ -122,9 +119,8 @@ require_once 'Ilib/Redirect.php';
  * @version @package-version@
  */
 
-class Redirect extends Ilib_Redirect
+class Intraface_Redirect extends Ilib_Redirect
 {
-
     /**
      * Constructs a redirect object
      *

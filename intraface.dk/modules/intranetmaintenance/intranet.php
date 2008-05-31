@@ -56,7 +56,7 @@ else {
         if($kernel->user->hasModuleAccess('contact')) {
             $contact_module = $kernel->useModule('contact');
     
-            $redirect = Redirect::factory($kernel, 'go');
+            $redirect = Intraface_Redirect::factory($kernel, 'go');
             $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", $modul->getPath()."intranet.php?id=".$intranet->get('id'));
             $redirect->askParameter('contact_id');
             $redirect->setIdentifier('contact');
@@ -71,7 +71,7 @@ else {
     
     # add existing user
     if(isset($_GET['add_user']) && $_GET['add_user'] == 1) {
-        $redirect = Redirect::factory($kernel, 'go');
+        $redirect = Intraface_Redirect::factory($kernel, 'go');
         $url = $redirect->setDestination($modul->getPath()."users.php", $modul->getPath()."user.php?intranet_id=".$intranet->get('id'));
         $redirect->askParameter('user_id');
         $redirect->setIdentifier('add_user');
@@ -81,7 +81,7 @@ else {
     
     #return
     if(isset($_GET['return_redirect_id'])) {
-        $redirect = Redirect::factory($kernel, 'return');
+        $redirect = Intraface_Redirect::factory($kernel, 'return');
         if($redirect->get('identifier') == 'contact') {
             $intranet->setContact($redirect->getParameter('contact_id'));
         }

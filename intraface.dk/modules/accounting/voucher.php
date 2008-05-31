@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 
 
-		$redirect = Redirect::factory($kernel, 'return');
+		$redirect = Intraface_Redirect::factory($kernel, 'return');
 		$selected_file_id = $redirect->getParameter('file_handler_id');
 
 		if($selected_file_id != 0) {
@@ -61,7 +61,7 @@ elseif (!empty($_POST) AND !empty($_FILES)) {
 	$var['belong_to'] = 'file';
 
 	if(!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
-		$redirect = Redirect::factory($kernel, 'go');
+		$redirect = Intraface_Redirect::factory($kernel, 'go');
 		$module_filemanager = $kernel->useModule('filemanager');
 		$url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $module_accounting->getPath().'voucher.php?id='.$voucher->get('id'));
 		// $redirect->setIdentifier('voucher'); // Den er der kun behov for, hvis der er flere redirect med return på samme side  /Sune 06-12-2006

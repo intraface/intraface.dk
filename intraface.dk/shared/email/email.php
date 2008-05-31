@@ -2,7 +2,7 @@
 require('../../include_first.php');
 
 $kernel->useShared('email');
-$redirect = Redirect::factory($kernel, 'receive');
+$redirect = Intraface_Redirect::factory($kernel, 'receive');
 
 
 
@@ -50,7 +50,7 @@ else {
   $contact = $email->getContact();
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Email');
 ?>
 <h1>E-mail</h1>

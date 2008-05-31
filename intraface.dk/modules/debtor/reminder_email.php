@@ -136,7 +136,7 @@ $var = array(
 );
 
 if ($id = $email->save($var)) {
-    $redirect = new Redirect($kernel);
+    $redirect = new Intraface_Redirect($kernel);
     $shared_email = $kernel->useShared('email');
     $url = $redirect->setDestination($shared_email->getPath().'email.php?id='.$id, $module_debtor->getPath().'reminder.php?id='.$reminder->get('id'));
     $redirect->setIdentifier('send_email');

@@ -171,7 +171,7 @@ switch ($send_as) {
             header('Location: ' . $url);
             */
 
-            $redirect = Redirect::factory($kernel, 'go');
+            $redirect = Intraface_Redirect::factory($kernel, 'go');
             $shared_email = $kernel->useShared('email');
 
             // First vi set the last, because we need this id to the first.

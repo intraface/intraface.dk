@@ -70,7 +70,7 @@ if (!empty($_POST)) {
             $keys = array_keys($_POST['choose_file']);
             $section_id = $keys[0];
 
-            $redirect = Redirect::factory($kernel, 'go');
+            $redirect = Intraface_Redirect::factory($kernel, 'go');
             $module_filemanager = $kernel->useModule('filemanager');
             $redirect->setIdentifier('picture:'.$section_id);
             $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $module_cms->getPath().'page.php?id='.$section->cmspage->get('id') . '&from_section_id=' . $section_id);
@@ -98,7 +98,7 @@ if (!empty($_POST)) {
 } elseif (!empty($_GET['id'])) {
 
     if(isset($_GET['return_redirect_id'])) {
-        $redirect = Redirect::factory($kernel, 'return');
+        $redirect = Intraface_Redirect::factory($kernel, 'return');
         $identifier_parts = explode(':', $redirect->get('identifier'));
         if($identifier_parts[0] == 'picture') {
             $section = CMS_Section::factory($kernel, 'id', $identifier_parts[1]);

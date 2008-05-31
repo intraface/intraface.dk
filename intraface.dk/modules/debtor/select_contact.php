@@ -64,7 +64,7 @@ if(isset($_POST["go_search"])) {
 elseif(isset($_POST["new_contact"])) {
     if($_POST["type"] == "quotation" || $_POST["type"] == "order" || $_POST["type"] == "invoice") {
 
-        $redirect = new Redirect($kernel);
+        $redirect = new Intraface_Redirect($kernel);
         // @todo make sure that you can have an regret destination
         $url = $redirect->setDestination($contact_module->getPath().'contact_edit.php', $module->getPath().'edit.php?type='.$_POST['type'], $module->getPath().'select_contact.php?type='.$_POST['type']); // contact_id sættes på fra contact_edit
         $redirect->askParameter('contact_id');

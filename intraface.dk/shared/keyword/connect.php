@@ -112,7 +112,7 @@ foreach($keyword->getConnectedKeywords() AS $key) {
     $checked[] = $key['id'];
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('add keywords to') . ' ' . $object->get('name')));
 
 ?>

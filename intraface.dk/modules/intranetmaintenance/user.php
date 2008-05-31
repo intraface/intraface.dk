@@ -63,7 +63,7 @@ if(isset($_POST["submit"])) {
         $intranet = new IntranetMaintenance($_GET['intranet_id']);
         $edit_intranet_id = $intranet->get('id');
     }
-    $redirect = Redirect::factory($kernel, 'return');
+    $redirect = Intraface_Redirect::factory($kernel, 'return');
     if($redirect->get('identifier') == 'add_user') {
         $user = new UserMaintenance($redirect->getParameter('user_id'));
         $user->setIntranetAccess($intranet->get('id'));

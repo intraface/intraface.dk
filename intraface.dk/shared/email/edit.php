@@ -3,7 +3,7 @@ require('../../include_first.php');
 
 $kernel->useShared('email');
 
-$redirect = Redirect::factory($kernel, 'receive');
+$redirect = Intraface_Redirect::factory($kernel, 'receive');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -62,7 +62,7 @@ else {
 	$value = $email->get();
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start('Skriv e-mail');
 
 ?>

@@ -45,7 +45,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 else {
 
-    $redirect = Redirect::returns($kernel);
+    $redirect = Intraface_Redirect::returns($kernel);
     if($redirect->getId('id') == 0) {
         trigger_error('we did not recive a redirect', E_USER_ERROR);
         exit;

@@ -34,11 +34,11 @@ else {
 if (!empty($_POST)) {
 }
 
-$redirect = new Redirect($kernel);
+$redirect = new Intraface_Redirect($kernel);
 $redirect->setDestination('http://www.intraface.dk/shared/keyword/edit.php', 'http://www.intraface.dk/shared/keyword/connect.php?'.$id_name.'='.$object->get('id'));
 
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start("Rediger nøgleord til produkt");
 
 ?>

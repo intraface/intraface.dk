@@ -40,7 +40,7 @@ elseif (!empty($_POST['undelete'])) {
 }
 
 if(!empty($_GET['import'])) {
-    $redirect = Redirect::go($kernel);
+    $redirect = Intraface_Redirect::go($kernel);
     $shared_fileimport = $kernel->useShared('fileimport');
     $url = $redirect->setDestination($shared_fileimport->getPath().'index.php', $module->getPath().'import.php');
     $redirect->askParameter('session_variable_name');

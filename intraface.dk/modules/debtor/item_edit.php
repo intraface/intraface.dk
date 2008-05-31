@@ -33,7 +33,7 @@ else {
 }
 
 if(isset($_GET['change_product'])) {
-	$redirect = Redirect::factory($kernel, 'go');
+	$redirect = Intraface_Redirect::factory($kernel, 'go');
 	$url = $redirect->setDestination($product_module->getPath().'select_product.php?no_quantity=1', $debtor_module->getPath().'item_edit.php?debtor_id='.$debtor->get('id').'&id='.$debtor->item->get('id'));
 	$redirect->askParameter('product_id');
 	header('location: '.$url);
@@ -41,7 +41,7 @@ if(isset($_GET['change_product'])) {
 }
 
 if(isset($_GET['return_redirect_id'])) {
-	$redirect = Redirect::factory($kernel, 'return');
+	$redirect = Intraface_Redirect::factory($kernel, 'return');
 	$product = new Product($kernel, (int)$redirect->getParameter('product_id'));
 	if($product->get('id') != 0) {
 		$product_values = $product->get();

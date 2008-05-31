@@ -13,7 +13,7 @@ $translation = $kernel->getTranslation('keyword');
 if (!empty($_POST)){
 	$keyword = Keyword::factory($kernel, $_POST['id']);
 	if ($keyword->save($_POST)) {
-		$redirect = new Redirect($kernel);
+		$redirect = new Intraface_Redirect($kernel);
 		//echo $redirect->getRedirect('/main/');
 		header('Location:'.$redirect->getRedirect('/main/index.php'));
 		exit;
@@ -27,7 +27,7 @@ else {
 	trigger_error($translation->get('no object has been given'),E_USER_ERROR);
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('edit keyword')));
 
 ?>

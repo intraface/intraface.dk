@@ -4,11 +4,11 @@ require('../../include_first.php');
 $module = $kernel->module('contact');
 $translation = $kernel->getTranslation('contact');
 
-$redirect = Redirect::factory($kernel, 'receive');
+$redirect = Intraface_Redirect::factory($kernel, 'receive');
 
 if(!empty($_GET['add'])) {
 
-	$add_redirect = Redirect::factory($kernel, 'go');
+	$add_redirect = Intraface_Redirect::factory($kernel, 'go');
 	$url = $add_redirect->setDestination($module->getPath()."contact_edit.php", $module->getPath()."select_contact.php?".$redirect->get('redirect_query_string'));
 	$add_redirect->askParameter("contact_id");
 	//$add_redirect->setParameter("selected_contact_id", intval($_GET['add']));

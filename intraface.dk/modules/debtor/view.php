@@ -136,7 +136,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // edit contact
     if(isset($_GET['edit_contact'])) {
         $contact_module = $kernel->getModule('contact');
-        $redirect = Redirect::factory($kernel, 'go');
+        $redirect = Intraface_Redirect::factory($kernel, 'go');
         $url = $redirect->setDestination($contact_module->getPath().'contact_edit.php?id='.intval($debtor->contact->get('id')), $debtor_module->getPath().'view.php?id='.$debtor->get('id'));
         header('location: '.$url);
         exit;
@@ -144,7 +144,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // Redirect til tilføj produkt
     if(isset($_GET['add_item'])) {
-        $redirect = Redirect::factory($kernel, 'go');
+        $redirect = Intraface_Redirect::factory($kernel, 'go');
         $product_module = $kernel->useModule('product');
         $redirect->setIdentifier('add_item');
         $url = $redirect->setDestination($product_module->getPath().'select_product.php?set_quantity=1', $debtor_module->getPath().'view.php?id='.$debtor->get('id'));
@@ -156,7 +156,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // Return fra tilføj produkt og send email
     if(isset($_GET['return_redirect_id'])) {
-        $return_redirect = Redirect::factory($kernel, 'return');
+        $return_redirect = Intraface_Redirect::factory($kernel, 'return');
 
         if($return_redirect->get('identifier') == 'add_item') {
             $selected_products = $return_redirect->getParameter('product_id', 'with_extra_value');

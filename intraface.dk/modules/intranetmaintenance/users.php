@@ -7,7 +7,7 @@ $translation = $kernel->getTranslation('intranetmaintenance');
 $user = new UserMaintenance();
 $user->createDBQuery($kernel);
 
-$redirect = Redirect::factory($kernel, 'receive');
+$redirect = Intraface_Redirect::factory($kernel, 'receive');
 
 if(isset($_GET['add_user_id']) && $_GET['add_user_id'] != 0) {
 	$redirect->setParameter('user_id', intval($_GET['add_user_id']));

@@ -24,7 +24,7 @@ if (!empty($_POST)) {
 
     if ($cmspage->save($_POST)) {
         if(!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
-            $redirect = Redirect::factory($kernel, 'go');
+            $redirect = Intraface_Redirect::factory($kernel, 'go');
             $module_filemanager = $kernel->useModule('filemanager');
             $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $module_cms->getPath().'page_edit.php?id='.$cmspage->get('id'));
             $redirect->askParameter('file_handler_id');
@@ -56,7 +56,7 @@ if (!empty($_POST)) {
 
     // til select - denne kan uden problemer fortrydes ved blot at have et link til samme side
     if (!empty($_GET['return_redirect_id']) AND is_numeric($_GET['return_redirect_id'])) {
-        $redirect = Redirect::factory($kernel, 'return');
+        $redirect = Intraface_Redirect::factory($kernel, 'return');
         $value['pic_id'] = $redirect->getParameter('file_handler_id');
     }
 } elseif (!empty($_GET['site_id']) AND is_numeric($_GET['site_id'])) {

@@ -7,7 +7,7 @@ $translation = $kernel->getTranslation('fileimport');
 
 $fileimport = new FileImport;
 
-$redirect = Redirect::receive($kernel);
+$redirect = Intraface_Redirect::receive($kernel);
 
 if($redirect->get('id') == 0) {
     trigger_error('we did not find a redirect, which is needed', E_USER_ERROR);
@@ -84,7 +84,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     }   
 }
 
-$page = new Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start($translation->get('import contacts'));
 ?>
 <h1><?php echo safeToHtml($translation->get('import contacts')); ?></h1>

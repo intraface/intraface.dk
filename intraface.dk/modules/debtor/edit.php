@@ -42,7 +42,7 @@ if(!empty($_POST)) {
 	if(isset($_GET['contact_id'])) {
 		$contact = new Contact($kernel, intval($_GET['contact_id']));
 	} elseif(isset($_GET['return_redirect_id'])) {
-		$redirect = Redirect::factory($kernel, 'return');
+		$redirect = Intraface_Redirect::factory($kernel, 'return');
 		$contact_id = $redirect->getParameter('contact_id');
 		$contact = new Contact($kernel, intval($contact_id));
 	} else {

@@ -29,7 +29,7 @@ else {
     
     $reminder = new Reminder($kernel, intval($_GET["id"]));
     if(isset($_GET['return_redirect_id'])) {
-        $return_redirect = Redirect::factory($kernel, 'return');
+        $return_redirect = Intraface_Redirect::factory($kernel, 'return');
     
         if($return_redirect->get('identifier') == 'send_email') {
             if($return_redirect->getParameter('send_email_status') == 'sent') {

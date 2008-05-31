@@ -6,7 +6,7 @@ $shared_filehandler = $kernel->useShared('filehandler');
 $translation = $kernel->getTranslation('administration');
 
 if(isset($_GET['return_redirect_id'])) {
-	$redirect = Redirect::factory($kernel, 'return');
+	$redirect = Intraface_Redirect::factory($kernel, 'return');
 	$file_id = $redirect->getParameter('file_handler_id');
 
 	$intranet = new IntranetAdministration($kernel);
@@ -52,7 +52,7 @@ if(isset($_POST['submit']) || isset($_POST['choose_file'])) {
 		if($intranet->address->validate($address_values) && $intranet->address->save($address_values)) {
 			if(isset($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
 				$module_filemanager = $kernel->useModule('filemanager');
-				$redirect = Redirect::factory($kernel, 'go');
+				$redirect = Intraface_Redirect::factory($kernel, 'go');
 	 			$url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1');
 				$redirect->askParameter('file_handler_id');
 				header('Location: ' . $url);

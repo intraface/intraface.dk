@@ -5,7 +5,7 @@ require_once 'Services/Eniro.php';
 $contact_module = $kernel->module('contact');
 $translation = $kernel->getTranslation('contact');
 
-$redirect = Redirect::factory($kernel, 'receive');
+$redirect = Intraface_Redirect::factory($kernel, 'receive');
 
 
 // prepare to save

@@ -26,7 +26,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "") {
 
 } elseif(isset($_GET['id']) && isset($_GET['return_redirect_id'])) {
 	$procurement = new Procurement($kernel, $_GET["id"]);
-	$redirect = Redirect::factory($kernel, 'return');
+	$redirect = Intraface_Redirect::factory($kernel, 'return');
 
 	$product_id = $redirect->getParameter('product_id');
 

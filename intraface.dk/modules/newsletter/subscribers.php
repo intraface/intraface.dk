@@ -14,7 +14,7 @@ if(isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
     if($kernel->user->hasModuleAccess('contact')) {
         $contact_module = $kernel->useModule('contact');
 
-        $redirect = Redirect::factory($kernel, 'go');
+        $redirect = Intraface_Redirect::factory($kernel, 'go');
         $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", $module->getPath()."subscribers.php?list_id=".$list->get('id'));
         $redirect->askParameter('contact_id');
         $redirect->setIdentifier('contact');
@@ -28,7 +28,7 @@ if(isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
 }
 
 if(isset($_GET['return_redirect_id'])) {
-    $redirect = Redirect::factory($kernel, 'return');
+    $redirect = Intraface_Redirect::factory($kernel, 'return');
     if($redirect->get('identifier') == 'contact') {
         $subscriber->addContact(new Contact($kernel, $redirect->getParameter('contact_id')));
     }

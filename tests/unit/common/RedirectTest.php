@@ -75,7 +75,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     function testGoRedirectAndsetDestination()
     {
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -87,7 +87,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     {
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -97,7 +97,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk/';
         $_SERVER['SCRIPT_NAME']  = 'state.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $standard_page_without_redirect = 'standard.php';
         $this->assertEquals($return_url . '&return_redirect_id=1', $redirect->getRedirect($standard_page_without_redirect));
         unset($_SERVER['HTTP_REFERER']);
@@ -110,7 +110,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     {
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -120,7 +120,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk/';
         $_SERVER['SCRIPT_NAME']  = 'state.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $standard_page_without_redirect = 'standard.php';
         $this->assertEquals($return_url . '&return_redirect_id=1', $redirect->getRedirect($standard_page_without_redirect));
         unset($_SERVER['HTTP_REFERER']);
@@ -130,19 +130,19 @@ class RedirectTest extends PHPUnit_Framework_TestCase
 
         // returning
         $_GET['return_redirect_id'] = 1;
-        $redirect = Redirect::returns($kernel);
+        $redirect = Intraface_Redirect::returns($kernel);
         $this->assertEquals(1, $redirect->getId());
     }
 
     function testLoadingARedirect()
     {
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
 
-        $redirect = new Redirect($kernel, 1);
+        $redirect = new Intraface_Redirect($kernel, 1);
         $this->assertEquals(1, $redirect->id);
     }
 
@@ -208,7 +208,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     function testDeleteExistingRedirectReturnsTrue()
     {
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -219,7 +219,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     {
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -230,7 +230,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     {
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -241,7 +241,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk/';
         $_SERVER['SCRIPT_NAME']  = 'state.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $this->assertTrue($redirect->setParameter('param', 120));
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
@@ -253,7 +253,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     {
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -264,7 +264,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk/';
         $_SERVER['SCRIPT_NAME']  = 'state.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $this->assertFalse($redirect->setParameter('wrong_param', 120));
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
@@ -275,7 +275,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     function testIsMultipleParameter() {
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -286,7 +286,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk/';
         $_SERVER['SCRIPT_NAME']  = 'state.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $this->assertTrue($redirect->isMultipleParameter('param') > 0);
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
@@ -298,7 +298,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     {
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -309,7 +309,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk/';
         $_SERVER['SCRIPT_NAME']  = 'state.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $redirect->setParameter('param', 120);
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
@@ -319,7 +319,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
 
         // returning
         $_GET['return_redirect_id']     = 1;
-        $redirect = Redirect::returns($kernel);
+        $redirect = Intraface_Redirect::returns($kernel);
         // notice that the returned format is string despite that the given is integer.
         $this->assertEquals('120', $redirect->getParameter('param'));
     }
@@ -328,7 +328,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     {
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -339,7 +339,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk/';
         $_SERVER['SCRIPT_NAME']  = 'state.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $redirect->setParameter('param', 120);
         $redirect->setParameter('param', 140);
         unset($_SERVER['HTTP_REFERER']);
@@ -349,14 +349,14 @@ class RedirectTest extends PHPUnit_Framework_TestCase
 
         // returning
         $_GET['return_redirect_id']     = 1;
-        $redirect = Redirect::returns($kernel);
+        $redirect = Intraface_Redirect::returns($kernel);
         // print_r($redirect->getParameter('param'));
         $this->assertEquals(array(120, 140), $redirect->getParameter('param'));
     }
 
     function testGetIdentifier() {
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $redirect->setIdentifier('identifier1');
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
@@ -367,7 +367,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk/';
         $_SERVER['SCRIPT_NAME']  = 'state.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $this->assertEquals('identifier1', $redirect->getIdentifier('identifier1'));
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
@@ -377,7 +377,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
 
     function testGetId() {
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -387,7 +387,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk/';
         $_SERVER['SCRIPT_NAME']  = 'state.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $this->assertEquals(1, $redirect->getId());
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
@@ -397,7 +397,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
 
     function testGetRedirectQueryString() {
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -407,7 +407,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk/';
         $_SERVER['SCRIPT_NAME']  = 'state.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $this->assertEquals('redirect_id=1', $redirect->getRedirectQueryString());
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
@@ -419,7 +419,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
 
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -432,7 +432,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk';
         $_SERVER['SCRIPT_NAME']  = '/page.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
         unset($_SERVER['SCRIPT_NAME']);
@@ -442,7 +442,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_REFERER'] = $destination_url;
         $_SERVER['HTTP_HOST']    = 'example.dk';
         $_SERVER['SCRIPT_NAME']  = '/page.php';
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $this->assertEquals(1, $redirect->getId());
 
     }
@@ -451,7 +451,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
 
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -461,7 +461,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk';
         $_SERVER['SCRIPT_NAME']  = '/page.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
         unset($_SERVER['SCRIPT_NAME']);
@@ -471,7 +471,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_REFERER'] = 'http://example.dk/another_page.php';
         $_SERVER['HTTP_HOST']    = 'example.dk';
         $_SERVER['SCRIPT_NAME']  = '/page.php';
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $this->assertEquals(0, $redirect->getId());
 
     }
@@ -481,7 +481,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
 
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $url = $redirect->setDestination($destination_url, $return_url);
@@ -491,7 +491,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk';
         $_SERVER['SCRIPT_NAME']  = '/page.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
         unset($_SERVER['SCRIPT_NAME']);
@@ -501,7 +501,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_REFERER'] = 'http://example.dk/another_page.php';
         $_SERVER['HTTP_HOST']    = 'example.dk';
         $_SERVER['SCRIPT_NAME']  = '/page.php';
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
         unset($_SERVER['SCRIPT_NAME']);
@@ -511,7 +511,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_REFERER'] = $destination_url;
         $_SERVER['HTTP_HOST']    = 'example.dk';
         $_SERVER['SCRIPT_NAME']  = '/page.php';
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $this->assertEquals(0, $redirect->getId());
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
@@ -522,7 +522,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
 
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $return_url      = 'http://example.dk/state.php?id=1';
         $destination_url = 'http://example.dk/page.php';
         $redirect->setDestination($destination_url, $return_url);
@@ -532,9 +532,9 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk';
         $_SERVER['SCRIPT_NAME']  = '/page.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $this->assertEquals(1, $redirect->getId());
-        $redirect_two = Redirect::go($kernel);
+        $redirect_two = Intraface_Redirect::go($kernel);
         $return_url_two      = 'http://example.dk/page.php';
         $destination_url_two = 'http://example.dk/add_page.php';
         $url = $redirect_two->setDestination($destination_url_two, $return_url_two.'?'.$redirect->getRedirectQueryString());
@@ -549,7 +549,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk';
         $_SERVER['SCRIPT_NAME']  = '/add_page.php';
         $_GET['redirect_id']     = 2;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $default = 'http://example.dk/another_page.php';
         $this->assertEquals($return_url_two.'?redirect_id=1&return_redirect_id=2', $redirect->getRedirect($default));
         unset($_SERVER['HTTP_REFERER']);
@@ -561,7 +561,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     function testLoadRedirectAfterSecondRedirectAndSubmit() {
         // go
         $kernel = new FakeRedirectKernel;
-        $redirect = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::go($kernel);
         $url1      = 'http://example.dk/state.php?id=1';
         $url2 = 'http://example.dk/page.php';
         $redirect->setDestination($url2, $url1);
@@ -571,8 +571,8 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk';
         $_SERVER['SCRIPT_NAME']  = '/page.php';
         $_GET['redirect_id']     = 1;
-        $redirect = Redirect::receive($kernel);
-        $redirect_two = Redirect::go($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
+        $redirect_two = Intraface_Redirect::go($kernel);
         $url3 = 'http://example.dk/add_page.php';
         $redirect_two->setDestination($url3, $url2.'?'.$redirect->getRedirectQueryString());
         unset($_SERVER['HTTP_REFERER']);
@@ -585,7 +585,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST']    = 'example.dk';
         $_SERVER['SCRIPT_NAME']  = '/add_page.php';
         $_GET['redirect_id']     = 2;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $default = 'http://example.dk/another_page.php';
         $this->assertEquals($url2.'?redirect_id=1&return_redirect_id=2', $redirect->getRedirect($default));
         unset($_SERVER['HTTP_REFERER']);
@@ -599,7 +599,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['SCRIPT_NAME']  = '/page.php';
         $_GET['redirect_id']     = 1;
         $_GET['return_redirect_id']     = 2;
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
         unset($_SERVER['SCRIPT_NAME']);
@@ -610,7 +610,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_REFERER'] = $url2;
         $_SERVER['HTTP_HOST']    = 'example.dk';
         $_SERVER['SCRIPT_NAME']  = '/page.php';
-        $redirect = Redirect::receive($kernel);
+        $redirect = Intraface_Redirect::receive($kernel);
         $this->assertEquals(1, $redirect->getId());
         unset($_SERVER['HTTP_REFERER']);
         unset($_SERVER['HTTP_HOST']);
@@ -622,7 +622,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
 
     function createRedirect()
     {
-        return new Redirect(new FakeRedirectKernel);
+        return new Intraface_Redirect(new FakeRedirectKernel);
     }
 
     function getVarsFromUrl($url) {

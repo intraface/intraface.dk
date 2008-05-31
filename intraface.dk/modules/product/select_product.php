@@ -6,7 +6,7 @@ $translation = $kernel->getTranslation('product');
 
 // hente liste med produkter - bør hentes med getList!
 
-$redirect = Redirect::factory($kernel, 'receive');
+$redirect = Intraface_Redirect::factory($kernel, 'receive');
 
 if($redirect->get('id') != 0) {
     $multiple = $redirect->isMultipleParameter('product_id');
@@ -20,7 +20,7 @@ if($redirect->get('id') != 0) {
 }
 
 if(isset($_GET['add_new'])) {
-    $add_redirect = Redirect::factory($kernel, 'go');
+    $add_redirect = Intraface_Redirect::factory($kernel, 'go');
     $url = $add_redirect->setDestination($product_module->getPath().'product_edit.php', $product_module->getPath().'select_product.php?'.$redirect->get('redirect_query_string').'&set_quantity='.$quantity);
     $add_redirect->askParameter('product_id');
     header('location: '.$url);
@@ -28,7 +28,7 @@ if(isset($_GET['add_new'])) {
 }
 
 if(isset($_GET['return_redirect_id'])) {
-    $add_redirect = Redirect::factory($kernel, 'return');
+    $add_redirect = Intraface_Redirect::factory($kernel, 'return');
     if($add_redirect->getParameter('product_id') != 0) {
         $redirect->setParameter('product_id', $add_redirect->getParameter('product_id'), 1);
     }

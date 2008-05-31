@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if($kernel->user->hasModuleAccess('contact')) {
             $contact_module = $kernel->useModule('contact');
 
-            $redirect = Redirect::factory($kernel, 'go');
+            $redirect = Intraface_Redirect::factory($kernel, 'go');
             $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", $debtor_module->getPath()."setting.php");
             $redirect->askParameter('contact_id');
             $redirect->setIdentifier('contact');
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if($kernel->user->hasModuleAccess('contact')) {
             $contact_module = $kernel->useModule('contact');
 
-            $redirect = Redirect::factory($kernel, 'go');
+            $redirect = Intraface_Redirect::factory($kernel, 'go');
             $url = $redirect->setDestination($contact_module->getPath()."contact_edit.php?id=".intval($_POST['scan_in_contact']), $debtor_module->getPath()."setting.php");
             header("location: ".$url );
             exit;
@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 else {
 
     if(isset($_GET['return_redirect_id'])) {
-        $redirect = Redirect::factory($kernel, 'return');
+        $redirect = Intraface_Redirect::factory($kernel, 'return');
         if($redirect->get('identifier') == 'contact') {
             // would be better if the return were a post
             $kernel->setting->set('intranet', 'debtor.scan_in_contact', $redirect->getParameter('contact_id'));

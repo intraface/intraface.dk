@@ -35,7 +35,7 @@ if(isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
     if($kernel->user->hasModuleAccess('contact')) {
         $contact_module = $kernel->useModule('contact');
 
-        $redirect = Redirect::factory($kernel, 'go');
+        $redirect = Intraface_Redirect::factory($kernel, 'go');
         $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", $module_procurement->getPath()."view.php?id=".$procurement->get('id'));
         $redirect->askParameter('contact_id');
         $redirect->setIdentifier('contact');
@@ -54,7 +54,7 @@ if(isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
 
 // tilføj bilag med redirect til filemanager
 if(isset($_POST['append_file_choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
-    $redirect = new Redirect($kernel);
+    $redirect = new Intraface_Redirect($kernel);
     $module_filemanager = $kernel->useModule('filemanager');
     $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $module_procurement->getPath().'view.php?id='.$procurement->get('id'));
     $redirect->setIdentifier('file_handler');
@@ -85,7 +85,7 @@ if(isset($_GET['delete_appended_file_id'])) {
 # tilføj produkt
 if(isset($_GET['add_item'])) {
     if($kernel->user->hasModuleAccess('product')) {
-        $redirect = Redirect::factory($kernel, 'go');
+        $redirect = Intraface_Redirect::factory($kernel, 'go');
         $module_product = $kernel->useModule('product');
         $url = $redirect->setDestination($module_product->getPath().'select_product.php', $module_procurement->getPath().'edit_quantity.php?id='.$procurement->get('id'));
         $redirect->askParameter('product_id', 'multiple');
@@ -100,7 +100,7 @@ if(isset($_GET['add_item'])) {
 
 #retur
 if(isset($_GET['return_redirect_id'])) {
-    $redirect = Redirect::factory($kernel, 'return');
+    $redirect = Intraface_Redirect::factory($kernel, 'return');
     if($redirect->get('identifier') == 'contact') {
         if($kernel->user->hasModuleAccess('contact')) {
             $contact_module = $kernel->useModule('contact');

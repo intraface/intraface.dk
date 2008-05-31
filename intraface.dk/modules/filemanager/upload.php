@@ -4,7 +4,7 @@ require('../../include_first.php');
 $module = $kernel->module('filemanager');
 $translation = $kernel->getTranslation('filemanager');
 
-$redirect = Redirect::factory($kernel, 'receive');
+$redirect = Intraface_Redirect::factory($kernel, 'receive');
 
 if(isset($_POST["submit"])) {
 

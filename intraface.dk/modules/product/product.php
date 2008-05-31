@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if(!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
-        $redirect = Redirect::factory($kernel, 'go');
+        $redirect = Intraface_Redirect::factory($kernel, 'go');
         $module_filemanager = $kernel->useModule('filemanager');
         $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', $module->getPath().'product.php?id='.$product->get('id'));
         $redirect->setIdentifier('product');
@@ -88,7 +88,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $filehandler = new FileHandler($kernel);
 
         if(isset($_GET['return_redirect_id'])) {
-            $redirect = Redirect::factory($kernel, 'return');
+            $redirect = Intraface_Redirect::factory($kernel, 'return');
             if($redirect->get('identifier') == 'product') {
                 $append_file = new AppendFile($kernel, 'product', $product->get('id'));
                 $array_files = $redirect->getParameter('file_handler_id');
