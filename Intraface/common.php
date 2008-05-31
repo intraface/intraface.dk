@@ -79,8 +79,8 @@ require_once 'MDB2.php';
 require_once 'Intraface/shared/systemmessage/SystemDisturbance.php';
 
 // core files
-require_once 'Intraface/tools/Date.php';
-require_once 'Intraface/tools/Amount.php';
+require_once 'Intraface/Date.php';
+require_once 'Intraface/Amount.php';
 
 $db = MDB2::singleton(DB_DSN, array('persistent' => true));
 if (PEAR::isError($db)) {
@@ -101,8 +101,6 @@ if ($db->getOption('debug')) {
 
     register_shutdown_function(array($my_debug_handler, 'executeAndExplain'));
     register_shutdown_function(array($my_debug_handler, 'dumpInfo'));
-
-
 }
 
 if (defined('TIMEZONE')) {
