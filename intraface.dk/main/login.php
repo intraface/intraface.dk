@@ -16,20 +16,8 @@ if (isset($_POST['email']) AND isset($_POST['password'])) {
 	if (is_object($user)) {
 	    header('Location: '.PATH_WWW.'main/index.php');
         exit;
-	}
-
-    if ($error === true) {
-        header('Location: '.PATH_WWW.'main/index.php');
-        exit;
     } else {
-        switch ($error) {
-            case LOGIN_ERROR_ALREADY_LOGGED_IN:
-                $msg = 'already logged in as another user. please logout before logging in.';
-            break;
-            case LOGIN_ERROR_WRONG_CREDENTIALS:
-                $msg = 'wrong credentials';
-            break;
-        }
+		$msg = 'wrong credentials';
     }
 } elseif (!empty($_GET['msg'])) {
 	$msg = $_GET['msg'];
