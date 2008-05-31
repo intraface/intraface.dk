@@ -9,7 +9,6 @@
  */
 
 require_once '../../common.php';
-require_once 'Intraface/XMLRPC/CMS/Server.php';
 
 $HTTP_RAW_POST_DATA = file_get_contents('php://input');
 $options = array('prefix' => 'cms.',

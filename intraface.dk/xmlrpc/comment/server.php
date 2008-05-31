@@ -1,7 +1,6 @@
 <?php
-
 require('../../common.php');
-require_once('../XmlRpcServer.php');
+/*
 XML_RPC2_Backend::setBackend('php');
 $HTTP_RAW_POST_DATA = file_get_contents('php://input');
 class XMLRPC_Message_Server extends XmlRpcServer {
@@ -24,10 +23,11 @@ class XMLRPC_Message_Server extends XmlRpcServer {
         $this->serve();
 
     }
-
+*/
     /**
      *
      */
+  /*
     function post($arg) {
         $credentials = $arg[0];
         if (is_object($return = $this->checkCredentials($credentials))) {
@@ -87,5 +87,4 @@ if($_SERVER['REQUEST_METHOD'] != 'POST' || $_SERVER['CONTENT_TYPE'] == 'applicat
 else {
     $server = new XMLRPC_Message_Server();
 }
-
-?>
+*/
