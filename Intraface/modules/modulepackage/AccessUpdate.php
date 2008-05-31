@@ -53,11 +53,11 @@ class Intraface_ModulePackage_AccessUpdate
             $sql_extra = '';
         }
 
-        // We login to the intranet maintenance intranet.
-        $weblogin = new Intraface_Weblogin;
-        if (!$intranet_id = $weblogin->auth('private', INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY)) {
-            trigger_error("Unable to log in to intranet maintenance intranet", E_USER_ERROR);
-            exit;
+        // We login to the intranet maintenance intranet
+        $auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), session_id(), INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY);
+        $weblogin = $auth_adapter->auth();
+        if (!$intranet_id = $weblogin->getActiveIntranetId()) {
+            throw new Exception("Unable to log in to intranet maintenance intranet");
         }
 
         $kernel = new Intraface_Kernel();
