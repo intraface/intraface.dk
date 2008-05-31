@@ -11,17 +11,17 @@
 class Main
 {
     public $menu_label;
-    protected $show_menu;
     public $active;
     public $menu_index;
-    protected $frontpage_index;
-    protected $submenu = array();
     public $sub_access = array();
     public $sub_access_description = array();
+    public $module_name;
+    protected $show_menu;
+    protected $frontpage_index;
+    protected $submenu = array();
     protected $preload_file = array();
     protected $dependent_module = array();
     protected $required_shared = array();
-    public $module_name;
     protected $setting;
     protected $controlpanel_files;
     protected $frontpage_files;
