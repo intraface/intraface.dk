@@ -12,7 +12,7 @@
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'pear');
+define('DB_NAME', 'intraface');
 
 // net
 define('NET_SCHEME', 'http://'); // http:// or https://
@@ -20,7 +20,7 @@ define('NET_HOST', 'localhost'); // www.intraface.dk
 define('NET_DIRECTORY', '/intraface/intraface.dk/'); // subdirectory. if non keep empty
 
 // paths
-define('PATH_ROOT', 'c:/Users/Lars Olesen/workspace/intraface/'); // remember trailing slash
+define('PATH_ROOT', dirname(__FILE__) . '/../'); // remember trailing slash
 define('PATH_INCLUDE_PATH', PATH_ROOT . PATH_SEPARATOR . get_include_path()); // remeber to use constant PATH_SEPARATOR after every path
 // optional: define('PATH_UPLOAD', '/home/.investor/intraface/upload/'); // remember trailing slash
 // optional: define('PATH_CACHE', PATH_ROOT . 'cache/'); // remember trailing slash - path to cache
