@@ -173,7 +173,7 @@ class Intraface_ModulePackage extends Intraface_Standard {
      */
     public function createDBQuery($kernel)
     {
-        $this->dbquery = new DBQuery($kernel, 'module_package', 'module_package.active = 1');
+        $this->dbquery = new Intraface_DBQuery($kernel, 'module_package', 'module_package.active = 1');
         $this->dbquery->setJoin('INNER', 'module_package_group', 'module_package.module_package_group_id = module_package_group.id', 'module_package_group.active = 1');
         $this->dbquery->setJoin('INNER', 'module_package_plan', 'module_package.module_package_plan_id = module_package_plan.id', 'module_package_plan.active = 1');
 

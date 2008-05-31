@@ -105,7 +105,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
      */
     public function createDBQuery($kernel)
     {
-        $this->dbquery = new DBQuery($kernel, 'intranet_module_package', 'intranet_module_package.active = 1 AND intranet_module_package.intranet_id = '.$this->intranet->get('id'));
+        $this->dbquery = new Intraface_DBQuery($kernel, 'intranet_module_package', 'intranet_module_package.active = 1 AND intranet_module_package.intranet_id = '.$this->intranet->get('id'));
         $this->dbquery->setJoin('INNER', 'module_package', 'intranet_module_package.module_package_id = module_package.id', '');
         $this->dbquery->setJoin('INNER', 'module_package_group', 'module_package.module_package_group_id = module_package_group.id', '');
         $this->dbquery->setJoin('INNER', 'module_package_plan', 'module_package.module_package_plan_id = module_package_plan.id', '');

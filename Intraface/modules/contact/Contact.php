@@ -234,7 +234,7 @@ class Contact extends Intraface_Standard {
         if ($this->dbquery) {
             return $this->dbquery;
         }
-        $this->dbquery = new DBQuery($this->kernel, "contact", "contact.active = 1 AND contact.intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery = new Intraface_DBQuery($this->kernel, "contact", "contact.active = 1 AND contact.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->setJoin("LEFT", "address", "address.belong_to_id = contact.id", "address.active = 1 AND address.type = 3");
         $this->dbquery->useErrorObject($this->error);
 
@@ -248,7 +248,7 @@ class Contact extends Intraface_Standard {
      */
     public function createDBQuery()
     {
-        $this->dbquery = new DBQuery($this->kernel, "contact", "contact.active = 1 AND contact.intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery = new Intraface_DBQuery($this->kernel, "contact", "contact.active = 1 AND contact.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->setJoin("LEFT", "address", "address.belong_to_id = contact.id", "address.active = 1 AND address.type = 3");
         $this->dbquery->useErrorObject($this->error);
     }

@@ -55,8 +55,7 @@ class OnlinePayment extends Intraface_Standard
         // lidt usikker på om det her er det smarteste sted at have den, men den skal være til stede, når der skal gemmes
         $this->provider_key = $this->kernel->setting->get('intranet', 'onlinepayment.provider_key');
 
-        require_once 'Intraface/DBQuery.php';
-        $this->dbquery = new DBQuery($this->kernel, "onlinepayment", "intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery = new IntrafaceDBQuery($this->kernel, "onlinepayment", "intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->useErrorObject($this->error);
 
         if ($this->id > 0) {

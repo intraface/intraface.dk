@@ -40,7 +40,7 @@ class Payment extends Intraface_Standard
 
         $this->id = intval($id);
 
-        $this->dbquery = new DBQuery($this->kernel, "invoice_payment", "intranet_id = ".$this->kernel->intranet->get("id")." AND payment_for = ".$this->payment_for_type_id." AND payment_for_id = ".$this->payment_for_id.' AND type IN ('.implode(',', array_keys($this->getTypes())).')');
+        $this->dbquery = new Intraface_DBQuery($this->kernel, "invoice_payment", "intranet_id = ".$this->kernel->intranet->get("id")." AND payment_for = ".$this->payment_for_type_id." AND payment_for_id = ".$this->payment_for_id.' AND type IN ('.implode(',', array_keys($this->getTypes())).')');
         $this->dbquery->useErrorObject($this->error);
         $this->db = MDB2::singleton(DB_DSN);
 

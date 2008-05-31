@@ -28,13 +28,12 @@ class Procurement extends Intraface_Standard
             trigger_error("Procurement requires kernel", E_USER_ERROR);
         }
 
-        $this->kernel = &$kernel;
+        $this->kernel = $kernel;
         require_once 'Intraface/Error.php';
         $this->error = new Error;
         $this->id = intval($id);
 
-        require_once 'Intraface/DBQuery.php';
-        $this->dbquery = new DBQuery($this->kernel, "procurement", "active = 1 AND intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery = new Intraface_DBQuery($this->kernel, "procurement", "active = 1 AND intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->useErrorObject($this->error);
 
         if ($this->id != 0) {

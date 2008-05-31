@@ -24,10 +24,10 @@ class Reminder extends Intraface_Standard
         $this->id     = intval($id);
         $this->kernel = $kernel;
 
-        $this->db     = new Db_sql;
+        $this->db     = new DB_Sql;
         $this->error  = new Error;
 
-        $this->dbquery = new DBQuery($this->kernel, "invoice_reminder", "intranet_id = ".$this->kernel->intranet->get("id")." AND active = 1");
+        $this->dbquery = new Intraface_DBQuery($this->kernel, "invoice_reminder", "intranet_id = ".$this->kernel->intranet->get("id")." AND active = 1");
         $this->dbquery->useErrorObject($this->error);
 
         if ($this->id) {

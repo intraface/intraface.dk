@@ -4,10 +4,7 @@
  *
  * @author Sune Jensen <sj@sunet.dk>
  */
-require_once 'DB/Sql.php';
-require_once 'Ilib/DBQuery.php';
-
-class DBQuery extends Ilib_DBQuery
+class Intraface_DBQuery extends Ilib_DBQuery
 {
     /**
      * Constructor

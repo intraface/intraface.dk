@@ -113,7 +113,7 @@ class Product extends Intraface_Standard
      */
     public function createDBQuery()
     {
-        $this->dbquery = new DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery = new Intraface_DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->setJoin("LEFT", "product_detail detail", "detail.product_id = product.id", "detail.active = 1");
         //$this->dbquery->setFindCharacterFromField("detail.name");
         $this->dbquery->useErrorObject($this->error);
@@ -125,7 +125,7 @@ class Product extends Intraface_Standard
             return $this->dbquery;
         }
 
-        $this->dbquery = new DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery = new Intraface_DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->setJoin("LEFT", "product_detail detail", "detail.product_id = product.id", "detail.active = 1");
         //$this->dbquery->setFindCharacterFromField("detail.name");
         $this->dbquery->useErrorObject($this->error);

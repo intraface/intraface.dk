@@ -49,7 +49,7 @@ class IntranetMaintenance extends Intranet
      */
     public function createDBQuery($kernel)
     {
-        $this->dbquery = new DBQuery($kernel, 'intranet');
+        $this->dbquery = new Intraface_DBQuery($kernel, 'intranet');
     }
 
     /**

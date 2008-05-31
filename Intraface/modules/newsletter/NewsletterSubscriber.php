@@ -60,7 +60,7 @@ class NewsletterSubscriber extends Intraface_Standard
             return $this->dbquery;
         }
         // optin = 1 should not be set here
-        $this->dbquery = new DBQuery($this->list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $this->list->get("id") . " AND newsletter_subscriber.intranet_id = " . $this->list->kernel->intranet->get('id') . " AND newsletter_subscriber.optin = 1 AND newsletter_subscriber.active = 1");
+        $this->dbquery = new Intraface_DBQuery($this->list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $this->list->get("id") . " AND newsletter_subscriber.intranet_id = " . $this->list->kernel->intranet->get('id') . " AND newsletter_subscriber.optin = 1 AND newsletter_subscriber.active = 1");
         $this->dbquery->useErrorObject($this->error);
         return $this->dbquery;
     }

@@ -105,7 +105,7 @@ class CMS_Page extends Intraface_Standard
         if ($this->dbquery) {
             return $this->dbquery;
         }
-        return ($this->dbquery = new DBQuery($this->kernel, 'cms_page', 'cms_page.intranet_id = '.$this->kernel->intranet->get('id').' AND cms_page.active = 1 AND site_id = ' . $this->cmssite->get('id')));
+        return ($this->dbquery = new Intraface_DBQuery($this->kernel, 'cms_page', 'cms_page.intranet_id = '.$this->kernel->intranet->get('id').' AND cms_page.active = 1 AND site_id = ' . $this->cmssite->get('id')));
     }
 
     /**

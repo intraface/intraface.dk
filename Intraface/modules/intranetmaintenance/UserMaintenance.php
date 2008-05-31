@@ -33,7 +33,7 @@ class UserMaintenance extends Intraface_User
      */
     public function createDBQuery($kernel)
     {
-        $this->dbquery = new DBQuery($kernel, 'user');
+        $this->dbquery = new Intraface_DBQuery($kernel, 'user');
         $this->dbquery->setJoin('LEFT', 'address', 'user.id = address.belong_to_id AND address.type = 2', 'address.active = 1 OR address.active IS NULL');
 
     }

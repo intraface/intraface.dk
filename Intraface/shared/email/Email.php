@@ -90,7 +90,7 @@ class Email extends Intraface_Standard
      */
     function createDBQuery()
     {
-        $this->dbquery = new DBQuery($this->kernel, "email", "email.intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery = new Intraface_DBQuery($this->kernel, "email", "email.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->useErrorObject($this->error);
     }
 
