@@ -10,7 +10,7 @@
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/modules/accounting/Account.php';
 require_once 'Intraface/modules/accounting/Post.php';
-require_once 'Intraface/tools/Date.php';
+require_once 'Intraface/Date.php';
 
 class Voucher extends Standard
 {
@@ -213,7 +213,7 @@ class Voucher extends Standard
             $var['credit_account_number'] = 0;
         }
 
-        $amount = new Amount($var['amount']);
+        $amount = new Intraface_Amount($var['amount']);
         if (!$amount->convert2db()) {
             $this->error->set('Beløbet kunne ikke konverteres');
         }

@@ -10,7 +10,7 @@
  */
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/Error.php';
-require_once 'Intraface/tools/Amount.php';
+require_once 'Intraface/Amount.php';
 require_once 'DB/Sql.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/Validator.php';
@@ -306,13 +306,13 @@ class Account extends Standard
             return false;
         }
 
-        $amount = new Amount($debet);
+        $amount = new Intraface_Amount($debet);
         if (!$amount->convert2db()) {
             $this->error->set('Beløbet kunne ikke konverteres');
         }
         $debet = $amount->get();
 
-        $amount = new Amount($credit);
+        $amount = new Intraface_Amount($credit);
         if (!$amount->convert2db()) {
             $this->error->set('Beløbet kunne ikke konverteres');
         }

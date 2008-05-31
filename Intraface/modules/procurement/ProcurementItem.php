@@ -84,7 +84,7 @@ class ProcurementItem extends Standard
         $validator->isNumeric($input["quantity"], "Du skal angive et antal", "greater_than_zero,integer");
 
         $validator->isDouble($input["dk_unit_purchase_price"], "Du skal angive en indkøbspris", "zero_or_greater");
-        $unit_purchase_price = new Amount($input["dk_unit_purchase_price"]);
+        $unit_purchase_price = new Intraface_Amount($input["dk_unit_purchase_price"]);
         if ($unit_purchase_price->convert2db()) {
             $input["unit_purchase_price"] = $unit_purchase_price->get();
         } else {

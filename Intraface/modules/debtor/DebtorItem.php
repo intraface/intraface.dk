@@ -186,8 +186,8 @@ class DebtorItem extends Standard
 
         if (!isset($input["quantity"])) $input["quantity"] = 0;
         $validator->isDouble($input["quantity"], "Du skal angive et antal", "");
-        require_once 'Intraface/tools/Amount.php';
-        $quantity = new Amount($input["quantity"]);
+        require_once 'Intraface/Amount.php';
+        $quantity = new Intraface_Amount($input["quantity"]);
         if ($quantity->convert2db()) {
             $input["quantity"] = $quantity->get();
         } else {

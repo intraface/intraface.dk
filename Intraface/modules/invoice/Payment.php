@@ -105,7 +105,7 @@ class Payment extends Standard
 
         if (!isset($input["amount"])) $input["amount"] = 0;
         if ($validator->isDouble($input["amount"], "Ugyldig beløb")) {
-            $amount = new Amount($input["amount"]);
+            $amount = new Intraface_Amount($input["amount"]);
             $amount->convert2db();
             $amount = $amount->get();
         }

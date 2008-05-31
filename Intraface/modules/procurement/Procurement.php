@@ -151,7 +151,7 @@ class Procurement extends Standard
 
         if (!isset($input['dk_invoice_date'])) $input['dk_invoice_date'] = '';
         $validator->isDate($input["dk_invoice_date"], "Fakturadato er ikke en gyldig dato");
-        require_once 'Intraface/tools/Date.php';
+        require_once 'Intraface/Date.php';
         $date = new Intraface_Date($input["dk_invoice_date"]);
         if ($date->convert2db()) {
             $input["invoice_date"] = $date->get();
@@ -198,22 +198,22 @@ class Procurement extends Standard
 
         if (!isset($input['dk_price_items'])) $input['dk_price_items'] = 0;
         $validator->isDouble($input["dk_price_items"], "Varerpris er ikke et gyldigt beløb", 'zero_or_greater');
-        require_once 'Intraface/tools/Amount.php';
-        $amount = new Amount($input["dk_price_items"]);
+        require_once 'Intraface/Amount.php';
+        $amount = new Intraface_Amount($input["dk_price_items"]);
         if ($amount->convert2db()) {
             $input["price_items"] = $amount->get();
         }
 
         if (!isset($input['dk_price_shipment_etc'])) $input['dk_price_shipment_etc'] = 0;
         $validator->isDouble($input["dk_price_shipment_etc"], "Pris for forsendelse og andet er ikke et gyldigt beløb", 'zero_or_greater');
-        $amount = new Amount($input["dk_price_shipment_etc"]);
+        $amount = new Intraface_Amount($input["dk_price_shipment_etc"]);
         if ($amount->convert2db()) {
             $input["price_shipment_etc"] = $amount->get();
         }
 
         if (!isset($input['dk_vat'])) $input['dk_vat'] = 0;
         $validator->isDouble($input["dk_vat"], "Moms er ikke et gyldigt beløb", 'zero_or_greater');
-        $amount = new Amount($input["dk_vat"]);
+        $amount = new Intraface_Amount($input["dk_vat"]);
         if ($amount->convert2db()) {
             $input["vat"] = $amount->get();
         }
@@ -535,7 +535,7 @@ class Procurement extends Standard
 
         $validator = new Validator($this->error);
         if ($validator->isDate($voucher_date, "Ugyldig dato")) {
-            require_once 'Intraface/tools/Date.php';
+            require_once 'Intraface/Date.php';
             $voucher_date_object = new Intraface_Date($voucher_date);
             $voucher_date_object->convert2db();
         }
@@ -570,7 +570,7 @@ class Procurement extends Standard
         foreach ($debet_accounts AS $key => $line) {
             $debet_account = Account::factory($year, $line['state_account_id']);
 
-            $amount = new Amount($line['amount']);
+            $amount = new Intraface_Amount($line['amount']);
             $amount->convert2db();
             $amount = $amount->get();
             $credit_total += $amount;
@@ -671,7 +671,7 @@ class Procurement extends Standard
 
         $validator = new Validator($this->error);
         if ($validator->isDate($voucher_date, "Ugyldig dato")) {
-            require_once 'Intraface/tools/Date.php';
+            require_once 'Intraface/Date.php';
             $voucher_date = new Intraface_Date($voucher_date);
             $voucher_date->convert2db();
         }
@@ -757,10 +757,10 @@ class Procurement extends Standard
         $total = 0;
         $vat = 0;
         foreach ($debet_accounts AS $key => $debet_account) {
-            require_once 'Intraface/tools/Amount.php';
+            require_once 'Intraface/Amount.php';
             if ($validator->isNumeric($debet_account['amount'], 'Ugyldig beløb i linje '.($key+1).' "'.$debet_account['text'].'"', 'greater_than_zero')) {
 
-                $amount = new Amount($debet_account['amount']);
+                $amount = new Intraface_Amount($debet_account['amount']);
                 $amount->convert2db();
                 $total += $amount->get();
 
