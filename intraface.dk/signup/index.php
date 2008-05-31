@@ -76,7 +76,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $user = new User($user_id);
                 $user->setActiveIntranetId($intranet_id);
 
-                $auth = new Auth(session_id());
+                $auth = new Intraface_Auth(session_id());
                 if (!$auth->login($_POST['email'], $_POST['password'])) {
                     trigger_error('could not login', E_USER_ERROR);
                     return false;
