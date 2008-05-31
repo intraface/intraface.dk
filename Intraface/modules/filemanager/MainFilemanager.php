@@ -6,7 +6,7 @@
  * @version	1.0
  *
  */
-class MainFileManager extends Main
+class MainFileManager extends Intraface_Main
 {
     function __construct()
     {

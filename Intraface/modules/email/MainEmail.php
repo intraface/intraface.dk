@@ -2,7 +2,7 @@
 /**
  * @package Intraface_Email
  */
-class MainEmail extends Main
+class MainEmail extends Intraface_Main
 {
     function __construct()
     {

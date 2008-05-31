@@ -6,7 +6,7 @@
  * @version	1.0
  *
  */
-class MainInvoice extends Main
+class MainInvoice extends Intraface_Main
 {
     function __construct()
     {

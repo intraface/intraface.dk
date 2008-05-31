@@ -8,7 +8,7 @@
  * @since   1.0
  * @version 1.0
  */
-class MainAccounting Extends Main
+class MainAccounting extends Intraface_Main
 {
     function __construct()
     {

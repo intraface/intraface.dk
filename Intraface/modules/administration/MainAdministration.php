@@ -7,7 +7,7 @@
  * @version	1.0
  *
  */
-class MainAdministration extends Main
+class MainAdministration extends Intraface_Main
 {
     function __construct()
     {

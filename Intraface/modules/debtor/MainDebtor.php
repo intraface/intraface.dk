@@ -5,7 +5,7 @@
  * @since	1.0
  * @version	1.0
  */
-class MainDebtor extends Main
+class MainDebtor extends Intraface_Main
 {
     function __construct()
     {

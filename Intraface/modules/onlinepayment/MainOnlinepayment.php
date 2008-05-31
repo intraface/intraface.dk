@@ -6,7 +6,7 @@
  * @version	1.0
  *
  */
-class MainOnlinepayment extends Main
+class MainOnlinepayment extends Intraface_Main
 {
     function __construct()
     {

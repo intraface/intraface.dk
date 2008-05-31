@@ -5,7 +5,7 @@
  * @since	1.0
  * @version	1.0
  */
-class MainNewsletter extends Main
+class MainNewsletter extends Intraface_Main
 {
     function __construct()
     {

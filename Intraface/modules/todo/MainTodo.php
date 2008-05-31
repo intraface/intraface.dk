@@ -3,8 +3,8 @@
  * @package Intraface_Todo
  */
 
-class MainTodo extends Main {
-
+class MainTodo extends Intraface_Main 
+{
     function __construct()
     {
         $this->module_name = 'todo';

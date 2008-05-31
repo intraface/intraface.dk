@@ -6,7 +6,7 @@
  * @version	1.0
  *
  */
-class MainWebshop extends Main
+class MainWebshop extends Intraface_Main
 {
     function __construct()
     {

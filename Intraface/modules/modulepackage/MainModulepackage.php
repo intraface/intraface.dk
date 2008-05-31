@@ -6,7 +6,7 @@
  * @version	1.0
  *
  */
-class MainModulepackage extends Main
+class MainModulepackage extends Intraface_Main
 {
     function __construct()
     {

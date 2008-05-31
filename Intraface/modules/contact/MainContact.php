@@ -8,9 +8,10 @@
  * @version	1.0
  */
 
-class MainContact Extends Main {
-
-    function MainContact() {
+class MainContact extends Intraface_Main 
+{
+    function __construct() 
+    {
         $this->module_name = 'contact';
         $this->menu_label = 'Kontakter'; // Navnet der vil stå i menuen
         $this->show_menu = 1; // Skal modulet vises i menuen.

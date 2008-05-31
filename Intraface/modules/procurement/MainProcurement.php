@@ -6,7 +6,7 @@
  * @version	1.0
  *
  */
-class MainProcurement extends Main
+class MainProcurement extends Intraface_Main
 {
     function __construct()
     {

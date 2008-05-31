@@ -7,7 +7,7 @@
  * @version	1.0
  *
  */
-class MainStock extends Main
+class MainStock extends Intraface_Main
 {
     function __construct()
     {

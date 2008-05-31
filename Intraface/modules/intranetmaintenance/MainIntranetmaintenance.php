@@ -7,7 +7,7 @@
  * @version	1.1
  *
  */
-class MainIntranetMaintenance extends Main
+class MainIntranetMaintenance extends Intraface_Main
 {
     function __construct()
     {

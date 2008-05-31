@@ -2,7 +2,7 @@
 /**
  * @package Intraface_Comment
  */
-class MainComment Extends Main
+class MainComment extends Intraface_Main
 {
     function __construct()
     {

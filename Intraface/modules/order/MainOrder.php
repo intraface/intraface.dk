@@ -6,7 +6,7 @@
  * @version	1.0
  *
  */
-class MainOrder extends Main
+class MainOrder extends Intraface_Main
 {
     function __construct()
     {

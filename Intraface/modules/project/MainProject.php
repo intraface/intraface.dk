@@ -2,7 +2,7 @@
 /**
  * @package Intraface_Todo
  */
-class MainProject extends Main
+class MainProject extends Intraface_Main
 {
     function __construct()
     {

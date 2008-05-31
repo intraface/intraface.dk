@@ -7,7 +7,8 @@
  * @since	1.0
  * @version	1.0
  */
-class MainBackup extends Main {
+class MainBackup extends Intraface_Main 
+{
 
     function __construct()
     {

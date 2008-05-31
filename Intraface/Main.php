@@ -7,8 +7,7 @@
  *
  * @example MainExample.php
  */
-
-class Main
+class Intraface_Main
 {
     public $menu_label;
     public $active;
@@ -35,7 +34,6 @@ class Main
      */
     function __construct()
     {
-        // init
         $this->module_name = '';
         $this->menu_label = '';
         $this->show_menu = 0;

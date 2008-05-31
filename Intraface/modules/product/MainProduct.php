@@ -5,7 +5,7 @@
  * @since	1.0
  * @version	1.0
  */
-class MainProduct extends Main
+class MainProduct extends Intraface_Main
 {
     function __construct()
     {

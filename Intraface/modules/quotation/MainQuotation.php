@@ -2,7 +2,7 @@
 /**
  * @package Intraface_Quotation
  */
-class MainQuotation extends Main
+class MainQuotation extends Intraface_Main
 {
     function __construct()
     {
