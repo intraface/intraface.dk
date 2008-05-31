@@ -33,8 +33,7 @@ function intrafaceFrontendErrorhandler($errno, $errstr, $errfile, $errline, $err
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
     if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
         $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
-    }
-    else {
+    } else {
         $errorhandler->addObserver(new ErrorHandler_Observer_User, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // See description of ~ above
     }
     return $errorhandler->handleError($errno, $errstr, $errfile, $errline, $errcontext);
@@ -45,8 +44,7 @@ function intrafaceFrontendExceptionhandler($e) {
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
     if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
         $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen);
-    }
-    else {
+    } else {
         $errorhandler->addObserver(new ErrorHandler_Observer_User);
     }
     return $errorhandler->handleException($e);
@@ -60,7 +58,7 @@ session_start();
 
 require_once 'Intraface/Auth.php';
 
-$auth = new Auth(session_id());
+$auth = new Intraface_Auth(session_id());
 
 if (!$user_id = $auth->isLoggedIn()) {
     $auth->toLogin();
@@ -159,8 +157,7 @@ function intraface_t($string, $page = NULL)
     global $translation;
     if($page !== NULL) {
         return $translation->get($string, $page);
-    }
-    else {
+    } else {
         return $translation->get($string);
     }
 }
