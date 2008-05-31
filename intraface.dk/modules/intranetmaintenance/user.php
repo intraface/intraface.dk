@@ -14,14 +14,12 @@ if(isset($_POST["submit"])) {
     $modules = array();
     if(isset($_POST['module'])) {
         $modules = $_POST["module"];
-    }
-    else {
+    } else {
         $modules = array();
     }
     if(isset($_POST['sub_access'])) {
         $sub_access = $_POST["sub_access"];
-    }
-    else {
+    } else {
         $sub_access = array();
     }
 
@@ -32,11 +30,9 @@ if(isset($_POST["submit"])) {
         $user_id = intval($_POST['id']);
         unset($user);
         unset($intranet);
-    }
-    else {
+    } else {
         // Sætter adgang til det redigerede intranet. Id kommer tidligere ved setIntranetId
         $user->setIntranetAccess();
-
 
         // Hvis en bruger retter sig selv, i det aktive intranet, sætter vi adgang til dette modul
         if($kernel->user->get("id") == $user->get("id") && $kernel->intranet->get("id") == $intranet->get("id")) {
@@ -49,9 +45,7 @@ if(isset($_POST["submit"])) {
         for($i = 0, $max = count($modules); $i < $max; $i++) {
             $user->setModuleAccess($modules[$i]);
             if (!empty($sub_access[$modules[$i]])) {
-
                 for($j = 0, $max1 = count($sub_access[$modules[$i]]); $j < $max1; $j++) {
-
                     $user->setSubAccess($modules[$i], $sub_access[$modules[$i]][$j]);
                 }
             }
@@ -64,8 +58,7 @@ if(isset($_POST["submit"])) {
     }
 
 
-}
-elseif(isset($_GET['return_redirect_id'])) {
+} elseif(isset($_GET['return_redirect_id'])) {
     if(isset($_GET['intranet_id'])) {
         $intranet = new IntranetMaintenance($_GET['intranet_id']);
         $edit_intranet_id = $intranet->get('id');
@@ -76,8 +69,7 @@ elseif(isset($_GET['return_redirect_id'])) {
         $user->setIntranetAccess($intranet->get('id'));
         $user_id = $user->get('id');
     }
-}
-else {
+} else {
     if(!isset($_GET['id'])) {
         trigger_error("An id is required", E_USER_ERROR);
     }
@@ -97,13 +89,11 @@ if(isset($edit_intranet_id)) {
 
     $intranet = new IntranetMaintenance(intval($edit_intranet_id));
     $user->setIntranetId(intval($intranet->get('id')));
-    $user->load();
     $address = $user->getAddress();
     if(isset($address)) {
         $value_address = $user->getAddress()->get();
     }
 }
-
 
 $page = new Page($kernel);
 $page->start($translation->get('User'));

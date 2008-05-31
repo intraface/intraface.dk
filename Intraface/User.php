@@ -95,7 +95,7 @@ class User extends Standard
         }
     }
 
-    function getError()
+    public function getError()
     {
         if ($this->error) {
             return $this->error;
@@ -109,7 +109,7 @@ class User extends Standard
      *
      * @return void
      */
-    function load()
+    protected function load()
     {
         $result = $this->db->query("SELECT id, email, disabled FROM user WHERE id = " . $this->db->quote($this->id, 'integer'));
         if (PEAR::isError($result)) {
@@ -129,7 +129,7 @@ class User extends Standard
      *
      * @return object
      */
-    function getAddress()
+    public function getAddress()
     {
         if (!empty($this->address)) {
             return $this->address;
@@ -143,7 +143,7 @@ class User extends Standard
      *
      * @return array
      */
-    function getPermissions()
+    public function getPermissions()
     {
         return $this->permissions;
     }
@@ -155,7 +155,7 @@ class User extends Standard
      *
      * @return boolean
      */
-    function loadPermissions($intranet_id = null)
+    private function loadPermissions($intranet_id = null)
     {
         if (!$intranet_id) {
             $intranet_id = $this->intranet_id;
@@ -182,49 +182,13 @@ class User extends Standard
     }
 
     /**
-     * Returns whether the user has intranetaccess
-     *
-     * @param integer $intranet_id
-     *
-     * @return boolean
-     */
-    function hasIntranetAccess($intranet_id = 0)
-    {
-        if ($intranet_id == 0) {
-            $intranet_id = $this->intranet_id;
-        }
-
-        //if (!$this->permissionsLoaded()) {
-            $this->loadPermissions($intranet_id);
-        //}
-
-        if (!empty($this->permissions['user']['intranet'][$intranet_id])) {
-            return $this->permissions['user']['intranet'][$intranet_id];
-        }
-
-        return false;
-    }
-
-    /**
-     * Clears cached permissions
-     *
-     * @return void
-     */
-    public function clearCachedPermission()
-    {
-        $this->permissions = array();
-        $this->modules = array();
-        $this->permissions_loaded = false;
-    }
-
-    /**
      * Gets module id from string
      *
      * @param integer $module
      *
      * @return integer
      */
-    function getModuleIdFromString($module)
+    private function getModuleIdFromString($module)
     {
         if (empty($this->modules)) {
             $result = $this->db->query("SELECT id, name FROM module WHERE active = 1");
@@ -244,6 +208,52 @@ class User extends Standard
     }
 
     /**
+     * Clears cached permissions
+     *
+     * @return void
+     */
+    public function clearCachedPermission()
+    {
+        $this->permissions = array();
+        $this->modules = array();
+        $this->permissions_loaded = false;
+    }
+
+    /**
+     * Returns whether the permissions has been loaded
+     *
+     * @return boolean
+     */
+    private function permissionsLoaded()
+    {
+        return $this->permissions_loaded;
+    }
+
+    /**
+     * Returns whether the user has intranetaccess
+     *
+     * @param integer $intranet_id
+     *
+     * @return boolean
+     */
+    public function hasIntranetAccess($intranet_id = 0)
+    {
+        if ($intranet_id == 0) {
+            $intranet_id = $this->intranet_id;
+        }
+
+        //if (!$this->permissionsLoaded()) {
+            $this->loadPermissions($intranet_id);
+        //}
+
+        if (!empty($this->permissions['user']['intranet'][$intranet_id])) {
+            return $this->permissions['user']['intranet'][$intranet_id];
+        }
+
+        return false;
+    }
+
+    /**
      * Returns whether user has module Access
      *
      * @param integer $module
@@ -251,7 +261,7 @@ class User extends Standard
      *
      * @return integer
      */
-    function hasModuleAccess($module, $intranet_id = 0)
+    public function hasModuleAccess($module, $intranet_id = 0)
     {
         $intranet_id = intval($intranet_id);
 
@@ -283,16 +293,6 @@ class User extends Standard
     }
 
     /**
-     * Returns whether the permissions has been loaded
-     *
-     * @return boolean
-     */
-    function permissionsLoaded()
-    {
-        return $this->permissions_loaded;
-    }
-
-    /**
      * Returns whether user has subaccess
      *
      * @param integer $module
@@ -301,7 +301,7 @@ class User extends Standard
      *
      * @return boolean
      */
-    function hasSubAccess($module, $sub_access, $intranet_id = 0)
+    public function hasSubAccess($module, $sub_access, $intranet_id = 0)
     {
         settype($intranet_id, "integer");
         if ($intranet_id == 0) {
@@ -390,7 +390,7 @@ class User extends Standard
      *
      * @return integer
      */
-    function getActiveIntranetId()
+    public function getActiveIntranetId()
     {
         $result = $this->db->query("SELECT active_intranet_id FROM user WHERE id = ".$this->db->quote($this->id, 'integer'));
         if (PEAR::isError($result)) {
@@ -425,10 +425,11 @@ class User extends Standard
      *
      * @return boolean
      */
-    function setIntranetId($id)
+    public function setIntranetId($id)
     {
         $this->intranet_id = intval($id);
         if ($this->id == 0 || $this->hasIntranetAccess()) {
+            $this->load();
             return true;
         } else {
             trigger_error('you do not have access to this intranet', E_USER_ERROR);
@@ -441,7 +442,7 @@ class User extends Standard
      *
      * @return boolean
      */
-    function setActiveIntranetId($id)
+    public function setActiveIntranetId($id)
     {
         $id = intval($id);
         if ($this->hasIntranetAccess($id)) {
@@ -458,7 +459,7 @@ class User extends Standard
      *
      * @return array
      */
-    function getIntranetList()
+    public function getIntranetList()
     {
         // Skal denne funktion være her? Måske den istedet skulle være i intranet.
         $result = $this->db->query("SELECT DISTINCT(intranet.id), intranet.name FROM intranet
@@ -483,7 +484,7 @@ class User extends Standard
      *
      * @return boolean
      */
-    function validate(&$input)
+    protected function validate(&$input)
     {
         $input = safeToDb($input);
         require_once 'Intraface/Validator.php';
@@ -513,7 +514,7 @@ class User extends Standard
      *
      * @return integer
      */
-    function update($input)
+    public function update($input)
     {
         $this->validate($input);
 
@@ -539,7 +540,7 @@ class User extends Standard
      * @todo this should be an observer instead
      *
      */
-    function SendForgottenPasswordEmail($email)
+    public function SendForgottenPasswordEmail($email)
     {
         if (!Validate::email($email)) {
             return false;
@@ -571,7 +572,7 @@ class User extends Standard
         }
     }
 
-    function updatePassword($old_password, $new_password, $repeat_password)
+    public function updatePassword($old_password, $new_password, $repeat_password)
     {
         if ($this->id == 0) {
             return false;
@@ -602,7 +603,7 @@ class User extends Standard
     /**
      * TODO Måske kan det gøres enklere, så der ikke skal bruges så mange tabeller
      */
-    function getList()
+    public function getList()
     {
         $i = 0;
         $result = $this->db->query("SELECT DISTINCT user.id, user.email, address.name
@@ -618,7 +619,7 @@ class User extends Standard
         return $result->fetchAll();
     }
 
-    function isFilledIn()
+    public function isFilledIn()
     {
         if ($this->getAddress()->get('phone')) {
             return true;
@@ -626,7 +627,7 @@ class User extends Standard
         return false;
     }
 
-    function getId()
+    public function getId()
     {
         return $this->id;
     }
