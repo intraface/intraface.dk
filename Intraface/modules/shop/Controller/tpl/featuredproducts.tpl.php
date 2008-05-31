@@ -18,7 +18,7 @@
             e($keyword->getKeyword());
         ?>
         </td>
-        <td><a href="<?php url(null, array('delete' => $feature['id'])); ?>" class="delete"><?php e(t('Delete')); ?></a></td>
+        <td><a href="<?php e(url(null, array('delete' => $feature['id']))); ?>" class="delete"><?php e(t('Delete')); ?></a></td>
     </tr>
 <?php endforeach; ?>
 </table>
