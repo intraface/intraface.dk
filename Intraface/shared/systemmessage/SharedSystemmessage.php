@@ -7,8 +7,7 @@
  * @version	1.0
  *
  */
-
-class SharedSystemmessage extends Shared
+class SharedSystemmessage extends Intraface_Shared
 {
     function __construct()
     {

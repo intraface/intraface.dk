@@ -7,7 +7,7 @@
  * @version	1.0
  *
  */
-class SharedEmail Extends Shared
+class SharedEmail extends Intraface_Shared
 {
     function __construct()
     {

@@ -2,7 +2,7 @@
 /**
  * Shared configuration for FileImport
  */
-class SharedFileImport extends Shared
+class SharedFileImport extends Intraface_Shared
 {
     function __construct()
     {

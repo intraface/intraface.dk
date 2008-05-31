@@ -7,17 +7,13 @@
  * @version	1.0 
  *
  */
- 
-
- 
-class SharedKeyword Extends Shared {
-
-	function SharedKeyword() {
+class SharedKeyword extends Intraface_Shared 
+{
+	function __construct() 
+	{
 		$this->shared_name = 'keyword'; // Navn på på mappen med modullet
 		$this->active = 1; // Er shared aktivt
 		
 		$this->addPreloadFile('Keyword.php');
 	}
 }
-
-?>

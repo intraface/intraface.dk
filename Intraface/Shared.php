@@ -5,7 +5,7 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @example SharedExample.php
  */
-class Shared
+class Intraface_Shared
 {
     protected $active;
     protected $preload_file = array();

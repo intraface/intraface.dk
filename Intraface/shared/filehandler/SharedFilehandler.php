@@ -7,10 +7,10 @@
  * @version	1.0
  *
  */
-
-class Sharedfilehandler Extends Shared {
-
-    function sharedfilehandler() {
+class SharedFilehandler extends Shared 
+{
+    function __construct() 
+    {
         $this->shared_name = 'filehandler'; // Navn på på mappen med modullet
         $this->active = 1; // Er shared aktivt
 

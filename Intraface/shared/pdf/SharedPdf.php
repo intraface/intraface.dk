@@ -7,7 +7,7 @@
  * @version	1.0
  *
  */
-class SharedPdf extends Shared
+class SharedPdf extends Intraface_Shared
 {
     function __construct()
     {

@@ -8,7 +8,7 @@
  *
  */
 
-class SharedComment extends Shared
+class SharedComment extends Intraface_Shared
 {
     function __construct()
     {
