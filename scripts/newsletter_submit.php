@@ -8,7 +8,7 @@ require_once 'Intraface/Setting.php';
 
 error_reporting(E_ALL);
 
-class ElevforeningenIntranet extends Intranet
+class ElevforeningenIntranet extends Intraface_Intranet
 {
     private $intranet_id = 9;
 
@@ -23,7 +23,7 @@ class ElevforeningenIntranet extends Intranet
     }
 }
 
-class ElevforeningenUser extends User
+class ElevforeningenUser extends Intraface_User
 {
     private $user_id = 2;
 
@@ -42,7 +42,7 @@ class ElevforeningenUser extends User
 $kernel = new Intraface_Kernel;
 $kernel->intranet = new ElevforeningenIntranet;
 $kernel->user = new ElevforeningenUser;
-$kernel->setting = new Setting($kernel->intranet->get('id'), $kernel->user->get('id'));
+$kernel->setting = new Intraface_Setting($kernel->intranet->get('id'), $kernel->user->get('id'));
 $kernel->useModule('contact');
 $kernel->useModule('newsletter');
 
