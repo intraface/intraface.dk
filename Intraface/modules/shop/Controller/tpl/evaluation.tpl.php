@@ -1,8 +1,8 @@
 <h1><?php e(t('Basket evaluation')); ?></h1>
 
-<?php echo $basketevaluation->error->view($translation); ?>
+<?php //echo $basketevaluation->error->view($translation); ?>
 
-<form action="<?php e(url()); ?>" method="post">
+<form action="<?php e(url(null)); ?>" method="post">
     <fieldset>
         <legend><?php e(t('Information')); ?></legend>
         <input type="hidden" name="id" value="<?php if (!empty($value['id'])) echo intval($value['id']); ?>" />
