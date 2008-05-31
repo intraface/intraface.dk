@@ -41,10 +41,9 @@ class Install_Helper_ModulePackage
         
     }
     
-    public function addModulePackageExperingWithinAMonthForAlternativIntranet() {
-        
-        require_once 'Intraface/Intranet.php';
-        $intranet = new Intranet(2);
+    public function addModulePackageExperingWithinAMonthForAlternativIntranet() 
+    {
+        $intranet = new Intraface_Intranet(2);
         
         require_once 'Intraface/modules/modulepackage/Manager.php';
         $manager = new Intraface_ModulePackage_Manager($intranet);
