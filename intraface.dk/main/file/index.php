@@ -17,13 +17,16 @@ if (empty($_SERVER["QUERY_STRING"])) {
 }
 $query_parts = explode('/', $_SERVER["QUERY_STRING"]);
 
-$weblogin = new Intraface_Weblogin();
-if (!$intranet_id = $weblogin->auth('public', $query_parts[1])) {
+$auth_adapter = new Intraface_Auth_PublicKeyLogin(MDB2::singleton(DB_DSN), session_id(), $query_parts[1]);
+$weblogin = $auth_adapter->auth();
+		
+if (!$weblogin) {
     trigger_error('Error logging in to intranet with public key '.$query_parts[1], E_USER_WARNING);
     exit;
-}
+} 
+
 $kernel = new Intraface_Kernel;
-$kernel->intranet = new Intraface_Intranet($intranet_id);
+$kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
 $filehandler_shared = $kernel->useShared('filehandler');
 $filehandler_shared->includeFile('FileViewer.php');
 
@@ -46,10 +49,10 @@ $fileviewer = new FileViewer($filehandler, $query_parts[3]);
 
 if($fileviewer->needLogin()) {
     session_start();
-    require('Intraface/Auth.php');
     $auth = new Intraface_Auth(session_id());
+    $logged_in_user = $auth->hasIdentity();
     // the user is logged in but...
-    if (!$user_id = $auth->isLoggedIn()) {
+    if (!$user_id = $logged_in_user->getId()) {
         trigger_error('You need to be logged in to view the file', E_USER_WARNING);
         exit;
     }
@@ -57,7 +60,7 @@ if($fileviewer->needLogin()) {
     // ...we need to check that it is the right intranet
     $user = new Intraface_User($user_id);
     $intranet = new Intraface_Intranet($user->getActiveIntranetId());
-    if($intranet->get('id') != $intranet_id) {
+    if($intranet->getId() != $intranet_id) {
         trigger_error('You where not logged into the correct intranet to view the file', E_USER_WARNING);
         exit;
     }
