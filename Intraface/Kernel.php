@@ -337,7 +337,7 @@ class Kernel
                 trigger_error($main_class_path.' do not exist', E_USER_ERROR);
             }
         } else {
-            throw new Exception('You need access to a required module to see this page');
+            throw new Exception('You need access to the required module '.$module_name.' to see this page');
             trigger_error('Du mangler adgang til et modul for at kunne se denne side: '.$module_name, E_USER_ERROR);
         }
     }
@@ -426,91 +426,3 @@ class Kernel
         return $pass;
     }
 }
-
-
-interface Observable
-{
-    function attach($observer);
-}
-
-interface Observer
-{
-    function update($code, $msg);
-}
-
-class KernelLog implements Observer
-{
-    private $db;
-    private $table_name = 'log_table';
-    private $table_definition = array(
-        'id' => array(
-            'type' => 'integer',
-            'unsigned' => 1,
-            'notnull' => 1,
-            'default' => 0
-            ),
-        'logtime' => array(
-            'type' => 'timestamp'
-            ),
-        'ident' => array(
-            'type' => 'text',
-            'length' => 16
-            ),
-        'priority' => array(
-            'type' => 'integer',
-            'notnull' => 1
-            ),
-        'message' => array(
-            'type' => 'text',
-            'length' => 200
-        )
-    );
-
-    private $definition = array('primary' => true, 'fields' => array('id' => array()));
-
-    function __construct()
-    {
-        $this->db = MDB2::singleton(DB_DSN);
-        if (!$this->tableExists($this->table_name)) {
-            $this->createTable();
-        }
-    }
-
-    function tableExists($table)
-    {
-        $this->db->loadModule('Manager', null, true);
-        $tables = $this->db->manager->listTables();
-        if (PEAR::isError($tables)) {
-            trigger_error("Error in query: ".$tables->getUserInfo(), E_USER_ERROR);
-        }
-
-        return in_array(strtolower($table), array_map('strtolower', $tables));
-    }
-
-    function createTable()
-    {
-
-        $this->db->loadModule('Manager');
-        $result = $this->db->createTable($this->table_name, $this->table_definition);
-
-        if (PEAR::isError($result)) {
-            die('create ' . $result->getMessage());
-        }
-
-        $result = $this->db->createConstraint($this->table_name, 'PRIMARY', $this->definition);
-        if (PEAR::isError($result)) {
-            die('primary ' . $result->getMessage());
-        }
-    }
-
-    function update($code, $msg)
-    {
-        require_once 'Log.php';
-        $log = &Log::singleton('sql', $this->table_name, $code, array('dsn' => DB_DSN, 'sequence' => 'log_id'));
-        $log->log($msg);
-        return 1;
-    }
-
-}
-
-?>

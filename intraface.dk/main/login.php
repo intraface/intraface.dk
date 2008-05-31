@@ -4,22 +4,20 @@ require_once 'Intraface/Auth.php';
 
 $title = 'Intraface.dk -> Login';
 
-
 if(isset($_POST['email']) AND isset($_POST['password'])) {
     session_start();
 
-    $log = new KernelLog;
+    require_once 'Intraface/Log.php';
+    $log = new Intraface_Log;
 
-    $auth = new Auth(session_id());
+    $auth = new Intraface_Auth(session_id());
     $auth->attachObserver($log);
-
 
     $error = $auth->login($_POST['email'], $_POST['password']);
     if ($error === true) {
         header('Location: '.PATH_WWW.'main/index.php');
         exit;
-    }
-    else {
+    } else {
         switch ($error) {
             case LOGIN_ERROR_ALREADY_LOGGED_IN:
                 $msg = 'already logged in as another user. please logout before logging in.';
