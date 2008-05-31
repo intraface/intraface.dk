@@ -15,7 +15,7 @@
 require_once 'Intraface/Standard.php';
 require_once 'Stylesheet.php';
 
-class CMS_Site extends Standard
+class CMS_Site extends Intraface_Standard
 {
     public $id;
     public $kernel;

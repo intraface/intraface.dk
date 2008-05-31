@@ -23,7 +23,7 @@
  */
 require_once 'Intraface/Standard.php';
 
-class CMS_Template extends Standard
+class CMS_Template extends Intraface_Standard
 {
     public $id;
     public $value;

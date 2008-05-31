@@ -11,7 +11,7 @@
 
 require_once 'Intraface/Standard.php';
 
-class Procurement extends Standard
+class Procurement extends Intraface_Standard
 {
     public $kernel;
     public $id;

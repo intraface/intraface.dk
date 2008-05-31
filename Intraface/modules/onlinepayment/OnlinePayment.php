@@ -16,7 +16,7 @@ require_once 'Intraface/Standard.php';
  * klienten eller i systemet.
  */
 
-class OnlinePayment extends Standard
+class OnlinePayment extends Intraface_Standard
 {
     public $id;
     public $kernel;

@@ -12,7 +12,7 @@ require_once 'template_section/LongText.php';
 require_once 'template_section/Picture.php';
 require_once 'template_section/Mixed.php';
 
-class CMS_TemplateSection extends Standard
+class CMS_TemplateSection extends Intraface_Standard
 {
     protected $id;
     public $kernel;

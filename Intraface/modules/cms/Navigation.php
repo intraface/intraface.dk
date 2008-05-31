@@ -5,7 +5,7 @@
  *       bliver der på undersiderne til en undermenu.
  * @package Intraface_CMS
  */
-class CMS_Navigation extends Standard
+class CMS_Navigation extends Intraface_Standard
 {
     private $cmspage;
     public $value;

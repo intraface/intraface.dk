@@ -13,7 +13,7 @@
  * @version 1.0
  */
 
-class Post extends Standard
+class Post extends Intraface_Standard
 {
     public $id; // integer
     public $voucher; // object

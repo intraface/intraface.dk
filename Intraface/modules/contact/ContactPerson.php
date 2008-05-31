@@ -3,7 +3,7 @@
  * @package Intraface_Contact
  */
 
-class ContactPerson extends Standard
+class ContactPerson extends Intraface_Standard
 {
     /**
      * @var integer

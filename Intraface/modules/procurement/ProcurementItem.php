@@ -5,7 +5,7 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
  */
-class ProcurementItem extends Standard
+class ProcurementItem extends Intraface_Standard
 {
     public $value;
     public $id;
@@ -18,7 +18,7 @@ class ProcurementItem extends Standard
     function __construct($procurement, $id)
     {
         if (!is_object($procurement) AND get_class($procurement) != 'Procurement') {
-            trigger_error('Procurement: Item kræver procurement', FATAL);
+            trigger_error('Procurement: Item kræver procurement', E_USER_ERROR);
         }
 
         $this->procurement = & $procurement;

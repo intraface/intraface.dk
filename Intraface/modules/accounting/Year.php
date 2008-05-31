@@ -10,7 +10,7 @@
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/Error.php';
 
-class Year extends Standard
+class Year extends Intraface_Standard
 {
     public $id; // årsid
     public $kernel; // object

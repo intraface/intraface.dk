@@ -11,21 +11,18 @@
  * @version @package-version@
  *
  */
-
-class Standard {
+class Intraface_Standard 
+{
 
 	public $value;
 
-	function __construct() {
+	function __construct() 
+	{
 		// init
 	}
 
-	function get($key = '') {
-		/*
-		if (empty($this->value)) {
-			trigger_error('Standard->get() mangler $value', FATAL);
-		}
-		*/
+	function get($key = '') 
+	{
 		if(!empty($key)) {
 			if(isset($this->value[$key])) {
 				return($this->value[$key]);
@@ -38,5 +35,3 @@ class Standard {
 	}
 
 }
-
-?>

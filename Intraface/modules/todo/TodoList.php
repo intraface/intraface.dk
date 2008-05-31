@@ -4,7 +4,7 @@
  */
 require_once 'Intraface/Standard.php';
 
-class TodoList extends Standard
+class TodoList extends Intraface_Standard
 {
     /**
      * @var object

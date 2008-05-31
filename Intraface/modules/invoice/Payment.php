@@ -9,7 +9,7 @@
 
 require_once 'Intraface/Standard.php';
 
-class Payment extends Standard
+class Payment extends Intraface_Standard
 {
     protected $id;
     public $kernel;

@@ -12,7 +12,7 @@ require_once 'Intraface/modules/accounting/Account.php';
 require_once 'Intraface/modules/accounting/Post.php';
 require_once 'Intraface/Date.php';
 
-class Voucher extends Standard
+class Voucher extends Intraface_Standard
 {
     private $id; // integer
     public $year; // object

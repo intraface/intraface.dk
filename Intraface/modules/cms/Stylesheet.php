@@ -2,7 +2,7 @@
 /**
  * @package Intraface_CMS
  */
-class CMS_Stylesheet extends Standard
+class CMS_Stylesheet extends Intraface_Standard
 {
     private $cmssite;
     public $error;

@@ -11,7 +11,7 @@
 
 require_once 'Intraface/Amount.php';
 
-class ProductDetail extends Standard {
+class ProductDetail extends Intraface_Standard {
 
     /**
      * @var array

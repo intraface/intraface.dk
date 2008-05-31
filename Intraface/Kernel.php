@@ -65,7 +65,7 @@ class Intraface_Kernel
      */
     function createUser($id)
     {
-        return new User($id);
+        return new Intraface_User($id);
     }
 
     /**

@@ -6,7 +6,7 @@
  */
 require_once 'Intraface/Standard.php';
 
-class YearEnd extends Standard
+class YearEnd extends Intraface_Standard
 {
     public $error;
     public $value;

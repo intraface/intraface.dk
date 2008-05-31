@@ -13,7 +13,7 @@ require_once 'Intraface/Error.php';
 require_once 'Intraface/Validator.php';
 require_once 'NewsletterSubscriber.php';
 
-class Newsletter extends Standard
+class Newsletter extends Intraface_Standard
 {
     public $list; //object
     public $value = array();

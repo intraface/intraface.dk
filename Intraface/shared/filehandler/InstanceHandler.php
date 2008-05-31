@@ -13,7 +13,7 @@
  *
  */
 
-class InstanceHandler extends Standard
+class InstanceHandler extends Intraface_Standard
 {
     /**
      * @var object

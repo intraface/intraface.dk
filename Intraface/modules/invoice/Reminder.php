@@ -8,7 +8,7 @@ require_once 'DB/Sql.php';
 require_once 'Intraface/Error.php';
 require_once 'Intraface/DBQuery.php';
 
-class Reminder extends Standard
+class Reminder extends Intraface_Standard
 {
     public $id;
     public $kernel;

@@ -16,7 +16,7 @@ require_once 'Intraface/Standard.php';
  * @author Lars Olesen <lars@legestue.net>
  */
 
-class Debtor extends Standard
+class Debtor extends Intraface_Standard
 {
     /**
      * @var integer

@@ -1,5 +1,5 @@
 <?php
-class SystemDisturbance extends Standard
+class SystemDisturbance extends Intraface_Standard
 {
     var $kernel;
     var $id;

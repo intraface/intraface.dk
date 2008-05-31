@@ -6,7 +6,7 @@
 require_once 'Intraface/Standard.php';
 require_once 'DB/Sql.php';
 
-class Stock extends Standard
+class Stock extends Intraface_Standard
 {
     private $product;
     public $value;

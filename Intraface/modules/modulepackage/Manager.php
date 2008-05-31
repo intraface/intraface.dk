@@ -7,7 +7,7 @@
  * @author sune
  * @version 0.0.1
  */
-class Intraface_ModulePackage_Manager extends Standard {
+class Intraface_ModulePackage_Manager extends Intraface_Standard {
 
     /**
      * @var object intranet

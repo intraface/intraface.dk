@@ -1,5 +1,5 @@
 <?php
-class IntranetNews extends Standard
+class IntranetNews extends Intraface_Standard
 {
     var $kernel;
     var $id;

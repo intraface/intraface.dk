@@ -7,11 +7,10 @@
  * @version 002
  */
 
-require_once 'Intraface/Standard.php';
 require_once 'Intraface/Error.php';
 require_once 'Intraface/Address.php';
 
-class Intranet extends Standard
+class Intranet extends Intraface_Standard
 {
     /**
      * @var object

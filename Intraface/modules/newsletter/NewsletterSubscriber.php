@@ -16,7 +16,7 @@ require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/modules/contact/Contact.php';
 require_once 'Intraface/shared/email/Email.php';
 
-class NewsletterSubscriber extends Standard
+class NewsletterSubscriber extends Intraface_Standard
 {
     public $list; //object
     public $value;

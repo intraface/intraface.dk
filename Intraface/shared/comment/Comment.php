@@ -8,7 +8,7 @@
  *
  * @author Lars Olesen <lars@legestue.net>
  */
-class Comment extends Standard
+class Comment extends Intraface_Standard
 {
     public $value;
     private $object;

@@ -12,7 +12,7 @@
  * @author Sune
  */
 
-class NewAddress extends Standard {
+class NewAddress extends Intraface_Standard {
 
     var $kernel;
     var $type;

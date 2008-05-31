@@ -2,7 +2,7 @@
 
 
 
-class DebtorAccount extends Standard {
+class DebtorAccount extends Intraface_Standard {
     
     /**
      * @var object debtor or reminder

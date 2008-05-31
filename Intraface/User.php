@@ -22,10 +22,7 @@
  * @since   0.1.0
  * @version @package-version@
  */
-require_once 'Intraface/Standard.php';
-require_once 'MDB2.php';
-
-class Intraface_User extends Standard
+class Intraface_User extends Intraface_Standard
 {
     /**
      * @var db

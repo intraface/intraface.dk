@@ -8,7 +8,7 @@
  * @author sune
  * @version 0.0.1
  */
-class Intraface_ModulePackage extends Standard {
+class Intraface_ModulePackage extends Intraface_Standard {
 
     /**
      * @var object database

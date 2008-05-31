@@ -55,7 +55,7 @@
  */
 require_once 'Intraface/Standard.php';
 
-class CMS_Page extends Standard
+class CMS_Page extends Intraface_Standard
 {
     public $id;
     public $kernel;

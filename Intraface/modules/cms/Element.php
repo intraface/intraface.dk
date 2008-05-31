@@ -19,7 +19,7 @@ require_once 'Intraface/modules/cms/element/Gallery.php';
 require_once 'Intraface/modules/cms/element/Video.php';
 require_once 'Intraface/modules/cms/element/Map.php';
 
-class CMS_Element extends Standard
+class CMS_Element extends Intraface_Standard
 {
     public $id;
     public $section;

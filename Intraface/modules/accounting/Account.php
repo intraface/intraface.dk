@@ -15,7 +15,7 @@ require_once 'DB/Sql.php';
 require_once 'Intraface/functions/functions.php';
 require_once 'Intraface/Validator.php';
 
-class Account extends Standard
+class Account extends Intraface_Standard
 {
     protected $id; // kontoid
     public $year; // object

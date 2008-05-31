@@ -10,7 +10,7 @@
 
 require_once 'Image/Transform.php';
 
-class ImageHandler extends Standard
+class ImageHandler extends Intraface_Standard
 {
     /**
      * @var object

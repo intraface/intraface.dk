@@ -22,7 +22,7 @@ require_once 'Intraface/Validator.php';
 require_once 'DB/Sql.php';
 require_once 'Intraface/modules/contact/Contact.php';
 
-class Email extends Standard
+class Email extends Intraface_Standard
 {
 
     public $kernel;

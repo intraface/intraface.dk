@@ -102,7 +102,7 @@ require_once 'Intraface/Error.php';
 require_once 'Intraface/Validator.php';
 require_once 'MDB2.php';
 
-class ContactReminder extends Standard
+class ContactReminder extends Intraface_Standard
 {
 
     private $id;

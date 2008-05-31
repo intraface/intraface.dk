@@ -11,7 +11,7 @@ require_once 'section/LongText.php';
 require_once 'section/Picture.php';
 require_once 'section/Mixed.php';
 
-class CMS_Section extends Standard
+class CMS_Section extends Intraface_Standard
 {
     public $id;
     private $db;

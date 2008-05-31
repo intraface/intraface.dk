@@ -4,7 +4,7 @@
  * @todo Not used anymore
  */
 /*
-class ContactMessage extends Standard {
+class ContactMessage extends Intraface_Standard {
 
     var $error;
     var $id;

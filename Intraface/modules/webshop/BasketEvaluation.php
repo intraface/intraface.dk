@@ -27,7 +27,7 @@ require_once 'Intraface/Error.php';
 require_once 'MDB2.php';
 require_once 'Intraface/Validator.php';
 
-class BasketEvaluation extends Standard
+class BasketEvaluation extends Intraface_Standard
 {
      public $kernel;
      public $error;

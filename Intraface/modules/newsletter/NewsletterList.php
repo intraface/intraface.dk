@@ -17,7 +17,7 @@ require_once 'Intraface/Error.php';
 require_once 'Intraface/Validator.php';
 require_once 'Intraface/functions/functions.php';
 
-class NewsletterList extends Standard
+class NewsletterList extends Intraface_Standard
 {
     public $value;
     private $id;

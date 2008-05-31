@@ -16,7 +16,7 @@ require_once 'Intraface/Validator.php';
 require_once 'DB/Sql.php';
 require_once 'Intraface/modules/product/ProductDetail.php';
 
-class Product extends Standard
+class Product extends Intraface_Standard
 {
     /**
      * @var object

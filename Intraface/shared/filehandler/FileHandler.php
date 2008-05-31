@@ -18,7 +18,7 @@ require_once 'Ilib/Error.php';
 require_once 'DB/Sql.php';
 require_once 'Intraface/Standard.php';
 
-class FileHandler extends Standard
+class FileHandler extends Intraface_Standard
 {
     /**
      * @var integer

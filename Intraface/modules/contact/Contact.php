@@ -127,7 +127,7 @@ require_once 'Intraface/Error.php';
 require_once 'Intraface/Address.php';
 require_once dirname(__FILE__) . '/ContactPerson.php';
 
-class Contact extends Standard {
+class Contact extends Intraface_Standard {
 
     /**
      * @var object

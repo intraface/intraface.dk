@@ -44,7 +44,7 @@
 
 require_once 'HTTP/Upload.php';
 
-class UploadHandler extends Standard
+class UploadHandler extends Intraface_Standard
 {
 
     /**

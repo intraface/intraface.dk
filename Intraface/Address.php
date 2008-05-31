@@ -10,11 +10,9 @@
  * @package Intraface
  * @author  Sune Jensen <sj@sunet.dk>
  */
-require_once 'Intraface/Standard.php';
-require_once 'DB/Sql.php';
 require_once 'Intraface/functions/functions.php';
 
-class Address extends Standard
+class Address extends Intraface_Standard
 {
     /**
      * @var integer

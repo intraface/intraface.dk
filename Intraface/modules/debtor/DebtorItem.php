@@ -8,7 +8,7 @@
  */
 require_once 'Intraface/Standard.php';
 
-class DebtorItem extends Standard
+class DebtorItem extends Intraface_Standard
 {
     /**
      * @var array
