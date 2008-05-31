@@ -56,18 +56,17 @@ set_exception_handler('intrafaceFrontendExceptionhandler');
 ob_start(); // ob_gzhandler()
 session_start();
 
-require_once 'Intraface/Auth.php';
-
 $auth = new Intraface_Auth(session_id());
 
-if (!$user_id = $auth->isLoggedIn()) {
+if (!$auth->hasIdentity()) {
     $auth->toLogin();
 }
 
 $kernel = new Intraface_Kernel(session_id());
-$kernel->user = new User($user_id);
 
-if (!$intranet_id = $kernel->user->getActiveIntranetId('id')) {
+$kernel->user = $auth->getIdentity();
+
+if (!$intranet_id = $kernel->user->getActiveIntranetId()) {
     trigger_error('no active intranet_id', E_USER_ERROR);
 }
 
