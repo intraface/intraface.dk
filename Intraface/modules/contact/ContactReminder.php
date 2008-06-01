@@ -97,7 +97,6 @@ med engangsreminder.
 */
 class ContactReminder extends Intraface_Standard
 {
-
     private $id;
     public $contact;
     private $db;
@@ -131,9 +130,6 @@ class ContactReminder extends Intraface_Standard
             return false;
         }
 
-        if (strtolower(get_class($kernel)) != 'kernel') {
-            trigger_error("Kernel is needed in ContactReminder->factory");
-        }
         $db = MDB2::singleton(DB_DSN);
         $result = $db->query("SELECT contact_id FROM contact_reminder_single WHERE intranet_id = ".$db->quote($kernel->intranet->get('id'), 'integer')." AND id = ".$db->quote($id, 'integer')."");
         if (PEAR::isError($result)) {
@@ -147,8 +143,7 @@ class ContactReminder extends Intraface_Standard
             trigger_error("Invalid contact id in ContactReminder->factory", E_USER_ERROR);
         }
 
-        return new ContactReminder($contact, $id);
-
+        return new self($contact, $id);
     }
 
     /**

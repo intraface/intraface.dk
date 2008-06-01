@@ -79,7 +79,7 @@ class ContactPerson extends Intraface_Standard
      *
      * @return integer
      */
-    public function save($input) 
+    public function save($input)
     {
         $input = safeToDb($input);
 
@@ -94,7 +94,7 @@ class ContactPerson extends Intraface_Standard
         $validator->isString($input['mobile'], 'Fejl i kontaktpersonens mobil', '', 'allow_empty');
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
 
         if ($this->id > 0) {
@@ -118,14 +118,14 @@ class ContactPerson extends Intraface_Standard
                 "contact_id = " . $db->quote($this->contact->get('id'), 'integer') . ", " .
                 "date_changed = NOW() " . $sql_end);
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
             exit;
         }
 
         if ($this->id == 0) {
             $id = $db->lastInsertID('contact_person', 'id');
-            if(PEAR::isError($id)) {
+            if (PEAR::isError($id)) {
                 trigger_error('Error in query: '.$id->getUserInfo(), E_USER_ERROR);
                 exit;
             }
@@ -140,7 +140,8 @@ class ContactPerson extends Intraface_Standard
      *
      * @return array
      */
-    public function getList() {
+    public function getList()
+    {
         $db = new DB_Sql;
         $db->query("SELECT * FROM contact_person WHERE contact_id = " . $this->contact->get('id'));
         $persons = array();
@@ -155,7 +156,4 @@ class ContactPerson extends Intraface_Standard
         }
         return $persons;
     }
-
 }
-
-?>
