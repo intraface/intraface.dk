@@ -126,7 +126,11 @@ class Intraface_User extends Intraface_Standard
      */
     public function getAddress()
     {
-        if (!empty($this->address)) {
+        // HACK if it does not check for an empty name
+        //      it is not transferred when the user is saved in the session
+        //      there must be a way to maintain state between pages for
+        //      for objects inside other objects
+        if (!empty($this->address) AND $this->address->get('name') != '') {
             return $this->address;
         }
         return ($this->address = Intraface_Address::factory('user', $this->id));
@@ -398,10 +402,10 @@ class Intraface_User extends Intraface_Standard
             }
         }
 
-        $result = $this->db->query("SELECT intranet.id 
-			FROM intranet
-            INNER JOIN permission 
-				ON permission.intranet_id = intranet.id
+        $result = $this->db->query("SELECT intranet.id
+            FROM intranet
+            INNER JOIN permission
+                ON permission.intranet_id = intranet.id
             WHERE permission.user_id = " . $this->db->quote($this->id, 'integer'));
         if (PEAR::isError($result)) {
             throw new Exception($result->getUserInfo());
