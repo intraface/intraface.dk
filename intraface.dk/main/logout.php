@@ -9,11 +9,9 @@
  */
 require '../include_first.php';
 
-if ($auth->logout()) {
-	$auth->toLogin('Du er logget ud');
+if ($auth->clearIdentity()) {
+    $auth->toLogin('Du er logget ud');
+} else {
+    trigger_error('could not logout', E_USER_ERROR);
+    return false;
 }
-else {
-	trigger_error('could not logout', E_USER_ERROR);
-	return false;
-}
-?>
