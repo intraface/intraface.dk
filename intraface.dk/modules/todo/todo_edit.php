@@ -12,6 +12,7 @@ if (!empty($_POST)) {
     ))) {
 
     foreach ($_POST['todo'] AS $key=>$value) {
+        if (isset($_POST['item_id'])) $item_id = $_POST['item_id']; else $item_id = 0;
         if ($todo->getItem($_POST['item_id'][$key])->save($_POST['todo'][$key], $_POST['responsible_user_id'][$key])) {
         }
     }
@@ -25,7 +26,7 @@ if (!empty($_POST)) {
     else {
         $todo = new TodoList($kernel);
     }
-    
+
     $value = $todo->get();
     $value['todo'] = $todo->getUndoneItems();
 }
