@@ -1,8 +1,6 @@
 <?php
 /**
- * Weblogin
- *
- * @todo this should be a special case of user
+ * PrivateKeyLogin
  *
  * @package Intraface
  * @author  Sune Jensen <sj@sunet.dk>
@@ -58,7 +56,7 @@ class Intraface_Auth_PrivateKeyLogin
             return false;
         }
         $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-
+        
         return new Intraface_Weblogin($this->session_id, new Intraface_Intranet($row['id']));
     }
 }

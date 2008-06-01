@@ -1,8 +1,6 @@
 <?php
 /**
- * Weblogin
- *
- * @todo this should be a special case of user
+ * PublicKeyLogin
  *
  * @package Intraface
  * @author  Sune Jensen <sj@sunet.dk>
@@ -50,13 +48,13 @@ class Intraface_Auth_PublicKeyLogin
     {
        $result = $this->db->query("SELECT id FROM intranet WHERE public_key = ".$this->db->quote($this->key, 'text'));
        if (PEAR::isError($result)) {
-               throw new Exception($result->getUserInfo());
+           throw new Exception($result->getUserInfo());
        }
        if ($result->numRows() == 0) {
            return false;
        }
        $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-
+       
        return new Intraface_Weblogin($this->session_id, new Intraface_Intranet($row['id']));
     }
 }

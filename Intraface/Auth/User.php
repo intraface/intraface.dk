@@ -53,7 +53,9 @@ class Intraface_Auth_User
             throw new Exception('could not update user ' . $result->getMessage() . $result->getUserInfo());
         }
 
-        return new Intraface_User($row['id']);
+		$user = new Intraface_User($row['id']);
+		$this->isLoggedIn();
+        return $user;
     }
     
     function isLoggedIn()
