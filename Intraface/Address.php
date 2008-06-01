@@ -92,7 +92,6 @@ class Intraface_Address extends Intraface_Standard
         }
 
         $db = new DB_Sql;
-        // intranet_id = ".$kernel->intranet->get('id')." AND
         $db->query("SELECT id FROM address WHERE type = ".$belong_to_key." AND belong_to_id = ".$belong_to_id." AND active = 1");
         if ($db->numRows() > 1) {
             trigger_error('There is more than one active address for '.$belong_to.':'.$belong_to_id.' in Address::facotory', E_USER_ERROR);
@@ -242,7 +241,7 @@ class Intraface_Address extends Intraface_Standard
      */
     function save($array_var)
     {
-
+        // @todo validate should probably be called. Selenium debtor:testChangeContactPersonAndSender fails.
         if ($this->belong_to_key == 0 || $this->belong_to_id == 0) {
             trigger_error("belong_to or belong_to_id was not set. Maybe because the provided address id was not valid. In Address::save", E_USER_ERROR);
         }
