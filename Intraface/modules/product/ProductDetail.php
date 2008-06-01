@@ -8,8 +8,8 @@
  *
  * TODO Lige nu gemmer den altid en ny produktdetalje uanset, hvad jeg gør.
  */
-class ProductDetail extends Intraface_Standard {
-
+class ProductDetail extends Intraface_Standard
+{
     /**
      * @var array
      */
@@ -96,7 +96,7 @@ class ProductDetail extends Intraface_Standard {
                 trigger_error('invalid unit '.$this->db->f('unit').'!', E_USER_ERROR);
                 exit;
             }
-            
+
             $this->value['unit_key'] = $this->db->f('unit');
             $this->value['unit']     = $unit;
 
@@ -320,8 +320,5 @@ class ProductDetail extends Intraface_Standard {
         $this->load();
         $this->product->load();
         return true;
-        //return ($this->save(array('state_account_id' => $id)) > 0);
     }
-
 }
-?>
