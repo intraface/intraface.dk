@@ -21,32 +21,15 @@ class Intraface_Auth
     {
 
     }
-    
-    /*
-    function isLoggedIn()
-    {
-        return true;
-    }
-
-    function logout()
-    {
-        return true;
-    }
-    
-    function login()
-    {
-        return true;
-    }
-    */
 
     public function authenticate($adapter)
     {
         if ($object = $adapter->auth()) {
-        	$this->notifyObservers('login', ' logged in');    
+            $this->notifyObservers('login', ' logged in');
         } else {
             $this->notifyObservers('login', ' could not login');
         }
-        
+
         return ($_SESSION['user'] = $object);
     }
 
@@ -57,11 +40,11 @@ class Intraface_Auth
      */
     public function hasIdentity()
     {
-		if (!empty($_SESSION['user'])) {
-		    return true;
-		} else {
-		    return false;
-		}
+        if (!empty($_SESSION['user'])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -71,16 +54,19 @@ class Intraface_Auth
      */
     public function clearIdentity()
     {
+        $_SESSION['user'] = '';
         unset($_SESSION['user']);
+        session_destroy();
+        return true;
     }
 
-	public function getIdentity()
-	{
-	    if ($this->hasIdentity()) {
-	        return $_SESSION['user'];
-	    }
-	    return false;
-	}
+    public function getIdentity()
+    {
+        if ($this->hasIdentity()) {
+            return $_SESSION['user'];
+        }
+        return false;
+    }
 
     /**
      * Redirects to login
