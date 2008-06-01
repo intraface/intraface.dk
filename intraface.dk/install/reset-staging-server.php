@@ -10,22 +10,25 @@ require $install_class;
 
 $install = new Intraface_Install;
 
+session_start();
+$auth = new Intraface_Auth;
+$auth->clearIdentity();
+
 if ($install->resetServer()) {
-    
+
     if(!empty($_GET['modules'])) {
         $install->grantModuleAccess($_GET['modules']);
     }
-    
+
     if(!empty($_GET['helper_function'])) {
         $install->runHelperFunction($_GET['helper_function']);
     }
-    
+
     if(!empty($_GET['login'])) {
-        if($install->loginUser()) {
+        if ($install->loginUser()) {
             // header('location: '.PATH_WWW.'/main/index.php');
             // exit;
-        }
-        else {
+        } else {
             echo 'Error in login';
         }
     }
