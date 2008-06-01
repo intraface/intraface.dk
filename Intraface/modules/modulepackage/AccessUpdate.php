@@ -37,7 +37,7 @@ class Intraface_ModulePackage_AccessUpdate
      * @param integer intranet_id id on intranet, and the access update will only run on this intranet.
      * @return boolean true on success, false on failure
      */
-    public function run($intranet_id = 0) 
+    public function run($intranet_id = 0)
     {
         $db = MDB2::singleton(DB_DSN);
         if (PEAR::isError($db)) {
@@ -155,6 +155,8 @@ class Intraface_ModulePackage_AccessUpdate
 
         }
 
+        // @todo this should not be in the errorlog
+        //       it should be somewhere else.
         $details = array(
                 'date' => date('r'),
                 'type' => 'AccessUpdate',

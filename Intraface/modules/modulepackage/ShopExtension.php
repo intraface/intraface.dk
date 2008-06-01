@@ -49,8 +49,6 @@ class Intraface_ModulePackage_ShopExtension {
             define('INTRAFACE_XMLRPC_DEBUG', false);
         }
 
-        require_once('IntrafacePublic/Shop/XMLRPC/Client.php');
-
         try {
             $this->shop = new IntrafacePublic_Shop_XMLRPC_Client(
                 array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()),
@@ -61,17 +59,13 @@ class Intraface_ModulePackage_ShopExtension {
             trigger_error('Unable to connect to the intranet maintenance webshop', E_USER_ERROR);
         }
 
-
-        require_once('IntrafacePublic/Debtor/XMLRPC/Client.php');
         $this->debtor = new IntrafacePublic_Debtor_XMLRPC_Client(
             array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()),
             INTRAFACE_XMLRPC_DEBUG,
             $xmlrpc_debtor_url);
 
         $this->error = new Intraface_Error;
-
     }
-
 
     /**
      * Returns the product from the shop
@@ -90,8 +84,7 @@ class Intraface_ModulePackage_ShopExtension {
             if (count($product_id) > 0) {
                 try {
                     $products = $this->shop->getProducts(array('ids' => $product_id, 'use_paging' => false));
-                }
-                catch (Exception $e) {
+                } catch (Exception $e) {
                     $products = array();
                     trigger_error('unable to get products from intranet webshop: '.$e->getMessage(), E_USER_NOTICE);
                 }
