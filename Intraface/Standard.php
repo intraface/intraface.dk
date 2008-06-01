@@ -11,27 +11,24 @@
  * @version @package-version@
  *
  */
-class Intraface_Standard 
+class Intraface_Standard
 {
+    public $value;
 
-	public $value;
+    function __construct()
+    {
+        // init
+    }
 
-	function __construct() 
-	{
-		// init
-	}
-
-	function get($key = '') 
-	{
-		if(!empty($key)) {
-			if(isset($this->value[$key])) {
-				return($this->value[$key]);
-			}
-			else {
-				return '';
-			}
-		}
-		return $this->value;
-	}
-
+    function get($key = '')
+    {
+        if (!empty($key)) {
+            if (isset($this->value[$key])) {
+                return($this->value[$key]);
+            } else {
+                return '';
+            }
+        }
+        return $this->value;
+    }
 }
