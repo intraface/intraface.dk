@@ -50,7 +50,6 @@ class CMS_Template extends Intraface_Standard
 
     function getPosition($db)
     {
-        require_once 'Ilib/Position.php';
         return new Ilib_Position($db, 'cms_template', $this->id, 'site_id = ' . $this->cmssite->get('id'), 'id', 'position');
     }
 

@@ -5,12 +5,7 @@
  * neccessary javascript http://api.maps.yahoo.com/v2.0/fl/javascript/apiloader.js
  * @package Intraface_CMS
  */
-
-require_once 'HTTP/Request.php';
-require_once 'XML/Unserializer.php';
-require_once 'Intraface/modules/cms/Element.php';
-
-class CMS_Map extends CMS_Element
+class Intraface_modules_cms_element_Map extends CMS_Element
 {
 
     public $services = array('yahoo', 'google');

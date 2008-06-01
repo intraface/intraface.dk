@@ -7,11 +7,6 @@
  * @author Lars Olesen <lars@legestue.net>
  * @package Intraface_CMS
  */
-require_once 'template_section/ShortText.php';
-require_once 'template_section/LongText.php';
-require_once 'template_section/Picture.php';
-require_once 'template_section/Mixed.php';
-
 class CMS_TemplateSection extends Intraface_Standard
 {
     protected $id;
@@ -58,7 +53,6 @@ class CMS_TemplateSection extends Intraface_Standard
 
     function getPosition($db)
     {
-        require_once 'Ilib/Position.php';
         return new Ilib_Position($db, "cms_template_section", $this->id, "template_id = ".$this->template->get('id')." AND active = 1", "position", "id");
     }
 
@@ -75,13 +69,13 @@ class CMS_TemplateSection extends Intraface_Standard
 
     function factory($object, $type, $value)
     {
-        $class_prefix = 'CMS_Template_';
+        $class_prefix = 'Intraface_modules_cms_templatesection_';
         switch ($type) {
             case 'type':
-                // validering på value // kun være gyldige elementtyper
+                // validering på value
+                // kun være gyldige elementtyper
                 // object skal vre cmspage
-
-                $class = $class_prefix . $value;
+                $class = $class_prefix . ucfirst($value);
                 return new $class($object);
                 break;
             case 'id':
@@ -95,7 +89,7 @@ class CMS_TemplateSection extends Intraface_Standard
                     return false;
                 }
 
-                $class = $class_prefix . $section_types[$db->f('type_key')];
+                $class = $class_prefix . ucfirst($section_types[$db->f('type_key')]);
                 return new $class(CMS_Template::factory($object, 'id', $db->f('template_id')), $db->f('id'));
 
                 break;
@@ -110,7 +104,7 @@ class CMS_TemplateSection extends Intraface_Standard
                     return false;
                 }
 
-                $class = $class_prefix . $section_types[$db->f('type_key')];
+                $class = $class_prefix . ucfirst($section_types[$db->f('type_key')]);
                 return new $class($object, $db->f('id'));
 
                 break;

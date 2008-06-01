@@ -5,16 +5,6 @@
  * @package Intraface_CMS
  */
 require_once 'Intraface/modules/cms/Parameter.php';
-require_once 'Intraface/modules/cms/element/Htmltext.php';
-require_once 'Intraface/modules/cms/element/Wikitext.php';
-require_once 'Intraface/modules/cms/element/Flickr.php';
-require_once 'Intraface/modules/cms/element/Delicious.php';
-require_once 'Intraface/modules/cms/element/Picture.php';
-require_once 'Intraface/modules/cms/element/PageList.php';
-require_once 'Intraface/modules/cms/element/FileList.php';
-require_once 'Intraface/modules/cms/element/Gallery.php';
-require_once 'Intraface/modules/cms/element/Video.php';
-require_once 'Intraface/modules/cms/element/Map.php';
 
 class CMS_Element extends Intraface_Standard
 {
@@ -103,7 +93,7 @@ class CMS_Element extends Intraface_Standard
      */
     function factory($object, $type, $value)
     {
-        $class_prefix = 'CMS_';
+        $class_prefix = 'Intraface_modules_cms_element_';
         switch ($type) {
             case 'type':
                 // validering p� value // kun v�re gyldige elementtyper

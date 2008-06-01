@@ -4,32 +4,34 @@ require_once dirname(__FILE__) . './../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'CMSStubs.php';
-require_once 'Intraface/Kernel.php';
+require_once 'Intraface/modules/cms/Element.php';
 require_once 'Intraface/modules/cms/element/Gallery.php';
 
-class GalleryElementTest extends PHPUnit_Framework_TestCase {
+class GalleryElementTest extends PHPUnit_Framework_TestCase
+{
+    private $gallery;
 
-    function createGallery()
+    function setUp()
     {
         $kernel = new FakeCMSKernel();
         $site = new FakeCMSSite($kernel);
         $page = new FakeCMSPage($site);
         $section = new FakeCMSSection($page);
-        $pagelist = new CMS_Gallery($section);
-        return $pagelist;
+        $this->gallery = new Intraface_modules_cms_element_Gallery($section);
+    }
 
+    function tearDown()
+    {
+        unset($this->gallery);
     }
 
     function testConstruction()
     {
-        $pagelist = $this->createGallery();
-        $this->assertTrue(is_object($pagelist));
+        $this->assertTrue(is_object($this->gallery));
     }
 
     function testSave()
     {
-        $pagelist = $this->createGallery();
-
         $data = array(
             'elm_properties' => 'none',
             'elm_adjust' => 'left',
@@ -40,7 +42,6 @@ class GalleryElementTest extends PHPUnit_Framework_TestCase {
             'show_description' => true
         );
 
-        $this->assertTrue($pagelist->save($data) > 0);
+        $this->assertTrue($this->gallery->save($data) > 0);
     }
 }
-?>

@@ -8,18 +8,16 @@
  *
  * @package Intraface_CMS
  */
-require_once 'Intraface/modules/cms/Element.php';
-
-class CMS_Picture extends CMS_Element 
+class Intraface_modules_cms_element_Picture extends CMS_Element
 {
-    function __construct($section, $id = 0) 
+    function __construct($section, $id = 0)
     {
         $this->value['type'] = 'picture';
         parent::__construct($section, $id);
         $this->section->kernel->useShared('filehandler');
     }
 
-    function load_element() 
+    function load_element()
     {
         $this->section->kernel->useShared('filehandler');
         $this->value['pic_id'] = $this->parameter->get('pic_id');
@@ -47,7 +45,7 @@ class CMS_Picture extends CMS_Element
 
     }
 
-    function validate_element($var) 
+    function validate_element($var)
     {
         $validator = new Intraface_Validator($this->error);
 
@@ -65,7 +63,7 @@ class CMS_Picture extends CMS_Element
     }
 
 
-    function save_element($var) 
+    function save_element($var)
     {
         $var = array_map('strip_tags', $var);
         //$var = safeToDb($var);

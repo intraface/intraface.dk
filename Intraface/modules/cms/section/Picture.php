@@ -7,12 +7,10 @@
  * @since   0.1.0
  * @version @package-version@
  */
-
-require_once dirname(__FILE__) . '/../Section.php';
-
-class CMS_Section_Picture extends CMS_Section {
-
-    function __construct($cmspage, $id = 0) {
+class Intraface_modules_cms_section_Picture extends CMS_Section
+{
+    function __construct($cmspage, $id = 0)
+    {
         $this->value['type'] = 'picture';
         parent::__construct($cmspage, $id);
         $this->cmspage->kernel->useShared('filehandler');

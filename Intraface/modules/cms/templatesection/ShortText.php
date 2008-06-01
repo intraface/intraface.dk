@@ -2,7 +2,7 @@
 /**
  * @package Intraface_CMS
  */
-class CMS_Template_ShortText extends CMS_TemplateSection
+class Intraface_modules_cms_templatesection_ShortText extends CMS_TemplateSection
 {
     public function __construct($cmspage, $id = 0)
     {

@@ -7,38 +7,39 @@
  * @since   0.1.0
  * @version @package-version@
  */
-
-require_once dirname(__FILE__) . '/../Section.php';
-
-class CMS_Section_Mixed extends CMS_Section {
-
-    function __construct($cmspage, $id = 0) {
+class Intraface_modules_cms_section_Mixed extends CMS_Section
+{
+    function __construct($cmspage, $id = 0)
+    {
         $this->value['type'] = 'mixed';
         parent::__construct($cmspage, $id);
     }
 
-    function load_section() {
+    function load_section()
+    {
         //$this->value['html'] = $this->getSectionHtml();
         foreach ($this->getElements() AS $element) {
             $this->value['elements'][] = $element->get();
         }
-        return 1;
+        return true;
 
     }
 
-    function validate_section(& $var) {
-        return 1;
+    function validate_section($var)
+    {
+        return true;
     }
 
-    function save_section($var) {
-        return 1;
+    function save_section($var)
+    {
+        return true;
     }
 
     /**
-     * FIXME - tror den her er med til at forårsage mange sql kald
-     *
+     * @todo - tror den her er med til at forårsage mange sql kald
      */
-    function getElements() {
+    function getElements()
+    {
         $element = array();
         $sql_expire = '';
         $sql_publish = '';
@@ -46,7 +47,6 @@ class CMS_Section_Mixed extends CMS_Section {
             $sql_expire = " AND (date_expire > NOW() OR date_expire = '0000-00-00 00:00:00')";
             $sql_publish = " AND date_publish < NOW()";
         }
-
 
         $db = new DB_Sql;
         $db->query("SELECT id FROM cms_element
@@ -63,24 +63,4 @@ class CMS_Section_Mixed extends CMS_Section {
 
         return $element;
     }
-    /*
-    function getSectionHtml($type = '') {
-        $elements = $this->getElements();
-        $display = '';
-
-        if (is_array($elements) AND count($elements) > 0) {
-            foreach ($elements AS $key => $element) {
-                $display .= $element->display($type);
-                // 'Position: ' . $element->get('position') . '<br>' . $element->get('id') . '<br>' .
-            }
-        }
-
-        return $display;
-    }
-    */
-
-
-
 }
-
-?>

@@ -3,20 +3,22 @@
  * @package Intraface_CMS
  *
  */
-require_once 'Intraface/modules/cms/Element.php';
+class Intraface_modules_cms_element_ShortText extends CMS_Element
+{
 
-class CMS_ShortText extends CMS_Element {
-
-    function __construct(& $cmspage, $id = 0) {
+    function __construct(& $cmspage, $id = 0)
+    {
         $this->value['type'] = 'shorttext';
         parent::__construct($cmspage, $id);
     }
 
-    function load_element() {
+    function load_element()
+    {
         $this->value['text'] = $this->parameter->get('text');
     }
 
-    function validate_element(& $var) {
+    function validate_element($var)
+    {
         // template_section er ikke oprettet ved nye sider
         // is_object($this->template_section) AND
         if (strlen($var['text']) > $this->template_section->get('size')) {
@@ -25,17 +27,15 @@ class CMS_ShortText extends CMS_Element {
         }
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
     }
 
-    function save_element($var) {
+    function save_element($var)
+    {
         $var['text'] = safeToDb($var['text']);
         $var['text'] = strip_tags($var['text']);
         return $this->parameter->save('text', $var['text']);
     }
-
 }
-
-?>

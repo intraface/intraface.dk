@@ -2,8 +2,7 @@
 /**
  * @package Intraface_CMS
  */
-
-class CMS_Template_LongText extends CMS_TemplateSection
+class Intraface_modules_cms_templatesection_LongText extends CMS_TemplateSection
 {
     private $possible_allowed_html = array(
         'strong', 'a', 'em'

@@ -2,9 +2,7 @@
 /**
  * @package Intraface_CMS
  */
-require_once 'Intraface/modules/cms/Element.php';
-
-class CMS_Gallery extends CMS_Element
+class Intraface_modules_cms_element_Gallery extends CMS_Element
 {
     public $methods = array('single_image');
 

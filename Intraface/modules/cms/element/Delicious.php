@@ -2,22 +2,20 @@
 /**
  * @package Intraface_CMS
  */
-require_once 'Intraface/modules/cms/Element.php';
-require_once 'HTTP/Request.php';
-require_once 'XML/Unserializer.php';
-
-class CMS_Delicious extends CMS_Element {
-
-    function __construct(& $section, $id = 0) {
+class Intraface_modules_cms_element_Delicious extends CMS_Element
+{
+    function __construct($section, $id = 0)
+    {
         $this->value['type'] = 'delicious';
         parent::__construct($section, $id);
     }
 
-    function load_element() {
+    function load_element()
+    {
         $url = $this->parameter->get('url');
         $this->value['url'] = $url;
 
-        $req = & new HTTP_Request(
+        $req = new HTTP_Request(
             $this->value['url'],
             array(
                 'timeout', 3
@@ -36,14 +34,13 @@ class CMS_Delicious extends CMS_Element {
         $output = $unserializer->getUnserializedData();
 
         $this->value['items'] = $output['item'];
-
-
     }
 
     /**
      *
      */
-    function validate_element($var) {
+    function validate_element($var)
+    {
         $validator = new Intraface_Validator($this->error);
         $validator->isUrl($var['url'], 'error in url');
 
@@ -52,13 +49,14 @@ class CMS_Delicious extends CMS_Element {
         }
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
 
-        return 1;
+        return true;
     }
 
-    function save_element($var) {
+    function save_element($var)
+    {
         $url = parse_url($var['url']);
 
         // cleans up url
@@ -66,9 +64,6 @@ class CMS_Delicious extends CMS_Element {
 
         $this->parameter->save('url', $var['url']);
 
-        return 1;
+        return true;
     }
-
 }
-
-?>

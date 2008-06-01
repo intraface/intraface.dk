@@ -2,12 +2,7 @@
 /**
  * @package Intraface_CMS
  */
-require_once 'Intraface/modules/cms/Element.php';
-require_once 'HTMLPurifier.php';
-require_once 'HTMLPurifier/Config.php';
-require_once 'Text/Wiki.php';
-
-class CMS_Htmltext extends CMS_Element
+class Intraface_modules_cms_element_Htmltext extends CMS_Element
 {
     protected $clean_text;
     protected $allowed_tags;

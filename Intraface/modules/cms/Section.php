@@ -6,11 +6,6 @@
  *
  * @package Intraface_CMS
  */
-require_once 'section/ShortText.php';
-require_once 'section/LongText.php';
-require_once 'section/Picture.php';
-require_once 'section/Mixed.php';
-
 class CMS_Section extends Intraface_Standard
 {
     public $id;
@@ -74,7 +69,7 @@ class CMS_Section extends Intraface_Standard
 
     public function factory($object, $type, $value)
     {
-        $class_prefix = 'CMS_Section_';
+        $class_prefix = 'Intraface_modules_cms_section_';
         switch ($type) {
             case 'type':
                 // validering på value // kun være gyldige elementtyper

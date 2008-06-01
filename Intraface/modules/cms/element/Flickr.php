@@ -13,9 +13,8 @@
 // use this http://www.airtightinteractive.com/simpleviewer/auto_server_instruct.html
 
 require_once 'phpFlickr/phpFlickr.php';
-require_once 'Intraface/modules/cms/Element.php';
 
-class CMS_Flickr extends CMS_Element
+class Intraface_modules_cms_element_Flickr extends CMS_Element
 {
     public $allowed_sizes = array(
         'square'    => 'Små firkanter',

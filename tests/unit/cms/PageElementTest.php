@@ -1,35 +1,34 @@
 <?php
 require_once dirname(__FILE__) . './../config.test.php';
 
-require_once 'PHPUnit/Framework.php';
-
 require_once 'CMSStubs.php';
-require_once 'Intraface/Kernel.php';
-require_once 'Intraface/modules/cms/element/PageList.php';
+require_once 'Intraface/modules/cms/Element.php';
 
-class PageElementTest extends PHPUnit_Framework_TestCase {
+class PageElementTest extends PHPUnit_Framework_TestCase
+{
+    private $pagelist;
 
-    function createPageList()
+    function setUp()
     {
         $kernel = new FakeCMSKernel();
         $site = new FakeCMSSite($kernel);
         $page = new FakeCMSPage($site);
         $section = new FakeCMSSection($page);
-        $pagelist = new CMS_Pagelist($section);
-        return $pagelist;
+        $this->pagelist = new Intraface_modules_cms_element_Pagelist($section);
+    }
 
+    function tearDown()
+    {
+        unset($this->pagelist);
     }
 
     function testConstruction()
     {
-        $pagelist = $this->createPageList();
-        $this->assertTrue(is_object($pagelist));
+        $this->assertTrue(is_object($this->pagelist));
     }
 
     function testSave()
     {
-        $pagelist = $this->createPageList();
-
         $data = array(
             'elm_properties' => 'none',
             'elm_adjust' => 'left',
@@ -43,12 +42,25 @@ class PageElementTest extends PHPUnit_Framework_TestCase {
             'read_more_text' => 'none'
         );
 
-        $this->assertTrue($pagelist->save($data) > 0);
+        $this->assertTrue($this->pagelist->save($data) > 0);
     }
 
     function testSaveWhenUpdating()
     {
-        $pagelist = $this->createPageList();
+        $data = array(
+            'elm_properties' => 'none',
+            'elm_adjust' => 'left',
+            'elm_width' => '100px',
+            'headline' => 'Test',
+            'show_type' => 'article',
+            'keyword' => array(1),
+            'show' => 1,
+            'lifetime' => 20,
+            'no_results_text' => 'none',
+            'read_more_text' => 'none'
+        );
+
+        $this->assertTrue($this->pagelist->save($data) > 0);
 
         $data = array(
             'elm_properties' => 'none',
@@ -63,28 +75,11 @@ class PageElementTest extends PHPUnit_Framework_TestCase {
             'read_more_text' => 'none'
         );
 
-        $this->assertTrue($pagelist->save($data) > 0);
-
-        $data = array(
-            'elm_properties' => 'none',
-            'elm_adjust' => 'left',
-            'elm_width' => '100px',
-            'headline' => 'Test',
-            'show_type' => 'article',
-            'keyword' => array(1),
-            'show' => 1,
-            'lifetime' => 20,
-            'no_results_text' => 'none',
-            'read_more_text' => 'none'
-        );
-
-        $pagelist->save($data);
+        $this->assertTrue($this->pagelist->save($data) > 0);
     }
 
     function testValidateFailsWhenInvalidValues()
     {
-        $pagelist = $this->createPageList();
-
         $data = array(
             'elm_properties' => 'wrongvalue',
             'elm_adjust' => 'wrongvalue',
@@ -99,21 +94,18 @@ class PageElementTest extends PHPUnit_Framework_TestCase {
             'read_more_text' => 'none'
         );
 
-        $this->assertTrue($pagelist->save($data) == 0);
+        $this->assertTrue($this->pagelist->save($data) == 0);
 
     }
 
     function testDeleteReturnsTrue()
     {
-        $pagelist = $this->createPageList();
-        $this->assertTrue($pagelist->delete());
+        $this->assertTrue($this->pagelist->delete());
     }
 
     function testUnDeleteReturnsTrue()
     {
-        $pagelist = $this->createPageList();
-        $this->assertTrue($pagelist->delete());
-        $this->assertTrue($pagelist->undelete());
+        $this->assertTrue($this->pagelist->delete());
+        $this->assertTrue($this->pagelist->undelete());
     }
-
 }

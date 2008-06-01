@@ -4,12 +4,11 @@ require_once dirname(__FILE__) . './../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'CMSStubs.php';
-require_once 'Intraface/Kernel.php';
 require_once 'Intraface/modules/cms/Section.php';
 
 define('PATH_CACHE', './');
 
-class Testable_CMS_Section_LongText extends CMS_Section_LongText
+class Testable_CMS_Section_LongText extends Intraface_modules_cms_section_LongText
 {
     function getTemplateSection()
     {
@@ -28,7 +27,7 @@ class SectionLongTextTest extends PHPUnit_Framework_TestCase {
         $db->exec('TRUNCATE cms_section');
         $db->exec('TRUNCATE cms_template');
         $db->exec('TRUNCATE cms_template_section');
-        
+
         $this->kernel = new Intraface_Kernel;
         $this->kernel->user = new FakeCMSUser;
         $this->kernel->intranet = new FakeCMSIntranet;
@@ -40,7 +39,7 @@ class SectionLongTextTest extends PHPUnit_Framework_TestCase {
 
     function testConstruction()
     {
-        $section = new CMS_Section_LongText($this->page);
+        $section = new Testable_CMS_Section_LongText($this->page);
         $this->assertTrue(is_object($section));
     }
 

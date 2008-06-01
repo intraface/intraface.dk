@@ -8,10 +8,7 @@
  * @version @package-version@
  *
  */
-require_once 'HTMLPurifier.php';
-require_once 'Intraface/modules/cms/Section.php';
-
-class CMS_Section_LongText extends CMS_Section
+class Intraface_modules_cms_section_LongText extends CMS_Section
 {
     private $allowed_tags = '';
 
@@ -71,10 +68,9 @@ class CMS_Section_LongText extends CMS_Section
         if (empty($var['text'])) {
             $var['text'] = '';
         }
-        
+
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Core', 'Encoding', 'ISO-8859-1');
-        // only used until we change encoding to utf8
         $purifier_cache_dir = PATH_CACHE.'htmlpurifier/';
         if(!is_dir($purifier_cache_dir)) {
             mkdir($purifier_cache_dir);

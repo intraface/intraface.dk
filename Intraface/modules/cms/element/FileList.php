@@ -2,9 +2,7 @@
 /**
  * @package Intraface_CMS
  */
-require_once 'Intraface/modules/cms/Element.php';
-
-class CMS_FileList extends CMS_Element
+class Intraface_modules_cms_element_FileList extends CMS_Element
 {
     public $select_methods = array('single_file');
 
