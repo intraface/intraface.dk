@@ -74,7 +74,7 @@ class CMS_Section extends Intraface_Standard
             case 'type':
                 // validering på value // kun være gyldige elementtyper
                 // object skal vre cmspage
-                $class = $class_prefix . $value;
+                $class = $class_prefix . ucfirst($value);
                 return new $class($object);
                 break;
             case 'id':
@@ -90,7 +90,7 @@ class CMS_Section extends Intraface_Standard
                     return false;
                 }
 
-                $class = $class_prefix . $section_types[$db->f('type_key')];
+                $class = $class_prefix . ucfirst($section_types[$db->f('type_key')]);
                 return new $class(CMS_Page::factory($object, 'id', $db->f('page_id')), $db->f('id'));
 
                 break;
@@ -104,7 +104,7 @@ class CMS_Section extends Intraface_Standard
                 if (!$db->nextRecord()) {
                     return false;
                 }
-                $class = $class_prefix . $section_types[$db->f('type_key')];
+                $class = $class_prefix . ucfirst($section_types[$db->f('type_key')]);
                 return new $class($object, $db->f('id'));
 
                 break;

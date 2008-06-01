@@ -7,7 +7,7 @@
  * @since   0.1.0
  * @version @package-version@
  */
-class Intraface_modules_cms_section_ShortText extends CMS_Section
+class Intraface_modules_cms_section_Shorttext extends CMS_Section
 {
     function __construct($cmspage, $id = 0)
     {

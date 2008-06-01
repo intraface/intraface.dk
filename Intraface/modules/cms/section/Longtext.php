@@ -8,7 +8,7 @@
  * @version @package-version@
  *
  */
-class Intraface_modules_cms_section_LongText extends CMS_Section
+class Intraface_modules_cms_section_Longtext extends CMS_Section
 {
     private $allowed_tags = '';
 

@@ -8,7 +8,7 @@ require_once 'Intraface/modules/cms/Section.php';
 
 define('PATH_CACHE', './');
 
-class Testable_CMS_Section_LongText extends Intraface_modules_cms_section_LongText
+class Testable_CMS_Section_LongText extends Intraface_modules_cms_section_Longtext
 {
     function getTemplateSection()
     {

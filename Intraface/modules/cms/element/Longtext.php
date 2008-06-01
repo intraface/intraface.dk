@@ -2,7 +2,7 @@
 /**
  * @package Intraface_CMS
  */
-class Intraface_modules_cms_element_LongText extends CMS_Element
+class Intraface_modules_cms_element_Longtext extends CMS_Element
 {
     private $allowed_tags = '';
 

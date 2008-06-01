@@ -3,7 +3,7 @@
  * @package Intraface_CMS
  *
  */
-class Intraface_modules_cms_element_ShortText extends CMS_Element
+class Intraface_modules_cms_element_Shorttext extends CMS_Element
 {
 
     function __construct(& $cmspage, $id = 0)
