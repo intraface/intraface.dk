@@ -595,8 +595,10 @@ class Intraface_XMLRPC_Shop_Server
      *
      * @return array
      */
-    public function checkCredentials($credentials)
+    private function checkCredentials($credentials)
     {
+        $this->credentials = $credentials;
+
         if (count($credentials) != 2) { // -4
             throw new XML_RPC2_FaultException('wrong argument count in $credentials - got ' . count($credentials) . ' arguments - need 2', -4);
         }
@@ -609,16 +611,15 @@ class Intraface_XMLRPC_Shop_Server
 
         $auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
         $weblogin = $auth_adapter->auth();
-        
+
         if (!$weblogin) {
             throw new XML_RPC2_FaultException('access to intranet denied', -2);
-        } 
+        }
 
         $this->kernel = new Intraface_Kernel($credentials['session_id']);
         $this->kernel->weblogin = $weblogin;
         $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
         $this->kernel->setting = new Intraface_Setting($this->kernel->intranet->get('id'));
-        $this->credentials = $credentials;
 
         return true;
     }
