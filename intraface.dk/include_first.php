@@ -18,15 +18,6 @@ require $config_file;
 
 require_once dirname(__FILE__) . '/common.php';
 
-// We redefine the errorhandler, to get good user outputs
-require_once 'ErrorHandler.php';
-if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
-   require_once 'ErrorHandler/Observer/BlueScreen.php';
-} else {
-    require_once 'ErrorHandler/Observer/User.php';
-}
-require_once 'ErrorHandler/Observer/File.php';
-
 function intrafaceFrontendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
     $errorhandler = new ErrorHandler;
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
@@ -71,7 +62,7 @@ if (!$intranet_id = $kernel->user->getActiveIntranetId()) {
 
 $kernel->intranet = new Intraface_Intranet($intranet_id);
 
-// why are we setting the id?
+// @todo why are we setting the id?
 $kernel->user->setIntranetId($kernel->intranet->get('id'));
 $kernel->setting = new Intraface_Setting($kernel->intranet->get('id'), $kernel->user->get('id'));
 
