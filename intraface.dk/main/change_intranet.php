@@ -30,7 +30,7 @@ $page->start(safeToHtml($translation->get('change intranet')));
 	<legend><?php echo safeToHtml($translation->get('choose intranet')); ?></legend>
 	<?php
 	// bør hente en liste vha. intranethalløjsaen
-	$db = new Db_sql;
+	$db = new DB_Sql;
 	$db->query("SELECT * FROM intranet ORDER BY name");
 	while($db->nextRecord()) {
 		if(!$kernel->user->hasIntranetAccess($db->f("id"))) { continue; }
