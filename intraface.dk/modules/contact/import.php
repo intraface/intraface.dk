@@ -1,11 +1,8 @@
 <?php
-require('../../include_first.php');
-require_once 'Services/Eniro.php';
+require '../../include_first.php';
 
 $contact_module = $kernel->module('contact');
 $translation = $kernel->getTranslation('contact');
-
-
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 

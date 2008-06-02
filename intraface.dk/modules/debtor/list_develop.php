@@ -244,13 +244,6 @@ foreach($posts AS $post) {
 	$i++;
 }
 
-
-
-require_once 'HTML/QuickForm.php';
-require_once 'HTML/QuickForm/Renderer/QuickHtml.php';
-require_once 'Structures/DataGrid.php';
-require_once 'HTML/Table.php';
-
 // prepare the form and the QuickHtml renderer
 $form =& new HTML_QuickForm();
 $renderer =& new HTML_QuickForm_Renderer_QuickHtml();

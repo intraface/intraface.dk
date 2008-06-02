@@ -1,6 +1,5 @@
 <?php
-require('../../include_first.php');
-require_once 'Ilib/Redirect.php';
+require '../../include_first.php';
 
 $module_filemanager = $kernel->module('filemanager');
 $translation = $kernel->getTranslation('filemanager');

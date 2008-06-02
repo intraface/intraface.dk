@@ -38,7 +38,6 @@ $page->start(safeToHtml($translation->get('you are now ready to pay your order')
         <p><?php echo safeToHtml($translation->get('the paymend is carried out on a secure connection.')); ?></p>
         
         <?php
-        require_once 'Ilib/Payment/Html.php';
         $payment_prepare = Ilib_Payment_Html::factory(INTRAFACE_ONLINEPAYMENT_PROVIDER, 'prepare', INTRAFACE_ONLINEPAYMENT_MERCHANT);
         $lang = $translation->getLang(); 
         $language = (isset($lang) && $lang == 'dansk') ? 'da' : 'en';

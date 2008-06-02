@@ -1,8 +1,5 @@
 <?php
-require('../../include_first.php');
-require_once 'Date.php';
-require_once 'Date/Span.php';
-require_once 'Date/Calc.php';
+require '../../include_first.php';
 
 $contact_module = $kernel->module('contact');
 $translation = $kernel->getTranslation('contact');
