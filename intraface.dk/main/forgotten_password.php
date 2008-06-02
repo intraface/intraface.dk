@@ -1,5 +1,5 @@
 <?php
-require('../common.php');
+require '../common.php';
 $title = 'Glemt password';
 
 if (!empty($_POST)) {
