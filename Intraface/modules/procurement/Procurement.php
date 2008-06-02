@@ -189,7 +189,6 @@ class Procurement extends Intraface_Standard
 
         if (!isset($input['dk_price_items'])) $input['dk_price_items'] = 0;
         $validator->isDouble($input["dk_price_items"], "Varerpris er ikke et gyldigt beløb", 'zero_or_greater');
-        require_once 'Intraface/Amount.php';
         $amount = new Intraface_Amount($input["dk_price_items"]);
         if ($amount->convert2db()) {
             $input["price_items"] = $amount->get();

@@ -157,7 +157,6 @@ class Intraface_Project_Task
      */
     public function getPosition($db)
     {
-        require_once 'Ilib/Position.php';
         return new Ilib_Position($db, "project_task", $this->id, "project_id=".$this->project->getId(), "position", "id");
     }
 }

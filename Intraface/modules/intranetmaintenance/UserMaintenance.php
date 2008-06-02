@@ -89,7 +89,7 @@ class UserMaintenance extends Intraface_User
      */
     function flushAccess()
     {
-        $db = new Db_sql;
+        $db = new DB_Sql;
         $db->query("DELETE FROM permission WHERE user_id = ".$this->id." AND intranet_id = ".$this->intranet_id);
     }
 
@@ -102,7 +102,7 @@ class UserMaintenance extends Intraface_User
      */
     function setIntranetAccess($intranet_id = 0)
     {
-        $db = new Db_sql;
+        $db = new DB_Sql;
         settype($intranet_id, "integer");
         if ($intranet_id == 0) {
             if ($this->intranet_id == 0) {
@@ -137,7 +137,7 @@ class UserMaintenance extends Intraface_User
      */
     function setModuleAccess($module_id, $intranet_id = 0)
     {
-        $db = new Db_sql;
+        $db = new DB_Sql;
         settype($intranet_id, "integer");
 
         if ($intranet_id == 0) {
@@ -189,8 +189,7 @@ class UserMaintenance extends Intraface_User
      */
     function setSubAccess($module_id, $sub_access_id, $intranet_id = 0)
     {
-        $db = new Db_sql;
-
+        $db = new DB_Sql;
 
         if (!is_numeric($module_id)) {
             $db->query("SELECT id FROM module WHERE name =  '".$module_id."'");

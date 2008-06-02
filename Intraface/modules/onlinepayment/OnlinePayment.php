@@ -229,7 +229,6 @@ class OnlinePayment extends Intraface_Standard
             $input['amount'] = 0;
         }
         if ($validator->isDouble($input['amount'], 'amount er ikke et gyldigt beløb')) {
-            require_once 'Intraface/Amount.php';
             $amount = new Intraface_Amount($input['amount']);
             if ($amount->convert2db()) {
                 $input['amount'] = $amount->get();

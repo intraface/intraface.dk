@@ -348,7 +348,6 @@ class Debtor extends Intraface_Standard
         $validator->isString($input['description'], 'Fejl i beskrivelse', '', 'allow_empty');
 
         if ($validator->isDate($input["this_date"], "Ugyldig dato", "allow_no_year")) {
-            require_once 'Intraface/Date.php';
             $this_date = new Intraface_Date($input["this_date"]);
             $this_date->convert2db();
         }

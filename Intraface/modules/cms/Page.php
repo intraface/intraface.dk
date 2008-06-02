@@ -114,7 +114,6 @@ class CMS_Page extends Intraface_Standard
      */
     public function getPosition($db)
     {
-        require_once 'Ilib/Position.php';
         return new Ilib_Position($db, "cms_page", $this->id, "site_id=".$this->cmssite->get('id')." AND active = 1 AND type_key = 1", "position", "id");
     }
 

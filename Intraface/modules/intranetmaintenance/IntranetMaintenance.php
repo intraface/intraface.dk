@@ -322,7 +322,6 @@ class IntranetMaintenance extends Intraface_Intranet
      */
     private function getRandomKeyGenerator($length)
     {
-        require_once 'Ilib/RandomKeyGenerator.php';
         return new Ilib_RandomKeyGenerator($length);
     }
 

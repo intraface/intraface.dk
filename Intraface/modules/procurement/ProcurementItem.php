@@ -101,7 +101,7 @@ class ProcurementItem extends Intraface_Standard
                 quantity = " . $input["quantity"] . ",
                 unit_purchase_price = " . $input["unit_purchase_price"];
 
-        $db = new Db_sql;
+        $db = new DB_Sql;
 
         if ($this->id == 0) {
             $db->query("INSERT INTO procurement_item SET " . $sql . ", intranet_id = " . $this->procurement->kernel->intranet->get("id") . ", procurement_id = " . $this->procurement->get("id") . ", active = 1");
@@ -115,7 +115,7 @@ class ProcurementItem extends Intraface_Standard
 
     function delete()
     {
-        $db = new Db_sql;
+        $db = new DB_Sql;
         $db->query("UPDATE procurement_item SET active = 0 WHERE intranet_id = " . $this->procurement->kernel->intranet->get('id') . " AND id = " . $this->id . " AND procurement_id = " . $this->procurement->get("id"));
         $this->id = 0;
 
@@ -124,7 +124,7 @@ class ProcurementItem extends Intraface_Standard
 
     function getList()
     {
-        $db = new DB_sql;
+        $db = new DB_Sql;
         $db->query("SELECT * FROM procurement_item WHERE active = 1 AND intranet_id = " . $this->procurement->kernel->intranet->get("id") . " AND procurement_id = " . $this->procurement->get("id") . " ORDER BY id ASC");
         $i = 0;
         $item = array ();

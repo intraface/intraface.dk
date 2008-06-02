@@ -66,7 +66,6 @@ class CMS_Element extends Intraface_Standard
 
     function getPosition($db)
     {
-        require_once 'Ilib/Position.php';
         return new Ilib_Position($db, "cms_element", $this->id, "section_id=".$this->section->get('id')." AND active = 1 AND intranet_id = " . $this->kernel->intranet->get('id'), "position", "id");
     }
 

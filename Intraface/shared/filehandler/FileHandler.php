@@ -450,7 +450,6 @@ class FileHandler extends Intraface_Standard
         // if mime type is not set as the parameter, we try to determine the mimetype
         if ($mime_type === NULL) {
             // $mime_type = mime_content_type($file);
-            require_once 'MIME/Type.php';
             $mime_type = MIME_Type::autoDetect($file);
             if (PEAR::isError($mime_type)) {
                 trigger_error("Error in MIME_Type::autoDetect in Filehandler->save() ".$mime_type->getMessage(), E_USER_ERROR);
@@ -671,10 +670,8 @@ class FileHandler extends Intraface_Standard
      * @param integer $length the length of the random key
      * @return object RandomKeyGenerator
      */
-
     private function getRandomKeyGenerator($length) 
     {
-        require_once 'Ilib/RandomKeyGenerator.php';
         return new Ilib_RandomKeyGenerator($length);
     }
 

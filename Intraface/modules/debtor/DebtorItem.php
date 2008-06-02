@@ -182,7 +182,6 @@ class DebtorItem extends Intraface_Standard
 
         if (!isset($input["quantity"])) $input["quantity"] = 0;
         $validator->isDouble($input["quantity"], "Du skal angive et antal", "");
-        require_once 'Intraface/Amount.php';
         $quantity = new Intraface_Amount($input["quantity"]);
         if ($quantity->convert2db()) {
             $input["quantity"] = $quantity->get();
@@ -377,7 +376,6 @@ class DebtorItem extends Intraface_Standard
 
     function getPosition($db)
     {
-        require_once 'Ilib/Position.php';
         return new Ilib_Position($db, "debtor_item", $this->id, "intranet_id=".$this->debtor->kernel->intranet->get('id')." AND debtor_id=".$this->debtor->get('id')." AND active = 1", "position", "id");
     }
 }

@@ -15,7 +15,7 @@ class ReminderItem extends Intraface_Standard
     {
         $this->reminder = $reminder;
         $this->id       = (int)$id;
-        $this->db       = new Db_sql;
+        $this->db       = new DB_Sql;
         $this->error    = $this->reminder->error;
 
         if ($this->id) {

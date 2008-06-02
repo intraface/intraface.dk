@@ -27,7 +27,6 @@ class ImageRandomizer
         
         $this->file_manager = $file_manager;
         
-        require_once 'Ilib/Error.php';
         $this->error = new Ilib_Error;
         
         $dbquery = $this->getDBQuery();
@@ -80,7 +79,6 @@ class ImageRandomizer
      */
     private function getDBQuery() 
     {
-        require_once 'Ilib/DBQuery.php';
         $dbquery = new Ilib_DBQuery("file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->file_manager->kernel->intranet->get('id'));
         $dbquery->useErrorObject($this->error);
         return $dbquery;

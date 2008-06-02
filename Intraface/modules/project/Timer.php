@@ -55,8 +55,6 @@ class Session
     }
 }
 
-require_once 'k/memory.php';
-
 $timer = new Intraface_Project_Timer(new Session);
 
 if (isset($_GET['stop'])) {

@@ -161,7 +161,6 @@ class TodoItem extends Intraface_Standard
      */
     public function getPosition($db)
     {
-        require_once 'Ilib/Position.php';
         return new Ilib_Position($db, "todo_item", $this->id, "todo_list_id=".$this->todo->get('id')." AND status = 0", "position", "id");
     }
 }

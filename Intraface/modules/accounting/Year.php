@@ -409,7 +409,7 @@ class Year extends Intraface_Standard
         $sql_where .= "id=0";
 
 
-        $db = new Db_sql;
+        $db = new DB_Sql;
         $db->query("SELECT id FROM accounting_account
             WHERE (".$sql_where.") AND intranet_id = " . $this->kernel->intranet->get('id') . " AND year_id = " . $this->get('id'));
 

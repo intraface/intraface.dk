@@ -42,7 +42,7 @@ class Post extends Intraface_Standard
     function factory($year, $post_id)
     {
         $post_id = (int)$post_id;
-        $db = new Db_sql;
+        $db = new DB_Sql;
         $db->query("SELECT voucher_id FROM accounting_post WHERE id = " . $post_id . " AND year_id = " . $year->get('id') . " AND intranet_id=" . $year->kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
             return new Post(new Voucher($year));
