@@ -76,7 +76,6 @@ class Intraface_Log implements Observer
 
     function update($code, $msg)
     {
-        require_once 'Log.php';
         $log = &Log::singleton('sql', $this->table_name, $code, array('dsn' => DB_DSN, 'sequence' => 'log_id'));
         $log->log($msg);
         return 1;

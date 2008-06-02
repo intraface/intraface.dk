@@ -6,10 +6,6 @@
  * @author Lars Olesen <lars@legestue.net>
  * @version 002
  */
-
-require_once 'Intraface/Error.php';
-require_once 'Intraface/Address.php';
-
 class Intraface_Intranet extends Intraface_Standard
 {
     /**

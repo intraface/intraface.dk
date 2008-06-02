@@ -46,7 +46,6 @@ class Intraface_Page
         $this->usermenu[2]['name'] = $this->kernel->translation->get('control panel', 'common');;
         $this->usermenu[2]['url'] = PATH_WWW.'main/controlpanel/';
 
-        require_once 'Cache/Lite/Output.php';
         if (!is_dir(PATH_CACHE)) {
             if(!mkdir(PATH_CACHE)) {
                 trigger_error('Unable to create dir "'.PATH_CACHE.'" from constant PATH_CACHE', E_USER_ERROR);

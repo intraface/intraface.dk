@@ -78,7 +78,7 @@ class NewAddress extends Intraface_Standard {
      */
     function _old_Address($type, $id, $old_address_id = 0) {
 
-        $this->db = new Db_sql;
+        $this->db = new DB_Sql;
         $this->id = (int)$id;
         $this->old_address_id = (int)$old_address_id;
 
@@ -96,7 +96,7 @@ class NewAddress extends Intraface_Standard {
             $this->type = $i;
         }
         else {
-            trigger_error('Ugyldig address type', FATAL);
+            trigger_error('Ugyldig address type', E_USER_ERROR);
         }
 
         return($this->address_id = $this->load());
