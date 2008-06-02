@@ -4,10 +4,9 @@ $title = 'Glemt password';
 
 if (!empty($_POST)) {
 
-	if (User::sendForgottenPasswordEmail($_POST['email'])) {
+	if (Intraface_User::sendForgottenPasswordEmail($_POST['email'])) {
 		$msg = '<p>Vi har sendt en e-mail til dig med en ny adgangskode, som du bør gå ind og lave om med det samme.</p>';
-	}
-	else {
+	} else {
 		$msg = '<p>Det gik <strong>ikke</strong> godt. E-mailen kunne ikke sendes. Du kan prøve igen senere.</p>';
 	}
 }

@@ -538,7 +538,7 @@ class Intraface_User extends Intraface_Standard
      * @todo this should be an observer instead
      *
      */
-    public function SendForgottenPasswordEmail($email)
+    public static function sendForgottenPasswordEmail($email)
     {
         if (!Validate::email($email)) {
             return false;
