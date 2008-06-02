@@ -69,8 +69,6 @@ $db->setOption('portability', MDB2_PORTABILITY_NONE);
 if ($db->getOption('debug')) {
     $db->setOption('log_line_break', "\n\n\n\n\t");
 
-    require_once 'MDB2/Debug/ExplainQueries.php';
-
     $my_debug_handler = new MDB2_Debug_ExplainQueries($db);
     $db->setOption('debug_handler', array($my_debug_handler, 'collectInfo'));
 
@@ -81,10 +79,6 @@ if ($db->getOption('debug')) {
 if (defined('TIMEZONE')) {
     $db->exec('SET time_zone=\''.TIMEZONE.'\'');
 }
-
-require_once 'ErrorHandler.php';
-require_once 'ErrorHandler/Observer/Echo.php';
-require_once 'ErrorHandler/Observer/File.php';
 
 function intrafaceBackendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
     if (!defined('ERROR_LOG')) define('ERROR_LOG', dirname(__FILE__) . '/../log/error.log');
