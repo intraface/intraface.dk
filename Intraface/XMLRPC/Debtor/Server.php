@@ -5,7 +5,6 @@
  * @since   0.1.0
  * @version @package-version@
  */
-require_once 'XML/RPC2/Server.php';
 
 class Intraface_XMLRPC_Debtor_Server_Translation
 {

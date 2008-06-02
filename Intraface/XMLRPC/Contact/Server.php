@@ -9,8 +9,6 @@
  */
 require_once 'Intraface/modules/contact/Contact.php';
 
-require_once 'XML/RPC2/Server.php';
-
 class Intraface_XMLRPC_Contact_Server
 {
     /**
