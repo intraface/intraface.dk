@@ -190,7 +190,6 @@ class Intraface_Install
     function loginUser()
     {
         session_start();
-        require_once 'Intraface/Auth.php';
         $auth = new Intraface_Auth(session_id());
         return $auth->login('start@intraface.dk', 'startup');
 
