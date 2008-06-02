@@ -1,4 +1,5 @@
 <?php
+// @todo remove if this is not used.
 require('../../include_first.php');
 
 $kernel->module("product");
