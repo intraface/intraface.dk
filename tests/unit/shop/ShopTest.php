@@ -20,6 +20,9 @@ class FakeShopIntranet
     }
     function hasModuleAccess() { return true; }
     function get() { return '1'; }
+    function getId() {
+        return 1;
+    }
 }
 
 class FakeShopWeblogin {
