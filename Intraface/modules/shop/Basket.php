@@ -439,7 +439,7 @@ class Intraface_modules_shop_Basket
      */
     public function getTotalWeight()
     {
-        $sql_extra = implode(" AND ", $this->conditions);
+        $sql_extra = implode(" AND basket.", $this->conditions);
         $db = new DB_Sql;
 
         $db->query("SELECT

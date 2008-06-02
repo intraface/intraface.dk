@@ -300,12 +300,12 @@ class Intraface_modules_shop_Coordinator
                                 'from_name' => $this->kernel->intranet->address->get('name'),
                                 'type_id' => 12, // webshop
                                 'belong_to' => $order_id))) {
-            $this->error->merge($email->error->message);
+            $this->error->merge($email->error->getMessage());
             return false;
         }
 
         if (!$email->send()) {
-            $this->error->merge($email->error->message);
+            $this->error->merge($email->error->getMessage());
             return false;
         }
 

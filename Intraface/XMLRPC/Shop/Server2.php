@@ -24,6 +24,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Gets a list with products
      *
      * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      * @param array  $search      Optional search array
      *
      * @return array
@@ -105,6 +106,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Gets one product
      *
      * @param struct  $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      * @param integer $id          Product id
      *
      * @return array
@@ -132,6 +134,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Gets related products
      *
      * @param struct  $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      * @param integer $id          Product id
      *
      * @return array
@@ -160,6 +163,7 @@ class Intraface_XMLRPC_Shop_Server2
      * as well, please contact lars@intraface.dk.
      *
      * @param struct  $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      *
      * @return array
      */
@@ -178,7 +182,7 @@ class Intraface_XMLRPC_Shop_Server2
             throw new XML_RPC2_FaultException($db->getMessage() . $db->getUserInfo(), -1);
         }
 
-        $featured = new Intraface_Webshop_FeaturedProducts($this->kernel->intranet, $db);
+        $featured = new Intraface_modules_shop_FeaturedProducts($this->kernel->intranet, $this->webshop->shop, $db);
         $all = $featured->getAll();
 
         $related_products = array();
@@ -206,6 +210,7 @@ class Intraface_XMLRPC_Shop_Server2
      * as well, please contact lars@intraface.dk.
      *
      * @param struct  $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      *
      * @return array with id and keywords
      */
@@ -224,6 +229,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Add product to basket
      *
      * @param struct  $credentials       Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      * @param integer $id                Product id to add
      * @param integer $quantity          Optional quantity
      * @param string  $text              Extra text to the itemline
@@ -254,6 +260,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Change the quantity of one product in basket
      *
      * @param struct  $credentials       Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      * @param integer $product_id        Product id to change
      * @param integer $quantity          New quantity
      * @param string  $text              Extra text to the itemline
@@ -287,6 +294,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Gets an array with the current basket
      *
      * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      * @param struct $customer customer values
      *
      * @return array
@@ -301,7 +309,7 @@ class Intraface_XMLRPC_Shop_Server2
         if (is_string($customer) && $customer == 'no_evaluation') {
             // nothing happens
         } elseif (is_array($customer)) {
-            $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->webshop->kernel);
+            $basketevaluation = new Intraface_modules_shop_BasketEvaluation(MDB2::singleton(DB_DSN), $this->webshop->kernel->intranet, $this->webshop->shop);
             if (!$basketevaluation->run($this->webshop->getBasket(), $customer)) {
                 // We should see to return the result in some way.
             }
@@ -318,6 +326,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Places an order in Intraface based on the current basket
      *
      * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      * @param struct $values      Values to save
      *
      * @return integer $order_id
@@ -349,10 +358,10 @@ class Intraface_XMLRPC_Shop_Server2
 
 
     /**
-     * Saves details for a processed onlineoayment
-     *
+     * Saves details for a processed onlinepayment
      *
      * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      * @param struct $values      Values to save
      *
      * @return integer $payment_id
@@ -389,6 +398,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Returns an onlinepayment id to be processed to the id can be used in payment
      *
      * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      *
      * @return integer $payment_id
      */
@@ -419,6 +429,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Saves buyer details
      *
      * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      * @param struct $values      Values to save
      *
      * @return boolean true or false
@@ -448,6 +459,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Get buyer details
      *
      * @param struct  $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      *
      * @return array
      */
@@ -464,6 +476,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Saves customer coupon
      *
      * @param struct $credentials     Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      * @param string $customer_coupon Customer coupon to save
      *
      * @return boolean true or false
@@ -488,6 +501,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Get customer coupon
      *
      * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      *
      * @return array
      */
@@ -504,6 +518,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Saves customer EAN location number
      *
      * @param struct $credentials     Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      * @param string $customer_ean Customer EAN to save
      *
      * @return boolean true or false
@@ -528,6 +543,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Get customer EAN location number
      *
      * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      *
      * @return array
      */
@@ -544,6 +560,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Saves customer comment
      *
      * @param struct $credentials     Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      * @param string $customer_comment Customer coupon to save
      *
      * @return boolean true or false
@@ -568,6 +585,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Get customer comment
      *
      * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      *
      * @return array
      */
@@ -584,6 +602,7 @@ class Intraface_XMLRPC_Shop_Server2
      * Get receipt text
      *
      * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
      *
      * @return array
      */
@@ -650,7 +669,7 @@ class Intraface_XMLRPC_Shop_Server2
         $this->kernel->module('webshop');
 
         Doctrine_Manager::connection(DB_DSN);
-        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findById((int)$shop_id);
+        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById((int)$shop_id);
         $this->webshop = new Intraface_modules_shop_Coordinator($this->kernel, $shop, $this->credentials['session_id']);
     }
 
