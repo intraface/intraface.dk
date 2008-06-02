@@ -1,12 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
 
-require_once 'PHPUnit/Framework.php';
-
-require_once 'Intraface/Standard.php';
-require_once 'Intraface/Kernel.php';
-require_once 'Intraface/modules/shop/FeaturedProducts.php';
-
 class FakeShopFeaturedProductsIntranet
 {
     function getId()

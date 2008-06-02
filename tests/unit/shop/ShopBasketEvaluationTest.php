@@ -1,13 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
 
-require_once 'PHPUnit/Framework.php';
-
-require_once 'Intraface/modules/shop/BasketEvaluation.php';
-require_once 'Intraface/modules/shop/Basket.php';
-
-error_reporting(E_ALL);
-
 class FakeShopEvaluationIntranet {
     function getId() {
         return 1;
