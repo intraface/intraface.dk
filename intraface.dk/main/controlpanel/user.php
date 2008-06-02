@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $translation = $kernel->getTranslation('controlpanel');
 
@@ -8,12 +8,13 @@ $value = $user->get();
 $address_value = $user->getAddress()->get();
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('user settings'));
+$page->start(t('user settings'));
 ?>
 
 <h1><?php e(t('user settings')); ?></h1>
 
 <ul class="options">
+    <li><a href="./"><?php e(t('close')); ?></a></li>
     <li><a href="user_edit.php"><?php e(t('edit', 'common')); ?></a></li>
     <li><a href="user_preferences.php"><?php e(t('preferences', 'controlpanel')); ?></a></li>
     <li><a href="user_change_password.php"><?php e(t('change password')); ?></a></li>

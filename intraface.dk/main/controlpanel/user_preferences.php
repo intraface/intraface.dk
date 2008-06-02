@@ -1,9 +1,5 @@
 <?php
-/**
- *
- */
-
-require('../../include_first.php');
+require '../../include_first.php';
 
 $translation = $kernel->getTranslation('controlpanel');
 
@@ -83,8 +79,7 @@ if(!empty($_POST)) {
     }
     $value = $_POST;
 
-}
-else {
+} else {
     /*
     $value['rows_pr_page'] = $kernel->setting->get('user', 'rows_pr_page');
     $value['theme'] = $kernel->setting->get('user', 'theme');
@@ -96,18 +91,17 @@ else {
 }
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('user preferences')));
+$page->start(t('user preferences'));
 ?>
 
-<h1><?php echo safeToHtml($translation->get('user preferences')); ?></h1>
+<h1><?php e(t('user preferences')); ?></h1>
 
 <ul class="options">
-
-    <li><a href="index.php"><?php e($translation->get('close', 'common')); ?></a></li>
-    <li><a href="user.php"><?php e($translation->get('user')); ?></a></li>
+    <li><a href="index.php"><?php e(t('close', 'common')); ?></a></li>
+    <li><a href="user.php"><?php e(t('user')); ?></a></li>
 </ul>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e(basename($_SERVER['PHP_SELF'])); ?>" method="post">
 
     <?php echo $error->view($translation); ?>
 
@@ -143,10 +137,10 @@ $page->start(safeToHtml($translation->get('user preferences')));
     ?>
     <fieldset>
         <div class="formrow">
-        <label for="language"><?php echo safeToHtml($translation->get('language')); ?></label>
+        <label for="language"><?php e(t('language')); ?></label>
         <select name="language" id="language">
             <?php foreach ($translation->getLangs() AS $key => $lang): ?>
-                <option value="<?php echo $key; ?>"<?php if (!empty($value['language']) AND $value['language'] == $key) echo ' selected="selected"'; ?>><?php echo $lang; ?></option>
+                <option value="<?php e($key); ?>"<?php if (!empty($value['language']) AND $value['language'] == $key) echo ' selected="selected"'; ?>><?php e($lang); ?></option>
             <?php endforeach; ?>
         </select>
         </div>
@@ -155,9 +149,9 @@ $page->start(safeToHtml($translation->get('user preferences')));
 
     <?php /* if ($kernel->user->hasModuleAccess('cms')): ?>
     <fieldset>
-        <legend><?php echo safeToHtml($translation->get('which editor do you want to use')); ?></legend>
+        <legend><?php e(t('which editor do you want to use')); ?></legend>
         <div class="formrow">
-        <label><?php echo safeToHtml($translation->get('editor')); ?></label>
+        <label><?php e(t('editor')); ?></label>
             <select name="htmleditor">
             <?php
                 foreach($editors AS $k=>$v) {
@@ -174,20 +168,20 @@ $page->start(safeToHtml($translation->get('user preferences')));
 
 
     <fieldset id="labelsize" class="radiobuttons">
-        <legend><?php echo safeToHtml($translation->get('labels')); ?></legend>
-        <p><?php echo $translation->get('choose which labels you use - when printing from acrobat reader remember to set page scaling to none'); ?></p>
+        <legend><?php e(t('labels')); ?></legend>
+        <p><?php e(t('choose which labels you use - when printing from acrobat reader remember to set page scaling to none')); ?></p>
             <?php foreach ($labels_standard AS $key => $v): ?>
-                <label for="<?php echo $key; ?>" class="<?php echo $key; if ($value['label'] == $key) echo ' selected'; ?>">
-                    <input type="radio" name="label" id="<?php echo $key; ?>" value="<?php echo $key; ?>" <?php if ($value['label'] == $key) echo ' checked="checked"'; ?> /> <?php echo $v; ?>
+                <label for="<?php e($key); ?>" class="<?php e($key); if ($value['label'] == $key) echo ' selected'; ?>">
+                    <input type="radio" name="label" id="<?php e($key); ?>" value="<?php echo $key; ?>" <?php if ($value['label'] == $key) echo ' checked="checked"'; ?> /> <?php echo $v; ?>
                 </label>
             <?php endforeach; ?>
     </fieldset>
 
 
     <div>
-        <input type="submit" name="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" />
+        <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />
             eller
-        <a href="/controlpanel/"><?php echo safeToHtml($translation->get('regret', 'common')); ?></a>
+        <a href="/controlpanel/"><?php e(t('regret', 'common')); ?></a>
     </div>
 
 </form>
