@@ -3,8 +3,6 @@ require_once dirname(__FILE__) . '/../config.test.php';
 
 require_once 'PHPUnit/Framework.php';
 
-require_once 'Intraface/Standard.php';
-require_once 'Intraface/Kernel.php';
 require_once 'Intraface/modules/shop/BasketEvaluation.php';
 require_once 'Intraface/modules/shop/Basket.php';
 
@@ -34,7 +32,7 @@ class FakeShopEvaluationShop
 class FakeShopEvaluationUser {
     function hasModuleAccess() { return true; }
     function get() { return 1; }
-
+    function getActiveIntranetId() { return 1; }
 }
 class FakeShopEvaluationWebshop {
     public $kernel;

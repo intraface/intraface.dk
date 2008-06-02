@@ -15,5 +15,9 @@ class FakeIntranet
     function hasModuleAccess() {
         return true;
     }
+    
+    function getId() {
+        return 1;
+    }    
 }
 ?>

@@ -18,6 +18,10 @@ class FakeProductUser {
     {
         return true;
     }
+    function getActiveIntranetId()
+    {
+        return 1;
+    }
 }
 
 class FakeProductIntranet {
@@ -27,6 +31,9 @@ class FakeProductIntranet {
     function hasModuleAccess()
     {
         return true;
+    }
+    function getId() {
+        return 1;
     }
 }
 

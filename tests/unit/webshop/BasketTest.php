@@ -1,10 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
 
-require_once 'PHPUnit/Framework.php';
-
-require_once 'Intraface/Standard.php';
-require_once 'Intraface/Kernel.php';
 require_once 'Intraface/modules/webshop/Basket.php';
 require_once 'Intraface/modules/product/ProductDetail.php';
 
@@ -31,6 +27,9 @@ class FakeBasketIntranet
     {
         return true;
     }
+    function getId() {
+        return 1;
+    }    
 }
 
 class FakeBasketUser
@@ -40,6 +39,11 @@ class FakeBasketUser
         return true;
     }
     function get()
+    {
+        return 1;
+    }
+    
+    function getActiveIntranetId() 
     {
         return 1;
     }

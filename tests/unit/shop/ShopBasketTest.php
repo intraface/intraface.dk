@@ -48,7 +48,9 @@ class FakeShopBasketUser
     {
         return 1;
     }
-
+    function getActiveIntranetId() { 
+        return 1;
+    }
 
 } // used for DBQuery
 

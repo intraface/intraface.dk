@@ -19,6 +19,11 @@ class Product extends Intraface_Standard
     public $kernel;
 
     /**
+     * @var object
+     */
+    public $user;
+
+    /**
      * @var integer
      */
     private $id;
@@ -86,7 +91,9 @@ class Product extends Intraface_Standard
             trigger_error('Produkt-objektet kræver et Kernel-objekt.', E_USER_ERROR);
         }
         $this->kernel                = $kernel;
-        $this->db                    = new Db_sql;
+        $this->user                  = $kernel->user;
+        $this->intranet              = $kernel->intranet;
+        $this->db                    = new DB_Sql;
         $this->id                    = (int)$product_id;
         $this->old_product_detail_id = (int)$old_product_detail_id;
         $this->fields                = array('do_show', 'stock');
@@ -108,7 +115,7 @@ class Product extends Intraface_Standard
      */
     public function createDBQuery()
     {
-        $this->dbquery = new Intraface_DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery = new Intraface_DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->intranet->getId());
         $this->dbquery->setJoin("LEFT", "product_detail detail", "detail.product_id = product.id", "detail.active = 1");
         //$this->dbquery->setFindCharacterFromField("detail.name");
         $this->dbquery->useErrorObject($this->error);
@@ -120,7 +127,7 @@ class Product extends Intraface_Standard
             return $this->dbquery;
         }
 
-        $this->dbquery = new Intraface_DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery = new Intraface_DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->intranet->getId());
         $this->dbquery->setJoin("LEFT", "product_detail detail", "detail.product_id = product.id", "detail.active = 1");
         //$this->dbquery->setFindCharacterFromField("detail.name");
         $this->dbquery->useErrorObject($this->error);
@@ -137,7 +144,7 @@ class Product extends Intraface_Standard
     public function load()
     {
         $this->db->query("SELECT id, active, locked, changed_date, ".implode(',', $this->fields)." FROM product
-                WHERE intranet_id = " . $this->kernel->intranet->get('id') . "
+                WHERE intranet_id = " . $this->intranet->getId() . "
                     AND id = " . $this->id . " LIMIT 1");
 
         if (!$this->db->nextRecord()) {
@@ -337,10 +344,10 @@ class Product extends Intraface_Standard
 
         if ($this->id > 0) {
             $sql_type = "UPDATE ";
-            $sql_end  = " WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id');
+            $sql_end  = " WHERE id = " . $this->id . " AND intranet_id = " . $this->intranet->getId();
         } else {
             $sql_type = "INSERT INTO";
-            $sql_end  = ", intranet_id = " . $this->kernel->intranet->get('id');
+            $sql_end  = ", intranet_id = " . $this->intranet->getId();
         }
 
         $this->db->query($sql_type . " product SET ".$sql." changed_date = NOW()"	 . $sql_end);
@@ -447,7 +454,7 @@ class Product extends Intraface_Standard
         $sql = "UPDATE product
             SET active = 0
             WHERE id = " . $this->id. "
-                AND intranet_id = " . $this->kernel->intranet->get("id") . "
+                AND intranet_id = " . $this->intranet->getId() . "
                 AND locked = 0";
         $db->query($sql);
 
@@ -471,7 +478,7 @@ class Product extends Intraface_Standard
         $sql = "UPDATE product
             SET active = 1
             WHERE id = " . $this->id. "
-                AND intranet_id = " . $this->kernel->intranet->get("id");
+                AND intranet_id = " . $this->intranet->getId();
         $db->query($sql);
         $this->value['active'] = 1;
         return true;
@@ -489,7 +496,7 @@ class Product extends Intraface_Standard
             FROM product
             INNER JOIN product_detail
                 ON product_detail.product_id = product.id
-            WHERE product.intranet_id = " . $this->kernel->intranet->get("id") . "
+            WHERE product.intranet_id = " . $this->intranet->getId() . "
             ORDER BY product_detail.number DESC LIMIT 1";
         $db->query($sql);
         if (!$db->nextRecord()) {
@@ -517,7 +524,7 @@ class Product extends Intraface_Standard
                 AND detail.product_id <> " . $this->id . "
                 AND detail.active = 1
                 AND product.active=1
-                AND product.intranet_id = ".$this->kernel->intranet->get('id')." LIMIT 1";
+                AND product.intranet_id = ".$this->intranet->getId()." LIMIT 1";
         $db->query($sql);
         if ($db->numRows() == 0) {
             return true;
@@ -557,13 +564,13 @@ class Product extends Intraface_Standard
         $db = new DB_Sql;
 
         if ($status == 'relate') {
-            $db->query("SELECT * FROM product_related WHERE product_id=" . $this->id  . " AND related_product_id = " . (int)$id . " AND intranet_id =" .$this->kernel->intranet->get('id'));
+            $db->query("SELECT * FROM product_related WHERE product_id=" . $this->id  . " AND related_product_id = " . (int)$id . " AND intranet_id =" .$this->intranet->getId());
             if ($db->nextRecord()) return true;
             if ($id == $this->id) return false;
-            $db->query("INSERT INTO product_related SET product_id = " . $this->id . ", related_product_id = " . (int)$id . ", intranet_id = " . $this->kernel->intranet->get('id'));
+            $db->query("INSERT INTO product_related SET product_id = " . $this->id . ", related_product_id = " . (int)$id . ", intranet_id = " . $this->intranet->getId());
             return true;
         } else {
-            $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id') . " AND related_product_id = " . (int)$id);
+            $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->intranet->getId() . " AND related_product_id = " . (int)$id);
             return true;
         }
     }
@@ -578,7 +585,7 @@ class Product extends Intraface_Standard
     public function deleteRelatedProduct($id)
     {
         $db = new DB_Sql;
-        $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id') . " AND related_product_id = " . (int)$id);
+        $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->intranet->getId() . " AND related_product_id = " . (int)$id);
         return true;
     }
 
@@ -592,7 +599,7 @@ class Product extends Intraface_Standard
     public function deleteRelatedProducts()
     {
         $db = new DB_Sql;
-        $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
+        $db->query("DELETE FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->intranet->getId());
         return true;
     }
 
@@ -607,7 +614,7 @@ class Product extends Intraface_Standard
         $key      = 0;
         $ids      = array();
         $db       = new DB_Sql;
-        $sql      = "SELECT related_product_id FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id');
+        $sql      = "SELECT related_product_id FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->intranet->getId();
         $db->query($sql);
 
         // rækkefølgen er vigtig - først hente fra product og bagefter tilføje nye værdier til arrayet
@@ -648,7 +655,7 @@ class Product extends Intraface_Standard
     public function isFilledIn()
     {
         $db = new DB_Sql;
-        $db->query("SELECT count(*) AS antal FROM product WHERE intranet_id = " . $this->kernel->intranet->get('id'));
+        $db->query("SELECT count(*) AS antal FROM product WHERE intranet_id = " . $this->intranet->getId());
         if ($db->nextRecord()) {
             return $db->f('antal');
         }
@@ -663,7 +670,7 @@ class Product extends Intraface_Standard
     public function any()
     {
         $db = new DB_Sql;
-        $db->query("SELECT id FROM product WHERE intranet_id = " . $this->kernel->intranet->get('id')." AND active = 1");
+        $db->query("SELECT id FROM product WHERE intranet_id = " . $this->intranet->getId()." AND active = 1");
         return $db->numRows();
     }
 

@@ -55,7 +55,7 @@ class ProductDetail extends Intraface_Standard
         }
 
         $this->product       = $product;
-        $this->db            = new Db_sql;
+        $this->db            = new DB_Sql;
         $this->old_detail_id = (int)$old_detail_id;
         $this->fields        = array('number', 'name', 'description', 'price', 'unit', 'do_show', 'vat', 'weight', 'state_account_id');
         $this->detail_id     = $this->load();
@@ -261,7 +261,7 @@ class ProductDetail extends Intraface_Standard
 
             // vi opdaterer produktet
             $this->db->query("UPDATE product_detail SET active = 0 WHERE product_id = " . $this->product->get('id'));
-            $this->db->query("INSERT INTO product_detail SET ".$sql." active = 1, changed_date = NOW(), product_id = " . $this->product->get('id') . ", intranet_id = " . $this->product->kernel->intranet->get('id'));
+            $this->db->query("INSERT INTO product_detail SET ".$sql." active = 1, changed_date = NOW(), product_id = " . $this->product->get('id') . ", intranet_id = " . $this->product->intranet->getId());
             $this->detail_id = $this->db->insertedId();
 
             $this->load();
