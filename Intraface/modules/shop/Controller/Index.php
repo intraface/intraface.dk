@@ -5,13 +5,18 @@ class Intraface_modules_shop_Controller_Index extends k_Controller
 
     function GET()
     {
-        $doctrine = $this->registry->get('doctrine');
+        $this->document->title = $this->__('Shops');
+        $this->document->options = array($this->url('create') => 'Create');
 
+        $doctrine = $this->registry->get('doctrine');
         $shops = Doctrine::getTable('Intraface_modules_shop_Shop')->findByIntranetId($this->registry->get('kernel')->intranet->getId());
 
+        if (count($shops) == 0) {
+            return $this->render(dirname(__FILE__) . '/tpl/empty-table.tpl.php', array('message' => 'No shops has been created yet.'));    
+        }
+        
         $data = array('shops' => $shops);
-
-        return $this->render(dirname(__FILE__) . '/tpl/index.tpl.php', $data);
+        return $this->render(dirname(__FILE__) . '/tpl/shops.tpl.php', $data);
     }
 
     function forward($name)

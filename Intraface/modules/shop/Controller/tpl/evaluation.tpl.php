@@ -1,5 +1,3 @@
-<h1><?php e(t('Basket evaluation')); ?></h1>
-
 <?php //echo $basketevaluation->error->view($translation); ?>
 
 <form action="<?php e(url(null)); ?>" method="post">
@@ -21,7 +19,7 @@
             <label for="evaluate_target_key"><?php e(t('evaluation target')); ?></label>
             <select name="evaluate_target_key">
                 <?php foreach($settings['evaluate_target'] AS $key => $evaluate_target): ?>
-                    <option value="<?php print(intval($key)); ?>" <?php if (!empty($value['evaluate_target_key']) && $value['evaluate_target_key'] == $key) echo 'selected="selected"'; ?> ><?php e(t($evaluate_target)); ?></option>
+                    <option value="<?php e(intval($key)); ?>" <?php if (!empty($value['evaluate_target_key']) && $value['evaluate_target_key'] == $key) echo 'selected="selected"'; ?> ><?php e(t($evaluate_target)); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -59,7 +57,7 @@
             <label for="action_action_key"><?php e(t('action')); ?></label>
             <select name="action_action_key">
                 <?php foreach($settings['action_action'] AS $key => $action_action): ?>
-                    <option value="<?php print(intval($key)); ?>" <?php if (!empty($value['action_action_key']) && $value['action_action_key'] == $key) echo 'selected="selected"'; ?> ><?php e(t($action_action)); ?></option>
+                    <option value="<?php e(intval($key)); ?>" <?php if (!empty($value['action_action_key']) && $value['action_action_key'] == $key) echo 'selected="selected"'; ?> ><?php e(t($action_action)); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -88,4 +86,3 @@
     <?php e(t('or', 'common')); ?> <a href="<?php e(url('../')); ?>">
     <?php e(t('cancel', 'common')); ?></a>
 </form>
-

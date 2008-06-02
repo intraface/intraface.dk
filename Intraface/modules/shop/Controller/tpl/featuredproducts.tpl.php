@@ -1,9 +1,3 @@
-<h1><?php e(t('featured products')); ?></h1>
-
-<ul class="options">
-	<li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
-</ul>
-
 <table>
     <caption><?php e(t('Featured products')); ?></caption>
     <thead>

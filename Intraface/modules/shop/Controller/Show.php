@@ -10,6 +10,12 @@ class Intraface_modules_shop_Controller_Show extends k_Controller
         $doctrine = $this->registry->get('doctrine');
         $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->name);
 
+        $this->document->title = $shop->name;
+
+        $this->document->options = array($this->url('../') => 'Close',
+                                         $this->url('edit') => 'Edit',
+                                         $this->url('featuredproducts') => 'Choose featured products');
+
         $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $shop);
         $evaluations = $basketevaluation->getList();
 

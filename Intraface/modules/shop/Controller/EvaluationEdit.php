@@ -1,7 +1,6 @@
 <?php
 class Intraface_modules_shop_Controller_EvaluationEdit extends k_Controller
 {
-    
 	function getShop()
 	{
 		$doctrine = $this->registry->get('doctrine');
@@ -22,6 +21,8 @@ class Intraface_modules_shop_Controller_EvaluationEdit extends k_Controller
             $value = array();
         }
         $settings = $basketevaluation->get('settings');
+    
+        $this->document->title = 'Basket evaluation';
 
         $data = array('basketevaluation' => $basketevaluation, 'value' => $value, 'settings' => $settings);
 

@@ -10,8 +10,8 @@ class Intraface_modules_shop_Controller_FeaturedProducts extends k_Controller
         $kernel = $this->registry->get('kernel');
         $db = $this->registry->get('db');
         $doctrine = $this->registry->get('doctrine');
-        $webshop_module = $kernel->module('webshop');
-        $translation = $kernel->getTranslation('webshop');
+        $webshop_module = $kernel->module('shop');
+        $translation = $kernel->getTranslation('shop');
 
         $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->context->name);
 
@@ -21,6 +21,9 @@ class Intraface_modules_shop_Controller_FeaturedProducts extends k_Controller
                 throw new k_http_Redirect($this->url());
             }
         }
+
+        $this->document->title = 'Featured products';
+        $this->document->options = array($this->url('../') => 'Close');
 
         $featured = new Intraface_modules_shop_FeaturedProducts($kernel->intranet, $shop, $db);
         $all = $featured->getAll();

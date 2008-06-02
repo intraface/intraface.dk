@@ -1,11 +1,3 @@
-<h1><?php e($shop->name); ?></h1>
-
-<ul class="options">
-    <li><a href="<?php e('../'); ?>"><?php e(t('Close')); ?></a></li>
-    <li><a href="<?php e($shop->id . '/edit'); ?>"><?php e(t('Edit')); ?></a></li>
-    <li><a href="<?php e($shop->id . '/featuredproducts'); ?>"><?php e(t('Choose featured products')); ?></a></li>
-</ul>
-
 <h2><?php e(t('Basket evaluations')); ?></h2>
 
 <table summary="<?php e(t('Basket evaluation')); ?>" class="stripe">
