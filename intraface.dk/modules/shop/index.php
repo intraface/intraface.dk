@@ -1,4 +1,12 @@
 <?php
+/**
+ * @todo make a check on the shop whether there is an 
+ *       email for the intranet, otherwise the shop 
+ *       will fail sending email
+ * 
+ * @todo make it possible to shut down the shop from the webinterface
+ */
+
 require_once dirname(__FILE__) . '/../../include_first.php';
 ini_set('include_path', PATH_INCLUDE_PATH);
 
