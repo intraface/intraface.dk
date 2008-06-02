@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $modul = $kernel->module('administration');
 $shared_filehandler = $kernel->useShared('filehandler');
@@ -18,8 +18,7 @@ if(isset($_GET['return_redirect_id'])) {
 			$values = $intranet->get();
 			$values['pdf_header_file_id'] = $filehandler->get('id');
 			$intranet->update($values);
-		}
-		else {
+		} else {
 			$filehandler->error->set('Header should be a .jpg image - got '. $filehandler->get('file_type'));
 		}
 	}
@@ -39,8 +38,7 @@ if(isset($_POST['submit']) || isset($_POST['choose_file'])) {
         $type = $filehandler->get('file_type');
         if($type['mime_type'] == 'image/jpeg' || $type['mime_type'] == 'image/pjpeg') {
             $values['pdf_header_file_id'] = $id;
-        }
-        else {
+        } else {
             $intranet->error->set('Header should be a .jpg image - got ' . $type['mime_type']);
             $filehandler->delete();
         }    
@@ -57,43 +55,44 @@ if(isset($_POST['submit']) || isset($_POST['choose_file'])) {
 				$redirect->askParameter('file_handler_id');
 				header('Location: ' . $url);
 				exit;
-			}
-			else {
+			} else {
 				header('Location: '.PATH_WWW . '/main/controlpanel/intranet.php');
 			}
 		}
-	}
-	else {
+        $values = $_POST;
+        $address = $_POST;
+
+	} else {
 		$values = $_POST;
 		$address = $_POST;
 	}
-}
-else {
+} else {
 	$intranet = new IntranetAdministration($kernel);
 	$values = $intranet->get();
 	$address = $intranet->address->get();
 }
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('edit intranet')));
+$page->start($translation->get('edit intranet'));
 ?>
 
-<h1><?php echo safeToHtml($translation->get('edit intranet')); ?></h1>
+<h1><?php e(t('edit intranet')); ?></h1>
 
 <?php echo $intranet->error->view(); ?>
 <?php echo $intranet->address->error->view(); ?>
+
 <?php if(isset($filehandler)) echo $filehandler->error->view(); ?>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post" enctype="multipart/form-data">
 	<fieldset>
-		<legend><?php echo safeToHtml($translation->get('information about the intranet')); ?></legend>
+		<legend><?php e(t('information about the intranet')); ?></legend>
 		<div class="formrow">
-			<label for="name"><?php echo safeToHtml($translation->get('name')); ?></label>
+			<label for="name"><?php e(t('name')); ?></label>
 			<input type="text" name="name" id="name" value="<?php if(isset($values['name'])) echo safeToHtml($values["name"]); ?>" size="50" />
 
   		</div>
   		<div class="formrow">
-			<label for="identifier"><?php echo safeToHtml($translation->get('identifier', 'common')); ?></label>
+			<label for="identifier"><?php e(t('identifier', 'common')); ?></label>
 			<input type="text" name="identifier" id="identifier" value="<?php if(isset($values['identifier'])) echo safeToHtml($values["identifier"]); ?>" size="50" />
 
 		</div>
@@ -103,62 +102,57 @@ $page->start(safeToHtml($translation->get('edit intranet')));
 
 
 	<fieldset>
-		<legend><?php echo safeToHtml($translation->get('address information')); ?></legend>
+		<legend><?php e(t('address information')); ?></legend>
 		<div class="formrow">
-			<label for="address_name"><?php echo safeToHtml($translation->get('name', 'address')); ?></label>
+			<label for="address_name"><?php e(t('name', 'address')); ?></label>
 			<input type="text" name="address_name" id="address_name" value="<?php if(isset($address['name'])) echo safeToHtml($address["name"]); ?>" />
 		</div>
 		<div class="formrow">
-			<label for="address"><?php echo safeToHtml($translation->get('address', 'address')); ?></label>
+			<label for="address"><?php e(t('address', 'address')); ?></label>
 			<textarea name="address" id="address" rows="2"><?php if(isset($address['address'])) echo safeToHtml($address["address"]); ?></textarea>
 		</div>
 		<div class="formrow">
-			<label for="postcode"><?php echo safeToHtml($translation->get('postal code and city', 'address')); ?></label>
+			<label for="postcode"><?php e(t('postal code and city', 'address')); ?></label>
 			<div>
-				<input type="text" name="postcode" id="postcode" value="<?php if(isset($address['postcode'])) echo safeToHtml($address["postcode"]); ?>" size="4" />
-				<input type="text" name="city" id="city" value="<?php if(isset($address['city'])) echo safeToHtml($address["city"]); ?>" />
+				<input type="text" name="postcode" id="postcode" value="<?php if(isset($address['postcode'])) e($address["postcode"]); ?>" size="4" />
+				<input type="text" name="city" id="city" value="<?php if(isset($address['city'])) e($address["city"]); ?>" />
 			</div>
 		</div>
 		<div class="formrow">
-			<label for="country"><?php echo safeToHtml($translation->get('country', 'address')); ?></label>
-			<input type="text" name="country" id="country" value="<?php if(isset($address['country'])) echo safeToHtml($address["country"]); ?>" />
+			<label for="country"><?php e(t('country', 'address')); ?></label>
+			<input type="text" name="country" id="country" value="<?php if(isset($address['country'])) e($address["country"]); ?>" />
 		</div>
 		<div class="formrow">
-			<label for="cvr"><?php echo safeToHtml($translation->get('cvr number', 'address')); ?></label>
-			<input type="text" name="cvr" id="cvr" value="<?php if(isset($address['cvr'])) echo safeToHtml($address["cvr"]); ?>" />
+			<label for="cvr"><?php e(t('cvr number', 'address')); ?></label>
+			<input type="text" name="cvr" id="cvr" value="<?php if(isset($address['cvr'])) e($address["cvr"]); ?>" />
 		</div>
 		<div class="formrow">
-			<label for="email"><?php echo safeToHtml($translation->get('e-mail', 'address')); ?></label>
-			<input type="text" name="email" id="email" value="<?php if(isset($address['email'])) echo safeToHtml($address["email"]); ?>" />
+			<label for="email"><?php e(t('e-mail', 'address')); ?></label>
+			<input type="text" name="email" id="email" value="<?php if(isset($address['email'])) e($address["email"]); ?>" />
 		</div>
 		<div class="formrow">
-			<label for="website"><?php echo safeToHtml($translation->get('website', 'address')); ?></label>
-			<input type="text" name="website" id="website" value="<?php if(isset($address['website'])) echo safeToHtml($address["website"]); ?>" />
+			<label for="website"><?php e(t('website', 'address')); ?></label>
+			<input type="text" name="website" id="website" value="<?php if(isset($address['website'])) e($address["website"]); ?>" />
 		</div>
 		<div class="formrow">
-			<label for="phone"><?php echo safeToHtml($translation->get('phone', 'address')); ?></label>
-			<input type="text" name="phone" id="phone" value="<?php if(isset($address['phone'])) echo safeToHtml($address["phone"]); ?>" />
+			<label for="phone"><?php e(t('phone', 'address')); ?></label>
+			<input type="text" name="phone" id="phone" value="<?php if(isset($address['phone'])) e($address["phone"]); ?>" />
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend><?php echo safeToHtml($translation->get('header for pdf')); ?></legend>
+		<legend><?php e(t('header for pdf')); ?></legend>
 		<?php
 		// print($intranet->get('pdf_header_file_id')."gg");
 		$filehandler = new FileHandler($kernel, $intranet->get('pdf_header_file_id'));
 		$filehandler_html = new FileHandlerHTML($filehandler);
 		$filehandler_html->printFormUploadTag('pdf_header_file_id','new_pdf_header_file', 'choose_file', array('image_size' => 'small'));
 		?>
-		<p><?php echo safeToHtml($translation->get('Header should be a .jpg image. For best results make the picture 150px tall')); ?></p>
+		<p><?php e(t('Header should be a .jpg image. For best results make the picture 150px tall')); ?></p>
 	</fieldset>
 
-
-
-
-
-
 	<div style="clear:both;">
-		<input type="submit" name="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" /> <a href="/main/controlpanel/intranet.php"><?php echo safeToHtml($translation->get('regret', 'common')); ?></a>
+		<input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" /> <a href="/main/controlpanel/intranet.php"><?php e(t('regret', 'common')); ?></a>
 	</div>
 </form>
 
