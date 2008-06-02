@@ -1,6 +1,4 @@
 <?php
-require_once 'Intraface/Error.php';
-
 class Intraface_modules_shop_Controller_Edit extends k_Controller
 {
     function isValid()

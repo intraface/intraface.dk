@@ -7,7 +7,7 @@ class Intraface_modules_shop_Controller_Index extends k_Controller
     {
         $doctrine = $this->registry->get('doctrine');
 
-        $shops = Doctrine::getTable('Intraface_modules_shop_Shop')->findAll();
+        $shops = Doctrine::getTable('Intraface_modules_shop_Shop')->findByIntranetId($this->registry->get('kernel')->intranet->getId());
 
         $data = array('shops' => $shops);
 
