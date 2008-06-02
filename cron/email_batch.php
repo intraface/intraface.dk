@@ -16,7 +16,6 @@
 session_start();
 
 require_once 'common.php';
-require_once("ErrorHandler/Observer/File.php");
 
 $db = MDB2::singleton(DB_DSN);
 $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
