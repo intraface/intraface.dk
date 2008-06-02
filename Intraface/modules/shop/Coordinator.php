@@ -20,7 +20,7 @@
  * @see Order
  * @see Contact
  */
-class Intraface_modules_shop_Webshop
+class Intraface_modules_shop_Coordinator
 {
     /**
      * @var object
@@ -31,6 +31,11 @@ class Intraface_modules_shop_Webshop
      * @var object
      */
     public $basket;
+
+    /**
+     * @var object
+     */
+    public $shop;
 
     /**
      * @var object
@@ -60,7 +65,7 @@ class Intraface_modules_shop_Webshop
      *
      * @return void
      */
-    public function __construct($kernel, $session_id)
+    public function __construct($kernel, $shop, $session_id)
     {
         if (!is_object($kernel)) {
             trigger_error('Webshopmodulet har brug for Kernel', E_USER_ERROR);
@@ -73,29 +78,21 @@ class Intraface_modules_shop_Webshop
         $this->kernel->useModule('contact');
 
         $this->session_id = $session_id;
-        $this->basket = $this->createBasket();
+        $this->intranet = $kernel->intranet;
+        $this->shop = $shop;
 
         $this->error = new Intraface_Error;
     }
 
     /**
-     * Convenience method to create the basket
-     *
-     * @return object
-     */
-    private function createBasket()
-    {
-        return new Basket($this, $this->session_id);
-    }
-
-    /**
-     * Gets the basket
+     * Get basket
      *
      * @return object
      */
     public function getBasket()
     {
-        return $this->basket;
+        if ($this->basket) return $this->basket;
+        return ($this->basket = new Intraface_modules_shop_Basket(MDB2::singleton(DB_DSN), $this->intranet, $this, $this->shop, $this->session_id));
     }
 
     /**
@@ -247,14 +244,14 @@ class Intraface_modules_shop_Webshop
             return false;
         }
 
-        $products = $this->basket->getItems();
+        $products = $this->getBasket()->getItems();
 
         if (!$this->addOrderLines($products)) {
             $this->error->set('unable add products to the order');
             return false;
         }
 
-        $this->basket->reset();
+        $this->getBasket()->reset();
 
         if (!$this->sendEmail($order_id)) {
             $this->error->set('unable to send email to the customer');

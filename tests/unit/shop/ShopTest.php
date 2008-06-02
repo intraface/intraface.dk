@@ -14,6 +14,14 @@ class FakeShopIntranet
     }
 }
 
+class FakeShopShop
+{
+    function getId()
+    {
+        return 1;
+    }
+}
+
 class FakeShopWeblogin {
     function get() { return 1; }
 }
@@ -38,7 +46,7 @@ class ShopTest extends PHPUnit_Framework_TestCase
         $this->kernel->intranet = new FakeShopIntranet;
         $this->kernel->weblogin = new FakeShopWeblogin;
         $this->kernel->setting = new FakeShopSetting;
-        $this->webshop = new Intraface_modules_shop_Webshop($this->kernel, 'thissession');
+        $this->webshop = new Intraface_modules_shop_Coordinator($this->kernel, new FakeShopShop, 'thissession');
     }
 
     ////////////////////////////////////////////////
@@ -46,7 +54,7 @@ class ShopTest extends PHPUnit_Framework_TestCase
     function testConstruction()
     {
         $this->assertTrue(is_object($this->webshop));
-        $this->assertTrue(is_object($this->webshop->basket));
+        $this->assertTrue(is_object($this->webshop->getBasket()));
     }
 
     function testPlaceOrderReturnsAnOrderNumber()

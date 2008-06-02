@@ -47,15 +47,19 @@ class FakeShopBasketUser
 
 } // used for DBQuery
 
-class FakeShopBasketWebshop
+class FakeShopBasketCoordinator
 {
     public $kernel;
+}
 
+class FakeShopBasketWebshop
+{
     function getId()
     {
         return 1;
     }
 }
+
 
 class ShopBasketTest extends PHPUnit_Framework_TestCase
 {
@@ -95,9 +99,10 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
     function createBasket()
     {
         $kernel = $this->createKernel();
-        $webshop = new FakeShopBasketWebshop();
-        $webshop->kernel = $kernel;
-        $basket = new Intraface_modules_shop_Basket(MDB2::factory(DB_DSN), new FakeShopBasketIntranet, $webshop, 'somesessionid');
+        $coordinator = new FakeShopBasketCoordinator();
+        $shop = new FakeShopBasketWebshop;
+        $coordinator->kernel = $kernel;
+        $basket = new Intraface_modules_shop_Basket(MDB2::factory(DB_DSN), new FakeShopBasketIntranet, $coordinator, $shop, 'somesessionid');
         return $basket;
     }
 

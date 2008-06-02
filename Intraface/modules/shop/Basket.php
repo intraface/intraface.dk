@@ -20,6 +20,11 @@ class Intraface_modules_shop_Basket
     /**
      * @var object
      */
+    private $coordinator;
+
+    /**
+     * @var object
+     */
     private $intranet;
 
     /**
@@ -49,11 +54,12 @@ class Intraface_modules_shop_Basket
      *
      * @return void
      */
-    public function __construct($db, $intranet, $webshop, $session_id)
+    public function __construct($db, $intranet, $coordinator, $shop, $session_id)
     {
         $this->db          = $db;
         $this->intranet    = $intranet;
-        $this->webshop     = $webshop;
+        $this->coordinator = $coordinator;
+        $this->webshop     = $shop;
         $this->session_id  = $session_id;
 
         $this->conditions = array('session_id = ' . $this->db->quote($this->session_id, 'text'),
@@ -120,9 +126,9 @@ class Intraface_modules_shop_Basket
         $product_detail_id = (int)$product_detail_id;
         $quantity = (int)$quantity;
 
-        $this->webshop->kernel->useModule('product');
+        $this->coordinator->kernel->useModule('product');
 
-        $product = new Product($this->webshop->kernel, $product_id, $product_detail_id);
+        $product = new Product($this->coordinator->kernel, $product_id, $product_detail_id);
 
         if($product->get('id') == 0) {
             return false;
@@ -258,13 +264,13 @@ class Intraface_modules_shop_Basket
 
         $db = new DB_Sql;
         $db->query("SELECT id FROM basket_details WHERE " . $sql_extra. "
-                AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
+                AND intranet_id = " . $this->intranet->getId());
         if ($db->nextRecord()) {
             $db->query("UPDATE basket_details SET ".$sql.",
                 date_changed = NOW()
                 WHERE id = ".$db->f('id') . "
                     AND " . $sql_extra . "
-                    AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
+                    AND intranet_id = " . $this->intranet->getId());
             return true;
         } else {
             $sql_extra = implode(", ", $this->conditions);
@@ -292,7 +298,7 @@ class Intraface_modules_shop_Basket
         $db->query("SELECT *
             FROM basket_details
             WHERE " . $sql_extra . "
-                AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
+                AND intranet_id = " . $this->intranet->getId());
         if (!$db->nextRecord()) {
             return array();
         }
@@ -322,7 +328,7 @@ class Intraface_modules_shop_Basket
         $db->query("SELECT customer_coupon
             FROM basket_details
             WHERE " . $sql_extra . "
-                AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
+                AND intranet_id = " . $this->intranet->getId());
         if (!$db->nextRecord()) {
             return array();
         }
@@ -344,7 +350,7 @@ class Intraface_modules_shop_Basket
         $db->query("SELECT customer_ean
             FROM basket_details
             WHERE " . $sql_extra . "
-                AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
+                AND intranet_id = " . $this->intranet->getId());
         if (!$db->nextRecord()) {
             return array();
         }
@@ -366,7 +372,7 @@ class Intraface_modules_shop_Basket
         $db->query("SELECT customer_comment
             FROM basket_details
             WHERE " . $sql_extra . "
-                AND intranet_id = " . $this->webshop->kernel->intranet->get('id'));
+                AND intranet_id = " . $this->intranet->getId());
         if (!$db->nextRecord()) {
             return array();
         }
@@ -391,7 +397,7 @@ class Intraface_modules_shop_Basket
             FROM basket
             WHERE " . $sql_extra . "
                 AND product_id = " . $product_id . "
-                AND intranet_id = " . $this->webshop->kernel->intranet->get('id') . "
+                AND intranet_id = " . $this->intranet->getId() . "
       AND quantity > 0 LIMIT 1");
 
         if (!$db->nextRecord()) {
@@ -415,7 +421,7 @@ class Intraface_modules_shop_Basket
         $db->query("SELECT product_id, quantity FROM basket WHERE " . $sql_extra);
 
         while ($db->nextRecord()) {
-            $product = new Product($this->webshop->kernel, $db->f("product_id"));
+            $product = new Product($this->coordinator->kernel, $db->f("product_id"));
             if($type == 'exclusive_vat') {
                 $price += $product->get('price') * $db->f("quantity");
             } else {
@@ -446,7 +452,7 @@ class Intraface_modules_shop_Basket
                 ON product.id = product_detail.product_id
             WHERE " . $sql_extra . "
                 AND product_detail.active = 1
-                AND basket.intranet_id = " . $this->webshop->kernel->intranet->get("id") . "
+                AND basket.intranet_id = " . $this->intranet->getId() . "
                 AND basket.quantity > 0
             ");
 
@@ -488,7 +494,7 @@ class Intraface_modules_shop_Basket
                 ON product.id = product_detail.product_id
             WHERE " . $sql_extra . "
                 AND product_detail.active = 1
-                AND basket.intranet_id = " . $this->webshop->kernel->intranet->get("id") . "
+                AND basket.intranet_id = " . $this->intranet->getId() . "
             ORDER BY product_detail.vat DESC, basket.basketevaluation_product");
 
         $i = 0;
@@ -497,7 +503,7 @@ class Intraface_modules_shop_Basket
             $items[$i]['id'] = $db->f("id");
             $items[$i]['text'] = $db->f("text");
             $items[$i]['basketevaluation_product'] = $db->f("basketevaluation_product");
-            $product = new Product($this->webshop->kernel, $db->f("id"));
+            $product = new Product($this->coordinator->kernel, $db->f("id"));
             $product->getPictures();
             $items[$i]['product_id'] = $product->get('id');
             $items[$i]['product_detail_id'] = $product->get('product_detail_id');
@@ -531,7 +537,7 @@ class Intraface_modules_shop_Basket
         $db->query("DELETE FROM basket " .
                 "WHERE basketevaluation_product = 1 " .
                     "AND " . $sql_extra . " " .
-                    "AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
+                    "AND intranet_id = " . $this->intranet->getId());
         return true;
 
     }
@@ -545,8 +551,8 @@ class Intraface_modules_shop_Basket
     {
         $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
-        $db->query("UPDATE basket SET session_id = '' WHERE " . $sql_extra . " AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
-        $db->query("UPDATE basket_details SET session_id = '' WHERE " . $sql_extra . " AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
+        $db->query("UPDATE basket SET session_id = '' WHERE " . $sql_extra . " AND intranet_id = " . $this->intranet->getId());
+        $db->query("UPDATE basket_details SET session_id = '' WHERE " . $sql_extra . " AND intranet_id = " . $this->intranet->getId());
 
         return true;
     }
