@@ -14,11 +14,6 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
 
     }
 
-    function preQuery(Doctrine_Event $event)
-    {
-        echo $event->getInvoker();
-    }
-
     function getId()
     {
         return $this->id;
