@@ -63,7 +63,9 @@ class Intraface_Auth
     public function getIdentity()
     {
         if ($this->hasIdentity()) {
-            return $_SESSION['user'];
+            $user = $_SESSION['user'];
+            $user->clearCachedPermission();
+            return $user;
         }
         return false;
     }
