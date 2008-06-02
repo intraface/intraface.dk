@@ -34,6 +34,7 @@ class Intraface_XMLRPC_Contact_Server
 
         $contact = new Contact($this->kernel, $id);
         if (!$contact->get('id') > 0) { // -4
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('contact does not exist', -4);
         }
         $contact_info = array_merge($contact->get(), $contact->address->get());
@@ -85,10 +86,12 @@ class Intraface_XMLRPC_Contact_Server
         $this->checkCredentials($credentials);
 
         if (!is_array($input)) { // -5
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('input is not an array', -5);
         }
 
         if (!isset($input['id'])) { // -5
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('input must contain an id key', -5);
         }
 
@@ -98,6 +101,7 @@ class Intraface_XMLRPC_Contact_Server
 
         if (!$contact->save($input)) {
             $contact->error->view(); // -6
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('could not update contact', -6);
         }
 
@@ -190,12 +194,15 @@ class Intraface_XMLRPC_Contact_Server
     private function checkCredentials($credentials)
     {
         if (count($credentials) != 2) { // -4
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('wrong argument count in $credentials - got ' . count($credentials) . ' arguments - need 2', -4);
         }
         if (empty($credentials['private_key'])) { // -5
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('supply a private_key', -5);
         }
         if (empty($credentials['session_id'])) { // -5
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('supply a session_id', -5);
         }
 
@@ -203,7 +210,8 @@ class Intraface_XMLRPC_Contact_Server
 		$weblogin = $auth_adapter->auth();
 		
 		if (!$weblogin) {
-		    throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
+		    require_once 'XML/RPC2/Exception.php';
+            throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
 		} 
 
         $this->kernel = new Intraface_Kernel();

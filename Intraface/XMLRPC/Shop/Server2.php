@@ -12,7 +12,7 @@
  * @author   Lars Olesen <lars@legestue.net>
  * @version  @package-version@
  */
-class Intraface_XMLRPC_Shop_Server
+class Intraface_XMLRPC_Shop_Server2
 {
     private $kernel;
     private $webshop;
@@ -118,6 +118,7 @@ class Intraface_XMLRPC_Shop_Server
         $id = intval($id);
 
         if (!is_numeric($id)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('product id must be an integer', -5);
         }
 
@@ -144,6 +145,7 @@ class Intraface_XMLRPC_Shop_Server
         $product_id = intval($id);
 
         if (!is_numeric($product_id)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('product id must be an integer', -5);
         }
 
@@ -172,6 +174,7 @@ class Intraface_XMLRPC_Shop_Server
         $db = MDB2::factory(DB_DSN);
 
         if (PEAR::isError($db)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException($db->getMessage() . $db->getUserInfo(), -1);
         }
 
@@ -239,11 +242,12 @@ class Intraface_XMLRPC_Shop_Server
         $product_id = intval($id);
 
         if (!is_numeric($product_id)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('product id must be an integer', -5);
         }
 
         $text = $this->utf8Decode($text);
-        return $this->webshop->basket->add(intval($product_id), intval($quantity), $text, $product_detail_id);
+        return $this->webshop->getBasket()->add(intval($product_id), intval($quantity), $text, $product_detail_id);
     }
 
     /**
@@ -267,13 +271,13 @@ class Intraface_XMLRPC_Shop_Server
         $quantity = intval($quantity);
 
         if (!is_numeric($product_id) AND !is_numeric($quantity)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('product id and quantity must be integers', -5);
         }
 
         $text = $this->utf8Decode($text);
-        if (!$this->webshop->basket->change($product_id, $quantity, $text, $product_detail_id)) {
+        if (!$this->webshop->getBasket()->change($product_id, $quantity, $text, $product_detail_id)) {
             return false;
-            // throw new XML_RPC2_FaultException('product quantity is not in stock', -100);
         }
 
         return true;
@@ -298,15 +302,15 @@ class Intraface_XMLRPC_Shop_Server
             // nothing happens
         } elseif (is_array($customer)) {
             $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->webshop->kernel);
-            if (!$basketevaluation->run($this->webshop->basket, $customer)) {
+            if (!$basketevaluation->run($this->webshop->getBasket(), $customer)) {
                 // We should see to return the result in some way.
             }
         }
 
         return array(
-            'items' => $this->webshop->basket->getItems(),
-            'price_total' => $this->webshop->basket->getTotalPrice(),
-            'weight' => $this->webshop->basket->getTotalWeight()
+            'items' => $this->webshop->getBasket()->getItems(),
+            'price_total' => $this->webshop->getBasket()->getTotalPrice(),
+            'weight' => $this->webshop->getBasket()->getTotalWeight()
         );
     }
 
@@ -324,7 +328,8 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->_factoryWebshop($shop_id);
 
-        if (!is_array($this->webshop->basket->getItems()) OR count($this->webshop->basket->getItems()) <= 0) {
+        if (!is_array($this->webshop->getBasket()->getItems()) OR count($this->webshop->getBasket()->getItems()) <= 0) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('order could not be sent - cart is empty', -4);
         }
 
@@ -335,6 +340,7 @@ class Intraface_XMLRPC_Shop_Server
         $values = $this->utf8Decode($values);
 
         if (!$order_id = $this->webshop->placeOrder($values)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('order could not be placed. It returned the following error: ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
         }
 
@@ -358,6 +364,7 @@ class Intraface_XMLRPC_Shop_Server
         $this->_factoryWebshop($shop_id);
 
         if (!$this->kernel->intranet->hasModuleAccess('onlinepayment')) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('The intranet did not have access to OnlinePayment', -4);
         }
 
@@ -370,7 +377,7 @@ class Intraface_XMLRPC_Shop_Server
         }
 
         if (!$payment_id = $onlinepayment->save($values)) {
-            // this is probably a little to hard reaction.
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('Onlinebetaling kunne ikke blive gemt' . strtolower(implode(', ', $onlinepayment->error->getMessage())), -4);
         }
 
@@ -392,6 +399,7 @@ class Intraface_XMLRPC_Shop_Server
         $this->_factoryWebshop($shop_id);
 
         if (!$this->kernel->intranet->hasModuleAccess('onlinepayment')) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('The intranet did not have access to OnlinePayment', -4);
         }
 
@@ -400,7 +408,7 @@ class Intraface_XMLRPC_Shop_Server
         $onlinepayment = OnlinePayment::factory($this->kernel);
 
         if (!$payment_id = $onlinepayment->create()) {
-            // this is probably a little to hard reaction
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('onlinepayment could not be created' . strtolower(implode(', ', $onlinepayment->error->getMessage())), -4);
         }
 
@@ -422,12 +430,14 @@ class Intraface_XMLRPC_Shop_Server
         $this->_factoryWebshop($shop_id);
 
         if (!is_array($values)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('details could not be saved - nothing to save', -4);
         }
 
         $values = $this->utf8Decode($values);
 
-        if (!$this->webshop->basket->saveAddress($values)) {
+        if (!$this->webshop->getBasket()->saveAddress($values)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
         }
 
@@ -447,7 +457,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->_factoryWebshop($shop_id);
 
-        return $this->webshop->basket->getAddress();
+        return $this->webshop->getBasket()->getAddress();
     }
 
     /**
@@ -465,7 +475,8 @@ class Intraface_XMLRPC_Shop_Server
         $this->_factoryWebshop($shop_id);
 
         $customer_coupon = $this->utf8Decode($customer_coupon);
-        if (!$this->webshop->basket->saveCustomerCoupon($customer_coupon)) {
+        if (!$this->webshop->getBasket()->saveCustomerCoupon($customer_coupon)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
         }
 
@@ -486,7 +497,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->_factoryWebshop($shop_id);
 
-        return $this->webshop->basket->getCustomerCoupon();
+        return $this->webshop->getBasket()->getCustomerCoupon();
     }
 
     /**
@@ -504,7 +515,8 @@ class Intraface_XMLRPC_Shop_Server
         $this->_factoryWebshop($shop_id);
 
         $customer_ean = $this->utf8Decode($customer_ean);
-        if (!$this->webshop->basket->saveCustomerEan($customer_ean)) {
+        if (!$this->webshop->getBasket()->saveCustomerEan($customer_ean)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('ean could not be saved ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
         }
 
@@ -525,7 +537,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->_factoryWebshop($shop_id);
 
-        return $this->webshop->basket->getCustomerEan();
+        return $this->webshop->getBasket()->getCustomerEan();
     }
 
     /**
@@ -543,7 +555,8 @@ class Intraface_XMLRPC_Shop_Server
         $this->_factoryWebshop($shop_id);
 
         $customer_comment = $this->utf8Decode($customer_comment);
-        if (!$this->webshop->basket->saveCustomerComment($customer_comment)) {
+        if (!$this->webshop->getBasket()->saveCustomerComment($customer_comment)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
         }
 
@@ -564,7 +577,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->_factoryWebshop($shop_id);
 
-        return $this->webshop->basket->getCustomerComment();
+        return $this->webshop->getBasket()->getCustomerComment();
     }
 
     /**
@@ -595,12 +608,15 @@ class Intraface_XMLRPC_Shop_Server
         $this->credentials = $credentials;
 
         if (count($credentials) != 2) { // -4
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('wrong argument count in $credentials - got ' . count($credentials) . ' arguments - need 2', -4);
         }
         if (empty($credentials['private_key'])) { // -5
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('supply a private_key', -5);
         }
         if (empty($credentials['session_id'])) { // -5
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('supply a session_id', -5);
         }
 
@@ -608,6 +624,7 @@ class Intraface_XMLRPC_Shop_Server
         $weblogin = $auth_adapter->auth();
 
         if (!$weblogin) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('access to intranet denied', -2);
         }
 
@@ -627,14 +644,14 @@ class Intraface_XMLRPC_Shop_Server
     private function _factoryWebshop($shop_id)
     {
         if (!$this->kernel->intranet->hasModuleAccess('webshop')) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('The intranet does not have access to the module webshop', -2);
         }
         $this->kernel->module('webshop');
 
-        // @todo this should produce a webshop
-
-        $this->webshop = new Intraface_modules_shop_Webshop($this->kernel, $this->credentials['session_id']);
-
+        Doctrine_Manager::connection(DB_DSN);
+        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findById((int)$shop_id);
+        $this->webshop = new Intraface_modules_shop_Coordinator($this->kernel, $shop, $this->credentials['session_id']);
     }
 
     private function utf8Decode($values)

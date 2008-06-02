@@ -21,6 +21,7 @@ class Intraface_XMLRPC_Admin_Server
     {
 
         if (!$this->checkCredentials($master_password)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('master password not accepted', -2);
         }
 

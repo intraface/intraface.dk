@@ -23,6 +23,7 @@ class Intraface_XMLRPC_Newsletter_Server
         $this->list = new NewsletterList($this->kernel, $list_id);
 
         if (!$this->list->doesListExist()) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('the newsletter list does not exist', -2);
         }
 
@@ -47,7 +48,7 @@ class Intraface_XMLRPC_Newsletter_Server
         $subscriber = $this->factoryList($list_id);
 
         if (!$subscriber->subscribe(array('name' => $name, 'email' => $email, 'ip' => $ip))) {
-            echo $subscriber->error->view();
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('an error occurred when trying to subscribe', -4);
         }
 
@@ -71,6 +72,7 @@ class Intraface_XMLRPC_Newsletter_Server
         $this->factoryList($list_id);
 
         if (!$this->subscriber->unsubscribe($email)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('you could not unsubscribe with ' .$email, -4);
         }
 
@@ -94,6 +96,7 @@ class Intraface_XMLRPC_Newsletter_Server
         $this->factoryList($list_id);
 
         if (!$this->subscriber->optIn($optin_code, $ip)) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('your submission could not be confirmed', -4);
         }
 
@@ -189,12 +192,15 @@ class Intraface_XMLRPC_Newsletter_Server
     private function checkCredentials($credentials)
     {
         if (count($credentials) != 2) { // -4
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('wrong argument count in $credentials - got ' . count($credentials) . ' arguments - need 2', -4);
         }
         if (empty($credentials['private_key'])) { // -5
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('supply a private_key', -5);
         }
         if (empty($credentials['session_id'])) { // -5
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('supply a session_id', -5);
         }
 
@@ -202,6 +208,7 @@ class Intraface_XMLRPC_Newsletter_Server
         $weblogin = $auth_adapter->auth();
         
         if (!$weblogin) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('access to intranet denied', -2);
         }
         

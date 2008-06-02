@@ -38,10 +38,12 @@ class Intraface_XMLRPC_Debtor_Server
     private function checkCredentials($credentials)
     {
         if (count($credentials) != 2) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('Wrong number of parameters.', -2);
         }
 
         if (empty($credentials['private_key'])) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('You must supply a private key.', -2);
         }
 
@@ -49,7 +51,8 @@ class Intraface_XMLRPC_Debtor_Server
 		$weblogin = $auth_adapter->auth();
 		
 		if (!$weblogin) {
-		    throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
+		    require_once 'XML/RPC2/Exception.php';
+            throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
 		} 
 
         $this->kernel = new Intraface_Kernel();

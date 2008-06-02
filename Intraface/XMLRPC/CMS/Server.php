@@ -15,9 +15,11 @@ class Intraface_XMLRPC_CMS_Server
     private function factory($site_id) 
     {
         if (!$this->kernel->weblogin->hasModuleAccess('cms')) { // -2
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('The intranet does not have access to the cms module', -2);
         }
         if (empty($site_id) OR !is_numeric($site_id)) { // -5
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('Invalid site id supplied', -5);
         }
         $cms_module = $this->kernel->module('cms');
@@ -140,10 +142,12 @@ class Intraface_XMLRPC_CMS_Server
         $this->credentials = $credentials;
 
         if ($count = count($credentials) != 2) { // -4
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('Wrong number of parameters in credentials ('.$count.'). Check the documentation.', -4);
         }
 
         if (empty($credentials['private_key'])) { // -5
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('Wrong parameters. You need to specify the private key.', -5);
         }
 
@@ -151,7 +155,8 @@ class Intraface_XMLRPC_CMS_Server
 		$weblogin = $auth_adapter->auth();
 		
 		if (!$weblogin) {
-		    throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
+		    require_once 'XML/RPC2/Exception.php';
+            throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
 		} 
 
         $this->kernel = new Intraface_Kernel();
