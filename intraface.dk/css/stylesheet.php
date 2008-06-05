@@ -14,7 +14,7 @@ ob_start('gz_handler');
 
 require '../common.php';
 
-$themes = themes();
+$themes = Intraface_Page::themes();
 
 header('Content-type: text/css');
 

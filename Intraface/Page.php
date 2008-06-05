@@ -73,7 +73,7 @@ class Intraface_Page
             }
 
             // temaet
-            $themes = themes();
+            $themes = self::themes();
             $this->theme_key = $this->kernel->setting->get('user', 'theme');
 
             // fontsize
@@ -124,8 +124,7 @@ class Intraface_Page
                                     trigger_error('Der er ikke angivet om submenu skal tjekke efter sub_access eller module adgang, for undermenupunktet i Page->start();', E_USER_ERROR);
                                     break;
                             }
-                        }
-                        else {
+                        } else {
                             $access = true;
                         }
 
@@ -185,8 +184,6 @@ class Intraface_Page
 
     function end() 
     {
-        // printer sidens slut
-
         include(PATH_INCLUDE_IHTML.'/intraface/bottom.php');
 
         if (defined('OB_START') AND OB_START == 'use') {
@@ -196,16 +193,38 @@ class Intraface_Page
 
     function includeJavascript($scope, $filename) 
     {
-
         if(!in_array($scope, array('global', 'module'), true)) {
             trigger_error("Første parameter er ikke enten 'global' eller 'module' i Page->includeJavascript", E_USER_ERROR);
         }
 
         if($scope == 'global') {
             $this->javascript_path[] = PATH_WWW.'javascript/'.$filename;
-        }
-        else {
+        } else {
             $this->javascript_path[] = 'javascript/'.$filename;
         }
+    }
+    
+    public static function themes()
+    {
+        return array(
+            1 => array(
+              'label' => 'system',
+              'dir' => '/system/',
+                    'name' => 'Web 2.0',
+                    'description' => 'Sprælsk, vildt og pastel.'
+            ),
+            2 => array(
+              'label' => 'newsystem',
+              'dir' => '/newsystem/',
+                    'name' => 'Standard',
+                    'description' => 'Standard.'
+            ),
+            3 => array(
+              'label' => 'black',
+              'dir' => '/black/',
+                    'name' => 'Den sorte ridder',
+                    'description' => 'Det gamle tema. Nydeligt og kedeligt.'
+            )
+        );
     }
 }
