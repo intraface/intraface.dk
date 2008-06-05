@@ -669,14 +669,7 @@ class Reminder extends Intraface_Standard
             trigger_error('Cannot create pdf from debtor without valid id', E_USER_ERROR);
         }
 
-
-        $shared_pdf = $this->kernel->useShared('pdf');
-        $shared_pdf->includeFile('PdfMakerDebtor.php');
-
         $translation = $this->kernel->getTranslation('debtor');
-
-        // hmm this should be done with the module object.
-        require_once PATH_INCLUDE_MODULE . 'invoice/Visitor/Pdf.php';
 
         $filehandler = '';
 
@@ -684,7 +677,7 @@ class Reminder extends Intraface_Standard
             $filehandler = new FileHandler($this->kernel, $this->kernel->intranet->get("pdf_header_file_id"));
         }
 
-        $report = new Reminder_Report_Pdf($translation, $filehandler);
+        $report = new Intraface_modules_invoice_Pdf_Reminder($translation, $filehandler);
         $report->visit($this);
         return $report->output($type, $filename);
     }

@@ -6,22 +6,20 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
  */
-require_once 'Intraface/modules/debtor/Pdf.php';
-
-class Reminder_Report_Pdf extends Debtor_Pdf
+class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pdf
 {
     function __construct($translation, $file = null)
     {
         parent::__construct($translation, $file);
     }
 
-    function visit(Reminder $reminder)
+    function visit($reminder)
     {
         if ($reminder->get('id') == 0) {
             trigger_error("Reminder->pdf skal være loaded for at lave pdf", E_USER_ERROR);
         }
 
-        $this->doc = $this->createDocument();
+        $this->doc = $this->getDocument();
 
         if (!empty($this->file) AND $this->file->get('id') > 0) {
             $this->doc->addHeader($this->file->get('file_uri_pdf'));
