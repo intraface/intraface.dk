@@ -1,9 +1,7 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
 
-require_once 'PHPUnit/Framework.php';
-require_once 'Intraface/Standard.php';
-require_once 'Intraface/functions/functions.php';
+require_once 'Intraface/functions.php';
 require_once 'Intraface/modules/filemanager/FileManager.php';
 require_once 'Intraface/modules/filemanager/ImageRandomizer.php';
 require_once 'Intraface/shared/keyword/Keyword.php';

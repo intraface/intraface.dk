@@ -2,7 +2,7 @@
 /**
  * @package Intraface_CMS
  */
-require_once 'Intraface/functions/functions.php';
+require_once 'Intraface/functions.php';
 
 class CMS_Parameter
 {

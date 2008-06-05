@@ -52,7 +52,7 @@ if (!defined('DB_DSN')) define('DB_DSN', 'mysql://'.DB_USER.':'.DB_PASS.'@'.DB_H
 require_once 'config/setting_themes.php';
 
 // functions
-require_once 'Intraface/functions/functions.php';
+require_once 'Intraface/functions.php';
 
 // Systembesked
 require_once 'Intraface/shared/systemmessage/SystemDisturbance.php';

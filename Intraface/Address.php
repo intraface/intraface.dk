@@ -10,7 +10,7 @@
  * @package Intraface
  * @author  Sune Jensen <sj@sunet.dk>
  */
-require_once 'Intraface/functions/functions.php';
+require_once 'Intraface/functions.php';
 
 class Intraface_Address extends Intraface_Standard
 {

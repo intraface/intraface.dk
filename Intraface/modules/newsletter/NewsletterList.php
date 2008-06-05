@@ -11,7 +11,7 @@
  * @version 1.0
  *
  */
-require_once 'Intraface/functions/functions.php';
+require_once 'Intraface/functions.php';
 
 class NewsletterList extends Intraface_Standard
 {

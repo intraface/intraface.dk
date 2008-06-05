@@ -7,7 +7,7 @@
  *
  * @author Lars Olesen <lars@legestue.net>
  */
-require_once 'Intraface/functions/functions.php';
+require_once 'Intraface/functions.php';
 
 abstract class Ilib_Keyword
 {

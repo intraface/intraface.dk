@@ -7,7 +7,7 @@
  * @package Intraface_Shop
  * @author Lars Olesen <lars@legestue.net>
  */
-require_once 'Intraface/functions/functions.php';
+require_once 'Intraface/functions.php';
 require_once 'Intraface/modules/product/Product.php';
 
 class Basket

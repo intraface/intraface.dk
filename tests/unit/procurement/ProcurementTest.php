@@ -8,7 +8,7 @@ require_once 'tests/unit/stubs/Address.php';
 require_once 'tests/unit/stubs/User.php';
 require_once 'tests/unit/stubs/Setting.php';
 require_once 'tests/unit/stubs/Translation.php';
-require_once 'Intraface/functions/functions.php';
+require_once 'Intraface/functions.php';
 require_once 'Intraface/modules/procurement/Procurement.php';
 
 class ProcurementTest extends PHPUnit_Framework_TestCase
