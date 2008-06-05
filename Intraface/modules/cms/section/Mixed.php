@@ -36,7 +36,8 @@ class Intraface_modules_cms_section_Mixed extends CMS_Section
     }
 
     /**
-     * @todo - tror den her er med til at forårsage mange sql kald
+     * @todo - tror den her er med til at forårsage mange sql kald - 
+     *         could probably be optimized quite a bit.
      */
     function getElements()
     {
