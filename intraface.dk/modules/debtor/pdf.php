@@ -40,9 +40,6 @@ switch ($format) {
 	break;
 	case 'pdf':
     default:
-		
-        require_once 'Intraface/modules/debtor/Visitor/Pdf.php';
-
         if($kernel->intranet->get("pdf_header_file_id") != 0) {
             $kernel->useShared('filehandler');
             $filehandler = new FileHandler($kernel, $kernel->intranet->get("pdf_header_file_id"));
@@ -51,7 +48,7 @@ switch ($format) {
             $filehandler = NULL;
         }
 
-        $report = new Debtor_Report_Pdf($translation, $filehandler);
+        $report = new Intraface_modules_debtor_Visitor_Pdf($translation, $filehandler);
         $report->visit($debtor, $onlinepayment);
         $report->output('stream');
     break;

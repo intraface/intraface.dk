@@ -3,7 +3,6 @@ require '../../include_first.php';
 $module_debtor = $kernel->module('debtor');
 $kernel->useModule('contact');
 $kernel->useModule('product');
-$kernel->useShared('pdf');
 $kernel->useShared('filehandler');
 $kernel->useShared('email');
 
@@ -86,8 +85,7 @@ $filehandler = new FileHandler($kernel);
 $tmp_file = $filehandler->createTemporaryFile($translation->get($debtor->get("type")).$debtor->get('number').'.pdf');
 
 // Her gemmes filen
-require_once 'Intraface/modules/debtor/Visitor/Pdf.php';
-$report = new Debtor_Report_Pdf($translation, $file);
+$report = new Intraface_modules_debtor_Visitor_Pdf($translation, $file);
 $report->visit($debtor, $onlinepayment);
 $report->output('file', $tmp_file->getFilePath());
 
