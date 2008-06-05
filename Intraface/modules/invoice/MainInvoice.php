@@ -22,31 +22,10 @@ class MainInvoice extends Intraface_Main
         $this->addPreloadFile('ReminderItem.php');
         $this->addPreloadFile('CreditNote.php');
 
-        /*
-        $this->addSetting('payment_for', array(
-            0=>'manuel',
-            1=>'invoice',
-            2=>'reminder')
-        );
-        */
-        
-        /*
-        $this->addSetting('payment_type', array(
-            -1=>'depriciation',
-            0=>'bank_transfer',
-            1=>'giro_transfer',
-            2=>'credit_card',
-            3=>'cash')
-        );
-        */
-
         $this->addPreloadFile('Payment.php');
 
         $this->addFrontpageFile('include_front.php');
 
         $this->includeSettingFile('settings.php');
-
     }
 }
-
-?>
