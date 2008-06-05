@@ -12,7 +12,7 @@ class Invoice extends Debtor
 {
     public $payment;
 
-    function __construct(& $kernel, $id = 0)
+    function __construct($kernel, $id = 0)
     {
         parent::__construct($kernel, 'invoice', $id);
     }
@@ -65,32 +65,6 @@ class Invoice extends Debtor
         require_once 'Intraface/modules/invoice/DebtorAccount.php';
         return new DebtorAccount($this);
     }
-
-    /*
-     * removed 22/1 2008
-    function getPayments($to_date = "")
-    {
-
-        $this->payment = new Payment($this);
-        $this->payment->dbquery->setFilter("to_date", $to_date);
-        $payments = $this->payment->getList();
-        $payment_types = $this->payment->getTypes();
-
-        foreach($payment_types AS $type) {
-            $payment[$type] = 0;
-        }
-
-        $payment["credit_note"] = 0;
-        $payment['total'] = 0;
-
-        for($i = 0, $max = count($payments); $i < $max; $i++) {
-            $payment[$payments[$i]["type"]] += $payments[$i]["amount"];
-            $payment["total"] += $payments[$i]["amount"];
-        }
-
-        return $payment;
-    }
-    */
 
     function delete()
     {
