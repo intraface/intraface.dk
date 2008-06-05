@@ -18,9 +18,7 @@
  * @author Lars Olesen <lars@legestue.net>
  * @author Sune Jensen <sj@sunet.dk>
  */
-require_once 'Intraface/modules/debtor/Pdf.php';
-
-class Debtor_Report_Pdf extends Debtor_Pdf
+class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
 {
     
     /**
@@ -45,7 +43,7 @@ class Debtor_Report_Pdf extends Debtor_Pdf
      */
     function visit($debtor, $onlinepayment = NULL)
     {
-        $this->doc = $this->createDocument();
+        $this->doc = $this->getDocument();
 
         if (!empty($this->file) AND $this->file->get('id') > 0) {
             $this->doc->addHeader($this->file->get('file_uri_pdf'));

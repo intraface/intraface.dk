@@ -1,14 +1,11 @@
 <?php
 require_once dirname(__FILE__) . '/../../config.test.php';
-require_once 'PHPUnit/Framework.php';
-
-require_once 'Intraface/shared/pdf/PdfMaker.php';
 
 class PdfMakerTest extends PHPUnit_Framework_TestCase
 {
     function createPdf()
     {
-        return new PdfMaker();
+        return new Intraface_Pdf();
     }
 
     //////////////////////////////////////////////////////

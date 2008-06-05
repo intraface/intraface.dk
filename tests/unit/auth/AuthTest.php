@@ -2,7 +2,9 @@
 require_once dirname(__FILE__) . '/../config.test.php';
 
 class FakeAuthObserver {}
-class FakeAuthUser {}
+class FakeAuthUser {
+    function clearCachedPermission() { return true; }   
+}
 class FakeAuthAdapter
 {
     function auth()

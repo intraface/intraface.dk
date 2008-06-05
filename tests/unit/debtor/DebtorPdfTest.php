@@ -21,7 +21,7 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
     
     function createPdf()
     {
-        return new Debtor_Report_Pdf(new FakeTranslation);
+        return new Intraface_modules_debtor_Visitor_Pdf(new FakeTranslation);
     }
     
     function createDebtor() {
