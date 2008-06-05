@@ -8,7 +8,6 @@ if(!$kernel->user->hasModuleAccess('stock')) {
     trigger_error("Du har ikke adgang til disse sider", ERROR);
 }
 
-
 if(isset($_POST['submit'])) {
     $product_object = new Product($kernel, $_POST['product_id']);
 

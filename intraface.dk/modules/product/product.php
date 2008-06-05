@@ -120,10 +120,10 @@ $page->start(t('product') . ': ' . $product->get('name'));
         <?php if ($product->get('locked') != 1) { ?>
         <li><a href="product_edit.php?id=<?php echo $product->get('id'); ?>"><?php e($translation->get('edit', 'common')); ?></a></li>
 
-        <li><a class="confirm" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo intval($product->get('id')); ?>"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a></li>
+        <li><a class="confirm" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo intval($product->get('id')); ?>"><?php e($translation->get('delete', 'common')); ?></a></li>
         <?php } ?>
         <li><a href="product.php?copy=<?php echo intval($product->get('id')); ?>"><?php echo $translation->get('copy', 'common'); ?></a></li>
-        <li><a href="index.php?from_product_id=<?php echo intval($product->get('id')); ?>&amp;use_stored=true"><?php echo safeToHtml($translation->get('close', 'common')); ?></a></li>
+        <li><a href="index.php?from_product_id=<?php echo intval($product->get('id')); ?>&amp;use_stored=true"><?php e($translation->get('close', 'common')); ?></a></li>
     </ul>
     <div><?php echo autoop($product->get('description')); ?></div>
 </div>
@@ -131,11 +131,11 @@ $page->start(t('product') . ': ' . $product->get('name'));
 <table>
     <tr>
         <td><?php e(t('price')); ?></td>
-        <td><?php echo safeToHtml(number_format($product->get('price'), 2, ",", ".")); ?> <?php e(t('excl. vat')); ?></td>
+        <td><?php e(number_format($product->get('price'), 2, ",", ".")); ?> <?php e(t('excl. vat')); ?></td>
     </tr>
     <tr>
         <td><?php e(t('weight')); ?></td>
-        <td><?php echo safeToHtml($product->get('weight')); ?> gram</td>
+        <td><?php e($product->get('weight')); ?> gram</td>
     </tr>
     <tr>
         <td><?php e(t('unit type')); ?></td>
@@ -143,7 +143,7 @@ $page->start(t('product') . ': ' . $product->get('name'));
             <?php
                 // getting settings
                 $unit_choises  = Product::getUnits();
-                echo safeToHtml(t($unit_choises[$product->get('unit_id')]['combined']));
+                e(t($unit_choises[$product->get('unit_id')]['combined']));
             ?>
         </td>
     </tr>
@@ -155,7 +155,7 @@ $page->start(t('product') . ': ' . $product->get('name'));
         <td>
             <?php
                 $show_choises = array(0=>"Nej", 1=>"Ja");
-                echo safeToHtml($show_choises[$product->get('do_show')]);
+                e($show_choises[$product->get('do_show')]);
             ?>
         </td>
     </tr>
@@ -169,7 +169,7 @@ $page->start(t('product') . ': ' . $product->get('name'));
         <td>
             <?php
                 $vat_choises = array(0=>"Nej", 1=>"Ja");
-                echo safeToHtml($vat_choises[$product->get('vat')]);
+                e($vat_choises[$product->get('vat')]);
             ?>
         </td>
     </tr>
@@ -178,7 +178,7 @@ $page->start(t('product') . ': ' . $product->get('name'));
         <td><?php e(t('stock product')); ?></td><td>
             <?php
                 $stock_choises = array(0=>"Nej", 1=>"Ja");
-                echo safeToHtml($stock_choises[$product->get('stock')]);
+                e($stock_choises[$product->get('stock')]);
             ?>
         </td>
     </tr>
@@ -196,7 +196,7 @@ $page->start(t('product') . ': ' . $product->get('name'));
             } else {
                 $account = Account::factory($year, $product->get('state_account_id'));
                 if ($account->get('name')) {
-                    echo safeToHtml($account->get('number') . ' ' . $account->get('name'));
+                    e($account->get('number') . ' ' . $account->get('name'));
                 } else {
                     echo t('not set');
                 }
@@ -306,15 +306,15 @@ if($kernel->user->hasModuleAccess('invoice')) {
             <table>
                 <tr>
                     <td><?php e(t('stock status')); ?></td>
-                    <td><?php print($product->stock->get("actual_stock")); ?></td>
+                    <td><?php e($product->stock->get("actual_stock")); ?></td>
                 </tr>
                 <tr>
                     <td><?php e(t('ordered')); ?></td>
-                    <td><?php print($product->stock->get("on_order")); ?></td>
+                    <td><?php e($product->stock->get("on_order")); ?></td>
                 </tr>
                 <tr>
                     <td><?php e(t('reserved')); ?></td>
-                    <td><?php print($product->stock->get("reserved")); ?> (<?php print($product->stock->get("on_quotation")); ?>)</td>
+                    <td><?php e($product->stock->get("reserved")); ?> (<?php print($product->stock->get("on_quotation")); ?>)</td>
                 </tr>
             </table>
             <!-- hvad bliver følgende brugt til -->
@@ -325,9 +325,9 @@ if($kernel->user->hasModuleAccess('invoice')) {
 
             </div>
 
-            <p><a href="stock_regulation.php?product_id=<?php print($product->get('id')); ?>">Regulering</a> <a href="product.php?id=<?php print($product->get('id')); ?>&amp;adaptation=true" class="confirm">Afstem</a></p>
+            <p><a href="stock_regulation.php?product_id=<?php e($product->get('id')); ?>">Regulering</a> <a href="product.php?id=<?php print($product->get('id')); ?>&amp;adaptation=true" class="confirm">Afstem</a></p>
 
-            <p>Sidst afstemt: <?php echo safeToHtml($product->stock->get('dk_adaptation_date_time')); ?></p>
+            <p>Sidst afstemt: <?php e($product->stock->get('dk_adaptation_date_time')); ?></p>
 
             <?php
             if($kernel->user->hasModuleAccess('procurement')) {
@@ -355,9 +355,9 @@ if($kernel->user->hasModuleAccess('invoice')) {
                         for($i = 0, $max = count($latest); $i < $max; $i++) {
                             ?>
                             <tr>
-                                <td><?php echo safeToHtml($latest[$i]['dk_invoice_date']); ?></td>
-                                <td class="amount"><?php print(number_format($latest[$i]['calculated_unit_price'], 2, ",", ".")); ?></td>
-                                <td class="amount"><?php safeToHtml(print($latest[$i]['quantity'])); ?></td>
+                                <td><?php e($latest[$i]['dk_invoice_date']); ?></td>
+                                <td class="amount"><?php e(number_format($latest[$i]['calculated_unit_price'], 2, ",", ".")); ?></td>
+                                <td class="amount"><?php e($latest[$i]['quantity']); ?></td>
                                 <td>
                                     <?php
                                     if(isset($latest[$i]['sum_quantity']) && $latest[$i]['sum_quantity'] >= $product->stock->get("actual_stock") && $is_under_actual) {

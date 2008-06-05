@@ -57,14 +57,14 @@ echo '</div>';
         <tbody>
             <?php foreach ($list AS $product) { ?>
             <tr>
-                <td><?php echo htmlentities($product['name']); ?></td>
+                <td><?php e($product['name']); ?></td>
                 <td>
-              <input type="text" name="quantity[]" value="<?php echo $product['quantity']; ?>" />
-              <input type="hidden" name="id[]" value="<?php echo $product['id']; ?>" />
+              <input type="text" name="quantity[]" value="<?php e($product['quantity']); ?>" />
+              <input type="hidden" name="id[]" value="<?php e($product['id']); ?>" />
           </td>
-                <td><?php echo $product['invoice_reserved']; ?></td>
-                <td><?php echo $product['webshop_reserved']; ?></td>
-                <td><?php echo $product['actual_stock']; ?></td>
+                <td><?php e($product['invoice_reserved']); ?></td>
+                <td><?php e($product['webshop_reserved']); ?></td>
+                <td><?php e($product['actual_stock']); ?></td>
             </tr>
             <?php } // end foreach ?>
         </tbody>
