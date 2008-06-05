@@ -7,7 +7,7 @@
  * @author Lars Olesen <lars@legestue.net>
  * @author Sune Jensen <sj@sunet.dk>
  */
-class Debtor_Pdf
+class Intraface_modules_debtor_Pdf
 {
     protected $file;
     protected $translation;
@@ -36,10 +36,9 @@ class Debtor_Pdf
      *
      * @return PdfMaker object
      */
-    protected function createDocument()
+    protected function getDocument()
     {
-        require_once 'Intraface/shared/pdf/PdfMaker.php';
-        $doc = new PdfMaker();
+        $doc = new Intraface_Pdf();
         return $doc;
     }
 
