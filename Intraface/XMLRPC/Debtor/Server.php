@@ -189,9 +189,7 @@ class Intraface_XMLRPC_Debtor_Server
             $filehandler = NULL;
         }
 
-        require_once 'Intraface/modules/debtor/Visitor/Pdf.php';
-
-        $report = new Debtor_Report_Pdf($this->kernel->getTranslation('debtor'), $filehandler);
+        $report = new Intraface_modules_debtor_Visitor_Pdf($this->kernel->getTranslation('debtor'), $filehandler);
         $report->visit($debtor, $onlinepayment);
 
         $encoded = XML_RPC2_Value::createFromNative($report->output('string'), 'base64');
