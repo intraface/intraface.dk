@@ -48,8 +48,7 @@ putenv("TZ=".TIMEZONE);
 
 // database
 if (!defined('DB_DSN')) define('DB_DSN', 'mysql://'.DB_USER.':'.DB_PASS.'@'.DB_HOST.'/'.DB_NAME.'');
-// settings for theme
-require_once 'config/setting_themes.php';
+
 
 // functions
 require_once 'Intraface/functions.php';
