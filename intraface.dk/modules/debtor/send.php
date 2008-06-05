@@ -12,7 +12,7 @@ $translation = $kernel->getTranslation('debtor');
 $send_as = $_GET['send'];
 $id = intval($_GET['id']);
 
-# find debtoren
+// find debtoren
 $debtor = Debtor::factory($kernel, intval($id));
 
 switch ($send_as) {
@@ -71,19 +71,17 @@ switch ($send_as) {
 if(($debtor->  get("type") == "order" || $debtor->get("type") == "invoice") && $kernel->intranet->hasModuleAccess('onlinepayment')) {
     $kernel->useModule('onlinepayment');
     $onlinepayment = OnlinePayment::factory($kernel);
-}
-else {
+} else {
     $onlinepayment = NULL;
 }
 
 if($kernel->intranet->get("pdf_header_file_id") != 0) {
     $file = new FileHandler($kernel, $kernel->intranet->get("pdf_header_file_id"));
-}
-else {
+} else {
     $file = NULL;
 }
 
-# gem debtoren som en fil i filsystemet
+// gem debtoren som en fil i filsystemet
 $filehandler = new FileHandler($kernel);
 $tmp_file = $filehandler->createTemporaryFile($translation->get($debtor->get("type")).$debtor->get('number').'.pdf');
 
@@ -93,17 +91,14 @@ $report = new Debtor_Report_Pdf($translation, $file);
 $report->visit($debtor, $onlinepayment);
 $report->output('file', $tmp_file->getFilePath());
 
-# gem filen med filehandleren
+// gem filen med filehandleren
 $filehandler = new FileHandler($kernel);
 if (!$file_id = $filehandler->save($tmp_file->getFilePath(), $tmp_file->getFileName(), 'hidden', 'application/pdf')) {
     echo $filehandler->error->view();
     trigger_error('Filen kunne ikke gemmes', E_USER_ERROR);
 }
 
-/**
- * @TODO: This is not right! the invoice should not be public!
- */
-$input['accessibility'] = 'public';
+$input['accessibility'] = 'private';
 if (!$file_id = $filehandler->update($input)) {
     echo $filehandler->error->view();
     trigger_error('Oplysninger om filen kunne ikke opdateres', E_USER_ERROR);
@@ -128,7 +123,7 @@ switch($kernel->setting->get('intranet', 'debtor.sender')) {
         exit;
 }
 
-# opret e-mailen
+// opret e-mailen
 $email = new Email($kernel);
 if (!$email->save(array(
         'contact_id' => $contact->get('id'),
@@ -143,7 +138,7 @@ if (!$email->save(array(
     trigger_error('E-mailen kunne ikke gemmes', E_USER_ERROR);
 }
 
-# tilknyt fil
+// tilknyt fil
 if (!$email->attachFile($file_id, $filehandler->get('file_name'))) {
     echo $email->error->view();
     trigger_error('Filen kunne ikke vedhæftes', E_USER_ERROR);
@@ -152,24 +147,6 @@ if (!$email->attachFile($file_id, $filehandler->get('file_name'))) {
 
 switch ($send_as) {
     case 'email':
-
-            /*
-            This is now changed so we only make one redirect
-            // Because we are going thru two pages we are making to redirects.
-            $first_redirect = Redirect::factory($kernel, 'go');
-            $second_redirect = Redirect::factory($kernel, 'go');
-            $shared_email = $kernel->useShared('email');
-
-            // First vi set the last, because we need this id to the first.
-            $second_redirect->setDestination($shared_email->getPath().'email.php?id='.$email->get('id'), $module_debtor->getPath().'view.php?id='.$debtor->get('id'));
-            $second_redirect->setIdentifier('send_email');
-            $second_redirect->askParameter('send_email_status');
-
-            // then we set the first redirect, notice we are using the first redirect id, and send that with the page.
-            $url = $first_redirect->setDestination($shared_email->getPath().'edit.php?id='.$email->get('id'), $shared_email->getPath().'email.php?id='.$email->get('id').'&redirect_id='.$second_redirect->get('id'));
-
-            header('Location: ' . $url);
-            */
 
             $redirect = Intraface_Redirect::factory($kernel, 'go');
             $shared_email = $kernel->useShared('email');
@@ -190,8 +167,7 @@ switch ($send_as) {
             }
             header('Location: view.php?id='.$debtor->get('id'));
             exit;
-        }
-        else {
+        } else {
             echo $email->error->view();
             trigger_error('E-mailen kunne ikke sendes', E_USER_ERROR);
         }
@@ -202,4 +178,3 @@ switch ($send_as) {
         break;
 }
 exit;
-?>
