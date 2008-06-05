@@ -1,7 +1,8 @@
 <?php
 /**
- * Hvad gør vi egentlig med disse settings. Bør settings, der hører de enkelte moduler
- * til være i en setting-fil under modulet, eller hvad var vi blevet enige om? /LO
+ * @todo Hvad gør vi egentlig med disse settings. Bør settings, der hører de
+ * enkelte moduler til være i en setting-fil under modulet, eller hvad var vi
+ * blevet enige om? /LO
  *
  */
  
