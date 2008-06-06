@@ -19,12 +19,11 @@ require_once 'Intraface/modules/contact/Contact.php';
 
 class Email extends Intraface_Standard
 {
-
     public $kernel;
     public $error;
     public $id;
     public $contact;
-    public $dbquery;
+    protected $dbquery;
 
     /**
      * Bruges til at sætte den øvre grænse for hvor mange e-mails der sendes i timen
@@ -83,10 +82,12 @@ class Email extends Intraface_Standard
     /**
      * @return DBQuery object
      */
-    function createDBQuery()
+    function getDBQuery()
     {
+        if ($this->dbquery) return $this->dbquery;
         $this->dbquery = new Intraface_DBQuery($this->kernel, "email", "email.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->useErrorObject($this->error);
+        return $this->dbquery;
     }
 
     /**
@@ -94,7 +95,6 @@ class Email extends Intraface_Standard
      */
     function load()
     {
-
         if ($this->id == 0) {
             return 0;
         }
@@ -389,12 +389,10 @@ class Email extends Intraface_Standard
             $validator = new Intraface_Validator($this->error);
             if($validator->isEmail($contact->contactperson->get('email'))) {
                 $phpmailer->AddAddress($contact->contactperson->get('email'), $contact->contactperson->get('name'));
-            }
-            else {
+            } else {
                 $phpmailer->AddAddress($contact->address->get('email'), $contact->address->get('name'));
             }
-        }
-        else {
+        } else {
             $phpmailer->AddAddress($contact->address->get('email'), $contact->address->get('name'));
         }
 
@@ -479,7 +477,6 @@ class Email extends Intraface_Standard
      */
     function getAttachments()
     {
-
         $db = new DB_Sql;
         $db->query("SELECT file_id, filename FROM email_attachment
             WHERE intranet_id = " .$this->kernel->intranet->get('id') . " AND email_id = " . $this->id);
@@ -540,8 +537,8 @@ class Email extends Intraface_Standard
     function getList()
     {
         $db = new DB_Sql;
-        $this->dbquery->setSorting("email.date_created DESC");
-        $db = $this->dbquery->getRecordset("email.id, email.subject, email.status, email.contact_id", "", false);
+        $this->getDBQuery()->setSorting("email.date_created DESC");
+        $db = $this->getDBQuery()->getRecordset("email.id, email.subject, email.status, email.contact_id", "", false);
         $i = 0;
         $list = array();
         while ($db->nextRecord()) {
@@ -576,6 +573,4 @@ class Email extends Intraface_Standard
         }
         return $this->value['outbox'];
     }
-
 }
-?>

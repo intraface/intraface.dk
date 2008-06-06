@@ -14,10 +14,9 @@ if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
 }
 
 $email_object = new Email($kernel);
-$email_object->createDBQuery();
-$email_object->dbquery->useCharacter();
-$email_object->dbquery->defineCharacter('character', 'email.subject');
-$email_object->dbquery->usePaging('paging');
+$email_object->getDBQuery()->useCharacter();
+$email_object->getDBQuery()->defineCharacter('character', 'email.subject');
+$email_object->getDBQuery()->usePaging('paging');
 //$email->dbquery->storeResult('use_stored', 'emails', 'toplevel');
 
 $emails = $email_object->getList();
