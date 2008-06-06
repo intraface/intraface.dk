@@ -3,44 +3,12 @@ require 'config.local.php';
 
 set_include_path(INTRAFACE_PATH_INCLUDE);
 
-require 'Intraface/Auth.php';
-require 'Intraface/User.php';
+require 'k.php';
+require 'MDB2.php';
+require 'Ilib/ClassLoader.php';
 
 define('INTRAFACE_TOOLS_DB_DSN', 'mysql://' . DB_USER . ':' . DB_PASS . '@' . DB_HOST . '/' . DB_NAME);
 define('DB_DSN', 'mysql://' . DB_USER . ':' . DB_PASS . '@' . DB_HOST . '/' . DB_NAME);
-
-require 'k.php';
-require_once 'Ilib/ClassLoader.php';
-
-class Tools_User
-{
-    private $auth;
-    private $user;
-    private $is_logged_in = false;
-
-    function __construct($session = '')
-    {
-        $this->auth = new Intraface_Auth(md5($session));
-        if ($this->auth->isLoggedIn()) {
-            $this->user = new Intraface_User($this->auth->isLoggedIn());
-            $this->user->setIntranetId(1);
-        }
-    }
-
-    function login($user, $password)
-    {
-        $this->auth->login($user, $password);
-        return ($this->user = new Intraface_User($this->auth->isLoggedIn()));
-    }
-
-    function isLoggedIn()
-    {
-        if (!is_object($this->user)) {
-            return false;
-        }
-        return $this->user->hasModuleAccess('intranetmaintenance');
-    }
-}
 
 $application = new Intraface_Tools_Controller_Root();
 
@@ -61,7 +29,7 @@ $application->registry->registerConstructor('db_sql', create_function(
 
 $application->registry->registerConstructor('user', create_function(
   '$className, $args, $registry',
-  'return new Tools_User($registry->get("session")->getSessionId());'
+  'return new Intraface_Tools_User($registry->SESSION);'
 ));
 
 $application->dispatch();
