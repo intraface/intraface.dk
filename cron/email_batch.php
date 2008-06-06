@@ -27,7 +27,7 @@ while ($row = $result->fetchRow()) {
 	$weblogin = $auth_adapter->auth();
 		
 	if (!$weblogin) {
-	    throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
+	    throw new Exception('Access to the intranet denied. The private key is probably wrong.');
 	} 
 
     $this->kernel = new Intraface_Kernel();
