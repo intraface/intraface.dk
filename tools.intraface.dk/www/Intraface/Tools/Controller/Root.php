@@ -8,6 +8,14 @@ class Intraface_Tools_Controller_Root extends k_Dispatcher
     {
         parent::__construct();
         $this->document->template = dirname(__FILE__) . '/../tpl/main-tpl.php';
+        $this->document->navigation = array(
+            $this->url('translation') => 'Translations',
+            $this->url('phpinfo') => 'PHP info',
+            $this->url('errorlog') => 'Unique errors (html)',
+            $this->url('errorlog', array('show' => 'all')) => 'All errors',
+            $this->url('errorlog/rss') => 'Errors as rss',
+            $this->url('log') => 'Log'
+        );
     }
 
     function execute()

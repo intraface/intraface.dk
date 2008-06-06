@@ -8,9 +8,9 @@
     </tr>
 <?php while ($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)): ?>
     <tr>
-        <td><?php echo $row['logtime']; ?></td>
-        <td><?php echo htmlspecialchars($row['ident']); ?></td>
-        <td><?php echo htmlspecialchars($row['message']); ?></td>
+        <td><?php e($row['logtime']); ?></td>
+        <td><?php e($row['ident']); ?></td>
+        <td><?php e($row['message']); ?></td>
     </tr>
 
 <?php endwhile; ?>

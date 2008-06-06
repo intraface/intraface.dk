@@ -8,8 +8,8 @@ class Intraface_Tools_Controller_Login extends k_Controller
         parent::__construct($parent, $name);
 
         $descriptors = array();
-        $descriptors[] = Array('name' => 'username', 'filters' => array('trim', 'strtolower'));
-        $descriptors[] = Array('name' => 'password', 'filters' => array('trim', 'strtolower'));
+        $descriptors[] = array('name' => 'username', 'filters' => array('trim', 'strtolower'));
+        $descriptors[] = array('name' => 'password', 'filters' => array('trim'));
         $this->form = new k_FormBehaviour($this, dirname(__FILE__) . '/../tpl/form.tpl.php');
         $this->form->descriptors = $descriptors;
     }
