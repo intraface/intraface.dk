@@ -2,7 +2,6 @@
 require('../../include_first.php');
 
 $module = $kernel->module('contact');
-$pdf_shared = $kernel->useShared('pdf');
 
 $contact = new Contact($kernel);
 $keyword = $contact->getKeywords();
@@ -12,7 +11,7 @@ $contact->dbquery->defineCharacter('character', 'address.name');
 $contact->dbquery->storeResult('use_stored', 'contact', 'toplevel');
 $contacts = $contact->getList("use_address");
 
-$doc = new PdfMaker($kernel);
+$doc = new Intraface_Pdf($kernel);
 
 $doc->setValue('font_size', 10);
 
