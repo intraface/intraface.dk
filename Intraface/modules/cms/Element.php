@@ -95,9 +95,7 @@ class CMS_Element extends Intraface_Standard
         $class_prefix = 'Intraface_modules_cms_element_';
         switch ($type) {
             case 'type':
-                // validering p� value // kun v�re gyldige elementtyper
-                // object skal v�re section
-                $class = $class_prefix . $value;
+                $class = $class_prefix . ucfirst($value);
                 return new $class($object);
                 break;
             case 'id':
