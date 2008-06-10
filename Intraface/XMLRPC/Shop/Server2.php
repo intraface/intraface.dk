@@ -182,7 +182,7 @@ class Intraface_XMLRPC_Shop_Server2
             throw new XML_RPC2_FaultException($db->getMessage() . $db->getUserInfo(), -1);
         }
 
-        $featured = new Intraface_modules_shop_FeaturedProducts($this->kernel->intranet, $this->webshop->shop, $db);
+        $featured = new Intraface_modules_shop_FeaturedProducts($this->kernel->intranet, $this->webshop->getShop(), $db);
         $all = $featured->getAll();
 
         $related_products = array();
@@ -662,14 +662,17 @@ class Intraface_XMLRPC_Shop_Server2
      */
     private function _factoryWebshop($shop_id)
     {
-        if (!$this->kernel->intranet->hasModuleAccess('webshop')) {
+        if (!$this->kernel->intranet->hasModuleAccess('shop')) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('The intranet does not have access to the module webshop', -2);
         }
-        $this->kernel->module('webshop');
+        $this->kernel->module('shop');
 
         Doctrine_Manager::connection(DB_DSN);
         $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById((int)$shop_id);
+        if ($shop === false) {
+            throw new XML_RPC2_FaultException('Could not find shop', 1);
+        }
         $this->webshop = new Intraface_modules_shop_Coordinator($this->kernel, $shop, $this->credentials['session_id']);
     }
 
