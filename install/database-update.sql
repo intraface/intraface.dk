@@ -14,7 +14,7 @@ CREATE TABLE `project_task` (
   `user_id` int(11) NOT NULL,
   `position` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE `shop` (
@@ -27,4 +27,4 @@ CREATE TABLE `shop` (
   `show_online` int(1) NOT NULL,
   `intranet_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
