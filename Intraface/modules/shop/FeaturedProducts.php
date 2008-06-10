@@ -40,7 +40,11 @@ class Intraface_modules_shop_FeaturedProducts
      */
     function add($description, $keyword)
     {
-        $result = $this->db->query('SELECT id FROM shop_featuredproducts WHERE intranet_id = ' . $this->db->quote($this->intranet->getId(), 'integer') . ' AND shop_id = ' . $this->db->quote($this->shop->getId(), 'integer') . ' AND keyword_id  = ' . $this->db->quote($keyword->getId(), 'integer'));
+        $result = $this->db->query('SELECT id 
+                                    FROM shop_featuredproducts 
+                                    WHERE intranet_id = ' . $this->db->quote($this->intranet->getId(), 'integer') . ' 
+                                        AND shop_id = ' . $this->db->quote($this->shop->getId(), 'integer') . ' 
+                                        AND keyword_id  = ' . $this->db->quote($keyword->getId(), 'integer'));
         if (PEAR::isError($result)) {
             throw new Exception($result->getUserInfo());
         }
@@ -76,7 +80,9 @@ class Intraface_modules_shop_FeaturedProducts
 
     function getAll()
     {
-        $result = $this->db->query('SELECT * FROM shop_featuredproducts WHERE intranet_id = ' . $this->db->quote($this->intranet->getId(), 'integer') . ' AND shop_id = ' . $this->db->quote($this->shop->getId(), 'integer'));
+        $result = $this->db->query('SELECT * FROM shop_featuredproducts 
+                                    WHERE intranet_id = ' . $this->db->quote($this->intranet->getId(), 'integer') . ' 
+                                        AND shop_id = ' . $this->db->quote($this->shop->getId(), 'integer'));
         if (PEAR::isError($result)) {
             throw new Exception($result->getUserInfo());
         }

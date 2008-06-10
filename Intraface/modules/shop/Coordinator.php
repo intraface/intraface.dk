@@ -67,10 +67,6 @@ class Intraface_modules_shop_Coordinator
      */
     public function __construct($kernel, $shop, $session_id)
     {
-        if (!is_object($kernel)) {
-            trigger_error('Webshopmodulet har brug for Kernel', E_USER_ERROR);
-        }
-
         $this->kernel = $kernel;
         $this->kernel->useModule('debtor');
         $this->kernel->useModule('order');
@@ -82,6 +78,11 @@ class Intraface_modules_shop_Coordinator
         $this->shop = $shop;
 
         $this->error = new Intraface_Error;
+    }
+    
+    function getShop()
+    {
+        return $this->shop;
     }
 
     /**
