@@ -190,8 +190,12 @@ class Intraface_Install
     function loginUser()
     {
         session_start();
-        $auth = new Intraface_Auth(session_id());
-        return $auth->login('start@intraface.dk', 'startup');
+        
+        $adapter = new Intraface_Auth_User($this->db, session_id(), 'start@intraface.dk', 'startup');
+        $auth = new Intraface_Auth();
+        $user = $auth->authenticate($adapter);
+        
+        return $user;
 
     }
 
