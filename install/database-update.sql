@@ -28,3 +28,8 @@ CREATE TABLE `shop` (
   `intranet_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+ALTER TABLE `debtor` ADD `identifier_key` VARCHAR( 255 ) NOT NULL AFTER `user_id` ;
+UPDATE `debtor` SET `identifier_key` = MD5( CONCAT( `id` , `intranet_id` , `date_created` , `number` , `description` ) ) WHERE `identifier_key` = '' ;
+ 
+ 
