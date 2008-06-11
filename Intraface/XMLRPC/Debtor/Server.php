@@ -76,7 +76,7 @@ class Intraface_XMLRPC_Debtor_Server
             return $return;
         }
         // die('her'.$arg[1].'gg');
-        $debtor = Debtor::factory($this->kernel, $debtor_id);
+        $debtor = Debtor::factory($this->kernel, (int)$debtor_id);
         if (!$debtor->get('id') > 0) {
             return 0;
         }
@@ -170,7 +170,7 @@ class Intraface_XMLRPC_Debtor_Server
 
         $this->kernel->translation = new Intraface_XMLRPC_Debtor_Server_Translation;
 
-        $debtor = Debtor::factory($this->kernel, $debtor_id);
+        $debtor = Debtor::factory($this->kernel, (int)$debtor_id);
         if (!$debtor->get('id') > 0) {
             return '';
         }

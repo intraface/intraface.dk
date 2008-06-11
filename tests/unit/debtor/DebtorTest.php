@@ -96,6 +96,23 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($debtor));
     }
     
+    function testFactoryWitnIdentifier()
+    {
+        $debtor = $this->createDebtor();
+        $description = 'test debtor';
+        $debtor->update(array(
+                'contact_id' => $this->createContact(), 
+                'description' => $description,
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y')));
+        
+        $debtor = Debtor::factory($this->kernel, $debtor->get('identifier_key'));
+        
+        $this->assertEquals('Order', get_class($debtor));
+        $this->assertEquals($description, $debtor->get('description'));
+        
+        
+    }
     
     
     function testUpdate() {

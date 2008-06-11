@@ -380,7 +380,7 @@ class Intraface_modules_shop_Coordinator
         if ($order_id == 0) {
             return 0;
         }
-        $debtor = Debtor::factory($order_id);
+        $debtor = Debtor::factory($this->kernel, (int)$order_id);
         return $debtor->setSent();
     }
 }

@@ -424,7 +424,7 @@ class OnlinePayment extends Intraface_Standard
 
         $invoice_module = $this->kernel->getModule('debtor', true); // true: tjekker kun intranet adgang
 
-        $invoice = Debtor::factory($this->kernel, $this->get('belong_to_id'));
+        $invoice = Debtor::factory($this->kernel, (int)$this->get('belong_to_id'));
 
         if ($invoice->get('id') == 0) {
             $this->error->set("Ugyldig faktura");

@@ -106,7 +106,6 @@ class Debtor extends Intraface_Standard
         $this->dbquery->setJoin("LEFT", "address", "address.belong_to_id = contact.id AND address.active = 1 AND address.type = 3", '');
         $this->dbquery->setJoin("LEFT", "debtor_item", "debtor_item.debtor_id = debtor.id AND debtor_item.active = 1 AND debtor_item.intranet_id = ".$this->kernel->intranet->get("id"), '');
 
-        // TODO Ved ikke hvorfor den er udkommenteret /Sune
         $this->dbquery->useErrorObject($this->error);
 
         if ($this->id > 0) {
@@ -121,12 +120,12 @@ class Debtor extends Intraface_Standard
      * mit forslag: factory($kernel, $type, $id)
      *
      * @param object  $kernel Kernel
-     * @param integer $id     Debtor id
+     * @param integer $id     Debtor id or debtor identifier_key
      * @param type    $tpye   String TODO What is this used for as a last parameter?
      */
     public static function factory($kernel, $id = 0, $type = "")
     {
-        if ((int)$id != 0) {
+        if (is_int($id) && $id != 0) {
             $types = self::getDebtorTypes();
 
             $db = new DB_Sql;
@@ -135,9 +134,20 @@ class Debtor extends Intraface_Standard
                 $type = $types[$db->f("type")];
             } else {
                 trigger_error("Invalid id for debtor in Debtor::factory", E_USER_ERROR);
-
             }
         }
+        elseif(is_string($id) && $id != '') {
+            $types = self::getDebtorTypes();
+
+            $db = new DB_Sql;
+            $db->query("SELECT type, id FROM debtor WHERE intranet_id = ".$kernel->intranet->get('id')." AND identifier_key = \"".$id."\"");
+            if ($db->nextRecord()) {
+                $type = $types[$db->f("type")];
+                $id = $db->f("id");
+            } else {
+                trigger_error("Invalid identifier_key for debtor in Debtor::factory", E_USER_ERROR);
+            }
+        } 
 
         switch ($type) {
             case "quotation":
@@ -183,7 +193,7 @@ class Debtor extends Intraface_Standard
             return 0;
         }
 
-        $this->db->query("SELECT id, number, intranet_address_id, contact_id, contact_address_id, contact_person_id, description, payment_method, this_date, due_date, date_stated, voucher_id, date_executed, status, where_from_id, where_from, user_id, round_off, girocode, active, message, internal_note,
+        $this->db->query("SELECT id, number, identifier_key, intranet_address_id, contact_id, contact_address_id, contact_person_id, description, payment_method, this_date, due_date, date_stated, voucher_id, date_executed, status, where_from_id, where_from, user_id, round_off, girocode, active, message, internal_note,
                 DATE_FORMAT(date_stated, '%d-%m-%Y') AS dk_date_stated,
                 DATE_FORMAT(this_date, '%d-%m-%Y') AS dk_this_date,
                 DATE_FORMAT(due_date, '%d-%m-%Y') AS dk_due_date,
@@ -198,6 +208,7 @@ class Debtor extends Intraface_Standard
         }
         $this->value["id"] = $this->db->f("id");
         $this->value["number"] = $this->db->f("number");
+        $this->value["identifier_key"] = $this->db->f("identifier_key");
         $this->value["intranet_address_id"] = $this->db->f("intranet_address_id");
         $this->value["contact_id"] = $this->db->f("contact_id");
         $this->value["contact_address_id"] = $this->db->f("contact_address_id");
@@ -389,15 +400,27 @@ class Debtor extends Intraface_Standard
         } else {
             $input["round_off"] = 0;
         }
-
+        
         if ($this->error->isError()) {
             return 0;
         }
       // user_id = ".$this->kernel->user->get('id').", // skal puttes på, men kun hvis det ikke er fra webshop.
         $db = new DB_Sql;
         if ($this->id == 0) {
+            
+            $infinite_check = 0;
+            do {
+                $random = new Ilib_RandomKeyGenerator();
+                $identifier = $random->generate(30);
+                $db->query('SELECT id FROM debtor WHERE identifier_key = "'.$identifier.'" AND intranet_id = '.$this->kernel->intranet->get('id'));
+                $infinite_check++;
+                if($infinite_check > 20) {
+                    throw new Exception('Unable to generate an unique key');
+                }
+            } while ($db->nextRecord());
+            
             $sql_type = "INSERT INTO ";
-            $sql_after = ", date_created = NOW(), intranet_id = " . $this->kernel->intranet->get('id');
+            $sql_after = ", date_created = NOW(), identifier_key = \"".$identifier."\", intranet_id = " . $this->kernel->intranet->get('id');
         } else {
             $sql_type = "UPDATE ";
             $sql_after = " WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id');
@@ -847,7 +870,7 @@ class Debtor extends Intraface_Standard
 
         while($db->nextRecord()) {
 
-            $debtor = Debtor::factory($this->kernel, $db->f("id"));
+            $debtor = Debtor::factory($this->kernel, (int)$db->f("id"));
             $list[$i] = $debtor->get();
 
             // $contact = new Contact($this->kernel, $db->f('contact_id'));

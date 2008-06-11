@@ -212,7 +212,7 @@ class DebtorItem extends Intraface_Standard
 
         // hvis det er et kreditnota, skal fakturastatus opdateres
         if ($this->debtor->get("type") == "credit_note" && $this->debtor->get("where_from") == "invoice" && $this->debtor->get("where_from_id") != 0) {
-            $invoice = Debtor::factory($this->debtor->kernel, $this->debtor->get("where_from_id"));
+            $invoice = Debtor::factory($this->debtor->kernel, (int)$this->debtor->get("where_from_id"));
             $invoice->updateStatus();
         }
 
