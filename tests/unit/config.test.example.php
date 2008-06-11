@@ -19,7 +19,7 @@ define('PATH_WWW', '');
 define('IMAGE_LIBRARY', 'GD');
 define('XMLRPC_SERVER_URL', 'http://intraface.dk/xmlrpc/');
 
-// @todo what is the next thing used for
+// Directory to move files to temporary in tests
 define('TEST_PATH_TEMP', '/var/lib/www/intraface_test/tmp/');
 
 set_include_path(PATH_ROOT. PATH_SEPARATOR . get_include_path());
