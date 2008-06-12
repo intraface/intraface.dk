@@ -13,7 +13,7 @@ class Demo_CMS_Show extends k_Controller
         $shop_id = $this->name;
 
         $credentials = array("private_key" => $this->context->getPrivateKey(), 
-                             "session_id" => md5(session_id()));
+                             "session_id" => md5($this->registry->get("k_http_Session")->getSessionId()));
 
         $debug = false;
         $site_id = $this->name;

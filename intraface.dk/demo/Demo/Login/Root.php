@@ -16,7 +16,7 @@ class Demo_Login_Root extends k_Controller
         $credentials = array();
         
         $credentials["private_key"] = $this->getPrivateKey();
-        $credentials["session_id"] = md5(session_id());
+        $credentials["session_id"] = md5($this->registry->get("k_http_Session")->getSessionId());
         
         return $credentials;     
     }
