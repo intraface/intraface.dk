@@ -28,6 +28,9 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
             $shop = $this->getModel();
             $data = $shop->toArray();
         }
+        else {
+            $data['receipt'] = $this->kernel->setting->get('intranet','webshop.webshop_receipt');
+        }
 
         $webshop_module = $this->registry->get('kernel')->module('shop');
         $settings = $webshop_module->getSetting('show_online');
