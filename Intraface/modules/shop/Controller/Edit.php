@@ -29,7 +29,7 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
             $data = $shop->toArray();
         }
         else {
-            $data['receipt'] = $this->kernel->setting->get('intranet','webshop.webshop_receipt');
+            $data['receipt'] = $this->registry->get('kernel')->setting->get('intranet','webshop.webshop_receipt');
         }
 
         $webshop_module = $this->registry->get('kernel')->module('shop');
