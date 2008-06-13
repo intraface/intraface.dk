@@ -31,13 +31,20 @@ for ($i = 0, $max = count($modules); $i < $max; $i++) {
 
 	$module = $kernel->module($modules[$i]['name']);
 	$files = $module->getControlpanelFiles();
-
+    
 	if (count($files) > 0) {
-		echo '<div class="controlpanel-item">';
-		echo '<h2>' . e(t($modules[$i]['name'], $modules[$i]['name'])) . '</h2>';
+		
+        echo '<div class="controlpanel-item">';
+		echo '<h2>';
+        e(t($modules[$i]['name'], $modules[$i]['name']));
+        echo '</h2>';
 		echo '<ul>';
 		foreach($files AS $file) {
-			echo '<li><a href="'. PATH_WWW .e($file['url']).'">'.e(t($file['title'])).'</a></li>';
+			echo '<li><a href="';
+            e(PATH_WWW.$file['url']);
+            echo '">';
+            e(t($file['title']));
+            echo'</a></li>';
 		}
 		echo '</ul>';
 		echo '</div>';
