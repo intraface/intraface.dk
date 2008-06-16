@@ -139,7 +139,8 @@ $pfm->addPackageDepWithChannel('required', 'DB_Sql', 'public.intraface.dk', '0.0
 $pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'pear.php.net', '1.0.2');
 // Bug fix for PEAR XML_RPC2 version 1.0.2
 $pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'public.intraface.dk', '0.0.1');
-
+// Yet another bug fix for PEAR XML_RPC2 version 1.0.2
+$pfm->addPackageDepWithChannel('required', 'XML_RPC2_Backend_Php_ServerFixedEncodingObject', 'public.intraface.dk', '0.0.1');
 
 // filehandler
 $pfm->addPackageDepWithChannel('required', 'MIME_Type', 'pear.php.net', '1.0.0');
