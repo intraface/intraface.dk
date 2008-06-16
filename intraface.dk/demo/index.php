@@ -3,6 +3,12 @@ require_once 'config.local.php';
 
 set_include_path(INTRAFACEPUBLIC_SHOP_INCLUDE_PATH);
 
+/** 
+ * NOTICE: session_start is needed to be executed before Classloader is initialized.
+ * Otherwise it gives strange error trying to start MDB2_Driver_mysql 
+ */
+session_start();
+
 require_once 'k.php';
 require_once 'Ilib/ClassLoader.php';
 
@@ -37,5 +43,4 @@ $application->registry->registerConstructor('translation', create_function(
    return $translation;
   '
 ));
-
 $application->dispatch();

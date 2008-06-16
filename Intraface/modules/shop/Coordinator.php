@@ -261,6 +261,14 @@ class Intraface_modules_shop_Coordinator
 
         return $order_id;
     }
+    
+    public function getOrderIdentifierKey()
+    {
+        if(!empty($this->order) && is_object($this->order) && $this->order->get('id') != 0) {
+            return $this->order->get('identifier_key');
+        }
+        throw new Exception('No valid order was present to return identifier from IN Coordinate->getOrderIdentifierKey()');
+    }
 
     /**
      * Adds the order lines
@@ -364,7 +372,7 @@ class Intraface_modules_shop_Coordinator
      */
     public function getReceiptText()
     {
-        return array('receipt_text' => $this->kernel->setting->get('intranet','webshop.webshop_receipt'));
+        return array('receipt_text' => $this->getShop()->receipt);
     }
 
     /**

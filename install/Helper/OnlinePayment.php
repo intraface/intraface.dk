@@ -9,6 +9,16 @@ class Install_Helper_OnlinePayment {
         $this->db = $db;
     }
     
+    public function setProvider() 
+    {
+        require_once 'Intraface/modules/onlinepayment/OnlinePayment.php';
+        $onlinepayment = new OnlinePayment($this->kernel);
+        $onlinepayment->setProvider(array('provider_key' => 2));
+        $onlinepayment = OnlinePayment::factory($this->kernel);
+        $onlinepayment->setSettings(array('merchant_id' => '12345678', 'md5_secret' => 'qqqaaasss'));
+    }
+    
+    
     public function createAndAttachToOrder() {
         
         require_once 'Intraface/modules/onlinepayment/OnlinePayment.php';

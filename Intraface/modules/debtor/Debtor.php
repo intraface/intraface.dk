@@ -270,6 +270,7 @@ class Debtor extends Intraface_Standard
         }
 
         // henter kunden
+        require_once 'Intraface/modules/contact/Contact.php';
         $this->contact = new Contact($this->kernel, $this->db->f("contact_id"), $this->db->f("contact_address_id"));
         if ($this->contact->get("type") == "corporation" && $this->db->f("contact_person_id") != 0) {
             $this->contact_person = new ContactPerson($this->contact, $this->db->f("contact_person_id"));

@@ -187,18 +187,19 @@ table#basket tfoot td.help {
 
 /* buyer details */
 
-div#buyer-details {
+fieldset.details-customer {
     background-color: #EEEEEE;
+    margin-bottom: 20px;
 
 }
 
-div#buyer-details div.row {
+fieldset.details-customer div.row {
     padding: 4px;
     border-bottom: 1px solid #ddd;
 
 }
 
-div#buyer-details div.row label {
+fieldset.details-customer div.row label {
     display: block;
     float: left;
     width: 150px;
@@ -208,23 +209,8 @@ div#buyer-details div.row input {
 
 }
 
-div#buyer-details div.row textarea {
-
-}
-
-div#terms-of-trade {
-    margin: 10px 0px 10px;
-    padding: 3px;
-    background-color: #EEEEEE;
-    border-bottom: 1px solid #ddd;
-    border-top: 1px solid #ddd;
-}
-
-div#buyer_details_save {
-    margin: 10px 0px 10px;
-    padding: 5px;
-    background-color: #EEEE00;
-    border: 2px solid #999;
+fieldset.details-customer div.row textarea {
+	
 }
 
 div#customer-coupon {
@@ -248,9 +234,27 @@ div#customer-comment {
     border-top: 1px solid #ddd;
 }
 
-div#customer-comment textarea {
-    width: 60%;
+fieldset#details-customer-comment textarea {
+    width: 80%;
+    height: 60px;
 }
+
+div#terms-of-trade {
+    margin: 10px 0px 10px;
+    padding: 3px;
+    background-color: #EEEEEE;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+}
+
+div#buyer_details_save {
+    margin: 10px 0px 10px;
+    padding: 5px;
+    background-color: #EEEE00;
+    border: 2px solid #999;
+}
+
+
 
 /* Order */
 

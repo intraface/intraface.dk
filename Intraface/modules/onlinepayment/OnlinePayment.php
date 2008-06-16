@@ -57,6 +57,9 @@ class OnlinePayment extends Intraface_Standard
         if ($this->id > 0) {
             $this->load();
         }
+        else {
+            $this->value['id'] = 0;
+        }
     }
 
     function factory($kernel, $type = 'settings', $value = 0)

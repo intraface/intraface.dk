@@ -25,7 +25,7 @@ class MainOnlinepayment extends Intraface_Main
         $this->addSubmenuItem('credit notes', '../debtor/list.php?type=credit_note', 'module:invoice');
         $this->addSubmenuItem('reminders', '../debtor/reminders.php', 'module:invoice');
         $this->addSubmenuItem('onlinepayments', '../onlinepayment/', 'module:onlinepayment');
-        $this->addSubmenuItem('settings', '../debtor/setting.php');
+        // $this->addSubmenuItem('settings', '../debtor/setting.php', 'module:debtor');
 
         $this->addControlpanelFile('OnlinePayment settings', 'modules/onlinepayment/settings.php');
 
