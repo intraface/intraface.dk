@@ -10,7 +10,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/install/reset-staging-server.php?modules=debtor,order,contact,product,administration,webshop&helper_function=Administration:fillInIntranetAddress,Product:create&login=true</td>
+	<td>/install/reset-staging-server.php?modules=debtor,order,contact,product,administration,shop&helper_function=Administration:fillInIntranetAddress,Product:create&login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -55,13 +55,43 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=webshop</td>
+	<td>link=shop</td>
 	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Create</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Standard</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>identifier</td>
+	<td>standard</td>
 </tr>
 <tr>
 	<td>select</td>
 	<td>show_online</td>
 	<td>label=all_published</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>confirmation</td>
+	<td>test</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>receipt</td>
+	<td>test</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description</td>
+	<td>test</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -70,7 +100,12 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=choose featured products</td>
+	<td>link=Standard</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Choose featured products</td>
 	<td></td>
 </tr>
 <tr>
@@ -105,7 +140,7 @@
 </tr>
 <tr>
 	<td>open</td>
-	<td>/demo/newshop/intraface/</td>
+	<td>/demo/intraface/shop/1</td>
 	<td></td>
 </tr>
 <tr>

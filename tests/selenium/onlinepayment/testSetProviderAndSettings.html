@@ -1,0 +1,94 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testSetProviderAndSettings</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testSetProviderAndSettings</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/install/reset-staging-server.php?modules=administration,onlinepayment&helper_function=Administration:fillInIntranetAddress&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=control panel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectFrame</td>
+	<td>relative=up</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=OnlinePayment settings</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Vælg en anden udbyder</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>provider</td>
+	<td>label=quickpay</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Gem']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>merchant_id</td>
+	<td>12345678</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>md5_secret</td>
+	<td>qqqaaasss</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Gem']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=control panel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=OnlinePayment settings</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>quickpay</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>merchant_id</td>
+	<td>12345678</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>md5_secret</td>
+	<td>qqqaaasss</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
