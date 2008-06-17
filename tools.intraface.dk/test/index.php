@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 
 set_include_path('/home/intraface/devel_intraface/3Party/PEAR/');
-$dsn = 'mysql://intraface:ED!gt@g@mysql.intraface.dk/intraface';
+$dsn = 'mysql://intraface:password@g@mysql.intraface.dk/intraface';
 
 require 'configuration';
 require 'PEAR.php';
@@ -81,7 +81,7 @@ $LUOptions = array(
 $LU =& LiveUser::factory($LUOptions);
 //$LU->dispatcher->addObserver('forceLogin', 'forceLogin');
 
-$LU->login('lars@legestue.net', 'klaniklani');
+$LU->login('lars@legestue.net', 'password');
 if ($LU->isLoggedIn()) {
 	echo 'Logged in';
 	
