@@ -64,12 +64,15 @@ class Intraface_ModulePackage_Action
      * Places the order in an external economic system. The communication with the economic system is handles by Intraface_ModulePackage_ShopExtension
      * 
      * @param array customer    array with information on customer.
+     * @param object $mailer mailer object
      * 
      * @return mixed order id on succes and false on failure.
      */
-    public function placeOrder($customer) 
+    public function placeOrder($customer, $mailer) 
     {
-        
+        if(!is_object($mailer)) {
+            throw new Exception('A valid mailer object is needed');
+        }
         // Because of the building of Intraface Webshop we need to add the order to the basket first
         // Then afterwards we can place the order from the basket. 
         
@@ -107,7 +110,7 @@ class Intraface_ModulePackage_Action
                 
         require_once('Intraface/modules/modulepackage/ShopExtension.php');
         $shop = new Intraface_ModulePackage_ShopExtension;
-        if(!$order = $shop->placeOrder($customer, $products)) {
+        if(!$order = $shop->placeOrder($customer, $products, $mailer)) {
             return false;
         }
         

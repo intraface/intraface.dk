@@ -157,9 +157,13 @@ class Intraface_ModulePackage_ShopExtension {
      *
      * @return integer order id
      */
-    public function placeOrder($customer, $products)
+    public function placeOrder($customer, $products, $mailer)
     {
 
+        if(!is_object($mailer)) {
+            throw new Exception('A valid mailer object is needed');
+        }
+        
         if (!isset($this->shop)) {
             // should we provide an errormessage?
             return false;
@@ -197,7 +201,7 @@ class Intraface_ModulePackage_ShopExtension {
         $customer['description'] = 'Intraface Package Add';
 
         // Then we place the order from the basket. At the moment we need to give the customer again - that is not too clever!
-        $order_id = $this->shop->placeOrder($customer);
+        $order_id = $this->shop->placeOrder($customer, $mailer);
 
         if ($order_id == 0) {
             $this->error->set("unable to place the order");
