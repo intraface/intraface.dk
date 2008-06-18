@@ -38,28 +38,33 @@ $page->start(safeToHtml($translation->get('you are now ready to pay your order')
         <p><?php echo safeToHtml($translation->get('the paymend is carried out on a secure connection.')); ?></p>
         
         <?php
-        $payment_prepare = Ilib_Payment_Html::factory(INTRAFACE_ONLINEPAYMENT_PROVIDER, 'prepare', INTRAFACE_ONLINEPAYMENT_MERCHANT);
+        $payment_html = new Ilib_Payment_Html(INTRAFACE_ONLINEPAYMENT_PROVIDER, INTRAFACE_ONLINEPAYMENT_MERCHANT, INTRAFACE_ONLINEPAYMENT_MD5SECRET, session_id());
+        $payment_prepare = $payment_html->getPrepare();
         $lang = $translation->getLang(); 
         $language = (isset($lang) && $lang == 'dansk') ? 'da' : 'en';
-        $prepare = array(
-            'language' => $language,
-            'ordernum' => $action->getOrderId(),
-            'amount' => round($action->getTotalPrice()*100),
-            'currency' => "DKK",
-            'okpage' => NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/index.php?status=success',
-            'errorpage' => NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/payment.php?action_store_id='.$action_store->getId().'&payment_error=true',
-            'resultpage' => NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/process.php',
-            'ccipage' => NET_SCHEME.NET_HOST.NET_DIRECTORY.'payment/html/cci.php?language='.$language,
-            'md5secret' => INTRAFACE_ONLINEPAYMENT_MD5SECRET);
+        $payment_prepare->setPaymentValues(
+            $action->getOrderId(), 
+            $action->getTotalPrice(), 
+            "DKK",
+            $language,
+            NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/index.php?status=success',
+            NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/payment.php?action_store_id='.$action_store->getId().'&payment_error=true',
+            NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/process.php',
+            NET_SCHEME.NET_HOST.NET_DIRECTORY.'payment/html/cci.php?language='.$language);
         
         $optional = array(
             'action_store_id' => $action_store->getId(),
             'intranet_public_key' => $kernel->intranet->get('public_key')
             );
         
-        $payment_prepare->set($prepare, $optional);
+        $payment_prepare->setOptionalValues($optional);
+        
+        $post_destination = $payment_prepare->getPostDestination();
+        // If it is not a complete path (containing slashes) it is a fake server and we add index.php to make the post variable get posted to the page.
+        if(!strpos($post_destination, '/')) $post_destination .= '/index.php';
+        
         ?>
-        <form action="<?php echo safeToHtml($payment_prepare->getPostDestination()); ?>" method="POST"> <!-- https://secure.quickpay.dk/quickpay.php -->
+        <form action="<?php echo safeToHtml($post_destination); ?>" method="POST"> <!-- https://secure.quickpay.dk/quickpay.php -->
         
         <?php echo $payment_prepare->getPostFields(); ?>
         

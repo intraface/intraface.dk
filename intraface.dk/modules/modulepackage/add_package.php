@@ -63,7 +63,7 @@ if(!empty($_POST)) {
                     $contact['contact_id'] = (int)$kernel->intranet->get('contact_id'); 
                     
                     // we place the order.
-                    if(!$action->placeOrder($contact)) {
+                    if(!$action->placeOrder($contact, Intraface_Mail::factory())) {
                         trigger_error("Unable to place the order", E_USER_ERROR);
                         exit;
                     }

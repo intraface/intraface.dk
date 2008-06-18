@@ -9,22 +9,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     session_start();
 
-    $payment_postprocess = Ilib_Payment_Html::factory(INTRAFACE_ONLINEPAYMENT_PROVIDER, 'postprocess', INTRAFACE_ONLINEPAYMENT_MERCHANT);
-    $payment_postprocess->set($_POST);
-    $payment_postprocess->setCompareValue(array('md5secret' => INTRAFACE_ONLINEPAYMENT_MD5SECRET));
-
-    if(!$payment_postprocess->validate()) {
+    $payment_html = new Ilib_Payment_Html(INTRAFACE_ONLINEPAYMENT_PROVIDER, INTRAFACE_ONLINEPAYMENT_MERCHANT, INTRAFACE_ONLINEPAYMENT_MD5SECRET, session_id());
+        
+    $payment_postprocess = $payment_html->getPostProcess();
+    
+    
+    if(!$payment_postprocess->setPaymentResponse($_POST)) {
         trigger_error('Error in the returned values from payment!', E_USER_ERROR);
         exit;
     }
-
-    if($payment_postprocess->get('intranet_public_key', 'optional') == '') {
+    
+    $optional = $payment_postprocess->getOptionalValues();
+    if($optional['intranet_public_key'] == '') {
         trigger_error('A public key is needed!', E_USER_ERROR);
         exit;
     }
 
     // We login to the intranet with the public key
-    $adapter = new Intraface_Auth_PublicKeyLogin(MDB2::singleton(DB_DSN), session_id(), $payment_postprocess->get('intranet_public_key', 'optional'));
+    $adapter = new Intraface_Auth_PublicKeyLogin(MDB2::singleton(DB_DSN), session_id(), $optional['intranet_public_key']);
     $weblogin = $adapter->auth();
     if(!$intranet_id = $weblogin->getActiveIntranetId()) {
         trigger_error("Unable to log in to the intranet with public key: ".$payment_postprocess->get('intranet_public_key', 'optional'), E_USER_ERROR);
@@ -43,19 +45,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $module->includeFile('AccessUpdate.php');
 
     $action_store = new Intraface_ModulePackage_ActionStore($kernel->intranet->get('id'));
-    $action = $action_store->restore($payment_postprocess->get('action_store_id', 'optional'));
+    $action = $action_store->restore($optional['action_store_id']);
 
     if(!is_object($action)) {
         trigger_error("Problem restoring action from action_store_id ".$payment_postprocess->get('action_store_id', 'optional'), E_USER_ERROR);
         exit;
     }
 
-    $amount = $payment_postprocess->get('amount');
+    $amount = $payment_postprocess->getAmount();
 
     // we append the onlinepayment to the order.
     $onlinepayment = array(
-        'transaction_number' => $payment_postprocess->get('transaction'),
-        'transaction_status' => $payment_postprocess->get('qpstat'),
+        'transaction_number' => $payment_postprocess->getTransactionNumber(),
+        'transaction_status' => $payment_postprocess->getTransactionStatus(),
         'amount' => number_format($amount, 2, ',', '.'),
         'text' => '');
 
