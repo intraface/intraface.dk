@@ -11,7 +11,7 @@ if (!empty($_POST)) {
 	$email = new Email($kernel, $_POST['id']);
 
 	if (!empty($_POST['submit'])) {
-		if ($email->send()) {
+		if ($email->send(Intraface_Mail::factory())) {
 
 			$email->load();
 			// This status can be used to change status where the email is coming from.

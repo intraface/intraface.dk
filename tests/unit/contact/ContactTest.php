@@ -4,9 +4,9 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/contact/Contact.php';
 require_once 'ContactStubs.php';
-require_once '../stubs/Address.php';
-require_once '../stubs/User.php';
-require_once '../stubs/PhpMailer.php';
+require_once 'tests/unit/stubs/Address.php';
+require_once 'tests/unit/stubs/User.php';
+require_once 'tests/unit/stubs/PhpMailer.php';
 
 class ContactTest extends PHPUnit_Framework_TestCase
 {

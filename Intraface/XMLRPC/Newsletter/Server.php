@@ -47,7 +47,7 @@ class Intraface_XMLRPC_Newsletter_Server
 
         $subscriber = $this->factoryList($list_id);
 
-        if (!$subscriber->subscribe(array('name' => $name, 'email' => $email, 'ip' => $ip))) {
+        if (!$subscriber->subscribe(array('name' => $name, 'email' => $email, 'ip' => $ip), Intraface_Mail::factory())) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('an error occurred when trying to subscribe', -4);
         }

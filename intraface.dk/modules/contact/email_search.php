@@ -47,7 +47,7 @@ if (!empty($_POST)) {
 			$email->save($input);
 			// E-mailen sættes i kø - hvis vi sender den med det samme tager det
 			// alt for lang tid.
-			$email->send('queue');
+			$email->send(Intraface_Mail::factory(), 'queue');
 			$j++;
 		}
 		$msg = 'Emailen blev i alt sendt til ' . $j . ' kontakter. <a href="index.php">Tilbage til kontakter</a>.';

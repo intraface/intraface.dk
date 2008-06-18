@@ -4,6 +4,7 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/newsletter/NewsletterSubscriber.php';
 require_once 'NewsletterStubs.php';
+require_once 'tests/unit/stubs/PhpMailer.php';
 
 class FakeObserver
 {
@@ -37,7 +38,9 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
     {
         $subscriber = $this->createSubscriber();
         $data = array('email' => 'test@legestue.net', 'ip' => 'ip');
-        $this->assertTrue($subscriber->subscribe($data));
+        $mailer = new FakePhpMailer;
+        $this->assertTrue($subscriber->subscribe($data, $mailer));
+        $this->assertTrue($mailer->isSend(), 'Mail is not send');
     }
 
     function testUnSubscribe()
@@ -50,8 +53,9 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
     {
         $subscriber = $this->createSubscriber();
         $data = array('email' => 'test@legestue.net', 'ip' => 'ip');
-        $this->assertTrue($subscriber->subscribe($data));
-
+        $mailer = new FakePhpMailer;
+        $this->assertTrue($subscriber->subscribe($data, $mailer));
+        $this->assertTrue($mailer->isSend(), 'Mail is not send');
         $code = 'wrongcode';
         $ip = 'ip';
 

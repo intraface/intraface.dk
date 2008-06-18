@@ -207,11 +207,16 @@ class Intraface_modules_shop_Coordinator
      *
      * @param array $input    Array with customer data
      * @param array $products Array with products
+     * @param object $mailer mailer to send e-mail
      *
      * @return integer Order id
      */
-    public function placeManualOrder($input = array(), $products = array())
+    public function placeManualOrder($input = array(), $products = array(), $mailer)
     {
+        if(!is_object($mailer)) {
+            throw new Exception('A valid mailer object is needed');
+        }
+        
         $order_id = $this->createOrder($input);
         if ($order_id == 0) {
             $this->error->set('unable to create the order');
@@ -223,7 +228,7 @@ class Intraface_modules_shop_Coordinator
             return false;
         }
 
-        if (!$this->sendEmail($order_id)) {
+        if (!$this->sendEmail($order_id, $mailer)) {
             $this->error->set('unable to send email to the customer');
             return false;
         }
@@ -235,11 +240,16 @@ class Intraface_modules_shop_Coordinator
      * Places the order and utilizes basket
      *
      * @param array $input Array with customer data
+     * @param object $mailer Mailer object to send e-mail
      *
      * @return integer Order id
      */
-    public function placeOrder($input)
+    public function placeOrder($input, $mailer)
     {
+        if(!is_object($mailer)) {
+            throw new Exception('A valid mailer object is needed');
+        }
+        
         if (!$order_id = $this->createOrder($input)) {
             $this->error->set('unable to create the order');
             return false;
@@ -254,7 +264,7 @@ class Intraface_modules_shop_Coordinator
 
         $this->getBasket()->reset();
 
-        if (!$this->sendEmail($order_id)) {
+        if (!$this->sendEmail($order_id, $mailer)) {
             $this->error->set('unable to send email to the customer');
             return false;
         }
@@ -297,8 +307,12 @@ class Intraface_modules_shop_Coordinator
      *
      * @return boolean
      */
-    private function sendEmail($order_id)
+    private function sendEmail($order_id, $mailer)
     {
+        if(!is_object($mailer)) {
+            throw new Exception('A valid mailer object is needed');
+        }
+        
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
@@ -313,7 +327,7 @@ class Intraface_modules_shop_Coordinator
             return false;
         }
 
-        if (!$email->send()) {
+        if (!$email->send($mailer)) {
             $this->error->merge($email->error->getMessage());
             return false;
         }

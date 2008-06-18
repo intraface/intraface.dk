@@ -9,6 +9,7 @@ require_once 'Intraface/Kernel.php';
 require_once 'Intraface/modules/webshop/Webshop.php';
 require_once 'Intraface/modules/webshop/Basket.php';
 require_once 'Intraface/modules/product/ProductDetail.php';
+require_once 'tests/unit/stubs/PhpMailer.php';
 
 error_reporting(E_ALL);
 
@@ -60,15 +61,20 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     function testPlaceOrderReturnsAnOrderNumber()
     {
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 'private', 'description' => 'test', 'internal_note' => '', 'message' => '');
-        $order_id = $this->webshop->placeOrder($data);
+        $mailer = new FakePhpMailer;
+        $order_id = $this->webshop->placeOrder($data, $mailer);
         $this->assertTrue($order_id > 0);
+        $this->assertTrue($mailer->isSend(), 'Mail is not send');
+        
     }
 
     function testPlaceOrderResetsBasketSoThereIsNoProductsInBasket()
     {
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 'private', 'description' => 'test', 'internal_note' => '', 'message' => '');
-        $order_id = $this->webshop->placeOrder($data);
+        $mailer = new FakePhpMailer;
+        $order_id = $this->webshop->placeOrder($data, $mailer);
         $this->assertTrue($order_id > 0);
+        $this->assertTrue($mailer->isSend(), 'Mail is not send');
 
         $basket = $this->webshop->getBasket();
         $this->assertTrue(count($basket->getItems()) == 0);
@@ -78,8 +84,11 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     {
         $ean = '2222222222222';
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
-        $order_id = $this->webshop->placeOrder($data);
+        $mailer = new FakePhpMailer;
+        $order_id = $this->webshop->placeOrder($data, $mailer);
         $this->assertTrue($order_id > 0);
+        $this->assertTrue($mailer->isSend(), 'Mail is not send');
+        
         $order = new Order($this->kernel, $order_id);
         $this->assertEquals($ean, $order->getContact()->getAddress()->get('ean'));
         $this->assertEquals(1, $order->getContact()->get('type_key'));
@@ -89,8 +98,10 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     {
         $ean = '2222222222222';
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
-        $order_id = $this->webshop->placeManualOrder($data);
+        $mailer = new FakePhpMailer;
+        $order_id = $this->webshop->placeManualOrder($data, array(), $mailer);
         $this->assertTrue($order_id > 0);
+        $this->assertTrue($mailer->isSend(), 'Mail is not send');
 
     }
 
@@ -98,10 +109,12 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     {
         $ean = '2222222222222';
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
-        $order_id = $this->webshop->placeOrder($data);
+        $mailer = new FakePhpMailer;
+        $order_id = $this->webshop->placeOrder($data, $mailer);
         $transaction_number = 1000;
         $transaction_status = 'captured';
         $amount = 1000;
         $this->assertTrue($this->webshop->addOnlinePayment($order_id, $transaction_number, $transaction_status, $amount) == 0);
+        $this->assertTrue($mailer->isSend(), 'Mail is not send');
     }
 }

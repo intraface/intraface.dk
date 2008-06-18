@@ -211,8 +211,12 @@ class NewsletterSubscriber extends Intraface_Standard
      *
      * @return boolean
      */
-    public function subscribe($input)
+    public function subscribe($input, $mailer)
     {
+        if(!is_object($mailer)) {
+            throw new Exception('A valid mailer object is needed');
+        }
+        
         $input = safeToDb($input);
         $input = array_map('strip_tags', $input);
 
@@ -311,7 +315,7 @@ class NewsletterSubscriber extends Intraface_Standard
         if (!$this->optedIn()) {
 
             // TODO replace by observer
-            if (!$this->sendOptInEmail()) {
+            if (!$this->sendOptInEmail($mailer)) {
                 $this->error->set('could not send optin email');
                 return false;
             }
@@ -422,8 +426,12 @@ class NewsletterSubscriber extends Intraface_Standard
      *
      * @return boolean
      */
-    public function sendOptInEmail()
+    public function sendOptInEmail($mailer)
     {
+        if(!is_object($mailer)) {
+            throw new Exception('A valid mailer object is needed');
+        }
+        
         if ($this->id == 0) {
             $this->error->set('no id');
             return false;
@@ -459,7 +467,7 @@ class NewsletterSubscriber extends Intraface_Standard
             return false;
         }
 
-        if ($email->send()) {
+        if ($email->send($mailer)) {
             $db = new DB_Sql;
             $db->query("UPDATE newsletter_subscriber SET date_optin_email_sent = NOW() WHERE id = " . $this->id);
             return true;

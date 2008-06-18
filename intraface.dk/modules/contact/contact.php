@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $contact = new Contact($kernel, $_POST['id']);
 
     if (!empty($_POST['send_email'])) {
-        $contact->sendLoginEmail();
+        $contact->sendLoginEmail(Intraface_Mail::factory());
     }
     elseif (!empty($_POST['new_password'])) {
         $contact->generatePassword();

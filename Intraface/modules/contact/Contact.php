@@ -853,10 +853,15 @@ class Contact extends Intraface_Standard {
     /**
      * Sends the login email for the contact
      *
+     * @param object mailer
      * @return boolean
      */
-    function sendLoginEmail()
+    function sendLoginEmail($mailer)
     {
+        if(!is_object($mailer)) {
+            throw new Exception('A valid mailer object must be provided');
+        }
+        
         if ($this->id == 0) {
             $this->error->set('Der er ikke noget id, så kunne ikke sende en e-mail');
             return false;
@@ -869,7 +874,7 @@ class Contact extends Intraface_Standard {
 
         $this->load();
 
-
+        $this->kernel->useShared('email');
         $email = new Email($this->kernel);
         if (!$email->save(
             array(
@@ -886,7 +891,7 @@ class Contact extends Intraface_Standard {
             return false;
         }
 
-        if ($email->send()) {
+        if ($email->send($mailer)) {
             $this->error->set('E-mailen er sendt');
             return true;
         }

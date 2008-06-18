@@ -45,7 +45,7 @@ while ($row = $result->fetchRow()) {
     //echo '<h1>' . $kernel->intranet->get('name') . ' sender e-mails</h1>';
 
     $email = new Email($kernel);
-    $email->sendAll();
+    $email->sendAll(Intraface_Mail::factory());
 
     // $email->error->view();
 

@@ -354,7 +354,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
             $values['description'] = 'Onlineshop';
         }
 
-        if (!$order_id = $this->webshop->placeOrder($values)) {
+        if (!$order_id = $this->webshop->placeOrder($values, Intraface_Mail::factory())) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('order could not be placed. It returned the following error: ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
         }

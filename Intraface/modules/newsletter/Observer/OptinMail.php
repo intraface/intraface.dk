@@ -14,6 +14,11 @@ require_once 'Intraface/shared/email/Email.php';
 class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observer pattern
 {
     private $list;
+    
+    /**
+     * @var object mailer to send emails
+     */
+    private $mailer;
 
     /**
      * Constructor
@@ -22,9 +27,13 @@ class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observ
      *
      * @return void
      */
-    public function __construct($list)
+    public function __construct($list, $mailer)
     {
         $this->list = $list;
+        if(!is_object($mailer)) {
+            throw new Exception('A valid mailer object is needed');
+        }
+        $this->mailer = $mailer;
     }
 
     /**
@@ -61,6 +70,10 @@ class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observ
      */
     private function sendOptInEmail($subscriber)
     {
+        if(!is_object($mailer)) {
+            throw new Exception('A valid mailer object is needed');
+        }
+        
         $subscriber->load();
 
         $contact = $subscriber->getContact();
@@ -84,7 +97,7 @@ class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observ
             return false;
         }
 
-        if ($email->send()) {
+        if ($email->send($this->mailer)) {
             $db = new DB_Sql;
             $db->query("UPDATE newsletter_subscriber SET date_optin_email_sent = NOW() WHERE id = " . $subscriber->get('id'));
             return true;

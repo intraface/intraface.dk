@@ -38,7 +38,7 @@ if (!empty($_POST)) {
 
 
             if ($id = $email->save($var)) {
-                $email->send();
+                $email->send(Intraface_Mail::factory());
                 header('Location: index.php?id='.$todo->get('id'));
                 exit;
             } else {

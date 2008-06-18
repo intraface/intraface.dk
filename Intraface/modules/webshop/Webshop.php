@@ -207,10 +207,11 @@ class Webshop
      *
      * @param array $input    Array with customer data
      * @param array $products Array with products
+     * @param object $mailer An mailer object to send e-mails
      *
      * @return integer Order id
      */
-    public function placeManualOrder($input = array(), $products = array())
+    public function placeManualOrder($input = array(), $products = array(), $mailer)
     {
         $order_id = $this->createOrder($input);
         if ($order_id == 0) {
@@ -223,7 +224,7 @@ class Webshop
             return false;
         }
 
-        if (!$this->sendEmail($order_id)) {
+        if (!$this->sendEmail($order_id, $mailer)) {
             $this->error->set('unable to send email to the customer');
             return false;
         }
@@ -238,8 +239,12 @@ class Webshop
      *
      * @return integer Order id
      */
-    public function placeOrder($input)
+    public function placeOrder($input, $mailer)
     {
+        if(!is_object($mailer)) {
+            throw new Exception('A valid mailer object is needed');
+        }
+        
         if (!$order_id = $this->createOrder($input)) {
             $this->error->set('unable to create the order');
             return false;
@@ -254,7 +259,7 @@ class Webshop
 
         $this->basket->reset();
 
-        if (!$this->sendEmail($order_id)) {
+        if (!$this->sendEmail($order_id, $mailer)) {
             $this->error->set('unable to send email to the customer');
             return false;
         }
@@ -289,8 +294,12 @@ class Webshop
      *
      * @return boolean
      */
-    private function sendEmail($order_id)
+    private function sendEmail($order_id, $mailer)
     {
+        if(!is_object($mailer)) {
+            throw new Exception('A valid mailer object is needed');
+        }
+        
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
@@ -305,7 +314,7 @@ class Webshop
             return false;
         }
 
-        if (!$email->send()) {
+        if (!$email->send($mailer)) {
             $this->error->merge($email->error->message);
             return false;
         }

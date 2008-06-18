@@ -13,7 +13,6 @@
  * @version @package-version@
  *
  */
-require_once 'phpmailer/class.phpmailer.php';
 require_once 'Intraface/functions.php';
 require_once 'Intraface/modules/contact/Contact.php';
 
@@ -327,9 +326,12 @@ class Email extends Intraface_Standard
      *
      * @return boolean
      */
-    function send($what_to_do = 'send')
+    function send($phpmailer, $what_to_do = 'send')
     {
-
+        if(!is_object($phpmailer)) {
+            throw new Exception('A valid mailer is not provided to the send method');
+        }
+        
         if (!$this->isReadyToSend()) {
             return false;
         }
@@ -358,13 +360,17 @@ class Email extends Intraface_Standard
             return 1;
         }
 
+        /*
+         * Now comes as a parameter to the method
         $phpmailer = new Phpmailer;
         // opsætning
         $phpmailer->Mailer   = 'mail'; // Alternative to IsSMTP()
         $phpmailer->WordWrap = 75;
         $phpmailer->setLanguage('en', 'phpmailer/language/');
         // $phpmailer->ConfirmReadingTo = $this->kernel->intranet->address->get('email');
-
+        */
+        
+        
         // Sender
         if ($this->get('from_email')) {
             $phpmailer->From = $this->get('from_email');
@@ -497,8 +503,12 @@ class Email extends Intraface_Standard
      *
      * @return boolean
      */
-    function sendAll()
+    function sendAll($mailer)
     {
+        if(!is_object($mailer)) {
+            throw new Exception('A valid mailer object is needed');
+        }
+        
         $sent_this_hour = $this->sentThisHour();
 
         $limit_query = abs($this->allowed_limit-$sent_this_hour-$this->system_buffer);
@@ -517,7 +527,7 @@ class Email extends Intraface_Standard
             $email = new Email($this->kernel, $db->f('id'));
             // could be good, but stops sending the rest of the emails if one has an error.
             // $email->error = &$this->error;
-            $email->send();
+            $email->send($mailer);
         }
         return 1;
 

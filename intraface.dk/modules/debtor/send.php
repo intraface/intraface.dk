@@ -159,7 +159,7 @@ switch ($send_as) {
         break;
     case 'electronic_email':
         // Sender e-mailen
-        if($email->send()) {
+        if($email->send(Intraface_Mail::factory())) {
             if ($debtor->get('status') == 'created') {
                 $debtor->setStatus('sent');
             }

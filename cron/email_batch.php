@@ -16,6 +16,7 @@
 session_start();
 
 require_once 'common.php';
+require_once 'Intraface/Mail.php';
 
 $db = MDB2::singleton(DB_DSN);
 $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
@@ -43,7 +44,7 @@ while ($row = $result->fetchRow()) {
 	//echo '<h1>' . $kernel->intranet->get('name') . ' sender e-mails</h1>';
 
 	$email = new Email($kernel);
-	$email->sendAll();
+	$email->sendAll(Intraface_Mail::factory());
 
 	// $email->error->view();
 

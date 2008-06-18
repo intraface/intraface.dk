@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             
             if(isset($_POST['send']) && $_POST['send'] != '' && $email->isReadyToSend()) {
-                $email->send();
+                $email->send(Intraface_Mail::factory());
                 $email->load();
                 if($redirect->get('id') != 0) {
                     $redirect->setParameter('send_email_status', $email->get('status'));
