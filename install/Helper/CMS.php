@@ -27,7 +27,7 @@ class Install_Helper_CMS {
         $template_id = $template->save(array('name' => 'Test', 'identifier' => 'test', 'for_page_type' => array(1, 2, 4)));
 
         require_once 'Intraface/modules/cms/TemplateSection.php';
-        require_once 'Intraface/modules/cms/template_section/Mixed.php';
+        require_once 'Intraface/modules/cms/templatesection/Mixed.php';
         $section = new Intraface_modules_cms_templatesection_Mixed($template);
         $section_id = $section->save(array('name' => 'Test', 'identifier' => 'test', 'allowed_element' => array(1, 2, 3, 4, 5, 6, 7, 8, 9)));
 
