@@ -194,7 +194,7 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html_Provider_FakeQuick
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Admin_XMLRPC', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Client_XMLRPC', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Controller', 'public.intraface.dk', '0.0.1');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '0.0.1');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '0.0.2');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.2.0');
 $pfm->addPackageDepWithChannel('required', 'konstrukt', 'public.intraface.dk', '0.4.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.1.0');
