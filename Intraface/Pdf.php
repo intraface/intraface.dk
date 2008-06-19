@@ -34,15 +34,6 @@ class Intraface_Pdf extends Document_Cpdf
 
         $this->page = 1;
 
-        // Sætter værdier på baggrund af faste værdier
-        $this->value['right_margin_position'] = $this->page_width - $this->value['margin_right']; // content_width fra 0 til højre-margin
-        $this->value['top_margin_position'] = $this->page_height - $this->value['margin_top']; // content_height
-
-        $this->value['content_width'] = $this->page_width - $this->value['margin_right'] - $this->value['margin_left']; // content_width fra 0 til højre-margin
-        $this->value['content_height'] = $this->page_height - $this->value['margin_bottom'] - $this->value['margin_top']; // content_height
-
-        $this->value['font_spacing'] = $this->value['font_size'] + $this->value['font_padding_top'] + $this->value['font_padding_bottom'];
-
         // Opretter en nyt A4 dokument
         parent::__construct(array(0, 0, $this->page_width, $this->page_height));
 
@@ -60,28 +51,32 @@ class Intraface_Pdf extends Document_Cpdf
                       197 => 'Aring');
 
         parent::selectFont('Helvetica.afm', array('differences'=>$diff));
+        
+        $this->calculateDynamicValues();
+    }
+
+
+
+    /**
+     * Calculates all the dynamic values
+     * Notice that X and Y are reset.
+     *
+     * @return void
+     */
+    private function calculateDynamicValues()
+    {
+        // Sætter værdier på baggrund af faste værdier
+        $this->value['right_margin_position'] = $this->page_width - $this->value['margin_right']; // content_width fra 0 til højre-margin
+        $this->value['top_margin_position'] = $this->page_height - $this->value['margin_top']; // content_height
+
+        $this->value['content_width'] = $this->page_width - $this->value['margin_right'] - $this->value['margin_left']; // content_width fra 0 til højre-margin
+        $this->value['content_height'] = $this->page_height - $this->value['margin_bottom'] - $this->value['margin_top']; // content_height
+
+        $this->value['font_spacing'] = $this->value['font_size'] + $this->value['font_padding_top'] + $this->value['font_padding_bottom'];
+        
+        // X and Y are need to be reset, if the margins are changed.
         $this->setX(0);
         $this->setY(0);
-    }
-
-    /**
-     * @todo delete this method
-     *
-     * @deprecated
-     */
-    private function start()
-    {
-        trigger_error('start() should be deleted as it is not used', E_USER_NOTICE);
-    }
-
-    /**
-     * @todo delete this method
-     *
-     * @deprecated
-     */
-    private function load()
-    {
-        trigger_error('load() should be deleted as it is not used', E_USER_NOTICE);
     }
 
     /**
@@ -95,6 +90,10 @@ class Intraface_Pdf extends Document_Cpdf
     public function setValue($key, $value)
     {
         $this->value[$key] = $value;
+        //Every time we change a fixed value we need to update the dynamic values
+        if(in_array($key, array('margin_right', 'margin_left', 'margin_top', 'margin_bottom', 'font_size', 'font_padding_top', 'font_padding_bottom'))) {
+            $this->calculateDynamicValues();
+        }    
     }
 
     /**

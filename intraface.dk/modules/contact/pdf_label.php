@@ -11,6 +11,20 @@ $contact->dbquery->defineCharacter('character', 'address.name');
 $contact->dbquery->storeResult('use_stored', 'contact', 'toplevel');
 $contacts = $contact->getList("use_address");
 
+
+$doc = new Intraface_modules_contact_PdfLabel($kernel->setting->get("user", "label"));
+$used_keyword = array();
+foreach($contact->dbquery->getKeyword() AS $kid) {
+    foreach($keywords AS $k){
+        if($k['id'] == $kid) {
+            $used_keyword[] = $k['keyword'];
+        }
+    }
+}
+$doc->generate($contacts, $contact->dbquery->getFilter('search'), $used_keyword);
+$doc->stream();
+
+/*
 $doc = new Intraface_Pdf($kernel);
 
 $doc->setValue('font_size', 10);
@@ -22,10 +36,9 @@ switch($kernel->setting->get("user", "label")) {
 		$doc->setValue('margin_right', 0);
 		$doc->setValue('margin_bottom', 0);
 		$doc->setValue('margin_left', 0);
-		$doc->load();
 
-		$label_width = ceil(($doc->page_width - $doc->get('margin_right') - $doc->get('margin_left'))/2);
-		$label_height = ceil(($doc->page_height - $doc->get('margin_top') - $doc->get('margin_bottom'))/8);
+		$label_width = ceil($doc->get('content_width')/2);
+		$label_height = ceil($doc->get('content_height')/8);
 
 		$label_padding_left = 42;
 		$label_padding_top = 28;
@@ -37,11 +50,9 @@ switch($kernel->setting->get("user", "label")) {
 		$doc->setValue('margin_right', 19);
 		$doc->setValue('margin_bottom', 42);
 		$doc->setValue('margin_left', 19);
-		$doc->load();
 
-
-		$label_width = ceil(($doc->page_width - $doc->get('margin_right') - $doc->get('margin_left'))/3);
-		$label_height = ceil(($doc->page_height - $doc->get('margin_top') - $doc->get('margin_bottom'))/7);
+        $label_width = ceil($doc->get('content_width')/3);
+		$label_height = ceil(($doc->get('content_height'))/7);
 
 		$label_padding_left = 14;
 		$label_padding_top = 14;
@@ -86,7 +97,7 @@ for($i = 0, $max = count($contacts); $i < $max; $i++) {
 		// Hvis de har en mail, kører vi videre med næste.
 		CONTINUE;
 	}
-	*/
+	
 	// TODO -- hvorfor bruger vi ikke antallet af labels til at vide, hvornår
 	// vi skifter linje?
 	if($doc->get('x') + $label_width  > $doc->get('right_margin_position')) {
@@ -129,5 +140,5 @@ for($i = 0, $max = count($contacts); $i < $max; $i++) {
 }
 
 $doc->stream();
-
+*/
 ?>
