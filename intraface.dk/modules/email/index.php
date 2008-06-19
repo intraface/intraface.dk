@@ -42,7 +42,7 @@ $page->start(safeToHtml($translation->get('e-mails')));
 		<p><?php echo safeToHtml($translation->get('e-mails are in queue - the will be sent soon')); ?></p>
 	<?php endif; ?>
 
-	<?php echo $email_object->dbquery->display('character'); ?>
+	<?php echo $email_object->getDBQuery()->display('character'); ?>
 
 	<table>
 	<caption><?php echo safeToHtml($translation->get('e-mails')); ?></caption>
@@ -71,7 +71,7 @@ $page->start(safeToHtml($translation->get('e-mails')));
 	</tbody>
 	</table>
 
-	<?php echo $email_object->dbquery->display('paging'); ?>
+	<?php echo $email_object->getDBQuery()->display('paging'); ?>
 
 <?php endif; ?>
 
