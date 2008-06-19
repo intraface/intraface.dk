@@ -44,6 +44,7 @@ class Intraface_modules_cms_element_Wikitext extends CMS_Element
     protected function save_element($var)
     {
         // should probably purify
+        require_once 'HTMLPurifier/Bootstrap.php';
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Core', 'Encoding', 'ISO-8859-1');
         $config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
