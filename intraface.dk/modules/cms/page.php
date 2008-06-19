@@ -200,7 +200,7 @@ $page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('
                 <div class="formrow">
                     <label for="section_<?php echo $section->get('id')?>"><?php echo $section->get('section_name'); ?></label>
                     <?php
-                        $editor = new HTML_Editor($section->template_section->get('html_format'));
+                        $editor = new Intraface_modules_cms_HTML_Editor($section->template_section->get('html_format'));
                         $editor->setEditor($kernel->setting->get('user', 'htmleditor'));
                         $textarea_attr = array(
                             //'id' => 'section_'.$section->get('id'),
