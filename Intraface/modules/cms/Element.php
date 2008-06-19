@@ -109,7 +109,7 @@ class CMS_Element extends Intraface_Standard
                 if (!$db->nextRecord()) {
                     return false;
                 }
-                $class = $class_prefix . $element_types[$db->f('type_key')];
+                $class = $class_prefix . ucfirst($element_types[$db->f('type_key')]);
                 if (!class_exists($class)) {
                     return false;
                 }
