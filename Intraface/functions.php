@@ -5,7 +5,7 @@ if (!function_exists('isAjax')) {
      * This function is dynamically redefinable.
      * @see $GLOBALS['_global_function_callback_e']
      */
-    function isAjax($args) 
+    function isAjax($args = NULL) 
     {
         $args = func_get_args();
         return call_user_func_array($GLOBALS['_global_function_callback_isAjax'], $args);
