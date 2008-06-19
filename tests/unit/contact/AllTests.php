@@ -8,7 +8,7 @@ class Contact_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Intraface_Contact');
 
-        $tests = array('Contact', 'ContactReminder');
+        $tests = array('Contact', 'ContactReminder', 'PdfLabel');
 
         foreach ($tests AS $test) {
             require_once $test . 'Test.php';
