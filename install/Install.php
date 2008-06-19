@@ -192,7 +192,7 @@ class Intraface_Install
         session_start();
         
         $adapter = new Intraface_Auth_User($this->db, session_id(), 'start@intraface.dk', 'startup');
-        $auth = new Intraface_Auth();
+        $auth = new Intraface_Auth(session_id());
         $user = $auth->authenticate($adapter);
         
         return $user;
