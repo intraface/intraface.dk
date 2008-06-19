@@ -69,6 +69,7 @@ class Intraface_modules_cms_section_Longtext extends CMS_Section
             $var['text'] = '';
         }
 
+        require_once 'HTMLPurifier/Bootstrap.php';
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Core', 'Encoding', 'ISO-8859-1');
         $purifier_cache_dir = PATH_CACHE.'htmlpurifier/';
