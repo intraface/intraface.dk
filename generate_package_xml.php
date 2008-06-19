@@ -158,7 +158,7 @@ $pfm->addPackageDepWithChannel('required', 'phpmailer', 'public.intraface.dk', '
 // cms
 $pfm->addPackageDepWithChannel('required', 'XML_Util', 'pear.php.net', '1.1.4');
 $pfm->addPackageDepWithChannel('required', 'XML_Serializer', 'pear.php.net', '0.18.0');
-$pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'htmlpurifier.org', '2.1.3');
+$pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'htmlpurifier.org', '3.1.0');
 $pfm->addPackageDepWithChannel('required', 'Text_Wiki', 'pear.php.net', '1.2.0');
 $pfm->addPackageDepWithChannel('required', 'Markdown', 'pear.michelf.com', '1.0.0');
 
