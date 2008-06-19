@@ -11,15 +11,16 @@ class Intraface_Auth
 {
     private $identity;
     private $observers = array();
+    private $session_id;
 
     /**
      * Constructor
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($session_id)
     {
-
+        $this->session_id = $session_id;
     }
 
     public function authenticate($adapter)
@@ -30,7 +31,7 @@ class Intraface_Auth
             $this->notifyObservers('login', ' could not login');
         }
 
-        return ($_SESSION['user'] = $object);
+        return ($object);
     }
 
     /**
@@ -40,7 +41,7 @@ class Intraface_Auth
      */
     public function hasIdentity()
     {
-        if (!empty($_SESSION['user'])) {
+        if (!empty($_SESSION['intraface_logged_in_user_id'])) {
             return true;
         } else {
             return false;
@@ -60,11 +61,14 @@ class Intraface_Auth
         return true;
     }
 
-    public function getIdentity()
+    public function getIdentity($db)
     {
         if ($this->hasIdentity()) {
-            $user = $_SESSION['user'];
-            $user->clearCachedPermission();
+            $adapter = new Intraface_Auth_User($db, $this->session_id);
+            if(!$user = $adapter->isLoggedIn()) {
+                throw new Exception('No valid user was found');
+            }
+            // $user->clearCachedPermission();
             return $user;
         }
         return false;

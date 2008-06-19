@@ -54,7 +54,7 @@ if (!$auth->hasIdentity()) {
 
 $kernel = new Intraface_Kernel(session_id());
 
-$kernel->user = $auth->getIdentity();
+$kernel->user = $auth->getIdentity(MDB2::singleton(DB_DSN));
 
 if (!$intranet_id = $kernel->user->getActiveIntranetId()) {
     trigger_error('no active intranet_id', E_USER_ERROR);

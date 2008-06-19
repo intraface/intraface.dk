@@ -22,7 +22,7 @@ class Intraface_Auth_User
      *
      * @return void
      */
-    function __construct($db, $session_id, $email, $password)
+    function __construct($db, $session_id, $email = NULL, $password = NULL)
     {
         $this->db         = $db;
         $this->email      = $email;
@@ -52,9 +52,14 @@ class Intraface_Auth_User
         if (PEAR::isError($result)) {
             throw new Exception('could not update user ' . $result->getMessage() . $result->getUserInfo());
         }
-
-		$user = new Intraface_User($row['id']);
-		$this->isLoggedIn();
+        
+        $user = new Intraface_User($row['id']);
+		if(!is_object($user) || $user->get('id') != $row['id']) {
+		    throw new Exception('Unable to return a valid user object on login');
+		}
+        
+        $_SESSION['intraface_logged_in_user_id'] = $user->getId();
+        
         return $user;
     }
     

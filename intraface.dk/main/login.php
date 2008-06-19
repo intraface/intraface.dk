@@ -8,7 +8,7 @@ if (isset($_POST['email']) AND isset($_POST['password'])) {
 
 	$adapter = new Intraface_Auth_User(MDB2::singleton(DB_DSN), session_id(), $_POST['email'], $_POST['password']);
 
-    $auth = new Intraface_Auth();
+    $auth = new Intraface_Auth(session_id());
     $auth->attachObserver(new Intraface_Log);
     
     $user = $auth->authenticate($adapter);

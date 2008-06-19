@@ -11,7 +11,7 @@ require $install_class;
 $install = new Intraface_Install;
 
 session_start();
-$auth = new Intraface_Auth;
+$auth = new Intraface_Auth(session_id());
 $auth->clearIdentity();
 
 Doctrine_Manager::connection(DB_DSN);

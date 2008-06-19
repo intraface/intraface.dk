@@ -126,11 +126,7 @@ class Intraface_User extends Intraface_Standard
      */
     public function getAddress()
     {
-        // HACK if it does not check for an empty name
-        //      it is not transferred when the user is saved in the session
-        //      there must be a way to maintain state between pages for
-        //      for objects inside other objects
-        if (!empty($this->address) AND $this->address->get('name') != '') {
+        if (!empty($this->address)) {
             return $this->address;
         }
         return ($this->address = Intraface_Address::factory('user', $this->id));
