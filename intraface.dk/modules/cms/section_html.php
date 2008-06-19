@@ -7,6 +7,9 @@ $translation = $kernel->getTranslation('cms');
 
 if (!empty($_GET['moveto']) AND is_numeric($_GET['moveto'])) {
     $element = CMS_Element::factory($kernel, 'id', $_GET['element_id']);
+    if(!is_object($element)) {
+        throw new Exception('Unable to create a valid element object');
+    }
     $element->getPosition(MDB2::singleton(DB_DSN))->moveToPosition($_GET['moveto']);
     $section = $element->section;
     header('Location: section_html.php?id='.$section->get('id'));
@@ -14,6 +17,9 @@ if (!empty($_GET['moveto']) AND is_numeric($_GET['moveto'])) {
 
 } elseif (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
     $element = CMS_Element::factory($kernel, 'id', $_GET['delete']);
+    if(!is_object($element)) {
+        throw new Exception('Unable to create a valid element object');
+    }
     $element->delete();
     $section = $element->section;
     header('Location: section_html.php?id='.$section->get('id'));
@@ -21,6 +27,9 @@ if (!empty($_GET['moveto']) AND is_numeric($_GET['moveto'])) {
 
 } elseif (!empty($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
     $element = CMS_Element::factory($kernel, 'id', $_GET['undelete']);
+    if(!is_object($element)) {
+        throw new Exception('Unable to create a valid element object');
+    }
     $element->undelete();
     $section = $element->section;
     header('Location: section_html.php?id='.$section->get('id'));

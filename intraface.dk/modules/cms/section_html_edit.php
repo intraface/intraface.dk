@@ -161,7 +161,10 @@ if (!empty($_POST)) {
     // i øvrigt er tingene alt for tæt koblet i page
     $section = CMS_Section::factory($kernel, 'id', $_GET['section_id']);
     $element = CMS_Element::factory($section, 'type', $_GET['type']);
-
+    if(!is_object($element)) {
+        throw new Exception('Unable to create a valid element object');
+    }
+    
     $value = $element->get();
 
     $value['type'] = $element->get('type');
