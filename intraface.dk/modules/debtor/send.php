@@ -96,7 +96,7 @@ if (!$file_id = $filehandler->save($tmp_file->getFilePath(), $tmp_file->getFileN
     trigger_error('Filen kunne ikke gemmes', E_USER_ERROR);
 }
 
-$input['accessibility'] = 'private';
+$input['accessibility'] = 'intranet';
 if (!$file_id = $filehandler->update($input)) {
     echo $filehandler->error->view();
     trigger_error('Oplysninger om filen kunne ikke opdateres', E_USER_ERROR);
