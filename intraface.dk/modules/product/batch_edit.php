@@ -82,8 +82,8 @@ $page->start(t('products'));
 <br />
 <?php $i++; } // end foreach ?>
 <div>
-    <input type="submit" class="save" value="<?php e(t('save')); ?>" />
-    eller <a href="index.php?use_stored=true"><?php e(t('regret')); ?></a>
+    <input type="submit" class="save" value="<?php e(t('save', 'common')); ?>" />
+    eller <a href="index.php?use_stored=true"><?php e(t('regret', 'common')); ?></a>
 </div>
 </form>
 
