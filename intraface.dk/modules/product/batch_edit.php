@@ -49,7 +49,7 @@ $page->start(t('products'));
 <h1><?php e(t('products')); ?></h1>
 
 <ul class="options">
-    <li><a href="index.php?use_stored=true"><?php e(t('close')); ?></a></li>
+    <li><a href="index.php?use_stored=true"><?php e(t('close', 'common')); ?></a></li>
 </ul>
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
