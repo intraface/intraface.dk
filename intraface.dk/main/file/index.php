@@ -50,17 +50,14 @@ $fileviewer = new FileViewer($filehandler, $query_parts[3]);
 if($fileviewer->needLogin()) {
     session_start();
     $auth = new Intraface_Auth(session_id());
-    $logged_in_user = $auth->hasIdentity();
-    // the user is logged in but...
-    if (!$user_id = $logged_in_user->getId()) {
+    if (!$auth->hasIdentity()) {
         trigger_error('You need to be logged in to view the file', E_USER_WARNING);
         exit;
     }
-
-    // ...we need to check that it is the right intranet
-    $user = new Intraface_User($user_id);
+    
+    $user = $auth->getIdentity(MDB2::singleton(DB_DSN));
     $intranet = new Intraface_Intranet($user->getActiveIntranetId());
-    if($intranet->getId() != $intranet_id) {
+    if($intranet->getId() != $kernel->intranet->getId()) {
         trigger_error('You where not logged into the correct intranet to view the file', E_USER_WARNING);
         exit;
     }
