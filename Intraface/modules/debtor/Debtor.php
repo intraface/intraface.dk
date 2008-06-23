@@ -410,8 +410,8 @@ class Debtor extends Intraface_Standard
         if ($this->id == 0) {
             
             $infinite_check = 0;
+            $random = new Ilib_RandomKeyGenerator();
             do {
-                $random = new Ilib_RandomKeyGenerator();
                 $identifier = $random->generate(30);
                 $db->query('SELECT id FROM debtor WHERE identifier_key = "'.$identifier.'" AND intranet_id = '.$this->kernel->intranet->get('id'));
                 $infinite_check++;
