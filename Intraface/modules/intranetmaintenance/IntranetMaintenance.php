@@ -202,11 +202,11 @@ class IntranetMaintenance extends Intraface_Intranet
         }
         if ($this->id == 0 || isset($input["generate_private_key"])) {
 
-            $sql .= ", private_key = \"".$this->getRandomKeyGenerator(50)->generate()."\"";
+            $sql .= ", private_key = \"".$this->getRandomKeyGenerator()->generate(50)."\"";
         }
 
         if ($this->id == 0 || isset($input["generate_public_key"])) {
-            $sql .= ", public_key = \"".$this->getRandomKeyGenerator(15)->generate()."\"";
+            $sql .= ", public_key = \"".$this->getRandomKeyGenerator()->generate(15)."\"";
         }
 
         if ($this->id == 0) {
@@ -320,9 +320,9 @@ class IntranetMaintenance extends Intraface_Intranet
      * @param integer $length the length of the generated key
      * @return object RandomKeyGenerator
      */
-    private function getRandomKeyGenerator($length)
+    private function getRandomKeyGenerator()
     {
-        return new Ilib_RandomKeyGenerator($length);
+        return new Ilib_RandomKeyGenerator();
     }
 
     private function identifierIsUnique($identifier)
