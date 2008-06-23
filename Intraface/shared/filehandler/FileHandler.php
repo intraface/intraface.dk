@@ -431,12 +431,12 @@ class FileHandler extends Intraface_Standard
         }
         
         
-        $random_key_generator = $this->getRandomKeyGenerator(50);
+        $random_key_generator = $this->getRandomKeyGenerator();
 
         // Vi sikre os at ingen andre har den nøgle
         $i = 0;
         do {
-            $access_key = $random_key_generator->generate();
+            $access_key = $random_key_generator->generate(50);
 
             if ($i > 50 || $access_key == '') {
                 trigger_error("Fejl under generering af access_key i FileHandler->save", E_USER_ERROR);
@@ -670,9 +670,9 @@ class FileHandler extends Intraface_Standard
      * @param integer $length the length of the random key
      * @return object RandomKeyGenerator
      */
-    private function getRandomKeyGenerator($length) 
+    private function getRandomKeyGenerator() 
     {
-        return new Ilib_RandomKeyGenerator($length);
+        return new Ilib_RandomKeyGenerator();
     }
 
 }
