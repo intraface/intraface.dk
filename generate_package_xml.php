@@ -7,11 +7,11 @@
  * @version @package-version@
  */
 
-$version = '1.7.4';
+$version = '1.8.0';
 $stability = 'stable';
 $notes = '
-* Fixed undefined variable keys
-* Bug fix in XMLRPC/CMS/Server.php
+* Prepared for enhanced webshop
+* Small improvements
 ';
 $web_dir = 'intraface.dk';
 
@@ -191,11 +191,11 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html_Provider_FakeQuick
 
 
 // demo
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Admin_XMLRPC', 'public.intraface.dk', '0.1.1');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Admin_XMLRPC', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Client_XMLRPC', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Controller', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '0.0.2');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.2.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.1.2');
 $pfm->addPackageDepWithChannel('required', 'konstrukt', 'public.intraface.dk', '0.4.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.intraface.dk', '0.1.0');
