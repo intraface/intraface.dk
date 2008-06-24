@@ -33,12 +33,13 @@ class Intraface_XMLRPC_Contact_Server
         $this->checkCredentials($credentials);
 
         $contact = new Contact($this->kernel, $id);
-        if (!$contact->get('id') > 0) { // -4
+        if (!$contact->getId() > 0) { // -4
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('contact does not exist', -4);
         }
         $contact_info = array_merge($contact->get(), $contact->address->get());
         $contact_info['id'] = $contact->get('id');
+        $contact_info['type'] = $contact->get('type');
         if (!$contact_info) {
             return array();
         }
@@ -146,9 +147,8 @@ class Intraface_XMLRPC_Contact_Server
         if (!$contact->get('id') > 0) {
             return 0;
         }
-        $contact->getKeywords();
         $keywords = array();
-        $keywords = $contact->keywords->getConnectedKeywords();
+        $keywords = $contact->getKeywordAppender()->getConnectedKeywords();
         return $keywords;
     }
 
