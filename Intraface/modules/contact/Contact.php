@@ -121,8 +121,8 @@ class Company extends Contact
  */
 require_once dirname(__FILE__) . '/ContactPerson.php';
 
-class Contact extends Intraface_Standard {
-
+class Contact extends Intraface_Standard 
+{
     /**
      * @var object
      */
@@ -308,8 +308,9 @@ class Contact extends Intraface_Standard {
         for ($i=0, $max=count($this->fields); $i<$max; $i++) {
             $this->value[$this->fields[$i]] = $db->f($this->fields[$i]);
         }
-        $this->value['type'] = $this->types[$db->f('type_key')];
         $this->value['type_key'] = $db->f('type_key');
+        //$this->value['type'] = $this->types[$db->f('type_key')];
+        $this->value['type'] = $this->getType();
         $this->value['password'] = $db->f('password');
         $this->value['number'] = $db->f('number');
         $this->value['code'] = $db->f('password');
@@ -967,5 +968,10 @@ class Contact extends Intraface_Standard {
     function getId()
     {
         return $this->id;
+    }
+    
+    function getType()
+    {
+        return $this->types[$this->value['type_key']];
     }
 }
