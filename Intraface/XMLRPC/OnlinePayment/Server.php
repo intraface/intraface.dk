@@ -86,7 +86,7 @@ class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
         
         if (!$payment_id = $onlinepayment->save($values)) {
             // this is probably a little to hard reaction.
-            throw new XML_RPC2_FaultException('Onlinebetaling kunne ikke blive gemt' . strtolower(implode(', ', $onlinepayment->error->getMessage())), -4);
+            throw new XML_RPC2_FaultException('Onlinebetaling kunne ikke blive gemt ' . strtolower(implode(', ', $onlinepayment->error->getMessage())), -4);
         }
 
         return $this->prepareResponseData($payment_id);
