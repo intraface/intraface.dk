@@ -14,16 +14,14 @@ if($debtor->get('id') == 0) {
 
 if (!empty($_GET['format'])) {
 	$format = $_GET['format'];
-}
-else {
+} else {
 	$format = 'pdf';
 }
 
 if(($debtor->get("type") == "order" || $debtor->get("type") == "invoice") && $kernel->intranet->hasModuleAccess('onlinepayment')) {
     $kernel->useModule('onlinepayment', true); // true: ignore_user_access
     $onlinepayment = OnlinePayment::factory($kernel);
-}
-else {
+} else {
     $onlinepayment = NULL;
 }
 
@@ -54,6 +52,4 @@ switch ($format) {
     break;
 }
 exit;
-
-?>
 
