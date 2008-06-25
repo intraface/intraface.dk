@@ -7,16 +7,13 @@
  * @author   Sune Jensen <sune@intraface.dk>
  * @version  @package-version@
  */
-
 class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
 {
-
     /**
      * Returns target to perform payment on
      *
-     *
-     * @param struct $credentials Credentials to use the server
-     * @param string $identifier_key debtor identifier key
+     * @param struct $credentials    Credentials to use the server
+     * @param string $identifier_key Debtor identifier key
      *
      * @return array debtor
      */
@@ -35,6 +32,17 @@ class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
         if ($debtor->get('id') == 0) {
             throw new XML_RPC2_FaultException('No valid debtor was found from the identifier key', -4);
         }
+
+        /*
+        $onlinepayment = OnlinePayment::factory($this->kernel);
+        $onlinepayment->dbquery->setFilter('belong_to', $debtor->get("type"));
+        $onlinepayment->dbquery->setFilter('belong_to_id', $debtor->get('id'));
+        $onlinepayment->dbquery->setFilter('status', 2);
+                
+        foreach($onlinepayment->getlist() AS $p) {
+            $parameter['payment_online'] += $p["amount"];
+        }
+        */
         
         return $this->prepareResponseData(
             array(
@@ -49,7 +57,6 @@ class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
 
     /**
      * Saves details for a processed onlineoayment
-     *
      *
      * @param struct $credentials Credentials to use the server
      * @param string $identifier_key Debtor identifier key
