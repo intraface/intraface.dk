@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $debtor_module = $kernel->module("debtor");
 $kernel->useModule("contact");
@@ -41,8 +41,7 @@ switch ($format) {
         if($kernel->intranet->get("pdf_header_file_id") != 0) {
             $kernel->useShared('filehandler');
             $filehandler = new FileHandler($kernel, $kernel->intranet->get("pdf_header_file_id"));
-        }
-        else {
+        } else {
             $filehandler = NULL;
         }
 
