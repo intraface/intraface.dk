@@ -187,7 +187,7 @@ $pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Debtor_XMLRPC', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_HTML', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Tools', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html_Provider_FakeQuickpay', 'public.intraface.dk', '0.1.3');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html_Provider_FakeQuickpay', 'public.intraface.dk', '0.1.4');
 
 
 // demo
