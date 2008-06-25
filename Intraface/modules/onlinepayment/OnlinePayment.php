@@ -34,12 +34,8 @@ class OnlinePayment extends Intraface_Standard
 
     public $transaction_status_authorized = "000";
 
-
     function __construct($kernel, $id = 0)
     {
-        /**
-         * @TODO: Because of tests it was necessary to remove OR strtolower(get_class($kernel)) != 'kernel'
-         */
         if (!is_object($kernel)) {
             trigger_error('Debtor requires Kernel, got:'.get_class($kernel), E_USER_ERROR);
         }
@@ -64,18 +60,14 @@ class OnlinePayment extends Intraface_Standard
 
     function factory($kernel, $type = 'settings', $value = 0)
     {
-        /*
-         * @TODO: had to remove the following to get it woring with tests: OR strtolower(get_class($kernel)) != 'kernel'
-         */
         if (!is_object($kernel)) {
-            trigger_error('Debtor kræver Kernel som objekt', E_USER_ERROR);
+            trigger_error('Onlinepayment kræver Kernel som objekt', E_USER_ERROR);
         }
 
         $implemented_providers = OnlinePayment::getImplementedProviders();
         // we set the fallback from settings
         if (!isset($implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')])) {
             trigger_error('Ikke en gyldig provider fra settings i OnlinePayment->factory', E_USER_ERROR);
-            die;
         }
         $provider = $implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')];
 
@@ -389,7 +381,6 @@ class OnlinePayment extends Intraface_Standard
             case "reversed":
                 $date_field = "date_reversed";
                 break;
-
             case "cancelled":
                 $date_field = "date_cancelled";
                 break;
@@ -408,7 +399,6 @@ class OnlinePayment extends Intraface_Standard
      * Tilføjer en onlinebetaling som betaling til faktura
      *
      */
-
     function addAsPayment()
     {
         if ($this->get('status') != 'authorized') {
