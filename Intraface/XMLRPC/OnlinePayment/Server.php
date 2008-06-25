@@ -33,30 +33,30 @@ class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
             throw new XML_RPC2_FaultException('No valid debtor was found from the identifier key', -4);
         }
 
-        /*
-        $onlinepayment = OnlinePayment::factory($this->kernel);
+        $onlinepayment = $this->onlinePaymentFactory();
         $onlinepayment->dbquery->setFilter('belong_to', $debtor->get("type"));
         $onlinepayment->dbquery->setFilter('belong_to_id', $debtor->get('id'));
         $onlinepayment->dbquery->setFilter('status', 2);
-                
+            
+        $parameter['payment_online'] = 0;    
         foreach($onlinepayment->getlist() AS $p) {
             $parameter['payment_online'] += $p["amount"];
         }
-        */
-        
+
         return $this->prepareResponseData(
             array(
                 'type' => $debtor->get('type'),
                 'id' => $debtor->get('id'),
                 'description' => $debtor->get('description'),
                 'total_price' => $debtor->get('total'),
-                'arrears' => $debtor->get('arrears')
+                'arrears' => $debtor->get('arrears'),
+                'payment_online' => $parameter['payment_online']
             )
         );
     }
 
     /**
-     * Saves details for a processed onlineoayment
+     * Saves details for a processed onlinepayment
      *
      * @param struct $credentials Credentials to use the server
      * @param string $identifier_key Debtor identifier key
@@ -145,7 +145,6 @@ class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
         }
     }
     
-    
     /**
      * Initialize Debtor
      *
@@ -154,7 +153,6 @@ class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
      */
     private function debtorFactory($identifier_key)
     {
-        
         if (!$this->kernel->intranet->hasModuleAccess('debtor')) {
             throw new XML_RPC2_FaultException('The intranet did not have access to Debtor', -4);
         }
