@@ -111,7 +111,7 @@ class OnlinePaymentDanDomain extends OnlinePayment
                 if ($this->addAsPayment()) {
                     $this->setStatus("captured");
                 } else {
-                    trigger_error("Onlinebetalingen er hævet, men kunne ikke overføres som betaling til fakturaen", FATAL);
+                    trigger_error("Onlinebetalingen er hævet, men kunne ikke overføres som betaling til fakturaen", E_USER_ERROR);
                 }
                 return 1;
             } else {
