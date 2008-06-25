@@ -117,37 +117,45 @@ class OnlinePaymentQuickPay extends OnlinePayment
                 if ($this->addAsPayment()) {
                     $this->setStatus("captured");
                 } else {
-                    trigger_error("Onlinebetalingen kunne ikke overføres til fakturaen", FATAL);
+                    throw new Exception('Onlinebetalingen kunne ikke overføres til fakturaen i Quickpay->transactionAction()');
                 }
 
                 return true;
 
             } else {
                 // fiasko
-                $this->error->set('Vi kunne ikke capture betalingen');
+                $this->error->set('Betalingen kunne ikke hæves');
                 return false;
             }
-        } elseif ($action == "reverse") {
-            die('not implemented');
-            /*
-            $this->quickpay->set_transaction($transaction);
+        } elseif ($action == "reversal") {
+            $this->quickpay->set_transaction($this->get('transaction_number'));
             $this->eval = $this->quickpay->reverse();
 
-            if (!empty($this->eval['qpstat']) AND $eval['this->qpstat'] === '000') {
+            if (!empty($this->eval['qpstat']) AND $this->eval['qpstat'] === '000') {
                 $this->setStatus("reversed");
-                return 1;
+                return true;
+
+            } else {
+                $this->error->set('Betalingen kunne ikke tilbagebetales');
+                return false;
 
             }
-            else {
-                $this->error->set('Kunne ikke reverse betalingen');
-                return 0;
-
-            }
-            */
 
         } else {
-            trigger_error("Ugyldig handling i Quickpay->transactionAction()", ERROR);
+            throw new Exception('Ugyldig handling i Quickpay->transactionAction()');
         }
+    }
+
+    function getTransactionActions()
+    {
+        return array(
+            0 => array(
+                'action' => 'capture',
+                'label' => 'Hæv'),
+            1 => array(
+                'action' => 'reversal',
+                'label' => 'Tilbagebetal')
+        );
     }
 
     /**
