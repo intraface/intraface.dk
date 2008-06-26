@@ -11,17 +11,24 @@ class FakeAuthAdapter
     {
         return new FakeAuthUser;
     }
+    
+    function getIdentification() 
+    {
+        return 'fake user';
+    }
 }
 
 class AuthTest extends PHPUnit_Framework_TestCase 
 {
     const SESSION_LOGIN = 'thissessionfirstlog';
 	private $auth;
+    private $db;
 
     function setUp()
     {
-        $db = MDB2::singleton(DB_DSN);
-        $db->exec('TRUNCATE user');
+        $this->db = MDB2::singleton(DB_DSN);
+        $this->db->exec('TRUNCATE user');
+        
 
         $this->auth = new Intraface_Auth(self::SESSION_LOGIN);
     }
@@ -44,7 +51,7 @@ class AuthTest extends PHPUnit_Framework_TestCase
 	function testAfterAuthenticationTheIdentityCanBeGrappedUsingGetIdentity()
 	{
 		$this->auth->authenticate(new FakeAuthAdapter);
-	    $this->assertTrue(is_object($this->auth->getIdentity()));
+	    $this->assertTrue(is_object($this->auth->getIdentity($this->db)));
 	}
 
 
