@@ -25,10 +25,17 @@ class Intraface_Auth
 
     public function authenticate($adapter)
     {
+        if(is_callable(array($adapter, 'getIdentification'))) {
+            $identification = $adapter->getIdentification();
+        }
+        else {
+            $identification = '[unidentifiable]';
+        }
+        
         if ($object = $adapter->auth()) {
-            $this->notifyObservers('login', ' logged in');
+            $this->notifyObservers('login', $identification.' logged in');
         } else {
-            $this->notifyObservers('login', ' could not login');
+            $this->notifyObservers('login', $identification.' could not login');
         }
 
         return ($object);

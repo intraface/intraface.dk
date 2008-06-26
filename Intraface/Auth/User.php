@@ -92,4 +92,15 @@ class Intraface_Auth_User
         }
         return true;
     }
+    
+    /**
+     * Returns an identification string on the user
+     * 
+     * @return string identification (email)
+     */
+    public function getIdentification() 
+    {
+        return $this->email;
+    }
+    
 }
