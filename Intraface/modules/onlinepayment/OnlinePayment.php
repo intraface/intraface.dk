@@ -47,13 +47,13 @@ class OnlinePayment extends Intraface_Standard
         // lidt usikker på om det her er det smarteste sted at have den, men den skal være til stede, når der skal gemmes
         $this->provider_key = $this->kernel->setting->get('intranet', 'onlinepayment.provider_key');
 
-        $this->dbquery = new Intraface_DBQuery($this->kernel, "onlinepayment", "intranet_id = ".$this->kernel->intranet->get("id"));
-        $this->dbquery->useErrorObject($this->error);
+        //$this->dbquery = new Intraface_DBQuery($this->kernel, "onlinepayment", "intranet_id = ".$this->kernel->intranet->get("id"));
+        //$this->dbquery->useErrorObject($this->error);
+        $this->dbquery = $this->getDBQuery();
 
         if ($this->id > 0) {
             $this->load();
-        }
-        else {
+        } else {
             $this->value['id'] = 0;
         }
     }
@@ -484,15 +484,15 @@ class OnlinePayment extends Intraface_Standard
 
     function getList()
     {
-        if ($this->dbquery->getFilter('belong_to') != '') {
-            if ($this->dbquery->getFilter('belong_to_id') == 0) {
-                trigger_error("belong_to_id er nul i OnlinePayment->getList()", FATAL);
+        if ($this->getDBQuery()->getFilter('belong_to') != '') {
+            if ($this->getDBQuery()->getFilter('belong_to_id') == 0) {
+                throw new Exception("belong_to_id er nul i OnlinePayment->getList()");
             }
             $belong_to_key = array_search($this->dbquery->getFilter('belong_to'), $this->getBelongToTypes());
-            if ($this->dbquery->getFilter('belong_to') == '' || $belong_to_key === false) {
-                trigger_error("belong_to_key er ikke gyldig i OnlinePayment->getList()", FATAL);
+            if ($this->getDBQuery()->getFilter('belong_to') == '' || $belong_to_key === false) {
+                throw new Exception("belong_to_key er ikke gyldig i OnlinePayment->getList()");
             }
-            $this->dbquery->setCondition("belong_to_key = ".$belong_to_key." AND belong_to_id = ".$this->dbquery->getFilter('belong_to_id'));
+            $this->getDBQuery()->setCondition("belong_to_key = ".$belong_to_key." AND belong_to_id = ".$this->dbquery->getFilter('belong_to_id'));
 
             // $this->dbquery->setFilter('status', -1);
 
@@ -504,16 +504,36 @@ class OnlinePayment extends Intraface_Standard
         }
         */
 
-        if ($this->dbquery->getFilter('status') > 0) {
-            $this->dbquery->setCondition("status_key = ".intval($this->dbquery->getFilter('status')));
+        if ($this->getDBQuery()->getFilter('status') > 0) {
+            $this->getDBQuery()->setCondition("status_key = ".intval($this->getDBQuery()->getFilter('status')));
         }
 
-        if ($this->dbquery->getFilter('text') != "") {
-            $this->dbquery->setCondition("transaction_number LIKE \"%".$this->dbquery->getFilter('text')."%\" OR text LIKE \"%".$this->dbquery->getFilter('text')."%\"");
+        if ($this->getDBQuery()->getFilter('text') != "") {
+            $this->getDBQuery()->setCondition("transaction_number LIKE \"%".$this->getDBQuery()->getFilter('text')."%\" OR text LIKE \"%".$this->dbquery->getFilter('text')."%\"");
+        }
+        
+        if ($this->getDBQuery()->checkFilter("from_date")) {
+            $date = new Intraface_Date($this->getDBQuery()->getFilter("from_date"));
+            if ($date->convert2db()) {
+                $this->getDBQuery()->setCondition("date_created >= \"".$date->get()."\"");
+            } else {
+                $this->error->set("Fra dato er ikke gyldig");
+            }
         }
 
-        $this->dbquery->setSorting("date_created DESC");
-        $db = $this->dbquery->getRecordset("id, date_created, belong_to_key, belong_to_id, text, status_key, amount, provider_key, transaction_number, transaction_status, DATE_FORMAT(date_created, '%d-%m-%Y %H:%i') AS dk_date_created", "", false);
+        // Poster med fakturadato før slutdato.
+        if ($this->getDBQuery()->checkFilter("to_date")) {
+            $date = new Intraface_Date($this->getDBQuery()->getFilter("to_date"));
+            if ($date->convert2db()) {
+                $this->getDBQuery()->setCondition("date_created <= \"".$date->get()."\"");
+            } else {
+                $this->error->set("Til dato er ikke gyldig");
+            }
+        }
+        
+
+        $this->getDBQuery()->setSorting("date_created DESC");
+        $db = $this->getDBQuery()->getRecordset("id, date_created, belong_to_key, belong_to_id, text, status_key, amount, provider_key, transaction_number, transaction_status, DATE_FORMAT(date_created, '%d-%m-%Y %H:%i') AS dk_date_created", "", false);
         $i = 0;
         $list = array();
 
@@ -595,6 +615,18 @@ class OnlinePayment extends Intraface_Standard
             2 => 'quickpay',
             3 => 'dandomain'
         );
+    }
+
+    function getDBQuery()
+    {
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
+
+        $this->dbquery = new Intraface_DBQuery($this->kernel, "onlinepayment", "intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery->useErrorObject($this->error);
+
+        return $this->dbquery;        
     }
 
     /**

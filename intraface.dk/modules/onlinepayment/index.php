@@ -1,20 +1,24 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module('onlinepayment');
 $translation = $kernel->getTranslation('onlinepayment');
 
 $onlinepayment = OnlinePayment::factory($kernel);
 
-if(isset($_GET['status'])) {
-	$onlinepayment->dbquery->setFilter('status', $_GET['status']);
+if (isset($_GET['status'])) {
+	$onlinepayment->getDBQuery()->setFilter('status', $_GET['status']);
+} else {
+    $onlinepayment->getDBQuery()->setFilter('status', 2);
 }
-else {
-    $onlinepayment->dbquery->setFilter('status', 2);
+if (isset($_GET['text'])) {
+	$onlinepayment->getDBQuery()->setFilter('text', $_GET['text']);
 }
-
-if(isset($_GET['text'])) {
-	$onlinepayment->dbquery->setFilter('text', $_GET['text']);
+if (isset($_GET["from_date"]) && $_GET["from_date"] != "") {
+    $onlinepayment->getDBQuery()->setFilter("from_date", $_GET["from_date"]);
+}
+if (isset($_GET["to_date"]) && $_GET["to_date"] != "") {
+    $onlinepayment->getDBQuery()->setFilter("to_date", $_GET["to_date"]);
 }
 
 $payments = $onlinepayment->getList();
@@ -43,7 +47,7 @@ $page->start('Onlinebetalinger');
 	<legend>Søgning</legend>
 	<form method="get" action="index.php">
 		<label>Tekst
-			<input type="text" name="text" value="<?php echo $onlinepayment->dbquery->getFilter("text"); ?>" />
+			<input type="text" name="text" value="<?php echo $onlinepayment->getDBQuery()->getFilter("text"); ?>" />
 		</label>
 		<label>Status
 		<select name="status">
@@ -52,12 +56,18 @@ $page->start('Onlinebetalinger');
 			$status_types = OnlinePayment::getStatusTypes();
 			for($i = 1, $max = count($status_types); $i < $max; $i++) {
 				?>
-				<option value="<?php print($i); ?>" <?php if ($onlinepayment->dbquery->getFilter("status") == $i) echo ' selected="selected"';?>><?php print($translation->get($status_types[$i])); ?></option>
+				<option value="<?php print($i); ?>" <?php if ($onlinepayment->getDBQuery()->getFilter("status") == $i) echo ' selected="selected"';?>><?php print($translation->get($status_types[$i])); ?></option>
 				<?php
 			}
 			?>
 			</select>
 		</label>
+        <label>Fra dato
+            <input type="text" name="from_date" id="date-from" value="<?php e($onlinepayment->getDBQuery()->getFilter("from_date")); ?>" /> <span id="calender"></span>
+        </label>
+        <label>Til dato
+            <input type="text" name="to_date" value="<?php e($onlinepayment->getDBQuery()->getFilter("to_date")); ?>" />
+        </label>
 		<span>
 		<input type="submit" value="Find" />
 		</span>
