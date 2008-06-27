@@ -219,11 +219,11 @@ class CMS_Page extends Intraface_Standard
             $var['hidden'] = 0;
         }
         
-        if(empty($var['keywords'])) $var['keywords'] = '';
-        if(empty($var['description'])) $var['description'] = '';
-
-        if (gettype($var) != 'array') {
-            trigger_error('CMS__Page::save(): $var is not an array array', E_USER_ERROR);
+        if(empty($var['keywords'])) {
+            $var['keywords'] = '';   
+        }
+        if(empty($var['description'])) {
+            $var['description'] = '';   
         }
 
         if (!isset($var['pic_id'])) {
@@ -261,7 +261,7 @@ class CMS_Page extends Intraface_Standard
         if (!empty($var['navigation_name'])) {
             $sql_extra = "navigation_name = '".$var['navigation_name']."',";
         }
-        if (!empty($var['child_of_id'])) {
+        if (isset($var['child_of_id'])) {
             $sql_extra = "child_of_id = '".(int)$var['child_of_id']."',";
         }
 
