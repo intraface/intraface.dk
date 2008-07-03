@@ -751,6 +751,10 @@ class Debtor extends Intraface_Standard
             $this->dbquery->setCondition("(debtor.description LIKE \"%".$this->dbquery->getFilter("text")."%\" OR debtor.girocode = \"".$this->dbquery->getFilter("text")."\" OR debtor.number = \"".$this->dbquery->getFilter("text")."\" OR address.name LIKE \"%".$this->dbquery->getFilter("text")."%\")");
         }
 
+        if ($this->dbquery->checkFilter("product_id")) {
+            $this->dbquery->setCondition("debtor_item.product_id = ".$this->dbquery->getFilter('product_id'));
+        }
+
         if ($this->dbquery->checkFilter("from_date")) {
             $date = new Intraface_Date($this->dbquery->getFilter("from_date"));
             if ($date->convert2db()) {
@@ -759,11 +763,6 @@ class Debtor extends Intraface_Standard
                 $this->error->set("Fra dato er ikke gyldig");
             }
         }
-
-        if ($this->dbquery->checkFilter("product_id")) {
-            $this->dbquery->setCondition("debtor_item.product_id = ".$this->dbquery->getFilter('product_id'));
-        }
-
 
         // Poster med fakturadato før slutdato.
         if ($this->dbquery->checkFilter("to_date")) {
