@@ -11,14 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!empty($_POST['send_email'])) {
         $contact->sendLoginEmail(Intraface_Mail::factory());
-    }
-    elseif (!empty($_POST['new_password'])) {
-        $contact->generatePassword();
-        $contact->load();
+    } elseif (!empty($_POST['new_password'])) {
+        if ($contact->generatePassword()) {
+            header('Location: ' . $_SERVER['PHP_SELF'] . '?id=' . $contact->getId());
+            exit;
+        }
     }
 
-}
-else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+} else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     $contact = new Contact($kernel, (int)$_GET['id']);
 
