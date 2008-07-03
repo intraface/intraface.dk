@@ -62,11 +62,11 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
         // sublevel has to be used so other searches are not overwritten
         $product->getDBQuery()->storeResult('use_stored', 'webshop_' . $area . '_' .  md5($this->credentials['session_id']), 'sublevel');
         $debug2 = serialize($mixed);
-        if (array_key_exists('offset', $mixed) AND is_numeric($mixed['offset'])) {
+        if (isset($mixed['offset']) AND array_key_exists('offset', $mixed) AND is_numeric($mixed['offset'])) {
             $product->getDBQuery()->useStored(true);
             $product->getDBQuery()->setPagingOffset((int)$mixed['offset']);
             $debug2 .= 'offset ' . $mixed['offset'];
-        } elseif (array_key_exists('use_stored', $mixed) AND $mixed['use_stored'] == 'true') {
+        } elseif (isset($mixed['use_stored']) AND array_key_exists('use_stored', $mixed) AND $mixed['use_stored'] == 'true') {
             $product->getDBQuery()->useStored(true);
             $debug2 .= 'use_stored true';
         } else {
@@ -80,7 +80,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
                 $debug2 .= 'keyword ' . $mixed['keywords'];
             }
 
-            if (array_key_exists('ids', $mixed) AND is_array($mixed['ids'])) {
+            if (isset($mixed['ids']) AND array_key_exists('ids', $mixed) AND is_array($mixed['ids'])) {
                 $product->getDBQuery()->setFilter('ids', $mixed['ids']);
                 $debug2 .= 'ids ' . implode(', ', $mixed['ids']);
             }

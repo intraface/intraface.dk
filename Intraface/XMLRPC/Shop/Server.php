@@ -59,30 +59,30 @@ class Intraface_XMLRPC_Shop_Server
         // sublevel has to be used so other searches are not overwritten
         $product->getDBQuery()->storeResult('use_stored', 'webshop_' . $area . '_' .  md5($this->credentials['session_id']), 'sublevel');
         $debug2 = serialize($mixed);
-        if (array_key_exists('offset', $mixed) AND is_numeric($mixed['offset'])) {
+        if (isset($mixed['offset']) AND array_key_exists('offset', $mixed) AND is_numeric($mixed['offset'])) {
             $product->getDBQuery()->useStored(true);
             $product->getDBQuery()->setPagingOffset((int)$mixed['offset']);
             $debug2 .= 'offset ' . $mixed['offset'];
-        } elseif (array_key_exists('use_stored', $mixed) AND $mixed['use_stored'] == 'true') {
+        } elseif (isset($mixed['use_stored']) AND array_key_exists('use_stored', $mixed) AND $mixed['use_stored'] == 'true') {
             $product->getDBQuery()->useStored(true);
             $debug2 .= 'use_stored true';
         } else {
-            if (array_key_exists('search', $mixed) AND !empty($mixed['search'])) {
+            if (isset($mixed['search']) AND array_key_exists('search', $mixed) AND !empty($mixed['search'])) {
                 $product->getDBQuery()->setFilter('search', $mixed['search']);
                 $debug2 .= 'search ' . $mixed['search'];
             }
 
-            if (array_key_exists('keywords', $mixed) AND !empty($mixed['keywords'])) {
+            if (isset($mixed['keywords']) AND array_key_exists('keywords', $mixed) AND !empty($mixed['keywords'])) {
                 $product->getDBQuery()->setFilter('keywords', $mixed['keywords']);
                 $debug2 .= 'keyword ' . $mixed['keywords'];
             }
 
-            if (array_key_exists('ids', $mixed) AND is_array($mixed['ids'])) {
+            if (isset($mixed['ids']) AND array_key_exists('ids', $mixed) AND is_array($mixed['ids'])) {
                 $product->getDBQuery()->setFilter('ids', $mixed['ids']);
                 $debug2 .= 'ids ' . implode(', ', $mixed['ids']);
             }
 
-            if (array_key_exists('sorting', $mixed) AND !empty($mixed['sorting'])) {
+            if (isset($mixed['sorting']) AND array_key_exists('sorting', $mixed) AND !empty($mixed['sorting'])) {
                 $product->getDBQuery()->setFilter('sorting', $mixed['sorting']);
                 $debug2 .= 'sorting ' . $mixed['sorting'];
             }
