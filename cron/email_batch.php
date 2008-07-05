@@ -31,9 +31,9 @@ while ($row = $result->fetchRow()) {
 	    throw new Exception('Access to the intranet denied. The private key is probably wrong.');
 	} 
 
-    $this->kernel = new Intraface_Kernel();
-    $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
-    $this->kernel->setting = new Intraface_Setting($kernel->intranet->get('id'));
+    $kernel = new Intraface_Kernel();
+    $kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
+    $kernel->setting = new Intraface_Setting($kernel->intranet->get('id'));
 
 	$kernel->useShared('email');
 
