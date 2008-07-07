@@ -2,7 +2,6 @@
 require('../../include_first.php');
 
 $module = $kernel->module('debtor');
-$kernel->useModule('invoice');
 $translation = $kernel->getTranslation('debtor');
 
 if(!empty($_POST)) {
