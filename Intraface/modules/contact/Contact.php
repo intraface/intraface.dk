@@ -288,6 +288,8 @@ class Contact extends Intraface_Standard
                 AND intranet_id =".$this->kernel->intranet->get('id'));
 
         if (!$db->nextRecord()) {
+            $this->id = 0;
+            $this->value['id'] = 0;
             return false;
         }
 

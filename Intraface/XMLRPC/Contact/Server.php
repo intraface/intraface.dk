@@ -33,7 +33,7 @@ class Intraface_XMLRPC_Contact_Server
         $this->checkCredentials($credentials);
 
         $contact = new Contact($this->kernel, $id);
-        if (!$contact->getId() > 0) { // -4
+        if ($contact->getId() == 0) { // -4
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('contact does not exist', -4);
         }
