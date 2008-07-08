@@ -106,6 +106,7 @@ class ContactReminder extends Intraface_Standard
         3 => 'cancelled'
     );
     public $value;
+    private $dbquery;
 
     /**
      * @param 	object contact: Class contact
@@ -300,21 +301,25 @@ class ContactReminder extends Intraface_Standard
 
     }
 
-    public function createDbquery()
+    public function getDBQuery()
     {
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
         $this->dbquery = new Intraface_DBQuery($this->contact->kernel, "contact_reminder_single", "contact_reminder_single.active = 1 AND contact_reminder_single.intranet_id = ".$this->db->quote($this->contact->kernel->intranet->get("id"), 'integer'));
         $this->dbquery->setJoin("INNER", "contact", "contact_reminder_single.contact_id = contact.id", "contact.active = 1 AND contact.intranet_id = ".$this->db->quote($this->contact->kernel->intranet->get("id"), 'integer'));
         $this->dbquery->useErrorObject($this->error);
-
+        
+        return $this->dbquery;
     }
 
     public function getList()
     {
-        $this->dbquery->setSorting('reminder_date');
-        $this->dbquery->setCondition('contact_id = '.$this->db->quote($this->contact->get('id'), 'integer'));
-        $this->dbquery->setCondition('status_key = '.$this->db->quote(1, 'integer'));
+        $this->getDBQuery()->setSorting('reminder_date');
+        $this->getDBQuery()->setCondition('contact_id = '.$this->db->quote($this->contact->get('id'), 'integer'));
+        $this->getDBQuery()->setCondition('status_key = '.$this->db->quote(1, 'integer'));
 
-        $db = $this->dbquery->getRecordset("contact_reminder_single.id, DATE_FORMAT(contact_reminder_single.reminder_date, '%d-%m-%Y') AS dk_reminder_date, contact_reminder_single.reminder_date, contact_reminder_single.subject", "", false);
+        $db = $this->getDBQuery()->getRecordset("contact_reminder_single.id, DATE_FORMAT(contact_reminder_single.reminder_date, '%d-%m-%Y') AS dk_reminder_date, contact_reminder_single.reminder_date, contact_reminder_single.subject", "", false);
         $reminders = array();
         $i = 0;
         while ($db->nextRecord()) {

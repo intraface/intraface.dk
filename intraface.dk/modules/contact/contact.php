@@ -230,7 +230,6 @@ $page->start(safeToHtml($translation->get('contact information') . ' ' .$contact
 
 <?php
 $reminder = new ContactReminder($contact);
-$reminder->createDbquery();
 $reminders = $reminder->getList();
 if(count($reminders) > 0) {
     ?>

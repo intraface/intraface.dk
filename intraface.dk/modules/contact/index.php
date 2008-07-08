@@ -20,13 +20,11 @@ if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
 			}
 		}
 	}
-}
-elseif (!empty($_POST['undelete'])) {
+} elseif (!empty($_POST['undelete'])) {
 
 	if (!empty($_POST['deleted']) AND is_string($_POST['deleted'])) {
 		$undelete = unserialize(base64_decode($_POST['deleted']));
-	}
-	else {
+	} else {
 		trigger_error('could not undelete', E_USER_ERROR);
 	}
 	if (!empty($undelete) AND is_array($undelete)) {
@@ -64,27 +62,26 @@ elseif (!empty($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
 
 // hente liste med kunder
 $contact = new Contact($kernel);
-$contact->createDBQuery();
 $keywords = $contact->getKeywordAppender();
 $used_keywords = $keywords->getUsedKeywords();
 
 if(isset($_GET['query']) || isset($_GET['keyword_id'])) {
 
 	if(isset($_GET['query'])) {
-		$contact->dbquery->setFilter('search', $_GET['query']);
+		$contact->getDBQuery()->setFilter('search', $_GET['query']);
 	}
 
 	if(isset($_GET['keyword_id'])) {
-		$contact->dbquery->setKeyword($_GET['keyword_id']);
+		$contact->getDBQuery()->setKeyword($_GET['keyword_id']);
 	}
 }
 else {
-	$contact->dbquery->useCharacter();
+	$contact->getDBQuery()->useCharacter();
 }
 
-$contact->dbquery->defineCharacter('character', 'address.name');
-$contact->dbquery->usePaging('paging');
-$contact->dbquery->storeResult('use_stored', 'contact', 'toplevel');
+$contact->getDBQuery()->defineCharacter('character', 'address.name');
+$contact->getDBQuery()->usePaging('paging');
+$contact->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
 
 $contacts = $contact->getList();
 
@@ -118,7 +115,7 @@ $page->start(safeToHtml($translation->get('contacts')));
 		<legend><?php echo safeToHtml($translation->get('search', 'common')); ?></legend>
 
 		<label for="query"><?php echo safeToHtml($translation->get('search for', 'common')); ?>
-			<input name="query" id="query" type="text" value="<?php print($contact->dbquery->getFilter('search')); ?>" />
+			<input name="query" id="query" type="text" value="<?php print($contact->getDBQuery()->getFilter('search')); ?>" />
 		</label>
 
 		<?php if (is_array($used_keywords) AND count($used_keywords)): ?>
@@ -126,7 +123,7 @@ $page->start(safeToHtml($translation->get('contacts')));
 			<select name="keyword_id" id="keyword_id">
 				<option value="">Alle</option>
 				<?php foreach ($used_keywords AS $k) { ?>
-					<option value="<?php echo $k['id']; ?>" <?php if($k['id'] == $contact->dbquery->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo safeToHtml($k['keyword']); ?></option>
+					<option value="<?php echo $k['id']; ?>" <?php if($k['id'] == $contact->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo safeToHtml($k['keyword']); ?></option>
 				<?php } ?>
 			</select>
 		</label>
@@ -138,7 +135,7 @@ $page->start(safeToHtml($translation->get('contacts')));
 
 <?php endif; ?>
 
-<?php echo $contact->dbquery->display('character'); ?>
+<?php echo $contact->getDBQuery()->display('character'); ?>
 
 <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
 
@@ -160,7 +157,7 @@ $page->start(safeToHtml($translation->get('contacts')));
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="5"><?php echo $contact->dbquery->display('paging'); ?></td>
+				<td colspan="5"><?php echo $contact->getDBQuery()->display('paging'); ?></td>
 			</tr>
 		</tfoot>
 		<tbody>
