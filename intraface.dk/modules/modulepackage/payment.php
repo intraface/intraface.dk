@@ -6,7 +6,7 @@ $module->includeFile('ActionStore.php');
 
 $translation = $kernel->getTranslation('modulepackage');
 
-$action_store = new Intraface_ModulePackage_ActionStore($kernel->intranet->get('id'));
+$action_store = new Intraface_modules_modulepackage_ActionStore($kernel->intranet->get('id'));
 $action = $action_store->restore((int)$_GET['action_store_id']);
         
 if(!is_object($action)) {

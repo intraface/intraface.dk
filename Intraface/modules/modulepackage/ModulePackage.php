@@ -4,11 +4,11 @@
  * It makes it easier to control which modules each intranet has and for long time they have
  * paid for it.
  *
- * @package Intraface_ModulePackage
+ * @package Intraface_modules_modulepackage
  * @author sune
  * @version 0.0.1
  */
-class Intraface_ModulePackage extends Intraface_Standard {
+class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
 
     /**
      * @var object database
@@ -171,12 +171,18 @@ class Intraface_ModulePackage extends Intraface_Standard {
      *
      * @return void
      */
-    public function createDBQuery($kernel)
+    public function getDBQuery($kernel = NULL)
     {
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
+        if($kernel == NULL) {
+            throw new Exception('You need to provide kernel the first time you are calling getDBQuery');
+        }
         $this->dbquery = new Intraface_DBQuery($kernel, 'module_package', 'module_package.active = 1');
         $this->dbquery->setJoin('INNER', 'module_package_group', 'module_package.module_package_group_id = module_package_group.id', 'module_package_group.active = 1');
         $this->dbquery->setJoin('INNER', 'module_package_plan', 'module_package.module_package_plan_id = module_package_plan.id', 'module_package_plan.active = 1');
-
+        return $this->dbquery;
     }
 
     /**
@@ -216,7 +222,7 @@ class Intraface_ModulePackage extends Intraface_Standard {
 
         // get all products in one request and add them to the array
         require_once('Intraface/modules/modulepackage/ShopExtension.php');
-        $shopextension = new Intraface_ModulePackage_ShopExtension;
+        $shopextension = new Intraface_modules_modulepackage_ShopExtension;
         $products = $shopextension->getProduct((array)$product_ids);
 
         // we apply the products to the aray

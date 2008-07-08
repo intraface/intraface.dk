@@ -6,11 +6,11 @@ $module->includeFile('Manager.php');
 
 // temp test
 // require('Intraface/ModulePackage/AccessUpdate.php');
-// $access_update = new Intraface_ModulePackage_AccessUpdate();
+// $access_update = new Intraface_modules_modulepackage_AccessUpdate();
 // $access_update->run($kernel->intranet->get('id'));
 
 if(isset($_GET['unsubscribe_id']) && intval($_GET['unsubscribe_id']) != 0) {
-    $modulepackagemanager = new Intraface_ModulePackage_Manager($kernel->intranet, (int)$_GET['unsubscribe_id']);
+    $modulepackagemanager = new Intraface_modules_modulepackage_Manager($kernel->intranet, (int)$_GET['unsubscribe_id']);
     if($modulepackagemanager->get('id') != 0) {
         if($modulepackagemanager->get('status') == 'created') {
             $modulepackagemanager->delete();
@@ -19,7 +19,7 @@ if(isset($_GET['unsubscribe_id']) && intval($_GET['unsubscribe_id']) != 0) {
             $modulepackagemanager->terminate();
 
             $module->includeFile('AccessUpdate.php');
-            $access_update = new Intraface_ModulePackage_AccessUpdate();
+            $access_update = new Intraface_modules_modulepackage_AccessUpdate();
             $access_update->run($kernel->intranet->get('id'));
             $kernel->user->clearCachedPermission();
 
@@ -52,7 +52,7 @@ $page->start(safeToHtml($translation->get('your account')));
 </div>
 
 <?php
-$modulepackagemanager = new Intraface_ModulePackage_Manager($kernel->intranet);
+$modulepackagemanager = new Intraface_modules_modulepackage_Manager($kernel->intranet);
 $modulepackagemanager->getDBQuery($kernel)->setFilter('status', 'created_and_active');
 $packages = $modulepackagemanager->getList();
 
@@ -88,10 +88,10 @@ if(count($packages) > 0) {
 <h2><?php e($translation->get('subscribe to new package')); ?></h2>
 
 <?php
-$modulepackage = new Intraface_ModulePackage;
+$modulepackage = new Intraface_modules_modulepackage_ModulePackage;
 $plans = $modulepackage->getPlans();
 $groups = $modulepackage->getGroups();
-$modulepackage->createDBQuery($kernel);
+$modulepackage->getDBQuery($kernel);
 $packages = $modulepackage->getList('matrix');
 ?>
 

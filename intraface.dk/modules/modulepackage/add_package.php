@@ -8,8 +8,8 @@ $module->includeFile('ActionStore.php');
 $translation = $kernel->getTranslation('modulepackage');
 
 if(!empty($_POST)) {
-    $modulepackage = new Intraface_ModulePackage(intval($_POST['id']));
-    $modulepackagemanager = new Intraface_ModulePackage_Manager($kernel->intranet);
+    $modulepackage = new Intraface_modules_modulepackage_ModulePackage(intval($_POST['id']));
+    $modulepackagemanager = new Intraface_modules_modulepackage_Manager($kernel->intranet);
     
     $add_type = $modulepackagemanager->getAddType($modulepackage);
     
@@ -42,7 +42,7 @@ if(!empty($_POST)) {
             }
             
             if(!$modulepackagemanager->error->isError()) {
-                $action_store = new Intraface_ModulePackage_ActionStore($kernel->intranet->get('id'));
+                $action_store = new Intraface_modules_modulepackage_ActionStore($kernel->intranet->get('id'));
                 if($action->hasAddActionWithProduct()) {
                     
                     $contact = $kernel->intranet->address->get();
@@ -99,8 +99,8 @@ if(!empty($_POST)) {
     }
 }
 elseif(isset($_GET['id'])) {
-    $modulepackage = new Intraface_ModulePackage(intval($_GET['id']));
-    $modulepackagemanager = new Intraface_ModulePackage_Manager($kernel->intranet);
+    $modulepackage = new Intraface_modules_modulepackage_ModulePackage(intval($_GET['id']));
+    $modulepackagemanager = new Intraface_modules_modulepackage_Manager($kernel->intranet);
     if($modulepackage->get('id') == 0) {
         trigger_error("Invalid id", E_USER_ERROR);
         exit;
@@ -115,7 +115,7 @@ else {
 
 
 
-$modulepackageshop = new Intraface_ModulePackage_ShopExtension();
+$modulepackageshop = new Intraface_modules_modulepackage_ShopExtension();
 
 $page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get($add_type).' '.$translation->get('package')));
@@ -185,10 +185,10 @@ $page->start(safeToHtml($translation->get($add_type).' '.$translation->get('pack
 </fieldset>
 
 <?php
-$modulepackagemanager->createDBQuery($kernel);
-$modulepackagemanager->dbquery->setFilter('status', 'created_and_active');
-$modulepackagemanager->dbquery->setFilter('group_id', $modulepackage->get('group_id'));
-$modulepackagemanager->dbquery->setFilter('sorting', 'end_date');
+$modulepackagemanager->getDBQuery($kernel);
+$modulepackagemanager->getDBQuery()->setFilter('status', 'created_and_active');
+$modulepackagemanager->getDBQuery()->setFilter('group_id', $modulepackage->get('group_id'));
+$modulepackagemanager->getDBQuery()->setFilter('sorting', 'end_date');
 $existing_modulepackages = $modulepackagemanager->getList();
 
 // default start date is today

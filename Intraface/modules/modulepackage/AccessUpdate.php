@@ -3,11 +3,11 @@
  * This class grants module access according to module packages an intranet has.
  * It is used by the automated script and is run on if there is any instant changes in modulepackages.
  *
- * @package Intraface_ModulePackage
+ * @package Intraface_modules_modulepackage
  * @author Sune Jensen
  * @version 0.0.1
  */
-class Intraface_ModulePackage_AccessUpdate
+class Intraface_modules_modulepackage_AccessUpdate
 {
 
     /**
@@ -75,7 +75,7 @@ class Intraface_ModulePackage_AccessUpdate
         }
 
         while($row = $result->fetchRow()) {
-            $modulepackage = new Intraface_ModulePackage($row['module_package_id']);
+            $modulepackage = new Intraface_modules_modulepackage_ModulePackage($row['module_package_id']);
             $intranet = new IntranetMaintenance($row['intranet_id']);
 
             $modules = $modulepackage->get('modules');
@@ -102,7 +102,7 @@ class Intraface_ModulePackage_AccessUpdate
         }
 
         while($row = $result->fetchRow()) {
-            $modulepackage = new Intraface_ModulePackage($row['module_package_id']);
+            $modulepackage = new Intraface_modules_modulepackage_ModulePackage($row['module_package_id']);
 
             // we prepare to give the intranet access
             $intranet = new IntranetMaintenance($row['intranet_id']);

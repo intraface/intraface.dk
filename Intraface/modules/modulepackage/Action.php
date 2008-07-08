@@ -4,11 +4,11 @@
  * when adding og upgrading af package.
  * It contains several methods which can be performed on the action, such as placing the order and executing the actions to the correct module packages for the intranet.
  * 
- * @package Intraface_ModulePackage
+ * @package Intraface_modules_modulepackage
  * @author Sune Jensen
  * @version 0.0.1
  */
-class Intraface_ModulePackage_Action 
+class Intraface_modules_modulepackage_Action 
 {
     
     /*
@@ -61,7 +61,7 @@ class Intraface_ModulePackage_Action
     
     
     /**
-     * Places the order in an external economic system. The communication with the economic system is handles by Intraface_ModulePackage_ShopExtension
+     * Places the order in an external economic system. The communication with the economic system is handles by Intraface_modules_modulepackage_ShopExtension
      * 
      * @param array customer    array with information on customer.
      * @param object $mailer mailer object
@@ -109,7 +109,7 @@ class Intraface_ModulePackage_Action
         }
                 
         require_once('Intraface/modules/modulepackage/ShopExtension.php');
-        $shop = new Intraface_ModulePackage_ShopExtension;
+        $shop = new Intraface_modules_modulepackage_ShopExtension;
         if(!$order = $shop->placeOrder($customer, $products, $mailer)) {
             return false;
         }
@@ -152,13 +152,13 @@ class Intraface_ModulePackage_Action
     {
         
         if(!is_object($intranet)) {
-            trigger_error("First parameter for Intraface_ModulePackage_Action->execute needs to be an intranet object", E_USER_ERROR);
+            trigger_error("First parameter for Intraface_modules_modulepackage_Action->execute needs to be an intranet object", E_USER_ERROR);
             exit;
         }
         
         foreach($this->action AS $action) {
             if($action['action'] == 'add') {
-                $manager = new Intraface_ModulePackage_Manager($intranet);
+                $manager = new Intraface_modules_modulepackage_Manager($intranet);
                 if(!$manager->save($action['module_package_id'], date('d-m-Y', strtotime($action['start_date'])), $action['end_date'])) {
                     trigger_error('There was an error adding the module package '.$action['module_package_id'], E_USER_NOTICE);
                     $this->error->set("an error appeared when adding your module package");
@@ -171,7 +171,7 @@ class Intraface_ModulePackage_Action
                 
             } 
             elseif($action['action'] == 'terminate') {
-                $manager = new Intraface_ModulePackage_Manager($intranet, (int)$action['intranet_module_package_id']);
+                $manager = new Intraface_modules_modulepackage_Manager($intranet, (int)$action['intranet_module_package_id']);
                 if(!$manager->terminate()) {
                     trigger_error('There was an error terminating the intranet module package '.$action['intranet_module_package_id'], E_USER_NOTICE);
                     $this->error->set("an error appeared when removing your old modulepackage. we have been noticed.");
@@ -179,7 +179,7 @@ class Intraface_ModulePackage_Action
                 }
             } 
             elseif($action['action'] == 'delete') {
-                $manager = new Intraface_ModulePackage_Manager($intranet, (int)$action['intranet_module_package_id']);
+                $manager = new Intraface_modules_modulepackage_Manager($intranet, (int)$action['intranet_module_package_id']);
                 if(!$manager->delete()) {
                     trigger_error('There was an error deleting the intranet module package '.$action['intranet_module_package_id'], E_USER_NOTICE);
                     $this->error->set("an error appeared when removing your old modulepackage. we have been noticed.");

@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $module->includeFile('ActionStore.php');
     $module->includeFile('AccessUpdate.php');
 
-    $action_store = new Intraface_ModulePackage_ActionStore($kernel->intranet->get('id'));
+    $action_store = new Intraface_modules_modulepackage_ActionStore($kernel->intranet->get('id'));
     $action = $action_store->restore($optional['action_store_id']);
 
     if(!is_object($action)) {
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'amount' => number_format($amount, 2, ',', '.'),
         'text' => '');
 
-    $shop = new Intraface_ModulePackage_ShopExtension();
+    $shop = new Intraface_modules_modulepackage_ShopExtension();
     $shop->addPaymentToOrder($action->getOrderId(), $onlinepayment);
 
     if($amount >= $action->getTotalPrice()) {
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // TODO: do we maybe want to send an email to the customer?
 
-            $access_update = new Intraface_ModulePackage_AccessUpdate();
+            $access_update = new Intraface_modules_modulepackage_AccessUpdate();
             $access_update->run($kernel->intranet->get('id'));
 
             echo 'SUCCESS!';
@@ -101,7 +101,7 @@ elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
     // When there is no payment we get this from add_package.php
     $id = (int)$_GET['action_store_id'];
 
-    $action_store = new Intraface_ModulePackage_ActionStore($kernel->intranet->get('id'));
+    $action_store = new Intraface_modules_modulepackage_ActionStore($kernel->intranet->get('id'));
     $action = $action_store->restore($id);
 
     if(!is_object($action)) {
@@ -119,7 +119,7 @@ elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
         // we delete the action from the store
         $action_store->delete();
 
-        $access_update = new Intraface_ModulePackage_AccessUpdate();
+        $access_update = new Intraface_modules_modulepackage_AccessUpdate();
         $access_update->run($kernel->intranet->get('id'));
 
         header('location: index.php?status=success');

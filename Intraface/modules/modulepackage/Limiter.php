@@ -13,7 +13,7 @@ class ModulePackage_Limit
     public function __construct($intranet) {
         
         require_once 'Intraface/modules/modulepackage/Manager.php';
-        $manager = new Intraface_ModulePackage_Manager($intranet);
+        $manager = new Intraface_modules_modulepackage_Manager($intranet);
 
         $manager->getDBQuery()->setFilter('status', 'active');
         $packages = $manager->getList();

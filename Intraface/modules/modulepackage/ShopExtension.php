@@ -4,11 +4,11 @@
  *
  * @todo TODO: This is not really a good name
  * @todo TODO: In theory this should be made with some kind of provider choice, so another provider could be selected.
- * @package Intraface_ModulePackage
+ * @package Intraface_modules_modulepackage
  * @author sune
  * @version 0.0.1
  */
-class Intraface_ModulePackage_ShopExtension {
+class Intraface_modules_modulepackage_ShopExtension {
 
     /**
      * @var object shop client
@@ -32,7 +32,7 @@ class Intraface_ModulePackage_ShopExtension {
     function __construct()
     {
         if (!defined('INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY') || INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY == '') {
-            trigger_error("Unable to use shop in Intraface_ModulePackage_ShopExtension as the private key is not set", E_USER_NOTICE);
+            trigger_error("Unable to use shop in Intraface_modules_modulepackage_ShopExtension as the private key is not set", E_USER_NOTICE);
 
             return array();
         }

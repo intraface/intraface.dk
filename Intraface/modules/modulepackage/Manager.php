@@ -3,11 +3,11 @@
  * Class to manage which ModulePackages an intranet has.
  * Should this class be called Intraface_IntranetModulePackage as this is actually what it is.
  *
- * @package Intraface_ModulePackage
+ * @package Intraface_modules_modulepackage
  * @author sune
  * @version 0.0.1
  */
-class Intraface_ModulePackage_Manager extends Intraface_Standard {
+class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
 
     /**
      * @var object intranet
@@ -84,7 +84,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
             'WHERE intranet_id = '.$this->db->quote($this->intranet->get('id'), 'integer').' AND intranet_module_package.id = '.$this->db->quote($this->id, 'integer'));
 
         if (PEAR::isError($result)) {
-            trigger_error("Error in query in Intraface_ModulePackage_Manager->load() :".$result->getUserInfo(), E_USER_ERROR);
+            trigger_error("Error in query in Intraface_modules_modulepackage_Manager->load() :".$result->getUserInfo(), E_USER_ERROR);
             exit;
         }
 
@@ -103,10 +103,13 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
      *
      * @return void
      */
-    public function getDBQuery($kernel)
+    public function getDBQuery($kernel = NULL)
     {
         if ($this->dbquery) {
             return $this->dbquery;
+        }
+        if($kernel == NULL) {
+            throw new Exception('You need to provide kernel the first time you are calling getDBQuery');
         }
         $this->dbquery = new Intraface_DBQuery($kernel, 'intranet_module_package', 'intranet_module_package.active = 1 AND intranet_module_package.intranet_id = '.$this->intranet->get('id'));
         $this->dbquery->setJoin('INNER', 'module_package', 'intranet_module_package.module_package_id = module_package.id', '');
@@ -127,7 +130,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
      */
     public function save($package_id, $start_date, $duration)
     {
-        $modulepackage = new Intraface_ModulePackage(intval($package_id));
+        $modulepackage = new Intraface_modules_modulepackage_ModulePackage(intval($package_id));
 
         if ($modulepackage->get('id') == 0) {
             $this->error->set('Invalid module package in');
@@ -163,13 +166,13 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
 
         $result = $this->db->exec("INSERT INTO intranet_module_package SET ".$sql.", status_key = 1, active = 1, intranet_id = ".$this->intranet->get('id'));
         if (PEAR::isError($result)) {
-            trigger_error("Error in query in Intraface_ModulePackage_Manager->save from result: ".$result->getUserInfo(), E_USER_ERROR);
+            trigger_error("Error in query in Intraface_modules_modulepackage_Manager->save from result: ".$result->getUserInfo(), E_USER_ERROR);
             exit;
         }
 
         $id = $this->db->lastInsertID();
         if (PEAR::isError($id)) {
-            trigger_error("Error in query in Intraface_ModulePackage_Manager->save from id: ".$id->getUserInfo(), E_USER_ERROR);
+            trigger_error("Error in query in Intraface_modules_modulepackage_Manager->save from id: ".$id->getUserInfo(), E_USER_ERROR);
             exit;
         }
         $this->id = $id;
@@ -220,7 +223,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
 
         $result = $this->db->exec("UPDATE intranet_module_package SET status_key = 3 WHERE intranet_id = ".$this->intranet->get('id')." AND id = ".intval($this->id));
         if (PEAR::isError($result)) {
-            trigger_error("Error in query in Intraface_ModulePackage_Manager->terminate :". $result->getUserInfo(), E_USER_ERROR);
+            trigger_error("Error in query in Intraface_modules_modulepackage_Manager->terminate :". $result->getUserInfo(), E_USER_ERROR);
             exit;
         }
 
@@ -239,7 +242,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
         }
         $result = $this->db->exec("UPDATE intranet_module_package SET active = 0 WHERE intranet_id = ".$this->intranet->get('id')." AND id = ".intval($this->id));
         if (PEAR::isError($result)) {
-            trigger_error("Error in query in Intraface_ModulePackage_Manager->delete :". $result->getUserInfo(), E_USER_ERROR);
+            trigger_error("Error in query in Intraface_modules_modulepackage_Manager->delete :". $result->getUserInfo(), E_USER_ERROR);
             exit;
         }
 
@@ -255,13 +258,13 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
      */
     public function getAddType($modulepackage)
     {
-        if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modulepackage') {
-            trigger_error("Intraface_ModulePackage_Manager->getAddType needs object Intraface_ModulePackage as first parameter");
+        if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modules_modulepackage_modulepackage') {
+            trigger_error("Intraface_modules_modulepackage_Manager->getAddType needs object Intraface_modules_modulepackage_ModulePackage as first parameter");
             exit;
         }
 
         if ($modulepackage->get('id') == 0) {
-            trigger_error('module package id is not valid in Intraface_ModulePackage_Manager->getAddType', E_USER_ERROR);
+            trigger_error('module package id is not valid in Intraface_modules_modulepackage_Manager->getAddType', E_USER_ERROR);
             exit;
         }
 
@@ -273,7 +276,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
                 'ORDER BY end_date DESC');
 
         if (PEAR::isError($result)) {
-            trigger_error("Error in query in Intraface_ModulePackage_Manager->getAddType: ".$result->getUserInfo());
+            trigger_error("Error in query in Intraface_modules_modulepackage_Manager->getAddType: ".$result->getUserInfo());
             exit;
         }
 
@@ -296,13 +299,13 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
     public function getLastEndDateInGroup($modulepackage)
     {
 
-        if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modulepackage') {
-            trigger_error("Intraface_ModulePackage_Manager->getLastEndDateInGroup needs object Intraface_ModulePackage as Parameter");
+        if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modules_modulepackage_modulepackage') {
+            trigger_error("Intraface_modules_modulepackage_Manager->getLastEndDateInGroup needs object Intraface_modules_modulepackage as Parameter");
             exit;
         }
 
         if ($modulepackage->get('id') == 0) {
-            trigger_error('module package id is not valid in Intraface_ModulePackage_Manager->getLastEndDateInGroup', E_USER_ERROR);
+            trigger_error('module package id is not valid in Intraface_modules_modulepackage_Manager->getLastEndDateInGroup', E_USER_ERROR);
             exit;
         }
 
@@ -314,7 +317,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
                 'ORDER BY end_date DESC');
 
         if (PEAR::isError($result)) {
-            trigger_error("Error in query in Intraface_ModulePackage_Manager->getLastEndDateInGroup: ".$result->getUserInfo());
+            trigger_error("Error in query in Intraface_modules_modulepackage_Manager->getLastEndDateInGroup: ".$result->getUserInfo());
             exit;
         }
 
@@ -387,7 +390,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
             return array('end_date' => $end_date->get(),
                 'month' => $params[1]);
         } else {
-            $this->error->set('Duration does not have a valid pattern in Intraface_ModulePackage_Manager->parseDuration', E_USER_ERROR);
+            $this->error->set('Duration does not have a valid pattern in Intraface_modules_modulepackage_Manager->parseDuration', E_USER_ERROR);
             return array();
         }
     }
@@ -402,13 +405,13 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
      */
     public function add($modulepackage, $duration)
     {
-        if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modulepackage') {
-            trigger_error('Intraface_ModulePackage_Manager->add needs object Intraface_ModulePackage as Parameter', E_USER_ERROR);
+        if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modules_modulepackage_modulepackage') {
+            trigger_error('Intraface_modules_modulepackage_Manager->add needs object Intraface_modules_modulepackage_ModulePackage as Parameter', E_USER_ERROR);
             exit;
         }
 
         if ($modulepackage->get('id') == 0) {
-            trigger_error('module package id is not valid in Intraface_ModulePackage_Manager->add', E_USER_ERROR);
+            trigger_error('module package id is not valid in Intraface_modules_modulepackage_Manager->add', E_USER_ERROR);
             exit;
         }
 
@@ -426,13 +429,13 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
      */
     public function extend($modulepackage, $duration)
     {
-        if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modulepackage') {
-            trigger_error('Intraface_ModulePackage_Manager->extend needs object Intraface_ModulePackage as Parameter', E_USER_ERROR);
+        if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modules_modulepackage_modulepackage') {
+            trigger_error('Intraface_modules_modulepackage_Manager->extend needs object Intraface_modules_modulepackage_ModulePackage as Parameter', E_USER_ERROR);
             exit;
         }
 
         if ($modulepackage->get('id') == 0) {
-            trigger_error('module package id is not valid in Intraface_ModulePackage_Manager->extend', E_USER_ERROR);
+            trigger_error('module package id is not valid in Intraface_modules_modulepackage_Manager->extend', E_USER_ERROR);
             exit;
         }
 
@@ -447,7 +450,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
         }
 
         require_once('Intraface/modules/modulepackage/Action.php');
-        $action = new Intraface_ModulePackage_Action;
+        $action = new Intraface_modules_modulepackage_Action;
 
         $action->addAction(array(
             'action' => 'add',
@@ -472,13 +475,13 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
      */
     public function upgrade($modulepackage, $duration)
     {
-        if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modulepackage') {
-            trigger_error('Intraface_ModulePackage_Manager->upgrade needs object Intraface_ModulePackage as Parameter', E_USER_ERROR);
+        if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modules_modulepackage_modulepackage') {
+            trigger_error('Intraface_modules_modulepackage_Manager->upgrade needs object Intraface_modules_modulepackage as Parameter', E_USER_ERROR);
             exit;
         }
 
         if ($modulepackage->get('id') == 0) {
-            trigger_error('module package id is not valid in Intraface_ModulePackage_Manager->upgrade', E_USER_ERROR);
+            trigger_error('module package id is not valid in Intraface_modules_modulepackage_Manager->upgrade', E_USER_ERROR);
             exit;
         }
 
@@ -490,10 +493,10 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
         }
 
         require_once('Intraface/modules/modulepackage/Action.php');
-        $action = new Intraface_ModulePackage_Action;
+        $action = new Intraface_modules_modulepackage_Action;
 
         require_once('Intraface/modules/modulepackage/ShopExtension.php');
-        $shop = new Intraface_ModulePackage_ShopExtension;
+        $shop = new Intraface_modules_modulepackage_ShopExtension;
 
         // TODO: If DBQuery had not needed kernel we could have used it here!
         $result = $this->db->query('SELECT intranet_module_package.id, intranet_module_package.status_key, intranet_module_package.start_date, intranet_module_package.end_date, intranet_module_package.order_debtor_id, intranet_module_package.module_package_id, module_package.product_id ' .
@@ -504,7 +507,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
                 'ORDER BY end_date DESC');
 
         if (PEAR::isError($result)) {
-            trigger_error("Error in query in Intraface_ModulePackage_Manager->upgrade: ".$result->getUserInfo());
+            trigger_error("Error in query in Intraface_modules_modulepackage_Manager->upgrade: ".$result->getUserInfo());
             exit;
         }
 
@@ -565,7 +568,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
     public function getList()
     {
         if (!isset($this->dbquery) || !is_object($this->dbquery)) {
-            trigger_error("DBQuery needs to be initiated before use of getList in Intraface_ModulePackage_Manager->getList", E_USER_ERROR);
+            trigger_error("DBQuery needs to be initiated before use of getList in Intraface_modules_modulepackage_Manager->getList", E_USER_ERROR);
         }
 
         if ($this->dbquery->checkFilter('status')) {

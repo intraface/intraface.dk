@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if(isset($_POST['add_module_package']) && $_POST['add_module_package'] != '') {
         
-        $modulepackagemanager = New Intraface_ModulePackage_Manager($intranet);
+        $modulepackagemanager = new Intraface_modules_modulepackage_Manager($intranet);
         $modulepackagemanager->save($_POST['module_package_id'], $_POST['start_date'], $_POST['duration_month'].' month');
                
     }
@@ -89,7 +89,7 @@ else {
     
     if(isset($_GET['delete_intranet_module_package_id']) && (int)$_GET['delete_intranet_module_package_id'] != 0) {
         
-        $modulepackagemanager = New Intraface_ModulePackage_Manager($intranet);
+        $modulepackagemanager = new Intraface_modules_modulepackage_Manager($intranet);
         $modulepackagemanager->delete((int)$_GET['delete_intranet_module_package_id']);
     }   
 }
@@ -200,7 +200,7 @@ $page->start($translation->get('Intranet'));
 
 
     <?php
-    $modulepackagemanager = new Intraface_ModulePackage_Manager($intranet);
+    $modulepackagemanager = new Intraface_modules_modulepackage_Manager($intranet);
     $modulepackagemanager->getDBQuery($kernel);
     $packages = $modulepackagemanager->getList();
     
@@ -242,7 +242,7 @@ $page->start($translation->get('Intranet'));
     <?php else: ?>
     
         <?php
-        $modulepackage = new Intraface_ModulePackage;
+        $modulepackage = new Intraface_modules_modulepackage_ModulePackage;
         $modulepackage->getDBQuery($kernel);
         $packages = $modulepackage->getList();
         ?>
