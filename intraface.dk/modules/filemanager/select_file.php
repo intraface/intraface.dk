@@ -41,8 +41,7 @@ $options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intran
 $receive_redirect = Ilib_Redirect::factory($kernel->getSessionId(), MDB2::singleton(DB_DSN), 'receive', $options);
 if($receive_redirect->isMultipleParameter('file_handler_id')) {
 	$multiple_choice = true;
-}
-else {
+} else {
 	$multiple_choice = false;
 }
 
@@ -54,7 +53,6 @@ if(isset($_POST['return'])) {
 }
 
 $filemanager = new FileManager($kernel); // has to be loaded here, while it should be able to set an error just below.
-$filemanager->createDBQuery();
 
 if(isset($_POST['submit_close']) || isset($_POST['submit'])) {
 	settype($_POST['selected'], 'array');
@@ -72,8 +70,7 @@ if(isset($_POST['submit_close']) || isset($_POST['submit'])) {
 
 	if($number_of_files == 0) {
 		$filemanager->error->set("you have to choose a file");
-	}
-	elseif($multiple_choice == false || isset($_POST['submit_close'])) {
+	} elseif($multiple_choice == false || isset($_POST['submit_close'])) {
 		header("Location: ".$receive_redirect->getRedirect('index.php'));
 		exit;
 	}
@@ -85,8 +82,7 @@ if(isset($_GET['upload'])) {
 
 	if($_GET['upload'] == 'multiple') {
 		$url = $upload_redirect->setDestination($module_filemanager->getPath().'upload_multiple.php', $module_filemanager->getPath().'select_file.php?redirect_id='.$receive_redirect->get('id').'&filtration=1');
-	}
-	else {
+	} else {
 		$url = $upload_redirect->setDestination($module_filemanager->getPath().'upload.php', $module_filemanager->getPath().'select_file.php?redirect_id='.$receive_redirect->get('id').'&filtration=1');
 	}
 	header("Location: ".$url);
@@ -94,67 +90,64 @@ if(isset($_GET['upload'])) {
 
 if($multiple_choice) {
 	$selected_files = $receive_redirect->getParameter('file_handler_id');
-}
-else {
+} else {
 	if(isset($_GET['selected_file_id'])) {
 		$selected_files[] = (int)$_GET['selected_file_id'];
-	}
-	else {
+	} else {
 		$selected_files = array();
 	}
 }
 
 if(isset($_GET['images'])) {
-	$filemanager->dbquery->setFilter('images', 1);
+	$filemanager->getDBQuery()->setFilter('images', 1);
 }
 
 if(isset($_GET["text"]) && $_GET["text"] != "") {
-	$filemanager->dbquery->setFilter("text", $_GET["text"]);
+	$filemanager->getDBQuery()->setFilter("text", $_GET["text"]);
 }
 
 if(isset($_GET["filtration"]) && intval($_GET["filtration"]) != 0) {
 	// Kun for at filtration igen vises i søgeboksen
-	$filemanager->dbquery->setFilter("filtration", $_GET["filtration"]);
+	$filemanager->getDBQuery()->setFilter("filtration", $_GET["filtration"]);
 
 	switch($_GET["filtration"]) {
 		case 1:
-			$filemanager->dbquery->setFilter("uploaded_from_date", date("d-m-Y")." 00:00");
+			$filemanager->getDBQuery()->setFilter("uploaded_from_date", date("d-m-Y")." 00:00");
 			break;
 		case 2:
-			$filemanager->dbquery->setFilter("uploaded_from_date", date("d-m-Y", time()-60*60*24)." 00:00");
-			$filemanager->dbquery->setFilter("uploaded_to_date", date("d-m-Y", time()-60*60*24)." 23:59");
+			$filemanager->getDBQuery()->setFilter("uploaded_from_date", date("d-m-Y", time()-60*60*24)." 00:00");
+			$filemanager->getDBQuery()->setFilter("uploaded_to_date", date("d-m-Y", time()-60*60*24)." 23:59");
 			break;
 		case 3:
-			$filemanager->dbquery->setFilter("uploaded_from_date", date("d-m-Y", time()-60*60*24*7)." 00:00");
+			$filemanager->getDBQuery()->setFilter("uploaded_from_date", date("d-m-Y", time()-60*60*24*7)." 00:00");
 			break;
 		case 4:
-			$filemanager->dbquery->setFilter("edited_from_date", date("d-m-Y")." 00:00");
+			$filemanager->getDBQuery()->setFilter("edited_from_date", date("d-m-Y")." 00:00");
 			break;
 		case 5:
-			$filemanager->dbquery->setFilter("edited_from_date", date("d-m-Y", time()-60*60*24)." 00:00");
-			$filemanager->dbquery->setFilter("edited_to_date", date("d-m-Y", time()-60*60*24)." 23:59");
+			$filemanager->getDBQuery()->setFilter("edited_from_date", date("d-m-Y", time()-60*60*24)." 00:00");
+			$filemanager->getDBQuery()->setFilter("edited_to_date", date("d-m-Y", time()-60*60*24)." 23:59");
 			break;
 		default:
 			// Probaly 0, so nothing happens
 	}
 }
 if(isset($_GET['keyword']) && is_array($_GET['keyword']) && count($_GET['keyword']) > 0) {
-	$filemanager->dbquery->setKeyword($_GET['keyword']);
+	$filemanager->getDBQuery()->setKeyword($_GET['keyword']);
 }
 
 if(isset($_GET['character'])) {
-	$filemanager->dbquery->useCharacter();
+	$filemanager->getDBQuery()->useCharacter();
 }
 
 if(!isset($_GET['search'])) {
-	$filemanager->dbquery->setSorting('file_handler.date_created DESC');
+	$filemanager->getDBQuery()->setSorting('file_handler.date_created DESC');
 }
 
-
-$filemanager->dbquery->defineCharacter('character', 'file_handler.file_name');
-$filemanager->dbquery->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
-$filemanager->dbquery->storeResult("use_stored", "filemanager", "sublevel");
-// $filemanager->dbquery->setExtraUri('&amp;type=1');
+$filemanager->getDBQuery()->defineCharacter('character', 'file_handler.file_name');
+$filemanager->getDBQuery()->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
+$filemanager->getDBQuery()->storeResult("use_stored", "filemanager", "sublevel");
+// $filemanager->getDBQuery()->setExtraUri('&amp;type=1');
 
 
 $files = $filemanager->getList();
@@ -180,20 +173,20 @@ $page->start(safeToHtml($translation->get('files')));
 	<fieldset>
 		<legend><?php echo safeToHtml($translation->get('search')); ?></legend>
 		<label><?php echo safeToHtml($translation->get('text')); ?>:
-			<input type="text" name="text" value="<?php echo $filemanager->dbquery->getFilter("text"); ?>" />
+			<input type="text" name="text" value="<?php echo $filemanager->getDBQuery()->getFilter("text"); ?>" />
 		</label>
 		<label>Filtrering:
 		<select name="filtration">
 			<option value="0">Alle</option>
-			<option value="1"<?php if ($filemanager->dbquery->getFilter("filtration") == 1) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded today')); ?></option>
-			<option value="2"<?php if ($filemanager->dbquery->getFilter("filtration") == 2) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded yesterday')); ?></option>
-			<option value="3"<?php if ($filemanager->dbquery->getFilter("filtration") == 3) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded this week')); ?></option>
-			<option value="4"<?php if ($filemanager->dbquery->getFilter("filtration") == 4) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('edited today')); ?></option>
-			<option value="5"<?php if ($filemanager->dbquery->getFilter("filtration") == 5) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('edited yesterday')); ?></option>
+			<option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded today')); ?></option>
+			<option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded yesterday')); ?></option>
+			<option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded this week')); ?></option>
+			<option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('edited today')); ?></option>
+			<option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('edited yesterday')); ?></option>
 		</select>
 		</label>
 		<label><?php echo safeToHtml($translation->get('only pictures')); ?>:
-			<input type="checkbox" name="images" value="1" <?php if($filemanager->dbquery->getFilter("images") == 1) echo 'checked="checked"'; ?> />
+			<input type="checkbox" name="images" value="1" <?php if($filemanager->getDBQuery()->getFilter("images") == 1) echo 'checked="checked"'; ?> />
 		</label>
 		<span>
 		<input type="submit" name="search" value="<?php echo safeToHtml($translation->get('find')); ?>" />
@@ -201,7 +194,7 @@ $page->start(safeToHtml($translation->get('files')));
 
 		<?php
 
-		$selected_keywords = $filemanager->dbquery->getKeyword();
+		$selected_keywords = $filemanager->getDBQuery()->getKeyword();
 
     $keyword = $filemanager->getKeywordAppender();
     $keywords = $keyword->getUsedKeywords();
@@ -224,7 +217,7 @@ $page->start(safeToHtml($translation->get('files')));
 	</fieldset>
 </form>
 
-<?php echo $filemanager->dbquery->display('character'); ?>
+<?php echo $filemanager->getDBQuery()->display('character'); ?>
 <form method="POST" action="select_file.php">
 <table class="stripe">
 	<caption><?php echo safeToHtml($translation->get('files')); ?></caption>
@@ -279,7 +272,7 @@ $page->start(safeToHtml($translation->get('files')));
 </form>
 
 
-<?php echo $filemanager->dbquery->display('paging'); ?>
+<?php echo $filemanager->getDBQuery()->display('paging'); ?>
 
 
 <?php
