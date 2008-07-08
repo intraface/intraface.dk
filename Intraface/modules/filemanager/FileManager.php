@@ -34,11 +34,16 @@ class FileManager extends FileHandler
      *
      * @return void
      */
-    public function createDBQuery()
+    public function getDBQuery()
     {
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
         $this->dbquery = new Ilib_DBQuery("file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->createStore($this->kernel->getSessionId(), 'intranet_id = '.intval($this->kernel->intranet->get('id')));
         $this->dbquery->useErrorObject($this->error);
+        
+        return $this->dbquery;
     }
     
 
@@ -69,6 +74,8 @@ class FileManager extends FileHandler
     {
         // we load the mime types as they are going to be used a couple of times 
         $this->loadMimeTypes();
+        
+        $this->dbquery = $this->getDBQuery();
         
         if($this->dbquery->checkFilter("uploaded_from_date")) {
             $date_parts = explode(" ", $this->dbquery->getFilter("uploaded_from_date"));
