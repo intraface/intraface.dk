@@ -129,7 +129,9 @@ class Intraface_Install
 
         $this->deleteUploadDirectory(PATH_UPLOAD);
 
-        mkdir(PATH_UPLOAD);
+        if (!file_exists(PATH_UPLOAD)) {
+            mkdir(PATH_UPLOAD);
+        }
 
         return true;
 
