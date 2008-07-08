@@ -29,8 +29,7 @@ if (empty($_GET['use_stored'])) {
 
 
 $filemanager = new FileManager($kernel);
-$filemanager->createDBQuery();
-$filemanager->dbquery->storeResult('use_stored', 'filemanager', 'toplevel');
+$filemanager->getDBQuery()->storeResult('use_stored', 'filemanager', 'toplevel');
 
 $files = $filemanager->getList();
 

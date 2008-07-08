@@ -1,27 +1,26 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module('contact');
 
 $contact = new Contact($kernel);
 $keyword = $contact->getKeywords();
 $keywords = $keyword->getAllKeywords();
-$contact->createDBQuery();
-$contact->dbquery->defineCharacter('character', 'address.name');
-$contact->dbquery->storeResult('use_stored', 'contact', 'toplevel');
+$contact->getDBQuery()->defineCharacter('character', 'address.name');
+$contact->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
 $contacts = $contact->getList("use_address");
 
 
 $doc = new Intraface_modules_contact_PdfLabel($kernel->setting->get("user", "label"));
 $used_keyword = array();
-foreach($contact->dbquery->getKeyword() AS $kid) {
+foreach($contact->getDBQuery()->getKeyword() AS $kid) {
     foreach($keywords AS $k){
         if($k['id'] == $kid) {
             $used_keyword[] = $k['keyword'];
         }
     }
 }
-$doc->generate($contacts, $contact->dbquery->getFilter('search'), $used_keyword);
+$doc->generate($contacts, $contact->getDBQuery()->getFilter('search'), $used_keyword);
 $doc->stream();
 
 /*
@@ -66,12 +65,12 @@ $validator = new Intraface_Validator(new Intraface_Error);
 
 $doc->addText($doc->get('x') + $label_padding_left, $doc->get('y') - $label_padding_top , $doc->get('font_size'), "<b>Søgning</b>");
 $line = 1;
-if($contact->dbquery->getFilter('search') != "") {
-	$doc->addText($doc->get('x') + $label_padding_left, $doc->get('y') - $label_padding_top - $doc->get('font_spacing'), $doc->get('font_size'), "Søgetekst: ".$contact->dbquery->getFilter('search'));
+if($contact->getDBQuery()->getFilter('search') != "") {
+	$doc->addText($doc->get('x') + $label_padding_left, $doc->get('y') - $label_padding_top - $doc->get('font_spacing'), $doc->get('font_size'), "Søgetekst: ".$contact->getDBQuery()->getFilter('search'));
 	$line++;
 }
 
-$keyword_ids = $contact->dbquery->getKeyword();
+$keyword_ids = $contact->getDBQuery()->getKeyword();
 if(is_array($keyword_ids) && count($keyword_ids) > 0) {
 
 	$used_keyword = array();

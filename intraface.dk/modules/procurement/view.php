@@ -332,7 +332,6 @@ $page->start("Indkøb");
         <h2>Bilag</h2>
 
         <?php
-        $append_file->createDBQuery();
         $appendix_list = $append_file->getList();
 
         if(count($appendix_list) > 0) {

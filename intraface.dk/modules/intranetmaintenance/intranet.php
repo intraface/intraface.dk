@@ -201,7 +201,7 @@ $page->start($translation->get('Intranet'));
 
     <?php
     $modulepackagemanager = new Intraface_ModulePackage_Manager($intranet);
-    $modulepackagemanager->createDBQuery($kernel);
+    $modulepackagemanager->getDBQuery($kernel);
     $packages = $modulepackagemanager->getList();
     
     if(count($packages) > 0) {
@@ -243,7 +243,7 @@ $page->start($translation->get('Intranet'));
     
         <?php
         $modulepackage = new Intraface_ModulePackage;
-        $modulepackage->createDBQuery($kernel);
+        $modulepackage->getDBQuery($kernel);
         $packages = $modulepackage->getList();
         ?>
         <div class="formrow">

@@ -6,16 +6,15 @@ $_GET['use_stored'] = 'true';
 
 $module = $kernel->module('contact');
 $contact = new Contact($kernel);
-$contact->createDBQuery();
 
 $keyword = $contact->getKeywords();
 $keywords = $keyword->getAllKeywords();
 
-$contact->dbquery->defineCharacter('character', 'address.name');
-$contact->dbquery->storeResult('use_stored', 'contact', 'toplevel');
+$contact->getDBQuery()->defineCharacter('character', 'address.name');
+$contact->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
 $contacts = $contact->getList('use_address');
 
-$keyword_ids = $contact->dbquery->getKeyword();
+$keyword_ids = $contact->getDBQuery()->getKeyword();
 
 $used_keyword = array();
 
@@ -32,7 +31,7 @@ if(is_array($keyword_ids) && count($keyword_ids) > 0) {
 }
 
 $keywords = 'Nøgleord' . implode(' ', $used_keyword);
-$search = 'Søgetekst' . $contact->dbquery->getFilter('search');
+$search = 'Søgetekst' . $contact->getDBQuery()->getFilter('search');
 $count = 'Kontakter i søgning' . count($contacts);
 
 $i = 1;

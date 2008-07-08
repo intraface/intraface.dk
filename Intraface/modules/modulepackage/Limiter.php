@@ -2,8 +2,8 @@
 /**
  * Still under development!
  */
-    
-class ModulePackage_Limit {
+class ModulePackage_Limit 
+{
     
     /**
      * @var array limiters
@@ -14,9 +14,8 @@ class ModulePackage_Limit {
         
         require_once 'Intraface/modules/modulepackage/Manager.php';
         $manager = new Intraface_ModulePackage_Manager($intranet);
-        
-        $manager->createDBQuery();
-        $manager->dbquery->setFilter('status', 'active');
+
+        $manager->getDBQuery()->setFilter('status', 'active');
         $packages = $manager->getList();
         $limiters = array();
         require_once 'Intraface/modules/modulepackage/ModulePackage.php';
@@ -35,7 +34,4 @@ class ModulePackage_Limit {
     {
         
     }
-    
-    
 }
-?>
