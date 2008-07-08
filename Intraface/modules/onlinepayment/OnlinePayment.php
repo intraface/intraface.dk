@@ -17,6 +17,7 @@ class OnlinePayment extends Intraface_Standard
 {
     public $id;
     public $kernel;
+    private $dbquery;
 
     // Standard udbyder-transactionsstatus. Er lavet ud fra QuickPay
     public $transaction_status_types = array(

@@ -4,7 +4,7 @@
  * @author Lars Olesen <lars@legestue.net>
  * @author Sune Jensen <sj@sunet.dk>
  */
-require('../../include_first.php');
+require '../../include_first.php';
 
 
 $debtor_module = $kernel->module('debtor');
@@ -710,8 +710,8 @@ if(isset($onlinepayment)) {
         $onlinepayment_module = $kernel->useModule('onlinepayment', true); // true: ignore user permisssion
         $onlinepayment = OnlinePayment::factory($kernel);
 
-        $onlinepayment->dbquery->setFilter('belong_to', $debtor->get("type"));
-        $onlinepayment->dbquery->setFilter('belong_to_id', $debtor->get('id'));
+        $onlinepayment->getDBQuery()->setFilter('belong_to', $debtor->get("type"));
+        $onlinepayment->getDBQuery()->setFilter('belong_to_id', $debtor->get('id'));
         $actions = $onlinepayment->getTransactionActions();
 
         $payment_list = $onlinepayment->getlist();
