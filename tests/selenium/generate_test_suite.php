@@ -7,5 +7,5 @@ $writer->addReplacement('@@dirctory_separator@@', DIRECTORY_SEPARATOR);
 if ($writer->write()) {
     echo "Success, wrote content to file testSuite.html\n";
 } else {
-    echo "Failire, did not wrote content to file testSuite.html\n";
+    echo "Failire, did not write content to file testSuite.html\n";
 }
