@@ -320,7 +320,7 @@ $page->start($translation->get('Intranet'));
 	</thead>
 	<tbody>
 	<?php
-	$users = $user->getList();
+	$users = $user->getList($kernel);
 
 	foreach($users AS $user_list) {
 		?>

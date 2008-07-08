@@ -30,8 +30,8 @@ if(isset($_GET["search"])) {
 }
 
 $user->getDBQuery($kernel)->defineCharacter('character', 'name');
-$user->getDBQuery($kernel)->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
-$user->getDBQuery($kernel)->storeResult("use_stored", "intranetmainenance_user", "sublevel");
+$user->getDBQuery()->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
+$user->getDBQuery()->storeResult("use_stored", "intranetmainenance_user", "sublevel");
 
 $users = $user->getList();
 

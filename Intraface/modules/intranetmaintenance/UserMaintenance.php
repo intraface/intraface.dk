@@ -33,10 +33,13 @@ class UserMaintenance extends Intraface_User
      *
      * @return void
      */
-    public function getDBQuery($kernel)
+    public function getDBQuery($kernel = NULL)
     {
         if ($this->dbquery) {
             return $this->dbquery;
+        }
+        if($kernel == NULL) {
+            throw new Exception('getDBQuery requires kernel first time called');
         }
         $this->dbquery = new Intraface_DBQuery($kernel, 'user');
         $this->dbquery->setJoin('LEFT', 'address', 'user.id = address.belong_to_id AND address.type = 2', 'address.active = 1 OR address.active IS NULL');
@@ -239,12 +242,13 @@ class UserMaintenance extends Intraface_User
      *
      * @return array list of users
      */
-    function getList($kernel)
+    function getList($kernel = NULL)
     {
         if ($this->intranet_id != 0) {
             return Intraface_User::getList();
         }
 
+        
         $this->dbquery = $this->getDBQuery($kernel);
 
         if ($this->dbquery->checkFilter('text')) {
