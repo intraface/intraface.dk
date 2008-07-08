@@ -27,8 +27,7 @@ class Intraface_modules_cms_element_Filelist extends CMS_Element
             $this->value['keyword_id'] = $this->parameter->get('keyword_id');
 
             $filemanager = new FileManager($this->kernel);
-            $filemanager->createDBQuery();
-            $filemanager->dbquery->setKeyword($this->value['keyword_id']);
+            $filemanager->getDBQuery()->setKeyword($this->value['keyword_id']);
             $files = $filemanager->getList();
 
 
@@ -37,7 +36,6 @@ class Intraface_modules_cms_element_Filelist extends CMS_Element
             $shared_filehandler = $this->kernel->useShared('filehandler');
             $shared_filehandler->includeFile('AppendFile.php');
             $append_file = new AppendFile($this->kernel, 'cms_element_filelist', $this->id);
-            $append_file->createDBQuery();
             $files = $append_file->getList();
         }
 
@@ -52,6 +50,7 @@ class Intraface_modules_cms_element_Filelist extends CMS_Element
             }
 
             $filehandler = new FileHandler($this->kernel, $id);
+            // @todo this should be avoided
             $filehandler->createInstance();
             // HACK lille hack - til at undgå at vi får filer med som ikke har beskrivelser (formentlig slettede filer)
             if (!$filehandler->get('description')) continue;
