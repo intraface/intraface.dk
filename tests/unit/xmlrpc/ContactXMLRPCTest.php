@@ -39,6 +39,26 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
     {
 		unset($this->server);
     }
+    
+    function getClient()
+    {
+        require_once PATH_ROOT . 'install/Install.php';
+
+        if (!defined('SERVER_STATUS')) {
+            define('SERVER_STATUS', 'TEST');
+        }
+        $install = new Intraface_Install;
+        $install->resetServer();
+        $install->grantModuleAccess('administration', 'contact');
+
+        require_once 'XML/RPC2/Client.php';
+        $options = array('prefix' => 'contact.', 'debug' => false);
+        $client = XML_RPC2_Client::create(XMLRPC_SERVER_URL.'contact/server.php', $options);
+        
+        return $client;
+    }
+    
+    ////////////////////////////////////////////////77
 
     function testConstruction()
     {
@@ -70,21 +90,6 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    function getClient()
-    {
-        require_once PATH_ROOT . 'install/Install.php';
-
-        if (!defined('SERVER_STATUS')) {
-            define('SERVER_STATUS', 'TEST');
-        }
-        $install = new Intraface_Install;
-        $install->resetServer();
-        $install->grantModuleAccess('administration', 'contact');
-
-        require_once 'XML/RPC2/Client.php';
-        $options = array('prefix' => 'contact.');
-        return XML_RPC2_Client::create(XMLRPC_SERVER_URL.'contact/server.php', $options);;
-    }
 
     function testGetContactWithDanishCharactersIsReturnedInUTF8FromTheClient()
     {
