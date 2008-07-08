@@ -259,10 +259,10 @@ class CMS_Page extends Intraface_Standard
         $sql_extra = '';
 
         if (!empty($var['navigation_name'])) {
-            $sql_extra = "navigation_name = '".$var['navigation_name']."',";
+            $sql_extra .= "navigation_name = '".$var['navigation_name']."', ";
         }
         if (isset($var['child_of_id'])) {
-            $sql_extra = "child_of_id = '".(int)$var['child_of_id']."',";
+            $sql_extra .= "child_of_id = '".(int)$var['child_of_id']."', ";
         }
 
         // if the page is to updated
