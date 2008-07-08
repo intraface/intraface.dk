@@ -27,8 +27,7 @@ class Intraface_Auth
     {
         if(is_callable(array($adapter, 'getIdentification'))) {
             $identification = $adapter->getIdentification();
-        }
-        else {
+        } else {
             $identification = '[unidentifiable]';
         }
         
@@ -38,7 +37,7 @@ class Intraface_Auth
             $this->notifyObservers('login', $identification.' could not login');
         }
 
-        return ($object);
+        return $object;
     }
 
     /**

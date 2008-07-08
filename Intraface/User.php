@@ -22,6 +22,8 @@
  * @since   0.1.0
  * @version @package-version@
  */
+require_once 'Intraface/functions.php';
+
 class Intraface_User extends Intraface_Standard
 {
     /**
