@@ -60,7 +60,7 @@ class Debtor extends Intraface_Standard
     /**
      * @var object
      */
-    public $dbquery;
+    protected $dbquery;
 
     /**
      * @var object
@@ -101,16 +101,27 @@ class Debtor extends Intraface_Standard
         $this->db = new DB_Sql;
         $this->error = new Intraface_Error;
 
+
+        if ($this->id > 0) {
+            $this->load();
+        }
+    }
+    
+    function getDBQuery()
+    {
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
+
         $this->dbquery = new Intraface_DBQuery($this->kernel, "debtor", "debtor.active = 1 AND debtor.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->setJoin("LEFT", "contact", "debtor.contact_id = contact.id AND contact.intranet_id = ".$this->kernel->intranet->get("id"), '');
         $this->dbquery->setJoin("LEFT", "address", "address.belong_to_id = contact.id AND address.active = 1 AND address.type = 3", '');
         $this->dbquery->setJoin("LEFT", "debtor_item", "debtor_item.debtor_id = debtor.id AND debtor_item.active = 1 AND debtor_item.intranet_id = ".$this->kernel->intranet->get("id"), '');
 
         $this->dbquery->useErrorObject($this->error);
-
-        if ($this->id > 0) {
-            $this->load();
-        }
+        
+        return $this->dbquery;
+        
     }
 
     /**
@@ -510,8 +521,7 @@ class Debtor extends Intraface_Standard
                 $this->error->set('Debtor::Created kan ikke lave kreditnota fra faktura, når fakturaen ikke er sendt eller færdigbehandlet', E_USER_ERROR);
                 return false;
             }
-        }
-        else {
+        } else {
             if ($debtor_object->get('locked') == true) {
                 $this->error->set('Objektet er låst, så du kan ikke lave et nyt objekt fra det.', E_USER_ERROR);
                 return false;
@@ -552,14 +562,13 @@ class Debtor extends Intraface_Standard
                 $debtor_object->setStatus('executed');
             }
 
-
             // Overførsel af onlinebetaling fra ordre til faktura.
             if ($debtor_object->get('type') == "order" && $this->kernel->intranet->hasModuleAccess('onlinepayment')) {
                 $onlinepayment_module = $this->kernel->useModule('onlinepayment', true); // true: ignore user permisssion
                 $onlinepayment = OnlinePayment::factory($this->kernel);
 
-                $onlinepayment->dbquery->setFilter('belong_to', 'order');
-                $onlinepayment->dbquery->setFilter('belong_to_id', $debtor_object->get('id'));
+                $onlinepayment->getDBQuery()->setFilter('belong_to', 'order');
+                $onlinepayment->getDBQuery()->setFilter('belong_to_id', $debtor_object->get('id'));
                 $payment_list = $onlinepayment->getlist();
 
                 foreach ($payment_list AS $p) {
@@ -567,8 +576,6 @@ class Debtor extends Intraface_Standard
                     $tmp_onlinepayment->changeBelongTo('invoice', $new_debtor_id);
                 }
             }
-
-
 
             return $new_debtor_id;
         }
@@ -740,6 +747,8 @@ class Debtor extends Intraface_Standard
     public function getList()
     {
         $db = new DB_Sql;
+
+        $this->dbquery = $this->getDBQuery();
 
         $this->dbquery->setCondition("debtor.type = ".$this->get("type_key"));
 

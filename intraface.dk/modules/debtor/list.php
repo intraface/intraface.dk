@@ -21,67 +21,62 @@ if(isset($_GET["action"]) && $_GET["action"] == "delete") {
 }
 
 if(isset($_GET["contact_id"]) && intval($_GET["contact_id"]) != 0) {
-    $debtor->dbquery->setFilter("contact_id", $_GET["contact_id"]);
+    $debtor->getDBQuery()->setFilter("contact_id", $_GET["contact_id"]);
 }
 
 if(isset($_GET["product_id"]) && intval($_GET["product_id"]) != 0) {
-    $debtor->dbquery->setFilter("product_id", $_GET["product_id"]);
+    $debtor->getDBQuery()->setFilter("product_id", $_GET["product_id"]);
 }
 
 
 // søgning
     // if(isset($_POST['submit'])
     if(isset($_GET["text"]) && $_GET["text"] != "") {
-        $debtor->dbquery->setFilter("text", $_GET["text"]);
+        $debtor->getDBQuery()->setFilter("text", $_GET["text"]);
     }
 
     if(isset($_GET["from_date"]) && $_GET["from_date"] != "") {
-        $debtor->dbquery->setFilter("from_date", $_GET["from_date"]);
+        $debtor->getDBQuery()->setFilter("from_date", $_GET["from_date"]);
     }
 
     if(isset($_GET["to_date"]) && $_GET["to_date"] != "") {
-        $debtor->dbquery->setFilter("to_date", $_GET["to_date"]);
+        $debtor->getDBQuery()->setFilter("to_date", $_GET["to_date"]);
     }
 
-    if($debtor->dbquery->checkFilter("contact_id")) {
-        $debtor->dbquery->setFilter("status", "-1");
-    }
-    elseif(isset($_GET["status"]) && $_GET['status'] != '') {
-        $debtor->dbquery->setFilter("status", $_GET["status"]);
-    }
-    else {
-        $debtor->dbquery->setFilter("status", "-2");
+    if($debtor->getDBQuery()->checkFilter("contact_id")) {
+        $debtor->getDBQuery()->setFilter("status", "-1");
+    } elseif(isset($_GET["status"]) && $_GET['status'] != '') {
+        $debtor->getDBQuery()->setFilter("status", $_GET["status"]);
+    } else {
+        $debtor->getDBQuery()->setFilter("status", "-2");
     }
 
     if(!empty($_GET['not_stated']) AND $_GET['not_stated'] == 'true') {
-        $debtor->dbquery->setFilter("not_stated", true);
+        $debtor->getDBQuery()->setFilter("not_stated", true);
     }
 
 // er der ikke noget galt herunder (LO) - brude det ikke være order der bliver sat?
 if(isset($_GET['sorting']) && $_GET['sorting'] != 0) {
-    $debtor->dbquery->setFilter("sorting", $_GET['sorting']);
+    $debtor->getDBQuery()->setFilter("sorting", $_GET['sorting']);
 }
 
-$debtor->dbquery->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
-$debtor->dbquery->storeResult("use_stored", $debtor->get("type"), "toplevel");
-$debtor->dbquery->setExtraUri('&amp;type='.$debtor->get("type"));
-
-
+$debtor->getDBQuery()->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
+$debtor->getDBQuery()->storeResult("use_stored", $debtor->get("type"), "toplevel");
+$debtor->getDBQuery()->setExtraUri('&amp;type='.$debtor->get("type"));
 
 $posts = $debtor->getList();
 
-if(intval($debtor->dbquery->getFilter('product_id')) != 0) {
+if(intval($debtor->getDBQuery()->getFilter('product_id')) != 0) {
     $product = new Product($kernel, $debtor->dbquery->getFilter('product_id'));
 }
 
-if(intval($debtor->dbquery->getFilter('contact_id')) != 0) {
+if(intval($debtor->getDBQuery()->getFilter('contact_id')) != 0) {
     $contact = new Contact($kernel, $debtor->dbquery->getFilter('contact_id'));
 }
 
 $page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'list.js');
 $page->start(safeToHtml($translation->get($debtor->get('type').'s')));
-
 ?>
 
 <h1>
@@ -139,43 +134,43 @@ $page->start(safeToHtml($translation->get($debtor->get('type').'s')));
         <legend>Avanceret søgning</legend>
         <form method="get" action="list.php">
         <label>Tekst
-            <input type="text" name="text" value="<?php echo safeToHtml($debtor->dbquery->getFilter("text")); ?>" />
+            <input type="text" name="text" value="<?php echo safeToHtml($debtor->getDBQuery()->getFilter("text")); ?>" />
         </label>
         <label>Status
         <select name="status">
             <option value="-1">Alle</option>
-            <option value="-2"<?php if ($debtor->dbquery->getFilter("status") == -2) echo ' selected="selected"';?>>Åbne</option>
+            <option value="-2"<?php if ($debtor->getDBQuery()->getFilter("status") == -2) echo ' selected="selected"';?>>Åbne</option>
             <?php if($debtor->get("type") == "invoice"): ?>
-            <option value="-3"<?php if ($debtor->dbquery->getFilter("status") == -3) echo ' selected="selected"';?>>Afskrevet</option>
+            <option value="-3"<?php if ($debtor->getDBQuery()->getFilter("status") == -3) echo ' selected="selected"';?>>Afskrevet</option>
             <?php endif; ?>
-            <option value="0"<?php if ($debtor->dbquery->getFilter("status") == 0) echo ' selected="selected"';?>>Oprettet</option>
-            <option value="1"<?php if ($debtor->dbquery->getFilter("status") == 1) echo ' selected="selected"';?>>Sendt</option>
-            <option value="2"<?php if ($debtor->dbquery->getFilter("status") == 2) echo ' selected="selected"';?>>Afsluttet</option>
-            <option value="3"<?php if ($debtor->dbquery->getFilter("status") == 3) echo ' selected="selected"';?>>Annulleret</option>
+            <option value="0"<?php if ($debtor->getDBQuery()->getFilter("status") == 0) echo ' selected="selected"';?>>Oprettet</option>
+            <option value="1"<?php if ($debtor->getDBQuery()->getFilter("status") == 1) echo ' selected="selected"';?>>Sendt</option>
+            <option value="2"<?php if ($debtor->getDBQuery()->getFilter("status") == 2) echo ' selected="selected"';?>>Afsluttet</option>
+            <option value="3"<?php if ($debtor->getDBQuery()->getFilter("status") == 3) echo ' selected="selected"';?>>Annulleret</option>
         </select>
         </label>
         <!-- sortering bør være placeret ved at man klikker på en overskrift i stedet - og så bør man kunne sortere på det hele -->
         <label>Sortering
         <select name="sorting">
-            <option value="0"<?php if ($debtor->dbquery->getFilter("sorting") == 0) echo ' selected="selected"';?>>Fakturanummer faldende</option>
-            <option value="1"<?php if ($debtor->dbquery->getFilter("sorting") == 1) echo ' selected="selected"';?>>Fakturanummer stigende</option>
-            <option value="2"<?php if ($debtor->dbquery->getFilter("sorting") == 2) echo ' selected="selected"';?>>Kontaktnummer</option>
-            <option value="3"<?php if ($debtor->dbquery->getFilter("sorting") == 3) echo ' selected="selected"';?>>Kontaktnavn</option>
+            <option value="0"<?php if ($debtor->getDBQuery()->getFilter("sorting") == 0) echo ' selected="selected"';?>>Fakturanummer faldende</option>
+            <option value="1"<?php if ($debtor->getDBQuery()->getFilter("sorting") == 1) echo ' selected="selected"';?>>Fakturanummer stigende</option>
+            <option value="2"<?php if ($debtor->getDBQuery()->getFilter("sorting") == 2) echo ' selected="selected"';?>>Kontaktnummer</option>
+            <option value="3"<?php if ($debtor->getDBQuery()->getFilter("sorting") == 3) echo ' selected="selected"';?>>Kontaktnavn</option>
         </select>
         </label>
         <br />
 
         <label>Fra dato
-            <input type="text" name="from_date" id="date-from" value="<?php print(safeToForm($debtor->dbquery->getFilter("from_date"))); ?>" /> <span id="calender"></span>
+            <input type="text" name="from_date" id="date-from" value="<?php print(safeToForm($debtor->getDBQuery()->getFilter("from_date"))); ?>" /> <span id="calender"></span>
         </label>
         <label>Til dato
-            <input type="text" name="to_date" value="<?php print(safeToForm($debtor->dbquery->getFilter("to_date"))); ?>" />
+            <input type="text" name="to_date" value="<?php print(safeToForm($debtor->getDBQuery()->getFilter("to_date"))); ?>" />
         </label>
 
         <span>
         <input type="hidden" name="type" value="<?php print(safeToForm($debtor->get("type"))); ?>" />
-        <input type="hidden" name="contact_id" value="<?php print(intval($debtor->dbquery->getFilter('contact_id'))); ?>" />
-        <input type="hidden" name="product_id" value="<?php print(intval($debtor->dbquery->getFilter('product_id'))); ?>" />
+        <input type="hidden" name="contact_id" value="<?php print(intval($debtor->getDBQuery()->getFilter('contact_id'))); ?>" />
+        <input type="hidden" name="product_id" value="<?php print(intval($debtor->getDBQuery()->getFilter('product_id'))); ?>" />
         <input type="submit" name="search" value="Find" />
         </span>
 
@@ -197,7 +192,7 @@ $page->start(safeToHtml($translation->get($debtor->get('type').'s')));
             <th colspan="2">Kontakt</th>
             <th>Beskrivelse</th>
             <th class="amount">Beløb</th>
-            <?php if($debtor->dbquery->getFilter("status") == -3): ?>
+            <?php if($debtor->getDBQuery()->getFilter("status") == -3): ?>
                 <th class="amount">Afskrevet</th>
             <?php endif; ?>
             <th>Sendt</th>
@@ -265,7 +260,7 @@ $page->start(safeToHtml($translation->get($debtor->get('type').'s')));
 
 
                 <?php
-                if($debtor->dbquery->getFilter("status") == -3) {
+                if($debtor->getDBQuery()->getFilter("status") == -3) {
                     ?>
                     <td class="amount"><?php if ($posts[$i]["deprication"]) print(number_format($posts[$i]["deprication"], 2, ",",".")); ?> &nbsp; </td>
                     <?php
@@ -323,7 +318,7 @@ $page->start(safeToHtml($translation->get($debtor->get('type').'s')));
 </table>
 
 
-<?php echo $debtor->dbquery->display('paging'); ?>
+<?php echo $debtor->getDBQuery()->display('paging'); ?>
 
 <?php endif; ?>
 
