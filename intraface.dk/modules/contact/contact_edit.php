@@ -29,8 +29,7 @@ if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
     if (empty($_POST['id'])) {
         $contact = new Contact($kernel);
         if (!empty($_POST['phone'])) {
-            $contact->createDBQuery();
-            $contact->dbquery->setCondition("address.phone = '".$_POST['phone']."' AND address.phone <> ''");
+            $contact->getDBQuery()->setCondition("address.phone = '".$_POST['phone']."' AND address.phone <> ''");
             $similar_contacts = $contact->getList();
         }
 
