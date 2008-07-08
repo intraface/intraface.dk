@@ -223,7 +223,7 @@ class Contact extends Intraface_Standard
         return $this->error;
     }
 
-    function getDBQuery()
+    public function getDBQuery()
     {
         if ($this->dbquery) {
             return $this->dbquery;
@@ -233,18 +233,6 @@ class Contact extends Intraface_Standard
         $this->dbquery->useErrorObject($this->error);
 
         return $this->dbquery;
-    }
-
-    /**
-     * Creates the dbquery which is used in getList()
-     *
-     * @return  void
-     */
-    public function createDBQuery()
-    {
-        $this->dbquery = new Intraface_DBQuery($this->kernel, "contact", "contact.active = 1 AND contact.intranet_id = ".$this->kernel->intranet->get("id"));
-        $this->dbquery->setJoin("LEFT", "address", "address.belong_to_id = contact.id", "address.active = 1 AND address.type = 3");
-        $this->dbquery->useErrorObject($this->error);
     }
 
     /**
