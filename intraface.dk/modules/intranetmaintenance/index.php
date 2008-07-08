@@ -8,19 +8,18 @@ $module = $kernel->module("intranetmaintenance");
 $translation = $kernel->getTranslation('intranetmaintenance');
 
 $intranetmaintenance = new IntranetMaintenance();
-$intranetmaintenance->createDBQuery($kernel);
 
 if(isset($_GET["search"])) {
     if(isset($_GET["text"]) && $_GET["text"] != "") {
-        $intranetmaintenance->dbquery->setFilter("text", $_GET["text"]);
+        $intranetmaintenance->getDBQuery($kernel)->setFilter("text", $_GET["text"]);
     }
 } elseif(isset($_GET['character'])) {
-    $intranetmaintenance->dbquery->useCharacter();
+    $intranetmaintenance->getDBQuery($kernel)->useCharacter();
 }
 
-$intranetmaintenance->dbquery->defineCharacter('character', 'name');
-$intranetmaintenance->dbquery->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
-$intranetmaintenance->dbquery->storeResult("use_stored", "intranetmainenance_intranet", "toplevel");
+$intranetmaintenance->getDBQuery($kernel)->defineCharacter('character', 'name');
+$intranetmaintenance->getDBQuery($kernel)->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
+$intranetmaintenance->getDBQuery($kernel)->storeResult("use_stored", "intranetmainenance_intranet", "toplevel");
 $intranets = $intranetmaintenance->getList();
 
 $page = new Intraface_Page($kernel);
@@ -38,13 +37,13 @@ $page->start($translation->get('intranets'));
     <fieldset>
         <legend><?php echo safeToHtml($translation->get('search')); ?></legend>
         <label><?php echo safeToHtml($translation->get('search text')); ?>:
-            <input type="text" name="text" value="<?php echo $intranetmaintenance->dbquery->getFilter("text"); ?>" />
+            <input type="text" name="text" value="<?php echo $intranetmaintenance->getDBQuery($kernel)->getFilter("text"); ?>" />
         </label>
         <span><input type="submit" name="search" value="<?php echo safeToHtml($translation->get('search')); ?>" /></span>
     </fieldset>
 </form>
 
-<?php echo $intranetmaintenance->dbquery->display('character'); ?>
+<?php echo $intranetmaintenance->getDBQuery($kernel)->display('character'); ?>
 
 <table>
 <thead>
@@ -69,7 +68,7 @@ $page->start($translation->get('intranets'));
 </tbody>
 </table>
 
-<?php echo $intranetmaintenance->dbquery->display('paging'); ?>
+<?php echo $intranetmaintenance->getDBQuery($kernel)->display('paging'); ?>
 
 <?php
 $page->end();

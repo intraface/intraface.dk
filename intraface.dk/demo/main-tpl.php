@@ -3,7 +3,7 @@
     <head>
         <title><?php echo $title; ?></title>
         <meta http-equiv="content-type" content="text/html; charset=<?php e($encoding); ?>">
-        <link rel="alternate" type="application/rss+xml" title="Alle produkter" href="/demo/shop/rss.php" />
+        <link rel="alternate" type="application/rss+xml" title="Alle produkter" href="<?php e(url('/demo/shop/rss.php')); ?>" />
 
         <style type="text/css">
         <?php foreach ($this->document->styles as $style): ?>

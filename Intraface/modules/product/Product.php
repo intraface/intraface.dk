@@ -113,14 +113,6 @@ class Product extends Intraface_Standard
      *
      * @return void
      */
-    public function createDBQuery()
-    {
-        $this->dbquery = new Intraface_DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->intranet->getId());
-        $this->dbquery->setJoin("LEFT", "product_detail detail", "detail.product_id = product.id", "detail.active = 1");
-        //$this->dbquery->setFindCharacterFromField("detail.name");
-        $this->dbquery->useErrorObject($this->error);
-    }
-
     public function getDBQuery()
     {
         if ($this->dbquery) {
@@ -224,7 +216,6 @@ class Product extends Intraface_Standard
 
         $filehandler = new FileHandler($this->kernel);
         $append_file = new AppendFile($this->kernel, 'product', $this->get('id'));
-        $append_file->createDBQuery();
         $appendix_list = $append_file->getList();
 
         $this->value['pictures'] = array();

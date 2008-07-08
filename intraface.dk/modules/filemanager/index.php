@@ -1,71 +1,65 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module('filemanager');
 $translation = $kernel->getTranslation('filemanager');
-
 
 if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
     $filemanager = new FileManager($kernel, $_GET['delete']);
     if (!$filemanager->delete()) {
         trigger_error($translation->get('could not delete file'), E_USER_ERROR);
     }
-}
-elseif (!empty($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
+} elseif (!empty($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
     $filemanager = new FileManager($kernel, $_GET['undelete']);
     if (!$filemanager->undelete()) {
         trigger_error($translation->get('could not undelete file'), E_USER_ERROR);
     }
-}
-
-else {
+} else {
     $filemanager = new FileManager($kernel);
 
 }
-
-$filemanager->createDBQuery();
 
 /*
 if(isset($_GET["contact_id"]) && intval($_GET["contact_id"]) != 0 && $kernel->user->hasModuleAccess('contact')) {
     $contact_module = $kernel->useModule('contact');
     $contact = new Contact($kernel, $_GET['contact_id']);
-    $procurement->dbquery->setFilter("contact_id", $_GET["contact_id"]);
+    $procurement->getDBQuery()->setFilter("contact_id", $_GET["contact_id"]);
 }
 */
 
 if(isset($_GET["search"])) {
 
     if(isset($_GET["text"]) && $_GET["text"] != "") {
-        $filemanager->dbquery->setFilter("text", $_GET["text"]);
+        $filemanager->getDBQuery()->setFilter("text", $_GET["text"]);
     }
 
     if(isset($_GET["filtration"]) && intval($_GET["filtration"]) != 0) {
         // Kun for at filtration igen vises i søgeboksen
-        $filemanager->dbquery->setFilter("filtration", $_GET["filtration"]);
+        $filemanager->getDBQuery()->setFilter("filtration", $_GET["filtration"]);
 
         switch($_GET["filtration"]) {
             case 1:
-                $filemanager->dbquery->setFilter("uploaded_from_date", date("d-m-Y")." 00:00");
+                $filemanager->getDBQuery()->setFilter("uploaded_from_date", date("d-m-Y")." 00:00");
                 break;
             case 2:
-                $filemanager->dbquery->setFilter("uploaded_from_date", date("d-m-Y", time()-60*60*24)." 00:00");
-                $filemanager->dbquery->setFilter("uploaded_to_date", date("d-m-Y", time()-60*60*24)." 23:59");
+                $filemanager->getDBQuery()->setFilter("uploaded_from_date", date("d-m-Y", time()-60*60*24)." 00:00");
+                $filemanager->getDBQuery()->setFilter("uploaded_to_date", date("d-m-Y", time()-60*60*24)." 23:59");
                 break;
             case 3:
-                $filemanager->dbquery->setFilter("uploaded_from_date", date("d-m-Y", time()-60*60*24*7)." 00:00");
+                $filemanager->getDBQuery()->setFilter("uploaded_from_date", date("d-m-Y", time()-60*60*24*7)." 00:00");
                 break;
             case 4:
-                $filemanager->dbquery->setFilter("edited_from_date", date("d-m-Y")." 00:00");
+                $filemanager->getDBQuery()->setFilter("edited_from_date", date("d-m-Y")." 00:00");
                 break;
             case 5:
-                $filemanager->dbquery->setFilter("edited_from_date", date("d-m-Y", time()-60*60*24)." 00:00");
-                $filemanager->dbquery->setFilter("edited_to_date", date("d-m-Y", time()-60*60*24)." 23:59");
+                $filemanager->getDBQuery()->setFilter("edited_from_date", date("d-m-Y", time()-60*60*24)." 00:00");
+                $filemanager->getDBQuery()->setFilter("edited_to_date", date("d-m-Y", time()-60*60*24)." 23:59");
                 break;
             case 6:
-                $filemanager->dbquery->setFilter('accessibility', 'public');
+                $filemanager->getDBQuery()->setFilter('accessibility', 'public');
                 break;
             case 7:
-                $filemanager->dbquery->setFilter('accessibility', 'intranet');
+                $filemanager->getDBQuery()->setFilter('accessibility', 'intranet');
                 break;
             default:
                 // Probaly 0, so nothing happens
@@ -74,20 +68,20 @@ if(isset($_GET["search"])) {
 
     if(isset($_GET['keyword']) && is_array($_GET['keyword']) && count($_GET['keyword']) > 0) {
 
-        $filemanager->dbquery->setKeyword($_GET['keyword']);
+        $filemanager->getDBQuery()->setKeyword($_GET['keyword']);
     }
 }
 elseif(isset($_GET['character'])) {
-    $filemanager->dbquery->useCharacter();
+    $filemanager->getDBQuery()->useCharacter();
 }
 else {
-    $filemanager->dbquery->setSorting('file_handler.date_created DESC');
+    $filemanager->getDBQuery()->setSorting('file_handler.date_created DESC');
 }
 
-$filemanager->dbquery->defineCharacter('character', 'file_handler.file_name');
-$filemanager->dbquery->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
-$filemanager->dbquery->storeResult("use_stored", "filemanager", "toplevel");
-// $filemanager->dbquery->setExtraUri('&amp;type=1');
+$filemanager->getDBQuery()->defineCharacter('character', 'file_handler.file_name');
+$filemanager->getDBQuery()->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
+$filemanager->getDBQuery()->storeResult("use_stored", "filemanager", "toplevel");
+// $filemanager->getDBQuery()->setExtraUri('&amp;type=1');
 
 
 $files = $filemanager->getList();
@@ -130,18 +124,18 @@ if($kernel->intranet->hasModuleAccess('ModulePackage')) {
         <fieldset>
             <legend><?php echo safeToHtml($translation->get('search')); ?></legend>
             <label><?php echo safeToHtml($translation->get('search text')); ?>:
-                <input type="text" name="text" value="<?php echo $filemanager->dbquery->getFilter("text"); ?>" />
+                <input type="text" name="text" value="<?php echo $filemanager->getDBQuery()->getFilter("text"); ?>" />
             </label>
             <label><?php echo safeToHtml($translation->get('search filter')); ?>:
             <select name="filtration">
                 <option value="0"><?php echo safeToHtml($translation->get('all', 'filehandler')); ?></option>
-                <option value="1"<?php if ($filemanager->dbquery->getFilter("filtration") == 1) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded today', 'filehandler')); ?></option>
-                <option value="2"<?php if ($filemanager->dbquery->getFilter("filtration") == 2) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded yesterday', 'filehandler')); ?></option>
-                <option value="3"<?php if ($filemanager->dbquery->getFilter("filtration") == 3) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded this week', 'filehandler')); ?></option>
-                <option value="4"<?php if ($filemanager->dbquery->getFilter("filtration") == 4) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('edited today', 'filehandler')); ?></option>
-                <option value="5"<?php if ($filemanager->dbquery->getFilter("filtration") == 5) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('edited yesterday', 'filehandler')); ?></option>
-                <option value="6"<?php if ($filemanager->dbquery->getFilter("filtration") == 6) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('public accessible', 'filemanager')); ?></option>
-                <option value="7"<?php if ($filemanager->dbquery->getFilter("filtration") == 7) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('only accessible from intranet', 'filemanager')); ?></option>
+                <option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded today', 'filehandler')); ?></option>
+                <option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded yesterday', 'filehandler')); ?></option>
+                <option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded this week', 'filehandler')); ?></option>
+                <option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('edited today', 'filehandler')); ?></option>
+                <option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('edited yesterday', 'filehandler')); ?></option>
+                <option value="6"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 6) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('public accessible', 'filemanager')); ?></option>
+                <option value="7"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 7) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('only accessible from intranet', 'filemanager')); ?></option>
     
             </select>
             </label>
@@ -151,7 +145,7 @@ if($kernel->intranet->hasModuleAccess('ModulePackage')) {
     
             <?php
     
-            $selected_keywords = $filemanager->dbquery->getKeyword();
+            $selected_keywords = $filemanager->getDBQuery()->getKeyword();
     
         $keyword = $filemanager->getKeywordAppender();
         $keywords = $keyword->getUsedKeywords();
@@ -175,7 +169,7 @@ if($kernel->intranet->hasModuleAccess('ModulePackage')) {
     </form>
     
     
-    <?php echo $filemanager->dbquery->display('character'); ?>
+    <?php echo $filemanager->getDBQuery()->display('character'); ?>
     
     
     
@@ -219,7 +213,7 @@ if($kernel->intranet->hasModuleAccess('ModulePackage')) {
         </tbody>
     </table>
     
-    <?php echo $filemanager->dbquery->display('paging'); ?>
+    <?php echo $filemanager->getDBQuery()->display('paging'); ?>
 
 <?php endif; ?>
 <?php

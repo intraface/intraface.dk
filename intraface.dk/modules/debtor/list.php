@@ -67,11 +67,11 @@ $debtor->getDBQuery()->setExtraUri('&amp;type='.$debtor->get("type"));
 $posts = $debtor->getList();
 
 if(intval($debtor->getDBQuery()->getFilter('product_id')) != 0) {
-    $product = new Product($kernel, $debtor->dbquery->getFilter('product_id'));
+    $product = new Product($kernel, $debtor->getDBQuery()->getFilter('product_id'));
 }
 
 if(intval($debtor->getDBQuery()->getFilter('contact_id')) != 0) {
-    $contact = new Contact($kernel, $debtor->dbquery->getFilter('contact_id'));
+    $contact = new Contact($kernel, $debtor->getDBQuery()->getFilter('contact_id'));
 }
 
 $page = new Intraface_Page($kernel);
@@ -281,18 +281,15 @@ $page->start(safeToHtml($translation->get($debtor->get('type').'s')));
 
                     if($debtor->get('type') == "invoice" && $posts[$i]['status'] == "sent" && $posts[$i]['arrears'] != 0) {
                         $arrears = " (".number_format($posts[$i]['arrears'], 2, ",", ".").")";
-                    }
-                    else {
+                    } else {
                         $arrears = "";
                     }
 
                     if($posts[$i]["status"] == "executed" || $posts[$i]["status"] == "cancelled") {
                         echo safeToHtml($translation->get($posts[$i]["status"]));
-                    }
-                    elseif($posts[$i]["due_date"] < date("Y-m-d")) {
+                    } elseif($posts[$i]["due_date"] < date("Y-m-d")) {
                         print("<span class=\"due\">".safeToHtml($posts[$i]["dk_due_date"].$arrears)."</span>");
-                    }
-                    else {
+                    } else {
                         print(safeToHtml($posts[$i]["dk_due_date"].$arrears));
                     }
                     ?>

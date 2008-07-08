@@ -1,10 +1,10 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $modul = $kernel->module("intranetmaintenance");
 $translation = $kernel->getTranslation('intranetmaintenance');
 
-if(isset($_POST["submit"])) {
+if (isset($_POST["submit"])) {
 
 	$intranet = new IntranetMaintenance(intval($_POST["id"]));
 
@@ -19,14 +19,12 @@ if(isset($_POST["submit"])) {
 		}
 	}
 
-}
-else {
+} else {
 	if(isset($_GET["id"])) {
 		$intranet = new IntranetMaintenance((int)$_GET["id"]);
 		$value = $intranet->get();
 		$address_value = $intranet->address->get();
-	}
-	else {
+	} else {
 		$intranet = new IntranetMaintenance();
 		$value = array();
 		$address_value = array();
@@ -91,7 +89,7 @@ $page->start($translation->get('edit intranet'));
 
 </fieldset>
 
-<input type="submit" name="submit" value="Gem" />
+<input type="submit" name="submit" value="Gem" id="submit-save-keys" />
 
 <fieldset>
 	<legend><?php echo $translation->get('address information', 'address'); ?></legend>
@@ -133,7 +131,7 @@ $page->start($translation->get('edit intranet'));
 	</div>
 </fieldset>
 <input type="hidden" name="id" id="id" value="<?php print($intranet->get("id")); ?>" />
-<input type="submit" name="submit" value="Gem" />
+<input type="submit" name="submit" value="Gem" id="submit-save-address" />
 
 </form>
 

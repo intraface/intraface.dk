@@ -16,7 +16,7 @@ class DebtorAccount extends Intraface_Standard {
      */
     public $account_for;
 
-    function __construct(& $object) 
+    function __construct($object) 
     {
 
         if(!is_object($object)) {
@@ -30,7 +30,7 @@ class DebtorAccount extends Intraface_Standard {
             return false;
         }
         
-        $this->object = & $object;
+        $this->object = $object;
         $this->error = $object->error;
         
     }
@@ -86,16 +86,13 @@ class DebtorAccount extends Intraface_Standard {
         // Hent kreditnotaer. Ikke hvis det er en reminder. Den kan ikke krediteres.
         if($this->account_for == "invoice") {
             $credit_note = $this->getCreditNote();
-            $credit_note->dbquery->setCondition("where_from = 5 AND where_from_id = ".$this->object->get("id"));
-            $credit_note->dbquery->setSorting("this_date");
+            $credit_note->getDBQuery()->setCondition("where_from = 5 AND where_from_id = ".$this->object->get("id"));
+            $credit_note->getDBQuery()->setSorting("this_date");
             // Det er ret krævende at køre debtor->getList(), måske det burde gøres med direkte sql-udtræk.
             $credit_notes = $credit_note->getList();
-        }
-        else {
+        } else {
             $credit_notes = array();
         }
-        
-        
         
         $value = array();
         $pay = 0; // payment
@@ -157,5 +154,3 @@ class DebtorAccount extends Intraface_Standard {
         return $value;
     }
 }
-
-?>

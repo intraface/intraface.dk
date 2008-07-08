@@ -27,7 +27,7 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
     /**
      * @var object dbquery
      */
-    public $dbquery;
+    private $dbquery;
 
     /**
      * @var integer id on intranet module package
@@ -103,12 +103,16 @@ class Intraface_ModulePackage_Manager extends Intraface_Standard {
      *
      * @return void
      */
-    public function createDBQuery($kernel)
+    public function getDBQuery($kernel)
     {
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
         $this->dbquery = new Intraface_DBQuery($kernel, 'intranet_module_package', 'intranet_module_package.active = 1 AND intranet_module_package.intranet_id = '.$this->intranet->get('id'));
         $this->dbquery->setJoin('INNER', 'module_package', 'intranet_module_package.module_package_id = module_package.id', '');
         $this->dbquery->setJoin('INNER', 'module_package_group', 'module_package.module_package_group_id = module_package_group.id', '');
         $this->dbquery->setJoin('INNER', 'module_package_plan', 'module_package.module_package_plan_id = module_package_plan.id', '');
+        return $this->dbquery;
     }
 
     /**

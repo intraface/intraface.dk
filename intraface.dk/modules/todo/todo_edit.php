@@ -113,13 +113,13 @@ function moreFields() {
 
     <p><a href="" onclick="moreFields(); return false;"><?php e(t('More fields')); ?></a></p>
 
-  <h2><?php e(t('Description (optional)')); ?></h2>
-  <label><textarea cols="80" rows="4" name="list_description"><?php if(!empty($value['list_description'])) e($value['list_description']); ?></textarea></label>
+   <h2><?php e(t('Description (optional)')); ?></h2>
+   <label><textarea cols="80" rows="4" name="list_description"><?php if(!empty($value['list_description'])) e($value['list_description']); ?></textarea></label>
 
-  </fieldset>
+   </fieldset>
 
     <div>
-        <input type="submit" value="<?php e(t('Save list')); ?>" class="save" /> <?php e(t('or')); ?> <a href="todo.php?id=<?php e($todo->get('id')); ?>"><?php e(t('Cancel')); ?></a>
+        <input type="submit" value="<?php e(t('Save list')); ?>" class="save" id="submit-save" /> <?php e(t('or')); ?> <a href="todo.php?id=<?php e($todo->get('id')); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 </form>
 

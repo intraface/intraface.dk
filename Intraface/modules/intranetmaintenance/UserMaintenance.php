@@ -12,6 +12,8 @@
  */
 class UserMaintenance extends Intraface_User
 {
+    private $dbquery;
+    
     /**
      * constructor
      *
@@ -31,11 +33,14 @@ class UserMaintenance extends Intraface_User
      *
      * @return void
      */
-    public function createDBQuery($kernel)
+    public function getDBQuery($kernel)
     {
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
         $this->dbquery = new Intraface_DBQuery($kernel, 'user');
         $this->dbquery->setJoin('LEFT', 'address', 'user.id = address.belong_to_id AND address.type = 2', 'address.active = 1 OR address.active IS NULL');
-
+        return $this->dbquery;
     }
 
     /**
@@ -234,11 +239,13 @@ class UserMaintenance extends Intraface_User
      *
      * @return array list of users
      */
-    function getList()
+    function getList($kernel)
     {
         if ($this->intranet_id != 0) {
             return Intraface_User::getList();
         }
+
+        $this->dbquery = $this->getDBQuery($kernel);
 
         if ($this->dbquery->checkFilter('text')) {
             $this->dbquery->setCondition('address.name LIKE "%'.safeToDB($this->dbquery->getFilter('text')).'%" OR user.email LIKE "%'.safeToDB($this->dbquery->getFilter('text')).'%"');

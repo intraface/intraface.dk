@@ -21,12 +21,20 @@ class Reminder extends Intraface_Standard
         $this->db     = new DB_Sql;
         $this->error  = new Intraface_Error;
 
-        $this->dbquery = new Intraface_DBQuery($this->kernel, "invoice_reminder", "intranet_id = ".$this->kernel->intranet->get("id")." AND active = 1");
-        $this->dbquery->useErrorObject($this->error);
-
         if ($this->id) {
             $this->load();
         }
+    }
+
+    function getDBQuery()
+    {
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
+        $this->dbquery = new Intraface_DBQuery($this->kernel, "invoice_reminder", "intranet_id = ".$this->kernel->intranet->get("id")." AND active = 1");
+        $this->dbquery->useErrorObject($this->error);
+        return $this->dbquery;
+        
     }
 
     function load()

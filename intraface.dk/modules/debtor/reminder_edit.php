@@ -34,17 +34,14 @@ if(!empty($_POST)) {
         if ($_POST['send_as'] == 'email') {
             header("Location: reminder_email.php?id=".$reminder->get("id"));
             exit;
-        }
-        else {
+        } else {
             header("Location: reminder.php?id=".$reminder->get("id"));
             exit;
         }
-    }
-    else {
+    } else {
         if(intval($_POST["id"]) != 0) {
             $title = "Ret rykker";
-        }
-        else {
+        } else {
             $title = "Ny rykker";
         }
 
@@ -57,23 +54,20 @@ if(!empty($_POST)) {
 
         if(isset($value["checked_invoice"]) && is_array($value["checked_invoice"])) {
             $checked_invoice = $value["checked_invoice"];
-        }
-        else {
+        } else {
             $checked_invoice = array();
         }
 
         if(isset($value["checked_reminder"]) && is_array($value["checked_reminder"])) {
             $checked_reminder = $value["checked_reminder"];
-        }
-        else {
+        } else {
             $checked_reminder = array();
         }
     }
-}
-elseif(isset($_GET["id"])) {
+} elseif(isset($_GET["id"])) {
     $title = "Ret rykker";
     $reminder = new Reminder($kernel, intval($_GET["id"]));
-  $value = $reminder->get();
+    $value = $reminder->get();
     $contact = new Contact($kernel, $reminder->get('contact_id'));
 
     $reminder->loadItem();
@@ -87,8 +81,7 @@ elseif(isset($_GET["id"])) {
     for($i = 0, $max = count($reminders); $i < $max; $i++) {
         $checked_reminder[] = $reminders[$i]["reminder_id"];
     }
-}
-else {
+} else {
     $title = "Ny rykker";
     $reminder = new Reminder($kernel);
     $contact = new Contact($kernel, $_GET['contact_id']);
@@ -226,8 +219,8 @@ echo $reminder->error->view("html");
             $invoice_listfilter->setSorting("this_date");
             $invoices = $invoice->getList($invoice_listfilter);
             */
-      $invoice->dbquery->setCondition("contact_id = ".$contact->get("id")." AND status = 1 AND due_date < NOW()"); // status: 1 = sent
-      $invoice->dbquery->setSorting('this_date');
+      $invoice->getDBQuery()->setCondition("contact_id = ".$contact->get("id")." AND status = 1 AND due_date < NOW()"); // status: 1 = sent
+      $invoice->getDBQuery()->setSorting('this_date');
 
       $invoices = $invoice->getList();
 
@@ -251,9 +244,9 @@ echo $reminder->error->view("html");
             $reminder_listfilter->setCondition("contact_id = ".$contact->get("id")." AND status = 1 AND due_date < NOW() AND reminder_fee > 0"); // status: 1 = sent
             $reminder_listfilter->setSorting("this_date");
       */
-      //$reminder->dbquery->setCondition("id != ".(int)$reminder->get("id"));
-      $reminder->dbquery->setCondition("contact_id = ".$contact->get("id")." AND status = 1 AND due_date < NOW() AND reminder_fee > 0"); // status: 1 = sent
-      $reminder->dbquery->setSorting('this_date');
+      //$reminder->getDBQuery()->setCondition("id != ".(int)$reminder->get("id"));
+      $reminder->getDBQuery()->setCondition("contact_id = ".$contact->get("id")." AND status = 1 AND due_date < NOW() AND reminder_fee > 0"); // status: 1 = sent
+      $reminder->getDBQuery()->setSorting('this_date');
 
             $reminders = $reminder->getList();
         if (!empty($reminders)) {

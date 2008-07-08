@@ -17,37 +17,37 @@ if(isset($_GET["delete"])) {
 
 if($contact_id) {
 	$contact = new Contact($kernel, $contact_id);
-	$reminder->dbquery->setFilter("contact_id", $contact->get("id"));
+	$reminder->getDBQuery()->setFilter("contact_id", $contact->get("id"));
 }
 
 if(isset($_GET["search"])) {
 	if(isset($_GET["text"]) && $_GET["text"] != "") {
-		$reminder->dbquery->setFilter("text", $_GET["text"]);
+		$reminder->getDBQuery()->setFilter("text", $_GET["text"]);
 	}
 
 	if(isset($_GET["from_date"]) && $_GET["from_date"] != "") {
-		$reminder->dbquery->setFilter("from_date", $_GET["from_date"]);
+		$reminder->getDBQuery()->setFilter("from_date", $_GET["from_date"]);
 	}
 
 	if(isset($_GET["to_date"]) && $_GET["to_date"] != "") {
-		$reminder->dbquery->setFilter("to_date", $_GET["to_date"]);
+		$reminder->getDBQuery()->setFilter("to_date", $_GET["to_date"]);
 	}
 
 	if(isset($_GET["status"])) {
-		$reminder->dbquery->setFilter("status", $_GET["status"]);
+		$reminder->getDBQuery()->setFilter("status", $_GET["status"]);
 	}
 }
 else {
-	if($reminder->dbquery->checkFilter("contact_id")) {
-  	$reminder->dbquery->setFilter("status", "-1");
+	if($reminder->getDBQuery()->checkFilter("contact_id")) {
+  	$reminder->getDBQuery()->setFilter("status", "-1");
   }
   else {
-		$reminder->dbquery->setFilter("status", "-2");
+		$reminder->getDBQuery()->setFilter("status", "-2");
 	}
 }
 
-$reminder->dbquery->usePaging("paging");
-$reminder->dbquery->storeResult("use_stored", "reminder", "toplevel");
+$reminder->getDBQuery()->usePaging("paging");
+$reminder->getDBQuery()->storeResult("use_stored", "reminder", "toplevel");
 $reminders = $reminder->getList();
 
 $page = new Intraface_Page($kernel);
@@ -80,18 +80,18 @@ if($contact_id == 0) {
 	<form method="get" action="reminders.php">
 	<fieldset>
 		<legend>Find</legend>
-		Tekst: <input type="text" name="text" value="<?php echo safeToHtml($reminder->dbquery->getFilter("text")); ?>" />
+		Tekst: <input type="text" name="text" value="<?php echo safeToHtml($reminder->getDBQuery()->getFilter("text")); ?>" />
 		Status:
 		<select name="status">
 			<option value="-1">Alle</option>
-			<option value="-2"<?php if($reminder->dbquery->getFilter("status") == -2) echo ' selected="selected"';?>>Åbne</option>
-			<option value="0"<?php if($reminder->dbquery->getFilter("status") == 0) echo ' selected="selected"';?>>Oprettet</option>
-			<option value="1"<?php if($reminder->dbquery->getFilter("status") == 1) echo ' selected="selected"';?>>Sendt</option>
-			<option value="2"<?php if($reminder->dbquery->getFilter("status") == 2) echo ' selected="selected"';?>>Afsluttet</option>
-			<option value="3"<?php if($reminder->dbquery->getFilter("status") == 3) echo ' selected="selected"';?>>Annulleret</option>
+			<option value="-2"<?php if($reminder->getDBQuery()->getFilter("status") == -2) echo ' selected="selected"';?>>Åbne</option>
+			<option value="0"<?php if($reminder->getDBQuery()->getFilter("status") == 0) echo ' selected="selected"';?>>Oprettet</option>
+			<option value="1"<?php if($reminder->getDBQuery()->getFilter("status") == 1) echo ' selected="selected"';?>>Sendt</option>
+			<option value="2"<?php if($reminder->getDBQuery()->getFilter("status") == 2) echo ' selected="selected"';?>>Afsluttet</option>
+			<option value="3"<?php if($reminder->getDBQuery()->getFilter("status") == 3) echo ' selected="selected"';?>>Annulleret</option>
 		</select>
-		Fra dato: <input type="text" name="from_date" value="<?php print(safeToHtml($reminder->dbquery->getFilter("from_date"))); ?>" />
-		Til dato: <input type="text" name="to_date" value="<?php print(safeToHtml($reminder->dbquery->getFilter("to_date"))); ?>" />
+		Fra dato: <input type="text" name="from_date" value="<?php print(safeToHtml($reminder->getDBQuery()->getFilter("from_date"))); ?>" />
+		Til dato: <input type="text" name="to_date" value="<?php print(safeToHtml($reminder->getDBQuery()->getFilter("to_date"))); ?>" />
 		<input type="submit" name="search" value="Find" />
 	</fieldset>
 	</form>
@@ -161,7 +161,7 @@ if($contact_id == 0) {
 	?>
 </tbody>
 </table>
-<?php echo $reminder->dbquery->display('paging'); ?>
+<?php echo $reminder->getDBQuery()->display('paging'); ?>
 
 <?php endif; ?>
 

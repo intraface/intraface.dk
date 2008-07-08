@@ -303,9 +303,9 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
                 "girocode" => $debtor->get("girocode"));
 
             if(is_object($onlinepayment)) {
-                $onlinepayment->dbquery->setFilter('belong_to', $debtor->get("type"));
-                $onlinepayment->dbquery->setFilter('belong_to_id', $debtor->get('id'));
-                $onlinepayment->dbquery->setFilter('status', 2);
+                $onlinepayment->getDBQuery()->setFilter('belong_to', $debtor->get("type"));
+                $onlinepayment->getDBQuery()->setFilter('belong_to_id', $debtor->get('id'));
+                $onlinepayment->getDBQuery()->setFilter('status', 2);
                 
                 foreach($onlinepayment->getlist() AS $p) {
                     $parameter['payment_online'] += $p["amount"];

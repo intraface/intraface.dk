@@ -530,14 +530,12 @@ class CMS_Page extends Intraface_Standard
     {
         $pages = array();
 
-        $this->dbquery = $this->getDBQuery();
-
-        if ($this->dbquery->checkFilter('type') && $this->dbquery->getFilter('page') == 'all') {
+        if ($this->getDBQuery()->checkFilter('type') && $this->getDBQuery()->getFilter('page') == 'all') {
             // no condition isset
             // $sql_type = "";
         } else {
             // with int it will never be a fake searcy
-            $type = $this->dbquery->getFilter('type');
+            $type = $this->getDBQuery()->getFilter('type');
             if ($type == '') {
                 $type = 'page'; // Standard
             }
@@ -548,7 +546,7 @@ class CMS_Page extends Intraface_Standard
                     trigger_error("Invalid type '".$type."' set with CMS_PAGE::dbquery::setFilter('type') in CMS_Page::getList", E_USER_ERROR);
                 }
 
-                $this->dbquery->setCondition("type_key = ".$type_key);
+                $this->getDBQuery()->setCondition("type_key = ".$type_key);
             }
         }
 
@@ -558,20 +556,20 @@ class CMS_Page extends Intraface_Standard
         $sql_publish = '';
         /* This need to be corrected */
         if (!is_object($this->kernel->user)) {
-            $this->dbquery->setCondition("(date_expire > NOW() OR date_expire = '0000-00-00 00:00:00') AND (date_publish < NOW() AND status_key > 0 AND hidden = 0)");
+            $this->getDBQuery()->setCondition("(date_expire > NOW() OR date_expire = '0000-00-00 00:00:00') AND (date_publish < NOW() AND status_key > 0 AND hidden = 0)");
         }
         /*  */
 
 
-        switch ($this->dbquery->getFilter('type')) {
+        switch ($this->getDBQuery()->getFilter('type')) {
             case 'page':
-                $this->dbquery->setSorting("position ASC");
+                $this->getDBQuery()->setSorting("position ASC");
             break;
             case 'news':
-                $this->dbquery->setSorting("date_publish DESC");
+                $this->getDBQuery()->setSorting("date_publish DESC");
             break;
             case 'article':
-                $this->dbquery->setSorting("position, date_publish DESC");
+                $this->getDBQuery()->setSorting("position, date_publish DESC");
             break;
         }
 
@@ -586,36 +584,36 @@ class CMS_Page extends Intraface_Standard
         $cmspage[0] = new DB_Sql;
 
         // Benyttes til undersider.
-        $dbquery_original = clone $this->dbquery;
+        $dbquery_original = clone $this->getDBQuery();
         $dbquery_original->storeResult('','', 'toplevel'); // sikre at der ikke bliver gemt ved undermenuer.
 
 
-        $keywords = $this->dbquery->getKeyword();
+        $keywords = $this->getDBQuery()->getKeyword();
         if (isset($keywords) && is_array($keywords) && count($keywords) > 0 && $type == 'page') {
             // If we are looking for pages, and there is keywords, we probaly want from more than one level
             // So we add nothing about level to condition.
 
-        } elseif ($this->dbquery->checkFilter('level') && $type == 'page') { // $level == 'sublevel' &&
+        } elseif ($this->getDBQuery()->checkFilter('level') && $type == 'page') { // $level == 'sublevel' &&
 
             // Til at finde hele menuen p� valgt level.
             $page_tree = $this->get('page_tree');
-            $level = (int)$this->dbquery->getFilter('level');
+            $level = (int)$this->getDBQuery()->getFilter('level');
             if (isset($page_tree[$level - 1]) && is_array($page_tree[$level - 1])) {
                 $child_of_id = $page_tree[$level - 1]['id'];
             } else {
                 $child_of_id = 0;
             }
 
-            $this->dbquery->setCondition('child_of_id = '.$child_of_id);
+            $this->getDBQuery()->setCondition('child_of_id = '.$child_of_id);
             // $cmspage[0]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE active=1 AND child_of_id = ".$this->id. $sql_expire . $sql_publish . " ORDER BY id");
 
         } else {
-            $this->dbquery->setCondition('child_of_id = 0');
+            $this->getDBQuery()->setCondition('child_of_id = 0');
             // $cmspage[0]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE ".$sql_type." site_id = " . $this->cmssite->get('id') . " AND child_of_id = 0 AND active = 1 " . $sql_expire . $sql_publish . $sql_order);
         }
 
         // print($this->dbquery->getFilter('type'));
-        $cmspage[0] = $this->dbquery->getRecordset("cms_page.id, title, identifier, status_key, navigation_name, date_publish, child_of_id, pic_id, description, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk", '', false); //
+        $cmspage[0] = $this->getDBQuery()->getRecordset("cms_page.id, title, identifier, status_key, navigation_name, date_publish, child_of_id, pic_id, description, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk", '', false); //
 
         while(TRUE) {
             while($cmspage[$n]->nextRecord()) {
@@ -664,7 +662,7 @@ class CMS_Page extends Intraface_Standard
                 // $o = $n + 1;
 
 
-                if ($this->dbquery->getFilter('type') == 'page' AND $this->dbquery->getFilter('level') == 'alllevels') {
+                if ($this->getDBQuery()->getFilter('type') == 'page' AND $this->getDBQuery()->getFilter('level') == 'alllevels') {
                     $dbquery[$n + 1] = clone $dbquery_original;
                     $dbquery[$n + 1]->setCondition("child_of_id = ".$cmspage[$n]->f("id"));
                     $cmspage[$n + 1] = $dbquery[$n + 1]->getRecordset("id, title, identifier, navigation_name, date_publish, child_of_id, pic_id, status_key, description, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk", '', false);
@@ -676,14 +674,14 @@ class CMS_Page extends Intraface_Standard
 
                     if ($cmspage[$n + 1]->numRows() != 0) {
                         $n++;
-                        CONTINUE;
+                        continue;
                     }
                 }
 
             }
 
             if ($n == 0) {
-                BREAK;
+                break;
             }
 
             $n--;

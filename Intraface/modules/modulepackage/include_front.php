@@ -8,8 +8,7 @@ if($kernel->user->hasModuleAccess('modulepackage')) {
     require_once 'Intraface/modules/modulepackage/Manager.php';
     $manager = new Intraface_ModulePackage_Manager($kernel->intranet);
     
-    $manager->createDBQuery($kernel);
-    $manager->dbquery->setFilter('status', 'created_and_active');
+    $manager->getDBQuery($kernel)->setFilter('status', 'created_and_active');
     $list = $manager->getList();
    
 

@@ -206,7 +206,7 @@ class AppendFile
      */
     public function getList()
     {
-        if(!isset($this->dbquery)) $this->createDBQuery();
+        if(!isset($this->dbquery)) $this->getDBQuery();
         
         if($this->dbquery->checkFilter('order_by') && $this->dbquery->getFilter('order_by') == 'name') {
             $this->dbquery->setJoin('INNER', 'file_handler', 'filehandler_append_file.file_handler_id = file_handler.id', 'file_handler.intranet_id = '.$this->kernel->intranet->get('id').' AND file_handler.active = 1');

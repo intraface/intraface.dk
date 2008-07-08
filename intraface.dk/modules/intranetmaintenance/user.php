@@ -240,8 +240,7 @@ if(isset($intranet)) {
     <tbody>
     <?php
     $intranet = new IntranetMaintenance();
-    $intranet->createDBQuery($kernel);
-    $intranet->dbquery->setFilter('user_id', $user->get('id'));
+    $intranet->getDBQuery($kernel)->setFilter('user_id', $user->get('id'));
 
     $intranets = $intranet->getList();
 

@@ -5,7 +5,7 @@ $module = $kernel->module("intranetmaintenance");
 $translation = $kernel->getTranslation('intranetmaintenance');
 
 $user = new UserMaintenance();
-$user->createDBQuery($kernel);
+
 
 $redirect = Intraface_Redirect::factory($kernel, 'receive');
 
@@ -16,34 +16,30 @@ if(isset($_GET['add_user_id']) && $_GET['add_user_id'] != 0) {
 
 if($redirect->get('identifier') == 'add_user') {
 	$add_user = true;
-}
-else {
+} else {
 	$add_user = false;
 }
 
 if(isset($_GET["search"])) {
 
 	if(isset($_GET["text"]) && $_GET["text"] != "") {
-		$user->dbquery->setFilter("text", $_GET["text"]);
+		$user->getDBQuery($kernel)->setFilter("text", $_GET["text"]);
 	}
-}
-elseif(isset($_GET['character'])) {
-	$user->dbquery->useCharacter();
+} elseif(isset($_GET['character'])) {
+	$user->getDBQuery($kernel)->useCharacter();
 }
 
-$user->dbquery->defineCharacter('character', 'name');
-$user->dbquery->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
-$user->dbquery->storeResult("use_stored", "intranetmainenance_user", "sublevel");
-
+$user->getDBQuery($kernel)->defineCharacter('character', 'name');
+$user->getDBQuery($kernel)->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
+$user->getDBQuery($kernel)->storeResult("use_stored", "intranetmainenance_user", "sublevel");
 
 $users = $user->getList();
 
 $page = new Intraface_Page($kernel);
-$page->start();
+$page->start(t('Users'));
 ?>
 
 <h1><?php print($translation->get('users')); ?></h1>
-
 
 
 <ul class="options">
@@ -62,13 +58,13 @@ $page->start();
 	<fieldset>
 		<legend><?php echo safeToHtml($translation->get('search'), 'common'); ?></legend>
 		<label><?php echo safeToHtml($translation->get('search text'), 'common'); ?>:
-			<input type="text" name="text" value="<?php echo $user->dbquery->getFilter("text"); ?>" />
+			<input type="text" name="text" value="<?php echo $user->getDBQuery($kernel)->getFilter("text"); ?>" />
 		</label>
 		<span><input type="submit" name="search" value="<?php echo safeToHtml($translation->get('search', 'common')); ?>" /></span>
 	</fieldset>
 </form>
 
-<?php echo $user->dbquery->display('character'); ?>
+<?php echo $user->getDBQuery($kernel)->display('character'); ?>
 
 <table>
 <thead>
@@ -111,7 +107,7 @@ $page->start();
 </tbody>
 </table>
 
-<?php echo $user->dbquery->display('paging'); ?>
+<?php echo $user->getDBQuery($kernel)->display('paging'); ?>
 
 <?php
 $page->end();

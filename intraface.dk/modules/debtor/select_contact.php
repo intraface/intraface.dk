@@ -7,9 +7,8 @@ $error = new Intraface_Error();
 
 if(isset($_POST["search"]) && $_POST["search"] != "") {
     $contact = new Contact($kernel);
-    $contact->createDBQuery();
 
-    $contact->dbquery->setFilter("search", $_POST["search"]);
+    $contact->getDBQuery()->setFilter("search", $_POST["search"]);
     $contacts = $contact->getList($_POST["search"]);
 
     $options = '';

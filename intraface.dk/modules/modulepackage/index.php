@@ -53,8 +53,7 @@ $page->start(safeToHtml($translation->get('your account')));
 
 <?php
 $modulepackagemanager = new Intraface_ModulePackage_Manager($kernel->intranet);
-$modulepackagemanager->createDBQuery($kernel);
-$modulepackagemanager->dbquery->setFilter('status', 'created_and_active');
+$modulepackagemanager->getDBQuery($kernel)->setFilter('status', 'created_and_active');
 $packages = $modulepackagemanager->getList();
 
 if(count($packages) > 0) {

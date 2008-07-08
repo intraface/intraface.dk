@@ -19,6 +19,7 @@ class IntranetMaintenance extends Intraface_Intranet
     private $db; // databaseobject mdb2
     protected $id; // intranet id
     public $address; // address object
+    private $dbquery;
 
     /**
      * Constructor
@@ -44,9 +45,13 @@ class IntranetMaintenance extends Intraface_Intranet
      * @param object $kernel The kernel object
      * @return object DBQuery
      */
-    public function createDBQuery($kernel)
+    public function getDBQuery($kernel)
     {
+        if ($this->dbquery) {
+            return  $this->dbquery;
+        }
         $this->dbquery = new Intraface_DBQuery($kernel, 'intranet');
+        return  $this->dbquery;
     }
 
     /**
