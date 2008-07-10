@@ -7,6 +7,8 @@ class Install_Helper_Product {
     public function __construct($kernel, $db) {
         $this->kernel = $kernel;
         $this->db = $db;
+        
+        Intraface_Doctrine_Intranet::singleton(1);
     }
     
     public function create() {
@@ -56,7 +58,7 @@ class Install_Helper_Product {
         require_once 'Intraface/modules/product/Product.php';
         $product = new Product($this->kernel);
         
-        $product->save(array('name' => 'Product 1', 'price' => 100, 'unit' => 2, 'has_variation' => 1, 'do_show' => 1));
+        $product->save(array('name' => 'Product 1', 'price' => 100, 'unit' => 2, 'has_variation' => 1, 'do_show' => 1, 'weight' => 110));
         $product->setAttributeGroup(1);
         $product->setAttributeGroup(2);
         foreach(array(1, 2, 3) AS $a1) {

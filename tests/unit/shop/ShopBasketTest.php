@@ -71,13 +71,23 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $this->emptyBasketTable();
         $kernel = $this->createKernel();
         $kernel->module('product');
+        $this->kernel = $kernel;
         $this->product = new Product($kernel);
-        $this->product->save(array('name' => 'test', 'price' => 200));
+        $this->product->save(array('name' => 'test', 'price' => 200, 'weight' => 200));
+        
+        
     }
 
     function tearDown() {
         $this->emptyBasketTable();
         $this->product->delete();
+    }
+    
+    function createProductWithVariations() 
+    {
+        require_once 'install/Helper/Product.php';
+        $helper = new Install_Helper_Product($this->kernel, MDB2::factory(DB_DSN));
+        $helper->createWithVariations();
     }
 
     function emptyBasketTable()
@@ -86,6 +96,15 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $result = $db->query('TRUNCATE basket');
         $result = $db->query('TRUNCATE basket_details');
         $result = $db->query('TRUNCATE product');
+        $result = $db->query('TRUNCATE product_detail');
+        $result = $db->query('TRUNCATE product_attribute');
+        $result = $db->query('TRUNCATE product_attribute_group');
+        $result = $db->query('TRUNCATE product_attribute');
+        $result = $db->query('TRUNCATE product_variation');
+        $result = $db->query('TRUNCATE product_variation_detail');
+        $result = $db->query('TRUNCATE product_variation_x_attribute');
+        $result = $db->query('TRUNCATE product_x_attribute_group');
+        
     }
 
     function createKernel()
@@ -114,18 +133,39 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
 
     function testAddToBasket()
     {
+        
         $basket = $this->createBasket();
 
         $product_id = 1;
         $quantity = 1;
 
-        $this->assertTrue($basket->add($product_id, $quantity));
+        $this->assertTrue($basket->add($product_id, 0, $quantity));
 
         $items = $basket->getItems();
 
         $this->assertEquals(count($items), 1);
         $this->assertEquals($items[0]['quantity'], $quantity);
         $this->assertEquals($items[0]['product_id'], $product_id);
+        
+    }
+    
+    function testAddToBasketWithVariation()
+    {
+        $this->createProductWithVariations();
+        $basket = $this->createBasket();
+
+        $product_id = 2;
+        $product_variation_id = 3;
+        $quantity = 1;
+
+        $this->assertTrue($basket->add($product_id, $product_variation_id, $quantity));
+
+        $items = $basket->getItems();
+
+        $this->assertEquals(count($items), 1);
+        $this->assertEquals($items[0]['quantity'], $quantity);
+        $this->assertEquals($items[0]['product_id'], $product_id);
+        $this->assertEquals($items[0]['product_variation_id'], $product_variation_id);
     }
 
     function testRemoveFromBasket()
@@ -135,10 +175,10 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $product_id = 1;
         $quantity = 1;
 
-        $basket->add($product_id, $quantity);
+        $basket->add($product_id, 0, $quantity);
         $this->assertEquals(count($basket->getItems()), 1);
 
-        $this->assertTrue($basket->remove($product_id, $quantity));
+        $this->assertTrue($basket->remove($product_id, 0, $quantity));
 
         $items = $basket->getItems();
 
@@ -152,14 +192,14 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $product_id = 1;
         $quantity = 1;
 
-        $basket->change($product_id, $quantity);
+        $basket->change($product_id, 0, $quantity);
 
         $items = $basket->getItems();
         $this->assertEquals($items[0]['quantity'], $quantity);
 
         $new_quantity = 10;
 
-        $this->assertTrue($basket->change($product_id, $new_quantity));
+        $this->assertTrue($basket->change($product_id, 0, $new_quantity));
 
         $items = $basket->getItems();
 
@@ -173,14 +213,14 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $product_id = 1;
         $quantity = 1;
 
-        $basket->change($product_id, $quantity);
+        $basket->change($product_id, 0, $quantity);
 
         $items = $basket->getItems();
 
         $this->assertEquals($items[0]['quantity'], $quantity);
 
 
-        $basket->change($product_id, -1);
+        $basket->change($product_id, 0, -1);
         $items = $basket->getItems();
 
         $this->assertEquals($items[0]['quantity'], -1);
@@ -194,7 +234,7 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $product_id = 1;
         $quantity = 1;
 
-        $basket->change($product_id, $quantity);
+        $basket->change($product_id, 0, $quantity);
 
         $items = $basket->getItems();
         $this->assertEquals(count($items), 1);
@@ -215,7 +255,7 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $quantity = 1;
         $evaluation_product = 1;
 
-        $this->assertTrue($basket->change($product_id, $quantity, '', '', $evaluation_product));
+        $this->assertTrue($basket->change($product_id, 0, $quantity, '', '', $evaluation_product));
 
         $this->assertEquals(count($basket->getItems()), 1);
 
@@ -292,6 +332,28 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($basket->saveAddress($address));
 
         $this->assertEquals($address_return, $basket->getAddress());
+    }
+    
+    function testGetTotalPriceCalculatesCorrect()
+    {
+        $this->createProductWithVariations();
+        $basket = $this->createBasket();
+
+        $basket->add(1, 0, 3); // 200 * 3 + vat 
+        $basket->add(2, 3, 2); // 106 * 2 + vat
+
+        $this->assertEquals(1015, $basket->getTotalPrice());
+    }
+    
+    function testGetTotalWeightCalculatesCorrect()
+    {
+        $this->createProductWithVariations();
+        $basket = $this->createBasket();
+
+        $basket->add(1, 0, 3); // 200 * 3 
+        $basket->add(2, 3, 2); // 104 * 2 
+
+        $this->assertEquals(808, $basket->getTotalWeight());
     }
 
 }
