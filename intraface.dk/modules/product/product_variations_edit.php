@@ -57,7 +57,7 @@ $page->start(t('Edit variations for product').' '.$product->get('name'));
 <h1><?php e(t('Edit variationa for product').' '.$product->get('name')); ?></h1>
 
 <ul class="options">
-    <li><a class="new" href="product_select_attribute_group.php?id=<?php e($product->getId()); ?>"><?php e(t('Choose attribute groups')); ?></a></li>
+    <li><a class="new" href="product_select_attribute_groups.php?id=<?php e($product->getId()); ?>"><?php e(t('Choose attribute groups')); ?></a></li>
     <li><a href="product.php?id=<?php e($product->get('id')); ?>"><?php e(t('Close', 'common')); ?></a></li>
 </ul>
 
