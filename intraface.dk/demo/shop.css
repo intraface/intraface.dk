@@ -1,4 +1,3 @@
-
 /* Miscellaneous */
 
 input.buy {
@@ -312,6 +311,7 @@ div#payment-creditcard div#cvc input {
     width: 40px;
 }
 
-
-
+.product-link {
+    clear: both;
+}
 
