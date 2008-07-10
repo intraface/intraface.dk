@@ -120,6 +120,9 @@ abstract class Ilib_Keyword
      */
     function getKeyword()
     {
+        if (!isset($this->value['keyword'])) {
+            return '';
+        }
         return $this->value['keyword'];
     }
 
