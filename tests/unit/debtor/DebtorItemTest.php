@@ -66,6 +66,9 @@ class DebtorItemTest extends PHPUnit_Framework_TestCase
         $values = Array(
             'id' => 1,
             'product_id' => 1,
+            'product_detail_id' => 1,
+            'product_variation_id' => 0,
+            'product_variation_detail_id' => 0,
             'description' => 'This is a test',
             'quantity' => 2.00
         );

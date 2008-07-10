@@ -162,7 +162,8 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $selected_products = $return_redirect->getParameter('product_id', 'with_extra_value');
             foreach($selected_products AS $product) {
                 $debtor->loadItem();
-                $debtor->item->save(array('product_id' => $product['value'], 'quantity' => $product['extra_value'], 'description' => ''));
+                $product['value'] = unserialize($product['value']);
+                $debtor->item->save(array('product_id' => $product['value']['product_id'], 'product_variation_id' => $product['value']['product_variation_id'], 'quantity' => $product['extra_value'], 'description' => ''));
             }
             $return_redirect->delete();
             $debtor->load();

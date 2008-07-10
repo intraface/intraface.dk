@@ -68,6 +68,9 @@ $kernel->setting = new Intraface_Setting($kernel->intranet->get('id'), $kernel->
 
 $language = $kernel->setting->get('user', 'language');
 
+// makes intranet_id accessable in Doctrine
+Intraface_Doctrine_Intranet::singleton($kernel->intranet->getId());
+
 // set the parameters to connect to your db
 $dbinfo = array(
     'hostspec' => DB_HOST,

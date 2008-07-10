@@ -1,0 +1,154 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testCreateProductWithVariationsWithTwoGroups</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testCreateProductWithVariationsWithTwoGroups</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=product,shop&helper_function=Product:createAttributes&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=create product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Test with attributes</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>unit</td>
+	<td>label=unit(s)</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>price</td>
+	<td>400</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>vat</td>
+	<td>label=yes</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>weight</td>
+	<td>400</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>has_variation</td>
+	<td>label=yes</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>do_show</td>
+	<td>label=yes</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Select attributes for product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>selected[]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>document.forms[0].elements['selected[]'][1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>select</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[0][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[1][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[2][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[3][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[4][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[5][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[6][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[8][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Color: Blue, Size: Small</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Color: Red, Size: Medium</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

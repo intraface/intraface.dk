@@ -218,7 +218,9 @@ class Intraface_Install
         $kernel->user->setIntranetId(1);
         $kernel->intranet = new Intraface_Intranet(1);
         $kernel->setting = new Intraface_Setting(1, 1);
-
+        
+        // adds the intranet_id to Doctrine!
+        Intraface_Doctrine_Intranet::singleton(1);
 
         foreach($functions AS $function) {
             $object_method = explode(':', trim($function));

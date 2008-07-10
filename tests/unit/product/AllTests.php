@@ -8,7 +8,7 @@ class Product_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Intraface_Product');
 
-        $tests = array('Product');
+        $tests = array('Product', 'VariationDetail', 'VariationGateway', 'VariationOneAttributeGroup', 'VariationTwoAttributeGroups');
 
         foreach ($tests AS $test) {
             require_once $test . 'Test.php';

@@ -129,14 +129,18 @@ $page->start(t('product') . ': ' . $product->get('name'));
 </div>
 
 <table>
-    <tr>
-        <td><?php e(t('price')); ?></td>
-        <td><?php e(number_format($product->get('price'), 2, ",", ".")); ?> <?php e(t('excl. vat')); ?></td>
-    </tr>
-    <tr>
-        <td><?php e(t('weight')); ?></td>
-        <td><?php e($product->get('weight')); ?> gram</td>
-    </tr>
+    <?php if(!$product->get('has_variation')): ?>
+        <tr>
+            <td><?php e(t('price')); ?></td>
+            <td><?php e(number_format($product->get('price'), 2, ",", ".")); ?> <?php e(t('excl. vat')); ?></td>
+        </tr>
+        <?php if($kernel->user->hasModuleAccess('webshop') || $kernel->user->hasModuleAccess('shop')): ?>
+            <tr>
+                <td><?php e(t('weight')); ?></td>
+                <td><?php e($product->get('weight')); ?> gram</td>
+            </tr>
+        <?php endif; ?>
+    <?php endif; ?>
     <tr>
         <td><?php e(t('unit type')); ?></td>
         <td>
@@ -148,7 +152,7 @@ $page->start(t('product') . ': ' . $product->get('name'));
         </td>
     </tr>
 
-    <?php if ($kernel->user->hasModuleAccess("webshop")): ?>
+    <?php if ($kernel->user->hasModuleAccess("webshop") || $kernel->user->hasModuleAccess("shop")): ?>
 
     <tr>
         <td><?php e(t('show in webshop')); ?></td>
@@ -184,26 +188,26 @@ $page->start(t('product') . ': ' . $product->get('name'));
     </tr>
     <?php endif; ?>
     <?php
-        if ($kernel->user->hasModuleAccess('accounting')):
-            $mainAccounting = $kernel->useModule("accounting");
-    ?>
-    <tr>
-        <td><?php e(t('state on')); ?></td><td>
-        <?php
-            $year = new Year($kernel);
-            if ($year->get('id') == 0) {
-                echo t('year is not set in accounting');
-            } else {
-                $account = Account::factory($year, $product->get('state_account_id'));
-                if ($account->get('name')) {
-                    e($account->get('number') . ' ' . $account->get('name'));
-                } else {
-                    echo t('not set');
-                }
-            }
+    if ($kernel->user->hasModuleAccess('accounting')): 
+        $mainAccounting = $kernel->useModule("accounting");
         ?>
-        </td>
-    </tr>
+        <tr>
+            <td><?php e(t('state on')); ?></td><td>
+            <?php
+                $year = new Year($kernel);
+                if ($year->get('id') == 0) {
+                    echo t('year is not set in accounting');
+                } else {
+                    $account = Account::factory($year, $product->get('state_account_id'));
+                    if ($account->get('name')) {
+                        e($account->get('number') . ' ' . $account->get('name'));
+                    } else {
+                        echo t('not set');
+                    }
+                }
+            ?>
+            </td>
+        </tr>
     <?php endif; ?>
 </table>
 
@@ -221,6 +225,62 @@ if($kernel->user->hasModuleAccess('invoice')) {
 }
 ?>
 
+
+<?php if($product->get('has_variation')): ?>
+    <?php /* <h2><?php e(t('Variations')); ?></h2> */ ?>
+    <?php
+    $groups = $product->getAttributeGroups();
+    ?>
+    <?php if(count($groups) == 0): ?>
+        <ul class="options">
+            <li><a href="product_select_attribute_groups.php?id=<?php e($product->get('id')); ?>"><?php e(t('Select attributes for product')); ?></a></li>
+        </ul>
+    <?php else: ?>
+        <?php
+        $variations = $product->getVariations();
+        ?>
+        <?php if($variations->count() == 0): ?>
+            <ul class="options">
+                <li><a href="product_variations_edit.php?id=<?php e($product->get('id')); ?>"><?php e(t('Create variations for the product')); ?></a></li>
+            </ul>   
+        <?php else: ?>
+            
+            <table summary="<?php e(t('Variations')); ?>" id="variations_table" class="stripe">
+                <caption><?php e(t('Variations')); ?></caption>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th><?php e(t('Variation')); ?></th>
+                        <th><?php e(t('Price')); ?><br /><?php e(t('excl. vat')); ?></th>
+                        <th><?php e(t('Weight')); ?><br />Gram</th>
+                        <?php if($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
+                            <th><?php e(t('In stock')); ?></th>
+                            <?php /* At this moment there is only a reason for more details when there is stock */ ?>
+                            <th></th>
+                        <?php endif; ?>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach($variations AS $variation): ?>
+                    <tr>
+                        <td><?php e($variation->getNumber()); ?></td>
+                        <td><?php e($variation->getName()); ?></td>
+                        <td><?php e(number_format($product->get('price') + $variation->getDetail()->getPriceDifference(), 2, ",", ".")); ?> </td>
+                        <td><?php e($product->get('weight')+$variation->getDetail()->getWeightDifference()); ?></td>
+                        <?php if($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
+                            <td><?php echo $variation->getStock($product)->get('actual_stock'); ?></td>
+                            <td><a href="product_variation.php?id=<?php e($variation->getId()); ?>&amp;product_id=<?php e($product->getId()); ?>"><?php e(t('Details', 'common')); ?></a></td>
+                        <?php endif; ?>
+                            
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+            <ul class="options">
+                <li><a href="product_variations_edit.php?id=<?php e($product->get('id')); ?>"><?php e(t('Edit variations for the product')); ?></a></li>
+            </ul>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php endif; ?>
 
 <div id="related_products" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'related') echo ' fade'; ?>">
     <h2><?php e(t('related products')); ?></h2>
@@ -293,11 +353,10 @@ if($kernel->user->hasModuleAccess('invoice')) {
 
 
     <?php
-    /* HACK HACK HACK MED AT TJEKKE OM oProduct har objektet */
-    if($kernel->user->hasModuleAccess("stock") AND is_object($product->stock)) {
+    if($kernel->user->hasModuleAccess("stock") AND $product->get('stock') AND !$product->get('has_variation')) {
 
         if(isset($_GET['adaptation']) && $_GET['adaptation'] == 'true') {
-            $product->stock->adaptation();
+            $product->getStock()->adaptation();
         }
         ?>
         <div id="stock" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'stock') echo ' fade'; ?>">
@@ -306,35 +365,31 @@ if($kernel->user->hasModuleAccess('invoice')) {
             <table>
                 <tr>
                     <td><?php e(t('stock status')); ?></td>
-                    <td><?php e($product->stock->get("actual_stock")); ?></td>
+                    <td><?php e($product->getStock()->get("actual_stock")); ?></td>
                 </tr>
                 <tr>
                     <td><?php e(t('ordered')); ?></td>
-                    <td><?php e($product->stock->get("on_order")); ?></td>
+                    <td><?php e($product->getStock()->get("on_order")); ?></td>
                 </tr>
                 <tr>
                     <td><?php e(t('reserved')); ?></td>
-                    <td><?php e($product->stock->get("reserved")); ?> (<?php print($product->stock->get("on_quotation")); ?>)</td>
+                    <td><?php e($product->getStock()->get("reserved")); ?> (<?php print($product->getStock()->get("on_quotation")); ?>)</td>
                 </tr>
             </table>
-            <!-- hvad bliver følgende brugt til -->
-            <div id="stock_regulation" style="display: none ; position: absolute; border: 1px solid #666666; background-color: #CCCCCC; padding: 10px; width: 260px;">
-                <?php e(t('requlate with quantity')); ?>: <input type="text" name="regulate_number" size="5" />
-                <br /><?php e(t('description')); ?>: <input type="text" name="regulation_description" />
-                <br /><input type="submit" name="regulate" value="<?php e(t('save', 'common')); ?>" /> <a href="javascript:;" onclick="document.getElementById('stock_regulation').style.display='none';return false"><?php e(t('hide', 'common')); ?></a>
+            
+            <ul class="options">
+                <li><a href="stock_regulation.php?product_id=<?php e($product->get('id')); ?>">Regulering</a></li>
+                <li><a href="product.php?id=<?php print($product->get('id')); ?>&amp;adaptation=true" class="confirm">Afstem</a></li>
+            </ul>
 
-            </div>
-
-            <p><a href="stock_regulation.php?product_id=<?php e($product->get('id')); ?>">Regulering</a> <a href="product.php?id=<?php print($product->get('id')); ?>&amp;adaptation=true" class="confirm">Afstem</a></p>
-
-            <p>Sidst afstemt: <?php e($product->stock->get('dk_adaptation_date_time')); ?></p>
+            <p>Sidst afstemt: <?php e($product->getStock()->get('dk_adaptation_date_time')); ?></p>
 
             <?php
             if($kernel->user->hasModuleAccess('procurement')) {
                 $kernel->useModule('procurement');
 
                 $procurement = new Procurement($kernel);
-                $latest = $procurement->getLatest($product->get('id'), $product->stock->get("actual_stock"));
+                $latest = $procurement->getLatest($product->get('id'), $product->getStock()->get("actual_stock"));
 
                 if(count($latest) > 0) {
                     ?>
@@ -360,7 +415,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
                                 <td class="amount"><?php e($latest[$i]['quantity']); ?></td>
                                 <td>
                                     <?php
-                                    if(isset($latest[$i]['sum_quantity']) && $latest[$i]['sum_quantity'] >= $product->stock->get("actual_stock") && $is_under_actual) {
+                                    if(isset($latest[$i]['sum_quantity']) && $latest[$i]['sum_quantity'] >= $product->getStock()->get("actual_stock") && $is_under_actual) {
                                         print("<");
                                         $is_under_actual = false;
                                     }

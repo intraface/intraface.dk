@@ -85,12 +85,13 @@ class Intraface_modules_shop_Basket
      *
      * @return boolean
      */
-    public function add($product_id, $quantity = 1, $text = '', $product_detail_id = 0)
+    public function add($product_id, $product_variation_id = 0, $quantity = 1, $text = '', $product_detail_id = 0)
     {
         $product_id = intval($product_id);
+        $product_variation_id = intval($product_variation_id);
         $quantity = intval($quantity);
-        $quantity = $this->getItemCount($product_id) + $quantity;
-        return $this->change($product_id, $quantity, $text, $product_detail_id);
+        $quantity = $this->getItemCount($product_id, $product_variation_id) + $quantity;
+        return $this->change($product_id, $product_variation_id, $quantity, $text, $product_detail_id);
     }
 
     /**
@@ -101,12 +102,13 @@ class Intraface_modules_shop_Basket
      *
      * @return boelean
      */
-    public function remove($product_id, $quantity = 1)
+    public function remove($product_id, $product_variation_id = 0, $quantity = 1)
     {
         $product_id = intval($product_id);
+        $product_variation_id = intval($product_variation_id);
         $quantity = intval($quantity);
-        $quantity = $this->getItemCount($product_id) - $quantity;
-        return $this->change($product_id, $quantity);
+        $quantity = $this->getItemCount($product_id, $product_variation_id) - $quantity;
+        return $this->change($product_id, $product_variation_id, $quantity);
     }
 
     /**
@@ -119,10 +121,11 @@ class Intraface_modules_shop_Basket
      *
      * @return boolean
      */
-    public function change($product_id, $quantity, $text = '', $product_detail_id = 0, $basketevaluation = 0)
+    public function change($product_id, $product_variation_id, $quantity, $text = '', $product_detail_id = 0, $basketevaluation = 0)
     {
         $db = new DB_Sql;
         $product_id = (int)$product_id;
+        $product_variation_id = intval($product_variation_id);
         $product_detail_id = (int)$product_detail_id;
         $quantity = (int)$quantity;
 
@@ -133,18 +136,33 @@ class Intraface_modules_shop_Basket
         if($product->get('id') == 0) {
             return false;
         }
-
-        if (is_object($product->stock) AND $product->stock->get('for_sale') < $quantity AND $quantity != 0) {
-            return false;
+        
+        if($product->get('stock')) {
+            if($product_variation_id != 0) {
+                $variation = $product->getVariation($product_variation_id);
+                if(!$variation->getId()) {
+                    return false;
+                }
+                $stock = $variation->getStock($product);
+            }
+            else {
+                $stock = $product->getStock();
+            }
+    
+            if (is_object($stock) AND $stock->get('for_sale') < $quantity AND $quantity != 0) {
+                return false;
+            }
         }
 
         $sql_extra = implode(" AND ", $this->conditions);
 
         $db->query("SELECT id, quantity
-                FROM basket WHERE product_id = $product_id
-                AND product_detail_id = " . $product_detail_id . "
-                AND basketevaluation_product = " . $basketevaluation . "
-                AND " . $sql_extra);
+                FROM basket
+                WHERE product_id = ".$product_id."
+                    AND product_variation_id = ".$product_variation_id."
+                    AND product_detail_id = " . $product_detail_id . "
+                    AND basketevaluation_product = " . $basketevaluation . "
+                    AND " . $sql_extra);
 
         if ($db->nextRecord()) {
             if ($quantity == 0) {
@@ -170,7 +188,8 @@ class Intraface_modules_shop_Basket
                         date_changed = NOW(),
                         text = '".$text."',
                         basketevaluation_product = " . $basketevaluation . ",
-                        product_id = $product_id,
+                        product_id = ".$product_id.",
+                        product_variation_id = ".$product_variation_id.",
                         product_detail_id = ".$product_detail_id.",
                         " . $sql_extra);
             return true;
@@ -387,9 +406,10 @@ class Intraface_modules_shop_Basket
      *
      * @return integer
      */
-    public function getItemCount($product_id)
+    public function getItemCount($product_id, $product_variation_id = 0)
     {
         $product_id = (int)$product_id;
+        $product_variation_id = (int)$product_variation_id;
 
         $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
@@ -397,6 +417,7 @@ class Intraface_modules_shop_Basket
             FROM basket
             WHERE " . $sql_extra . "
                 AND product_id = " . $product_id . "
+                AND product_variation_id = ".$product_variation_id."
                 AND intranet_id = " . $this->intranet->getId() . "
       AND quantity > 0 LIMIT 1");
 
@@ -418,18 +439,32 @@ class Intraface_modules_shop_Basket
 
         $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
-        $db->query("SELECT product_id, quantity FROM basket WHERE " . $sql_extra);
+        $db->query("SELECT product_id, product_variation_id, quantity FROM basket WHERE " . $sql_extra);
 
         while ($db->nextRecord()) {
             $product = new Product($this->coordinator->kernel, $db->f("product_id"));
             if($type == 'exclusive_vat') {
-                $price += $product->get('price') * $db->f("quantity");
+                if($db->f('product_variation_id') != 0) {
+                    $variation = $product->getVariation($db->f('product_variation_id'));
+                    $detail = $variation->getDetail();
+                    $price += ($product->get('price') + $detail->getPriceDifference()) * $db->f("quantity");
+                }
+                else {
+                    $price += $product->get('price') * $db->f("quantity");
+                }
             } else {
-                $price += $product->get('price_incl_vat') * $db->f("quantity");
+                if($db->f('product_variation_id') != 0) {
+                    $variation = $product->getVariation($db->f('product_variation_id'));
+                    $detail = $variation->getDetail();
+                    $price += (($product->get('price') + $detail->getPriceDifference()) * (1 + $product->get('vat_percent')/100)) * $db->f("quantity");
+                }
+                else {
+                    $price += $product->get('price_incl_vat') * $db->f("quantity");
+                }
             }
         }
 
-        return $price;
+        return round($price, 2);
     }
 
     /**
@@ -439,32 +474,26 @@ class Intraface_modules_shop_Basket
      */
     public function getTotalWeight()
     {
-        $sql_extra = implode(" AND basket.", $this->conditions);
+        
+        $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
-
-        $db->query("SELECT
-                product_detail.weight,
-                basket.quantity
-            FROM basket
-            INNER JOIN product
-                ON product.id = basket.product_id
-            INNER JOIN product_detail
-                ON product.id = product_detail.product_id
-            WHERE " . $sql_extra . "
-                AND product_detail.active = 1
-                AND basket.intranet_id = " . $this->intranet->getId() . "
-                AND basket.quantity > 0
-            ");
-
-
+        $db->query("SELECT product_id, product_variation_id, quantity FROM basket WHERE " . $sql_extra);
+        
         $weight = 0;
 
         while ($db->nextRecord()) {
-            $weight += $db->f('weight') * $db->f('quantity');
+            $product = new Product($this->coordinator->kernel, $db->f("product_id"));
+            if($db->f('product_variation_id') != 0) {
+                $variation = $product->getVariation($db->f('product_variation_id'));
+                $detail = $variation->getDetail();
+                $weight += ($product->get('weight') + $detail->getWeightDifference()) * $db->f('quantity');
+            }
+            else {
+                $weight += $product->get('weight') * $db->f('quantity');
+            }
         }
-
+        
         return $weight;
-
     }
 
     /**
@@ -481,6 +510,7 @@ class Intraface_modules_shop_Basket
         $db->query("SELECT
                 product.id,
                 basket.product_id,
+                basket.product_variation_id,
                 basket.product_detail_id,
                 product_detail.name,
                 product_detail.price,
@@ -507,12 +537,23 @@ class Intraface_modules_shop_Basket
             $product->getPictures();
             $items[$i]['product_id'] = $product->get('id');
             $items[$i]['product_detail_id'] = $product->get('product_detail_id');
-            $items[$i]['name'] = $product->get('name');
-            $items[$i]['price'] = $product->get('price');
-            $items[$i]['price_incl_vat'] = $product->get('price_incl_vat');
             $items[$i]['pictures'] = $product->get('pictures');
-
-
+            
+            if($db->f('product_variation_id') != 0) {
+                $variation = $product->getVariation($db->f('product_variation_id'));
+                $detail = $variation->getDetail();
+                $items[$i]['product_variation_id'] = $variation->getId();
+                $items[$i]['name'] = $product->get('name').' - '.$variation->getName();
+                $items[$i]['price'] = $product->get('price') + $detail->getPriceDifference();
+                $items[$i]['price_incl_vat'] = (($product->get('price') + $detail->getPriceDifference()) * (1 + $product->get('vat_percent')/100));    
+            }
+            else {
+                $items[$i]['product_variation_id'] = 0;
+                $items[$i]['name'] = $product->get('name');
+                $items[$i]['price'] = $product->get('price');
+                $items[$i]['price_incl_vat'] = $product->get('price_incl_vat');
+            }
+            
             // basket specific
             $items[$i]['quantity'] = $db->f('quantity');
             $items[$i]['totalprice'] = $db->f('quantity') * $items[$i]['price'];

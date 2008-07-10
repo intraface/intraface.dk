@@ -10,10 +10,16 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
         $this->hasColumn('show_online',  'integer',  1);
         $this->hasColumn('confirmation', 'string',  65555);
         $this->hasColumn('receipt',      'string',  65555);
-        $this->hasColumn('intranet_id',  'string',  65555);
+        // $this->hasColumn('intranet_id',  'string',  65555);
 
     }
+    
+    public function setUp()
+    {
+        $this->loadTemplate('Intraface_Doctrine_Template_Intranet');
+    }
 
+    
     function getId()
     {
         return $this->id;

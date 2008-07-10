@@ -291,7 +291,8 @@ class Intraface_modules_shop_Coordinator
     {
         foreach ($products AS $product) {
             $this->order->loadItem();
-            $value['product_id'] = $product['id'];
+            $value['product_id'] = $product['product_id'];
+            $value['product_variation_id'] = $product['product_variation_id'];
             $value['quantity'] = $product['quantity'];
             $value['description'] = $product['text'];
             $this->order->item->save($value);

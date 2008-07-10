@@ -123,10 +123,55 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
         }
         
         $id = $this->processRequestData(intval($id));
+        
+        $return = array();
+        
         $product = new Product($this->kernel, $id);
         $product->getPictures();
+        $return['product'] = $product->get();
+        if(!$product->get('has_variation') && $product->get('stock')) {
+            $return['stock'] = $product->getStock()->get();
+        }
+        
+        if($product->get('has_variation')) {
+            $variations = $product->getVariations();
+            
+            // We should make a Doctrine Product_X_AttributeGroup class and get all the groups i one sql 
+            $groups = $product->getAttributeGroups();
+            $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway;
+            foreach($groups AS $group) {
+                $return['attribute_groups'][] = array_merge(
+                    $group, 
+                    array('attributes' => $group_gateway->findById($group['id'])->getAttributes()->toArray())
+                );
+            }
+            
+            foreach($variations AS $variation) {
+                $detail = $variation->getDetail();
+                $attribute_string = '';
+                $attributes_array = $variation->getAttributesAsArray();
+                foreach($attributes_array AS $attribute) {
+                    if($attribute_string != '') $attribute_string .= '-';
+                    $attribute_string .= $attribute['id'];
+                }
+                
+                $return['variations'][] = array(
+                    'variation' => array(
+                        'id' => $variation->getId(),
+                        'detail_id' => $detail->getId(),
+                        'number' => $variation->getNumber(),
+                        'name' => $variation->getName(),
+                        'attributes' => $attributes_array,
+                        'identifier' => $attribute_string,
+                        'price_incl_vat' => round(($product->get('price') + $detail->getPriceDifference()) * (1 + $product->get('vat_percent')/100), 2),
+                        'weight' => $product->get('weight') + $detail->getWeightDifference()
+                    ),
+                    'stock' => array()
+                );
+            }
+        }
 
-        return $this->prepareResponseData($product->get());
+        return $this->prepareResponseData($return);
     }
 
     /**
@@ -229,14 +274,15 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
      *
      * @param struct  $credentials       Credentials to use the server
      * @param integer $shop_id    Id for the shop
-     * @param integer $id                Product id to add
+     * @param integer $produt_id         Product id to add
+     * @param integer $product_variation_id Product variation id to change
      * @param integer $quantity          Optional quantity
      * @param string  $text              Extra text to the itemline
      * @param integer $product_detail_id Product detail id
      *
      * @return boolean
      */
-    public function addProductToBasket($credentials, $shop_id, $product_id, $quantity = 1, $text = '', $product_detail_id = 0)
+    public function addProductToBasket($credentials, $shop_id, $product_id, $product_variation_id, $quantity = 1, $text = '', $product_detail_id = 0)
     {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
@@ -250,12 +296,13 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
         }
         
         $product_id = $this->processRequestData(intval($product_id));
+        $product_variation_id = $this->processRequestData(intval($product_variation_id));
         $quantity = $this->processRequestData(intval($quantity));
         $text = $this->processRequestData($text);
         $product_detail_id = $this->processRequestData(intval($product_detail_id));
 
         return $this->prepareResponseData(
-            $this->webshop->getBasket()->add($product_id, $quantity, $text, $product_detail_id)
+            $this->webshop->getBasket()->add($product_id, $product_variation_id, $quantity, $text, $product_detail_id)
         );
     }
 
@@ -265,13 +312,14 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
      * @param struct  $credentials       Credentials to use the server
      * @param integer $shop_id    Id for the shop
      * @param integer $product_id        Product id to change
+     * @param integer $product_variation_id Product_variation_id to change
      * @param integer $quantity          New quantity
      * @param string  $text              Extra text to the itemline
      * @param integer $product_detail_id Product detail id
      *
      * @return mixed
      */
-    public function changeProductInBasket($credentials, $shop_id, $product_id, $quantity, $text = '', $product_detail_id = 0)
+    public function changeProductInBasket($credentials, $shop_id, $product_id, $product_variation_id, $quantity, $text = '', $product_detail_id = 0)
     {
         $this->checkCredentials($credentials);
 
@@ -283,11 +331,12 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
         }
         
         $product_id = $this->processRequestData(intval($product_id));
+        $product_variation_id = $this->processRequestData(intval($product_variation_id));
         $quantity = $this->processRequestData(intval($quantity));
         $text = $this->processRequestData($text);
         $product_detail_id = $this->processRequestData(intval($product_detail_id));
 
-        if (!$this->webshop->getBasket()->change($product_id, $quantity, $text, $product_detail_id)) {
+        if (!$this->webshop->getBasket()->change($product_id, $product_variation_id, $quantity, $text, $product_detail_id)) {
             return false;
         }
 
@@ -558,6 +607,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
      *
      * @return array
      */
+    /*
     protected function checkCredentials($credentials)
     {
         $this->credentials = $credentials;
@@ -590,6 +640,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
 
         return true;
     }
+    */
 
     /**
      * Initialize the webshop

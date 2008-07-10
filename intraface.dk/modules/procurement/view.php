@@ -87,7 +87,7 @@ if(isset($_GET['add_item'])) {
     if($kernel->user->hasModuleAccess('product')) {
         $redirect = Intraface_Redirect::factory($kernel, 'go');
         $module_product = $kernel->useModule('product');
-        $url = $redirect->setDestination($module_product->getPath().'select_product.php', $module_procurement->getPath().'edit_quantity.php?id='.$procurement->get('id'));
+        $url = $redirect->setDestination($module_product->getPath().'select_product.php?set_quantity=1', $module_procurement->getPath().'set_purchase_price.php?id='.$procurement->get('id'));
         $redirect->askParameter('product_id', 'multiple');
         header('location: '.$url);
         exit;

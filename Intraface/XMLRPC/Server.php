@@ -67,6 +67,9 @@ class Intraface_XMLRPC_Server
         $this->kernel->weblogin = $weblogin;
         $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
         $this->kernel->setting = new Intraface_Setting($this->kernel->intranet->get('id'));
+        
+        // makes intranet_id accessable in Doctrine
+        Intraface_Doctrine_Intranet::singleton($this->kernel->intranet->getId());
 
         return true;
     }

@@ -26,6 +26,9 @@ if(isset($_GET["contact_id"]) && intval($_GET["contact_id"]) != 0) {
 
 if(isset($_GET["product_id"]) && intval($_GET["product_id"]) != 0) {
     $debtor->getDBQuery()->setFilter("product_id", $_GET["product_id"]);
+    if(isset($_GET['product_variation_id'])) {
+        $debtor->getDBQuery()->setFilter("product_variation_id", $_GET["product_variation_id"]);
+    }
 }
 
 
@@ -68,6 +71,9 @@ $posts = $debtor->getList();
 
 if(intval($debtor->getDBQuery()->getFilter('product_id')) != 0) {
     $product = new Product($kernel, $debtor->getDBQuery()->getFilter('product_id'));
+    if(intval($debtor->getDBQuery()->getFilter('product_variation_id')) != 0) {
+        $variation = $product->getVariation($debtor->getDBQuery()->getFilter('product_variation_id'));
+    }
 }
 
 if(intval($debtor->getDBQuery()->getFilter('contact_id')) != 0) {
@@ -88,6 +94,9 @@ $page->start(safeToHtml($translation->get($debtor->get('type').'s')));
 
         if (!empty($product) AND is_object($product) && $product->get('name') != '') {
             echo ' med produkt: ' . safeToHtml($product->get('name'));
+            if(!empty($variation) AND is_object($variation) AND $variation->getName() != '') {
+                echo ' - '.$variation->getName();
+            }
         }
     ?>
 </h1>

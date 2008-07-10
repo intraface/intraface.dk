@@ -777,3 +777,12 @@ div.show_file img {
 #publish-form fieldset.draft {
     background: red;
 }
+
+/* product with variations */
+
+img.variation {
+    height: 16px;
+    width: 16px;
+    border: 0px;
+    vertical-align: middle;
+}

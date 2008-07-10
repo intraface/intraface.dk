@@ -139,7 +139,7 @@ $page->start($translation->get('State invoice'));
                                 $year->loadActiveYear();
                                 $accounts =  $account->getList('sale');
                                 ?>
-                                <select if="state_account" name="state_account_id[<?php echo $product->get('id'); ?>]">
+                                <select id="state_account" name="state_account_id[<?php echo $product->get('id'); ?>]">
                                     <option value="">Vælg...</option>
                                     <?php
                                     $x = 0;

@@ -695,7 +695,7 @@ class Debtor extends Intraface_Standard
      *
      * @return integer
      */
-    public function any($type, $type_id)
+    public function any($type, $type_id, $variation_id = 0)
     {
         switch ($type) {
             case 'contact':
@@ -715,7 +715,8 @@ class Debtor extends Intraface_Standard
                         AND debtor.active = 1
                         AND debtor_item.intranet_id = ".$this->kernel->intranet->get("id")."
                         AND debtor_item.active = 1
-                        AND debtor_item.product_id = ".(int)$type_id;
+                        AND debtor_item.product_id = ".(int)$type_id."
+                        AND debtor_item.product_variation_id = ".(int)$variation_id;
             break;
             default:
                 trigger_error("Ugyldg type i Debtor->any", E_USER_ERROR);
@@ -762,6 +763,12 @@ class Debtor extends Intraface_Standard
 
         if ($this->dbquery->checkFilter("product_id")) {
             $this->dbquery->setCondition("debtor_item.product_id = ".$this->dbquery->getFilter('product_id'));
+            if($this->dbquery->checkFilter("product_variation_id")) {
+                $this->dbquery->setCondition("debtor_item.product_variation_id = ".$this->dbquery->getFilter('product_variation_id'));
+            }
+            else {
+                $this->dbquery->setCondition("debtor_item.product_variation_id = 0");
+            }
         }
 
         if ($this->dbquery->checkFilter("from_date")) {

@@ -1,0 +1,164 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testCreateProductWithVariationsWithOneGroup</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testCreateProductWithVariationsWithOneGroup</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=product,shop&helper_function=Product:createAttributes&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=create product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Test with attributes</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>unit</td>
+	<td>label=unit(s)</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>price</td>
+	<td>400</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>vat</td>
+	<td>label=yes</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>weight</td>
+	<td>400</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>has_variation</td>
+	<td>label=yes</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>do_show</td>
+	<td>label=yes</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Select attributes for product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>selected[]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>select</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[0][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[1][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[2][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>variation[0][price_difference]</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>variation[1][price_difference]</td>
+	<td>4</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>variation[2][price_difference]</td>
+	<td>-2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>variation[0][weight_difference]</td>
+	<td>3</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>variation[1][weight_difference]</td>
+	<td>6</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>variation[2][weight_difference]</td>
+	<td>-3</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>save_and_close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Color: Blue</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Color: Black</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Color: Red</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>402,00 excl. vat</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>403 gram</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

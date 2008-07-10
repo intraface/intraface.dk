@@ -14,8 +14,6 @@ session_start();
 $auth = new Intraface_Auth(session_id());
 $auth->clearIdentity();
 
-Doctrine_Manager::connection(DB_DSN);
-
 if ($install->resetServer()) {
 
     if(!empty($_GET['modules'])) {

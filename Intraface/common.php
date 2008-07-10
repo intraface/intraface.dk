@@ -75,6 +75,11 @@ if ($db->getOption('debug')) {
     register_shutdown_function(array($my_debug_handler, 'dumpInfo'));
 }
 
+// Initializes Doctrine
+Doctrine_Manager::getInstance()->setAttribute("use_dql_callbacks", true);
+Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_ALL);
+Doctrine_Manager::connection(DB_DSN);
+
 if (defined('TIMEZONE')) {
     $db->exec('SET time_zone=\''.TIMEZONE.'\'');
 }

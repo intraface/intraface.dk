@@ -1,132 +1,117 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>010createAndUpdateNewProduct</title>
+<title>testCreateAndUpdateNewProduct</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">010createAndUpdateNewProduct</td></tr>
+<tr><td rowspan="1" colspan="3">testCreateAndUpdateNewProduct</td></tr>
 </thead><tbody>
 <tr>
-    <td>open</td>
-    <td>install/reset-staging-server.php?modules=product&login=true</td>
-    <td></td>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=product&login=true</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=login</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=product</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=product</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=create product</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=create product</td>
+	<td></td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>name</td>
-    <td>Testprodukt</td>
+	<td>type</td>
+	<td>name</td>
+	<td>Testprodukt</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>description</td>
-    <td>Testbeskrivelse</td>
+	<td>type</td>
+	<td>description</td>
+	<td>Testbeskrivelse</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>weight</td>
-    <td>100</td>
+	<td>select</td>
+	<td>unit</td>
+	<td>label=unit(s)</td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>unit</td>
-    <td>label=unit(s)</td>
+	<td>type</td>
+	<td>price</td>
+	<td>100</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>price</td>
-    <td>100</td>
+	<td>select</td>
+	<td>vat</td>
+	<td>label=yes</td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>vat</td>
-    <td>label=yes</td>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>submit</td>
-    <td></td>
+	<td>verifyText</td>
+	<td>xpath=//title</td>
+	<td>product: Testprodukt</td>
 </tr>
 <tr>
-    <td>verifyText</td>
-    <td>xpath=//title</td>
-    <td>product: Testprodukt</td>
+	<td>clickAndWait</td>
+	<td>link=edit</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=edit</td>
-    <td></td>
+	<td>type</td>
+	<td>price</td>
+	<td>200,00</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>weight</td>
-    <td>200</td>
+	<td>type</td>
+	<td>name</td>
+	<td>Testprodukt - edited</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>price</td>
-    <td>200,00</td>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>name</td>
-    <td>Testprodukt - edited</td>
+	<td>verifyTextPresent</td>
+	<td>Testprodukt - edited</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>submit</td>
-    <td></td>
+	<td>verifyText</td>
+	<td>//td[2]</td>
+	<td>200,00 excl. vat</td>
 </tr>
 <tr>
-    <td>verifyTextPresent</td>
-    <td>Testprodukt - edited</td>
-    <td></td>
+	<td>verifyTextNotPresent</td>
+	<td>stock product</td>
+	<td></td>
 </tr>
 <tr>
-    <td>verifyText</td>
-    <td>//td[2]</td>
-    <td>200,00 excl. vat</td>
+	<td>clickAndWait</td>
+	<td>link=delete</td>
+	<td></td>
 </tr>
 <tr>
-    <td>verifyText</td>
-    <td>//tr[2]/td[2]</td>
-    <td>200 gram</td>
+	<td>waitForConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
 </tr>
 <tr>
-    <td>verifyTextNotPresent</td>
-    <td>stock product</td>
-    <td></td>
-</tr>
-<tr>
-    <td>clickAndWait</td>
-    <td>link=delete</td>
-    <td></td>
-</tr>
-<tr>
-    <td>waitForConfirmation</td>
-    <td>Er du sikker?</td>
-    <td></td>
-</tr>
-<tr>
-    <td>verifyTextNotPresent</td>
-    <td>Testprodukt - edited</td>
-    <td></td>
+	<td>verifyTextNotPresent</td>
+	<td>Testprodukt - edited</td>
+	<td></td>
 </tr>
 
 </tbody></table>

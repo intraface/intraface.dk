@@ -10,21 +10,41 @@ if(!$kernel->user->hasModuleAccess('stock')) {
 
 if(isset($_POST['submit'])) {
     $product_object = new Product($kernel, $_POST['product_id']);
-
+    
     if($product_object->get('id') == 0) {
         trigger_error("Ugyldigt product_id", ERROR);
     }
-
-    if($product_object->stock->regulate($_POST)) {
-        header("Location: product.php?id=".$product_object->get('id')."&from=stock#stock");
-        exit;
+    
+    if(!empty($_POST['product_variation_id'])) {
+        $variation = $product_object->getVariation(intval($_POST['product_variation_id']));
+        if(!$variation->getId()) {
+            throw new Exception('Invalid variation. '.intval($_POST['product_variation_id']));
+        }
+        if($variation->getStock($product_object)->regulate($_POST)) {
+            header("Location: product_variation.php?product_id=".$product_object->get('id')."&id=".$variation->getId()."&from=stock#stock");
+            exit;
+        }
+        
     }
-
+    else {
+        if($product_object->getStock()->regulate($_POST)) {
+            header("Location: product.php?id=".$product_object->get('id')."&from=stock#stock");
+            exit;
+        }
+    }
+    
     $values = $_POST;
 }
 else {
     // set up product
     $product_object = new Product($kernel, $_GET['product_id']);
+    if(!empty($_GET['product_variation_id'])) {
+        $variation = $product_object->getVariation($_GET['product_variation_id']);
+    }
+    else {
+        $variation = NULL;
+    }
+    
     if($product_object->get('id') == 0) {
         trigger_error("Ugyldigt product_id", ERROR);
     }
@@ -36,7 +56,7 @@ $page->start(t('regulate stock'));
 
 <h1><?php e(t('regulate stock product')); ?></h1>
 
-<p>#<?php print($product_object->get('number').' '.$product_object->get('name')); ?></p>
+<p>#<?php e($product_object->get('number')); if($variation) e('.'.$variation->getNumber()); e(' '.$product_object->get('name')); if($variation) e(' - '.$variation->getName()); ?></p>
 
 <?php echo $product_object->error->view(); ?>
 
@@ -62,6 +82,7 @@ $page->start(t('regulate stock'));
 </fieldset>
 
 <input type="hidden" name="product_id" value="<?php e($product_object->get('id')); ?>" />
+<input type="hidden" name="product_variation_id" value="<?php if($variation) e($variation->getId()); ?>" />
 <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />  <a href="product.php?id=<?php print($product_object->get('id')); ?>&from=stock#stock"><?php e(t('regret', 'common')); ?></a>
 </form>
 

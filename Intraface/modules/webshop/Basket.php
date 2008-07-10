@@ -123,7 +123,7 @@ class Basket
             return false;
         }
 
-        if (is_object($product->stock) AND $product->stock->get('for_sale') < $quantity AND $quantity != 0) {
+        if (is_object($product->getStock()) AND $product->getStock()->get('for_sale') < $quantity AND $quantity != 0) {
             return false;
         }
 

@@ -82,10 +82,7 @@ $page->start(t('edit product'));
             <label for="description"><?php e(t('description')); ?></label>
             <textarea class="resizable" rows="8" cols="60" name="description" id="description"><?php if (!empty($value['description'])) e($value['description']); ?></textarea>
         </div>
-        <div class="formrow">
-            <label for="weight"><?php e(t('weight')); ?></label>
-            <input type="text" name="weight" id="weight" value="<?php if (!empty($value['weight'])) e($value['weight']); ?>" /> <?php e(t('grams')); ?>
-        </div>
+        
         <div class="formrow">
             <label for="unit"><?php e(t('unit type')); ?></label>
             <select name="unit" id="unit">
@@ -138,10 +135,43 @@ $page->start(t('edit product'));
 
     </fieldset>
 
-    <?php if ($kernel->user->hasModuleAccess('webshop')): ?>
+    <?php if ($kernel->user->hasModuleAccess('webshop') || $kernel->user->hasModuleAccess('shop')): ?>
     <fieldset>
-        <legend><?php e(t('webshop')); ?></legend>
-
+        <legend><?php e(t('Information for shop')); ?></legend>
+        
+        <div class="formrow">
+            <label for="weight"><?php e(t('weight')); ?></label>
+            <input type="text" name="weight" id="weight" value="<?php if (!empty($value['weight'])) e($value['weight']); ?>" /> <?php e(t('grams')); ?>
+        </div>
+        
+        <?php if(!isset($value['has_variation'])): ?>
+            <div class="formrow">
+                <label for="has_variation"><?php e(t('Product has variations')); ?></label>
+                <select name="has_variation" id="has_variation">
+                    <?php
+                    foreach (array(0 => t('no', 'common'), 1 => t('yes', 'common')) AS $key=>$v) {
+                        echo '<option value="' . $key . '"';
+                        if (!empty($value['has_variation']) AND $value['has_variation'] == $key) { echo ' selected="selected"'; }
+                        echo '>' . safeToForm($v) . '</option>';
+                    }
+                    ?>
+                </select>
+            </div>
+        <?php else: ?>
+            <div class="formrow">
+                <label for="has_variation"><?php e(t('Product has variations')); ?></label>
+                <input type="hidden" name="has_variation" value="<?php e($value['has_variation']); ?>" />
+                <span id="has_variation">
+                    <?php 
+                    if($value['has_variation'] == 1) {
+                        e('Yes', 'common');
+                    } else {
+                        e('No', 'common');
+                    }
+                    ?>
+                </span>
+            </div>
+        <?php endif; ?>
 
         <div class="formrow">
             <label for="do_show"><?php e(t('show in webshop')); ?></label>

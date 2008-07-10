@@ -56,8 +56,10 @@ class Product extends Intraface_Standard
 
     /**
      * @var object
+     * 
+     * Made private now. Please use getStock() instead.
      */
-    public $stock;
+    private $stock;
 
     /**
      * @var object
@@ -94,7 +96,7 @@ class Product extends Intraface_Standard
         $this->db                    = new DB_Sql;
         $this->id                    = (int)$product_id;
         $this->old_product_detail_id = (int)$old_product_detail_id;
-        $this->fields                = array('do_show', 'stock');
+        $this->fields                = array('do_show', 'stock', 'has_variation');
         $this->error                 = new Intraface_Error;
 
         if ($this->id > 0) {
@@ -163,7 +165,8 @@ class Product extends Intraface_Standard
             $this->value[$this->fields[$i]] = $this->db->f($this->fields[$i]);
         }
 
-        $this->getStock();
+        // We now remove stock from load. It can be obtained manaully!
+        // $this->getStock();
 
         // desuden skal copy lige opdateres!
         // hvad med at vi bruger det øverste billede som primary. Det betyder dog, at
@@ -183,19 +186,25 @@ class Product extends Intraface_Standard
      */
     public function getStock()
     {
+        if($this->get('has_variation')) {
+            throw new Exception('You cannot get stock from product with variations. Use stock for variation');
+        }
+        
         if ($this->value['stock'] == 0 AND $this->value['do_show'] == 1) {
             $this->value['stock_status'] = array('for_sale' => 100); // kun til at stock_status
         }
         // hvis det er en lagervare og intranettet har adgang til stock skal det startes op
 
         if ($this->kernel->intranet->hasModuleAccess('stock') AND $this->get('stock') == 1) {
-            // hvis klassen ikke er startet op skal det ske
-            $module = $this->kernel->useModule('stock', true); // true ignorere bruger adgang
-            $this->stock                 = new Stock($this);
-            $this->value['stock_status'] = $this->stock->get();
+            if(!is_object($this->stock)) {
+                // hvis klassen ikke er startet op skal det ske
+                $module = $this->kernel->useModule('stock', true); // true ignorere bruger adgang
+                $this->stock                 = new Stock($this);
+                $this->value['stock_status'] = $this->stock->get();
+            }
+            return $this->stock;
         }
-
-        return $this->stock;
+        return false;
     }
 
     /**
@@ -609,8 +618,8 @@ class Product extends Intraface_Standard
             $products[$key]               = $product->get();
             $products[$key]['related_id'] = $db->f('related_product_id');
 
-            if (is_object($product->stock) AND strtolower(get_class($product->stock)) == "stock") {
-                $products[$key]['stock_status'] = $product->stock->get();
+            if (is_object($product->getStock()) AND strtolower(get_class($product->getStock())) == "stock") {
+                $products[$key]['stock_status'] = $product->getStock()->get();
             } else {
                 // alle ikke lagervarer der skal vises i webshop skal have en for_sale
                 if ($product->get('stock') == 0 AND $product->get('do_show') == 1) {
@@ -631,6 +640,126 @@ class Product extends Intraface_Standard
         }
         return $products;
     }
+    
+    
+    /**
+     * Set attribute for product
+     *
+     * @param integer $id     Attribute id to relate to this product
+     *
+     * @return boolean
+     */
+    public function setAttributeGroup($id)
+    {
+        if(!$this->get('has_variation')) {
+            throw new Exception('You can not set attribute group for a product without variations!');
+        }
+        
+        $db = MDB2::factory(DB_DSN);
+        $result = $db->query("SELECT id FROM product_x_attribute_group WHERE intranet_id = ".$db->quote($this->intranet->getId())." AND product_id=" . $this->getId()  . " AND product_attribute_group_id = " . (int)$id );
+        if(PEAR::isError($result)) {
+            throw new Exception('Error in query :'.$result->getUserInfo());
+        }
+        
+        if ($result->numRows() > 0) return true;
+        $result = $db->exec("INSERT INTO product_x_attribute_group SET product_id = " . $this->getId() . ", product_attribute_group_id = " . (int)$id . ", intranet_id = " . $this->intranet->getId());
+        if(PEAR::isError($result)) {
+            throw new Exception('Error in insert :'.$result->getUserInfo());
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Remove attribute for product
+     *
+     * @param integer $id     Attribute id to relate to this product
+     *
+     * @return boolean
+     */
+    public function removeAttributeGroup($id)
+    {
+        if(!$this->get('has_variation')) {
+            throw new Exception('You can not remove attribute group for a product without variations!');
+        }
+        
+        $db = MDB2::factory(DB_DSN);
+        $result = $db->exec("DELETE FROM product_x_attribute_group WHERE intranet_id = ".$db->quote($this->intranet->getId())." AND product_id=" . $this->getId()  . " AND product_attribute_group_id = " . (int)$id );
+        if(PEAR::isError($result)) {
+            throw new Exception('Error in query :'.$result->getUserInfo());
+        }
+        
+        return ($result > 0);
+        
+    }
+    
+    /**
+     * Get all attributes related to the product
+     *
+     * @return array
+     */
+    public function getAttributeGroups()
+    {
+        if(!$this->get('has_variation')) {
+            throw new Exception('You can not get attribute groups for a product without variations!');
+        }
+        
+        // takes groups despite the are deleted. That is probably the best behaviour for now
+        // NOTE: Very important that it is ordered by product_attribute_group.id so the groups
+        // does always get attached to the correct attribute number on the variation.
+        $db = MDB2::factory(DB_DSN);
+        $result = $db->query("SELECT product_attribute_group.* FROM product_x_attribute_group " .
+                "INNER JOIN product_attribute_group " .
+                    "ON product_x_attribute_group.product_attribute_group_id = product_attribute_group.id " .
+                    "AND product_attribute_group.intranet_id = ".$db->quote($this->intranet->getId())." " .
+                "WHERE product_x_attribute_group.intranet_id = ".$db->quote($this->intranet->getId())." " .
+                    "AND product_x_attribute_group.product_id=" . $this->getId()  . " " .
+                 "ORDER BY product_attribute_group.id");
+        
+        if(PEAR::isError($result)) {
+            throw new Exception('Error in query :'.$result->getUserInfo());
+        }
+        
+        return $result->fetchAll(MDB2_FETCHMODE_ASSOC);
+    }
+    
+    
+    /**
+     * returns variation
+     */
+    public function getVariation($id = 0) 
+    {
+        $gateway = new Intraface_modules_product_Variation_Gateway($this);
+        if(intval($id) > 0) {
+            return $gateway->findById($id);
+        }
+        $object = $gateway->getObject();
+        $object->product_id = $this->getId(); 
+        return $object;
+    }
+    
+    /**
+     * Returns variation on the basis of attributes
+     * 
+     * @param array $attributes Attributes to find variation from
+     *        array('attribte1' => [id1], 'attribute2' => [id2]);
+     */
+    public function getVariationFromAttributes($attributes)
+    {
+        $gateway = new Intraface_modules_product_Variation_Gateway($this);
+        return $gateway->findByAttributes($attributes);
+    }
+    
+    /**
+     * Returns all variations on product
+     */
+    public function getVariations() 
+    {
+        $gateway = new Intraface_modules_product_Variation_Gateway($this);
+        return $gateway->findAll();
+    }
+    
+    
 
     /**
      * Checks whether any products has been created before
@@ -735,8 +864,8 @@ class Product extends Intraface_Standard
             $product->getPictures();
             $products[$i] = $product->get();
 
-            if (is_object($product->stock) AND strtolower(get_class($product->stock)) == "stock") {
-                $products[$i]['stock_status'] = $product->stock->get();
+            if (!$product->get('has_variation') AND is_object($product->getStock()) AND strtolower(get_class($product->getStock())) == "stock") {
+                $products[$i]['stock_status'] = $product->getStock()->get();
             } else {
                 // alle ikke lagervarer der skal vises i webshop skal have en for_sale
                 if ($product->get('stock') == 0 AND $product->get('do_show') == 1) {

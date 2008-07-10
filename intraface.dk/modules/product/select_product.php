@@ -21,38 +21,77 @@ if($redirect->get('id') != 0) {
 
 if(isset($_GET['add_new'])) {
     $add_redirect = Intraface_Redirect::factory($kernel, 'go');
+    $add_redirect->setIdentifier('add_new');
     $url = $add_redirect->setDestination($product_module->getPath().'product_edit.php', $product_module->getPath().'select_product.php?'.$redirect->get('redirect_query_string').'&set_quantity='.$quantity);
     $add_redirect->askParameter('product_id');
     header('location: '.$url);
     exit;
 }
 
-if(isset($_GET['return_redirect_id'])) {
-    $add_redirect = Intraface_Redirect::factory($kernel, 'return');
-    if($add_redirect->getParameter('product_id') != 0) {
-        $redirect->setParameter('product_id', $add_redirect->getParameter('product_id'), 1);
-    }
-    // $product_id[] = $add_redirect->getParameter('product_id');
+if(!empty($_GET['select_variation'])) {
+    $variation_redirect = Intraface_Redirect::factory($kernel, 'go');
+    $variation_redirect->setIdentifier('select_variation');
+    $url = $variation_redirect->setDestination($product_module->getPath().'select_product_variation.php?product_id='.intval($_GET['select_variation']).'&set_quantity='.$quantity, $product_module->getPath().'select_product.php?'.$redirect->get('redirect_query_string').'&set_quantity='.$quantity);
+    $type = ($multiple) ? 'multiple' : 'single';
+    $variation_redirect->askParameter('product_variation_id', $type);
+    header('location: '.$url);
+    exit;
 }
 
-if(isset($_POST['submit']) || isset($_POST['submit_close'])) {
-    if($multiple && is_array($_POST['selected'])) {
-        foreach($_POST['selected'] AS $selected_id => $selected_value) {
-            if((int)$selected_value > 0) {
-                // Hvis der allerede er gemt en værdi, så starter vi med at fjerne den, så der ikke kommer flere på.
-                $redirect->removeParameter('product_id', $selected_id);
+if(isset($_GET['return_redirect_id'])) {
+    $return_redirect = Intraface_Redirect::factory($kernel, 'return');
+    if($return_redirect->getIdentifier() == 'add_new' && $return_redirect->getParameter('product_id') != 0) {
+        $redirect->setParameter('product_id', serialize(array('product_id' => intval($return_redirect->getParameter('product_id')), 'product_variation_id' => 0)), 1);
+    }
+    elseif($return_redirect->getIdentifier() == 'select_variation') {
+        // Returning from variations page and add the variations to the product_id parameter.
+        $product_variations = $return_redirect->getParameter('product_variation_id', 'with_extra_value');
+        if($multiple) {
+            foreach($product_variations AS $product_variation) {
+                $redirect->removeParameter('product_id', $product_variation['value']);
                 if($quantity) {
-                    $redirect->setParameter('product_id', $selected_id, $selected_value);
+                    $redirect->setParameter('product_id', $product_variation['value'], $product_variation['extra_value']);
                 } else {
-                    $redirect->setParameter('product_id', $selected_id);
+                    $redirect->setParameter('product_id', $product_variation['value']);
                 }
             }
         }
-    } elseif(!$multiple && (int)$_POST['selected'] != 0) {
-        if($quantity) {
-            $redirect->setParameter('product_id', (int)$_POST['selected'], (int)$_POST['quantity']);
-        } else {
-            $redirect->setParameter('product_id', (int)$_POST['selected']);
+        else {
+            
+            $redirect->removeParameter('product_id', $product_variations['value']);
+            if($quantity) {
+                $redirect->setParameter('product_id', $product_variations['value'], $product_variations['extra_value']);
+            } else {
+                $redirect->setParameter('product_id', $product_variations['value']);
+            }
+        }
+    }
+}
+
+if(isset($_POST['submit']) || isset($_POST['submit_close'])) {
+    if($multiple) {
+        if(isset($_POST['selected']) && is_array($_POST['selected'])) {
+            foreach($_POST['selected'] AS $selected_id => $selected_value) {
+                if((int)$selected_value > 0) {
+                    $select = serialize(array('product_id' => $selected_id, 'product_variation_id' => 0));
+                    // Hvis der allerede er gemt en værdi, så starter vi med at fjerne den, så der ikke kommer flere på.
+                    $redirect->removeParameter('product_id', $select);
+                    if($quantity) {
+                        $redirect->setParameter('product_id', $select, $selected_value);
+                    } else {
+                        $redirect->setParameter('product_id', $select);
+                    }
+                }
+            }
+        }
+    } else {
+        if(isset($_POST['selected']) && (int)$_POST['selected'] != 0) {
+            $select = serialize(array('product_id' => (int)$_POST['selected'], 'product_variation_id' => 0));
+            if($quantity) {
+                $redirect->setParameter('product_id', $select, (int)$_POST['quantity']);
+            } else {
+                $redirect->setParameter('product_id', $select);
+            }
         }
     }
 
@@ -87,8 +126,14 @@ $list = $product->getList();
 $product_values = $redirect->getParameter('product_id', 'with_extra_value');
 $selected_products = array();
 if(is_array($product_values)) {
-    foreach($product_values AS $selection) {
-        $selected_products[$selection['value']] = $selection['extra_value'];
+    if($multiple) {
+        foreach($product_values AS $selection) {
+            $selection['value'] = unserialize($selection['value']);
+            $selected_products[$selection['value']['product_id']] = $selection['extra_value'];
+        }
+    }
+    else {
+        $selected_products[$product_values['value']['product_id']] = $product_values['extra_value'];
     }
 }
 
@@ -149,7 +194,9 @@ $page->start(t('select product'));
                 <?php foreach ($list AS $p): ?>
                 <tr>
                     <td>
-                        <?php if($multiple && $quantity): ?>
+                        <?php if($p['has_variation']): ?>
+                            <a href="select_product.php?select_variation=<?php echo $p['id'];?>&amp;set_quantity=<?php print(intval($quantity)); ?>" /><?php echo '<img class="variation" src="/images/icons/silk/table_multiple.png" title="'.t("See the product's variations").'"/> '; ?></a>
+                        <?php elseif($multiple && $quantity): ?>
                             <input id="<?php e($p['id']); ?>" type="text" name="selected[<?php echo intval($p['id']); ?>]" value="<?php if(isset($selected_products[$p['id']])): print(intval($selected_products[$p['id']])); else: print('0'); endif; ?>" size="2" />
                         <?php elseif($multiple && !$quantity): ?>
                             <input id="<?php e($p['id']); ?>" type="checkbox" name="selected[<?php echo intval($p['id']); ?>]" value="1" <?php if (array_key_exists($p['id'], $selected_products)) echo ' checked="checked"'; ?> />

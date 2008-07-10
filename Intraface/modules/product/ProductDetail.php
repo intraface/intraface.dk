@@ -102,8 +102,10 @@ class ProductDetail extends Intraface_Standard
 
             // udregne moms priser ud fra prisen, men kun hvis der er moms på den
             if ($this->db->f('vat') == 1) {
+                $this->value['vat_percent'] = 25;
                 $this->value['price_incl_vat'] = round((float)$this->db->f('price') + ((float)$this->db->f('price') * 0.25), 2);
             } else {
+                $this->value['vat_percent'] = 0;
                 $this->value['price_incl_vat'] = round((float)$this->db->f('price'), 2);
             }
             return $this->db->f('id');

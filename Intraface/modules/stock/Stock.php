@@ -5,21 +5,33 @@
 class Stock extends Intraface_Standard
 {
     private $product;
+    private $product_variation_id;
     public $value;
-    public $error;
     private $kernel;
 
-    function __construct($product)
+    function __construct($product, $variation = NULL)
     {
         if (!is_object($product) AND strtolower(get_class($product)) == "product") {
             trigger_error("Stock kræver product", E_USER_ERROR);
         }
 
         $this->product = &$product;
-        $this->product->get("id");
+        
+        if($variation) {
+            $this->product_variation_id = $variation->getId();
+        }
+        else {
+            $this->product_variation_id = 0;
+        }
+        
         if ($this->product->get("id") > 0) {
             $this->load();
         }
+    }
+    
+    public function getError()
+    {
+        return $this->error;
     }
 
     function load()
@@ -28,7 +40,7 @@ class Stock extends Intraface_Standard
 
         // Hvornår var blev produktet sidst afstemt. Vi tager derfra.
         $db->query("SELECT id, quantity, adaptation_date_time, DATE_FORMAT(adaptation_date_time, '%d-%m-%Y %H:%i') AS dk_adaptation_date_time
-            FROM stock_adaptation WHERE intranet_id = ".$this->product->kernel->intranet->get("id")." AND product_id = ".$this->product->get("id")." ORDER BY adaptation_date_time DESC");
+            FROM stock_adaptation WHERE intranet_id = ".$this->product->kernel->intranet->get("id")." AND product_id = ".$this->product->get("id")." AND product_variation_id = ".$this->product_variation_id." ORDER BY adaptation_date_time DESC");
         if ($db->nextRecord()) {
             $basis = intval($db->f("quantity"));
             $basis_date = $db->f("adaptation_date_time");
@@ -45,8 +57,8 @@ class Stock extends Intraface_Standard
 
             $procurement = new Procurement($this->product->kernel);
             $procurement->loadItem();
-            $stock_in = $procurement->item->getQuantity('delivered', $this->product->get('id'), $basis_date);
-            $this->value["on_order"] = $procurement->item->getQuantity('ordered', $this->product->get('id'));
+            $stock_in = $procurement->item->getQuantity('delivered', $this->product->get('id'), $this->product_variation_id, $basis_date);
+            $this->value["on_order"] = $procurement->item->getQuantity('ordered', $this->product->get('id'), $this->product_variation_id);
         } else {
             $stock_in = 0;
             $this->value["on_order"] = 0;
@@ -57,7 +69,7 @@ class Stock extends Intraface_Standard
 
             $invoice = Debtor::factory($this->product->kernel, 0, "invoice");
             $invoice->loadItem();
-            $stock_out = $invoice->item->getQuantity($this->product->get('id'), $basis_date);
+            $stock_out = $invoice->item->getQuantity($this->product->get('id'), $this->product_variation_id, $basis_date);
         } else {
             $stock_out = 0;
         }
@@ -67,7 +79,7 @@ class Stock extends Intraface_Standard
 
             $credit_note = Debtor::factory($this->product->kernel, 0, "credit_note");
             $credit_note->loadItem();
-            $stock_out_reduced = $credit_note->item->getQuantity($this->product->get('id'), $basis_date);
+            $stock_out_reduced = $credit_note->item->getQuantity($this->product->get('id'), $this->product_variation_id, $basis_date);
         } else {
             $stock_out_reduced = 0;
         }
@@ -75,7 +87,7 @@ class Stock extends Intraface_Standard
         // Reguleret
         $db->query("SELECT SUM(quantity) AS regulated
             FROM stock_regulation
-            WHERE intranet_id = ".$this->product->kernel->intranet->get('id')." AND product_id = ".$this->product->get('id')." AND regulation_date_time > \"".$basis_date."\"");
+            WHERE intranet_id = ".$this->product->kernel->intranet->get('id')." AND product_id = ".$this->product->get('id')." AND product_variation_id = ".$this->product_variation_id." AND regulation_date_time > \"".$basis_date."\"");
         $db->nextRecord(); // Der vil altid være en post
         $regulated = intval($db->f('regulated'));
 
@@ -88,7 +100,7 @@ class Stock extends Intraface_Standard
 
             $order = Debtor::factory($this->product->kernel, 0, "order");
             $order->loadItem();
-            $this->value["reserved"] = $order->item->getQuantity($this->product->get('id'), $basis_date);
+            $this->value["reserved"] = $order->item->getQuantity($this->product->get('id'), $this->product_variation_id, $basis_date);
         } else {
             $this->value["reserved"] = 0;
         }
@@ -98,7 +110,7 @@ class Stock extends Intraface_Standard
 
             $invoice = Debtor::factory($this->product->kernel, 0, "invoice");
             $invoice->loadItem();
-            $this->value["reserved"] += $invoice->item->getQuantity($this->product->get('id'), $basis_date, "not_sent");
+            $this->value["reserved"] += $invoice->item->getQuantity($this->product->get('id'), $this->product_variation_id, $basis_date, "not_sent");
         } else {
             // $this->value["reserved"] += 0;
         }
@@ -108,7 +120,7 @@ class Stock extends Intraface_Standard
 
             $quotation = Debtor::factory($this->product->kernel, 0, "quotation");
             $quotation->loadItem();
-            $this->value["on_quotation"] = $quotation->item->getQuantity($this->product->get('id'), $basis_date);
+            $this->value["on_quotation"] = $quotation->item->getQuantity($this->product->get('id'), $this->product_variation_id, $basis_date);
         } else {
             $this->value["on_quotation"] = 0;
         }
@@ -146,6 +158,7 @@ class Stock extends Intraface_Standard
         $db->query("INSERT INTO stock_regulation SET
             intranet_id = ".$this->product->kernel->intranet->get('id').",
             product_id = ".$this->product->get('id').",
+            product_variation_id = ".$this->product_variation_id.",
             user_id = ".$this->product->kernel->user->get('id').",
             regulation_date_time = NOW(),
             comment = \"".$input['description']."\",
@@ -168,6 +181,7 @@ class Stock extends Intraface_Standard
         $db->query("INSERT INTO stock_adaptation SET
             intranet_id = ".$this->product->kernel->intranet->get('id').",
             product_id = ".$this->product->get('id').",
+            product_variation_id = ".$this->product_variation_id.",
             user_id = ".$this->product->kernel->user->get('id').",
             adaptation_date_time = NOW(),
             quantity = ".$this->get('actual_stock')."");

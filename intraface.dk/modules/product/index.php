@@ -65,6 +65,9 @@ $page->start(t('products'));
     <?php if (count($products) > 0): ?>
     <li><a href="batch_edit.php?use_stored=true"><?php e(t('edit all products in search')); ?></a></li>
     <?php endif; ?>
+    <?php if($kernel->intranet->hasModuleAccess('shop')): ?>
+        <li><a href="attribute_groups.php"><?php e(t('Edit attributes')); ?></a></li>
+    <?php endif; ?>
 </ul>
 
 <?php if (!$product->isFilledIn()): ?>
@@ -119,7 +122,7 @@ $page->start(t('products'));
         <thead>
             <tr>
                 <th></th>
-                <th><?php e(t('product number')); ?></th>
+                <th>#</th>
                 <th><?php e(t('name')); ?></th>
                 <th><?php e(t('unit type')); ?></th>
                 <?php if ($kernel->user->hasModuleAccess("webshop")) { ?>
@@ -148,7 +151,7 @@ $page->start(t('products'));
                 </td>
 
                 <td><?php echo safeToHtml($p['number']); ?></td>
-                <td><a href="product.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml($p['name']); ?></a></td>
+                <td><?php if($p['has_variation']) echo '<img class="variation" src="/images/icons/silk/table_multiple.png" title="'.t('The product has variations').'"/> '; ?><a href="product.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml($p['name']); ?></a></td>
                 <td><?php echo t($p['unit']['combined']); ?></td>
                  <?php if ($kernel->user->hasModuleAccess("webshop")) { ?>
               <td><?php if ($p['do_show'] == 1) e(t('yes', 'common')); else e(t('no', 'common')); ?></td>
@@ -159,9 +162,11 @@ $page->start(t('products'));
                         if($p['stock'] == 0) {
                             print("-");
                         }
+                        elseif($p['has_variation']) {
+                            e('...');
+                        }
                         else {
-                            //print_r($p['stock_status']);
-                              if (!empty($p['stock_status']['for_sale'])) echo safeToHtml($p['stock_status']['for_sale']);
+                            if (!empty($p['stock_status']['for_sale'])) echo safeToHtml($p['stock_status']['for_sale']);
                         }
                         ?>
                     </td>

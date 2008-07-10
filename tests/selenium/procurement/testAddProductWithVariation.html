@@ -1,0 +1,229 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testAddProductWithVariation</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testAddProductWithVariation</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=product,shop,procurement,administration&helper_function=Product:createWithVariations,Administration:fillInIntranetAddress&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=you can create new procurements</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Opret et indkøb</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description</td>
+	<td>Test</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_invoice_date</td>
+	<td>01-01-2008</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_price_items</td>
+	<td>64</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_price_shipment_etc</td>
+	<td>50</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>vat</td>
+	<td>16</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Registrer varer til lager</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//img[@title="See the product's variations"]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>1</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>3</td>
+	<td>3</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>5</td>
+	<td>5</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit_close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit_close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>items[0][price]</td>
+	<td>10</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>items[1][price]</td>
+	<td>8</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>items[2][price]</td>
+	<td>6</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>10,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>8,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>6,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>17,81</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>14,25</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>10,69</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>64,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@href, 'item_edit.php?procurement_id=1&id=1')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_unit_purchase_price</td>
+	<td>12,00</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>12,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Prisen for varerne registreret på lageret overstiger prisen for varerne angivet på indkøbet.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@href, 'item_edit.php?procurement_id=1&id=3')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Skift</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//img[@title="See the product's variations"]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>7</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit_close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit_close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>quantity</td>
+	<td>7</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_unit_purchase_price</td>
+	<td>4</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Prisen for varerne registreret på lageret overstiger prisen for varerne angivet på indkøbet.</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

@@ -8,7 +8,6 @@ define('DB_NAME', 'pear');
 define('DB_DSN', 'mysql://root:@localhost/pear');
 define('PATH_ROOT', dirname(__FILE__) . '/../../');
 define('PATH_INCLUDE_CONFIG', PATH_ROOT . 'Intraface/config/');
-define('XMLRPC_PATH', PATH_ROOT . 'intraface.dk/xmlrpc/');
 define('PATH_INCLUDE_MODULE', PATH_ROOT . 'Intraface/modules/');
 define('PATH_INCLUDE_SHARED', PATH_ROOT . 'Intraface/shared/');
 define('CONNECTION_INTERNET', 'ONLINE');
@@ -41,3 +40,7 @@ if ($db->getOption('debug')) {
     register_shutdown_function(array($my_debug_handler, 'executeAndExplain'));
     register_shutdown_function(array($my_debug_handler, 'dumpInfo'));
 }
+
+Doctrine_Manager::getInstance()->setAttribute("use_dql_callbacks", true);
+Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_ALL);
+Doctrine_Manager::connection(DB_DSN);
