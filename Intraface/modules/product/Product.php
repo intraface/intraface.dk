@@ -70,11 +70,9 @@ class Product extends Intraface_Standard
     public $keywords;
 
     /**
-     * @todo should be private
-     *
      * @var object
      */
-    public $dbquery;
+    private $dbquery;
 
     /**
      * Constructor
@@ -106,11 +104,7 @@ class Product extends Intraface_Standard
 
     /**
      * Creates the dbquery object
-     *
-     * @todo should be private and deleted
-     *
-     * @deprecated should be removed as soon as possible
-     *
+
      * @return void
      */
     public function getDBQuery()
