@@ -23,7 +23,7 @@ $application->registry->registerConstructor('cache', create_function(
   '$className, $args, $registry',
   '
    $options = array(
-       "cacheDir" => "",
+       "cacheDir" => dirname(__FILE__) . "/",
        "lifeTime" => 3600
    );
    return new Cache_Lite($options);'
