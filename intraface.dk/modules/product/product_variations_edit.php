@@ -80,14 +80,12 @@ $page->start(t('Edit variations for product').' '.$product->get('name'));
         </thead>
         <tbody>
             <?php
-            
             $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway();
             
             $attributes1 = $group_gateway->findById($groups[0]['id'])->getAttributes();
             if(isset($groups[1]) && is_array($groups[1]) && !empty($groups[1]['id'])) {
                 $attributes2 = $group_gateway->findById($groups[1]['id'])->getAttributes();
-            }
-            else {
+            } else {
                 $attributes2 = array(NULL);
             }
             
@@ -99,12 +97,15 @@ $page->start(t('Edit variations for product').' '.$product->get('name'));
                         <td>
                             <?php
                             $attributes['attribute1'] = $a1->getId();
-                            if($a2 != NULL) $attributes['attribute2'] = $a2->getId();
-                            
+                            if($a2 != NULL) {
+                                $attributes['attribute2'] = $a2->getId();   
+                            }
                             try {
                                 $variation = $product->getVariationFromAttributes($attributes);
-                            }
-                            catch(Intraface_Gateway_Exception $e) {
+
+                            } catch (Intraface_Gateway_Exception $e) {
+                                $variation = NULL;
+                            } catch (Exception $e) {
                                 $variation = NULL;
                             }
                             ?>
