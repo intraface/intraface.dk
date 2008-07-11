@@ -186,7 +186,7 @@ class Product extends Intraface_Standard
      */
     public function getStock()
     {
-        if($this->get('has_variation')) {
+        if ($this->hasVariation()) {
             throw new Exception('You cannot get stock from product with variations. Use stock for variation');
         }
         
@@ -618,7 +618,7 @@ class Product extends Intraface_Standard
             $products[$key]               = $product->get();
             $products[$key]['related_id'] = $db->f('related_product_id');
 
-            if (is_object($product->getStock()) AND strtolower(get_class($product->getStock())) == "stock") {
+            if (!$product->hasVariation() AND is_object($product->getStock())) {
                 $products[$key]['stock_status'] = $product->getStock()->get();
             } else {
                 // alle ikke lagervarer der skal vises i webshop skal have en for_sale
@@ -628,7 +628,6 @@ class Product extends Intraface_Standard
                     $products[$key]['stock_status'] = array();
                 }
             }
-
             // den her skal vist lige kigges igennem, for den tager jo alt med på nettet?
             // 0 = only stock
             if ($this->kernel->setting->get('intranet', 'webshop.show_online') == 0 AND !empty($which) AND $which=='webshop') { // only stock
@@ -640,7 +639,11 @@ class Product extends Intraface_Standard
         }
         return $products;
     }
-    
+
+    function hasVariation()
+    {
+        return $this->get('has_variation');
+    }  
     
     /**
      * Set attribute for product
