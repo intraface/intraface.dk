@@ -79,6 +79,12 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
                 $product->getDBQuery()->setFilter('keywords', $mixed['keywords']);
                 $debug2 .= 'keyword ' . $mixed['keywords'];
             }
+            
+            if (array_key_exists('category', $mixed) AND !empty($mixed['category'])) {
+                $product->getDBQuery()->setFilter('shop_id', $shop_id);
+                $product->getDBQuery()->setFilter('category', $mixed['category']);
+                $debug2 .= 'category ' . $mixed['category'];
+            }
 
             if (isset($mixed['ids']) AND array_key_exists('ids', $mixed) AND is_array($mixed['ids'])) {
                 $product->getDBQuery()->setFilter('ids', $mixed['ids']);

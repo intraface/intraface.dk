@@ -1,0 +1,204 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testSearchForProduct</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testSearchForProduct</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=debtor,order,contact,product,administration,shop&helper_function=Administration:fillInIntranetAddress,Product:createVisibleInShop,Shop:create&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Product 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=copy</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=copy</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=edit all products in search</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name[1]</td>
+	<td>A Product 1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name[2]</td>
+	<td>B Product 1 TestA</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name[3]</td>
+	<td>C Product 1 TestAA</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='save']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>demo/intraface/shop/1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=See all products</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>All products</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>A Product 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>B Product 1 TestA</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>C Product 1 TestAA</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>q</td>
+	<td>Product</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Search']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Search: Product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>q</td>
+	<td>Product</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>A Product 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>B Product 1 TestA</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>C Product 1 TestAA</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>q</td>
+	<td>Product 1 TestA</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Search']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>A Product 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>B Product 1 TestA</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>C Product 1 TestAA</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>q</td>
+	<td>Product 1 TestAA</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Search']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>A Product 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>B Product 1 TestA</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>C Product 1 TestAA</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>q</td>
+	<td>Product 1 TestAAA</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Search']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>No products found on your search.</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

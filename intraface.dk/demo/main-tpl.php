@@ -14,7 +14,13 @@
 
      <body>
         <div id="container">
-            <?php echo $content; ?>
+            <div id="menu">
+                <?php if(isset($this->document->menu)) echo $this->document->menu; ?>
+            </div>
+            <div id="content">
+                <?php echo $content; ?>
+            </div>
+            <div style="clear:both; text-align: center">Intraface demo</div>
         </div>
     </body>
 </html>

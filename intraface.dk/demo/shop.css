@@ -13,6 +13,42 @@ ul#error-message {
     border: 1px solid #ff0000;
 }
 
+/* categories */
+
+div#menu ul {
+    margin-left: 0px;
+    list-style-position: inside;
+    padding-left: 8px;
+}
+
+ul#category-bread-crump {
+    padding: 0px;
+    list-style-position: inside;
+    list-style-type: none;
+}
+
+ul#category-bread-crump li {
+    float: left;
+    padding: 0px 15px 0px 0px;
+    font-size: 80%;
+}
+
+ul#category-categories {
+    padding: 0px;
+    list-style-position: inside;
+    list-style-type: none;
+}
+
+ul#category-categories li {
+    float: left;
+    padding: 5px;
+    margin: 0px 10px 10px 0px;
+}
+
+h1#category-name {
+    clear: both;
+}
+
 /* purchase */
 
 ol#purchase-steps {

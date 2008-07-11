@@ -827,6 +827,25 @@ class Product extends Intraface_Standard
         if ($keywords = $this->getDBQuery()->getFilter("keywords")) {
             $this->getDBQuery()->setKeyword($keywords);
         }
+        
+        if($this->getDBQuery()->checkFilter('shop_id') && $this->getDBQuery()->checkFilter('category')) {
+            $category_type = new Intraface_Category_Type('shop', $this->getDBQuery()->checkFilter('shop_id'));
+            $this->getDBQuery()->setJoin(
+                'INNER', 
+                'ilib_category_append', 
+                'ilib_category_append.object_id = product.id',
+                'ilib_category_append.intranet_id = '.$this->kernel->intranet->getId());
+            $this->getDBQuery()->setJoin(
+                'INNER', 
+                'ilib_category', 
+                'ilib_category_append.category_id = ilib_category.id', 
+                'ilib_category.intranet_id = '.$this->kernel->intranet->getId(). ' ' .
+                    'AND ilib_category.belong_to = '.$category_type->getBelongTo().' ' .
+                    'AND ilib_category.belong_to_id = '.$category_type->getBelongToId());
+            
+            $this->getDBQuery()->setCondition('ilib_category.id = '.$this->getDBQuery()->getFilter("category"));
+            
+        }
 
         if ($ids = $this->getDBQuery()->getFilter("ids")) {
             if (is_array($ids) && count($ids) > 0) {

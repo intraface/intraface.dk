@@ -3,5 +3,20 @@ body {
 }
 
 #container {
-    background-color: white; margin: 20px auto; border: 4px solid #666666; width: 600px; padding: 20px;
+    background-color: white; 
+    margin: 20px auto; 
+    border: 4px solid #666666; 
+    width: 800px; 
+    padding: 20px;
+}
+
+#menu {
+    width: 200px;
+    float: left;
+    border-right: 1px sold #999999;
+}
+
+#content {
+    width: 560px;
+    float: left;
 }
