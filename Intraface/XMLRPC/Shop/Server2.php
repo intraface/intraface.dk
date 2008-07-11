@@ -172,7 +172,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
                         'price_incl_vat' => round(($product->get('price') + $detail->getPriceDifference()) * (1 + $product->get('vat_percent')/100), 2),
                         'weight' => $product->get('weight') + $detail->getWeightDifference()
                     ),
-                    'stock' => array()
+                    'stock' => $variation->getStock($product)->get()
                 );
             }
         }

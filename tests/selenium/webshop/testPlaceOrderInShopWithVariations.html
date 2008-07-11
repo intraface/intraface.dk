@@ -28,6 +28,151 @@
 	<td>link=See all products</td>
 	<td></td>
 </tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Product 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>attribute[0]</td>
+	<td>label=Small</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>attribute[1]</td>
+	<td>label=Red</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>select_variation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>DKK 132,50</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>add_product_id</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Product 1 - Size: Small, Color: Red</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>items[0][quantity]</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>update</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>DKK 265,00</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Checkout</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Jens Hansen</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>address</td>
+	<td>Jens Vej 12</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>postcode</td>
+	<td>1234</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>city</td>
+	<td>City</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>email</td>
+	<td>start@intraface.dk</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>phone</td>
+	<td>12345678</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>send</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Product 1 - Size: Small, Color: Red</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>DKK 265</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>accept_terms_of_trade</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>Send</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Vi har modtaget din ordre</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/main/index.php</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=you have unprocessed orders</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Onlineshop</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Product 1 - Size: Small, Color: Red</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>265,00</td>
+	<td></td>
+</tr>
 
 </tbody></table>
 </body>

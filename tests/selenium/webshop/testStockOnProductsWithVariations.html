@@ -1,16 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>testAddMoreProductsThanInStockInShop</title>
+<title>testStockOnProductsWithVariations</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">testAddMoreProductsThanInStockInShop</td></tr>
+<tr><td rowspan="1" colspan="3">testStockOnProductsWithVariations</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=debtor,order,contact,product,administration,shop,stock&helper_function=Administration:fillInIntranetAddress,Product:createVisibleInShop,Shop:create&login=true</td>
+	<td>install/reset-staging-server.php?modules=debtor,order,contact,product,administration,shop,stock&helper_function=Administration:fillInIntranetAddress,Product:createWithVariations,Shop:create&login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -21,11 +21,6 @@
 <tr>
 	<td>clickAndWait</td>
 	<td>link=product</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=Product 1</td>
 	<td></td>
 </tr>
 <tr>
@@ -45,18 +40,23 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Regulering</td>
+	<td>//a[contains(@href, 'product_variation.php?id=4&product_id=1')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Regulate</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>quantity</td>
-	<td>3</td>
+	<td>10</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>description</td>
-	<td>Added for stock</td>
+	<td>Test</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -74,18 +74,53 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>All products</td>
-	<td></td>
-</tr>
-<tr>
 	<td>clickAndWait</td>
 	<td>link=Product 1</td>
 	<td></td>
 </tr>
 <tr>
+	<td>select</td>
+	<td>attribute[0]</td>
+	<td>label=Small</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>attribute[1]</td>
+	<td>label=Red</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>select_variation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>DKK 135,00</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextPresent</td>
-	<td>Product 1</td>
+	<td>Variation is sold out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>attribute[0]</td>
+	<td>label=Medium</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>attribute[1]</td>
+	<td>label=Blue</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>select_variation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>DKK 135,00</td>
 	<td></td>
 </tr>
 <tr>
@@ -94,19 +129,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Basket</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Product 1</td>
-	<td></td>
-</tr>
-<tr>
 	<td>type</td>
 	<td>items[0][quantity]</td>
-	<td>5</td>
+	<td>20</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -121,7 +146,7 @@
 <tr>
 	<td>type</td>
 	<td>items[0][quantity]</td>
-	<td>3</td>
+	<td>8</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>

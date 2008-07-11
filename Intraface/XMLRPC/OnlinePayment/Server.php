@@ -34,9 +34,9 @@ class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
         }
 
         $onlinepayment = $this->onlinePaymentFactory();
-        $onlinepayment->dbquery->setFilter('belong_to', $debtor->get("type"));
-        $onlinepayment->dbquery->setFilter('belong_to_id', $debtor->get('id'));
-        $onlinepayment->dbquery->setFilter('status', 2);
+        $onlinepayment->getDBQuery()->setFilter('belong_to', $debtor->get("type"));
+        $onlinepayment->getDBQuery()->setFilter('belong_to_id', $debtor->get('id'));
+        $onlinepayment->getDBQuery()->setFilter('status', 2);
             
         $parameter['payment_online'] = 0;    
         foreach($onlinepayment->getlist() AS $p) {
