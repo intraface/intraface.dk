@@ -18,8 +18,9 @@ class Demo_CMS_Show extends k_Controller
         $debug = false;
         $site_id = $this->name;
         $client = new IntrafacePublic_CMS_XMLRPC_Client($credentials, $site_id, $debug, INTRAFACE_XMLPRC_SERVER_PATH . "cms/server2.php");
+        $cms = new IntrafacePublic_CMS($client, $this->registry->get('cache'));
         
-        return $client;
+        return $cms;
 
     }
 
@@ -30,7 +31,7 @@ class Demo_CMS_Show extends k_Controller
     
     function forward($name)
     {
-        $this->registry->set('cms:client', $this->getClient());
+        $this->registry->set('cms', $this->getClient());
         $next = new IntrafacePublic_CMS_Controller_Index($this, $name);
         return $next->handleRequest();
     }
