@@ -256,8 +256,6 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
    /**
      * Gets product keywords which can be used to sort ones webshop
      *
-     * Method is experimental and only used by nylivsstil.dk. If you need to use it
-     * as well, please contact lars@intraface.dk.
      *
      * @param struct  $credentials Credentials to use the server
      * @param integer $shop_id    Id for the shop
@@ -273,6 +271,62 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
         $keywords = $product->getKeywordAppender();
         return $this->prepareResponseData($keywords->getUsedKeywords());
 
+    }
+    
+    /**
+     * Returns the categories for the shop
+     * 
+     * @param struct  $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
+     *
+     * @return array with categories
+     * 
+     */
+    public function getProductCategories($credentials, $shop_id) 
+    {
+        return array();
+        /*
+        return $this->prepareResponseData(
+            array(
+                1 => array(
+                    'id' => 1,
+                    'name' => 'Category 1',
+                    'identifier' => 'category-1',
+                    'parent_id' => 0,
+                    'categories' => array()
+                ),
+                2 => array(
+                    'id' => 2,
+                    'name' => 'Category 2',
+                    'identifier' => 'category-2',
+                    'parent_id' => 0,
+                    'categories' => array(
+                        3 => array(
+                            'id' => 3,
+                            'name' => 'Sub category 1',
+                            'identifier' => 'sub-category-1',
+                            'parent_id' => 2,
+                            'categories' => array()
+                        ),
+                        4 => array(
+                            'id' => 4,
+                            'name' => 'Sub category 2',
+                            'identifier' => 'sub-category-2',
+                            'parent_id' => 2,
+                            'categories' => array()
+                        )
+                    )
+                ),
+                5 => array(
+                    'id' => 5,
+                    'name' => 'Category 5',
+                    'identifier' => 'category-5',
+                    'parent_id' => 0,
+                    'categories' => array()
+                )
+            )
+        );
+        */
     }
 
     /**
