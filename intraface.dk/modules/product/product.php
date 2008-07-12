@@ -285,7 +285,9 @@ if($kernel->user->hasModuleAccess('invoice')) {
 <div id="related_products" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'related') echo ' fade'; ?>">
     <h2><?php e(t('related products')); ?></h2>
     <?php if ($product->get('locked') == 0) { ?>
-        <ul class="button"><li><a href="related_product.php?id=<?php echo $product->get('id'); ?>"><?php e(t('add products')); ?></a></li></ul>
+        <ul class="button">
+            <li><a href="related_product.php?id=<?php echo $product->get('id'); ?>"><?php e(t('add products')); ?></a></li>
+        </ul>
     <?php } ?>
     <?php
         $related = $product->getRelatedProducts();
