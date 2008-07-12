@@ -1,11 +1,10 @@
 <?php
-
 /**
  * Elementredigering
  *
  * Webinterfacet til de enkelte elementer programmeres alle i denne fil.
  */
-require ('../../include_first.php');
+require '../../include_first.php';
 
 $cms_module = $kernel->module('cms');
 $translation = $kernel->getTranslation('cms');
@@ -32,13 +31,11 @@ if (!empty ($_POST)) {
     } else {
         $value = $_POST;
     }
-}
-elseif (!empty ($_GET['id']) AND is_numeric($_GET['id'])) {
+} elseif (!empty ($_GET['id']) AND is_numeric($_GET['id'])) {
     $section = CMS_TemplateSection :: factory($kernel, 'id', $_GET['id']);
     $value = $section->get();
 
-}
-elseif (!empty ($_GET['template_id']) AND is_numeric($_GET['template_id'])) {
+} elseif (!empty ($_GET['template_id']) AND is_numeric($_GET['template_id'])) {
     // der skal valideres noget på typen også.
 
     $template = CMS_Template :: factory($kernel, 'id', $_GET['template_id']);
@@ -55,7 +52,7 @@ $page = new Intraface_Page($kernel);
 $page->start(safeToHtml($translation->get('edit template section')));
 ?>
 
-<h1><?php echo safeToHtml($translation->get('edit template section')); ?></h1>
+<h1><?php e(t('edit template section')); ?></h1>
 
 <?php
 
@@ -67,13 +64,13 @@ echo $section->error->view($translation);
     <input name="template_id" type="hidden" value="<?php echo intval($section->template->get('id')); ?>" />
     <input name="type" type="hidden" value="<?php echo $section->get('type'); ?>" />
     <fieldset>
-        <legend><?php echo safeToHtml($translation->get('information about section')); ?></legend>
+        <legend><?php e(t('information about section')); ?></legend>
         <div class="formrow">
-            <label for=""><?php echo safeToHtml($translation->get('template section name')); ?></label>
+            <label for=""><?php e(t('template section name')); ?></label>
             <input type="text" name="name" value="<?php if (!empty($value['name'])) echo safeToForm($value['name']); ?>" />
         </div>
         <div class="formrow">
-            <label for=""><?php echo safeToHtml($translation->get('identifier', 'common')); ?></label>
+            <label for=""><?php e(t('identifier', 'common')); ?></label>
             <input type="text" name="identifier" value="<?php  if (!empty($value['identifier'])) echo safeToForm($value['identifier']); ?>" />
         </div>
     </fieldset>
@@ -86,9 +83,9 @@ switch ($value['type']) {
     case 'shorttext' :
 ?>
         <fieldset>
-            <legend><?php echo safeToHtml($translation->get('information about shorttext')); ?></legend>
+            <legend><?php e(t('information about shorttext')); ?></legend>
             <div class="formrow">
-                <label><?php echo safeToHtml($translation->get('number of allowed characters - max 255')); ?></label>
+                <label><?php e(t('number of allowed characters - max 255')); ?></label>
                 <input name="size" type="text" value="<?php  if (!empty($value['size'])) echo safeToForm($value['size']); ?>" />
             </div>
         </fieldset>
@@ -101,16 +98,17 @@ switch ($value['type']) {
             $value['html_format'] = array ();
 ?>
         <fieldset>
-            <legend><?php echo safeToHtml($translation->get('information about longtext')); ?></legend>
+            <legend><?php e(t('information about longtext')); ?></legend>
             <div class="formrow">
-                <label><?php echo safeToHtml($translation->get('number of allowed characters')); ?></label>
+                <label><?php e(t('number of allowed characters')); ?></label>
                 <input name="size" type="text" value="<?php if (!empty($value['size'])) echo safeToForm($value['size']); ?>" />
             </div>
         </fieldset>
         <fieldset>
-            <legend><?php echo safeToHtml($translation->get('allowed html tags')); ?></legend>
+            <legend><?php e(t('allowed html tags')); ?></legend>
             <?php foreach ($section->getAllowedHTMLOptions() AS $html): ?>
-                <input type="checkbox" value="<?php echo $html; ?>" name="html_format[]" <?php if (in_array($html, $value['html_format'])) echo ' checked="checked"'; ?> /> <label for="<?php echo $html; ?>"><<?php echo $html; ?>><?php echo safeToHtml($translation->get($html)); ?></<?php echo $html; ?>></label>
+                <input id="html-format-<?php e($html); ?>" type="checkbox" value="<?php echo $html; ?>" name="html_format[]" <?php if (in_array($html, $value['html_format'])) echo ' checked="checked"'; ?> /> 
+                <label for="<?php e($html); ?>"><<?php e($html); ?>><?php e(t($html)); ?></<?php echo $html; ?>></label>
             <?php endforeach; ?>
         </fieldset>
         <?php
@@ -124,13 +122,13 @@ switch ($value['type']) {
         $instances = $instancemanager->getList();
 ?>
         <fieldset>
-            <legend><?php echo safeToHtml($translation->get('information about picture')); ?></legend>
+            <legend><?php e(t('information about picture')); ?></legend>
             <div class="formrow">
                 <label for="pic_size"><?php echo $translation->get('picture size'); ?></label>
                 <select name="pic_size">
                     <option value="original"<?php if (!empty($value['pic_size']) AND $value['pic_size'] == 'original') echo ' selected="selected"'; ?>>original</option>
                     <?php foreach ($instances AS $instance): ?>
-                    <option value="<?php echo safeToHtml($instance['name']); ?>"<?php if (!empty($value['pic_size']) AND $value['pic_size'] == $instance['name']) echo ' selected="selected"'; ?>><?php echo safeToHtml($translation->get($instance['name'], 'filehandler')); ?></option>
+                    <option value="<?php echo safeToHtml($instance['name']); ?>"<?php if (!empty($value['pic_size']) AND $value['pic_size'] == $instance['name']) echo ' selected="selected"'; ?>><?php e(t($instance['name'], 'filehandler')); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -141,7 +139,7 @@ switch ($value['type']) {
     case 'mixed' :
 ?>
         <fieldset>
-            <legend><?php echo safeToHtml($translation->get('mixed allowed elements')); ?></legend>
+            <legend><?php e(t('mixed allowed elements')); ?></legend>
                 <?php
 
         $element_types = $cms_module->getSetting('element_types');
@@ -171,9 +169,9 @@ switch ($value['type']) {
 ?>
 
     <div class="">
-        <input type="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" />
-        <input type="submit" name="close" value="<?php echo safeToHtml($translation->get('save and close', 'common')); ?>" />
-        <a href="template.php?id=<?php echo intval($section->template->get('id')); ?>"><?php echo safeToHtml($translation->get('regret', 'common')); ?></a>
+        <input type="submit" value="<?php e(t('save', 'common')); ?>" />
+        <input type="submit" name="close" value="<?php e(t('save and close', 'common')); ?>" />
+        <a href="template.php?id=<?php echo intval($section->template->get('id')); ?>"><?php e(t('regret', 'common')); ?></a>
     </div>
 
 </form>
