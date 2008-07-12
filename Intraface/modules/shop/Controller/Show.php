@@ -6,10 +6,15 @@ class Intraface_modules_shop_Controller_Show extends k_Controller
                         'featuredproducts' => 'Intraface_modules_shop_Controller_FeaturedProducts',
                         'categories' => 'Intraface_modules_shop_Controller_Categories');
 
+    function getShopId()
+    {
+        return $this->name;
+    }
+
     function GET()
     {
         $doctrine = $this->registry->get('doctrine');
-        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->name);
+        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->getShopId());
 
         $this->document->title = $shop->name;
 
