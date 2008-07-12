@@ -31,4 +31,12 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
             throw new k_http_Redirect($this->url());
         }
     }
+    
+    function forward($name) 
+    {
+        if ($name == 'edit') {
+            $next = new Intraface_modules_shop_Controller_Categories_Edit($this, $name);
+            return $next->handleRequest();
+        }
+    }
 }
