@@ -61,6 +61,7 @@ class Intraface_modules_shop_Controller_Categories_Edit extends k_Controller
         $validator = new Intraface_Validator($error);
         $validator->isString($this->POST['name'], 'category name is not valid');
         $validator->isString($this->POST['identifier'], 'category identifier is not valid');
+        $validator->isNumeric($this->POST['parent_id'], 'category parent id has to be numeric');
         return !$error->isError();
     }
 }
