@@ -38,5 +38,7 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
             $next = new Intraface_modules_shop_Controller_Categories_Edit($this, $name);
             return $next->handleRequest();
         }
+        
+        throw new Exception('Unknown forward');
     }
 }
