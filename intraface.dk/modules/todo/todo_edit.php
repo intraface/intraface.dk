@@ -12,8 +12,12 @@ if (!empty($_POST)) {
     ))) {
 
     foreach ($_POST['todo'] AS $key=>$value) {
-        if (isset($_POST['item_id'])) $item_id = $_POST['item_id']; else $item_id = 0;
-        if ($todo->getItem($_POST['item_id'][$key])->save($_POST['todo'][$key], $_POST['responsible_user_id'][$key])) {
+        if (isset($_POST['item_id'])) {
+            $item_id = $_POST['item_id'];    
+            if ($todo->getItem($_POST['item_id'][$key])->save($_POST['todo'][$key], $_POST['responsible_user_id'][$key])) {
+            }
+        } else {
+            $item_id = 0;
         }
     }
     header('Location: todo.php?id='.$todo->get('id'));
@@ -22,8 +26,7 @@ if (!empty($_POST)) {
 } else {
     if(!empty($_GET['id'])) {
         $todo = new TodoList($kernel, $_GET['id']);
-    }
-    else {
+    } else {
         $todo = new TodoList($kernel);
     }
 
@@ -42,31 +45,31 @@ $page->start(t('Edit todo'));
     <fieldset id="todolist">
       <h2><?php e(t('Edit todo')); ?></h2>
       <label><input style="font-size: 2em;" type="text" name="list_name" value="<?php if(!empty($value['list_name'])) e($value['list_name']); ?>" /></label>
-
       <h2><?php e(t('Items')); ?></h2>
-    <?php foreach($value['todo'] AS $i): ?>
+        <?php foreach($value['todo'] AS $i): ?>
         <div>
         <input type="hidden" name="item_id[]" value="<?php e($i['id']); ?>">
-       <label>
+        <label>
             <input type="text" style="width:50%;" name="todo[]" value="<?php e($i['item']); ?>" />
         </label>
-    <label>
+        <label>
         <select name="responsible_user_id[]">
-          <option value="0"><?php e(t('Who is responsible?')); ?></option>
-          <?php
-            $users = $kernel->user->getList();
-          foreach ($users AS $user) {
-              echo '<option value="'.$user['id'].'"';
-            if ($i['responsible_user_id'] == $user['id']) echo ' selected="selected"';
-            echo '>'.$user['name'].'</option>';
-          }
-        ?>
+            <option value="0"><?php e(t('Who is responsible?')); ?></option>
+            <?php
+                $users = $kernel->user->getList();
+                foreach ($users AS $user) {
+                    echo '<option value="'.$user['id'].'"';
+                    if ($i['responsible_user_id'] == $user['id']) {
+                        echo ' selected="selected"';   
+                    }
+                    echo '>'.$user['name'].'</option>';
+                }
+            ?>
         </select>
-            <!--   -->
-    </label>
+        </label>
         <!-- egentlig bør dette link henvise til en side, der sletter punktet - mærkeligt at jeg ikke kan få behavior til at virke -->
         <a href="#"><?php e(t('Remove')); ?></a>
-<!--		onclick="this.parentNode.parentNode.removeChild(this.parentNode);" -->
+        <!-- onclick="this.parentNode.parentNode.removeChild(this.parentNode);" -->
         </div>
     <?php endforeach; ?>
         <div id="readroot">
@@ -84,7 +87,7 @@ $page->start(t('Edit todo'));
         </select>
     </label>
         <!-- bør skrives ind med javascript eller også skulle man bare knytte den til en slet-funktion, hvilket nok ville være ganske kvikt? -->
-    <a href="#" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"><?php e(t('Remove')); ?></a>
+            <a href="#" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"><?php e(t('Remove')); ?></a>
         </div>
 
         <span id="writeroot"></span>
