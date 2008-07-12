@@ -27,8 +27,7 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
         if (is_numeric($this->context->name)) {
             $shop = $this->getModel();
             $data = $shop->toArray();
-        }
-        else {
+        } else {
             $data['receipt'] = $this->registry->get('kernel')->setting->get('intranet','webshop.webshop_receipt');
         }
 
