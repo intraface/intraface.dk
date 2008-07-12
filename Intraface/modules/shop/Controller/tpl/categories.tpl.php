@@ -26,7 +26,7 @@ $level = 0;
             <tr>
                 <td><?php ?></td>
                 <td><?php e(str_repeat('- ', $level)); ?><?php e($category['name']); ?></td>
-                <td></td>
+                <td><a href="<?php e(url($category['id'] . '/edit')); ?>"><?php e(t('Edit')); ?></a></td>
             </tr>
             <?php
             # If there is subcategories to the category

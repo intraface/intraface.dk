@@ -1,7 +1,12 @@
 <?php
-
 class Intraface_modules_shop_Controller_Categories extends k_Controller
 {
+
+    function getShopId()
+    {
+        return $this->context->getShopId();
+    }
+
     function GET()
     {
         $kernel = $this->registry->get('kernel');
@@ -12,7 +17,7 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
         $shop = $this->registry->get('category_gateway')->findById($this->context->name);
 
         $this->document->title = $translation->get('Categories for shop'.' '.$shop->getName());
-        $this->document->options = array($this->url('../') => $translation->get('Close', 'common'), $this->url('add') => $translation->get('Add new category'));
+        $this->document->options = array($this->url('../') => $translation->get('Close', 'common'), $this->url('create') => $translation->get('Add new category'));
         
         $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()));
         $categories = $category->getAllCategories();
@@ -34,8 +39,11 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
     
     function forward($name) 
     {
-        if ($name == 'edit') {
+        if ($name == 'create') {
             $next = new Intraface_modules_shop_Controller_Categories_Edit($this, $name);
+            return $next->handleRequest();
+        } elseif (is_numeric($name)) {
+            $next = new Intraface_modules_shop_Controller_Categories_Show($this, $name);
             return $next->handleRequest();
         }
         

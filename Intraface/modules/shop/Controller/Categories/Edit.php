@@ -25,8 +25,9 @@ class Intraface_modules_shop_Controller_Categories_Edit extends k_Controller
     function GET()
     {
         $this->document->title = $this->__('Edit category');
+        
         $data = array(
-            'category' => $this->getModel()
+            'category_object' => $this->getModel()
         );
         return $this->render(dirname(__FILE__) . '/../tpl/categories-edit.tpl.php', $data);
     }   
@@ -40,7 +41,7 @@ class Intraface_modules_shop_Controller_Categories_Edit extends k_Controller
             $category = $this->getModel();
             $category->setIdentifier($this->POST['identifier']);
             $category->setName($this->POST['name']);
-            $category->setParentId(0);
+            $category->setParentId($this->POST['parent_id']);
             $category->save();
         } catch (Exception $e) {
             throw $e;
@@ -59,6 +60,7 @@ class Intraface_modules_shop_Controller_Categories_Edit extends k_Controller
         $error = new Intraface_Error();
         $validator = new Intraface_Validator($error);
         $validator->isString($this->POST['name'], 'category name is not valid');
+        $validator->isString($this->POST['identifier'], 'category identifier is not valid');
         return !$error->isError();
     }
 }
