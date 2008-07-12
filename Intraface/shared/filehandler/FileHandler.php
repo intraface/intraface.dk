@@ -525,15 +525,13 @@ class FileHandler extends Intraface_Standard
     /**
      * Benyttes til at opdaterer oplysninger om fil
      *
-     * @todo should be called save()
-     *
      * @param array $input array med input
      *
      * @return integer
      */
     public function update($input)
     {
-        $db = new DB_sql;
+        $db = new DB_Sql;
 
         if (!is_array($input)) {
             trigger_error("Input skal være et array i FileHandler->updateInstance", E_USER_ERROR);
