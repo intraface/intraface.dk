@@ -66,9 +66,9 @@ $page->start(t('Select attributes for product').' '.$product->get('name'));
             <?php foreach($groups AS $group): ?>
                 <tr>
                     <td>
-                        <input type="checkbox" value="<?php echo intval($group->getId()); ?>" name="selected[]" <?php if(in_array($group->getId(), $existing_groups)) echo 'checked="checked"'; ?> />
+                        <input type="checkbox" id="product-attribute-<?php e($group->getId()); ?>" value="<?php e($group->getId()); ?>" name="selected[]" <?php if(in_array($group->getId(), $existing_groups)) echo 'checked="checked"'; ?> />
                     </td>
-                    <td><?php echo safeToHtml($group->getName()); ?></td>
+                    <td><?php e($group->getName()); ?></td>
                 </tr>
              <?php endforeach; ?>
         </tbody>
