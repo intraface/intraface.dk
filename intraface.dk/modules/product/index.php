@@ -88,7 +88,7 @@ $page->start(t('products'));
         </label>
         -->
         <label for="search"><?php e(t('search for', 'common')); ?>
-            <input name="search" id="search" type="text" value="<?php echo safeToForm($product->getDBQuery()->getFilter("search")); ?>" />
+            <input name="search" id="search" type="text" value="<?php e($product->getDBQuery()->getFilter("search")); ?>" />
         </label>
 
         <label for="keyword_id"><?php e(t('show with keywords', 'common')); ?>
@@ -147,12 +147,12 @@ $page->start(t('products'));
             <?php foreach ($products AS $p) { ?>
             <tr>
                 <td>
-                    <input type="checkbox" value="<?php echo intval($p['id']); ?>" name="selected[]" />
+                    <input type="checkbox" id="product-<?php e($p['id']); ?>" value="<?php e($p['id']); ?>" name="selected[]" />
                 </td>
 
-                <td><?php echo safeToHtml($p['number']); ?></td>
+                <td><?php e($p['number']); ?></td>
                 <td><?php if($p['has_variation']) echo '<img class="variation" src="/images/icons/silk/table_multiple.png" title="'.t('The product has variations').'"/> '; ?><a href="product.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml($p['name']); ?></a></td>
-                <td><?php echo t($p['unit']['combined']); ?></td>
+                <td><?php e(t($p['unit']['combined'])); ?></td>
                  <?php if ($kernel->user->hasModuleAccess("webshop")) { ?>
               <td><?php if ($p['do_show'] == 1) e(t('yes', 'common')); else e(t('no', 'common')); ?></td>
                 <?php } ?>
@@ -161,11 +161,9 @@ $page->start(t('products'));
                         <?php
                         if($p['stock'] == 0) {
                             print("-");
-                        }
-                        elseif($p['has_variation']) {
+                        } elseif($p['has_variation']) {
                             e('...');
-                        }
-                        else {
+                        } else {
                             if (!empty($p['stock_status']['for_sale'])) echo safeToHtml($p['stock_status']['for_sale']);
                         }
                         ?>
@@ -182,7 +180,7 @@ $page->start(t('products'));
                     <a class="button edit" href="product_edit.php?id=<?php echo $p['id']; ?>"><?php e(t('edit', 'common')); ?></a>
                     <!--<a class="button delete ajaxdelete" title="Dette sletter produktet" id="delete<?php echo intval($p['id']); ?>" href="index.php?use_stored=true&amp;delete=<?php echo intval($p['id']); ?>">Slet</a>--></td>
        <?php } else { ?>
-          <a href="index.php?unlock=<?php echo $p['id']; ?>&amp;use_stored=true"><?php e(t('unlock', 'common')); ?></a>
+          <a href="index.php?unlock=<?php e($p['id']); ?>&amp;use_stored=true"><?php e(t('unlock', 'common')); ?></a>
        <?php } ?>
             </tr>
             <?php } // end foreach ?>
