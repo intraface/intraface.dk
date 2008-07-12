@@ -15,7 +15,7 @@ class Intraface_modules_product_Attribute_Group_Gateway
     {
         // NOTE: Very important that it is ordered by id so the groups
         // does always get attached to the correct attribute number on the variation.
-        return $groups = Doctrine_Query::create()
+        return Doctrine_Query::create()
             ->select('id, name')
             ->from('Intraface_modules_product_Attribute_Group')
             ->orderBy('id')->execute();
