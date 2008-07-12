@@ -7,11 +7,12 @@
  * @version @package-version@
  */
 
-$version = '1.8.0';
+$version = '1.9.0';
 $stability = 'stable';
 $notes = '
-* Prepared for enhanced webshop
-* Small improvements
+* The shop now supports variants for products
+* The shop support categories
+* Small bug fixes
 ';
 $web_dir = 'intraface.dk';
 
@@ -189,8 +190,6 @@ $pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php
 
 // modulepackage
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Debtor_XMLRPC', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_HTML', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Tools', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html_Provider_FakeQuickpay', 'public.intraface.dk', '0.1.4');
 
 
@@ -198,10 +197,10 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html_Provider_FakeQuick
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Admin_XMLRPC', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Client_XMLRPC', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Controller', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '0.0.2');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.1.2');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.2.2');
 $pfm->addPackageDepWithChannel('required', 'konstrukt', 'public.intraface.dk', '0.4.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.intraface.dk', '0.1.0');
 
 
