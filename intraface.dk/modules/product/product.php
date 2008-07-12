@@ -81,6 +81,22 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $product->deleteRelatedProduct($_GET['del_related']);
         header('Location: product.php?id='.$product->get('id'));
         exit;
+    } 
+    
+    elseif(isset($_GET['append_category']) && $kernel->user->hasModuleAccess('shop')) {
+        $product = new Product($kernel, $_GET['id']);
+        $module_shop = $kernel->useModule('shop');
+        $redirect = Intraface_Redirect::factory($kernel, 'go');
+        $url = $redirect->setDestination($module_shop->getPath().'shop/'.$_GET['shop_id'].'/categories?product_id='.$product->getId(), $module->getPath().'product.php?id='.$product->getId());
+        header('location: '.$url);
+        exit;
+    }
+    
+    elseif(isset($_GET['remove_appended_category']) && $kernel->user->hasModuleAccess('shop')) {
+        $product = new Product($kernel, $_GET['id']);
+        $category = new Intraface_Category($kernel, MDB2::factory(DB_DSN), new Intraface_Category_Type('shop', $_GET['shop_id']), $_GET['remove_appended_category']);
+        $appender = $category->getAppender($product->getId());
+        $appender->delete($category);
     }
 
     elseif (!empty($_GET['id'])) {
@@ -102,7 +118,6 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
 
     }
-
     else {
         trigger_error('Ulovligt', E_USER_ERROR);
     }
@@ -333,6 +348,36 @@ if($kernel->user->hasModuleAccess('invoice')) {
         ?>
         </form>
     </div>
+    
+    <?php if($kernel->user->hasModuleAccess('shop')): ?>
+        <?php $module_shop = $kernel->useModule('shop'); ?> 
+        <div id="categories" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'categories') echo ' fade'; ?>">
+            <h2><?php e(t('Categories')); ?></h2>
+            <?php
+            $gateway = new Intraface_modules_shop_Shop_Gateway();
+            $shops = $gateway->findAll();
+            $db =  MDB2::factory(DB_DSN);
+            
+            ?>
+            <?php foreach($shops AS $shop): ?>
+                <?php $category_type = new Intraface_Category_Type('shop', $shop->getId()); ?>
+                <h3><?php e($shop->getName()); ?></h3>
+                <ul class="options">
+                    <li><a href="product.php?id=<?php e($product->getId()); ?>&amp;shop_id=<?php e($shop->getId()); ?>&amp;append_category=1"><?php e(t('Add product to categories')); ?></a></li>
+                </ul>
+                <?php
+                $category = new Intraface_Category($kernel, $db, $category_type);
+                $appender = $category->getAppender($product->getId());
+                ?>
+                <ul>
+                    <?php foreach($appender->getCategories() AS $category): ?>
+                        <li><?php e($category['name']); ?> <a href="product.php?id=<?php e($product->getId()); ?>&amp;shop_id=<?php e($shop->getId()); ?>&amp;remove_appended_category=<?php e($category['id']); ?>" class="delete"><?php e(t('Remove', 'common')); ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+                
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 
 
     <div id="keywords" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'keywords') echo ' fade'; ?>">
@@ -352,8 +397,10 @@ if($kernel->user->hasModuleAccess('invoice')) {
         }
     ?>
   </div>
-
-
+  
+    
+    
+    
     <?php
     if($kernel->user->hasModuleAccess("stock") AND $product->get('stock') AND !$product->get('has_variation')) {
 

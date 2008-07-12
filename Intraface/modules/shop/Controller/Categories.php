@@ -13,28 +13,42 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
         $webshop_module = $kernel->module('shop');
         $translation = $kernel->getTranslation('shop');
         $db = $this->registry->get('db');
-
+        
+        $redirect = Intraface_Redirect::factory($kernel, 'receive');
+        
         $shop = $this->registry->get('category_gateway')->findById($this->context->name);
 
         $this->document->title = $translation->get('Categories for shop'.' '.$shop->getName());
         $this->document->options = array($this->url('../') => $translation->get('Close', 'common'), $this->url('create') => $translation->get('Add new category'));
         
         $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()));
-        $categories = $category->getAllCategories();
+        $data['categories'] = $category->getAllCategories();
         
-        return $this->render('Intraface/modules/shop/Controller/tpl/categories.tpl.php', array('categories' => $categories));
+        if(isset($this->GET['product_id'])) {
+            $data['product_id'] = $this->GET['product_id'];
+        }
+        
+        return $this->render('Intraface/modules/shop/Controller/tpl/categories.tpl.php', $data);
     }
 
     function POST()
     {
-        $db = $this->registry->get('db');
         $kernel = $this->registry->get('kernel');
-        $doctrine = $this->registry->get('doctrine');
-        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->context->name);
-        $featured = new Intraface_modules_shop_FeaturedProducts($kernel->intranet, $shop, $db);
-        if ($featured->add($this->POST['headline'], new Keyword(new Product($this->registry->get('kernel')), $this->POST['keyword_id']))) {
-            throw new k_http_Redirect($this->url());
+        $webshop_module = $kernel->module('shop');
+        $translation = $kernel->getTranslation('shop');
+        $db = $this->registry->get('db');
+        
+        $redirect = Intraface_Redirect::factory($kernel, 'receive');
+        
+        $shop = $this->registry->get('category_gateway')->findById($this->context->name);
+        $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()));
+        $appender = $category->getAppender($this->POST['product_id']);
+        foreach($this->POST['category'] AS $category) {
+            $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()), $category);
+            $appender->add($category);
         }
+        
+        throw new k_http_Redirect($redirect->getRedirect($this->url('../')));
     }
     
     function forward($name) 

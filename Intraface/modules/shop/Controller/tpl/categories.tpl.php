@@ -11,6 +11,7 @@ $level_categories = array(0 => $categories);
 $level = 0;
 ?>
 
+<form action="<?php e($this->url()); ?>" method="post">
 <table>
     <caption><?php e(t('Categories')); ?></caption>
     <thead>
@@ -24,7 +25,7 @@ $level = 0;
         <?php foreach($level_categories[$level] AS $category): ?>
             <?php array_shift($level_categories[$level]); ?>
             <tr>
-                <td><?php ?></td>
+                <td><input type="checkbox" name="category[]" value="<?php e($category['id']); ?>" /></td>
                 <td><?php e(str_repeat('- ', $level)); ?><?php e($category['name']); ?></td>
                 <td><a href="<?php e(url($category['id'] . '/edit')); ?>"><?php e(t('Edit')); ?></a></td>
             </tr>
@@ -53,3 +54,8 @@ $level = 0;
         ?>
     <?php endwhile; ?>
 </table>
+<?php if(isset($product_id)): ?>
+    <input type="hidden" name="product_id" value="<?php e($product_id); ?>" />
+    <input type="submit" name="append_product" value="<?php e(t('Select')); ?>" />
+<?php endif; ?>
+</form>
