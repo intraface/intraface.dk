@@ -8,6 +8,9 @@ $translation = $kernel->getTranslation('accounting');
 $year = new Year($kernel);
 $year->checkYear();
 
+$error = new Intraface_Error; 
+
+// @todo this has to be made much better
 if (!empty($_POST)) {
 
 	$search_terms = array('bilag');
@@ -15,34 +18,42 @@ if (!empty($_POST)) {
 	if (!empty($_POST['search'])) {
 		$search_string = $_POST['search'];
 		$search = explode(':', $_POST['search']);
-		$search_term = $search[0];
-		$search_real = $search[1];
-		if (strpos($search[1], '-')) {
-			$search_real = explode('-', $search_real);
-		}
-		if (count($search_real) <> 2) {
-			trigger_error('Ulovlig søgning - ikke bindestreg');
-		}
-
-		$search_term = strtolower($search_term);
-
-		switch ($search_term) {
-			case 'bilag':
-				$db = new DB_Sql;
-				$db->query("SELECT * FROM accounting_voucher WHERE number >= " . $search_real[0] . " AND number <= " . $search_real[1] . " AND intranet_id = " . $year->kernel->intranet->get('id') . " AND year_id = " . $year->get('id'));
-				//$i++;
-				$posts = array();
-				while ($db->nextRecord()) {
-					$voucher = new Voucher($year, $db->f('id'));
-					$posts = array_merge($voucher->getPosts(), $posts);
-					//$i++;
-				}
-				break;
-			default:
-					trigger_error('Ulovlig søgning', E_USER_ERROR);
-				break;
-		}
-
+        
+        if (empty($search[0]) OR empty($search[1])) {
+            $error->set('Not a valid search');
+        } else {
+        
+    		$search_term = $search[0];
+    		$search_real = $search[1];
+    		if (strpos($search[1], '-')) {
+    			$search_real = explode('-', $search_real);
+    		} else {
+                $error->set('Not a valid search');
+    		}
+    
+            if (!$error->isError()) {
+        		$search_term = strtolower($search_term);
+        
+        		switch ($search_term) {
+        			case 'bilag':
+        				$db = new DB_Sql;
+        				$db->query("SELECT * FROM accounting_voucher WHERE number >= " . $search_real[0] . " AND number <= " . $search_real[1] . " AND intranet_id = " . $year->kernel->intranet->get('id') . " AND year_id = " . $year->get('id'));
+        				//$i++;
+        				$posts = array();
+        				while ($db->nextRecord()) {
+        					$voucher = new Voucher($year, $db->f('id'));
+        					$posts = array_merge($voucher->getPosts(), $posts);
+        					//$i++;
+        				}
+        				break;
+        			default:
+        					$error->set('Not a valid search');
+        				break;
+        		}
+            }
+        }
+	} else {
+        $error->set('Not a valid search');
 	}
 
 
@@ -53,7 +64,9 @@ $page = new Intraface_Page($kernel);
 $page->start('Find posteringer');
 ?>
 
-<h1>Posteringer</h1>
+<h1>Find posteringer</h1>
+
+<?php echo $error->view(); ?>
 
 <p>Søgningen søger i alle bilag, som er bogført. Du skal nok finde det, hvis det er der.</p>
 
