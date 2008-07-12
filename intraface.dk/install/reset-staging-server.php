@@ -32,11 +32,21 @@ if ($install->resetServer()) {
             echo 'Error in login';
         }
     }
+
+    delete_cache_files_from_demo(dirname(__FILE__) . '/../demo/');
+
     echo 'staging server reset. Go to <a href="../main/index.php">login</a>.';
-}
-else {
+} else {
     echo 'error';
 }
 
-
-?>
+function delete_cache_files_from_demo($f)
+{
+        if(is_dir($f)) {
+            foreach(scandir($f) as $item) {
+                if (strpos($item, 'cache_') !== false) {       
+                    unlink($f . $item);
+                }
+            }
+        }
+}
