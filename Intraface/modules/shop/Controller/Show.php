@@ -3,7 +3,8 @@ class Intraface_modules_shop_Controller_Show extends k_Controller
 {
     public $map = array('edit' => 'Intraface_modules_shop_Controller_Edit',
                         'basketevaluation' => 'Intraface_modules_shop_Controller_EvaluationEdit',
-                        'featuredproducts' => 'Intraface_modules_shop_Controller_FeaturedProducts');
+                        'featuredproducts' => 'Intraface_modules_shop_Controller_FeaturedProducts',
+                        'categories' => 'Intraface_modules_shop_Controller_Categories');
 
     function GET()
     {
@@ -14,7 +15,8 @@ class Intraface_modules_shop_Controller_Show extends k_Controller
 
         $this->document->options = array($this->url('../') => 'Close',
                                          $this->url('edit') => 'Edit',
-                                         $this->url('featuredproducts') => 'Choose featured products');
+                                         $this->url('featuredproducts') => 'Choose featured products',
+                                         $this->url('categories') => 'Product categories');
 
         $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $shop);
         $evaluations = $basketevaluation->getList();
@@ -34,6 +36,9 @@ class Intraface_modules_shop_Controller_Show extends k_Controller
             return $next->handleRequest();
         } elseif ($name == 'featuredproducts') {
             $next = new Intraface_modules_shop_Controller_FeaturedProducts($this, $name);
+            return $next->handleRequest();
+        } elseif ($name == 'categories') {
+            $next = new Intraface_modules_shop_Controller_Categories($this, $name);
             return $next->handleRequest();
         }
 

@@ -25,9 +25,12 @@ $application = new Intraface_modules_shop_Controller_Root();
 
 $application->registry->registerConstructor('doctrine', create_function(
   '$className, $args, $registry',
-  'Doctrine_Manager::getInstance()->setAttribute("use_dql_callbacks", true); ' .
   'return Doctrine_Manager::connection(DB_DSN);'
-//   'Doctrine_Manager::getInstance()->addRecordListener(new Intraface_Doctrine_Intranet(1)); ' .
+));
+
+$application->registry->registerConstructor('category_gateway', create_function(
+  '$className, $args, $registry',
+  'return new Intraface_modules_shop_Shop_Gateway;'
 ));
 
 $application->registry->registerConstructor('kernel', create_function(
