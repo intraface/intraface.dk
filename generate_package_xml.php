@@ -115,14 +115,17 @@ $pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.10.0');
 $pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.7.0');
 $pfm->addPackageDepWithChannel('required', 'HTTP_Upload', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.1');
-$pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.4');
+$pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.5');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Debug_ExplainQueries', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.intraface.dk', '0.2.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk', '0.3.0');
-// Doctrine
-$pfm->addPackageDepWithChannel('required', 'doctrine', 'pear.phpdoctrine.org', '0.10.4');
 
+// Doctrine // remember to move it to correct installed dir afterwards
+$pfm->addPackageDepWithChannel('required', 'doctrine', 'pear.phpdoctrine.org', '0.11.0');
+$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Nohtml', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Greaterthan', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'Doctrine_Template_Positionable', 'public.intraface.dk', '0.1.0');
 
 
 // Ilib
