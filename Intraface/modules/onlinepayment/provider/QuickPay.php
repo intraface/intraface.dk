@@ -39,8 +39,8 @@ class OnlinePaymentQuickPay extends OnlinePayment
         'credit' => 'credit', // tilbagebetaler
         '1420' => 'reversal', // ophæver reservationen
         'status' => 'status' // ophæver reservationen
-
     );
+    protected $dbquery;
 
     /**
      * Constructor
