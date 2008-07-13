@@ -18,7 +18,7 @@
                         <td><?php
                             e(t('if').' '.t($evaluation['evaluate_target']).' ');
                             if($evaluation['evaluate_method'] != 'equals') {
-                                e($translation->get('is').' ');
+                                e(t('is').' ');
                             }
                             e(t($evaluation['evaluate_method']).' '.$evaluation['evaluate_value']);
                             if($evaluation['evaluate_value_case_sensitive']) {
