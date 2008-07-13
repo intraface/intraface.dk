@@ -97,11 +97,32 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
             }
 
         }
+        
+        $products = array();
+        foreach($product->getList('webshop') AS $p) {
+            // Make sure we only include necessary data. Several things more might be left out. Mostly we remove description.
+            $products[] = array(
+                'id' => $p['id'],
+                'number' => $p['number'],
+                'name' => $p['name'],
+                'price' => $p['price'],
+                'unit' => $p['unit'],
+                'vat' => $p['vat'],
+                'weight' => $p['weight'],
+                'detail_id' => $p['detail_id'],
+                'vat_percent' => $p['vat_percent'],
+                'price_incl_vat' => $p['price_incl_vat'],
+                'changed_date' => $p['changed_date'],
+                'stock' => $p['stock'],
+                'has_variation' => $p['has_variation'],
+                'pictures' => $p['pictures'],
+                'stock_status' => $p['stock_status']);
+        }
 
         return $this->prepareResponseData(array(
             'parameter' => $mixed,
             'debug2' => $debug2,
-            'products' => $product->getList('webshop'),
+            'products' => $products,
             'paging' => $product->getDBQuery()->getPaging(),
             'search' => array(),
         ));
@@ -145,11 +166,18 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
             // We should make a Doctrine Product_X_AttributeGroup class and get all the groups i one sql 
             $groups = $product->getAttributeGroups();
             $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway;
-            foreach($groups AS $group) {
-                $return['attribute_groups'][] = array_merge(
-                    $group, 
-                    array('attributes' => $group_gateway->findById($group['id'])->getAttributes()->toArray())
-                );
+            foreach($groups AS $key => $group) {
+                // Make sure we only include necessary data
+                $return['attribute_groups'][$key]['id'] = $group['id'];
+                $return['attribute_groups'][$key]['name'] = $group['name'];
+                $attributes = $group_gateway->findById($group['id'])->getAttributes();
+                foreach($attributes AS $attribute) {
+                    $return['attribute_groups'][$key]['attributes'][] = array(
+                        'id' => $attribute->getId(),
+                        'name' => $attribute->getName()
+                    );
+                } 
+                    
             }
             
             foreach($variations AS $variation) {
