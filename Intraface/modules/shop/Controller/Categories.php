@@ -15,13 +15,13 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
         $db = $this->registry->get('db');
         
         $redirect = Intraface_Redirect::factory($kernel, 'receive');
-        
-        $shop = $this->registry->get('category_gateway')->findById($this->context->name);
 
+        $shop = $this->registry->get('category_gateway')->findById($this->context->name);
+        
         $this->document->title = $translation->get('Categories for shop'.' '.$shop->getName());
         $this->document->options = array($this->url('../') => $translation->get('Close', 'common'), $this->url('create') => $translation->get('Add new category'));
         
-        $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()));
+        $category = $this->getModel();
         $data['categories'] = $category->getAllCategories();
         
         if(isset($this->GET['product_id'])) {
@@ -29,6 +29,21 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
         }
         
         return $this->render('Intraface/modules/shop/Controller/tpl/categories.tpl.php', $data);
+    }
+    
+    function _getModel()
+    {
+        // @todo - cannot find the categories when using this one
+        $db = $this->registry->get('db');
+        $kernel = $this->registry->get('kernel');
+        $shop = $this->registry->get('category_gateway')->findById($this->context->name);
+        return new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()));
+    }
+
+    function getModel()
+    {
+        return new Ilib_Category($this->registry->get('db'), 
+            new Intraface_Category_Type('shop', $this->getShopId()));
     }
 
     function POST()

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @var array $level_categories Containes the menu items for the level given by the key
  */
