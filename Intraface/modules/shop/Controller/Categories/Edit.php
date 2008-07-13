@@ -8,9 +8,12 @@ class Intraface_modules_shop_Controller_Categories_Edit extends k_Controller
     
     function getModel()
     {
+        /*
         return new Ilib_Category($this->registry->get('db'), 
             new Intraface_Category_Type('shop', $this->getShopId()), 
             $this->getId());
+        */
+        return $this->context->getModel($this->getId());
     }
     
     function getId()

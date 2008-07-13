@@ -31,16 +31,16 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
         return $this->render('Intraface/modules/shop/Controller/tpl/categories.tpl.php', $data);
     }
     
-    function _getModel()
+    function getModel($id = 0)
     {
         // @todo - cannot find the categories when using this one
         $db = $this->registry->get('db');
         $kernel = $this->registry->get('kernel');
         $shop = $this->registry->get('category_gateway')->findById($this->context->name);
-        return new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()));
+        return new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()), $id);
     }
 
-    function getModel()
+    function _getModel()
     {
         return new Ilib_Category($this->registry->get('db'), 
             new Intraface_Category_Type('shop', $this->getShopId()));
