@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module('product');
 $translation = $kernel->getTranslation('product');
@@ -10,19 +10,19 @@ $shared_filehandler->includeFile('AppendFile.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product = new Product($kernel, $_POST['id']);
     
-    if(isset($_POST['append_file_submit'])) {
+    if (isset($_POST['append_file_submit'])) {
 
         $filehandler = new FileHandler($kernel);
         $append_file = new AppendFile($kernel, 'product', $product->get('id'));
 
-        if(isset($_FILES['new_append_file'])) {
+        if (isset($_FILES['new_append_file'])) {
             $filehandler = new FileHandler($kernel);
 
             $filehandler->createUpload();
             if ($product->get('do_show') == 1) { // if shown i webshop
                 $filehandler->upload->setSetting('file_accessibility', 'public');
             }
-            if($id = $filehandler->upload->upload('new_append_file')) {
+            if ($id = $filehandler->upload->upload('new_append_file')) {
                 $append_file->addFile(new FileHandler($kernel, $id));
             }
         }
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     }
 
-    if(!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
+    if (!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
         $redirect = Intraface_Redirect::factory($kernel, 'go');
         $module_filemanager = $kernel->useModule('filemanager');
         $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', $module->getPath().'product.php?id='.$product->get('id'));
@@ -43,8 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     header('Location: product.php?id='.$product->get('id'));
     exit;
-}
-elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
+} elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // delete
     if (!empty($_GET['delete'])) {
@@ -53,62 +52,46 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
             header('Location: index.php?use_stored=true');
             exit;
         }
-    }
-
-    // copy product
-    elseif (!empty($_GET['copy']) AND is_numeric($_GET['copy'])) {
+    } elseif (!empty($_GET['copy']) AND is_numeric($_GET['copy'])) {
         $product = new Product($kernel, $_GET['copy']);
         if ($id = $product->copy()) {
             header('Location: product.php?id='.$id);
             exit;
         }
-    }
-
-    // this has to be moved to post
-    elseif(isset($_GET['delete_appended_file_id'])) {
+    } elseif (isset($_GET['delete_appended_file_id'])) {
         $product = new Product($kernel, $_GET['id']);
         $append_file = new AppendFile($kernel, 'product', $product->get('id'));
         $append_file->delete((int)$_GET['delete_appended_file_id']);
         header('Location: product.php?id='.$product->get('id'));
         exit;
 
-    }
-
-    // Delete related product
-    // has to be moved to post
-    elseif (!empty($_GET['del_related']) AND is_numeric($_GET['del_related'])) {
+    } elseif (!empty($_GET['del_related']) AND is_numeric($_GET['del_related'])) {
         $product = new Product($kernel, $_GET['id']);
         $product->deleteRelatedProduct($_GET['del_related']);
         header('Location: product.php?id='.$product->get('id'));
         exit;
-    } 
-    
-    elseif(isset($_GET['append_category']) && $kernel->user->hasModuleAccess('shop')) {
+    } elseif (isset($_GET['append_category']) && $kernel->user->hasModuleAccess('shop')) {
         $product = new Product($kernel, $_GET['id']);
         $module_shop = $kernel->useModule('shop');
         $redirect = Intraface_Redirect::factory($kernel, 'go');
         $url = $redirect->setDestination($module_shop->getPath().'shop/'.$_GET['shop_id'].'/categories?product_id='.$product->getId(), $module->getPath().'product.php?id='.$product->getId());
         header('location: '.$url);
         exit;
-    }
-    
-    elseif(isset($_GET['remove_appended_category']) && $kernel->user->hasModuleAccess('shop')) {
+    } elseif (isset($_GET['remove_appended_category']) && $kernel->user->hasModuleAccess('shop')) {
         $product = new Product($kernel, $_GET['id']);
         $category = new Intraface_Category($kernel, MDB2::factory(DB_DSN), new Intraface_Category_Type('shop', $_GET['shop_id']), $_GET['remove_appended_category']);
         $appender = $category->getAppender($product->getId());
         $appender->delete($category);
-    }
-
-    elseif (!empty($_GET['id'])) {
+    } elseif (!empty($_GET['id'])) {
         $product = new Product($kernel, $_GET['id']);
         $filehandler = new FileHandler($kernel);
 
-        if(isset($_GET['return_redirect_id'])) {
+        if (isset($_GET['return_redirect_id'])) {
             $redirect = Intraface_Redirect::factory($kernel, 'return');
-            if($redirect->get('identifier') == 'product') {
+            if ($redirect->get('identifier') == 'product') {
                 $append_file = new AppendFile($kernel, 'product', $product->get('id'));
                 $array_files = $redirect->getParameter('file_handler_id');
-                if(is_array($array_files)) {
+                if (is_array($array_files)) {
                     foreach($array_files AS $file_id) {
                         $append_file->addFile(new FileHandler($kernel, $file_id));
                     }
@@ -117,8 +100,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
             }
         }
 
-    }
-    else {
+    } else {
         trigger_error('Ulovligt', E_USER_ERROR);
     }
 }
@@ -144,12 +126,12 @@ $page->start(t('product') . ': ' . $product->get('name'));
 </div>
 
 <table>
-    <?php if(!$product->get('has_variation')): ?>
+    <?php if (!$product->get('has_variation')): ?>
         <tr>
             <td><?php e(t('price')); ?></td>
             <td><?php e(number_format($product->get('price'), 2, ",", ".")); ?> <?php e(t('excl. vat')); ?></td>
         </tr>
-        <?php if($kernel->user->hasModuleAccess('webshop') || $kernel->user->hasModuleAccess('shop')): ?>
+        <?php if ($kernel->user->hasModuleAccess('webshop') || $kernel->user->hasModuleAccess('shop')): ?>
             <tr>
                 <td><?php e(t('weight')); ?></td>
                 <td><?php e($product->get('weight')); ?> gram</td>
@@ -227,10 +209,10 @@ $page->start(t('product') . ': ' . $product->get('name'));
 </table>
 
 <?php
-if($kernel->user->hasModuleAccess('invoice')) {
+if ($kernel->user->hasModuleAccess('invoice')) {
     $debtor_module = $kernel->useModule('debtor');
     $invoice = new Debtor($kernel, 'invoice');
-    if($invoice->any('product', $product->get('id'))) {
+    if ($invoice->any('product', $product->get('id'))) {
         ?>
         <ul class="options">
             <li><a href="<?php print($debtor_module->getPath().'list.php?type=invoice&amp;status=-1&amp;product_id='.$product->get('id')); ?>"><?php e(t('invoices with this product')); ?></a></li>
@@ -241,20 +223,26 @@ if($kernel->user->hasModuleAccess('invoice')) {
 ?>
 
 
-<?php if($product->get('has_variation')): ?>
+<?php if ($product->hasVariation()): ?>
     <?php /* <h2><?php e(t('Variations')); ?></h2> */ ?>
     <?php
     $groups = $product->getAttributeGroups();
     ?>
-    <?php if(count($groups) == 0): ?>
+    <?php if (count($groups) == 0): ?>
         <ul class="options">
             <li><a href="product_select_attribute_groups.php?id=<?php e($product->get('id')); ?>"><?php e(t('Select attributes for product')); ?></a></li>
         </ul>
     <?php else: ?>
         <?php
-        $variations = $product->getVariations();
+        try {
+            $variations = $product->getVariations();
+            $variation_is_present = true;
+        } catch (Intraface_Gateway_Exception $e) {
+            $variations_is_present = false;
+        }
         ?>
-        <?php if($variations->count() == 0): ?>
+        <?php if ($variation_is_present): ?>
+        <?php if ($variations->count() == 0): ?>
             <ul class="options">
                 <li><a href="product_variations_edit.php?id=<?php e($product->get('id')); ?>"><?php e(t('Create variations for the product')); ?></a></li>
             </ul>   
@@ -268,7 +256,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
                         <th><?php e(t('Variation')); ?></th>
                         <th><?php e(t('Price')); ?><br /><?php e(t('excl. vat')); ?></th>
                         <th><?php e(t('Weight')); ?><br />Gram</th>
-                        <?php if($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
+                        <?php if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
                             <th><?php e(t('In stock')); ?></th>
                             <?php /* At this moment there is only a reason for more details when there is stock */ ?>
                             <th></th>
@@ -282,7 +270,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
                         <td><?php e($variation->getName()); ?></td>
                         <td><?php e(number_format($product->get('price') + $variation->getDetail()->getPriceDifference(), 2, ",", ".")); ?> </td>
                         <td><?php e($product->get('weight')+$variation->getDetail()->getWeightDifference()); ?></td>
-                        <?php if($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
+                        <?php if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
                             <td><?php echo $variation->getStock($product)->get('actual_stock'); ?></td>
                             <td><a href="product_variation.php?id=<?php e($variation->getId()); ?>&amp;product_id=<?php e($product->getId()); ?>"><?php e(t('Details', 'common')); ?></a></td>
                         <?php endif; ?>
@@ -290,10 +278,12 @@ if($kernel->user->hasModuleAccess('invoice')) {
                     </tr>
                 <?php endforeach; ?>
             </table>
+        <?php endif; ?>
+        <?php endif; ?>
             <ul class="options">
                 <li><a href="product_variations_edit.php?id=<?php e($product->get('id')); ?>"><?php e(t('Edit variations for the product')); ?></a></li>
             </ul>
-        <?php endif; ?>
+
     <?php endif; ?>
 <?php endif; ?>
 
@@ -327,7 +317,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
         <?php
         //$appendix_list = $append_file->getList();
         $product->getPictures();
-        if(count($product->get('pictures')) > 0) {
+        if (count($product->get('pictures')) > 0) {
             foreach($product->get('pictures') AS $appendix) {
                 echo '<div class="appendix"><img src="'.$appendix['system-square']['file_uri'].'" />'.$appendix['original']['name'].' <a class="delete" href="product.php?id='.$product->get('id').'&amp;delete_appended_file_id='.$appendix['appended_file_id'].'">Slet</a></div>';
             }
@@ -349,7 +339,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
         </form>
     </div>
     
-    <?php if($kernel->user->hasModuleAccess('shop')): ?>
+    <?php if ($kernel->user->hasModuleAccess('shop')): ?>
         <?php $module_shop = $kernel->useModule('shop'); ?> 
         <div id="categories" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'categories') echo ' fade'; ?>">
             <h2><?php e(t('Categories')); ?></h2>
@@ -402,9 +392,9 @@ if($kernel->user->hasModuleAccess('invoice')) {
     
     
     <?php
-    if($kernel->user->hasModuleAccess("stock") AND $product->get('stock') AND !$product->get('has_variation')) {
+    if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock') AND !$product->get('has_variation')) {
 
-        if(isset($_GET['adaptation']) && $_GET['adaptation'] == 'true') {
+        if (isset($_GET['adaptation']) && $_GET['adaptation'] == 'true') {
             $product->getStock()->adaptation();
         }
         ?>
@@ -434,13 +424,13 @@ if($kernel->user->hasModuleAccess('invoice')) {
             <p>Sidst afstemt: <?php e($product->getStock()->get('dk_adaptation_date_time')); ?></p>
 
             <?php
-            if($kernel->user->hasModuleAccess('procurement')) {
+            if ($kernel->user->hasModuleAccess('procurement')) {
                 $kernel->useModule('procurement');
 
                 $procurement = new Procurement($kernel);
                 $latest = $procurement->getLatest($product->get('id'), $product->getStock()->get("actual_stock"));
 
-                if(count($latest) > 0) {
+                if (count($latest) > 0) {
                     ?>
                     <h3><?php e(t('latest purchases')); ?></h3>
 
@@ -464,7 +454,7 @@ if($kernel->user->hasModuleAccess('invoice')) {
                                 <td class="amount"><?php e($latest[$i]['quantity']); ?></td>
                                 <td>
                                     <?php
-                                    if(isset($latest[$i]['sum_quantity']) && $latest[$i]['sum_quantity'] >= $product->getStock()->get("actual_stock") && $is_under_actual) {
+                                    if (isset($latest[$i]['sum_quantity']) && $latest[$i]['sum_quantity'] >= $product->getStock()->get("actual_stock") && $is_under_actual) {
                                         print("<");
                                         $is_under_actual = false;
                                     }
