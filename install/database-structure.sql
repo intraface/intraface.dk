@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: mysql.intraface.dk
--- Generation Time: Jun 23, 2008 at 06:52 AM
+-- Generation Time: Jul 12, 2008 at 05:26 PM
 -- Server version: 4.1.16
 -- PHP Version: 4.4.7
 
@@ -19,7 +19,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Table structure for table `accounting_account`
 --
 
-CREATE TABLE IF NOT EXISTS `accounting_account` (
+CREATE TABLE `accounting_account` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `year_id` int(11) NOT NULL default '0',
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `accounting_account` (
 -- Table structure for table `accounting_post`
 --
 
-CREATE TABLE IF NOT EXISTS `accounting_post` (
+CREATE TABLE `accounting_post` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `accounting_post` (
 -- Table structure for table `accounting_vat_period`
 --
 
-CREATE TABLE IF NOT EXISTS `accounting_vat_period` (
+CREATE TABLE `accounting_vat_period` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `year_id` int(11) NOT NULL default '0',
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `accounting_vat_period` (
 -- Table structure for table `accounting_voucher`
 --
 
-CREATE TABLE IF NOT EXISTS `accounting_voucher` (
+CREATE TABLE `accounting_voucher` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `accounting_voucher` (
 -- Table structure for table `accounting_voucher_file`
 --
 
-CREATE TABLE IF NOT EXISTS `accounting_voucher_file` (
+CREATE TABLE `accounting_voucher_file` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `voucher_id` int(11) NOT NULL default '0',
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `accounting_voucher_file` (
 -- Table structure for table `accounting_year`
 --
 
-CREATE TABLE IF NOT EXISTS `accounting_year` (
+CREATE TABLE `accounting_year` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `accounting_year` (
 -- Table structure for table `accounting_year_end`
 --
 
-CREATE TABLE IF NOT EXISTS `accounting_year_end` (
+CREATE TABLE `accounting_year_end` (
   `id` int(11) NOT NULL auto_increment,
   `operating_reset_voucher_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -186,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `accounting_year_end` (
 -- Table structure for table `accounting_year_end_action`
 --
 
-CREATE TABLE IF NOT EXISTS `accounting_year_end_action` (
+CREATE TABLE `accounting_year_end_action` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `year_id` int(11) NOT NULL default '0',
@@ -205,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `accounting_year_end_action` (
 -- Table structure for table `accounting_year_end_statement`
 --
 
-CREATE TABLE IF NOT EXISTS `accounting_year_end_statement` (
+CREATE TABLE `accounting_year_end_statement` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `year_id` int(11) NOT NULL default '0',
@@ -221,7 +221,7 @@ CREATE TABLE IF NOT EXISTS `accounting_year_end_statement` (
 -- Table structure for table `address`
 --
 
-CREATE TABLE IF NOT EXISTS `address` (
+CREATE TABLE `address` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `tmp_intranet_id` int(11) NOT NULL default '0',
@@ -255,13 +255,14 @@ CREATE TABLE IF NOT EXISTS `address` (
 -- Table structure for table `basket`
 --
 
-CREATE TABLE IF NOT EXISTS `basket` (
+CREATE TABLE `basket` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `order_id` int(11) NOT NULL default '0',
   `session_id` varchar(255) NOT NULL default '',
   `product_id` int(11) NOT NULL default '0',
   `product_detail_id` int(11) NOT NULL default '0',
+  `product_variation_id` int(11) NOT NULL default '0',
   `quantity` int(11) NOT NULL default '0',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
   `basketevaluation_product` int(11) NOT NULL default '0',
@@ -279,7 +280,7 @@ CREATE TABLE IF NOT EXISTS `basket` (
 -- Table structure for table `basket_details`
 --
 
-CREATE TABLE IF NOT EXISTS `basket_details` (
+CREATE TABLE `basket_details` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `order_id` int(11) NOT NULL default '0',
@@ -308,7 +309,7 @@ CREATE TABLE IF NOT EXISTS `basket_details` (
 -- Table structure for table `cms_element`
 --
 
-CREATE TABLE IF NOT EXISTS `cms_element` (
+CREATE TABLE `cms_element` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `type_key` int(11) NOT NULL default '0',
@@ -330,7 +331,7 @@ CREATE TABLE IF NOT EXISTS `cms_element` (
 -- Table structure for table `cms_page`
 --
 
-CREATE TABLE IF NOT EXISTS `cms_page` (
+CREATE TABLE `cms_page` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -366,7 +367,7 @@ CREATE TABLE IF NOT EXISTS `cms_page` (
 -- Table structure for table `cms_parameter`
 --
 
-CREATE TABLE IF NOT EXISTS `cms_parameter` (
+CREATE TABLE `cms_parameter` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `belong_to_id` int(11) NOT NULL default '0',
@@ -383,7 +384,7 @@ CREATE TABLE IF NOT EXISTS `cms_parameter` (
 -- Table structure for table `cms_section`
 --
 
-CREATE TABLE IF NOT EXISTS `cms_section` (
+CREATE TABLE `cms_section` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `site_id` int(11) NOT NULL default '0',
@@ -402,7 +403,7 @@ CREATE TABLE IF NOT EXISTS `cms_section` (
 -- Table structure for table `cms_site`
 --
 
-CREATE TABLE IF NOT EXISTS `cms_site` (
+CREATE TABLE `cms_site` (
   `id` int(11) NOT NULL auto_increment,
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -421,7 +422,7 @@ CREATE TABLE IF NOT EXISTS `cms_site` (
 -- Table structure for table `cms_template`
 --
 
-CREATE TABLE IF NOT EXISTS `cms_template` (
+CREATE TABLE `cms_template` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `site_id` int(11) NOT NULL default '0',
@@ -442,7 +443,7 @@ CREATE TABLE IF NOT EXISTS `cms_template` (
 -- Table structure for table `cms_template_section`
 --
 
-CREATE TABLE IF NOT EXISTS `cms_template_section` (
+CREATE TABLE `cms_template_section` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `template_id` int(11) NOT NULL default '0',
@@ -466,7 +467,7 @@ CREATE TABLE IF NOT EXISTS `cms_template_section` (
 -- Table structure for table `comment`
 --
 
-CREATE TABLE IF NOT EXISTS `comment` (
+CREATE TABLE `comment` (
   `id` int(11) NOT NULL auto_increment,
   `code` varchar(255) NOT NULL default '',
   `intranet_id` int(11) NOT NULL default '0',
@@ -493,7 +494,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
 -- Table structure for table `contact`
 --
 
-CREATE TABLE IF NOT EXISTS `contact` (
+CREATE TABLE `contact` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `number` int(11) NOT NULL default '0',
@@ -516,7 +517,7 @@ CREATE TABLE IF NOT EXISTS `contact` (
 -- Table structure for table `contact_message`
 --
 
-CREATE TABLE IF NOT EXISTS `contact_message` (
+CREATE TABLE `contact_message` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -534,7 +535,7 @@ CREATE TABLE IF NOT EXISTS `contact_message` (
 -- Table structure for table `contact_person`
 --
 
-CREATE TABLE IF NOT EXISTS `contact_person` (
+CREATE TABLE `contact_person` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
@@ -553,7 +554,7 @@ CREATE TABLE IF NOT EXISTS `contact_person` (
 -- Table structure for table `contact_reminder_single`
 --
 
-CREATE TABLE IF NOT EXISTS `contact_reminder_single` (
+CREATE TABLE `contact_reminder_single` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
@@ -576,7 +577,7 @@ CREATE TABLE IF NOT EXISTS `contact_reminder_single` (
 -- Table structure for table `core_translation_i18n`
 --
 
-CREATE TABLE IF NOT EXISTS `core_translation_i18n` (
+CREATE TABLE `core_translation_i18n` (
   `page_id` varchar(50) default NULL,
   `id` text NOT NULL,
   `dk` text,
@@ -592,7 +593,7 @@ CREATE TABLE IF NOT EXISTS `core_translation_i18n` (
 -- Table structure for table `core_translation_langs`
 --
 
-CREATE TABLE IF NOT EXISTS `core_translation_langs` (
+CREATE TABLE `core_translation_langs` (
   `id` varchar(16) default NULL,
   `name` varchar(200) default NULL,
   `meta` text,
@@ -607,7 +608,7 @@ CREATE TABLE IF NOT EXISTS `core_translation_langs` (
 -- Table structure for table `dbquery_result`
 --
 
-CREATE TABLE IF NOT EXISTS `dbquery_result` (
+CREATE TABLE `dbquery_result` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -632,7 +633,7 @@ CREATE TABLE IF NOT EXISTS `dbquery_result` (
 -- Table structure for table `debtor`
 --
 
-CREATE TABLE IF NOT EXISTS `debtor` (
+CREATE TABLE `debtor` (
   `id` int(11) NOT NULL auto_increment,
   `where_from` int(11) NOT NULL default '0',
   `where_from_id` int(11) NOT NULL default '0',
@@ -690,12 +691,14 @@ CREATE TABLE IF NOT EXISTS `debtor` (
 -- Table structure for table `debtor_item`
 --
 
-CREATE TABLE IF NOT EXISTS `debtor_item` (
+CREATE TABLE `debtor_item` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `debtor_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
   `product_detail_id` int(11) NOT NULL default '0',
+  `product_variation_id` int(11) NOT NULL default '0',
+  `product_variation_detail_id` int(11) NOT NULL default '0',
   `description` text NOT NULL,
   `quantity` double(11,2) NOT NULL default '0.00',
   `position` int(11) NOT NULL default '0',
@@ -713,7 +716,7 @@ CREATE TABLE IF NOT EXISTS `debtor_item` (
 -- Table structure for table `email`
 --
 
-CREATE TABLE IF NOT EXISTS `email` (
+CREATE TABLE `email` (
   `id` int(11) NOT NULL auto_increment,
   `type_id` int(11) NOT NULL default '0',
   `status` int(11) NOT NULL default '0',
@@ -745,7 +748,7 @@ CREATE TABLE IF NOT EXISTS `email` (
 -- Table structure for table `email_attachment`
 --
 
-CREATE TABLE IF NOT EXISTS `email_attachment` (
+CREATE TABLE `email_attachment` (
   `id` int(11) NOT NULL auto_increment,
   `email_id` int(11) NOT NULL default '0',
   `file_id` int(11) NOT NULL default '0',
@@ -761,7 +764,7 @@ CREATE TABLE IF NOT EXISTS `email_attachment` (
 -- Table structure for table `filehandler_append_file`
 --
 
-CREATE TABLE IF NOT EXISTS `filehandler_append_file` (
+CREATE TABLE `filehandler_append_file` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -781,7 +784,7 @@ CREATE TABLE IF NOT EXISTS `filehandler_append_file` (
 -- Table structure for table `file_handler`
 --
 
-CREATE TABLE IF NOT EXISTS `file_handler` (
+CREATE TABLE `file_handler` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -808,7 +811,7 @@ CREATE TABLE IF NOT EXISTS `file_handler` (
 -- Table structure for table `file_handler_instance`
 --
 
-CREATE TABLE IF NOT EXISTS `file_handler_instance` (
+CREATE TABLE `file_handler_instance` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `file_handler_id` int(11) NOT NULL default '0',
@@ -831,7 +834,7 @@ CREATE TABLE IF NOT EXISTS `file_handler_instance` (
 -- Table structure for table `file_handler_instance_type`
 --
 
-CREATE TABLE IF NOT EXISTS `file_handler_instance_type` (
+CREATE TABLE `file_handler_instance_type` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
@@ -849,7 +852,7 @@ CREATE TABLE IF NOT EXISTS `file_handler_instance_type` (
 -- Table structure for table `flickr_cache`
 --
 
-CREATE TABLE IF NOT EXISTS `flickr_cache` (
+CREATE TABLE `flickr_cache` (
   `request` varchar(35) NOT NULL default '',
   `response` mediumtext NOT NULL,
   `expiration` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -859,10 +862,41 @@ CREATE TABLE IF NOT EXISTS `flickr_cache` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ilib_category`
+--
+
+CREATE TABLE `ilib_category` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `belong_to` int(11) NOT NULL default '0',
+  `belong_to_id` int(11) NOT NULL default '0',
+  `parent_id` int(11) NOT NULL default '0',
+  `name` varchar(255) NOT NULL default '',
+  `identifier` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ilib_category_append`
+--
+
+CREATE TABLE `ilib_category_append` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `object_id` int(11) NOT NULL default '0',
+  `category_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `intranet`
 --
 
-CREATE TABLE IF NOT EXISTS `intranet` (
+CREATE TABLE `intranet` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `identifier` varchar(255) NOT NULL default '',
@@ -889,7 +923,7 @@ CREATE TABLE IF NOT EXISTS `intranet` (
 -- Table structure for table `intranet_module_package`
 --
 
-CREATE TABLE IF NOT EXISTS `intranet_module_package` (
+CREATE TABLE `intranet_module_package` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `module_package_id` int(11) NOT NULL default '0',
@@ -907,7 +941,7 @@ CREATE TABLE IF NOT EXISTS `intranet_module_package` (
 -- Table structure for table `invoice_payment`
 --
 
-CREATE TABLE IF NOT EXISTS `invoice_payment` (
+CREATE TABLE `invoice_payment` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `payment_date` date NOT NULL default '0000-00-00',
@@ -931,7 +965,7 @@ CREATE TABLE IF NOT EXISTS `invoice_payment` (
 -- Table structure for table `invoice_reminder`
 --
 
-CREATE TABLE IF NOT EXISTS `invoice_reminder` (
+CREATE TABLE `invoice_reminder` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `intranet_address_id` int(11) NOT NULL default '0',
@@ -968,7 +1002,7 @@ CREATE TABLE IF NOT EXISTS `invoice_reminder` (
 -- Table structure for table `invoice_reminder_item`
 --
 
-CREATE TABLE IF NOT EXISTS `invoice_reminder_item` (
+CREATE TABLE `invoice_reminder_item` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `invoice_reminder_id` int(11) NOT NULL default '0',
@@ -982,7 +1016,7 @@ CREATE TABLE IF NOT EXISTS `invoice_reminder_item` (
 -- Table structure for table `invoice_reminder_unpaid_reminder`
 --
 
-CREATE TABLE IF NOT EXISTS `invoice_reminder_unpaid_reminder` (
+CREATE TABLE `invoice_reminder_unpaid_reminder` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `invoice_reminder_id` int(11) NOT NULL default '0',
@@ -996,7 +1030,7 @@ CREATE TABLE IF NOT EXISTS `invoice_reminder_unpaid_reminder` (
 -- Table structure for table `kernel_log`
 --
 
-CREATE TABLE IF NOT EXISTS `kernel_log` (
+CREATE TABLE `kernel_log` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1013,7 +1047,7 @@ CREATE TABLE IF NOT EXISTS `kernel_log` (
 -- Table structure for table `keyword`
 --
 
-CREATE TABLE IF NOT EXISTS `keyword` (
+CREATE TABLE `keyword` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `keyword` varchar(255) NOT NULL default '',
@@ -1030,7 +1064,7 @@ CREATE TABLE IF NOT EXISTS `keyword` (
 -- Table structure for table `keyword_x_object`
 --
 
-CREATE TABLE IF NOT EXISTS `keyword_x_object` (
+CREATE TABLE `keyword_x_object` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `belong_to` int(11) NOT NULL default '0',
@@ -1047,7 +1081,7 @@ CREATE TABLE IF NOT EXISTS `keyword_x_object` (
 -- Table structure for table `lock_post`
 --
 
-CREATE TABLE IF NOT EXISTS `lock_post` (
+CREATE TABLE `lock_post` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1063,7 +1097,7 @@ CREATE TABLE IF NOT EXISTS `lock_post` (
 -- Table structure for table `log_id_seq`
 --
 
-CREATE TABLE IF NOT EXISTS `log_id_seq` (
+CREATE TABLE `log_id_seq` (
   `id` int(10) unsigned NOT NULL auto_increment,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -1074,7 +1108,7 @@ CREATE TABLE IF NOT EXISTS `log_id_seq` (
 -- Table structure for table `log_table`
 --
 
-CREATE TABLE IF NOT EXISTS `log_table` (
+CREATE TABLE `log_table` (
   `id` int(11) NOT NULL default '0',
   `logtime` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `ident` varchar(16) NOT NULL default '',
@@ -1089,7 +1123,7 @@ CREATE TABLE IF NOT EXISTS `log_table` (
 -- Table structure for table `module`
 --
 
-CREATE TABLE IF NOT EXISTS `module` (
+CREATE TABLE `module` (
   `id` int(11) NOT NULL auto_increment,
   `name` char(255) NOT NULL default '',
   `menu_label` char(255) NOT NULL default '',
@@ -1111,7 +1145,7 @@ CREATE TABLE IF NOT EXISTS `module` (
 -- Table structure for table `module_package`
 --
 
-CREATE TABLE IF NOT EXISTS `module_package` (
+CREATE TABLE `module_package` (
   `id` int(11) NOT NULL auto_increment,
   `module_package_group_id` int(11) NOT NULL default '0',
   `module_package_plan_id` int(11) NOT NULL default '0',
@@ -1126,7 +1160,7 @@ CREATE TABLE IF NOT EXISTS `module_package` (
 -- Table structure for table `module_package_action`
 --
 
-CREATE TABLE IF NOT EXISTS `module_package_action` (
+CREATE TABLE `module_package_action` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `order_debtor_id` int(11) NOT NULL default '0',
@@ -1142,7 +1176,7 @@ CREATE TABLE IF NOT EXISTS `module_package_action` (
 -- Table structure for table `module_package_group`
 --
 
-CREATE TABLE IF NOT EXISTS `module_package_group` (
+CREATE TABLE `module_package_group` (
   `id` int(11) NOT NULL auto_increment,
   `group_name` varchar(255) NOT NULL default '',
   `sorting_index` int(11) NOT NULL default '0',
@@ -1156,7 +1190,7 @@ CREATE TABLE IF NOT EXISTS `module_package_group` (
 -- Table structure for table `module_package_module`
 --
 
-CREATE TABLE IF NOT EXISTS `module_package_module` (
+CREATE TABLE `module_package_module` (
   `id` int(11) NOT NULL auto_increment,
   `module_package_id` int(11) NOT NULL default '0',
   `module` varchar(255) NOT NULL default '',
@@ -1171,7 +1205,7 @@ CREATE TABLE IF NOT EXISTS `module_package_module` (
 -- Table structure for table `module_package_plan`
 --
 
-CREATE TABLE IF NOT EXISTS `module_package_plan` (
+CREATE TABLE `module_package_plan` (
   `id` int(11) NOT NULL auto_increment,
   `plan` varchar(255) NOT NULL default '',
   `plan_index` int(11) NOT NULL default '0',
@@ -1185,7 +1219,7 @@ CREATE TABLE IF NOT EXISTS `module_package_plan` (
 -- Table structure for table `module_sub_access`
 --
 
-CREATE TABLE IF NOT EXISTS `module_sub_access` (
+CREATE TABLE `module_sub_access` (
   `id` int(11) NOT NULL auto_increment,
   `module_id` int(11) NOT NULL default '0',
   `name` char(255) NOT NULL default '',
@@ -1202,7 +1236,7 @@ CREATE TABLE IF NOT EXISTS `module_sub_access` (
 -- Table structure for table `newsletter_archieve`
 --
 
-CREATE TABLE IF NOT EXISTS `newsletter_archieve` (
+CREATE TABLE `newsletter_archieve` (
   `id` int(11) NOT NULL auto_increment,
   `list_id` int(11) NOT NULL default '0',
   `subject` varchar(255) NOT NULL default '',
@@ -1224,7 +1258,7 @@ CREATE TABLE IF NOT EXISTS `newsletter_archieve` (
 -- Table structure for table `newsletter_list`
 --
 
-CREATE TABLE IF NOT EXISTS `newsletter_list` (
+CREATE TABLE `newsletter_list` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
@@ -1252,7 +1286,7 @@ CREATE TABLE IF NOT EXISTS `newsletter_list` (
 -- Table structure for table `newsletter_subscriber`
 --
 
-CREATE TABLE IF NOT EXISTS `newsletter_subscriber` (
+CREATE TABLE `newsletter_subscriber` (
   `id` int(11) NOT NULL auto_increment,
   `code` varchar(255) NOT NULL default '',
   `list_id` int(11) NOT NULL default '0',
@@ -1277,7 +1311,7 @@ CREATE TABLE IF NOT EXISTS `newsletter_subscriber` (
 -- Table structure for table `onlinepayment`
 --
 
-CREATE TABLE IF NOT EXISTS `onlinepayment` (
+CREATE TABLE `onlinepayment` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `belong_to_key` int(11) NOT NULL default '0',
@@ -1306,7 +1340,7 @@ CREATE TABLE IF NOT EXISTS `onlinepayment` (
 -- Table structure for table `permission`
 --
 
-CREATE TABLE IF NOT EXISTS `permission` (
+CREATE TABLE `permission` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1322,7 +1356,7 @@ CREATE TABLE IF NOT EXISTS `permission` (
 -- Table structure for table `php_sessions`
 --
 
-CREATE TABLE IF NOT EXISTS `php_sessions` (
+CREATE TABLE `php_sessions` (
   `session_id` varchar(40) NOT NULL default '',
   `last_active` int(11) NOT NULL default '0',
   `data` text NOT NULL,
@@ -1335,7 +1369,7 @@ CREATE TABLE IF NOT EXISTS `php_sessions` (
 -- Table structure for table `procurement`
 --
 
-CREATE TABLE IF NOT EXISTS `procurement` (
+CREATE TABLE `procurement` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1372,12 +1406,14 @@ CREATE TABLE IF NOT EXISTS `procurement` (
 -- Table structure for table `procurement_item`
 --
 
-CREATE TABLE IF NOT EXISTS `procurement_item` (
+CREATE TABLE `procurement_item` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `procurement_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
   `product_detail_id` int(11) NOT NULL default '0',
+  `product_variation_id` int(11) NOT NULL default '0',
+  `product_variation_detail_id` int(11) NOT NULL default '0',
   `unit_purchase_price` double(11,2) NOT NULL default '0.00',
   `quantity` int(11) NOT NULL default '0',
   `active` int(11) NOT NULL default '1',
@@ -1395,10 +1431,11 @@ CREATE TABLE IF NOT EXISTS `procurement_item` (
 -- Table structure for table `product`
 --
 
-CREATE TABLE IF NOT EXISTS `product` (
+CREATE TABLE `product` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `do_show` tinyint(1) NOT NULL default '1',
+  `has_variation` tinyint(1) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '1',
   `changed_date` datetime NOT NULL default '0000-00-00 00:00:00',
   `quantity` int(11) NOT NULL default '0',
@@ -1412,10 +1449,40 @@ CREATE TABLE IF NOT EXISTS `product` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product_attribute`
+--
+
+CREATE TABLE `product_attribute` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `attribute_group_id` int(11) NOT NULL default '0',
+  `name` varchar(255) NOT NULL default '',
+  `position` int(11) NOT NULL default '0',
+  `deleted` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_attribute_group`
+--
+
+CREATE TABLE `product_attribute_group` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `name` varchar(255) NOT NULL default '',
+  `deleted` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `product_detail`
 --
 
-CREATE TABLE IF NOT EXISTS `product_detail` (
+CREATE TABLE `product_detail` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
@@ -1444,7 +1511,7 @@ CREATE TABLE IF NOT EXISTS `product_detail` (
 -- Table structure for table `product_related`
 --
 
-CREATE TABLE IF NOT EXISTS `product_related` (
+CREATE TABLE `product_related` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
@@ -1458,10 +1525,70 @@ CREATE TABLE IF NOT EXISTS `product_related` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product_variation`
+--
+
+CREATE TABLE `product_variation` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `product_id` int(11) NOT NULL default '0',
+  `number` int(11) NOT NULL default '0',
+  `deleted` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_variation_detail`
+--
+
+CREATE TABLE `product_variation_detail` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `product_variation_id` int(11) NOT NULL default '0',
+  `price_difference` int(11) NOT NULL default '0',
+  `weight_difference` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_variation_x_attribute`
+--
+
+CREATE TABLE `product_variation_x_attribute` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `product_variation_id` int(11) NOT NULL default '0',
+  `product_attribute_id` int(11) NOT NULL default '0',
+  `attribute_number` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_x_attribute_group`
+--
+
+CREATE TABLE `product_x_attribute_group` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL default '0',
+  `product_id` int(11) NOT NULL default '0',
+  `product_attribute_group_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `project`
 --
 
-CREATE TABLE IF NOT EXISTS `project` (
+CREATE TABLE `project` (
   `id` int(11) NOT NULL auto_increment,
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1477,7 +1604,7 @@ CREATE TABLE IF NOT EXISTS `project` (
 -- Table structure for table `project_task`
 --
 
-CREATE TABLE IF NOT EXISTS `project_task` (
+CREATE TABLE `project_task` (
   `id` int(11) NOT NULL auto_increment,
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1495,7 +1622,7 @@ CREATE TABLE IF NOT EXISTS `project_task` (
 -- Table structure for table `redirect`
 --
 
-CREATE TABLE IF NOT EXISTS `redirect` (
+CREATE TABLE `redirect` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `session_id` varchar(255) NOT NULL default '',
@@ -1514,7 +1641,7 @@ CREATE TABLE IF NOT EXISTS `redirect` (
 -- Table structure for table `redirect_parameter`
 --
 
-CREATE TABLE IF NOT EXISTS `redirect_parameter` (
+CREATE TABLE `redirect_parameter` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `redirect_id` int(11) NOT NULL default '0',
@@ -1529,7 +1656,7 @@ CREATE TABLE IF NOT EXISTS `redirect_parameter` (
 -- Table structure for table `redirect_parameter_value`
 --
 
-CREATE TABLE IF NOT EXISTS `redirect_parameter_value` (
+CREATE TABLE `redirect_parameter_value` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `redirect_id` int(11) NOT NULL default '0',
@@ -1545,7 +1672,7 @@ CREATE TABLE IF NOT EXISTS `redirect_parameter_value` (
 -- Table structure for table `setting`
 --
 
-CREATE TABLE IF NOT EXISTS `setting` (
+CREATE TABLE `setting` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1565,7 +1692,7 @@ CREATE TABLE IF NOT EXISTS `setting` (
 -- Table structure for table `shop`
 --
 
-CREATE TABLE IF NOT EXISTS `shop` (
+CREATE TABLE `shop` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `identifier` varchar(255) NOT NULL default '',
@@ -1583,7 +1710,7 @@ CREATE TABLE IF NOT EXISTS `shop` (
 -- Table structure for table `shop_featuredproducts`
 --
 
-CREATE TABLE IF NOT EXISTS `shop_featuredproducts` (
+CREATE TABLE `shop_featuredproducts` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `headline` varchar(255) NOT NULL default '',
@@ -1598,10 +1725,11 @@ CREATE TABLE IF NOT EXISTS `shop_featuredproducts` (
 -- Table structure for table `stock_adaptation`
 --
 
-CREATE TABLE IF NOT EXISTS `stock_adaptation` (
+CREATE TABLE `stock_adaptation` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
+  `product_variation_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `adaptation_date_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `quantity` int(11) NOT NULL default '0',
@@ -1615,10 +1743,11 @@ CREATE TABLE IF NOT EXISTS `stock_adaptation` (
 -- Table structure for table `stock_regulation`
 --
 
-CREATE TABLE IF NOT EXISTS `stock_regulation` (
+CREATE TABLE `stock_regulation` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
+  `product_variation_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `regulation_date_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `comment` text NOT NULL,
@@ -1633,7 +1762,7 @@ CREATE TABLE IF NOT EXISTS `stock_regulation` (
 -- Table structure for table `systemmessage_disturbance`
 --
 
-CREATE TABLE IF NOT EXISTS `systemmessage_disturbance` (
+CREATE TABLE `systemmessage_disturbance` (
   `id` int(11) NOT NULL auto_increment,
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `user_name` varchar(255) NOT NULL default '0',
@@ -1653,7 +1782,7 @@ CREATE TABLE IF NOT EXISTS `systemmessage_disturbance` (
 -- Table structure for table `systemmessage_news`
 --
 
-CREATE TABLE IF NOT EXISTS `systemmessage_news` (
+CREATE TABLE `systemmessage_news` (
   `id` int(11) NOT NULL auto_increment,
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `user_name` varchar(255) NOT NULL default '0',
@@ -1670,7 +1799,7 @@ CREATE TABLE IF NOT EXISTS `systemmessage_news` (
 -- Table structure for table `todo_contact`
 --
 
-CREATE TABLE IF NOT EXISTS `todo_contact` (
+CREATE TABLE `todo_contact` (
   `id` int(11) NOT NULL auto_increment,
   `list_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
@@ -1684,7 +1813,7 @@ CREATE TABLE IF NOT EXISTS `todo_contact` (
 -- Table structure for table `todo_item`
 --
 
-CREATE TABLE IF NOT EXISTS `todo_item` (
+CREATE TABLE `todo_item` (
   `id` int(11) NOT NULL auto_increment,
   `todo_list_id` int(11) NOT NULL default '0',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1705,7 +1834,7 @@ CREATE TABLE IF NOT EXISTS `todo_item` (
 -- Table structure for table `todo_list`
 --
 
-CREATE TABLE IF NOT EXISTS `todo_list` (
+CREATE TABLE `todo_list` (
   `id` int(255) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1724,7 +1853,7 @@ CREATE TABLE IF NOT EXISTS `todo_list` (
 -- Table structure for table `user`
 --
 
-CREATE TABLE IF NOT EXISTS `user` (
+CREATE TABLE `user` (
   `id` int(11) NOT NULL auto_increment,
   `lastlogin` datetime NOT NULL default '0000-00-00 00:00:00',
   `email` char(255) NOT NULL default '',
@@ -1743,7 +1872,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Table structure for table `webshop_basket_evaluation`
 --
 
-CREATE TABLE IF NOT EXISTS `webshop_basket_evaluation` (
+CREATE TABLE `webshop_basket_evaluation` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `running_index` int(11) NOT NULL default '0',
