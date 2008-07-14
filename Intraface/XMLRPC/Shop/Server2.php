@@ -121,7 +121,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
 
         return $this->prepareResponseData(array(
             'parameter' => $mixed,
-            'debug2' => $debug2,
+            //'debug2' => $debug2,
             'products' => $products,
             'paging' => $product->getDBQuery()->getPaging(),
             'search' => array(),
