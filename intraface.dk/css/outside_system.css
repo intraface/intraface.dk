@@ -12,7 +12,7 @@ div#container {
 	padding: 2em;
 	margin: 5em auto; 
 	background: white; 
-	width: 35em; 
+	width: 40em; 
 	text-align: left; 
 	color: black;
 	border: 10px solid #ddd; 
@@ -20,7 +20,7 @@ div#container {
 
 fieldset {
 	border: none;
-	width: 27em;
+	width: 32em;
 	margin: auto;
 }
 
