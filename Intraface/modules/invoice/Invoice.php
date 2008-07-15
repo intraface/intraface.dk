@@ -199,7 +199,7 @@ class Invoice extends Debtor
         ));
 
 
-        $total = 0;
+        $total_with_vat = 0;
         foreach($items AS $item) {
 
             // produkterne
@@ -230,32 +230,34 @@ class Invoice extends Debtor
                 'vat_off' => 1,
                 'text' => $text . ' - ' . $item['name']
             );
-            if ($credit_account->get('vat_off') == 0) {
-                $total += $item["quantity"] * $item["price"];
+            if ($credit_account->get('vat') != 0) {
+                $total_with_vat += $item["quantity"] * $item["price"];
             }
 
             if (!$voucher->saveInDaybook($input_values, true)) {
                 $this->error->merge($voucher->error->getMessage());
             }
         }
+        
+        
         // samlet moms på fakturaen
-        $voucher = Voucher::factory($year, $voucher_number);
-        $credit_account = new Account($year, $year->getSetting('vat_out_account_id'));
-        $debet_account = 	new Account($year, $year->getSetting('debtor_account_id'));
-        $input_values = array(
-                'voucher_number' => $voucher_number,
-                'reference' => $this->get('number'),
-                'date' => $voucher_date,
-                'amount' => number_format($total * $this->kernel->setting->get('intranet', 'vatpercent') / 100, 2, ",", "."), // opmærksom på at vat bliver rigtig defineret
-                'debet_account_number' => $debet_account->get('number'),
-                'credit_account_number' => $credit_account->get('number'),
-                'vat_off' => 1,
-                'text' => $text . ' - ' . $credit_account->get('name')
-        );
-
-
-        if (!$voucher->saveInDaybook($input_values, true)) {
-            $this->error->merge($voucher->error->getMessage());
+        if($total_with_vat > 0) {
+            $voucher = Voucher::factory($year, $voucher_number);
+            $credit_account = new Account($year, $year->getSetting('vat_out_account_id'));
+            $debet_account = 	new Account($year, $year->getSetting('debtor_account_id'));
+            $input_values = array(
+                    'voucher_number' => $voucher_number,
+                    'reference' => $this->get('number'),
+                    'date' => $voucher_date,
+                    'amount' => number_format($total_with_vat * $this->kernel->setting->get('intranet', 'vatpercent') / 100, 2, ",", "."), // opmærksom på at vat bliver rigtig defineret
+                    'debet_account_number' => $debet_account->get('number'),
+                    'credit_account_number' => $credit_account->get('number'),
+                    'vat_off' => 1,
+                    'text' => $text . ' - ' . $credit_account->get('name')
+            );
+            if (!$voucher->saveInDaybook($input_values, true)) {
+                $this->error->merge($voucher->error->getMessage());
+            }
         }
 
         require_once 'Intraface/modules/accounting/VoucherFile.php';
