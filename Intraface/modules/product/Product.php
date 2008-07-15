@@ -879,9 +879,7 @@ class Product extends Intraface_Standard
         $db       = $this->getDBQuery()->getRecordset("product.id", "", false);
         $products = array();
 
-        // @todo Ved at starte product op hver gang får vi startet dbquery op en masse gange
         while ($db->nextRecord()) {
-
             $product = new Product($this->kernel, $db->f("id"));
             $product->getPictures();
             $products[$i] = $product->get();
