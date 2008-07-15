@@ -137,15 +137,14 @@ class Intraface_modules_shop_Basket
             return false;
         }
         
-        if($product->get('stock')) {
-            if($product_variation_id != 0) {
+        if ($product->get('stock')) {
+            if ($product_variation_id != 0) {
                 $variation = $product->getVariation($product_variation_id);
-                if(!$variation->getId()) {
+                if (!$variation->getId()) {
                     return false;
                 }
                 $stock = $variation->getStock($product);
-            }
-            else {
+            } else {
                 $stock = $product->getStock();
             }
     
@@ -457,8 +456,7 @@ class Intraface_modules_shop_Basket
                     $variation = $product->getVariation($db->f('product_variation_id'));
                     $detail = $variation->getDetail();
                     $price += (($product->get('price') + $detail->getPriceDifference()) * (1 + $product->get('vat_percent')/100)) * $db->f("quantity");
-                }
-                else {
+                } else {
                     $price += $product->get('price_incl_vat') * $db->f("quantity");
                 }
             }
@@ -474,7 +472,6 @@ class Intraface_modules_shop_Basket
      */
     public function getTotalWeight()
     {
-        
         $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
         $db->query("SELECT product_id, product_variation_id, quantity FROM basket WHERE " . $sql_extra);
@@ -539,15 +536,15 @@ class Intraface_modules_shop_Basket
             $items[$i]['product_detail_id'] = $product->get('product_detail_id');
             $items[$i]['pictures'] = $product->get('pictures');
             
-            if($db->f('product_variation_id') != 0) {
+            //if($db->f('product_variation_id') != 0) {
+            if($product->hasVariation()) {
                 $variation = $product->getVariation($db->f('product_variation_id'));
                 $detail = $variation->getDetail();
                 $items[$i]['product_variation_id'] = $variation->getId();
                 $items[$i]['name'] = $product->get('name').' - '.$variation->getName();
                 $items[$i]['price'] = $product->get('price') + $detail->getPriceDifference();
                 $items[$i]['price_incl_vat'] = (($product->get('price') + $detail->getPriceDifference()) * (1 + $product->get('vat_percent')/100));    
-            }
-            else {
+            } else {
                 $items[$i]['product_variation_id'] = 0;
                 $items[$i]['name'] = $product->get('name');
                 $items[$i]['price'] = $product->get('price');
