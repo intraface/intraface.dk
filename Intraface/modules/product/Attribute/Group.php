@@ -21,8 +21,9 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
         $this->loadTemplate('Intraface_Doctrine_Template_Intranet');
         $this->actAs('SoftDelete');
         
-        $this->hasMany('Intraface_modules_product_Attribute as attribute', array('local' => 'id',
-                                            'foreign' => 'attribute_group_id'));
+        $this->hasMany('Intraface_modules_product_Attribute as attribute', 
+            array('local' => 'id', 'foreign' => 'attribute_group_id')
+        );
         
     }
 
@@ -47,9 +48,9 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
      */
     public function getAttributes()
     {
-        /**
-         * @todo: Make sure not used before saved.
-         */
+        if(!$this->id) {
+            throw new Exception('Can first be used when group is saved');
+        }
         
         return Doctrine_Query::create()
             ->select('name, id')
@@ -72,5 +73,28 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
         }
         return $attribute;
         
+    }
+    
+    /**
+     * Returns collection of attributes used on a given product
+     * 
+     * @param object $product Intraface_modules_product_Product
+     */
+    public function getAttributesUsedByProduct($product)
+    {
+        if(!$this->id) {
+            throw new Exception('Can first be used when group is saved');
+        }
+        
+        return Doctrine_Query::create()
+            ->select('attribute.name, attribute.id')
+            ->from('Intraface_modules_product_Attribute attribute')
+            ->innerJoin('attribute.variation_x_attribute variation_x_attribute')
+            ->innerJoin('variation_x_attribute.variation variation')
+            ->addWhere('attribute.attribute_group_id = ?', $this->getId())
+            ->addWhere('variation.product_id = ?', $product->getId())
+            ->groupBy('attribute.id')
+            ->orderBy('position')
+            ->execute();
     }
 }

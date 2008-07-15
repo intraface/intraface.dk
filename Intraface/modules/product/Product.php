@@ -698,7 +698,11 @@ class Product extends Intraface_Standard
     
     /**
      * Get all attributes related to the product
-     *
+     * 
+     * @todo Rewrite product_x_attribute_group to Doctrine.
+     * @todo Add a field named attribute_number to product_x_attribute_group, to be sure
+     *       that a attribute always relates to the correct attribute number on the variation. 
+     * 
      * @return array
      */
     public function getAttributeGroups()
@@ -709,7 +713,7 @@ class Product extends Intraface_Standard
         
         // takes groups despite the are deleted. That is probably the best behaviour for now
         // NOTE: Very important that it is ordered by product_attribute_group.id so the groups
-        // does always get attached to the correct attribute number on the variation.
+        // does always get attached to the correct attribute number on the variation. Se above todo in method doc
         $db = MDB2::factory(DB_DSN);
         $result = $db->query("SELECT product_attribute_group.* FROM product_x_attribute_group " .
                 "INNER JOIN product_attribute_group " .

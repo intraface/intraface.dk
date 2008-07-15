@@ -161,7 +161,6 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
         }
         
         if($product->get('has_variation')) {
-            $variations = $product->getVariations();
             
             // We should make a Doctrine Product_X_AttributeGroup class and get all the groups i one sql 
             $groups = $product->getAttributeGroups();
@@ -170,7 +169,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
                 // Make sure we only include necessary data
                 $return['attribute_groups'][$key]['id'] = $group['id'];
                 $return['attribute_groups'][$key]['name'] = $group['name'];
-                $attributes = $group_gateway->findById($group['id'])->getAttributes();
+                $attributes = $group_gateway->findById($group['id'])->getAttributesUsedByProduct($product);
                 foreach($attributes AS $attribute) {
                     $return['attribute_groups'][$key]['attributes'][] = array(
                         'id' => $attribute->getId(),
@@ -180,6 +179,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
                     
             }
             
+            $variations = $product->getVariations();
             foreach($variations AS $variation) {
                 $detail = $variation->getDetail();
                 $attribute_string = '';
