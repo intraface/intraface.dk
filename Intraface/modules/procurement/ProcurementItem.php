@@ -14,6 +14,8 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
  */
+require_once 'Intraface/modules/product/Product.php';
+
 class ProcurementItem extends Intraface_Standard
 {
     /**
