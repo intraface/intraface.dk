@@ -1,0 +1,139 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testProductWithVariationsOnlyShowRelevantAttributes</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testProductWithVariationsOnlyShowRelevantAttributes</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=debtor,order,contact,product,administration,shop&helper_function=Administration:fillInIntranetAddress,Product:createWithVariations,Shop:create&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Product 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Edit variations for the product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[0][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[3][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[5][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[6][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[7][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>variation[8][used]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>save_and_close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>demo/intraface/shop/1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=See all products</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Product 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Large</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>blue</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Please select a variation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>attribute[0]</td>
+	<td>label=Medium</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>attribute[1]</td>
+	<td>label=Black</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>select_variation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>add_product_id</td>
+	<td>Buy</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>attribute[1]</td>
+	<td>label=Red</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>select_variation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>The selected variation does not exist. Please select another.</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

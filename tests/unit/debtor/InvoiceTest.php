@@ -12,6 +12,7 @@ require_once 'tests/unit/stubs/Address.php';
 require_once 'tests/unit/stubs/Translation.php';
 require_once 'Intraface/modules/product/Product.php';
 require_once 'Intraface/modules/contact/Contact.php';
+require_once 'Intraface/functions.php';
 
 class InvoiceTest extends PHPUnit_Framework_TestCase
 {
@@ -50,7 +51,15 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
         return new Invoice($this->createKernel());
     }
     
-    function createAnInvoiceWithOneItem() {
+    function createAnInvoiceWithOneItem($options = array()) {
+        
+        $options = array_merge(
+            array(
+                'product_vat' => 1,
+                'product_state_account_id' => 1110,
+            ),
+            $options
+        );
         
         $invoice = $this->createInvoice();
         $invoice->update(array(
@@ -62,7 +71,7 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
         $invoice->loadItem();
         
         $product = new Product($this->createKernel());
-        $product->save(array('name' => 'test', 'vat' => 1, 'price' => '100', 'state_account_id' => 1110));
+        $product->save(array('name' => 'test', 'vat' => $options['product_vat'], 'price' => '100', 'state_account_id' => $options['product_state_account_id']));
         $invoice->item->save(array('product_id' => 1, 'quantity' => 2, 'description' => 'This is a test'));
         
         return $invoice;
@@ -182,6 +191,52 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
                 'stated' => 1,
                 'account_number' => 66200,
                 'account_name' => 'Moms, udgående, salg'
+            )
+        );
+        
+        $this->assertEquals($expected, $voucher->getPosts());
+        $this->assertTrue($invoice->isStated());
+        $this->assertFalse($invoice->readyForState($year));
+    }
+    
+    function testStateStatesNoVatWhenNotVatOnProduct() {
+        $invoice = $this->createAnInvoiceWithOneItem(array('product_vat' => 0, 'product_state_account_id' => 1120));
+        $invoice->setStatus('sent');
+        $year = $this->createAccountingYear();
+        $this->assertTrue($invoice->state($year, 1, '10-01-2008', new FakeTranslation), $invoice->error->view());
+        
+        $voucher = Voucher::factory($year, 1);
+        
+        $expected = array(
+            0 => array(
+                'id' => 1,
+                'date_dk' => '10-01-2008',
+                'date' => '2008-01-10',
+                'text' => 'invoice #1 - test',
+                'debet' => 200.00,
+                'credit' => 0.00,
+                'voucher_number' => 1,
+                'reference' => '1',
+                'voucher_id' => 1,
+                'account_id' => 32,
+                'stated' => 1,
+                'account_number' => 56100,
+                'account_name' => 'Debitor'
+            ),
+            1 => array(
+                'id' => 2,
+                'date_dk' => '10-01-2008',
+                'date' => '2008-01-10',
+                'text' => 'invoice #1 - test',
+                'debet' => 0.00,
+                'credit' => 200.00,
+                'voucher_number' => 1,
+                'reference' => '1',
+                'voucher_id' => 1,
+                'account_id' => 3,
+                'stated' => 1,
+                'account_number' => 1120,
+                'account_name' => 'Salg uden moms'
             )
         );
         

@@ -230,7 +230,8 @@ class Invoice extends Debtor
                 'vat_off' => 1,
                 'text' => $text . ' - ' . $item['name']
             );
-            if ($credit_account->get('vat') != 0) {
+            
+            if ($credit_account->get('vat') == 'out') {
                 $total_with_vat += $item["quantity"] * $item["price"];
             }
 

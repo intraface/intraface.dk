@@ -170,7 +170,7 @@ class CreditNote extends Debtor
                 'vat_off' => 1,
                 'text' => $text.' #' . $this->get('number') . ' - ' . $item['name']
             );
-            if ($credit_account->get('vat_off') != 0) {
+            if ($debet_account->get('vat') == 'out') {
                 $total_with_vat += $item["quantity"] * $item["price"];
             }
 
