@@ -98,7 +98,7 @@ $page->start(t('Edit todo'));
             <?php if ($i['status'] == 0): ?>
           <a href="todo.php?id=<?php e($todo->get('id')); ?>&amp;item_id=<?php e($i['id']); ?>&amp;action=moveup"><?php e(t('Up')); ?></a>
           <a href="todo.php?id=<?php e($todo->get('id')); ?>&amp;item_id=<?php e($i['id']); ?>&amp;action=movedown"><?php e(t('Down')); ?></a>
-          <a href="todo.php?id=<?php e($value['id']); ?>&amp;delete=<?php e($i['id']); ?>" class="confirm" title="<?php e(t('This will delete the product')); ?>"><?php e(t('Remove')); ?></a>
+          <a href="todo.php?id=<?php e($value['id']); ?>&amp;delete=<?php e($i['id']); ?>" class="confirm" title="<?php e(t('This will delete the todo')); ?>"><?php e(t('Remove')); ?></a>
             <?php endif; ?>
       </div>
    <?php endforeach; ?>
