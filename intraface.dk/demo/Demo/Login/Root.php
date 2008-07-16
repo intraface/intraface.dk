@@ -36,6 +36,11 @@ class Demo_Login_Root extends k_Controller
         return new IntrafacePublic_Debtor_XMLRPC_Client($this->getCredentials(), true, INTRAFACE_XMLPRC_SERVER_PATH . "debtor/server.php");
     }
 
+    function execute()
+    {
+        return $this->forward('login');
+    }
+
     function forward($name)
     {
         $this->registry->set('contact', $this->getContactClient());
