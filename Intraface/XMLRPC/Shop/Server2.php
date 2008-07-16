@@ -311,7 +311,12 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
      */
     public function getProductCategories($credentials, $shop_id) 
     {
-        $category = new Ilib_Category(MDB2::singleton(DB_DSN), 
+        if (is_object($return = $this->checkCredentials($credentials))) {
+            return $return;
+        }
+
+        $this->_factoryWebshop($shop_id);
+        $category = new Intraface_Category($this->kernel, MDB2::singleton(DB_DSN), 
             new Intraface_Category_Type('shop', $shop_id));
 
         return $this->prepareResponseData($category->getAllCategories());
