@@ -16,6 +16,8 @@ $notes = '
 ';
 $web_dir = 'intraface.dk';
 
+// @todo make sure that there is not created an intraface.dk/intraface.dk on the server
+// @todo make sure that there is not created an install dir on the server.
 $ignore = array(
             'generate_package_xml.php',
             '*.tgz',
@@ -123,11 +125,10 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.in
 $pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk', '0.3.0');
 
 // Doctrine // remember to move it to correct installed dir afterwards
-$pfm->addPackageDepWithChannel('required', 'doctrine', 'pear.phpdoctrine.org', '0.11.0');
+$pfm->addPackageDepWithChannel('required', 'doctrine', 'pear.phpdoctrine.org', '0.11.1');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Nohtml', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Greaterthan', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Template_Positionable', 'public.intraface.dk', '0.1.0');
-
 
 // Ilib
 $pfm->addPackageDepWithChannel('required', 'Ilib_Category', 'public.intraface.dk', '0.1.0');
