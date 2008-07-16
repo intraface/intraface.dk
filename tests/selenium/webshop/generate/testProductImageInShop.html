@@ -1,0 +1,64 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testProductImageInShop</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testProductImageInShop</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=debtor,contact,order,product,administration,shop&helper_function=Administration:fillInIntranetAddress,Product:createVisibleInShop,Shop:create&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Product 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>new_append_file</td>
+	<td>##path_test_root##@@dirctory_separator@@webshop@@dirctory_separator@@wideonball1.jpg</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>append_file_submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/demo/intraface/shop/1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=See all products</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Product 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>picture</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
