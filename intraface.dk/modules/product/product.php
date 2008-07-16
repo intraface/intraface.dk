@@ -238,7 +238,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
             $variations = $product->getVariations();
             $variation_is_present = true;
         } catch (Intraface_Gateway_Exception $e) {
-            $variations_is_present = false;
+            $variation_is_present = false;
         }
         ?>
         <?php if ($variation_is_present): ?>
