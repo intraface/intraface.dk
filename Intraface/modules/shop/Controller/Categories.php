@@ -18,7 +18,7 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
 
         $shop = $this->registry->get('category_gateway')->findById($this->context->name);
         
-        $this->document->title = $translation->get('Categories for shop'.' '.$shop->getName());
+        $this->document->title = $translation->get('Categories for shop').' '.$shop->getName();
         $this->document->options = array($this->url('../') => $translation->get('Close', 'common'), $this->url('create') => $translation->get('Add new category'));
         
         $category = $this->getModel();
