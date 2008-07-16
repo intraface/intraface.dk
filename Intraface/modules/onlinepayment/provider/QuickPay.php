@@ -130,13 +130,12 @@ class OnlinePaymentQuickPay extends OnlinePayment
         } elseif ($action == "reversal") {
             $this->quickpay->set_transaction($this->get('transaction_number'));
             $this->eval = $this->quickpay->reverse();
-
             if (!empty($this->eval['qpstat']) AND $this->eval['qpstat'] === '000') {
                 $this->setStatus("reversed");
                 return true;
 
             } else {
-                $this->error->set('Betalingen kunne ikke tilbagebetales');
+                $this->error->set('Betalingen kunne ikke tilbagebetales: ' . $this->eval['qpstatmsg']);
                 return false;
 
             }
