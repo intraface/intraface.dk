@@ -105,8 +105,8 @@ class Intraface_XMLRPC_Debtor_Server
         }
 
         $debtor = Debtor::factory($this->kernel, 0, $type);
-        $debtor->dbquery->setFilter('contact_id', $contact_id);
-        $debtor->dbquery->setFilter('status', '-1');
+        $debtor->getDBQuery()->setFilter('contact_id', $contact_id);
+        $debtor->getDBQuery()->setFilter('status', '-1');
         return $debtor->getList();
 
     }
