@@ -119,8 +119,8 @@ $page->start(t('product') . ': ' . $product->get('name'));
 
         <li><a class="confirm" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo intval($product->get('id')); ?>"><?php e($translation->get('delete', 'common')); ?></a></li>
         <?php } ?>
-        <li><a href="product.php?copy=<?php echo intval($product->get('id')); ?>"><?php echo $translation->get('copy', 'common'); ?></a></li>
-        <li><a href="index.php?from_product_id=<?php echo intval($product->get('id')); ?>&amp;use_stored=true"><?php e($translation->get('close', 'common')); ?></a></li>
+        <li><a href="product.php?copy=<?php echo intval($product->get('id')); ?>"><?php e(t('copy', 'common')); ?></a></li>
+        <li><a href="index.php?from_product_id=<?php echo intval($product->get('id')); ?>&amp;use_stored=true"><?php e(t('close', 'common')); ?></a></li>
     </ul>
     <div><?php echo autoop($product->get('description')); ?></div>
 </div>
@@ -319,15 +319,15 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         $product->getPictures();
         if (count($product->get('pictures')) > 0) {
             foreach($product->get('pictures') AS $appendix) {
-                echo '<div class="appendix"><img src="'.$appendix['system-square']['file_uri'].'" />'.$appendix['original']['name'].' <a class="delete" href="product.php?id='.$product->get('id').'&amp;delete_appended_file_id='.$appendix['appended_file_id'].'">Slet</a></div>';
+                echo '<div class="appendix"><img src="'.$appendix['system-square']['file_uri'].'" />'.$appendix['original']['name'].' <a class="delete" href="product.php?id='.$product->get('id').'&amp;delete_appended_file_id='.$appendix['appended_file_id'].'">Fjern</a></div>';
             }
         }
         ?>
 
 
         <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="POST"  enctype="multipart/form-data">
-        <input type="hidden" name="id" value="<?php echo intval($product->get('id')); ?>" />
-        <input type="hidden" name="detail_id" value="<?php echo intval($product->get('detail_id')); ?>" />
+        <input type="hidden" name="id" value="<?php e($product->get('id')); ?>" />
+        <input type="hidden" name="detail_id" value="<?php e($product->get('detail_id')); ?>" />
 
         <?php
         $filehandler = new Filehandler($kernel);
