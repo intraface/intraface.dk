@@ -4,6 +4,7 @@
 1) Run all unit tests
 2) Run all selenium tests
 3) Download all files from upload through FTP. TODO: Make a method to first make a tar.gz of the files
+   - backup.sh in root can make an rsync to my harddisk - that should be sufficient
 4) Make a complete dump of the database: mysqldump --host mysql.intraface.dk --password intraface > mysql_backup.yyyymmdd.sql (replace ymd)
 5) Download the mysqldump via FTP
 6) Update the generate_package_xml.php and generate package.xml (see below)
