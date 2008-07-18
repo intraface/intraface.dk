@@ -27,7 +27,7 @@ $level = 0;
         <?php foreach($level_categories[$level] as $category): ?>
             <?php array_shift($level_categories[$level]); ?>
             <?php if ($category['id'] == $category_object->getId()) continue; ?>
-                <option <?php if ($category_object->getParentId() == $category['id']) echo 'checked="checked"'; ?> value="<?php e($category['id']); ?>">
+                <option <?php if ($category_object->getParentId() == $category['id']) echo 'selected="selected"'; ?> value="<?php e($category['id']); ?>">
                     <?php e(str_repeat('- ', $level)); ?> <?php e($category['name']); ?>
                 </option>
             <?php
