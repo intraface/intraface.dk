@@ -10,6 +10,10 @@
 
 //configuration - this should never be edited - only edit intraface.dk/config.local.php
 
+require_once 'Ilib/ClassLoader.php';
+require_once 'Doctrine/lib/Doctrine.php';
+spl_autoload_register(array('Doctrine', 'autoload'));
+
 // paths
 if (!defined('PATH_INCLUDE_IHTML')) define('PATH_INCLUDE_IHTML', PATH_ROOT.'Intraface/ihtml' . DIRECTORY_SEPARATOR);
 if (!defined('PATH_INCLUDE_MODULE')) define('PATH_INCLUDE_MODULE', PATH_ROOT.'Intraface/modules' . DIRECTORY_SEPARATOR);
