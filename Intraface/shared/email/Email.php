@@ -383,6 +383,8 @@ class Email extends Intraface_Standard
             $phpmailer->From = $this->kernel->intranet->address->get('email');
             $phpmailer->FromName = $this->kernel->intranet->address->get('name');
         }
+        
+        $phpmailer->AddReplyTo($phpmailer->From);
 
         // Reciever
         $contact = $this->getContact();
