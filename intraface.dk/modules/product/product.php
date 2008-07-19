@@ -7,12 +7,13 @@ $translation = $kernel->getTranslation('product');
 $shared_filehandler = $kernel->useShared('filehandler');
 $shared_filehandler->includeFile('AppendFile.php');
 
+$filehandler = new FileHandler($kernel);
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product = new Product($kernel, $_POST['id']);
     
     if (isset($_POST['append_file_submit'])) {
 
-        $filehandler = new FileHandler($kernel);
         $append_file = new AppendFile($kernel, 'product', $product->get('id'));
 
         if (isset($_FILES['new_append_file'])) {
@@ -26,7 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $append_file->addFile(new FileHandler($kernel, $id));
             }
         }
-
+        if (!$filehandler->error->isError()) {
+            header('Location: product.php?id='.$product->get('id'));
+            exit;
+        }
 
     }
 
@@ -40,9 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: '.$url);
         exit;
     }
-    
-    header('Location: product.php?id='.$product->get('id'));
-    exit;
 } elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // delete
@@ -330,7 +331,6 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         <input type="hidden" name="detail_id" value="<?php e($product->get('detail_id')); ?>" />
 
         <?php
-        $filehandler = new Filehandler($kernel);
         $filehandler_html = new FileHandlerHTML($filehandler);
         $filehandler_html->printFormUploadTag('pic_id', 'new_append_file', 'choose_file', array('include_submit_button_name' => 'append_file_submit', 'filemanager' => true));
 

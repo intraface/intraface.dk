@@ -125,6 +125,8 @@ class FileHandlerHTML
 
         $options = array_merge($pre_options, $options);
 
+        echo $this->file_handler->error->view();
+    
         if ($this->file_handler->get('id') != 0 && $options['type'] != 'only_upload') {
             $file_id = $this->file_handler->get('id');
             if ($options['image_size'] != '') {
