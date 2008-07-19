@@ -336,13 +336,14 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
     
     function testGetTotalPriceCalculatesCorrect()
     {
+        // This test is not as relevant after variation price difference has been deactivated.
         $this->createProductWithVariations();
         $basket = $this->createBasket();
 
         $basket->add(1, 0, 3); // 200 * 3 + vat 
-        $basket->add(2, 3, 2); // 106 * 2 + vat
+        $basket->add(2, 3, 2); // 100 * 2 + vat
 
-        $this->assertEquals(1015, $basket->getTotalPrice());
+        $this->assertEquals(1000, $basket->getTotalPrice());
     }
     
     function testGetTotalWeightCalculatesCorrect()

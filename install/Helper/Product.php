@@ -68,7 +68,7 @@ class Install_Helper_Product {
                 $variation->save();
                 $variation->load();
                 $detail = $variation->getDetail();
-                $detail->price_difference = ($a1 * $a2);
+                $detail->price_difference = 0; /* Can be reimplemented: ($a1 * $a2); */
                 $detail->weight_difference = -1*($a1 * $a2);
                 $detail->save();
                 

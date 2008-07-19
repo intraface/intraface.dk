@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 
                 $detail = $variation->getDetail();
-                $detail->price_difference = intval($variation_data['price_difference']);
+                $detail->price_difference = 0; /* Can be reimplemented: intval($variation_data['price_difference']); */
                 $detail->weight_difference = intval($variation_data['weight_difference']);
                 $detail->save();
                 
@@ -74,7 +74,7 @@ $page->start(t('Edit variations for product').' '.$product->get('name'));
                 <th><?php e(t('Use')); ?></th>
                 <th><?php e(t('Number')); ?></th>
                 <th><?php e(t('Variation')); ?></th>
-                <th><?php e(t('Price difference')); ?></th>
+                <?php /* Ca be reimplemented: <th><?php e(t('Price difference')); ?></th> */ ?>
                 <th><?php e(t('Weight difference')); ?></th>
             </tr>
         </thead>
@@ -122,7 +122,7 @@ $page->start(t('Edit variations for product').' '.$product->get('name'));
                             if($a2 != NULL) e(', '.$groups[1]['name'].': '.$a2->getName());
                             ?>
                         </td>
-                        <td><input type="text" name="variation[<?php echo intval($count); ?>][price_difference]" value="<?php if($variation !== NULL) e($variation->getDetail()->getPriceDifference()); ?>" size="4"/></td>
+                        <?php /* can be reimplemented: <td><input type="text" name="variation[<?php echo intval($count); ?>][price_difference]" value="<?php if($variation !== NULL) e($variation->getDetail()->getPriceDifference()); ?>" size="4"/></td> */ ?>
                         <td><input type="text" name="variation[<?php echo intval($count); ?>][weight_difference]" value="<?php if($variation !== NULL) e($variation->getDetail()->getWeightDifference()); ?>" size="4" /></td>
                     </tr>
                     <?php

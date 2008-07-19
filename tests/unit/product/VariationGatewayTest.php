@@ -26,6 +26,11 @@ class FakeVariationGatewayProduct {
         $values = array('has_variation' => 1);
         return $values[$key];
     }
+    
+    public function hasVariation()
+    {
+        return 1;
+    }
 }
 
 

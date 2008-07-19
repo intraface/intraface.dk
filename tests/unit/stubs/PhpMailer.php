@@ -33,6 +33,11 @@ class FakePhpMailer {
         
     }
     
+    public function addReplyTo($email) 
+    {
+        
+    }
+    
     public function addAttachment($file, $filename)
     {
         

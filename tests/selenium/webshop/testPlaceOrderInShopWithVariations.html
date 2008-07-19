@@ -1,19 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head profile="http://selenium-ide.openqa.org/profiles/test-case">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="" />
-<title>webshop:testPlaceOrderInShopWithVariations</title>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testPlaceOrderInShopWithVariations</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">webshop:testPlaceOrderInShopWithVariations</td></tr>
+<tr><td rowspan="1" colspan="3">testPlaceOrderInShopWithVariations</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=debtor,order,contact,product,administration,shop&amp;helper_function=Administration:fillInIntranetAddress,Product:createWithVariations,Shop:create&amp;login=true</td>
+	<td>install/reset-staging-server.php?modules=debtor,order,contact,product,administration,shop&helper_function=Administration:fillInIntranetAddress,Product:createWithVariations,Shop:create&login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -52,13 +49,8 @@
 	<td>label=Red</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>select_variation</td>
-	<td></td>
-</tr>
-<tr>
 	<td>verifyTextPresent</td>
-	<td>DKK 132,50</td>
+	<td>DKK 125,00</td>
 	<td></td>
 </tr>
 <tr>
@@ -83,7 +75,7 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>DKK 265,00</td>
+	<td>DKK 250,00</td>
 	<td></td>
 </tr>
 <tr>
@@ -133,7 +125,7 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>DKK 265</td>
+	<td>DKK 250</td>
 	<td></td>
 </tr>
 <tr>
@@ -173,7 +165,7 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>265,00</td>
+	<td>250,00</td>
 	<td></td>
 </tr>
 
