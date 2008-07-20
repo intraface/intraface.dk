@@ -20,7 +20,6 @@
  */ 
 class Intraface_XMLRPC_Server 
 {
-    
     /**
      * @var struct $credentials
      */
@@ -74,7 +73,6 @@ class Intraface_XMLRPC_Server
         return true;
     }
     
-
     /**
      * Prepares response to be sent with the correct UTF-8 encoding.
      *

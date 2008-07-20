@@ -59,6 +59,8 @@ class Intraface_XMLRPC_Debtor_Server
         $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
         $this->kernel->setting = new Intraface_Setting($this->kernel->intranet->get('id'));
 
+        Intraface_Doctrine_Intranet::singleton($this->kernel->intranet->getId());
+
         $debtor_module = $this->kernel->module('debtor');
     }
 

@@ -9,7 +9,6 @@
  */
 class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server 
 {
-
     private function factory($site_id) 
     {
         if (!$this->kernel->weblogin->hasModuleAccess('cms')) { // -2
