@@ -1889,3 +1889,7 @@ CREATE TABLE `webshop_basket_evaluation` (
   `shop_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+ALTER TABLE `basket_details` ADD `payment_method_key` INT NOT NULL AFTER `customer_ean` ;
+
