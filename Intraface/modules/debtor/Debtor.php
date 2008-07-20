@@ -1045,9 +1045,12 @@ class Debtor extends Intraface_Standard
                 break;
             case 'user':
                 // @todo needs to be changed in order to work with contactlogin
-                $intranet['email'] = $this->kernel->user->getAddress()->get('email');
-                $intranet['contact_person'] = $this->kernel->user->getAddress()->get('name');
-                $intranet['phone'] = $this->kernel->user->getAddress()->get('phone');
+                // hack hack hack
+                if (isset($this->kernel->user) and is_object($this->kernel->user) and method_exists($this->kernel->user, 'getAddress')) {
+                    $intranet['email'] = $this->kernel->user->getAddress()->get('email');
+                    $intranet['contact_person'] = $this->kernel->user->getAddress()->get('name');
+                    $intranet['phone'] = $this->kernel->user->getAddress()->get('phone');
+                }
                 break;
             case 'defined':
                 $intranet['email'] = $this->kernel->setting->get('intranet', 'debtor.sender.email');
