@@ -6,9 +6,9 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
         $error = new Intraface_Error();
         $validator = new Intraface_Validator($error);
         $validator->isNumeric($this->POST['show_online'], 'show_online skal være et tal');
-        $validator->isString($this->POST['description'], 'confirmation text is not valid');
+        $validator->isString($this->POST['description'], 'description text is not valid');
         $validator->isString($this->POST['confirmation'], 'confirmation text is not valid');
-        $validator->isString($this->POST['receipt'], 'webshop receipt is not valid', '<p><br/><div><ul><ol><li><h2><h3><h4>');
+        $validator->isString($this->POST['receipt'], 'shop receipt is not valid', '<p><br/><div><ul><ol><li><h2><h3><h4>');
 
         return !$error->isError();
     }

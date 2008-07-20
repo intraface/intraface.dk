@@ -14,6 +14,8 @@ class Intraface_modules_shop_Controller_Index extends k_Controller
         if (count($shops) == 0) {
             return $this->render(dirname(__FILE__) . '/tpl/empty-table.tpl.php', array('message' => 'No shops has been created yet.'));    
         }
+    
+
         
         $data = array('shops' => $shops);
         return $this->render(dirname(__FILE__) . '/tpl/shops.tpl.php', $data);

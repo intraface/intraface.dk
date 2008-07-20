@@ -29,6 +29,9 @@ class Intraface_modules_shop_Controller_Categories_Edit extends k_Controller
     {
         $this->document->title = $this->__('Edit category');
         
+        $kernel = $this->registry->get('kernel');
+        $redirect = Intraface_Redirect::factory($kernel, 'receive');
+        
         $data = array(
             'category_object' => $this->getModel()
         );
@@ -54,8 +57,11 @@ class Intraface_modules_shop_Controller_Categories_Edit extends k_Controller
         } else {
             $url = $this->context->context->url();
         }
-        
-        throw new k_http_Redirect($url);
+
+        $kernel = $this->registry->get('kernel');
+        $redirect = Intraface_Redirect::factory($kernel, 'receive');
+
+        throw new k_http_Redirect($redirect->getRedirect($url));
     } 
 
     function isValid()

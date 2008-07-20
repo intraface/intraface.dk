@@ -1,7 +1,6 @@
 <?php
 class Intraface_modules_shop_Controller_Categories extends k_Controller
 {
-
     function getShopId()
     {
         return $this->context->getShopId();
@@ -19,12 +18,14 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
         $shop = $this->registry->get('category_gateway')->findById($this->context->name);
         
         $this->document->title = $translation->get('Categories for shop').' '.$shop->getName();
-        $this->document->options = array($this->url('../') => $translation->get('Close', 'common'), $this->url('create') => $translation->get('Add new category'));
+        $this->document->options = array(
+            $redirect->getRedirect($this->url('../')) => $translation->get('Close', 'common'), $this->url('create') => $translation->get('Add new category')
+        );
         
         $category = $this->getModel();
         $data['categories'] = $category->getAllCategories();
         
-        if(isset($this->GET['product_id'])) {
+        if (isset($this->GET['product_id'])) {
             $data['product_id'] = $this->GET['product_id'];
         }
         
@@ -58,7 +59,7 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
         $shop = $this->registry->get('category_gateway')->findById($this->context->name);
         $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()));
         $appender = $category->getAppender($this->POST['product_id']);
-        foreach($this->POST['category'] AS $category) {
+        foreach ($this->POST['category'] AS $category) {
             $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()), $category);
             $appender->add($category);
         }
