@@ -1,10 +1,7 @@
 <?php
-
 class Intraface_Doctrine_Intranet
 {
-    
     private $id;
-    
     
     public function __construct($id) 
     {
@@ -25,10 +22,5 @@ class Intraface_Doctrine_Intranet
     public function getId()
     {
         return $this->id;
-    }
-    
-    
+    }   
 }
-
-
-?>
