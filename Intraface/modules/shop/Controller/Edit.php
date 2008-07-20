@@ -1,16 +1,25 @@
 <?php
 class Intraface_modules_shop_Controller_Edit extends k_Controller
 {
+    private $error;
+    
+    function getError()
+    {
+        if ($this->error) {
+            return $this->error;
+        }
+        return ($this->error = new Intraface_Error()); 
+    }
+    
     function isValid()
     {
-        $error = new Intraface_Error();
-        $validator = new Intraface_Validator($error);
+        $validator = new Intraface_Validator($this->getError());
         $validator->isNumeric($this->POST['show_online'], 'show_online skal være et tal');
         $validator->isString($this->POST['description'], 'description text is not valid');
         $validator->isString($this->POST['confirmation'], 'confirmation text is not valid');
         $validator->isString($this->POST['receipt'], 'shop receipt is not valid', '<p><br/><div><ul><ol><li><h2><h3><h4>');
 
-        return !$error->isError();
+        return !$this->getError()->isError();
     }
 
     function getModel()
@@ -22,11 +31,18 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
 
     function GET()
     {
+        $this->document->title = 'Edit shop';
+        
         $data = array();
 
         if (is_numeric($this->context->name)) {
-            $shop = $this->getModel();
-            $data = $shop->toArray();
+            $post = $this->POST->getArrayCopy();
+            if (!empty($post)) {
+                $data = $post;
+            } else {
+                $shop = $this->getModel();
+                $data = $shop->toArray();
+            }
         } else {
             $data['receipt'] = $this->registry->get('kernel')->setting->get('intranet','webshop.webshop_receipt');
         }
@@ -35,13 +51,13 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
         $settings = $webshop_module->getSetting('show_online');
 
         $data = array('data' => $data, 'settings' => $settings);
-        return $this->render(dirname(__FILE__) . '/tpl/edit.tpl.php', $data);
+        return $this->getError()->view() . $this->render(dirname(__FILE__) . '/tpl/edit.tpl.php', $data);
     }
 
     function POST()
     {
         if (!$this->isValid()) {
-            throw new Exception('Values not valid');
+            return $this->GET();
         }
 
         $doctrine = $this->registry->get('doctrine');
