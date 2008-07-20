@@ -29,4 +29,9 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
     {
         return $this->name;
     }
+    
+    function getConfirmationText()
+    {
+        return $this->confirmation;
+    }
 }

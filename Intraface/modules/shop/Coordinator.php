@@ -321,9 +321,10 @@ class Intraface_modules_shop_Coordinator
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
+        // @todo fix this later on
         if (!$email->save(array('contact_id' => $this->contact->get('id'),
-                                'subject' => 'Bekræftelse på bestilling #' . $order_id,
-                                'body' => $this->kernel->setting->get('intranet', 'webshop.confirmation_text') . "\n" . $this->contact->getLoginUrl() . "\n\nVenlig hilsen\n" . $this->kernel->intranet->address->get('name'),
+                                'subject' => 'Bekræftelse på ordre #' . $order_id,
+                                'body' => $this->shop->getConfirmationText() . "\n" . $this->contact->getLoginUrl() . "\n\nVenlig hilsen\n" . $this->kernel->intranet->address->get('name'),
                                 'from_email' => $this->kernel->intranet->address->get('email'),
                                 'from_name' => $this->kernel->intranet->address->get('name'),
                                 'type_id' => 12, // webshop
