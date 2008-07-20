@@ -1145,7 +1145,9 @@ class Debtor extends Intraface_Standard
             0=>'Ingen',
             1=>'Kontooverførsel',
             2=>'Girokort +01',
-            3=>'Girokort +71'
+            3=>'Girokort +71',
+            4=>'Efterkrav',
+            5=>'Onlinebetaling'
         );
     }
 }

@@ -446,7 +446,7 @@ if (isset($onlinepayment)) {
                     ?>
                 </td>
             </tr>
-            <?php	if ($debtor->get("type") == "invoice") {	?>
+            <?php	if ($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {	?>
                 <tr>
                     <th>Betalingsmetode</th>
                     <td><?php echo safeToHtml($debtor->get("translated_payment_method")); ?></td>

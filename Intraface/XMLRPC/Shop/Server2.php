@@ -635,6 +635,64 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
 
         return $this->prepareResponseData($this->webshop->getBasket()->getCustomerComment());
     }
+    
+    /**
+     * Get possible payment methods
+     *
+     * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
+     *
+     * @return array
+     */
+    public function getPaymentMethods($credentials, $shop_id)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop($shop_id);
+        
+        return $this->prepareResponseData($this->webshop->getPaymentMethods());
+    }
+    
+    /**
+     * Saves payment method
+     *
+     * @param struct $credentials     Credentials to use the server
+     * @param integer $shop_id    Id for the shop
+     * @param string $payment_method Payment method to save
+     *
+     * @return boolean true or false
+     */
+    public function savePaymentMethod($credentials, $shop_id, $payment_method)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop($shop_id);
+
+        $payment_method = $this->processRequestData($payment_method);
+        if (!$this->webshop->getBasket()->savePaymentMethod($payment_method)) {
+            require_once 'XML/RPC2/Exception.php';
+            throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
+        }
+
+        return $this->prepareResponseData(true);
+    }
+    
+    /**
+     * Returns selected payment method
+     *
+     * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
+     *
+     * @return array
+     */
+    public function getPaymentMethod($credentials, $shop_id)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop($shop_id);
+
+        return $this->prepareResponseData($this->webshop->getBasket()->getPaymentMethod());
+    }
 
     /**
      * Get receipt text

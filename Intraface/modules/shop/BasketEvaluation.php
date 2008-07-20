@@ -52,7 +52,8 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                 0 => 'price',
                 1 => 'weight',
                 2 => 'customer_coupon',
-                3 => 'customer_country'),
+                3 => 'customer_country',
+                4 => 'payment_method'),
 
             'evaluate_method' => array(
                 0 => 'equals',
@@ -278,6 +279,16 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                         $evaluate = trim($customer['country']);
                     }
                     // country can only be evaluated as 'equals' or 'different from'
+                    if ($evaluation['evaluate_method'] != 'equals' && $evaluation['evaluate_method'] != 'different_from') {
+                        $evaluation['evaluate_method'] = 'different_from';
+                    }
+                    break;
+                case 'payment_method':
+                    settype($customer['payment_method'], 'array');
+                    settype($customer['payment_method']['identifier'], 'string');
+                    
+                    $evaluate = $customer['payment_method']['identifier'];
+                    // payment method can only be evaluated as 'equals' or 'different from'
                     if ($evaluation['evaluate_method'] != 'equals' && $evaluation['evaluate_method'] != 'different_from') {
                         $evaluation['evaluate_method'] = 'different_from';
                     }

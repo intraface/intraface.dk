@@ -189,6 +189,10 @@ class Intraface_modules_shop_Coordinator
             if ($value['message'] != '') $value['message'] .= "\n\n";
             $value['message'] .= "Kommentar:\n". $input['customer_comment'];
         }
+        
+        if (isset($input['payment_method']) && is_array($input['payment_method']) && !empty($input['payment_method'])) {
+            $value['payment_method'] = $input['payment_method']['key'];
+        }
 
 
         $this->order = new Debtor($this->kernel, 'order');
@@ -406,4 +410,62 @@ class Intraface_modules_shop_Coordinator
         $debtor = Debtor::factory($this->kernel, (int)$order_id);
         return $debtor->setSent();
     }
+    
+    public function getPaymentMethods() 
+    {
+        $payment_method[] = array(
+                'key' => 4,
+                'identifier' => 'CashOnDelivery',
+                'description' => 'Cash on delivery',
+                'text' => '');
+        if($this->kernel->intranet->hasModuleAccess('onlinepayment')) {
+            $payment_method[] = array(
+                'key' => 5,
+                'identifier' => 'OnlinePayment',
+                'description' => 'Online payment',
+                'text' => '');
+        }
+        
+        return $payment_method;
+    }
+    
+    /**
+     * Returns payment method key from identifier
+     * 
+     * @param string $payment_method
+     * @return integer payment method key
+     */
+    public function getPaymentMethodKeyFromIdenfifier($payment_method) 
+    {
+        $methods = $this->getPaymentMethods();
+        foreach($methods AS $method) {
+            if($method['identifier'] == $payment_method) {
+                return $method['key'];
+            }
+        }
+        
+        throw new Exception('Invalid payment method "'.$payment_method.'"');
+        
+    }
+    
+    /**
+     * Returns payment method from key
+     * 
+     * @param string $payment_method_key
+     * @return array payment method
+     */
+    public function getPaymentMethodFromKey($payment_method_key) 
+    {
+        $methods = $this->getPaymentMethods();
+        foreach($methods AS $method) {
+            if($method['key'] == $payment_method_key) {
+                return $method;
+            }
+        }
+        
+        throw new Exception('Invalid payment method key "'.$payment_method_key.'"');
+        
+    }
+    
+    
 }

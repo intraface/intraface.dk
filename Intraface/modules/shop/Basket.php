@@ -269,6 +269,24 @@ class Intraface_modules_shop_Basket
         return $this->saveToDb($sql);
 
     }
+    
+    /**
+     * Save Payment method
+     *
+     * @param string $payment_method
+     *
+     * @return boolean true or false
+     */
+    public function savePaymentMethod($payment_method)
+    {
+        
+        $payment_method_key = $this->coordinator->getPaymentMethodKeyFromIdenfifier($payment_method);
+        
+        $sql = "payment_method_key = \"".$payment_method_key."\"";
+
+        return $this->saveToDb($sql);
+
+    }
 
     /**
      * @todo Is this really public
@@ -396,6 +414,28 @@ class Intraface_modules_shop_Basket
         }
 
         return array('customer_comment' => $db->f('customer_comment'));
+    }
+    
+    /**
+     * Return payment method
+     *
+     * @todo Why return an array? Then it is possible to extend with more data later.
+     *
+     * @return array with customer coupon
+     */
+    public function getPaymentMethod()
+    {
+        $sql_extra = implode(" AND ", $this->conditions);
+        $db = new DB_Sql;
+        $db->query("SELECT payment_method_key
+            FROM basket_details
+            WHERE " . $sql_extra . "
+                AND intranet_id = " . $this->intranet->getId());
+        if (!$db->nextRecord() || $db->f('payment_method_key') == 0) {
+            return array();
+        }
+
+        return array('payment_method' => $this->coordinator->getPaymentMethodFromKey($db->f('payment_method_key')));
     }
 
     /**

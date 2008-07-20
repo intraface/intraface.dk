@@ -199,7 +199,20 @@ if($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {
 			<label for="girocode" style="display: none;">Girokode</label> <input class="input" name="girocode" id="girocode" value="<?php if(isset($value['girocode'])) print safeToHtml($value['girocode']); ?>" size="16" onfocus="if(document.getElementById) document.getElementById('giro71').checked = true;" /> + <?php echo $kernel->setting->get("intranet", "giro_account_number"); ?>&lt;
 		</div>
     <?php } ?>
-	</fieldset>
+    <?php if ($kernel->intranet->hasModuleAccess('shop')): ?>
+        <div>
+            <label<?php if(isset($value['payment_method']) AND $value['payment_method'] == 4) print(' class="selected"'); ?>><input class="input" id="account" type="radio" name="payment_method" value="4" <?php if(isset($value['payment_method']) AND $value['payment_method'] == 4) print("checked=\"CHECKED\""); ?> />
+            Per efterkrav</label>
+        </div>
+    <?php endif; ?>
+    <?php if ($kernel->intranet->hasModuleAccess('shop')): ?>
+        <div>
+            <label<?php if(isset($value['payment_method']) AND $value['payment_method'] == 5) print(' class="selected"'); ?>><input class="input" id="account" type="radio" name="payment_method" value="5" <?php if(isset($value['payment_method']) AND $value['payment_method'] == 5) print("checked=\"CHECKED\""); ?> />
+            Onlinebetaling</label>
+        </div>
+    <?php endif; ?>
+    
+    </fieldset>
 	<?php
 }
 ?>
