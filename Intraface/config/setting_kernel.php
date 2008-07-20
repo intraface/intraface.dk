@@ -40,9 +40,6 @@ $_setting['giro_account_number'] = '';
 $_setting['webshop.show_online'] = 0;
 $_setting['webshop.confirmation_text'] = 'Tak for din bestilling i vores webshop. Vi behandler ordrene så hurtigt vi kan.';
 $_setting['webshop.webshop_receipt'] = "<h3>Nu sker der følgende</h3>\n\n<ol>\n  <li>\n    <h4>Ordren modtages</h4>\n    <p>Vi modtager ordren og behandler den i løbet af højst 3 arbejdsdage.</p>\n  </li>\n  <li>\n    <h4>Ordren sendes</h4>\n    <p>Ordren sendes som almindelig brev med Post Danmark. De bruger typisk 1-2 dage med at få produktet frem.</p>\n  </li>\n  <li>\n    <h4>Du pakker ud</h4>\n    <p>Forventningsfuld åbner du brevet og begynder at kigge på tingene. Hvis der er nogle problemer med leverancen, kontakter du os.</p>\n  </li>\n</ol>";
-$_setting['webshop.discount_percent'] = '15';
-$_setting['webshop.discount_limit'] = '1000';
-
 
 $_setting['comment.gravatar'] = 'show';
 $_setting['comment.gravatar.default_url'] = 'http://www.intraface.dk/images/gravatar/gravatar-default.gif';
