@@ -59,13 +59,6 @@ class InstanceHandler extends Intraface_Standard
             trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (1)", E_USER_ERROR);
         }
 
-        if(strtolower(get_class($file_handler)) == 'filehandler' || strtolower(get_class($file_handler)) == 'filemanager') {
-            // HJÆLP MIG, jeg kan ikke vende denne if-sætning rigtigt.
-            // Men her er det ok.
-        } else {
-            trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (2)", E_USER_ERROR);
-        }
-
         $this->file_handler = $file_handler;
         $this->id = (int)$id;
         $this->instance_path = $this->file_handler->getUploadPath().'instance/';
@@ -92,19 +85,12 @@ class InstanceHandler extends Intraface_Standard
      *
      * @return object
      */
-    function factory(&$file_handler, $type_name, $param = array()) 
+    function factory($file_handler, $type_name, $param = array()) 
     {
         if(!is_object($file_handler)) {
             trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->factory (1)", E_USER_ERROR);
         }
 
-        if(strtolower(get_class($file_handler)) != 'filehandler' AND strtolower(get_class($file_handler)) != 'filemanager') {
-            trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->factory (2)", E_USER_ERROR);
-        }
-        /*
-        print_r($file_handler->get());
-        exit;
-        */
         if((int)$file_handler->get('id') == 0) {
             trigger_error("Der kan kun laves instance ud en loaded fil i Instance->factory", E_USER_ERROR);
         }
@@ -281,7 +267,7 @@ class InstanceHandler extends Intraface_Standard
                 $types[$i]['file_uri'] = FILE_VIEWER.'?/'.$this->file_handler->kernel->intranet->get('public_key').'/'.$this->file_handler->get('access_key').'/'.$types[$i]['name'].'/'.urlencode($this->file_handler->get('file_name'));
 
                 $match_file_instance_key = false;
-                foreach($file_instances AS $file_instance_key => $file_instance) {
+                foreach($file_instances as $file_instance_key => $file_instance) {
                     if($file_instance['type_key'] == $types[$i]['type_key']) {
                         $match_file_instance_key = $file_instance_key;
                         break;
