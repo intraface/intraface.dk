@@ -21,21 +21,15 @@ if (!empty($_POST)) {
     if (!$error->isError()) {
 
         $kernel->setting->set('intranet','webshop.show_online', $_POST['show_online']);
-        //$kernel->setting->set('intranet','webshop.discount_limit', $_POST['discount_limit']);
-        //$kernel->setting->set('intranet','webshop.discount_percent', $_POST['discount_percent']);
         $kernel->setting->set('intranet','webshop.confirmation_text', $_POST['confirmation_text']);
         $kernel->setting->set('intranet','webshop.webshop_receipt', $_POST['webshop_receipt']);
 
         header('Location: index.php');
         exit;
-    }
-    else {
+    } else {
         $value = $_POST;
     }
-}
-else {
-    $value['discount_limit'] = $kernel->setting->get('intranet','webshop.discount_limit');
-    $value['discount_percent'] = $kernel->setting->get('intranet','webshop.discount_percent');
+} else {
     $value['show_online'] = $kernel->setting->get('intranet','webshop.show_online');
     $value['confirmation_text'] = $kernel->setting->get('intranet','webshop.confirmation_text');
     $value['webshop_receipt'] = $kernel->setting->get('intranet','webshop.webshop_receipt');
@@ -108,20 +102,6 @@ $page->start(safeToHtml($translation->get('webshop')));
         
     </fieldset>
     
-    <!--
-    <fieldset>
-        <legend>Rabat</legend>
-        <div class="formrow">
-        <label>Rabatgrænse</label>
-        <input value="<?php echo safeToHtml($value['discount_limit']); ?>" name="discount_limit" type="text" /> kroner
-        </div>
-        <div class="formrow">
-        <label>Rabat</label>
-        <input value="<?php echo safeToHtml($value['discount_percent']); ?>" name="discount_percent" type="text" /> %
-
-        </div>
-    </fieldset>
-    -->
     <fieldset>
         <legend><?php echo safeToHtml($translation->get('order confirmation - including warranty and right of cancellation')); ?></legend>
         <div>
