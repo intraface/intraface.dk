@@ -1,11 +1,8 @@
 <?php
 class Intraface_Doctrine_Template_Listener_Intranet extends Doctrine_Record_Listener
 {
-    
-    
     public function preDqlSelect(Doctrine_Event $event)
     {
-        // print('preDqlSelect, intranet_id:'.$this->getIntranetId());
         $params = $event->getParams();
         $field = $params['alias'] . '.intranet_id';
         $query = $event->getQuery();
@@ -14,14 +11,11 @@ class Intraface_Doctrine_Template_Listener_Intranet extends Doctrine_Record_List
     
     public function preInsert(Doctrine_Event $event)
     {
-        // print('preInsert');
         $event->getInvoker()->intranet_id = $this->getIntranetId();
-        
     }
     
     public function preUpdate(Doctrine_Event $event)
     {
-        // print('preUpdate');
         if($event->getInvoker()->intranet_id != $this->getIntranetId()) {
             throw new Exception('You are trying to update a record with another intranet_id than the present one ('.$event->getInvoker()->intranet_id.'/'.$this->getIntranetId().')');
         }
@@ -40,7 +34,5 @@ class Intraface_Doctrine_Template_Listener_Intranet extends Doctrine_Record_List
     private function getIntranetId()
     {
         return Intraface_Doctrine_Intranet::singleton()->getId();
-    }
-    
+    }   
 }
-?>
