@@ -21,7 +21,7 @@
                  foreach ($settings AS $k=>$v) {
                     echo '<option value="'.$k.'"';
                     if (!empty($data['show_online']) AND $k == $data['show_online']) echo ' selected="selected"';
-                    echo '>' . t($v) . '</option>';
+                    echo '>' . __($v) . '</option>';
                 }
             ?>
             </select>
