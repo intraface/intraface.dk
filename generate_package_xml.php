@@ -33,7 +33,8 @@ $ignore = array(
             'tools.intraface.dk/',
             'example/',
             'cache/',
-            '.svn/'
+            '.svn/',
+            'log/*'
             );
 
 function getFilelist($dir) {
@@ -172,6 +173,7 @@ $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_HTML', 'public.i
 
 // debtor
 $pfm->addPackageDepWithChannel('required', 'Document_Cpdf', 'public.intraface.dk', '0.0.1');
+$pfm->addPackageDepWithChannel('required', 'Console_Table', 'pear.php.net', '1.1.1');
 
 // contact
 $pfm->addPackageDepWithChannel('required', 'Services_Eniro', 'public.intraface.dk', '0.1.6');
