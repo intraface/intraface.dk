@@ -14,26 +14,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $existing_groups = array();
         $new_groups = array();
         foreach($product->getAttributeGroups() AS $group) $existing_groups[] = $group['id'];
-        if(isset($_POST['selected']) && is_array($_POST['selected'])) {
-            $new_groups = $_POST['selected'];    
+        
+        if(count($existing_groups) > 0) {
+            try {
+                $variations = $product->getVariations();
+                if($variations->count() > 0) {
+                    $error = new Intraface_Error;
+                    $error->set('You cannot change the attached attribute groups when variations has been created');
+                }
+            } catch (Intraface_Gateway_Exception $e) {
+                
+            }
         }
         
-        foreach(array_diff($existing_groups, $new_groups) AS $id) {
-            $product->removeAttributeGroup($id);
+        if(!isset($error) || $error->isError() == 0) {
+            if(isset($_POST['selected']) && is_array($_POST['selected'])) {
+                $new_groups = $_POST['selected'];    
+            }
+            
+            foreach(array_diff($existing_groups, $new_groups) AS $id) {
+                $product->removeAttributeGroup($id);
+            }
+            
+            foreach($new_groups AS $id) {
+                $product->setAttributeGroup($id);
+            }
+            
+            $existing_groups = $new_groups;
+            
+            header('location: product_variations_edit.php?id='.$product->getId());
         }
-        
-        foreach($new_groups AS $id) {
-            $product->setAttributeGroup($id);
-        }
-        
-        $existing_groups = $new_groups;
-        
-        header('location: product_variations_edit.php?id='.$product->getId());
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $product = new Product($kernel, $_GET['id']);
+    
     $existing_groups = array();
     foreach($product->getAttributeGroups() AS $group) $existing_groups[] = $group['id'];
+    
+    if(count($existing_groups) > 0) {
+        try {
+            $variations = $product->getVariations();
+            if($variations->count() > 0) {
+                
+                $error = new Intraface_Error;
+                $error->set('You cannot change the attached attribute groups when variations has been created');
+            }
+        } catch (Intraface_Gateway_Exception $e) {
+            
+        }
+    }
+    
 }
 
 $groups = $group_gateway->findAll();
@@ -47,6 +77,8 @@ $page->start(t('Select attributes for product').' '.$product->get('name'));
     <li><a class="new" href="attribute_group_edit.php"><?php e(t('Create attribute group')); ?></a></li>
     <li><a href="product.php?id=<?php e($product->get('id')); ?>"><?php e(t('Close', 'common')); ?></a></li>
 </ul>
+
+<?php if(isset($error)) echo $error->view('html'); ?>
 
 <?php if ($groups->count() == 0): ?>
     <p><?php e(t('No attribute groups has been created.')); ?> <a href="attribute_group_edit.php"><?php e(t('Create attribute group')); ?></a>.</p>
