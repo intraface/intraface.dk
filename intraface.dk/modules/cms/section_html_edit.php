@@ -42,6 +42,7 @@ if (!empty($_POST)) {
             $filehandler = new FileHandler($kernel);
             $filehandler->createUpload();
             $filehandler->upload->setSetting('file_accessibility', 'public');
+            $filehandler->upload->setSetting('max_file_size', 5000000);
             $filehandler->upload->setSetting('allow_only_images', 1);
             $id = $filehandler->upload->upload('new_pic');
 
