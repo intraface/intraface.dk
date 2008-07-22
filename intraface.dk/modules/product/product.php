@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $filehandler = new FileHandler($kernel);
 
             $filehandler->createUpload();
+            $filehandler->upload->setSetting('max_file_size', 5000000);
             if ($product->get('do_show') == 1) { // if shown i webshop
                 $filehandler->upload->setSetting('file_accessibility', 'public');
             }
