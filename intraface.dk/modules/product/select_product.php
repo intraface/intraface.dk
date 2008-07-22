@@ -208,7 +208,8 @@ $page->start(t('select product'));
                     <td><?php e($p['name']); ?></td>
                     <td><?php if(!empty($p['unit']['combined'])) e(t($p['unit']['combined'])); ?></td>
                     <?php if($kernel->user->hasModuleAccess('stock')): ?>
-                        <td><?php if($p['stock'] == 0): e("-"); elseif(isset($p['stock_status']['for_sale'])): e($p['stock_status']['for_sale']); else: echo 0; endif; ?></td>
+                        <td>
+                            <?php if($p['stock'] == 0): e("-"); elseif($p['has_variation']): e('...'); elseif(isset($p['stock_status']['for_sale'])): e($p['stock_status']['for_sale']); else: echo 0; endif; ?></td>
                     <?php endif; ?>
                     <td><?php if ($p['vat'] == 1) e('yes'); else e('no'); ?></td>
                   <td class="amount"><?php e(number_format($p['price'], 2, ",", ".")); ?></td>
