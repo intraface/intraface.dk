@@ -45,11 +45,11 @@ class Install_Helper_CMS {
 
         require_once 'Intraface/modules/cms/TemplateSection.php';
         $section = new Intraface_modules_cms_templatesection_Mixed($template);
-        $section_id = $section->save(array('name' => 'Test', 'identifier' => 'test', 'allowed_element' => array(1, 2, 3, 4, 5, 6, 7, 8, 9)));
+        $section_id = $section->save(array('name' => 'Content', 'identifier' => 'content', 'allowed_element' => array(1, 2, 3, 4, 5, 6, 7, 8, 9)));
 
         require_once 'Intraface/modules/cms/Page.php';
         $page = new CMS_Page($site);
-        $template_id = $page->save(array('title' => 'Test', 'allow_comment' => 0, 'hidden' => 0, 'page_type' => 'page', 'template_id' => $template_id));
+        $template_id = $page->save(array('title' => 'Test', 'allow_comment' => 0, 'hidden' => 0, 'page_type' => 'page', 'template_id' => $template_id, 'identifier' => 'test'));
 
     }
 }
