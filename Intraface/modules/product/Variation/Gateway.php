@@ -88,7 +88,7 @@ class Intraface_modules_product_Variation_Gateway
         $collection = $query->where(get_class($this->variation).'.product_id = ? AND id = ?', array($this->product->getId(), $id))->execute();
         
         if (!$collection || $collection->count() == 0) {
-            throw new Intraface_Gateway_Exception('Unable to find variation');
+            throw new Intraface_Gateway_Exception('Unable to find variation '.$id);
         }
         if ($collection->count() > 1) {
             throw new Exception('More than one entry found!');
