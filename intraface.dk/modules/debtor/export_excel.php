@@ -9,7 +9,7 @@ if (empty($_GET['id'])) $_GET['id'] = '';
 if (empty($_GET['type'])) $_GET['type'] = '';
 
 $debtor = Debtor::factory($kernel, intval($_GET["id"]), $_GET["type"]);
-$debtor->dbquery->storeResult("use_stored", $debtor->get("type"), "toplevel");
+$debtor->getDbQuery()->storeResult("use_stored", $debtor->get("type"), "toplevel");
 
 //$db = new DB_sql;
 
@@ -48,23 +48,23 @@ $status_types = array(
     3 => 'Annulleret');
 
 $worksheet->write($i, 0, 'Status', $format_italic);
-$worksheet->write($i, 1, $status_types[$debtor->dbquery->getFilter('status')], $format_italic);
+$worksheet->write($i, 1, $status_types[$debtor->getDbQuery()->getFilter('status')], $format_italic);
 $i++;
 
 $worksheet->write($i, 0, 'Søgetekst', $format_italic);
-$worksheet->write($i, 1, $debtor->dbquery->getFilter('text'), $format_italic);
+$worksheet->write($i, 1, $debtor->getDbQuery()->getFilter('text'), $format_italic);
 $i++;
 
-if($debtor->dbquery->checkFilter('product_id')) {
-    $product = new Product($kernel, $debtor->dbquery->getFilter('product_id'));
+if($debtor->getDbQuery()->checkFilter('product_id')) {
+    $product = new Product($kernel, $debtor->getDbQuery()->getFilter('product_id'));
 
     $worksheet->write($i, 0, 'Produkt', $format_italic);
     $worksheet->write($i, 1, $product->get('name'), $format_italic);
     $i++;
 }
 
-if($debtor->dbquery->checkFilter('contact_id')) {
-    $contact = new Contact($kernel, $debtor->dbquery->getFilter('contact_id'));
+if($debtor->getDbQuery()->checkFilter('contact_id')) {
+    $contact = new Contact($kernel, $debtor->getDbQuery()->getFilter('contact_id'));
 
     $worksheet->write($i, 0, 'Kontakt', $format_italic);
     $worksheet->write($i, 1, $contact->address->get('name'), $format_italic);
