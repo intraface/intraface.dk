@@ -1,0 +1,144 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testDeleteCreditNote</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testDeleteCreditNote</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=debtor,invoice,contact,product&helper_function=Administration:fillInIntranetAddress,Contact:create,Product:create&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=debtor</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=create invoice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>search</td>
+	<td>tes</td>
+</tr>
+<tr>
+	<td>keyUp</td>
+	<td>search</td>
+	<td>t</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>contact_select</td>
+	<td>label=Contact 1</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>go_search</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description</td>
+	<td>State test</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>none</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Tilføj vare</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>1</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit_close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>sent</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>credit_note</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>credit_note #1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>delete</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>credit_note #1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>credit_notes</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=invoices</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>status</td>
+	<td>label=Alle</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>search</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=State test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>credit_note</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

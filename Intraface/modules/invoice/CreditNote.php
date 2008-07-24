@@ -30,7 +30,7 @@ class CreditNote extends Debtor
     function delete()
     {
         if ($this->get("where_from") == "invoice" && $this->get("where_from_id") != 0) {
-            $invoice = parent::factory($this->kernel, $this->get("where_from_id"));
+            $invoice = parent::factory($this->kernel, (int)$this->get("where_from_id"));
         }
         parent::delete();
         if (isset($invoice)) {
