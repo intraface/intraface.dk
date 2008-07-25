@@ -64,7 +64,8 @@ class Email extends Intraface_Standard
             9 => 'contact',
             10 => 'electronic_invoice',
             11 => 'email_to_search',  // kan ikke helt huske hvad den her er?
-            12 => 'webshop'
+            12 => 'webshop',
+            13 => 'onlinepayment'
         );
 
         $this->status = array(
