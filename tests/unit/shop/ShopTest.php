@@ -21,6 +21,23 @@ class FakeShopShop
     {
         return 1;
     }
+    
+    function getConfirmationSubject() {
+        return 'confirmation subject';
+    }
+
+    function getConfirmationText() {
+        return 'confirmation text';
+    }
+
+    function showPaymentUrl() {
+        return 1;
+    }
+
+    function getPaymentUrl() {
+        return 'payment_url';
+    }
+
 }
 
 class FakeShopWeblogin {
