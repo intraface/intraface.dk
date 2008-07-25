@@ -15,8 +15,10 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
     {
         $validator = new Intraface_Validator($this->getError());
         $validator->isNumeric($this->POST['show_online'], 'show_online skal være et tal');
-        $validator->isString($this->POST['description'], 'description text is not valid');
+        // $validator->isString($this->POST['description'], 'description text is not valid');
+        $validator->isString($this->POST['confirmation_subject'], 'confirmation subject is not valid');
         $validator->isString($this->POST['confirmation'], 'confirmation text is not valid');
+        $validator->isString($this->POST['confirmation_greeting'], 'confirmation greeting is not valid');
         $validator->isString($this->POST['receipt'], 'shop receipt is not valid', '<p><br/><div><ul><ol><li><h2><h3><h4>');
 
         return !$this->getError()->isError();
@@ -70,6 +72,11 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
                 $shop->intranet_id = $this->registry->get('kernel')->intranet->getId();
             }
             $shop->fromArray($this->POST->getArrayCopy());
+            if (isset($this->POST['confirmation_add_contact_url']) AND $this->POST['confirmation_add_contact_url'] == 1) {
+                $shop->confirmation_add_contact_url = 1;
+            } else {
+                $shop->confirmation_add_contact_url = 0;
+            }
             $shop->save();
         } catch (Exception $e) {
             throw $e;
