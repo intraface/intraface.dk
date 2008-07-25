@@ -1,5 +1,4 @@
 <?php
-
 class Intraface_modules_debtor_PaymentMethod
 {
     /**
@@ -9,26 +8,24 @@ class Intraface_modules_debtor_PaymentMethod
      */
     private $types = array(
             1 => 'BankTransfer',
-            2 => 'GiroPayment01',
-            3 => 'GiroPayment71',
+            //2 => 'GiroPayment01',
+            //3 => 'GiroPayment71',
             4 => 'CashOnDelivery',
             5 => 'OnlinePayment'
     );
-    
     
     /**
      * Returns specific payment method
      */
     public function getByName($method, $id = 0)
     {
-        if(!ereg("^[a-zA-Z0-9]+$")) {
+        if(!ereg("^[a-zA-Z0-9]+$", $method)) {
             throw new Exception('Invalid method name "'.$method.'"');
         }
         
         $name = 'Intraface_modules_debtor_PaymentMethod_'.$method;
         
         return new $name;
-        
     }
     
     /**
@@ -54,11 +51,4 @@ class Intraface_modules_debtor_PaymentMethod
         }
         return $types;
     }
-    
-    
-    
 }
-
-
-
-?>
