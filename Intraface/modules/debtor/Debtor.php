@@ -1153,5 +1153,15 @@ class Debtor extends Intraface_Standard
             5=>'Onlinebetaling'
         );
     }
+    
+    function getIdentifier()
+    {
+        return $this->get('identifier_key');
+    }
+    
+    function getId()
+    {
+        return $this->id;
+    }
 }
 ?>

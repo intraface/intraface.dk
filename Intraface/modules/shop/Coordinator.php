@@ -41,6 +41,7 @@ class Intraface_modules_shop_Coordinator
      * @var object
      */
     private $order;
+    private $onlinepayment;
 
     /**
      * @var object
@@ -329,6 +330,10 @@ class Intraface_modules_shop_Coordinator
 
         $body = $this->shop->getConfirmationText();
 
+        if ($this->shop->showPaymentUrl()) {
+            $body .=  "\n\n" . $this->shop->getPaymentUrl() . $this->order->getIdentifier();
+        } 
+
         $table = new Console_Table;
         foreach ($this->order->getItems() as $item) {
             $table->addRow(array(round($item["quantity"]), substr($item["name"], 0, 40), 'DKK ' . number_format($item["amount"], 2, ',', '.')));
@@ -381,6 +386,9 @@ class Intraface_modules_shop_Coordinator
             return 0;
         }
 
+        $this->order = new Debtor($this->kernel, $order_id);
+        $this->contact = $debtor->getContact();
+
         if (!$this->kernel->intranet->hasModuleAccess('onlinepayment')) {
             return 0;
         }
@@ -400,12 +408,49 @@ class Intraface_modules_shop_Coordinator
                         'amount'             => $amount);
 
         if ($payment_id = $onlinepayment->save($values)) {
+            $this->onlinepayment = $onlinepayment;
+            if ($this->sendEmailOnOnlinePayment($payment_id)) {
+                throw new Exception('Could not send email as receipt for onlinepayment');
+            }
             return $payment_id;
         } else {
-            $onlinepayment->error->view();
             return 0;
         }
     }
+
+    private function sendEmailOnOnlinePayment($payment_id, $mailer = null)
+    {
+        if ($mailer === null) {
+            $mailer = Intraface_Mail::factory();
+        }
+        
+        $this->kernel->useShared('email');
+        $email = new Email($this->kernel);
+
+        $subject = 'Bekræftelse på betaling (#' . $payment_id . ')';
+        $body = 'Vi har modtaget din betaling. Hvis din ordre var afsendt inden kl. 12.00, sender vi den allerede i dag.';
+
+        $body .= "\n\nVenlig hilsen\n".  $this->kernel->intranet->address->get('name');    
+        
+        if (!$email->save(array('contact_id' => $this->contact->get('id'),
+                                'subject' => $subject,
+                                'body' => $body,
+                                'from_email' => $this->kernel->intranet->address->get('email'),
+                                'from_name' => $this->kernel->intranet->address->get('name'),
+                                'type_id' => 13, // webshop
+                                'belong_to' => $payment_id))) {
+            $this->error->merge($email->error->getMessage());
+            return false;
+        }
+
+        if (!$email->send($mailer)) {
+            $this->error->merge($email->error->getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
 
     /**
      * Returns receipt text

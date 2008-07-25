@@ -77,6 +77,12 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
             } else {
                 $shop->confirmation_add_contact_url = 0;
             }
+            if (isset($this->POST['payment_link_add']) AND $this->POST['payment_link_add'] == 1) {
+                $shop->payment_link_add = 1;
+            } else {
+                $shop->payment_link_add = 0;
+            }
+            
             $shop->save();
         } catch (Exception $e) {
             throw $e;

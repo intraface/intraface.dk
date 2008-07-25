@@ -13,6 +13,8 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
         $this->hasColumn('confirmation', 'string',  65555);
         $this->hasColumn('confirmation_add_contact_url', 'integer', 1);
         $this->hasColumn('receipt',      'string',  65555);
+        $this->hasColumn('payment_link',      'string',  255);
+        $this->hasColumn('payment_link_add',      'integer',  1);
     }
     
     public function setUp()
@@ -49,4 +51,15 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
     {
         return $this->confirmation_add_contact_url;
     }
+
+    function getPaymentUrl()
+    {
+        return $this->payment_link;
+    }
+
+    function showPaymentUrl()
+    {
+        return $this->payment_link_add;
+    }
+
 }
