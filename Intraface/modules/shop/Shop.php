@@ -8,7 +8,10 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
         $this->hasColumn('description',  'string',  65555);
         $this->hasColumn('identifier',   'string',  255);
         $this->hasColumn('show_online',  'integer',  1);
+        $this->hasColumn('confirmation_subject', 'string',  255);
+        $this->hasColumn('confirmation_greeting', 'string',  255);
         $this->hasColumn('confirmation', 'string',  65555);
+        $this->hasColumn('confirmation_add_contact_url', 'integer', 1);
         $this->hasColumn('receipt',      'string',  65555);
     }
     
@@ -26,9 +29,24 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
     {
         return $this->name;
     }
+
+    function getConfirmationSubject()
+    {
+        return $this->confirmation_subject;
+    }
     
     function getConfirmationText()
     {
         return $this->confirmation;
+    }
+    
+    function getConfirmationGreeting()
+    {
+        return $this->confirmation_greeting;
+    }    
+    
+    function showLoginUrl()
+    {
+        return $this->confirmation_add_contact_url;
     }
 }

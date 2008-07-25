@@ -321,10 +321,34 @@ class Intraface_modules_shop_Coordinator
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
-        // @todo fix this later on
+        if ($this->shop->getConfirmationSubject()) {
+            $subject = $this->shop->getConfirmationSubject() . ' (#' . $order_id . ')';
+        } else {
+            $subject = 'Bekræftelse på bestilling (#' . $order_id . ')';
+        }
+
+        $body = $this->shop->getConfirmationText();
+
+        $table = new Console_Table;
+        foreach ($this->order->getItems() as $item) {
+            $table->addRow(array(round($item["quantity"]), substr($item["name"], 0, 40), 'DKK ' . number_format($item["amount"], 2, ',', '.')));
+        }
+
+        $body .= $table->getTable();
+
+        if ($this->shop->getConfirmationGreeting()) {
+            $body .=  "\n\n" . $this->shop->getConfirmationGreeting();
+        } else {
+            $body .= "Venlig hilsen\n".  $this->kernel->intranet->address->get('name');    
+        }
+
+        if ($this->shop->showLoginUrl()) {
+            $body .=  "\n\n" . $this->contact->getLoginUrl();
+        }                
+        
         if (!$email->save(array('contact_id' => $this->contact->get('id'),
-                                'subject' => 'Bekræftelse på ordre #' . $order_id,
-                                'body' => $this->shop->getConfirmationText() . "\n" . $this->contact->getLoginUrl() . "\n\nVenlig hilsen\n" . $this->kernel->intranet->address->get('name'),
+                                'subject' => $subject,
+                                'body' => $body,
                                 'from_email' => $this->kernel->intranet->address->get('email'),
                                 'from_name' => $this->kernel->intranet->address->get('name'),
                                 'type_id' => 12, // webshop
@@ -414,11 +438,13 @@ class Intraface_modules_shop_Coordinator
     
     public function getPaymentMethods() 
     {
+        /*
         $payment_method[] = array(
                 'key' => 4,
                 'identifier' => 'CashOnDelivery',
                 'description' => 'Cash on delivery',
                 'text' => '');
+        */
         if($this->kernel->intranet->hasModuleAccess('onlinepayment')) {
             $payment_method[] = array(
                 'key' => 5,
