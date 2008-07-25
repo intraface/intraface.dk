@@ -334,7 +334,7 @@ class Intraface_modules_shop_Coordinator
             $table->addRow(array(round($item["quantity"]), substr($item["name"], 0, 40), 'DKK ' . number_format($item["amount"], 2, ',', '.')));
         }
 
-        $body .= $table->getTable();
+        $body .= "\n\n" . $table->getTable();
 
         if ($this->shop->getConfirmationGreeting()) {
             $body .=  "\n\n" . $this->shop->getConfirmationGreeting();
