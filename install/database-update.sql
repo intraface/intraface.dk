@@ -5,7 +5,7 @@
 `paymentmethod_key` INT( 11 ) NOT NULL ,
 `text` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` )
-) ENGINE = MYISAM 
+) ENGINE = MYISAM ;
 
 ALTER TABLE `product_variation_x_attribute` ADD INDEX `idx_intranet` ( `intranet_id` );
 ALTER TABLE `product_variation_x_attribute` ADD INDEX `product_attribute_id` ( `product_attribute_id` );
