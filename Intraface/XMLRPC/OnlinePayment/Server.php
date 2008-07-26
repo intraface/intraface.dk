@@ -96,8 +96,45 @@ class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
             throw new XML_RPC2_FaultException('Onlinebetaling kunne ikke blive gemt ' . strtolower(implode(', ', $onlinepayment->error->getMessage())), -4);
         }
 
+        $this->sendEmailOnOnlinePayment($debtor, $payment_id);
+
         return $this->prepareResponseData($payment_id);
     }
+
+    private function sendEmailOnOnlinePayment($debtor, $payment_id, $mailer = null)
+    {
+        if ($mailer === null) {
+            $mailer = Intraface_Mail::factory();
+        }
+        
+        $this->kernel->useShared('email');
+        $email = new Email($this->kernel);
+
+        $subject = 'Bekræftelse på betaling (#' . $payment_id . ')';
+        $body = 'Vi har modtaget din betaling. Hvis din ordre #' .$debtor->getId(). ' var afsendt inden kl. 12.00, sender vi varerne allerede i dag.';
+
+        $body .= "\n\nVenlig hilsen\n".  $this->kernel->intranet->address->get('name');    
+        
+        if (!$email->save(array('contact_id' => $debtor->getContact()->getId(),
+                                'subject' => $subject,
+                                'body' => $body,
+                                'from_email' => $this->kernel->intranet->address->get('email'),
+                                'from_name' => $this->kernel->intranet->address->get('name'),
+                                'type_id' => 13, // onlinepayment
+                                'belong_to' => $payment_id))) {
+            trigger_error('Could not save email to onlinepayment', E_USER_NOTICE);;
+            return false;
+        }
+
+        if (!$email->send($mailer)) {
+            $this->error->merge($email->error->getMessage());
+            trigger_error('Could not send email to ' . $debtor->getContact()->getId(), E_USER_NOTICE);;
+            return false;
+        }
+
+        return true;
+    }
+
 
 
     /**
