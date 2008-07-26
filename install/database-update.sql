@@ -59,3 +59,7 @@ ALTER TABLE `product_attribute_group` ADD INDEX ( `intranet_id` )  ;
 ALTER TABLE `redirect` ADD INDEX `session_id` ( `session_id` ) 
 ALTER TABLE `redirect_parameter` ADD INDEX ( `intranet_id` , `redirect_id` )  ;
 ALTER TABLE `redirect_parameter_value` ADD INDEX ( `intranet_id` , `redirect_id` , `redirect_parameter_id` )  ;
+
+
+ALTER TABLE `shop` ADD `payment_link` VARCHAR( 255 ) NOT NULL ,
+ADD `payment_link_add` TINYINT( 1 ) NOT NULL ;
