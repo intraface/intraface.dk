@@ -1,4 +1,11 @@
 <?php
+if(time() < strtotime('2008-07-31 20:00:00')) {
+    die('Du kan ikke sende mail før den 1. august');
+}
+
+if(!isset($_GET['send'])) {
+    die('Du er nu klar til at sende. <a href="https://www.intraface.dk/carmakoma/newsletter/send.php?send=true">Klik her</a>');
+}
 
 ini_set('max_execution_time', 600); // 10 min
 require_once '../../include_first.php';
@@ -47,6 +54,8 @@ $module = $kernel->module('contact');
 $contact = new Contact($kernel);
 $contacts = $contact->getList();
 
+$date = date('YmdHis');
+
 $i = 0;
 
 foreach ($contacts as $contact) {
@@ -56,18 +65,16 @@ foreach ($contacts as $contact) {
     $result = new Intraface_Standard;
     
     
-    
     // UNCOMMENT NEXT LINE TO SEND MESSAGES!
-    // $result = $mail->send($contact['email'], $hdrs, $body);
-    
-    
+    $result = $mail->send($contact['email'], $hdrs, $body);
     
     if (!PEAR::isError($result)) {
         echo "sent to " . $contact['email'] . "<br />\n";
         $i++;
+        file_put_contents(dirname(__FILE__).'/send'.$date.'.txt', $contact['email']."\n", FILE_APPEND);
     } else {
         echo "could NOT send to " . $contact['email'] . ": ".$result->getMessage().", ".$result->getUserInfo(). "<br />\n";   
-    }    
+    }
 }
 
 echo $i;
