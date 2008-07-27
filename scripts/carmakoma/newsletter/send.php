@@ -1,13 +1,13 @@
 <?php
 if(time() < strtotime('2008-07-31 20:00:00')) {
-    die('Du kan ikke sende mail før den 1. august');
+    die('Du kan ikke sende mail før den 1. august 05:00');
 }
 
 if(!isset($_GET['send'])) {
     die('Du er nu klar til at sende. <a href="https://www.intraface.dk/carmakoma/newsletter/send.php?send=true">Klik her</a>');
 }
 
-ini_set('max_execution_time', 600); // 10 min
+ini_set('max_execution_time', 1200); // 20 min
 require_once '../../include_first.php';
 
 // NOTICE IF INTRANET_ID IS CORRECT. 34 = carmakoma
@@ -61,7 +61,7 @@ $i = 0;
 foreach ($contacts as $contact) {
     $hdrs['To'] = $contact['email'];
     
-    // Only not showing error when testing
+    // Only for not showing error when testing
     $result = new Intraface_Standard;
     
     
@@ -77,4 +77,4 @@ foreach ($contacts as $contact) {
     }
 }
 
-echo $i;
+echo 'Count '.$i;
