@@ -1,0 +1,189 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>testBasketEvaluationAddsProductFromWeight</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testBasketEvaluationAddsProductFromWeight</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=debtor,order,contact,product,administration,shop&helper_function=Administration:fillInIntranetAddress,Product:createVisibleInShop,Shop:create&login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>weight</td>
+	<td>100</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=close</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=create product</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Shipment</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>price</td>
+	<td>20</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=shop</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Basket evaluation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Add basket evaluation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>running_index</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>evaluate_target_key</td>
+	<td>label=weight</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>evaluate_method_key</td>
+	<td>label=at_least</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>evaluate_value</td>
+	<td>150</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>go_to_index_after</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>action_action_key</td>
+	<td>label=add_product_id</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>action_value</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>action_quantity</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>demo/intraface/shop/1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=See all products</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>All products</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Product 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Product 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>add_product_id</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Basket</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>Shipment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>items[0][quantity]</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>update</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Shipment</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
