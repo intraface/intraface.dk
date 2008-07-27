@@ -71,4 +71,3 @@ foreach ($contacts as $contact) {
 }
 
 echo $i;
-
