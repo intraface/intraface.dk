@@ -1,12 +1,4 @@
 <?php
-if(time() < strtotime('2008-07-31 20:00:00')) {
-    die('Du kan ikke sende mail før den 1. august 05:00');
-}
-
-if(!isset($_GET['send'])) {
-    die('Du er nu klar til at sende. <a href="https://www.intraface.dk/carmakoma/newsletter/send.php?send=true">Klik her</a>');
-}
-
 ini_set('max_execution_time', 1200); // 20 min
 require_once '../../include_first.php';
 
@@ -57,6 +49,14 @@ $contacts = $contact->getList();
 $date = date('YmdHis');
 
 $i = 0;
+
+if(time() < strtotime('2008-07-31 20:00:00')) {
+    die('Du kan ikke sende mail før den 1. august 05:00');
+}
+
+if(!isset($_GET['send'])) {
+    die('Du er nu klar til at sende. <a href="https://www.intraface.dk/carmakoma/newsletter/send.php?send=true">Klik her</a>');
+}
 
 foreach ($contacts as $contact) {
     $hdrs['To'] = $contact['email'];
