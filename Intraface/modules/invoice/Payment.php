@@ -439,7 +439,7 @@ class Payment extends Intraface_Standard
         }
 
         $db = new DB_sql;
-        $db->query("UPDATE invoice_payment SET date_stated = NOW(), voucher_id = ".$voucher->get('id'));
+        $db->query("UPDATE invoice_payment SET date_stated = NOW(), voucher_id = ".$voucher->get('id') . " WHERE intranet_id = " . $this->kernel->intranet->getId() . ' AND id = ' . $this->id);
 
         $this->load();
         return true;
