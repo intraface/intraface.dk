@@ -53,7 +53,7 @@ $page = new Intraface_Page($kernel);
 $page->start($translation->get('State invoice'));
 
 ?>
-<h1>Bogfør faktura #<?php echo safeToHtml($debtor->get('number')); ?></h1>
+<h1>Bogfør faktura #<?php e($debtor->get('number')); ?></h1>
 
 <ul class="options">
     <li><a href="view.php?id=<?php print(intval($debtor->get("id"))); ?>">Luk</a></li>
@@ -76,12 +76,12 @@ $page->start($translation->get('State invoice'));
         <legend>Faktura</legend>
         <table>
             <tr>
-                <th><?php print(safeToHtml($translation->get("invoice number"))); ?></th>
-                <td><?php print(safeToHtml($debtor->get("number"))); ?></td>
+                <th><?php e($translation->get("invoice number")); ?></th>
+                <td><?php e($debtor->get("number")); ?></td>
             </tr>
             <tr>
                 <th>Dato</th>
-                <td><?php print(safeToHtml($debtor->get("dk_this_date"))); ?></td>
+                <td><?php e($debtor->get("dk_this_date")); ?></td>
             </tr>
         </table>
     </fieldset>
@@ -92,11 +92,11 @@ $page->start($translation->get('State invoice'));
             <table>
                 <tr>
                     <th>Bilagsnummer</th>
-                    <td><input type="text" name="voucher_number" value="<?php echo safeToHtml($voucher->getMaxNumber() + 1); ?>" /></td>
+                    <td><input type="text" name="voucher_number" value="<?php e($voucher->getMaxNumber() + 1); ?>" /></td>
                 </tr>
                 <tr>
                     <th>Bogfør på dato</th>
-                    <td><input type="text" name="date_state" value="<?php echo safeToHtml($debtor->get("dk_this_date")); ?>" /></td>
+                    <td><input type="text" name="date_state" value="<?php e($debtor->get("dk_this_date")); ?>" /></td>
                 </tr>
             </table>
         </fieldset>
@@ -117,8 +117,7 @@ $page->start($translation->get('State invoice'));
                 $total = 0;
                 if(isset($items[0]["vat"])) {
                     $vat = $items[0]["vat"]; // Er der moms på det første produkt
-                }
-                else {
+                } else {
                     $vat = 0;
                 }
         
@@ -130,9 +129,9 @@ $page->start($translation->get('State invoice'));
                     $vat = $items[$i]["vat"];
                     ?>
                     <tr>
-                        <td><?php print(safeToHtml($items[$i]["number"])); ?></td>
-                        <td><?php print(safeToHtml($items[$i]["name"])); ?></td>
-                        <td><?php print(amountToOutput($items[$i]["quantity"]*$items[$i]["price"])); ?></td>
+                        <td><?php e($items[$i]["number"]); ?></td>
+                        <td><?php e($items[$i]["name"]); ?></td>
+                        <td><?php e(amountToOutput($items[$i]["quantity"]*$items[$i]["price"])); ?></td>
                         <td>
                             <?php if (!$debtor->isStated()): 
                                 $year = new Year($kernel);
@@ -158,7 +157,7 @@ $page->start($translation->get('State invoice'));
                                     ?>
                                 </select>
                             <?php else: ?>
-                                <?php echo safeToHtml($account->get('number') . ' ' . $account->get('name')); ?>
+                                <?php e($account->get('number') . ' ' . $account->get('name')); ?>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -167,12 +166,12 @@ $page->start($translation->get('State invoice'));
                         ?>
                         <tr>
                             <td>&nbsp;</td>
-                            <td><b>25% moms af <?php print(amountToOutput($total)); ?></b></td>
-                            <td><b><?php print(amountToOutput($total * 0.25, 2)); ?></b></td>
+                            <td><b>25% moms af <?php e(amountToOutput($total)); ?></b></td>
+                            <td><b><?php e(amountToOutput($total * 0.25, 2)); ?></b></td>
                             <td>
                                 <?php
                                     $account = new Account($year, $year->getSetting('vat_out_account_id'));
-                                    echo safeToHtml($account->get('number') . ' ' . $account->get('name'));
+                                    e($account->get('number') . ' ' . $account->get('name'));
                                 ?>
                             </td>
                         </tr>
@@ -186,7 +185,7 @@ $page->start($translation->get('State invoice'));
 
         <div>
             <input type="submit" value="Bogfør" /> eller
-            <a href="view.php?id=<?php echo intval($debtor->get('id')); ?>">fortryd</a>
+            <a href="view.php?id=<?php e($debtor->get('id')); ?>">fortryd</a>
         </div>
    <?php endif;  ?>
     </form>
