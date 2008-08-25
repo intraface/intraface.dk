@@ -14,6 +14,11 @@ class FakeShopEvaluationIntranet {
     }
 }
 
+class FakeShopEvaluationCoordinator
+{
+    
+}
+
 class FakeShopEvaluationShop
 {
     function getId()
@@ -67,10 +72,13 @@ class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
     function createBasket()
     {
         $kernel = $this->createKernel();
-        $webshop = new FakeEvaluationWebshop();
+        $webshop = new FakeShopEvaluationWebshop();
         $webshop->kernel = $kernel;
-        return new Basket($webshop, 'somesessionid');
-
+        
+        return new Intraface_modules_shop_Basket(MDB2::singleton(DB_DSN), 
+            new FakeShopEvaluationIntranet, 
+            new FakeShopEvaluationCoordinator(),
+            new FakeShopEvaluationShop, 'some session');
     }
 
     function saveEvaluation()
@@ -155,11 +163,11 @@ class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
         $basket = $this->createBasket();
 
         // setting up products
-        $basket->webshop->kernel->module('product');
-        $product = new Product($basket->webshop->kernel);
+        //$basket->webshop->kernel->module('product');
+        $product = new Product($this->createKernel());
         $product_id = $product->save(array('name' => 'Test', 'price' => 2000));
 
-        $product = new Product($basket->webshop->kernel);
+        $product = new Product($this->createKernel());
         $filter_product_id = $product->save(array('name' => 'Filterproduct', 'price' => -1));
 
         $valid_data = array(

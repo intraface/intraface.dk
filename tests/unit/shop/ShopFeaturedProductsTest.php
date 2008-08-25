@@ -25,7 +25,7 @@ class ShopFeaturedProductsTest extends PHPUnit_Framework_TestCase
     {
         $db = MDB2::factory(DB_DSN);
         $db->exec('TRUNCATE shop_featuredproducts');
-        $this->featured = new Intraface_modules_shop_FeaturedProducts(new FakeFeaturedProductsIntranet, new FakeFeaturedProductsIntranet, $db);
+        $this->featured = new Intraface_modules_shop_FeaturedProducts(new FakeShopFeaturedProductsIntranet, new FakeShopFeaturedProductsIntranet, $db);
     }
 
     function testConstruction()

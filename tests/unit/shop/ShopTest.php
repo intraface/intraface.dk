@@ -6,7 +6,7 @@ class FakeShopIntranet
 {
     public $address;
     function __construct() {
-        $this->address = new FakeWebshopAddress;
+        $this->address = new FakeShopAddress;
     }
     function hasModuleAccess() { return true; }
     function get() { return '1'; }
@@ -46,6 +46,12 @@ class FakeShopShop
     {
         return 1;
     }
+
+    function showLoginUrl()
+    {
+        return true;
+    }
+    
 }
 
 class FakeShopWeblogin {
