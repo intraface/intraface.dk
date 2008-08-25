@@ -30,6 +30,11 @@ class FakeShopShop
         return 'confirmation text';
     }
 
+    function getConfirmationGreeting()
+    {
+        return 'confirmation greeting';
+    }
+
     function showPaymentUrl() {
         return 1;
     }
@@ -37,7 +42,10 @@ class FakeShopShop
     function getPaymentUrl() {
         return 'payment_url';
     }
-
+    function sendConfirmation()
+    {
+        return 1;
+    }
 }
 
 class FakeShopWeblogin {
