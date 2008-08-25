@@ -110,8 +110,8 @@ class InstanceHandler extends Intraface_Standard
         if($db->nextRecord()) {
             return new InstanceHandler($file_handler, $db->f('id'));
         } else {
-
             $file_handler->createImage();
+            
             if(!empty($param['crop_width']) && !empty($param['crop_height'])) {
                 settype($param['crop_offset_x'], 'integer');
                 settype($param['crop_offset_y'], 'integer');
