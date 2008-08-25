@@ -147,4 +147,5 @@ class ShopTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->webshop->addOnlinePayment($order_id, $transaction_number, $transaction_status, $amount) == 0);
         $this->assertTrue($mailer->isSend(), 'Mail is not send');
     }
+
 }

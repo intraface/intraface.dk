@@ -16,7 +16,11 @@ class FakeShopEvaluationIntranet {
 
 class FakeShopEvaluationCoordinator
 {
-    
+    public $kernel;
+    function __construct($kernel)
+    {
+        $this->kernel = $kernel;
+    }
 }
 
 class FakeShopEvaluationShop
@@ -77,7 +81,7 @@ class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
         
         return new Intraface_modules_shop_Basket(MDB2::singleton(DB_DSN), 
             new FakeShopEvaluationIntranet, 
-            new FakeShopEvaluationCoordinator(),
+            new FakeShopEvaluationCoordinator($this->createKernel()),
             new FakeShopEvaluationShop, 'some session');
     }
 
