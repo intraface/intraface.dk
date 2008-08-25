@@ -120,6 +120,7 @@ class Company extends Contact
  *
  */
 require_once dirname(__FILE__) . '/ContactPerson.php';
+require_once 'Intraface/functions.php';
 
 class Contact extends Intraface_Standard 
 {
