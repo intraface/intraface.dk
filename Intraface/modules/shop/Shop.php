@@ -8,6 +8,7 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
         $this->hasColumn('description',  'string',  65555);
         $this->hasColumn('identifier',   'string',  255);
         $this->hasColumn('show_online',  'integer',  1);
+        $this->hasColumn('send_confirmation',  'integer',  1);
         $this->hasColumn('confirmation_subject', 'string',  255);
         $this->hasColumn('confirmation_greeting', 'string',  255);
         $this->hasColumn('confirmation', 'string',  65555);
@@ -61,5 +62,9 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
     {
         return $this->payment_link_add;
     }
-
+    
+    function sendConfirmation()
+    {
+        return $this->send_confirmation;
+    }    
 }

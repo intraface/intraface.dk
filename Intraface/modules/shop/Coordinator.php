@@ -269,9 +269,11 @@ class Intraface_modules_shop_Coordinator
 
         $this->getBasket()->reset();
 
-        if (!$this->sendEmail($order_id, $mailer)) {
-            $this->error->set('unable to send email to the customer');
-            return false;
+        if ($this->getShop()->sendConfirmation()) {
+            if (!$this->sendEmail($order_id, $mailer)) {
+                $this->error->set('unable to send email to the customer');
+                return false;
+            }
         }
 
         return $order_id;
