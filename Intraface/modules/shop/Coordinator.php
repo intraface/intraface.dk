@@ -389,7 +389,7 @@ class Intraface_modules_shop_Coordinator
         }
 
         $this->order = new Debtor($this->kernel, $order_id);
-        $this->contact = $debtor->getContact();
+        $this->contact = $this->order->getContact();
 
         if (!$this->kernel->intranet->hasModuleAccess('onlinepayment')) {
             return 0;
