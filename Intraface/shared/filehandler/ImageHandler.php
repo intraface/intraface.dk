@@ -142,8 +142,6 @@ class ImageHandler extends Intraface_Standard
         return $new_file->getFilePath();
     }
 
-
-
     /**
      * crop a picture
      *
@@ -154,7 +152,8 @@ class ImageHandler extends Intraface_Standard
      *
      * @return string new file name
      */    
-    function crop($width, $height, $offset_x = 0, $offset_y = 0) {
+    function crop($width, $height, $offset_x = 0, $offset_y = 0) 
+    {
         $image = Image_Transform::factory($this->image_library);
         if (PEAR::isError($image)) {
             trigger_error($image->getMessage() . $image->getUserInfo(), E_USER_ERROR);
@@ -163,21 +162,20 @@ class ImageHandler extends Intraface_Standard
 
         if($this->tmp_file_name != NULL && file_exists($this->tmp_file_name)) {
             $error = $image->load($this->tmp_file_name);
-        }
-        else {
+        } else {
             $error = $image->load($this->file_handler->get('file_path'));
         }
-        
 
         $image->setOption('quality', 95);
 
         if($error !== true) {
             trigger_error("Kunne ikke åbne fil i ImageHandler->resize. ".$error->getMessage(), E_USER_ERROR);
         }
-        
-        
-        if($image->crop($width, $height, $offset_x, $offset_y) !== true){
-            trigger_error("Der opstod en fejl under formatering (crop) af billedet i ImageHandler->crop", E_USER_ERROR);
+
+        $result = $image->crop($width, $height, $offset_x, $offset_y);
+
+        if (PEAR::isError($result)) {
+            trigger_error("Der opstod en fejl under formatering (crop) af billedet i ImageHandler->crop: " . $result->getMessage(), E_USER_ERROR);
             return false;
         }
         
