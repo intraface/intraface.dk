@@ -554,12 +554,10 @@ class CMS_Page extends Intraface_Standard
         // hvis en henter siderne uden for systemet
         $sql_expire = '';
         $sql_publish = '';
-        /* This need to be corrected */
+        // @todo This need to be corrected
         if (!is_object($this->kernel->user)) {
             $this->getDBQuery()->setCondition("(date_expire > NOW() OR date_expire = '0000-00-00 00:00:00') AND (date_publish < NOW() AND status_key > 0 AND hidden = 0)");
         }
-        /*  */
-
 
         switch ($this->getDBQuery()->getFilter('type')) {
             case 'page':
@@ -624,6 +622,7 @@ class CMS_Page extends Intraface_Standard
                 $pages[$i]['identifier'] = $cmspage[$n]->f('identifier');
                 $pages[$i]['navigation_name'] = $cmspage[$n]->f('navigation_name');
                 $pages[$i]['date_publish_dk'] = $cmspage[$n]->f('date_publish_dk');
+                $pages[$i]['date_publish'] = $cmspage[$n]->f('date_publish');
                 $pages[$i]['child_of_id'] = $cmspage[$n]->f('child_of_id');
                 $pages[$i]['level'] = $n;
 
@@ -636,7 +635,7 @@ class CMS_Page extends Intraface_Standard
 
                 $pages[$i]['status'] = $this->status[$cmspage[$n]->f('status_key')];
 
-                // hvad er det her til
+                // @todo hvad er det her til
                 $pages[$i]['new_status'] = 'published';
                 if ($pages[$i]['status'] == 'published') {
                     $pages[$i]['new_status'] = 'draft';
@@ -647,7 +646,6 @@ class CMS_Page extends Intraface_Standard
                 $pages[$i]['pic_id'] = $cmspage[$n]->f('pic_id');
                 $pages[$i]['description'] = $cmspage[$n]->f('description');
 
-
                 // til google sitemaps
                 // sp�rgsm�let er om vi ikke skal starte et objekt op for hver pages
 
@@ -656,11 +654,8 @@ class CMS_Page extends Intraface_Standard
                 $pages[$i]['changefreq'] = 'weekly';
                 $pages[$i]['priority'] = 0.5;
 
-
-
                 $i++;
                 // $o = $n + 1;
-
 
                 if ($this->getDBQuery()->getFilter('type') == 'page' AND $this->getDBQuery()->getFilter('level') == 'alllevels') {
                     $dbquery[$n + 1] = clone $dbquery_original;
