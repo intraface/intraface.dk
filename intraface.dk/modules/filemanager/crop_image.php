@@ -18,27 +18,21 @@ if(isset($_POST['id']) && isset($_POST['instance_type'])) {
         $filemanager->createInstance($instance_type);
         $filemanager->instance->delete();
     
-        
-        
         $param['crop_width'] = (int)$_POST['width'];
         $param['crop_height'] = (int)$_POST['height'];
         $param['crop_offset_x'] = (int)$_POST['x'];
         $param['crop_offset_y'] = (int)$_POST['y'];
-        
+
         $filemanager->createInstance($instance_type, $param);
-        
         if(!$filemanager->error->isError()) {
             header('location: file.php?id='.$filemanager->get('id'));
             exit;
         }
     }   
-}
-elseif (isset($_GET['id']) && isset($_GET['instance_type'])) {
+} elseif (isset($_GET['id']) && isset($_GET['instance_type'])) {
     $filemanager = new FileManager($kernel, $_GET['id']);
     $instance_type = $_GET['instance_type'];
-    
-}
-else {
+} else {
     trigger_error("an id and instance type is needed", E_USER_ERROR);
     exit;
 }
