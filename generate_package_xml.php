@@ -7,7 +7,7 @@
  * @version @package-version@
  */
 
-$version = '1.10.0';
+$version = '1.10.2';
 $stability = 'stable';
 $notes = '
 * Added support for how to choose payments.
@@ -124,22 +124,20 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.in
 $pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk', '0.3.0');
 
 // Doctrine // remember to move it to correct installed dir afterwards
-$pfm->addPackageDepWithChannel('required', 'doctrine', 'pear.phpdoctrine.org', '0.11.1');
+$pfm->addPackageDepWithChannel('required', 'Doctrine', 'pear.phpdoctrine.org', '0.11.1');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Nohtml', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Greaterthan', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Template_Positionable', 'public.intraface.dk', '0.1.0');
 
 // Ilib
-$pfm->addPackageDepWithChannel('required', 'Ilib_Category', 'public.intraface.dk', '0.1.1');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Category', 'public.intraface.dk', '0.1.2');
 $pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Error', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Redirect', 'public.intraface.dk', '0.2.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Validator', 'public.intraface.dk', '0.0.2');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html', 'public.intraface.dk', '0.0.1');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html_Provider_Quickpay', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_ClassLoader', 'public.intraface.dk', '0.1.1');
-
 
 // other intraface 3_Party packages
 $pfm->addPackageDepWithChannel('required', 'DB_Sql', 'public.intraface.dk', '0.0.1');
@@ -173,7 +171,7 @@ $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_HTML', 'public.i
 
 // debtor
 $pfm->addPackageDepWithChannel('required', 'Document_Cpdf', 'public.intraface.dk', '0.0.1');
-$pfm->addPackageDepWithChannel('required', 'Console_Table', 'pear.php.net', '1.1.1');
+$pfm->addPackageDepWithChannel('required', 'Console_Table', 'pear.php.net', '1.1.2');
 
 // contact
 $pfm->addPackageDepWithChannel('required', 'Services_Eniro', 'public.intraface.dk', '0.1.6');
