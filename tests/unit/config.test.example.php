@@ -24,6 +24,8 @@ define('TEST_PATH_TEMP', '/var/lib/www/intraface_test/tmp/');
 set_include_path(PATH_ROOT. PATH_SEPARATOR . get_include_path());
 
 require_once 'Ilib/ClassLoader.php';
+require_once 'Doctrine/lib/Doctrine.php';
+spl_autoload_register(array('Doctrine', 'autoload'));
 
 $db = MDB2::singleton(DB_DSN);
 $db->setOption('debug', 0);
