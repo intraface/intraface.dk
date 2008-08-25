@@ -84,7 +84,7 @@ $page = new Intraface_Page($kernel);
 $page->start($translation->get('state payment for '.$for));
 
 ?>
-<h1><?php echo safeToHtml($translation->get('state payment for '.$for)); ?> #<?php echo safeToHtml($object->get('number')); ?></h1>
+<h1><?php e($translation->get('state payment for '.$for)); ?> #<?php e($object->get('number')); ?></h1>
 
 <ul class="options">
     <?php if($for == 'invoice'): ?>
@@ -93,7 +93,6 @@ $page->start($translation->get('state payment for '.$for));
         <li><a href="reminder.php?id=<?php print(intval($object->get("id"))); ?>">Luk</a></li>
     <?php endif; ?>
 </ul>
-
 
 <?php if (!$year->readyForState($payment->get('payment_date'))): ?>
     <?php echo $year->error->view(); ?>
@@ -134,12 +133,12 @@ $page->start($translation->get('state payment for '.$for));
 
         <div class="formrow">
             <label for="voucher_number">Bilagsnummer</label>
-            <input type="text" name="voucher_number" id="voucher_number" value="<?php echo safeToHtml($voucher->getMaxNumber() + 1); ?>" />
+            <input type="text" name="voucher_number" id="voucher_number" value="<?php e($voucher->getMaxNumber() + 1); ?>" />
         </div>
         
         <div class="formrow">
             <label for="date_stated">Bogfør på dato</label>
-            <input type="text" name="date_state" id="date_stated" value="<?php echo safeToHtml($payment->get("dk_payment_date")); ?>" />
+            <input type="text" name="date_state" id="date_stated" value="<?php e($payment->get("dk_payment_date")); ?>" />
         </div>
         
         <p>Beløbet vil blive trukket fra debitorkontoen og blive sat på kontoen, du vælger herunder:</p>
