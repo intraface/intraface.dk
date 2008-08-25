@@ -57,7 +57,7 @@ class FileManagerTest extends PHPUnit_Framework_TestCase
 
     function testCreateDBQuery() {
         $filemanager = $this->createFileManager();
-        $filemanager->createDBQuery();
+        $filemanager->getDBQuery();
         $this->assertTrue(is_object($filemanager->dbquery));
     }
 }
