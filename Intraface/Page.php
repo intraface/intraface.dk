@@ -185,10 +185,6 @@ class Intraface_Page
     function end() 
     {
         include(PATH_INCLUDE_IHTML.'/intraface/bottom.php');
-
-        if (defined('OB_START') AND OB_START == 'use') {
-            ob_end_flush();
-        }
     }
 
     function includeJavascript($scope, $filename) 
