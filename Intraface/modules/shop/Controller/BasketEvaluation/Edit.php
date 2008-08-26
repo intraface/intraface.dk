@@ -4,7 +4,7 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Edit extends k_Controll
     function getShop()
     {
         $doctrine = $this->registry->get('doctrine');
-        return Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById($this->context->name);
+        return Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById($this->context->context->name);
     }
     
     function GET()
@@ -26,7 +26,7 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Edit extends k_Controll
 
         $data = array('basketevaluation' => $basketevaluation, 'value' => $value, 'settings' => $settings);
 
-        return $this->render(dirname(__FILE__) . '/tpl/evaluation.tpl.php', $data);
+        return $this->render('Intraface/modules/shop/Controller/tpl/evaluation.tpl.php', $data);
 
     }
 
