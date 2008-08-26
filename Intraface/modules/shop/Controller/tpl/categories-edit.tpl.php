@@ -64,7 +64,7 @@ $level = 0;
     
     <div>
         <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" class="save" /> <?php e(t('or', 'common')); ?>
-        <a href="<?php e(url('../')); ?>"><?php e(t('regret', 'common')); ?></a>
+        <a href="<?php e($regret_link); ?>"><?php e(t('regret', 'common')); ?></a>
     </div>
 
 </form>

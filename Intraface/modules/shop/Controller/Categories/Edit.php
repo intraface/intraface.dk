@@ -27,20 +27,26 @@ class Intraface_modules_shop_Controller_Categories_Edit extends k_Controller
     
     function GET()
     {
-        $this->document->title = $this->__('Edit category');
+        $kernel = $this->registry->get('kernel');
+        $redirect = Intraface_Redirect::factory($kernel, 'receive');
         
+        $this->document->title = $this->__('Edit category');
         $kernel = $this->registry->get('kernel');
         $redirect = Intraface_Redirect::factory($kernel, 'receive');
         
         $data = array(
-            'category_object' => $this->getModel()
+            'category_object' => $this->getModel(),
+            'regret_link' => $redirect->getRedirect($this->url('../'))
         );
         return $this->render(dirname(__FILE__) . '/../tpl/categories-edit.tpl.php', $data);
     }   
     
     function POST()
     {
-         if (!$this->isValid()) {
+        $kernel = $this->registry->get('kernel');
+        $redirect = Intraface_Redirect::factory($kernel, 'receive');
+        
+        if (!$this->isValid()) {
             throw new Exception('Values not valid');
         }
         try {
@@ -53,9 +59,9 @@ class Intraface_modules_shop_Controller_Categories_Edit extends k_Controller
             throw $e;
         }        
         if ($this->getId() == 0) {
-            $url = $this->context->url();
+            $url = $redirect->getRedirect($this->context->url());
         } else {
-            $url = $this->context->context->url();
+            $url = $redirect->getRedirect($this->context->context->url());
         }
 
         $kernel = $this->registry->get('kernel');
