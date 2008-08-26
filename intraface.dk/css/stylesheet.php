@@ -10,8 +10,6 @@
  * @version 1.0.
  */
 
-ob_start('gz_handler');
-
 require '../common.php';
 
 $themes = Intraface_Page::themes();
