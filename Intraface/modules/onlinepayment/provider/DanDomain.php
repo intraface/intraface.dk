@@ -99,7 +99,10 @@ class OnlinePaymentDanDomain extends OnlinePayment
 
 
             $http_request->setURL($basis_url.$add_url.'&Capture=1');
-            $http_request->sendRequest();
+            $result = $http_request->sendRequest();
+            if(PEAR::isError($result)) {
+                trigger_error('Error in sending request: '.$result->getMessage().' '.$result->getUserInfo());
+            }
 
             if ($http_request->getResponseCode() != '200') {
                 trigger_error("DanDomain serveren er nede, eller fejl i capture adresse", E_USER_WARNING);
@@ -122,7 +125,10 @@ class OnlinePaymentDanDomain extends OnlinePayment
         } elseif ($action == "reverse") {
 
             $http_request->setURL($basis_url.'&Reject=1');
-            $http_request->sendRequest();
+            $result = $http_request->sendRequest();
+            if(PEAR::isError($result)) {
+                trigger_error('Error in sending request: '.$result->getMessage().' '.$result->getUserInfo());
+            }
 
             if ($http_request->getResponseCode() != '200') {
                 trigger_error("DanDomain serveren er nede, eller fejl i capture adresse", E_USER_WARNING);
