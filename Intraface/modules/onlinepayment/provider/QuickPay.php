@@ -124,7 +124,7 @@ class OnlinePaymentQuickPay extends OnlinePayment
 
             } else {
                 // fiasko
-                $this->error->set('Betalingen kunne ikke hæves');
+                $this->error->set('Betalingen kunne ikke hæves: '.$this->eval['qpstatmsg']);
                 return false;
             }
         } elseif ($action == "reversal") {
