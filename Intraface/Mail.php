@@ -18,14 +18,14 @@ class Intraface_Mail
         // opsætning
         //$phpmailer->Mailer   = 'mail'; // Alternative to IsSMTP()
         $phpmailer->isSMTP();//
-        $phpmailer->Host = 'mail.dev.intraface.dk';//smpt.domain.com
+        $phpmailer->Host = SMTP_HOST; //smpt.domain.com
         $phpmailer->Port = 25;//usually 25
         $phpmailer->SMTPAuth = true;  // Auth Type
         $phpmailer->Username = SMTP_USERNAME;
         $phpmailer->Password = SMTP_PASSWORD;        
         $phpmailer->SMTPKeepAlive = false; 
         $phpmailer->WordWrap = 75;
-        $phpmailer->setLanguage('en', 'phpmailer/language/');
+        $phpmailer->setLanguage('en');
         return $phpmailer;
     }
     
