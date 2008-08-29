@@ -376,8 +376,7 @@ class VatPeriod extends Intraface_Standard
         }
         // Moms af varekøb i udlandet
         $var['text'] = 'Momsafregning - moms af køb i udlandet';
-        $var['amount'] = $this->get('saldo_vat_abroad');
-
+        
         if ($this->get('saldo_vat_abroad') < 0) {
             $var['debet_account_number'] = $account_vat_balance->get('number');
             $var['credit_account_number'] = $account_vat_abroad->get('number');
@@ -385,9 +384,11 @@ class VatPeriod extends Intraface_Standard
             $var['debet_account_number'] = $account_vat_abroad->get('number');
             $var['credit_account_number'] = $account_vat_balance->get('number');
         }
+        // prepares amount to be stated
+        $var['amount'] = number_format($this->get('saldo_vat_abroad'), 2, ',', '');
 
         if (!$voucher->saveInDaybook($var, $skip_daybook)) {
-            $this->error->set('Systemet kunne ikke opdatere moms moms af varekøb i andre lande');
+            $this->error->set('Systemet kunne ikke opdatere moms af varekøb i andre lande');
         }
 
         // Indgående moms (køb)
