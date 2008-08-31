@@ -11,6 +11,8 @@ Server:
 - Mysql Server
 - PEAR 
 - Install dependencies from Intraface package.
+- PHP module openSSL (for https requests to onlinepayment gateways)
+- PHP with magic_quotes_pgc = Off
 
 Unittesting:
 
