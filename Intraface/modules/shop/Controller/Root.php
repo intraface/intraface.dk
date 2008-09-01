@@ -9,7 +9,7 @@ class Intraface_modules_shop_Controller_Root extends k_Dispatcher
     {
         $page = $this->registry->get('page');
         ob_start();
-        $page->start();
+        $page->start($this->document->title);
         $data = ob_get_contents();
         ob_end_clean();
         return $data;
