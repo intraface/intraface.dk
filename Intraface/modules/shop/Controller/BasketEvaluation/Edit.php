@@ -3,27 +3,22 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Edit extends k_Controll
 {
     function getShop()
     {
-        $doctrine = $this->registry->get('doctrine');
-        return Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById($this->context->context->name);
+        return $this->context->getShop();
     }
     
     function GET()
     {
-        if (!empty($this->GET['delete'])) {
-            $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $this->getShop(), (int)$this->GET['delete']);
-            $basketevaluation->delete();
-            throw new k_http_Redirect($this->url('../'));
-        } elseif (isset($this->GET['id'])) {
-            $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $this->getShop(), (int)$this->GET['id']);
+        if (is_numeric($this->context->name)) {
+            $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $this->getShop(), (int)$this->context->name);
             $value = $basketevaluation->get();
+            $this->document->title = 'Edit basket evaluation';
         } else {
             $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $this->getShop());
             $value = array();
+            $this->document->title = 'Create new basket evaluation';
         }
         $settings = $basketevaluation->get('settings');
     
-        $this->document->title = 'Basket evaluation';
-
         $data = array('basketevaluation' => $basketevaluation, 'value' => $value, 'settings' => $settings);
 
         return $this->render('Intraface/modules/shop/Controller/tpl/evaluation.tpl.php', $data);
@@ -32,12 +27,21 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Edit extends k_Controll
 
     function POST()
     {
-        $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $this->getShop(), (int)$this->POST['id']);
+        
+        if (is_numeric($this->context->name)) {
+            $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $this->getShop(), (int)$this->context->name);
+        } else {
+            $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $this->getShop());
+        }
 
         if (!$basketevaluation->save($this->POST->getArrayCopy())) {
             throw new Exception('Could not save values');
         }
-
-        throw new k_http_Redirect($this->url('../'));
+        
+        if (is_numeric($this->context->name)) {
+            throw new k_http_Redirect($this->url('../../'));
+        } else {
+            throw new k_http_Redirect($this->url('../'));
+        }
     }
 }

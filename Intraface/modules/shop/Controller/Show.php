@@ -1,12 +1,7 @@
 <?php
 class Intraface_modules_shop_Controller_Show extends k_Controller
 {
-    public $map = array('edit' => 'Intraface_modules_shop_Controller_Edit',
-                        'basketevaluation' => 'Intraface_modules_shop_Controller_EvaluationEdit',
-                        'featuredproducts' => 'Intraface_modules_shop_Controller_FeaturedProducts',
-                        'categories' => 'Intraface_modules_shop_Controller_Categories',
-                        'paymentmethods' => 'Intraface_modules_shop_Controller_PaymentMethods_Index');
-
+    
     function getShopId()
     {
         return $this->name;

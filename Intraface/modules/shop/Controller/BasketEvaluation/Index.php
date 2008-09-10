@@ -3,15 +3,14 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Index extends k_Control
 {
     public $map = array('edit' => 'Intraface_modules_shop_Controller_BasketEvaluation_Edit');
 
-    function getShopId()
-    {
-        return $this->context->name;
+    function getShop() {
+        $doctrine = $this->registry->get('doctrine');
+        return Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->context->name);
     }
 
     function GET()
     {
-        $doctrine = $this->registry->get('doctrine');
-        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->getShopId());
+        $shop = $this->getShop();
 
         $this->document->title = $this->__('Basket evaluation for') . ' ' . $shop->name;
 
@@ -32,6 +31,7 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Index extends k_Control
             return $next->handleRequest();
         } 
 
-        throw new Exception('Unknown forward');
+        $next = new Intraface_modules_shop_Controller_BasketEvaluation_Show($this, $name);
+        return $next->handleRequest();
     }
 }
