@@ -30,7 +30,7 @@ class AllTests
                        'Email',
                        'Webshop',
                        'Shop',
-                       'IntranetMaintenance',
+                       'Intranetmaintenance',
                        'Contact',
                        'Common',
                        'Accounting',
@@ -40,15 +40,15 @@ class AllTests
                        'Newsletter',
                        'Keyword',
                        'Stock',
-                       'OnlinePayment',
+                       'Onlinepayment',
                        'Procurement',
                        'Project',
-                       'Xmlrpc',
+                       //'XMLRPC',
                        'Auth'
         );
 
         foreach ($tests AS $test) {
-            require_once strtolower($test) . '/AllTests.php';
+            require_once $test . '/AllTests.php';
             $suite->addTest(call_user_func(array($test.'_AllTests', 'suite')));
         }
         return $suite;
