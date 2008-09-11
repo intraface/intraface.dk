@@ -110,7 +110,7 @@ $pfm->addPackageDepWithChannel('required', 'MDB2_Schema', 'pear.php.net', '0.8.1
 // Kernel
 $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.1');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Driver_mysql', 'pear.php.net', '1.4.1');
-$pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '2.0.0RC4');
+$pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '2.0.0');
 $pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTranslation', 'public.intraface.dk', '0.1.3');
 $pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.10.0');
 // there is a Validate 0.8.1 now!
@@ -159,7 +159,7 @@ $pfm->addPackageDepWithChannel('required', 'System_Command', 'pear.php.net', '1.
 $pfm->addPackageDepWithChannel('required', 'phpmailer', 'public.intraface.dk', '1.73.1');
 
 // cms
-$pfm->addPackageDepWithChannel('required', 'XML_Util', 'pear.php.net', '1.1.4');
+$pfm->addPackageDepWithChannel('required', 'XML_Util', 'pear.php.net', '1.2.0');
 $pfm->addPackageDepWithChannel('required', 'XML_Serializer', 'pear.php.net', '0.18.0');
 $pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'htmlpurifier.org', '3.1.0');
 $pfm->addPackageDepWithChannel('required', 'Text_Wiki', 'pear.php.net', '1.2.0');
