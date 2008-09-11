@@ -20,7 +20,8 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
     
     public function setUp()
     {
-        $this->loadTemplate('Intraface_Doctrine_Template_Intranet');
+        $this->actAs('Intraface_Doctrine_Template_Intranet');
+        //$this->loadTemplate('Intraface_Doctrine_Template_Intranet');
     }
 
     function getId()

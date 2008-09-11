@@ -11,6 +11,7 @@ class Intraface_modules_shop_PaymentMethods extends Doctrine_Record
     
     public function setUp()
     {
+        $this->actAs('Intraface_Doctrine_Template_Intranet');
         $this->loadTemplate('Intraface_Doctrine_Template_Intranet');
         $this->hasOne('Intraface_modules_shop_Shop', array('local' => 'shop_id',
                                     'foreign' => 'id'));

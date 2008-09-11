@@ -15,7 +15,8 @@ class Intraface_modules_product_Variation extends Doctrine_Record
     
     public function setUp()
     {
-        $this->loadTemplate('Intraface_Doctrine_Template_Intranet');
+        $this->actAs('Intraface_Doctrine_Template_Intranet');
+        //$this->loadTemplate('Intraface_Doctrine_Template_Intranet');
         $this->actAs('SoftDelete');
         
         $this->hasMany('Intraface_modules_product_Variation_Detail as detail', 

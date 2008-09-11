@@ -17,7 +17,8 @@ class Intraface_modules_product_Variation_Detail extends Doctrine_Record
     
     public function setUp()
     {
-        $this->loadTemplate('Intraface_Doctrine_Template_Intranet');
+        //$this->loadTemplate('Intraface_Doctrine_Template_Intranet');
+        $this->actAs('Intraface_Doctrine_Template_Intranet');
         // This relation is skippend because of several variation classes
         // $this->hasOne('Intraface_modules_product_Variation as variation', array('local' => 'product_variation_id', 'foreign' => 'id'));
     }

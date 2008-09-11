@@ -16,7 +16,8 @@ class Intraface_modules_product_Variation_X_Attribute extends Doctrine_Record
     
     public function setUp()
     {
-        $this->loadTemplate('Intraface_Doctrine_Template_Intranet');
+        //$this->loadTemplate('Intraface_Doctrine_Template_Intranet');
+        $this->actAs('Intraface_Doctrine_Template_Intranet');
         
         $this->hasOne('Intraface_modules_product_Attribute as attribute', array('local' => 'product_attribute_id','foreign' => 'id'));
         // Notice that Variation/OneAttributeGroup and TwoAttributeGroup extends Variation, which means we do not get

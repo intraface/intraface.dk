@@ -19,8 +19,8 @@ class Intraface_modules_product_Attribute extends Doctrine_Record
     
     public function setUp()
     {
-        
-        $this->loadTemplate('Intraface_Doctrine_Template_Intranet');
+        $this->actAs('Intraface_Doctrine_Template_Intranet');        
+        //$this->loadTemplate('Intraface_Doctrine_Template_Intranet');
         $this->actAs('SoftDelete');
         $this->actAs('Positionable');
         $this->hasOne('Intraface_modules_product_Attribute_Group as group', 
