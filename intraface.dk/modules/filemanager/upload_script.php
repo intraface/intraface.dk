@@ -23,7 +23,7 @@ if(!empty($_FILES)) {
                     $filemanager = new FileManager($kernel);
                     $filemanager->createUpload();
                     $filemanager->upload->setSetting('file_accessibility', 'public');
-                    $filemanager->upload->setSetting('max_file_size', '600000');
+                    $filemanager->upload->setSetting('max_file_size', '1000000');
                     if ($filemanager->upload->upload('file', 'temporary')) {
                         $filemanager->load();
                         ?>
