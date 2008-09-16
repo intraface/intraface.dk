@@ -35,12 +35,8 @@ class OnlinePayment extends Intraface_Standard
 
     public $transaction_status_authorized = "000";
 
-    function __construct($kernel, $id = 0)
+    public function __construct($kernel, $id = 0)
     {
-        if (!is_object($kernel)) {
-            trigger_error('Debtor requires Kernel, got:'.get_class($kernel), E_USER_ERROR);
-        }
-
         $this->kernel = $kernel;
         $this->id = $id;
         $this->error = new Intraface_Error;
@@ -59,12 +55,8 @@ class OnlinePayment extends Intraface_Standard
         }
     }
 
-    function factory($kernel, $type = 'settings', $value = 0)
+    public static function factory($kernel, $type = 'settings', $value = 0)
     {
-        if (!is_object($kernel)) {
-            trigger_error('Onlinepayment kræver Kernel som objekt', E_USER_ERROR);
-        }
-
         $implemented_providers = OnlinePayment::getImplementedProviders();
         // we set the fallback from settings
         if (!isset($implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')])) {
@@ -186,7 +178,7 @@ class OnlinePayment extends Intraface_Standard
      *
      * @return integer
       */
-    function save($input)
+    public function save($input)
     {
         $input = safeToDb($input);
 
@@ -277,7 +269,7 @@ class OnlinePayment extends Intraface_Standard
      *
      * @return integer payment_id
      */
-    function create()
+    public function create()
     {
         $provider_key = $this->kernel->setting->get('intranet', 'onlinepayment.provider_key');
         $db = new DB_Sql;
@@ -293,9 +285,11 @@ class OnlinePayment extends Intraface_Standard
 
     /**
      * Funktion til at opdatere betaling inden fra intranettet
-     *
+     * 
+     * @param array $input 
+     * 
+     * return integer
      */
-
     function update($input)
     {
         if ($this->id == 0) {
