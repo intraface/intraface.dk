@@ -19,6 +19,7 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
         $validator->isString($this->POST['confirmation_subject'], 'confirmation subject is not valid');
         $validator->isString($this->POST['confirmation'], 'confirmation text is not valid');
         $validator->isString($this->POST['confirmation_greeting'], 'confirmation greeting is not valid');
+        $validator->isString($this->POST['terms_of_trade_url'], 'terms of trade is not valid');
         $validator->isString($this->POST['receipt'], 'shop receipt is not valid', '<p><br/><div><ul><ol><li><h2><h3><h4>');
 
         return !$this->getError()->isError();

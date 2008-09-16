@@ -710,6 +710,15 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
 
         return $this->prepareResponseData($this->webshop->getReceiptText());
     }
+    
+    public function getTermsOfTradeUrl($credentials, $shop_id)
+    {
+        $this->checkCredentials($credentials);
+
+        $this->_factoryWebshop($shop_id);
+
+        return $this->prepareResponseData($this->webshop->getTermsOfTradeUrl());
+    }
 
     /**
      * Checks credentials

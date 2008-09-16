@@ -10,6 +10,11 @@
         <label for="identifier"><?php e(t('Identifier')); ?></label>
         <input type="text" name="identifier" id="identifier" value="<?php if(!empty($data['identifier'])) e($data['identifier']); ?>" />
 
+        <br />
+
+        <label for="terms-of-trade"><?php e(t('Terms of trade')); ?></label>
+        <input type="text" name="terms_of_trade_url" id="terms-of-trade" value="<?php if(!empty($data['terms_of_trade_url'])) e($data['terms_of_trade_url']); ?>" />
+
     </fieldset>
 
     <fieldset>

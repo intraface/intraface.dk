@@ -65,3 +65,8 @@ ALTER TABLE `shop` ADD `payment_link` VARCHAR( 255 ) NOT NULL ,
 ADD `payment_link_add` TINYINT( 1 ) NOT NULL ;
 
 ALTER TABLE `shop` ADD `send_confirmation` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `intranet_id` 
+
+ALTER TABLE `shop` ADD `confirmation_subject` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id`
+ALTER TABLE `shop` ADD `confirmation_greeting` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id`
+ALTER TABLE `shop` ADD `confirmation_add_contact_url` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id`
+ALTER TABLE `shop` ADD `terms_of_trade_url` VARCHAR( 255 ) NOT NULL ;   
