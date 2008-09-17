@@ -35,6 +35,11 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
         return $this->name;
     }
 
+    function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
     function getConfirmationSubject()
     {
         return $this->confirmation_subject;
