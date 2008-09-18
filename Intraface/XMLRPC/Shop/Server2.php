@@ -725,7 +725,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
 
         $this->_factoryWebshop($shop_id);
 
-        return $this->prepareResponseData($this->webshop->getTermsOfTradeUrl());
+        return $this->prepareResponseData($this->webshop->getShop()->getTermsOfTradeUrl());
     }
 
     /**
@@ -742,7 +742,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
 
         $this->_factoryWebshop($shop_id);
 
-        return $this->prepareResponseData($this->webshop->getIdentifier());
+        return $this->prepareResponseData($this->webshop->getShop()->getIdentifier());
     }    
 
     /**
