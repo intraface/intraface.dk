@@ -124,7 +124,7 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.in
 $pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk', '0.3.0');
 
 // Doctrine // remember to move it to correct installed dir afterwards
-$pfm->addPackageDepWithChannel('required', 'Doctrine', 'pear.phpdoctrine.org', '0.11.1');
+$pfm->addPackageDepWithChannel('required', 'Doctrine', 'pear.phpdoctrine.org', '1.0.2');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Nohtml', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Greaterthan', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Template_Positionable', 'public.intraface.dk', '0.1.0');
@@ -170,7 +170,7 @@ $pfm->addPackageDepWithChannel('required', 'phpFlickr', 'public.intraface.dk', '
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_HTML', 'public.intraface.dk', '0.2.0');
 
 // debtor
-$pfm->addPackageDepWithChannel('required', 'Document_Cpdf', 'public.intraface.dk', '0.0.1');
+$pfm->addPackageDepWithChannel('required', 'Document_Cpdf', 'public.intraface.dk', '0.0.2');
 $pfm->addPackageDepWithChannel('required', 'Console_Table', 'pear.php.net', '1.1.2');
 
 // contact
@@ -195,11 +195,11 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html_Provider_FakeQuick
 // demo
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Admin_XMLRPC', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Client_XMLRPC', 'public.intraface.dk', '0.0.1');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Controller', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.2.2');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Controller', 'public.intraface.dk', '0.1.6');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '0.3.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.5.0');
 $pfm->addPackageDepWithChannel('required', 'konstrukt', 'public.intraface.dk', '0.4.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.intraface.dk', '0.1.0');
 
 
