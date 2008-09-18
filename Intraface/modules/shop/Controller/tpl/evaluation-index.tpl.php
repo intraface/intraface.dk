@@ -37,4 +37,4 @@
             </tbody>
         </table>
 
-        <p><a href="<?php e(url('edit')); ?>"><?php e(t('Add basket evaluation')); ?></a></p>
+        <p><a href="<?php e(url('./edit')); ?>"><?php e(t('Add basket evaluation')); ?></a></p>
