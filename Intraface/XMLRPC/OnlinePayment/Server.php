@@ -110,18 +110,20 @@ class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
-        $subject = 'Bekræftelse på betaling (#' . $payment_id . ')';
-        $body = 'Vi har modtaget din betaling. Hvis din ordre #' .$debtor->getId(). ' var afsendt inden kl. 12.00, sender vi varerne allerede i dag.';
-
-        $body .= "\n\nVenlig hilsen\n".  $this->kernel->intranet->address->get('name');    
+        $subject = 'Payment confirmation / betalingsbekræftelse (#' . $payment_id . ')';
+        $body    = 'We have received your payment for order #' .$debtor->getId(). '.' . "\n\n";
+        $body   .= 'Vi har modtaget din betaling for ordre #' .$debtor->getId(). '.';
+        $body   .= "\n\nYours sincerely / Venlig hilsen\n".  $this->kernel->intranet->address->get('name');    
         
-        if (!$email->save(array('contact_id' => $debtor->getContact()->getId(),
-                                'subject' => $subject,
-                                'body' => $body,
-                                'from_email' => $this->kernel->intranet->address->get('email'),
-                                'from_name' => $this->kernel->intranet->address->get('name'),
-                                'type_id' => 13, // onlinepayment
-                                'belong_to' => $payment_id))) {
+        $data = array('contact_id' => $debtor->getContact()->getId(),
+                      'subject'    => $subject,
+                      'body'       => $body,
+                      'from_email' => $this->kernel->intranet->address->get('email'),
+                      'from_name'  => $this->kernel->intranet->address->get('name'),
+                      'type_id'    => 13, // onlinepayment
+                      'belong_to'  => $payment_id);
+        
+        if (!$email->save($data)) {
             trigger_error('Could not save email to onlinepayment', E_USER_NOTICE);;
             return false;
         }
