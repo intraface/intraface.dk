@@ -44,7 +44,8 @@ class AllTests
                        'Procurement',
                        'Project',
                        //'XMLRPC',
-                       'Auth'
+                       'Auth',
+                       'Currency'
         );
 
         foreach ($tests AS $test) {

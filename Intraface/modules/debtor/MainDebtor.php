@@ -22,6 +22,7 @@ class MainDebtor extends Intraface_Main
         $this->addSubmenuItem('credit notes', 'list.php?type=credit_note', 'module:invoice');
         $this->addSubmenuItem('reminders', 'reminders.php', 'module:invoice');
         $this->addSubmenuItem('onlinepayments', '../onlinepayment/', 'module:onlinepayment');
+        $this->addSubmenuItem('currency', '../currency/', 'module:currency');
         //$this->addSubmenuItem('Indstillinger', 'setting.php');
 
         /*

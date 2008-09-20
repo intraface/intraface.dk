@@ -1,4 +1,4 @@
- CREATE TABLE `intraface`.`shop_paymentmethods` (
+ CREATE TABLE `shop_paymentmethods` (
 `id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
 `intranet_id` INT( 11 ) NOT NULL ,
 `shop_id` INT( 11 ) NOT NULL ,
@@ -64,9 +64,28 @@ ALTER TABLE `redirect_parameter_value` ADD INDEX ( `intranet_id` , `redirect_id`
 ALTER TABLE `shop` ADD `payment_link` VARCHAR( 255 ) NOT NULL ,
 ADD `payment_link_add` TINYINT( 1 ) NOT NULL ;
 
-ALTER TABLE `shop` ADD `send_confirmation` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `intranet_id` 
+ALTER TABLE `shop` ADD `send_confirmation` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `intranet_id` ;
 
 ALTER TABLE `shop` ADD `confirmation_subject` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id`
 ALTER TABLE `shop` ADD `confirmation_greeting` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id`
 ALTER TABLE `shop` ADD `confirmation_add_contact_url` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id`
 ALTER TABLE `shop` ADD `terms_of_trade_url` VARCHAR( 255 ) NOT NULL ;   
+
+CREATE TABLE `currency` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`intranet_id` INT NOT NULL ,
+`type_key` INT NOT NULL ,
+`deleted` INT( 1 ) NOT NULL
+) ENGINE = MYISAM ;
+
+CREATE TABLE currency_exchangerate (
+id BIGINT AUTO_INCREMENT, 
+currency_id BIGINT NOT NULL, 
+used_for_key TINYINT NOT NULL, 
+rate DOUBLE NOT NULL, 
+date_created DATETIME NOT NULL, 
+intranet_id BIGINT NOT NULL, 
+INDEX currency_id_idx (currency_id), PRIMARY KEY(id)
+) ENGINE = MYISAM;
+
+ALTER TABLE currency_exchangerate ADD FOREIGN KEY (currency_id) REFERENCES currency(id);

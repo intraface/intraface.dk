@@ -4,9 +4,24 @@ class Intraface_Doctrine_Template_Listener_Intranet extends Doctrine_Record_List
     public function preDqlSelect(Doctrine_Event $event)
     {
         $params = $event->getParams();
+        
+        $invoker = $event->getInvoker();
+        $class   = get_class($invoker);
+        
         $field = $params['alias'] . '.intranet_id';
         $query = $event->getQuery();
-        $query->addWhere($field . ' = ?', array($this->getIntranetId()));
+        
+        // if it is not the class from FROM statement, it is left or inner join.
+        // then we add the possibility for IS NULL. Actually it is only relevant in
+        // left join, but how do we find out which kind of join it is?
+        if($query->contains('FROM '.$class)) {
+            $query->addWhere($field . '  = ?', array($this->getIntranetId()));
+        }
+        else {
+            $query->addWhere('('.$field.' IS NULL OR '.$field . '  = ?)', array($this->getIntranetId()));
+        }
+        
+        
     }
     
     public function preInsert(Doctrine_Event $event)

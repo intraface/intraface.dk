@@ -23,7 +23,7 @@ class Intraface_Doctrine_ErrorRender
         
         // only html is implemented
         
-        $display = '<ul class="formerrors">';
+        $display = '';
         foreach($this->errorstack AS $errorstack) {
             foreach($errorstack['errorstack'] AS $field_name => $error_codes) {
                 $display .= '<li>';
@@ -39,7 +39,10 @@ class Intraface_Doctrine_ErrorRender
                 $display .= '.</li>';
             }
         }
-        $display .= '</ul>';
+        
+        if($display != '') {
+            $display = '<ul class="formerrors">'.$display.'</ul>';
+        }
         
         return $display;
         
