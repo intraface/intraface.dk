@@ -19,6 +19,11 @@ define('NET_SCHEME', 'http://'); // http:// or https://
 define('NET_HOST', 'localhost'); // www.intraface.dk
 define('NET_DIRECTORY', '/intraface/intraface.dk/'); // subdirectory. if non keep empty
 
+// smtp
+define('SMTP_USERNAME', '');
+define('SMTP_PASSWORD', '');
+define('SMTP_HOST', '');
+
 // paths
 define('PATH_ROOT', dirname(__FILE__) . '/../'); // remember trailing slash
 define('PATH_INCLUDE_PATH', PATH_ROOT . PATH_SEPARATOR . get_include_path()); // remeber to use constant PATH_SEPARATOR after every path
