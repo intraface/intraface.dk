@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>testDeleteBasketEvaluation</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testDeleteBasketEvaluation</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=debtor,order,contact,product,administration,shop&amp;helper_function=Administration:fillInIntranetAddress,Product:create,Shop:create&amp;login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=shop</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Basket evaluation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Add basket evaluation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>running_index</td>
+	<td>1000</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>evaluate_target_key</td>
+	<td>label=customer_coupon</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>evaluate_value</td>
+	<td>test1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>go_to_index_after</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>action_action_key</td>
+	<td>label=add_product_id</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>action_value</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>action_quantity</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>if customer_coupon equals test1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>add_product_id 1 at 1 pieces</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Delete</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>if customer_coupon equals test1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>add_product_id 1 at 1 pieces</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

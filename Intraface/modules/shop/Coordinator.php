@@ -485,18 +485,24 @@ class Intraface_modules_shop_Coordinator
     
     public function getPaymentMethods() 
     {
-        /*
-        $payment_method[] = array(
-                'key' => 4,
-                'identifier' => 'CashOnDelivery',
-                'description' => 'Cash on delivery',
-                'text' => '');
-        */
+        $payment_method = array();
+        
+        
+        /**
+         * @todo Fix this so it returns correct payment types!
+         */
         if($this->kernel->intranet->hasModuleAccess('onlinepayment')) {
             $payment_method[] = array(
                 'key' => 5,
                 'identifier' => 'OnlinePayment',
                 'description' => 'Online payment',
+                'text' => '');
+        }
+        else {
+            $payment_method[] = array(
+                'key' => 4,
+                'identifier' => 'CashOnDelivery',
+                'description' => 'Cash on delivery',
                 'text' => '');
         }
         
