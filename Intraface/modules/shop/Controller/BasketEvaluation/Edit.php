@@ -17,9 +17,12 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Edit extends k_Controll
             $value = array();
             $this->document->title = 'Create new basket evaluation';
         }
+        
         $settings = $basketevaluation->get('settings');
     
-        $data = array('basketevaluation' => $basketevaluation, 'value' => $value, 'settings' => $settings);
+        $data = array('basketevaluation' => $basketevaluation, 
+                      'value' => $value, 
+                      'settings' => $settings);
 
         return $this->render('Intraface/modules/shop/Controller/tpl/evaluation.tpl.php', $data);
 

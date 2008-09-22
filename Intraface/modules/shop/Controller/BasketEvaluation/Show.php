@@ -11,12 +11,12 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Show extends k_Controll
     {
         
         $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $this->getShop(), $this->name);
-        if($basketevaluation->getId() == 0) {
-            throw new exception('Invalid basket evaluation '.$this->name);
+        if ($basketevaluation->getId() == 0) {
+            throw new Exception('Invalid basket evaluation '.$this->name);
         }    
         
         
-        throw new exception('No content on this page!');
+        throw new Exception('No content on this page!');
     }
 
     function forward($name)
