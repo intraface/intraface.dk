@@ -107,8 +107,10 @@ class OnlinePaymentQuickPay extends OnlinePayment
 
             // henter beløbene fra denne onlinebetaling
             $this->quickpay->set_transaction($this->get('transaction_number'));
-            $this->quickpay->set_amount(number_format($this->get('amount'), 0) * 100);
-
+            $this->quickpay->set_amount(round($this->get('amount') * 100));
+            
+            die(round($this->get('amount') * 100));
+            
             $this->eval = $this->quickpay->capture();
 
             if (!empty($this->eval['qpstat']) AND $this->eval['qpstat'] === '000') {
