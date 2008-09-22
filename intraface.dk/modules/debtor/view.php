@@ -737,7 +737,7 @@ if (isset($onlinepayment)) {
                                         foreach($actions AS $a) {
                                             if ($a['action'] != 'capture' || ($debtor->get("type") == "invoice" && $debtor->get("status") == "sent")) {
                                                 ?>
-                                                <a href="view.php?id=<?php e($debtor->get('id'))); ?>&amp;onlinepayment_id=<?php print(intval($p['id'])); ?>&amp;onlinepayment_action=<?php e($a['action']); ?>" class="confirm"><?php e($a['label']); ?></a>
+                                                <a href="view.php?id=<?php e($debtor->get('id')); ?>&amp;onlinepayment_id=<?php print(intval($p['id'])); ?>&amp;onlinepayment_action=<?php e($a['action']); ?>" class="confirm"><?php e($a['label']); ?></a>
                                                 <?php
                                             }
                                         }
@@ -760,7 +760,7 @@ if (isset($onlinepayment)) {
 
     <?php if ($debtor->get("locked") == false) { ?>
         <ul class="options" style="clear: both;">
-            <li><a href="view.php?id=<?php e($debtor->get("id"))); ?>&amp;add_item=true">Tilføj vare</a></li>
+            <li><a href="view.php?id=<?php e($debtor->get("id")); ?>&amp;add_item=true">Tilføj vare</a></li>
         </ul>
     <?php } ?>
 
@@ -828,10 +828,10 @@ if (isset($onlinepayment)) {
                         <?php
                         if ($debtor->get("locked") == false) {
                             ?>
-                            <a class="moveup" href="view.php?id=<?php e($debtor->get("id"))); ?>&amp;action=moveup&amp;item_id=<?php print(intval($items[$i]["id"])); ?>">Op</a>
-                            <a class="movedown" href="view.php?id=<?php e($debtor->get("id"))); ?>&amp;action=movedown&amp;item_id=<?php print(intval($items[$i]["id"])); ?>">Ned</a>
-                            <a class="edit" href="item_edit.php?debtor_id=<?php e($debtor->get('id')); ?>&amp;id=<?php print(intval($items[$i]["id"])); ?>">Ret</a>
-                            <a class="delete" title="Dette vil slette varen!" href="view.php?id=<?php print(intval($debtor->get("id"))); ?>&amp;action=delete_item&amp;item_id=<?php print(intval($items[$i]["id"])); ?>">Slet</a>
+                            <a class="moveup" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=moveup&amp;item_id=<?php e($items[$i]["id"]); ?>">Op</a>
+                            <a class="movedown" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=movedown&amp;item_id=<?php e($items[$i]["id"]); ?>">Ned</a>
+                            <a class="edit" href="item_edit.php?debtor_id=<?php e($debtor->get('id')); ?>&amp;id=<?php e($items[$i]["id"]); ?>">Ret</a>
+                            <a class="delete" title="Dette vil slette varen!" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=delete_item&amp;item_id=<?php print(intval($items[$i]["id"])); ?>">Slet</a>
                             <?php
                         }
                         ?>&nbsp;
