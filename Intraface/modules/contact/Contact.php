@@ -376,7 +376,7 @@ class Contact extends Intraface_Standard
             $validator->isString($var['address'], 'Adressen er ikke en streng', '', 'allow_empty');
         }
         if (!empty($var['postcode'])) {
-            $validator->isNumeric($var['postcode'], 'Postkoden er ikke et tal', 'allow_empty');
+            $validator->isString($var['postcode'], 'Postkoden er ikke gyldig', '', 'allow_empty');
         }
         if (!empty($var['city'])) {
             $validator->isString($var['city'], 'Byen er ikke en by', '', 'allow_empty');
@@ -413,7 +413,7 @@ class Contact extends Intraface_Standard
             $validator->isString($var['delivery_address'], 'Leveringsadressen forkert', '', 'allow_empty');
         }
         if (!empty($var['delivery_postcode'])) {
-            $validator->isNumeric($var['delivery_postcode'], 'Leveringsadressens postnummer', 'allow_empty');
+            $validator->isString($var['delivery_postcode'], 'Leveringsadressens postnummer', '', 'allow_empty');
         }
         if (!empty($var['delivery_city'])) {
             $validator->isString($var['delivery_city'], 'Leveringsadressens by', '', 'allow_empty');
