@@ -50,7 +50,7 @@ class Intraface_modules_modulepackage_ShopExtension {
         }
 
         try {
-            $this->shop = new IntrafacePublic_Shop_XMLRPC_Client(
+            $this->shop = new IntrafacePublic_Shop_Client_XMLRPC2(
                 array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()),
                 INTRAFACE_XMLRPC_DEBUG,
                 $xmlrpc_shop_url);
