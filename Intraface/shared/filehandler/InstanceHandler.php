@@ -160,6 +160,11 @@ class InstanceHandler extends Intraface_Standard
             if(!rename($file, $instancehandler->instance_path.$server_file_name)) {
                 trigger_error("Det var ikke muligt at flytte fil i InstanceHandler->factory", E_USER_ERROR);
             }
+            
+            if(!chmod($instancehandler->instance_path.$server_file_name, 0644)) {
+                // please do not stop executing here
+                trigger_error("Unable to chmod file '".$instancehandler->instance_path.$server_file_name."'", E_USER_NOTICE);
+            }
 
             $db->query("UPDATE file_handler_instance SET server_file_name = \"".$server_file_name."\", active = 1 WHERE intranet_id = ".$file_handler->kernel->intranet->get('id')." AND id = ".$id);
 

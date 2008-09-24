@@ -514,6 +514,11 @@ class FileHandler extends Intraface_Standard
             $this->delete();
             trigger_error("Unable to move file '".$file."' to '".$this->upload_path.$server_file_name."' in Filehandler->save", E_USER_ERROR);
         }
+        
+        if(!chmod($this->upload_path.$server_file_name, 0644)) {
+            // please do not stop executing here
+            trigger_error("Unable to chmod file '".$this->upload_path.$server_file_name."' in Filehandler->save", E_USER_NOTICE);
+        }
 
         $db->query("UPDATE file_handler SET server_file_name = \"".$server_file_name."\" WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$id);
         $this->id = $id;
