@@ -8,7 +8,7 @@ class Demo_Shop_Show extends k_Controller
         return get_class($this) . ' intentionally left blank';
     }
 
-    function getClient()
+    function getShop()
     {
         $shop_id = $this->name;
 
@@ -25,7 +25,7 @@ class Demo_Shop_Show extends k_Controller
     
     function forward($name)
     {
-        $this->registry->set('shop', $this->getClient());
+        $this->registry->set('shop', $this->getShop());
         $next = new IntrafacePublic_Shop_Controller_Index($this, $name);
         return $next->handleRequest();
     }
