@@ -23,7 +23,7 @@ $files = array(
     'email-pic8.jpg',
     'email-pic9.jpg',
     'hearts.gif',
-    'logo-nyhed.jpg',
+    'logo-nyhed-dk.jpg',
     'world.jpg'
 );
 
