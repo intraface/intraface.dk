@@ -128,6 +128,10 @@ $page->start("Onlinebetaling");
 			<th>Transaktionsstatus:</th>
 			<td><?php print($onlinepayment->get("transaction_status_translated")); ?></td>
 		</tr>
+        <tr>
+            <th>PBS status:</th>
+            <td><?php print($onlinepayment->get("pbs_status")); ?></td>
+        </tr>
 		<tr>
 			<th>Beløb:</th>
 			<td><?php print($onlinepayment->get("dk_amount")); ?></td>

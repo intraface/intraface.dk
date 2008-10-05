@@ -66,9 +66,9 @@ ADD `payment_link_add` TINYINT( 1 ) NOT NULL ;
 
 ALTER TABLE `shop` ADD `send_confirmation` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `intranet_id` ;
 
-ALTER TABLE `shop` ADD `confirmation_subject` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id`
-ALTER TABLE `shop` ADD `confirmation_greeting` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id`
-ALTER TABLE `shop` ADD `confirmation_add_contact_url` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id`
+ALTER TABLE `shop` ADD `confirmation_subject` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id` ;
+ALTER TABLE `shop` ADD `confirmation_greeting` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id` ;
+ALTER TABLE `shop` ADD `confirmation_add_contact_url` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id` ;
 ALTER TABLE `shop` ADD `terms_of_trade_url` VARCHAR( 255 ) NOT NULL ;   
 
 CREATE TABLE `currency` (
@@ -89,3 +89,8 @@ INDEX currency_id_idx (currency_id), PRIMARY KEY(id)
 ) ENGINE = MYISAM;
 
 ALTER TABLE currency_exchangerate ADD FOREIGN KEY (currency_id) REFERENCES currency(id);
+
+ALTER TABLE `debtor` ADD `currency_id` INT NOT NULL AFTER `voucher_id` ,
+ADD `currency_product_price_exchange_rate_id` INT NOT NULL AFTER `currency_id` ;
+
+ALTER TABLE `onlinepayment` ADD `pbs_status` VARCHAR( 256 ) NOT NULL AFTER `transaction_status` ;

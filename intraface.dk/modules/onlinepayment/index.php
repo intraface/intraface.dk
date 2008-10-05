@@ -143,7 +143,11 @@ $page->start('Onlinebetalinger');
 					print($translation->get($payments[$i]["status"]));
 
 					if($payments[$i]['user_transaction_status_translated'] != "") {
-						print(" (".$p['user_transaction_status_translated'].")");
+						e(" (".$payments[$i]['user_transaction_status_translated']);
+                        if($payments[$i]['pbs_status'] != '' && $payments[$i]['pbs_status'] != '000') {
+                            e(": ".$payments[$i]['pbs_status']);
+                        }
+                        e(")");
 					}
 					elseif($payments[$i]['status'] == 'authorized') {
 						print(" (Ikke <acronym title=\"Betaling kan først hæves når faktura er sendt\">hævet</acronym>)");

@@ -119,7 +119,7 @@ class OnlinePayment extends Intraface_Standard
     function load()
     {
         $db = new DB_Sql;
-        $db->query("SELECT id, date_created, date_authorized, date_captured, date_reversed, belong_to_key, belong_to_id, text, status_key, amount, original_amount, transaction_number, transaction_status,
+        $db->query("SELECT id, date_created, date_authorized, date_captured, date_reversed, belong_to_key, belong_to_id, text, status_key, amount, original_amount, transaction_number, transaction_status, pbs_status,
                 DATE_FORMAT(date_created, '%d-%m-%Y') AS dk_date_created,
                 DATE_FORMAT(date_authorized, '%d-%m-%Y') AS dk_date_authorized,
                 DATE_FORMAT(date_captured, '%d-%m-%Y') AS dk_date_captured,
@@ -157,6 +157,7 @@ class OnlinePayment extends Intraface_Standard
 
             $this->value['transaction_number'] = $db->f('transaction_number');
             $this->value['transaction_status'] = $db->f('transaction_status');
+            $this->value['pbs_status'] = $db->f('pbs_status');
             $this->value['transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
             if ($db->f('transaction_status') != $this->transaction_status_authorized) {
                 $this->value['user_transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
@@ -196,21 +197,35 @@ class OnlinePayment extends Intraface_Standard
             $input['belong_to_id'] = 0;
         }
         $validator->isNumeric($input['belong_to_id'], 'belong_to_id er ikke et tal');
+        
         if (!isset($input['transaction_number'])) {
             $input['transaction_number'] = 0;
         }
-        $validator->isString($input['transaction_number'], 'transaction_number er ikke gyldig');
+        $validator->isNumeric($input['transaction_number'], 'transaction_number er ikke gyldig');
+        
         if (!isset($input['transaction_status'])) {
             $input['transaction_status'] = '';
         }
         $validator->isString($input['transaction_status'], 'transaction_status er ikke udfyldt');
+        
         if (!isset($this->transaction_status_types[$input['transaction_status']])) {
             $this->error->set("transaction_status '".$input['transaction_status']."' er ikke en gyldig status");
         }
-
+        
+        if(!isset($input['pbs_status'])) $input['pbs_status'] = '';
+        $validator->isString($input['pbs_status'], 'pbs status er ikke udfyldt', '', 'allow_empty');
+        
         // VÆR LIGE OPMÆRKSOM HER: INDTIL VIDERE KAN KUN ACCEPTEREDE TRANSAKTIONER GEMMES
-        if ($input['transaction_status'] != $this->transaction_status_authorized) {
-            $this->error->set("Transactionen er ikke godkendt, så den kan ikke gemmes");
+        // Hermed ændret, så alle transaktioner kan gemmes. 
+        // if ($input['transaction_status'] != $this->transaction_status_authorized) {
+        //     $this->error->set("Transactionen er ikke godkendt, så den kan ikke gemmes");
+        // }
+        
+        if ($input['transaction_status'] == $this->transaction_status_authorized) {
+             $status_key = 2;
+        }
+        else {
+            $status_key = 1;
         }
 
         if (!isset($input['amount'])) {
@@ -236,12 +251,13 @@ class OnlinePayment extends Intraface_Standard
         }
 
         $sql = "date_changed = NOW(),
-            status_key = 2,
+            status_key = ".$status_key.",
             belong_to_key = ".$belong_to_key.",
             belong_to_id = ".$input['belong_to_id'].",
             text = \"".$input['text']."\",
             transaction_number = ".$input['transaction_number'].",
             transaction_status = \"".$input['transaction_status']."\",
+            pbs_status = \"".$input['pbs_status']."\",
             amount = ".$input['amount'].",
             provider_key = ".$this->provider_key.",
             original_amount = ".$input['amount'];
@@ -528,7 +544,7 @@ class OnlinePayment extends Intraface_Standard
         
 
         $this->getDBQuery()->setSorting("date_created DESC");
-        $db = $this->getDBQuery()->getRecordset("id, date_created, belong_to_key, belong_to_id, text, status_key, amount, provider_key, transaction_number, transaction_status, DATE_FORMAT(date_created, '%d-%m-%Y %H:%i') AS dk_date_created", "", false);
+        $db = $this->getDBQuery()->getRecordset("id, date_created, belong_to_key, belong_to_id, text, status_key, amount, provider_key, transaction_number, transaction_status, pbs_status, DATE_FORMAT(date_created, '%d-%m-%Y %H:%i') AS dk_date_created", "", false);
         $i = 0;
         $list = array();
 
@@ -548,15 +564,16 @@ class OnlinePayment extends Intraface_Standard
             $list[$i]['provider_key'] = $db->f('provider_key');
             $list[$i]['dk_amount'] = number_format($db->f('amount'), 2, ",", ".");
             $list[$i]['transaction_number'] = $db->f('transaction_number');
+            $list[$i]['pbs_status'] = $db->f('pbs_status');
             $list[$i]['transaction_status'] = $db->f('transaction_status');
-            if (in_array($list[$i]['transaction_status'], $this->transaction_status_types)) {
+            if (array_key_exists($list[$i]['transaction_status'], $this->transaction_status_types)) {
                 $list[$i]['transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
             } else {
                 $list[$i]['transaction_status_translated'] = 'invalid status';
             }
 
             // Don't really know want this is for? /Sune(19-05-2007)
-            if (in_array($list[$i]['transaction_status'], $this->transaction_status_types) && $db->f('transaction_status') != $this->transaction_status_authorized) {
+            if (array_key_exists($list[$i]['transaction_status'], $this->transaction_status_types) && $db->f('transaction_status') != $this->transaction_status_authorized) {
                 $list[$i]['user_transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
             } else {
                 $list[$i]['user_transaction_status_translated'] = "";
