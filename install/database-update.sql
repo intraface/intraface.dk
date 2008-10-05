@@ -93,4 +93,5 @@ ALTER TABLE currency_exchangerate ADD FOREIGN KEY (currency_id) REFERENCES curre
 ALTER TABLE `debtor` ADD `currency_id` INT NOT NULL AFTER `voucher_id` ,
 ADD `currency_product_price_exchange_rate_id` INT NOT NULL AFTER `currency_id` ;
 
+## The following has already been added to the database 
 ALTER TABLE `onlinepayment` ADD `pbs_status` VARCHAR( 256 ) NOT NULL AFTER `transaction_status` ;
