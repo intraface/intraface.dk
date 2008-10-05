@@ -759,7 +759,9 @@ if (isset($onlinepayment)) {
             $payment_url = '<strong>Der findes ikke nogen url</strong>';
             try {
                 $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById($debtor->getWhereFromId());
-                $payment_url = $debtor->getPaymentLink($shop->getPaymentUrl());
+                if ($shop) {
+                    $payment_url = $debtor->getPaymentLink($shop->getPaymentUrl());
+                }
             } catch (Doctrine_Record_Exeption $e) {
             }
                         
