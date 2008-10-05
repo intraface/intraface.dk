@@ -58,7 +58,7 @@ class ExchangeRateTest extends PHPUnit_Framework_TestCase
         $object->save();
         
         $object = Doctrine::getTable('Intraface_modules_currency_Currency_ExchangeRate')->find(1);
-        $this->assertEquals('745,23', $object->getRate()->get('da_dk'));
+        $this->assertEquals('745,23', $object->getRate()->getAsLocal('da_dk'));
         
     }
 }

@@ -69,6 +69,6 @@ class CurrencyTest extends PHPUnit_Framework_TestCase
         $currency = $gateway->findById(1);
         
         $rate = $currency->getProductPriceExchangeRate();
-        $this->assertEquals('745,23', $rate->getRate()->get('da_dk'));
+        $this->assertEquals('745,23', $rate->getRate()->getAsLocal('da_dk'));
     }
 }
