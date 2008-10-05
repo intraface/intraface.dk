@@ -755,9 +755,17 @@ if (isset($onlinepayment)) {
             </div>
             <?php
         // paymentmethodkey 5 is onlinepayment
-        } elseif ($debtor->getPaymentMethodKey() == 5 AND $debtor->getWhereToId() == 0) { ?>
+        } elseif ($debtor->getPaymentMethodKey() == 5 AND $debtor->getWhereToId() == 0) { 
+            $payment_url = '<strong>Der findes ikke nogen url</strong>';
+            try {
+                $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById($debtor->getWhereFromId());
+                $payment_url = $debtor->getPaymentLink($shop->getPaymentUrl());
+            } catch (Doctrine_Record_Exeption $e) {
+            }
+                        
+        ?>
             <div class="warning">
-                Der burde være en onlinebetaling knyttet hertil. Måske har kunden fortrudt sit køb, eller også er der sket en fejl hos PBS under købet. Vi arbejder på en løsning, så vi nøjagtigt kan se, hvad der går galt under kundens betaling, så alle betalingsforsøg kommer med herind i Intraface.
+                Der burde være en onlinebetaling knyttet hertil. Måske har kunden fortrudt sit køb, eller også er der sket en fejl hos PBS under købet. Du kan skrive en e-mail til kunden, hvor du oplyser følgende link, hvor pengene kan betales: <?php e($payment_url); ?>.
             </div>
         <?php }
     }

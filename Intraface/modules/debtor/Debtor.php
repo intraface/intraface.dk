@@ -1173,4 +1173,13 @@ class Debtor extends Intraface_Standard
         return $this->get('where_to_id');
     }
 
+    function getWhereFromId()
+    {
+        return $this->get('where_from_id');
+    }
+
+    function getPaymentLink($url)
+    {
+        return $url . $this->getIdentifier();
+    }
 }
