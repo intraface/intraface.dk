@@ -10,19 +10,6 @@
 class OnlinePaymentDanDomain extends OnlinePayment
 {
 
-    /*
-        '' => 'Ingen kontakt til Dandomin - mangler $eval',
-        '000' => 'Godkendt',
-        '001' => 'Afvist af PBS',
-        '002' => 'Kommunikationsfejl',
-        '003' => 'Kort udløbet',
-        '004' => 'Status er forkert (Ikke autoriseret)',
-        '005' => 'Autorisation er forældet',
-        '006' => 'Fejl hos PBS',
-        '007' => 'Fejl hos Dandomain',
-        '008' => 'Fejl i parameter sendt til DanDomain'
-     */
-
     public $transaction_status_types = array(
         '-1' => 'Godkendt',
         '' => 'Ingen kontakt til Dandomin',
