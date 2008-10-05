@@ -31,9 +31,8 @@ class CurrencyTest extends PHPUnit_Framework_TestCase
         $object->setType($type->getByIsoCode('EUR'));
         try {
             $object->save();
-        }
-        catch(Exception $e) {
-            $this->assertTrue(false, $e->getErrorMessage());
+        } catch(Exception $e) {
+            $this->assertTrue(false, $e->getMessage());
         }
     }
     
