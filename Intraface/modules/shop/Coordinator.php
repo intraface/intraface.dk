@@ -195,9 +195,8 @@ class Intraface_modules_shop_Coordinator
             $value['payment_method'] = $input['payment_method']['key'];
         }
 
-
         $this->order = new Debtor($this->kernel, 'order');
-        $order_id = $this->order->update($value, 'webshop');
+        $order_id = $this->order->update($value, 'webshop', $this->shop->getId());
 
         if ($order_id == 0) {
             $this->error->merge($this->order->error->message);
