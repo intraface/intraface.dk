@@ -47,6 +47,8 @@ class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
             array(
                 'type' => $debtor->get('type'),
                 'id' => $debtor->get('id'),
+                'number' => $debtor->get('number'),
+                'this_date' => $debtor->get('this_date'),
                 'description' => $debtor->get('description'),
                 'total_price' => $debtor->get('total'),
                 'arrears' => $debtor->get('arrears'),
