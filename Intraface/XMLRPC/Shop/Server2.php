@@ -99,7 +99,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
         }
         
         $products = array();
-        foreach($product->getList('webshop') AS $p) {
+        foreach ($product->getList('webshop') AS $p) {
             // Make sure we only include necessary data. Several things more might be left out. Mostly we remove description.
             $products[] = array(
                 'id' => $p['id'],
@@ -156,21 +156,21 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
         $product = new Product($this->kernel, $id);
         $product->getPictures();
         $return['product'] = $product->get();
-        if(!$product->get('has_variation') && $product->get('stock')) {
+        if (!$product->get('has_variation') && $product->get('stock')) {
             $return['stock'] = $product->getStock()->get();
         }
         
-        if($product->get('has_variation')) {
+        if ($product->get('has_variation')) {
             
             // We should make a Doctrine Product_X_AttributeGroup class and get all the groups i one sql 
             $groups = $product->getAttributeGroups();
             $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway;
-            foreach($groups AS $key => $group) {
+            foreach ($groups AS $key => $group) {
                 // Make sure we only include necessary data
                 $return['attribute_groups'][$key]['id'] = $group['id'];
                 $return['attribute_groups'][$key]['name'] = $group['name'];
                 $attributes = $group_gateway->findById($group['id'])->getAttributesUsedByProduct($product);
-                foreach($attributes AS $attribute) {
+                foreach ($attributes AS $attribute) {
                     $return['attribute_groups'][$key]['attributes'][] = array(
                         'id' => $attribute->getId(),
                         'name' => $attribute->getName()
@@ -180,12 +180,12 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
             }
             
             $variations = $product->getVariations();
-            foreach($variations AS $variation) {
+            foreach ($variations as $variation) {
                 $detail = $variation->getDetail();
                 $attribute_string = '';
                 $attributes_array = $variation->getAttributesAsArray();
-                foreach($attributes_array AS $attribute) {
-                    if($attribute_string != '') $attribute_string .= '-';
+                foreach ($attributes_array as $attribute) {
+                    if ($attribute_string != '') $attribute_string .= '-';
                     $attribute_string .= $attribute['id'];
                 }
                 
