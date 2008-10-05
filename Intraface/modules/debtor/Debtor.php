@@ -86,7 +86,7 @@ class Debtor extends Intraface_Standard
 
         $this->kernel = $kernel;
         $this->type = $type;
-        $this->type_key = array_search($type, Debtor::getDebtorTypes());
+        $this->type_key = array_search($type, self::getDebtorTypes());
         if (!isset($this->type_key)) {
             trigger_error('Debtor: Ugyldig type', E_USER_ERROR);
         }
@@ -262,7 +262,7 @@ class Debtor extends Intraface_Standard
         if ($db->nextRecord()) {
 
             if ($db->f('type') > 0) {
-                $types = Debtor::getDebtorTypes();
+                $types = self::getDebtorTypes();
                 $this->value['where_to'] = $types[$db->f('type')];
             } else {
                 $this->value['where_to'] = '';
@@ -885,7 +885,7 @@ class Debtor extends Intraface_Standard
 
         while($db->nextRecord()) {
 
-            $debtor = Debtor::factory($this->kernel, (int)$db->f("id"));
+            $debtor = self::factory($this->kernel, (int)$db->f("id"));
             $list[$i] = $debtor->get();
 
             // $contact = new Contact($this->kernel, $db->f('contact_id'));
@@ -1099,10 +1099,10 @@ class Debtor extends Intraface_Standard
     static function getDebtorTypes()
     {
         return array(
-            1=>'quotation',
-            2=>'order',
-            3=>'invoice',
-            4=>'credit_note');
+            1 => 'quotation',
+            2 => 'order',
+            3 => 'invoice',
+            4 => 'credit_note');
     }
 
     /**
@@ -1113,11 +1113,11 @@ class Debtor extends Intraface_Standard
     private function getFromTypes()
     {
         return array(
-            1=>'manuel',
-            2=>'webshop',
-            3=>'quotation',
-            4=>'order',
-            5=>'invoice'
+            1 => 'manuel',
+            2 => 'webshop',
+            3 => 'quotation',
+            4 => 'order',
+            5 => 'invoice'
         );
     }
 
@@ -1129,10 +1129,10 @@ class Debtor extends Intraface_Standard
     private function getStatusTypes()
     {
         return array(
-            0=>'created',
-            1=>'sent',
-            2=>'executed',
-            3=>'cancelled'
+            0 => 'created',
+            1 => 'sent',
+            2 => 'executed',
+            3 => 'cancelled'
         );
     }
 
@@ -1144,12 +1144,12 @@ class Debtor extends Intraface_Standard
     private function getPaymentMethods()
     {
         return array(
-            0=>'Ingen',
-            1=>'Kontooverførsel',
-            2=>'Girokort +01',
-            3=>'Girokort +71',
-            4=>'Efterkrav',
-            5=>'Onlinebetaling'
+            0 => 'Ingen',
+            1 => 'Kontooverførsel',
+            2 => 'Girokort +01',
+            3 => 'Girokort +71',
+            4 => 'Efterkrav',
+            5 => 'Onlinebetaling'
         );
     }
     
@@ -1162,5 +1162,15 @@ class Debtor extends Intraface_Standard
     {
         return $this->id;
     }
+    
+    function getPaymentMethodKey()
+    {
+        return $this->get('payment_method');
+    }
+
+    function getWhereToId()
+    {
+        return $this->get('where_to_id');
+    }
+
 }
-?>
