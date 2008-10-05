@@ -478,7 +478,8 @@ if (isset($onlinepayment)) {
                     <?php
                         if ($debtor->isStated()) {
                             $module_accounting = $kernel->useModule('accounting');
-                            e($debtor->get('dk_date_stated')) . ' <a href="'.$module_accounting->getPath().'voucher.php?id='.$debtor->get('voucher_id').'">Se bilag</a>';
+                            e($debtor->get('dk_date_stated'));
+                            echo ' <a href="'.$module_accounting->getPath().'voucher.php?id='.$debtor->get('voucher_id').'">Se bilag</a>';
                         } else {
                             e('Ikke bogført');
                             if ($debtor->get('status') == 'sent' || $debtor->get('status') == 'executed') {
