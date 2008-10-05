@@ -146,8 +146,7 @@ class Debtor extends Intraface_Standard
             } else {
                 trigger_error("Invalid id for debtor in Debtor::factory", E_USER_ERROR);
             }
-        }
-        elseif(is_string($id) && $id != '') {
+        } elseif (is_string($id) && $id != '') {
             $types = self::getDebtorTypes();
 
             $db = new DB_Sql;

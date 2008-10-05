@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * @author Lars Olesen <lars@legestue.net>
  * @author Sune Jensen <sj@sunet.dk>
  */
@@ -97,8 +96,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_GET["action"]) && $_GET["action"] == "delete_item") {
         $debtor->loadItem(intval($_GET["item_id"]));
         $debtor->item->delete();
+        header('Location: view.php?id='. $debtor->getId());
+        exit;
     }
-
     // move item
     if (isset($_GET['action']) && $_GET['action'] == "moveup") {
         $debtor->loadItem(intval($_GET['item_id']));

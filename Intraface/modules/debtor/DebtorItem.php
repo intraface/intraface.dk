@@ -75,7 +75,7 @@ class DebtorItem extends Intraface_Standard
             trigger_error('Debtor: Item kræver debtor', E_USER_ERROR);
         }
 
-        $this->debtor = &$debtor;
+        $this->debtor = $debtor;
         $this->db = new DB_Sql;
         $this->error = new Intraface_Error;
         $this->id = (int)$id;
@@ -97,7 +97,6 @@ class DebtorItem extends Intraface_Standard
         }
         $this->db->query("SELECT id, product_id, product_detail_id, product_variation_id, product_variation_detail_id, description, quantity FROM debtor_item WHERE id = ".$this->id." AND intranet_id = ".$this->debtor->kernel->intranet->get("id"));
         if ($this->db->nextRecord()) {
-           
             $this->value["id"] = $this->db->f("id");
             $this->value["product_id"] = $this->db->f("product_id");
             $this->value["product_detail_id"] = $this->db->f("product_detail_id");
@@ -425,7 +424,7 @@ class DebtorItem extends Intraface_Standard
         $this->id = 0;
 
         if ($this->debtor->get("type") == "credit_note" && $this->debtor->get("where_from") == "invoice" && $this->debtor->get("where_from_id") != 0) {
-            $invoice = Debtor::factory($this->debtor->kernel, $this->debtor->get("where_from_id"));
+            $invoice = Debtor::factory($this->debtor->kernel, intval($this->debtor->get("where_from_id")));
             $invoice->updateStatus();
         }
 
