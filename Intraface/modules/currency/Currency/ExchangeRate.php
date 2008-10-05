@@ -44,7 +44,7 @@ class Intraface_modules_currency_Currency_ExchangeRate extends Doctrine_Record
     
     public function setRate($rate) 
     {
-        $this->rate = $rate->get('iso');
+        $this->rate = $rate->getAsIso();
     }
     
     public function getRate()
