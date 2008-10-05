@@ -453,7 +453,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
         }
 
         if (empty($values['description'])) {
-            $values['description'] = 'Onlineshop';
+            $values['description'] = $this->webshop->getShop()->getName();
         }
 
         if (!$order_id = $this->webshop->placeOrder($values, Intraface_Mail::factory())) {
