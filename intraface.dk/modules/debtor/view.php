@@ -394,7 +394,7 @@ if (isset($onlinepayment)) {
                 <th>Dato</th>
                 <td><?php e($debtor->get("dk_this_date")); ?></td>
             </tr>
-            <?php if ($debtor->get("type") != "credit_note") { ?>
+            <?php if ($debtor->get("type") != "credit_note"): ?>
             <tr>
                 <th><?php e(t($debtor->get('type').' due date')); ?>:</th>
                 <td>
@@ -402,7 +402,7 @@ if (isset($onlinepayment)) {
                     <?php if ($debtor->get('type')=='invoice' && $debtor->anyDue($debtor->contact->get('id')) && $debtor->get("status") != 'executed') echo '<a href="reminder_edit.php?contact_id='.intval($debtor->contact->get('id')).'">Opret rykker</a>'; ?>
                 </td>
             </tr>
-            <?php } ?>
+            <?php endif; ?>
 
 
 
@@ -753,7 +753,12 @@ if (isset($onlinepayment)) {
                 </table>
             </div>
             <?php
-        }
+        // paymentmethodkey 5 is onlinepayment
+        } elseif ($debtor->getPaymentMethodKey() == 5 AND $debtor->getWhereToId() == 0) { ?>
+            <div class="warning">
+                Der burde være en onlinebetaling knyttet hertil. Måske har kunden fortrudt sit køb, eller også er der sket en fejl hos PBS under købet. Vi arbejder på en løsning, så vi nøjagtigt kan se, hvad der går galt under kundens betaling, så alle betalingsforsøg kommer med herind i Intraface.
+            </div>
+        <?php }
     }
     ?>
 <div style="clear:both;">
