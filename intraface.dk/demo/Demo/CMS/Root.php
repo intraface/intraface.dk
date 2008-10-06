@@ -16,4 +16,9 @@ class Demo_CMS_Root extends k_Controller
         $next = new Demo_CMS_Show($this, $name);
         return $next->handleRequest();
     }
+    
+    function getCMS()
+    {
+        return $this->registry->get('cms');
+    }
 }

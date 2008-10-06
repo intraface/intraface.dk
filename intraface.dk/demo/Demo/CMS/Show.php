@@ -21,7 +21,6 @@ class Demo_CMS_Show extends k_Controller
         $cms = new IntrafacePublic_CMS($client, $this->registry->get('cache'));
         
         return $cms;
-
     }
 
     function execute()
@@ -36,4 +35,8 @@ class Demo_CMS_Show extends k_Controller
         return $next->handleRequest();
     }
     
+    function getCMS()
+    {
+        return $this->context->getCMS();
+    }
 }
