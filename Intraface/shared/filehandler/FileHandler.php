@@ -124,7 +124,7 @@ class FileHandler extends Intraface_Standard
         $this->www_path = PATH_WWW;
 
         if (!is_dir($this->upload_path)) {
-            if (!mkdir($this->upload_path)) {
+            if (!mkdir($this->upload_path, 0755)) {
                 trigger_error("Unable to create folder '".$this->upload_path."'", E_USER_ERROR);
                 exit;
             }

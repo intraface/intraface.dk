@@ -151,7 +151,7 @@ class InstanceHandler extends Intraface_Standard
             $server_file_name = $id.'.'.$mime_type['extension'];
 
             if(!is_dir($instancehandler->instance_path)) {
-                if(!mkdir($instancehandler->instance_path)) {
+                if(!mkdir($instancehandler->instance_path, 0755)) {
                     $this->delete();
                     trigger_error("Kunne ikke oprette mappe i InstanceHandler->factory", E_USER_ERROR);
                 }

@@ -63,14 +63,14 @@ class TemporaryFile {
         
         // We make sure to create the folders
         if(!is_dir($this->filehandler->upload_path)) {
-            if(!mkdir($this->filehandler->upload_path)) {
+            if(!mkdir($this->filehandler->upload_path, 0755)) {
                 trigger_error('Unable to create upload dir "'.$this->filehandler->upload_path.'"', E_USER_ERROR);
                 exit;
             }
         }
 
         if(!is_dir($this->filehandler->tempdir_path)) {
-            if(!mkdir($this->filehandler->tempdir_path)) {
+            if(!mkdir($this->filehandler->tempdir_path, 0755)) {
                 trigger_error('Unable to create temp dir "'.$this->filehandler->tempdir_path.'"', E_USER_ERROR);
                 exit;
             }
@@ -87,7 +87,7 @@ class TemporaryFile {
         }
         while (is_dir($this->filehandler->tempdir_path.$unique_name));
         
-        if(!mkdir($this->filehandler->tempdir_path.$unique_name)) {
+        if(!mkdir($this->filehandler->tempdir_path.$unique_name, 0755)) {
             trigger_error('Unable to create temporary dir "'.$this->filehandler->tempdir_path.$unique_name.'"', E_USER_ERROR);
             exit;
         }

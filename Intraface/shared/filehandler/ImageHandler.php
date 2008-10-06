@@ -60,7 +60,7 @@ class ImageHandler extends Intraface_Standard
         $this->tempdir_path = $this->file_handler->getTemporaryDirectory();
 
         if(!is_dir($this->tempdir_path)) {
-            if(!mkdir($this->tempdir_path)) {
+            if(!mkdir($this->tempdir_path, 0755)) {
                 trigger_error('Kunne ikke oprette workdir '.$this->tempdir_path.'i ImageHandler->imageHandler', E_USER_ERROR);
             }
         }
