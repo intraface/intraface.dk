@@ -24,7 +24,7 @@ $level = 0;
         <?php foreach($level_categories[$level] AS $category): ?>
             <?php array_shift($level_categories[$level]); ?>
             <tr>
-                <td><input type="checkbox" name="category[]" value="<?php e($category['id']); ?>" /></td>
+                <td><input id="category_<?php e($category['id']); ?>" type="checkbox" name="category[]" value="<?php e($category['id']); ?>" /></td>
                 <td><?php e(str_repeat('- ', $level)); ?><?php e($category['name']); ?></td>
                 <td><a href="<?php e(url($category['id'] . '/edit')); ?>"><?php e(t('Edit')); ?></a></td>
             </tr>
