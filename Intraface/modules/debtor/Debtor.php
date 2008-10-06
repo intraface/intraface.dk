@@ -356,15 +356,13 @@ class Debtor extends Intraface_Standard
         $contact = new Contact($this->kernel, $input["contact_id"]);
         if (is_object($contact->address)) {
             $contact_address_id = $contact->address->get("address_id");
-        }
-        else {
+        } else {
             $this->error->set("Ugyldig kunde");
         }
 
         if ($contact->get("type") == "corporation") {
             $validator->isNumeric($input["contact_person_id"], "Der er ikke angivet en kontaktperson");
-        }
-        else {
+        } else {
             $input["contact_person_id"] = 0;
         }
         $validator->isString($input['description'], 'Fejl i beskrivelse', '', 'allow_empty');
@@ -404,7 +402,6 @@ class Debtor extends Intraface_Standard
         if (isset($input['internal_note'])) {
             $internal_note_sql = ", internal_note = '".$input['internal_note']."'";
         }
-
 
         if (isset($input["round_off"]) && intval($input["round_off"])) {
             $input["round_off"] = 1;
