@@ -138,7 +138,7 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.
 $pfm->addPackageDepWithChannel('required', 'Ilib_Validator', 'public.intraface.dk', '0.0.2');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_ClassLoader', 'public.intraface.dk', '0.1.1');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Variable', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Variable', 'public.intraface.dk', '0.2.1');
 
 // other intraface 3_Party packages
 $pfm->addPackageDepWithChannel('required', 'DB_Sql', 'public.intraface.dk', '0.0.1');
