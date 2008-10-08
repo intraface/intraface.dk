@@ -45,7 +45,7 @@ class OnlinePaymentTest extends PHPUnit_Framework_TestCase
     {
         $onlinepayment = new OnlinePayment($this->createKernel());
         $this->assertEquals(0, $onlinepayment->save(array()));
-        $this->assertEquals(4, $onlinepayment->error->count());
+        $this->assertEquals(2, $onlinepayment->error->count());
 
     }
 
