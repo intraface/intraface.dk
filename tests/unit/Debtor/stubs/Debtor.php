@@ -55,6 +55,11 @@ class FakeDebtor
         return 'Ja, det kan du tro, at der er en masse at fortaelle.';
     }
     
+    function getCurrency() 
+    {
+        return false;
+    }
+    
     
 }
 ?>

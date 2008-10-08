@@ -18,8 +18,29 @@ class Intraface_modules_currency_Currency_Gateway
     {
         $query = $this->table->createQuery('currency');
         $collection = $query->select('currency.*, product_price_exchange_rate.*, payment_exchange_rate.*')
-                ->leftJoin('currency.product_price_exchange_rate AS product_price_exchange_rate INDEX BY product_price_exchange_rate.id') 
-                ->leftJoin('currency.payment_exchange_rate AS payment_exchange_rate INDEX by payment_exchange_rate.id')
+                ->leftJoin('currency.product_price_exchange_rate AS product_price_exchange_rate') 
+                ->leftJoin('currency.payment_exchange_rate AS payment_exchange_rate')
+                ->orderBy('type_key')
+                ->execute();
+        
+        
+        if (!$collection || $collection->count() == 0) {
+            throw new Intraface_Gateway_Exception('Unable to find currency');
+        }
+        return $collection;
+    }
+    
+    /**
+     * Finds all currencies with defined exchange rates
+     * 
+     * @return object collection
+     */
+    public function findAllWithExchangeRate()
+    {
+        $query = $this->table->createQuery('currency');
+        $collection = $query->select('currency.*, product_price_exchange_rate.*, payment_exchange_rate.*')
+                ->innerJoin('currency.product_price_exchange_rate AS product_price_exchange_rate') 
+                ->innerJoin('currency.payment_exchange_rate AS payment_exchange_rate')
                 ->orderBy('type_key')
                 ->execute();
         
@@ -34,8 +55,8 @@ class Intraface_modules_currency_Currency_Gateway
     {
         $query = $this->table->createQuery('currency');
         $query = $query->select('currency.*, product_price_exchange_rate.*, payment_exchange_rate.*')
-                ->leftJoin('currency.product_price_exchange_rate AS product_price_exchange_rate INDEX BY product_price_exchange_rate.id')
-                ->leftJoin('currency.payment_exchange_rate AS payment_exchange_rate INDEX by payment_exchange_rate.id')
+                ->leftJoin('currency.product_price_exchange_rate AS product_price_exchange_rate')
+                ->leftJoin('currency.payment_exchange_rate AS payment_exchange_rate') 
                 ->addWhere('currency.id = ?', $id);
         
         // echo $query->getSqlQuery();

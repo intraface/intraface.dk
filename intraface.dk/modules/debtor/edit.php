@@ -16,6 +16,17 @@ if(!empty($_POST)) {
 		$contact_person->load();
 		$_POST["contact_person_id"] = $contact_person->get("id");
 	}
+    
+    if($kernel->intranet->hasModuleAccess('currency') && !empty($_POST['currency_id'])) {
+        $currency_module = $kernel->useModule('currency', false); // false = ignore user access
+        $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
+        $currency = $gateway->findById($_POST['currency_id']);
+        if($currency == false) {
+            throw new Exception('Invalid currency');
+        }
+        
+        $_POST['currency'] = $currency;
+    }
 
 	if($debtor->update($_POST)) {
 		header("Location: view.php?id=".$debtor->get("id"));
@@ -120,7 +131,25 @@ $page->start(safeToHtml($translation->get($action.' '.$debtor->get('type'))));
 		<?php
 	}
 	?>
-	
+    
+    <?php if($kernel->intranet->hasModuleAccess('currency')): ?>
+        <?php $kernel->useModule('currency', true); /* true: ignore user access */ ?>
+        <div class="formrow">
+            <label for="currency_id"><?php e(t('Currency')); ?></label>
+            <select name="currency_id" id="currency_id">
+                <option value="0">DKK (Standard)</option>
+                <?php
+                $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
+                foreach($gateway->findAllWithExchangeRate() AS $currency) {
+                    ?>
+                    <option value="<?php e($currency->getId()); ?>" ><?php e($currency->getType()->getIsoCode().' '.$currency->getType()->getDescription()); ?></option>
+                    <?php
+                }
+                ?>
+            </select>
+        </div>
+    <?php endif; ?>
+    
 	<div class="formrow">
 		<label for="message">Besked</label>
 		<textarea id="message" type="text" name="message" cols="80" rows="5"><?php if(isset($value["message"])) print(safeToForm($value["message"])); ?></textarea>

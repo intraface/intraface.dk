@@ -449,6 +449,8 @@ class DebtorItem extends Intraface_Standard
 
         require_once 'Intraface/modules/product/Product.php';
         
+        $currency = $this->debtor->getCurrency();
+        
         while($db->nextRecord()) {
             $product = new Product($this->debtor->kernel, $db->f('product_id'), $db->f('product_detail_id'));
             
@@ -475,20 +477,34 @@ class DebtorItem extends Intraface_Standard
                     $item["name"] = $product->get("name").' - '.$variation->getName();
                     $item["number"]= $product->get("number").'.'.$variation->getNumber();
                     $item["price"] = $product->get("price") + $detail->getPriceDifference();
+                    
+                    /**
+                     * @todo This is not good. But not able to do it in other ways as long
+                     * as Variation_Detail does not have getPrice/getPriceInCurrency. 
+                     * The following line is the prober solution:
+                     * if($currency) $item['price_currency'] = $detail->getPriceInCurrency($currency);
+                     */
+                    if($currency) {
+                        $exchange_rate = $currency->getProductPriceExchangeRate($this->debtor->get('currency_product_price_exchange_rate_id'));
+                        $item['price_currency'] = new Ilib_Variable_Float($item['price'] / ($exchange_rate->getRate()->getAsIso()/100), 'iso');
+                    }
                 }
                 else {
                     $item["name"] = $product->get("name");
                     $item["number"]= $product->get("number");
                     $item["price"] = $product->get("price");
+                    if($currency) $item['price_currency'] = $product->getDetails()->getPriceInCurrency($currency, $this->debtor->get('currency_product_price_exchange_rate_id'));
                 }
                     
                 if ($product->get("vat") == 0) {
                     $item_no_vat[$j] = $item;
                     $item_no_vat[$j]["amount"] = $item["quantity"] * $item["price"];
+                    if($currency) $item_no_vat[$j]["amount_currency"] = new Ilib_Variable_Float($item["quantity"] * $item["price_currency"]->getAsIso(), 'iso');
                     $j++;
                 } else {
                     $item_with_vat[$i] = $item;
                     $item_with_vat[$i]["amount"] = $item["quantity"] * $item["price"] * 1.25;
+                    if($currency) $item_with_vat[$i]["amount_currency"] = new Ilib_Variable_Float($item["quantity"] * $item["price_currency"]->getAsIso() * 1.25, 'iso');
                     $i++;
                 }
             } else {

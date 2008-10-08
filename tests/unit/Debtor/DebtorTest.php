@@ -9,6 +9,8 @@ require_once 'Intraface/modules/debtor/Debtor.php';
 require_once 'Intraface/Date.php';
 require_once 'tests/unit/stubs/Translation.php';
 
+Intraface_Doctrine_Intranet::singleton(1);
+
 
 class FakeDebtorAddress {
     function get($key = '') {
@@ -66,6 +68,9 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $db = MDB2::factory(DB_DSN);
         $db->query('TRUNCATE debtor');
         $db->query('TRUNCATE debtor_item');
+        $db->query('TRUNCATE currency');
+        $db->query('TRUNCATE currency_exchange_rate');
+        
         
         
         
@@ -126,6 +131,69 @@ class DebtorTest extends PHPUnit_Framework_TestCase
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'))
             ) > 0);
+    }
+    
+    function testUpdateWithCurrency() {
+        $debtor = $this->createDebtor();
+        
+        $currency = new Intraface_modules_currency_Currency;
+        $currency->setType(new Intraface_modules_currency_Currency_Type_Eur);
+        try {
+            $currency->save();
+        }
+        catch (Exception $e) {
+            print_r($currency->getErrorStack());
+            die;
+        }
+        $excr = new Intraface_modules_currency_Currency_ExchangeRate_ProductPrice;
+        $excr->setRate(new Ilib_Variable_Float(745.23));
+        $excr->setCurrency($currency);
+        $excr->save();
+        
+        $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
+        
+        $this->assertTrue($debtor->update(
+            array(
+                'contact_id' => $this->createContact(), 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y'),
+                'currency' => $currency)
+            ) > 0);
+        
+    }
+    
+    function testGetCurrency() {
+        $debtor = $this->createDebtor();
+        
+        $currency = new Intraface_modules_currency_Currency;
+        $currency->setType(new Intraface_modules_currency_Currency_Type_Eur);
+        try {
+            $currency->save();
+        }
+        catch (Exception $e) {
+            print_r($currency->getErrorStack());
+            die;
+        }
+        $excr = new Intraface_modules_currency_Currency_ExchangeRate_ProductPrice;
+        $excr->setRate(new Ilib_Variable_Float(745.23));
+        $excr->setCurrency($currency);
+        $excr->save();
+        
+        $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
+        
+        $debtor->update(
+            array(
+                'contact_id' => $this->createContact(), 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y'),
+                'currency' => $currency)
+            );
+        $debtor->load();
+        
+        $this->assertEquals('Intraface_modules_currency_Currency', get_class($debtor->getCurrency(Doctrine_Manager::connection(DB_DSN))));
+        
     }
     
     function testSetStatus() {

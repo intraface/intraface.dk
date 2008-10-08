@@ -50,7 +50,11 @@ class Intraface_modules_currency_Currency extends Doctrine_Record
             return $this->product_price_exchange_rate->getLast();
         } 
         else {
+            if(false === ($key = array_search($id, $this->product_price_exchange_rate->getPrimaryKeys()))) {
+                throw new Intraface_Gateway_Exception('Unable to find exchange rate with id '.$id);
+            }
             
+            return $this->product_price_exchange_rate[$key];
         }
     }
     
@@ -60,7 +64,11 @@ class Intraface_modules_currency_Currency extends Doctrine_Record
             return $this->payment_exchange_rate->getLast();
         } 
         else {
+            if(false === ($key = array_search($id, $this->payment_exchange_rate->getPrimaryKeys()))) {
+                throw new Intraface_Gateway_Exception('Unable to find exchange rate with id '.$id);
+            }
             
+            return $this->payment_exchange_rate[$key];
         }
     }
     

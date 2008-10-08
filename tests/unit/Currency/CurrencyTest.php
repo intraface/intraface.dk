@@ -71,4 +71,40 @@ class CurrencyTest extends PHPUnit_Framework_TestCase
         $rate = $currency->getProductPriceExchangeRate();
         $this->assertEquals('745,23', $rate->getRate()->getAsLocal('da_dk'));
     }
+    
+    function testGetProductPriceExchangeRateWithId()
+    {
+        $currency = new Intraface_modules_currency_Currency;
+        $type = new Intraface_modules_currency_Currency_Type;
+        $currency->setType($type->getByIsoCode('EUR'));
+        $currency->save();
+        
+        $rate = new Intraface_modules_currency_Currency_ExchangeRate_ProductPrice;
+        $rate->setRate(new Ilib_Variable_Float('745,21', 'da_dk'));
+        $rate->setCurrency($currency);
+        $rate->save();
+        
+        $rate = new Intraface_modules_currency_Currency_ExchangeRate_Payment;
+        $rate->setRate(new Ilib_Variable_Float('745,80', 'da_dk'));
+        $rate->setCurrency($currency);
+        $rate->save();
+        
+        $rate = new Intraface_modules_currency_Currency_ExchangeRate_ProductPrice;
+        $rate->setRate(new Ilib_Variable_Float('745,23', 'da_dk'));
+        $rate->setCurrency($currency);
+        $rate->save();
+        
+        $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection());
+        $currency = $gateway->findById(1);
+        
+        $this->assertEquals(1, $currency->getProductPriceExchangeRate(1)->getId());
+        $this->assertEquals(3, $currency->getProductPriceExchangeRate(3)->getId());
+        try {
+            $currency->getProductPriceExchangeRate(2);
+            $this->assertTrue(false);
+        }
+        catch (Intraface_Gateway_Exception $e) {
+            $this->assertTrue(true);
+        }    
+    }
 }

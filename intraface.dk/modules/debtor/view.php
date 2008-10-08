@@ -724,7 +724,11 @@ if (isset($onlinepayment)) {
                                     <?php
                                     e(t($p['status'], 'onlinepayment'));
                                     if ($p['user_transaction_status_translated'] != "") {
-                                        e(" (".$p['user_transaction_status_translated'].")");
+                                        e(" (".$p['user_transaction_status_translated']);
+                                        if($p['pbs_status'] != '' && $p['pbs_status'] != '000') {
+                                            e(": ".$p['pbs_status']);
+                                        }
+                                        e(")");
                                     } elseif ($p['status'] == 'authorized') {
                                         print(" (Ikke <acronym title=\"Betaling kan først hæves når faktura er sendt\">hævet</acronym>)");
                                     }
@@ -773,7 +777,6 @@ if (isset($onlinepayment)) {
     }
     ?>
 <div style="clear:both;">
-
     <?php if ($debtor->get("locked") == false) { ?>
         <ul class="options" style="clear: both;">
             <li><a href="view.php?id=<?php e($debtor->get("id")); ?>&amp;add_item=true">Tilføj vare</a></li>
@@ -789,6 +792,9 @@ if (isset($onlinepayment)) {
                 <th colspan="2">Antal</th>
                 <th>Pris</th>
                 <th>Beløb</th>
+                <?php if($kernel->intranet->hasModuleAccess('currency') && false !== $debtor->getCurrency()): ?>
+                    <th><?php e($debtor->getCurrency()->getType()->getIsoCode()); ?></th>
+                <?php endif; ?> 
                 <th>&nbsp;</th>
             </tr>
         </thead>
@@ -799,6 +805,7 @@ if (isset($onlinepayment)) {
             $debtor->loadItem();
             $items = $debtor->item->getList();
             $total = 0;
+            $total_currency = 0;
             if (isset($items[0]["vat"])) {
                 $vat = $items[0]["vat"]; // Er der moms på det første produkt
             } else {
@@ -836,10 +843,17 @@ if (isset($onlinepayment)) {
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
-                        <?php
+                        <?php 
                     }
                     ?>
-                    <td><?php e(number_format($items[$i]["quantity"]*$items[$i]["price"], 2, ",", ".")); ?></td>
+                    <td class="amount"><?php e(number_format($items[$i]["quantity"]*$items[$i]["price"], 2, ",", ".")); ?></td>
+                    <?php if($debtor->getCurrency()): ?>
+                        <?php
+                        $price_currency = new Ilib_Variable_Float($items[$i]["quantity"]*$items[$i]["price_currency"]->getAsIso());
+                        $total_currency += $price_currency->getAsIso();
+                        ?>
+                        <td class="amount"><?php e($price_currency->getAsLocal('da_dk', 2)); ?></td>
+                    <?php endif; ?> 
                     <td class="options">
                         <?php
                         if ($debtor->get("locked") == false) {
@@ -864,7 +878,12 @@ if (isset($onlinepayment)) {
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
-                        <td><b><?php e(number_format($total * 0.25, 2, ",", ".")); ?></b></td>
+                        <td class="amount"><b><?php e(number_format($total * 0.25, 2, ",", ".")); ?></b></td>
+                        <?php if($debtor->getCurrency()): ?>
+                            <td class="amount"><b><?php e(number_format($total_currency * 0.25, 2, ",", ".")); ?></b></td>
+                            <?php $total_currency *= 1.25; ?>
+                        <?php endif; ?> 
+                    
                         <td>&nbsp;</td>
                     </tr>
                     <?php
@@ -878,7 +897,11 @@ if (isset($onlinepayment)) {
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td colspan="3">I alt:</td>
-                <td><?php e(number_format($total, 2, ",", ".")); ?></td>
+                <td class="amount"><?php e(number_format($total, 2, ",", ".")); ?></td>
+                <?php if($debtor->getCurrency()): ?>
+                    <td class="amount"><?php e(number_format($total_currency, 2, ",", ".")); ?></td>
+                <?php endif; ?> 
+                    
                 <td>&nbsp;</td>
             </tr>
             <?php } ?>
@@ -886,7 +909,11 @@ if (isset($onlinepayment)) {
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td colspan="3"><b>Total<?php if ($debtor->get("round_off") == 1 && $debtor->get("type") == "invoice" && $total != $debtor->get("total")) print("&nbsp;afrundet"); ?>:</b></td>
-            <td><strong><?php e(number_format($debtor->get("total"), 2, ",", ".")); ?></strong></td>
+            <td class="amount"><strong><?php e(number_format($debtor->get("total"), 2, ",", ".")); ?></strong></td>
+            <?php if($debtor->getCurrency()): ?>
+                <td class="amount"><strong><?php e(number_format($total_currency, 2, ",", ".")); ?></strong></td>
+            <?php endif; ?> 
+                    
             <td>&nbsp;</td>
         </tr>
     </table>

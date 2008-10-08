@@ -274,6 +274,11 @@ class ProductDetail extends Intraface_Standard
             return true;
         }
     }
+    
+    public function getPriceInCurrency($currency, $exchange_rate_id = 0)
+    {
+        return new Ilib_Variable_Float($this->get('price') / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100), 'iso');
+    } 
 
     /**
      * Gets the corresponding unit to a key

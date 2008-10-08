@@ -66,6 +66,11 @@ class Debtor extends Intraface_Standard
      * @var object
      */
     public $payment;
+    
+    /**
+     * @var object currency
+     */
+    private $currency;
 
     /**
      * Constructor
@@ -203,7 +208,7 @@ class Debtor extends Intraface_Standard
             return 0;
         }
 
-        $this->db->query("SELECT id, number, identifier_key, intranet_address_id, contact_id, contact_address_id, contact_person_id, description, payment_method, this_date, due_date, date_stated, voucher_id, date_executed, status, where_from_id, where_from, user_id, round_off, girocode, active, message, internal_note,
+        $this->db->query("SELECT id, number, identifier_key, intranet_address_id, contact_id, contact_address_id, contact_person_id, description, payment_method, this_date, due_date, date_stated, voucher_id, date_executed, status, where_from_id, where_from, user_id, round_off, girocode, active, message, internal_note, currency_id, currency_product_price_exchange_rate_id,
                 DATE_FORMAT(date_stated, '%d-%m-%Y') AS dk_date_stated,
                 DATE_FORMAT(this_date, '%d-%m-%Y') AS dk_this_date,
                 DATE_FORMAT(due_date, '%d-%m-%Y') AS dk_due_date,
@@ -245,6 +250,8 @@ class Debtor extends Intraface_Standard
         $status_types = $this->getStatusTypes();
         $this->value["status"] = $status_types[$this->db->f("status")];
         $this->value["status_id"] = $this->db->f("status");
+        $this->value["currency_id"] = $this->db->f("currency_id");
+        $this->value["currency_product_price_exchange_rate_id"] = $this->db->f("currency_product_price_exchange_rate_id");
         // $this->value["is_credited"] = $this->db->f("is_credited");
         $froms = $this->getFromTypes();
         $this->value["where_from"] = $froms[$this->db->f("where_from")];
@@ -290,11 +297,18 @@ class Debtor extends Intraface_Standard
         $this->loadItem();
         $item = $this->item->getList();
         $this->value['items'] = $item;
+        
+        /**
+         * Currency is always loaded, should be done with left join. Oh give me more doctrine!
+         */
+        $currency = $this->getCurrency();
 
-        for ($i = 0, $max = count($item), $total = 0; $i<$max; $i++) {
+        for ($i = 0, $max = count($item), $total = 0, $total_currency = 0; $i<$max; $i++) {
             $total += $item[$i]["amount"];
+            if($currency) $total_currency += $item[$i]['amount_currency']->getAsIso(2);
         }
 
+        // no round off of curreny yet!
         if ($this->get("round_off") == 1 && $this->get("type") == "invoice") {
             $decimal = $total - floor($total);
             $decimal *= 4;
@@ -303,7 +317,10 @@ class Debtor extends Intraface_Standard
         }
 
         $this->value["total"] = round($total, 2);
+        if($currency) $this->value['total_currency'] = round($total_currency, 2);
         $this->value['payment_total'] = 0;
+        
+        
 
         if ($this->value["type"] == "invoice") {
             foreach ($this->getDebtorAccount()->getList() AS $payment) {
@@ -402,6 +419,13 @@ class Debtor extends Intraface_Standard
         if (isset($input['internal_note'])) {
             $internal_note_sql = ", internal_note = '".$input['internal_note']."'";
         }
+        
+        $currency_id = 0;
+        $currency_exchange_rate_id = 0;
+        if(isset($input['currency']) && is_object($input['currency'])) {
+            $currency_id = $input['currency']->getId();
+            $currency_exchange_rate_id = $input['currency']->getProductPriceExchangeRate()->getId();
+        }
 
         if (isset($input["round_off"]) && intval($input["round_off"])) {
             $input["round_off"] = 1;
@@ -445,6 +469,8 @@ class Debtor extends Intraface_Standard
             description = '".$input['description']."',
             message = '".$input['message']."',
             round_off = ".$input["round_off"].",
+            currency_id = ".$currency_id.",
+            currency_product_price_exchange_rate_id = ".$currency_exchange_rate_id.",
             payment_method=".$input['payment_method'].",
             girocode='".$input['girocode']."' " . $internal_note_sql . $sql_after;
 
@@ -1087,7 +1113,30 @@ class Debtor extends Intraface_Standard
     {
         return new Contact($this->kernel, $this->get("contact_id"), $this->get("contact_address_id"));
     }
-
+    
+    /**
+     * Returns currency if debtor is in another currency.
+     * 
+     * @todo it is wrong that doctrine connection is created here. Should be given to Debtor object.
+     * @return mixed object currency when currency set or false.
+     * 
+     */
+    public function getCurrency() 
+    {
+        
+        if($this->get('currency_id') == 0 || $this->get('currency_product_price_exchange_rate_id') == 0) {
+            return false;
+        }
+        
+        if(!$this->currency) {
+            $doctrine = Doctrine_Manager::connection(DB_DSN);
+            $gateway = new Intraface_modules_currency_Currency_Gateway($doctrine);
+            $this->currency = $gateway->findById($this->get('currency_id'));     
+        }
+        
+        return $this->currency;
+    }
+    
     /**
      * returns the possible debtor types!
      *

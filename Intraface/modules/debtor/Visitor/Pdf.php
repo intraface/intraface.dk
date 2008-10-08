@@ -127,8 +127,12 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
 
         // vareoversigt
         $items = $debtor->getItems();
-
+        
         $total = 0;
+        if($debtor->getCurrency()) {
+            $total_currency = 0;
+        }
+        
         if (isset($items[0]["vat"])) {
             $vat = $items[0]["vat"];
         } else {
@@ -149,13 +153,25 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
 
             $this->doc->setY('-'.($this->doc->get("font_padding_top") + $this->doc->get("font_size")));
             $this->doc->addText($apointX["varenr"] - $this->doc->getTextWidth($this->doc->get("font_size"), $items[$i]["number"]), $this->doc->get('y'), $this->doc->get("font_size"), $items[$i]["number"]);
+            
             if ($items[$i]["unit"] != "") {
                 $this->doc->addText($apointX["antal"] - $this->doc->getTextWidth($this->doc->get("font_size"), number_format($items[$i]["quantity"], 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($items[$i]["quantity"], 2, ",", "."));
                 $this->doc->addText($apointX["enhed"], $this->doc->get('y'), $this->doc->get("font_size"), $this->translation->get($items[$i]["unit"], 'product'));
-                $this->doc->addText($apointX["pris"] - $this->doc->getTextWidth($this->doc->get("font_size"), number_format($items[$i]["price"], 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($items[$i]["price"], 2, ",", "."));
+                if($debtor->getCurrency()) {
+                    $this->doc->addText($apointX["pris"] - $this->doc->getTextWidth($this->doc->get("font_size"), $items[$i]["price_currency"]->getAsLocal('da_dk', 2)), $this->doc->get('y'), $this->doc->get("font_size"), $items[$i]["price_currency"]->getAsLocal('da_dk', 2));
+                }
+                else {
+                    $this->doc->addText($apointX["pris"] - $this->doc->getTextWidth($this->doc->get("font_size"), number_format($items[$i]["price"], 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($items[$i]["price"], 2, ",", "."));
+                }
             }
-            $amount =  $items[$i]["quantity"] * $items[$i]["price"];
+            if($debtor->getCurrency()) {
+                $amount =  $items[$i]["quantity"] * $items[$i]["price_currency"]->getAsIso();
+            }
+            else {
+                $amount =  $items[$i]["quantity"] * $items[$i]["price"];
+            }
             $total += $amount;
+            
             $this->doc->addText($apointX["beloeb"] - $this->doc->getTextWidth($this->doc->get("font_size"), number_format($amount, 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($amount, 2, ",", "."));
 
             $tekst = $items[$i]["name"];
@@ -267,16 +283,26 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
 
         $this->doc->setLineStyle(1);
         $this->doc->line($this->doc->get("margin_left"), $this->doc->get('y'), $this->doc->get('right_margin_position'), $this->doc->get('y'));
-
-        if ($debtor->get("round_off") == 1 && $debtor->get("type") == "invoice" && $total != $debtor->get("total")) {
+        if($debtor->getCurrency()) {
+            $currency_iso_code = $debtor->getCurrency()->getType()->getIsoCode();
+            $debtor_total = $debtor->get("total_currency");
+        }
+        else {
+            $currency_iso_code = 'DKK';
+            $debtor_total = $debtor->get("total");
+        }
+        
+        
+        
+        if ($debtor->get("round_off") == 1 && $debtor->get("type") == "invoice" && $total != $debtor_total) {
             $this->doc->setY('-'.($this->doc->get("font_size") + $this->doc->get("font_padding_top")));
             $this->doc->addText($apointX["enhed"], $this->doc->get('y'), $this->doc->get("font_size"), "I alt:");
             $this->doc->addText($apointX["beloeb"] - $this->doc->getTextWidth($this->doc->get("font_size"), number_format($total, 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($total, 2, ",", "."));
             $this->doc->setY('-'.$this->doc->get("font_padding_bottom"));
 
-            $total_text = "Total afrundet DKK:";
+            $total_text = "Total afrundet ".$currency_iso_code.":";
         } else {
-            $total_text = "Total DKK:";
+            $total_text = "Total ".$currency_iso_code.":";
         }
 
         if ($this->doc->get('y') < $this->doc->get("margin_bottom") + $this->doc->get("font_spacing") * 2) {
@@ -286,7 +312,7 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
 
         $this->doc->setY('-'.($this->doc->get("font_size") + $this->doc->get("font_padding_top")));
         $this->doc->addText($apointX["enhed"], $this->doc->get('y'), $this->doc->get("font_size"), "<b>".$total_text."</b>");
-        $this->doc->addText($apointX["beloeb"] - $this->doc->getTextWidth($this->doc->get("font_size"), "<b>".number_format($debtor->get("total"), 2, ",", ".")."</b>"), $this->doc->get('y'), $this->doc->get("font_size"), "<b>".number_format($debtor->get("total"), 2, ",", ".")."</b>");
+        $this->doc->addText($apointX["beloeb"] - $this->doc->getTextWidth($this->doc->get("font_size"), "<b>".number_format($debtor_total, 2, ",", ".")."</b>"), $this->doc->get('y'), $this->doc->get("font_size"), "<b>".number_format($debtor_total, 2, ",", ".")."</b>");
         $this->doc->setY('-'.$this->doc->get("font_padding_bottom"));
         $this->doc->line($apointX["enhed"], $this->doc->get('y'), $this->doc->get('right_margin_position'), $this->doc->get('y'));
 
