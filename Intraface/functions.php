@@ -198,6 +198,10 @@ $GLOBALS['_global_function_callback_safetodb'] = 'intraface_safetodb';
  */
 function intraface_safetodb($data) 
 {
+    if(is_object($data)) {
+        return $data;
+    }
+    
     if(is_array($data)){
         return array_map('safeToDb',$data);
     }
