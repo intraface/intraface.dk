@@ -101,7 +101,9 @@ class Intraface_XMLRPC_OnlinePayment_Server0001 extends Intraface_XMLRPC_Server
             throw new XML_RPC2_FaultException('Onlinebetaling kunne ikke blive gemt ' . strtolower(implode(', ', $onlinepayment->error->getMessage())), -4);
         }
 
-        $this->sendEmailOnOnlinePayment($debtor, $payment_id);
+        if($onlinepayment->get('status') == 'authorized') {
+            $this->sendEmailOnOnlinePayment($debtor, $payment_id);
+        }
 
         return $this->prepareResponseData($payment_id);
     }
