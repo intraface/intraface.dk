@@ -2,24 +2,27 @@
 class Intraface_modules_shop_Controller_Edit extends k_Controller
 {
     private $error;
-    
+
     function getError()
     {
         if ($this->error) {
             return $this->error;
         }
-        return ($this->error = new Intraface_Error()); 
+        return ($this->error = new Intraface_Error());
     }
-    
+
     function isValid()
     {
+        if (!$this->POST->getArrayCopy()) {
+        	return true;
+        }
         $validator = new Intraface_Validator($this->getError());
         $validator->isNumeric($this->POST['show_online'], 'show_online skal være et tal');
         // $validator->isString($this->POST['description'], 'description text is not valid');
-        $validator->isString($this->POST['confirmation_subject'], 'confirmation subject is not valid');
-        $validator->isString($this->POST['confirmation'], 'confirmation text is not valid');
-        $validator->isString($this->POST['confirmation_greeting'], 'confirmation greeting is not valid');
-        $validator->isString($this->POST['terms_of_trade_url'], 'terms of trade is not valid');
+        $validator->isString($this->POST['confirmation_subject'], 'confirmation subject is not valid', '', 'allow_empty');
+        $validator->isString($this->POST['confirmation'], 'confirmation text is not valid', '', 'allow_empty');
+        $validator->isString($this->POST['confirmation_greeting'], 'confirmation greeting is not valid', '', 'allow_empty');
+        $validator->isString($this->POST['terms_of_trade_url'], 'terms of trade is not valid', '', 'allow_empty');
         $validator->isString($this->POST['receipt'], 'shop receipt is not valid', '<p><br/><div><ul><ol><li><h2><h3><h4>');
 
         return !$this->getError()->isError();
@@ -35,7 +38,7 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
     function GET()
     {
         $this->document->title = 'Edit shop';
-        
+
         $data = array();
 
         if (is_numeric($this->context->name)) {
@@ -46,6 +49,8 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
                 $shop = $this->getModel();
                 $data = $shop->toArray();
             }
+        } elseif (!$this->isValid()) {
+            $data = $this->POST->getArrayCopy();
         } else {
             $data['receipt'] = $this->registry->get('kernel')->setting->get('intranet','webshop.webshop_receipt');
         }
@@ -87,7 +92,7 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
                 $shop->send_confirmation = 1;
             } else {
                 $shop->send_confirmation = 0;
-            }            
+            }
             $shop->save();
         } catch (Exception $e) {
             throw $e;
