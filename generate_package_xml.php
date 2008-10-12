@@ -7,10 +7,10 @@
  * @version @package-version@
  */
 
-$version = '1.10.2';
+$version = '1.11.0';
 $stability = 'stable';
 $notes = '
-* Added support for how to choose payments.
+* Added currencies
 ';
 $web_dir = 'intraface.dk';
 
