@@ -75,7 +75,7 @@ class ProductDetail extends Intraface_Standard
         }
 
         $sql = "SELECT id, ".implode(',', $this->fields)." FROM product_detail WHERE ".$sql . "
-            AND product_id = " . $this->product->get('id');
+            AND product_id = " . $this->product->get('id') . ' AND intranet_id = ' . $this->product->intranet->getId();
         $this->db->query($sql);
         if ($this->db->numRows() > 1) {
             trigger_error('Systemfejl', 'Der er mere end en aktiv produktdetalje', E_USER_ERROR);
@@ -176,7 +176,7 @@ class ProductDetail extends Intraface_Standard
         }
 
         $this->db->query("SELECT * FROM product_detail WHERE id = ".$this->detail_id . "
-                AND product_id = " . $this->product->get('id'));
+                AND product_id = " . $this->product->get('id') . ' AND intranet_id = ' . $this->product->intranet->getId());
 
         if ($this->db->nextRecord()) {
             // her skal vi sørge for at få billedet med
@@ -274,11 +274,11 @@ class ProductDetail extends Intraface_Standard
             return true;
         }
     }
-    
+
     public function getPriceInCurrency($currency, $exchange_rate_id = 0)
     {
         return new Ilib_Variable_Float($this->get('price') / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100), 'iso');
-    } 
+    }
 
     /**
      * Gets the corresponding unit to a key

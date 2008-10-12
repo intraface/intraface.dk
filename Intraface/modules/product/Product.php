@@ -56,7 +56,7 @@ class Product extends Intraface_Standard
 
     /**
      * @var object
-     * 
+     *
      * Made private now. Please use getStock() instead.
      */
     private $stock;
@@ -189,7 +189,7 @@ class Product extends Intraface_Standard
         if ($this->hasVariation()) {
             throw new Exception('You cannot get stock from product with variations. Use stock for variation');
         }
-        
+
         if ($this->value['stock'] == 0 AND $this->value['do_show'] == 1) {
             $this->value['stock_status'] = array('for_sale' => 100); // kun til at stock_status
         }
@@ -643,8 +643,8 @@ class Product extends Intraface_Standard
     function hasVariation()
     {
         return $this->get('has_variation');
-    }  
-    
+    }
+
     /**
      * Set attribute for product
      *
@@ -657,22 +657,22 @@ class Product extends Intraface_Standard
         if(!$this->get('has_variation')) {
             throw new Exception('You can not set attribute group for a product without variations!');
         }
-        
+
         $db = MDB2::factory(DB_DSN);
         $result = $db->query("SELECT id FROM product_x_attribute_group WHERE intranet_id = ".$db->quote($this->intranet->getId())." AND product_id=" . $this->getId()  . " AND product_attribute_group_id = " . (int)$id );
         if(PEAR::isError($result)) {
             throw new Exception('Error in query :'.$result->getUserInfo());
         }
-        
+
         if ($result->numRows() > 0) return true;
         $result = $db->exec("INSERT INTO product_x_attribute_group SET product_id = " . $this->getId() . ", product_attribute_group_id = " . (int)$id . ", intranet_id = " . $this->intranet->getId());
         if(PEAR::isError($result)) {
             throw new Exception('Error in insert :'.$result->getUserInfo());
         }
-        
+
         return true;
     }
-    
+
     /**
      * Remove attribute for product
      *
@@ -685,24 +685,24 @@ class Product extends Intraface_Standard
         if(!$this->get('has_variation')) {
             throw new Exception('You can not remove attribute group for a product without variations!');
         }
-        
+
         $db = MDB2::factory(DB_DSN);
         $result = $db->exec("DELETE FROM product_x_attribute_group WHERE intranet_id = ".$db->quote($this->intranet->getId())." AND product_id=" . $this->getId()  . " AND product_attribute_group_id = " . (int)$id );
         if(PEAR::isError($result)) {
             throw new Exception('Error in query :'.$result->getUserInfo());
         }
-        
+
         return ($result > 0);
-        
+
     }
-    
+
     /**
      * Get all attributes related to the product
-     * 
+     *
      * @todo Rewrite product_x_attribute_group to Doctrine.
      * @todo Add a field named attribute_number to product_x_attribute_group, to be sure
-     *       that a attribute always relates to the correct attribute number on the variation. 
-     * 
+     *       that a attribute always relates to the correct attribute number on the variation.
+     *
      * @return array
      */
     public function getAttributeGroups()
@@ -710,7 +710,7 @@ class Product extends Intraface_Standard
         if(!$this->get('has_variation')) {
             throw new Exception('You can not get attribute groups for a product without variations!');
         }
-        
+
         // takes groups despite the are deleted. That is probably the best behaviour for now
         // NOTE: Very important that it is ordered by product_attribute_group.id so the groups
         // does always get attached to the correct attribute number on the variation. Se above todo in method doc
@@ -722,32 +722,32 @@ class Product extends Intraface_Standard
                 "WHERE product_x_attribute_group.intranet_id = ".$db->quote($this->intranet->getId())." " .
                     "AND product_x_attribute_group.product_id=" . $this->getId()  . " " .
                  "ORDER BY product_attribute_group.id");
-        
+
         if(PEAR::isError($result)) {
             throw new Exception('Error in query :'.$result->getUserInfo());
         }
-        
+
         return $result->fetchAll(MDB2_FETCHMODE_ASSOC);
     }
-    
-    
+
+
     /**
      * returns variation
      */
-    public function getVariation($id = 0) 
+    public function getVariation($id = 0)
     {
         $gateway = new Intraface_modules_product_Variation_Gateway($this);
         if(intval($id) > 0) {
             return $gateway->findById($id);
         }
         $object = $gateway->getObject();
-        $object->product_id = $this->getId(); 
+        $object->product_id = $this->getId();
         return $object;
     }
-    
+
     /**
      * Returns variation on the basis of attributes
-     * 
+     *
      * @param array $attributes Attributes to find variation from
      *        array('attribte1' => [id1], 'attribute2' => [id2]);
      */
@@ -756,17 +756,17 @@ class Product extends Intraface_Standard
         $gateway = new Intraface_modules_product_Variation_Gateway($this);
         return $gateway->findByAttributes($attributes);
     }
-    
+
     /**
      * Returns all variations on product
      */
-    public function getVariations() 
+    public function getVariations()
     {
         $gateway = new Intraface_modules_product_Variation_Gateway($this);
         return $gateway->findAll();
     }
-    
-    
+
+
 
     /**
      * Checks whether any products has been created before
@@ -834,24 +834,24 @@ class Product extends Intraface_Standard
         if ($keywords = $this->getDBQuery()->getFilter("keywords")) {
             $this->getDBQuery()->setKeyword($keywords);
         }
-        
+
         if($this->getDBQuery()->checkFilter('shop_id') && $this->getDBQuery()->checkFilter('category')) {
             $category_type = new Intraface_Category_Type('shop', $this->getDBQuery()->checkFilter('shop_id'));
             $this->getDBQuery()->setJoin(
-                'INNER', 
-                'ilib_category_append', 
+                'INNER',
+                'ilib_category_append',
                 'ilib_category_append.object_id = product.id',
                 'ilib_category_append.intranet_id = '.$this->kernel->intranet->getId());
             $this->getDBQuery()->setJoin(
-                'INNER', 
-                'ilib_category', 
-                'ilib_category_append.category_id = ilib_category.id', 
+                'INNER',
+                'ilib_category',
+                'ilib_category_append.category_id = ilib_category.id',
                 'ilib_category.intranet_id = '.$this->kernel->intranet->getId(). ' ' .
                     'AND ilib_category.belong_to = '.$category_type->getBelongTo().' ' .
                     'AND ilib_category.belong_to_id = '.$category_type->getBelongToId());
-            
+
             $this->getDBQuery()->setCondition('ilib_category.id = '.$this->getDBQuery()->getFilter("category"));
-            
+
         }
 
         if ($ids = $this->getDBQuery()->getFilter("ids")) {
