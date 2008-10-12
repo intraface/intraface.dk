@@ -96,6 +96,10 @@ class Intraface_modules_modulepackage_ActionStore {
             return false;
         }
         
+        if($result->numRows() == 0) {
+            return false;
+        }
+        
         $row = $result->fetchRow();
         
         if($row['action'] != '') {
