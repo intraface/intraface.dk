@@ -190,7 +190,7 @@ class Product extends Intraface_Standard
             throw new Exception('You cannot get stock from product with variations. Use stock for variation');
         }
 
-        if ($this->value['stock'] == 0 AND $this->value['do_show'] == 1) {
+        if (isset($this->value['stock']) AND $this->value['stock'] == 0 AND isset($this->value['do_show']) AND $this->value['do_show'] == 1) {
             $this->value['stock_status'] = array('for_sale' => 100); // kun til at stock_status
         }
         // hvis det er en lagervare og intranettet har adgang til stock skal det startes op
