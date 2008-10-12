@@ -16,7 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $attribute = $group->getAttribute($_POST['id']);
     }
     else {
-        $attribute = $group->attribute[0];
+        // $attribute = $group->attribute[0];
+        $attribute = new Intraface_modules_product_Attribute;
+        $attribute->attribute_group_id = $group->getId();
     }
     $attribute->name = $_POST['name'];
         
