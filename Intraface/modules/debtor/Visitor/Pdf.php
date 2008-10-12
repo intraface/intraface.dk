@@ -165,7 +165,7 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
                 }
             }
             if($debtor->getCurrency()) {
-                $amount =  $items[$i]["quantity"] * $items[$i]["price_currency"]->getAsIso();
+                $amount =  $items[$i]["quantity"] * $items[$i]["price_currency"]->getAsIso(2);
             }
             else {
                 $amount =  $items[$i]["quantity"] * $items[$i]["price"];

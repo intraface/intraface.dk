@@ -499,12 +499,12 @@ class DebtorItem extends Intraface_Standard
                 if ($product->get("vat") == 0) {
                     $item_no_vat[$j] = $item;
                     $item_no_vat[$j]["amount"] = $item["quantity"] * $item["price"];
-                    if($currency) $item_no_vat[$j]["amount_currency"] = new Ilib_Variable_Float($item["quantity"] * $item["price_currency"]->getAsIso(), 'iso');
+                    if($currency) $item_no_vat[$j]["amount_currency"] = new Ilib_Variable_Float($item["quantity"] * $item["price_currency"]->getAsIso(2), 'iso');
                     $j++;
                 } else {
                     $item_with_vat[$i] = $item;
                     $item_with_vat[$i]["amount"] = $item["quantity"] * $item["price"] * 1.25;
-                    if($currency) $item_with_vat[$i]["amount_currency"] = new Ilib_Variable_Float($item["quantity"] * $item["price_currency"]->getAsIso() * 1.25, 'iso');
+                    if($currency) $item_with_vat[$i]["amount_currency"] = new Ilib_Variable_Float($item["quantity"] * $item["price_currency"]->getAsIso(2) * 1.25, 'iso');
                     $i++;
                 }
             } else {

@@ -849,8 +849,8 @@ if (isset($onlinepayment)) {
                     <td class="amount"><?php e(number_format($items[$i]["quantity"]*$items[$i]["price"], 2, ",", ".")); ?></td>
                     <?php if($debtor->getCurrency()): ?>
                         <?php
-                        $price_currency = new Ilib_Variable_Float($items[$i]["quantity"]*$items[$i]["price_currency"]->getAsIso());
-                        $total_currency += $price_currency->getAsIso();
+                        $price_currency = new Ilib_Variable_Float($items[$i]["quantity"]*$items[$i]["price_currency"]->getAsIso(2));
+                        $total_currency += $price_currency->getAsIso(2);
                         ?>
                         <td class="amount"><?php e($price_currency->getAsLocal('da_dk', 2)); ?></td>
                     <?php endif; ?> 

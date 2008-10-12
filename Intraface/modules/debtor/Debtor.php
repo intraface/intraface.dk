@@ -305,7 +305,7 @@ class Debtor extends Intraface_Standard
 
         for ($i = 0, $max = count($item), $total = 0, $total_currency = 0; $i<$max; $i++) {
             $total += $item[$i]["amount"];
-            if($currency) $total_currency += $item[$i]['amount_currency']->getAsIso(2);
+            if($currency) $total_currency += $item[$i]['amount_currency']->getAsIso();
         }
 
         // no round off of curreny yet!
