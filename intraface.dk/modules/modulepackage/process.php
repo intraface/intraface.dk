@@ -58,34 +58,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $onlinepayment = array(
         'transaction_number' => $payment_postprocess->getTransactionNumber(),
         'transaction_status' => $payment_postprocess->getTransactionStatus(),
+        'pbs_status' => $payment_postprocess->getPbsStatus(),
         'amount' => number_format($amount, 2, ',', '.'),
         'text' => '');
 
     $shop = new Intraface_modules_modulepackage_ShopExtension();
     $shop->addPaymentToOrder($action->getOrderId(), $onlinepayment);
 
-    if($amount >= $action->getTotalPrice()) {
-        if($action->execute($kernel->intranet)) {
-            // we delete the action from the store
-            $action_store->delete();
-
-            // TODO: do we maybe want to send an email to the customer?
-
-            $access_update = new Intraface_modules_modulepackage_AccessUpdate();
-            $access_update->run($kernel->intranet->get('id'));
-
-            echo 'SUCCESS!';
+    if($payment_postprocess->getPbsStatus() == '000') {
+        if($amount >= $action->getTotalPrice()) {
+            if($action->execute($kernel->intranet)) {
+                // we delete the action from the store
+                $action_store->delete();
+    
+                // TODO: do we maybe want to send an email to the customer?
+    
+                $access_update = new Intraface_modules_modulepackage_AccessUpdate();
+                $access_update->run($kernel->intranet->get('id'));
+    
+                echo 'SUCCESS!';
+            }
+            else {
+                echo 'Failure:';
+                echo $action->error->view();
+            }
         }
         else {
-            echo 'Failure:';
-            echo $action->error->view();
+    
+            // TODO: Here we can send an e-mail that says they still need to pay some more OR?
+            trigger_error('Failure: Not sufficient payment', E_USER_ERROR);
+            exit;
         }
     }
     else {
-
-        // TODO: Here we can send an e-mail that says they still need to pay some more OR?
-        trigger_error('Failure: Not sufficient payment', E_USER_ERROR);
-        exit;
+        echo 'Payment attempt registered. Not authorized';
     }
 }
 elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
