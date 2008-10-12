@@ -19,11 +19,16 @@ $query_parts = explode('/', $_SERVER["QUERY_STRING"]);
 
 $auth_adapter = new Intraface_Auth_PublicKeyLogin(MDB2::singleton(DB_DSN), session_id(), $query_parts[1]);
 $weblogin = $auth_adapter->auth();
-		
+
 if (!$weblogin) {
-    trigger_error('Error logging in to intranet with public key '.$query_parts[1], E_USER_WARNING);
+    if (isset($query_parts[1])) {
+    	$query = $query_parts[1];
+    } else {
+    	$query = 'query_parts[1] is empty';
+    }
+    trigger_error('Error logging in to intranet with public key '.$query, E_USER_WARNING);
     exit;
-} 
+}
 
 $kernel = new Intraface_Kernel;
 $kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
@@ -54,7 +59,7 @@ if($fileviewer->needLogin()) {
         trigger_error('You need to be logged in to view the file', E_USER_WARNING);
         exit;
     }
-    
+
     $user = $auth->getIdentity(MDB2::singleton(DB_DSN));
     $intranet = new Intraface_Intranet($user->getActiveIntranetId());
     if($intranet->getId() != $kernel->intranet->getId()) {
