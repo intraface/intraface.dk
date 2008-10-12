@@ -189,7 +189,7 @@ class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($evaluation->save($valid_data));
 
         $quantity = 2;
-        $basket->add($product_id, $quantity);
+        $basket->add($product_id, 0, $quantity);
 
         $this->assertTrue($evaluation->run($basket));
 
