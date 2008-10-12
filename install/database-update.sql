@@ -61,15 +61,6 @@ ALTER TABLE `redirect_parameter` ADD INDEX ( `intranet_id` , `redirect_id` )  ;
 ALTER TABLE `redirect_parameter_value` ADD INDEX ( `intranet_id` , `redirect_id` , `redirect_parameter_id` )  ;
 
 
-ALTER TABLE `shop` ADD `payment_link` VARCHAR( 255 ) NOT NULL ,
-ADD `payment_link_add` TINYINT( 1 ) NOT NULL ;
-
-ALTER TABLE `shop` ADD `send_confirmation` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `intranet_id` ;
-
-ALTER TABLE `shop` ADD `confirmation_subject` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id` ;
-ALTER TABLE `shop` ADD `confirmation_greeting` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id` ;
-ALTER TABLE `shop` ADD `confirmation_add_contact_url` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id` ;
-ALTER TABLE `shop` ADD `terms_of_trade_url` VARCHAR( 255 ) NOT NULL ;   
 
 CREATE TABLE `currency` (
 `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -95,3 +86,17 @@ ADD `currency_product_price_exchange_rate_id` INT NOT NULL AFTER `currency_id` ;
 
 ## The following has already been added to the database 
 ALTER TABLE `onlinepayment` ADD `pbs_status` VARCHAR( 256 ) NOT NULL AFTER `transaction_status` ;
+
+ALTER TABLE `shop` ADD `payment_link` VARCHAR( 255 ) NOT NULL ,
+ADD `payment_link_add` TINYINT( 1 ) NOT NULL ;
+
+ALTER TABLE `shop` ADD `send_confirmation` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `intranet_id` ;
+
+ALTER TABLE `shop` ADD `confirmation_subject` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id` ;
+ALTER TABLE `shop` ADD `confirmation_greeting` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id` ;
+ALTER TABLE `shop` ADD `confirmation_add_contact_url` VARCHAR( 255 ) NOT NULL DEFAULT '1' AFTER `intranet_id` ;
+ALTER TABLE `shop` ADD `terms_of_trade_url` VARCHAR( 255 ) NOT NULL ;   
+
+ALTER TABLE `dbquery_result` DROP INDEX `intranet_id` ,
+ADD INDEX `intranet_id` ( `intranet_id` , `name` , `session_id` )
+ 
