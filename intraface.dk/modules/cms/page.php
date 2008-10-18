@@ -284,7 +284,7 @@ $page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('
                     echo '<fieldset>';
                     echo '<legend>' . $section->get('section_name') . '</legend>';
                     echo '<p>'. e($translation->get('there is a html element on the page')).'</p>';
-                    echo '<input type="submit" value="'.safeToForm($translation->get('show element')).'" name="edit_html['.$section->get('id').']" />';
+                    echo '<input type="submit" value="'.safeToForm($translation->get('edit section')).'" name="edit_html['.$section->get('id').']" />';
 
                     //echo '<p><a class="confirm" title="Dette link forlader siden uden at gemme ændringer på den." href="section_html.php?id='.$section->get('id').'">Rediger det blandede HTML-element &rarr;</a></p>';
                 break;
