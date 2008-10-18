@@ -23,7 +23,7 @@ $files = array(
     'email-pic8.jpg',
     'email-pic9.jpg',
     'hearts.gif',
-    'logo-nyhed-dk.jpg',
+    'logo-nyhed-uk.jpg',
     'world.jpg'
 );
 
@@ -57,7 +57,6 @@ if(!isset($_GET['send'])) {
 $sent = array();
 /*
 $contacts = array();
-$contacts[] = array('email' => 'lsolesen@gmail.com');
 $contacts[] = array('email' => 'lsolesen@gmail.com');
 $contacts[] = array('email' => 'lars@legestue.net');
 */

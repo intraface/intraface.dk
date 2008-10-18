@@ -19,6 +19,8 @@ $mime->setTXTBody($text);
 
 $files = array(
     'email-pic10.jpg',
+    'email-pic11.jpg',
+    'email-pic12.jpg',
     'email-pic7.jpg',
     'email-pic8.jpg',
     'email-pic9.jpg',
@@ -57,6 +59,7 @@ if(!isset($_GET['send'])) {
 $sent = array();
 /*
 $contacts = array();
+$contacts[] = array('email' => 'lsolesen@gmail.com');
 $contacts[] = array('email' => 'lsolesen@gmail.com');
 $contacts[] = array('email' => 'lars@legestue.net');
 */
