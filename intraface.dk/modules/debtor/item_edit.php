@@ -67,7 +67,7 @@ $page->start($translation->get($debtor->get('type').' content'));
 	</div>
 
 	<div class="formrow">
-		<label for="price">Pris</label><span id="price"><?php echo number_format($debtor->item->getProductPrice(), 2, ",", "."); ?></span>
+		<label for="price">Pris</label><span id="price"><?php echo $debtor->item->getProductPrice()->getAsLocal('da_dk', 2); ?></span>
 	</div>
 
 	<div class="formrow">

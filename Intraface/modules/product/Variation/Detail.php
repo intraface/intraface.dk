@@ -39,20 +39,106 @@ class Intraface_modules_product_Variation_Detail extends Doctrine_Record
         $event->skipOperation();
     }
 
+    /**
+     * Returns the id of the detail
+     * 
+     * @return integer id
+     */
     public function getId()
     {
         return $this->id;
     }
     
+    /**
+     * Returns the price difference on the variation
+     * 
+     * @return float price difference
+     */
     public function getPriceDifference()
     {
         return $this->price_difference;
     }
     
+    /**
+     * returns weight differnece in grams
+     * 
+     * @return integer weight difference in grams
+     */
     public function getWeightDifference()
     {
         return $this->weight_difference;
     }
+    
+    /**
+     * Returns the price of the variation
+     * 
+     * @todo Product should not be given as parameter, but defined as relation. Product needs to be made in doctrine
+     * 
+     * @param object Product
+     * @return object Ilib_Variable_Float with price
+     */
+    public function getPrice($product)
+    {
+        return new Ilib_Variable_Float(round($product->get('price') + $this->getPriceDifference(), 2));
+    }
+    
+    /**
+     * Returns the price of the variation in given currency
+     * 
+     * @todo Product should not be given as parameter, but defined as relation. Product needs to be made in doctrine
+     * 
+     * @param object $currency Intraface_modules_currency_Currency
+     * @param integer $exchange_rage_id
+     * @param object $product Product
+     * @return obejct Ilib_Variable_Float with price of the variation in given currency
+     */
+    public function getPriceInCurrency($currency, $exchange_rate_id = 0, $product)
+    {
+        return new Ilib_Variable_Float(round($this->getPrice($product)->getAsIso() / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100) , 2));
+    }
+    
+    /**
+     * Returns price include vat of the variation
+     * 
+     * @todo Product should not be given as parameter, but defined as relation. Product needs to be made in doctrine
+     * 
+     * @param object $product Product
+     * @return object Ilib_Variable_Float with price including vat
+     */
+    public function getPriceIncludingVat($product) 
+    {
+        return new Ilib_Variable_Float($this->getPrice($product)->getAsIso(2) * (1 + $product->get('vat_percent')/100));
+    }
+    
+    /**
+     * returns the price including vat in given currency
+     * 
+     * @todo Product should not be given as parameter, but defined as relation. Product needs to be made in doctrine
+     * 
+     * @param object $currency Intraface_modules_currency_Currency
+     * @param integer $exchange_rate_id
+     * @param object product Product
+     * @return object Ilib_Variable_Float with price including vat in given currency
+     */
+    public function getPriceIncludingVatInCurrency($currency, $exchange_rate_id, $product)
+    {
+        return new Ilib_Variable_Float($this->getPriceIncludingVat($product)->getAsIso() / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100));
+    }
+    
+    /**
+     * Returns the weight of the variation
+     * 
+     * @todo Product should not be given as parameter, but defined as relation. Product needs to be made in doctrine
+     * 
+     * @param object Product
+     * @return object Ilib_Variable_Float with price
+     */
+    public function getWeight($product)
+    {
+        return new Ilib_Variable_Float(round($product->get('weight') + $this->getWeightDifference(), 0));
+    }
+    
+    
 }
 
 

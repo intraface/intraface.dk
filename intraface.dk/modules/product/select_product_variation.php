@@ -128,7 +128,7 @@ $page->start(t('Select product variation'));
                     </td>
                     <td><?php e($variation->getNumber()); ?></td>
                     <td><?php e($variation->getName()); ?></td>
-                    <td><?php e(number_format($product->get('price') + $variation->getDetail()->getPriceDifference(), 2, ",", ".")); ?> <?php e(t('excl. vat')); ?></td>
+                    <td><?php e($variation->getDetail()->getPrice($product)->getAsLocal('da_dk', 2)); ?> <?php e(t('excl. vat')); ?></td>
                 </tr>
             <?php endforeach; ?>
         </table>

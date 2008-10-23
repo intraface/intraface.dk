@@ -304,7 +304,7 @@ class Debtor extends Intraface_Standard
         $currency = $this->getCurrency();
 
         for ($i = 0, $max = count($item), $total = 0, $total_currency = 0; $i<$max; $i++) {
-            $total += $item[$i]["amount"];
+            $total += $item[$i]["amount"]->getAsIso();
             if($currency) $total_currency += $item[$i]['amount_currency']->getAsIso();
         }
 

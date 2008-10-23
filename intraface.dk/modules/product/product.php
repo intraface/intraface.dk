@@ -270,7 +270,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                     <tr>
                         <td><?php e($variation->getNumber()); ?></td>
                         <td><?php e($variation->getName()); ?></td>
-                        <td><?php e(number_format($product->get('price') + $variation->getDetail()->getPriceDifference(), 2, ",", ".")); ?> </td>
+                        <td><?php e($variation->getDetail()->getPrice($product)->getAsLocal('da_dk', 2)); ?> </td>
                         <td><?php e($product->get('weight')+$variation->getDetail()->getWeightDifference()); ?></td>
                         <?php if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
                             <td><?php echo $variation->getStock($product)->get('actual_stock'); ?></td>

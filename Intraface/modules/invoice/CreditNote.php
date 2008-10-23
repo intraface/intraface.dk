@@ -151,7 +151,7 @@ class CreditNote extends Debtor
             $credit_account_number = $credit_account->get('number');
             $voucher = Voucher::factory($year, $voucher_number);
 
-            $amount = $item['quantity'] * $item['price'];
+            $amount = $item['quantity'] * $item['price']->getAsIso(2);
 
             // hvis beløbet er mindre end nul, skal konti byttes om og beløbet skal gøres positivt
             if ($amount < 0) {
@@ -171,7 +171,7 @@ class CreditNote extends Debtor
                 'text' => $text.' #' . $this->get('number') . ' - ' . $item['name']
             );
             if ($debet_account->get('vat') == 'out') {
-                $total_with_vat += $item["quantity"] * $item["price"];
+                $total_with_vat += $item["quantity"] * $item["price"]->getAsIso(2);
             }
 
             if (!$voucher->saveInDaybook($input_values, true)) {

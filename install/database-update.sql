@@ -1,0 +1,1 @@
+ALTER TABLE `shop` ADD `default_currency_id` INT NOT NULL AFTER `terms_of_trade_url` ;

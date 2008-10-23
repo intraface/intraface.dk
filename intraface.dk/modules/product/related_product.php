@@ -26,7 +26,10 @@ if (!empty($_POST['product'])) {
 
 $product = new Product($kernel, (int)$_GET['id']);
 
-$related_products = $product->getRelatedProducts();
+$related_product_ids = array();
+foreach($product->getRelatedProducts() AS $related) {
+    $related_product_ids[] = $related['id'];
+}
 
 $keywords = $product->getKeywordAppender();
 
@@ -114,7 +117,7 @@ echo $product->getDBQuery()->display('character');
             <tr>
                 <td>
                     <input type="hidden" name="product[<?php e($p['id']); ?>]" value="<?php e($p['id']); ?>" />
-                    <input class="input-relate" id="<?php e($p['id']); ?>" type="checkbox" name="relate[<?php e($p['id']); ?>]" value="relate" <?php if (array_key_exists($p['id'], $related_products)) echo ' checked="checked"'; ?> />
+                    <input class="input-relate" id="<?php e($p['id']); ?>" type="checkbox" name="relate[<?php e($p['id']); ?>]" value="relate" <?php if (array_search($p['id'], $related_product_ids) !== false) echo ' checked="checked"'; ?> />
                 </td>
                 <td><?php e($p['number']); ?></td>
                 <td><?php e($p['name']); ?></td>

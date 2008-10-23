@@ -41,6 +41,11 @@ class Intraface_modules_shop_Basket
      * @var object
      */
     private $db;
+    
+    /**
+     * @var array $items
+     */
+    private $items;
 
     const CLEAN_UP_AFTER = 2;
 
@@ -61,6 +66,7 @@ class Intraface_modules_shop_Basket
         $this->coordinator = $coordinator;
         $this->webshop     = $shop;
         $this->session_id  = $session_id;
+        $this->resetItemCache();
 
         $this->conditions = array('session_id = ' . $this->db->quote($this->session_id, 'text'),
                                   'shop_id = ' . $this->db->quote($this->webshop->getId(), 'integer'),
@@ -128,6 +134,8 @@ class Intraface_modules_shop_Basket
         $product_variation_id = intval($product_variation_id);
         $product_detail_id = (int)$product_detail_id;
         $quantity = (int)$quantity;
+        
+        $this->resetItemCache();
 
         $this->coordinator->kernel->useModule('product');
 
@@ -475,34 +483,52 @@ class Intraface_modules_shop_Basket
     public function getTotalPrice($type = 'including_vat')
     {
         $price = 0;
-
-        $sql_extra = implode(" AND ", $this->conditions);
-        $db = new DB_Sql;
-        $db->query("SELECT product_id, product_variation_id, quantity FROM basket WHERE " . $sql_extra);
-
-        while ($db->nextRecord()) {
-            $product = new Product($this->coordinator->kernel, $db->f("product_id"));
+        
+        foreach($this->getItems() AS $item) {
             if($type == 'exclusive_vat') {
-                if($db->f('product_variation_id') != 0) {
-                    $variation = $product->getVariation($db->f('product_variation_id'));
-                    $detail = $variation->getDetail();
-                    $price += ($product->get('price') + $detail->getPriceDifference()) * $db->f("quantity");
-                }
-                else {
-                    $price += $product->get('price') * $db->f("quantity");
-                }
-            } else {
-                if($db->f('product_variation_id') != 0) {
-                    $variation = $product->getVariation($db->f('product_variation_id'));
-                    $detail = $variation->getDetail();
-                    $price += (($product->get('price') + $detail->getPriceDifference()) * (1 + $product->get('vat_percent')/100)) * $db->f("quantity");
-                } else {
-                    $price += $product->get('price_incl_vat') * $db->f("quantity");
+                $price += $item['totalprice'];
+            }
+            else {
+                $price += $item['totalprice_incl_vat'];
+            }
+        }
+        
+        return round($price, 2);
+    }
+    
+    /**
+     * Gets the total price of the basket in given currencies
+     *
+     * @param object $currencies Collection of currencies
+     * @return float
+     */
+    public function getTotalPriceInCurrencies($currencies)
+    {
+        
+        $total['DKK']['ex_vat'] = 0;
+        $total['DKK']['incl_vat'] = 0;
+        
+        if(is_object($currencies) && $currencies->count() > 0) {
+            foreach($currencies AS $currency) {
+                $total[$currency->getType()->getIsoCode()]['ex_vat'] = 0;
+                $total[$currency->getType()->getIsoCode()]['incl_vat'] = 0;
+            }
+        }
+        
+        foreach($this->getItems($currencies) AS $item) {
+            
+            $total['DKK']['ex_vat'] += $item['currency']['DKK']['price'];
+            $total['DKK']['incl_vat'] += $item['currency']['DKK']['totalprice_incl_vat'];
+            
+            if(is_object($currencies) && $currencies->count() > 0) {
+                foreach($currencies AS $currency) {
+                    $total[$currency->getType()->getIsoCode()]['ex_vat'] += $item['currency'][$currency->getType()->getIsoCode()]['price'];
+                    $total[$currency->getType()->getIsoCode()]['incl_vat'] += $item['currency'][$currency->getType()->getIsoCode()]['totalprice_incl_vat'];
                 }
             }
         }
-
-        return round($price, 2);
+        
+        return $total;
     }
 
     /**
@@ -512,22 +538,10 @@ class Intraface_modules_shop_Basket
      */
     public function getTotalWeight()
     {
-        $sql_extra = implode(" AND ", $this->conditions);
-        $db = new DB_Sql;
-        $db->query("SELECT product_id, product_variation_id, quantity FROM basket WHERE " . $sql_extra);
-        
         $weight = 0;
-
-        while ($db->nextRecord()) {
-            $product = new Product($this->coordinator->kernel, $db->f("product_id"));
-            if($db->f('product_variation_id') != 0) {
-                $variation = $product->getVariation($db->f('product_variation_id'));
-                $detail = $variation->getDetail();
-                $weight += ($product->get('weight') + $detail->getWeightDifference()) * $db->f('quantity');
-            }
-            else {
-                $weight += $product->get('weight') * $db->f('quantity');
-            }
+        
+        foreach($this->getItems() AS $item) {
+            $weight += $item['totalweight'];
         }
         
         return $weight;
@@ -538,8 +552,14 @@ class Intraface_modules_shop_Basket
      *
      * @return array
      */
-    public function getItems()
+    public function getItems($currencies = false)
     {
+        
+        // Local cache
+        if($this->items !== NULL && is_array($this->items)) {
+            return $this->items;
+        } 
+        
         $sql_extra = implode(" AND basket.", $this->conditions);
         $items = array();
         $db = new DB_Sql;
@@ -582,24 +602,63 @@ class Intraface_modules_shop_Basket
                 $detail = $variation->getDetail();
                 $items[$i]['product_variation_id'] = $variation->getId();
                 $items[$i]['name'] = $product->get('name').' - '.$variation->getName();
-                $items[$i]['price'] = $product->get('price') + $detail->getPriceDifference();
-                $items[$i]['price_incl_vat'] = (($product->get('price') + $detail->getPriceDifference()) * (1 + $product->get('vat_percent')/100));    
+                $items[$i]['weight'] = $detail->getWeight($product)->getAsIso(0);
+                $items[$i]['price'] = $detail->getPrice($product)->getAsIso(2);
+                $items[$i]['price_incl_vat'] = $detail->getPriceIncludingVat($product)->getAsIso(2);
+                
+                $items[$i]['currency']['DKK']['price'] = $detail->getPrice($product)->getAsIso();
+                $items[$i]['currency']['DKK']['price_incl_vat'] = $detail->getPriceIncludingVat($product)->getAsIso(4);
+                if(is_object($currencies) && $currencies->count() > 0) {
+                    foreach($currencies AS $currency) {
+                        $items[$i]['currency'][$currency->getType()->getIsoCode()]['price'] = $detail->getPriceInCurrency($currency, 0, $product)->getAsIso();
+                        $items[$i]['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'] = $detail->getPriceIncludingVatInCurrency($currency, 0, $product)->getAsIso(4);
+                    }
+                }
             } else {
                 $items[$i]['product_variation_id'] = 0;
                 $items[$i]['name'] = $product->get('name');
-                $items[$i]['price'] = $product->get('price');
-                $items[$i]['price_incl_vat'] = $product->get('price_incl_vat');
+                $items[$i]['weight'] = $product->get('weight');
+                $items[$i]['price'] = $product->getDetails()->getPrice()->getAsIso(2);
+                $items[$i]['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat()->getAsIso(2);
+                
+                $items[$i]['currency']['DKK']['price'] = $product->getDetails()->getPrice()->getAsIso(2);
+                $items[$i]['currency']['DKK']['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat()->getAsIso(2);
+                if(is_object($currencies) && $currencies->count() > 0) {
+                    foreach($currencies AS $currency) {
+                        $items[$i]['currency'][$currency->getType()->getIsoCode()]['price'] = $product->getDetails()->getPriceInCurrency($currency)->getAsIso(2);
+                        $items[$i]['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'] = $product->getDetails()->getPriceIncludingVatInCurrency($currency)->getAsIso(2);
+                    }
+                }
             }
             
             // basket specific
             $items[$i]['quantity'] = $db->f('quantity');
+            $items[$i]['totalweight'] = $items[$i]['weight'] * $db->f('quantity');
             $items[$i]['totalprice'] = $db->f('quantity') * $items[$i]['price'];
             $items[$i]['totalprice_incl_vat'] = $db->f('quantity') * $items[$i]['price_incl_vat'];
-
+            
+            $items[$i]['currency']['DKK']['totalprice'] = $db->f('quantity') * $items[$i]['currency']['DKK']['price'];
+            $items[$i]['currency']['DKK']['totalprice_incl_vat'] = $db->f('quantity') * $items[$i]['currency']['DKK']['price_incl_vat'];
+            if(is_object($currencies) && $currencies->count() > 0) {
+                foreach($currencies AS $currency) {
+                    $items[$i]['currency'][$currency->getType()->getIsoCode()]['totalprice'] = $db->f('quantity') * $items[$i]['currency'][$currency->getType()->getIsoCode()]['price'];
+                    $items[$i]['currency'][$currency->getType()->getIsoCode()]['totalprice_incl_vat'] = $db->f('quantity') * $items[$i]['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'];
+                }
+            }
+            
             $i++;
         }
-
+        
+        $this->items = $items;
         return $items;
+    }
+    
+    /**
+     * Resets the item cache
+     */
+    private function resetItemCache() 
+    {
+        $this->items = NULL;
     }
 
     /**
@@ -616,6 +675,9 @@ class Intraface_modules_shop_Basket
                 "WHERE basketevaluation_product = 1 " .
                     "AND " . $sql_extra . " " .
                     "AND intranet_id = " . $this->intranet->getId());
+        
+        $this->resetItemCache();
+       
         return true;
 
     }
@@ -627,6 +689,8 @@ class Intraface_modules_shop_Basket
      */
     public function reset()
     {
+        $this->resetItemCache();
+        
         $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
         $db->query("UPDATE basket SET session_id = '' WHERE " . $sql_extra . " AND intranet_id = " . $this->intranet->getId());

@@ -813,7 +813,7 @@ if (isset($onlinepayment)) {
             }
 
             for($i = 0, $max = count($items); $i<$max; $i++) {
-                $total += $items[$i]["quantity"] * $items[$i]["price"];
+                $total += $items[$i]["quantity"] * $items[$i]["price"]->getAsIso(2);
                 $vat = $items[$i]["vat"];
                 ?>
                 <tr id="i<?php e($items[$i]["id"]); ?>" <?php if (isset($_GET['item_id']) && $_GET['item_id'] == $items[$i]['id']) print(' class="fade"'); ?>>
@@ -836,7 +836,7 @@ if (isset($onlinepayment)) {
                         ?>
                         <td><?php e(number_format($items[$i]["quantity"], 2, ",", ".")); ?></td>
                         <td><?php e(t($items[$i]["unit"], 'product')); ?></td>
-                        <td class="amount"><?php e(number_format($items[$i]["price"], 2, ",", ".")); ?></td>
+                        <td class="amount"><?php e($items[$i]["price"]->getAsLocal('da_dk', 2)); ?></td>
                         <?php
                     } else {
                         ?>
@@ -846,7 +846,8 @@ if (isset($onlinepayment)) {
                         <?php 
                     }
                     ?>
-                    <td class="amount"><?php e(number_format($items[$i]["quantity"]*$items[$i]["price"], 2, ",", ".")); ?></td>
+                    <?php $price = new Ilib_Variable_Float($items[$i]["quantity"] * $items[$i]["price"]->getAsIso(2)); ?>
+                    <td class="amount"><?php e($price->getAsLocal('da_dk', 2)); ?></td>
                     <?php if($debtor->getCurrency()): ?>
                         <?php
                         $price_currency = new Ilib_Variable_Float($items[$i]["quantity"]*$items[$i]["price_currency"]->getAsIso(2));

@@ -464,7 +464,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $product->save(array('name' => 'test', 'price' => 200, 'unit' => 1));
         $product->load();
         
-        $this->assertEquals(26.8374, round($product->getDetails()->getPriceInCurrency($currency)->getAsIso(), 4));
+        $this->assertEquals(26.84, $product->getDetails()->getPriceInCurrency($currency)->getAsIso());
         
         
         

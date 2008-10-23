@@ -125,13 +125,13 @@ $page->start($translation->get('State invoice'));
                     $product = new Product($kernel, $items[$i]['product_id']);
                     $account = Account::factory($year, $product->get('state_account_id'));
         
-                    $total += $items[$i]["quantity"] * $items[$i]["price"];
+                    $total += $items[$i]["quantity"] * $items[$i]["price"]->getAsIso(2);
                     $vat = $items[$i]["vat"];
                     ?>
                     <tr>
                         <td><?php e($items[$i]["number"]); ?></td>
                         <td><?php e($items[$i]["name"]); ?></td>
-                        <td><?php e(amountToOutput($items[$i]["quantity"]*$items[$i]["price"])); ?></td>
+                        <td><?php e(amountToOutput($items[$i]["quantity"]*$items[$i]["price"]->getAsIso(2))); ?></td>
                         <td>
                             <?php if (!$debtor->isStated()): 
                                 $year = new Year($kernel);

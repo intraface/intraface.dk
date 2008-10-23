@@ -274,10 +274,30 @@ class ProductDetail extends Intraface_Standard
             return true;
         }
     }
+    
+    public function getPrice()
+    {
+        return new Ilib_Variable_Float($this->get('price'));
+    }
 
     public function getPriceInCurrency($currency, $exchange_rate_id = 0)
     {
-        return new Ilib_Variable_Float($this->get('price') / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100), 'iso');
+        return new Ilib_Variable_Float(round($this->get('price') / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100), 2), 'iso');
+    }
+    
+    public function getPriceIncludingVat()
+    {
+        return new Ilib_Variable_Float(round($this->get('price') * (1 + $this->getVatPercent()->getAsIso()/100), 2));
+    }
+    
+    public function getPriceIncludingVatInCurrency($currency, $exchange_rate_id = 0)
+    {
+        return new Ilib_Variable_Float(round($this->get('price') / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100) * (1 + $this->getVatPercent()->getAsIso()/100), 2), 'iso');
+    }
+    
+    public function getVatPercent()
+    {
+        return new Ilib_Variable_Float($this->value['vat_percent']);
     }
 
     /**

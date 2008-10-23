@@ -17,6 +17,7 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
         $this->hasColumn('payment_link',                 'string',  255);
         $this->hasColumn('payment_link_add',             'integer', 1);
         $this->hasColumn('terms_of_trade_url',           'string',  255);
+        $this->hasColumn('default_currency_id',          'integer');
     }
     
     public function setUp()
@@ -78,5 +79,14 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
     function getTermsOfTradeUrl()
     {
         return $this->terms_of_trade_url;
-    }   
+    }
+    
+    function getDefaultCurrency($gateway)
+    {
+        if($this->default_currency_id == 0) {
+            return false;
+        }
+        
+        return $gateway->findById($this->default_currency_id);
+    }
 }

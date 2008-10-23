@@ -602,7 +602,7 @@ class Product extends Intraface_Standard
      *
      * @return array
      */
-    public function getRelatedProducts()
+    public function getRelatedProducts($currencies = false)
     {
         $products = array();
         $key      = 0;
@@ -613,11 +613,19 @@ class Product extends Intraface_Standard
 
         // rækkefølgen er vigtig - først hente fra product og bagefter tilføje nye værdier til arrayet
         while ($db->nextRecord()) {
-            $key                          = $db->f('related_product_id');
             $product                      = new Product($this->kernel, $db->f('related_product_id'));
             $products[$key]               = $product->get();
             $products[$key]['related_id'] = $db->f('related_product_id');
 
+            $products[$key]['currency']['DKK']['price'] = $product->getDetails()->getPrice();
+            $products[$key]['currency']['DKK']['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat();
+            if($currencies && $currencies->count() > 0) {
+                foreach($currencies AS $currency) {
+                    $products[$key]['currency'][$currency->getType()->getIsoCode()]['price'] = $product->getDetails()->getPriceInCurrency($currency);
+                    $products[$key]['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'] = $product->getDetails()->getPriceIncludingVatInCurrency($currency);
+                }
+            }
+            
             if (!$product->hasVariation() AND is_object($product->getStock())) {
                 $products[$key]['stock_status'] = $product->getStock()->get();
             } else {
@@ -635,6 +643,7 @@ class Product extends Intraface_Standard
                     continue;
                 }
             }
+            $key++;
 
         }
         return $products;
@@ -810,12 +819,16 @@ class Product extends Intraface_Standard
      * Hvis den er fra webshop bør den faktisk opsamle oplysninger om søgningen
      * så man kan se, hvad folk er interesseret i.
      * Søgemaskinen skal være tolerant for stavefejl
+     * 
+     * @todo It is wrong to give currencies as parameter. Instead the list should
+     *       be given as an object collection, and then currency should be given
+     *       to the getPrice method.
      *
      * @param string $which valgfri søgeparameter - ikke aktiv endnu
-     *
+     * @param object $currencies Collection of valid currencies.
      * @return array indeholdende kundedata til liste
      */
-    function getList($which = 'all')
+    function getList($which = 'all', $currencies = false)
     {
         switch ($this->getDBQuery()->getFilter('sorting')) {
             case 'date':
@@ -887,6 +900,15 @@ class Product extends Intraface_Standard
             $product = new Product($this->kernel, $db->f("id"));
             $product->getPictures();
             $products[$i] = $product->get();
+            
+            $products[$i]['currency']['DKK']['price'] = $product->getDetails()->getPrice();
+            $products[$i]['currency']['DKK']['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat();
+            if($currencies && $currencies->count() > 0) {
+                foreach($currencies AS $currency) {
+                    $products[$i]['currency'][$currency->getType()->getIsoCode()]['price'] = $product->getDetails()->getPriceInCurrency($currency);
+                    $products[$i]['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'] = $product->getDetails()->getPriceIncludingVatInCurrency($currency);
+                }
+            }
 
             if (!$product->get('has_variation') AND is_object($product->getStock()) AND strtolower(get_class($product->getStock())) == "stock") {
                 $products[$i]['stock_status'] = $product->getStock()->get();

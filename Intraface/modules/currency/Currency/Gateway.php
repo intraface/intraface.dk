@@ -67,5 +67,25 @@ class Intraface_modules_currency_Currency_Gateway
         }
         return $collection->getFirst();
     }
+    
+    public function findByIsoCode($code)
+    {
+        $type_gateway = new Intraface_modules_currency_Currency_Type;
+        $key = $type_gateway->getByIsoCode($code)->getKey();
+        
+        $query = $this->table->createQuery('currency');
+        $query = $query->select('currency.*, product_price_exchange_rate.*, payment_exchange_rate.*')
+                ->leftJoin('currency.product_price_exchange_rate AS product_price_exchange_rate')
+                ->leftJoin('currency.payment_exchange_rate AS payment_exchange_rate') 
+                ->addWhere('currency.type_key = ?', $key);
+        
+        // echo $query->getSqlQuery();
+        $collection = $query->execute();
+        
+        if (!$collection || $collection->count() != 1) {
+            throw new Intraface_Gateway_Exception('Unable to find currency with type key '.$key);
+        }
+        return $collection->getFirst();
+    }
 }
 ?>

@@ -23,8 +23,9 @@ class FakeDebtor
     }
     
     function getItems() {
-        $item[0] = array('id' => 1, 'name' => 'product 1', 'number' => 1, 'quantity' => 1, 'unit' => 'unit', 'price' => 100, 'description' => 'test product 1', 'vat' => 1, 'amount' => 125);
-        $item[1] = array('id' => 2, 'name' => 'product 2', 'number' => 2, 'quantity' => 10, 'unit' => 'days', 'price' => 200, 'description' => 'test product 2', 'vat' => 0, 'amount' => 2000);
+        require_once 'Ilib/Variable/Float.php';
+        $item[0] = array('id' => 1, 'name' => 'product 1', 'number' => 1, 'quantity' => 1, 'unit' => 'unit', 'price' => new Ilib_Variable_Float(100), 'description' => 'test product 1', 'vat' => 1, 'amount' => 125);
+        $item[1] = array('id' => 2, 'name' => 'product 2', 'number' => 2, 'quantity' => 10, 'unit' => 'days', 'price' => new Ilib_Variable_Float(200), 'description' => 'test product 2', 'vat' => 0, 'amount' => 2000);
         return $item;
         
     }

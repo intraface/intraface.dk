@@ -167,6 +167,16 @@ class Intraface_modules_shop_Coordinator
                 return false;
             }
         }
+        
+        // currency
+        if(!empty($input['currency']) && strtoupper($input['currency']) != 'DKK' && $this->kernel->intranet->hasModuleAccess('currency')) {
+            $this->kernel->useModule('currency', true); /* true: ignore user access */
+            
+            $currency_gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
+            if(false !== ($currency = $currency_gateway->findByIsoCode($input['currency']))) {
+                $value['currency'] = $currency;
+            }
+        }
 
         $value['contact_id'] = $this->contact->get('id');
         $value['contact_address_id'] = $this->contact->address->get('id');
@@ -231,7 +241,7 @@ class Intraface_modules_shop_Coordinator
             $this->error->set('unable add products to the order');
             return false;
         }
-
+        
         if (!$this->sendEmail($order_id, $mailer)) {
             $this->error->set('unable to send email to the customer');
             return false;
@@ -333,11 +343,20 @@ class Intraface_modules_shop_Coordinator
 
         if ($this->shop->showPaymentUrl()) {
             $body .=  "\n\n" . $this->shop->getPaymentUrl() . $this->order->getIdentifier();
-        } 
+        }
 
         $table = new Console_Table;
         foreach ($this->order->getItems() as $item) {
-            $table->addRow(array(round($item["quantity"]), substr($item["name"], 0, 40), 'DKK ' . number_format($item["amount"], 2, ',', '.')));
+            if($this->order->getCurrency()) {
+                $amount = $item["amount_currency"]->getAsLocal('da_dk', 2);
+                $currency_iso_code = $this->order->getCurrency()->getType()->getIsoCode();
+            } 
+            else {
+                $amount = $item["amount"]->getAsLocal('da_dk', 2);
+                $currency_iso_code = 'DKK';
+            }
+            
+            $table->addRow(array(round($item["quantity"]), substr($item["name"], 0, 40), $currency_iso_code.' ' . $amount));
         }
 
         $body .= "\n\n" . $table->getTable();

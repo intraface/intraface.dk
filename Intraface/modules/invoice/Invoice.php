@@ -211,7 +211,7 @@ class Invoice extends Debtor
             $debet_account_number = $debet_account->get('number');
             $voucher = Voucher::factory($year, $voucher_number);
 
-            $amount = $item['quantity'] * $item['price'];
+            $amount = $item['quantity'] * $item['price']->getAsIso(2);
 
             // hvis beløbet er mindre end nul, skal konti byttes om og beløbet skal gøres positivt
             if ($amount < 0) {
@@ -232,7 +232,7 @@ class Invoice extends Debtor
             );
             
             if ($credit_account->get('vat') == 'out') {
-                $total_with_vat += $item["quantity"] * $item["price"];
+                $total_with_vat += $item["quantity"] * $item["price"]->getAsIso(2);
             }
 
             if (!$voucher->saveInDaybook($input_values, true)) {

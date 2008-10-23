@@ -87,7 +87,7 @@ $page->start(t('Product variation') . ': ' . $variation->getName());
     <table>
         <tr>
             <td><?php e(t('Price')); ?></td>
-            <td><?php e(number_format($product->get('price') + $variation->getDetail()->getPriceDifference(), 2, ",", ".")); ?> <?php e(t('excl. vat')); ?></td>
+            <td><?php e($variation->getDetail()->getPrice($product)->getAsLocal('da_dk', 2)); ?> <?php e(t('excl. vat')); ?></td>
         </tr>
         <tr>
             <td><?php e(t('Weight')); ?></td>

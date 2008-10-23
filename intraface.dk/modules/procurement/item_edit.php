@@ -68,7 +68,7 @@ $page->start("Ret vare");
 	</div>
 
 	<div class="formrow">
-		<label for="price">Pris</label><span id="price"><?php echo number_format($procurement->item->getProductPrice(), 2, ",", "."); ?></span>
+		<label for="price">Pris</label><span id="price"><?php echo $procurement->item->getProductPrice()->getAsLocal('da_dk', 2); ?></span>
 	</div>
 
 </fieldset>

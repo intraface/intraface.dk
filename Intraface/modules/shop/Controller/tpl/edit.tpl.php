@@ -2,21 +2,41 @@
 
 <form action="<?php e(url(null)); ?>" method="post">
     <fieldset>
-        <label for="name"><?php e(t('Name')); ?></label>
-        <input type="text" name="name" id="name" value="<?php if(!empty($data['name'])) e($data['name']); ?>" />
+        <div class="formrow">
+            <label for="name"><?php e(t('Name')); ?></label>
+            <input type="text" name="name" id="name" value="<?php if(!empty($data['name'])) e($data['name']); ?>" />
+        </div>
 
-        <br />
+        <div class="formrow">
+            <label for="identifier"><?php e(t('Identifier')); ?></label>
+            <input type="text" name="identifier" id="identifier" value="<?php if(!empty($data['identifier'])) e($data['identifier']); ?>" />
+        </div>
 
-        <label for="identifier"><?php e(t('Identifier')); ?></label>
-        <input type="text" name="identifier" id="identifier" value="<?php if(!empty($data['identifier'])) e($data['identifier']); ?>" />
-
-        <br />
-
-        <label for="terms-of-trade"><?php e(t('Terms of trade')); ?></label>
-        <input type="text" name="terms_of_trade_url" id="terms-of-trade" value="<?php if(!empty($data['terms_of_trade_url'])) e($data['terms_of_trade_url']); ?>" />
-
+        <div class="formrow">        
+            <label for="terms-of-trade"><?php e(t('Terms of trade')); ?></label>
+            <input type="text" name="terms_of_trade_url" id="terms-of-trade" value="<?php if(!empty($data['terms_of_trade_url'])) e($data['terms_of_trade_url']); ?>" />
+        </div>
     </fieldset>
 
+    <?php if(!empty($currencies)): ?>
+        <fieldset>
+            <legend><?php e(t('Currency')); ?></legend>    
+            <div class="formrow">
+                <label for="default_currency_id"><?php e(t('Default currency')); ?></label>
+                <select name="default_currency_id" id="default_currency_id">
+                    <option value="0" >DKK (<?php e(t('standard', 'common')); ?>)</option>
+                    <?php
+                    foreach ($currencies AS $currency) {
+                        echo '<option value="'.$currency->getId().'"';
+                        if (!empty($data['default_currency_id']) AND $currency->getId() == $data['default_currency_id']) echo ' selected="selected"';
+                        echo '>' . $currency->getType()->getIsoCode().' '.$currency->getType()->getDescription() . '</option>';
+                    }
+                    ?>
+                </select>
+            </div>
+        </fieldset>
+    <?php endif; ?>
+    
     <fieldset>
         <legend><?php e(t('What should be shown in the shop?')); ?></legend>
         <div class="formrow">

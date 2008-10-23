@@ -79,7 +79,6 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
     }
 
     function tearDown() {
-        $this->emptyBasketTable();
         $this->product->delete();
     }
     

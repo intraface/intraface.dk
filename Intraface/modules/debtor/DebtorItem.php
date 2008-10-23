@@ -169,10 +169,10 @@ class DebtorItem extends Intraface_Standard
     public function getProductPrice()
     {
         if($this->getProduct()->get('has_variation')) {
-            return $this->getProduct()->get("price") + $this->getProductVariationDetail()->getPriceDifference();
+            return $this->getProductVariationDetail()->getPrice($this->getProduct());
         }
         else {
-            return $this->getProduct()->get("price");
+            return $this->getProduct()->getDetails()->getPrice();
         }
     }
     
@@ -476,34 +476,24 @@ class DebtorItem extends Intraface_Standard
                     $detail = $variation->getDetail($db->f('product_variation_detail_id'));
                     $item["name"] = $product->get("name").' - '.$variation->getName();
                     $item["number"]= $product->get("number").'.'.$variation->getNumber();
-                    $item["price"] = $product->get("price") + $detail->getPriceDifference();
-                    
-                    /**
-                     * @todo This is not good. But not able to do it in other ways as long
-                     * as Variation_Detail does not have getPrice/getPriceInCurrency. 
-                     * The following line is the prober solution:
-                     * if($currency) $item['price_currency'] = $detail->getPriceInCurrency($currency);
-                     */
-                    if($currency) {
-                        $exchange_rate = $currency->getProductPriceExchangeRate($this->debtor->get('currency_product_price_exchange_rate_id'));
-                        $item['price_currency'] = new Ilib_Variable_Float($item['price'] / ($exchange_rate->getRate()->getAsIso()/100), 'iso');
-                    }
+                    $item["price"] = $detail->getPrice($product);
+                    if($currency) $item['price_currency'] = $detail->getPriceInCurrency($currency, $this->debtor->get('currency_product_price_exchange_rate_id'), $product);
                 }
                 else {
                     $item["name"] = $product->get("name");
                     $item["number"]= $product->get("number");
-                    $item["price"] = $product->get("price");
+                    $item["price"] = $product->getDetails()->getPrice();
                     if($currency) $item['price_currency'] = $product->getDetails()->getPriceInCurrency($currency, $this->debtor->get('currency_product_price_exchange_rate_id'));
                 }
                     
                 if ($product->get("vat") == 0) {
                     $item_no_vat[$j] = $item;
-                    $item_no_vat[$j]["amount"] = $item["quantity"] * $item["price"];
+                    $item_no_vat[$j]["amount"] = new Ilib_Variable_Float($item["quantity"] * $item["price"]->getAsIso(2));
                     if($currency) $item_no_vat[$j]["amount_currency"] = new Ilib_Variable_Float($item["quantity"] * $item["price_currency"]->getAsIso(2), 'iso');
                     $j++;
                 } else {
                     $item_with_vat[$i] = $item;
-                    $item_with_vat[$i]["amount"] = $item["quantity"] * $item["price"] * 1.25;
+                    $item_with_vat[$i]["amount"] = new Ilib_Variable_Float($item["quantity"] * $item["price"]->getAsIso(2) * 1.25);
                     if($currency) $item_with_vat[$i]["amount_currency"] = new Ilib_Variable_Float($item["quantity"] * $item["price_currency"]->getAsIso(2) * 1.25, 'iso');
                     $i++;
                 }

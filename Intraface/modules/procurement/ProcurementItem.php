@@ -170,10 +170,10 @@ class ProcurementItem extends Intraface_Standard
     public function getProductPrice()
     {
         if($this->getProduct()->get('has_variation')) {
-            return $this->getProduct()->get("price") + $this->getProductVariationDetail()->getPriceDifference();
+            return $this->getProductVariationDetail()->getPrice($this->getProduct());
         }
         else {
-            return $this->getProduct()->get("price");
+            return $this->getProduct()->getDetails()->getPrice();
         }
     }
         
@@ -441,13 +441,13 @@ class ProcurementItem extends Intraface_Standard
                 $detail = $variation->getDetail($db->f('product_variation_detail_id'));
                 $item[$i]["name"] = $product->get("name").' - '.$variation->getName();
                 $item[$i]["number"]= $product->get("number").'.'.$variation->getNumber();
-                $item[$i]["price"] = $product->get("price") + $detail->getPriceDifference();
+                $item[$i]["price"] = $detail->getPrice($product);
                 
             }
             else {
                 $item[$i]["name"] = $product->get("name");
                 $item[$i]["number"] = $product->get("number");
-                $item[$i]["price"] = $product->get("price");
+                $item[$i]["price"] = $product->getDetails()->getPrice();
             }
             $i++;
 
