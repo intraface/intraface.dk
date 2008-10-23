@@ -37,6 +37,6 @@ class Demo_CMS_Show extends k_Controller
     
     function getCMS()
     {
-        return $this->context->getCMS();
+        return $this->registry->get('cms');
     }
 }
