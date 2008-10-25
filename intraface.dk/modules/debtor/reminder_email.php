@@ -11,7 +11,7 @@ class Reminder_Text {
     function visit(Reminder $reminder) {
         $this->output .= "Dato: " . $reminder->get("dk_this_date") ."\n\n";
         $this->output .= $reminder->contact->address->get("name") . "\n";
-        if($reminder->get("attention_to") != "") {
+        if ($reminder->get("attention_to") != "") {
             $this->output .= "Att.: ".$reminder->get("attention_to")."\n";
         }
         $this->output .= $reminder->contact->address->get("address") . "\n";
@@ -24,7 +24,7 @@ class Reminder_Text {
         $reminder->loadItem();
         $items = $reminder->item->getList("invoice");
         $total = 0;
-        for($i = 0, $max = count($items); $i < $max; $i++) {
+        for ($i = 0, $max = count($items); $i < $max; $i++) {
             $this->output .= "\nFak# ".$items[$i]["number"];
             $spaces = -strlen($items[$i]["number"]) - 5 + 20;
             for ($j = 0; $j < $spaces; $j++) { $this->output .= ' ';  }
@@ -34,14 +34,14 @@ class Reminder_Text {
                 $total += $items[$i]["arrears"];
             }
             $items = $reminder->item->getList("reminder");
-            for($i = 0, $max = count($items); $i < $max; $i++) {
+            for ($i = 0, $max = count($items); $i < $max; $i++) {
                 $this->output .= "\nTidl. rykkkergebyr  ";
                 $this->output .= ' ' . $items[$i]["dk_this_date"];
                 $this->output .= '  ' .$items[$i]["dk_due_date"];
                 $this->output .= '      ' . number_format($items[$i]["reminder_fee"], 2, ",", ".");
                 $total += $items[$i]["reminder_fee"];
             }
-            if($reminder->get("reminder_fee") != 0) {
+            if ($reminder->get("reminder_fee") != 0) {
                 $this->output .= "\nRykkergebyr                                      ".number_format($reminder->get("reminder_fee"), 2, ",", ".");
                 $total += $reminder->get("reminder_fee");
             }

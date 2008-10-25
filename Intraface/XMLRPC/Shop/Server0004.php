@@ -1,7 +1,7 @@
 <?php
 /**
  * ShopServer version 0.4.0
- * Class named with version XXYY from version numbering XX.YY.ZZ 
+ * Class named with version XXYY from version numbering XX.YY.ZZ
  *
  * @todo we need to move kernel out of Product.
  * @todo we need to move kernel out of DBQuery.
@@ -33,7 +33,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $this->checkCredentials($credentials);
 
         $offset = 0;
-        
+
         $search = $this->processRequestData($search);
 
         $mixed = array();
@@ -80,7 +80,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
                 $product->getDBQuery()->setFilter('keywords', $mixed['keywords']);
                 $debug2 .= 'keyword ' . $mixed['keywords'];
             }
-            
+
             if (array_key_exists('category', $mixed) AND !empty($mixed['category'])) {
                 $product->getDBQuery()->setFilter('shop_id', $shop_id);
                 $product->getDBQuery()->setFilter('category', $mixed['category']);
@@ -98,14 +98,14 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             }
 
         }
-        
-        if(false !== ($currency_gateway = $this->getCurrencyGateway())) {
+
+        if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
             $currencies = $currency_gateway->findAllWithExchangeRate();
         }
         else {
             $currencies = false;
         }
-        
+
         return $this->prepareResponseData(array(
             'parameter' => $mixed,
             //'debug2' => $debug2,
@@ -114,19 +114,19 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             'search' => array(),
         ));
     }
-    
+
     /**
-     * Make sure we only include necessary data. Several things more might 
+     * Make sure we only include necessary data. Several things more might
      * be left out. Mostly we remove description.
-     * 
+     *
      * @param array products
      * @return array cleaned up products
      */
-    private function cleanUpProductList($products) 
+    private function cleanUpProductList($products)
     {
         $return = array();
         foreach ($products AS $key => $p) {
-            
+
             $return[$key]['id'] = $p['id'];
             $return[$key]['number'] = $p['number'];
             $return[$key]['name'] = $p['name'];
@@ -140,18 +140,18 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             $return[$key]['stock'] = $p['stock'];
             $return[$key]['has_variation'] = $p['has_variation'];
             $return[$key]['stock_status'] = $p['stock_status'];
-            
-            foreach($p['currency'] AS $k => $c) {
+
+            foreach ($p['currency'] AS $k => $c) {
                 $return[$key]['currency'][$k]['price'] = $c['price']->getAsIso(2);
                 $return[$key]['currency'][$k]['price_incl_vat'] = $c['price_incl_vat']->getAsIso(2);
             }
-            
-            if(isset($p['pictures'])) {
+
+            if (isset($p['pictures'])) {
                 $return[$key]['pictures'] = $p['pictures'];
             }
-            
+
         }
-        
+
         return $return;
     }
 
@@ -174,34 +174,34 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('product id must be an integer', -5);
         }
-        
+
         $id = $this->processRequestData(intval($id));
-        
+
         $return = array();
-        
+
         $product = new Product($this->kernel, $id);
         $product->getPictures();
         $return['product'] = $product->get();
         $return['product']['currency']['DKK']['price'] = $product->getDetails()->getPrice()->getAsIso(2);
         $return['product']['currency']['DKK']['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat()->getAsIso(2);
-        
-        if(false !== ($currency_gateway = $this->getCurrencyGateway())) {
-            foreach($currency_gateway->findAllWithExchangeRate() AS $currency) {
+
+        if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
+            foreach ($currency_gateway->findAllWithExchangeRate() AS $currency) {
                 $return['product']['currency'][$currency->getType()->getIsoCode()]['price'] = $product->getDetails()->getPriceInCurrency($currency)->getAsIso(2);
                 $return['product']['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'] = $product->getDetails()->getPriceIncludingVatInCurrency($currency)->getAsIso(2);
             }
         }
-        
+
         if (!$product->get('has_variation') && $product->get('stock')) {
             $return['stock'] = $product->getStock()->get();
         }
-        
+
         if ($product->get('has_variation')) {
-            
-            // We should make a Doctrine Product_X_AttributeGroup class and get all the groups i one sql 
+
+            // We should make a Doctrine Product_X_AttributeGroup class and get all the groups i one sql
             $groups = $product->getAttributeGroups();
             $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway;
-            foreach ($groups AS $key => $group) {
+            foreach ($groups as $key => $group) {
                 // Make sure we only include necessary data
                 $return['attribute_groups'][$key]['id'] = $group['id'];
                 $return['attribute_groups'][$key]['name'] = $group['name'];
@@ -211,10 +211,10 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
                         'id' => $attribute->getId(),
                         'name' => $attribute->getName()
                     );
-                } 
-                    
+                }
+
             }
-            
+
             $variations = $product->getVariations();
             foreach ($variations as $variation) {
                 $detail = $variation->getDetail();
@@ -224,17 +224,17 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
                     if ($attribute_string != '') $attribute_string .= '-';
                     $attribute_string .= $attribute['id'];
                 }
-                
+
                 $variation_currency['DKK']['price'] = $detail->getPrice($product)->getAsIso(2);
                 $variation_currency['DKK']['price_incl_vat'] = $detail->getPriceIncludingVat($product)->getAsIso(2);
-                
-                if(isset($currency_gateway) && is_object($currency_gateway)) {
-                    foreach($currency_gateway->findAllWithExchangeRate() AS $currency) {
+
+                if (isset($currency_gateway) && is_object($currency_gateway)) {
+                    foreach ($currency_gateway->findAllWithExchangeRate() AS $currency) {
                         $variation_currency[$currency->getType()->getIsoCode()]['price'] = $detail->getPriceInCurrency($currency, 0, $product)->getAsIso(2);
                         $variation_currency[$currency->getType()->getIsoCode()]['price_incl_vat'] = $detail->getPriceIncludingVatInCurrency($currency, 0, $product)->getAsIso(2);
                     }
                 }
-                
+
                 $return['variations'][] = array(
                     'variation' => array(
                         'id' => $variation->getId(),
@@ -269,21 +269,21 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $this->checkCredentials($credentials);
 
         $this->_factoryWebshop($shop_id);
-        
+
         if (!is_numeric($product_id)) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('product id must be an integer', -5);
         }
-        
+
         $product_id = $this->processRequestData(intval($product_id));
 
-        if(false !== ($currency_gateway = $this->getCurrencyGateway())) {
+        if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
             $currencies = $currency_gateway->findAllWithExchangeRate();
         }
         else {
             $currencies = false;
         }
-        
+
         $product = new Product($this->kernel, $product_id);
         return $this->prepareResponseData($this->cleanUpProductList($product->getRelatedProducts($currencies)));
     }
@@ -317,13 +317,13 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $featured = new Intraface_modules_shop_FeaturedProducts($this->kernel->intranet, $this->webshop->getShop(), $db);
         $all = $featured->getAll();
 
-        if(false !== ($currency_gateway = $this->getCurrencyGateway())) {
+        if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
             $currencies = $currency_gateway->findAllWithExchangeRate();
         }
         else {
             $currencies = false;
         }
-        
+
         $related_products = array();
 
         foreach ($all as $row) {
@@ -359,24 +359,24 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         return $this->prepareResponseData($keywords->getUsedKeywords());
 
     }
-    
+
     /**
      * Returns the categories for the shop
-     * 
+     *
      * @param struct  $credentials Credentials to use the server
      * @param integer $shop_id    Id for the shop
      *
      * @return array with categories
-     * 
+     *
      */
-    public function getProductCategories($credentials, $shop_id) 
+    public function getProductCategories($credentials, $shop_id)
     {
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
 
         $this->_factoryWebshop($shop_id);
-        $category = new Intraface_Category($this->kernel, MDB2::singleton(DB_DSN), 
+        $category = new Intraface_Category($this->kernel, MDB2::singleton(DB_DSN),
             new Intraface_Category_Type('shop', $shop_id));
 
         return $this->prepareResponseData($category->getAllCategories());
@@ -407,7 +407,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('product id must be an integer', -5);
         }
-        
+
         $product_id = $this->processRequestData(intval($product_id));
         $product_variation_id = $this->processRequestData(intval($product_variation_id));
         $quantity = $this->processRequestData(intval($quantity));
@@ -442,7 +442,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('product id and quantity must be integers', -5);
         }
-        
+
         $product_id = $this->processRequestData(intval($product_id));
         $product_variation_id = $this->processRequestData(intval($product_variation_id));
         $quantity = $this->processRequestData(intval($quantity));
@@ -472,8 +472,8 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $this->_factoryWebshop($shop_id);
 
         $customer = $this->processRequestData($customer);
-        
-        
+
+
         // we put the possibility for BasketEvaluation not to be run.
         if (is_string($customer) && $customer == 'no_evaluation') {
             // nothing happens
@@ -483,8 +483,8 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
                 // We should see to return the result in some way.
             }
         }
-        
-        if(false !== ($currency_gateway = $this->getCurrencyGateway())) {
+
+        if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
             $currencies = $currency_gateway->findAllWithExchangeRate();
         }
         else {
@@ -494,7 +494,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         return $this->prepareResponseData(array(
             'items' => $this->webshop->getBasket()->getItems($currencies),
             'total_price' => $this->webshop->getBasket()->getTotalPriceInCurrencies($currencies),
-            'weight' => $this->webshop->getBasket()->getTotalWeight() 
+            'weight' => $this->webshop->getBasket()->getTotalWeight()
         ));
     }
 
@@ -512,7 +512,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $this->checkCredentials($credentials);
 
         $this->_factoryWebshop($shop_id);
-        
+
         $values = $this->processRequestData($values);
 
         if (!is_array($this->webshop->getBasket()->getItems()) OR count($this->webshop->getBasket()->getItems()) <= 0) {
@@ -551,9 +551,9 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('details could not be saved - nothing to save', -4);
         }
-        
+
         $values = $this->processRequestData($values);
-        
+
         if (!$this->webshop->getBasket()->saveAddress($values)) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('datails could not be saved ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
@@ -575,10 +575,10 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $this->checkCredentials($credentials);
 
         $this->_factoryWebshop($shop_id);
-        
+
         return $this->prepareResponseData($this->webshop->getBasket()->getAddress());
     }
-    
+
     /**
      * Saves customer coupon
      *
@@ -703,7 +703,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
 
         return $this->prepareResponseData($this->webshop->getBasket()->getCustomerComment());
     }
-    
+
     /**
      * Get possible payment methods
      *
@@ -717,10 +717,10 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $this->checkCredentials($credentials);
 
         $this->_factoryWebshop($shop_id);
-        
+
         return $this->prepareResponseData($this->webshop->getPaymentMethods());
     }
-    
+
     /**
      * Saves payment method
      *
@@ -744,7 +744,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
 
         return $this->prepareResponseData(true);
     }
-    
+
     /**
      * Returns selected payment method
      *
@@ -786,7 +786,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
      * @param integer $shop_id     Id for the shop
      *
      * @return string
-     */    
+     */
     public function getTermsOfTradeUrl($credentials, $shop_id)
     {
         $this->checkCredentials($credentials);
@@ -795,7 +795,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
 
         return $this->prepareResponseData($this->webshop->getShop()->getTermsOfTradeUrl());
     }
-    
+
     /**
      * Get default currency.
      *
@@ -803,45 +803,45 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
      * @param integer $shop_id     Id for the shop
      *
      * @return string
-     */    
+     */
     public function getCurrency($credentials, $shop_id)
     {
         $this->checkCredentials($credentials);
 
         $this->_factoryWebshop($shop_id);
-        
+
         return $this->prepareResponseData($this->getCurrencyArray());
     }
-    
+
     /**
      * Returns currency gateway if there is access to it
      */
     private function getCurrencyGateway()
     {
-        if($this->webshop->kernel->intranet->hasModuleAccess('currency')) {
+        if ($this->webshop->kernel->intranet->hasModuleAccess('currency')) {
             $this->webshop->kernel->useModule('currency', true); // true: ignore intranet access
             return new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
         }
         return false;
     }
-    
+
     /**
      * Returns an array with currency information.
-     * 
+     *
      * @return array default currency and valid currencies
      */
     private function getCurrencyArray()
     {
         $currency['default'] = 'DKK';
         $currency['currencies']['DKK'] = 'Danish Krone';
-        
-        if(false !== ($currency_gateway = $this->getCurrencyGateway())) {
-            foreach($currency_gateway->findAllWithExchangeRate() AS $c) {
+
+        if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
+            foreach ($currency_gateway->findAllWithExchangeRate() AS $c) {
                 $currency['currencies'][$c->getType()->getIsoCode()] = $c->getType()->getDescription();
             }
             $currency['default'] = $this->webshop->getShop()->getDefaultCurrency($currency_gateway)->getType()->getIsoCode();
         }
-        
+
         return $currency;
     }
 
@@ -852,7 +852,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
      * @param integer $shop_id     Id for the shop
      *
      * @return string
-     */     
+     */
     public function getIdentifier($credentials, $shop_id)
     {
         $this->checkCredentials($credentials);
@@ -860,7 +860,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $this->_factoryWebshop($shop_id);
 
         return $this->prepareResponseData($this->webshop->getShop()->getIdentifier());
-    }    
+    }
 
     /**
      * Checks credentials

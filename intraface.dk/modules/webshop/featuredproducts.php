@@ -26,7 +26,7 @@ $featured = new Intraface_Webshop_FeaturedProducts($kernel->intranet, $db);
 $all = $featured->getAll();
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('featured products')));
+$page->start($translation->get('featured products'));
 
 ?>
 <h1><?php e($translation->get('featured products')); ?></h1>
@@ -49,12 +49,12 @@ $page->start(safeToHtml($translation->get('featured products')));
             e($keyword->getKeyword());
         ?>
         </td>
-        <td><a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php e($feature['id']); ?>" class="delete">Slet</a></td>
+        <td><a href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($feature['id']); ?>" class="delete">Slet</a></td>
     </tr>
 <?php endforeach; ?>
 </table>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="POST">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="POST">
     <label for="headline">Headline</label> <input id="headline" type="text" name="headline" />
     <label for="keyword_id">Keyword</label>
         <?php
@@ -69,7 +69,7 @@ $page->start(safeToHtml($translation->get('featured products')));
         <?php endforeach; ?>
 
     </select>
-    <input type="submit" class="save" name="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" /> <?php echo safeToHtml($translation->get('or', 'common')); ?> <a href="./"><?php echo safeToHtml($translation->get('cancel', 'common')); ?></a>
+    <input type="submit" class="save" name="submit" value="<?php e($translation->get('save', 'common')); ?>" /> <?php e($translation->get('or', 'common')); ?> <a href="./"><?php e($translation->get('cancel', 'common')); ?></a>
 </form>
 
 <?php

@@ -12,7 +12,7 @@ $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $group = $group_gateway->findById($_POST['group_id']);
     
-    if(!empty($_POST['id'])) {
+    if (!empty($_POST['id'])) {
         $attribute = $group->getAttribute($_POST['id']);
     }
     else {
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
 } elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $group = $group_gateway->findById($_GET['group_id']);
-    if(!empty($_GET['id'])) {
+    if (!empty($_GET['id'])) {
         $attribute = $group->getAttribute($_GET['id']);
     }
 }
@@ -46,13 +46,13 @@ $page->start(t('Edit attribute in group').' '.$group->getName());
 
 <h1><?php e(t('Edit attribute in group').' '.$group->getName()); ?></h1>
 
-<?php if(isset($error)) echo $error->view(); ?>
+<?php if (isset($error)) echo $error->view(); ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 <fieldset>
     <legend><?php e(t('Attribute information')); ?></legend>
-        <input type="hidden" name="id" value="<?php if(isset($attribute)) e($attribute->getId()); ?>" />
-        <input type="hidden" name="group_id" value="<?php if(isset($group)) e($group->getId()); ?>" />
+        <input type="hidden" name="id" value="<?php if (isset($attribute)) e($attribute->getId()); ?>" />
+        <input type="hidden" name="group_id" value="<?php if (isset($group)) e($group->getId()); ?>" />
         <div class="formrow">
             <label for="name"><?php e(t('Name')); ?></label>
             <input type="text" name="name" id="name" value="<?php if (isset($attribute)) e($attribute->getName()); ?>" />
@@ -61,7 +61,7 @@ $page->start(t('Edit attribute in group').' '.$group->getName());
     
     <div>
         <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" class="save" /> <?php e(t('or', 'common')); ?>
-        <a href="attribute_group.php?id=<?php e($group->getId()); ?>"><?php e(t('regret', 'common')); ?></a>
+        <a href="attribute_group.php?id=<?php e($group->getId()); ?>"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 
 </form>

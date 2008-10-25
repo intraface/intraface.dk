@@ -47,24 +47,24 @@ $page->start("Rediger besked");
 
 <?php echo $contact->message->error->view(); ?>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 <fieldset>
 	<legend>Besked</legend>
 	<div class="formrow">
 		<label for="message">Besked</label>
-    <textarea name="message" id="message" rows="5" cols="40"><?php echo $values['message']; ?></textarea>
+    <textarea name="message" id="message" rows="5" cols="40"><?php e($values['message']); ?></textarea>
 	</div>
 	<div style="clear:both;">
 		<input type="checkbox" value="1" id="important" name="important" <?php if ($values['important'] == 1) echo ' checked="checked"'; ?>/>
 		<label for="important">Marker som vigtig</label>
-		<input type="hidden" value="<?php echo $contact->get('id'); ?>" name="contact_id" />
-		<input type="hidden" value="<?php echo $values['id']; ?>" name="id" />
+		<input type="hidden" value="<?php e($contact->get('id')); ?>" name="contact_id" />
+		<input type="hidden" value="<?php e($values['id']); ?>" name="id" />
 	</div>
 </fieldset>
 	<div>
 		<input type="submit" name="submit" value="Gem" id="save" class="save" />
-    <a href="contact.php?id=<?php echo $contact->get('id'); ?>">Fortryd</a>
+    <a href="contact.php?id=<?php e($contact->get('id')); ?>">Fortryd</a>
 	</div>
 </form>
 

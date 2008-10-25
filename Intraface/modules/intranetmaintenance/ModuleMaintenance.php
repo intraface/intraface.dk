@@ -129,8 +129,6 @@ class ModuleMaintenance
                     $db->free();
 
                     $updated_module_id = $module_id;
-
-                    // print("med følgende sub access: ");
                     $count_subaccess = count($module->sub_access);
 
                     for ($i = 0; $i < $count_subaccess; $i++) {
@@ -143,7 +141,6 @@ class ModuleMaintenance
                             $updated_sub_access_id[] = $db->insertedId();
                         }
                         $db->free();
-                                // print($module->sub_access[$i].", ");
                     }
                 }
             }

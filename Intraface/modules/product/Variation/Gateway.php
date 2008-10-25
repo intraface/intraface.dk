@@ -151,7 +151,6 @@ class Intraface_modules_product_Variation_Gateway
             
         }
         $query = $query->where(get_class($this->variation).'.product_id = ?', $this->product->getId());
-        // echo $query->getSqlQuery();
         $collection = $query->execute();
         
         if (!$collection || $collection->count() == 0) {

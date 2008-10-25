@@ -13,6 +13,7 @@
 require_once 'Ilib/ClassLoader.php';
 require_once 'Doctrine/lib/Doctrine.php';
 spl_autoload_register(array('Doctrine', 'autoload'));
+require_once 'k/urlbuilder.php';
 
 // paths
 if (!defined('PATH_INCLUDE_IHTML')) define('PATH_INCLUDE_IHTML', PATH_ROOT.'Intraface/ihtml' . DIRECTORY_SEPARATOR);

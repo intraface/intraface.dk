@@ -87,7 +87,7 @@ class OnlinePaymentDanDomain extends OnlinePayment
 
             $http_request->setURL($basis_url.$add_url.'&Capture=1');
             $result = $http_request->sendRequest();
-            if(PEAR::isError($result)) {
+            if (PEAR::isError($result)) {
                 trigger_error('Error in sending request: '.$result->getMessage().' '.$result->getUserInfo());
             }
 
@@ -113,7 +113,7 @@ class OnlinePaymentDanDomain extends OnlinePayment
 
             $http_request->setURL($basis_url.'&Reject=1');
             $result = $http_request->sendRequest();
-            if(PEAR::isError($result)) {
+            if (PEAR::isError($result)) {
                 trigger_error('Error in sending request: '.$result->getMessage().' '.$result->getUserInfo());
             }
 

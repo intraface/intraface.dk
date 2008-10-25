@@ -39,7 +39,7 @@ $page->start('Indstillinger');
 
 <h1>Indstillinger</h1>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 <?php echo $error->view(); ?>
 
@@ -63,7 +63,7 @@ $page->start('Indstillinger');
 		<?php
 		/*
 		<label>
-			<input type="radio" value="<?php echo $value; ?>" name="contact_login_url" <?php if ($values['contact_login_url'] == $value) echo 'checked="checked"'; ?>/> <?php echo $value; ?>
+			<input type="radio" value="<?php e($value); ?>" name="contact_login_url" <?php if ($values['contact_login_url'] == $value) echo 'checked="checked"'; ?>/> <?php e($value); ?>
 		</label>
 		*/
 		?>
@@ -72,7 +72,7 @@ $page->start('Indstillinger');
 	<p>Du kan vælge mellem følgende standardlinks <?php echo implode($url_options, ', '); ?> (anbefales), eller du kan skrive dit eget link.</p>
 
 	<label>
-		Link <input type="text" name="contact_login_url" value="<?php echo safeToForm($values['contact_login_url']); ?>" />
+		Link <input type="text" name="contact_login_url" value="<?php e($values['contact_login_url']); ?>" />
 	</label>
 
 </fieldset>
@@ -82,7 +82,7 @@ $page->start('Indstillinger');
 	<legend>Tekst på e-mail til login</legend>
 	<div class="formrow">
 		<label>Tekst</label>
-		<textarea name="text" cols="80" rows="10"><?php echo safeToForm($values['text']); ?></textarea>
+		<textarea name="text" cols="80" rows="10"><?php e($values['text']); ?></textarea>
 	</div>
 
 

@@ -16,7 +16,7 @@ Den skal fungere sådan nogenlunde sådan her:
 // Ved udskrivning af upload felt
 $filehandler = new FileHandler($kernel); Der kan sættes id som sidste parameter
 $filehandler_html = new FileHandlerHtml($filehandler); // Denne klasse er ikke skrevet
-print($filehandler_html->getUploadField("userfile", array([indstillinger se herunder]));
+$filehandler_html->getUploadField("userfile", array([indstillinger se herunder]));
 
 # Indstillinger (noget i retning af):
 # Dem med * stjerne skal være sat som default, og sætter man ikke indstillingen benyttes den.
@@ -126,7 +126,7 @@ class FileHandlerHTML
         $options = array_merge($pre_options, $options);
 
         echo $this->file_handler->error->view();
-    
+
         if ($this->file_handler->get('id') != 0 && $options['type'] != 'only_upload') {
             $file_id = $this->file_handler->get('id');
             if ($options['image_size'] != '') {

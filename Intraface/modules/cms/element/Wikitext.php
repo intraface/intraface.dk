@@ -50,9 +50,9 @@ class Intraface_modules_cms_element_Wikitext extends CMS_Element
         $config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
         // only used until we change encoding to utf8
         $purifier_cache_dir = PATH_CACHE.'htmlpurifier/';
-        if(!is_dir($purifier_cache_dir)) {
+        if (!is_dir($purifier_cache_dir)) {
             mkdir($purifier_cache_dir);
-            if(!is_dir($purifier_cache_dir)) {
+            if (!is_dir($purifier_cache_dir)) {
                 trigger_error('Unable to create HTML Purifier cache dir!', E_USER_ERROR);
                 exit;
             }

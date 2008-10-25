@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // any to merge with?
     if (is_array($_POST['contact'])) {
 
-        foreach($_POST['contact'] AS $key=>$value) {
+        foreach ($_POST['contact'] AS $key=>$value) {
 
             // which contact to merge with
             $contact_id = intval($_POST['contact'][$key]);
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $debtor->dbquery->setCondition('contact_id='.$merge_with_contact->get('id'));
             foreach ($debtor->getList() AS $debtor_array) {
                 $debtor = new Debtor($kernel, $debtor_array['id']);
-                echo $debtor->get('id');
+                e($debtor->get('id'));
                 //$debtor->setNewContact($contact->get('id'));
             }
 
@@ -81,7 +81,7 @@ $page->start('Kontakter');
 ?>
 <h1>Flet kontakter</h1>
 
-<?php if(!is_array($similar_contacts) OR count($similar_contacts) == 0) {	?>
+<?php if (!is_array($similar_contacts) OR count($similar_contacts) == 0) {	?>
 
 <p>Denne kontakt ligner ikke andre, så du kan ikke flette den med nogen.</p>
 
@@ -105,19 +105,19 @@ $page->start('Kontakter');
         <tbody>
             <tr>
                 <td></td>
-                <td><?php echo htmlspecialchars($contact->get('number')); ?></td>
-                <td><?php echo htmlspecialchars($contact->address->get('name')); ?></td>
-                <td><?php echo htmlspecialchars($contact->address->get('address')); ?></td>
-                <td><?php echo htmlspecialchars($contact->address->get('postcode')); ?> <?php echo $contact->get('city'); ?></td>
-                <td><?php echo htmlspecialchars($contact->address->get('phone')); ?></td>
-                <td><?php echo htmlspecialchars($contact->address->get('email')); ?></td>
+                <td><?php e($contact->get('number')); ?></td>
+                <td><?php e($contact->address->get('name')); ?></td>
+                <td><?php e($contact->address->get('address')); ?></td>
+                <td><?php e($contact->address->get('postcode')); ?> <?php e($contact->get('city')); ?></td>
+                <td><?php e($contact->address->get('phone')); ?></td>
+                <td><?php e($contact->address->get('email')); ?></td>
             </tr>
         </tbody>
     </table>
 
 
-    <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
-    <input type="hidden" value="<?php echo intval($contact->get('id')); ?>" name="id" />
+    <form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
+    <input type="hidden" value="<?php e($contact->get('id')); ?>" name="id" />
     <table style="font-size: 0.8em;">
         <caption>Ligner følgende kontakter</caption>
         <thead>
@@ -134,17 +134,17 @@ $page->start('Kontakter');
         </thead>
         <tbody>
         <?php
-            foreach($similar_contacts AS $c) {
+            foreach ($similar_contacts as $c) {
             ?>
             <tr>
-                <td><input type="checkbox" value="<?php echo intval($c['id']); ?>" name="contact[]" /></td>
-                <td><?php echo htmlspecialchars($c['number']); ?></td>
-                <td><?php echo htmlspecialchars($c['name']); ?></td>
-                <td><?php echo htmlspecialchars($c['address']); ?></td>
-                <td><?php echo htmlspecialchars($c['postcode']); ?> <?php echo $c['city']; ?></td>
-                <td><?php echo htmlspecialchars($c['phone']); ?></td>
-                <td><?php echo htmlspecialchars($c['email']); ?></td>
-                <td><?php echo htmlspecialchars($c['email']); ?></td>
+                <td><input type="checkbox" value="<?php e($c['id']); ?>" name="contact[]" /></td>
+                <td><?php e($c['number']); ?></td>
+                <td><?php e($c['name']); ?></td>
+                <td><?php e($c['address']); ?></td>
+                <td><?php e($c['postcode']); ?> <?php e($c['city']); ?></td>
+                <td><?php e($c['phone']); ?></td>
+                <td><?php e($c['email']); ?></td>
+                <td><?php e($c['email']); ?></td>
             </tr>
             <?php
         }

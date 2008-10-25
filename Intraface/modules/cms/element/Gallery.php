@@ -46,7 +46,6 @@ class Intraface_modules_cms_element_Gallery extends CMS_Element
 
         */
         } else { // Enkeltfiler
-            // print("this->id i gallery: ".$this->id."<br /><br />");
             $shared_filehandler = $this->kernel->useShared('filehandler');
             $shared_filehandler->includeFile('AppendFile.php');
             $append_file = new AppendFile($this->kernel, 'cms_element_gallery', $this->id);

@@ -108,7 +108,7 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
         if ($this->dbquery) {
             return $this->dbquery;
         }
-        if($kernel == NULL) {
+        if ($kernel == NULL) {
             throw new Exception('You need to provide kernel the first time you are calling getDBQuery');
         }
         $this->dbquery = new Intraface_DBQuery($kernel, 'intranet_module_package', 'intranet_module_package.active = 1 AND intranet_module_package.intranet_id = '.$this->intranet->get('id'));

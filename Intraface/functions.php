@@ -1,11 +1,35 @@
 <?php
+// url
+if (!function_exists('url')) {
+    /**
+     * This function is dynamically redefinable.
+     * @see $GLOBALS['_global_function_callback_e']
+     */
+    function url($args = NULL)
+    {
+        $args = func_get_args();
+        return call_user_func_array($GLOBALS['_global_function_callback_url'], $args);
+    }
+    if (!isset($GLOBALS['_global_function_callback_url'])) {
+        $GLOBALS['_global_function_callback_url'] = NULL;
+    }
+}
+
+$GLOBALS['_global_function_callback_url'] = 'intraface_url';
+
+function intraface_url($url, $args = array())
+{
+    $builder = new k_UrlBuilder(PATH_WWW);
+    return $builder->url($url, $args);
+}
+
 // isAjax()
 if (!function_exists('isAjax')) {
     /**
      * This function is dynamically redefinable.
      * @see $GLOBALS['_global_function_callback_e']
      */
-    function isAjax($args = NULL) 
+    function isAjax($args = NULL)
     {
         $args = func_get_args();
         return call_user_func_array($GLOBALS['_global_function_callback_isAjax'], $args);
@@ -17,7 +41,7 @@ if (!function_exists('isAjax')) {
 
 $GLOBALS['_global_function_callback_isAjax'] = 'intraface_isAjax';
 
-function intraface_isAjax() 
+function intraface_isAjax()
 {
     if (!empty($_REQUEST['ajax']) AND $_REQUEST['ajax'] == true) {
         return true;
@@ -40,7 +64,7 @@ if (!function_exists('e')) {
      * This function is dynamically redefinable.
      * @see $GLOBALS['_global_function_callback_e']
      */
-    function e($args) 
+    function e($args)
     {
         $args = func_get_args();
         return call_user_func_array($GLOBALS['_global_function_callback_e'], $args);
@@ -63,7 +87,7 @@ if (!function_exists('amountToOutput')) {
      * This function is dynamically redefinable.
      * @see $GLOBALS['_global_function_callback_e']
      */
-    function amountToOutput($args) 
+    function amountToOutput($args)
     {
         $args = func_get_args();
         return call_user_func_array($GLOBALS['_global_function_callback_amountToOutput'], $args);
@@ -80,7 +104,7 @@ $GLOBALS['_global_function_callback_amountToOutput'] = 'intraface_AmountToOutput
  * Det kunne jo være gavnligt om metoden også indeholdte noget om,
  * hvilket land der er tale om.
  */
-function amountToOutput($amount) 
+function amountToOutput($amount)
 {
     return number_format($amount, 2, ',', '.');
 }
@@ -91,7 +115,7 @@ if (!function_exists('amountToForm')) {
      * This function is dynamically redefinable.
      * @see $GLOBALS['_global_function_callback_e']
      */
-    function amountToForm($args) 
+    function amountToForm($args)
     {
         $args = func_get_args();
         return call_user_func_array($GLOBALS['_global_function_callback_amountToForm'], $args);
@@ -107,7 +131,7 @@ $GLOBALS['_global_function_callback_amountToForm'] = 'intraface_AmountToForm';
 /**
  * Funktion til at outputte et beløb landespecifik notation i en formular
  */
-function intraface_amountToForm($amount) 
+function intraface_amountToForm($amount)
 {
     return number_format($amount, 2, ',', '');
 }
@@ -118,7 +142,7 @@ if (!function_exists('amountToDb')) {
      * This function is dynamically redefinable.
      * @see $GLOBALS['_global_function_callback_e']
      */
-    function amountToDb($args) 
+    function amountToDb($args)
     {
         $args = func_get_args();
         return call_user_func_array($GLOBALS['_global_function_callback_amountToDb'], $args);
@@ -137,7 +161,7 @@ $GLOBALS['_global_function_callback_amountToDb'] = 'intraface_AmountToDb';
  * Funktionen skal konvertere til den mindste enhed af beløbet
  * i vores tilfælde ofte ører
  */
-function intraface_amountToDb($amount) 
+function intraface_amountToDb($amount)
 {
     // dette konverterer fra dansk til engelsk format - men så bør den også være landespecifik
     // spørgsmålet er hvordan vi gør dem landespecifikke på en smart måde?
@@ -162,7 +186,7 @@ if (!function_exists('autoop')) {
     }
 }
 
-function intraface_autoop($text) 
+function intraface_autoop($text)
 {
     require_once 'markdown.php';
     require_once 'smartypants.php';
@@ -174,13 +198,41 @@ function intraface_autoop($text)
 
 $GLOBALS['_global_function_callback_autoop'] = 'intraface_autoop';
 
+// autoop()
+if (!function_exists('autohtml')) {
+    /**
+     * This function is dynamically redefinable.
+     * @see $GLOBALS['_global_function_callback_email']
+     */
+    function autohtml($args) {
+        $args = func_get_args();
+        return call_user_func_array($GLOBALS['_global_function_callback_autohtml'], $args);
+    }
+    if (!isset($GLOBALS['_global_function_callback_autohtml'])) {
+        $GLOBALS['_global_function_callback_autohtml'] = NULL;
+    }
+}
+
+function intraface_autohtml($text)
+{
+    require_once 'markdown.php';
+    require_once 'smartypants.php';
+
+    $text = MarkDown($text);
+    $text = SmartyPants($text);
+    echo $text;
+}
+
+$GLOBALS['_global_function_callback_autohtml'] = 'intraface_autohtml';
+
+
 // Dynamic global functions
 if (!function_exists('safeToDb')) {
     /**
      * This function is dynamically redefinable.
      * @see $GLOBALS['_global_function_callback_e']
      */
-    function safeToDb($args) 
+    function safeToDb($args)
     {
         $args = func_get_args();
         return call_user_func_array($GLOBALS['_global_function_callback_safetodb'], $args);
@@ -196,13 +248,13 @@ $GLOBALS['_global_function_callback_safetodb'] = 'intraface_safetodb';
  *
  * @author  Lars Olesen <lars@legestue.net>
  */
-function intraface_safetodb($data) 
+function intraface_safetodb($data)
 {
-    if(is_object($data)) {
+    if (is_object($data)) {
         return $data;
     }
-    
-    if(is_array($data)){
+
+    if (is_array($data)){
         return array_map('safeToDb',$data);
     }
 
@@ -213,84 +265,13 @@ function intraface_safetodb($data)
     return mysql_escape_string(trim($data));
 }
 
-// Dynamic global functions
-if (!function_exists('safeToForm')) {
-    /**
-     * This function is dynamically redefinable.
-     * @see $GLOBALS['_global_function_callback_e']
-     */
-    function safeToForm($args) 
-    {
-        $args = func_get_args();
-        return call_user_func_array($GLOBALS['_global_function_callback_safetoform'], $args);
-    }
-    if (!isset($GLOBALS['_global_function_callback_safetoform'])) {
-        $GLOBALS['_global_function_callback_safetoform'] = NULL;
-    }
-}
-$GLOBALS['_global_function_callback_safetoform'] = 'intraface_safetoform';
-
-/**
- * Function to be called before outputting data to a form
- *
- * @author	Lars Olesen <lars@legestue.net>
- */
-function intraface_safetoform($data) 
-{
-    return safeToHtml($data);
-}
-
-// Dynamic global functions
-if (!function_exists('safeToHtml')) {
-    /**
-     * This function is dynamically redefinable.
-     * @see $GLOBALS['_global_function_callback_e']
-     */
-    function safeToHtml($args) 
-    {
-        $args = func_get_args();
-        return call_user_func_array($GLOBALS['_global_function_callback_safetohtml'], $args);
-    }
-    if (!isset($GLOBALS['_global_function_callback_safetohtml'])) {
-        $GLOBALS['_global_function_callback_safetohtml'] = NULL;
-    }
-}
-$GLOBALS['_global_function_callback_safetohtml'] = 'intraface_safeToHtml';
-
-/**
- * Function to be called before putting data into a form
- *
- * Metoden skal i øvrigt skrives om hvis den skal fungere sådan her til den
- * der findes i vores subversion.
- *
- * @author	Lars Olesen <lars@legestue.net>
- */
-function intraface_safeToHtml($data) 
-{
-    // denne bruges i forbindelse med translation - kan sikkert fjernes når alt er implementeret
-    if (is_object($data)) return $data->getMessage();
-
-    // egentlig bør den her vel ikke være rekursiv. Man skal kun bruge den når man skriver direkte ud.
-    if(is_array($data)){
-        return array_map('safeToHtml',$data);
-    }
-
-    if (get_magic_quotes_gpc()) {
-        $data = stripslashes($data);
-    }
-
-    // return 'safeToHtml'; // For debugging of use of safeToHtml
-    return htmlspecialchars($data);
-}
-
-
 //Dynamic global functions
 if (!function_exists('filesize_readable')) {
     /**
      * This function is dynamically redefinable.
      * @see $GLOBALS['_global_function_callback_e']
      */
-    function filesize_readable($args) 
+    function filesize_readable($args)
     {
         $args = func_get_args();
         return call_user_func_array($GLOBALS['_global_function_callback_filesize_readable'], $args);
@@ -305,7 +286,7 @@ $GLOBALS['_global_function_callback_filesize_readable'] = 'intraface_filesize_re
  * Function to convert filesize to readable sizes.
  * from: http://us3.php.net/filesize
  */
-function intraface_filesize_readable($size, $retstring = null) 
+function intraface_filesize_readable($size, $retstring = null)
 {
         // adapted from code at http://aidanlister.com/repos/v/function.size_readable.php
         $sizes = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');

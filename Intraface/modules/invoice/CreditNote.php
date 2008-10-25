@@ -180,7 +180,7 @@ class CreditNote extends Debtor
         }
         
         // samlet moms på fakturaen
-        if($total_with_vat != 0) {
+        if ($total_with_vat != 0) {
             $voucher = Voucher::factory($year, $voucher_number);
             $debet_account = new Account($year, $year->getSetting('vat_out_account_id'));
             $credit_account = new Account($year, $year->getSetting('debtor_account_id'));

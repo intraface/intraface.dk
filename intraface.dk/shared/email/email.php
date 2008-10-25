@@ -1,10 +1,8 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $kernel->useShared('email');
 $redirect = Intraface_Redirect::factory($kernel, 'receive');
-
-
 
 // hvordan skal denne laves helt præcist?
 if (!empty($_POST)) {
@@ -15,7 +13,7 @@ if (!empty($_POST)) {
 
 			$email->load();
 			// This status can be used to change status where the email is coming from.
-			if($redirect->get('id') != 0) {
+			if ($redirect->get('id') != 0) {
 				$redirect->setParameter('send_email_status', $email->get('status'));
 			}
 
@@ -66,54 +64,54 @@ if ($email->get('status') == 'sent') {
 }
 else { ?>
 <ul class="options">
-  <li><a href="edit.php?id=<?php echo $email->get('id'); ?>">Rediger</a></li>
+  <li><a href="edit.php?id=<?php e($email->get('id')); ?>">Rediger</a></li>
 </ul>
 <?php } ?>
 
 <?php echo $email->error->view(); ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
-	<input type="hidden" value="<?php echo $value['id']; ?>" name="id" />
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+	<input type="hidden" value="<?php e($value['id']); ?>" name="id" />
 
 	<fieldset>
-		<pre>Til: <?php 
-            if($contact->get('type') == 'corporation' && $email->get('contact_person_id') != 0) {
-                
+		<pre>Til: <?php
+            if ($contact->get('type') == 'corporation' && $email->get('contact_person_id') != 0) {
+
                 $contact->loadContactPerson($email->get('contact_person_id'));
-                if($contact->contactperson->get('email') != '') {
-                    echo safeToHtml($contact->contactperson->get('name')." <".$contact->contactperson->get('email').">");
+                if ($contact->contactperson->get('email') != '') {
+                    e($contact->contactperson->get('name')." <".$contact->contactperson->get('email').">");
                 }
                 else {
-                    echo safeToHtml($contact->address->get('name')." <".$contact->address->get('email').">");
+                    e($contact->address->get('name')." <".$contact->address->get('email').">");
                 }
             }
             else {
-               echo safeToHtml($contact->address->get('name')." <".$contact->address->get('email').">"); 
+               e($contact->address->get('name')." <".$contact->address->get('email').">");
             }
             ?></pre>
-		<pre>Fra: <?php if(isset($value['from_email']) && $value['from_email'] != ''): echo safeToHtml($value['from_name']." <".$value['from_email'].">"); else: echo safeToHtml($kernel->intranet->address->get('name')." <".$kernel->intranet->address->get('email').">"); endif; ?></pre>
-		
-		<pre><?php echo safeToHtml($value['subject']); ?></pre>
+		<pre>Fra: <?php if (isset($value['from_email']) && $value['from_email'] != ''): e($value['from_name']." <".$value['from_email'].">"); else: e($kernel->intranet->address->get('name')." <".$kernel->intranet->address->get('email').">"); endif; ?></pre>
+
+		<pre><?php e($value['subject']); ?></pre>
 	</fieldset>
 
 	<fieldset>
-		<pre><?php echo wordwrap(safeToHtml($value['body']), 75); ?></pre>
+		<pre><?php e(wordwrap($value['body'], 75)); ?></pre>
 	</fieldset>
-	
+
 	<?php
 	$attachments = $email->getAttachments();
-	
-	if(count($attachments) > 0) {
+
+	if (count($attachments) > 0) {
 	    ?>
 	    <fieldset>
 			<legend>Vedhæftede filer</legend>
 			<ul>
-				<?php 
+				<?php
 				$kernel->useShared('filehandler');
-				foreach($attachments AS $attachment) {
+				foreach ($attachments as $attachment) {
 				    $file = new FileHandler($kernel, $attachment['id']);
 				    echo '<li><a href="'.$file->get('file_uri').'" target="_blank">'.$attachment['filename'].'</a></li>';
-				} 
+				}
 				?>
 			</ul>
 		</fieldset>
@@ -121,11 +119,11 @@ else { ?>
 	}
 	?>
 
-	<?php if(!$email->isReadyToSend()): ?>
+	<?php if (!$email->isReadyToSend()): ?>
 		<?php echo $email->error->view(); /* errors is first set in isReadyToSend, therefor we show the errors here */  ?>
 	<?php elseif ($email->get('status') != 'sent'): // 3 er sendt ?>
 		<input type="submit" name="submit" value="Send e-mail" class="save" onclick="return confirm('Er du sikker på, at du vil sende en e-mail?');" /> eller
-		<a href="<?php echo $redirect->getRedirect('email.php?id='.$email->get('id')); ?>">Fortryd</a>
+		<a href="<?php e($redirect->getRedirect('email.php?id='.$email->get('id'))); ?>">Fortryd</a>
 	<?php endif; ?>
 </form>
 

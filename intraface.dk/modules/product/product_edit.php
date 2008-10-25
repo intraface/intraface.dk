@@ -3,7 +3,7 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module('product');
 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product = new Product($kernel, $_POST['id']);
     if ($id = $product->save($var)) {
 
-        if($redirect->get('id') != 0) {
+        if ($redirect->get('id') != 0) {
             $redirect->setParameter('product_id', $id);
         }
 
@@ -60,16 +60,16 @@ $page->start(t('edit product'));
 
 <?php if ($product->get('locked') == 1) { ?>
     <ul class="formerrors">
-      <li>Produktet er låst og kan ikke opdateres. <a href="edit_product.php?unlock=<?php echo $product->get('id'); ?>&amp;id=<?php echo intval($product->get('id')); ?>">Lås op</a>.</li>
+      <li>Produktet er låst og kan ikke opdateres. <a href="edit_product.php?unlock=<?php e($product->get('id')); ?>&amp;id=<?php e($product->get('id')); ?>">Lås op</a>.</li>
    </ul>
 <?php } ?>
 
 <?php echo $product->error->view(); ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 <fieldset>
     <legend><?php e(t('product information')); ?></legend>
-        <input type="hidden" name="id" value="<?php if(isset($value['id'])) e($value['id']); ?>" />
+        <input type="hidden" name="id" value="<?php if (isset($value['id'])) e($value['id']); ?>" />
         <div class="formrow">
             <label for="number"><?php e(t('product number')); ?></label>
             <input type="text" name="number" id="number" value="<?php if (!empty($value['number'])) e($value['number']); ?>" />
@@ -82,7 +82,7 @@ $page->start(t('edit product'));
             <label for="description"><?php e(t('description')); ?></label>
             <textarea class="resizable" rows="8" cols="60" name="description" id="description"><?php if (!empty($value['description'])) e($value['description']); ?></textarea>
         </div>
-        
+
         <div class="formrow">
             <label for="unit"><?php e(t('unit type')); ?></label>
             <select name="unit" id="unit">
@@ -94,12 +94,11 @@ $page->start(t('edit product'));
                 foreach ($unit_choises AS $key=>$v) {
                     $unit_options .= '<option value="' . $key . '"';
                     if (!empty($value['unit_id']) AND $value['unit_id'] == $key) { $unit_options .= ' selected="selected"'; }
-                    
+
                     // to avoid trying to translate empty string.
-                    if(!empty($v['combined'])) {
+                    if (!empty($v['combined'])) {
                         $unit_options .= '>' . htmlentities(t($v['combined'])) . '</option>';
-                    }
-                    else {
+                    } else {
                         $unit_options .= '></option>';
                     }
                 }
@@ -123,13 +122,11 @@ $page->start(t('edit product'));
             <?php
                 $vat_choises = array(0 => t('no', 'common'), 1 => t('yes', 'common'));
                 $vat_options = '';
-                foreach ($vat_choises AS $key=>$v) {
-                    $vat_options .= '<option value="' . $key . '"';
-                    if (!empty($value['vat']) AND $value['vat'] == $key) { $vat_options .= ' selected="selected"'; }
-                    $vat_options .= '>' . safeToForm($v) . '</option>';
-                }
-                echo $vat_options;
-            ?>
+                foreach ($vat_choises AS $key=>$v) { ?>
+                    <option value="<?php e($key); ?>"
+                    <?php if (!empty($value['vat']) AND $value['vat'] == $key) { echo ' selected="selected"'; } ?>
+                    ><?php e($v); ?></option>
+                <?php } ?>
             </select>
         </div>
 
@@ -138,23 +135,24 @@ $page->start(t('edit product'));
     <?php if ($kernel->user->hasModuleAccess('webshop') || $kernel->user->hasModuleAccess('shop')): ?>
     <fieldset>
         <legend><?php e(t('Information for shop')); ?></legend>
-        
+
         <div class="formrow">
             <label for="weight"><?php e(t('weight')); ?></label>
             <input type="text" name="weight" id="weight" value="<?php if (!empty($value['weight'])) e($value['weight']); ?>" /> <?php e(t('grams')); ?>
         </div>
-        
-        <?php if($kernel->user->hasModuleAccess('shop')): ?>
-            <?php if(!isset($value['has_variation'])): ?>
+
+        <?php if ($kernel->user->hasModuleAccess('shop')): ?>
+            <?php if (!isset($value['has_variation'])): ?>
                 <div class="formrow">
                     <label for="has_variation"><?php e(t('Product has variations')); ?></label>
                     <select name="has_variation" id="has_variation">
                         <?php
                         foreach (array(0 => t('no', 'common'), 1 => t('yes', 'common')) AS $key=>$v) {
-                            echo '<option value="' . $key . '"';
-                            if (!empty($value['has_variation']) AND $value['has_variation'] == $key) { echo ' selected="selected"'; }
-                            echo '>' . safeToForm($v) . '</option>';
-                        }
+                            ?>
+                            <option value="<?php e($key); ?>"
+                            <?php if (!empty($value['has_variation']) AND $value['has_variation'] == $key) { echo ' selected="selected"'; } ?>
+                            ><?php e($v); ?></option>
+                        <?php }
                         ?>
                     </select>
                 </div>
@@ -163,8 +161,8 @@ $page->start(t('edit product'));
                     <label for="has_variation"><?php e(t('Product has variations')); ?></label>
                     <input type="hidden" name="has_variation" value="<?php e($value['has_variation']); ?>" />
                     <span id="has_variation">
-                        <?php 
-                        if($value['has_variation'] == 1) {
+                        <?php
+                        if ($value['has_variation'] == 1) {
                             e('Yes', 'common');
                         } else {
                             e('No', 'common');
@@ -182,12 +180,11 @@ $page->start(t('edit product'));
                 $show_options = '';
                 $show_choises = array(0 => t('no', 'common'), 1 => t('yes', 'common'));
 
-                foreach ($show_choises AS $key=>$v) {
-                    $show_options .= '<option value="' . $key . '"';
-                    if (!empty($value['do_show']) AND $value['do_show'] == $key) { $show_options .= ' selected="selected"'; }
-                    $show_options .= '>' . safeToForm($v) . '</option>';
-                }
-                echo $show_options;
+                foreach ($show_choises AS $key=>$v) { ?>
+                    <option value="<?php e($key); ?>"
+                    <?php if (!empty($value['do_show']) AND $value['do_show'] == $key) { echo ' selected="selected"'; } ?>
+                    ><?php e($v); ?></option>
+                <?php }
             ?>
             </select>
         </div>
@@ -206,13 +203,11 @@ $page->start(t('edit product'));
             <?php
                 $stock_options = '';
                 $stock_choises = array(0 => t('no', 'common'), 1 => t('yes', 'common'));
-                foreach ($stock_choises AS $key=>$v) {
-                    $stock_options .= '<option value="' . $key . '"';
-                    if (!empty($value['stock']) AND $value['stock'] == $key) { $stock_options .= ' selected="selected"'; }
-                    $stock_options .= '>' . safeToForm($v) . '</option>';
-                }
-
-                echo $stock_options;
+                foreach ($stock_choises AS $key=>$v) { ?>
+                    <option value="<?php e($key); ?>"
+                    <?php if (!empty($value['stock']) AND $value['stock'] == $key) { $stock_options .= ' selected="selected"'; } ?>
+                    ><?php e($v); ?></option>
+                <?php }
             ?>
             </select>
         </div>
@@ -233,7 +228,7 @@ $page->start(t('edit product'));
         <legend><?php e(t('accounting')); ?></legend>
 
         <?php if (count($accounts) == 0): ?>
-            <p><?php echo $translation->get('You will need to create an accounting year and create accounts for that year, to be able to set the account for which this product will be stated.'); ?> <a href="<?php echo $mainAccounting->getPath(); ?>"><?php echo $translation->get('Create accounting year and accounts'); ?></a></p>
+            <p><?php e($translation->get('You will need to create an accounting year and create accounts for that year, to be able to set the account for which this product will be stated.')); ?> <a href="<?php e($mainAccounting->getPath()); ?>"><?php e($translation->get('Create accounting year and accounts')); ?></a></p>
         <?php else: ?>
 
         <div class="formrow">
@@ -243,7 +238,7 @@ $page->start(t('edit product'));
                 <?php
                     $x = 0;
                     $optgroup = 1;
-                    foreach($accounts AS $a):
+                    foreach ($accounts AS $a):
                         if (strtolower($a['type']) == 'sum') continue;
 
                         if (strtolower($a['type']) == 'headline') {
@@ -257,12 +252,15 @@ $page->start(t('edit product'));
                             continue;
                             */
                         }
-
-                        echo '<option value="'. $a['number'].'"';
-                        // er det korrekt at det er number? og måske skal et produkt i virkeligheden snarere
+                        ?>
+                        <option value="<?php e($a['number']); ?>"
+                        <?php
+                        // @todo er det korrekt at det er number? og måske skal et produkt i virkeligheden snarere
                         // gemmes med nummeret en med id - for så er det noget lettere at opdatere fra år til år
                         if (!empty($value['state_account_id']) AND $value['state_account_id'] == $a['number']) echo ' selected="selected"';
-                        echo '>'.safeToForm($a['name']).'</option>';
+                        ?>
+                        ><?php e($a['name']); ?></option>
+                        <?php
                         $optgroup = 0;
                     endforeach;
                 ?>
@@ -278,7 +276,7 @@ $page->start(t('edit product'));
 
             <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" class="save" /> <?php e(t('or', 'common')); ?>
     <?php endif; ?>
-        <a href="<?php $return = 'index.php'; if(isset($product) && $product->get('id') != 0) $return = 'product.php?id='.intval($product->get('id')); echo $redirect->getRedirect($return); ?>"><?php e(t('regret', 'common')); ?></a>
+        <a href="<?php $return = 'index.php'; if (isset($product) && $product->get('id') != 0) $return = 'product.php?id='.intval($product->get('id')); e($redirect->getRedirect($return)); ?>"><?php e(t('Cancel', 'common')); ?></a>
 
     </div>
 

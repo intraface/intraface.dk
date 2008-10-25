@@ -213,7 +213,7 @@ class NewsletterSubscriber extends Intraface_Standard
      */
     public function subscribe($input, $mailer)
     {
-        if(!is_object($mailer)) {
+        if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
         
@@ -428,7 +428,7 @@ class NewsletterSubscriber extends Intraface_Standard
      */
     public function sendOptInEmail($mailer)
     {
-        if(!is_object($mailer)) {
+        if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
         

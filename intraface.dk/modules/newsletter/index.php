@@ -41,7 +41,7 @@ $page->start('Nyhedsbrevslister');
 	<?php foreach ($lists AS $list): ?>
 	<tr>
 		<td><a href="list.php?id=<?php e($list['id']); ?>"><?php e($list['title']); ?></a></td>
-		<td><?php echo intval($list['subscribers']); ?></td>
+		<td><?php e($list['subscribers']); ?></td>
 		<td class="options">
 			<a class="edit" href="list_edit.php?id=<?php e($list['id']); ?>">Ret</a>
 			<a class="delete" href="index.php?delete=<?php e($list['id']); ?>&amp;id=<?php e($list['id']); ?>">Slet</a>

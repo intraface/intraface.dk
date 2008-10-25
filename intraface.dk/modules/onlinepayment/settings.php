@@ -35,11 +35,11 @@ $page->start('Onlinebetalinger');
 
 <h1>Sæt indstillinger</h1>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 	<fieldset>
 		<legend>Udbyder</legend>
-		<p>Du har valgt <strong><?php echo $implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]; ?></strong> som din udbyder. <a href="choose_provider.php">Vælg en anden udbyder</a>.</p>
+		<p>Du har valgt <strong><?php e($implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]); ?></strong> som din udbyder. <a href="choose_provider.php">Vælg en anden udbyder</a>.</p>
 	</fieldset>
 
 	<?php 
@@ -50,12 +50,12 @@ $page->start('Onlinebetalinger');
 				<legend>Indstillinger</legend>
 				<div class="formrow">
 					<label for="merchant_id">Merchant id</label>
-					<input type="text" name="merchant_id" id="merchant_id" value="<?php echo $value['merchant_id']; ?>" />
+					<input type="text" name="merchant_id" id="merchant_id" value="<?php e($value['merchant_id']); ?>" />
 				</div>
 		
 				<div class="formrow">
 					<label for="md5_secret">MD5 Secret</label>
-					<input type="text" name="md5_secret" id="md5_secret" value="<?php echo $value['md5_secret']; ?>" />
+					<input type="text" name="md5_secret" id="md5_secret" value="<?php e($value['md5_secret']); ?>" />
 				</div>
 			</fieldset>
 			<?php 
@@ -66,12 +66,12 @@ $page->start('Onlinebetalinger');
 				<legend>Indstillinger</legend>
 				<div class="formrow">
 					<label for="merchant_id">Merchant id</label>
-					<input type="text" name="merchant_id" id="merchant_id" value="<?php echo $value['merchant_id']; ?>" />
+					<input type="text" name="merchant_id" id="merchant_id" value="<?php e($value['merchant_id']); ?>" />
 				</div>
 		
 				<div class="formrow">
 					<label for="password">Password</label>
-					<input type="text" name="password" id="password" value="<?php echo $value['password']; ?>" />
+					<input type="text" name="password" id="password" value="<?php e($value['password']); ?>" />
 				</div>
 			</fieldset>
 			<?php

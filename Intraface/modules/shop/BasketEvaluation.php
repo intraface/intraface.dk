@@ -259,7 +259,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                     break;
                 case 'customer_coupon':
                     settype($customer['customer_coupon'], 'string');
-                    if($evaluation['evaluate_value_case_sensitive'] != 1) {
+                    if ($evaluation['evaluate_value_case_sensitive'] != 1) {
                         $evaluate = strtolower(trim($customer['customer_coupon']));
                         $evaluation['evaluate_value'] = strtolower($evaluation['evaluate_value']);
                     } else {
@@ -272,7 +272,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                     break;
                 case 'customer_country':
                     settype($customer['country'], 'string');
-                    if($evaluation['evaluate_value_case_sensitive'] != 1) {
+                    if ($evaluation['evaluate_value_case_sensitive'] != 1) {
                         $evaluate = strtolower(trim($customer['country']));
                         $evaluation['evaluate_value'] = strtolower($evaluation['evaluate_value']);
                     } else {

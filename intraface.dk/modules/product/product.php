@@ -11,7 +11,7 @@ $filehandler = new FileHandler($kernel);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product = new Product($kernel, $_POST['id']);
-    
+
     if (isset($_POST['append_file_submit'])) {
 
         $append_file = new AppendFile($kernel, 'product', $product->get('id'));
@@ -94,11 +94,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $append_file = new AppendFile($kernel, 'product', $product->get('id'));
                 $array_files = $redirect->getParameter('file_handler_id');
                 if (is_array($array_files)) {
-                    foreach($array_files AS $file_id) {
+                    foreach ($array_files AS $file_id) {
                         $append_file->addFile(new FileHandler($kernel, $file_id));
                     }
                 }
-                
+
             }
         }
 
@@ -117,14 +117,14 @@ $page->start(t('product') . ': ' . $product->get('name'));
     <h2>#<?php e($product->get('number'));  ?> <?php e($product->get('name')); ?></h2>
     <ul class="options">
         <?php if ($product->get('locked') != 1) { ?>
-        <li><a href="product_edit.php?id=<?php echo $product->get('id'); ?>"><?php e($translation->get('edit', 'common')); ?></a></li>
+        <li><a href="product_edit.php?id=<?php e($product->get('id')); ?>"><?php e($translation->get('edit', 'common')); ?></a></li>
 
-        <li><a class="confirm" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo intval($product->get('id')); ?>"><?php e($translation->get('delete', 'common')); ?></a></li>
+        <li><a class="confirm" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($product->get('id')); ?>"><?php e($translation->get('delete', 'common')); ?></a></li>
         <?php } ?>
-        <li><a href="product.php?copy=<?php echo intval($product->get('id')); ?>"><?php e(t('copy', 'common')); ?></a></li>
-        <li><a href="index.php?from_product_id=<?php echo intval($product->get('id')); ?>&amp;use_stored=true"><?php e(t('close', 'common')); ?></a></li>
+        <li><a href="product.php?copy=<?php e($product->get('id')); ?>"><?php e(t('copy', 'common')); ?></a></li>
+        <li><a href="index.php?from_product_id=<?php e($product->get('id')); ?>&amp;use_stored=true"><?php e(t('close', 'common')); ?></a></li>
     </ul>
-    <div><?php echo autoop($product->get('description')); ?></div>
+    <div><?php autohtml($product->get('description')); ?></div>
 </div>
 
 <table>
@@ -187,7 +187,7 @@ $page->start(t('product') . ': ' . $product->get('name'));
     </tr>
     <?php endif; ?>
     <?php
-    if ($kernel->user->hasModuleAccess('accounting')): 
+    if ($kernel->user->hasModuleAccess('accounting')):
         $mainAccounting = $kernel->useModule("accounting");
         ?>
         <tr>
@@ -217,7 +217,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
     if ($invoice->any('product', $product->get('id'))) {
         ?>
         <ul class="options">
-            <li><a href="<?php print($debtor_module->getPath().'list.php?type=invoice&amp;status=-1&amp;product_id='.$product->get('id')); ?>"><?php e(t('invoices with this product')); ?></a></li>
+            <li><a href="<?php e($debtor_module->getPath().'list.php?type=invoice&amp;status=-1&amp;product_id='.$product->get('id')); ?>"><?php e(t('invoices with this product')); ?></a></li>
         </ul>
         <?php
     }
@@ -247,9 +247,9 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         <?php if ($variations->count() == 0): ?>
             <ul class="options">
                 <li><a href="product_variations_edit.php?id=<?php e($product->get('id')); ?>"><?php e(t('Create variations for the product')); ?></a></li>
-            </ul>   
+            </ul>
         <?php else: ?>
-            
+
             <table summary="<?php e(t('Variations')); ?>" id="variations_table" class="stripe">
                 <caption><?php e(t('Variations')); ?></caption>
                 <thead>
@@ -266,17 +266,17 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach($variations AS $variation): ?>
+                <?php foreach ($variations AS $variation): ?>
                     <tr>
                         <td><?php e($variation->getNumber()); ?></td>
                         <td><?php e($variation->getName()); ?></td>
                         <td><?php e($variation->getDetail()->getPrice($product)->getAsLocal('da_dk', 2)); ?> </td>
                         <td><?php e($product->get('weight')+$variation->getDetail()->getWeightDifference()); ?></td>
                         <?php if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
-                            <td><?php echo $variation->getStock($product)->get('actual_stock'); ?></td>
+                            <td><?php e($variation->getStock($product)->get('actual_stock')); ?></td>
                             <td><a href="product_variation.php?id=<?php e($variation->getId()); ?>&amp;product_id=<?php e($product->getId()); ?>"><?php e(t('Details', 'common')); ?></a></td>
                         <?php endif; ?>
-                            
+
                     </tr>
                 <?php endforeach; ?>
             </table>
@@ -293,7 +293,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
     <h2><?php e(t('related products')); ?></h2>
     <?php if ($product->get('locked') == 0) { ?>
         <ul class="button">
-            <li><a href="related_product.php?id=<?php echo $product->get('id'); ?>"><?php e(t('add products')); ?></a></li>
+            <li><a href="related_product.php?id=<?php e($product->get('id')); ?>"><?php e(t('add products')); ?></a></li>
         </ul>
     <?php } ?>
     <?php
@@ -320,14 +320,14 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         //$appendix_list = $append_file->getList();
         $product->getPictures();
         if (count($product->get('pictures')) > 0) {
-            foreach($product->get('pictures') AS $appendix) {
+            foreach ($product->get('pictures') AS $appendix) {
                 echo '<div class="appendix"><img src="'.$appendix['system-square']['file_uri'].'" />'.$appendix['original']['name'].' <a class="delete" href="product.php?id='.$product->get('id').'&amp;delete_appended_file_id='.$appendix['appended_file_id'].'">Fjern</a></div>';
             }
         }
         ?>
 
 
-        <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="POST"  enctype="multipart/form-data">
+        <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="POST"  enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?php e($product->get('id')); ?>" />
         <input type="hidden" name="detail_id" value="<?php e($product->get('detail_id')); ?>" />
 
@@ -339,18 +339,18 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         ?>
         </form>
     </div>
-    
+
     <?php if ($kernel->user->hasModuleAccess('shop')): ?>
-        <?php $module_shop = $kernel->useModule('shop'); ?> 
+        <?php $module_shop = $kernel->useModule('shop'); ?>
         <div id="categories" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'categories') echo ' fade'; ?>">
             <h2><?php e(t('Categories')); ?></h2>
             <?php
             $gateway = new Intraface_modules_shop_Shop_Gateway();
             $shops = $gateway->findAll();
             $db =  MDB2::factory(DB_DSN);
-            
+
             ?>
-            <?php foreach($shops AS $shop): ?>
+            <?php foreach ($shops AS $shop): ?>
                 <?php $category_type = new Intraface_Category_Type('shop', $shop->getId()); ?>
                 <h3><?php e($shop->getName()); ?></h3>
                 <ul class="options">
@@ -361,11 +361,11 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                 $appender = $category->getAppender($product->getId());
                 ?>
                 <ul>
-                    <?php foreach($appender->getCategories() AS $category): ?>
+                    <?php foreach ($appender->getCategories() AS $category): ?>
                         <li><?php e($category['name']); ?> <a href="product.php?id=<?php e($product->getId()); ?>&amp;shop_id=<?php e($shop->getId()); ?>&amp;remove_appended_category=<?php e($category['id']); ?>" class="delete"><?php e(t('Remove', 'common')); ?></a></li>
                     <?php endforeach; ?>
                 </ul>
-                
+
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
@@ -374,24 +374,24 @@ if ($kernel->user->hasModuleAccess('invoice')) {
     <div id="keywords" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'keywords') echo ' fade'; ?>">
       <h2><?php e(t('keywords')); ?></h2>
     <?php if ($product->get('locked') == 0) { $shared_keyword = $kernel->useShared('keyword'); ?>
-    <ul class="button"><li><a href="<?php echo $shared_keyword->getPath(); ?>connect.php?product_id=<?php echo $product->get('id'); ?>">Tilknyt nøgleord</a></li></ul>
+    <ul class="button"><li><a href="<?php e($shared_keyword->getPath()); ?>connect.php?product_id=<?php e($product->get('id')); ?>">Tilknyt nøgleord</a></li></ul>
     <?php } ?>
     <?php
         $keyword = $product->getKeywordAppender();
         $keywords = $keyword->getConnectedKeywords();
-        if (is_array($keywords) AND count($keywords) > 0) {
-            echo '<ul>';
-            foreach ($keywords AS $k) {
-                echo '<li>' . safeToHtml($k['keyword']) . '</li>';
-            }
-            echo '</ul>';
-        }
+        if (is_array($keywords) AND count($keywords) > 0) { ?>
+            <ul>
+            <?php foreach ($keywords AS $k) { ?>
+                <li><?php e($k['keyword']); ?></li>
+            <?php } ?>
+            </ul>
+        <?php }
     ?>
   </div>
-  
-    
-    
-    
+
+
+
+
     <?php
     if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock') AND !$product->get('has_variation')) {
 
@@ -413,13 +413,13 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                 </tr>
                 <tr>
                     <td><?php e(t('reserved')); ?></td>
-                    <td><?php e($product->getStock()->get("reserved")); ?> (<?php print($product->getStock()->get("on_quotation")); ?>)</td>
+                    <td><?php e($product->getStock()->get("reserved")); ?> (<?php e($product->getStock()->get("on_quotation")); ?>)</td>
                 </tr>
             </table>
-            
+
             <ul class="options">
                 <li><a href="stock_regulation.php?product_id=<?php e($product->get('id')); ?>">Regulering</a></li>
-                <li><a href="product.php?id=<?php print($product->get('id')); ?>&amp;adaptation=true" class="confirm">Afstem</a></li>
+                <li><a href="product.php?id=<?php e($product->get('id')); ?>&amp;adaptation=true" class="confirm">Afstem</a></li>
             </ul>
 
             <p>Sidst afstemt: <?php e($product->getStock()->get('dk_adaptation_date_time')); ?></p>
@@ -447,7 +447,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                         <tbody>
                         <?php
                         $is_under_actual = true;
-                        for($i = 0, $max = count($latest); $i < $max; $i++) {
+                        for ($i = 0, $max = count($latest); $i < $max; $i++) {
                             ?>
                             <tr>
                                 <td><?php e($latest[$i]['dk_invoice_date']); ?></td>

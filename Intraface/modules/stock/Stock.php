@@ -17,7 +17,7 @@ class Stock extends Intraface_Standard
 
         $this->product = &$product;
         
-        if($variation) {
+        if ($variation) {
             $this->product_variation_id = $variation->getId();
         }
         else {
@@ -90,14 +90,10 @@ class Stock extends Intraface_Standard
             WHERE intranet_id = ".$this->product->kernel->intranet->get('id')." AND product_id = ".$this->product->get('id')." AND product_variation_id = ".$this->product_variation_id." AND regulation_date_time > \"".$basis_date."\"");
         $db->nextRecord(); // Der vil altid være en post
         $regulated = intval($db->f('regulated'));
-
-        // print($basis.' + '.$stock_in.' - '.$stock_out.' + '.$stock_out_reduced.' + '.$regulated);
-
         $this->value["actual_stock"] = $basis + $stock_in - $stock_out + $stock_out_reduced + $regulated;
 
         if ($this->product->kernel->intranet->hasModuleAccess('order')) {
             $this->product->kernel->useModule('debtor', true); // true: vi ignorere brugeradgang.
-
             $order = Debtor::factory($this->product->kernel, 0, "order");
             $order->loadItem();
             $this->value["reserved"] = $order->item->getQuantity($this->product->get('id'), $this->product_variation_id, $basis_date);
@@ -107,7 +103,6 @@ class Stock extends Intraface_Standard
 
         if ($this->product->kernel->intranet->hasModuleAccess('invoice')) {
             $this->product->kernel->useModule('debtor', true); // true: vi ignorere brugeradgang.
-
             $invoice = Debtor::factory($this->product->kernel, 0, "invoice");
             $invoice->loadItem();
             $this->value["reserved"] += $invoice->item->getQuantity($this->product->get('id'), $this->product_variation_id, $basis_date, "not_sent");

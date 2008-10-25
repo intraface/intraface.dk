@@ -38,7 +38,7 @@ class TemporaryFile {
      */
     public function __construct($filehandler, $file_name = NULL)
     {
-        if(!is_object($filehandler)) {
+        if (!is_object($filehandler)) {
             trigger_error("TemporaryFile requires filehandler or filemanager", E_USER_ERROR);
         }
 
@@ -47,7 +47,7 @@ class TemporaryFile {
         $this->file_path = NULL;
         $this->file_dir = NULL;
         
-        if($this->file_name != NULL) {
+        if ($this->file_name != NULL) {
             $this->load();
         } 
     }
@@ -57,20 +57,20 @@ class TemporaryFile {
      */
     private function load() 
     {
-        if(empty($this->file_name)) {
+        if (empty($this->file_name)) {
             trigger_error('file_name needs to be set to load temporary file', E_USER_ERROR);
         }
         
         // We make sure to create the folders
-        if(!is_dir($this->filehandler->upload_path)) {
-            if(!mkdir($this->filehandler->upload_path, 0755)) {
+        if (!is_dir($this->filehandler->upload_path)) {
+            if (!mkdir($this->filehandler->upload_path, 0755)) {
                 trigger_error('Unable to create upload dir "'.$this->filehandler->upload_path.'"', E_USER_ERROR);
                 exit;
             }
         }
 
-        if(!is_dir($this->filehandler->tempdir_path)) {
-            if(!mkdir($this->filehandler->tempdir_path, 0755)) {
+        if (!is_dir($this->filehandler->tempdir_path)) {
+            if (!mkdir($this->filehandler->tempdir_path, 0755)) {
                 trigger_error('Unable to create temp dir "'.$this->filehandler->tempdir_path.'"', E_USER_ERROR);
                 exit;
             }
@@ -80,14 +80,14 @@ class TemporaryFile {
         do {
             $unique_name = uniqid();
             $i++;
-            if($i == 50) {
+            if ($i == 50) {
                 trigger_error('Error generating a unique name', E_USER_ERROR);
                 exit;
             }
         }
         while (is_dir($this->filehandler->tempdir_path.$unique_name));
         
-        if(!mkdir($this->filehandler->tempdir_path.$unique_name, 0755)) {
+        if (!mkdir($this->filehandler->tempdir_path.$unique_name, 0755)) {
             trigger_error('Unable to create temporary dir "'.$this->filehandler->tempdir_path.$unique_name.'"', E_USER_ERROR);
             exit;
         }
@@ -111,9 +111,9 @@ class TemporaryFile {
         $file_name = str_replace('\\', '_', $file_name);
         $file_name = str_replace('#', '', $file_name);
         
-        if(strlen($file_name) > 50) {
+        if (strlen($file_name) > 50) {
             $extension = strrchr($file_name, '.');
-            if($extension !== false && (strlen($extension) == 4 || strlen($extension) == 5)) {
+            if ($extension !== false && (strlen($extension) == 4 || strlen($extension) == 5)) {
                 $file_name = substr($file_name, 0, 50-strlen($extension)).$extension;
             }
             else {

@@ -24,7 +24,7 @@ $level = 0;
             <select name="parent_id" id="parent_id">
             <option value="0"><?php e(t('Choose')); ?></option>
     <?php while($level >= 0): ?>
-        <?php foreach($level_categories[$level] as $category): ?>
+        <?php foreach ($level_categories[$level] as $category): ?>
             <?php array_shift($level_categories[$level]); ?>
             <?php if ($category['id'] == $category_object->getId()) continue; ?>
                 <option <?php if ($category_object->getParentId() == $category['id']) echo 'selected="selected"'; ?> value="<?php e($category['id']); ?>">
@@ -32,7 +32,7 @@ $level = 0;
                 </option>
             <?php
             # If there is subcategories to the category
-            if(is_array($category['categories']) && count($category['categories']) > 0) {
+            if (is_array($category['categories']) && count($category['categories']) > 0) {
                 
                 # We make the items for the next level the sub categories of this category
                 $level_categories[$level+1] = $category['categories'];
@@ -48,7 +48,7 @@ $level = 0;
         <?php endforeach; ?>
         <?php
         # If all elements for the level_categories for this level is gone, we move a level up.
-        if(count($level_categories[$level]) == 0) {
+        if (count($level_categories[$level]) == 0) {
             # And we move a level up.
             $level--;
         }
@@ -64,7 +64,7 @@ $level = 0;
     
     <div>
         <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" class="save" /> <?php e(t('or', 'common')); ?>
-        <a href="<?php e($regret_link); ?>"><?php e(t('regret', 'common')); ?></a>
+        <a href="<?php e($regret_link); ?>"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 
 </form>

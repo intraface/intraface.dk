@@ -401,7 +401,7 @@ class Year extends Intraface_Standard
         $sql_where = "";
 
         if (!empty($balance_accounts) AND count($balance_accounts) > 0) {
-            foreach($balance_accounts AS $account) {
+            foreach ($balance_accounts AS $account) {
                 $sql_where .= "id = " . $account . " OR ";
             }
         }
@@ -460,7 +460,6 @@ class Year extends Intraface_Standard
 
                     // $module_accounting = $this->kernel->useModule('accounting');
                     // $module_accounting->includeFile('standardaccounts.php');
-                    // print
                     // HACK
                     // include($module_accounting->includeFile('standardaccounts.php')); // 'intraface_modules/accounting/standardaccounts.php');
                     // HACK

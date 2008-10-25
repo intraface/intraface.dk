@@ -2,7 +2,7 @@
 require('../../include_first.php');
 $module = $kernel->module('newsletter');
 
-if(!$kernel->user->hasModuleAccess('contact')) {
+if (!$kernel->user->hasModuleAccess('contact')) {
     trigger_error("Du skal have adgang til kontakt-modullet for at se denne side");
 }
 
@@ -10,8 +10,8 @@ $list = new NewsletterList($kernel, (int)$_GET['list_id']);
 $subscriber = new NewsletterSubscriber($list);
 
 
-if(isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
-    if($kernel->user->hasModuleAccess('contact')) {
+if (isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
+    if ($kernel->user->hasModuleAccess('contact')) {
         $contact_module = $kernel->useModule('contact');
 
         $redirect = Intraface_Redirect::factory($kernel, 'go');
@@ -27,9 +27,9 @@ if(isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
 
 }
 
-if(isset($_GET['return_redirect_id'])) {
+if (isset($_GET['return_redirect_id'])) {
     $redirect = Intraface_Redirect::factory($kernel, 'return');
-    if($redirect->get('identifier') == 'contact') {
+    if ($redirect->get('identifier') == 'contact') {
         $subscriber->addContact(new Contact($kernel, $redirect->getParameter('contact_id')));
     }
 

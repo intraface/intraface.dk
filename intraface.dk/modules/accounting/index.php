@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module('accounting');
 $translation = $kernel->getTranslation('accounting');
@@ -25,6 +25,7 @@ $page->start('Regnskab');
 </div>
 
 <?php if (count($years) == 0): ?>
+
 	<p>Du skal <a href="year_edit.php">oprette et regnskab</a> for at komme i gang med at bruge regnskabsmodulet.</p>
 <?php else: ?>
 	<p><a href="years.php">Vælg et regnskab</a> du vil se eller ændre i.</p>

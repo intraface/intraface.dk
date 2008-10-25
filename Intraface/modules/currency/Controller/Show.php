@@ -16,7 +16,7 @@ class Intraface_modules_currency_Controller_Show extends k_Controller
     {
         $gateway = new Intraface_modules_currency_Currency_Gateway($this->registry->get('doctrine'));
         $currency = $gateway->findById($this->name);
-        if($currency === false) {
+        if ($currency === false) {
             throw new Exception('Invalid currency '.$this->name);
         }
         return $currency;

@@ -4,7 +4,7 @@ require 'Intraface/Auth.php';
 
 $title = 'Intraface.dk -> Login';
 
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!Validate::email($_POST['email'])) {
         $error[] = 'E-mail ugyldig';
@@ -29,7 +29,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         if (!empty($error) AND count($error) > 0) {
-            $msg = 'Du er allerede oprettet. <a href="'.PATH_WWW.'main/login.php">Login</a>.';
+            $msg = 'Du er allerede oprettet. <a href="'.url('/main/login.php').'">Login</a>.';
         } else {
             require_once 'Intraface/modules/intranetmaintenance/IntranetMaintenance.php';
             $intranet = new IntranetMaintenance();
@@ -83,7 +83,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 $auth->isLoggedIn();
 
-                header('Location: '.PATH_WWW.'main/');
+                header('Location: '.url('/main'));
                 exit;
             }
         }
@@ -98,7 +98,7 @@ include(PATH_INCLUDE_IHTML . 'outside/top.php');
 
 <h1><span>Intraface.dk</span></h1>
 
-<form id="form-login" method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+<form id="form-login" method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
 
     <fieldset>
         <legend>Opret mig i systemet med følgende oplysninger</legend>

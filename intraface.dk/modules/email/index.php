@@ -23,13 +23,13 @@ $emails = $email_object->getList();
 $queue = $email_object->countQueue();
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('e-mails')));
+$page->start($translation->get('e-mails'));
 ?>
-<h1><?php echo safeToHtml($translation->get('e-mails')); ?></h1>
+<h1><?php e($translation->get('e-mails')); ?></h1>
 
 <?php if (count($emails) == 0): ?>
 
-	<p><?php echo safeToHtml($translation->get('no e-mails has been sent')); ?></p>
+	<p><?php e($translation->get('no e-mails has been sent')); ?></p>
 
 <?php else: ?>
 
@@ -39,31 +39,31 @@ $page->start(safeToHtml($translation->get('e-mails')));
 	?>
 
 	<?php if ($queue > 0): ?>
-		<p><?php echo safeToHtml($translation->get('e-mails are in queue - the will be sent soon')); ?></p>
+		<p><?php e($translation->get('e-mails are in queue - the will be sent soon')); ?></p>
 	<?php endif; ?>
 
 	<?php echo $email_object->getDBQuery()->display('character'); ?>
 
 	<table>
-	<caption><?php echo safeToHtml($translation->get('e-mails')); ?></caption>
+	<caption><?php e($translation->get('e-mails')); ?></caption>
 	<thead>
 	<tr>
-		<th><?php echo safeToHtml($translation->get('subject')); ?></th>
-		<th><?php echo safeToHtml($translation->get('contact')); ?></th>
+		<th><?php e($translation->get('subject')); ?></th>
+		<th><?php e($translation->get('contact')); ?></th>
 		<th></th>
 	</tr>
 	</thead>
 	<tbody>
-	<?php foreach($emails AS $email): ?>
+	<?php foreach ($emails AS $email): ?>
 	<tr>
-		<td><a href="<?php echo $email_shared->getPath(); ?>email.php?id=<?php echo $email['id']; ?>"><?php echo safeToHtml($email['subject']); ?></a></td>
-		<td><a href="<?php echo $contact_module->getPath(); ?>contact.php?id=<?php echo $email['contact_id']; ?>"><?php echo safeToHtml($email['contact_name']); ?></a></td>
+		<td><a href="<?php e($email_shared->getPath()); ?>email.php?id=<?php e($email['id']); ?>"><?php e($email['subject']); ?></a></td>
+		<td><a href="<?php e($contact_module->getPath()); ?>contact.php?id=<?php e($email['contact_id']); ?>"><?php e($email['contact_name']); ?></a></td>
 		<td>
 		<?php if (!empty($email['status']) AND $email['status'] != 'sent'): ?>
-			<a class="edit" href="<?php echo $email_shared->getPath(); ?>edit.php?id=<?php echo $email['id']; ?>"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a>
-			<a class="delete" href="index.php?delete=<?php echo $email['id']; ?>"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a>
+			<a class="edit" href="<?php e($email_shared->getPath()); ?>edit.php?id=<?php e($email['id']); ?>"><?php e($translation->get('edit', 'common')); ?></a>
+			<a class="delete" href="index.php?delete=<?php e($email['id']); ?>"><?php e($translation->get('delete', 'common')); ?></a>
 		<?php else: ?>
-			<?php echo safeToHtml($translation->get($email['status'], 'email')); ?>
+			<?php e($translation->get($email['status'], 'email')); ?>
 		<?php endif; ?>
 		</td>
 	</tr>

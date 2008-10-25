@@ -14,13 +14,13 @@ if (isset($_POST['submit'])) {
 	} else {
 		$value = $_POST;
 	}
-} elseif(isset($_GET['id'])) {
+} elseif (isset($_GET['id'])) {
 
 	$letter = Newsletter::factory($kernel, intval($_GET['id']));
 	$value = $letter->get();
 } else {
 	$list = new NewsletterList($kernel, (int)$_GET['list_id']);
-	if($list->get('id') == 0) {
+	if ($list->get('id') == 0) {
 		trigger_error('Ugyldig liste', E_USER_ERROR);
 	}
 	$letter = new Newsletter($list);
@@ -45,7 +45,7 @@ $page->start('Rediger nyhedsbrev');
 
 <?php echo $letter->error->view(); ?>
 
-<form action="<?php e(basename($_SERVER['PHP_SELF'])); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 	<fieldset>
 	<input type="hidden" name="id" value="<?php e($letter->get('id')); ?>" />
 	<input type="hidden" name="list_id" value="<?php e($letter->list->get('id')); ?>" />

@@ -27,19 +27,19 @@ if (!empty($_POST['product'])) {
 $product = new Product($kernel, (int)$_GET['id']);
 
 $related_product_ids = array();
-foreach($product->getRelatedProducts() AS $related) {
+foreach ($product->getRelatedProducts() AS $related) {
     $related_product_ids[] = $related['id'];
 }
 
 $keywords = $product->getKeywordAppender();
 
-if(isset($_GET["search"]) || isset($_GET["keyword_id"])) {
+if (isset($_GET["search"]) || isset($_GET["keyword_id"])) {
 
-    if(isset($_GET["search"])) {
+    if (isset($_GET["search"])) {
         $product->getDBQuery()->setFilter("search", $_GET["search"]);
     }
 
-    if(isset($_GET["keyword_id"])) {
+    if (isset($_GET["keyword_id"])) {
         $product->getDBQuery()->setKeyword($_GET["keyword_id"]);
     }
 } else {
@@ -86,7 +86,7 @@ $page->start(t('add related products'));
         <select name="keyword_id" id="keyword_id">
             <option value=""><?php e(t('none')); ?></option>
             <?php foreach ($keywords->getUsedKeywords() AS $k) { ?>
-            <option value="<?php e($k['id']); ?>" <?php if($k['id'] == $product->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo $k['keyword']; ?></option>
+            <option value="<?php e($k['id']); ?>" <?php if ($k['id'] == $product->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php e($k['keyword']); ?></option>
             <?php } ?>
         </select>
     </label>
@@ -101,7 +101,7 @@ $page->start(t('add related products'));
 <?php
 echo $product->getDBQuery()->display('character');
 ?>
-<form action="<?php e(basename($_SERVER['PHP_SELF'])); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
     <input type="hidden" name="id" value="<?php e($product->get('id')); ?>" id="product_id" />
     <table summary="Produkter" class="stripe">
         <caption><?php e(t('products')); ?></caption>

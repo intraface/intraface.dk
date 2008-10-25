@@ -38,14 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('edit template')));
+$page->start($translation->get('edit template'));
 ?>
 
 <h1><?php e($translation->get('edit template')); ?></h1>
 
 <?php if (!empty($value['id'])): ?>
 <ul class="options">
-    <li><a href="template.php?id=<?php echo intval($value['id']); ?>"><?php e($translation->get('view template')); ?></a></li>
+    <li><a href="template.php?id=<?php e($value['id']); ?>"><?php e($translation->get('view template')); ?></a></li>
 </ul>
 <?php endif; ?>
 
@@ -53,9 +53,9 @@ $page->start(safeToHtml($translation->get('edit template')));
     echo $template->error->view($translation);
 ?>
 
-<form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
-    <input name="id" type="hidden" value="<?php if (!empty($value['id'])) echo intval($value['id']); ?>" />
-    <input name="site_id" type="hidden" value="<?php if (!empty($value['site_id'])) echo intval($value['site_id']); ?>" />
+<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
+    <input name="id" type="hidden" value="<?php if (!empty($value['id'])) e($value['id']); ?>" />
+    <input name="site_id" type="hidden" value="<?php if (!empty($value['site_id'])) e($value['site_id']); ?>" />
 
     <fieldset>
 
@@ -63,20 +63,20 @@ $page->start(safeToHtml($translation->get('edit template')));
 
         <div class="formrow" id="titlerow">
             <label for="name"><?php e($translation->get('template name')); ?></label>
-            <input name="name" type="text" id="name" value="<?php if (!empty($value['name'])) echo safeToForm($value['name']); ?>" size="50" maxlength="255" />
+            <input name="name" type="text" id="name" value="<?php if (!empty($value['name'])) e($value['name']); ?>" size="50" maxlength="255" />
         </div>
         <div class="formrow" id="titlerow">
             <label for="identifier"><?php e($translation->get('identifier', 'common')); ?></label>
-            <input name="identifier" type="text" id="name" value="<?php if (!empty($value['identifier'])) echo safeToForm($value['identifier']); ?>" size="50" maxlength="255" />
+            <input name="identifier" type="text" id="name" value="<?php if (!empty($value['identifier'])) e($value['identifier']); ?>" size="50" maxlength="255" />
         </div>
-        
+
         <div class="formrow" id="titlerow">
             <label><?php e($translation->get('for page type')); ?></label>
             <?php
             require_once 'Intraface/modules/cms/Page.php';
             $page_types = CMS_Page::getTypesWithBinaryIndex();
-            foreach($page_types AS $key => $page_type): ?>
-                <label for="for_page_type_<?php echo intval($key); ?>"><input name="for_page_type[]" type="checkbox" id="for_page_type_<?php echo intval($key); ?>" value="<?php echo intval($key); ?>" <?php if (!empty($value['for_page_type']) && $value['for_page_type'] & $key) echo 'checked="checked"'; ?> /><?php e($translation->get($page_type)); ?></label>
+            foreach ($page_types AS $key => $page_type): ?>
+                <label for="for_page_type_<?php e($key); ?>"><input name="for_page_type[]" type="checkbox" id="for_page_type_<?php e($key); ?>" value="<?php e($key); ?>" <?php if (!empty($value['for_page_type']) && $value['for_page_type'] & $key) echo 'checked="checked"'; ?> /><?php e($translation->get($page_type)); ?></label>
             <?php endforeach; ?>
         </div>
 
@@ -86,9 +86,9 @@ $page->start(safeToHtml($translation->get('edit template')));
         <input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
         <input type="submit" name="close" value="<?php e($translation->get('save and close', 'common')); ?>" />
         <?php if (!empty($value['id'])): ?>
-            <a href="template.php?id=<?php echo intval($value['id']); ?>"><?php e($translation->get('regret')); ?></a>
+            <a href="template.php?id=<?php e($value['id']); ?>"><?php e($translation->get('Cancel')); ?></a>
         <?php else: ?>
-            <a href="templates.php?site_id=<?php echo intval($value['site_id']); ?>"><?php e($translation->get('regret', 'common')); ?></a>
+            <a href="templates.php?site_id=<?php e($value['site_id']); ?>"><?php e($translation->get('Cancel', 'common')); ?></a>
         <?php endif; ?>
     </div>
 </form>

@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module('modulepackage');
 $module->includeFile('Manager.php');
@@ -9,13 +9,12 @@ $module->includeFile('Manager.php');
 // $access_update = new Intraface_modules_modulepackage_AccessUpdate();
 // $access_update->run($kernel->intranet->get('id'));
 
-if(isset($_GET['unsubscribe_id']) && intval($_GET['unsubscribe_id']) != 0) {
+if (isset($_GET['unsubscribe_id']) && intval($_GET['unsubscribe_id']) != 0) {
     $modulepackagemanager = new Intraface_modules_modulepackage_Manager($kernel->intranet, (int)$_GET['unsubscribe_id']);
-    if($modulepackagemanager->get('id') != 0) {
-        if($modulepackagemanager->get('status') == 'created') {
+    if ($modulepackagemanager->get('id') != 0) {
+        if ($modulepackagemanager->get('status') == 'created') {
             $modulepackagemanager->delete();
-        }
-        elseif($modulepackagemanager->get('status') == 'active') {
+        } elseif ($modulepackagemanager->get('status') == 'active') {
             $modulepackagemanager->terminate();
 
             $module->includeFile('AccessUpdate.php');
@@ -23,8 +22,7 @@ if(isset($_GET['unsubscribe_id']) && intval($_GET['unsubscribe_id']) != 0) {
             $access_update->run($kernel->intranet->get('id'));
             $kernel->user->clearCachedPermission();
 
-        }
-        else {
+        } else {
             $modulepackagemanager->error->set('it is not possible to unsubscribe module packages which is not either created or active');
         }
     }
@@ -33,14 +31,14 @@ if(isset($_GET['unsubscribe_id']) && intval($_GET['unsubscribe_id']) != 0) {
 $translation = $kernel->getTranslation('modulepackage');
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('your account')));
+$page->start($translation->get('your account'));
 ?>
 <h1><?php e($translation->get('your account')); ?></h1>
 
-<?php if(isset($modulepackagemanager)) echo $modulepackagemanager->error->view(); ?>
+<?php if (isset($modulepackagemanager)) echo $modulepackagemanager->error->view(); ?>
 
 <div class="message">
-    <?php if(isset($_GET['status']) && $_GET['status'] == 'success'): ?>
+    <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
         <?php
         // TODO: This is not really a good text
         ?>
@@ -56,7 +54,7 @@ $modulepackagemanager = new Intraface_modules_modulepackage_Manager($kernel->int
 $modulepackagemanager->getDBQuery($kernel)->setFilter('status', 'created_and_active');
 $packages = $modulepackagemanager->getList();
 
-if(count($packages) > 0) {
+if (count($packages) > 0) {
     ?>
     <h2><?php e($translation->get('your subscription')); ?></h2>
     <table class="stribe">
@@ -71,13 +69,13 @@ if(count($packages) > 0) {
             </tr>
         </thead>
         <tbody>
-        <?php foreach($packages AS $package): ?>
+        <?php foreach ($packages AS $package): ?>
             <tr>
                 <td><?php e($translation->get($package['plan']).' '.$translation->get($package['group'])); ?></td>
                 <td><?php e($package['dk_start_date']); ?></td>
                 <td><?php e($package['dk_end_date']); ?></td>
                 <td><?php e($translation->get($package['status'])); ?></td>
-                <td><a href="index.php?unsubscribe_id=<?php echo intval($package['id']); ?>" class="delete"><?php e($translation->get('unsubscribe')); ?></a></td>
+                <td><a href="index.php?unsubscribe_id=<?php e($package['id']); ?>" class="delete"><?php e($translation->get('unsubscribe')); ?></a></td>
             </tr>
         <?php endforeach; ?>
     </table>
@@ -99,7 +97,7 @@ $packages = $modulepackage->getList('matrix');
     <thead>
         <tr>
             <th><?php e($translation->get('select your package')); ?></th>
-            <?php foreach($plans AS $plan): ?>
+            <?php foreach ($plans AS $plan): ?>
                 <th style="width: <?php echo floor(100/(2 + count($plans))); ?>%;"><?php e($translation->get($plan['plan'])); ?></th>
             <?php endforeach; ?>
         </tr>
@@ -110,77 +108,82 @@ $packages = $modulepackage->getList('matrix');
         settype($groups, 'array');
         settype($plans, 'array');
 
-        foreach($groups AS $group) {
+        foreach ($groups AS $group) { ?>
 
-            echo '<tr>';
-            echo '<th style="vertical-align: top;">';
-            echo '<strong>'.safeToHtml($translation->get($group['group'])).'</strong>';
-            if(isset($plans[0]['id']) && isset($packages[$group['id']][$plans[0]['id']]) && is_array($packages[$group['id']][$plans[0]['id']])) {
+
+            <tr>
+            <th style="vertical-align: top;">
+            <strong><?php e($translation->get($group['group'])); ?></strong>
+            <?php
+            if (isset($plans[0]['id']) && isset($packages[$group['id']][$plans[0]['id']]) && is_array($packages[$group['id']][$plans[0]['id']])) {
                 $modules = $packages[$group['id']][$plans[0]['id']]['modules'];
-            }
-            else {
+            } else {
                 $modules = array();
             }
             $row_modules = array();
-            if(is_array($modules) && count($modules) > 0) {
-                echo '<div>';
+            if (is_array($modules) && count($modules) > 0) { ?>
+                <div>
+                <?php
                 echo $translation->get('gives you access to: <br /> - ');
-                for($j = 0, $max = count($modules); $j < $max; $j++) {
-                    if($j != 0) {
+                for ($j = 0, $max = count($modules); $j < $max; $j++) {
+                    if ($j != 0) {
                         echo ', ';
                     }
-                    echo $translation->get($modules[$j]['module']);
+                    e($translation->get($modules[$j]['module']));
                     $row_modules[] = $modules[$j]['module'];
-                }
-                echo '</div>';
+                } ?>
+                </div>
+                <?php
             }
-            echo '</th>';
-
-            foreach($plans AS $plan) {
-                echo '<td style="vertical-align: bottom;">';
-                if(isset($packages[$group['id']][$plan['id']]) && is_array($packages[$group['id']][$plan['id']])) {
+            ?>
+            </th>
+            <?php
+            foreach ($plans AS $plan) { ?>
+                <td style="vertical-align: bottom;">
+                <?php if (isset($packages[$group['id']][$plan['id']]) && is_array($packages[$group['id']][$plan['id']])) {
 
                     $modules = array();
                     $limiters = array();
-                    if(isset($packages[$group['id']][$plan['id']]['modules']) && is_array($packages[$group['id']][$plan['id']]['modules'])) {
-                        foreach($packages[$group['id']][$plan['id']]['modules'] AS $module) {
+                    if (isset($packages[$group['id']][$plan['id']]['modules']) && is_array($packages[$group['id']][$plan['id']]['modules'])) {
+                        foreach ($packages[$group['id']][$plan['id']]['modules'] AS $module) {
                             $modules[] = $module['module'];
-                            if(is_array($module['limiters']) && count($module['limiters']) > 0) {
+                            if (is_array($module['limiters']) && count($module['limiters']) > 0) {
                                 $limiters = array_merge($limiters, $module['limiters']);
                             }
                         }
                     }
 
                     $display_modules = array_diff($modules, $row_modules);
-                    if(is_array($display_modules) && count($display_modules) > 0) {
-                        echo '<p>'.safeToHtml($translation->get('plus the modules')).': <br /> ';
-                        echo implode(', ', $display_modules);
-                        echo '</p>';
+                    if (is_array($display_modules) && count($display_modules) > 0) { ?>
+                        <p><?php e($translation->get('plus the modules')); ?>: <br />
+                        <?php echo implode(', ', $display_modules); ?>
+                        </p>
+                    <?php
                     }
 
-                    if(is_array($limiters) && count($limiters) > 0) {
-                        echo '<p>'.safeToHtml($translation->get('gives you')).': ';
+                    if (is_array($limiters) && count($limiters) > 0) { ?>
+                        <p><?php e($translation->get('gives you')); ?>:
 
-                        foreach($limiters AS $limiter) {
-                            echo '<br />'.safeToHtml($translation->get($limiter['description']).' ');
-                            if(isset($limiter['limit_readable'])) {
+                        <?php foreach ($limiters AS $limiter) { ?>
+                            <br /><?php e($translation->get($limiter['description']).' ');
+                            if (isset($limiter['limit_readable'])) {
                                 e($limiter['limit_readable']);
-                            }
-                            else {
+                            } else {
                                 e($limiter['limit']);
                             }
-                        }
-                        echo '</p>';
-                    }
+                        } ?>
+                        </p>
+                    <?php }
 
-                    if(is_array($packages[$group['id']][$plan['id']]['product']) && count($packages[$group['id']][$plan['id']]['product']) > 0) {
-                        echo '<p> DKK '.safeToHtml($packages[$group['id']][$plan['id']]['product']['price_incl_vat']).' '.$translation->get('per').' '.$translation->get($packages[$group['id']][$plan['id']]['product']['unit']['singular']).'</p>';
-                    }
+                    if (is_array($packages[$group['id']][$plan['id']]['product']) && count($packages[$group['id']][$plan['id']]['product']) > 0) { ?>
+                        <p> DKK <?php e($packages[$group['id']][$plan['id']]['product']['price_incl_vat'].' '.$translation->get('per').' '.$translation->get($packages[$group['id']][$plan['id']]['product']['unit']['singular'])); ?></p>
+                    <?php } ?>
 
-                    echo '<a href="add_package.php?id='.$packages[$group['id']][$plan['id']]['id'].'">'.$translation->get('choose', 'common').'</a>';
+                    <a href="add_package.php?id=<?php e($packages[$group['id']][$plan['id']]['id']); ?>"><?php e($translation->get('choose', 'common')); ?></a>
 
-                }
-                echo '</td>';
+                <?php } ?>
+                </td>
+                <?php
             }
         }
         ?>

@@ -69,13 +69,13 @@ if (!empty($_POST)) {
 
     // listen med keywords
     if (!empty($_POST['keyword']) AND is_array($_POST['keyword']) AND count($_POST['keyword']) > 0) {
-        for($i=0, $max = count($_POST['keyword']); $i < $max; $i++) {
+        for ($i=0, $max = count($_POST['keyword']); $i < $max; $i++) {
             $keyword->addKeyword(new Keyword($object, $_POST['keyword'][$i]));
         }
     }
 
     if (!empty($_POST['close'])) {
-        header('Location: '.PATH_WWW.'/modules/'.$redirect.'.php?id='.$id.'&from=keywords#keywords');
+        header('Location: '.url('/modules/'.$redirect.'.php', array('id' => $id, 'from' => 'keywords#keywords')));
         exit;
     }
       if (!$keyword->error->isError()) {
@@ -86,7 +86,7 @@ if (!empty($_POST)) {
 
 $options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
 $redirect = Ilib_Redirect::receive($kernel->getSessionId(), MDB2::singleton(DB_DSN), $options);
-$redirect->setDestination(PATH_WWW . 'shared/keyword/edit.php', PATH_WWW . 'shared/keyword/connect.php?'.$id_name.'='.$object->get('id'));
+$redirect->setDestination(url('/shared/keyword/edit.php'), url('/shared/keyword/connect.php', array($id_name => $object->get('id'))));
 
 if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
     $keyword = new Keyword($object, $_GET['delete']);
@@ -99,7 +99,7 @@ $keyword_string = $keyword->getConnectedKeywordsAsString();
 
 // finder dem der er valgt
 $checked = array();
-foreach($keyword->getConnectedKeywords() AS $key) {
+foreach ($keyword->getConnectedKeywords() AS $key) {
     $checked[] = $key['id'];
 }
 
@@ -111,25 +111,26 @@ $page->start($translation->get('add keywords to') . ' ' . $object->get('name'));
 
 <?php echo $keyword->error->view(); ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
     <?php if (is_array($keywords) AND count($keywords) > 0): ?>
     <fieldset>
         <legend><?php e($translation->get('choose keywords')); ?></legend>
-        <input type="hidden" name="<?php echo $id_name; ?>" value="<?php echo $object->get('id'); ?>" />
+        <input type="hidden" name="<?php e($id_name); ?>" value="<?php e($object->get('id')); ?>" />
         <?php
             $i = 0;
-            foreach ($keywords AS $k) {
-                print '<input type="checkbox" name="keyword[]" id="k'.$k['id'].'" value="'.$k['id'].'"';
+            foreach ($keywords AS $k) { ?>
+                <input type="checkbox" name="keyword[]" id="k<?php e($k['id']); ?>" value="<?php e($k['id']); ?>"
+                <?php
                 if (in_array($k['id'], $checked)) {
                     print ' checked="checked" ';
-                }
-                print ' />';
-                print ' <label for="k'.$k["id"].'"><a href="edit.php?'. $id_name.'='.$object->get('id').'&amp;id='.$k['id'].'">' . safeToHtmL($k['keyword']) . ' (#'.$k["id"].')</a></label> - <a href="'.basename($_SERVER['PHP_SELF']).'?'. $id_name.'='.$object->get('id').'&amp;delete='.$k["id"].'" class="confirm">' .safeToHtml($translation->get('delete', 'common')). '</a><br />'. "\n";
-        }
+                } ?>
+                />
+                <label for="k<?php e($k["id"]); ?>"><a href="edit.php?<?php e($id_name); ?>=<?php e($object->get('id')); ?>&amp;id=<?php e($k['id']); ?>"><?php e($k['keyword']); ?> (#<?php e($k["id"]); ?>)</a></label> - <a href="<?php e($_SERVER['PHP_SELF']); ?>?<?php e($id_name); ?>=<?php e($object->get('id')); ?>&amp;delete=<?php e($k["id"]); ?>" class="confirm"><?php e($translation->get('delete', 'common')); ?></a><br />
+        <?php }
         ?>
     </fieldset>
         <div style="clear: both; margin-top: 1em; width:100%;">
-            <input type="submit" value="<?php e(t('choose')); ?>" name="submit" class="save" id="submit-save" /> 
+            <input type="submit" value="<?php e(t('choose')); ?>" name="submit" class="save" id="submit-save" />
             <input type="submit" value="<?php e(t('choose and close')); ?>" name="close" class="save" id="submit-close" />
         </div>
 

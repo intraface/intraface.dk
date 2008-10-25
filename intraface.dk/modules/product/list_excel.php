@@ -40,7 +40,7 @@ foreach ($products AS $p) {
     $worksheet->write($i, 1, $p['name'], $style);
     $worksheet->write($i, 2, $translation->get($p['unit']['combined']), $style);
     $worksheet->write($i, 3, $p['price'], $style);
-    if($p['stock'] != 0) {
+    if ($p['stock'] != 0) {
         $worksheet->write($i, 3, $p['stock_status']['for_sale'], $style);
     }
     $i++;

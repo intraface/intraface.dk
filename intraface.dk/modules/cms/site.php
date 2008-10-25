@@ -12,27 +12,27 @@ $page->start(t('site').' '.$cmssite->get('name'));
 
 ?>
 
-<h1><?php echo safeToHtml($translation->get('site')); ?> <?php echo $cmssite->get('name'); ?></h1>
+<h1><?php e($translation->get('site')); ?> <?php e($cmssite->get('name')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="site_edit.php?id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('edit site settings')); ?></a></li>
+    <li><a class="edit" href="site_edit.php?id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('edit site settings')); ?></a></li>
 
     <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-    <li><a class="template" href="templates.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('templates')); ?></a></li>
+    <li><a class="template" href="templates.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('templates')); ?></a></li>
     <?php endif; ?>
     <?php if ($kernel->user->hasSubAccess('cms', 'edit_stylesheet')): ?>
-    <li><a class="stylesheet" href="stylesheet_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('stylesheet')); ?></a></li>
+    <li><a class="stylesheet" href="stylesheet_edit.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('stylesheet')); ?></a></li>
     <?php endif; ?>
 </ul>
 
 <?php if (count($cmspage->getTemplate()->getList()) == 0): ?>
 
     <p class="message-dependent">
-        <?php echo safeToHtml($translation->get('you have to create a template')); ?>
+        <?php e($translation->get('you have to create a template')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="template_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('create template')); ?></a>.
+            <a href="template_edit.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('create template')); ?></a>.
         <?php else: ?>
-            <strong><?php echo safeToHtml($translation->get('please ask your administrator to do that')); ?></strong>
+            <strong><?php e($translation->get('please ask your administrator to do that')); ?></strong>
         <?php endif; ?>
     </p>
 
@@ -51,22 +51,22 @@ $page->start(t('site').' '.$cmssite->get('name'));
 
 
 <ul class="options">
-    <li><a href="pages.php?type=page&amp;id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('go to pages'));  ?></a></li>
-    <li><a href="page_edit.php?type=page&amp;site_id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('create a new page'));  ?></a></li>
+    <li><a href="pages.php?type=page&amp;id=<?php e($cmssite->get('id')); ?>"><?php e(t('go to pages'));  ?></a></li>
+    <li><a href="page_edit.php?type=page&amp;site_id=<?php e($cmssite->get('id')); ?>"><?php e(t('create a new page'));  ?></a></li>
 </ul>
 
 <h2><?php e(t('articles')); ?></h2>
 
 <ul class="options">
-    <li><a href="pages.php?type=article&amp;id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('go to articles'));  ?></a></li>
-    <li><a href="page_edit.php?type=article&amp;site_id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('create a new article'));  ?></a></li>
+    <li><a href="pages.php?type=article&amp;id=<?php e($cmssite->get('id')); ?>"><?php e(t('go to articles'));  ?></a></li>
+    <li><a href="page_edit.php?type=article&amp;site_id=<?php e($cmssite->get('id')); ?>"><?php e(t('create a new article'));  ?></a></li>
 </ul>
 
 <h2><?php e(t('news')); ?></h2>
 
 <ul class="options">
-    <li><a href="pages.php?type=news&amp;id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('go to news'));  ?></a></li>
-    <li><a href="page_edit.php?type=news&amp;site_id=<?php echo intval($cmssite->get('id')); ?>"><?php e(t('create a news'));  ?></a></li>
+    <li><a href="pages.php?type=news&amp;id=<?php e($cmssite->get('id')); ?>"><?php e(t('go to news'));  ?></a></li>
+    <li><a href="page_edit.php?type=news&amp;site_id=<?php e($cmssite->get('id')); ?>"><?php e(t('create a news'));  ?></a></li>
 </ul>
 
 <?php endif; ?>

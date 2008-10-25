@@ -59,8 +59,8 @@ $page->start('Backup');
     ?>
         <tr>
             <td><?php echo date('d-m-Y H:i:s', filemtime(BACKUP_PATH . '/' . $filename)); ?></td>
-            <td><?php echo $filename; ?></td>
-            <td><a href="file.php?file=<?php echo $filename; ?>">Download</a></td>
+            <td><?php e($filename); ?></td>
+            <td><a href="file.php?file=<?php e($filename); ?>">Download</a></td>
         </tr>
     <?php
             }

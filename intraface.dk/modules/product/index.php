@@ -37,12 +37,12 @@ $product = new Product($kernel);
 $keywords = $product->getKeywordAppender();
 
 // burde bruge query
-if(isset($_GET["search"]) || isset($_GET["keyword_id"])) {
-    if(isset($_GET["search"])) {
+if (isset($_GET["search"]) || isset($_GET["keyword_id"])) {
+    if (isset($_GET["search"])) {
         $product->getDBQuery()->setFilter("search", $_GET["search"]);
     }
 
-    if(isset($_GET["keyword_id"])) {
+    if (isset($_GET["keyword_id"])) {
         $product->getDBQuery()->setKeyword($_GET["keyword_id"]);
     }
 } else {
@@ -65,7 +65,7 @@ $page->start(t('products'));
     <?php if (count($products) > 0): ?>
     <li><a href="batch_edit.php?use_stored=true"><?php e(t('edit all products in search')); ?></a></li>
     <?php endif; ?>
-    <?php if($kernel->intranet->hasModuleAccess('shop')): ?>
+    <?php if ($kernel->intranet->hasModuleAccess('shop')): ?>
         <li><a href="attribute_groups.php"><?php e(t('Edit attributes')); ?></a></li>
     <?php endif; ?>
 </ul>
@@ -81,9 +81,9 @@ $page->start(t('products'));
         <label for="filter">Filter
             <select name="filter" id="filter">
                 <option>Ingen</option>
-                <option value="notpublished" <?php if(isset($_GET['filter']) && $_GET['filter'] == 'notpublished') echo ' selected="selected"'; ?>>Ikke udgivet</option>
-                <option value="webshop"<?php if(isset($_GET['filter']) && $_GET['filter'] == 'webshop') echo ' selected="selected"'; ?>>Webshop</option>
-                <option value="stock"<?php if(isset($_GET['filter']) && $_GET['filter'] == 'stock') echo ' selected="selected"'; ?>>Lager</option>
+                <option value="notpublished" <?php if (isset($_GET['filter']) && $_GET['filter'] == 'notpublished') echo ' selected="selected"'; ?>>Ikke udgivet</option>
+                <option value="webshop"<?php if (isset($_GET['filter']) && $_GET['filter'] == 'webshop') echo ' selected="selected"'; ?>>Webshop</option>
+                <option value="stock"<?php if (isset($_GET['filter']) && $_GET['filter'] == 'stock') echo ' selected="selected"'; ?>>Lager</option>
             </select>
         </label>
         -->
@@ -95,7 +95,7 @@ $page->start(t('products'));
             <select name="keyword_id" id="keyword_id">
                 <option value=""><?php e(t('none', 'common')); ?></option>
                 <?php foreach ($keywords->getUsedKeywords() AS $k) { ?>
-                <option value="<?php echo $k['id']; ?>" <?php if($k['id'] == $product->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo safeToForm($k['keyword']); ?></option>
+                <option value="<?php e($k['id']); ?>" <?php if ($k['id'] == $product->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php e($k['keyword']); ?></option>
                 <?php } ?>
             </select>
         </label>
@@ -106,9 +106,9 @@ $page->start(t('products'));
 </form>
 
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
-<?php if(!empty($deleted)): ?>
-        <p class="message"><?php e(t('products has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('regret', 'common')); ?>" /></p>
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+<?php if (!empty($deleted)): ?>
+        <p class="message"><?php e(t('products has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('Cancel', 'common')); ?>" /></p>
 <?php endif; ?>
 
 <?php echo $product->getDBQuery()->display('character'); ?>
@@ -151,7 +151,7 @@ $page->start(t('products'));
                 </td>
 
                 <td><?php e($p['number']); ?></td>
-                <td><?php if($p['has_variation']) echo '<img class="variation" src="/images/icons/silk/table_multiple.png" title="'.t('The product has variations').'"/> '; ?><a href="product.php?id=<?php echo $p['id']; ?>"><?php echo safeToHtml($p['name']); ?></a></td>
+                <td><?php if ($p['has_variation']) echo '<img class="variation" src="/images/icons/silk/table_multiple.png" title="'.t('The product has variations').'"/> '; ?><a href="product.php?id=<?php e($p['id']); ?>"><?php e($p['name']); ?></a></td>
                 <td><?php e(t($p['unit']['combined'])); ?></td>
                  <?php if ($kernel->user->hasModuleAccess("webshop")) { ?>
               <td><?php if ($p['do_show'] == 1) e(t('yes', 'common')); else e(t('no', 'common')); ?></td>
@@ -159,12 +159,12 @@ $page->start(t('products'));
                 <?php if ($kernel->user->hasModuleAccess("stock")) { ?>
                     <td>
                         <?php
-                        if($p['stock'] == 0) {
-                            print("-");
-                        } elseif($p['has_variation']) {
+                        if ($p['stock'] == 0) {
+                            e("-");
+                        } elseif ($p['has_variation']) {
                             e('...');
                         } else {
-                            if (!empty($p['stock_status']['for_sale'])) echo safeToHtml($p['stock_status']['for_sale']);
+                            if (!empty($p['stock_status']['for_sale'])) e($p['stock_status']['for_sale']);
                         }
                         ?>
                     </td>
@@ -175,10 +175,10 @@ $page->start(t('products'));
                 <td class="options">
           <?php if ($p['locked'] == 0) { ?>
                   <!-- nedenstående bør sættes på produktsiden - muligheden skal ikke findes her
-                    <a href="index.php?lock=<?php echo $p['id']; ?>&amp;use_stored=true"><?php e(t('lock', 'common')); ?></a>
+                    <a href="index.php?lock=<?php e($p['id']); ?>&amp;use_stored=true"><?php e(t('lock', 'common')); ?></a>
                     -->
-                    <a class="button edit" href="product_edit.php?id=<?php echo $p['id']; ?>"><?php e(t('edit', 'common')); ?></a>
-                    <!--<a class="button delete ajaxdelete" title="Dette sletter produktet" id="delete<?php echo intval($p['id']); ?>" href="index.php?use_stored=true&amp;delete=<?php echo intval($p['id']); ?>">Slet</a>--></td>
+                    <a class="button edit" href="product_edit.php?id=<?php e($p['id']); ?>"><?php e(t('edit', 'common')); ?></a>
+                    <!--<a class="button delete ajaxdelete" title="Dette sletter produktet" id="delete<?php e($p['id']); ?>" href="index.php?use_stored=true&amp;delete=<?php e($p['id']); ?>">Slet</a>--></td>
        <?php } else { ?>
           <a href="index.php?unlock=<?php e($p['id']); ?>&amp;use_stored=true"><?php e(t('unlock', 'common')); ?></a>
        <?php } ?>

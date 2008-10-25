@@ -25,12 +25,12 @@ class Intraface_Auth
 
     public function authenticate($adapter)
     {
-        if(is_callable(array($adapter, 'getIdentification'))) {
+        if (is_callable(array($adapter, 'getIdentification'))) {
             $identification = $adapter->getIdentification();
         } else {
             $identification = '[unidentifiable]';
         }
-        
+
         if ($object = $adapter->auth()) {
             $this->notifyObservers('login', $identification.' logged in');
         } else {
@@ -71,7 +71,7 @@ class Intraface_Auth
     {
         if ($this->hasIdentity()) {
             $adapter = new Intraface_Auth_User($db, $this->session_id);
-            if(!$user = $adapter->isLoggedIn()) {
+            if (!$user = $adapter->isLoggedIn()) {
                 throw new Exception('No valid user was found');
             }
             // $user->clearCachedPermission();
@@ -90,10 +90,10 @@ class Intraface_Auth
     static public function toLogin($msg = '')
     {
         if (empty($msg)) {
-            header('Location: '.PATH_WWW.'main/login.php');
+            header('Location: ' . url('/main/login.php'));
             exit;
         } else {
-            header('Location: '.PATH_WWW.'main/login.php?msg='.urlencode($msg));
+            header('Location: '.url('/main/login.php', array('msg' => $msg)));
             exit;
         }
     }

@@ -117,7 +117,7 @@ class Account extends Intraface_Standard
      */
     private function load()
     {
-        if($this->year->get('id') == 0 || $this->id == 0) {
+        if ($this->year->get('id') == 0 || $this->id == 0) {
             $this->value['id'] = 0;
             $this->id = 0;
             return 0;
@@ -553,8 +553,8 @@ class Account extends Intraface_Standard
         $type = safeToDb($type);
         $type_sql = '';
 
-        //if($this->year->get('id') == 0 || $this->id == 0) {
-        if($this->year->get('id') == 0) {
+        //if ($this->year->get('id') == 0 || $this->id == 0) {
+        if ($this->year->get('id') == 0) {
             //$this->value['id'] = 0;
             //$this->id = 0;
             return array();

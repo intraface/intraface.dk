@@ -5,7 +5,7 @@ class Intraface_modules_currency_Controller_Add extends k_Controller
     
     public function getError()
     {
-        if(!$this->error) {
+        if (!$this->error) {
             $this->error = new Intraface_Doctrine_ErrorRender($this->context->getTranslation());
         }
         

@@ -34,21 +34,21 @@ $filemanager->getDBQuery()->storeResult('use_stored', 'filemanager', 'toplevel')
 $files = $filemanager->getList();
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('files')));
+$page->start($translation->get('files'));
 ?>
 
-<h1><?php echo safeToHtml($translation->get('files')); ?></h1>
+<h1><?php e($translation->get('files')); ?></h1>
 
 <ul class="options">
-    <li><a href="index.php?use_stored=true"><?php echo safeToHtml($translation->get('regret', 'common')); ?></a></li>
+    <li><a href="index.php?use_stored=true"><?php e($translation->get('Cancel', 'common')); ?></a></li>
 </ul>
 
 
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 <?php
 
-for($i = 0, $max = count($files); $i < $max; $i++) {
+for ($i = 0, $max = count($files); $i < $max; $i++) {
     $this_filemanager = new FileManager($kernel, $files[$i]['id']);
     if ($this_filemanager->get('is_picture')) {
 
@@ -63,27 +63,27 @@ for($i = 0, $max = count($files); $i < $max; $i++) {
                 <td rowspan="5" style="width: 280px;">
                     <?php if ($this_filemanager->get('is_picture')): ?>
                         <?php $this_filemanager->createInstance('small');?>
-                        <img src="<?php echo $this_filemanager->instance->get('file_uri'); ?>" alt="" />
+                        <img src="<?php e($this_filemanager->instance->get('file_uri')); ?>" alt="" />
                     <?php else: ?>
-                        <img src="<?php echo $this_filemanager->get('icon_uri'); ?>" alt="" />
+                        <img src="<?php e($this_filemanager->get('icon_uri')); ?>" alt="" />
                     <?php endif; ?>
                 </td>
             </tr>
             <tr>
-                <th><?php echo safeToHtml($translation->get('file')); ?></th>
-                <td><?php echo $files[$i]['file_name']; ?></td>
+                <th><?php e($translation->get('file')); ?></th>
+                <td><?php e($files[$i]['file_name']); ?></td>
             </tr>
             <tr>
-                <th><?php echo safeToHtml($translation->get('file description')); ?></th>
-                <td><textarea style="width: 400px; height; 100px;" name="description[<?php echo $files[$i]['id']; ?>]"><?php echo safeToHtml($files[$i]['description']); ?></textarea></td>
+                <th><?php e($translation->get('file description')); ?></th>
+                <td><textarea style="width: 400px; height; 100px;" name="description[<?php e($files[$i]['id']); ?>]"><?php e($files[$i]['description']); ?></textarea></td>
             </tr>
             <tr>
-                <th><?php echo safeToHtml($translation->get('keywords', 'keyword')); ?></th>
-                <td><input type="text" name="keywords[<?php echo $files[$i]['id']; ?>]" value="<?php echo $files[$i]['keywords']; ?>" /></td>
+                <th><?php e($translation->get('keywords', 'keyword')); ?></th>
+                <td><input type="text" name="keywords[<?php e($files[$i]['id']); ?>]" value="<?php e($files[$i]['keywords']); ?>" /></td>
             </tr>
             <tr>
-                <th><?php echo safeToHtml($translation->get('file accessibility')); ?></th>
-                <td><input type="radio" id="accessibility[<?php echo $files[$i]['id']; ?>]_public" name="accessibility[<?php echo $files[$i]['id']; ?>]" value="public" <?php if(isset($files[$i]['accessibility']) && $files[$i]['accessibility'] == 'public') echo 'checked="checked"'; ?> /><label for="accessibility[<?php echo $files[$i]['id']; ?>]_public"><?php echo safetoHtml($translation->get('public')); ?></label> &nbsp; &nbsp; <input type="radio" id="accessibility[<?php echo $files[$i]['id']; ?>]_intranet" name="accessibility[<?php echo $files[$i]['id']; ?>]" value="intranet" <?php if(isset($files[$i]['accessibility']) && $files[$i]['accessibility'] == 'intranet') echo 'checked="checked"'; ?> /><label for="accessibility[<?php echo $files[$i]['id']; ?>]_intranet"><?php echo safetoHtml($translation->get('intranet')); ?></label></td>
+                <th><?php e($translation->get('file accessibility')); ?></th>
+                <td><input type="radio" id="accessibility[<?php e($files[$i]['id']); ?>]_public" name="accessibility[<?php e($files[$i]['id']); ?>]" value="public" <?php if (isset($files[$i]['accessibility']) && $files[$i]['accessibility'] == 'public') echo 'checked="checked"'; ?> /><label for="accessibility[<?php e($files[$i]['id']); ?>]_public"><?php e($translation->get('public')); ?></label> &nbsp; &nbsp; <input type="radio" id="accessibility[<?php e($files[$i]['id']); ?>]_intranet" name="accessibility[<?php e($files[$i]['id']); ?>]" value="intranet" <?php if (isset($files[$i]['accessibility']) && $files[$i]['accessibility'] == 'intranet') echo 'checked="checked"'; ?> /><label for="accessibility[<?php e($files[$i]['id']); ?>]_intranet"><?php e($translation->get('intranet')); ?></label></td>
             </tr>
         </tbody>
     </table>
@@ -91,8 +91,8 @@ for($i = 0, $max = count($files); $i < $max; $i++) {
 }
 ?>
 <p>
-<input type="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" />
-<a href="index.php?use_stored=true"><?php echo safeToHtml($translation->get('regret', 'common')); ?></a>
+<input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
+<a href="index.php?use_stored=true"><?php e($translation->get('Cancel', 'common')); ?></a>
 </p>
 </form>
 

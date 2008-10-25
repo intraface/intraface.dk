@@ -129,7 +129,7 @@ $page->start('Slet intranet');
 
 <h1>Slet intranet</h1>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 	<fieldset>
 		<legend>Vælg intranet</legend>
@@ -148,5 +148,5 @@ $page->start('Slet intranet');
 </form>
 
 <?php
-echo $page->end();
+$page->end();
 ?>

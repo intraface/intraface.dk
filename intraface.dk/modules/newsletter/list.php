@@ -24,7 +24,7 @@ $page->start('Rediger liste');
 <ul class="options">
     <li><a class="edit" href="list_edit.php?id=<?php e($list->get('id')); ?>">Ret</a></li>
     <li><a href="letters.php?list_id=<?php e($list->get('id')); ?>">Breve</a></li>
-    <?php if($kernel->user->hasModuleAccess('contact')): ?>
+    <?php if ($kernel->user->hasModuleAccess('contact')): ?>
         <li><a href="subscribers.php?list_id=<?php e($list->get('id')); ?>">Modtagere</a></li>
     <?php endif; ?>
     <li><a href="index.php">Luk</a></li>
@@ -51,7 +51,7 @@ $page->start('Rediger liste');
     </tr>
     <tr>
         <th>Frameldingsbesked</th>
-        <td><?php echo nl2br(htmlentities($value['unsubscribe_message'])); ?></td>
+        <td><?php autohtml($value['unsubscribe_message']); ?></td>
     </tr>
 -->
     <tr>

@@ -16,7 +16,7 @@ if (!empty($_POST)) {
      * Seems to not be used anymore
     $kernel->setting->set('intranet', 'accounting.vat_period', $_POST['vat_period']);
      */
-    
+
     header('Location: setting.php');
     exit;
 
@@ -38,13 +38,13 @@ $page = new Intraface_Page($kernel);
 $page->start('Indstillinger');
 ?>
 
-<h1>Indstillinger for <?php echo $year->get('label'); ?></h1>
+<h1>Indstillinger for <?php e($year->get('label')); ?></h1>
 
 <div class="message">
     <p><strong>Indstillinger</strong>. På denne side kan du sætte særlige egenskaber for de enkelte konti.</p>
 </div>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
     <fieldset>
     <legend>Resultatopgørelseskonto</legend>
         <div class="formrow">
@@ -52,7 +52,7 @@ $page->start('Indstillinger');
             <select id="result_account" name="result_account_id">
                 <option value="">Vælg</option>
                 <?php foreach ($status_accounts AS $account) { ?>
-                    <option value="<?php echo $account['id']; ?>"<?php if($setting['result_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                    <option value="<?php e($account['id']); ?>"<?php if ($setting['result_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -65,7 +65,7 @@ $page->start('Indstillinger');
             <select id="capital_account" name="capital_account_id">
                 <option value="">Vælg</option>
                 <?php foreach ($status_accounts AS $account) { ?>
-                    <option value="<?php echo $account['id']; ?>"<?php if($setting['capital_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                    <option value="<?php e($account['id']); ?>"<?php if ($setting['capital_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -79,7 +79,7 @@ $page->start('Indstillinger');
             <select id="result_account_id_start" name="result_account_id_start">
                 <option value="">Vælg</option>
                 <?php foreach ($accounts AS $account) { ?>
-                    <option value="<?php echo $account['id']; ?>"<?php if($setting['result_account_id_start']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                    <option value="<?php e($account['id']); ?>"<?php if ($setting['result_account_id_start']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -88,7 +88,7 @@ $page->start('Indstillinger');
             <select id="result_account_id_end" name="result_account_id_end">
                 <option value="">Vælg</option>
                 <?php foreach ($accounts AS $account) { ?>
-                    <option value="<?php echo $account['id']; ?>"<?php if($setting['result_account_id_end']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                    <option value="<?php e($account['id']); ?>"<?php if ($setting['result_account_id_end']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -97,7 +97,7 @@ $page->start('Indstillinger');
             <select id="balance_account_id_start" name="balance_account_id_start">
                 <option value="">Vælg</option>
                 <?php foreach ($accounts AS $account) { ?>
-                    <option value="<?php echo $account['id']; ?>"<?php if($setting['balance_account_id_start']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                    <option value="<?php e($account['id']); ?>"<?php if ($setting['balance_account_id_start']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -106,7 +106,7 @@ $page->start('Indstillinger');
             <select id="balance_account_id_end" name="balance_account_id_end">
                 <option value="">Vælg</option>
                 <?php foreach ($accounts AS $account) { ?>
-                    <option value="<?php echo $account['id']; ?>"<?php if($setting['balance_account_id_end']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                    <option value="<?php e($account['id']); ?>"<?php if ($setting['balance_account_id_end']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -120,7 +120,7 @@ $page->start('Indstillinger');
             <select id="debtor_account" name="debtor_account_id">
                 <option value="">Vælg</option>
                 <?php foreach ($status_accounts AS $account) { ?>
-                    <option value="<?php echo $account['id']; ?>"<?php if($setting['debtor_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                    <option value="<?php e($account['id']); ?>"<?php if ($setting['debtor_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -133,7 +133,7 @@ $page->start('Indstillinger');
             <select id="credit_account" name="credit_account_id">
                 <option value="">Vælg</option>
                 <?php foreach ($status_accounts AS $account) { ?>
-                    <option value="<?php echo $account['id']; ?>"<?php if($setting['credit_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                    <option value="<?php e($account['id']); ?>"<?php if ($setting['credit_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -149,7 +149,7 @@ $page->start('Indstillinger');
             <select id="vat_in" name="vat_in_account_id">
                 <option value="">Vælg</option>
                 <?php foreach ($status_accounts AS $account) { ?>
-                <option value="<?php echo $account['id']; ?>"<?php if($setting['vat_in_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                <option value="<?php e($account['id']); ?>"<?php if ($setting['vat_in_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select> Købsmoms
         </div>
@@ -158,7 +158,7 @@ $page->start('Indstillinger');
             <select id="vat_out" name="vat_out_account_id">
                 <option value="">Vælg</option>
                 <?php foreach ($status_accounts AS $account) { ?>
-                <option value="<?php echo $account['id']; ?>"<?php if($setting['vat_out_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                <option value="<?php e($account['id']); ?>"<?php if ($setting['vat_out_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select> Salgsmoms
         </div>
@@ -167,7 +167,7 @@ $page->start('Indstillinger');
             <select id="vat_abroad" name="vat_abroad_account_id">
                 <option value="">Vælg</option>
                 <?php foreach ($status_accounts AS $account) { ?>
-                <option value="<?php echo $account['id']; ?>"<?php if($setting['vat_abroad_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                <option value="<?php e($account['id']); ?>"<?php if ($setting['vat_abroad_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -176,7 +176,7 @@ $page->start('Indstillinger');
             <select id="vat_balance" name="vat_balance_account_id">
                 <option value="">Vælg</option>
                 <?php foreach ($status_accounts AS $account) { ?>
-                <option value="<?php echo $account['id']; ?>"<?php if($setting['vat_balance_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                <option value="<?php e($account['id']); ?>"<?php if ($setting['vat_balance_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -186,7 +186,7 @@ $page->start('Indstillinger');
             <select id="vat_free" name="vat_free_account_id">
                 <option value="">Vælg</option>
                 <?php foreach ($drift_accounts AS $account) { ?>
-                <option value="<?php echo $account['id']; ?>"<?php if($setting['vat_free_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                <option value="<?php e($account['id']); ?>"<?php if ($setting['vat_free_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -204,7 +204,7 @@ $page->start('Indstillinger');
             <select id="eu_buy" name="eu_buy_account_id">
                 <option value="">Vælg</option>
                 <?php foreach ($drift_accounts AS $account) { ?>
-                <option value="<?php echo $account['id']; ?>"<?php if(!empty($setting['eu_buy_account_id']) AND $setting['eu_buy_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                <option value="<?php e($account['id']); ?>"<?php if (!empty($setting['eu_buy_account_id']) AND $setting['eu_buy_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -215,7 +215,7 @@ $page->start('Indstillinger');
             <select id="eu_sale" name="eu_sale_account_id">
                 <option value="">Vælg</option>
                 <?php foreach ($drift_accounts AS $account) { ?>
-                <option value="<?php echo $account['id']; ?>"<?php if($setting['eu_sale_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                <option value="<?php e($account['id']); ?>"<?php if ($setting['eu_sale_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -226,7 +226,7 @@ $page->start('Indstillinger');
             <select id="abroad_buy" name="abroad_buy_account_id">
                 <option value="">Vælg</option>
                 <?php foreach ($drift_accounts AS $account) { ?>
-                <option value="<?php echo $account['id']; ?>"<?php if(!empty($setting['abroad_buy_account_id']) AND $setting['abroad_buy_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php echo $account['number']; ?> <?php echo $account['name']; ?></option>
+                <option value="<?php e($account['id']); ?>"<?php if (!empty($setting['abroad_buy_account_id']) AND $setting['abroad_buy_account_id']==$account['id']) { echo ' selected="selected"'; } ?>><?php e($account['number']); ?> <?php e($account['name']); ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -240,7 +240,7 @@ $page->start('Indstillinger');
         <p>Du kan vælge mellem alle driftskonti.</p>
         <?php foreach ($buy_accounts AS $account) { ?>
         <div>
-            <input type="checkbox" name="buy_eu_accounts[]" id="buy_eu_account_<?php echo $account['id']; ?>" value="<?php echo $account['id']; ?>" <?php if(is_array($setting['buy_eu_accounts']) AND in_array($account['id'], $setting['buy_eu_accounts'])) { echo ' checked="checked"'; } ?>/> <label for="buy_eu_account_<?php echo $account['id']; ?>"><?php echo $account['number']; ?>  <?php echo $account['name']; ?></label>
+            <input type="checkbox" name="buy_eu_accounts[]" id="buy_eu_account_<?php e($account['id']); ?>" value="<?php e($account['id']); ?>" <?php if (is_array($setting['buy_eu_accounts']) AND in_array($account['id'], $setting['buy_eu_accounts'])) { echo ' checked="checked"'; } ?>/> <label for="buy_eu_account_<?php e($account['id']); ?>"><?php e($account['number']); ?>  <?php e($account['name']); ?></label>
         </div>
         <?php } ?>
     </fieldset>
@@ -250,7 +250,7 @@ $page->start('Indstillinger');
         <p>Du kan vælge mellem alle driftskonti.</p>
         <?php foreach ($buy_accounts AS $account) { ?>
         <div>
-            <input type="checkbox" name="buy_abroad_accounts[]" id="buy_abroad_account_<?php echo $account['id']; ?>" value="<?php echo $account['id']; ?>" <?php if(is_array($setting['buy_abroad_accounts']) AND in_array($account['id'], $setting['buy_abroad_accounts'])) { echo ' checked="checked"'; } ?>/> <label for="buy_abroad_account_<?php echo $account['id']; ?>"><?php echo $account['number']; ?>  <?php echo $account['name']; ?></label>
+            <input type="checkbox" name="buy_abroad_accounts[]" id="buy_abroad_account_<?php e($account['id']); ?>" value="<?php e($account['id']); ?>" <?php if (is_array($setting['buy_abroad_accounts']) AND in_array($account['id'], $setting['buy_abroad_accounts'])) { echo ' checked="checked"'; } ?>/> <label for="buy_abroad_account_<?php e($account['id']); ?>"><?php e($account['number']); ?>  <?php e($account['name']); ?></label>
         </div>
         <?php } ?>
     </fieldset>
@@ -263,7 +263,7 @@ $page->start('Indstillinger');
         <!--<p class="message"><strong>Bemærk:</strong> Udregningerne tager foreløbig ikke højde for moms på momskonti, hvis du laver om på standardinstillingerne.</p>-->
         <?php foreach ($finance_accounts AS $account) { ?>
         <div>
-            <input type="checkbox" name="balance_accounts[]" id="balance_account_<?php echo $account['id']; ?>" value="<?php echo $account['id']; ?>" <?php if(is_array($setting['balance_accounts']) AND in_array($account['id'], $setting['balance_accounts'])) { echo ' checked="checked"'; } ?>/> <label for="balance_account_<?php echo $account['id']; ?>"><?php echo $account['number']; ?>  <?php echo $account['name']; ?></label>
+            <input type="checkbox" name="balance_accounts[]" id="balance_account_<?php e($account['id']); ?>" value="<?php e($account['id']); ?>" <?php if (is_array($setting['balance_accounts']) AND in_array($account['id'], $setting['balance_accounts'])) { echo ' checked="checked"'; } ?>/> <label for="balance_account_<?php e($account['id']); ?>"><?php e($account['number']); ?>  <?php e($account['name']); ?></label>
         </div>
         <?php } ?>
     </fieldset>

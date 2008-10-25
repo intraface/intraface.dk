@@ -8,7 +8,7 @@ $translation = $kernel->getTranslation('debtor');
 
 $debtor = Debtor::factory($kernel, intval($_GET["id"]));
 
-if($debtor->get('id') == 0) {
+if ($debtor->get('id') == 0) {
     trigger_error('Cannot create pdf from debtor without valid id', E_USER_ERROR);
 }
 
@@ -18,7 +18,7 @@ if (!empty($_GET['format'])) {
 	$format = 'pdf';
 }
 
-if(($debtor->get("type") == "order" || $debtor->get("type") == "invoice") && $kernel->intranet->hasModuleAccess('onlinepayment')) {
+if (($debtor->get("type") == "order" || $debtor->get("type") == "invoice") && $kernel->intranet->hasModuleAccess('onlinepayment')) {
     $kernel->useModule('onlinepayment', true); // true: ignore_user_access
     $onlinepayment = OnlinePayment::factory($kernel);
 } else {
@@ -38,7 +38,7 @@ switch ($format) {
 	break;
 	case 'pdf':
     default:
-        if($kernel->intranet->get("pdf_header_file_id") != 0) {
+        if ($kernel->intranet->get("pdf_header_file_id") != 0) {
             $kernel->useShared('filehandler');
             $filehandler = new FileHandler($kernel, $kernel->intranet->get("pdf_header_file_id"));
         } else {

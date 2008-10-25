@@ -30,7 +30,7 @@ class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observ
     public function __construct($list, $mailer)
     {
         $this->list = $list;
-        if(!is_object($mailer)) {
+        if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
         $this->mailer = $mailer;
@@ -70,7 +70,7 @@ class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observ
      */
     private function sendOptInEmail($subscriber)
     {
-        if(!is_object($mailer)) {
+        if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
         

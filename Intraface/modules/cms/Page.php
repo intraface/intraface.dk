@@ -176,10 +176,10 @@ class CMS_Page extends Intraface_Standard
         if (!empty($var['navigation_name'])) {
             $validator->isString($var['navigation_name'], 'error in navigation_name - has to be a string', '', 'allow_empty');
         }
-        
+
         $validator->isString($var['keywords'], 'error in keywords', '', 'allow_empty');
         $validator->isString($var['description'], 'error in description', '', 'allow_empty');
-        
+
         $validator->isNumeric($var['allow_comments'], 'error in comments - allowed values are 0 and 1');
         $validator->isNumeric($var['hidden'], 'error in hidden - allowed values are 0 and 1');
 
@@ -218,12 +218,12 @@ class CMS_Page extends Intraface_Standard
         if (empty($var['hidden'])) {
             $var['hidden'] = 0;
         }
-        
-        if(empty($var['keywords'])) {
-            $var['keywords'] = '';   
+
+        if (empty($var['keywords'])) {
+            $var['keywords'] = '';
         }
-        if(empty($var['description'])) {
-            $var['description'] = '';   
+        if (empty($var['description'])) {
+            $var['description'] = '';
         }
 
         if (!isset($var['pic_id'])) {
@@ -421,18 +421,6 @@ class CMS_Page extends Intraface_Standard
 
             // Vi vender arrayet rundt, s� key kommer til at passe til level.
             $this->value['page_tree'] = array_reverse($page_tree);
-
-            /*
-            $i = 0;
-
-            for($j = count($page_tree) - 1; $j >= 0; $j--) {
-
-                $this->value['page_tree'][$i] = $page_tree[$j];
-                $i++;
-                if ($i == 50) trigger_error("The for loop is runing loose in CMS_Page::load", E_USER_ERROR);
-            }
-            */
-
         }
 
         return true;
@@ -446,7 +434,7 @@ class CMS_Page extends Intraface_Standard
     {
         $template_sections = $this->template->getSections();
 
-        foreach ($template_sections AS $template_section) {
+        foreach ($template_sections as $template_section) {
             $db = new DB_Sql;
             $db->query("SELECT id FROM cms_section WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND page_id = ".$this->get('id')." AND site_id = ".$this->cmssite->get('id')." AND template_section_id = " . $template_section['id']);
 
@@ -610,7 +598,6 @@ class CMS_Page extends Intraface_Standard
             // $cmspage[0]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE ".$sql_type." site_id = " . $this->cmssite->get('id') . " AND child_of_id = 0 AND active = 1 " . $sql_expire . $sql_publish . $sql_order);
         }
 
-        // print($this->dbquery->getFilter('type'));
         $cmspage[0] = $this->getDBQuery()->getRecordset("cms_page.id, title, identifier, status_key, navigation_name, date_publish, child_of_id, pic_id, description, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk", '', false); //
 
         while(TRUE) {

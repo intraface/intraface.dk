@@ -132,7 +132,7 @@ if ($intranet_id != 0) {
             <input type="text" name="phone" id="phone" value="<?php if (isset($address_value["phone"])) e($address_value["phone"]); ?>" />
         </div>
     </fieldset>
-    <input type="submit" name="submit" value="<?php e(t('Save')); ?>" id="submit-save-address" /> or <a href="user.php?id=<?php print(intval($user->get('id'))); ?>">Cancel</a>
+    <input type="submit" name="submit" value="<?php e(t('Save')); ?>" id="submit-save-address" /> or <a href="user.php?id=<?php e($user->get('id')); ?>">Cancel</a>
     <?php
 }
 ?>

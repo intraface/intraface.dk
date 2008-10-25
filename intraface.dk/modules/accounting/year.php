@@ -70,18 +70,18 @@ $vat_period = new VatPeriod($year);
 $page = new Intraface_Page($kernel);
 $page->start('Regnskab');
 ?>
-<h1>Regnskab <?php echo $year->get('label'); ?></h1>
+<h1>Regnskab <?php e($year->get('label')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="year_edit.php?id=<?php echo $year->get('id'); ?>">Ret</a></li>
+    <li><a class="edit" href="year_edit.php?id=<?php e($year->get('id')); ?>">Ret</a></li>
     <li><a class="setting" href="setting.php">Indstillinger</a></li>
 </ul>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
     <?php echo $year->error->view(); ?>
 
-    <input type="hidden" name="id" value="<?php echo $values['id']; ?>" />
+    <input type="hidden" name="id" value="<?php e($values['id']); ?>" />
 <?php if ($account->anyAccounts()): ?>
     <fieldset>
         <legend>Vælg og gå til regnskabet</legend>
@@ -110,10 +110,9 @@ $page->start('Regnskab');
             <?php
                 if (!empty($values['last_year_id']) AND $values['last_year_id'] > 0) {
                     $last_year = new Year($kernel, $values['last_year_id']);
-                    echo $last_year->get('label');
-                }
-                else {
-                    echo 'Ingen';
+                    e($last_year->get('label'));
+                } else {
+                    e('Ingen');
                 }
             ?>
         </td>
@@ -123,10 +122,9 @@ $page->start('Regnskab');
         <td>
             <?php
                 if (!empty($values['locked']) AND $values['locked'] == 1) {
-                    echo 'Ja';
-                }
-                else {
-                    echo 'Nej';
+                    e('Ja');
+                } else {
+                    e('Nej');
                 }
             ?>
 

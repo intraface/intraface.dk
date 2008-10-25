@@ -241,7 +241,7 @@ class Webshop
      */
     public function placeOrder($input, $mailer)
     {
-        if(!is_object($mailer)) {
+        if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
         
@@ -296,7 +296,7 @@ class Webshop
      */
     private function sendEmail($order_id, $mailer)
     {
-        if(!is_object($mailer)) {
+        if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
         

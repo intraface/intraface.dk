@@ -18,7 +18,7 @@
         <div class="formrow">
             <label for="evaluate_target_key"><?php e(t('evaluation target')); ?></label>
             <select name="evaluate_target_key">
-                <?php foreach($settings['evaluate_target'] AS $key => $evaluate_target): ?>
+                <?php foreach ($settings['evaluate_target'] AS $key => $evaluate_target): ?>
                     <option value="<?php e(intval($key)); ?>" <?php if (isset($value['evaluate_target_key']) && $value['evaluate_target_key'] == $key) echo 'selected="selected"'; ?> ><?php e(t($evaluate_target)); ?></option>
                 <?php endforeach; ?>
             </select>
@@ -27,8 +27,8 @@
         <div class="formrow">
             <label for="evaluate_method_key"><?php e(t('evaluation method')); ?></label>
             <select name="evaluate_method_key">
-                <?php foreach($settings['evaluate_method'] AS $key => $evaluate_method): ?>
-                    <option value="<?php print(intval($key)); ?>" <?php if (isset($value['evaluate_method_key']) && $value['evaluate_method_key'] == $key) echo 'selected="selected"'; ?> ><?php e(t($evaluate_method)); ?></option>
+                <?php foreach ($settings['evaluate_method'] AS $key => $evaluate_method): ?>
+                    <option value="<?php e($key); ?>" <?php if (isset($value['evaluate_method_key']) && $value['evaluate_method_key'] == $key) echo 'selected="selected"'; ?> ><?php e(t($evaluate_method)); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -56,7 +56,7 @@
         <div class="formrow">
             <label for="action_action_key"><?php e(t('action')); ?></label>
             <select name="action_action_key">
-                <?php foreach($settings['action_action'] AS $key => $action_action): ?>
+                <?php foreach ($settings['action_action'] AS $key => $action_action): ?>
                     <option value="<?php e(intval($key)); ?>" <?php if (isset($value['action_action_key']) && $value['action_action_key'] == $key) echo 'selected="selected"'; ?> ><?php e(t($action_action)); ?></option>
                 <?php endforeach; ?>
             </select>
@@ -75,8 +75,8 @@
         <div class="formrow">
             <label for="action_unit_key"><?php e(t('action unit')); ?></label>
             <select name="action_unit_key">
-                <?php foreach($settings['action_unit'] AS $key => $action_unit): ?>
-                    <option value="<?php print(intval($key)); ?>" <?php if (isset($value['action_unit_key']) && $value['action_unit_key'] == $key) echo 'selected="selected"'; ?> ><?php e(t($action_unit)); ?></option>
+                <?php foreach ($settings['action_unit'] AS $key => $action_unit): ?>
+                    <option value="<?php e($key); ?>" <?php if (isset($value['action_unit_key']) && $value['action_unit_key'] == $key) echo 'selected="selected"'; ?> ><?php e(t($action_unit)); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>

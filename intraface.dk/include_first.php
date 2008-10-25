@@ -21,7 +21,7 @@ require_once dirname(__FILE__) . '/common.php';
 function intrafaceFrontendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
     $errorhandler = new ErrorHandler;
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
-    if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
+    if (defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
         $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
     } else {
         $errorhandler->addObserver(new ErrorHandler_Observer_User, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // See description of ~ above
@@ -32,7 +32,7 @@ function intrafaceFrontendErrorhandler($errno, $errstr, $errfile, $errline, $err
 function intrafaceFrontendExceptionhandler($e) {
     $errorhandler = new ErrorHandler;
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
-    if(defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
+    if (defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
         $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen);
     } else {
         $errorhandler->addObserver(new ErrorHandler_Observer_User);
@@ -145,7 +145,7 @@ $GLOBALS['_global_function_callback_t'] = 'intraface_t';
 function intraface_t($string, $page = NULL)
 {
     global $translation;
-    if($page !== NULL) {
+    if ($page !== NULL) {
         return $translation->get($string, $page);
     } else {
         return $translation->get($string);

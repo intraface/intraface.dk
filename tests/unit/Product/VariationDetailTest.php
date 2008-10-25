@@ -19,7 +19,7 @@ class VariationDetailTest extends PHPUnit_Framework_TestCase
     
     function createVariation() 
     {
-        if($this->object === NULL) {
+        if ($this->object === NULL) {
             $object = new Intraface_modules_product_Variation_OneAttributeGroup;
             $object->product_id = 1;
             $object->setAttributesFromArray(array('attribute1' => 1));

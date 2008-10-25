@@ -41,8 +41,6 @@ class Intraface_modules_cms_section_Longtext extends CMS_Section
         $this->allowed_tags[] = 'p';
         $this->allowed_tags[] = 'br';
 
-        //print_r($this->allowed_tags);
-
         $validator = new Intraface_Validator($this->error);
         $validator->isString($var['text'], 'error in text', $this->convertArrayToTags($this->allowed_tags));
 
@@ -73,9 +71,9 @@ class Intraface_modules_cms_section_Longtext extends CMS_Section
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Core', 'Encoding', 'ISO-8859-1');
         $purifier_cache_dir = PATH_CACHE.'htmlpurifier/';
-        if(!is_dir($purifier_cache_dir)) {
+        if (!is_dir($purifier_cache_dir)) {
             mkdir($purifier_cache_dir);
-            if(!is_dir($purifier_cache_dir)) {
+            if (!is_dir($purifier_cache_dir)) {
                 trigger_error('Unable to create HTML Purifier cache dir!', E_USER_ERROR);
                 exit;
             }

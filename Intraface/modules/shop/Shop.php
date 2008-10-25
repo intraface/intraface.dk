@@ -83,7 +83,7 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
     
     function getDefaultCurrency($gateway)
     {
-        if($this->default_currency_id == 0) {
+        if ($this->default_currency_id == 0) {
             return false;
         }
         

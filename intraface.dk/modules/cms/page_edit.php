@@ -17,13 +17,13 @@ if (!empty($_POST)) {
         $filehandler->upload->setSetting('file_accessibility', 'public');
         $id = $filehandler->upload->upload('new_pic');
 
-        if($id != 0) {
+        if ($id != 0) {
             $_POST['pic_id'] = $id;
         }
     }
 
     if ($cmspage->save($_POST)) {
-        if(!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
+        if (!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
             $redirect = Intraface_Redirect::factory($kernel, 'go');
             $module_filemanager = $kernel->useModule('filemanager');
             $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $module_cms->getPath().'page_edit.php?id='.$cmspage->get('id'));
@@ -60,7 +60,7 @@ if (!empty($_POST)) {
         $value['pic_id'] = $redirect->getParameter('file_handler_id');
     }
 } elseif (!empty($_GET['site_id']) AND is_numeric($_GET['site_id'])) {
-    if(empty($_GET['type'])) {
+    if (empty($_GET['type'])) {
         trigger_error('you need to provide at page type for what you want to create', E_USER_ERROR);
         exit;
     }
@@ -90,7 +90,7 @@ $cmspages = $cmspage->getList();
 $page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'page_edit.js');
 $page->includeJavascript('module', 'parseUrlIdentifier.js');
-$page->start(safeToHtml($translation->get('edit page')));
+$page->start($translation->get('edit page'));
 ?>
 
 <h1><?php e(t('edit '.$type)); ?></h1>
@@ -109,7 +109,7 @@ $page->start(safeToHtml($translation->get('edit page')));
     <p class="message-dependent">
         <?php e(t('you have to create a template for this page type')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="template_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php e(t('create template')); ?></a>.
+            <a href="template_edit.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e(t('create template')); ?></a>.
         <?php else: ?>
             <strong><?php e(t('please ask your administrator to do create a template')); ?></strong>
         <?php endif; ?>
@@ -117,7 +117,7 @@ $page->start(safeToHtml($translation->get('edit page')));
 
 <?php else: ?>
 
-    <form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>"  enctype="multipart/form-data">
+    <form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>"  enctype="multipart/form-data">
         <input name="id" type="hidden" value="<?php if (!empty($value['id'])) e($value['id']); ?>" />
         <input name="site_id" type="hidden" value="<?php if (!empty($value['site_id'])) e($value['site_id']); ?>" />
 
@@ -126,10 +126,10 @@ $page->start(safeToHtml($translation->get('edit page')));
 
             <div class="formrow">
                 <label for="page-type"><?php e(t('type')); ?></label>
-                <div id="static-cms-page-type" style="display: none;"><?php e(t($type)); ?> <?php if(!empty($value['id'])): ?><a href="#" onClick="page_edit.show_select();" class="edit"><?php e(t('Change type')); ?></a><?php endif; ?></div>
+                <div id="static-cms-page-type" style="display: none;"><?php e(t($type)); ?> <?php if (!empty($value['id'])): ?><a href="#" onClick="page_edit.show_select();" class="edit"><?php e(t('Change type')); ?></a><?php endif; ?></div>
                 <select name="page_type" id="cms-page-type">
                     <?php foreach ($cmspage->getTypes() AS $key => $type): ?>
-                    <option value="<?php echo $type; ?>"<?php if (!empty($value['type']) AND $value['type'] == $type) echo ' selected="selected"' ?>><?php e(t($type)); ?></option>
+                    <option value="<?php e($type); ?>"<?php if (!empty($value['type']) AND $value['type'] == $type) echo ' selected="selected"' ?>><?php e(t($type)); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -141,13 +141,13 @@ $page->start(safeToHtml($translation->get('edit page')));
                 <div class="formrow">
                     <label><?php e(t('choose template')); ?></label>
                     <select name="template_id">
-                    <?php foreach ($templates AS $template): ?>
-                        <option value="<?php echo intval($template['id']); ?>"><?php e($template['name']); ?></option>
+                    <?php foreach ($templates as $template): ?>
+                        <option value="<?php e($template['id']); ?>"><?php e($template['name']); ?></option>
                     <?php endforeach; ?>
                     </select>
                 </div>
             <?php else: ?>
-                <input type="hidden" name="template_id" value="<?php echo intval($templates[0]['id']); ?>" />
+                <input type="hidden" name="template_id" value="<?php e($templates[0]['id']); ?>" />
             <?php endif; ?>
         </fieldset>
 
@@ -183,13 +183,12 @@ $page->start(safeToHtml($translation->get('edit page')));
                 <label for="child_of_id"><?php e(t('choose page is child of')); ?></label>
                 <select name="child_of_id" id="child_of_id">
                     <option value="0"><?php e(t('none', 'common')); ?></option>
-                    <?php
-                        foreach ($cmspages AS $p) {
-                            if (!empty($value['id']) AND $p['id'] == $value['id']) continue;
-                            echo '<option value="'.$p['id'].'"';
-                            if (!empty($value['child_of_id']) AND $value['child_of_id'] == $p['id']) echo ' selected="selected"';
-                            echo '>'.safeToForm($p['title']).'</option>';
-                        }
+                    <?php foreach ($cmspages AS $p) { ?>
+                        <?php if (!empty($value['id']) AND $p['id'] == $value['id']) continue; ?>
+                        <option value="<?php e($p['id']); ?>"
+                            <?php if (!empty($value['child_of_id']) AND $value['child_of_id'] == $p['id']) echo ' selected="selected"'; ?>
+                            ><?php e($p['title']); ?></option>
+                        <?php } ?>
                     ?>
                 </select>
             </div>
@@ -254,7 +253,7 @@ $page->start(safeToHtml($translation->get('edit page')));
             <!--
             <div class="formrow">
                 <label for="password"><?php e(t('password', 'common')); ?></label>
-                <input type="text" value="<?php if(!empty($value['password'])) e($value['password']); ?>" name="password" />
+                <input type="text" value="<?php if (!empty($value['password'])) e($value['password']); ?>" name="password" />
             </div>
             -->
 

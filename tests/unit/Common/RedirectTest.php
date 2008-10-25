@@ -602,18 +602,18 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     function getVarsFromUrl($url) {
 
         $parts = explode('?');
-        if(!isset($parts[1])) {
+        if (!isset($parts[1])) {
             return array();
         }
         $params = explode('&', $parts[1]);
-        if(!is_array($params)) {
+        if (!is_array($params)) {
             return array();
         }
 
         $param = array();
-        foreach($params AS $p) {
+        foreach ($params AS $p) {
             $parts = explode('=', $p);
-            if(is_array($parts) && count($parts) == 2) {
+            if (is_array($parts) && count($parts) == 2) {
                 $param[$parts[0]] = $parts[1];
             }
         }

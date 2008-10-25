@@ -6,7 +6,7 @@
  * @author Lars Olesen <lars@legestue.net>
  *
  */
-class Intraface_Page 
+class Intraface_Page
 {
     public $kernel;
     public $db;
@@ -17,16 +17,16 @@ class Intraface_Page
     public $javascript_path = array();
     public $primary_module;
 
-    function __construct($object_kernel) 
+    function __construct($object_kernel)
     {
-        if(!is_object($object_kernel)) {
+        if (!is_object($object_kernel)) {
             trigger_error('Page requires Kernel', E_USER_ERROR);
         }
         $this->kernel = $object_kernel;
         $this->db = new DB_Sql;
     }
 
-    function start($title = '') 
+    function start($title = '')
     {
         $this->primary_module = $this->kernel->getPrimaryModule();
         $name = '';
@@ -38,16 +38,16 @@ class Intraface_Page
         // Unforntunately the usermenuen has to be before the cache as it is printed in bottom.php.
         $this->usermenu = array();
         $this->usermenu[0]['name'] = $this->kernel->translation->get('logout', 'common');
-        $this->usermenu[0]['url'] = PATH_WWW.'main/logout.php';
-        if(count($this->kernel->user->getIntranetList()) > 1) {
+        $this->usermenu[0]['url'] = url('/main/logout.php');
+        if (count($this->kernel->user->getIntranetList()) > 1) {
             $this->usermenu[1]['name'] = $this->kernel->translation->get('change intranet', 'common');
-            $this->usermenu[1]['url'] = PATH_WWW.'main/change_intranet.php';
+            $this->usermenu[1]['url'] = url('/main/change_intranet.php');
         }
         $this->usermenu[2]['name'] = $this->kernel->translation->get('control panel', 'common');;
-        $this->usermenu[2]['url'] = PATH_WWW.'main/controlpanel/';
+        $this->usermenu[2]['url'] = url('/main/controlpanel/');
 
         if (!is_dir(PATH_CACHE)) {
-            if(!mkdir(PATH_CACHE)) {
+            if (!mkdir(PATH_CACHE)) {
                 trigger_error('Unable to create dir "'.PATH_CACHE.'" from constant PATH_CACHE', E_USER_ERROR);
                 exit;
             }
@@ -68,7 +68,7 @@ class Intraface_Page
 
             $intranet_name = $this->kernel->intranet->get('name');
 
-            if(empty($title)) {
+            if (empty($title)) {
                 $title = $intranet_name;
             }
 
@@ -84,38 +84,38 @@ class Intraface_Page
             $this->menu = array();
             $i = 0;
             $this->menu[$i]['name'] = $this->kernel->translation->get('dashboard', 'dashboard');;
-            $this->menu[$i]['url'] = PATH_WWW.'main/';
+            $this->menu[$i]['url'] = url('/main/');
             $i++;
             $this->db->query("SELECT name, menu_label, name FROM module WHERE active = 1 AND show_menu = 1 ORDER BY menu_index");
             while($this->db->nextRecord()) {
 
-                if($this->kernel->user->hasModuleAccess($this->db->f('name'))) {
+                if ($this->kernel->user->hasModuleAccess($this->db->f('name'))) {
                     $this->menu[$i]['name'] = $this->kernel->translation->get($this->db->f('name'), $this->db->f('name'));
-                    $this->menu[$i]['url'] = PATH_WWW_MODULE.$this->db->f("name").'/';
+                    $this->menu[$i]['url'] = url('/modules/' . $this->db->f("name") . '/');
                     $i++;
                 }
             }
 
             $submenu = array();
-            if(is_object($this->primary_module)) {
+            if (is_object($this->primary_module)) {
                 $all_submenu = $this->primary_module->getSubmenu();
-                if(count($all_submenu) > 0) { // added to avoid error messages
+                if (count($all_submenu) > 0) { // added to avoid error messages
                     $j = 0;
-                    for($i = 0, $max = count($all_submenu); $i < $max; $i++) {
+                    for ($i = 0, $max = count($all_submenu); $i < $max; $i++) {
                         $access = false;
 
-                        if($all_submenu[$i]['sub_access'] != '') {
+                        if ($all_submenu[$i]['sub_access'] != '') {
                             $sub = explode(":", $all_submenu[$i]['sub_access']);
 
                             switch($sub[0]) {
                                 case 'sub_access':
-                                    if($this->kernel->user->hasSubAccess($this->primary_module->module_name, $sub[1])) {
+                                    if ($this->kernel->user->hasSubAccess($this->primary_module->module_name, $sub[1])) {
                                         $access = true;
                                     }
                                     break;
 
                                 case 'module':
-                                    if($this->kernel->user->hasModuleAccess($sub[1])) {
+                                    if ($this->kernel->user->hasModuleAccess($sub[1])) {
                                         $access = true;
                                     }
                                     break;
@@ -128,9 +128,9 @@ class Intraface_Page
                             $access = true;
                         }
 
-                        if($access) {
+                        if ($access) {
                             $this->submenu[$j]['name'] = $this->kernel->translation->get($all_submenu[$i]['label'], $this->primary_module->getName());
-                            $this->submenu[$j]['url'] = $this->primary_module->getPath().$all_submenu[$i]['url'];
+                            $this->submenu[$j]['url'] = $this->primary_module->getPath(). $all_submenu[$i]['url'];
                             $j++;
                         }
                     }
@@ -138,8 +138,8 @@ class Intraface_Page
             }
 
             $javascript = '';
-            if(!empty($this->javascript_path) AND count($this->javascript_path) > 0) {
-                for($i = 0, $max = count($this->javascript_path); $i < $max; $i++) {
+            if (!empty($this->javascript_path) AND count($this->javascript_path) > 0) {
+                for ($i = 0, $max = count($this->javascript_path); $i < $max; $i++) {
                     $javascript .= '<script type="text/javascript" src="'.$this->javascript_path[$i].'"></script>' . "\n";
                 }
             }
@@ -147,7 +147,7 @@ class Intraface_Page
             $systemdisturbance = new SystemDisturbance($this->kernel);
             $now = $systemdisturbance->getActual();
 
-            if(!empty($now) AND count($now) > 0 && $now['important'] == 1) {
+            if (!empty($now) AND count($now) > 0 && $now['important'] == 1) {
                 $system_message = $now['description'];
             }
             */
@@ -182,24 +182,24 @@ class Intraface_Page
 
     }
 
-    function end() 
+    function end()
     {
         include(PATH_INCLUDE_IHTML.'/intraface/bottom.php');
     }
 
-    function includeJavascript($scope, $filename) 
+    function includeJavascript($scope, $filename)
     {
-        if(!in_array($scope, array('global', 'module'), true)) {
+        if (!in_array($scope, array('global', 'module'), true)) {
             trigger_error("Første parameter er ikke enten 'global' eller 'module' i Page->includeJavascript", E_USER_ERROR);
         }
 
-        if($scope == 'global') {
-            $this->javascript_path[] = PATH_WWW.'javascript/'.$filename;
+        if ($scope == 'global') {
+            $this->javascript_path[] = url('/javascript/'.$filename);
         } else {
             $this->javascript_path[] = 'javascript/'.$filename;
         }
     }
-    
+
     public static function themes()
     {
         return array(

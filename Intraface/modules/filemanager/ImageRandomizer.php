@@ -32,13 +32,13 @@ class ImageRandomizer
         $dbquery = $this->getDBQuery();
         
         require_once 'Intraface/shared/keyword/Keyword.php';
-        if(!is_array($keywords)) {
+        if (!is_array($keywords)) {
             trigger_error('second parameter should be an array with keywords', E_USER_ERROR);
             return false;
         }
         
         $keyword_ids = array();
-        foreach($keywords AS $keyword) {
+        foreach ($keywords AS $keyword) {
             $keyword_object = new Keyword($this->file_manager);
             /**
              * @todo: This is not really good, but the only way to identify keyword on name!
@@ -53,8 +53,8 @@ class ImageRandomizer
         $filetype = new FileType();
         $types = $filetype->getList();
         $keys = array();
-        foreach($types AS $key => $mime_type) {
-            if($mime_type['image'] == 1) {
+        foreach ($types AS $key => $mime_type) {
+            if ($mime_type['image'] == 1) {
                 $keys[] = $key;
             }
         }
@@ -66,7 +66,7 @@ class ImageRandomizer
             $this->file_list[] = $db->f('id');
         }
         
-        if(count($this->file_list) == 0) {
+        if (count($this->file_list) == 0) {
             trigger_error('No images found with the keywords: '.implode(', ', $keywords), E_USER_ERROR);
             exit;
         }

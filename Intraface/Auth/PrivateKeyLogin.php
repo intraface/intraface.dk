@@ -52,7 +52,7 @@ class Intraface_Auth_PrivateKeyLogin
         if (PEAR::isError($result)) {
             throw new Exception($result->getUserInfo());
         }
-        if($result->numRows() == 0) {
+        if ($result->numRows() == 0) {
             return false;
         }
         $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);

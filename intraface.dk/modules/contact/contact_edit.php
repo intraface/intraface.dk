@@ -42,7 +42,7 @@ if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
     } elseif ($id = $contact->save($_POST)) {
 
         // $redirect->addQueryString('contact_id='.$id);
-        if($redirect->get('id') != 0) {
+        if ($redirect->get('id') != 0) {
             $redirect->setParameter('contact_id', $id);
         }
         //$contact->lock->unlock_post($id);
@@ -69,7 +69,7 @@ if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
     $value['number'] = $contact->getMaxNumber() + 1;
 }
 
-if($contact->get('id') != 0) {
+if ($contact->get('id') != 0) {
     // i do not believe this is needed... we try to remove it!
     // $redirect->addQueryString('contact_id='.$contact->get('id'));
 }
@@ -85,14 +85,14 @@ $page->start('Rediger kontakt');
 
 <?php echo $contact->error->view(); ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 <?php if (empty($value['id'])): ?>
 
     <fieldset>
         <legend>Find adressen hos Eniro</legend>
         <label for="eniro_phone">Telefon
-            <input id="eniro_phone" name="eniro_phone" value="<?php if (!empty($_POST['eniro_phone'])) echo $_POST['eniro_phone']; ?>" />
+            <input id="eniro_phone" name="eniro_phone" value="<?php if (!empty($_POST['eniro_phone'])) e($_POST['eniro_phone']); ?>" />
         </label>
         <input type="submit" name="eniro" value="Find adresseoplysninger" />
     </fieldset>
@@ -116,14 +116,14 @@ $page->start('Rediger kontakt');
         </tr>
         </thead>
         <tbody>
-        <?php foreach($similar_contacts AS $c): ?>
+        <?php foreach ($similar_contacts AS $c): ?>
             <tr>
-                <td><?php echo safeToHtml($c['name']); ?></td>
-                <td><?php echo safeToHtml($c['address']); ?></td>
-                <td><?php echo safeToHtml($c['postcode']) . ' ' . safeToHtml($c['city']); ?></td>
-                <td><?php echo safeToHtml($c['phone']); ?></td>
-                <td><?php echo safeToHtml($c['email']); ?></td>
-                <td><a href="contact.php?id=<?php echo intval($c['id']); ?>">Vælg</a></td>
+                <td><?php e($c['name']); ?></td>
+                <td><?php e($c['address']); ?></td>
+                <td><?php e($c['postcode'] . ' ' . $c['city']); ?></td>
+                <td><?php e($c['phone']); ?></td>
+                <td><?php e($c['email']); ?></td>
+                <td><a href="contact.php?id=<?php e($c['id']); ?>">Vælg</a></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -135,15 +135,15 @@ $page->start('Rediger kontakt');
 
 <fieldset>
     <legend>Kontaktoplysninger</legend>
-    <input type="hidden" name="id" value="<?php if (!empty($value['id']))  echo intval($value['id']); ?>" />
+    <input type="hidden" name="id" value="<?php if (!empty($value['id']))  e($value['id']); ?>" />
 
     <div class="formrow">
         <label for="number">Kontaktnummer</label>
-        <input type="text" name="number" id="number" value="<?php if (!empty($value['number'])) echo safeToForm($value['number']); ?>" />
+        <input type="text" name="number" id="number" value="<?php if (!empty($value['number'])) e($value['number']); ?>" />
     </div>
     <div class="formrow">
         <label for="name">Navn</label>
-        <input type="text" name="name" id="name" value="<?php if (!empty($address['name'])) echo safeToForm($address['name']); ?>" size="30" />
+        <input type="text" name="name" id="name" value="<?php if (!empty($address['name'])) e($address['name']); ?>" size="30" />
     </div>
 </fieldset>
 <fieldset>
@@ -153,7 +153,7 @@ $page->start('Rediger kontakt');
         <select id="contact-type" name="type_key">
             <option value="">Vælg</option>
             <?php foreach ($contact_module->getSetting('type') AS $key=>$v): ?>
-                <option value="<?php echo $key; ?>"<?php if (isset($value['type_key']) AND $value['type_key'] == $key) { echo ' selected="selected"'; } ?>><?php echo safeToForm($translation->get($v)); ?></option>
+                <option value="<?php e($key); ?>"<?php if (isset($value['type_key']) AND $value['type_key'] == $key) { echo ' selected="selected"'; } ?>><?php e($translation->get($v)); ?></option>
             <?php endforeach; ?>
         </select>
     </div>
@@ -163,7 +163,7 @@ $page->start('Rediger kontakt');
     <legend>Oplysninger om firma</legend>
     <div class="formrow">
         <label for="cvr"><acronym title="Centrale VirksomhedsRegister">CVR</acronym>-nummer</label>
-        <input type="text" name="cvr" id="cvr" value="<?php if (!empty($address['cvr'])) echo safeToForm($address['cvr']); ?>" />
+        <input type="text" name="cvr" id="cvr" value="<?php if (!empty($address['cvr'])) e($address['cvr']); ?>" />
     </div>
 </fieldset>
 
@@ -171,19 +171,19 @@ $page->start('Rediger kontakt');
     <legend>Adresse</legend>
     <div class="formrow">
         <label for="address">Adresse</label>
-        <textarea name="address" id="address" rows="2" cols="30"><?php if (!empty($address['address'])) echo safeToForm($address['address']); ?></textarea>
+        <textarea name="address" id="address" rows="2" cols="30"><?php if (!empty($address['address'])) e($address['address']); ?></textarea>
     </div>
     <div class="formrow">
         <label for="postalcode">Postnummer</label>
-        <input type="text" name="postcode" id="postalcode" value="<?php if (!empty($address['postcode']))  echo safeToForm($address['postcode']); ?>" />
+        <input type="text" name="postcode" id="postalcode" value="<?php if (!empty($address['postcode']))  e($address['postcode']); ?>" />
     </div>
     <div class="formrow">
         <label for="town">By</label>
-        <input type="text" name="city" id="town" value="<?php if (!empty($address['city']))  echo safeToForm($address['city']); ?>" />
+        <input type="text" name="city" id="town" value="<?php if (!empty($address['city']))  e($address['city']); ?>" />
     </div>
     <div class="formrow">
         <label for="country">Land</label>
-        <input type="text" name="country" id="country" value="<?php if (!empty($address['country']))  echo safeToForm($address['country']); ?>" />
+        <input type="text" name="country" id="country" value="<?php if (!empty($address['country']))  e($address['country']); ?>" />
     </div>
 </fieldset>
 
@@ -191,15 +191,15 @@ $page->start('Rediger kontakt');
     <legend>Kontaktinformation</legend>
     <div class="formrow">
         <label for="email">E-mail</label>
-        <input type="text" name="email" id="email" value="<?php  if (!empty($address['email'])) echo safeToForm($address['email']); ?>" />
+        <input type="text" name="email" id="email" value="<?php  if (!empty($address['email'])) e($address['email']); ?>" />
     </div>
     <div class="formrow">
         <label for="phone">Telefon</label>
-        <input type="text" name="phone" id="phone" value="<?php if (!empty($address['phone']))  echo safeToForm($address['phone']); ?>" />
+        <input type="text" name="phone" id="phone" value="<?php if (!empty($address['phone']))  e($address['phone']); ?>" />
     </div>
     <div class="fm-optional formrow">
         <label for="website">Website</label>
-        <input type="text" name="website" id="website" value="<?php if (!empty($address['website']))  echo safeToForm($address['website']); ?>" />
+        <input type="text" name="website" id="website" value="<?php if (!empty($address['website']))  e($address['website']); ?>" />
     </div>
 </fieldset>
 
@@ -207,24 +207,24 @@ $page->start('Rediger kontakt');
     <legend>Leveringsadresse</legend>
     <div class="formrow">
         <label for="deliveryname">Navn</label>
-        <input type="text" name="delivery_name" id="deliveryname" value="<?php  if (!empty($delivery_address['name'])) echo safeToForm($delivery_address['name']); ?>" size="30" />
+        <input type="text" name="delivery_name" id="deliveryname" value="<?php  if (!empty($delivery_address['name'])) e($delivery_address['name']); ?>" size="30" />
     </div>
 
     <div class="formrow">
         <label for="deliveryaddress">Adresse</label>
-        <textarea name="delivery_address" id="deliveryaddress" rows="2" cols="30"><?php  if (!empty($delivery_address['address'])) echo safeToForm($delivery_address['address']); ?></textarea>
+        <textarea name="delivery_address" id="deliveryaddress" rows="2" cols="30"><?php  if (!empty($delivery_address['address'])) e($delivery_address['address']); ?></textarea>
     </div>
     <div class="formrow">
         <label for="deliverypostalcode">Postnummer</label>
-        <input type="text" name="delivery_postcode" id="deliverypostcode" value="<?php if (!empty($delivery_address['postcode'])) echo safeToForm($delivery_address['postcode']); ?>" />
+        <input type="text" name="delivery_postcode" id="deliverypostcode" value="<?php if (!empty($delivery_address['postcode'])) e($delivery_address['postcode']); ?>" />
     </div>
     <div class="formrow">
         <label for="deliverytown">By</label>
-        <input type="text" name="delivery_city" id="deliverytown" value="<?php  if (!empty($delivery_address['city'])) echo safeToForm($delivery_address['city']); ?>" />
+        <input type="text" name="delivery_city" id="deliverytown" value="<?php  if (!empty($delivery_address['city'])) e($delivery_address['city']); ?>" />
     </div>
     <div class="formrow">
         <label for="deliverycountry">Land</label>
-        <input type="text" name="delivery_country" id="deliverycountry" value="<?php  if (!empty($delivery_address['country'])) echo safeToForm($delivery_address['country']); ?>" />
+        <input type="text" name="delivery_country" id="deliverycountry" value="<?php  if (!empty($delivery_address['country'])) e($delivery_address['country']); ?>" />
     </div>
 </fieldset>
 
@@ -257,10 +257,11 @@ $page->start('Rediger kontakt');
                 foreach ($contact_module->getSetting('preferred_invoice') AS $key=>$v) {
                     // skal ikke vise electronic ved privatperson
                     if (!empty($value['type']) AND $value['type'] == "private" AND $key == 3) continue;
-                    echo '<option value="'.$key.'"';
-                    if (isset($value['preferred_invoice']) AND $key == $value['preferred_invoice']) { echo ' selected="selected"'; }
-                    echo '>'.safeToForm($translation->get($v)).'</option>';
-                }
+                    ?>
+                    <option value="<?php e($key); ?>"
+                    <?php if (isset($value['preferred_invoice']) AND $key == $value['preferred_invoice']) { echo ' selected="selected"'; } ?>
+                    ><?php e($translation->get($v)); ?></option>
+                <?php }
             ?>
         </select>
     </div>
@@ -269,7 +270,7 @@ $page->start('Rediger kontakt');
     <legend>Elektronisk faktura</legend>
     <div class="formrow">
         <label for="ean"><acronym title="En elektronisk postkasse">EAN</acronym>-nummer</label>
-        <input type="text" name="ean" id="ean" value="<?php if (!empty($address['ean'])) echo safeToForm($address['ean']); ?>" />
+        <input type="text" name="ean" id="ean" value="<?php if (!empty($address['ean'])) e($address['ean']); ?>" />
     </div>
 </fieldset>
 <?php endif; ?>
@@ -279,14 +280,14 @@ $page->start('Rediger kontakt');
         <input type="submit" name="submit" value="Gem" id="save" class="save" />
         eller
         <?php
-        if($contact->get('id') != 0) {
+        if ($contact->get('id') != 0) {
             $url = 'contact.php?id='.$contact->get('id');
         }
         else {
             $url = 'index.php';
         }
         ?>
-        <a href="<?php echo $redirect->getCancelUrl($url); ?>" title="Dette vil slette alle dine ændringer">Fortryd</a>
+        <a href="<?php e($redirect->getCancelUrl($url)); ?>" title="Dette vil slette alle dine ændringer">Fortryd</a>
     </div>
 </form>
 

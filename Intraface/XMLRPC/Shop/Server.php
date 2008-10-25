@@ -122,7 +122,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $product = new Product($this->kernel, $id);
         $product->getPictures();
-        if(!$product->get('has_variation')) {
+        if (!$product->get('has_variation')) {
             // loads stock information to array;
             $product->getStock();
         }

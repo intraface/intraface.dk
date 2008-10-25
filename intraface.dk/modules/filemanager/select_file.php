@@ -9,43 +9,43 @@ $translation = $kernel->getTranslation('filemanager');
 // hvis det er ajax outputter den 1 eller 0.
 // hvis det ikke er ajax går den bare videre.
 
-if(isset($_POST['ajax'])) {
+if (isset($_POST['ajax'])) {
 
-	if(!isset($_POST['redirect_id'])) {
-		print('0');
+	if (!isset($_POST['redirect_id'])) {
+		e('0');
 	}
 
 	// print($_SERVER['REQUEST_URI']);
 	// exit;
 	$options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
     $redirect = new Ilib_Redirect($kernel->getSessionId(), MDB2::facotory(DB_DSN), intval($_POST['redirect_id']), $options);
-	if(isset($_POST['add_file_id'])) {
+	if (isset($_POST['add_file_id'])) {
 		$filemanager = new Filemanager($kernel, intval($_POST['add_file_id']));
-		if($filemanager->get('id') != 0) {
+		if ($filemanager->get('id') != 0) {
 			$redirect->setParameter("file_handler_id", $filemanager->get('id'));
-			print('1');
+			e('1');
 			exit;
 		}
 	}
-	if(isset($_POST['remove_file_id'])) {
+	if (isset($_POST['remove_file_id'])) {
 		$redirect->removeParameter('file_handler_id', (int)$_POST['remove_file_id']);
-		print('1');
+		e('1');
 		exit;
 	}
-	print('0');
+	e('0');
 	exit;
 }
 
 
 $options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
 $receive_redirect = Ilib_Redirect::factory($kernel->getSessionId(), MDB2::singleton(DB_DSN), 'receive', $options);
-if($receive_redirect->isMultipleParameter('file_handler_id')) {
+if ($receive_redirect->isMultipleParameter('file_handler_id')) {
 	$multiple_choice = true;
 } else {
 	$multiple_choice = false;
 }
 
-if(isset($_POST['return'])) {
+if (isset($_POST['return'])) {
 	// Return is when AJAX is active, and then the checked files is already saved and should not be saved again.
 
 	header("Location: ".$receive_redirect->getRedirect('index.php'));
@@ -54,33 +54,33 @@ if(isset($_POST['return'])) {
 
 $filemanager = new FileManager($kernel); // has to be loaded here, while it should be able to set an error just below.
 
-if(isset($_POST['submit_close']) || isset($_POST['submit'])) {
+if (isset($_POST['submit_close']) || isset($_POST['submit'])) {
 	settype($_POST['selected'], 'array');
 	$selected = $_POST['selected'];
 
 	$number_of_files = 0;
-	foreach($selected AS $id) {
+	foreach ($selected AS $id) {
 		$tmp_f = new Filemanager($kernel, (int)$id);
-		if($tmp_f->get('id') != 0) {
+		if ($tmp_f->get('id') != 0) {
 			$receive_redirect->setParameter("file_handler_id", $tmp_f->get('id'));
 			$number_of_files++;
 		}
 
 	}
 
-	if($number_of_files == 0) {
+	if ($number_of_files == 0) {
 		$filemanager->error->set("you have to choose a file");
-	} elseif($multiple_choice == false || isset($_POST['submit_close'])) {
+	} elseif ($multiple_choice == false || isset($_POST['submit_close'])) {
 		header("Location: ".$receive_redirect->getRedirect('index.php'));
 		exit;
 	}
 }
 
-if(isset($_GET['upload'])) {
+if (isset($_GET['upload'])) {
 	$options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
     $upload_redirect = Ilib_Redirect::factory($kernel->getSessionId(), MDB2::singleton(DB_DSN), 'go', $options);
 
-	if($_GET['upload'] == 'multiple') {
+	if ($_GET['upload'] == 'multiple') {
 		$url = $upload_redirect->setDestination($module_filemanager->getPath().'upload_multiple.php', $module_filemanager->getPath().'select_file.php?redirect_id='.$receive_redirect->get('id').'&filtration=1');
 	} else {
 		$url = $upload_redirect->setDestination($module_filemanager->getPath().'upload.php', $module_filemanager->getPath().'select_file.php?redirect_id='.$receive_redirect->get('id').'&filtration=1');
@@ -88,25 +88,25 @@ if(isset($_GET['upload'])) {
 	header("Location: ".$url);
 }
 
-if($multiple_choice) {
+if ($multiple_choice) {
 	$selected_files = $receive_redirect->getParameter('file_handler_id');
 } else {
-	if(isset($_GET['selected_file_id'])) {
+	if (isset($_GET['selected_file_id'])) {
 		$selected_files[] = (int)$_GET['selected_file_id'];
 	} else {
 		$selected_files = array();
 	}
 }
 
-if(isset($_GET['images'])) {
+if (isset($_GET['images'])) {
 	$filemanager->getDBQuery()->setFilter('images', 1);
 }
 
-if(isset($_GET["text"]) && $_GET["text"] != "") {
+if (isset($_GET["text"]) && $_GET["text"] != "") {
 	$filemanager->getDBQuery()->setFilter("text", $_GET["text"]);
 }
 
-if(isset($_GET["filtration"]) && intval($_GET["filtration"]) != 0) {
+if (isset($_GET["filtration"]) && intval($_GET["filtration"]) != 0) {
 	// Kun for at filtration igen vises i søgeboksen
 	$filemanager->getDBQuery()->setFilter("filtration", $_GET["filtration"]);
 
@@ -132,15 +132,15 @@ if(isset($_GET["filtration"]) && intval($_GET["filtration"]) != 0) {
 			// Probaly 0, so nothing happens
 	}
 }
-if(isset($_GET['keyword']) && is_array($_GET['keyword']) && count($_GET['keyword']) > 0) {
+if (isset($_GET['keyword']) && is_array($_GET['keyword']) && count($_GET['keyword']) > 0) {
 	$filemanager->getDBQuery()->setKeyword($_GET['keyword']);
 }
 
-if(isset($_GET['character'])) {
+if (isset($_GET['character'])) {
 	$filemanager->getDBQuery()->useCharacter();
 }
 
-if(!isset($_GET['search'])) {
+if (!isset($_GET['search'])) {
 	$filemanager->getDBQuery()->setSorting('file_handler.date_created DESC');
 }
 
@@ -153,43 +153,43 @@ $filemanager->getDBQuery()->storeResult("use_stored", "filemanager", "sublevel")
 $files = $filemanager->getList();
 
 $page = new Intraface_Page($kernel);
-if($multiple_choice) {
+if ($multiple_choice) {
 	// Kun hvis man skal kunne vælge flere er der behov for javascript
 	$page->includeJavascript('module', 'select_file.js');
 }
 $page->includeJavascript('global', 'yui/connection/connection-min.js');
-$page->start(safeToHtml($translation->get('files')));
+$page->start($translation->get('files'));
 ?>
 
-<h1><?php echo safeToHtml($translation->get('files')); ?></h1>
+<h1><?php e($translation->get('files')); ?></h1>
 
 <ul class="options">
-	<li><a href="select_file.php?upload=single" onclick="location.href='select_file.php?upload=multiple'; return false;"><?php echo safeToHtml($translation->get('upload file')); ?></a></li>
+	<li><a href="select_file.php?upload=single" onclick="location.href='select_file.php?upload=multiple'; return false;"><?php e($translation->get('upload file')); ?></a></li>
 </ul>
 
 <?php echo $filemanager->error->view('html'); ?>
 
 <form method="get" action="select_file.php?use_stored=true">
 	<fieldset>
-		<legend><?php echo safeToHtml($translation->get('search')); ?></legend>
-		<label><?php echo safeToHtml($translation->get('text')); ?>:
-			<input type="text" name="text" value="<?php echo $filemanager->getDBQuery()->getFilter("text"); ?>" />
+		<legend><?php e($translation->get('search')); ?></legend>
+		<label><?php e($translation->get('text')); ?>:
+			<input type="text" name="text" value="<?php e($filemanager->getDBQuery()->getFilter("text")); ?>" />
 		</label>
 		<label>Filtrering:
 		<select name="filtration">
 			<option value="0">Alle</option>
-			<option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded today')); ?></option>
-			<option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded yesterday')); ?></option>
-			<option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('uploaded this week')); ?></option>
-			<option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('edited today')); ?></option>
-			<option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) echo ' selected="selected"';?>><?php echo safeToHtml($translation->get('edited yesterday')); ?></option>
+			<option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) echo ' selected="selected"';?>><?php e($translation->get('uploaded today')); ?></option>
+			<option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) echo ' selected="selected"';?>><?php e($translation->get('uploaded yesterday')); ?></option>
+			<option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) echo ' selected="selected"';?>><?php e($translation->get('uploaded this week')); ?></option>
+			<option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) echo ' selected="selected"';?>><?php e($translation->get('edited today')); ?></option>
+			<option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) echo ' selected="selected"';?>><?php e($translation->get('edited yesterday')); ?></option>
 		</select>
 		</label>
-		<label><?php echo safeToHtml($translation->get('only pictures')); ?>:
-			<input type="checkbox" name="images" value="1" <?php if($filemanager->getDBQuery()->getFilter("images") == 1) echo 'checked="checked"'; ?> />
+		<label><?php e($translation->get('only pictures')); ?>:
+			<input type="checkbox" name="images" value="1" <?php if ($filemanager->getDBQuery()->getFilter("images") == 1) echo 'checked="checked"'; ?> />
 		</label>
 		<span>
-		<input type="submit" name="search" value="<?php echo safeToHtml($translation->get('find')); ?>" />
+		<input type="submit" name="search" value="<?php e($translation->get('find')); ?>" />
 		</span>
 
 		<?php
@@ -199,10 +199,10 @@ $page->start(safeToHtml($translation->get('files')));
     $keyword = $filemanager->getKeywordAppender();
     $keywords = $keyword->getUsedKeywords();
 
-    if(count($keywords) > 0) {
+    if (count($keywords) > 0) {
 	    echo '<div>Nøgleord: <ul style="display: inline;">';
   	  foreach ($keywords AS $value) {
-     		if(in_array($value['id'], $selected_keywords) === true) {
+     		if (in_array($value['id'], $selected_keywords) === true) {
 					$checked = 'checked="checked"';
 				}
 				else {
@@ -220,16 +220,16 @@ $page->start(safeToHtml($translation->get('files')));
 <?php echo $filemanager->getDBQuery()->display('character'); ?>
 <form method="POST" action="select_file.php">
 <table class="stripe">
-	<caption><?php echo safeToHtml($translation->get('files')); ?></caption>
+	<caption><?php e($translation->get('files')); ?></caption>
 	<thead>
 		<tr>
 			<th></th>
 			<th></th>
-			<th><?php echo safeToHtml($translation->get('file name')); ?></th>
-			<th><?php echo safeToHtml($translation->get('file type')); ?></th>
-			<th><?php echo safeToHtml($translation->get('accessibility')); ?></th>
-			<th><?php echo safeToHtml($translation->get('file size')); ?></th>
-			<th><?php echo safeToHtml($translation->get('file date')); ?></th>
+			<th><?php e($translation->get('file name')); ?></th>
+			<th><?php e($translation->get('file type')); ?></th>
+			<th><?php e($translation->get('accessibility')); ?></th>
+			<th><?php e($translation->get('file size')); ?></th>
+			<th><?php e($translation->get('file date')); ?></th>
 			<!--<th></th>-->
 		</tr>
 	</thead>
@@ -237,36 +237,36 @@ $page->start(safeToHtml($translation->get('files')));
 	<tbody>
 		<?php
 
-		for($i = 0, $max = count($files); $i < $max; $i++) {
+		for ($i = 0, $max = count($files); $i < $max; $i++) {
 			?>
 			<tr>
 				<td>
-					<input type="<?php if($multiple_choice): print('checkbox'); else: print('radio'); endif; ?>" value="<?php echo $files[$i]["id"]; ?>" id="<?php echo $files[$i]["id"]; ?>" class="input-select_file" name="selected[]" <?php if(in_array($files[$i]['id'], $selected_files)) print("checked=\"checked\""); ?> />
+					<input type="<?php if ($multiple_choice): print('checkbox'); else: print('radio'); endif; ?>" value="<?php e($files[$i]["id"]); ?>" id="<?php e($files[$i]["id"]); ?>" class="input-select_file" name="selected[]" <?php if (in_array($files[$i]['id'], $selected_files)) print("checked=\"checked\""); ?> />
 				</td>
-				<td style="height: 67px;"><img src="<?php echo safeToHtml($files[$i]["icon_uri"]); ?>" style="height: <?php echo safeToHtml($files[$i]["icon_height"]); ?>px; width: <?php echo safeToHtml($files[$i]["icon_width"]); ?>px;" /></td>
+				<td style="height: 67px;"><img src="<?php e($files[$i]["icon_uri"]); ?>" style="height: <?php e($files[$i]["icon_height"]); ?>px; width: <?php e($files[$i]["icon_width"]); ?>px;" /></td>
 
-				<td><a href="file.php?id=<?php print($files[$i]["id"]); ?>"><?php echo safeToHtml($files[$i]["file_name"]); ?></a></td>
-				<td><?php echo safeToHtml($files[$i]["file_type"]['description']); ?></td>
-				<td><?php echo safeToHtml($files[$i]["accessibility"]); ?></td>
-				<td><?php echo safeToHtml($files[$i]["dk_file_size"]); ?></td>
-				<td><?php echo safeToHtml($files[$i]["date_created"]); ?></td>
-				<!--<td class="buttons"><a href="<?php print($files[$i]['file_uri']); ?>" target="_blank">Hent fil</a></td>-->
+				<td><a href="file.php?id=<?php e($files[$i]["id"]); ?>"><?php e($files[$i]["file_name"]); ?></a></td>
+				<td><?php e($files[$i]["file_type"]['description']); ?></td>
+				<td><?php e($files[$i]["accessibility"]); ?></td>
+				<td><?php e($files[$i]["dk_file_size"]); ?></td>
+				<td><?php e($files[$i]["date_created"]); ?></td>
+				<!--<td class="buttons"><a href="<?php e($files[$i]['file_uri']); ?>" target="_blank">Hent fil</a></td>-->
 			</tr>
 			<?php
 		}
 		?>
 	</tbody>
 </table>
-<input type="hidden" name="redirect_id" id="redirect_id" value="<?php print($receive_redirect->get('id')); ?>" />
+<input type="hidden" name="redirect_id" id="redirect_id" value="<?php e($receive_redirect->get('id')); ?>" />
 
 <div>
 
-	<?php if($multiple_choice): ?>
-		<input type="submit" name="submit" id="submit-select_file" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" />
+	<?php if ($multiple_choice): ?>
+		<input type="submit" name="submit" id="submit-select_file" value="<?php e($translation->get('save', 'common')); ?>" />
 	<?php endif; ?>
 
-	<input type="submit" name="submit_close" id="submit_close-select_file" value="<?php echo safeToHtml($translation->get('save and transfer')); ?>" />
-	eller <a href="<?php echo safeToHtml($receive_redirect->getRedirect("index.php")); ?>"><?php echo safeToHtml($translation->get('regret' ,'common')); ?></a>
+	<input type="submit" name="submit_close" id="submit_close-select_file" value="<?php e($translation->get('save and transfer')); ?>" />
+	eller <a href="<?php e($receive_redirect->getRedirect("index.php")); ?>"><?php e($translation->get('Cancel' ,'common')); ?></a>
 </div>
 
 </form>

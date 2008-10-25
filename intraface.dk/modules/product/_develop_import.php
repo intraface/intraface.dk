@@ -14,7 +14,7 @@ if (!empty($_POST['import'])) {
 
 	if (!empty($_POST['delete_old_products'])) {
   	$product = new Product($kernel);
-  	foreach($product->getList("all") AS $p) {
+  	foreach ($product->getList("all") AS $p) {
     	$po = new Product($kernel, $p['id']);
     	$po->delete();
 		}
@@ -141,28 +141,28 @@ if ($csv_file) {
 	<?php if (count($msg) > 0) { ?>
 	<ul class="formerrors">
 	<?php foreach ($msg AS $error) { ?>
-	<li><?php echo $error; ?></li>
+	<li><?php e($error); ?></li>
 	<?php } ?>
 	</ul>
 	<?php } ?>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 <fieldset>
-	<input type="hidden" name="file_id" value="<?php echo $file_id; ?>">
+	<input type="hidden" name="file_id" value="<?php e($file_id); ?>">
 	<div class="formrow">
-  	<label for="name">Navn</label><select name="name"><?php echo $row_name; ?></select>
+  	<label for="name">Navn</label><select name="name"><?php e($row_name); ?></select>
 	</div>
 	<div class="formrow">
-  	<label for="name">Beskrivelse</label><select name="description"><?php echo $row_name; ?></select>
+  	<label for="name">Beskrivelse</label><select name="description"><?php e($row_name); ?></select>
 	</div>
 	<div class="formrow">
-  	<label for="price">Pris</label><select name="price"><?php echo $row_name; ?></select>
+  	<label for="price">Pris</label><select name="price"><?php e($row_name); ?></select>
 	</div>
 	<div class="formrow">
-  	<label for="on_stock">På lager</label><select name="on_stock"><?php echo $row_name; ?></select>
+  	<label for="on_stock">På lager</label><select name="on_stock"><?php e($row_name); ?></select>
 	</div>
 	<div class="formrow">
-  	<label for="keyword">Nøgleord</label><select name="keyword"><?php echo $row_name; ?></select>
+  	<label for="keyword">Nøgleord</label><select name="keyword"><?php e($row_name); ?></select>
 	</div>
 
 	<div style="clear:both; margin-top: 1em;">
@@ -180,7 +180,7 @@ else {
 
 <?php echo $msg; ?>
 <p>Vær meget forsigtig med denne funktion. Den tjekker ikke, om input er ordentligt. Det skal være en fil separaret af semikolon.</p>
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="editproduct" enctype="multipart/form-data">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post" id="editproduct" enctype="multipart/form-data">
 <fieldset>
 		<p><strong>Note:</strong> Du må kun bruge a-z og 0-9 i filnavnet.</p>
 		<p>Du kan uploade <var>.jpg</var>- og <var>.png</var>-filer og filerne må maksimalt fylde 300KB.</p>

@@ -1,5 +1,4 @@
 <?php
-
 /* UNDER DEVELOPMENT */
 
 
@@ -11,7 +10,6 @@
  * @todo    Mulighed for at vælge størrelser på gravatar og sætte sin egen standard
  *
  */
-
 require('../../include_first.php');
 
 $kernel->module('comment');
@@ -58,7 +56,7 @@ else {
 		$contact = new Contact($kernel, $values['scan_in_contact']);
 		$values['scan_in_email'] = $contact->address->get('email');
 	}
-	
+
 }
 
 $page = new Intraface_Page($kernel);
@@ -69,29 +67,29 @@ $page->start('Indstillinger');
 
 <?php // echo $oSetting->error->view(); ?>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 	<fieldset>
 		<legend>Bankoplysninger</legend>
 		<fieldset>
 			<legend>Kontobetaling:</legend>
 			<div class="formrow">
 				<label for="bankname">Bank</label>
-				<input type="text" name="bank_name" id="bankname" value="<?php print $values['bank_name']; ?>" />
+				<input type="text" name="bank_name" id="bankname" value="<?php e($values['bank_name']); ?>" />
 			</div>
 			<div class="formrow">
 				<label for="regnumber">Registreringsnummer</label>
-				<input type="text" name="bank_reg_number" id="regnumber" value="<?php echo $values['bank_reg_number']; ?>" />
+				<input type="text" name="bank_reg_number" id="regnumber" value="<?php e($values['bank_reg_number']); ?>" />
 			</div>
 			<div class="formrow">
 				<label for="accountnumber">Kontonummer</label>
-				<input type="text" name="bank_account_number" id="accountnumber" value="<?php echo $values['bank_account_number']; ?>" />
+				<input type="text" name="bank_account_number" id="accountnumber" value="<?php e($values['bank_account_number']); ?>" />
 			</div>
 		</fieldset>
 		<fieldset>
 			<legend>Girobetaling:</legend>
 			<div class="formrow">
 				<label for="giroaccountnumber">Girokontonummer</label>
-				<input type="text" name="giro_account_number" id="giroaccountnumber" value="<?php echo $values['giro_account_number']; ?>" />
+				<input type="text" name="giro_account_number" id="giroaccountnumber" value="<?php e($values['giro_account_number']); ?>" />
 			</div>
 		</fieldset>
 	</fieldset>
@@ -101,7 +99,7 @@ $page->start('Indstillinger');
 		<div class="formrow">
 			<label for="scan-in">E-mail</label>
 			<?php if (!empty($values['scan_in_email'])): ?>
-				<?php echo $values['scan_in_email']; ?> <a href="<?php echo $_SERVER['PHP_SELF'] ?>?action=deletescanin">Slet Læs-ind e-mail</a>
+				<?php e($values['scan_in_email']); ?> <a href="<?php e($_SERVER['PHP_SELF']); ?>?action=deletescanin">Slet Læs-ind e-mail</a>
 			<?php else: ?>
 			<input type="text" value="" name="scan_in_contact" />
 			<?php endif; ?>
@@ -110,11 +108,11 @@ $page->start('Indstillinger');
 
 	<fieldset>
 		<legend>Tekst på rykker</legend>
-		<textarea name="reminder_text" cols="80" rows="8"><?php echo $values['reminder_text']; ?></textarea>
+		<textarea name="reminder_text" cols="80" rows="8"><?php e($values['reminder_text']); ?></textarea>
 	</fieldset>
 
 	<div>
-		<input type="submit" name="submit" value="Gem" /> eller <a href="<?php echo $_SERVER['HTTP_REFERER']; ?>">Fortryd</a>
+		<input type="submit" name="submit" value="Gem" /> eller <a href="<?php e($_SERVER['HTTP_REFERER']); ?>">Fortryd</a>
 	</div>
 </form>
 

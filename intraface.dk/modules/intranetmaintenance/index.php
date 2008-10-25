@@ -9,11 +9,11 @@ $translation = $kernel->getTranslation('intranetmaintenance');
 
 $intranetmaintenance = new IntranetMaintenance();
 
-if(isset($_GET["search"])) {
-    if(isset($_GET["text"]) && $_GET["text"] != "") {
+if (isset($_GET["search"])) {
+    if (isset($_GET["text"]) && $_GET["text"] != "") {
         $intranetmaintenance->getDBQuery($kernel)->setFilter("text", $_GET["text"]);
     }
-} elseif(isset($_GET['character'])) {
+} elseif (isset($_GET['character'])) {
     $intranetmaintenance->getDBQuery($kernel)->useCharacter();
 }
 
@@ -26,20 +26,20 @@ $page = new Intraface_Page($kernel);
 $page->start($translation->get('intranets'));
 ?>
 
-<h1><?php echo $translation->get('intranets'); ?></h1>
+<h1><?php e($translation->get('intranets')); ?></h1>
 
 <ul class="options">
-    <li><a href="intranet_edit.php"><?php echo $translation->get('create', 'common'); ?></a></li>
-    <li><a href="users.php"><?php echo $translation->get('users'); ?></a></li>
+    <li><a href="intranet_edit.php"><?php e($translation->get('create', 'common')); ?></a></li>
+    <li><a href="users.php"><?php e($translation->get('users')); ?></a></li>
 </ul>
 
 <form method="get" action="index.php">
     <fieldset>
-        <legend><?php echo safeToHtml($translation->get('search')); ?></legend>
-        <label><?php echo safeToHtml($translation->get('search text')); ?>:
-            <input type="text" name="text" value="<?php echo $intranetmaintenance->getDBQuery($kernel)->getFilter("text"); ?>" />
+        <legend><?php e($translation->get('search')); ?></legend>
+        <label><?php e($translation->get('search text')); ?>:
+            <input type="text" name="text" value="<?php e($intranetmaintenance->getDBQuery($kernel)->getFilter("text")); ?>" />
         </label>
-        <span><input type="submit" name="search" value="<?php echo safeToHtml($translation->get('search')); ?>" /></span>
+        <span><input type="submit" name="search" value="<?php e($translation->get('search')); ?>" /></span>
     </fieldset>
 </form>
 
@@ -48,18 +48,18 @@ $page->start($translation->get('intranets'));
 <table>
 <thead>
     <tr>
-        <th><?php echo $translation->get('name'); ?></th>
+        <th><?php e($translation->get('name')); ?></th>
         <th>&nbsp;</th>
     </tr>
 </thead>
 <tbody>
     <?php
-    for($i = 0; $i < count($intranets); $i++) {
+    for ($i = 0; $i < count($intranets); $i++) {
         ?>
         <tr>
-            <td><a href="intranet.php?id=<?php echo intval($intranets[$i]["id"]); ?>"><?php echo safeToHtml($intranets[$i]["name"]); ?></a></td>
+            <td><a href="intranet.php?id=<?php e($intranets[$i]["id"]); ?>"><?php e($intranets[$i]["name"]); ?></a></td>
             <td class="buttons">
-                <a href="intranet_edit.php?id=<?php print($intranets[$i]["id"]); ?>"><?php echo $translation->get('edit', 'common'); ?></a>
+                <a href="intranet_edit.php?id=<?php e($intranets[$i]["id"]); ?>"><?php e($translation->get('edit', 'common')); ?></a>
             </td>
         </tr>
         <?php

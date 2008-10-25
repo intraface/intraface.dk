@@ -34,7 +34,7 @@ class Intraface_modules_product_Attribute_Group_Gateway
             ->addWhere('id = '.intval($id))
             ->execute();
         
-        if($groups->count() == 0) {
+        if ($groups->count() == 0) {
             throw new Intraface_Gateway_Exception('Invalid group id "'.$id.'" to undelete');
         }
         return $groups->getFirst();
@@ -46,7 +46,7 @@ class Intraface_modules_product_Attribute_Group_Gateway
     public function findById($id)
     {
         $groups = Doctrine::getTable('Intraface_modules_product_Attribute_Group')->findById(intval($id));
-        if($groups->count() == 0) {
+        if ($groups->count() == 0) {
             throw new Intraface_Gateway_Exception('Invalid group id "'.$id.'" in findById');
         }
         return $groups->getFirst();

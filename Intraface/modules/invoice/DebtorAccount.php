@@ -19,13 +19,13 @@ class DebtorAccount extends Intraface_Standard {
     function __construct($object) 
     {
 
-        if(!is_object($object)) {
+        if (!is_object($object)) {
             trigger_error('DebtorAccount needs debtor or reminder as parameter', E_USER_ERROR);
             return false;
         }
 
         $this->account_for = strtolower(get_class($object));
-        if(!in_array($this->account_for, array('invoice', 'reminder'))) {
+        if (!in_array($this->account_for, array('invoice', 'reminder'))) {
             trigger_error('Debtor account can only be account for either invoice or reminder. Is '.$this->account_for, E_USER_ERROR);
             return false;
         }
@@ -84,7 +84,7 @@ class DebtorAccount extends Intraface_Standard {
         $depreciations = $this->getDepreciation()->getList();
         
         // Hent kreditnotaer. Ikke hvis det er en reminder. Den kan ikke krediteres.
-        if($this->account_for == "invoice") {
+        if ($this->account_for == "invoice") {
             $credit_note = $this->getCreditNote();
             $credit_note->getDBQuery()->setCondition("where_from = 5 AND where_from_id = ".$this->object->get("id"));
             $credit_note->getDBQuery()->setSorting("this_date");
@@ -110,7 +110,7 @@ class DebtorAccount extends Intraface_Standard {
             $date['credit_note'] = (!empty($credit_notes[$cre]["this_date"])) ? strtotime($credit_notes[$cre]["this_date"]) : 0;
             
             $date = array_filter($date); // removes items with 0
-            if(count($date) == 0) {
+            if (count($date) == 0) {
                 trigger_error('Problem in finding the next entry!', E_USER_ERROR);
                 return false;
             }
@@ -135,7 +135,7 @@ class DebtorAccount extends Intraface_Standard {
                     $value[$i]["type"] = "credit_note";
                     $value[$i]["date"] = $credit_notes[$cre]["this_date"];
                     $value[$i]["dk_date"] = $credit_notes[$cre]["dk_this_date"];
-                    if($credit_notes[$cre]["description"] != "") {
+                    if ($credit_notes[$cre]["description"] != "") {
                         $value[$i]["description"] = $credit_notes[$cre]["description"];
                     }
                     else {

@@ -47,16 +47,16 @@ $page->start('Onlinebetalinger');
 	<legend>Søgning</legend>
 	<form method="get" action="index.php">
 		<label>Tekst
-			<input type="text" name="text" value="<?php echo $onlinepayment->getDBQuery()->getFilter("text"); ?>" />
+			<input type="text" name="text" value="<?php e($onlinepayment->getDBQuery()->getFilter("text")); ?>" />
 		</label>
 		<label>Status
 		<select name="status">
 			<option value="-1">Alle</option>
 			<?php
 			$status_types = OnlinePayment::getStatusTypes();
-			for($i = 1, $max = count($status_types); $i < $max; $i++) {
+			for ($i = 1, $max = count($status_types); $i < $max; $i++) {
 				?>
-				<option value="<?php print($i); ?>" <?php if ($onlinepayment->getDBQuery()->getFilter("status") == $i) echo ' selected="selected"';?>><?php print($translation->get($status_types[$i])); ?></option>
+				<option value="<?php e($i); ?>" <?php if ($onlinepayment->getDBQuery()->getFilter("status") == $i) echo ' selected="selected"';?>><?php e($translation->get($status_types[$i])); ?></option>
 				<?php
 			}
 			?>
@@ -92,17 +92,16 @@ $page->start('Onlinebetalinger');
 		<?php
 
 		$saldo = 0;
-		for($i = 0, $max = count($payments); $i < $max; $i++) {
+		for ($i = 0, $max = count($payments); $i < $max; $i++) {
 			?>
-			<tr id="p<?php print($payments[$i]["id"]); ?>" <?php if (!empty($_GET['from_id']) AND $_GET['from_id'] == $payments[$i]["id"]) echo ' class="fade"'; ?>>
-				<td><?php print($payments[$i]["dk_date_created"]); ?></td>
-				<td><a href="payment.php?id=<?php print($payments[$i]['id']); ?>">
+			<tr id="p<?php e($payments[$i]["id"]); ?>" <?php if (!empty($_GET['from_id']) AND $_GET['from_id'] == $payments[$i]["id"]) echo ' class="fade"'; ?>>
+				<td><?php e($payments[$i]["dk_date_created"]); ?></td>
+				<td><a href="payment.php?id=<?php e($payments[$i]['id']); ?>">
 					<?php
-					if($payments[$i]["transaction_number"] == "") {
-						print("Ej angivet");
-					}
-					else {
-						print($payments[$i]["transaction_number"]);
+					if ($payments[$i]["transaction_number"] == "") {
+						e("Ej angivet");
+					} else {
+						e($payments[$i]["transaction_number"]);
 					}
 					?></a>
 				</td>
@@ -110,29 +109,29 @@ $page->start('Onlinebetalinger');
 					<?php
 					switch($payments[$i]['belong_to']) {
 						case "invoice":
-							if($kernel->user->hasModuleAccess('invoice')) {
+							if ($kernel->user->hasModuleAccess('invoice')) {
 								$debtor_module = $kernel->useModule('debtor');
 								print("<a href=\"".$debtor_module->getPath()."view.php?id=".$payments[$i]['belong_to_id']."\">Faktura</a>");
 							}
 							else {
-								print("Faktura");
+								e("Faktura");
 							}
 						break;
 						case "order":
-							if($kernel->user->hasModuleAccess('order')) {
+							if ($kernel->user->hasModuleAccess('order')) {
 								$debtor_module = $kernel->useModule('debtor');
 								print("<a href=\"".$debtor_module->getPath()."view.php?id=".$payments[$i]['belong_to_id']."\">Ordre</a>");
 							}
 							else {
-								print("Ordre");
+								e("Ordre");
 							}
 						break;
 						default:
-							print("Ingen");
+							e("Ingen");
 					}
 					?>
 				</td>
-				<td><?php print($payments[$i]["dk_amount"]); ?></td>
+				<td><?php e($payments[$i]["dk_amount"]); ?></td>
 				<td>
 					<?php
 					if ($payments[$i]["status"] == 'captured') {
@@ -140,16 +139,16 @@ $page->start('Onlinebetalinger');
 					}
 
 
-					print($translation->get($payments[$i]["status"]));
+					e($translation->get($payments[$i]["status"]));
 
-					if($payments[$i]['user_transaction_status_translated'] != "") {
+					if ($payments[$i]['user_transaction_status_translated'] != "") {
 						e(" (".$payments[$i]['user_transaction_status_translated']);
-                        if($payments[$i]['pbs_status'] != '' && $payments[$i]['pbs_status'] != '000') {
+                        if ($payments[$i]['pbs_status'] != '' && $payments[$i]['pbs_status'] != '000') {
                             e(": ".$payments[$i]['pbs_status']);
                         }
                         e(")");
 					}
-					elseif($payments[$i]['status'] == 'authorized') {
+					elseif ($payments[$i]['status'] == 'authorized') {
 						print(" (Ikke <acronym title=\"Betaling kan først hæves når faktura er sendt\">hævet</acronym>)");
 					}
 					?>
@@ -162,7 +161,7 @@ $page->start('Onlinebetalinger');
 	</tbody>
 </table>
 
-<p><strong>Hævet i alt på søgningen: </strong> <?php echo $saldo; ?> kroner.</p>
+<p><strong>Hævet i alt på søgningen: </strong> <?php e($saldo); ?> kroner.</p>
 <?php endif; ?>
 <?php
 

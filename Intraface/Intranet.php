@@ -46,7 +46,7 @@ class Intraface_Intranet extends Intraface_Standard
         $this->db = MDB2::singleton(DB_DSN);
         $this->error = new Intraface_Error();
 
-        if(!$this->load()) {
+        if (!$this->load()) {
             trigger_error('unknown intranet', E_USER_ERROR);
         }
     }
@@ -73,11 +73,11 @@ class Intraface_Intranet extends Intraface_Standard
             FROM intranet
             WHERE id = ".$this->db->quote($this->id, 'integer'));
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error($result->getUserInfo(), E_USER_ERROR);
         }
 
-        if($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+        if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             $this->value   = $row;
             $this->address = Intraface_Address::factory('intranet', $this->id);
             return $this->id;
@@ -100,7 +100,7 @@ class Intraface_Intranet extends Intraface_Standard
      */
     function hasModuleAccess($module)
     {
-        if(is_string($module)) {
+        if (is_string($module)) {
             if (empty($this->modules)) {
                 $result = $this->db->query("SELECT id, name FROM module WHERE active = 1");
                 while($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {

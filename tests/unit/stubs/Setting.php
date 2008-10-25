@@ -5,7 +5,7 @@ class FakeSetting
 
     function get($type, $setting)
     {
-        if(!isset($this->setting[$type][$setting])) {
+        if (!isset($this->setting[$type][$setting])) {
             trigger_error('You need to create the setting '.$type.':'.$setting.' in with set(type, key, value) before use', E_USER_ERROR);
             exit;
         }

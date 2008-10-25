@@ -23,10 +23,10 @@ $page->start(t('Edit category'));
 
 <?php echo $category->error->view(); ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 <fieldset>
     <legend><?php e(t('Category information')); ?></legend>
-        <input type="hidden" name="id" value="<?php if(isset($values['id'])) e($values['id']); ?>" />
+        <input type="hidden" name="id" value="<?php if (isset($values['id'])) e($values['id']); ?>" />
         <div class="formrow">
             <label for="name"><?php e(t('Name')); ?></label>
             <input type="text" name="name" id="name" value="<?php if (isset($values['name'])) e($values['name']); ?>" />
@@ -35,7 +35,7 @@ $page->start(t('Edit category'));
     
     <div>
         <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" class="save" /> <?php e(t('or', 'common')); ?>
-        <a href="attribute_groups.php"><?php e(t('regret', 'common')); ?></a>
+        <a href="attribute_groups.php"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 
 </form>

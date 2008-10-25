@@ -137,7 +137,7 @@ class CMS_Section extends Intraface_Standard
         $this->value = array_merge($this->value, $row);
         $this->value['type'] = $this->section_types[$this->get('type_key')];
         $this->template_section = $this->getTemplateSection($this->get('template_section_id'));
-        if(!is_object($this->template_section)) {
+        if (!is_object($this->template_section)) {
             trigger_error('Unable to load template section', E_USER_ERROR);
             return false;
         }

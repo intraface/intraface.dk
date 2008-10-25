@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $debtor->load();
 
-            // @todo vi skulle faktisk kun videre, hvis det ikke er 
+            // @todo vi skulle faktisk kun videre, hvis det ikke er
             // en tilbagebetaling eller hvad?
             if ($debtor->get("type") == "invoice" && $debtor->get("status") == "sent" AND !$onlinepayment->error->isError()) {
                 if ($kernel->user->hasModuleAccess('accounting')) {
@@ -161,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($return_redirect->get('identifier') == 'add_item') {
             $selected_products = $return_redirect->getParameter('product_id', 'with_extra_value');
-            foreach($selected_products AS $product) {
+            foreach ($selected_products as $product) {
                 $debtor->loadItem();
                 $product['value'] = unserialize($product['value']);
                 $debtor->item->save(array('product_id' => $product['value']['product_id'], 'product_variation_id' => $product['value']['product_variation_id'], 'quantity' => $product['extra_value'], 'description' => ''));
@@ -198,10 +198,10 @@ $page->start($translation->get($debtor->get('type')));
 
     <ul class="options">
         <?php if ($debtor->get("locked") == false): ?>
-            <li><a href="edit.php?id=<?php print(intval($debtor->get("id"))); ?>">Ret</a></li>
+            <li><a href="edit.php?id=<?php e($debtor->get("id")); ?>">Ret</a></li>
         <?php endif; ?>
-        <li><a class="pdf" href="pdf_viewer.php?id=<?php print(intval($debtor->get("id"))); ?>" target="_blank">Udskriv PDF</a></li>
-        <li><a href="list.php?id=<?php print(intval($debtor->get("id"))); ?>&amp;type=<?php e($debtor->get("type")); ?>&amp;use_stored=true">Luk</a></li>
+        <li><a class="pdf" href="pdf_viewer.php?id=<?php e($debtor->get("id")); ?>" target="_blank">Udskriv PDF</a></li>
+        <li><a href="list.php?id=<?php e($debtor->get("id")); ?>&amp;type=<?php e($debtor->get("type")); ?>&amp;use_stored=true">Luk</a></li>
     </ul>
 
     <p><?php e($debtor->get('description')); ?></p>
@@ -219,7 +219,7 @@ if (isset($onlinepayment)) {
 ?>
 <?php if ($kernel->intranet->get("pdf_header_file_id") == 0 && $kernel->user->hasModuleAccess('administration')): ?>
     <div class="message-dependent">
-        <p><a href="<?php echo PATH_WWW; ?>/main/controlpanel/intranet.php">Upload et logo</a> til dine pdf'er.</p>
+        <p><a href="<?php e(url('/main/controlpanel/intranet.php')); ?>">Upload et logo</a> til dine pdf'er.</p>
     </div>
 <?php endif; ?>
 
@@ -248,7 +248,7 @@ if (isset($onlinepayment)) {
         case 'user':
             if ($kernel->user->getAddress()->get('name') == '' || $kernel->user->getAddress()->get('email') == '') {
                 $valid_sender = false;
-                echo '<div class="message-dependent"><p>'.$translation->get('you need to fill in an e-mail address to send e-mail').'. <a href="'.PATH_WWW.'/main/controlpanel/user_edit.php">'.$translation->get('do it now').'</a>.</p></div>';
+                echo '<div class="message-dependent"><p>'.$translation->get('you need to fill in an e-mail address to send e-mail').'. <a href="'.url('/main/controlpanel/user_edit.php').'">'.$translation->get('do it now').'</a>.</p></div>';
             }
             break;
         case 'defined':
@@ -290,7 +290,7 @@ if (isset($onlinepayment)) {
     if ($scan_in_contact->get('id') == 0) {
         $valid_scan_in_contact = false;
         echo '<div class="message-dependent"><p>';
-        echo $translation->get('a contact for the scan in bureau is needed to send electronic invoices').'. ';
+        e($translation->get('a contact for the scan in bureau is needed to send electronic invoices').'. ');
         if ($kernel->user->hasModuleAccess('administration')) {
             echo '<a href="'.$debtor_module->getPath().'setting.php">'.$translation->get('do it now').'</a>.';
         }
@@ -299,7 +299,7 @@ if (isset($onlinepayment)) {
     } elseif (!$scan_in_contact->address->get('email')) {
         $valid_scan_in_contact = false;
         echo '<div class="message-dependent"><p>';
-        echo $translation->get('you need to provide a valid e-mail address to the contact for the scan in bureau').'.';
+        e($translation->get('you need to provide a valid e-mail address to the contact for the scan in bureau').'.');
         echo ' <a href="'.$contact_module->getPath().'contact.php?id='.$scan_in_contact->get('id').'">'.$translation->get('do it now').'</a>.';
         echo '</p></div>';
     }
@@ -307,11 +307,11 @@ if (isset($onlinepayment)) {
 <?php endif; ?>
 
 <?php if (isset($email_send_with_success) && $email_send_with_success): ?>
-    <div class="message-dependent"><p><?php echo $translation->get('your email was sent').'.'; ?></p></div>
+    <div class="message-dependent"><p><?php e($translation->get('your email was sent').'.'); ?></p></div>
 <?php endif; ?>
 
-<form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
-    <input type="hidden" name="id" value="<?php echo $debtor->get('id'); ?>" />
+<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
+    <input type="hidden" name="id" value="<?php e($debtor->get('id')); ?>" />
     <?php if ($debtor->contact->get('preferred_invoice') == 2 AND  $debtor->get('status') == 'created' AND isset($valid_sender) AND $valid_sender == true): ?>
         <input type="submit" value="Send på e-mail" name="send_email" class="confirm" title="Dette vil sende e-mail til kontakten" />
     <?php elseif ($debtor->contact->get('preferred_invoice') == 2 AND $debtor->get('status') == 'sent' AND isset($valid_sender) AND $valid_sender == true): ?>
@@ -371,12 +371,12 @@ if (isset($onlinepayment)) {
                 $contact = new Contact($kernel, $key);
                 ?>
                 <tr>
-                    <td><?php echo $contact->address->get('name'); ?></td>
-                    <td><?php echo $contact->address->get('address'); ?></td>
-                    <td><?php echo $contact->address->get('postcode'); ?> <?php echo $contact->address->get('city'); ?></td>
-                    <td><?php echo $contact->address->get('phone'); ?></td>
-                    <td><?php echo $contact->address->get('email'); ?></td>
-                    <td><a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=changecontact&amp;new_id=<?php echo $contact->get('id'); ?>&amp;id=<?php echo $debtor->get('id'); ?>" onclick="return confirm('Er du sikker på at du vil erstatte den nuværende kunde med den der er fundet i det eksisterende adressekartotek?');">[Vælg]</a></td>
+                    <td><?php e($contact->address->get('name')); ?></td>
+                    <td><?php e($contact->address->get('address')); ?></td>
+                    <td><?php e($contact->address->get('postcode')); ?> <?php e($contact->address->get('city')); ?></td>
+                    <td><?php e($contact->address->get('phone')); ?></td>
+                    <td><?php e($contact->address->get('email')); ?></td>
+                    <td><a href="<?php e($_SERVER['PHP_SELF']); ?>?action=changecontact&amp;new_id=<?php e($contact->get('id')); ?>&amp;id=<?php e($debtor->get('id')); ?>" onclick="return confirm('Er du sikker på at du vil erstatte den nuværende kunde med den der er fundet i det eksisterende adressekartotek?');">[Vælg]</a></td>
                 </tr>
                 <?php
             }
@@ -413,22 +413,23 @@ if (isset($onlinepayment)) {
                             <?php
                             switch($kernel->setting->get('intranet', 'debtor.sender')) {
                                 case 'user':
-                                    echo $kernel->user->getAddress()->get('name'). ' &lt;'.$kernel->user->getAddress()->get('email').'&gt;';
+                                    e($kernel->user->getAddress()->get('name'). ' <'.$kernel->user->getAddress()->get('email').'>');
                                     break;
                                 case 'defined':
-                                    echo $kernel->setting->get('intranet', 'debtor.sender.name').' &lt;'.$kernel->setting->get('intranet', 'debtor.sender.email').'&gt;';
+                                    e($kernel->setting->get('intranet', 'debtor.sender.name').' <'.$kernel->setting->get('intranet', 'debtor.sender.email').'>');
                                     break;
                             }
 
-                            if ($kernel->user->hasModuleAccess('administration')) {
-                                echo ' <a href="'.$debtor_module->getPath().'setting.php" class="edit">'.safeToHtml($translation->get('change')).'</a></p>';
+                            if ($kernel->user->hasModuleAccess('administration')) { ?>
+                                <a href="<?php e($debtor_module->getPath()); ?>setting.php" class="edit"><?php e($translation->get('change')); ?></a></p>
+                            <?php
                             }
                             ?>
                         </td>
                 </tr>
             <?php endif; ?>
             <tr>
-                <th>Status</th>
+                <th><?php e(t('Status')); ?></th>
                 <td>
                     <?php
                         e(t($debtor->get("status")));
@@ -438,7 +439,7 @@ if (isset($onlinepayment)) {
             </tr>
             <?php if ($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {	?>
                 <tr>
-                    <th>Betalingsmetode</th>
+                    <th><?php e(t('Payment method')); ?></th>
                     <td><?php e($debtor->get("translated_payment_method")); ?></td>
                 </tr>
                 <?php if ($debtor->get("payment_method") == 3) { ?>
@@ -450,16 +451,16 @@ if (isset($onlinepayment)) {
 
                 <?php if ($debtor->get("status") == "executed") { ?>
                     <tr>
-                        <th>Afsluttet dato:</th>
+                        <th><?php e(t('Date executed')); ?></th>
                         <td><?php e($debtor->get("dk_date_executed")); ?></td>
                     </tr>
                 <?php } ?>
             <?php } ?>
             <tr>
-                <th>Hvorfra</th>
+                <th><?php e(t('Where from')); ?></th>
                 <td>
                     <?php if ($debtor->get("where_from_id") > 0) { ?>
-                        <a href="view.php?id=<?php print(intval($debtor->get("where_from_id"))); ?>"><?php e(t($debtor->get("where_from"))); ?></a>
+                        <a href="view.php?id=<?php e($debtor->get("where_from_id")); ?>"><?php e(t($debtor->get("where_from"))); ?></a>
                <?php } else { ?>
                         <?php e(t($debtor->get('where_from'))); ?>
                     <?php } ?>
@@ -467,13 +468,13 @@ if (isset($onlinepayment)) {
             </tr>
             <?php if ($debtor->get('where_to') AND $debtor->get('where_to_id')): ?>
             <tr>
-                <th>Hvortil</th>
+                <th><?php e(t('Where to')); ?></th>
                 <td><a href="view.php?id=<?php e($debtor->get('where_to_id')); ?>"><?php e(t($debtor->get('where_to'))); ?></a></td>
             </tr>
             <?php endif; ?>
             <?php if (($debtor->get("type") == 'credit_note' || $debtor->get("type") == 'invoice') AND $kernel->user->hasModuleAccess('accounting')): ?>
             <tr>
-                <th>Bogført</th>
+                <th><?php e(t('Stated')); ?></th>
                 <td>
                     <?php
                         if ($debtor->isStated()) {
@@ -481,9 +482,10 @@ if (isset($onlinepayment)) {
                             e($debtor->get('dk_date_stated'));
                             echo ' <a href="'.$module_accounting->getPath().'voucher.php?id='.$debtor->get('voucher_id').'">Se bilag</a>';
                         } else {
-                            e('Ikke bogført');
-                            if ($debtor->get('status') == 'sent' || $debtor->get('status') == 'executed') {
-                                echo ' <a href="state_'.$debtor->get('type').'.php?id=' . intval($debtor->get("id")) . '">'.safeToHtml($translation->get('state '.$debtor->get('type'))).'</a>';
+                            e(t('Not stated'));
+                            if ($debtor->get('status') == 'sent' || $debtor->get('status') == 'executed') { ?>
+                                <a href="state_<?php e($debtor->get('type')); ?>.php?id=<?php e($debtor->get("id")); ?>"><?php e($translation->get('state '.$debtor->get('type'))); ?></a>
+                            <?php
                             }
 
                         }
@@ -497,17 +499,17 @@ if (isset($onlinepayment)) {
     <?php if ($debtor->get("message") != ''): ?>
         <fieldset>
             <legend>Tekst</legend>
-            <p><?php print(nl2br(safeToHtml($debtor->get("message")))); ?></p>
+            <p><?php autohtml($debtor->get("message")); ?></p>
         </fieldset>
     <?php endif; ?>
 
     <?php if ($debtor->get("internal_note") != ''): ?>
         <fieldset>
-            <legend>Intern note</legend>
+            <legend><?php e(t('Internal note')); ?></legend>
             <?php
-            $internal_note = ereg_replace("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]","<a href=\"\\0\" target=\"_blank\">\\0</a>", safeToHtml($debtor->get("internal_note")));
+            $internal_note = ereg_replace("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]","<a href=\"\\0\" target=\"_blank\">\\0</a>", $debtor->get("internal_note"));
             ?>
-            <p><?php print(nl2br($internal_note)); ?></p>
+            <p><?php autohtml($internal_note); ?></p>
         </fieldset>
     <?php endif; ?>
 
@@ -516,40 +518,40 @@ if (isset($onlinepayment)) {
 <div id="colTwo">
     <div class="box">
     <table>
-        <caption>Kontaktoplysninger</caption>
+        <caption><?php e(t('Contact information')); ?></caption>
         <tbody>
             <tr>
-                <th>Nummer</th>
-                <td><?php e($debtor->contact->get("number")); ?> <a href="view.php?id=<?php print(intval($debtor->get('id'))); ?>&amp;edit_contact=<?php print(intval($debtor->contact->get('id'))); ?>" class="edit">Ret</a></td>
+                <th><?php e(t('Number')); ?></th>
+                <td><?php e($debtor->contact->get("number")); ?> <a href="view.php?id=<?php e($debtor->get('id')); ?>&amp;edit_contact=<?php e($debtor->contact->get('id')); ?>" class="edit">Ret</a></td>
             </tr>
             <tr>
-                <th>Kontakt</th>
-                <td><a href="<?php print($contact_module->getPath()); ?>contact.php?id=<?php echo intval($debtor->contact->get('id')); ?>"><?php e($debtor->contact->address->get("name")); ?></a></td>
+                <th><?php e(t('Contact')); ?></th>
+                <td><a href="<?php e($contact_module->getPath()); ?>contact.php?id=<?php e($debtor->contact->get('id')); ?>"><?php e($debtor->contact->address->get("name")); ?></a></td>
             </tr>
             <tr>
-                <th>Adresse</th>
+                <th><?php e(t('Address')); ?></th>
                 <td class="adr">
                     <div class="adr">
-                        <div class="street-address"><?php print(nl2br(safeToHtml($debtor->contact->address->get("address")))); ?></div>
-                        <span class="postal-code"><?php print safeToHtml($debtor->contact->address->get('postcode')); ?></span>  <span class="location"><?php e($debtor->contact->address->get('city')); ?></span>
+                        <div class="street-address"><?php autohtml($debtor->contact->address->get("address")); ?></div>
+                        <span class="postal-code"><?php e($debtor->contact->address->get('postcode')); ?></span>  <span class="location"><?php e($debtor->contact->address->get('city')); ?></span>
                         <div class="country"><?php e($debtor->contact->address->get('country')); ?></div>
                     </div>
                 </td>
             </tr>
             <tr>
-                <th>E-mail</th>
+                <th><?php e(t('Email')); ?></th>
                 <td><?php e($debtor->contact->address->get("email")); ?></td>
             </tr>
             <?php if ($debtor->contact->address->get("cvr") != '' && $debtor->contact->address->get("cvr") != 0): ?>
                 <tr>
-                    <th>CVR</th>
+                    <th><?php e(t('CVR')); ?></th>
                     <td><?php e($debtor->contact->address->get("cvr")); ?></td>
                 </tr>
             <?php endif; ?>
 
             <?php if (isset($debtor->contact_person) && strtolower(get_class($debtor->contact_person)) == "contactperson"): ?>
                 <tr>
-                    <th>Att.</th>
+                    <th><?php e(t('Att.')); ?></th>
                     <td><?php e($debtor->contact_person->get("name")); ?></td>
                 </tr>
             <?php endif; ?>
@@ -559,7 +561,7 @@ if (isset($onlinepayment)) {
 
     <?php if ($debtor->get("type") == "invoice" && $debtor->get("status") == "sent"):  ?>
         <div class="box">
-            <h2>Registrér betaling</h2>
+            <h2><?php e(t('Register payment')); ?></h2>
             <form method="post" action="register_payment.php">
                 <?php
                 // @TODO: hack as long as the payment types are not the same as on the invoice
@@ -584,12 +586,12 @@ if (isset($onlinepayment)) {
                 </div>
 
                 <div class="formrow">
-                    <label for="payment_date" class="tight">Dato</label>
+                    <label for="payment_date" class="tight"><?php e(t('Date')); ?></label>
                     <input type="text" name="payment_date" id="payment_date" value="<?php e(date("d-m-Y")); ?>" size="8" />
                 </div>
 
                 <div style="clear: both;">
-                    <input class="confirm" type="submit" name="payment" value="Registrér" title="Dette vil registrere betalingen" />
+                    <input class="confirm" type="submit" name="payment" value="<?php e(t('Register')); ?>" title="<?php e(t('This will register the payment')); ?>" />
                     <?php e(t('or', 'common')); ?>
                     <a href="register_payment.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>"><?php e(t('give me more choices')); ?></a>.
                 </div>
@@ -613,48 +615,48 @@ if (isset($onlinepayment)) {
         if (count($payments) > 0) {
             ?>
                 <table class="stripe">
-                    <caption>Betalinger</caption>
+                    <caption><?php e(t('Payments')); ?></caption>
                     <thead>
                         <tr>
-                            <th>Dato</th>
-                            <th>Type</th>
-                            <th>Beskrivelse</th>
-                            <th>Beløb</th>
+                            <th><?php e(t('Date')); ?></th>
+                            <th><?php e(t('Type')); ?></th>
+                            <th><?php e(t('Description')); ?></th>
+                            <th><?php e(t('Amount')); ?></th>
                             <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
-                                <th>Bogført</th>
+                                <th><?php e(t('Stated')); ?></th>
                             <?php endif; ?>
                         </tr>
                     </thead>
                     <tbody>
                     <?php
-                    for($i = 0, $max = count($payments); $i < $max; $i++) {
-                        $payment_total += $payments[$i]["amount"];
+                    foreach ($payments as $payment) {
+                        $payment_total += $payment["amount"];
                         ?>
                         <tr>
-                            <td><?php e($payments[$i]["dk_date"]); ?></td>
-                            <td><?php e(t($payments[$i]['type'])); ?></td>
+                            <td><?php e($payment["dk_date"]); ?></td>
+                            <td><?php e(t($payment['type'])); ?></td>
                             <td>
                                 <?php
-                                if ($payments[$i]["type"] == "credit_note") {
+                                if ($payment["type"] == "credit_note") {
                                     ?>
-                                    <a href="view.php?id=<?php print(intval($payments[$i]["id"])); ?>"><?php e($payments[$i]["description"]); ?></a>
+                                    <a href="view.php?id=<?php e($payment["id"]); ?>"><?php e($payment["description"]); ?></a>
                                     <?php
                                 } else {
-                                    e($payments[$i]['description']);
+                                    e($payment['description']);
                                 }
                                 ?>
                             </td>
-                            <td><?php print(number_format($payments[$i]["amount"], 2, ",", ".")); ?></td>
+                            <td><?php e(number_format($payment["amount"], 2, ",", ".")); ?></td>
                             <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
                                 <td>
-                                    <?php if ($payments[$i]['is_stated']): ?>
-                                        <a href="<?php e($module_accounting->getPath().'voucher.php?id='.$payments[$i]['voucher_id']); ?>"><?php e($translation->get('voucher')); ?></a>
-                                    <?php elseif ($payments[$i]['type'] == 'credit_note'): ?>
-                                        <a href="state_credit_note.php?id=<?php e($payments[$i]['id']) ?>"><?php e($translation->get('state credit note')); ?></a>
-                                    <?php elseif ($payments[$i]['type'] == 'depreciation'): ?>
-                                        <a href="state_depreciation.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>&amp;depreciation_id=<?php e($payments[$i]['id']) ?>"><?php e($translation->get('state depreciation')); ?></a>
+                                    <?php if ($payment['is_stated']): ?>
+                                        <a href="<?php e($module_accounting->getPath().'voucher.php?id='.$payment['voucher_id']); ?>"><?php e($translation->get('voucher')); ?></a>
+                                    <?php elseif ($payment['type'] == 'credit_note'): ?>
+                                        <a href="state_credit_note.php?id=<?php e($payment['id']) ?>"><?php e(t('state credit note')); ?></a>
+                                    <?php elseif ($payment['type'] == 'depreciation'): ?>
+                                        <a href="state_depreciation.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>&amp;depreciation_id=<?php e($payment['id']) ?>"><?php e(t('state depreciation')); ?></a>
                                     <?php else: ?>
-                                        <a href="state_payment.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>&amp;payment_id=<?php e($payments[$i]['id']) ?>"><?php e($translation->get('state payment')); ?></a>
+                                        <a href="state_payment.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>&amp;payment_id=<?php e($payment['id']) ?>"><?php e(t('state payment')); ?></a>
                                     <?php endif; ?>
                                 </td>
                             <?php endif; ?>
@@ -666,8 +668,8 @@ if (isset($onlinepayment)) {
                     <tr>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
-                        <td><strong>I alt</strong></td>
-                        <td><?php print(number_format($payment_total, 2, ",", ".")); ?></td>
+                        <td><strong><?php e(t('Total')); ?></strong></td>
+                        <td><?php e(number_format($payment_total, 2, ",", ".")); ?></td>
                         <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
                             <td>&nbsp;</td>
                         <?php endif; ?>
@@ -676,7 +678,7 @@ if (isset($onlinepayment)) {
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <th>Manglende betaling</th>
-                        <td><?php echo number_format($debtor->get("total") - $payment_total, 2, ",", "."); ?></td>
+                        <td><?php e(number_format($debtor->get("total") - $payment_total, 2, ",", ".")); ?></td>
                         <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
                             <td>&nbsp;</td>
                         <?php endif; ?>
@@ -702,21 +704,21 @@ if (isset($onlinepayment)) {
         if (count($payment_list) > 0) {
             ?>
             <div class="box">
-                <h2>Onlinebetaling</h2>
+                <h2><?php e(t('Online payment')); ?></h2>
 
                 <table class="stribe">
                     <thead>
                         <tr>
-                            <th>Dato</th>
-                            <th>Transactionsnummer</th>
-                            <th>Status</th>
-                            <th>Beløb</th>
+                            <th><?php e(t('Date')); ?></th>
+                            <th><?php e(t('Transaction number')); ?></th>
+                            <th><?php e(t('Status')); ?></th>
+                            <th><?php e(t('Amount')); ?></th>
                             <th>&nbsp;</th>
 
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($payment_list AS $p): ?>
+                        <?php foreach ($payment_list as $p): ?>
                             <tr>
                                 <td><?php e($p['dk_date_created']); ?></td>
                                 <td><?php e($p['transaction_number']); ?></td>
@@ -725,12 +727,13 @@ if (isset($onlinepayment)) {
                                     e(t($p['status'], 'onlinepayment'));
                                     if ($p['user_transaction_status_translated'] != "") {
                                         e(" (".$p['user_transaction_status_translated']);
-                                        if($p['pbs_status'] != '' && $p['pbs_status'] != '000') {
+                                        if ($p['pbs_status'] != '' && $p['pbs_status'] != '000') {
                                             e(": ".$p['pbs_status']);
                                         }
                                         e(")");
-                                    } elseif ($p['status'] == 'authorized') {
-                                        print(" (Ikke <acronym title=\"Betaling kan først hæves når faktura er sendt\">hævet</acronym>)");
+                                    } elseif ($p['status'] == 'authorized') { ?>
+                                        (Ikke <acronym title="Betaling kan først hæves når faktura er sendt">hævet</acronym>)
+                                    <?php
                                     }
                                     ?>
                                 </td>
@@ -739,17 +742,17 @@ if (isset($onlinepayment)) {
 
                                     <?php if (count($actions) > 0 && $p['status'] == "authorized" && $kernel->user->hasModuleAccess('onlinepayment')): // Changed for better usability. $debtor->get("type") == "invoice" && $debtor->get("status") == "sent"    ?>
                                         <?php
-                                        foreach($actions AS $a) {
+                                        foreach ($actions AS $a) {
                                             if ($a['action'] != 'capture' || ($debtor->get("type") == "invoice" && $debtor->get("status") == "sent")) {
                                                 ?>
-                                                <a href="view.php?id=<?php e($debtor->get('id')); ?>&amp;onlinepayment_id=<?php print(intval($p['id'])); ?>&amp;onlinepayment_action=<?php e($a['action']); ?>" class="confirm"><?php e($a['label']); ?></a>
+                                                <a href="view.php?id=<?php e($debtor->get('id')); ?>&amp;onlinepayment_id=<?php e($p['id']); ?>&amp;onlinepayment_action=<?php e($a['action']); ?>" class="confirm"><?php e($a['label']); ?></a>
                                                 <?php
                                             }
                                         }
                                         ?>
                                     <?php endif; ?>
                                     <?php if ($p['status'] == 'authorized'): ?>
-                                        <a href="<?php print($onlinepayment_module->getPath()); ?>payment.php?id=<?php print(intval($p['id'])); ?>" class="edit"><?php e(t('edit payment')); ?></a>
+                                        <a href="<?php e($onlinepayment_module->getPath()); ?>payment.php?id=<?php e($p['id']); ?>" class="edit"><?php e(t('edit payment')); ?></a>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -759,7 +762,7 @@ if (isset($onlinepayment)) {
             </div>
             <?php
         // paymentmethodkey 5 is onlinepayment
-        } elseif ($debtor->getPaymentMethodKey() == 5 AND $debtor->getWhereToId() == 0) { 
+        } elseif ($debtor->getPaymentMethodKey() == 5 AND $debtor->getWhereToId() == 0) {
             $payment_url = '<strong>Der findes ikke nogen url</strong>';
             try {
                 $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById($debtor->getWhereFromId());
@@ -768,7 +771,7 @@ if (isset($onlinepayment)) {
                 }
             } catch (Doctrine_Record_Exeption $e) {
             }
-                        
+
         ?>
             <div class="warning">
                 Der burde være en onlinebetaling knyttet hertil. Måske har kunden fortrudt sit køb, eller også er der sket en fejl hos PBS under købet. Du kan skrive en e-mail til kunden, hvor du oplyser følgende link, hvor pengene kan betales: <?php e($payment_url); ?>.
@@ -784,17 +787,17 @@ if (isset($onlinepayment)) {
     <?php } ?>
 
     <table class="stripe" style="clear:both;">
-        <caption>Varer</caption>
+        <caption><?php e(t('Products')); ?></caption>
         <thead>
             <tr>
-                <th>Varenr.</th>
-                <th>Beskrivelse</th>
-                <th colspan="2">Antal</th>
-                <th>Pris</th>
-                <th>Beløb</th>
-                <?php if($kernel->intranet->hasModuleAccess('currency') && false !== $debtor->getCurrency()): ?>
+                <th><?php e(t('Product number')); ?></th>
+                <th><?php e(t('Description')); ?></th>
+                <th colspan="2"><?php e(t('Quantity')); ?></th>
+                <th><?php e(t('Price')); ?></th>
+                <th><?php e(t('Amount')); ?></th>
+                <?php if ($kernel->intranet->hasModuleAccess('currency') && false !== $debtor->getCurrency()): ?>
                     <th><?php e($debtor->getCurrency()->getType()->getIsoCode()); ?></th>
-                <?php endif; ?> 
+                <?php endif; ?>
                 <th>&nbsp;</th>
             </tr>
         </thead>
@@ -812,7 +815,7 @@ if (isset($onlinepayment)) {
                 $vat = 0;
             }
 
-            for($i = 0, $max = count($items); $i<$max; $i++) {
+            for ($i = 0, $max = count($items); $i<$max; $i++) {
                 $total += $items[$i]["quantity"] * $items[$i]["price"]->getAsIso(2);
                 $vat = $items[$i]["vat"];
                 ?>
@@ -821,7 +824,7 @@ if (isset($onlinepayment)) {
                     <td><?php e($items[$i]["name"]); ?>
                         <?php
                         if ($items[$i]["description"] != "") {
-                            print("<br />".nl2br(safeToHtml($items[$i]["description"])));
+                            autohtml($items[$i]["description"]);
                             if ($debtor->get("locked") == false) {
                                 echo '<br /> <a href="item_edit.php?debtor_id='.intval($debtor->get('id')).'&amp;id='.intval($items[$i]["id"]).'">Ret tekst</a>';
                             }
@@ -843,26 +846,26 @@ if (isset($onlinepayment)) {
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
-                        <?php 
+                        <?php
                     }
                     ?>
                     <?php $price = new Ilib_Variable_Float($items[$i]["quantity"] * $items[$i]["price"]->getAsIso(2)); ?>
                     <td class="amount"><?php e($price->getAsLocal('da_dk', 2)); ?></td>
-                    <?php if($debtor->getCurrency()): ?>
+                    <?php if ($debtor->getCurrency()): ?>
                         <?php
                         $price_currency = new Ilib_Variable_Float($items[$i]["quantity"]*$items[$i]["price_currency"]->getAsIso(2));
                         $total_currency += $price_currency->getAsIso(2);
                         ?>
                         <td class="amount"><?php e($price_currency->getAsLocal('da_dk', 2)); ?></td>
-                    <?php endif; ?> 
+                    <?php endif; ?>
                     <td class="options">
                         <?php
                         if ($debtor->get("locked") == false) {
                             ?>
-                            <a class="moveup" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=moveup&amp;item_id=<?php e($items[$i]["id"]); ?>">Op</a>
-                            <a class="movedown" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=movedown&amp;item_id=<?php e($items[$i]["id"]); ?>">Ned</a>
-                            <a class="edit" href="item_edit.php?debtor_id=<?php e($debtor->get('id')); ?>&amp;id=<?php e($items[$i]["id"]); ?>">Ret</a>
-                            <a class="delete" title="Dette vil slette varen!" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=delete_item&amp;item_id=<?php print(intval($items[$i]["id"])); ?>">Slet</a>
+                            <a class="moveup" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=moveup&amp;item_id=<?php e($items[$i]["id"]); ?>"><?php e(t('Up')); ?></a>
+                            <a class="movedown" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=movedown&amp;item_id=<?php e($items[$i]["id"]); ?>"><?php e(t('Down')); ?></a>
+                            <a class="edit" href="item_edit.php?debtor_id=<?php e($debtor->get('id')); ?>&amp;id=<?php e($items[$i]["id"]); ?>"><?php e(t('Edit')); ?></a>
+                            <a class="delete" title="Dette vil slette varen!" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=delete_item&amp;item_id=<?php e($items[$i]["id"]); ?>"><?php e(t('Delete')); ?></a>
                             <?php
                         }
                         ?>&nbsp;
@@ -880,11 +883,11 @@ if (isset($onlinepayment)) {
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td class="amount"><b><?php e(number_format($total * 0.25, 2, ",", ".")); ?></b></td>
-                        <?php if($debtor->getCurrency()): ?>
+                        <?php if ($debtor->getCurrency()): ?>
                             <td class="amount"><b><?php e(number_format($total_currency * 0.25, 2, ",", ".")); ?></b></td>
                             <?php $total_currency *= 1.25; ?>
-                        <?php endif; ?> 
-                    
+                        <?php endif; ?>
+
                         <td>&nbsp;</td>
                     </tr>
                     <?php
@@ -899,22 +902,22 @@ if (isset($onlinepayment)) {
                 <td>&nbsp;</td>
                 <td colspan="3">I alt:</td>
                 <td class="amount"><?php e(number_format($total, 2, ",", ".")); ?></td>
-                <?php if($debtor->getCurrency()): ?>
+                <?php if ($debtor->getCurrency()): ?>
                     <td class="amount"><?php e(number_format($total_currency, 2, ",", ".")); ?></td>
-                <?php endif; ?> 
-                    
+                <?php endif; ?>
+
                 <td>&nbsp;</td>
             </tr>
             <?php } ?>
         <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
-            <td colspan="3"><b>Total<?php if ($debtor->get("round_off") == 1 && $debtor->get("type") == "invoice" && $total != $debtor->get("total")) print("&nbsp;afrundet"); ?>:</b></td>
+            <td colspan="3"><b>Total<?php if ($debtor->get("round_off") == 1 && $debtor->get("type") == "invoice" && $total != $debtor->get("total")) e(" afrundet"); ?>:</b></td>
             <td class="amount"><strong><?php e(number_format($debtor->get("total"), 2, ",", ".")); ?></strong></td>
-            <?php if($debtor->getCurrency()): ?>
+            <?php if ($debtor->getCurrency()): ?>
                 <td class="amount"><strong><?php e(number_format($total_currency, 2, ",", ".")); ?></strong></td>
-            <?php endif; ?> 
-                    
+            <?php endif; ?>
+
             <td>&nbsp;</td>
         </tr>
     </table>

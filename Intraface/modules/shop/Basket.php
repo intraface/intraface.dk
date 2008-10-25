@@ -141,7 +141,7 @@ class Intraface_modules_shop_Basket
 
         $product = new Product($this->coordinator->kernel, $product_id, $product_detail_id);
 
-        if($product->get('id') == 0) {
+        if ($product->get('id') == 0) {
             return false;
         }
         
@@ -484,8 +484,8 @@ class Intraface_modules_shop_Basket
     {
         $price = 0;
         
-        foreach($this->getItems() AS $item) {
-            if($type == 'exclusive_vat') {
+        foreach ($this->getItems() AS $item) {
+            if ($type == 'exclusive_vat') {
                 $price += $item['totalprice'];
             }
             else {
@@ -508,20 +508,20 @@ class Intraface_modules_shop_Basket
         $total['DKK']['ex_vat'] = 0;
         $total['DKK']['incl_vat'] = 0;
         
-        if(is_object($currencies) && $currencies->count() > 0) {
-            foreach($currencies AS $currency) {
+        if (is_object($currencies) && $currencies->count() > 0) {
+            foreach ($currencies AS $currency) {
                 $total[$currency->getType()->getIsoCode()]['ex_vat'] = 0;
                 $total[$currency->getType()->getIsoCode()]['incl_vat'] = 0;
             }
         }
         
-        foreach($this->getItems($currencies) AS $item) {
+        foreach ($this->getItems($currencies) AS $item) {
             
             $total['DKK']['ex_vat'] += $item['currency']['DKK']['price'];
             $total['DKK']['incl_vat'] += $item['currency']['DKK']['totalprice_incl_vat'];
             
-            if(is_object($currencies) && $currencies->count() > 0) {
-                foreach($currencies AS $currency) {
+            if (is_object($currencies) && $currencies->count() > 0) {
+                foreach ($currencies AS $currency) {
                     $total[$currency->getType()->getIsoCode()]['ex_vat'] += $item['currency'][$currency->getType()->getIsoCode()]['price'];
                     $total[$currency->getType()->getIsoCode()]['incl_vat'] += $item['currency'][$currency->getType()->getIsoCode()]['totalprice_incl_vat'];
                 }
@@ -540,7 +540,7 @@ class Intraface_modules_shop_Basket
     {
         $weight = 0;
         
-        foreach($this->getItems() AS $item) {
+        foreach ($this->getItems() AS $item) {
             $weight += $item['totalweight'];
         }
         
@@ -556,7 +556,7 @@ class Intraface_modules_shop_Basket
     {
         
         // Local cache
-        if($this->items !== NULL && is_array($this->items)) {
+        if ($this->items !== NULL && is_array($this->items)) {
             return $this->items;
         } 
         
@@ -596,8 +596,8 @@ class Intraface_modules_shop_Basket
             $items[$i]['product_detail_id'] = $product->get('product_detail_id');
             $items[$i]['pictures'] = $product->get('pictures');
             
-            //if($db->f('product_variation_id') != 0) {
-            if($product->hasVariation()) {
+            //if ($db->f('product_variation_id') != 0) {
+            if ($product->hasVariation()) {
                 $variation = $product->getVariation($db->f('product_variation_id'));
                 $detail = $variation->getDetail();
                 $items[$i]['product_variation_id'] = $variation->getId();
@@ -608,8 +608,8 @@ class Intraface_modules_shop_Basket
                 
                 $items[$i]['currency']['DKK']['price'] = $detail->getPrice($product)->getAsIso();
                 $items[$i]['currency']['DKK']['price_incl_vat'] = $detail->getPriceIncludingVat($product)->getAsIso(4);
-                if(is_object($currencies) && $currencies->count() > 0) {
-                    foreach($currencies AS $currency) {
+                if (is_object($currencies) && $currencies->count() > 0) {
+                    foreach ($currencies AS $currency) {
                         $items[$i]['currency'][$currency->getType()->getIsoCode()]['price'] = $detail->getPriceInCurrency($currency, 0, $product)->getAsIso();
                         $items[$i]['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'] = $detail->getPriceIncludingVatInCurrency($currency, 0, $product)->getAsIso(4);
                     }
@@ -623,8 +623,8 @@ class Intraface_modules_shop_Basket
                 
                 $items[$i]['currency']['DKK']['price'] = $product->getDetails()->getPrice()->getAsIso(2);
                 $items[$i]['currency']['DKK']['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat()->getAsIso(2);
-                if(is_object($currencies) && $currencies->count() > 0) {
-                    foreach($currencies AS $currency) {
+                if (is_object($currencies) && $currencies->count() > 0) {
+                    foreach ($currencies AS $currency) {
                         $items[$i]['currency'][$currency->getType()->getIsoCode()]['price'] = $product->getDetails()->getPriceInCurrency($currency)->getAsIso(2);
                         $items[$i]['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'] = $product->getDetails()->getPriceIncludingVatInCurrency($currency)->getAsIso(2);
                     }
@@ -639,8 +639,8 @@ class Intraface_modules_shop_Basket
             
             $items[$i]['currency']['DKK']['totalprice'] = $db->f('quantity') * $items[$i]['currency']['DKK']['price'];
             $items[$i]['currency']['DKK']['totalprice_incl_vat'] = $db->f('quantity') * $items[$i]['currency']['DKK']['price_incl_vat'];
-            if(is_object($currencies) && $currencies->count() > 0) {
-                foreach($currencies AS $currency) {
+            if (is_object($currencies) && $currencies->count() > 0) {
+                foreach ($currencies AS $currency) {
                     $items[$i]['currency'][$currency->getType()->getIsoCode()]['totalprice'] = $db->f('quantity') * $items[$i]['currency'][$currency->getType()->getIsoCode()]['price'];
                     $items[$i]['currency'][$currency->getType()->getIsoCode()]['totalprice_incl_vat'] = $db->f('quantity') * $items[$i]['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'];
                 }

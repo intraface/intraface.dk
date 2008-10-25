@@ -52,7 +52,7 @@ $page->start(t('products'));
     <li><a href="index.php?use_stored=true"><?php e(t('close', 'common')); ?></a></li>
 </ul>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 <?php $i = 0; foreach ($products AS $p) {
     if ($p['locked'] == 1) { continue; }
     $this_product = new Product($kernel, $p['id']);
@@ -63,19 +63,19 @@ $page->start(t('products'));
     <tbody>
         <tr>
             <th><?php e(t('name')); ?></th>
-            <td><input size="50" type="text" name="name[<?php echo $p['id']; ?>]" value="<?php echo htmlentities($p['name']); ?>" /></td>
+            <td><input size="50" type="text" name="name[<?php e($p['id']); ?>]" value="<?php e($p['name']); ?>" /></td>
         </tr>
         <tr>
             <th><?php e(t('description')); ?></th>
-            <td><textarea cols="80" rows="5" name="description[<?php echo $p['id']; ?>]"><?php echo htmlentities($p['description']); ?></textarea></td>
+            <td><textarea cols="80" rows="5" name="description[<?php e($p['id']); ?>]"><?php e($p['description']); ?></textarea></td>
         </tr>
         <tr>
             <th><?php e(t('price')); ?></th>
-            <td><input size="10" type="text" value="<?php echo number_format($p['price'], 2, ",", "."); ?>" name="price[<?php echo $p['id']; ?>]" /> kroner excl. moms</td>
+            <td><input size="10" type="text" value="<?php e(number_format($p['price'], 2, ",", ".")); ?>" name="price[<?php e($p['id']); ?>]" /> kroner excl. moms</td>
         </tr>
         <tr>
             <th><?php e(t('keywords')); ?></th>
-            <td><input size="50"  type="text" value="<?php echo $p['keywords']; ?>" name="keywords[<?php echo $p['id']; ?>]" /></td>
+            <td><input size="50"  type="text" value="<?php e($p['keywords']); ?>" name="keywords[<?php e($p['id']); ?>]" /></td>
         </tr>
     </tbody>
 </table>
@@ -83,7 +83,7 @@ $page->start(t('products'));
 <?php $i++; } // end foreach ?>
 <div>
     <input type="submit" class="save" value="<?php e(t('save', 'common')); ?>" />
-    eller <a href="index.php?use_stored=true"><?php e(t('regret', 'common')); ?></a>
+    eller <a href="index.php?use_stored=true"><?php e(t('Cancel', 'common')); ?></a>
 </div>
 </form>
 

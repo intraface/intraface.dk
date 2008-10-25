@@ -7,7 +7,7 @@ $translation = $kernel->getTranslation('cms');
 
 if (!empty($_GET['moveto']) AND is_numeric($_GET['moveto'])) {
     $element = CMS_Element::factory($kernel, 'id', $_GET['element_id']);
-    if(!is_object($element)) {
+    if (!is_object($element)) {
         throw new Exception('Unable to create a valid element object');
     }
     $element->getPosition(MDB2::singleton(DB_DSN))->moveToPosition($_GET['moveto']);
@@ -17,7 +17,7 @@ if (!empty($_GET['moveto']) AND is_numeric($_GET['moveto'])) {
 
 } elseif (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
     $element = CMS_Element::factory($kernel, 'id', $_GET['delete']);
-    if(!is_object($element)) {
+    if (!is_object($element)) {
         throw new Exception('Unable to create a valid element object');
     }
     $element->delete();
@@ -27,7 +27,7 @@ if (!empty($_GET['moveto']) AND is_numeric($_GET['moveto'])) {
 
 } elseif (!empty($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
     $element = CMS_Element::factory($kernel, 'id', $_GET['undelete']);
-    if(!is_object($element)) {
+    if (!is_object($element)) {
         throw new Exception('Unable to create a valid element object');
     }
     $element->undelete();
@@ -62,18 +62,18 @@ $page->includeJavascript('module', 'section_html.js');
 $page->start('CMS');
 ?>
 
-<h1><?php echo safeToHtml($translation->get('edit section')); ?> <?php echo $section->get('section_name'); ?> <?php echo e(t('on page')); ?> <?php e($section->cmspage->get('title')); ?></h1>
+<h1><?php e($translation->get('edit section')); ?> <?php e($section->get('section_name')); ?> <?php echo e(t('on page')); ?> <?php e($section->cmspage->get('title')); ?></h1>
 
 <ul class="options">
     <?php if (count($section->cmspage->getSections()) > 1): ?>
-    <li><a href="page.php?id=<?php echo $section->cmspage->get('id'); ?>"><?php echo safeToHtml($translation->get('close', 'common')); ?></a></li>
+    <li><a href="page.php?id=<?php e($section->cmspage->get('id')); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
     <?php else: ?>
-    <li><a class="edit" href="page_edit.php?id=<?php echo $section->cmspage->get('id'); ?>"><?php echo safeToHtml($translation->get('edit page settings')); ?></a></li>
-    <li><a href="pages.php?type=<?php e($section->cmspage->get('type')); ?>&amp;id=<?php echo $section->cmspage->cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('close')); ?></a></li>
+    <li><a class="edit" href="page_edit.php?id=<?php e($section->cmspage->get('id')); ?>"><?php e($translation->get('edit page settings')); ?></a></li>
+    <li><a href="pages.php?type=<?php e($section->cmspage->get('type')); ?>&amp;id=<?php e($section->cmspage->cmssite->get('id')); ?>"><?php e($translation->get('close')); ?></a></li>
     <?php endif; ?>
 </ul>
 
-<form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>" id="publish-form">
+<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>" id="publish-form">
     <fieldset class="<?php e($section->cmspage->getStatus()); ?>">
     <?php if (!$section->cmspage->isPublished()): ?>
     <?php e('this page is not published'); ?>
@@ -82,7 +82,7 @@ $page->start('CMS');
     <?php e('this page is published'); ?>
     <input type="submit" value="<?php e(t('set as draft')); ?>" name="unpublish" />
     <?php endif; ?>
-    <input type="hidden" value="<?php echo intval($section->get('id')); ?>" name="id" />
+    <input type="hidden" value="<?php e($section->get('id')); ?>" name="id" />
     </fieldset>
 </form>
 
@@ -102,22 +102,22 @@ $page->start('CMS');
 
     <div style="clear: both;"></div>
 </div>
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
-    <input type="hidden" value="<?php echo intval($section->get('id')); ?>" name="id" />
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+    <input type="hidden" value="<?php e($section->get('id')); ?>" name="id" />
     <fieldset>
-        <legend><?php echo safeToHtml($translation->get('create new element')); ?></legend>
-        <p><?php echo safeToHtml($translation->get('place content on the section by adding elements')); ?></p>
+        <legend><?php e($translation->get('create new element')); ?></legend>
+        <p><?php e($translation->get('place content on the section by adding elements')); ?></p>
         <select name="new_element_type_id" id="new_element_type_id">
-            <option value=""><?php echo safeToHtml($translation->get('choose', 'common')); ?></option>
+            <option value=""><?php e($translation->get('choose', 'common')); ?></option>
             <?php
                 foreach ($element_types AS $key=>$type):
-                    if (!in_array($key, $section->template_section->get('allowed_element'))) continue;
-                     echo '<option value="'.$type.'">'.safeToHtml($translation->get($type)).'</option>';
-                endforeach;
+                    if (!in_array($key, $section->template_section->get('allowed_element'))) continue; ?>
+                     <option value="<?php e($type); ?>"><?php e($translation->get($type)); ?></option>
+                <?php endforeach;
             ?>
         </select>
-        <input type="submit" value="<?php echo safeToHtml($translation->get('add element')); ?>" name="add_element" />
-        <a href="page.php?id=<?php echo $section->cmspage->get('id'); ?>"><?php echo safeToHtml($translation->get('regret', 'common')); ?></a>
+        <input type="submit" value="<?php e($translation->get('add element')); ?>" name="add_element" />
+        <a href="page.php?id=<?php e($section->cmspage->get('id')); ?>"><?php e($translation->get('Cancel', 'common')); ?></a>
 
     </fieldset>
 </form>

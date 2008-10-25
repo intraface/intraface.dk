@@ -360,7 +360,7 @@ class Reminder extends Intraface_Standard
         $payment["payment"] = 0;
         $payment["deprication"] = 0;
 
-        for($i = 0, $max = count($payments); $i < $max; $i++) {
+        for ($i = 0, $max = count($payments); $i < $max; $i++) {
             if ($payments[$i]["type"] == 'depriciation') {
                 $payment['depriciation'] += $payments[$i]["amount"];
             } else {

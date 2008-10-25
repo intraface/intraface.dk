@@ -56,7 +56,7 @@ $page = new Intraface_Page($kernel);
 $page->start('Momsoversigt');
 ?>
 
-<h1>Moms <?php echo $year->get('label'); ?></h1>
+<h1>Moms <?php e($year->get('label')); ?></h1>
 
 <?php echo $vat_period->error->view(); ?>
 
@@ -72,13 +72,13 @@ $page->start('Momsoversigt');
 	</div>
 
 	<p class="message-dependent">Der er ikke oprettet nogen momsperioder for dette år.</p>
-	<form action="<?php basename($_SERVER['PHP_SELF']); ?>" method="post">
+	<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 		<fieldset>
 			<label for="vat_period_key">Hvor ofte skal du afregne moms</label>
 			<select name="vat_period_key" id="vat_period_key">
 			<option value="">Vælg</option>
 			<?php foreach ($allowed_periods AS $key=>$value): ?>
-				<option value="<?php echo $key; ?>"<?php if ($key == $year->getSetting('vat_period')) echo ' selected="selected"'; ?>><?php echo safeToHtml($value['name']); ?></option>
+				<option value="<?php e($key); ?>"<?php if ($key == $year->getSetting('vat_period')) echo ' selected="selected"'; ?>><?php e($value['name']); ?></option>
 			<?php endforeach; ?>
 			</select>
 			<input type="submit" value="Opret perioder" name="create_periods" />
@@ -86,7 +86,7 @@ $page->start('Momsoversigt');
 	</form>
 <?php else: ?>
 	<table>
-	<caption>Momsperioder i perioden <?php echo safeToHtml($year->get('from_date_dk')); ?> til <?php echo safeToHtml($year->get('to_date_dk')); ?></caption>
+	<caption>Momsperioder i perioden <?php e($year->get('from_date_dk')); ?> til <?php e($year->get('to_date_dk')); ?></caption>
 	<thead>
 		<tr>
 			<th>Periode</th>
@@ -96,12 +96,12 @@ $page->start('Momsoversigt');
 		</tr>
 	</thead>
 	<tbody>
-	<?php foreach ($periods AS $period): ?>
+	<?php foreach ($periods as $period): ?>
 		<tr>
-			<td><a href="vat_view.php?id=<?php echo intval($period['id']); ?>"><?php echo safeToHtml($period['label']); ?></a></td>
-			<td><?php echo safeToHtml($period['date_start_dk']); ?></td>
-			<td><?php echo safeToHtml($period['date_end_dk']); ?></td>
-			<td class="options"><a class="delete" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo $period['id']; ?>">Slet</a></td>
+			<td><a href="vat_view.php?id=<?php e($period['id']); ?>"><?php e($period['label']); ?></a></td>
+			<td><?php e($period['date_start_dk']); ?></td>
+			<td><?php e($period['date_end_dk']); ?></td>
+			<td class="options"><a class="delete" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($period['id']); ?>">Slet</a></td>
 		</tr>
 	<?php endforeach; ?>
 	</tbody>

@@ -56,8 +56,8 @@ class AttributeGroupTest extends PHPUnit_Framework_TestCase
         $this->createGroups();
         
         $j = 1;
-        for($a1 = 1; $a1 < 4; $a1++) {
-            for($a2 = 5; $a2 < 7; $a2++) {
+        for ($a1 = 1; $a1 < 4; $a1++) {
+            for ($a2 = 5; $a2 < 7; $a2++) {
                 $variation = new Intraface_modules_product_Variation_TwoAttributeGroups;
                 $variation->product_id = 1;
                 $variation->number = $j;

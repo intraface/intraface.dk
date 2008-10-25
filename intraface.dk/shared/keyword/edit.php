@@ -28,20 +28,20 @@ else {
 }
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('edit keyword')));
+$page->start($translation->get('edit keyword'));
 
 ?>
-<h1><?php echo safeToHtml($translation->get('edit keyword')); ?></h1>
+<h1><?php e($translation->get('edit keyword')); ?></h1>
 
 <?php echo $keyword->error->view(); ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 	<fieldset>
-		<legend><?php echo safeToHtml($translation->get('edit keyword')); ?></legend>
-		<input type="hidden" name="id" value="<?php echo $keyword->getId(); ?>" />
-		<label for="keyword"><?php echo safeToHtml($translation->getKeyword()); ?></label>
-		<input type="text" name="keyword" id="keyword" value="<?php echo safeToHtmL($keyword->getKeyword()); ?>" />
-		<input type="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" name="submit" class="save" />
+		<legend><?php e($translation->get('edit keyword')); ?></legend>
+		<input type="hidden" name="id" value="<?php e($keyword->getId()); ?>" />
+		<label for="keyword"><?php e($translation->getKeyword()); ?></label>
+		<input type="text" name="keyword" id="keyword" value="<?php e($keyword->getKeyword()); ?>" />
+		<input type="submit" value="<?php e($translation->get('save', 'common')); ?>" name="submit" class="save" />
 	</fieldset>
 </form>
 

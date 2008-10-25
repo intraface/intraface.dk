@@ -196,7 +196,7 @@ class Product extends Intraface_Standard
         // hvis det er en lagervare og intranettet har adgang til stock skal det startes op
 
         if ($this->kernel->intranet->hasModuleAccess('stock') AND $this->get('stock') == 1) {
-            if(!is_object($this->stock)) {
+            if (!is_object($this->stock)) {
                 // hvis klassen ikke er startet op skal det ske
                 $module = $this->kernel->useModule('stock', true); // true ignorere bruger adgang
                 $this->stock                 = new Stock($this);
@@ -404,7 +404,7 @@ class Product extends Intraface_Standard
         // @todo does not transfer keywords correctly
         if (is_array($keywords)) {
             $appender = $product->getKeywordAppender();
-            foreach ($keywords AS $k) {
+            foreach ($keywords as $k) {
                 $appender->addKeyword(new Keyword($this, $k['id']));
             }
         }
@@ -417,7 +417,7 @@ class Product extends Intraface_Standard
 
         $pictures = $this->getPictures();
         if (is_array($pictures)) {
-            foreach ($pictures AS $pic) {
+            foreach ($pictures as $pic) {
                 $append_file->addFile(new FileHandler($this->kernel, $pic['id']));
             }
         }
@@ -619,13 +619,13 @@ class Product extends Intraface_Standard
 
             $products[$key]['currency']['DKK']['price'] = $product->getDetails()->getPrice();
             $products[$key]['currency']['DKK']['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat();
-            if($currencies && $currencies->count() > 0) {
-                foreach($currencies AS $currency) {
+            if ($currencies && $currencies->count() > 0) {
+                foreach ($currencies AS $currency) {
                     $products[$key]['currency'][$currency->getType()->getIsoCode()]['price'] = $product->getDetails()->getPriceInCurrency($currency);
                     $products[$key]['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'] = $product->getDetails()->getPriceIncludingVatInCurrency($currency);
                 }
             }
-            
+
             if (!$product->hasVariation() AND is_object($product->getStock())) {
                 $products[$key]['stock_status'] = $product->getStock()->get();
             } else {
@@ -663,19 +663,19 @@ class Product extends Intraface_Standard
      */
     public function setAttributeGroup($id)
     {
-        if(!$this->get('has_variation')) {
+        if (!$this->get('has_variation')) {
             throw new Exception('You can not set attribute group for a product without variations!');
         }
 
         $db = MDB2::factory(DB_DSN);
         $result = $db->query("SELECT id FROM product_x_attribute_group WHERE intranet_id = ".$db->quote($this->intranet->getId())." AND product_id=" . $this->getId()  . " AND product_attribute_group_id = " . (int)$id );
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             throw new Exception('Error in query :'.$result->getUserInfo());
         }
 
         if ($result->numRows() > 0) return true;
         $result = $db->exec("INSERT INTO product_x_attribute_group SET product_id = " . $this->getId() . ", product_attribute_group_id = " . (int)$id . ", intranet_id = " . $this->intranet->getId());
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             throw new Exception('Error in insert :'.$result->getUserInfo());
         }
 
@@ -691,13 +691,13 @@ class Product extends Intraface_Standard
      */
     public function removeAttributeGroup($id)
     {
-        if(!$this->get('has_variation')) {
+        if (!$this->get('has_variation')) {
             throw new Exception('You can not remove attribute group for a product without variations!');
         }
 
         $db = MDB2::factory(DB_DSN);
         $result = $db->exec("DELETE FROM product_x_attribute_group WHERE intranet_id = ".$db->quote($this->intranet->getId())." AND product_id=" . $this->getId()  . " AND product_attribute_group_id = " . (int)$id );
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             throw new Exception('Error in query :'.$result->getUserInfo());
         }
 
@@ -716,7 +716,7 @@ class Product extends Intraface_Standard
      */
     public function getAttributeGroups()
     {
-        if(!$this->get('has_variation')) {
+        if (!$this->get('has_variation')) {
             throw new Exception('You can not get attribute groups for a product without variations!');
         }
 
@@ -732,7 +732,7 @@ class Product extends Intraface_Standard
                     "AND product_x_attribute_group.product_id=" . $this->getId()  . " " .
                  "ORDER BY product_attribute_group.id");
 
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             throw new Exception('Error in query :'.$result->getUserInfo());
         }
 
@@ -746,7 +746,7 @@ class Product extends Intraface_Standard
     public function getVariation($id = 0)
     {
         $gateway = new Intraface_modules_product_Variation_Gateway($this);
-        if(intval($id) > 0) {
+        if (intval($id) > 0) {
             return $gateway->findById($id);
         }
         $object = $gateway->getObject();
@@ -774,8 +774,6 @@ class Product extends Intraface_Standard
         $gateway = new Intraface_modules_product_Variation_Gateway($this);
         return $gateway->findAll();
     }
-
-
 
     /**
      * Checks whether any products has been created before
@@ -819,7 +817,7 @@ class Product extends Intraface_Standard
      * Hvis den er fra webshop bør den faktisk opsamle oplysninger om søgningen
      * så man kan se, hvad folk er interesseret i.
      * Søgemaskinen skal være tolerant for stavefejl
-     * 
+     *
      * @todo It is wrong to give currencies as parameter. Instead the list should
      *       be given as an object collection, and then currency should be given
      *       to the getPrice method.
@@ -848,7 +846,7 @@ class Product extends Intraface_Standard
             $this->getDBQuery()->setKeyword($keywords);
         }
 
-        if($this->getDBQuery()->checkFilter('shop_id') && $this->getDBQuery()->checkFilter('category')) {
+        if ($this->getDBQuery()->checkFilter('shop_id') && $this->getDBQuery()->checkFilter('category')) {
             $category_type = new Intraface_Category_Type('shop', $this->getDBQuery()->checkFilter('shop_id'));
             $this->getDBQuery()->setJoin(
                 'INNER',
@@ -900,11 +898,11 @@ class Product extends Intraface_Standard
             $product = new Product($this->kernel, $db->f("id"));
             $product->getPictures();
             $products[$i] = $product->get();
-            
+
             $products[$i]['currency']['DKK']['price'] = $product->getDetails()->getPrice();
             $products[$i]['currency']['DKK']['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat();
-            if($currencies && $currencies->count() > 0) {
-                foreach($currencies AS $currency) {
+            if ($currencies && $currencies->count() > 0) {
+                foreach ($currencies AS $currency) {
                     $products[$i]['currency'][$currency->getType()->getIsoCode()]['price'] = $product->getDetails()->getPriceInCurrency($currency);
                     $products[$i]['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'] = $product->getDetails()->getPriceIncludingVatInCurrency($currency);
                 }

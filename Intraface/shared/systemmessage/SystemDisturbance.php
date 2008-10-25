@@ -14,7 +14,7 @@ class SystemDisturbance extends Intraface_Standard
         $this->error = new Intraface_Error;
         $this->actual_id = 0;
 
-        if($this->id != 0) {
+        if ($this->id != 0) {
             $this->load();
         }
     }
@@ -24,7 +24,7 @@ class SystemDisturbance extends Intraface_Standard
         $db = new DB_sql;
 
         $db->query("SELECT id, user_name, important, description, DATE_FORMAT(from_date_time, '%d-%m-%Y %H:%i') AS dk_from_date_time, DATE_FORMAT(to_date_time, '%d-%m-%Y %H:%i') AS dk_to_date_time FROM systemmessage_disturbance WHERE active = 1 AND id = ".$this->id);
-        if($db->nextRecord()) {
+        if ($db->nextRecord()) {
             $this->value['id'] = $db->f('id');
             $this->value['dk_from_date_time'] = $db->f('dk_from_date_time');
             $this->value['dk_to_date_time'] = $db->f('dk_to_date_time');
@@ -46,14 +46,14 @@ class SystemDisturbance extends Intraface_Standard
 
         $from = split(' ', $input['from_date_time']);
 
-        if($validator->isDate($from[0], 'Ugyldig dato i Fra tidspunkt')) {
+        if ($validator->isDate($from[0], 'Ugyldig dato i Fra tidspunkt')) {
             $db_from = new Intraface_Date($from[0]);
             $db_from->convert2db();
         }
         $validator->isTime($from[1], 'Ugyldigt tidspunkt i Fra tidspunkt');
 
         $to = split(' ', $input['to_date_time']);
-        if($validator->isDate($to[0], 'Ugyldig dato i Til tidspunkt')) {
+        if ($validator->isDate($to[0], 'Ugyldig dato i Til tidspunkt')) {
             $db_to = new Intraface_Date($to[0]);
             $db_to->convert2db();
         }
@@ -61,13 +61,13 @@ class SystemDisturbance extends Intraface_Standard
 
         $validator->isString($input['description'], 'Beskrivelsen er ikke udfyldt korrekt');
 
-        if(isset($input['important']) && $input['important'] = 'true') {
+        if (isset($input['important']) && $input['important'] = 'true') {
             $input['important'] = 1;
         } else {
             $input['important'] = 0;
         }
 
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             return 0;
         }
 
@@ -80,7 +80,7 @@ class SystemDisturbance extends Intraface_Standard
 
         $db = new DB_sql;
 
-        if($this->id != 0) {
+        if ($this->id != 0) {
             $db->query("UPDATE systemmessage_disturbance SET ".$sql." WHERE id = ".$this->id);
         } else {
             $db->query("INSERT INTO systemmessage_disturbance SET date_created = NOW(), ".$sql);
@@ -93,7 +93,7 @@ class SystemDisturbance extends Intraface_Standard
 
     function delete()
     {
-        if($this->id == 0) {
+        if ($this->id == 0) {
             return 0;
         }
 
@@ -108,7 +108,7 @@ class SystemDisturbance extends Intraface_Standard
     {
         $db = new DB_sql;
         $db->query("SELECT id, user_name, important, description, DATE_FORMAT(from_date_time, '%d-%m-%Y %H:%i') AS dk_from_date_time, DATE_FORMAT(to_date_time, '%d-%m-%Y %H:%i') AS dk_to_date_time FROM systemmessage_disturbance WHERE active = 1 AND from_date_time < NOW() AND to_date_time > NOW() ORDER BY from_date_time DESC");
-        if(!$db->nextRecord()) {
+        if (!$db->nextRecord()) {
             //$this->actual_id = 0;
             return array();
         }
@@ -131,7 +131,7 @@ class SystemDisturbance extends Intraface_Standard
         $value = array();
         $i = 0;
 
-        if($only_actual == true) {
+        if ($only_actual == true) {
             $sql = "AND to_date_time > NOW() AND id != ".$this->actual_id;
         } else {
             $sql = "";

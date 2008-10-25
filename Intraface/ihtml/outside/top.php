@@ -2,16 +2,16 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
       <html xmlns="http://www.w3.org/1999/xhtml" lang="da" xml:lang="da">
         <head>
-	<title><?php echo $title; ?></title>
+	<title><?php e($title); ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<style type="text/css">
-		@import "<?php echo PATH_WWW; ?>css/outside_system.css";
+		@import "<?php e(url('/css/outside_system.css')); ?>";
 	</style>
-	<script type="text/javascript" src="<?php echo PATH_WWW; ?>javascript/yui/yahoo/yahoo.js"></script>
-	<script type="text/javascript" src="<?php echo PATH_WWW; ?>javascript/yui/event/event.js"></script>
-	<script type="text/javascript" src="<?php echo PATH_WWW; ?>javascript/yui/connection/connection.js"></script>
-	<script type="text/javascript" src="<?php echo PATH_WWW; ?>javascript/yui/dom/dom.js"></script>
-	<script type="text/javascript" src="<?php echo PATH_WWW; ?>javascript/focusField.js"></script>
+	<script type="text/javascript" src="<?php e(url('/javascript/yui/yahoo/yahoo.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('/javascript/yui/event/event.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('/javascript/yui/connection/connection.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('/javascript/yui/dom/dom.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('/javascript/focusField.js')); ?>"></script>
 
 
 	<script type="text/javascript">
@@ -49,10 +49,10 @@
 		YAHOO.util.Event.addListener(window, "load", init);
 
 	</script>
-    
-    <link href="<?php echo PATH_WWW; ?>images/favicon.ico" rel="icon" />
-    <link href="<?php echo PATH_WWW; ?>images/favicon.ico" rel="shortcut icon"/>
-    <link rel="shortcut icon" href="<?php echo PATH_WWW; ?>images/favicon.ico" type="image/x-icon" />
+
+    <link href="<?php e(url('/images/favicon.ico')); ?>" rel="icon" />
+    <link href="<?php e(url('/images/favicon.ico')); ?>" rel="shortcut icon"/>
+    <link rel="shortcut icon" href="<?php e(url('/images/favicon.ico')); ?>" type="image/x-icon" />
 
 </head>
 

@@ -10,10 +10,10 @@ class Intraface_Doctrine_Intranet
     
     public static function singleton($id = NULL)
     {
-        if($id != NULL) {
+        if ($id != NULL) {
             $GLOBALS['intraface_doctrine_intranet_id'] = intval($id);    
         }
-        if(empty($GLOBALS['intraface_doctrine_intranet_id'])) {
+        if (empty($GLOBALS['intraface_doctrine_intranet_id'])) {
             throw new Exception('An intranet id was not set!');
         }
         return new Intraface_Doctrine_Intranet($GLOBALS['intraface_doctrine_intranet_id']);

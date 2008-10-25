@@ -30,22 +30,22 @@ if (!empty($_POST)) {
 
             if ($section->get('type') == 'picture') {
 
-                if(!empty($_FILES) && !is_array($files)) {
+                if (!empty($_FILES) && !is_array($files)) {
                     $filehandler = new FileHandler($kernel);
                     $filehandler->createUpload();
                     $files = $filehandler->upload->getFiles();
                 }
 
-                if(is_array($files)) {
-                    foreach($files AS $file) {
-                        if($file->getProp('form_name') == 'new_picture_'.$key) {
+                if (is_array($files)) {
+                    foreach ($files AS $file) {
+                        if ($file->getProp('form_name') == 'new_picture_'.$key) {
 
                             $filehandler = new FileHandler($kernel);
                             $filehandler->createUpload();
                             $filehandler->upload->setSetting('file_accessibility', 'public');
                             $pic_id = $filehandler->upload->upload($file);
 
-                            if($pic_id != 0) {
+                            if ($pic_id != 0) {
                                 $value['pic_id'] = $pic_id;
                             }
 
@@ -55,7 +55,7 @@ if (!empty($_POST)) {
                     }
                 }
 
-                if(!isset($value['pic_id'])) $value['pic_id'] = 0;
+                if (!isset($value['pic_id'])) $value['pic_id'] = 0;
             }
             if (!$section->save($value)) {
                 $error[$section->get('id')] = $translation->get('error in section') . ' ' . strtolower(implode($section->error->message, ', '));
@@ -63,7 +63,7 @@ if (!empty($_POST)) {
         }
     }
     if (empty($error) AND count($error) == 0) {
-        if(!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
+        if (!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
 
             // jeg skal bruge array_key, når der er klikket på choose_file, for den indeholder section_id. Der bør
             // kun kunne være en post i arrayet, så key 0 må være $section_id for vores fil
@@ -97,10 +97,10 @@ if (!empty($_POST)) {
     }
 } elseif (!empty($_GET['id'])) {
 
-    if(isset($_GET['return_redirect_id'])) {
+    if (isset($_GET['return_redirect_id'])) {
         $redirect = Intraface_Redirect::factory($kernel, 'return');
         $identifier_parts = explode(':', $redirect->get('identifier'));
-        if($identifier_parts[0] == 'picture') {
+        if ($identifier_parts[0] == 'picture') {
             $section = CMS_Section::factory($kernel, 'id', $identifier_parts[1]);
             $section->save(array('pic_id' => $redirect->getParameter('file_handler_id')));
         }
@@ -123,20 +123,20 @@ $page = new Intraface_Page($kernel);
 if ($kernel->setting->get('user', 'htmleditor') == 'tinymce') {
     $page->includeJavascript('global', 'tinymce/jscripts/tiny_mce/tiny_mce.js');
 }
-$page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('title')));
+$page->start($translation->get('content on page').' '.$cmspage->get('title'));
 ?>
 
 <h1><?php e($translation->get('content on page').' '.$cmspage->get('title')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="page_edit.php?id=<?php echo $cmspage->get('id'); ?>"><?php echo safeToHtml($translation->get('edit settings', 'common')); ?></a></li>
-    <li><a href="pages.php?type=<?php e($cmspage->get('type')); ?>&amp;id=<?php echo $cmspage->cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('close', 'common')); ?></a></li>
+    <li><a class="edit" href="page_edit.php?id=<?php e($cmspage->get('id')); ?>"><?php e($translation->get('edit settings', 'common')); ?></a></li>
+    <li><a href="pages.php?type=<?php e($cmspage->get('type')); ?>&amp;id=<?php e($cmspage->cmssite->get('id')); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
     <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-    <li><a href="template.php?id=<?php echo $cmspage->get('template_id'); ?>"><?php e($translation->get('edit template')); ?></a></li>
+    <li><a href="template.php?id=<?php e($cmspage->get('template_id')); ?>"><?php e($translation->get('edit template')); ?></a></li>
     <?php endif; ?>
 </ul>
 
-<form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>" id="publish-form">
+<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>" id="publish-form">
     <fieldset class="<?php e($cmspage->getStatus()); ?>">
     <?php if (!$cmspage->isPublished()): ?>
     <?php e(t('this page is not published')); ?>
@@ -155,7 +155,7 @@ $page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('
     <p class="warning">
         <?php echo e($translation->get('no sections added to the template')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="template.php?id=<?php echo $cmspage->get('template_id'); ?>"><?php echo e($translation->get('edit template')); ?></a>.
+            <a href="template.php?id=<?php e($cmspage->get('template_id')); ?>"><?php e($translation->get('edit template')); ?></a>.
         <?php else: ?>
             <strong><?php echo e($translation->get('you cannot edit templates')); ?></strong>
         <?php endif; ?>
@@ -169,7 +169,7 @@ $page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('
     }
 ?>
 
-<form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>" enctype="multipart/form-data" id="myform">
+<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>" enctype="multipart/form-data" id="myform">
     <?php $test = ''; foreach ($sections AS $section):  ?>
         <?php
             // hvis value section ikke er sat, så er det en ny post, så vi henter den bare fra section->get()
@@ -188,8 +188,8 @@ $page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('
                 if ($test != 'shorttext') echo '<fieldset>';
                 ?>
                 <div class="formrow">
-                    <label for="section_<?php echo $section->get('id'); ?>"><?php echo $section->get('section_name'); ?></label>
-                    <input id="section_<?php echo $section->get('id'); ?>" value="<?php echo safeToForm($value['section'][$section->get('id')]['text']); ?>" name="section[<?php echo $section->get('id'); ?>][text]" type="text" maxlength="<?php echo $section->template_section->get('size'); ?>" />
+                    <label for="section_<?php e($section->get('id')); ?>"><?php e($section->get('section_name')); ?></label>
+                    <input id="section_<?php e($section->get('id')); ?>" value="<?php e($value['section'][$section->get('id')]['text']); ?>" name="section[<?php e($section->get('id')); ?>][text]" type="text" maxlength="<?php e($section->template_section->get('size')); ?>" />
                 </div>
                 <?php
                 break;
@@ -198,7 +198,7 @@ $page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('
                 if ($test != 'longtext') echo '<fieldset>';
                 ?>
                 <div class="formrow">
-                    <label for="section_<?php echo $section->get('id')?>"><?php echo $section->get('section_name'); ?></label>
+                    <label for="section_<?php e($section->get('id')); ?>"><?php e($section->get('section_name')); ?></label>
                     <?php
                         $editor = new Intraface_modules_cms_HTML_Editor($section->template_section->get('html_format'));
                         $editor->setEditor($kernel->setting->get('user', 'htmleditor'));
@@ -222,7 +222,7 @@ $page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('
                     ?>
                     <?php
                     /*
-                    <textarea class="<?php echo $kernel->setting->get('user', 'htmleditor'); ?>" id="section_<?php echo $section->get('id'); ?>" name="section[<?php echo $section->get('id'); ?>][text]" cols="90" rows="10"><?php echo safeToForm($value['section'][$section->get('id')]['text']); ?></textarea>
+                    <textarea class="<?php e($kernel->setting->get('user', 'htmleditor')); ?>" id="section_<?php e($section->get('id')); ?>" name="section[<?php e($section->get('id')); ?>][text]" cols="90" rows="10"><?php e($value['section'][$section->get('id')]['text']); ?></textarea>
                     */
                     ?>
                 </div>
@@ -234,7 +234,7 @@ $page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('
                         // Notice: The simple theme does not use all options some of them are limited to the advanced theme
                         tinyMCE.init({
                             mode : "exact",
-                            elements: "section_<?php echo $section->get('id'); ?>",
+                            elements: "section_<?php e($section->get('id')); ?>",
                             theme : "advanced",
                             cleanup : true,
                             verify_html : false,
@@ -257,9 +257,9 @@ $page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('
                 if (!array_key_exists($section->get('id'), $error) AND !empty($test)) echo '</fieldset>';
                 ?>
                 <fieldset>
-                    <input value="<?php echo $section->get('id'); ?>" name="section[<?php echo $section->get('id'); ?>][picture]" type="hidden" />
+                    <input value="<?php e($section->get('id')); ?>" name="section[<?php e($section->get('id')); ?>][picture]" type="hidden" />
 
-                <legend><?php echo $section->get('section_name'); ?></legend>
+                <legend><?php e($section->get('section_name')); ?></legend>
 
                 <?php
                 /*
@@ -280,13 +280,15 @@ $page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('
                 <?php
                 break;
                 case 'mixed':
-                    if (!array_key_exists($section->get('id'), $error)) echo '</fieldset>';
-                    echo '<fieldset>';
-                    echo '<legend>' . $section->get('section_name') . '</legend>';
-                    echo '<p>'. e($translation->get('there is a html element on the page')).'</p>';
-                    echo '<input type="submit" value="'.safeToForm($translation->get('edit section')).'" name="edit_html['.$section->get('id').']" />';
-
-                    //echo '<p><a class="confirm" title="Dette link forlader siden uden at gemme ændringer på den." href="section_html.php?id='.$section->get('id').'">Rediger det blandede HTML-element &rarr;</a></p>';
+                    if (!array_key_exists($section->get('id'), $error)) { ?>
+                        </fieldset>
+                    <?php } ?>
+                    <fieldset>
+                        <legend><?php e($section->get('section_name')); ?></legend>
+                        <p><?php e($translation->get('there is a html element on the page')); ?></p>
+                        <input type="submit" value="<?php e($translation->get('edit section')); ?>" name="edit_html[<?php e($section->get('id')); ?>]" />
+                        <p><a class="confirm" title="Dette link forlader siden uden at gemme ændringer på den." href="section_html.php?id=<?php e($section->get('id')); ?>">Rediger det blandede HTML-element &rarr;</a></p>
+                <?php
                 break;
             ?>
 
@@ -304,7 +306,7 @@ $page->start(safeToHtml($translation->get('content on page').' '.$cmspage->get('
     <div>
         <input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
         <input type="submit" name="close" value="<?php e($translation->get('save and close', 'common')); ?>" />
-        <a href="pages.php?type=<?php e($cmspage->get('type')); ?>&amp;id=<?php echo $cmspage->cmssite->get('id'); ?>"><?php e($translation->get('regret', 'common')); ?></a>
+        <a href="pages.php?type=<?php e($cmspage->get('type')); ?>&amp;id=<?php e($cmspage->cmssite->get('id')); ?>"><?php e($translation->get('Cancel', 'common')); ?></a>
     </div>
 
 </form>

@@ -33,16 +33,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     */
 }
 
-if($kernel->user->hasModuleAccess('debtor')) {
+if ($kernel->user->hasModuleAccess('debtor')) {
     $debtor = $kernel->useModule('debtor');
-    if($kernel->user->hasModuleAccess("quotation")) {
+    if ($kernel->user->hasModuleAccess("quotation")) {
         $quotation = new Debtor($kernel, 'quotation');
   }
-    if($kernel->user->hasModuleAccess('order')) {
+    if ($kernel->user->hasModuleAccess('order')) {
         $kernel->useModule('order');
         $order = new Debtor($kernel, 'order');
     }
-    if($kernel->user->hasModuleAccess('invoice')) {
+    if ($kernel->user->hasModuleAccess('invoice')) {
         $kernel->useModule('invoice');
         $invoice = new Invoice($kernel);
         $creditnote = new CreditNote($kernel);
@@ -67,7 +67,7 @@ $similar_contacts = array();
 
 $page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'viewcontact.js');
-$page->start(safeToHtml($translation->get('contact information') . ' ' .$contact->get('name')));
+$page->start($translation->get('contact information') . ' ' .$contact->get('name'));
 ?>
 
 
@@ -80,52 +80,52 @@ $page->start(safeToHtml($translation->get('contact information') . ' ' .$contact
     <?php echo $contact->error->view(); ?>
 
     <ul class="options">
-        <li><a href="contact_edit.php?id=<?php print($contact->get("id")); ?>"><?php e(t('edit', 'common')); ?></a></li>
-        <li><a href="index.php?from_contact_id=<?php print($contact->get("id")); ?>&amp;use_stored=true"><?php e(t('close', 'common')); ?></a></li>
-        <li><a class="vcard" href="vcard.php?id=<?php print($contact->get("id")); ?>"><?php e(t('vcard')); ?></a></li>
+        <li><a href="contact_edit.php?id=<?php e($contact->get("id")); ?>"><?php e(t('edit', 'common')); ?></a></li>
+        <li><a href="index.php?from_contact_id=<?php e($contact->get("id")); ?>&amp;use_stored=true"><?php e(t('close', 'common')); ?></a></li>
+        <li><a class="vcard" href="vcard.php?id=<?php e($contact->get("id")); ?>"><?php e(t('vcard')); ?></a></li>
     </ul>
 
-    <?php if($kernel->user->hasModuleAccess("debtor")): ?>
+    <?php if ($kernel->user->hasModuleAccess("debtor")): ?>
         <ul class="options">
-        <?php if($kernel->user->hasModuleAccess("quotation")): ?>
+        <?php if ($kernel->user->hasModuleAccess("quotation")): ?>
             <?php if ($quotation->any('contact', $contact->get("id"))): ?>
-            <li><a href="<?php print($debtor->getPath()); ?>list.php?type=quotation&amp;contact_id=<?php print($contact->get("id")); ?>"><?php e(t('quotation', 'debtor')); ?></a></li>
+            <li><a href="<?php e($debtor->getPath()); ?>list.php?type=quotation&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('quotation', 'debtor')); ?></a></li>
             <?php else: ?>
-            <li class="inactive"><a href="<?php print($debtor->getPath()); ?>edit.php?type=quotation&amp;contact_id=<?php print($contact->get("id")); ?>"><?php e(t('create quotation', 'debtor')); ?></a></li>
+            <li class="inactive"><a href="<?php e($debtor->getPath()); ?>edit.php?type=quotation&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('create quotation', 'debtor')); ?></a></li>
             <?php endif; ?>
         <?php endif; ?>
 
-        <?php if($kernel->user->hasModuleAccess("order")): ?>
-            <?php if($order->any('contact', $contact->get("id"))): ?>
-                <li><a href="<?php print($debtor->getPath()); ?>list.php?type=order&amp;contact_id=<?php print($contact->get("id")); ?>"><?php e(t('orders', 'debtor')); ?></a></li>
+        <?php if ($kernel->user->hasModuleAccess("order")): ?>
+            <?php if ($order->any('contact', $contact->get("id"))): ?>
+                <li><a href="<?php e($debtor->getPath()); ?>list.php?type=order&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('orders', 'debtor')); ?></a></li>
             <?php else: ?>
-                <li class="inactive"><a href="<?php print($debtor->getPath()); ?>edit.php?type=order&amp;contact_id=<?php print($contact->get("id")); ?>"><?php e(t('create order', 'debtor')); ?></a></li>
+                <li class="inactive"><a href="<?php e($debtor->getPath()); ?>edit.php?type=order&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('create order', 'debtor')); ?></a></li>
             <?php endif; ?>
         <?php endif; ?>
 
-        <?php if($kernel->user->hasModuleAccess("invoice")): ?>
+        <?php if ($kernel->user->hasModuleAccess("invoice")): ?>
             <?php if ($invoice->any('contact', $contact->get("id"))): ?>
-                <li><a href="<?php print($debtor->getPath()); ?>list.php?type=invoice&amp;contact_id=<?php print($contact->get("id")); ?>"><?php e(t('invoices', 'debtor')); ?></a></li>
+                <li><a href="<?php e($debtor->getPath()); ?>list.php?type=invoice&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('invoices', 'debtor')); ?></a></li>
             <?php else: ?>
-                <li class="inactive"><a href="<?php print($debtor->getPath()); ?>edit.php?type=invoice&amp;contact_id=<?php print($contact->get("id")); ?>"><?php e(t('create invoice', 'debtor')); ?></a></li>
+                <li class="inactive"><a href="<?php e($debtor->getPath()); ?>edit.php?type=invoice&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('create invoice', 'debtor')); ?></a></li>
             <?php endif; ?>
             <?php if ($creditnote->any('contact', $contact->get("id"))): ?>
-                <li><a href="<?php print($debtor->getPath()); ?>list.php?type=credit_note&amp;contact_id=<?php print($contact->get("id")); ?>"><?php e(t('credit notes', 'debtor')); ?></a></li>
+                <li><a href="<?php e($debtor->getPath()); ?>list.php?type=credit_note&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('credit notes', 'debtor')); ?></a></li>
             <?php endif; ?>
-            <?php if($reminder->any($contact->get("id"))): ?>
-                <li><a href="<?php print($debtor->getPath()); ?>reminders.php?contact_id=<?php print($contact->get("id")); ?>"><?php e(t('reminders', 'debtor')); ?></a></li>
-            <?php elseif($invoice->anyDue($contact->get("id"))): ?>
-                <li class="inactive"><a href="<?php print($debtor->getPath()); ?>reminder_edit.php?contact_id=<?php print($contact->get("id")); ?>"><?php e(t('create reminder', 'debtor')); ?></a></li>
+            <?php if ($reminder->any($contact->get("id"))): ?>
+                <li><a href="<?php e($debtor->getPath()); ?>reminders.php?contact_id=<?php e($contact->get("id")); ?>"><?php e(t('reminders', 'debtor')); ?></a></li>
+            <?php elseif ($invoice->anyDue($contact->get("id"))): ?>
+                <li class="inactive"><a href="<?php e($debtor->getPath()); ?>reminder_edit.php?contact_id=<?php e($contact->get("id")); ?>"><?php e(t('create reminder', 'debtor')); ?></a></li>
             <?php endif; ?>
         <?php endif; ?>
 
-        <?php if($kernel->user->hasModuleAccess("procurement")): ?>
+        <?php if ($kernel->user->hasModuleAccess("procurement")): ?>
             <?php
             $procurement_module = $kernel->useModule('procurement');
             $procurement = new Procurement($kernel);
-            if($procurement->any($contact->get('id'))) {
+            if ($procurement->any($contact->get('id'))) {
                 ?>
-                <li><a href="<?php print($procurement_module->getPath()."index.php?contact_id=".$contact->get('id')); ?>"><?php e(t('procurement', 'procurement')); ?></a></li>
+                <li><a href="<?php e($procurement_module->getPath()."index.php?contact_id=".$contact->get('id')); ?>"><?php e(t('procurement', 'procurement')); ?></a></li>
                 <?php
             }
             ?>
@@ -137,12 +137,12 @@ $page->start(safeToHtml($translation->get('contact information') . ' ' .$contact
 
 <?php /* Put in next version if (!empty($similar_contacts) AND is_array($similar_contacts) AND count($similar_contacts) > 0): ?>
 
-    <p class="message">Der er kontakter, der ligner denne kontakt. <a href="contact_merge.php?id=<?php echo $contact->get('id'); ?>">Videre</a></p>
+    <p class="message">Der er kontakter, der ligner denne kontakt. <a href="contact_merge.php?id=<?php e($contact->get('id')); ?>">Videre</a></p>
 
 <?php endif; */?>
 
-    <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
-    <input type="hidden" name="id" value="<?php echo $contact->get('id'); ?>" />
+    <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+    <input type="hidden" name="id" value="<?php e($contact->get('id')); ?>" />
     <table>
         <caption><?php e(t('contact information')); ?></caption>
         <tbody>
@@ -151,7 +151,7 @@ $page->start(safeToHtml($translation->get('contact information') . ' ' .$contact
                 <td class="adr">
                     <span class="fn"><?php e($address['name']); ?></span>
                     <div class="adr">
-                        <div class="street-address"><?php echo nl2br(safeToHtml($address['address'])); ?></div>
+                        <div class="street-address"><?php autohtml($address['address']); ?></div>
                         <span class="postal-code"><?php e($address['postcode']); ?></span>
                         <span class="locality"><?php e($address['city']); ?></span>
                         <div class="country"><?php e($address['country']); ?></div>
@@ -164,7 +164,7 @@ $page->start(safeToHtml($translation->get('contact information') . ' ' .$contact
                 <td>
                 <span class="fn"><?php e($delivery_address['name']); ?></span>
                 <div class="adr">
-                    <div class="street-address"><?php echo nl2br(safeToHtmL($delivery_address['address'])); ?></div>
+                    <div class="street-address"><?php autohtml($delivery_address['address']); ?></div>
                     <span class="postal-code"><?php e($delivery_address['postcode']); ?></span>
                     <span class="locality"><?php e($delivery_address['city']); ?></span>
                     <div class="country"><?php e($delivery_address['country']); ?></div>
@@ -211,27 +211,27 @@ $page->start(safeToHtml($translation->get('contact information') . ' ' .$contact
     <caption><?php e(t('contact persons')); ?></caption>
     <tbody>
     <?php
-    foreach ($persons AS $person) {
-        echo '<tr class="vcard">';
-        echo '<td class="fn"><a href="contactperson_edit.php?contact_id='.$contact->get('id').'&amp;id=' . $person['id'] . '">'.$person['name'].'</a></td>';
-        echo '<td class="email">'.safeToHtml($person['email']).'</td>';
-        echo '<td class="tel">'.safeToHtml($person['phone']).'</td>';
-        echo '<td class="tel">'.safeToHtmL($person['mobile']).'</td>';
-        echo '</tr>';
-    }
+    foreach ($persons AS $person) { ?>
+        <tr class="vcard">
+        <td class="fn"><a href="contactperson_edit.php?contact_id=<?php e($contact->get('id') . '&id=' . $person['id']); ?>"><?php e($person['name']); ?></a></td>
+        <td class="email"><?php e($person['email']); ?></td>
+        <td class="tel"><?php e($person['phone']); ?></td>
+        <td class="tel"><?php e($person['mobile']); ?></td>
+        </tr>
+    <?php }
     ?>
     </tbody>
     </table>
   <?php } ?>
     <ul class="options">
-        <li><a href="contactperson_edit.php?contact_id=<?php echo intval($value['id']); ?>"><?php e(t('add contact person')); ?></a></li>
+        <li><a href="contactperson_edit.php?contact_id=<?php e($value['id']); ?>"><?php e(t('add contact person')); ?></a></li>
     </ul>
 <?php endif; ?>
 
 <?php
 $reminder = new ContactReminder($contact);
 $reminders = $reminder->getList();
-if(count($reminders) > 0) {
+if (count($reminders) > 0) {
     ?>
     <h2><?php e(t('reminders')); ?></h2>
 
@@ -246,21 +246,21 @@ if(count($reminders) > 0) {
         </thead>
         <tbody>
         <?php
-        foreach($reminders AS $reminder_item) {
+        foreach ($reminders AS $reminder_item) {
             ?>
             <tr>
                 <td class="date">
                     <?php
-                    if(strtotime($reminder_item['reminder_date']) <= time()) {
-                        echo '<span class="due">'.safeToHtml($reminder_item['dk_reminder_date']).'</span>';
-                    }
+                    if (strtotime($reminder_item['reminder_date']) <= time()) { ?>
+                        <span class="due"><?php e($reminder_item['dk_reminder_date']); ?></span>
+                    <?php }
                     else {
                         e($reminder_item['dk_reminder_date']);
                     }
                     ?>
                 </td>
-                <td><a href="reminder.php?id=<?php echo intval($reminder_item['id']); ?>"><?php e($reminder_item['subject']); ?></a></td>
-                <td class="buttons"><a href="reminder_edit.php?id=<?php echo intval($reminder_item['id']); ?>" class="edit"><?php e(t('edit', 'common')); ?></a></td>
+                <td><a href="reminder.php?id=<?php e($reminder_item['id']); ?>"><?php e($reminder_item['subject']); ?></a></td>
+                <td class="buttons"><a href="reminder_edit.php?id=<?php e($reminder_item['id']); ?>" class="edit"><?php e(t('edit', 'common')); ?></a></td>
             </tr>
             <?php
         }
@@ -272,7 +272,7 @@ if(count($reminders) > 0) {
 ?>
 
 <ul class="options">
-    <li><a href="reminder_edit.php?contact_id=<?php echo intval($value['id']); ?>"><?php e(t('add reminder')); ?></a></li>
+    <li><a href="reminder_edit.php?contact_id=<?php e($value['id']); ?>"><?php e(t('add reminder')); ?></a></li>
 </ul>
 
 
@@ -290,7 +290,7 @@ if(count($reminders) > 0) {
     <?php if (!empty($address['cvr'])): ?>
 <tr>
     <td><?php e(t('cvr number', 'address')); ?></td>
-    <td><?php echo '<a href="http://www.cvr.dk/Site/Forms/PublicService/DisplayCompany.aspx?cvrnr='.rawurlencode($address['cvr']).'">' . safeToHtml($address['cvr']); ?></a></td>
+    <td><a href="http://www.cvr.dk/Site/Forms/PublicService/DisplayCompany.aspx?cvrnr=<?php echo rawurlencode($address['cvr']); ?>"><?php e($address['cvr']); ?></a></td>
 </tr>
     <?php endif; ?>
     <?php if (!empty($address['ean'])): ?>
@@ -315,17 +315,18 @@ if(count($reminders) > 0) {
 <div id="keywords" class="box <?php if (!empty($_GET['from']) AND $_GET['from'] == 'keywords') echo ' fade'; ?>">
  <h2><?php e(t('keywords', 'keyword')); ?></h2>
     <?php if ($contact->get('locked') == 0) { ?>
-    <ul class="button"><li><a href="<?php echo PATH_WWW; ?>/shared/keyword/connect.php?contact_id=<?php echo $contact->get('id'); ?>"><?php e(t('add keywords', 'keyword')); ?></a></li></ul>
+    <ul class="button"><li><a href="<?php e(url('/shared/keyword/connect.php', array('contact_id' => $contact->get('id')))); ?>"><?php e(t('add keywords', 'keyword')); ?></a></li></ul>
     <?php } ?>
     <?php
         $keyword = $contact->getKeywordAppender();
         $keywords = $keyword->getConnectedKeywords();
-        if (is_array($keywords) AND count($keywords) > 0) {
-            echo '<ul id="keyword_list">';
-            foreach ($keywords AS $k) {
-                echo '<li>' . safeToHtml($k['keyword']) . '</li>';
-            }
-            echo '</ul>';
+        if (is_array($keywords) AND count($keywords) > 0) { ?>
+            <ul id="keyword_list">
+            <?php foreach ($keywords AS $k) { ?>
+                <li><?php e($k['keyword']); ?></li>
+            <?php } ?>
+            </ul>
+            <?php
         }
     ?>
 
@@ -337,15 +338,15 @@ if(count($reminders) > 0) {
 <h2>Meddelelser</h2>
 
 <ul class="button">
-    <li><a href="message_edit.php?contact_id=<?php echo $_GET['id']; ?>" id="createmessage">Opret meddelelse</a></li>
+    <li><a href="message_edit.php?contact_id=<?php e($_GET['id']); ?>" id="createmessage">Opret meddelelse</a></li>
 </ul>
 
 <ol>
 <?php foreach ($contact->message->getList() AS $m): ?>
     <li<?php if ($m['important'] == 1) echo ' style="color: blue"'; if (!empty($_GET['from_msg_id']) AND $_GET['from_msg_id']==$m['id']) echo ' id="message_'.$m['id'].'" class="fade"'; ?>>
       <?php echo nl2br($m['message']); ?>
-      <a class="edit" href="message_edit.php?contact_id=<?php echo $_GET['id']; ?>&amp;id=<?php echo $m['id'];  ?>">Ret</a>
-        <a href="contact.php?id=<?php echo $_GET['id']; ?>&amp;delete_msg=<?php echo $m['id']; ?>" class="delete" title="Er du sikker på, at du vil slette beskeden?">Slet</a>
+      <a class="edit" href="message_edit.php?contact_id=<?php e($_GET['id']); ?>&amp;id=<?php e($m['id']);  ?>">Ret</a>
+        <a href="contact.php?id=<?php e($_GET['id']); ?>&amp;delete_msg=<?php e($m['id']); ?>" class="delete" title="Er du sikker på, at du vil slette beskeden?">Slet</a>
     </li>
 <?php endforeach; ?>
 </ol>
@@ -356,7 +357,7 @@ if(count($reminders) > 0) {
 <div class="box">
     <h2><?php e(t('tools')); ?></h2>
 <ul>
-    <li><a href="<?php echo $contact->getLoginUrl(); ?>"><?php e(t('see contact login')); ?></a></li>
+    <li><a href="<?php e($contact->getLoginUrl()); ?>"><?php e(t('see contact login')); ?></a></li>
 </ul>
 </div>
 <?php endif; ?>

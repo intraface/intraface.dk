@@ -38,7 +38,7 @@ class UserMaintenance extends Intraface_User
         if ($this->dbquery) {
             return $this->dbquery;
         }
-        if($kernel == NULL) {
+        if ($kernel == NULL) {
             throw new Exception('getDBQuery requires kernel first time called');
         }
         $this->dbquery = new Intraface_DBQuery($kernel, 'user');

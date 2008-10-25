@@ -92,7 +92,7 @@ class NewAddress extends Intraface_Standard {
         // $this->fields = array('name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'contactname', 'ean');
         $this->fields = array('name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'ean');
 
-        if($i = array_search($type, $address_type)) {
+        if ($i = array_search($type, $address_type)) {
             $this->type = $i;
         }
         else {
@@ -106,7 +106,7 @@ class NewAddress extends Intraface_Standard {
      * Private: Loader data ind i array
      */
     function load() {
-        if($this->old_address_id != 0) {
+        if ($this->old_address_id != 0) {
             $sql = "id = ".$this->old_address_id;
         }
         else {
@@ -114,12 +114,12 @@ class NewAddress extends Intraface_Standard {
         }
 
         $this->db->query("SELECT * FROM address WHERE ".$sql);
-        if($this->db->numRows() > 1) {
+        if ($this->db->numRows() > 1) {
             trigger_error('Der er mere end 1 aktiv adresse', FATAL);
         }
-        elseif($this->db->nextRecord()) {
+        elseif ($this->db->nextRecord()) {
             $this->value['address_id'] = $this->db->f('id');
-            for($i = 0, $max = count($this->fields); $i<$max; $i++) {
+            for ($i = 0, $max = count($this->fields); $i<$max; $i++) {
                 $this->value[$this->fields[$i]] = $this->db->f($this->fields[$i]);
             }
             return $this->db->f('id');
@@ -138,21 +138,21 @@ class NewAddress extends Intraface_Standard {
     function save($array_var) {
 
         $db = new DB_sql;
-        if($this->old_address_id != 0) {
+        if ($this->old_address_id != 0) {
             return 0;
         }
-        elseif($this->id == 0) {
+        elseif ($this->id == 0) {
             trigger_error('Address:save(): Id kan ikke være 0 når du forsøger at gemme adresse', FATAL);
         }
         elseif (count($array_var) > 0) {
 
             $db->query("SELECT * FROM address WHERE id = ".$this->address_id);
-            if($db->nextRecord()) {
+            if ($db->nextRecord()) {
                 $do_update = 0;
-                for($i = 0, $max = count($this->fields), $sql=''; $i<$max; $i++) {
-                    if(array_key_exists($this->fields[$i], $array_var) AND isset($array_var[$this->fields[$i]])) {
+                for ($i = 0, $max = count($this->fields), $sql=''; $i<$max; $i++) {
+                    if (array_key_exists($this->fields[$i], $array_var) AND isset($array_var[$this->fields[$i]])) {
                         $sql .= $this->fields[$i]." = '".$array_var[$this->fields[$i]]."', ";
-                        if($db->f($this->fields[$i]) != $array_var[$this->fields[$i]]) {
+                        if ($db->f($this->fields[$i]) != $array_var[$this->fields[$i]]) {
                             $do_update = 1;
                         }
                     }
@@ -165,8 +165,8 @@ class NewAddress extends Intraface_Standard {
             else {
                 // Kun hvis der rent faktisk gemmes nogle værdier opdaterer vi
                 $do_update = 0;
-                for($i = 0, $max = count($this->fields), $sql = ''; $i<$max; $i++) {
-                    if(array_key_exists($this->fields[$i], $array_var) AND isset($array_var[$this->fields[$i]])) {
+                for ($i = 0, $max = count($this->fields), $sql = ''; $i<$max; $i++) {
+                    if (array_key_exists($this->fields[$i], $array_var) AND isset($array_var[$this->fields[$i]])) {
                         $sql .= $this->fields[$i]." = '".$array_var[$this->fields[$i]]."', ";
                         $do_update = 1;
                     }
@@ -176,7 +176,7 @@ class NewAddress extends Intraface_Standard {
                 }
             }
 
-            if($do_update == 0) {
+            if ($do_update == 0) {
                 // Hmmmmm, der er slet ikke nogen felter der er ændret! Så gemmer vi ikke, men siger at det gik godt :-)
                 return 1;
             }
@@ -203,18 +203,18 @@ class NewAddress extends Intraface_Standard {
      * $return	(int)	Returnere 1 hvis arrayet er gemt, 0 hvis det ikke er. Man kan ikke gemme på en old_address.
      */
     function update($array_var) {
-        if($this->old_address_id != 0) {
+        if ($this->old_address_id != 0) {
             return 0;
         }
-        elseif($this->address_id == 0) {
+        elseif ($this->address_id == 0) {
             $this->save($array_var);
         }
-        elseif($this->id == 0) {
+        elseif ($this->id == 0) {
             trigger_error("Id kan ikke være 0 når du forsøger at gemme adresse", FATAL);
         }
         else {
-            for($i = 0, $max = count($this->fields), $sql = ''; $i<$max; $i++) {
-                if(isset($array_var[$this->fields[$i]])) {
+            for ($i = 0, $max = count($this->fields), $sql = ''; $i<$max; $i++) {
+                if (isset($array_var[$this->fields[$i]])) {
                     $sql .= $this->fields[$i]." = \"".$array_var[$this->fields[$i]]."\", ";
                 }
                 else {

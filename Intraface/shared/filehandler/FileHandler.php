@@ -129,7 +129,7 @@ class FileHandler extends Intraface_Standard
                 exit;
             }
         }
-        
+
         if ($this->id > 0) {
             $this->load();
         }
@@ -429,8 +429,8 @@ class FileHandler extends Intraface_Standard
         } else {
             $file_name = safeToDb($file_name);
         }
-        
-        
+
+
         $random_key_generator = $this->getRandomKeyGenerator();
 
         // Vi sikre os at ingen andre har den nøgle
@@ -514,8 +514,8 @@ class FileHandler extends Intraface_Standard
             $this->delete();
             trigger_error("Unable to move file '".$file."' to '".$this->upload_path.$server_file_name."' in Filehandler->save", E_USER_ERROR);
         }
-        
-        if(!chmod($this->upload_path.$server_file_name, 0644)) {
+
+        if (!chmod($this->upload_path.$server_file_name, 0644)) {
             // please do not stop executing here
             trigger_error("Unable to chmod file '".$this->upload_path.$server_file_name."' in Filehandler->save", E_USER_NOTICE);
         }
@@ -666,14 +666,14 @@ class FileHandler extends Intraface_Standard
         $db->query("UPDATE file_handler SET temporary = 0 WHERE user_id = ".$this->kernel->user->get('id')." AND id = " . $this->id);
         return true;
     }
-    
+
     /**
      * Returns RandomKeyGenerator
-     * 
+     *
      * @param integer $length the length of the random key
      * @return object RandomKeyGenerator
      */
-    private function getRandomKeyGenerator() 
+    private function getRandomKeyGenerator()
     {
         return new Ilib_RandomKeyGenerator();
     }

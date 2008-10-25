@@ -45,13 +45,13 @@ $page = new Intraface_Page($kernel);
 $page->start('Bogfør');
 ?>
 
-<h1>Bogfør <?php echo $year->get('label'); ?></h1>
+<h1>Bogfør <?php e($year->get('label')); ?></h1>
 
 <?php if ($kernel->setting->get('user', 'accounting.state.message') == 'view'): ?>
 <div class="message">
 	<p><strong>Bogfør</strong>. På denne side bogfører du posterne fra kassekladden. Når du har bogført beløbene, kan du ikke længere redigere i posterne.</p>
 	<p><strong>Hvis du laver fejl</strong>. Hvis du har bogført noget forkert, skal du lave et bilag med en rettelsespost, som du så bogfører, så dine konti kommer til at stemme.</p>
-	<p><a href="<?php echo $_SERVER['PHP_SELF']; ?>?message=hide">Skjul</a></p>
+	<p><a href="<?php e($_SERVER['PHP_SELF']); ?>?message=hide">Skjul</a></p>
 </div>
 <?php endif; ?>
 
@@ -61,7 +61,7 @@ $page->start('Bogfør');
 <?php if ($kernel->setting->get('user', 'accounting.state.message2') == 'view'): ?>
 <div class="message">
 	<p><strong>Afstemning</strong>. Du bør afstemme dine konti, inden du bogfører. Det betyder, at du fx bør tjekke om beløbene på dit kontoudtog er magen til det beløb, der bliver bogført.</p>
-	<p><a href="<?php echo $_SERVER['PHP_SELF']; ?>?message2=hide">Skjul</a></p>
+	<p><a href="<?php e($_SERVER['PHP_SELF']); ?>?message2=hide">Skjul</a></p>
 </div>
 <?php endif; ?>
 
@@ -81,11 +81,11 @@ $page->start('Bogfør');
 <tbody>
 	<?php foreach ($accounts AS $account) { ?>
 	<tr>
-		<td><a href="account.php?id=<?php echo $account['id']; ?>"><?php echo $account['number']; ?></a></td>
-		<td><?php echo $account['name']; ?></td>
-		<td class="amount"><?php echo amountToOutput($account['saldo_primo']); ?></td>
-		<td class="amount"><?php echo amountToOutput($account['saldo_draft']); ?></td>
-		<td class="amount"><?php echo amountToOutput($account['saldo_ultimo']); ?></td>
+		<td><a href="account.php?id=<?php e($account['id']); ?>"><?php e($account['number']); ?></a></td>
+		<td><?php e($account['name']); ?></td>
+		<td class="amount"><?php e(amountToOutput($account['saldo_primo'])); ?></td>
+		<td class="amount"><?php e(amountToOutput($account['saldo_draft'])); ?></td>
+		<td class="amount"><?php e(amountToOutput($account['saldo_ultimo'])); ?></td>
 	</tr>
 	<?php  } ?>
 </tbody>
@@ -101,12 +101,12 @@ $page->start('Bogfør');
 
 <?php echo $voucher->error->view(); ?>
 
-<?php if(!$year->vatAccountIsSet()): ?>
+<?php if (!$year->vatAccountIsSet()): ?>
 	<p class="message-dependent">Du skal først <a href="setting.php">sætte momskonti</a>, inden du kan bogføre.</p>
 <?php elseif ($voucher->get('list_saldo') > 0): ?>
 	<p class="error">Kassekladden balancerer ikke. Du kan ikke bogføre, før den balancerer.</p>
 <?php elseif (!empty($posts) AND count($posts) > 0): // der skal kun kunne bogføres, hvis der er nogle poster ?>
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 	<fieldset>
 		<p>Bogfør posterne og tøm kassekladden. Husk, at du ikke længere kan redigere i posterne, når du har klikket på knappen. Bevægelserne kan derefter ses i regnskabet.</p>
 		<div><input type="submit" value="Bogfør" name="state" onclick="return confirm('Er du sikker på, at du vil bogføre?');" /></div>

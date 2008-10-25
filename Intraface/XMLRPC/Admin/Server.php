@@ -62,7 +62,7 @@ class Intraface_XMLRPC_Admin_Server extends Intraface_XMLRPC_Server
      */
     public function hasModuleAccess($credentials, $module) 
     {
-        if(!$this->checkCredentials($credentials)) {
+        if (!$this->checkCredentials($credentials)) {
             throw new XML_RPC2_Exception('error in credentials');
         }
         

@@ -249,7 +249,7 @@ class TodoList extends Intraface_Standard
         $i=0;
         while ($db->nextRecord()) {
             $todo = new TodoList($this->kernel, $db->f('id'));
-            if($type == 'done' and $todo->howManyLeft() > 0) {
+            if ($type == 'done' and $todo->howManyLeft() > 0) {
                 continue;
             } elseif ($type != 'done'  AND $todo->howManyLeft() == 0) {
                 continue;

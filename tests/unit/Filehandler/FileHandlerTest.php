@@ -32,9 +32,9 @@ class FakeFileHandlerUser
 
 function fht_deltree( $f ){
 
-    if( is_dir( $f ) ){
-        foreach( scandir( $f ) as $item ){
-            if( !strcmp( $item, '.' ) || !strcmp( $item, '..' ) )
+    if ( is_dir( $f ) ){
+        foreach ( scandir( $f ) as $item ){
+            if ( !strcmp( $item, '.' ) || !strcmp( $item, '..' ) )
                 continue;
             fht_deltree( $f . "/" . $item );
         }

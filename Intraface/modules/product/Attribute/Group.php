@@ -49,7 +49,7 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
      */
     public function getAttributes()
     {
-        if(!$this->id) {
+        if (!$this->id) {
             throw new Exception('Can first be used when group is saved');
         }
         
@@ -69,7 +69,7 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
     public function getAttribute($id)
     {
         $attribute = Doctrine::getTable('Intraface_modules_product_Attribute')->find(intval($id));
-        if(!$attribute) {
+        if (!$attribute) {
             throw new Intraface_Gateway_Exception('Invalid attribute id '.intval($id));
         }
         return $attribute;
@@ -83,7 +83,7 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
      */
     public function getAttributesUsedByProduct($product)
     {
-        if(!$this->id) {
+        if (!$this->id) {
             throw new Exception('Can first be used when group is saved');
         }
         

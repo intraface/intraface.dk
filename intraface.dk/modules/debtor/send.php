@@ -34,7 +34,7 @@ switch ($send_as) {
 
         // hvad skal den skrive her?
 
-        if($debtor->get('type') == 'order') {
+        if ($debtor->get('type') == 'order') {
             $body = $kernel->setting->get('intranet', 'debtor.order.email.text');
         } else {
             $body = '';
@@ -56,7 +56,7 @@ switch ($send_as) {
 
         if ($debtor->contact->get('preferred_invoice') <> 3) { // elektronisk faktura
             trigger_error('Kunden foretrækker ikke elektronisk faktura!', E_USER_ERROR);
-        } elseif(!$debtor->contact->address->get('ean')) {
+        } elseif (!$debtor->contact->address->get('ean')) {
             trigger_error('EAN-nummeret er ikke sat', E_USER_ERROR);
         }
 
@@ -67,14 +67,14 @@ switch ($send_as) {
 
 }
 
-if(($debtor->  get("type") == "order" || $debtor->get("type") == "invoice") && $kernel->intranet->hasModuleAccess('onlinepayment')) {
+if (($debtor->  get("type") == "order" || $debtor->get("type") == "invoice") && $kernel->intranet->hasModuleAccess('onlinepayment')) {
     $kernel->useModule('onlinepayment');
     $onlinepayment = OnlinePayment::factory($kernel);
 } else {
     $onlinepayment = NULL;
 }
 
-if($kernel->intranet->get("pdf_header_file_id") != 0) {
+if ($kernel->intranet->get("pdf_header_file_id") != 0) {
     $file = new FileHandler($kernel, $kernel->intranet->get("pdf_header_file_id"));
 } else {
     $file = NULL;
@@ -159,7 +159,7 @@ switch ($send_as) {
         break;
     case 'electronic_email':
         // Sender e-mailen
-        if($email->send(Intraface_Mail::factory())) {
+        if ($email->send(Intraface_Mail::factory())) {
             if ($debtor->get('status') == 'created') {
                 $debtor->setStatus('sent');
             }

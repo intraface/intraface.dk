@@ -41,7 +41,7 @@ class Intraface_Amount
      */
     function convert2dk()
     {
-        //if(is_double($this->amount)) {
+        //if (is_double($this->amount)) {
             $this->amount = number_format($this->amount, 2, ",", ".");
         //}
         return true;

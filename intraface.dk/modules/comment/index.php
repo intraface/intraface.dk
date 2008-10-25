@@ -51,16 +51,16 @@ $page->start('Kommentarer');
 	</tr>
 	</thead>
 	<tbody>
-<?php foreach($comments AS $comment): ?>
+<?php foreach ($comments AS $comment): ?>
 	<tr>
-		<td><img src="<?php echo $comment['gravatar_url']; ?>" height="<?php echo $comment['gravatar_size']; ?>" width="<?php echo $comment['gravatar_size']; ?>" /></td>
-		<td><?php echo safeToHtml($comment['headline']); ?></td>
-		<td><a href="/modules/contact/contact.php?id=<?php echo safeToHtml($comment['contact_id']); ?>"><?php echo safeToHtml($comment['contact_name']); ?></a></td>
+		<td><img src="<?php e($comment['gravatar_url']); ?>" height="<?php e($comment['gravatar_size']); ?>" width="<?php e($comment['gravatar_size']); ?>" /></td>
+		<td><?php e($comment['headline']); ?></td>
+		<td><a href="/modules/contact/contact.php?id=<?php e($comment['contact_id']); ?>"><?php e($comment['contact_name']); ?></a></td>
 		<td class="options">
 			<?php if ($comment['approved'] == 0): ?>
-			<a class="approve" href="index.php?approve=<?php echo safeToHtml($comment['code']); ?>">Godkend</a>
+			<a class="approve" href="index.php?approve=<?php e($comment['code']); ?>">Godkend</a>
 			<?php endif; ?>
-			<a class="delete" href="index.php?delete=<?php echo safeToHtml($comment['id']); ?>">Slet</a>
+			<a class="delete" href="index.php?delete=<?php e($comment['id']); ?>">Slet</a>
 		</td>
 	</tr>
 <?php endforeach; ?>

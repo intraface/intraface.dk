@@ -19,7 +19,7 @@ class ModulePackage_Limit
         $packages = $manager->getList();
         $limiters = array();
         require_once 'Intraface/modules/modulepackage/ModulePackage.php';
-        foreach($packages AS $package) {
+        foreach ($packages AS $package) {
             $package_module = new ModulePackage($package['module_package_id']);
             $limiters = array_merge($limiters, $package_module->get('limiters'));
         }

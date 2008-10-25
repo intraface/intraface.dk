@@ -34,9 +34,9 @@ class FakeImageRandomizerUser
 
 function iht_deltree( $f ){
 
-    if( is_dir( $f ) ){
-        foreach( scandir( $f ) as $item ){
-            if( !strcmp( $item, '.' ) || !strcmp( $item, '..' ) )
+    if ( is_dir( $f ) ){
+        foreach ( scandir( $f ) as $item ){
+            if ( !strcmp( $item, '.' ) || !strcmp( $item, '..' ) )
                 continue;
             iht_deltree( $f . "/" . $item );
         }
@@ -60,7 +60,7 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
         $db->query('TRUNCATE keyword');
         $db->query('TRUNCATE keyword_x_object');
         iht_deltree(PATH_UPLOAD.'1');
-        if(file_exists(PATH_UPLOAD.'/1/1.jpeg')) {
+        if (file_exists(PATH_UPLOAD.'/1/1.jpeg')) {
             unlink(PATH_UPLOAD.'/1/1.jpeg');
         }
 
@@ -81,14 +81,14 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
     }
     
     function createImages() {
-        for($i = 1; $i < 11; $i++) {
+        for ($i = 1; $i < 11; $i++) {
             $filemanager = new FileManager($this->createKernel());
             copy(dirname(__FILE__) . '/'.$this->file_name, PATH_UPLOAD.$this->file_name);
             $filemanager->save(PATH_UPLOAD.$this->file_name, 'file'.$i.'.jpg');
             $appender = $filemanager->getKeywordAppender();
             
             $string_appender = new Intraface_Keyword_StringAppender(new Keyword($filemanager), $appender);
-            if(round($i/2) == $i/2) {
+            if (round($i/2) == $i/2) {
                 $t = 'A';
             }
             else {

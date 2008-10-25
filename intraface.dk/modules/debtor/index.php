@@ -4,15 +4,15 @@ require('../../include_first.php');
 $kernel->module("debtor");
 $translation = $kernel->getTranslation('contact');
 
-if($kernel->user->hasModuleAccess("invoice")) {
+if ($kernel->user->hasModuleAccess("invoice")) {
 	header("Location: list.php?type=invoice");
 	exit;
 }
-elseif($kernel->user->hasModuleAccess("order")) {
+elseif ($kernel->user->hasModuleAccess("order")) {
 	header("Location: list.php?type=order");
 	exit;
 }
-elseif($kernel->user->hasModulesAccess("quotation")) {
+elseif ($kernel->user->hasModulesAccess("quotation")) {
 	header("Location: list.php?type=quotation");
 	exit;
 }

@@ -76,7 +76,7 @@ class XMLRPC_Message_Server extends XmlRpcServer {
 
 }
 
-if($_SERVER['REQUEST_METHOD'] != 'POST' || $_SERVER['CONTENT_TYPE'] == 'application/x-www-form-urlencoded') {
+if ($_SERVER['REQUEST_METHOD'] != 'POST' || $_SERVER['CONTENT_TYPE'] == 'application/x-www-form-urlencoded') {
     require('../Documentor.php');
     $doc = new XMLRPC_Documentor('http://www.intraface.dk' . $_SERVER['PHP_SELF']);
     $doc->setDescription('

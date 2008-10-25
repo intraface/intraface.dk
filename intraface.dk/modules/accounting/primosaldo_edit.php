@@ -38,17 +38,17 @@ $page = new Intraface_Page($kernel);
 $page->start('Primosaldo');
 ?>
 
-<h1>Rediger primosaldo <?php echo $year->get('label'); ?></h1>
+<h1>Rediger primosaldo <?php e($year->get('label')); ?></h1>
 
 <ul class="options">
-	<li><a href="year_edit.php?id=<?php echo $year->get('id'); ?>">Gå tilbage til regnskabsåret</a></li>
-	<li><a href="primosaldo.php?id=<?php echo $year->get('id'); ?>">Luk</a></li>
+	<li><a href="year_edit.php?id=<?php e($year->get('id')); ?>">Gå tilbage til regnskabsåret</a></li>
+	<li><a href="primosaldo.php?id=<?php e($year->get('id')); ?>">Luk</a></li>
 </ul>
 
 <?php echo $account->error->view(); ?>
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-	<input type="hidden" name="year_id" value="<?php echo $year->get('id'); ?>" />
+<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
+	<input type="hidden" name="year_id" value="<?php e($year->get('id')); ?>" />
 	<fieldset>
 		<legend>Oplysninger til primosaldo</legend>
 		<table>
@@ -64,15 +64,15 @@ $page->start('Primosaldo');
 			<?php foreach ($accounts AS $account): ?>
 				<tr>
 					<td>
-						<input type="hidden" name="id[]" id="id<?php echo $account['id']; ?>" value="<?php echo $account['id']; ?>" />
-						<?php echo $account['number']; ?>
+						<input type="hidden" name="id[]" id="id<?php e($account['id']); ?>" value="<?php e($account['id']); ?>" />
+						<?php e($account['number']); ?>
 					</td>
-					<td><?php echo $account['name']; ?></td>
+					<td><?php e($account['name']); ?></td>
 					<td>
-						<input type="text" name="debet[]" id="debet<?php echo $account['id']; ?>" value="<?php echo amountToForm($account['primosaldo_debet']); ?>" />
+						<input type="text" name="debet[]" id="debet<?php e($account['id']); ?>" value="<?php e(amountToForm($account['primosaldo_debet'])); ?>" />
 					</td>
 					<td>
-						<input type="text" name="credit[]" id="credit<?php echo $account['id']; ?>" value="<?php echo amountToForm($account['primosaldo_credit']); ?>" />
+						<input type="text" name="credit[]" id="credit<?php e($account['id']); ?>" value="<?php e(amountToForm($account['primosaldo_credit'])); ?>" />
 					</td>
 				</tr>
 				<?php
@@ -91,8 +91,8 @@ $page->start('Primosaldo');
 							}
 						?>
 					</td>
-					<td><strong><?php echo amountToOutput($total_debet); ?></strong></td>
-					<td><strong><?php echo amountToOutput($total_credit); ?></strong></td>
+					<td><strong><?php e(amountToOutput($total_debet)); ?></strong></td>
+					<td><strong><?php e(amountToOutput($total_credit)); ?></strong></td>
 				</tr>
 			</tbody>
 		</table>
@@ -100,7 +100,7 @@ $page->start('Primosaldo');
 	<div>
 		<input type="submit" name="submit" value="Opdater primosaldo" class="confirm" />
 		eller
-		<a href="primosaldo.php?id=<?php echo $year->get('id'); ?>">Fortryd</a>
+		<a href="primosaldo.php?id=<?php e($year->get('id')); ?>">Fortryd</a>
 	</div>
 </form>
 

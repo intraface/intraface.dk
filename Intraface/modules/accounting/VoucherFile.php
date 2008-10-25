@@ -116,14 +116,14 @@ class VoucherFile
                         $files[$i]['description'] = 'Faktura';
                     }
                     $files[$i]['name'] = 'Faktura';
-                    $files[$i]['file_uri'] = '/modules/debtor/pdf.php?id=' . $db->f('belong_to_id');
+                    $files[$i]['file_uri'] = url('/modules/debtor/pdf.php', array('id' => $db->f('belong_to_id')));
                 break;
                 case 'vat':
                     if (empty($files[$i]['description'])) {
                         $files[$i]['description'] = 'Momsperiode';
                     }
                     $files[$i]['name'] = 'Momsperiode';
-                    $files[$i]['file_uri'] = '/modules/accounting/vat_view.php?id=' . $db->f('belong_to_id');
+                    $files[$i]['file_uri'] = url('/modules/accounting/vat_view.php', array('id' => $db->f('belong_to_id')));
                 break;
 
                 case 'file':
@@ -138,21 +138,21 @@ class VoucherFile
                         $files[$i]['description'] = 'Kreditnota';
                     }
                     $files[$i]['name'] = 'Kreditnota';
-                    $files[$i]['file_uri'] = '/modules/debtor/pdf.php?id=' . $db->f('belong_to_id');
+                    $files[$i]['file_uri'] = url('/modules/debtor/pdf.php', array('id' => $db->f('belong_to_id')));
                 break;
                 case 'reminder':
                     if (empty($files[$i]['description'])) {
                         $files[$i]['description'] = 'Rykker';
                     }
                     $files[$i]['name'] = 'Rykker';
-                    $files[$i]['file_uri'] = '/modules/debtor/reminder_pdf.php?id=' . $db->f('belong_to_id');
+                    $files[$i]['file_uri'] = url('/modules/debtor/reminder_pdf.php', array('id' => $db->f('belong_to_id')));
                 break;
                 case 'procurement':
                     if (empty($files[$i]['description'])) {
                         $files[$i]['description'] = 'Indkøb';
                     }
                     $files[$i]['name'] = 'Indkøb';
-                    $files[$i]['file_uri'] = '/modules/procurement/view.php?id=' . $db->f('belong_to_id');
+                    $files[$i]['file_uri'] = url('/modules/procurement/view.php', array('id' => $db->f('belong_to_id')));
                 break;
                 default:
                     trigger_error('VoucherFile::getList: ugyldig belong to');

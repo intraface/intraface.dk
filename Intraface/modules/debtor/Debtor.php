@@ -305,7 +305,7 @@ class Debtor extends Intraface_Standard
 
         for ($i = 0, $max = count($item), $total = 0, $total_currency = 0; $i<$max; $i++) {
             $total += $item[$i]["amount"]->getAsIso();
-            if($currency) $total_currency += $item[$i]['amount_currency']->getAsIso();
+            if ($currency) $total_currency += $item[$i]['amount_currency']->getAsIso();
         }
 
         // no round off of curreny yet!
@@ -317,7 +317,7 @@ class Debtor extends Intraface_Standard
         }
 
         $this->value["total"] = round($total, 2);
-        if($currency) $this->value['total_currency'] = round($total_currency, 2);
+        if ($currency) $this->value['total_currency'] = round($total_currency, 2);
         $this->value['payment_total'] = 0;
         
         
@@ -422,7 +422,7 @@ class Debtor extends Intraface_Standard
         
         $currency_id = 0;
         $currency_exchange_rate_id = 0;
-        if(isset($input['currency']) && is_object($input['currency'])) {
+        if (isset($input['currency']) && is_object($input['currency'])) {
             $currency_id = $input['currency']->getId();
             $currency_exchange_rate_id = $input['currency']->getProductPriceExchangeRate()->getId();
         }
@@ -446,7 +446,7 @@ class Debtor extends Intraface_Standard
                 $identifier = $random->generate(30);
                 $db->query('SELECT id FROM debtor WHERE identifier_key = "'.$identifier.'" AND intranet_id = '.$this->kernel->intranet->get('id'));
                 $infinite_check++;
-                if($infinite_check > 20) {
+                if ($infinite_check > 20) {
                     throw new Exception('Unable to generate an unique key');
                 }
             } while ($db->nextRecord());
@@ -745,7 +745,6 @@ class Debtor extends Intraface_Standard
         }
 
         $db = new DB_Sql;
-        // print($sql);
         $db->query($sql);
         return $db->numRows();
     }
@@ -785,7 +784,7 @@ class Debtor extends Intraface_Standard
 
         if ($this->dbquery->checkFilter("product_id")) {
             $this->dbquery->setCondition("debtor_item.product_id = ".$this->dbquery->getFilter('product_id'));
-            if($this->dbquery->checkFilter("product_variation_id")) {
+            if ($this->dbquery->checkFilter("product_variation_id")) {
                 $this->dbquery->setCondition("debtor_item.product_variation_id = ".$this->dbquery->getFilter('product_variation_id'));
             }
             else {
@@ -1124,11 +1123,11 @@ class Debtor extends Intraface_Standard
     public function getCurrency() 
     {
         
-        if($this->get('currency_id') == 0 || $this->get('currency_product_price_exchange_rate_id') == 0) {
+        if ($this->get('currency_id') == 0 || $this->get('currency_product_price_exchange_rate_id') == 0) {
             return false;
         }
         
-        if(!$this->currency) {
+        if (!$this->currency) {
             $doctrine = Doctrine_Manager::connection(DB_DSN);
             $gateway = new Intraface_modules_currency_Currency_Gateway($doctrine);
             $this->currency = $gateway->findById($this->get('currency_id'));     

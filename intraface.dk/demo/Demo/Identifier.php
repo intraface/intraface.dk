@@ -16,7 +16,7 @@ class Demo_Identifier extends k_Controller
     
     function getPrivateKey()
     {
-        if(!empty($this->private_key)) {
+        if (!empty($this->private_key)) {
             return $this->private_key;
         }
         
@@ -39,11 +39,11 @@ class Demo_Identifier extends k_Controller
     {
         
         // If we are going to either shop (and when implemented, login) we see if onlinepayment is present
-        if($name == 'shop') { /* OR name == 'login */
+        if ($name == 'shop') { /* OR name == 'login */
             
             $credentials = array('private_key' => $this->getPrivateKey(), "session_id" => md5($this->registry->get("k_http_Session")->getSessionId()));
             
-            if($this->registry->get('admin')->hasModuleAccess($credentials, 'onlinepayment')) {
+            if ($this->registry->get('admin')->hasModuleAccess($credentials, 'onlinepayment')) {
                 
                 $this->registry->registerConstructor('onlinepayment', create_function(
                     '$className, $args, $registry',  

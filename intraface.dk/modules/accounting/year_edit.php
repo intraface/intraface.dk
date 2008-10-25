@@ -36,8 +36,8 @@ $page->start('Rediger regnskab');
 <h1>Regnskabsår</h1>
 
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
-	<input type="hidden" name="id" value="<?php if (!empty($values['id'])) echo intval($values['id']); ?>" />
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+	<input type="hidden" name="id" value="<?php if (!empty($values['id'])) e($values['id']); ?>" />
 
 	<?php echo $year->error->view(); ?>
 
@@ -46,17 +46,17 @@ $page->start('Rediger regnskab');
 
 		<div class="formrow">
 			<label for="label">Navn</label>
-			<input type="text" name="label" id="label" value="<?php if (!empty($values['label'])) echo safeToHtml($values['label']); ?>" />
+			<input type="text" name="label" id="label" value="<?php if (!empty($values['label'])) e($values['label']); ?>" />
 		</div>
 
 		<div class="formrow">
 			<label for="from_date">Fra dato</label>
-			<input type="text" name="from_date" id="from_date" value="<?php if (!empty($values['from_date_dk'])) echo safeToHtml($values['from_date_dk']); ?>" />
+			<input type="text" name="from_date" id="from_date" value="<?php if (!empty($values['from_date_dk'])) e($values['from_date_dk']); ?>" />
 		</div>
 
 		<div class="formrow">
 			<label for="to_date">Til dato</label>
-			<input type="text" name="to_date" id="to_date" value="<?php if (!empty($values['to_date_dk'])) echo safeToHtml($values['to_date_dk']); ?>" />
+			<input type="text" name="to_date" id="to_date" value="<?php if (!empty($values['to_date_dk'])) e($values['to_date_dk']); ?>" />
 		</div>
 		<br /> <!-- Mærkelig nok skal denne være der for det ser ordentlig ud!!! /Sune -->
 		<div class="formrow">
@@ -67,7 +67,7 @@ $page->start('Rediger regnskab');
 					foreach ($years AS $y):
 						if (!empty($values['id']) AND $y['id'] == $values['id']) { continue; }
 						?>
-						<option value="<?php echo $y['id']; ?>"<?php if (!empty($values['last_year_id']) AND $y['id'] == $values['last_year_id']) { echo ' selected="selected"'; } ?>><?php echo $y['label']; ?></option>
+						<option value="<?php e($y['id']); ?>"<?php if (!empty($values['last_year_id']) AND $y['id'] == $values['last_year_id']) { echo ' selected="selected"'; } ?>><?php e($y['label']); ?></option>
 					<?php endforeach; ?>
 			</select>
 		</div>
@@ -88,7 +88,7 @@ $page->start('Rediger regnskab');
 	<div style="clear:both;">
 		<input type="submit" value="Gem" name="submit" id="submit" />
 		eller
-		<a href="year.php?id=<?php if (!empty($values['id'])) echo intval($values['id']); ?>">Fortryd</a>
+		<a href="year.php?id=<?php if (!empty($values['id'])) e($values['id']); ?>">Fortryd</a>
 	</div>
 	</fieldset>
 </form>

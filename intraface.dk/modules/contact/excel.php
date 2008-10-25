@@ -18,11 +18,11 @@ $keyword_ids = $contact->getDBQuery()->getKeyword();
 
 $used_keyword = array();
 
-if(is_array($keyword_ids) && count($keyword_ids) > 0) {
+if (is_array($keyword_ids) && count($keyword_ids) > 0) {
 
-    foreach($keyword_ids AS $kid) {
-        foreach($keywords AS $k){
-            if($k['id'] == $kid) {
+    foreach ($keyword_ids AS $kid) {
+        foreach ($keywords AS $k){
+            if ($k['id'] == $kid) {
                 $used_keyword[] = $k['keyword'];
             }
         }

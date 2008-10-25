@@ -274,7 +274,7 @@ class IntranetMaintenance extends Intraface_Intranet
     {
 
         if ($this->dbquery->checkFilter('text')) {
-            $this->dbquery->setCondition('name LIKE "%'.safeToHtml($this->dbquery->getFilter('text')).'%"');
+            $this->dbquery->setCondition('name LIKE "%'.$this->dbquery->getFilter('text').'%"');
         }
 
         if ($this->dbquery->checkFilter('user_id')) {

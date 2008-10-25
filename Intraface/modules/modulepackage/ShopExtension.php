@@ -125,7 +125,7 @@ class Intraface_modules_modulepackage_ShopExtension {
 
         // what kind of check of the invoice/order do we need to make here!
 
-        foreach($debtor['items'] AS $item) {
+        foreach ($debtor['items'] AS $item) {
             if ($item['product_id'] == $product_id) {
                 return (array)$item;
             }
@@ -160,7 +160,7 @@ class Intraface_modules_modulepackage_ShopExtension {
     public function placeOrder($customer, $products, $mailer)
     {
 
-        if(!is_object($mailer)) {
+        if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
         
@@ -179,7 +179,7 @@ class Intraface_modules_modulepackage_ShopExtension {
 
         // then we add the products to the basket
         settype($products, 'array');
-        foreach($products AS $product) {
+        foreach ($products AS $product) {
             if (!isset($product['product_detail_id'])) {
                 $product['product_detail_id'] = 0;
             }

@@ -6,7 +6,7 @@ $translation = $kernel->getTranslation('contact');
 
 $redirect = Intraface_Redirect::factory($kernel, 'receive');
 
-if(!empty($_GET['add'])) {
+if (!empty($_GET['add'])) {
 
 	$add_redirect = Intraface_Redirect::factory($kernel, 'go');
 	$url = $add_redirect->setDestination($module->getPath()."contact_edit.php", $module->getPath()."select_contact.php?".$redirect->get('redirect_query_string'));
@@ -17,10 +17,10 @@ if(!empty($_GET['add'])) {
 }
 
 
-if(isset($_POST['submit'])) {
+if (isset($_POST['submit'])) {
 
 	$contact = new Contact($kernel, intval($_POST['selected']));
-	if($contact->get('id') != 0) {
+	if ($contact->get('id') != 0) {
 		$redirect->setParameter("contact_id", $contact->get('id'));
 		header("Location: ".$redirect->getRedirect('index.php'));
 		exit;
@@ -36,15 +36,15 @@ if(isset($_POST['submit'])) {
 $keywords = $contact->getKeywordAppender();
 $used_keywords = $keywords->getUsedKeywords();
 
-if(isset($_GET['contact_id'])) {
+if (isset($_GET['contact_id'])) {
 	$contact->getDBQuery()->setCondition("contact.id = ".intval($_GET['contact_id']));
-} elseif(isset($_GET['query']) || isset($_GET['keyword_id'])) {
+} elseif (isset($_GET['query']) || isset($_GET['keyword_id'])) {
 
-	if(isset($_GET['query'])) {
+	if (isset($_GET['query'])) {
 		$contact->getDBQuery()->setFilter('search', $_GET['query']);
 	}
 
-	if(isset($_GET['keyword_id'])) {
+	if (isset($_GET['keyword_id'])) {
 		$contact->getDBQuery()->setKeyword($_GET['keyword_id']);
 	}
 } else {
@@ -55,10 +55,9 @@ $contact->getDBQuery()->defineCharacter('character', 'address.name');
 $contact->getDBQuery()->usePaging('paging');
 $contact->getDBQuery()->storeResult('use_stored', 'select_contact', 'sublevel');
 
-if(isset($_GET['contact_id']) && intval($_GET['contact_id']) != 0) {
+if (isset($_GET['contact_id']) && intval($_GET['contact_id']) != 0) {
 	$contact->getDBQuery()->setExtraUri("&last_contact_id=".intval($_GET['contact_id']));
-}
-elseif(isset($_GET['last_contact_id']) && intval($_GET['last_contact_id']) != 0) {
+} elseif (isset($_GET['last_contact_id']) && intval($_GET['last_contact_id']) != 0) {
 	$contact->getDBQuery()->setExtraUri("&last_contact_id=".intval($_GET['last_contact_id']));
 }
 
@@ -79,10 +78,10 @@ $page->start('Vælg kontakt');
 <?php else: ?>
     <ul class="options">
         <li><a href="select_contact.php?add=1">Opret kontakt</a></li>
-        <?php if(isset($_GET['last_contact_id']) && intval($_GET['last_contact_id']) != 0): ?>
-        <li><a href="select_contact.php?contact_id=<?php print(intval($_GET['last_contact_id'])); ?>">Vis valgte</a></li>
+        <?php if (isset($_GET['last_contact_id']) && intval($_GET['last_contact_id']) != 0): ?>
+        <li><a href="select_contact.php?contact_id=<?php e($_GET['last_contact_id']); ?>">Vis valgte</a></li>
         <?php endif; ?>
-    
+
     </ul>
 
     <form action="select_contact.php" method="get" class="search-filter">
@@ -90,7 +89,7 @@ $page->start('Vælg kontakt');
 		<legend>Søgning</legend>
 
 		<label for="query">Søg efter
-			<input name="query" id="query" type="text" value="<?php print($contact->getDBQuery()->getFilter('search')); ?>" />
+			<input name="query" id="query" type="text" value="<?php e($contact->getDBQuery()->getFilter('search')); ?>" />
 		</label>
 
 		<?php if (is_array($used_keywords) AND count($used_keywords)): ?>
@@ -98,7 +97,7 @@ $page->start('Vælg kontakt');
 			<select name="keyword_id" id="keyword_id">
 				<option value="">Ingen</option>
 				<?php foreach ($used_keywords AS $k) { ?>
-					<option value="<?php echo $k['id']; ?>" <?php if($k['id'] == $contact->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo $k['keyword']; ?></option>
+					<option value="<?php e($k['id']); ?>" <?php if ($k['id'] == $contact->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php e($k['keyword']); ?></option>
 				<?php } ?>
 			</select>
 		</label>
@@ -107,10 +106,10 @@ $page->start('Vælg kontakt');
 		<span><input type="submit" value="Afsted!" /></span>
 	</fieldset>
     </form>
-    
+
     <?php echo $contact->getDBQuery()->display('character'); ?>
-    
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+
+    <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
     	<table summary="Kontakter" class="stripe">
     		<caption>Kontakter</caption>
     		<thead>
@@ -127,20 +126,21 @@ $page->start('Vælg kontakt');
     			</tr>
     		</tfoot>
     		<tbody>
-    			<?php foreach ($contacts AS $c) { ?>
+    			<?php foreach ($contacts as $c) { ?>
     			<tr>
     				<td>
-    					<input type="radio" value="<?php echo $c['id']; ?>" name="selected" <?php if((isset($_GET['contact_id']) && $_GET['contact_id'] == $c['id']) || (isset($_GET['last_contact_id']) && $_GET['last_contact_id'] == $c['id'])) print("checked=\"checked\""); ?> />
+    					<input type="radio" value="<?php e($c['id']); ?>" name="selected" <?php if ((isset($_GET['contact_id']) && $_GET['contact_id'] == $c['id']) || (isset($_GET['last_contact_id']) && $_GET['last_contact_id'] == $c['id'])) print("checked=\"checked\""); ?> />
     				</td>
-    				<td><?php echo $c['number']; ?></td>
-    				<td><a href="contact.php?id=<?php echo $c['id']; ?>"><?php echo $c['name']; ?></a></td>
-    				<td><?php echo $c['email']; ?></td>
+    				<td><?php e($c['number']); ?></td>
+    				<td><a href="contact.php?id=<?php e($c['id']); ?>"><?php e($c['name']); ?></a></td>
+    				<td><?php e($c['email']); ?></td>
     			</tr>
-    			<?php } // end foreach ?>
+    			<?php } // end foreach
+                ?>
     		</tbody>
     	</table>
-    
-    	<input type="submit" name="submit" value="<?php echo $translation->get('choose', 'common'); ?>" /> eller <a href="<?php print($redirect->getRedirect("index.php")); ?>">Fortryd</a>
+
+    	<input type="submit" name="submit" value="<?php e($translation->get('choose', 'common')); ?>" /> eller <a href="<?php e($redirect->getRedirect("index.php")); ?>">Fortryd</a>
     </form>
 
 <?php endif; ?>

@@ -70,7 +70,7 @@ class Intraface_modules_modulepackage_Action
      */
     public function placeOrder($customer, $mailer) 
     {
-        if(!is_object($mailer)) {
+        if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
         // Because of the building of Intraface Webshop we need to add the order to the basket first
@@ -78,11 +78,11 @@ class Intraface_modules_modulepackage_Action
         
         // First we translate the actions into actual products for the order
         $products = array();
-        foreach($this->action AS $action) {
+        foreach ($this->action AS $action) {
             
-            if(isset($action['action']) && isset($action['month']) && isset($action['product_id'])) {
-                if($action['action'] == 'add') {
-                    if(isset($action['start_date']) && $action['start_date'] != '' && isset($action['end_date']) && $action['end_date'] != '') {
+            if (isset($action['action']) && isset($action['month']) && isset($action['product_id'])) {
+                if ($action['action'] == 'add') {
+                    if (isset($action['start_date']) && $action['start_date'] != '' && isset($action['end_date']) && $action['end_date'] != '') {
                         $description = date('d-m-Y', strtotime($action['start_date'])).' - '.date('d-m-Y', strtotime($action['end_date']));
                     }
                     else {
@@ -94,7 +94,7 @@ class Intraface_modules_modulepackage_Action
                         'description' => $description, 
                         'quantity' => (int)$action['month']);
                 } 
-                elseif(($action['action'] == 'terminate' || $action['action'] == 'delete') 
+                elseif (($action['action'] == 'terminate' || $action['action'] == 'delete') 
                         && isset($action['product_id']) && $action['product_id'] != 0 
                         && isset($action['product_detail_id']) && $action['product_detail_id'] != 0) {
                     // we only substract the price id we are able to find a product detail.
@@ -110,7 +110,7 @@ class Intraface_modules_modulepackage_Action
                 
         require_once('Intraface/modules/modulepackage/ShopExtension.php');
         $shop = new Intraface_modules_modulepackage_ShopExtension;
-        if(!$order = $shop->placeOrder($customer, $products, $mailer)) {
+        if (!$order = $shop->placeOrder($customer, $products, $mailer)) {
             return false;
         }
         
@@ -151,43 +151,43 @@ class Intraface_modules_modulepackage_Action
     public function execute($intranet) 
     {
         
-        if(!is_object($intranet)) {
+        if (!is_object($intranet)) {
             trigger_error("First parameter for Intraface_modules_modulepackage_Action->execute needs to be an intranet object", E_USER_ERROR);
             exit;
         }
         
-        foreach($this->action AS $action) {
-            if($action['action'] == 'add') {
+        foreach ($this->action AS $action) {
+            if ($action['action'] == 'add') {
                 $manager = new Intraface_modules_modulepackage_Manager($intranet);
-                if(!$manager->save($action['module_package_id'], date('d-m-Y', strtotime($action['start_date'])), $action['end_date'])) {
+                if (!$manager->save($action['module_package_id'], date('d-m-Y', strtotime($action['start_date'])), $action['end_date'])) {
                     trigger_error('There was an error adding the module package '.$action['module_package_id'], E_USER_NOTICE);
                     $this->error->set("an error appeared when adding your module package");
                 }
-                if($this->getOrderId() > 0) {
-                    if(!$manager->addOrderId($this->getOrderId())) {
+                if ($this->getOrderId() > 0) {
+                    if (!$manager->addOrderId($this->getOrderId())) {
                         trigger_error('There was an error adding the order '.$this->getOrderId().' to the intranet module package '.$action['module_package_id'], E_USER_NOTICE);
                     }
                 }
                 
             } 
-            elseif($action['action'] == 'terminate') {
+            elseif ($action['action'] == 'terminate') {
                 $manager = new Intraface_modules_modulepackage_Manager($intranet, (int)$action['intranet_module_package_id']);
-                if(!$manager->terminate()) {
+                if (!$manager->terminate()) {
                     trigger_error('There was an error terminating the intranet module package '.$action['intranet_module_package_id'], E_USER_NOTICE);
                     $this->error->set("an error appeared when removing your old modulepackage. we have been noticed.");
                 
                 }
             } 
-            elseif($action['action'] == 'delete') {
+            elseif ($action['action'] == 'delete') {
                 $manager = new Intraface_modules_modulepackage_Manager($intranet, (int)$action['intranet_module_package_id']);
-                if(!$manager->delete()) {
+                if (!$manager->delete()) {
                     trigger_error('There was an error deleting the intranet module package '.$action['intranet_module_package_id'], E_USER_NOTICE);
                     $this->error->set("an error appeared when removing your old modulepackage. we have been noticed.");
                 }
             }
         }
         
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             return false;
         }
         else {
@@ -203,12 +203,12 @@ class Intraface_modules_modulepackage_Action
      */
     public function hasAddActionWithProduct() 
     {
-        if(!is_array($this->action) || count($this->action) == 0) {
+        if (!is_array($this->action) || count($this->action) == 0) {
             return false;
         }
         
-        foreach($this->action AS $action) {
-            if($action['action'] == 'add' && $action['product_id'] != 0) {
+        foreach ($this->action AS $action) {
+            if ($action['action'] == 'add' && $action['product_id'] != 0) {
                 return true;
             }
         }

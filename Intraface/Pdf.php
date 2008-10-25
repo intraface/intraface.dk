@@ -91,7 +91,7 @@ class Intraface_Pdf extends Document_Cpdf
     {
         $this->value[$key] = $value;
         //Every time we change a fixed value we need to update the dynamic values
-        if(in_array($key, array('margin_right', 'margin_left', 'margin_top', 'margin_bottom', 'font_size', 'font_padding_top', 'font_padding_bottom'))) {
+        if (in_array($key, array('margin_right', 'margin_left', 'margin_top', 'margin_bottom', 'font_size', 'font_padding_top', 'font_padding_bottom'))) {
             $this->calculateDynamicValues();
         }    
     }
@@ -105,11 +105,11 @@ class Intraface_Pdf extends Document_Cpdf
      */
     public function setX($value)
     {
-        if(is_int($value)) {
+        if (is_int($value)) {
             $this->value['x'] = $this->get('margin_left') + $value;
-        } elseif(is_string($value) && substr($value, 0, 1) == "+") {
+        } elseif (is_string($value) && substr($value, 0, 1) == "+") {
             $this->value['x'] +=  intval(substr($value, 1));
-        } elseif(is_string($value) && substr($value, 0, 1) == "-") {
+        } elseif (is_string($value) && substr($value, 0, 1) == "-") {
             $this->value['x'] -= intval(substr($value, 1));
         } else {
             trigger_error('Ugyldig værdi i setX: '.$value, E_USER_ERROR);
@@ -126,11 +126,11 @@ class Intraface_Pdf extends Document_Cpdf
     public function setY($value)
     {
 
-        if(is_int($value)) {
+        if (is_int($value)) {
             $this->value['y'] = $this->page_height - $this->get('margin_top') - $value;
-        } elseif(is_string($value) && substr($value, 0, 1) == "+") {
+        } elseif (is_string($value) && substr($value, 0, 1) == "+") {
             $this->value['y'] += intval(substr($value, 1));
-        } elseif(is_string($value) && substr($value, 0, 1) == "-") {
+        } elseif (is_string($value) && substr($value, 0, 1) == "-") {
             $this->value['y'] -= intval(substr($value, 1));
         } else {
             trigger_error("Ugyldig værdi i setY: ".$value, E_USER_ERROR);
@@ -146,7 +146,7 @@ class Intraface_Pdf extends Document_Cpdf
      */
     public function addHeader($headerImg = '')
     {
-        if(!file_exists($headerImg)) {
+        if (!file_exists($headerImg)) {
             return false;
         }
 
@@ -156,7 +156,7 @@ class Intraface_Pdf extends Document_Cpdf
         $height = $this->get('header_height');;
         $width = $size[0] * ($height/$size[1]);
 
-        if($width > $this->get('content_width')) {
+        if ($width > $this->get('content_width')) {
             $width = $this->get('content_width');
             $height = $size[1] * ($width/$size[0]);
         }
@@ -216,7 +216,7 @@ class Intraface_Pdf extends Document_Cpdf
      */
     public function nextPage($sub_text = false)
     {
-        if($sub_text == true) {
+        if ($sub_text == true) {
             parent::addText($this->value['right_margin_position'] - parent::getTextWidth($this->value['font_size'], "<i>Fortsættes på næste side...</i>") - 30, $this->value["margin_bottom"] - $this->value['font_padding_top'] - $this->value['font_size'], $this->value['font_size'], "<i>Fortsættes på næste side...</i>");
         }
         parent::newPage();
@@ -235,7 +235,7 @@ class Intraface_Pdf extends Document_Cpdf
      */
     public function get($key = '')
     {
-        if(!empty($key)) {
+        if (!empty($key)) {
             return($this->value[$key]);
         } else {
             return $this->value;

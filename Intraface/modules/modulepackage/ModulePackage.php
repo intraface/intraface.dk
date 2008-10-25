@@ -176,7 +176,7 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
         if ($this->dbquery) {
             return $this->dbquery;
         }
-        if($kernel == NULL) {
+        if ($kernel == NULL) {
             throw new Exception('You need to provide kernel the first time you are calling getDBQuery');
         }
         $this->dbquery = new Intraface_DBQuery($kernel, 'module_package', 'module_package.active = 1');

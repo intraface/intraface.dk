@@ -97,10 +97,10 @@ class Intraface_XMLRPC_Server
     
     protected function recursiveMap($function, $values) 
     {
-        if(is_string($values)) {
+        if (is_string($values)) {
             return call_user_func($function, $values);
-        } elseif(is_array($values)) {
-            foreach($values AS $key => $value) {
+        } elseif (is_array($values)) {
+            foreach ($values AS $key => $value) {
                 $values[$key] = $this->recursiveMap($function, $value);
             }
             return $values;

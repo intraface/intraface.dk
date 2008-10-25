@@ -13,7 +13,7 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
 {
     function setup() {
         
-        if(file_exists(TEST_PATH_TEMP.'debtor.pdf')) {
+        if (file_exists(TEST_PATH_TEMP.'debtor.pdf')) {
             unlink(TEST_PATH_TEMP.'debtor.pdf');
         }
     

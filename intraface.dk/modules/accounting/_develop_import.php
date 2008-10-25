@@ -40,7 +40,7 @@ $page->start('Regnskab');
 <ul>
 <?php foreach ($procurements AS $procurement): ?>
 
-<li><label for=""><input type="checkbox" name="procurement[]" value="<?php echo $procurement['id']; ?>" /> <?php echo $procurement['dk_invoice_date']; ?> <?php echo $procurement['description']; ?></label></li>
+<li><label for=""><input type="checkbox" name="procurement[]" value="<?php e($procurement['id']); ?>" /> <?php e($procurement['dk_invoice_date']); ?> <?php e($procurement['description']); ?></label></li>
 
 <?php endforeach; ?>
 </ul>
@@ -53,7 +53,7 @@ $page->start('Regnskab');
 <ul>
 <?php foreach ($invoices AS $debtor): ?>
 
-<li><label for=""><input type="checkbox" name="debtor[]" value="<?php echo $debtor['id']; ?>" /> <?php echo $debtor['number']; ?> <?php echo $debtor['this_date']; ?> <?php echo $debtor['description']; ?></label></li>
+<li><label for=""><input type="checkbox" name="debtor[]" value="<?php e($debtor['id']); ?>" /> <?php e($debtor['number']); ?> <?php e($debtor['this_date']); ?> <?php e($debtor['description']); ?></label></li>
 
 <?php endforeach; ?>
 </ul>

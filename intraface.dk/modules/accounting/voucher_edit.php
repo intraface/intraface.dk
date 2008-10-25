@@ -32,36 +32,36 @@ $page = new Intraface_Page($kernel);
 $page->start('Regnskab');
 ?>
 
-<h1>Rediger bilag #<?php echo safeToHtml($voucher->get('number')); ?> på <?php echo safeToHtml($year->get('label')); ?></h1>
+<h1>Rediger bilag #<?php e($voucher->get('number')); ?> på <?php e($year->get('label')); ?></h1>
 
 <?php echo $voucher->error->view(); ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 	<fieldset>
-		<input type="hidden" value="<?php echo intval($value['id']); ?>" name="id" />
+		<input type="hidden" value="<?php e($value['id']); ?>" name="id" />
 		<div class="formrow">
 			<label for="date">Dato</label>
-			<input type="text" value="<?php if (!empty($value['date'])) echo safeToForm($value['date']); ?>" name="date" />
+			<input type="text" value="<?php if (!empty($value['date'])) e($value['date']); ?>" name="date" />
 		</div>
 		<div class="formrow">
 			<label for="number">Nummer</label>
-			<input type="text" value="<?php if (!empty($value['number'])) echo safeToForm($value['number']); ?>" name="voucher_number" />
+			<input type="text" value="<?php if (!empty($value['number'])) e($value['number']); ?>" name="voucher_number" />
 		</div>
 		<div class="formrow">
 			<label for="text">Tekst</label>
-			<input type="text" value="<?php if (!empty($value['text'])) echo safeToForm($value['text']); ?>" name="text" />
+			<input type="text" value="<?php if (!empty($value['text'])) e($value['text']); ?>" name="text" />
 		</div>
 		<div class="formrow">
 			<label for="reference">Reference</label>
-			<input type="text" value="<?php if (!empty($value['reference'])) echo safeToForm($value['reference']); ?>" name="reference" />
+			<input type="text" value="<?php if (!empty($value['reference'])) e($value['reference']); ?>" name="reference" />
 		</div>
 	</fieldset>
 
 	<div>
 		<input type="submit" value="Gem" /> eller
 		<?php if ($voucher->get('id') > 0): ?>
-		<a href="voucher.php?id=<?php echo intval($voucher->get('id')); ?>">fortryd</a>
+		<a href="voucher.php?id=<?php e($voucher->get('id')); ?>">fortryd</a>
 		<?php else: ?>
 		<a href="vouchers.php">fortryd</a>
 		<?php endif; ?>

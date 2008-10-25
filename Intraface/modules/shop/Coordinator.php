@@ -80,7 +80,7 @@ class Intraface_modules_shop_Coordinator
 
         $this->error = new Intraface_Error;
     }
-    
+
     function getShop()
     {
         return $this->shop;
@@ -167,13 +167,13 @@ class Intraface_modules_shop_Coordinator
                 return false;
             }
         }
-        
+
         // currency
-        if(!empty($input['currency']) && strtoupper($input['currency']) != 'DKK' && $this->kernel->intranet->hasModuleAccess('currency')) {
+        if (!empty($input['currency']) && strtoupper($input['currency']) != 'DKK' && $this->kernel->intranet->hasModuleAccess('currency')) {
             $this->kernel->useModule('currency', true); /* true: ignore user access */
-            
+
             $currency_gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
-            if(false !== ($currency = $currency_gateway->findByIsoCode($input['currency']))) {
+            if (false !== ($currency = $currency_gateway->findByIsoCode($input['currency']))) {
                 $value['currency'] = $currency;
             }
         }
@@ -200,7 +200,7 @@ class Intraface_modules_shop_Coordinator
             if ($value['message'] != '') $value['message'] .= "\n\n";
             $value['message'] .= "Kommentar:\n". $input['customer_comment'];
         }
-        
+
         if (isset($input['payment_method']) && is_array($input['payment_method']) && !empty($input['payment_method'])) {
             $value['payment_method'] = $input['payment_method']['key'];
         }
@@ -227,10 +227,10 @@ class Intraface_modules_shop_Coordinator
      */
     public function placeManualOrder($input = array(), $products = array(), $mailer)
     {
-        if(!is_object($mailer)) {
+        if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
-        
+
         $order_id = $this->createOrder($input);
         if ($order_id == 0) {
             $this->error->set('unable to create the order');
@@ -241,7 +241,7 @@ class Intraface_modules_shop_Coordinator
             $this->error->set('unable add products to the order');
             return false;
         }
-        
+
         if (!$this->sendEmail($order_id, $mailer)) {
             $this->error->set('unable to send email to the customer');
             return false;
@@ -260,10 +260,10 @@ class Intraface_modules_shop_Coordinator
      */
     public function placeOrder($input, $mailer)
     {
-        if(!is_object($mailer)) {
+        if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
-        
+
         if (!$order_id = $this->createOrder($input)) {
             $this->error->set('unable to create the order');
             return false;
@@ -287,10 +287,10 @@ class Intraface_modules_shop_Coordinator
 
         return $order_id;
     }
-    
+
     public function getOrderIdentifierKey()
     {
-        if(!empty($this->order) && is_object($this->order) && $this->order->get('id') != 0) {
+        if (!empty($this->order) && is_object($this->order) && $this->order->get('id') != 0) {
             return $this->order->get('identifier_key');
         }
         throw new Exception('No valid order was present to return identifier from IN Coordinate->getOrderIdentifierKey()');
@@ -326,10 +326,10 @@ class Intraface_modules_shop_Coordinator
      */
     private function sendEmail($order_id, $mailer)
     {
-        if(!is_object($mailer)) {
+        if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
-        
+
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
@@ -347,15 +347,15 @@ class Intraface_modules_shop_Coordinator
 
         $table = new Console_Table;
         foreach ($this->order->getItems() as $item) {
-            if($this->order->getCurrency()) {
+            if ($this->order->getCurrency()) {
                 $amount = $item["amount_currency"]->getAsLocal('da_dk', 2);
                 $currency_iso_code = $this->order->getCurrency()->getType()->getIsoCode();
-            } 
+            }
             else {
                 $amount = $item["amount"]->getAsLocal('da_dk', 2);
                 $currency_iso_code = 'DKK';
             }
-            
+
             $table->addRow(array(round($item["quantity"]), substr($item["name"], 0, 40), $currency_iso_code.' ' . $amount));
         }
 
@@ -364,13 +364,13 @@ class Intraface_modules_shop_Coordinator
         if ($this->shop->getConfirmationGreeting()) {
             $body .=  "\n\n" . $this->shop->getConfirmationGreeting();
         } else {
-            $body .= "Venlig hilsen\n".  $this->kernel->intranet->address->get('name');    
+            $body .= "Venlig hilsen\n".  $this->kernel->intranet->address->get('name');
         }
 
         if ($this->shop->showLoginUrl()) {
             $body .=  "\n\n" . $this->contact->getLoginUrl();
-        }                
-        
+        }
+
         if (!$email->save(array('contact_id' => $this->contact->get('id'),
                                 'subject' => $subject,
                                 'body' => $body,
@@ -443,21 +443,20 @@ class Intraface_modules_shop_Coordinator
         if ($mailer === null) {
             $mailer = Intraface_Mail::factory();
         }
-        
+
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
         $subject = 'Bekræftelse på betaling (#' . $payment_id . ')';
         $body = 'Vi har modtaget din betaling. Hvis din ordre var afsendt inden kl. 12.00, sender vi den allerede i dag.';
+        $body .= "\n\nVenlig hilsen\n".  $this->kernel->intranet->address->get('name');
 
-        $body .= "\n\nVenlig hilsen\n".  $this->kernel->intranet->address->get('name');    
-        
         if (!$email->save(array('contact_id' => $this->contact->get('id'),
                                 'subject' => $subject,
                                 'body' => $body,
                                 'from_email' => $this->kernel->intranet->address->get('email'),
                                 'from_name' => $this->kernel->intranet->address->get('name'),
-                                'type_id' => 13, // webshop
+                                'type_id' => 13, // onlinepayment
                                 'belong_to' => $payment_id))) {
             $this->error->merge($email->error->getMessage());
             return false;
@@ -500,16 +499,16 @@ class Intraface_modules_shop_Coordinator
         $debtor = Debtor::factory($this->kernel, (int)$order_id);
         return $debtor->setSent();
     }
-    
-    public function getPaymentMethods() 
+
+    public function getPaymentMethods()
     {
         $payment_method = array();
-        
-        
+
+
         /**
          * @todo Fix this so it returns correct payment types!
          */
-        if($this->kernel->intranet->hasModuleAccess('onlinepayment')) {
+        if ($this->kernel->intranet->hasModuleAccess('onlinepayment')) {
             $payment_method[] = array(
                 'key' => 5,
                 'identifier' => 'OnlinePayment',
@@ -523,47 +522,47 @@ class Intraface_modules_shop_Coordinator
                 'description' => 'Cash on delivery',
                 'text' => '');
         }
-        
+
         return $payment_method;
     }
-    
+
     /**
      * Returns payment method key from identifier
-     * 
+     *
      * @param string $payment_method
      * @return integer payment method key
      */
-    public function getPaymentMethodKeyFromIdenfifier($payment_method) 
+    public function getPaymentMethodKeyFromIdenfifier($payment_method)
     {
         $methods = $this->getPaymentMethods();
-        foreach($methods AS $method) {
-            if($method['identifier'] == $payment_method) {
+        foreach ($methods AS $method) {
+            if ($method['identifier'] == $payment_method) {
                 return $method['key'];
             }
         }
-        
+
         throw new Exception('Invalid payment method "'.$payment_method.'"');
-        
+
     }
-    
+
     /**
      * Returns payment method from key
-     * 
+     *
      * @param string $payment_method_key
      * @return array payment method
      */
-    public function getPaymentMethodFromKey($payment_method_key) 
+    public function getPaymentMethodFromKey($payment_method_key)
     {
         $methods = $this->getPaymentMethods();
-        foreach($methods AS $method) {
-            if($method['key'] == $payment_method_key) {
+        foreach ($methods AS $method) {
+            if ($method['key'] == $payment_method_key) {
                 return $method;
             }
         }
-        
+
         throw new Exception('Invalid payment method key "'.$payment_method_key.'"');
-        
+
     }
-    
-    
+
+
 }

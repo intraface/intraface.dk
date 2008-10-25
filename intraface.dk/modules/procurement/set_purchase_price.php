@@ -7,38 +7,38 @@ $translation = $kernel->getTranslation('procurement');
 
 settype($_GET['id'], 'integer');
 
-if(isset($_POST['submit']) && $_POST['submit'] != "") {
+if (isset($_POST['submit']) && $_POST['submit'] != "") {
 
 	$procurement = new Procurement($kernel, intval($_POST["id"]));
 
-	foreach($_POST['items'] AS $item) {
+	foreach ($_POST['items'] AS $item) {
 		$procurement->loadItem($item['id']);
 		$procurement->item->setPurchasePrice($item['price']);
         $procurement->error->merge($procurement->item->error->getMessage());
 	}
-    
-    if(!$procurement->error->isError()) {
+
+    if (!$procurement->error->isError()) {
         header("Location: view.php?id=".$procurement->get("id"));
         exit;
     }
 
-} elseif(isset($_GET['id']) && isset($_GET['return_redirect_id'])) {
+} elseif (isset($_GET['id']) && isset($_GET['return_redirect_id'])) {
 	$procurement = new Procurement($kernel, $_GET["id"]);
 	$redirect = Intraface_Redirect::factory($kernel, 'return');
     $return_parameter = $redirect->getParameter('product_id', 'with_extra_value');
     $redirect->delete();
-    if(is_array($return_parameter) && count($return_parameter) > 0) {
-		foreach($return_parameter AS $return) {
+    if (is_array($return_parameter) && count($return_parameter) > 0) {
+		foreach ($return_parameter AS $return) {
 		    $return['value'] = unserialize($return['value']);
             $procurement->loadItem();
             $procurement->item->save(array('product_id' => $return['value']['product_id'], 'product_variation_id' => $return['value']['product_variation_id'],  'quantity' => intval($return['extra_value'])));
-        }        
+        }
 	} else {
 		header('location: view.php?id='.$procurement->get('id'));
 		exit;
 	}
-    
-    
+
+
 } else {
 	trigger_error("Der mangler id eller return_redirect_id", E_USER_ERROR);
 }
@@ -53,7 +53,7 @@ $page->start("Angiv indkøbspris");
 
 <?php echo $procurement->error->view(); ?>
 
-<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="form_items">
+<form method="POST" action="<?php e($_SERVER['PHP_SELF']); ?>" id="form_items">
 
 	<table class="stripe">
         <caption>Produkter</caption>
@@ -67,15 +67,15 @@ $page->start("Angiv indkøbspris");
   		    </tr>
         </thead>
         <tbody>
-  		    <?php for($i = 0, $max = count($items); $i < $max; $i++): ?>
+  		    <?php for ($i = 0, $max = count($items); $i < $max; $i++): ?>
                 <tr>
                     <td align="right">
                         <?php e($items[$i]['number']); ?>
                         <input type="hidden" name="items[<?php e($i); ?>][id]" value="<?php e($items[$i]['id']); ?>" />
                     </td>
-                    <td><?php print(safeToHtml($items[$i]["name"])) ?></td>
+                    <td><?php e($items[$i]["name"]) ?></td>
                     <td><?php e($items[$i]['quantity']); ?> <?php e($translation->get($items[$i]['unit'], 'product')) ?></td>
-                    <td align="right"><?php print($items[$i]["price"]->getAsLocal('da_dk', 2)) ?></td>
+                    <td align="right"><?php e($items[$i]["price"]->getAsLocal('da_dk', 2)); ?></td>
                     <td><input type="input" name="items[<?php e($i); ?>][price]" value="0,00" size="8" /></td>
                 </tr>
   			<?php endfor; ?>
@@ -83,8 +83,8 @@ $page->start("Angiv indkøbspris");
     </table>
 
 
-<input type="submit" name="submit" value="Gem" class="save" /> eller <a href="view.php?id=<?php echo $procurement->get("id"); ?>">Spring over</a>
-<input type="hidden" name="id" value="<?php print($procurement->get("id")); ?>" />
+<input type="submit" name="submit" value="Gem" class="save" /> eller <a href="view.php?id=<?php e($procurement->get("id")); ?>">Spring over</a>
+<input type="hidden" name="id" value="<?php e($procurement->get("id")); ?>" />
 </form>
 <?php
 

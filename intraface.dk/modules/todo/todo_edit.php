@@ -24,7 +24,7 @@ if (!empty($_POST)) {
     exit;
   }
 } else {
-    if(!empty($_GET['id'])) {
+    if (!empty($_GET['id'])) {
         $todo = new TodoList($kernel, $_GET['id']);
     } else {
         $todo = new TodoList($kernel);
@@ -44,9 +44,9 @@ $page->start(t('Edit todo'));
     <input type="hidden" name="id" value="<?php e($todo->get('id')); ?>" />
     <fieldset id="todolist">
       <h2><?php e(t('Edit todo')); ?></h2>
-      <label><input style="font-size: 2em;" type="text" name="list_name" value="<?php if(!empty($value['list_name'])) e($value['list_name']); ?>" /></label>
+      <label><input style="font-size: 2em;" type="text" name="list_name" value="<?php if (!empty($value['list_name'])) e($value['list_name']); ?>" /></label>
       <h2><?php e(t('Items')); ?></h2>
-        <?php foreach($value['todo'] AS $i): ?>
+        <?php foreach ($value['todo'] AS $i): ?>
         <div>
         <input type="hidden" name="item_id[]" value="<?php e($i['id']); ?>">
         <label>
@@ -117,7 +117,7 @@ function moreFields() {
     <p><a href="" onclick="moreFields(); return false;"><?php e(t('More fields')); ?></a></p>
 
    <h2><?php e(t('Description (optional)')); ?></h2>
-   <label><textarea cols="80" rows="4" name="list_description"><?php if(!empty($value['list_description'])) e($value['list_description']); ?></textarea></label>
+   <label><textarea cols="80" rows="4" name="list_description"><?php if (!empty($value['list_description'])) e($value['list_description']); ?></textarea></label>
 
    </fieldset>
 

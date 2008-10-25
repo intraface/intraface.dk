@@ -4,7 +4,7 @@
  * Svare på spørgsmål om pbsadgangen
  *
  */
-require('../../include_first.php');
+require '../../include_first.php';
 
 $onlinepayment_module = $kernel->module('onlinepayment');
 
@@ -14,13 +14,11 @@ if (!empty($_POST)) {
 	if ($onlinepayment->setProvider($_POST)) {
 		header('Location: settings.php');
 		exit;
-	}
-	else {
+	} else {
 		$value = $_POST;
 	}
 
-}
-else {
+} else {
 	$onlinepayment = OnlinePayment::factory($kernel);
 	$value = $onlinepayment->getProvider();
 }
@@ -31,7 +29,7 @@ $page->start('Onlinebetalinger');
 
 <h1>Vælg udbyder</h1>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 	<fieldset>
 		<legend>Udbyder</legend>
@@ -41,7 +39,7 @@ $page->start('Onlinebetalinger');
 				<option value="">Vælg</option>
 				    <?php
 					$implemented_providers = OnlinePayment::getImplementedProviders();
-                    foreach($implemented_providers AS $key => $provider):
+                    foreach ($implemented_providers AS $key => $provider):
 						if ($provider == '_invalid_') continue;
 						echo '<option value="'.$key.'"';
 						if (intval($value['provider_key']) == $key):

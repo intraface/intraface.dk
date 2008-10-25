@@ -114,8 +114,8 @@ class DebtorItem extends Intraface_Standard
      */
     private function getProduct() 
     {
-        if(!$this->product) {
-            if($this->get('product_id') == '' || $this->get('product_detail_id') == '') {
+        if (!$this->product) {
+            if ($this->get('product_id') == '' || $this->get('product_detail_id') == '') {
                 throw new Exception('The item is not loaded');
             }
             $this->product = new Product($this->debtor->kernel, $this->get('product_id'), $this->get('product_detail_id'));
@@ -130,11 +130,11 @@ class DebtorItem extends Intraface_Standard
      */
     private function getProductVariation()
     {
-        if(!$this->getProduct()->get('has_variation')) {
+        if (!$this->getProduct()->get('has_variation')) {
             throw new Exception('The product must have variation to request variations');    
         }
-        if(!$this->product_variation) {
-            if(intval($this->get('product_variation_id')) == 0) {
+        if (!$this->product_variation) {
+            if (intval($this->get('product_variation_id')) == 0) {
                 throw new Exception('The product variation id is not valid on item '.$this->get('id'));
             }
             $this->product_variation = $this->product->getVariation($this->get('product_variation_id'));
@@ -149,11 +149,11 @@ class DebtorItem extends Intraface_Standard
      */
     private function getProductVariationDetail()
     {
-        if(!$this->getProduct()->get('has_variation')) {
+        if (!$this->getProduct()->get('has_variation')) {
             throw new Exception('The product must have variation to request variations');    
         }
-        if(!$this->product_variation_detail) {
-            if(intval($this->get('product_variation_detail_id')) == 0) {
+        if (!$this->product_variation_detail) {
+            if (intval($this->get('product_variation_detail_id')) == 0) {
                 throw new Exception('The product variation detail id is not valid on item '.$this->get('id'));
             }
             $this->product_variation_detail = $this->getProductVariation()->getDetail($this->get('product_variation_detail_id'));
@@ -168,7 +168,7 @@ class DebtorItem extends Intraface_Standard
      */
     public function getProductPrice()
     {
-        if($this->getProduct()->get('has_variation')) {
+        if ($this->getProduct()->get('has_variation')) {
             return $this->getProductVariationDetail()->getPrice($this->getProduct());
         }
         else {
@@ -183,7 +183,7 @@ class DebtorItem extends Intraface_Standard
      */
     public function getProductWeight()
     {
-        if($this->getProduct()->get('has_variation')) {
+        if ($this->getProduct()->get('has_variation')) {
             return $this->getProduct()->get("weight") + $this->getProductVariationDetail()->getWeightDifference();
         }
         else {
@@ -198,7 +198,7 @@ class DebtorItem extends Intraface_Standard
      */
     public function getProductNumber() 
     {
-        if($this->getProduct()->get('has_variation')) {
+        if ($this->getProduct()->get('has_variation')) {
             return $this->getProduct()->get("number").'.'.$this->getProductVariation()->getNumber();
         }
         else {
@@ -213,7 +213,7 @@ class DebtorItem extends Intraface_Standard
      */
     public function getProductName()
     {
-        if($this->getProduct()->get('has_variation')) {
+        if ($this->getProduct()->get('has_variation')) {
             return $this->getProduct()->get("name").' - '.$this->getProductVariation()->getName();
         }
         else {
@@ -295,16 +295,16 @@ class DebtorItem extends Intraface_Standard
                 $product_detail_id = $product->get("detail_id");
             }
             
-            if(!isset($input['product_variation_id'])) $input['product_variation_id'] = 0;
-            if(intval($input['product_variation_id']) != 0) {
+            if (!isset($input['product_variation_id'])) $input['product_variation_id'] = 0;
+            if (intval($input['product_variation_id']) != 0) {
                 $variation = $product->getVariation(intval($input['product_variation_id']));
-                if(!$variation->getId()) {
+                if (!$variation->getId()) {
                     $this->error->set("Invalid product variation");
                 }
                 
-                if(!isset($input['product_variation_detail_id'])) $input['product_variation_detail_id'] = 0;
+                if (!isset($input['product_variation_detail_id'])) $input['product_variation_detail_id'] = 0;
                 $detail = $variation->getDetail(intval($input['product_variation_detail_id']));
-                if(!$detail->getId()) {
+                if (!$detail->getId()) {
                     $this->error->set("Invalid product variation detail");
                 }
                 
@@ -368,7 +368,7 @@ class DebtorItem extends Intraface_Standard
      */
     public function changeProduct($product_id, $product_variation_id = 0)
     {
-        if(!$this->id) {
+        if (!$this->id) {
             throw new Exception('You cannot change product when not saved');
         }
         
@@ -381,14 +381,14 @@ class DebtorItem extends Intraface_Standard
             $product_detail_id = $product->get("detail_id");
         }
         
-        if(intval($product_variation_id) != 0) {
+        if (intval($product_variation_id) != 0) {
             $variation = $product->getVariation(intval($product_variation_id));
-            if(!$variation->getId()) {
+            if (!$variation->getId()) {
                 throw new Exception('Invalid product variation id');
             }
             
             $detail = $variation->getDetail();
-            if(!$detail->getId()) {
+            if (!$detail->getId()) {
                 throw new Exception("Invalid product variation detail");
             }
             
@@ -471,30 +471,30 @@ class DebtorItem extends Intraface_Standard
                     $item["unit"] = $unit['plural'];
                 }
                 
-                if($product->get('has_variation')) {
+                if ($product->get('has_variation')) {
                     $variation = $product->getVariation($db->f('product_variation_id'));
                     $detail = $variation->getDetail($db->f('product_variation_detail_id'));
                     $item["name"] = $product->get("name").' - '.$variation->getName();
                     $item["number"]= $product->get("number").'.'.$variation->getNumber();
                     $item["price"] = $detail->getPrice($product);
-                    if($currency) $item['price_currency'] = $detail->getPriceInCurrency($currency, $this->debtor->get('currency_product_price_exchange_rate_id'), $product);
+                    if ($currency) $item['price_currency'] = $detail->getPriceInCurrency($currency, $this->debtor->get('currency_product_price_exchange_rate_id'), $product);
                 }
                 else {
                     $item["name"] = $product->get("name");
                     $item["number"]= $product->get("number");
                     $item["price"] = $product->getDetails()->getPrice();
-                    if($currency) $item['price_currency'] = $product->getDetails()->getPriceInCurrency($currency, $this->debtor->get('currency_product_price_exchange_rate_id'));
+                    if ($currency) $item['price_currency'] = $product->getDetails()->getPriceInCurrency($currency, $this->debtor->get('currency_product_price_exchange_rate_id'));
                 }
                     
                 if ($product->get("vat") == 0) {
                     $item_no_vat[$j] = $item;
                     $item_no_vat[$j]["amount"] = new Ilib_Variable_Float($item["quantity"] * $item["price"]->getAsIso(2));
-                    if($currency) $item_no_vat[$j]["amount_currency"] = new Ilib_Variable_Float($item["quantity"] * $item["price_currency"]->getAsIso(2), 'iso');
+                    if ($currency) $item_no_vat[$j]["amount_currency"] = new Ilib_Variable_Float($item["quantity"] * $item["price_currency"]->getAsIso(2), 'iso');
                     $j++;
                 } else {
                     $item_with_vat[$i] = $item;
                     $item_with_vat[$i]["amount"] = new Ilib_Variable_Float($item["quantity"] * $item["price"]->getAsIso(2) * 1.25);
-                    if($currency) $item_with_vat[$i]["amount_currency"] = new Ilib_Variable_Float($item["quantity"] * $item["price_currency"]->getAsIso(2) * 1.25, 'iso');
+                    if ($currency) $item_with_vat[$i]["amount_currency"] = new Ilib_Variable_Float($item["quantity"] * $item["price_currency"]->getAsIso(2) * 1.25, 'iso');
                     $i++;
                 }
             } else {
@@ -558,7 +558,6 @@ class DebtorItem extends Intraface_Standard
                 AND debtor.type = ".$this->debtor->get('type_key')." AND (".$status_sql.")
                 AND debtor_item.product_id = ".intval($product_id)."
                 AND debtor_item.product_variation_id = ".intval($product_variation_id)." ".$date_sql;
-        // print("\n".$this->debtor->get('type').":".$sql."\n");
         $db->query($sql);
         $db->nextRecord(); // Der vil altid være en post
         return intval($db->f("sum_quantity"));

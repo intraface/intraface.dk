@@ -2,7 +2,7 @@
 /**
  * @package Intraface_Invoice
  */
-if($kernel->user->hasModuleAccess('debtor') AND $kernel->user->hasModuleAccess('invoice')) {
+if ($kernel->user->hasModuleAccess('debtor') AND $kernel->user->hasModuleAccess('invoice')) {
 
     $invoice_module = $kernel->useModule('invoice');
     $debtor_module = $kernel->useModule('debtor');

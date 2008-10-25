@@ -119,7 +119,7 @@ class Basket
         $product = new Product($this->webshop->kernel, $product_id, $product_detail_id);
 
 
-        if($product->get('id') == 0) {
+        if ($product->get('id') == 0) {
             return false;
         }
 
@@ -404,7 +404,7 @@ class Basket
 
         while ($db->nextRecord()) {
             $product = new Product($this->webshop->kernel, $db->f("product_id"));
-            if($type == 'exclusive_vat') {
+            if ($type == 'exclusive_vat') {
                 $price += $product->get('price') * $db->f("quantity");
             } else {
                 $price += $product->get('price_incl_vat') * $db->f("quantity");

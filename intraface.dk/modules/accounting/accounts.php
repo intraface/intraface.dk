@@ -28,7 +28,7 @@ $page = new Intraface_Page($kernel);
 $page->start('Kontooversigt');
 
 ?>
-<h1>Konti <?php echo $year->get('label'); ?></h1>
+<h1>Konti <?php e($year->get('label')); ?></h1>
 
 <div class="message">
 	<p><strong>Kontoplan</strong>. Dette er en oversigt over alle dine konti, hvor du kan se saldoen, rette de enkelte konti og slette dem. Hvis du vil se bevægelserne på den enkelte konto, kan du klikke på kontonavnet.</p>
@@ -39,14 +39,14 @@ $page->start('Kontooversigt');
 	<li><a class="excel" href="accounts_excel.php">Excel</a></li>
 </ul>
 <!--
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="get">
 	<fieldset>
 		<legend>Avanceret visning</legend>
 		<label id="date-from">Fra
-			<input type="text" name="from_date" id="date-from" value="<?php echo safeToHtml($values['from_date']); ?>" />
+			<input type="text" name="from_date" id="date-from" value="<?php e($values['from_date']); ?>" />
 		</label>
 		<label id="date-to">Til
-			<input type="text" name="to_date" id="date-to" value="<?php echo safeToHtml($values['to_date']); ?>" />
+			<input type="text" name="to_date" id="date-to" value="<?php e($values['to_date']); ?>" />
 		</label>
 		<input type="submit" value="Vis" />
 	</fieldset>
@@ -57,7 +57,7 @@ $page->start('Kontooversigt');
 <?php if (count($accounts) == 0): ?>
 	<div class="message-dependent">
 		<p>Der er endnu ikke oprettet nogen konti.</p>
-		<p>Du kan oprette en standardkontoplan under <a href="year.php?id=<?php echo intval($year->get('id')); ?>">regnskabsåret</a>, eller du kan taste dem manuelt ind ved at klikke på opret konto ovenfor.</p>
+		<p>Du kan oprette en standardkontoplan under <a href="year.php?id=<?php e($year->get('id')); ?>">regnskabsåret</a>, eller du kan taste dem manuelt ind ved at klikke på opret konto ovenfor.</p>
 	</div>
 <?php else: ?>
 <table>
@@ -77,26 +77,26 @@ $page->start('Kontooversigt');
 
 		<tr<?php if ($account['type'] == 'headline') { echo ' class="headline"'; } elseif ($account['type'] == 'sum') { echo ' class="sum"';} ?><?php if (!empty($_GET['from_account_id']) AND $_GET['from_account_id'] == $account['id']) { echo ' id="'.$account['id'].'" class="fade"'; } ?>>
 	  		<?php if ($account['type'] != 'headline' AND $account['type'] != 'sum'): ?>
-				<td><a href="account.php?id=<?php echo $account['id']; ?>"><?php echo safeToHtml($account['number']); ?></a></td>
+				<td><a href="account.php?id=<?php e($account['id']); ?>"><?php e($account['number']); ?></a></td>
 			<?php else: ?>
-				<td><?php echo $account['number']; ?></td>
+				<td><?php e($account['number']); ?></td>
 			<?php endif; ?>
 	  		<?php if ($account['type'] == 'headline'): ?>
-				<td colspan="4" class="headline"><?php echo safeToHtml($account['name']); ?></td>
+				<td colspan="4" class="headline"><?php e($account['name']); ?></td>
 			<?php elseif ($account['type'] == 'sum'): ?>
-				<td><?php echo $account['name']; ?><?php if ($account['type'] == 'sum') { echo ' ('. $account["sum_from"] . ' til ' . $account["sum_to"] . ')'; } ?></td>
+				<td><?php e($account['name']); ?><?php if ($account['type'] == 'sum') { e(' ('. $account["sum_from"] . ' til ' . $account["sum_to"] . ')'); } ?></td>
 			<?php else:?>
-				<td><a href="account.php?id=<?php echo $account['id']; ?>"><?php echo safeToHtml($account['name']); ?></a></td>
+				<td><a href="account.php?id=<?php e($account['id']); ?>"><?php e($account['name']); ?></a></td>
 			<?php endif; ?>
 
 			<?php if ($account['type'] != 'headline') { ?>
-			<td><?php echo safeToHtml($translation->get($account['type'])); ?></td>
-			<td><?php if ($account['type'] == 'balance, asset' OR $account['type'] == 'balance, liability' OR $account['type'] == 'operating') echo safeToHtml($translation->get($account['vat_shorthand'])); ?></td>
-			<td class="amount"><?php echo amountToOutput($account['saldo'], 2, ",", "."); ?></td>
+			<td><?php e($translation->get($account['type'])); ?></td>
+			<td><?php if ($account['type'] == 'balance, asset' OR $account['type'] == 'balance, liability' OR $account['type'] == 'operating') e($translation->get($account['vat_shorthand'])); ?></td>
+			<td class="amount"><?php e(amountToOutput($account['saldo'], 2, ",", ".")); ?></td>
 			<?php } ?>
 			<td class="options">
-				<a class="edit" href="account_edit.php?id=<?php echo intval($account['id']); ?>">Ret</a>
-				<a class="delete" href="accounts.php?id=<?php echo intval($account['id']); ?>&amp;action=delete">Slet</a>
+				<a class="edit" href="account_edit.php?id=<?php e($account['id']); ?>">Ret</a>
+				<a class="delete" href="accounts.php?id=<?php e($account['id']); ?>&amp;action=delete">Slet</a>
 			</td>
 		</tr>
 	<?php } ?>

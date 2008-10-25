@@ -2,7 +2,7 @@
 require_once '../common.php';
 
 $install_class = PATH_ROOT.'install/Install.php';
-if(!file_exists($install_class)) {
+if (!file_exists($install_class)) {
     trigger_error('The install class is not present. Probably because you should not run it now!', E_USER_ERROR);
     exit;
 }
@@ -16,17 +16,17 @@ $auth->clearIdentity();
 
 if ($install->resetServer()) {
 
-    if(!empty($_GET['modules'])) {
+    if (!empty($_GET['modules'])) {
         $install->grantModuleAccess($_GET['modules']);
     }
 
-    if(!empty($_GET['helper_function'])) {
+    if (!empty($_GET['helper_function'])) {
         $install->runHelperFunction($_GET['helper_function']);
     }
 
-    if(!empty($_GET['login'])) {
+    if (!empty($_GET['login'])) {
         if ($install->loginUser()) {
-            // header('location: '.PATH_WWW.'/main/index.php');
+            // header('location: /main/index.php');
             // exit;
         } else {
             echo 'Error in login';
@@ -42,9 +42,9 @@ if ($install->resetServer()) {
 
 function delete_cache_files_from_demo($f)
 {
-        if(is_dir($f)) {
-            foreach(scandir($f) as $item) {
-                if (strpos($item, 'cache_') !== false) {       
+        if (is_dir($f)) {
+            foreach (scandir($f) as $item) {
+                if (strpos($item, 'cache_') !== false) {
                     unlink($f . $item);
                 }
             }

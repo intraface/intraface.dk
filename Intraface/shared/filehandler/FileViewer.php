@@ -39,7 +39,7 @@ class FileViewer {
     
     public function __construct($filehandler, $instance = '') {
         
-        if(!is_object($filehandler)) {
+        if (!is_object($filehandler)) {
             trigger_error('the first parameter needs to be filehandler in FileViewet->__construct', E_USER_ERROR);
             exit;
         }
@@ -53,7 +53,7 @@ class FileViewer {
         
         $this->filehandler->createInstance();
         
-        if(!empty($instance) && $filehandler->instance->checkType($instance) !== false) {
+        if (!empty($instance) && $filehandler->instance->checkType($instance) !== false) {
             $this->filehandler->createInstance($instance);
             $this->file_path = $filehandler->instance->get('file_path');
         }
@@ -66,7 +66,7 @@ class FileViewer {
     
     public function out() {
         
-        if(!file_exists($this->file_path)) {
+        if (!file_exists($this->file_path)) {
             return 'invalid file';
         }
         

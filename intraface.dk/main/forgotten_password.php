@@ -18,7 +18,7 @@ include(PATH_INCLUDE_IHTML . 'outside/top.php');
 
 <?php if (empty($msg)): ?>
 
-<form method="POST" action="<?php echo basename($_SERVER['PHP_SELF']); ?>" id="forgotten_email_form">
+<form method="POST" action="<?php e($_SERVER['PHP_SELF']); ?>" id="forgotten_email_form">
 	<p>Det er da fjollet, at du har glemt din adgangskode. Skriv din e-mail ind nedenunder, og så sender vi dig en ny.</p>
 	<fieldset>
 		<label id="email_label">E-mail:</label>

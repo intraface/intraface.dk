@@ -57,7 +57,7 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
         $this->doc->setY('-20'); // mellemrum til vareoversigt
 
         $text = explode("\r\n", $reminder->get("text"));
-        foreach($text AS $line) {
+        foreach ($text AS $line) {
             if ($line == "") {
                 $this->doc->setY('-'.$this->doc->get('font_spacing'));
 

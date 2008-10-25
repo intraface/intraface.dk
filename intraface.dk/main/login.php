@@ -10,11 +10,11 @@ if (isset($_POST['email']) AND isset($_POST['password'])) {
 
     $auth = new Intraface_Auth(session_id());
     $auth->attachObserver(new Intraface_Log);
-    
+
     $user = $auth->authenticate($adapter);
 
 	if (is_object($user)) {
-	    header('Location: '.PATH_WWW.'main/index.php');
+	    header('Location: '.url('/main/index.php'));
         exit;
     } else {
 		$msg = 'wrong credentials';
@@ -28,17 +28,17 @@ include(PATH_INCLUDE_IHTML . 'outside/top.php');
 
 <h1><span>Intraface.dk</span></h1>
 
-<form id="form-login" method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+<form id="form-login" method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
 
     <fieldset>
     <?php
-        if (!empty($msg)) {
-            echo '<p>'.htmlspecialchars(strip_tags($msg)).'</p>';
-        }
+        if (!empty($msg)) { ?>
+            <p><?php e($msg); ?></p>
+        <?php }
         /*
         else {
             $actual = SystemDisturbance::getActual();
-            if(count($actual) > 0 && $actual['important'] == 1) {
+            if (count($actual) > 0 && $actual['important'] == 1) {
                 echo '<p id="system_message">'.htmlspecialchars($actual['description']).'</p>';
             }
         }
@@ -49,11 +49,11 @@ include(PATH_INCLUDE_IHTML . 'outside/top.php');
 
         <div class="align-left">
             <label for="email" id="email_label">E-mail:</label>
-            <input tabindex="1" type="text" name="email" id="email" value="<?php if (!empty($_COOKIE['username'])) echo htmlentities(strip_tags($_COOKIE['username'])); ?>" />
+            <input tabindex="1" type="text" name="email" id="email" value="<?php if (!empty($_COOKIE['username'])) e($_COOKIE['username']); ?>" />
         </div>
         <div>
             <label for="password" id="password_label">Adgangskode:</label>
-            <input tabindex="2" type="password" name="password" id="password" value="<?php if (!empty($_COOKIE['password'])) echo htmlentities(strip_tags($_COOKIE['password'])); ?>" />
+            <input tabindex="2" type="password" name="password" id="password" value="<?php if (!empty($_COOKIE['password'])) e($_COOKIE['password']); ?>" />
         </div>
 
         <div>
@@ -66,7 +66,7 @@ include(PATH_INCLUDE_IHTML . 'outside/top.php');
         <a href="http://blog.intraface.dk/">Website</a> |
         <a href="http://blog.intraface.dk/blog/">Nyheder</a> |
         <a href="http://blog.intraface.dk/kontakt/">Kontakt</a> |
-        <a href="<?php echo PATH_WWW; ?>signup/">Prøv systemet</a>
+        <a href="<?php e(url('/signup/')); ?>">Prøv systemet</a>
     </p>
     <!--<p>Intraface.dk er et system målrettet til mindre virksomheder. Forskellige moduler klarer både webshop, fakturaer, regnskab og nyhedsbreve.</p>-->
 

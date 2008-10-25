@@ -16,18 +16,18 @@ class OnlinePaymentDefault extends OnlinePayment
     function transactionAction($action)
     {
 
-        if($action == "capture") {
+        if ($action == "capture") {
 
             // Her kan der laves en capture fra Betalingsudbyder;
 
-            if($this->addAsPayment()) {
+            if ($this->addAsPayment()) {
                 $this->setStatus("captured");
                 return true;
             } else {
                 trigger_error("Onlinebetalingen kunne ikke overføres til fakturaen", E_USER_ERROR);
                 return false;
             }
-        } elseif($action == "reverse") {
+        } elseif ($action == "reverse") {
 
             // her skal reverse så laves?
 

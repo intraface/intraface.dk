@@ -52,7 +52,7 @@ class InstanceManager
         $this->type_key = (int)$type_key;
         $this->intranet_id = $kernel->intranet->get('id');
         
-        if($this->type_key > 0) {
+        if ($this->type_key > 0) {
             $this->load();
         }
     }
@@ -65,34 +65,34 @@ class InstanceManager
     public function load() 
     {        
         $standard_types = $this->getStandardTypes();
-        foreach($standard_types AS $tmp_standard_type) {
-            if($tmp_standard_type['type_key'] == $this->type_key) {
+        foreach ($standard_types AS $tmp_standard_type) {
+            if ($tmp_standard_type['type_key'] == $this->type_key) {
                 $standard_type = $tmp_standard_type;
                 break;
             }
         }
         
         $result = $this->db->query('SELECT name, type_key, max_width, max_height, resize_type_key FROM file_handler_instance_type WHERE intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' AND type_key = '.$this->db->quote($this->type_key, 'integer'));
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
             return false;
         }
-        if($result->numRows() > 0) {
+        if ($result->numRows() > 0) {
             $custom_type = $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
         }
-        if(isset($standard_type) && isset($custom_type)) {
+        if (isset($standard_type) && isset($custom_type)) {
             $this->value = array_merge($standard_type, $custom_type);
             $resize_types = $this->getResizeTypes();
             $this->value['resize_type'] = $resize_types[$this->value['resize_type_key']];
             $this->value['origin'] = 'overwritten';
             return true;
         }
-        elseif(isset($standard_type)) {
+        elseif (isset($standard_type)) {
             $this->value = $standard_type;
             $this->value['origin'] = 'standard';
             return true;           
         }
-        elseif(isset($custom_type)) {
+        elseif (isset($custom_type)) {
             $this->value = $custom_type;
             $resize_types = $this->getResizeTypes();
             $this->value['resize_type'] = $resize_types[$this->value['resize_type_key']];
@@ -117,13 +117,13 @@ class InstanceManager
         
         $validator = new Ilib_Validator($this->error);
         
-        if($this->type_key != 0) {
+        if ($this->type_key != 0) {
             $standard_types = $this->getStandardTypes();
-            foreach($standard_types AS $standard_type) {
-                if($standard_type['type_key'] == $this->type_key) {
+            foreach ($standard_types AS $standard_type) {
+                if ($standard_type['type_key'] == $this->type_key) {
                     // then we set the name to the standard type name
                     $input['name'] = $standard_type['name'];
-                    if($standard_type['fixed']) {
+                    if ($standard_type['fixed']) {
                         trigger_error('You cannot overwrite fixed types', E_USER_ERROR);
                         return false;
                     }
@@ -135,7 +135,7 @@ class InstanceManager
                 
         settype($input['name'], 'string');
         $validator->isIdentifier($input['name'], 'invalid name', '');
-        if(!$this->isNameFree($input['name'], $this->type_key)) {
+        if (!$this->isNameFree($input['name'], $this->type_key)) {
             $this->error->set('an instance with the same name already exists');
         }
                 
@@ -144,15 +144,15 @@ class InstanceManager
         settype($input['max_height'], 'string');
         $validator->isNumeric($input['max_height'], 'invalid max height', 'integer,greater_than_zero');
         settype($input['resize_type'], 'string');
-        if($validator->isString($input['resize_type'], 'error in resize type', '')) {
+        if ($validator->isString($input['resize_type'], 'error in resize type', '')) {
             $resize_types = $this->getResizeTypes();
             $resize_type_key = array_search($input['resize_type'], $resize_types);
-            if($resize_type_key === false) {
+            if ($resize_type_key === false) {
                 $this->error->set('invalid resize type');
             }
         }
         
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             return false;
         }
         
@@ -161,8 +161,8 @@ class InstanceManager
                 'max_height = '.$this->db->quote($input['max_height'], 'integer').', ' .
                 'resize_type_key = '.$this->db->quote($resize_type_key);
         
-        if($this->type_key == 0 || $this->get('origin') == 'standard') {
-            if($this->type_key == 0) {
+        if ($this->type_key == 0 || $this->get('origin') == 'standard') {
+            if ($this->type_key == 0) {
                 $type_key = $this->getNextFreeTypeKey();
             }
             else {
@@ -173,11 +173,11 @@ class InstanceManager
                     'intranet_id = '.$this->db->quote($this->intranet_id, 'integer').', ' .
                     'type_key = '.$this->db->quote($type_key, 'integer').', ' .
                     'active = 1, '.$sql);
-            if(PEAR::isError($result)) {
+            if (PEAR::isError($result)) {
                 trigger_error('Error in exec: '.$result->getUserInfo(), E_USER_ERROR);
                 return false;
             }
-            if($result == 0) {
+            if ($result == 0) {
                 $this->error->set('unable to save the instance');
                 return false;
             }
@@ -188,7 +188,7 @@ class InstanceManager
             $result = $this->db->exec('UPDATE file_handler_instance_type SET '.$sql.' ' .
                     'WHERE intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' ' .
                             'AND type_key = '.$this->db->quote($this->type_key, 'integer'));
-            if(PEAR::isError($result)) {
+            if (PEAR::isError($result)) {
                 trigger_error('Error in exec: '.$result->getUserInfo(), E_USER_ERROR);
                 return false;
             }
@@ -232,8 +232,8 @@ class InstanceManager
     {
         
         $standard_types = $this->getStandardTypes();
-        foreach($standard_types AS $standard_type) {
-            if($standard_type['name'] == $name && $standard_type['type_key'] != $type_key) {
+        foreach ($standard_types AS $standard_type) {
+            if ($standard_type['name'] == $name && $standard_type['type_key'] != $type_key) {
                 return false;
             }
         }
@@ -243,12 +243,12 @@ class InstanceManager
                 'name = '.$this->db->quote($name, 'text').' AND ' .
                 'type_key != '.$this->db->quote((int)$type_key, 'integer').' AND ' .
                 'active = 1');
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
             return false;
         }
         
-        if($result->numRows() > 0) {            
+        if ($result->numRows() > 0) {            
             return false;
         }
         
@@ -266,14 +266,14 @@ class InstanceManager
         // We do not active = 1, then it is possible to recreate deleted items without messing everything up.
         $result = $this->db->query('SELECT MAX(type_key) AS max_key FROM file_handler_instance_type WHERE ' .
                 'intranet_id = '.$this->db->quote($this->intranet_id, 'integer'));
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
             return false;
         }
         
         $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
         
-        if($row['max_key'] >= InstanceManager::MIN_CUSTOM_TYPE_KEY_VALUE) {
+        if ($row['max_key'] >= InstanceManager::MIN_CUSTOM_TYPE_KEY_VALUE) {
             return $row['max_key'] + 1;
         }
         else {
@@ -289,13 +289,13 @@ class InstanceManager
      */
     public function getList($show = 'visible') 
     {
-        if(!in_array($show, array('visible', 'include_hidden'))) {
+        if (!in_array($show, array('visible', 'include_hidden'))) {
             trigger_error('First parameter to InstanceManager->getList should either be visibe or include_hidden', E_USER_ERROR);
             exit;
         }
         
         $result = $this->db->query('SELECT type_key, name, max_width, max_height, resize_type_key FROM file_handler_instance_type WHERE intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' AND active = 1 ORDER BY type_key');
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
             return false;
         }
@@ -311,13 +311,13 @@ class InstanceManager
         
         while(isset($standard_types[$s]) || isset($custom_types[$c])) {
             
-            if(isset($standard_types[$s])) {
-                if($standard_types[$s]['hidden'] && $show == 'visible') {
+            if (isset($standard_types[$s])) {
+                if ($standard_types[$s]['hidden'] && $show == 'visible') {
                     $s++;
                     CONTINUE;
                 }
                 
-                if(isset($custom_types[$c]['type_key']) && $standard_types[$s]['type_key'] == $custom_types[$c]['type_key']) {
+                if (isset($custom_types[$c]['type_key']) && $standard_types[$s]['type_key'] == $custom_types[$c]['type_key']) {
                     $type[$i] = array_merge($standard_types[$s], $custom_types[$c]);
                     $type[$i]['resize_type'] = $resize_types[$type[$i]['resize_type_key']];
                     $type[$i]['origin'] = 'overwritten';
@@ -350,13 +350,13 @@ class InstanceManager
      * @return boolean true or false
      */
     public function delete() {
-        if($this->type_key == 0) {
+        if ($this->type_key == 0) {
             trigger_error('You can not delete an instancetype without setting a type_key!', E_USER_ERROR);
             return false;
         }
         
         $result = $this->db->exec('UPDATE file_handler_instance_type SET active = 0 WHERE intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' AND type_key = '.$this->db->quote($this->type_key, 'integer'));
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
             return false;
         }
@@ -383,8 +383,8 @@ class InstanceManager
     function get($key = '') 
     {
         
-        if(!empty($key)) {
-            if(isset($this->value[$key])) {
+        if (!empty($key)) {
+            if (isset($this->value[$key])) {
                 return($this->value[$key]);
             }
             else {

@@ -33,9 +33,9 @@ class FakeInstanceHandlerUser
 
 function iht_deltree( $f ){
 
-    if( is_dir( $f ) ){
-        foreach( scandir( $f ) as $item ){
-            if( !strcmp( $item, '.' ) || !strcmp( $item, '..' ) )
+    if ( is_dir( $f ) ){
+        foreach ( scandir( $f ) as $item ){
+            if ( !strcmp( $item, '.' ) || !strcmp( $item, '..' ) )
                 continue;
             iht_deltree( $f . "/" . $item );
         }
@@ -56,7 +56,7 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
         $db->query('TRUNCATE file_handler_instance');
         $db->query('TRUNCATE file_handler_instance_type');
         iht_deltree(PATH_UPLOAD.'1');
-        if(file_exists(PATH_UPLOAD.'/1/1.jpeg')) {
+        if (file_exists(PATH_UPLOAD.'/1/1.jpeg')) {
             unlink(PATH_UPLOAD.'/1/1.jpeg');
         }
 

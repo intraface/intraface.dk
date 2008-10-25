@@ -7,11 +7,11 @@ $translation = $kernel->getTranslation('debtor');
 
 settype($_GET['id'], "integer");
 
-if(!empty($_POST)) {
+if (!empty($_POST)) {
 	$debtor = Debtor::factory($kernel, intval($_POST["debtor_id"]));
 	$debtor->loadItem(intval($_POST["id"]));
 
-	if($id = $debtor->item->save($_POST)) {
+	if ($id = $debtor->item->save($_POST)) {
 		header("Location: view.php?id=".$debtor->get("id")."&item_id=".$id);
         exit;
 	}
@@ -19,7 +19,7 @@ if(!empty($_POST)) {
 		$values = $_POST;
 	}
 }
-elseif(isset($_GET['debtor_id']) && isset($_GET['id'])) {
+elseif (isset($_GET['debtor_id']) && isset($_GET['id'])) {
 	$debtor = Debtor::factory($kernel, intval($_GET["debtor_id"]));
 	$debtor->loadItem(intval($_GET["id"]));
 	$values = $debtor->item->get();
@@ -30,7 +30,7 @@ else {
 	trigger_error("Der mangler debtor_id eller id", E_USER_ERROR);
 }
 
-if(isset($_GET['change_product'])) {
+if (isset($_GET['change_product'])) {
 	$redirect = Intraface_Redirect::factory($kernel, 'go');
 	$url = $redirect->setDestination($product_module->getPath().'select_product.php', $debtor_module->getPath().'item_edit.php?debtor_id='.$debtor->get('id').'&id='.$debtor->item->get('id'));
 	$redirect->askParameter('product_id');
@@ -38,7 +38,7 @@ if(isset($_GET['change_product'])) {
 	exit;
 }
 
-if(isset($_GET['return_redirect_id'])) {
+if (isset($_GET['return_redirect_id'])) {
 	$redirect = Intraface_Redirect::factory($kernel, 'return');
     $returned_values = unserialize($redirect->getParameter('product_id'));
 	$debtor->item->changeProduct($returned_values['product_id'], $returned_values['product_variation_id']);
@@ -49,7 +49,7 @@ $page = new Intraface_Page($kernel);
 $page->start($translation->get($debtor->get('type').' content'));
 ?>
 
-<h1><?php echo safeToHtml($translation->get($debtor->get('type').' content')); ?></h1>
+<h1><?php e($translation->get($debtor->get('type').' content')); ?></h1>
 
 <?php echo $debtor->item->error->view(); ?>
 
@@ -63,7 +63,7 @@ $page->start($translation->get($debtor->get('type').' content'));
 	</div>
 
 	<div class="formrow">
-		<label for="name">Navn</label><span id="name"><?php e($debtor->item->getProductName()); ?> <a href="item_edit.php?debtor_id=<?php echo intval($debtor->get('id')); ?>&amp;id=<?php echo intval($debtor->item->get('id')); ?>&amp;change_product=1" class="edit">Skift</a></span>
+		<label for="name">Navn</label><span id="name"><?php e($debtor->item->getProductName()); ?> <a href="item_edit.php?debtor_id=<?php e($debtor->get('id')); ?>&amp;id=<?php e($debtor->item->get('id')); ?>&amp;change_product=1" class="edit">Skift</a></span>
 	</div>
 
 	<div class="formrow">
@@ -71,7 +71,7 @@ $page->start($translation->get($debtor->get('type').' content'));
 	</div>
 
 	<div class="formrow">
-		<label for="vat">Moms</label><span id="vat"><?php if($debtor->item->getTaxPercent() > 0): echo "Ja"; else: echo "Nej"; endif; ?></span>
+		<label for="vat">Moms</label><span id="vat"><?php if ($debtor->item->getTaxPercent() > 0): echo "Ja"; else: echo "Nej"; endif; ?></span>
 	</div>
 </fieldset>
 
@@ -80,7 +80,7 @@ $page->start($translation->get($debtor->get('type').' content'));
 
 	<div class="formrow">
 		<label for="quantity">Antal</label>
-    <input type="text" name="quantity" id="quantity" value="<?php print(safeToForm($values["quantity"])); ?>" />
+    <input type="text" name="quantity" id="quantity" value="<?php e($values["quantity"]); ?>" />
 	</div>
 </fieldset>
 
@@ -88,19 +88,19 @@ $page->start($translation->get($debtor->get('type').' content'));
 	<legend>Beskrivelse</legend>
 	<div class="formrow">
 		<label for="description">Beskrivelse</label>
-    <textarea name="description" id="description" style="width: 500px; height: 200px;"><?php if(isset($values["description"])) print(safeToForm($values["description"])); ?></textarea>
+    <textarea name="description" id="description" style="width: 500px; height: 200px;"><?php if (isset($values["description"])) e($values["description"]); ?></textarea>
 	</div>
 </fieldset>
 <div>
-    <input type="hidden" name="id" value="<?php print($debtor->item->get("id")); ?>" />
-    <input type="hidden" name="debtor_id" value="<?php print(intval($debtor->get("id"))); ?>" />
-    <input type="hidden" name="product_id" value="<?php  echo intval($debtor->item->get('product_id')); ?>" />
-    <input type="hidden" name="product_detail_id" value="<?php  echo intval($debtor->item->get('product_detail_id')); ?>" />
-    <input type="hidden" name="product_variation_id" value="<?php  echo intval($debtor->item->get('product_variation_id')); ?>" />
-    <input type="hidden" name="product_variation_detail_id" value="<?php  echo intval($debtor->item->get('product_variation_detail_id')); ?>" />
+    <input type="hidden" name="id" value="<?php e($debtor->item->get("id")); ?>" />
+    <input type="hidden" name="debtor_id" value="<?php e($debtor->get("id")); ?>" />
+    <input type="hidden" name="product_id" value="<?php  e($debtor->item->get('product_id')); ?>" />
+    <input type="hidden" name="product_detail_id" value="<?php  e($debtor->item->get('product_detail_id')); ?>" />
+    <input type="hidden" name="product_variation_id" value="<?php  e($debtor->item->get('product_variation_id')); ?>" />
+    <input type="hidden" name="product_variation_detail_id" value="<?php  e($debtor->item->get('product_variation_detail_id')); ?>" />
     
 	<input type="submit" name="submit" value="Gem" class="save" /> eller
-  <a href="view.php?id=<?php echo intval($debtor->get("id"));  ?>">Fortryd</a>
+  <a href="view.php?id=<?php e($debtor->get("id"));  ?>">Fortryd</a>
 	
 </div>
 </form>

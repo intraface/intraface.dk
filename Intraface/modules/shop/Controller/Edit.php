@@ -55,7 +55,7 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
             $data['receipt'] = $this->registry->get('kernel')->setting->get('intranet','webshop.webshop_receipt');
         }
         
-        if($this->registry->get('kernel')->intranet->hasModuleAccess('currency')) {
+        if ($this->registry->get('kernel')->intranet->hasModuleAccess('currency')) {
             $this->registry->get('kernel')->useModule('currency', true); // true: ignore user access
             $gateway = new Intraface_modules_currency_Currency_Gateway($this->registry->get('doctrine'));
             $currencies = $gateway->findAllWithExchangeRate();

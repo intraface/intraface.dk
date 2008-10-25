@@ -14,13 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $payment_postprocess = $payment_html->getPostProcess();
     
     
-    if(!$payment_postprocess->setPaymentResponse($_POST)) {
+    if (!$payment_postprocess->setPaymentResponse($_POST)) {
         trigger_error('Error in the returned values from payment!', E_USER_ERROR);
         exit;
     }
     
     $optional = $payment_postprocess->getOptionalValues();
-    if($optional['intranet_public_key'] == '') {
+    if ($optional['intranet_public_key'] == '') {
         trigger_error('A public key is needed!', E_USER_ERROR);
         exit;
     }
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // We login to the intranet with the public key
     $adapter = new Intraface_Auth_PublicKeyLogin(MDB2::singleton(DB_DSN), session_id(), $optional['intranet_public_key']);
     $weblogin = $adapter->auth();
-    if(!$intranet_id = $weblogin->getActiveIntranetId()) {
+    if (!$intranet_id = $weblogin->getActiveIntranetId()) {
         trigger_error("Unable to log in to the intranet with public key: ".$payment_postprocess->get('intranet_public_key', 'optional'), E_USER_ERROR);
         exit;
     }
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $action_store = new Intraface_modules_modulepackage_ActionStore($kernel->intranet->get('id'));
     $action = $action_store->restore($optional['action_store_id']);
 
-    if(!is_object($action)) {
+    if (!is_object($action)) {
         trigger_error("Problem restoring action from action_store_id ".$payment_postprocess->get('action_store_id', 'optional'), E_USER_ERROR);
         exit;
     }
@@ -65,9 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $shop = new Intraface_modules_modulepackage_ShopExtension();
     $shop->addPaymentToOrder($action->getOrderId(), $onlinepayment);
 
-    if($payment_postprocess->getPbsStatus() == '000') {
-        if($amount >= $action->getTotalPrice()) {
-            if($action->execute($kernel->intranet)) {
+    if ($payment_postprocess->getPbsStatus() == '000') {
+        if ($amount >= $action->getTotalPrice()) {
+            if ($action->execute($kernel->intranet)) {
                 // we delete the action from the store
                 $action_store->delete();
     
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo 'Payment attempt registered. Not authorized';
     }
 }
-elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
+elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // Here we are logged in so we can use the normal way to acccess files.
     require('../../include_first.php');
 
@@ -110,18 +110,18 @@ elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
     $action_store = new Intraface_modules_modulepackage_ActionStore($kernel->intranet->get('id'));
     $action = $action_store->restore($id);
 
-    if(!is_object($action)) {
+    if (!is_object($action)) {
         trigger_error("Problem restoring action from order_id ".$id, E_USER_ERROR);
         exit;
     }
 
     // We make a double check
-    if($action->hasAddActionWithProduct() && $action->getTotalPrice() > 0) {
+    if ($action->hasAddActionWithProduct() && $action->getTotalPrice() > 0) {
         trigger_error("The actions can not be processed without payment!", E_USER_ERROR);
         exit;
     }
 
-    if($action->execute($kernel->intranet)) {
+    if ($action->execute($kernel->intranet)) {
         // we delete the action from the store
         $action_store->delete();
 

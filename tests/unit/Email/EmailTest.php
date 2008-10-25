@@ -93,7 +93,7 @@ class EmailTest extends PHPUnit_Framework_TestCase {
 
     function testALotOfSaveEmails() {
         $number = 200;
-        for($i = 0; $i<$number; $i++) {
+        for ($i = 0; $i<$number; $i++) {
             $belong_to_id = rand(1, 100000);
             $type_id = rand(1,5);
             $contact_id = rand(1, 100000);

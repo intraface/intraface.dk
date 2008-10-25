@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = new Intraface_Error;
         $validator = new Intraface_Validator($error);
 
-        if($_POST['debtor_sender'] == 'defined') {
+        if ($_POST['debtor_sender'] == 'defined') {
             $validator->isEmail($_POST['debtor_sender_email'], 'Invalid e-mail in Sender e-mail');
             $validator->isString($_POST['debtor_sender_name'], 'Error in Sender name');
         }
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         }
 
-        if(!$error->isError()) {
+        if (!$error->isError()) {
 
             $kernel->setting->set('intranet', 'debtor.sender', $_POST['debtor_sender']);
 
@@ -64,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    elseif(isset($_POST['add_scan_in_contact'])) {
-        if($kernel->user->hasModuleAccess('contact')) {
+    elseif (isset($_POST['add_scan_in_contact'])) {
+        if ($kernel->user->hasModuleAccess('contact')) {
             $contact_module = $kernel->useModule('contact');
 
             $redirect = Intraface_Redirect::factory($kernel, 'go');
@@ -87,8 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 
-    elseif(isset($_POST['edit_scan_in_contact'])) {
-        if($kernel->user->hasModuleAccess('contact')) {
+    elseif (isset($_POST['edit_scan_in_contact'])) {
+        if ($kernel->user->hasModuleAccess('contact')) {
             $contact_module = $kernel->useModule('contact');
 
             $redirect = Intraface_Redirect::factory($kernel, 'go');
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if(!$error->isError()) {
+    if (!$error->isError()) {
         header('Location: index.php'); // Changed from setting.php, but don't know what is most right /SJ (14/1 2007)
         exit;
     }
@@ -112,9 +112,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 else {
 
-    if(isset($_GET['return_redirect_id'])) {
+    if (isset($_GET['return_redirect_id'])) {
         $redirect = Intraface_Redirect::factory($kernel, 'return');
-        if($redirect->get('identifier') == 'contact') {
+        if ($redirect->get('identifier') == 'contact') {
             // would be better if the return were a post
             $kernel->setting->set('intranet', 'debtor.scan_in_contact', $redirect->getParameter('contact_id'));
         }
@@ -172,9 +172,9 @@ $page->start('Indstillinger');
 
 <h1>Indstillinger</h1>
 
-<?php if(isset($error)) echo $error->view(); ?>
+<?php if (isset($error)) echo $error->view(); ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
     <fieldset>
         <legend>Kontaktperson på PDF og afsender af e-mail</legend>
@@ -182,20 +182,20 @@ $page->start('Indstillinger');
             <div class="formrow">
                 <label for="debtor_sender">Konaktperson/Afsender</label>
                 <select name="debtor_sender">
-                    <option value="intranet" <?php if(isset($values['debtor_sender']) && $values['debtor_sender'] == 'intranet') echo 'selected="selected"'; ?> >Intranetoplysninger (<?php echo safeToForm($kernel->intranet->address->get('name').' / '.$kernel->intranet->address->get('email')); ?>)</option>
-                    <option value="user" <?php if(isset($values['debtor_sender']) && $values['debtor_sender'] == 'user') echo 'selected="selected"'; ?> >Aktuel brugers oplysninger (<?php echo safeToForm($kernel->user->getAddress()->get('name').' / '.$kernel->user->getAddress()->get('email')); ?>)</option>
-                    <option value="defined" <?php if(isset($values['debtor_sender']) && $values['debtor_sender'] == 'defined') echo 'selected="selected"'; ?> >Brugerdefineret... (Udfyld herunder)</option>
+                    <option value="intranet" <?php if (isset($values['debtor_sender']) && $values['debtor_sender'] == 'intranet') echo 'selected="selected"'; ?> >Intranetoplysninger (<?php e($kernel->intranet->address->get('name').' / '.$kernel->intranet->address->get('email')); ?>)</option>
+                    <option value="user" <?php if (isset($values['debtor_sender']) && $values['debtor_sender'] == 'user') echo 'selected="selected"'; ?> >Aktuel brugers oplysninger (<?php e($kernel->user->getAddress()->get('name').' / '.$kernel->user->getAddress()->get('email')); ?>)</option>
+                    <option value="defined" <?php if (isset($values['debtor_sender']) && $values['debtor_sender'] == 'defined') echo 'selected="selected"'; ?> >Brugerdefineret... (Udfyld herunder)</option>
                 </select>
             </div>
 
 
             <div class="formrow">
                 <label for="debtor_sender_name">Afsendernavn</label>
-                <input type="text" name="debtor_sender_name" id="debtor_sender_name" value="<?php if (!empty($values['debtor_sender_name'])) print safeToForm($values['debtor_sender_name']); ?>" />
+                <input type="text" name="debtor_sender_name" id="debtor_sender_name" value="<?php if (!empty($values['debtor_sender_name'])) e($values['debtor_sender_name']); ?>" />
             </div>
             <div class="formrow">
                 <label for="debtor_sender_email">Afsender e-mail</label>
-                <input type="text" name="debtor_sender_email" id="debtor_sender_email" value="<?php if (!empty($values['debtor_sender_email'])) echo safeToForm($values['debtor_sender_email']); ?>" />
+                <input type="text" name="debtor_sender_email" id="debtor_sender_email" value="<?php if (!empty($values['debtor_sender_email'])) e($values['debtor_sender_email']); ?>" />
             </div>
     </fieldset>
 
@@ -205,59 +205,59 @@ $page->start('Indstillinger');
             <legend>Kontobetaling:</legend>
             <div class="formrow">
                 <label for="bankname">Bank</label>
-                <input type="text" name="bank_name" id="bankname" value="<?php print safeToForm($values['bank_name']); ?>" />
+                <input type="text" name="bank_name" id="bankname" value="<?php e($values['bank_name']); ?>" />
             </div>
             <div class="formrow">
                 <label for="regnumber">Registreringsnummer</label>
-                <input type="text" name="bank_reg_number" id="regnumber" value="<?php echo safeToForm($values['bank_reg_number']); ?>" />
+                <input type="text" name="bank_reg_number" id="regnumber" value="<?php e($values['bank_reg_number']); ?>" />
             </div>
             <div class="formrow">
                 <label for="accountnumber">Kontonummer</label>
-                <input type="text" name="bank_account_number" id="accountnumber" value="<?php echo safeToForm($values['bank_account_number']); ?>" />
+                <input type="text" name="bank_account_number" id="accountnumber" value="<?php e($values['bank_account_number']); ?>" />
             </div>
         </fieldset>
         <fieldset>
             <legend>Girobetaling:</legend>
             <div class="formrow">
                 <label for="giroaccountnumber">Girokontonummer</label>
-                <input type="text" name="giro_account_number" id="giroaccountnumber" value="<?php echo safeToForm($values['giro_account_number']); ?>" />
+                <input type="text" name="giro_account_number" id="giroaccountnumber" value="<?php e($values['giro_account_number']); ?>" />
             </div>
         </fieldset>
     </fieldset>
 
     <fieldset>
         <legend>E-mail til Læs-ind bureau</legend>
-        <p><?php echo $string; ?></p>
+        <p><?php e($string); ?></p>
 
         <?php if (!empty($scan_in_contact) AND is_object($scan_in_contact) AND !$scan_in_contact->address->get('email')): ?>
         <p class="warning">Der er ikke angivet nogen e-mail-adresse på Læs-ind bureauet.</p>
-        <strong>Kontakt</strong>: <?php echo safeToHtml($scan_in_contact->get('name')); ?>
+        <strong>Kontakt</strong>: <?php e($scan_in_contact->get('name')); ?>
         <input type="submit" name="edit_scan_in_contact" value="Rediger" />
-        <input type="hidden" name="scan_in_contact" value="<?php echo $scan_in_contact->get('id'); ?>" />
+        <input type="hidden" name="scan_in_contact" value="<?php e($scan_in_contact->get('id')); ?>" />
         <?php elseif (empty($scan_in_contact) OR !is_object($scan_in_contact)): ?>
         <input type="submit" name="add_scan_in_contact" value="Vælg kontakt" />
         <?php else: ?>
-        <strong>Kontakt</strong>: <?php echo safeToHtml($scan_in_contact->get('name') . ' <'.$scan_in_contact->address->get('email').'>'); ?> <input type="submit" name="delete_scan_in_contact" value="Slet kontakt" />
+        <strong>Kontakt</strong>: <?php e($scan_in_contact->get('name') . ' <'.$scan_in_contact->address->get('email').'>'); ?> <input type="submit" name="delete_scan_in_contact" value="Slet kontakt" />
         <?php endif; ?>
     </fieldset>
 
     <fieldset>
         <legend>Fast tekst på ordre e-mail</legend>
-        <textarea name="order_email_text" cols="80" rows="8"><?php echo safeToForm($values['order_email_text']); ?></textarea>
+        <textarea name="order_email_text" cols="80" rows="8"><?php e($values['order_email_text']); ?></textarea>
     </fieldset>
 
     <fieldset>
         <legend>Fast tekst på fakturaer</legend>
-        <textarea name="invoice_text" cols="80" rows="8"><?php echo safeToForm($values['invoice_text']); ?></textarea>
+        <textarea name="invoice_text" cols="80" rows="8"><?php e($values['invoice_text']); ?></textarea>
     </fieldset>
 
     <fieldset>
         <legend>Tekst på rykker</legend>
-        <textarea name="reminder_text" cols="80" rows="8"><?php echo safeToForm($values['reminder_text']); ?></textarea>
+        <textarea name="reminder_text" cols="80" rows="8"><?php e($values['reminder_text']); ?></textarea>
     </fieldset>
 
     <div>
-        <input type="submit" name="submit" value="Gem" /> eller <a href="<?php echo safeToHtml('index.php'); ?>">Fortryd</a>
+        <input type="submit" name="submit" value="Gem" /> eller <a href="<?php e('index.php'); ?>">Fortryd</a>
     </div>
 </form>
 

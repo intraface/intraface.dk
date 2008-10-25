@@ -4,7 +4,7 @@ require '../../include_first.php';
 // $modul = $kernel->module('administration');
 $translation = $kernel->getTranslation('controlpanel');
 
-if(!empty($_POST)) {
+if (!empty($_POST)) {
 
     $user = new Intraface_User($kernel->user->get('id'));
 
@@ -16,8 +16,8 @@ if(!empty($_POST)) {
     // hvis man ændrer e-mail skal man have en e-mail som en sikkerhedsforanstaltning
     // på den gamle e-mail
 
-    if($user->update($_POST)) {
-        if($user->getAddress()->validate($address_value) && $user->getAddress()->save($address_value)) {
+    if ($user->update($_POST)) {
+        if ($user->getAddress()->validate($address_value) && $user->getAddress()->save($address_value)) {
             header("Location: user.php");
             exit;
         }
@@ -42,7 +42,7 @@ $page->start(t('edit user'));
 <?php echo $user->error->view(); ?>
 <?php echo $user->getAddress()->error->view(); ?>
 
-<form action="<?php e(basename($_SERVER['PHP_SELF'])); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 <fieldset>
     <legend><?php e(t('information about user')); ?></legend>
@@ -88,7 +88,7 @@ $page->start(t('edit user'));
 </fieldset>
 
 <p><input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />
-<a href="user.php"><?php e(t('regret', 'common')); ?></a></p>
+<a href="user.php"><?php e(t('Cancel', 'common')); ?></a></p>
 
 </form>
 

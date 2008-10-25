@@ -5,11 +5,11 @@ $kernel->module('administration');
 $translation = $kernel->getTranslation('administration');
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('administration')));
+$page->start($translation->get('administration'));
 ?>
-<h1><?php echo safeToHtml($translation->get('administration')); ?></h1>
+<h1><?php e($translation->get('administration')); ?></h1>
 
-<p class="message"><?php echo safeToHtml($translation->get('we are making a solution so you can add users yourself')); ?></p>
+<p class="message"><?php e($translation->get('we are making a solution so you can add users yourself')); ?></p>
 
 
 

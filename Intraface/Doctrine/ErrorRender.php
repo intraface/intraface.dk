@@ -1,55 +1,52 @@
 <?php
-
 class Intraface_Doctrine_ErrorRender
 {
-    
+
     private $errorstack = array();
     private $translation;
-    
+
     public function __construct($translation = NULL)
     {
         $this->translation = $translation;
     }
-    
-    public function attachErrorStack($errorstack, $field_alias = array()) 
+
+    public function attachErrorStack($errorstack, $field_alias = array())
     {
         $this->errorstack[] = array(
             'errorstack' => $errorstack,
             'field_alias' => $field_alias);
     }
-    
-    public function view($type = 'html') 
+
+    public function view($type = 'html')
     {
-        
         // only html is implemented
-        
         $display = '';
-        foreach($this->errorstack AS $errorstack) {
-            foreach($errorstack['errorstack'] AS $field_name => $error_codes) {
+        foreach ($this->errorstack AS $errorstack) {
+            foreach ($errorstack['errorstack'] AS $field_name => $error_codes) {
                 $display .= '<li>';
-                $display .= $this->translate('There was an error in', 'common').' '; 
-                $display .= ( isset($errorstack['field_alias'][$field_name]) ? 
-                            $errorstack['field_alias'][$field_name] : 
+                $display .= $this->translate('There was an error in', 'common').' ';
+                $display .= ( isset($errorstack['field_alias'][$field_name]) ?
+                            $errorstack['field_alias'][$field_name] :
                             $field_name);
-                    
-                foreach($error_codes AS $error_code) {
+
+                foreach ($error_codes AS $error_code) {
                     $description = $this->getErrorDescription($error_code);
                     $display .= ', '.$this->translate( $description !== NULL ? $description : $error_code, 'common');
                 }
                 $display .= '.</li>';
             }
         }
-        
-        if($display != '') {
+
+        if ($display != '') {
             $display = '<ul class="formerrors">'.$display.'</ul>';
         }
-        
+
         return $display;
-        
+
     }
-    
-    private function getErrorDescription($code) {
-        
+
+    private function getErrorDescription($code)
+    {
         $errorcodes = array(
             'notnull' => 'it needs to be filled in',
             'email' => 'it is not a valid email',
@@ -66,25 +63,20 @@ class Intraface_Doctrine_ErrorRender
             'creditcard' => 'it is not a valid creditcard number',
             'nohtml' => 'you have used a forbidden html tag'
         );
-        
-        if(isset($errorcodes[$code])) {
+
+        if (isset($errorcodes[$code])) {
             return $errorcodes[$code];
-        }
-        else {
+        } else {
             return null;
         }
     }
-    
-    private function translate($text, $page_id = 'common') {
-        if(is_callable($this->translation, 'get')) {
+
+    private function translate($text, $page_id = 'common')
+    {
+        if (is_callable($this->translation, 'get')) {
             return $this->translation->get($text, $page_id);
-        }
-        else {
+        } else {
             return $text;
         }
     }
-    
-    
 }
-
-?>

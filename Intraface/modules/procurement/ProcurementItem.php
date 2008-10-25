@@ -115,8 +115,8 @@ class ProcurementItem extends Intraface_Standard
      */
     private function getProduct() 
     {
-        if(!$this->product) {
-            if($this->get('product_id') == '' || $this->get('product_detail_id') == '') {
+        if (!$this->product) {
+            if ($this->get('product_id') == '' || $this->get('product_detail_id') == '') {
                 throw new Exception('The item is not loaded');
             }
             $this->product = new Product($this->procurement->kernel, $this->get('product_id'), $this->get('product_detail_id'));
@@ -131,11 +131,11 @@ class ProcurementItem extends Intraface_Standard
      */
     private function getProductVariation()
     {
-        if(!$this->getProduct()->get('has_variation')) {
+        if (!$this->getProduct()->get('has_variation')) {
             throw new Exception('The product must have variation to request variations');    
         }
-        if(!$this->product_variation) {
-            if(intval($this->get('product_variation_id')) == 0) {
+        if (!$this->product_variation) {
+            if (intval($this->get('product_variation_id')) == 0) {
                 throw new Exception('The product variation id is not valid on item '.$this->get('id'));
             }
             $this->product_variation = $this->product->getVariation($this->get('product_variation_id'));
@@ -150,11 +150,11 @@ class ProcurementItem extends Intraface_Standard
      */
     private function getProductVariationDetail()
     {
-        if(!$this->getProduct()->get('has_variation')) {
+        if (!$this->getProduct()->get('has_variation')) {
             throw new Exception('The product must have variation to request variations');    
         }
-        if(!$this->product_variation_detail) {
-            if(intval($this->get('product_variation_detail_id')) == 0) {
+        if (!$this->product_variation_detail) {
+            if (intval($this->get('product_variation_detail_id')) == 0) {
                 throw new Exception('The product variation detail id is not valid on item '.$this->get('id'));
             }
             $this->product_variation_detail = $this->getProductVariation()->getDetail($this->get('product_variation_detail_id'));
@@ -169,7 +169,7 @@ class ProcurementItem extends Intraface_Standard
      */
     public function getProductPrice()
     {
-        if($this->getProduct()->get('has_variation')) {
+        if ($this->getProduct()->get('has_variation')) {
             return $this->getProductVariationDetail()->getPrice($this->getProduct());
         }
         else {
@@ -184,7 +184,7 @@ class ProcurementItem extends Intraface_Standard
      */
     public function getProductNumber() 
     {
-        if($this->getProduct()->get('has_variation')) {
+        if ($this->getProduct()->get('has_variation')) {
             return $this->getProduct()->get("number").'.'.$this->getProductVariation()->getNumber();
         }
         else {
@@ -199,7 +199,7 @@ class ProcurementItem extends Intraface_Standard
      */
     public function getProductName()
     {
-        if($this->getProduct()->get('has_variation')) {
+        if ($this->getProduct()->get('has_variation')) {
             return $this->getProduct()->get("name").' - '.$this->getProductVariation()->getName();
         }
         else {
@@ -249,16 +249,16 @@ class ProcurementItem extends Intraface_Standard
                 $product_detail_id = $product->get("detail_id");
             }
             
-            if(!isset($input['product_variation_id'])) $input['product_variation_id'] = 0;
-            if(intval($input['product_variation_id']) != 0) {
+            if (!isset($input['product_variation_id'])) $input['product_variation_id'] = 0;
+            if (intval($input['product_variation_id']) != 0) {
                 $variation = $product->getVariation(intval($input['product_variation_id']));
-                if(!$variation->getId()) {
+                if (!$variation->getId()) {
                     $this->error->set("Invalid product variation");
                 }
                 
-                if(!isset($input['product_variation_detail_id'])) $input['product_variation_detail_id'] = 0;
+                if (!isset($input['product_variation_detail_id'])) $input['product_variation_detail_id'] = 0;
                 $detail = $variation->getDetail(intval($input['product_variation_detail_id']));
-                if(!$detail->getId()) {
+                if (!$detail->getId()) {
                     $this->error->set("Invalid product variation detail");
                 }
                 
@@ -274,7 +274,7 @@ class ProcurementItem extends Intraface_Standard
         
         $validator->isNumeric($input["quantity"], "Du skal angive et antal", "greater_than_zero,integer");
         
-        if(!isset($input["dk_unit_purchase_price"])) $input["dk_unit_purchase_price"] = 0;
+        if (!isset($input["dk_unit_purchase_price"])) $input["dk_unit_purchase_price"] = 0;
         $validator->isDouble($input["dk_unit_purchase_price"], "Du skal angive en indkøbspris", "zero_or_greater");
         $unit_purchase_price = new Intraface_Amount($input["dk_unit_purchase_price"]);
         if ($unit_purchase_price->convert2db()) {
@@ -319,7 +319,7 @@ class ProcurementItem extends Intraface_Standard
             throw new Exception('You can only set purchase price when item has been saved');
         }
         $validator = new Intraface_Validator($this->error);
-        if($validator->isDouble($price, "Ugyldig indkøbspris", "zero_or_greater")) {
+        if ($validator->isDouble($price, "Ugyldig indkøbspris", "zero_or_greater")) {
             $unit_purchase_price = new Intraface_Amount($price);
             $unit_purchase_price->convert2db();
         }
@@ -344,7 +344,7 @@ class ProcurementItem extends Intraface_Standard
      */
     public function changeProduct($product_id, $product_variation_id = 0)
     {
-        if(!$this->id) {
+        if (!$this->id) {
             throw new Exception('You cannot change product when not saved');
         }
         
@@ -357,14 +357,14 @@ class ProcurementItem extends Intraface_Standard
             $product_detail_id = $product->get("detail_id");
         }
         
-        if(intval($product_variation_id) != 0) {
+        if (intval($product_variation_id) != 0) {
             $variation = $product->getVariation(intval($product_variation_id));
-            if(!$variation->getId()) {
+            if (!$variation->getId()) {
                 throw new Exception('Invalid product variation id');
             }
             
             $detail = $variation->getDetail();
-            if(!$detail->getId()) {
+            if (!$detail->getId()) {
                 throw new Exception("Invalid product variation detail");
             }
             
@@ -436,7 +436,7 @@ class ProcurementItem extends Intraface_Standard
             $item[$i]["product_id"] = $product->get("id");
             $item[$i]["amount"] = $db->f("quantity") * $db->f("unit_purchase_price");
             
-            if($product->get('has_variation')) {
+            if ($product->get('has_variation')) {
                 $variation = $product->getVariation($db->f('product_variation_id'));
                 $detail = $variation->getDetail($db->f('product_variation_detail_id'));
                 $item[$i]["name"] = $product->get("name").' - '.$variation->getName();

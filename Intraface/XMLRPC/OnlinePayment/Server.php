@@ -39,7 +39,7 @@ class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
         $onlinepayment->getDBQuery()->setFilter('status', 2);
             
         $parameter['payment_online'] = 0;    
-        foreach($onlinepayment->getlist() AS $p) {
+        foreach ($onlinepayment->getlist() AS $p) {
             $parameter['payment_online'] += $p["amount"];
         }
 
@@ -76,7 +76,7 @@ class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
 
         $id = $this->processRequestData($id);
         $onlinepayment = $this->onlinePaymentFactory(intval($id));
-        if($onlinepayment->get('id') != $id) {
+        if ($onlinepayment->get('id') != $id) {
             throw new XML_RPC2_FaultException('The given payment id '.$id.' is not valid', -4);
         }
         

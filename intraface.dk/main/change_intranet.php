@@ -21,8 +21,8 @@ $db = new DB_Sql;
 $db->query("SELECT * FROM intranet ORDER BY name");
 $accessible_intranets = array();
 while($db->nextRecord()) {
-    if(!$kernel->user->hasIntranetAccess($db->f("id"))) { 
-        continue;    
+    if (!$kernel->user->hasIntranetAccess($db->f("id"))) {
+        continue;
     }
     $accessible_intranets[$db->f('id')] = $db->f('name');
 }
@@ -32,7 +32,7 @@ $page->start(t('change intranet'));
 ?>
 <h1><?php e(t('change intranet')); ?></h1>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="get">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="get">
 	<fieldset id="choose_intranet" class="radiobuttons">
 	<legend><?php e(t('choose intranet')); ?></legend>
 	<?php foreach ($accessible_intranets as $id => $name): ?>
@@ -40,7 +40,7 @@ $page->start(t('change intranet'));
 	<?php endforeach; ?>
 	</fieldset>
 	<div>
-		<input type="submit" value="<?php e(t('change')); ?>" /> <a href="<?php if(isset($_SERVER['HTTP_REFERER'])): echo safeToHtml($_SERVER['HTTP_REFERER']); else: echo 'index.php'; endif; ?>"><?php e(t('regret')); ?></a>
+		<input type="submit" value="<?php e(t('change')); ?>" /> <a href="<?php if (isset($_SERVER['HTTP_REFERER'])): e($_SERVER['HTTP_REFERER']); else: echo 'index.php'; endif; ?>"><?php e(t('Cancel')); ?></a>
 	</div>
 
 </form>

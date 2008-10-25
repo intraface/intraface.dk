@@ -28,7 +28,7 @@ class Voucher extends Intraface_Standard
      */
     function __construct($year_object, $id = 0)
     {
-        if(!is_object($year_object)) {
+        if (!is_object($year_object)) {
             trigger_error('Klassen Voucher kræver objektet Year', E_USER_ERROR);
             exit;
         }

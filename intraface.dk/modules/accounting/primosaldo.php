@@ -70,11 +70,11 @@ $page = new Intraface_Page($kernel);
 $page->start('Primosaldo');
 ?>
 
-<h1>Primosaldo <?php echo $year->get('label'); ?></h1>
+<h1>Primosaldo <?php e($year->get('label')); ?></h1>
 
 <ul class="options">
-    <li><a href="year.php?id=<?php echo $year->get('id'); ?>">Gå tilbage til regnskabsåret</a></li>
-    <li><a class="edit" href="primosaldo_edit.php?id=<?php echo $year->get('id'); ?>">Ret</a></li>
+    <li><a href="year.php?id=<?php e($year->get('id')); ?>">Gå tilbage til regnskabsåret</a></li>
+    <li><a class="edit" href="primosaldo_edit.php?id=<?php e($year->get('id')); ?>">Ret</a></li>
 </ul>
 
 <table>
@@ -90,10 +90,10 @@ $page->start('Primosaldo');
 <tbody>
     <?php foreach ($accounts AS $account): ?>
     <tr>
-        <td><?php echo $account['number']; ?></td>
-        <td><?php echo $account['name']; ?></td>
-        <td><?php echo amountToOutput($account['primosaldo_debet']); ?></td>
-        <td><?php echo amountToOutput($account['primosaldo_credit']); ?></td>
+        <td><?php e($account['number']); ?></td>
+        <td><?php e($account['name']); ?></td>
+        <td><?php e(amountToOutput($account['primosaldo_debet'])); ?></td>
+        <td><?php e(amountToOutput($account['primosaldo_credit'])); ?></td>
     </tr>
     <?php
         // udregninger
@@ -112,16 +112,16 @@ $page->start('Primosaldo');
                 }
             ?>
         </td>
-        <td><strong><?php echo amountToOutput($total_debet); ?></strong></td>
-        <td><strong><?php echo amountToOutput($total_credit); ?></strong></td>
+        <td><strong><?php e(amountToOutput($total_debet)); ?></strong></td>
+        <td><strong><?php e(amountToOutput($total_credit)); ?></strong></td>
     </tr>
 </tbody>
 </table>
 
 <?php if ($year->get('last_year_id') > 0): ?>
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-    <input type="hidden" name="id" value="<?php echo $year->get('id'); ?>" />
+<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
+    <input type="hidden" name="id" value="<?php e($year->get('id')); ?>" />
     <fieldset>
         <legend>Oplysninger til primosaldo</legend>
 

@@ -27,36 +27,36 @@ else {
 }
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('edit stylesheet')));
+$page->start($translation->get('edit stylesheet'));
 ?>
 
-<h1><?php echo safeToHtml($translation->get('edit stylesheet')); ?></h1>
+<h1><?php e($translation->get('edit stylesheet')); ?></h1>
 
 <ul class="options">
-    <li><a href="site.php?id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('close', 'common')); ?></a></li>
+    <li><a href="site.php?id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
 </ul>
 
 <?php
     echo $cmssite->stylesheet->error->view($translation);
 ?>
 
-<form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
-    <input name="site_id" type="hidden" value="<?php echo $cmssite->get('id'); ?>" />
+<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
+    <input name="site_id" type="hidden" value="<?php e($cmssite->get('id')); ?>" />
 
     <fieldset id="stylesheet">
 
-        <legend><?php echo safeToHtml($translation->get('stylesheet')); ?></legend>
+        <legend><?php e($translation->get('stylesheet')); ?></legend>
 
         <label for="css">
-            <textarea cols="80" rows="20" name="css"><?php echo htmlspecialchars($value['css']); ?></textarea>
+            <textarea cols="80" rows="20" name="css"><?php e($value['css']); ?></textarea>
          </label>
 
      </fieldset>
 
     <div style="clear: both;">
-        <input type="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" />
-        <input type="submit" name="close" value="<?php echo safeToHtml($translation->get('save and close', 'common')); ?>" />
-        <a href="site.php?id=<?php echo $cmssite->get('id'); ?>"><?php echo safeToHtml($translation->get('regret', 'common')); ?></a>
+        <input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
+        <input type="submit" name="close" value="<?php e($translation->get('save and close', 'common')); ?>" />
+        <a href="site.php?id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('Cancel', 'common')); ?></a>
 
     </div>
 </form>

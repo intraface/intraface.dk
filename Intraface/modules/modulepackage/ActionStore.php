@@ -48,7 +48,7 @@ class Intraface_modules_modulepackage_ActionStore {
     public function store($action) 
     {
         
-        if(!is_object($action) || strtolower(get_class($action)) != 'intraface_modules_modulepackage_action') {
+        if (!is_object($action) || strtolower(get_class($action)) != 'intraface_modules_modulepackage_action') {
             trigger_error('First parameter in Intraface_modules_modulepackage_ActionStore::store should be an action object. Now it is: '.strtolower(get_class($action)), E_USER_ERROR);
             exit;
         }
@@ -62,7 +62,7 @@ class Intraface_modules_modulepackage_ActionStore {
                 'action = '.$this->db->quote($action_serialized, 'text').', ' .
                 'active = 1');
         
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error("Error in query in Intraface_modules_modulepackage_ActionStore->store(): ".$result->getUserInfo(), E_USER_ERROR);
             exit;
         }
@@ -91,18 +91,18 @@ class Intraface_modules_modulepackage_ActionStore {
                 'id = '.$this->db->quote($id, 'integer').' AND ' .
                 'active = 1 ');
         
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error("Error in query in Intraface_modules_modulepackage_ActionStore::restore(): ".$result->getUserInfo(), E_USER_ERROR);
             return false;
         }
         
-        if($result->numRows() == 0) {
+        if ($result->numRows() == 0) {
             return false;
         }
         
         $row = $result->fetchRow();
         
-        if($row['action'] != '') {
+        if ($row['action'] != '') {
             $this->id = $row['id'];
             require_once("Intraface/modules/modulepackage/Action.php");
             return unserialize($row['action']);
@@ -120,7 +120,7 @@ class Intraface_modules_modulepackage_ActionStore {
      */
     public function delete() 
     {
-        if($this->id == 0) {
+        if ($this->id == 0) {
             return false;
         }
         
@@ -128,7 +128,7 @@ class Intraface_modules_modulepackage_ActionStore {
                 'intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' AND ' .
                 'id = '.$this->db->quote($this->id, 'integer'));
         
-        if(PEAR::isError($result)) {
+        if (PEAR::isError($result)) {
             trigger_error("Error in query in Intraface_modules_modulepackage_ActionStore::delete(): ".$result->getUserInfo(), E_USER_ERROR);
             return false;
         }

@@ -12,7 +12,7 @@ class IntranetNews extends Intraface_Standard
         $this->id = intval($id);
         $this->error = new Intraface_Error;
 
-        if($this->id != 0) {
+        if ($this->id != 0) {
             $this->load();
         }
     }
@@ -22,7 +22,7 @@ class IntranetNews extends Intraface_Standard
         $db = new DB_sql;
 
         $db->query("SELECT id, area, description FROM systemmessage_news WHERE active = 1 AND id = ".$this->id);
-        if($db->nextRecord()) {
+        if ($db->nextRecord()) {
             $this->value['id'] = $db->f('id');
             $this->value['area'] = $db->f('area');
             $this->value['description'] = $db->f('description');
@@ -40,7 +40,7 @@ class IntranetNews extends Intraface_Standard
         $validator->isString($input['area'], 'Område er ikke udfylde korrekt', '', 'allow_empty');
         $validator->isString($input['description'], 'Beskrivelsen er ikke udfyldt korrekt', '<strong>');
 
-        if($this->error->isError()) {
+        if ($this->error->isError()) {
             return 0;
         }
 
@@ -51,7 +51,7 @@ class IntranetNews extends Intraface_Standard
 
         $db = new DB_Sql;
 
-        if($this->id != 0) {
+        if ($this->id != 0) {
             $db->query("UPDATE systemmessage_news SET ".$sql." WHERE id = ".$this->id);
         } else {
             $db->query("INSERT INTO systemmessage_news SET date_created = NOW(), ".$sql);
@@ -64,7 +64,7 @@ class IntranetNews extends Intraface_Standard
 
     function delete()
     {
-        if($this->id == 0) {
+        if ($this->id == 0) {
             return 0;
         }
 
@@ -79,7 +79,7 @@ class IntranetNews extends Intraface_Standard
     {
         $db = new DB_sql;
 
-        if($to_date == "") {
+        if ($to_date == "") {
             $to_date = "0000-00-00";
         }
         $value = array();

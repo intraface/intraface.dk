@@ -8,17 +8,17 @@ $systemmessage = $kernel->useShared('systemmessage');
 $intranetnews = new IntranetNews($kernel);
 $systemdisturbance = new SystemDisturbance($kernel);
 
-if(isset($_POST['news'])) {
+if (isset($_POST['news'])) {
 	$systemdisturbance = new SystemDisturbance($kernel, intval($_POST['edit_disturbance']));
 	$intranetnews->update($_POST);
 }
 
-if(isset($_GET['delete_news'])) {
+if (isset($_GET['delete_news'])) {
 	$intranetnews = new IntranetNews($kernel, intval($_GET['delete_news']));
 	$intranetnews->delete();
 }
 
-if(isset($_GET['delete_disturbance'])) {
+if (isset($_GET['delete_disturbance'])) {
 	$systemdisturbance = new SystemDisturbance($kernel, intval($_GET['delete_disturbance']));
 	$systemdisturbance->delete();
 }
@@ -56,11 +56,11 @@ $disturbance = $systemdisturbance->getList();
 	<tbody>
 		<?php foreach ($disturbance AS $d) { ?>
   		<tr>
-  			<td><?php print($d['dk_from_date_time'].' til '.$d['dk_to_date_time']); ?></td>
-  			<td><?php print($d['user_name']); ?></td>
-				<td><?php print($d['important']); ?></td>
-  			<td><?php print(nl2br($d['description'])); ?></td>
-				<td><a href="edit_disturbance.php?id=<?php print($d['id']); ?>" class="edit">Ret</a> <a href="messages.php?delete_disturbance=<?php print($d['id']); ?>" class="delete">Slet</a></td>
+  			<td><?php e($d['dk_from_date_time'].' til '.$d['dk_to_date_time']); ?></td>
+  			<td><?php e($d['user_name']); ?></td>
+				<td><?php e($d['important']); ?></td>
+  			<td><?php autohtml($d['description']); ?></td>
+				<td><a href="edit_disturbance.php?id=<?php e($d['id']); ?>" class="edit">Ret</a> <a href="messages.php?delete_disturbance=<?php e($d['id']); ?>" class="delete">Slet</a></td>
   		</tr>
 		<?php } // end foreach ?>
 	</tbody>
@@ -88,13 +88,13 @@ $news = $intranetnews->getList();
 	</thead>
 
 	<tbody>
-		<?php foreach ($news AS $n) { ?>
+		<?php foreach ($news as $n) { ?>
   		<tr>
-  			<td><?php print($n['dk_date_time']); ?></td>
-  			<td><?php print($n['user_name']); ?></td>
-  			<td><?php print($n['area']); ?></td>
-  			<td><?php print(nl2br($n['description'])); ?></td>
-				<td><a href="edit_news.php?id=<?php print($n['id']); ?>" class="edit">Ret</a> <a href="messages.php?delete_news=<?php print($n['id']); ?>" class="delete">Slet</a></td>
+  			<td><?php e($n['dk_date_time']); ?></td>
+  			<td><?php e($n['user_name']); ?></td>
+  			<td><?php e($n['area']); ?></td>
+  			<td><?php autohtml($n['description']); ?></td>
+				<td><a href="edit_news.php?id=<?php e($n['id']); ?>" class="edit">Ret</a> <a href="messages.php?delete_news=<?php e($n['id']); ?>" class="delete">Slet</a></td>
   		</tr>
 		<?php } // end foreach ?>
 	</tbody>

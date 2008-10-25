@@ -4,7 +4,7 @@ require('../../include_first.php');
 $module = $kernel->module('filemanager');
 $translation = $kernel->getTranslation('filemanager');
 
-if(isset($_POST['id']) && isset($_POST['instance_type'])) {
+if (isset($_POST['id']) && isset($_POST['instance_type'])) {
     $filemanager = new FileManager($kernel, $_POST['id']);
     $instance_type = $_POST['instance_type'];
     
@@ -14,7 +14,7 @@ if(isset($_POST['id']) && isset($_POST['instance_type'])) {
     $validator->isNumeric($_POST['x'], 'invalid width', 'zero_or_greater,integer');
     $validator->isNumeric($_POST['y'], 'invalid width', 'zero_or_greater,integer');
     
-    if(!$filemanager->error->isError()) {
+    if (!$filemanager->error->isError()) {
         $filemanager->createInstance($instance_type);
         $filemanager->instance->delete();
     
@@ -24,7 +24,7 @@ if(isset($_POST['id']) && isset($_POST['instance_type'])) {
         $param['crop_offset_y'] = (int)$_POST['y'];
 
         $filemanager->createInstance($instance_type, $param);
-        if(!$filemanager->error->isError()) {
+        if (!$filemanager->error->isError()) {
             header('location: file.php?id='.$filemanager->get('id'));
             exit;
         }
@@ -57,17 +57,17 @@ $type = $filemanager->instance->get('instance_properties');
 $editor_min_width = $type['max_width'] * $size_ratio;
 $editor_min_height = $type['max_height'] * $size_ratio;
 
-if($editor_min_width > $editor_img_width) {
+if ($editor_min_width > $editor_img_width) {
     $editor_min_width = $editor_img_width;
     $editor_min_height = ($editor_img_width/$editor_min_width)*$editor_min_height;
 }
 
-if($editor_min_height > $editor_img_height) {
+if ($editor_min_height > $editor_img_height) {
     $editor_min_height = $editor_img_height;
     $editor_min_width = ($editor_img_height/$editor_min_height)*$editor_min_width;
 }
 
-if($type['resize_type'] != 'strict' && !empty($_GET['unlock_ratio'])) {
+if ($type['resize_type'] != 'strict' && !empty($_GET['unlock_ratio'])) {
     $unlock_ratio = 1;
 }
 else {
@@ -81,13 +81,13 @@ $page->includeJavascript('module', 'crop_image.js.php?size_ratio='.doubleval(1/$
 
 $page->start($translation->get('crop image').' '.$filemanager->get('file_name'));
 ?>
-<h1><?php echo safeToHtml($translation->get('crop image').' '.$translation->get('file')); ?></h1>
+<h1><?php e($translation->get('crop image').' '.$translation->get('file')); ?></h1>
 
 <ul class="options" style="clear:both;">
-    <?php if($type['resize_type'] != 'strict' && $unlock_ratio == 1): ?>
-        <li><a href="crop_image.php?id=<?php echo intval($filemanager->get('id')); ?>&instance_type=<?php echo safeToHtml($filemanager->instance->get('type')); ?>&unlock_ratio=1"><?php echo safeToHtml($translation->get('unlock image ratio')); ?></a></li>
-    <?php elseif($type['resize_type'] != 'strict'): ?>
-        <li><a href="crop_image.php?id=<?php echo intval($filemanager->get('id')); ?>&instance_type=<?php echo safeToHtml($filemanager->instance->get('type')); ?>&unlock_ratio=0"><?php echo safeToHtml($translation->get('lock image ratio')); ?></a></li>
+    <?php if ($type['resize_type'] != 'strict' && $unlock_ratio == 1): ?>
+        <li><a href="crop_image.php?id=<?php e($filemanager->get('id')); ?>&instance_type=<?php e($filemanager->instance->get('type')); ?>&unlock_ratio=1"><?php e($translation->get('unlock image ratio')); ?></a></li>
+    <?php elseif ($type['resize_type'] != 'strict'): ?>
+        <li><a href="crop_image.php?id=<?php e($filemanager->get('id')); ?>&instance_type=<?php e($filemanager->instance->get('type')); ?>&unlock_ratio=0"><?php e($translation->get('lock image ratio')); ?></a></li>
     <?php endif; ?>
       
 </ul>
@@ -95,36 +95,36 @@ $page->start($translation->get('crop image').' '.$filemanager->get('file_name'))
 <?php echo $filemanager->error->view(); ?>
 
 <fieldset>
-    <legend><?php echo safeToHtml($translation->get('cropping')); ?></legend>
+    <legend><?php e($translation->get('cropping')); ?></legend>
     <form method="POST" action="crop_image.php">
-    <input type="hidden" name="id" value="<?php echo intval($filemanager->get('id')); ?>" />
-    <input type="hidden" name="instance_type" value="<?php echo safeToHtml($filemanager->instance->get('type')); ?>" />
+    <input type="hidden" name="id" value="<?php e($filemanager->get('id')); ?>" />
+    <input type="hidden" name="instance_type" value="<?php e($filemanager->instance->get('type')); ?>" />
     
     
-    <div><?php echo safeTohtml($translation->get('crop')); ?>:  
-        <label for="width"><?php echo safeTohtml($translation->get('width')); ?></label>
+    <div><?php e($translation->get('crop')); ?>:  
+        <label for="width"><?php e($translation->get('width')); ?></label>
         <input type="text" name="width" id="width" value="" size="4" />
     
-        <label for="height"><?php echo safeTohtml($translation->get('height')); ?></label>
+        <label for="height"><?php e($translation->get('height')); ?></label>
         <input type="text" name="height" id="height" value="" size="4" />
     
     
-        <?php echo safeTohtml($translation->get('from top left corner')); ?>
+        <?php e($translation->get('from top left corner')); ?>
        
-        <label for="x"><?php echo safeTohtml($translation->get('x')); ?></label>
+        <label for="x"><?php e($translation->get('x')); ?></label>
         <input type="text" name="x" id="x" value="" size="4" />
         
-        <label for="y"><?php echo safeTohtml($translation->get('y')); ?></label>
+        <label for="y"><?php e($translation->get('y')); ?></label>
         <input type="text" name="y" id="y" value="" size="4" />
 
-        <input type="submit" name="crop" id="submit" value="<?php echo safeTohtml($translation->get('crop and resize image')); ?>" />
+        <input type="submit" name="crop" id="submit" value="<?php e($translation->get('crop and resize image')); ?>" />
     </div>
-    <div><?php echo safeTohtml($translation->get('your original image has the following dimensions (width x height)')); ?>: <?php echo intval($img_width); ?> x <?php echo intval($img_height); ?></div>
+    <div><?php e($translation->get('your original image has the following dimensions (width x height)')); ?>: <?php e($img_width); ?> x <?php e($img_height); ?></div>
     </form>
 </fieldset>
 
 
-<img id="image" src="<?php echo $editor_img_uri; ?>" width="<?php echo intval($editor_img_width); ?>" height="<?php echo intval($editor_img_height); ?>" />
+<img id="image" src="<?php e($editor_img_uri); ?>" width="<?php e($editor_img_width); ?>" height="<?php e($editor_img_height); ?>" />
 
 <?php
 $page->end();

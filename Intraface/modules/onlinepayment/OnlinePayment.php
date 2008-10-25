@@ -212,7 +212,7 @@ class OnlinePayment extends Intraface_Standard
             $this->error->set("transaction_status '".$input['transaction_status']."' er ikke en gyldig status");
         }
         
-        if(!isset($input['pbs_status'])) $input['pbs_status'] = '';
+        if (!isset($input['pbs_status'])) $input['pbs_status'] = '';
         $validator->isString($input['pbs_status'], 'pbs status er ikke udfyldt', '', 'allow_empty');
         
         // VÆR LIGE OPMÆRKSOM HER: INDTIL VIDERE KAN KUN ACCEPTEREDE TRANSAKTIONER GEMMES

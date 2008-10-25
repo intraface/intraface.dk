@@ -35,97 +35,97 @@ if (!empty($_POST)) {
     $value['webshop_receipt'] = $kernel->setting->get('intranet','webshop.webshop_receipt');
 }
 
-if(isset($_GET['delete_basketevaluation_id'])) {
+if (isset($_GET['delete_basketevaluation_id'])) {
     $basketevaluation = new BasketEvaluation($kernel, $_GET['delete_basketevaluation_id']);
     $basketevaluation->delete();
 }
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('webshop')));
+$page->start($translation->get('webshop'));
 
 ?>
-<h1><?php echo safeToHtml($translation->get('webshop')); ?></h1>
+<h1><?php e($translation->get('webshop')); ?></h1>
 
 <p class="message">
-    <?php echo safeToHtml($translation->get('here you edit your settings for the webshop')); ?>
+    <?php e($translation->get('here you edit your settings for the webshop')); ?>
 </p>
 
 <ul>
     <li><a href="featuredproducts.php"><?php e($translation->get('choose featured products')); ?></a></li>
 </ul>
 
-<form action="<?php basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
     <?php echo $error->view(); ?>
 
     <fieldset>
-        <legend><?php echo safeToHtml($translation->get('what to show in the webshop')); ?></legend>
+        <legend><?php e($translation->get('what to show in the webshop')); ?></legend>
         <div class="formrow">
         <label>Vis</label>
 
             <select name="show_online">
             <?php
-                foreach($settings AS $k=>$v) {
-                    echo '<option value="'.$k.'"';
-                    if (!empty($value['show_online']) AND $k == $value['show_online']) echo ' selected="selected"';
-                    echo '>' . safeToForm($translation->get($v)) . '</option>';
-                }
+                foreach ($settings AS $k=>$v) { ?>
+                    <option value="<?php e($k); ?>"
+                    <?php if (!empty($value['show_online']) AND $k == $value['show_online']) echo ' selected="selected"'; ?>
+                    ><?php e($translation->get($v)); ?></option>
+                <?php }
             ?>
             </select>
         </div>
     </fieldset>
-    
+
     <fieldset>
-        <legend><?php echo safeToHtml($translation->get('which payment methods are available')); ?></legend>
-        
+        <legend><?php e($translation->get('which payment methods are available')); ?></legend>
+
         <?php if ($kernel->setting->get('intranet', 'bank_account_number')): ?>
             <div class="formrow">
                 <label for="payment_method_bank_transfer"><?php e(t('bank transfer')); ?></label>
                 <input type="checkbox" name="payment_method_bank_transfer" id="payment_method_bank_transfer" value="bank_transfer" />
             </div>
         <?php endif; ?>
-        
-        
+
+
          <?php if ($kernel->setting->get('intranet', 'giro_account_number')): ?>
             <div class="formrow">
                 <label for="payment_method_giro_payment"><?php e(t('giro payment')); ?></label>
                 <input type="checkbox" name="payment_method_giro_payment" id="payment_method_giro_payment" value="giro_payment" />
             </div>
         <?php endif; ?>
-        
+
         <?php if ($kernel->intranet->hasModuleAccess('onlinepayment')): ?>
             <div class="formrow">
                 <label for="payment_method_online_payment"><?php e(t('online payment')); ?></label>
                 <input type="checkbox" name="payment_method_online_payment" id="payment_method_online_payment" value="online_payment" />
             </div>
         <?php endif; ?>
-        
+
     </fieldset>
-    
+
     <fieldset>
-        <legend><?php echo safeToHtml($translation->get('order confirmation - including warranty and right of cancellation')); ?></legend>
+        <legend><?php e($translation->get('order confirmation - including warranty and right of cancellation')); ?></legend>
         <div>
-        <label for="confirmation_text"><?php echo safeToHtml($translation->get('text')); ?></label><br />
-        <textarea name="confirmation_text" cols="80" rows="10"><?php echo safeToForm($value['confirmation_text']); ?></textarea>
+        <label for="confirmation_text"><?php e($translation->get('text')); ?></label><br />
+        <textarea name="confirmation_text" cols="80" rows="10"><?php e($value['confirmation_text']); ?></textarea>
         </div>
     </fieldset>
 
     <fieldset>
-        <legend><?php echo safeToHtml($translation->get('webshop receipt')); ?></legend>
+        <legend><?php e($translation->get('webshop receipt')); ?></legend>
         <div>
-        <label for="webshop_receipt"><?php echo safeToHtml($translation->get('text')); ?></label><br />
-        <textarea name="webshop_receipt" cols="80" rows="10"><?php echo safeToForm($value['webshop_receipt']); ?></textarea>
+        <label for="webshop_receipt"><?php e($translation->get('text')); ?></label><br />
+        <textarea name="webshop_receipt" cols="80" rows="10"><?php e($value['webshop_receipt']); ?></textarea>
         </div>
     </fieldset>
 
     <p>
-        <input type="submit" value="<?php echo safeToHtml($translation->get('save', 'common')); ?>" />
+        <input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
     </p>
 
 </form>
 
 <fieldset>
-    <legend><?php echo safeToHtml($translation->get('basket evaluation')); ?></legend>
+    <legend><?php e($translation->get('basket evaluation')); ?></legend>
 
 
 
@@ -133,38 +133,38 @@ $page->start(safeToHtml($translation->get('webshop')));
     $basketevaluation = new BasketEvaluation($kernel);
     $evaluations = $basketevaluation->getList();
 
-    if(count($evaluations) > 0):
+    if (count($evaluations) > 0):
         ?>
-        <table summary="<?php echo safeToHtml($translation->get('basket evaluation')); ?>" class="stripe">
-            <caption><?php echo safeToHtml($translation->get('basket evaluation')); ?></caption>
+        <table summary="<?php e($translation->get('basket evaluation')); ?>" class="stripe">
+            <caption><?php e($translation->get('basket evaluation')); ?></caption>
             <thead>
                 <tr>
-                    <th><?php echo safeToHtml($translation->get('running index')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('evaluation')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('action')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('go to index after')); ?></th>
+                    <th><?php e($translation->get('running index')); ?></th>
+                    <th><?php e($translation->get('evaluation')); ?></th>
+                    <th><?php e($translation->get('action')); ?></th>
+                    <th><?php e($translation->get('go to index after')); ?></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($evaluations AS $evaluation): ?>
+                <?php foreach ($evaluations AS $evaluation): ?>
                     <tr>
-                        <td><?php echo safeToHtml($evaluation['running_index']); ?></td>
+                        <td><?php e($evaluation['running_index']); ?></td>
                         <td><?php
-                            echo safeToHtml($translation->get('if').' '.$translation->get($evaluation['evaluate_target']).' ');
-                            if($evaluation['evaluate_method'] != 'equals') {
-                                echo safeToHtml($translation->get('is').' ');
+                            e($translation->get('if').' '.$translation->get($evaluation['evaluate_target']).' ');
+                            if ($evaluation['evaluate_method'] != 'equals') {
+                                e($translation->get('is').' ');
                             }
-                            echo safeToHtml($translation->get($evaluation['evaluate_method']).' '.$evaluation['evaluate_value']);
-                            if($evaluation['evaluate_value_case_sensitive']) {
-                                echo ' [<acronym title="'.safeToHtml($translation->get('case sensitive')).'">CS</acronym>]';
+                            e($translation->get($evaluation['evaluate_method']).' '.$evaluation['evaluate_value']);
+                            if ($evaluation['evaluate_value_case_sensitive']) {
+                                echo ' [<acronym title="'.e($translation->get('case sensitive')).'">CS</acronym>]';
                             }
 
                             ?>
                         </td>
-                        <td><?php echo safeToHtml($translation->get($evaluation['action_action']).' '.$evaluation['action_value'].' '.$translation->get('at').' '.$evaluation['action_quantity'].' '.$translation->get($evaluation['action_unit'])); ?></td>
-                        <td><?php echo safeToHtml($evaluation['go_to_index_after']); ?></td>
-                        <td><a href="edit_basketevaluation.php?id=<?php echo intval($evaluation['id']); ?>" class="edit"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a> <a href="index.php?delete_basketevaluation_id=<?php echo intval($evaluation['id']); ?>" class="delete"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a></td>
+                        <td><?php e($translation->get($evaluation['action_action']).' '.$evaluation['action_value'].' '.$translation->get('at').' '.$evaluation['action_quantity'].' '.$translation->get($evaluation['action_unit'])); ?></td>
+                        <td><?php e($evaluation['go_to_index_after']); ?></td>
+                        <td><a href="edit_basketevaluation.php?id=<?php e($evaluation['id']); ?>" class="edit"><?php e($translation->get('edit', 'common')); ?></a> <a href="index.php?delete_basketevaluation_id=<?php e($evaluation['id']); ?>" class="delete"><?php e($translation->get('delete', 'common')); ?></a></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -173,7 +173,7 @@ $page->start(safeToHtml($translation->get('webshop')));
     endif;
     ?>
 
-    <p><a href="edit_basketevaluation.php"><?php echo safeToHtml($translation->get('add basket evaluation')); ?></a></p>
+    <p><a href="edit_basketevaluation.php"><?php e($translation->get('add basket evaluation')); ?></a></p>
 
 </fieldset>
 

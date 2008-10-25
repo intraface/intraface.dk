@@ -129,7 +129,7 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
         $items = $debtor->getItems();
         
         $total = 0;
-        if($debtor->getCurrency()) {
+        if ($debtor->getCurrency()) {
             $total_currency = 0;
         }
         
@@ -157,14 +157,14 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
             if ($items[$i]["unit"] != "") {
                 $this->doc->addText($apointX["antal"] - $this->doc->getTextWidth($this->doc->get("font_size"), number_format($items[$i]["quantity"], 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($items[$i]["quantity"], 2, ",", "."));
                 $this->doc->addText($apointX["enhed"], $this->doc->get('y'), $this->doc->get("font_size"), $this->translation->get($items[$i]["unit"], 'product'));
-                if($debtor->getCurrency()) {
+                if ($debtor->getCurrency()) {
                     $this->doc->addText($apointX["pris"] - $this->doc->getTextWidth($this->doc->get("font_size"), $items[$i]["price_currency"]->getAsLocal('da_dk', 2)), $this->doc->get('y'), $this->doc->get("font_size"), $items[$i]["price_currency"]->getAsLocal('da_dk', 2));
                 }
                 else {
                     $this->doc->addText($apointX["pris"] - $this->doc->getTextWidth($this->doc->get("font_size"), $items[$i]["price"]->getAsLocal('da_dk', 2)), $this->doc->get('y'), $this->doc->get("font_size"), $items[$i]["price"]->getAsLocal('da_dk', 2));
                 }
             }
-            if($debtor->getCurrency()) {
+            if ($debtor->getCurrency()) {
                 $amount =  $items[$i]["quantity"] * $items[$i]["price_currency"]->getAsIso(2);
             }
             else {
@@ -232,7 +232,6 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
                             $this->doc->setY('-'.$this->doc->get("font_padding_bottom"));
 
                             if ($this->doc->get('y') < $this->doc->get("margin_bottom") + $this->doc->get("font_spacing") * 2) {
-                                // print("a".$this->doc->get('y'));
                                 $this->doc->nextPage(true);
                             }
                         }
@@ -242,7 +241,6 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
             }
 
             if ($this->doc->get('y') < $this->doc->get("margin_bottom") + $this->doc->get("font_spacing") * 2) {
-                // print("b".$this->doc->get('y'));
                 $this->doc->nextPage(true);
             }
 
@@ -276,14 +274,12 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
 
 
         if ($this->doc->get('y') < $this->doc->get("margin_bottom") + $this->doc->get("font_spacing") * 2) {
-            // print("c".$this->doc->get('y'));
             $this->doc->nextPage();
-            // print($this->doc->get('y'));
         }
 
         $this->doc->setLineStyle(1);
         $this->doc->line($this->doc->get("margin_left"), $this->doc->get('y'), $this->doc->get('right_margin_position'), $this->doc->get('y'));
-        if($debtor->getCurrency()) {
+        if ($debtor->getCurrency()) {
             $currency_iso_code = $debtor->getCurrency()->getType()->getIsoCode();
             $debtor_total = $debtor->get("total_currency");
         }
@@ -306,7 +302,6 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
         }
 
         if ($this->doc->get('y') < $this->doc->get("margin_bottom") + $this->doc->get("font_spacing") * 2) {
-            // print("d".$this->doc->get('y'));
             $this->doc->nextPage(true);
         }
 
@@ -328,12 +323,12 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
                 "due_date" => $debtor->get("dk_due_date"),
                 "girocode" => $debtor->get("girocode"));
 
-            if(is_object($onlinepayment)) {
+            if (is_object($onlinepayment)) {
                 $onlinepayment->getDBQuery()->setFilter('belong_to', $debtor->get("type"));
                 $onlinepayment->getDBQuery()->setFilter('belong_to_id', $debtor->get('id'));
                 $onlinepayment->getDBQuery()->setFilter('status', 2);
                 
-                foreach($onlinepayment->getlist() AS $p) {
+                foreach ($onlinepayment->getlist() AS $p) {
                     $parameter['payment_online'] += $p["amount"];
                 }
             }

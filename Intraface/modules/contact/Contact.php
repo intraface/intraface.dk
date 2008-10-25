@@ -122,7 +122,7 @@ class Company extends Contact
 require_once dirname(__FILE__) . '/ContactPerson.php';
 require_once 'Intraface/functions.php';
 
-class Contact extends Intraface_Standard 
+class Contact extends Intraface_Standard
 {
     /**
      * @var object
@@ -296,11 +296,10 @@ class Contact extends Intraface_Standard
 
         $this->value['id'] = $db->f('id');
 
-        for ($i=0, $max=count($this->fields); $i<$max; $i++) {
-            $this->value[$this->fields[$i]] = $db->f($this->fields[$i]);
+        foreach ($this->fields as $field) {
+            $this->value[$field] = $db->f($field);
         }
         $this->value['type_key'] = $db->f('type_key');
-        //$this->value['type'] = $this->types[$db->f('type_key')];
         $this->value['type'] = $this->getType();
         $this->value['password'] = $db->f('password');
         $this->value['number'] = $db->f('number');
@@ -499,12 +498,12 @@ class Contact extends Intraface_Standard
         }
 
         // skrive sql
-        for ($i = 0, $max = count($this->fields); $i<$max; $i++) {
-            if (!array_key_exists($this->fields[$i], $var)) {
+        foreach ($this->fields as $field) {
+            if (!array_key_exists($field, $var)) {
                 continue;
             }
-            if (isset($var[$this->fields[$i]])) {
-                $sql_items .= $this->fields[$i]." = '".safeToDb($var[$this->fields[$i]])."', ";
+            if (isset($var[$field])) {
+                $sql_items .= $field." = '".safeToDb($var[$field])."', ";
             }
         }
 
@@ -850,10 +849,10 @@ class Contact extends Intraface_Standard
      */
     function sendLoginEmail($mailer)
     {
-        if(!is_object($mailer)) {
+        if (!is_object($mailer)) {
             throw new Exception('A valid mailer object must be provided');
         }
-        
+
         if ($this->id == 0) {
             $this->error->set('Der er ikke noget id, så kunne ikke sende en e-mail');
             return false;
@@ -960,7 +959,7 @@ class Contact extends Intraface_Standard
     {
         return $this->id;
     }
-    
+
     function getType()
     {
         return $this->types[$this->value['type_key']];

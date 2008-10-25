@@ -68,24 +68,24 @@ $page->start('Todo E-mail');
 ?>
 <h1>Hvem skal todo-listen sendes til?</h1>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
     <fieldset>
         <legend>Send til kontakter</legend>
 
-        <?php foreach($contacts AS $contact):  ?>
+        <?php foreach ($contacts AS $contact):  ?>
             <?php
                 $c = new Contact($kernel, $contact);
             ?>
-            <label><input type="checkbox" value="<?php echo $contact['id']; ?>" name="contact[]" /> <?php echo $c->get('name'); ?></label>
+            <label><input type="checkbox" value="<?php e($contact['id']); ?>" name="contact[]" /> <?php e($c->get('name')); ?></label>
         <?php endforeach; ?>
 
         <div class="formrow">
         <label>Tilføj en kontaktperson</label>
         <select name="new_contact[]">
         <option value="">Vælg</option>
-        <?php foreach($contact_list AS $contact_item): ?>
-            <option value="<?php echo $contact_item['id']; ?>"><?php echo $contact_item['name']; ?></option>
+        <?php foreach ($contact_list AS $contact_item): ?>
+            <option value="<?php e($contact_item['id']); ?>"><?php e($contact_item['name']); ?></option>
         <?php endforeach; ?>
         </div>
         </select>
@@ -98,17 +98,17 @@ $page->start('Todo E-mail');
 
         <div class="formrow">
             <label for="">Titel</label>
-            <input type="text" name="subject" value="<?php echo $value['subject']; ?>" />
+            <input type="text" name="subject" value="<?php e($value['subject']); ?>" />
         </div>
 
         <div class="formrow">
             <label for="">Tekst</label>
-            <textarea cols="80" rows="6" name="body"><?php echo $value['body']; ?></textarea>
+            <textarea cols="80" rows="6" name="body"><?php e($value['body']); ?></textarea>
         </div>
 
         <div>
             <input type="submit" value="Gem" />
-            <input type="hidden" value="<?php echo $value['id']; ?>" name="id" />
+            <input type="hidden" value="<?php e($value['id']); ?>" name="id" />
 
         </div>
 

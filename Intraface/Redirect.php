@@ -52,7 +52,7 @@
  * // Must be called on every page show
  * $redirect = Redirect::receive($kernel, $other_querystring_name, $other_return_querystring_name = '';);
  *
- * if(isset($_POST['submit'])) {
+ * if (isset($_POST['submit'])) {
  *     // save something
  *     // optional parameter
  *     $redirect->setParameter("add_contact_id", $added_id); // Denne sætter parameter som skal sendes tilbage til siden. Den sendes dog kun tilbage hvis askParameter er sat ved opstart af redirect. Hvis ask er sat til multiple, sï¿½ gemmes der en ny hver gang den aktiveres, hvis ikke, overskrives den
@@ -73,7 +73,7 @@
  * You can do the following (@todo ON WHICH PAGE?):
  *
  * <code>
- * if($go_further) {
+ * if ($go_further) {
  * 	   $new_redireict = Redirect::go($kernel);
  * 	   $url = $new_redirect->setDestination('http://example.dk/first.php', 'http://example.dk/second.php?' . $redirect->get('redirect_query_string'));
  * 	   header('Location: ' . $url);
@@ -88,7 +88,7 @@
  * the parameter again:
  *
  * <code>
- * if(isset($_GET['return_redirect_id'])) {
+ * if (isset($_GET['return_redirect_id'])) {
  *     $redirect = Redirect::return($kernel);
  *     // optional
  *     $redirect->getIdentifier(); returns the identifier set in the beginning
@@ -197,7 +197,7 @@ class Intraface_Redirect extends Ilib_Redirect
     static function factory($kernel, $type, $query_variable = 'redirect_id', $query_return_variable = 'return_redirect_id')
     {
 
-        if(!is_object($kernel)) {
+        if (!is_object($kernel)) {
             trigger_error("First parameter in redirect::factory is not kernel", E_USER_ERROR);
         }
 

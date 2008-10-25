@@ -5,7 +5,7 @@ $module = $kernel->module("filemanager");
 
 $file_dir = $kernel->intranet->get('id').'/import/';
 
-if(isset($_POST["submit"])) {
+if (isset($_POST["submit"])) {
 
 	$filemanager = new FileManager($kernel);
 	$filemanager->createUpload();
@@ -14,7 +14,7 @@ if(isset($_POST["submit"])) {
 	$filemanager->upload->setSetting('max_file_size', 800000);
 	$filemanager->upload->setSetting('add_keyword', $_POST['keyword']);
 
-	if($filemanager->upload->import(UPLOAD_PATH.$file_dir)) {
+	if ($filemanager->upload->import(UPLOAD_PATH.$file_dir)) {
 		// header("location: file.php?id=".$id);
 		// her burde den gå til en batchedit af de uploadede filer!
 		die("FÆRDIG");
@@ -34,7 +34,7 @@ $page->start();
 
 <?php echo $filemanager->error->view(); ?>
 
-<p>Importere fra <?php print($file_dir); ?></p>
+<p>Importerer fra <?php e($file_dir); ?></p>
 
 <form action="import.php" method="POST">
 <fieldset>

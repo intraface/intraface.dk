@@ -3,7 +3,7 @@ require('../../include_first.php');
 
 $module = $kernel->module('newsletter');
 
-if(isset($_POST['submit'])) {
+if (isset($_POST['submit'])) {
     $list = new NewsletterList($kernel, $_POST['id']);
     if ($id = $list->save($_POST)) {
         header('Location: index.php?from_id='.$id);
@@ -12,7 +12,7 @@ if(isset($_POST['submit'])) {
         $value = $_POST;
     }
 
-} elseif(isset($_GET['id'])) {
+} elseif (isset($_GET['id'])) {
     $list = new NewsletterList($kernel, $_GET['id']);
     $value = $list->get();
 } else {
@@ -28,7 +28,7 @@ $page->start('Rediger liste');
 
 <?php echo $list->error->view(); ?>
 
-<form action="<?php e(basename($_SERVER['PHP_SELF'])); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
     <fieldset>
     <legend>Om nyhedsbrevet</legend>
     <div class="formrow">
@@ -43,9 +43,9 @@ $page->start('Rediger liste');
             <?php
             $newsletter_module = $kernel->getModule('newsletter');
 
-            foreach($newsletter_module->getSetting('subscribe_option') AS $key => $option) {
+            foreach ($newsletter_module->getSetting('subscribe_option') AS $key => $option) {
                 ?>
-                <option value="<?php print($key); ?>" <?php if($value['subscribe_option_key'] == $key) print("selected=\"selected\""); ?> ><?php print($newsletter_module->getTranslation($option)); ?></option>
+                <option value="<?php e($key); ?>" <?php if ($value['subscribe_option_key'] == $key) print("selected=\"selected\""); ?> ><?php e($newsletter_module->getTranslation($option)); ?></option>
                 <?php
             }
             ?>
@@ -55,7 +55,7 @@ $page->start('Rediger liste');
 ?>
       <div style="clear: both;">
         <label for="description">Beskrivelse</label><br />
-        <textarea name="description" cols="90" rows="10"><?php if(!empty($value['description'])) e($value['description']); ?></textarea>
+        <textarea name="description" cols="90" rows="10"><?php if (!empty($value['description'])) e($value['description']); ?></textarea>
     </div>
 </fieldset>
 <fieldset>

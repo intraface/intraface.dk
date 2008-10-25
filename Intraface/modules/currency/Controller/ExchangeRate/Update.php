@@ -25,7 +25,7 @@ class Intraface_modules_currency_Controller_ExchangeRate_Update extends k_Contro
      */
     private function getError()
     {
-        if(!$this->error) {
+        if (!$this->error) {
             $this->error = new Intraface_Doctrine_ErrorRender($this->getTranslation());
         }
         
@@ -36,14 +36,14 @@ class Intraface_modules_currency_Controller_ExchangeRate_Update extends k_Contro
     {
         $rate =  new Intraface_modules_currency_Currency_ExchangeRate;
         $types = $rate->getUsedForTypes();
-        if(false === ($used_for_key = array_search($this->context->name, $types))) {
+        if (false === ($used_for_key = array_search($this->context->name, $types))) {
             throw new Exception('Invalid used for '.$this->context->name);
         }
         
-        if($this->context->name == 'payment') {
+        if ($this->context->name == 'payment') {
             $this->document->title = 'Update exchange rate for payments';
         }
-        elseif($this->context->name == 'productprice') {
+        elseif ($this->context->name == 'productprice') {
             $this->document->title = 'Update exchange rate for product prices';
         }
         else {
@@ -58,10 +58,10 @@ class Intraface_modules_currency_Controller_ExchangeRate_Update extends k_Contro
         
         // $doctrine = $this->registry->get('doctrine');
         
-        if($this->context->name == 'payment') {
+        if ($this->context->name == 'payment') {
             $exchangerate = new Intraface_modules_currency_Currency_ExchangeRate_Payment;
         }
-        elseif($this->context->name == 'productprice') {
+        elseif ($this->context->name == 'productprice') {
             $exchangerate = new Intraface_modules_currency_Currency_ExchangeRate_ProductPrice;
         }
         else {

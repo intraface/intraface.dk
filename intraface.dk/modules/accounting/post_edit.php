@@ -28,7 +28,7 @@ if (!empty($_POST)) {
         $this->error->set('Beløbet kunne ikke konverteres');
     }
     $credit = $credit->get();
-    
+
     if ($id = $post->save($date->get(), $account->get('id'), $_POST['text'], $debet, $credit)) {
         header('Location: voucher.php?id='.$post->voucher->get('id').'&from_post_id='.$id);
         exit;
@@ -67,11 +67,11 @@ $page = new Intraface_Page($kernel);
 $page->start('Rediger post på bilag #' . $post->voucher->get('number'));
 ?>
 
-<h1>Post på bilag #<?php echo $post->voucher->get('number'); ?></h1>
+<h1>Post på bilag #<?php e($post->voucher->get('number')); ?></h1>
 
-<form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
-    <input type="hidden" name="id" value="<?php echo $post->get('id'); ?>" />
-    <input type="hidden" name="voucher_id" value="<?php echo $post->voucher->get('id'); ?>" />
+<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
+    <input type="hidden" name="id" value="<?php e($post->get('id')); ?>" />
+    <input type="hidden" name="voucher_id" value="<?php e($post->voucher->get('id')); ?>" />
 
     <?php echo $post->error->view(); ?>
 
@@ -91,16 +91,16 @@ $page->start('Rediger post på bilag #' . $post->voucher->get('number'));
             <tbody>
                 <tr>
                     <td>
-                        <input tabindex="1" name="date" type="text" size="7" value="<?php if (!empty($values['date'])) echo safeToHtml($values['date']);  ?>" />
+                        <input tabindex="1" name="date" type="text" size="7" value="<?php if (!empty($values['date'])) e($values['date']);  ?>" />
                     </td>
                     <td>
-                        <input tabindex="2" type="text" name="text" id="text" value="<?php if (!empty($values['text'])) echo safeToHtml($values['text']); ?>" />
+                        <input tabindex="2" type="text" name="text" id="text" value="<?php if (!empty($values['text'])) e($values['text']); ?>" />
                     </td>
                     <td>
                         <select name="account" tabindex="3">
                             <option value="">Vælg</option>
                             <?php
-                                foreach($account->getList() AS $a):
+                                foreach ($account->getList() AS $a):
                                     echo '<option value="'.$a['number'].'"';
                                     if (!empty($values['account_number']) AND $values['account_number'] == $a['number']) echo ' selected="selected"';
                                     echo '>'.$a['name'].'</option>';
@@ -109,11 +109,11 @@ $page->start('Rediger post på bilag #' . $post->voucher->get('number'));
                         </select>
                     </td>
                     <td>
-                        <input tabindex="4" name="debet" id="amount" type="text" size="8"  value="<?php if(!empty($values['debet'])) echo amountToForm($values['debet']); ?>" />
+                        <input tabindex="4" name="debet" id="amount" type="text" size="8"  value="<?php if (!empty($values['debet'])) e(amountToForm($values['debet'])); ?>" />
                     </td>
 
                     <td>
-                        <input tabindex="5" name="credit" id="amount" type="text" size="8"  value="<?php if(!empty($values['credit'])) echo amountToForm($values['credit']); ?>" />
+                        <input tabindex="5" name="credit" id="amount" type="text" size="8"  value="<?php if (!empty($values['credit'])) e(amountToForm($values['credit'])); ?>" />
                     </td>
                     <td>
                         <input tabindex="6" type="submit" id="submit" value="Gem" />
@@ -124,7 +124,7 @@ $page->start('Rediger post på bilag #' . $post->voucher->get('number'));
 </fieldset>
 </form>
 
-<p><a href="voucher.php?id=<?php echo $post->voucher->get('id'); ?>">Tilbage</a></p>
+<p><a href="voucher.php?id=<?php e($post->voucher->get('id')); ?>">Tilbage</a></p>
 
 
 <?php

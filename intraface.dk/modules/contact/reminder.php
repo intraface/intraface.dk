@@ -8,7 +8,7 @@ $contact_module->includeFile('ContactReminder.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	$reminder = ContactReminder::factory($kernel, (int)$_POST['id']);
-	if($reminder->get('id') == 0) {
+	if ($reminder->get('id') == 0) {
 		trigger_error('Invalid reminder id', E_USER_ERROR);
 	}
 
@@ -49,13 +49,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	$reminder = ContactReminder::factory($kernel, (int)$_GET['id']);
-	if($reminder->get('id') == 0) {
+	if ($reminder->get('id') == 0) {
 		trigger_error('Invalid reminder id', E_USER_ERROR);
 	}
 
 }
 
-if($reminder->get('id') == 0) {
+if ($reminder->get('id') == 0) {
 	trigger_error('Invalid reminder id', E_USER_ERROR);
 }
 $contact = $reminder->contact;
@@ -68,52 +68,52 @@ $page->start($translation->get('reminder'));
 
 <div class="box">
 
-	<h1><?php echo safeToHtml($translation->get('reminder')); ?>: <?php echo safeToHtml($reminder->get('subject')); ?></h1>
+	<h1><?php e($translation->get('reminder')); ?>: <?php e($reminder->get('subject')); ?></h1>
 
 	<ul class="options">
-		<li><a href="reminder_edit.php?id=<?php echo intval($reminder->get('id')); ?>"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a></li>
-		<li><a href="contact.php?id=<?php echo intval($contact->get('id')); ?>"><?php echo safeToHtml($translation->get('close', 'common')); ?></a></li>
+		<li><a href="reminder_edit.php?id=<?php e($reminder->get('id')); ?>"><?php e($translation->get('edit', 'common')); ?></a></li>
+		<li><a href="contact.php?id=<?php e($contact->get('id')); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
 	</ul>
 
 </div>
 
-<form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
-	<input type="hidden" name="id" value="<?php echo $reminder->get('id'); ?>" />
+<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
+	<input type="hidden" name="id" value="<?php e($reminder->get('id')); ?>" />
 	<?php if ($reminder->get('status') == 'created'): ?>
 
-			<input type="submit" value="<?php echo safeToHtml($translation->get('mark as seen')); ?>" name="mark_as_seen" class="confirm" title="<?php echo safeToHtml($translation->get('This will mark the reminder as seen')); ?>" />
-			<input type="submit" value="<?php echo safeToHtml($translation->get('cancel', 'common')); ?>" name="cancel" class="confirm" title="<?php echo safeToHtml($translation->get('This will cancel the reminder')); ?>" />
+			<input type="submit" value="<?php e($translation->get('mark as seen')); ?>" name="mark_as_seen" class="confirm" title="<?php e($translation->get('This will mark the reminder as seen')); ?>" />
+			<input type="submit" value="<?php e($translation->get('cancel', 'common')); ?>" name="cancel" class="confirm" title="<?php e($translation->get('This will cancel the reminder')); ?>" />
 
-			<?php echo safeToHtml($translation->get('postpone')); ?>:
-			<input type="submit" value="<?php echo safeToHtml($translation->get('1 day')); ?>" name="postpone_1_day" class="confirm" title="<?php echo safeToHtml($translation->get('This will postpone the reminder with 1 day')); ?>" />
-			<input type="submit" value="<?php echo safeToHtml($translation->get('1 week')); ?>" name="postpone_1_week" class="confirm" title="<?php echo safeToHtml($translation->get('This will postpone the reminder with 1 week')); ?>" />
-			<input type="submit" value="<?php echo safeToHtml($translation->get('1 month')); ?>" name="postpone_1_month" class="confirm" title="<?php echo safeToHtml($translation->get('This will postpone the reminder with 1 month')); ?>" />
-			<input type="submit" value="<?php echo safeToHtml($translation->get('1 year')); ?>" name="postpone_1_year" class="confirm" title="<?php echo safeToHtml($translation->get('This will postpone the reminder with 1 year')); ?>" />
-			<a href="reminder_edit.php?id=<?php echo intval($reminder->get('id')); ?>"><?php echo safeToHtml($translation->get('other')); ?></a>
+			<?php e($translation->get('postpone')); ?>:
+			<input type="submit" value="<?php e($translation->get('1 day')); ?>" name="postpone_1_day" class="confirm" title="<?php e($translation->get('This will postpone the reminder with 1 day')); ?>" />
+			<input type="submit" value="<?php e($translation->get('1 week')); ?>" name="postpone_1_week" class="confirm" title="<?php e($translation->get('This will postpone the reminder with 1 week')); ?>" />
+			<input type="submit" value="<?php e($translation->get('1 month')); ?>" name="postpone_1_month" class="confirm" title="<?php e($translation->get('This will postpone the reminder with 1 month')); ?>" />
+			<input type="submit" value="<?php e($translation->get('1 year')); ?>" name="postpone_1_year" class="confirm" title="<?php e($translation->get('This will postpone the reminder with 1 year')); ?>" />
+			<a href="reminder_edit.php?id=<?php e($reminder->get('id')); ?>"><?php e($translation->get('other')); ?></a>
 
 	<?php endif; ?>
 </form>
 
 <?php echo $reminder->error->view(); ?>
 
-<p><?php echo safeToHtml(nl2br($reminder->get('description'))); ?></p>
+<p><?php autohtml($reminder->get('description')); ?></p>
 
 <table>
-	<caption><?php echo safeToHtml($translation->get('reminder information')); ?></caption>
+	<caption><?php e($translation->get('reminder information')); ?></caption>
 	<tbody>
 	<tr>
-		<th><?php echo safeToHtml($translation->get('reminder date')); ?></th>
-		<td class="date"><?php echo safeToHtml($reminder->get('dk_reminder_date')); ?></td>
+		<th><?php e($translation->get('reminder date')); ?></th>
+		<td class="date"><?php e($reminder->get('dk_reminder_date')); ?></td>
 	</tr>
 
 	<tr>
-		<th><?php echo safeToHtml($translation->get('status')); ?></th>
-		<td><?php echo safeToHtml($reminder->get('status')); ?></td>
+		<th><?php e($translation->get('status')); ?></th>
+		<td><?php e($reminder->get('status')); ?></td>
 	</tr>
 
 	<tr>
-		<th><?php echo safeToHtml($translation->get('created date')); ?></th>
-		<td class="date"><?php echo safeToHtml($reminder->get('dk_date_created')); ?></td>
+		<th><?php e($translation->get('created date')); ?></th>
+		<td class="date"><?php e($reminder->get('dk_date_created')); ?></td>
 	</tr>
 
 </div>

@@ -51,12 +51,12 @@ class Intraface_modules_contact_PdfLabel extends Intraface_Pdf
         // Search info on first label
         $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top , $this->get('font_size'), "<b>Søgning</b>");
         $line = 1;
-        if($search != "") {
+        if ($search != "") {
             $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top - $this->get('font_spacing'), $this->get('font_size'), "Søgetekst: ".$search);
             $line++;
         }
         
-        if(is_array($keywords) && count($keywords) > 0) {
+        if (is_array($keywords) && count($keywords) > 0) {
             $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top - $this->get('font_spacing') * $line, $this->get('font_size'), "Nøgleord: ".implode(", ", $keywords));
             $line++;
         }
@@ -65,12 +65,12 @@ class Intraface_modules_contact_PdfLabel extends Intraface_Pdf
         
         // The contacts on labels
         
-        for($i = 0, $max = count($contacts); $i < $max; $i++) {
+        for ($i = 0, $max = count($contacts); $i < $max; $i++) {
         
             
             // TODO -- hvorfor bruger vi ikke antallet af labels til at vide, hvornår
             // vi skifter linje? Vi kender faktisk ikke antallet af labels i en række. Det kunne vi selvfølgelig komme til
-            if($this->get('x') + $this->label_width  > $this->get('right_margin_position')) {
+            if ($this->get('x') + $this->label_width  > $this->get('right_margin_position')) {
                 // For enden af linjen, ny linje
                 $this->setY("-".$this->label_height);
                 $this->setX(0);
@@ -82,22 +82,19 @@ class Intraface_modules_contact_PdfLabel extends Intraface_Pdf
             }
         
         
-            if($this->get('y') - $this->label_height < $this->get('margin_bottom')) {
+            if ($this->get('y') - $this->label_height < $this->get('margin_bottom')) {
                 // Hvis næste labelsrække ikke kan nå at være der tager vi en ny side.
                 $this->newPage();
                 $this->setX(0);
                 $this->setY(0);
             }
         
-            // print("X".$this->get('x')."Y".$this->get('y'));
-        
-        
             $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top , $this->get('font_size'), "<b>".$contacts[$i]['number']."</b>");
             $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top - $this->get('font_spacing'), $this->get('font_size'), "<b>".$contacts[$i]['name']."</b>");
             $line = 2;
             $address_lines = explode("\n", $contacts[$i]['address']['address']);
-            foreach($address_lines AS $l) {
-                if(trim($l) != "") {
+            foreach ($address_lines AS $l) {
+                if (trim($l) != "") {
                     $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top - $this->get('font_spacing') * $line, $this->get('font_size'), $l);
                     $line++;
                 }

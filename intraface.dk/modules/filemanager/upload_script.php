@@ -4,7 +4,7 @@ require('../../include_first.php');
 $module = $kernel->module("filemanager");
 $translation = $kernel->getTranslation('filemanager');
 
-if(!empty($_FILES)) {
+if (!empty($_FILES)) {
     ?>
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
         <html xmlns="http://www.w3.org/1999/xhtml" lang="da">
@@ -28,13 +28,13 @@ if(!empty($_FILES)) {
                         $filemanager->load();
                         ?>
                         var input_new = par.createElement('input');
-                        // input_new.setAttribute("value", <?php echo $filemanager->get('id'); ?>); // Ser herunder
+                        // input_new.setAttribute("value", <?php e($filemanager->get('id')); ?>); // Ser herunder
                         input_new.setAttribute("name", 'addfile[]');
                         input_new.setAttribute("type", 'checkbox');
                         input_new.setAttribute("id", "input-test");
 
 
-                        image_new.src = '<?php echo $filemanager->get('icon_uri'); ?>';
+                        image_new.src = '<?php e($filemanager->get('icon_uri')); ?>';
                         image_new.className = 'loaded';
                         imgdiv.appendChild(image_new);
                         imgdiv.appendChild(br_new);
@@ -43,13 +43,13 @@ if(!empty($_FILES)) {
                         /* IE HACK */
                         // IE forstår ikke set attribute, så derfor må vi gøre det uden for DOM bagefter!
                         input_new.checked = true;
-                        input_new.value = <?php echo $filemanager->get('id'); ?>;
+                        input_new.value = <?php e($filemanager->get('id')); ?>;
 
                         <?php
                     }
                     else {
                         ?>
-                        image_new.src = '<?php echo PATH_WWW.'images/upload_error.jpg'; ?>';
+                        image_new.src = '<?php e(url('/images/upload_error.jpg')); ?>';
                         image_new.className = 'loaded';
                         imgdiv.appendChild(image_new);
                         imgdiv.appendChild(br_new);
@@ -90,7 +90,7 @@ function upload() {
     var images = par.getElementById('images');
     var new_div = par.createElement('div');
     var new_img = par.createElement('img');
-    new_img.src = '<?php print(PATH_WWW.'images/indicator.gif'); ?>';
+    new_img.src = '<?php e(url('/images/indicator.gif')); ?>';
     new_img.className = 'load';
     new_div.appendChild(new_img);
     images.appendChild(new_div);
@@ -136,7 +136,7 @@ body {
 <body>
         <form name="iform" action="upload_script.php" method="post" enctype="multipart/form-data">
             <div class="formrow">
-                <label><?php echo safeToHtml($translation->get('file')); ?></label>
+                <label><?php e($translation->get('file')); ?></label>
                 <input id="file" type="file" name="file" onchange="upload()" /><input type="hidden" name="imgnum" />
             </div>
         </form>

@@ -24,8 +24,8 @@ if (!empty($_POST)) {
 		// valideret subject og body
 		$j = 0;
 
-		for($i = 0, $max = count($contacts); $i < $max; $i++) {
-			if(!$validator->isEmail($contacts[$i]['email'], "")) {
+		for ($i = 0, $max = count($contacts); $i < $max; $i++) {
+			if (!$validator->isEmail($contacts[$i]['email'], "")) {
 				// Hvis de ikke har en mail, kører vi videre med næste.
 				continue;
 			}
@@ -70,18 +70,18 @@ $page->start('Rediger e-mail');
 
 	<?php echo $contact->error->view(); ?>
 
-<p class="message">Du er ved at sende en e-mail til <?php echo count($contacts); ?> kontakter. Vi sender naturligvis kun til de kontakter, der har en e-mail-adresse.</p>
+<p class="message">Du er ved at sende en e-mail til <?php e(count($contacts)); ?> kontakter. Vi sender naturligvis kun til de kontakter, der har en e-mail-adresse.</p>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 	<fieldset>
 
 	<div class="formrow">
 		<label for="title">Titel</label>
-		<input type="text" name="subject" size="60" value="<?php if (!empty($value['subject'])) echo htmlspecialchars($value['subject']); ?>" />
+		<input type="text" name="subject" size="60" value="<?php if (!empty($value['subject'])) e($value['subject']); ?>" />
 	</div>
 	<div class="formrow">
 		<label for="">Tekst</label>
-		<textarea name="text" cols="90" rows="20"><?php if (!empty($value['subject'])) echo htmlspecialchars($value['text']); ?></textarea>
+		<textarea name="text" cols="90" rows="20"><?php if (!empty($value['subject'])) e($value['text']); ?></textarea>
 	</div>
 	<div>
 		<input type="submit" name="submit" value="Send" class="save" /> <a href="index.php?use_stored=true">Fortryd</a>

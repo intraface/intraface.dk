@@ -54,7 +54,7 @@ class Intraface_Auth_User
         }
         
         $user = new Intraface_User($row['id']);
-		if(!is_object($user) || $user->get('id') != $row['id']) {
+		if (!is_object($user) || $user->get('id') != $row['id']) {
 		    throw new Exception('Unable to return a valid user object on login');
 		}
         

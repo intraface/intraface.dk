@@ -55,7 +55,7 @@ class Intraface_Main
         $this->kernel = $kernel;
 
         if (is_array($this->required_shared) && count($this->required_shared) > 0) {
-            foreach($this->required_shared AS $shared_name) {
+            foreach ($this->required_shared AS $shared_name) {
                 $this->kernel->useShared($shared_name);
             }
         }
@@ -231,16 +231,17 @@ class Intraface_Main
         // @todo global should be removed
         global $_setting; // globalized other places also
         // @todo constant should be removed
-        include(PATH_INCLUDE_MODULE.$this->module_name."/".$file);
+        include(dirname(__FILE__). '/modules/' .$this->module_name.'/'.$file);
     }
 
     /**
+     * Returns the www path for the modules; always ends on a slash
+     *
      * @return string
      */
-    function getPath()
+    public function getPath()
     {
-        // @todo constant should be removed
-        return(PATH_WWW_MODULE.$this->module_name."/");
+        return url('/modules/' . $this->module_name) . '/';
     }
 
     /**

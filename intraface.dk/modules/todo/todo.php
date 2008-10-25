@@ -56,11 +56,11 @@ if (!empty($_POST)) {
     }
 } else {
     $todo = new TodoList($kernel, $_REQUEST['id']);
-    if(isset($_GET['action']) && $_GET['action'] == "moveup") {
+    if (isset($_GET['action']) && $_GET['action'] == "moveup") {
         $todo->getItem($_GET['item_id'])->getPosition(MDB2::singleton(DB_DSN))->moveUp();
     }
 
-    if(isset($_GET['action']) && $_GET['action'] == "movedown") {
+    if (isset($_GET['action']) && $_GET['action'] == "movedown") {
         $todo->getItem($_GET['item_id'])->getPosition(MDB2::singleton(DB_DSN))->moveDown();
     }
 
@@ -87,7 +87,7 @@ $page->start(t('Edit todo'));
 
     <input type="hidden" name="id" value="<?php e($value['id']); ?>" />
     <fieldset>
-    <?php foreach($value['todo'] AS $i): ?>
+    <?php foreach ($value['todo'] AS $i): ?>
         <div>
             <?php if ($i['status'] == 1 AND empty($headline)) { echo '<h4>'.t('Finished').'</h4>'; $headline = true; } ?>
           <label <?php  if ($i['status'] == 1) echo ' class="completed"'; ?>>

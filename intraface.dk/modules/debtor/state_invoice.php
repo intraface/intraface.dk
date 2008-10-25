@@ -10,10 +10,10 @@ $year = new Year($kernel);
 $voucher = new Voucher($year);
 
 if (!empty($_POST)) {
-    
+
     $debtor = Debtor::factory($kernel, intval($_POST["id"]));
-    
-    if($debtor->get('type') != 'invoice') {
+
+    if ($debtor->get('type') != 'invoice') {
         trigger_error('You can only state invoice from this page', E_USER_ERROR);
         exit;
     }
@@ -39,11 +39,11 @@ if (!empty($_POST)) {
     }
 } else {
     $debtor = Debtor::factory($kernel, intval($_GET["id"]));
-    if($debtor->get('type') != 'invoice') {
+    if ($debtor->get('type') != 'invoice') {
         trigger_error('You can only state invoice from this page', E_USER_ERROR);
         exit;
     }
-    
+
     $debtor->loadItem();
 }
 
@@ -56,22 +56,22 @@ $page->start($translation->get('State invoice'));
 <h1>Bogfør faktura #<?php e($debtor->get('number')); ?></h1>
 
 <ul class="options">
-    <li><a href="view.php?id=<?php print(intval($debtor->get("id"))); ?>">Luk</a></li>
-    <li><a href="list.php?type=invoice&amp;id=<?php print(intval($debtor->get("id"))); ?>&amp;use_stored=true">Tilbage til fakturaoversigten</a></li>
+    <li><a href="view.php?id=<?php e($debtor->get("id")); ?>">Luk</a></li>
+    <li><a href="list.php?type=invoice&amp;id=<?php e($debtor->get("id")); ?>&amp;use_stored=true">Tilbage til fakturaoversigten</a></li>
 </ul>
 
 <?php if (!$year->readyForState($debtor->get('this_date'))): ?>
     <?php echo $year->error->view(); ?>
-    <p>Gå til <a href="<?php echo $accounting_module->getPath().'years.php'; ?>">regnskabet</a></p>
+    <p>Gå til <a href="<?php e($accounting_module->getPath().'years.php'); ?>">regnskabet</a></p>
 <?php else: ?>
 
     <p class="message">Når du bogfører fakturaerne vil det skyldige beløb blive sat på debitorkontoen. Når kunden har betalt, skal betalingen bogføres for at overføre beløbet fra debitorkontoen til din indkomst konto (fx Bankkonto).</p>
-    
-    <?php $debtor->readyForState($year, 'skip_check_products'); ?>  
+
+    <?php $debtor->readyForState($year, 'skip_check_products'); ?>
     <?php echo $debtor->error->view(); ?>
-    
-    <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
-    <input type="hidden" value="<?php echo intval($debtor->get('id')); ?>" name="id" />
+
+    <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+    <input type="hidden" value="<?php e($debtor->get('id')); ?>" name="id" />
     <fieldset>
         <legend>Faktura</legend>
         <table>
@@ -85,7 +85,7 @@ $page->start($translation->get('State invoice'));
             </tr>
         </table>
     </fieldset>
-    
+
     <?php  if ($debtor->readyForState($year, 'skip_check_products')): ?>
         <fieldset>
             <legend>Oplysninger der bogføres</legend>
@@ -100,9 +100,9 @@ $page->start($translation->get('State invoice'));
                 </tr>
             </table>
         </fieldset>
-    
-    
-    
+
+
+
         <table class="stripe">
             <thead>
                 <tr>
@@ -115,16 +115,16 @@ $page->start($translation->get('State invoice'));
             <tbody>
                 <?php
                 $total = 0;
-                if(isset($items[0]["vat"])) {
+                if (isset($items[0]["vat"])) {
                     $vat = $items[0]["vat"]; // Er der moms på det første produkt
                 } else {
                     $vat = 0;
                 }
-        
-                for($i = 0, $max = count($items); $i<$max; $i++) {
+
+                for ($i = 0, $max = count($items); $i<$max; $i++) {
                     $product = new Product($kernel, $items[$i]['product_id']);
                     $account = Account::factory($year, $product->get('state_account_id'));
-        
+
                     $total += $items[$i]["quantity"] * $items[$i]["price"]->getAsIso(2);
                     $vat = $items[$i]["vat"];
                     ?>
@@ -133,26 +133,28 @@ $page->start($translation->get('State invoice'));
                         <td><?php e($items[$i]["name"]); ?></td>
                         <td><?php e(amountToOutput($items[$i]["quantity"]*$items[$i]["price"]->getAsIso(2))); ?></td>
                         <td>
-                            <?php if (!$debtor->isStated()): 
+                            <?php if (!$debtor->isStated()):
                                 $year = new Year($kernel);
                                 $year->loadActiveYear();
                                 $accounts =  $account->getList('sale');
                                 ?>
-                                <select id="state_account" name="state_account_id[<?php echo $product->get('id'); ?>]">
+                                <select id="state_account" name="state_account_id[<?php e($product->get('id')); ?>]">
                                     <option value="">Vælg...</option>
                                     <?php
                                     $x = 0;
                                     $optgroup = 1;
-                                    foreach($accounts AS $a):
+                                    foreach ($accounts AS $a):
                                         if (strtolower($a['type']) == 'sum') continue;
                                         if (strtolower($a['type']) == 'headline') continue;
-                                        
-                                        echo '<option value="'. $a['number'].'"';
+                                        ?>
+                                        <option value="<?php e($a['number']); ?>"
+                                        <?php
                                         // er det korrekt at det er number? og måske skal et produkt i virkeligheden snarere
                                         // gemmes med nummeret en med id - for så er det noget lettere at opdatere fra år til år
                                         if ($product->get('state_account_id') == $a['number']) echo ' selected="selected"';
-                                        echo '>'.safeToForm($a['name']).'</option>';
-                                        $optgroup = 0;
+                                        ?>
+                                        ><?php e($a['name']); ?></option>
+                                        <?php $optgroup = 0;
                                     endforeach;
                                     ?>
                                 </select>
@@ -162,7 +164,7 @@ $page->start($translation->get('State invoice'));
                         </td>
                     </tr>
                     <?php
-                    if($vat == 1 && (!isset($items[$i+1]["vat"]) || $items[$i+1]["vat"] == 0)) {
+                    if ($vat == 1 && (!isset($items[$i+1]["vat"]) || $items[$i+1]["vat"] == 0)) {
                         ?>
                         <tr>
                             <td>&nbsp;</td>

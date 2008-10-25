@@ -20,7 +20,7 @@ class FakeDBQueryKernel {
     {
         $this->user = new FakeDBQueryUser;
         $this->intranet = new FakeDBQueryIntranet;
-        if($session_id == '') {
+        if ($session_id == '') {
             $this->session_id = 'dkm30dekcmek3dk30dkqdlfrjdi3i2jdnft';
         }
         else {

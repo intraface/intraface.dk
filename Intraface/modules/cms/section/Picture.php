@@ -24,7 +24,7 @@ class Intraface_modules_cms_section_Picture extends CMS_Section
         $this->cmspage->kernel->useShared('filehandler');
         $this->value['picture'] = array();
 
-        if($this->value['pic_id'] == 0) return;
+        if ($this->value['pic_id'] == 0) return;
 
 
         $filemanager = new FileHandler($this->cmspage->kernel, $this->value['pic_id']);
@@ -61,13 +61,12 @@ class Intraface_modules_cms_section_Picture extends CMS_Section
             $filehandler->upload->setSetting('file_accessibility', 'public');
             $id = $filehandler->upload->upload('new_picture_'.$key);
 
-            if($id != 0) {
+            if ($id != 0) {
                 $var['pic_id'] = $id;
             }
         }
         */
 
-        //print_r($_FILES);
         /*
         if (!empty($var['delete_picture'])) {
             $var['pic_id'] = 0;
@@ -75,7 +74,7 @@ class Intraface_modules_cms_section_Picture extends CMS_Section
         elseif (!empty($_FILES) AND !empty($_FILES['userfile']['name'][$this->get('id')])) {
             $filehandler = new FileHandler($this->cmspage->kernel);
             $filehandler->loadUpload();
-            if(!$id = $filehandler->upload->upload('userfile['.$this->get('id').']')) {
+            if (!$id = $filehandler->upload->upload('userfile['.$this->get('id').']')) {
                 trigger_error('Kunne ikke uploade filen');
             }
             $var['pic_id'] = $id;

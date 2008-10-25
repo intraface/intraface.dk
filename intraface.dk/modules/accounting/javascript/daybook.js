@@ -121,12 +121,12 @@ var daybook = {
 			return false;
 		}
 	},
-
 	account_window_open: function(account_id) {
 		var accountlist = window.open("daybook_list_accounts.php?"+account_id, "accountlist", "height=600, width=350, scrollbars=yes");
 		if (!accountlist) return;
 		accountlist.window.focus();
 
+        // @todo make sure this closes the window again
 		window.onunload = function() {
 			if (accountlist && accountlist.open && !accountlist.closed) {
 				accountlist.close();

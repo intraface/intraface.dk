@@ -36,7 +36,7 @@ $filehandler_shared = $kernel->useShared('filehandler');
 $filehandler_shared->includeFile('FileViewer.php');
 
 $filehandler = FileHandler::factory($kernel, $query_parts[2]);
-if(!is_object($filehandler) || $filehandler->get('id') == 0) {
+if (!is_object($filehandler) || $filehandler->get('id') == 0) {
 
     // require_once 'HTTP/Header.php';
     // $h = new HTTP_Header;
@@ -44,7 +44,6 @@ if(!is_object($filehandler) || $filehandler->get('id') == 0) {
 
     header('HTTP/1.0 404 Not Found');
     // header('Status: 404 Not Found');
-    // print_r(headers_list());
     // trigger_error('Invalid image: '.$_SERVER['QUERY_STRING'], E_USER_WARNING);
     exit;
 }
@@ -52,7 +51,7 @@ if(!is_object($filehandler) || $filehandler->get('id') == 0) {
 settype($query_parts[3], 'string');
 $fileviewer = new FileViewer($filehandler, $query_parts[3]);
 
-if($fileviewer->needLogin()) {
+if ($fileviewer->needLogin()) {
     session_start();
     $auth = new Intraface_Auth(session_id());
     if (!$auth->hasIdentity()) {
@@ -62,7 +61,7 @@ if($fileviewer->needLogin()) {
 
     $user = $auth->getIdentity(MDB2::singleton(DB_DSN));
     $intranet = new Intraface_Intranet($user->getActiveIntranetId());
-    if($intranet->getId() != $kernel->intranet->getId()) {
+    if ($intranet->getId() != $kernel->intranet->getId()) {
         trigger_error('You where not logged into the correct intranet to view the file', E_USER_WARNING);
         exit;
     }

@@ -19,7 +19,7 @@ class Intraface_modules_debtor_PaymentMethod
      */
     public function getByName($method, $id = 0)
     {
-        if(!ereg("^[a-zA-Z0-9]+$", $method)) {
+        if (!ereg("^[a-zA-Z0-9]+$", $method)) {
             throw new Exception('Invalid method name "'.$method.'"');
         }
         
@@ -33,7 +33,7 @@ class Intraface_modules_debtor_PaymentMethod
      */
     public function getById($key, $id = 0)
     {
-        if(!isset($this->types[$key])) {
+        if (!isset($this->types[$key])) {
             throw new Exception('Invalid payment method id');
         }
         
@@ -46,7 +46,7 @@ class Intraface_modules_debtor_PaymentMethod
     public function getAll()
     {
         $types = array();
-        foreach($this->types AS $key => $type) {
+        foreach ($this->types AS $key => $type) {
             $types[$key] = $this->getByName($type);
         }
         return $types;

@@ -7,20 +7,20 @@ $module->includeFile('ActionStore.php');
 
 $translation = $kernel->getTranslation('modulepackage');
 
-if(!empty($_POST)) {
+if (!empty($_POST)) {
     $modulepackage = new Intraface_modules_modulepackage_ModulePackage(intval($_POST['id']));
     $modulepackagemanager = new Intraface_modules_modulepackage_Manager($kernel->intranet);
     
     $add_type = $modulepackagemanager->getAddType($modulepackage);
     
     $values = $_POST;
-    if(!$kernel->intranet->address->validate($values) || !$kernel->intranet->address->save($values)) {
+    if (!$kernel->intranet->address->validate($values) || !$kernel->intranet->address->save($values)) {
         // Here we need to know the errors from address, but it does not validate now!
         $modulepackagemanager->error->set('there was an error in your address informations');
         $modulepackagemanager->error->merge($kernel->intranet->address->error->getMessage());
     }
     else {
-        if(!isset($_POST['accept_conditions']) || $_POST['accept_conditions'] != '1') {
+        if (!isset($_POST['accept_conditions']) || $_POST['accept_conditions'] != '1') {
             $modulepackagemanager->error->set('You need to accept the conditions of sale and use');
         }
         else {
@@ -41,9 +41,9 @@ if(!empty($_POST)) {
                     exit;   
             }
             
-            if(!$modulepackagemanager->error->isError()) {
+            if (!$modulepackagemanager->error->isError()) {
                 $action_store = new Intraface_modules_modulepackage_ActionStore($kernel->intranet->get('id'));
-                if($action->hasAddActionWithProduct()) {
+                if ($action->hasAddActionWithProduct()) {
                     
                     $contact = $kernel->intranet->address->get();
                     // The following we do not want to transfer as this can give problems.
@@ -53,7 +53,7 @@ if(!empty($_POST)) {
                     unset($contact['address_id']);
                     
                     // If the intranet address is different from the user it is probably a company.
-                    if($kernel->intranet->address->get('name') != $kernel->user->getAddress()->get('name')) {
+                    if ($kernel->intranet->address->get('name') != $kernel->user->getAddress()->get('name')) {
                         $contact['contactperson'] = $kernel->user->getAddress()->get('name');
                         $contact['contactemail'] = $kernel->user->getAddress()->get('email');
                         $contact['contactphone'] =  $kernel->user->getAddress()->get('phone');
@@ -63,7 +63,7 @@ if(!empty($_POST)) {
                     $contact['contact_id'] = (int)$kernel->intranet->get('contact_id'); 
                     
                     // we place the order.
-                    if(!$action->placeOrder($contact, Intraface_Mail::factory())) {
+                    if (!$action->placeOrder($contact, Intraface_Mail::factory())) {
                         trigger_error("Unable to place the order", E_USER_ERROR);
                         exit;
                     }
@@ -74,7 +74,7 @@ if(!empty($_POST)) {
                     $total_price = 0;
                 }
                     
-                if(!$action_store_id = $action_store->store($action)) {
+                if (!$action_store_id = $action_store->store($action)) {
                     trigger_error("Unable to store Action!", E_USER_ERROR);
                     exit;
                 }
@@ -82,11 +82,11 @@ if(!empty($_POST)) {
                 // TODO: What do we do if the onlinepayment is not running?
                     
                 // Notice: Only if the price is more than zero we continue to the payment page, otherwise we contibue to the process page further down.
-                if(isset($action_store_id) && $action_store_id > 0 && $total_price > 0) {
+                if (isset($action_store_id) && $action_store_id > 0 && $total_price > 0) {
                     header('location: payment.php?action_store_id='.$action_store_id);
                     exit;
                 }
-                elseif(isset($action_store_id) && $action_store_id > 0) {
+                elseif (isset($action_store_id) && $action_store_id > 0) {
                     header('location: process.php?action_store_id='.intval($action_store_id));
                     exit;
                 }
@@ -98,10 +98,10 @@ if(!empty($_POST)) {
         }
     }
 }
-elseif(isset($_GET['id'])) {
+elseif (isset($_GET['id'])) {
     $modulepackage = new Intraface_modules_modulepackage_ModulePackage(intval($_GET['id']));
     $modulepackagemanager = new Intraface_modules_modulepackage_Manager($kernel->intranet);
-    if($modulepackage->get('id') == 0) {
+    if ($modulepackage->get('id') == 0) {
         trigger_error("Invalid id", E_USER_ERROR);
         exit;
     }
@@ -118,42 +118,42 @@ else {
 $modulepackageshop = new Intraface_modules_modulepackage_ShopExtension();
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get($add_type).' '.$translation->get('package')));
+$page->start($translation->get($add_type).' '.$translation->get('package'));
 ?>
 
-<h1><?php echo safeToHtml($translation->get($add_type).' '.$translation->get('package')); ?></h1>
+<h1><?php e($translation->get($add_type).' '.$translation->get('package')); ?></h1>
 
 <?php echo $modulepackagemanager->error->view(); ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 <fieldset>
-    <legend><?php echo safeToHtml($translation->get('your selected package')); ?></legend>
+    <legend><?php e($translation->get('your selected package')); ?></legend>
     <div class="formrow">
-        <label for="package"><?php echo safeToHtml($translation->get('package')); ?></label>
-        <span id="package"><?php echo safeToHtml($translation->get($modulepackage->get('plan')).' '.$translation->get($modulepackage->get('group'))); ?> <input type="hidden" name="id" value="<?php echo intval($modulepackage->get('id')); ?>" /></span>
+        <label for="package"><?php e($translation->get('package')); ?></label>
+        <span id="package"><?php e($translation->get($modulepackage->get('plan')).' '.$translation->get($modulepackage->get('group'))); ?> <input type="hidden" name="id" value="<?php e($modulepackage->get('id')); ?>" /></span>
     </div>
     
     <div class="formrow">
         <?php
         
         ?>
-        <label for="price"><?php echo safeToHtml($translation->get('price')); ?></label>
-        <span id="price"><?php $product = $modulepackageshop->getProduct((int)$modulepackage->get('product_id')); if(isset($product['price_incl_vat'])): echo safeToHtml('DKK '.$product['price_incl_vat']).' '.$translation->get('per').' '.$translation->get($product['unit']['singular']); else: echo 'free!'; endif; ?></span>
+        <label for="price"><?php e($translation->get('price')); ?></label>
+        <span id="price"><?php $product = $modulepackageshop->getProduct((int)$modulepackage->get('product_id')); if (isset($product['price_incl_vat'])): e('DKK '.$product['price_incl_vat']).' '.$translation->get('per').' '.$translation->get($product['unit']['singular']); else: echo 'free!'; endif; ?></span>
     </div>
     
     <div class="formrow">
-        <label for="modules"><?php echo safeToHtml($translation->get('gives you the following modules')); ?></label>
+        <label for="modules"><?php e($translation->get('gives you the following modules')); ?></label>
         <span id="modules">
             <?php 
             $modules = $modulepackage->get('modules');
             $limiters = array();
-            for($j = 0, $max = count($modules); $j < $max; $j++) {
-                if($j != 0) {
-                    echo ', ';
+            for ($j = 0, $max = count($modules); $j < $max; $j++) {
+                if ($j != 0) {
+                    e(', ');
                 }
-                echo $translation->get($modules[$j]['module']);
-                if(is_array($modules[$j]['limiters']) && count($modules[$j]['limiters']) > 0) {
+                e($translation->get($modules[$j]['module']));
+                if (is_array($modules[$j]['limiters']) && count($modules[$j]['limiters']) > 0) {
                     $limiters = array_merge($limiters, $modules[$j]['limiters']);
                 }  
             }
@@ -162,22 +162,22 @@ $page->start(safeToHtml($translation->get($add_type).' '.$translation->get('pack
     </div>
     
     <div class="formrow">
-        <label for="limiters"><?php echo safeToHtml($translation->get('and gives you')); ?></label>
+        <label for="limiters"><?php e($translation->get('and gives you')); ?></label>
         <span id="limiters">
             <?php 
-            if(is_array($limiters) && count($limiters) > 0) {
-                foreach($limiters AS $limiter) {
-                    echo safeToHtml($translation->get($limiter['description']).' ');
-                    if(isset($limiter['limit_readable'])) {
-                        echo safeToHtml($limiter['limit_readable']);
+            if (is_array($limiters) && count($limiters) > 0) {
+                foreach ($limiters AS $limiter) {
+                    e($translation->get($limiter['description']).' ');
+                    if (isset($limiter['limit_readable'])) {
+                        e($limiter['limit_readable']);
                     }
                     else {
-                        echo safeToHtml($limiter['limit']);
+                        e($limiter['limit']);
                     }
                 }
             }
             else {
-                echo safeToHtml($translation->get('no limitations at all, isn\'t that nice!'));
+                e($translation->get('no limitations at all, isn\'t that nice!'));
             }
             ?>
         </span>
@@ -192,7 +192,7 @@ $modulepackagemanager->getDBQuery()->setFilter('sorting', 'end_date');
 $existing_modulepackages = $modulepackagemanager->getList();
 
 // default start date is today
-if($add_type == 'extend' && count($existing_modulepackages) > 0 && isset($existing_modulepackages[count($existing_modulepackages)-1]['dk_start_date'])) {
+if ($add_type == 'extend' && count($existing_modulepackages) > 0 && isset($existing_modulepackages[count($existing_modulepackages)-1]['dk_start_date'])) {
     $end_date_integer = strtotime($existing_modulepackages[count($existing_modulepackages)-1]['end_date']);
     // the new start day is the day after the last package ends
     $start_date = date('d-m-Y', strtotime('+1 day', $end_date_integer));
@@ -201,35 +201,35 @@ else {
     $start_date = date('d-m-Y');
 }
 
-if(is_array($existing_modulepackages) && count($existing_modulepackages) > 0):
+if (is_array($existing_modulepackages) && count($existing_modulepackages) > 0):
     ?>
     <fieldset>
-        <legend><?php echo safeToHtml($translation->get('your existing packages')); ?></legend>
+        <legend><?php e($translation->get('your existing packages')); ?></legend>
         
         <table class="stripe">
             <thead>
                 <tr>
-                    <th><?php echo safeToHtml($translation->get('package')); ?></th>
-                    <th><?php echo safeToHtml($translation->get('end date')); ?></th>
-                    <?php if($add_type == 'upgrade'): ?>
-                        <th><?php echo safeToHtml($translation->get('balance in your favour')); ?></th>
+                    <th><?php e($translation->get('package')); ?></th>
+                    <th><?php e($translation->get('end date')); ?></th>
+                    <?php if ($add_type == 'upgrade'): ?>
+                        <th><?php e($translation->get('balance in your favour')); ?></th>
                     <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($existing_modulepackages AS $package): ?>
+                <?php foreach ($existing_modulepackages AS $package): ?>
                     <tr>    
-                        <td><?php echo safeToHtml($translation->get($package['plan']).' '.$translation->get($package['group'])); ?></td>
-                        <td><?php echo safeToHtml($package['dk_end_date']); ?></td>
-                        <?php if($add_type == 'upgrade'): ?>
+                        <td><?php e($translation->get($package['plan']).' '.$translation->get($package['group'])); ?></td>
+                        <td><?php e($package['dk_end_date']); ?></td>
+                        <?php if ($add_type == 'upgrade'): ?>
                             <td></td>
                         <?php endif; ?>
                     </tr>
                 <?php endforeach; ?>
              </tbody>
          </table>
-         <?php if($add_type == 'upgrade'): ?>
-            <p><?php echo safeToHtml($translation->get('your balance will be deducted from your new upgrade price')); ?></p>
+         <?php if ($add_type == 'upgrade'): ?>
+            <p><?php e($translation->get('your balance will be deducted from your new upgrade price')); ?></p>
          <?php endif; ?>
     </fieldset>
     <?php
@@ -237,71 +237,71 @@ endif;
 ?>
 
 <fieldset>
-    <legend><?php echo safeToHtml($translation->get('choose periode')); ?></legend>
+    <legend><?php e($translation->get('choose periode')); ?></legend>
     <div class="formrow">
-        <label for="start_date"><?php echo safeToHtml($translation->get('start dato')); ?></label>
-        <span id="start_date"><?php echo $start_date; ?></span>
+        <label for="start_date"><?php e($translation->get('start dato')); ?></label>
+        <span id="start_date"><?php e($start_date); ?></span>
     </div>
     
     
     <div class="formrow">
-        <label for="duration_month"><?php echo safeToHtml($translation->get('periode')); ?></label>
+        <label for="duration_month"><?php e($translation->get('periode')); ?></label>
         <select name="duration_month" id="duration_month">
-            <option value="12"><?php echo safeToHtml('1 '.$translation->get('year')); if(isset($product['price_incl_vat'])): echo safeToHtml(' (DKK '.($product['price_incl_vat']*12).')'); endif; ?></option>
-            <option value="24"><?php echo safeToHtml('2 '.$translation->get('years')); if(isset($product['price_incl_vat'])): echo safeToHtml(' (DKK '.($product['price_incl_vat']*24).')'); endif;  ?></option>
+            <option value="12"><?php e('1 '.$translation->get('year')); if (isset($product['price_incl_vat'])): e(' (DKK '.($product['price_incl_vat']*12).')'); endif; ?></option>
+            <option value="24"><?php e('2 '.$translation->get('years')); if (isset($product['price_incl_vat'])): e(' (DKK '.($product['price_incl_vat']*24).')'); endif;  ?></option>
         </select>    
     </div>
     
 </fieldset>
 
 <fieldset>
-    <legend><?php echo safeToHtml($translation->get('make sure your address informations are correct')); ?></legend>
+    <legend><?php e($translation->get('make sure your address informations are correct')); ?></legend>
     <?php
     $address = $kernel->intranet->address->get();
     ?>
     <div class="formrow">
-        <label for="name"><?php echo safeToHtml($translation->get('name', 'address')); ?></label>
-        <input type="text" name="name" id="name" value="<?php if(isset($address['name'])) echo safeToHtml($address["name"]); ?>" />
+        <label for="name"><?php e($translation->get('name', 'address')); ?></label>
+        <input type="text" name="name" id="name" value="<?php if (isset($address['name'])) e($address["name"]); ?>" />
     </div>
     <div class="formrow">
-        <label for="address"><?php echo safeToHtml($translation->get('address', 'address')); ?></label>
-        <textarea name="address" id="address" rows="2"><?php if(isset($address['address'])) echo safeToHtml($address["address"]); ?></textarea>
+        <label for="address"><?php e($translation->get('address', 'address')); ?></label>
+        <textarea name="address" id="address" rows="2"><?php if (isset($address['address'])) e($address["address"]); ?></textarea>
     </div>
     <div class="formrow">
-        <label for="postcode"><?php echo safeToHtml($translation->get('postal code and city', 'address')); ?></label>
+        <label for="postcode"><?php e($translation->get('postal code and city', 'address')); ?></label>
         <div>
-            <input type="text" name="postcode" id="postcode" value="<?php if(isset($address['postcode'])) echo safeToHtml($address["postcode"]); ?>" size="4" />
-            <input type="text" name="city" id="city" value="<?php if(isset($address['city'])) echo safeToHtml($address["city"]); ?>" />
+            <input type="text" name="postcode" id="postcode" value="<?php if (isset($address['postcode'])) e($address["postcode"]); ?>" size="4" />
+            <input type="text" name="city" id="city" value="<?php if (isset($address['city'])) e($address["city"]); ?>" />
         </div>
     </div>
     <div class="formrow">
-        <label for="country"><?php echo safeToHtml($translation->get('country', 'address')); ?></label>
-        <input type="text" name="country" id="country" value="<?php if(isset($address['country'])) echo safeToHtml($address["country"]); ?>" />
+        <label for="country"><?php e($translation->get('country', 'address')); ?></label>
+        <input type="text" name="country" id="country" value="<?php if (isset($address['country'])) e($address["country"]); ?>" />
     </div>
     <div class="formrow">
-        <label for="cvr"><?php echo safeToHtml($translation->get('cvr number', 'address')); ?></label>
-        <input type="text" name="cvr" id="cvr" value="<?php if(isset($address['cvr'])) echo safeToHtml($address["cvr"]); ?>" />
+        <label for="cvr"><?php e($translation->get('cvr number', 'address')); ?></label>
+        <input type="text" name="cvr" id="cvr" value="<?php if (isset($address['cvr'])) e($address["cvr"]); ?>" />
     </div>
     <div class="formrow">
-        <label for="email"><?php echo safeToHtml($translation->get('e-mail', 'address')); ?></label>
-        <input type="text" name="email" id="email" value="<?php if(isset($address['email'])) echo safeToHtml($address["email"]); ?>" />
+        <label for="email"><?php e($translation->get('e-mail', 'address')); ?></label>
+        <input type="text" name="email" id="email" value="<?php if (isset($address['email'])) e($address["email"]); ?>" />
     </div>
     <div class="formrow">
-        <label for="phone"><?php echo safeToHtml($translation->get('phone', 'address')); ?></label>
-        <input type="text" name="phone" id="phone" value="<?php if(isset($address['phone'])) echo safeToHtml($address["phone"]); ?>" />
+        <label for="phone"><?php e($translation->get('phone', 'address')); ?></label>
+        <input type="text" name="phone" id="phone" value="<?php if (isset($address['phone'])) e($address["phone"]); ?>" />
     </div>
 </fieldset>
 
 <fieldset>
-    <legend><?php echo safeToHtml($translation->get('one final question')); ?></legend>
+    <legend><?php e($translation->get('one final question')); ?></legend>
     
-    <input type="checkbox" name="accept_conditions" value="1" id="accept_conditions" /> <label for="accept_conditions"><?php echo safeToHtml($translation->get('i accept the conditions of sales and use!')); ?></label>
+    <input type="checkbox" name="accept_conditions" value="1" id="accept_conditions" /> <label for="accept_conditions"><?php e($translation->get('i accept the conditions of sales and use!')); ?></label>
 </fieldset>
 
 <p>
-    <input type="submit" name="submit" value="<?php echo safeToHtml($translation->get('yes, i am ready to pay')); ?>" />
-    <?php echo safeToHtml($translation->get('or', 'common')); ?>
-    <a href="index.php"><?php echo safeToHtml($translation->get('regret', 'common')); ?></a>
+    <input type="submit" name="submit" value="<?php e($translation->get('yes, i am ready to pay')); ?>" />
+    <?php e($translation->get('or', 'common')); ?>
+    <a href="index.php"><?php e($translation->get('Cancel', 'common')); ?></a>
 </p>
 
 </form>

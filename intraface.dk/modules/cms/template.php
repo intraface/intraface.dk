@@ -41,14 +41,14 @@ $sections = $template->getSections();
 
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('template')));
+$page->start($translation->get('template'));
 ?>
 
-<h1><?php e($translation->get('template')); ?> <?php echo $template->get('name'); ?></h1>
+<h1><?php e($translation->get('template')); ?> <?php e($template->get('name')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="template_edit.php?id=<?php echo $template->get('id'); ?>"><?php e($translation->get('edit', 'common')); ?></a></li>
-    <li><a href="templates.php?site_id=<?php echo $template->cmssite->get('id');?>"><?php e($translation->get('close', 'common')); ?></a></li>
+    <li><a class="edit" href="template_edit.php?id=<?php e($template->get('id')); ?>"><?php e($translation->get('edit', 'common')); ?></a></li>
+    <li><a href="templates.php?site_id=<?php e($template->cmssite->get('id')); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
 </ul>
 
     <?php
@@ -69,15 +69,15 @@ $page->start(safeToHtml($translation->get('template')));
             </tr>
         </thead>
         <tbody>
-    <?php foreach($sections AS $s): ?>
+    <?php foreach ($sections AS $s): ?>
         <tr>
             <td><?php e($s['name']); ?></td>
             <td><?php e($s['identifier']); ?></td>
             <td><?php e($s['type']); ?></td>
-            <td class="options"><a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?moveup=<?php echo $s['id']; ?>"><?php e($translation->get('up','common')); ?></a>
-            <a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?movedown=<?php echo $s['id']; ?>"><?php e($translation->get('down', 'common')); ?></a>
-            <a class="edit" href="template_section_edit.php?id=<?php echo $s['id']; ?>"><?php e($translation->get('edit settings', 'common')); ?></a>
-            <a class="delete" href="template.php?delete=<?php echo $s['id']; ?>"><?php e($translation->get('delete', 'common')); ?></a></td>
+            <td class="options"><a href="<?php e($_SERVER['PHP_SELF']); ?>?moveup=<?php e($s['id']); ?>"><?php e($translation->get('up','common')); ?></a>
+            <a href="<?php e($_SERVER['PHP_SELF']); ?>?movedown=<?php e($s['id']); ?>"><?php e($translation->get('down', 'common')); ?></a>
+            <a class="edit" href="template_section_edit.php?id=<?php e($s['id']); ?>"><?php e($translation->get('edit settings', 'common')); ?></a>
+            <a class="delete" href="template.php?delete=<?php e($s['id']); ?>"><?php e($translation->get('delete', 'common')); ?></a></td>
         </tr>
     <?php endforeach; ?>
         </tbody>
@@ -85,8 +85,8 @@ $page->start(safeToHtml($translation->get('template')));
 <?php endif; ?>
 
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
-    <input type="hidden" value="<?php echo $template->get('id'); ?>" name="id" />
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+    <input type="hidden" value="<?php e($template->get('id')); ?>" name="id" />
     <fieldset>
         <legend><?php e($translation->get('create section')); ?></legend>
         <select name="new_section_type">
@@ -96,12 +96,12 @@ $page->start(safeToHtml($translation->get('template')));
                 <option value="picture"><?php e($translation->get('picture', 'common')); ?></option>					<option value="mixed"><?php e($translation->get('mixed')); ?></option>
         </select>
         <div>
-            <input type="submit" value="<?php echo safeToForm($translation->get('add section')); ?>" name="add_section" />
+            <input type="submit" value="<?php e($translation->get('add section')); ?>" name="add_section" />
         </div>
     </fieldset>
     <fieldset>
         <legend><?php e($translation->get('standard keywords')); ?></legend>
-        <p><?php echo safeToForm($translation->get('keywords on a template are automatically transferred to the new pages created with the template')); ?></p>
+        <p><?php e($translation->get('keywords on a template are automatically transferred to the new pages created with the template')); ?></p>
         <input type="submit" value="<?php e($translation->get('add keywords', 'keyword')); ?>" name="add_keywords" />
     </fieldset>
 </form>

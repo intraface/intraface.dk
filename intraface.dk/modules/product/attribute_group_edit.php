@@ -11,7 +11,7 @@ $translation = $kernel->getTranslation('product');
 $gateway = new Intraface_modules_product_Attribute_Group_Gateway();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if(!empty($_POST['id'])) {
+    if (!empty($_POST['id'])) {
         $group = $gateway->findById($_POST['id']);
     }
     else {
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error->attachErrorStack($group->getErrorStack());
     }  
 } elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    if(!empty($_GET['id'])) {
+    if (!empty($_GET['id'])) {
         $group = $gateway->findById($_GET['id']);
     }
 }
@@ -40,12 +40,12 @@ $page->start(t('Edit attribute group'));
 
 <h1><?php e(t('Edit attribute group')); ?></h1>
 
-<?php if(isset($error)) echo $error->view(); ?>
+<?php if (isset($error)) echo $error->view(); ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 <fieldset>
     <legend><?php e(t('Attribute group information')); ?></legend>
-        <input type="hidden" name="id" value="<?php if(isset($group)) e($group->getId()); ?>" />
+        <input type="hidden" name="id" value="<?php if (isset($group)) e($group->getId()); ?>" />
         <div class="formrow">
             <label for="name"><?php e(t('Name')); ?></label>
             <input type="text" name="name" id="name" value="<?php if (isset($group)) e($group->getName()); ?>" />
@@ -54,7 +54,7 @@ $page->start(t('Edit attribute group'));
     
     <div>
         <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" class="save" /> <?php e(t('or', 'common')); ?>
-        <a href="attribute_groups.php"><?php e(t('regret', 'common')); ?></a>
+        <a href="attribute_groups.php"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 
 </form>

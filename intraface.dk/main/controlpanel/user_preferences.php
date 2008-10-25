@@ -29,7 +29,7 @@ $labels_standard = array(
     1 => '2x8'
 );
 
-if(!empty($_POST)) {
+if (!empty($_POST)) {
     /*
     if (!$kernel->setting->set('user', 'rows_pr_page', $_POST['rows_pr_page'])) {
         $error[] = 'rows_pr_page';
@@ -101,7 +101,7 @@ $page->start(t('user preferences'));
     <li><a href="user.php"><?php e(t('user')); ?></a></li>
 </ul>
 
-<form action="<?php e(basename($_SERVER['PHP_SELF'])); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
     <?php echo $error->view($translation); ?>
 
@@ -109,10 +109,10 @@ $page->start(t('user preferences'));
     /*
     <fieldset id="ptheme" class="radiobuttons">
         <legend>Tema</legend>
-      <?php  foreach(themes() AS $key=>$v): ?>
-           <label for="<?php echo $key; ?>" <?php if ($value['theme'] == $key) echo ' class="selected"'; ?>>
-                <input type="radio" id="<?php echo $key; ?>" name="theme" value="<?php echo $key; ?>" <?php if ($value['theme'] == $key) echo ' checked="checked"'; ?> />
-                <?php echo $v['name']; ?>. <span><?php echo $v['description']; ?></span>
+      <?php  foreach (themes() AS $key=>$v): ?>
+           <label for="<?php e($key); ?>" <?php if ($value['theme'] == $key) echo ' class="selected"'; ?>>
+                <input type="radio" id="<?php e($key); ?>" name="theme" value="<?php e($key); ?>" <?php if ($value['theme'] == $key) echo ' checked="checked"'; ?> />
+                <?php e($v['name']); ?>. <span><?php e($v['description']); ?></span>
             </label>
          <?php endforeach; ?>
     </fieldset>
@@ -120,8 +120,8 @@ $page->start(t('user preferences'));
     <fieldset id="ptextsize" class="radiobuttons">
         <legend>Tekststørrelse</legend>
             <?php foreach ($textsizes AS $key => $v): ?>
-                <label for="<?php echo $key; ?>" class="<?php echo $key; if ($value['ptextsize'] == $key) echo ' selected'; ?>">
-                    <input type="radio" name="ptextsize" id="<?php echo $key; ?>" value="<?php echo $key; ?>" <?php if ($value['ptextsize'] == $key) echo ' checked="checked"'; ?> /> <?php echo $v; ?>
+                <label for="<?php e($key); ?>" class="<?php e($key); if ($value['ptextsize'] == $key) echo ' selected'; ?>">
+                    <input type="radio" name="ptextsize" id="<?php e($key); ?>" value="<?php e($key); ?>" <?php if ($value['ptextsize'] == $key) echo ' checked="checked"'; ?> /> <?php e($v); ?>
                 </label>
             <?php endforeach; ?>
     </fieldset>
@@ -130,7 +130,7 @@ $page->start(t('user preferences'));
         <legend>Visning</legend>
         <div>
             <label for="rows_pr_page">Rækker pr. side</label>
-            <input type="text" name="rows_pr_page" id="rows_pr_page" value="<?php print $value["rows_pr_page"]; ?>" />
+            <input type="text" name="rows_pr_page" id="rows_pr_page" value="<?php e($value["rows_pr_page"]); ?>" />
         </div>
     </fieldset>
     */
@@ -153,13 +153,11 @@ $page->start(t('user preferences'));
         <div class="formrow">
         <label><?php e(t('editor')); ?></label>
             <select name="htmleditor">
-            <?php
-                foreach($editors AS $k=>$v) {
-                    echo '<option value="'.$k.'"';
-                    if (!empty($value['htmleditor']) AND $k == $value['htmleditor']) echo ' selected="selected"';
-                    echo '>' . safeToForm($translation->get($v)) . '</option>';
-                }
-            ?>
+            <?php foreach ($editors AS $k=>$v) { ?>
+                <option value="<?php e($k); ?>"
+                    <?php if (!empty($value['htmleditor']) AND $k == $value['htmleditor']) echo ' selected="selected"'; ?>
+                    ><?php e($translation->get($v)); ?></option>
+            <?php } ?>
             </select>
 
         </div>
@@ -172,7 +170,7 @@ $page->start(t('user preferences'));
         <p><?php e(t('choose which labels you use - when printing from acrobat reader remember to set page scaling to none')); ?></p>
             <?php foreach ($labels_standard AS $key => $v): ?>
                 <label for="<?php e($key); ?>" class="<?php e($key); if ($value['label'] == $key) echo ' selected'; ?>">
-                    <input type="radio" name="label" id="<?php e($key); ?>" value="<?php echo $key; ?>" <?php if ($value['label'] == $key) echo ' checked="checked"'; ?> /> <?php echo $v; ?>
+                    <input type="radio" name="label" id="<?php e($key); ?>" value="<?php e($key); ?>" <?php if ($value['label'] == $key) echo ' checked="checked"'; ?> /> <?php e($v); ?>
                 </label>
             <?php endforeach; ?>
     </fieldset>
@@ -181,7 +179,7 @@ $page->start(t('user preferences'));
     <div>
         <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />
             eller
-        <a href="/controlpanel/"><?php e(t('regret', 'common')); ?></a>
+        <a href="/controlpanel/"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 
 </form>

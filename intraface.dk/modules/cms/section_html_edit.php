@@ -20,22 +20,22 @@ if (!empty($_POST)) {
         $element = CMS_Element::factory($section, 'type', $_POST['type']);
     }
 
-    if($element->get('type') == 'picture') {
+    if ($element->get('type') == 'picture') {
         if (!empty($_FILES['new_pic'])) {
 
             $filehandler = new FileHandler($kernel);
             $filehandler->createUpload();
             $filehandler->upload->setSetting('file_accessibility', 'public');
             $filehandler->upload->setSetting('allow_only_images', 1);
-            if($filehandler->upload->isUploadFile('new_pic')) {
+            if ($filehandler->upload->isUploadFile('new_pic')) {
                 $id = $filehandler->upload->upload('new_pic');
-                if($id != 0) {
+                if ($id != 0) {
                     $_POST['pic_id'] = $id;
                 }
             }
             $element->error->merge($filehandler->error->getMessage());
         }
-    } elseif($element->get('type') == 'gallery') {
+    } elseif ($element->get('type') == 'gallery') {
 
         if (!empty($_FILES['new_pic']) && isset($_POST['upload_new'])) {
 
@@ -47,17 +47,17 @@ if (!empty($_POST)) {
             $id = $filehandler->upload->upload('new_pic');
 
             // Newly created element which has not been saved yet.
-            if($element->get('id') == 0) {
+            if ($element->get('id') == 0) {
                 $element->save($_POST);
             }
 
-            if($id != 0) {
+            if ($id != 0) {
                 $append_file = new AppendFile($kernel, 'cms_element_gallery', $element->get('id'));
                 $append_file->addFile($filehandler);
             }
             $element->error->merge($filehandler->error->getMessage());
         }
-    } elseif($element->get('type') == 'filelist') {
+    } elseif ($element->get('type') == 'filelist') {
 
         if (!empty($_FILES['new_file']) && isset($_POST['upload_new'])) {
             $filehandler = new FileHandler($kernel);
@@ -66,11 +66,11 @@ if (!empty($_POST)) {
             $id = $filehandler->upload->upload('new_file');
 
             // Newly created element which has not been saved yet.
-            if($element->get('id') == 0) {
+            if ($element->get('id') == 0) {
                 $element->save($_POST);
             }
 
-            if($id != 0) {
+            if ($id != 0) {
                 $append_file = new AppendFile($kernel, 'cms_element_filelist', $element->get('id'));
                 $append_file->addFile($filehandler);
             }
@@ -79,18 +79,18 @@ if (!empty($_POST)) {
     }
 
     if ($element->save($_POST)) {
-        if(!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
+        if (!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
             $redirect = Intraface_Redirect::factory($kernel, 'go');
             $module_filemanager = $kernel->useModule('filemanager');
-            if($element->get('type') == 'picture') {
+            if ($element->get('type') == 'picture') {
                 $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', $module_cms->getPath().'section_html_edit.php?id='.$element->get('id'));
                 $redirect->setIdentifier('picture');
                 $redirect->askParameter('file_handler_id');
-            } elseif($element->get('type') == 'gallery') {
+            } elseif ($element->get('type') == 'gallery') {
                 $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', $module_cms->getPath().'section_html_edit.php?id='.$element->get('id'));
                 $redirect->setIdentifier('gallery');
                 $redirect->askParameter('file_handler_id', 'multiple');
-            } elseif($element->get('type') == 'filelist') {
+            } elseif ($element->get('type') == 'filelist') {
                 $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?', $module_cms->getPath().'section_html_edit.php?id='.$element->get('id'));
                 $redirect->setIdentifier('filelist');
                 $redirect->askParameter('file_handler_id', 'multiple');
@@ -116,21 +116,21 @@ if (!empty($_POST)) {
     // til select - denne kan uden problemer fortrydes ved blot at have et link til samme side
     if (isset($_GET['return_redirect_id'])) {
         $redirect = Intraface_Redirect::factory($kernel, 'return');
-        if($redirect->get('identifier') == 'picture') {
+        if ($redirect->get('identifier') == 'picture') {
             $value['pic_id'] = $redirect->getParameter('file_handler_id');
-        } elseif($redirect->get('identifier') == 'gallery') {
+        } elseif ($redirect->get('identifier') == 'gallery') {
             $append_file = new AppendFile($kernel, 'cms_element_gallery', $element->get('id'));
             $array_files = $redirect->getParameter('file_handler_id');
-            foreach($array_files AS $file_id) {
+            foreach ($array_files AS $file_id) {
                 $append_file->addFile(new FileHandler($kernel, $file_id));
             }
             $element->load();
             $value = $element->get();
 
-        } elseif($redirect->get('identifier') == 'filelist') {
+        } elseif ($redirect->get('identifier') == 'filelist') {
             $append_file = new AppendFile($kernel, 'cms_element_filelist', $element->get('id'));
             $array_files = $redirect->getParameter('file_handler_id');
-            foreach($array_files AS $file_id) {
+            foreach ($array_files AS $file_id) {
                 $append_file->addFile(new FileHandler($kernel, $file_id));
             }
             $element->load();
@@ -138,7 +138,7 @@ if (!empty($_POST)) {
         }
     }
 
-    if(isset($_GET['delete_gallery_append_file_id'])) {
+    if (isset($_GET['delete_gallery_append_file_id'])) {
 
         $append_file = new AppendFile($kernel, 'cms_element_gallery', $element->get('id'));
         $append_file->delete((int)$_GET['delete_gallery_append_file_id']);
@@ -146,7 +146,7 @@ if (!empty($_POST)) {
         $value = $element->get();
     }
 
-    if(isset($_GET['delete_filelist_append_file_id'])) {
+    if (isset($_GET['delete_filelist_append_file_id'])) {
 
         $append_file = new AppendFile($kernel, 'cms_element_filelist', $element->get('id'));
         $append_file->delete((int)$_GET['delete_filelist_append_file_id']);
@@ -162,10 +162,10 @@ if (!empty($_POST)) {
     // i øvrigt er tingene alt for tæt koblet i page
     $section = CMS_Section::factory($kernel, 'id', $_GET['section_id']);
     $element = CMS_Element::factory($section, 'type', $_GET['type']);
-    if(!is_object($element)) {
+    if (!is_object($element)) {
         throw new Exception('Unable to create a valid element object');
     }
-    
+
     $value = $element->get();
 
     $value['type'] = $element->get('type');
@@ -185,7 +185,7 @@ $page->start(t('edit element'));
 echo $element->error->view($translation);
 ?>
 
-<form method="post" action="<?php e(basename($_SERVER['PHP_SELF'])); ?>"  enctype="multipart/form-data">
+<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>"  enctype="multipart/form-data">
     <input name="id" type="hidden" value="<?php e(intval($element->get('id'))); ?>" />
     <input name="section_id" type="hidden" value="<?php e(intval($element->section->get('id'))); ?>" />
     <input name="type" type="hidden" value="<?php e($element->get('type')); ?>" />
@@ -355,12 +355,12 @@ switch ($value['type']) {
                 <select name="show_type" id="show_type_id">
                     <option value="all"<?php if (!empty($value['show_type']) AND $value['show_type'] == 'all') echo ' selected="selected"'; ?>><?php e($translation->get('all pages')); ?></option>
                     <?php foreach ($element->section->cmspage->getTypes() AS $page_type): ?>
-                        <option value="<?php echo $page_type; ?>"<?php if (isset($value['show_type']) AND $value['show_type'] == $page_type) echo ' selected="selected"'; ?>><?php e($translation->get($page_type)); ?></option>
+                        <option value="<?php e($page_type); ?>"<?php if (isset($value['show_type']) AND $value['show_type'] == $page_type) echo ' selected="selected"'; ?>><?php e($translation->get($page_type)); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
         <?php
-        if(isset($value['keyword'])) {
+        if (isset($value['keyword'])) {
             $selected_keywords = $value['keyword'];
         }
         else {
@@ -369,18 +369,23 @@ switch ($value['type']) {
         $keyword = $element->section->cmspage->getKeywordAppender();
         $keywords = $keyword->getUsedKeywords();
 
-        if(count($keywords) > 0) {
-            echo '<div>'. safeToHtml($translation->get('keywords', 'keyword')) . ': <ul style="display: inline;">';
-            foreach ($keywords AS $v) {
-                if(in_array($v['id'], $selected_keywords) === true) {
+        if (count($keywords) > 0) { ?>
+            <div><?php e($translation->get('keywords', 'keyword')); ?>: <ul style="display: inline;">';
+            <?php foreach ($keywords AS $v) {
+                if (in_array($v['id'], $selected_keywords) === true) {
                     $checked = 'checked="checked"';
-                }
-                else {
+                } else {
                     $checked = "";
                 }
-                echo '<li style="display: inline; margin-left: 20px;"><label for="keyword_'.$v['id'].'"><input type="checkbox" name="keyword[]" value="'.$v['id'].'" id="keyword_'.$v['id'].'" '.$checked.' />&nbsp;'.$v['keyword'].'</label></li>';
-        }
-        echo '</ul></div>';
+                ?>
+                <li style="display: inline; margin-left: 20px;">
+                    <label for="keyword_<?php e($v['id']); ?>">
+                    <input type="checkbox" name="keyword[]" value="<?php e($v['id']); ?>" id="keyword_<?php e($v['id']); ?>" <?php e($checked); ?> />
+                    &nbsp;<?php e($v['keyword']); ?></label></li>
+        <?php
+        } ?>
+        </ul></div>
+        <?php
     }
     ?>
             <!--
@@ -407,7 +412,7 @@ switch ($value['type']) {
             <legend><?php e(t('file list')); ?></legend>
             <p><?php e(t('file list displays a list with files')); ?></p>
 
-            <?php /* if($kernel->user->hasModuleAccess('filemanager')): ?>
+            <?php /* if ($kernel->user->hasModuleAccess('filemanager')): ?>
                 <div class="formrow">
 
                     <input type="radio" name="filelist_select_method" value="keyword" />
@@ -439,7 +444,7 @@ switch ($value['type']) {
             </div>
 
             <div class="formrow">
-                <?php if($kernel->user->hasModuleAccess('filemanager')): ?>
+                <?php if ($kernel->user->hasModuleAccess('filemanager')): ?>
                     <!-- hvad bruges den her egentlig til? - hvorfor kan man ikke vælge uden administration -->
                     <input type="hidden" name="filelist_select_method" value="single_file" />
                 <?php endif; ?>
@@ -447,16 +452,14 @@ switch ($value['type']) {
                 <!--<strong>Enkeltfiler</strong>-->
                 <?php
 
-                // print_r($value);
-
-                if(!empty($value['files']) AND is_array($value['files'])) {
-                    foreach($value['files'] AS $file) {
+                if (!empty($value['files']) AND is_array($value['files'])) {
+                    foreach ($value['files'] AS $file) {
                         $filehandler = new Filehandler($kernel, $file['id']);
                         $filehandlerHTML = new FilehandlerHTML($filehandler);
                         $filehandlerHTML->showFile('section_html_edit.php?id='.$element->get('id').'&delete_filelist_append_file_id='.$file['append_file_id']);
                         /*
                         ?>
-                        <div style="border: 3px solid blue; padding: 5px;"><img src="<?php print($filehandler->instance->get('file_uri')); ?>" width="<?php print($filehandler->instance->get('width')); ?>" height="<?php print($filehandler->instance->get('height')); ?>" /> <a class="delete" href="">Slet</a></div>
+                        <div style="border: 3px solid blue; padding: 5px;"><img src="<?php e($filehandler->instance->get('file_uri')); ?>" width="<?php e($filehandler->instance->get('width')); ?>" height="<?php e($filehandler->instance->get('height')); ?>" /> <a class="delete" href="">Slet</a></div>
                         <?php
                         */
                     }
@@ -481,13 +484,13 @@ switch ($value['type']) {
             <!--
             <div class="formrow">
             <label>Bruger</label>
-                <input type="text" value="<?php if (!empty($value['user'])) echo safeToHtml($value['user']); ?>" name="user" />
+                <input type="text" value="<?php if (!empty($value['user'])) e($value['user']); ?>" name="user" />
             </div>
             -->
             <!--
             <div class="formrow">
             <label>Tags</label>
-                <input type="text" value="<?php if (!empty($value['tags'])) echo safeToHtml($value['tags']); ?>" name="tags" />
+                <input type="text" value="<?php if (!empty($value['tags'])) e($value['tags']); ?>" name="tags" />
             </div>
             -->
 
@@ -496,7 +499,7 @@ switch ($value['type']) {
                 <select name="service">
                     <option value=""><?php e(t('choose', 'common')); ?></option>
                     <?php foreach ($element->services AS $key => $service): ?>
-                    <option value="<?php echo $key; ?>"<?php if (!empty($value['service']) AND $value['service'] == $key) echo ' selected="selected"'; ?>><?php e($service); ?></option>
+                    <option value="<?php e($key); ?>"<?php if (!empty($value['service']) AND $value['service'] == $key) echo ' selected="selected"'; ?>><?php e($service); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -510,7 +513,7 @@ switch ($value['type']) {
             <label>Stï¿½rrelse</label>
                 <select name="size">
                     <?php foreach ($element->allowed_sizes AS $key => $size): ?>
-                    <option value="<?php echo $key; ?>"<?php if (!empty($value['size']) AND $value['size'] == $key) echo ' selected="selected"'; ?>><?php e($translation->get($size)); ?></option>
+                    <option value="<?php e($key); ?>"<?php if (!empty($value['size']) AND $value['size'] == $key) echo ' selected="selected"'; ?>><?php e($translation->get($size)); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -544,7 +547,7 @@ switch ($value['type']) {
                 <select name="service">
                     <option value=""><?php e(t('choose', 'common')); ?></option>
                     <?php foreach ($element->services AS $key => $service): ?>
-                    <option value="<?php echo $key; ?>"<?php if (!empty($value['service']) AND $value['service'] == $key) echo ' selected="selected"'; ?>><?php e(t($service)); ?></option>
+                    <option value="<?php e($key); ?>"<?php if (!empty($value['service']) AND $value['service'] == $key) echo ' selected="selected"'; ?>><?php e(t($service)); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -565,7 +568,7 @@ switch ($value['type']) {
                 <select name="service">
                     <option value=""><?php e(t('choose', 'common')); ?></option>
                     <?php foreach ($element->services AS $service): ?>
-                    <option value="<?php echo $service; ?>"<?php if (!empty($value['service']) AND $value['service'] == $service) echo ' selected="selected"'; ?>><?php e(t($service)); ?></option>
+                    <option value="<?php e($service); ?>"<?php if (!empty($value['service']) AND $value['service'] == $service) echo ' selected="selected"'; ?>><?php e(t($service)); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -605,7 +608,7 @@ switch ($value['type']) {
             <legend><?php e(t('photo album')); ?></legend>
 
             <!-- Egentlig skulle dette bare vï¿½re en, og sï¿½ kan man vï¿½lge mellem flickr mv. ogsï¿½ mï¿½ske? -->
-            <?php /* if($kernel->user->hasModuleAccess('filemanager')): ?>
+            <?php /* if ($kernel->user->hasModuleAccess('filemanager')): ?>
 
             <div class="formrow">
 
@@ -689,12 +692,9 @@ switch ($value['type']) {
                 <strong><?php e(t('single images')); ?></strong>
 
                 <?php
+                if (!empty($value['pictures']) AND is_array($value['pictures'])) {
 
-                // print_r($value);
-
-                if(!empty($value['pictures']) AND is_array($value['pictures'])) {
-
-                    foreach($value['pictures'] AS $key => $file) {
+                    foreach ($value['pictures'] AS $key => $file) {
 
                         $filehandler = new Filehandler($kernel, $file['id']);
                         $filehandlerHTML = new FilehandlerHTML($filehandler);
@@ -705,7 +705,7 @@ switch ($value['type']) {
                         /*
                         $filehandler->createInstance('small');
                         ?>
-                        <div style="border: 3px solid blue; padding: 5px;"><img src="<?php print($file['instances'][2]['file_uri']); ?>" width="<?php print($filehandler->instance->get('width')); ?>" height="<?php print($filehandler->instance->get('height')); ?>" /> <a class="delete" href="section_html_edit.php?id=<?php print($element->get('id')); ?>&delete_gallery_append_file_id=<?php print($file['append_file_id']); ?>">Slet</a></div>
+                        <div style="border: 3px solid blue; padding: 5px;"><img src="<?php e($file['instances'][2]['file_uri']); ?>" width="<?php e($filehandler->instance->get('width')); ?>" height="<?php e($filehandler->instance->get('height')); ?>" /> <a class="delete" href="section_html_edit.php?id=<?php e($element->get('id')); ?>&delete_gallery_append_file_id=<?php e($file['append_file_id']); ?>">Slet</a></div>
                         <?php
                         */
                     }
@@ -715,7 +715,7 @@ switch ($value['type']) {
                 $filehandler_html = new FileHandlerHTML($filehandler);
                 $filehandler_html->printFormUploadTag('', 'new_pic', 'choose_file', array('type' => 'only_upload', 'include_submit_button_name' => 'upload_new'));
                 ?>
-                <p><?php echo $translation->get('Pictures are sorted by picture name.'); ?></p>
+                <p><?php e($translation->get('Pictures are sorted by picture name.')); ?></p>
             </div>
         </fieldset>
         <?php
@@ -734,8 +734,8 @@ switch ($value['type']) {
         <div class="formrow">
             <label for="elm-properties"><?php e(t('element properties')); ?></label>
             <select name="elm_properties">
-                <?php foreach($element->properties AS $key => $property): ?>
-                <option value="<?php echo $key; ?>"<?php if (!empty($value['elm_properties']) AND $value['elm_properties'] == $key) echo ' selected="selected"'; ?>><?php e(t($property)); ?></option>
+                <?php foreach ($element->properties AS $key => $property): ?>
+                <option value="<?php e($key); ?>"<?php if (!empty($value['elm_properties']) AND $value['elm_properties'] == $key) echo ' selected="selected"'; ?>><?php e(t($property)); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -743,8 +743,8 @@ switch ($value['type']) {
         <div class="formrow">
             <label for="elm-adjust"><?php e(t('element adjustment')); ?></label>
             <select name="elm_adjust">
-                <?php foreach($element->alignment AS $key => $alignment): ?>
-                <option value="<?php echo $key; ?>"<?php if (!empty($value['elm_adjust']) AND $value['elm_adjust'] == $key) echo ' selected="selected"'; ?>><?php e(t($alignment, 'cms')); ?></option>
+                <?php foreach ($element->alignment AS $key => $alignment): ?>
+                <option value="<?php e($key); ?>"<?php if (!empty($value['elm_adjust']) AND $value['elm_adjust'] == $key) echo ' selected="selected"'; ?>><?php e(t($alignment, 'cms')); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -752,7 +752,7 @@ switch ($value['type']) {
 
         <div class="formrow">
             <label for="elm-width"><?php e(t('element width')); ?></label>
-            <input name="elm_width" id="elm-width" type="text" value="<?php if (!empty($value['elm_width'])) echo safeToHtml($value['elm_width']); ?>" size="3" maxlength="10" /> <?php e(t('use either %, em or px')); ?>
+            <input name="elm_width" id="elm-width" type="text" value="<?php if (!empty($value['elm_width'])) e($value['elm_width']); ?>" size="3" maxlength="10" /> <?php e(t('use either %, em or px')); ?>
         </div>
 
 
@@ -770,19 +770,19 @@ switch ($value['type']) {
 
         <div class="formrow">
             <label for="dateFieldPublish"><?php e(t('publish date','cms')); ?></label>
-            <input name="date_publish" id="dateFieldPublish" type="text" value="<?php if (!empty($value['date_publish'])) echo safeToHtml($value['date_publish']); ?>" size="30" maxlength="225" /> <span id="dateFieldMsg1"><?php e(t('empty is today')); ?></span>
+            <input name="date_publish" id="dateFieldPublish" type="text" value="<?php if (!empty($value['date_publish'])) e($value['date_publish']); ?>" size="30" maxlength="225" /> <span id="dateFieldMsg1"><?php e(t('empty is today')); ?></span>
         </div>
 
         <div class="formrow">
             <label for="dateFieldExpire"><?php e(t('expire date','cms')); ?></label>
-            <input name="date_expire" id="dateFieldExpire" type="text" value="<?php if (!empty($value['date_expire']))  echo $value['date_expire']; ?>" size="30" maxlength="225" /> <span id="dateFieldMsg2"><?php e(t('empty never expires')); ?></span>
+            <input name="date_expire" id="dateFieldExpire" type="text" value="<?php if (!empty($value['date_expire']))  e($value['date_expire']); ?>" size="30" maxlength="225" /> <span id="dateFieldMsg2"><?php e(t('empty never expires')); ?></span>
         </div>
     </fieldset>
 
     <div class="">
         <input type="submit" value="<?php e(t('save', 'common')); ?>" />
         <input type="submit" name="close" value="<?php e(t('save and close', 'common')); ?>" />
-        <a href="section_html.php?id=<?php echo intval($element->section->get('id')); ?>"><?php e(t('regret', 'common')); ?></a>
+        <a href="section_html.php?id=<?php e($element->section->get('id')); ?>"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 
 </form>

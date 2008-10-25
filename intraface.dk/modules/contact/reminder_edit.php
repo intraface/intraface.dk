@@ -30,16 +30,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 elseif (isset($_GET['id'])) {
 	$reminder = ContactReminder::factory($kernel, (int)$_GET['id']);
-	if($reminder->get('id') == 0) {
+	if ($reminder->get('id') == 0) {
 		trigger_error('Invalid reminder id', E_USER_ERROR);
 	}
 	$contact = $reminder->contact;
 	$value = $reminder->get();
 	$value['reminder_date'] = $reminder->get('dk_reminder_date');
 }
-elseif(isset($_GET['contact_id'])) {
+elseif (isset($_GET['contact_id'])) {
 	$contact = new Contact($kernel, (int)$_GET['contact_id']);
-	if($contact->get('id') == 0) {
+	if ($contact->get('id') == 0) {
 		trigger_error("Invalod contact_id", E_USER_ERROR);
 	}
 	$reminder = new ContactReminder($contact);
@@ -55,42 +55,42 @@ $page->start($translation->get('Edit reminder'));
 ?>
 
 
-<h1><?php echo safeToHtml($translation->get('Edit reminder')); ?></h1>
+<h1><?php e($translation->get('Edit reminder')); ?></h1>
 
 <?php echo $reminder->error->view(); ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 <fieldset>
-	<legend><?php echo safeToHtml($translation->get('Reminder date')); ?></legend>
+	<legend><?php e($translation->get('Reminder date')); ?></legend>
 	<div class="formrow">
-		<label for="reminder_date"><?php echo safeToHtml($translation->get('Reminder date')); ?></label>
-		<input type="text" name="reminder_date" id="reminder_date" value="<?php if (!empty($value['reminder_date'])) echo safeToForm($value['reminder_date']); ?>" />
+		<label for="reminder_date"><?php e($translation->get('Reminder date')); ?></label>
+		<input type="text" name="reminder_date" id="reminder_date" value="<?php if (!empty($value['reminder_date'])) e($value['reminder_date']); ?>" />
 	</div>
 </fieldset>
 
 <fieldset>
-	<legend><?php echo safeToHtml($translation->get('Reminder information')); ?></legend>
+	<legend><?php e($translation->get('Reminder information')); ?></legend>
 	
 	<div class="formrow">
-		<label for="subject"><?php echo safeToHtml($translation->get('Subject')); ?></label>
-		<input type="text" name="subject" id="subject" value="<?php if (!empty($value['subject'])) echo safeToForm($value['subject']); ?>" />
+		<label for="subject"><?php e($translation->get('Subject')); ?></label>
+		<input type="text" name="subject" id="subject" value="<?php if (!empty($value['subject'])) e($value['subject']); ?>" />
 	</div>
 	
 	<div class="formrow">
-		<label for="description"><?php echo safeToHtml($translation->get('Description')); ?></label>
-		<textarea name="description" id="description" style="width: 400px; height: 100px;"><?php if (!empty($value['description'])) echo safeToForm($value['description']); ?></textarea>
+		<label for="description"><?php e($translation->get('Description')); ?></label>
+		<textarea name="description" id="description" style="width: 400px; height: 100px;"><?php if (!empty($value['description'])) e($value['description']); ?></textarea>
 	</div>
 </fieldset>
 
 <div>
-	<input type="hidden" name="id" value="<?php if (!empty($value['id']))  echo intval($value['id']); ?>" />
-	<input type="hidden" name="contact_id" value="<?php echo intval($contact->get('id')); ?>" />
+	<input type="hidden" name="id" value="<?php if (!empty($value['id']))  e($value['id']); ?>" />
+	<input type="hidden" name="contact_id" value="<?php e($contact->get('id')); ?>" />
 	
 	
-	<input type="submit" name="submit" value="<?php echo safeToHtml($translation->get('Save', 'common')); ?>" id="save" class="save" />
-		<?php echo safeToHtml($translation->get('or', 'common')); ?>
-	<a href="contact.php?id=<?php echo intval($contact->get('id')); ?>" title="<?php echo safeToHtml($translation->get('Cancel', 'common')); ?>"><?php echo safeToHtml($translation->get('cancel', 'common')); ?></a>
+	<input type="submit" name="submit" value="<?php e($translation->get('Save', 'common')); ?>" id="save" class="save" />
+		<?php e($translation->get('or', 'common')); ?>
+	<a href="contact.php?id=<?php e($contact->get('id')); ?>" title="<?php e($translation->get('Cancel', 'common')); ?>"><?php e($translation->get('cancel', 'common')); ?></a>
 	</div>
 </form>
 

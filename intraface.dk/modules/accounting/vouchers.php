@@ -33,9 +33,9 @@ $page->start('Regnskab');
         </thead>
     <?php foreach ($posts AS $post): ?>
         <tr>
-            <td><a href="voucher.php?id=<?php echo $post['id']; ?>"><?php echo $post['number']; ?></a></td>
-            <td><?php echo safeToHtml($post['date_dk']); ?></td>
-            <td><?php echo safeToHtml($post['text']); ?></td>
+            <td><a href="voucher.php?id=<?php e($post['id']); ?>"><?php e($post['number']); ?></a></td>
+            <td><?php e($post['date_dk']); ?></td>
+            <td><?php e($post['text']); ?></td>
         </tr>
 
     <?php endforeach; ?>

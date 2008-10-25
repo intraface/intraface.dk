@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module('accounting');
 $translation = $kernel->getTranslation('accounting');
@@ -8,7 +8,7 @@ $translation = $kernel->getTranslation('accounting');
 if (!empty($_POST['id']) AND is_numeric($_POST['id'])) {
 	$year = new Year($kernel, $_POST['id']);
 	if (!$year->setYear()) {
-		trigger_error('Kunne ikke sætte året', FATAL);
+		trigger_error('Kunne ikke sætte året', E_USER_ERROR);
 	}
 
 	header('Location: daybook.php');
@@ -37,7 +37,7 @@ $page->start('Vælg regnskab');
 <?php if (empty($years)): ?>
 	<p>Der er ikke oprettet nogen regnskabsår. Du kan oprette et ved at klikke på knappen ovenover.</p>
 <?php else: ?>
-	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+	<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 	<table>
 		<caption>Regnskabsår</caption>
 		<thead>
@@ -50,10 +50,10 @@ $page->start('Vælg regnskab');
 		<tbody>
 		<?php foreach ($years AS $y): ?>
 		<tr>
-			<td><input type="radio" name="id" value="<?php echo $y['id']; ?>" <?php if($year->loadActiveYear() == $y['id']) { echo ' checked="checked"'; } ?>/></td>
-			<td><a href="year.php?id=<?php echo $y['id']; ?>"><?php echo $y['label']; ?></a></td>
+			<td><input type="radio" name="id" value="<?php e($y['id']); ?>" <?php if ($year->loadActiveYear() == $y['id']) { echo ' checked="checked"'; } ?>/></td>
+			<td><a href="year.php?id=<?php e($y['id']); ?>"><?php e($y['label']); ?></a></td>
 			<td class="options">
-				<a class="edit" href="year_edit.php?id=<?php echo $y['id']; ?>">Ret</a>
+				<a class="edit" href="year_edit.php?id=<?php e($y['id']); ?>">Ret</a>
 			</td>
 		</tr>
 		<?php endforeach; ?>

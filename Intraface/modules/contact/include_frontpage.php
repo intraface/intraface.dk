@@ -18,7 +18,7 @@ endif;
 
 $reminders = ContactReminder::upcomingReminders($kernel);
 foreach ($reminders AS $reminder) {
-    if(strtotime($reminder['reminder_date']) > time()) {
+    if (strtotime($reminder['reminder_date']) > time()) {
         $text = $translation->get('Upcoming', 'contact');
     }
     else {
@@ -31,8 +31,4 @@ foreach ($reminders AS $reminder) {
         'no_translation' => true
     );
 
-
-    // print_r($reminder);
 }
-
-?>

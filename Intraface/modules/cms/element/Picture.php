@@ -73,7 +73,7 @@ class Intraface_modules_cms_element_Picture extends CMS_Element
             $filehandler->loadUpload();
             $filehandler->upload->setSetting('max_file_size', 5000000);
             $filehandler->upload->setSetting('file_accessibility', 'public');
-            if(!$var['pic_id'] = $filehandler->upload->upload('userfile')) {
+            if (!$var['pic_id'] = $filehandler->upload->upload('userfile')) {
                 trigger_error('Kunne ikke uploade filen');
             }
             if (!empty($var['pic_text'])) {
@@ -91,7 +91,6 @@ class Intraface_modules_cms_element_Picture extends CMS_Element
         }
         */
 
-        //PRINT_R($var);
         if (!isset($var['pic_id'])) $var['pic_id'] = 0;
         $this->parameter->save('pic_id', $var['pic_id']);
         if (!empty($var['pic_size'])) $this->parameter->save('pic_size', $var['pic_size']);

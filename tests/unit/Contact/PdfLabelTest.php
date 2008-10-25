@@ -10,7 +10,7 @@ class PdfLabelTest extends PHPUnit_Framework_TestCase
 {
     function setup() 
     {
-        if(file_exists(TEST_PATH_TEMP.'pdf_label.pdf')) {
+        if (file_exists(TEST_PATH_TEMP.'pdf_label.pdf')) {
             unlink(TEST_PATH_TEMP.'pdf_label.pdf');
         }
     }
@@ -31,7 +31,7 @@ class PdfLabelTest extends PHPUnit_Framework_TestCase
     function testGenerate() {
         $pdf = $this->getPdfLabel();
         
-        for($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $contacts[$i] = array(
                 'number' => $i,
                 'name' => 'Test'.$i,

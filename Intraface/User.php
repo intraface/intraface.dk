@@ -560,7 +560,7 @@ class Intraface_User extends Intraface_Standard
         $body  = "Huha, det var heldigt, at vi stod på spring i kulissen, så vi kan hjælpe dig med at lave en ny adgangskode.\n\n";
         $body .= "Din nye adgangskode er: " . $new_password . "\n\n";
         $body .= "Du kan logge ind fra:\n\n";
-        $body .= "<".PATH_WWW.">\n\n";
+        $body .= "<".url(null).">\n\n";
         $body .= "Med venlig hilsen\nDin hengivne webserver";
 
         if (mail($email, $subject, $body, "From: Intraface.dk <robot@intraface.dk>\nReturn-Path: robot@intraface.dk")) {

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Intraface_Doctrine_Template_Intranet
  *
@@ -16,7 +15,6 @@
  */
 class Intraface_Doctrine_Template_Intranet extends Doctrine_Template
 {
-
     /**
      * setUp
      *
@@ -24,15 +22,12 @@ class Intraface_Doctrine_Template_Intranet extends Doctrine_Template
      */
     public function setTableDefinition()
     {
-        // print 'Intranet_Template';
         $this->hasColumn('intranet_id',  'integer',  11);
         require_once 'Intraface/Doctrine/Template/Listener/Intranet.php';
         $this->addListener(new Intraface_Doctrine_Template_Listener_Intranet());
     }
-    
-    public function setUp() 
+
+    public function setUp()
     {
-        
-        
     }
 }

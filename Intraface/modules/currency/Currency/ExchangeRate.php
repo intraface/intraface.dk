@@ -32,7 +32,7 @@ class Intraface_modules_currency_Currency_ExchangeRate extends Doctrine_Record
     
     public function preSave()
     {
-        if($this->date_created == NULL) {
+        if ($this->date_created == NULL) {
             $this->date_created = date('Y-m-d h:i:s');
         }
     }

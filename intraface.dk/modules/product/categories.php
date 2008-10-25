@@ -25,9 +25,9 @@ $page->start(t('Add product to categories in shop'));
     <p><?php e(t('No categories has been created.')); ?> <a href="category_edit.php"><?php e(t('Create category')); ?></a>.</p>
 <?php else: ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
-<?php if(!empty($deleted)): ?>
-        <p class="message"><?php e(t('An categories has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('regret', 'common')); ?>" /></p>
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+<?php if (!empty($deleted)): ?>
+        <p class="message"><?php e(t('An categories has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('Cancel', 'common')); ?>" /></p>
 <?php endif; ?>
 
     <table summary="<?php e(t('Categories')); ?>" id="categories_table" class="stripe">
@@ -40,13 +40,13 @@ $page->start(t('Add product to categories in shop'));
             </tr>
         </thead>
         <tbody>
-            <?php foreach($categories AS $category): ?>
+            <?php foreach ($categories as $category): ?>
                 <tr>
                     <td>
-                        <input type="checkbox" value="<?php echo intval($group->getId()); ?>" name="selected[]" />
+                        <input type="checkbox" value="<?php e($group->getId()); ?>" name="selected[]" />
                     </td>
                     <td></td>
-                    <td class="options"><a class="edit" href="category_edit.php?id=<?php echo intval($category['id']); ?>"><?php e(t('edit', 'common')); ?></a></td>
+                    <td class="options"><a class="edit" href="category_edit.php?id=<?php e($category['id']); ?>"><?php e(t('edit', 'common')); ?></a></td>
                 </tr>
              <?php endforeach; ?>
         </tbody>

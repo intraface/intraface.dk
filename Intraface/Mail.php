@@ -7,9 +7,54 @@
  * @author  Lars Olesen <lars@legestue.net>
  * @version @package-version@
  */
-
 class Intraface_Mail
 {
+    private $subject;
+    private $text_body;
+    private $html_body;
+    private $recipients = array();
+    private $cc = array();
+    private $bcc = array();
+    private $attachments = array();
+
+    function __construct()
+    {  
+    }
+    
+    function setSubject($text)
+    {
+        $this->text = $text;
+    }
+
+    function setTextBody($text)
+    {
+        $this->text_body = $text;
+    }
+    
+    function setHtmlBody($html)
+    {
+        $this->text_body = $html;
+    }
+    
+    function addRecipient($email)
+    {
+        $this->recipients[] = $email;
+    }
+    
+    function addCC($email)
+    {
+        $this->cc[] = $email;
+    }
+    
+    function addBCC($email)
+    {
+        $this->bcc[] = $email;
+    }
+    
+    function addAttachment($attachment)
+    {
+        $this->attachments[] = $attachment;
+    }
     
     public static function factory()
     {

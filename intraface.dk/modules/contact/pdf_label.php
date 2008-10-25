@@ -13,9 +13,9 @@ $contacts = $contact->getList("use_address");
 
 $doc = new Intraface_modules_contact_PdfLabel($kernel->setting->get("user", "label"));
 $used_keyword = array();
-foreach($contact->getDBQuery()->getKeyword() AS $kid) {
-    foreach($keywords AS $k){
-        if($k['id'] == $kid) {
+foreach ($contact->getDBQuery()->getKeyword() AS $kid) {
+    foreach ($keywords AS $k){
+        if ($k['id'] == $kid) {
             $used_keyword[] = $k['keyword'];
         }
     }
@@ -65,19 +65,19 @@ $validator = new Intraface_Validator(new Intraface_Error);
 
 $doc->addText($doc->get('x') + $label_padding_left, $doc->get('y') - $label_padding_top , $doc->get('font_size'), "<b>Søgning</b>");
 $line = 1;
-if($contact->getDBQuery()->getFilter('search') != "") {
+if ($contact->getDBQuery()->getFilter('search') != "") {
 	$doc->addText($doc->get('x') + $label_padding_left, $doc->get('y') - $label_padding_top - $doc->get('font_spacing'), $doc->get('font_size'), "Søgetekst: ".$contact->getDBQuery()->getFilter('search'));
 	$line++;
 }
 
 $keyword_ids = $contact->getDBQuery()->getKeyword();
-if(is_array($keyword_ids) && count($keyword_ids) > 0) {
+if (is_array($keyword_ids) && count($keyword_ids) > 0) {
 
 	$used_keyword = array();
 
-	foreach($keyword_ids AS $kid) {
-		foreach($keywords AS $k){
-			if($k['id'] == $kid) {
+	foreach ($keyword_ids AS $kid) {
+		foreach ($keywords AS $k){
+			if ($k['id'] == $kid) {
 				$used_keyword[] = $k['keyword'];
 			}
 		}
@@ -89,17 +89,17 @@ if(is_array($keyword_ids) && count($keyword_ids) > 0) {
 $doc->addText($doc->get('x') + $label_padding_left, $doc->get('y') - $label_padding_top - $doc->get('font_spacing') * $line, $doc->get('font_size'), "Antal labels i søgning: ".count($contacts));
 
 
-for($i = 0, $max = count($contacts); $i < $max; $i++) {
+for ($i = 0, $max = count($contacts); $i < $max; $i++) {
 
 	/*
-	if($validator->isEmail($subscribers[$i]['contact_email'], "")) {
+	if ($validator->isEmail($subscribers[$i]['contact_email'], "")) {
 		// Hvis de har en mail, kører vi videre med næste.
 		CONTINUE;
 	}
 	
 	// TODO -- hvorfor bruger vi ikke antallet af labels til at vide, hvornår
 	// vi skifter linje?
-	if($doc->get('x') + $label_width  > $doc->get('right_margin_position')) {
+	if ($doc->get('x') + $label_width  > $doc->get('right_margin_position')) {
 		// For enden af linjen, ny linje
 		$doc->setY("-".$label_height);
 		$doc->setX(0);
@@ -111,22 +111,19 @@ for($i = 0, $max = count($contacts); $i < $max; $i++) {
 	}
 
 
-	if($doc->get('y') - $label_height < $doc->get('margin_bottom')) {
+	if ($doc->get('y') - $label_height < $doc->get('margin_bottom')) {
 		// Hvis næste labelsrække ikke kan nå at være der tager vi en ny side.
 		$doc->newPage();
 		$doc->setX(0);
 		$doc->setY(0);
 	}
 
-	// print("X".$doc->get('x')."Y".$doc->get('y'));
-
-
 	$doc->addText($doc->get('x') + $label_padding_left, $doc->get('y') - $label_padding_top , $doc->get('font_size'), "<b>".$contacts[$i]['number']."</b>");
 	$doc->addText($doc->get('x') + $label_padding_left, $doc->get('y') - $label_padding_top - $doc->get('font_spacing'), $doc->get('font_size'), "<b>".$contacts[$i]['name']."</b>");
 	$line = 2;
 	$address_lines = explode("\n", $contacts[$i]['address']['address']);
-	foreach($address_lines AS $l) {
-		if(trim($l) != "") {
+	foreach ($address_lines AS $l) {
+		if (trim($l) != "") {
 			$doc->addText($doc->get('x') + $label_padding_left, $doc->get('y') - $label_padding_top - $doc->get('font_spacing') * $line, $doc->get('font_size'), $l);
 			$line++;
 		}

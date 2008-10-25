@@ -69,8 +69,8 @@ else {
 
 			</div>
 
-			<form id="form-download" method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>">
-				<input type="hidden" name="id" value="<?php echo $id; ?>" />
+			<form id="form-download" method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
+				<input type="hidden" name="id" value="<?php e($id); ?>" />
 				<input type="submit" value="Hent" />
 			</form>
 		</div>

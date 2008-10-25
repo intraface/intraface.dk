@@ -27,7 +27,7 @@ class Intraface_Shared
     public function load()
     {
         // Inkluder preload filerne
-        for($i = 0, $max = count($this->preload_file); $i<$max; $i++) {
+        for ($i = 0, $max = count($this->preload_file); $i<$max; $i++) {
             $this->includeFile($this->preload_file[$i]);
         }
     }
@@ -71,7 +71,7 @@ class Intraface_Shared
      */
     function includeFile($file)
     {
-        $file = PATH_INCLUDE_SHARED . $this->shared_name . '/' . $file;
+        $file = dirname(__FILE__) . '/shared/' . $this->shared_name . '/' . $file;
         if (!file_exists($file)) {
             return 0;
         }
@@ -89,12 +89,13 @@ class Intraface_Shared
     }
 
     /**
-     * @todo could this not resolve the path automatically, for instance through a dirname()
-     *       would do it possible to drop a constant.
+     * Returns the www path for the shared modules; always ends on a slash
+     *
+     * @return string
      */
-    function getPath()
+    public function getPath()
     {
-        return(PATH_WWW_SHARED.$this->shared_name."/");
+        return url('/shared/' . $this->shared_name) . '/';
     }
 
     /**
@@ -107,7 +108,7 @@ class Intraface_Shared
 
     function getSetting($key)
     {
-        if(isset($this->setting[$key])) {
+        if (isset($this->setting[$key])) {
             return($this->setting[$key]);
         }
     }

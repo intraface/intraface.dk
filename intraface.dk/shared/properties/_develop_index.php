@@ -42,14 +42,14 @@ $page = new Intraface_Page($kernel);
 $page->start("Rediger nøgleord til produkt");
 
 ?>
-<h1>Rediger egenskabskategorier <?php echo $object->get('name'); ?></h1>
+<h1>Rediger egenskabskategorier "<?php e($object->get('name')); ?>"</h1>
 
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 	<?php if (count($keywords) > 0): ?>
 	<fieldset>
 		<legend>Vælg nøgleord</legend>
-		<input type="hidden" name="<?php echo $id_name; ?>" value="<?php echo $object->get('id'); ?>" />
+		<input type="hidden" name="<?php e($id_name); ?>" value="<?php e($object->get('id')); ?>" />
 		<?php
 			$i = 0;
 			foreach ($keywords AS $k) {
@@ -77,9 +77,9 @@ $page->start("Rediger nøgleord til produkt");
 	<fieldset>
 		<legend>Opret nøgleord</legend>
 		<p>Du kan oprette flere nøgleord på en gang adskilt med mellemrum, fx <samp>billedbog bamse</samp>. Hvis du vil lave et nøgleord bestående af flere ord, omkranser du dem med anførselstegn <samp>"verdens bedste sune"</samp></p>
-		<input type="hidden" name="<?php echo $id_name; ?>" value="<?php echo $object->get('id'); ?>" />
+		<input type="hidden" name="<?php e($id_name); ?>" value="<?php e($object->get('id')); ?>" />
 		<label for="keyword">Nøgleord</label>
-		<input type="text" name="keyword" id="keyword" value="<?php // echo $selected_keywords; ?>" />
+		<input type="text" name="keyword" id="keyword" value="<?php // e($selected_keywords); ?>" />
 		<input type="submit" value="Gem" name="submit" class="save" />
 	</fieldset>
 </form>

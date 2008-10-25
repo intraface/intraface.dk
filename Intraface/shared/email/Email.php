@@ -136,7 +136,7 @@ class Email extends Intraface_Standard
         $this->kernel->useModule('contact');
         $this->contact = new Contact($this->kernel, $this->get('contact_id'));
 
-        if($this->get('contact_person_id') != 0 && $this->contact->get('type') == 'corporation') {
+        if ($this->get('contact_person_id') != 0 && $this->contact->get('type') == 'corporation') {
             $this->contact->loadContactPerson($this->get('contact_person_id'));
         }
 
@@ -210,11 +210,11 @@ class Email extends Intraface_Standard
             $sql_extra = ', user_id = ' . $db->quote($this->kernel->user->get('id'), 'integer');
         }
 
-        if(!isset($var['contact_person_id'])) {
+        if (!isset($var['contact_person_id'])) {
             $var['contact_person_id'] = 0;
         }
 
-        if(!isset($var['bcc_to_user'])) {
+        if (!isset($var['bcc_to_user'])) {
             $var['bcc_to_user'] = 0;
         }
 
@@ -291,7 +291,6 @@ class Email extends Intraface_Standard
     {
         $db = new DB_Sql;
         $db->query("SELECT COUNT(*) AS antal FROM email WHERE DATE_SUB(NOW(), INTERVAL 1 HOUR) < date_sent");
-        // print $db->numRows();
         if (!$db->nextRecord()) {
             return 0;
         }
@@ -329,7 +328,7 @@ class Email extends Intraface_Standard
      */
     function send($phpmailer, $what_to_do = 'send')
     {
-        if(!is_object($phpmailer)) {
+        if (!is_object($phpmailer)) {
             throw new Exception('A valid mailer is not provided to the send method');
         }
         
@@ -393,10 +392,10 @@ class Email extends Intraface_Standard
             $this->error->set('Der kunne ikke sendes e-mail til email #' . $this->get('id') . ' fordi der ikke var nogen kunde sat');
         }
 
-        if($contact->get('type') == 'corporation' && $this->get('contact_person_id') != 0) {
+        if ($contact->get('type') == 'corporation' && $this->get('contact_person_id') != 0) {
             $contact->loadContactPerson($this->get('contact_person_id'));
             $validator = new Intraface_Validator($this->error);
-            if($validator->isEmail($contact->contactperson->get('email'))) {
+            if ($validator->isEmail($contact->contactperson->get('email'))) {
                 $phpmailer->AddAddress($contact->contactperson->get('email'), $contact->contactperson->get('name'));
             } else {
                 $phpmailer->AddAddress($contact->address->get('email'), $contact->address->get('name'));
@@ -405,7 +404,7 @@ class Email extends Intraface_Standard
             $phpmailer->AddAddress($contact->address->get('email'), $contact->address->get('name'));
         }
 
-        if($this->get('bcc_to_user')) {
+        if ($this->get('bcc_to_user')) {
             $phpmailer->addBCC($this->kernel->user->getAddress()->get('email'), $this->kernel->user->getAddress()->get('name'));
         }
 
@@ -508,7 +507,7 @@ class Email extends Intraface_Standard
      */
     function sendAll($mailer)
     {
-        if(!is_object($mailer)) {
+        if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
         

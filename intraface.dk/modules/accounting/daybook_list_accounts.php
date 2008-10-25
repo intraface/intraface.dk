@@ -73,12 +73,12 @@ $accounts = $account->getList();
 	}
 	</style>
 
-	<script type="text/javascript" src="<?php echo PATH_WWW; ?>javascript/yui/yahoo/yahoo.js"></script>
-	<script type="text/javascript" src="<?php echo PATH_WWW; ?>javascript/yui/event/event.js"></script>
-	<script type="text/javascript" src="<?php echo PATH_WWW; ?>javascript/yui/widget/widget.js"></script>
-	<script type="text/javascript" src="<?php echo PATH_WWW; ?>javascript/getInnerText.js"></script>
-	<script type="text/javascript" src="<?php echo PATH_WWW; ?>javascript/functions_string.js"></script>
-	<script type="text/javascript" src="<?php echo $accounting_module->getPath(); ?>javascript/daybook_list_account.js"></script>
+	<script type="text/javascript" src="<?php e(url('/javascript/yui/yahoo/yahoo.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('/javascript/yui/event/event.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('/javascript/yui/widget/widget.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('/javascript/getInnerText.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('/javascript/functions_string.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e($accounting_module->getPath()); ?>javascript/daybook_list_account.js"></script>
 </head>
 <body>
 
@@ -89,15 +89,15 @@ $accounts = $account->getList();
 	<div id="content">
 		<table>
 			<caption>Konti</caption>
-			<?php foreach ($accounts AS $account): ?>
+			<?php foreach ($accounts as $account): ?>
 				<?php if ($account['type'] == 'headline'): ?>
 					<tr class="headline">
-						<td colspan="2"><?php echo $account['name']; ?></td>
+						<td colspan="2"><?php e($account['name']); ?></td>
 					</tr>
 				<?php else: ?>
 					<tr>
-						<th><?php echo $account['number']; ?></th>
-						<td><?php echo $account['name'];  ?></td>
+						<th><?php e($account['number']); ?></th>
+						<td><?php e($account['name']);  ?></td>
 					</tr>
 				<?php endif; ?>
 			<?php endforeach; ?>

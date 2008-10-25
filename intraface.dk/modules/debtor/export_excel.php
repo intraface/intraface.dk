@@ -55,7 +55,7 @@ $worksheet->write($i, 0, 'Søgetekst', $format_italic);
 $worksheet->write($i, 1, $debtor->getDbQuery()->getFilter('text'), $format_italic);
 $i++;
 
-if($debtor->getDbQuery()->checkFilter('product_id')) {
+if ($debtor->getDbQuery()->checkFilter('product_id')) {
     $product = new Product($kernel, $debtor->getDbQuery()->getFilter('product_id'));
 
     $worksheet->write($i, 0, 'Produkt', $format_italic);
@@ -63,7 +63,7 @@ if($debtor->getDbQuery()->checkFilter('product_id')) {
     $i++;
 }
 
-if($debtor->getDbQuery()->checkFilter('contact_id')) {
+if ($debtor->getDbQuery()->checkFilter('contact_id')) {
     $contact = new Contact($kernel, $debtor->getDbQuery()->getFilter('contact_id'));
 
     $worksheet->write($i, 0, 'Kontakt', $format_italic);
@@ -86,14 +86,14 @@ $worksheet->write($i, 5, 'Oprettet', $format_bold);
 $worksheet->write($i, 6, 'Sendt', $format_bold);
 //$worksheet->write($i, 7, $translation->get("due_date"), $format_bold);
 $c = 8;
-if($debtor->get('type') == 'invoice') {
+if ($debtor->get('type') == 'invoice') {
     $worksheet->write($i, $c, 'Forfaldsbeløb', $format_bold);
     $c++;
 }
 $worksheet->write($i, $c, 'Kontaktnøgleord', $format_bold);
 $c++;
 
-if(!empty($product) && is_object($product) && get_class($product) == 'product') {
+if (!empty($product) && is_object($product) && get_class($product) == 'product') {
     $worksheet->write($i, $c, 'Antal valgte produkt', $format_bold);
     $c++;
 }
@@ -105,13 +105,13 @@ $due_total = 0;
 $sent_total = 0;
 $total = 0;
 
-if(count($posts) > 0) {
-    for($j = 0, $max = count($posts); $j < $max; $j++) {
+if (count($posts) > 0) {
+    for ($j = 0, $max = count($posts); $j < $max; $j++) {
 
-        if($posts[$j]["due_date"] < date("Y-m-d") && ($posts[$j]["status"] == "created" OR $posts[$j]["status"] == "sent")) {
+        if ($posts[$j]["due_date"] < date("Y-m-d") && ($posts[$j]["status"] == "created" OR $posts[$j]["status"] == "sent")) {
             $due_total += $posts[$i]["total"];
         }
-        if($posts[$j]["status"] == "sent") {
+        if ($posts[$j]["status"] == "sent") {
             $sent_total += $posts[$j]["total"];
         }
         $total += $posts[$j]["total"];
@@ -130,14 +130,14 @@ if(count($posts) > 0) {
             $worksheet->write($i, 6, "Nej");
         }
 
-        if($posts[$j]["status"] == "executed" || $posts[$j]["status"] == "canceled") {
+        if ($posts[$j]["status"] == "executed" || $posts[$j]["status"] == "canceled") {
             $worksheet->write($i, 7, $translation->get($posts[$j]["status"], 'debtor'));
         }
         else {
             $worksheet->write($i, 7, $posts[$j]["dk_due_date"]);
         }
         $c = 8;
-        if($debtor->get('type') == 'invoice') {
+        if ($debtor->get('type') == 'invoice') {
             $worksheet->write($i, $c, $posts[$j]['arrears']);
             $c++;
         }
@@ -146,8 +146,8 @@ if(count($posts) > 0) {
         $contact = new Contact($kernel, $posts[$j]['contact']['id']);
         $appender = $contact->getKeywordAppender();
         $keyword_ids = $appender->getConnectedKeywords();
-        if(count($keyword_ids) > 0) {
-            foreach($keyword_ids AS $keyword_id) {
+        if (count($keyword_ids) > 0) {
+            foreach ($keyword_ids AS $keyword_id) {
                 $keyword = new Keyword($contact, $keyword_id);
                 $keywords[] = $keyword->getKeyword();
             }
@@ -155,11 +155,11 @@ if(count($posts) > 0) {
             $c++;
         }
 
-        if(!empty($product) && is_object($product) && get_class($product) == 'product') {
+        if (!empty($product) && is_object($product) && get_class($product) == 'product') {
             $quantity_product = 0;
-            if(count($posts[$j]['items']) > 0) {
-                foreach($posts[$j]['items'] AS $item) {
-                    if($item['product_id'] == $product->get('id')) {
+            if (count($posts[$j]['items']) > 0) {
+                foreach ($posts[$j]['items'] AS $item) {
+                    if ($item['product_id'] == $product->get('id')) {
                         $quantity_product += $item['quantity'];
                     }
                 }

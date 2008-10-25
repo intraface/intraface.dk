@@ -37,16 +37,16 @@ if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
 	}
 }
 
-if(!empty($_GET['import'])) {
+if (!empty($_GET['import'])) {
     $redirect = Intraface_Redirect::go($kernel);
     $shared_fileimport = $kernel->useShared('fileimport');
     $url = $redirect->setDestination($shared_fileimport->getPath().'index.php', $module->getPath().'import.php');
     $redirect->askParameter('session_variable_name');
     header('location: '.$url);
     exit;
-    
+
 }
- 
+
 /*
 if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
 	$contact = new Contact($kernel, $_GET['delete']);
@@ -65,13 +65,13 @@ $contact = new Contact($kernel);
 $keywords = $contact->getKeywordAppender();
 $used_keywords = $keywords->getUsedKeywords();
 
-if(isset($_GET['query']) || isset($_GET['keyword_id'])) {
+if (isset($_GET['query']) || isset($_GET['keyword_id'])) {
 
-	if(isset($_GET['query'])) {
+	if (isset($_GET['query'])) {
 		$contact->getDBQuery()->setFilter('search', $_GET['query']);
 	}
 
-	if(isset($_GET['keyword_id'])) {
+	if (isset($_GET['keyword_id'])) {
 		$contact->getDBQuery()->setKeyword($_GET['keyword_id']);
 	}
 }
@@ -86,24 +86,24 @@ $contact->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
 $contacts = $contact->getList();
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('contacts')));
+$page->start($translation->get('contacts'));
 ?>
-<h1><?php echo safeToHtml($translation->get('contacts')); ?></h1>
+<h1><?php e($translation->get('contacts')); ?></h1>
 
 <ul class="options">
-	<li><a class="new" href="contact_edit.php"><?php echo safeToHtml($translation->get('create contact')); ?></a></li>
+	<li><a class="new" href="contact_edit.php"><?php e($translation->get('create contact')); ?></a></li>
 	<?php if ($kernel->setting->get('user', 'contact.search') == 'hide' AND count($contacts) > 0): ?>
-	<li><a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?search=view"><?php echo safeToHtml($translation->get('show search')); ?></a></li>
+	<li><a href="<?php e($_SERVER['PHP_SELF']); ?>?search=view"><?php e($translation->get('show search')); ?></a></li>
 	<?php endif; ?>
-	<li><a class="pdf" href="<?php echo safeToHtml('http://'.NET_HOST.NET_DIRECTORY.'modules/contact/'); /* BAD SOLUTION!!! */ ?>pdf_label.php?use_stored=true" target="_blank"><?php echo safeToHtml($translation->get('print labels')); ?></a></li>
-	<li><a class="excel" href="excel.php?use_stored=true"><?php echo safeToHtml($translation->get('excel', 'common')); ?></a></li>
-	<li><a href="email_search.php?use_stored=true"><?php echo safeToHtml($translation->get('email to contacts in search')); ?></a></li>
-    <li><a href="index.php?import=true"><?php echo safeToHtml($translation->get('import contacts')); ?></a></li>    
+	<li><a class="pdf" href="<?php e('http://'.NET_HOST.NET_DIRECTORY.'modules/contact/'); /* BAD SOLUTION!!! */ ?>pdf_label.php?use_stored=true" target="_blank"><?php e($translation->get('print labels')); ?></a></li>
+	<li><a class="excel" href="excel.php?use_stored=true"><?php e($translation->get('excel', 'common')); ?></a></li>
+	<li><a href="email_search.php?use_stored=true"><?php e($translation->get('email to contacts in search')); ?></a></li>
+    <li><a href="index.php?import=true"><?php e($translation->get('import contacts')); ?></a></li>
 </ul>
 
 <?php if (!$contact->isFilledIn()): ?>
 
-	<p><?php echo safeToHtml($translation->get('no contacts has been created')); ?>. <a href="contact_edit.php"><?php echo safeToHtml($translation->get('create contact')); ?></a>.</p>
+	<p><?php e($translation->get('no contacts has been created')); ?>. <a href="contact_edit.php"><?php e($translation->get('create contact')); ?></a>.</p>
 
 <?php else: ?>
 
@@ -112,24 +112,24 @@ $page->start(safeToHtml($translation->get('contacts')));
 
 <form action="index.php" method="get" class="search-filter">
 	<fieldset>
-		<legend><?php echo safeToHtml($translation->get('search', 'common')); ?></legend>
+		<legend><?php e($translation->get('search', 'common')); ?></legend>
 
-		<label for="query"><?php echo safeToHtml($translation->get('search for', 'common')); ?>
-			<input name="query" id="query" type="text" value="<?php print($contact->getDBQuery()->getFilter('search')); ?>" />
+		<label for="query"><?php e($translation->get('search for', 'common')); ?>
+			<input name="query" id="query" type="text" value="<?php e($contact->getDBQuery()->getFilter('search')); ?>" />
 		</label>
 
 		<?php if (is_array($used_keywords) AND count($used_keywords)): ?>
-		<label for="keyword_id"><?php echo safeToHtml($translation->get('show with keywords', 'common')); ?>
+		<label for="keyword_id"><?php e($translation->get('show with keywords', 'common')); ?>
 			<select name="keyword_id" id="keyword_id">
 				<option value="">Alle</option>
 				<?php foreach ($used_keywords AS $k) { ?>
-					<option value="<?php echo $k['id']; ?>" <?php if($k['id'] == $contact->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php echo safeToHtml($k['keyword']); ?></option>
+					<option value="<?php e($k['id']); ?>" <?php if ($k['id'] == $contact->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php e($k['keyword']); ?></option>
 				<?php } ?>
 			</select>
 		</label>
 		<?php endif; ?>
 		<span><input type="submit" value="<?php e(t('go', 'common')); ?>" /></span>
-		<!-- <a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?search=hide">Skjul søgemulighederne</a>  -->
+		<!-- <a href="<?php e($_SERVER['PHP_SELF']); ?>?search=hide">Skjul søgemulighederne</a>  -->
 	</fieldset>
 </form>
 
@@ -137,21 +137,21 @@ $page->start(safeToHtml($translation->get('contacts')));
 
 <?php echo $contact->getDBQuery()->display('character'); ?>
 
-<form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
-	<?php if(!empty($deleted)): ?>
+	<?php if (!empty($deleted)): ?>
 		<p class="message">Du har slettet kontakter. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="Fortryd" /></p>
 	<?php endif; ?>
 
-	<table summary="<?php echo safeToHtml($translation->get('contacts')); ?>" class="stripe">
-		<caption><?php echo safeToHtml($translation->get('contacts')); ?></caption>
+	<table summary="<?php e($translation->get('contacts')); ?>" class="stripe">
+		<caption><?php e($translation->get('contacts')); ?></caption>
 		<thead>
 			<tr>
 				<th>&nbsp;</th>
-				<th><?php echo safeToHtml($translation->get('number')); ?></th>
-				<th><?php echo safeToHtml($translation->get('name', 'address')); ?></th>
-				<th><?php echo safeToHtml($translation->get('phone', 'address')); ?></th>
-				<th><?php echo safeToHtml($translation->get('e-mail', 'address')); ?></th>
+				<th><?php e($translation->get('number')); ?></th>
+				<th><?php e($translation->get('name', 'address')); ?></th>
+				<th><?php e($translation->get('phone', 'address')); ?></th>
+				<th><?php e($translation->get('e-mail', 'address')); ?></th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>
@@ -161,20 +161,20 @@ $page->start(safeToHtml($translation->get('contacts')));
 			</tr>
 		</tfoot>
 		<tbody>
-			<?php foreach ($contacts AS $c) { ?>
+			<?php foreach ($contacts as $c) { ?>
 			<tr class="vcard">
 
 				<td>
-					<input type="checkbox" value="<?php echo intval($c['id']); ?>" name="selected[]" />
+					<input type="checkbox" value="<?php e($c['id']); ?>" name="selected[]" />
 				</td>
-				<td><?php echo safeToHtml($c['number']); ?></td>
-				<td class="fn"><a href="contact.php?id=<?php echo $c['id']; ?>"><?php echo safeToHtmL($c['name']); ?></a></td>
-				<td class="tel"><?php echo safeToHtml($c['phone']); ?></td>
-				<td class="email"><?php echo safeToHtml($c['email']); ?></td>
+				<td><?php e($c['number']); ?></td>
+				<td class="fn"><a href="contact.php?id=<?php e($c['id']); ?>"><?php e($c['name']); ?></a></td>
+				<td class="tel"><?php e($c['phone']); ?></td>
+				<td class="email"><?php e($c['email']); ?></td>
 				<td class="options">
-					<a class="edit" href="contact_edit.php?id=<?php echo $c['id']; ?>"><?php echo safeToHtml($translation->get('edit', 'common')); ?></a>
+					<a class="edit" href="contact_edit.php?id=<?php e($c['id']); ?>"><?php e($translation->get('edit', 'common')); ?></a>
 					<?php /*
-					<a class="delete" href="index.php?delete=<?php echo $c['id']; ?>&amp;use_stored=true"><?php echo safeToHtml($translation->get('delete', 'common')); ?></a> */ ?>
+					<a class="delete" href="index.php?delete=<?php e($c['id']); ?>&amp;use_stored=true"><?php e($translation->get('delete', 'common')); ?></a> */ ?>
 				</td>
 			</tr>
 			<?php } // end foreach ?>

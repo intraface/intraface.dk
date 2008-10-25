@@ -25,7 +25,7 @@ $page->start(t('Todo'));
 <?php else: ?>
 
 <ul class="todo-list">
-    <?php foreach($todo_list AS $t): ?>
+    <?php foreach ($todo_list AS $t): ?>
     <li><a href="todo.php?id=<?php e($t['id']); ?>"><?php e($t['name']); ?></a> &mdash; <?php e($t['left']); ?> <?php e(t('left')); ?></li>
     <?php endforeach; ?>
 </ul>
@@ -35,7 +35,7 @@ $page->start(t('Todo'));
 <?php if (count($todo_done) > 0): ?>
 
 <p class="todo-finished"><strong><?php e(t('Finished lists')); ?></strong>:
-    <?php foreach($todo_done AS $t): ?>
+    <?php foreach ($todo_done AS $t): ?>
         <a href="todo.php?id=<?php e($t['id']); ?>"><?php e($t['name']); ?></a>
     <?php endforeach; ?>
 </p>

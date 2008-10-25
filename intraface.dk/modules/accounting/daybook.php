@@ -17,11 +17,9 @@ $year->checkYear();
 
 if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
 	$kernel->setting->set('user', 'accounting.daybook.message', 'hide');
-}
-elseif (!empty($_GET['view']) AND in_array($_GET['view'], array('income', 'expenses', 'classic', 'debtor'))) {
+} elseif (!empty($_GET['view']) AND in_array($_GET['view'], array('income', 'expenses', 'classic', 'debtor'))) {
 	$kernel->setting->set('user', 'accounting.daybook_view', $_GET['view']);
-}
-elseif (!empty($_GET['quickhelp']) AND in_array($_GET['quickhelp'], array('true', 'false'))) {
+} elseif (!empty($_GET['quickhelp']) AND in_array($_GET['quickhelp'], array('true', 'false'))) {
 	$kernel->setting->set('user', 'accounting.daybook_cheatsheet', $_GET['quickhelp']);
 	if (isAjax()) {
 		echo '1';
@@ -36,12 +34,10 @@ if (!empty($_POST)) {
 	if ($id = $voucher->saveInDaybook($_POST)) {
 		header('Location: daybook.php?from_post_id='.$id);
 		exit;
-	}
-	else {
+	} else {
 		$values = $_POST;
 	}
-}
-else {
+} else {
 	// setting variables
 	$voucher = new Voucher($year);
 	$values['voucher_number'] = $voucher->getMaxNumber() + 1;
@@ -66,10 +62,10 @@ $page->includeJavascript('module', 'daybook.js');
 $page->start('Kassekladde');
 ?>
 
-<h1>Kassekladde for <?php echo safeToHtml($year->get('label')); ?></h1>
+<h1>Kassekladde for <?php e($year->get('label')); ?></h1>
 
 <?php if (!$account->anyAccounts()): ?>
-	<p class="message-dependent">Du skal først oprette nogle konti, inden du kan taste poster ind i regnskabet. Du kan oprette en standardkontoplan under <a href="year.php?id=<?php echo $year->get('id'); ?>">regnskabsåret</a>.</p>
+	<p class="message-dependent">Du skal først oprette nogle konti, inden du kan taste poster ind i regnskabet. Du kan oprette en standardkontoplan under <a href="year.php?id=<?php e($year->get('id')); ?>">regnskabsåret</a>.</p>
 <?php elseif ($year->get('vat') == 1 AND !$year->vatAccountIsSet()): ?>
 	<p class="message-dependent">Du har ikke sat momskonti.
 	<a href="setting.php">Gå til indstillingerne</a>.
@@ -81,19 +77,19 @@ $page->start('Kassekladde');
 		<strong>Kassekladde</strong>. Her opretter du poster til dit regnskab. I første omgang figurerer beløbene kun i kassekladden og under <a href="state.php">afstemningen</a>. Indtil du bogfører posterne, kan du stadig nå at redigere dem.
 	</p>
 	<p><strong>Hjælp</strong>. Du kan bogføre ved at indtaste kontonumrene i standardvisningen, men du kan også bruge vores hjælpefunktioner ved at klikke på vores links nedenunder.</p>
-	<p><a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?message=hide">Skjul</a></p>
+	<p><a href="<?php e($_SERVER['PHP_SELF']); ?>?message=hide">Skjul</a></p>
 	</div>
 	<?php endif; ?>
-	<form method="post" action="<?php echo basename($_SERVER['PHP_SELF']); ?>" id="accounting-form-state">
-		<input type="hidden" name="id" value="<?php echo safeToHtml($values['id']); ?>" />
+	<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>" id="accounting-form-state">
+		<input type="hidden" name="id" value="<?php e($values['id']); ?>" />
 
 	<?php echo $voucher->error->view(); ?>
 
 	<ul class="options">
-		<li><a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?view=classic">Standard</a></li>
-		<li><a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?view=income">Indtægter</a></li>
-		<li><a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?view=expenses">Udgifter</a></li>
-		<li><a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?view=debtor">Betalende debitor</a></li>
+		<li><a href="<?php e($_SERVER['PHP_SELF']); ?>?view=classic">Standard</a></li>
+		<li><a href="<?php e($_SERVER['PHP_SELF']); ?>?view=income">Indtægter</a></li>
+		<li><a href="<?php e($_SERVER['PHP_SELF']); ?>?view=expenses">Udgifter</a></li>
+		<li><a href="<?php e($_SERVER['PHP_SELF']); ?>?view=debtor">Betalende debitor</a></li>
 	</ul>
 
 	<fieldset>
@@ -119,43 +115,39 @@ $page->start('Kassekladde');
 			<tbody>
 				<tr>
 					<td>
-						<input tabindex="1" name="date" type="text" size="7" value="<?php echo safeToForm($values['date']);  ?>" />
+						<input tabindex="1" name="date" type="text" size="7" value="<?php e($values['date']);  ?>" />
 					</td>
 					<td>
-						<input tabindex="2" name="voucher_number" id="voucher_number" type="text" size="5" value="<?php echo safeToForm($values['voucher_number']); ?>" />
+						<input tabindex="2" name="voucher_number" id="voucher_number" type="text" size="5" value="<?php e($values['voucher_number']); ?>" />
 					</td>
 					<td>
-						<input tabindex="3" type="text" name="text" id="text" value="<?php echo safeToForm($values['text']); ?>" />
+						<input tabindex="3" type="text" name="text" id="text" value="<?php e($values['text']); ?>" />
 					</td>
 					<td>
 						<select name="debet_account_number" id="buy_account_number_select" tabindex="4">
 							<option value="">Vælg</option>
-							<?php
-								foreach($account->getList('expenses') AS $a):
-									echo '<option value="'.safeToForm($a['number']).'"';
-									if ($values['debet_account_number'] == $a['number']) echo ' selected="selected"';
-									echo '>'.safeToForm($a['name']).'</option>';
-								endforeach;
-							?>
+							<?php foreach ($account->getList('expenses') AS $a): ?>
+                                <option value="<?php e($a['number']); ?>"
+								    <?php if ($values['debet_account_number'] == $a['number']) echo ' selected="selected"'; ?>
+									><?php e($a['name']); ?></option>
+						    <?php endforeach; ?>
 						</select>
 					</td>
 					<td>
 						<select name="credit_account_number" id="balance_account_number_select" tabindex="4">
 							<option value="">Vælg</option>
-							<?php
-								foreach($account->getList('finance') AS $a):
-									echo '<option value="'.safeToForm($a['number']).'"';
-									if ($values['credit_account_number'] == $a['number']) echo ' selected="selected"';
-									echo '>'.safeToForm($a['name']).'</option>';
-								endforeach;
-							?>
+							<?php foreach ($account->getList('finance') AS $a): ?>
+							 <option value="<?php e($a['number']); ?>"
+							     <?php if ($values['credit_account_number'] == $a['number']) echo ' selected="selected"'; ?>
+							     ><?php e($a['name']); ?></option>
+                            <?php endforeach; ?>
 						</select>
 					</td>
 					<td>
-						<input tabindex="6" name="amount" id="amount" type="text" size="8"  value="<?php echo safeToForm($values['amount']); ?>" />
+						<input tabindex="6" name="amount" id="amount" type="text" size="8"  value="<?php e($values['amount']); ?>" />
 					</td>
 					<td>
-						<input tabindex="7" name="reference" id="reference" type="text" size="7"  value="<?php if (!empty($values['reference'])) echo safeToForm($values['reference']); ?>" />
+						<input tabindex="7" name="reference" id="reference" type="text" size="7"  value="<?php if (!empty($values['reference'])) e($values['reference']); ?>" />
 					</td>
 					<?php if ($year->get('vat') > 0): ?>
 					<td>
@@ -187,43 +179,39 @@ $page->start('Kassekladde');
 			<tbody>
 				<tr>
 					<td>
-						<input tabindex="1" accesskey="1" name="date" type="text" size="7" value="<?php echo safeToForm($values['date']);  ?>" />
+						<input tabindex="1" accesskey="1" name="date" type="text" size="7" value="<?php e($values['date']);  ?>" />
 					</td>
 					<td>
-						<input tabindex="2" name="voucher_number" id="voucher_number" type="text" size="5" value = "<?php echo safeToForm($values['voucher_number']); ?>" />
+						<input tabindex="2" name="voucher_number" id="voucher_number" type="text" size="5" value = "<?php e($values['voucher_number']); ?>" />
 					</td>
 					<td>
-						<input tabindex="3" type="text" name="text" id="text" value="<?php echo safeToForm($values['text']); ?>" />
+						<input tabindex="3" type="text" name="text" id="text" value="<?php e($values['text']); ?>" />
 					</td>
 					<td>
 						<select name="debet_account_number" id="balance_account_number_select" tabindex="4">
 							<option value="">Vælg</option>
-							<?php
-								foreach($account->getList('finance') AS $a):
-									echo '<option value="'.safeToForm($a['number']).'"';
-									if ($values['debet_account_number'] == $a['number']) echo ' selected="selected"';
-									echo '>'.safeToForm($a['name']).'</option>';
-								endforeach;
-							?>
+							<?php foreach ($account->getList('finance') AS $a): ?>
+							    <option value="<?php e($a['number']); ?>"
+									<?php if ($values['debet_account_number'] == $a['number']) echo ' selected="selected"'; ?>
+									><?php e($a['name']); ?></option>
+						    <?php endforeach; ?>
 						</select>
 					</td>
 					<td>
 						<select name="credit_account_number" id="sales_account_number_select" tabindex="5">
 							<option value="">Vælg</option>
-							<?php
-								foreach($account->getList('income') AS $a):
-									echo '<option value="'.safeToForm($a['number']).'"';
-									if ($values['credit_account_number'] == $a['number']) echo ' selected="selected"';
-									echo '>'.safeToForm($a['name']).'</option>';
-								endforeach;
-							?>
+							<?php foreach ($account->getList('income') AS $a): ?>
+							    <option value="<?php e($a['number']); ?>"
+									<?php if ($values['credit_account_number'] == $a['number']) echo ' selected="selected"'; ?>
+									><?php e($a['name']); ?></option>
+								<?php endforeach; ?>
 						</select>
 					</td>
 					<td>
-						<input tabindex="6" name="amount" id="amount" type="text" size="8"  value="<?php echo safeToForm($values['amount']); ?>"/>
+						<input tabindex="6" name="amount" id="amount" type="text" size="8"  value="<?php e($values['amount']); ?>"/>
 					</td>
 					<td>
-						<input tabindex="7" name="reference" id="reference" type="text" size="7" value="<?php if (!empty($values['reference'])) safeToForm($values['reference']); ?>" />
+						<input tabindex="7" name="reference" id="reference" type="text" size="7" value="<?php if (!empty($values['reference'])) e($values['reference']); ?>" />
 					</td>
 					<?php if ($year->get('vat') > 0): ?>
 					<td>
@@ -258,37 +246,35 @@ $page->start('Kassekladde');
 			<tbody>
 				<tr>
 					<td>
-						<input tabindex="1" accesskey="1" name="date" type="text" size="7" value="<?php echo safeToForm($values['date']);  ?>" />
+						<input tabindex="1" accesskey="1" name="date" type="text" size="7" value="<?php e($values['date']);  ?>" />
 					</td>
 					<td>
-						<input tabindex="2" name="voucher_number" id="voucher_number" type="text" size="5" value="<?php echo safeToForm($values['voucher_number']); ?>" />
+						<input tabindex="2" name="voucher_number" id="voucher_number" type="text" size="5" value="<?php e($values['voucher_number']); ?>" />
 					</td>
 					<td>
-						<input tabindex="3" type="text" name="text" id="text" value="<?php echo $values['text']; ?>" />
+						<input tabindex="3" type="text" name="text" id="text" value="<?php e($values['text']); ?>" />
 					</td>
 					<td>
 						<select name="debet_account_number" id="debitor_account_number_select" tabindex="4">
 							<option value="">Vælg</option>
-							<?php
-								foreach($account->getList('finance') AS $a):
-									if ($year->getSetting('debtor_account_id') == $a['id']) continue;
-									echo '<option value="'.safeToForm($a['number']).'"';
-									if ($values['debet_account_number'] == $a['number']) echo ' selected="selected"';
-									echo '>'.safeToForm($a['name']).'</option>';
-								endforeach;
-							?>
+							<?php foreach ($account->getList('finance') AS $a): ?>
+									<?php if ($year->getSetting('debtor_account_id') == $a['id']) continue; ?>
+									<option value="<?php e($a['number']); ?>"
+									<?php if ($values['debet_account_number'] == $a['number']) echo ' selected="selected"'; ?>
+									><?php e($a['name']); ?></option>
+						    <?php endforeach; ?>
 						</select>
 					</td>
 					<td>
-						<input tabindex="5" type="text" name="credit_account_number" id="credit_account_number" value="<?php if (empty($values['credit_account_number'])) { $account = new Account($year, $year->getSetting('debtor_account_id')); echo safeToForm($account->get('number')); } else { echo safeToForm($values['credit_account_number']); }?>" size="8" />
+						<input tabindex="5" type="text" name="credit_account_number" id="credit_account_number" value="<?php if (empty($values['credit_account_number'])) { $account = new Account($year, $year->getSetting('debtor_account_id')); e($account->get('number')); } else { e($values['credit_account_number']); }?>" size="8" />
 						<a href="daybook_list_accounts.php" id="credit_account_open">+</a>
 						<div id="credit_account_name">&nbsp;</div>
 					</td>
 					<td>
-						<input tabindex="6" name="amount" id="amount" type="text" value="<?php echo safeToForm($values['amount']); ?>" size="8" />
+						<input tabindex="6" name="amount" id="amount" type="text" value="<?php e($values['amount']); ?>" size="8" />
 					</td>
 					<td>
-						<input tabindex="7" name="reference" id="reference" type="text" size="7"  value="<?php if (!empty($values['reference'])) echo safeToForm($values['reference']); ?>" />
+						<input tabindex="7" name="reference" id="reference" type="text" size="7"  value="<?php if (!empty($values['reference'])) e($values['reference']); ?>" />
 					</td>
 					<!--
 					<?php if ($year->get('vat') > 0): ?>
@@ -321,29 +307,29 @@ $page->start('Kassekladde');
 			<tbody>
 				<tr>
 					<td>
-						<input tabindex="1" accesskey="1" name="date" id="date" type="text" size="7" value="<?php echo safeToForm($values['date']);  ?>" />
+						<input tabindex="1" accesskey="1" name="date" id="date" type="text" size="7" value="<?php e($values['date']);  ?>" />
 					</td>
 					<td>
-						<input tabindex="2" name="voucher_number" id="voucher_number" type="text" size="5" value = "<?php echo safeToForm($values['voucher_number']); ?>" />
+						<input tabindex="2" name="voucher_number" id="voucher_number" type="text" size="5" value = "<?php e($values['voucher_number']); ?>" />
 					</td>
 					<td>
-						<input tabindex="3" type="text" name="text" id="text" value="<?php echo safeToForm($values['text']); ?>" size="20" />
+						<input tabindex="3" type="text" name="text" id="text" value="<?php e($values['text']); ?>" size="20" />
 					</td>
 					<td>
-						<input tabindex="4" type="text" name="debet_account_number" id="debet_account_number" value="<?php echo safeToForm($values['debet_account_number']);  ?>" size="8" />
+						<input tabindex="4" type="text" name="debet_account_number" id="debet_account_number" value="<?php e($values['debet_account_number']);  ?>" size="8" />
 						<a href="daybook_list_accounts.php" id="debet_account_open">+</a>
 						<div id="debet_account_name">&nbsp;</div>
 					</td>
 					<td>
-						<input tabindex="5" type="text" name="credit_account_number" id="credit_account_number" value="<?php echo safeToForm($values['credit_account_number']); ?>" size="8" />
+						<input tabindex="5" type="text" name="credit_account_number" id="credit_account_number" value="<?php e($values['credit_account_number']); ?>" size="8" />
 						<a href="daybook_list_accounts.php" id="credit_account_open">+</a>
 						<div id="credit_account_name">&nbsp;</div>
 					</td>
 					<td>
-						<input tabindex="6" name="amount" id="amount" type="text" size="8" value="<?php echo safeToForm($values['amount']); ?>"  />
+						<input tabindex="6" name="amount" id="amount" type="text" size="8" value="<?php e($values['amount']); ?>"  />
 					</td>
 					<td>
-						<input tabindex="7" name="reference" id="reference" type="text" size="7" value="<?php if (!empty($values['reference'])) echo safeToForm($values['reference']);  ?>"  />
+						<input tabindex="7" name="reference" id="reference" type="text" size="7" value="<?php if (!empty($values['reference'])) e($values['reference']);  ?>"  />
 					</td>
 					<?php if ($year->get('vat') > 0): ?>
 					<td>
@@ -383,14 +369,14 @@ $page->start('Kassekladde');
 <tbody>
 	<?php foreach ($posts AS $p): ?>
 	<tr>
-		<td><?php echo safeToHtml($p['date_dk']); ?></td>
-		<td><a href="voucher.php?id=<?php echo intval($p['voucher_id']); ?>"><?php echo safeToHtml($p['voucher_number']); ?></a></td>
-		<td><?php echo safeToHtml($p['text']); ?></td>
-		<td><a href="account.php?id=<?php echo intval($p['account_id']); ?>"><?php echo safeToHtml($p['account_name']); ?></a></td>
-		<td class="amount"><?php echo amountToOutput($p['debet']); ?></td>
-		<td class="amount"><?php echo amountToOutput($p['credit']); ?></td>
-		<td><?php if (!empty($p['reference'])) echo safeToHtml($p['reference']); ?></td>
-		<td><a href="voucher.php?id=<?php echo intval($p['voucher_id']); ?>">Se bilag</a></td>
+		<td><?php e($p['date_dk']); ?></td>
+		<td><a href="voucher.php?id=<?php e($p['voucher_id']); ?>"><?php e($p['voucher_number']); ?></a></td>
+		<td><?php e($p['text']); ?></td>
+		<td><a href="account.php?id=<?php e($p['account_id']); ?>"><?php e($p['account_name']); ?></a></td>
+		<td class="amount"><?php e(amountToOutput($p['debet'])); ?></td>
+		<td class="amount"><?php e(amountToOutput($p['credit'])); ?></td>
+		<td><?php if (!empty($p['reference'])) e($p['reference']); ?></td>
+		<td><a href="voucher.php?id=<?php e($p['voucher_id']); ?>">Se bilag</a></td>
 	</tr>
 	<?php endforeach; ?>
 </tbody>
@@ -399,7 +385,7 @@ $page->start('Kassekladde');
 <?php if (round($post->get('list_saldo'), 2) == 0.00): // this is a hack - can be removed when the database uses mindste enhed ?>
 	<p class="advice"><a href="state.php">Bogfør posterne</a></p>
 <?php else: ?>
-	<p class="error">Kassekladden stemmer ikke. Der er en difference på <?php echo amountToOutput($post->get('list_saldo')); ?>.</p>
+	<p class="error">Kassekladden stemmer ikke. Der er en difference på <?php e(amountToOutput($post->get('list_saldo'))); ?>.</p>
 <?php endif; ?>
 
 <?php else: ?>
@@ -410,7 +396,7 @@ $page->start('Kassekladde');
 <?php if ($kernel->setting->get('user', 'accounting.daybook_cheatsheet')== 'true'): ?>
 
 <table summary="" id="accounting-cheatsheet">
-	<caption>Hjælp - hvad er nu debet og kredit? <a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?quickhelp=false" id="accounting-cheatsheet-link">(Skjul)</a></caption>
+	<caption>Hjælp - hvad er nu debet og kredit? <a href="<?php e($_SERVER['PHP_SELF']); ?>?quickhelp=false" id="accounting-cheatsheet-link">(Skjul)</a></caption>
 	<tr>
 		<th></th>
 		<th>Debet</th>
@@ -434,7 +420,7 @@ $page->start('Kassekladde');
 </table>
 <?php else: ?>
 	<ul class="options">
-	<li><a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?quickhelp=true">Slå hurtighjælp til</a></li>
+	<li><a href="<?php e($_SERVER['PHP_SELF']); ?>?quickhelp=true">Slå hurtighjælp til</a></li>
 	</ul>
 
 

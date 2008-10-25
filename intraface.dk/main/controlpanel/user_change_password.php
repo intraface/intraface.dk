@@ -3,10 +3,10 @@ require '../../include_first.php';
 
 $translation = $kernel->getTranslation('controlpanel');
 
-if(!empty($_POST)) {
+if (!empty($_POST)) {
 	$user = new Intraface_User($kernel->user->get('id'));
 
-	if($user->updatePassword($_POST['old_password'], $_POST['new_password'], $_POST['repeat_password'])) {
+	if ($user->updatePassword($_POST['old_password'], $_POST['new_password'], $_POST['repeat_password'])) {
 		header("Location: user.php");
 		exit;
 	}
@@ -27,7 +27,7 @@ $page->start(t('change user password'));
 
 <?php echo $user->error->view(); ?>
 
-<form action="<?php e(basename($_SERVER['PHP_SELF'])); ?>" method="post">
+<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 <fieldset>
 	<legend><?php e(t('change password')); ?></legend>
@@ -47,7 +47,7 @@ $page->start(t('change user password'));
 </fieldset>
 
 <p><input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />
-<a href="user.php"><?php e(t('regret', 'common')); ?></a></p>
+<a href="user.php"><?php e(t('Cancel', 'common')); ?></a></p>
 
 </form>
 

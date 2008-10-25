@@ -26,7 +26,7 @@ class Post extends Intraface_Standard
      */
     function __construct($voucher, $post_id = 0)
     {
-        if(!is_object($voucher)) {
+        if (!is_object($voucher)) {
             trigger_error('Klassen Post kræver objektet Voucher', E_USER_ERROR);
             exit;
         }
@@ -96,8 +96,6 @@ class Post extends Intraface_Standard
         //$validator->isDouble($credit, 'Kreditbeløbet '.$credit .' er ikke gyldigt');
 
         if ($this->error->isError()) {
-            // this must be wrong!
-            // echo $this->error->view();
             return 0;
         }
 

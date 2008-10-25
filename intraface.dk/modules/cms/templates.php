@@ -19,14 +19,14 @@ if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
 $templates = $template->getList();
 
 $page = new Intraface_Page($kernel);
-$page->start(safeToHtml($translation->get('templates')));
+$page->start($translation->get('templates'));
 ?>
 
 <h1><?php e($translation->get('templates')); ?></h1>
 
 <ul class="options">
-    <li><a class="new" href="template_edit.php?site_id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('create template')); ?></a></li>
-    <li><a href="site.php?id=<?php echo $cmssite->get('id'); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
+    <li><a class="new" href="template_edit.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('create template')); ?></a></li>
+    <li><a href="site.php?id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
 </ul>
 
 <?php if (count($templates) == 0): ?>
@@ -50,24 +50,24 @@ $page_types = CMS_Page::getTypesWithBinaryIndex();
 
 <?php foreach ($templates AS $s): ?>
     <tr>
-        <td><a href="template.php?id=<?php echo $s['id']; ?>"><?php e($s['name']);  ?></a></td>
+        <td><a href="template.php?id=<?php e($s['id']); ?>"><?php e($s['name']);  ?></a></td>
         <td><?php e($s['identifier']); ?></td>
         <td>
-            <?php 
+            <?php
             $return = '';
-            foreach($page_types AS $page_key => $page_type){
-                if($page_key & $s['for_page_type']) {
-                    if($return != '') $return .= ', ';
+            foreach ($page_types AS $page_key => $page_type){
+                if ($page_key & $s['for_page_type']) {
+                    if ($return != '') $return .= ', ';
                     $return .= t($page_type);
                 }
             }
-            e($return); 
+            e($return);
             ?>
-            
+
         </td>
         <td class="options">
-            <a class="edit" href="template_edit.php?id=<?php echo $s['id']; ?>"><?php e($translation->get('edit settings', 'common')); ?></a>
-            <a class="delete" href="<?php echo basename($_SERVER['PHP_SELF']); ?>?delete=<?php echo $s['id']; ?>"><?php e($translation->get('delete', 'common')); ?></a>
+            <a class="edit" href="template_edit.php?id=<?php e($s['id']); ?>"><?php e($translation->get('edit settings', 'common')); ?></a>
+            <a class="delete" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($s['id']); ?>"><?php e($translation->get('delete', 'common')); ?></a>
         </td>
     </tr>
 <?php endforeach; ?>
