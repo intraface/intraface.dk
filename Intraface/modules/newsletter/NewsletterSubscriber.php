@@ -516,6 +516,7 @@ class NewsletterSubscriber extends Intraface_Standard
                 $subscribers[$i]['contact_city'] = $contact->address->get('city');
                 $subscribers[$i]['contact_email'] = $contact->address->get('email');
                 $subscribers[$i]['contact_country'] = $contact->address->get('country');
+                $subscribers[$i]['contact_login_url'] = $contact->getLoginUrl();
             }
             $i++;
         }
