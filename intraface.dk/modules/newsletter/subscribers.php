@@ -1,6 +1,7 @@
 <?php
 require('../../include_first.php');
 $module = $kernel->module('newsletter');
+$translation = $kernel->getTranslation('newsletter');
 
 if (!$kernel->user->hasModuleAccess('contact')) {
     trigger_error("Du skal have adgang til kontakt-modullet for at se denne side");
