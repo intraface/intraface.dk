@@ -150,7 +150,8 @@ class NewsletterSubscriber extends Intraface_Standard
         $this->value['code'] = $db->f('code');
         $this->contact = new Contact($this->list->kernel, $db->f('contact_id'));
         $this->value['email'] = $this->contact->get('email');
-
+        $this->value['resend_optin_email_count'] = $db->f('resend_optin_email_count');
+        
         return 1;
     }
 
@@ -475,6 +476,19 @@ class NewsletterSubscriber extends Intraface_Standard
         $this->error->set('could not send the e-mail' . implode(',', $email->error->message));
         return false;
     }
+    
+    /**
+     * Resends the optin e-mail to the user again, and adds one to count of resend times.
+     * 
+     */
+    function resendOptInEmail($mailer)
+    {
+        if($this->sendOptInEmail($mailer)) {
+            $db = new DB_Sql;
+            $db->query("UPDATE newsletter_subscriber SET resend_optin_email_count = resend_optin_email_count + 1 WHERE id = " . $this->id);
+            return true;
+        }
+    }
 
     private function getLoginUrl($contact)
     {
@@ -497,7 +511,7 @@ class NewsletterSubscriber extends Intraface_Standard
         //$db->query("SELECT id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted FROM newsletter_subscriber WHERE list_id=". $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id') . " AND optin = 1 AND active = 1");
         $i = 0;
 
-        $db = $this->getDBQuery()->getRecordset("id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted, optin", "", false);
+        $db = $this->getDBQuery()->getRecordset("id, contact_id, date_submitted, resend_optin_email_count, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted, optin", "", false);
 
         while ($db->nextRecord()) {
             $contact_id = $db->f('contact_id');
@@ -506,7 +520,8 @@ class NewsletterSubscriber extends Intraface_Standard
             $subscribers[$i]['dk_date_submitted'] = $db->f('dk_date_submitted');
             $subscribers[$i]['date_submitted'] = $db->f('date_submitted');
             $subscribers[$i]['optin'] = $db->f('optin');
-
+            $subscribers[$i]['resend_optin_email_count'] = $db->f('resend_optin_email_count');
+            
             if (isset($this->list->kernel->user)) { // only if we are logged in.
                 $contact = $this->getContact($db->f('contact_id'));
                 $subscribers[$i]['contact_number'] = $contact->get('number');
