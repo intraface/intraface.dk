@@ -1,4 +1,6 @@
-
+<?php
+require('../../../include_first.php');
+?>
 Event.observe( window, 'load', function() {
         
     document.getElementById('width').readOnly = true;
