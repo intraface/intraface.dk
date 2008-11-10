@@ -392,7 +392,7 @@ $page->start("Rykker");
 				?>
 				<tr>
 					<td class="number"><?php e($items[$i]["number"]); ?></td>
-					<td><a href="<?php e($module->getPath()).'view.php?id='.intval($items[$i]['invoice_id']); ?>"><?php e($items[$i]["description"]); ?></a></td>
+					<td><a href="<?php e($module->getPath().'view.php?id='.intval($items[$i]['invoice_id'])); ?>"><?php e($items[$i]["description"]); ?></a></td>
 					<td class="date"><?php e($items[$i]["dk_due_date"]); ?></td>
 					<td class="amount"><?php e(number_format($items[$i]["arrears"], 2, ",",".")); ?></td>
 				</tr>

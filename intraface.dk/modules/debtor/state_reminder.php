@@ -40,7 +40,7 @@ $page->start($translation->get('State invoice'));
 
 <?php if (!$year->readyForState($reminder->get('this_date'))): ?>
     <?php echo $year->error->view(); ?>
-    <p><?php e(t('go to the')); ?> <a href="<?php e($accounting_module->getPath()).'years.php'; ?>"><?php e(t('accounts')); ?></a></p>
+    <p><?php e(t('go to the')); ?> <a href="<?php e($accounting_module->getPath().'years.php'); ?>"><?php e(t('accounts')); ?></a></p>
 <?php else: ?>
 
     <p class="message"><?php e(t('this function will only state the reminder fee on this reminder. all invoices and earlier reminder fees on the reminder should be stated on the corresponding invoices and reminders.')); ?></p>
