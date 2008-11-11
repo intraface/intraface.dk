@@ -1,6 +1,8 @@
 <?php
-require('../../include_first.php');
-require('Spreadsheet/Excel/Writer.php');
+ini_set('memory_limit', '56M');
+
+require '../../include_first.php';
+require 'Spreadsheet/Excel/Writer.php';
 
 $translation = $kernel->getTranslation('debtor');
 $debtor_module = $kernel->module('debtor');
@@ -11,8 +13,6 @@ if (empty($_GET['type'])) $_GET['type'] = '';
 $debtor = Debtor::factory($kernel, intval($_GET["id"]), $_GET["type"]);
 $debtor->getDbQuery()->storeResult("use_stored", $debtor->get("type"), "toplevel");
 
-//$db = new DB_sql;
-
 $posts = $debtor->getList();
 
 // spreadsheet
@@ -20,19 +20,19 @@ $workbook = new Spreadsheet_Excel_Writer();
 
 $workbook->send('debtor.xls');
 
-$format_bold =& $workbook->addFormat();
+$format_bold = $workbook->addFormat();
 $format_bold->setBold();
 $format_bold->setSize(8);
 
-$format_italic =& $workbook->addFormat();
+$format_italic = $workbook->addFormat();
 $format_italic->setItalic();
 $format_italic->setSize(8);
 
-$format =& $workbook->addFormat();
+$format = $workbook->addFormat();
 $format->setSize(8);
 
 // Creating a worksheet
-$worksheet =& $workbook->addWorksheet(ucfirst($translation->get('title')));
+$worksheet = $workbook->addWorksheet(ucfirst($translation->get('title')));
 
 $i = 1;
 $worksheet->write($i, 0, $kernel->intranet->get('name'), $format_bold);
@@ -72,6 +72,8 @@ if ($debtor->getDbQuery()->checkFilter('contact_id')) {
 }
 
 
+
+
 $worksheet->write($i, 0, "Antal i søgningen", $format_italic);
 $worksheet->write($i, 1, count($posts), $format_italic);
 $i++;
@@ -98,6 +100,10 @@ if (!empty($product) && is_object($product) && get_class($product) == 'product')
     $c++;
 }
 
+// HACK unsetting debtor which is actually ok to avoid memory problems //
+$type = $debtor->get('type');
+unset($debtor);
+// HACK end //
 
 $i++;
 
@@ -125,19 +131,17 @@ if (count($posts) > 0) {
 
         if ($posts[$j]["status"] != "created") {
             $worksheet->write($i, 6, $posts[$j]["dk_date_sent"]);
-        }
-        else {
+        } else {
             $worksheet->write($i, 6, "Nej");
         }
 
         if ($posts[$j]["status"] == "executed" || $posts[$j]["status"] == "canceled") {
             $worksheet->write($i, 7, $translation->get($posts[$j]["status"], 'debtor'));
-        }
-        else {
+        } else {
             $worksheet->write($i, 7, $posts[$j]["dk_due_date"]);
         }
         $c = 8;
-        if ($debtor->get('type') == 'invoice') {
+        if ($type == 'invoice') {
             $worksheet->write($i, $c, $posts[$j]['arrears']);
             $c++;
         }
@@ -195,4 +199,3 @@ $worksheet->hideGridLines();
 $workbook->close();
 
 exit;
-?>
