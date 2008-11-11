@@ -86,6 +86,7 @@ class Intraface_modules_product_Variation_Gateway
         }
         
         $collection = $query->where(get_class($this->variation).'.product_id = ? AND id = ?', array($this->product->getId(), $id))->execute();
+        $query->free(true);
         
         if (!$collection || $collection->count() == 0) {
             throw new Intraface_Gateway_Exception('Unable to find variation '.$id);
@@ -113,6 +114,7 @@ class Intraface_modules_product_Variation_Gateway
         }
         
         $collection = $query->where(get_class($this->variation).'.product_id = ?', $this->product->getId())->execute();
+        $query->free(true);
         
         if (!$collection || $collection->count() == 0) {
             throw new Intraface_Gateway_Exception('Unable to find variation');
@@ -152,6 +154,7 @@ class Intraface_modules_product_Variation_Gateway
         }
         $query = $query->where(get_class($this->variation).'.product_id = ?', $this->product->getId());
         $collection = $query->execute();
+        $query->free(true);
         
         if (!$collection || $collection->count() == 0) {
             throw new Intraface_Gateway_Exception('Unable to find variation');
