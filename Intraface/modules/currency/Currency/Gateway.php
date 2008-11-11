@@ -22,7 +22,7 @@ class Intraface_modules_currency_Currency_Gateway
                 ->leftJoin('currency.payment_exchange_rate AS payment_exchange_rate')
                 ->orderBy('type_key')
                 ->execute();
-
+        $query->free(true);
 
         if (!$collection || $collection->count() == 0) {
             throw new Intraface_Gateway_Exception('Unable to find currency');
@@ -43,7 +43,7 @@ class Intraface_modules_currency_Currency_Gateway
                 ->innerJoin('currency.payment_exchange_rate AS payment_exchange_rate')
                 ->orderBy('type_key')
                 ->execute();
-
+        $query->free(true);
 
         if (!$collection || $collection->count() == 0) {
             throw new Intraface_Gateway_Exception('Unable to find currency');
@@ -59,7 +59,8 @@ class Intraface_modules_currency_Currency_Gateway
                 ->leftJoin('currency.payment_exchange_rate AS payment_exchange_rate')
                 ->addWhere('currency.id = ?', $id);
         $collection = $query->execute();
-
+        $query->free(true);
+        
         if (!$collection || $collection->count() != 1) {
             throw new Intraface_Gateway_Exception('Unable to find currency '.$id);
         }
@@ -78,7 +79,8 @@ class Intraface_modules_currency_Currency_Gateway
                 ->addWhere('currency.type_key = ?', $key);
 
         $collection = $query->execute();
-
+        $query->free(true);
+        
         if (!$collection || $collection->count() != 1) {
             throw new Intraface_Gateway_Exception('Unable to find currency with type key '.$key);
         }
