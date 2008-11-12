@@ -126,7 +126,7 @@ if (count($posts) > 0) {
         $worksheet->write($i, 1, $posts[$j]['contact']['number']);
         $worksheet->write($i, 2, $posts[$j]["name"]);
         $worksheet->write($i, 3, $posts[$j]["description"]);
-        $worksheet->write($i, 4, number_format($posts[$j]["total"], 2, ",","."));
+        $worksheet->writeNumber($i, 4, $posts[$j]["total"]);
         $worksheet->write($i, 5, $posts[$j]["dk_this_date"]);
 
         if ($posts[$j]["status"] != "created") {
