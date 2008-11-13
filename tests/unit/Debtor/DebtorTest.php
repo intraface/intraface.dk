@@ -43,6 +43,11 @@ class FakeDebtorIntranet
         else return $info[$key];
     }
     
+    function getId()
+    {
+        return 1;
+    }
+    
     function hasModuleAccess() {
         return true;
     }
@@ -69,9 +74,12 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $db->query('TRUNCATE debtor');
         $db->query('TRUNCATE debtor_item');
         $db->query('TRUNCATE currency');
-        $db->query('TRUNCATE currency_exchange_rate');
+        $db->query('TRUNCATE currency_exchangerate');
         
+        $db->query('TRUNCATE product');
+        $db->query('TRUNCATE product_detail');
         
+        $db->query('TRUNCATE invoice_payment');
         
         
         $kernel = new Intraface_Kernel;
@@ -94,11 +102,50 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         
         return $contact->save(array('name' => 'Test', 'email' => 'lars@legestue.net', 'phone' => '98468269'));
     }
+    
+    function createProduct()
+    {
+        $this->kernel->useModule('product');
+        $product = new Product($this->kernel);
+        
+        return $product->save(array('name' => 'Test', 'price' => 20, 'unit' => 1));
+    }
+    
+    function createCurrency()
+    {
+        $currency = new Intraface_modules_currency_Currency;
+        $currency->setType(new Intraface_modules_currency_Currency_Type_Eur);
+        try {
+            $currency->save();
+        }
+        catch (Exception $e) {
+            print_r($currency->getErrorStack());
+            die;
+        }
+        $excr = new Intraface_modules_currency_Currency_ExchangeRate_ProductPrice;
+        $excr->setRate(new Ilib_Variable_Float(745.23));
+        $excr->setCurrency($currency);
+        $excr->save();
+        
+        return $currency;
+        
+    }
+    
+    function createPayment($debtor)
+    {
+        $payment = new Payment($debtor);
+        return $payment->update(array('payment_date' => '01-01-2007', 'amount' => 50, 'type' => 1));
+    }
 
     function testConstruct()
     {
         $debtor = $this->createDebtor();
         $this->assertTrue(is_object($debtor));
+    }
+    
+    function testGetDBQuery() {
+        $debtor = $this->createDebtor();
+        $this->assertEquals('Intraface_DBQuery', get_class($debtor->getDBQuery()));
     }
     
     function testFactoryWitnIdentifier()
@@ -166,33 +213,17 @@ class DebtorTest extends PHPUnit_Framework_TestCase
     function testGetCurrency() {
         $debtor = $this->createDebtor();
         
-        $currency = new Intraface_modules_currency_Currency;
-        $currency->setType(new Intraface_modules_currency_Currency_Type_Eur);
-        try {
-            $currency->save();
-        }
-        catch (Exception $e) {
-            print_r($currency->getErrorStack());
-            die;
-        }
-        $excr = new Intraface_modules_currency_Currency_ExchangeRate_ProductPrice;
-        $excr->setRate(new Ilib_Variable_Float(745.23));
-        $excr->setCurrency($currency);
-        $excr->save();
-        
-        $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
-        
         $debtor->update(
             array(
                 'contact_id' => $this->createContact(), 
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'),
-                'currency' => $currency)
+                'currency' => $this->createCurrency())
             );
         $debtor->load();
         
-        $this->assertEquals('Intraface_modules_currency_Currency', get_class($debtor->getCurrency(Doctrine_Manager::connection(DB_DSN))));
+        $this->assertEquals('Intraface_modules_currency_Currency', get_class($debtor->getCurrency()));
         
     }
     
@@ -209,6 +240,32 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($debtor->setStatus('sent'));
     }
     
+    function testGetStatusAfterStatusChange() {
+        
+        $debtor = $this->createDebtor();
+        
+        $debtor->update(array(
+                'contact_id' => $this->createContact(), 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y')));
+        
+        $debtor->setStatus('sent');
+        $debtor->load();
+        $this->assertEquals('sent', $debtor->get('status'));
+    }
+    
+    function testSetNewContact()
+    {
+        $debtor = $this->createDebtor();
+        $debtor->update(array(
+                'contact_id' => $this->createContact(), 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y')));
+        $this->assertTrue($debtor->setNewContact($this->createContact()));
+    }
+    
     function testCreate() {
         
         $quotation = new Debtor($this->kernel, 'quotation');
@@ -221,6 +278,22 @@ class DebtorTest extends PHPUnit_Framework_TestCase
        
         $order = new Debtor($this->kernel, 'order');
         $this->assertTrue($order->create($quotation) > 0);
+    }
+    
+    function testCreateWithCurrency() {
+        
+        $quotation = new Debtor($this->kernel, 'quotation');
+        
+        $quotation->update(array(
+                'contact_id' => $this->createContact(), 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y'),
+                'currency' => $this->createCurrency()));
+       
+        $order = new Debtor($this->kernel, 'order');
+        $this->assertTrue($order->create($quotation) > 0);
+        $this->assertEquals('Intraface_modules_currency_Currency', get_class($order->getCurrency()));
     }
     
     function testDelete() {
@@ -250,6 +323,107 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($debtor->any('contact', $contact_id) > 0);
     }
     
+    function testAnyWithProduct() {
+                
+        $debtor = $this->createDebtor();
+        $contact_id = $this->createContact();
+        $debtor->update(array(
+                'contact_id' => $contact_id, 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y')));
+        
+        $product_id = $this->createProduct();
+        $debtor->loadItem();
+        $debtor->item->save(array('product_id' => $product_id, 'quantity' => 1));
+        
+        $this->assertTrue($debtor->any('product', $product_id) > 0);
+    }
+    
+    function testGetTotal()
+    {
+        $debtor = $this->createDebtor();
+        $contact_id = $this->createContact();
+        $debtor->update(array(
+                'contact_id' => $contact_id, 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y')));
+        $product_id = $this->createProduct();
+        $debtor->loadItem();
+        $this->assertEquals(1, $product_id);
+        $debtor->item->save(array('product_id' => $product_id, 'quantity' => 3));
+        $debtor->load();
+        
+        $this->assertEquals(75, $debtor->getTotal()->getAsIso());
+    }
+    
+    function testGetTotalInCurrency()
+    {
+        $debtor = $this->createDebtor();
+        $contact_id = $this->createContact();
+        $debtor->update(array(
+                'contact_id' => $contact_id, 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y'),
+                'currency' => $this->createCurrency()));
+        $product_id = $this->createProduct();
+        $debtor->loadItem();
+        $this->assertEquals(1, $product_id);
+        $debtor->item->save(array('product_id' => $product_id, 'quantity' => 3));
+        $debtor->load();
+        
+        $this->assertEquals(10.05, $debtor->getTotalInCurrency()->getAsIso());
+    
+    }
+    
+    function testGetArrears()
+    {
+        require_once 'Intraface/modules/invoice/Invoice.php';
+        $debtor = new Invoice($this->kernel);
+        $contact_id = $this->createContact();
+        $debtor->update(array(
+                'contact_id' => $contact_id, 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y')));
+        $product_id = $this->createProduct();
+        $debtor->loadItem();
+        $this->assertEquals(1, $product_id);
+        $debtor->item->save(array('product_id' => $product_id, 'quantity' => 3));
+        
+        $this->createPayment($debtor);
+        
+        $debtor->load();
+        
+        $this->assertEquals(75, $debtor->getTotal()->getAsIso());
+        $this->assertEquals(25, $debtor->getArrears()->getAsIso());
+    }
+    
+    function testGetArrearsInCurrency()
+    {
+        $debtor = new Invoice($this->kernel);
+        $contact_id = $this->createContact();
+        $debtor->update(array(
+                'contact_id' => $contact_id, 
+                'description' =>'test',
+                'this_date' => date('d-m-Y'),
+                'due_date' => date('d-m-Y'),
+                'currency' => $this->createCurrency()));
+        $product_id = $this->createProduct();
+        $debtor->loadItem();
+        $this->assertEquals(1, $product_id);
+        $debtor->item->save(array('product_id' => $product_id, 'quantity' => 3));
+        
+        $this->createPayment($debtor);
+        
+        $debtor->load();
+        
+        $this->assertEquals(75, $debtor->getTotal()->getAsIso());
+        $this->assertEquals(3.35, $debtor->getArrearsInCurrency()->getAsIso());
+    }
+    
     function testGetMaxNumber() {
         
         $debtor = $this->createDebtor();
@@ -273,6 +447,7 @@ class DebtorTest extends PHPUnit_Framework_TestCase
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y')), 'quotation'));
     }
+    
 }
 
 ?>

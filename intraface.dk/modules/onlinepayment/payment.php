@@ -130,14 +130,32 @@ $page->start("Onlinebetaling");
         </tr>
 		<tr>
 			<th>Beløb</th>
-			<td><?php e($onlinepayment->get("dk_amount")); ?></td>
+			<td>
+                <?php 
+                if(false !== ($currency = $onlinepayment->getCurrency())) {
+                    e($currency->getType()->getIsoCode().' ');    
+                } elseif($kernel->intranet->hasModuleAccess('currency')) {
+                    e('DKK ');
+                }
+                e($onlinepayment->get("dk_amount")); 
+                ?>
+            </td>
 		</tr>
 		<?php
 		if ($onlinepayment->get('amount') != $onlinepayment->get('original_amount')) {
 			?>
 			<tr>
 				<th>Oprindeligt beløb</th>
-				<td><?php e($onlinepayment->get("dk_original_amount")); ?></td>
+				<td>
+                    <?php 
+                    if(false !== ($currency = $onlinepayment->getCurrency())) {
+                        e($currency->getType()->getIsoCode().' ');    
+                    } elseif($kernel->intranet->hasModuleAccess('currency')) {
+                        e('DKK ');
+                    }
+                    e($onlinepayment->get("dk_original_amount")); 
+                    ?>
+                </td>
 			</tr>
 			<?php
 		}

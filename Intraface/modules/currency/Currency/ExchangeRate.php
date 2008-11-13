@@ -67,6 +67,17 @@ class Intraface_modules_currency_Currency_ExchangeRate extends Doctrine_Record
         throw new Exception('You cannot delete exchange rates.');
     }
     
+    /**
+     * Converts amount from system default to currency
+     * 
+     * @param object $amount Ilib_Variable_Float cotaining amount
+     * @return object Ilib_Varibale_Float containing converted amount
+     */
+    public function convertAmountToCurrency($amount)
+    {
+        return new Ilib_Variable_Float($amount->getAsIso() / ($this->getRate()->getAsIso() / 100));
+    }
+    
     public function getUsedForTypes() 
     {
         return array(

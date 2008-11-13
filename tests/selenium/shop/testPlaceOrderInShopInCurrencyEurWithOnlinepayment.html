@@ -137,8 +137,38 @@
 	<td></td>
 </tr>
 <tr>
+	<td>clickAndWait</td>
+	<td>pay</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>cardnum</td>
+	<td>1111111111111111</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>month</td>
+	<td>label=03</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>year</td>
+	<td>label=2009</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>cvd</td>
+	<td>123</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
 	<td>verifyTextPresent</td>
-	<td>Vi har modtaget din ordre</td>
+	<td>Receipt</td>
 	<td></td>
 </tr>
 <tr>
@@ -178,12 +208,17 @@
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
-	<td>Product 1</td>
+	<td>Online payment</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyTextPresent</td>
 	<td>EUR</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>authorized</td>
 	<td></td>
 </tr>
 <tr>

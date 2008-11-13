@@ -2,6 +2,8 @@
 require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'tests/unit/stubs/PhpMailer.php';
 
+Intraface_Doctrine_Intranet::singleton(1);
+
 class FakeShopIntranet
 {
     public $address;
@@ -110,18 +112,16 @@ class ShopTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(count($basket->getItems()) == 0);
     }
 
-    function testPlaceOrderWithAnEanNumberSavesTheEanNumberAndAutomaticallyMakesItACompany()
+    function testPlaceOrderWithWithCurrency()
     {
-        $ean = '2222222222222';
-        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
+        
+        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'currency' => 'EUR');
         $mailer = new FakePhpMailer;
         $order_id = $this->webshop->placeOrder($data, $mailer);
         $this->assertTrue($order_id > 0);
-        $this->assertTrue($mailer->isSend(), 'Mail is not send');
         
         $order = new Order($this->kernel, $order_id);
-        $this->assertEquals($ean, $order->getContact()->getAddress()->get('ean'));
-        $this->assertEquals(1, $order->getContact()->get('type_key'));
+        $this->assertEquals('Intraface_modules_currency_Currency', get_class($order->getCurrency()));
     }
 
     function testPlaceManualOrder()

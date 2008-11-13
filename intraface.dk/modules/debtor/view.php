@@ -646,7 +646,7 @@ if (isset($onlinepayment)) {
                                 }
                                 ?>
                             </td>
-                            <td><?php e(number_format($payment["amount"], 2, ",", ".")); ?></td>
+                            <td class="amount"><?php e(number_format($payment["amount"], 2, ",", ".")); ?></td>
                             <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
                                 <td>
                                     <?php if ($payment['is_stated']): ?>
@@ -669,7 +669,7 @@ if (isset($onlinepayment)) {
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td><strong><?php e(t('Total')); ?></strong></td>
-                        <td><?php e(number_format($payment_total, 2, ",", ".")); ?></td>
+                        <td class="amount"><?php e(number_format($payment_total, 2, ",", ".")); ?></td>
                         <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
                             <td>&nbsp;</td>
                         <?php endif; ?>
@@ -678,7 +678,7 @@ if (isset($onlinepayment)) {
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <th>Manglende betaling</th>
-                        <td><?php e(number_format($debtor->get("total") - $payment_total, 2, ",", ".")); ?></td>
+                        <td class="amount"><?php e(number_format($debtor->get("total") - $payment_total, 2, ",", ".")); ?></td>
                         <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
                             <td>&nbsp;</td>
                         <?php endif; ?>
@@ -737,8 +737,17 @@ if (isset($onlinepayment)) {
                                     }
                                     ?>
                                 </td>
-                                <td><?php e($p['dk_amount']); ?></td>
-                                <td class="buttons">
+                                <td class="amount">
+                                    <?php 
+                                    if($p['currency'] && is_object($p['currency'])) {
+                                        e($p['currency']->getType()->getIsoCode().' ');    
+                                    } elseif($kernel->intranet->hasModuleAccess('currency')) {
+                                        e('DKK ');
+                                    } 
+                                    e($p['dk_amount']); 
+                                    ?>
+                                </td>
+                                <td class="options">
 
                                     <?php if (count($actions) > 0 && $p['status'] == "authorized" && $kernel->user->hasModuleAccess('onlinepayment')): // Changed for better usability. $debtor->get("type") == "invoice" && $debtor->get("status") == "sent"    ?>
                                         <?php

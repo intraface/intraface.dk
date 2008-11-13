@@ -131,7 +131,15 @@ $page->start('Onlinebetalinger');
 					}
 					?>
 				</td>
-				<td><?php e($payments[$i]["dk_amount"]); ?></td>
+				<td class="amount">
+                    <?php 
+                    if($payments[$i]['currency'] && is_object($payments[$i]['currency'])) {
+                        e($payments[$i]['currency']->getType()->getIsoCode().' ');    
+                    } elseif($kernel->intranet->hasModuleAccess('currency')) {
+                        e('DKK ');
+                    }
+                    
+                    e($payments[$i]["dk_amount"]); ?></td>
 				<td>
 					<?php
 					if ($payments[$i]["status"] == 'captured') {

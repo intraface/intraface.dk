@@ -355,7 +355,6 @@ class Debtor extends Intraface_Standard
         $from = safeToDb($from);
         $from_id = (int)$from_id;
 
-
         // starte validatoren
         $validator = new Intraface_Validator($this->error);
 
@@ -419,7 +418,7 @@ class Debtor extends Intraface_Standard
         if (isset($input['internal_note'])) {
             $internal_note_sql = ", internal_note = '".$input['internal_note']."'";
         }
-        
+       
         $currency_id = 0;
         $currency_exchange_rate_id = 0;
         if (isset($input['currency']) && is_object($input['currency'])) {
@@ -553,7 +552,8 @@ class Debtor extends Intraface_Standard
         $values = $debtor_object->get();
         $values['this_date'] = date('d-m-Y');
         $values['number'] = ''; // nulstiller nummeret ellers vil den få samme nummer
-
+        $values['currency'] = $debtor_object->getCurrency();
+        
         switch ($this->type) {
             case "invoice":
                 $values['due_date'] = date("d-m-Y", time() + 24 * 60 * 60 * $debtor_object->contact->get("paymentcondition"));
@@ -1134,6 +1134,55 @@ class Debtor extends Intraface_Standard
         }
         
         return $this->currency;
+    }
+    
+    /**
+     * Returns the total amount on Debtor
+     * 
+     * @return object Ilib_Variable_Float with total
+     */
+    public function getTotal() 
+    {
+        return new Ilib_Variable_Float($this->value['total']);
+    }
+    
+    /**
+     * Returns the total amount of debtor in the given set currency if is set.
+     * 
+     * @returns object Ilib_Variable_Float with total amount in currency if set, otherwise in system default.
+     */
+    public function getTotalInCurrency()
+    {
+        if($this->getCurrency()) {
+            return new Ilib_Variable_Float($this->value['total_currency']);
+        }
+        else {
+            return $this->getTotal();
+        }
+    }
+    
+    
+    /**
+     * Returns arrears on a debtor
+     * 
+     * @return object Ilib_Variable_Float with arrears
+     */
+    public function getArrears()
+    {
+        return new Ilib_Variable_Float($this->value['arrears']);
+    }
+    
+    /**
+     * Returns arrears in currency
+     */
+    public function getArrearsInCurrency()
+    {
+        if(false !== ($currency = $this->getCurrency())) {
+            return new Ilib_Variable_Float(round($currency->getProductPriceExchangeRate($this->get('currency_product_price_exchange_rate_id'))->convertAmountToCurrency($this->getArrears())->getAsIso(), 2));    
+        }
+        
+        return $this->getArrears();
+        
     }
     
     /**

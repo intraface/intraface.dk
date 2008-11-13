@@ -18,6 +18,8 @@ class OnlinePayment extends Intraface_Standard
     public $id;
     public $kernel;
     protected $dbquery;
+    
+    protected $currency;
 
     // Standard udbyder-transactionsstatus. Er lavet ud fra QuickPay
     public $transaction_status_types = array(
@@ -119,7 +121,8 @@ class OnlinePayment extends Intraface_Standard
     function load()
     {
         $db = new DB_Sql;
-        $db->query("SELECT id, date_created, date_authorized, date_captured, date_reversed, belong_to_key, belong_to_id, text, status_key, amount, original_amount, transaction_number, transaction_status, pbs_status,
+        $db->query("SELECT id, date_created, date_authorized, date_captured, date_reversed, belong_to_key, belong_to_id, text, status_key, amount, original_amount, transaction_number, transaction_status, pbs_status, currency_id,
+                captured_in_currency_payment_exchange_rate_id,
                 DATE_FORMAT(date_created, '%d-%m-%Y') AS dk_date_created,
                 DATE_FORMAT(date_authorized, '%d-%m-%Y') AS dk_date_authorized,
                 DATE_FORMAT(date_captured, '%d-%m-%Y') AS dk_date_captured,
@@ -150,7 +153,9 @@ class OnlinePayment extends Intraface_Standard
             $this->value['status'] = $status_types[$db->f('status_key')];
             $this->value['amount'] = $db->f('amount');
             $this->value['dk_amount'] = number_format($db->f('amount'), 2, ",", ".");
-
+            $this->value['currency_id'] = $db->f('currency_id');
+            $this->value['captured_in_currency_payment_exchange_rate_id'] = $db->f('captured_in_currency_payment_exchange_rate_id');
+            
             $this->value['original_amount'] = $db->f('original_amount');
             $this->value['dk_original_amount'] = number_format($db->f('original_amount'), 2, ",", ".");
 
@@ -239,6 +244,11 @@ class OnlinePayment extends Intraface_Standard
                 $this->error->set("Kunne ikke konvertere amount til databasen!");
             }
         }
+        
+        $currency_id = 0;
+        if(isset($input['currency']) && is_object($input['currency'])) {
+            $currency_id = $input['currency']->getId();
+        }
 
         if (array_key_exists('text', $input)) {
             $validator->isString($input['text'], 'text er ikke en gyldig streng', '', 'allow_empty');
@@ -260,7 +270,8 @@ class OnlinePayment extends Intraface_Standard
             pbs_status = \"".$input['pbs_status']."\",
             amount = ".$input['amount'].",
             provider_key = ".$this->provider_key.",
-            original_amount = ".$input['amount'];
+            original_amount = ".$input['amount'].",
+            currency_id = ".$currency_id;
 
         $db = new DB_Sql;
 
@@ -439,14 +450,17 @@ class OnlinePayment extends Intraface_Standard
 
         $input = array(
             "payment_date" => date("d-m-Y"),
-            "amount" => $this->get("dk_amount"),
+            "amount" => $this->getAmountInSystemCurrency()->getAsLocal('da_dk', 2),
             "description" => "Transaction ".$this->get('transaction_number'),
             "type" => 2);
         // type = 2: credit_card
 
-
         if ($payment->update($input)) {
             $this->value['create_payment_id'] = $payment->get('id');
+            if($this->getCurrency()) {
+                $db = new DB_Sql;
+                $db->query("UPDATE onlinepayment SET captured_in_currency_payment_exchange_rate_id = ".$this->getCurrency()->getPaymentExchangeRate()->getId()." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
+            }
             return true;
 
         } else {
@@ -542,9 +556,11 @@ class OnlinePayment extends Intraface_Standard
             }
         }
         
-
+        $doctrine = Doctrine_Manager::connection(DB_DSN);
+        $currency_gateway = new Intraface_modules_currency_Currency_Gateway($doctrine);
+        
         $this->getDBQuery()->setSorting("date_created DESC");
-        $db = $this->getDBQuery()->getRecordset("id, date_created, belong_to_key, belong_to_id, text, status_key, amount, provider_key, transaction_number, transaction_status, pbs_status, DATE_FORMAT(date_created, '%d-%m-%Y %H:%i') AS dk_date_created", "", false);
+        $db = $this->getDBQuery()->getRecordset("id, date_created, belong_to_key, belong_to_id, text, status_key, amount, provider_key, transaction_number, transaction_status, pbs_status, currency_id, DATE_FORMAT(date_created, '%d-%m-%Y %H:%i') AS dk_date_created", "", false);
         $i = 0;
         $list = array();
 
@@ -571,6 +587,13 @@ class OnlinePayment extends Intraface_Standard
             } else {
                 $list[$i]['transaction_status_translated'] = 'invalid status';
             }
+            
+            if ($db->f('currency_id') != 0) {
+                $list[$i]['currency'] = $currency_gateway->findById($db->f('currency_id'));     
+            }
+            else {
+                $list[$i]['currency'] = false;
+            }
 
             // Don't really know want this is for? /Sune(19-05-2007)
             if (array_key_exists($list[$i]['transaction_status'], $this->transaction_status_types) && $db->f('transaction_status') != $this->transaction_status_authorized) {
@@ -584,6 +607,54 @@ class OnlinePayment extends Intraface_Standard
         return $list;
 
     }
+    
+    /**
+     * Returns the currency if set, otherwise false
+     */
+    public function getCurrency()
+    {
+        if ($this->get('currency_id') == 0) {
+            return false;
+        }
+        
+        if (!$this->currency) {
+            $doctrine = Doctrine_Manager::connection(DB_DSN);
+            $gateway = new Intraface_modules_currency_Currency_Gateway($doctrine);
+            $this->currency = $gateway->findById($this->get('currency_id'));     
+        }
+        
+        return $this->currency;
+    }
+    
+    /**
+     * Returns the amount in the given currency
+     */
+    public function getAmount()
+    {
+        return new Ilib_Variable_Float($this->get('amount'));
+    }
+    
+    /**
+     * Returns an approximate amount in the 
+     */
+    public function getAmountInSystemCurrency()
+    {
+        if($this->getCurrency()) {
+            if($this->get('status') == 'captured') {
+                return new Ilib_Variable_Float(
+                    $this->getCurrency()
+                    ->getPaymentExchangeRate(
+                        $this->get('captured_in_currency_payment_exchange_rate_id')
+                    )
+                    ->convertAmountToCurrency($this->getAmount())->getAsIso(2));
+            }
+            else {
+                return new Ilib_Variable_Float($this->getCurrency()->getPaymentExchangeRate()->convertAmountToCurrency($this->getAmount())->getAsIso(2));
+            }
+        }
+        return $this->getAmount();
+    }
+    
 
     /**
      * returns the possible status types
