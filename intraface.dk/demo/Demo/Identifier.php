@@ -51,7 +51,7 @@ class Demo_Identifier extends k_Controller
                     '    new IntrafacePublic_OnlinePayment_Client_XMLRPC(' .
                     '        array("private_key" => "'.$this->getPrivateKey().'", "session_id" => md5($registry->get("k_http_Session")->getSessionId())), ' .
                     '        false, ' .
-                    '        INTRAFACE_XMLPRC_SERVER_PATH . "onlinepayment/server0001.php"' .
+                    '        INTRAFACE_XMLPRC_SERVER_PATH . "onlinepayment/server0002.php"' .
                     '    ),' .
                     '    $registry->get("cache")' .
                     ');'
