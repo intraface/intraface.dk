@@ -138,7 +138,7 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.
 $pfm->addPackageDepWithChannel('required', 'Ilib_Validator', 'public.intraface.dk', '0.0.2');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html', 'public.intraface.dk', '0.2.3');
 $pfm->addPackageDepWithChannel('required', 'Ilib_ClassLoader', 'public.intraface.dk', '0.1.1');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Variable', 'public.intraface.dk', '0.2.1');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Variable', 'public.intraface.dk', '0.2.2');
 
 // other intraface 3_Party packages
 $pfm->addPackageDepWithChannel('required', 'DB_Sql', 'public.intraface.dk', '0.0.1');
@@ -190,18 +190,17 @@ $pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php
 
 // modulepackage
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Debtor_XMLRPC', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html_Provider_FakeQuickpay', 'public.intraface.dk', '0.2.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_XMLRPC', 'public.intraface.dk', '0.1.1');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html_Provider_FakeQuickpay', 'public.intraface.dk', '0.3.0');
 
 
 // demo
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Admin_XMLRPC', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Client_XMLRPC', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Controller', 'public.intraface.dk', '0.1.6');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '0.3.2');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.5.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop', 'public.intraface.dk', '0.4.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '0.4.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.6.0');
 $pfm->addPackageDepWithChannel('required', 'konstrukt', 'public.intraface.dk', '0.4.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.intraface.dk', '0.1.0');
 
 
