@@ -56,8 +56,9 @@ class ProductTest extends PHPUnit_Framework_TestCase
 
         $db = MDB2::factory(DB_DSN);
         $db->query('TRUNCATE product');
-        $db->query('TRUNCATE product_detail');
+        $db->query('TRUNCATE product_attribute');
         $db->query('TRUNCATE product_attribute_group');
+        $db->query('TRUNCATE product_detail');
         $db->query('TRUNCATE product_variation');
         $db->query('TRUNCATE product_variation_detail');
         $db->query('TRUNCATE product_variation_x_attribute');
