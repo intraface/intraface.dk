@@ -67,6 +67,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: product.php?id='.$product->get('id'));
         exit;
 
+    } elseif (isset($_GET['moveup'])) {
+        $product = new Product($kernel, $_GET['id']);
+        $append_file = new AppendFile($kernel, 'product', $product->get('id'));
+        $file = $append_file->findById($_GET['moveup']);
+      	$file->moveUp();
+        header('Location: product.php?id='.$product->get('id'));
+        exit;
+    } elseif (isset($_GET['movedown'])) {
+        $product = new Product($kernel, $_GET['id']);
+        $append_file = new AppendFile($kernel, 'product', $product->get('id'));
+        $file = $append_file->findById($_GET['movedown']);
+        $file->moveDown();
+        header('Location: product.php?id='.$product->get('id'));
+        exit;
     } elseif (!empty($_GET['del_related']) AND is_numeric($_GET['del_related'])) {
         $product = new Product($kernel, $_GET['id']);
         $product->deleteRelatedProduct($_GET['del_related']);
@@ -128,7 +142,7 @@ $page->start(t('product') . ': ' . $product->get('name'));
 </div>
 
 <table>
-    <?php if (!$product->get('has_variation')): ?>
+    <?php if (!$product->hasVariation()): ?>
         <tr>
             <td><?php e(t('price')); ?></td>
             <td><?php e(number_format($product->get('price'), 2, ",", ".")); ?> <?php e(t('excl. vat')); ?></td>
@@ -321,7 +335,12 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         $product->getPictures();
         if (count($product->get('pictures')) > 0) {
             foreach ($product->get('pictures') AS $appendix) {
-                echo '<div class="appendix"><img src="'.$appendix['system-square']['file_uri'].'" />'.$appendix['original']['name'].' <a class="delete" href="product.php?id='.$product->get('id').'&amp;delete_appended_file_id='.$appendix['appended_file_id'].'">Fjern</a></div>';
+                echo '<div class="appendix">
+                        <img src="'.$appendix['system-square']['file_uri'].'" />'.$appendix['original']['name'].'
+                                <a class="delete" href="product.php?id='.$product->get('id').'&amp;delete_appended_file_id='.$appendix['appended_file_id'].'">Fjern</a>
+                                <a class="moveup" href="product.php?id='.$product->get('id').'&amp;moveup='.$appendix['appended_file_id'].'">Moveup</a>
+                                <a class="movedown" href="product.php?id='.$product->get('id').'&amp;movedown='.$appendix['appended_file_id'].'">Movedown</a>
+                                </div>';
             }
         }
         ?>
