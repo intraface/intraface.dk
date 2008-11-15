@@ -7,5 +7,5 @@ $options = array(
     'prefix' => 'intraface.', 
     'encoding' => 'utf-8');
 
-$server = XML_RPC2_ServerFixedEncodingObject::create(new Intraface_XMLRPC_Admin_Server(), $options);
+$server = XML_RPC2_Server::create(new Intraface_XMLRPC_Admin_Server(), $options);
 $server->handleCall();

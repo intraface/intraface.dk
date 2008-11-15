@@ -16,6 +16,6 @@ $HTTP_RAW_POST_DATA = file_get_contents('php://input');
 $options = array('prefix' => 'cms.',
                  'encoding' => 'utf-8');
 
-$server = XML_RPC2_ServerFixedEncodingObject::create(new Intraface_XMLRPC_CMS_Server0300(), $options);
+$server = XML_RPC2_Server::create(new Intraface_XMLRPC_CMS_Server0300(), $options);
 $server->handleCall();
 ?>

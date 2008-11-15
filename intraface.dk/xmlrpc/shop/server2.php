@@ -8,5 +8,5 @@ $options = array(
     'prefix' => 'shop.',
     'encoding' => 'utf-8');
 
-$server = XML_RPC2_ServerFixedEncodingObject::create(new Intraface_XMLRPC_Shop_Server2(), $options);
+$server = XML_RPC2_Server::create(new Intraface_XMLRPC_Shop_Server2(), $options);
 $server->handleCall();
