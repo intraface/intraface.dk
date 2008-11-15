@@ -66,7 +66,7 @@ class Debtor extends Intraface_Standard
      * @var object
      */
     public $payment;
-    
+
     /**
      * @var object currency
      */
@@ -111,7 +111,7 @@ class Debtor extends Intraface_Standard
             $this->load();
         }
     }
-    
+
     function getDBQuery()
     {
         if ($this->dbquery) {
@@ -124,9 +124,9 @@ class Debtor extends Intraface_Standard
         $this->dbquery->setJoin("LEFT", "debtor_item", "debtor_item.debtor_id = debtor.id AND debtor_item.active = 1 AND debtor_item.intranet_id = ".$this->kernel->intranet->get("id"), '');
 
         $this->dbquery->useErrorObject($this->error);
-        
+
         return $this->dbquery;
-        
+
     }
 
     /**
@@ -162,7 +162,7 @@ class Debtor extends Intraface_Standard
             } else {
                 trigger_error("Invalid identifier_key for debtor in Debtor::factory", E_USER_ERROR);
             }
-        } 
+        }
 
         switch ($type) {
             case "quotation":
@@ -297,7 +297,7 @@ class Debtor extends Intraface_Standard
         $this->loadItem();
         $item = $this->item->getList();
         $this->value['items'] = $item;
-        
+
         /**
          * Currency is always loaded, should be done with left join. Oh give me more doctrine!
          */
@@ -319,8 +319,8 @@ class Debtor extends Intraface_Standard
         $this->value["total"] = round($total, 2);
         if ($currency) $this->value['total_currency'] = round($total_currency, 2);
         $this->value['payment_total'] = 0;
-        
-        
+
+
 
         if ($this->value["type"] == "invoice") {
             foreach ($this->getDebtorAccount()->getList() AS $payment) {
@@ -354,6 +354,7 @@ class Debtor extends Intraface_Standard
         $input = safeToDb($input);
         $from = safeToDb($from);
         $from_id = (int)$from_id;
+
 
         // starte validatoren
         $validator = new Intraface_Validator($this->error);
@@ -418,7 +419,7 @@ class Debtor extends Intraface_Standard
         if (isset($input['internal_note'])) {
             $internal_note_sql = ", internal_note = '".$input['internal_note']."'";
         }
-       
+
         $currency_id = 0;
         $currency_exchange_rate_id = 0;
         if (isset($input['currency']) && is_object($input['currency'])) {
@@ -431,14 +432,14 @@ class Debtor extends Intraface_Standard
         } else {
             $input["round_off"] = 0;
         }
-        
+
         if ($this->error->isError()) {
             return 0;
         }
       // user_id = ".$this->kernel->user->get('id').", // skal puttes på, men kun hvis det ikke er fra webshop.
         $db = new DB_Sql;
         if ($this->id == 0) {
-            
+
             $infinite_check = 0;
             $random = new Ilib_RandomKeyGenerator();
             do {
@@ -449,7 +450,7 @@ class Debtor extends Intraface_Standard
                     throw new Exception('Unable to generate an unique key');
                 }
             } while ($db->nextRecord());
-            
+
             $sql_type = "INSERT INTO ";
             $sql_after = ", date_created = NOW(), identifier_key = \"".$identifier."\", intranet_id = " . $this->kernel->intranet->get('id');
         } else {
@@ -786,8 +787,7 @@ class Debtor extends Intraface_Standard
             $this->dbquery->setCondition("debtor_item.product_id = ".$this->dbquery->getFilter('product_id'));
             if ($this->dbquery->checkFilter("product_variation_id")) {
                 $this->dbquery->setCondition("debtor_item.product_variation_id = ".$this->dbquery->getFilter('product_variation_id'));
-            }
-            else {
+            } else {
                 $this->dbquery->setCondition("debtor_item.product_variation_id = 0");
             }
         }
@@ -905,7 +905,7 @@ class Debtor extends Intraface_Standard
         $i = 0;
         $list = array();
 
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
 
             $debtor = self::factory($this->kernel, (int)$db->f("id"));
             $list[$i] = $debtor->get();
@@ -927,6 +927,8 @@ class Debtor extends Intraface_Standard
             $i++;
 
         }
+        unset($db);
+
         return $list;
     }
 
@@ -1112,30 +1114,30 @@ class Debtor extends Intraface_Standard
     {
         return new Contact($this->kernel, $this->get("contact_id"), $this->get("contact_address_id"));
     }
-    
+
     /**
      * Returns currency if debtor is in another currency.
-     * 
+     *
      * @todo it is wrong that doctrine connection is created here. Should be given to Debtor object.
      * @return mixed object currency when currency set or false.
-     * 
+     *
      */
-    public function getCurrency() 
+    public function getCurrency()
     {
-        
+
         if ($this->get('currency_id') == 0 || $this->get('currency_product_price_exchange_rate_id') == 0) {
             return false;
         }
-        
+
         if (!$this->currency) {
             $doctrine = Doctrine_Manager::connection(DB_DSN);
             $gateway = new Intraface_modules_currency_Currency_Gateway($doctrine);
-            $this->currency = $gateway->findById($this->get('currency_id'));     
+            $this->currency = $gateway->findById($this->get('currency_id'));
         }
-        
+
         return $this->currency;
     }
-    
+
     /**
      * Returns the total amount on Debtor
      * 
@@ -1246,17 +1248,17 @@ class Debtor extends Intraface_Standard
             5 => 'Onlinebetaling'
         );
     }
-    
+
     function getIdentifier()
     {
         return $this->get('identifier_key');
     }
-    
+
     function getId()
     {
         return $this->id;
     }
-    
+
     function getPaymentMethodKey()
     {
         return $this->get('payment_method');
