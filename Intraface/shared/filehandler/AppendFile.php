@@ -207,12 +207,12 @@ class AppendFile
     public function getList()
     {
         if (!isset($this->dbquery)) $this->getDBQuery();
-        
+
         if ($this->dbquery->checkFilter('order_by') && $this->dbquery->getFilter('order_by') == 'name') {
             $this->dbquery->setJoin('INNER', 'file_handler', 'filehandler_append_file.file_handler_id = file_handler.id', 'file_handler.intranet_id = '.$this->kernel->intranet->get('id').' AND file_handler.active = 1');
-            $this->dbquery->setSorting('file_handler.file_name');
+            $this->dbquery->setSorting('filehandler_append_file.position ASC, file_handler.file_name');
         } else {
-            $this->dbquery->setSorting('filehandler_append_file.id');
+            $this->dbquery->setSorting('filehandler_append_file.position ASC, filehandler_append_file.id ASC');
         }
 
         $db = $this->dbquery->getRecordset('filehandler_append_file.id, filehandler_append_file.file_handler_id, filehandler_append_file.description');
@@ -227,6 +227,9 @@ class AppendFile
         return $files;
     }
 
+    public function findById($id)
+    {
+        return Doctrine::getTable('Intraface_shared_filehandler_Append_File')
+            ->find(intval($id));
+    }
 }
-
-?>
