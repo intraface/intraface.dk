@@ -13,3 +13,5 @@ ALTER TABLE `newsletter_subscriber` ADD `resend_optin_email_count` INT NOT NULL 
 ALTER TABLE `onlinepayment` ADD `currency_id` INT NOT NULL DEFAULT '0' AFTER `original_amount` ;
 
 ALTER TABLE `onlinepayment` ADD `captured_in_currency_payment_exchange_rate_id` INT NOT NULL AFTER `currency_id` ;
+
+ALTER TABLE `filehandler_append_file` ADD `position` INT( 11 ) NOT NULL ;
