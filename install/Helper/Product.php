@@ -61,8 +61,8 @@ class Install_Helper_Product {
         $product->save(array('name' => 'Product 1', 'price' => 100, 'unit' => 2, 'has_variation' => 1, 'do_show' => 1, 'weight' => 110));
         $product->setAttributeGroup(1);
         $product->setAttributeGroup(2);
-        foreach(array(1, 2, 3) AS $a1) {
-            foreach(array(4, 5, 6) AS $a2) {
+        foreach (array(1, 2, 3) AS $a1) {
+            foreach (array(4, 5, 6) AS $a2) {
                 $variation = $product->getVariation();
                 $variation->setAttributesFromArray(array('attribute1' => $a1, 'attribute2' => $a2));
                 $variation->save();

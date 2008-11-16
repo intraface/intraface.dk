@@ -22,10 +22,10 @@ class Install_Helper_ModulePackage
         $sql_structure = file_get_contents(dirname(__FILE__) . '/../database-module_package-values.sql');
         $sql_arr = Intraface_Install::splitSql($sql_structure);
 
-        foreach($sql_arr as $sql) {
-            if(empty($sql)) { continue; }
+        foreach ($sql_arr as $sql) {
+            if (empty($sql)) { continue; }
             $result = $this->db->exec($sql);
-            if(PEAR::isError($result)) {
+            if (PEAR::isError($result)) {
                 trigger_error($result->getUserInfo(), E_USER_ERROR);
                 exit;
             }
