@@ -350,8 +350,7 @@ class Intraface_modules_shop_Coordinator
             if ($this->order->getCurrency()) {
                 $amount = $item["amount_currency"]->getAsLocal('da_dk', 2);
                 $currency_iso_code = $this->order->getCurrency()->getType()->getIsoCode();
-            }
-            else {
+            } else {
                 $amount = $item["amount"]->getAsLocal('da_dk', 2);
                 $currency_iso_code = 'DKK';
             }
