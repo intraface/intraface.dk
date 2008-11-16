@@ -136,7 +136,7 @@ class Intraface_Setting
                     } else {
                         $this->db->query("INSERT INTO setting SET value = ".$this->db->quote($value, 'text').", setting = ".$this->db->quote($setting, 'text').", intranet_id = ".$this->db->quote($this->intranet_id, 'integer').", user_id = 0, sub_id = ".intval($sub_id));
                     }
-                    $this->settings['intranet'][$setting][$sub_id] = $value;
+                    $this->settings[$this->intranet_id][0][$setting][$sub_id] = $value;
                 break;
                 case 'user':
                     if ($this->checkSystem($setting)) {
@@ -147,7 +147,7 @@ class Intraface_Setting
                             $this->db->query("INSERT INTO setting SET value = ".$this->db->quote($value, 'text').", setting = ".$this->db->quote($setting, 'text').", intranet_id = ".$this->intranet_id.", user_id = ".$this->db->quote($this->user_id, 'integer').", sub_id = ".intval($sub_id));
                         }
                     }
-                    $this->settings['user'][$setting][$sub_id] = $value;
+                    $this->settings[$this->intranet_id][$this->user_id][$setting][$sub_id] = $value;
                     break;
             }
             return true;
@@ -175,11 +175,7 @@ class Intraface_Setting
         $this->settings = array();
         $this->db->query("SELECT setting, value, sub_id, user_id FROM setting WHERE intranet_id = " . $this->db->quote($this->intranet_id, 'integer')." AND (user_id = ".$this->db->quote($this->user_id, 'integer')." OR user_id = 0)");
         while($this->db->nextRecord()) {
-            if ($this->db->f('user_id') == 0) {
-                $this->settings['intranet'][$this->db->f('setting')][$this->db->f('sub_id')] = $this->db->f('value');
-            } else {
-                $this->settings['user'][$this->db->f('setting')][$this->db->f('sub_id')] = $this->db->f('value');
-            }
+            $this->settings[$this->intranet_id][$this->db->f('user_id')][$this->db->f('setting')][$this->db->f('sub_id')] = $this->db->f('value');
         }
         $this->is_loaded = true;
     }
@@ -227,8 +223,8 @@ class Intraface_Setting
 
                         }
                         */
-                        if (!empty($this->settings['user'][$setting][intval($sub_id)])) {
-                            return $this->settings['user'][$setting][intval($sub_id)];
+                        if (!empty($this->settings[$this->intranet_id][$this->user_id][$setting][intval($sub_id)])) {
+                            return $this->settings[$this->intranet_id][$this->user_id][$setting][intval($sub_id)];
                         }
 
 
@@ -248,8 +244,8 @@ class Intraface_Setting
 
                     }
                     */
-                    if (!empty($this->settings['intranet'][$setting][intval($sub_id)])) {
-                        return $this->settings['intranet'][$setting][intval($sub_id)];
+                    if (!empty($this->settings[$this->intranet_id][0][$setting][intval($sub_id)])) {
+                        return $this->settings[$this->intranet_id][0][$setting][intval($sub_id)];
                     }
                     // no break because it has to fall through if intranet is not set
                 default:
