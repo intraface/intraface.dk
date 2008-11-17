@@ -1,10 +1,10 @@
 <?php
 class Intraface_shared_filehandler_Append_File extends Doctrine_Record
 {
-	function setTableDefinition()
+    function setTableDefinition()
     {
         $this->setTableName('filehandler_append_file');
-        $this->hasColumn('intranet_id',     'integer',  11);
+        $this->hasColumn('intranet_id',    'integer', 11);
         $this->hasColumn('date_created',    'datetime');
         $this->hasColumn('date_updated',    'datetime');
         $this->hasColumn('belong_to_key',   'integer', 11);
@@ -13,13 +13,12 @@ class Intraface_shared_filehandler_Append_File extends Doctrine_Record
         $this->hasColumn('description',     'string', 65555);
         $this->hasColumn('position',        'integer', 11);
         $this->hasColumn('active',          'integer', 1);
-
     }
 
     public function setUp()
     {
-        $this->actAs('Intraface_Doctrine_Template_Intranet');
-        /*
+        // @todo should add the template for intranet
+        //$this->actAs('Intraface_Doctrine_Template_Intranet');
         $options = array('created' =>  array('name'          => 'date_created',    // Name of created column
                                              'type'          => 'timestamp',     // Doctrine column data type
                                              'options'       => array(),         // Array of options for column
@@ -35,12 +34,14 @@ class Intraface_shared_filehandler_Append_File extends Doctrine_Record
                                              'onInsert'      => true));          // Whether or not to set column onInsert(default)
 
         $this->actAs('Timestampable', $options);
-        */
-        $this->actAs('Positionable');
+
+        $options['extra_where'] = array('intranet_id', 'belong_to_key', 'belong_to_id');
+
+        $this->actAs('Positionable', $options);
     }
 
     function getIntranetId()
     {
-    	return $this->intranet_id;
+        return $this->intranet_id;
     }
 }

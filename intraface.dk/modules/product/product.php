@@ -70,15 +70,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif (isset($_GET['moveup'])) {
         $product = new Product($kernel, $_GET['id']);
         $append_file = new AppendFile($kernel, 'product', $product->get('id'));
-        $file = $append_file->findById($_GET['moveup']);
-      	$file->moveUp();
+        $file = $append_file->findById(intval($_GET['moveup']));
+        try {
+            $file->moveUp();
+        } catch (Exception $e) {
+        }
+
         header('Location: product.php?id='.$product->get('id'));
         exit;
     } elseif (isset($_GET['movedown'])) {
         $product = new Product($kernel, $_GET['id']);
         $append_file = new AppendFile($kernel, 'product', $product->get('id'));
-        $file = $append_file->findById($_GET['movedown']);
-        $file->moveDown();
+        $file = $append_file->findById(intval($_GET['movedown']));
+        try {
+            $file->moveDown();
+        } catch (Exception $e) {
+        }
         header('Location: product.php?id='.$product->get('id'));
         exit;
     } elseif (!empty($_GET['del_related']) AND is_numeric($_GET['del_related'])) {
