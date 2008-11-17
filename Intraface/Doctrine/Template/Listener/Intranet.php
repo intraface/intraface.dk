@@ -31,7 +31,6 @@ class Intraface_Doctrine_Template_Listener_Intranet extends Doctrine_Record_List
         if ($event->getInvoker()->intranet_id != $this->getIntranetId()) {
             throw new Exception('You are trying to update a record with another intranet_id than the present one ('.$event->getInvoker()->intranet_id.'/'.$this->getIntranetId().')');
         }
-
     }
 
     public function preDqlDelete(Doctrine_Event $event)
