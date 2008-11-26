@@ -285,9 +285,9 @@ $page->start($translation->get('content on page').' '.$cmspage->get('title'));
                     <?php } ?>
                     <fieldset>
                         <legend><?php e($section->get('section_name')); ?></legend>
-                        <p><?php e($translation->get('there is a html element on the page')); ?></p>
+                        <p><?php e($translation->get('There is a html section on the page')); ?></p>
                         <input type="submit" value="<?php e($translation->get('edit section')); ?>" name="edit_html[<?php e($section->get('id')); ?>]" />
-                        <p><a class="confirm" title="Dette link forlader siden uden at gemme ændringer på den." href="section_html.php?id=<?php e($section->get('id')); ?>">Rediger det blandede HTML-element &rarr;</a></p>
+                        
                 <?php
                 break;
             ?>
