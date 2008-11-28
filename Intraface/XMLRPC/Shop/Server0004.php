@@ -839,7 +839,10 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             foreach ($currency_gateway->findAllWithExchangeRate() AS $c) {
                 $currency['currencies'][$c->getType()->getIsoCode()] = $c->getType()->getDescription();
             }
-            $currency['default'] = $this->webshop->getShop()->getDefaultCurrency($currency_gateway)->getType()->getIsoCode();
+        }
+        
+        if(false !== ($default_currency = $this->webshop->getShop()->getDefaultCurrency($currency_gateway))) {
+            $currency['default'] = $default_currency->getType()->getIsoCode();
         }
 
         return $currency;
