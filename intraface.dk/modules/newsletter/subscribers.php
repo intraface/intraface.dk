@@ -10,6 +10,7 @@ if (!$kernel->user->hasModuleAccess('contact')) {
 $list = new NewsletterList($kernel, (int)$_GET['list_id']);
 $subscriber = new NewsletterSubscriber($list);
 
+
 if (isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
     if ($kernel->user->hasModuleAccess('contact')) {
         $contact_module = $kernel->useModule('contact');
@@ -30,6 +31,8 @@ if (isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
     if (!$subscriber->sendOptInEmail(Intraface_Mail::factory())) {
     	trigger_error('Could not send the optin e-mail');
     }
+} elseif (isset($_GET['optin'])) {
+    $subscriber->getDBQuery()->setFilter('optin', intval($_GET['optin']));
 }
 
 if (isset($_GET['return_redirect_id'])) {
@@ -45,14 +48,12 @@ if (isset($_GET['delete']) AND intval($_GET['delete']) != 0) {
     $subscriber = new NewsletterSubscriber($list, $_GET['delete']);
     $subscriber->delete();
 }
-// HACK - Denne bliver her sat uden at de skal være opted in i modsætning til constructor
-$subscriber->setDBQuery(new Intraface_DBQuery($list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $list->get("id") . " AND newsletter_subscriber.intranet_id = " . $list->kernel->intranet->get('id') . " AND newsletter_subscriber.active = 1"));
 
 $subscriber->getDBQuery()->useCharacter();
 $subscriber->getDBQuery()->defineCharacter('character', 'newsletter_subscriber.id');
 $subscriber->getDBQuery()->usePaging('paging');
 $subscriber->getDBQuery()->setExtraUri('&amp;list_id='.$list->get('id'));
-$subscriber->getDBQuery()->storeResult("use_stored", $list->get("id"), "toplevel");
+$subscriber->getDBQuery()->storeResult("use_stored", 'newsletter_subscribers_'.$list->get("id"), "toplevel");
 $subscribers = $subscriber->getList();
 
 
@@ -71,9 +72,28 @@ $page->start('Modtagere');
 
 <?php echo $subscriber->error->view(); ?>
 
+<form action="subscribers.php?" method="get" class="search-filter">
+    <input type="hidden" name="list_id" value="<?php e($list->get("id")); ?>" />
+    <fieldset>
+        <legend><?php e(t('search', 'common')); ?></legend>
+        
+        <label for="optin"><?php e(t('Filter', 'common')); ?>: 
+            <select name="optin" id="optin">
+                <option value="1" <?php if($subscriber->getDBQuery()->getFilter('optin') == 1) echo 'selected="selected"'; ?> ><?php e(t('Opted in')); ?></option>
+                <option value="0" <?php if($subscriber->getDBQuery()->getFilter('optin') == 0) echo 'selected="selected"'; ?> ><?php e(t('Not opted in')); ?></option>
+            </select>
+        </label>
+        <span>
+            <input type="submit" value="<?php e(t('go', 'common')); ?>" /> 
+        </span>
+    </fieldset>
+</form>
+
 <?php if (count($subscribers) == 0): ?>
     <p>Der er ikke tilføjet nogen modtager endnu.</p>
 <?php else: ?>
+
+
 
     <?php echo $subscriber->getDBQuery()->display('character'); ?>
 <table class="stripe">
@@ -103,7 +123,7 @@ $page->start('Modtagere');
             <?php endif; ?>
         </td>
         <td>
-            <a class="delete" href="subscribers.php?delete=<?php e($s['id']); ?>&amp;list_id=<?php e($list->get('id')); ?>" title="Dette sletter nyhedsbrevet">Slet</a>
+            <a class="delete" href="subscribers.php?delete=<?php e($s['id']); ?>&amp;list_id=<?php e($list->get('id')); ?>" title="Dette sletter modtageren">Slet</a>
         </td>
     </tr>
     <?php endforeach; ?>

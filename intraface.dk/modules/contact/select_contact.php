@@ -16,6 +16,14 @@ if (!empty($_GET['add'])) {
 	exit;
 }
 
+if(!empty($_GET['return_redirect_id'])) {
+    $return_redirect = Intraface_Redirect::factory($kernel, 'return');
+    if($return_redirect->getParameter('contact_id') != 0) {
+        $redirect->setParameter('contact_id', $return_redirect->getParameter('contact_id'));
+        header("Location: ".$redirect->getRedirect('index.php'));
+        exit;
+    }
+}
 
 if (isset($_POST['submit'])) {
 
@@ -129,7 +137,7 @@ $page->start('Vælg kontakt');
     			<?php foreach ($contacts as $c) { ?>
     			<tr>
     				<td>
-    					<input type="radio" value="<?php e($c['id']); ?>" name="selected" <?php if ((isset($_GET['contact_id']) && $_GET['contact_id'] == $c['id']) || (isset($_GET['last_contact_id']) && $_GET['last_contact_id'] == $c['id'])) print("checked=\"checked\""); ?> />
+    					<input type="radio" value="<?php e($c['id']); ?>" name="selected" <?php if ($redirect->getParameter('contact_id') == $c['id']) print("checked=\"checked\""); ?> />
     				</td>
     				<td><?php e($c['number']); ?></td>
     				<td><a href="contact.php?id=<?php e($c['id']); ?>"><?php e($c['name']); ?></a></td>

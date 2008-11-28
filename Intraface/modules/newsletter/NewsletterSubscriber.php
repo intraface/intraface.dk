@@ -57,19 +57,12 @@ class NewsletterSubscriber extends Intraface_Standard
             return $this->dbquery;
         }
         // optin = 1 should not be set here
-        $this->dbquery = new Intraface_DBQuery($this->list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $this->list->get("id") . " AND newsletter_subscriber.intranet_id = " . $this->list->kernel->intranet->get('id') . " AND newsletter_subscriber.optin = 1 AND newsletter_subscriber.active = 1");
+        $this->dbquery = new Intraface_DBQuery($this->list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $this->list->get("id") . " AND newsletter_subscriber.intranet_id = " . $this->list->kernel->intranet->get('id'));
         $this->dbquery->useErrorObject($this->error);
+        $this->dbquery->setFilter('optin', 1);
+        $this->dbquery->setFilter('active', 1);
+        $this->dbquery->setSorting('date_submitted DESC');   
         return $this->dbquery;
-    }
-
-    /**
-     * HACK: Only used in subscribers. Added as a hack
-     *
-     * @return void
-     */
-    function setDBQuery($dbquery)
-    {
-        $this->dbquery = $dbquery;
     }
 
     /**
@@ -510,7 +503,9 @@ class NewsletterSubscriber extends Intraface_Standard
         //$db = new DB_Sql;
         //$db->query("SELECT id, contact_id, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted FROM newsletter_subscriber WHERE list_id=". $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id') . " AND optin = 1 AND active = 1");
         $i = 0;
-
+        $this->getDBQuery()->setCondition('newsletter_subscriber.optin = '.$this->getDBQuery()->getFilter('optin'));
+        $this->getDBQuery()->setCondition('newsletter_subscriber.active = '.$this->getDBQuery()->getFilter('active'));
+        
         $db = $this->getDBQuery()->getRecordset("id, date_optin_email_sent, contact_id, resend_optin_email_count, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted, optin", "", false);
 
         while ($db->nextRecord()) {

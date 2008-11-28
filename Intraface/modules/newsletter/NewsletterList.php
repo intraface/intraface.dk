@@ -128,7 +128,14 @@ class NewsletterList extends Intraface_Standard
     function save($var)
     {
         $var = safeToDb($var);
-
+        
+        if(!isset($var['sender_name'])) $var['sender_name'] = '';
+        if(!isset($var['reply_email'])) $var['reply_email'] = '';
+        if(!isset($var['description'])) $var['description'] = '';
+        if(!isset($var['optin_link'])) $var['optin_link'] = '';
+        if(!isset($var['subscribe_subject'])) $var['subscribe_subject'] = '';
+        if(!isset($var['subscribe_message'])) $var['subscribe_message'] = '';
+        
         if (!$this->validate($var)) {
             return 0;
         }

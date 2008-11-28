@@ -18,6 +18,8 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
         $db = MDB2::factory(DB_DSN);
         $db->exec('TRUNCATE newsletter_subscriber');
         $db->exec('TRUNCATE newsletter_archieve');
+        $db->exec('TRUNCATE contact');
+        $db->exec('TRUNCATE address');
     }
 
     function createSubscriber()
@@ -25,6 +27,7 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
         $list = new FakeNewsletterList();
         $list->kernel = new FakeNewsletterKernel;
         $list->kernel->intranet = new FakeNewsletterIntranet;
+        $list->kernel->user = new FakeNewsletterUser;
         return new NewsletterSubscriber($list);
     }
 
@@ -96,6 +99,27 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
     {
         $subscriber = new NewsletterSubscriber(new FakeNewsletterList);
         $this->assertTrue(is_array($subscriber->getList()));
+    }
+    
+    function testGetListReturnsActiveOptedInSubscribers()
+    {
+        $mailer = new FakePhpMailer;
+        $subscriber = $this->createSubscriber();
+        $subscriber->subscribe(array('name' => 'test1', 'email' => 'test1@intraface.dk', 'ip' => '0.0.0.0'), $mailer);
+        
+        $subscriber = $this->createSubscriber();
+        $subscriber->subscribe(array('name' => 'test2', 'email' => 'test2@intraface.dk', 'ip' => '0.0.0.0'), $mailer);
+        $subscriber->optin($subscriber->get('code'), '0.0.0.0');
+        
+        $subscriber = $this->createSubscriber();
+        $subscriber->subscribe(array('name' => 'test3', 'email' => 'test3@intraface.dk', 'ip' => '0.0.0.0'), $mailer);
+        $subscriber->optin($subscriber->get('code'), '0.0.0.0');
+        $subscriber->delete();
+        
+        $list = $subscriber->getList();
+        
+        $this->assertEquals(1, count($list));
+        $this->assertEquals('test2@intraface.dk', $list[0]['contact_email']);
     }
 }
 
