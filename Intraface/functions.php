@@ -218,6 +218,7 @@ function intraface_autohtml($text)
     require_once 'markdown.php';
     require_once 'smartypants.php';
 
+    $text = nl2br($text);
     $text = MarkDown($text);
     $text = SmartyPants($text);
     echo $text;
