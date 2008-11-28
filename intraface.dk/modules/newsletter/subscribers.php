@@ -10,7 +10,6 @@ if (!$kernel->user->hasModuleAccess('contact')) {
 $list = new NewsletterList($kernel, (int)$_GET['list_id']);
 $subscriber = new NewsletterSubscriber($list);
 
-
 if (isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
     if ($kernel->user->hasModuleAccess('contact')) {
         $contact_module = $kernel->useModule('contact');
@@ -26,6 +25,11 @@ if (isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
         trigger_error("Du har ikke adgang til modulet contact", ERROR);
     }
 
+} elseif (isset($_GET['remind']) AND $_GET['remind'] == 'true') {
+    $subscriber = new NewsletterSubscriber($list, intval($_GET['id']));
+    if (!$subscriber->sendOptInEmail(Intraface_Mail::factory())) {
+    	trigger_error('Could not send the optin e-mail');
+    }
 }
 
 if (isset($_GET['return_redirect_id'])) {
@@ -48,8 +52,7 @@ $subscriber->getDBQuery()->useCharacter();
 $subscriber->getDBQuery()->defineCharacter('character', 'newsletter_subscriber.id');
 $subscriber->getDBQuery()->usePaging('paging');
 $subscriber->getDBQuery()->setExtraUri('&amp;list_id='.$list->get('id'));
-
-
+$subscriber->getDBQuery()->storeResult("use_stored", $list->get("id"), "toplevel");
 $subscribers = $subscriber->getList();
 
 
@@ -90,7 +93,15 @@ $page->start('Modtagere');
         <td><?php e($s['contact_name']); ?></td>
         <td><?php e($s['contact_email']); ?></td>
         <td><?php e($s['dk_date_submitted']); ?></td>
-        <td><?php e($s['optin']); ?></td>
+        <td>
+            <?php if ($s['optin'] == 0 and $s['date_optin_email_sent'] < date('Y-m-d', time() - 60 * 60 * 24 * 3)): ?>
+                <a href="<?php e($_SERVER['PHP_SELF'] . '?list_id='.$list->get('id')); ?>&amp;id=<?php e($s['id']); ?>&amp;remind=true&amp;use_stored=true"><?php e(t('Remind')); ?></a>
+            <?php elseif ($s['optin'] == 0): ?>
+                <?php e(t('Not opted in')); ?>
+            <?php elseif ($s['optin'] == 1): ?>
+                <?php e(t('Opted in')); ?>
+            <?php endif; ?>
+        </td>
         <td>
             <a class="delete" href="subscribers.php?delete=<?php e($s['id']); ?>&amp;list_id=<?php e($list->get('id')); ?>" title="Dette sletter nyhedsbrevet">Slet</a>
         </td>
