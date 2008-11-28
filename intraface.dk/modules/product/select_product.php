@@ -72,7 +72,7 @@ if (isset($_POST['submit']) || isset($_POST['submit_close'])) {
     if ($multiple) {
         if (isset($_POST['selected']) && is_array($_POST['selected'])) {
             foreach ($_POST['selected'] AS $selected_id => $selected_value) {
-                if ((int)$selected_value > 0) {
+                if ($selected_value != '' && $selected_value != '0') {
                     $select = serialize(array('product_id' => $selected_id, 'product_variation_id' => 0));
                     // Hvis der allerede er gemt en værdi, så starter vi med at fjerne den, så der ikke kommer flere på.
                     $redirect->removeParameter('product_id', $select);
