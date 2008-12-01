@@ -1,21 +1,21 @@
 <?php
 
 //
-$list_id = 24; /* 23: UK, 24: DK */
+$list_id = 23; /* 23: UK, 24: DK */
 
 // The html file
-$newsletter_html = 'newsletter-dec-08-dk.htm'; /* NB: language */
+$newsletter_html = 'newsletter-dec-08-eng.htm'; /* NB: language */
 
 // The files that should be attachecd
 $files = array(
     'newsletter-base.jpg',
-    'newsletter-header2.jpg', /* NB: language */
-    'newsletter-mainbg-dk.jpg', /* NB: language */
+    'newsletter-header.jpg', /* NB: language */
+    'newsletter-mainbg.jpg', /* NB: language */
     'shopnow-button.jpg', 
 );
 
 // The subject
-$subject = 'Den perfekte kjole...'; /* NB: language */
+$subject = 'The perfect dress...'; /* NB: language */
 
 
 ini_set('max_execution_time', 1200); // 20 min
