@@ -337,7 +337,7 @@ class NewsletterSubscriber extends Intraface_Standard
             return false;
         }
 
-        if (!$db->f('ip_optin')) {
+        if ($db->f('optin') == 0) {
             return false;
         }
         return true;
