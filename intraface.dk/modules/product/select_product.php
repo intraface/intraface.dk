@@ -42,8 +42,7 @@ if (isset($_GET['return_redirect_id'])) {
     $return_redirect = Intraface_Redirect::factory($kernel, 'return');
     if ($return_redirect->getIdentifier() == 'add_new' && $return_redirect->getParameter('product_id') != 0) {
         $redirect->setParameter('product_id', serialize(array('product_id' => intval($return_redirect->getParameter('product_id')), 'product_variation_id' => 0)), 1);
-    }
-    elseif ($return_redirect->getIdentifier() == 'select_variation') {
+    } elseif ($return_redirect->getIdentifier() == 'select_variation') {
         // Returning from variations page and add the variations to the product_id parameter.
         $product_variations = $return_redirect->getParameter('product_variation_id', 'with_extra_value');
         if ($multiple) {
@@ -55,9 +54,8 @@ if (isset($_GET['return_redirect_id'])) {
                     $redirect->setParameter('product_id', $product_variation['value']);
                 }
             }
-        }
-        else {
-            
+        } else {
+
             $redirect->removeParameter('product_id', $product_variations['value']);
             if ($quantity) {
                 $redirect->setParameter('product_id', $product_variations['value'], $product_variations['extra_value']);
@@ -174,7 +172,7 @@ $page->start(t('select product'));
     <?php
     echo $product->getDBQuery()->display('character');
     ?>
-    <form action="<?php e($_SERVER['PHP_SELF']); ?>?set_quantity=<?php e($quantity); ?>" method="post">
+    <form action="<?php e($_SERVER['PHP_SELF']); ?>?set_quantity=<?php e($quantity); ?>&amp;use_stored=true" method="post">
         <table summary="Produkter" class="stripe">
             <caption><?php e(t('products')); ?></caption>
             <thead>
