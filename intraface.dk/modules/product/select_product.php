@@ -149,7 +149,7 @@ $page->start(t('select product'));
         <li><a href="select_product.php?add_new=true&amp;set_quantity=<?php e($quantity); ?>">Opret produkt</a></li>
     </ul>
 
-    <form action="<?php echo basename(__FILE__); ?>" method="get">
+    <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="get">
         <fieldset>
             <legend><?php e(t('search', 'common')); ?></legend>
             <label><?php e(t('search for')); ?>
