@@ -182,7 +182,7 @@ $page->start(t('select product'));
                     <th><?php e(t('Name')); ?></th>
                     <th><?php e(t('Unit type')); ?></th>
                     <?php if ($kernel->user->hasModuleAccess('stock')): ?>
-                    <th><?php e(t('Stock')); ?>r</th>
+                    <th><?php e(t('Stock')); ?></th>
                     <?php endif; ?>
                     <th><?php e(t('Vat')); ?></th>
                     <th><?php e(t('Price')); ?></th>
