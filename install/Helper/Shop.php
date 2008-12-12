@@ -45,5 +45,17 @@ class Install_Helper_Shop {
         
         return 1;
     }
+    
+    public function createCategory($name = 'Category 1', $identifier = 'category1', $parent = 0) {
+        
+        $category = new Intraface_Category($this->kernel, $this->db, new Intraface_Category_Type('shop', 1));
+        $category->setIdentifier($identifier);
+        $category->setName($name);
+        $category->setParentId($parent);
+        $category->save();
+        
+        return $category;
+        
+    }
 }
 ?>

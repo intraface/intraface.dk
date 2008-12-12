@@ -59,11 +59,10 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             $product->getDBQuery()->usePaging('paging');
         }
 
-
         // sublevel has to be used so other searches are not overwritten
         $product->getDBQuery()->storeResult('use_stored', 'webshop_' . $area . '_' .  md5($this->credentials['session_id']), 'sublevel');
         $debug2 = serialize($mixed);
-        if (isset($mixed['offset']) AND array_key_exists('offset', $mixed) AND is_numeric($mixed['offset'])) {
+        if (isset($mixed['offset']) AND is_numeric($mixed['offset']) AND $mixed['offset'] > 0) {
             $product->getDBQuery()->useStored(true);
             $product->getDBQuery()->setPagingOffset((int)$mixed['offset']);
             $debug2 .= 'offset ' . $mixed['offset'];
@@ -113,6 +112,59 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             'paging' => $product->getDBQuery()->getPaging(),
             'search' => array(),
         ));
+    }
+    
+    /**
+     * Gets a list with products in given category
+     *
+     * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
+     * @param integer $category_id Id of category
+     * @param integer $results_per_page Optional returned products per page
+     * @param integer $pagging_offset Otional offset for pagging.
+     *
+     * @return array
+     */
+    public function getProductsInCategoryId($credentials, $shop_id, $category_id, $results_per_page = 0, $pagging_offset = 0)
+    {
+        $search = array();
+        $search['area'] = 'category_'.$category_id;
+        if($results_per_page > 0) {
+            $search['use_paging'] = 'true';
+        }
+        $search['category'] = $category_id;
+        $search['offset'] = $pagging_offset;
+        
+        return $this->getProducts($credentials, $shop_id, $search);
+    } 
+    
+    /**
+     * Gets a list with products with a given keyword or with given keywords
+     *
+     * @param struct $credentials Credentials to use the server
+     * @param integer $shop_id    Id for the shop
+     * @param mixed  $keyword      Integer with keyword id or array with keyword ids.
+     * @param integer $results_per_page optional returned products per page
+     * @param integer $pagging_offset optional offset for pagging.
+     *
+     * @return array
+     */
+    public function getProductsWithKeywordId($credentials, $shop_id, $keyword, $results_per_page = 0, $pagging_offset = 0)
+    {
+        
+        $search = array();
+        if(is_array($keyword)) {
+            $search['area'] = 'keyword_'.implode('-', $keyword);
+        } else {
+            $search['area'] = 'keyword_'.$keyword;
+        }
+        if($results_per_page > 0) {
+            $search['use_paging'] = 'true';
+        }
+        $search['keywords'] = $keyword;
+        $search['offset'] = $pagging_offset;
+        
+        return $this->getProducts($credentials, $shop_id, $search);
     }
 
     /**

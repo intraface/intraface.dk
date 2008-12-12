@@ -23,8 +23,29 @@ class Install_Helper_Product {
     {
         require_once 'Intraface/modules/product/Product.php';
         $product = new Product($this->kernel);
+        $product->save(array('name' => 'Product 1', 'price' => '100,10', 'unit' => 1, 'do_show' => 1));
         
-        return $product->save(array('name' => 'Product 1', 'price' => '100,10', 'unit' => 1, 'do_show' => 1));
+        return $product;
+    }
+    
+    public function createVisibleInShopWithCategories() {
+        
+        $product = $this->createVisibleInShop();
+        
+        require 'Shop.php';
+        $shop = new Install_Helper_Shop($this->kernel, $this->db);
+        
+        $category = $shop->createCategory('Category 1', 'category1', 0);
+        $appender = $category->getAppender($product->get('id'));
+        
+        $category = $shop->createCategory('Category 2', 'category2', 1);
+        $appender->add($category);
+        
+        $category = $shop->createCategory('Category 3', 'category3', 0);
+        $appender->add($category);
+        
+        return $product;
+        
     }
     
     public function createAttributes() 

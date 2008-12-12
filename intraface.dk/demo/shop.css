@@ -21,13 +21,13 @@ div#menu ul {
     padding-left: 8px;
 }
 
-ul#category-bread-crump {
+ul#breadcrumptrail {
     padding: 0px;
     list-style-position: inside;
     list-style-type: none;
 }
 
-ul#category-bread-crump li {
+ul#breadcrumptrail li {
     float: left;
     padding: 0px 15px 0px 0px;
     font-size: 80%;
@@ -142,6 +142,7 @@ div#product img {
 }
 
 div#product h1 {
+    clear:both;
 }
 
 div#product h2 {
