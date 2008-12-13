@@ -39,7 +39,6 @@ class Intraface_Setting
     /**
      * @var boolean
      */
-
     protected $is_loaded = false;
 
     /**
@@ -54,12 +53,11 @@ class Intraface_Setting
     {
         global $_setting;
 
-        require_once 'Intraface/config/setting_kernel.php';
+        require_once dirname(__FILE__) . '/config/setting_kernel.php';
 
         // Init
         $this->db = new DB_Sql;
         $this->system = &$_setting; // don't remove the & - otherwise it will not work
-
         $this->user_id = (int)$user_id;
         $this->intranet_id = (int)$intranet_id;
     }
