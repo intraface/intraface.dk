@@ -63,6 +63,11 @@ class Intraface_modules_product_Variation_Detail extends Doctrine_Record
         return $this->weight_difference;
     }
 
+    function getIntranetId()
+    {
+    	return $this->intranet_id;
+    }
+
     /**
      * Returns the price of the variation
      *
