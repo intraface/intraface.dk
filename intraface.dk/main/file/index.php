@@ -7,8 +7,9 @@
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
  */
+ini_set('memory_limit', '128M');
 ob_start();
-require('../../common.php');
+require '../../common.php';
 
 // file should stop if no querystring
 if (empty($_SERVER["QUERY_STRING"])) {
