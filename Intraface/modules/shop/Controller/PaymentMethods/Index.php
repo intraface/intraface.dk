@@ -36,14 +36,14 @@ class Intraface_modules_shop_Controller_PaymentMethods_Index extends k_Controlle
         }
         return $m;
     }
-    
+
     function flushPaymentMethods()
     {
         $doctrine = $this->registry->get('doctrine');
         $methods = Doctrine::getTable('Intraface_modules_shop_PaymentMethods')->findByShopId($this->getShopId());
         foreach ($methods as $method) {
             $method->delete();
-        }   
+        }
     }
 
     function POST()
@@ -57,7 +57,7 @@ class Intraface_modules_shop_Controller_PaymentMethods_Index extends k_Controlle
                 $method = Doctrine::getTable('Intraface_modules_shop_PaymentMethods')->findOneById($paymentmethods[$this->POST['method'][$key]]['id']);
                 if (!$method) {
                     $method = new Intraface_modules_shop_PaymentMethods();
-                    $method->paymentmethod_key = $this->POST['method'][$key];           
+                    $method->paymentmethod_key = $this->POST['method'][$key];
                     $method->text = $this->POST['text'][$key];
                     $method->shop_id = $this->getShopId();
                     $method->save();
@@ -67,13 +67,13 @@ class Intraface_modules_shop_Controller_PaymentMethods_Index extends k_Controlle
                 }
             } else {
                 $method = new Intraface_modules_shop_PaymentMethods();
-                $method->paymentmethod_key = $this->POST['method'][$key];           
+                $method->paymentmethod_key = $this->POST['method'][$key];
                 $method->text = $this->POST['text'][$key];
                 $method->shop_id = $this->getShopId();
                 $method->save();
             }
         }
-        
+
         throw new k_http_Redirect($this->url());
     }
 }
