@@ -847,7 +847,7 @@ class Product extends Intraface_Standard
         }
 
         if ($this->getDBQuery()->checkFilter('shop_id') && $this->getDBQuery()->checkFilter('category')) {
-            $category_type = new Intraface_Category_Type('shop', $this->getDBQuery()->checkFilter('shop_id'));
+            $category_type = new Intraface_Category_Type('shop', $this->getDBQuery()->getFilter('shop_id'));
             $this->getDBQuery()->setJoin(
                 'INNER',
                 'ilib_category_append',
