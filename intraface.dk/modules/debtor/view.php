@@ -92,6 +92,111 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $debtor = Debtor::factory($kernel, intval($_GET["id"]));
 
+     if (isset($_GET["action"]) && $_GET["action"] == "send_onlinepaymentlink") {
+
+        $shared_email = $kernel->useShared('email');
+        if ($debtor->getPaymentMethodKey() == 5 AND $debtor->getWhereToId() == 0) {
+            try {
+                echo $debtor->getWhereFromId();
+                $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById($debtor->getWhereFromId());
+                if ($shop) {
+                    $payment_url = $debtor->getPaymentLink($shop->getPaymentUrl());
+                }
+            } catch (Doctrine_Record_Exeption $e) {
+                trigger_error('Could not send an e-mail with onlinepayment-link', E_USER_ERROR);
+            }
+        }
+
+        if ($kernel->intranet->get("pdf_header_file_id") != 0) {
+            $file = new FileHandler($kernel, $kernel->intranet->get("pdf_header_file_id"));
+        } else {
+            $file = NULL;
+        }
+
+        $body = 'Tak for din bestilling i vores onlineshop. Vi har ikke registreret nogen onlinebetaling sammen med bestillingen, hvilket kan skyldes flere ting.
+
+1) Du fortrudt bestillingen, da du skulle til at betale. I så fald må du meget gerne skrive tilbage og annullere din bestilling.
+2) Der er sket en fejl under betalingen. I det tilfælde må du gerne betale ved at gå ind på nedenstående link:
+
+' .  $payment_url;
+        $subject = 'Betaling ikke modtaget';
+
+        // gem debtoren som en fil i filsystemet
+        $filehandler = new FileHandler($kernel);
+        $tmp_file = $filehandler->createTemporaryFile($translation->get($debtor->get("type")).$debtor->get('number').'.pdf');
+
+        // Her gemmes filen
+        $report = new Intraface_modules_debtor_Visitor_Pdf($translation, $file);
+        $report->visit($debtor, $onlinepayment);
+        $report->output('file', $tmp_file->getFilePath());
+
+        // gem filen med filehandleren
+        $filehandler = new FileHandler($kernel);
+        if (!$file_id = $filehandler->save($tmp_file->getFilePath(), $tmp_file->getFileName(), 'hidden', 'application/pdf')) {
+            echo $filehandler->error->view();
+            trigger_error('Filen kunne ikke gemmes', E_USER_ERROR);
+        }
+
+        $input['accessibility'] = 'intranet';
+        if (!$file_id = $filehandler->update($input)) {
+            echo $filehandler->error->view();
+            trigger_error('Oplysninger om filen kunne ikke opdateres', E_USER_ERROR);
+        }
+
+        switch($kernel->setting->get('intranet', 'debtor.sender')) {
+            case 'intranet':
+                $from_email = '';
+                $from_name = '';
+                break;
+            case 'user':
+                $from_email = $kernel->user->getAddress()->get('email');
+                $from_name = $kernel->user->getAddress()->get('name');
+                break;
+            case 'defined':
+                $from_email = $kernel->setting->get('intranet', 'debtor.sender.email');
+                $from_name = $kernel->setting->get('intranet', 'debtor.sender.name');
+                break;
+            default:
+                trigger_error("Invalid sender!", E_USER_ERROR);
+                exit;
+        }
+        $contact = new Contact($kernel, $debtor->get('contact_id'));
+        // opret e-mailen
+        $email = new Email($kernel);
+        if (!$email->save(array(
+                'contact_id' => $contact->get('id'),
+                'subject' => $subject,
+                'body' => $body . "\n\n--\n" . $kernel->user->getAddress()->get('name') . "\n" . $kernel->intranet->get('name'),
+                'from_email' => $from_email,
+                'from_name' => $from_name,
+                'type_id' => 10, // electronic invoice
+                'belong_to' => $debtor->get('id')
+            ))) {
+            echo $email->error->view();
+            exit;
+            trigger_error('E-mailen kunne ikke gemmes', E_USER_ERROR);
+        }
+
+        // tilknyt fil
+        if (!$email->attachFile($file_id, $filehandler->get('file_name'))) {
+            echo $email->error->view();
+            trigger_error('Filen kunne ikke vedhæftes', E_USER_ERROR);
+        }
+
+        $redirect = Intraface_Redirect::factory($kernel, 'go');
+        $shared_email = $kernel->useShared('email');
+
+        // First vi set the last, because we need this id to the first.
+        $url = $redirect->setDestination($shared_email->getPath().'edit.php?id='.$email->get('id'), $debtor_module->getPath().'view.php?id='.$debtor->get('id'));
+        $redirect->setIdentifier('send_onlinepaymentlink');
+        $redirect->askParameter('send_onlinepaymentlink_status');
+
+        header('Location: ' . $url);
+        exit;
+
+    }
+
+
     // delete item
     if (isset($_GET["action"]) && $_GET["action"] == "delete_item") {
         $debtor->loadItem(intval($_GET["item_id"]));
@@ -738,13 +843,13 @@ if (isset($onlinepayment)) {
                                     ?>
                                 </td>
                                 <td class="amount">
-                                    <?php 
+                                    <?php
                                     if($p['currency'] && is_object($p['currency'])) {
-                                        e($p['currency']->getType()->getIsoCode().' ');    
+                                        e($p['currency']->getType()->getIsoCode().' ');
                                     } elseif($kernel->intranet->hasModuleAccess('currency')) {
                                         e('DKK ');
-                                    } 
-                                    e($p['dk_amount']); 
+                                    }
+                                    e($p['dk_amount']);
                                     ?>
                                 </td>
                                 <td class="options">
@@ -780,12 +885,17 @@ if (isset($onlinepayment)) {
                 }
             } catch (Doctrine_Record_Exeption $e) {
             }
-
-        ?>
+            if ($shop->getPaymentUrl()):
+            ?>
             <div class="warning">
-                Der burde være en onlinebetaling knyttet hertil. Måske har kunden fortrudt sit køb, eller også er der sket en fejl hos PBS under købet. Du kan skrive en e-mail til kunden, hvor du oplyser følgende link, hvor pengene kan betales: <?php e($payment_url); ?>.
+                Der burde være en onlinebetaling knyttet hertil. Måske har kunden fortrudt sit køb, eller også er der sket en fejl hos PBS under købet. Kunden kan betale på følgende link <?php e($payment_url); ?>. <a href="<?php e($_SERVER['PHP_SELF']); ?>?id=<?php e($debtor->getId()); ?>&amp;action=send_onlinepaymentlink">Skriv e-mail</a>.
             </div>
-        <?php }
+            <?php else: ?>
+            <div class="warning">
+                Der burde være en onlinebetaling knyttet hertil. Hvis du skriver et betalingslink ind under shoppen, kan du automatisk sende en e-mail til vedkommende.
+            </div>
+
+        <?php endif; }
     }
     ?>
 <div style="clear:both;">
