@@ -16,14 +16,11 @@ class Intraface_modules_language_Controller_Index extends k_Controller
         $gateway = new Intraface_modules_language_Gateway;
 
         $languages = new Intraface_modules_language_Languages;
-        $chosen = $languages->getChosen();
+        $chosen = $languages->getChosenAsArray();
 
-        $langs = array();
-        foreach ($chosen as $lang) {
-        	$langs[$lang->type_key] = $gateway->getByKey($lang->type_key);
-        }
 
-        $data = array('languages' => $gateway->getAll(), 'chosen' => $langs);
+
+        $data = array('languages' => $gateway->getAll(), 'chosen' => $chosen);
         return $this->render(dirname(__FILE__) . '/tpl/languages.tpl.php', $data);
     }
 

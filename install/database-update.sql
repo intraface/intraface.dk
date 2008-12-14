@@ -13,3 +13,5 @@ CREATE TABLE IF NOT EXISTS `language` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+ALTER TABLE `shop` ADD `language_key` INT( 11 ) NOT NULL ;

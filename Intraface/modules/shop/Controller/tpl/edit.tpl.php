@@ -38,6 +38,26 @@
         </fieldset>
     <?php endif; ?>
 
+    <?php if (!empty($languages)): ?>
+        <fieldset>
+            <legend><?php e(t('Language')); ?></legend>
+            <div class="formrow">
+                <label for="language_key"><?php e(t('Language')); ?></label>
+                <select name="language_key" id="language key">
+                    <option value="0" >Danish (<?php e(t('standard', 'common')); ?>)</option>
+                    <?php
+                    foreach ($languages as $lang) { ?>
+                        <option value="<?php e($lang->getKey()); ?>"
+                        <?php if (!empty($data['language_key']) AND $lang->getKey() == $data['language_key']) echo ' selected="selected"'; ?>
+                        ><?php e($lang->getDescription()); ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
+            </div>
+        </fieldset>
+    <?php endif; ?>
+
     <fieldset>
         <legend><?php e(t('What should be shown in the shop?')); ?></legend>
         <div class="formrow">

@@ -18,20 +18,21 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
         $this->hasColumn('payment_link_add',             'integer', 1);
         $this->hasColumn('terms_of_trade_url',           'string',  255);
         $this->hasColumn('default_currency_id',          'integer');
+        $this->hasColumn('language_key',                 'integer');
+
     }
-    
+
     public function setUp()
     {
         $this->actAs('Intraface_Doctrine_Template_Intranet');
-        //$this->loadTemplate('Intraface_Doctrine_Template_Intranet');
     }
 
     function getId()
     {
         return $this->id;
     }
-    
-    public function getName() 
+
+    public function getName()
     {
         return $this->name;
     }
@@ -45,17 +46,17 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
     {
         return $this->confirmation_subject;
     }
-    
+
     function getConfirmationText()
     {
         return $this->confirmation;
     }
-    
+
     function getConfirmationGreeting()
     {
         return $this->confirmation_greeting;
-    }    
-    
+    }
+
     function showLoginUrl()
     {
         return $this->confirmation_add_contact_url;
@@ -70,23 +71,23 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
     {
         return $this->payment_link_add;
     }
-    
+
     function sendConfirmation()
     {
         return $this->send_confirmation;
-    } 
-    
+    }
+
     function getTermsOfTradeUrl()
     {
         return $this->terms_of_trade_url;
     }
-    
+
     function getDefaultCurrency($gateway)
     {
         if ($this->default_currency_id == 0) {
             return false;
         }
-        
+
         return $gateway->findById($this->default_currency_id);
     }
 }

@@ -21,6 +21,18 @@ class Intraface_modules_language_Languages extends Doctrine_Record
     	return Doctrine::getTable('Intraface_modules_language_Languages')->findByIntranetId($GLOBALS['intraface_doctrine_intranet_id']);
     }
 
+    function getChosenAsArray()
+    {
+        $langs = array();
+        $gateway = new Intraface_modules_language_Gateway;
+
+    	foreach ($this->getChosen() as $lang) {
+            $langs[$lang->type_key] = $gateway->getByKey($lang->type_key);
+    	}
+
+        return $langs;
+    }
+
     function flush()
     {
     	$q = Doctrine_Query::create();
