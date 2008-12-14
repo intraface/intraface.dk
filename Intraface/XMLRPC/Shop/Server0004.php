@@ -100,8 +100,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
 
         if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
             $currencies = $currency_gateway->findAllWithExchangeRate();
-        }
-        else {
+        } else {
             $currencies = false;
         }
 
@@ -113,7 +112,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             'search' => array(),
         ));
     }
-    
+
     /**
      * Gets a list with products in given category
      *
@@ -134,10 +133,10 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         }
         $search['category'] = $category_id;
         $search['offset'] = $pagging_offset;
-        
+
         return $this->getProducts($credentials, $shop_id, $search);
-    } 
-    
+    }
+
     /**
      * Gets a list with products with a given keyword or with given keywords
      *
@@ -151,7 +150,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
      */
     public function getProductsWithKeywordId($credentials, $shop_id, $keyword, $results_per_page = 0, $pagging_offset = 0)
     {
-        
+
         $search = array();
         if(is_array($keyword)) {
             $search['area'] = 'keyword_'.implode('-', $keyword);
@@ -163,7 +162,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         }
         $search['keywords'] = $keyword;
         $search['offset'] = $pagging_offset;
-        
+
         return $this->getProducts($credentials, $shop_id, $search);
     }
 
@@ -331,8 +330,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
 
         if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
             $currencies = $currency_gateway->findAllWithExchangeRate();
-        }
-        else {
+        } else {
             $currencies = false;
         }
 
@@ -371,8 +369,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
 
         if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
             $currencies = $currency_gateway->findAllWithExchangeRate();
-        }
-        else {
+        } else {
             $currencies = false;
         }
 
@@ -538,8 +535,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
 
         if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
             $currencies = $currency_gateway->findAllWithExchangeRate();
-        }
-        else {
+        } else {
             $currencies = false;
         }
 
@@ -892,7 +888,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
                 $currency['currencies'][$c->getType()->getIsoCode()] = $c->getType()->getDescription();
             }
         }
-        
+
         if(false !== ($default_currency = $this->webshop->getShop()->getDefaultCurrency($currency_gateway))) {
             $currency['default'] = $default_currency->getType()->getIsoCode();
         }
@@ -918,46 +914,23 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
     }
 
     /**
-     * Checks credentials
+     * Gets information about the company
      *
      * @param struct $credentials Credentials to use the server
      *
      * @return array
      */
-    /*
-    protected function checkCredentials($credentials)
+    public function getCompanyInformation($credentials)
     {
-        $this->credentials = $credentials;
-
-        if (count($credentials) != 2) { // -4
-            require_once 'XML/RPC2/Exception.php';
-            throw new XML_RPC2_FaultException('wrong argument count in $credentials - got ' . count($credentials) . ' arguments - need 2', -4);
-        }
-        if (empty($credentials['private_key'])) { // -5
-            require_once 'XML/RPC2/Exception.php';
-            throw new XML_RPC2_FaultException('supply a private_key', -5);
-        }
-        if (empty($credentials['session_id'])) { // -5
-            require_once 'XML/RPC2/Exception.php';
-            throw new XML_RPC2_FaultException('supply a session_id', -5);
-        }
-
-        $auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
-        $weblogin = $auth_adapter->auth();
-
-        if (!$weblogin) {
-            require_once 'XML/RPC2/Exception.php';
-            throw new XML_RPC2_FaultException('access to intranet denied', -2);
-        }
-
-        $this->kernel = new Intraface_Kernel($credentials['session_id']);
-        $this->kernel->weblogin = $weblogin;
-        $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
-        $this->kernel->setting = new Intraface_Setting($this->kernel->intranet->get('id'));
-
-        return true;
+        $this->checkCredentials($credentials);
+        $address = array();
+        $address['name'] = $this->kernel->getIntranet()->getAddress()->get('name');
+        $address['address'] = $this->kernel->getIntranet()->getAddress()->get('address');
+        $address['postcode'] = $this->kernel->getIntranet()->getAddress()->get('postcode');
+        $address['city'] = $this->kernel->getIntranet()->getAddress()->get('city');
+        $address['cvr'] = $this->kernel->getIntranet()->getAddress()->get('cvr');
+        return  $this->prepareResponseData($address);
     }
-    */
 
     /**
      * Initialize the webshop

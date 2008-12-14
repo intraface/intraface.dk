@@ -428,4 +428,9 @@ class Intraface_Kernel
         }
         return $pass;
     }
+
+    function getIntranet()
+    {
+    	return $this->intranet;
+    }
 }
