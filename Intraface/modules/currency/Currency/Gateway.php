@@ -60,7 +60,7 @@ class Intraface_modules_currency_Currency_Gateway
                 ->addWhere('currency.id = ?', $id);
         $collection = $query->execute();
         $query->free(true);
-        
+
         if (!$collection || $collection->count() != 1) {
             throw new Intraface_Gateway_Exception('Unable to find currency '.$id);
         }
@@ -80,11 +80,10 @@ class Intraface_modules_currency_Currency_Gateway
 
         $collection = $query->execute();
         $query->free(true);
-        
+
         if (!$collection || $collection->count() != 1) {
             throw new Intraface_Gateway_Exception('Unable to find currency with type key '.$key);
         }
         return $collection->getFirst();
     }
 }
-?>
