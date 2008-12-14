@@ -4,21 +4,11 @@ class Intraface_modules_language_Controller_Index extends k_Controller
     function GET()
     {
         $this->document->title = $this->__('Languages');
-        /*
-        $this->document->options = array($this->url('create') => 'Create');
 
-        $doctrine = $this->registry->get('doctrine');
-        $languages = Doctrine::getTable('Intraface_modules_language_Language')->findByIntranetId($this->registry->get('kernel')->intranet->getId());
-        if (count($languages) == 0) {
-            return $this->render(dirname(__FILE__) . '/tpl/empty-table.tpl.php', array('message' => 'No languages has been created yet.'));
-        }
-        */
         $gateway = new Intraface_modules_language_Gateway;
 
         $languages = new Intraface_modules_language_Languages;
         $chosen = $languages->getChosenAsArray();
-
-
 
         $data = array('languages' => $gateway->getAll(), 'chosen' => $chosen);
         return $this->render(dirname(__FILE__) . '/tpl/languages.tpl.php', $data);
