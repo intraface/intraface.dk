@@ -1,4 +1,6 @@
 <?php
+ini_set('memory_limit', '112M');
+
 require('../../include_first.php');
 
 $module = $kernel->module('filemanager');
@@ -7,17 +9,17 @@ $translation = $kernel->getTranslation('filemanager');
 if (isset($_POST['id']) && isset($_POST['instance_type'])) {
     $filemanager = new FileManager($kernel, $_POST['id']);
     $instance_type = $_POST['instance_type'];
-    
+
     $validator = new Ilib_Validator($filemanager->error);
     $validator->isNumeric($_POST['width'], 'invalid width', 'greater_than_zero,integer');
     $validator->isNumeric($_POST['height'], 'invalid width', 'greater_than_zero,integer');
     $validator->isNumeric($_POST['x'], 'invalid width', 'zero_or_greater,integer');
     $validator->isNumeric($_POST['y'], 'invalid width', 'zero_or_greater,integer');
-    
+
     if (!$filemanager->error->isError()) {
         $filemanager->createInstance($instance_type);
         $filemanager->instance->delete();
-    
+
         $param['crop_width'] = (int)$_POST['width'];
         $param['crop_height'] = (int)$_POST['height'];
         $param['crop_offset_x'] = (int)$_POST['x'];
@@ -28,7 +30,7 @@ if (isset($_POST['id']) && isset($_POST['instance_type'])) {
             header('location: file.php?id='.$filemanager->get('id'));
             exit;
         }
-    }   
+    }
 } elseif (isset($_GET['id']) && isset($_GET['instance_type'])) {
     $filemanager = new FileManager($kernel, $_GET['id']);
     $instance_type = $_GET['instance_type'];
@@ -89,7 +91,7 @@ $page->start($translation->get('crop image').' '.$filemanager->get('file_name'))
     <?php elseif ($type['resize_type'] != 'strict'): ?>
         <li><a href="crop_image.php?id=<?php e($filemanager->get('id')); ?>&instance_type=<?php e($filemanager->instance->get('type')); ?>&unlock_ratio=0"><?php e($translation->get('lock image ratio')); ?></a></li>
     <?php endif; ?>
-      
+
 </ul>
 
 <?php echo $filemanager->error->view(); ?>
@@ -99,21 +101,21 @@ $page->start($translation->get('crop image').' '.$filemanager->get('file_name'))
     <form method="POST" action="crop_image.php">
     <input type="hidden" name="id" value="<?php e($filemanager->get('id')); ?>" />
     <input type="hidden" name="instance_type" value="<?php e($filemanager->instance->get('type')); ?>" />
-    
-    
-    <div><?php e($translation->get('crop')); ?>:  
+
+
+    <div><?php e($translation->get('crop')); ?>:
         <label for="width"><?php e($translation->get('width')); ?></label>
         <input type="text" name="width" id="width" value="" size="4" />
-    
+
         <label for="height"><?php e($translation->get('height')); ?></label>
         <input type="text" name="height" id="height" value="" size="4" />
-    
-    
+
+
         <?php e($translation->get('from top left corner')); ?>
-       
+
         <label for="x"><?php e($translation->get('x')); ?></label>
         <input type="text" name="x" id="x" value="" size="4" />
-        
+
         <label for="y"><?php e($translation->get('y')); ?></label>
         <input type="text" name="y" id="y" value="" size="4" />
 
