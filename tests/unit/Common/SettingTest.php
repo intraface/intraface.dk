@@ -7,6 +7,8 @@ require_once 'Intraface/Setting.php';
 
 class SettingTest extends PHPUnit_Framework_TestCase
 {
+    protected $backupGlobals = FALSE;
+
     function createSetting()
     {
         $intranet_id = rand(1, 1000000);
