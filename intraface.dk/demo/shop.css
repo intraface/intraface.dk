@@ -166,6 +166,10 @@ ul#related-product li {
     border-bottom: 1px solid #ddd;
 }
 
+.product-message {
+    font-weight: bold;
+}
+
 /* basket */
 
 table#basket {
