@@ -14,7 +14,7 @@ class Demo_Shop_Show extends k_Controller
 
         $credentials = array("private_key" => $this->context->getPrivateKey(), 
                              "session_id" => md5($this->registry->get("k_http_Session")->getSessionId()));
-        $client = new IntrafacePublic_Shop_Client_XMLRPC2($credentials, $shop_id, true, INTRAFACE_XMLPRC_SERVER_PATH . "shop/server0004.php");
+        $client = new IntrafacePublic_Shop_Client_XMLRPC2($credentials, $shop_id, false, INTRAFACE_XMLPRC_SERVER_PATH . "shop/server0004.php");
         return new IntrafacePublic_Shop($client, $this->registry->get('cache'));
     }
 
