@@ -37,7 +37,7 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
         // @todo - cannot find the categories when using this one
         $db = $this->registry->get('db');
         $kernel = $this->registry->get('kernel');
-        $shop = $this->registry->get('category_gateway')->findById($this->context->name);
+        $shop = $this->registry->get('category_gateway')->findById($this->context->name);       
         return new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()), $id);
     }
 

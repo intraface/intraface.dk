@@ -901,10 +901,14 @@ class Product extends Intraface_Standard
 
             $products[$i]['currency']['DKK']['price'] = $product->getDetails()->getPrice();
             $products[$i]['currency']['DKK']['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat();
+            $products[$i]['currency']['DKK']['before_price'] = $product->getDetails()->getBeforePrice();
+            $products[$i]['currency']['DKK']['before_price_incl_vat'] = $product->getDetails()->getBeforePriceIncludingVat();
             if ($currencies && $currencies->count() > 0) {
                 foreach ($currencies AS $currency) {
                     $products[$i]['currency'][$currency->getType()->getIsoCode()]['price'] = $product->getDetails()->getPriceInCurrency($currency);
                     $products[$i]['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'] = $product->getDetails()->getPriceIncludingVatInCurrency($currency);
+                    $products[$i]['currency'][$currency->getType()->getIsoCode()]['before_price'] = $product->getDetails()->getBeforePriceInCurrency($currency);
+                    $products[$i]['currency'][$currency->getType()->getIsoCode()]['before_price_incl_vat'] = $product->getDetails()->getBeforePriceIncludingVatInCurrency($currency);
                 }
             }
 

@@ -140,6 +140,11 @@ $page->start(t('edit product'));
             <label for="weight"><?php e(t('weight')); ?></label>
             <input type="text" name="weight" id="weight" value="<?php if (!empty($value['weight'])) e($value['weight']); ?>" /> <?php e(t('grams')); ?>
         </div>
+        
+        <div class="formrow">
+            <label for="before_price"><?php e(t('Before price')); ?></label>
+            <input type="text" name="before_price" id="before_price" value="<?php if (!empty($value['before_price']) && $value['before_price'] != 0.00) e(amountToForm($value['before_price'])); ?>" />
+        </div>
 
         <?php if ($kernel->user->hasModuleAccess('shop')): ?>
             <?php if (!isset($value['has_variation'])): ?>

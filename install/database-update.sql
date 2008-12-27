@@ -15,3 +15,5 @@ CREATE TABLE IF NOT EXISTS `language` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ;
 
 ALTER TABLE `shop` ADD `language_key` INT( 11 ) NOT NULL ;
+
+ALTER TABLE `product_detail` ADD `before_price` FLOAT( 11, 2 ) NOT NULL AFTER `price` ;

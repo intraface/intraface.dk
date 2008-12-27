@@ -57,7 +57,7 @@ class ProductDetail extends Intraface_Standard
         $this->product       = $product;
         $this->db            = new DB_Sql;
         $this->old_detail_id = (int)$old_detail_id;
-        $this->fields        = array('number', 'name', 'description', 'price', 'unit', 'do_show', 'vat', 'weight', 'state_account_id');
+        $this->fields        = array('number', 'name', 'description', 'price', 'before_price', 'unit', 'do_show', 'vat', 'weight', 'state_account_id');
         $this->detail_id     = $this->load();
     }
 
@@ -135,7 +135,8 @@ class ProductDetail extends Intraface_Standard
         $validator->isNumeric($array_var['weight'], 'Fejl i vægt - skal være et helt tal', 'allow_empty');
 
         if (isset($array_var['price'])) $validator->isNumeric($array_var['price'], 'Fejl i pris', 'allow_empty');
-
+        if (isset($array_var['before_price'])) $validator->isNumeric($array_var['before_price'], 'Fejl i førpris', 'allow_empty');
+        
         if ($this->product->error->isError()) {
             return false;
         }
@@ -162,6 +163,12 @@ class ProductDetail extends Intraface_Standard
             $amount = new Intraface_Amount($array_var['price']);
             $amount->convert2db();
             $array_var['price'] = $amount->get();
+        }
+        
+        if (isset($array_var['before_price'])) {
+            $amount = new Intraface_Amount($array_var['before_price']);
+            $amount->convert2db();
+            $array_var['before_price'] = $amount->get();
         }
 
 
@@ -293,6 +300,26 @@ class ProductDetail extends Intraface_Standard
     public function getPriceIncludingVatInCurrency($currency, $exchange_rate_id = 0)
     {
         return new Ilib_Variable_Float(round($this->get('price') / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100) * (1 + $this->getVatPercent()->getAsIso()/100), 2), 'iso');
+    }
+    
+    public function getBeforePrice()
+    {
+        return new Ilib_Variable_Float($this->get('before_price'));
+    }
+
+    public function getBeforePriceInCurrency($currency, $exchange_rate_id = 0)
+    {
+        return new Ilib_Variable_Float(round($this->get('price') / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100), 2), 'iso');
+    }
+    
+    public function getBeforePriceIncludingVat()
+    {
+        return new Ilib_Variable_Float(round($this->get('before_price') * (1 + $this->getVatPercent()->getAsIso()/100), 2));
+    }
+    
+    public function getBeforePriceIncludingVatInCurrency($currency, $exchange_rate_id = 0)
+    {
+        return new Ilib_Variable_Float(round($this->get('before_price') / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100) * (1 + $this->getVatPercent()->getAsIso()/100), 2), 'iso');
     }
     
     public function getVatPercent()

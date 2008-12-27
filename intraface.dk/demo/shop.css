@@ -166,6 +166,11 @@ ul#related-product li {
     border-bottom: 1px solid #ddd;
 }
 
+p.before_price {
+    font-size: 90%;
+    text-decoration: line-through;
+}
+
 .product-message {
     font-weight: bold;
 }

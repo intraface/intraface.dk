@@ -195,6 +195,8 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             foreach ($p['currency'] AS $k => $c) {
                 $return[$key]['currency'][$k]['price'] = $c['price']->getAsIso(2);
                 $return[$key]['currency'][$k]['price_incl_vat'] = $c['price_incl_vat']->getAsIso(2);
+                $return[$key]['currency'][$k]['before_price'] = $c['before_price']->getAsIso(2);
+                $return[$key]['currency'][$k]['before_price_incl_vat'] = $c['before_price_incl_vat']->getAsIso(2);
             }
 
             if (isset($p['pictures'])) {
@@ -235,11 +237,15 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $return['product'] = $product->get();
         $return['product']['currency']['DKK']['price'] = $product->getDetails()->getPrice()->getAsIso(2);
         $return['product']['currency']['DKK']['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat()->getAsIso(2);
-
+        $return['product']['currency']['DKK']['before_price'] = $product->getDetails()->getBeforePrice()->getAsIso(2);
+        $return['product']['currency']['DKK']['before_price_incl_vat'] = $product->getDetails()->getBeforePriceIncludingVat()->getAsIso(2);
+        
         if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
             foreach ($currency_gateway->findAllWithExchangeRate() AS $currency) {
                 $return['product']['currency'][$currency->getType()->getIsoCode()]['price'] = $product->getDetails()->getPriceInCurrency($currency)->getAsIso(2);
                 $return['product']['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'] = $product->getDetails()->getPriceIncludingVatInCurrency($currency)->getAsIso(2);
+                $return['product']['currency'][$currency->getType()->getIsoCode()]['before_price'] = $product->getDetails()->getBeforePriceInCurrency($currency)->getAsIso(2);
+                $return['product']['currency'][$currency->getType()->getIsoCode()]['before_price_incl_vat'] = $product->getDetails()->getBeforePriceIncludingVatInCurrency($currency)->getAsIso(2);
             }
         }
 

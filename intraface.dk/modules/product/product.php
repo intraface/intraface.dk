@@ -155,6 +155,12 @@ $page->start(t('product') . ': ' . $product->get('name'));
             <td><?php e(number_format($product->get('price'), 2, ",", ".")); ?> <?php e(t('excl. vat')); ?></td>
         </tr>
         <?php if ($kernel->user->hasModuleAccess('webshop') || $kernel->user->hasModuleAccess('shop')): ?>
+            <?php if ($product->get('before_price') != 0.00): ?>
+                <tr>
+                    <td><?php e(t('Before price')); ?></td>
+                    <td><?php e(number_format($product->get('before_price'), 2, ",", ".")); ?></td>
+                </tr>
+            <?php endif; ?>
             <tr>
                 <td><?php e(t('weight')); ?></td>
                 <td><?php e($product->get('weight')); ?> gram</td>
