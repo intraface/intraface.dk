@@ -136,7 +136,7 @@ $pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Greaterthan', 'pu
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Template_Positionable', 'public.intraface.dk', '0.2.0');
 
 // Ilib
-$pfm->addPackageDepWithChannel('required', 'Ilib_Category', 'public.intraface.dk', '0.1.2');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Category', 'public.intraface.dk', '0.1.3');
 $pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.1.2');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Error', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Redirect', 'public.intraface.dk', '0.2.1');
