@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // slet debtoren
     if (!empty($_POST['delete'])) {
-
         $type = $debtor->get("type");
         $debtor->delete();
         header("Location: list.php?type=".$type."&amp;use_stored=true");
@@ -885,7 +884,7 @@ if (isset($onlinepayment)) {
                 }
             } catch (Doctrine_Record_Exeption $e) {
             }
-            if ($shop->getPaymentUrl()):
+            if ($shop AND $shop->getPaymentUrl()):
             ?>
             <div class="warning">
                 Der burde være en onlinebetaling knyttet hertil. Måske har kunden fortrudt sit køb, eller også er der sket en fejl hos PBS under købet. Kunden kan betale på følgende link <?php e($payment_url); ?>. <a href="<?php e($_SERVER['PHP_SELF']); ?>?id=<?php e($debtor->getId()); ?>&amp;action=send_onlinepaymentlink">Skriv e-mail</a>.
