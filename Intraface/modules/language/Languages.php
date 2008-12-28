@@ -16,6 +16,11 @@ class Intraface_modules_language_Languages extends Doctrine_Record
         //$this->actAs('SoftDelete');
     }
 
+    function getTypeKey()
+    {
+    	return $this->type_key;
+    }
+
     function getChosen()
     {
     	return Doctrine::getTable('Intraface_modules_language_Languages')->findByIntranetId($GLOBALS['intraface_doctrine_intranet_id']);
