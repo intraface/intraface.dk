@@ -554,7 +554,7 @@ class Debtor extends Intraface_Standard
         $values['this_date'] = date('d-m-Y');
         $values['number'] = ''; // nulstiller nummeret ellers vil den få samme nummer
         $values['currency'] = $debtor_object->getCurrency();
-        
+
         switch ($this->type) {
             case "invoice":
                 $values['due_date'] = date("d-m-Y", time() + 24 * 60 * 60 * $debtor_object->contact->get("paymentcondition"));
@@ -706,6 +706,14 @@ class Debtor extends Intraface_Standard
         $db->query("UPDATE debtor SET contact_id = " . $contact_id . " WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get("id") . " AND type='".$this->type_key."'");
 
         return true;
+    }
+
+    function getFromShopId()
+    {
+    	if ($this->value['where_from'] == 2) {
+    		return $this->value['where_from_id'];
+    	}
+        throw new Exception('Not from a shop');
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1140,17 +1148,17 @@ class Debtor extends Intraface_Standard
 
     /**
      * Returns the total amount on Debtor
-     * 
+     *
      * @return object Ilib_Variable_Float with total
      */
-    public function getTotal() 
+    public function getTotal()
     {
         return new Ilib_Variable_Float($this->value['total']);
     }
-    
+
     /**
      * Returns the total amount of debtor in the given set currency if is set.
-     * 
+     *
      * @returns object Ilib_Variable_Float with total amount in currency if set, otherwise in system default.
      */
     public function getTotalInCurrency()
@@ -1162,31 +1170,31 @@ class Debtor extends Intraface_Standard
             return $this->getTotal();
         }
     }
-    
-    
+
+
     /**
      * Returns arrears on a debtor
-     * 
+     *
      * @return object Ilib_Variable_Float with arrears
      */
     public function getArrears()
     {
         return new Ilib_Variable_Float($this->value['arrears']);
     }
-    
+
     /**
      * Returns arrears in currency
      */
     public function getArrearsInCurrency()
     {
         if(false !== ($currency = $this->getCurrency())) {
-            return new Ilib_Variable_Float(round($currency->getProductPriceExchangeRate($this->get('currency_product_price_exchange_rate_id'))->convertAmountToCurrency($this->getArrears())->getAsIso(), 2));    
+            return new Ilib_Variable_Float(round($currency->getProductPriceExchangeRate($this->get('currency_product_price_exchange_rate_id'))->convertAmountToCurrency($this->getArrears())->getAsIso(), 2));
         }
-        
+
         return $this->getArrears();
-        
+
     }
-    
+
     /**
      * returns the possible debtor types!
      *
