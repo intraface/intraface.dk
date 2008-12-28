@@ -1,10 +1,3 @@
-
-# Already added to running database
-ALTER TABLE `dbquery_result` ADD INDEX `search` ( `id` , `intranet_id` , `session_id` , `name` )  
-ALTER TABLE `dbquery_result` DROP INDEX `intranet_id`  
-ALTER TABLE `file_handler` ADD INDEX `simple_find` ( `id` , `intranet_id` )  
-
-
 # New tables
 CREATE TABLE IF NOT EXISTS `language` (
   `id` int(11) NOT NULL auto_increment,
@@ -15,5 +8,23 @@ CREATE TABLE IF NOT EXISTS `language` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ;
 
 ALTER TABLE `shop` ADD `language_key` INT( 11 ) NOT NULL ;
+ALTER TABLE `language` ADD `type_key` INT( 11 ) NOT NULL ;
+
+CREATE TABLE IF NOT EXISTS `onlinepayment_settings` (
+  `id` int(11) NOT NULL,
+  `intranet_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `onlinepayment_settings_translation` (
+  `id` int(11) NOT NULL,
+  `email` text,
+  `lang` varchar(20) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+ALTER TABLE `onlinepayment_settings_translation` ADD `subject` VARCHAR( 255 ) NOT NULL ;
+ ALTER TABLE `onlinepayment_settings_translation` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT
+ ALTER TABLE `onlinepayment_settings` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT  
 
 ALTER TABLE `product_detail` ADD `before_price` FLOAT( 11, 2 ) NOT NULL AFTER `price` ;
