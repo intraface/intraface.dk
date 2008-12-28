@@ -7,9 +7,9 @@
  * @since   0.1.0
  * @version @package-version@
  */
-class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server 
+class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
 {
-    private function factory($site_id) 
+    private function factory($site_id)
     {
         if (!$this->kernel->weblogin->hasModuleAccess('cms')) { // -2
             require_once 'XML/RPC2/Exception.php';
@@ -32,7 +32,7 @@ class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
      *
      * @return array
      */
-    public function getPage($credentials, $site_id, $identifier) 
+    public function getPage($credentials, $site_id, $identifier)
     {
         $identifier = $this->processRequestData($identifier);
         $this->checkCredentials($credentials);
@@ -89,10 +89,10 @@ class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
      * @param array $search
      * @return array
      */
-    public function getPageList($credentials, $site_id, $search = '') 
+    public function getPageList($credentials, $site_id, $search = '')
     {
         $search = $this->processRequestData($search);
-        
+
         $this->checkCredentials($credentials);
         $site_id = intval($site_id);
 
@@ -108,6 +108,10 @@ class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
             $cmspage->getDBQuery()->setFilter('level', $search['level']);
         }
 
+        if (isset($search['keyword'])) {
+            $cmspage->getDBQuery()->setKeyword($search['keyword']);
+        }
+
         return $this->prepareResponseData($cmspage->getList());
     }
 
@@ -118,7 +122,7 @@ class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
      * @param integer $site_id
      * @return array
      */
-    public function getSitemap($credentials, $site_id) 
+    public function getSitemap($credentials, $site_id)
     {
         $this->checkCredentials($credentials);
 
