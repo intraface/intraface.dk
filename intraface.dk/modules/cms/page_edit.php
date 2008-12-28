@@ -196,8 +196,6 @@ $page->start($translation->get('edit page'));
         </fieldset>
         <?php endif; ?>
 
-        <?php
-        /*
         <fieldset>
                 <legend><?php e(t('choose picture')); ?></legend>
                 <?php
@@ -207,8 +205,6 @@ $page->start($translation->get('edit page'));
                     $filehandler_html->printFormUploadTag('pic_id', 'new_pic', 'choose_file', array('image_size' => 'small'));
                 ?>
             </fieldset>
-        */
-        ?>
 
         <fieldset id="searchengine-info">
             <legend><?php e(t('metatags for the search engines')); ?></legend>
