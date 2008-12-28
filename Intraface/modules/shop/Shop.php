@@ -90,4 +90,9 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
 
         return $gateway->findById($this->default_currency_id);
     }
+
+    function getLanguage()
+    {
+    	return Intraface_modules_language_Gateway::getByKey($this->language_key);
+    }
 }
