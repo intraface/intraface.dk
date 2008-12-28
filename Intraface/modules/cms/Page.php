@@ -631,6 +631,9 @@ class CMS_Page extends Intraface_Standard
 
                 // denne b�r laves om til picture - og s� f�r man alle nyttige oplysninger ud
                 $pages[$i]['pic_id'] = $cmspage[$n]->f('pic_id');
+                $pages[$i]['picture'] = $this->getPicture($cmspage[$n]->f('pic_id'));
+
+                //$pages[$i]['picture'] = $cmspage[$n]->f('pic_id');
                 $pages[$i]['description'] = $cmspage[$n]->f('description');
 
                 // til google sitemaps
@@ -671,6 +674,34 @@ class CMS_Page extends Intraface_Standard
 
         return $pages;
 
+    }
+
+    function getPicture($pic_id)
+    {
+        $shared_filehandler = $this->kernel->useShared('filehandler');
+        $shared_filehandler->includeFile('AppendFile.php');
+
+                $tmp_filehandler = new FileHandler($this->kernel, $pic_id);
+                $this->value['picture']['id']                   = $pic_id;
+                $this->value['picture']['original']['icon_uri'] = $tmp_filehandler->get('icon_uri');
+                $this->value['picture']['original']['name']     = $tmp_filehandler->get('file_name');
+                $this->value['picture']['original']['width']    = $tmp_filehandler->get('width');
+                $this->value['picture']['original']['height']   = $tmp_filehandler->get('height');
+                $this->value['picture']['original']['file_uri'] = $tmp_filehandler->get('file_uri');
+
+                if ($tmp_filehandler->get('is_image')) {
+                    $tmp_filehandler->createInstance();
+                    $instances = $tmp_filehandler->instance->getList('include_hidden');
+                    foreach ($instances as $instance) {
+                        $this->value['picture'][$instance['name']]['file_uri'] = $instance['file_uri'];
+                        $this->value['picture'][$instance['name']]['name']     = $instance['name'];
+                        $this->value['picture'][$instance['name']]['width']    = $instance['width'];
+                        $this->value['picture'][$instance['name']]['height']   = $instance['height'];
+
+                    }
+                }
+
+            return $this->value['picture'];
     }
 
     /**
