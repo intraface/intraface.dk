@@ -36,6 +36,10 @@ switch ($send_as) {
 
         if ($debtor->get('type') == 'order') {
             $body = $kernel->setting->get('intranet', 'debtor.order.email.text');
+        } elseif ($debtor->get('type') == 'invoice') {
+            $body = $kernel->setting->get('intranet', 'debtor.invoice.email.text');
+        } elseif ($debtor->get('type') == 'quotation') {
+            $body = $kernel->setting->get('intranet', 'debtor.quotation.email.text');
         } else {
             $body = '';
         }
