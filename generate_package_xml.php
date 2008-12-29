@@ -137,7 +137,7 @@ $pfm->addPackageDepWithChannel('required', 'Doctrine_Template_Positionable', 'pu
 
 // Ilib
 $pfm->addPackageDepWithChannel('required', 'Ilib_Category', 'public.intraface.dk', '0.1.3');
-$pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.1.2');
+$pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.1.3');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Error', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Redirect', 'public.intraface.dk', '0.2.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.dk', '0.1.0');
