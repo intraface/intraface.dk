@@ -7,12 +7,11 @@
  * @version @package-version@
  */
 
-$version = '1.12.0';
+$version = '1.13.0';
 $stability = 'stable';
 $notes = '
-* Implemented support for currencies
-* Support for postioning files on product. 
-* Bug fixes
+* Implemented support for before price in shop
+* Other small improvements
 ';
 $web_dir = 'intraface.dk';
 
