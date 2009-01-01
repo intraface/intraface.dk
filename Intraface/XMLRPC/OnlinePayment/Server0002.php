@@ -123,7 +123,7 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
             throw new XML_RPC2_FaultException('Onlinebetaling kunne ikke blive gemt ' . strtolower(implode(', ', $onlinepayment->error->getMessage())), -4);
         }
 
-        if($onlinepayment->get('status') == 'authorized') {
+        if ($onlinepayment->get('status') == 'authorized') {
             $this->sendEmailOnOnlinePayment($debtor, $payment_id);
         }
 
@@ -139,15 +139,18 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
-        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findById($debtor->getFromShopId());
+        try {
+            $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById($debtor->getFromShopId());
 
-        $settings = Doctrine::getTable('Intraface_modules_onlinepayment_Language')->findByIntranetId($kernel->intranet->getId());
-        if (!empty($settings[0])) {
-            $settings = $settings[0];
+            $settings = Doctrine::getTable('Intraface_modules_onlinepayment_Language')->findOneByIntranetId($kernel->intranet->getId());
+
+            $subject = $settings->getConfirmationEmailSubject($shop->getLanguage());
+            $body = $settings->getConfirmationEmailBody($shop->getLanguage());
+
+        } catch (Exception $e) {
+
         }
 
-        $subject = $settings->getConfirmationEmailSubject($shop->getLanguage());
-        $body = $settings->getConfirmationEmailBody($shop->getLanguage());
 
         if (empty($subject)) {
             $subject = 'Payment confirmation / betalingsbekræftelse (#' . $payment_id . ')';
