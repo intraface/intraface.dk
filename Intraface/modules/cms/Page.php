@@ -557,6 +557,9 @@ class CMS_Page extends Intraface_Standard
             case 'article':
                 $this->getDBQuery()->setSorting("position, date_publish DESC");
             break;
+            default:
+                $this->getDBQuery()->setSorting("date_publish DESC");
+            break;
         }
 
         // rekursiv funktion til at vise siderne
