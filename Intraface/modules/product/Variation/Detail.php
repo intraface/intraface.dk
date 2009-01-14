@@ -4,7 +4,7 @@ class Intraface_modules_product_Variation_Detail extends Doctrine_Record
     public function setTableDefinition()
     {
         $this->setTableName('product_variation_detail');
-        $this->hasColumn('date_created', 'datetime', array());
+        $this->hasColumn('date_created', 'timestamp', array());
         $this->hasColumn('product_variation_id', 'integer', 11, array());
         $this->hasColumn('price_difference', 'integer', 11, array());
         $this->hasColumn('weight_difference', 'integer', 11, array());
