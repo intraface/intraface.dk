@@ -21,7 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $filehandler->createUpload();
             $filehandler->upload->setSetting('max_file_size', 5000000);
-            if ($product->get('do_show') == 1) { // if shown i webshop
+            
+            /*
+             * @todo: It is not enough validation if we have shop to make it public. Should probably be possible to set on the image if it should be public. 
+             */
+            if ($kernel->user->hasModuleAccess('shop')) { // if shown i webshop $product->get('do_show') == 1
                 $filehandler->upload->setSetting('file_accessibility', 'public');
             }
             if ($id = $filehandler->upload->upload('new_append_file')) {
