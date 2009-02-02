@@ -646,7 +646,7 @@ class OnlinePayment extends Intraface_Standard
                     ->getPaymentExchangeRate(
                         $this->get('captured_in_currency_payment_exchange_rate_id')
                     )
-                    ->convertAmountToCurrency($this->getAmount())->getAsIso(2));
+                    ->convertAmountFromCurrency($this->getAmount())->getAsIso(2));
             }
             else {
                 return new Ilib_Variable_Float($this->getCurrency()->getPaymentExchangeRate()->convertAmountToCurrency($this->getAmount())->getAsIso(2));

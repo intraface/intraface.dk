@@ -77,6 +77,18 @@ class Intraface_modules_currency_Currency_ExchangeRate extends Doctrine_Record
     {
         return new Ilib_Variable_Float($amount->getAsIso() / ($this->getRate()->getAsIso() / 100));
     }
+    
+    
+    /**
+     * Converts amount from currency to system default
+     *
+     * @param object $amount Ilib_Variable_Float cotaining amount
+     * @return object Ilib_Varibale_Float containing converted amount
+     */
+    public function convertAmountFromCurrency($amount)
+    {
+        return new Ilib_Variable_Float($amount->getAsIso() * ($this->getRate()->getAsIso() / 100));
+    }    
 
     public function getUsedForTypes()
     {
