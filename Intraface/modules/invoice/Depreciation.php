@@ -76,7 +76,7 @@ class Depreciation extends Payment
             return false;
         }
 
-        if (!$year->readyForState()) {
+        if (!$year->readyForState($this->get('this_date'))) {
             $this->error->merge($year->error->getMessage());
             return false;
         }

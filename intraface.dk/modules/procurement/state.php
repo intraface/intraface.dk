@@ -75,7 +75,7 @@ $page->start('Bogfør indkøb #' . $procurement->get('number'));
     <p>Du bedes manuelt kontrollere at indkøbet bliver bogført korrekt.</p>
 </div>
 
-<?php if (!$year->readyForState()): ?>
+<?php if (!$year->readyForState($procurement->get('paid_date'))): ?>
     <?php echo $year->error->view(); ?>
     <p>Gå til <a href="<?php e($accounting_module->getPath().'years.php'); ?>">regnskabet</a></p>
 

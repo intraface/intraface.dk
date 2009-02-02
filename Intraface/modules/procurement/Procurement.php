@@ -689,7 +689,7 @@ class Procurement extends Intraface_Standard
             return false;
         }
 
-        if (!$year->readyForState()) {
+        if (!$year->readyForState($this->get('paid_date'))) {
             $this->error->set('Regnskabåret er ikke klar til bogføring.');
             return false;
         }
