@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>testStateProcurementAfterYearEndInAccounting</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testStateProcurementAfterYearEndInAccounting</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=procurement,product,accounting&amp;login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=accounting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=oprette et regnskab</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>label</td>
+	<td>Test</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>from_date</td>
+	<td>01-01-2008</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>to_date</td>
+	<td>31-12-2008</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>vat</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>standard_accountplan</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>start</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=procurement</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Opret et indkøb</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description</td>
+	<td>Test</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_invoice_date</td>
+	<td>30-12-2008</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_price_items</td>
+	<td>100</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_price_shipment_etc</td>
+	<td>20</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>vat</td>
+	<td>25</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dk_paid_date</td>
+	<td>30-12-2008</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>paid</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>credit_account_number</td>
+	<td>label=Bank, folio</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>state_account</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>state_account</td>
+	<td>label=Småanskaffelser (vat: in)</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//option[@value='7400']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>debet_account[1][state_account_id]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>debet_account[1][state_account_id]</td>
+	<td>label=Porto (vat: none)</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//tr[2]/td[4]/select/option[6]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>state</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Se bilag</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>30-12-2008</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Moms, indgående, køb</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Bank, folio</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
