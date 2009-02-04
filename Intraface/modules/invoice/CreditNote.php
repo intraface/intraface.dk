@@ -50,7 +50,7 @@ class CreditNote extends Debtor
             return false;
         }
 
-        if (!$year->readyForState()) {
+        if (!$year->readyForState($this->get('this_date'))) {
             $this->error->set('Regnskabåret er ikke klar til bogføring');
             return false;
         }

@@ -388,7 +388,7 @@ class Payment extends Intraface_Standard
             return false;
         }
 
-        if (!$year->readyForState()) {
+        if (!$year->readyForState($this->get('payment_date'))) {
             $this->error->merge($year->error->getMessage());
             return false;
         }
