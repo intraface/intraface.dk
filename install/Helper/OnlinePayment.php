@@ -29,5 +29,20 @@ class Install_Helper_OnlinePayment {
         }
     }
     
+    public function createInEurAndAttachToInvoice() {
+        
+        require_once 'Intraface/modules/currency/Currency/Gateway.php';
+        $doctrine = Doctrine_Manager::connection(DB_DSN);
+        $gateway = new Intraface_modules_currency_Currency_Gateway($doctrine);
+        $currency = $gateway->findByIsoCode('Eur');
+        
+        require_once 'Intraface/modules/onlinepayment/OnlinePayment.php';
+        $onlinepayment = new OnlinePayment($this->kernel);
+        if (!$onlinepayment->save(array('belong_to' => 'invoice', 'belong_to_id' => 1, 'transaction_number' => 111, 'transaction_status' => '000', 'amount' => 100, 'currency' => $currency))) {
+            echo $onlinepayment->error->view();
+            die;
+        }
+    }
+    
 }
 ?>

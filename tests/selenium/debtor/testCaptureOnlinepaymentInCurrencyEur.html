@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>testCaptureOnlinepaymentInCurrencyEur</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testCaptureOnlinepaymentInCurrencyEur</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=debtor,invoice,order,contact,product,onlinepayment,currency&amp;helper_function=Administration:fillInIntranetAddress,Currency:createWithExchangeRates,OnlinePayment:createInEurAndAttachToInvoice,Contact:create,Product:create&amp;login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=debtor</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=create invoice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>search</td>
+	<td>Con</td>
+</tr>
+<tr>
+	<td>keyUp</td>
+	<td>search</td>
+	<td>t</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>contact_select</td>
+	<td>label=Contact 1</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>go_search</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description</td>
+	<td>Test</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>currency_id</td>
+	<td>label=EUR Euro</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>sent</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Marker som hævet</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>745,23</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>captured</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Transaction 111</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>EUR 100,00</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
