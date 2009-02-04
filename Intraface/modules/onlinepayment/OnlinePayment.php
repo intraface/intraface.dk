@@ -649,7 +649,7 @@ class OnlinePayment extends Intraface_Standard
                     ->convertAmountFromCurrency($this->getAmount())->getAsIso(2));
             }
             else {
-                return new Ilib_Variable_Float($this->getCurrency()->getPaymentExchangeRate()->convertAmountToCurrency($this->getAmount())->getAsIso(2));
+                return new Ilib_Variable_Float($this->getCurrency()->getPaymentExchangeRate()->convertAmountFromCurrency($this->getAmount())->getAsIso(2));
             }
         }
         return $this->getAmount();

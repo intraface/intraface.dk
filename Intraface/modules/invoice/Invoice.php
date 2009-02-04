@@ -43,7 +43,7 @@ class Invoice extends Debtor
      */
     function updateStatus()
     {
-        if (round($this->get("arrears")) == 0) {
+        if (round($this->get("arrears")) <= 0) {
             $go_status = "executed";
         } else {
             $go_status = "sent";
