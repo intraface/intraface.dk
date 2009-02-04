@@ -360,7 +360,7 @@ class YearEnd extends Intraface_Standard
                             'date' => $this->year->get('to_date_dk'),
                             'debet_account_number' => $result_account->get('number'),
                             'credit_account_number' => $account->get('number'),
-                            'amount' => abs(amountToForm($account->get('saldo'))), // nødvendig med amountToForm for at få den i det rigtige format ift. at gemme i daybook
+                            'amount' => amountToForm(abs($account->get('saldo'))), // nødvendig med amountToForm for at få den i det rigtige format ift. at gemme i daybook
                             'text' => $account->get('name') . ' til resultatkontoen',
                             'vat_off' => 1
 
@@ -372,7 +372,7 @@ class YearEnd extends Intraface_Standard
                             'date' => $this->year->get('to_date_dk'),
                             'debet_account_number' => $account->get('number'),
                             'credit_account_number' => $result_account->get('number'),
-                            'amount' => abs(amountToForm($account->get('saldo'))), // nødvendig med amountToForm for at få den i det rigtige format ift. at gemme i daybook
+                            'amount' => amountToForm(abs($account->get('saldo'))), // nødvendig med amountToForm for at få den i det rigtige format ift. at gemme i daybook
                             'text' => $account->get('name') . ' til resultatkontoen',
                             'vat_off' => 1
                         );

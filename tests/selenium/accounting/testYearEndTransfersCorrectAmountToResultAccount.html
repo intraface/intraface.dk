@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>testYearEndTransfersCorrectAmountToResultAccount</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testYearEndTransfersCorrectAmountToResultAccount</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=accounting,administration&amp;helper_function=Accounting:createYearWithVatAndStandardAccounts&amp;login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=accounting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>date</td>
+	<td>10-01-2009</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>text</td>
+	<td>Test 1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>credit_account_number</td>
+	<td>1110</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>debet_account_number</td>
+	<td>58000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>amount</td>
+	<td>100,10</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>date</td>
+	<td>10-01-2009</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>text</td>
+	<td>Test 2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>credit_account_number</td>
+	<td>58000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>debet_account_number</td>
+	<td>7000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>amount</td>
+	<td>60,60</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Bogfør posterne</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>state</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker på, at du vil bogføre?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=vat</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>create_periods</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=end year</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>step_things_stated</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>step_save_result</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>step_result</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=accounts</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Årets resultat</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>-31,60</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
