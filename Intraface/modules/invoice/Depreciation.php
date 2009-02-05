@@ -127,7 +127,7 @@ class Depreciation extends Payment
         }
 
         $db = new DB_sql;
-        $db->query("UPDATE invoice_payment SET date_stated = NOW(), voucher_id = ".$voucher->get('id'));
+        $db->query("UPDATE invoice_payment SET date_stated = NOW(), voucher_id = ".$voucher->get('id').' WHERE id = '. $this->id.' AND intranet_id = '.$this->kernel->intranet->getId());
 
         $this->load();
         return true;
