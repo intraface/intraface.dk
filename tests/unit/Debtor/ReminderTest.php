@@ -16,9 +16,9 @@ require_once 'Intraface/modules/contact/Contact.php';
 class ReminderTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
-    
+
     function setUp() {
-        
+
         $db = MDB2::factory(DB_DSN);
         $db->query('TRUNCATE invoice_reminder');
         $db->query('TRUNCATE invoice_reminder_item');
@@ -27,9 +27,9 @@ class ReminderTest extends PHPUnit_Framework_TestCase
         $db->exec('TRUNCATE accounting_post');
         $db->exec('TRUNCATE accounting_year');
         $db->exec('TRUNCATE accounting_voucher');
-        
+
     }
-    
+
     function createKernel() {
         $kernel = new FakeKernel;
         $kernel->intranet = new FakeIntranet;
@@ -40,22 +40,24 @@ class ReminderTest extends PHPUnit_Framework_TestCase
         $kernel->setting->set('intranet', 'vatpercent', 25);
         return $kernel;
     }
-    
+
     function createReminder()
     {
         return new Reminder($this->createKernel());
     }
-    
-    function createContact() {
+
+    function createContact()
+    {
         $contact = new Contact($this->createKernel());
         return $contact->save(array('name' => 'Test', 'email' => 'lars@legestue.net', 'phone' => '98468269'));
     }
-    
-    function createAnInvoice($contact_id) {
+
+    function createAnInvoice($contact_id)
+    {
         $debtor = new Invoice($this->createKernel());
         $invoice_id = $debtor->update(
             array(
-                'contact_id' => $contact_id, 
+                'contact_id' => $contact_id,
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'))
@@ -63,8 +65,9 @@ class ReminderTest extends PHPUnit_Framework_TestCase
         // maybe attach some items!
         return $invoice_id;
     }
-    
-    function createAccountingYear() {
+
+    function createAccountingYear()
+    {
         require_once 'Intraface/modules/accounting/Year.php';
         $year = new Year($this->createKernel());
         $year->save(array('from_date' => date('Y').'-01-01', 'to_date' => date('Y').'-12-31', 'label' => 'test', 'locked' => 0));
@@ -77,21 +80,22 @@ class ReminderTest extends PHPUnit_Framework_TestCase
         $reminder = $this->createReminder();
         $this->assertTrue(is_object($reminder));
     }
-    
-    function testSaveOnEmptyArray() 
+
+    function testSaveOnEmptyArray()
     {
         $reminder = $this->createReminder();
         $this->assertFalse($reminder->save(array()));
     }
-    
-    function testSaveWithValidData() {
+
+    function testSaveWithValidData()
+    {
         $reminder = $this->createReminder();
         $contact_id = $this->createContact();
-        
+
         $this->assertTrue($reminder->save(
             array(
                 'number' => 1,
-                'contact_id' => $contact_id, 
+                'contact_id' => $contact_id,
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'),
@@ -99,103 +103,103 @@ class ReminderTest extends PHPUnit_Framework_TestCase
                 'checked_invoice' => array($this->createAnInvoice($contact_id)))
             ) > 0);
     }
-    
-    
-    function testSetStatus() {
-        
+
+    function testSetStatus()
+    {
         $reminder = $this->createReminder();
         $contact_id = $this->createContact();
         $reminder->save(array(
                 'number' => 1,
-                'contact_id' => $contact_id, 
+                'contact_id' => $contact_id,
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'),
                 'send_as' => 'pdf',
                 'checked_invoice' => array($this->createAnInvoice($contact_id))));
-        
+
         $this->assertTrue($reminder->setStatus('sent'));
     }
-    
-    
-    function testDelete() {
+
+    function testDelete()
+    {
         $reminder = $this->createReminder();
         $contact_id = $this->createContact();
         $reminder->save(array(
                 'number' => 1,
-                'contact_id' => $contact_id, 
+                'contact_id' => $contact_id,
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'),
                 'send_as' => 'pdf',
                 'checked_invoice' => array($this->createAnInvoice($contact_id))));
-        
+
         $this->assertTrue($reminder->delete());
-        
+
         /**
          * @todo: Reminder can be loaded despite it is deleted. Is that correct?
          */
         // $reminder = new Reminder($this->createKernel(), 1);
         // $this->assertEquals(0, $reminder->get('id'));
-        
+
     }
-    
-    function testSomethingToStateWithoutReminderFee() {
+
+    function testSomethingToStateWithoutReminderFee()
+    {
         $reminder = $this->createReminder();
         $contact_id = $this->createContact();
         $reminder->save(array(
                 'number' => 1,
-                'contact_id' => $contact_id, 
+                'contact_id' => $contact_id,
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'),
                 'send_as' => 'pdf',
                 'checked_invoice' => array($this->createAnInvoice($contact_id))));
-        
+
         $this->assertFalse($reminder->somethingToState($this->createAccountingYear()));
     }
-    
-    function testSomethingToStateWithReminderFee() {
+
+    function testSomethingToStateWithReminderFee()
+    {
         $reminder = $this->createReminder();
         $contact_id = $this->createContact();
         $reminder->save(array(
                 'number' => 1,
-                'contact_id' => $contact_id, 
+                'contact_id' => $contact_id,
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'),
                 'send_as' => 'pdf',
                 'reminder_fee' => 100,
                 'checked_invoice' => array($this->createAnInvoice($contact_id))));
-        
+
         $this->assertTrue($reminder->somethingToState($this->createAccountingYear()));
     }
-    
-    
-    function testReadyForStateBeforeSent() {
-        
+
+    function testReadyForStateBeforeSent()
+    {
         $reminder = $this->createReminder();
         $contact_id = $this->createContact();
         $reminder->save(array(
                 'number' => 1,
-                'contact_id' => $contact_id, 
+                'contact_id' => $contact_id,
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'),
                 'send_as' => 'pdf',
                 'reminder_fee' => 100,
                 'checked_invoice' => array($this->createAnInvoice($contact_id))));
-        
+
         $this->assertFalse($reminder->readyForState($this->createAccountingYear()), $reminder->error->view());
     }
-    
-    function testReadyForStateAfterSent() {
-        
+
+    function testReadyForStateAfterSent()
+    {
         $reminder = $this->createReminder();
         $contact_id = $this->createContact();
         $reminder->save(array(
                 'number' => 1,
-                'contact_id' => $contact_id, 
+                'contact_id' => $contact_id,
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'),
@@ -203,16 +207,17 @@ class ReminderTest extends PHPUnit_Framework_TestCase
                 'reminder_fee' => 100,
                 'checked_invoice' => array($this->createAnInvoice($contact_id))));
         $reminder->setStatus('sent');
-       
+
         $this->assertTrue($reminder->readyForState($this->createAccountingYear()), $reminder->error->view());
     }
-    
-    function testState() {
+
+    function testState()
+    {
         $reminder = $this->createReminder();
         $contact_id = $this->createContact();
         $reminder->save(array(
                 'number' => 1,
-                'contact_id' => $contact_id, 
+                'contact_id' => $contact_id,
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'),
@@ -221,15 +226,15 @@ class ReminderTest extends PHPUnit_Framework_TestCase
                 'checked_invoice' => array($this->createAnInvoice($contact_id))));
         $reminder->setStatus('sent');
         $year = $this->createAccountingYear();
-        $this->assertTrue($reminder->state($year, 1, '10-01-2008', 1120, new FakeTranslation), $reminder->error->view());
-        
+        $this->assertTrue($reminder->state($year, 1, '10-01-' . date('Y'), 1120, new FakeTranslation), $reminder->error->view());
+
         $voucher = Voucher::factory($year, 1);
-        
+
         $expected = array(
             0 => array(
                 'id' => 1,
-                'date_dk' => '10-01-2008',
-                'date' => '2008-01-10',
+                'date_dk' => '10-01-' . date('Y'),
+                'date' => date('Y') . '-01-10',
                 'text' => 'reminder #1',
                 'debet' => 100.00,
                 'credit' => 0.00,
@@ -243,8 +248,8 @@ class ReminderTest extends PHPUnit_Framework_TestCase
             ),
             1 => array(
                 'id' => 2,
-                'date_dk' => '10-01-2008',
-                'date' => '2008-01-10',
+                'date_dk' => '10-01-' . date('Y'),
+                'date' => date('Y') . '-01-10',
                 'text' => 'reminder #1',
                 'debet' => 0.00,
                 'credit' => 100.00,
@@ -257,13 +262,13 @@ class ReminderTest extends PHPUnit_Framework_TestCase
                 'account_name' => 'Salg uden moms'
             )
         );
-        
-        
+
+
         $this->assertEquals($expected, $voucher->getPosts());
         $this->assertTrue($reminder->isStated());
         $this->assertFalse($reminder->readyForState($year));
     }
-    
+
 }
 
 ?>

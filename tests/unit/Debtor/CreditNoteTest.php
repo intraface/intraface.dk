@@ -16,9 +16,9 @@ require_once 'Intraface/functions.php';
 class CreditNoteTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
-    
+
     function setUp() {
-        
+
         $db = MDB2::factory(DB_DSN);
         $db->exec('TRUNCATE debtor');
         $db->exec('TRUNCATE debtor_item');
@@ -28,9 +28,9 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
         $db->exec('TRUNCATE accounting_post');
         $db->exec('TRUNCATE accounting_year');
         $db->exec('TRUNCATE accounting_voucher');
-        
+
     }
-    
+
     function createKernel() {
         $kernel = new FakeKernel;
         $kernel->user = new FakeUser;
@@ -40,16 +40,16 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
         $kernel->setting->set('intranet', 'onlinepayment.provider_key', '1');
         $kernel->setting->set('user', 'accounting.active_year', '1');
         $kernel->setting->set('intranet', 'vatpercent', 25);
-        
+
         return $kernel;
     }
-    
+
     function createCreditNote()
     {
-        
+
         return new CreditNote($this->createKernel());
     }
-    
+
     function createAnCreditNoteWithOneItem($options = array()) {
         $options = array_merge(
             array(
@@ -58,88 +58,93 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
             ),
             $options
         );
-        
+
         $creditnote = $this->createCreditNote();
         $creditnote->update(array(
-                'contact_id' => $this->createContact(), 
+                'contact_id' => $this->createContact(),
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y')));
-        
+
         $creditnote->loadItem();
-        
+
         $product = new Product($this->createKernel());
         $product->save(array('name' => 'test', 'vat' => $options['product_vat'], 'price' => '100', 'state_account_id' => $options['product_state_account_id']));
         $creditnote->item->save(array('product_id' => 1, 'quantity' => 2, 'description' => 'This is a test'));
-        
+
         return $creditnote;
     }
-    
-    function createAccountingYear() {
+
+    function createAccountingYear()
+    {
         require_once 'Intraface/modules/accounting/Year.php';
         $year = new Year($this->createKernel());
         $year->save(array('from_date' => date('Y').'-01-01', 'to_date' => date('Y').'-12-31', 'label' => 'test', 'locked' => 0));
         $year->createAccounts('standard');
         return $year;
     }
-    
-    function createContact() {
-        
+
+    function createContact()
+    {
+
         $contact = new Contact($this->createKernel());
         return $contact->save(array('name' => 'Test', 'email' => 'lars@legestue.net', 'phone' => '98468269'));
     }
 
     function testConstruct()
     {
-        
         $creditnote = $this->createCreditNote();
         $this->assertTrue(is_object($creditnote));
     }
-    
-    function testSetStatusToSent() {
+
+    function testSetStatusToSent()
+    {
         $creditnote = $this->createAnCreditNoteWithOneItem();
         $this->assertTrue($creditnote->setStatus('sent'));
         $creditnote->load();
         $this->assertEquals('executed', $creditnote->get('status'));
     }
-    
-    function testSetStatusToExecuted() {
+
+    function testSetStatusToExecuted()
+    {
         $creditnote = $this->createAnCreditNoteWithOneItem();
         $this->assertTrue($creditnote->setStatus('executed'));
         $creditnote->load();
         $this->assertEquals('executed', $creditnote->get('status'));
     }
-    
-    function testReadyForStateWithoutCheckingProducts() {
+
+    function testReadyForStateWithoutCheckingProducts()
+    {
         $creditnote = $this->createAnCreditNoteWithOneItem();
         $this->assertFalse($creditnote->readyForState($this->createAccountingYear(), 'skip_check_products'));
-        
+
         // needed otherwise errors are transfered...
         $creditnote = $this->createAnCreditNoteWithOneItem();
         $creditnote->setStatus('sent');
         $this->assertTrue($creditnote->readyForState($this->createAccountingYear(), 'skip_check_products'), $creditnote->error->view());
     }
-    
-    function testReadyForStateWithCheckingProducts() {
-        
+
+    function testReadyForStateWithCheckingProducts()
+    {
         $creditnote = $this->createAnCreditNoteWithOneItem();
         $creditnote->setStatus('sent');
         $this->assertTrue($creditnote->readyForState($this->createAccountingYear()), $creditnote->error->view());
     }
-    
-    function testState() {
+
+    function testState()
+    {
         $creditnote = $this->createAnCreditNoteWithOneItem();
         $creditnote->setStatus('sent');
         $year = $this->createAccountingYear();
-        $this->assertTrue($creditnote->state($year, 1, '10-01-2008', new FakeTranslation), 'state: '.$creditnote->error->view());
-        
+        $this->assertTrue($creditnote->state($year, 1, '10-01-' . date('Y'), new FakeTranslation), 'state: '.$creditnote->error->view());
+
         $voucher = Voucher::factory($year, 1);
-        
+
         $expected = array(
             0 => array(
                 'id' => 1,
-                'date_dk' => '10-01-2008',
-                'date' => '2008-01-10',
+                'date_dk' => '10-01-' . date('Y'),
+                'date' => date('Y') . '-01-10',
                 'text' => 'credit note #1 - test',
                 'debet' => 200,
                 'credit' => 0,
@@ -153,8 +158,8 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
             ),
             1 => array(
                 'id' => 2,
-                'date_dk' => '10-01-2008',
-                'date' => '2008-01-10',
+                'date_dk' => '10-01-' . date('Y'),
+                'date' => date('Y'). '-01-10',
                 'text' => 'credit note #1 - test',
                 'debet' => 0,
                 'credit' => 200,
@@ -168,8 +173,8 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
             ),
             2 => array(
                 'id' => 3,
-                'date_dk' => '10-01-2008',
-                'date' => '2008-01-10',
+                'date_dk' => '10-01-' . date('Y'),
+                'date' => date('Y') . '-01-10',
                 'text' => 'credit note #1 - Moms, udgående, salg',
                 'debet' => 50.00,
                 'credit' => 0.00,
@@ -183,8 +188,8 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
             ),
             3 => array(
                 'id' => 4,
-                'date_dk' => '10-01-2008',
-                'date' => '2008-01-10',
+                'date_dk' => '10-01-' . date('Y'),
+                'date' => date('Y'). '-01-10',
                 'text' => 'credit note #1 - Moms, udgående, salg',
                 'debet' => 0,
                 'credit' => 50,
@@ -197,25 +202,26 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
                 'account_name' => 'Debitor'
             )
         );
-        
+
         $this->assertEquals($expected, $voucher->getPosts());
         $this->assertTrue($creditnote->isStated());
         $this->assertFalse($creditnote->readyForState($year));
     }
-    
-        function testStateStatesNoVatWhenNotVatOnProduct() {
+
+    function testStateStatesNoVatWhenNotVatOnProduct()
+    {
         $creditnote = $this->createAnCreditNoteWithOneItem(array('product_vat' => 0, 'product_state_account_id' => 1120));
         $creditnote->setStatus('sent');
         $year = $this->createAccountingYear();
-        $this->assertTrue($creditnote->state($year, 1, '10-01-2008', new FakeTranslation), 'state: '.$creditnote->error->view());
-        
+        $this->assertTrue($creditnote->state($year, 1, '10-01-' . date('Y'), new FakeTranslation), 'state: '.$creditnote->error->view());
+
         $voucher = Voucher::factory($year, 1);
-        
+
         $expected = array(
             0 => array(
                 'id' => 1,
-                'date_dk' => '10-01-2008',
-                'date' => '2008-01-10',
+                'date_dk' => '10-01-' . date('Y'),
+                'date' => date('Y') . '-01-10',
                 'text' => 'credit note #1 - test',
                 'debet' => 200,
                 'credit' => 0,
@@ -229,8 +235,8 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
             ),
             1 => array(
                 'id' => 2,
-                'date_dk' => '10-01-2008',
-                'date' => '2008-01-10',
+                'date_dk' => '10-01-' . date('Y'),
+                'date' => date('Y'). '-01-10',
                 'text' => 'credit note #1 - test',
                 'debet' => 0,
                 'credit' => 200,
@@ -243,11 +249,10 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
                 'account_name' => 'Debitor'
             )
         );
-        
+
         $this->assertEquals($expected, $voucher->getPosts());
         $this->assertTrue($creditnote->isStated());
         $this->assertFalse($creditnote->readyForState($year));
     }
 
 }
-?>
