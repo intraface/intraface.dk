@@ -40,7 +40,7 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
         $onlinepayment->getDBQuery()->setFilter('status', 2);
 
         $parameter['payment_online'] = 0;
-        foreach($onlinepayment->getlist() AS $p) {
+        foreach ($onlinepayment->getlist() AS $p) {
             $parameter['payment_online'] += $p["amount"];
         }
 
@@ -48,7 +48,7 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
         $arrears['DKK'] = $debtor->getArrears()->getAsIso(2);
         $default_currency = 'DKK';
 
-        if($this->kernel->intranet->hasModuleAccess('currency') && false != ($currency = $debtor->getCurrency())) {
+        if ($this->kernel->intranet->hasModuleAccess('currency') && false != ($currency = $debtor->getCurrency())) {
             $default_currency = $currency->getType()->getIsoCode();
             $total_price[$default_currency] = $debtor->getTotalInCurrency()->getAsIso(2);
             $arrears[$default_currency] = $debtor->getArrearsInCurrency()->getAsIso(2);
@@ -90,7 +90,7 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
 
         $id = $this->processRequestData($id);
         $onlinepayment = $this->onlinePaymentFactory(intval($id));
-        if($onlinepayment->get('id') != $id) {
+        if ($onlinepayment->get('id') != $id) {
             throw new XML_RPC2_FaultException('The given payment id '.$id.' is not valid', -4);
         }
 
