@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module("procurement");
 $translation = $kernel->getTranslation('procurement');
