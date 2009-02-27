@@ -45,8 +45,8 @@ $ignore = array(
 function getFilelist($dir) {
     global $rFiles;
     $files = glob($dir.'/*');
-    foreach($files as $f) {
-        if(is_dir($f)) { getFileList($f); continue; }
+    foreach ($files as $f) {
+        if (is_dir($f)) { getFileList($f); continue; }
         $rFiles[] = $f;
     }
 }
