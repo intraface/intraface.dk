@@ -25,7 +25,7 @@
            --log-pmd ${reports.phpunit.dir}/phpunit.pmd.xml
            --coverage-xml ${reports.phpunit.dir}/phpunit.coverage.xml
            --coverage-html ${reports.coverage.dir}/
-           AllTests" passthru="true" checkreturn="true" />
+           AllTests" passthru="true" checkreturn="false" />
     </target>
 
     <target name="phpcs">
