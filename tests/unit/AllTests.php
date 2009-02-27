@@ -1,4 +1,5 @@
 <?php
+require_once 'k.php';
 require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
@@ -48,7 +49,7 @@ class AllTests
                        'Currency'
         );
 
-        foreach ($tests AS $test) {
+        foreach ($tests as $test) {
             require_once $test . '/AllTests.php';
             $suite->addTest(call_user_func(array($test.'_AllTests', 'suite')));
         }
