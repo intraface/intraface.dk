@@ -31,7 +31,7 @@
     </target>
 
     <target name="php-codesniffer">
-        <exec output="${reports.dir}/checkstyle.xml" dir="${source.dir}Intraface/"
+        <exec output="${reports.dir}/checkstyle.xml" dir="${source.dir}/Intraface/"
             command="phpcs --report=checkstyle . --standard=PEAR" />
     </target>
 
