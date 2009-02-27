@@ -1163,10 +1163,9 @@ class Debtor extends Intraface_Standard
      */
     public function getTotalInCurrency()
     {
-        if($this->getCurrency()) {
+        if ($this->getCurrency()) {
             return new Ilib_Variable_Float($this->value['total_currency']);
-        }
-        else {
+        } else {
             return $this->getTotal();
         }
     }
@@ -1187,7 +1186,7 @@ class Debtor extends Intraface_Standard
      */
     public function getArrearsInCurrency()
     {
-        if(false !== ($currency = $this->getCurrency())) {
+        if (false !== ($currency = $this->getCurrency())) {
             return new Ilib_Variable_Float(round($currency->getProductPriceExchangeRate($this->get('currency_product_price_exchange_rate_id'))->convertAmountToCurrency($this->getArrears())->getAsIso(), 2));
         }
 
