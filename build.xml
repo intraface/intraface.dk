@@ -9,7 +9,7 @@
     <property name="api.dir" value="../build/api" />
 
     <target name="prepare">
-        <delete dir="${build.dir}" />
+        <delete dir="${build.dir}" /> 
     </target>
 
     <target name="build" depends="prepare,checkout,test,php-codesniffer,php-documentor,pear-create">
@@ -17,6 +17,7 @@
 
     <target name="checkout">
         <exec dir="${source.dir}" command="svn export ${source.dir} ${build.dir}" />
+    	<mkdir dir="${reports.dir}" />
     </target>
 
     <target name="test">
