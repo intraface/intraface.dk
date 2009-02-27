@@ -73,7 +73,8 @@ class MainCMS extends Intraface_Main
             1 => 'shorttext',
             2 => 'longtext',
             3 => 'picture',
-            4 => 'mixed' // måske skal man sætte allowed elements?
+            4 => 'mixed',
+            5 => 'gallery' // måske skal man sætte allowed elements?
         ));
 
         $this->addSetting('htmleditors', array(
@@ -83,7 +84,7 @@ class MainCMS extends Intraface_Main
         ));
 
         $_cc_license = array();
-        require(PATH_INCLUDE_CONFIG.'setting_cc_license.php');
+        require PATH_INCLUDE_CONFIG.'setting_cc_license.php';
         $this->addSetting('cc_license', $_cc_license);
     }
 }
