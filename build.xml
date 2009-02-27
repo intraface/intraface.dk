@@ -5,14 +5,14 @@
     <property name="build.dir" value="../build" />
     <property name="reports.dir" value="../build/logs" />
     <property name="reports.phpunit.dir" value="../../../build/logs" />
-    <property name="reports.coverage.dir" value="../../../build/logs/coverage" />
+    <property name="reports.coverage.dir" value="../../../build/coverage" />
     <property name="api.dir" value="../build/api" />
 
     <target name="prepare">
         <delete dir="${build.dir}" />
     </target>
 
-    <target name="build" depends="prepare,checkout,test,phpcs,php-documentor,pear-create">
+    <target name="build" depends="prepare,checkout,test,php-codesniffer,php-documentor,pear-create">
     </target>
 
     <target name="checkout">
@@ -23,12 +23,13 @@
         <exec dir="${tests.dir}" command="phpunit
            --log-xml ${reports.phpunit.dir}/phpunit.xml
            --log-pmd ${reports.phpunit.dir}/phpunit.pmd.xml
+           --log-metrics ${reports.phpunit.dir}/phpunit.metrics.xml 	
            --coverage-xml ${reports.phpunit.dir}/phpunit.coverage.xml
            --coverage-html ${reports.coverage.dir}/
            AllTests" passthru="true" checkreturn="false" />
     </target>
 
-    <target name="phpcs">
+    <target name="php-codesniffer">
         <exec output="${reports.dir}/checkstyle.xml" dir="${source.dir}Intraface/"
             command="phpcs --report=checkstyle . --standard=PEAR" />
     </target>
