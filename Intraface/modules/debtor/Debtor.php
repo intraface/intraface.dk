@@ -267,7 +267,6 @@ class Debtor extends Intraface_Standard
         $db = new DB_Sql;
         $db->query("SELECT id, type FROM debtor WHERE where_from_id = " . $this->id . " AND active = 1");
         if ($db->nextRecord()) {
-
             if ($db->f('type') > 0) {
                 $types = self::getDebtorTypes();
                 $this->value['where_to'] = $types[$db->f('type')];
@@ -298,9 +297,7 @@ class Debtor extends Intraface_Standard
         $item = $this->item->getList();
         $this->value['items'] = $item;
 
-        /**
-         * Currency is always loaded, should be done with left join. Oh give me more doctrine!
-         */
+        // @todo Currency is always loaded, should be done with left join. Oh give me more doctrine!
         $currency = $this->getCurrency();
 
         for ($i = 0, $max = count($item), $total = 0, $total_currency = 0; $i<$max; $i++) {
@@ -317,10 +314,10 @@ class Debtor extends Intraface_Standard
         }
 
         $this->value["total"] = round($total, 2);
-        if ($currency) $this->value['total_currency'] = round($total_currency, 2);
+        if ($currency) {
+            $this->value['total_currency'] = round($total_currency, 2);
+        }
         $this->value['payment_total'] = 0;
-
-
 
         if ($this->value["type"] == "invoice") {
             foreach ($this->getDebtorAccount()->getList() AS $payment) {
@@ -333,14 +330,7 @@ class Debtor extends Intraface_Standard
         return true;
     }
 
-    /**
-     * update()
-     *
-     * @param array   $input
-     * @param string  $from    Bruges til at fortælle, hvor debtoren kommer fra, fx webshop eller quotation
-     * @param integer $from_id Hvis debtoren kommer fra en anden debtor.
-     */
-    public function update($input, $from = 'manuel', $from_id = 0)
+    public function validate($input)
     {
         if (!is_array($input)) {
             trigger_error('Debtor->update(): $input er ikke et array', E_USER_ERROR);
@@ -351,43 +341,48 @@ class Debtor extends Intraface_Standard
             return 0;
         }
 
+    }
+
+    /**
+     * update()
+     *
+     * @param array   $input
+     * @param string  $from    Bruges til at fortælle, hvor debtoren kommer fra, fx webshop eller quotation
+     * @param integer $from_id Hvis debtoren kommer fra en anden debtor.
+     */
+    public function update($input, $from = 'manuel', $from_id = 0)
+    {
+        settype($input['payment_method'], 'integer');
+        settype($input['girocode'], 'string');
+        settype($input['message'], 'string');
+
         $input = safeToDb($input);
         $from = safeToDb($from);
         $from_id = (int)$from_id;
-
-
-        // starte validatoren
-        $validator = new Intraface_Validator($this->error);
 
         // nummeret
         if (empty($input["number"])) {
             $input["number"] = $this->getMaxNumber() + 1;
         }
+
+        // starte validatoren
+        $validator = new Intraface_Validator($this->error);
+
         $validator->isNumeric($input["number"], "Nummeret (".$input["number"].")  skal være et tal", "greater_than_zero");
         if (!$this->isNumberFree($input["number"])) {
             $this->error->set("Nummeret er allerede benyttet");
         }
 
-        // kunde
-        $validator->isNumeric($input["contact_id"], "Du skal angive en kunde", "greater_than_zero");
-        $contact = new Contact($this->kernel, $input["contact_id"]);
-        if (is_object($contact->address)) {
-            $contact_address_id = $contact->address->get("address_id");
-        } else {
-            $this->error->set("Ugyldig kunde");
-        }
-
-        if ($contact->get("type") == "corporation") {
-            $validator->isNumeric($input["contact_person_id"], "Der er ikke angivet en kontaktperson");
-        } else {
-            $input["contact_person_id"] = 0;
-        }
         $validator->isString($input['description'], 'Fejl i beskrivelse', '', 'allow_empty');
+        $validator->isString($input['girocode'], 'error in girocode', '', 'allow_empty');
+        $validator->isString($input['message'], 'error in message', '', 'allow_empty');
+        $validator->isNumeric($input["contact_id"], "Du skal angive en kunde", "greater_than_zero");
 
         if ($validator->isDate($input["this_date"], "Ugyldig dato", "allow_no_year")) {
             $this_date = new Intraface_Date($input["this_date"]);
             $this_date->convert2db();
         }
+
         if ($this->type == "invoice") {
           // Hvis det er en faktura skal der indtastes en due_date, ellers er det ligegyldigt!
             if ($validator->isDate($input["due_date"], "Ugyldig leveringsdato", "allow_no_year")) {
@@ -408,12 +403,24 @@ class Debtor extends Intraface_Standard
             }
         }
 
-        settype($input['payment_method'], 'integer');
-        settype($input['girocode'], 'string');
-        $validator->isString($input['girocode'], 'error in girocode', '', 'allow_empty');
+        // kunde
+        $contact = new Contact($this->kernel, $input["contact_id"]);
+        if (is_object($contact->address)) {
+            $contact_address_id = $contact->address->get("address_id");
+        } else {
+            $this->error->set("Ugyldig kunde");
+        }
 
-        settype($input['message'], 'string');
-        $validator->isString($input['message'], 'error in message', '', 'allow_empty');
+        if ($contact->get("type") == "corporation") {
+            $validator->isNumeric($input["contact_person_id"], "Der er ikke angivet en kontaktperson");
+        } else {
+            $input["contact_person_id"] = 0;
+        }
+
+
+        if ($this->error->isError()) {
+            return 0;
+        }
 
         $internal_note_sql = '';
         if (isset($input['internal_note'])) {
@@ -433,9 +440,6 @@ class Debtor extends Intraface_Standard
             $input["round_off"] = 0;
         }
 
-        if ($this->error->isError()) {
-            return 0;
-        }
       // user_id = ".$this->kernel->user->get('id').", // skal puttes på, men kun hvis det ikke er fra webshop.
         $db = new DB_Sql;
         if ($this->id == 0) {
