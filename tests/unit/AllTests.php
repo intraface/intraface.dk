@@ -5,7 +5,7 @@ require_once 'PHPUnit/TextUI/TestRunner.php';
 
 PHPUnit_Util_Filter::addDirectoryToWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/'), '.php');
 PHPUnit_Util_Filter::removeDirectoryFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/certificates/'), '.php');
-PHPUnit_Util_Filter::removeDirectoryFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/'), '.tpl.php');
+PHPUnit_Util_Filter::removeDirectoryFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/'), 'tpl.php');
 PHPUnit_Util_Filter::removeDirectoryFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/config/'), '.php');
 PHPUnit_Util_Filter::removeDirectoryFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/ihtml/'), '.php');
 PHPUnit_Util_Filter::removeFileFromWhitelist(realpath(dirname(__FILE__) . '/../../Intraface/modules/accounting/include_frontpage.php'));
