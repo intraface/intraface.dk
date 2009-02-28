@@ -10,8 +10,10 @@
  */
 class Intraface_ModuleHandler
 {
-    private $modules = array();
     private $user;
+    private $internet;
+    private $modules = array();
+    private $primary_module_name;
 
     public function __construct($intranet = '', $user = '')
     {
