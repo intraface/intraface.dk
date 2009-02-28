@@ -15,6 +15,7 @@ class Intraface_ModuleHandler
     private $modules = array();
     private $primary_module_name;
     private $primary_module_object;
+    private $shared = array();
 
     public function __construct($intranet = '', $user = '')
     {
