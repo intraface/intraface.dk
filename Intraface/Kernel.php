@@ -436,6 +436,9 @@ class Intraface_Kernel
      */
     function randomKey($length = 1)
     {
+        $random = new Ilib_RandomKeyGenerator();
+        return $random->generate($length);
+        /*
         // Legal characters
         $chars = 'abcdefghijkmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ23456789';
         $how_many = strlen($chars);
@@ -450,6 +453,7 @@ class Intraface_Kernel
             $i++;
         }
         return $pass;
+        */
     }
 
     function getIntranet()
