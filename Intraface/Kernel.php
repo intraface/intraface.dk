@@ -377,7 +377,8 @@ class Intraface_Kernel
      */
     function useShared($shared_name)
     {
-
+        return $this->getModuleHandler()->useShared($shared_name);
+        /*
         if (!ereg("^[a-z0-9]+$", $shared_name)) {
             trigger_error('Ugyldig shared '.$shared_name, E_USER_ERROR);
         }
@@ -399,6 +400,7 @@ class Intraface_Kernel
         } else {
             trigger_error($shared_name . ' cannot be found on ' . $main_shared_path . ' with PATH_INCLUDE_SHARED: ' . PATH_INCLUDE_SHARED, E_USER_ERROR);
         }
+        */
     }
 
     /**
