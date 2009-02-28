@@ -13,9 +13,26 @@ class Intraface_ModuleHandler
     private $modules = array();
     private $user;
 
-    public function __construct($user = '')
+    public function __construct($intranet = '', $user = '')
     {
         $this->user = $user;
+        $this->intranet = $intranet;
+    }
+
+    /**
+     * Returns the primary module
+     *
+     * Used for instance in Page to give the correct submenu.
+     *
+     * @return module object or false
+     */
+    function getPrimaryModule()
+    {
+        if (!empty($this->modules[$this->primary_module_name]) AND is_object($this->modules[$this->primary_module_name])) {
+            return($this->modules[$this->primary_module_name]);
+        } else {
+            return false;
+        }
     }
 
     function setPrimaryModule($module_name)
@@ -68,8 +85,6 @@ class Intraface_ModuleHandler
         $this->modules[$module_name] = $module_name;
 
         // access control here
-
-        /*
         $access = false;
 
         if (!is_object($this->user)) {
@@ -98,7 +113,6 @@ class Intraface_ModuleHandler
         if ($access !== true) {
             throw new Exception('You need access to a required module to see this page');
         }
-        */
 
         $main_class_name = "Main".ucfirst($module_name);
         $main_class_path = PATH_INCLUDE_MODULE.$module_name."/".$main_class_name.".php";

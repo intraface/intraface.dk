@@ -2,7 +2,14 @@
 require_once dirname(__FILE__) . '/../config.test.php';
 
 require_once 'PHPUnit/Framework.php';
-require_once 'Intraface/ModuleHandler.php';
+
+class ModuleHandlerIntranet
+{
+    function hasModuleAccess()
+    {
+    	return true;
+    }
+}
 
 class ModuleHandlerTest extends PHPUnit_Framework_TestCase
 {
@@ -10,7 +17,7 @@ class ModuleHandlerTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->handler = new Intraface_ModuleHandler;
+        $this->handler = new Intraface_ModuleHandler(new ModuleHandlerIntranet);
     }
 
     function testUseModuleThrowsAnExceptionIfTheModuleIsNotValid()

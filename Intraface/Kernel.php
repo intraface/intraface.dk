@@ -20,6 +20,7 @@ class Intraface_Kernel
     public $shared;
     public $translation;
     private $observers = array();
+    private $modulehandler;
 
     /**
      * Constructor
@@ -158,6 +159,14 @@ class Intraface_Kernel
     }
     */
 
+    function getModuleHandler()
+    {
+        if (!empty($this->modulehandler)) {
+        	return $this->modulehandler;
+        }
+    	return ($this->modulehandler = new Intraface_ModuleHandler($this->intranet, $this->user));
+    }
+
     /**
      * Sets primary module for a page
      *
@@ -167,6 +176,7 @@ class Intraface_Kernel
      */
     function module($module_name)
     {
+        /*
         if (!empty($this->primary_module_object) AND is_object($this->primary_module_object)) {
             trigger_error('Primary module is already set', E_USER_ERROR);
         } else {
@@ -189,6 +199,8 @@ class Intraface_Kernel
                 return false;
             }
         }
+        */
+        return $this->getModuleHandler()->setPrimaryModule($module_name);
     }
 
     /**
@@ -200,11 +212,14 @@ class Intraface_Kernel
      */
     function getPrimaryModule()
     {
+        /*
         if (!empty($this->modules[$this->primary_module_name]) AND is_object($this->modules[$this->primary_module_name])) {
             return($this->modules[$this->primary_module_name]);
         } else {
             return false;
         }
+        */
+        return $this->getModuleHandler()->getPrimaryModule();
     }
 
     /**
@@ -216,11 +231,14 @@ class Intraface_Kernel
      */
     function getModule($name)
     {
+        /*
         if (!empty($this->modules[$name]) AND is_object($this->modules[$name])) {
             return($this->modules[$name]);
         } else {
             trigger_error('Ugyldigt modulnavn '.$name.' eller modulet er ikke loadet i funktionen getModule: '.$name, E_USER_ERROR);
         }
+        */
+        return $this->getModuleHandler()->getModule($name);
     }
 
     /**
@@ -232,6 +250,7 @@ class Intraface_Kernel
      */
     function getModules($order_by = 'frontpage_index')
     {
+        /*
         $modules = array();
 
         if ($order_by != '') {
@@ -278,7 +297,8 @@ class Intraface_Kernel
             $i++;
         }
         return $modules;
-
+        */
+        return $this->getModuleHandler()->getModules($this->db, $order_by);
     }
 
     /**
@@ -291,6 +311,7 @@ class Intraface_Kernel
      */
     function useModule($module_name, $ignore_user_access = false)
     {
+        /*
         if (!ereg("^[a-z0-9]+$", $module_name)) {
             trigger_error('kernel says invalid module name '.$module_name, E_USER_ERROR);
             return false;
@@ -343,6 +364,8 @@ class Intraface_Kernel
             throw new Exception('You need access to the required module '.$module_name.' to see this page');
             trigger_error('Du mangler adgang til et modul for at kunne se denne side: '.$module_name, E_USER_ERROR);
         }
+        */
+        return $this->getModuleHandler()->useModule($module_name, $ignore_user_access = false);
     }
 
     /**
