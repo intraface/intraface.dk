@@ -14,6 +14,7 @@ class Intraface_ModuleHandler
     private $internet;
     private $modules = array();
     private $primary_module_name;
+    private $primary_module_object;
 
     public function __construct($intranet = '', $user = '')
     {
