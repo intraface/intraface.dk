@@ -13,11 +13,13 @@ class Intraface_Kernel
     private $db;
     public $intranet;
     public $user;
-    private $primary_module_name;
     private $_session;
     public $session_id;
+    /*
     public $modules = array();
     public $shared;
+    private $primary_module_name;
+    */
     public $translation;
     private $observers = array();
     private $modulehandler;
