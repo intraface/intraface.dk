@@ -20,16 +20,33 @@
     	<mkdir dir="${reports.dir}" />
     </target>
 
-    <target name="test">
+	<target name="test" depends="phpunit,selenium,merge"></target>
+	
+    <target name="phpunit">
         <exec dir="${tests.dir}" command="phpunit
-           --log-xml ${reports.phpunit.dir}/phpunit.xml
+           --log-xml ${reports.phpunit.dir}/unit.xml
            --log-pmd ${reports.phpunit.dir}/phpunit.pmd.xml
            --log-metrics ${reports.phpunit.dir}/phpunit.metrics.xml 	
            --coverage-xml ${reports.phpunit.dir}/phpunit.coverage.xml
            --coverage-html ${reports.coverage.dir}/
            AllTests" passthru="true" checkreturn="false" />
     </target>
+	
+    <target name="selenium">
+        <exec dir="${tests.dir}" command="phpunit
+           --log-xml ${reports.phpunit.dir}/selenium.xml
+           SeleniumTests" passthru="true" checkreturn="false" />
+    </target>	
 
+	<target name="merge">
+		   <exec dir="${build.dir}" command="phpuc merge-phpunit
+	                 -b unit,selenium
+	                 -i logs/unit.xml,logs/selenium.xml
+	                 -o logs/phpunit.xml"/>
+		   <delete file="${build.dir}/logs/unit.xml" />
+		   <delete file="${build.dir}/logs/selenium.xml" />
+	</target>
+		
     <target name="php-codesniffer">
         <exec output="${reports.dir}/checkstyle.xml" dir="${source.dir}/Intraface/" error="${reports.dir}/phpcserror.log"
             command="phpcs --report=checkstyle . --standard=PEAR" />
