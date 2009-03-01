@@ -14,7 +14,17 @@ class SeleniumTests extends PHPUnit_Extensions_SeleniumTestCase
 
     function assertConfirmation()
     {
-    	$this->assertConfirmationPresent();
-        $this->click();
+    	return $this->assertPromptPresent();
     }
+
+    function assertSelectedValue($selectLocator, $option)
+    {
+    	return $this->assertSelected($selectLocator, $option);
+    }
+
+    function verifyValue($pattern)
+    {
+    	return $this->assertTextPresent($pattern);
+    }
+
 }
