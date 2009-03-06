@@ -38,34 +38,6 @@ class Demo_Identifier extends k_Controller
     function forward($name)
     {
         
-        // If we are going to either shop (and when implemented, login) we see if onlinepayment is present
-        if ($name == 'shop') { /* OR name == 'login */
-            
-            $credentials = array('private_key' => $this->getPrivateKey(), "session_id" => md5($this->registry->get("k_http_Session")->getSessionId()));
-            
-            if ($this->registry->get('admin')->hasModuleAccess($credentials, 'onlinepayment')) {
-                
-                $this->registry->registerConstructor('onlinepayment', create_function(
-                    '$className, $args, $registry',  
-                    'return new IntrafacePublic_OnlinePayment(' .
-                    '    new IntrafacePublic_OnlinePayment_Client_XMLRPC(' .
-                    '        array("private_key" => "'.$this->getPrivateKey().'", "session_id" => md5($registry->get("k_http_Session")->getSessionId())), ' .
-                    '        false, ' .
-                    '        INTRAFACE_XMLPRC_SERVER_PATH . "onlinepayment/server0002.php"' .
-                    '    ),' .
-                    '    $registry->get("cache")' .
-                    ');'
-                ));
-                
-                
-                $this->registry->registerConstructor('onlinepayment:payment_html', create_function(
-                    '$className, $args, $registry',  
-                    'return new Ilib_Payment_Html("FakeQuickpay", "12345678", "fakequickpaymd5secret", $registry->get("k_http_Session")->getSessionId());'
-                ));
-            }
-        }
-        
-        
         if ($name == 'shop') {
             $next = new Demo_Shop_Root($this, $name);
             return $next->handleRequest();
