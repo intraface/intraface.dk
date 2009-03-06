@@ -360,7 +360,7 @@ switch ($value['type']) {
                 </select>
             </div>
         <?php
-        if (isset($value['keyword'])) {
+        if (!empty($value['keyword']) && is_array($value['keyword'])) {
             $selected_keywords = $value['keyword'];
         }
         else {
