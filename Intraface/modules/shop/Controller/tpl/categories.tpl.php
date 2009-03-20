@@ -20,7 +20,7 @@ $level = 0;
         <th></th>
     </tr>
     </thead>
-    <?php while($level >= 0): ?>
+    <?php while ($level >= 0): ?>
         <?php foreach ($level_categories[$level] AS $category): ?>
             <?php array_shift($level_categories[$level]); ?>
             <tr>

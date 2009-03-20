@@ -23,7 +23,7 @@ $level = 0;
             <label for="parent_id"><?php e(t('Parent category')); ?></label>
             <select name="parent_id" id="parent_id">
             <option value="0"><?php e(t('Choose')); ?></option>
-    <?php while($level >= 0): ?>
+    <?php while ($level >= 0): ?>
         <?php foreach ($level_categories[$level] as $category): ?>
             <?php array_shift($level_categories[$level]); ?>
             <?php if ($category['id'] == $category_object->getId()) continue; ?>
