@@ -114,8 +114,15 @@ class Intraface_modules_debtor_Pdf
         }
         // $pointY -= $this->doc->get("font_spacing");
         $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), $contact["postcode"]." ".$contact["city"]);
-        $this->doc->setY('-'.($this->doc->get("font_spacing") * 2));
+        $this->doc->setY('-'.$this->doc->get("font_spacing"));
 
+        if (isset($contact["country"]) && $contact["country"] != "") {
+            $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), $contact["country"]);
+            $this->doc->setY('-'.$this->doc->get('font_spacing')); // $pointY -= $this->doc->get("font_spacing");
+        }
+        
+        $this->doc->setY('-'.$this->doc->get("font_spacing"));
+        
         if ($contact["cvr"] != "") {
             $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), "CVR.:");
             $this->doc->addText($this->doc->get('x') + 10 + 60, $this->doc->get('y'), $this->doc->get("font_size"), $contact["cvr"]);
