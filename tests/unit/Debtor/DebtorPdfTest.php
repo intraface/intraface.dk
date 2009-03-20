@@ -8,6 +8,7 @@ require_once 'tests/unit/stubs/Address.php';
 require_once 'tests/unit/Contact/stubs/Contact.php';
 require_once 'tests/unit/Contact/stubs/ContactPerson.php';
 require_once 'tests/unit/Debtor/stubs/Debtor.php';
+require_once 'tests/unit/Debtor/stubs/DebtorLongProductText.php';
 
 class DebtorPdfTest extends PHPUnit_Framework_TestCase
 {
@@ -26,6 +27,14 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
     
     function createDebtor() {
         $debtor = new FakeDebtor();
+        $debtor->contact = new FakeContact;
+        $debtor->contact->address = new FakeAddress;
+        $debtor->contact_person = new FakeContactPerson;
+        return $debtor;
+    }
+    
+    function createDebtorLongProductText() {
+        $debtor = new FakeDebtorLongProductText();
         $debtor->contact = new FakeContact;
         $debtor->contact->address = new FakeAddress;
         $debtor->contact_person = new FakeContactPerson;
@@ -63,6 +72,21 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
         $pdf->visit($debtor);
         $pdf->output('file', TEST_PATH_TEMP.'debtor.pdf');
         $expected = file_get_contents('tests/unit/Debtor/expected_debtor_with_payment.pdf', 1);
+        $actual = file_get_contents(TEST_PATH_TEMP.'debtor.pdf');
+        
+        
+        $this->assertEquals(strlen($expected), strlen($actual));
+    }
+    
+    function testVisitWithLongProductText()
+    {
+        error_reporting(E_ALL);
+        
+        $pdf = $this->createPdf();
+        $debtor = $this->createDebtorLongProductText();
+        $pdf->visit($debtor);
+        $pdf->output('file', TEST_PATH_TEMP.'debtor.pdf');
+        $expected = file_get_contents('tests/unit/Debtor/expected_debtor_with_long_text.pdf', 1);
         $actual = file_get_contents(TEST_PATH_TEMP.'debtor.pdf');
         
         

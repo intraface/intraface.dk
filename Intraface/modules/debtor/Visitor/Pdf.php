@@ -180,14 +180,16 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
             while ($tekst != "") {
 
                 if (!$first) {
-                    $this->doc->setY('-'.($this->doc->get("font_padding_top") + $this->doc->get("font_size")));
+                    // first line has already got coloured
                     if ($bg_color == 1) {
                         $this->doc->setColor(0.8, 0.8, 0.8);
                         $this->doc->filledRectangle($this->doc->get("margin_left"), $this->doc->get('y') - $this->doc->get("font_spacing"), $this->doc->get('right_margin_position') - $this->doc->get("margin_left"), $this->doc->get("font_spacing"));
                         $this->doc->setColor(0, 0, 0);
                     }
+                    $this->doc->setY('-'.($this->doc->get("font_padding_top") + $this->doc->get("font_size")));
                 }
                 $first = false;
+                
 
                 $tekst = $this->doc->addTextWrap($apointX["tekst"], $this->doc->get('y'), $apointX["tekst_width_small"], $this->doc->get("font_size"), $tekst);
                 $this->doc->setY('-'.$this->doc->get("font_padding_bottom"));
