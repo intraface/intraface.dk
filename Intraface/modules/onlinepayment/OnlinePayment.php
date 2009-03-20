@@ -18,7 +18,7 @@ class OnlinePayment extends Intraface_Standard
     public $id;
     public $kernel;
     protected $dbquery;
-    
+
     protected $currency;
 
     // Standard udbyder-transactionsstatus. Er lavet ud fra QuickPay
@@ -155,7 +155,7 @@ class OnlinePayment extends Intraface_Standard
             $this->value['dk_amount'] = number_format($db->f('amount'), 2, ",", ".");
             $this->value['currency_id'] = $db->f('currency_id');
             $this->value['captured_in_currency_payment_exchange_rate_id'] = $db->f('captured_in_currency_payment_exchange_rate_id');
-            
+
             $this->value['original_amount'] = $db->f('original_amount');
             $this->value['dk_original_amount'] = number_format($db->f('original_amount'), 2, ",", ".");
 
@@ -188,54 +188,70 @@ class OnlinePayment extends Intraface_Standard
     {
         $input = safeToDb($input);
 
-        $validator = new Intraface_Validator($this->error);
-
         if (!isset($input['belong_to'])) {
             $input['belong_to'] = 0;
-        }
-        $belong_to_key = array_search($input['belong_to'], $this->getBelongToTypes());
-        if ($input['belong_to'] == '' || $belong_to_key === false) {
-            $this->error->set("Ugyldig belong_to");
         }
 
         if (!isset($input['belong_to_id'])) {
             $input['belong_to_id'] = 0;
         }
-        $validator->isNumeric($input['belong_to_id'], 'belong_to_id er ikke et tal');
-        
+
         if (!isset($input['transaction_number'])) {
             $input['transaction_number'] = 0;
         }
-        $validator->isNumeric($input['transaction_number'], 'transaction_number er ikke gyldig');
-        
+
         if (!isset($input['transaction_status'])) {
             $input['transaction_status'] = '';
         }
-        $validator->isString($input['transaction_status'], 'transaction_status er ikke udfyldt');
-        
-        if (!isset($this->transaction_status_types[$input['transaction_status']])) {
-            $this->error->set("transaction_status '".$input['transaction_status']."' er ikke en gyldig status");
+
+        if (!isset($input['pbs_status'])) {
+            $input['pbs_status'] = '';
         }
-        
-        if (!isset($input['pbs_status'])) $input['pbs_status'] = '';
-        $validator->isString($input['pbs_status'], 'pbs status er ikke udfyldt', '', 'allow_empty');
-        
+
+        if (!isset($input['text'])) {
+        	$input['text'] = '';
+        }
+
         // VÆR LIGE OPMÆRKSOM HER: INDTIL VIDERE KAN KUN ACCEPTEREDE TRANSAKTIONER GEMMES
-        // Hermed ændret, så alle transaktioner kan gemmes. 
+        // Hermed ændret, så alle transaktioner kan gemmes.
         // if ($input['transaction_status'] != $this->transaction_status_authorized) {
         //     $this->error->set("Transactionen er ikke godkendt, så den kan ikke gemmes");
         // }
-        
+
         if ($input['transaction_status'] == $this->transaction_status_authorized) {
              $status_key = 2;
-        }
-        else {
+        } else {
             $status_key = 1;
         }
 
         if (!isset($input['amount'])) {
             $input['amount'] = 0;
         }
+
+        $currency_id = 0;
+        if (isset($input['currency']) && is_object($input['currency'])) {
+            $currency_id = $input['currency']->getId();
+        }
+
+        $validator = new Intraface_Validator($this->error);
+
+        $belong_to_key = array_search($input['belong_to'], $this->getBelongToTypes());
+        if ($input['belong_to'] == '' || $belong_to_key === false) {
+            $this->error->set("Ugyldig belong_to");
+        }
+
+        $validator->isNumeric($input['belong_to_id'], 'belong_to_id er ikke et tal');
+        $validator->isNumeric($input['transaction_number'], 'transaction_number er ikke gyldig');
+
+        $validator->isString($input['transaction_status'], 'transaction_status er ikke udfyldt');
+
+        if (!isset($this->transaction_status_types[$input['transaction_status']])) {
+            $this->error->set("transaction_status '".$input['transaction_status']."' er ikke en gyldig status");
+        }
+        $validator->isString($input['pbs_status'], 'pbs status er ikke udfyldt', '', 'allow_empty');
+
+        $validator->isString($input['text'], 'text er ikke en gyldig streng', '', 'allow_empty');
+
         if ($validator->isDouble($input['amount'], 'amount er ikke et gyldigt beløb')) {
             $amount = new Intraface_Amount($input['amount']);
             if ($amount->convert2db()) {
@@ -243,17 +259,6 @@ class OnlinePayment extends Intraface_Standard
             } else {
                 $this->error->set("Kunne ikke konvertere amount til databasen!");
             }
-        }
-        
-        $currency_id = 0;
-        if(isset($input['currency']) && is_object($input['currency'])) {
-            $currency_id = $input['currency']->getId();
-        }
-
-        if (array_key_exists('text', $input)) {
-            $validator->isString($input['text'], 'text er ikke en gyldig streng', '', 'allow_empty');
-        } else {
-            $input['text'] = '';
         }
 
         if ($this->error->isError()) {
@@ -312,9 +317,9 @@ class OnlinePayment extends Intraface_Standard
 
     /**
      * Funktion til at opdatere betaling inden fra intranettet
-     * 
-     * @param array $input 
-     * 
+     *
+     * @param array $input
+     *
      * return integer
      */
     function update($input)
@@ -457,7 +462,7 @@ class OnlinePayment extends Intraface_Standard
 
         if ($payment->update($input)) {
             $this->value['create_payment_id'] = $payment->get('id');
-            if($this->getCurrency()) {
+            if ($this->getCurrency()) {
                 $db = new DB_Sql;
                 $db->query("UPDATE onlinepayment SET captured_in_currency_payment_exchange_rate_id = ".$this->getCurrency()->getPaymentExchangeRate()->getId()." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
             }
@@ -474,7 +479,7 @@ class OnlinePayment extends Intraface_Standard
      * These are defined individually to all providers. The actual action is executed in OnlinePayment->transactionAction()
      *
      * Nb. the action 'capture' is not shown in debtor (view.php) before it is an sent invoice.
-     * 
+     *
      * @todo better description of this, what is it used for. I think that the label
      *       has to go by the way.
      *
@@ -536,7 +541,7 @@ class OnlinePayment extends Intraface_Standard
         if ($this->getDBQuery()->getFilter('text') != "") {
             $this->getDBQuery()->setCondition("transaction_number LIKE \"%".$this->getDBQuery()->getFilter('text')."%\" OR text LIKE \"%".$this->dbquery->getFilter('text')."%\"");
         }
-        
+
         if ($this->getDBQuery()->checkFilter("from_date")) {
             $date = new Intraface_Date($this->getDBQuery()->getFilter("from_date"));
             if ($date->convert2db()) {
@@ -555,10 +560,10 @@ class OnlinePayment extends Intraface_Standard
                 $this->error->set("Til dato er ikke gyldig");
             }
         }
-        
+
         $doctrine = Doctrine_Manager::connection(DB_DSN);
         $currency_gateway = new Intraface_modules_currency_Currency_Gateway($doctrine);
-        
+
         $this->getDBQuery()->setSorting("date_created DESC");
         $db = $this->getDBQuery()->getRecordset("id, date_created, belong_to_key, belong_to_id, text, status_key, amount, provider_key, transaction_number, transaction_status, pbs_status, currency_id, DATE_FORMAT(date_created, '%d-%m-%Y %H:%i') AS dk_date_created", "", false);
         $i = 0;
@@ -587,9 +592,9 @@ class OnlinePayment extends Intraface_Standard
             } else {
                 $list[$i]['transaction_status_translated'] = 'invalid status';
             }
-            
+
             if ($db->f('currency_id') != 0) {
-                $list[$i]['currency'] = $currency_gateway->findById($db->f('currency_id'));     
+                $list[$i]['currency'] = $currency_gateway->findById($db->f('currency_id'));
             }
             else {
                 $list[$i]['currency'] = false;
@@ -607,7 +612,7 @@ class OnlinePayment extends Intraface_Standard
         return $list;
 
     }
-    
+
     /**
      * Returns the currency if set, otherwise false
      */
@@ -616,16 +621,16 @@ class OnlinePayment extends Intraface_Standard
         if ($this->get('currency_id') == 0) {
             return false;
         }
-        
+
         if (!$this->currency) {
             $doctrine = Doctrine_Manager::connection(DB_DSN);
             $gateway = new Intraface_modules_currency_Currency_Gateway($doctrine);
-            $this->currency = $gateway->findById($this->get('currency_id'));     
+            $this->currency = $gateway->findById($this->get('currency_id'));
         }
-        
+
         return $this->currency;
     }
-    
+
     /**
      * Returns the amount in the given currency
      */
@@ -633,28 +638,27 @@ class OnlinePayment extends Intraface_Standard
     {
         return new Ilib_Variable_Float($this->get('amount'));
     }
-    
+
     /**
-     * Returns an approximate amount in the 
+     * Returns an approximate amount in the
      */
     public function getAmountInSystemCurrency()
     {
-        if($this->getCurrency()) {
-            if($this->get('status') == 'captured') {
+        if ($this->getCurrency()) {
+            if ($this->get('status') == 'captured') {
                 return new Ilib_Variable_Float(
                     $this->getCurrency()
                     ->getPaymentExchangeRate(
                         $this->get('captured_in_currency_payment_exchange_rate_id')
                     )
                     ->convertAmountFromCurrency($this->getAmount())->getAsIso(2));
-            }
-            else {
+            } else {
                 return new Ilib_Variable_Float($this->getCurrency()->getPaymentExchangeRate()->convertAmountFromCurrency($this->getAmount())->getAsIso(2));
             }
         }
         return $this->getAmount();
     }
-    
+
 
     /**
      * returns the possible status types
@@ -709,7 +713,7 @@ class OnlinePayment extends Intraface_Standard
         $this->dbquery = new Intraface_DBQuery($this->kernel, "onlinepayment", "intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->useErrorObject($this->error);
 
-        return $this->dbquery;        
+        return $this->dbquery;
     }
 
     /**
