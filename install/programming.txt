@@ -17,7 +17,7 @@ Server:
 Unittesting:
 
 - phpunit http://www.phpunit.de
-- Xdebug kræver php source kode (php-devel)
+- Xdebug kræver php source kode (php-devel og autoconf)
 
 Selenium testing:
 
