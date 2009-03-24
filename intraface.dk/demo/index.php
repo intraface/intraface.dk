@@ -16,7 +16,7 @@ $application = new Demo_Root();
 
 $application->registry->registerConstructor('admin', create_function(
   '$className, $args, $registry',  
-  'return new IntrafacePublic_Admin_XMLRPC_Client("abcdefghijklmnopqrstuvwxyz123456789#", false, INTRAFACE_XMLPRC_SERVER_PATH . "admin/server.php");'
+  'return new IntrafacePublic_Admin_Client_XMLRPC("abcdefghijklmnopqrstuvwxyz123456789#", false, INTRAFACE_XMLPRC_SERVER_PATH . "admin/server.php");'
 ));
 
 $application->registry->registerConstructor('cache', create_function(
