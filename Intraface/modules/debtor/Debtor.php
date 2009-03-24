@@ -265,7 +265,7 @@ class Debtor extends Intraface_Standard
 
         // Bruges til at afgøre, hvor debtor er sendt hent til
         $db = new DB_Sql;
-        $db->query("SELECT id, type FROM debtor WHERE where_from_id = " . $this->id . " AND active = 1");
+        $db->query("SELECT id, type FROM debtor WHERE where_from > 2 AND where_from_id = " . $this->id . " AND active = 1");
         if ($db->nextRecord()) {
             if ($db->f('type') > 0) {
                 $types = self::getDebtorTypes();
