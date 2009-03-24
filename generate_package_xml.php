@@ -169,9 +169,9 @@ $pfm->addPackageDepWithChannel('required', 'XML_Util', 'pear.php.net', '1.2.0');
 $pfm->addPackageDepWithChannel('required', 'XML_Serializer', 'pear.php.net', '0.19.0');
 $pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'htmlpurifier.org', '3.1.0');
 $pfm->addPackageDepWithChannel('required', 'Text_Wiki', 'pear.php.net', '1.2.0');
-$pfm->addPackageDepWithChannel('required', 'Markdown', 'pear.michelf.com', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'Markdown', 'pear.michelf.com', '1.0.1m');
 
-$pfm->addPackageDepWithChannel('required', 'SmartyPants', 'pear.michelf.com', '1.5.0');
+$pfm->addPackageDepWithChannel('required', 'SmartyPants', 'pear.michelf.com', '1.5.1oo2');
 $pfm->addPackageDepWithChannel('required', 'phpFlickr', 'public.intraface.dk', '1.6.1');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_HTML', 'public.intraface.dk', '0.2.0');
 
