@@ -525,7 +525,7 @@ if (isset($onlinepayment)) {
                             }
 
                             if ($kernel->user->hasModuleAccess('administration')) { ?>
-                                <a href="<?php e($debtor_module->getPath()); ?>setting.php" class="edit"><?php e($translation->get('change')); ?></a></p>
+                                <a href="<?php e($debtor_module->getPath()); ?>setting.php" class="edit"><?php e($translation->get('change')); ?></a>
                             <?php
                             }
                             ?>
@@ -563,7 +563,7 @@ if (isset($onlinepayment)) {
             <tr>
                 <th><?php e(t('Where from')); ?></th>
                 <td>
-                    <?php if ($debtor->get("where_from_id") > 0) { ?>
+                    <?php if (($debtor->get('where_from') == 'quotation' || $debtor->get('where_from') == 'order' || $debtor->get('where_from') == 'invoice') && $debtor->get("where_from_id") > 0) { ?>
                         <a href="view.php?id=<?php e($debtor->get("where_from_id")); ?>"><?php e(t($debtor->get("where_from"))); ?></a>
                <?php } else { ?>
                         <?php e(t($debtor->get('where_from'))); ?>
