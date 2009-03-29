@@ -151,3 +151,7 @@ function intraface_t($string, $page = NULL)
         return $translation->get($string);
     }
 }
+
+
+$dependency = new Intraface_Dependency();
+$dependency->willUse('Intraface_modules_product_Gateway');

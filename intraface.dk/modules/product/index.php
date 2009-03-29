@@ -4,12 +4,14 @@ require('../../include_first.php');
 $module = $kernel->module('product');
 $translation = $kernel->getTranslation('product');
 
+$gateway = $dependency->create('Intraface_modules_product_Gateway', $kernel);
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
         $deleted = array();
         if (!empty($_POST['selected']) AND is_array($_POST['selected'])) {
-            foreach ($_POST['selected'] AS $key=>$id) {
-                $product = new Product($kernel, intval($id));
+            foreach ($_POST['selected'] as $key=>$id) {
+                $product = $gateway->getById(intval($id));
                 if ($product->delete()) {
                     $deleted[] = $id;
                 }
@@ -22,8 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             trigger_error('could not undelete', E_USER_ERROR);
         }
         if (!empty($undelete) AND is_array($undelete)) {
-            foreach ($undelete AS $key=>$id) {
-                $product = new Product($kernel, intval($id));
+            foreach ($undelete as $key=>$id) {
+                $product = $gateway->getById(intval($id));
                 if (!$product->undelete()) {
                     // void
                 }
@@ -32,28 +34,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$product = new Product($kernel);
+$product = $gateway->getById(0);
 // $characters = $product->getCharacters();
 $keywords = $product->getKeywordAppender();
 
 // burde bruge query
 if (isset($_GET["search"]) || isset($_GET["keyword_id"])) {
     if (isset($_GET["search"])) {
-        $product->getDBQuery()->setFilter("search", $_GET["search"]);
+        $gateway->getDBQuery()->setFilter("search", $_GET["search"]);
     }
 
     if (isset($_GET["keyword_id"])) {
-        $product->getDBQuery()->setKeyword($_GET["keyword_id"]);
+        $gateway->getDBQuery()->setKeyword($_GET["keyword_id"]);
     }
 } else {
-    $product->getDBQuery()->useCharacter();
+    $gateway->getDBQuery()->useCharacter();
 }
 
-$product->getDBQuery()->defineCharacter("character", "detail.name");
-$product->getDBQuery()->usePaging("paging");
-$product->getDBQuery()->storeResult("use_stored", "products", "toplevel");
+$gateway->getDBQuery()->defineCharacter("character", "detail.name");
+$gateway->getDBQuery()->usePaging("paging");
+$gateway->getDBQuery()->storeResult("use_stored", "products", "toplevel");
 
-$products = $product->getList();
+$products = $gateway->getAllProducts();
 
 $page = new Intraface_Page($kernel);
 $page->start(t('products'));
@@ -111,7 +113,7 @@ $page->start(t('products'));
         <p class="message"><?php e(t('products has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('Cancel', 'common')); ?>" /></p>
 <?php endif; ?>
 
-<?php echo $product->getDBQuery()->display('character'); ?>
+<?php echo $gateway->getDBQuery()->display('character'); ?>
 
     <?php if (!is_array($products) OR count($products) == 0): ?>
         <p><?php e(t('no products in search')); ?>.</p>
@@ -196,7 +198,7 @@ $page->start(t('products'));
 
     <?php endif; ?>
 
-<?php echo $product->getDBQuery()->display('paging'); ?>
+<?php echo $gateway->getDBQuery()->display('paging'); ?>
 
 <?php endif; ?>
 
