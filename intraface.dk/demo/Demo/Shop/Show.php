@@ -49,7 +49,7 @@ class Demo_Shop_Show extends k_Controller
     public function getOnlinePaymentAuthorize()
     {        
         if ($this->intranetHasOnlinePaymentAccess()) {       
-            return new Ilib_Payment_Authorize_Provider_Dandomain_PostForm("12345678", "fakequickpaymd5secret", 'https://intraface.asterix/demo/intraface/shop/1/shop/');
+            return new Ilib_Payment_Authorize_Provider_Testing("12345678", "fakequickpaymd5secret");
         }
         return false;
     }
