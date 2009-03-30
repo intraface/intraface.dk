@@ -4,7 +4,7 @@ require('../../include_first.php');
 $module = $kernel->module('product');
 $translation = $kernel->getTranslation('product');
 
-$gateway = $dependency->create('Intraface_modules_product_Gateway', $kernel);
+$gateway = $dependency->create('Intraface_modules_product_Gateway');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
