@@ -12,11 +12,9 @@ if (!defined('DB_DSN')) {
     define('DB_DSN', 'mysql://' . DB_USER . ':' . DB_PASSWORD . '@' . DB_HOST . '/' . DB_NAME);
 }
 
-class This_Filehandler_Root extends k_Dispatcher
+class This_Product_Root extends k_Dispatcher
 {
-    public $map = array('file'        => 'Intraface_Filehandler_Controller_Viewer',
-                        'filemanager' => 'Intraface_Filehandler_Controller_Index',
-                        'keyword'     => 'Intraface_Keyword_Controller_Index');
+    public $map = array('product' => 'Intraface_modules_product_Controller_Index');
     public $debug = true;
 
     function __construct()
@@ -28,11 +26,11 @@ class This_Filehandler_Root extends k_Dispatcher
 
     function execute()
     {
-        return $this->forward('filemanager');
+        return $this->forward('product');
     }
 }
 
-$application = new This_Filehandler_Root();
+$application = new This_Product_Root();
 
 $GLOBALS['kernel'] = $kernel;
 $GLOBALS['intranet'] = $kernel->intranet;
