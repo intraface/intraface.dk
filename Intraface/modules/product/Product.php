@@ -207,6 +207,49 @@ class Product extends Intraface_Standard
         return false;
     }
 
+    function getKernel()
+    {
+    	return $this->kernel;
+    }
+
+    /**
+     * @todo How should we handle the function to get pictures?
+     */
+    function getNewPictures()
+    {
+        //$filehandler = new Ilib_Filehandler($this->kernel);
+        $append_file = new Appender($this->kernel, 'product', $this->get('id'));
+        $appendix_list = $append_file->getList();
+
+        $this->value['pictures'] = array();
+
+        if (count($appendix_list) > 0) {
+            foreach ($appendix_list as $key => $appendix) {
+                $tmp_filehandler = new Ilib_Filehandler($this->kernel, $appendix['file_handler_id']);
+                $this->value['pictures'][$key]['id']                   = $appendix['file_handler_id'];
+                $this->value['pictures'][$key]['original']['icon_uri'] = $tmp_filehandler->get('icon_uri');
+                $this->value['pictures'][$key]['original']['name']     = $tmp_filehandler->get('file_name');
+                $this->value['pictures'][$key]['original']['width']    = $tmp_filehandler->get('width');
+                $this->value['pictures'][$key]['original']['height']   = $tmp_filehandler->get('height');
+                $this->value['pictures'][$key]['original']['file_uri'] = $tmp_filehandler->get('file_uri');
+                $this->value['pictures'][$key]['appended_file_id']     = $appendix['id'];
+
+                if ($tmp_filehandler->get('is_image')) {
+                    $tmp_filehandler->createInstance();
+                    $instances = $tmp_filehandler->instance->getList('include_hidden');
+                    foreach ($instances as $instance) {
+                        $this->value['pictures'][$key][$instance['name']]['file_uri'] = $instance['file_uri'];
+                        $this->value['pictures'][$key][$instance['name']]['name']     = $instance['name'];
+                        $this->value['pictures'][$key][$instance['name']]['width']    = $instance['width'];
+                        $this->value['pictures'][$key][$instance['name']]['height']   = $instance['height'];
+
+                    }
+                }
+            }
+        }
+        return $this->value['pictures'];
+    }
+
     /**
      * Gets pictures for the product
      *
@@ -621,7 +664,7 @@ class Product extends Intraface_Standard
             $products[$key]['currency']['DKK']['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat();
             $products[$key]['currency']['DKK']['before_price'] = $product->getDetails()->getBeforePrice();
             $products[$key]['currency']['DKK']['before_price_incl_vat'] = $product->getDetails()->getBeforePriceIncludingVat();
-            
+
             if ($currencies && $currencies->count() > 0) {
                 foreach ($currencies AS $currency) {
                     $products[$key]['currency'][$currency->getType()->getIsoCode()]['price'] = $product->getDetails()->getPriceInCurrency($currency);
@@ -833,6 +876,10 @@ class Product extends Intraface_Standard
      */
     function getList($which = 'all', $currencies = false)
     {
+        $gateway = new Intraface_modules_product_Gateway($this->kernel);
+        return $gateway->getAllProducts($which, $currencies);
+
+        /*
         switch ($this->getDBQuery()->getFilter('sorting')) {
             case 'date':
                     $this->getDBQuery()->setSorting("product.changed_date DESC");
@@ -940,6 +987,7 @@ class Product extends Intraface_Standard
         }
         $db->free();
         return $products;
+        */
     }
 
     /**
