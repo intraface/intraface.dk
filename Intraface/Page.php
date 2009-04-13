@@ -61,6 +61,7 @@ class Intraface_Page
         $cache = new Cache_Lite_Output($options);
 
         // unfortunately cache has to be deactivated (true or) as there is problems with titel and javascript. solution: only caching of menu and nothing else.
+        // If you activate again remeber to activate $cache->end() in the end of this method
         if (true OR !USE_CACHE OR !($cache->start('page_' . $this->kernel->user->get('id') . '_' . $name))) {
 
             if (!is_object($this->kernel->translation)) $this->kernel->getTranslation();
@@ -177,7 +178,7 @@ class Intraface_Page
 
             include(PATH_INCLUDE_IHTML.'/intraface/top.php');
 
-            $cache->end();
+            // $cache->end();
         }
 
     }
