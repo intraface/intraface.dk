@@ -13,7 +13,7 @@ if (!empty($_POST)) {
 } elseif (!empty($_GET)) {
     $letter = Newsletter::factory($kernel, (int)$_GET['id']);
 } else {
-    trigger_error('Der mangler et nyhedsbrev', FATAL);
+    trigger_error('Der mangler et nyhedsbrev', E_USER_ERROR);
 }
 
 $page = new Intraface_Page($kernel);
