@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // annuller ordre tilbud eller order
-    elseif (!empty($_POST['cancel']) AND ($debtor->get("type") == "quotation" || $debtor->get("type") == "order") && $debtor->get('status') == "sent") {
+    elseif (!empty($_POST['cancel']) AND ($debtor->get("type") == "quotation" || $debtor->get("type") == "order") && ($debtor->get('status') == "created" || $debtor->get('status') == "sent")) {
         $debtor->setStatus('cancelled');
     }
 
@@ -433,7 +433,7 @@ if (isset($onlinepayment)) {
         <input type="submit" value="Slet" class="confirm" title="Er du sikker på du vil slette denne <?php e(t($debtor->get('type').' title')); ?>?" name="delete" />
     <?php endif; ?>
 
-    <?php if (($debtor->get("type") == "quotation" || $debtor->get("type") == "order") && $debtor->get('status') == "sent"): ?>
+    <?php if (($debtor->get("type") == "quotation" || $debtor->get("type") == "order") && ($debtor->get('status') == "created" || $debtor->get('status') == "sent")): ?>
         <input type="submit" value="Annuller" name="cancel" class="confirm" title="Er du sikker på, at du vil annullere?" />
     <?php endif; ?>
 
