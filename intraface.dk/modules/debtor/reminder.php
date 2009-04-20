@@ -142,7 +142,7 @@ $page->start("Rykker");
 					if ($kernel->user->hasModuleAccess('administration')) {
 						$debtor_module = $kernel->useModule('debtor');
                         ?>
-						 <a href="<?php e($debtor_module->getPath()); ?>setting.php" class="edit"><?php e($translation->get('change')); ?></a></p>
+						 <a href="<?php e($debtor_module->getPath()); ?>setting.php" class="edit"><?php e($translation->get('change')); ?></a>
                         <?php
 					}
 					?>
