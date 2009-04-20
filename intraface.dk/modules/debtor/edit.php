@@ -91,10 +91,11 @@ $page->start($translation->get($action.' '.$debtor->get('type')));
 		<?php
 		$module_administration = $kernel->useModule('administration');
 		?>
-		<a href="<?php e($module_administration->getPath().'intranet_edit.php'); ?>">Udfyld adresse</a>.</p>
+		<a href="<?php e($module_administration->getPath().'intranet_edit.php'); ?>">Udfyld adresse</a>.
 	<?php else: ?>
-		Du har ikke adgang til at rette adresseoplysningerne, det må du bede din administrator om at gøre.</p>
+		Du har ikke adgang til at rette adresseoplysningerne, det må du bede din administrator om at gøre.
 	<?php endif; ?>
+	</p>
 <?php else: ?>
 
 
