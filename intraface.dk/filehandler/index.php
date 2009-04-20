@@ -1,10 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../include_first.php';
-ini_set('include_path', '/home/lsolesen/workspace/ilib-new/3Party/Ilib_Filemanager_Controller/src/' . PATH_SEPARATOR .
-'/home/lsolesen/workspace/ilib-new/3Party/Ilib_Filemanager_Controller/src/www/' . PATH_SEPARATOR .
-'/home/lsolesen/workspace/ilib-new/3Party/Ilib_Keyword_Controller/src/' . PATH_SEPARATOR .
-'/home/lsolesen/workspace/ilib-new/3Party/Ilib_Keyword/src/' . PATH_SEPARATOR .
-'/home/lsolesen/workspace/ilib-new/3Party/Ilib_Filemanager/src/' . PATH_SEPARATOR . PATH_INCLUDE_PATH);
+
 require_once 'k.php';
 require_once 'Ilib/ClassLoader.php';
 
