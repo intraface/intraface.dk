@@ -24,9 +24,20 @@ $application->registry->registerConstructor('db_sql', create_function(
   'return new DB_Sql;'
 ));
 
+$application->registry->registerConstructor('mdb2', create_function(
+  '$className, $args, $registry',
+  ' $db = MDB2::singleton(DB_DSN, array("persistent" => true));
+    if (PEAR::isError($db)) {
+        trigger_error($db->getMessage(), E_USER_ERROR);
+    }
+    $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
+    $db->setOption("portability", MDB2_PORTABILITY_NONE);
+    return $db;'
+));
+
 $application->registry->registerConstructor('user', create_function(
   '$className, $args, $registry',
-  'return new Intraface_Tools_User($registry->SESSION);'
+  'return new Ilib_SimpleLogin_User($registry->SESSION);'
 ));
 
 $application->registry->registerConstructor('translation_admin', create_function(
