@@ -1,4 +1,5 @@
 <?php
+
 class Intraface_Tools_Controller_ErrorList extends k_Controller
 {
     public $map = array(
@@ -15,7 +16,14 @@ class Intraface_Tools_Controller_ErrorList extends k_Controller
     
     public function GET()
     {
-        $data = array('items' => $this->getErrorList());
+        $data['items'] = $this->getErrorList();
+        try {
+            $translation = $this->registry->get('translation_admin');
+            $data['has_translation'] = true;
+        }
+        catch(ReflectionException $e) {
+            $data['has_translation'] = false;
+        }
 
         return $this->render('Intraface/Tools/templates/errorlist-tpl.php', $data);
     }
@@ -24,7 +32,7 @@ class Intraface_Tools_Controller_ErrorList extends k_Controller
     {
         $errorlist = $this->registry->get('errorlist');
         
-        if (!empty($this->POAT['deletelog'])) {
+        if (!empty($this->POST['deletelog'])) {
             $errorlist->delete();
         }
         

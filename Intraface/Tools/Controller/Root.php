@@ -1,9 +1,18 @@
 <?php
 class Intraface_Tools_Controller_Root extends k_Dispatcher
 {
-    public $map = array('index' => 'Intraface_Tools_Controller_Index',
-                        'login' => 'Intraface_Tools_Controller_Login');
-
+    private $user;
+    
+    
+    public $map = array('dashboard' => 'Ilib_SimpleLogin_Controller_Index',
+                        'login' => 'Ilib_SimpleLogin_Controller_Login',
+                        'logout' => 'Ilib_SimpleLogin_Controller_LogOut',
+                        'errorlist'    => 'Ilib_ErrorHandler_Observer_File_ErrorList',
+                        'phpinfo'     => 'Intraface_Tools_Controller_Phpinfo',
+                        'log'         => 'Intraface_Tools_Controller_Log',
+                        'translation' => 'Translation2_Frontend_Controller_Index'
+                        );
+    
     function __construct()
     {
         parent::__construct();
@@ -11,28 +20,43 @@ class Intraface_Tools_Controller_Root extends k_Dispatcher
         $this->document->navigation = array(
             $this->url('translation') => 'Translations',
             $this->url('phpinfo') => 'PHP info',
-            $this->url('errorlog/unique') => 'Unique errors (html)',
-            $this->url('errorlog/all') => 'All errors',
-            $this->url('errorlog/rss') => 'Errors as rss',
-            $this->url('log') => 'Log'
+            $this->url('errorlist/unique') => 'Unique errors (html)',
+            $this->url('errorlist/all') => 'All errors',
+            $this->url('errorlist/rss') => 'Errors as rss',
+            $this->url('log') => 'Log',
+            $this->url('logout') => 'Log out'
         );
     }
-
+    
     function execute()
     {
-        return $this->forward('index');
+        throw new k_http_Redirect($this->url('dashboard'));
     }
-
-    function forward($name)
+    
+    public function forward($name)
     {
-        if ($name == 'login') {
-            return parent::forward('login');
-        }
-
-        if (!$this->registry->get('user')->isLoggedIn()) {
+        $login_exceptions = array('login', 'errorlist/rss');
+        
+        if (!$this->getUser()->isLoggedIn() && !in_array($this->getSubspace(), $login_exceptions)) {
             throw new k_http_Redirect($this->url('login'));
         }
-        return parent::forward('index');
+        
+        return parent::forward($name);
+    }
+    
+    function getTranslationCommonPageId()
+    {
+        return 'common';
+    }
+    
+    function getUser()
+    {
+        if(empty($this->user)) {
+            $this->user = $this->registry->get('user');
+            $this->user->register('sj@sunet.dk', md5('12345'));
+        }
+        
+        return $this->user;   
     }
 
 }

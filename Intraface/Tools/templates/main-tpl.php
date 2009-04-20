@@ -98,10 +98,6 @@ div.success p {
     margin: 0 0 0 0;
 }
 
-div.search {
-    float:right;
-}
-
 
     </style>
 </head>

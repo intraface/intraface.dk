@@ -1,8 +1,9 @@
 <?php
-class Intraface_Tools_Controller_ErrorLog_RSS extends k_Controller
+class Intraface_Tools_Controller_ErrorList_RSS extends k_Controller
 {
     function GET()
     {
+        /*
         $errorlist = $this->registry->get('errorlist');
 
         $now = date("D, d M Y H:i:s T");
@@ -37,7 +38,12 @@ class Intraface_Tools_Controller_ErrorLog_RSS extends k_Controller
         $output .= "
                         </channel>
                     </rss>";
-
+        */
+        
+        $data['items'] = $this->registry->get('errorlist')->getUnique();
+        
+        $output = $this->render('Intraface/Tools/templates/errorlist-css-tpl.php', $data);
+        
         $response = new k_http_Response(200, $output);
         $response->setEncoding(NULL);
         $response->setContentType("Content-Type: application/rss+xml");
@@ -45,5 +51,4 @@ class Intraface_Tools_Controller_ErrorLog_RSS extends k_Controller
         throw $response;
 
     }
-
 }

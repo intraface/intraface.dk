@@ -21,7 +21,7 @@ class Intraface_Tools_User
 
     function isLoggedIn()
     {
-        if ($this->session['logged_in'] != true) {
+        if (empty($this->session['logged_in'])) {
             return false;
         }
         return true;
