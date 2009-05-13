@@ -5,6 +5,7 @@ class Demo_Root extends k_Dispatcher
     {
         parent::__construct();
         $this->document->template = dirname(__FILE__) . '/../main-tpl.php';
+        $this->document->company_name = 'Intraface Demo';
         $this->document->styles[] = $this->url('/layout.css');
         $this->document->styles[] = $this->url('/shop.css');
     }

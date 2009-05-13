@@ -1,14 +1,26 @@
 body {
-    background-color: #CC0000;
+    font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
+    background-color: #d5d6d7;
+    color: #333;
 }
 
 #container {
     background-color: white; 
     margin: 20px auto; 
-    border: 4px solid #666666; 
+    border: 1px solid #666666; 
     width: 800px; 
     padding: 20px;
 }
+
+#header {
+    margin: 0px;
+    background-color: #006699;
+    text-align: center;
+    color: white;
+    font-size: 200%;
+    padding: 40px;
+    margin-bottom: 20px;    
+}   
 
 #menu {
     width: 200px;
@@ -20,3 +32,4 @@ body {
     width: 560px;
     float: left;
 }
+

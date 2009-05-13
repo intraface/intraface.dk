@@ -14,6 +14,8 @@
 
      <body>
         <div id="container">
+            <div id="header"><?php e($this->document->company_name); ?></div>
+            
             <div id="menu">
                 <?php if (isset($this->document->menu)) echo $this->document->menu; ?>
             </div>
