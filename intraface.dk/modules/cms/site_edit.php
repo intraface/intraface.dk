@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $cms_module = $kernel->module('cms');
 $translation = $kernel->getTranslation('cms');
@@ -13,12 +13,10 @@ if (!empty($_POST)) {
 	else {
 		$value = $_POST;
 	}
-}
-elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
+} elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
 	$cmssite = new CMS_Site($kernel, (int)$_GET['id']);
 	$value = $cmssite->get();
-}
-else {
+} else {
 	$cmssite = new CMS_Site($kernel);
 }
 
