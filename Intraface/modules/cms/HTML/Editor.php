@@ -104,6 +104,8 @@ class Intraface_modules_cms_HTML_Editor
                     $button[] = 'formatselect';
                 }
 
+
+
                 // link, unlink - hvis link er tilladte
                 // bold, italic - hvis de er tilladte
                 // formatselect - if blockformats !empty
@@ -124,6 +126,7 @@ class Intraface_modules_cms_HTML_Editor
                 }
 
                 $button[] = 'code';
+                $button[] = 'pasteword';
 
                 $output = '<textarea'.$this->_parseTextareaAttributes($textarea_attributes).'>'.htmlentities($initial_value).'</textarea>'."\n";
                 $output .= '<script language="javascript" type="text/javascript">'."\n";
