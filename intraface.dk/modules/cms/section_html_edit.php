@@ -218,8 +218,8 @@ switch ($value['type']) {
                 $textarea_attr = array(
                     'id' => 'text',
                     'name' => 'text',
-                    'cols' => 100,
-                    'rows' => 15,
+                    'cols' => 120,
+                    'rows' => 20,
                     'class' => 'cms-html-editor'
                 );
 
