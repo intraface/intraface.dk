@@ -93,8 +93,18 @@ elseif (!empty($_POST) AND !empty($_FILES)) {
 	}
 
 
-}
-else {
+} elseif(!empty($_POST) AND !empty($_POST['action']) && $_POST['action'] == 'counter_entry' ) {
+    
+    $voucher = new Voucher($year, $_POST['id']);
+    $posts = $voucher->getPosts();
+    
+    foreach($posts AS $post) {
+        if(is_array($_POST['selected']) && in_array($post['id'], $_POST['selected'])) {
+            $new_post = new Post($voucher);
+            $new_post->save(date('Y-m-d'), $post['account_id'], $post['text'].' - '.t('counter entry'), $post['credit'], $post['debet']);
+        }
+    }   
+} else {
 	$voucher = new Voucher($year, $_GET['id']);
 }
 
@@ -124,10 +134,12 @@ $page->start('Regnskab');
 <?php if (count($posts) == 0): ?>
 	<p class="warning">Der er ikke nogen poster på bilaget. <a href="post_edit.php?voucher_id=<?php e($voucher->get('id')); ?>">Indtast poster</a>.</p>
 <?php else: ?>
+	<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 	<table>
 		<caption>Poster</caption>
 		<thead>
 		<tr>
+			<th></th>
 			<th>Dato</th>
 			<th>Tekst</th>
 			<th>Konto</th>
@@ -138,6 +150,7 @@ $page->start('Regnskab');
 		</thead>
 	<?php foreach ($posts AS $post): ?>
 		<tr>
+			<td><input type="checkbox" name="selected[]" value="<?php e($post['id']); ?>" /></td>
 			<td><?php e($post['date_dk']); ?></td>
 			<td><?php e($post['text']); ?></td>
 			<td><a href="account.php?id=<?php e($post['account_id']); ?>"><?php e($post['account_name']); ?></a></td>
@@ -155,6 +168,16 @@ $page->start('Regnskab');
 
 	<?php endforeach; ?>
 	</table>
+	
+	<select name="action">
+       <option value=""><?php e(t('Choose...', 'common'))?></option>
+       <option value="counter_entry"><?php e(t('Create counter entry'))?></option>
+    </select>
+    <input name="id" type="hidden" value="<?php e($voucher->get('id')); ?>" />
+    <input type="submit" value="<?php e(t('go', 'common')); ?>" />
+    
+    </form>
+	
 	<p><a href="post_edit.php?voucher_id=<?php e($voucher->get('id')); ?>">Indtast poster</a></p>
 	<?php if (round($voucher->get('saldo'), 2) <> 0.00): ?>
 		<p class="error">Bilaget stemmer ikke. Der er en difference på <?php e(round($voucher->get('saldo'), 2)); ?> kroner.</p>
