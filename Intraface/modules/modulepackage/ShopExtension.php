@@ -38,7 +38,7 @@ class Intraface_modules_modulepackage_ShopExtension {
         }
 
         if (defined('INTRAFACE_XMLRPC_SERVER_URL') && INTRAFACE_XMLRPC_SERVER_URL != '') {
-            $xmlrpc_shop_url = INTRAFACE_XMLRPC_SERVER_URL.'shop/server3.php';
+            $xmlrpc_shop_url = INTRAFACE_XMLRPC_SERVER_URL.'shop/server004.php';
             $xmlrpc_debtor_url = INTRAFACE_XMLRPC_SERVER_URL.'debtor/server.php';
         } else {
             $xmlrpc_shop_url = '';
@@ -50,13 +50,14 @@ class Intraface_modules_modulepackage_ShopExtension {
         }
 
         try {
-            $this->shop = new IntrafacePublic_Shop_XMLRPC_Client(
+            $this->shop = new IntrafacePublic_Shop_Client_XMLRPC(
                 array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()),
+                INTRAFACE_INTRANETMAINTENANCE_SHOP_ID,
                 INTRAFACE_XMLRPC_DEBUG,
                 $xmlrpc_shop_url);
         } catch(Exception $e) {
             $this->shop = NULL;
-            trigger_error('Unable to connect to the intranet maintenance webshop', E_USER_ERROR);
+            trigger_error('Unable to connect to the intranet maintenance webshop '.$e->getMessage(), E_USER_ERROR);
         }
 
         $this->debtor = new IntrafacePublic_Debtor_XMLRPC_Client(
