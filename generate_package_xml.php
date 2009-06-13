@@ -105,8 +105,7 @@ $pfm->addReplacement('intraface.php', 'pear-config', '@data-dir@', 'data_dir');
 
 $pfm->clearDeps();
 $pfm->setPhpDep('5.2.0');
-// there is a PEAR 1.6.2 now
-$pfm->setPearinstallerDep('1.5.0');
+$pfm->setPearinstallerDep('1.8.1');
 
 // installer
 $pfm->addPackageDepWithChannel('required', 'Config', 'pear.php.net', '1.10.11');
@@ -117,9 +116,9 @@ $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.1');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Driver_mysql', 'pear.php.net', '1.4.1');
 $pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '2.0.0');
 $pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTranslation', 'public.intraface.dk', '0.1.3');
-$pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.10.0');
+$pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.11.4');
 // there is a Validate 0.8.1 now!
-$pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.8.1');
+$pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.8.2');
 $pfm->addPackageDepWithChannel('required', 'HTTP_Upload', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.5');
@@ -166,7 +165,7 @@ $pfm->addPackageDepWithChannel('required', 'phpmailer', 'public.intraface.dk', '
 
 // cms
 $pfm->addPackageDepWithChannel('required', 'XML_Util', 'pear.php.net', '1.2.0');
-$pfm->addPackageDepWithChannel('required', 'XML_Serializer', 'pear.php.net', '0.19.0');
+$pfm->addPackageDepWithChannel('required', 'XML_Serializer', 'pear.php.net', '0.20.0');
 $pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'htmlpurifier.org', '3.1.0');
 $pfm->addPackageDepWithChannel('required', 'Text_Wiki', 'pear.php.net', '1.2.0');
 $pfm->addPackageDepWithChannel('required', 'Markdown', 'pear.michelf.com', '1.0.1m');
@@ -208,6 +207,9 @@ $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'p
 $pfm->addPackageDepWithChannel('required', 'konstrukt', 'public.intraface.dk', '0.4.0');
 $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.intraface.dk', '0.1.0');
 
+// tools
+$pfm->addPackageDepWithChannel('required', 'Ilib_SimpleLogin', 'public.intraface.dk', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Observer_File_ErrorList', 'public.intraface.dk', '1.0.0');
 
 foreach ($ignore AS $file) {
     // $pfm->addIgnoreToRelease($file);
