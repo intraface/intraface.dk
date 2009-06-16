@@ -149,7 +149,7 @@ if (isset($intranet)) {
         <tr>
             <th><?php e($translation->get('phone', 'address')); ?></th>
             <td><?php if (isset($value_address['phone'])) e($value_address["phone"]); ?></td>
-        </td>
+        </tr>
     </table>
 
 
@@ -177,14 +177,14 @@ if (isset($intranet)) {
                 <div>
                     <input type="checkbox" name="module[]" id="module_<?php e($modules[$i]["name"]); ?>" value="<?php e($modules[$i]["name"]); ?>" <?php if ($user->hasModuleAccess(intval($modules[$i]["id"]))) print("checked=\"checked\""); ?> />
                     <label for="module_<?php e($modules[$i]["name"]); ?>"><?php e($modules[$i]["menu_label"]); ?></label>
-                    <?php if (!empty($modules[$i]["sub_access"]) AND count($modules[$i]["sub_access"]) > 0) { ?>
+                    <?php if (!empty($modules[$i]["sub_access"]) AND count($modules[$i]["sub_access"]) > 0): ?>
                       <ol>
-                      <?php for ($j = 0; $j < count($modules[$i]["sub_access"]); $j++) { ?>
+                      <?php for ($j = 0; $j < count($modules[$i]["sub_access"]); $j++): ?>
                           <input type="checkbox" name="sub_access[<?php e($modules[$i]["name"]); ?>][]" id="sub_<?php e($modules[$i]["sub_access"][$j]["name"]); ?>" value="<?php e($modules[$i]["sub_access"][$j]["name"]); ?>"<?php if ($user->hasSubAccess(intval($modules[$i]["id"]), intval($modules[$i]["sub_access"][$j]["id"]))) print(" checked=\"checked\""); ?> />
                           <label for="sub_<?php e($modules[$i]["sub_access"][$j]["name"]); ?>"><?php e($modules[$i]["sub_access"][$j]["description"]); ?></label>
-                      <?php } ?>
+                      <?php endfor; ?>
                       </ol>
-                      <?php } ?>
+                      <?php endif; ?>
                 </div>
                 <?php } }
         ?>
