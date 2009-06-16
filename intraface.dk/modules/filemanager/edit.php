@@ -78,10 +78,11 @@ $page->start($translation->get('edit file'));
 
 </fieldset>
 
-<p></p><input type="submit" class="save" name="submit" value="<?php e($translation->get('save', 'common')); ?>" />
+<p>
+<input type="submit" class="save" name="submit" value="<?php e($translation->get('save', 'common')); ?>" />
 <a href="file.php?id=<?php e($filemanager->get('id')); ?>"><?php e($translation->get('Cancel', 'common')); ?></a>
 </p>
-</p><input type="hidden" name="id" value="<?php e($filemanager->get("id")); ?>" />
+<input type="hidden" name="id" value="<?php e($filemanager->get("id")); ?>" />
 
 </form>
 
