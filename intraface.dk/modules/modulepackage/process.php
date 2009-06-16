@@ -8,11 +8,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require('../../common.php');
 
     session_start();
-
-    $payment_html = new Ilib_Payment_Html(INTRAFACE_ONLINEPAYMENT_PROVIDER, INTRAFACE_ONLINEPAYMENT_MERCHANT, INTRAFACE_ONLINEPAYMENT_MD5SECRET, session_id());
-        
-    $payment_postprocess = $payment_html->getPostProcess();
     
+    $action_store = new Intraface_modules_modulepackage_ActionStore($kernel->intranet->get('id'));
+    $action = $action_store->restore((int)$_GET['action_store_id']);
+
+    /**
+     * TODO: This script does not work! intranet id and public key should be saved with the action in ActionStore
+     * so we can use it here.
+     */
+    
+    $payment_provider = 'Ilib_Payment_Authorize_Provider_'.INTRAFACE_ONLINEPAYMENT_PROVIDER;
+    $payment_authorize = new $payment_provider(INTRAFACE_ONLINEPAYMENT_MERCHANT, INTRAFACE_ONLINEPAYMENT_MD5SECRET);
+    $payment_postprocess = $payment_authorize->getPostProcess($_GET, $_POST, );
     
     if (!$payment_postprocess->setPaymentResponse($_POST)) {
         trigger_error('Error in the returned values from payment!', E_USER_ERROR);

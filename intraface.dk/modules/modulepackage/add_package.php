@@ -67,8 +67,9 @@ if (!empty($_POST)) {
                         trigger_error("Unable to place the order", E_USER_ERROR);
                         exit;
                     }
-                    $order_id = $action->getOrderId();
+                    
                     $total_price = $action->getTotalPrice();
+                    
                 }
                 else {
                     $total_price = 0;
@@ -139,7 +140,7 @@ $page->start($translation->get($add_type).' '.$translation->get('package'));
         
         ?>
         <label for="price"><?php e($translation->get('price')); ?></label>
-        <span id="price"><?php $product = $modulepackageshop->getProduct((int)$modulepackage->get('product_id')); if (isset($product['price_incl_vat'])): e('DKK '.$product['price_incl_vat']).' '.$translation->get('per').' '.$translation->get($product['unit']['singular']); else: echo 'free!'; endif; ?></span>
+        <span id="price"><?php $product = $modulepackageshop->getProduct((int)$modulepackage->get('product_id')); if (isset($product['product']['currency']['DKK']['price_incl_vat'])): e('DKK '.$product['product']['currency']['DKK']['price_incl_vat'].' '.$translation->get('per').' '.$translation->get($product['product']['unit']['singular'])); else: echo 'free!'; endif; ?></span>
     </div>
     
     <div class="formrow">
