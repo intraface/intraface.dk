@@ -231,7 +231,7 @@ $page->start($translation->get('contact information') . ' ' .$contact->get('name
 <?php
 $reminder = new ContactReminder($contact);
 $reminders = $reminder->getList();
-if (count($reminders) > 0) {
+if (count($reminders) > 0):
     ?>
     <h2><?php e(t('reminders')); ?></h2>
 
@@ -266,9 +266,9 @@ if (count($reminders) > 0) {
         }
         ?>
         </tbody>
-    </table
+    </table>
     <?php
-}
+endif;
 ?>
 
 <ul class="options">
