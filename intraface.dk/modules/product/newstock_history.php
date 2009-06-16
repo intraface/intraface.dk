@@ -62,7 +62,7 @@ $page->start(t('stock history'));
 </div>
 
 
-
+<div id="colTwo">
         <div id="stock" class="box">
             <h2><?php e(t('status')); ?></h2>
 
