@@ -72,6 +72,73 @@ class CurrencyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('745,23', $rate->getRate()->getAsLocal('da_dk'));
     }
     
+    function testGetProductPriceExchangeRateReturnsNewestWithTwoCurrencies()
+    {
+        /**
+         * Of some strange reason with the following posts in the database it does not 
+         * return the latest exchange rate
+         */
+        
+        # create Euro with exchange rate
+        $currency_eur = new Intraface_modules_currency_Currency;
+        $type = new Intraface_modules_currency_Currency_Type;
+        $currency_eur->setType($type->getByIsoCode('EUR'));
+        $currency_eur->save();
+        
+        $rate = new Intraface_modules_currency_Currency_ExchangeRate_ProductPrice;
+        $rate->setRate(new Ilib_Variable_Float('7,21', 'da_dk'));
+        $rate->setCurrency($currency_eur);
+        $rate->save();
+        
+        $rate = new Intraface_modules_currency_Currency_ExchangeRate_Payment;
+        $rate->setRate(new Ilib_Variable_Float('7,20', 'da_dk'));
+        $rate->setCurrency($currency_eur);
+        $rate->save();
+        
+        
+        # create dollars with exchange rate
+        $currency_usd = new Intraface_modules_currency_Currency;
+        $type = new Intraface_modules_currency_Currency_Type;
+        $currency_usd->setType($type->getByIsoCode('USD'));
+        $currency_usd->save();
+        
+        $rate = new Intraface_modules_currency_Currency_ExchangeRate_ProductPrice;
+        $rate->setRate(new Ilib_Variable_Float('530', 'da_dk'));
+        $rate->setCurrency($currency_usd);
+        $rate->save();
+        
+        $rate = new Intraface_modules_currency_Currency_ExchangeRate_Payment;
+        $rate->setRate(new Ilib_Variable_Float('531', 'da_dk'));
+        $rate->setCurrency($currency_usd);
+        $rate->save();
+        
+        
+        # Adds a new euro exchange rate
+        $rate = new Intraface_modules_currency_Currency_ExchangeRate_ProductPrice;
+        $rate->setRate(new Ilib_Variable_Float('745,23', 'da_dk'));
+        $rate->setCurrency($currency_eur);
+        $rate->save();
+        
+        $rate = new Intraface_modules_currency_Currency_ExchangeRate_Payment;
+        $rate->setRate(new Ilib_Variable_Float('745,24', 'da_dk'));
+        $rate->setCurrency($currency_eur);
+        $rate->save();
+        
+        $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection());
+        // $currency = $gateway->findById(1);
+        
+        $currencies = $gateway->findAllWithExchangeRate();
+        
+        foreach($currencies AS $currency) {
+            if($currency->getType()->getIsoCode() == 'EUR') {
+                $rate = $currency->getProductPriceExchangeRate(0);
+                $this->assertEquals('745,23', $rate->getRate()->getAsLocal('da_dk'));
+            }
+        }
+        
+        
+    }
+    
     function testGetProductPriceExchangeRateWithId()
     {
         $currency = new Intraface_modules_currency_Currency;

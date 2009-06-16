@@ -20,7 +20,7 @@ class Intraface_modules_currency_Currency_Gateway
         $collection = $query->select('currency.*, product_price_exchange_rate.*, payment_exchange_rate.*')
                 ->leftJoin('currency.product_price_exchange_rate AS product_price_exchange_rate')
                 ->leftJoin('currency.payment_exchange_rate AS payment_exchange_rate')
-                ->orderBy('type_key')
+                ->orderBy('type_key, product_price_exchange_rate.id, payment_exchange_rate.id')
                 ->execute();
         $query->free(true);
 
@@ -41,7 +41,7 @@ class Intraface_modules_currency_Currency_Gateway
         $collection = $query->select('currency.*, product_price_exchange_rate.*, payment_exchange_rate.*')
                 ->innerJoin('currency.product_price_exchange_rate AS product_price_exchange_rate')
                 ->innerJoin('currency.payment_exchange_rate AS payment_exchange_rate')
-                ->orderBy('type_key')
+                ->orderBy('type_key, product_price_exchange_rate.id, payment_exchange_rate.id')
                 ->execute();
         $query->free(true);
 
@@ -57,7 +57,8 @@ class Intraface_modules_currency_Currency_Gateway
         $query = $query->select('currency.*, product_price_exchange_rate.*, payment_exchange_rate.*')
                 ->leftJoin('currency.product_price_exchange_rate AS product_price_exchange_rate')
                 ->leftJoin('currency.payment_exchange_rate AS payment_exchange_rate')
-                ->addWhere('currency.id = ?', $id);
+                ->addWhere('currency.id = ?', $id)
+                ->orderBy('product_price_exchange_rate.id, payment_exchange_rate.id');
         $collection = $query->execute();
         $query->free(true);
 
@@ -76,7 +77,8 @@ class Intraface_modules_currency_Currency_Gateway
         $query = $query->select('currency.*, product_price_exchange_rate.*, payment_exchange_rate.*')
                 ->leftJoin('currency.product_price_exchange_rate AS product_price_exchange_rate')
                 ->leftJoin('currency.payment_exchange_rate AS payment_exchange_rate')
-                ->addWhere('currency.type_key = ?', $key);
+                ->addWhere('currency.type_key = ?', $key)
+                ->orderBy('product_price_exchange_rate.id, payment_exchange_rate.id');
 
         $collection = $query->execute();
         $query->free(true);
