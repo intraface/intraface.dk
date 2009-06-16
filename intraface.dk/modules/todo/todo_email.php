@@ -87,8 +87,9 @@ $page->start('Todo E-mail');
         <?php foreach ($contact_list AS $contact_item): ?>
             <option value="<?php e($contact_item['id']); ?>"><?php e($contact_item['name']); ?></option>
         <?php endforeach; ?>
-        </div>
         </select>
+        </div>
+        
 
     </fieldset>
 
