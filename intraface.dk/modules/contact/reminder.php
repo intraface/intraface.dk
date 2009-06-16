@@ -115,7 +115,8 @@ $page->start($translation->get('reminder'));
 		<th><?php e($translation->get('created date')); ?></th>
 		<td class="date"><?php e($reminder->get('dk_date_created')); ?></td>
 	</tr>
-
+    </tbody>
+</table>
 </div>
 <div id="colTwo">
 
