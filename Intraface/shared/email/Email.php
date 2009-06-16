@@ -374,6 +374,7 @@ class Email extends Intraface_Standard
         // Sender
         if ($this->get('from_email')) {
             $phpmailer->From = $this->get('from_email');
+            $phpmailer->Sender = $this->get('from_email');
             if ($this->get('from_name')) {
                 $phpmailer->FromName = $this->get('from_name');
             } else {
@@ -381,6 +382,7 @@ class Email extends Intraface_Standard
             }
         } else { // Standardafsender
             $phpmailer->From = $this->kernel->intranet->address->get('email');
+            $phpmailer->Sender = $this->kernel->intranet->address->get('email');
             $phpmailer->FromName = $this->kernel->intranet->address->get('name');
         }
         
