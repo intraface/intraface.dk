@@ -64,10 +64,10 @@ $page->start('Kommentarer');
 		</td>
 	</tr>
 <?php endforeach; ?>
-	</body>
+	</tbody>
 </table>
 
-	<?php // echo $email_object->dbquery->display('paging'); ?></td>
+	<?php // echo $email_object->dbquery->display('paging'); ?>
 
 <?php endif; ?>
 
