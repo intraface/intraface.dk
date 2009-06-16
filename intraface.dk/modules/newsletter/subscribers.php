@@ -130,7 +130,7 @@ $page->start('Modtagere');
     </tbody>
 </table>
 
-    <?php echo $subscriber->getDBQuery()->display('paging'); ?></td>
+    <?php echo $subscriber->getDBQuery()->display('paging'); ?>
 <?php endif; ?>
 
 <?php
