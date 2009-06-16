@@ -57,7 +57,7 @@ class Intraface_modules_modulepackage_ActionStore {
         
         $result = $this->db->exec('INSERT INTO module_package_action SET ' .
                 'intranet_id = '.$this->db->quote($this->intranet_id, 'integer').', ' .
-                'order_debtor_id = '.$this->db->quote($action->getOrderId(), 'integer').',  ' .
+                'order_debtor_identifier = '.$this->db->quote($action->getOrderIdentifier(), 'text').',  ' .
                 'date_created = NOW(), ' .
                 'action = '.$this->db->quote($action_serialized, 'text').', ' .
                 'active = 1');

@@ -24,7 +24,7 @@ class Intraface_modules_modulepackage_Action
     /**
      * @var integer 
      */
-    private $order_id;
+    private $order_identifier;
     
     /**
      * @var double 
@@ -114,11 +114,10 @@ class Intraface_modules_modulepackage_Action
             return false;
         }
         
-        $this->order_id = $order['order_id'];
+        $this->order_identifier = $order['order_identifier']; 
         $this->order_total_price = $order['total_price'];
         
-        
-        return $this->order_id;
+        return $this->order_identifier;
     }
     
     /**
@@ -126,9 +125,12 @@ class Intraface_modules_modulepackage_Action
      * 
      * @return integer  order id
      */
-    public function getOrderId() 
+    public function getOrderIdentifier() 
     {
-        return (int)$this->order_id;
+        if(isset($this->order_identifier)) {
+            return $this->order_identifier;
+        }
+        return '';
     }
     
     /**
@@ -163,8 +165,8 @@ class Intraface_modules_modulepackage_Action
                     trigger_error('There was an error adding the module package '.$action['module_package_id'], E_USER_NOTICE);
                     $this->error->set("an error appeared when adding your module package");
                 }
-                if ($this->getOrderId() > 0) {
-                    if (!$manager->addOrderId($this->getOrderId())) {
+                if ($this->getOrderIdentifier() != 0) {
+                    if (!$manager->addOrderIdentifier($this->getOrderIdentifier())) {
                         trigger_error('There was an error adding the order '.$this->getOrderId().' to the intranet module package '.$action['module_package_id'], E_USER_NOTICE);
                     }
                 }

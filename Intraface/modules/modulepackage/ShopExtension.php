@@ -19,6 +19,11 @@ class Intraface_modules_modulepackage_ShopExtension {
      * @var object debtor client
      */
     private $debtor;
+    
+    /**
+     * @var object onlinepayment client
+     */
+    private $onlinepayment;
 
     /**
      * @var object error
@@ -38,11 +43,13 @@ class Intraface_modules_modulepackage_ShopExtension {
         }
 
         if (defined('INTRAFACE_XMLRPC_SERVER_URL') && INTRAFACE_XMLRPC_SERVER_URL != '') {
-            $xmlrpc_shop_url = INTRAFACE_XMLRPC_SERVER_URL.'shop/server004.php';
+            $xmlrpc_shop_url = INTRAFACE_XMLRPC_SERVER_URL.'shop/server0004.php';
             $xmlrpc_debtor_url = INTRAFACE_XMLRPC_SERVER_URL.'debtor/server.php';
+            $xmlrpc_onlinepayment_url = INTRAFACE_XMLRPC_SERVER_URL.'onlinepayment/server0002.php';
         } else {
             $xmlrpc_shop_url = '';
             $xmlrpc_debtor_url = '';
+            $xmlrpc_onlinepayment_url = '';
         }
 
         if (!defined('INTRAFACE_XMLRPC_DEBUG')) {
@@ -59,11 +66,17 @@ class Intraface_modules_modulepackage_ShopExtension {
             $this->shop = NULL;
             trigger_error('Unable to connect to the intranet maintenance webshop '.$e->getMessage(), E_USER_ERROR);
         }
-
+        
+        
         $this->debtor = new IntrafacePublic_Debtor_XMLRPC_Client(
             array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()),
             INTRAFACE_XMLRPC_DEBUG,
             $xmlrpc_debtor_url);
+            
+        $this->onlinepayment = new IntrafacePublic_OnlinePayment_Client_XMLRPC(
+            array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()),
+            INTRAFACE_XMLRPC_DEBUG,
+            $xmlrpc_onlinepayment_url);
 
         $this->error = new Intraface_Error;
     }
@@ -184,7 +197,7 @@ class Intraface_modules_modulepackage_ShopExtension {
             if (!isset($product['product_detail_id'])) {
                 $product['product_detail_id'] = 0;
             }
-            if (!$this->shop->changeBasket($product['product_id'], $product['quantity'], $product['description'], $product['product_detail_id'])) {
+            if (!$this->shop->changeProductInBasket($product['product_id'], 0, $product['quantity'], $product['description'], $product['product_detail_id'])) {
                 $this->error->set("unable to add the product to the basket");
                 trigger_error('unable to add the product to the basket', E_USER_NOTICE);
                 return false;
@@ -202,16 +215,16 @@ class Intraface_modules_modulepackage_ShopExtension {
         $customer['description'] = 'Intraface Package Add';
 
         // Then we place the order from the basket. At the moment we need to give the customer again - that is not too clever!
-        $order_id = $this->shop->placeOrder($customer, $mailer);
+        $order_identifier = $this->shop->placeOrder($customer, $mailer);
 
-        if ($order_id == 0) {
+        if (empty($order_identifier)) {
             $this->error->set("unable to place the order");
             trigger_error('unable to place the order', E_USER_NOTICE);
             false;
         }
 
-        return array('order_id' => $order_id,
-            'total_price' => $basket['price_total']);
+        return array('order_identifier' => $order_identifier,
+            'total_price' => $basket['total_price']['DKK']['incl_vat']);
 
     }
 
@@ -229,7 +242,18 @@ class Intraface_modules_modulepackage_ShopExtension {
         $payment['belong_to'] = 'order';
         $payment['belong_to_id'] = $order_id;
 
-        return $this->shop->saveOnlinePayment($payment);
+        return $this->onlinepayment->saveOnlinePayment($payment);
 
     }
+    
+    /**
+     * Returns order details from order identifier
+     * 
+     * @param string $order_identifier
+     * @return array
+     */
+    public function getOrderDetails($order_identification)
+    {
+        return $this->onlinepayment->getPaymentTarget($order_identification);
+    } 
 }

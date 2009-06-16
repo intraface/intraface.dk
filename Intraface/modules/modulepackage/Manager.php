@@ -187,10 +187,10 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
      *
      * @return mixed Number of affected rows or false on error
      */
-    public function addOrderId($order_id)
+    public function addOrderIdentifier($order_identifier)
     {
 
-        if (intval($order_id) == 0) {
+        if ($order_identifier != '') {
             return false;
         }
 
@@ -199,7 +199,7 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
         }
 
         $result = $this->db->exec('UPDATE intranet_module_package ' .
-            'SET order_debtor_id = '.$this->db->quote($order_id, 'integer').' ' .
+            'SET order_debtor_identifier = '.$this->db->quote($order_identifier, 'text').' ' .
             'WHERE intranet_id = '.$this->db->quote($this->intranet->get('id'), 'integer').' AND id = '.$this->db->quote($this->id, 'integer'));
 
         if (PEAR::isError($result)) {
