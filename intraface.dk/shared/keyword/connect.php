@@ -137,7 +137,7 @@ $page->start($translation->get('add keywords to') . ' ' . $object->get('name'));
     <?php endif; ?>
     <fieldset>
         <legend><?php e(t('create keyword')); ?></legend>
-        <p><?php e(t('separate keywords by comma')); ?></samp></p>
+        <p><?php e(t('separate keywords by comma')); ?></p>
         <input type="hidden" name="<?php e($id_name); ?>" value="<?php e($object->get('id')); ?>" />
         <label for="keyword"><?php e(t('keywords')); ?></label>
         <input type="text" name="keywords" id="keyword" value="<?php //e($keyword_string); ?>" />
