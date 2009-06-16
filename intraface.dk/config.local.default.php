@@ -46,6 +46,7 @@ define('COUNTRY_LOCAL', 'da_DK');
 
 // for intranet maintenance
 define('INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY', 'privatekeyshouldbereplaced'); // the private key of the intranet that has intranetmaintenance
+define('INTRAFACE_INTRANETMAINTENANCE_SHOP_ID', 0); // the id of the shop used to modulepackage
 define('INTRAFACE_XMLRPC_SERVER_URL', ''); // the url for intraface xml-rpc server. Empty for the default url.
 define('INTRAFACE_XMLRPC_DEBUG', false);
 
