@@ -194,7 +194,7 @@ $pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php
 
 // modulepackage
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Debtor_XMLRPC', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Payment_Provider_Testing', 'public.intraface.dk', '0.1.1');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Authorize_Provider_Testing', 'public.intraface.dk', '0.1.2');
 
 
 // demo
