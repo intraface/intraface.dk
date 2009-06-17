@@ -25,7 +25,7 @@ class Intraface_modules_product_Variation extends Doctrine_Record
             ->createQuery()
             ->select('number')
             ->addWhere('product_id = '.$this->product_id)
-            ->addWhere(get_class($this).'.deleted = 0 OR '.get_class($this).'.deleted = 1')
+            ->addWhere(get_class($this).'.deleted_at IS NULL OR '.get_class($this).'.deleted_at IS NOT NULL')
             ->orderBy('number')
             ->execute();
 

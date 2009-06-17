@@ -362,13 +362,15 @@ class ProductTest extends PHPUnit_Framework_TestCase
                 'id' => 1,
                 'intranet_id' => 1,
                 'name' => 'Test1',
-                'deleted' => 0
+                '_old_deleted' => 0,
+                'deleted_at' => NULL
             ),
             1 => array(
                 'id' => 2,
                 'intranet_id' => 1,
                 'name' => 'Test2',
-                'deleted' => 0
+                '_old_deleted' => 0,
+                'deleted_at' => NULL
             )
         );
         $this->assertEquals($expected, $product->getAttributeGroups());

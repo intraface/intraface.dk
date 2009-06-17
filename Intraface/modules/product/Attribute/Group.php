@@ -40,7 +40,7 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
     
     public function undelete()
     {
-        $this->deleted = false;
+        $this->deleted_at = NULL;
         $this->save();
     }
     

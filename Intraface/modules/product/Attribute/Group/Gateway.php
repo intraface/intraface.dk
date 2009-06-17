@@ -30,7 +30,7 @@ class Intraface_modules_product_Attribute_Group_Gateway
         $groups = Doctrine_Query::create()
             ->select('id, name, intranet_id')
             ->from('Intraface_modules_product_Attribute_Group')
-            ->addWhere('Intraface_modules_product_Attribute_Group.deleted = 1')
+            ->addWhere('Intraface_modules_product_Attribute_Group.deleted_at IS NOT NULL')
             ->addWhere('id = '.intval($id))
             ->execute();
         
