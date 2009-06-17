@@ -40,8 +40,21 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
     
     public function undelete()
     {
-        $this->deleted_at = NULL;
-        $this->save();
+        // $this->deleted_at = new Doctrine_Null;
+        // $this->save();
+        
+        $result = $this->getTable()
+            ->createQuery()
+            ->update()
+            ->set('deleted_at', 'NULL')
+            ->addWhere('id = ?', $this->getId())
+            ->addWhere('intranet_id = ?', $this->intranet_id)
+            ->execute();
+        
+        if(!$result) {
+            throw new Exception('Error deleting group '.$this->getId());
+        }
+        
     }
     
     /**
