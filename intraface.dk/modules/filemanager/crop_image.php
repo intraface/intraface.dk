@@ -87,9 +87,9 @@ $page->start($translation->get('crop image').' '.$filemanager->get('file_name'))
 
 <ul class="options" style="clear:both;">
     <?php if ($type['resize_type'] != 'strict' && $unlock_ratio == 1): ?>
-        <li><a href="crop_image.php?id=<?php e($filemanager->get('id')); ?>&instance_type=<?php e($filemanager->instance->get('type')); ?>&unlock_ratio=1"><?php e($translation->get('unlock image ratio')); ?></a></li>
-    <?php elseif ($type['resize_type'] != 'strict'): ?>
         <li><a href="crop_image.php?id=<?php e($filemanager->get('id')); ?>&instance_type=<?php e($filemanager->instance->get('type')); ?>&unlock_ratio=0"><?php e($translation->get('lock image ratio')); ?></a></li>
+    <?php elseif ($type['resize_type'] != 'strict'): ?>
+        <li><a href="crop_image.php?id=<?php e($filemanager->get('id')); ?>&instance_type=<?php e($filemanager->instance->get('type')); ?>&unlock_ratio=1"><?php e($translation->get('unlock image ratio')); ?></a></li>
     <?php endif; ?>
 
 </ul>
