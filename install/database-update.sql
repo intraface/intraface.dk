@@ -17,3 +17,6 @@ ALTER TABLE `product_variation` ADD `deleted_at` TIMESTAMP NULL DEFAULT NULL;
 UPDATE `product_variation` SET deleted_at = NOW() WHERE deleted = 1;
 ALTER TABLE `product_variation` CHANGE `deleted` `_old_deleted` TINYINT( 1 ) NOT NULL DEFAULT '0';
 
+ALTER TABLE `module_package_action` ADD `identifier` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `intranet_id` ;
+
+ALTER TABLE `module_package_action` ADD UNIQUE ( `identifier` );
