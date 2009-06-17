@@ -12,6 +12,8 @@ if(!empty($_POST['pay'])) {
     $process = $payment_authorize->getPaymentProcess();
     $url = $process->process($_POST, $_SESSION);
     
+    // die($process->http_response_body);
+    
     header('location:'. $url);
     exit;
 }
@@ -22,8 +24,8 @@ $form = $payment_authorize->getForm(
     $_POST['currency'],
     $language,
     NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/index.php?status=success',
-    NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/payment.php?action_store_id='.$_POST['action_store_id'].'&payment_error=true',
-    NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/process.php?action_store_id='.$_POST['action_store_id'],
+    NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/payment.php?action_store_identifier='.$_POST['action_store_identifier'].'&payment_error=true',
+    NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/process.php?action_store_identifier='.$_POST['action_store_identifier'],
     $_GET,
     $_POST);
 

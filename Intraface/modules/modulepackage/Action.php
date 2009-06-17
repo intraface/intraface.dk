@@ -17,6 +17,18 @@ class Intraface_modules_modulepackage_Action
     private $action = array();
     
     /**
+     * 
+     * @var integer $intranet_id
+     */
+    private $intranet_id;
+    
+    /**
+     * 
+     * @var string $intranet_private_key
+     */
+    private $intranet_privte_key;
+    
+    /**
      * @var array;
      */
     private $basket = array();
@@ -216,6 +228,27 @@ class Intraface_modules_modulepackage_Action
         }
         
         return false;
+    }
+    
+    /**
+     * Set the intranet private key for the intranet of the action
+     * 
+     * @param $key the key of the intranet
+     * @return void
+     */
+    public function setIntranetPrivateKey($key) 
+    {
+        $this->intranet_private_key = $key;
+    }
+    
+    /**
+     * Returns the private key for the intranet
+     * 
+     * @return string intranet private key
+     */
+    public function getIntranetPrivateKey()
+    {
+        return $this->intranet_private_key;
     }
 }
 

@@ -74,8 +74,11 @@ if (!empty($_POST)) {
                 else {
                     $total_price = 0;
                 }
+                
+                // sets private key to be saved.
+                $action->setIntranetPrivateKey($kernel->intranet->get('private_key'));
                     
-                if (!$action_store_id = $action_store->store($action)) {
+                if (!$action_store_identifier = $action_store->store($action)) {
                     trigger_error("Unable to store Action!", E_USER_ERROR);
                     exit;
                 }
@@ -83,12 +86,12 @@ if (!empty($_POST)) {
                 // TODO: What do we do if the onlinepayment is not running?
                     
                 // Notice: Only if the price is more than zero we continue to the payment page, otherwise we contibue to the process page further down.
-                if (isset($action_store_id) && $action_store_id > 0 && $total_price > 0) {
-                    header('location: payment.php?action_store_id='.$action_store_id);
+                if (!empty($action_store_identifier) && $total_price > 0) {
+                    header('location: payment.php?action_store_identifier='.$action_store_identifier);
                     exit;
                 }
-                elseif (isset($action_store_id) && $action_store_id > 0) {
-                    header('location: process.php?action_store_id='.intval($action_store_id));
+                elseif (!empty($action_store_identifier)) {
+                    header('location: process.php?action_store_identifier='.$action_store_identifier);
                     exit;
                 }
                 else {

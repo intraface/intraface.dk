@@ -8,10 +8,10 @@ $module->includeFile('ShopExtension.php');
 $translation = $kernel->getTranslation('modulepackage');
 
 $action_store = new Intraface_modules_modulepackage_ActionStore($kernel->intranet->get('id'));
-$action = $action_store->restore((int)$_GET['action_store_id']);
+$action = $action_store->restore($_GET['action_store_identifier']);
 
 if (!is_object($action)) {
-    trigger_error("Problem restoring action from order_id ".$_GET['action_store_id'], E_USER_ERROR);
+    trigger_error("Problem restoring action from identifier ".$_GET['action_store_identifier'], E_USER_ERROR);
     exit;
 }
 
@@ -54,27 +54,18 @@ $page->start($translation->get('you are now ready to pay your order'));
             $order['default_currency'],
             $language,
             NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/index.php?status=success',
-            NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/payment.php?action_store_id='.$action_store->getId().'&payment_error=true',
-            NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/process.php',
+            NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/payment.php?action_store_identifier='.$action_store->getIdentifier().'&payment_error=true',
+            NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/process.php?action_store_identifier='.$action_store->getIdentifier(),
             NET_SCHEME.NET_HOST.NET_DIRECTORY.'payment/html/cci.php?language='.$language,
             $_GET,
             $_POST
         );
         
-        /*
-        $optional = array(
-            'action_store_id' => $action_store->getId(),
-            'intranet_public_key' => $kernel->intranet->get('public_key')
-            );
-        
-        $payment_prepare->setOptionalValues($optional);
-        */
-        
         ?>
         <form action="<?php if(!strpos($payment_prepare->getAction(), '/')):  e($payment_prepare->getAction().'/index.php'); else: e($payment_prepare->getAction()); endif; ?>" method="POST">
         
         <?php echo $payment_prepare->getHiddenFields(); ?>
-        <input type="hidden" name="action_store_id" value="<?php e($action_store->getId()); ?>" />
+        <input type="hidden" name="action_store_identifier" value="<?php e($action_store->getIdentifier()); ?>" />
         
         <input type="submit" name="submit" value="<?php e($translation->get('pay the order now')); ?>" />
         

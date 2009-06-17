@@ -236,13 +236,17 @@ class Intraface_modules_modulepackage_ShopExtension {
      *
      * @return integer Payment id.
      */
-    public function addPaymentToOrder($order_id, $payment)
+    public function addPaymentToOrder($order_identifier, $postprocess)
     {
-        settype($payment, 'array');
-        $payment['belong_to'] = 'order';
-        $payment['belong_to_id'] = $order_id;
-
-        return $this->onlinepayment->saveOnlinePayment($payment);
+        
+        return $this->onlinepayment->saveOnlinePayment(
+            $order_identifier, 
+            $postprocess->getTransactionNumber(),
+            $postprocess->getTransactionStatus(),
+            $postprocess->getPbsStatus(),
+            $postprocess->getAmount(),
+            $postprocess->getCurrency()
+        );
 
     }
     

@@ -25,6 +25,12 @@ class Intraface_modules_modulepackage_ActionStore {
     private $id;
     
     /**
+     * 
+     * @var string $identifier
+     */
+    private $identifier;
+    
+    /**
      * Constructor
      * 
      * @param integer intranet_id
@@ -55,8 +61,11 @@ class Intraface_modules_modulepackage_ActionStore {
         
         $action_serialized = serialize($action);
         
+        $identifier = md5($action->getOrderIdentifier().$this->intranet_id.time());
+        
         $result = $this->db->exec('INSERT INTO module_package_action SET ' .
                 'intranet_id = '.$this->db->quote($this->intranet_id, 'integer').', ' .
+                'identifier = '.$this->db->quote($identifier, 'text').', ' .
                 'order_debtor_identifier = '.$this->db->quote($action->getOrderIdentifier(), 'text').',  ' .
                 'date_created = NOW(), ' .
                 'action = '.$this->db->quote($action_serialized, 'text').', ' .
@@ -73,22 +82,22 @@ class Intraface_modules_modulepackage_ActionStore {
             exit;
         }
         $this->id = $id;
-        return $this->id;
+        return $identifier;
     }
     
     /**
-     * Restore an action on the basis of an earlier id.
+     * Restore an action on the basis of an earlier identifier.
      * 
-     * @param integer id
+     * @param string identifier
      * 
      * @return object Action
      */
-    public function restore($id) 
+    public function restore($identifier) 
     {
         
-        $result = $this->db->query('SELECT id, action FROM module_package_action WHERE ' .
+        $result = $this->db->query('SELECT id, action, identifier FROM module_package_action WHERE ' .
                 'intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' AND ' .
-                'id = '.$this->db->quote($id, 'integer').' AND ' .
+                'identifier = '.$this->db->quote($identifier, 'text').' AND ' .
                 'active = 1 ');
         
         if (PEAR::isError($result)) {
@@ -104,6 +113,40 @@ class Intraface_modules_modulepackage_ActionStore {
         
         if ($row['action'] != '') {
             $this->id = $row['id'];
+            $this->identifier = $row['identifier'];
+            require_once("Intraface/modules/modulepackage/Action.php");
+            return unserialize($row['action']);
+        }
+        return false;
+        
+    }
+    
+    /**
+     * Restore an action on the basis of an earlier identifier.
+     * 
+     * @param string identifier
+     * 
+     * @return object Action
+     */
+    static public function restoreFromIdentifier($db, $identifier) 
+    {
+        
+        $result = $db->query('SELECT id, action, identifier FROM module_package_action WHERE ' .
+                'identifier = '.$db->quote($identifier, 'text').' AND ' .
+                'active = 1 ');
+        
+        if (PEAR::isError($result)) {
+            trigger_error("Error in query in Intraface_modules_modulepackage_ActionStore::restoreFromIdentifier(): ".$result->getUserInfo(), E_USER_ERROR);
+            return false;
+        }
+        
+        if ($result->numRows() == 0) {
+            return false;
+        }
+        
+        $row = $result->fetchRow();
+        
+        if ($row['action'] != '') {
             require_once("Intraface/modules/modulepackage/Action.php");
             return unserialize($row['action']);
         }
@@ -143,6 +186,15 @@ class Intraface_modules_modulepackage_ActionStore {
      */ 
     public function getId() {
         return $this->id;
+    }
+    
+/**
+     * Returns the store identifier which is generated on store and restore.
+     * 
+     * @return string action store identifier
+     */ 
+    public function getIdentifier() {
+        return $this->identifier;
     }
 }
 
