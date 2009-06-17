@@ -237,8 +237,8 @@ $page->start($translation->get('Intranet'));
 
 <fieldset>
     <legend>Tilføj modulpakke</legend>
-    <?php if (!$kernel->intranet->hasModuleAccess('webshop')): ?>
-        This intranet needs to have access to webshop for modulepackage to work!
+    <?php if (!$kernel->intranet->hasModuleAccess('shop')): ?>
+        This intranet needs to have access to shop for modulepackage to work!
     <?php else: ?>
 
         <?php
