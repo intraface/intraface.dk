@@ -48,13 +48,13 @@ if (count($instances) > 0): ?>
                     <td><?php e($instance['max_height']); ?></td>
                     <td>
                       <?php
-                      echo '<a class="edit" href="edit_instance_type.php?type_key='.intval($instance['type_key']).'">'.e($translation->get('edit', 'common')).'</a> ';
+                      echo '<a class="edit" href="edit_instance_type.php?type_key='.intval($instance['type_key']).'">'.$translation->get('edit', 'common').'</a> ';
 
                       if ($instance['origin'] == 'overwritten') {
-                          echo '<a class="delete" href="settings.php?delete_instance_type_key='.intval($instance['type_key']).'">'.e($translation->get('reset to standard')).'</a>';
+                          echo '<a class="delete" href="settings.php?delete_instance_type_key='.intval($instance['type_key']).'">'.$translation->get('reset to standard').'</a>';
                       }
                       elseif ($instance['origin'] == 'custom') {
-                          echo '<a class="delete" href="settings.php?delete_instance_type_key='.intval($instance['type_key']).'">'.e($translation->get('delete', 'common')).'</a>';
+                          echo '<a class="delete" href="settings.php?delete_instance_type_key='.intval($instance['type_key']).'">'.$translation->get('delete', 'common').'</a>';
                       }
                       ?>
                     </td>
