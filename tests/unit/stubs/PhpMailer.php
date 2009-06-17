@@ -53,6 +53,21 @@ class FakePhpMailer {
         
     }
     
+    public function ClearReplyTos() 
+    {
+        
+    }
+    
+    public function ClearAllRecipients()
+    {
+        
+    }
+    
+    public function ClearAttachments()
+    {
+        
+    }
+    
     public function isSend()
     {
         return $this->is_send;
