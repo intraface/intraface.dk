@@ -114,12 +114,17 @@ class Product extends Intraface_Standard
         if ($this->dbquery) {
             return $this->dbquery;
         }
-
+        
+        $gateway = new Intraface_modules_product_Gateway($this->kernel);
+        return $this->dbquery = $gateway->getDBQuery();
+        
+        /*
         $this->dbquery = new Intraface_DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->intranet->getId());
         $this->dbquery->setJoin("LEFT", "product_detail detail", "detail.product_id = product.id", "detail.active = 1");
         //$this->dbquery->setFindCharacterFromField("detail.name");
         $this->dbquery->useErrorObject($this->error);
         return $this->dbquery;
+        */
     }
 
     /**
@@ -877,6 +882,7 @@ class Product extends Intraface_Standard
     function getList($which = 'all', $currencies = false)
     {
         $gateway = new Intraface_modules_product_Gateway($this->kernel);
+        $gateway->setDBQuery($this->getDBQuery());
         return $gateway->getAllProducts($which, $currencies);
 
         /*

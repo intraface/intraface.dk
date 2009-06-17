@@ -53,7 +53,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             $area = $mixed['area'];
         }
 
-        $product = new Product($this->webshop->kernel);
+        $product = new Intraface_modules_product_Gateway($this->webshop->kernel);
 
         if (!isset($mixed['use_paging']) || $mixed['use_paging'] == 'true') {
             $product->getDBQuery()->usePaging('paging');
@@ -107,7 +107,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         return $this->prepareResponseData(array(
             'parameter' => $mixed,
             //'debug2' => $debug2,
-            'products' => $this->cleanUpProductList($product->getList('webshop', $currencies)),
+            'products' => $this->cleanUpProductList($product->getAllProducts('webshop', $currencies)),
             'paging' => $product->getDBQuery()->getPaging(),
             'search' => array(),
         ));
@@ -388,12 +388,12 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $related_products = array();
 
         foreach ($all as $row) {
-            $product = new Product($this->kernel);
-            $product->getDBQuery()->setFilter('keywords', array($row['keyword_id']));
+            $product_gateway = new Intraface_modules_product_Gateway($this->kernel);
+            $product_gateway->getDBQuery()->setFilter('keywords', array($row['keyword_id']));
 
             $related_products[] = array(
                 'title' => $row['headline'],
-                'products' => $this->cleanUpProductList($product->getList('webshop', $currencies))
+                'products' => $this->cleanUpProductList($product_gateway->getAllProducts('webshop', $currencies))
             );
         }
 

@@ -66,6 +66,11 @@ class Intraface_modules_product_Gateway
         $this->dbquery->useErrorObject($this->error);
         return $this->dbquery;
     }
+    
+    public function setDBQuery($dbquery)
+    {
+        $this->dbquery = $dbquery;
+    }
 
     /**
      * Finds a product with an id
