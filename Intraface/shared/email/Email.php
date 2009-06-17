@@ -359,22 +359,16 @@ class Email extends Intraface_Standard
             $this->error->set('Der er i øjeblikket kø i e-mail-systemet. Vi sender så hurtigt som muligt.');
             return 1;
         }
-
-        /*
-         * Now comes as a parameter to the method
-        $phpmailer = new Phpmailer;
-        // opsætning
-        $phpmailer->Mailer   = 'mail'; // Alternative to IsSMTP()
-        $phpmailer->WordWrap = 75;
-        $phpmailer->setLanguage('en', 'phpmailer/language/');
-        // $phpmailer->ConfirmReadingTo = $this->kernel->intranet->address->get('email');
-        */
+        
+        // Make sure it is cleared from earlier use.
+        $phpmailer->ClearReplyTos(); 
+        $phpmailer->ClearAllRecipients();
+        $phpmailer->ClearAttachments();
         
         
         // Sender
         if ($this->get('from_email')) {
             $phpmailer->From = $this->get('from_email');
-            $phpmailer->Sender = $this->get('from_email');
             if ($this->get('from_name')) {
                 $phpmailer->FromName = $this->get('from_name');
             } else {
@@ -382,10 +376,10 @@ class Email extends Intraface_Standard
             }
         } else { // Standardafsender
             $phpmailer->From = $this->kernel->intranet->address->get('email');
-            $phpmailer->Sender = $this->kernel->intranet->address->get('email');
             $phpmailer->FromName = $this->kernel->intranet->address->get('name');
         }
         
+        $phpmailer->Sender = $phpmailer->From;
         $phpmailer->AddReplyTo($phpmailer->From);
 
         // Reciever
