@@ -45,6 +45,7 @@ class AllTests
                        'Onlinepayment',
                        'Procurement',
                        'Project',
+                       'Language',
                        //'XMLRPC',
                        'Auth',
                        'Currency'
