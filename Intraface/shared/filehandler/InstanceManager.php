@@ -309,7 +309,7 @@ class InstanceManager
         $s = 0; // index for standard_types
         $c = 0; // index for custom_types;
         
-        while(isset($standard_types[$s]) || isset($custom_types[$c])) {
+        while (isset($standard_types[$s]) || isset($custom_types[$c])) {
             
             if (isset($standard_types[$s])) {
                 if ($standard_types[$s]['hidden'] && $show == 'visible') {
