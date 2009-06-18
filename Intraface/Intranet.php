@@ -108,7 +108,7 @@ class Intraface_Intranet extends Intraface_Standard
         if (is_string($module)) {
             if (empty($this->modules)) {
                 $result = $this->db->query("SELECT id, name FROM module WHERE active = 1");
-                while($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+                while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
                     $this->modules[$row['name']] = $row['id'];
                 }
                 $result->free();
