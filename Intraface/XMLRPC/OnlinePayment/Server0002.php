@@ -40,7 +40,7 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
         $onlinepayment->getDBQuery()->setFilter('status', 2);
 
         $parameter['payment_online'] = 0;
-        foreach ($onlinepayment->getlist() AS $p) {
+        foreach ($onlinepayment->getlist() as $p) {
             $parameter['payment_online'] += $p["amount"];
         }
 
@@ -144,13 +144,11 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
 
             $settings = Doctrine::getTable('Intraface_modules_onlinepayment_Language')->findOneByIntranetId($kernel->intranet->getId());
 
-            $subject = $settings->getConfirmationEmailSubject($shop->getLanguage());
-            $body = $settings->getConfirmationEmailBody($shop->getLanguage());
+            $subject = $settings->getConfirmationEmailSubject($shop->getLanguage()) . ' (#' . $payment_id . ')';
+            $body = $settings->getConfirmationEmailBody($shop->getLanguage()) . "\n\n" . $this->kernel->intranet->address->get('name');
 
         } catch (Exception $e) {
-
         }
-
 
         if (empty($subject)) {
             $subject = 'Payment confirmation / betalingsbekræftelse (#' . $payment_id . ')';
@@ -161,7 +159,6 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
             $body   .= 'Vi har modtaget din betaling for ordre #' .$debtor->getId(). '.';
             $body   .= "\n\nYours sincerely / Venlig hilsen\n".  $this->kernel->intranet->address->get('name');
         }
-
 
         $data = array('contact_id' => $debtor->getContact()->getId(),
                       'subject'    => $subject,
@@ -184,8 +181,6 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
 
         return true;
     }
-
-
 
     /**
      * Returns an onlinepayment id to be processed to the id can be used in payment
@@ -214,7 +209,6 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
      */
     private function onlinePaymentFactory($id = 0)
     {
-
         if (!$this->kernel->intranet->hasModuleAccess('onlinepayment')) {
             throw new XML_RPC2_FaultException('The intranet did not have access to OnlinePayment', -4);
         }
