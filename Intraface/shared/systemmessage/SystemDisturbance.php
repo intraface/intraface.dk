@@ -138,7 +138,7 @@ class SystemDisturbance extends Intraface_Standard
         }
 
         $db->query("SELECT id, user_name, important, description, DATE_FORMAT(from_date_time, '%d-%m-%Y %H:%i') AS dk_from_date_time, DATE_FORMAT(to_date_time, '%d-%m-%Y %H:%i') AS dk_to_date_time FROM systemmessage_disturbance WHERE active = 1 ".$sql." ORDER BY from_date_time DESC");
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
 
             $value[$i]['id'] = $db->f('id');
             $value[$i]['dk_from_date_time'] = $db->f('dk_from_date_time');
