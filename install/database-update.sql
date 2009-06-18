@@ -20,3 +20,17 @@ ALTER TABLE `product_variation` CHANGE `deleted` `_old_deleted` TINYINT( 1 ) NOT
 ALTER TABLE `module_package_action` ADD `identifier` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `intranet_id` ;
 
 ALTER TABLE `module_package_action` ADD UNIQUE ( `identifier` );
+
+
+CREATE TABLE IF NOT EXISTS `onlinepayment_settings` (
+  `id` int(11) NOT NULL auto_increment,
+  `intranet_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+CREATE TABLE IF NOT EXISTS `intraface_modules_onlinepayment__language_translation` (
+  `id` int(11) NOT NULL auto_increment,
+  `email` text,
+  `lang` varchar(20) default NULL,
+  `subject` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
