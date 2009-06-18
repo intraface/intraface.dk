@@ -6,21 +6,27 @@ $implemented_providers = $onlinepayment_module->getSetting('implemented_provider
 
 $onlinepayment = OnlinePayment::factory($kernel);
 $language = new Intraface_modules_language_Languages;
-$settings = Doctrine::getTable('Intraface_modules_onlinepayment_Language')->findByIntranetId($kernel->intranet->getId());
-$settings = $settings[0];
+$settings = Doctrine::getTable('Intraface_modules_onlinepayment_Language')->findOneByIntranetId($kernel->intranet->getId());
+
+if (!$settings) {
+	$settings = new Intraface_modules_onlinepayment_Language;
+    $settings->save();
+}
 
 if (!empty($_POST)) {
 
     $settings->Translation['da']->email = $_POST['email']['da'];
     $settings->Translation['da']->subject = $_POST['subject']['da'];
+
     foreach ($language->getChosenAsArray() as $lang) {
         $settings->Translation[$lang->getIsoCode()]->email = $_POST['email'][$lang->getIsoCode()];
         $settings->Translation[$lang->getIsoCode()]->subject = $_POST['subject'][$lang->getIsoCode()];
     }
-    //$settings->save();
+
+    $settings->save();
 
 	if ($onlinepayment->setSettings($_POST)) {
-		header('Location: index.php');
+		header('Location: ' . $_SERVER['PHP_SELF']);
 		exit;
 	} else {
 		$value = $_POST;
