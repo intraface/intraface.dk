@@ -148,12 +148,14 @@ class Webshop
             $input['ean'] = $input['customer_ean'];
         }
 
-        // opdaterer kontakten
-        if (!$contact_id = $this->contact->save($input)) {
-            $this->error->merge($this->contact->getError()->getMessage());
-            return false;
-        }
 
+        if (!isset($input['contact_id'])) {
+            // opdaterer kontakten
+            if (!$contact_id = $this->contact->save($input)) {
+                $this->error->merge($this->contact->getError()->getMessage());
+                return false;
+            }
+        }
 
         // we update/add the contactperson.
         if (isset($input['type']) && $input['type'] == 'corporation') { // firma
@@ -244,7 +246,7 @@ class Webshop
         if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
-        
+
         if (!$order_id = $this->createOrder($input)) {
             $this->error->set('unable to create the order');
             return false;
@@ -299,7 +301,7 @@ class Webshop
         if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
-        
+
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
