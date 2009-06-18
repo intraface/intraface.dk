@@ -88,7 +88,7 @@ class Intraface_Page
             $this->menu[$i]['url'] = url('/main/');
             $i++;
             $this->db->query("SELECT name, menu_label, name FROM module WHERE active = 1 AND show_menu = 1 ORDER BY menu_index");
-            while($this->db->nextRecord()) {
+            while ($this->db->nextRecord()) {
 
                 if ($this->kernel->user->hasModuleAccess($this->db->f('name'))) {
                     $this->menu[$i]['name'] = $this->kernel->translation->get($this->db->f('name'), $this->db->f('name'));
