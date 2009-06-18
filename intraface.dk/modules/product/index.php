@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module('product');
 $translation = $kernel->getTranslation('product');
@@ -119,7 +119,7 @@ $page->start(t('products'));
         <p><?php e(t('no products in search')); ?>.</p>
     <?php else: ?>
 
-    <table summary="Produkter" id="product_table" class="stripe">
+    <table summary="<?php e(t('products')); ?>" id="product_table" class="stripe">
         <caption><?php e(t('products')); ?></caption>
         <thead>
             <tr>
@@ -146,19 +146,24 @@ $page->start(t('products'));
             </tr>
         </tfoot>
         <tbody>
-            <?php foreach ($products AS $p) { ?>
+            <?php foreach ($products as $p) { ?>
             <tr>
                 <td>
                     <input type="checkbox" id="product-<?php e($p['id']); ?>" value="<?php e($p['id']); ?>" name="selected[]" />
                 </td>
 
                 <td><?php e($p['number']); ?></td>
-                <td><?php if ($p['has_variation']) echo '<img class="variation" src="/images/icons/silk/table_multiple.png" title="'.t('The product has variations').'"/> '; ?><a href="product.php?id=<?php e($p['id']); ?>"><?php e($p['name']); ?></a></td>
+                <td>
+                    <?php if ($p['has_variation']): ?>
+                        <img class="variation" src="<?php e(url('/images/icons/silk/table_multiple.png')); ?>" title="<?php e(t('The product has variations')); ?>"/>
+                    <?php endif; ?>
+                    <a href="product.php?id=<?php e($p['id']); ?>"><?php e($p['name']); ?></a>
+                </td>
                 <td><?php e(t($p['unit']['combined'])); ?></td>
-                 <?php if ($kernel->user->hasModuleAccess("webshop")) { ?>
-              <td><?php if ($p['do_show'] == 1) e(t('yes', 'common')); else e(t('no', 'common')); ?></td>
-                <?php } ?>
-                <?php if ($kernel->user->hasModuleAccess("stock")) { ?>
+                <?php if ($kernel->user->hasModuleAccess("webshop")): ?>
+                    <td><?php if ($p['do_show'] == 1) e(t('yes', 'common')); else e(t('no', 'common')); ?></td>
+                <?php endif; ?>
+                <?php if ($kernel->user->hasModuleAccess('stock')) { ?>
                     <td>
                         <?php
                         if ($p['stock'] == 0) {
@@ -166,7 +171,9 @@ $page->start(t('products'));
                         } elseif ($p['has_variation']) {
                             e('...');
                         } else {
-                            if (!empty($p['stock_status']['for_sale'])) e($p['stock_status']['for_sale']);
+                            if (!empty($p['stock_status']['for_sale'])) {
+                                e($p['stock_status']['for_sale']);
+                            }
                         }
                         ?>
                     </td>
