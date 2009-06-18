@@ -89,14 +89,19 @@ class Intraface_modules_cms_section_Longtext extends CMS_Section
 
         $this->allowed_tags[] = 'p';
 
+        /* HACK TO MAKE THINGS WORK
         $config->set('HTML', 'AllowedElements', $this->allowed_tags);
         if (in_array('a', $this->allowed_tags)) {
             $config->set('HTML', 'AllowedAttributes', array('a.href'));
         }
+        */
 
         // starting purifier
         $purifier = new HTMLPurifier($config);
         $clean_text = $purifier->purify($var['text']);
+
+        // HACK
+        $clean_text = $var['text'];
 
         // should probably purify instead of strip_tags
         $this->addParameter('saved_with', $this->kernel->setting->get('user', 'htmleditor'));
