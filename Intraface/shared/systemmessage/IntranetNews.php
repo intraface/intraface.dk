@@ -86,7 +86,7 @@ class IntranetNews extends Intraface_Standard
         $i = 0;
 
         $db->query("SELECT id, user_name, area, description, DATE_FORMAT(date_created, '%d-%m-%Y %H:%i') AS dk_date_time FROM systemmessage_news WHERE active = 1 AND date_created > \"".$to_date."\" ORDER BY date_created DESC");
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
 
             $value[$i]['id'] = $db->f('id');
             $value[$i]['dk_date_time'] = $db->f('dk_date_time');
