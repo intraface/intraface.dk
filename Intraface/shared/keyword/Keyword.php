@@ -609,7 +609,7 @@ class Intraface_Keyword_StringAppender
                 //Each string has extraneous delimiters around it (inc the ones we added above), so they need to be stripped off
                 $temparray = split($splitter, substr($val, $delimlen, strlen($val)-$delimlen-$delimlen ) );
 
-                while(list($iarg, $ival) = each($temparray)) {
+                while (list($iarg, $ival) = each($temparray)) {
                     if (!empty($ival)) $result[] = trim($ival);
                 }
                 $instring = 1;
