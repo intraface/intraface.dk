@@ -128,7 +128,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
     {
         $search = array();
         $search['area'] = 'category_'.$category_id;
-        if($results_per_page > 0) {
+        if ($results_per_page > 0) {
             $search['use_paging'] = 'true';
         }
         $search['category'] = $category_id;
@@ -152,12 +152,12 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
     {
 
         $search = array();
-        if(is_array($keyword)) {
+        if (is_array($keyword)) {
             $search['area'] = 'keyword_'.implode('-', $keyword);
         } else {
             $search['area'] = 'keyword_'.$keyword;
         }
-        if($results_per_page > 0) {
+        if ($results_per_page > 0) {
             $search['use_paging'] = 'true';
         }
         $search['keywords'] = $keyword;
@@ -901,7 +901,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             }
         }
 
-        if(false !== ($default_currency = $this->webshop->getShop()->getDefaultCurrency($currency_gateway))) {
+        if (false !== ($default_currency = $this->webshop->getShop()->getDefaultCurrency($currency_gateway))) {
             $currency['default'] = $default_currency->getType()->getIsoCode();
         }
 
