@@ -381,7 +381,7 @@ class InstanceHandler extends Intraface_Standard
         $type = $this->checkType($instance, $compare);        
         $db = new DB_sql;
         $db->query("SELECT id FROM file_handler_instance WHERE intranet_id = ".$this->file_handler->kernel->intranet->get('id')." AND type_key = ".intval($type['type_key'])." AND active = 1");
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
             $instance = new InstanceHandler($this->file_handler, $db->f('id'));
             $instance->delete();
         }
