@@ -167,7 +167,7 @@ class Intraface_User extends Intraface_Standard
             return false;
         }
 
-        while($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+        while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             $this->permissions['intranet']['module'][$row['module_id']] = true;
             $this->permissions['user']['module'][$row['module_id']] = true;
             $this->permissions['user']['intranet'][$row['intranet_id']] = true;
@@ -192,7 +192,7 @@ class Intraface_User extends Intraface_Standard
                 trigger_error($result->getUserInfo(), E_USER_ERROR);
             }
 
-            while($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+            while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
                 $this->modules[$row['name']] = $row['id'];
             }
         }
@@ -338,7 +338,7 @@ class Intraface_User extends Intraface_Standard
             if (PEAR::isError($result)) {
                 trigger_error($result->getUserInfo(), E_USER_ERROR);
             }
-            while($row = $result->fetchRow()) {
+            while ($row = $result->fetchRow()) {
                 $this->permissions['intranet']['module'][$row['id']];
             }
         }
