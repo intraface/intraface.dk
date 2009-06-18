@@ -172,7 +172,7 @@ class Intraface_Setting
     {
         $this->settings = array();
         $this->db->query("SELECT setting, value, sub_id, user_id FROM setting WHERE intranet_id = " . $this->db->quote($this->intranet_id, 'integer')." AND (user_id = ".$this->db->quote($this->user_id, 'integer')." OR user_id = 0)");
-        while($this->db->nextRecord()) {
+        while ($this->db->nextRecord()) {
             $this->settings[$this->intranet_id][$this->db->f('user_id')][$this->db->f('setting')][$this->db->f('sub_id')] = $this->db->f('value');
         }
         $this->is_loaded = true;
@@ -206,7 +206,7 @@ class Intraface_Setting
         }
 
         if ($this->checkSystem($setting) && $this->checkType($type)) {
-            switch($type) {
+            switch ($type) {
                 case 'user':
                     if ($this->checkLogin()) {
                         // hvis der ikke er nogen intranet-indstillinger på posten vil den stadig
@@ -215,7 +215,7 @@ class Intraface_Setting
                         if (!isset($this->settings['user'])) {
                             $this->settings['user'] = array();
                             $this->db->query("SELECT setting, value, sub_id FROM setting WHERE intranet_id = ".$this->intranet_id." AND user_id = ".$this->user_id);
-                            while($this->db->nextRecord()) {
+                            while ($this->db->nextRecord()) {
                                 $this->settings['user'][$this->db->f('setting')][$this->db->f('sub_id')] = $this->db->f('value');
                             }
 
@@ -236,7 +236,7 @@ class Intraface_Setting
                         $this->settings['intranet'] = array();
                         $this->db->query("SELECT setting, value, sub_id FROM setting WHERE intranet_id = ".$this->intranet_id." AND user_id = 0");
 
-                        while($this->db->nextRecord()) {
+                        while ($this->db->nextRecord()) {
                             $this->settings['intranet'][$this->db->f('setting')][intval($this->db->f('sub_id'))] = $this->db->f('value');
                         }
 
