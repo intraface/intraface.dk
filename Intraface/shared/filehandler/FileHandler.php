@@ -443,7 +443,7 @@ class FileHandler extends Intraface_Standard
             }
             $i++;
             $db->query("SELECT id FROM file_handler WHERE access_key = '".$access_key."'");
-        } while($db->nextRecord());
+        } while ($db->nextRecord());
 
         $file_size = filesize($file);
 
