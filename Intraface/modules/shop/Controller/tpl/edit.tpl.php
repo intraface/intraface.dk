@@ -1,5 +1,3 @@
-<h1><?php e('Edit'); ?></h1>
-
 <form action="<?php e(url(null)); ?>" method="post">
     <fieldset>
         <div class="formrow">
