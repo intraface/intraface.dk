@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
 
-class Language_Test extends PHPUnit_Framework_TestCase
+class LanguageTest extends PHPUnit_Framework_TestCase
 {
     function testLanguageSave()
     {

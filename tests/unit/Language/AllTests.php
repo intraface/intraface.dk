@@ -8,7 +8,7 @@ class Language_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Intraface_Product');
 
-        $tests = array('Language_');
+        $tests = array('Language');
 
         foreach ($tests as $test) {
             require_once $test . 'Test.php';
