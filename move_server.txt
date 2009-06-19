@@ -1,0 +1,6 @@
+Login to old server
+rsync -avz -e ssh intrafac@dev.intraface.dk:/home/intrafac/upload/ /home/intraface/upload/
+
+Eksportere mysql
+
+ 
