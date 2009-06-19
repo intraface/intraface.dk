@@ -2,21 +2,21 @@
 
 //
 $list_id = 24; /* 23: UK, 24: DK */
-
+$language = 'dk';
 // The html file
-$newsletter_html = 'nyhedsbrev-dk.htm'; /* NB: language */
+$newsletter_html = 'newsletter-nyhedsbrev-'.$language.'.htm'; /* NB: language */
 
 // The files that should be attachecd
 $files = array(
     'imgstrip1.jpg',
     'imgstrip2.jpg',
     'partyhearts.jpg',
-    'newsletter-bg-dk.jpg', /* NB: language */
+    'newsletter-bg-'.$language.'.jpg',
+    'newsletter-header-'.$language.'.jpg', /* NB: language */
 );
 
 // The subject
 $subject = 'carmakoma news';
-
 
 ini_set('max_execution_time', 1200); // 20 min
 require_once '../../../include_first.php';
@@ -61,10 +61,10 @@ $contacts = $subscriber->getList();
 // For testing;
 
 $contacts = array();
-// $contacts[] = array('contact_email' => 'lsolesen@gmail.com');
-// $contacts[] = array('contact_email' => 'lars@legestue.net');
-$contacts[] = array('contact_email' => 'sj@sunet.dk');
-$contacts[] = array('contact_email' => 'admin@nylivsstil.dk');
+$contacts[] = array('contact_email' => 'lsolesen@gmail.com');
+$contacts[] = array('contact_email' => 'lars@legestue.net');
+//$contacts[] = array('contact_email' => 'sj@sunet.dk');
+//$contacts[] = array('contact_email' => 'admin@nylivsstil.dk');
 
 
 echo 'List: '.$list->get('title')."<br />";

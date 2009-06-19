@@ -3,7 +3,7 @@ ini_set('max_execution_time', 1200); // 20 min
 require_once '../../../include_first.php';
 
 // NOTICE IF INTRANET_ID IS CORRECT. 34 = carmakoma
-if($kernel->intranet->getId() != 34) {
+if ($kernel->intranet->getId() != 34) {
     die('Invalid intranet');
 }
 
@@ -52,7 +52,7 @@ $date = date('YmdHis');
 
 $i = 0;
 
-if(!isset($_GET['send'])) {
+if (!isset($_GET['send'])) {
     die('Du er nu klar til at sende. <a href="'.$_SERVER['PHP_SELF'].'?send=true">Klik her</a>');
 }
 

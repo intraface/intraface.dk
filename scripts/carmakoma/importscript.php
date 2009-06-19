@@ -18,7 +18,7 @@ $list_dk = new NewsletterList($kernel, 24);
 $subscriber_dk = new NewsletterSubscriber($list_dk);
 $subscribers_dk = $subscriber_dk->getList();
 $emails_dk = array();
-foreach($subscribers_dk AS $s_dk) {
+foreach ($subscribers_dk as $s_dk) {
     $emails_dk[] = $s_dk['contact_email'];
 }
 
@@ -40,7 +40,7 @@ $contacts = $contact->getList();
 
 echo 'Contacts: '.count($contacts)."<br />";
 
-foreach($contacts AS $c) {
+foreach ($contacts as $c) {
     
     $unique_contacts[$c['email']] = 1;
     
