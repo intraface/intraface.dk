@@ -3,7 +3,7 @@ require_once 'Doctrine/lib/Doctrine.php';
 spl_autoload_register(array('Doctrine', 'autoload'));
 require 'Ilib/ClassLoader.php';
 
-$conn = Doctrine_Manager::connection('mysql://root:klani@localhost/intraface');    
+$conn = Doctrine_Manager::connection('mysql://root:klani@localhost/intraface');
 Doctrine_Manager::getInstance()->setAttribute("model_loading", "conservative");
 
 $item = new Model_Product;
@@ -16,6 +16,7 @@ $item->save();
 echo $item->version;
 
 $item->name = 'Version 2';
+$item->price = 2;
 
 $item->save();
 
@@ -23,7 +24,7 @@ echo $item->version;
 
 
 $item->name = 'Version 3';
-
+$item->price = 3;
 $item->save();
 
 echo $item->version;
@@ -33,7 +34,9 @@ echo $item->version;
 $reopened = Doctrine::getTable('Model_Product')->findOneById($item->id);
 echo $reopened->name;
 echo $reopened->Translation['DK']->description;
+echo $reopened->version;
 $log = $reopened->getAuditLog();
-$version1 =  $log->getVersion($item, 2);
+$version1 =  $log->getVersion($item, 3);
+echo '<br>';
 print_r($version1);
 
