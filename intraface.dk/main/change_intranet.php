@@ -20,7 +20,7 @@ if (isset($_GET["id"]) && $kernel->user->hasIntranetAccess($_GET['id'])) {
 $db = new DB_Sql;
 $db->query("SELECT * FROM intranet ORDER BY name");
 $accessible_intranets = array();
-while($db->nextRecord()) {
+while ($db->nextRecord()) {
     if (!$kernel->user->hasIntranetAccess($db->f("id"))) {
         continue;
     }
