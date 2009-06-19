@@ -23,7 +23,7 @@ class Intraface_Tools_Controller_ErrorLog_RSS extends k_Controller
 
         $items = $errorlist->get();
 
-        if(is_array($items) && count($items) > 0) {
+        if (is_array($items) && count($items) > 0) {
             foreach ($items as $line) {
                 $output .= "
                         <item>

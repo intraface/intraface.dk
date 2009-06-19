@@ -14,7 +14,7 @@ $runs = 100;
 $time = 0;
 $url = 'http://devel.intraface.dk/test/stresstest.php';
 
-for($i = 0; $i < $runs; $i++) {
+for ($i = 0; $i < $runs; $i++) {
 	
 	$ch = curl_init();
 	$timeout = 5; // set to zero for no timeout

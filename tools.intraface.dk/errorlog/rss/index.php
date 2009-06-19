@@ -4,7 +4,7 @@ require('../ErrorList.php');
 
 $errorlist = new ErrorList;
 
-if(!isset($_GET['code']) || $_GET['code'] != 'intrafaceerrorrssfeedisprotected') {
+if (!isset($_GET['code']) || $_GET['code'] != 'intrafaceerrorrssfeedisprotected') {
     
 }
 
@@ -26,7 +26,7 @@ $output = "<?xml version=\"1.0\"?>
 
 $items = $errorlist->get();
 
-if(is_array($items) && count($items) > 0) {
+if (is_array($items) && count($items) > 0) {
     foreach ($items as $line) {
         $output .= "
             <item>

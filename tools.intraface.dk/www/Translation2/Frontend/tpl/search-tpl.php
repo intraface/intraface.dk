@@ -6,9 +6,9 @@
 
 
 <?php
-if(isset($this->GET['search']) && $this->GET['search'] != '') {
+if (isset($this->GET['search']) && $this->GET['search'] != '') {
     $db->query("SELECT * FROM core_translation_i18n WHERE id LIKE \"%".$this->GET['search']."%\"");
-    if($db->numRows() > 0) {
+    if ($db->numRows() > 0) {
         ?>
         <table>
             <caption>Søgeresultat</caption>

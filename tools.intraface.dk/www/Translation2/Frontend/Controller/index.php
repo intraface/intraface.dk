@@ -11,9 +11,9 @@ class Translation2_Frontend_Controller_Index extends k_Controller
         $id = 0;
         $overwrite = 0;
 
-        if(isset($this->GET['edit_id']) && isset($this->GET['page_id'])) {
+        if (isset($this->GET['edit_id']) && isset($this->GET['page_id'])) {
             $db->query("SELECT * FROM core_translation_i18n WHERE id = \"".safeToDb(urldecode($this->GET['edit_id']))."\" AND page_id = \"".safeToDb(urldecode($this->GET['page_id']))."\"");
-            if($db->nextRecord()) {
+            if ($db->nextRecord()) {
                 $id = $db->f('id');
                 $page_id = $db->f('page_id');
                 $dk = $db->f('dk');
@@ -43,31 +43,31 @@ class Translation2_Frontend_Controller_Index extends k_Controller
         $dk = mysql_escape_string(trim($this->POST['dk']));
         $uk = mysql_escape_string(trim($this->POST['uk']));
 
-        if($id == '') {
+        if ($id == '') {
             $message[] = 'Identifier er ikke udfyldt';
         }
 
-        if($page_id == '' && $new_page_id == '') {
+        if ($page_id == '' && $new_page_id == '') {
             $message[] = 'Der er ikke angivet et PageId';
         }
 
-        if($dk == '') {
+        if ($dk == '') {
             $message[] = 'DK er ikke udfyldt';
         }
 
-        if($uk == '') {
+        if ($uk == '') {
             $message[] = 'UK er ikke udfyldt';
         }
 
-        if(count($message) == 0) {
+        if (count($message) == 0) {
 
-            if($new_page_id != '') {
+            if ($new_page_id != '') {
                 $page_id = $new_page_id;
             }
 
             $exists = array();
             $db->query("SELECT * FROM core_translation_i18n WHERE (page_id = \"".$page_id."\" OR page_id = 'common') AND id = \"".$id."\"");
-            if($db->numRows() > 0 && $_POST['overwrite'] != '1') {
+            if ($db->numRows() > 0 && $_POST['overwrite'] != '1') {
                 $message[] = "Den indtastede identifier eksisterer allerede.<br />Hvis det er under samme page_id vil den blive overskrevet. Hvis det er under 'Common' vil den blive oprettet.";
                 $overwrite = 1;
 
@@ -79,9 +79,9 @@ class Translation2_Frontend_Controller_Index extends k_Controller
                 }
             }
 
-            if(count($message) == 0) {
+            if (count($message) == 0) {
                 $db->query("SELECT id, page_id FROM core_translation_i18n WHERE page_id = \"".$page_id."\" AND id = \"".$id."\"");
-                if($db->nextRecord()) {
+                if ($db->nextRecord()) {
                     $id = $db->f('id');
                     $db->query("UPDATE core_translation_i18n SET dk = \"".$dk."\", uk = \"".$uk."\" WHERE page_id = \"".$page_id."\" AND id = \"".$id."\"");
                     $success['text'] = "F�lgende translation er opdateret";

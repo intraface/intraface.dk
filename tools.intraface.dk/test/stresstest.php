@@ -27,7 +27,7 @@ $j = 0;
 $db = new DB_Sql;
 
 $time = getmicrotime2();
-for($i = 1; $i < 100000; $i += 2) {
+for ($i = 1; $i < 100000; $i += 2) {
 
 	$db->query("SELECT some_value, some_id, id, some_text FROM _sune_test WHERE id = ".$i."");
 	$db->nextRecord();
@@ -44,7 +44,7 @@ echo "<br />After sql with i++".round(getmicrotime2()-$time,4);
 
 
 $time = getmicrotime2();
-for($i = 1; $i < 100000; $i += 2) {
+for ($i = 1; $i < 100000; $i += 2) {
 
 	$db->query("SELECT some_value, some_id, id, some_text FROM _sune_test WHERE id = ".$i."");
 	$db->nextRecord();
@@ -65,7 +65,7 @@ while($db->nextRecord()) {
 	$j++;
 }
 
-for($i = 1; $i < 100000; $i += 2) {
+for ($i = 1; $i < 100000; $i += 2) {
 	//print($array[$i][md5($i)]); // [md5($i)]
 }
 
