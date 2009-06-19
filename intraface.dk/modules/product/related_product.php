@@ -7,10 +7,8 @@ if (empty($_REQUEST['id']) OR !is_numeric($_REQUEST['id'])) {
 
 $module = $kernel->module("product");
 
-// hente liste med produkter - bør hentes med getList!
-
 if (!empty($_POST['product'])) {
-    foreach ($_POST['product'] AS $key=>$value) {
+    foreach ($_POST['product'] as $key=>$value) {
         $product = new Product($kernel, $_POST['id']);
         if (!empty($_POST['relate'][$key]) AND $product->setRelatedProduct($_POST['product'][$key], $_POST['relate'][$key])) {
         }
@@ -113,7 +111,7 @@ echo $product->getDBQuery()->display('character');
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($list AS $p) { ?>
+            <?php foreach ($list as $p) { ?>
             <tr>
                 <td>
                     <input type="hidden" name="product[<?php e($p['id']); ?>]" value="<?php e($p['id']); ?>" />
