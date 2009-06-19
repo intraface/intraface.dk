@@ -1,12 +1,9 @@
 <?php
-require('/home/intraface/intraface.dk/config.local.php');
+require('config.local.php');
+require('common.php');
 
-require_once 'Intraface/Kernel.php';
-require_once 'Intraface/Intranet.php';
-require_once 'Intraface/User.php';
-require_once 'Intraface/Setting.php';
+set_include_path(PATH_INCLUDE_PATH);
 
-error_reporting(E_ALL);
 
 class ElevforeningenIntranet extends Intraface_Intranet
 {
@@ -68,8 +65,7 @@ $list = new ElevforeningenNewsletterList($kernel);
 $subscriber = new NewsletterSubscriber($list);
 
 $contact = new Contact($kernel);
-$contact->createDBQuery();
-$contact->dbquery->setFilter('search', '');
+$contact->getDBQuery()->setFilter('search', '');
 $contacts = $contact->getList();
 $i = 0;
 foreach ($contacts as $contact) {
