@@ -16,9 +16,9 @@ if (!empty($_GET['add'])) {
 	exit;
 }
 
-if(!empty($_GET['return_redirect_id'])) {
+if (!empty($_GET['return_redirect_id'])) {
     $return_redirect = Intraface_Redirect::factory($kernel, 'return');
-    if($return_redirect->getParameter('contact_id') != 0) {
+    if ($return_redirect->getParameter('contact_id') != 0) {
         $redirect->setParameter('contact_id', $return_redirect->getParameter('contact_id'));
         header("Location: ".$redirect->getRedirect('index.php'));
         exit;
