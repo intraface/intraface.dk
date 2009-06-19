@@ -23,7 +23,7 @@ class FakeShopShop
     {
         return 1;
     }
-    
+
     function getConfirmationSubject() {
         return 'confirmation subject';
     }
@@ -53,7 +53,7 @@ class FakeShopShop
     {
         return true;
     }
-    
+
 }
 
 class FakeShopWeblogin {
@@ -73,6 +73,7 @@ class ShopTest extends PHPUnit_Framework_TestCase
 {
     private $webshop;
     private $kernel;
+    protected $backupGlobals = FALSE;
 
     function setUp()
     {
@@ -107,19 +108,19 @@ class ShopTest extends PHPUnit_Framework_TestCase
         $order_id = $this->webshop->placeOrder($data, $mailer);
         $this->assertTrue($order_id > 0);
         $this->assertTrue($mailer->isSend(), 'Mail is not send');
-        
+
         $basket = $this->webshop->getBasket();
         $this->assertTrue(count($basket->getItems()) == 0);
     }
 
     function testPlaceOrderWithWithCurrency()
     {
-        
+
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'currency' => 'EUR');
         $mailer = new FakePhpMailer;
         $order_id = $this->webshop->placeOrder($data, $mailer);
         $this->assertTrue($order_id > 0);
-        
+
         $order = new Order($this->kernel, $order_id);
         $this->assertEquals('Intraface_modules_currency_Currency', get_class($order->getCurrency()));
     }
@@ -148,4 +149,10 @@ class ShopTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($mailer->isSend(), 'Mail is not send');
     }
 
+    function testSaveShop()
+    {
+        $shop = new Intraface_modules_shop_Shop();
+        $shop->name = 'Øer er noget værre noget';
+        $shop->save();
+    }
 }

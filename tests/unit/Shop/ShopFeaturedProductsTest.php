@@ -20,6 +20,7 @@ class FakeShopFeaturedProductsKeyword
 class ShopFeaturedProductsTest extends PHPUnit_Framework_TestCase
 {
     private $featured;
+    protected $backupGlobals = FALSE;
 
     function setUp()
     {

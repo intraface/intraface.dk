@@ -42,6 +42,7 @@ class FakeShopEvaluationWebshop {
 
 class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
 {
+    protected $backupGlobals = FALSE;
 
     function setUp()
     {
@@ -78,9 +79,9 @@ class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
         $kernel = $this->createKernel();
         $webshop = new FakeShopEvaluationWebshop();
         $webshop->kernel = $kernel;
-        
-        return new Intraface_modules_shop_Basket(MDB2::singleton(DB_DSN), 
-            new FakeShopEvaluationIntranet, 
+
+        return new Intraface_modules_shop_Basket(MDB2::singleton(DB_DSN),
+            new FakeShopEvaluationIntranet,
             new FakeShopEvaluationCoordinator($this->createKernel()),
             new FakeShopEvaluationShop, 'some session');
     }

@@ -41,7 +41,7 @@ class FakeShopBasketUser
     {
         return 1;
     }
-    function getActiveIntranetId() { 
+    function getActiveIntranetId() {
         return 1;
     }
 
@@ -63,8 +63,8 @@ class FakeShopBasketWebshop
 
 class ShopBasketTest extends PHPUnit_Framework_TestCase
 {
-
     private $product;
+    protected $backupGlobals = FALSE;
 
     function setUp()
     {
@@ -74,15 +74,15 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $this->kernel = $kernel;
         $this->product = new Product($kernel);
         $this->product->save(array('name' => 'test', 'price' => 200, 'weight' => 200));
-        
-        
+
+
     }
 
     function tearDown() {
         $this->product->delete();
     }
-    
-    function createProductWithVariations() 
+
+    function createProductWithVariations()
     {
         require_once 'install/Helper/Product.php';
         $helper = new Install_Helper_Product($this->kernel, MDB2::factory(DB_DSN));
@@ -103,7 +103,7 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $result = $db->query('TRUNCATE product_variation_detail');
         $result = $db->query('TRUNCATE product_variation_x_attribute');
         $result = $db->query('TRUNCATE product_x_attribute_group');
-        
+
     }
 
     function createKernel()
@@ -132,7 +132,7 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
 
     function testAddToBasket()
     {
-        
+
         $basket = $this->createBasket();
 
         $product_id = 1;
@@ -145,9 +145,9 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(count($items), 1);
         $this->assertEquals($items[0]['quantity'], $quantity);
         $this->assertEquals($items[0]['product_id'], $product_id);
-        
+
     }
-    
+
     function testAddToBasketWithVariation()
     {
         $this->createProductWithVariations();
@@ -332,26 +332,26 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($address_return, $basket->getAddress());
     }
-    
+
     function testGetTotalPriceCalculatesCorrect()
     {
         // This test is not as relevant after variation price difference has been deactivated.
         $this->createProductWithVariations();
         $basket = $this->createBasket();
 
-        $basket->add(1, 0, 3); // 200 * 3 + vat 
+        $basket->add(1, 0, 3); // 200 * 3 + vat
         $basket->add(2, 3, 2); // 100 * 2 + vat
 
         $this->assertEquals(1000, $basket->getTotalPrice());
     }
-    
+
     function testGetTotalWeightCalculatesCorrect()
     {
         $this->createProductWithVariations();
         $basket = $this->createBasket();
 
-        $basket->add(1, 0, 3); // 200 * 3 
-        $basket->add(2, 3, 2); // 104 * 2 
+        $basket->add(1, 0, 3); // 200 * 3
+        $basket->add(2, 3, 2); // 104 * 2
 
         $this->assertEquals(808, $basket->getTotalWeight());
     }
