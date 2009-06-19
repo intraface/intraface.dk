@@ -26,11 +26,12 @@ CREATE TABLE IF NOT EXISTS `onlinepayment_settings` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
 CREATE TABLE IF NOT EXISTS `intraface_modules_onlinepayment__language_translation` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL,
   `email` text,
   `lang` varchar(20) default NULL,
   `subject` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+  PRIMARY KEY  (id, lang)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
