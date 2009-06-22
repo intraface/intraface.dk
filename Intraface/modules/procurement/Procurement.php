@@ -758,7 +758,10 @@ class Procurement extends Intraface_Standard
                 } else {
                     require_once 'Intraface/modules/accounting/Account.php';
                     $account = Account::factory($year, $debet_account['state_account_id']);
-                    if ($account->get('id') == 0 || $account->get('type') != 'operating') {
+
+                    // @todo check this. I changed it to make sure that we are able to state varekøb til videresalg
+                    //
+                    if ($account->get('id') == 0) {
                         $this->error->set('Ugyldig konto for bogføring af linje '.($key+1).' "'.$debet_account['text'].'"');
                     } elseif ($account->get('vat') == 'in') {
 
