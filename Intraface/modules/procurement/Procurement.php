@@ -774,7 +774,7 @@ class Procurement extends Intraface_Standard
 
         if ($skip_amount_check == 'do_amount_check') {
             if (round($total + $this->get('vat'), 2) != $this->get('total_price')) {
-                $this->error->set('Det samlede beløb ('.number_format($total + $this->get('vat'), 2, ',', '.').') til bogføring stemmer ikke overens med det samlede beløb på indkøbet. Har du fået alle vare på indkøbet med?');
+                $this->error->set('Det samlede beløb ('.number_format($total + $this->get('vat'), 2, ',', '.').') til bogføring stemmer ikke overens med det samlede beløb på indkøbet. Har du fået alle varer på indkøbet med?');
             }
 
             if (round($vat, 2) != $this->get('vat')) {
