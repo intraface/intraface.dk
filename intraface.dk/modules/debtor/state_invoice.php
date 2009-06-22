@@ -28,11 +28,8 @@ if (!empty($_POST)) {
         $product->getDetails()->setStateAccountId($state_account_id);
     }
 
-    if ($debtor->error->isError()) {
-        $debtor->loadItem();
-    } elseif (!$debtor->state($year, $_POST['voucher_number'], $_POST['date_state'], $translation)) {
+    if (!$debtor->state($year, $_POST['voucher_number'], $_POST['date_state'], $translation)) {
         $debtor->error->set('Kunne ikke bogføre posten');
-        $debtor->loadItem();
     } else {
         header('Location: view.php?id='.$debtor->get('id'));
         exit;
@@ -43,10 +40,9 @@ if (!empty($_POST)) {
         trigger_error('You can only state invoice from this page', E_USER_ERROR);
         exit;
     }
-
-    $debtor->loadItem();
 }
 
+$debtor->loadItem();
 $items = $debtor->item->getList();
 
 $page = new Intraface_Page($kernel);
@@ -86,7 +82,7 @@ $page->start($translation->get('State invoice'));
         </table>
     </fieldset>
 
-    <?php  if ($debtor->readyForState($year, 'skip_check_products')): ?>
+    <?php  // if ($debtor->readyForState($year, 'skip_check_products')): ?>
         <fieldset>
             <legend>Oplysninger der bogføres</legend>
             <table>
@@ -189,7 +185,7 @@ $page->start($translation->get('State invoice'));
             <input type="submit" value="Bogfør" /> eller
             <a href="view.php?id=<?php e($debtor->get('id')); ?>">fortryd</a>
         </div>
-   <?php endif;  ?>
+   <?php // endif;  ?>
     </form>
 <?php endif; ?>
 <?php
