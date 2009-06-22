@@ -68,7 +68,7 @@ $page->start('Bogfør indkøb #' . $procurement->get('number'));
 
 <ul class="options">
     <li><a href="view.php?id=<?php e($procurement->get("id")); ?>">Luk</a></li>
-    <li><a href="index.php?type=invoice&amp;id=<?php e($procurement->get("id")); ?>&amp;use_stored=true">Tilbage til indkøbslisten</a></li>
+    <li><a href="index.php?id=<?php e($procurement->get("id")); ?>&amp;use_stored=true">Tilbage til indkøbslisten</a></li>
 </ul>
 
 <div class="message">
