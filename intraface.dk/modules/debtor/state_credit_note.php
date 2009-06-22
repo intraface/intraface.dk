@@ -196,7 +196,7 @@ $page->start($translation->get('State invoice'));
         </tbody>
     </table>
 
-    <?php  if (!$debtor->readyForState($year)): ?>
+    <?php  if ($debtor->readyForState($year)): ?>
         <div>
             <input type="submit" value="Bogfør" /> eller
             <a href="view.php?id=<?php e($value['id']); ?>">fortryd</a>
