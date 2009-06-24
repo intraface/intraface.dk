@@ -1043,5 +1043,75 @@ if (isset($onlinepayment)) {
 </div>
 
 <?php
+// @todo Added a list with the customers reminders. Should be created so you can see the reminders created for the actual debtor.
+$reminder = new Reminder($kernel);
+$reminder->getDBQuery()->setFilter("contact_id", $debtor->contact->get("id"));
+$reminder->getDBQuery()->storeResult("use_stored", "reminder_invoice", "toplevel");
+$reminders = $reminder->getList();
+?>
+<table class="stripe">
+<thead>
+    <tr>
+        <th>Nr.</th>
+        <th>Kunde</th>
+        <th>Beskrivelse</th>
+        <th>Sendt</th>
+        <th>Sendt som</th>
+        <th>Forfaldsdato</th>
+        <th>&nbsp;</th>
+    </tr>
+</thead>
+<tbody>
+    <?php
+    for ($i = 0, $n = count($reminders); $i < $n; $i++) {
+        ?>
+        <tr id="i<?php e($reminders[$i]["id"]); ?>"<?php if (isset($_GET['id']) && $_GET['id'] == $reminders[$i]['id']) print(" class=\"fade\""); ?>>
+            <td class="number"><?php e($reminders[$i]["number"]); ?></td>
+            <td><a href="reminders.php?contact_id=<?php e($reminders[$i]["contact_id"]); ?>"><?php e($reminders[$i]["name"]); ?></a></td>
+            <td><a href="reminder.php?id=<?php e($reminders[$i]["id"]); ?>"><?php (trim($reminders[$i]["description"] != "")) ? e($reminders[$i]["description"]) : e(t("[No description]")); ?></a></td>
+            <td class="date">
+                <?php
+                if ($reminders[$i]["status"] != "created") {
+                    e($reminders[$i]["dk_date_sent"]);
+                }
+                else {
+                    e(t('No'));
+                }
+                ?>
+      </td>
+            <td><?php e($reminders[$i]["send_as"]); ?></td>
+            <td class="date">
+                <?php
+                if ($reminders[$i]["status"] == "executed" || $reminders[$i]["status"] == "canceled") {
+                    e($reminders[$i]["status"]);
+                } elseif ($reminders[$i]["due_date"] < date("Y-m-d")) { ?>
+                    <span class="red"><?php e($reminders[$i]["dk_due_date"]); ?></span>
+                <?php
+                } else {
+                    e($reminders[$i]["dk_due_date"]);
+                }
+                ?>
+            </td>
+            <td class="buttons">
+                <?php
+                if ($reminders[$i]["locked"] == 0) {
+                    ?>
+                    <a class="edit" href="reminder_edit.php?id=<?php e($reminders[$i]["id"]); ?>">Ret</a>
+                    <?php if ($reminders[$i]["status"] == "created"): ?>
+                    <a class="delete" href="reminders.php?contact_id=<?php e($_GET["contact_id"]); ?>&amp;delete=<?php e($reminders[$i]["id"]); ?>">Slet</a>
+                    <?php endif; ?>
+                    <?php
+                }
+                ?>
+            </td>
+        </tr>
+        <?php
+    }
+    ?>
+</tbody>
+</table>
+
+
+<?php
 $page->end();
 ?>
