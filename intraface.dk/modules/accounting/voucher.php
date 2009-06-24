@@ -101,8 +101,6 @@ $posts = $voucher->getPosts();
 $voucher_file = new VoucherFile($voucher);
 $voucher_files = $voucher_file->getList();
 
-
-
 $page = new Intraface_Page($kernel);
 $page->start('Regnskab');
 ?>
@@ -137,7 +135,7 @@ $page->start('Regnskab');
 			<th></th>
 		</tr>
 		</thead>
-	<?php foreach ($posts AS $post): ?>
+	<?php foreach ($posts as $post): ?>
 		<tr>
 			<td><input type="checkbox" name="selected[]" value="<?php e($post['id']); ?>" /></td>
 			<td><?php e($post['date_dk']); ?></td>
@@ -195,7 +193,7 @@ $page->start('Regnskab');
 		</tr>
 		</thead>
 		<tbody>
-		<?php foreach ($voucher_files AS $file): ?>
+		<?php foreach ($voucher_files as $file): ?>
 			<tr>
 				<td><a target="_blank" href="<?php e($file['file_uri']); ?>"><?php e($file['description']); ?></a></td>
 				<td class="options">
@@ -212,13 +210,13 @@ $page->start('Regnskab');
 	<input name="id" type="hidden" value="<?php e($voucher->get('id')); ?>" />
 	<fieldset>
 		<legend>Upload fil til bilaget</legend>
-	<?php
-$voucher_file->error->view();
+        <?php
+        $voucher_file->error->view();
 
-$filehandler = new FileHandler($kernel);
-$filehandler_html = new FileHandlerHTML($filehandler);
-$filehandler_html->printFormUploadTag('file_id', 'new_file', 'choose_file');
-?>
+        $filehandler = new FileHandler($kernel);
+        $filehandler_html = new FileHandlerHTML($filehandler);
+        $filehandler_html->printFormUploadTag('file_id', 'new_file', 'choose_file');
+        ?>
 	</fieldset>
 	<p><input type="submit" value="Upload" /></p>
 </form>
