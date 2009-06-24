@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module_accounting = $kernel->module('accounting');
 $kernel->useShared('filehandler');
@@ -13,8 +13,6 @@ $year = new Year($kernel);
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 	if (!empty($_GET['return_redirect_id']) AND is_numeric($_GET['return_redirect_id'])) {
-
-
 
 		$redirect = Intraface_Redirect::factory($kernel, 'return');
 		$selected_file_id = $redirect->getParameter('file_handler_id');
@@ -45,17 +43,13 @@ if (!empty($_GET['delete_file']) AND is_numeric($_GET['delete_file'])) {
 	if ($voucher_file->delete()) {
 		header('Location: voucher.php?id='.$voucher->get('id'));
 		exit;
-	}
-	else {
+	} else {
 		trigger_error('Kunne ikke slette filen');
 	}
-}
-
-elseif (!empty($_POST) AND !empty($_POST['state'])) {
+} elseif (!empty($_POST) AND !empty($_POST['state'])) {
 	$voucher = new Voucher($year, $_POST['id']);
 	$voucher->stateVoucher();
-}
-elseif (!empty($_POST) AND !empty($_FILES)) {
+} elseif (!empty($_POST) AND !empty($_FILES)) {
 	$voucher = new Voucher($year, $_POST['id']);
 	$voucher_file = new VoucherFile($voucher);
 	$var['belong_to'] = 'file';
@@ -68,8 +62,7 @@ elseif (!empty($_POST) AND !empty($_FILES)) {
 		$redirect->askParameter('file_handler_id');
 		header('Location: '.$url);
 		exit;
-	}
-	elseif (!empty($_FILES['new_file'])) {
+	} elseif (!empty($_FILES['new_file'])) {
 		$filehandler = new FileHandler($kernel);
 		$filehandler->createUpload();
 		$filehandler->upload->setSetting('max_file_size', 2000000);
@@ -77,33 +70,29 @@ elseif (!empty($_POST) AND !empty($_FILES)) {
 			$var['belong_to_id'] = $id;
 			if (!$voucher_file->save($var)) {
 				$value = $_POST;
-			}
-			else {
+			} else {
 				header('Location: voucher.php?id='.$voucher->get('id'));
 				exit;
 			}
 
-		}
-		else {
+		} else {
 			$filehandler->error->view();
 			$voucher_file->error->set('Kunne ikke uploade filen');
 			$voucher_file->error->view();
 		}
 
 	}
-
-
 } elseif(!empty($_POST) AND !empty($_POST['action']) && $_POST['action'] == 'counter_entry' ) {
-    
-    $voucher = new Voucher($year, $_POST['id']);
-    $posts = $voucher->getPosts();
-    
-    foreach($posts AS $post) {
-        if(is_array($_POST['selected']) && in_array($post['id'], $_POST['selected'])) {
-            $new_post = new Post($voucher);
-            $new_post->save(date('Y-m-d'), $post['account_id'], $post['text'].' - '.t('counter entry'), $post['credit'], $post['debet']);
-        }
-    }   
+
+	$voucher = new Voucher($year, $_POST['id']);
+	$posts = $voucher->getPosts();
+
+	foreach($posts as $post) {
+		if(is_array($_POST['selected']) && in_array($post['id'], $_POST['selected'])) {
+			$new_post = new Post($voucher);
+			$new_post->save($post['date'], $post['account_id'], $post['text'].' - '.t('counter entry'), $post['credit'], $post['debet']);
+		}
+	}
 } else {
 	$voucher = new Voucher($year, $_GET['id']);
 }
@@ -168,16 +157,16 @@ $page->start('Regnskab');
 
 	<?php endforeach; ?>
 	</table>
-	
+
 	<select name="action">
        <option value=""><?php e(t('Choose...', 'common'))?></option>
        <option value="counter_entry"><?php e(t('Create counter entry'))?></option>
     </select>
     <input name="id" type="hidden" value="<?php e($voucher->get('id')); ?>" />
     <input type="submit" value="<?php e(t('go', 'common')); ?>" />
-    
+
     </form>
-	
+
 	<p><a href="post_edit.php?voucher_id=<?php e($voucher->get('id')); ?>">Indtast poster</a></p>
 	<?php if (round($voucher->get('saldo'), 2) <> 0.00): ?>
 		<p class="error">Bilaget stemmer ikke. Der er en difference på <?php e(round($voucher->get('saldo'), 2)); ?> kroner.</p>
@@ -224,12 +213,12 @@ $page->start('Regnskab');
 	<fieldset>
 		<legend>Upload fil til bilaget</legend>
 	<?php
-		$voucher_file->error->view();
+$voucher_file->error->view();
 
-		$filehandler = new FileHandler($kernel);
-		$filehandler_html = new FileHandlerHTML($filehandler);
-		$filehandler_html->printFormUploadTag('file_id', 'new_file', 'choose_file');
-	?>
+$filehandler = new FileHandler($kernel);
+$filehandler_html = new FileHandlerHTML($filehandler);
+$filehandler_html->printFormUploadTag('file_id', 'new_file', 'choose_file');
+?>
 	</fieldset>
 	<p><input type="submit" value="Upload" /></p>
 </form>
