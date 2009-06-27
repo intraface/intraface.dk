@@ -20,7 +20,7 @@ class Intraface_modules_accounting_VoucherGateway
      */
     public function __construct($year_object)
     {
-        $this->year       = $year_object;
+        $this->year = $year_object;
     }
 
     public function findFromId($id)
@@ -40,7 +40,7 @@ class Intraface_modules_accounting_VoucherGateway
     public function findFromVoucherNumber($voucher_number)
     {
         $db = new DB_Sql;
-        $db->query("SELECT id FROM accounting_voucher WHERE number = '".safeToDb($voucher_number)."' AND year_id = '".$year->get('id')."' AND intranet_id = " . $this->year->kernel->intranet->get('id'));
+        $db->query("SELECT id FROM accounting_voucher WHERE number = '".safeToDb($voucher_number)."' AND year_id = '".$this->year->get('id')."' AND intranet_id = " . $this->year->kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
             return new Voucher($this->year);
         }

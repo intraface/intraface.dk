@@ -17,6 +17,12 @@ class Intraface_modules_accounting_AccountGateway
         4 => 'finance'
     );
 
+    private $vat = array(
+        0 => 'none',
+        1 => 'in',
+        2 => 'out'
+    );
+
 
     function __construct($year)
     {
