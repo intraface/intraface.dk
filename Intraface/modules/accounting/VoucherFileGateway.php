@@ -4,7 +4,16 @@
  */
 class Intraface_modules_accounting_VoucherFileGateway
 {
-    public $voucher;
+    private $voucher;
+    private $what_can_i_belong_to = array(
+        0 => '_invalid_',
+        1 => 'invoice',
+        2 => 'procurement',
+        3 => 'file',
+        4 => 'vat',
+        5 => 'credit_note',
+        6 => 'reminder'
+    );
 
     function __construct($voucher)
     {

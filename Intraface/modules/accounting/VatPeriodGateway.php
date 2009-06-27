@@ -122,9 +122,16 @@ class Intraface_modules_accounting_VatPeriodGateway
                 'date_start' => $this->year->get('year') . '-' . $value['date_from'],
                 'date_end'   => $this->year->get('year') . '-' . $value['date_to'],
             );
-            $this->save($input, 'insert');
+            $vatperiod = $this->findFromId();
+            $vatperiod->save($input, 'insert');
         }
 
         return true;
+    }
+
+    function findFromId($id = 0)
+    {
+    	require_once dirname(__FILE__) . '/VatPeriod.php';
+        return new VatPeriod($this->year);
     }
 }
