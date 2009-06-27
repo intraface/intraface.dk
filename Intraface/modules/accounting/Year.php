@@ -285,12 +285,12 @@ class Year extends Intraface_Standard
     function vatAccountIsSet()
     {
         if ($this->get('vat') == 0) {
-            return 1; // vi lader som om de er sat, når der ikke er moms på selve regnskabet
+            return true; // vi lader som om de er sat, når der ikke er moms på selve regnskabet
         }
         if ($this->getSetting('vat_in_account_id') > 0 AND $this->getSetting('vat_out_account_id') > 0 AND $this->getSetting('vat_balance_account_id') > 0) {
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
     }
 
 
@@ -320,6 +320,10 @@ class Year extends Intraface_Standard
      */
     public function isDateInYear($date)
     {
+        if ($this->getId() == 0) {
+        	throw new Exception('Year has not been loaded yet - maybe not saved');
+        }
+
         $date = safeToDb($date);
 
         $db = new Db_Sql;
@@ -371,6 +375,9 @@ class Year extends Intraface_Standard
      */
     function getList()
     {
+        $gateway = new Intraface_modules_accounting_YearGateway($this->kernel);
+        return $gateway->getList();
+        /*
         if (!is_object($this->kernel)) {
             trigger_error('Du kan ikke køre Year::getList() uden at have instatieret klassen', FATAL);
         }
@@ -391,12 +398,17 @@ class Year extends Intraface_Standard
         }
 
         return $account_years;
+        */
     }
 
     function getBalanceAccounts()
     {
         // afstemningskonti
         $balance_accounts = unserialize($this->getSetting('balance_accounts'));
+
+        if (!is_array($balance_accounts)) {
+        	throw new Exception('Balance accounts are not an array');
+        }
 
         $sql_where = "";
 
@@ -444,6 +456,10 @@ class Year extends Intraface_Standard
 
     function createAccounts($type, $last_year_id = 0)
     {
+        if ($this->getId() == 0) {
+        	throw new Exception('Year has no id');
+        }
+
         $last_year_id = (int)$last_year_id;
         switch ($type) {
             case 'standard':
@@ -467,7 +483,7 @@ class Year extends Intraface_Standard
                     include('Intraface/modules/accounting/standardaccounts.php');
 
                     if (empty($standardaccounts)) {
-                        return 0;
+                        return false;
                     }
 
                     $balance_accounts = array();
@@ -525,13 +541,13 @@ class Year extends Intraface_Standard
             case 'transfer_from_last_year':
                     // oprette konti
                     if ($last_year_id == 0) {
-                        return 0;
+                        return false;
                     }
                     $last_year = new Year($this->kernel, $last_year_id);
                     $account = new Account($last_year);
                     $accounts = $account->getList();
 
-                    foreach ($accounts AS $a) {
+                    foreach ($accounts as $a) {
                         $old_account = new Account($last_year, $a['id']);
                         $input = $old_account->get();
                         $input['created_from_id'] = $old_account->get('id');
@@ -567,7 +583,7 @@ class Year extends Intraface_Standard
                     $new_balance_accounts = array();
 
                     if (is_array($balance_accounts)) {
-                        foreach ($balance_accounts AS $key=>$id) {
+                        foreach ($balance_accounts as $key=>$id) {
                             $db->query("SELECT id FROM accounting_account WHERE year_id = ".$this->get('id')." AND intranet_id = ".$this->kernel->intranet->get('id')." AND created_from_id = " . (int)$id);
                             while ($db->nextRecord()) {
                                 $new_balance_accounts[] = $db->f('id');
@@ -612,7 +628,7 @@ class Year extends Intraface_Standard
                     trigger_error('Der skal vælges en måde at lave kontoplanen på', FATAL);
                 break;
         }
-        return 1;
+        return true;
 
     }
 
@@ -642,7 +658,7 @@ class Year extends Intraface_Standard
 
         $this->setSetting('capital_account_id', $input['capital_account_id']);
 
-        return 1;
+        return true;
     }
 
     function getSettings()
@@ -691,9 +707,9 @@ class Year extends Intraface_Standard
     function isSettingsSet()
     {
         if (!$this->getSetting('result_account_id_start') OR !$this->getSetting('result_account_id_end') OR !$this->getSetting('balance_account_id_start') OR !$this->getSetting('balance_account_id_end') OR !$this->getSetting('capital_account_id')) {
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
     }
 
     /**
@@ -779,5 +795,10 @@ class Year extends Intraface_Standard
         $db = new DB_Sql;
         $db->query("UPDATE accounting_year SET locked = 1 WHERE id = " . $this->id);
         return true;
+    }
+
+    public function getId()
+    {
+    	return $this->get('id');
     }
 }

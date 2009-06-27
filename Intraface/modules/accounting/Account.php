@@ -370,6 +370,11 @@ class Account extends Intraface_Standard
         return false;
     }
 
+    public function getType()
+    {
+        return $this->types[$this->get('type_key')];
+    }
+
     /**
      * Metode til at tjekke om kontonummeret er fri.
      *
@@ -544,12 +549,18 @@ class Account extends Intraface_Standard
 
     /**
      * Returnerer liste med alle kontoerne
-     * @param (string) $type Typen af konto, kig i $this->type;
+     *
+     * @param string  $type  Typen af konto, kig i Account::type;
+     * @param boolean $saldo Whether to return the saldo
+     *
      * @return array
-     * @access public
      */
+    public function getList($type = '', $saldo = false)
+    {
+        $gateway = new Intraface_modules_accounting_AccountGateway($this->year);
+        return $gateway->getList($type, $saldo);
 
-    function getList($type = '', $saldo = false) {
+        /*
         $type = safeToDb($type);
         $type_sql = '';
 
@@ -633,9 +644,10 @@ class Account extends Intraface_Standard
             $i++;
         }
         return $accounts;
+        */
     }
 
-    function anyAccounts()
+    public function anyAccounts()
     {
         $db = new DB_Sql;
         $sql = "SELECT id
@@ -647,7 +659,7 @@ class Account extends Intraface_Standard
 
     }
 
-    function anyPosts()
+    public function anyPosts()
     {
         $db = new DB_Sql;
         $db->query("SELECT
@@ -660,7 +672,7 @@ class Account extends Intraface_Standard
         return $db->numRows();
     }
 
-    function getPosts()
+    public function getPosts()
     {
         $posts = array();
 
@@ -712,7 +724,7 @@ class Account extends Intraface_Standard
      *
      * @return float Vat amount
      */
-    function calculateVat($amount, $vat_percent)
+    public function calculateVat($amount, $vat_percent)
     {
         $amount = (float)$amount;
         $vat_percent = (float)$vat_percent / 100;
@@ -720,8 +732,13 @@ class Account extends Intraface_Standard
         return $amount * ($vat_percent / (1 + $vat_percent));
     }
 
-    function getId()
+    public function getId()
     {
         return $this->id;
+    }
+
+    public function getNumber()
+    {
+    	return $this->get('number');
     }
 }

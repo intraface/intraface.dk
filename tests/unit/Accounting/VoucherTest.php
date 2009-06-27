@@ -2,10 +2,7 @@
 require_once dirname(__FILE__) . './../config.test.php';
 
 require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/modules/accounting/Voucher.php';
-require_once 'Intraface/Kernel.php';
-require_once 'Intraface/Date.php';
 
 class FakeVoucherSetting {
     function get() {}
@@ -18,35 +15,41 @@ class FakeVoucherUser {
     function get() { return 1; }
 }
 
-class FakeVoucherKernel {
-
+class FakeVoucherKernel
+{
     public $setting;
     public $intranet;
     public $user;
-    function __construct() {
+    function __construct()
+    {
         $this->setting = new FakeVoucherSetting;
         $this->intranet = new FakeVoucherIntranet;
         $this->user = new FakeVoucherUser;
     }
 }
 
-class FakeAccountingYear {
+class FakeVoucherYear
+{
     public $kernel;
-    function __construct() {
+    function __construct()
+    {
         $this->kernel = new FakeVoucherKernel;
     }
     function get() { return 1; }
     function vatAccountIsSet() { return true; }
+    function getSetting()
+    {
+    	return 1;
+    }
 }
 
 class VoucherTest extends PHPUnit_Framework_TestCase
 {
-
     private $year;
 
     function setUp()
     {
-        $this->year = new FakeAccountingYear;
+        $this->year = new FakeVoucherYear;
     }
 
     function testVoucherCreate()
@@ -75,18 +78,24 @@ class VoucherTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($voucher->delete());
     }
 
-    function testStateDraftReturnsZeroWhenNoPostsAreFound()
+    function testStateDraftReturnsFalseWhenNoPostsAreFound()
     {
         $voucher = new Voucher($this->year);
         $voucher->save(array('text' => 'Description', 'date' => '2002-10-10'));
-        $this->assertTrue($voucher->stateDraft() == 0);
+        $res = $voucher->stateDraft();
+        $this->assertFalse($res);
     }
 
-    function testStateVoucherReturnsOneWhenNoPostsAreFound()
+    function testStateVoucherReturnsTrueWhenNoPostsAreFound()
     {
         $voucher = new Voucher($this->year);
         $voucher->save(array('text' => 'Description', 'date' => '2002-10-10'));
-        $this->assertTrue($voucher->stateVoucher() == 1);
+        $this->assertTrue($voucher->stateVoucher());
     }
 
+    function testGetList()
+    {
+    	$voucher = new Voucher($this->year);
+        $this->assertTrue(is_array($voucher->getList()));
+    }
 }

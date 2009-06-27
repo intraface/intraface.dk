@@ -117,4 +117,75 @@ class YearTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($year->isBalanced());
     }
 
+    function testGetList()
+    {
+    	$year = new Year($this->kernel);
+        $this->assertTrue(is_array($year->getList()));
+    }
+
+    function testGetBalanceAccountsThrowsEceptionIfBalanceAccountsIsNotAnArray()
+    {
+    	$year = new Year($this->kernel);
+        try {
+        	$year->getBalanceAccounts();
+            $this->assertTrue(false);
+        } catch (Exception $e) {
+        	$this->assertTrue(true);
+        }
+    }
+
+    function testCreateAccounts()
+    {
+    	$year = new Year($this->kernel);
+        $year->save(array('label' => '2000', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0));
+        $res = $year->createAccounts('standard');
+        $this->assertTrue($res);
+    }
+
+    function testIsSettingsSet()
+    {
+    	$year = new Year($this->kernel);
+        $this->assertFalse($year->isSettingsSet());
+    }
+
+    function testGetSettings()
+    {
+        $year = new Year($this->kernel);
+        $this->assertTrue(is_array($year->getSettings()));
+    }
+
+    function testSetSettings()
+    {
+        $year = new Year($this->kernel);
+        $data = array();
+        $this->assertTrue($year->setSettings($data));
+    }
+
+    function testReadyForState()
+    {
+        $year = new Year($this->kernel);
+        $data = array();
+        $this->assertFalse($year->readyForState());
+    }
+
+    function testIsYearOpen()
+    {
+        $year = new Year($this->kernel);
+        $year->save(array('label' => '2000', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0));
+        $this->assertTrue($year->isYearOpen());
+    }
+
+    function testIsDateInYear()
+    {
+        $year = new Year($this->kernel);
+        $year->save(array('label' => '2000', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0));
+        $this->assertFalse($year->isDateinYear(date('Y-m-d')));
+    }
+
+    function testVatAccountIsSetReturnsTrueWhenVatOnYearIsNotSet()
+    {
+        $year = new Year($this->kernel);
+        $year->save(array('label' => '2000', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0));
+        $this->assertTrue($year->vatAccountIsSet());
+    }
 }

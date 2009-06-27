@@ -235,4 +235,38 @@ class AccountTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(25, $account_new->get('vat_percent'));
     }
 
+    function testFactory()
+    {
+        $account = $this->createAccount();
+        $factory = Account::factory(new FakeAccountYear, $account->getNumber());
+        $this->assertTrue(is_object($factory));
+        $this->assertEquals($account->getNumber(), $factory->getNumber());
+    }
+
+    function testValidForStateReturnsFalseIfTypeKeyIsNotSet()
+    {
+    	$account = $this->createAccount();
+        $res = $account->validForState();
+        $this->assertFalse($res);
+    }
+
+    function testSaveReturnsTrueWhenTypeKeyIsSet()
+    {
+        $account = $this->createAccount();
+        $account_number = rand(1, 1000000);
+        $data = array(
+            'number' => $account_number,
+            'name' => 'test',
+            'type_key' => 2,
+            'use_key' => 1,
+            'vat_key' => 1,
+            'vat_percent' => 25
+        );
+        $id = $account->save($data);
+        $res = $account->validForState();
+        $this->assertEquals('operating', $account->getType());
+        $this->assertTrue($res);
+
+    }
+
 }

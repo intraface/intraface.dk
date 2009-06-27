@@ -102,6 +102,9 @@ class VoucherFile
 
     function getList()
     {
+        $gateway = new Intraface_modules_accounting_VoucherFileGateway($this->voucher);
+        return $gateway->getList();
+        /*
         $db = new DB_Sql;
         $db->query("SELECT * FROM accounting_voucher_file WHERE active = 1 AND voucher_id = " . $this->voucher->get('id') . " AND intranet_id=" . $this->voucher->year->kernel->intranet->get('id'));
         $i = 0;
@@ -162,5 +165,6 @@ class VoucherFile
             $i++;
         }
         return $files;
+        */
     }
 }

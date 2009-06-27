@@ -69,6 +69,9 @@ class VatPeriod extends Intraface_Standard
      */
     public function getList()
     {
+        $gateway = new Intraface_modules_accounting_VatPeriodGateway($this->year);
+        return $gateway->getList();
+        /*
         $db = new DB_Sql;
         $db->query("SELECT *, DATE_FORMAT(date_start, '%d-%m-%Y') AS date_start_dk, DATE_FORMAT(date_end, '%d-%m-%Y') AS date_end_dk FROM accounting_vat_period WHERE year_id = " . $this->year->get('id') . " AND intranet_id=" . $this->year->kernel->intranet->get('id') . " AND active = 1 ORDER BY date_start ASC");
         $i   = 0;
@@ -84,6 +87,7 @@ class VatPeriod extends Intraface_Standard
             $i++;
         }
         return $vat;
+        */
     }
 
     /**
@@ -91,13 +95,19 @@ class VatPeriod extends Intraface_Standard
      */
     public function periodsCreated()
     {
+        $gateway = new Intraface_modules_accounting_VatPeriodGateway($this->year);
+        return $gateway->arePeriodsCreated();
+        /*
         $db = new DB_Sql;
         $db->query("SELECT id FROM accounting_vat_period WHERE year_id = " . $this->year->get('id') . " AND intranet_id=" . $this->year->kernel->intranet->get('id'). " AND active=1");
         return $db->numRows();
+        */
     }
 
     public static function getPeriodsArray()
     {
+        return Intraface_modules_accounting_VatPeriodGateway::getPeriodsArray();
+        /*
         return array(
                 // halvårlig
                 0 => array(
@@ -148,6 +158,7 @@ class VatPeriod extends Intraface_Standard
                     )
                 )
             );
+         */
     }
 
     /**
@@ -155,6 +166,10 @@ class VatPeriod extends Intraface_Standard
      */
     public function createPeriods()
     {
+        $gateway = new Intraface_modules_accounting_VatPeriodGateway($this->year);
+        return $gateway->createPeriods();
+
+        /*
         if ($this->periodsCreated()) {
             // we will just pretend everything went fine
             return true;
@@ -177,6 +192,7 @@ class VatPeriod extends Intraface_Standard
         }
 
         return true;
+        */
     }
 
     /**
@@ -376,7 +392,7 @@ class VatPeriod extends Intraface_Standard
         }
         // Moms af varekøb i udlandet
         $var['text'] = 'Momsafregning - moms af køb i udlandet';
-        
+
         if ($this->get('saldo_vat_abroad') < 0) {
             $var['debet_account_number'] = $account_vat_balance->get('number');
             $var['credit_account_number'] = $account_vat_abroad->get('number');

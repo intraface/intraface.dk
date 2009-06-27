@@ -52,6 +52,9 @@ class Voucher extends Intraface_Standard
      */
     function factory($year, $voucher_number)
     {
+        $gateway = new Intraface_modules_accounting_VoucherGateway($year);
+        return $gateway->findFromVoucherNumber($voucher_number);
+        /*
         if (!is_object($year)) {
             trigger_error('Voucher::factory must have year object', E_USER_ERROR);
         }
@@ -63,6 +66,7 @@ class Voucher extends Intraface_Standard
         }
 
         return new Voucher($year, $db->f('id'));
+        */
     }
 
     private function load()
@@ -264,7 +268,10 @@ class Voucher extends Intraface_Standard
 
     protected function getAccount($id)
     {
-        return Account::factory($this->year, $id);
+        $gateway = new Intraface_modules_accounting_AccountGateway($this->year);
+        return $gateway->findFromId($id);
+
+        //return Account::factory($this->year, $id);
     }
 
     /**
@@ -293,6 +300,9 @@ class Voucher extends Intraface_Standard
      */
      function getList($filter = '')
      {
+        $gateway = new Intraface_modules_accounting_VoucherGateway($this->year);
+        return $gateway->getList($filter);
+        /*
         $sql = "SELECT *, DATE_FORMAT(voucher.date, '%d-%m-%Y') AS date_dk
             FROM accounting_voucher voucher
             WHERE voucher.active = 1 AND voucher.year_id = ".$this->year->get('id')."
@@ -323,6 +333,7 @@ class Voucher extends Intraface_Standard
             $i++;
         }
         return $list;
+        */
      }
 
     /**
@@ -482,32 +493,32 @@ class Voucher extends Intraface_Standard
     }
 
     /**
-     * Public: bogfører de poster, der er i kassekladden
+     * Bogfører de poster, der er i kassekladden
      *
      * Klassen vælger automatisk alle poster i kladden og bogfører dem en efter en.
      * De poster der kan bogføres, mens de resterende ikke bogføres.
      * Der laves igen tjek på, om året er åbent og om datoen for posten er i året.
      *
-     * @return 1 = success; 0 = failure
+     * @return boolean
      */
-    function stateDraft()
+    public function stateDraft()
     {
         if (!$this->year->vatAccountIsSet()) {
             $this->error->set('Du skal først sætte momskonti, inden du kan bogføre.');
         }
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
 
         $post = new Post($this);
         $posts = $post->getList('draft');
         if (!is_array($posts) OR count($posts) == 0) {
             $this->error->set('Der var ikke nogen poster at bogføre');
-            return 0;
+            return false;
         }
 
-        foreach ($posts AS $p) {
+        foreach ($posts as $p) {
             $post = new Post($this, $p['id']);
 
             if (!$post->setStated()) {
@@ -518,11 +529,12 @@ class Voucher extends Intraface_Standard
             // tjekker om der har været nogle fejl i bogføringen
             if ($this->error->isError()) {
                 //$this->error->view();
-                return 0;
+                return false;
             }
 
         }
-        return 1;
+
+        return true;
     }
 
     function stateVoucher()
@@ -540,12 +552,12 @@ class Voucher extends Intraface_Standard
         }
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
 
         $posts = $this->getPosts();
 
-        foreach ($posts AS $p) {
+        foreach ($posts as $p) {
             $post = new Post($this, $p['id']);
             if ($post->get('stated') == 1) continue;
 
@@ -557,9 +569,9 @@ class Voucher extends Intraface_Standard
         // tjekker om der har været nogle fejl i bogføringen
         if ($this->error->isError()) {
             //$this->error->view();
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
     }
 
     function getPosts()
