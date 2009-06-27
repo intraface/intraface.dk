@@ -4,7 +4,7 @@
  */
 require_once 'IntrafacePublic/CMS/HTML/Parser.php';
 
-class CMS_HTML_Parser extends IntrafacePublic_CMS_HTML_Parser
+class Intraface_modules_cms_HTML_Parser extends IntrafacePublic_CMS_HTML_Parser
 {
     private $translation;
 
