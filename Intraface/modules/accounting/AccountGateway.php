@@ -29,6 +29,38 @@ class Intraface_modules_accounting_AccountGateway
     	$this->year = $year;
     }
 
+   /**
+     * Denne funktion bruges bl.a. under bogføringen, så man bare taster kontonummer
+     * og så sættes den rigtige konto.
+     *
+     * @param integer $account_number
+     *
+     * @return object
+     */
+    public function findFromNumber($account_number)
+    {
+        $account_number = (int)$account_number;
+
+        if ($this->year->get('id') == 0) {
+            return 0;
+        }
+
+        $sql = "SELECT id FROM accounting_account
+            WHERE number = '".$account_number."'
+                AND intranet_id = ".$this->year->kernel->intranet->get('id')."
+                AND year_id = ".$this->year->get('id')." AND active = 1
+            LIMIT 1";
+
+        $db = new Db_Sql;
+        $db->query($sql);
+
+        if (!$db->nextRecord()) {
+            return new Account($this->year);
+        }
+
+        return new Account($this->year, $db->f('id'));
+
+    }
     function findFromId($id)
     {
         require_once dirname (__FILE__) . '/Account.php';

@@ -87,6 +87,9 @@ class Account extends Intraface_Standard
      */
     public static function factory($year, $account_number)
     {
+        $gateway = new Intraface_modules_accounting_AccountGateway($year);
+        return $gateway->findFromNumber($account_number);
+        /*
         $account_number = (int)$account_number;
 
         if ($year->get('id') == 0) {
@@ -107,7 +110,7 @@ class Account extends Intraface_Standard
         }
 
         return new Account($year, $db->f('id'));
-
+        */
     }
 
     /**

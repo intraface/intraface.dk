@@ -266,10 +266,10 @@ class Voucher extends Intraface_Standard
         return $this->id;
     }
 
-    protected function getAccount($id)
+    protected function getAccount($number)
     {
         $gateway = new Intraface_modules_accounting_AccountGateway($this->year);
-        return $gateway->findFromId($id);
+        return $gateway->findFromNumber($number);
 
         //return Account::factory($this->year, $id);
     }
