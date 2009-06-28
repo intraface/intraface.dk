@@ -1,6 +1,6 @@
 <?php
 /**
- * Burde kunne vises på dato - og bør i øvrigt indkludere dbQuery();
+ * @todo Burde kunne vises på dato - og bør i øvrigt indkludere dbQuery();
  *
  */
 require('../../include_first.php');

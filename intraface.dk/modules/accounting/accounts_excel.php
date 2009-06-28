@@ -42,11 +42,9 @@ if (count($accounts) > 0) {
 		$style = '';
 		if ($account['type'] == 'headline') {
 			$style = $format_bold;
-		}
-		elseif ($account['type'] == 'sum') {
+		} elseif ($account['type'] == 'sum') {
 			$style = $format_italic;
-		}
-		else {
+		} else {
 			$style = $format;
 		}
 

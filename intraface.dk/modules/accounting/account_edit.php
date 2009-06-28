@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module('accounting');
 $translation = $kernel->getTranslation('accounting');
@@ -19,17 +19,14 @@ if (!empty($_POST)) {
     if ($id = $account->save($_POST)) {
 		header('Location: accounts.php');
 		exit;
-	}
-	else {
+	} else {
 		$values = $_POST;
 	}
-}
-elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
+} elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
 	$account = new Account($year, (int)$_GET['id']);
 	$values = $account->get();
 
-}
-else {
+} else {
 	$account = new Account($year);
 	$values = array();
 }
