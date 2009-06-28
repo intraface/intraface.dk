@@ -9,6 +9,7 @@ $debtor_module = $kernel->module('debtor');
 $translation = $kernel->getTranslation('debtor');
 $contact_module = $kernel->getModule('contact');
 
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $debtor = Debtor::factory($kernel, intval($_POST['id']));
@@ -1043,11 +1044,14 @@ if (isset($onlinepayment)) {
 </div>
 
 <?php
+if ($kernel->user->hasModuleAccess('invoice')):
+$kernel->useModule('invoice');
 // @todo Added a list with the customers reminders. Should be created so you can see the reminders created for the actual debtor.
 $reminder = new Reminder($kernel);
 $reminder->getDBQuery()->setFilter("contact_id", $debtor->contact->get("id"));
 $reminder->getDBQuery()->storeResult("use_stored", "reminder_invoice", "toplevel");
 $reminders = $reminder->getList();
+if (count($reminders) > 0):
 ?>
 <table class="stripe">
 <thead>
@@ -1110,7 +1114,7 @@ $reminders = $reminder->getList();
     ?>
 </tbody>
 </table>
-
+<?php endif; endif; ?>
 
 <?php
 $page->end();
