@@ -46,7 +46,7 @@ class AllTests
                        'Procurement',
                        'Project',
                        'Language',
-                       //'XMLRPC',
+                       'XMLRPC',
                        'Auth',
                        'Currency'
         );
