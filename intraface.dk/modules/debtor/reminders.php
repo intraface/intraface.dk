@@ -36,12 +36,10 @@ if (isset($_GET["search"])) {
 	if (isset($_GET["status"])) {
 		$reminder->getDBQuery()->setFilter("status", $_GET["status"]);
 	}
-}
-else {
+} else {
 	if ($reminder->getDBQuery()->checkFilter("contact_id")) {
-  	$reminder->getDBQuery()->setFilter("status", "-1");
-  }
-  else {
+        $reminder->getDBQuery()->setFilter("status", "-1");
+    } else {
 		$reminder->getDBQuery()->setFilter("status", "-2");
 	}
 }
