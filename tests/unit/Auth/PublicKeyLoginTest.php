@@ -7,7 +7,7 @@ class PublicKeyLoginTest extends PHPUnit_Framework_TestCase {
     private $adapter;
     private $db;
 
-    function setUp() 
+    function setUp()
     {
         $public_key = md5('public' . date('d-m-Y H:i:s') . 'test');
         $this->db = MDB2::singleton(DB_DSN);
@@ -22,19 +22,19 @@ class PublicKeyLoginTest extends PHPUnit_Framework_TestCase {
         unset($this->adapter);
     }
 
-    function testConstructionOfAdapter() 
+    function testConstructionOfAdapter()
     {
         $this->assertTrue(is_object($this->adapter));
     }
 
-    function testAuthWithWrongPublicKey() 
+    function testAuthWithWrongPublicKey()
     {
-        $this->markTestIncomplete('');
+        $adapter = new Intraface_Auth_PublicKeyLogin($this->db, self::SESSION_LOGIN, 'wrongprivatekey');
+        $this->assertFalse($adapter->auth());
     }
 
-    function testAuthWithCorrectPublicKey() 
+    function testAuthWithCorrectPublicKey()
     {
         $this->assertTrue(is_object($this->adapter->auth()));
-
     }
 }
