@@ -203,7 +203,7 @@ $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_Client_XMLRPC', 
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_Controller', 'public.intraface.dk', '1.0.0');
 
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Admin_Client_XMLRPC', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Client_XMLRPC', 'public.intraface.dk', '0.3.1');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Client_XMLRPC', 'public.intraface.dk', '0.3.2');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Controller', 'public.intraface.dk', '0.4.1');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop', 'public.intraface.dk', '0.5.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '1.0.1');
