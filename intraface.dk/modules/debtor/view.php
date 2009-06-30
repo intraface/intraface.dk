@@ -1049,7 +1049,6 @@ $kernel->useModule('invoice');
 // @todo Added a list with the customers reminders. Should be created so you can see the reminders created for the actual debtor.
 $reminder = new Reminder($kernel);
 $reminder->getDBQuery()->setFilter("contact_id", $debtor->contact->get("id"));
-$reminder->getDBQuery()->storeResult("use_stored", "reminder_invoice", "toplevel");
 $reminders = $reminder->getList();
 if (count($reminders) > 0):
 ?>
