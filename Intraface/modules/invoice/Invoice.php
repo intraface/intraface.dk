@@ -85,6 +85,7 @@ class Invoice extends Debtor
      */
     function readyForState($year, $check_products = 'check_products')
     {
+        
         if (!is_object($year)) {
             trigger_error('First parameter to readyForState needs to be a Year object!', E_USER_ERROR);
             return false;
@@ -99,7 +100,6 @@ class Invoice extends Debtor
             $this->error->set('Regnskabåret er ikke klar til bogføring');
             return false;
         }
-
 
         if ($this->type != 'invoice') {
             $this->error->set('Du kan kun bogføre fakturaer');
@@ -121,6 +121,8 @@ class Invoice extends Debtor
             $this->error->set('Ugyldig debitor konto sat i regnskabsindstillingerne.');
             return false;
         }
+        
+        $return = true;
 
         if ($check_products == 'check_products') {
             $this->loadItem();
@@ -134,15 +136,13 @@ class Invoice extends Debtor
                     $account = Account::factory($year, $product->get('state_account_id'));
                     if ($account->get('id') == 0 || $account->get('type') != 'operating') {
                         $this->error->set('Ugyldig konto for bogføring af produktet ' . $product->get('name'));
+                        $return = false;
                     }
                 }
             }
         }
 
-        if ($this->error->isError()) {
-            return false;
-        }
-        return true;
+        return $return;
     }
 
     /**

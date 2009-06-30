@@ -70,6 +70,8 @@ class CreditNote extends Debtor
             $this->error->set('Kreditnotaen skal være sendt eller afsluttet for at den kan bogføres');
             return false;
         }
+        
+        $return = true;
 
         if ($check_products == 'check_products') {
             $this->loadItem();
@@ -84,15 +86,13 @@ class CreditNote extends Debtor
                     $account = Account::factory($year, $product->get('state_account_id'));
                     if ($account->get('id') == 0 || $account->get('type') != 'operating') {
                         $this->error->set('Ugyldig konto for bogføring af produktet ' . $product->get('name'));
+                        $return = false;
                     }
                 }
             }
         }
 
-        if ($this->error->isError()) {
-            return false;
-        }
-        return true;
+        return $return;
 
     }
 

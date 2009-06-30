@@ -82,7 +82,7 @@ $page->start($translation->get('State invoice'));
         </table>
     </fieldset>
 
-    <?php  // if ($debtor->readyForState($year, 'skip_check_products')): ?>
+    <?php if ($debtor->readyForState($year, 'skip_check_products')): ?>
         <fieldset>
             <legend>Oplysninger der bogføres</legend>
             <table>
@@ -185,7 +185,7 @@ $page->start($translation->get('State invoice'));
             <input type="submit" value="Bogfør" /> eller
             <a href="view.php?id=<?php e($debtor->get('id')); ?>">fortryd</a>
         </div>
-   <?php // endif;  ?>
+   <?php endif;  ?>
     </form>
 <?php endif; ?>
 <?php
