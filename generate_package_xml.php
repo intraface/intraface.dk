@@ -184,7 +184,7 @@ $pfm->addPackageDepWithChannel('required', 'Contact_Vcard_Build', 'pear.php.net'
 $pfm->addPackageDepWithChannel('required', 'Date', 'pear.php.net', '1.4.7');
 
 // onlinepayment
-$pfm->addPackageDepWithChannel('required', 'Payment_Quickpay', 'public.intraface.dk', '1.18.2');
+$pfm->addPackageDepWithChannel('required', 'Payment_Quickpay', 'public.intraface.dk', '1.18.3');
 $pfm->addPackageDepWithChannel('required', 'Validate_Finance_CreditCard', 'pear.php.net', '0.5.2');
 
 
