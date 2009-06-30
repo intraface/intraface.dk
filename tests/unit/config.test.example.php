@@ -44,5 +44,5 @@ if ($db->getOption('debug')) {
 }
 
 Doctrine_Manager::getInstance()->setAttribute("use_dql_callbacks", true);
-Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_ALL);
+Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
 Doctrine_Manager::connection(DB_DSN);
