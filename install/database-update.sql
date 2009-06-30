@@ -21,12 +21,13 @@ ALTER TABLE `module_package_action` ADD `identifier` VARCHAR( 255 ) NOT NULL DEF
 
 ALTER TABLE `module_package_action` ADD UNIQUE ( `identifier` );
 
+ALTER TABLE `product_detail` CHANGE `before_price` `before_price` FLOAT( 11, 2 ) NOT NULL DEFAULT '0' ;
 
 CREATE TABLE IF NOT EXISTS `onlinepayment_settings` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ;
 
 CREATE TABLE IF NOT EXISTS `intraface_modules_onlinepayment__language_translation` (
   `id` int(11) NOT NULL,
