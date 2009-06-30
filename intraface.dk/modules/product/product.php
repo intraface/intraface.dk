@@ -248,7 +248,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
     if ($invoice->any('product', $product->get('id'))) {
         ?>
         <ul class="options">
-            <li><a href="<?php e($debtor_module->getPath().'list.php?type=invoice&amp;status=-1&amp;product_id='.$product->get('id')); ?>"><?php e(t('invoices with this product')); ?></a></li>
+            <li><a href="<?php e($debtor_module->getPath().'list.php?type=invoice&status=-1&product_id='.$product->get('id')); ?>"><?php e(t('invoices with this product')); ?></a></li>
         </ul>
         <?php
     }
