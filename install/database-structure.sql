@@ -1,10 +1,10 @@
 -- phpMyAdmin SQL Dump
--- version 2.11.9.4
+-- version 2.11.9.5
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 30, 2008 at 10:33 PM
--- Server version: 5.0.67
+-- Generation Time: Jul 02, 2009 at 12:21 AM
+-- Server version: 5.0.81
 -- PHP Version: 5.2.6
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
@@ -623,7 +623,8 @@ CREATE TABLE `currency` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL,
   `type_key` int(11) NOT NULL,
-  `deleted` int(1) NOT NULL,
+  `_old_deleted` int(1) NOT NULL,
+  `deleted_at` timestamp NULL default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
@@ -943,6 +944,20 @@ CREATE TABLE `ilib_category_append` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `intraface_modules_onlinepayment__language_translation`
+--
+
+CREATE TABLE `intraface_modules_onlinepayment__language_translation` (
+  `id` int(11) NOT NULL,
+  `email` text,
+  `lang` varchar(20) NOT NULL default '',
+  `subject` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`,`lang`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `intranet`
 --
 
@@ -1002,6 +1017,8 @@ CREATE TABLE `invoice_payment` (
   `type` int(11) NOT NULL default '0',
   `description` varchar(255) NOT NULL default '',
   `amount` double(11,2) NOT NULL default '0.00',
+  `_old_date_stated` date NOT NULL default '0000-00-00',
+  `_old_voucher_id` int(11) NOT NULL default '0',
   `date_stated` date NOT NULL default '0000-00-00',
   `voucher_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
@@ -1144,7 +1161,7 @@ CREATE TABLE `language` (
   `intranet_id` int(11) NOT NULL,
   `type_key` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1235,12 +1252,14 @@ CREATE TABLE `module_package` (
 CREATE TABLE `module_package_action` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
-  `order_debtor_id` int(11) NOT NULL default '0',
+  `identifier` varchar(255) NOT NULL default '',
+  `order_debtor_identifier` varchar(255) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `action` text NOT NULL,
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
-  KEY `intranet_id` (`intranet_id`,`order_debtor_id`)
+  UNIQUE KEY `identifier` (`identifier`),
+  KEY `intranet_id` (`intranet_id`,`order_debtor_identifier`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -1427,21 +1446,7 @@ CREATE TABLE `onlinepayment_settings` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `onlinepayment_settings_translation`
---
-
-CREATE TABLE `onlinepayment_settings_translation` (
-  `id` int(11) NOT NULL auto_increment,
-  `email` text,
-  `lang` varchar(20) default NULL,
-  `subject` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1566,11 +1571,12 @@ CREATE TABLE `product_attribute` (
   `attribute_group_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
   `position` int(11) NOT NULL default '0',
-  `deleted` tinyint(1) NOT NULL default '0',
+  `_old_deleted` tinyint(1) NOT NULL default '0',
+  `deleted_at` timestamp NULL default NULL,
   PRIMARY KEY  (`id`),
   KEY `attribute_group_id` (`attribute_group_id`),
   KEY `position` (`position`),
-  KEY `intranet_id` (`intranet_id`,`deleted`)
+  KEY `intranet_id` (`intranet_id`,`_old_deleted`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -1583,7 +1589,8 @@ CREATE TABLE `product_attribute_group` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
-  `deleted` tinyint(1) NOT NULL default '0',
+  `_old_deleted` tinyint(1) NOT NULL default '0',
+  `deleted_at` timestamp NULL default NULL,
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
@@ -1602,7 +1609,7 @@ CREATE TABLE `product_detail` (
   `name` varchar(255) NOT NULL default '',
   `description` text NOT NULL,
   `price` float(11,2) NOT NULL default '0.00',
-  `before_price` float(11,2) NOT NULL,
+  `before_price` float(11,2) NOT NULL default '0.00',
   `weight` int(11) NOT NULL default '0',
   `unit` int(11) NOT NULL default '0',
   `vat` tinyint(1) NOT NULL default '1',
@@ -1645,7 +1652,8 @@ CREATE TABLE `product_variation` (
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
   `number` int(11) NOT NULL default '0',
-  `deleted` tinyint(1) NOT NULL default '0',
+  `_old_deleted` tinyint(1) NOT NULL default '0',
+  `deleted_at` timestamp NULL default NULL,
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`product_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;

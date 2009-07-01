@@ -12,32 +12,19 @@ $stability = 'stable';
 $notes = '
 * Many small changes eg Doctrine in product
 ';
-$web_dir = 'intraface.dk';
+$web_dir = 'src/intraface.dk';
 
 // @todo make sure that there is not created an intraface.dk/intraface.dk on the server
 // @todo make sure that there is not created an install dir on the server.
 $ignore = array(
-            'generate_package_xml.php',
-            '*.tgz',
-            '.amateras',
-            '.project',
-            'project.properties.default',
-            'install/',
-            'blog.intraface.dk/',
             'intraface.dk/config.local.php',
             'intraface.dk/config.local.default.php',
+            'intraface.dk/demo/config.local.php',
+            'intraface.dk/demo/config.local.example.php',
             'intraface.dk/install/',
             'intraface.dk/install/reset-staging-server.php',
-            'tests/',
-            'sandbox/',
-            'example/',
-            'scripts/',
-            'tools.intraface.dk/',
-            'cache/',
             '.svn/',
-            '.settings/',
-            'log/*'
-            
+            '.settings/'
             );
 
 function getFilelist($dir) {
@@ -53,7 +40,6 @@ getFilelist($web_dir);
 
 $web_files = $rFiles;
 
-
 require_once 'PEAR/PackageFileManager2.php';
 PEAR::setErrorHandling(PEAR_ERROR_DIE);
 $pfm = new PEAR_PackageFileManager2();
@@ -61,14 +47,14 @@ $pfm->setOptions(
     array(
         'baseinstalldir'    => '/',
         'filelistgenerator' => 'file',
-        'packagedirectory'  => dirname(__FILE__),
+        'packagedirectory'  => dirname(__FILE__).'/src',
         'packagefile'       => 'package.xml',
         'ignore'            => $ignore,
         'dir_roles'        => array(
-            'intraface.dk' => 'web'
+              'intraface.dk' => 'www'
         ),
         'exceptions' => array(
-            'intraface.dk/*.*' => 'web'
+              'intraface.dk/*.*' => 'www'
         ),
         'simpleoutput'      => true,
         'addhiddenfiles' => true
@@ -107,7 +93,7 @@ $pfm->setPearinstallerDep('1.8.1');
 
 // installer
 $pfm->addPackageDepWithChannel('required', 'Config', 'pear.php.net', '1.10.11');
-$pfm->addPackageDepWithChannel('required', 'MDB2_Schema', 'pear.php.net', '0.8.2');
+$pfm->addPackageDepWithChannel('required', 'MDB2_Schema', 'pear.php.net', '0.8.5');
 
 // Kernel
 $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.1');
@@ -255,18 +241,30 @@ $post_install_script->addParamGroup('setup',
 $pfm->addPostInstallTask($post_install_script, 'intraface.php');
 
 foreach ($web_files AS $file) {
+    $src_file = substr($file, 4);
     $formatted_file = substr($file, strlen($web_dir . '/'));
-    if (in_array($file, $ignore)) continue;
-    $pfm->addInstallAs($file, $formatted_file);
+    if (in_array($src_file, $ignore)) continue;
+    $pfm->addInstallAs($src_file, $formatted_file);
 }
 
 $pfm->generateContents();
 
 if (isset($_GET['make']) || (isset($_SERVER['argv']) && @$_SERVER['argv'][1] == 'make')) {
-    if ($pfm->writePackageFile()) {
-        exit('package file written');
+    $res = $pfm->writePackageFile();
+    if(PEAR::isError($res)) {
+        echo $res->toString()."\n";
+    }
+    
+    if ($res) {
+        exit("Package file written\n");
     }
 } else {
-    $pfm->debugPackageFile();
+    $res = $pfm->debugPackageFile();
+    
+    if(PEAR::isError($res)) {
+        echo $res->toString()."\n";
+    }
+    
+    
 }
 ?>
