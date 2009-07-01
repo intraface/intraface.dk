@@ -981,10 +981,10 @@ if (isset($onlinepayment)) {
                         <?php
                         if ($debtor->get("locked") == false) {
                             ?>
-                            <a class="moveup" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=moveup&amp;item_id=<?php e($items[$i]["id"]); ?>"><?php e(t('Up')); ?></a>
-                            <a class="movedown" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=movedown&amp;item_id=<?php e($items[$i]["id"]); ?>"><?php e(t('Down')); ?></a>
-                            <a class="edit" href="item_edit.php?debtor_id=<?php e($debtor->get('id')); ?>&amp;id=<?php e($items[$i]["id"]); ?>"><?php e(t('Edit')); ?></a>
-                            <a class="delete" title="Dette vil slette varen!" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=delete_item&amp;item_id=<?php e($items[$i]["id"]); ?>"><?php e(t('Delete')); ?></a>
+                            <a class="moveup" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=moveup&amp;item_id=<?php e($items[$i]["id"]); ?>"><?php e(t('Up', 'common')); ?></a>
+                            <a class="movedown" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=movedown&amp;item_id=<?php e($items[$i]["id"]); ?>"><?php e(t('Down', 'common')); ?></a>
+                            <a class="edit" href="item_edit.php?debtor_id=<?php e($debtor->get('id')); ?>&amp;id=<?php e($items[$i]["id"]); ?>"><?php e(t('Edit', 'common')); ?></a>
+                            <a class="delete" title="Dette vil slette varen!" href="view.php?id=<?php e($debtor->get("id")); ?>&amp;action=delete_item&amp;item_id=<?php e($items[$i]["id"]); ?>"><?php e(t('Delete', 'common')); ?></a>
                             <?php
                         }
                         ?>&nbsp;
