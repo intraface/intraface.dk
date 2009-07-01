@@ -3,7 +3,7 @@ require('../../include_first.php');
 $module = $kernel->module("debtor");
 
 $mainInvoice = $kernel->useModule("invoice");
-
+$translation = $kernel->getTranslation('debtor');
 $reminder = new Reminder($kernel);
 
 settype($_GET["contact_id"], 'integer');
@@ -123,7 +123,7 @@ if ($contact_id == 0) {
 					e($reminders[$i]["dk_date_sent"]);
 				}
 				else {
-					e(t('No'));
+					e(t('No', 'common'));
 				}
 				?>
       </td>
