@@ -50,7 +50,7 @@ define('INTRAFACE_INTRANETMAINTENANCE_SHOP_ID', 0); // the id of the shop used t
 define('INTRAFACE_XMLRPC_SERVER_URL', ''); // the url for intraface xml-rpc server. Empty for the default url.
 define('INTRAFACE_XMLRPC_DEBUG', false);
 
-define('INTRAFACE_ONLINEPAYMENT_PROVIDER', 'FakeQuickpay');
+define('INTRAFACE_ONLINEPAYMENT_PROVIDER', 'Testing');
 define('INTRAFACE_ONLINEPAYMENT_MERCHANT', '123');
 define('INTRAFACE_ONLINEPAYMENT_MD5SECRET', 'fake');
 
