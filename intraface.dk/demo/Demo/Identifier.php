@@ -4,7 +4,8 @@ class Demo_Identifier extends k_Controller
     public $map = array(
         'shop' => 'Demo_Shop_Root',
         'cms' => 'Demo_CMS_Root',
-        'login' => 'Demo_Login_Root'
+        'login' => 'Demo_Login_Root',
+        'newsletter' => 'Demo_Newsletter_Root'
     );
     
     private $private_key;
@@ -46,6 +47,9 @@ class Demo_Identifier extends k_Controller
             return $next->handleRequest();
         } elseif ($name == 'login') {
             $next = new Demo_Login_Root($this, $name);
+            return $next->handleRequest();
+        } elseif ($name == 'newsletter') {
+            $next = new Demo_Newsletter_Root($this, $name);
             return $next->handleRequest();
         }
     }
