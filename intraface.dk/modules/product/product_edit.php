@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if(isset($_POST['stock'])) $product->stock = $_POST['stock'];
     
     try {
-        $product->save();
+        $product->save(); 
         
         if ($redirect->get('id') != 0) {
             $redirect->setParameter('product_id', $product->getId());
@@ -147,10 +147,10 @@ $page->start(t('edit product'));
             <?php else: ?>
                 <div class="formrow">
                     <label for="has_variation"><?php e(t('Product has variations')); ?></label>
-                    <input type="hidden" name="has_variation" value="<?php e($value['has_variation']); ?>" />
+                    <input type="hidden" name="has_variation" value="<?php if(isset($product)) e($product->hasVariation()); ?>" />
                     <span id="has_variation">
                         <?php
-                        if ($product->getDetails()->hasVariation() == 1) {
+                        if ($product->hasVariation() == 1) {
                             e('Yes', 'common');
                         } else {
                             e('No', 'common');

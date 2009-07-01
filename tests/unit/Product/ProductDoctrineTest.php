@@ -25,8 +25,8 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
     function createProductObject($id = 0)
     {
         if($id != 0) {
-            $model = new Intraface_modules_product_ProductDoctrine;
-            return $model->getTable()->find($id);
+            $gateway = new Intraface_modules_product_ProductDoctrineGateway(Doctrine_Manager::connection(), NULL);
+            return $gateway->findById($id);
         }
         return new Intraface_modules_product_ProductDoctrine;
     }
@@ -146,10 +146,8 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         $product = $this->createProductObject($id);
         $this->assertEquals($id, $product->getId());
         $this->assertTrue($product->getDetails()->setStateAccountId(20));
-        $this->assertEquals($id, $product->getId());
 
-        $product->refresh(true);
-        
+        $product = $this->createProductObject($id);
         $this->assertEquals(1, $product->getDetails()->getNumber());
         $this->assertEquals($name, $product->getDetails()->getName());
         $this->assertEquals(20, $product->getDetails()->getStateAccountId());

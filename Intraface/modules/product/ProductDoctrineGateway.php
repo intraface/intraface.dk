@@ -58,7 +58,7 @@ class Intraface_modules_product_ProductDoctrineGateway
         if ($collection == NULL || $collection->count() != 1) {
             throw new Intraface_Gateway_Exception('Error finding product from id '.$id);
         } else {
-            return $collection->getFirst();
+            return $collection->getLast();
         }
         
     }

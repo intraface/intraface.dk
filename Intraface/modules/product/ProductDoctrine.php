@@ -53,9 +53,15 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
         
         
         if(is_object($this->active_details)) {
-            if(!$this->active_details->isValid()) {
-                // throw new Doctrine_Validator_Exception('Unable to validate details');
-                $event->skipOperation();
+            # We validate the details
+            $this->active_details->isValid();
+            
+            $errors =& $this->active_details->getErrorStack();
+            
+            if($errors->count() > 1 && $errors->contains('product_id')) {
+                $errors->remove('product_id');
+                throw new Doctrine_Validator_Exception(array());
+                // $event->skipOperation();
             }
         }
         
@@ -103,7 +109,7 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
      */
     public function hasVariation()
     {
-        return $this->_has_variation;
+        return $this->has_variation;
     }
     
     /**

@@ -24,7 +24,7 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         $this->setTableName('product_detail');
         $this->hasColumn('product_id', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
         $this->hasColumn('number', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
-        $this->hasColumn('name', 'string', 255, array('type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true));
+        $this->hasColumn('name', 'string', 255, array('type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true, 'notblank' => true));
         $this->hasColumn('description', 'string', null, array('type' => 'string', 'notnull' => true));
         $this->hasColumn('price', 'float', 11, array('type' => 'float', 'length' => 11, 'default' => '0.00', 'notnull' => true));
         $this->hasColumn('before_price', 'float', 11, array('type' => 'float', 'length' => 11, 'default' => '0.00', 'notnull' => true));
@@ -83,14 +83,16 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         }
         
         if(is_object($this->before_price)) {
-            $this->price = $this->before_price->getAsIso();
+            $this->before_price = $this->before_price->getAsIso();
         }
         
         if(is_object($this->weight)) {
-            $this->price = $this->weight->getAsIso();
+            $this->weight = $this->weight->getAsIso();
         }
         
         if(is_null($this->description)) $this->description = '';
+        
+        if($this->state_account_id == '') $this->state_account_id = 0;
     }
     
     public function preInsert($event)
@@ -164,6 +166,9 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
      */
     public function getPrice()
     {
+        if(is_object($this->price)) {
+            return $this->price;
+        }
         return new Ilib_Variable_Float($this->price);
     }
 
@@ -177,7 +182,7 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
      */
     public function getPriceInCurrency($currency, $exchange_rate_id = 0)
     {
-        return new Ilib_Variable_Float(round($this->getPrice($product)->getAsIso() / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100) , 2));
+        return new Ilib_Variable_Float(round($this->getPrice()->getAsIso() / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100) , 2));
     }
 
     /**
@@ -209,6 +214,9 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
      */
     public function getBeforePrice()
     {
+        if(is_object($this->before_price)) {
+            return $this->before_price;
+        }
         return new Ilib_Variable_Float($this->before_price);
     }
 
@@ -254,6 +262,9 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
      */
     public function getWeight()
     {
+        if(is_object($this->weight)) {
+            return $this->weight;
+        }
         return new Ilib_Variable_Float($this->weight);
     }
     
