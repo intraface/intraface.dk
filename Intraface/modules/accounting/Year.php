@@ -635,27 +635,58 @@ class Year extends Intraface_Standard
     function setSettings($input)
     {
         if ($this->get('vat') > 0) {
+            if(empty($input['vat_in_account_id'])) $input['vat_in_account_id'] = 0;
             $this->setSetting('vat_in_account_id', (int)$input['vat_in_account_id']);
+            
+            if(empty($input['vat_out_account_id'])) $input['vat_out_account_id'] = 0;
             $this->setSetting('vat_out_account_id', (int)$input['vat_out_account_id']);
+            
+            if(empty($input['vat_abroad_account_id'])) $input['vat_abroad_account_id'] = 0;
             $this->setSetting('vat_abroad_account_id', (int)$input['vat_abroad_account_id']);
+            
+            if(empty($input['vat_balance_account_id'])) $input['vat_balance_account_id'] = 0;
             $this->setSetting('vat_balance_account_id', (int)$input['vat_balance_account_id']);
+            
+            if(empty($input['vat_free_account_id'])) $input['vat_free_account_id'] = 0;
             $this->setSetting('vat_free_account_id', (int)$input['vat_free_account_id']);
+            
+            if(empty($input['eu_sale_account_id'])) $input['eu_sale_account_id'] = 0;
             $this->setSetting('eu_sale_account_id', (int)$input['eu_sale_account_id']);
             //$this->setSetting('eu_buy_account_id', (int)$input['eu_buy_account_id']);
             //$this->setSetting('abroad_buy_account_id', (int)$input['abroad_buy_account_id']);
         }
+        if(empty($input['result_account_id'])) $input['result_account_id'] = 0;
         $this->setSetting('result_account_id', (int)$input['result_account_id']);
+        
+        if(empty($input['debtor_account_id'])) $input['debtor_account_id'] = 0;
         $this->setSetting('debtor_account_id', (int)$input['debtor_account_id']);
+        
+        if(empty($input['credit_account_id'])) $input['credit_account_id'] = 0;
         $this->setSetting('credit_account_id', (int)$input['credit_account_id']);
+        
+        if(empty($input['balance_accounts'])) $input['balance_accounts'] = array();
         $this->setSetting('balance_accounts', serialize($input['balance_accounts']));
+        
+        if(empty($input['buy_abroad_accounts'])) $input['buy_abroad_accounts'] = array();
         $this->setSetting('buy_abroad_accounts', serialize($input['buy_abroad_accounts']));
+        
+        if(empty($input['buy_eu_accounts'])) $input['buy_eu_accounts'] = array();
         $this->setSetting('buy_eu_accounts', serialize($input['buy_eu_accounts']));
 
+        
+        if(empty($input['result_account_id_start'])) $input['result_account_id_start'] = 0;
         $this->setSetting('result_account_id_start', $input['result_account_id_start']);
+        
+        if(empty($input['result_account_id_end'])) $input['result_account_id_end'] = 0;
         $this->setSetting('result_account_id_end', $input['result_account_id_end']);
+        
+        if(empty($input['balance_account_id_start'])) $input['balance_account_id_start'] = 0;
         $this->setSetting('balance_account_id_start', $input['balance_account_id_start']);
+        
+        if(empty($input['balance_account_id_end'])) $input['balance_account_id_end'] = 0;
         $this->setSetting('balance_account_id_end', $input['balance_account_id_end']);
 
+        if(empty($input['capital_account_id'])) $input['capital_account_id'] = 0;
         $this->setSetting('capital_account_id', $input['capital_account_id']);
 
         return true;
