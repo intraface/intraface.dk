@@ -7,7 +7,7 @@ class Intraface_Tools_Controller_Root extends k_Dispatcher
     public $map = array('dashboard' => 'Ilib_SimpleLogin_Controller_Index',
                         'login' => 'Ilib_SimpleLogin_Controller_Login',
                         'logout' => 'Ilib_SimpleLogin_Controller_LogOut',
-                        'errorlist'    => 'Ilib_ErrorHandler_Observer_File_ErrorList',
+                        'errorlist'    => 'Ilib_ErrorHandler_Observer_File_ErrorList_Controller_Index',
                         'phpinfo'     => 'Intraface_Tools_Controller_Phpinfo',
                         'log'         => 'Intraface_Tools_Controller_Log',
                         'translation' => 'Translation2_Frontend_Controller_Index'

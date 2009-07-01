@@ -11,7 +11,7 @@ $application = new Intraface_Tools_Controller_Root();
 
 $application->registry->registerConstructor('errorlist', create_function(
   '$className, $args, $registry',
-  'return new Intraface_Tools_ErrorList(ERROR_LOG);'
+  'return new Ilib_ErrorHandler_Observer_File_ErrorList(ERROR_LOG);'
 ));
 
 $application->registry->registerConstructor('database', create_function(
