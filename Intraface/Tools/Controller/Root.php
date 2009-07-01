@@ -53,7 +53,8 @@ class Intraface_Tools_Controller_Root extends k_Dispatcher
     {
         if(empty($this->user)) {
             $this->user = $this->registry->get('user');
-            $this->user->register('sj@sunet.dk', md5('12345'));
+            $this->user->register('sune@intraface.dk', '7f5c04fb811783c71d951302e3314d62');
+            $this->user->register('lars@legestue.net', '0294de2de14cc570a3242f22fe1311c5');
         }
         
         return $this->user;   
