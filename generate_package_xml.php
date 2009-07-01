@@ -7,11 +7,10 @@
  * @version @package-version@
  */
 
-$version = '1.13.0';
+$version = '1.14.0';
 $stability = 'stable';
 $notes = '
-* Implemented support for before price in shop
-* Other small improvements
+* Many small changes eg Doctrine in product
 ';
 $web_dir = 'intraface.dk';
 
@@ -24,17 +23,16 @@ $ignore = array(
             '.project',
             'project.properties.default',
             'install/',
-            'install.txt',
+            'blog.intraface.dk/',
             'intraface.dk/config.local.php',
             'intraface.dk/config.local.default.php',
             'intraface.dk/install/',
             'intraface.dk/install/reset-staging-server.php',
-            'intraface.dk/modules/modulepackage/fake_quickpay_server.php',
             'tests/',
             'sandbox/',
+            'example/',
             'scripts/',
             'tools.intraface.dk/',
-            'example/',
             'cache/',
             '.svn/',
             '.settings/',
@@ -215,7 +213,8 @@ $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.i
 
 // tools
 $pfm->addPackageDepWithChannel('required', 'Ilib_SimpleLogin', 'public.intraface.dk', '1.0.0');
-$pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Observer_File_ErrorList', 'public.intraface.dk', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Observer_File_ErrorList', 'public.intraface.dk', '1.0.1');
+$pfm->addPackageDepWithChannel('required', 'Translation2_Frontend', 'public.intraface.dk', '1.0.0');
 
 foreach ($ignore AS $file) {
     // $pfm->addIgnoreToRelease($file);
