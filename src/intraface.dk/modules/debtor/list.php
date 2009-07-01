@@ -277,7 +277,7 @@ $page->start($translation->get($debtor->get('type').'s'));
                     if ($posts[$i]["status"] != "created") {
                         e($posts[$i]["dk_date_sent"]);
                     } else {
-                        e(t('No'));
+                        e(t('No', 'common'));
                     }
                     ?>
           </td>
