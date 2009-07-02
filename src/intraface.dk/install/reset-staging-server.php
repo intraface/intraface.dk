@@ -1,7 +1,8 @@
 <?php
 require_once '../common.php';
 
-$install_class = PATH_ROOT.'install/Install.php';
+$install_class = realpath('../../../install/').'/Install.php';
+
 if (!file_exists($install_class)) {
     trigger_error('The install class is not present. Probably because you should not run it now!', E_USER_ERROR);
     exit;
