@@ -102,7 +102,7 @@ $page->start(t('Product variation') . ': ' . $variation->getName());
         if ($invoice->any('product', $product->get('id'), $variation->getId())) {
             ?>
             <ul class="options">
-                <li><a href="<?php e($debtor_module->getPath().'list.php?type=invoice&amp;status=-1&amp;product_id='.$product->get('id').'&amp;product_variation_id='.$variation->getId()); ?>"><?php e(t('invoices with this product')); ?></a></li>
+                <li><a href="<?php e($debtor_module->getPath().'list.php?type=invoice&status=-1&product_id='.$product->get('id').'&product_variation_id='.$variation->getId()); ?>"><?php e(t('invoices with this product')); ?></a></li>
             </ul>
             <?php
         }
