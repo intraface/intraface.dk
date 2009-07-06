@@ -79,7 +79,6 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
     function testSubscribeHandlesStuff()
     {
         $client = $this->getClient();
-
         $credentials = array('private_key' => 'privatekeyshouldbereplaced', 'session_id' => 'something');
         $email = 'test';
 
@@ -106,7 +105,7 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
 
     function getClient()
     {
-        require_once PATH_ROOT . 'install/Install.php';
+        require_once dirname(__FILE__) . '/../../../install/Install.php';
 
         if (!defined('SERVER_STATUS')) {
             define('SERVER_STATUS', 'TEST');
@@ -117,7 +116,7 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
 
         require_once 'XML/RPC2/Client.php';
         $options = array('prefix' => 'newsletter.');
-        return XML_RPC2_Client::create(XMLRPC_SERVER_URL.'newsletter/server.php', $options);
+        return XML_RPC2_Client::create(XMLRPC_SERVER_URL.'newsletterx/', $options);
     }
 
 

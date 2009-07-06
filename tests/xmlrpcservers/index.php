@@ -1,6 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../common.php';
-ini_set('include_path', PATH_INCLUDE_PATH);
+require_once dirname(__FILE__) . '/../unit/config.test.php';
 
 require_once 'Ilib/ClassLoader.php';
 require_once 'konstrukt/konstrukt.inc.php';
