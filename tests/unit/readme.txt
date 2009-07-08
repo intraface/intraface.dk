@@ -15,3 +15,7 @@ If you get error
  in /usr/share/php5/PEAR/Document/Cpdf.php on line 1465
 
 Set write access for the server to PEAR/Document/fonts
+
+If you get the error
+Segmentation Fault
+It should be corrected in Xdebug 2.1.0-CVS
