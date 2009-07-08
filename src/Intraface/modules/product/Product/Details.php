@@ -34,7 +34,7 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         // $this->hasColumn('show_unit', 'enum', 3, array('type' => 'enum', 'length' => 3, 'values' => array(0 => 'Yes', 1 => 'No'), 'default' => 'No', 'notnull' => true));
         // $this->hasColumn('pic_id', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
         $this->hasColumn('changed_date', 'timestamp', null, array('type' => 'timestamp', 'default' => '0000-00-00 00:00:00', 'notnull' => true));
-        $this->hasColumn('do_show', 'integer', 1, array('type' => 'integer', 'length' => 1, 'default' => '1', 'notnull' => true));
+        // $this->hasColumn('do_show', 'integer', 1, array('type' => 'integer', 'length' => 1, 'default' => '1', 'notnull' => true));
         $this->hasColumn('active', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
         $this->hasColumn('state_account_id', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
     }
@@ -332,15 +332,6 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         else {
             return new Ilib_Variable_Float(0);
         }
-    }
-    
-    /**
-     * Returns whether product is shown
-     * @return integer 1 or 0
-     */
-    public function showInShop()
-    {
-        return $this->do_show;
     }
     
     /**

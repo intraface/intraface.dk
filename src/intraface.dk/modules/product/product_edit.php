@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if(isset($_POST['weight'])) $product->getDetails()->weight = new Ilib_Variable_Float($_POST['weight'], 'da_dk');
     if(isset($_POST['unit'])) $product->getDetails()->unit = $_POST['unit'];
     if(isset($_POST['vat'])) $product->getDetails()->vat = $_POST['vat'];
-    if(isset($_POST['do_show'])) $product->getDetails()->do_show = $_POST['do_show'];
+    if(isset($_POST['do_show'])) $product->do_show = $_POST['do_show'];
     if(isset($_POST['state_account_id'])) $product->getDetails()->state_account_id = $_POST['state_account_id'];
     
     if(isset($_POST['has_variation'])) $product->has_variation = $_POST['has_variation'];
@@ -166,7 +166,7 @@ $page->start(t('edit product'));
             <select name="do_show" id="do_show">
                 
                 <?php foreach (array(0 => 'No', 1 => 'Yes') AS $key=>$v): ?>
-                    <option value="<?php e($key); ?>" <?php if (isset($product) && $product->getDetails()->showInShop() == $key) e('selected="selected"'); ?> ><?php e(t($v, 'common')); ?></option>
+                    <option value="<?php e($key); ?>" <?php if (isset($product) && $product->showInShop() == $key) e('selected="selected"'); ?> ><?php e(t($v, 'common')); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>

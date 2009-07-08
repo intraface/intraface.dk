@@ -37,7 +37,7 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
     public function setTableDefinition()
     {
         $this->setTableName('product');
-        // $this->hasColumn('do_show', 'integer', 1, array('type' => 'integer', 'length' => 1, 'default' => '1', 'notnull' => true));
+        $this->hasColumn('do_show', 'integer', 1, array('type' => 'integer', 'length' => 1, 'default' => '1', 'notnull' => true));
         $this->hasColumn('has_variation', 'integer', 1, array('type' => 'integer', 'length' => 1, 'default' => '0', 'notnull' => true));
         $this->hasColumn('active', 'integer', 1, array('type' => 'integer', 'length' => 1, 'default' => '1', 'notnull' => true));
         $this->hasColumn('changed_date', 'timestamp', null, array('type' => 'timestamp', 'default' => '0000-00-00 00:00:00', 'notnull' => true));
@@ -146,6 +146,15 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
         else {
             return $this->active_details = $this->details[$id];
         }
+    }
+    
+    /**
+     * Returns whether product is shown
+     * @return integer 1 or 0
+     */
+    public function showInShop()
+    {
+        return $this->do_show;
     }
 
 }

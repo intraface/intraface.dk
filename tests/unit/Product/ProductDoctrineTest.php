@@ -146,11 +146,32 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         $product = $this->createProductObject($id);
         $this->assertEquals($id, $product->getId());
         $this->assertTrue($product->getDetails()->setStateAccountId(20));
-
+        /**
+         * When you want to fix the problem in this test, you will find the next line removing the problem
+         * But it is a problem that Doctrine does not find a complete new object from the database.
+         */
+        // $product->active_details = NULL;
+        
         $product = $this->createProductObject($id);
         $this->assertEquals(1, $product->getDetails()->getNumber());
+        
         $this->assertEquals($name, $product->getDetails()->getName());
         $this->assertEquals(20, $product->getDetails()->getStateAccountId());
+        
+        
+    }
+    
+    public function testShowInShop() 
+    {
+        $product = $this->createProductObject();
+        $product->getDetails()->name = 'Test';
+        $product->getDetails()->price = new Ilib_Variable_Float(20);
+        $product->do_show = 1;
+        $product->save();
+        
+        $product = $this->createProductObject(1);
+        $this->assertEquals(1, $product->showInShop());
+        
     }
     
     /*
