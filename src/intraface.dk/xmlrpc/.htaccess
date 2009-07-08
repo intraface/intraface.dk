@@ -12,7 +12,7 @@ php_value log_errors             on
 
 # These settings routes all traffic, except concrete files, to the dispatcher
 #DirectorySlash Off
-#Options FollowSymLinks Indexes
+Options FollowSymLinks
 #DirectoryIndex index.php
 
 RewriteEngine on
