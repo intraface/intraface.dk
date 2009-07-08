@@ -53,7 +53,8 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                 1 => 'weight',
                 2 => 'customer_coupon',
                 3 => 'customer_country',
-                4 => 'payment_method'),
+                4 => 'payment_method',
+                5 => 'customer_country_region'),
 
             'evaluate_method' => array(
                 0 => 'equals',
@@ -277,6 +278,26 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                         $evaluation['evaluate_value'] = strtolower($evaluation['evaluate_value']);
                     } else {
                         $evaluate = trim($customer['country']);
+                    }
+                    // country can only be evaluated as 'equals' or 'different from'
+                    if ($evaluation['evaluate_method'] != 'equals' && $evaluation['evaluate_method'] != 'different_from') {
+                        $evaluation['evaluate_method'] = 'different_from';
+                    }
+                    break;
+                case 'customer_country_region':
+                    settype($customer['country'], 'string');
+                    
+                    $countries = new Ilib_Countries('iso-8859-1');
+                    if(false !== ($country = $countries->getCountryByName(trim($customer['country'])))) {
+                        $evaluate = $country['region'];
+                    }
+                    else {
+                        $evaluate = 'unknown';
+                    }
+                    
+                    if ($evaluation['evaluate_value_case_sensitive'] != 1) {
+                        $evaluate = strtolower($evaluate);
+                        $evaluation['evaluate_value'] = strtolower($evaluation['evaluate_value']);
                     }
                     // country can only be evaluated as 'equals' or 'different from'
                     if ($evaluation['evaluate_method'] != 'equals' && $evaluation['evaluate_method'] != 'different_from') {
