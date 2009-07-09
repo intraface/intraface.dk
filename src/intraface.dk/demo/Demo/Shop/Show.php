@@ -27,7 +27,7 @@ class Demo_Shop_Show extends k_Controller
     function getShop()
     {
         $shop_id = $this->name;
-        $client = new IntrafacePublic_Shop_Client_XMLRPC($this->getCredentials(), $shop_id, false, INTRAFACE_XMLPRC_SERVER_PATH . "shop/server0004.php");
+        $client = new IntrafacePublic_Shop_Client_XMLRPC($this->getCredentials(), $shop_id, false, INTRAFACE_XMLPRC_SERVER_PATH . "shop/server0100.php"); // 'iso-8859-1', 'xmlrpcext'
         return new IntrafacePublic_Shop($client, $this->registry->get('cache'));
     }
     
@@ -39,7 +39,7 @@ class Demo_Shop_Show extends k_Controller
                 new IntrafacePublic_OnlinePayment_Client_XMLRPC(
                     $this->getCredentials(),
                     false,
-                    INTRAFACE_XMLPRC_SERVER_PATH . "onlinepayment/server0002.php"
+                    INTRAFACE_XMLPRC_SERVER_PATH . "onlinepayment/server0100.php" // , 'iso-8859-1', 'xmlrpcext'
                 ),
                 $this->registry->get("cache")
             );
