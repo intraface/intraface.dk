@@ -10,7 +10,7 @@ Installation
 
 
 1. Copy all files to your server.
-2. Make sure that all files in intraface.dk is put into the web accessible folder
+2. Make sure that all files in src/intraface.dk is put into the web accessible folder
 3. Set up a database, create a user with all data and structure access.
 4. Import strucuture and values to database from intraface.dk/install/
 5. Create and give access to the webserver to write to log/
