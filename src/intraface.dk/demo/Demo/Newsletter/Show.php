@@ -15,7 +15,7 @@ class Demo_Newsletter_Show extends k_Controller
     function getNewsletter()
     {
         $list_id = $this->name;
-        $client = new IntrafacePublic_Newsletter_Client_XMLRPC($this->getCredentials(), $list_id, false, INTRAFACE_XMLPRC_SERVER_PATH . "newsletter/server0100.php");
+        $client = new IntrafacePublic_Newsletter_Client_XMLRPC($this->getCredentials(), $list_id, false, INTRAFACE_XMLPRC_SERVER_PATH . "newsletter/server0101.php"); // , 'iso-8859-1', 'xmlrpcext'
         return $client;
     }
 
