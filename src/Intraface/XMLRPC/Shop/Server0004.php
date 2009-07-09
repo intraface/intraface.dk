@@ -18,6 +18,16 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
     private $webshop;
     private $basket;
     private $product;
+    
+    /**
+     * Constructor
+     * @param $encoding the encoding used for the XML_RPC2 backend 
+     * @return unknown_type
+     */
+    public function __construct($encoding = 'utf-8') 
+    {
+        parent::__construct($encoding);
+    }
 
     /**
      * Gets a list with products

@@ -30,6 +30,23 @@ class Intraface_XMLRPC_Server
      */
     protected $kernel;
     
+    
+    /**
+     * Constructor
+     *
+     * @param string  $encoding The encoding wich the server recieves and returns data in
+     *
+     * @return void
+     */
+    public function __construct($encoding = 'utf-8')
+    {
+        
+        if(!in_array($encoding, array('utf-8', 'iso-8859-1'))) {
+            throw new Exception('Invalid encoding: '.$encoding.'. Should either be utf-8 or iso-8859');
+        }
+        $this->encoding = $encoding;
+    }
+    
     /**
      * Checks credentials
      *
@@ -81,7 +98,10 @@ class Intraface_XMLRPC_Server
      */
     protected function prepareResponseData($values)
     {
-        return $this->recursiveMap('utf8_encode', $values);
+        if($this->encoding == 'utf-8') {
+            return $this->recursiveMap('utf8_encode', $values);
+        }
+        return $values;
     }
     
     /**
@@ -92,7 +112,10 @@ class Intraface_XMLRPC_Server
      */
     protected function processRequestData($values)
     {
-        return $this->recursiveMap('utf8_decode', $values);
+        if($this->encoding == 'utf-8') {
+            return $this->recursiveMap('utf8_decode', $values);
+        }
+        return $values;
     }
     
     protected function recursiveMap($function, $values) 

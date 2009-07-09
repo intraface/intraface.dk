@@ -22,11 +22,6 @@ class Intraface_XMLRPC_Controller extends k_Component
         }
     }
 
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function renderHtml()
     {
         return '
@@ -48,13 +43,5 @@ class Intraface_XMLRPC_Controller extends k_Component
         </ul>
 
         ';
-        /*
-        if ($this->getModel()->getId() > 0) {
-            return new k_SeeOther($this->url('daybook'));
-        }
-
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
-        return $smarty->render($this);
-        */
     }
 }

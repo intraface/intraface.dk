@@ -21,7 +21,10 @@ class Intraface_XMLRPC_Shop_Controller extends k_Component
 
     function renderHtml()
     {
-        return $this->getResponse();
+        ob_start();
+        $this->getServer()->autoDocument();
+        $result = ob_get_clean();
+        return $result;
     }
 
     function POST()
