@@ -9,7 +9,7 @@ require_once 'Intraface/Kernel.php';
 require_once 'Intraface/modules/webshop/Webshop.php';
 require_once 'Intraface/modules/webshop/Basket.php';
 require_once 'Intraface/modules/product/ProductDetail.php';
-require_once 'tests/unit/stubs/PhpMailer.php';
+require_once dirname(__FILE__) .'/../stubs/PhpMailer.php';
 
 error_reporting(E_ALL);
 

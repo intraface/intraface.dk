@@ -7,7 +7,7 @@ require_once 'Intraface/Setting.php';
 require_once 'Intraface/DBQuery.php';
 require_once 'Intraface/modules/debtor/Debtor.php';
 require_once 'Intraface/Date.php';
-require_once 'tests/unit/stubs/Translation.php';
+require_once dirname(__FILE__) .'/../stubs/Translation.php';
 
 Intraface_Doctrine_Intranet::singleton(1);
 

@@ -455,11 +455,11 @@ class ProductTest extends PHPUnit_Framework_TestCase
     
     function testGetPriceInCurrency()
     {
-        require_once 'tests/unit/stubs/Fake/Intraface/modules/currency/Currency.php';
+        require_once dirname(__FILE__) .'/../stubs/Fake/Intraface/modules/currency/Currency.php';
         $currency = new Fake_Intraface_modules_currency_Currency;
-        require_once 'tests/unit/stubs/Fake/Intraface/modules/currency/Currency/ExchangeRate.php';
+        require_once dirname(__FILE__) .'/../stubs/Fake/Intraface/modules/currency/Currency/ExchangeRate.php';
         $currency->product_price_exchange_rate = new Fake_Intraface_modules_currency_Currency_ExchangeRate;
-        require_once 'tests/unit/stubs/Fake/Ilib/Variable/Float.php';
+        require_once dirname(__FILE__) .'/../stubs/Fake/Ilib/Variable/Float.php';
         $currency->product_price_exchange_rate->rate = new Fake_Ilib_Variable_Float;
         $currency->product_price_exchange_rate->rate->iso = 745.23;
         

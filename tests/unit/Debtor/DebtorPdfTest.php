@@ -3,12 +3,12 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/debtor/Visitor/Pdf.php';
-require_once 'tests/unit/stubs/Translation.php';
-require_once 'tests/unit/stubs/Address.php';
-require_once 'tests/unit/Contact/stubs/Contact.php';
-require_once 'tests/unit/Contact/stubs/ContactPerson.php';
-require_once 'tests/unit/Debtor/stubs/Debtor.php';
-require_once 'tests/unit/Debtor/stubs/DebtorLongProductText.php';
+require_once dirname(__FILE__) .'/../stubs/Translation.php';
+require_once dirname(__FILE__) .'/../stubs/Address.php';
+require_once dirname(__FILE__) .'/../Contact/stubs/Contact.php';
+require_once dirname(__FILE__) .'/../Contact/stubs/ContactPerson.php';
+require_once dirname(__FILE__) .'/stubs/Debtor.php';
+require_once dirname(__FILE__) .'/stubs/DebtorLongProductText.php';
 
 class DebtorPdfTest extends PHPUnit_Framework_TestCase
 {
@@ -55,7 +55,7 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
         $debtor = $this->createDebtor();
         $pdf->visit($debtor);
         $pdf->output('file', TEST_PATH_TEMP.'debtor.pdf');
-        $expected = file_get_contents('tests/unit/Debtor/expected_debtor.pdf', 1);
+        $expected = file_get_contents(dirname(__FILE__) .'/expected_debtor.pdf', 1);
         $actual = file_get_contents(TEST_PATH_TEMP.'debtor.pdf');
         
         
@@ -71,7 +71,7 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
         $debtor->values['payment_total'] = 2125;
         $pdf->visit($debtor);
         $pdf->output('file', TEST_PATH_TEMP.'debtor.pdf');
-        $expected = file_get_contents('tests/unit/Debtor/expected_debtor_with_payment.pdf', 1);
+        $expected = file_get_contents(dirname(__FILE__) .'/expected_debtor_with_payment.pdf', 1);
         $actual = file_get_contents(TEST_PATH_TEMP.'debtor.pdf');
         
         
@@ -86,7 +86,7 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
         $debtor = $this->createDebtorLongProductText();
         $pdf->visit($debtor);
         $pdf->output('file', TEST_PATH_TEMP.'debtor.pdf');
-        $expected = file_get_contents('tests/unit/Debtor/expected_debtor_with_long_text.pdf', 1);
+        $expected = file_get_contents(dirname(__FILE__) .'/expected_debtor_with_long_text.pdf', 1);
         $actual = file_get_contents(TEST_PATH_TEMP.'debtor.pdf');
         
         

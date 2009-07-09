@@ -4,9 +4,9 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/debtor/DebtorItem.php';
 require_once 'Intraface/functions.php';
-require_once 'tests/unit/stubs/Kernel.php';
-require_once 'tests/unit/stubs/Intranet.php';
-require_once 'tests/unit/Debtor/stubs/Debtor.php';
+require_once dirname(__FILE__) .'/../stubs/Kernel.php';
+require_once dirname(__FILE__) .'/../stubs/Intranet.php';
+require_once dirname(__FILE__) .'/stubs/Debtor.php';
 // require_once 'Intraface/DBQuery.php';
 
 

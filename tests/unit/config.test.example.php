@@ -6,7 +6,7 @@ define('DB_PASS', '');
 define('DB_USER', 'root');
 define('DB_NAME', 'pear');
 define('DB_DSN', 'mysql://root:@localhost/pear');
-define('PATH_ROOT', dirname(__FILE__) . '/../../');
+define('PATH_ROOT', dirname(__FILE__) . '/../../src/');
 define('PATH_INCLUDE_CONFIG', PATH_ROOT . 'Intraface/config/');
 define('PATH_INCLUDE_MODULE', PATH_ROOT . 'Intraface/modules/');
 define('PATH_INCLUDE_SHARED', PATH_ROOT . 'Intraface/shared/');

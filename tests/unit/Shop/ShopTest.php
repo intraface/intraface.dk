@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-require_once 'tests/unit/stubs/PhpMailer.php';
+require_once dirname(__FILE__) .'/../stubs/PhpMailer.php';
 
 Intraface_Doctrine_Intranet::singleton(1);
 

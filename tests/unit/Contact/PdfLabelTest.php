@@ -47,7 +47,7 @@ class PdfLabelTest extends PHPUnit_Framework_TestCase
         
         // file_put_contents(TEST_PATH_TEMP.'pdf_label.pdf', $pdf->output());
         
-        $this->assertEquals(strlen(file_get_contents('tests/unit/Contact/expected/pdf_label.pdf', 1)), strlen($pdf->output()));
+        $this->assertEquals(strlen(file_get_contents(dirname(__FILE__) .'/expected/pdf_label.pdf', 1)), strlen($pdf->output()));
         
     }
 }

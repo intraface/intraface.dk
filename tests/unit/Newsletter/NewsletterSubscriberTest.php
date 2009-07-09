@@ -4,7 +4,7 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/newsletter/NewsletterSubscriber.php';
 require_once 'NewsletterStubs.php';
-require_once 'tests/unit/stubs/PhpMailer.php';
+require_once dirname(__FILE__) .'/../stubs/PhpMailer.php';
 
 class FakeObserver
 {

@@ -37,7 +37,7 @@ class FakeDebtor
     
     function getIntranetAddress()
     {
-        require_once 'tests/unit/stubs/Address.php';
+        require_once dirname(__FILE__) .'/../../stubs/Address.php';
         return new FakeAddress();
     }
     

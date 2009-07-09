@@ -84,7 +84,7 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
 
     function createProductWithVariations()
     {
-        require_once 'install/Helper/Product.php';
+        require_once dirname(__FILE__) .'/../../../install/Helper/Product.php';
         $helper = new Install_Helper_Product($this->kernel, MDB2::factory(DB_DSN));
         $helper->createWithVariations();
     }
