@@ -1071,7 +1071,7 @@ if (count($reminders) > 0):
         <tr id="i<?php e($reminders[$i]["id"]); ?>"<?php if (isset($_GET['id']) && $_GET['id'] == $reminders[$i]['id']) print(" class=\"fade\""); ?>>
             <td class="number"><?php e($reminders[$i]["number"]); ?></td>
             <td><a href="reminders.php?contact_id=<?php e($reminders[$i]["contact_id"]); ?>"><?php e($reminders[$i]["name"]); ?></a></td>
-            <td><a href="reminder.php?id=<?php e($reminders[$i]["id"]); ?>"><?php (trim($reminders[$i]["description"] != "")) ? e($reminders[$i]["description"]) : e(t("[No description]")); ?></a></td>
+            <td><a href="reminder.php?id=<?php e($reminders[$i]["id"]); ?>"><?php (trim($reminders[$i]["description"] != "")) ? e($reminders[$i]["description"]) : e('['.t("No description", 'common').']'); ?></a></td>
             <td class="date">
                 <?php
                 if ($reminders[$i]["status"] != "created") {
