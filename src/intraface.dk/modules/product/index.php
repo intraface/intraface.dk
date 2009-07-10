@@ -159,7 +159,7 @@ $page->start(t('products'));
                     <?php endif; ?>
                     <a href="product.php?id=<?php e($p['id']); ?>"><?php e($p['name']); ?></a>
                 </td>
-                <td><?php e(t($p['unit']['combined'])); ?></td>
+                <td><?php if($p['unit']['combined'] != '') e(t($p['unit']['combined'])); ?></td>
                 <?php if ($kernel->user->hasModuleAccess("webshop")): ?>
                     <td><?php if ($p['do_show'] == 1) e(t('yes', 'common')); else e(t('no', 'common')); ?></td>
                 <?php endif; ?>
