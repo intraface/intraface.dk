@@ -7,10 +7,10 @@
  * @version @package-version@
  */
 
-$version = '1.14.0';
+$version = '1.15.0';
 $stability = 'stable';
 $notes = '
-* Many small changes eg Doctrine in product
+* New XMLRPC servers and basket evaluation on country region
 ';
 $web_dir = 'src/intraface.dk';
 
@@ -110,6 +110,8 @@ $pfm->addPackageDepWithChannel('required', 'MDB2_Debug_ExplainQueries', 'public.
 $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk', '0.3.0');
+$pfm->addPackageDepWithChannel('required', 'phemto', 'public.intraface.dk', '0.1.0');
+
 
 // Doctrine // remember to move it to correct installed dir afterwards
 $pfm->addPackageDepWithChannel('required', 'Doctrine', 'pear.phpdoctrine.org', '1.1.1');
@@ -124,7 +126,6 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_Error', 'public.intraface.dk', 
 $pfm->addPackageDepWithChannel('required', 'Ilib_Redirect', 'public.intraface.dk', '0.2.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Validator', 'public.intraface.dk', '0.0.2');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Html', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_ClassLoader', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Variable', 'public.intraface.dk', '0.2.2');
 
@@ -180,6 +181,8 @@ $pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Debtor_XMLRPC', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Authorize_Provider_Testing', 'public.intraface.dk', '0.1.3');
 
+// shop
+$pfm->addPackageDepWithChannel('required', 'Ilib_Countries', 'public.intraface.dk', '1.0.0');
 
 // demo
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS', 'public.intraface.dk', '0.1.6');
@@ -187,13 +190,13 @@ $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_Client_XMLRPC', 
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_Controller', 'public.intraface.dk', '1.0.0');
 
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Admin_Client_XMLRPC', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Client_XMLRPC', 'public.intraface.dk', '0.3.2');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Controller', 'public.intraface.dk', '0.4.1');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Client_XMLRPC', 'public.intraface.dk', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Controller', 'public.intraface.dk', '0.5.2');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop', 'public.intraface.dk', '0.5.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '1.0.1');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '0.9.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '1.0.3');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '1.0.1');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Client_XMLRPC', 'public.intraface.dk', '1.0.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Controller', 'public.intraface.dk', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Controller', 'public.intraface.dk', '1.1.0');
 $pfm->addPackageDepWithChannel('required', 'konstrukt', 'public.intraface.dk', '0.4.0');
 $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.intraface.dk', '0.1.0');
 
