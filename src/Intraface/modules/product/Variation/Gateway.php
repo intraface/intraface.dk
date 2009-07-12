@@ -85,7 +85,9 @@ class Intraface_modules_product_Variation_Gateway
                 ->innerJoin('a2_attribute.group a2_attribute_group');
         }
         
-        $collection = $query->where(get_class($this->variation).'.product_id = ? AND id = ?', array($this->product->getId(), $id))->execute();
+        // We make sure it is possible also to find deleted variations, as they can be present on debtors.
+        $collection = $query->where(get_class($this->variation).'.product_id = ? AND '.get_class($this->variation).'.id = ? '.
+            'AND ('.get_class($this->variation).'.deleted_at IS NULL OR '.get_class($this->variation).'.deleted_at IS NOT NULL)', array($this->product->getId(), $id))->execute();
         $query->free(true);
         
         if (!$collection || $collection->count() == 0) {
