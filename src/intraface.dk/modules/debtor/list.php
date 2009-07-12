@@ -37,6 +37,10 @@ if (isset($_GET["product_id"]) && intval($_GET["product_id"]) != 0) {
     if (isset($_GET["text"]) && $_GET["text"] != "") {
         $debtor->getDBQuery()->setFilter("text", $_GET["text"]);
     }
+    
+    if (isset($_GET["date_field"]) && $_GET["date_field"] != "") {
+        $debtor->getDBQuery()->setFilter("date_field", $_GET["date_field"]);
+    }
 
     if (isset($_GET["from_date"]) && $_GET["from_date"] != "") {
         $debtor->getDBQuery()->setFilter("from_date", $_GET["from_date"]);
@@ -161,18 +165,25 @@ $page->start($translation->get($debtor->get('type').'s'));
         <!-- sortering bør være placeret ved at man klikker på en overskrift i stedet - og så bør man kunne sortere på det hele -->
         <label>Sortering
         <select name="sorting">
-            <option value="0"<?php if ($debtor->getDBQuery()->getFilter("sorting") == 0) echo ' selected="selected"';?>>Fakturanummer faldende</option>
-            <option value="1"<?php if ($debtor->getDBQuery()->getFilter("sorting") == 1) echo ' selected="selected"';?>>Fakturanummer stigende</option>
-            <option value="2"<?php if ($debtor->getDBQuery()->getFilter("sorting") == 2) echo ' selected="selected"';?>>Kontaktnummer</option>
-            <option value="3"<?php if ($debtor->getDBQuery()->getFilter("sorting") == 3) echo ' selected="selected"';?>>Kontaktnavn</option>
+            <?php foreach(array(0 => ucfirst($debtor->get('type')).' number descending', 1 => ucfirst($debtor->get('type')).' number ascending', 2 => 'Contact number', 3 => 'Contact name') AS $key => $description): ?>
+                <option value="<?php e($key); ?>"<?php if ($debtor->getDBQuery()->getFilter("sorting") == $key) echo ' selected="selected"';?>><?php e(t($description)); ?></option>
+            <?php endforeach; ?>
         </select>
         </label>
         <br />
+        
+        <label><?php e(t('Date interval'))?>
+            <select name="date_field">
+                <?php foreach(array('this_date' => ucfirst($debtor->get('type')).' date', 'date_created' => 'Date created', 'date_sent' => 'Date sent', 'date_executed' => 'Date executed', 'data_cancelled' => 'Date cancelled') AS $field => $description): ?>
+                    <option value="<?php e($field); ?>" <?php if ($debtor->getDBQuery()->getFilter("date_field") == $field) echo ' selected="selected"';?>><?php e(t($description)) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
 
-        <label>Fra dato
+        <label><?php e(t('From', 'common'))?>
             <input type="text" name="from_date" id="date-from" value="<?php e($debtor->getDBQuery()->getFilter("from_date")); ?>" /> <span id="calender"></span>
         </label>
-        <label>Til dato
+        <label><?php e(t('To', 'common'))?>
             <input type="text" name="to_date" value="<?php e($debtor->getDBQuery()->getFilter("to_date")); ?>" />
         </label>
 
