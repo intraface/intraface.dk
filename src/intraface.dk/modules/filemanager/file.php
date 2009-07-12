@@ -106,7 +106,7 @@ $page->start($translation->get('file')) . ': ' . $filemanager->get('file_name');
                     if ($instance['name'] == 'manual') CONTINUE;
                     ?>
                     <tr>
-                        <td><a href="<?php e($instance['file_uri']); ?>" target="_blank"><?php e($translation->get($instance['name'], 'filehandler')); ?></a></td>
+                        <td><a href="<?php e($instance['file_uri']); ?>" target="_blank"><?php if($instance['origin'] == 'standard'): e($translation->get($instance['name'], 'filehandler')); else: e($instance['name']); endif; ?></a></td>
                         <td><?php e($instance['width']); ?>px</td>
                         <td><?php e($instance['height']); ?>px</td>
                         <td>

@@ -251,9 +251,9 @@ if ($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {
 
 <div>
 <input type="submit" class="save" name="submit" value="<?php e(t('Continue')); ?>" />
-<?php e(t('or')); ?>
+<?php e(t('or', 'common')); ?>
 <?php if (!$debtor->get("id")) { ?>
-<a href="<?php e($_SERVER['HTTP_REFERER']); ?>"><?php e(t('Cancel')); ?></a>
+<a href="<?php e($_SERVER['HTTP_REFERER']); ?>"><?php e(t('Cancel', 'common')); ?></a>
 <?php } else { ?>
 <a href="view.php?id=<?php e($debtor->get("id")); ?>"><?php e(t('Cancel')); ?></a>
 <?php } ?>

@@ -6,6 +6,7 @@ if (empty($_REQUEST['id']) OR !is_numeric($_REQUEST['id'])) {
 }
 
 $module = $kernel->module("product");
+$translation = $kernel->getTranslation('product');
 
 if (!empty($_POST['product'])) {
     foreach ($_POST['product'] as $key=>$value) {
