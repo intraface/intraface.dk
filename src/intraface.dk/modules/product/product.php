@@ -177,7 +177,7 @@ $page->start(t('product') . ': ' . $product->get('name'));
             <?php
                 // getting settings
                 $unit_choises  = Product::getUnits();
-                e(t($unit_choises[$product->get('unit_id')]['combined']));
+                if(!empty($unit_choises[$product->get('unit_id')]['combined'])) e(t($unit_choises[$product->get('unit_id')]['combined']));
             ?>
         </td>
     </tr>
