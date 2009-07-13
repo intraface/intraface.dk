@@ -58,7 +58,7 @@ $page = new Intraface_Page($kernel);
 $page->start(t('add related products'));
 ?>
 <h1><?php e(t('add related products')); ?></h1>
-<p>... <?php e(t('to')); ?> <?php e($product->get('name')); ?></p>
+<p>... <?php e(t('to', 'common')); ?> <?php e($product->get('name')); ?></p>
 
 <ul class="options">
     <li><a href="product.php?id=<?php e($_GET['id']); ?>&amp;from=related&amp;use_stored=true#related"><?php e(t('close')); ?></a></li>
@@ -66,7 +66,7 @@ $page->start(t('add related products'));
 
 <form action="<?php echo basename(__FILE__); ?>" method="get">
     <fieldset>
-        <legend><?php e(t('search')); ?></legend>
+        <legend><?php e(t('search', 'common')); ?></legend>
         <!--
         <label>Filter
         <select name="filter" id="filter">
@@ -83,14 +83,14 @@ $page->start(t('add related products'));
     <label>
         Vis med nøgleord
         <select name="keyword_id" id="keyword_id">
-            <option value=""><?php e(t('none')); ?></option>
+            <option value=""><?php e(t('none', 'common')); ?></option>
             <?php foreach ($keywords->getUsedKeywords() AS $k) { ?>
             <option value="<?php e($k['id']); ?>" <?php if ($k['id'] == $product->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php e($k['keyword']); ?></option>
             <?php } ?>
         </select>
     </label>
     <span>
-        <input type="submit" value="<?php e(t('go!')); ?>" class="search" />
+        <input type="submit" value="<?php e(t('go!', 'common')); ?>" class="search" />
         <input type="hidden" value="<?php e($product->get('id')); ?>" name="id" />
     </span>
     </fieldset>
@@ -106,7 +106,7 @@ echo $product->getDBQuery()->display('character');
         <caption><?php e(t('products')); ?></caption>
         <thead>
             <tr>
-                <th><?php e(t('choose')); ?></th>
+                <th><?php e(t('choose', 'common')); ?></th>
                 <th><?php e(t('product number')); ?></th>
                 <th><?php e(t('name')); ?></th>
             </tr>
@@ -125,8 +125,8 @@ echo $product->getDBQuery()->display('character');
         </tbody>
     </table>
       <p>
-          <input type="submit" value="<?php e(t('save')); ?>" />
-          <input type="submit" value="<?php e(t('save and close')); ?>" name="close" />
+          <input type="submit" value="<?php e(t('Save', 'common')); ?>" />
+          <input type="submit" value="<?php e(t('Save and close', 'common')); ?>" name="close" />
       </p>
 
   <?php echo $product->getDBQuery()->display('paging'); ?>
