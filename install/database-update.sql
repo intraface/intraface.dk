@@ -1,0 +1,1 @@
+ALTER TABLE `product_attribute_group` ADD `description` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `name` ;
