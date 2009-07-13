@@ -52,7 +52,7 @@ $page->start(t('Edit attribute group'));
             <input type="text" name="name" id="name" value="<?php if (isset($group)) e($group->getName()); ?>" />
         </div>
         <div class="formrow">
-            <label for="description"><?php e(t('Shor description')); ?></label>
+            <label for="description"><?php e(t('Short description')); ?></label>
             <input type="text" name="description" id="description" value="<?php if (isset($group)) e($group->getDescription()); ?>" />
         </div>
     </fieldset>
