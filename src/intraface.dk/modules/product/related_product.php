@@ -55,13 +55,13 @@ $list = $product->getList();
 
 $page = new Intraface_Page($kernel);
 //$page->includeJavascript('module', 'add_related.js');
-$page->start(t('add related products'));
+$page->start(t('Add related products'));
 ?>
-<h1><?php e(t('add related products')); ?></h1>
+<h1><?php e(t('Add related products')); ?></h1>
 <p>... <?php e(t('to', 'common')); ?> <?php e($product->get('name')); ?></p>
 
 <ul class="options">
-    <li><a href="product.php?id=<?php e($_GET['id']); ?>&amp;from=related&amp;use_stored=true#related"><?php e(t('close')); ?></a></li>
+    <li><a href="product.php?id=<?php e($_GET['id']); ?>&amp;from=related&amp;use_stored=true#related"><?php e(t('Close', 'common')); ?></a></li>
 </ul>
 
 <form action="<?php echo basename(__FILE__); ?>" method="get">
@@ -90,7 +90,7 @@ $page->start(t('add related products'));
         </select>
     </label>
     <span>
-        <input type="submit" value="<?php e(t('go!', 'common')); ?>" class="search" />
+        <input type="submit" value="<?php e(t('Go', 'common')); ?>" class="search" />
         <input type="hidden" value="<?php e($product->get('id')); ?>" name="id" />
     </span>
     </fieldset>
