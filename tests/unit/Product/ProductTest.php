@@ -362,6 +362,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
                 'id' => 1,
                 'intranet_id' => 1,
                 'name' => 'Test1',
+                'description' => '',
                 '_old_deleted' => 0,
                 'deleted_at' => NULL
             ),
@@ -369,6 +370,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
                 'id' => 2,
                 'intranet_id' => 1,
                 'name' => 'Test2',
+                'description' => '',
                 '_old_deleted' => 0,
                 'deleted_at' => NULL
             )
