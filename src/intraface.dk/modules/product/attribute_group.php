@@ -37,6 +37,8 @@ $page->start(t('Attributes in group').' '.$group->getName());
 ?>
 <h1><?php e(t('Attribute in group').' '.$group->getName()); ?></h1>
 
+<p><?php e($group->getDescription()); ?></p>
+
 <ul class="options">
     <li><a class="new" href="attribute_edit.php?group_id=<?php e($group->getId()); ?>"><?php e(t('Create attribute')); ?></a></li>
     <li><a href="attribute_groups.php?id=<?php e($group->getId()); ?>"><?php e(t('Close', 'common')); ?></a></li>

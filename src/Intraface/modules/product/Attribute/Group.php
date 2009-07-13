@@ -14,6 +14,7 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
     {
         $this->setTableName('product_attribute_group');
         $this->hasColumn('name', 'string', 255, array('notblank' => true, 'nohtml' => ''));
+        $this->hasColumn('description', 'string', 255, array('nohtml' => ''));
     }
     
     public function setUp()
@@ -36,6 +37,11 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
     public function getName() 
     {
         return $this->name;
+    }
+    
+    public function getDescription() 
+    {
+        return $this->description;
     }
     
     public function undelete()

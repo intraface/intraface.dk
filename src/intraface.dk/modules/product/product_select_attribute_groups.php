@@ -100,7 +100,7 @@ $page->start(t('Select attributes for product').' '.$product->get('name'));
                     <td>
                         <input type="checkbox" id="product-attribute-<?php e($group->getId()); ?>" value="<?php e($group->getId()); ?>" name="selected[]" <?php if (in_array($group->getId(), $existing_groups)) echo 'checked="checked"'; ?> />
                     </td>
-                    <td><?php e($group->getName()); ?></td>
+                    <td><?php e($group->getName()); if($group->getDescription() != '') e(' ('.$group->getDescription().')'); ?></td>
                 </tr>
              <?php endforeach; ?>
         </tbody>

@@ -74,7 +74,7 @@ $page->start(t('Product attribute groups'));
                     <td>
                         <input type="checkbox" value="<?php e($group->getId()); ?>" name="selected[]" />
                     </td>
-                    <td><a href="attribute_group.php?id=<?php e($group->getId()); ?>"><?php e($group->getName()); ?></a></td>
+                    <td><a href="attribute_group.php?id=<?php e($group->getId()); ?>"><?php e($group->getName()); if($group->getDescription() != '') e(' ('.$group->getDescription().')'); ?></a></td>
                     <td class="options"><a class="edit" href="attribute_group_edit.php?id=<?php e($group->getId()); ?>"><?php e(t('edit', 'common')); ?></a></td>
                 </tr>
              <?php endforeach; ?>

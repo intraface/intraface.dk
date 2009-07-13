@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     
     $group->name = $_POST['name'];
+    $group->description = $_POST['description'];
     try {
         $group->save();
         $group->load();
@@ -49,6 +50,10 @@ $page->start(t('Edit attribute group'));
         <div class="formrow">
             <label for="name"><?php e(t('Name')); ?></label>
             <input type="text" name="name" id="name" value="<?php if (isset($group)) e($group->getName()); ?>" />
+        </div>
+        <div class="formrow">
+            <label for="description"><?php e(t('Shor description')); ?></label>
+            <input type="text" name="description" id="description" value="<?php if (isset($group)) e($group->getDescription()); ?>" />
         </div>
     </fieldset>
     
