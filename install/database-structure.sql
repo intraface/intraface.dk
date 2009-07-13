@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 02, 2009 at 12:21 AM
+-- Generation Time: Jul 13, 2009 at 12:27 PM
 -- Server version: 5.0.81
 -- PHP Version: 5.2.6
 
@@ -1589,6 +1589,7 @@ CREATE TABLE `product_attribute_group` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
+  `description` varchar(255) NOT NULL default '',
   `_old_deleted` tinyint(1) NOT NULL default '0',
   `deleted_at` timestamp NULL default NULL,
   PRIMARY KEY  (`id`),
