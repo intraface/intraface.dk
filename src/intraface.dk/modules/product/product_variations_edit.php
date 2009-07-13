@@ -11,32 +11,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if (!empty($_POST['save']) || !empty($_POST['save_and_close'])) {
         
-        foreach ($_POST['variation'] AS $variation_data) {
-            
-            if (isset($variation_data['used'])) {
-                if (!empty($variation_data['id'])) {
-                    // update existing
+        if(isset($_POST['variation']) && is_array($_POST['variation'])) {
+            foreach ($_POST['variation'] AS $variation_data) {
+                
+                if (isset($variation_data['used'])) {
+                    if (!empty($variation_data['id'])) {
+                        // update existing
+                        $variation = $product->getVariation($variation_data['id']);
+                        
+                    }
+                    else {
+                        $variation = $product->getVariation();
+                        $variation->product_id = $_POST['id'];
+                        $variation->setAttributesFromArray($variation_data['attributes']);
+                        $variation->save();
+                        
+                    }
+                    
+                    $detail = $variation->getDetail();
+                    $detail->price_difference = 0; /* Can be reimplemented: intval($variation_data['price_difference']); */
+                    $detail->weight_difference = intval($variation_data['weight_difference']);
+                    $detail->save();
+                    
+                }
+                elseif (!empty($variation_data['id'])) {
                     $variation = $product->getVariation($variation_data['id']);
-                    
-                }
-                else {
-                    $variation = $product->getVariation();
-                    $variation->product_id = $_POST['id'];
-                    $variation->setAttributesFromArray($variation_data['attributes']);
-                    $variation->save();
-                    
-                }
-                
-                $detail = $variation->getDetail();
-                $detail->price_difference = 0; /* Can be reimplemented: intval($variation_data['price_difference']); */
-                $detail->weight_difference = intval($variation_data['weight_difference']);
-                $detail->save();
-                
+                    $variation->delete();
+                }   
             }
-            elseif (!empty($variation_data['id'])) {
-                $variation = $product->getVariation($variation_data['id']);
-                $variation->delete();
-            }   
         }
         
         if (!empty($_POST['save_and_close'])) {
