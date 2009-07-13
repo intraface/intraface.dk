@@ -7,10 +7,10 @@
  * @version @package-version@
  */
 
-$version = '1.15.0';
+$version = '1.16.0';
 $stability = 'stable';
 $notes = '
-* New XMLRPC servers and basket evaluation on country region
+* Added short description to product attribute group. Corrected translation pageId.
 ';
 $web_dir = 'src/intraface.dk';
 
