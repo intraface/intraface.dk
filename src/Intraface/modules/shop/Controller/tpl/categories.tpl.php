@@ -56,5 +56,12 @@ $level = 0;
 <?php if (isset($product_id)): ?>
     <input type="hidden" name="product_id" value="<?php e($product_id); ?>" />
     <input type="submit" name="append_product" value="<?php e(t('Select')); ?>" />
+<?php else: ?>
+    <select name="action">
+        <option value=""><?php e(t('Choose...', 'common')); ?></option>
+        <option value="delete"><?php e(t('Delete selected', 'common')); ?></option>
+    </select>
+
+    <input type="submit" value="<?php e(t('Go', 'common')); ?>" />
 <?php endif; ?>
 </form>

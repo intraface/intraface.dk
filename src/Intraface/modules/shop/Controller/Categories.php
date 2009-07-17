@@ -54,17 +54,34 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
         $translation = $kernel->getTranslation('shop');
         $db = $this->registry->get('db');
         
-        $redirect = Intraface_Redirect::factory($kernel, 'receive');
+        
         
         $shop = $this->registry->get('category_gateway')->findById($this->context->name);
         $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()));
-        $appender = $category->getAppender($this->POST['product_id']);
-        foreach ($this->POST['category'] AS $category) {
-            $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()), $category);
-            $appender->add($category);
+        
+        if(!empty($this->POST['append_product'])) {
+            // Append category to product
+            $appender = $category->getAppender($this->POST['product_id']);
+            foreach ($this->POST['category'] AS $category) {
+                $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()), $category);
+                $appender->add($category);
+            }
+            $redirect = Intraface_Redirect::factory($kernel, 'receive');
+            throw new k_http_Redirect($redirect->getRedirect($this->url('../')));
+        } elseif (!empty($this->POST['action']) && $this->POST['action'] == 'delete') {
+            // delete category
+            if(isset($this->POST['category']) && is_array($this->POST['category'])) {
+                foreach ($this->POST['category'] AS $category) {
+                    $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()), $category);
+                    $category->delete();
+                }
+            }
+            
+            return $this->GET();
         }
         
-        throw new k_http_Redirect($redirect->getRedirect($this->url('../')));
+        throw new exception('Invalid action');
+        
     }
     
     function forward($name) 
