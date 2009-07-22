@@ -1,18 +1,26 @@
 var confirmboxes = {
 
 	init: function() {
-		confirmboxes.apply("delete");
-		confirmboxes.apply("confirm");				
+		confirmboxes.apply("delete", "a");
+		confirmboxes.apply("delete", "input");
+		confirmboxes.apply("confirm", "a");	
+		confirmboxes.apply("confirm", "input");
 	},
 	
-	apply: function(sClass) {
-		var elements = YAHOO.util.Dom.getElementsByClassName(sClass, "a", "content");
+	apply: function(sClass, sElement) {
+		var elements = YAHOO.util.Dom.getElementsByClassName(sClass, sElement, "content");
 		if (!elements) return;
 		var n = elements.length;
 		for (var i=0; i<n;i++) {
+			
 			var event = YAHOO.util.Event.addListener(elements[i], "click", function(e) {
 				// kunne godt lige udvides med at tage title
-				if (!confirm("Er du sikker?")) {
+				if(this.title) {
+					var title = this.title;
+				} else {
+					var title = "Er du sikker?";
+				}
+				if (!confirm(title)) {
 					YAHOO.util.Event.stopEvent(e);
 				}
 			});		
