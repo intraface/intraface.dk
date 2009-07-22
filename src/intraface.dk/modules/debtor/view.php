@@ -418,16 +418,16 @@ if (isset($onlinepayment)) {
 <form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
     <input type="hidden" name="id" value="<?php e($debtor->get('id')); ?>" />
     <?php if ($debtor->contact->get('preferred_invoice') == 2 AND  $debtor->get('status') == 'created' AND isset($valid_sender) AND $valid_sender == true): ?>
-        <input type="submit" value="Send på e-mail" name="send_email" class="confirm" title="Dette vil sende e-mail til kontakten" />
+        <input type="submit" value="Send på e-mail" name="send_email" title="Dette vil sende e-mail til kontakten" />
     <?php elseif ($debtor->contact->get('preferred_invoice') == 2 AND $debtor->get('status') == 'sent' AND isset($valid_sender) AND $valid_sender == true): ?>
-        <input type="submit" value="Genfremsend på e-mail" name="send_email" class="confirm" title="Dette vil sende fakturaen igen" />
+        <input type="submit" value="Genfremsend på e-mail" name="send_email" title="Dette vil sende fakturaen igen" />
     <?php elseif ($debtor->get("type") == 'invoice' AND $debtor->contact->get('preferred_invoice') == 3 AND $debtor->contact->address->get('ean') AND $debtor->get('status') == 'created' AND isset($valid_scan_in_contact) AND $valid_scan_in_contact == true): ?>
-        <input type="submit" value="Send elektronisk faktura" name="send_electronic_invoice" class="confirm" title="Dette vil sende den elektroniske faktura til Læs-ind bureauet" />
+        <input type="submit" value="Send elektronisk faktura" name="send_electronic_invoice" title="Dette vil sende den elektroniske faktura til Læs-ind bureauet" />
     <?php elseif ($debtor->get("type") == 'invoice' AND $debtor->contact->get('preferred_invoice') == 3 AND $debtor->contact->address->get('ean') AND $debtor->get('status') == 'sent' AND isset($valid_scan_in_contact) AND $valid_scan_in_contact == true): ?>
-        <input type="submit" value="Genfremsend elektronisk faktura" name="send_electronic_invoice" class="confirm" title="Dette vil sende den elektroniske faktura igen" />
+        <input type="submit" value="Genfremsend elektronisk faktura" name="send_electronic_invoice" title="Dette vil sende den elektroniske faktura igen" />
     <?php endif; ?>
     <?php if ($debtor->get("status") == "created"): // make sure we can always mark as sent	?>
-        <input type="submit" value="Marker som sendt" name="sent" />
+        <input type="submit" value="Marker som sendt" class="confirm" title="Dette markerer denne som sendt?" name="sent" />
     <?php endif; ?>
 
     <?php if (($debtor->get("type") == "invoice" && $debtor->get("status") == "created") || ($debtor->get("type") != "invoice" && $debtor->get("locked") == false)): ?>
