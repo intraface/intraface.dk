@@ -271,33 +271,33 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
 
         if ($product->get('has_variation')) {
 
-            // We should make a Doctrine Product_X_AttributeGroup class and get all the groups i one sql
-            $groups = $product->getAttributeGroups();
-            $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway;
-            foreach ($groups as $key => $group) {
-                // Make sure we only include necessary data
-                $return['attribute_groups'][$key]['id'] = $group['id'];
-                $return['attribute_groups'][$key]['name'] = $group['name'];
-                $attributes = $group_gateway->findById($group['id'])->getAttributesUsedByProduct($product);
-                foreach ($attributes AS $attribute) {
-                    $return['attribute_groups'][$key]['attributes'][] = array(
-                        'id' => $attribute->getId(),
-                        'name' => $attribute->getName()
-                    );
-                }
-
-            }
-
             $variations = $product->getVariations();
             foreach ($variations as $variation) {
+                
+                if($product->get('stock')) {
+                    $stock = $variation->getStock($product)->get();
+                } else {
+                    $stock = false;
+                }
+                
                 $detail = $variation->getDetail();
                 $attribute_string = '';
                 $attributes_array = $variation->getAttributesAsArray();
+                
                 foreach ($attributes_array as $attribute) {
                     if ($attribute_string != '') $attribute_string .= '-';
                     $attribute_string .= $attribute['id'];
+                    
+                    // We calculate all products which is on stock with this attribute to be able to mark unused attributes in list.
+                    if(!isset($attribute_for_sale[$attribute['id']])) $attribute_for_sale[$attribute['id']] = 0;
+                    if($stock !== false) {
+                        $attribute_for_sale[$attribute['id']] += $stock['for_sale'];
+                    } else {
+                        // If product does not use stock, then we calculate one up, as the attribute is always in use.
+                        $attribute_for_sale[$attribute['id']] += 1;
+                    }
                 }
-
+                
                 $variation_currency['DKK']['price'] = $detail->getPrice($product)->getAsIso(2);
                 $variation_currency['DKK']['price_incl_vat'] = $detail->getPriceIncludingVat($product)->getAsIso(2);
 
@@ -320,8 +320,34 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
                         'weight' => $product->get('weight') + $detail->getWeightDifference(2),
                         'currency' => $variation_currency
                     ),
-                    'stock' => $variation->getStock($product)->get()
+                    'stock' => $stock
                 );
+            }
+            
+            // We should make a Doctrine Product_X_AttributeGroup class and get all the groups i one sql
+            $groups = $product->getAttributeGroups();
+            $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway;
+            foreach ($groups as $key => $group) {
+                // Make sure we only include necessary data
+                $return['attribute_groups'][$key]['id'] = $group['id'];
+                $return['attribute_groups'][$key]['name'] = $group['name'];
+                $attributes = $group_gateway->findById($group['id'])->getAttributesUsedByProduct($product);
+                foreach ($attributes AS $attribute) {
+                    
+                    // No products has attribute on stock we remove it from the list.
+                    if(isset($attribute_for_sale[$attribute->getId()]) && $attribute_for_sale[$attribute->getId()] == 0) {
+                        $is_used = 0;
+                    } else {
+                        $is_used = 1;
+                    }
+                    
+                    $return['attribute_groups'][$key]['attributes'][] = array(
+                        'id' => $attribute->getId(),
+                        'name' => $attribute->getName(),
+                        'is_used' => $is_used
+                    );
+                }
+
             }
         }
 
