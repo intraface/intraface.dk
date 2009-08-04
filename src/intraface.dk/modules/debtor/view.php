@@ -703,6 +703,11 @@ if (isset($onlinepayment)) {
             </form>
             <p><a href="register_depreciation.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>"><?php e(t('I am not going to recieve the full payment...')); ?></a></p>
         </div>
+    <?php elseif($debtor->get("type") == "invoice" && $debtor->get("status") == 'executed'): ?>
+        <div class="box">
+            <a href="register_payment.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>"><?php e(t('Register payment or reimbursement')); ?></a>.
+        </div>
+        
     <?php endif; ?>
 
 </div>
