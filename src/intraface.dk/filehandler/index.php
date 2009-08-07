@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../include_first.php';
+require_once dirname(__FILE__) . '/../../include_first.php';
 
 require_once 'k.php';
 require_once 'Ilib/ClassLoader.php';
@@ -18,8 +18,34 @@ class This_Filehandler_Root extends k_Dispatcher
     function __construct()
     {
         parent::__construct();
-        $this->document->template = 'document.tpl.php';
         $this->document->title = 'Filemanager';
+    }
+
+    function getHeader()
+    {
+        $page = $this->registry->get('page');
+        ob_start();
+        $page->start($this->document->title);
+        $data = ob_get_contents();
+        ob_end_clean();
+        return $data;
+    }
+
+    function getFooter()
+    {
+        $page = $this->registry->get('page');
+        ob_start();
+        $page->end();
+        $data = ob_get_contents();
+        ob_end_clean();
+        return $data;
+    }
+
+    function handleRequest()
+    {
+        $content = parent::handleRequest();
+        $data = array('content' => $content);
+        return $this->getHeader() . $this->render(dirname(__FILE__) . '/tpl/content.tpl.php', $data) . $this->getFooter();
     }
 
     function execute()
@@ -45,6 +71,11 @@ $application->registry->registerConstructor('intraface:kernel', create_function(
   'return $GLOBALS["intraface.kernel"];'
 ));
 
+$application->registry->registerConstructor('kernel', create_function(
+  '$className, $args, $registry',
+  'return $GLOBALS["intraface.kernel"];'
+));
+
 $application->registry->registerConstructor('database:mdb2', create_function(
   '$className, $args, $registry',
   '$options= array("debug" => 0);
@@ -57,6 +88,11 @@ $application->registry->registerConstructor('database:mdb2', create_function(
    $db->exec("SET time_zone=\"-01:00\"");
    return $db;
 '
+));
+
+$application->registry->registerConstructor('page', create_function(
+  '$className, $args, $registry',
+  'return new Intraface_Page($registry->get("kernel"));'
 ));
 
 $application->registry->registerConstructor('intraface:filehandler:gateway', create_function(
