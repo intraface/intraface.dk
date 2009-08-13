@@ -18,6 +18,12 @@ if (empty($_SERVER["QUERY_STRING"])) {
 }
 $query_parts = explode('/', $_SERVER["QUERY_STRING"]);
 
+if(!isset($query_parts[1])) {
+    header("HTTP/1.0 404 Not Found");
+    exit;
+}
+
+
 $auth_adapter = new Intraface_Auth_PublicKeyLogin(MDB2::singleton(DB_DSN), session_id(), $query_parts[1]);
 $weblogin = $auth_adapter->auth();
 
