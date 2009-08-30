@@ -1,52 +1,50 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module("procurement");
-$procurement = new Procurement($kernel);
+$procurement_object = new Procurement($kernel);
 $translation = $kernel->getTranslation('procurement');
 
 if (isset($_GET["contact_id"]) && intval($_GET["contact_id"]) != 0 && $kernel->user->hasModuleAccess('contact')) {
     $contact_module = $kernel->useModule('contact');
     $contact = new Contact($kernel, $_GET['contact_id']);
-    $procurement->dbquery->setFilter("contact_id", $_GET["contact_id"]);
+    $procurement_object->dbquery->setFilter("contact_id", $_GET["contact_id"]);
 }
 
 if (isset($_GET["search"])) {
 
     if (isset($_GET["text"]) && $_GET["text"] != "") {
-        $procurement->dbquery->setFilter("text", $_GET["text"]);
+        $procurement_object->dbquery->setFilter("text", $_GET["text"]);
     }
 
     if (isset($_GET["from_date"]) && $_GET["from_date"] != "") {
-        $procurement->dbquery->setFilter("from_date", $_GET["from_date"]);
+        $procurement_object->dbquery->setFilter("from_date", $_GET["from_date"]);
     }
 
     if (isset($_GET["to_date"]) && $_GET["to_date"] != "") {
-        $procurement->dbquery->setFilter("to_date", $_GET["to_date"]);
+        $procurement_object->dbquery->setFilter("to_date", $_GET["to_date"]);
     }
 
     if (isset($_GET["status"])) {
-        $procurement->dbquery->setFilter("status", $_GET["status"]);
+        $procurement_object->dbquery->setFilter("status", $_GET["status"]);
+    }
+} else {
+
+    if ($procurement_object->dbquery->checkFilter("contact_id")) {
+      $procurement_object->dbquery->setFilter("status", "-1");
+  } else {
+        $procurement_object->dbquery->setFilter("status", "-2");
     }
 }
-else {
 
-    if ($procurement->dbquery->checkFilter("contact_id")) {
-      $procurement->dbquery->setFilter("status", "-1");
-  }
-  else {
-        $procurement->dbquery->setFilter("status", "-2");
-    }
-}
-
-$procurement->dbquery->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
-$procurement->dbquery->storeResult("use_stored", "procurement", "toplevel");
-// $procurement->dbquery->setExtraUri('&amp;type='.$procurement->get("type"));
+$procurement_object->dbquery->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
+$procurement_object->dbquery->storeResult("use_stored", "procurement", "toplevel");
+// $procurement_object->dbquery->setExtraUri('&amp;type='.$procurement_object->get("type"));
 
 
-$procurements = $procurement->getList();
+$procurements = $procurement_object->getList();
 
-// $procurement->dbquery->setCondition("paid = 0 OR status = 0");
+// $procurement_object->dbquery->setCondition("paid = 0 OR status = 0");
 
 $page = new Intraface_Page($kernel);
 $page->start('Indkøb');
@@ -63,7 +61,7 @@ $page->start('Indkøb');
 
 </ul>
 
-<?php if (!$procurement->isFilledIn()): ?>
+<?php if (!$procurement_object->isFilledIn()): ?>
     <p>Der er ikke oprettet nogen indkøb. <a href="edit.php">Opret et indkøb</a>.</p>
 <?php else: ?>
 
@@ -73,22 +71,22 @@ $page->start('Indkøb');
     <fieldset>
         <legend>Avanceret søgning</legend>
         <label>Tekst
-            <input type="text" name="text" value="<?php e($procurement->dbquery->getFilter("text")); ?>" />
+            <input type="text" name="text" value="<?php e($procurement_object->dbquery->getFilter("text")); ?>" />
         </label>
         <label>Status
         <select name="status">
             <option value="-1">Alle</option>
-            <option value="-2"<?php if ($procurement->dbquery->getFilter("status") == -2) echo ' selected="selected"';?>>Åbne</option>
-            <option value="0"<?php if ($procurement->dbquery->getFilter("status") == 0) echo ' selected="selected"';?>>Oprettet</option>
-            <option value="1"<?php if ($procurement->dbquery->getFilter("status") == 1) echo ' selected="selected"';?>>Modtaget</option>
-            <option value="3"<?php if ($procurement->dbquery->getFilter("status") == 3) echo ' selected="selected"';?>>Annulleret</option>
+            <option value="-2"<?php if ($procurement_object->dbquery->getFilter("status") == -2) echo ' selected="selected"';?>>Åbne</option>
+            <option value="0"<?php if ($procurement_object->dbquery->getFilter("status") == 0) echo ' selected="selected"';?>>Oprettet</option>
+            <option value="1"<?php if ($procurement_object->dbquery->getFilter("status") == 1) echo ' selected="selected"';?>>Modtaget</option>
+            <option value="3"<?php if ($procurement_object->dbquery->getFilter("status") == 3) echo ' selected="selected"';?>>Annulleret</option>
         </select>
         </label>
         <label>Fra dato
-            <input type="text" name="from_date" id="date-from" value="<?php e($procurement->dbquery->getFilter("from_date")); ?>" /> <span id="calender"></span>
+            <input type="text" name="from_date" id="date-from" value="<?php e($procurement_object->dbquery->getFilter("from_date")); ?>" /> <span id="calender"></span>
         </label>
         <label>Til dato
-            <input type="text" name="to_date" value="<?php e($procurement->dbquery->getFilter("to_date")); ?>" />
+            <input type="text" name="to_date" value="<?php e($procurement_object->dbquery->getFilter("to_date")); ?>" />
         </label>
         <span>
         <input type="submit" name="search" value="Find" />
@@ -103,6 +101,7 @@ $page->start('Indkøb');
     <thead>
         <tr>
             <th>Nr.</th>
+            <th>Fakturadato</th>
             <th>Beskrivelse</th>
             <th>Fra</th>
             <th>Leveringsdato</th>
@@ -114,31 +113,34 @@ $page->start('Indkøb');
     <tbody>
         <?php
 
-        for ($i = 0, $max = count($procurements); $i < $max; $i++) {
+        foreach ($procurements as $procurement) {
             ?>
             <tr>
-                <td><?php e($procurements[$i]["number"]); ?></td>
-                <td><a href="view.php?id=<?php e($procurements[$i]["id"]); ?>"><?php e($procurements[$i]["description"]); ?></a></td>
+                <td><?php e($procurement["number"]); ?></td>
+                <td><?php e($procurement["dk_invoice_date"]); ?></td>
+
+
+                <td><a href="view.php?id=<?php e($procurement["id"]); ?>"><?php e($procurement["description"]); ?></a></td>
                 <td>
                     <?php
-                    if ($kernel->user->hasModuleAccess('contact') && $procurements[$i]["contact_id"] != 0) {
+                    if ($kernel->user->hasModuleAccess('contact') && $procurement["contact_id"] != 0) {
                         $ModuleContact = $kernel->getModule('contact');
                         ?>
-                        <a href="<?php e($ModuleContact->getPath()."contact.php?id=".$procurements[$i]["contact_id"]); ?>"><?php e($procurements[$i]["contact"]); ?>
+                        <a href="<?php e($ModuleContact->getPath()."contact.php?id=".$procurement["contact_id"]); ?>"><?php e($procurement["contact"]); ?>
                         <?php
                     } else {
-                        e($procurements[$i]["vendor"]);
+                        e($procurement["vendor"]);
                     }
                     ?>
                 </td>
                 <td>
                     <?php
-                    if ($procurements[$i]["status"] == "recieved") {
+                    if ($procurement["status"] == "recieved") {
                         e("Modtaget");
-                    } elseif ($procurements[$i]["status"] == "canceled") {
+                    } elseif ($procurement["status"] == "canceled") {
                         e("Annulleret");
-                    } elseif ($procurements[$i]["delivery_date"] != "0000-00-00") {
-                        e($procurements[$i]["dk_delivery_date"]);
+                    } elseif ($procurement["delivery_date"] != "0000-00-00") {
+                        e($procurement["dk_delivery_date"]);
                     } else {
                         e("Ej oplyst");
                     }
@@ -146,19 +148,19 @@ $page->start('Indkøb');
                 </td>
                 <td>
                     <?php
-                    if ($procurements[$i]["status"] == "canceled") {
+                    if ($procurement["status"] == "canceled") {
                         e("-");
-                    } elseif ($procurements[$i]['paid_date'] != '0000-00-00') {
+                    } elseif ($procurement['paid_date'] != '0000-00-00') {
                         e('Betalt');
-                    } elseif ($procurements[$i]["payment_date"] != "0000-00-00") {
-                        e($procurements[$i]["dk_payment_date"]);
+                    } elseif ($procurement["payment_date"] != "0000-00-00") {
+                        e($procurement["dk_payment_date"]);
                     } else {
                         e("Ej oplyst");
                     }
                     ?>
                 </td>
                 <td>
-                    <?php e(number_format($procurements[$i]["total_price"], 2, ',', '.')); ?>
+                    <?php e(number_format($procurement["total_price"], 2, ',', '.')); ?>
                 </td>
             </tr>
             <?php
@@ -167,10 +169,8 @@ $page->start('Indkøb');
     </tbody>
 </table>
 
-<?php echo $procurement->dbquery->display('paging'); ?>
+<?php echo $procurement_object->dbquery->display('paging'); ?>
 
 <?php endif; ?>
 <?php
-
 $page->end();
-?>

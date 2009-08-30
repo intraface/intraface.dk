@@ -324,6 +324,7 @@ class Procurement extends Intraface_Standard
 
         $this->dbquery->setSorting("date_created DESC");
         $db = $this->dbquery->getRecordset("*,
+            DATE_FORMAT(invoice_date, '%d-%m-%Y') AS dk_invoice_date,
             DATE_FORMAT(delivery_date, '%d-%m-%Y') AS dk_delivery_date,
             DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date,
             DATE_FORMAT(paid_date, '%d-%m-%Y') AS dk_paid_date");
@@ -339,6 +340,7 @@ class Procurement extends Intraface_Standard
             $list[$i]["status"] = $status_types[$db->f("status_key")];
             $list[$i]["delivery_date"] = $db->f("delivery_date");
             $list[$i]["dk_delivery_date"] = $db->f("dk_delivery_date");
+            $list[$i]["dk_invoice_date"] = $db->f("dk_invoice_date");
             $list[$i]["payment_date"] = $db->f("payment_date");
             $list[$i]["dk_payment_date"] = $db->f("dk_payment_date");
             $list[$i]["paid_date"] = $db->f("paid_date");
