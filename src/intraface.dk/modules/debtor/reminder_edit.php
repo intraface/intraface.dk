@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $module = $kernel->module("debtor");
 
@@ -24,7 +24,7 @@ if (!empty($_POST)) {
         $contact_person = new ContactPerson($contact);
         $person["name"] = $_POST['contact_person_name'];
         $person["email"] = $_POST['contact_person_email'];
-        $contact_person->update($person);
+        $contact_person->save($person);
         $contact_person->load();
         $_POST["contact_person_id"] = $contact_person->get("id");
     }
