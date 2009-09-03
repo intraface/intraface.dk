@@ -25,15 +25,15 @@ class Intraface_modules_shop_Controller_Root extends k_Dispatcher
         return $data;
     }
 
-    function execute()
-    {
-        return $this->forward('shop');
-    }
-
     function handleRequest()
     {
         $content = parent::handleRequest();
         $data = array('content' => $content);
         return $this->getHeader() . $this->render(dirname(__FILE__) . '/tpl/content.tpl.php', $data) . $this->getFooter();
+    }
+
+    function execute()
+    {
+        return $this->forward('shop');
     }
 }

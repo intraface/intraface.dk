@@ -5,4 +5,9 @@ class Intraface_modules_debtor_PaymentMethod_BankTransfer
     {
         return 'Bank transfer';
     }
+
+    public function getIdentifier()
+    {
+    	return 'BankTransfer';
+    }
 }

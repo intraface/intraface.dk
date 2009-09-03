@@ -88,6 +88,8 @@ class Intraface_ModuleHandler
 
         $this->modules[$module_name] = $module_name;
 
+        // @todo check whether a module has any limitations in access here?
+
         // access control here
         $access = false;
 

@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../../include_first.php';
+require_once dirname(__FILE__) . '/../include_first.php';
 
 require_once 'k.php';
 require_once 'Ilib/ClassLoader.php';

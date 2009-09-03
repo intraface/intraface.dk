@@ -614,7 +614,7 @@ class FileHandler extends Intraface_Standard
         }
 
         if (in_array($from, array('mime_type', 'extension'))) {
-            foreach ($this->file_types AS $file_key => $file_type) {
+            foreach ($this->file_types as $file_key => $file_type) {
                 if ($file_type[$from] == $key) {
                     // Vi putter lige key med i arrayet
                     $file_type['key'] = $file_key;
@@ -637,6 +637,11 @@ class FileHandler extends Intraface_Standard
     {
         return $this->_getMimeType($key, 'key');
 
+    }
+
+    function getKernel()
+    {
+    	return $this->kernel;
     }
 
     /**

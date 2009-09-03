@@ -168,7 +168,7 @@ class Intraface_Install
         $user->setIntranetAccess(1);
 
         require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
-        foreach ($modules AS $module_name) {
+        foreach ($modules as $module_name) {
             $module = ModuleMaintenance::factory($module_name);
 
             if ($module->get('id') == 0) {
@@ -178,7 +178,7 @@ class Intraface_Install
             $intranet->setModuleAccess($module->get('id'));
             $user->setModuleAccess($module->get('id'), 1);
             $sub_accesss = $module->get('sub_access');
-            foreach ($sub_accesss AS $sub_access) {
+            foreach ($sub_accesss as $sub_access) {
                 $user->setSubAccess($module->get('id'), $sub_access['id'], 1);
             }
         }
@@ -228,7 +228,7 @@ class Intraface_Install
             $object_method[0] = str_replace('/', '', $object_method[0]);
             $object_method[0] = str_replace('\\', '', $object_method[0]);
 
-            require_once 'install/Helper/'.$object_method[0].'.php';
+            require_once dirname(__FILE__) . '/Helper/'.$object_method[0].'.php';
             $object_name = 'Install_Helper_'.$object_method[0];
             $object = new $object_name($kernel, $this->db);
             $object->$object_method[1]();
@@ -242,7 +242,7 @@ class Intraface_Install
      */
     private function registerModules()
     {
-        require_once('Intraface/modules/intranetmaintenance/ModuleMaintenance.php');
+        require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
         $modulemaintenance = new ModuleMaintenance;
         $modulemaintenance->register();
     }

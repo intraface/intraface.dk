@@ -34,7 +34,9 @@ class Intraface_modules_cms_section_Shorttext extends CMS_Section
 
     function save_section($var)
     {
-        if (empty($var['text'])) $var['text'] = '';
+        if (empty($var['text'])) {
+            $var['text'] = '';
+        }
         $var['text'] = strip_tags($var['text']);
         return $this->addParameter('text', $var['text']);
     }

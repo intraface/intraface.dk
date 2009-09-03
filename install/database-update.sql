@@ -12,4 +12,3 @@ CREATE TABLE `product_detail_translation` (
 PRIMARY KEY ( `id`, `lang` )
 ) ENGINE = MYISAM ;
 
-

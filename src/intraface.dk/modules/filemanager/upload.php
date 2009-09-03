@@ -12,7 +12,7 @@ if (isset($_POST["submit"])) {
 	$filemanager->createUpload();
 
 	$filemanager->upload->setSetting('file_accessibility', $_POST['accessibility']);
-	$filemanager->upload->setSetting('max_file_size', '1000000');
+	$filemanager->upload->setSetting('max_file_size', '10000000');
 	$filemanager->upload->setSetting('add_keyword', $_POST['keyword']);
 	if ($id = $filemanager->upload->upload('userfile')) {
 		header("location: ".$redirect->getRedirect('file.php?id='.$id));

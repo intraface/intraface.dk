@@ -1,3 +1,6 @@
+<?php
+$values = $context->getValues(); ?>
+
 <h1>Kassekladde for <?php e($context->getYear()->get('label')); ?></h1>
 
 <?php if (!$context->getAccount()->anyAccounts()): ?>
@@ -31,7 +34,7 @@
     <fieldset>
         <legend>Indtast</legend>
         <table>
-        <?php if ($this->getKernel()->setting->get('user', 'accounting.daybook_view') == 'expenses'): ?>
+        <?php if ($context->getKernel()->setting->get('user', 'accounting.daybook_view') == 'expenses'): ?>
             <caption>Udgifter</caption>
             <thead>
                 <tr>
@@ -95,7 +98,7 @@
                     </td>
                 </tr>
             </tbody>
-        <?php elseif ($kernel->setting->get('user', 'accounting.daybook_view') == 'income'): ?>
+        <?php elseif ($context->getKernel()->setting->get('user', 'accounting.daybook_view') == 'income'): ?>
             <caption>Indtægter</caption>
             <thead>
                 <tr>
@@ -160,7 +163,7 @@
                 </tr>
             </tbody>
 
-        <?php elseif ($kernel->setting->get('user', 'accounting.daybook_view') == 'debtor'): ?>
+        <?php elseif ($context->getKernel()->setting->get('user', 'accounting.daybook_view') == 'debtor'): ?>
             <caption>Debitorbetaling</caption>
             <thead>
                 <tr>
@@ -267,7 +270,7 @@
                     <td>
                         <input tabindex="7" name="reference" id="reference" type="text" size="7" value="<?php if (!empty($values['reference'])) e($values['reference']);  ?>"  />
                     </td>
-                    <?php if ($year->get('vat') > 0): ?>
+                    <?php if ($context->getYear()->get('vat') > 0): ?>
                     <td>
                         <input tabindex="8" name="vat_off" id="vat_off" type="checkbox" value="1" />
                     </td>
@@ -303,7 +306,7 @@
     </tr>
 </thead>
 <tbody>
-    <?php foreach ($posts AS $p): ?>
+    <?php foreach ($posts as $p): ?>
     <tr>
         <td><?php e($p['date_dk']); ?></td>
         <td><a href="voucher.php?id=<?php e($p['voucher_id']); ?>"><?php e($p['voucher_number']); ?></a></td>
@@ -329,7 +332,7 @@
 <?php endif; ?>
 
 
-<?php if ($kernel->setting->get('user', 'accounting.daybook_cheatsheet')== 'true'): ?>
+<?php if ($context->getKernel()->setting->get('user', 'accounting.daybook_cheatsheet')== 'true'): ?>
 
 <table summary="" id="accounting-cheatsheet">
     <caption>Hjælp - hvad er nu debet og kredit? <a href="<?php e($_SERVER['PHP_SELF']); ?>?quickhelp=false" id="accounting-cheatsheet-link">(Skjul)</a></caption>

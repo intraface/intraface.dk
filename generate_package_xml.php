@@ -104,7 +104,7 @@ $pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.11.4');
 $pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.8.2');
 $pfm->addPackageDepWithChannel('required', 'Net_IDNA', 'pear.php.net', '0.7.2');
 $pfm->addPackageDepWithChannel('required', 'HTTP_Upload', 'pear.php.net', '0.9.1');
-$pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.1');
+$pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.3');
 $pfm->addPackageDepWithChannel('required', 'ErrorHandler', 'public.intraface.dk', '0.2.6');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Debug_ExplainQueries', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
@@ -112,8 +112,7 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.in
 $pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'phemto', 'public.intraface.dk', '0.1.0');
 
-
-// Doctrine // remember to move it to correct installed dir afterwards
+// Doctrine
 $pfm->addPackageDepWithChannel('required', 'Doctrine', 'pear.phpdoctrine.org', '1.1.1');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Nohtml', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Greaterthan', 'public.intraface.dk', '0.1.0');
@@ -151,7 +150,7 @@ $pfm->addPackageDepWithChannel('required', 'phpmailer', 'public.intraface.dk', '
 // cms
 $pfm->addPackageDepWithChannel('required', 'XML_Util', 'pear.php.net', '1.2.0');
 $pfm->addPackageDepWithChannel('required', 'XML_Serializer', 'pear.php.net', '0.20.0');
-$pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'htmlpurifier.org', '3.1.0');
+$pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'htmlpurifier.org', '4.0.0');
 $pfm->addPackageDepWithChannel('required', 'Text_Wiki', 'pear.php.net', '1.2.0');
 $pfm->addPackageDepWithChannel('required', 'Markdown', 'pear.michelf.com', '1.0.1m');
 
@@ -257,17 +256,17 @@ if (isset($_GET['make']) || (isset($_SERVER['argv']) && @$_SERVER['argv'][1] == 
     if(PEAR::isError($res)) {
         echo $res->toString()."\n";
     }
-    
+
     if ($res) {
         exit("Package file written\n");
     }
 } else {
     $res = $pfm->debugPackageFile();
-    
+
     if(PEAR::isError($res)) {
         echo $res->toString()."\n";
     }
-    
-    
+
+
 }
 ?>

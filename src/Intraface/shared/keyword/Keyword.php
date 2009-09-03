@@ -8,8 +8,9 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 require_once 'Intraface/functions.php';
+require_once 'Ilib/Keyword.php';
 
-class Keyword extends Ilib_Keyword
+class Keyword extends Ilib_Abstract_Keyword
 {
     /**
      * @var object

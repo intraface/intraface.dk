@@ -93,7 +93,9 @@ class Intraface_modules_shop_Coordinator
      */
     public function getBasket()
     {
-        if ($this->basket) return $this->basket;
+        if ($this->basket) {
+            return $this->basket;
+        }
         return ($this->basket = new Intraface_modules_shop_Basket(MDB2::singleton(DB_DSN), $this->intranet, $this, $this->shop, $this->session_id));
     }
 
@@ -305,7 +307,7 @@ class Intraface_modules_shop_Coordinator
      */
     private function addOrderLines($products = array())
     {
-        foreach ($products AS $product) {
+        foreach ($products as $product) {
             $this->order->loadItem();
             $value['product_id'] = $product['product_id'];
             $value['product_variation_id'] = $product['product_variation_id'];
@@ -499,69 +501,73 @@ class Intraface_modules_shop_Coordinator
         return $debtor->setSent();
     }
 
+    /**
+     * Returns payment methods
+     *
+     * @return array
+     */
     public function getPaymentMethods()
     {
-        $payment_method = array();
+        $payment_methods = array();
 
+        $method = new Intraface_modules_debtor_PaymentMethod();
+        $shop_id = $this->shop->getId();
+        $payment_methods = $method->getChosenAsArray($shop_id);
 
-        /**
-         * @todo Fix this so it returns correct payment types!
-         */
-        if ($this->kernel->intranet->hasModuleAccess('onlinepayment')) {
-            $payment_method[] = array(
-                'key' => 5,
-                'identifier' => 'OnlinePayment',
-                'description' => 'Online payment',
-                'text' => '');
+        if (empty($payment_methods)) {
+            if ($this->kernel->intranet->hasModuleAccess('onlinepayment')) {
+                $payment_methods[] = array(
+                    'key' => 5,
+                    'identifier' => 'OnlinePayment',
+                    'description' => 'Online payment',
+                    'text' => '');
+            } else {
+                $payment_methods[] = array(
+                    'key' => 4,
+                    'identifier' => 'CashOnDelivery',
+                    'description' => 'Cash on delivery',
+                    'text' => '');
+            }
         }
-        else {
-            $payment_method[] = array(
-                'key' => 4,
-                'identifier' => 'CashOnDelivery',
-                'description' => 'Cash on delivery',
-                'text' => '');
-        }
 
-        return $payment_method;
+        return $payment_methods;
     }
 
     /**
      * Returns payment method key from identifier
      *
      * @param string $payment_method
+     *
      * @return integer payment method key
      */
     public function getPaymentMethodKeyFromIdenfifier($payment_method)
     {
         $methods = $this->getPaymentMethods();
-        foreach ($methods AS $method) {
+        foreach ($methods as $method) {
             if ($method['identifier'] == $payment_method) {
                 return $method['key'];
             }
         }
 
         throw new Exception('Invalid payment method "'.$payment_method.'"');
-
     }
 
     /**
      * Returns payment method from key
      *
      * @param string $payment_method_key
+     *
      * @return array payment method
      */
     public function getPaymentMethodFromKey($payment_method_key)
     {
         $methods = $this->getPaymentMethods();
-        foreach ($methods AS $method) {
+        foreach ($methods as $method) {
             if ($method['key'] == $payment_method_key) {
                 return $method;
             }
         }
 
         throw new Exception('Invalid payment method key "'.$payment_method_key.'"');
-
     }
-
-
 }

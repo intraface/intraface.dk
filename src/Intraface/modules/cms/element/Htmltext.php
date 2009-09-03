@@ -71,11 +71,11 @@ class Intraface_modules_cms_element_Htmltext extends CMS_Element
         // should probably purify
         require_once 'HTMLPurifier/Bootstrap.php';
         $config = HTMLPurifier_Config::createDefault();
-        $config->set('Core', 'Encoding', 'ISO-8859-1');
-        $config->set('HTML', 'Doctype', 'XHTML 1.0 Strict');
+        $config->set('Core.Encoding', 'ISO-8859-1');
+        $config->set('HTML.Doctype', 'XHTML 1.0 Strict');
         // only used until we change encoding to utf8
         $purifier_cache_dir = PATH_CACHE.'htmlpurifier/';
-        
+
         if (!is_dir($purifier_cache_dir)) {
             mkdir($purifier_cache_dir);
             if (!is_dir($purifier_cache_dir)) {
@@ -83,7 +83,7 @@ class Intraface_modules_cms_element_Htmltext extends CMS_Element
                 exit;
             }
         }
-        $config->set('Cache', 'SerializerPath', $purifier_cache_dir);
+        $config->set('Cache.SerializerPath', $purifier_cache_dir);
 
         $purifier = new HTMLPurifier($config);
         $clean_text = $purifier->purify($var['text']);

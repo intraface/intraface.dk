@@ -63,6 +63,7 @@ if (!empty($_POST)) {
             $filehandler = new FileHandler($kernel);
             $filehandler->createUpload();
             $filehandler->upload->setSetting('file_accessibility', 'public');
+            $filehandler->upload->setSetting('max_file_size', 10000000);
             $id = $filehandler->upload->upload('new_file');
 
             // Newly created element which has not been saved yet.

@@ -18,19 +18,19 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
     function renderHtml()
     {
         if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
-            $kernel->setting->set('user', 'accounting.daybook.message', 'hide');
+            $this->getKernel()->setting->set('user', 'accounting.daybook.message', 'hide');
         } elseif (!empty($_GET['view']) AND in_array($_GET['view'], array('income', 'expenses', 'classic', 'debtor'))) {
-            $kernel->setting->set('user', 'accounting.daybook_view', $_GET['view']);
+            $this->getKernel()->setting->set('user', 'accounting.daybook_view', $_GET['view']);
         } elseif (!empty($_GET['quickhelp']) AND in_array($_GET['quickhelp'], array('true', 'false'))) {
-            $kernel->setting->set('user', 'accounting.daybook_cheatsheet', $_GET['quickhelp']);
+            $this->getKernel()->setting->set('user', 'accounting.daybook_cheatsheet', $_GET['quickhelp']);
             if (isAjax()) {
                 echo '1';
                 exit;
             }
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/daybook.tpl.php');
-        return $smarty->render($this);
+        $tpl = new k_Template(dirname(__FILE__) . '/templates/daybook.tpl.php');
+        return $tpl->render($this);
     }
 
     function getKernel()
@@ -53,6 +53,7 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
 
     function POST()
     {
+        $this->getVoucher();
         // tjek om debet og credit account findes
         $voucher = Voucher::factory($this->getYear(), $_POST['voucher_number']);
         if ($id = $voucher->saveInDaybook($_POST)) {
@@ -65,7 +66,8 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
 
     function getVoucher()
     {
-        $voucher = new Voucher($this->getYear());
+        require_once dirname(__FILE__) . '/../Voucher.php';
+        return new Voucher($this->getYear());
     }
 
     function getValues()

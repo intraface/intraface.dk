@@ -10,7 +10,7 @@ $redirect = Ilib_Redirect::factory($kernel->getSessionId(), MDB2::factory(DB_DSN
 
 if (!empty($_POST['addfile'])) {
 
-    foreach ($_POST['addfile'] AS $key=>$value) {
+    foreach ($_POST['addfile'] as $key=>$value) {
         $filemanager = new FileManager($kernel, $value);
         $appender = $filemanager->getKeywordAppender();
         $string_appender = new Intraface_Keyword_StringAppender(new Keyword($filemanager), $appender);
