@@ -18,12 +18,7 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
     {
         $this->registry = $registry;
     }
-/*
-    function execute()
-    {
-        return $this->wrap(parent::execute());
-    }
-*/
+
     function renderHtml()
     {
         if ($this->getModel()->getId() > 0) {
