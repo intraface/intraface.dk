@@ -29,7 +29,8 @@
         </div>
 
         <div>
-            <input tabindex="3" type="submit" value="Login" id="submit" /> <a tabindex="4" href="forgotten_password.php">Glemt password?</a>
+            <input tabindex="3" type="submit" value="Login" id="submit" />
+            <a tabindex="4" href="<?php e(url('../retrievepassword')); ?>">Glemt password?</a>
         </div>
 
     </fieldset>

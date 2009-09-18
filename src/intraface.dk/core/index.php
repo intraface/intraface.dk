@@ -26,10 +26,10 @@ class TemplateFactory {
     return $smarty;
   }
 }
-
+session_start();
 $kernel = new Intraface_Kernel(session_id());
 
-
+/*
 $language = $kernel->setting->get('user', 'language');
 
 // set the parameters to connect to your db
@@ -86,8 +86,23 @@ $translation->emptyPrefix  = '';  //default: empty string
 $translation->emptyPostfix = '';  //default: empty string
 
 $kernel->translation = $translation;
+*/
 
+class k_SessionIdentityLoader implements k_IdentityLoader {
+  function load(k_Context $context) {
+    if ($context->session('identity')) {
+      return $context->session('identity');
+    }
+    return new k_Anonymous();
+  }
+}
 
+class NotAuthorizedComponent extends k_Component {
+  function dispatch() {
+    // redirect to login-page
+    return new k_TemporaryRedirect($this->url('/login', array('continue' => $this->requestUri())));
+  }
+}
 
 $GLOBALS['kernel'] = $kernel;
 $GLOBALS['intranet'] = $kernel->intranet;
@@ -142,5 +157,6 @@ k()
   // Uncomment the next line to enable in-browser debugging
   //->setDebug()
   // Dispatch request
+  ->setIdentityLoader(new k_SessionIdentityLoader())
   ->run('Intraface_Controller_Index')
   ->out();

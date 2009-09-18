@@ -13,6 +13,8 @@ class Intraface_Controller_Index extends k_Component
             return 'Intraface_Controller_RetrievePassword';
         } elseif ($name == 'restricted') {
             return 'Intraface_Controller_Restricted';
+        } elseif ($name == 'signup') {
+            return 'Intraface_Controller_Signup';
         }
     }
 
@@ -25,14 +27,6 @@ class Intraface_Controller_Index extends k_Component
     {
         $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
         return $smarty->render($this);
-    }
-
-    function GET()
-    {
-    	if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
-			$this->getKernel()->setting->set('user', 'homepage.message', 'hide');
-		}
-    	return parent::GET();
     }
 
     function getKernel()
@@ -51,16 +45,14 @@ class Intraface_Controller_Index extends k_Component
     	return $this->getKernel()->getTranslation();
     }
 
-    function getLastView()
-    {
-		$last_view = $this->getKernel()->setting->get('user', 'homepage.last_view');
-		$this->getKernel()->setting->set('user', 'homepage.last_view', date('Y-m-d H:i:s'));
-    	return $last_view;
-    }
-
     function getAuth()
     {
         return new Intraface_Auth(session_id());
+    }
+
+    function t($phrase)
+    {
+        return $phrase;
     }
 }
 

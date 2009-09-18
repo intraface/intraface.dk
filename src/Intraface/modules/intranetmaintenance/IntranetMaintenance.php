@@ -311,6 +311,7 @@ class IntranetMaintenance extends Intraface_Intranet
      * Sets the contact for the intranet
      *
      * @param integer $contact_id the id of the contact
+     *
      * @return boolean true on success
      */
     function setContact($contact_id)
