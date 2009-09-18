@@ -140,7 +140,10 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $search['area'] = 'category_'.$category_id;
         if ($results_per_page > 0) {
             $search['use_paging'] = 'true';
+        }else {
+            $search['use_paging'] = 'false';
         }
+        
         $search['category'] = $category_id;
         $search['offset'] = $pagging_offset;
 
@@ -169,6 +172,8 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         }
         if ($results_per_page > 0) {
             $search['use_paging'] = 'true';
+        } else {
+            $search['use_paging'] = 'false';
         }
         $search['keywords'] = $keyword;
         $search['offset'] = $pagging_offset;
