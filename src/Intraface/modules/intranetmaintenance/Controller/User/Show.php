@@ -34,7 +34,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         }
 
         if (isset($edit_intranet_id)) {
-
             $intranet = new IntranetMaintenance(intval($edit_intranet_id));
             $user->setIntranetId(intval($intranet->get('id')));
             $address = $user->getAddress();
@@ -42,6 +41,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
                 $value_address = $user->getAddress()->get();
             }
         }
+
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/user/show.tpl.php');
         return $smarty->render($this);
     }
@@ -81,7 +81,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
 
     function getValues()
     {
-        $user = new UserMaintenance(intval($this->name()));
+        $user = $this->getUser();
         $value = $user->get();
         if (isset($_REQUEST['intranet_id'])) {
             $intranet_id = intval($_REQUEST["intranet_id"]);
@@ -156,7 +156,9 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         if (is_object($this->user)) {
             return $this->user;
         }
-        return ($this->user = new UserMaintenance($this->name()));
+        $this->user = new UserMaintenance($this->name());
+        $this->user->setIntranetId($this->getIntranet()->get('id'));
+        return ($this->user);
     }
 
     function getIntranet()

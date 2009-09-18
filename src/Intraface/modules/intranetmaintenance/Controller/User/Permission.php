@@ -14,7 +14,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Permission extends k
         return $smarty->render($this);
     }
 
-
     function getUser()
     {
         return ($this->context->getUser());
