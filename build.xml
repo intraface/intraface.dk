@@ -60,11 +60,13 @@
         <exec dir="${build.dir}" command="php generate_package_xml.php make" />
     </target>
 
-    <target name="pear-create">
-        <phingcall target="pear" />
+    <target name="pear-create" depends="pear">
         <exec dir="${build.dir}" command="pear package package.xml" />
     </target>
 
+    <target name="create-pear-package" depends="prepare,checkout,pear-create">
+    </target>
+	
     <target name="deploy">
         <property file="./build.properties" />
     </target>

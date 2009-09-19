@@ -84,7 +84,7 @@ $pfm->addPackageDepWithChannel('required', 'Role_Web', 'pearified.com', '1.1.1')
 
 // $pfm->addGlobalReplacement('package-info', '@package-version@', 'version');
 $pfm->addReplacement('intraface.php', 'pear-config', '@php-dir@', 'php_dir');
-$pfm->addReplacement('intraface.php', 'pear-config', '@web-dir@', 'web_dir');
+$pfm->addReplacement('intraface.php', 'pear-config', '@web-dir@', 'www_dir');
 $pfm->addReplacement('intraface.php', 'pear-config', '@data-dir@', 'data_dir');
 
 $pfm->clearDeps();
