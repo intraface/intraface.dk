@@ -199,7 +199,7 @@ class Intraface_User extends Intraface_Standard
         if (!empty($this->modules[$module])) {
             return $module_id = $this->modules[$module];
         } else {
-           trigger_error('user says unknown module ' . $module, E_USER_ERROR);
+           throw new Exception('user says unknown module ' . $module);
         }
     }
 
@@ -429,8 +429,7 @@ class Intraface_User extends Intraface_Standard
             $this->load();
             return true;
         } else {
-            trigger_error('you do not have access to this intranet', E_USER_ERROR);
-            return false;
+            throw new Exception('you do not have access to this intranet');
         }
     }
 
@@ -552,7 +551,6 @@ class Intraface_User extends Intraface_Standard
         $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
         $new_password = Intraface_Kernel::randomKey(8);
 
-
         $db->exec("UPDATE user SET password = '".md5($new_password)."' WHERE id =" . $row['id']);
 
         $subject = 'Tsk, glemt din adgangskode?';
@@ -566,6 +564,7 @@ class Intraface_User extends Intraface_Standard
         if (mail($email, $subject, $body, "From: Intraface.dk <robot@intraface.dk>\nReturn-Path: robot@intraface.dk")) {
             return true;
         }
+        throw new Exception('Could not send the e-mail - maybe the mail() function is not working properly');
     }
 
     public function updatePassword($old_password, $new_password, $repeat_password)
