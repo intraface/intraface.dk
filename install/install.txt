@@ -5,9 +5,38 @@ Requirements
 2. MySQL-server
 3. Allowing .htaccess configuration with auto_prepend_file
 
+To install phing 
+
+pear channel-discover pear.phing.info
+pear install --alldeps phing/phing
+pear channel-discover pear.domain51.com
+pear install --force d51/Phing_d51PearPkg2Task
+pear channel-discover pear.saltybeagle.com
+pear install intrafacepublic/Phing_IlibPearDeployerTask 
+77
+
+To install all dependencies in the easiest way
+
+pear channel-discover public.intraface.dk
+pear channel-discover pear.phpdoctrine.org
+pear channel-discover htmlpurifier.org
+pear channel-discover pear.michelf.com
+
+Download konstrukt from: http://code.google.com/p/konstrukt/downloads/list
+sudo pear install konstrukt-xxx.tgz
+
+php generate_package_xml.php make
+cd src
+pear make package.xml
+sudo pear install --alldeps --force Intraface-1.16.0.tgz 
+
+Development stuff
+
+apt-get install php5-dev
+apt-get install php5
+pecl install xdebug
 
 Installation
-
 
 1. Copy all files to your server.
 2. Make sure that all files in src/intraface.dk is put into the web accessible folder
