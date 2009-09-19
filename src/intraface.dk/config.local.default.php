@@ -17,7 +17,7 @@ define('DB_NAME', 'intraface');
 // net
 define('NET_SCHEME', 'http://'); // http:// or https://
 define('NET_HOST', 'localhost'); // www.intraface.dk
-define('NET_DIRECTORY', '/intraface/intraface.dk/'); // subdirectory. if non keep empty
+define('NET_DIRECTORY', '/intraface/src/intraface.dk/'); // subdirectory. if non keep empty
 
 // smtp
 define('SMTP_USERNAME', '');
@@ -26,7 +26,7 @@ define('SMTP_HOST', '');
 
 // paths
 define('PATH_ROOT', dirname(__FILE__) . '/../'); // remember trailing slash
-define('PATH_INCLUDE_PATH', PATH_ROOT . PATH_SEPARATOR . get_include_path()); // remeber to use constant PATH_SEPARATOR after every path
+define('PATH_INCLUDE_PATH', PATH_ROOT . PATH_SEPARATOR . get_include_path()); // remember to use constant PATH_SEPARATOR after every path
 // optional: define('PATH_UPLOAD', '/home/.investor/intraface/upload/'); // remember trailing slash
 // optional: define('PATH_CACHE', PATH_ROOT . 'cache/'); // remember trailing slash - path to cache
 
@@ -35,7 +35,7 @@ define('CONNECTION_INTERNET', true); // if the system has access to dns and more
 define('SERVER_STATUS', 'TEST'); // if the system is in PRODUCTION or TEST mode
 
 // error log
-define('ERROR_HANDLE_LEVEL', E_ALL); //  which levels should error_handler take care of: E_ALL 
+define('ERROR_HANDLE_LEVEL', E_ALL); //  which levels should error_handler take care of: E_ALL
 define('ERROR_LEVEL_CONTINUE_SCRIPT', 0); // Which level should the script continue executing. Development: 0, Production: E_USER_NOTICE ^ E_NOTICE
 define('ERROR_REPORT_EMAIL', ''); // if you want to recieve an e-mail on every error.
 define('ERROR_LOG', PATH_ROOT.'intraface/log/error.log'); // exact directory and filename
