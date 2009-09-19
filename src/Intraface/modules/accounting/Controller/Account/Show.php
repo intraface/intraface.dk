@@ -1,16 +1,12 @@
 <?php
-class Intraface_modules_accounting_Controller_Year_Show extends k_Component
+class Intraface_modules_accounting_Controller_Account_Show extends k_Component
 {
     protected $registry;
 
     protected function map($name)
     {
         if ($name == 'edit') {
-            return 'Intraface_modules_accounting_Controller_Year_Edit';
-        } elseif ($name == 'daybook') {
-            return 'Intraface_modules_accounting_Controller_Daybook';
-        } elseif ($name == 'settings') {
-            return 'Intraface_modules_accounting_Controller_Settings';
+            return 'Intraface_modules_accounting_Controller_Account_Edit';
         }
     }
 
@@ -21,11 +17,29 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
 
     function renderHtml()
     {
-        if (!$this->getYear()->isValid()) {
-            trigger_error('Året er ikke gyldigt', E_USER_ERROR);
-        }
+        $kernel->module('accounting');
+        $translation = $kernel->getTranslation('accounting');
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/year/show.tpl.php');
+        $year = new Year($kernel);
+        $year->checkYear();
+
+        $account = new Account($year, (int)$_GET['id']);
+
+        $saldo = 0;
+        $posts = array();
+        // primosaldo
+        $primo = $account->getPrimoSaldo();
+        $posts[0]['id'] = '';
+        $posts[0]['date'] = '';
+        $posts[0]['voucher_number'] = '';
+        $posts[0]['text'] = 'Primosaldo';
+        $posts[0]['debet'] = $primo['debet'];
+        $posts[0]['credit'] = $primo['credit'];
+        $posts[0]['saldo'] = $primo['debet'] - $primo['credit'];
+
+        $posts = array_merge($posts, $account->getPosts());
+
+        $smarty = new k_Template(dirname(__FILE__) . '/../templates/account/show.tpl.php');
         return $smarty->render($this);
     }
 
@@ -47,22 +61,27 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
         if (!empty($_POST['start']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
             $year = $this->getYear();
             $year->setYear();
-            return new k_SeeOther($this->url('daybook'));
-        } elseif (!empty($_POST['primobalance']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
+            header('Location: daybook.php');
+            exit;
+        }
+        if (!empty($_POST['primobalance']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
             $year = $this->getYear();
             $year->setYear();
-            return new k_SeeOther($this->url('daybook'));
+            header('Location: primosaldo.php');
+            exit;
         } elseif (!empty($_POST['manual_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
             $year = $this->getYear();
             $year->setYear();
-            return new k_SeeOther($this->url('account'));
+            header('Location: accounts.php');
+            exit;
         } elseif (!empty($_POST['standard_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
             $this->getYear()->setYear();
             if (!$this->getYear()->createAccounts('standard')) {
-                throw new Exception('Kunne ikke oprette standardkontoplanen');
+                trigger_error('Kunne ikke oprette standardkontoplanen', E_USER_ERROR);
             }
 
             $values = $this->getYear()->get();
+
             return new k_SeeOther($this->url());
 
         } elseif (!empty($_POST['transfer_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
@@ -71,9 +90,10 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
             $year->setYear();
             if (empty($_POST['accountplan_year']) OR !is_numeric($_POST['accountplan_year'])) {
                 $year->error->set('Du kan ikke oprette kontoplanen, for du har ikke valgt et år at gøre det fra');
-            } else {
+            }
+            else {
                 if (!$year->createAccounts('transfer_from_last_year', $_POST['accountplan_year'])) {
-                    throw new Exception('Kunne ikke oprette standardkontoplanen');
+                    trigger_error('Kunne ikke oprette standardkontoplanen', E_USER_ERROR);
                 }
             }
             $values = $year->get();
@@ -85,14 +105,14 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
     	return $this->getYear()->getList();
     }
 
-    function getAccount()
+    function getAccount($id = 0)
     {
-    	return new Account($this->getYear());
+    	return new Account($this->getYear(), $id);
     }
 
     function getVatPeriod()
     {
-    	return new VatPeriod($this->getYear());
+    	return new VatPeriod($$this->getYear());
     }
 
     function getYearGateway()
@@ -100,4 +120,5 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
         $gateway = $this->context->getYearGateway();
         return $gateway;
     }
+
 }

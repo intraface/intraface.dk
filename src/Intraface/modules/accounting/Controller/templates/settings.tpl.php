@@ -1,12 +1,11 @@
 <?php
-        $year = $context->getYear();
-        $setting = $context->getYear()->getSettings();
-        $status_accounts = $context->getAccount()->getList('status');
-        $drift_accounts = $context->getAccount()->getList('drift');
-        $buy_accounts = $context->getAccount()->getList('expenses');
-        $finance_accounts = $context->getAccount()->getList('finance');
-        $accounts = $context->getAccount()->getList();
-
+$year = $context->getYear();
+$setting = $context->getYear()->getSettings();
+$status_accounts = $context->getAccount()->getList('status');
+$drift_accounts = $context->getAccount()->getList('drift');
+$buy_accounts = $context->getAccount()->getList('expenses');
+$finance_accounts = $context->getAccount()->getList('finance');
+$accounts = $context->getAccount()->getList();
 ?>
 
 <h1>Indstillinger for <?php e($year->get('label')); ?></h1>
@@ -225,8 +224,6 @@
         </div>
         <?php } ?>
     </fieldset>
-
-
 
     <fieldset class="select">
     <legend>Afstemningskonti</legend>

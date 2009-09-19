@@ -29,8 +29,10 @@ class Intraface_modules_accounting_Controller_Settings extends k_Component
 
     function getYear()
     {
-        $year = $this->context->getModel();
-        $year->checkYear();
+        $year = $this->context->getYear();
+        if (!$year->isYearSet()) {
+            return new k_SeeOther($this->url('year'));
+        }
         return $year;
     }
 
@@ -59,5 +61,4 @@ class Intraface_modules_accounting_Controller_Settings extends k_Component
     {
         return new Post($this->getVoucher());
     }
-
 }

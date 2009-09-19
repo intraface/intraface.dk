@@ -1,13 +1,10 @@
 <?php
-class Intraface_modules_accounting_Controller_Daybook extends k_Component
+class Intraface_modules_accounting_Controller_State extends k_Component
 {
     protected $registry;
 
     protected function map($name)
     {
-        if ($name == 'state') {
-            return 'Intraface_modules_accounting_Controller_State';
-        }
     }
 
     function __construct(WireFactory $registry)
@@ -18,19 +15,23 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
     function renderHtml()
     {
         if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
-            $this->getKernel()->setting->set('user', 'accounting.daybook.message', 'hide');
-        } elseif (!empty($_GET['view']) AND in_array($_GET['view'], array('income', 'expenses', 'classic', 'debtor'))) {
-            $this->getKernel()->setting->set('user', 'accounting.daybook_view', $_GET['view']);
-        } elseif (!empty($_GET['quickhelp']) AND in_array($_GET['quickhelp'], array('true', 'false'))) {
-            $this->getKernel()->setting->set('user', 'accounting.daybook_cheatsheet', $_GET['quickhelp']);
-            if (isAjax()) {
-                echo '1';
-                exit;
-            }
+            $this->getKernel()->setting->set('user', 'accounting.state.message', 'hide');
+        } elseif (!empty($_GET['message2']) AND in_array($_GET['message2'], array('hide'))) {
+            $this->getKernel()->setting->set('user', 'accounting.state.message2', 'hide');
         }
 
-        $tpl = new k_Template(dirname(__FILE__) . '/templates/daybook.tpl.php');
+        $tpl = new k_Template(dirname(__FILE__) . '/templates/state.tpl.php');
         return $tpl->render($this);
+    }
+
+    function getPosts()
+    {
+        return $this->getPost()->getList('draft');
+    }
+
+    function getAccounts()
+    {
+        return $this->getYear()->getBalanceAccounts();
     }
 
     function getKernel()
@@ -53,15 +54,13 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
 
     function POST()
     {
-        $this->getVoucher();
-        // tjek om debet og credit account findes
-        $voucher = Voucher::factory($this->getYear(), $_POST['voucher_number']);
-        if ($id = $voucher->saveInDaybook($_POST)) {
-            header('Location: daybook.php?from_post_id='.$id);
-            exit;
-        } else {
-            $values = $_POST;
+        $voucher = new Voucher($this->getYear());
+        // denne funktion vælger automatisk alle poster i kassekladden
+        if (!$voucher->stateDraft()) {
+            // $post->error->set('Posterne kunne ikke bogføres');
         }
+
+        return k_SeeOther($this->url());
     }
 
     function getVoucher()
@@ -95,3 +94,4 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
     }
 
 }
+

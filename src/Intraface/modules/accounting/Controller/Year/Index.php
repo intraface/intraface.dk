@@ -16,12 +16,7 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
     {
         $this->registry = $registry;
     }
-/*
-    function execute()
-    {
-        return $this->wrap(parent::execute());
-    }
-*/
+
     function renderHtml()
     {
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/year/index.tpl.php');

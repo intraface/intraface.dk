@@ -11,6 +11,8 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
         	return 'Intraface_modules_accounting_Controller_Daybook';
         } elseif ($name == 'settings') {
             return 'Intraface_modules_accounting_Controller_Settings';
+        } elseif ($name == 'account') {
+            return 'Intraface_modules_accounting_Controller_Account_Index';
         }
     }
 
@@ -21,7 +23,7 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
 
     function renderHtml()
     {
-        if ($this->getModel()->getId() > 0) {
+        if ($this->getYear()->getId() > 0) {
             return new k_SeeOther($this->url('daybook'));
         }
 
@@ -35,7 +37,7 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
     	return $registry->get('kernel');
     }
 
-    function getModel()
+    function getYear()
     {
         $module = $this->getKernel()->module('accounting');
         $translation = $this->getKernel()->getTranslation('accounting');
@@ -43,9 +45,13 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
         return new Year($this->getKernel());
     }
 
-    function getYearGateway()
+    function getAccounts()
     {
-        return new Intraface_modules_accounting_YearGateway($this->getKernel());
+        return $this->getAccount()->getList();
     }
 
+    function getAccount($id = 0)
+    {
+        return new Account($this->getYear(), $id);
+    }
 }

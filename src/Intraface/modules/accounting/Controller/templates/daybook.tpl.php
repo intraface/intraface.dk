@@ -13,7 +13,7 @@ $values = $context->getValues(); ?>
     <?php if ($context->getKernel()->setting->get('user', 'accounting.daybook.message') == 'view'): ?>
     <div class="message">
     <p>
-        <strong>Kassekladde</strong>. Her opretter du poster til dit regnskab. I første omgang figurerer beløbene kun i kassekladden og under <a href="state.php">afstemningen</a>. Indtil du bogfører posterne, kan du stadig nå at redigere dem.
+        <strong>Kassekladde</strong>. Her opretter du poster til dit regnskab. I første omgang figurerer beløbene kun i kassekladden og under <a href="<?php e($context->url('state')); ?>">afstemningen</a>. Indtil du bogfører posterne, kan du stadig nå at redigere dem.
     </p>
     <p><strong>Hjælp</strong>. Du kan bogføre ved at indtaste kontonumrene i standardvisningen, men du kan også bruge vores hjælpefunktioner ved at klikke på vores links nedenunder.</p>
     <p><a href="<?php e($context->url('./')); ?>?message=hide">Skjul</a></p>
@@ -256,12 +256,12 @@ $values = $context->getValues(); ?>
                     </td>
                     <td>
                         <input tabindex="4" type="text" name="debet_account_number" id="debet_account_number" value="<?php e($values['debet_account_number']);  ?>" size="8" />
-                        <a href="daybook_list_accounts.php" id="debet_account_open">+</a>
+                        <a href="<?php e($context->url('../account/popup')); ?>" id="debet_account_open">+</a>
                         <div id="debet_account_name">&nbsp;</div>
                     </td>
                     <td>
                         <input tabindex="5" type="text" name="credit_account_number" id="credit_account_number" value="<?php e($values['credit_account_number']); ?>" size="8" />
-                        <a href="daybook_list_accounts.php" id="credit_account_open">+</a>
+                        <a href="<?php e($context->url('../account/popup')); ?>" id="credit_account_open">+</a>
                         <div id="credit_account_name">&nbsp;</div>
                     </td>
                     <td>
@@ -335,7 +335,7 @@ $values = $context->getValues(); ?>
 <?php if ($context->getKernel()->setting->get('user', 'accounting.daybook_cheatsheet')== 'true'): ?>
 
 <table summary="" id="accounting-cheatsheet">
-    <caption>Hjælp - hvad er nu debet og kredit? <a href="<?php e($_SERVER['PHP_SELF']); ?>?quickhelp=false" id="accounting-cheatsheet-link">(Skjul)</a></caption>
+    <caption>Hjælp - hvad er nu debet og kredit? <a href="<?php e($context->url()); ?>?quickhelp=false" id="accounting-cheatsheet-link">(Skjul)</a></caption>
     <tr>
         <th></th>
         <th>Debet</th>
