@@ -296,7 +296,8 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
                     // We calculate all products which is on stock with this attribute to be able to mark unused attributes in list.
                     if(!isset($attribute_for_sale[$attribute['id']])) $attribute_for_sale[$attribute['id']] = 0;
                     if($stock !== false) {
-                        $attribute_for_sale[$attribute['id']] += $stock['for_sale'];
+                        // If for_sale is less than zero we add zero.
+                        $attribute_for_sale[$attribute['id']] += (($stock['for_sale'] < 0) ? 0 : $stock['for_sale']);
                     } else {
                         // If product does not use stock, then we calculate one up, as the attribute is always in use.
                         $attribute_for_sale[$attribute['id']] += 1;
