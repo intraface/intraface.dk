@@ -7,20 +7,20 @@ class Demo_Identifier extends k_Controller
         'login' => 'Demo_Login_Root',
         'newsletter' => 'Demo_Newsletter_Root'
     );
-    
+
     private $private_key;
 
     function GET()
     {
         return get_class($this) . ' intentionally left blank';
     }
-    
+
     function getPrivateKey()
     {
         if (!empty($this->private_key)) {
             return $this->private_key;
         }
-        
+
         $client = $this->registry->get('admin');
 
         try {
@@ -33,12 +33,11 @@ class Demo_Identifier extends k_Controller
             throw new Exception('private key is not found for the intranet - shop cannot be generated');
         }
 
-        return $this->private_key;        
+        return $this->private_key;
     }
 
     function forward($name)
     {
-        
         if ($name == 'shop') {
             $next = new Demo_Shop_Root($this, $name);
             return $next->handleRequest();
