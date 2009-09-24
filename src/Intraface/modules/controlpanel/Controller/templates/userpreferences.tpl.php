@@ -2,7 +2,6 @@
 
 <ul class="options">
     <li><a href="<?php e(url('../')); ?>"><?php e(t('close', 'common')); ?></a></li>
-    <li><a href="<?php e(url('../user')); ?>"><?php e(t('user')); ?></a></li>
 </ul>
 
 <form action="<?php e(url()); ?>" method="post">

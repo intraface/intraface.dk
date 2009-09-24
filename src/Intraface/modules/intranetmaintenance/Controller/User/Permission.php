@@ -85,7 +85,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Permission extends k
             $user_id = $user->get('id');
             $edit_intranet_id = $intranet->get('id');
 
-            return new k_SeeOther($this->url('../', array('intranet_id' => $edit_intranet_id)));
+            return new k_SeeOther($this->url('../', array('flare' => 'Permissions has been updated')));
         }
 
         return $this->render();

@@ -10,9 +10,13 @@ $address_value = $context->getValues();
 <h1><?php e(__('Intranet')); ?>: <?php e($context->getIntranet()->get('name')); ?></h1>
 
 <ul class="options">
-	<li><a href="<?php e(url('edit')); ?>"><?php e(__('edit', 'common')); ?></a></li>
+	<li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(__('edit', 'common')); ?></a></li>
 	<li><a href="<?php e(url('../', array('use_stored' => true))); ?>"><?php e(__('close', 'common')); ?></a></li>
 </ul>
+
+<?php if ($context->query('flare')): ?>
+<p class="message"><?php e(__($context->query('flare')));?></p>
+<?php endif; ?>
 
 <?php echo $context->getIntranet()->error->view(); ?>
 <?php if (isset($modulepackagemanager)) echo $modulepackagemanager->error->view(); ?>
@@ -93,6 +97,7 @@ $address_value = $context->getValues();
 <form action="<?php e(url('permission')); ?>" method="post">
 
 <input type="hidden" name="id" value="<?php e($context->getIntranet()->get("id")); ?>" />
+<input type="hidden" name="_method" value="put" />
     <?php
     $modulepackagemanager = new Intraface_modules_modulepackage_Manager($context->getIntranet());
     $modulepackagemanager->getDBQuery($context->getKernel());
@@ -220,7 +225,7 @@ $address_value = $context->getValues();
 			<?php
 			if ($user_list['name'] == '') $user_list['name'] = '[not filled in]';
 			?>
-			<td><a href="<?php e(url('../../user/' . $user_list['id'], array('intranet_id' => $context->getIntranet()->get('id')))); ?>"><?php e($user_list['name']); ?></a></td>
+			<td><a href="<?php e(url('../../intranet/' . $context->getIntranet()->get('id') . '/user/' . $user_list['id'])); ?>"><?php e($user_list['name']); ?></a></td>
 			<td><?php e($user_list['email']); ?></td>
 		</tr>
 		<?php

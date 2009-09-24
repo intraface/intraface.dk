@@ -4,6 +4,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
     protected $registry;
     protected $intranetmaintenance;
     public $method = 'put';
+    public $error;
 
     protected function map($name)
     {
@@ -24,8 +25,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
                 $contact_module = $this->getKernel()->useModule('contact');
             }
         } catch (Exception $e) {
-            $contact_error = '<p>Kontaktmodulet findes ikke. Du har formentlig ikke registreret modulerne endnu. <a href="http://localhost/intraface/intraface/trunk/src/intraface.dk/modules/intranetmaintenance/modules.php?do=register">Registrer modulerne.</a></p>';
-            throw new Excpetion($contact_error);
+            $this->error = '<p>Kontaktmodulet findes ikke. Du har formentlig ikke registreret modulerne endnu. <a href="http://localhost/intraface/intraface/trunk/src/intraface.dk/modules/intranetmaintenance/modules.php?do=register">Registrer modulerne.</a></p>';
         }
         $translation = $this->getKernel()->getTranslation('intranetmaintenance');
 
@@ -117,6 +117,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
         return new IntranetMaintenance($this->name());
     }
 
+    /*
     function POST()
     {
         $modul = $this->getKernel()->module("intranetmaintenance");
@@ -150,6 +151,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
             return new k_SeeOther($this->url());
         }
     }
+    */
 
     function renderHtmlEdit()
     {
@@ -177,6 +179,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
     			return new k_SeeOther($this->url(null));
     		}
     	}
+    	return $this->renderHtmlEdit();
     }
 }
 

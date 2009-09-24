@@ -1,48 +1,18 @@
 <?php
-require '../../include_first.php';
-
-// $modul = $kernel->module('administration');
-$translation = $kernel->getTranslation('controlpanel');
-
-if (!empty($_POST)) {
-
-    $user = new Intraface_User($kernel->user->get('id'));
-
-    $value = $_POST;
-    $address_value = $_POST;
-    $address_value['name'] = $_POST['address_name'];
-    $address_value['email'] = $_POST['address_email'];
-
-    // hvis man ændrer e-mail skal man have en e-mail som en sikkerhedsforanstaltning
-    // på den gamle e-mail
-
-    if ($user->update($_POST)) {
-        if ($user->getAddress()->validate($address_value) && $user->getAddress()->save($address_value)) {
-            header("Location: user.php");
-            exit;
-        }
-    }
-
-} else {
-    $user = new Intraface_User($kernel->user->get('id'));
-    $value = $user->get();
-    $address_value = $user->getAddress()->get();
-}
-
-$page = new Intraface_Page($kernel);
-$page->start(t('edit user'));
+$value = $context->getValues();
+$address_value = $context->getValues();
 ?>
 
 <h1><?php e(t('edit user')); ?></h1>
 
 <ul class="options">
-    <li><a href="index.php"><?php e(t('close')); ?></a></li>
+    <li><a href="<?php e(url(null)); ?>"><?php e(t('close')); ?></a></li>
 </ul>
 
-<?php echo $user->error->view(); ?>
-<?php echo $user->getAddress()->error->view(); ?>
+<?php echo $context->getUser()->error->view(); ?>
+<?php echo $context->getUser()->getAddress()->error->view(); ?>
 
-<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e(url(null)); ?>" method="post">
 
 <fieldset>
     <legend><?php e(t('information about user')); ?></legend>
@@ -91,7 +61,3 @@ $page->start(t('edit user'));
 <a href="user.php"><?php e(t('Cancel', 'common')); ?></a></p>
 
 </form>
-
-<?php
-$page->end();
-?>

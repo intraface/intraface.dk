@@ -17,15 +17,16 @@ $value_address = $context->getValues();
     <li><a href="<?php e(url('../')); ?>"><?php e(__('close', 'common')); ?></a></li>
 </ul>
 
+<?php if ($context->query('flare')): ?>
+	<p class="message"><?php e(__($context->query('flare'))); ?></p>
+<?php endif; ?>
+
+
 <?php echo $context->getUser()->error->view(); ?>
 
 <?php
-    if (isset($_GET['intranet_id'])) {
-        $intranet = new IntranetMaintenance($_GET['intranet_id']);
-        $edit_intranet_id = $intranet->get('id');
-    }
-
 if ($context->getIntranet()->getId() > 0) {
+        $edit_intranet_id = $context->getIntranet()->getId();
     ?>
     <table>
         <tr>

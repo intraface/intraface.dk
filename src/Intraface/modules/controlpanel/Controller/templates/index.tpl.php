@@ -19,8 +19,8 @@ foreach ($context->getModules() as $module) {
 		continue;
 	}
 
-	$module = $context->getKernel()->module($module['name']);
-	$files = $module->getControlpanelFiles();
+	$m = $context->getKernel()->module($module['name']);
+	$files = $m->getControlpanelFiles();
 
 	if (count($files) > 0) { ?>
 
@@ -38,4 +38,3 @@ foreach ($context->getModules() as $module) {
         <?php
 	}
 }
-?>

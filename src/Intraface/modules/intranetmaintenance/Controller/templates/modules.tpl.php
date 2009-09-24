@@ -1,10 +1,11 @@
 <?php
 $module_msg = $context->getModuleMsg();
 ?>
-<h1>Moduler</h1>
+<h1><?php e(__('Modules')); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url(null, array('do' => 'register'))); ?>"><?php e(__('register modules')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(__('Close')); ?></a></li>
+    <li><a href="<?php e(url(null, array('do' => 'register'))); ?>"><?php e(__('Register modules')); ?></a></li>
 </ul>
 
 <?php echo $context->getModuleMaintenance()->error->view(); ?>

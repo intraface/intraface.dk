@@ -4,9 +4,14 @@ $address_values = $context->getValues();
 ?>
 <h1><?php e('User'); ?></h1>
 
+<ul>
+	<li><a href="<?php e(url('../')); ?>"><?php e(__('Close')); ?></a></li>
+</ul>
+
 <?php echo $context->getUser()->error->view(); ?>
 
 <form action="<?php e(url(null)); ?>" method="post">
+<input type="hidden" value="put" name="_method" />
 
 <fieldset>
     <legend>Oplysninger om bruger</legend>
@@ -23,7 +28,7 @@ $address_values = $context->getValues();
     <div class="formrow">
         <?php
         // hvis en bruger er valgt skal teksten vises, ellers ikke
-        if (isset($_GET["id"])) {
+        if ($context->query('id') != 0) {
             ?>
             <p>Du kan vælge at angive en ny adgangskode.</p>
             <?php
@@ -42,7 +47,7 @@ or <a href="<?php e(url('../')); ?>">Cancel</a>
 
 <?php
 
-if ($context->query('intranet_id') != 0) {
+if ($context->getIntranet()->getId() != 0) {
     ?>
     <fieldset>
         <legend>Adresse oplysninger</legend>
@@ -84,6 +89,6 @@ if ($context->query('intranet_id') != 0) {
 
 
 <input type="hidden" name="id" id="id" value="<?php e($context->getUser()->get("id")); ?>" />
-<input type="hidden" name="intranet_id" value="<?php e($context->query('intranet_id')); ?>" />
+<input type="hidden" name="intranet_id" value="<?php e($context->getIntranet()->get('id')); ?>" />
 
 </form>

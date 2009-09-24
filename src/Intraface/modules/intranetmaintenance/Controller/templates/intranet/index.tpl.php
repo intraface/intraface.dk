@@ -1,6 +1,7 @@
 <h1><?php e(__('Intranets')); ?></h1>
 
 <ul class="options">
+    <li><a href="<?php e(url('../')); ?>"><?php e(__('Close')); ?></a></li>
     <li><a href="<?php e(url(null) . '?new'); ?>"><?php e(__('create', 'common')); ?></a></li>
     <li><a href="<?php e(url('../user')); ?>"><?php e(__('users')); ?></a></li>
 </ul>

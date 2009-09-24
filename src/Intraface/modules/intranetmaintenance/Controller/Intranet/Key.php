@@ -1,5 +1,5 @@
 <?php
-class Intraface_modules_intranetmaintenance_Controller_Intranet_Edit extends k_Component
+class Intraface_modules_intranetmaintenance_Controller_Intranet_Key extends k_Component
 {
     protected $registry;
     protected $intranetmaintenance;

@@ -38,24 +38,6 @@ class Intraface_Controller_Login extends k_Component
     	return $this->kernel = $registry->get('kernel');
     }
 
-    /*
-    function POST()
-    {
-    	$adapter = new Intraface_Auth_User(MDB2::singleton(DB_DSN), session_id(), $_POST['email'], $_POST['password']);
-
-        $auth = new Intraface_Auth(session_id());
-        $auth->attachObserver(new Intraface_Log);
-
-        $user = $auth->authenticate($adapter);
-
-    	if (is_object($user)) {
-    	    return new k_SeeOther($this->url('../'));
-        } else {
-    		$msg = 'wrong credentials';
-        }
-    }
-    */
-
     function postForm()
     {
         $user = $this->selectUser($this->body('email'), $this->body('password'));

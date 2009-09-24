@@ -56,6 +56,10 @@ class Intraface_modules_intranetmaintenance_Controller_Modules extends k_Compone
     function getModules()
     {
         return $this->getModuleMaintenance()->getList();
+    }
 
+    function putForm()
+    {
+        // @todo should probably be created using put instead of this
     }
 }

@@ -51,9 +51,8 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         $module = $this->getKernel()->module("intranetmaintenance");
 
         $user = new UserMaintenance(intval($this->name()));
-
-        if (isset($_POST["intranet_id"]) && intval($_POST["intranet_id"]) != 0) {
-            $intranet = new Intraface_Intranet($_POST["intranet_id"]);
+        if ($this->context->getIntranet()->get('id') != 0) {
+            $intranet = new Intraface_Intranet($this->context->getIntranet()->get('id'));
             $intranet_id = $intranet->get("id");
             $address_value = $_POST;
             $address_value["name"] = $_POST["address_name"];
@@ -69,22 +68,19 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
                 $user->setIntranetAccess($intranet->get('id'));
                 $user->setIntranetId($intranet->get('id'));
                 $user->getAddress()->save($address_value);
-
-                    return new k_SeeOther($this->url(null, array('intranet_id' => $intranet->get("id"))));
-
-            } else {
-                return new k_SeeOther($this->url(null));
             }
+            return new k_SeeOther($this->url(null));
         }
-        return $this->render();
+
+        return $this->renderHtmlEdit();
     }
 
     function getValues()
     {
         $user = $this->getUser();
         $value = $user->get();
-        if (isset($_REQUEST['intranet_id'])) {
-            $intranet_id = intval($_REQUEST["intranet_id"]);
+        if ($this->context->getIntranet()->get('id') > 0) {
+            $intranet_id = intval($this->context->getIntranet()->get('id'));
             $user->setIntranetId($intranet_id);
             $address_value = $user->getAddress()->get();
         } else {
@@ -126,6 +122,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         return $vcard->fetch();
     }
 
+    /*
     function _getValues()
     {
         $user = new UserMaintenance($this->name());
@@ -147,6 +144,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         }
         return array_merge($value, $value_address);
     }
+    */
 
     function getUser()
     {
@@ -188,6 +186,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         $this->registry = $registry;
     }
 
+    /*
     function postForm()
     {
         $module = $this->getKernel()->module("intranetmaintenance");
@@ -241,6 +240,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
             return new k_SeeOther($this->url(null, array('intranet_id' => $edit_intranet_id)));
         }
     }
+    */
 
     function renderHtmlEdit()
     {

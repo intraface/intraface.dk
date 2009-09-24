@@ -7,11 +7,9 @@ class Intraface_modules_controlpanel_Controller_Index extends k_Component
     protected function map($name)
     {
         if ($name == 'intranet') {
-            return 'Intraface_modules_intranetmaintenance_Controller_Intranet_Index';
+            return 'Intraface_modules_controlpanel_Controller_Intranet';
         } elseif ($name == 'user') {
-            return 'Intraface_modules_intranetmaintenance_Controller_User_Index';
-        } elseif ($name == 'preferences') {
-            return 'Intraface_modules_controlpanel_Controller_UserPreferences';
+            return 'Intraface_modules_controlpanel_Controller_User';
         }
     }
 

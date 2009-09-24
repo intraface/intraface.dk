@@ -31,7 +31,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Permission exten
         return $this->context->getIntranet();
     }
 
-    function postForm()
+    function putForm()
     {
         $modul = $this->getKernel()->module("intranetmaintenance");
         $intranet = $this->getIntranet();
@@ -61,7 +61,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Permission exten
                 $intranet->setModuleAccess($modules[$i]);
             }
 
-            return new k_SeeOther($this->url('../'));
+            return new k_SeeOther($this->url('../', array('flare' => 'Permissions has been updated')));
         }
 
         throw new Exception('Did not validate');
