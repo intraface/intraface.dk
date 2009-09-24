@@ -10,7 +10,7 @@
 require_once 'Intraface/functions.php';
 require_once 'Ilib/Keyword.php';
 
-class Keyword extends Ilib_Abstract_Keyword
+class Keyword extends Ilib_Keyword
 {
     /**
      * @var object
