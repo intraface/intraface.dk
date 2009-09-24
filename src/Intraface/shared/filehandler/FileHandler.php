@@ -134,6 +134,16 @@ class FileHandler extends Intraface_Standard
             $this->load();
         }
     }
+    
+    /**
+     * desctructor
+     */
+    public function __destruct() {
+        unset($this->kernel);
+        if(isset($this->instance)) $this->instance->__destruct();
+        unset($this->instance);
+        unset($this->image);
+    }
 
     /**
      * Returns the access key for the file
