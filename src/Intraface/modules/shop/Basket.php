@@ -41,7 +41,7 @@ class Intraface_modules_shop_Basket
      * @var object
      */
     private $db;
-    
+
     /**
      * @var array $items
      */
@@ -71,9 +71,6 @@ class Intraface_modules_shop_Basket
         $this->conditions = array('session_id = ' . $this->db->quote($this->session_id, 'text'),
                                   'shop_id = ' . $this->db->quote($this->webshop->getId(), 'integer'),
                                   'intranet_id = ' . $this->db->quote($this->intranet->getId(), 'integer'));
-
-        // rydder op i databasen efter fx to timer
-        $clean_up_after = 2; // timer
 
         $this->cleanUp();
     }
@@ -134,7 +131,7 @@ class Intraface_modules_shop_Basket
         $product_variation_id = intval($product_variation_id);
         $product_detail_id = (int)$product_detail_id;
         $quantity = (int)$quantity;
-        
+
         $this->resetItemCache();
 
         $this->coordinator->kernel->useModule('product');
@@ -144,7 +141,7 @@ class Intraface_modules_shop_Basket
         if ($product->get('id') == 0) {
             return false;
         }
-        
+
         if ($product->get('stock')) {
             if ($product_variation_id != 0) {
                 $variation = $product->getVariation($product_variation_id);
@@ -155,7 +152,7 @@ class Intraface_modules_shop_Basket
             } else {
                 $stock = $product->getStock();
             }
-    
+
             if (is_object($stock) AND $stock->get('for_sale') < $quantity AND $quantity != 0) {
                 return false;
             }
@@ -277,7 +274,7 @@ class Intraface_modules_shop_Basket
         return $this->saveToDb($sql);
 
     }
-    
+
     /**
      * Save Payment method
      *
@@ -287,9 +284,9 @@ class Intraface_modules_shop_Basket
      */
     public function savePaymentMethod($payment_method)
     {
-        
+
         $payment_method_key = $this->coordinator->getPaymentMethodKeyFromIdenfifier($payment_method);
-        
+
         $sql = "payment_method_key = \"".$payment_method_key."\"";
 
         return $this->saveToDb($sql);
@@ -423,7 +420,7 @@ class Intraface_modules_shop_Basket
 
         return array('customer_comment' => $db->f('customer_comment'));
     }
-    
+
     /**
      * Return payment method
      *
@@ -483,7 +480,7 @@ class Intraface_modules_shop_Basket
     public function getTotalPrice($type = 'including_vat')
     {
         $price = 0;
-        
+
         foreach ($this->getItems() AS $item) {
             if ($type == 'exclusive_vat') {
                 $price += $item['totalprice'];
@@ -492,10 +489,10 @@ class Intraface_modules_shop_Basket
                 $price += $item['totalprice_incl_vat'];
             }
         }
-        
+
         return round($price, 2);
     }
-    
+
     /**
      * Gets the total price of the basket in given currencies
      *
@@ -504,22 +501,22 @@ class Intraface_modules_shop_Basket
      */
     public function getTotalPriceInCurrencies($currencies)
     {
-        
+
         $total['DKK']['ex_vat'] = 0;
         $total['DKK']['incl_vat'] = 0;
-        
+
         if (is_object($currencies) && $currencies->count() > 0) {
             foreach ($currencies AS $currency) {
                 $total[$currency->getType()->getIsoCode()]['ex_vat'] = 0;
                 $total[$currency->getType()->getIsoCode()]['incl_vat'] = 0;
             }
         }
-        
+
         foreach ($this->getItems($currencies) AS $item) {
-            
+
             $total['DKK']['ex_vat'] += $item['currency']['DKK']['price'];
             $total['DKK']['incl_vat'] += $item['currency']['DKK']['totalprice_incl_vat'];
-            
+
             if (is_object($currencies) && $currencies->count() > 0) {
                 foreach ($currencies AS $currency) {
                     $total[$currency->getType()->getIsoCode()]['ex_vat'] += $item['currency'][$currency->getType()->getIsoCode()]['price'];
@@ -527,7 +524,7 @@ class Intraface_modules_shop_Basket
                 }
             }
         }
-        
+
         return $total;
     }
 
@@ -539,11 +536,11 @@ class Intraface_modules_shop_Basket
     public function getTotalWeight()
     {
         $weight = 0;
-        
+
         foreach ($this->getItems() AS $item) {
             $weight += $item['totalweight'];
         }
-        
+
         return $weight;
     }
 
@@ -554,12 +551,12 @@ class Intraface_modules_shop_Basket
      */
     public function getItems($currencies = false)
     {
-        
+
         // Local cache
         if ($this->items !== NULL && is_array($this->items)) {
             return $this->items;
-        } 
-        
+        }
+
         $sql_extra = implode(" AND basket.", $this->conditions);
         $items = array();
         $db = new DB_Sql;
@@ -595,7 +592,7 @@ class Intraface_modules_shop_Basket
             $items[$i]['product_id'] = $product->get('id');
             $items[$i]['product_detail_id'] = $product->get('product_detail_id');
             $items[$i]['pictures'] = $product->get('pictures');
-            
+
             //if ($db->f('product_variation_id') != 0) {
             if ($product->hasVariation()) {
                 $variation = $product->getVariation($db->f('product_variation_id'));
@@ -605,7 +602,7 @@ class Intraface_modules_shop_Basket
                 $items[$i]['weight'] = $detail->getWeight($product)->getAsIso(0);
                 $items[$i]['price'] = $detail->getPrice($product)->getAsIso(2);
                 $items[$i]['price_incl_vat'] = $detail->getPriceIncludingVat($product)->getAsIso(2);
-                
+
                 $items[$i]['currency']['DKK']['price'] = $detail->getPrice($product)->getAsIso();
                 $items[$i]['currency']['DKK']['price_incl_vat'] = $detail->getPriceIncludingVat($product)->getAsIso(4);
                 if (is_object($currencies) && $currencies->count() > 0) {
@@ -620,7 +617,7 @@ class Intraface_modules_shop_Basket
                 $items[$i]['weight'] = $product->get('weight');
                 $items[$i]['price'] = $product->getDetails()->getPrice()->getAsIso(2);
                 $items[$i]['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat()->getAsIso(2);
-                
+
                 $items[$i]['currency']['DKK']['price'] = $product->getDetails()->getPrice()->getAsIso(2);
                 $items[$i]['currency']['DKK']['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat()->getAsIso(2);
                 if (is_object($currencies) && $currencies->count() > 0) {
@@ -630,13 +627,13 @@ class Intraface_modules_shop_Basket
                     }
                 }
             }
-            
+
             // basket specific
             $items[$i]['quantity'] = $db->f('quantity');
             $items[$i]['totalweight'] = $items[$i]['weight'] * $db->f('quantity');
             $items[$i]['totalprice'] = $db->f('quantity') * $items[$i]['price'];
             $items[$i]['totalprice_incl_vat'] = $db->f('quantity') * $items[$i]['price_incl_vat'];
-            
+
             $items[$i]['currency']['DKK']['totalprice'] = $db->f('quantity') * $items[$i]['currency']['DKK']['price'];
             $items[$i]['currency']['DKK']['totalprice_incl_vat'] = $db->f('quantity') * $items[$i]['currency']['DKK']['price_incl_vat'];
             if (is_object($currencies) && $currencies->count() > 0) {
@@ -645,18 +642,18 @@ class Intraface_modules_shop_Basket
                     $items[$i]['currency'][$currency->getType()->getIsoCode()]['totalprice_incl_vat'] = $db->f('quantity') * $items[$i]['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'];
                 }
             }
-            
+
             $i++;
         }
-        
+
         $this->items = $items;
         return $items;
     }
-    
+
     /**
      * Resets the item cache
      */
-    private function resetItemCache() 
+    private function resetItemCache()
     {
         $this->items = NULL;
     }
@@ -675,9 +672,9 @@ class Intraface_modules_shop_Basket
                 "WHERE basketevaluation_product = 1 " .
                     "AND " . $sql_extra . " " .
                     "AND intranet_id = " . $this->intranet->getId());
-        
+
         $this->resetItemCache();
-       
+
         return true;
 
     }
@@ -690,7 +687,7 @@ class Intraface_modules_shop_Basket
     public function reset()
     {
         $this->resetItemCache();
-        
+
         $sql_extra = implode(" AND ", $this->conditions);
         $db = new DB_Sql;
         $db->query("UPDATE basket SET session_id = '' WHERE " . $sql_extra . " AND intranet_id = " . $this->intranet->getId());

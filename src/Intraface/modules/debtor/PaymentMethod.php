@@ -15,9 +15,10 @@ class Intraface_modules_debtor_PaymentMethod
      *
      * @return array The possible payment types
      */
-    private function getTypes()
+    public function getTypes()
     {
-     	$types[1] = 'BankTransfer';
+     	$types[0] = 'None';
+        $types[1] = 'BankTransfer';
         //$types[2] = 'GiroPayment01';
         //$types[3] = 'GiroPayment71';
         $types[4] = 'CashOnDelivery';

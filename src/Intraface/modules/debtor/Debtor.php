@@ -803,7 +803,7 @@ class Debtor extends Intraface_Standard
                 $this->dbquery->setCondition("debtor_item.product_variation_id = 0");
             }
         }
-        
+
         if ($this->dbquery->checkFilter("date_field")) {
             if (in_array($this->dbquery->getFilter("date_field"), array('this_date', 'date_created', 'date_sent', 'date_executed', 'data_cancelled'))) {
                 $date_field = $this->dbquery->getFilter("date_field");
@@ -879,9 +879,9 @@ class Debtor extends Intraface_Standard
                     $this->dbquery->setCondition("status = 1 OR status = 2");
                 }
             } else {
-                
+
                 $this->dbquery->setCondition("debtor.status = ".intval($this->dbquery->getFilter("status")));
-                
+
                 /*
                 // New date_field handles this instead
                 switch ($this->dbquery->getFilter("status")) {
@@ -908,7 +908,7 @@ class Debtor extends Intraface_Standard
                         // This gives a problem: We have an invoice created 20/4 and is executed 5/5
                         // If we make a search: executed 1/4-30/4 the above invoice will not be calculated in with date search below.
                         // And if we make a search : executed 1/5-30/5 it will not even be included in that search.
-                        // Why was this made in that way? 
+                        // Why was this made in that way?
                         // $this->dbquery->setCondition("debtor.".$to_date_field." <= \"".$date->get()."\"");
                         // So instead we add this normal status search: Changed 12/7 2009 /Sune
                         $this->dbquery->setCondition("debtor.status = ".intval($this->dbquery->getFilter("status")));
@@ -1272,14 +1272,20 @@ class Debtor extends Intraface_Standard
      */
     private function getPaymentMethods()
     {
+        /*
         return array(
             0 => 'Ingen',
             1 => 'Kontooverførsel',
             2 => 'Girokort +01',
             3 => 'Girokort +71',
             4 => 'Efterkrav',
-            5 => 'Onlinebetaling'
+            5 => 'Onlinebetaling',
+            6 => 'EAN'
         );
+        */
+
+        $gateway = new Intraface_modules_debtor_PaymentMethod;
+        return $gateway->getTypes();
     }
 
     function getIdentifier()
