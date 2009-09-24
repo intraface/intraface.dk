@@ -75,6 +75,14 @@ class InstanceHandler extends Intraface_Standard
             $this->load();
         }
     }
+    
+    /**
+     * desctructor
+     */
+    public function __destruct() {
+        unset($this->file_handler);
+        unset($this->instance_path);
+    } 
 
     /**
      * Factory
