@@ -61,7 +61,7 @@ class NewsletterSubscriber extends Intraface_Standard
         $this->dbquery->useErrorObject($this->error);
         $this->dbquery->setFilter('optin', 1);
         $this->dbquery->setFilter('active', 1);
-        $this->dbquery->setSorting('date_submitted DESC');   
+        $this->dbquery->setSorting('date_submitted DESC');
         return $this->dbquery;
     }
 
@@ -144,7 +144,7 @@ class NewsletterSubscriber extends Intraface_Standard
         $this->contact = new Contact($this->list->kernel, $db->f('contact_id'));
         $this->value['email'] = $this->contact->get('email');
         $this->value['resend_optin_email_count'] = $db->f('resend_optin_email_count');
-        
+
         return 1;
     }
 
@@ -370,7 +370,7 @@ class NewsletterSubscriber extends Intraface_Standard
         $this->load();
 
         $db = new DB_Sql;
-        $db->query("UPDATE newsletter_subscriber SET active = 0 WHERE id=".$this->id." AND list_id = " . $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id'));
+        $db->query("UPDATE newsletter_subscriber SET active = 0, date_unsubscribe = '".date('Y-m-d H:i:s')."' WHERE id=".$this->id." AND list_id = " . $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id'));
         return true;
     }
 
@@ -469,10 +469,10 @@ class NewsletterSubscriber extends Intraface_Standard
         $this->error->set('could not send the e-mail' . implode(',', $email->error->message));
         return false;
     }
-    
+
     /**
      * Resends the optin e-mail to the user again, and adds one to count of resend times.
-     * 
+     *
      */
     function resendOptInEmail($mailer)
     {
@@ -505,7 +505,7 @@ class NewsletterSubscriber extends Intraface_Standard
         $i = 0;
         $this->getDBQuery()->setCondition('newsletter_subscriber.optin = '.$this->getDBQuery()->getFilter('optin'));
         $this->getDBQuery()->setCondition('newsletter_subscriber.active = '.$this->getDBQuery()->getFilter('active'));
-        
+
         $db = $this->getDBQuery()->getRecordset("id, date_optin_email_sent, contact_id, resend_optin_email_count, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted, optin", "", false);
 
         while ($db->nextRecord()) {
@@ -517,7 +517,7 @@ class NewsletterSubscriber extends Intraface_Standard
             $subscribers[$i]['date_optin_email_sent'] = $db->f('date_optin_email_sent');
             $subscribers[$i]['optin'] = $db->f('optin');
             $subscribers[$i]['resend_optin_email_count'] = $db->f('resend_optin_email_count');
-            
+
             if (isset($this->list->kernel->user)) { // only if we are logged in.
                 $contact = $this->getContact($db->f('contact_id'));
                 $subscribers[$i]['contact_number'] = $contact->get('number');
