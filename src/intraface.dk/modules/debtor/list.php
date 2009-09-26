@@ -104,22 +104,22 @@ $page->start(__($debtor->get('type').'s'));
 </h1>
 
 <?php if ($kernel->intranet->address->get('id') == 0): ?>
-    <p>Du mangler at udfylde adresse til dit intranet. Det skal du gøre, før du kan oprette en <?php e(strtolower(__($debtor->get('type')))); ?>.
+    <p><?php e(t('You have to fill out an adddress before you can create a')); ?> <?php e(strtolower(__($debtor->get('type')))); ?>.
     <?php if ($kernel->user->hasModuleAccess('administration')): ?>
         <?php
         $module_administration = $kernel->useModule('administration');
         ?>
-        <a href="<?php e($module_administration->getPath().'intranet_edit.php'); ?>">Udfyld adresse</a>.
+        <a href="<?php e($module_administration->getPath().'intranet_edit.php'); ?>"><?php e(t('Fill in address')); ?></a>.
     <?php else: ?>
-        Du har ikke adgang til at rette adresseoplysningerne, det må du bede din administrator om at gøre.
+        <?php e(t('You do not have permission to edit the address information. Please ask an administrator to do it.')); ?>
     <?php endif; ?>
     </p>
 <?php elseif (!$debtor->isFilledIn()): ?>
 
     <?php if ($debtor->get('type') == 'credit_note'): ?>
-        <p>Du har endnu ikke oprettet nogen. Kreditnotaer oprettes fra en fakturaer.</p>
+        <p><?php e(t('You have not created any credit notes. A credit note can be created from an invoice.')); ?></p>
     <?php else: ?>
-        <p>Du har endnu ikke oprettet nogen. <a href="select_contact.php?type=<?php e($debtor->get("type")); ?>"><?php e(__('create '.$debtor->get('type'))); ?></a>.</p>
+        <p><?php e(t('You have not created any')); ?>. <a href="select_contact.php?type=<?php e($debtor->get("type")); ?>"><?php e(__('create '.$debtor->get('type'))); ?></a>.</p>
     <?php endif; ?>
 <?php else: ?>
 
