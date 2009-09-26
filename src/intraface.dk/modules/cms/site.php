@@ -12,27 +12,27 @@ $page->start(t('site').' '.$cmssite->get('name'));
 
 ?>
 
-<h1><?php e($translation->get('site')); ?> <?php e($cmssite->get('name')); ?></h1>
+<h1><?php e(__('site')); ?> <?php e($cmssite->get('name')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="site_edit.php?id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('edit site settings')); ?></a></li>
+    <li><a class="edit" href="site_edit.php?id=<?php e($cmssite->get('id')); ?>"><?php e(__('edit site settings')); ?></a></li>
 
     <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-    <li><a class="template" href="templates.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('templates')); ?></a></li>
+    <li><a class="template" href="templates.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e(__('templates')); ?></a></li>
     <?php endif; ?>
     <?php if ($kernel->user->hasSubAccess('cms', 'edit_stylesheet')): ?>
-    <li><a class="stylesheet" href="stylesheet_edit.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('stylesheet')); ?></a></li>
+    <li><a class="stylesheet" href="stylesheet_edit.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e(__('stylesheet')); ?></a></li>
     <?php endif; ?>
 </ul>
 
 <?php if (count($cmspage->getTemplate()->getList()) == 0): ?>
 
     <p class="message-dependent">
-        <?php e($translation->get('you have to create a template')); ?>
+        <?php e(__('you have to create a template')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="template_edit.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('create template')); ?></a>.
+            <a href="template_edit.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e(__('create template')); ?></a>.
         <?php else: ?>
-            <strong><?php e($translation->get('please ask your administrator to do that')); ?></strong>
+            <strong><?php e(__('please ask your administrator to do that')); ?></strong>
         <?php endif; ?>
     </p>
 

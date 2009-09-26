@@ -71,7 +71,7 @@ if (!empty($_POST)) {
     $value['site_id'] = $_GET['site_id'];
     $template = new CMS_Template($cmssite);
 } else {
-    trigger_error($translation->get('not allowed', 'common'), E_USER_ERROR);
+    trigger_error(__('not allowed', 'common'), E_USER_ERROR);
 }
 
 
@@ -90,7 +90,7 @@ $cmspages = $cmspage->getList();
 $page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'page_edit.js');
 $page->includeJavascript('module', 'parseUrlIdentifier.js');
-$page->start($translation->get('edit page'));
+$page->start(__('edit page'));
 ?>
 
 <h1><?php e(t('edit '.$type)); ?></h1>

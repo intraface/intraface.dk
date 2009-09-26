@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // gem debtoren som en fil i filsystemet
         $filehandler = new FileHandler($kernel);
-        $tmp_file = $filehandler->createTemporaryFile($translation->get($debtor->get("type")).$debtor->get('number').'.pdf');
+        $tmp_file = $filehandler->createTemporaryFile(__($debtor->get("type")).$debtor->get('number').'.pdf');
 
         // Her gemmes filen
         $report = new Intraface_modules_debtor_Visitor_Pdf($translation, $file);
@@ -293,20 +293,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'view.js');
-$page->start($translation->get($debtor->get('type')));
+$page->start(__($debtor->get('type')));
 ?>
 
 <div id="colOne">
 <div class="box">
     <h1><?php e(t($debtor->get("type"))); ?> #<?php e($debtor->get("number")); ?></h1>
 
-
     <ul class="options">
         <?php if ($debtor->get("locked") == false): ?>
-            <li><a href="edit.php?id=<?php e($debtor->get("id")); ?>">Ret</a></li>
+            <li><a href="edit.php?id=<?php e($debtor->get("id")); ?>"><?php e(t('Edit')); ?></a></li>
         <?php endif; ?>
-        <li><a class="pdf" href="pdf_viewer.php?id=<?php e($debtor->get("id")); ?>" target="_blank">Udskriv PDF</a></li>
-        <li><a href="list.php?id=<?php e($debtor->get("id")); ?>&amp;type=<?php e($debtor->get("type")); ?>&amp;use_stored=true">Luk</a></li>
+        <li><a class="pdf" href="pdf_viewer.php?id=<?php e($debtor->get("id")); ?>" target="_blank"><?php e(t('Print pdf')); ?></a></li>
+        <li><a href="list.php?id=<?php e($debtor->get("id")); ?>&amp;type=<?php e($debtor->get("type")); ?>&amp;use_stored=true"><?php e(t('Close')); ?></a></li>
     </ul>
 
     <p><?php e($debtor->get('description')); ?></p>
@@ -324,7 +323,7 @@ if (isset($onlinepayment)) {
 ?>
 <?php if ($kernel->intranet->get("pdf_header_file_id") == 0 && $kernel->user->hasModuleAccess('administration')): ?>
     <div class="message-dependent">
-        <p><a href="<?php e(url('/main/controlpanel/intranet.php')); ?>">Upload et logo</a> til dine pdf'er.</p>
+        <p><a href="<?php e(url('/main/controlpanel/intranet.php')); ?>"><?php e(t('Upload a logo for your pdf\'s')); ?></a> </p>
     </div>
 <?php endif; ?>
 
@@ -342,10 +341,10 @@ if (isset($onlinepayment)) {
             if ($kernel->intranet->address->get('name') == '' || $kernel->intranet->address->get('email') == '') {
                 $valid_sender = false;
                 if ($kernel->user->hasModuleAccess('administration')) {
-                    echo '<div class="message-dependent"><p>'.$translation->get('you need to fill in an e-mail address to send e-mail').'. <a href="'.$module_administration->getPath().'intranet_edit.php">'.$translation->get('do it now').'</a>.</p></div>';
+                    echo '<div class="message-dependent"><p>'.__('You need to fill in an e-mail address to send e-mail').'. <a href="'.$module_administration->getPath().'intranet_edit.php">'.__('do it now').'</a>.</p></div>';
                 }
                 else {
-                    echo '<div class="message-dependent"><p>'.$translation->get('you need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
+                    echo '<div class="message-dependent"><p>'.__('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
 
                 }
             }
@@ -353,17 +352,17 @@ if (isset($onlinepayment)) {
         case 'user':
             if ($kernel->user->getAddress()->get('name') == '' || $kernel->user->getAddress()->get('email') == '') {
                 $valid_sender = false;
-                echo '<div class="message-dependent"><p>'.$translation->get('you need to fill in an e-mail address to send e-mail').'. <a href="'.url('/main/controlpanel/user_edit.php').'">'.$translation->get('do it now').'</a>.</p></div>';
+                echo '<div class="message-dependent"><p>'.__('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('/main/controlpanel/user_edit.php').'">'.__('do it now').'</a>.</p></div>';
             }
             break;
         case 'defined':
             if ($kernel->setting->get('intranet', 'debtor.sender.name') == '' || $kernel->setting->get('intranet', 'debtor.sender.email') == '') {
                 $valid_sender = false;
                 if ($kernel->user->hasModuleAccess('administration')) {
-                    echo '<div class="message-dependent"><p>'.$translation->get('you need to fill in an e-mail address to send e-mail').'. <a href="'.$module_debtor->getPath().'settings.php">'.$translation->get('do it now').'</a>.</p></div>';
+                    echo '<div class="message-dependent"><p>'.__('You need to fill in an e-mail address to send e-mail').'. <a href="'.$module_debtor->getPath().'settings.php">'.__('do it now').'</a>.</p></div>';
                 }
                 else {
-                    echo '<div class="message-dependent"><p>'.$translation->get('you need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
+                    echo '<div class="message-dependent"><p>'.__('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
                 }
 
             }
@@ -377,7 +376,7 @@ if (isset($onlinepayment)) {
 
     if ($debtor->contact->address->get('email') == '') {
         $valid_sender = false;
-        echo '<div class="message-dependent"><p>'.$translation->get('you need to register an e-mail to the contact, so you can send e-mails').'</p></div>';
+        echo '<div class="message-dependent"><p>'.__('You need to register an e-mail to the contact, so you can send e-mails').'</p></div>';
 
     }
     ?>
@@ -385,7 +384,7 @@ if (isset($onlinepayment)) {
     <?php
 
     if ($debtor->contact->address->get('ean') == '') {
-        echo '<div class="message-dependent"><p>'.$translation->get('to be able to send electronic e-mails you need to fill out the EAN location number for the contact').'</p></div>';
+        echo '<div class="message-dependent"><p>'.__('To be able to send electronic e-mails you need to fill out the EAN location number for the contact').'</p></div>';
     }
 
     $scan_in_contact_id = $kernel->setting->get('intranet', 'debtor.scan_in_contact');
@@ -395,60 +394,60 @@ if (isset($onlinepayment)) {
     if ($scan_in_contact->get('id') == 0) {
         $valid_scan_in_contact = false;
         echo '<div class="message-dependent"><p>';
-        e($translation->get('a contact for the scan in bureau is needed to send electronic invoices').'. ');
+        e(__('A contact for the scan in bureau is needed to send electronic invoices').'. ');
         if ($kernel->user->hasModuleAccess('administration')) {
-            echo '<a href="'.$debtor_module->getPath().'setting.php">'.$translation->get('do it now').'</a>.';
+            echo '<a href="'.$debtor_module->getPath().'setting.php">'.__('Add it now').'</a>.';
         }
         echo '</p></div>';
 
     } elseif (!$scan_in_contact->address->get('email')) {
         $valid_scan_in_contact = false;
         echo '<div class="message-dependent"><p>';
-        e($translation->get('you need to provide a valid e-mail address to the contact for the scan in bureau').'.');
-        echo ' <a href="'.$contact_module->getPath().'contact.php?id='.$scan_in_contact->get('id').'">'.$translation->get('do it now').'</a>.';
+        e(__('You need to provide a valid e-mail address to the contact for the scan in bureau').'.');
+        echo ' <a href="'.$contact_module->getPath().'contact.php?id='.$scan_in_contact->get('id').'">'.__('Add it now').'</a>.';
         echo '</p></div>';
     }
     ?>
 <?php endif; ?>
 
 <?php if (isset($email_send_with_success) && $email_send_with_success): ?>
-    <div class="message-dependent"><p><?php e($translation->get('your email was sent').'.'); ?></p></div>
+    <div class="message-dependent"><p><?php e(__('Your email was sent').'.'); ?></p></div>
 <?php endif; ?>
 
 <form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
     <input type="hidden" name="id" value="<?php e($debtor->get('id')); ?>" />
     <?php if ($debtor->contact->get('preferred_invoice') == 2 AND  $debtor->get('status') == 'created' AND isset($valid_sender) AND $valid_sender == true): ?>
-        <input type="submit" value="Send på e-mail" name="send_email" title="Dette vil sende e-mail til kontakten" />
+        <input type="submit" value="<?php e(t('Send on email')); ?>" name="send_email" title="<?php e(t('Are you sure?')); ?>" />
     <?php elseif ($debtor->contact->get('preferred_invoice') == 2 AND $debtor->get('status') == 'sent' AND isset($valid_sender) AND $valid_sender == true): ?>
-        <input type="submit" value="Genfremsend på e-mail" name="send_email" title="Dette vil sende fakturaen igen" />
+        <input type="submit" value="<?php e(t('Resend on email')); ?>" name="send_email" title="<?php e(t('Are you sure?')); ?>" />
     <?php elseif ($debtor->get("type") == 'invoice' AND $debtor->contact->get('preferred_invoice') == 3 AND $debtor->contact->address->get('ean') AND $debtor->get('status') == 'created' AND isset($valid_scan_in_contact) AND $valid_scan_in_contact == true): ?>
-        <input type="submit" value="Send elektronisk faktura" name="send_electronic_invoice" title="Dette vil sende den elektroniske faktura til Læs-ind bureauet" />
+        <input type="submit" value="<?php e(t('Send electronic invoice')); ?>" name="send_electronic_invoice" title="<?php e(t('Are you sure you want to send the invoice to the Læs-ind-bureau?')); ?>" />
     <?php elseif ($debtor->get("type") == 'invoice' AND $debtor->contact->get('preferred_invoice') == 3 AND $debtor->contact->address->get('ean') AND $debtor->get('status') == 'sent' AND isset($valid_scan_in_contact) AND $valid_scan_in_contact == true): ?>
-        <input type="submit" value="Genfremsend elektronisk faktura" name="send_electronic_invoice" title="Dette vil sende den elektroniske faktura igen" />
+        <input type="submit" value="<?php e(t('Resend electronic invoice')); ?>" name="send_electronic_invoice" title="<?php e(t('Are you sure?')); ?>" />
     <?php endif; ?>
     <?php if ($debtor->get("status") == "created"): // make sure we can always mark as sent	?>
-        <input type="submit" value="Marker som sendt" class="confirm" title="Dette markerer denne som sendt?" name="sent" />
+        <input type="submit" value="<?php e(t('Mark as sent')); ?>" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="sent" />
     <?php endif; ?>
 
     <?php if (($debtor->get("type") == "invoice" && $debtor->get("status") == "created") || ($debtor->get("type") != "invoice" && $debtor->get("locked") == false)): ?>
-        <input type="submit" value="Slet" class="confirm" title="Er du sikker på du vil slette denne <?php e(t($debtor->get('type').' title')); ?>?" name="delete" />
+        <input type="submit" value="<?php e(t('Delete')); ?>" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="delete" />
     <?php endif; ?>
 
     <?php if (($debtor->get("type") == "quotation" || $debtor->get("type") == "order") && ($debtor->get('status') == "created" || $debtor->get('status') == "sent")): ?>
-        <input type="submit" value="Annuller" name="cancel" class="confirm" title="Er du sikker på, at du vil annullere?" />
+        <input type="submit" value="<?php e(t('Cancel')); ?>" name="cancel" class="confirm" title="<?php e(t('Are you sure?')); ?>" />
     <?php endif; ?>
 
     <?php if ($debtor->get("type") == "quotation" && $debtor->get('status') == "sent" && $kernel->user->hasModuleAccess('order')): ?>
-        <input type="submit" value="Læg ind som ordre" name="order" class="confirm" value="Er du sikker på, at du vil lægge tilbuddet ind som ordre?" />
+        <input type="submit" value="<?php e(t('Order this')); ?>" name="order" class="confirm" value="<?php e(t('Are you sure?')); ?>" />
     <?php endif; ?>
     <?php if ($debtor->get("type") == "quotation" && $debtor->get("status") == "sent" && $kernel->user->hasModuleAccess('invoice')): ?>
-        <input type="submit" class="confirm" title="Er du sikker på, at du vil fakturere dette tilbud?" name="invoice" value="Fakturer tilbuddet" />
+        <input type="submit" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="invoice" value="<?php e(t('Invoice this')); ?>" />
     <?php endif; ?>
     <?php if ($debtor->get("type") == "order" && $debtor->get("status") == "sent" && $kernel->user->hasModuleAccess('invoice')): ?>
-        <input type="submit" class="confirm" title="Er du sikker på, at du vil fakturere denne ordre?" name="invoice" value="Fakturer ordre" />
+        <input type="submit" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="invoice" value="<?php e(t('Invoice this')); ?>" />
     <?php endif; ?>
     <?php if ($debtor->get("type") == "invoice" && ($debtor->get("status") == "sent" OR $debtor->get("status") == 'executed')): // Opret kreditnota fra faktura ?>
-        <input type="submit" class="confirm" title="Er du sikker på, at du vil kreditere denne faktura?" name="credit_note" value="Krediter faktura" />
+        <input type="submit" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="credit_note" value="<?php e(t('Make credit note from invoice')); ?>" />
 
     <?php endif; ?>
 
@@ -493,18 +492,18 @@ if (isset($onlinepayment)) {
 
 <?php */ ?>
     <table>
-        <caption><?php e(t($debtor->get('type').' title')); ?> information</caption>
+        <caption><?php e(t($debtor->get('type').' title')); ?> <?php e(t('information')); ?></caption>
         <tbody>
             <tr>
-                <th>Dato</th>
+                <th><?php e(t('Date')); ?></th>
                 <td><?php e($debtor->get("dk_this_date")); ?></td>
             </tr>
             <?php if ($debtor->get("type") != "credit_note"): ?>
             <tr>
-                <th><?php e(t($debtor->get('type').' due date')); ?>:</th>
+                <th><?php e(t($debtor->get('type').' due date')); ?></th>
                 <td>
                     <?php e($debtor->get("dk_due_date")); ?>
-                    <?php if ($debtor->get('type')=='invoice' && $debtor->anyDue($debtor->contact->get('id')) && $debtor->get("status") != 'executed') echo '<a href="reminder_edit.php?contact_id='.intval($debtor->contact->get('id')).'">Opret rykker</a>'; ?>
+                    <?php if ($debtor->get('type')=='invoice' && $debtor->anyDue($debtor->contact->get('id')) && $debtor->get("status") != 'executed') echo '<a href="reminder_edit.php?contact_id='.intval($debtor->contact->get('id')).'">'.t('Create reminder').'</a>'; ?>
                 </td>
             </tr>
             <?php endif; ?>
@@ -513,7 +512,7 @@ if (isset($onlinepayment)) {
 
             <?php if ($kernel->setting->get('intranet', 'debtor.sender') == 'user' || $kernel->setting->get('intranet', 'debtor.sender') == 'defined'): ?>
                 <tr>
-                    <th>Vores ref.</th>
+                    <th><?php e(t('Our contact')); ?></th>
                         <td>
                             <?php
                             switch($kernel->setting->get('intranet', 'debtor.sender')) {
@@ -526,7 +525,7 @@ if (isset($onlinepayment)) {
                             }
 
                             if ($kernel->user->hasModuleAccess('administration')) { ?>
-                                <a href="<?php e($debtor_module->getPath()); ?>setting.php" class="edit"><?php e($translation->get('change')); ?></a>
+                                <a href="<?php e($debtor_module->getPath()); ?>setting.php" class="edit"><?php e(__('change')); ?></a>
                             <?php
                             }
                             ?>
@@ -589,7 +588,7 @@ if (isset($onlinepayment)) {
                         } else {
                             e(t('Not stated'));
                             if ($debtor->get('status') == 'sent' || $debtor->get('status') == 'executed') { ?>
-                                <a href="state_<?php e($debtor->get('type')); ?>.php?id=<?php e($debtor->get("id")); ?>"><?php e($translation->get('state '.$debtor->get('type'))); ?></a>
+                                <a href="state_<?php e($debtor->get('type')); ?>.php?id=<?php e($debtor->get("id")); ?>"><?php e(__('state '.$debtor->get('type'))); ?></a>
                             <?php
                             }
 
@@ -603,7 +602,7 @@ if (isset($onlinepayment)) {
 
     <?php if ($debtor->get("message") != ''): ?>
         <fieldset>
-            <legend>Tekst</legend>
+            <legend><?php e(t('Text')); ?></legend>
             <p><?php autohtml($debtor->get("message")); ?></p>
         </fieldset>
     <?php endif; ?>
@@ -707,7 +706,7 @@ if (isset($onlinepayment)) {
         <div class="box">
             <a href="register_payment.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>"><?php e(t('Register payment or reimbursement')); ?></a>.
         </div>
-        
+
     <?php endif; ?>
 
 </div>
@@ -760,7 +759,7 @@ if (isset($onlinepayment)) {
                             <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
                                 <td>
                                     <?php if ($payment['is_stated']): ?>
-                                        <a href="<?php e($module_accounting->getPath().'voucher.php?id='.$payment['voucher_id']); ?>"><?php e($translation->get('voucher')); ?></a>
+                                        <a href="<?php e($module_accounting->getPath().'voucher.php?id='.$payment['voucher_id']); ?>"><?php e(__('voucher')); ?></a>
                                     <?php elseif ($payment['type'] == 'credit_note'): ?>
                                         <a href="state_credit_note.php?id=<?php e($payment['id']) ?>"><?php e(t('state credit note')); ?></a>
                                     <?php elseif ($payment['type'] == 'depreciation'): ?>
@@ -787,7 +786,7 @@ if (isset($onlinepayment)) {
                     <tr>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
-                        <th>Manglende betaling</th>
+                        <th><?php e(t('Missing payment')); ?></th>
                         <td class="amount"><?php e(number_format($debtor->get("total") - $payment_total, 2, ",", ".")); ?></td>
                         <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
                             <td>&nbsp;</td>
@@ -906,7 +905,7 @@ if (isset($onlinepayment)) {
 <div style="clear:both;">
     <?php if ($debtor->get("locked") == false) { ?>
         <ul class="options" style="clear: both;">
-            <li><a href="view.php?id=<?php e($debtor->get("id")); ?>&amp;add_item=true">Tilføj vare</a></li>
+            <li><a href="view.php?id=<?php e($debtor->get("id")); ?>&amp;add_item=true"><?php e(t('Add item')); ?></a></li>
         </ul>
     <?php } ?>
 
@@ -1060,12 +1059,12 @@ if (count($reminders) > 0):
 <table class="stripe">
 <thead>
     <tr>
-        <th>Nr.</th>
-        <th>Kunde</th>
-        <th>Beskrivelse</th>
-        <th>Sendt</th>
-        <th>Sendt som</th>
-        <th>Forfaldsdato</th>
+        <th><?php e(t('No.')); ?></th>
+        <th><?php e(t('Contact')); ?></th>
+        <th><?php e(t('Description')); ?></th>
+        <th><?php e(t('Sent')); ?></th>
+        <th><?php e(t('Sent as')); ?></th>
+        <th><?php e(t('Due date')); ?></th>
         <th>&nbsp;</th>
     </tr>
 </thead>

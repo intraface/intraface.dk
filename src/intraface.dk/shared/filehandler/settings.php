@@ -17,10 +17,10 @@ $instance_manager = new InstanceManager($kernel);
 
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('filehandler settings'));
+$page->start(__('filehandler settings'));
 
 ?>
-<h1><?php e($translation->get('filehandler settings')); ?></h1>
+<h1><?php e(__('filehandler settings')); ?></h1>
 
 <?php echo $instance_manager->error->view(); ?>
 
@@ -31,12 +31,12 @@ $page->start($translation->get('filehandler settings'));
 $instances = $instance_manager->getList();
 if (count($instances) > 0): ?>
     <table class="stripe">
-        <caption><?php e($translation->get('instance types')); ?></caption>
+        <caption><?php e(__('instance types')); ?></caption>
         <thead>
             <tr>
-                <th><?php e($translation->get('name')); ?></th>
-                <th><?php e($translation->get('maximum width')); ?></th>
-                <th><?php e($translation->get('maximum height')); ?></th>
+                <th><?php e(__('name')); ?></th>
+                <th><?php e(__('maximum width')); ?></th>
+                <th><?php e(__('maximum height')); ?></th>
                 <th></th>
             </tr>
         </thead>
@@ -48,13 +48,13 @@ if (count($instances) > 0): ?>
                     <td><?php e($instance['max_height']); ?></td>
                     <td>
                       <?php
-                      echo '<a class="edit" href="edit_instance_type.php?type_key='.intval($instance['type_key']).'">'.$translation->get('edit', 'common').'</a> ';
+                      echo '<a class="edit" href="edit_instance_type.php?type_key='.intval($instance['type_key']).'">'.__('edit', 'common').'</a> ';
 
                       if ($instance['origin'] == 'overwritten') {
-                          echo '<a class="delete" href="settings.php?delete_instance_type_key='.intval($instance['type_key']).'">'.$translation->get('reset to standard').'</a>';
+                          echo '<a class="delete" href="settings.php?delete_instance_type_key='.intval($instance['type_key']).'">'.__('reset to standard').'</a>';
                       }
                       elseif ($instance['origin'] == 'custom') {
-                          echo '<a class="delete" href="settings.php?delete_instance_type_key='.intval($instance['type_key']).'">'.$translation->get('delete', 'common').'</a>';
+                          echo '<a class="delete" href="settings.php?delete_instance_type_key='.intval($instance['type_key']).'">'.__('delete', 'common').'</a>';
                       }
                       ?>
                     </td>
@@ -64,7 +64,7 @@ if (count($instances) > 0): ?>
     </table>
 
     <ul class="options">
-        <li><a href="edit_instance_type.php"><?php e($translation->get('add new instance type')); ?></a><li>
+        <li><a href="edit_instance_type.php"><?php e(__('add new instance type')); ?></a><li>
     </ul>
 <?php endif; ?>
 

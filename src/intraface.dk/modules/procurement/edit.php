@@ -79,7 +79,7 @@ $page->start($title);
 
             foreach ($from_region as $key => $region) {
                 ?>
-                <option value="<?php e($key); ?>" <?php if (!empty($values["from_region"]) AND $values["from_region"] == $key) print("selected='selected'"); ?> ><?php e($translation->get($region)); ?></option>
+                <option value="<?php e($key); ?>" <?php if (!empty($values["from_region"]) AND $values["from_region"] == $key) print("selected='selected'"); ?> ><?php e(__($region)); ?></option>
                 <?php
             }
             ?>

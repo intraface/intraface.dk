@@ -52,7 +52,7 @@ $value = $debtor->get();
 
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('State invoice'));
+$page->start(__('State invoice'));
 
 ?>
 <h1>Bogfør kreditnota #<?php e($debtor->get('number')); ?></h1>
@@ -74,12 +74,12 @@ $page->start($translation->get('State invoice'));
 
     <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
     <input type="hidden" value="<?php e($value['id']); ?>" name="id" />
-    
+
     <fieldset>
-        <legend>Kreditnota</legend>
+        <legend><?php e(__('Credit note')); ?></legend>
         <table>
             <tr>
-                <th><?php e($translation->get("credit note number")); ?></th>
+                <th><?php e(__("credit note number")); ?></th>
                 <td><?php e($debtor->get("number")); ?></td>
             </tr>
             <tr>
@@ -88,7 +88,7 @@ $page->start($translation->get('State invoice'));
             </tr>
         </table>
     </fieldset>
-    
+
     <?php if ($debtor->readyForState($year, 'skip_check_products')): ?>
         <fieldset>
             <legend>Oplysninger der bogføres</legend>
@@ -120,9 +120,9 @@ $page->start($translation->get('State invoice'));
                 <?php endif; ?>
             </table>
         </fieldset>
-    
-    
-    
+
+
+
         <table class="stripe">
             <thead>
                 <tr>
@@ -140,11 +140,11 @@ $page->start($translation->get('State invoice'));
                 } else {
                     $vat = 0;
                 }
-    
+
                 for ($i = 0, $max = count($items); $i<$max; $i++) {
                     $product = new Product($kernel, $items[$i]['product_id']);
                     $account = Account::factory($year, $product->get('state_account_id'));
-    
+
                     $total += $items[$i]["quantity"] * $items[$i]["price"]->getAsIso(2);
                     $vat = $items[$i]["vat"];
                     ?>
@@ -204,7 +204,7 @@ $page->start($translation->get('State invoice'));
                 ?>
             </tbody>
         </table>
-        
+
         <div>
             <input type="submit" value="Bogfør" /> eller
             <a href="view.php?id=<?php e($value['id']); ?>">fortryd</a>

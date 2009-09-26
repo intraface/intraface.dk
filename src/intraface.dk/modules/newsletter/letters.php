@@ -49,7 +49,7 @@ $page->start('Breve');
 	<?php foreach ($letters AS $letter): ?>
 	<tr>
 		<td><a href="letter.php?id=<?php e($letter['id']); ?>"><?php e($letter['subject']); ?></a></td>
-		<td><?php e($translation->get($letter['status'])); ?></td>
+		<td><?php e(__($letter['status'])); ?></td>
 		<td>
 			<?php
 				if ($letter['status'] == 'sent'):

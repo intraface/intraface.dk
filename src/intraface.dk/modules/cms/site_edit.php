@@ -21,30 +21,30 @@ if (!empty($_POST)) {
 }
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('edit site'));
+$page->start(__('edit site'));
 ?>
 
-<h1><?php e($translation->get('edit site')); ?></h1>
+<h1><?php e(__('edit site')); ?></h1>
 
 <?php echo $cmssite->error->view($translation); ?>
 
 <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="POST">
 	<fieldset>
-		<legend><?php e($translation->get('info about the site')); ?></legend>
+		<legend><?php e(__('info about the site')); ?></legend>
 		<input type="hidden" name="id" value="<?php if (!empty($value['id'])) e($value['id']); ?>" />
 		<div class="formrow">
-			<label><?php e($translation->get('website name')); ?></label>
+			<label><?php e(__('website name')); ?></label>
 			<input type="text" name="name" size="30" value="<?php if (!empty($value['name'])) e($value['name']); ?>" />
 		</div>
 		<div class="formrow">
-			<label><?php e($translation->get('website url')); ?></label>
-			<input type="text" name="url" size="30" value="<?php if (!empty($value['url'])) e($value['url']); ?>" /> <?php e($translation->get('start url with http://')); ?>
+			<label><?php e(__('website url')); ?></label>
+			<input type="text" name="url" size="30" value="<?php if (!empty($value['url'])) e($value['url']); ?>" /> <?php e(__('start url with http://')); ?>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend><?php e($translation->get('creative commons license', 'cc_license')); ?></legend>
-		<label for="cc-license"><?php e($translation->get('creative commons license', 'cc_license')); ?></label>
+		<legend><?php e(__('creative commons license', 'cc_license')); ?></legend>
+		<label for="cc-license"><?php e(__('creative commons license', 'cc_license')); ?></label>
 		<select name="cc_license" id="cc-license">
 			<?php
 				foreach ($cms_module->getSetting('cc_license') AS $key=>$license): ?>
@@ -53,12 +53,12 @@ $page->start($translation->get('edit site'));
 						echo ' selected="selected"';
 					}
                     ?>
-					><?php e($translation->get($license['identifier'], 'cc_license')); ?></option>
+					><?php e(__($license['identifier'], 'cc_license')); ?></option>
 				<?php endforeach;
 			?>
 		</select>
 
-		<p><a href="http://creativecommons.org/about/licenses/meet-the-licenses"><?php e($translation->get('read more about creative commons licenses', 'cc_license')); ?></a></p>
+		<p><a href="http://creativecommons.org/about/licenses/meet-the-licenses"><?php e(__('read more about creative commons licenses', 'cc_license')); ?></a></p>
 		<!--
 		<script type="text/javascript">
 			var creative_commons = {
@@ -72,7 +72,7 @@ $page->start($translation->get('edit site'));
 	</fieldset>
 
 	<div>
-		<input type="submit" class="save" value="<?php e($translation->get('save', 'common')); ?>" /> <?php e($translation->get('or', 'common')); ?> <a href="index.php"><?php e($translation->get('Cancel', 'common')); ?></a>
+		<input type="submit" class="save" value="<?php e(__('save', 'common')); ?>" /> <?php e(__('or', 'common')); ?> <a href="index.php"><?php e(__('Cancel', 'common')); ?></a>
 	</div>
 </form>
 

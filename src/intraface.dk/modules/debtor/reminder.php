@@ -47,30 +47,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $page = new Intraface_Page($kernel);
-$page->start("Rykker");
+$page->start('Reminder');
 ?>
 <div id="colOne"> <!-- style="float: left; width: 45%;" -->
     <div class="box">
-        <h1>Rykker #<?php e($reminder->get("number")); ?></h1>
+        <h1><?php e(__('Reminder')); ?> #<?php e($reminder->get("number")); ?></h1>
 
         <ul class="options">
         	<?php if ($reminder->get("locked") == false) {
         		?>
-        			<li><a href="reminder_edit.php?id=<?php e($reminder->get("id")); ?>">Ret</a></li>
+        			<li><a href="reminder_edit.php?id=<?php e($reminder->get("id")); ?>"><?php e(t('Edit')); ?></a></li>
         		<?php
         	}
         	?>
 
-        		<li><a class="pdf" href="reminder_pdf.php?id=<?php e($reminder->get("id")); ?>" target="_blank">Udskriv PDF</a></li>
+        		<li><a class="pdf" href="reminder_pdf.php?id=<?php e($reminder->get("id")); ?>" target="_blank"><?php e(__('Print pdf')); ?></a></li>
         	<?php
         	if ($reminder->get("send_as") == "email" AND $reminder->get('status_key') < 1) {
         		?>
-        		<li><a href="reminder_email.php?id=<?php e($reminder->get("id")); ?>">Send E-mail</a></li>
+        		<li><a href="reminder_email.php?id=<?php e($reminder->get("id")); ?>"><?php e(__('Send email')); ?></a></li>
         		<?php
         	}
         	?>
-        	<li><a href="list.php?type=invoice&amp;use_stored=true">Tilbage til fakturaer</a></li>
-        	<li><a href="reminders.php?id=<?php e($reminder->get("id")); ?>&amp;use_stored=true">Luk</a></li>
+        	<li><a href="list.php?type=invoice&amp;use_stored=true"><?php e(__('Back to invoices')); ?></a></li>
+        	<li><a href="reminders.php?id=<?php e($reminder->get("id")); ?>&amp;use_stored=true"><?php e(__('Close')); ?></a></li>
         </ul>
 
         <p><?php e($reminder->get('description')); ?></p>
@@ -89,17 +89,17 @@ $page->start("Rykker");
     </form>
 
 	<table>
-		<caption>Rykkerinformationer</caption>
+		<caption><?php e(__('Reminder information')); ?></caption>
 		<tr>
-			<th>Dato:</th>
+			<th><?php e(__('Date')); ?></th>
 			<td><?php e($reminder->get("dk_this_date")); ?></td>
 		</tr>
 		<tr>
-			<th>Forfaldsdato:</th>
+			<th><?php e(__('Due date')); ?></th>
 			<td><?php e($reminder->get("dk_due_date")); ?></td>
 		</tr>
 		<tr>
-			<th>Betalingmetode</th>
+			<th><?php e(__('Payment method')); ?></th>
 			<td><?php e($reminder->get("payment_method")); ?></td>
 		</tr>
 		<?php if ($reminder->get("payment_method_key") == 3): ?>
@@ -110,24 +110,24 @@ $page->start("Rykker");
 		<?php endif; ?>
 		<?php if ($reminder->get("status") == "cancelled"): ?>
 			<tr>
-				<th>Afskrevet dato</th>
+				<th><?php e(__('Depreciation date')); ?></th>
 				<td><?php e($reminder->get("dk_date_cancelled")); ?></td>
 			</tr>
 		<?php endif; ?>
 		<?php if ($reminder->get("status") == "executed"): ?>
 			<tr>
-				<th>Færdigbehandlet dato:</th>
+				<th><?php e(__('Date closed')); ?></th>
 				<td><?php e($reminder->get("dk_date_executed")); ?></td>
 			</tr>
 		<?php endif; ?>
 		<tr>
-			<th>Send som:</th>
+			<th><?php e(__('Send as')); ?></th>
 			<td><?php e($reminder->get("send_as")); ?></td>
         </tr>
 
         <?php if ($kernel->setting->get('intranet', 'debtor.sender') == 'user' || $kernel->setting->get('intranet', 'debtor.sender') == 'defined'): ?>
     		<tr>
-    			<th>Vores ref.</th>
+    			<th><?php e(__('Our contact')); ?></th>
 				<td>
 					<?php
 					switch($kernel->setting->get('intranet', 'debtor.sender')) {
@@ -142,7 +142,7 @@ $page->start("Rykker");
 					if ($kernel->user->hasModuleAccess('administration')) {
 						$debtor_module = $kernel->useModule('debtor');
                         ?>
-						 <a href="<?php e($debtor_module->getPath()); ?>setting.php" class="edit"><?php e($translation->get('change')); ?></a>
+						 <a href="<?php e($debtor_module->getPath()); ?>setting.php" class="edit"><?php e(__('Change')); ?></a>
                         <?php
 					}
 					?>
@@ -150,24 +150,24 @@ $page->start("Rykker");
     		</tr>
     	<?php endif; ?>
 		<tr>
-			<th>Status:</th>
-			<td><?php e($translation->get($reminder->get("status"))); ?></td>
+			<th><?php e(__('Status')); ?></th>
+			<td><?php e(__($reminder->get("status"))); ?></td>
 		</tr>
         <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
             <tr>
-                <th>Bogført</th>
+                <th><?php e(__('Stated')); ?></th>
                 <td>
                     <?php
                     if (!$reminder->somethingToState()) {
-                        echo 'Der er intet at bogføre.';
+                        e(__('Nothing to state'));
                     } elseif ($reminder->isStated()) {
                         $module_accounting = $kernel->useModule('accounting');
                         e($reminder->get('dk_date_stated'));
-                        echo ' <a href="'.$module_accounting->getPath().'voucher.php?id='.$reminder->get('voucher_id').'">Se bilag</a>';
+                        echo ' <a href="'.$module_accounting->getPath().'voucher.php?id='.$reminder->get('voucher_id').'">'.__('See voucher').'</a>';
                     } else {
-                        echo 'Ikke bogført';
+                        e(__('Not stated'));
                         if ($reminder->get('status') == 'sent' || $reminder->get('status') == 'executed') { ?>
-                            <a href="state_reminder.php?id=<?php e($reminder->get("id")); ?>"><?php e($translation->get('state reminder')); ?></a>
+                            <a href="state_reminder.php?id=<?php e($reminder->get("id")); ?>"><?php e(__('state reminder')); ?></a>
                         <?php
                         }
                     }
@@ -178,7 +178,7 @@ $page->start("Rykker");
 	</table>
 
     <fieldset>
-    	<legend>Tekst</legend>
+    	<legend><?php e(__('Text')); ?></legend>
     	<p><?php autohtml($reminder->get("text")); ?></p>
     </fieldset>
 </div>
@@ -187,21 +187,21 @@ $page->start("Rykker");
 
     <div class="box">
     	<table>
-    		<caption>Kontaktoplysninger</caption>
+    		<caption><?php e(__('Contact information')); ?></caption>
 
     		<tr>
-    			<th>Nummer</th>
+    			<th><?php e(__('Number')); ?></th>
     			<?php
     			$contact_module = $kernel->getModule('contact');
     			?>
     			<td><?php e($reminder->contact->get("number")); ?> <a href="<?php e($contact_module->getPath()); ?>contact_edit.php?id=<?php e($reminder->contact->get('id')); ?>" class="edit">Ret</a></td>
     		</tr>
     		<tr>
-    			<th>Kontakt</th>
+    			<th><?php e(__('Contact')); ?></th>
     			<td><a href="<?php e($contact_module->getPath()).'contact.php?id='.$reminder->contact->get('id'); ?>"><?php e($reminder->contact->address->get("name")); ?></a></td>
     		</tr>
     		<tr>
-    			<th>Adresse</th>
+    			<th>Address</th>
     			<td class="adr">
                     <div class="adr">
                         <div class="street-address"><?php autohtml($reminder->contact->address->get("address")); ?></div>
@@ -211,18 +211,18 @@ $page->start("Rykker");
                 </td>
             </tr>
             <tr>
-                <th>E-mail</th>
+                <th><?php e(__('Email')); ?></th>
                     <td><?php e($reminder->contact->address->get("email")); ?></td>
                 </tr>
                 <?php if ($reminder->contact->address->get("cvr") != '' && $reminder->contact->address->get("cvr") != 0): ?>
                     <tr>
-                        <th>CVR</th>
+                        <th><?php e(__('CVR')); ?></th>
                         <td><?php e($reminder->contact->address->get("cvr")); ?></td>
                     </tr>
                 <?php endif; ?>
     		<?php if (isset($reminder->contact_person) && strtolower(get_class($reminder->contact_person)) == "contactperson"): ?>
     			<tr>
-    				<th>Att.</th>
+    				<th><?php e(__('Attention')); ?></th>
     				<td><?php e($reminder->contact_person->get("name")); ?></td>
     			</tr>
     		<?php endif; ?>
@@ -232,7 +232,7 @@ $page->start("Rykker");
 
     <?php if ($reminder->get("status") == "sent"): ?>
     	<div class="box">
-            <h2>Registrér betaling</h2>
+            <h2><?php e(__('Register payment')); ?></h2>
     		<div style="border: 2px solid red; padding: 5px; margin: 10px;">
     			<strong>Vigtigt</strong>: Registering af betaling her vedrører indtil videre KUN rukkergebyret på DENNE rykker. Dvs. du skal registere betalingen for fakturaer og tidligere rykkere på de respektive fakturaer og rykkere!
     		</div>
@@ -265,14 +265,14 @@ $page->start("Rykker");
                 </div>
 
                 <div class="formrow">
-                    <label for="payment_date" class="tight">Dato</label>
+                    <label for="payment_date" class="tight"><?php e(__('Date')); ?></label>
                     <input type="text" name="payment_date" id="payment_date" value="<?php e(date("d-m-Y")); ?>" size="8" />
                 </div>
 
                 <div style="clear: both;">
                     <input class="confirm" type="submit" name="payment" value="Registrér" title="Dette vil registrere betalingen" />
                     <?php e(t('or', 'common')); ?>
-                    <a href="register_payment.php?for=reminder&amp;id=<?php e($reminder->get('id')); ?>"><?php e(t('give me more choices')); ?></a>.
+                    <a href="register_payment.php?for=reminder&amp;id=<?php e($reminder->get('id')); ?>"><?php e(t('Give me more choices')); ?></a>.
                 </div>
             </form>
             <p><a href="register_depreciation.php?for=reminder&amp;id=<?php e($reminder->get('id')); ?>"><?php e(t('I am not going to recieve the full payment...')); ?></a></p>
@@ -290,15 +290,15 @@ $page->start("Rykker");
 	if (count($payments) > 0) {
 		?>
 		<table style="clear:both;">
-			<caption>Betaling (rykkergebyr)</caption>
+			<caption><?php e(__('Payment (reminder fee)')); ?></caption>
 			<thead>
 				<tr>
-					<th>Dato</th>
-					<th>Type</th>
-					<th>Beskrivelse</th>
-					<th>Beløb</th>
+					<th><?php e(__('Date')); ?></th>
+					<th><?php e(__('Type')); ?></th>
+					<th><?php e(__('Description')); ?></th>
+					<th><?php e(__('Amount')); ?></th>
                     <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
-                         <th>Bogført</th>
+                         <th><?php e(__('Stated')); ?></th>
                     <?php endif; ?>
 				</tr>
 			</thead>
@@ -316,8 +316,7 @@ $page->start("Rykker");
 							?>
 							<a href="view.php?id=<?php e($payments[$i]["id"]); ?>"><?php e($payments[$i]["description"]); ?></a>
 							<?php
-						}
-						else {
+						} else {
 							e($payments[$i]["description"]);
 						}
 						?>
@@ -327,11 +326,11 @@ $page->start("Rykker");
                         <td>
                             <?php if ($payments[$i]['is_stated']): ?>
                                 <?php $module_accounting = $kernel->useModule('accounting'); ?>
-                                <a href="<?php e($module_accounting->getPath().'voucher.php?id='.$payments[$i]['voucher_id']); ?>"><?php e($translation->get('voucher')); ?></a>
+                                <a href="<?php e($module_accounting->getPath().'voucher.php?id='.$payments[$i]['voucher_id']); ?>"><?php e(__('voucher')); ?></a>
                             <?php elseif ($payments[$i]['type'] == 'depreciation'): ?>
-                                <a href="state_depreciation.php?for=reminder&amp;id=<?php e($reminder->get('id')); ?>&amp;depreciation_id=<?php e($payments[$i]['id']) ?>"><?php e($translation->get('state depreciation')); ?></a>
+                                <a href="state_depreciation.php?for=reminder&amp;id=<?php e($reminder->get('id')); ?>&amp;depreciation_id=<?php e($payments[$i]['id']) ?>"><?php e(__('state depreciation')); ?></a>
                             <?php else: ?>
-                                <a href="state_payment.php?for=reminder&amp;id=<?php e($reminder->get('id')); ?>&amp;payment_id=<?php e($payments[$i]['id']) ?>"><?php e($translation->get('state payment')); ?></a>
+                                <a href="state_payment.php?for=reminder&amp;id=<?php e($reminder->get('id')); ?>&amp;payment_id=<?php e($payments[$i]['id']) ?>"><?php e(__('state payment')); ?></a>
                             <?php endif; ?>
                         </td>
                     <?php endif; ?>
@@ -343,14 +342,14 @@ $page->start("Rykker");
 			<tr>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
-				<td>Betalt</td>
+				<td><?php e(__('Paid')); ?></td>
 				<td><?php e(number_format($payment_total, 2, ",", ".")); ?></td>
                 <td>&nbsp;</td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
-				<td>Manglende betaling</td>
+				<td><?php e(__('Missing payments')); ?></td>
 				<td><?php e(number_format($reminder->get("total") - $payment_total, 2, ",", ".")); ?></td>
 			    <td>&nbsp;</td>
             </tr>
@@ -364,13 +363,13 @@ $page->start("Rykker");
 
 
 	<table class="stribe">
-		<caption>Indhold</caption>
+		<caption><?php e(__('Content')); ?></caption>
 		<thead>
 			<tr>
-				<th>Nr.</th>
-				<th>Beskrivelse</th>
-				<th>Forfaldsdato</th>
-				<th>Beløb</th>
+				<th><?php e(__('No.')); ?></th>
+				<th><?php e(__('Description')); ?></th>
+				<th><?php e(__('Due date')); ?></th>
+				<th><?php e(__('Amount')); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -382,7 +381,7 @@ $page->start("Rykker");
 			if (count($items) > 0) {
 				?>
 				<tr>
-					<td colspan="4"><b>Fakturaer med restance:</b></td>
+					<td colspan="4"><b><?php e(__('Invoices with missing payments:')); ?></b></td>
 				</tr>
 				<?php
 			}
@@ -403,7 +402,7 @@ $page->start("Rykker");
 			if (count($items) > 0) {
 				?>
 				<tr>
-  				<td colspan="4"><b>Tidligere rykkere:</b></td>
+  				<td colspan="4"><b><?php e(__('Earlier reminders')); ?></b></td>
 				</tr>
 				<?php
 			}
@@ -424,7 +423,7 @@ $page->start("Rykker");
 				$total += $reminder->get("reminder_fee");
 				?>
 				<tr>
-					<td colspan="2"><b>Rykkergebyr</b></td>
+					<td colspan="2"><b><?php e(__('Reminder fee')); ?></b></td>
 					<td class="date">&nbsp;</td>
 					<td class="amount"><?php e(number_format($reminder->get("reminder_fee"), 2, ",",".")); ?></td>
 				</tr>
@@ -436,13 +435,11 @@ $page->start("Rykker");
 			<tr>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
-				<td><strong>Total:</strong></td>
+				<td><strong><?php e(__('Total')); ?></strong></td>
 				<td class="amount"><strong><?php e(number_format($total, 2, ",",".")); ?></strong></td>
 			</tr>
 		</tfoot>
 	</table>
-
-
 
 <?php
 $page->end();

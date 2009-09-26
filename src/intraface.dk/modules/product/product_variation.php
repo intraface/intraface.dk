@@ -9,7 +9,7 @@ $shared_filehandler->includeFile('AppendFile.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product = new Product($kernel, $_POST['id']);
-    
+
     if (isset($_POST['append_file_submit'])) {
 
         $filehandler = new FileHandler($kernel);
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: '.$url);
         exit;
     }
-    
+
     // this has to be moved to post
     if (isset($_GET['delete_appended_file_id'])) {
         $product = new Product($kernel, $_GET['id']);
@@ -65,7 +65,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     $append_file->addFile(new FileHandler($kernel, $file_id));
                 }
             }
-            
+
         }
     }
 }
@@ -80,10 +80,10 @@ $page->start(t('Product variation') . ': ' . $variation->getName());
         <h2><?php e(t('Product')); ?> #<?php e($product->get('number'));  ?> <?php e($product->get('name')); ?></h2>
         <h2><?php e(t('Variation')); ?> #<?php e($variation->getNumber());  ?> <?php e($variation->getName()); ?></h2>
         <ul class="options">
-            <li><a href="product.php?id=<?php e($product->get('id')); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
+            <li><a href="product.php?id=<?php e($product->get('id')); ?>"><?php e(__('close', 'common')); ?></a></li>
         </ul>
     </div>
-    
+
     <table>
         <tr>
             <td><?php e(t('Price')); ?></td>
@@ -94,7 +94,7 @@ $page->start(t('Product variation') . ': ' . $variation->getName());
             <td><?php e($product->get('weight') + $variation->getDetail()->getWeightDifference()); ?> gram</td>
         </tr>
     </table>
-    
+
     <?php
     if ($kernel->user->hasModuleAccess('invoice')) {
         $debtor_module = $kernel->useModule('debtor');

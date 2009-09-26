@@ -73,7 +73,7 @@ if (isset($_POST['submit']) || isset($_POST['choose_file'])) {
 }
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('edit intranet'));
+$page->start(__('edit intranet'));
 ?>
 
 <h1><?php e(t('edit intranet')); ?></h1>

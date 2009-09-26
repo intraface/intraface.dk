@@ -75,35 +75,35 @@ $contacts = $contact->getList();
 $page = new Intraface_Page($kernel);
 $page->start('Vælg kontakt');
 ?>
-<h1>Vælg kontakt</h1>
+<h1><?php e(t('Choose contact')); ?></h1>
 
 <?php echo $contact->error->view(); ?>
 
 <?php if (!$contact->isFilledIn()): ?>
 
-	<p>Der er ikke oprettet nogen kontakter. <a href="select_contact.php?add=1">Opret en kontakt</a>.</p>
+	<p><?php e(t('No contacts has been created')); ?>. <a href="select_contact.php?add=1"><?php e(t('Create contact')); ?></a>.</p>
 
 <?php else: ?>
     <ul class="options">
-        <li><a href="select_contact.php?add=1">Opret kontakt</a></li>
+        <li><a href="select_contact.php?add=1"><?php e(t('Create contact')); ?></a></li>
         <?php if (isset($_GET['last_contact_id']) && intval($_GET['last_contact_id']) != 0): ?>
-        <li><a href="select_contact.php?contact_id=<?php e($_GET['last_contact_id']); ?>">Vis valgte</a></li>
+        <li><a href="select_contact.php?contact_id=<?php e($_GET['last_contact_id']); ?>"><?php e(t('Show chosen')); ?></a></li>
         <?php endif; ?>
 
     </ul>
 
     <form action="select_contact.php" method="get" class="search-filter">
 	<fieldset>
-		<legend>Søgning</legend>
+		<legend><?php e(t('Search')); ?></legend>
 
-		<label for="query">Søg efter
+		<label for="query"><?php e(t('Search for')); ?>
 			<input name="query" id="query" type="text" value="<?php e($contact->getDBQuery()->getFilter('search')); ?>" />
 		</label>
 
 		<?php if (is_array($used_keywords) AND count($used_keywords)): ?>
-		<label for="keyword_id">Vis med nøgleord
+		<label for="keyword_id"><?php e(t('Show with keywords')); ?>
 			<select name="keyword_id" id="keyword_id">
-				<option value="">Ingen</option>
+				<option value=""><?php e(t('None')); ?></option>
 				<?php foreach ($used_keywords AS $k) { ?>
 					<option value="<?php e($k['id']); ?>" <?php if ($k['id'] == $contact->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php e($k['keyword']); ?></option>
 				<?php } ?>
@@ -111,7 +111,7 @@ $page->start('Vælg kontakt');
 		</label>
 		<?php endif; ?>
 
-		<span><input type="submit" value="Afsted!" /></span>
+		<span><input type="submit" value="<?php e(t('Go ahead')); ?>" /></span>
 	</fieldset>
     </form>
 
@@ -119,13 +119,13 @@ $page->start('Vælg kontakt');
 
     <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
     	<table summary="Kontakter" class="stripe">
-    		<caption>Kontakter</caption>
+    		<caption><?php e(t('Contacts')); ?></caption>
     		<thead>
     			<tr>
     				<th>&nbsp;</th>
-    				<th>Nr.</th>
-    				<th>Navn</th>
-    				<th>E-mail</th>
+    				<th><?php e(t('No.')); ?></th>
+    				<th><?php e(t('Name')); ?></th>
+    				<th><?php e(t('Email')); ?></th>
     			</tr>
     		</thead>
     		<tfoot>
@@ -148,7 +148,7 @@ $page->start('Vælg kontakt');
     		</tbody>
     	</table>
 
-    	<input type="submit" name="submit" value="<?php e($translation->get('choose', 'common')); ?>" /> eller <a href="<?php e($redirect->getRedirect("index.php")); ?>">Fortryd</a>
+    	<input type="submit" name="submit" value="<?php e(__('Choose')); ?>" /> <?php e(t('or')); ?> <a href="<?php e($redirect->getRedirect("index.php")); ?>"><?php e(t('cancel')); ?></a>
     </form>
 
 <?php endif; ?>

@@ -5,23 +5,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	// This is a fairly bad solution! But it is Microsofts fault!!!
 	header('Location: http://'.NET_HOST.NET_DIRECTORY.'modules/debtor/pdf.php?id='. intval($_POST['id']));
 	exit;
-}
-else {
+} else {
 	if (!empty($_GET['id'])) {
 		$id = (int)$_GET['id'];
-	}
-	else {
+	} else {
 		trigger_error('not a valid id', E_USER_ERROR);
 	}
 }
-
-
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="da">
 	<head>
-		<title>Henter dokument...</title>
+		<title><?php e(__('Fetching document...')); ?></title>
 		<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
 		<style type="text/css">
 			body {
@@ -40,9 +36,9 @@ else {
 	</head>
 	<body>
 		<div id="container">
-			<h1>Henter dokument...</h1>
+			<h1><?php e(__('Fetching document...')); ?></h1>
 
-			<p>Dokumentet vil nu blive sendt til din browser.</p>
+			<p><?php e(__('Document is being sent to your browser.')); ?></p>
 			<p>Skulle der i opstå problemer med visningen, kan du forsøge at afhjælpe dette ved at følge nedenstående anvisninger.</p>
 
 			<p><a href="" onclick="document.getElementById('help').style.display = 'block'; return false;">Hjælp</a></p>

@@ -32,7 +32,7 @@ $format = $workbook->addFormat();
 $format->setSize(8);
 
 // Creating a worksheet
-$worksheet = $workbook->addWorksheet(ucfirst($translation->get('title')));
+$worksheet = $workbook->addWorksheet(ucfirst(__('title')));
 
 $i = 1;
 $worksheet->write($i, 0, $kernel->intranet->get('name'), $format_bold);
@@ -71,9 +71,6 @@ if ($debtor->getDbQuery()->checkFilter('contact_id')) {
     $i++;
 }
 
-
-
-
 $worksheet->write($i, 0, "Antal i søgningen", $format_italic);
 $worksheet->write($i, 1, count($posts), $format_italic);
 $i++;
@@ -86,7 +83,7 @@ $worksheet->write($i, 3, 'Beskrivelse', $format_bold);
 $worksheet->write($i, 4, 'Beløb', $format_bold);
 $worksheet->write($i, 5, 'Oprettet', $format_bold);
 $worksheet->write($i, 6, 'Sendt', $format_bold);
-//$worksheet->write($i, 7, $translation->get("due_date"), $format_bold);
+//$worksheet->write($i, 7, __("due_date"), $format_bold);
 $c = 8;
 if ($debtor->get('type') == 'invoice') {
     $worksheet->write($i, $c, 'Forfaldsbeløb', $format_bold);
@@ -136,7 +133,7 @@ if (count($posts) > 0) {
         }
 
         if ($posts[$j]["status"] == "executed" || $posts[$j]["status"] == "canceled") {
-            $worksheet->write($i, 7, $translation->get($posts[$j]["status"], 'debtor'));
+            $worksheet->write($i, 7, __($posts[$j]["status"], 'debtor'));
         } else {
             $worksheet->write($i, 7, $posts[$j]["dk_due_date"]);
         }

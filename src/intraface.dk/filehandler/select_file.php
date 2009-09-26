@@ -158,38 +158,38 @@ if ($multiple_choice) {
 	$page->includeJavascript('module', 'select_file.js');
 }
 $page->includeJavascript('global', 'yui/connection/connection-min.js');
-$page->start($translation->get('files'));
+$page->start(__('files'));
 ?>
 
-<h1><?php e($translation->get('files')); ?></h1>
+<h1><?php e(__('files')); ?></h1>
 
 <ul class="options">
-	<li><a href="select_file.php?upload=single" onclick="location.href='select_file.php?upload=multiple'; return false;"><?php e($translation->get('upload file')); ?></a></li>
+	<li><a href="select_file.php?upload=single" onclick="location.href='select_file.php?upload=multiple'; return false;"><?php e(__('upload file')); ?></a></li>
 </ul>
 
 <?php echo $filemanager->error->view('html'); ?>
 
 <form method="get" action="select_file.php?use_stored=true">
 	<fieldset>
-		<legend><?php e($translation->get('search')); ?></legend>
-		<label><?php e($translation->get('text')); ?>:
+		<legend><?php e(__('search')); ?></legend>
+		<label><?php e(__('text')); ?>:
 			<input type="text" name="text" value="<?php e($filemanager->getDBQuery()->getFilter("text")); ?>" />
 		</label>
 		<label>Filtrering:
 		<select name="filtration">
 			<option value="0">Alle</option>
-			<option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) echo ' selected="selected"';?>><?php e($translation->get('uploaded today')); ?></option>
-			<option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) echo ' selected="selected"';?>><?php e($translation->get('uploaded yesterday')); ?></option>
-			<option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) echo ' selected="selected"';?>><?php e($translation->get('uploaded this week')); ?></option>
-			<option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) echo ' selected="selected"';?>><?php e($translation->get('edited today')); ?></option>
-			<option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) echo ' selected="selected"';?>><?php e($translation->get('edited yesterday')); ?></option>
+			<option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) echo ' selected="selected"';?>><?php e(__('uploaded today')); ?></option>
+			<option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) echo ' selected="selected"';?>><?php e(__('uploaded yesterday')); ?></option>
+			<option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) echo ' selected="selected"';?>><?php e(__('uploaded this week')); ?></option>
+			<option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) echo ' selected="selected"';?>><?php e(__('edited today')); ?></option>
+			<option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) echo ' selected="selected"';?>><?php e(__('edited yesterday')); ?></option>
 		</select>
 		</label>
-		<label><?php e($translation->get('only pictures')); ?>:
+		<label><?php e(__('only pictures')); ?>:
 			<input type="checkbox" name="images" value="1" <?php if ($filemanager->getDBQuery()->getFilter("images") == 1) echo 'checked="checked"'; ?> />
 		</label>
 		<span>
-		<input type="submit" name="search" value="<?php e($translation->get('find')); ?>" />
+		<input type="submit" name="search" value="<?php e(__('find')); ?>" />
 		</span>
 
 		<?php
@@ -220,16 +220,16 @@ $page->start($translation->get('files'));
 <?php echo $filemanager->getDBQuery()->display('character'); ?>
 <form method="POST" action="select_file.php">
 <table class="stripe">
-	<caption><?php e($translation->get('files')); ?></caption>
+	<caption><?php e(__('files')); ?></caption>
 	<thead>
 		<tr>
 			<th></th>
 			<th></th>
-			<th><?php e($translation->get('file name')); ?></th>
-			<th><?php e($translation->get('file type')); ?></th>
-			<th><?php e($translation->get('accessibility')); ?></th>
-			<th><?php e($translation->get('file size')); ?></th>
-			<th><?php e($translation->get('file date')); ?></th>
+			<th><?php e(__('file name')); ?></th>
+			<th><?php e(__('file type')); ?></th>
+			<th><?php e(__('accessibility')); ?></th>
+			<th><?php e(__('file size')); ?></th>
+			<th><?php e(__('file date')); ?></th>
 			<!--<th></th>-->
 		</tr>
 	</thead>
@@ -262,11 +262,11 @@ $page->start($translation->get('files'));
 <div>
 
 	<?php if ($multiple_choice): ?>
-		<input type="submit" name="submit" id="submit-select_file" value="<?php e($translation->get('save', 'common')); ?>" />
+		<input type="submit" name="submit" id="submit-select_file" value="<?php e(__('save', 'common')); ?>" />
 	<?php endif; ?>
 
-	<input type="submit" name="submit_close" id="submit_close-select_file" value="<?php e($translation->get('save and transfer')); ?>" />
-	eller <a href="<?php e($receive_redirect->getRedirect("index.php")); ?>"><?php e($translation->get('Cancel' ,'common')); ?></a>
+	<input type="submit" name="submit_close" id="submit_close-select_file" value="<?php e(__('save and transfer')); ?>" />
+	eller <a href="<?php e($receive_redirect->getRedirect("index.php")); ?>"><?php e(__('Cancel' ,'common')); ?></a>
 </div>
 
 </form>

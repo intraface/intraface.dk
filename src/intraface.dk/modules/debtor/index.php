@@ -7,24 +7,21 @@ $translation = $kernel->getTranslation('contact');
 if ($kernel->user->hasModuleAccess("invoice")) {
 	header("Location: list.php?type=invoice");
 	exit;
-}
-elseif ($kernel->user->hasModuleAccess("order")) {
+} elseif ($kernel->user->hasModuleAccess("order")) {
 	header("Location: list.php?type=order");
 	exit;
-}
-elseif ($kernel->user->hasModulesAccess("quotation")) {
+} elseif ($kernel->user->hasModulesAccess("quotation")) {
 	header("Location: list.php?type=quotation");
 	exit;
 }
-else {
-	$page = new Intraface_Page($kernel);
-	$page->start();
-	?>
-	<H1>Debitor</h1>
 
-	<p>Du mangler adgang til enten faktura-, ordre- eller tilbudsmodullet.</p>
-
-	<?php
-	$page->end();
-}
+$page = new Intraface_Page($kernel);
+$page->start();
 ?>
+
+<h1><?php e(__('Debtor')); ?></h1>
+
+<p><?php e(__('You do not have access to the following modules: quotation, order or invoice.')); ?></p>
+
+<?php
+$page->end();

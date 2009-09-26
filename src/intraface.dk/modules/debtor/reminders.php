@@ -49,15 +49,15 @@ $reminder->getDBQuery()->storeResult("use_stored", "reminder", "toplevel");
 $reminders = $reminder->getList();
 
 $page = new Intraface_Page($kernel);
-$page->start("Rykkere");
+$page->start('Reminders');
 ?>
 
-<h1>Rykkere</h1>
+<h1><?php e(__('Reminders')); ?></h1>
 
 <?php if ($contact_id): ?>
 	<ul class="options">
-		<li><a href="reminder_edit.php?contact_id=<?php e($contact_id); ?>">Opret rykker</a></li>
-		<li><a href="/modules/contact/contact.php?id=<?php e($contact->get('id')); ?>">Gå til kontakten</a>
+		<li><a href="reminder_edit.php?contact_id=<?php e($contact_id); ?>"><?php e(__('Create')); ?></a></li>
+		<li><a href="/modules/contact/contact.php?id=<?php e($contact->get('id')); ?>"><?php e(__('Go to contact')); ?></a>
 	</ul>
 <?php endif; ?>
 
@@ -77,9 +77,9 @@ if ($contact_id == 0) {
 	?>
 	<form method="get" action="reminders.php">
 	<fieldset>
-		<legend>Find</legend>
-		Tekst: <input type="text" name="text" value="<?php e($reminder->getDBQuery()->getFilter("text")); ?>" />
-		Status:
+		<legend><?php e(__('Search')); ?></legend>
+		<?php e(__('Text')); ?> <input type="text" name="text" value="<?php e($reminder->getDBQuery()->getFilter("text")); ?>" />
+		<?php e(__('Status')); ?>
 		<select name="status">
 			<option value="-1">Alle</option>
 			<option value="-2"<?php if ($reminder->getDBQuery()->getFilter("status") == -2) echo ' selected="selected"';?>>Åbne</option>
@@ -88,9 +88,9 @@ if ($contact_id == 0) {
 			<option value="2"<?php if ($reminder->getDBQuery()->getFilter("status") == 2) echo ' selected="selected"';?>>Afsluttet</option>
 			<option value="3"<?php if ($reminder->getDBQuery()->getFilter("status") == 3) echo ' selected="selected"';?>>Annulleret</option>
 		</select>
-		Fra dato: <input type="text" name="from_date" value="<?php e($reminder->getDBQuery()->getFilter("from_date")); ?>" />
-		Til dato: <input type="text" name="to_date" value="<?php e($reminder->getDBQuery()->getFilter("to_date")); ?>" />
-		<input type="submit" name="search" value="Find" />
+		<?php e(__('From date')); ?> <input type="text" name="from_date" value="<?php e($reminder->getDBQuery()->getFilter("from_date")); ?>" />
+		<?php e(__('To date')); ?> <input type="text" name="to_date" value="<?php e($reminder->getDBQuery()->getFilter("to_date")); ?>" />
+		<input type="submit" name="search" value="<?php e(__('Search')); ?>" />
 	</fieldset>
 	</form>
 	<?php
@@ -100,12 +100,12 @@ if ($contact_id == 0) {
 <table class="stripe">
 <thead>
 	<tr>
-		<th>Nr.</th>
-		<th>Kunde</th>
-		<th>Beskrivelse</th>
-		<th>Sendt</th>
-		<th>Sendt som</th>
-		<th>Forfaldsdato</th>
+		<th><?php e(__('No.')); ?></th>
+		<th><?php e(__('Contact')); ?></th>
+		<th><?php e(__('Description')); ?></th>
+		<th><?php e(__('Sent')); ?></th>
+		<th><?php e(__('Send as')); ?></th>
+		<th><?php e(__('Due date')); ?></th>
 		<th>&nbsp;</th>
 	</tr>
 </thead>
@@ -121,9 +121,8 @@ if ($contact_id == 0) {
 				<?php
 				if ($reminders[$i]["status"] != "created") {
 					e($reminders[$i]["dk_date_sent"]);
-				}
-				else {
-					e(t('No', 'common'));
+				} else {
+					e(t('No'));
 				}
 				?>
       </td>
@@ -144,9 +143,9 @@ if ($contact_id == 0) {
 				<?php
 				if ($reminders[$i]["locked"] == 0) {
 					?>
-					<a class="edit" href="reminder_edit.php?id=<?php e($reminders[$i]["id"]); ?>">Ret</a>
+					<a class="edit" href="reminder_edit.php?id=<?php e($reminders[$i]["id"]); ?>"><?php e(__('Edit')); ?></a>
 					<?php if ($reminders[$i]["status"] == "created"): ?>
-					<a class="delete" href="reminders.php?contact_id=<?php e($_GET["contact_id"]); ?>&amp;delete=<?php e($reminders[$i]["id"]); ?>">Slet</a>
+					<a class="delete" href="reminders.php?contact_id=<?php e($_GET["contact_id"]); ?>&amp;delete=<?php e($reminders[$i]["id"]); ?>"><?php e(__('Delete')); ?></a>
 					<?php endif; ?>
 					<?php
 				}

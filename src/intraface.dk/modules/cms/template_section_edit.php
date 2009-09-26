@@ -45,11 +45,11 @@ if (!empty ($_POST)) {
     $value['template_id'] = $section->get('template_id');
 
 } else {
-    trigger_error($translation->get('not allowed', 'common'), E_USER_ERROR);
+    trigger_error(__('not allowed', 'common'), E_USER_ERROR);
 }
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('edit template section'));
+$page->start(__('edit template section'));
 ?>
 
 <h1><?php e(t('edit template section')); ?></h1>
@@ -124,7 +124,7 @@ switch ($value['type']) {
         <fieldset>
             <legend><?php e(t('information about picture')); ?></legend>
             <div class="formrow">
-                <label for="pic_size"><?php e($translation->get('picture size')); ?></label>
+                <label for="pic_size"><?php e(__('picture size')); ?></label>
                 <select name="pic_size">
                     <option value="original"<?php if (!empty($value['pic_size']) AND $value['pic_size'] == 'original') echo ' selected="selected"'; ?>>original</option>
                     <?php foreach ($instances AS $instance): ?>
@@ -153,7 +153,7 @@ switch ($value['type']) {
             }
             ?>
             />
-            <label for="allowed_element_<?php e($key); ?>"><?php e($translation->get($v)); ?></label>
+            <label for="allowed_element_<?php e($key); ?>"><?php e(__($v)); ?></label>
             </div>
         <?php endforeach; ?>
 
@@ -163,7 +163,7 @@ switch ($value['type']) {
         break;
 
     default :
-        trigger_error($translation->get('not allowed', 'common'), E_USER_ERROR);
+        trigger_error(__('not allowed', 'common'), E_USER_ERROR);
         break;
 
 }

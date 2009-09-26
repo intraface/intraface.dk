@@ -34,18 +34,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $value['site_id'] = $_GET['site_id'];
     $value['for_page_type'] = 7; // all types;
 } else {
-    trigger_error($translation->get('not allowed', 'common'), E_USER_ERROR);
+    trigger_error(__('not allowed', 'common'), E_USER_ERROR);
 }
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('edit template'));
+$page->start(__('edit template'));
 ?>
 
-<h1><?php e($translation->get('edit template')); ?></h1>
+<h1><?php e(__('edit template')); ?></h1>
 
 <?php if (!empty($value['id'])): ?>
 <ul class="options">
-    <li><a href="template.php?id=<?php e($value['id']); ?>"><?php e($translation->get('view template')); ?></a></li>
+    <li><a href="template.php?id=<?php e($value['id']); ?>"><?php e(__('view template')); ?></a></li>
 </ul>
 <?php endif; ?>
 
@@ -59,36 +59,36 @@ $page->start($translation->get('edit template'));
 
     <fieldset>
 
-        <legend><?php e($translation->get('template')); ?></legend>
+        <legend><?php e(__('template')); ?></legend>
 
         <div class="formrow" id="titlerow">
-            <label for="name"><?php e($translation->get('template name')); ?></label>
+            <label for="name"><?php e(__('template name')); ?></label>
             <input name="name" type="text" id="name" value="<?php if (!empty($value['name'])) e($value['name']); ?>" size="50" maxlength="255" />
         </div>
         <div class="formrow" id="titlerow">
-            <label for="identifier"><?php e($translation->get('identifier', 'common')); ?></label>
+            <label for="identifier"><?php e(__('identifier', 'common')); ?></label>
             <input name="identifier" type="text" id="name" value="<?php if (!empty($value['identifier'])) e($value['identifier']); ?>" size="50" maxlength="255" />
         </div>
 
         <div class="formrow" id="titlerow">
-            <label><?php e($translation->get('for page type')); ?></label>
+            <label><?php e(__('for page type')); ?></label>
             <?php
             require_once 'Intraface/modules/cms/Page.php';
             $page_types = CMS_Page::getTypesWithBinaryIndex();
             foreach ($page_types AS $key => $page_type): ?>
-                <label for="for_page_type_<?php e($key); ?>"><input name="for_page_type[]" type="checkbox" id="for_page_type_<?php e($key); ?>" value="<?php e($key); ?>" <?php if (!empty($value['for_page_type']) && $value['for_page_type'] & $key) echo 'checked="checked"'; ?> /><?php e($translation->get($page_type)); ?></label>
+                <label for="for_page_type_<?php e($key); ?>"><input name="for_page_type[]" type="checkbox" id="for_page_type_<?php e($key); ?>" value="<?php e($key); ?>" <?php if (!empty($value['for_page_type']) && $value['for_page_type'] & $key) echo 'checked="checked"'; ?> /><?php e(__($page_type)); ?></label>
             <?php endforeach; ?>
         </div>
 
     </fieldset>
 
     <div style="clear: both;">
-        <input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
-        <input type="submit" name="close" value="<?php e($translation->get('save and close', 'common')); ?>" />
+        <input type="submit" value="<?php e(__('save', 'common')); ?>" />
+        <input type="submit" name="close" value="<?php e(__('save and close', 'common')); ?>" />
         <?php if (!empty($value['id'])): ?>
-            <a href="template.php?id=<?php e($value['id']); ?>"><?php e($translation->get('Cancel')); ?></a>
+            <a href="template.php?id=<?php e($value['id']); ?>"><?php e(__('Cancel')); ?></a>
         <?php else: ?>
-            <a href="templates.php?site_id=<?php e($value['site_id']); ?>"><?php e($translation->get('Cancel', 'common')); ?></a>
+            <a href="templates.php?site_id=<?php e($value['site_id']); ?>"><?php e(__('Cancel', 'common')); ?></a>
         <?php endif; ?>
     </div>
 </form>

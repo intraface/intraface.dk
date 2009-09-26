@@ -21,9 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $filehandler->createUpload();
             $filehandler->upload->setSetting('max_file_size', 5000000);
-            
+
             /*
-             * @todo: It is not enough validation if we have shop to make it public. Should probably be possible to set on the image if it should be public. 
+             * @todo: It is not enough validation if we have shop to make it public. Should probably be possible to set on the image if it should be public.
              */
             if ($kernel->user->hasModuleAccess('shop')) { // if shown i webshop $product->get('do_show') == 1
                 $filehandler->upload->setSetting('file_accessibility', 'public');
@@ -142,9 +142,9 @@ $page->start(t('product') . ': ' . $product->get('name'));
     <h2>#<?php e($product->get('number'));  ?> <?php e($product->get('name')); ?></h2>
     <ul class="options">
         <?php if ($product->get('locked') != 1) { ?>
-        <li><a href="product_edit.php?id=<?php e($product->get('id')); ?>"><?php e($translation->get('edit', 'common')); ?></a></li>
+        <li><a href="product_edit.php?id=<?php e($product->get('id')); ?>"><?php e(__('edit', 'common')); ?></a></li>
 
-        <li><a class="confirm" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($product->get('id')); ?>"><?php e($translation->get('delete', 'common')); ?></a></li>
+        <li><a class="confirm" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($product->get('id')); ?>"><?php e(__('delete', 'common')); ?></a></li>
         <?php } ?>
         <li><a href="product.php?copy=<?php e($product->get('id')); ?>"><?php e(t('copy', 'common')); ?></a></li>
         <li><a href="index.php?from_product_id=<?php e($product->get('id')); ?>&amp;use_stored=true"><?php e(t('close', 'common')); ?></a></li>

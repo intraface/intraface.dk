@@ -67,7 +67,7 @@ $similar_contacts = array();
 
 $page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'viewcontact.js');
-$page->start($translation->get('contact information') . ' ' .$contact->get('name'));
+$page->start(__('contact information') . ' ' .$contact->get('name'));
 ?>
 
 

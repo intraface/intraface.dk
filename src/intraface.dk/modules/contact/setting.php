@@ -37,7 +37,7 @@ $page = new Intraface_Page($kernel);
 $page->start('Indstillinger');
 ?>
 
-<h1>Indstillinger</h1>
+<h1><?php e(t('Settings')); ?></h1>
 
 <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
@@ -57,7 +57,7 @@ $page->start('Indstillinger');
 <fieldset class="radiobuttons">
 
 
-	<legend>Kontaktlogin</legend>
+	<legend><?php e(t('Contact login')); ?></legend>
 
 	<?php foreach ($url_options AS $key=>$value): ?>
 		<?php
@@ -69,19 +69,19 @@ $page->start('Indstillinger');
 		?>
 	<?php endforeach; ?>
 
-	<p>Du kan vælge mellem følgende standardlinks <?php echo implode($url_options, ', '); ?> (anbefales), eller du kan skrive dit eget link.</p>
+	<p><?php e(t('You can choose between the following standard links:')); ?> <?php echo implode($url_options, ', '); ?> <?php e(t('(recommended) or you can write your own link.')); ?></p>
 
 	<label>
-		Link <input type="text" name="contact_login_url" value="<?php e($values['contact_login_url']); ?>" />
+		<?php e(t('Link')); ?> <input type="text" name="contact_login_url" value="<?php e($values['contact_login_url']); ?>" />
 	</label>
 
 </fieldset>
 
 
 <fieldset>
-	<legend>Tekst på e-mail til login</legend>
+	<legend><?php e(t('Text on email to login')); ?></legend>
 	<div class="formrow">
-		<label>Tekst</label>
+		<label><?php e(t('Body text')); ?></label>
 		<textarea name="text" cols="80" rows="10"><?php e($values['text']); ?></textarea>
 	</div>
 
@@ -90,7 +90,7 @@ $page->start('Indstillinger');
 </fieldset>
 
 	<div>
-		<input type="submit" name="submit" value="Gem" /> eller <a href="/modules/contact/">Fortryd</a>
+		<input type="submit" name="submit" value="<?php e(t('Save')); ?>" /> <a href="/modules/contact/"><?php e(t('cancel')); ?></a>
 	</div>
 </form>
 

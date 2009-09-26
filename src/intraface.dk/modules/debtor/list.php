@@ -14,7 +14,6 @@ if (empty($_GET["status"])) $_GET['status'] = '';
 
 $debtor = Debtor::factory($kernel, intval($_GET["id"]), $_GET["type"]);
 
-
 if (isset($_GET["action"]) && $_GET["action"] == "delete") {
     // $debtor = new CreditNote($kernel, (int)$_GET["delete"]);
     $debtor->delete();
@@ -31,13 +30,12 @@ if (isset($_GET["product_id"]) && intval($_GET["product_id"]) != 0) {
     }
 }
 
-
 // søgning
     // if (isset($_POST['submit'])
     if (isset($_GET["text"]) && $_GET["text"] != "") {
         $debtor->getDBQuery()->setFilter("text", $_GET["text"]);
     }
-    
+
     if (isset($_GET["date_field"]) && $_GET["date_field"] != "") {
         $debtor->getDBQuery()->setFilter("date_field", $_GET["date_field"]);
     }
@@ -86,12 +84,12 @@ if (intval($debtor->getDBQuery()->getFilter('contact_id')) != 0) {
 
 $page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'list.js');
-$page->start($translation->get($debtor->get('type').'s'));
+$page->start(__($debtor->get('type').'s'));
 ?>
 
 <h1>
     <?php
-        e($translation->get($debtor->get("type").'s'));
+        e(__($debtor->get("type").'s'));
         if (!empty($contact) AND is_object($contact) && $contact->address->get('name') != '') { ?>
             : <?php e($contact->address->get('name')); ?>
         <?php }
@@ -106,7 +104,7 @@ $page->start($translation->get($debtor->get('type').'s'));
 </h1>
 
 <?php if ($kernel->intranet->address->get('id') == 0): ?>
-    <p>Du mangler at udfylde adresse til dit intranet. Det skal du gøre, før du kan oprette en <?php e(strtolower($translation->get($debtor->get('type')))); ?>.
+    <p>Du mangler at udfylde adresse til dit intranet. Det skal du gøre, før du kan oprette en <?php e(strtolower(__($debtor->get('type')))); ?>.
     <?php if ($kernel->user->hasModuleAccess('administration')): ?>
         <?php
         $module_administration = $kernel->useModule('administration');
@@ -121,19 +119,19 @@ $page->start($translation->get($debtor->get('type').'s'));
     <?php if ($debtor->get('type') == 'credit_note'): ?>
         <p>Du har endnu ikke oprettet nogen. Kreditnotaer oprettes fra en fakturaer.</p>
     <?php else: ?>
-        <p>Du har endnu ikke oprettet nogen. <a href="select_contact.php?type=<?php e($debtor->get("type")); ?>"><?php e($translation->get('create '.$debtor->get('type'))); ?></a>.</p>
+        <p>Du har endnu ikke oprettet nogen. <a href="select_contact.php?type=<?php e($debtor->get("type")); ?>"><?php e(__('create '.$debtor->get('type'))); ?></a>.</p>
     <?php endif; ?>
 <?php else: ?>
 
 <ul class="options">
     <?php if (!empty($contact) AND is_object($contact) AND $debtor->get("type") != "credit_note"): ?>
-        <li><a href="edit.php?type=<?php e($debtor->get("type")); ?>&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e($translation->get('create '.$debtor->get('type'))); ?></a></li>
+        <li><a href="edit.php?type=<?php e($debtor->get("type")); ?>&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(__('create '.$debtor->get('type'))); ?></a></li>
         <li><a href="<?php e($contact_module->getPath()); ?>contact.php?id=<?php e($contact->get('id')); ?>">Vis kontakten</a>
     <?php else: ?>
         <?php if (!empty($_GET['product_id'])): ?>
             <li><a href="<?php e($product_module->getPath()); ?>product.php?id=<?php e($product->get('id')); ?>">Vis produktet</a>
         <?php endif; ?>
-        <li><a href="select_contact.php?type=<?php e($debtor->get("type")); ?>"><?php e($translation->get('create '.$debtor->get('type'))); ?></a></li>
+        <li><a href="select_contact.php?type=<?php e($debtor->get("type")); ?>"><?php e(__('create '.$debtor->get('type'))); ?></a></li>
     <?php endif; ?>
     <li><a class="excel" href="export_excel.php?type=<?php e($debtor->get('type')); ?>&amp;use_stored=true">Exporter liste til Excel</a></li>
 </ul>
@@ -144,12 +142,12 @@ $page->start($translation->get($debtor->get('type').'s'));
 <?php if (!isset($_GET['$contact_id'])): ?>
 
     <fieldset class="hide_on_print">
-        <legend>Avanceret søgning</legend>
+        <legend><?php e(__('Advanced search')); ?></legend>
         <form method="get" action="list.php">
-        <label>Tekst
+        <label><?php e(__('Text')); ?>
             <input type="text" name="text" value="<?php e($debtor->getDBQuery()->getFilter("text")); ?>" />
         </label>
-        <label>Status
+        <label><?php e(__('Status')); ?>
         <select name="status">
             <option value="-1">Alle</option>
             <option value="-2"<?php if ($debtor->getDBQuery()->getFilter("status") == -2) echo ' selected="selected"';?>>Åbne</option>
@@ -163,7 +161,7 @@ $page->start($translation->get($debtor->get('type').'s'));
         </select>
         </label>
         <!-- sortering bør være placeret ved at man klikker på en overskrift i stedet - og så bør man kunne sortere på det hele -->
-        <label>Sortering
+        <label><?php e(__('Sorting')); ?>
         <select name="sorting">
             <?php foreach(array(0 => ucfirst($debtor->get('type')).' number descending', 1 => ucfirst($debtor->get('type')).' number ascending', 2 => 'Contact number', 3 => 'Contact name') AS $key => $description): ?>
                 <option value="<?php e($key); ?>"<?php if ($debtor->getDBQuery()->getFilter("sorting") == $key) echo ' selected="selected"';?>><?php e(t($description)); ?></option>
@@ -171,7 +169,7 @@ $page->start($translation->get($debtor->get('type').'s'));
         </select>
         </label>
         <br />
-        
+
         <label><?php e(t('Date interval'))?>
             <select name="date_field">
                 <?php foreach(array('this_date' => ucfirst($debtor->get('type')).' date', 'date_created' => 'Date created', 'date_sent' => 'Date sent', 'date_executed' => 'Date executed', 'data_cancelled' => 'Date cancelled') AS $field => $description): ?>
@@ -198,22 +196,19 @@ $page->start($translation->get($debtor->get('type').'s'));
 
 <?php endif; ?>
 
-
-
-
 <table class="stripe">
-    <caption><?php e($translation->get($debtor->get("type").' title')); ?></caption>
+    <caption><?php e(__($debtor->get("type").' title')); ?></caption>
     <thead>
         <tr>
-            <th>Nr.</th>
-            <th colspan="2">Kontakt</th>
-            <th>Beskrivelse</th>
-            <th class="amount">Beløb</th>
+            <th><?php e(__('No.')); ?></th>
+            <th colspan="2"><?php e(__('Contact')); ?></th>
+            <th><?php e(__('Description')); ?></th>
+            <th class="amount"><?php e(__('Amount')); ?></th>
             <?php if ($debtor->getDBQuery()->getFilter("status") == -3): ?>
-                <th class="amount">Afskrevet</th>
+                <th class="amount"><?php e(__('Depreciated')); ?></th>
             <?php endif; ?>
-            <th>Sendt</th>
-            <th><?php e($translation->get($debtor->get('type').' due date')); ?></th>
+            <th><?php e(__('Sent')); ?></th>
+            <th><?php e(__($debtor->get('type').' due date')); ?></th>
             <th>&nbsp;</th>
         </tr>
     </thead>
@@ -302,7 +297,7 @@ $page->start($translation->get($debtor->get('type').'s'));
                     }
 
                     if ($posts[$i]["status"] == "executed" || $posts[$i]["status"] == "cancelled") {
-                        e($translation->get($posts[$i]["status"]));
+                        e(__($posts[$i]["status"]));
                     } elseif ($posts[$i]["due_date"] < date("Y-m-d")) { ?>
                         <span class="due"><?php e($posts[$i]["dk_due_date"].$arrears); ?></span>
                     <?php
@@ -315,9 +310,9 @@ $page->start($translation->get($debtor->get('type').'s'));
                     <?php
                     if ($posts[$i]["locked"] == false) {
                         ?>
-                        <a class="edit" href="edit.php?id=<?php e($posts[$i]["id"]); ?>">Ret</a>
+                        <a class="edit" href="edit.php?id=<?php e($posts[$i]["id"]); ?>"><?php e(__('Edit')); ?></a>
                         <?php if ($posts[$i]["status"] == "created"): ?>
-                        <a class="delete" title="Er du sikker på, at du vil slette denne <?php e($translation->get($debtor->get('type').' title')); ?>?" href="list.php?id=<?php e($posts[$i]["id"]); ?>&amp;action=delete&amp;use_stored=true">Slet</a>
+                        <a class="delete" title="<?php e(__('Are you sure?')); ?>" href="list.php?id=<?php e($posts[$i]["id"]); ?>&amp;action=delete&amp;use_stored=true"><?php e(__('Delete')); ?></a>
                         <?php endif; ?>
                         &nbsp;
                         <?php
@@ -330,7 +325,6 @@ $page->start($translation->get($debtor->get('type').'s'));
         ?>
     </tbody>
 </table>
-
 
 <?php echo $debtor->getDBQuery()->display('paging'); ?>
 

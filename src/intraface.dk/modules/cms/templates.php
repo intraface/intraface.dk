@@ -19,26 +19,26 @@ if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
 $templates = $template->getList();
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('templates'));
+$page->start(__('templates'));
 ?>
 
-<h1><?php e($translation->get('templates')); ?></h1>
+<h1><?php e(__('templates')); ?></h1>
 
 <ul class="options">
-    <li><a class="new" href="template_edit.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('create template')); ?></a></li>
-    <li><a href="site.php?id=<?php e($cmssite->get('id')); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
+    <li><a class="new" href="template_edit.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e(__('create template')); ?></a></li>
+    <li><a href="site.php?id=<?php e($cmssite->get('id')); ?>"><?php e(__('close', 'common')); ?></a></li>
 </ul>
 
 <?php if (count($templates) == 0): ?>
-    <p><?php e($translation->get('no templates found')); ?></p>
+    <p><?php e(__('no templates found')); ?></p>
 <?php else: ?>
 <table>
-<caption><?php e($translation->get('templates')); ?></caption>
+<caption><?php e(__('templates')); ?></caption>
 <thead>
 <tr>
-    <th><?php e($translation->get('template name')); ?></th>
-    <th><?php e($translation->get('identifier', 'common')); ?></th>
-    <th><?php e($translation->get('for page type')); ?></th>
+    <th><?php e(__('template name')); ?></th>
+    <th><?php e(__('identifier', 'common')); ?></th>
+    <th><?php e(__('for page type')); ?></th>
     <th></th>
 </tr>
 </thead>
@@ -66,8 +66,8 @@ $page_types = CMS_Page::getTypesWithBinaryIndex();
 
         </td>
         <td class="options">
-            <a class="edit" href="template_edit.php?id=<?php e($s['id']); ?>"><?php e($translation->get('edit settings', 'common')); ?></a>
-            <a class="delete" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($s['id']); ?>"><?php e($translation->get('delete', 'common')); ?></a>
+            <a class="edit" href="template_edit.php?id=<?php e($s['id']); ?>"><?php e(__('edit settings', 'common')); ?></a>
+            <a class="delete" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($s['id']); ?>"><?php e(__('delete', 'common')); ?></a>
         </td>
     </tr>
 <?php endforeach; ?>

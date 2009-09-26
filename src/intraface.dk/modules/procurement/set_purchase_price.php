@@ -74,7 +74,7 @@ $page->start("Angiv indkøbspris");
                         <input type="hidden" name="items[<?php e($i); ?>][id]" value="<?php e($items[$i]['id']); ?>" />
                     </td>
                     <td><?php e($items[$i]["name"]) ?></td>
-                    <td><?php e($items[$i]['quantity']); ?> <?php e($translation->get($items[$i]['unit'], 'product')) ?></td>
+                    <td><?php e($items[$i]['quantity']); ?> <?php e(__($items[$i]['unit'], 'product')) ?></td>
                     <td align="right"><?php e($items[$i]["price"]->getAsLocal('da_dk', 2)); ?></td>
                     <td><input type="input" name="items[<?php e($i); ?>][price]" value="0,00" size="8" /></td>
                 </tr>

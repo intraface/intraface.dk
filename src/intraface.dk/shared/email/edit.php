@@ -78,10 +78,10 @@ $page->start('Skriv e-mail');
 	<input type="hidden" name="type_id" value="<?php e($value['type_id']); ?>" />
 
 	<fieldset>
-		<legend>Modtager</legend>
+		<legend><?php e(t('Recipient')); ?></legend>
 
 		<div class="formrow">
-			<label for="contact_person_id">Til:</label>
+			<label for="contact_person_id"><?php e(t('To')); ?></label>
 			<?php
 			$email->getContact();
 			if (isset($email->contact->contactperson)) {
@@ -105,11 +105,11 @@ $page->start('Skriv e-mail');
 			?>
 		</div>
 		<div class="formrow">
-			<label for="bcc_to_user">Blind kopi til:</label>
+			<label for="bcc_to_user"><?php e(t('BCC')); ?></label>
 			<input type="checkbox" name="bcc_to_user" id="bcc_to_user" value="1" <?php if (isset($value['bcc_to_user']) && intval($value['bcc_to_user']) == 1) echo 'checked="checked"'; ?> /> <?php echo $kernel->user->getAddress()->get('name').' &#60'.$kernel->user->getAddress()->get('email').'&#62'; ?>
 		</div>
 		<div class="formrow">
-			<label for="from">Fra:</label>
+			<label for="from"><?php e(t('From')); ?></label>
 			<span id="from">
 				<?php
 				if ($email->get('from_email')) {
@@ -123,15 +123,14 @@ $page->start('Skriv e-mail');
 
 	</fieldset>
 
-
 	<fieldset>
-		<legend>Overskrift</legend>
+		<legend><?php e(t('Subject')); ?></legend>
 		<input size="80" type="text" name="subject" value="<?php e($value['subject']); ?>" />
 	</fieldset>
 	<fieldset>
-		<legend>Tekst</legend>
+		<legend><?php e(t('Body text')); ?></legend>
 		<textarea cols="80" rows="12" class="resizable" name="body"><?php e(wordwrap($value['body'], 75)); ?></textarea>
-		<br /><input type="checkbox" name="add_contact_login_url" value="1" /> <label for="add_customer_login_link">Tilføj logininformation til <?php echo $kernel->setting->get('intranet', 'contact.login_url'); ?></label>
+		<br /><input type="checkbox" name="add_contact_login_url" value="1" /> <label for="add_customer_login_link"><?php e(t('Add login information')); ?> <?php echo $kernel->setting->get('intranet', 'contact.login_url'); ?></label>
 	</fieldset>
 
 	<?php
@@ -140,7 +139,7 @@ $page->start('Skriv e-mail');
 	if (count($attachments) > 0) {
 	    ?>
 	    <fieldset>
-			<legend>Vedhæftede filer</legend>
+			<legend><?php e(t('Attachments')); ?></legend>
 			<ul>
 				<?php
 				$kernel->useShared('filehandler');
@@ -155,12 +154,12 @@ $page->start('Skriv e-mail');
 	}
 	?>
 	<p>
-		<input type="submit" class="confirm" name="send" value="Send"  onclick="return confirm('Er du sikker på, at du vil sende denne e-mail?');" />
+		<input type="submit" class="confirm" name="send" value="<?php e(t('Send')); ?>"  />
         <?php if ($kernel->user->hasModuleAccess('email')): ?>
-            <input type="submit" class="save" name="save" value="Gem i kladder" />
+            <input type="submit" class="save" name="save" value="<?php e(t('Save in drafts')); ?>" />
         <?php endif; ?>
-        <input type="submit" class="save" name="delete" value="Slet" />
-		eller <a href="<?php e($redirect->getRedirect('email.php?id='.intval($value['id']))); ?>">Fortryd</a>
+        <input type="submit" class="save" name="delete" value="<?php e(t('Delete')); ?>" />
+		<a href="<?php e($redirect->getRedirect('email.php?id='.intval($value['id']))); ?>"><?php e(t('Cancel')); ?></a>
 	</p>
 </form>
 

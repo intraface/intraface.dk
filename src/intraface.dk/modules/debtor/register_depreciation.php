@@ -29,8 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
         $for = 'reminder';
-    }
-    else {
+    } else {
         trigger_error('Invalid for!', E_USER_ERROR);
         exit;
     }
@@ -45,13 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 header('location: view.php?id='.$object->get('id'));
                 exit;
             }
-        }
-        elseif ($for == 'reminder') {
+        } elseif ($for == 'reminder') {
             if ($kernel->user->hasModuleAccess('accounting')) {
                 header('location: state_depreciation.php?for=reminder&id=' . intval($object->get("id")).'&depreciation_id='.$depreciation->get('id'));
                 exit;
-            }
-            else {
+            } else {
                 header('location: reminder.php?id='.$object->get('id'));
                 exit;
             }
@@ -71,22 +68,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
         $for = 'invoice';
-    }
-    elseif ($_GET['for'] == 'reminder') {
+    } elseif ($_GET['for'] == 'reminder') {
         $object = new Reminder($kernel, intval($_GET["id"]));
         if ($object->get('id') == 0) {
             trigger_error('Invalid Reminder', E_USER_ERROR);
             exit;
         }
         $for = 'reminder';
-    }
-    else {
+    } else {
         trigger_error('Invalid for!', E_USER_ERROR);
         exit;
     }
     $depreciation = new Depreciation($object);
-
-
 }
 
 $page = new Intraface_Page($kernel);
@@ -121,9 +114,9 @@ $page->start(t('register depreciation for').' '.t($for));
 <input type="submit" name="depreciation" value="Registrér" />
 <?php e(t('or', 'common')); ?>
 <?php if ($for == 'invoice'): ?>
-    <a href="view.php?id=<?php e($object->get('id')); ?>"><?php e(t('Cancel', 'common')); ?></a>
+    <a href="view.php?id=<?php e($object->get('id')); ?>"><?php e(t('Cancel')); ?></a>
 <?php elseif ($for == 'reminder'): ?>
-    <a href="reminder.php?id=<?php e($object->get('id')); ?>"><?php e(t('Cancel', 'common')); ?></a>
+    <a href="reminder.php?id=<?php e($object->get('id')); ?>"><?php e(t('Cancel')); ?></a>
 <?php endif; ?>
 </form>
 <?php

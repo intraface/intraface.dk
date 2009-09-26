@@ -40,27 +40,25 @@ $page->start("Onlinebetaling");
 
 <div id="colOne">
 
-<h1><?php e("Onlinebetaling"); ?></h1>
+<h1><?php e(t('Online payment')); ?></h1>
 
 <ul class="options">
-	<li><a href="index.php?from_id=<?php e($onlinepayment->get('id')); ?>">Luk</a></li>
+	<li><a href="index.php?from_id=<?php e($onlinepayment->get('id')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 <?php echo $onlinepayment->error->view(); ?>
 
-
 <table>
-	<caption>Betalingsoplysninger</caption>
+	<caption><?php e(t('Payment information')); ?></caption>
 	<tbody>
 		<tr>
-			<th>Dato</th>
+			<th><?php e(t('Date')); ?></th>
 			<td><?php e($onlinepayment->get("dk_date_created")); ?></td>
 		</tr>
 		<tr>
-			<th>Tilknyttet</th>
+			<th><?php e(t('Related to')); ?></th>
 			<td>
 				<?php
-
 				switch($onlinepayment->get('belong_to')) {
 					case "invoice":
 						if ($kernel->user->hasModuleAccess('invoice')) {
@@ -85,10 +83,10 @@ $page->start("Onlinebetaling");
 			</td>
 		</tr>
 		<tr>
-			<th>Status</th>
+			<th><?php e(t('Status')); ?></th>
 			<td>
 				<?php
-				e($translation->get($onlinepayment->get("status")));
+				e(__($onlinepayment->get("status")));
 
 				if ($onlinepayment->get('status') == 'authorized') {
 					print(" (Ikke <acronym title=\"Betaling kan først hæves når faktura er sendt\">hævet</acronym>)");
@@ -100,7 +98,7 @@ $page->start("Onlinebetaling");
 		if ($onlinepayment->get('status') == 'captured') {
 			?>
 			<tr>
-				<th>Dato hævet</th>
+				<th><?php e(t('Date captured')); ?></th>
 				<td><?php e($onlinepayment->get("dk_date_captured")); ?></td>
 			</tr>
 			<?php
@@ -110,34 +108,34 @@ $page->start("Onlinebetaling");
 		if ($onlinepayment->get('status') == 'reversed') {
 			?>
 			<tr>
-				<th>Dato tibagebetalt</th>
+				<th><?php e(t('Date reversed')); ?></th>
 				<td><?php e($onlinepayment->get("dk_date_reversed")); ?></td>
 			</tr>
 			<?php
 		}
 		?>
 		<tr>
-			<th>Transaktionsnummer</th>
+			<th><?php e(t('Transaction number')); ?></th>
 			<td><?php e($onlinepayment->get("transaction_number")); ?></td>
 		</tr>
 		<tr>
-			<th>Transaktionsstatus</th>
+			<th><?php e(t('Transaction status')); ?></th>
 			<td><?php e($onlinepayment->get("transaction_status_translated")); ?></td>
 		</tr>
         <tr>
-            <th>PBS status</th>
+            <th><?php e(t('PBS status')); ?></th>
             <td><?php e($onlinepayment->get("pbs_status")); ?></td>
         </tr>
 		<tr>
-			<th>Beløb</th>
+			<th><?php e(t('Amount')); ?></th>
 			<td>
-                <?php 
+                <?php
                 if(false !== ($currency = $onlinepayment->getCurrency())) {
-                    e($currency->getType()->getIsoCode().' ');    
+                    e($currency->getType()->getIsoCode().' ');
                 } elseif($kernel->intranet->hasModuleAccess('currency')) {
                     e('DKK ');
                 }
-                e($onlinepayment->get("dk_amount")); 
+                e($onlinepayment->get("dk_amount"));
                 ?>
             </td>
 		</tr>
@@ -145,15 +143,15 @@ $page->start("Onlinebetaling");
 		if ($onlinepayment->get('amount') != $onlinepayment->get('original_amount')) {
 			?>
 			<tr>
-				<th>Oprindeligt beløb</th>
+				<th><?php e(t('Original amount')); ?></th>
 				<td>
-                    <?php 
+                    <?php
                     if(false !== ($currency = $onlinepayment->getCurrency())) {
-                        e($currency->getType()->getIsoCode().' ');    
+                        e($currency->getType()->getIsoCode().' ');
                     } elseif($kernel->intranet->hasModuleAccess('currency')) {
                         e('DKK ');
                     }
-                    e($onlinepayment->get("dk_original_amount")); 
+                    e($onlinepayment->get("dk_original_amount"));
                     ?>
                 </td>
 			</tr>
@@ -165,7 +163,7 @@ $page->start("Onlinebetaling");
 		if ($onlinepayment->get('text') != "") {
 			?>
 			<tr>
-				<th>Beskrivelse</th>
+				<th><?php e(t('Description')); ?></th>
 				<td><?php autohtml($onlinepayment->get("text")); ?></td>
 			</tr>
 			<?php
@@ -182,18 +180,18 @@ $page->start("Onlinebetaling");
 if ($onlinepayment->get('status') == "authorized") {
 	?>
 	<fieldset>
-		<legend>Ændre beløb</legend>
+		<legend><?php e(t('Change amount')); ?></legend>
 
 		<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
-		<p>Du har mulighed for at nedsætte beløbet der trækkes fra kontoen, før du hæver beløbet.</p>
+		<p<?php e(t('You can make the amount you withdraw smaller.')); ?>></p>
 
 		<div class="formrow">
-			<label for="dk_amount" class="tight">Beløb</label>
+			<label for="dk_amount" class="tight"><?php e(t('Amount')); ?></label>
 	    <input type="text" name="dk_amount" id="dk_amount" value="<?php e($value["dk_amount"]); ?>" />
 		</div>
 
-		<input type="submit" class="save" name="submit" value="Gem" />
+		<input type="submit" class="save" name="submit" value="<?php e(t('Save')); ?>" />
 		<input type="hidden" name="id" value="<?php e($onlinepayment->get("id")); ?>" />
 		</form>
 

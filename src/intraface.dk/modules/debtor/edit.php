@@ -70,8 +70,7 @@ if (!empty($_POST)) {
 	$value["dk_this_date"] = date("d-m-Y");
 	if ($debtor->get("type") == "invoice") {
 		$value["dk_due_date"] = date("d-m-Y", time() + 24 * 60 * 60 * $contact->get("paymentcondition"));
-	}
-	else {
+	} else {
 		$value["dk_due_date"] = "";
 	}
 	$value["payment_method_id"] = 1;
@@ -80,20 +79,20 @@ if (!empty($_POST)) {
 
 $page = new Intraface_Page($kernel);
 $page->includeJavascript('module', 'edit.js');
-$page->start($translation->get($action.' '.$debtor->get('type')));
+$page->start(__($action.' '.$debtor->get('type')));
 
 ?>
-<h1><?php e($translation->get($action.' '.$debtor->get('type'))); ?></h1>
+<h1><?php e(__($action.' '.$debtor->get('type'))); ?></h1>
 
 <?php if ($kernel->intranet->address->get('id') == 0): ?>
-	<p>Du mangler at udfylde adresse til dit intranet. Det skal du gøre, før du kan oprette en <?php e(strtolower($translation->get($debtor->get('type')))); ?>.
+	<p><?php e(t('You have not filled in an address for your intranet. Please do that in order to create a debtor.')); ?>.
 	<?php if ($kernel->user->hasModuleAccess('administration')): ?>
 		<?php
 		$module_administration = $kernel->useModule('administration');
 		?>
-		<a href="<?php e($module_administration->getPath().'intranet_edit.php'); ?>">Udfyld adresse</a>.
+		<a href="<?php e($module_administration->getPath().'intranet_edit.php'); ?>"><?php e(t('Fill out address')); ?></a>.
 	<?php else: ?>
-		Du har ikke adgang til at rette adresseoplysningerne, det må du bede din administrator om at gøre.
+		<?php e(t('You do not have access to fill out an adress. Please ask an administrator to do that.')); ?>
 	<?php endif; ?>
 	</p>
 <?php else: ?>
@@ -104,10 +103,10 @@ $page->start($translation->get($action.' '.$debtor->get('type')));
 <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 <fieldset>
-	<legend><?php e($translation->get($debtor->get('type').' data')); ?></legend>
+	<legend><?php e(__($debtor->get('type').' data')); ?></legend>
 
 	<div class="formrow">
-		<label for="number"><?php e($translation->get($debtor->get('type').' number')); ?></label>
+		<label for="number"><?php e(__($debtor->get('type').' number')); ?></label>
     <input type="text" name="number" id="number" value="<?php e($value["number"]); ?>" />
 	</div>
 	<div class="formrow">
@@ -119,7 +118,7 @@ $page->start($translation->get($action.' '.$debtor->get('type')));
 		<input class="input" name="this_date" id="this_date" value="<?php if (isset($value["dk_this_date"])) e($value["dk_this_date"]); ?>" size="10" />
 	</div>
 	<div class="formrow">
-		<label for="due_date"><?php e($translation->get($debtor->get('type').' due date')); ?></label>
+		<label for="due_date"><?php e(__($debtor->get('type').' due date')); ?></label>
 		<input class="input" name="due_date" id="due_date" value="<?php if (isset($value["dk_due_date"])) e($value["dk_due_date"]); ?>" size="10" />
 	</div>
 	<?php
@@ -153,7 +152,7 @@ $page->start($translation->get($action.' '.$debtor->get('type')));
 
 	<div class="formrow">
 		<label for="message"><?php e(t('Message', 'debtor')); ?></label>
-		<textarea id="message" type="text" name="message" cols="80" rows="5"><?php if (isset($value["message"])) e($value["message"]); ?></textarea>
+		<textarea id="message" name="message" cols="80" rows="5"><?php if (isset($value["message"])) e($value["message"]); ?></textarea>
 	</div>
 
 </fieldset>
@@ -206,19 +205,19 @@ $page->start($translation->get($action.' '.$debtor->get('type')));
 if ($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {
 	?>
 	<fieldset class="radiobuttons">
-		<legend><?php e(t('Payment information', 'debtor')); ?></legend>
-		<p><?php e($translation->get('Which payment method do you want to show on the '.$debtor->get("type"))); ?></p>
+		<legend><?php e(t('Payment information')); ?></legend>
+		<p><?php e(__('Which payment method do you want to show on the '.$debtor->get("type"))); ?></p>
 		<div>
 			<label<?php if (isset($value['payment_method']) && $value['payment_method'] == 0) print(" class=\"selected\""); ?>><input class="input" id="none" type="radio" name="payment_method" value="0" <?php if (isset($value['payment_method']) && $value['payment_method'] == 0) print("checked=\"CHECKED\""); ?> />
-			Ingen</label>
+			<?php e(__('None')); ?></label>
 		</div>
     <?php if ($kernel->setting->get('intranet', 'bank_account_number')) { ?>
 		<div>
 			<label<?php if (isset($value['payment_method']) AND $value['payment_method'] == 1) print(' class="selected"'); ?>><input class="input" id="account" type="radio" name="payment_method" value="1" <?php if (isset($value['payment_method']) AND $value['payment_method'] == 1) print("checked=\"CHECKED\""); ?> />
-			Kontooverførsel</label>
+			<?php e(__('Wire transfer')); ?></label>
 		</div>
     <?php } else { ?>
-        <p>Hvis du ønsker at modtage penge via kontooverførsel, kan du indtaste dit kontonummer under <a href="setting.php">Indstillingerne</a>.</p>
+        <p><?php e(t('In order to receive money through wire transfer, you have to put in your account number')); ?>. <a href="setting.php"><?php e(t('Put in bank account number')); ?></a>.</p>
     <?php } ?>
     <?php if ($kernel->setting->get('intranet', 'giro_account_number')) { ?>
 		<div>
@@ -240,7 +239,7 @@ if ($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {
     <?php if ($kernel->intranet->hasModuleAccess('shop')): ?>
         <div>
             <label<?php if (isset($value['payment_method']) AND $value['payment_method'] == 5) print(' class="selected"'); ?>><input class="input" id="account" type="radio" name="payment_method" value="5" <?php if (isset($value['payment_method']) AND $value['payment_method'] == 5) print("checked=\"CHECKED\""); ?> />
-            Onlinebetaling</label>
+            <?php e(t('Online payment')); ?></label>
         </div>
     <?php endif; ?>
 
@@ -251,7 +250,6 @@ if ($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {
 
 <div>
 <input type="submit" class="save" name="submit" value="<?php e(t('Continue')); ?>" />
-<?php e(t('or', 'common')); ?>
 <?php if (!$debtor->get("id")) { ?>
 <a href="<?php e($_SERVER['HTTP_REFERER']); ?>"><?php e(t('Cancel', 'common')); ?></a>
 <?php } else { ?>

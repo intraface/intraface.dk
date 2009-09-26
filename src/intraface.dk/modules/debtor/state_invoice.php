@@ -46,7 +46,7 @@ $debtor->loadItem();
 $items = $debtor->item->getList();
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('State invoice'));
+$page->start(__('State invoice'));
 
 ?>
 <h1>Bogfør faktura #<?php e($debtor->get('number')); ?></h1>
@@ -72,7 +72,7 @@ $page->start($translation->get('State invoice'));
         <legend>Faktura</legend>
         <table>
             <tr>
-                <th><?php e($translation->get("invoice number")); ?></th>
+                <th><?php e(__("invoice number")); ?></th>
                 <td><?php e($debtor->get("number")); ?></td>
             </tr>
             <tr>

@@ -50,17 +50,14 @@ if (isset($_POST["go_search"])) {
         if (!$error->isError()) {
             header("Location: edit.php?type=".$_POST["type"]."&contact_id=".$_POST["contact"]."");
             exit;
-        }
-        else {
+        } else {
             $value = $_POST;
             $type = $_POST['type'];
         }
-    }
-    else {
+    } else {
         trigger_error("Ugyldig type", E_USER_ERROR);
     }
-}
-elseif (isset($_POST["new_contact"])) {
+} elseif (isset($_POST["new_contact"])) {
     if ($_POST["type"] == "quotation" || $_POST["type"] == "order" || $_POST["type"] == "invoice") {
 
         $redirect = new Intraface_Redirect($kernel);
@@ -74,26 +71,21 @@ elseif (isset($_POST["new_contact"])) {
         header("location: /modules/contact/contact_edit.php?go_to=".$_POST["type"]);
         exit;
         */
-    }
-    else {
+    } else {
         trigger_error("Ugyldig type", E_USER_ERROR);
     }
-}
-else {
+} else {
 
     if (isset($_GET["type"])) {
 
         if ($_GET["type"] == "reminder" && $kernel->user->hasModuleAccess("invoice")) {
             $type = "reminder";
-        }
-        elseif (($_GET["type"] == "quotation" || $_GET["type"] == "order" || $_GET["type"] == "invoice") && $kernel->user->hasModuleAccess($_GET["type"])) {
+        } elseif (($_GET["type"] == "quotation" || $_GET["type"] == "order" || $_GET["type"] == "invoice") && $kernel->user->hasModuleAccess($_GET["type"])) {
             $type = $_GET["type"];
-        }
-        else {
+        } else {
             $type = "";
         }
-    }
-    else {
+    } else {
         $type = "";
     }
 }
@@ -101,10 +93,10 @@ else {
 $page = new Intraface_Page($kernel);
 $page->includeJavascript('global', 'XMLHttp.js');
 $page->includeJavascript('module', 'select_contact.js');
-$page->start('Opret ny');
+$page->start('Create new');
 ?>
 
-<h1>Opret tilbud, ordre eller faktura</h1>
+<h1><?php e(t('Create new quotation, order or invoice')); ?></h1>
 
 <?php echo $error->view(); ?>
 
@@ -112,39 +104,39 @@ $page->start('Opret ny');
 <table>
 <thead>
 <tr>
-    <th>Hvad?</th>
-    <th>Til?</th>
+    <th><?php e(t('What?')); ?></th>
+    <th><?php e(t('To?')); ?></th>
     <th></th>
 </tr>
 </thead>
 <tbody>
 <tr>
   <td>
-  <label id="type_label">Opret
+  <label id="type_label"><?php e(t('Create')); ?>
       <select name="type" id="type_select">
-    <option value="">Vælg</option>
-        <option value="quotation" <?php if ($type == "quotation") print("selected=\"selected\""); ?>>Tilbud</option>
-        <option value="order" <?php if ($type == "order") print("selected=\"selected\""); ?>>Ordre</option>
-        <option value="invoice" <?php if ($type == "invoice") print("selected=\"selected\""); ?>>Faktura</option>
+    <option value=""><?php e(t('Choose')); ?></option>
+        <option value="quotation" <?php if ($type == "quotation") print("selected=\"selected\""); ?>><?php e(t('Quotation')); ?></option>
+        <option value="order" <?php if ($type == "order") print("selected=\"selected\""); ?>><?php e(t('Order')); ?></option>
+        <option value="invoice" <?php if ($type == "invoice") print("selected=\"selected\""); ?>><?php e(t('Invoice')); ?></option>
     </select>
    </label>
  </td>
 
 <td>
-<input type="submit" name="new_contact" id="new_contact" value="Ny kontakt" />
+<input type="submit" name="new_contact" id="new_contact" value="<?php e(t('New contact')); ?>" />
 <?php $contact = new Contact($kernel); if ($contact->isFilledIn()): ?>
 eller
 <label>søg
         <input type="text" name="search" id="search" value="<?php if (!empty($_GET['search'])) e($_GET['search']); ?>" />
 </label>
 
-        <input type="submit" value="Søg" id="search_button" />
+        <input type="submit" value="<?php e(t('Search')); ?>" id="search_button" />
         <select name="contact" size="4" id="contact_select" style="width:300px;"><?php if (isset($options)) e($options); ?></select>
 <?php endif; ?>
   </td>
 
  <td>
-  <input type="submit" name="go_search" value="Opret" />
+  <input type="submit" name="go_search" value="<?php e(t('Create')); ?>" />
   </td>
   </tr></tbody>
   </table>

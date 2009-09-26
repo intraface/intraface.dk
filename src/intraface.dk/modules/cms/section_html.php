@@ -62,14 +62,14 @@ $page->includeJavascript('module', 'section_html.js');
 $page->start('CMS');
 ?>
 
-<h1><?php e($translation->get('edit section')); ?> <?php e($section->get('section_name')); ?> <?php echo e(t('on page')); ?> <?php e($section->cmspage->get('title')); ?></h1>
+<h1><?php e(__('edit section')); ?> <?php e($section->get('section_name')); ?> <?php echo e(t('on page')); ?> <?php e($section->cmspage->get('title')); ?></h1>
 
 <ul class="options">
     <?php if (count($section->cmspage->getSections()) > 1): ?>
-    <li><a href="page.php?id=<?php e($section->cmspage->get('id')); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
+    <li><a href="page.php?id=<?php e($section->cmspage->get('id')); ?>"><?php e(__('close', 'common')); ?></a></li>
     <?php else: ?>
-    <li><a class="edit" href="page_edit.php?id=<?php e($section->cmspage->get('id')); ?>"><?php e($translation->get('edit page settings')); ?></a></li>
-    <li><a href="pages.php?type=<?php e($section->cmspage->get('type')); ?>&amp;id=<?php e($section->cmspage->cmssite->get('id')); ?>"><?php e($translation->get('close')); ?></a></li>
+    <li><a class="edit" href="page_edit.php?id=<?php e($section->cmspage->get('id')); ?>"><?php e(__('edit page settings')); ?></a></li>
+    <li><a href="pages.php?type=<?php e($section->cmspage->get('type')); ?>&amp;id=<?php e($section->cmspage->cmssite->get('id')); ?>"><?php e(__('close')); ?></a></li>
     <?php endif; ?>
 </ul>
 
@@ -105,19 +105,19 @@ $page->start('CMS');
 <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
     <input type="hidden" value="<?php e($section->get('id')); ?>" name="id" />
     <fieldset>
-        <legend><?php e($translation->get('create new element')); ?></legend>
-        <p><?php e($translation->get('place content on the section by adding elements')); ?></p>
+        <legend><?php e(__('create new element')); ?></legend>
+        <p><?php e(__('place content on the section by adding elements')); ?></p>
         <select name="new_element_type_id" id="new_element_type_id">
-            <option value=""><?php e($translation->get('choose', 'common')); ?></option>
+            <option value=""><?php e(__('choose', 'common')); ?></option>
             <?php
                 foreach ($element_types AS $key=>$type):
                     if (!in_array($key, $section->template_section->get('allowed_element'))) continue; ?>
-                     <option value="<?php e($type); ?>"><?php e($translation->get($type)); ?></option>
+                     <option value="<?php e($type); ?>"><?php e(__($type)); ?></option>
                 <?php endforeach;
             ?>
         </select>
-        <input type="submit" value="<?php e($translation->get('add element')); ?>" name="add_element" />
-        <a href="page.php?id=<?php e($section->cmspage->get('id')); ?>"><?php e($translation->get('Cancel', 'common')); ?></a>
+        <input type="submit" value="<?php e(__('add element')); ?>" name="add_element" />
+        <a href="page.php?id=<?php e($section->cmspage->get('id')); ?>"><?php e(__('Cancel', 'common')); ?></a>
 
     </fieldset>
 </form>

@@ -170,7 +170,7 @@ $page = new Intraface_Page($kernel);
 $page->start('Indstillinger');
 ?>
 
-<h1>Indstillinger</h1>
+<h1><?php e(__('Settings')); ?></h1>
 
 <?php if (isset($error)) echo $error->view(); ?>
 

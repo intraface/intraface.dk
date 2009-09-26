@@ -55,16 +55,16 @@ if ($kernel->user->countModuleAccess() == 1) {
 */
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('dashboard', 'dashboard'));
+$page->start(__('dashboard', 'dashboard'));
 ?>
 <div id="colOne">
 
-<h1><?php e($translation->get('dashboard', 'dashboard')); ?></h1>
+<h1><?php e(__('dashboard', 'dashboard')); ?></h1>
 
 <?php if ($kernel->setting->get('user', 'homepage.message') == 'view'): ?>
 <div class="message">
-	<p><?php e($translation->get('welcome, you are on the dashboard', 'dashboard')); ?></p>
-	<p><a href="<?php e($_SERVER['PHP_SELF']); ?>?message=hide"><?php e($translation->get('hide message forever')); ?></a></p>
+	<p><?php e(__('welcome, you are on the dashboard', 'dashboard')); ?></p>
+	<p><a href="<?php e($_SERVER['PHP_SELF']); ?>?message=hide"><?php e(__('hide message forever')); ?></a></p>
 </div>
 <?php endif; ?>
 
@@ -81,7 +81,7 @@ $page->start($translation->get('dashboard', 'dashboard'));
 				if (isset($advice['no_translation']) && $advice['no_translation'] == true) {
 					e($advice['msg']);
 				} else {
-					e($translation->get($advice['msg'], $advice['module']));
+					e(__($advice['msg'], $advice['module']));
 				}
 			}
             ?>
@@ -104,7 +104,7 @@ $page->start($translation->get('dashboard', 'dashboard'));
 			<?php if (!empty($advice['link'])): ?>
                 <a href="<?php e($advice['link']); ?>">
             <?php endif; ?>
-			<?php if (!empty($advice['msg'])) e($translation->get($advice['msg'], $advice['module'])); ?>
+			<?php if (!empty($advice['msg'])) e(__($advice['msg'], $advice['module'])); ?>
 			<?php if (!empty($advice['link'])): ?>
                 </a>
 			<?php endif; ?>
@@ -121,7 +121,7 @@ if (Intraface_ModuleHandler::exists(MDB2::singleton(DB_DSN), 'modulepackage') &&
     <?php
     $module_modulepackage = $kernel->useModule('modulepackage');
     ?>
-    <p><a href="<?php e($module_modulepackage->getPath()); ?>"><?php e($translation->get('view and change your intraface account')); ?></a></p>
+    <p><a href="<?php e($module_modulepackage->getPath()); ?>"><?php e(__('view and change your intraface account')); ?></a></p>
 <?php endif; ?>
 </div>
 
@@ -153,7 +153,7 @@ if (is_array($now) AND count($now) > 0) {
 if (is_array($disturbance) AND count($disturbance) > 0) {
 	?>
 	<div class="box">
-	<h2><?php e($translation->get('future disturbance', 'common')); ?></h2>
+	<h2><?php e(__('future disturbance', 'common')); ?></h2>
 	<dl>
 		<?php for ($i = 0, $max = count($disturbance); $i < $max; $i++) { ?>
 			<dt>Fra <?php e($disturbance[$i]['dk_from_date_time']); ?> til <?php e($disturbance[$i]['dk_to_date_time']); ?></dt>
@@ -187,7 +187,7 @@ else {
 <?php if (count($news) > 0): ?>
 <div class="box">
 
-<h2><?php e($translation->get('news', 'common')); ?></h2>
+<h2><?php e(__('news', 'common')); ?></h2>
 
 
 <dl>

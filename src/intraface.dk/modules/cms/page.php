@@ -58,7 +58,7 @@ if (!empty($_POST)) {
                 if (!isset($value['pic_id'])) $value['pic_id'] = 0;
             }
             if (!$section->save($value)) {
-                $error[$section->get('id')] = $translation->get('error in section') . ' ' . strtolower(implode($section->error->message, ', '));
+                $error[$section->get('id')] = __('error in section') . ' ' . strtolower(implode($section->error->message, ', '));
             }
         }
     }
@@ -123,16 +123,16 @@ $page = new Intraface_Page($kernel);
 if ($kernel->setting->get('user', 'htmleditor') == 'tinymce') {
     $page->includeJavascript('global', 'tinymce/jscripts/tiny_mce/tiny_mce.js');
 }
-$page->start($translation->get('content on page').' '.$cmspage->get('title'));
+$page->start(__('content on page').' '.$cmspage->get('title'));
 ?>
 
-<h1><?php e($translation->get('content on page').' '.$cmspage->get('title')); ?></h1>
+<h1><?php e(__('content on page').' '.$cmspage->get('title')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="page_edit.php?id=<?php e($cmspage->get('id')); ?>"><?php e($translation->get('edit settings', 'common')); ?></a></li>
-    <li><a href="pages.php?type=<?php e($cmspage->get('type')); ?>&amp;id=<?php e($cmspage->cmssite->get('id')); ?>"><?php e($translation->get('close', 'common')); ?></a></li>
+    <li><a class="edit" href="page_edit.php?id=<?php e($cmspage->get('id')); ?>"><?php e(__('edit settings', 'common')); ?></a></li>
+    <li><a href="pages.php?type=<?php e($cmspage->get('type')); ?>&amp;id=<?php e($cmspage->cmssite->get('id')); ?>"><?php e(__('close', 'common')); ?></a></li>
     <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-    <li><a href="template.php?id=<?php e($cmspage->get('template_id')); ?>"><?php e($translation->get('edit template')); ?></a></li>
+    <li><a href="template.php?id=<?php e($cmspage->get('template_id')); ?>"><?php e(__('edit template')); ?></a></li>
     <?php endif; ?>
 </ul>
 
@@ -153,11 +153,11 @@ $page->start($translation->get('content on page').' '.$cmspage->get('title'));
 
 <?php if (count($sections) == 0): ?>
     <p class="warning">
-        <?php echo e($translation->get('no sections added to the template')); ?>
+        <?php echo e(__('no sections added to the template')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="template.php?id=<?php e($cmspage->get('template_id')); ?>"><?php e($translation->get('edit template')); ?></a>.
+            <a href="template.php?id=<?php e($cmspage->get('template_id')); ?>"><?php e(__('edit template')); ?></a>.
         <?php else: ?>
-            <strong><?php echo e($translation->get('you cannot edit templates')); ?></strong>
+            <strong><?php echo e(__('you cannot edit templates')); ?></strong>
         <?php endif; ?>
 
     </p>
@@ -165,7 +165,7 @@ $page->start($translation->get('content on page').' '.$cmspage->get('title'));
 
 <?php
     if (!empty($error) AND is_array($error) AND array_key_exists($section->get('id'), $error)) {
-        echo '<p class="error">'.e($translation->get('error in a section - please see below')).'</p>';
+        echo '<p class="error">'.e(__('error in a section - please see below')).'</p>';
     }
 ?>
 
@@ -285,9 +285,9 @@ $page->start($translation->get('content on page').' '.$cmspage->get('title'));
                     <?php } ?>
                     <fieldset>
                         <legend><?php e($section->get('section_name')); ?></legend>
-                        <p><?php e($translation->get('There is a html section on the page')); ?></p>
-                        <input type="submit" value="<?php e($translation->get('edit section')); ?>" name="edit_html[<?php e($section->get('id')); ?>]" />
-                        
+                        <p><?php e(__('There is a html section on the page')); ?></p>
+                        <input type="submit" value="<?php e(__('edit section')); ?>" name="edit_html[<?php e($section->get('id')); ?>]" />
+
                 <?php
                 break;
             ?>
@@ -304,9 +304,9 @@ $page->start($translation->get('content on page').' '.$cmspage->get('title'));
     <!-- sektionerne kan lige så godt blive vist direkte - på nær html-elementet men hvorfor ikke også html elementet? -->
 
     <div>
-        <input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
-        <input type="submit" name="close" value="<?php e($translation->get('save and close', 'common')); ?>" />
-        <a href="pages.php?type=<?php e($cmspage->get('type')); ?>&amp;id=<?php e($cmspage->cmssite->get('id')); ?>"><?php e($translation->get('Cancel', 'common')); ?></a>
+        <input type="submit" value="<?php e(__('save', 'common')); ?>" />
+        <input type="submit" name="close" value="<?php e(__('save and close', 'common')); ?>" />
+        <a href="pages.php?type=<?php e($cmspage->get('type')); ?>&amp;id=<?php e($cmspage->cmssite->get('id')); ?>"><?php e(__('Cancel', 'common')); ?></a>
     </div>
 
 </form>

@@ -15,7 +15,7 @@ if ($kernel->user->hasModuleAccess('accounting')) {
 }
 
 $gateway = new Intraface_modules_product_ProductDoctrineGateway(Doctrine_Manager::connection(), $kernel->user);
-            
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     else {
         $product = new Intraface_modules_product_ProductDoctrine;
     }
-    
+
     $product->getDetails()->number = $_POST['number'];
     $product->getDetails()->name = $_POST['name'];
     $product->getDetails()->description = $_POST['description'];
@@ -36,13 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if(isset($_POST['vat'])) $product->getDetails()->vat = $_POST['vat'];
     if(isset($_POST['do_show'])) $product->do_show = $_POST['do_show'];
     if(isset($_POST['state_account_id'])) $product->getDetails()->state_account_id = $_POST['state_account_id'];
-    
+
     if(isset($_POST['has_variation'])) $product->has_variation = $_POST['has_variation'];
     if(isset($_POST['stock'])) $product->stock = $_POST['stock'];
-    
+
     try {
-        $product->save(); 
-        
+        $product->save();
+
         if ($redirect->get('id') != 0) {
             $redirect->setParameter('product_id', $product->getId());
         }
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
         $product = $gateway->findById((int)$_GET['id']);
     } else {
-        
+
     }
 }
 
@@ -128,7 +128,7 @@ $page->start(t('edit product'));
             <label for="weight"><?php e(t('weight')); ?></label>
             <input type="text" name="weight" id="weight" value="<?php if (isset($product)) e($product->getDetails()->getWeight()->getAsLocal('da_dk')); ?>" /> <?php e(t('grams')); ?>
         </div>
-        
+
         <div class="formrow">
             <label for="before_price"><?php e(t('Before price')); ?></label>
             <input type="text" name="before_price" id="before_price" value="<?php if (isset($product) && $product->getDetails()->getBeforePrice()->getAsIso() != 0) e($product->getDetails()->getBeforePrice()->getAsLocal('da_dk')); ?>" />
@@ -164,14 +164,14 @@ $page->start(t('edit product'));
         <div class="formrow">
             <label for="do_show"><?php e(t('show in webshop')); ?></label>
             <select name="do_show" id="do_show">
-                
+
                 <?php foreach (array(0 => 'No', 1 => 'Yes') AS $key=>$v): ?>
                     <option value="<?php e($key); ?>" <?php if (isset($product) && $product->showInShop() == $key) e('selected="selected"'); ?> ><?php e(t($v, 'common')); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
     </fieldset>
-        
+
         <!-- her bør være en tidsangivelse -->
 
     <?php endif; ?>
@@ -204,7 +204,7 @@ $page->start(t('edit product'));
         <legend><?php e(t('accounting')); ?></legend>
 
         <?php if (count($accounts) == 0): ?>
-            <p><?php e($translation->get('You will need to create an accounting year and create accounts for that year, to be able to set the account for which this product will be stated.')); ?> <a href="<?php e($mainAccounting->getPath()); ?>"><?php e($translation->get('Create accounting year and accounts')); ?></a></p>
+            <p><?php e(__('You will need to create an accounting year and create accounts for that year, to be able to set the account for which this product will be stated.')); ?> <a href="<?php e($mainAccounting->getPath()); ?>"><?php e(__('Create accounting year and accounts')); ?></a></p>
         <?php else: ?>
 
         <div class="formrow">
@@ -218,7 +218,7 @@ $page->start(t('edit product'));
                         if (strtolower($a['type']) == 'sum') continue;
 
                         if (strtolower($a['type']) == 'headline') {
-                            
+
                             // det er lidt svært at få optgroupperne til at passe, hvis man har flere overskrifter i træk
                             if ($optgroup == 1) echo '</optgroup>';
                             echo '<optgroup label="'.$a['name'].'">';

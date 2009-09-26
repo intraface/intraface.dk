@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		exit;
 	}
 
-	$value = $_POST;	
+	$value = $_POST;
 }
 elseif (isset($_GET['id'])) {
 	$reminder = ContactReminder::factory($kernel, (int)$_GET['id']);
@@ -51,34 +51,34 @@ else {
 
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('Edit reminder'));
+$page->start(__('Edit reminder'));
 ?>
 
 
-<h1><?php e($translation->get('Edit reminder')); ?></h1>
+<h1><?php e(__('Edit reminder')); ?></h1>
 
 <?php echo $reminder->error->view(); ?>
 
 <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 <fieldset>
-	<legend><?php e($translation->get('Reminder date')); ?></legend>
+	<legend><?php e(__('Reminder date')); ?></legend>
 	<div class="formrow">
-		<label for="reminder_date"><?php e($translation->get('Reminder date')); ?></label>
+		<label for="reminder_date"><?php e(__('Reminder date')); ?></label>
 		<input type="text" name="reminder_date" id="reminder_date" value="<?php if (!empty($value['reminder_date'])) e($value['reminder_date']); ?>" />
 	</div>
 </fieldset>
 
 <fieldset>
-	<legend><?php e($translation->get('Reminder information')); ?></legend>
-	
+	<legend><?php e(__('Reminder information')); ?></legend>
+
 	<div class="formrow">
-		<label for="subject"><?php e($translation->get('Subject')); ?></label>
+		<label for="subject"><?php e(__('Subject')); ?></label>
 		<input type="text" name="subject" id="subject" value="<?php if (!empty($value['subject'])) e($value['subject']); ?>" />
 	</div>
-	
+
 	<div class="formrow">
-		<label for="description"><?php e($translation->get('Description')); ?></label>
+		<label for="description"><?php e(__('Description')); ?></label>
 		<textarea name="description" id="description" style="width: 400px; height: 100px;"><?php if (!empty($value['description'])) e($value['description']); ?></textarea>
 	</div>
 </fieldset>
@@ -86,11 +86,11 @@ $page->start($translation->get('Edit reminder'));
 <div>
 	<input type="hidden" name="id" value="<?php if (!empty($value['id']))  e($value['id']); ?>" />
 	<input type="hidden" name="contact_id" value="<?php e($contact->get('id')); ?>" />
-	
-	
-	<input type="submit" name="submit" value="<?php e($translation->get('Save', 'common')); ?>" id="save" class="save" />
-		<?php e($translation->get('or', 'common')); ?>
-	<a href="contact.php?id=<?php e($contact->get('id')); ?>" title="<?php e($translation->get('Cancel', 'common')); ?>"><?php e($translation->get('cancel', 'common')); ?></a>
+
+
+	<input type="submit" name="submit" value="<?php e(__('Save', 'common')); ?>" id="save" class="save" />
+		<?php e(__('or', 'common')); ?>
+	<a href="contact.php?id=<?php e($contact->get('id')); ?>" title="<?php e(__('Cancel', 'common')); ?>"><?php e(__('cancel', 'common')); ?></a>
 	</div>
 </form>
 

@@ -11,7 +11,6 @@ $year = new Year($kernel);
 $voucher = new Voucher($year);
 
 if (!empty($_POST)) {
-
     $reminder = new Reminder($kernel, intval($_POST["id"]));
 
     if ($reminder->error->isError()) {
@@ -29,7 +28,7 @@ if (!empty($_POST)) {
 }
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('State invoice'));
+$page->start(__('State invoice'));
 
 ?>
 <h1><?php e(t('state reminder')) ?> #<?php e($reminder->get('number')); ?></h1>
@@ -52,7 +51,7 @@ $page->start($translation->get('State invoice'));
         <legend><?php e(t('reminder')); ?></legend>
         <table>
             <tr>
-                <th><?php e($translation->get("reminder number")); ?></th>
+                <th><?php e(__("reminder number")); ?></th>
                 <td><?php e($reminder->get("number")); ?></td>
             </tr>
             <tr>
@@ -66,26 +65,26 @@ $page->start($translation->get('State invoice'));
         <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
         <input type="hidden" value="<?php e($reminder->get('id')); ?>" name="id" />
         <fieldset>
-            <legend>Oplysninger der bogføres</legend>
+            <legend><?php e(t('Information to state')); ?></legend>
 
             <div class="formrow">
-                <label for="voucher_number"><?php e(t('voucher number')); ?></label>
+                <label for="voucher_number"><?php e(t('Voucher number')); ?></label>
                 <input type="text" name="voucher_number" id="voucher_number" value="<?php e($voucher->getMaxNumber() + 1); ?>" />
             </div>
 
             <div class="formrow">
-                <label for="date_state"><?php e(t('state on date')); ?></label>
+                <label for="date_state"><?php e(t('State on date')); ?></label>
                 <input type="text" name="date_state" id="date_state" value="<?php e($reminder->get("dk_this_date")); ?>" />
             </div>
 
 
-            <p><?php e(t('the reminder fee will be taken from the account below and set on the the debitor account.')); ?></p>
+            <p><?php e(t('The reminder fee will be taken from the account below and set on the the debitor account.')); ?></p>
 
-            <p><?php e(t('there is no vat on reminder fee, so it should be stated on an account without vat.')); ?></p>
+            <p><?php e(t('There is no vat on reminder fee, so it should be stated on an account without vat.')); ?></p>
 
 
             <div class="formrow">
-                <label for="state_account"><?php e($translation->get("state on account")); ?></label>
+                <label for="state_account"><?php e(__("State on account")); ?></label>
                 <?php
                 $account = new Account($year); // $product->get('state_account_id')
 
@@ -94,7 +93,7 @@ $page->start($translation->get('State invoice'));
                 $accounts =  $account->getList('operating');
                 ?>
                 <select id="state_account" name="state_account_id">
-                    <option value=""><?php e(t('choose', 'common')); ?>...</option>
+                    <option value=""><?php e(t('Choose')); ?>...</option>
                     <?php
                     $x = 0;
                     $default_account_id = $kernel->setting->get('intranet', 'reminder.state.account');
@@ -112,8 +111,8 @@ $page->start($translation->get('State invoice'));
             </div>
         </fieldset>
         <div>
-            <input type="submit" value="<?php e(t('state')); ?>" /> <?php e(t('or', 'common')); ?>
-            <a href="view.php?id=<?php e($value['id']); ?>"><?php e(t('Cancel', 'common')); ?></a>
+            <input type="submit" value="<?php e(t('State')); ?>" /> <?php e(t('or')); ?>
+            <a href="view.php?id=<?php e($value['id']); ?>"><?php e(t('cancel')); ?></a>
         </div>
     <?php endif;  ?>
     </form>

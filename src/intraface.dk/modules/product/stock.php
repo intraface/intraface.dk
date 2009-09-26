@@ -62,7 +62,7 @@ echo '</div>';
               <input type="text" name="quantity[]" value="<?php e($product['quantity']); ?>" />
               <input type="hidden" name="id[]" value="<?php e($product['id']); ?>" />
           </td>
-                <td><?php e($product['invoice_reserved']); ?></td>
+                <td><?php e($product['invotice_reserved']); ?></td>
                 <td><?php e($product['webshop_reserved']); ?></td>
                 <td><?php e($product['actual_stock']); ?></td>
             </tr>

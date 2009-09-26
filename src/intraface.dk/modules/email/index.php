@@ -9,7 +9,7 @@ $translation = $kernel->getTranslation('email');
 if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
 	$email = new Email($kernel, $_GET['delete']);
 	if (!$email->delete()) {
-		trigger_error($translation->get('could not delete e-mail', 'email'), E_USER_ERROR);
+		trigger_error(__('could not delete e-mail', 'email'), E_USER_ERROR);
 	}
 }
 
@@ -23,13 +23,13 @@ $emails = $email_object->getList();
 $queue = $email_object->countQueue();
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('e-mails'));
+$page->start(__('e-mails'));
 ?>
-<h1><?php e($translation->get('e-mails')); ?></h1>
+<h1><?php e(__('e-mails')); ?></h1>
 
 <?php if (count($emails) == 0): ?>
 
-	<p><?php e($translation->get('no e-mails has been sent')); ?></p>
+	<p><?php e(__('no e-mails has been sent')); ?></p>
 
 <?php else: ?>
 
@@ -39,17 +39,17 @@ $page->start($translation->get('e-mails'));
 	?>
 
 	<?php if ($queue > 0): ?>
-		<p><?php e($translation->get('e-mails are in queue - the will be sent soon')); ?></p>
+		<p><?php e(__('e-mails are in queue - the will be sent soon')); ?></p>
 	<?php endif; ?>
 
 	<?php echo $email_object->getDBQuery()->display('character'); ?>
 
 	<table>
-	<caption><?php e($translation->get('e-mails')); ?></caption>
+	<caption><?php e(__('e-mails')); ?></caption>
 	<thead>
 	<tr>
-		<th><?php e($translation->get('subject')); ?></th>
-		<th><?php e($translation->get('contact')); ?></th>
+		<th><?php e(__('subject')); ?></th>
+		<th><?php e(__('contact')); ?></th>
 		<th></th>
 	</tr>
 	</thead>
@@ -60,10 +60,10 @@ $page->start($translation->get('e-mails'));
 		<td><a href="<?php e($contact_module->getPath()); ?>contact.php?id=<?php e($email['contact_id']); ?>"><?php e($email['contact_name']); ?></a></td>
 		<td>
 		<?php if (!empty($email['status']) AND $email['status'] != 'sent'): ?>
-			<a class="edit" href="<?php e($email_shared->getPath()); ?>edit.php?id=<?php e($email['id']); ?>"><?php e($translation->get('edit', 'common')); ?></a>
-			<a class="delete" href="index.php?delete=<?php e($email['id']); ?>"><?php e($translation->get('delete', 'common')); ?></a>
+			<a class="edit" href="<?php e($email_shared->getPath()); ?>edit.php?id=<?php e($email['id']); ?>"><?php e(__('edit', 'common')); ?></a>
+			<a class="delete" href="index.php?delete=<?php e($email['id']); ?>"><?php e(__('delete', 'common')); ?></a>
 		<?php else: ?>
-			<?php e($translation->get($email['status'], 'email')); ?>
+			<?php e(__($email['status'], 'email')); ?>
 		<?php endif; ?>
 		</td>
 	</tr>

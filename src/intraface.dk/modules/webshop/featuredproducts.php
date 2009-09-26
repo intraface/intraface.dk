@@ -26,13 +26,13 @@ $featured = new Intraface_Webshop_FeaturedProducts($kernel->intranet, $db);
 $all = $featured->getAll();
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('featured products'));
+$page->start(__('featured products'));
 
 ?>
-<h1><?php e($translation->get('featured products')); ?></h1>
+<h1><?php e(__('featured products')); ?></h1>
 
 <table>
-    <caption><?php e($translation->get('featured products')); ?></caption>
+    <caption><?php e(__('featured products')); ?></caption>
     <thead>
     <tr>
         <th>Overskrift</th>
@@ -69,7 +69,7 @@ $page->start($translation->get('featured products'));
         <?php endforeach; ?>
 
     </select>
-    <input type="submit" class="save" name="submit" value="<?php e($translation->get('save', 'common')); ?>" /> <?php e($translation->get('or', 'common')); ?> <a href="./"><?php e($translation->get('cancel', 'common')); ?></a>
+    <input type="submit" class="save" name="submit" value="<?php e(__('save', 'common')); ?>" /> <?php e(__('or', 'common')); ?> <a href="./"><?php e(__('cancel', 'common')); ?></a>
 </form>
 
 <?php

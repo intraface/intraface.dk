@@ -108,8 +108,8 @@ $page->start('Regnskab');
 <h1>Bilag #<?php e($voucher->get('number')); ?> på <?php e($year->get('label')); ?></h1>
 
 <ul class="options">
-	<li><a class="edit" href="voucher_edit.php?id=<?php e($voucher->get('id')); ?>"><?php e($translation->get('edit', 'common')); ?></a></li>
-	<li><a href="vouchers.php"><?php e($translation->get('close', 'common')); ?></a></li>
+	<li><a class="edit" href="voucher_edit.php?id=<?php e($voucher->get('id')); ?>"><?php e(__('edit', 'common')); ?></a></li>
+	<li><a href="vouchers.php"><?php e(__('close', 'common')); ?></a></li>
 </ul>
 
 <p><?php e($voucher->get('text')); ?></p>

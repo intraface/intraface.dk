@@ -20,8 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
         $for = 'invoice';
-    }
-    elseif ($_POST['for'] == 'reminder') {
+    } elseif ($_POST['for'] == 'reminder') {
         require_once 'Intraface/modules/invoice/Reminder.php';
         $object = new Reminder($kernel, intval($_POST["id"]));
         if ($object->get('id') == 0) {
@@ -29,8 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
         $for = 'reminder';
-    }
-    else {
+    } else {
         trigger_error('Invalid for!', E_USER_ERROR);
         exit;
     }
@@ -40,26 +38,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($kernel->user->hasModuleAccess('accounting')) {
                 header('location: state_payment.php?for=invoice&id=' . intval($object->get("id")).'&payment_id='.$payment->get('id'));
                 exit;
-            }
-            else {
+            } else {
                 header('location: view.php?id='.$object->get('id'));
                 exit;
             }
-        }
-        elseif ($for == 'reminder') {
+        } elseif ($for == 'reminder') {
             if ($kernel->user->hasModuleAccess('accounting')) {
                 header('location: state_payment.php?for=reminder&id=' . intval($object->get("id")).'&payment_id='.$payment->get('id'));
                 exit;
-            }
-            else {
+            } else {
                 header('location: reminder.php?id='.$object->get('id'));
                 exit;
             }
         }
     }
 
-}
-else {
+} else {
 
     if ($_GET['for'] == 'invoice') {
         $object = Debtor::factory($kernel, intval($_GET["id"]));
@@ -72,8 +66,7 @@ else {
             exit;
         }
         $for = 'invoice';
-    }
-    elseif ($_GET['for'] == 'reminder') {
+    } elseif ($_GET['for'] == 'reminder') {
         require_once 'Intraface/modules/invoice/Reminder.php';
         $object = new Reminder($kernel, intval($_GET["id"]));
         if ($object->get('id') == 0) {
@@ -81,19 +74,15 @@ else {
             exit;
         }
         $for = 'reminder';
-    }
-    else {
+    } else {
         trigger_error('Invalid for!', E_USER_ERROR);
         exit;
     }
     $payment = new Payment($object);
-
-
 }
 
 $page = new Intraface_Page($kernel);
 $page->start(t('register payment for').' '.t($for));
-
 ?>
 
 <h1><?php e(t('register payment for').' '.t($for).' #'.$object->get('number')); ?></h1>
@@ -118,7 +107,7 @@ $page->start(t('register payment for').' '.t($for));
             $types = $payment->getTypes();
             foreach ($types AS $key => $value) {
                 ?>
-                <option value="<?php e($key); ?>" <?php if ($key == 0) print("selected='selected'"); ?> ><?php e($translation->get($value)); ?></option>
+                <option value="<?php e($key); ?>" <?php if ($key == 0) print("selected='selected'"); ?> ><?php e(__($value)); ?></option>
                 <?php
             }
             ?>

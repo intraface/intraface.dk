@@ -105,10 +105,10 @@ $page->start(t('about the intranet'));
 		echo '<img src="'.$filehandler->instance->get('file_uri').'" alt="Sidehoved til breve" style="width: '.$filehandler->instance->get('width').'px; height: '.$filehandler->instance->get('height').'px;" />';
 	} else {
 
-		echo '<p>' . e($translation->get('no picture uploaded'));
+		echo '<p>' . e(__('no picture uploaded'));
 		if ($kernel->user->hasModuleAccess('administration')) {
 			$module_administration = $kernel->useModule('administration');
-			echo ' <a href="'.$module_administration->getPath().'intranet_edit.php">'.e($translation->get('upload picture')).'</a>.';
+			echo ' <a href="'.$module_administration->getPath().'intranet_edit.php">'.e(__('upload picture')).'</a>.';
 		}
 		echo '</p>';
 	}

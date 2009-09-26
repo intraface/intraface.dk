@@ -8,8 +8,6 @@ $product = new Product($kernel);
 $products = $product->getList();
 $translation = $kernel->getTranslation('product');
 
-
-
 $workbook = new Spreadsheet_Excel_Writer();
 
 // sending HTTP headers

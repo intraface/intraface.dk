@@ -36,37 +36,37 @@ else {
 
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('import files'));
+$page->start(__('import files'));
 ?>
 
-<h1><?php e($translation->get('import files')); ?></h1>
+<h1><?php e(__('import files')); ?></h1>
 
 <?php echo $filemanager->error->view(); ?>
 
-<p><?php e($translation->get('import files from directory')); ?> <?php e($file_dir); ?></p>
+<p><?php e(__('import files from directory')); ?> <?php e($file_dir); ?></p>
 
 <form action="import.php" method="POST">
 <fieldset>
-	<legend><?php e($translation->get('file information')); ?></legend>
+	<legend><?php e(__('file information')); ?></legend>
 
 	<div class="formrow">
-		<label for="accessibility"><?php e($translation->get('accessibility')); ?></label>
+		<label for="accessibility"><?php e(__('accessibility')); ?></label>
 		<select name="accessibility">
-			<option value="public"><?php e($translation->get('public')); ?></option>
-			<option value="intranet"><?php e($translation->get('intranet')); ?></option>
+			<option value="public"><?php e(__('public')); ?></option>
+			<option value="intranet"><?php e(__('intranet')); ?></option>
 		</select>
 	</div>
 
 	<div class="formrow">
-		<label for="keyword"><?php e($translation->get('keywords', 'keyword')); ?></label>
+		<label for="keyword"><?php e(__('keywords', 'keyword')); ?></label>
 		<input type="text" name="keyword" id="keyword" value="" />
 	</div>
 
 </fieldset>
 
-<input type="submit" class="save" name="submit" value="<?php e($translation->get('import files')); ?>" />
+<input type="submit" class="save" name="submit" value="<?php e(__('import files')); ?>" />
 
-<a href="index.php"><?php e($translation->get('Cancel', 'common')); ?></a>
+<a href="index.php"><?php e(__('Cancel', 'common')); ?></a>
 
 </form>
 

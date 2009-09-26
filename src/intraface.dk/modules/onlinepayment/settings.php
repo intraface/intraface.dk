@@ -39,13 +39,13 @@ $page = new Intraface_Page($kernel);
 $page->start('Onlinebetalinger');
 ?>
 
-<h1>Sæt indstillinger</h1>
+<h1><?php e(t('Settings')); ?></h1>
 
 <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 
 	<fieldset>
-		<legend>Udbyder</legend>
-		<p>Du har valgt <strong><?php e($implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]); ?></strong> som din udbyder. <a href="choose_provider.php">Vælg en anden udbyder</a>.</p>
+		<legend><?php e(t('Provider')); ?></legend>
+		<p><?php e(t('You have chosen')); ?> <strong><?php e($implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]); ?></strong>. <a href="choose_provider.php"><?php e(t('Select another provider')); ?></a>.</p>
 	</fieldset>
 
 	<?php
@@ -53,14 +53,14 @@ $page->start('Onlinebetalinger');
 		case 'quickpay':
 			?>
 			<fieldset>
-				<legend>Indstillinger</legend>
+				<legend><?php e(t('Settings')); ?></legend>
 				<div class="formrow">
-					<label for="merchant_id">Merchant id</label>
+					<label for="merchant_id"><?php e(t('Merchant id')); ?></label>
 					<input type="text" name="merchant_id" id="merchant_id" value="<?php e($value['merchant_id']); ?>" />
 				</div>
 
 				<div class="formrow">
-					<label for="md5_secret">MD5 Secret</label>
+					<label for="md5_secret"><?php e(t('MD5 secret')); ?></label>
 					<input type="text" name="md5_secret" id="md5_secret" value="<?php e($value['md5_secret']); ?>" />
 				</div>
 			</fieldset>
@@ -69,45 +69,45 @@ $page->start('Onlinebetalinger');
 		case 'dandomain':
 			?>
 			<fieldset>
-				<legend>Indstillinger</legend>
+				<legend><?php e(t('Settings')); ?></legend>
 				<div class="formrow">
-					<label for="merchant_id">Merchant id</label>
+					<label for="merchant_id"><?php e(t('Merchant id')); ?></label>
 					<input type="text" name="merchant_id" id="merchant_id" value="<?php e($value['merchant_id']); ?>" />
 				</div>
 
 				<div class="formrow">
-					<label for="password">Password</label>
+					<label for="password"><?php e(t('Password')); ?></label>
 					<input type="text" name="password" id="password" value="<?php e($value['password']); ?>" />
 				</div>
 			</fieldset>
 			<?php
 			break;
-		case 'default':
-			echo '<p>Her behøver du ikke sætte nogen særlige indstillinger for denne provider.</p>';
-			break;
+		case 'default': ?>
+			<p><?php e(t('No specific settings needed for this provider')); ?></p>
+			<?php break;
 		default:
 			trigger_error('Ugyldig provider');
 			break;
 	endswitch;
 	?>
     <fieldset>
-        <legend>Tekst på e-mail på dansk</legend>
-            <label for="language_da_subject">Subject</label><br />
+        <legend><?php e(t('Text on danish email')); ?></legend>
+            <label for="language_da_subject"><?php e(t('Subject')); ?></label><br />
             <input type="text" id="language_da_subject" name="subject[da]" value="<?php e($settings->Translation['da']->subject); ?>" />
             <br>
 
-            <label for="language_da">Body</label><br />
+            <label for="language_da"><?php e(t('Body text')); ?></label><br />
             <textarea cols="80" id="language_da" name="email[da]"><?php e($settings->Translation['da']->email); ?></textarea>
             <br>
         </fieldset>
         <?php foreach ($language->getChosenAsArray() as $lang): ?>
             <fieldset>
         <legend>Tekst på e-mail på <?php e($lang->getDescription()); ?></legend>
-            <label for="language_da_subject">Subject</label><br />
+            <label for="language_da_subject"><?php e(t('Subject')); ?></label><br />
             <input type="text" id="language_<?php e($lang->getIsoCode()); ?>_subject" name="subject[<?php e($lang->getIsoCode()); ?>]" value="<?php e($settings->Translation[$lang->getIsoCode()]->subject); ?>" />
             <br>
 
-            <label for="language_<?php e($lang->getIsoCode()); ?>">Subject</label><br />
+            <label for="language_<?php e($lang->getIsoCode()); ?>"><?php e(t('Body text')); ?></label><br />
             <textarea cols="80" id="language_<?php e($lang->getIsoCode()); ?>" name="email[<?php e($lang->getIsoCode()); ?>]"><?php e($settings->Translation[$lang->getIsoCode()]->email); ?></textarea>
             <br>
           </fieldset>
@@ -116,10 +116,10 @@ $page->start('Onlinebetalinger');
 
 
 	<div>
-		<input type="submit" value="Gem" />
+		<input type="submit" value="<?php e(t('Save')); ?>" />
 	</div>
 
-<form>
+</form>
 
 <?php
 $page->end();

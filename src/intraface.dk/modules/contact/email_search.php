@@ -60,7 +60,7 @@ $page->start('Rediger e-mail');
 
 ?>
 
-<h1>Send e-mail</h1>
+<h1><?php e(t('Send email')); ?></h1>
 
 <?php if (!empty($msg)): ?>
 
@@ -76,15 +76,15 @@ $page->start('Rediger e-mail');
 	<fieldset>
 
 	<div class="formrow">
-		<label for="title">Titel</label>
+		<label for="title"><?php e(t('Subject')); ?></label>
 		<input type="text" name="subject" size="60" value="<?php if (!empty($value['subject'])) e($value['subject']); ?>" />
 	</div>
 	<div class="formrow">
-		<label for="">Tekst</label>
+		<label for=""><?php e(t('Body text')); ?></label>
 		<textarea name="text" cols="90" rows="20"><?php if (!empty($value['subject'])) e($value['text']); ?></textarea>
 	</div>
 	<div>
-		<input type="submit" name="submit" value="Send" class="save" /> <a href="index.php?use_stored=true">Fortryd</a>
+		<input type="submit" name="submit" value="<?php e(t('Send')); ?>" class="save" /> <a href="index.php?use_stored=true"><?php e(t('Cancel')); ?></a>
 	</div>
 	</fieldset>
 </form>

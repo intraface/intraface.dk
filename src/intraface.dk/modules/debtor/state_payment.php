@@ -81,10 +81,10 @@ if (!empty($_POST)) {
 }
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('state payment for '.$for));
+$page->start(__('state payment for '.$for));
 
 ?>
-<h1><?php e($translation->get('state payment for '.$for)); ?> #<?php e($object->get('number')); ?></h1>
+<h1><?php e(__('state payment for '.$for)); ?> #<?php e($object->get('number')); ?></h1>
 
 <ul class="options">
     <?php if ($for == 'invoice'): ?>
@@ -114,15 +114,15 @@ $page->start($translation->get('state payment for '.$for));
         <legend><?php e('payment'); ?></legend>
         <table>
             <tr>
-                <th><?php e($translation->get("payment type")); ?></th>
-                <td><?php e($translation->get($payment->get("type"))); ?></td>
+                <th><?php e(__("payment type")); ?></th>
+                <td><?php e(__($payment->get("type"))); ?></td>
             </tr>
             <tr>
-                <th><?php e($translation->get("date")); ?></th>
+                <th><?php e(__("date")); ?></th>
                 <td><?php e($payment->get("dk_payment_date")); ?></td>
             </tr>
             <tr>
-                <th><?php e($translation->get("amount")); ?></th>
+                <th><?php e(__("amount")); ?></th>
                 <td><?php e(number_format($payment->get("amount"), 2, ',', '.')); ?></td>
             </tr>
         </table>
@@ -144,7 +144,7 @@ $page->start($translation->get('state payment for '.$for));
         <p>Beløbet vil blive trukket fra debitorkontoen og blive sat på kontoen, du vælger herunder:</p>
 
         <div class="formrow">
-            <label for="state_account"><?php e($translation->get("state on account")); ?></label>
+            <label for="state_account"><?php e(__("state on account")); ?></label>
             <?php
             $account = new Account($year); // $product->get('state_account_id')
 

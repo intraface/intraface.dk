@@ -195,7 +195,7 @@ $page->start("Indkøb");
         ?>
         <tr>
             <td>Køb fra</td>
-            <td><?php e($translation->get($procurement->get('from_region'), 'procurement')); ?>
+            <td><?php e(__($procurement->get('from_region'), 'procurement')); ?>
             </td>
         </tr>
         <tr>
@@ -226,7 +226,7 @@ $page->start("Indkøb");
                         } else {
                             e('Ikke bogført');
                             if ($procurement->get('paid_date') != '0000-00-00') { ?>
-                                <a href="state.php?id=<?php e($procurement->get("id")); ?>"><?php e($translation->get('state')); ?></a>
+                                <a href="state.php?id=<?php e($procurement->get("id")); ?>"><?php e(__('state')); ?></a>
                             <?php }
 
                         }
@@ -394,7 +394,7 @@ $page->start("Indkøb");
                     <td><?php e($items[$i]["number"]); ?></td>
                     <td><?php e($items[$i]["name"]); ?></td>
                     <td class="amount"><?php e(number_format($items[$i]["quantity"], 2, ",", ".")); ?></td>
-                    <td><?php e($translation->get($items[$i]["unit"])); ?></td>
+                    <td><?php e(__($items[$i]["unit"])); ?></td>
                     <td class="amount"><?php e(number_format($items[$i]["unit_purchase_price"], 2, ",", ".")); ?></td>
                     <td class="amount"><?php e(number_format($items[$i]["quantity"]*$items[$i]["unit_purchase_price"], 2, ",", ".")); ?></td>
                     <td class="amount"><?php e(number_format($items[$i]["calculated_unit_price"], 2, ",", ".")); ?></td>

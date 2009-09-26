@@ -57,28 +57,28 @@ else {
 }
 
 $page = new Intraface_Page($kernel);
-$page->start($translation->get('import contacts'));
+$page->start(__('import contacts'));
 ?>
-<h1><?php e($translation->get('import contacts')); ?></h1>
+<h1><?php e(__('import contacts')); ?></h1>
 
 <?php // echo $contact->error->view(); ?>
 
 <?php if (isset($success) && isset($errors)): ?>
 
     <fieldset>
-        <legend><?php e($translation->get('imported contacts')); ?></legend>
+        <legend><?php e(__('imported contacts')); ?></legend>
 
-        <div><?php e(sprintf($translation->get('%d records was imported successfully'), $success)); ?></div>
+        <div><?php e(sprintf(__('%d records was imported successfully'), $success)); ?></div>
     </fieldset>
 
-    <h3><?php e($translation->get('errors')); ?></h3>
+    <h3><?php e(__('errors')); ?></h3>
 
     <?php if (count($errors) == 0): ?>
-        <div><?php e($translation->get('lucky you - no errors in import')); ?></div>
+        <div><?php e(__('lucky you - no errors in import')); ?></div>
     <?php else: ?>
 
         <?php foreach ($errors AS $error): ?>
-            <div><?php e(sprintf($translation->get('error in line %d. unable to import %s <%s>'), $error['line'], $error['name'], $error['email'])); ?></div>
+            <div><?php e(sprintf(__('error in line %d. unable to import %s <%s>'), $error['line'], $error['name'], $error['email'])); ?></div>
             <?php echo $error['error']->view($translation); ?>
         <?php endforeach; ?>
     <?php endif; ?>
@@ -89,18 +89,18 @@ $page->start($translation->get('import contacts'));
 
 
     <fieldset>
-        <legend><?php e($translation->get('data')); ?></legend>
+        <legend><?php e(__('data')); ?></legend>
 
-        <div><?php e(sprintf($translation->get('there are %d records to import'), count($data))); ?></div>
+        <div><?php e(sprintf(__('there are %d records to import'), count($data))); ?></div>
 
     </fieldset>
 
     <fieldset>
-        <legend><?php e($translation->get('keywords')); ?></legend>
+        <legend><?php e(__('keywords')); ?></legend>
 
         <div class="formrow">
-            <label for="keyword"><?php e($translation->get('keywords')); ?></label>
-            <input type="text" name="keyword" id="keyword" value="" /> <?php e($translation->get('separated by comma')); ?>
+            <label for="keyword"><?php e(__('keywords')); ?></label>
+            <input type="text" name="keyword" id="keyword" value="" /> <?php e(__('separated by comma')); ?>
         </div>
     </fieldset>
 
@@ -111,7 +111,7 @@ $page->start($translation->get('import contacts'));
         $list = $newsletter_list->getList();
         ?>
         <fieldset>
-            <legend><?php e($translation->get('newsletter')); ?></legend>
+            <legend><?php e(__('newsletter')); ?></legend>
 
             <?php foreach ($list AS $newsletter): ?>
                 <div id="formrow">
@@ -122,9 +122,9 @@ $page->start($translation->get('import contacts'));
         </fieldset>
     <?php endif; */ ?>
 
-    <input type="submit" class="save" name="submit" value="<?php e($translation->get('import')); ?>" />
-    <?php e($translation->get('or', 'common')); ?>
-    <a href="<?php echo 'index.php'; ?>"><?php e($translation->get('Cancel', 'common')); ?></a>
+    <input type="submit" class="save" name="submit" value="<?php e(__('import')); ?>" />
+    <?php e(__('or', 'common')); ?>
+    <a href="<?php echo 'index.php'; ?>"><?php e(__('Cancel', 'common')); ?></a>
 
     </form>
 <?php endif; ?>

@@ -55,7 +55,7 @@ if (!empty($_POST)) {
     }
 
     if ($procurement->get('price_shipment_etc') > 0) {
-        $value['debet_account'][$i++] = array('text' => $translation->get('shipment etc'), 'amount' => $procurement->get('dk_price_shipment_etc'));
+        $value['debet_account'][$i++] = array('text' => __('shipment etc'), 'amount' => $procurement->get('dk_price_shipment_etc'));
     }
 }
 
@@ -90,7 +90,7 @@ $page->start('Bogfør indkøb #' . $procurement->get('number'));
         <legend><?php e(t('procurement')); ?></legend>
         <table>
             <tr>
-                <th><?php e($translation->get("number")); ?></th>
+                <th><?php e(__("number")); ?></th>
                 <td><?php e($procurement->get("number")); ?></td>
             </tr>
             <tr>
@@ -124,7 +124,7 @@ $page->start('Bogfør indkøb #' . $procurement->get('number'));
             </tr>
             <tr>
                 <td><?php e(t('buy from')) ?></td>
-                <td><?php e($translation->get($procurement->get('from_region'), 'procurement')); ?>
+                <td><?php e(__($procurement->get('from_region'), 'procurement')); ?>
             </td>
         </tr>
 

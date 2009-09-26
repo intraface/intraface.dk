@@ -12,7 +12,7 @@ if (isset($_GET["id"]) && $kernel->user->hasIntranetAccess($_GET['id'])) {
 		header('Location: index.php');
 		exit;
 	} else {
-		trigger_error($translation->get('could not change intranet'), E_USER_ERROR);
+		trigger_error(__('could not change intranet'), E_USER_ERROR);
 	}
 }
 
