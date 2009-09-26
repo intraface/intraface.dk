@@ -121,16 +121,12 @@ $page->start(__($action.' '.$debtor->get('type')));
 		<label for="due_date"><?php e(__($debtor->get('type').' due date')); ?></label>
 		<input class="input" name="due_date" id="due_date" value="<?php if (isset($value["dk_due_date"])) e($value["dk_due_date"]); ?>" size="10" />
 	</div>
-	<?php
-	if ($debtor->get("type") == "invoice") {
-		?>
+	<?php if ($debtor->get("type") == "invoice") { ?>
 		<div class="formrow">
 			<label for="round_off"><?php e(t('Round off', 'debtor')); ?></label>
 			<input class="input" type="checkbox" name="round_off" id="round_off" value="1" size="10" <?php if (isset($value["round_off"]) && $value["round_off"] == 1) print('checked="checked"'); ?> />
 		</div>
-		<?php
-	}
-	?>
+	<?php } ?>
 
     <?php if ($kernel->intranet->hasModuleAccess('currency')): ?>
         <?php $kernel->useModule('currency', true); /* true: ignore user access */ ?>
@@ -200,10 +196,7 @@ $page->start(__($action.' '.$debtor->get('type')));
 
 </fieldset>
 
-<?php
-
-if ($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {
-	?>
+<?php if ($debtor->get("type") == "invoice" || $debtor->get("type") == "order") { ?>
 	<fieldset class="radiobuttons">
 		<legend><?php e(t('Payment information')); ?></legend>
 		<p><?php e(__('Which payment method do you want to show on the '.$debtor->get("type"))); ?></p>
@@ -244,9 +237,7 @@ if ($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {
     <?php endif; ?>
 
     </fieldset>
-	<?php
-}
-?>
+	<?php } ?>
 
 <div>
 <input type="submit" class="save" name="submit" value="<?php e(t('Continue')); ?>" />
