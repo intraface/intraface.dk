@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project name="intraface" default="build" basedir=".">
-    <property name="source.dir" value="./" />
+    <property name="source.dir" value="./src/" />
     <property name="tests.dir" value="./tests/unit/" />
     <property name="build.dir" value="../build" />
     <property name="reports.dir" value="../build/logs" />
