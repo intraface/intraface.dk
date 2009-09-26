@@ -58,7 +58,11 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
         if ($this->registry->get('kernel')->intranet->hasModuleAccess('currency')) {
             $this->registry->get('kernel')->useModule('currency', true); // true: ignore user access
             $gateway = new Intraface_modules_currency_Currency_Gateway($this->registry->get('doctrine'));
-            $currencies = $gateway->findAllWithExchangeRate();
+            try {
+                $currencies = $gateway->findAllWithExchangeRate();
+            } catch (Intraface_Gateway_Exception $e) {
+                $currencies = array();
+            }
         } else {
             $currencies = false;
         }
