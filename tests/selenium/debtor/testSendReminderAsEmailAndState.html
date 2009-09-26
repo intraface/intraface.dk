@@ -1,16 +1,19 @@
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>testSendReminderAsEmailAndState</title>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>debtor:testSendReminderAsEmailAndState</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">testSendReminderAsEmailAndState</td></tr>
+<tr><td rowspan="1" colspan="3">debtor:testSendReminderAsEmailAndState</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=debtor,invoice,contact,product,accounting&helper_function=Administration:fillInIntranetAddress,Debtor:createInvoice&login=true</td>
+	<td>install/reset-staging-server.php?modules=debtor,invoice,contact,product,accounting&amp;helper_function=Administration:fillInIntranetAddress,Debtor:createInvoice&amp;login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -49,6 +52,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>assertConfirmation</td>
+	<td>Er du sikker?</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>start</td>
 	<td></td>
@@ -60,7 +68,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Ret</td>
+	<td>link=Edit</td>
 	<td></td>
 </tr>
 <tr>
@@ -84,18 +92,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>assertConfirmation</td>
+	<td>Are you sure?</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>link=Luk</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertTextPresent</td>
-	<td>Opret rykker</td>
-	<td></td>
-</tr>
-<tr>
 	<td>clickAndWait</td>
-	<td>link=Opret rykker</td>
+	<td>link=Create reminder</td>
 	<td></td>
 </tr>
 <tr>
@@ -140,7 +148,7 @@
 </tr>
 <tr>
 	<td>assertTextPresent</td>
-	<td>Rykker #1</td>
+	<td>Reminder #1</td>
 	<td></td>
 </tr>
 <tr>
@@ -150,7 +158,7 @@
 </tr>
 <tr>
 	<td>assertTextPresent</td>
-	<td>Der er intet at bogføre.</td>
+	<td>Nothing to state</td>
 	<td></td>
 </tr>
 <tr>
@@ -160,7 +168,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Opret rykker</td>
+	<td>link=Create reminder</td>
 	<td></td>
 </tr>
 <tr>
