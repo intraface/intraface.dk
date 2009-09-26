@@ -51,6 +51,11 @@ class Intraface_Intranet extends Intraface_Standard
         }
     }
 
+    function getName()
+    {
+        return $this->get('name');
+    }
+
     /**
      * loads
      *
