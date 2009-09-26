@@ -33,6 +33,9 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
 
     function getKernel()
     {
+        if (is_callable('getKernel', $this->context)) {
+             return $this->context->getKernel();
+        }
         $registry = $this->registry->create();
     	return $registry->get('kernel');
     }
