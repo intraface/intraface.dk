@@ -1,6 +1,7 @@
 # Allready updated on server:
 
 ALTER TABLE `ilib_category` ADD `active` INT( 1 ) NOT NULL DEFAULT '1' ;
+ALTER TABLE `newsletter_subscriber` ADD `date_unsubscribe` DATE NOT NULL 
 
 # New
 
@@ -11,4 +12,6 @@ CREATE TABLE `product_detail_translation` (
 `description` TEXT NOT NULL ,
 PRIMARY KEY ( `id`, `lang` )
 ) ENGINE = MYISAM ;
+
+
 
