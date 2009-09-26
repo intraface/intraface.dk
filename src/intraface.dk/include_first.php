@@ -142,6 +142,23 @@ if (!function_exists('t')) {
 
 $GLOBALS['_global_function_callback_t'] = 'intraface_t';
 
+if (!function_exists('__')) {
+  /**
+   * This function is dynamically redefinable.
+   * @see $GLOBALS['_global_function_callback_e']
+   */
+  function __($args) {
+    $args = func_get_args();
+    return call_user_func_array($GLOBALS['_global_function_callback___'], $args);
+  }
+  if (!isset($GLOBALS['_global_function_callback___'])) {
+    $GLOBALS['_global_function_callback___'] = NULL;
+  }
+}
+
+$GLOBALS['_global_function_callback_t'] = 'intraface_t';
+$GLOBALS['_global_function_callback___'] = 'intraface_t';
+
 function intraface_t($string, $page = NULL)
 {
     global $translation;
