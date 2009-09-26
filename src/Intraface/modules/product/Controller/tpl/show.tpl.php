@@ -4,9 +4,9 @@
     <h2>#<?php e($product->get('number'));  ?> <?php e($product->get('name')); ?></h2>
     <ul class="options">
         <?php if ($product->get('locked') != 1) { ?>
-        <li><a href="product_edit.php?id=<?php e($product->get('id')); ?>"><?php e($translation->get('edit', 'common')); ?></a></li>
+        <li><a href="product_edit.php?id=<?php e($product->get('id')); ?>"><?php e(__('edit', 'common')); ?></a></li>
 
-        <li><a class="confirm" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($product->get('id')); ?>"><?php e($translation->get('delete', 'common')); ?></a></li>
+        <li><a class="confirm" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($product->get('id')); ?>"><?php e(__('delete', 'common')); ?></a></li>
         <?php } ?>
         <li><a href="product.php?copy=<?php e($product->get('id')); ?>"><?php e(t('copy', 'common')); ?></a></li>
         <li><a href="index.php?from_product_id=<?php e($product->get('id')); ?>&amp;use_stored=true"><?php e(t('close', 'common')); ?></a></li>
