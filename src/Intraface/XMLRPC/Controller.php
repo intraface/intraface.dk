@@ -5,19 +5,19 @@ class Intraface_XMLRPC_Controller extends k_Component
 
     protected function map($name)
     {
-        if ($name == 'adminx') {
+        if ($name == 'admin') {
             return 'Intraface_XMLRPC_Admin_Controller';
-        } elseif ($name == 'cmsx') {
+        } elseif ($name == 'cms') {
             return 'Intraface_XMLRPC_CMS_Controller';
-        } elseif ($name == 'contactx') {
+        } elseif ($name == 'contact') {
             return 'Intraface_XMLRPC_Contact_Controller';
-        } elseif ($name == 'debtorx') {
+        } elseif ($name == 'debtor') {
             return 'Intraface_XMLRPC_Debtor_Controller';
-        } elseif ($name == 'newsletterx') {
+        } elseif ($name == 'newsletter') {
             return 'Intraface_XMLRPC_Newsletter_Controller';
-        } elseif ($name == 'onlinepaymentx') {
+        } elseif ($name == 'onlinepayment') {
             return 'Intraface_XMLRPC_OnlinePayment_Controller';
-        } elseif ($name == 'shopx') {
+        } elseif ($name == 'shop') {
             return 'Intraface_XMLRPC_Shop_Controller';
         }
     }
@@ -35,11 +35,13 @@ class Intraface_XMLRPC_Controller extends k_Component
         </ul>
         <h2>New servers</h2>
         <ul>
-            <li><a href="cmsx">CMS</a></li>
-            <li><a href="contactx">Contact</a></li>
-            <li><a href="debtorx">Debtor</a></li>
-            <li><a href="newsletterx">Newsletter</a></li>
-            <li><a href="shopx">Shop</a></li>
+            <li><a href="admin">Admin</a></li>
+        	<li><a href="cms">CMS</a></li>
+            <li><a href="contact">Contact</a></li>
+            <li><a href="debtor">Debtor</a></li>
+            <li><a href="newsletter">Newsletter</a></li>
+            <li><a href="onlinepayment">Onlinepayment</a></li>
+            <li><a href="shop">Shop</a></li>
         </ul>
 
         ';

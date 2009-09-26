@@ -55,7 +55,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         require_once 'XML/RPC2/Client.php';
         $debug = false;
         $options = array('prefix' => 'contact.', 'debug' => $debug);
-        $client = XML_RPC2_Client::create(XMLRPC_SERVER_URL.'contactx/', $options);
+        $client = XML_RPC2_Client::create(XMLRPC_SERVER_URL.'contact/', $options);
 
         return $client;
     }

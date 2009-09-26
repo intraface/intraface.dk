@@ -116,7 +116,7 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
 
         require_once 'XML/RPC2/Client.php';
         $options = array('prefix' => 'newsletter.');
-        return XML_RPC2_Client::create(XMLRPC_SERVER_URL.'newsletterx/', $options);
+        return XML_RPC2_Client::create(XMLRPC_SERVER_URL.'newsletter/', $options);
     }
 
 
