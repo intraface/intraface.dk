@@ -59,7 +59,7 @@
             <?php foreach ($editors AS $k=>$v) { ?>
                 <option value="<?php e($k); ?>"
                     <?php if (!empty($value['htmleditor']) AND $k == $value['htmleditor']) echo ' selected="selected"'; ?>
-                    ><?php e($translation->get($v)); ?></option>
+                    ><?php e(__($v)); ?></option>
             <?php } ?>
             </select>
 
