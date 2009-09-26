@@ -28,6 +28,16 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
             return 'Intraface_modules_administration_Controller_Index';
         } elseif ($name == 'controlpanel') {
             return 'Intraface_modules_controlpanel_Controller_Index';
+        } elseif ($name == 'newsletter') {
+            return 'Intraface_modules_newsletter_Controller_Lists';
+        } elseif ($name == 'debtor') {
+            return 'Intraface_modules_debtor_Controller_Index';
+        } elseif ($name == 'accounting') {
+            return 'Intraface_modules_accounting_Controller_Index';
+        } elseif ($name == 'contact') {
+            return 'Intraface_modules_contact_Controller_Index';
+        } elseif ($name == 'product') {
+            return 'Intraface_modules_product_Controller_Index';
         }
     }
 

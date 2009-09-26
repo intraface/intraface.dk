@@ -111,10 +111,20 @@ class Intraface_Controller_Restricted extends k_Component
     	return $last_view;
     }
 
+    /*
     function wrapHtml($content)
     {
         return sprintf('<html><body><ul><li><a href="'.$this->url('/restricted/module').'">Moduler</a></li><li><a href="'.$this->url('/logout').'">Logout</a></li><li><a href="'.$this->url('/restricted/switchintranet').'">Switch Intranet</a></li></ul>%s</body></html>', $content);
     }
+    */
+
+    function wrapHtml($content)
+    {
+        $smarty = new k_Template(dirname(__FILE__) . '/templates/wrapper.tpl.php');
+        return $smarty->render($this, array('content' => $content));
+    }
+
+
 
     function execute()
     {
@@ -124,5 +134,82 @@ class Intraface_Controller_Restricted extends k_Component
     function t($phrase)
     {
         return $phrase;
+    }
+
+    function getUserMenu()
+    {
+        $this->usermenu = array();
+        $this->usermenu[0]['name'] = $this->t('Logout');
+        $this->usermenu[0]['url'] = $this->url('/logout');
+        if (count($this->getKernel()->user->getIntranetList()) > 1) {
+            $this->usermenu[1]['name'] = $this->t('Switch intranet');
+            $this->usermenu[1]['url'] = $this->url('/restricted/switchintranet');
+        }
+        $this->usermenu[2]['name'] = $this->t('Modules');
+        $this->usermenu[2]['url'] = url('/restricted/module');
+        return $this->usermenu;
+    }
+
+    function getMenu()
+    {
+        $this->menu = array();
+        $i = 0;
+        $this->menu[$i]['name'] = $this->getKernel()->translation->get('dashboard', 'dashboard');;
+        $this->menu[$i]['url'] = url('/restricted/');
+        $i++;
+        $this->db = new DB_Sql;
+        $this->db->query("SELECT name, menu_label, name FROM module WHERE active = 1 AND show_menu = 1 ORDER BY menu_index");
+        while ($this->db->nextRecord()) {
+            if ($this->getKernel()->user->hasModuleAccess($this->db->f('name'))) {
+                $this->menu[$i]['name'] = $this->getKernel()->translation->get($this->db->f('name'), $this->db->f('name'));
+                $this->menu[$i]['url'] = $this->url('/restricted/module/' . $this->db->f("name"));
+                $i++;
+            }
+        }
+        return $this->menu;
+    }
+
+    function getSubmenu()
+    {
+        $this->primary_module = $this->kernel->getPrimaryModule();
+        $this->submenu = array();
+        if (is_object($this->primary_module)) {
+            $all_submenu = $this->primary_module->getSubmenu();
+            if (count($all_submenu) > 0) { // added to avoid error messages
+                $j = 0;
+                for ($i = 0, $max = count($all_submenu); $i < $max; $i++) {
+                    $access = false;
+                    if ($all_submenu[$i]['sub_access'] != '') {
+                        $sub = explode(":", $all_submenu[$i]['sub_access']);
+
+                        switch($sub[0]) {
+                            case 'sub_access':
+                                if ($this->getKernel()->user->hasSubAccess($this->primary_module->module_name, $sub[1])) {
+                                    $access = true;
+                                }
+                                break;
+                            case 'module':
+                                if ($this->getKernel()->user->hasModuleAccess($sub[1])) {
+                                    $access = true;
+                                }
+                                break;
+                            default:
+                                trigger_error('Der er ikke angivet om submenu skal tjekke efter sub_access eller module adgang, for undermenupunktet i Page->start();', E_USER_ERROR);
+                                break;
+                        }
+                    } else {
+                        $access = true;
+                    }
+
+                    if ($access) {
+                       $this->submenu[$j]['name'] = $this->getKernel()->translation->get($all_submenu[$i]['label'], $this->primary_module->getName());
+                       $this->submenu[$j]['url'] = $this->primary_module->getPath(). $all_submenu[$i]['url'];
+                            $j++;
+                    }
+                }
+            }
+        }
+
+        return $this->submenu;
     }
 }

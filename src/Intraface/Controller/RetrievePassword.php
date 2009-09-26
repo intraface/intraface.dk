@@ -10,10 +10,11 @@
 class Intraface_Controller_RetrievePassword extends k_Component
 {
     protected $registry;
+    public $msg;
 
     function execute()
     {
-        $this->url_state->init("continue", $this->url('/login'));
+        $this->url_state->init("continue", $this->url('/login', array('flare' => 'Vi har sendt en e-mail til dig med en ny adgangskode, som du bør gå ind og lave om med det samme.')));
         return parent::execute();
     }
 
@@ -30,10 +31,8 @@ class Intraface_Controller_RetrievePassword extends k_Component
 
     function postForm()
     {
-    	if (Intraface_User::sendForgottenPasswordEmail($this->body('email'))) {
-    	    $msg = '<p>Vi har sendt en e-mail til dig med en ny adgangskode, som du bør gå ind og lave om med det samme.</p>';
-    	} else {
-    	    $msg = '<p>Det gik <strong>ikke</strong> godt. E-mailen kunne ikke sendes. Du kan prøve igen senere.</p>';
+    	if (!Intraface_User::sendForgottenPasswordEmail($this->body('email'))) {
+    	    $this->msg = '<p>Det gik <strong>ikke</strong> godt. E-mailen kunne ikke sendes. Du kan prøve igen senere.</p>';
     	    return $this->render();
     	}
     	return new k_SeeOther($this->query('continue'));

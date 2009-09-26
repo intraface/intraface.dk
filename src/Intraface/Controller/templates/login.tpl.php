@@ -20,17 +20,17 @@
 
 
         <div class="align-left">
-            <label for="email" id="email_label">E-mail:</label>
+            <label for="email" id="email_label"><?php e(t('Email')); ?></label>
             <input tabindex="1" type="text" name="email" id="email" value="<?php if (!empty($_COOKIE['username'])) e($_COOKIE['username']); ?>" />
         </div>
         <div>
-            <label for="password" id="password_label">Adgangskode:</label>
+            <label for="password" id="password_label"><?php e(t('Password')); ?></label>
             <input tabindex="2" type="password" name="password" id="password" value="<?php if (!empty($_COOKIE['password'])) e($_COOKIE['password']); ?>" />
         </div>
 
         <div>
-            <input tabindex="3" type="submit" value="Login" id="submit" />
-            <a tabindex="4" href="<?php e(url('../retrievepassword')); ?>">Glemt password?</a>
+            <input tabindex="3" type="submit" value="<?php e(t('Login')); ?>" id="submit" />
+            <a tabindex="4" href="<?php e(url('../retrievepassword')); ?>"><?php e(t('Forgotten password')); ?></a>
         </div>
 
     </fieldset>

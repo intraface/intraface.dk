@@ -1,10 +1,14 @@
 <h1><span>Intraface.dk</span></h1>
 
+<?php if (isset($context->msg)): ?>
+	<p class="error"><?php echo $context->msg; ?></p>
+<?php endif; ?>
+
 <form method="POST" action="<?php e(url(null)); ?>" id="forgotten_email_form">
-	<p>Det er da fjollet, at du har glemt din adgangskode. Skriv din e-mail ind nedenunder, og så sender vi dig en ny.</p>
+	<p><?php e(t('Silly you, but luckily we are here to help you.')); ?></p>
 	<fieldset>
-		<label id="email_label">E-mail:</label>
+		<label id="email_label"><?php e(t('Email')); ?></label>
 		<input type="text" name="email" id="email"  />
-		<input type="submit" name="submit" value="Hjælp!" id="submit" />
+		<input type="submit" name="submit" value="<?php e(t('Help')); ?>" id="submit" />
 	</fieldset>
 </form>
