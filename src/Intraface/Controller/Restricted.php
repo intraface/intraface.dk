@@ -154,7 +154,7 @@ class Intraface_Controller_Restricted extends k_Component
     {
         $this->menu = array();
         $i = 0;
-        $this->menu[$i]['name'] = $this->getKernel()->translation->get('dashboard', 'dashboard');;
+        $this->menu[$i]['name'] = $this->getTranslation()->get('dashboard');
         $this->menu[$i]['url'] = url('/restricted/');
         $i++;
         $this->db = new DB_Sql;

@@ -38,6 +38,8 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
             return 'Intraface_modules_contact_Controller_Index';
         } elseif ($name == 'product') {
             return 'Intraface_modules_product_Controller_Index';
+        } elseif ($name == 'modulemanager') {
+            return 'Intraface_Controller_ModuleManager';
         }
     }
 
