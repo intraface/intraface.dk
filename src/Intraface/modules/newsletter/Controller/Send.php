@@ -45,7 +45,7 @@ class Intraface_modules_newsletter_Controller_Send extends k_Component
     function postForm()
     {
         if ($this->context->getLetter()->queue()) {
-            return new k_SeeOther($this->url('../'));
+            return new k_SeeOther($this->url('../', array('flare' => 'Newsletter has been sent')));
         }
         return $this->render();
     }

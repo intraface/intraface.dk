@@ -48,7 +48,7 @@
         <td><?php e($s['dk_date_submitted']); ?></td>
         <td>
             <?php if ($s['optin'] == 0 and $s['date_optin_email_sent'] < date('Y-m-d', time() - 60 * 60 * 24 * 3)): ?>
-                <a href="<?php e($_SERVER['PHP_SELF'] . '?list_id='.$context->getList()->get('id')); ?>&amp;id=<?php e($s['id']); ?>&amp;remind=true&amp;use_stored=true"><?php e(t('Remind')); ?></a>
+                <a href="<?php e(url($s['id'], array('remind' => 'true', 'use_stored' => 'true'))); ?>"><?php e(t('Remind')); ?></a>
             <?php elseif ($s['optin'] == 0): ?>
                 <?php e(t('Not opted in')); ?>
             <?php elseif ($s['optin'] == 1): ?>
@@ -56,7 +56,7 @@
             <?php endif; ?>
         </td>
         <td>
-            <a class="delete" href="subscribers.php?delete=<?php e($s['id']); ?>&amp;list_id=<?php e($context->getList()->get('id')); ?>"><?php e(t('Delete')); ?></a>
+            <a class="delete" href="<?php e(url(null, array('delete'))); ?>"><?php e(t('Delete')); ?></a>
         </td>
     </tr>
     <?php endforeach; ?>

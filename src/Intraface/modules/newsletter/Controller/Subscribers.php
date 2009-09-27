@@ -59,7 +59,7 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
             $contact_module = $this->getKernel()->useModule('contact');
 
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-            $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", $module->getPath()."subscribers.php?list_id=".$this->getList()->get('id'));
+            $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", $module->getPath()."lists/".$this->getList()->get('id')."/subscribers");
             $redirect->askParameter('contact_id');
             $redirect->setIdentifier('contact');
 

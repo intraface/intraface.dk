@@ -43,6 +43,7 @@ class Intraface_modules_newsletter_Controller_Letter extends k_Component
 
     function getLetter()
     {
+        $module = $this->getKernel()->module("newsletter");
         return Newsletter::factory($this->getKernel(), $this->name());
     }
 

@@ -3,6 +3,11 @@ class Intraface_modules_newsletter_Controller_Letters extends k_Component
 {
     protected $registry;
 
+    function getValues()
+    {
+        return array();
+    }
+
     protected function map($name)
     {
         if (is_numeric($name)) {

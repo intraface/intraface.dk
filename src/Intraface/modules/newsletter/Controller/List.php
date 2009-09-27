@@ -73,7 +73,7 @@ class Intraface_modules_newsletter_Controller_List extends k_Component
 
     function postForm()
     {
-        $list = new NewsletterList($this->getKernel(), $this->name());
+        $list = $this->getList();
         if ($id = $list->save($_POST)) {
             return new k_SeeOther($this->url());
         } else {
