@@ -1,16 +1,10 @@
-<h1><span>Intraface.dk</span></h1>
+<h1>Signup</h1>
 
 <form id="form-login" method="post" action="<?php e(url(null)); ?>">
 
     <fieldset>
-        <legend>Opret mig i systemet med følgende oplysninger</legend>
-        <p>Du kan prøve systemet ved at skrive din e-mail og adgangskode nedenunder. Derefter logger vi dig direkte ind i systemet.</p>
-    <?php
-        if (!empty($msg)) {
-            echo '<p>'.$msg.'</p>';
-        }
-    ?>
-
+        <legend><?php e(t('Please create a user for me')); ?></legend>
+        <p><?php echo $context->msg; ?></p>
 
         <div class="align-left">
             <label for="email" id="email_label"><?php e(t('Email')); ?></label>

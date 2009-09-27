@@ -13,6 +13,7 @@ class Intraface_Controller_Signup extends k_Component
 {
     protected $registry;
     protected $kernel;
+    public $msg;
 
     function execute()
     {
@@ -65,13 +66,13 @@ class Intraface_Controller_Signup extends k_Component
             }
 
             if (!empty($error) AND count($error) > 0) {
-                $msg = 'Du er allerede oprettet. <a href="'.url('/login').'">Login</a>.';
+                $content->msg = 'Du er allerede oprettet. <a href="'.url('/login').'">Login</a>.';
             } else {
                 require_once 'Intraface/modules/intranetmaintenance/IntranetMaintenance.php';
                 $intranet = new IntranetMaintenance();
                 $data = array('identifier' => $this->body('identifier'), 'name' => $this->body('name'));
                 if (!$intranet->save($data)) {
-                    $msg = $intranet->error->view();
+                    $content->msg = $intranet->error->view();
                 } else {
                     $intranet_id = $intranet->getId(); // betatest intranet for forskellige brugere
 
@@ -117,7 +118,10 @@ class Intraface_Controller_Signup extends k_Component
             }
             return $this->render();
         }
-
     }
 
+    function t($phrase)
+    {
+        return $phrase;
+    }
 }

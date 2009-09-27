@@ -79,4 +79,9 @@ class Intraface_Controller_Login extends k_Component
 
         return new k_AuthenticatedUser($username);
     }
+
+    function t($phrase)
+    {
+        return $phrase;
+    }
 }

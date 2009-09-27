@@ -31,16 +31,9 @@
         <div>
             <input tabindex="3" type="submit" value="<?php e(t('Login')); ?>" id="submit" />
             <a tabindex="4" href="<?php e(url('../retrievepassword')); ?>"><?php e(t('Forgotten password')); ?></a>
+            <a tabindex="4" href="<?php e(url('../signup')); ?>"><?php e(t('Register')); ?></a>
         </div>
 
     </fieldset>
-
-    <p style="text-align: center;">
-        <a href="http://blog.intraface.dk/">Website</a> |
-        <a href="http://blog.intraface.dk/blog/">Nyheder</a> |
-        <a href="http://blog.intraface.dk/kontakt/">Kontakt</a> |
-        <a href="<?php e(url('/signup/')); ?>">Prøv systemet</a>
-    </p>
-    <!--<p>Intraface.dk er et system målrettet til mindre virksomheder. Forskellige moduler klarer både webshop, fakturaer, regnskab og nyhedsbreve.</p>-->
 
 </form>
