@@ -2,6 +2,7 @@
 class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
 {
     protected $registry;
+    protected $subscriber;
 
     protected function map($name)
     {
@@ -10,9 +11,34 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
         }
     }
 
+    function getList()
+    {
+        return $this->context->getList();
+    }
+
     function __construct(WireFactory $registry)
     {
         $this->registry = $registry;
+    }
+
+    function getSubscriber()
+    {
+        if (is_object($this->subscriber)) {
+            return $this->subscriber;
+        }
+        $list = $this->context->getList();
+        return ($this->subscriber = new NewsletterSubscriber($this->getList()));
+    }
+
+    function getSubscribers()
+    {
+        $subscriber = $this->getSubscriber();
+        $subscriber->getDBQuery()->useCharacter();
+        $subscriber->getDBQuery()->defineCharacter('character', 'newsletter_subscriber.id');
+        $subscriber->getDBQuery()->usePaging('paging');
+        $subscriber->getDBQuery()->setExtraUri('&amp;list_id='.$this->getList()->get('id'));
+        $subscriber->getDBQuery()->storeResult("use_stored", 'newsletter_subscribers_'.$this->getList()->get("id"), "toplevel");
+        return $subscriber->getList();
     }
 
     function renderHtml()
@@ -24,27 +50,22 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
             trigger_error("Du skal have adgang til kontakt-modullet for at se denne side");
         }
 
-        $list = $this->context->getList();
-        $subscriber = new NewsletterSubscriber($list);
-
+        $subscriber = $this->getSubscriber();
 
         if (isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
-            if ($this->getKernel()->user->hasModuleAccess('contact')) {
-                $contact_module = $this->getKernel()->useModule('contact');
-
-                $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-                $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", $module->getPath()."subscribers.php?list_id=".$list->get('id'));
-                $redirect->askParameter('contact_id');
-                $redirect->setIdentifier('contact');
-
-                header("Location: ".$url);
-                exit;
-            } else {
-                trigger_error("Du har ikke adgang til modulet contact", ERROR);
+            if (!$this->getKernel()->user->hasModuleAccess('contact')) {
+                throw new Exception('You do not have access to the contact module');
             }
+            $contact_module = $this->getKernel()->useModule('contact');
 
+            $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
+            $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", $module->getPath()."subscribers.php?list_id=".$this->getList()->get('id'));
+            $redirect->askParameter('contact_id');
+            $redirect->setIdentifier('contact');
+
+            return new k_SeeOther($url);
         } elseif (isset($_GET['remind']) AND $_GET['remind'] == 'true') {
-            $subscriber = new NewsletterSubscriber($list, intval($_GET['id']));
+            $subscriber = new NewsletterSubscriber($this->getList(), intval($_GET['id']));
             if (!$subscriber->sendOptInEmail(Intraface_Mail::factory())) {
             	trigger_error('Could not send the optin e-mail');
             }
@@ -59,19 +80,11 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
             }
 
         }
-        //
-        if (isset($_GET['delete']) AND intval($_GET['delete']) != 0) {
 
-            $subscriber = new NewsletterSubscriber($list, $_GET['delete']);
+        if (isset($_GET['delete']) AND intval($_GET['delete']) != 0) {
+            $subscriber = new NewsletterSubscriber($this->getList(), $_GET['delete']);
             $subscriber->delete();
         }
-
-        $subscriber->getDBQuery()->useCharacter();
-        $subscriber->getDBQuery()->defineCharacter('character', 'newsletter_subscriber.id');
-        $subscriber->getDBQuery()->usePaging('paging');
-        $subscriber->getDBQuery()->setExtraUri('&amp;list_id='.$list->get('id'));
-        $subscriber->getDBQuery()->storeResult("use_stored", 'newsletter_subscribers_'.$list->get("id"), "toplevel");
-        $subscribers = $subscriber->getList();
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/subscribers.tpl.php');
         return $smarty->render($this);

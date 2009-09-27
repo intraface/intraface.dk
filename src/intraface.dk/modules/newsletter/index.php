@@ -1,58 +1,84 @@
 <?php
-require('../../include_first.php');
+require_once dirname(__FILE__) . '/../../include_first.php';
+ini_set('include_path', PATH_INCLUDE_PATH);
 
-$module = $kernel->module("newsletter");
+require_once 'Ilib/ClassLoader.php';
+require_once 'konstrukt/konstrukt.inc.php';
+//set_error_handler('k_exceptions_error_handler');
+spl_autoload_register('k_autoload');
 
-if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
-	$list = new NewsletterList($kernel, $_GET['delete']);
-	$list->delete();
-} else {
-	$list = new NewsletterList($kernel);
+require_once 'phemto.php';
+function create_container() {
+  $injector = new Phemto();
+  // put application wiring here
+  $template_dir = realpath(dirname(__FILE__) . '/../../../Intraface/modules/accounting/Controller/templates');
+  $injector->whenCreating('TemplateFactory')->forVariable('template_dir')->willUse(new Value($template_dir));
+  return $injector;
 }
 
-$lists = $list->getList();
+class TemplateFactory {
+  protected $template_dir;
+  function __construct($template_dir) {
+    $this->template_dir = $template_dir;
+  }
+  function create() {
+    $smarty = new k_Template($this->template_dir);
+    return $smarty;
+  }
+}
 
-$page = new Intraface_Page($kernel);
-$page->start('Nyhedsbrevslister');
-?>
+$GLOBALS['kernel'] = $kernel;
+$GLOBALS['intranet'] = $kernel->intranet;
+$GLOBALS['db'] = $db;
 
-<h1>Lister</h1>
+class WireFactory {
+    function __construct()
+    {
+    }
 
-<ul class="options">
-	<li><a class="new" href="list_edit.php">Opret liste</a></li>
-</ul>
+    function create()
+    {
+    	$registry = new k_Registry();
+        $registry->registerConstructor('doctrine', create_function(
+            '$className, $args, $registry',
+            'return Doctrine_Manager::connection(DB_DSN);'
+        ));
+        $registry->registerConstructor('category_gateway', create_function(
+          '$className, $args, $registry',
+          'return new Intraface_modules_shop_Shop_Gateway;'
+        ));
 
-<?php if (is_object($list->error)) echo $list->error->view(); ?>
+        $registry->registerConstructor('kernel', create_function(
+          '$className, $args, $registry',
+          'return $GLOBALS["kernel"];'
+        ));
 
-<?php if (count($lists) == 0): ?>
-<p>Der er ikke oprettet nogen lister.</p>
-<?php else: ?>
+        $registry->registerConstructor('intranet', create_function(
+          '$className, $args, $registry',
+          'return $GLOBALS["intranet"];'
+        ));
 
-<table class="stripe">
-	<caption>E-mail-lister</caption>
-	<thead>
-	<tr>
-		<th>Navn</th>
-		<th>Modtagere</th>
-		<th>&nbsp;</th>
-	</tr>
-	</thead>
-	<tbody>
-	<?php foreach ($lists AS $list): ?>
-	<tr>
-		<td><a href="list.php?id=<?php e($list['id']); ?>"><?php e($list['title']); ?></a></td>
-		<td><?php e($list['subscribers']); ?></td>
-		<td class="options">
-			<a class="edit" href="list_edit.php?id=<?php e($list['id']); ?>">Ret</a>
-			<a class="delete" href="index.php?delete=<?php e($list['id']); ?>&amp;id=<?php e($list['id']); ?>">Slet</a>
-		</td>
+        $registry->registerConstructor('db', create_function(
+          '$className, $args, $registry',
+          'return $GLOBALS["db"];'
+        ));
 
-	</tr>
-	<?php endforeach; ?>
-	</tbody>
-</table>
+        $registry->registerConstructor('page', create_function(
+          '$className, $args, $registry',
+          'return new Intraface_Page($registry->get("kernel"));'
+        ));
 
-<?php endif; ?>
-<?php
-$page->end();
-?>
+        return $registry;
+    }
+}
+
+k()
+  // Use container for wiring of components
+  ->setComponentCreator(new k_InjectorAdapter(create_container()))
+  // Enable file logging
+  //->setLog(dirname(__FILE__) . '/../log/debug.log')
+  // Uncomment the next line to enable in-browser debugging
+  //->setDebug()
+  // Dispatch request
+  ->run('Intraface_modules_newsletter_Controller_Index')
+  ->out();
