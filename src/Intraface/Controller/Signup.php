@@ -1,6 +1,6 @@
 <?php
 /**
- * Logout
+ * Signup
  *
  * @todo Kunne let laves så man kunne oprette sig på et intranet, man havde fået lov til med en eller anden kode.
  *
