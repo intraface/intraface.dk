@@ -88,7 +88,7 @@ if (!empty($_GET['delete_file']) AND is_numeric($_GET['delete_file'])) {
 	$posts = $voucher->getPosts();
 
 	foreach($posts as $post) {
-		if(is_array($_POST['selected']) && in_array($post['id'], $_POST['selected'])) {
+		if(isset($_POST['selected']) && is_array($_POST['selected']) && in_array($post['id'], $_POST['selected'])) {
 			$new_post = new Post($voucher);
 			$new_post->save($post['date'], $post['account_id'], $post['text'].' - '.t('counter entry'), $post['credit'], $post['debet']);
 		}
