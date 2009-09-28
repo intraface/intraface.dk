@@ -99,12 +99,12 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         $credentials = array('private_key' => 'privatekeyshouldbereplaced', 'session_id' => 'something');
 
         $contact = new Contact(new ContactXMLRPCServerKernel);
-        $data = array('name' => 'Tester æøå');
+        $data = array('name' => 'Tester Ã¦Ã¸Ã¥');
         $contact->save($data);
 
         $retrieved = $client->getContact($credentials, $contact->getId());
 
-        $this->assertEquals('Tester æøå', utf8_decode($retrieved['name']));
+        $this->assertEquals('Tester Ã¦Ã¸Ã¥', $retrieved['name']);
 
     }
 
@@ -118,7 +118,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         $data = array('name' => 'Tester');
         $contact->save($data);
 
-        $new_name = 'Tester æøå';
+        $new_name = 'Tester ï¿½ï¿½ï¿½';
         $data = array('id' => $contact->getId(), 'name' => $new_name);
         $this->assertTrue($client->saveContact($credentials, $data));
 
