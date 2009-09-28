@@ -1,7 +1,7 @@
 <?php
-class Intraface_XMLRPC_Contact_Controller extends k_Component
+class Intraface_XMLRPC_Contact_Controller extends Intraface_XMLRPC_Controller_Server
 {
-    private $available_servers = array(
+    protected $available_servers = array(
         '0001' => 'Intraface_XMLRPC_Contact_Server'
     );
 
@@ -16,15 +16,5 @@ class Intraface_XMLRPC_Contact_Controller extends k_Component
         }
 
         return XML_RPC2_Server::create(new Intraface_XMLRPC_Contact_Server(), $options);
-    }
-
-    function GET()
-    {
-        return $this->getServer()->getResponse();
-    }
-
-    function POST()
-    {
-    	return $this->getServer()->getResponse();
     }
 }

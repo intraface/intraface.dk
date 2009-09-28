@@ -65,6 +65,6 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
 
     function POST()
     {
-        return ;
+        return $this->getResponse();
     }
 }
