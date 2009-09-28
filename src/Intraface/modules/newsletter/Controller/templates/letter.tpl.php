@@ -22,4 +22,4 @@ $letter = $context->getValues();
 
 </div>
 
-<!-- @todo angivelse af hvor mange det bliver sendt til, hvornår det er sendt mv. -->
+<!-- @todo angivelse af hvor mange det bliver sendt til, hvornår det er sendt mv. d -->
