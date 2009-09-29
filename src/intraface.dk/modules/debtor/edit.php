@@ -244,7 +244,7 @@ $page->start(__($action.' '.$debtor->get('type')));
 <?php if (!$debtor->get("id")) { ?>
 <a href="<?php e($_SERVER['HTTP_REFERER']); ?>"><?php e(t('Cancel', 'common')); ?></a>
 <?php } else { ?>
-<a href="view.php?id=<?php e($debtor->get("id")); ?>"><?php e(t('Cancel')); ?></a>
+<a href="view.php?id=<?php e($debtor->get("id")); ?>"><?php e(t('Cancel', 'common')); ?></a>
 <?php } ?>
 </div>
 
