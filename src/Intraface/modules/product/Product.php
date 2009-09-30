@@ -103,6 +103,17 @@ class Product extends Intraface_Standard
             $this->id = $this->load();
         }
     }
+    
+    /*
+    Did not seem to have any effect
+    function __destruct()
+    {
+        unset($this->dbquery);
+        unset($this->db);
+        unset($this->stock);
+        unset($this->detail);
+    }
+    */
 
     /**
      * Creates the dbquery object
@@ -270,7 +281,7 @@ class Product extends Intraface_Standard
         $appendix_list = $append_file->getList();
 
         $this->value['pictures'] = array();
-
+        
         if (count($appendix_list) > 0) {
             foreach ($appendix_list AS $key => $appendix) {
                 $tmp_filehandler = new FileHandler($this->kernel, $appendix['file_handler_id']);
@@ -293,7 +304,10 @@ class Product extends Intraface_Standard
 
                     }
                 }
+                $tmp_filehandler->__destruct();
+                unset($tmp_filehandler);
             }
+            
         }
         return $this->value['pictures'];
     }
@@ -662,6 +676,9 @@ class Product extends Intraface_Standard
         // rækkefølgen er vigtig - først hente fra product og bagefter tilføje nye værdier til arrayet
         while ($db->nextRecord()) {
             $product                      = new Product($this->kernel, $db->f('related_product_id'));
+            if($product->get('id') == 0 || $product->get('active') == 0) {
+                CONTINUE;
+            }
             $products[$key]               = $product->get();
             $products[$key]['related_id'] = $db->f('related_product_id');
 
@@ -805,6 +822,7 @@ class Product extends Intraface_Standard
             return $gateway->findById($id);
         }
         $object = $gateway->getObject();
+        unset($gateway);
         $object->product_id = $this->getId();
         return $object;
     }
