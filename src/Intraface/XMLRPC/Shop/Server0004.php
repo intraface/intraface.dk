@@ -18,13 +18,13 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
     private $webshop;
     private $basket;
     private $product;
-    
+
     /**
      * Constructor
-     * @param $encoding the encoding used for the XML_RPC2 backend 
+     * @param $encoding the encoding used for the XML_RPC2 backend
      * @return unknown_type
      */
-    public function __construct($encoding = 'utf-8') 
+    public function __construct($encoding = 'utf-8')
     {
         parent::__construct($encoding);
     }
@@ -143,7 +143,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         }else {
             $search['use_paging'] = 'false';
         }
-        
+
         $search['category'] = $category_id;
         $search['offset'] = $pagging_offset;
 
@@ -248,19 +248,18 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $return = array();
 
         $product = new Product($this->kernel, $id);
-        $product = new Product($this->kernel, $id);
-        if($product->get('id') == 0 || $product->get('do_show') == 0) {
+        if ($product->get('id') == 0 || $product->get('do_show') == 0) {
             return array('product' => array('id' => 0));
         }
-        
-        
+
+
         $product->getPictures();
         $return['product'] = $product->get();
         $return['product']['currency']['DKK']['price'] = $product->getDetails()->getPrice()->getAsIso(2);
         $return['product']['currency']['DKK']['price_incl_vat'] = $product->getDetails()->getPriceIncludingVat()->getAsIso(2);
         $return['product']['currency']['DKK']['before_price'] = $product->getDetails()->getBeforePrice()->getAsIso(2);
         $return['product']['currency']['DKK']['before_price_incl_vat'] = $product->getDetails()->getBeforePriceIncludingVat()->getAsIso(2);
-        
+
         if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
             foreach ($currency_gateway->findAllWithExchangeRate() AS $currency) {
                 $return['product']['currency'][$currency->getType()->getIsoCode()]['price'] = $product->getDetails()->getPriceInCurrency($currency)->getAsIso(2);
@@ -278,21 +277,21 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
 
             $variations = $product->getVariations();
             foreach ($variations as $variation) {
-                
+
                 if($product->get('stock')) {
                     $stock = $variation->getStock($product)->get();
                 } else {
                     $stock = false;
                 }
-                
+
                 $detail = $variation->getDetail();
                 $attribute_string = '';
                 $attributes_array = $variation->getAttributesAsArray();
-                
+
                 foreach ($attributes_array as $attribute) {
                     if ($attribute_string != '') $attribute_string .= '-';
                     $attribute_string .= $attribute['id'];
-                    
+
                     // We calculate all products which is on stock with this attribute to be able to mark unused attributes in list.
                     if(!isset($attribute_for_sale[$attribute['id']])) $attribute_for_sale[$attribute['id']] = 0;
                     if($stock !== false) {
@@ -303,7 +302,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
                         $attribute_for_sale[$attribute['id']] += 1;
                     }
                 }
-                
+
                 $variation_currency['DKK']['price'] = $detail->getPrice($product)->getAsIso(2);
                 $variation_currency['DKK']['price_incl_vat'] = $detail->getPriceIncludingVat($product)->getAsIso(2);
 
@@ -329,7 +328,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
                     'stock' => $stock
                 );
             }
-            
+
             // We should make a Doctrine Product_X_AttributeGroup class and get all the groups i one sql
             $groups = $product->getAttributeGroups();
             $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway;
@@ -339,14 +338,14 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
                 $return['attribute_groups'][$key]['name'] = $group['name'];
                 $attributes = $group_gateway->findById($group['id'])->getAttributesUsedByProduct($product);
                 foreach ($attributes AS $attribute) {
-                    
+
                     // No products has attribute on stock we remove it from the list.
                     if(isset($attribute_for_sale[$attribute->getId()]) && $attribute_for_sale[$attribute->getId()] == 0) {
                         $is_used = 0;
                     } else {
                         $is_used = 1;
                     }
-                    
+
                     $return['attribute_groups'][$key]['attributes'][] = array(
                         'id' => $attribute->getId(),
                         'name' => $attribute->getName(),
