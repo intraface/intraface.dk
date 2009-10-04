@@ -2,9 +2,13 @@
 class Intraface_XMLRPC_Contact_Controller extends Intraface_XMLRPC_Controller_Server
 {
     protected $available_servers = array(
-        '0001' => 'Intraface_XMLRPC_Contact_Server'
+        '0.1.0' => 'Intraface_XMLRPC_Contact_Server'
     );
+    protected $prefix = 'contact';
 
+    protected $default_server_version = '0.1.0';
+
+    /*
     function getServer()
     {
     	$options = array('prefix' => 'contact.', 'encoding' => 'utf-8');
@@ -15,6 +19,7 @@ class Intraface_XMLRPC_Contact_Controller extends Intraface_XMLRPC_Controller_Se
         	$server = 'Intraface_XMLRPC_Contact_Server';
         }
 
-        return XML_RPC2_Server::create(new Intraface_XMLRPC_Contact_Server(), $options);
+        return XML_RPC2_Server::create(new $server(), $options);
     }
+    */
 }

@@ -2,7 +2,9 @@
 class Intraface_XMLRPC_Shop_Controller extends k_Component
 {
     private $available_servers = array(
-        '0004' => 'Intraface_XMLRPC_Shop_Server0004'
+        '0.1.0' => 'Intraface_XMLRPC_Shop_Server',
+        '0.2.0' => 'Intraface_XMLRPC_Shop_Server2',
+        '0.4.0' => 'Intraface_XMLRPC_Shop_Server0004'
     );
 
     function getServer()

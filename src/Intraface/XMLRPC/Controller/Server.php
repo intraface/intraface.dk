@@ -2,15 +2,15 @@
 class Intraface_XMLRPC_Controller_Server extends k_Component
 {
     protected $available_servers = array();
-    protected $server;
     protected $backends = array(
         'php' => 'utf-8',
         'xmlrpcext' => 'iso-8859-1');
+
     protected $prefix;
     protected $backend = 'php';
+    protected $default_server_version = null;
 
-    /*
-    function getServer()
+    protected function getServer()
     {
         if ($this->query('version') != '') {
             if (isset($this->available_servers[$this->query('version')])) {
@@ -24,7 +24,6 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
             } else {
                 throw new Exception('Invalid default server version');
             }
-
         }
 
         if ($this->query('backend') != '') {
@@ -44,13 +43,12 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
         $this->encoding = $this->backends[$backend];
 
         $options = array(
-            'prefix' => $this->prefix,
-            'encoding' => $this->encoding,
+            'prefix' => $this->prefix . '.',
+            'encoding' => 'utf-8' /*$this->encoding*/,
             'backend' => $backend);
 
         return XML_RPC2_Server::create(new $server($this->encoding), $options);
     }
-    */
 
     function dispatch()
     {
@@ -68,7 +66,7 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
         return parent::dispatch();
     }
 
-    function isXmlRpcExt()
+    protected function isXmlRpcExt()
     {
         return ($this->backend == 'xmlrpcext');
     }
