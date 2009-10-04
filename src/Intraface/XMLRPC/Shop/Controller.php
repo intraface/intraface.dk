@@ -13,22 +13,4 @@ class Intraface_XMLRPC_Shop_Controller extends k_Component
 
         return XML_RPC2_Server::create(new Intraface_XMLRPC_Shop_Server0004(), $options);
     }
-
-    function getResponse()
-    {
-        return $this->getServer()->getResponse();
-    }
-
-    function renderHtml()
-    {
-        ob_start();
-        $this->getServer()->autoDocument();
-        $result = ob_get_clean();
-        return $result;
-    }
-
-    function POST()
-    {
-        return $this->getResponse();
-    }
 }
