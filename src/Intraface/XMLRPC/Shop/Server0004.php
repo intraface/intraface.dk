@@ -252,7 +252,6 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             return array('product' => array('id' => 0));
         }
 
-
         $product->getPictures();
         $return['product'] = $product->get();
         $return['product']['currency']['DKK']['price'] = $product->getDetails()->getPrice()->getAsIso(2);
