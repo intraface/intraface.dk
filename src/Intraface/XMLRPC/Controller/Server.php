@@ -8,6 +8,7 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
         'xmlrpcext' => 'iso-8859-1');
     protected $prefix;
 
+    /*
     function getServer()
     {
         if ($this->query('version') != '') {
@@ -48,6 +49,7 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
 
         return XML_RPC2_Server::create(new $server($this->encoding), $options);
     }
+    */
 
     function renderHtml()
     {
@@ -66,5 +68,10 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
     function POST()
     {
         return $this->getResponse();
+    }
+
+    function getResponse()
+    {
+        return $this->getServer()->getResponse();
     }
 }
