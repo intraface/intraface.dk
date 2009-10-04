@@ -55,7 +55,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         require_once 'XML/RPC2/Client.php';
         $debug = false;
         $options = array('prefix' => 'contact.', 'debug' => $debug);
-        $client = XML_RPC2_Client::create(XMLRPC_SERVER_URL.'contact/', $options);
+        $client = XML_RPC2_Client::create(XMLRPC_SERVER_URL.'contact?backend=xmlrpcext', $options);
 
         return $client;
     }
@@ -118,7 +118,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         $data = array('name' => 'Tester');
         $contact->save($data);
 
-        $new_name = 'Tester ���';
+        $new_name = 'Tester æøå';
         $data = array('id' => $contact->getId(), 'name' => $new_name);
         $this->assertTrue($client->saveContact($credentials, $data));
 

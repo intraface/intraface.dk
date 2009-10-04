@@ -7,6 +7,7 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
         'php' => 'utf-8',
         'xmlrpcext' => 'iso-8859-1');
     protected $prefix;
+    protected $backend = 'php';
 
     /*
     function getServer()
@@ -51,27 +52,61 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
     }
     */
 
+    function dispatch()
+    {
+        switch ($this->query('backend')) {
+            case 'xmlrpcext':
+                // @todo tests består ikke med denne slået til.
+                XML_RPC2_Backend::setBackend('xmlrpcext');
+                $this->backend = 'xmlrpcext';
+                break;
+            default:
+                XML_RPC2_Backend::setBackend('php');
+                break;
+        }
+
+        return parent::dispatch();
+    }
+
+    function isXmlRpcExt()
+    {
+        return ($this->backend == 'xmlrpcext');
+    }
+
     function renderHtml()
     {
         ob_start();
         $this->getServer()->autoDocument();
         $result = ob_get_clean();
 
+        if ($this->isXmlRpcExt()) {
+            return utf8_decode($result);
+        }
+
         return $result;
     }
 
+    /*
     function renderXml() {
 
         return $this->getServer()->getResponse();
     }
+    */
 
     function POST()
     {
+        if ($this->isXmlRpcExt()) {
+            return utf8_decode($this->getResponse());
+        }
+
         return $this->getResponse();
     }
 
     function getResponse()
     {
+        if ($this->isXmlRpcExt()) {
+            return utf8_decode($this->getServer()->getResponse());
+        }
         return $this->getServer()->getResponse();
     }
 }

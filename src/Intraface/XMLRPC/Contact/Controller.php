@@ -7,7 +7,7 @@ class Intraface_XMLRPC_Contact_Controller extends Intraface_XMLRPC_Controller_Se
 
     function getServer()
     {
-    	$options = array('prefix' => 'contact.', 'encoding' => 'iso-8859-1');
+    	$options = array('prefix' => 'contact.', 'encoding' => 'utf-8');
 
         if (!empty($this->GET['version'])) {
         	$server = $this->available_servers[$this->GET['version']];
