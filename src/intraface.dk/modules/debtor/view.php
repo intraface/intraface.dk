@@ -626,7 +626,7 @@ if (isset($onlinepayment)) {
         <tbody>
             <tr>
                 <th><?php e(t('Number')); ?></th>
-                <td><?php e($debtor->contact->get("number")); ?> <a href="view.php?id=<?php e($debtor->get('id')); ?>&amp;edit_contact=<?php e($debtor->contact->get('id')); ?>" class="edit">Ret</a></td>
+                <td><?php e($debtor->contact->get("number")); ?> <a href="view.php?id=<?php e($debtor->get('id')); ?>&amp;edit_contact=<?php e($debtor->contact->get('id')); ?>" class="edit"><?php e(t('Edit')); ?></a></td>
             </tr>
             <tr>
                 <th><?php e(t('Contact')); ?></th>
@@ -696,7 +696,6 @@ if (isset($onlinepayment)) {
 
                 <div style="clear: both;">
                     <input class="confirm" type="submit" name="payment" value="<?php e(t('Register')); ?>" title="<?php e(t('This will register the payment')); ?>" />
-                    <?php e(t('or', 'common')); ?>
                     <a href="register_payment.php?for=invoice&amp;id=<?php e($debtor->get('id')); ?>"><?php e(t('give me more choices')); ?></a>.
                 </div>
             </form>
