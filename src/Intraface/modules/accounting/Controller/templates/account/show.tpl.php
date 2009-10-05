@@ -1,27 +1,27 @@
-<h1><?php e($account->get('number')); ?>: <?php e($account->get('name')); ?></h1>
+<h1><?php e($context->getAccount()->get('number')); ?>: <?php e($context->getAccount()->get('name')); ?></h1>
 
 <ul class="options">
-	<li><a href="account_edit.php?id=<?php e($account->get('id')); ?>">Ret</a></li>
-	<li><a href="accounts.php?from_account_id=<?php e($account->get('id')); ?>">Luk</a></li>
+	<li><a href="account_edit.php?id=<?php e($context->getAccount()->get('id')); ?>">Ret</a></li>
+	<li><a href="accounts.php?from_account_id=<?php e($context->getAccount()->get('id')); ?>">Luk</a></li>
 </ul>
 
 <!-- Følgende bør vises her, men kunne skjules med en indstilling
 <table>
 	<tr>
 		<th rowspan="2">Beskrivelse</th>
-		<td rowspan="2"><?php e($account->get('comment')); ?></td>
+		<td rowspan="2"><?php e($context->getAccount()->get('comment')); ?></td>
 	</tr>
 	<tr>
 		<th>Type</th>
-		<td><?php e($account->get('type')); ?></td>	</tr>
+		<td><?php e($context->getAccount()->get('type')); ?></td>	</tr>
 	<tr>
 		<th>Moms</th>
-		<td><?php e($account->get('vat')); ?></td>
+		<td><?php e($context->getAccount()->get('vat')); ?></td>
 	</tr>
 </table>
 -->
 
-<p><?php e(t('vat')); ?>: <?php e(t($account->get('vat'))); ?> <?php if ($account->get('vat') != 'none'): ?><?php e(number_format($account->get('vat_percent'), 2, ',', '.').'%'); ?><?php endif; ?></p>
+<p><?php e(t('vat')); ?>: <?php e(t($context->getAccount()->get('vat'))); ?> <?php if ($context->getAccount()->get('vat') != 'none'): ?><?php e(number_format($context->getAccount()->get('vat_percent'), 2, ',', '.').'%'); ?><?php endif; ?></p>
 
 <?php if (!empty($posts) AND is_array($posts) AND count($posts) > 0) { ?>
 	<table>

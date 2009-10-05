@@ -17,13 +17,13 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
 
     function renderHtml()
     {
-        $kernel->module('accounting');
-        $translation = $kernel->getTranslation('accounting');
+        $this->getKernel()->module('accounting');
+        $translation = $this->getKernel()->getTranslation('accounting');
 
-        $year = new Year($kernel);
+        $year = new Year($this->getKernel());
         $year->checkYear();
 
-        $account = new Account($year, (int)$_GET['id']);
+        $account = new Account($year, (int)$this->name());
 
         $saldo = 0;
         $posts = array();
@@ -121,4 +121,8 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         return $gateway;
     }
 
+    function t($phrase)
+    {
+        return $phrase;
+    }
 }

@@ -38,7 +38,7 @@ $accounts = $context->getAccounts();
 <tbody>
 	<?php foreach ($context->getAccounts() as $account) { ?>
 	<tr>
-		<td><a href="account.php?id=<?php e($account['id']); ?>"><?php e($account['number']); ?></a></td>
+		<td><a href="<?php e(url('../../account/' . $account['id'])); ?>"><?php e($account['number']); ?></a></td>
 		<td><?php e($account['name']); ?></td>
 		<td class="amount"><?php e(amountToOutput($account['saldo_primo'])); ?></td>
 		<td class="amount"><?php e(amountToOutput($account['saldo_draft'])); ?></td>
@@ -59,7 +59,7 @@ $accounts = $context->getAccounts();
 <?php echo $context->getVoucher()->error->view(); ?>
 
 <?php if (!$context->getYear()->vatAccountIsSet()): ?>
-	<p class="message-dependent">Du skal først <a href="setting.php">sætte momskonti</a>, inden du kan bogføre.</p>
+	<p class="message-dependent">Du skal først <a href="<?php e(url('../../settings')); ?>">sætte momskonti</a>, inden du kan bogføre.</p>
 <?php elseif ($context->getVoucher()->get('list_saldo') > 0): ?>
 	<p class="error">Kassekladden balancerer ikke. Du kan ikke bogføre, før den balancerer.</p>
 <?php elseif (!empty($posts) AND count($posts) > 0): // der skal kun kunne bogføres, hvis der er nogle poster ?>

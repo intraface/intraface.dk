@@ -1,7 +1,9 @@
 <?php
-$values = $context->getValues(); ?>
+$values = $context->getValues();
+$posts = $context->getPostsInDraft();
+?>
 
-<h1>Kassekladde for <?php e($context->getYear()->get('label')); ?></h1>
+<h1><?php e(t('Daybook for')); ?> <?php e($context->getYear()->get('label')); ?></h1>
 
 <?php if (!$context->getAccount()->anyAccounts()): ?>
     <p class="message-dependent">Du skal først oprette nogle konti, inden du kan taste poster ind i regnskabet. Du kan oprette en standardkontoplan under <a href="<?php e($context->url('../year/' . $context->getYear()->get('id'))); ?>">regnskabsåret</a>.</p>
@@ -16,25 +18,26 @@ $values = $context->getValues(); ?>
         <strong>Kassekladde</strong>. Her opretter du poster til dit regnskab. I første omgang figurerer beløbene kun i kassekladden og under <a href="<?php e($context->url('state')); ?>">afstemningen</a>. Indtil du bogfører posterne, kan du stadig nå at redigere dem.
     </p>
     <p><strong>Hjælp</strong>. Du kan bogføre ved at indtaste kontonumrene i standardvisningen, men du kan også bruge vores hjælpefunktioner ved at klikke på vores links nedenunder.</p>
-    <p><a href="<?php e($context->url('./')); ?>?message=hide">Skjul</a></p>
+    <p><a href="<?php e($context->url(null, array('message' => 'hide'))); ?>">Skjul</a></p>
     </div>
     <?php endif; ?>
-    <form method="post" action="<?php e(url('./')); ?>" id="accounting-form-state">
+    <form method="post" action="<?php e(url(null, array('view' => $context->query('view')))); ?>" id="accounting-form-state">
         <input type="hidden" name="id" value="<?php e($values['id']); ?>" />
 
     <?php echo $context->getVoucher()->error->view(); ?>
 
     <ul class="options">
-        <li><a href="<?php e($context->url('./')); ?>?view=classic">Standard</a></li>
-        <li><a href="<?php e($context->url('./')); ?>?view=income">Indtægter</a></li>
-        <li><a href="<?php e($context->url('./')); ?>?view=expenses">Udgifter</a></li>
-        <li><a href="<?php e($context->url('./')); ?>?view=debtor">Betalende debitor</a></li>
+        <li><a href="<?php e(url(null, array('view' => 'classic'))); ?>">Standard</a></li>
+        <li><a href="<?php e(url(null, array('view' => 'income'))); ?>">Indtægter</a></li>
+        <li><a href="<?php e(url(null, array('view' => 'expenses'))); ?>">Udgifter</a></li>
+        <li><a href="<?php e(url(null, array('view' => 'debtor'))); ?>">Betalende debitor</a></li>
     </ul>
 
     <fieldset>
         <legend>Indtast</legend>
         <table>
-        <?php if ($context->getKernel()->setting->get('user', 'accounting.daybook_view') == 'expenses'): ?>
+        <?php //if ($context->getKernel()->setting->get('user', 'accounting.daybook_view') == 'expenses'): ?>
+        <?php if ($context->query('view') == 'expenses'): ?>
             <caption>Udgifter</caption>
             <thead>
                 <tr>
@@ -45,7 +48,7 @@ $values = $context->getValues(); ?>
                     <th><label for="buy_balance_account">Modpost</label></th>
                     <th><label for="amount">Beløb</label></th>
                     <th><label for="reference">Reference</label></th>
-                    <?php if ($year->get('vat') > 0): ?>
+                    <?php if ($context->getYear()->get('vat') > 0): ?>
                     <th><label for="vat_on">U. moms</label></th>
                     <?php endif; ?>
                     <th></th>
@@ -65,7 +68,7 @@ $values = $context->getValues(); ?>
                     <td>
                         <select name="debet_account_number" id="buy_account_number_select" tabindex="4">
                             <option value="">Vælg</option>
-                            <?php foreach ($account->getList('expenses') AS $a): ?>
+                            <?php foreach ($context->getAccount()->getList('expenses') AS $a): ?>
                                 <option value="<?php e($a['number']); ?>"
                                     <?php if ($values['debet_account_number'] == $a['number']) echo ' selected="selected"'; ?>
                                     ><?php e($a['name']); ?></option>
@@ -88,7 +91,7 @@ $values = $context->getValues(); ?>
                     <td>
                         <input tabindex="7" name="reference" id="reference" type="text" size="7"  value="<?php if (!empty($values['reference'])) e($values['reference']); ?>" />
                     </td>
-                    <?php if ($year->get('vat') > 0): ?>
+                    <?php if ($context->getYear()->get('vat') > 0): ?>
                     <td>
                         <input tabindex="8" name="vat_off" id="vat_off" type="checkbox" value="1" />
                     </td>
@@ -98,7 +101,8 @@ $values = $context->getValues(); ?>
                     </td>
                 </tr>
             </tbody>
-        <?php elseif ($context->getKernel()->setting->get('user', 'accounting.daybook_view') == 'income'): ?>
+        <?php //elseif ($context->getKernel()->setting->get('user', 'accounting.daybook_view') == 'income'): ?>
+        <?php elseif ($context->query('view') == 'income'): ?>
             <caption>Indtægter</caption>
             <thead>
                 <tr>
@@ -109,7 +113,7 @@ $values = $context->getValues(); ?>
                     <th><label for="sales_account_number">Salgskonto</label></th>
                     <th><label for="amount">Beløb</label></th>
                     <th><label for="reference">Reference</label></th>
-                    <?php if ($year->get('vat') > 0): ?>
+                    <?php if ($context->getYear()->get('vat') > 0): ?>
                     <th><label for="vat_on">U. moms</label></th>
                     <?php endif; ?>
                     <th></th>
@@ -129,7 +133,7 @@ $values = $context->getValues(); ?>
                     <td>
                         <select name="debet_account_number" id="balance_account_number_select" tabindex="4">
                             <option value="">Vælg</option>
-                            <?php foreach ($account->getList('finance') AS $a): ?>
+                            <?php foreach ($context->getAccount()->getList('finance') AS $a): ?>
                                 <option value="<?php e($a['number']); ?>"
                                     <?php if ($values['debet_account_number'] == $a['number']) echo ' selected="selected"'; ?>
                                     ><?php e($a['name']); ?></option>
@@ -139,7 +143,7 @@ $values = $context->getValues(); ?>
                     <td>
                         <select name="credit_account_number" id="sales_account_number_select" tabindex="5">
                             <option value="">Vælg</option>
-                            <?php foreach ($account->getList('income') AS $a): ?>
+                            <?php foreach ($context->getAccount()->getList('income') AS $a): ?>
                                 <option value="<?php e($a['number']); ?>"
                                     <?php if ($values['credit_account_number'] == $a['number']) echo ' selected="selected"'; ?>
                                     ><?php e($a['name']); ?></option>
@@ -152,7 +156,7 @@ $values = $context->getValues(); ?>
                     <td>
                         <input tabindex="7" name="reference" id="reference" type="text" size="7" value="<?php if (!empty($values['reference'])) e($values['reference']); ?>" />
                     </td>
-                    <?php if ($year->get('vat') > 0): ?>
+                    <?php if ($context->getYear()->get('vat') > 0): ?>
                     <td>
                         <input tabindex="8" name="vat_off" id="vat_off" type="checkbox" value="1" />
                     </td>
@@ -163,7 +167,8 @@ $values = $context->getValues(); ?>
                 </tr>
             </tbody>
 
-        <?php elseif ($context->getKernel()->setting->get('user', 'accounting.daybook_view') == 'debtor'): ?>
+        <?php // elseif ($context->getKernel()->setting->get('user', 'accounting.daybook_view') == 'debtor'): ?>
+        <?php elseif ($context->query('view') == 'debtor'): ?>
             <caption>Debitorbetaling</caption>
             <thead>
                 <tr>
@@ -175,7 +180,7 @@ $values = $context->getValues(); ?>
                     <th><label for="amount">Beløb</label></th>
                     <th><label for="reference">Reference</label></th>
                     <!--
-                    <?php if ($year->get('vat') > 0): ?>
+                    <?php if ($context->getYear()->get('vat') > 0): ?>
                     <th><label for="vat_on">U. moms</label></th>
                     <?php endif; ?>
                     -->
@@ -196,8 +201,8 @@ $values = $context->getValues(); ?>
                     <td>
                         <select name="debet_account_number" id="debitor_account_number_select" tabindex="4">
                             <option value="">Vælg</option>
-                            <?php foreach ($account->getList('finance') AS $a): ?>
-                                    <?php if ($year->getSetting('debtor_account_id') == $a['id']) continue; ?>
+                            <?php foreach ($context->getAccount()->getList('finance') AS $a): ?>
+                                    <?php if ($context->getYear()->getSetting('debtor_account_id') == $a['id']) continue; ?>
                                     <option value="<?php e($a['number']); ?>"
                                     <?php if ($values['debet_account_number'] == $a['number']) echo ' selected="selected"'; ?>
                                     ><?php e($a['name']); ?></option>
@@ -205,7 +210,7 @@ $values = $context->getValues(); ?>
                         </select>
                     </td>
                     <td>
-                        <input tabindex="5" type="text" name="credit_account_number" id="credit_account_number" value="<?php if (empty($values['credit_account_number'])) { $account = new Account($year, $year->getSetting('debtor_account_id')); e($account->get('number')); } else { e($values['credit_account_number']); }?>" size="8" />
+                        <input tabindex="5" type="text" name="credit_account_number" id="credit_account_number" value="<?php if (empty($values['credit_account_number'])) { $account = new Account($context->getYear(), $context->getYear()->getSetting('debtor_account_id')); e($context->getAccount()->get('number')); } else { e($values['credit_account_number']); }?>" size="8" />
                         <a href="daybook_list_accounts.php" id="credit_account_open">+</a>
                         <div id="credit_account_name">&nbsp;</div>
                     </td>
@@ -216,7 +221,7 @@ $values = $context->getValues(); ?>
                         <input tabindex="7" name="reference" id="reference" type="text" size="7"  value="<?php if (!empty($values['reference'])) e($values['reference']); ?>" />
                     </td>
                     <!--
-                    <?php if ($year->get('vat') > 0): ?>
+                    <?php if ($context->getYear()->get('vat') > 0): ?>
                     <td>
                         <input tabindex="8" name="vat_off" id="vat_off" type="checkbox" value="1" />
                     </td>
@@ -285,11 +290,7 @@ $values = $context->getValues(); ?>
 </fieldset>
 </form>
 
-
-
-
 <?php if (!empty($posts) AND count($posts) > 0): // tabellen skal kun vises hvis der er poster ?>
-
 
 <table class="stripe">
 <caption>Poster i kassekladden</caption>
@@ -309,20 +310,20 @@ $values = $context->getValues(); ?>
     <?php foreach ($posts as $p): ?>
     <tr>
         <td><?php e($p['date_dk']); ?></td>
-        <td><a href="voucher.php?id=<?php e($p['voucher_id']); ?>"><?php e($p['voucher_number']); ?></a></td>
+        <td><a href="<?php e(url('voucher/' . $p['voucher_id'])); ?>"><?php e($p['voucher_number']); ?></a></td>
         <td><?php e($p['text']); ?></td>
-        <td><a href="account.php?id=<?php e($p['account_id']); ?>"><?php e($p['account_name']); ?></a></td>
+        <td><a href="<?php e(url('account/' . $p['account_id'])); ?>"><?php e($p['account_name']); ?></a></td>
         <td class="amount"><?php e(amountToOutput($p['debet'])); ?></td>
         <td class="amount"><?php e(amountToOutput($p['credit'])); ?></td>
         <td><?php if (!empty($p['reference'])) e($p['reference']); ?></td>
-        <td><a href="voucher.php?id=<?php e($p['voucher_id']); ?>">Se bilag</a></td>
+        <td><a href="<?php e(url('../voucher/' . $p['voucher_id'])); ?>">Se bilag</a></td>
     </tr>
     <?php endforeach; ?>
 </tbody>
 </table>
 
-<?php if (round($post->get('list_saldo'), 2) == 0.00): // this is a hack - can be removed when the database uses mindste enhed ?>
-    <p class="advice"><a href="state.php">Bogfør posterne</a></p>
+<?php if (round($context->getPost()->get('list_saldo'), 2) == 0.00): // this is a hack - can be removed when the database uses mindste enhed ?>
+    <p class="advice"><a href="<?php e(url('state')); ?>">Bogfør posterne</a></p>
 <?php else: ?>
     <p class="error">Kassekladden stemmer ikke. Der er en difference på <?php e(amountToOutput($post->get('list_saldo'))); ?>.</p>
 <?php endif; ?>
@@ -335,7 +336,7 @@ $values = $context->getValues(); ?>
 <?php if ($context->getKernel()->setting->get('user', 'accounting.daybook_cheatsheet')== 'true'): ?>
 
 <table summary="" id="accounting-cheatsheet">
-    <caption>Hjælp - hvad er nu debet og kredit? <a href="<?php e($context->url()); ?>?quickhelp=false" id="accounting-cheatsheet-link">(Skjul)</a></caption>
+    <caption>Hjælp - hvad er nu debet og kredit? <a href="<?php e($context->url(null, array('quickhelp' => 'false'))); ?>" id="accounting-cheatsheet-link">(Skjul)</a></caption>
     <tr>
         <th></th>
         <th>Debet</th>
@@ -359,7 +360,7 @@ $values = $context->getValues(); ?>
 </table>
 <?php else: ?>
     <ul class="options">
-    <li><a href="<?php e($_SERVER['PHP_SELF']); ?>?quickhelp=true">Slå hurtighjælp til</a></li>
+    	<li><a href="<?php e(url(null, array('quickhelp' => 'true'))); ?>">Slå hurtighjælp til</a></li>
     </ul>
 
 

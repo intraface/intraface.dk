@@ -2,6 +2,8 @@
 class Intraface_modules_accounting_Controller_Daybook extends k_Component
 {
     protected $registry;
+    protected $post;
+    protected $voucher;
 
     protected function map($name)
     {
@@ -19,8 +21,6 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
     {
         if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
             $this->getKernel()->setting->set('user', 'accounting.daybook.message', 'hide');
-        } elseif (!empty($_GET['view']) AND in_array($_GET['view'], array('income', 'expenses', 'classic', 'debtor'))) {
-            $this->getKernel()->setting->set('user', 'accounting.daybook_view', $_GET['view']);
         } elseif (!empty($_GET['quickhelp']) AND in_array($_GET['quickhelp'], array('true', 'false'))) {
             $this->getKernel()->setting->set('user', 'accounting.daybook_cheatsheet', $_GET['quickhelp']);
             if (isAjax()) {
@@ -28,8 +28,13 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
                 exit;
             }
         }
+        /*
+        elseif (!empty($_GET['view']) AND in_array($_GET['view'], array('income', 'expenses', 'classic', 'debtor'))) {
+            $this->getKernel()->setting->set('user', 'accounting.daybook_view', $_GET['view']);
+        }
+        */
 
-        $tpl = new k_Template(dirname(__FILE__) . '/templates/daybook.tpl.php');
+         $tpl = new k_Template(dirname(__FILE__) . '/templates/daybook.tpl.php');
         return $tpl->render($this);
     }
 
@@ -51,27 +56,33 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
         return new Intraface_modules_accounting_YearGateway($this->getKernel());
     }
 
-    function POST()
+    function postForm()
     {
-        $this->getVoucher();
+        //$this->getVoucher();
         // tjek om debet og credit account findes
-        $voucher = Voucher::factory($this->getYear(), $_POST['voucher_number']);
+        //$voucher = Voucher::factory($this->getYear(), $_POST['voucher_number']);
+        $voucher = $this->getVoucher($_POST['voucher_number']);
         if ($id = $voucher->saveInDaybook($_POST)) {
-            header('Location: daybook.php?from_post_id='.$id);
-            exit;
-        } else {
-            $values = $_POST;
+            return new k_SeeOther($this->url(null, array('flare' => 'Post has been added', 'view' => $this->query('view'))));
         }
+        return $this->render();
     }
 
-    function getVoucher()
+    function getVoucher($voucher_number = null)
     {
         require_once dirname(__FILE__) . '/../Voucher.php';
-        return new Voucher($this->getYear());
+
+        if (is_object($this->voucher)) {
+    	    return $this->voucher;
+    	}
+        return ($this->voucher = new Voucher($this->getYear(), $voucher_number));
     }
 
     function getValues()
     {
+        if (!empty($_POST)) {
+            return $_POST;
+        }
         $values['voucher_number'] = $this->getVoucher()->getMaxNumber() + 1;
         $values['date'] = date('d-m-Y');
         $values['debet_account_number'] = '';
@@ -91,7 +102,19 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
 
     function getPost()
     {
-    	return new Post($this->getVoucher());
+    	if (is_object($this->post)) {
+    	    return $this->post;
+    	}
+        return ($this->post = new Post($this->getVoucher()));
     }
 
+    function getPostsInDraft()
+    {
+        return $this->getPost()->getList('draft');
+    }
+
+    function t($phrase)
+    {
+        return $phrase;
+    }
 }
