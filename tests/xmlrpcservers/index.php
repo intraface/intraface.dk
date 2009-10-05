@@ -6,8 +6,6 @@ require_once 'konstrukt/konstrukt.inc.php';
 //set_error_handler('k_exceptions_error_handler');
 spl_autoload_register('k_autoload');
 
-XML_RPC2_Backend::setBackend('php');
-// XML_RPC2_Backend::setBackend('xmlrpcext'); @todo tests består ikke med denne slået til.
 $HTTP_RAW_POST_DATA = file_get_contents('php://input');
 
 require_once 'phemto.php';
