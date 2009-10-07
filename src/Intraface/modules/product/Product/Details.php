@@ -25,7 +25,7 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         $this->hasColumn('product_id', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
         $this->hasColumn('number', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
         $this->hasColumn('name', 'string', 255, array('type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true, 'notblank' => true));
-        $this->hasColumn('description', 'string', null, array('type' => 'string', 'notnull' => true));
+        $this->hasColumn('description', 'string', null, array('type' => 'string', 'notnull' => true, 'default' => ''));
         $this->hasColumn('price', 'float', 11, array('type' => 'float', 'length' => 11, 'default' => '0.00', 'notnull' => true));
         $this->hasColumn('before_price', 'float', 11, array('type' => 'float', 'length' => 11, 'default' => '0.00', 'notnull' => true));
         $this->hasColumn('weight', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
@@ -33,7 +33,7 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         $this->hasColumn('vat', 'integer', 1, array('type' => 'integer', 'length' => 1, 'default' => '1', 'notnull' => true));
         // $this->hasColumn('show_unit', 'enum', 3, array('type' => 'enum', 'length' => 3, 'values' => array(0 => 'Yes', 1 => 'No'), 'default' => 'No', 'notnull' => true));
         // $this->hasColumn('pic_id', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
-        $this->hasColumn('changed_date', 'timestamp', null, array('type' => 'timestamp', 'default' => '0000-00-00 00:00:00', 'notnull' => true));
+        $this->hasColumn('changed_date', 'timestamp', null, array('type' => 'timestamp', 'default' => new Doctrine_Expression('NOW()'), 'notnull' => true));
         // $this->hasColumn('do_show', 'integer', 1, array('type' => 'integer', 'length' => 1, 'default' => '1', 'notnull' => true));
         $this->hasColumn('active', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
         $this->hasColumn('state_account_id', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
@@ -48,12 +48,22 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
     {
         $this->actAs('Intraface_Doctrine_Template_Intranet');
         
+        $this->actAs('I18n', array(
+                'fields' => array('name', 'description'),
+                'tableName' => 'product_detail_translation'
+            )
+        );
+        
+        $this->hasMutator('price', 'setPrice');
+        $this->hasMutator('before_price', 'setBeforePrice');
+        $this->hasMutator('weight', 'setWeight');
+        
         // $this->hasOne('Intraface_modules_product_ProductDoctrine as product', array('local' => 'product_id', 'foreign' => 'id'));
     }
     
     function validate()
     {
-        // print($this->state().'d'..'ff');
+        // product_id is an object of Intraface_modules_product_ProductDoctrine until the product is saved.
         if(is_object($this->product_id)) {
             $product_id = 0;
         } else {
@@ -78,26 +88,21 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
     
     public function preSave($event)
     {
-        if(is_object($this->price)) {
-            $this->price = $this->price->getAsIso();
+        # If we update details and translation fields are changed, we do not want to
+        # update translation, but instead want to update this record, so the changes are
+        # saved.
+        if($this->state() == Doctrine_Record::STATE_CLEAN || $this->state() == Doctrine_Record::STATE_DIRTY) {
+            foreach($this->Translation AS $translation) {
+                if($translation->state() == Doctrine_Record::STATE_DIRTY) {
+                    $translation->state(Doctrine_Record::STATE_CLEAN);
+                    $this->state(Doctrine_Record::STATE_DIRTY);
+                }
+            }
         }
-        
-        if(is_object($this->before_price)) {
-            $this->before_price = $this->before_price->getAsIso();
-        }
-        
-        if(is_object($this->weight)) {
-            $this->weight = $this->weight->getAsIso();
-        }
-        
-        if(is_null($this->description)) $this->description = '';
-        
-        if($this->state_account_id == '') $this->state_account_id = 0;
     }
     
     public function preInsert($event)
-    {
-        
+    {        
         if(empty($this->number)) {
             /**
              * @TODO: We should have gateway as parameter instead
@@ -107,7 +112,7 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         }
         
         $this->active = 1;
-        $this->changed_date = new Doctrine_Expression('NOW()');
+        $this->set('changed_date', new Doctrine_Expression('NOW()'));
         
     }
     
@@ -116,12 +121,34 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         $values = $this->toArray();
         unset($values['id']);
         unset($values['changed_date']);
+        foreach($values['Translation'] AS $key => $tmp) {
+            unset($values['Translation'][$key]['id']);
+        }
+        
+        // set methods require Ilib_Variable_Float objects, so we make sure it is objects
+        $values['price'] = $this->getPrice();
+        $values['before_price'] = $this->getBeforePrice();
+        $values['weight'] = $this->getWeight();
+        
         $new = new Intraface_modules_product_Product_Details;
         $new->fromArray($values);
         $new->save();
         
         $this->refresh();
         $this->active = 0;
+    }
+    
+    /**
+     * Returns translation object
+     */
+    public function getTranslation($language) 
+    {
+        if(isset($this->Translation[$language])) {
+            return $this->Translation[$language];
+        }
+        
+        // This might be to dramatic
+        throw new Exception('Invalid language '.$language);
     }
 
     /**
@@ -132,16 +159,6 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
     function getId()
     {
         return $this->id;
-    }
-    
-    /**
-     * Returns name of product
-     * 
-     * @return string name
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -154,10 +171,6 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         return $this->number;
     }
     
-    public function getDescription()
-    {
-        return $this->description;
-    }
     
     /**
      * Returns the price of the product
@@ -166,12 +179,20 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
      */
     public function getPrice()
     {
-        if(is_object($this->price)) {
-            return $this->price;
-        }
-        return new Ilib_Variable_Float($this->price);
+        return new Ilib_Variable_Float((float)$this->_get('price'));
     }
-
+    
+    /**
+     * Used to set price
+     * 
+     * @param object $price Ilib_Variable_Float
+     * @return void
+     */
+    public function setPrice(Ilib_Variable_Float $price)
+    {
+        $this->_set('price', $price->getAsIso());
+    }
+    
     /**
      * Returns the price of the product in given currency
      *
@@ -207,6 +228,12 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         return new Ilib_Variable_Float($this->getPriceIncludingVat()->getAsIso() / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100));
     }
     
+    public function setBeforePrice(Ilib_Variable_Float $value)
+    {
+        $this->_set('before_price', $value->getAsIso());
+    } 
+    
+    
     /**
      * Returns the before price of the product
      *
@@ -214,9 +241,6 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
      */
     public function getBeforePrice()
     {
-        if(is_object($this->before_price)) {
-            return $this->before_price;
-        }
         return new Ilib_Variable_Float($this->before_price);
     }
 
@@ -254,6 +278,16 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
     {
         return new Ilib_Variable_Float($this->getBeforePriceIncludingVat()->getAsIso() / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100));
     }
+    
+    /**
+     * Sets the weight
+     * @param object $value Ilib_Value_Float
+     * @return void
+     */
+    public function setWeight(Ilib_Variable_Float $value) 
+    {
+        $this->_set('weight', $value->getAsIso());
+    }
 
     /**
      * Returns the weight of the product
@@ -262,9 +296,6 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
      */
     public function getWeight()
     {
-        if(is_object($this->weight)) {
-            return $this->weight;
-        }
         return new Ilib_Variable_Float($this->weight);
     }
     
