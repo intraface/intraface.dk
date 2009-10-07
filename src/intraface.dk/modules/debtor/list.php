@@ -133,7 +133,7 @@ $page->start(__($debtor->get('type').'s'));
         <?php endif; ?>
         <li><a href="select_contact.php?type=<?php e($debtor->get("type")); ?>"><?php e(__('create '.$debtor->get('type'))); ?></a></li>
     <?php endif; ?>
-    <li><a class="excel" href="export_excel.php?type=<?php e($debtor->get('type')); ?>&amp;use_stored=true">Exporter liste til Excel</a></li>
+    <li><a class="excel" href="export_excel.php?type=<?php e($debtor->get('type')); ?>&amp;use_stored=true">Exporter liste til Excel</a><?php if($debtor->get('type') == 'invoice'): ?> (<a href="export_excel_doctrine.php?type=<?php e($debtor->get('type')); ?>&amp;use_stored=true">simpel</a>)<?php endif; ?></li>
 </ul>
 
 

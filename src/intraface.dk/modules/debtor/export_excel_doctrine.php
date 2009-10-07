@@ -11,11 +11,25 @@ if (empty($_GET['id'])) $_GET['id'] = '';
 if (empty($_GET['type'])) $_GET['type'] = '';
 
 $debtor = Debtor::factory($kernel, intval($_GET["id"]), $_GET["type"]);
-$debtor->getDbQuery()->storeResult("use_stored", $debtor->get("type"), "toplevel");
+$dbquery = $debtor->getDbQuery();
+$type = $debtor->get('type');
+unset($debtor);
 
-$posts = $debtor->getList();
-// var_dump($debtor->getDbQuery()->getFilter('status')); die;
+$dbquery->storeResult("use_stored", $type, "toplevel");
+$dbquery->loadStored();
+
+$gateway = new Intraface_modules_debtor_DebtorDoctrineGateway(Doctrine_Manager::connection(), $kernel->user);
 // echo number_format(memory_get_usage())." After gateway initializd<br />"; die;
+$posts = $gateway->findByDbQuerySearch($dbquery);
+
+/*
+echo '<pre>';
+var_dump($posts->getFirst()->toArray()); die();
+print_r($posts->toArray(true));
+echo '</pre>';
+echo number_format(memory_get_usage())." After gateway initializd<br />"; die;
+*/
+
 // spreadsheet
 $workbook = new Spreadsheet_Excel_Writer();
 
@@ -49,23 +63,23 @@ $status_types = array(
     3 => 'Annulleret');
 
 $worksheet->write($i, 0, 'Status', $format_italic);
-$worksheet->write($i, 1, $status_types[$debtor->getDbQuery()->getFilter('status')], $format_italic);
+$worksheet->write($i, 1, $status_types[$dbquery->getFilter('status')], $format_italic);
 $i++;
 
 $worksheet->write($i, 0, 'Søgetekst', $format_italic);
-$worksheet->write($i, 1, $debtor->getDbQuery()->getFilter('text'), $format_italic);
+$worksheet->write($i, 1, $dbquery->getFilter('text'), $format_italic);
 $i++;
 
-if ($debtor->getDbQuery()->checkFilter('product_id')) {
-    $product = new Product($kernel, $debtor->getDbQuery()->getFilter('product_id'));
+if ($dbquery->checkFilter('product_id')) {
+    $product = new Product($kernel, $dbquery->getFilter('product_id'));
 
     $worksheet->write($i, 0, 'Produkt', $format_italic);
     $worksheet->write($i, 1, $product->get('name'), $format_italic);
     $i++;
 }
 
-if ($debtor->getDbQuery()->checkFilter('contact_id')) {
-    $contact = new Contact($kernel, $debtor->getDbQuery()->getFilter('contact_id'));
+if ($dbquery->checkFilter('contact_id')) {
+    $contact = new Contact($kernel, $dbquery->getFilter('contact_id'));
 
     $worksheet->write($i, 0, 'Kontakt', $format_italic);
     $worksheet->write($i, 1, $contact->address->get('name'), $format_italic);
@@ -86,7 +100,7 @@ $worksheet->write($i, 5, 'Oprettet', $format_bold);
 $worksheet->write($i, 6, 'Sendt', $format_bold);
 //$worksheet->write($i, 7, __("due_date"), $format_bold);
 $c = 8;
-if ($debtor->get('type') == 'invoice') {
+if ($type == 'invoice') {
     $worksheet->write($i, $c, 'Forfaldsbeløb', $format_bold);
     $c++;
 }
@@ -98,11 +112,6 @@ if (!empty($product) && is_object($product) && get_class($product) == 'product')
     $c++;
 }
 
-// HACK unsetting debtor which is actually ok to avoid memory problems //
-$type = $debtor->get('type');
-unset($debtor);
-// HACK end //
-
 $i++;
 
 $due_total = 0;
@@ -110,40 +119,46 @@ $sent_total = 0;
 $total = 0;
 
 if (count($posts) > 0) {
-    for ($j = 0, $max = count($posts); $j < $max; $j++) {
+    foreach($posts AS $debtor) {
 
-        if ($posts[$j]["due_date"] < date("Y-m-d") && ($posts[$j]["status"] == "created" OR $posts[$j]["status"] == "sent")) {
-            $due_total += $posts[$i]["total"];
+        if (strtotime($debtor->getDueDate()->getAsIso()) < time() && ($debtor->getStatus() == "created" OR $debtor->getStatus() == "sent")) {
+            $due_total += $debtor->getTotal()->getAsIso(2);
         }
-        if ($posts[$j]["status"] == "sent") {
-            $sent_total += $posts[$j]["total"];
+        if ($debtor->getStatus() == "sent") {
+            $sent_total += $debtor->getTotal()->getAsIso(2);
         }
-        $total += $posts[$j]["total"];
+        $total += $debtor->getTotal()->getAsIso(2);
 
-        $worksheet->write($i, 0, $posts[$j]["number"]);
-        $worksheet->write($i, 1, $posts[$j]['contact']['number']);
-        $worksheet->write($i, 2, $posts[$j]["name"]);
-        $worksheet->write($i, 3, $posts[$j]["description"]);
-        $worksheet->writeNumber($i, 4, $posts[$j]["total"]);
-        $worksheet->write($i, 5, $posts[$j]["dk_this_date"]);
+        /**
+         * @todo this could be done with Doctrine, but this seems only to have minimal memory usage
+         */
+        $contact = new Contact($kernel, $debtor->contact_id);
+        $worksheet->write($i, 0, $debtor->getNumber());
+        $worksheet->write($i, 1, $contact->get('number')); // $posts[$j]['contact']['number']
+        $worksheet->write($i, 2, $contact->get('name')); 
+        $worksheet->write($i, 3, $debtor->getDescription());
+        $worksheet->writeNumber($i, 4, $debtor->getTotal()->getAsIso());
+        $worksheet->write($i, 5, $debtor->getDebtorDate()->getAsLocal('da_DK'));
 
-        if ($posts[$j]["status"] != "created") {
-            $worksheet->write($i, 6, $posts[$j]["dk_date_sent"]);
+        if ($debtor->getStatus() != "created") {
+            $worksheet->write($i, 6, $debtor->getDateSent()->getAsLocal('da_DK'));
         } else {
             $worksheet->write($i, 6, "Nej");
         }
 
-        if ($posts[$j]["status"] == "executed" || $posts[$j]["status"] == "canceled") {
-            $worksheet->write($i, 7, __($posts[$j]["status"], 'debtor'));
+        if ($debtor->getStatus() == "executed" || $debtor->getStatus() == "canceled") {
+            $worksheet->write($i, 7, __($debtor->getStatus(), 'debtor'));
         } else {
-            $worksheet->write($i, 7, $posts[$j]["dk_due_date"]);
+            $worksheet->write($i, 7, $debtor->getDueDate()->getAsLocal('da_DK'));
         }
         $c = 8;
         if ($type == 'invoice') {
-            $worksheet->write($i, $c, $posts[$j]['arrears']);
+            $worksheet->write($i, $c, '-'); // $posts[$j]['arrears']
             $c++;
         }
 
+        /*
+        // not implemented
         $keywords = array();
         $contact = new Contact($kernel, $posts[$j]['contact']['id']);
         $appender = $contact->getKeywordAppender();
@@ -155,8 +170,10 @@ if (count($posts) > 0) {
             }
             $worksheet->write($i, $c, implode(', ', $keywords));
             $c++;
-        }
+        }*/
 
+        /*
+        // not implemented
         if (!empty($product) && is_object($product) && get_class($product) == 'product') {
             $quantity_product = 0;
             if (count($posts[$j]['items']) > 0) {
@@ -168,7 +185,7 @@ if (count($posts) > 0) {
             }
             $worksheet->write($i, $c, $quantity_product);
             $c++;
-        }
+        }*/
 
         $i++;
 
@@ -190,7 +207,8 @@ $i++;
 $worksheet->write($i, 0, 'Total:', $format_italic);
 $worksheet->write($i, 1, number_format($total, 2, ",","."), $format_italic);
 $i++;
-// $worksheet->write($i, 0, number_format(memory_get_usage()));
+
+$worksheet->write($i, 0, number_format(memory_get_usage()));
 
 $worksheet->hideGridLines();
 
