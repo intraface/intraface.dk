@@ -17,6 +17,9 @@ class DebtorItemTest extends PHPUnit_Framework_TestCase
         $db->query('TRUNCATE debtor_item');
         $db->query('TRUNCATE product');
         $db->query('TRUNCATE product_detail');
+        $db->query('TRUNCATE product_detail_translation');
+        
+        
     }
     
     

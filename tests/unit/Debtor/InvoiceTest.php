@@ -25,6 +25,7 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
         $db->exec('TRUNCATE debtor_item');
         $db->exec('TRUNCATE product');
         $db->exec('TRUNCATE product_detail');
+        $db->exec('TRUNCATE product_detail_translation');
         $db->exec('TRUNCATE accounting_account');
         $db->exec('TRUNCATE accounting_post');
         $db->exec('TRUNCATE accounting_year');
