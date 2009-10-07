@@ -74,9 +74,20 @@ class Intraface_modules_product_ProductDoctrineGateway
      *
      * @return object collection containing products
      */
-    public function findBySearch($search)
+    public function findBySearch($search = '')
     {
-        
+        $collection = $this->table
+            ->createQuery()
+            ->select('*, details.*, variation.id, variation.*, variation_detail.*')
+            ->innerJoin('Intraface_modules_product_ProductDoctrine.details details')
+            ->leftJoin('Intraface_modules_product_ProductDoctrine.variation variation')
+            ->innerJoin('variation.detail variation_detail')
+            ->addWhere('active = 1')
+            ->addOrderBy('details.number')
+            // ->getSql(); die($collection);
+            ->execute(array(), Doctrine::HYDRATE_ARRAY);
+    
+        return $collection;
     }
     
     

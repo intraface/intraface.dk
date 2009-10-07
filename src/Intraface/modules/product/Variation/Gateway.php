@@ -86,8 +86,11 @@ class Intraface_modules_product_Variation_Gateway
         }
         
         // We make sure it is possible also to find deleted variations, as they can be present on debtors.
-        $collection = $query->where(get_class($this->variation).'.product_id = ? AND '.get_class($this->variation).'.id = ? '.
-            'AND ('.get_class($this->variation).'.deleted_at IS NULL OR '.get_class($this->variation).'.deleted_at IS NOT NULL)', array($this->product->getId(), $id))->execute();
+        $query = $query->where(get_class($this->variation).'.product_id = ? AND '.get_class($this->variation).'.id = ? '.
+            'AND ('.get_class($this->variation).'.deleted_at IS NULL OR '.get_class($this->variation).'.deleted_at IS NOT NULL)', array($this->product->getId(), $id));
+        $query = $query->addOrderBy('number, detail.date_created DESC');
+        
+        $collection = $query->execute();
         $query->free(true);
         
         if (!$collection || $collection->count() == 0) {
@@ -96,7 +99,7 @@ class Intraface_modules_product_Variation_Gateway
         if ($collection->count() > 1) {
             throw new Exception('More than one entry found!');
         }
-        return $collection->getFirst();    
+        return $collection->getFirst();
     }
     
     /**
@@ -115,7 +118,10 @@ class Intraface_modules_product_Variation_Gateway
             $query->innerJoin(get_class($this->variation).'.attribute2 a2 WITH a2.attribute_number = 2 AND a2.product_attribute_id = ?', array($value['attribute2']));
         }
         
-        $collection = $query->where(get_class($this->variation).'.product_id = ?', $this->product->getId())->execute();
+        $query = $query->where(get_class($this->variation).'.product_id = ?', $this->product->getId());
+        $query = $query->addOrderBy('number, detail.date_created DESC');
+        
+        $collection = $query->execute();
         $query->free(true);
         
         if (!$collection || $collection->count() == 0) {
@@ -155,6 +161,8 @@ class Intraface_modules_product_Variation_Gateway
             
         }
         $query = $query->where(get_class($this->variation).'.product_id = ?', $this->product->getId());
+        $query = $query->addOrderBy('number, detail.date_created DESC');
+        
         $collection = $query->execute();
         $query->free(true);
         

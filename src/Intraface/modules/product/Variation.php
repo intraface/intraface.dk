@@ -36,13 +36,35 @@ class Intraface_modules_product_Variation extends Doctrine_Record
         }
 
     }
-
+    
+    /**
+     * Returns detail object
+     * 
+     * @param $id
+     * @return object Intraface_modules_product_Variation_Detail
+     */
     public function getDetail($id = 0)
     {
         if ($this->id === NULL) {
             throw new Exception('You can first get detail when variation is saved');
         }
+        
+        if($id != 0) {
+            foreach($this->detail AS $detail) {
+                if($detail->getId() == $id) {
+                    return $detail;
+                }
+            }
+            throw new Exception('Unable to find detail with id '.$id);
+        } elseif($this->detail->count() > 0) {
+            return $this->detail->getFirst();
+        } else {
+            $detail = new Intraface_modules_product_Variation_Detail;
+            $detail->product_variation_id = $this->getId();
+            return $detail;
+        }
 
+        /*
         $collection = $this->detail;
         if ($collection->count() == 0) {
             $detail = new Intraface_modules_product_Variation_Detail;
@@ -68,6 +90,7 @@ class Intraface_modules_product_Variation extends Doctrine_Record
             ->orderBy('date_created DESC')
             ->execute();
         return $collection->getFirst();
+        */
     }
 
     public function getStock($product = NULL)

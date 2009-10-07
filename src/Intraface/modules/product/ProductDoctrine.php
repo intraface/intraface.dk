@@ -27,7 +27,7 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
      * 
      * @var object with active details
      */
-    private $active_details;
+    public $active_details;
     
     /**
      * Doctrine table definitin
@@ -40,24 +40,21 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
         $this->hasColumn('do_show', 'integer', 1, array('type' => 'integer', 'length' => 1, 'default' => '1', 'notnull' => true));
         $this->hasColumn('has_variation', 'integer', 1, array('type' => 'integer', 'length' => 1, 'default' => '0', 'notnull' => true));
         $this->hasColumn('active', 'integer', 1, array('type' => 'integer', 'length' => 1, 'default' => '1', 'notnull' => true));
-        $this->hasColumn('changed_date', 'timestamp', null, array('type' => 'timestamp', 'default' => '0000-00-00 00:00:00', 'notnull' => true));
+        $this->hasColumn('changed_date', 'timestamp', null, array('type' => 'timestamp', 'default' => new Doctrine_Expression('NOW()'), 'notnull' => true));
         // $this->hasColumn('quantity', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
         $this->hasColumn('stock', 'integer', 1, array('type' => 'integer', 'length' => 1, 'default' => '0', 'notnull' => true));
         // $this->hasColumn('locked', 'integer', 1, array('type' => 'integer', 'length' => 1, 'default' => '0', 'notnull' => true));
     }
-    
+ 
     public function preInsert($event)
     {
         $this->changed_date = new Doctrine_Expression('NOW()');
+        
         # If details are not valid, we do not want to save the product.
-        
-        
         if(is_object($this->active_details)) {
             # We validate the details
             $this->active_details->isValid();
-            
             $errors =& $this->active_details->getErrorStack();
-            
             if($errors->count() > 1 && $errors->contains('product_id')) {
                 $errors->remove('product_id');
                 throw new Doctrine_Validator_Exception(array());
@@ -66,7 +63,7 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
         }
         
     }
-    
+   
     public function setUp()
     {
         $this->actAs('Intraface_Doctrine_Template_Intranet');
@@ -74,7 +71,8 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
         $this->hasMany('Intraface_modules_product_Product_Details as details',
             array('local' => 'id', 'foreign' => 'product_id'));
             
-        $this->hasMany('Intraface_modules_product_Variation as variation', array('local' => 'id', 'foreign' => 'product_id'));    
+        $this->hasMany('Intraface_modules_product_Variation as variation', 
+            array('local' => 'id', 'foreign' => 'product_id'));    
     }
 
     /**
@@ -113,6 +111,25 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
     }
     
     /**
+     * returns variation
+     */
+    public function getVariation($id = 0)
+    {
+        if($id != 0) {
+            foreach($this->variation AS $variation) {
+                if($variation->getId() == $id) {
+                    return $variation;
+                }
+            }
+            throw new Exception('Unable to find variation with id '.$id);
+        }
+        
+        $variation = $this->variation->get(NULL); // returns empty variation;
+        $variation->product_id = $this->getId();
+        return $variation;
+    }
+    
+    /**
      * Returns whether product is active
      * @return boolean true or false;
      */
@@ -134,17 +151,30 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
         if($id == NULL) {
             if(empty($this->active_details)) {
                 if($this->details->count() == 0) {
+                    // Add an empty details entry.
                     $this->active_details = $this->details->get(NULL);
                 } else {
-                    $this->active_details = $this->details->getLast();
-            
+                    // Find the active details
+                    foreach($this->details AS $details) {
+                        if($details->active == 1) {
+                            $this->active_details = $details;
+                        }
+                    }
+                    if(empty($this->active_details)) {
+                        throw new Exception('Unable to find active details');
+                    }
                 }
             }
             
             return $this->active_details;
         }
         else {
-            return $this->active_details = $this->details[$id];
+            foreach($this->details AS $detail) {
+                if($detail->getId() == $id) {
+                    return $this->active_details = $detail;
+                }
+            }
+            throw new Exception('Unable to find detail with id '.$id);
         }
     }
     
@@ -155,6 +185,18 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
     public function showInShop()
     {
         return $this->do_show;
+    }
+    
+    /**
+     * Make sures active details is also refreshed.
+     * 
+     * @param $depth boolean true or false
+     * @return void
+     */
+    public function refresh($depth = false) 
+    {
+        $this->active_details = NULL;
+        parent::refresh($depth);
     }
 
 }

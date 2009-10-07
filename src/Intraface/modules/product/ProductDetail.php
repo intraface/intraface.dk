@@ -57,7 +57,7 @@ class ProductDetail extends Intraface_Standard
         $this->product       = $product;
         $this->db            = new DB_Sql;
         $this->old_detail_id = (int)$old_detail_id;
-        $this->fields        = array('number', 'name', 'description', 'price', 'before_price', 'unit', 'do_show', 'vat', 'weight', 'state_account_id');
+        $this->fields        = array('number', 'price', 'before_price', 'do_show', 'vat', 'weight', 'state_account_id');
         $this->detail_id     = $this->load();
     }
 
@@ -69,35 +69,37 @@ class ProductDetail extends Intraface_Standard
     private function load()
     {
         if ($this->old_detail_id != 0) {
-            $sql = "id = ".$this->old_detail_id;
+            $sql = "product_detail.id = ".$this->old_detail_id;
         } else {
             $sql = "active = 1";
         }
 
-        $sql = "SELECT id, ".implode(',', $this->fields)." FROM product_detail WHERE ".$sql . "
+        $sql = "SELECT product_detail.id, product_detail.unit AS unit_key,".implode(',', $this->fields).", product_detail_translation.name, product_detail_translation.description FROM product_detail 
+            LEFT JOIN product_detail_translation ON product_detail.id = product_detail_translation.id AND product_detail_translation.lang = 'da'
+            WHERE ".$sql . "
             AND product_id = " . $this->product->get('id') . ' AND intranet_id = ' . $this->product->intranet->getId();
         $this->db->query($sql);
         if ($this->db->numRows() > 1) {
-            trigger_error('Systemfejl', 'Der er mere end en aktiv produktdetalje', E_USER_ERROR);
+            trigger_error('Der er mere end en aktiv produktdetalje', E_USER_ERROR);
         } elseif ($this->db->nextRecord()) {
             // hardcoded udtræk af nogle vigtige oplysnigner, som vi ikke kan have i feltlisten
             for ($i = 0, $max = count($this->fields); $i<$max; $i++) {
                 $this->value[$this->fields[$i]] = $this->db->f($this->fields[$i]);
             }
+            $this->value['name'] = $this->db->f('name');
+            $this->value['description'] = $this->db->f('description');
+            $this->value['unit_key'] = $this->db->f('unit_key');
 
             // unit skal skrives om til den egentlige unit alt efter settings i produkterne
             $this->value['detail_id'] = $this->db->f('id');
-            $this->value['unit_id']   = $this->db->f('unit');
-
-
-
-            $unit = $this->getUnits($this->db->f('unit'));
+            
+            $unit = $this->getUnits($this->db->f('unit_key'));
             if (empty($unit)) {
-                trigger_error('invalid unit '.$this->db->f('unit').'!', E_USER_ERROR);
+                trigger_error('invalid unit '.$this->db->f('unit_key').'!', E_USER_ERROR);
                 exit;
             }
 
-            $this->value['unit_key'] = $this->db->f('unit');
+            $this->value['unit_id']   = $this->db->f('unit_key');
             $this->value['unit']     = $unit;
 
             // udregne moms priser ud fra prisen, men kun hvis der er moms på den
@@ -182,73 +184,64 @@ class ProductDetail extends Intraface_Standard
             return false;
         }
 
-        $this->db->query("SELECT * FROM product_detail WHERE id = ".$this->detail_id . "
-                AND product_id = " . $this->product->get('id') . ' AND intranet_id = ' . $this->product->intranet->getId());
+        // $this->db->query("SELECT * FROM product_detail WHERE id = ".$this->detail_id . "
+        //         AND product_id = " . $this->product->get('id') . ' AND intranet_id = ' . $this->product->intranet->getId());
 
-        if ($this->db->nextRecord()) {
+        if ($this->detail_id != 0) { // $this->db->nextRecord()
             // her skal vi sørge for at få billedet med
             $do_update = 0;
             $sql       = '';
-            /*
-            for ($i=0, $max = sizeof($this->fields); $i<$max; $i++) {
-                if (!array_key_exists($this->fields[$i], $array_var)) {
-                    continue;
-                }
-                if (isset($array_var[$this->fields[$i]])) {
-                    $sql .= $this->fields[$i]." = '".$array_var[$this->fields[$i]]."', ";
-                } else {
-                    $sql .= $this->fields[$i]." = '', ";
-                }
-                if (isset($array_var[$this->fields[$i]]) AND $this->db->f($this->fields[$i]) != $array_var[$this->fields[$i]] OR (is_numeric($this->db->f($this->fields[$i]) AND $this->db->f($this->fields[$i])) > 0)) {
-                    $do_update = 1;
-                }
-            }
-            */
+            
+            // check if there is any changes and only update changes.
             foreach ($this->fields as $field) {
-                /*
-                if (!array_key_exists($field, $array_var)) {
-                    continue;
-                }
-                */
-                if (!empty($array_var[$field])) {
+                if (isset($array_var[$field])) {
+                    if ($this->get($field) != $array_var[$field]) {
+                        $do_update = 1;
+                    }
+                    
                     $sql .= $field." = '".$array_var[$field]."', ";
-                } elseif (isset($array_var[$field])) {
-                    $sql .= $field . " = '', ";
                 } else {
-                    // why continue? /sune 3/12 2007
-                    // continue;
-                    // this might be another prober solution also for saving all known details
-                    // but we need to be aware of number also!
-                    $sql .= $field . " = '".$this->db->f($field)."', ";
+                    $sql .= $field." = '".$this->get($field)."', ";
                 }
-                if (isset($array_var[$field]) AND $this->db->f($field) != $array_var[$field] OR (is_numeric($this->db->f($field) AND $this->db->f($field)) > 0)) {
+            }
+            
+            if(isset($array_var['unit'])) {
+                if($array_var['unit'] != $this->get('unit_key')) {
                     $do_update = 1;
                 }
-
+                $sql .= "unit = '".$array_var['unit']."', ";
+            } else {
+                $sql .= "unit = '".$this->get('unit_key')."', ";
             }
-            if ($this->db->f('pic_id') > 0) {
-                $picture_id = $this->db->f('pic_id');
+            
+            if(isset($array_var['name'])) {
+                if($array_var['name'] != $this->get('name')) {
+                    $do_update = 1;
+                }
+            } else {
+                $array_var['name'] = $this->get('name');
             }
+            
+            if(isset($array_var['description'])) {
+                if($array_var['description'] != $this->get('description')) {
+                    $do_update = 1;
+                }
+            } else {
+                $array_var['description'] = $this->get('description');
+            }
+            
+            
         } else {
             // der er ikke nogen tidligere poster, så vi opdatere selvfølgelig
             $do_update = 1;
             $sql       = '';
             // we make sure that unit is set to a valid unit.
-            if (empty($array_var['unit'])) {
-                $array_var['unit'] = 1;
-            }
-            /*
-            for ($i=0, $max = sizeof($this->fields), $sql = ''; $i<$max; $i++) {
-                if (!array_key_exists($this->fields[$i], $array_var)) {
-                    continue;
-                }
-                if (isset($array_var[$this->fields[$i]])) {
-                    $sql .= $this->fields[$i]." = '".$array_var[$this->fields[$i]]."', ";
-                } else {
-                    $sql .= $this->fields[$i]." = '', ";
-                }
-            }
-            */
+            if (empty($array_var['unit'])) $array_var['unit'] = 1;
+            $sql .= "unit = ".intval($array_var['unit']).", ";
+            
+            if(!isset($array_var['name'])) $array_var['name'] = '';
+            if(!isset($array_var['description'])) $array_var['description'] = '';
+            
             foreach ($this->fields as $field) {
                 if (!array_key_exists($field, $array_var)) {
                     continue;
@@ -272,6 +265,8 @@ class ProductDetail extends Intraface_Standard
             $this->db->query("UPDATE product_detail SET active = 0 WHERE product_id = " . $this->product->get('id'));
             $this->db->query("INSERT INTO product_detail SET ".$sql." active = 1, changed_date = NOW(), product_id = " . $this->product->get('id') . ", intranet_id = " . $this->product->intranet->getId());
             $this->detail_id = $this->db->insertedId();
+            $this->db->query("INSERT INTO product_detail_translation SET name = \"".$array_var['name']."\", description = \"".$array_var['description']."\", lang = 'da', id = ".$this->detail_id);
+            
 
             $this->load();
             $this->product->load();
