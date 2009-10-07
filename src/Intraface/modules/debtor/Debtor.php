@@ -111,6 +111,18 @@ class Debtor extends Intraface_Standard
             $this->load();
         }
     }
+    
+    public function __desctruct() 
+    {
+        unset($this->kernel);
+        unset($this->db);
+        unset($this->error);
+        unset($this->dbquery);
+        unset($this->contact); // consider descruct
+        unset($this->contact_person); // consider descruct
+        unset($this->item); // consider desctruct
+        
+    }
 
     function getDBQuery()
     {
@@ -957,12 +969,12 @@ class Debtor extends Intraface_Standard
                 $list[$i]['city'] = $debtor->contact->address->get('city');
 
             }
-
+            $debtor->__desctruct();
+            unset($debtor);
             $i++;
 
         }
         unset($db);
-
         return $list;
     }
 
