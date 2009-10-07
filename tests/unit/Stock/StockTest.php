@@ -55,6 +55,7 @@ class StockTest extends PHPUnit_Framework_TestCase
         $db = MDB2::factory(DB_DSN);
         $db->query('TRUNCATE product');
         $db->query('TRUNCATE product_detail');
+        $db->query('TRUNCATE product_detail_translation');
         */
         $product = new FakeStockProduct($this->kernel);
 

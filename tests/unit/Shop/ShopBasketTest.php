@@ -96,6 +96,7 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $result = $db->query('TRUNCATE basket_details');
         $result = $db->query('TRUNCATE product');
         $result = $db->query('TRUNCATE product_detail');
+        $result = $db->query('TRUNCATE product_detail_translation');
         $result = $db->query('TRUNCATE product_attribute');
         $result = $db->query('TRUNCATE product_attribute_group');
         $result = $db->query('TRUNCATE product_attribute');

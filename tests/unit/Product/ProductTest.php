@@ -59,6 +59,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $db->query('TRUNCATE product_attribute');
         $db->query('TRUNCATE product_attribute_group');
         $db->query('TRUNCATE product_detail');
+        $db->query('TRUNCATE product_detail_translation');
         $db->query('TRUNCATE product_variation');
         $db->query('TRUNCATE product_variation_detail');
         $db->query('TRUNCATE product_variation_x_attribute');
