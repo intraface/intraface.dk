@@ -81,6 +81,8 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $result = $db->query('TRUNCATE basket');
         $result = $db->query('TRUNCATE basket_details');
         $result = $db->query('TRUNCATE product');
+        $result = $db->query('TRUNCATE product_detail');
+        $result = $db->query('TRUNCATE product_detail_translation');
     }
 
     function createKernel()
