@@ -97,7 +97,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $shared_email = $kernel->useShared('email');
         if ($debtor->getPaymentMethodKey() == 5 AND $debtor->getWhereToId() == 0) {
             try {
-                echo $debtor->getWhereFromId();
+                // echo $debtor->getWhereFromId();
+                /**
+                 * @todo We should use a shop gateway here instead
+                 */
                 $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById($debtor->getWhereFromId());
                 if ($shop) {
                     $payment_url = $debtor->getPaymentLink($shop->getPaymentUrl());
@@ -125,6 +128,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $filehandler = new FileHandler($kernel);
         $tmp_file = $filehandler->createTemporaryFile(__($debtor->get("type")).$debtor->get('number').'.pdf');
 
+        if (($debtor->get("type") == "order" || $debtor->get("type") == "invoice") && $kernel->intranet->hasModuleAccess('onlinepayment')) {
+            $kernel->useModule('onlinepayment', true); // true: ignore_user_access
+            $onlinepayment = OnlinePayment::factory($kernel);
+        } else {
+            $onlinepayment = NULL;
+        }
+        
         // Her gemmes filen
         $report = new Intraface_modules_debtor_Visitor_Pdf($translation, $file);
         $report->visit($debtor, $onlinepayment);
@@ -888,17 +898,16 @@ if (isset($onlinepayment)) {
                 }
             } catch (Doctrine_Record_Exeption $e) {
             }
-            if ($shop AND $shop->getPaymentUrl()):
-            ?>
-            <div class="warning">
-                Der burde være en onlinebetaling knyttet hertil. Måske har kunden fortrudt sit køb, eller også er der sket en fejl hos PBS under købet. Kunden kan betale på følgende link <?php e($payment_url); ?>. <a href="<?php e($_SERVER['PHP_SELF']); ?>?id=<?php e($debtor->getId()); ?>&amp;action=send_onlinepaymentlink">Skriv e-mail</a>.
-            </div>
+            if ($shop AND $shop->getPaymentUrl()): ?>
+                <div class="warning">
+                    Der burde være en onlinebetaling knyttet hertil. Måske har kunden fortrudt sit køb, eller også er der sket en fejl hos PBS under købet. Kunden kan betale på følgende link <?php e($payment_url); ?>. <a href="<?php e($_SERVER['PHP_SELF']); ?>?id=<?php e($debtor->getId()); ?>&amp;action=send_onlinepaymentlink">Skriv e-mail</a>.
+                </div>
             <?php else: ?>
-            <div class="warning">
-                Der burde være en onlinebetaling knyttet hertil. Hvis du skriver et betalingslink ind under shoppen, kan du automatisk sende en e-mail til vedkommende.
-            </div>
-
-        <?php endif; }
+                <div class="warning">
+                    Der burde være en onlinebetaling knyttet hertil. Hvis du skriver et betalingslink ind under shoppen, kan du automatisk sende en e-mail til vedkommende.
+                </div>
+            <?php endif; 
+        }
     }
     ?>
 <div style="clear:both;">

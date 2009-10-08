@@ -18,6 +18,7 @@ class Install_Helper_Shop {
         $shop->description = 'test';
         $shop->identifier = 'test';
         $shop->show_online = 1;
+        $shop->payment_link = '/demo/1/shop/1/basket/onlinepayment';
         $shop->confirmation = '';
         $shop->receipt = '<h3>Vi har modtaget din ordre</h3><p>Nu sker der følgende:</p><p>Vi sender, du pakker du</p>';
         
