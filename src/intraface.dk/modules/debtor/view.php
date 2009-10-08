@@ -1090,7 +1090,7 @@ if (count($reminders) > 0):
                     e($reminders[$i]["dk_date_sent"]);
                 }
                 else {
-                    e(t('No'));
+                    e(t('No', 'common'));
                 }
                 ?>
       </td>
@@ -1113,7 +1113,7 @@ if (count($reminders) > 0):
                     ?>
                     <a class="edit" href="reminder_edit.php?id=<?php e($reminders[$i]["id"]); ?>">Ret</a>
                     <?php if ($reminders[$i]["status"] == "created"): ?>
-                    <a class="delete" href="reminders.php?contact_id=<?php e($_GET["contact_id"]); ?>&amp;delete=<?php e($reminders[$i]["id"]); ?>">Slet</a>
+                    <a class="delete" href="reminders.php?delete=<?php e($reminders[$i]["id"]); ?>">Slet</a>
                     <?php endif; ?>
                     <?php
                 }
