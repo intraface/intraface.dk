@@ -16,7 +16,7 @@ define('PATH_UPLOAD_TEMPORARY', 'tempdir/');
 define('FILE_VIEWER', '');
 define('PATH_WWW', '');
 define('IMAGE_LIBRARY', 'GD');
-define('XMLRPC_SERVER_URL', 'http://intraface.dk/xmlrpc/');
+define('XMLRPC_SERVER_URL', 'http://localhost/intraface/tests/xmlrpcservers/');
 
 // Directory to move files to temporary in tests
 define('TEST_PATH_TEMP', '/var/lib/www/intraface_test/tmp/');
