@@ -101,9 +101,9 @@ $page->start('Indkøb');
     <thead>
         <tr>
             <th>Nr.</th>
-            <th>Fakturadato</th>
             <th>Beskrivelse</th>
             <th>Fra</th>
+            <th>Fakturadato</th>
             <th>Leveringsdato</th>
             <th>Betalingsdato</th>
             <th>Pris</th>
@@ -117,9 +117,6 @@ $page->start('Indkøb');
             ?>
             <tr>
                 <td><?php e($procurement["number"]); ?></td>
-                <td><?php e($procurement["dk_invoice_date"]); ?></td>
-
-
                 <td><a href="view.php?id=<?php e($procurement["id"]); ?>"><?php e($procurement["description"]); ?></a></td>
                 <td>
                     <?php
@@ -133,6 +130,7 @@ $page->start('Indkøb');
                     }
                     ?>
                 </td>
+                <td><?php e($procurement["dk_invoice_date"]); ?></td>
                 <td>
                     <?php
                     if ($procurement["status"] == "recieved") {
