@@ -1,7 +1,7 @@
 # Allready updated on server:
 
 ALTER TABLE `ilib_category` ADD `active` INT( 1 ) NOT NULL DEFAULT '1' ;
-ALTER TABLE `newsletter_subscriber` ADD `date_unsubscribe` DATE NOT NULL 
+ALTER TABLE `newsletter_subscriber` ADD `date_unsubscribe` DATE NOT NULL ;
 
 # New
 
