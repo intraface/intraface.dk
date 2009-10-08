@@ -15,6 +15,7 @@ php_value log_errors             on
 #Options FollowSymLinks Indexes
 #DirectoryIndex index.php
 
+Options FollowSymLinks
 RewriteEngine on
 
 RewriteCond %{REQUEST_FILENAME}  -d
