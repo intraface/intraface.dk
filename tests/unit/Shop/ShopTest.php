@@ -77,6 +77,15 @@ class ShopTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
+        $db = MDB2::factory(DB_DSN);
+        $result = $db->query('TRUNCATE currency');
+        $result = $db->query('TRUNCATE currency_exchangerate');
+        $result = $db->query('TRUNCATE contact');
+        $result = $db->query('TRUNCATE address');
+        $result = $db->query('TRUNCATE debtor');
+        $result = $db->query('TRUNCATE email');
+        
+        
         $this->kernel = new Intraface_Kernel;
         $this->kernel->intranet = new FakeShopIntranet;
         $this->kernel->weblogin = new FakeShopWeblogin;
@@ -115,7 +124,16 @@ class ShopTest extends PHPUnit_Framework_TestCase
 
     function testPlaceOrderWithWithCurrency()
     {
-
+        $currency = new Intraface_modules_currency_Currency;
+        $type = new Intraface_modules_currency_Currency_Type;
+        $currency->setType($type->getByIsoCode('EUR'));
+        $currency->save();
+        
+        $rate = new Intraface_modules_currency_Currency_ExchangeRate_ProductPrice;
+        $rate->setRate(new Ilib_Variable_Float('745,21', 'da_dk'));
+        $rate->setCurrency($currency);
+        $rate->save();
+        
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'currency' => 'EUR');
         $mailer = new FakePhpMailer;
         $order_id = $this->webshop->placeOrder($data, $mailer);
