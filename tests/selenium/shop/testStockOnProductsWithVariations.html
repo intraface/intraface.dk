@@ -82,29 +82,29 @@
 	<td></td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>attribute[0]</td>
-	<td>label=Small</td>
-</tr>
-<tr>
-	<td>select</td>
-	<td>attribute[1]</td>
-	<td>label=Red</td>
-</tr>
-<tr>
 	<td>assertTextPresent</td>
 	<td>DKK 125,00</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>add_product_id</td>
-	<td></td>
+	<td>assertAttribute</td>
+	<td>//div[@id='product']/form/div[1]/select[1]/option[2]@disabled</td>
+	<td>disabled</td>
 </tr>
 <tr>
-	<td>assertTextPresent</td>
-	<td>Variation is sold out</td>
-	<td></td>
+	<td>assertAttribute</td>
+	<td>//div[@id='product']/form/div[1]/select[1]/option[4]@disabled</td>
+	<td>disabled</td>
+</tr>
+<tr>
+	<td>assertAttribute</td>
+	<td>//div[@id='product']/form/div[2]/select[1]/option[3]@disabled</td>
+	<td>disabled</td>
+</tr>
+<tr>
+	<td>assertAttribute</td>
+	<td>//div[@id='product']/form/div[2]/select[1]/option[4]@disabled</td>
+	<td>disabled</td>
 </tr>
 <tr>
 	<td>select</td>
@@ -115,11 +115,6 @@
 	<td>select</td>
 	<td>attribute[1]</td>
 	<td>label=Blue</td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>DKK 125,00</td>
-	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
