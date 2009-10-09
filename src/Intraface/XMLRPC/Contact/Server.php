@@ -55,11 +55,39 @@ class Intraface_XMLRPC_Contact_Server
      *
      * @return array
      */
-    public function authenticateContact($credentials, $contact_key)
+    public function authenticateByKey($credentials, $contact_key)
     {
         $this->checkCredentials($credentials);
 
         $contact = Contact::factory($this->kernel, 'code', $contact_key);
+        if (!is_object($contact) OR !$contact->get('id') > 0) {
+            return false;
+        }
+
+        $contact_info = array_merge($contact->get(), $contact->address->get());
+        $contact_info['id'] = $contact->get('id');
+
+        if (!$contact_info) {
+            return array();
+        }
+
+        return $contact_info;
+    }
+
+    /**
+     * Authenticates a contact
+     *
+     * @param  struct  $credentials Credentials provided by intraface
+     * @param  string  $username    E-mail
+     * @param  string  $password 	Password
+     *
+     * @return array
+     */
+    public function authenticateByUsernameAndPassword($credentials, $username, $password)
+    {
+        $this->checkCredentials($credentials);
+
+        $contact = Contact::factory($this->kernel, 'username', array('username' => $username, 'password' => $password));
         if (!is_object($contact) OR !$contact->get('id') > 0) {
             return false;
         }
@@ -208,11 +236,11 @@ class Intraface_XMLRPC_Contact_Server
 
 		$auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
 		$weblogin = $auth_adapter->auth();
-		
+
 		if (!$weblogin) {
 		    require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
-		} 
+		}
 
         $this->kernel = new Intraface_Kernel();
         $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
