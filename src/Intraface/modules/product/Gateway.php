@@ -62,6 +62,8 @@ class Intraface_modules_product_Gateway
 
         $this->dbquery = new Intraface_DBQuery($this->kernel, "product", "product.active = 1 AND product.intranet_id = ".$this->intranet->getId());
         $this->dbquery->setJoin("LEFT", "product_detail detail", "detail.product_id = product.id", "detail.active = 1");
+        $this->dbquery->setJoin("INNER", "product_detail_translation detail_translation", "detail.id = detail_translation.id", "detail_translation.lang = 'da'");
+        
         //$this->dbquery->setFindCharacterFromField("detail.name");
         $this->dbquery->useErrorObject($this->error);
         return $this->dbquery;
@@ -118,8 +120,8 @@ class Intraface_modules_product_Gateway
 
         if ($search = $this->getDBQuery()->getFilter("search")) {
             $this->getDBQuery()->setCondition("detail.number = '".$search."'
-                OR detail.name LIKE '%".$search."%'
-                OR detail.description LIKE '%".$search."%'");
+                OR detail_translation.name LIKE '%".$search."%'
+                OR detail_translation.description LIKE '%".$search."%'");
         }
         if ($keywords = $this->getDBQuery()->getFilter("keywords")) {
             $this->getDBQuery()->setKeyword($keywords);
