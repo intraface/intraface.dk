@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 $module = $kernel->module('newsletter');
 $translation = $kernel->getTranslation('newsletter');
 
@@ -9,7 +9,6 @@ if (!$kernel->user->hasModuleAccess('contact')) {
 
 $list = new NewsletterList($kernel, (int)$_GET['list_id']);
 $subscriber = new NewsletterSubscriber($list);
-
 
 if (isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
     if ($kernel->user->hasModuleAccess('contact')) {
@@ -25,7 +24,6 @@ if (isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
     } else {
         trigger_error("Du har ikke adgang til modulet contact", ERROR);
     }
-
 } elseif (isset($_GET['remind']) AND $_GET['remind'] == 'true') {
     $subscriber = new NewsletterSubscriber($list, intval($_GET['id']));
     if (!$subscriber->sendOptInEmail(Intraface_Mail::factory())) {
@@ -40,11 +38,9 @@ if (isset($_GET['return_redirect_id'])) {
     if ($redirect->get('identifier') == 'contact') {
         $subscriber->addContact(new Contact($kernel, $redirect->getParameter('contact_id')));
     }
-
 }
 //
 if (isset($_GET['delete']) AND intval($_GET['delete']) != 0) {
-
     $subscriber = new NewsletterSubscriber($list, $_GET['delete']);
     $subscriber->delete();
 }
@@ -55,7 +51,6 @@ $subscriber->getDBQuery()->usePaging('paging');
 $subscriber->getDBQuery()->setExtraUri('&amp;list_id='.$list->get('id'));
 $subscriber->getDBQuery()->storeResult("use_stored", 'newsletter_subscribers_'.$list->get("id"), "toplevel");
 $subscribers = $subscriber->getList();
-
 
 $page = new Intraface_Page($kernel);
 $page->start('Modtagere');
@@ -76,15 +71,15 @@ $page->start('Modtagere');
     <input type="hidden" name="list_id" value="<?php e($list->get("id")); ?>" />
     <fieldset>
         <legend><?php e(t('search', 'common')); ?></legend>
-        
-        <label for="optin"><?php e(t('Filter', 'common')); ?>: 
+
+        <label for="optin"><?php e(t('Filter', 'common')); ?>:
             <select name="optin" id="optin">
                 <option value="1" <?php if($subscriber->getDBQuery()->getFilter('optin') == 1) echo 'selected="selected"'; ?> ><?php e(t('Opted in')); ?></option>
                 <option value="0" <?php if($subscriber->getDBQuery()->getFilter('optin') == 0) echo 'selected="selected"'; ?> ><?php e(t('Not opted in')); ?></option>
             </select>
         </label>
         <span>
-            <input type="submit" value="<?php e(t('go', 'common')); ?>" /> 
+            <input type="submit" value="<?php e(t('go', 'common')); ?>" />
         </span>
     </fieldset>
 </form>

@@ -1,5 +1,5 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 $kernel->module('newsletter');
 
@@ -22,7 +22,7 @@ $page->start('Rediger nyhedsbrev');
 </ul>
 
 <div class="box">
-	<pre><h2>Overskift: <?php e($letter['subject']); ?></h2></pre>
+	<pre>Overskift: <?php e($letter['subject']); ?></pre>
 
 	<pre><?php e(wordwrap($letter['text'], 80)); ?></pre>
 
