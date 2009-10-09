@@ -27,15 +27,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $product->getDetails()->number = $_POST['number'];
-    $product->getDetails()->name = $_POST['name'];
-    $product->getDetails()->description = $_POST['description'];
+    $product->getDetails()->Translation['da']->name = $_POST['name'];
+    $product->getDetails()->Translation['da']->description = $_POST['description'];
     $product->getDetails()->price = new Ilib_Variable_Float($_POST['price'], 'da_dk');
     if(isset($_POST['before_price'])) $product->getDetails()->before_price = new Ilib_Variable_Float($_POST['before_price'], 'da_dk');
     if(isset($_POST['weight'])) $product->getDetails()->weight = new Ilib_Variable_Float($_POST['weight'], 'da_dk');
     if(isset($_POST['unit'])) $product->getDetails()->unit = $_POST['unit'];
     if(isset($_POST['vat'])) $product->getDetails()->vat = $_POST['vat'];
     if(isset($_POST['do_show'])) $product->do_show = $_POST['do_show'];
-    if(isset($_POST['state_account_id'])) $product->getDetails()->state_account_id = $_POST['state_account_id'];
+    if(isset($_POST['state_account_id'])) $product->getDetails()->state_account_id = (int)$_POST['state_account_id'];
 
     if(isset($_POST['has_variation'])) $product->has_variation = $_POST['has_variation'];
     if(isset($_POST['stock'])) $product->stock = $_POST['stock'];
@@ -85,13 +85,13 @@ $page->start(t('edit product'));
         </div>
         <div class="formrow">
             <label for="name"><?php e(t('name')); ?></label>
-            <input type="text" size="50" name="name" id="name" value="<?php if(isset($product)) e($product->getDetails()->getName()); ?>" />
+            <input type="text" size="50" name="name" id="name" value="<?php if(isset($product)) e($product->getDetails()->getTranslation('da')->name); ?>" />
         </div>
         <div class="formrow">
             <label for="description"><?php e(t('description')); ?></label>
-            <textarea class="resizable" rows="8" cols="60" name="description" id="description"><?php if (isset($product)) e($product->getDetails()->getDescription()); ?></textarea>
+            <textarea class="resizable" rows="8" cols="60" name="description" id="description"><?php if (isset($product)) e($product->getDetails()->getTranslation('da')->description); ?></textarea>
         </div>
-
+        
         <div class="formrow">
             <label for="unit"><?php e(t('unit type')); ?></label>
             <select name="unit" id="unit">
