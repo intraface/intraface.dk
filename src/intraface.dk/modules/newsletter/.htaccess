@@ -16,6 +16,7 @@ php_value log_errors             on
 #DirectoryIndex index.php
 
 RewriteEngine on
+Options +FollowSymLinks
 
 RewriteCond %{REQUEST_FILENAME}  -d
 RewriteRule  ^.*$  -  [L]
