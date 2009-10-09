@@ -74,7 +74,7 @@ else { ?>
 	<input type="hidden" value="<?php e($value['id']); ?>" name="id" />
 
 	<fieldset>
-		<pre><?php e(t('To')); ?><?php
+		<pre><?php e(t('To')); ?>: <?php
             if ($contact->get('type') == 'corporation' && $email->get('contact_person_id') != 0) {
 
                 $contact->loadContactPerson($email->get('contact_person_id'));
@@ -89,7 +89,7 @@ else { ?>
                e($contact->address->get('name')." <".$contact->address->get('email').">");
             }
             ?></pre>
-		<pre><?php e(t('From')); ?><?php if (isset($value['from_email']) && $value['from_email'] != ''): e($value['from_name']." <".$value['from_email'].">"); else: e($kernel->intranet->address->get('name')." <".$kernel->intranet->address->get('email').">"); endif; ?></pre>
+		<pre><?php e(t('From')); ?>: <?php if (isset($value['from_email']) && $value['from_email'] != ''): e($value['from_name']." <".$value['from_email'].">"); else: e($kernel->intranet->address->get('name')." <".$kernel->intranet->address->get('email').">"); endif; ?></pre>
 
 		<pre><?php e($value['subject']); ?></pre>
 	</fieldset>
@@ -122,7 +122,7 @@ else { ?>
 	<?php if (!$email->isReadyToSend()): ?>
 		<?php echo $email->error->view(); /* errors is first set in isReadyToSend, therefor we show the errors here */  ?>
 	<?php elseif ($email->get('status') != 'sent'): ?>
-		<input type="submit" name="submit" value="<?php e(t('Send')); ?>" class="save" />
+		<input type="submit" name="submit" value="<?php e(t('Send')); ?>" class="confirm" />
 		<a href="<?php e($redirect->getRedirect('email.php?id='.$email->get('id'))); ?>"><?php e(t('Cancel')); ?></a>
 	<?php endif; ?>
 </form>
