@@ -1,4 +1,0 @@
-#AuthName "Intraface Tools"
-#AuthType Basic
-#AuthUserFile /home/intraface/tools_intraface/.htpasswd
-#Require valid-user
