@@ -95,7 +95,7 @@ class Intraface_modules_product_ProductDoctrineGateway
     {
         $collection = $this->table
             ->createQuery()
-            ->select('id, details.number')
+            ->select('id, details.id, details.active, details.number')
             ->innerJoin('Intraface_modules_product_ProductDoctrine.details AS details')
             ->addWhere('Intraface_modules_product_ProductDoctrine.active = 0 OR Intraface_modules_product_ProductDoctrine.active = 1')
             ->orderBy('details.number')
