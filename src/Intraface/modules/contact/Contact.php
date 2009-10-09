@@ -254,7 +254,10 @@ class Contact extends Intraface_Standard
                 $db->query("SELECT address.belong_to_id AS id FROM contact INNER JOIN address ON address.belong_to_id = contact.id WHERE address.email = '".$value."' AND contact.intranet_id = " . $kernel->intranet->get('id') . " AND address.active = 1 AND contact.active = 1");
                 break;
             case 'code':
-                $db->query("SELECT id FROM contact WHERE password  = '".$value."' AND contact.intranet_id = " . $kernel->intranet->get('id'));
+                $db->query("SELECT id FROM contact WHERE key  = '".$value."' AND contact.intranet_id = " . $kernel->intranet->get('id'));
+                break;
+            case 'username':
+                $db->query("SELECT id FROM contact WHERE username  = '".$value['username']."' AND password  = '".$value['password']."' AND contact.intranet_id = " . $kernel->intranet->get('id'));
                 break;
             case 'openid_url':
                 $db->query("SELECT id FROM contact WHERE openid_url  = '".$value."' AND contact.intranet_id = " . $kernel->intranet->get('id'));
@@ -302,8 +305,9 @@ class Contact extends Intraface_Standard
         $this->value['type_key'] = $db->f('type_key');
         $this->value['type'] = $this->getType();
         $this->value['password'] = $db->f('password');
+        $this->value['username'] = $db->f('username');
         $this->value['number'] = $db->f('number');
-        $this->value['code'] = $db->f('password');
+        $this->value['code'] = $db->f('key');
 
         if ($this->get('type') == 'corporation') {
             $this->contactperson = new ContactPerson($this);
@@ -837,7 +841,7 @@ class Contact extends Intraface_Standard
             return false;
         }
         $db = new DB_Sql;
-        $db->query("UPDATE contact SET password = '".md5($this->id . date('Y-m-d H:i:s') . $this->kernel->intranet->get('id'))."' WHERE id = " . $this->id);
+        $db->query("UPDATE contact SET key = '".md5($this->id . date('Y-m-d H:i:s') . $this->kernel->intranet->get('id'))."' WHERE id = " . $this->id);
         return true;
     }
 
