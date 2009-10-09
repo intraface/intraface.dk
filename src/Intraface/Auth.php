@@ -32,9 +32,9 @@ class Intraface_Auth
         }
 
         if ($object = $adapter->auth()) {
-            $this->notifyObservers('login', $identification.' logged in');
+            $this->notifyObservers('login', $identification . ' logged in');
         } else {
-            $this->notifyObservers('login', $identification.' could not login');
+            $this->notifyObservers('login', $identification . ' could not login');
         }
 
         return $object;
