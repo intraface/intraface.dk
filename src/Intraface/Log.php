@@ -60,25 +60,25 @@ class Intraface_Log implements Observer
 
     function createTable()
     {
-
         $this->db->loadModule('Manager');
         $result = $this->db->createTable($this->table_name, $this->table_definition);
 
         if (PEAR::isError($result)) {
-            die('create ' . $result->getMessage());
+            throw new Exception('create ' . $result->getMessage());
         }
 
         $result = $this->db->createConstraint($this->table_name, 'PRIMARY', $this->definition);
         if (PEAR::isError($result)) {
-            die('primary ' . $result->getMessage());
+            throw new Exception('primary ' . $result->getMessage());
         }
     }
 
     function update($code, $msg)
     {
-        $log = &Log::singleton('sql', $this->table_name, $code, array('dsn' => DB_DSN, 'sequence' => 'log_id'));
+        // @todo should be replaced by the mdb2 driver, but at the moment it does not work directly
+        $log = Log::singleton('sql', $this->table_name, $code, array('dsn' => DB_DSN));
         $log->log($msg);
-        return 1;
+        return true;
     }
 
 }
