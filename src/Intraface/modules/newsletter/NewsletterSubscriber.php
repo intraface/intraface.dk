@@ -125,6 +125,8 @@ class NewsletterSubscriber extends Intraface_Standard
     }
 
     /**
+     * Loads the subscriber
+     *
      * @return boolean
      */
     private function load()
@@ -135,7 +137,7 @@ class NewsletterSubscriber extends Intraface_Standard
 
             $this->id = 0;
             $this->value['id'] = 0;
-            return 0;
+            return false;
         }
 
         $this->value['id'] = $db->f('id');
@@ -145,7 +147,7 @@ class NewsletterSubscriber extends Intraface_Standard
         $this->value['email'] = $this->contact->get('email');
         $this->value['resend_optin_email_count'] = $db->f('resend_optin_email_count');
 
-        return 1;
+        return true;
     }
 
     /**
@@ -360,7 +362,7 @@ class NewsletterSubscriber extends Intraface_Standard
         $validator->isEmail($email, 'E-mailen er ikke gyldig');
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
 
         $which_subscriber_has_email = NewsletterSubscriber::factory($this->list, 'email', $email);
