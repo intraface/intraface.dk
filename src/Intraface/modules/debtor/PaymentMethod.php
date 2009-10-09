@@ -19,8 +19,8 @@ class Intraface_modules_debtor_PaymentMethod
     {
      	$types[0] = 'None';
         $types[1] = 'BankTransfer';
-        //$types[2] = 'GiroPayment01';
-        //$types[3] = 'GiroPayment71';
+        $types[2] = 'GiroPayment01';
+        $types[3] = 'GiroPayment71';
         $types[4] = 'CashOnDelivery';
         $types[5] = 'OnlinePayment';
         $types[6] = 'EAN';
