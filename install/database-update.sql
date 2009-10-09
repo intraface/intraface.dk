@@ -13,5 +13,9 @@ CREATE TABLE `product_detail_translation` (
 PRIMARY KEY ( `id`, `lang` )
 ) ENGINE = MYISAM ;
 
+ALTER TABLE `contact` ADD `code` VARCHAR( 255 ) NOT NULL 
+ALTER TABLE `contact` ADD `username` VARCHAR( 255 ) NOT NULL 
+
+
 
 
