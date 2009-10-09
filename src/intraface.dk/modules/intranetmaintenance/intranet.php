@@ -1,13 +1,18 @@
 <?php
-require('../../include_first.php');
+require '../../include_first.php';
 
 // This is not a really good way to do it...
-require('Intraface/modules/modulepackage/ModulePackage.php');
-require('Intraface/modules/modulepackage/Manager.php');
+require 'Intraface/modules/modulepackage/ModulePackage.php';
+require 'Intraface/modules/modulepackage/Manager.php';
 
 $modul = $kernel->module("intranetmaintenance");
-if ($kernel->user->hasModuleAccess('contact')) {
-	$contact_module = $kernel->useModule('contact');
+
+try {
+    if ($kernel->user->hasModuleAccess('contact')) {
+        $contact_module = $kernel->useModule('contact');
+    }
+} catch (Exception $e) {
+    $contact_error = '<p>Kontaktmodulet findes ikke. Du har formentlig ikke registreret modulerne endnu. <a href="http://localhost/intraface/intraface/trunk/src/intraface.dk/modules/intranetmaintenance/modules.php?do=register">Registrer modulerne.</a></p>';
 }
 $translation = $kernel->getTranslation('intranetmaintenance');
 
@@ -16,13 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $intranet = new IntranetMaintenance(intval($_POST["id"]));
 
     if (isset($_POST['add_module_package']) && $_POST['add_module_package'] != '') {
-
         $modulepackagemanager = new Intraface_modules_modulepackage_Manager($intranet);
         $modulepackagemanager->save($_POST['module_package_id'], $_POST['start_date'], $_POST['duration_month'].' month');
-
     }
 
-    # Update permission
+    // Update permission
     if (isset($_POST["change_permission"])) {
 
         $modules = array();
@@ -45,13 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: intranet.php?id='.$intranet->get('id'));
         exit;
     }
-
-}
-else {
-
+} else {
     $intranet = new IntranetMaintenance($_GET['id']);
 
-    # add contact
+    // add contact
     if (isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
         if ($kernel->user->hasModuleAccess('contact')) {
             $contact_module = $kernel->useModule('contact');
@@ -63,13 +63,12 @@ else {
 
             header("location: ".$url);
             exit;
-        }
-        else {
+        } else {
             trigger_error("Du har ikke adgang til modulet contact", E_ERROR_ERROR);
         }
     }
 
-    # add existing user
+    // add existing user
     if (isset($_GET['add_user']) && $_GET['add_user'] == 1) {
         $redirect = Intraface_Redirect::factory($kernel, 'go');
         $url = $redirect->setDestination($modul->getPath()."users.php", $modul->getPath()."user.php?intranet_id=".$intranet->get('id'));
@@ -79,7 +78,7 @@ else {
         exit;
     }
 
-    #return
+    // return
     if (isset($_GET['return_redirect_id'])) {
         $redirect = Intraface_Redirect::factory($kernel, 'return');
         if ($redirect->get('identifier') == 'contact') {
@@ -97,8 +96,7 @@ else {
 $value = $intranet->get();
 if (isset($intranet->address)) {
 	$address_value = $intranet->address->get();
-}
-else {
+} else {
 	$address_value = array();
 }
 
@@ -108,7 +106,9 @@ $user->setIntranetId($intranet->get('id'));
 $page = new Intraface_Page($kernel);
 $page->start($translation->get('Intranet'));
 ?>
-
+<?php if (!empty($contact_error)): ?>
+<?php echo $contact_error;?>
+<?php else: ?>
 <div id="colOne">
 
 <h1><?php e($translation->get('Intranet')); ?>: <?php e($intranet->get('name')); ?></h1>
@@ -197,8 +197,6 @@ $page->start($translation->get('Intranet'));
 <form action="intranet.php" method="post">
 
 <input type="hidden" name="id" value="<?php e($intranet->get("id")); ?>" />
-
-
     <?php
     $modulepackagemanager = new Intraface_modules_modulepackage_Manager($intranet);
     $modulepackagemanager->getDBQuery($kernel);
@@ -344,7 +342,7 @@ $page->start($translation->get('Intranet'));
 
 
 </div>
-
+<?php endif; ?>
 <?php
 $page->end();
 ?>
