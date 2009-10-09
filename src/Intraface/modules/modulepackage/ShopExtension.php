@@ -45,7 +45,7 @@ class Intraface_modules_modulepackage_ShopExtension {
         if (defined('INTRAFACE_XMLRPC_SERVER_URL') && INTRAFACE_XMLRPC_SERVER_URL != '') {
             $xmlrpc_shop_url = INTRAFACE_XMLRPC_SERVER_URL.'shop/server0004.php';
             $xmlrpc_debtor_url = INTRAFACE_XMLRPC_SERVER_URL.'debtor/server.php';
-            $xmlrpc_onlinepayment_url = INTRAFACE_XMLRPC_SERVER_URL.'onlinepayment/server0002.php';
+            $xmlrpc_onlinepayment_url = INTRAFACE_XMLRPC_SERVER_URL.'onlinepayment/server0100.php';
         } else {
             $xmlrpc_shop_url = '';
             $xmlrpc_debtor_url = '';
