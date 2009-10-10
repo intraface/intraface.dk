@@ -103,6 +103,46 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
+	<td>link=edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>description</td>
+	<td>Testbeskrivelse 2</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Testbeskrivelse 2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>vat</td>
+	<td>label=No</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[@id='colOne']/table/tbody/tr[3]/td[2]</td>
+	<td>Nej</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
 	<td>link=delete</td>
 	<td></td>
 </tr>
