@@ -46,7 +46,9 @@ var account = {
 	},
 	write: function(v) {
 		window.opener.document.getElementById(document.location.search.substring(1)).value = v;
+		window.close();
 		window.opener.focus();
+
 	}
 }
 YAHOO.util.Event.addListener(window, "load", account.init);
