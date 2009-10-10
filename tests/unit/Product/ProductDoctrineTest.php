@@ -22,25 +22,14 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         $connection->exec('TRUNCATE product_x_attribute_group');
         
         $connection->clear();
-        
-        /*
-        $db = MDB2::factory(DB_DSN);
-        $db->query('TRUNCATE product');
-        $db->query('TRUNCATE product_attribute');
-        $db->query('TRUNCATE product_attribute_group');
-        $db->query('TRUNCATE product_detail');
-        $db->query('TRUNCATE product_detail_translation');
-        $db->query('TRUNCATE product_variation');
-        $db->query('TRUNCATE product_variation_detail');
-        $db->query('TRUNCATE product_variation_x_attribute');
-        $db->query('TRUNCATE product_x_attribute_group');
-        */
     }
 
     function createProductObject($id = 0)
     {
         if($id != 0) {
-            $gateway = new Intraface_modules_product_ProductDoctrineGateway(Doctrine_Manager::connection(), NULL);
+            $connection = Doctrine_Manager::connection();
+            $connection->clear(); // clear repo, so that we are sure data are loaded again.
+            $gateway = new Intraface_modules_product_ProductDoctrineGateway($connection, NULL);
             return $gateway->findById($id);
         }
         return new Intraface_modules_product_ProductDoctrine;
@@ -96,7 +85,7 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
     }
 
     
-    function testSavePersistsItselfAndCanSaveAgainStillHavingTheSameNumber()
+    function testSaveIncreasesNumberOnNewProduct()
     {
         $product = $this->createProductObject();
         $name = 'Test';
@@ -136,6 +125,37 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($name, $product->getDetails()->getTranslation('da')->name);
         $this->assertEquals($price, $product->getDetails()->getPrice()->getAsIso());
     }
+    
+    function testSavePersistsItselfAndCanSaveAgainStillHavingTheSameNumber()
+    {
+        $product = $this->createProductObject();
+        $name = 'Test';
+        $price = 20;
+        $product->getDetails()->Translation['da']->name = $name;
+        $product->getDetails()->Translation['da']->description = '';
+        $product->getDetails()->price = new Ilib_Variable_Float($price);
+        
+        try {
+            $product->save();
+        } catch (Exception $e) {
+            $this->fail('Exception thrown '.$e->__toString());
+        }
+        $product->refresh(true);
+
+        $name = 'Test 2';
+        $product->getDetails()->Translation['da']->name = $name;
+        try {
+                $product->save();
+        } catch (Exception $e) {
+            $this->fail('Exception thrown '.$e->__toString());
+        }
+        $product->refresh(true);
+        
+        $this->assertEquals(1, $product->getDetails()->getNumber());
+        $this->assertEquals($name, $product->getDetails()->getTranslation('da')->name);
+        $this->assertEquals($price, $product->getDetails()->getPrice()->getAsIso());
+        
+    }
 
     
     function testSaveStateAccountIdInProductDetailsDoesntChangeOtherValues()
@@ -172,8 +192,6 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $product->getDetails()->getNumber());
         $this->assertEquals($name, $product->getDetails()->getTranslation('da')->name);
         $this->assertEquals(20, $product->getDetails()->getStateAccountId());
-        
-        
     }
     
     function testChangeProductNameSavesAsNewDetail()
@@ -203,6 +221,63 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(2, $product->getDetails()->getId());
         $this->assertEquals('Test 2', $product->getDetails()->getTranslation('da')->name);
+    }
+    
+    function testChangeProductPriceSavesAsNewDetail()
+    {
+        $product = $this->createProductObject();
+        $product->getDetails()->Translation['da']->name = 'Test';
+        $product->getDetails()->price = new Ilib_Variable_Float(20);
+        
+        try {
+            $product->save();
+        } catch (Exception $e) {
+            $this->fail('Exception thrown '.$e->__toString());
+        }
+        
+        $product->refresh(true);
+        $this->assertEquals(1, $product->getDetails()->getId());
+        $this->assertEquals(20, $product->getDetails()->getPrice()->getAsIso());
+
+        $product->getDetails()->price = new Ilib_Variable_Float(30);
+        try {
+            $product->save();
+        } catch (Exception $e) {
+            $this->fail('Exception thrown '.$e->__toString());
+        }
+        $product->refresh(true);
+        // $product = $this->createProductObject($product->get('id'));
+        
+        $this->assertEquals(2, $product->getDetails()->getId());
+        $this->assertEquals(30, $product->getDetails()->getPrice()->getAsIso());
+    }
+    
+    public function testLoadEarlierDetails()
+    {
+        $product = $this->createProductObject();
+        $product->getDetails()->Translation['da']->name = 'Test';
+        $product->getDetails()->price = new Ilib_Variable_Float(20);
+        
+        try {
+            $product->save();
+        } catch (Exception $e) {
+            $this->fail('Exception thrown '.$e->__toString());
+        }
+        
+        $product->refresh(true);
+        $this->assertEquals(1, $product->getDetails()->getId());
+        $this->assertEquals('Test', $product->getDetails()->getTranslation('da')->name);
+
+        $product->getDetails()->Translation['da']->name = 'Test 2';
+        try {
+            $product->save();
+        } catch (Exception $e) {
+            $this->fail('Exception thrown '.$e->__toString());
+        }
+        // $product->refresh(true);
+        $product = $this->createProductObject(1);        
+        $this->assertEquals(1, $product->getDetails(1)->getId());
+        $this->assertEquals('Test', $product->getDetails(1)->getTranslation('da')->name);
     }
     
     public function testShowInShop() 
