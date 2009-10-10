@@ -169,6 +169,5 @@ function intraface_t($string, $page = NULL)
     }
 }
 
-
 $dependency = new Intraface_Dependency();
 $dependency->whenCreating('Intraface_modules_product_Gateway')->forVariable('kernel')->willUse($kernel);
