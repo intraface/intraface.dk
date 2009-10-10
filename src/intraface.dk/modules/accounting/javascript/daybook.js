@@ -38,7 +38,7 @@ var daybook = {
 		if (oDebet) {
 			var o = document.getElementById('debet_account_open');
 			YAHOO.util.Event.addListener(o, "click", function(e) {
-				daybook.account_window_open('debet_account_number');
+				daybook.account_window_open(o, 'debet_account_number');
 				YAHOO.util.Event.stopEvent(e);
 				return false;
 			});
@@ -53,7 +53,7 @@ var daybook = {
 		if (oCredit) {
 			var o = document.getElementById("credit_account_open");
 			YAHOO.util.Event.addListener(o, "click", function(e) {
-				daybook.account_window_open('credit_account_number');
+				daybook.account_window_open(o, 'credit_account_number');
 				YAHOO.util.Event.stopEvent(e);
 				return false;
 			});
@@ -121,8 +121,9 @@ var daybook = {
 			return false;
 		}
 	},
-	account_window_open: function(account_id) {
-		var accountlist = window.open("daybook_list_accounts.php?"+account_id, "accountlist", "height=600, width=350, scrollbars=yes");
+	account_window_open: function(url, account_id) {
+		//var accountlist = window.open("daybook_list_accounts.php?"+account_id, "accountlist", "height=600, width=350, scrollbars=yes");
+		var accountlist = window.open(url + "?"+account_id, "accountlist", "height=600, width=350, scrollbars=yes");
 		if (!accountlist) return;
 		accountlist.window.focus();
 
