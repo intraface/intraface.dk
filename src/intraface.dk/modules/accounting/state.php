@@ -45,7 +45,7 @@ $page = new Intraface_Page($kernel);
 $page->start('Bogfør');
 ?>
 
-<h1>Bogfør <?php e($year->get('label')); ?></h1>
+<h1>Bogfør <a href="<?php e('year.php?id=' . $year->get('id')); ?>"><?php e($year->get('label')); ?></a></h1>
 
 <?php if ($kernel->setting->get('user', 'accounting.state.message') == 'view'): ?>
 <div class="message">

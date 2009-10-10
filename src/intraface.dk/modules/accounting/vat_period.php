@@ -56,7 +56,7 @@ $page = new Intraface_Page($kernel);
 $page->start('Momsoversigt');
 ?>
 
-<h1>Moms <?php e($year->get('label')); ?></h1>
+<h1>Moms <a href="<?php e('year.php?id=' . $year->get('id')); ?>"><?php e($year->get('label')); ?></a></h1>
 
 <?php echo $vat_period->error->view(); ?>
 

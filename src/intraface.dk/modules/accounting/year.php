@@ -179,6 +179,13 @@ $page->start('Regnskab');
     <h2>Kontoplan</h2>
     <p>Du kan finde dine konti under <a href="accounts.php">kontoplanen</a>.</p>
 
+ <h2>Moms</h2>
+    <p>You can <a href="vat_period.php">calculate your vat</a>.</p>
+
+
+ <h2>Årsafslutning</h2>
+    <p>You can <a href="end.php">make your year end</a>.</p>
+
     <?php if (!$year->vatAccountIsSet()): ?>
 
         <p class="message-dependent">Du mangler at sætte nogle indstillinger. <a href="setting.php">Sæt indstillingerne</a>.</p>

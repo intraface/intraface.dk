@@ -62,7 +62,7 @@ $page->includeJavascript('module', 'daybook.js');
 $page->start('Kassekladde');
 ?>
 
-<h1>Kassekladde for <?php e($year->get('label')); ?></h1>
+<h1>Daybook for <?php e($year->get('label')); ?></h1>
 
 <?php if (!$account->anyAccounts()): ?>
 	<p class="message-dependent">Du skal først oprette nogle konti, inden du kan taste poster ind i regnskabet. Du kan oprette en standardkontoplan under <a href="year.php?id=<?php e($year->get('id')); ?>">regnskabsåret</a>.</p>
