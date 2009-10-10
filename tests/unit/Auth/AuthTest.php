@@ -1,34 +1,38 @@
 <?php
+session_start();
 require_once dirname(__FILE__) . '/../config.test.php';
 
 class FakeAuthObserver {}
 class FakeAuthUser {
-    function clearCachedPermission() { return true; }   
+    function clearCachedPermission() { return true; }
+    function getId() { return 1; }
 }
+
 class FakeAuthAdapter
 {
     function auth()
     {
+        $_SESSION['intraface_logged_in_user_id'] = 1;
         return new FakeAuthUser;
     }
-    
-    function getIdentification() 
+
+    function getIdentification()
     {
         return 'fake user';
     }
 }
 
-class AuthTest extends PHPUnit_Framework_TestCase 
+class AuthTest extends PHPUnit_Framework_TestCase
 {
     const SESSION_LOGIN = 'thissessionfirstlog';
 	private $auth;
     private $db;
+    protected $backupGlobals = FALSE;
 
     function setUp()
     {
         $this->db = MDB2::singleton(DB_DSN);
         $this->db->exec('TRUNCATE user');
-        
 
         $this->auth = new Intraface_Auth(self::SESSION_LOGIN);
     }
@@ -42,7 +46,7 @@ class AuthTest extends PHPUnit_Framework_TestCase
 	{
 	    $this->assertTrue(is_object($this->auth));
 	}
-	
+
 	function testAuthMethodReturnsAnObjectOnSuccessFullAuthentication()
 	{
 	    $this->assertTrue(is_object($this->auth->authenticate(new FakeAuthAdapter)));
@@ -50,8 +54,13 @@ class AuthTest extends PHPUnit_Framework_TestCase
 
 	function testAfterAuthenticationTheIdentityCanBeGrappedUsingGetIdentity()
 	{
-		$this->auth->authenticate(new FakeAuthAdapter);
-	    $this->assertTrue(is_object($this->auth->getIdentity($this->db)));
+		$db = MDB2::singleton();
+	    $db->query('INSERT INTO user SET email="start@intraface.dk", session_id="'.self::SESSION_LOGIN.'"');
+	    // @todo lidt dum da der skal være en Intraface_User tilgængelig.
+	    $this->auth->authenticate(new FakeAuthAdapter);
+		$identity = $this->auth->getIdentity($this->db);
+	    $this->assertTrue(is_object($identity));
+	    //$db->query('TRUNCATE user');
 	}
 
 
