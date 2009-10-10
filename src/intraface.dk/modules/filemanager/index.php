@@ -24,6 +24,9 @@ class This_Filehandler_Root extends k_Dispatcher
     function getHeader()
     {
         $page = $this->registry->get('page');
+        foreach ($this->document->scripts as $script) {
+            $page->addJavascript($script);
+        }
         ob_start();
         $page->start($this->document->title);
         $data = ob_get_contents();

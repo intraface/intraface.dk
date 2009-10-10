@@ -26,6 +26,14 @@ class Intraface_Page
         $this->db = new DB_Sql;
     }
 
+    function t($phrase)
+    {
+        if (!method_exists('get', $this->kernel->translation)) {
+            return $phrase;
+        }
+        return $this->_kernel->translation->get($phrase);
+    }
+
     function start($title = '')
     {
         $this->primary_module = $this->kernel->getPrimaryModule();
@@ -37,13 +45,13 @@ class Intraface_Page
         // brugermenuen
         // Unforntunately the usermenuen has to be before the cache as it is printed in bottom.php.
         $this->usermenu = array();
-        $this->usermenu[0]['name'] = $this->kernel->translation->get('logout', 'common');
+        $this->usermenu[0]['name'] = $this->t('logout', 'common');
         $this->usermenu[0]['url'] = url('/main/logout.php');
         if (count($this->kernel->user->getIntranetList()) > 1) {
-            $this->usermenu[1]['name'] = $this->kernel->translation->get('change intranet', 'common');
+            $this->usermenu[1]['name'] = $this->t('change intranet', 'common');
             $this->usermenu[1]['url'] = url('/main/change_intranet.php');
         }
-        $this->usermenu[2]['name'] = $this->kernel->translation->get('control panel', 'common');;
+        $this->usermenu[2]['name'] = $this->t('control panel', 'common');;
         $this->usermenu[2]['url'] = url('/main/controlpanel/');
 
         if (!is_dir(PATH_CACHE)) {
@@ -84,14 +92,14 @@ class Intraface_Page
             // menuen
             $this->menu = array();
             $i = 0;
-            $this->menu[$i]['name'] = $this->kernel->translation->get('dashboard', 'dashboard');;
+            $this->menu[$i]['name'] = $this->t('dashboard', 'dashboard');;
             $this->menu[$i]['url'] = url('/main/');
             $i++;
             $this->db->query("SELECT name, menu_label, name FROM module WHERE active = 1 AND show_menu = 1 ORDER BY menu_index");
             while ($this->db->nextRecord()) {
 
                 if ($this->kernel->user->hasModuleAccess($this->db->f('name'))) {
-                    $this->menu[$i]['name'] = $this->kernel->translation->get($this->db->f('name'), $this->db->f('name'));
+                    $this->menu[$i]['name'] = $this->t($this->db->f('name'), $this->db->f('name'));
                     $this->menu[$i]['url'] = url('/modules/' . $this->db->f("name") . '/');
                     $i++;
                 }
@@ -130,7 +138,7 @@ class Intraface_Page
                         }
 
                         if ($access) {
-                            $this->submenu[$j]['name'] = $this->kernel->translation->get($all_submenu[$i]['label'], $this->primary_module->getName());
+                            $this->submenu[$j]['name'] = $this->t($all_submenu[$i]['label'], $this->primary_module->getName());
                             $this->submenu[$j]['url'] = $this->primary_module->getPath(). $all_submenu[$i]['url'];
                             $j++;
                         }
@@ -199,6 +207,11 @@ class Intraface_Page
         } else {
             $this->javascript_path[] = 'javascript/'.$filename;
         }
+    }
+
+    function addJavascript($url)
+    {
+        $this->javascript_path[] = $url;
     }
 
     public static function themes()
