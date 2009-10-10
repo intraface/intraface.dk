@@ -1,5 +1,5 @@
 <?php
-abstract class Ilib_Keyword
+class Ilib_Keyword
 {
     /**
      * @var integer
