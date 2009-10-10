@@ -146,10 +146,11 @@ class Intraface_modules_shop_Coordinator
                 $input['preferred_invoice'] = 2;
             }
         }
-
+        /*
         if (isset($input['customer_ean'])) {
             $input['ean'] = $input['customer_ean'];
         }
+        */
 
         // opdaterer kontakten
         if (!$contact_id = $this->contact->save($input)) {
