@@ -1,8 +1,8 @@
 <h1><?php e($context->getAccount()->get('number')); ?>: <?php e($context->getAccount()->get('name')); ?></h1>
 
 <ul class="options">
-	<li><a href="account_edit.php?id=<?php e($context->getAccount()->get('id')); ?>">Ret</a></li>
-	<li><a href="accounts.php?from_account_id=<?php e($context->getAccount()->get('id')); ?>">Luk</a></li>
+	<li><a href="<?php e(url(null, array('edit'))); ?>">Ret</a></li>
+	<li><a href="<?php e(url('../')); ?>">Luk</a></li>
 </ul>
 
 <!-- Følgende bør vises her, men kunne skjules med en indstilling

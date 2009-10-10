@@ -1,22 +1,32 @@
-class Intraface_modules_accounting_Controller_Account_Show extends k_Component
+<?php
+class Intraface_modules_accounting_Controller_Year_End extends k_Component
 {
     protected $registry;
-
-    protected function map($name)
-    {
-        if ($name == 'edit') {
-            return 'Intraface_modules_accounting_Controller_Account_Edit';
-        }
-    }
 
     function __construct(WireFactory $registry)
     {
         $this->registry = $registry;
     }
 
+    function getAccount()
+    {
+        $year = $this->getYear();
+        return $account = new Account($year);
+    }
+
 	function POST()
 	{
-        // disse gør det muligt let at skifte mellem trinene
+	    $accounting_module = $this->getKernel()->module('accounting');
+        $accounting_module->includeFile('YearEnd.php');
+        $translation = $this->getKernel()->getTranslation('accounting');
+        $year = $this->getYear();
+        $account = new Account($year);
+        $year_end = new YearEnd($year);
+        $post = new Post(new Voucher($year));
+        $vat_period = new VatPeriod($year);
+
+
+	    // disse gï¿½r det muligt let at skifte mellem trinene
         if (!empty($_POST['previous'])) {
         	$year_end = new YearEnd($year);
         	$year_end->setStep($_POST['step'] - 2);
@@ -27,14 +37,14 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         	$year_end->setStep($_POST['step']);
         }
 
-        // her reagerer vi på de forskellige trin
+        // her reagerer vi pï¿½ de forskellige trin
         if (!empty($_POST['step_save_result'])) {
         	$year_end = new YearEnd($year);
 
         	if (!$year_end->saveStatement('operating')) {
-        		trigger_error('Kunne ikke gemme resultatopgørelsen', E_USER_ERROR);
+        		trigger_error('Kunne ikke gemme resultatopgï¿½relsen', E_USER_ERROR);
         	}
-        	// her skal den så gemme resultatopgørelsen.
+        	// her skal den sï¿½ gemme resultatopgï¿½relsen.
 
         	$year_end->setStep($_POST['step']);
         }
@@ -52,7 +62,7 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         	$year_end = new YearEnd($year);
 
         	if (!$year_end->resetYearResult()) {
-        		trigger_error('Kunne ikke nulstille årets resultat', E_USER_ERROR);
+        		trigger_error('Kunne ikke nulstille ï¿½rets resultat', E_USER_ERROR);
         	}
 
         	$year_end->setStep($_POST['step']);
@@ -61,7 +71,7 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         	$year_end = new YearEnd($year);
         	if (!$year_end->resetYearResult('reverse')) {
         		echo $year_end->error->view();
-        		trigger_error('Kunne ikke tilbageføre årets resultat årets resultat', E_USER_ERROR);
+        		trigger_error('Kunne ikke tilbagefï¿½re ï¿½rets resultat ï¿½rets resultat', E_USER_ERROR);
         	}
         	$year_end->setStep($_POST['step'] - 1);
         }
@@ -73,7 +83,7 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         	$year_end->setStep($_POST['step']);
         }
 
-        // overførsel af årsopgørelsen
+        // overfï¿½rsel af ï¿½rsopgï¿½relsen
         elseif (!empty($_POST['step_result'])) {
         	$year_end = new YearEnd($year);
         	$account = new Account($year);
@@ -95,17 +105,18 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         	$year_end->resetOperatingAccounts('reverse');
         	$year_end->setStep($_POST['step'] - 1);
         }
+
+        return $this->render();
 	}
 
 	function renderHtml()
 	{
-        $accounting_module = $kernel->module('accounting');
+        $accounting_module = $this->getKernel()->module('accounting');
         $accounting_module->includeFile('YearEnd.php');
-        $translation = $kernel->getTranslation('accounting');
+        $translation = $this->getKernel()->getTranslation('accounting');
 
-        $year = new Year($kernel);
+        $year = new Year($this->getKernel());
         $year->checkYear();
-
 
         $account = new Account($year);
         $year_end = new YearEnd($year);
@@ -114,5 +125,47 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
 
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/year/end.tpl.php');
         return $smarty->render($this);
+	}
+
+	function getPost()
+	{
+        $year = new Year($this->getKernel());
+        $year->checkYear();
+
+        $account = new Account($year);
+        $year_end = new YearEnd($year);
+        return $post = new Post(new Voucher($year));
+	}
+
+	function getVatPeriod()
+	{
+        $year = new Year($this->getKernel());
+        $year->checkYear();
+
+        $account = new Account($year);
+        $year_end = new YearEnd($year);
+        $post = new Post(new Voucher($year));
+        return $vat_period = new VatPeriod($year);
+	}
+
+	function getYearEnd()
+	{
+        $year = new Year($this->getKernel());
+        $year->checkYear();
+
+        $account = new Account($year);
+        return $year_end = new YearEnd($year);
+	}
+
+	function getYear()
+	{
+	    $year = new Year($this->getKernel());
+        $year->checkYear();
+	    return $year;
+	}
+
+	function getKernel()
+	{
+	    return $this->context->getKernel();
 	}
 }

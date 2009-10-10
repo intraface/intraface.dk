@@ -5,8 +5,9 @@
 </div>
 
 <ul class="options">
-	<li><a href="<?php e(url('create')); ?>">Opret konto</a></li>
-	<li><a class="excel" href="<?php e(url(null, array('format' => 'excel'))); ?>">Excel</a></li>
+	<li><a href="<?php e(url(null, array('create'))); ?>">Opret konto</a></li>
+	<li><a class="excel" href="<?php e(url(null . '.xls')); ?>">Excel</a></li>
+	<li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 <?php
 /*
@@ -49,7 +50,7 @@
 
 		<tr<?php if ($account['type'] == 'headline') { echo ' class="headline"'; } elseif ($account['type'] == 'sum') { echo ' class="sum"';} ?><?php if (!empty($_GET['from_account_id']) AND $_GET['from_account_id'] == $account['id']) { echo ' id="'.$account['id'].'" class="fade"'; } ?>>
 	  		<?php if ($account['type'] != 'headline' AND $account['type'] != 'sum'): ?>
-				<td><a href="account.php?id=<?php e($account['id']); ?>"><?php e($account['number']); ?></a></td>
+				<td><a href="<?php e(url($account['id'])); ?>"><?php e($account['number']); ?></a></td>
 			<?php else: ?>
 				<td><?php e($account['number']); ?></td>
 			<?php endif; ?>
@@ -58,17 +59,17 @@
 			<?php elseif ($account['type'] == 'sum'): ?>
 				<td><?php e($account['name']); ?><?php if ($account['type'] == 'sum') { e(' ('. $account["sum_from"] . ' til ' . $account["sum_to"] . ')'); } ?></td>
 			<?php else:?>
-				<td><a href="account.php?id=<?php e($account['id']); ?>"><?php e($account['name']); ?></a></td>
+				<td><a href="<?php e(url($account['id'])); ?>"><?php e($account['name']); ?></a></td>
 			<?php endif; ?>
 
 			<?php if ($account['type'] != 'headline') { ?>
 			<td><?php e(__($account['type'])); ?></td>
 			<td><?php if ($account['type'] == 'balance, asset' OR $account['type'] == 'balance, liability' OR $account['type'] == 'operating') e(__($account['vat_shorthand'])); ?></td>
-			<td class="amount"><?php e(amountToOutput($account['saldo'], 2, ",", ".")); ?></td>
+			<td class="amount"><?php if (!empty($account['saldo'])) e(amountToOutput($account['saldo'], 2, ",", ".")); ?></td>
 			<?php } ?>
 			<td class="options">
-				<a class="edit" href="account_edit.php?id=<?php e($account['id']); ?>">Ret</a>
-				<a class="delete" href="accounts.php?id=<?php e($account['id']); ?>&amp;action=delete">Slet</a>
+				<a class="edit" href="<?php e(url($account['id'], array('edit'))); ?>">Ret</a>
+				<a class="delete" href="<?php e(url($account['id'], array('delete'))); ?>">Slet</a>
 			</td>
 		</tr>
 	<?php endforeach; ?>

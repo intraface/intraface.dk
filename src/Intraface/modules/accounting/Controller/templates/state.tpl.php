@@ -2,12 +2,12 @@
 $accounts = $context->getAccounts();
 ?>
 
-<h1>Bogfør <?php e($context->getYear()->get('label')); ?></h1>
+<h1>BogfÃ¸r <a href="<?php e(url('../../year/' . $context->getYear()->getId())); ?>"><?php e($context->getYear()->get('label')); ?></a></h1>
 
 <?php if ($context->getKernel()->setting->get('user', 'accounting.state.message') == 'view'): ?>
 <div class="message">
-	<p><strong>Bogfør</strong>. På denne side bogfører du posterne fra kassekladden. Når du har bogført beløbene, kan du ikke længere redigere i posterne.</p>
-	<p><strong>Hvis du laver fejl</strong>. Hvis du har bogført noget forkert, skal du lave et bilag med en rettelsespost, som du så bogfører, så dine konti kommer til at stemme.</p>
+	<p><strong>Bogfï¿½r</strong>. Pï¿½ denne side bogfï¿½rer du posterne fra kassekladden. Nï¿½r du har bogfï¿½rt belï¿½bene, kan du ikke lï¿½ngere redigere i posterne.</p>
+	<p><strong>Hvis du laver fejl</strong>. Hvis du har bogfï¿½rt noget forkert, skal du lave et bilag med en rettelsespost, som du sï¿½ bogfï¿½rer, sï¿½ dine konti kommer til at stemme.</p>
 	<p><a href="<?php e($context->url()); ?>?message=hide">Skjul</a></p>
 </div>
 <?php endif; ?>
@@ -17,12 +17,12 @@ $accounts = $context->getAccounts();
 
 <?php if ($context->getKernel()->setting->get('user', 'accounting.state.message2') == 'view'): ?>
 <div class="message">
-	<p><strong>Afstemning</strong>. Du bør afstemme dine konti, inden du bogfører. Det betyder, at du fx bør tjekke om beløbene på dit kontoudtog er magen til det beløb, der bliver bogført.</p>
+	<p><strong>Afstemning</strong>. Du bï¿½r afstemme dine konti, inden du bogfï¿½rer. Det betyder, at du fx bï¿½r tjekke om belï¿½bene pï¿½ dit kontoudtog er magen til det belï¿½b, der bliver bogfï¿½rt.</p>
 	<p><a href="<?php e($context->url()); ?>?message2=hide">Skjul</a></p>
 </div>
 <?php endif; ?>
 
-<?php if (!empty($accounts) AND count($accounts) > 0) { ?>
+<?php if (count($context->getAccounts()) > 0) { ?>
 
 <table class="stripe">
 <caption>Afstemningskonti (<a href="<?php e($context->url('../../settings')); ?>">skift konti</a>)</caption>
@@ -31,7 +31,7 @@ $accounts = $context->getAccounts();
 		<th scope="col">Kontonummer</th>
 		<th scope="col">Kontonavn</th>
 		<th scope="col">Startsaldo</th>
-		<th scope="col">Bevægelse</th>
+		<th scope="col">Bevï¿½gelse</th>
 		<th scope="col">Slutsaldo</th>
 	</tr>
 </thead>
@@ -54,21 +54,21 @@ $accounts = $context->getAccounts();
 
 <?php } ?>
 
-<h2>Bogfør</h2>
+<h2>Bogfï¿½r</h2>
 
 <?php echo $context->getVoucher()->error->view(); ?>
 
 <?php if (!$context->getYear()->vatAccountIsSet()): ?>
-	<p class="message-dependent">Du skal først <a href="<?php e(url('../../settings')); ?>">sætte momskonti</a>, inden du kan bogføre.</p>
+	<p class="message-dependent">Du skal fï¿½rst <a href="<?php e(url('../../settings')); ?>">sï¿½tte momskonti</a>, inden du kan bogfï¿½re.</p>
 <?php elseif ($context->getVoucher()->get('list_saldo') > 0): ?>
-	<p class="error">Kassekladden balancerer ikke. Du kan ikke bogføre, før den balancerer.</p>
-<?php elseif (!empty($posts) AND count($posts) > 0): // der skal kun kunne bogføres, hvis der er nogle poster ?>
+	<p class="error">Kassekladden balancerer ikke. Du kan ikke bogfï¿½re, fï¿½r den balancerer.</p>
+<?php elseif (count($context->getPosts()) > 0): // der skal kun kunne bogfï¿½res, hvis der er nogle poster ?>
 <form action="<?php e($context->url()); ?>" method="post">
 	<fieldset>
-		<p>Bogfør posterne og tøm kassekladden. Husk, at du ikke længere kan redigere i posterne, når du har klikket på knappen. Bevægelserne kan derefter ses i regnskabet.</p>
-		<div><input type="submit" value="Bogfør" name="state" onclick="return confirm('Er du sikker på, at du vil bogføre?');" /></div>
+		<p>Bogfï¿½r posterne og tï¿½m kassekladden. Husk, at du ikke lï¿½ngere kan redigere i posterne, nï¿½r du har klikket pï¿½ knappen. Bevï¿½gelserne kan derefter ses i regnskabet.</p>
+		<div><input type="submit" value="BogfÃ¸r" name="state" onclick="return confirm('Er du sikker pÃ¥, at du vil bogfÃ¸re?');" /></div>
 	</fieldset>
 </form>
 <?php else: ?>
-	<p class="message-dependent">Der er ingen poster i kassekladden. Du skal <a href="<?php e($context->url('../')); ?>">indtaste poster i kassekladden</a>, inden du kan bogføre.</p>
+	<p class="message-dependent">Der er ingen poster i kassekladden. Du skal <a href="<?php e($context->url('../')); ?>">indtaste poster i kassekladden</a>, inden du kan bogfï¿½re.</p>
 <?php endif; ?>

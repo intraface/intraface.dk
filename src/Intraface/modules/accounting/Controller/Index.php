@@ -25,12 +25,13 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
 
     function renderHtml()
     {
+        return new k_SeeOther(PATH_WWW."modules/accounting/index_old.php");
         if ($this->getYear()->getId() > 0) {
             return new k_SeeOther($this->url('daybook'));
         }
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
-        return $smarty->render($this);
+        return $this->getHeader() . $smarty->render($this) . $this->getFooter();
     }
 
     function getKernel()
@@ -50,6 +51,14 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
         return new Year($this->getKernel());
     }
 
+    function getYearGateway()
+    {
+        $module = $this->getKernel()->module('accounting');
+        $translation = $this->getKernel()->getTranslation('accounting');
+
+        return new Year($this->getKernel());
+    }
+
     function getAccounts()
     {
         return $this->getAccount()->getList();
@@ -58,5 +67,38 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
     function getAccount($id = 0)
     {
         return new Account($this->getYear(), $id);
+    }
+
+    function getPage()
+    {
+        $registry = $this->registry->create();
+    	return $registry->get('page');
+    }
+
+    function getHeader()
+    {
+        ob_start();
+        $this->getPage()->start('Newsletter');
+        $data = ob_get_contents();
+        ob_end_clean();
+        return $data;
+    }
+
+    function getFooter()
+    {
+        ob_start();
+        $this->getPage()->end();
+        $data = ob_get_contents();
+        ob_end_clean();
+        return $data;
+    }
+
+    function wrapHtml($content)
+    {
+        $scripts = '';
+        foreach ($this->document->scripts() as $script) {
+            $scripts .= '<script src="'.$script.'" type="text/javascript"></script>';
+        }
+        return $this->getHeader() . $scripts . $content . $this->getFooter();
     }
 }

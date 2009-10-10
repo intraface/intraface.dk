@@ -68,12 +68,16 @@ $accounts = $context->getAccounts();
 	}
 	</style>
 
-	<script type="text/javascript" src="<?php e(url('/javascript/yui/yahoo/yahoo.js')); ?>"></script>
-	<script type="text/javascript" src="<?php e(url('/javascript/yui/event/event.js')); ?>"></script>
-	<script type="text/javascript" src="<?php e(url('/javascript/yui/widget/widget.js')); ?>"></script>
-	<script type="text/javascript" src="<?php e(url('/javascript/getInnerText.js')); ?>"></script>
-	<script type="text/javascript" src="<?php e(url('/javascript/functions_string.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('/../../javascript/yui/yahoo/yahoo.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('/../../javascript/yui/event/event.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('/../../javascript/yui/widget/widget.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('/../../javascript/getInnerText.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('/../../javascript/functions_string.js')); ?>"></script>
 	<script type="text/javascript" src="<?php e($context->getAccountingModule()->getPath()); ?>javascript/daybook_list_account.js"></script>
+	<?php foreach ($context->getDocument()->styles() as $style): ?>
+		<script type="text/javascript" src="<?php e($style); ?>"></script>
+	<?php endforeach; ?>
+
 </head>
 <body>
 

@@ -11,6 +11,14 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
             return 'Intraface_modules_accounting_Controller_Daybook';
         } elseif ($name == 'settings') {
             return 'Intraface_modules_accounting_Controller_Settings';
+        } elseif ($name == 'account') {
+            return 'Intraface_modules_accounting_Controller_Account_Index';
+        } elseif ($name == 'vat') {
+            return 'Intraface_modules_accounting_Controller_Vat_Index';
+        } elseif ($name == 'voucher') {
+            return 'Intraface_modules_accounting_Controller_Voucher_Index';
+        } elseif ($name == 'end') {
+            return 'Intraface_modules_accounting_Controller_Year_End';
         }
     }
 
@@ -22,7 +30,7 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
     function renderHtml()
     {
         if (!$this->getYear()->isValid()) {
-            trigger_error('Året er ikke gyldigt', E_USER_ERROR);
+            trigger_error('ï¿½ret er ikke gyldigt', E_USER_ERROR);
         }
 
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/year/show.tpl.php');
@@ -66,11 +74,11 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
             return new k_SeeOther($this->url());
 
         } elseif (!empty($_POST['transfer_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
-            // kontoplanen fra sidste år hentes
+            // kontoplanen fra sidste ï¿½r hentes
             $year = $this->getYear();
             $year->setYear();
             if (empty($_POST['accountplan_year']) OR !is_numeric($_POST['accountplan_year'])) {
-                $year->error->set('Du kan ikke oprette kontoplanen, for du har ikke valgt et år at gøre det fra');
+                $year->error->set('Du kan ikke oprette kontoplanen, for du har ikke valgt et ï¿½r at gï¿½re det fra');
             } else {
                 if (!$year->createAccounts('transfer_from_last_year', $_POST['accountplan_year'])) {
                     throw new Exception('Kunne ikke oprette standardkontoplanen');
@@ -78,6 +86,11 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
             }
             $values = $year->get();
         }
+    }
+
+    function getValues()
+    {
+        return $this->getYear()->get();
     }
 
     function getYears()
@@ -99,5 +112,10 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
     {
         $gateway = $this->context->getYearGateway();
         return $gateway;
+    }
+
+    function t($phrase)
+    {
+        return $phrase;
     }
 }

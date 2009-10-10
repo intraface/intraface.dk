@@ -53,72 +53,50 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         $module = $this->getKernel()->module('accounting');
         $translation = $this->getKernel()->getTranslation('accounting');
 
-        return new Year($this->getKernel(), $this->name());
+        $year = new Year($this->getKernel());
+        $year->checkYear();
+        return $year;
     }
 
-    function POST()
+    function renderHtmlEdit()
     {
-        if (!empty($_POST['start']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
-            $year = $this->getYear();
-            $year->setYear();
-            header('Location: daybook.php');
-            exit;
+        $this->document->addScript($this->url('/../accounting/javascript/edit_account.js'));
+
+        $smarty = new k_Template(dirname(__FILE__) . '/../templates/account/edit.tpl.php');
+        return $smarty->render($this);
+    }
+
+    function postForm()
+    {
+        $module = $this->getKernel()->module('accounting');
+        $translation = $this->getKernel()->getTranslation('accounting');
+
+        $year = new Year($this->getKernel());
+        $year->checkYear();
+
+        $account = new Account($year, $this->name());
+
+        if (isset($_POST['vat_key']) && $_POST['vat_key'] != 0) {
+            $_POST['vat_percent'] = 25;
         }
-        if (!empty($_POST['primobalance']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
-            $year = $this->getYear();
-            $year->setYear();
-            header('Location: primosaldo.php');
-            exit;
-        } elseif (!empty($_POST['manual_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
-            $year = $this->getYear();
-            $year->setYear();
-            header('Location: accounts.php');
-            exit;
-        } elseif (!empty($_POST['standard_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
-            $this->getYear()->setYear();
-            if (!$this->getYear()->createAccounts('standard')) {
-                trigger_error('Kunne ikke oprette standardkontoplanen', E_USER_ERROR);
-            }
 
-            $values = $this->getYear()->get();
-
+        if ($id = $account->save($_POST)) {
             return new k_SeeOther($this->url());
-
-        } elseif (!empty($_POST['transfer_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
-            // kontoplanen fra sidste år hentes
-            $year = $this->getYear();
-            $year->setYear();
-            if (empty($_POST['accountplan_year']) OR !is_numeric($_POST['accountplan_year'])) {
-                $year->error->set('Du kan ikke oprette kontoplanen, for du har ikke valgt et år at gøre det fra');
-            }
-            else {
-                if (!$year->createAccounts('transfer_from_last_year', $_POST['accountplan_year'])) {
-                    trigger_error('Kunne ikke oprette standardkontoplanen', E_USER_ERROR);
-                }
-            }
-            $values = $year->get();
+        } else {
+            $values = $_POST;
         }
     }
 
-    function getYears()
+    function getValues()
     {
-    	return $this->getYear()->getList();
+        return $this->getAccount()->get();;
     }
 
-    function getAccount($id = 0)
+    function getAccount()
     {
-    	return new Account($this->getYear(), $id);
-    }
-
-    function getVatPeriod()
-    {
-    	return new VatPeriod($$this->getYear());
-    }
-
-    function getYearGateway()
-    {
-        $gateway = $this->context->getYearGateway();
-        return $gateway;
+        $module = $this->getKernel()->module('accounting');
+        $translation = $this->getKernel()->getTranslation('accounting');
+        return new Account($this->getYear(), $this->name());
     }
 
     function t($phrase)

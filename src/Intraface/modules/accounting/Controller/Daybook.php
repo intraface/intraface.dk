@@ -4,6 +4,7 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
     protected $registry;
     protected $post;
     protected $voucher;
+    protected $year;
 
     protected function map($name)
     {
@@ -19,6 +20,9 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
 
     function renderHtml()
     {
+        $this->document->addScript($this->url('/../../javascript/focusField.js'));
+        $this->document->addScript($this->url('/../accounting/javascript/daybook.js'));
+
         if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
             $this->getKernel()->setting->set('user', 'accounting.daybook.message', 'hide');
         } elseif (!empty($_GET['quickhelp']) AND in_array($_GET['quickhelp'], array('true', 'false'))) {
@@ -46,9 +50,16 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
 
     function getYear()
     {
-        $year = $this->context->getYear();
+        $module = $this->getKernel()->module('accounting');
+        $translation = $this->getKernel()->getTranslation('accounting');
+
+        if (is_object($this->year)) {
+            return $this->year;
+        }
+
+        $year = new Year($this->getKernel());
         $year->checkYear();
-        return $year;
+        return $this->year = $year;
     }
 
     function getYearGateway()
@@ -58,7 +69,7 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
 
     function postForm()
     {
-        //$this->getVoucher();
+        require_once dirname(__FILE__) . '/../Voucher.php';
         // tjek om debet og credit account findes
         //$voucher = Voucher::factory($this->getYear(), $_POST['voucher_number']);
         $voucher = $this->getVoucher($_POST['voucher_number']);
@@ -75,7 +86,7 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
         if (is_object($this->voucher)) {
     	    return $this->voucher;
     	}
-        return ($this->voucher = new Voucher($this->getYear(), $voucher_number));
+        return ($this->voucher = Voucher::factory($this->getYear(), $voucher_number));
     }
 
     function getValues()

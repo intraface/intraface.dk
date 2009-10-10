@@ -12,7 +12,7 @@ class Intraface_modules_accounting_VatPeriodGateway
     }
 
     /**
-     * Hente momsopgivelser fra i år
+     * Hente momsopgivelser fra i ï¿½r
      *
      * @return array
      */
@@ -48,17 +48,17 @@ class Intraface_modules_accounting_VatPeriodGateway
     public static function getPeriodsArray()
     {
         return array(
-                // halvårlig
+                // halvï¿½rlig
                 0 => array(
                     'name' => 'Halvårlig',
                     'periods' => array(
-                        // 1. halvår
+                        // 1. halvï¿½r
                         1 => array(
                             'name' => '1. halvår',
                             'date_from' => '01-01',
                             'date_to' => '06-30'
                         ),
-                        // 2. halvår
+                        // 2. halvï¿½r
                         2 => array(
                             'name' => '2. halvår',
                             'date_from' => '07-01',

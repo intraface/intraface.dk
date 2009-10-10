@@ -1,8 +1,11 @@
+<?php
+$values = $context->getValues();
+?>
 <h1>Rediger konto</h1>
 
 <form id="account" action="<?php e(url()); ?>" method="post">
 	<input type="hidden" name="id" value="<?php if (!empty($values['id'])) e($values['id']); ?>" />
-	<?php echo $context->getAccount($context->name())->error->view(); ?>
+	<?php echo $context->getAccount()->error->view(); ?>
 
 	<fieldset>
 		<legend>Kontoplysninger</legend>
@@ -18,7 +21,7 @@
 			<label for="account_type">Type</label>
 			<select name="type_key" id="account_type">
 				<option value="">Vælg</option>
-				<?php foreach ($account->types as $type_key=>$type) { ?>
+				<?php foreach ($context->getAccount()->types as $type_key=>$type) { ?>
 					<option value="<?php e($type_key); ?>"<?php if (!empty($values['type_key']) AND $type_key == $values['type_key']) { echo ' selected="selected"'; } ?>><?php e(__($type)); ?></option>
 				<?php } ?>
 			</select>
@@ -30,20 +33,20 @@
 		<div class="formrow">
 			<label for="account_usage">Brug</label>
 			<select name="use_key" id="account_usage">
-				<?php foreach ($account->use as $use_key=>$use) { ?>
+				<?php foreach ($context->getAccount()->use as $use_key=>$use) { ?>
 					<option value="<?php e($use_key); ?>"<?php if (!empty($values['use_key']) AND $use_key == $values['use_key']) { echo ' selected="selected"'; } ?>><?php e(__($use)); ?></option>
 				<?php } ?>
 
 			</select>
 		</div>
 	</fieldset>
-	<?php if ($year->get('vat') > 0): ?>
+	<?php if ($context->getYear()->get('vat') > 0): ?>
 	<fieldset id="vat_fieldset">
 	<legend>Momsindstilling</legend>
 		<div class="formrow">
 			<label for="vat_id">Moms</label>
 			<select name="vat_key" id="vat_id">
-				<?php foreach ($account->vat as $vat_key=>$vat) { ?>
+				<?php foreach ($context->getAccount()->vat as $vat_key=>$vat) { ?>
 					<option value="<?php e($vat_key); ?>"<?php if (!empty($values['vat_key']) AND $vat_key == $values['vat_key']) { echo ' selected="selected"'; } ?>><?php e(__($vat)); ?></option>
 				<?php } ?>
 			</select>
@@ -62,10 +65,6 @@
 	</fieldset>
 	<div>
 		<input type="submit" value="Gem" />
-		<?php if (!empty($values['id'])): ?>
-		<a href="account.php?id=<?php e($values['id']); ?>">Fortryd</a>
-		<?php else: ?>
-		<a href="accounts.php">Fortryd</a>
-		<?php endif; ?>
+		<a href="<?php e(url('../')); ?>">Fortryd</a>
 	</div>
 </form>

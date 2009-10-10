@@ -1,81 +1,80 @@
 
-<h1>Årsafslutning</h1>
+<h1>Ã…rsafslutning</h1>
 
 <?php /*if (!$year->get('locked') == 1): ?>
-	<p class="warning">Året er lukket for bogføring. Du kan låse det op under <a href="year_edit.php<?php e($year->get('id')); ?>">året</a>.</p>
-<?php */ if (!$year->isSettingsSet()): ?>
-	<p class="error">Kontoplanen er ikke delt op i resultatopgørelse og balance, eller der er ikke valgt en kapitalkonto. <a href="setting.php">Gå til indstillingerne</a>.</p>
-<?php elseif (count($post->getList('draft')) > 0): ?>
-	<p class="warning">Der er stadig poster i kassekladden. De skal bogføres, før du kan afslutte året. <a href="daybook.php">Gå til kassekladden</a>.</p>
-<?php elseif ($year->get('vat') == 1 AND count($vat_period->getList()) == 0): ?>
+	<p class="warning">ï¿½ret er lukket for bogfï¿½ring. Du kan lï¿½se det op under <a href="year_edit.php<?php e($context->getYear()->get('id')); ?>">ï¿½ret</a>.</p>
+<?php */ if (!$context->getYear()->isSettingsSet()): ?>
+	<p class="error">Kontoplanen er ikke delt op i resultatopgï¿½relse og balance, eller der er ikke valgt en kapitalkonto. <a href="setting.php">Gï¿½ til indstillingerne</a>.</p>
+<?php elseif (count($context->getPost()->getList('draft')) > 0): ?>
+	<p class="warning">Der er stadig poster i kassekladden. De skal bogfï¿½res, fï¿½r du kan afslutte ï¿½ret. <a href="daybook.php">Gï¿½ til kassekladden</a>.</p>
+<?php elseif ($context->getYear()->get('vat') == 1 AND count($context->getVatPeriod()->getList()) == 0): ?>
 	<p class="warning">Du har ikke oprettet nogen momsperioder. <a href="vat_period.php">Opret perioder</a>.</p>
-<?php elseif (!$year->isBalanced()): ?>
-	<p class="error">Balancen for året er <?php e(amountToOutput($year->get('year_saldo'))); ?>. I et dobbelt bogholderi skal saldoen altid være 0, for ellers er der ikke er bogført lige meget på debet og credit. Du kan først lave årsafslutning når regnskabet stemmer. <a href="daybook.php">Gå til kassekladden</a>.</p>
+<?php elseif (!$context->getYear()->isBalanced()): ?>
+	<p class="error">Balancen for ï¿½ret er <?php e(amountToOutput($context->getYear()->get('year_saldo'))); ?>. I et dobbelt bogholderi skal saldoen altid vï¿½re 0, for ellers er der ikke er bogfï¿½rt lige meget pï¿½ debet og credit. Du kan fï¿½rst lave ï¿½rsafslutning nï¿½r regnskabet stemmer. <a href="daybook.php">Gï¿½ til kassekladden</a>.</p>
 <?php else: ?>
 
 
-<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
-	<input type="hidden" name="step" value="<?php e($year_end->get('step') + 1); ?>" />
+<form action="<?php e(url()); ?>" method="post">
+	<input type="hidden" name="step" value="<?php e($context->getYearEnd()->get('step') + 1); ?>" />
 
 <?php
-switch($year_end->get('step') + 1):
+switch($context->getYearEnd()->get('step') + 1):
 
 	case 1:
 		?>
 
 	<div class="message">
-		<p><strong>Årsafslutning</strong>. Her kan du følge en guide til at afslutte dit årsregnskab.</p>
+		<p><strong>ï¿½rsafslutning</strong>. Her kan du fï¿½lge en guide til at afslutte dit ï¿½rsregnskab.</p>
 	</div>
 		<fieldset>
-			<legend>Trin 1: Sikre sig at alle poster er bogført</legend>
-			<p>Det første du skal gøre, er at kigge en ekstra gang på alle dine bilag.</p>
+			<legend>Trin 1: Sikre sig at alle poster er bogfï¿½rt</legend>
+			<p>Det fï¿½rste du skal gï¿½re, er at kigge en ekstra gang pï¿½ alle dine bilag.</p>
 			<ul>
-				<li>Er alle bilag bogført - fakturaer, indkøb, kreditnotaer og rykkere?</li>
-				<li>Har du bogført alle afskrivninger?</li>
+				<li>Er alle bilag bogfï¿½rt - fakturaer, indkï¿½b, kreditnotaer og rykkere?</li>
+				<li>Har du bogfï¿½rt alle afskrivninger?</li>
 				<li>Har du afstemt banken og kassen?</li>
 			</ul>
 
 
-		<?php if (!$year->isStated('invoice', $year->get('from_date'), $year->get('to_date'))): ?>
-			<p class="warning">Alle fakturaer i perioden er ikke bogført. <a href="/modules/debtor/list.php?type=invoice&amp;status=-1&amp;not_stated=true&amp;from_date=<?php e($year->get('from_date_dk')) ?>&amp;to_date=<?php e($year->get('to_date_dk')); ?>">Gå til ikke bogførte fakturaer</a>.</p>
+		<?php if (!$context->getYear()->isStated('invoice', $context->getYear()->get('from_date'), $context->getYear()->get('to_date'))): ?>
+			<p class="warning">Alle fakturaer i perioden er ikke bogfï¿½rt. <a href="/modules/debtor/list.php?type=invoice&amp;status=-1&amp;not_stated=true&amp;from_date=<?php e($context->getYear()->get('from_date_dk')) ?>&amp;to_date=<?php e($context->getYear()->get('to_date_dk')); ?>">Gï¿½ til ikke bogfï¿½rte fakturaer</a>.</p>
 		<?php endif; ?>
 
-		<?php if (!$year->isStated('credit_note', $year->get('from_date'), $year->get('to_date'))): ?>
-			<p class="warning">Alle kreditnotaer i perioden er ikke bogført. <a href="/modules/debtor/list.php?type=credit_note&amp;status=-1&amp;not_stated=true&amp;from_date=<?php e($year->get('from_date_dk')); ?>&amp;to_date=<?php e($year->get('to_date_dk')); ?>">Gå til ikke bogførte kreditnotaer</a>.</p>
+		<?php if (!$context->getYear()->isStated('credit_note', $context->getYear()->get('from_date'), $context->getYear()->get('to_date'))): ?>
+			<p class="warning">Alle kreditnotaer i perioden er ikke bogfï¿½rt. <a href="/modules/debtor/list.php?type=credit_note&amp;status=-1&amp;not_stated=true&amp;from_date=<?php e($context->getYear()->get('from_date_dk')); ?>&amp;to_date=<?php e($context->getYear()->get('to_date_dk')); ?>">Gï¿½ til ikke bogfï¿½rte kreditnotaer</a>.</p>
 		<?php endif; ?>
 
 		<?php
-			$vat_period = new VatPeriod($year);
-			$vat_periods = $vat_period->getList();
+			//$context->getVatPeriod() = new VatPeriod($context->getYear());
+			$vat_periods = $context->getVatPeriod()->getList();
 
 			foreach ($vat_periods as $period) {
-				$vat_period = new VatPeriod($year, $period['id']);
-				if (!$vat_period->get('voucher_id')) {
-					echo '<p class="warning">Momsperiode ' . $vat_period->get('label') . ' er ikke bogført. <a href="vat_view.php?id='.$vat_period->get('id').'">Gå til momsperioden</a>.</p>';
-				}
-				elseif (!$vat_period->compareAmounts()) {
-					echo '<p class="warning">Momsperiode ' . $vat_period->get('label') . ' stemmer ikke. <a href="vat_view.php?id='.$vat_period->get('id').'">Gå til momsperioden</a>.</p>';
+				$vat_period = new VatPeriod($context->getYear(), $period['id']);
+				if (!$context->getVatPeriod()->get('voucher_id')) {
+					echo '<p class="warning">Momsperiode ' . $context->getVatPeriod()->get('label') . ' er ikke bogfï¿½rt. <a href="vat_view.php?id='.$context->getVatPeriod()->get('id').'">Gï¿½ til momsperioden</a>.</p>';
+				} elseif (!$context->getVatPeriod()->compareAmounts()) {
+					echo '<p class="warning">Momsperiode ' . $context->getVatPeriod()->get('label') . ' stemmer ikke. <a href="vat_view.php?id='.$context->getVatPeriod()->get('id').'">Gï¿½ til momsperioden</a>.</p>';
 				}
 			}
 		?>
 
-			<input type="submit" value="Næste" name="step_things_stated" />
+			<input type="submit" value="Nï¿½ste" name="step_things_stated" />
 		</fieldset>
 		<?php
 	break;
 	case 2:
-		// her skal resultatopgørelsen gemmes.
+		// her skal resultatopgï¿½relsen gemmes.
 		?>
 		<fieldset>
-			<legend>Trin 2: Gem resultatopgørelsen</legend>
-			<?php if (count($year_end->getStatedActions('operating_reset')) == 0): ?>
+			<legend>Trin 2: Gem resultatopgï¿½relsen</legend>
+			<?php if (count($context->getYearEnd()->getStatedActions('operating_reset')) == 0): ?>
 			<input type="submit" name="previous" value="Forrige" />
-			<input type="submit" name="step_save_result" value="Gem resultatopgørelsen" class="confirm" />
+			<input type="submit" name="step_save_result" value="Gem resultatopgï¿½relsen" class="confirm" />
 			<?php else: ?>
-				<p>Resultatopgørelsen er allerede gemt. Du kan føre posterne tilbage, hvis du vil gemme igen.</p>
+				<p>Resultatopgï¿½relsen er allerede gemt. Du kan fï¿½re posterne tilbage, hvis du vil gemme igen.</p>
 				<input type="submit" name="previous" value="Forrige" />
-				<input type="submit" name="step_reverse_result_reset" value="Tilbagefør posterne" class="confirm" />
-				<input type="submit" name="next" value="Næste" class="confirm" />
+				<input type="submit" name="step_reverse_result_reset" value="Tilbagefï¿½r posterne" class="confirm" />
+				<input type="submit" name="next" value="Nï¿½ste" class="confirm" />
 			<?php endif; ?>
 		</fieldset>
 
@@ -83,37 +82,37 @@ switch($year_end->get('step') + 1):
 		<?php
 	break;
 	case 3:
-		// her skal resultatopgørelsen overføres til statuskonti - og årets resultat
+		// her skal resultatopgï¿½relsen overfï¿½res til statuskonti - og ï¿½rets resultat
 		?>
 
-		<?php if (count($year_end->getStatement('operating')) == 0): ?>
+		<?php if (count($context->getYearEnd()->getStatement('operating')) == 0): ?>
 			<fieldset>
-			<legend>Trin 3: Poster overføres til resultatopgørelseskontoen</legend>
-			<p class="warning">Du er endnu ikke helt klar til dette trin, for resultatopgørelsen er ikke gemt.</p>
+			<legend>Trin 3: Poster overfï¿½res til resultatopgï¿½relseskontoen</legend>
+			<p class="warning">Du er endnu ikke helt klar til dette trin, for resultatopgï¿½relsen er ikke gemt.</p>
 			<input type="submit" value="Forrige" name="previous" />
 			</fieldset>
 		<?php else: ?>
 <?php
-$status_accounts = $account->getList('status');
+$status_accounts = $context->getAccount()->getList('status');
 ?>
 
 	<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
 		<fieldset>
-			<legend>Trin 3: Poster overføres til resultatopgørelseskontoen</legend>
-			<p>Her kan du automatisk overføre alle poster fra driftskonti til resultatopgørelsen. Derved nulstilles alle driftskonti. Lad være at trykke på knappen, hvis du ikke er helt sikker på, hvad du gør.</p>
+			<legend>Trin 3: Poster overfï¿½res til resultatopgï¿½relseskontoen</legend>
+			<p>Her kan du automatisk overfï¿½re alle poster fra driftskonti til resultatopgï¿½relsen. Derved nulstilles alle driftskonti. Lad vï¿½re at trykke pï¿½ knappen, hvis du ikke er helt sikker pï¿½, hvad du gï¿½r.</p>
 			<div class="formrow">
-			<label for="result_account">Poster overføres til</label>
+			<label for="result_account">Poster overfï¿½res til</label>
 			<select id="result_account" name="result_account_id">
-				<option value="">Vælg</option>
+				<option value="">Vï¿½lg</option>
 				<?php foreach ($status_accounts as $a) { ?>
-					<option value="<?php e($a['id']); ?>"<?php if ($year->getSetting('result_account_id')==$a['id']) { echo ' selected="selected"'; } ?>><?php e($a['number']); ?> <?php e($a['name']); ?></option>
+					<option value="<?php e($a['id']); ?>"<?php if ($context->getYear()->getSetting('result_account_id')==$a['id']) { echo ' selected="selected"'; } ?>><?php e($a['number']); ?> <?php e($a['name']); ?></option>
 				<?php } ?>
 			</select>
 			</div>
 
 			<div>
 				<input type="submit" name="previous" value="Forrige" />
-				<input type="submit" name="step_result" value="Overfør poster" class="confirm" />
+				<input type="submit" name="step_result" value="Overfï¿½r poster" class="confirm" />
 			</div>
 		</fieldset>
 	</form>
@@ -130,7 +129,7 @@ $status_accounts = $account->getList('status');
 		</tr>
 		</thead>
 		<tbody>
-		<?php foreach ($account->getList('drift', true) AS $a): ?>
+		<?php foreach ($context->getAccount()->getList('drift', true) AS $a): ?>
 			<tr>
 				<td><a href="account.php?id=<?php e($a['id']); ?>"><?php e($a['number']); ?></a></td>
 				<td><?php e($a['name']); ?></td>
@@ -146,10 +145,10 @@ $status_accounts = $account->getList('status');
 		endif;
 	break;
 	case 4:
-		// her skal statusopgørelsen gemmes.
+		// her skal statusopgï¿½relsen gemmes.
 		?>
 		<fieldset>
-			<legend>Trin 4: Gem statusopgørelsen</legend>
+			<legend>Trin 4: Gem statusopgï¿½relsen</legend>
 			<input type="submit" name="previous" value="Forrige" />
 			<input type="submit" name="step_save_balance" value="Gem balancen" class="confirm" />
 		</fieldset>
@@ -158,15 +157,15 @@ $status_accounts = $account->getList('status');
 	break;
 
 	case 5:
-		// her skal man så kunne aflæse resultatopgørelsen og balancen på samme side
-		$result_statements = $year_end->getStatement('operating');
-		$balance_statements = $year_end->getStatement('balance');
+		// her skal man sï¿½ kunne aflï¿½se resultatopgï¿½relsen og balancen pï¿½ samme side
+		$result_statements = $context->getYearEnd()->getStatement('operating');
+		$balance_statements = $context->getYearEnd()->getStatement('balance');
 
 		if (count($result_statements) == 0 OR count($balance_statements) == 0):
 			?>
 			<fieldset>
-			<legend>Trin 5: Årsregnskabet</legend>
-			<p class="warning">Du er ikke helt klar til dette trin endnu, for årsregnskabet er endnu ikke gemt.</p>
+			<legend>Trin 5: ï¿½rsregnskabet</legend>
+			<p class="warning">Du er ikke helt klar til dette trin endnu, for ï¿½rsregnskabet er endnu ikke gemt.</p>
 			<input name="previous" type="submit" value="Forrige" />
 			</fieldset>
 
@@ -174,22 +173,22 @@ $status_accounts = $account->getList('status');
 		else:
 		?>
 		<fieldset>
-			<legend>Trin 5: Årsregnskabet</legend>
-			<p>Årsregnskabet er færdig. Du kan se det nedenunder - og du kan skrive det ud som et excel-ark. God fornøjelse.</p>
+			<legend>Trin 5: ï¿½rsregnskabet</legend>
+			<p>ï¿½rsregnskabet er fï¿½rdig. Du kan se det nedenunder - og du kan skrive det ud som et excel-ark. God fornï¿½jelse.</p>
 			<input name="previous" type="submit" value="Forrige" />
-			<input name="next" type="submit" value="Næste" />
+			<input name="next" type="submit" value="Nï¿½ste" />
 		</fieldset>
 
 		<ul class="options">
 			<li><a class="excel" href="end_excel.php">Excel</a></li>
 		</ul>
 		<table>
-			<caption>Resultatopgørelse</caption>
+			<caption>Resultatopgï¿½relse</caption>
 			<thead>
 				<tr>
 					<th>Kontonummer</th>
 					<th>Konto</th>
-					<th>Beløb</th>
+					<th>Belï¿½b</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -211,7 +210,7 @@ $status_accounts = $account->getList('status');
 				<tr>
 					<th>Kontonummer</th>
 					<th>Konto</th>
-					<th>Beløb</th>
+					<th>Belï¿½b</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -234,7 +233,7 @@ $status_accounts = $account->getList('status');
 
 			<table>
 
-				<caption>Resultatopgørelse</caption>
+				<caption>Resultatopgï¿½relse</caption>
 				<thead>
 				<tr>
 					<th>Tekst</th>
@@ -243,7 +242,7 @@ $status_accounts = $account->getList('status');
 				</thead>
 				<tbody>
 				<tr>
-					<td colspan="2"><strong>Indtægter</strong></td>
+					<td colspan="2"><strong>Indtï¿½gter</strong></td>
 				</tr>
 			<?php
 
@@ -282,21 +281,21 @@ $status_accounts = $account->getList('status');
 	break;
 
 	case 6:
-		// hvad skal vi gøre med årets resultat?
+		// hvad skal vi gï¿½re med ï¿½rets resultat?
 		?>
 
 			<fieldset>
-				<legend>Trin 6: Årets resultat</legend>
-			<?php if (count($year_end->getStatedActions('result_account_reset')) == 0): ?>
-				<p>Årets resultat skal overføres til kapitalkontoen, så dine konti er klar til næste års regnskab.</p>
+				<legend>Trin 6: ï¿½rets resultat</legend>
+			<?php if (count($context->getYearEnd()->getStatedActions('result_account_reset')) == 0): ?>
+				<p>ï¿½rets resultat skal overfï¿½res til kapitalkontoen, sï¿½ dine konti er klar til nï¿½ste ï¿½rs regnskab.</p>
 				<input type="submit" value="Forrige" name="previous" />
 				<input type="submit" value="Gem" name="step_transfer_result" class="confirm" />
 			<?php else: ?>
-				<p>Årets resultat er allerede nulstillet. Du kan føre posterne tilbage, hvis du vil gemme igen.</p>
+				<p>ï¿½rets resultat er allerede nulstillet. Du kan fï¿½re posterne tilbage, hvis du vil gemme igen.</p>
 				<input type="submit" value="Forrige" name="previous" />
-				<input type="submit" name="step_reverse_result_account_reset" value="Tilbagefør posterne" />
+				<input type="submit" name="step_reverse_result_account_reset" value="Tilbagefï¿½r posterne" />
 
-				<input type="submit" name="next" value="Næste" />
+				<input type="submit" name="next" value="Nï¿½ste" />
 			<?php endif; ?>
 
 			</fieldset>
@@ -305,14 +304,14 @@ $status_accounts = $account->getList('status');
 	case 7:
 		?>
 			<fieldset>
-			<legend>Trin 7: Lås året?</legend>
-				<p>Efter en årsafslutning kan det være en god ide at låse året, så der ikke længere kan bogføres i det.</p>
+			<legend>Trin 7: Lï¿½s ï¿½ret?</legend>
+				<p>Efter en ï¿½rsafslutning kan det vï¿½re en god ide at lï¿½se ï¿½ret, sï¿½ der ikke lï¿½ngere kan bogfï¿½res i det.</p>
 				<div>
-					<label><input type="radio" name="lock" value="1" <?php if ($year->get('locked') == 1) echo ' checked="checked"'; ?>/> Lås</label>
-					<label><input type="radio" name="lock" value="0"<?php if ($year->get('locked') == 0) echo ' checked="checked"'; ?> /> Lås ikke</label>
+					<label><input type="radio" name="lock" value="1" <?php if ($context->getYear()->get('locked') == 1) echo ' checked="checked"'; ?>/> Lï¿½s</label>
+					<label><input type="radio" name="lock" value="0"<?php if ($context->getYear()->get('locked') == 0) echo ' checked="checked"'; ?> /> Lï¿½s ikke</label>
 				</div>
 				<input type="submit" name="previous" value="Forrige" />
-				<input type="submit" name="step_lock_year" value="Næste" />
+				<input type="submit" name="step_lock_year" value="Nï¿½ste" />
 			</fieldset>
 		<?php
 	break;
@@ -322,8 +321,8 @@ $status_accounts = $account->getList('status');
 		?>
 			<fieldset>
 				<legend>Trin 8: Fyraften</legend>
-				<p>Det er godt arbejde. Nu har du fortjent en pause. Håber ikke det var for vanskeligt. Vi hører naturligvis altid gerne om dine oplevelser med programmet, så vi kan forbedre det mest muligt.</p>
-				<p><a class="excel" href="end_excel.php">Hent årsregnskabet i et regneark</a></p>
+				<p>Det er godt arbejde. Nu har du fortjent en pause. Hï¿½ber ikke det var for vanskeligt. Vi hï¿½rer naturligvis altid gerne om dine oplevelser med programmet, sï¿½ vi kan forbedre det mest muligt.</p>
+				<p><a class="excel" href="end_excel.php">Hent ï¿½rsregnskabet i et regneark</a></p>
 				<input type="submit" value="Forrige" name="previous" />
 			</fieldset>
 		<?php
@@ -337,23 +336,23 @@ endswitch;
 </form>
 <!--
 <ol>
-	<li>Hvis man har været gennem hele guiden og lavet det hele, skal der bare være et link til en rapport - hvor man har mulighed for at ændre noget tekst i</li>
-	<li>Tjekker om bogføringen stemmer</li>
-	<li>Tjekker om momskonti er tømte</li>
+	<li>Hvis man har vï¿½ret gennem hele guiden og lavet det hele, skal der bare vï¿½re et link til en rapport - hvor man har mulighed for at ï¿½ndre noget tekst i</li>
+	<li>Tjekker om bogfï¿½ringen stemmer</li>
+	<li>Tjekker om momskonti er tï¿½mte</li>
 
-	<li>Vi laver det som en KLIK-GUIDE med følgende spørgsmål:
+	<li>Vi laver det som en KLIK-GUIDE med fï¿½lgende spï¿½rgsmï¿½l:
 		<ul style="margin: 2em;">
-			<li>Er alle poster fra i år indtastet?</li>
+			<li>Er alle poster fra i ï¿½r indtastet?</li>
 			<li>Er momsregnskabet lavet og er posterne registreret rigtigt?</li>
 		</ul>
 	</li>
-	<li>Overfør poster til resultatkontoen. Der skal nok laves en tabel til det - så kan det evt. også fortrydes igen.</li>
+	<li>Overfï¿½r poster til resultatkontoen. Der skal nok laves en tabel til det - sï¿½ kan det evt. ogsï¿½ fortrydes igen.</li>
 	<li>Viser resultatkontoen.</li>
-	<li>Der spørges om hvilken konto resultatet skal overføres til - hvilket ofte vil være årets resultat.</li>
-	<li>Det er det årsafslutningen skal kunne, men næste år skal så kunne starte med følgende:
+	<li>Der spï¿½rges om hvilken konto resultatet skal overfï¿½res til - hvilket ofte vil vï¿½re ï¿½rets resultat.</li>
+	<li>Det er det ï¿½rsafslutningen skal kunne, men nï¿½ste ï¿½r skal sï¿½ kunne starte med fï¿½lgende:
 		<ul>
 			<li>Et nyt regnskab med samme kontoplan og indstillinger oprettes.</li>
-			<li>Der spørges om statuskonti skal overføres til nye regnskab som primosaldo.</li>
+			<li>Der spï¿½rges om statuskonti skal overfï¿½res til nye regnskab som primosaldo.</li>
 		</ul>
 	</li>
 </ol>

@@ -38,6 +38,7 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
         return new Year($this->getKernel(), $this->name());
     }
 
+
     function POST()
     {
         if (!empty($_POST['start']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {

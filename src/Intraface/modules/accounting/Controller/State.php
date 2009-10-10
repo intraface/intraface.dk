@@ -14,6 +14,9 @@ class Intraface_modules_accounting_Controller_State extends k_Component
 
     function renderHtml()
     {
+        $module = $this->getKernel()->module('accounting');
+        $translation = $this->getKernel()->getTranslation('accounting');
+
         if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
             $this->getKernel()->setting->set('user', 'accounting.state.message', 'hide');
         } elseif (!empty($_GET['message2']) AND in_array($_GET['message2'], array('hide'))) {
@@ -42,6 +45,9 @@ class Intraface_modules_accounting_Controller_State extends k_Component
 
     function getYear()
     {
+        $module = $this->getKernel()->module('accounting');
+        $translation = $this->getKernel()->getTranslation('accounting');
+
         $year = $this->context->getYear();
         $year->checkYear();
         return $year;
@@ -52,15 +58,18 @@ class Intraface_modules_accounting_Controller_State extends k_Component
         return new Intraface_modules_accounting_YearGateway($this->getKernel());
     }
 
-    function POST()
+    function postForm()
     {
+        $module = $this->getKernel()->module('accounting');
+        $translation = $this->getKernel()->getTranslation('accounting');
+
         $voucher = new Voucher($this->getYear());
         // denne funktion vælger automatisk alle poster i kassekladden
         if (!$voucher->stateDraft()) {
             // $post->error->set('Posterne kunne ikke bogføres');
         }
 
-        return k_SeeOther($this->url());
+        return new k_SeeOther($this->url());
     }
 
     function getVoucher()
@@ -68,7 +77,7 @@ class Intraface_modules_accounting_Controller_State extends k_Component
         require_once dirname(__FILE__) . '/../Voucher.php';
         return new Voucher($this->getYear());
     }
-
+    /*
     function getValues()
     {
         $values['voucher_number'] = $this->getVoucher()->getMaxNumber() + 1;
@@ -82,6 +91,7 @@ class Intraface_modules_accounting_Controller_State extends k_Component
 
     	return $values;
     }
+    */
 
     function getAccount()
     {

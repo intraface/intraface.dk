@@ -1,3 +1,7 @@
+<?php
+$values = $context->getValues();
+?>
+
 <h1>Regnskabsår</h1>
 
 <form action="<?php e($context->url()); ?>" method="post">
