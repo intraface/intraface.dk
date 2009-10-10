@@ -114,7 +114,7 @@ class Intraface_modules_product_Gateway
                     $this->getDBQuery()->setSorting("product.changed_date DESC");
                 break;
             default:
-                    $this->getDBQuery()->setSorting("detail.name ASC");
+                    $this->getDBQuery()->setSorting("detail_translation.name ASC");
                 break;
         }
 
