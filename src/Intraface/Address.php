@@ -110,7 +110,7 @@ class Intraface_Address extends Intraface_Standard
      *
      * @return array
      */
-    private static function getBelongToTypes()
+    public static function getBelongToTypes()
     {
         return array(1 => 'intranet',
                      2 => 'user',
