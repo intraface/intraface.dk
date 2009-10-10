@@ -32,6 +32,7 @@ $res = $db->setCharset('utf8');
 if (PEAR::isError($res)) {
     trigger_error($res->getUserInfo(), E_USER_WARNING);
 }
+
 $GLOBALS['kernel'] = $kernel;
 $GLOBALS['intranet'] = $kernel->intranet;
 $GLOBALS['db'] = $db;
