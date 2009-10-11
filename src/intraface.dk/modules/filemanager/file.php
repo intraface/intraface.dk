@@ -25,9 +25,9 @@ $page->start($translation->get('file')) . ': ' . $filemanager->get('file_name');
     <?php echo $filemanager->error->view(); ?>
 
     <ul class="options">
-        <li><a href="edit.php?id=<?php e($filemanager->get("id")); ?>"><?php e($translation->get('edit', 'common')); ?></a></li>
+        <li><a href="edit.php?id=<?php e($filemanager->get("id")); ?>"><?php e($translation->get('Edit', 'common')); ?></a></li>
         <li><a href="<?php e($filemanager->get('file_uri')); ?>" target="_blank"><?php e($translation->get('get file')); ?></a></li>
-        <li><a href="index.php?use_stored=true"><?php e($translation->get('close', 'common')); ?></a></li>
+        <li><a href="index.php?use_stored=true"><?php e($translation->get('Close', 'common')); ?></a></li>
     </ul>
 
     <table>
@@ -130,7 +130,7 @@ $page->start($translation->get('file')) . ': ' . $filemanager->get('file_name');
             $shared_filehandler = $kernel->useShared('filehandler');
             ?>
             <ul class="options">
-                <li><a href="<?php e($shared_filehandler->getPath()); ?>settings.php"><?php e($translation->get('manage your files sizes')); ?></a></li>
+                <li><a href="<?php e($shared_filehandler->getPath()); ?>settings.php"><?php e($translation->get('manage your image sizes')); ?></a></li>
             </ul>
         <?php endif; ?>
         <?php

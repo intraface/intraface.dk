@@ -64,7 +64,7 @@ if (count($instances) > 0): ?>
     </table>
 
     <ul class="options">
-        <li><a href="edit_instance_type.php"><?php e(__('add new instance type')); ?></a><li>
+        <li><a href="edit_instance_type.php"><?php e(__('Add new instance type')); ?></a><li>
     </ul>
 <?php endif; ?>
 

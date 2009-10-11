@@ -71,7 +71,7 @@ $page->start($translation->get('upload files'));
 
 
     <p>
-        <input type="submit" value="<?php e($translation->get('save', 'common')); ?>" />
+        <input type="submit" value="<?php e($translation->get('Save', 'common')); ?>" />
          <a href="<?php e($redirect->getRedirect('index.php')); ?>"><?php e($translation->get('Cancel', 'common')); ?></a>
     </p>
 
