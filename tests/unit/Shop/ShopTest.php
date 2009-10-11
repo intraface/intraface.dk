@@ -146,7 +146,7 @@ class ShopTest extends PHPUnit_Framework_TestCase
     function testPlaceManualOrder()
     {
         $ean = '2222222222222';
-        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
+        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'ean' => $ean);
         $mailer = new FakePhpMailer;
         $order_id = $this->webshop->placeManualOrder($data, array(), $mailer);
         $this->assertTrue($order_id > 0);
@@ -157,7 +157,7 @@ class ShopTest extends PHPUnit_Framework_TestCase
     function testAddOnlinePaymentReturnsZeroWhenNoAccessToOnlinepayment()
     {
         $ean = '2222222222222';
-        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
+        $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'ean' => $ean);
         $mailer = new FakePhpMailer;
         $order_id = $this->webshop->placeOrder($data, $mailer);
         $transaction_number = 1000;
