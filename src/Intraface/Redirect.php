@@ -118,7 +118,6 @@
  * @author  Sune Jensen <sj@sunet.dk>
  * @version @package-version@
  */
-
 class Intraface_Redirect extends Ilib_Redirect
 {
     /**
@@ -196,7 +195,6 @@ class Intraface_Redirect extends Ilib_Redirect
      */
     static function factory($kernel, $type, $query_variable = 'redirect_id', $query_return_variable = 'return_redirect_id')
     {
-
         if (!is_object($kernel)) {
             trigger_error("First parameter in redirect::factory is not kernel", E_USER_ERROR);
         }
