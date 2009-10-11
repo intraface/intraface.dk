@@ -14,7 +14,6 @@ class Intraface_Pdf extends Document_Cpdf
 
     public function __construct()
     {
-
         $this->page_width = 595;
         $this->page_height = 841;
 
@@ -51,7 +50,7 @@ class Intraface_Pdf extends Document_Cpdf
                       197 => 'Aring');
 
         parent::selectFont('Helvetica.afm', array('differences'=>$diff));
-        
+
         $this->calculateDynamicValues();
     }
 
@@ -73,7 +72,7 @@ class Intraface_Pdf extends Document_Cpdf
         $this->value['content_height'] = $this->page_height - $this->value['margin_bottom'] - $this->value['margin_top']; // content_height
 
         $this->value['font_spacing'] = $this->value['font_size'] + $this->value['font_padding_top'] + $this->value['font_padding_bottom'];
-        
+
         // X and Y are need to be reset, if the margins are changed.
         $this->setX(0);
         $this->setY(0);
@@ -93,7 +92,7 @@ class Intraface_Pdf extends Document_Cpdf
         //Every time we change a fixed value we need to update the dynamic values
         if (in_array($key, array('margin_right', 'margin_left', 'margin_top', 'margin_bottom', 'font_size', 'font_padding_top', 'font_padding_bottom'))) {
             $this->calculateDynamicValues();
-        }    
+        }
     }
 
     /**
