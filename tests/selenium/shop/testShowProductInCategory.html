@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>testShowProductInCategory</title>
+<title>shop:testShowProductInCategory</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">testShowProductInCategory</td></tr>
+<tr><td rowspan="1" colspan="3">shop:testShowProductInCategory</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -23,7 +23,13 @@
 </tr>
 <tr>
 	<td>open</td>
-	<td>demo/intraface/shop/1</td>
+	<td>demo/intraface/shop/1/shop?update_all</td>
+	<td></td>
+</tr>
+<!--cache is first cleared after categories are found, så first time they are not updated-->
+<tr>
+	<td>open</td>
+	<td>demo/intraface/shop/1/shop</td>
 	<td></td>
 </tr>
 <tr>
