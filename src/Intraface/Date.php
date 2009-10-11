@@ -8,13 +8,11 @@ class Intraface_Date
         $this->date = $date;
     }
 
+	/**
+     * HUSK AT RETTE I BÅDE VALIDATOR OG DATE
+     */
     function convert2db($default_year = "")
     {
-
-        /**
-         * HUSK AT RETTE I BÅDE VALIDATOR OG DATE
-         */
-
         $d = "([0-3]?[0-9])";
         $m = "([0-1]?[0-9])";
         $y = "([0-9][0-9][0-9][0-9]|[0-9]?[0-9])";
