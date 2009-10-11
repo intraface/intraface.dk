@@ -18,42 +18,21 @@ require $config_file;
 
 require_once dirname(__FILE__) . '/common.php';
 
-function intrafaceFrontendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
-    $errorhandler = new ErrorHandler;
-    $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
-    if (defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
-        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
-    } else {
-        $errorhandler->addObserver(new ErrorHandler_Observer_User, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // See description of ~ above
-    }
-    return $errorhandler->handleError($errno, $errstr, $errfile, $errline, $errcontext);
-}
-
-function intrafaceFrontendExceptionhandler($e) {
-    $errorhandler = new ErrorHandler;
-    $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
-    if (defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
-        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen);
-    } else {
-        $errorhandler->addObserver(new ErrorHandler_Observer_User);
-    }
-    return $errorhandler->handleException($e);
-}
-
+// error handling
 set_error_handler('intrafaceFrontendErrorhandler', ERROR_HANDLE_LEVEL);
 set_exception_handler('intrafaceFrontendExceptionhandler');
 
 ob_start(); // ob_gzhandler()
 session_start();
 
-$auth = new Intraface_Auth(session_id());
+//$auth = new Intraface_Auth(session_id());
+$auth = $bucket->get('Intraface_Auth');
 
 if (!$auth->hasIdentity()) {
     $auth->toLogin();
 }
 
 $kernel = new Intraface_Kernel(session_id());
-
 $kernel->user = $auth->getIdentity(MDB2::singleton(DB_DSN));
 
 if (!$intranet_id = $kernel->user->getActiveIntranetId()) {
@@ -71,6 +50,14 @@ $language = $kernel->setting->get('user', 'language');
 // makes intranet_id accessable in Doctrine
 Intraface_Doctrine_Intranet::singleton($kernel->intranet->getId());
 
+$config = new Intraface_Config;
+$config->language = $language;
+$config->kernel = $kernel;
+
+$bucket = new bucket_Container(new Intraface_Factory($config));
+$translation = $bucket->get('translation2');
+
+/*
 // set the parameters to connect to your db
 $dbinfo = array(
     'hostspec' => DB_HOST,
@@ -123,51 +110,9 @@ $translation->outputString = '%stringID%';
 $translation->url = '';           //same as default
 $translation->emptyPrefix  = '';  //default: empty string
 $translation->emptyPostfix = '';  //default: empty string
-
+*/
 $kernel->translation = $translation;
 
-if (!function_exists('t')) {
-  /**
-   * This function is dynamically redefinable.
-   * @see $GLOBALS['_global_function_callback_e']
-   */
-  function t($args) {
-    $args = func_get_args();
-    return call_user_func_array($GLOBALS['_global_function_callback_t'], $args);
-  }
-  if (!isset($GLOBALS['_global_function_callback_t'])) {
-    $GLOBALS['_global_function_callback_t'] = NULL;
-  }
-}
-
-$GLOBALS['_global_function_callback_t'] = 'intraface_t';
-
-if (!function_exists('__')) {
-  /**
-   * This function is dynamically redefinable.
-   * @see $GLOBALS['_global_function_callback_e']
-   */
-  function __($args) {
-    $args = func_get_args();
-    return call_user_func_array($GLOBALS['_global_function_callback___'], $args);
-  }
-  if (!isset($GLOBALS['_global_function_callback___'])) {
-    $GLOBALS['_global_function_callback___'] = NULL;
-  }
-}
-
-$GLOBALS['_global_function_callback_t'] = 'intraface_t';
-$GLOBALS['_global_function_callback___'] = 'intraface_t';
-
-function intraface_t($string, $page = NULL)
-{
-    global $translation;
-    if ($page !== NULL) {
-        return $translation->get($string, $page);
-    } else {
-        return $translation->get($string);
-    }
-}
-
+// @todo CHANGE THIS TO BUCKET INSTEAD
 $dependency = new Intraface_Dependency();
 $dependency->whenCreating('Intraface_modules_product_Gateway')->forVariable('kernel')->willUse($kernel);

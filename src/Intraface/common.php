@@ -2,18 +2,23 @@
 /**
  * Includes common files and makes common settings
  *
+ * Should never be edited. Edit config.local.php in intraface.dk if you want to override default values.
+ *
  * @package Intraface
  * @author  Lars Olesen <lars@legestue.net>
  * @since   0.1.0
  * @version @package-version@
  */
 
-//configuration - this should never be edited - only edit intraface.dk/config.local.php
-
+// required files
 require_once 'Ilib/ClassLoader.php';
 require_once 'Doctrine/lib/Doctrine.php';
 spl_autoload_register(array('Doctrine', 'autoload'));
 require_once 'k/urlbuilder.php';
+require_once 'Intraface/functions.php';
+require_once 'Intraface/shared/systemmessage/SystemDisturbance.php';
+require_once 'lib/bucket.php';
+require_once 'Intraface/Page.php';
 
 // paths
 if (!defined('PATH_INCLUDE_IHTML')) define('PATH_INCLUDE_IHTML', PATH_ROOT.'Intraface/ihtml' . DIRECTORY_SEPARATOR);
@@ -35,32 +40,27 @@ if (defined('NET_SCHEME') && defined('NET_HOST') && defined('NET_DIRECTORY')) {
     define('FILE_VIEWER', PATH_WWW . 'main/file/');
 }
 
-if (!defined('MDB2_DEBUG')) {
-    define('MDB2_DEBUG', false);
+// errorhandling
+if (!defined('ERROR_HANDLE_LEVEL')) {
+    define('ERROR_HANDLE_LEVEL', E_ALL);
 }
+set_error_handler('intrafaceBackendErrorhandler', ERROR_HANDLE_LEVEL);
+set_exception_handler('intrafaceBackendExceptionhandler');
 
-// @todo This showed not to be the right solution to change this setting - but what then... /Sune (29-08-2007)
-// define('MDB2_PORTABILITY_EMPTY_TO_NULL', false);
+// wiring
+$bucket = new bucket_Container(new Intraface_Factory());
 
-// Filehandler
+// filehandler
 if (!defined('IMAGE_LIBRARY')) define('IMAGE_LIBRARY', 'GD');
-
-// timezone and local
-if (!defined('COUNTRY_LOCAL')) define('COUNTRY_LOCAL', 'da_DK');
-if (!defined('TIMEZONE')) define('TIMEZONE', 'Europe/Copenhagen');
-setlocale(LC_CTYPE, COUNTRY_LOCAL);
-putenv("TZ=".TIMEZONE);
 
 // database
 if (!defined('DB_DSN')) define('DB_DSN', 'mysql://'.DB_USER.':'.DB_PASS.'@'.DB_HOST.'/'.DB_NAME.'');
+if (!defined('MDB2_DEBUG')) {
+    define('MDB2_DEBUG', false);
+}
+$db = $bucket->get('mdb2');
 
-
-// functions
-require_once 'Intraface/functions.php';
-
-// Systembesked
-require_once 'Intraface/shared/systemmessage/SystemDisturbance.php';
-
+/*
 $db = MDB2::singleton(DB_DSN, array('persistent' => true));
 if (PEAR::isError($db)) {
     trigger_error($db->getMessage(), E_USER_ERROR);
@@ -69,6 +69,10 @@ if (PEAR::isError($db)) {
 $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
 $db->setOption('debug', MDB2_DEBUG);
 $db->setOption('portability', MDB2_PORTABILITY_NONE);
+$res = $db->setCharset('latin1');
+if (PEAR::isError($res)) {
+    trigger_error($res->getUserInfo(), E_USER_ERROR);
+}
 
 if ($db->getOption('debug')) {
     $db->setOption('log_line_break', "\n\n\n\n\t");
@@ -79,42 +83,18 @@ if ($db->getOption('debug')) {
     register_shutdown_function(array($my_debug_handler, 'executeAndExplain'));
     register_shutdown_function(array($my_debug_handler, 'dumpInfo'));
 }
+*/
+
+// timezone and local
+if (!defined('COUNTRY_LOCAL')) define('COUNTRY_LOCAL', 'da_DK');
+if (!defined('TIMEZONE')) define('TIMEZONE', 'Europe/Copenhagen');
+setlocale(LC_CTYPE, COUNTRY_LOCAL);
+putenv("TZ=".TIMEZONE);
+if (defined('TIMEZONE')) {
+    $db->exec('SET time_zone=\''.TIMEZONE.'\'');
+}
 
 // Initializes Doctrine
 Doctrine_Manager::getInstance()->setAttribute("use_dql_callbacks", true);
 Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
 Doctrine_Manager::connection(DB_DSN);
-
-if (defined('TIMEZONE')) {
-    $db->exec('SET time_zone=\''.TIMEZONE.'\'');
-}
-
-function intrafaceBackendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext) {
-    if (!defined('ERROR_LOG')) define('ERROR_LOG', dirname(__FILE__) . '/../log/error.log');
-    $errorhandler = new ErrorHandler;
-    if (!defined('ERROR_LEVEL_CONTINUE_SCRIPT')) define('ERROR_LEVEL_CONTINUE_SCRIPT', E_ALL);
-    $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
-    $errorhandler->addObserver(new ErrorHandler_Observer_Echo, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
-    return $errorhandler->handleError($errno, $errstr, $errfile, $errline, $errcontext);
-}
-
-function intrafaceBackendExceptionhandler($e) {
-    $errorhandler = new ErrorHandler;
-    $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
-    $errorhandler->addObserver(new ErrorHandler_Observer_Echo);
-    return $errorhandler->handleException($e);
-}
-
-if (!defined('ERROR_HANDLE_LEVEL')) {
-    define('ERROR_HANDLE_LEVEL', E_ALL);
-}
-
-set_error_handler('intrafaceBackendErrorhandler', ERROR_HANDLE_LEVEL);
-set_exception_handler('intrafaceBackendExceptionhandler');
-
-// vi skal have lavet en fil, der bare sørger for at inkludere filer.
-// i virkelighede var det måske smart, hvis vi brugte lidt
-// require_once så listen ikke var så lang - på den måde
-// fandt vi også mere grundigt ud af, hvilke viler der behøver
-// hvilke filer i stedet for bare en stor sikkerhedshalløj.
-// på den måde kan vi også flytte authentication is logged in til denne fil

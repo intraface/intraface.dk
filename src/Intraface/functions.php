@@ -300,3 +300,88 @@ function intraface_filesize_readable($size, $retstring = null)
         if ($sizestring == $sizes[0]) { $retstring = '%01d %s'; } // Bytes aren't normally fractional
         return sprintf($retstring, $size, $sizestring);
 }
+
+if (!function_exists('t')) {
+  /**
+   * This function is dynamically redefinable.
+   * @see $GLOBALS['_global_function_callback_e']
+   */
+  function t($args) {
+    $args = func_get_args();
+    return call_user_func_array($GLOBALS['_global_function_callback_t'], $args);
+  }
+  if (!isset($GLOBALS['_global_function_callback_t'])) {
+    $GLOBALS['_global_function_callback_t'] = NULL;
+  }
+}
+
+$GLOBALS['_global_function_callback_t'] = 'intraface_t';
+
+if (!function_exists('__')) {
+  /**
+   * This function is dynamically redefinable.
+   * @see $GLOBALS['_global_function_callback_e']
+   */
+  function __($args) {
+    $args = func_get_args();
+    return call_user_func_array($GLOBALS['_global_function_callback___'], $args);
+  }
+  if (!isset($GLOBALS['_global_function_callback___'])) {
+    $GLOBALS['_global_function_callback___'] = NULL;
+  }
+}
+
+$GLOBALS['_global_function_callback_t'] = 'intraface_t';
+$GLOBALS['_global_function_callback___'] = 'intraface_t';
+
+function intraface_t($string, $page = NULL)
+{
+    global $translation;
+    if ($page !== NULL) {
+        return $translation->get($string, $page);
+    } else {
+        return $translation->get($string);
+    }
+}
+
+function intrafaceBackendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext)
+{
+    if (!defined('ERROR_LOG')) define('ERROR_LOG', dirname(__FILE__) . '/../log/error.log');
+    $errorhandler = new ErrorHandler;
+    if (!defined('ERROR_LEVEL_CONTINUE_SCRIPT')) define('ERROR_LEVEL_CONTINUE_SCRIPT', E_ALL);
+    $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
+    $errorhandler->addObserver(new ErrorHandler_Observer_Echo, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
+    return $errorhandler->handleError($errno, $errstr, $errfile, $errline, $errcontext);
+}
+
+function intrafaceBackendExceptionhandler($e)
+{
+    $errorhandler = new ErrorHandler;
+    $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
+    $errorhandler->addObserver(new ErrorHandler_Observer_Echo);
+    return $errorhandler->handleException($e);
+}
+
+function intrafaceFrontendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext)
+{
+    $errorhandler = new ErrorHandler;
+    $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
+    if (defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
+        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
+    } else {
+        $errorhandler->addObserver(new ErrorHandler_Observer_User, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // See description of ~ above
+    }
+    return $errorhandler->handleError($errno, $errstr, $errfile, $errline, $errcontext);
+}
+
+function intrafaceFrontendExceptionhandler($e)
+{
+    $errorhandler = new ErrorHandler;
+    $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
+    if (defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
+        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen);
+    } else {
+        $errorhandler->addObserver(new ErrorHandler_Observer_User);
+    }
+    return $errorhandler->handleException($e);
+}

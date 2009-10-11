@@ -17,13 +17,17 @@ class Intraface_Page
     public $javascript_path = array();
     public $primary_module;
 
-    function __construct($object_kernel)
+    function __construct(Intraface_Kernel $object_kernel, DB_Sql $db = null)
     {
         if (!is_object($object_kernel)) {
             trigger_error('Page requires Kernel', E_USER_ERROR);
         }
         $this->kernel = $object_kernel;
-        $this->db = new DB_Sql;
+        if ($this->db == null) {
+            $this->db = new DB_Sql;
+        } else {
+            $this->db = $db;
+        }
     }
 
     function t($phrase)
