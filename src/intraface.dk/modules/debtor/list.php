@@ -200,7 +200,7 @@ $page->start(__($debtor->get('type').'s'));
     <caption><?php e(__($debtor->get("type").' title')); ?></caption>
     <thead>
         <tr>
-            <th><?php e(__('No.')); ?></th>
+            <th>#</th>
             <th colspan="2"><?php e(__('Contact')); ?></th>
             <th><?php e(__('Description')); ?></th>
             <th class="amount"><?php e(__('Amount')); ?></th>
@@ -310,9 +310,9 @@ $page->start(__($debtor->get('type').'s'));
                     <?php
                     if ($posts[$i]["locked"] == false) {
                         ?>
-                        <a class="edit" href="edit.php?id=<?php e($posts[$i]["id"]); ?>"><?php e(__('Edit')); ?></a>
+                        <a class="edit" href="edit.php?id=<?php e($posts[$i]["id"]); ?>"><?php e(__('Edit', 'common')); ?></a>
                         <?php if ($posts[$i]["status"] == "created"): ?>
-                        <a class="delete" title="<?php e(__('Are you sure?')); ?>" href="list.php?id=<?php e($posts[$i]["id"]); ?>&amp;action=delete&amp;use_stored=true"><?php e(__('Delete')); ?></a>
+                        <a class="delete" title="<?php e(__('Are you sure?')); ?>" href="list.php?id=<?php e($posts[$i]["id"]); ?>&amp;action=delete&amp;use_stored=true"><?php e(__('Delete', 'common')); ?></a>
                         <?php endif; ?>
                         &nbsp;
                         <?php

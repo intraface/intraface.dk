@@ -44,14 +44,14 @@ $page->start('Online payments');
 
 
 <fieldset class="hide_on_print">
-	<legend><?php e(t('Search')); ?></legend>
+	<legend><?php e(t('Search', 'common')); ?></legend>
 	<form method="get" action="index.php">
-		<label><?php e(t('Text')); ?>
+		<label><?php e(t('Text', 'common')); ?>
 			<input type="text" name="text" value="<?php e($onlinepayment->getDBQuery()->getFilter("text")); ?>" />
 		</label>
-		<label><?php e(t('Status')); ?>
+		<label><?php e(t('Status', 'common')); ?>
 		<select name="status">
-			<option value="-1"><?php e(t('All')); ?></option>
+			<option value="-1"><?php e(t('All', 'common')); ?></option>
 			<?php
 			$status_types = OnlinePayment::getStatusTypes();
 			for ($i = 1, $max = count($status_types); $i < $max; $i++) {
@@ -62,14 +62,14 @@ $page->start('Online payments');
 			?>
 			</select>
 		</label>
-        <label><?php e(t('From date')); ?>
+        <label><?php e(t('From date', 'common')); ?>
             <input type="text" name="from_date" id="date-from" value="<?php e($onlinepayment->getDBQuery()->getFilter("from_date")); ?>" /> <span id="calender"></span>
         </label>
-        <label><?php e(t('To date')); ?>
+        <label><?php e(t('To date', 'common')); ?>
             <input type="text" name="to_date" value="<?php e($onlinepayment->getDBQuery()->getFilter("to_date")); ?>" />
         </label>
 		<span>
-		<input type="submit" value="<?php e(t('Search')); ?>" />
+		<input type="submit" value="<?php e(t('Search', 'common')); ?>" />
 		</span>
 	</form>
 </fieldset>
@@ -78,11 +78,11 @@ $page->start('Online payments');
 	<caption><?php e(t('Online payments')); ?></caption>
 	<thead>
 		<tr>
-			<th><?php e(t('Date')); ?></th>
+			<th><?php e(t('Date', 'common')); ?></th>
 			<th><?php e(t('Transaction number')); ?></th>
 			<th><?php e(t('Related to')); ?></th>
-			<th><?php e(t('Amount')); ?></th>
-			<th><?php e(t('Status')); ?></th>
+			<th><?php e(t('Amount', 'common')); ?></th>
+			<th><?php e(t('Status', 'common')); ?></th>
 		</tr>
 	</thead>
 	<tbody>

@@ -315,7 +315,7 @@ $page->start(__($debtor->get('type')));
             <li><a href="edit.php?id=<?php e($debtor->get("id")); ?>"><?php e(t('Edit')); ?></a></li>
         <?php endif; ?>
         <li><a class="pdf" href="pdf_viewer.php?id=<?php e($debtor->get("id")); ?>" target="_blank"><?php e(t('Print pdf')); ?></a></li>
-        <li><a href="list.php?id=<?php e($debtor->get("id")); ?>&amp;type=<?php e($debtor->get("type")); ?>&amp;use_stored=true"><?php e(t('Close')); ?></a></li>
+        <li><a href="list.php?id=<?php e($debtor->get("id")); ?>&amp;type=<?php e($debtor->get("type")); ?>&amp;use_stored=true"><?php e(t('Close', 'common')); ?></a></li>
     </ul>
 
     <p><?php e($debtor->get('description')); ?></p>
@@ -444,7 +444,7 @@ if (isset($onlinepayment)) {
     <?php endif; ?>
 
     <?php if (($debtor->get("type") == "quotation" || $debtor->get("type") == "order") && ($debtor->get('status') == "created" || $debtor->get('status') == "sent")): ?>
-        <input type="submit" value="<?php e(t('Cancel')); ?>" name="cancel" class="confirm" title="<?php e(t('Are you sure?')); ?>" />
+        <input type="submit" value="<?php e(t('Cancel', 'common')); ?>" name="cancel" class="confirm" title="<?php e(t('Are you sure?')); ?>" />
     <?php endif; ?>
 
     <?php if ($debtor->get("type") == "quotation" && $debtor->get('status') == "sent" && $kernel->user->hasModuleAccess('order')): ?>

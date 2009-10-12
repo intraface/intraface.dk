@@ -202,7 +202,7 @@ $page->start(__($action.' '.$debtor->get('type')));
 		<p><?php e(__('Which payment method do you want to show on the '.$debtor->get("type"))); ?></p>
 		<div>
 			<label<?php if (isset($value['payment_method']) && $value['payment_method'] == 0) print(" class=\"selected\""); ?>><input class="input" id="none" type="radio" name="payment_method" value="0" <?php if (isset($value['payment_method']) && $value['payment_method'] == 0) print("checked=\"CHECKED\""); ?> />
-			<?php e(__('None')); ?></label>
+			<?php e(__('None', 'common')); ?></label>
 		</div>
     <?php if ($kernel->setting->get('intranet', 'bank_account_number')) { ?>
 		<div>
