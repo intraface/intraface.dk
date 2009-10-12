@@ -91,14 +91,15 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
             ->select('due_date, status, number, description, this_date, date_sent, contact_id
                 item.id, item.product_detail_id, item.product_variation_id, item.product_variation_detail_id, item.quantity,
                 item_product.id, item_product.has_variation, 
-                item_product_details.id, item_product_details.number, item_product_details.name, item_product_details.description, item_product_details.price, item_product_details.vat,
+                item_product_details.id, item_product_details.number, item_product_details_translation.name, item_product_details_translation.description, item_product_details.price, item_product_details.vat,
                 item_product_variation.id, item_product_variation.number,
                 item_product_variation_detail.id, item_product_variation_detail.price_difference, item_product_variation_detail.weight_difference')
             ->leftJoin('Intraface_modules_debtor_DebtorDoctrine.item item')
             ->innerJoin('item.product item_product')
             ->innerJoin('item_product.details item_product_details WITH item.product_detail_id = item_product_details.id')
-            ->leftJoin('item_product.variation item_product_variation WITH item.product_variation_id = item_product_variation.id')
-            ->innerJoin('item_product_variation.detail item_product_variation_detail')
+            ->innerJoin('item_product_details.Translation item_product_details_translation WITH item_product_details.id = item_product_details_translation.id')
+            ->leftJoin('item_product.variation item_product_variation WITH item.product_variation_id = item_product_variation.id AND (item_product_variation.deleted_at IS NULL OR item_product_variation.deleted_at IS NOT NULL)') // also deleted variations is used
+            ->leftJoin('item_product_variation.detail item_product_variation_detail')
             ->addWhere('active = 1')
             ->addWhere('item.active = 1')
             ->addWhere('type = ?', $this->type_key);
