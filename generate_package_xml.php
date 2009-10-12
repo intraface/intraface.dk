@@ -7,10 +7,10 @@
  * @version @package-version@
  */
 
-$version = '1.16.0';
+$version = '1.18.0';
 $stability = 'stable';
 $notes = '
-* Added short description to product attribute group. Corrected translation pageId.
+* small improvements
 ';
 $web_dir = 'src/intraface.dk';
 
