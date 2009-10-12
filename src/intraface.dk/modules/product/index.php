@@ -51,7 +51,7 @@ if (isset($_GET["search"]) || isset($_GET["keyword_id"])) {
     $gateway->getDBQuery()->useCharacter();
 }
 
-$gateway->getDBQuery()->defineCharacter("character", "detail.name");
+$gateway->getDBQuery()->defineCharacter("character", "detail_translation.name");
 $gateway->getDBQuery()->usePaging("paging");
 $gateway->getDBQuery()->storeResult("use_stored", "products", "toplevel");
 

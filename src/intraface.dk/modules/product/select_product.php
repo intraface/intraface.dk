@@ -115,7 +115,7 @@ if (isset($_GET["search"]) || isset($_GET["keyword_id"])) {
     $product->getDBQuery()->useCharacter();
 }
 
-$product->getDBQuery()->defineCharacter("character", "detail.name");
+$product->getDBQuery()->defineCharacter("character", "detail_translation.name");
 $product->getDBQuery()->usePaging("paging");
 $product->getDBQuery()->storeResult("use_stored", "select_product", "sublevel");
 $product->getDBQuery()->setExtraUri('set_quantity='.$quantity);

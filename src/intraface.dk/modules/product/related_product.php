@@ -45,7 +45,7 @@ if (isset($_GET["search"]) || isset($_GET["keyword_id"])) {
     $product->getDBQuery()->useCharacter();
 }
 
-$product->getDBQuery()->defineCharacter("character", "detail.name");
+$product->getDBQuery()->defineCharacter("character", "detail_translation.name");
 $product->getDBQuery()->setCondition("product.id != " . $_GET['id']);
 $product->getDBQuery()->setExtraUri("&amp;id=".(int)$_GET['id']);
 $product->getDBQuery()->usePaging("paging");

@@ -38,7 +38,7 @@ if (empty($_GET['use_stored'])) {
 
 // hente liste med produkter - bør hentes med getList!
 $product = new Product($kernel);
-$product->getDBQuery()->defineCharacter("character", "detail.name");
+$product->getDBQuery()->defineCharacter("character", "detail_translation.name");
 $product->getDBQuery()->usePaging("paging");
 $product->getDBQuery()->storeResult("use_stored", "products", "toplevel");
 $products = $product->getList();
