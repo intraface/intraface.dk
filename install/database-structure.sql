@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 2.11.9.5
+-- version 3.1.3
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 13, 2009 at 12:27 PM
--- Server version: 5.0.81
--- PHP Version: 5.2.6
+-- Generation Time: Oct 12, 2009 at 08:59 PM
+-- Server version: 5.0.67
+-- PHP Version: 5.2.9
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -16,7 +16,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `intrafac_intraface`
+-- Database: `intraface`
 --
 
 -- --------------------------------------------------------
@@ -49,7 +49,7 @@ CREATE TABLE `accounting_account` (
   KEY `kontonummer` (`number`),
   KEY `user_id` (`user_id`),
   KEY `intranet_id` (`intranet_id`,`year_id`,`active`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -75,7 +75,7 @@ CREATE TABLE `accounting_post` (
   KEY `year_id` (`year_id`),
   KEY `account_id` (`account_id`),
   KEY `stated` (`stated`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -97,7 +97,7 @@ CREATE TABLE `accounting_vat_period` (
   `voucher_id` int(11) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -120,7 +120,7 @@ CREATE TABLE `accounting_voucher` (
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`),
   KEY `intranet_id` (`intranet_id`,`year_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -139,7 +139,7 @@ CREATE TABLE `accounting_voucher_file` (
   `description` char(255) NOT NULL default '',
   `active` int(1) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -165,7 +165,7 @@ CREATE TABLE `accounting_year` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -184,7 +184,7 @@ CREATE TABLE `accounting_year_end` (
   `result_account_reset_voucher_id` int(11) NOT NULL default '0',
   `_old_type_key` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -203,7 +203,7 @@ CREATE TABLE `accounting_year_end_action` (
   `voucher_id` int(11) NOT NULL default '0',
   `type_key` tinyint(2) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -219,7 +219,7 @@ CREATE TABLE `accounting_year_end_statement` (
   `amount` float(11,2) NOT NULL default '0.00',
   `type_key` tinyint(2) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -279,7 +279,7 @@ CREATE TABLE `basket` (
   KEY `session_id` (`session_id`),
   KEY `product_detail_id` (`product_detail_id`,`product_variation_id`),
   KEY `intranet_id` (`intranet_id`,`product_id`,`shop_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -312,7 +312,7 @@ CREATE TABLE `basket_details` (
   KEY `intranet_id` (`intranet_id`,`shop_id`),
   KEY `order_id` (`order_id`),
   KEY `session_id` (`session_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -334,7 +334,7 @@ CREATE TABLE `cms_element` (
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`section_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -370,7 +370,7 @@ CREATE TABLE `cms_page` (
   PRIMARY KEY  (`id`),
   KEY `child_of_id` (`child_of_id`),
   KEY `site_id` (`site_id`,`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -387,7 +387,7 @@ CREATE TABLE `cms_parameter` (
   `type_key` int(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`belong_to_id`,`type_key`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -406,7 +406,7 @@ CREATE TABLE `cms_section` (
   `type_key` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`page_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -425,7 +425,7 @@ CREATE TABLE `cms_site` (
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -446,7 +446,7 @@ CREATE TABLE `cms_template` (
   `position` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`site_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -470,7 +470,7 @@ CREATE TABLE `cms_template_section` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`template_id`,`site_id`),
   KEY `position` (`position`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -497,7 +497,7 @@ CREATE TABLE `comment` (
   KEY `intranet_id` (`intranet_id`),
   KEY `belong_to_id` (`belong_to_id`),
   KEY `date_created` (`date_created`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -517,6 +517,8 @@ CREATE TABLE `contact` (
   `preferred_invoice` tinyint(2) NOT NULL default '0',
   `password` varchar(255) NOT NULL default '',
   `openid_url` varchar(255) NOT NULL default '',
+  `code` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `number` (`number`)
@@ -538,7 +540,7 @@ CREATE TABLE `contact_message` (
   `important` tinyint(1) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -557,7 +559,7 @@ CREATE TABLE `contact_person` (
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -580,7 +582,7 @@ CREATE TABLE `contact_reminder_single` (
   `description` text NOT NULL,
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -626,7 +628,7 @@ CREATE TABLE `currency` (
   `_old_deleted` int(1) NOT NULL,
   `deleted_at` timestamp NULL default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -643,7 +645,7 @@ CREATE TABLE `currency_exchangerate` (
   `intranet_id` bigint(20) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `currency_id_idx` (`currency_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -785,7 +787,7 @@ CREATE TABLE `email` (
   KEY `date_sent` (`date_sent`),
   KEY `belong_to_id` (`belong_to_id`),
   KEY `date_deadline_2` (`date_deadline`,`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -801,7 +803,7 @@ CREATE TABLE `email_attachment` (
   `filename` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `email_id` (`email_id`,`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -822,7 +824,7 @@ CREATE TABLE `filehandler_append_file` (
   `position` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`belong_to_id`,`file_handler_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -850,7 +852,7 @@ CREATE TABLE `file_handler` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`access_key`,`active`,`id`),
   KEY `simple_find` (`id`,`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -873,7 +875,7 @@ CREATE TABLE `file_handler_instance` (
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`file_handler_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -892,7 +894,7 @@ CREATE TABLE `file_handler_instance_type` (
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -921,10 +923,11 @@ CREATE TABLE `ilib_category` (
   `parent_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
   `identifier` varchar(255) NOT NULL default '',
+  `active` int(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`belong_to`,`belong_to_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -939,7 +942,7 @@ CREATE TABLE `ilib_category_append` (
   `category_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`object_id`,`category_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1017,8 +1020,6 @@ CREATE TABLE `invoice_payment` (
   `type` int(11) NOT NULL default '0',
   `description` varchar(255) NOT NULL default '',
   `amount` double(11,2) NOT NULL default '0.00',
-  `_old_date_stated` date NOT NULL default '0000-00-00',
-  `_old_voucher_id` int(11) NOT NULL default '0',
   `date_stated` date NOT NULL default '0000-00-00',
   `voucher_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
@@ -1026,7 +1027,7 @@ CREATE TABLE `invoice_payment` (
   KEY `type` (`type`),
   KEY `payment_for_id` (`payment_for_id`),
   KEY `payment_for` (`payment_for`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1066,7 +1067,7 @@ CREATE TABLE `invoice_reminder` (
   KEY `intranet_id` (`intranet_id`),
   KEY `contact_id` (`contact_id`,`contact_address_id`),
   KEY `invoice_id` (`invoice_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1081,7 +1082,7 @@ CREATE TABLE `invoice_reminder_item` (
   `invoice_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`invoice_reminder_id`,`invoice_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1096,7 +1097,7 @@ CREATE TABLE `invoice_reminder_unpaid_reminder` (
   `unpaid_invoice_reminder_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`invoice_reminder_id`,`unpaid_invoice_reminder_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1131,7 +1132,7 @@ CREATE TABLE `keyword` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`type`,`active`),
   KEY `keyword` (`keyword`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1148,7 +1149,7 @@ CREATE TABLE `keyword_x_object` (
   KEY `intranet_id` (`intranet_id`),
   KEY `belong_to` (`belong_to`),
   KEY `keyword_id` (`keyword_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1161,7 +1162,7 @@ CREATE TABLE `language` (
   `intranet_id` int(11) NOT NULL,
   `type_key` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1177,7 +1178,7 @@ CREATE TABLE `lock_post` (
   `table_name` varchar(255) NOT NULL default '',
   `post_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1188,7 +1189,7 @@ CREATE TABLE `lock_post` (
 CREATE TABLE `log_id_seq` (
   `id` int(10) unsigned NOT NULL auto_increment,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1346,7 +1347,7 @@ CREATE TABLE `newsletter_archieve` (
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `list_id` (`list_id`,`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1375,7 +1376,7 @@ CREATE TABLE `newsletter_list` (
   `optin_link` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1399,9 +1400,10 @@ CREATE TABLE `newsletter_subscriber` (
   `resend_optin_email_count` int(11) NOT NULL,
   `intranet_id` int(11) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '1',
+  `date_unsubscribe` date NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `intranet_id_optin_active_list_id_contact_id` (`intranet_id`,`optin`,`active`,`list_id`,`contact_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1434,7 +1436,7 @@ CREATE TABLE `onlinepayment` (
   KEY `intranet_id` (`intranet_id`),
   KEY `belong_to_key` (`belong_to_key`),
   KEY `belong_to_id` (`belong_to_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1446,7 +1448,21 @@ CREATE TABLE `onlinepayment_settings` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `onlinepayment_settings_translation`
+--
+
+CREATE TABLE `onlinepayment_settings_translation` (
+  `id` int(11) NOT NULL auto_increment,
+  `email` text,
+  `lang` varchar(20) default NULL,
+  `subject` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1512,7 +1528,7 @@ CREATE TABLE `procurement` (
   `voucher_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1537,7 +1553,7 @@ CREATE TABLE `procurement_item` (
   KEY `product_id` (`product_id`),
   KEY `product_detail_id` (`product_detail_id`),
   KEY `active` (`active`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1607,8 +1623,8 @@ CREATE TABLE `product_detail` (
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
   `number` int(11) NOT NULL default '0',
-  `name` varchar(255) NOT NULL default '',
-  `description` text NOT NULL,
+  `_old_name` varchar(255) NOT NULL,
+  `_old_description` text NOT NULL,
   `price` float(11,2) NOT NULL default '0.00',
   `before_price` float(11,2) NOT NULL default '0.00',
   `weight` int(11) NOT NULL default '0',
@@ -1628,6 +1644,20 @@ CREATE TABLE `product_detail` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product_detail_translation`
+--
+
+CREATE TABLE `product_detail_translation` (
+  `id` int(11) NOT NULL,
+  `lang` char(2) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY  (`id`,`lang`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `product_related`
 --
 
@@ -1640,7 +1670,7 @@ CREATE TABLE `product_related` (
   KEY `product_id` (`product_id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `related_product_id` (`related_product_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1844,7 +1874,7 @@ CREATE TABLE `shop` (
   `language_key` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1861,7 +1891,7 @@ CREATE TABLE `shop_featuredproducts` (
   PRIMARY KEY  (`id`),
   KEY `keyword_id` (`keyword_id`),
   KEY `intranet_id` (`intranet_id`,`shop_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1876,7 +1906,7 @@ CREATE TABLE `shop_paymentmethods` (
   `paymentmethod_key` int(11) NOT NULL,
   `text` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1895,7 +1925,7 @@ CREATE TABLE `stock_adaptation` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`product_id`),
   KEY `product_variation_id` (`product_variation_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1915,7 +1945,7 @@ CREATE TABLE `stock_regulation` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`product_id`),
   KEY `product_variation_id` (`product_variation_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1935,7 +1965,7 @@ CREATE TABLE `systemmessage_disturbance` (
   PRIMARY KEY  (`id`),
   KEY `from_date_time` (`from_date_time`),
   KEY `to_date_time` (`to_date_time`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1952,7 +1982,7 @@ CREATE TABLE `systemmessage_news` (
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `date_created` (`date_created`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1987,7 +2017,7 @@ CREATE TABLE `todo_item` (
   `intranet_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `todo_list_id` (`todo_list_id`,`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -2006,7 +2036,7 @@ CREATE TABLE `todo_list` (
   `public_key` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -2050,4 +2080,4 @@ CREATE TABLE `webshop_basket_evaluation` (
   `shop_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`shop_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
