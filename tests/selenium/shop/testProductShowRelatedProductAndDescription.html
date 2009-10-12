@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>shop:testProductShowRelatedProductAndDescription</title>
+<title>testProductShowRelatedProductAndDescription</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">shop:testProductShowRelatedProductAndDescription</td></tr>
+<tr><td rowspan="1" colspan="3">testProductShowRelatedProductAndDescription</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -83,6 +83,31 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
+	<td>link=copy</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Product 4</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>do_show</td>
+	<td>label=No</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
 	<td>link=close</td>
 	<td></td>
 </tr>
@@ -104,6 +129,11 @@
 <tr>
 	<td>click</td>
 	<td>3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>4</td>
 	<td></td>
 </tr>
 <tr>
@@ -164,6 +194,11 @@
 <tr>
 	<td>assertTextPresent</td>
 	<td>Product 3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextNotPresent</td>
+	<td>Product 4</td>
 	<td></td>
 </tr>
 <tr>

@@ -664,7 +664,7 @@ class Product extends Intraface_Standard
      *
      * @return array
      */
-    public function getRelatedProducts($currencies = false)
+    public function getRelatedProducts($currencies = false, $show = 'all')
     {
         $products = array();
         $key      = 0;
@@ -676,7 +676,7 @@ class Product extends Intraface_Standard
         // rækkefølgen er vigtig - først hente fra product og bagefter tilføje nye værdier til arrayet
         while ($db->nextRecord()) {
             $product                      = new Product($this->kernel, $db->f('related_product_id'));
-            if($product->get('id') == 0 || $product->get('active') == 0) {
+            if($product->get('id') == 0 || $product->get('active') == 0 || ($show == 'webshop' && $product->get('do_show') == 0)) {
                 CONTINUE;
             }
             $products[$key]               = $product->get();

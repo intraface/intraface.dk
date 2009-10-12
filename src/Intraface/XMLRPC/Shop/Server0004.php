@@ -387,7 +387,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         }
 
         $product = new Product($this->kernel, $product_id);
-        return $this->prepareResponseData($this->cleanUpProductList($product->getRelatedProducts($currencies)));
+        return $this->prepareResponseData($this->cleanUpProductList($product->getRelatedProducts($currencies, 'webshop')));
     }
 
    /**
