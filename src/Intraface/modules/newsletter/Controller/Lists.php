@@ -62,4 +62,9 @@ class Intraface_modules_newsletter_Controller_Lists extends k_Component
     {
          return $phrase;
     }
+
+    function getValues()
+    {
+        return array();
+    }
 }
