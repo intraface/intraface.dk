@@ -32,10 +32,12 @@ class Intraface_Page
 
     function t($phrase)
     {
+        /*
+        // This seems to give problem with bucket? And translation is in kernel so we skip it /sune 12/10 2009
         if (!method_exists('get', $this->kernel->translation)) {
             return $phrase;
-        }
-        return $this->_kernel->translation->get($phrase);
+        }*/
+        return $this->kernel->translation->get($phrase);
     }
 
     function start($title = '')
