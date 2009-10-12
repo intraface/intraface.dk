@@ -566,7 +566,6 @@ class Intraface_modules_shop_Basket
                 basket.product_id,
                 basket.product_variation_id,
                 basket.product_detail_id,
-                product_detail.name,
                 product_detail.price,
                 basket.quantity,
                 basket.text,

@@ -462,8 +462,6 @@ class Basket
                 product.id,
                 basket.product_id,
                 basket.product_detail_id,
-                product_detail.name,
-                product_detail.price,
                 basket.quantity,
                 basket.text,
                 basket.basketevaluation_product
