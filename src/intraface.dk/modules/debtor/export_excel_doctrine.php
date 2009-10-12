@@ -208,7 +208,7 @@ $worksheet->write($i, 0, 'Total:', $format_italic);
 $worksheet->write($i, 1, number_format($total, 2, ",","."), $format_italic);
 $i++;
 
-$worksheet->write($i, 0, number_format(memory_get_usage()));
+// $worksheet->write($i, 0, number_format(memory_get_usage()));
 
 $worksheet->hideGridLines();
 
