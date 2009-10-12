@@ -3,16 +3,16 @@ class Intraface_modules_newsletter_Controller_Lists extends k_Component
 {
     protected $registry;
 
+    function __construct(WireFactory $registry)
+    {
+        $this->registry = $registry->create();
+    }
+
     protected function map($name)
     {
         if (is_numeric($name)) {
             return 'Intraface_modules_newsletter_Controller_List';
         }
-    }
-
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
     }
 
     function renderHtml()
@@ -21,32 +21,6 @@ class Intraface_modules_newsletter_Controller_Lists extends k_Component
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/lists.tpl.php');
         return $smarty->render($this);
-    }
-
-    function getKernel()
-    {
-        if (method_exists('getKernel', $this->context)) {
-            return $this->context->getKernel();
-        }
-        $registry = $this->registry->create();
-    	return $this->kernel = $registry->get('kernel');
-    }
-
-    function getLists()
-    {
-        $list = new NewsletterList($this->getKernel());
-        return $list->getList();
-    }
-
-    function t($phrase)
-    {
-         return $phrase;
-    }
-
-    function getList()
-    {
-        $module = $this->getKernel()->module("newsletter");
-        return $list = new NewsletterList($this->getKernel());
     }
 
     function renderHtmlCreate()
@@ -60,9 +34,32 @@ class Intraface_modules_newsletter_Controller_Lists extends k_Component
         $list = new NewsletterList($this->getKernel());
         if ($id = $list->save($_POST)) {
             return new k_SeeOther($this->url($id));
-        } else {
-            $value = $_POST;
         }
         return $this->render();
+    }
+
+    function getKernel()
+    {
+        if (method_exists('getKernel', $this->context)) {
+            return $this->context->getKernel();
+        }
+    	return $this->kernel = $this->registry->get('kernel');
+    }
+
+    function getLists()
+    {
+        $list = new NewsletterList($this->getKernel());
+        return $list->getList();
+    }
+
+    function getList()
+    {
+        $module = $this->getKernel()->module("newsletter");
+        return $list = new NewsletterList($this->getKernel());
+    }
+
+    function t($phrase)
+    {
+         return $phrase;
     }
 }
