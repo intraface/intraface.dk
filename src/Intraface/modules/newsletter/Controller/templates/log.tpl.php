@@ -16,7 +16,7 @@ $logs = $context->getLog();
 	<?php while ($logs->nextRecord()): ?>
 	<tr>
 		<td><?php e($logs->f('dk_date_unsubscribe')); ?></td>
-		<td><?php e($logs->f('contact_id')); ?></td>
+		<td><a href="<?php e(url('../../../../contact/contact.php', array('id' => $logs->f('contact_id')))); ?>"><?php e($logs->f('name')); ?></a></td>
 	</tr>
 	<?php endwhile; ?>
 	</tbody>
