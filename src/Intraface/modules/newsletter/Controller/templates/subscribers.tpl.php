@@ -8,10 +8,12 @@
 <?php echo $context->getSubscriber()->error->view(); ?>
 
 <form action="<?php e(url(null)); ?>" method="get" class="search-filter">
-    <input type="hidden" name="list_id" value="<?php e($context->getList()->get("id")); ?>" />
     <fieldset>
         <legend><?php e(t('Search', 'common')); ?></legend>
 
+		<label for="q">Søgning
+			<input type="text" id="q" name="q" value="<?php e($context->getSubscriber()->getDBQuery()->getFilter('q')); ?>" />
+		</label>
         <label for="optin"><?php e(t('Filter', 'common')); ?>:
             <select name="optin" id="optin">
                 <option value="1" <?php if($context->getSubscriber()->getDBQuery()->getFilter('optin') == 1) echo 'selected="selected"'; ?> ><?php e(t('Opted in')); ?></option>

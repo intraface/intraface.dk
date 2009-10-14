@@ -58,6 +58,8 @@ class NewsletterSubscriber extends Intraface_Standard
         }
         // optin = 1 should not be set here
         $this->dbquery = new Intraface_DBQuery($this->list->kernel, "newsletter_subscriber", "newsletter_subscriber.list_id=". $this->list->get("id") . " AND newsletter_subscriber.intranet_id = " . $this->list->kernel->intranet->get('id'));
+        $this->dbquery->setJoin("LEFT", "contact", "newsletter_subscriber.contact_id = contact.id AND contact.intranet_id = ".$this->list->kernel->intranet->get("id"), '');
+        $this->dbquery->setJoin("LEFT", "address", "address.belong_to_id = contact.id AND address.active = 1 AND address.type = 3", '');
         $this->dbquery->useErrorObject($this->error);
         $this->dbquery->setFilter('optin', 1);
         $this->dbquery->setFilter('active', 1);
@@ -507,8 +509,11 @@ class NewsletterSubscriber extends Intraface_Standard
         $i = 0;
         $this->getDBQuery()->setCondition('newsletter_subscriber.optin = '.$this->getDBQuery()->getFilter('optin'));
         $this->getDBQuery()->setCondition('newsletter_subscriber.active = '.$this->getDBQuery()->getFilter('active'));
+        if ($this->getDBQuery()->checkFilter("q")) {
+            $this->getDBQuery()->setCondition("(address.name LIKE \"%".$this->getDBQuery()->getFilter("q")."%\" OR address.email LIKE \"%".$this->getDBQuery()->getFilter("q")."%\")");
+        }
 
-        $db = $this->getDBQuery()->getRecordset("id, date_optin_email_sent, contact_id, resend_optin_email_count, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted, optin", "", false);
+        $db = $this->getDBQuery()->getRecordset("newsletter_subscriber.id, date_optin_email_sent, contact_id, resend_optin_email_count, date_submitted, DATE_FORMAT(date_submitted, '%d-%m-%Y') AS dk_date_submitted, optin", "", false);
 
         while ($db->nextRecord()) {
             $contact_id = $db->f('contact_id');

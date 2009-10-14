@@ -72,6 +72,7 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
             }
         } elseif (isset($_GET['optin'])) {
             $subscriber->getDBQuery()->setFilter('optin', intval($_GET['optin']));
+            $subscriber->getDBQuery()->setFilter('q', $_GET['q']);
         }
 
         if (isset($_GET['return_redirect_id'])) {
