@@ -36,7 +36,8 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
         $subscriber->getDBQuery()->useCharacter();
         $subscriber->getDBQuery()->defineCharacter('character', 'newsletter_subscriber.id');
         $subscriber->getDBQuery()->usePaging('paging');
-        $subscriber->getDBQuery()->setExtraUri('&amp;list_id='.$this->getList()->get('id'));
+        $subscriber->getDBQuery()->setUri($this->url());
+        //$subscriber->getDBQuery()->setExtraUri('&amp;list_id='.$this->getList()->get('id'));
         $subscriber->getDBQuery()->storeResult("use_stored", 'newsletter_subscribers_'.$this->getList()->get("id"), "toplevel");
         return $subscriber->getList();
     }
