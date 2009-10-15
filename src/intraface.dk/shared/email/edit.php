@@ -81,7 +81,7 @@ $page->start('Skriv e-mail');
 		<legend><?php e(t('Recipient')); ?></legend>
 
 		<div class="formrow">
-			<label for="contact_person_id"><?php e(t('To')); ?></label>
+			<label for="contact_person_id"><?php e(t('To', 'common')); ?></label>
 			<?php
 			$email->getContact();
 			if (isset($email->contact->contactperson)) {
@@ -109,7 +109,7 @@ $page->start('Skriv e-mail');
 			<input type="checkbox" name="bcc_to_user" id="bcc_to_user" value="1" <?php if (isset($value['bcc_to_user']) && intval($value['bcc_to_user']) == 1) echo 'checked="checked"'; ?> /> <?php echo $kernel->user->getAddress()->get('name').' &#60'.$kernel->user->getAddress()->get('email').'&#62'; ?>
 		</div>
 		<div class="formrow">
-			<label for="from"><?php e(t('From')); ?></label>
+			<label for="from"><?php e(t('From', 'common')); ?></label>
 			<span id="from">
 				<?php
 				if ($email->get('from_email')) {
@@ -154,12 +154,12 @@ $page->start('Skriv e-mail');
 	}
 	?>
 	<p>
-		<input type="submit" class="confirm" name="send" value="<?php e(t('Send')); ?>"  />
+		<input type="submit" class="confirm" name="send" value="<?php e(t('Send', 'common')); ?>"  />
         <?php if ($kernel->user->hasModuleAccess('email')): ?>
             <input type="submit" class="save" name="save" value="<?php e(t('Save in drafts')); ?>" />
         <?php endif; ?>
-        <input type="submit" class="save" name="delete" value="<?php e(t('Delete')); ?>" />
-		<a href="<?php e($redirect->getRedirect('email.php?id='.intval($value['id']))); ?>"><?php e(t('Cancel')); ?></a>
+        <input type="submit" class="save" name="delete" value="<?php e(t('Delete', 'common')); ?>" />
+		<a href="<?php e($redirect->getRedirect('email.php?id='.intval($value['id']))); ?>"><?php e(t('Cancel', 'common')); ?></a>
 	</p>
 </form>
 
