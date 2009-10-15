@@ -58,15 +58,15 @@ $page->start(__($debtor->get('type').' content'));
 	</div>
 
 	<div class="formrow">
-		<label for="name"><?php e(__('Name')); ?></label><span id="name"><?php e($debtor->item->getProductName()); ?> <a href="item_edit.php?debtor_id=<?php e($debtor->get('id')); ?>&amp;id=<?php e($debtor->item->get('id')); ?>&amp;change_product=1" class="edit">Skift</a></span>
+		<label for="name"><?php e(__('Name', 'common')); ?></label><span id="name"><?php e($debtor->item->getProductName()); ?> <a href="item_edit.php?debtor_id=<?php e($debtor->get('id')); ?>&amp;id=<?php e($debtor->item->get('id')); ?>&amp;change_product=1" class="edit">Skift</a></span>
 	</div>
 
 	<div class="formrow">
-		<label for="price"><?php e(__('Price')); ?></label><span id="price"><?php echo $debtor->item->getProductPrice()->getAsLocal('da_dk', 2); ?></span>
+		<label for="price"><?php e(__('Price', 'common')); ?></label><span id="price"><?php echo $debtor->item->getProductPrice()->getAsLocal('da_dk', 2); ?></span>
 	</div>
 
 	<div class="formrow">
-		<label for="vat"><?php e(__('VAT')); ?></label><span id="vat"><?php if ($debtor->item->getTaxPercent() > 0): e(__('Yes')); else: e(__('No')); endif; ?></span>
+		<label for="vat"><?php e(__('VAT')); ?></label><span id="vat"><?php if ($debtor->item->getTaxPercent() > 0): e(__('Yes', 'common')); else: e(__('No', 'common')); endif; ?></span>
 	</div>
 </fieldset>
 
@@ -94,8 +94,8 @@ $page->start(__($debtor->get('type').' content'));
     <input type="hidden" name="product_variation_id" value="<?php  e($debtor->item->get('product_variation_id')); ?>" />
     <input type="hidden" name="product_variation_detail_id" value="<?php  e($debtor->item->get('product_variation_detail_id')); ?>" />
 
-	<input type="submit" name="submit" value="<?php e(__('Save')); ?>" class="save" /> <?php e(__('or')); ?>
-  <a href="view.php?id=<?php e($debtor->get("id"));  ?>"><?php e(__('Cancel')); ?></a>
+	<input type="submit" name="submit" value="<?php e(__('Save', 'common')); ?>" class="save" /> <?php e(__('or', 'common')); ?>
+  <a href="view.php?id=<?php e($debtor->get("id"));  ?>"><?php e(__('Cancel', 'common')); ?></a>
 
 </div>
 </form>
