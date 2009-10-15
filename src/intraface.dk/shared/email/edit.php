@@ -2,7 +2,7 @@
 require('../../include_first.php');
 
 $kernel->useShared('email');
-
+$translation = $kernel->getTranslation('email');
 $redirect = Intraface_Redirect::factory($kernel, 'receive');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
