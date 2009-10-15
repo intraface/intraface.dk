@@ -43,7 +43,7 @@ $page->start("Onlinebetaling");
 <h1><?php e(t('Online payment')); ?></h1>
 
 <ul class="options">
-	<li><a href="index.php?from_id=<?php e($onlinepayment->get('id')); ?>"><?php e(t('Close')); ?></a></li>
+	<li><a href="index.php?from_id=<?php e($onlinepayment->get('id')); ?>"><?php e(t('Close', 'common')); ?></a></li>
 </ul>
 
 <?php echo $onlinepayment->error->view(); ?>
@@ -52,7 +52,7 @@ $page->start("Onlinebetaling");
 	<caption><?php e(t('Payment information')); ?></caption>
 	<tbody>
 		<tr>
-			<th><?php e(t('Date')); ?></th>
+			<th><?php e(t('Date', 'common')); ?></th>
 			<td><?php e($onlinepayment->get("dk_date_created")); ?></td>
 		</tr>
 		<tr>
@@ -83,7 +83,7 @@ $page->start("Onlinebetaling");
 			</td>
 		</tr>
 		<tr>
-			<th><?php e(t('Status')); ?></th>
+			<th><?php e(t('Status', 'common')); ?></th>
 			<td>
 				<?php
 				e(__($onlinepayment->get("status")));
@@ -127,7 +127,7 @@ $page->start("Onlinebetaling");
             <td><?php e($onlinepayment->get("pbs_status")); ?></td>
         </tr>
 		<tr>
-			<th><?php e(t('Amount')); ?></th>
+			<th><?php e(t('Amount', 'common')); ?></th>
 			<td>
                 <?php
                 if(false !== ($currency = $onlinepayment->getCurrency())) {
@@ -187,11 +187,11 @@ if ($onlinepayment->get('status') == "authorized") {
 		<p<?php e(t('You can make the amount you withdraw smaller.')); ?>></p>
 
 		<div class="formrow">
-			<label for="dk_amount" class="tight"><?php e(t('Amount')); ?></label>
+			<label for="dk_amount" class="tight"><?php e(t('Amount', 'common')); ?></label>
 	    <input type="text" name="dk_amount" id="dk_amount" value="<?php e($value["dk_amount"]); ?>" />
 		</div>
 
-		<input type="submit" class="save" name="submit" value="<?php e(t('Save')); ?>" />
+		<input type="submit" class="save" name="submit" value="<?php e(t('Save', 'common')); ?>" />
 		<input type="hidden" name="id" value="<?php e($onlinepayment->get("id")); ?>" />
 		</form>
 
