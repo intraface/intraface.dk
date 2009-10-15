@@ -49,10 +49,10 @@ if (!empty ($_POST)) {
 }
 
 $page = new Intraface_Page($kernel);
-$page->start(__('edit template section'));
+$page->start(__('Edit template section'));
 ?>
 
-<h1><?php e(t('edit template section')); ?></h1>
+<h1><?php e(t('Edit template section')); ?></h1>
 
 <?php
 
@@ -64,13 +64,13 @@ echo $section->error->view($translation);
     <input name="template_id" type="hidden" value="<?php e($section->template->get('id')); ?>" />
     <input name="type" type="hidden" value="<?php e($section->get('type')); ?>" />
     <fieldset>
-        <legend><?php e(t('information about section')); ?></legend>
+        <legend><?php e(t('Information about section')); ?></legend>
         <div class="formrow">
-            <label for=""><?php e(t('template section name')); ?></label>
+            <label for=""><?php e(t('Template section name')); ?></label>
             <input type="text" name="name" value="<?php if (!empty($value['name'])) e($value['name']); ?>" />
         </div>
         <div class="formrow">
-            <label for=""><?php e(t('identifier', 'common')); ?></label>
+            <label for=""><?php e(t('Identifier', 'common')); ?></label>
             <input type="text" name="identifier" value="<?php  if (!empty($value['identifier'])) e($value['identifier']); ?>" />
         </div>
     </fieldset>
@@ -83,7 +83,7 @@ switch ($value['type']) {
     case 'shorttext' :
 ?>
         <fieldset>
-            <legend><?php e(t('information about shorttext')); ?></legend>
+            <legend><?php e(t('Information about shorttext')); ?></legend>
             <div class="formrow">
                 <label><?php e(t('number of allowed characters - max 255')); ?></label>
                 <input name="size" type="text" value="<?php  if (!empty($value['size'])) e($value['size']); ?>" />
@@ -98,14 +98,14 @@ switch ($value['type']) {
             $value['html_format'] = array ();
 ?>
         <fieldset>
-            <legend><?php e(t('information about longtext')); ?></legend>
+            <legend><?php e(t('Information about longtext')); ?></legend>
             <div class="formrow">
-                <label><?php e(t('number of allowed characters')); ?></label>
+                <label><?php e(t('Number of allowed characters')); ?></label>
                 <input name="size" type="text" value="<?php if (!empty($value['size'])) e($value['size']); ?>" />
             </div>
         </fieldset>
         <fieldset>
-            <legend><?php e(t('allowed html tags')); ?></legend>
+            <legend><?php e(t('Allowed html tags')); ?></legend>
             <?php foreach ($section->getAllowedHTMLOptions() AS $html): ?>
                 <input id="html-format-<?php e($html); ?>" type="checkbox" value="<?php e($html); ?>" name="html_format[]" <?php if (in_array($html, $value['html_format'])) echo ' checked="checked"'; ?> />
                 <label for="<?php e($html); ?>"><<?php e($html); ?>><?php e(t($html)); ?></<?php e($html); ?>></label>
@@ -122,9 +122,9 @@ switch ($value['type']) {
         $instances = $instancemanager->getList();
 ?>
         <fieldset>
-            <legend><?php e(t('information about picture')); ?></legend>
+            <legend><?php e(t('Information about picture')); ?></legend>
             <div class="formrow">
-                <label for="pic_size"><?php e(__('picture size')); ?></label>
+                <label for="pic_size"><?php e(__('Picture size')); ?></label>
                 <select name="pic_size">
                     <option value="original"<?php if (!empty($value['pic_size']) AND $value['pic_size'] == 'original') echo ' selected="selected"'; ?>>original</option>
                     <?php foreach ($instances AS $instance): ?>
@@ -139,7 +139,7 @@ switch ($value['type']) {
     case 'mixed' :
 ?>
         <fieldset>
-            <legend><?php e(t('mixed allowed elements')); ?></legend>
+            <legend><?php e(t('Mixed allowed elements')); ?></legend>
                 <?php
 
         $element_types = $cms_module->getSetting('element_types');
@@ -163,15 +163,15 @@ switch ($value['type']) {
         break;
 
     default :
-        trigger_error(__('not allowed', 'common'), E_USER_ERROR);
+        trigger_error('"'.$value['type'].'" not allowed', E_USER_ERROR);
         break;
 
 }
 ?>
 
     <div class="">
-        <input type="submit" value="<?php e(t('save', 'common')); ?>" />
-        <input type="submit" name="close" value="<?php e(t('save and close', 'common')); ?>" />
+        <input type="submit" value="<?php e(t('Save', 'common')); ?>" />
+        <input type="submit" name="close" value="<?php e(t('Save and close', 'common')); ?>" />
         <a href="template.php?id=<?php e($section->template->get('id')); ?>"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 
