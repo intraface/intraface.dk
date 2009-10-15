@@ -34,14 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $value['site_id'] = $_GET['site_id'];
     $value['for_page_type'] = 7; // all types;
 } else {
-    trigger_error(__('not allowed', 'common'), E_USER_ERROR);
+    trigger_error(__('Not allowed', 'common'), E_USER_ERROR);
 }
 
 $page = new Intraface_Page($kernel);
-$page->start(__('edit template'));
+$page->start(__('Edit template'));
 ?>
 
-<h1><?php e(__('edit template')); ?></h1>
+<h1><?php e(__('Edit template')); ?></h1>
 
 <?php if (!empty($value['id'])): ?>
 <ul class="options">
@@ -59,19 +59,19 @@ $page->start(__('edit template'));
 
     <fieldset>
 
-        <legend><?php e(__('template')); ?></legend>
+        <legend><?php e(__('Template')); ?></legend>
 
         <div class="formrow" id="titlerow">
-            <label for="name"><?php e(__('template name')); ?></label>
+            <label for="name"><?php e(__('Template name')); ?></label>
             <input name="name" type="text" id="name" value="<?php if (!empty($value['name'])) e($value['name']); ?>" size="50" maxlength="255" />
         </div>
         <div class="formrow" id="titlerow">
-            <label for="identifier"><?php e(__('identifier', 'common')); ?></label>
+            <label for="identifier"><?php e(__('Identifier', 'common')); ?></label>
             <input name="identifier" type="text" id="name" value="<?php if (!empty($value['identifier'])) e($value['identifier']); ?>" size="50" maxlength="255" />
         </div>
 
         <div class="formrow" id="titlerow">
-            <label><?php e(__('for page type')); ?></label>
+            <label><?php e(__('For page type')); ?></label>
             <?php
             require_once 'Intraface/modules/cms/Page.php';
             $page_types = CMS_Page::getTypesWithBinaryIndex();
@@ -83,10 +83,10 @@ $page->start(__('edit template'));
     </fieldset>
 
     <div style="clear: both;">
-        <input type="submit" value="<?php e(__('save', 'common')); ?>" />
-        <input type="submit" name="close" value="<?php e(__('save and close', 'common')); ?>" />
+        <input type="submit" value="<?php e(__('Save', 'common')); ?>" />
+        <input type="submit" name="close" value="<?php e(__('Save and close', 'common')); ?>" />
         <?php if (!empty($value['id'])): ?>
-            <a href="template.php?id=<?php e($value['id']); ?>"><?php e(__('Cancel')); ?></a>
+            <a href="template.php?id=<?php e($value['id']); ?>"><?php e(__('Cancel', 'common')); ?></a>
         <?php else: ?>
             <a href="templates.php?site_id=<?php e($value['site_id']); ?>"><?php e(__('Cancel', 'common')); ?></a>
         <?php endif; ?>
