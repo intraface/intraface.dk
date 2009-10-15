@@ -7,10 +7,10 @@
  * @version @package-version@
  */
 
-$version = '1.18.0';
+$version = '1.18.1';
 $stability = 'stable';
 $notes = '
-* small improvements
+* translation changes
 ';
 $web_dir = 'src/intraface.dk';
 
