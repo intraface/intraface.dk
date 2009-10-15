@@ -30,15 +30,15 @@ $page->start(__('templates'));
 </ul>
 
 <?php if (count($templates) == 0): ?>
-    <p><?php e(__('no templates found')); ?></p>
+    <p><?php e(__('No templates found')); ?></p>
 <?php else: ?>
 <table>
-<caption><?php e(__('templates')); ?></caption>
+<caption><?php e(__('Templates')); ?></caption>
 <thead>
 <tr>
-    <th><?php e(__('template name')); ?></th>
-    <th><?php e(__('identifier', 'common')); ?></th>
-    <th><?php e(__('for page type')); ?></th>
+    <th><?php e(__('Template name')); ?></th>
+    <th><?php e(__('Identifier', 'common')); ?></th>
+    <th><?php e(__('For page type')); ?></th>
     <th></th>
 </tr>
 </thead>
