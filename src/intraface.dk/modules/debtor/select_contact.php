@@ -2,6 +2,7 @@
 require '../../include_first.php';
 $module = $kernel->module("debtor");
 $contact_module = $kernel->useModule('contact');
+$translation = $kernel->getTranslation('debtor');
 
 $error = new Intraface_Error();
 
