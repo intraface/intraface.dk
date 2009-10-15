@@ -45,7 +45,7 @@ if (!empty ($_POST)) {
     $value['template_id'] = $section->get('template_id');
 
 } else {
-    trigger_error(__('not allowed', 'common'), E_USER_ERROR);
+    trigger_error('not allowed', E_USER_ERROR);
 }
 
 $page = new Intraface_Page($kernel);
