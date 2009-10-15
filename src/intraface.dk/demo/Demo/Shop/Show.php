@@ -13,7 +13,7 @@ class Demo_Shop_Show extends k_Controller
     private function getCredentials()
     {
         return array("private_key" => $this->context->getPrivateKey(),
-                             "session_id" => md5($this->registry->get("k_http_Session")->getSessionId()));
+                     "session_id" => md5($this->registry->get("k_http_Session")->getSessionId()));
     }
 
     private function intranetHasOnlinePaymentAccess()
