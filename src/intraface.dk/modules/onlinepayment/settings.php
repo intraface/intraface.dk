@@ -2,6 +2,7 @@
 require '../../include_first.php';
 
 $onlinepayment_module = $kernel->module('onlinepayment');
+$translation = $kernel->getTranslation('onlinepayment');
 $implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
 
 $onlinepayment = OnlinePayment::factory($kernel);
