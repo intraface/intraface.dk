@@ -151,7 +151,7 @@ $page->start('Rediger kontakt');
     <div class="formrow">
         <label for="contact-type"><?php e(t('Type')); ?></label>
         <select id="contact-type" name="type_key">
-            <option value=""><?php e(t('Choose')); ?></option>
+            <option value=""><?php e(t('Choose', 'common')); ?></option>
             <?php foreach ($contact_module->getSetting('type') AS $key=>$v): ?>
                 <option value="<?php e($key); ?>"<?php if (isset($value['type_key']) AND $value['type_key'] == $key) { echo ' selected="selected"'; } ?>><?php e(__($v)); ?></option>
             <?php endforeach; ?>
@@ -277,7 +277,7 @@ $page->start('Rediger kontakt');
 <?php endif; ?>
 
     <div>
-        <input type="submit" name="submit" value="<?php e(t('Save')); ?>" id="save" class="save" />
+        <input type="submit" name="submit" value="<?php e(t('Save', 'common')); ?>" id="save" class="save" />
         eller
         <?php
         if ($contact->get('id') != 0) {
@@ -287,7 +287,7 @@ $page->start('Rediger kontakt');
             $url = 'index.php';
         }
         ?>
-        <a href="<?php e($redirect->getCancelUrl($url)); ?>" title="Dette vil slette alle dine ændringer"><?php e(t('Cancel')); ?></a>
+        <a href="<?php e($redirect->getCancelUrl($url)); ?>" title="Dette vil slette alle dine ændringer"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 </form>
 
