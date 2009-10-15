@@ -312,7 +312,7 @@ $page->start(__($debtor->get('type')));
 
     <ul class="options">
         <?php if ($debtor->get("locked") == false): ?>
-            <li><a href="edit.php?id=<?php e($debtor->get("id")); ?>"><?php e(t('Edit')); ?></a></li>
+            <li><a href="edit.php?id=<?php e($debtor->get("id")); ?>"><?php e(t('Edit', 'common')); ?></a></li>
         <?php endif; ?>
         <li><a class="pdf" href="pdf_viewer.php?id=<?php e($debtor->get("id")); ?>" target="_blank"><?php e(t('Print pdf')); ?></a></li>
         <li><a href="list.php?id=<?php e($debtor->get("id")); ?>&amp;type=<?php e($debtor->get("type")); ?>&amp;use_stored=true"><?php e(t('Close', 'common')); ?></a></li>
@@ -440,7 +440,7 @@ if (isset($onlinepayment)) {
     <?php endif; ?>
 
     <?php if (($debtor->get("type") == "invoice" && $debtor->get("status") == "created") || ($debtor->get("type") != "invoice" && $debtor->get("locked") == false)): ?>
-        <input type="submit" value="<?php e(t('Delete')); ?>" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="delete" />
+        <input type="submit" value="<?php e(t('Delete', 'common')); ?>" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="delete" />
     <?php endif; ?>
 
     <?php if (($debtor->get("type") == "quotation" || $debtor->get("type") == "order") && ($debtor->get('status') == "created" || $debtor->get('status') == "sent")): ?>
@@ -535,7 +535,7 @@ if (isset($onlinepayment)) {
                             }
 
                             if ($kernel->user->hasModuleAccess('administration')) { ?>
-                                <a href="<?php e($debtor_module->getPath()); ?>setting.php" class="edit"><?php e(__('change')); ?></a>
+                                <a href="<?php e($debtor_module->getPath()); ?>setting.php" class="edit"><?php e(__('Change', 'common')); ?></a>
                             <?php
                             }
                             ?>
@@ -636,7 +636,7 @@ if (isset($onlinepayment)) {
         <tbody>
             <tr>
                 <th><?php e(t('Number')); ?></th>
-                <td><?php e($debtor->contact->get("number")); ?> <a href="view.php?id=<?php e($debtor->get('id')); ?>&amp;edit_contact=<?php e($debtor->contact->get('id')); ?>" class="edit"><?php e(t('Edit')); ?></a></td>
+                <td><?php e($debtor->contact->get("number")); ?> <a href="view.php?id=<?php e($debtor->get('id')); ?>&amp;edit_contact=<?php e($debtor->contact->get('id')); ?>" class="edit"><?php e(t('Edit', 'common')); ?></a></td>
             </tr>
             <tr>
                 <th><?php e(t('Contact')); ?></th>
@@ -879,7 +879,7 @@ if (isset($onlinepayment)) {
                                         ?>
                                     <?php endif; ?>
                                     <?php if ($p['status'] == 'authorized'): ?>
-                                        <a href="<?php e($onlinepayment_module->getPath()); ?>payment.php?id=<?php e($p['id']); ?>" class="edit"><?php e(t('edit payment')); ?></a>
+                                        <a href="<?php e($onlinepayment_module->getPath()); ?>payment.php?id=<?php e($p['id']); ?>" class="edit"><?php e(t('Edit payment')); ?></a>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -1111,9 +1111,9 @@ if (count($reminders) > 0):
                 <?php
                 if ($reminders[$i]["locked"] == 0) {
                     ?>
-                    <a class="edit" href="reminder_edit.php?id=<?php e($reminders[$i]["id"]); ?>">Ret</a>
+                    <a class="edit" href="reminder_edit.php?id=<?php e($reminders[$i]["id"]); ?>"><?php e(t('Edit', 'common')); ?></a>
                     <?php if ($reminders[$i]["status"] == "created"): ?>
-                    <a class="delete" href="reminders.php?delete=<?php e($reminders[$i]["id"]); ?>">Slet</a>
+                    <a class="delete" href="reminders.php?delete=<?php e($reminders[$i]["id"]); ?>"><?php e(t('Delete', 'common')); ?></a>
                     <?php endif; ?>
                     <?php
                 }
