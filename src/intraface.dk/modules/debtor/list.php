@@ -104,7 +104,7 @@ $page->start(__($debtor->get('type').'s'));
 </h1>
 
 <?php if ($kernel->intranet->address->get('id') == 0): ?>
-    <p><?php e(t('You have to fill out an address before you can create a')); ?> <?php e(strtolower(__($debtor->get('type')))); ?>.
+    <p><?php e(t('You have to fill out an address before you can create a '.strtolower($debtor->get('type')))); ?>.
     <?php if ($kernel->user->hasModuleAccess('administration')): ?>
         <?php
         $module_administration = $kernel->useModule('administration');
