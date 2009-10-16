@@ -148,7 +148,7 @@ $page->start('Vælg kontakt');
     		</tbody>
     	</table>
 
-    	<input type="submit" name="submit" value="<?php e(__('Choose')); ?>" /> <?php e(t('or')); ?> <a href="<?php e($redirect->getRedirect("index.php")); ?>"><?php e(t('cancel')); ?></a>
+    	<input type="submit" name="submit" value="<?php e(__('Choose', 'common')); ?>" /> <?php e(t('or', 'common')); ?> <a href="<?php e($redirect->getRedirect("index.php")); ?>"><?php e(t('cancel', 'common')); ?></a>
     </form>
 
 <?php endif; ?>
