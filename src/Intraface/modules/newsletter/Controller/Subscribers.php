@@ -7,7 +7,7 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
     protected function map($name)
     {
         if (is_numeric($name)) {
-            return 'Intraface_modules_newsletter_Controller_List';
+            return 'Intraface_modules_newsletter_Controller_Subscriber';
         }
     }
 
@@ -81,11 +81,6 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
                 $subscriber->addContact(new Contact($this->getKernel(), $redirect->getParameter('contact_id')));
             }
 
-        }
-
-        if (isset($_GET['delete']) AND intval($_GET['delete']) != 0) {
-            $subscriber = new NewsletterSubscriber($this->getList(), $_GET['delete']);
-            $subscriber->delete();
         }
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/subscribers.tpl.php');

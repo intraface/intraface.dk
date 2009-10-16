@@ -58,7 +58,7 @@
             <?php endif; ?>
         </td>
         <td>
-            <a class="delete" href="<?php e(url(null, array('delete'))); ?>"><?php e(t('Delete')); ?></a>
+            <a class="delete" href="<?php e(url($s['id'], array('remove'))); ?>"><?php e(t('Remove')); ?></a>
         </td>
     </tr>
     <?php endforeach; ?>
