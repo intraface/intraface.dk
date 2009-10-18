@@ -388,20 +388,20 @@ class NewsletterSubscriber extends Intraface_Standard
      */
     public function optIn($code, $ip)
     {
+        // lets assume that a newsletter which has been set to active = 0 which wants to
+        // optin really wants to optin, so we will not make that a part of the select query
+        // and we will set it in the update query
         $db = new DB_Sql;
-        $db->query("SELECT id FROM newsletter_subscriber WHERE code = '".$code."' AND list_id = " . $this->list->get('id')." AND active = 1");
+        $db->query("SELECT id, ip_submitted FROM newsletter_subscriber WHERE code = '".$code."' AND list_id = " . $this->list->get('id'));
         if (!$db->nextRecord()) {
             return false;
         }
 
-        $db->query("UPDATE newsletter_subscriber SET optin = 1, ip_optin = '".$ip."', date_optin = NOW() WHERE code = '" . $code . "' AND list_id = " . $this->list->get('id')." AND active = 1");
+        $db->query("UPDATE newsletter_subscriber SET optin = 1, ip_optin = '".$ip."', date_optin = NOW(), active = 1 WHERE code = '" . $code . "' AND list_id = " . $this->list->get('id'));
 
-        // makes sure that the submitted ip is also set - not really a port of this method.
-        $db->query("SELECT id, ip_submitted FROM newsletter_subscriber WHERE code = '".$code."' AND list_id = " . $this->list->get('id'));
-        if ($db->nextRecord()) {
-            if (!$db->f('ip_submitted')) {
-                $db->query("UPDATE newsletter_subscriber SET ip_submitted = '".$ip."' WHERE id = " . $db->f("id"));
-            }
+        // makes sure that the submitted ip is also set - not really a part of this method.
+        if ($db->f('ip_submitted')) {
+            $db->query("UPDATE newsletter_subscriber SET ip_submitted = '".$ip."' WHERE id = " . $db->f("id"));
         }
         return true;
     }
