@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $onlinepayment = NULL;
         }
-        
+
         // Her gemmes filen
         $report = new Intraface_modules_debtor_Visitor_Pdf($translation, $file);
         $report->visit($debtor, $onlinepayment);
@@ -906,7 +906,7 @@ if (isset($onlinepayment)) {
                 <div class="warning">
                     Der burde være en onlinebetaling knyttet hertil. Hvis du skriver et betalingslink ind under shoppen, kan du automatisk sende en e-mail til vedkommende.
                 </div>
-            <?php endif; 
+            <?php endif;
         }
     }
     ?>
@@ -1058,13 +1058,13 @@ if (isset($onlinepayment)) {
 <?php
 if ($kernel->user->hasModuleAccess('invoice')):
 $kernel->useModule('invoice');
-// @todo Added a list with the customers reminders. Should be created so you can see the reminders created for the actual debtor.
 $reminder = new Reminder($kernel);
-$reminder->getDBQuery()->setFilter("contact_id", $debtor->contact->get("id"));
+$reminder->getDBQuery()->setFilter("invoice_id", $debtor->get("id"));
 $reminders = $reminder->getList();
 if (count($reminders) > 0):
 ?>
 <table class="stripe">
+<caption><?php e(t('Reminders on this invoice')); ?></caption>
 <thead>
     <tr>
         <th><?php e(t('No.')); ?></th>
@@ -1078,42 +1078,42 @@ if (count($reminders) > 0):
 </thead>
 <tbody>
     <?php
-    for ($i = 0, $n = count($reminders); $i < $n; $i++) {
+    foreach ($reminders as $reminder) {
         ?>
-        <tr id="i<?php e($reminders[$i]["id"]); ?>"<?php if (isset($_GET['id']) && $_GET['id'] == $reminders[$i]['id']) print(" class=\"fade\""); ?>>
-            <td class="number"><?php e($reminders[$i]["number"]); ?></td>
-            <td><a href="reminders.php?contact_id=<?php e($reminders[$i]["contact_id"]); ?>"><?php e($reminders[$i]["name"]); ?></a></td>
-            <td><a href="reminder.php?id=<?php e($reminders[$i]["id"]); ?>"><?php (trim($reminders[$i]["description"] != "")) ? e($reminders[$i]["description"]) : e('['.t("No description", 'common').']'); ?></a></td>
+        <tr id="i<?php e($reminder["id"]); ?>"<?php if (isset($_GET['id']) && $_GET['id'] == $reminder['id']) print(" class=\"fade\""); ?>>
+            <td class="number"><?php e($reminder["number"]); ?></td>
+            <td><a href="reminders.php?contact_id=<?php e($reminder["contact_id"]); ?>"><?php e($reminder["name"]); ?></a></td>
+            <td><a href="reminder.php?id=<?php e($reminder["id"]); ?>"><?php (trim($reminder["description"] != "")) ? e($reminder["description"]) : e('['.t("No description", 'common').']'); ?></a></td>
             <td class="date">
                 <?php
-                if ($reminders[$i]["status"] != "created") {
-                    e($reminders[$i]["dk_date_sent"]);
+                if ($reminder["status"] != "created") {
+                    e($reminder["dk_date_sent"]);
                 }
                 else {
                     e(t('No', 'common'));
                 }
                 ?>
       </td>
-            <td><?php e($reminders[$i]["send_as"]); ?></td>
+            <td><?php e($reminder["send_as"]); ?></td>
             <td class="date">
                 <?php
-                if ($reminders[$i]["status"] == "executed" || $reminders[$i]["status"] == "canceled") {
-                    e($reminders[$i]["status"]);
-                } elseif ($reminders[$i]["due_date"] < date("Y-m-d")) { ?>
-                    <span class="red"><?php e($reminders[$i]["dk_due_date"]); ?></span>
+                if ($reminder["status"] == "executed" || $reminder["status"] == "canceled") {
+                    e($reminder["status"]);
+                } elseif ($reminder["due_date"] < date("Y-m-d")) { ?>
+                    <span class="red"><?php e($reminder["dk_due_date"]); ?></span>
                 <?php
                 } else {
-                    e($reminders[$i]["dk_due_date"]);
+                    e($reminder["dk_due_date"]);
                 }
                 ?>
             </td>
             <td class="buttons">
                 <?php
-                if ($reminders[$i]["locked"] == 0) {
+                if ($reminder["locked"] == 0) {
                     ?>
-                    <a class="edit" href="reminder_edit.php?id=<?php e($reminders[$i]["id"]); ?>"><?php e(t('Edit', 'common')); ?></a>
-                    <?php if ($reminders[$i]["status"] == "created"): ?>
-                    <a class="delete" href="reminders.php?delete=<?php e($reminders[$i]["id"]); ?>"><?php e(t('Delete', 'common')); ?></a>
+                    <a class="edit" href="reminder_edit.php?id=<?php e($reminder["id"]); ?>"><?php e(t('Edit', 'common')); ?></a>
+                    <?php if ($reminder["status"] == "created"): ?>
+                    <a class="delete" href="reminders.php?delete=<?php e($reminder["id"]); ?>"><?php e(t('Delete', 'common')); ?></a>
                     <?php endif; ?>
                     <?php
                 }

@@ -34,7 +34,7 @@ class Reminder extends Intraface_Standard
         $this->dbquery = new Intraface_DBQuery($this->kernel, "invoice_reminder", "intranet_id = ".$this->kernel->intranet->get("id")." AND active = 1");
         $this->dbquery->useErrorObject($this->error);
         return $this->dbquery;
-        
+
     }
 
     function load()
@@ -380,6 +380,10 @@ class Reminder extends Intraface_Standard
 
         if ($this->dbquery->checkFilter("contact_id")) {
             $this->dbquery->setCondition("contact_id = ".intval($this->dbquery->getFilter("contact_id")));
+        }
+
+        if ($this->dbquery->checkFilter("invoice_id")) {
+            $this->dbquery->setCondition("invoice_id = ".intval($this->dbquery->getFilter("invoice_id")));
         }
 
         if ($this->dbquery->checkFilter("text")) {
