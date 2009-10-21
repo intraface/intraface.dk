@@ -263,7 +263,6 @@ class Contact extends Intraface_Standard
                 $db->query("SELECT id FROM contact WHERE openid_url  = '".$value."' AND contact.intranet_id = " . $kernel->intranet->get('id'));
                 // Her bør vel være et tjek på hvor mange - og hvis mange give en fejl
                 break;
-
             default:
                 trigger_error('Contact::factory() skal bruge en type');
                 break;
@@ -441,9 +440,12 @@ class Contact extends Intraface_Standard
         }
         settype($var['preferred_invoice'], 'integer');
         $validator->isNumeric($var['preferred_invoice'], 'Fejl i preferred_invoice', 'allow_empty');
+        /*
         if ($var['preferred_invoice'] == 3 AND empty($var['ean'])) {
+            // @todo this creates problems from the shop when EAN has been chosen
             $this->error->set('Du skal udfylde EAN-nummeret, hvis du vælger en elektronisk faktura');
         }
+        */
 
         if ($var['preferred_invoice'] == 2 AND empty($var['email'])) {
             $this->error->set('E-mailen skal udfyldes, hvis kontakten foretrækker e-mail.');
@@ -519,7 +521,7 @@ class Contact extends Intraface_Standard
             $sql_create = "";
         } else {
             $sql="INSERT INTO contact ";
-            $sql_after = ", password='".safeToDb(md5(date('Y-m-d H:i:s') . $sql_items))."'";
+            $sql_after = ", code='".safeToDb(md5(date('Y-m-d H:i:s') . $sql_items))."'";
             $sql_create = "date_created = NOW(),";
         }
 
