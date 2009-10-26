@@ -3,6 +3,11 @@ class Intraface_Controller_Index extends k_Component
 {
     protected $registry;
 
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     protected function map($name)
     {
         if ($name == 'logout') { // skal sikkert være fra restricted controller i stedet
@@ -18,15 +23,13 @@ class Intraface_Controller_Index extends k_Component
         }
     }
 
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function renderHtml()
     {
+        return new k_SeeOther($this->url('restricted'));
+        /*
         $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
         return $smarty->render($this);
+        */
     }
 
     function getKernel()

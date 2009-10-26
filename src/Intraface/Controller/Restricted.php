@@ -4,6 +4,16 @@ class Intraface_Controller_Restricted extends k_Component
     protected $registry;
     protected $kernel;
 
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
+    function document()
+    {
+        return $this->document;
+    }
+
     protected function map($name)
     {
         if ($name == 'switchintranet') {
@@ -99,10 +109,6 @@ class Intraface_Controller_Restricted extends k_Component
     	return $this->kernel = $this->session()->get('kernel');
     }
 
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
-    }
 
     function getLastView()
     {
@@ -117,14 +123,43 @@ class Intraface_Controller_Restricted extends k_Component
         return sprintf('<html><body><ul><li><a href="'.$this->url('/restricted/module').'">Moduler</a></li><li><a href="'.$this->url('/logout').'">Logout</a></li><li><a href="'.$this->url('/restricted/switchintranet').'">Switch Intranet</a></li></ul>%s</body></html>', $content);
     }
     */
-
+    /*
     function wrapHtml($content)
     {
         $smarty = new k_Template(dirname(__FILE__) . '/templates/wrapper.tpl.php');
         return $smarty->render($this, array('content' => $content));
     }
+    */
 
+    function getPage()
+    {
+    	return $this->registry->create('page');
+    }
 
+    function getHeader()
+    {
+        return;
+        ob_start();
+        $this->getPage()->start('Newsletter');
+        $data = ob_get_contents();
+        ob_end_clean();
+        return $data;
+    }
+
+    function getFooter()
+    {
+        return;
+        ob_start();
+        $this->getPage()->end();
+        $data = ob_get_contents();
+        ob_end_clean();
+        return $data;
+    }
+
+    function wrapHtml($content)
+    {
+        return $this->getHeader() . $content . $this->getFooter();
+    }
 
     function execute()
     {
@@ -136,6 +171,7 @@ class Intraface_Controller_Restricted extends k_Component
         return $phrase;
     }
 
+    /*
     function getUserMenu()
     {
         $this->usermenu = array();
@@ -212,4 +248,5 @@ class Intraface_Controller_Restricted extends k_Component
 
         return $this->submenu;
     }
+    */
 }

@@ -12,15 +12,15 @@ class Intraface_Controller_RetrievePassword extends k_Component
     protected $registry;
     public $msg;
 
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     function execute()
     {
         $this->url_state->init("continue", $this->url('/login', array('flare' => 'Vi har sendt en e-mail til dig med en ny adgangskode, som du bør gå ind og lave om med det samme.')));
         return parent::execute();
-    }
-
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
     }
 
     function renderHtml()

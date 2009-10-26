@@ -10,17 +10,18 @@
 class Intraface_Controller_Login extends k_Component
 {
     protected $registry;
+    protected $template;
     protected $kernel;
+
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
 
     function execute()
     {
         $this->url_state->init("continue", $this->url('/restricted'));
         return parent::execute();
-    }
-
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
     }
 
     function renderHtml()
@@ -34,8 +35,7 @@ class Intraface_Controller_Login extends k_Component
         if (is_object($this->kernel)) {
             return $this->kernel;
         }
-        $registry = $this->registry->create();
-    	return $this->kernel = $registry->get('kernel');
+    	return $this->kernel = $this->registry->get('kernel');
     }
 
     function postForm()

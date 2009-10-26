@@ -1,10 +1,12 @@
 <?php
+ini_set('memory_limit', '32M');
+
 class Intraface_Controller_ModuleManager extends k_Component
 {
     protected $registry;
     protected $channels;
 
-    function __construct(WireFactory $registry)
+    function __construct(k_Registry $registry)
     {
         $this->registry = $registry;
         $this->channels = array(
@@ -19,213 +21,297 @@ class Intraface_Controller_ModuleManager extends k_Component
 
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/modulemanager.tpl.php');
-        return $smarty->render($this);
-    }
+        $pear_user_config = '/etc/pear/pear.conf';
 
-    function validate($req, &$input)
-    {
-        $this->validated        = true;
-
-        //  default action is 'overview' unless paging through results,
-        //  in which case default is 'list'
-        $input->from            = $req->get('pageID');
-        $input->totalItems      = $req->get('totalItems');
-        $input->action = ($req->get('action')) ? $req->get('action') : 'list';
-        $input->aDelete         = $req->get('frmDelete');
-        $input->submitted       = $req->get('submitted');
-
-        //  PEAR params
-        $input->mode            = $req->get('mode');
-        $input->channel         = $req->get('channel');
-        $input->command         = $req->get('command');
-        $input->pkg             = $this->restoreSlashes($req->get('pkg'));
-
-        //  validate fields
-        $aErrors = array();
-        if ($input->submitted) {
-            $aFields = array(
-                'name' => 'Please, specify a name',
-                'title' => 'Please, specify a title',
-                'description' => 'Please, specify a description',
-                'icon' => 'Please, specify the name of the icon-file'
-            );
-            foreach ($aFields as $field => $errorMsg) {
-                if (empty($input->module->$field)) {
-                    $aErrors[$field] = $errorMsg;
-                }
-            }
-        }
-
-        //  if errors have occured
-        if (isset($aErrors) && count($aErrors)) {
-            SGL::raiseMsg('Please fill in the indicated fields');
-            $input->error = $aErrors;
-            $input->template = 'moduleEdit.html';
-            $this->validated = false;
-        }
-    }
-
-    function restoreSlashes($str)
-    {
-        return str_replace('^', '/',$str);
-    }
-
-    function _cmd_doRequest(&$input, &$output)
-    {
-        $ok = ini_set('max_execution_time', 180);
-        putenv('PHP_PEAR_INSTALL_DIR='.SGL_LIB_PEAR_DIR);
-
-        #$useDHTML = true;
-        define('PEAR_Frontend_Web',1);
-
-        // Include needed files
-        require_once 'PEAR/Registry.php';
-        require_once 'PEAR/Config.php';
-        require_once 'PEAR/Command.php';
-
+        PEAR_Frontend::setFrontendClass('PEAR_Frontend_Web');
         // Init PEAR Installer Code and WebFrontend
-        #$config  = $GLOBALS['_PEAR_Frontend_Web_config'] = &PEAR_Config::singleton();
-        $config  = $GLOBALS['_PEAR_Frontend_Web_config'] =
-            &PEAR_Config::singleton($this->getPearConfigPath(), $this->getPearConfigPath());
+        $GLOBALS['_PEAR_Frontend_Web_config'] = &PEAR_Config::singleton($pear_user_config, '');
+        $config = &$GLOBALS['_PEAR_Frontend_Web_config'];
+        if (PEAR::isError($config)) {
+            die('<b>Error:</b> '.$config->getMessage());
+        }
 
-        $config->set('default_channel', $input->channel);
-        $config->set('preferred_state', 'devel');
-
-        PEAR_Command::setFrontendType("WebSGL");
         $ui = &PEAR_Command::getFrontendObject();
+        if (PEAR::isError($ui)) {
+            die('<b>Error:</b> '.$ui->getMessage());
+        }
+        $ui->setConfig($config);
 
-        $verbose = $config->get("verbose");
+        PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array($ui, "displayFatalError"));
+
         $cmdopts = array();
         $opts    = array();
         $params  = array();
-
-        $URL = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-        #$dir = substr(dirname(__FILE__), 0, -strlen('PEAR/PEAR')); // strip PEAR/PEAR
-
-        #$_ENV['TMPDIR'] = $_ENV['TEMP'] = $dir.'tmp';
-        $_ENV['TMPDIR'] = $_ENV['TEMP'] = SGL_TMP_DIR;
-
-        if ($input->command == 'sgl-install' || $input->command == 'sgl-install') {
-            if (!is_writable(SGL_MOD_DIR)) {
-                SGL::raiseError('your module directory must be writable '.
-                    'by the webserver before you attempt this command',
-                        SGL_ERROR_FILEUNWRITABLE);
-                return;
-            }
-        }
-        if (is_null($input->command)) {
-            $input->command  = 'sgl-list-all';
-        }
-        $params = array();
-        if ($input->mode) {
-            $opts['mode'] = 'installed';
+        if (isset($_GET['command']) && !is_null($_GET['command'])) {
+            $command = $_GET['command'];
+        } else {
+            $command = 'list';
         }
 
-        #PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array($ui, "displayFatalError"));
+        //$ui->outputBegin($command);
 
-        $cache = & SGL_Cache::singleton();
-        $cacheId = 'pear'.$input->command.$input->mode;
+        // Handle some different Commands
+        ob_start();
 
-        switch ($input->command) {
-
-        case 'sgl-list-all':
-            SGL::logMessage('made it to list-all', PEAR_LOG_DEBUG);
-            if ($serialized = $cache->get($cacheId, 'pear')) {
-                $data = unserialize($serialized);
-                if (PEAR::isError($data)) {
-                    return $data;
+        switch ($command) {
+            case 'install':
+            case 'uninstall':
+            case 'upgrade':
+                if ($_GET['command'] == 'install') {
+                    // also install dependencies
+                    $opts['onlyreqdeps'] = true;
+                    if (isset($_GET['force']) && $_GET['force'] == 'on') {
+                        $opts['force'] = true;
+                    }
                 }
-                SGL::logMessage('pear data from cache', PEAR_LOG_DEBUG);
-            } else {
-                $cmd = PEAR_Command::factory($input->command, $config);
-                $data = $cmd->run($input->command, $opts, $params);
-                if (PEAR::isError($data)) {
-                    return $data;
+
+                if (strpos($_GET['pkg'], '\\\\') !== false) {
+                    $_GET['pkg'] = stripslashes($_GET['pkg']);
                 }
-                $serialized = serialize($data);
-                $cache->save($serialized, $cacheId, 'pear');
-                SGL::logMessage('pear data from db', PEAR_LOG_DEBUG);
-            }
-            break;
+                $params = array($_GET["pkg"]);
+                $cmd = PEAR_Command::factory($command, $config);
+                $ok = $cmd->run($command, $opts, $params);
 
-        case 'sgl-install':
-        case 'sgl-uninstall':
-        case 'sgl-upgrade':
-            $params = array($input->pkg);
-            $cmd = PEAR_Command::factory($input->command, $config);
-            if (PEAR::isError($cmd)) {
-                return SGL::raiseError('prob with PEAR_Command object');
-            }
-            ob_start();
-            $ok = $cmd->run($input->command, $opts, $params);
-            $pearOutput = ob_get_contents();
-            ob_end_clean();
+                $reg = &$config->getRegistry();
+                PEAR::staticPushErrorHandling(PEAR_ERROR_RETURN);
+                $err = $reg->parsePackageName($_GET['pkg']);
+                PEAR::staticPopErrorHandling(); // reset error handling
 
-            if ($ok) {
-                print $pearOutput;#exit;
-                $this->_redirectToDefault($input, $output);
-            } else {
-                print '<pre>';print_r($ok);
-            }
-            break;
+                if (!PEAR::isError($err)) {
+                    $ui->finishOutput('Back', array('link' => $_SERVER['PHP_SELF'].'?command=info&pkg='.$_GET['pkg'],
+                        'text' => 'View package information'));
+                }
+                break;
+            case 'run-scripts' :
+                $params = array($_GET['pkg']);
+                $cmd = PEAR_Command::factory($command, $config);
+                $ok = $cmd->run($command, $opts, $params);
+                break;
+            case 'info':
+            case 'remote-info':
+                $reg = &$config->getRegistry();
+                // we decide what it is:
+                $pkg = $reg->parsePackageName($_GET['pkg']);
+                if ($reg->packageExists($pkg['package'], $pkg['channel'])) {
+                    $command = 'info';
+                } else {
+                    $command = 'remote-info';
+                }
+
+                $params = array(strtolower($_GET['pkg']));
+                $cmd = PEAR_Command::factory($command, $config);
+                $ok = $cmd->run($command, $opts, $params);
+
+                break;
+            case 'search':
+                if (!isset($_POST['search']) || $_POST['search'] == '') {
+                    // unsubmited, show forms
+                    $ui->outputSearch();
+                } else {
+                    if ($_POST['channel'] == 'all') {
+                        $opts['allchannels'] = true;
+                    } else {
+                        $opts['channel'] = $_POST['channel'];
+                    }
+                    $opts['channelinfo'] = true;
+
+                    // submited, do search
+                    switch ($_POST['search']) {
+                        case 'name':
+                            $params = array($_POST['input']);
+                            break;
+                        case 'description':
+                            $params = array($_POST['input'], $_POST['input']);
+                            break;
+                        default:
+                            PEAR::raiseError('Can\'t search for '.$_POST['search']);
+                            break;
+                    }
+
+                    $cmd = PEAR_Command::factory($command, $config);
+                    $ok = $cmd->run($command, $opts, $params);
+                }
+
+                break;
+            case 'config-show':
+                $cmd = PEAR_Command::factory($command, $config);
+                $res = $cmd->run($command, $opts, $params);
+
+                // if this code is reached, the config vars are submitted
+                $set = PEAR_Command::factory('config-set', $config);
+                foreach($GLOBALS['_PEAR_Frontend_Web_Config'] as $var => $value) {
+                    if ($var == 'Filename') {
+                        continue; // I hate obscure bugs
+                    }
+                    if ($value != $config->get($var)) {
+                        print('Saving '.$var.'... ');
+                        $res = $set->run('config-set', $opts, array($var, $value));
+                        $config->set($var, $value);
+                    }
+                }
+                print('<p><b>Config saved succesfully!</b></p>');
+
+                $ui->finishOutput('Back', array('link' => $_SERVER['PHP_SELF'].'?command='.$command, 'text' => 'Back to the config'));
+                break;
+            case 'list-files':
+                $params = array($_GET['pkg']);
+                $cmd = PEAR_Command::factory($command, $config);
+                $res = $cmd->run($command, $opts, $params);
+                break;
+            case 'list-docs':
+                if (!isset($_GET['pkg'])) {
+                    PEAR::raiseError('The webfrontend-command list-docs needs at least one \'pkg\' argument.');
+                    break;
+                }
+
+                $reg = $config->getRegistry();
+                $pkg = $reg->parsePackageName($_GET['pkg']);
+
+                $docview = new PEAR_Frontend_Web_Docviewer($ui);
+                $docview->outputListDocs($pkg['package'], $pkg['channel']);
+                break;
+            case 'doc-show':
+                if (!isset($_GET['pkg']) || !isset($_GET['file'])) {
+                    PEAR::raiseError('The webfrontend-command list-docs needs one \'pkg\' and one \'file\' argument.');
+                    break;
+                }
+
+                $reg = $config->getRegistry();
+                $pkg = $reg->parsePackageName($_GET['pkg']);
+
+                $docview = new PEAR_Frontend_Web_Docviewer($ui);
+                $docview->outputDocShow($pkg['package'], $pkg['channel'], $_GET['file']);
+                break;
+            case 'list-all':
+                // Deprecated, use 'list-categories' is used instead
+                if (isset($_GET['chan']) && $_GET['chan'] != '') {
+                    $opts['channel'] = $_GET['chan'];
+                }
+                $opts['channelinfo'] = true;
+                $cmd = PEAR_Command::factory($command, $config);
+                $res = $cmd->run($command, $opts, $params);
+
+                break;
+            case 'list-categories':
+            case 'list-packages':
+                if (isset($_GET['chan']) && $_GET['chan'] != '') {
+                    $opts['channel'] = $_GET['chan'];
+                } else {
+                    // show 'table of contents' before all channel output
+                    $ui->outputTableOfChannels();
+
+                    $opts['allchannels'] = true;
+                }
+                if (isset($_GET['opt']) && $_GET['opt'] == 'packages') {
+                    $opts['packages'] = true;
+                }
+                $cmd = PEAR_Command::factory($command, $config);
+                $res = $cmd->run($command, $opts, $params);
+
+                break;
+            case 'list-category':
+                if (isset($_GET['chan']) && $_GET['chan'] != '') {
+                    $opts['channel'] = $_GET['chan'];
+                }
+                $params = array($_GET['cat']);
+                $cmd = PEAR_Command::factory($command, $config);
+                $res = $cmd->run($command, $opts, $params);
+
+                break;
+            case 'list':
+                $opts['allchannels'] = true;
+                $opts['channelinfo'] = true;
+                $cmd = PEAR_Command::factory($command, $config);
+                $res = $cmd->run($command, $opts, $params);
+
+                break;
+            case 'list-upgrades':
+                $opts['channelinfo'] = true;
+                $cmd = PEAR_Command::factory($command, $config);
+                $res = $cmd->run($command, $opts, $params);
+                $ui->outputUpgradeAll();
+
+                break;
+            case 'upgrade-all':
+                $cmd = PEAR_Command::factory($command, $config);
+                $ok = $cmd->run($command, $opts, $params);
+
+                $ui->finishOutput('Back', array('link' => $_SERVER['PHP_SELF'].'?command=list',
+                    'text' => 'Click here to go back'));
+                break;
+            case 'channel-info':
+                if (isset($_GET['chan']))
+                    $params[] = $_GET['chan'];
+                $cmd = PEAR_Command::factory($command, $config);
+                $ok = $cmd->run($command, $opts, $params);
+
+                break;
+            case 'channel-discover':
+                if (isset($_GET['chan']) && $_GET['chan'] != '')
+                    $params[] = $_GET['chan'];
+                $cmd = PEAR_Command::factory($command, $config);
+                $ui->startSession();
+                $ok = $cmd->run($command, $opts, $params);
+
+                $ui->finishOutput('Channel Discovery', array('link' =>
+                    $_SERVER['PHP_SELF'] . '?command=channel-info&chan=' . urlencode($_GET['chan']),
+                    'text' => 'Click Here for ' . htmlspecialchars($_GET['chan']) . ' Information'));
+                break;
+            case 'channel-delete':
+                if (isset($_GET["chan"]))
+                    $params[] = $_GET["chan"];
+                $cmd = PEAR_Command::factory($command, $config);
+                $ok = $cmd->run($command, $opts, $params);
+
+                $ui->finishOutput('Delete Channel', array('link' =>
+                    $_SERVER['PHP_SELF'] . '?command=list-channels',
+                    'text' => 'Click here to list all channels'));
+                break;
+            case 'list-channels':
+                $cmd = PEAR_Command::factory($command, $config);
+                $ok = $cmd->run($command, $opts, $params);
+
+                break;
+            case 'channel-update':
+                if (isset($_GET['chan'])) {
+                    $params = array($_GET['chan']);
+                }
+                $cmd = PEAR_Command::factory($command, $config);
+                $ok = $cmd->run($command, $opts, $params);
+
+                break;
+            case 'update-channels':
+                // update every channel manually,
+                // fixes bug PEAR/#10275 (XML_RPC dependency)
+                // will be fixed in next pear release
+                $reg = &$config->getRegistry();
+                $channels = $reg->getChannels();
+                $command = 'channel-update';
+                $cmd = PEAR_Command::factory($command, $config);
+
+                $success = true;
+                $ui->startSession();
+                foreach ($channels as $channel) {
+                    if ($channel->getName() != '__uri') {
+                        $success &= $cmd->run($command, $opts,
+                                              array($channel->getName()));
+                    }
+                }
+
+                $ui->finishOutput('Update Channel List', array('link' =>
+                    $_SERVER['PHP_SELF'] . '?command=list-channels',
+                    'text' => 'Click here to list all channels'));
+                break;
+            default:
+                $cmd = PEAR_Command::factory($command, $config);
+                $res = $cmd->run($command, $opts, $params);
+
+                break;
         }
+        $output = ob_get_contents();
+        ob_end_clean();
+        return $output;
 
-       # foreach ($data['data'] as $aPackages) {
-       #     foreach ($aPackages as $aPackage) {
-                // [0] name
-                // [1] remote version
-                // [2] local version
-                // [3] desc
-                // [4] (array) deps
-        #        $result .= $aPackage[0]."\n<br />";
-#print '<pre>';print_r($aPackage);
-         #   }
-        #}
-        $output->result = @$data['data'];
-#print '<pre>';print_r($aPackage);
-
-    }
-
-    /**
-     * Returns path to PEAR config file, and creates file if it doesn't exist.
-     *
-     * @return string
-     */
-    function getPearConfigPath()
-    {
-        if (!is_file(SGL_TMP_DIR . '/pear.conf')) {
-            $conf = &PEAR_Config::singleton();
-
-            $conf->set('default_channel', 'pear.php.net');
-            $conf->set('http_proxy', SGL_LIB_PEAR_DIR);
-            $conf->set('doc_dir', SGL_TMP_DIR);
-            $conf->set('php_dir', SGL_LIB_PEAR_DIR);
-            $conf->set('web_dir', SGL_WEB_ROOT);
-            $conf->set('cache_dir', SGL_TMP_DIR);
-            $conf->set('data_dir', SGL_TMP_DIR);
-            $conf->set('test_dir', SGL_TMP_DIR);
-            $conf->set('preferred_state', 'devel');
-
-//            $conf->set('auto_discover ', '');
-//            $conf->set('preferred_mirror', '');
-//            $conf->set('remote_config', '');
-//            $conf->set('bin_dir', '');
-//            $conf->set('ext_dir', '');
-//            $conf->set('php_bin', '');
-//            $conf->set('cache_ttl', '');
-//            $conf->set('umask', '');
-//            $conf->set('verbose', '');
-//            $conf->set('password', '');
-//            $conf->set('sig_bin', '');
-//            $conf->set('sig_keydir', '');
-//            $conf->set('sig_keyid', '');
-//            $conf->set('sig_type', '');
-//            $conf->set('username', '');
-
-            $ok = $conf->writeConfigFile(SGL_TMP_DIR . '/pear.conf', $layer = 'user'/*, $data = null*/);
-        }
-
-        return SGL_TMP_DIR . '/pear.conf';
+        //$ui->outputEnd($command);
     }
 }

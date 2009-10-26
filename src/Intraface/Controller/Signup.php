@@ -15,15 +15,15 @@ class Intraface_Controller_Signup extends k_Component
     protected $kernel;
     public $msg;
 
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     function execute()
     {
         $this->url_state->init("continue", $this->url('/login'));
         return parent::execute();
-    }
-
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
     }
 
     function renderHtml()

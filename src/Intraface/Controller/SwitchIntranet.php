@@ -11,7 +11,7 @@ class Intraface_Controller_SwitchIntranet extends k_Component
 {
     protected $registry;
 
-    function __construct(WireFactory $registry)
+    function __construct(k_Registry $registry)
     {
         $this->registry = $registry;
     }

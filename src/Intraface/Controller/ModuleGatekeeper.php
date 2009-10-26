@@ -3,6 +3,11 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
 {
     protected $registry;
 
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     /*
     function dispatch()
     {
@@ -55,14 +60,9 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
         return $phrase;
     }
 
-    function getKernel()
+    public function getKernel()
     {
         return $this->context->getKernel();
-    }
-
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
     }
 
     function getUser()
