@@ -158,7 +158,6 @@ class Intraface_modules_shop_Coordinator
             return false;
         }
 
-
         // we update/add the contactperson.
         if (isset($input['type']) && $input['type'] == 'corporation') { // firma
             $this->contact->loadContactPerson($contact_person_id);
@@ -235,6 +234,7 @@ class Intraface_modules_shop_Coordinator
         }
 
         $order_id = $this->createOrder($input);
+
         if ($order_id == 0) {
             $this->error->set('unable to create the order');
             return false;
