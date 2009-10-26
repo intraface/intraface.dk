@@ -32,30 +32,44 @@ if (!$auth->hasIdentity()) {
     $auth->toLogin();
 }
 
-$kernel = new Intraface_Kernel(session_id());
-$kernel->user = $auth->getIdentity(MDB2::singleton(DB_DSN));
+$user = $auth->getIdentity($bucket->get('MDB2'));
+$intranet = $user->getActiveIntranet();
+// @todo why are we setting the id?
+$user->setIntranetId($intranet->get('id'));
 
-if (!$intranet_id = $kernel->user->getActiveIntranetId()) {
+if ($intranet->getId() == 0) {
     trigger_error('no active intranet_id', E_USER_ERROR);
 }
-
-$kernel->intranet = new Intraface_Intranet($intranet_id);
-
-// @todo why are we setting the id?
-$kernel->user->setIntranetId($kernel->intranet->get('id'));
-$kernel->setting = new Intraface_Setting($kernel->intranet->get('id'), $kernel->user->get('id'));
-
-$language = $kernel->setting->get('user', 'language');
+//$setting = new Intraface_Setting($kernel->intranet->get('id'), $kernel->user->get('id'));
+$setting = $user->getSetting();
+$language = $setting->get('user', 'language');
 
 // makes intranet_id accessable in Doctrine
-Intraface_Doctrine_Intranet::singleton($kernel->intranet->getId());
+Intraface_Doctrine_Intranet::singleton($intranet->getId());
 
+
+//$kernel = new Intraface_Kernel(session_id());
+$kernel = $bucket->get('Intraface_Kernel');
+$kernel->user = $user;
+// $kernel->intranet = new Intraface_Intranet($intranet_id);
+$kernel->intranet = $intranet;
+$kernel->setting = $setting;
+
+// @todo starting up a new bucket - should not be neccessary
+//       it has to be refactored. It is Page which creates problems
+//       as it needs a setup kernel.
 $config = new Intraface_Config;
-$config->language = $language;
+//$config->language = $language;
 $config->kernel = $kernel;
 
 $bucket = new bucket_Container(new Intraface_Factory($config));
-$translation = $bucket->get('translation2');
+$translation = $bucket->get('Translation2');
+// set primary language
+$set_language = $translation->setLang($language);
+
+if (PEAR::isError($set_language)) {
+    trigger_error($set_language->getMessage(), E_USER_ERROR);
+}
 
 /*
 // set the parameters to connect to your db
@@ -113,6 +127,8 @@ $translation->emptyPostfix = '';  //default: empty string
 */
 $kernel->translation = $translation;
 
+/*
 // @todo CHANGE THIS TO BUCKET INSTEAD
 $dependency = new Intraface_Dependency();
 $dependency->whenCreating('Intraface_modules_product_Gateway')->forVariable('kernel')->willUse($kernel);
+*/
