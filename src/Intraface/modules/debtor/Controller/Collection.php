@@ -2,6 +2,7 @@
 class Intraface_modules_debtor_Controller_Collection extends k_Component
 {
     protected $registry;
+    protected $debtor;
 
     function __construct(k_Registry $registry)
     {
@@ -21,7 +22,12 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
     {
         Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
         $module = $this->getKernel()->module('debtor');
-        return $debtor = Debtor::factory($this->getKernel(), null, $this->getType());
+
+        if (is_object($this->debtor)) {
+            return $this->debtor;
+        }
+
+        return $this->debtor = Debtor::factory($this->getKernel(), null, $this->getType());
     }
 
     function getPosts()

@@ -290,7 +290,7 @@ if (isset($onlinepayment)) {
                         } else {
                             e(t('Not stated'));
                             if ($context->getDebtor()->get('status') == 'sent' || $context->getDebtor()->get('status') == 'executed') { ?>
-                                <a href="state_<?php e($context->getDebtor()->get('type')); ?>.php?id=<?php e($context->getDebtor()->get("id")); ?>"><?php e(__('state '.$context->getDebtor()->get('type'))); ?></a>
+                                <a href="<?php e(url('state')); ?>"><?php e(__('State')); ?></a>
                             <?php
                             }
 
@@ -605,7 +605,7 @@ if (isset($onlinepayment)) {
 <div style="clear:both;">
     <?php if ($context->getDebtor()->get("locked") == false) { ?>
         <ul class="options" style="clear: both;">
-            <li><a href="<?php e(url(null, array('add_item' => true))); ?>"><?php e(t('Add item')); ?></a></li>
+            <li><a href="<?php e(url('selectproduct', array('set_quantity' => true, 'multiple' => true))); ?>"><?php e(t('Add item')); ?></a></li>
         </ul>
     <?php } ?>
 
@@ -649,10 +649,10 @@ if (isset($onlinepayment)) {
                         if ($items[$i]["description"] != "") {
                             autohtml($items[$i]["description"]);
                             if ($context->getDebtor()->get("locked") == false) {
-                                echo '<br /> <a href="item_edit.php?debtor_id='.intval($context->getDebtor()->get('id')).'&amp;id='.intval($items[$i]["id"]).'">Ret tekst</a>';
+                                echo '<br /> <a href="'.url('item/' . intval($items[$i]["id"]), array('edit')).'">Ret tekst</a>';
                             }
                         } elseif ($context->getDebtor()->get("locked") == false) {
-                            echo ' <a href="item_edit.php?debtor_id='.intval($context->getDebtor()->get('id')).'&amp;id='.intval($items[$i]["id"]).'">Tilføj tekst</a>';
+                            echo ' <a href="'.url('item/' . intval($items[$i]["id"]), array('edit')).'">Tilføj tekst</a>';
                         }
 
                         ?>

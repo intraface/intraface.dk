@@ -36,7 +36,7 @@ $multiple = $context->multiple;
     <?php
     echo $context->getProduct()->getDBQuery()->display('character');
     ?>
-    <form action="<?php e(url()); ?>?set_quantity=<?php e($quantity); ?>&amp;use_stored=true" method="post">
+    <form action="<?php e(url(null, array('set_quantity' => $context->quantity, 'multiple' => $context->multiple, 'use_stored' => 'true'))); ?>" method="post">
         <table summary="Produkter" class="stripe">
             <caption><?php e(t('products')); ?></caption>
             <thead>

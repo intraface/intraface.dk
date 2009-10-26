@@ -13,9 +13,7 @@ class Intraface_modules_product_Controller_Selectproduct extends k_Component
 
     function getRedirect()
     {
-
         return $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
-
     }
 
     function renderHtml()
@@ -23,18 +21,8 @@ class Intraface_modules_product_Controller_Selectproduct extends k_Component
         $product_module = $this->getKernel()->module("product");
         $translation = $this->getKernel()->getTranslation('product');
 
-        // hente liste med produkter - bør hentes med getList!
-        $redirect = $this->getRedirect();
-        if ($redirect->get('id') != 0) {
-            $this->multiple = $redirect->isMultipleParameter('product_id');
-            if (isset($_GET['set_quantity']) && (int)$_GET['set_quantity'] == 1) {
-                $this->quantity = 1;
-            } else {
-                $this->quantity = 0;
-            }
-        } else {
-            trigger_error("Der mangler en gyldig redirect", E_USER_ERROR);
-        }
+        $this->multiple = $this->query('multiple');
+        $this->quantity = $this->query('set_quantity');
 
         if (isset($_GET['add_new'])) {
             $add_redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
@@ -87,7 +75,9 @@ class Intraface_modules_product_Controller_Selectproduct extends k_Component
         $keywords = $product->getKeywordAppender();
 
         $list = $product->getList();
-        $product_values = $redirect->getParameter('product_id', 'with_extra_value');
+
+        /*
+        $product_values = array();
         $selected_products = array();
         if (is_array($product_values)) {
             if ($this->multiple) {
@@ -99,6 +89,7 @@ class Intraface_modules_product_Controller_Selectproduct extends k_Component
                 $selected_products[$product_values['value']['product_id']] = $product_values['extra_value'];
             }
         }
+        */
 
         $smarty = new k_Template(dirname(__FILE__) . '/tpl/selectproduct.tpl.php');
         return $smarty->render($this);
@@ -149,41 +140,34 @@ class Intraface_modules_product_Controller_Selectproduct extends k_Component
 
     function postForm()
     {
-        // @todo the actual save should be done here
-        $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
-        $this->multiple = $redirect->isMultipleParameter('product_id');
+        $this->multiple = $this->query('multiple');
+        $this->quantity = $this->query('set_quantity');
+
         if (isset($_POST['submit']) || isset($_POST['submit_close'])) {
             if ($this->multiple) {
                 if (isset($_POST['selected']) && is_array($_POST['selected'])) {
                     foreach ($_POST['selected'] AS $selected_id => $selected_value) {
                         if ($selected_value != '' && $selected_value != '0') {
-                            $select = serialize(array('product_id' => $selected_id, 'product_variation_id' => 0));
-                            // Hvis der allerede er gemt en værdi, så starter vi med at fjerne den, så der ikke kommer flere på
-                            $redirect->removeParameter('product_id', $select);
-                            if ($this->quantity) {
-                                $redirect->setParameter('product_id', $select, $selected_value);
-                            } else {
-                                $redirect->setParameter('product_id', $select);
-                            }
+                            $product = array(
+                            	'product_id' => $selected_id,
+                            	'product_variation_id' => 0);
+
+                            $this->context->addItem($product, $selected_value);
                         }
                     }
                 }
             } else {
                 if (isset($_POST['selected']) && (int)$_POST['selected'] != 0) {
-                    $select = serialize(array('product_id' => (int)$_POST['selected'], 'product_variation_id' => 0));
-                    if ($this->quantity) {
-                        $redirect->setParameter('product_id', $select, (int)$_POST['quantity']);
-                    } else {
-                        $redirect->setParameter('product_id', $select);
-                    }
+                    $product = array('product_id' => (int)$_POST['selected'], 'product_variation_id' => 0);
+                    $this->context->addItem($product, (int)$_POST['quantity']);
                 }
             }
 
             if (isset($_POST['submit_close'])) {
-                return new k_SeeOther($redirect->getRedirect($this->url()));
+                return new k_SeeOther($this->url('../'));
             }
 
-            throw new Exception('What to do?');
+            return new k_SeeOther($this->url(null, array('use_stored' => true, 'set_quantity' => $this->quantity, 'multiple' => $this->multiple)));
         }
 
     }

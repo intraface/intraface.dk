@@ -25,6 +25,8 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             } elseif ($this->getType() == 'invoice') {
                 return 'Intraface_modules_accounting_Controller_State_Invoice';
             }
+        } elseif ($name == 'item') {
+            return 'Intraface_modules_debtor_Controller_Items';
         }
     }
 
@@ -365,6 +367,12 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             }
         }
          return parent::GET();
+    }
+
+    function addItem($product, $quantity)
+    {
+        $this->getDebtor()->loadItem();
+        $this->getDebtor()->item->save(array('product_id' => $product['product_id'], 'product_variation_id' => $product['product_variation_id'], 'quantity' => $quantity, 'description' => ''));
     }
 
     function getKernel()
