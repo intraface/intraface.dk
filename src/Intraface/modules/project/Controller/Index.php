@@ -1,9 +1,14 @@
 <?php
-class Intraface_modules_project_Controller_Index extends k_Controller
+class Intraface_modules_project_Controller_Index extends k_Component
 {
-    public $map = array('create' => 'Intraface_modules_shop_Controller_Edit');
+    protected $registry;
 
-    function GET()
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry->create();
+    }
+
+    function renderHtml()
     {
         $doctrine = $this->registry->get('doctrine');
 
@@ -11,17 +16,12 @@ class Intraface_modules_project_Controller_Index extends k_Controller
 
         $data = array('shops' => $shops);
 
-        return $this->render(dirname(__FILE__) . '/tpl/index.tpl.php', $data);
+        $template = new k_Template(dirname(__FILE__) . '/tpl/index.tpl.php');
+        return $template->render($this, $data);
     }
 
-    function forward($name)
+    function t($phrase)
     {
-        if ($name == 'create') {
-            $next = new Intraface_modules_shop_Controller_Edit($this, $name);
-            return $next->handleRequest();
-        }
-        $next = new Intraface_modules_shop_Controller_Show($this, $name);
-        return $next->handleRequest();
-
+        return $phrase;
     }
 }
