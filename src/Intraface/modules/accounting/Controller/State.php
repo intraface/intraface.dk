@@ -7,7 +7,7 @@ class Intraface_modules_accounting_Controller_State extends k_Component
     {
     }
 
-    function __construct(WireFactory $registry)
+    function __construct(k_Registry $registry)
     {
         $this->registry = $registry;
     }
@@ -64,9 +64,9 @@ class Intraface_modules_accounting_Controller_State extends k_Component
         $translation = $this->getKernel()->getTranslation('accounting');
 
         $voucher = new Voucher($this->getYear());
-        // denne funktion vælger automatisk alle poster i kassekladden
+        // denne funktion vï¿½lger automatisk alle poster i kassekladden
         if (!$voucher->stateDraft()) {
-            // $post->error->set('Posterne kunne ikke bogføres');
+            // $post->error->set('Posterne kunne ikke bogfï¿½res');
         }
 
         return new k_SeeOther($this->url());

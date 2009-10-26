@@ -3,18 +3,31 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
 {
     protected $registry;
 
-    function __construct(WireFactory $registry)
+    function __construct(k_Registry $registry)
     {
         $this->registry = $registry;
     }
 
+    function map($name)
+    {
+        if (is_numeric($name)) {
+            return 'Intraface_modules_debtor_Controller_Show';
+        } elseif ($name == 'contact') {
+            return 'Intraface_modules_contact_Controller_Choosecontact';
+        }
+    }
+
     function getDebtor()
     {
-        return $debtor = Debtor::factory($this->getKernel(), intval($_GET["id"]), $_GET["type"]);
+        Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
+        $module = $this->getKernel()->module('debtor');
+        return $debtor = Debtor::factory($this->getKernel(), null, $this->getType());
     }
 
     function getPosts()
     {
+        Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
+
         return $this->getDebtor()->getList();
     }
 
@@ -26,7 +39,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         if (empty($_GET['id'])) $_GET['id'] = '';
         if (empty($_GET['type'])) $_GET['type'] = '';
 
-        $debtor = Debtor::factory($kernel, intval($_GET["id"]), $_GET["type"]);
+        $debtor = Debtor::factory($kernel, intval($_GET["id"]), $this->context->getType());
         $debtor->getDbQuery()->storeResult("use_stored", $debtor->get("type"), "toplevel");
 
         $posts = $debtor->getList();
@@ -216,6 +229,8 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
 
     function renderHtml()
     {
+        Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
+
         $translation = $this->getKernel()->getTranslation('debtor');
 
         $mDebtor = $this->getKernel()->module('debtor');
@@ -227,7 +242,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         if (empty($_GET["contact_id"])) $_GET['contact_id'] = '';
         if (empty($_GET["status"])) $_GET['status'] = '';
 
-        $debtor = Debtor::factory($this->getKernel(), intval($_GET["id"]), $_GET["type"]);
+        $debtor = Debtor::factory($this->getKernel(), intval($_GET["id"]), $this->context->getType());
 
         if (isset($_GET["action"]) && $_GET["action"] == "delete") {
             // $debtor = new CreditNote($this->getKernel(), (int)$_GET["delete"]);
@@ -315,5 +330,74 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
     function t($phrase)
     {
          return $phrase;
+    }
+
+    function postForm()
+    {
+    	$debtor = $this->getDebtor();
+    	$contact = new Contact($this->getKernel(), $_POST["contact_id"]);
+
+    	if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
+    		$contact_person = new ContactPerson($contact);
+    		$person["name"] = $_POST['contact_person_name'];
+    		$person["email"] = $_POST['contact_person_email'];
+    		$contact_person->save($person);
+    		$contact_person->load();
+    		$_POST["contact_person_id"] = $contact_person->get("id");
+    	}
+
+        if ($this->getKernel()->intranet->hasModuleAccess('currency') && !empty($_POST['currency_id'])) {
+            $currency_module = $this->getKernel()->useModule('currency', false); // false = ignore user access
+            $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
+            $currency = $gateway->findById($_POST['currency_id']);
+            if ($currency == false) {
+                throw new Exception('Invalid currency');
+            }
+
+            $_POST['currency'] = $currency;
+        }
+
+    	if ($debtor->update($_POST)) {
+    	    return new k_SeeOther($this->url('../list/' . $debtor->get('id')));
+    	}
+
+    	return $this->renderHtmlCreate();
+    }
+
+    function getReturnUrl($contact_id)
+    {
+        return $this->url(null, array('create', 'contact_id' => $contact_id));
+    }
+
+    function renderHtmlCreate()
+    {
+        if ($this->query('contact_id') == '') {
+            return new k_SeeOther($this->url('contact'));
+        }
+        $smarty = new k_Template(dirname(__FILE__) . '/templates/edit.tpl.php');
+        return $smarty->render($this);
+    }
+
+    function getValues()
+    {
+        return array(
+            'number' => ''
+        );
+    }
+
+    function getAction()
+    {
+        return 'Create';
+    }
+
+    function getType()
+    {
+        return $this->context->getType();
+    }
+
+    function getContact()
+    {
+        $module = $this->getKernel()->module('contact');
+        return new Contact($this->getKernel(), $this->query('contact_id'));
     }
 }

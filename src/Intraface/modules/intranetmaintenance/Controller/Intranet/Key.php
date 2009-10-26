@@ -4,6 +4,12 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Key extends k_Co
     protected $registry;
     protected $intranetmaintenance;
 
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+
+    }
+
     function renderHtml()
     {
         $modul = $this->getKernel()->module("intranetmaintenance");
@@ -37,12 +43,6 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Key extends k_Co
     function t($phrase)
     {
         return $phrase;
-    }
-
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
-
     }
 
     function POST()

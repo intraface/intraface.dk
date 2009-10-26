@@ -3,7 +3,7 @@ class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
 {
     protected $registry;
 
-    function __construct(WireFactory $registry)
+    function __construct(k_Registry $registry)
     {
         $this->registry = $registry;
     }
@@ -51,13 +51,13 @@ class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
 
         $debet = new Intraface_Amount($_POST['debet']);
         if (!$debet->convert2db()) {
-            $this->error->set('Beløbet kunne ikke konverteres');
+            $this->error->set('Belï¿½bet kunne ikke konverteres');
         }
         $debet = $debet->get();
 
         $credit = new Intraface_Amount($_POST['credit']);
         if (!$credit->convert2db()) {
-            $this->error->set('Beløbet kunne ikke konverteres');
+            $this->error->set('Belï¿½bet kunne ikke konverteres');
         }
         $credit = $credit->get();
 

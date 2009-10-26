@@ -8,6 +8,11 @@ class Intraface_Factory
         $this->config = $config;
     }
 
+    function new_Intraface_Kernel()
+    {
+        return new Intraface_Kernel(session_id());
+    }
+
     function new_MDB2($container)
     {
         $db = MDB2::singleton(DB_DSN, array('persistent' => true));
@@ -68,13 +73,6 @@ class Intraface_Factory
             trigger_error('Could not start Translation ' . $translation->getMessage(), E_USER_ERROR);
         }
 
-        // set primary language
-        $set_language = $translation->setLang($this->config->language);
-
-        if (PEAR::isError($set_language)) {
-            trigger_error($set_language->getMessage(), E_USER_ERROR);
-        }
-
         // set the group of strings you want to fetch from
         // $translation->setPageID($page_id);
 
@@ -82,7 +80,6 @@ class Intraface_Factory
         $translation = $translation->getDecorator('Lang');
         $translation->setOption('fallbackLang', 'uk');
         $translation = $translation->getDecorator('LogMissingTranslation');
-        require_once("ErrorHandler/Observer/File.php");
         $translation->setOption('logger', array(new ErrorHandler_Observer_File(ERROR_LOG), 'update'));
         $translation = $translation->getDecorator('DefaultText');
 
@@ -108,13 +105,15 @@ class Intraface_Factory
         return new Intraface_Page($this->config->kernel, $this->new_DB_Sql($container));
     }
 
+    /////////////////////////////////////////////////////////////////////
+
     function new_k_Template($container)
     {
         $smarty = new k_Template($this->config->template_dir);
         return $smarty;
     }
 
-    function new_k_Registry()
+    function new_k_Registry($container)
     {
     	$registry = new k_Registry();
         $registry->registerConstructor('doctrine', create_function(
@@ -147,5 +146,26 @@ class Intraface_Factory
         ));
 
         return $registry;
+    }
+
+    /*
+    function new_Doctrine()
+    {
+        Doctrine_Manager::getInstance()->setAttribute("use_dql_callbacks", true);
+        Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
+        Doctrine_Manager::connection(DB_DSN);
+    }
+
+    function new_Intraface_Doctrine_Intranet()
+    {
+        Intraface_Doctrine_Intranet::singleton($kernel->intranet->getId());
+    }
+    */
+
+    ///////////////////////////////////////////////////////////////////////
+
+    function new_Intraface_modules_product_Gateway($container)
+    {
+        return new Intraface_modules_product_Gateway($GLOBALS["kernel"]);
     }
 }

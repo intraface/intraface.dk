@@ -92,7 +92,6 @@ class MainAccounting extends Intraface_Main
                 )
             )
         );
-
         $this->includeSettingFile('settings.php');
         $this->addPreloadFile('Account.php');
         $this->addPreloadFile('Year.php');

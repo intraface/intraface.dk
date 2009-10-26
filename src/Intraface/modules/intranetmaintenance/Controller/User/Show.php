@@ -6,6 +6,11 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
     public $method = 'put';
     protected $intranetmaintenance;
 
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     protected function map($name)
     {
         if ($name == 'permission') {
@@ -179,11 +184,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
     function t($phrase)
     {
         return $phrase;
-    }
-
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
     }
 
     /*

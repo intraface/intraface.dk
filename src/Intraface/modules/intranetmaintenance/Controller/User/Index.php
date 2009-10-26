@@ -5,6 +5,11 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
     protected $user;
     public $method = 'post';
 
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     protected function map($name)
     {
         if ($name == 'create') {
@@ -86,11 +91,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
     function t($phrase)
     {
         return $phrase;
-    }
-
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
     }
 
     function getIntranet()

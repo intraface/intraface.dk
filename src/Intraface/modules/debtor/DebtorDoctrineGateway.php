@@ -11,23 +11,23 @@
 
 class Intraface_modules_debtor_DebtorDoctrineGateway
 {
-    
+
     /**
      * @var object
      */
     private $user;
 
     /**
-     * 
+     *
      * @var object doctrine record table
      */
     private $table;
-    
+
     /**
      * @var integer type
      */
     private $type_key;
-    
+
     /**
      * Constructor
      *
@@ -37,7 +37,6 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
      */
     function __construct($doctrine, $user)
     {
-        
         $this->user = $user;
         $this->table = $doctrine->getTable('Intraface_modules_debtor_DebtorDoctrine');
         $this->type_key = 3; // invoice
@@ -52,7 +51,7 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
     /*
     function findById($id)
     {
-        
+
         die('Not created');
         $collection = $this->table
             ->createQuery()
@@ -62,13 +61,13 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
             ->addWhere('id = ?', $id)
             ->addOrderBy('details.id')
             ->execute();
-    
+
         if ($collection == NULL || $collection->count() != 1) {
             throw new Intraface_Gateway_Exception('Error finding product from id '.$id);
         } else {
             return $collection->getLast();
         }
-        
+
     }*/
 
     /**
@@ -78,19 +77,17 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
      * så man kan se, hvad folk er interesseret i.
      * Søgemaskinen skal være tolerant for stavefejl
      *
-     * @param object $search 
+     * @param object $search
      *
      * @return object collection containing products
      */
     public function findByDbQuerySearch($dbquery = NULL)
     {
-        
-        
         $query = $this->table
             ->createQuery()
             ->select('due_date, status, number, description, this_date, date_sent, contact_id
                 item.id, item.product_detail_id, item.product_variation_id, item.product_variation_detail_id, item.quantity,
-                item_product.id, item_product.has_variation, 
+                item_product.id, item_product.has_variation,
                 item_product_details.id, item_product_details.number, item_product_details_translation.name, item_product_details_translation.description, item_product_details.price, item_product_details.vat,
                 item_product_variation.id, item_product_variation.number,
                 item_product_variation_detail.id, item_product_variation_detail.price_difference, item_product_variation_detail.weight_difference')
@@ -103,14 +100,13 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
             ->addWhere('active = 1')
             ->addWhere('item.active = 1')
             ->addWhere('type = ?', $this->type_key);
-            
-        
+
         if ($dbquery->checkFilter("contact_id")) {
             $query = $query->addWhere("contact_id = ?",intval($dbquery->getFilter("contact_id")));
         }
 
         if ($dbquery->checkFilter("text")) {
-            $query = $query->addWhere('description LIKE ? OR girocode = ? OR number = ?', array('%'.$dbquery->getFilter("text").'%', $dbquery->getFilter("text"), $dbquery->getFilter("text"))); 
+            $query = $query->addWhere('description LIKE ? OR girocode = ? OR number = ?', array('%'.$dbquery->getFilter("text").'%', $dbquery->getFilter("text"), $dbquery->getFilter("text")));
             //  OR contact_address.name LIKE \"%".$dbquery->getFilter("text")."%\")
 
         }
@@ -219,15 +215,15 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
                 $query =  $query->addOrderBy('number DESC, item.position');
         }
 
-        
+
         // $query = $query->getSql(); die($query);
 
         $collection = $query->execute();
-    
+
         return $collection;
     }
-    
-    
+
+
     /*
     public function getMaxNumber()
     {
@@ -238,13 +234,13 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
             ->addWhere('Intraface_modules_product_ProductDoctrine.active = 0 OR Intraface_modules_product_ProductDoctrine.active = 1')
             ->orderBy('details.number')
             ->execute();
-    
+
         if ($collection == NULL || $collection->count() == 0) {
             return 0;
         } else {
             return $collection->getLast()->getDetails()->getNumber();
         }
     }*/
-    
-    
+
+
 }

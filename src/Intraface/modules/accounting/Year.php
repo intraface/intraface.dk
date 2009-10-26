@@ -25,10 +25,6 @@ class Year extends Intraface_Standard
      */
     function __construct($kernel, $year_id = 0, $load_active = true)
     {
-        if (!is_object($kernel)) {
-            trigger_error('Klassen Year kræver et Kernel-objekt', E_USER_ERROR);
-            exit;
-        }
         $this->error  = new Intraface_Error;
         $this->kernel = $kernel;
         $this->id     = (int)$year_id;
@@ -54,7 +50,7 @@ class Year extends Intraface_Standard
         }
         $this->reset();
 
-        $this->kernel->setting->set('user', 'accounting.active_year', $this->id);
+        $this->kernel->getSetting()->set('user', 'accounting.active_year', $this->id);
 
         return true;
     }
@@ -68,7 +64,7 @@ class Year extends Intraface_Standard
      */
     public function loadActiveYear()
     {
-        return($this->id = $this->kernel->setting->get('user', 'accounting.active_year'));
+        return($this->id = $this->kernel->getSetting()->get('user', 'accounting.active_year'));
     }
 
     /**
@@ -78,7 +74,7 @@ class Year extends Intraface_Standard
      */
     function getActiveYear()
     {
-        return $this->kernel->setting->get('user', 'accounting.active_year');
+        return $this->kernel->getSetting()->get('user', 'accounting.active_year');
     }
 
     /**

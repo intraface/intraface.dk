@@ -6,7 +6,7 @@ require_once 'Ilib/ClassLoader.php';
 require_once 'konstrukt/konstrukt.inc.php';
 //set_error_handler('k_exceptions_error_handler');
 spl_autoload_register('k_autoload');
-
+/*
 require_once 'phemto.php';
 function create_container() {
   $injector = new Phemto();
@@ -25,9 +25,13 @@ class TemplateFactory {
     $smarty = new k_Template($this->template_dir);
     return $smarty;
   }
-}
+}*/
 session_start();
 $kernel = new Intraface_Kernel(session_id());
+
+$kernel->translation = $bucket->get('translation2');
+
+$config->template_dir = realpath(dirname(__FILE__) . '/../../../Intraface/modules/accounting/Controller/templates');
 
 /*
 $language = $kernel->setting->get('user', 'language');
@@ -106,8 +110,11 @@ class NotAuthorizedComponent extends k_Component {
 
 $GLOBALS['kernel'] = $kernel;
 $GLOBALS['intranet'] = $kernel->intranet;
-$GLOBALS['db'] = $db;
+//$db = MDB2::singleton();
+//$db->setCharset('utf8');
 
+$GLOBALS['db'] = $db;
+/*
 class WireFactory {
     function __construct()
     {
@@ -148,10 +155,15 @@ class WireFactory {
         return $registry;
     }
 }
+*/
+
+//$components = new k_InjectorAdapter(create_container());
+$components = new k_InjectorAdapter($bucket);
+$components->setImplementation('k_DefaultNotAuthorizedComponent', 'NotAuthorizedComponent');
 
 k()
   // Use container for wiring of components
-  ->setComponentCreator(new k_InjectorAdapter(create_container()))
+  ->setComponentCreator($components)
   // Enable file logging
   //->setLog(dirname(__FILE__) . '/../log/debug.log')
   // Uncomment the next line to enable in-browser debugging

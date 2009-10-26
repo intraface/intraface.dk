@@ -230,7 +230,7 @@ class Intraface_Main
     {
         // @todo global should be removed
         global $_setting; // globalized other places also
-        // @todo constant should be removed
+
         include(dirname(__FILE__). '/modules/' .$this->module_name.'/'.$file);
     }
 

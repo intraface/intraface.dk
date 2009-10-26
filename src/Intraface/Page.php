@@ -53,9 +53,11 @@ class Intraface_Page
         $this->usermenu = array();
         $this->usermenu[0]['name'] = $this->t('logout', 'common');
         $this->usermenu[0]['url'] = url('/main/logout.php');
+        if (method_exists('getIntranetList', $this->kernel->user)) {
         if (count($this->kernel->user->getIntranetList()) > 1) {
             $this->usermenu[1]['name'] = $this->t('change intranet', 'common');
             $this->usermenu[1]['url'] = url('/main/change_intranet.php');
+        }
         }
         $this->usermenu[2]['name'] = $this->t('control panel', 'common');;
         $this->usermenu[2]['url'] = url('/main/controlpanel/');
@@ -79,7 +81,6 @@ class Intraface_Page
         if (true OR !USE_CACHE OR !($cache->start('page_' . $this->kernel->user->get('id') . '_' . $name))) {
 
             if (!is_object($this->kernel->translation)) $this->kernel->getTranslation();
-
 
             $intranet_name = $this->kernel->intranet->get('name');
 

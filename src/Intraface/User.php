@@ -415,6 +415,16 @@ class Intraface_User extends Intraface_Standard
         }
     }
 
+    function getActiveIntranet()
+    {
+        return new Intraface_Intranet($this->getActiveIntranetId());
+    }
+
+    function getSetting()
+    {
+        return new Intraface_Setting($this->getActiveIntranet()->getId(), $this->getId());
+    }
+
     /**
      * Sets intranet_id
      *

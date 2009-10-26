@@ -36,15 +36,15 @@
 
 <ul class="options">
     <?php if (!empty($contact) AND is_object($contact) AND $context->getDebtor()->get("type") != "credit_note"): ?>
-        <li><a href="edit.php?type=<?php e($context->getDebtor()->get("type")); ?>&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(__('create '.$context->getDebtor()->get('type'))); ?></a></li>
+        <li><a href="edit.php?type=<?php e($context->getDebtor()->get("type")); ?>&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(__('Create')); ?></a></li>
         <li><a href="<?php e($contact_module->getPath()); ?>contact.php?id=<?php e($contact->get('id')); ?>">Vis kontakten</a>
     <?php else: ?>
         <?php if (!empty($_GET['product_id'])): ?>
             <li><a href="<?php e($product_module->getPath()); ?>product.php?id=<?php e($product->get('id')); ?>">Vis produktet</a>
         <?php endif; ?>
-        <li><a href="select_contact.php?type=<?php e($context->getDebtor()->get("type")); ?>"><?php e(__('create '.$context->getDebtor()->get('type'))); ?></a></li>
+        <li><a href="<?php e(url(null, array('create'))); ?>"><?php e(__('Create')); ?></a></li>
     <?php endif; ?>
-    <li><a class="excel" href="export_excel.php?type=<?php e($context->getDebtor()->get('type')); ?>&amp;use_stored=true">Exporter liste til Excel</a></li>
+    <li><a class="excel" href="<?php e(url(null . '.excel', array('use_stored' => 'true'))); ?>"><?php e(t('Excel')); ?></a></li>
 </ul>
 
 
@@ -54,7 +54,7 @@
 
     <fieldset class="hide_on_print">
         <legend><?php e(__('Advanced search')); ?></legend>
-        <form method="get" action="list.php">
+        <form method="get" action="<?php e(url(null)); ?>">
         <label><?php e(__('Text')); ?>
             <input type="text" name="text" value="<?php e($context->getDebtor()->getDBQuery()->getFilter("text")); ?>" />
         </label>
@@ -108,7 +108,7 @@
 <?php endif; ?>
 
 <table class="stripe">
-    <caption><?php e(__($context->getDebtor()->get("type").' title')); ?></caption>
+    <caption><?php e(__($context->getDebtor()->get("type"))); ?></caption>
     <thead>
         <tr>
             <th><?php e(__('No.')); ?></th>
@@ -174,11 +174,11 @@
         $sent_total = 0;
         foreach ($context->getPosts() as $post) {
             ?>
-            <tr id="i<?php e($post["id"]); ?>" class="<?php if (isset($_GET['id']) && $_GET['id'] == $post['id']) echo 'fade'; ?>">
+            <tr id="i<?php e($post["id"]); ?>">
                 <td><?php e($post["number"]); ?></td>
                 <td class="number"><?php e($post['contact']['number']); ?></td>
-                <td><a href="<?php // e($contact_module->getPath()); ?>contact.php?id=<?php e($post["contact_id"]); ?>"><?php e($post["name"]); ?></a></td>
-                <td><a href="view.php?id=<?php e($post["id"]); ?>"><?php ($post["description"] != "") ? e($post["description"]) : e("[Ingen beskrivelse]"); ?></a></td>
+                <td><a href="<?php // e($contact_module->getPath()); ?><?php e(url('../../../contact/' . $post["contact_id"])); ?>"><?php e($post["name"]); ?></a></td>
+                <td><a href="<?php e(url($post["id"])); ?>"><?php ($post["description"] != "") ? e($post["description"]) : e("[Ingen beskrivelse]"); ?></a></td>
                 <td class="amount"><?php e(number_format($post["total"], 2, ",",".")); ?> &nbsp; </td>
 
 
@@ -221,7 +221,7 @@
                     <?php
                     if ($post["locked"] == false) {
                         ?>
-                        <a class="edit" href="edit.php?id=<?php e($post["id"]); ?>"><?php e(__('Edit')); ?></a>
+                        <a class="edit" href="<?php e(url($post["id"], array('edit'))); ?>"><?php e(__('Edit')); ?></a>
                         <?php if ($post["status"] == "created"): ?>
                         <a class="delete" title="<?php e(__('Are you sure?')); ?>" href="list.php?id=<?php e($post["id"]); ?>&amp;action=delete&amp;use_stored=true"><?php e(__('Delete')); ?></a>
                         <?php endif; ?>

@@ -4,6 +4,11 @@ class Intraface_modules_intranetmaintenance_Controller_Modules extends k_Compone
     protected $registry;
     protected $module_msg;
 
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     function renderHtml()
     {
         $module = $this->getModule();
@@ -38,11 +43,6 @@ class Intraface_modules_intranetmaintenance_Controller_Modules extends k_Compone
     function t($phrase)
     {
         return $phrase;
-    }
-
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
     }
 
     function getModuleMaintenance()

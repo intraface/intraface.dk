@@ -5,6 +5,11 @@ class Intraface_modules_intranetmaintenance_Controller_User_Permission extends k
     protected $user;
     public $method = 'put';
 
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     function renderHtml()
     {
         $module = $this->getKernel()->module("intranetmaintenance");
@@ -22,11 +27,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Permission extends k
     function t($phrase)
     {
         return $phrase;
-    }
-
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
     }
 
     function getIntranet()

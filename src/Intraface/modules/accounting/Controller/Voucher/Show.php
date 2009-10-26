@@ -3,7 +3,7 @@ class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
 {
     protected $registry;
 
-    function __construct(WireFactory $registry)
+    function __construct(k_Registry $registry)
     {
         $this->registry = $registry;
     }
@@ -68,7 +68,7 @@ if (!empty($_GET['delete_file']) AND is_numeric($_GET['delete_file'])) {
 		$redirect = Intraface_Redirect::factory($kernel, 'go');
 		$module_filemanager = $kernel->useModule('filemanager');
 		$url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $module_accounting->getPath().'voucher.php?id='.$voucher->get('id'));
-		// $redirect->setIdentifier('voucher'); // Den er der kun behov for, hvis der er flere redirect med return på samme side  /Sune 06-12-2006
+		// $redirect->setIdentifier('voucher'); // Den er der kun behov for, hvis der er flere redirect med return pï¿½ samme side  /Sune 06-12-2006
 		$redirect->askParameter('file_handler_id');
 		header('Location: '.$url);
 		exit;

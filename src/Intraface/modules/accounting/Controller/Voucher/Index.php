@@ -27,7 +27,7 @@ class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
         }
     }
 
-    function __construct(WireFactory $registry)
+    function __construct(k_Registry $registry)
     {
         $this->registry = $registry;
     }

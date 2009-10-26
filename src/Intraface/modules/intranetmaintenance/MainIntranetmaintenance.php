@@ -18,7 +18,7 @@ class MainIntranetMaintenance extends Intraface_Main
         $this->menu_index = 500;
         $this->frontpage_index = 200;
 
-        $this->addSubMenuItem('intranet', 'index.php');
+        $this->addSubMenuItem('intranet', '');
         $this->addSubMenuItem('modules', 'modules.php');
         $this->addSubMenuItem('messages', 'messages.php');
         $this->addSubMenuItem('delete intranet', 'delete_intranet.php');

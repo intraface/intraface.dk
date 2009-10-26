@@ -464,4 +464,10 @@ class Intraface_Kernel
     {
     	return $this->intranet;
     }
+
+    function getSetting()
+    {
+        return new Intraface_Setting($this->intranet->getId(), $this->user->getId());
+        //return $this->setting;
+    }
 }

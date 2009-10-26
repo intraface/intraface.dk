@@ -111,8 +111,8 @@ class Debtor extends Intraface_Standard
             $this->load();
         }
     }
-    
-    public function __desctruct() 
+
+    public function __desctruct()
     {
         unset($this->kernel);
         unset($this->db);
@@ -121,7 +121,7 @@ class Debtor extends Intraface_Standard
         unset($this->contact); // consider descruct
         unset($this->contact_person); // consider descruct
         unset($this->item); // consider desctruct
-        
+
     }
 
     function getDBQuery()
@@ -1039,9 +1039,10 @@ class Debtor extends Intraface_Standard
      *
      * @return void
      */
-    public function addItem()
+    public function addItem($item)
     {
         // TODO hide the implementation details of how to add an item. Also to conform with basket.
+        throw new Exception('Add item not implemented yet');
     }
 
     /* FUNKTIONER TIL BOGFØRING ***********************************************************/

@@ -4,6 +4,11 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Permission exten
     protected $registry;
     protected $intranetmaintenance;
 
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     function getUsers()
     {
         $user = new UserMaintenance();
@@ -19,11 +24,6 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Permission exten
     function t($phrase)
     {
         return $phrase;
-    }
-
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
     }
 
     function getIntranet()

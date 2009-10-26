@@ -1,6 +1,7 @@
 <?php
-class Intraface_modules_product_Controller_Index extends k_Controller
+class Intraface_modules_product_Controller_Index extends k_Component
 {
+    /*
     function GET()
     {
     	return 'intentionally left blank';
@@ -10,5 +11,11 @@ class Intraface_modules_product_Controller_Index extends k_Controller
     {
         $next = new Intraface_modules_product_Controller_Show($this, $name);
         return $next->handleRequest();
+    }
+    */
+
+    function map($name)
+    {
+        return 'Intraface_modules_product_Controller_Selectproduct';
     }
 }
