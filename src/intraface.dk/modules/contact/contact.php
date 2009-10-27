@@ -81,7 +81,7 @@ $page->start(__('contact information') . ' ' .$contact->get('name'));
 
     <ul class="options">
         <li><a href="contact_edit.php?id=<?php e($contact->get("id")); ?>"><?php e(t('edit', 'common')); ?></a></li>
-        <li><a href="index.php?from_contact_id=<?php e($contact->get("id")); ?>&amp;use_stored=true"><?php e(t('close', 'common')); ?></a></li>
+        <li><a href="./?from_contact_id=<?php e($contact->get("id")); ?>&amp;use_stored=true"><?php e(t('close', 'common')); ?></a></li>
         <li><a class="vcard" href="vcard.php?id=<?php e($contact->get("id")); ?>"><?php e(t('vcard')); ?></a></li>
     </ul>
 
@@ -188,7 +188,7 @@ $page->start(__('contact information') . ' ' .$contact->get('name'));
             <tr>
                 <th><?php e(t('code')); ?></th>
                 <td>
-                    <?php e($contact->get('password')); ?>
+                    <?php e($contact->get('code')); ?>
                     <input type="submit" value="<?php e(t('new', 'common')); ?>" class="confirm" name="new_password" />
                     <?php if (!empty($address['email'])): ?>
                         <input type="submit" name="send_email" value="<?php e(t('send e-mail with login')); ?>" class="confirm" title="Er du sikker på, at du vil sende e-mail?" />
