@@ -17,12 +17,6 @@ class Intraface_modules_debtor_Controller_Item extends k_Component
         $product_module = $this->getKernel()->useModule('product');
         $translation = $this->getKernel()->getTranslation('debtor');
 
-        	$debtor = $this->context->getDebtor();
-        	$debtor->loadItem(intval($this->name()));
-        	$values = $debtor->item->get();
-        	$values["quantity"] = number_format($debtor->item->get('quantity'), 2, ",", ".");
-            $values['description'] = $debtor->item->get('description');
-
         if (isset($_GET['change_product'])) {
         	$redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
         	$url = $redirect->setDestination($product_module->getPath().'select_product.php', $debtor_module->getPath().'item_edit.php?debtor_id='.$debtor->get('id').'&id='.$debtor->item->get('id'));
@@ -42,6 +36,16 @@ class Intraface_modules_debtor_Controller_Item extends k_Component
         return $smarty->render($this);
     }
 
+    function getValues()
+    {
+        	$debtor = $this->context->getDebtor();
+        	$debtor->loadItem(intval($this->name()));
+        	$values = $debtor->item->get();
+        	$values["quantity"] = number_format($debtor->item->get('quantity'), 2, ",", ".");
+            $values['description'] = $debtor->item->get('description');
+        return $values;
+    }
+
     function getDebtor()
     {
         return $this->context->getDebtor();
@@ -54,16 +58,15 @@ class Intraface_modules_debtor_Controller_Item extends k_Component
 
     function postForm()
     {
-        if (!empty($_POST)) {
-        	$debtor = Debtor::factory($this->getKernel(), intval($_POST["debtor_id"]));
+
+        	$debtor = $this->context->getDebtor();
         	$debtor->loadItem(intval($_POST["id"]));
 
         	if ($id = $debtor->item->save($_POST)) {
-        		header("Location: view.php?id=".$debtor->get("id")."&item_id=".$id);
-                exit;
+        		return new k_SeeOther($this->url('../../'));
         	} else {
         		$values = $_POST;
         	}
-        }
+
     }
 }

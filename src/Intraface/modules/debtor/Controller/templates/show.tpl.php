@@ -37,8 +37,8 @@ if (isset($onlinepayment)) {
         $module_administration = $context->getKernel()->useModule('administration');
     }
     $valid_sender = true;
-/*
-    switch ($context->getKernel()->setting->get('intranet', 'debtor.sender')) {
+
+    switch ($context->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
         case 'intranet':
             if ($context->getKernel()->intranet->address->get('name') == '' || $context->getKernel()->intranet->address->get('email') == '') {
                 $valid_sender = false;
@@ -58,7 +58,7 @@ if (isset($onlinepayment)) {
             }
             break;
         case 'defined':
-            if ($context->getKernel()->setting->get('intranet', 'debtor.sender.name') == '' || $context->getKernel()->setting->get('intranet', 'debtor.sender.email') == '') {
+            if ($context->getKernel()->getSetting()->get('intranet', 'debtor.sender.name') == '' || $context->getKernel()->setting->get('intranet', 'debtor.sender.email') == '') {
                 $valid_sender = false;
                 if ($context->getKernel()->user->hasModuleAccess('administration')) {
                     echo '<div class="message-dependent"><p>'.__('You need to fill in an e-mail address to send e-mail').'. <a href="'.$module_debtor->getPath().'settings.php">'.__('do it now').'</a>.</p></div>';
@@ -75,7 +75,7 @@ if (isset($onlinepayment)) {
             exit;
 
     }
-*/
+
     if ($context->getDebtor()->contact->address->get('email') == '') {
         $valid_sender = false;
         echo '<div class="message-dependent"><p>'.__('You need to register an e-mail to the contact, so you can send e-mails').'</p></div>';
@@ -449,7 +449,7 @@ if (isset($onlinepayment)) {
                                 <?php
                                 if ($payment["type"] == "credit_note") {
                                     ?>
-                                    <a href="view.php?id=<?php e($payment["id"]); ?>"><?php e($payment["description"]); ?></a>
+                                    <a href="<?php e(url('../' . $payment["id"])); ?>"><?php e($payment["description"]); ?></a>
                                     <?php
                                 } else {
                                     e($payment['description']);
@@ -462,11 +462,11 @@ if (isset($onlinepayment)) {
                                     <?php if ($payment['is_stated']): ?>
                                         <a href="<?php e($module_accounting->getPath().'voucher.php?id='.$payment['voucher_id']); ?>"><?php e(__('voucher')); ?></a>
                                     <?php elseif ($payment['type'] == 'credit_note'): ?>
-                                        <a href="state_credit_note.php?id=<?php e($payment['id']) ?>"><?php e(t('state credit note')); ?></a>
+                                        <a href="<?php e(url('../' . $payment['id'] . '/state')); ?>"><?php e(t('state credit note')); ?></a>
                                     <?php elseif ($payment['type'] == 'depreciation'): ?>
-                                        <a href="state_depreciation.php?for=invoice&amp;id=<?php e($context->getDebtor()->get('id')); ?>&amp;depreciation_id=<?php e($payment['id']) ?>"><?php e(t('state depreciation')); ?></a>
+                                        <a href="<?php e(url('../' . $context->getDebtor()->get('id') . '/depreciation/'.$payment['id'].'/state')); ?>"><?php e(t('state depreciation')); ?></a>
                                     <?php else: ?>
-                                        <a href="state_payment.php?for=invoice&amp;id=<?php e($context->getDebtor()->get('id')); ?>&amp;payment_id=<?php e($payment['id']) ?>"><?php e(t('state payment')); ?></a>
+                                        <a href="<?php e(url('../' . $context->getDebtor()->get('id') . '/payment/' . $payment['id'] . '/state')); ?>"><?php e(t('state payment')); ?></a>
                                     <?php endif; ?>
                                 </td>
                             <?php endif; ?>
@@ -649,10 +649,10 @@ if (isset($onlinepayment)) {
                         if ($items[$i]["description"] != "") {
                             autohtml($items[$i]["description"]);
                             if ($context->getDebtor()->get("locked") == false) {
-                                echo '<br /> <a href="'.url('item/' . intval($items[$i]["id"]), array('edit')).'">Ret tekst</a>';
+                                echo '<br /> <a href="'.url('item/' . intval($items[$i]["id"]), array('edit')).'">'.t('Edit text').'</a>';
                             }
                         } elseif ($context->getDebtor()->get("locked") == false) {
-                            echo ' <a href="'.url('item/' . intval($items[$i]["id"]), array('edit')).'">Tilføj tekst</a>';
+                            echo ' <a href="'.url('item/' . intval($items[$i]["id"]), array('edit')).'">'.t('Add text').'</a>';
                         }
 
                         ?>
@@ -687,7 +687,7 @@ if (isset($onlinepayment)) {
                             ?>
                             <a class="moveup" href="<?php e(url(null, array('action' => 'moveup', 'item_id' => $items[$i]["id"]))); ?>"><?php e(t('Up', 'common')); ?></a>
                             <a class="movedown" href="<?php e(url(null, array('action' => 'movedown', 'item_id' => $items[$i]["id"]))); ?>"><?php e(t('Down', 'common')); ?></a>
-                            <a class="edit" href="item_edit.php?debtor_id=<?php e($context->getDebtor()->get('id')); ?>&amp;id=<?php e($items[$i]["id"]); ?>"><?php e(t('Edit', 'common')); ?></a>
+                            <a class="edit" href="<?php e(url('item/' . $items[$i]["id"], array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a>
                             <a class="delete" title="Dette vil slette varen!" href="<?php e(url(null, array('action' => 'delete_item', 'item_id' => $items[$i]["id"]))); ?>"><?php e(t('Delete', 'common')); ?></a>
                             <?php
                         }

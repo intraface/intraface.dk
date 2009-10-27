@@ -1,3 +1,7 @@
+<?php
+$values = $context->getValues();
+?>
+
 <h1><?php e(__($context->getDebtor()->get('type').' content')); ?></h1>
 
 <?php echo $context->getDebtor()->item->error->view(); ?>
@@ -10,7 +14,8 @@
 	</div>
 
 	<div class="formrow">
-		<label for="name"><?php e(__('Name', 'common')); ?></label><span id="name"><?php e($context->getDebtor()->item->getProductName()); ?> <a href="item_edit.php?debtor_id=<?php e($context->getDebtor()->get('id')); ?>&amp;id=<?php e($context->getDebtor()->item->get('id')); ?>&amp;change_product=1" class="edit">Skift</a></span>
+		<label for="name"><?php e(__('Name', 'common')); ?></label><span id="name"><?php e($context->getDebtor()->item->getProductName()); ?>
+		<a href="<?php e(url(null, array('change_product'=>1))); ?>" class="edit"><?php e(t('Change')); ?></a></span>
 	</div>
 
 	<div class="formrow">
@@ -46,8 +51,8 @@
     <input type="hidden" name="product_variation_id" value="<?php  e($context->getDebtor()->item->get('product_variation_id')); ?>" />
     <input type="hidden" name="product_variation_detail_id" value="<?php  e($context->getDebtor()->item->get('product_variation_detail_id')); ?>" />
 
-	<input type="submit" name="submit" value="<?php e(__('Save', 'common')); ?>" class="save" /> <?php e(__('or', 'common')); ?>
-  <a href="view.php?id=<?php e($context->getDebtor()->get("id"));  ?>"><?php e(__('Cancel', 'common')); ?></a>
+	<input type="submit" name="submit" value="<?php e(__('Save', 'common')); ?>" class="save" />
+  	<a href="<?php e(url('../../'));  ?>"><?php e(__('Cancel', 'common')); ?></a>
 
 </div>
 </form>
