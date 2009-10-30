@@ -6,14 +6,14 @@
 	<li><a href="<?php e(url(null, array('search' => 'view'))); ?>"><?php e(__('show search')); ?></a></li>
 	<?php endif; ?>
 	<li><a class="pdf" href="<?php e(url(null . '.pdf', array('use_stored' => 'true'))); ?>" target="_blank"><?php e(__('Pdf-labels')); ?></a></li>
-	<li><a class="excel" href="excel.php?use_stored=true"><?php e(__('excel', 'common')); ?></a></li>
-	<li><a href="<?php e(url('sendemail', array('use_stored' => true))); ?>"><?php e(__('email to contacts in search')); ?></a></li>
-    <li><a href="<?php e(url('import')); ?>"><?php e(__('import contacts')); ?></a></li>
+	<li><a class="excel" href="<?php e(url(null . '.xls', array('use_stored' => 'true'))); ?>"><?php e(__('Excel', 'common')); ?></a></li>
+	<li><a href="<?php e(url('sendemail', array('use_stored' => true))); ?>"><?php e(__('Email to contacts in search')); ?></a></li>
+    <li><a href="<?php e(url('import')); ?>"><?php e(__('Import contacts')); ?></a></li>
 </ul>
 
 <?php if (!$context->getContact()->isFilledIn()): ?>
 
-	<p><?php e(__('no contacts has been created')); ?>. <a href="<?php e(url(array('create'))); ?>"><?php e(__('create contact')); ?></a>.</p>
+	<p><?php e(__('No contacts has been created')); ?>. <a href="<?php e(url(array('Create'))); ?>"><?php e(__('create contact')); ?></a>.</p>
 
 <?php else: ?>
 

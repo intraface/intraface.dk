@@ -1,59 +1,63 @@
-
+<?php
+$value = $context->getValues();
+$address = $context->getAddressValues();
+$delivery_address = $context->getDeliveryAddressValues();
+?>
 <div id="colOne">
 
 <div class="box">
 
     <h1>#<?php e($value['number']); ?> <?php e($address['name']); ?></h1>
 
-    <?php echo $contact->error->view(); ?>
+    <?php echo $context->getContact()->error->view(); ?>
 
     <ul class="options">
-        <li><a href="contact_edit.php?id=<?php e($contact->get("id")); ?>"><?php e(t('edit', 'common')); ?></a></li>
-        <li><a href="./?from_contact_id=<?php e($contact->get("id")); ?>&amp;use_stored=true"><?php e(t('close', 'common')); ?></a></li>
-        <li><a class="vcard" href="vcard.php?id=<?php e($contact->get("id")); ?>"><?php e(t('vcard')); ?></a></li>
+        <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></li>
+        <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close', 'common')); ?></a></li>
+        <li><a class="vcard" href="<?php e(url(null . '.vcard')); ?>"><?php e(t('vcard')); ?></a></li>
     </ul>
 
-    <?php if ($kernel->user->hasModuleAccess("debtor")): ?>
+    <?php if ($context->getKernel()->user->hasModuleAccess("debtor")): ?>
         <ul class="options">
-        <?php if ($kernel->user->hasModuleAccess("quotation")): ?>
-            <?php if ($quotation->any('contact', $contact->get("id"))): ?>
-            <li><a href="<?php e($debtor->getPath()); ?>list.php?type=quotation&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('quotation', 'debtor')); ?></a></li>
+        <?php if ($context->getKernel()->user->hasModuleAccess("quotation")): ?>
+            <?php if ($quotation->any('contact', $context->getContact()->get("id"))): ?>
+            <li><a href="<?php e(url('../../debtor/quotation', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('Quotation', 'debtor')); ?></a></li>
             <?php else: ?>
-            <li class="inactive"><a href="<?php e($debtor->getPath()); ?>edit.php?type=quotation&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('create quotation', 'debtor')); ?></a></li>
+            <li class="inactive"><a href="<?php e(url('../../debtor/quotation', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('create quotation', 'debtor')); ?></a></li>
             <?php endif; ?>
         <?php endif; ?>
 
-        <?php if ($kernel->user->hasModuleAccess("order")): ?>
-            <?php if ($order->any('contact', $contact->get("id"))): ?>
-                <li><a href="<?php e($debtor->getPath()); ?>list.php?type=order&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('orders', 'debtor')); ?></a></li>
+        <?php if ($context->getKernel()->user->hasModuleAccess("order")): ?>
+            <?php if ($order->any('contact', $context->getContact()->get("id"))): ?>
+                <li><a href="<?php e($context->getDebtorModule()->getPath()); ?>list.php?type=order&amp;contact_id=<?php e($context->getContact()->get("id")); ?>"><?php e(t('orders', 'debtor')); ?></a></li>
             <?php else: ?>
-                <li class="inactive"><a href="<?php e($debtor->getPath()); ?>edit.php?type=order&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('create order', 'debtor')); ?></a></li>
+                <li class="inactive"><a href="<?php e($context->getDebtorModule()->getPath()); ?>edit.php?type=order&amp;contact_id=<?php e($context->getContact()->get("id")); ?>"><?php e(t('create order', 'debtor')); ?></a></li>
             <?php endif; ?>
         <?php endif; ?>
 
-        <?php if ($kernel->user->hasModuleAccess("invoice")): ?>
-            <?php if ($invoice->any('contact', $contact->get("id"))): ?>
-                <li><a href="<?php e($debtor->getPath()); ?>list.php?type=invoice&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('invoices', 'debtor')); ?></a></li>
+        <?php if ($context->getKernel()->user->hasModuleAccess("invoice")): ?>
+            <?php if ($context->getInvoice()->any('contact', $context->getContact()->get("id"))): ?>
+                <li><a href="<?php e(url('../../debtor/invoice/list', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('invoices', 'debtor')); ?></a></li>
             <?php else: ?>
-                <li class="inactive"><a href="<?php e($debtor->getPath()); ?>edit.php?type=invoice&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('create invoice', 'debtor')); ?></a></li>
+                <li class="inactive"><a href="<?php e($context->getDebtorModule()->getPath()); ?>edit.php?type=invoice&amp;contact_id=<?php e($context->getContact()->get("id")); ?>"><?php e(t('create invoice', 'debtor')); ?></a></li>
             <?php endif; ?>
-            <?php if ($creditnote->any('contact', $contact->get("id"))): ?>
-                <li><a href="<?php e($debtor->getPath()); ?>list.php?type=credit_note&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(t('credit notes', 'debtor')); ?></a></li>
+            <?php if ($context->getCreditnote()->any('contact', $context->getContact()->get("id"))): ?>
+                <li><a href="<?php e(url('../../debtor/credit_note/list', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('credit notes', 'debtor')); ?></a></li>
             <?php endif; ?>
-            <?php if ($reminder->any($contact->get("id"))): ?>
-                <li><a href="<?php e($debtor->getPath()); ?>reminders.php?contact_id=<?php e($contact->get("id")); ?>"><?php e(t('reminders', 'debtor')); ?></a></li>
-            <?php elseif ($invoice->anyDue($contact->get("id"))): ?>
-                <li class="inactive"><a href="<?php e($debtor->getPath()); ?>reminder_edit.php?contact_id=<?php e($contact->get("id")); ?>"><?php e(t('create reminder', 'debtor')); ?></a></li>
+            <?php if ($context->getReminder()->any($context->getContact()->get("id"))): ?>
+                <li><a href="<?php e(url('../../debtor/reminders', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('reminders', 'debtor')); ?></a></li>
+            <?php elseif ($context->getInvoice()->anyDue($context->getContact()->get("id"))): ?>
+                <li class="inactive"><a href="<?php e($context->getDebtorModule()->getPath()); ?>reminder_edit.php?contact_id=<?php e($context->getContact()->get("id")); ?>"><?php e(t('create reminder', 'debtor')); ?></a></li>
             <?php endif; ?>
         <?php endif; ?>
 
-        <?php if ($kernel->user->hasModuleAccess("procurement")): ?>
+        <?php if ($context->getKernel()->user->hasModuleAccess("procurement")): ?>
             <?php
-            $procurement_module = $kernel->useModule('procurement');
-            $procurement = new Procurement($kernel);
-            if ($procurement->any($contact->get('id'))) {
+            $procurement_module = $context->getKernel()->useModule('procurement');
+            $procurement = new Procurement($context->getKernel());
+            if ($procurement->any($context->getContact()->get('id'))) {
                 ?>
-                <li><a href="<?php e($procurement_module->getPath()."index.php?contact_id=".$contact->get('id')); ?>"><?php e(t('procurement', 'procurement')); ?></a></li>
+                <li><a href="<?php e($procurement_module->getPath()."index.php?contact_id=".$context->getContact()->get('id')); ?>"><?php e(t('procurement', 'procurement')); ?></a></li>
                 <?php
             }
             ?>
@@ -65,12 +69,12 @@
 
 <?php /* Put in next version if (!empty($similar_contacts) AND is_array($similar_contacts) AND count($similar_contacts) > 0): ?>
 
-    <p class="message">Der er kontakter, der ligner denne kontakt. <a href="contact_merge.php?id=<?php e($contact->get('id')); ?>">Videre</a></p>
+    <p class="message">Der er kontakter, der ligner denne kontakt. <a href="contact_merge.php?id=<?php e($context->getContact()->get('id')); ?>">Videre</a></p>
 
 <?php endif; */?>
 
-    <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
-    <input type="hidden" name="id" value="<?php e($contact->get('id')); ?>" />
+    <form action="<?php e(url()); ?>" method="post">
+    <input type="hidden" name="id" value="<?php e($context->getContact()->get('id')); ?>" />
     <table>
         <caption><?php e(t('contact information')); ?></caption>
         <tbody>
@@ -86,7 +90,7 @@
                     </div>
                 </td>
             </tr>
-            <?php if (is_object($contact->delivery_address) AND !empty($delivery_address['address'])): ?>
+            <?php if (is_object($context->getContact()->delivery_address) AND !empty($delivery_address['address'])): ?>
             <tr class="vcard">
                 <th><?php e(t('delivery address')); ?></th>
                 <td>
@@ -112,11 +116,11 @@
                 <th><?php e(t('website', 'address')); ?></th>
                 <td class="url"><?php e($address['website']); ?></td>
             </tr>
-            <?php if ($kernel->intranet->get('identifier')): ?>
+            <?php if ($context->getKernel()->intranet->get('identifier')): ?>
             <tr>
                 <th><?php e(t('code')); ?></th>
                 <td>
-                    <?php e($contact->get('code')); ?>
+                    <?php e($context->getContact()->get('code')); ?>
                     <input type="submit" value="<?php e(t('new', 'common')); ?>" class="confirm" name="new_password" />
                     <?php if (!empty($address['email'])): ?>
                         <input type="submit" name="send_email" value="<?php e(t('send e-mail with login')); ?>" class="confirm" title="Er du sikker på, at du vil sende e-mail?" />
@@ -141,7 +145,7 @@
     <?php
     foreach ($persons AS $person) { ?>
         <tr class="vcard">
-        <td class="fn"><a href="contactperson_edit.php?contact_id=<?php e($contact->get('id') . '&id=' . $person['id']); ?>"><?php e($person['name']); ?></a></td>
+        <td class="fn"><a href="contactperson_edit.php?contact_id=<?php e($context->getContact()->get('id') . '&id=' . $person['id']); ?>"><?php e($person['name']); ?></a></td>
         <td class="email"><?php e($person['email']); ?></td>
         <td class="tel"><?php e($person['phone']); ?></td>
         <td class="tel"><?php e($person['mobile']); ?></td>
@@ -157,7 +161,7 @@
 <?php endif; ?>
 
 <?php
-$reminder = new ContactReminder($contact);
+$reminder = new ContactReminder($context->getContact());
 $reminders = $reminder->getList();
 if (count($reminders) > 0):
     ?>
@@ -208,7 +212,7 @@ endif;
 
 <div id="colTwo">
 <?php if ($value['type'] == "corporation"): ?>
-<?php //if ($kernel->user->hasModuleAccess('debtor') AND !empty($address['cvr'])): ?>
+<?php //if ($context->getKernel()->user->hasModuleAccess('debtor') AND !empty($address['cvr'])): ?>
 <div id="paymentinformation" class="box">
 <h2><?php e(t('payment information')); ?></h2>
 <table class="stripe">
@@ -231,7 +235,7 @@ endif;
 <tr>
     <td><?php e(t('payment conditions')); ?></td>
      <td><?php
-    foreach ($contact_module->getSetting("paymentcondition") AS $key=>$v) {
+    foreach ($context->getContactModule()->getSetting("paymentcondition") AS $key=>$v) {
         if (isset($value['paymentcondition']) AND $v == $value['paymentcondition']) { e($v); }
     }
 ?> <?php e(t('days')); ?></td>
@@ -242,11 +246,11 @@ endif;
 
 <div id="keywords" class="box <?php if (!empty($_GET['from']) AND $_GET['from'] == 'keywords') echo ' fade'; ?>">
  <h2><?php e(t('keywords', 'keyword')); ?></h2>
-    <?php if ($contact->get('locked') == 0) { ?>
-    <ul class="button"><li><a href="<?php e(url('/shared/keyword/connect.php', array('contact_id' => $contact->get('id')))); ?>"><?php e(t('add keywords', 'keyword')); ?></a></li></ul>
+    <?php if ($context->getContact()->get('locked') == 0) { ?>
+    <ul class="button"><li><a href="<?php e(url('/shared/keyword/connect.php', array('contact_id' => $context->getContact()->get('id')))); ?>"><?php e(t('add keywords', 'keyword')); ?></a></li></ul>
     <?php } ?>
     <?php
-        $keyword = $contact->getKeywordAppender();
+        $keyword = $context->getContact()->getKeywordAppender();
         $keywords = $keyword->getConnectedKeywords();
         if (is_array($keywords) AND count($keywords) > 0) { ?>
             <ul id="keyword_list">
@@ -270,7 +274,7 @@ endif;
 </ul>
 
 <ol>
-<?php foreach ($contact->message->getList() AS $m): ?>
+<?php foreach ($context->getContact()->message->getList() AS $m): ?>
     <li<?php if ($m['important'] == 1) echo ' style="color: blue"'; if (!empty($_GET['from_msg_id']) AND $_GET['from_msg_id']==$m['id']) echo ' id="message_'.$m['id'].'" class="fade"'; ?>>
       <?php echo nl2br($m['message']); ?>
       <a class="edit" href="message_edit.php?contact_id=<?php e($_GET['id']); ?>&amp;id=<?php e($m['id']);  ?>">Ret</a>
@@ -281,11 +285,11 @@ endif;
 </div>
 */ ?>
 
-<?php if ($kernel->intranet->get('identifier')): ?>
+<?php if ($context->getKernel()->intranet->get('identifier')): ?>
 <div class="box">
     <h2><?php e(t('tools')); ?></h2>
 <ul>
-    <li><a href="<?php e($contact->getLoginUrl()); ?>"><?php e(t('see contact login')); ?></a></li>
+    <li><a href="<?php e($context->getContact()->getLoginUrl()); ?>"><?php e(t('see contact login')); ?></a></li>
 </ul>
 </div>
 <?php endif; ?>

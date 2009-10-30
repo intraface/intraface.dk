@@ -346,7 +346,7 @@ class Contact extends Intraface_Standard
     {
         // HACK NECCESSARY FOR THE NEWSLETTERSUBSCRIBER
         $this->kernel->useModule('contact');
-        return ($this->value['login_url'] = 'http://' . $this->kernel->setting->get('intranet', 'contact.login_url') . '/' .$this->kernel->intranet->get('identifier') . '/login?code='. $this->get('code'));
+        return ($this->value['login_url'] = 'http://' . $this->kernel->getSetting()->get('intranet', 'contact.login_url') . '/' .$this->kernel->intranet->get('identifier') . '/login?code='. $this->get('code'));
     }
 
     /**
