@@ -8,16 +8,21 @@ class Intraface_modules_contact_Controller_Show extends k_Component
         $this->registry = $registry;
     }
 
+    function map($name)
+    {
+        if ($name == 'merge') {
+            return 'Intraface_modules_contact_Controller_Merge';
+        }
+
+    }
+
     function renderHtml()
     {
         $this->getKernel()->module("contact");
         $translation = $this->getKernel()->getTranslation('contact');
 
-        return new k_SeeOther(PATH_WWW."modules/contact/contact.php?id=".$this->name());
-        /*
         $smarty = new k_Template(dirname(__FILE__) . '/templates/show.tpl.php');
         return $smarty->render($this);
-		*/
     }
 
     function getKernel()
@@ -34,13 +39,5 @@ class Intraface_modules_contact_Controller_Show extends k_Component
     function t($phrase)
     {
          return $phrase;
-    }
-
-    function map($name)
-    {
-        if ($name == 'merge') {
-            return 'Intraface_modules_contact_Controller_Merge';
-        }
-
     }
 }
