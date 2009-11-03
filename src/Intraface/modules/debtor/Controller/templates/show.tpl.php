@@ -594,6 +594,10 @@ if (isset($onlinepayment)) {
                 <div class="warning">
                     Der burde være en onlinebetaling knyttet hertil. Måske har kunden fortrudt sit køb, eller også er der sket en fejl hos PBS under købet. Kunden kan betale på følgende link <?php e($payment_url); ?>. <a href="<?php e($_SERVER['PHP_SELF']); ?>?id=<?php e($context->getDebtor()->getId()); ?>&amp;action=send_onlinepaymentlink">Skriv e-mail</a>.
                 </div>
+            <?php elseif ($shop === false AND $this->getKernel()->user->hasModuleAccess('shop')): ?>
+                <div class="warning">
+                    Der burde være en onlinebetaling knyttet hertil, den den er ikke oprettet via en butik. Hvis du i fremtiden ønsker at sende et betalingslink ud til en kunde, så kan du oprette selve ordren via din butik, rette den til og til sidst sende den.
+                </div>
             <?php else: ?>
                 <div class="warning">
                     Der burde være en onlinebetaling knyttet hertil. Hvis du skriver et betalingslink ind under shoppen, kan du automatisk sende en e-mail til vedkommende.
