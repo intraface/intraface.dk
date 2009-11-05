@@ -26,6 +26,7 @@ class Intraface_modules_currency_Controller_Index extends k_Component
 
     function GET()
     {
+        return new k_SeeOther($this->url('../../../../modules/currency'));
         //$this->document->options = array($this->url('add') => 'Add new');
 
         $doctrine = $this->registry->get('doctrine');

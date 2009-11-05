@@ -1,12 +1,16 @@
 <?php
 class Intraface_Controller_Restricted extends k_Component
 {
-    protected $registry;
+    //protected $registry;
     protected $kernel;
+    protected $user_gateway;
+    protected $kernel_gateway;
 
-    function __construct(k_Registry $registry)
+    function __construct(Intraface_UserGateway $gateway, Intraface_KernelGateway $kernel_gateway /*k_Registry $registry*/)
     {
-        $this->registry = $registry;
+        /*$this->registry = $registry;*/
+        $this->user_gateway = $gateway;
+        $this->kernel_gateway = $kernel_gateway;
     }
 
     function document()
@@ -28,6 +32,7 @@ class Intraface_Controller_Restricted extends k_Component
         if ($this->identity()->anonymous()) {
             throw new k_NotAuthorized();
         }
+
         return parent::dispatch();
     }
 
@@ -36,13 +41,17 @@ class Intraface_Controller_Restricted extends k_Component
         if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
 			$this->getKernel()->setting->set('user', 'homepage.message', 'hide');
 		}
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/restricted.tpl.php');
+
+        //echo $this->user_gateway->findByUsername($this->identity()->user())->getId();
+
+		$smarty = new k_Template(dirname(__FILE__) . '/templates/restricted.tpl.php');
         return $smarty->render($this);
     }
 
+    /*
     function getTranslation()
     {
-        $language = $this->getKernel()->setting->get('user', 'language');
+        $language = $this->getKernel()->getSetting->get('user', 'language');
 
         // set the parameters to connect to your db
         $dbinfo = array(
@@ -100,13 +109,34 @@ class Intraface_Controller_Restricted extends k_Component
         $this->getKernel()->translation = $translation;
         return $translation;
     }
+    */
 
+    /**
+     * Hvad med at flytte det hele over i et userobject, der implementerer getIntranet()
+     * I $intranet har vi så de transiente gateways.
+     *
+
+class component_ShowProduct {
+  protected $user_gateway;
+  function __construct(UserGateway $user_gateway) {
+    $this->user_gateway = $user_gateway;
+  }
+  function GET() {
+    $user = $user_gateway->getByUsername($this->identity()->getUsername());
+    return $this->render('product.tpl.php', array('product' => $user->getIntranet()->getProduct()));
+  }
+}
+     *
+     * http://pastie.org/683209
+     *
+     * @return object
+     */
     function getKernel()
     {
         if (is_object($this->kernel)) {
             return $this->kernel;
         }
-    	return $this->kernel = $this->session()->get('kernel');
+        return $this->kernel = $this->kernel_gateway->findByUserobject($this->user_gateway->findByUsername($this->identity()->user()));
     }
 
 
@@ -131,6 +161,7 @@ class Intraface_Controller_Restricted extends k_Component
     }
     */
 
+    /*
     function getPage()
     {
     	return $this->registry->create('page');
@@ -165,7 +196,7 @@ class Intraface_Controller_Restricted extends k_Component
     {
         return $this->wrap(parent::execute());
     }
-
+	*/
     function t($phrase)
     {
         return $phrase;
@@ -249,4 +280,40 @@ class Intraface_Controller_Restricted extends k_Component
         return $this->submenu;
     }
     */
+
+
+    function getPage()
+    {
+        return $this->getKernel()->getPage();
+    }
+
+    function getHeader()
+    {
+        ob_start();
+        $this->getPage()->start('Newsletter');
+        $data = ob_get_contents();
+        ob_end_clean();
+        return $data;
+    }
+
+    function getFooter()
+    {
+        ob_start();
+        $this->getPage()->end();
+        $data = ob_get_contents();
+        ob_end_clean();
+        return $data;
+    }
+
+    function wrapHtml($content)
+    {
+        return $this->getHeader() . $content . $this->getFooter();
+
+    }
+
+    function execute()
+    {
+        return $this->wrap(parent::execute());
+    }
+
 }

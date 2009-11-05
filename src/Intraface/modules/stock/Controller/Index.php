@@ -14,7 +14,8 @@ class Intraface_modules_stock_Controller_Index extends k_Component
 
     function getStock()
     {
-        $stock = new Product($kernel);
+        $this->getKernel()->useModule('product');
+        $stock = new Product($this->getKernel());
         return $list = $stock->getList("stock", '', $this->query('c'));
     }
 

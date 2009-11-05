@@ -14,6 +14,8 @@ class Intraface_Controller_Index extends k_Component
             return 'Intraface_Controller_Logout';
         } elseif ($name == 'login') {
             return 'Intraface_Controller_Login';
+        } elseif ($name == 'testlogin') {
+            return 'Intraface_Controller_TestLogin';
         } elseif ($name == 'retrievepassword') {
             return 'Intraface_Controller_RetrievePassword';
         } elseif ($name == 'restricted') {

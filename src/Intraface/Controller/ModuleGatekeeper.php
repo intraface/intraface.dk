@@ -27,30 +27,17 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
 
     function map($name)
     {
-        if ($name == 'intranetmaintenance') {
-            return 'Intraface_modules_intranetmaintenance_Controller_Index';
-        } elseif ($name == 'administration') {
-            return 'Intraface_modules_administration_Controller_Index';
-        } elseif ($name == 'controlpanel') {
-            return 'Intraface_modules_controlpanel_Controller_Index';
-        } elseif ($name == 'newsletter') {
-            return 'Intraface_modules_newsletter_Controller_Lists';
-        } elseif ($name == 'debtor') {
-            return 'Intraface_modules_debtor_Controller_Index';
-        } elseif ($name == 'accounting') {
-            return 'Intraface_modules_accounting_Controller_Index';
-        } elseif ($name == 'contact') {
-            return 'Intraface_modules_contact_Controller_Index';
-        } elseif ($name == 'product') {
-            return 'Intraface_modules_product_Controller_Index';
-        } elseif ($name == 'modulemanager') {
-            return 'Intraface_Controller_ModuleManager';
+        foreach ($this->getModules() as $module) {
+            if ($module['name'] == $name);
+            return 'Intraface_modules_'.$name.'_Controller_Index';
         }
+        return parent::map($name);
     }
 
     function renderHtml()
     {
         $primary_module = $this->getKernel()->module("intranetmaintenance");
+
         $smarty = new k_Template(dirname(__FILE__) . '/templates/modulegatekeeper.tpl.php');
         return $smarty->render($this);
     }
@@ -72,6 +59,8 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
 
     function getModules()
     {
+        $primary_module = $this->getKernel()->module("intranetmaintenance");
+
         $module = new ModuleMaintenance;
         return $module->getList();
     }

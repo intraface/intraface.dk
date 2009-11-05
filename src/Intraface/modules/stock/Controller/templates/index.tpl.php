@@ -1,7 +1,7 @@
-<h1><?php e(t('stock')); ?></h1>
+<h1><?php e(t('Stock')); ?></h1>
 
 
-<?php if (count($$context->getStock()) > 0) { ?>
+<?php if (count($context->getStock()) > 0) { ?>
 
 <?php
 echo '<div style="text-align: center; margin: 1em">- ';

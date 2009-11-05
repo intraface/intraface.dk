@@ -2,7 +2,7 @@
 class Intraface_modules_currency_Controller_Root extends k_Dispatcher
 {
     public $map = array(
-        'currency' => 'Intraface_modules_currency_Controller_Index'
+        'currency' => 'Intraface_modules_currency_Controller_IndexOld'
     );
 
     function getHeader()
