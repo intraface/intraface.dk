@@ -49,7 +49,7 @@ if (!empty($_POST)) {
 			$email->send(Intraface_Mail::factory(), 'queue');
 			$j++;
 		}
-		$msg = 'Emailen blev i alt sendt til ' . $j . ' kontakter. <a href="index.php">Tilbage til kontakter</a>.';
+		$msg = 'Emailen blev i alt sendt til ' . $j . ' kontakter. <a href="">Tilbage til kontakter</a>.';
 	} else {
 		$value = $_POST;
 	}
