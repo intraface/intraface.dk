@@ -15,6 +15,8 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             return 'Intraface_modules_contact_Controller_Choosecontact';
         } elseif ($name == 'selectproduct') {
             return 'Intraface_modules_product_Controller_Selectproduct';
+        } elseif ($name == 'selectproductvariation') {
+            return 'Intraface_modules_product_Controller_Selectproductvariation';
         } elseif ($name == 'payment') {
             return 'Intraface_modules_debtor_Controller_Payment';
         } elseif ($name == 'depreciation') {
@@ -24,6 +26,8 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 return 'Intraface_modules_accounting_Controller_State_Creditnote';
             } elseif ($this->getType() == 'invoice') {
                 return 'Intraface_modules_accounting_Controller_State_Invoice';
+            } else {
+                throw new Exception('Cannot state type ' . $this->getType());
             }
         } elseif ($name == 'item') {
             return 'Intraface_modules_debtor_Controller_Items';
@@ -37,12 +41,13 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
     function getType()
     {
-        return $this->context->context->getType();
+        return $this->getDebtor()->get('type');
     }
 
     function renderHtml()
     {
         $debtor_module = $this->getKernel()->module('debtor');
+        $contact_module = $this->getKernel()->useModule('onlinepayment');
         $translation = $this->getKernel()->getTranslation('debtor');
         $contact_module = $this->getKernel()->getModule('contact');
 
@@ -218,7 +223,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 trigger_error('Oplysninger om filen kunne ikke opdateres', E_USER_ERROR);
             }
 
-            switch($this->getKernel()->setting->get('intranet', 'debtor.sender')) {
+            switch($this->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
                 case 'intranet':
                     $from_email = '';
                     $from_name = '';
@@ -228,8 +233,8 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                     $from_name = $this->getKernel()->user->getAddress()->get('name');
                     break;
                 case 'defined':
-                    $from_email = $this->getKernel()->setting->get('intranet', 'debtor.sender.email');
-                    $from_name = $this->getKernel()->setting->get('intranet', 'debtor.sender.name');
+                    $from_email = $this->getKernel()->getSetting()->get('intranet', 'debtor.sender.email');
+                    $from_name = $this->getKernel()->getSetting()->get('intranet', 'debtor.sender.name');
                     break;
                 default:
                     trigger_error("Invalid sender!", E_USER_ERROR);

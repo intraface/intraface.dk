@@ -3,6 +3,8 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
 {
     protected $registry;
     protected $debtor;
+    protected $contact;
+    protected $reminder;
 
     function __construct(k_Registry $registry)
     {
@@ -26,8 +28,12 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
 
         $mainInvoice = $kernel->useModule("invoice");
         $translation = $kernel->getTranslation('debtor');
-        $reminder = new Reminder($this->getKernel());
-        return $reminder;
+
+        if (is_object($this->reminder)) {
+            return $this->reminder;
+        }
+        $this->reminder = new Reminder($this->getKernel());
+        return $this->reminder;
     }
 
     function renderHtml()
@@ -44,6 +50,36 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
         $smarty = new k_Template(dirname(__FILE__) . '/templates/reminders.tpl.php');
 
         return $smarty->render($this);
+    }
+
+    function getContact()
+    {
+        if (is_object($this->contact)) {
+            return $this->contact;
+        }
+        return $this->contact = new Contact($this->getKernel(), $this->query('contact_id'));
+    }
+
+    function renderHtmlCreate()
+    {
+        $title = "Ny rykker";
+        $reminder = $this->getReminder();
+        $contact = new Contact($this->getKernel(), $this->query('contact_id'));
+
+        $value["dk_this_date"] = date("d-m-Y");
+        $value["dk_due_date"] = date("d-m-Y", time()+3*24*60*60);
+        /*
+        if ($contact->address->get("name") != $contact->address->get("contactname")) {
+            $value["attention_to"] = $contact->address->get("contactname");
+        }
+        */
+        //$value["text"] = $this->getKernel()->setting->get('intranet', 'reminder.first.text');
+        $value["payment_method_key"] = 1;
+        $value["number"] = $reminder->getMaxNumber();
+        $smarty = new k_Template(dirname(__FILE__) . '/templates/reminder-edit.tpl.php');
+
+        return $smarty->render($this);
+
     }
 
     function getReminders()
@@ -88,5 +124,63 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
     function t($phrase)
     {
         return $phrase;
+    }
+
+    function postForm()
+    {
+        $module = $this->getKernel()->module("debtor");
+
+        $translation = $this->getKernel()->getTranslation('debtor');
+
+        $mainInvoice = $this->getKernel()->useModule("invoice");
+        $mainInvoice->includeFile("Reminder.php");
+        $mainInvoice->includeFile("ReminderItem.php");
+
+        $reminder = $this->getReminder();
+
+        if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
+            $this->contact = new Contact($this->getKernel(), $_POST["contact_id"]);
+            $contact_person = new ContactPerson($contact);
+            $person["name"] = $_POST['contact_person_name'];
+            $person["email"] = $_POST['contact_person_email'];
+            $contact_person->save($person);
+            $contact_person->load();
+            $_POST["contact_person_id"] = $contact_person->get("id");
+        }
+
+        if ($reminder->save($_POST)) {
+             if ($_POST['send_as'] == 'email') {
+                 header("Location: reminder_email.php?id=".$reminder->get("id"));
+                 exit;
+             } else {
+                 return new k_SeeOther($this->url($reminder->get("id")), array('flare' => 'Reminder has been created'));
+             }
+        }
+
+        $value = $_POST;
+
+        $value["dk_this_date"] = $value["this_date"];
+        $value["dk_due_date"] = $value["due_date"];
+
+        $this->contact = new Contact($this->getKernel(), $_POST["contact_id"]);
+
+        if (isset($value["checked_invoice"]) && is_array($value["checked_invoice"])) {
+            $checked_invoice = $value["checked_invoice"];
+        } else {
+            $checked_invoice = array();
+        }
+
+        if (isset($value["checked_reminder"]) && is_array($value["checked_reminder"])) {
+            $checked_reminder = $value["checked_reminder"];
+        } else {
+            $checked_reminder = array();
+        }
+
+        return $this->render();
+    }
+
+    function getFormUrl()
+    {
+        return $this->url(null, array('create'));
     }
 }

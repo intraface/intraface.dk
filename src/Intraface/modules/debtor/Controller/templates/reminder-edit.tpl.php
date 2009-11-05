@@ -6,13 +6,13 @@ $contact = $context->getContact();
 $kernel = $context->getKernel();
 ?>
 
-<h1><?php e($title); ?></h1>
+<h1><?php e(t('Edit reminder')); ?></h1>
 
 <?php
 echo $reminder->error->view("html");
 ?>
 
-<form action="<?php e(url()); ?>" method="post">
+<form action="<?php e($context->getFormUrl()); ?>" method="post">
 
 <fieldset>
     <legend><?php e(__('Information about the reminder')); ?></legend>
@@ -259,11 +259,11 @@ if ($contact->address->get('email')) {
     <?php endif; ?>
 </fieldset>
 
-<input type="submit" name="submit" value="<?php e(__('Save')); ?>" class="save" /> <?php e(__('or')); ?>
+<input type="submit" name="submit" value="<?php e(__('Save')); ?>" class="save" />
 <?php if ($reminder->get('id') > 0): ?>
-<a href="reminder.php?id=<?php e($reminder->get('id')); ?>"><?php e(__('Cancel')); ?></a>
+<a href="<?php e(url()); ?>"><?php e(__('Cancel')); ?></a>
 <?php else: ?>
-<a href="/modules/contact/contact.php?id=<?php e($contact->get('id')); ?>"><?php e(__('Cancel')); ?></a>
+<a href="<?php e(url('../../contact/' . $contact->get('id'))); ?>"><?php e(__('Cancel')); ?></a>
 <?php endif; ?>
 
 <input type="hidden" name="id" value="<?php e($reminder->get("id")); ?>" />

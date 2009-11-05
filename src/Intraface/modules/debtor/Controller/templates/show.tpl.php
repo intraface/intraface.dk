@@ -5,7 +5,7 @@
 
     <ul class="options">
         <?php if ($context->getDebtor()->get("locked") == false): ?>
-            <li><a href="<?php e(null, array('edit')); ?>"><?php e(t('Edit', 'common')); ?></a></li>
+            <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></li>
         <?php endif; ?>
         <li><a class="pdf" href="<?php e($context->getDebtor()->getId() . '.pdf'); ?>" target="_blank"><?php e(t('Pdf')); ?></a></li>
         <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close', 'common')); ?></a></li>
@@ -20,7 +20,7 @@
 if (isset($onlinepayment)) {
     echo $onlinepayment->error->view();
     if (isset($onlinepayment_show_cancel_option) && $onlinepayment_show_cancel_option == true) {
-        echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'"><ul class="formerrors"><li>Ønsker du i stedet at <input type="submit" name="onlinepayment_cancel" value="Annullere" /><input type="hidden" name="id" value="'.$context->getDebtor()->get('id').'" /><input type="hidden" name="onlinepayment_id" value="'.$onlinepayment->id.'" /> registreringen af betalingen.</li></ul></form>';
+        echo '<form method="post" action="'.url(null).'"><ul class="formerrors"><li>Ønsker du i stedet at <input type="submit" name="onlinepayment_cancel" value="Annullere" /><input type="hidden" name="id" value="'.$context->getDebtor()->get('id').'" /><input type="hidden" name="onlinepayment_id" value="'.$onlinepayment->id.'" /> registreringen af betalingen.</li></ul></form>';
     }
 }
 ?>
@@ -58,7 +58,7 @@ if (isset($onlinepayment)) {
             }
             break;
         case 'defined':
-            if ($context->getKernel()->getSetting()->get('intranet', 'debtor.sender.name') == '' || $context->getKernel()->setting->get('intranet', 'debtor.sender.email') == '') {
+            if ($context->getKernel()->getSetting()->get('intranet', 'debtor.sender.name') == '' || $context->getKernel()->getSetting()->get('intranet', 'debtor.sender.email') == '') {
                 $valid_sender = false;
                 if ($context->getKernel()->user->hasModuleAccess('administration')) {
                     echo '<div class="message-dependent"><p>'.__('You need to fill in an e-mail address to send e-mail').'. <a href="'.$module_debtor->getPath().'settings.php">'.__('do it now').'</a>.</p></div>';
@@ -89,7 +89,7 @@ if (isset($onlinepayment)) {
         echo '<div class="message-dependent"><p>'.__('To be able to send electronic e-mails you need to fill out the EAN location number for the contact').'</p></div>';
     }
 
-    $scan_in_contact_id = $context->getKernel()->setting->get('intranet', 'debtor.scan_in_contact');
+    $scan_in_contact_id = $context->getKernel()->getSetting()->get('intranet', 'debtor.scan_in_contact');
     $valid_scan_in_contact = true;
 
     $scan_in_contact = new Contact($context->getKernel(), $scan_in_contact_id);
@@ -111,6 +111,7 @@ if (isset($onlinepayment)) {
     }
     ?>
 <?php endif; ?>
+
 
 <?php if (isset($email_send_with_success) && $email_send_with_success): ?>
     <div class="message-dependent"><p><?php e(__('Your email was sent').'.'); ?></p></div>
@@ -193,6 +194,7 @@ if (isset($onlinepayment)) {
     <?php } ?>
 
 <?php */ ?>
+
     <table>
         <caption><?php e(t($context->getDebtor()->get('type'))); ?> <?php e(t('information')); ?></caption>
         <tbody>
@@ -205,35 +207,35 @@ if (isset($onlinepayment)) {
                 <th><?php e(t($context->getDebtor()->get('type').' due date')); ?></th>
                 <td>
                     <?php e($context->getDebtor()->get("dk_due_date")); ?>
-                    <?php if ($context->getDebtor()->get('type')=='invoice' && $context->getDebtor()->anyDue($context->getDebtor()->contact->get('id')) && $context->getDebtor()->get("status") != 'executed') echo '<a href="reminder_edit.php?contact_id='.intval($context->getDebtor()->contact->get('id')).'">'.t('Create reminder').'</a>'; ?>
+                    <?php if ($context->getDebtor()->get('type')=='invoice' && $context->getDebtor()->anyDue($context->getDebtor()->contact->get('id')) && $context->getDebtor()->get("status") != 'executed') echo '<a href="'.url('../../../reminders', array('create', 'contact_id' => intval($context->getDebtor()->contact->get('id')))).'">'.t('Create reminder').'</a>'; ?>
                 </td>
             </tr>
             <?php endif; ?>
 
 
 
-            <?php /*if ($context->getKernel()->setting->get('intranet', 'debtor.sender') == 'user' || $context->getKernel()->setting->get('intranet', 'debtor.sender') == 'defined'): ?>
+            <?php if ($context->getKernel()->getSetting()->get('intranet', 'debtor.sender') == 'user' || $context->getKernel()->getSetting()->get('intranet', 'debtor.sender') == 'defined'): ?>
                 <tr>
                     <th><?php e(t('Our contact')); ?></th>
                         <td>
                             <?php
-                            switch($context->getKernel()->setting->get('intranet', 'debtor.sender')) {
+                            switch($context->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
                                 case 'user':
                                     e($context->getKernel()->user->getAddress()->get('name'). ' <'.$context->getKernel()->user->getAddress()->get('email').'>');
                                     break;
                                 case 'defined':
-                                    e($context->getKernel()->setting->get('intranet', 'debtor.sender.name').' <'.$context->getKernel()->setting->get('intranet', 'debtor.sender.email').'>');
+                                    e($context->getKernel()->getSetting()->get('intranet', 'debtor.sender.name').' <'.$context->getKernel()->getSetting()->get('intranet', 'debtor.sender.email').'>');
                                     break;
                             }
 
                             if ($context->getKernel()->user->hasModuleAccess('administration')) { ?>
-                                <a href="<?php e($debtor_module->getPath()); ?>setting.php" class="edit"><?php e(__('Change', 'common')); ?></a>
+                                <a href="<?php e(url('settings')); ?>" class="edit"><?php e(__('Change', 'common')); ?></a>
                             <?php
                             }
                             ?>
                         </td>
                 </tr>
-            <?php endif; */ ?>
+            <?php endif; ?>
             <tr>
                 <th><?php e(t('Status')); ?></th>
                 <td>
@@ -251,7 +253,7 @@ if (isset($onlinepayment)) {
                 <?php if ($context->getDebtor()->get("payment_method") == 3) { ?>
                     <tr>
                         <th>Girolinje</th>
-                        <td>+71&lt;<?php echo str_repeat("0", 15 - strlen($context->getDebtor()->get("girocode"))).e($context->getDebtor()->get("girocode")); ?> +<?php e($context->getKernel()->setting->get("intranet", "giro_account_number")); ?>&lt;</td>
+                        <td>+71&lt;<?php echo str_repeat("0", 15 - strlen($context->getDebtor()->get("girocode"))).e($context->getDebtor()->get("girocode")); ?> +<?php e($context->getKernel()->getSetting()->get("intranet", "giro_account_number")); ?>&lt;</td>
                     </tr>
                 <?php } ?>
 
@@ -286,7 +288,7 @@ if (isset($onlinepayment)) {
                         if ($context->getDebtor()->isStated()) {
                             $module_accounting = $context->getKernel()->useModule('accounting');
                             e($context->getDebtor()->get('dk_date_stated'));
-                            echo ' <a href="'.$module_accounting->getPath().'voucher.php?id='.$context->getDebtor()->get('voucher_id').'">Se bilag</a>';
+                            echo ' <a href="'.url('../../../../accounting/voucher/' . $context->getDebtor()->get('voucher_id')).'">'.t('See voucher').'</a>';
                         } else {
                             e(t('Not stated'));
                             if ($context->getDebtor()->get('status') == 'sent' || $context->getDebtor()->get('status') == 'executed') { ?>
@@ -606,6 +608,7 @@ if (isset($onlinepayment)) {
         }
     }
     ?>
+
 <div style="clear:both;">
     <?php if ($context->getDebtor()->get("locked") == false) { ?>
         <ul class="options" style="clear: both;">

@@ -1,6 +1,6 @@
 <h1>
     <?php
-        e(__($context->getDebtor()->get("type").'s'));
+        e(ucfirst(t($context->getDebtor()->get("type").'s')));
         if (!empty($contact) AND is_object($contact) && $contact->address->get('name') != '') { ?>
             : <?php e($contact->address->get('name')); ?>
         <?php }
@@ -30,7 +30,7 @@
     <?php if ($context->getDebtor()->get('type') == 'credit_note'): ?>
         <p>Du har endnu ikke oprettet nogen. Kreditnotaer oprettes fra en fakturaer.</p>
     <?php else: ?>
-        <p>Du har endnu ikke oprettet nogen. <a href="select_contact.php?type=<?php e($context->getDebtor()->get("type")); ?>"><?php e(__('create '.$context->getDebtor()->get('type'))); ?></a>.</p>
+        <p><?php e(t('None has been created yet')); ?>. <a href="<?php e(url(null, array('create'))); ?>"><?php e(__('Create '.$context->getDebtor()->get('type'))); ?></a>.</p>
     <?php endif; ?>
 <?php else: ?>
 

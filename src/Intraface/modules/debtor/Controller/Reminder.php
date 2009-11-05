@@ -7,6 +7,11 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
     protected $registry;
     protected $debtor;
 
+    function getFormUrl()
+    {
+        return $this->url();
+    }
+
     function __construct(k_Registry $registry)
     {
         $this->registry = $registry;
@@ -77,31 +82,7 @@ $mainProduct = $this->getKernel()->useModule("product");
 
 $checked_invoice = array();
 $checked_reminder = array();
-
-if (!empty($_POST)) {
-
-    $reminder = new Reminder($this->getKernel(), intval($_POST["id"]));
-
-    if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
-        $contact = new Contact($this->getKernel(), $_POST["contact_id"]);
-        $contact_person = new ContactPerson($contact);
-        $person["name"] = $_POST['contact_person_name'];
-        $person["email"] = $_POST['contact_person_email'];
-        $contact_person->save($person);
-        $contact_person->load();
-        $_POST["contact_person_id"] = $contact_person->get("id");
-    }
-
-    if ($reminder->save($_POST)) {
-
-        if ($_POST['send_as'] == 'email') {
-            header("Location: reminder_email.php?id=".$reminder->get("id"));
-            exit;
-        } else {
-            header("Location: reminder.php?id=".$reminder->get("id"));
-            exit;
-        }
-    } else {
+/*
         if (intval($_POST["id"]) != 0) {
             $title = "Ret rykker";
         } else {
@@ -127,7 +108,10 @@ if (!empty($_POST)) {
             $checked_reminder = array();
         }
     }
-} elseif (isset($_GET["id"])) {
+*/
+
+
+if (isset($_GET["id"])) {
     $title = "Ret rykker";
     $reminder = new Reminder($this->getKernel(), intval($_GET["id"]));
     $value = $reminder->get();

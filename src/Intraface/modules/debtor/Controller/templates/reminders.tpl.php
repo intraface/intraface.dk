@@ -9,7 +9,7 @@ $reminders = $context->getReminders();
 <?php if ($contact_id): ?>
 	<ul class="options">
 		<li><a href="reminder_edit.php?contact_id=<?php e($contact_id); ?>"><?php e(__('Create')); ?></a></li>
-		<li><a href="/modules/contact/contact.php?id=<?php e($contact->get('id')); ?>"><?php e(__('Go to contact')); ?></a>
+		<li><a href="/modules/contact/contact.php?id=<?php e($contact_id); ?>"><?php e(__('Go to contact')); ?></a>
 	</ul>
 <?php endif; ?>
 
@@ -21,7 +21,7 @@ $reminders = $context->getReminders();
 <?php else: ?>
 
 <?php
-echo $reminder->error->view();
+echo $context->getReminder()->error->view();
 ?>
 
 <?php
@@ -95,9 +95,9 @@ if ($contact_id == 0) {
 				<?php
 				if ($r["locked"] == 0) {
 					?>
-					<a class="edit" href="<?php e(null, array('edit')); ?>"><?php e(__('Edit')); ?></a>
+					<a class="edit" href="<?php e(url($r["id"], array('edit'))); ?>"><?php e(__('Edit')); ?></a>
 					<?php if ($r["status"] == "created"): ?>
-					<a class="delete" href="<?php e(url(null, array('delete'))); ?>"><?php e(__('Delete')); ?></a>
+					<a class="delete" href="<?php e(url($r["id"], array('delete'))); ?>"><?php e(__('Delete')); ?></a>
 					<?php endif; ?>
 					<?php
 				}
