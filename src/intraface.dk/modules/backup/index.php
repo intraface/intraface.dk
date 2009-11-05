@@ -31,7 +31,7 @@ $page->start('Backup');
 
 <h1>Backup af database</h1>
 
-<form action="index.php" method="post">
+<form action="" method="post">
     <fieldset>
         <legend>Backup</legend>
         <p><strong>Backup</strong>. På denne side kan du lave en backup af enten filerne i domænet eller systemets databaser. </p>
