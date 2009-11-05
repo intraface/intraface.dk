@@ -1,97 +1,105 @@
 <?php
-require('../../include_first.php');
+class Intraface_modules_product_Controller_Variation extends k_Component
+{
+    function postForm()
+    {
+        if (isset($_POST['set_quantity']) && (int)$_POST['set_quantity'] == 1) {
+            $quantity = 1;
+        } else {
+            $quantity = 0;
+        }
 
-$product_module = $kernel->module("product");
-$translation = $kernel->getTranslation('product');
+        if (empty($_POST['product_id'])) {
+            throw new Exception('You need to provide a product_id');
+        }
 
-$redirect = Intraface_Redirect::factory($kernel, 'receive');
+        $product = new Product($kernel, intval($_POST['product_id']));
 
-if ($redirect->get('id') != 0) {
-    $multiple = $redirect->isMultipleParameter('product_variation_id');
-} else {
-    trigger_error("Der mangler en gyldig redirect", E_USER_ERROR);
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['set_quantity']) && (int)$_POST['set_quantity'] == 1) {
-        $quantity = 1;
-    } else {
-        $quantity = 0;
-    }
-    
-    if (empty($_POST['product_id'])) {
-        throw new Exception('You need to provide a product_id');
-    }
-    
-    $product = new Product($kernel, intval($_POST['product_id']));
-    
-    if (isset($_POST['submit']) || isset($_POST['submit_close'])) {
-        if ($multiple && is_array($_POST['selected'])) {
-            foreach ($_POST['selected'] AS $selected_id => $selected_value) {
-                if ((int)$selected_value > 0) {
-                    $selected = serialize(array('product_id' => $product->getId(), 'product_variation_id' => $selected_id));
-                    // Hvis der allerede er gemt en værdi, så starter vi med at fjerne den, så der ikke kommer flere på.
-                    $redirect->removeParameter('product_variation_id', $selected);
-                    if ($quantity) {
-                        $redirect->setParameter('product_variation_id', $selected, $selected_value);
-                    } else {
-                        $redirect->setParameter('product_variation_id', $selected);
+        if (isset($_POST['submit']) || isset($_POST['submit_close'])) {
+            if ($multiple && is_array($_POST['selected'])) {
+                foreach ($_POST['selected'] AS $selected_id => $selected_value) {
+                    if ((int)$selected_value > 0) {
+                        $selected = serialize(array('product_id' => $product->getId(), 'product_variation_id' => $selected_id));
+                        // Hvis der allerede er gemt en værdi, så starter vi med at fjerne den, så der ikke kommer flere på.
+                        $redirect->removeParameter('product_variation_id', $selected);
+                        if ($quantity) {
+                            $redirect->setParameter('product_variation_id', $selected, $selected_value);
+                        } else {
+                            $redirect->setParameter('product_variation_id', $selected);
+                        }
                     }
                 }
+            } elseif (!$multiple && !empty($_POST['selected'])) {
+                $selected = serialize(array('product_id' => $product->getId(), 'product_variation_id' => (int)$_POST['selected']));
+                if ($quantity) {
+                    $redirect->setParameter('product_variation_id', $selected, (int)$_POST['quantity']);
+                } else {
+                    $redirect->setParameter('product_variation_id', $selected);
+                }
             }
-        } elseif (!$multiple && !empty($_POST['selected'])) {
-            $selected = serialize(array('product_id' => $product->getId(), 'product_variation_id' => (int)$_POST['selected']));
-            if ($quantity) {
-                $redirect->setParameter('product_variation_id', $selected, (int)$_POST['quantity']);
-            } else {
-                $redirect->setParameter('product_variation_id', $selected);
+
+            if (isset($_POST['submit_close'])) {
+                header('location: '.$redirect->getRedirect('index.php'));
+                exit;
             }
         }
-    
-        if (isset($_POST['submit_close'])) {
-            header('location: '.$redirect->getRedirect('index.php'));
+    }
+
+
+    function renderHtml()
+    {
+        $product_module = $kernel->module("product");
+        $translation = $kernel->getTranslation('product');
+
+        $redirect = Intraface_Redirect::factory($kernel, 'receive');
+
+        if ($redirect->get('id') != 0) {
+            $multiple = $redirect->isMultipleParameter('product_variation_id');
+        } else {
+            trigger_error("Der mangler en gyldig redirect", E_USER_ERROR);
+        }
+        if (isset($_GET['set_quantity']) && (int)$_GET['set_quantity'] == 1) {
+            $quantity = 1;
+        } else {
+            $quantity = 0;
+        }
+
+        if (empty($_GET['product_id'])) {
+            throw new Exception('You need to provide a product_id');
+        }
+
+        $product = new Product($kernel, intval($_GET['product_id']));
+
+        if (isset($_GET['edit_product_variation'])) {
+            $add_redirect = Intraface_Redirect::factory($kernel, 'go');
+            $add_redirect->setIdentifier('add_new');
+            $url = $add_redirect->setDestination($product_module->getPath().'product_edit.php', $product_module->getPath().'select_product.php?'.$redirect->get('redirect_query_string').'&set_quantity='.$quantity);
+            header('location: '.$url);
             exit;
         }
+
+
+        if (!$product->get('has_variation')) {
+            throw new Exception('The product is not with variations');
+        }
+
+        try {
+            $variations = $product->getVariations();
+        }
+        catch(Exception $e) {
+            if ($e->getMessage() == 'No groups is added to the product') {
+                $variations = array();
+            } else {
+                throw $e;
+            }
+        }
+
     }
-    
-} elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    
-    if (isset($_GET['set_quantity']) && (int)$_GET['set_quantity'] == 1) {
-        $quantity = 1;
-    } else {
-        $quantity = 0;
-    }
-    
-    if (empty($_GET['product_id'])) {
-        throw new Exception('You need to provide a product_id');
-    }
-    
-    $product = new Product($kernel, intval($_GET['product_id']));
-    
-    if (isset($_GET['edit_product_variation'])) {
-        $add_redirect = Intraface_Redirect::factory($kernel, 'go');
-        $add_redirect->setIdentifier('add_new');
-        $url = $add_redirect->setDestination($product_module->getPath().'product_edit.php', $product_module->getPath().'select_product.php?'.$redirect->get('redirect_query_string').'&set_quantity='.$quantity);
-        header('location: '.$url);
-        exit;
-    }   
 }
 
 
-if (!$product->get('has_variation')) {
-    throw new Exception('The product is not with variations');
-}
 
-try {
-    $variations = $product->getVariations();
-}
-catch(Exception $e) {
-    if ($e->getMessage() == 'No groups is added to the product') {
-        $variations = array();
-    } else {
-        throw $e;
-    }
-}
+
 
 $page = new Intraface_Page($kernel);
 $page->start(t('Select product variation'));

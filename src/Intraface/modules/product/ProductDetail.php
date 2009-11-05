@@ -61,6 +61,11 @@ class ProductDetail extends Intraface_Standard
         $this->detail_id     = $this->load();
     }
 
+    function getNumber()
+    {
+        return $this->get('number');
+    }
+
     /**
      * Loads details into an array
      *
@@ -74,7 +79,7 @@ class ProductDetail extends Intraface_Standard
             $sql = "active = 1";
         }
 
-        $sql = "SELECT product_detail.id, product_detail.unit AS unit_key,".implode(',', $this->fields).", product_detail_translation.name, product_detail_translation.description FROM product_detail 
+        $sql = "SELECT product_detail.id, product_detail.unit AS unit_key,".implode(',', $this->fields).", product_detail_translation.name, product_detail_translation.description FROM product_detail
             LEFT JOIN product_detail_translation ON product_detail.id = product_detail_translation.id AND product_detail_translation.lang = 'da'
             WHERE ".$sql . "
             AND product_id = " . $this->product->get('id') . ' AND intranet_id = ' . $this->product->intranet->getId();
@@ -92,7 +97,7 @@ class ProductDetail extends Intraface_Standard
 
             // unit skal skrives om til den egentlige unit alt efter settings i produkterne
             $this->value['detail_id'] = $this->db->f('id');
-            
+
             $unit = $this->getUnits($this->db->f('unit_key'));
             if (empty($unit)) {
                 trigger_error('invalid unit '.$this->db->f('unit_key').'!', E_USER_ERROR);
@@ -138,7 +143,7 @@ class ProductDetail extends Intraface_Standard
 
         if (isset($array_var['price'])) $validator->isNumeric($array_var['price'], 'Fejl i pris', 'allow_empty');
         if (isset($array_var['before_price'])) $validator->isNumeric($array_var['before_price'], 'Fejl i førpris', 'allow_empty');
-        
+
         if ($this->product->error->isError()) {
             return false;
         }
@@ -166,7 +171,7 @@ class ProductDetail extends Intraface_Standard
             $amount->convert2db();
             $array_var['price'] = $amount->get();
         }
-        
+
         if (isset($array_var['before_price'])) {
             $amount = new Intraface_Amount($array_var['before_price']);
             $amount->convert2db();
@@ -191,20 +196,20 @@ class ProductDetail extends Intraface_Standard
             // her skal vi sørge for at få billedet med
             $do_update = 0;
             $sql       = '';
-            
+
             // check if there is any changes and only update changes.
             foreach ($this->fields as $field) {
                 if (isset($array_var[$field])) {
                     if ($this->get($field) != $array_var[$field]) {
                         $do_update = 1;
                     }
-                    
+
                     $sql .= $field." = '".$array_var[$field]."', ";
                 } else {
                     $sql .= $field." = '".$this->get($field)."', ";
                 }
             }
-            
+
             if(isset($array_var['unit'])) {
                 if($array_var['unit'] != $this->get('unit_key')) {
                     $do_update = 1;
@@ -213,7 +218,7 @@ class ProductDetail extends Intraface_Standard
             } else {
                 $sql .= "unit = '".$this->get('unit_key')."', ";
             }
-            
+
             if(isset($array_var['name'])) {
                 if($array_var['name'] != $this->get('name')) {
                     $do_update = 1;
@@ -221,7 +226,7 @@ class ProductDetail extends Intraface_Standard
             } else {
                 $array_var['name'] = $this->get('name');
             }
-            
+
             if(isset($array_var['description'])) {
                 if($array_var['description'] != $this->get('description')) {
                     $do_update = 1;
@@ -229,8 +234,8 @@ class ProductDetail extends Intraface_Standard
             } else {
                 $array_var['description'] = $this->get('description');
             }
-            
-            
+
+
         } else {
             // der er ikke nogen tidligere poster, så vi opdatere selvfølgelig
             $do_update = 1;
@@ -238,10 +243,10 @@ class ProductDetail extends Intraface_Standard
             // we make sure that unit is set to a valid unit.
             if (empty($array_var['unit'])) $array_var['unit'] = 1;
             $sql .= "unit = ".intval($array_var['unit']).", ";
-            
+
             if(!isset($array_var['name'])) $array_var['name'] = '';
             if(!isset($array_var['description'])) $array_var['description'] = '';
-            
+
             foreach ($this->fields as $field) {
                 if (!array_key_exists($field, $array_var)) {
                     continue;
@@ -266,7 +271,7 @@ class ProductDetail extends Intraface_Standard
             $this->db->query("INSERT INTO product_detail SET ".$sql." active = 1, changed_date = NOW(), product_id = " . $this->product->get('id') . ", intranet_id = " . $this->product->intranet->getId());
             $this->detail_id = $this->db->insertedId();
             $this->db->query("INSERT INTO product_detail_translation SET name = \"".$array_var['name']."\", description = \"".$array_var['description']."\", lang = 'da', id = ".$this->detail_id);
-            
+
 
             $this->load();
             $this->product->load();
@@ -276,7 +281,7 @@ class ProductDetail extends Intraface_Standard
             return true;
         }
     }
-    
+
     public function getPrice()
     {
         return new Ilib_Variable_Float($this->get('price'));
@@ -286,17 +291,17 @@ class ProductDetail extends Intraface_Standard
     {
         return new Ilib_Variable_Float(round($this->get('price') / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100), 2), 'iso');
     }
-    
+
     public function getPriceIncludingVat()
     {
         return new Ilib_Variable_Float(round($this->get('price') * (1 + $this->getVatPercent()->getAsIso()/100), 2));
     }
-    
+
     public function getPriceIncludingVatInCurrency($currency, $exchange_rate_id = 0)
     {
         return new Ilib_Variable_Float(round($this->get('price') / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100) * (1 + $this->getVatPercent()->getAsIso()/100), 2), 'iso');
     }
-    
+
     public function getBeforePrice()
     {
         return new Ilib_Variable_Float($this->get('before_price'));
@@ -306,17 +311,17 @@ class ProductDetail extends Intraface_Standard
     {
         return new Ilib_Variable_Float(round($this->get('price') / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100), 2), 'iso');
     }
-    
+
     public function getBeforePriceIncludingVat()
     {
         return new Ilib_Variable_Float(round($this->get('before_price') * (1 + $this->getVatPercent()->getAsIso()/100), 2));
     }
-    
+
     public function getBeforePriceIncludingVatInCurrency($currency, $exchange_rate_id = 0)
     {
         return new Ilib_Variable_Float(round($this->get('before_price') / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100) * (1 + $this->getVatPercent()->getAsIso()/100), 2), 'iso');
     }
-    
+
     public function getVatPercent()
     {
         return new Ilib_Variable_Float($this->value['vat_percent']);

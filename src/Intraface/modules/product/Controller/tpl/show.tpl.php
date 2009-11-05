@@ -4,12 +4,12 @@
     <h2>#<?php e($product->get('number'));  ?> <?php e($product->get('name')); ?></h2>
     <ul class="options">
         <?php if ($product->get('locked') != 1) { ?>
-        <li><a href="product_edit.php?id=<?php e($product->get('id')); ?>"><?php e(__('edit', 'common')); ?></a></li>
+        <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(__('Edit', 'common')); ?></a></li>
 
-        <li><a class="confirm" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($product->get('id')); ?>"><?php e(__('delete', 'common')); ?></a></li>
+        <li><a class="confirm" href="<?php e(url(null, array('delete'))); ?>"><?php e(__('Delete', 'common')); ?></a></li>
         <?php } ?>
-        <li><a href="product.php?copy=<?php e($product->get('id')); ?>"><?php e(t('copy', 'common')); ?></a></li>
-        <li><a href="?from_product_id=<?php e($product->get('id')); ?>&amp;use_stored=true"><?php e(t('close', 'common')); ?></a></li>
+        <li><a href="<?php e(url(null, array('copy'))); ?>"><?php e(t('Copy', 'common')); ?></a></li>
+        <li><a href="<?php e(url('../', array('use_stored' => true))); ?>"><?php e(t('Close', 'common')); ?></a></li>
     </ul>
     <div><?php autohtml($product->get('description')); ?></div>
 </div>
@@ -110,7 +110,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
     if ($invoice->any('product', $product->get('id'))) {
         ?>
         <ul class="options">
-            <li><a href="<?php e($debtor_module->getPath().'list.php?type=invoice&amp;status=-1&amp;product_id='.$product->get('id')); ?>"><?php e(t('invoices with this product')); ?></a></li>
+            <li><a href="<?php e(url('../../debtor/invoice/list', array('product_id' => $product->get('id'), 'status' => -1))); ?>"><?php e(t('Invoices with this product')); ?></a></li>
         </ul>
         <?php
     }
@@ -125,7 +125,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
     ?>
     <?php if (count($groups) == 0): ?>
         <ul class="options">
-            <li><a href="product_select_attribute_groups.php?id=<?php e($product->get('id')); ?>"><?php e(t('Select attributes for product')); ?></a></li>
+            <li><a href="<?php e(url('attributes')); ?>"><?php e(t('Select attributes for product')); ?></a></li>
         </ul>
     <?php else: ?>
         <?php
@@ -182,11 +182,11 @@ if ($kernel->user->hasModuleAccess('invoice')) {
     <?php endif; ?>
 <?php endif; ?>
 
-<div id="related_products" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'related') echo ' fade'; ?>">
+<div id="related_products" class="box">
     <h2><?php e(t('related products')); ?></h2>
     <?php if ($product->get('locked') == 0) { ?>
         <ul class="button">
-            <li><a href="related_product.php?id=<?php e($product->get('id')); ?>"><?php e(t('add products')); ?></a></li>
+            <li><a href="<?php e(url('related', array('add'))); ?>"><?php e(t('Add products')); ?></a></li>
         </ul>
     <?php } ?>
     <?php
@@ -195,7 +195,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
             foreach ($related AS $p) {
                 echo '<li>'. $p['name'];
                 if ($p['locked'] == 0) {
-                    echo ' <a class="delete" href="product.php?id='.$product->get('id').'&amp;del_related='.$p['related_id'].'&amp;from=related#related">'.t('remove').'</a>';
+                    echo ' <a class="delete" href="'.url('related', array('delete', 'del_related' => $p['related_id'])) .'">'.t('remove').'</a>';
                 }
                 echo '</li>';
             }
@@ -245,14 +245,14 @@ if ($kernel->user->hasModuleAccess('invoice')) {
             <?php
             $gateway = new Intraface_modules_shop_Shop_Gateway();
             $shops = $gateway->findAll();
-            $db =  MDB2::factory(DB_DSN);
+            $db = MDB2::factory(DB_DSN);
 
             ?>
             <?php foreach ($shops as $shop): ?>
                 <?php $category_type = new Intraface_Category_Type('shop', $shop->getId()); ?>
                 <h3><?php e($shop->getName()); ?></h3>
                 <ul class="options">
-                    <li><a href="product.php?id=<?php e($product->getId()); ?>&amp;shop_id=<?php e($shop->getId()); ?>&amp;append_category=1"><?php e(t('Add product to categories')); ?></a></li>
+                    <li><a href="<?php e(url(null, array('shop_id' => $shop->getId(), 'append_category' => 1))); ?>"><?php e(t('Add product to categories')); ?></a></li>
                 </ul>
                 <?php
                 $category = new Intraface_Category($kernel, $db, $category_type);
@@ -260,7 +260,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                 ?>
                 <ul>
                     <?php foreach ($appender->getCategories() AS $category): ?>
-                        <li><?php e($category['name']); ?> <a href="product.php?id=<?php e($product->getId()); ?>&amp;shop_id=<?php e($shop->getId()); ?>&amp;remove_appended_category=<?php e($category['id']); ?>" class="delete"><?php e(t('Remove', 'common')); ?></a></li>
+                        <li><?php e($category['name']); ?> <a href="<?php e(url(null, array('shop_id' => $shop->getId(), 'remove_appended_category' => $category['id']))); ?>" class="delete"><?php e(t('Remove', 'common')); ?></a></li>
                     <?php endforeach; ?>
                 </ul>
 
@@ -316,8 +316,8 @@ if ($kernel->user->hasModuleAccess('invoice')) {
             </table>
 
             <ul class="options">
-                <li><a href="stock_regulation.php?product_id=<?php e($product->get('id')); ?>">Regulering</a></li>
-                <li><a href="product.php?id=<?php e($product->get('id')); ?>&amp;adaptation=true" class="confirm">Afstem</a></li>
+                <li><a href="<?php e(url('stock')); ?>">Regulering</a></li>
+                <li><a href="<?php e(url(null, array('adaptation' => true))); ?>" class="confirm">Afstem</a></li>
             </ul>
 
             <p>Sidst afstemt: <?php e($product->getStock()->get('dk_adaptation_date_time')); ?></p>

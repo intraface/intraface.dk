@@ -6,11 +6,11 @@ $multiple = $context->multiple;
 <h1><?php e(t('select product')); ?></h1>
 
 <?php if ($context->getProduct()->isFilledIn() == 0): ?>
-    <p><?php e(t('no products to select.')); ?> <a href="select_product.php?add_new=true&amp;set_quantity=<?php e($quantity); ?>"><?php e(t('create product')); ?></a>.</p>
+    <p><?php e(t('no products to select.')); ?> <a href="<?php e(url(null, array('add_new' => true, 'set_quantity' => $quantity))); ?>"><?php e(t('create product')); ?></a>.</p>
 <?php else: ?>
 
     <ul class="options">
-        <li><a href="select_product.php?add_new=true&amp;set_quantity=<?php e($quantity); ?>">Opret produkt</a></li>
+        <li><a href="<?php e(url(null, array('add_new' => true, 'set_quantity' => $quantity))); ?>">Opret produkt</a></li>
     </ul>
 
     <form action="<?php e(url()); ?>" method="get">
@@ -57,7 +57,7 @@ $multiple = $context->multiple;
                 <tr>
                     <td>
                         <?php if ($p['has_variation']): ?>
-                            <a href="select_product.php?select_variation=<?php e($p['id']);?>&amp;set_quantity=<?php e($quantity); ?>" /><?php echo '<img class="variation" src="/images/icons/silk/table_multiple.png" title="'.t("See the product's variations").'"/> '; ?></a>
+                            <a href="<?php e(url(null, array('select_variation' => $p['id'], 'set_quantity' => $quantity))); ?>" /><?php echo '<img class="variation" src="/images/icons/silk/table_multiple.png" title="'.t("See the product's variations").'"/> '; ?></a>
                         <?php elseif ($multiple && $quantity): ?>
                             <input id="<?php e($p['id']); ?>" type="text" name="selected[<?php e($p['id']); ?>]" value="<?php if (isset($selected_products[$p['id']])): e($selected_products[$p['id']]); else: e('0'); endif; ?>" size="2" />
                         <?php elseif ($multiple && !$quantity): ?>
