@@ -44,6 +44,11 @@ class Intraface_Kernel
         }
     }
 
+    function getPage()
+    {
+        return new Intraface_Page($this, new DB_Sql);
+    }
+
     /**
      * returns an unique user id for this login
      *

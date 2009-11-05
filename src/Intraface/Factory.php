@@ -17,7 +17,7 @@ class Intraface_Factory
     {
         $db = MDB2::singleton(DB_DSN, array('persistent' => true));
         if (PEAR::isError($db)) {
-            trigger_error($db->getMessage(), E_USER_ERROR);
+            throw new Exception($db->getMessage());
         }
 
         $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
@@ -25,7 +25,7 @@ class Intraface_Factory
         $db->setOption('portability', MDB2_PORTABILITY_NONE);
         $res = $db->setCharset('latin1');
         if (PEAR::isError($res)) {
-            trigger_error($res->getUserInfo(), E_USER_ERROR);
+            throw new Exception($res->getUserInfo());
         }
 
         if ($db->getOption('debug')) {
@@ -70,7 +70,7 @@ class Intraface_Factory
         //always check for errors. In this examples, error checking is omitted
         //to make the example concise.
         if (PEAR::isError($translation)) {
-            trigger_error('Could not start Translation ' . $translation->getMessage(), E_USER_ERROR);
+            throw new Exception('Could not start Translation ' . $translation->getMessage());
         }
 
         // set the group of strings you want to fetch from
@@ -100,10 +100,12 @@ class Intraface_Factory
         return new Intraface_Auth(session_id());
     }
 
+    /*
     function new_Intraface_Page($container)
     {
         return new Intraface_Page($this->config->kernel, $this->new_DB_Sql($container));
     }
+    */
 
     /////////////////////////////////////////////////////////////////////
 
@@ -139,11 +141,12 @@ class Intraface_Factory
           '$className, $args, $registry',
           'return $GLOBALS["db"];'
         ));
-
+        /*
         $registry->registerConstructor('page', create_function(
           '$className, $args, $registry',
           'return new Intraface_Page($registry->get("kernel"));'
         ));
+        */
 
         return $registry;
     }
@@ -160,7 +163,7 @@ class Intraface_Factory
     {
         Intraface_Doctrine_Intranet::singleton($kernel->intranet->getId());
     }
-    */
+
 
     ///////////////////////////////////////////////////////////////////////
 
@@ -168,4 +171,5 @@ class Intraface_Factory
     {
         return new Intraface_modules_product_Gateway($GLOBALS["kernel"]);
     }
+    */
 }

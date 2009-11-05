@@ -37,7 +37,7 @@ class Intraface_Page
         if (!method_exists('get', $this->kernel->translation)) {
             return $phrase;
         }*/
-        return $this->kernel->translation->get($phrase, $pageid);
+        return $this->kernel->getTranslation()->get($phrase, $pageid);
     }
 
     function start($title = '')
@@ -200,6 +200,18 @@ class Intraface_Page
 
     function end()
     {
+        $this->usermenu = array();
+        $this->usermenu[0]['name'] = $this->t('logout', 'common');
+        $this->usermenu[0]['url'] = url('/main/logout.php');
+        if (method_exists('getIntranetList', $this->kernel->user)) {
+        if (count($this->kernel->user->getIntranetList()) > 1) {
+            $this->usermenu[1]['name'] = $this->t('change intranet', 'common');
+            $this->usermenu[1]['url'] = url('/main/change_intranet.php');
+        }
+        }
+        $this->usermenu[2]['name'] = $this->t('control panel', 'common');;
+        $this->usermenu[2]['url'] = url('/main/controlpanel/');
+
         include(PATH_INCLUDE_IHTML.'/intraface/bottom.php');
     }
 

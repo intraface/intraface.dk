@@ -109,7 +109,7 @@ class NotAuthorizedComponent extends k_Component {
 }
 
 $GLOBALS['kernel'] = $kernel;
-$GLOBALS['intranet'] = $kernel->intranet;
+//$GLOBALS['intranet'] = $kernel->intranet;
 //$db = MDB2::singleton();
 //$db->setCharset('utf8');
 
@@ -165,9 +165,9 @@ k()
   // Use container for wiring of components
   ->setComponentCreator($components)
   // Enable file logging
-  //->setLog(dirname(__FILE__) . '/../log/debug.log')
+  ->setLog(K2_LOG)
   // Uncomment the next line to enable in-browser debugging
-  //->setDebug()
+  //->setDebug(K2_DEBUG)
   // Dispatch request
   ->setIdentityLoader(new k_SessionIdentityLoader())
   ->run('Intraface_Controller_Index')

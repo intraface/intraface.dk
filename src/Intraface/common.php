@@ -18,7 +18,6 @@ require_once 'k/urlbuilder.php';
 require_once 'Intraface/functions.php';
 require_once 'Intraface/shared/systemmessage/SystemDisturbance.php';
 require_once 'lib/bucket.inc.php';
-require_once 'Intraface/Page.php';
 
 // paths
 if (!defined('PATH_INCLUDE_IHTML')) define('PATH_INCLUDE_IHTML', PATH_ROOT.'Intraface/ihtml' . DIRECTORY_SEPARATOR);

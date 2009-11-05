@@ -438,9 +438,8 @@ class Intraface_User extends Intraface_Standard
         if ($this->id == 0 || $this->hasIntranetAccess()) {
             $this->load();
             return true;
-        } else {
-            throw new Exception('you do not have access to this intranet');
         }
+        throw new Exception('you do not have access to this intranet');
     }
 
     /**
@@ -635,5 +634,11 @@ class Intraface_User extends Intraface_Standard
     public function getId()
     {
         return $this->id;
+    }
+
+    function getLanguage()
+    {
+        return $this->getSetting()->get('user', 'language');
+
     }
 }
