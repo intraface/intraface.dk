@@ -53,8 +53,6 @@ if ($kernel->user->hasModuleAccess('debtor')) {
 // values
 $value = $contact->get();
 $address = $contact->address->get();
-
-
 $delivery_address = $contact->delivery_address->get();
 
 if ($value['type'] == "corporation") {
