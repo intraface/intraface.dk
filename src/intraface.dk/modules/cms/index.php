@@ -43,7 +43,7 @@ $page->start(__('cms'));
 	<td><a href="pages.php?type=page&amp;id=<?php e($s['id']); ?>"><?php e(t('pages'));  ?></a>, <a href="pages.php?type=article&amp;id=<?php e($s['id']); ?>"><?php e(t('articles'));  ?></a>, <a href="pages.php?type=news&amp;id=<?php e($s['id']); ?>"><?php e(t('news'));  ?></a></td>
     <td class="options">
 		<a class="edit" href="site_edit.php?id=<?php e($s['id']); ?>"><?php e(__('edit settings', 'common')); ?></a>
-		<a class="delete" href="index.php?delete=<?php e($s['id']); ?>"><?php e(__('delete', 'common')); ?></a>
+		<a class="delete" href="?delete=<?php e($s['id']); ?>"><?php e(__('delete', 'common')); ?></a>
 	</td>
 </tr>
 <?php endforeach; ?>
