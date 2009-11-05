@@ -12,6 +12,10 @@ class Intraface_modules_contact_Controller_Show extends k_Component
     {
         if ($name == 'merge') {
             return 'Intraface_modules_contact_Controller_Merge';
+        } elseif ($name == 'memo') {
+            return 'Intraface_modules_contact_Controller_Memos';
+        } elseif ($name == 'contactperson') {
+            return 'Intraface_modules_contact_Controller_Contactpersons';
         }
     }
 
@@ -22,7 +26,86 @@ class Intraface_modules_contact_Controller_Show extends k_Component
         $contact_module->includeFile('ContactReminder.php');
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/show.tpl.php');
+        return $smarty->render($this, array('persons' => $this->getContactPersons()));
+    }
+
+    function renderHtmlEdit()
+    {
+        $contact_module = $this->getKernel()->module("contact");
+        $translation = $this->getKernel()->getTranslation('contact');
+        $contact_module->includeFile('ContactReminder.php');
+
+        $smarty = new k_Template(dirname(__FILE__) . '/templates/edit.tpl.php');
         return $smarty->render($this);
+
+    }
+
+    function getRedirect()
+    {
+        return Intraface_Redirect::factory($this->getKernel(), 'receive');
+    }
+
+    function postForm()
+    {
+        $contact_module = $this->getKernel()->module("contact");
+        $translation = $this->getKernel()->getTranslation('contact');
+        $contact_module->includeFile('ContactReminder.php');
+
+        $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
+
+        if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
+            $contact = new Contact($this->getKernel(), $_POST['id']);
+
+            $eniro = new Services_Eniro();
+            $value = $_POST;
+
+            if ($oplysninger = $eniro->query('telefon', $_POST['eniro_phone'])) {
+                // skal kun bruges så længe vi ikke er utf8
+                // $oplysninger = array_map('utf8_decode', $oplysninger);
+                $address['name'] = $oplysninger['navn'];
+                $address['address'] = $oplysninger['adresse'];
+                $address['postcode'] = $oplysninger['postnr'];
+                $address['city'] = $oplysninger['postby'];
+                $address['phone'] = $_POST['eniro_phone'];
+            }
+        } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            // for a new contact we want to check if similar contacts alreade exists
+            if (empty($_POST['id'])) {
+                $contact = new Contact($this->getKernel());
+                if (!empty($_POST['phone'])) {
+                    $contact->getDBQuery()->setCondition("address.phone = '".$_POST['phone']."' AND address.phone <> ''");
+                    $similar_contacts = $contact->getList();
+                }
+
+            } else {
+                $contact = new Contact($this->getKernel(), $_POST['id']);
+            }
+
+            // checking if similiar contacts exists
+            if (!empty($similar_contacts) AND count($similar_contacts) > 0 AND empty($_POST['force_save'])) {
+            } elseif ($id = $contact->save($_POST)) {
+
+                // $redirect->addQueryString('contact_id='.$id);
+                if ($redirect->get('id') != 0) {
+                    $redirect->setParameter('contact_id', $id);
+                }
+                return new k_SeeOther($redirect->getRedirect($this->url()));
+
+                //$contact->lock->unlock_post($id);
+            }
+
+            $value = $_POST;
+            $address = $_POST;
+            $delivery_address = array();
+            $delivery_address['name'] = $_POST['delivery_name'];
+            $delivery_address['address'] = $_POST['delivery_address'];
+            $delivery_address['postcode'] = $_POST['delivery_postcode'];
+            $delivery_address['city'] = $_POST['delivery_city'];
+            $delivery_address['country'] = $_POST['delivery_country'];
+        }
+
+        return $this->render();
     }
 
     function getKernel()
@@ -43,6 +126,18 @@ class Intraface_modules_contact_Controller_Show extends k_Component
         // $similar_contacts = $contact->compare();
         $similar_contacts = array();
         return $contact;
+    }
+
+    function getContactPersons()
+    {
+        $contact = new Contact($this->getKernel(), $this->name());
+        $value = $contact->get();
+
+        if ($value['type'] == "corporation") {
+            return $persons = $contact->contactperson->getList();
+        }
+        return array();
+
     }
 
     function getValues()
@@ -175,7 +270,7 @@ class Intraface_modules_contact_Controller_Show extends k_Component
         }
     }
 
-    function postForm()
+    function putForm()
     {
         $contact_module = $this->getKernel()->module("contact");
         $translation = $this->getKernel()->getTranslation('contact');

@@ -14,13 +14,13 @@ $delivery_address = $context->getDeliveryAddressValues();
     <ul class="options">
         <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></li>
         <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close', 'common')); ?></a></li>
-        <li><a class="vcard" href="<?php e(url(null . '.vcard')); ?>"><?php e(t('vcard')); ?></a></li>
+        <li><a class="vcard" href="<?php e(url(null . '.vcard')); ?>"><?php e(t('Vcard')); ?></a></li>
     </ul>
 
     <?php if ($context->getKernel()->user->hasModuleAccess("debtor")): ?>
         <ul class="options">
         <?php if ($context->getKernel()->user->hasModuleAccess("quotation")): ?>
-            <?php if ($quotation->any('contact', $context->getContact()->get("id"))): ?>
+            <?php if ($context->getQuotation()->any('contact', $context->getContact()->get("id"))): ?>
             <li><a href="<?php e(url('../../debtor/quotation', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('Quotation', 'debtor')); ?></a></li>
             <?php else: ?>
             <li class="inactive"><a href="<?php e(url('../../debtor/quotation', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('create quotation', 'debtor')); ?></a></li>
@@ -28,7 +28,7 @@ $delivery_address = $context->getDeliveryAddressValues();
         <?php endif; ?>
 
         <?php if ($context->getKernel()->user->hasModuleAccess("order")): ?>
-            <?php if ($order->any('contact', $context->getContact()->get("id"))): ?>
+            <?php if ($context->getOrder()->any('contact', $context->getContact()->get("id"))): ?>
                 <li><a href="<?php e($context->getDebtorModule()->getPath()); ?>list.php?type=order&amp;contact_id=<?php e($context->getContact()->get("id")); ?>"><?php e(t('orders', 'debtor')); ?></a></li>
             <?php else: ?>
                 <li class="inactive"><a href="<?php e($context->getDebtorModule()->getPath()); ?>edit.php?type=order&amp;contact_id=<?php e($context->getContact()->get("id")); ?>"><?php e(t('create order', 'debtor')); ?></a></li>
@@ -74,7 +74,7 @@ $delivery_address = $context->getDeliveryAddressValues();
 <?php endif; */?>
 
     <form action="<?php e(url()); ?>" method="post">
-    <input type="hidden" name="id" value="<?php e($context->getContact()->get('id')); ?>" />
+    <input type="hidden" name="_method" value="put" />
     <table>
         <caption><?php e(t('contact information')); ?></caption>
         <tbody>
@@ -145,7 +145,7 @@ $delivery_address = $context->getDeliveryAddressValues();
     <?php
     foreach ($persons AS $person) { ?>
         <tr class="vcard">
-        <td class="fn"><a href="contactperson_edit.php?contact_id=<?php e($context->getContact()->get('id') . '&id=' . $person['id']); ?>"><?php e($person['name']); ?></a></td>
+        <td class="fn"><a href="<?php e(url('contactperson/' . $person['id'], array('edit'))); ?>"><?php e($person['name']); ?></a></td>
         <td class="email"><?php e($person['email']); ?></td>
         <td class="tel"><?php e($person['phone']); ?></td>
         <td class="tel"><?php e($person['mobile']); ?></td>
@@ -156,7 +156,7 @@ $delivery_address = $context->getDeliveryAddressValues();
     </table>
   <?php } ?>
     <ul class="options">
-        <li><a href="contactperson_edit.php?contact_id=<?php e($value['id']); ?>"><?php e(t('add contact person')); ?></a></li>
+        <li><a href="<?php e(url('contactperson', array('create'))); ?>"><?php e(t('Add contact person')); ?></a></li>
     </ul>
 <?php endif; ?>
 
@@ -185,14 +185,13 @@ if (count($reminders) > 0):
                     <?php
                     if (strtotime($reminder_item['reminder_date']) <= time()) { ?>
                         <span class="due"><?php e($reminder_item['dk_reminder_date']); ?></span>
-                    <?php }
-                    else {
+                    <?php } else {
                         e($reminder_item['dk_reminder_date']);
                     }
                     ?>
                 </td>
-                <td><a href="reminder.php?id=<?php e($reminder_item['id']); ?>"><?php e($reminder_item['subject']); ?></a></td>
-                <td class="buttons"><a href="reminder_edit.php?id=<?php e($reminder_item['id']); ?>" class="edit"><?php e(t('edit', 'common')); ?></a></td>
+                <td><a href="<?php e(url('memo/' . $reminder_item['id'])); ?>"><?php e($reminder_item['subject']); ?></a></td>
+                <td class="buttons"><a href="<?php e(url('memo/' .$reminder_item['id'], array('edit'))); ?>" class="edit"><?php e(t('edit', 'common')); ?></a></td>
             </tr>
             <?php
         }
@@ -204,7 +203,7 @@ endif;
 ?>
 
 <ul class="options">
-    <li><a href="reminder_edit.php?contact_id=<?php e($value['id']); ?>"><?php e(t('add reminder')); ?></a></li>
+    <li><a href="<?php e(url('memo', array('create'))); ?>"><?php e(t('Add memo')); ?></a></li>
 </ul>
 
 

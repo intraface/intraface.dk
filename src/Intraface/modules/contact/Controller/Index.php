@@ -3,6 +3,11 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 {
     protected $registry;
 
+    function getRedirect()
+    {
+        return Intraface_Redirect::factory($this->getKernel(), 'receive');
+    }
+
     function __construct(k_Registry $registry)
     {
         $this->registry = $registry;
@@ -47,8 +52,9 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         return $contacts = $contact->getList();
     }
 
-    function POST()
+    function putForm()
     {
+        $this->getKernel()->module("contact");
         // delete
         if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
         	$deleted = array();
@@ -77,7 +83,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         	}
         }
 
-        return parent::POST();
+        return new k_SeeOther($this->url());
     }
 
     function renderHtml()
@@ -265,4 +271,102 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
         exit;
     }
+
+    function renderHtmlCreate()
+    {
+        $contact_module = $this->getKernel()->module("contact");
+        $translation = $this->getKernel()->getTranslation('contact');
+        $contact_module->includeFile('ContactReminder.php');
+
+        $smarty = new k_Template(dirname(__FILE__) . '/templates/edit.tpl.php');
+        return $smarty->render($this);
+
+    }
+
+    function getContactModule()
+    {
+        return        $contact_module = $this->getKernel()->module("contact");
+
+    }
+
+    function postForm()
+    {
+        $contact_module = $this->getKernel()->module("contact");
+        $translation = $this->getKernel()->getTranslation('contact');
+        $contact_module->includeFile('ContactReminder.php');
+
+        $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
+
+        if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
+            $contact = new Contact($this->getKernel(), $_POST['id']);
+
+            $eniro = new Services_Eniro();
+            $value = $_POST;
+
+            if ($oplysninger = $eniro->query('telefon', $_POST['eniro_phone'])) {
+                // skal kun bruges så længe vi ikke er utf8
+                // $oplysninger = array_map('utf8_decode', $oplysninger);
+                $address['name'] = $oplysninger['navn'];
+                $address['address'] = $oplysninger['adresse'];
+                $address['postcode'] = $oplysninger['postnr'];
+                $address['city'] = $oplysninger['postby'];
+                $address['phone'] = $_POST['eniro_phone'];
+            }
+        } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            // for a new contact we want to check if similar contacts alreade exists
+            if (empty($_POST['id'])) {
+                $contact = new Contact($this->getKernel());
+                if (!empty($_POST['phone'])) {
+                    $contact->getDBQuery()->setCondition("address.phone = '".$_POST['phone']."' AND address.phone <> ''");
+                    $similar_contacts = $contact->getList();
+                }
+
+            } else {
+                $contact = new Contact($this->getKernel(), $_POST['id']);
+            }
+
+            // checking if similiar contacts exists
+            if (!empty($similar_contacts) AND count($similar_contacts) > 0 AND empty($_POST['force_save'])) {
+            } elseif ($id = $contact->save($_POST)) {
+
+                // $redirect->addQueryString('contact_id='.$id);
+                if ($redirect->get('id') != 0) {
+                    $redirect->setParameter('contact_id', $id);
+                }
+                return new k_SeeOther($redirect->getRedirect($this->url($id)));
+
+                //$contact->lock->unlock_post($id);
+            }
+
+            $value = $_POST;
+            $address = $_POST;
+            $delivery_address = array();
+            $delivery_address['name'] = $_POST['delivery_name'];
+            $delivery_address['address'] = $_POST['delivery_address'];
+            $delivery_address['postcode'] = $_POST['delivery_postcode'];
+            $delivery_address['city'] = $_POST['delivery_city'];
+            $delivery_address['country'] = $_POST['delivery_country'];
+        }
+
+        return $this->render();
+
+    }
+
+    function getValues()
+    {
+        return array();
+    }
+
+    function getAddressValues()
+    {
+        return array();
+    }
+
+    function getDeliveryAddressValues()
+    {
+        return array();
+    }
+
+
 }

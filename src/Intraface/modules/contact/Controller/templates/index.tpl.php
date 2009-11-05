@@ -13,7 +13,7 @@
 
 <?php if (!$context->getContact()->isFilledIn()): ?>
 
-	<p><?php e(__('No contacts has been created')); ?>. <a href="<?php e(url(array('Create'))); ?>"><?php e(__('create contact')); ?></a>.</p>
+	<p><?php e(__('No contacts has been created')); ?>. <a href="<?php e(url(null, array('create'))); ?>"><?php e(__('Create contact')); ?></a>.</p>
 
 <?php else: ?>
 
@@ -48,7 +48,7 @@
 <?php echo $context->getContact()->getDBQuery()->display('character'); ?>
 
 <form action="<?php e(url()); ?>" method="post">
-
+	<input type="hidden" value="put" name="_method" />
 	<?php if (!empty($deleted)): ?>
 		<p class="message">Du har slettet kontakter. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="Fortryd" /></p>
 	<?php endif; ?>
@@ -92,11 +92,11 @@
 	</table>
 
 	<select name="action">
-		<option value="">Vælg</option>
-		<option value="delete">Slet valgte</option>
+		<option value=""><?php e(t('Choose')); ?></option>
+		<option value="delete"><?php e(t('Delete')); ?></option>
 	</select>
 
-	<input type="submit" value="Udfør" />
+	<input type="submit" value="<?php e(t('Execute')); ?>" />
 </form>
 
 <?php endif; ?>
