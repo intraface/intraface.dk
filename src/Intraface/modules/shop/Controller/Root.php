@@ -2,7 +2,7 @@
 class Intraface_modules_shop_Controller_Root extends k_Dispatcher
 {
     public $map = array(
-        'shop' => 'Intraface_modules_shop_Controller_Index'
+        'shop' => 'Intraface_modules_shop_Controller_IndexOld'
     );
 
     function getHeader()

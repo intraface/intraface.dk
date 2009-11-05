@@ -28,19 +28,17 @@ class Intraface_modules_accounting_Controller_Year_Edit extends k_Component
 
     function getKernel()
     {
-        $registry = $this->registry->create();
-        return $registry->get('kernel');
+        return $this->context->getKernel();
     }
 
     function getYear()
     {
         $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
 
         if (!is_numeric($this->name())) {
         	return new Year($this->getKernel());
         } else {
-        	return new Year ($this->getKernel(), $this->name());
+        	return new Year($this->getKernel(), $this->name());
         }
     }
 
@@ -49,4 +47,8 @@ class Intraface_modules_accounting_Controller_Year_Edit extends k_Component
         return $this->context->getYearGateway();
     }
 
+    function getValues()
+    {
+        return $this->getYear()->get();
+    }
 }

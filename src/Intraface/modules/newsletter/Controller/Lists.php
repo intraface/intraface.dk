@@ -3,9 +3,9 @@ class Intraface_modules_newsletter_Controller_Lists extends k_Component
 {
     protected $registry;
 
-    function __construct(WireFactory $registry)
+    function __construct(k_Registry $registry)
     {
-        $this->registry = $registry->create();
+        $this->registry = $registry;
     }
 
     protected function map($name)
@@ -40,10 +40,7 @@ class Intraface_modules_newsletter_Controller_Lists extends k_Component
 
     function getKernel()
     {
-        if (method_exists('getKernel', $this->context)) {
-            return $this->context->getKernel();
-        }
-    	return $this->kernel = $this->registry->get('kernel');
+        return $this->context->getKernel();
     }
 
     function getLists()

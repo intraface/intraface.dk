@@ -24,9 +24,9 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
         $this->document->addScript($this->url('/../accounting/javascript/daybook.js'));
 
         if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
-            $this->getKernel()->setting->set('user', 'accounting.daybook.message', 'hide');
+            $this->getKernel()->getSetting()->set('user', 'accounting.daybook.message', 'hide');
         } elseif (!empty($_GET['quickhelp']) AND in_array($_GET['quickhelp'], array('true', 'false'))) {
-            $this->getKernel()->setting->set('user', 'accounting.daybook_cheatsheet', $_GET['quickhelp']);
+            $this->getKernel()->getSetting()->set('user', 'accounting.daybook_cheatsheet', $_GET['quickhelp']);
             if (isAjax()) {
                 echo '1';
                 exit;
@@ -37,8 +37,7 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
             $this->getKernel()->setting->set('user', 'accounting.daybook_view', $_GET['view']);
         }
         */
-
-         $tpl = new k_Template(dirname(__FILE__) . '/templates/daybook.tpl.php');
+        $tpl = new k_Template(dirname(__FILE__) . '/templates/daybook.tpl.php');
         return $tpl->render($this);
     }
 

@@ -19,7 +19,7 @@ class MainCMS extends Intraface_Main
         //$this->addControlPanelFile('accounting', $this->getPath() . 'settings.php');
 
         // Tilføj undermenu punkter.
-        $this->addSubMenuItem('choose site', 'index.php');
+        $this->addSubMenuItem('choose site', '');
         $this->addSubMenuItem('pages', 'pages.php?type=page');
         $this->addSubMenuItem('articles', 'pages.php?type=article');
         $this->addSubMenuItem('news', 'pages.php?type=news');

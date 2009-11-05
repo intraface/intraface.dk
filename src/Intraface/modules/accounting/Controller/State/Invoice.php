@@ -2,6 +2,7 @@
 class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
 {
     protected $registry;
+    protected $year;
 
     function getKernel()
     {
@@ -20,7 +21,11 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
 
     function getYear()
     {
-        return $year = new Year($this->getKernel());
+        if (is_object($this->year)) {
+            return $this->year;
+        }
+
+        return $this->year = new Year($this->getKernel());
     }
 
     function getVoucher()
@@ -57,6 +62,17 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
 
     }
 
+    function getItems()
+    {
+        $this->getDebtor()->loadItem();
+        return $this->getDebtor()->item->getList();
+    }
+
+    function t($phrase)
+    {
+        return $phrase;
+    }
+
     function postForm()
     {
         $debtor_module = $this->getKernel()->module('debtor');
@@ -67,7 +83,7 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
         $year = new Year($this->getKernel());
         $voucher = new Voucher($year);
 
-        $debtor = Debtor::factory($this->getKernel(), intval($_POST["id"]));
+        $debtor = $this->getDebtor();
 
         if ($debtor->get('type') != 'invoice') {
             trigger_error('You can only state invoice from this page', E_USER_ERROR);
@@ -87,8 +103,8 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
         if (!$debtor->state($year, $_POST['voucher_number'], $_POST['date_state'], $translation)) {
             $debtor->error->set('Kunne ikke bogf�re posten');
         } else {
-            header('Location: view.php?id='.$debtor->get('id'));
-            exit;
+            return new k_SeeOther($this->url('../', array('flare' => 'Invoice has been stated')));
         }
+        return $this->render();
     }
 }

@@ -1,12 +1,13 @@
 <?php
 $accounting_module = $context->getModule();
+$items = $context->getItems();
 ?>
 
 <h1>Bogf�r faktura #<?php e($context->getDebtor()->get('number')); ?></h1>
 
 <ul class="options">
-    <li><a href="view.php?id=<?php e($context->getDebtor()->get("id")); ?>">Luk</a></li>
-    <li><a href="list.php?type=invoice&amp;id=<?php e($context->getDebtor()->get("id")); ?>&amp;use_stored=true">Tilbage til fakturaoversigten</a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
+    <li><a href="<?php e(url('../../', array('use_stored' => true))); ?>"><?php e(t('To invoices')); ?></a></li>
 </ul>
 
 <?php if (!$context->getYear()->readyForState($context->getDebtor()->get('this_date'))): ?>
@@ -19,7 +20,7 @@ $accounting_module = $context->getModule();
     <?php $context->getDebtor()->readyForState($context->getYear(), 'skip_check_products'); ?>
     <?php echo $context->getDebtor()->error->view(); ?>
 
-    <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+    <form action="<?php e(url()); ?>" method="post">
     <input type="hidden" value="<?php e($context->getDebtor()->get('id')); ?>" name="id" />
     <fieldset>
         <legend>Faktura</legend>
@@ -41,7 +42,7 @@ $accounting_module = $context->getModule();
             <table>
                 <tr>
                     <th>Bilagsnummer</th>
-                    <td><input type="text" name="voucher_number" value="<?php e($voucher->getMaxNumber() + 1); ?>" /></td>
+                    <td><input type="text" name="voucher_number" value="<?php e($context->getVoucher()->getMaxNumber() + 1); ?>" /></td>
                 </tr>
                 <tr>
                     <th>Bogf�r p� dato</th>
@@ -71,7 +72,7 @@ $accounting_module = $context->getModule();
                 }
 
                 for ($i = 0, $max = count($items); $i<$max; $i++) {
-                    $product = new Product($kernel, $items[$i]['product_id']);
+                    $product = new Product($context->getKernel(), $items[$i]['product_id']);
                     $account = Account::factory($context->getYear(), $product->get('state_account_id'));
 
                     $total += $items[$i]["quantity"] * $items[$i]["price"]->getAsIso(2);
@@ -83,7 +84,7 @@ $accounting_module = $context->getModule();
                         <td><?php e(amountToOutput($items[$i]["quantity"]*$items[$i]["price"]->getAsIso(2))); ?></td>
                         <td>
                             <?php if (!$context->getDebtor()->isStated()):
-                                $year = new Year($kernel);
+                                $year = new Year($context->getKernel());
                                 $context->getYear()->loadActiveYear();
                                 $accounts =  $account->getList('sale');
                                 ?>
@@ -135,8 +136,8 @@ $accounting_module = $context->getModule();
         </table>
 
         <div>
-            <input type="submit" value="Bogf�r" /> eller
-            <a href="view.php?id=<?php e($context->getDebtor()->get('id')); ?>">fortryd</a>
+            <input type="submit" value="<?php e(t('State')); ?>" />
+            <a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a>
         </div>
    <?php endif;  ?>
     </form>

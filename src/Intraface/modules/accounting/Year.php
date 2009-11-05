@@ -120,7 +120,7 @@ class Year extends Intraface_Standard
      */
     private function reset()
     {
-        $this->kernel->setting->set('user', 'accounting.active_year', 0);
+        $this->kernel->getSetting()->set('user', 'accounting.active_year', 0);
         /*
         $db = new DB_Sql;
         $db->query("DELETE FROM accounting_year_active WHERE intranet_id = " . $this->kernel->intranet->get('id') . " AND user_id = " . $this->kernel->user->get('id'));
@@ -442,12 +442,12 @@ class Year extends Intraface_Standard
 
     function setSetting($setting, $value)
     {
-        return $this->kernel->setting->set('intranet', 'accounting.'.$setting, $value,  $this->get('id'));
+        return $this->kernel->getSetting()->set('intranet', 'accounting.'.$setting, $value,  $this->get('id'));
     }
 
     function getSetting($setting)
     {
-        return $this->kernel->setting->get('intranet', 'accounting.' . $setting, $this->get('id'));
+        return $this->kernel->getSetting()->get('intranet', 'accounting.' . $setting, $this->get('id'));
     }
 
     function createAccounts($type, $last_year_id = 0)
@@ -489,7 +489,7 @@ class Year extends Intraface_Standard
                     foreach ($standardaccounts AS $input) {
                         require_once 'Intraface/modules/accounting/Account.php';
                         $account = new Account($this);
-                        $input['vat_percent'] = $this->kernel->setting->get('intranet', 'vatpercent');
+                        $input['vat_percent'] = $this->kernel->getSetting()->get('intranet', 'vatpercent');
                         $id = $account->save($input);
 
                         // settings

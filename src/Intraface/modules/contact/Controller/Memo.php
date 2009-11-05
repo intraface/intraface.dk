@@ -65,23 +65,25 @@ class Intraface_modules_contact_Controller_Memo extends k_Component
     		$date_span->setFromDays(365); // does not take account of leap year
     		$date->addSpan($date_span);
     		$reminder->postponeUntil($date->getDate());
-    	}
-
-    	// for a new contact we want to check if similar contacts alreade exists
-    	if (empty($_POST['id'])) {
-    		$contact = new Contact($this->context->getKernel(), (int)$this->context->context->name());
-    		$reminder = new ContactReminder($contact);
-
     	} else {
-    		$reminder = ContactReminder::factory($this->context->getKernel(), (int)$this->name());
-    		$contact = $reminder->contact;
+        	// for a new contact we want to check if similar contacts alreade exists
+        	if (empty($_POST['id'])) {
+        		$contact = new Contact($this->context->getKernel(), (int)$this->context->context->name());
+        		$reminder = new ContactReminder($contact);
+
+        	} else {
+        		$reminder = ContactReminder::factory($this->context->getKernel(), (int)$this->name());
+        		$contact = $reminder->contact;
+        	}
+
+        	if ($id = $reminder->update($_POST)) {
+        		return new k_SeeOther($this->url('../'));
+        	}
+
+        	$value = $_POST;
+
     	}
 
-    	if ($id = $reminder->update($_POST)) {
-    		return new k_SeeOther($this->url('../'));
-    	}
-
-    	$value = $_POST;
 
     	return $this->render();
     }

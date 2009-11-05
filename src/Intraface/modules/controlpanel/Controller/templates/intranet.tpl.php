@@ -8,7 +8,7 @@ $address = $context->getValues();
 <ul class="options">
 	<li><a href="<?php e(url('../')); ?>"><?php e(t('close', 'common')); ?></a></li>
 <?php if ($context->getKernel()->user->hasModuleAccess('administration')): $administration_module = $context->getKernel()->useModule('administration'); ?>
-	<li><a href="<?php e($administration_module->getPath()); ?>intranet_edit.php"><?php e(t('edit', 'common')); ?></a></li>
+	<li><a href="<?php e(url('../../administration/intranet/' . $context->getKernel()->intranet->getId(), array('edit'))); ?>"><?php e(t('edit', 'common')); ?></a></li>
 <?php endif; ?>
 </ul>
 

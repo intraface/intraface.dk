@@ -1,10 +1,15 @@
 <?php
-class Intraface_modules_stock_Controller_Index
+class Intraface_modules_stock_Controller_Index extends k_Component
 {
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/tpl/index.tpl.php');
+        $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
         return $smarty->render($this);
+    }
+
+    function t($phrase)
+    {
+        return $phrase;
     }
 
     function getStock()

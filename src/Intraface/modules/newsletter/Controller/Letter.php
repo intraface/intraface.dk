@@ -12,7 +12,7 @@ class Intraface_modules_newsletter_Controller_Letter extends k_Component
         }
     }
 
-    function __construct(WireFactory $registry)
+    function __construct(k_Registry $registry)
     {
         $this->registry = $registry;
     }

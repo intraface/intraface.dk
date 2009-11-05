@@ -81,8 +81,7 @@
 
     <div>
         <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />
-            eller
-        <a href="<?php e(url(null)); ?>"><?php e(t('Cancel', 'common')); ?></a>
+        <a href="<?php e(url('../')); ?>"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 
 </form>

@@ -30,7 +30,7 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
     function renderHtml()
     {
         if (!$this->getYear()->isValid()) {
-            trigger_error('�ret er ikke gyldigt', E_USER_ERROR);
+            throw new Exception('Year is not valid');
         }
 
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/year/show.tpl.php');
@@ -50,7 +50,7 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
         return new Year($this->getKernel(), $this->name());
     }
 
-    function POST()
+    function postForm()
     {
         if (!empty($_POST['start']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
             $year = $this->getYear();

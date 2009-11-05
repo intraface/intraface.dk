@@ -43,8 +43,8 @@ class OnlinePayment extends Intraface_Standard
         $this->id = $id;
         $this->error = new Intraface_Error;
 
-        // lidt usikker på om det her er det smarteste sted at have den, men den skal være til stede, når der skal gemmes
-        $this->provider_key = $this->kernel->setting->get('intranet', 'onlinepayment.provider_key');
+        // @todo lidt usikker på om det her er det smarteste sted at have den, men den skal være til stede, når der skal gemmes
+        $this->provider_key = $kernel->getSetting()->get('intranet', 'onlinepayment.provider_key');
 
         //$this->dbquery = new Intraface_DBQuery($this->kernel, "onlinepayment", "intranet_id = ".$this->kernel->intranet->get("id"));
         //$this->dbquery->useErrorObject($this->error);
@@ -61,10 +61,10 @@ class OnlinePayment extends Intraface_Standard
     {
         $implemented_providers = OnlinePayment::getImplementedProviders();
         // we set the fallback from settings
-        if (!isset($implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')])) {
+        if (!isset($implemented_providers[$kernel->getSetting()->get('intranet', 'onlinepayment.provider_key')])) {
             trigger_error('Ikke en gyldig provider fra settings i OnlinePayment->factory', E_USER_ERROR);
         }
-        $provider = $implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')];
+        $provider = $implemented_providers[$kernel->getSetting()->get('intranet', 'onlinepayment.provider_key')];
 
         switch($type) {
             case 'settings':
@@ -303,7 +303,7 @@ class OnlinePayment extends Intraface_Standard
      */
     public function create()
     {
-        $provider_key = $this->kernel->setting->get('intranet', 'onlinepayment.provider_key');
+        $provider_key = $this->kernel->getSetting()->get('intranet', 'onlinepayment.provider_key');
         $db = new DB_Sql;
 
         $db->query("INSERT INTO onlinepayment SET
@@ -734,20 +734,20 @@ class OnlinePayment extends Intraface_Standard
 
     function isProviderSet()
     {
-        return $this->kernel->setting->get('intranet', 'onlinepayment.provider_key');
+        return $this->kernel->getSetting()->get('intranet', 'onlinepayment.provider_key');
     }
 
     function setProvider($input)
     {
         // der skal nok laves et tjek på om alle poster er færdigbehandlet inden man kan skifte
         // udbyder
-        $this->kernel->setting->set('intranet', 'onlinepayment.provider_key', $input['provider_key']);
-        return 1;
+        $this->kernel->getSetting()->set('intranet', 'onlinepayment.provider_key', $input['provider_key']);
+        return true;
     }
 
     function getProvider()
     {
-        return array('provider_key' => $this->kernel->setting->get('intranet', 'onlinepayment.provider_key'));
+        return array('provider_key' => $this->kernel->getSetting()->get('intranet', 'onlinepayment.provider_key'));
     }
 
     function getStatus()

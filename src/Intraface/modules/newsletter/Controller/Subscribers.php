@@ -16,7 +16,7 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
         return $this->context->getList();
     }
 
-    function __construct(WireFactory $registry)
+    function __construct(k_Registry $registry)
     {
         $this->registry = $registry;
     }

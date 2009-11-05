@@ -5,7 +5,7 @@ class Intraface_modules_project_Controller_Index extends k_Component
 
     function __construct(k_Registry $registry)
     {
-        $this->registry = $registry->create();
+        $this->registry = $registry;
     }
 
     function renderHtml()

@@ -1,4 +1,4 @@
-<h1>Bilag #<?php e($context->getVoucher()->get('number')); ?> på <?php e($context->getYear()->get('label')); ?></h1>
+<h1>Bilag #<?php e($context->getVoucher()->get('number')); ?> pï¿½ <?php e($context->getYear()->get('label')); ?></h1>
 
 <ul class="options">
 	<li><a class="edit" href="<?php e(url(null, array('edit'))); ?>"><?php e(__('Edit')); ?></a></li>
@@ -12,7 +12,7 @@
 <?php endif; ?>
 
 <?php if (count($context->getPosts()) == 0): ?>
-	<p class="warning">Der er ikke nogen poster på bilaget. <a href="post_edit.php?voucher_id=<?php e($context->getVoucher()->get('id')); ?>">Indtast poster</a>.</p>
+	<p class="warning">Der er ikke nogen poster pï¿½ bilaget. <a href="post_edit.php?voucher_id=<?php e($context->getVoucher()->get('id')); ?>">Indtast poster</a>.</p>
 <?php else: ?>
 	<form action="<?php e(url(null)); ?>" method="post">
 	<table>
@@ -41,7 +41,7 @@
 				<a class="edit" href="post_edit.php?id=<?php e($post['id']); ?>">Ret</a>
 				<a class="delete" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($post['id']); ?>&amp;id=<?php e($context->getVoucher()->get('id')); ?>">Slet</a>
 				<?php else: ?>
-				Bogført
+				Bogfï¿½rt
 				<?php endif; ?>
 			</td>
 		</tr>
@@ -59,14 +59,15 @@
     </form>
 
 	<p><a href="post_edit.php?voucher_id=<?php e($context->getVoucher()->get('id')); ?>">Indtast poster</a></p>
+
 	<?php if (round($context->getVoucher()->get('saldo'), 2) <> 0.00): ?>
-		<p class="error">Bilaget stemmer ikke. Der er en difference på <?php e(round($context->getVoucher()->get('saldo'), 2)); ?> kroner.</p>
+		<p class="error">Bilaget stemmer ikke. Der er en difference pï¿½ <?php e(round($context->getVoucher()->get('saldo'), 2)); ?> kroner.</p>
 	<?php elseif (isset($not_all_stated)): ?>
 	<form action="<?php e(url(null)); ?>" method="post">
 		<input name="id" type="hidden" value="<?php e($context->getVoucher()->get('id')); ?>" />
 		<fieldset>
-			<legend>Bogfør bilaget</legend>
-			<input type="submit" name="state" value="Bogfør" />
+			<legend>Bogfï¿½r bilaget</legend>
+			<input type="submit" name="state" value="Bogfï¿½r" />
 		</fieldset>
 	</form>
 	<?php endif; ?>
@@ -90,7 +91,7 @@
 			<tr>
 				<td><a target="_blank" href="<?php e($file['file_uri']); ?>"><?php e($file['description']); ?></a></td>
 				<td class="options">
-					<a class="delete" href="<?php e(url()); ?>?delete_file=<?php e($file['id']); ?>&amp;id=<?php e($context->getVoucher()->get('id')); ?>">Slet</a>
+					<a class="delete" href="<?php e(url(null)); ?>?delete_file=<?php e($file['id']); ?>&amp;id=<?php e($context->getVoucher()->get('id')); ?>">Slet</a>
 				</td>
 			</tr>
 		<?php endforeach; ?>

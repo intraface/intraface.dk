@@ -85,7 +85,7 @@ class Invoice extends Debtor
      */
     function readyForState($year, $check_products = 'check_products')
     {
-        
+
         if (!is_object($year)) {
             trigger_error('First parameter to readyForState needs to be a Year object!', E_USER_ERROR);
             return false;
@@ -121,7 +121,7 @@ class Invoice extends Debtor
             $this->error->set('Ugyldig debitor konto sat i regnskabsindstillingerne.');
             return false;
         }
-        
+
         $return = true;
 
         if ($check_products == 'check_products') {
@@ -230,7 +230,7 @@ class Invoice extends Debtor
                 'vat_off' => 1,
                 'text' => $text . ' - ' . $item['name']
             );
-            
+
             if ($credit_account->get('vat') == 'out') {
                 $total_with_vat += $item["quantity"] * $item["price"]->getAsIso(2);
             }
@@ -239,8 +239,8 @@ class Invoice extends Debtor
                 $this->error->merge($voucher->error->getMessage());
             }
         }
-        
-        
+
+
         // samlet moms på fakturaen
         if ($total_with_vat > 0) {
             $voucher = Voucher::factory($year, $voucher_number);

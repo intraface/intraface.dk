@@ -43,21 +43,20 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
         return $values;
     }
 
-    function POST()
-    {
-        /*
-        $year = $this->getYear($_POST['id']);
-        if ($year->setYear()) {
-            return new k_SeeOther($this->url('../daybook'));
-        }
-        return $this->render();
-        */
-
-        return parent::POST();
-    }
-
     function postForm()
     {
+
+        $module = $this->getKernel()->module('accounting');
+        // her sætter vi et år
+        if (!empty($_POST['id']) AND is_numeric($_POST['id'])) {
+        	$year = new Year($this->getKernel(), $_POST['id']);
+
+        	if (!$year->setYear()) {
+        		throw new Exception('Could not set the year');
+        	}
+        	return new k_SeeOther($this->url());
+        }
+
         if ($id = $this->getYear()->save($_POST)) {
             return new k_SeeOther($this->url($id));
         }

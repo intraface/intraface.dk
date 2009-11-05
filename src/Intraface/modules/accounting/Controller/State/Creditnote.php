@@ -2,6 +2,7 @@
 class Intraface_modules_accounting_Controller_State_Creditnote extends k_Component
 {
     protected $registry;
+    protected $year;
 
     function __construct(k_Registry $registry)
     {
@@ -13,12 +14,17 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
         return $this->context->getDebtor();
     }
 
+    function t($phrase)
+    {
+        return $phrase;
+    }
+
     function renderHtml()
     {
-        $debtor_module = $kernel->module('debtor');
-        $accounting_module = $kernel->useModule('accounting');
-        $product_module = $kernel->useModule('product');
-        $translation = $kernel->getTranslation('debtor');
+        $debtor_module = $this->getKernel()->module('debtor');
+        $accounting_module = $this->getKernel()->useModule('accounting');
+        $product_module = $this->getKernel()->useModule('product');
+        $translation = $this->getKernel()->getTranslation('debtor');
 
         $debtor = $this->getDebtor();
 
@@ -37,32 +43,48 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
 
     }
 
-    function postForm()
+    function getItems()
     {
-        $debtor_module = $kernel->module('debtor');
-        $accounting_module = $kernel->useModule('accounting');
-        $product_module = $kernel->useModule('product');
-        $translation = $kernel->getTranslation('debtor');
+        $debtor = $this->getDebtor();
 
-        $year = new Year($kernel);
+        $this->getDebtor()->loadItem();
+
+        return $items = $this->getDebtor()->item->getList();
+    }
+
+    function getVoucher()
+    {
+        $year = new Year($this->getKernel());
         $voucher = new Voucher($year);
 
-        if (!empty($_POST)) {
+        return $voucher;
+    }
+
+    function postForm()
+    {
+        $debtor_module = $this->getKernel()->module('debtor');
+        $accounting_module = $this->getKernel()->useModule('accounting');
+        $product_module = $this->getKernel()->useModule('product');
+        $translation = $this->getKernel()->getTranslation('debtor');
+
+        $year = new Year($this->getKernel());
+        $voucher = new Voucher($year);
 
             $debtor = $this->getDebtor();
             if ($debtor->get('type') != 'credit_note') {
                 trigger_error('You can only state credit notes from this page', E_USER_ERROR);
                 exit;
             }
+            if (!empty($_POST['state_account_id'])) {
+                foreach ($_POST['state_account_id'] as $product_id => $state_account_id) {
+                    if (empty($state_account_id)) {
+                        $debtor->error->set('Mindst et produkt ved ikke hvor det skal bogf�res.');
+                        continue;
+                    }
 
-            foreach ($_POST['state_account_id'] as $product_id => $state_account_id) {
-                if (empty($state_account_id)) {
-                    $debtor->error->set('Mindst et produkt ved ikke hvor det skal bogf�res.');
-                    continue;
+                    $product = new Product($this->getKernel(), $product_id);
+                    $product->getDetails()->setStateAccountId($state_account_id);
                 }
-
-                $product = new Product($kernel, $product_id);
-                $product->getDetails()->setStateAccountId($state_account_id);
             }
 
             if ($debtor->error->isError()) {
@@ -71,10 +93,22 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
                 $debtor->error->set('Kunne ikke bogf�re posten');
                 $debtor->loadItem();
             } else {
-                header('Location: view.php?id='.$debtor->get('id'));
-                exit;
+                return new k_SeeOther($this->url('../'));
             }
-        }
 
+        return $this->render();
+    }
+
+    function getYear()
+    {
+        if (is_object($this->year)) {
+            return $this->year;
+        }
+        return $this->year = new Year($this->getKernel());
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

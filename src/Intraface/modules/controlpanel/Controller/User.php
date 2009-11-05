@@ -45,7 +45,7 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
             }
         }
 
-        return $this->renderHtml();
+        return $this->render();
     }
 
     function t($phrase)

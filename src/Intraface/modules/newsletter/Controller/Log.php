@@ -3,7 +3,7 @@ class Intraface_modules_newsletter_Controller_Log extends k_Component
 {
     protected $registry;
 
-    function __construct(WireFactory $registry)
+    function __construct(k_Registry $registry)
     {
         $this->registry = $registry;
     }

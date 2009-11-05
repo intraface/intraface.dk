@@ -2,7 +2,6 @@
 $values = $context->getValues();
 $posts = $context->getPostsInDraft();
 ?>
-
 <h1><?php e(t('Daybook for')); ?> <a href="<?php e(url('../year/' . $context->getYear()->getId())); ?>"><?php e($context->getYear()->get('label')); ?></a></h1>
 
 <?php if (!$context->getAccount()->anyAccounts()): ?>
@@ -12,7 +11,7 @@ $posts = $context->getPostsInDraft();
     <a href="<?php e(url('../settings')); ?>">Gå til indstillingerne</a>.
     </p>
 <?php else: ?>
-    <?php if ($context->getKernel()->setting->get('user', 'accounting.daybook.message') == 'view'): ?>
+    <?php if ($context->getKernel()->getSetting()->get('user', 'accounting.daybook.message') == 'view'): ?>
     <div class="message">
     <p>
         <strong>Kassekladde</strong>. Her opretter du poster til dit regnskab. I f�rste omgang figurerer bel�bene kun i kassekladden og under <a href="<?php e($context->url('state')); ?>">afstemningen</a>. Indtil du bogf�rer posterne, kan du stadig n� at redigere dem.
