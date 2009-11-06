@@ -38,8 +38,8 @@
 			<td class="amount"><?php e(amountToOutput($post['credit'])); ?></td>
 			<td class="options">
 				<?php if ($post['stated'] == 0): $not_all_stated = true; ?>
-				<a class="edit" href="post_edit.php?id=<?php e($post['id']); ?>">Ret</a>
-				<a class="delete" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($post['id']); ?>&amp;id=<?php e($context->getVoucher()->get('id')); ?>">Slet</a>
+				<a class="edit" href="<?php e(url('post/'. $post['id'] . '/edit')); ?>">Ret</a>
+				<a class="delete" href="<?php e(url('post/'.$post['id'], array('delete'))); ?>">Slet</a>
 				<?php else: ?>
 				Bogf�rt
 				<?php endif; ?>
@@ -58,7 +58,7 @@
 
     </form>
 
-	<p><a href="post_edit.php?voucher_id=<?php e($context->getVoucher()->get('id')); ?>">Indtast poster</a></p>
+	<p><a href="<?php e(url('post', array('create'))); ?>">Indtast poster</a></p>
 
 	<?php if (round($context->getVoucher()->get('saldo'), 2) <> 0.00): ?>
 		<p class="error">Bilaget stemmer ikke. Der er en difference p� <?php e(round($context->getVoucher()->get('saldo'), 2)); ?> kroner.</p>

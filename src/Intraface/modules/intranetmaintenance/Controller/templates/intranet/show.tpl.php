@@ -234,7 +234,7 @@ $address_value = $context->getValues();
 	</tbody>
 </table>
 
-<p><a href="<?php e(url('../../user/create', array('intranet_id' => $context->getIntranet()->get('id')))); ?>">Create new user</a></p>
+<p><a href="<?php e(url('../../user', array('create', 'intranet_id' => $context->getIntranet()->get('id')))); ?>">Create new user</a></p>
 
 <p><a href="<?php e(url(null, array('add_user' => 1))); ?>">Add existing user</a></p>
 

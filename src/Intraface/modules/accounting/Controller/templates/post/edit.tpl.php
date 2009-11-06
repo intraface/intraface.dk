@@ -1,6 +1,9 @@
-<h1>Post på bilag #<?php e($post->voucher->get('number')); ?></h1>
+<?php
+$values = $post->get();
+?>
+<h1>Post pï¿½ bilag #<?php e($post->voucher->get('number')); ?></h1>
 
-<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
+<form method="post" action="<?php e(url()); ?>">
     <input type="hidden" name="id" value="<?php e($post->get('id')); ?>" />
     <input type="hidden" name="voucher_id" value="<?php e($post->voucher->get('id')); ?>" />
 
@@ -29,7 +32,7 @@
                     </td>
                     <td>
                         <select name="account" tabindex="3">
-                            <option value="">Vælg</option>
+                            <option value="">Vï¿½lg</option>
                             <?php
                                 foreach ($account->getList() AS $a):
                                     echo '<option value="'.$a['number'].'"';
@@ -55,4 +58,4 @@
 </fieldset>
 </form>
 
-<p><a href="voucher.php?id=<?php e($post->voucher->get('id')); ?>">Tilbage</a></p>
+<p><a href="<?php e(url('../../../')); ?>"><?php e(t('Cancel')); ?></a></p>

@@ -23,6 +23,11 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
         $this->registry = $registry;
     }
 
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
     function renderHtml()
     {
         if ($this->getYear()->getId() > 0) {
@@ -31,14 +36,6 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
         return $smarty->render($this);
-    }
-
-    function getKernel()
-    {
-        if (method_exists($this->context, 'getKernel')) {
-            return $this->context->getKernel();
-        }
-        return $this->registry->get('kernel');
     }
 
     function getYear()

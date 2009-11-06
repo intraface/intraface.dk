@@ -48,7 +48,7 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
         $translation = $this->getKernel()->getTranslation('newsletter');
 
         if (!$this->getKernel()->user->hasModuleAccess('contact')) {
-            trigger_error("Du skal have adgang til kontakt-modullet for at se denne side");
+            throw new Exception("Du skal have adgang til kontakt-modullet for at se denne side");
         }
 
         $subscriber = $this->getSubscriber();
@@ -60,7 +60,7 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
             $contact_module = $this->getKernel()->useModule('contact');
 
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-            $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", $module->getPath()."lists/".$this->getList()->get('id')."/subscribers");
+            $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", NET_SCHEME . NET_HOST . $this->url());
             $redirect->askParameter('contact_id');
             $redirect->setIdentifier('contact');
 
@@ -68,14 +68,12 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
         } elseif (isset($_GET['remind']) AND $_GET['remind'] == 'true') {
             $subscriber = new NewsletterSubscriber($this->getList(), intval($_GET['id']));
             if (!$subscriber->sendOptInEmail(Intraface_Mail::factory())) {
-            	trigger_error('Could not send the optin e-mail');
+            	throw new Exception('Could not send the optin e-mail');
             }
         } elseif (isset($_GET['optin'])) {
             $subscriber->getDBQuery()->setFilter('optin', intval($_GET['optin']));
             $subscriber->getDBQuery()->setFilter('q', $_GET['q']);
-        }
-
-        if (isset($_GET['return_redirect_id'])) {
+        } elseif (isset($_GET['return_redirect_id'])) {
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
             if ($redirect->get('identifier') == 'contact') {
                 $subscriber->addContact(new Contact($this->getKernel(), $redirect->getParameter('contact_id')));

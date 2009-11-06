@@ -8,20 +8,21 @@ class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
         $this->registry = $registry;
     }
 
-    function GET()
+    function renderHtml()
     {
+        $module = $this->getKernel()->module('accounting');
         if (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
-            $post = Post::factory($year, (int)$_GET['id']);
+            $post = Post::factory($this->getYear(), (int)$_GET['id']);
             $values = $post->get();
             $values['date'] = $post->get('date_dk');
             $values['debet'] = $post->get('debet');
             $values['credit'] = $post->get('credit');
         } elseif (!empty($_GET['voucher_id']) AND is_numeric($_GET['voucher_id'])) {
-            $post = new Post(new Voucher($year, $_GET['voucher_id']));
+            $post = new Post(new Voucher($this->getYear(), $_GET['voucher_id']));
             $values['date'] = $post->voucher->get('date_dk');
         } else {
             // setting variables
-            $post = Post::factory($year);
+            $post = Post::factory($this->getYear(), $this->context->name());
             $values['date'] = date('d-m-Y');
             $values['debet_account_number'] = '';
             $values['credit_account_number'] = '';
@@ -29,22 +30,19 @@ class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
             $values['text'] = '';
             $values['id'] = '';
         }
-    }
-
-    function renderHtml()
-    {
+        $account = new Account($this->getYear());
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/post/edit.tpl.php');
-        return $smarty->render($this);
+        return $smarty->render($this, array('post' => $post, 'account' => $account));
     }
 
     function postForm()
     {
         $year = $this->getYear();
-        $year->checkYear();
+        $this->getYear()->checkYear();
 
         // tjek om debet og credit account findes
-        $post = new Post(new Voucher($year, $_POST['voucher_id']), $_POST['id']);
-        $account = Account::factory($year, $_POST['account']);
+        $post = new Post(new Voucher($this->getYear(), $_POST['voucher_id']), $_POST['id']);
+        $account = Account::factory($this->getYear(), $_POST['account']);
 
         $date = new Intraface_Date($_POST['date']);
         $date->convert2db();
@@ -62,8 +60,7 @@ class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
         $credit = $credit->get();
 
         if ($id = $post->save($date->get(), $account->get('id'), $_POST['text'], $debet, $credit)) {
-            header('Location: voucher.php?id='.$post->voucher->get('id').'&from_post_id='.$id);
-            exit;
+            return new k_SeeOther($this->url('../../../'));
         } else {
             $values = $_POST;
         }
@@ -72,8 +69,7 @@ class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
 
     function getKernel()
     {
-        $registry = $this->registry->create();
-        return $registry->get('kernel');
+        return $this->context->getKernel();
     }
 
     function getYear()
@@ -81,20 +77,22 @@ class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
         $module = $this->getKernel()->module('accounting');
         $translation = $this->getKernel()->getTranslation('accounting');
 
-        if (!is_numeric($this->name())) {
-        	return new Year($this->getKernel());
-        } else {
-        	return new Year ($this->getKernel(), $this->name());
-        }
+        return new Year($this->getKernel());
+
     }
 
     function getAccount()
     {
-        return new Account($year);
+        return new Account($this->getYear());
     }
 
     function getYearGateway()
     {
         return $this->context->getYearGateway();
+    }
+
+    function t($phrase)
+    {
+        return $phrase;
     }
 }

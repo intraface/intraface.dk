@@ -39,8 +39,7 @@ class Intraface_modules_accounting_Controller_State extends k_Component
 
     function getKernel()
     {
-        $registry = $this->registry->create();
-        return $registry->get('kernel');
+        return $this->context->getKernel();
     }
 
     function getYear()

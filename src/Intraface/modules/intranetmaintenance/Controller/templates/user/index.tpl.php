@@ -4,8 +4,8 @@
 <ul class="options">
 	<li><a href="<?php e(url('../')); ?>"><?php e(__('Close')); ?></a></li>
 	<?php if ($context->query('intranet_id') != 0): ?>
-		<li><a href="<?php e(url('create'), array('intranet_id' => $context->getIntranet()->get("id"))); ?>">Opret bruger</a></li>
-		<li><a href="<?php e(url(null), array('intranet_id' => $context->getIntranet()->get("id"), 'not_in_intranet' => 1)); ?>">Tilføj eksisterende bruger</a></li>
+		<li><a href="<?php e(url(null, array('create', 'intranet_id' => $context->getIntranet()->get("id")))); ?>">Opret bruger</a></li>
+		<li><a href="<?php e(url(null, array('intranet_id' => $context->getIntranet()->get("id"), 'not_in_intranet' => 1))); ?>">Tilføj eksisterende bruger</a></li>
     <?php endif; ?>
 </ul>
 

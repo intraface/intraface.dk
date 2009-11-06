@@ -21,7 +21,7 @@
 			<input type="submit" value="<?php e(__('1 week')); ?>" name="postpone_1_week" class="confirm" title="<?php e(__('This will postpone the reminder with 1 week')); ?>" />
 			<input type="submit" value="<?php e(__('1 month')); ?>" name="postpone_1_month" class="confirm" title="<?php e(__('This will postpone the reminder with 1 month')); ?>" />
 			<input type="submit" value="<?php e(__('1 year')); ?>" name="postpone_1_year" class="confirm" title="<?php e(__('This will postpone the reminder with 1 year')); ?>" />
-			<a href="reminder_edit.php?id=<?php e($reminder->get('id')); ?>"><?php e(__('other')); ?></a>
+			<a href="<?php e(url(null, array('edit'))); ?>"><?php e(__('other')); ?></a>
 
 	<?php endif; ?>
 </form>

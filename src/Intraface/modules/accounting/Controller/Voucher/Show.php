@@ -8,6 +8,13 @@ class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
         $this->registry = $registry;
     }
 
+    protected function map($name)
+    {
+        if ($name == 'post') {
+            return 'Intraface_modules_accounting_Controller_Post_Index';
+        }
+    }
+
     function renderHtml()
     {
         /*
@@ -156,24 +163,6 @@ $voucher_files = $voucher_file->getList();
         return $year;
     }
 
-    function POST()
-    {
-/*
-    } elseif(!empty($_POST) AND !empty($_POST['action']) && $_POST['action'] == 'counter_entry' ) {
-
-	$voucher = new Voucher($year, $_POST['id']);
-	$posts = $voucher->getPosts();
-
-	foreach($posts as $post) {
-		if(is_array($_POST['selected']) && in_array($post['id'], $_POST['selected'])) {
-			$new_post = new Post($voucher);
-			$new_post->save($post['date'], $post['account_id'], $post['text'].' - '.t('counter entry'), $post['credit'], $post['debet']);
-		}
-	}
-  */
-        return parent::POST();
-    }
-
     function getValues()
     {
         $module = $this->getKernel()->module('accounting');
@@ -205,6 +194,10 @@ $voucher_files = $voucher_file->getList();
 
     function t($phrase)
     {
+        $translation = $this->getKernel()->getTranslation('accounting');
+
+        global $translation;
+
         return $phrase;
     }
 
@@ -218,6 +211,26 @@ $voucher_files = $voucher_file->getList();
     {
         $module = $this->getKernel()->module('accounting');
         $translation = $this->getKernel()->getTranslation('accounting');
+
+        global $translation;
+
+        $module = $this->getKernel()->module('accounting');
+
+        if (!empty($_POST) AND !empty($_POST['action']) && $_POST['action'] == 'counter_entry' ) {
+
+        	$voucher = new Voucher($this->getYear(), $this->name());
+        	$posts = $voucher->getPosts();
+
+        	foreach ($posts as $post) {
+        		if (is_array($_POST['selected']) && in_array($post['id'], $_POST['selected'])) {
+        			$new_post = new Post($voucher);
+        			$new_post->save($post['date'], $post['account_id'], $post['text'].' - '.$this->t('counter entry'), $post['credit'], $post['debet']);
+        		}
+        	}
+
+        	return new k_SeeOther($this->url());
+        }
+
 
         $voucher = new Voucher($this->getYear(), $this->name());
     	if ($voucher->save($_POST)) {
