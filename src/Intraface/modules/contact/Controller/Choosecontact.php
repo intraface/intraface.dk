@@ -24,7 +24,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
             $return_redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
             if ($return_redirect->getParameter('contact_id') != 0) {
                 $redirect->setParameter('contact_id', $return_redirect->getParameter('contact_id'));
-                return new k_SeeOther($redirect->getRedirect('index.php'));
+                return new k_SeeOther($redirect->getRedirect($this->url('../')));
             }
         }
 
