@@ -10,16 +10,22 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
 
     function renderHtml()
     {
-        $this->getKernel()->module("contact");
+        $module = $this->getKernel()->module("contact");
         $translation = $this->getKernel()->getTranslation('contact');
+        $redirect = $this->getRedirect();
 
         if (!empty($_GET['add'])) {
-        	$add_redirect = Intraface_Redirect::factory($kernel, 'go');
-        	$url = $add_redirect->setDestination($module->getPath()."contact_edit.php", $module->getPath()."select_contact.php?".$redirect->get('redirect_query_string'));
+        	$add_redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
+        	$url = $add_redirect->setDestination($module->getPath()."contact_edit.php", NET_SCHEME . NET_HOST . $this->url(null, array($redirect->get('redirect_query_string'))));
         	$add_redirect->askParameter("contact_id");
         	//$add_redirect->setParameter("selected_contact_id", intval($_GET['add']));
-        	header("Location: ".$url);
-        	exit;
+        	return new k_SeeOther($url);
+        } elseif (!empty($_GET['return_redirect_id'])) {
+            $return_redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
+            if ($return_redirect->getParameter('contact_id') != 0) {
+                $redirect->setParameter('contact_id', $return_redirect->getParameter('contact_id'));
+                return new k_SeeOther($redirect->getRedirect('index.php'));
+            }
         }
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/choosecontact.tpl.php');
