@@ -129,12 +129,6 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         return $this->context->getKernel();
     }
 
-    function getLists()
-    {
-        $list = new NewsletterList($this->getKernel());
-        return $list->getList();
-    }
-
     function t($phrase)
     {
          return $phrase;

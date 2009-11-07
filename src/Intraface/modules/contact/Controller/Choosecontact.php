@@ -12,6 +12,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
     {
         $module = $this->getKernel()->module("contact");
         $translation = $this->getKernel()->getTranslation('contact');
+        /*
         $redirect = $this->getRedirect();
 
         if (!empty($_GET['add'])) {
@@ -27,6 +28,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
                 return new k_SeeOther($redirect->getRedirect($this->url('../')));
             }
         }
+        */
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/choosecontact.tpl.php');
         return $smarty->render($this);
@@ -103,6 +105,100 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
 
     function postForm()
     {
+        $contact_module = $this->getKernel()->module("contact");
+        $translation = $this->getKernel()->getTranslation('contact');
+        $contact_module->includeFile('ContactReminder.php');
+
+        $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
+
+        if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
+            $contact = new Contact($this->getKernel(), $_POST['id']);
+
+            $eniro = new Services_Eniro();
+            $value = $_POST;
+
+            if ($oplysninger = $eniro->query('telefon', $_POST['eniro_phone'])) {
+                // skal kun bruges så længe vi ikke er utf8
+                // $oplysninger = array_map('utf8_decode', $oplysninger);
+                $address['name'] = $oplysninger['navn'];
+                $address['address'] = $oplysninger['adresse'];
+                $address['postcode'] = $oplysninger['postnr'];
+                $address['city'] = $oplysninger['postby'];
+                $address['phone'] = $_POST['eniro_phone'];
+            }
+        } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            // for a new contact we want to check if similar contacts alreade exists
+            if (empty($_POST['id'])) {
+                $contact = new Contact($this->getKernel());
+                if (!empty($_POST['phone'])) {
+                    $contact->getDBQuery()->setCondition("address.phone = '".$_POST['phone']."' AND address.phone <> ''");
+                    $similar_contacts = $contact->getList();
+                }
+
+            } else {
+                $contact = new Contact($this->getKernel(), $_POST['id']);
+            }
+
+            // checking if similiar contacts exists
+            if (!empty($similar_contacts) AND count($similar_contacts) > 0 AND empty($_POST['force_save'])) {
+            } elseif ($id = $contact->save($_POST)) {
+
+                // $redirect->addQueryString('contact_id='.$id);
+                if ($redirect->get('id') != 0) {
+                    $redirect->setParameter('contact_id', $id);
+                }
+                return new k_SeeOther($this->url('../', array('contact_id' => $id)));
+
+                //$contact->lock->unlock_post($id);
+            }
+
+            $value = $_POST;
+            $address = $_POST;
+            $delivery_address = array();
+            $delivery_address['name'] = $_POST['delivery_name'];
+            $delivery_address['address'] = $_POST['delivery_address'];
+            $delivery_address['postcode'] = $_POST['delivery_postcode'];
+            $delivery_address['city'] = $_POST['delivery_city'];
+            $delivery_address['country'] = $_POST['delivery_country'];
+        }
+
+        return $this->render();
+    }
+
+    function getContactModule()
+    {
+        return        $contact_module = $this->getKernel()->module("contact");
+
+    }
+
+    function getValues()
+    {
+        return array();
+    }
+
+    function getAddressValues()
+    {
+        return array();
+    }
+
+    function getDeliveryAddressValues()
+    {
+        return array();
+    }
+    function renderHtmlCreate()
+    {
+        $contact_module = $this->getKernel()->module("contact");
+        $translation = $this->getKernel()->getTranslation('contact');
+        $contact_module->includeFile('ContactReminder.php');
+
+        $smarty = new k_Template(dirname(__FILE__) . '/templates/edit.tpl.php');
+        return $smarty->render($this);
+
+    }
+
+    function putForm()
+    {
         $module = $this->getKernel()->module('contact');
 
         $contact = new Contact($this->getKernel(), intval($_POST['selected']));
@@ -111,6 +207,8 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
     	} else {
     		$contact->error->set("Du skal vælge en kontakt");
     	}
+
+    	return $this->render();
     }
 }
 /*

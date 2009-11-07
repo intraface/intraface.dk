@@ -27,7 +27,7 @@ class Intraface_modules_product_Controller_Selectproduct extends k_Component
         if (isset($_GET['add_new'])) {
             $add_redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
             $add_redirect->setIdentifier('add_new');
-            $url = $add_redirect->setDestination($product_module->getPath().'product_edit.php', $product_module->getPath().'select_product.php?'.$redirect->get('redirect_query_string').'&set_quantity='.$this->quantity);
+            $url = $add_redirect->setDestination($product_module->getPath().'product_edit.php', $product_module->getPath().'select_product.php?'.$this->getRedirect()->get('redirect_query_string').'&set_quantity='.$this->quantity);
             $add_redirect->askParameter('product_id');
             header('location: '.$url);
             exit;

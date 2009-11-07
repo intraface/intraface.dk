@@ -23,15 +23,15 @@ $delivery_address = $context->getDeliveryAddressValues();
             <?php if ($context->getQuotation()->any('contact', $context->getContact()->get("id"))): ?>
             <li><a href="<?php e(url('../../debtor/quotation', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('Quotation', 'debtor')); ?></a></li>
             <?php else: ?>
-            <li class="inactive"><a href="<?php e(url('../../debtor/quotation', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('create quotation', 'debtor')); ?></a></li>
+            <li class="inactive"><a href="<?php e(url('../../debtor/quotation/create', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('create quotation', 'debtor')); ?></a></li>
             <?php endif; ?>
         <?php endif; ?>
 
         <?php if ($context->getKernel()->user->hasModuleAccess("order")): ?>
             <?php if ($context->getOrder()->any('contact', $context->getContact()->get("id"))): ?>
-                <li><a href="<?php e($context->getDebtorModule()->getPath()); ?>list.php?type=order&amp;contact_id=<?php e($context->getContact()->get("id")); ?>"><?php e(t('orders', 'debtor')); ?></a></li>
+                <li><a href="<?php e(url('../../debtor/order', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('orders', 'debtor')); ?></a></li>
             <?php else: ?>
-                <li class="inactive"><a href="<?php e($context->getDebtorModule()->getPath()); ?>edit.php?type=order&amp;contact_id=<?php e($context->getContact()->get("id")); ?>"><?php e(t('create order', 'debtor')); ?></a></li>
+                <li class="inactive"><a href="<?php e(url('../../debtor/order/create', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('create order', 'debtor')); ?></a></li>
             <?php endif; ?>
         <?php endif; ?>
 
@@ -39,7 +39,7 @@ $delivery_address = $context->getDeliveryAddressValues();
             <?php if ($context->getInvoice()->any('contact', $context->getContact()->get("id"))): ?>
                 <li><a href="<?php e(url('../../debtor/invoice/list', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('invoices', 'debtor')); ?></a></li>
             <?php else: ?>
-                <li class="inactive"><a href="<?php e($context->getDebtorModule()->getPath()); ?>edit.php?type=invoice&amp;contact_id=<?php e($context->getContact()->get("id")); ?>"><?php e(t('create invoice', 'debtor')); ?></a></li>
+                <li class="inactive"><a href="<?php e(url('../../debtor/invoice/create', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('create invoice', 'debtor')); ?></a></li>
             <?php endif; ?>
             <?php if ($context->getCreditnote()->any('contact', $context->getContact()->get("id"))): ?>
                 <li><a href="<?php e(url('../../debtor/credit_note/list', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('credit notes', 'debtor')); ?></a></li>

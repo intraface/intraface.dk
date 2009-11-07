@@ -1,5 +1,5 @@
 <?php
-class Intraface_modules_debtor_Controller_Collection extends k_Component
+class Intraface_modules_debtor_Controller_Create extends k_Component
 {
     protected $registry;
     protected $debtor;
@@ -11,11 +11,11 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
 
     function map($name)
     {
-        if (is_numeric($name)) {
-            return 'Intraface_modules_debtor_Controller_Show';
-        } elseif ($name == 'create') {
-            return 'Intraface_modules_debtor_Controller_Create';
+        if ($name == 'contact') {
+            return 'Intraface_modules_contact_Controller_Choosecontact';
         }
+
+        return parent::map($name);
     }
 
     function getDebtor()
@@ -233,95 +233,6 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         exit;
     }
 
-    function renderHtml()
-    {
-        Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
-
-        $translation = $this->getKernel()->getTranslation('debtor');
-
-        $mDebtor = $this->getKernel()->module('debtor');
-        $contact_module = $this->getKernel()->useModule('contact');
-        $product_module = $this->getKernel()->useModule('product');
-
-        if (empty($_GET['id'])) $_GET['id'] = '';
-        if (empty($_GET['type'])) $_GET['type'] = '';
-        if (empty($_GET["contact_id"])) $_GET['contact_id'] = '';
-        if (empty($_GET["status"])) $_GET['status'] = '';
-
-        $debtor = Debtor::factory($this->getKernel(), intval($_GET["id"]), $this->context->getType());
-
-        if (isset($_GET["action"]) && $_GET["action"] == "delete") {
-            // $debtor = new CreditNote($this->getKernel(), (int)$_GET["delete"]);
-            $debtor->delete();
-        }
-
-        if (isset($_GET["contact_id"]) && intval($_GET["contact_id"]) != 0) {
-            $debtor->getDBQuery()->setFilter("contact_id", $_GET["contact_id"]);
-        }
-
-        if (isset($_GET["product_id"]) && intval($_GET["product_id"]) != 0) {
-            $debtor->getDBQuery()->setFilter("product_id", $_GET["product_id"]);
-            if (isset($_GET['product_variation_id'])) {
-                $debtor->getDBQuery()->setFilter("product_variation_id", $_GET["product_variation_id"]);
-            }
-        }
-
-        // søgning
-            // if (isset($_POST['submit'])
-            if (isset($_GET["text"]) && $_GET["text"] != "") {
-                $debtor->getDBQuery()->setFilter("text", $_GET["text"]);
-            }
-
-            if (isset($_GET["date_field"]) && $_GET["date_field"] != "") {
-                $debtor->getDBQuery()->setFilter("date_field", $_GET["date_field"]);
-            }
-
-            if (isset($_GET["from_date"]) && $_GET["from_date"] != "") {
-                $debtor->getDBQuery()->setFilter("from_date", $_GET["from_date"]);
-            }
-
-            if (isset($_GET["to_date"]) && $_GET["to_date"] != "") {
-                $debtor->getDBQuery()->setFilter("to_date", $_GET["to_date"]);
-            }
-
-            if ($debtor->getDBQuery()->checkFilter("contact_id")) {
-                $debtor->getDBQuery()->setFilter("status", "-1");
-            } elseif (isset($_GET["status"]) && $_GET['status'] != '') {
-                $debtor->getDBQuery()->setFilter("status", $_GET["status"]);
-            } else {
-                $debtor->getDBQuery()->setFilter("status", "-2");
-            }
-
-            if (!empty($_GET['not_stated']) AND $_GET['not_stated'] == 'true') {
-                $debtor->getDBQuery()->setFilter("not_stated", true);
-            }
-
-        // er der ikke noget galt herunder (LO) - brude det ikke være order der bliver sat?
-        if (isset($_GET['sorting']) && $_GET['sorting'] != 0) {
-            $debtor->getDBQuery()->setFilter("sorting", $_GET['sorting']);
-        }
-
-        $debtor->getDBQuery()->usePaging("paging", $this->getKernel()->setting->get('user', 'rows_pr_page'));
-        $debtor->getDBQuery()->storeResult("use_stored", $debtor->get("type"), "toplevel");
-        $debtor->getDBQuery()->setExtraUri('&amp;type='.$debtor->get("type"));
-
-        $posts = $debtor->getList();
-
-        if (intval($debtor->getDBQuery()->getFilter('product_id')) != 0) {
-            $product = new Product($this->getKernel(), $debtor->getDBQuery()->getFilter('product_id'));
-            if (intval($debtor->getDBQuery()->getFilter('product_variation_id')) != 0) {
-                $variation = $product->getVariation($debtor->getDBQuery()->getFilter('product_variation_id'));
-            }
-        }
-
-        if (intval($debtor->getDBQuery()->getFilter('contact_id')) != 0) {
-            $contact = new Contact($this->getKernel(), $debtor->getDBQuery()->getFilter('contact_id'));
-        }
-
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/collection.tpl.php');
-        return $smarty->render($this);
-    }
-
     function getKernel()
     {
         return $this->context->getKernel();
@@ -364,10 +275,10 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         }
 
     	if ($debtor->update($_POST)) {
-    	    return new k_SeeOther($this->url('../list/' . $debtor->get('id')));
+    	    return new k_SeeOther($this->url('../' . $debtor->get('id')));
     	}
 
-    	return $this->renderHtmlCreate();
+    	return $this->render();
     }
 
     function getReturnUrl($contact_id)
@@ -375,15 +286,21 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         return $this->url(null, array('create', 'contact_id' => $contact_id));
     }
 
-    function renderHtmlCreate()
+    function renderHtml()
     {
-        return new k_SeeOther($this->url('create'));
+        if ($this->query('contact_id') == '') {
+            return new k_SeeOther($this->url('contact'));
+        }
+        $smarty = new k_Template(dirname(__FILE__) . '/templates/edit.tpl.php');
+        return $smarty->render($this);
     }
 
     function getValues()
     {
         return array(
-            'number' => ''
+            'number' => $this->getDebtor()->getMaxNumber() + 1,
+            'dk_this_date' => date('d-m-Y'),
+            'dk_due_date' => date('d-m-Y')
         );
     }
 
@@ -394,7 +311,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
 
     function getType()
     {
-        return $this->context->getType();
+        return $this->context->context->getType();
     }
 
     function getContact()

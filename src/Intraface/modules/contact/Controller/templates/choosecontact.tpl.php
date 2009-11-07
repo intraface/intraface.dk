@@ -8,7 +8,7 @@
 
 <?php else: ?>
     <ul class="options">
-        <li><a href="<?php e(url(null, array('add' => 1))); ?>"><?php e(t('Create contact')); ?></a></li>
+        <li><a href="<?php e(url(null, array('create'))); ?>"><?php e(t('Create contact')); ?></a></li>
         <?php if (isset($_GET['last_contact_id']) && intval($_GET['last_contact_id']) != 0): ?>
         <li><a href="<?php e(url(null, array('contact_id' => $_GET['last_contact_id']))); ?>"><?php e(t('Show chosen')); ?></a></li>
         <?php endif; ?>
@@ -34,13 +34,14 @@
 		</label>
 		<?php endif; ?>
 
-		<span><input type="submit" value="<?php e(t('Go ahead')); ?>" /></span>
+		<span><input type="submit" value="<?php e(t('Search')); ?>" /></span>
 	</fieldset>
     </form>
 
     <?php echo $context->getContact()->getDBQuery()->display('character'); ?>
 
     <form action="<?php e(url()); ?>" method="post">
+    	<input type="hidden" name="_method" value="put" />
     	<table summary="Kontakter" class="stripe">
     		<caption><?php e(t('Contacts')); ?></caption>
     		<thead>
@@ -60,7 +61,7 @@
     			<?php foreach ($context->getContacts() as $c) { ?>
     			<tr>
     				<td>
-    					<input type="radio" value="<?php e($c['id']); ?>" name="selected" />
+    					<input id="contact_<?php e($c['id']); ?>" type="radio" value="<?php e($c['id']); ?>" name="selected" />
     				</td>
     				<td><?php e($c['number']); ?></td>
     				<td><?php e($c['name']); ?></td>
@@ -71,7 +72,8 @@
     		</tbody>
     	</table>
 
-    	<input type="submit" name="submit" value="<?php e(__('Choose')); ?>" /> <?php e(t('or')); ?> <a href="<?php e($context->getRedirectUrl()); ?>"><?php e(t('Cancel')); ?></a>
+    	<input type="submit" name="submit" value="<?php e(__('Choose')); ?>" />
+    	<a href="<?php e(url('../../')); ?>"><?php e(t('Cancel')); ?></a>
     </form>
 
 <?php endif; ?>

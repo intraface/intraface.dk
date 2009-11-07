@@ -12,16 +12,16 @@ class OnlinePaymentDefault extends OnlinePayment
 
         parent::__construct($kernel, $id);
     }
-    
+
     function getTransactionActions()
     {
         return array(
             0 => array(
                 'action' => 'capture',
-                'label' => 'Marker som hævet'),
+                'label' => 'Withdrawed'),
             1 => array(
                 'action' => 'reverse',
-                'label' => 'Marker som tilbagebetalt')
+                'label' => 'Paid back')
         );
     }
 
