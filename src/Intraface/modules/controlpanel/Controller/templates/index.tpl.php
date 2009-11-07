@@ -19,7 +19,7 @@ foreach ($context->getModules() as $module) {
 		continue;
 	}
 
-	$m = $context->getKernel()->module($module['name']);
+	$m = $context->getKernel()->useModule($module['name']);
 	$files = $m->getControlpanelFiles();
 
 	if (count($files) > 0) { ?>

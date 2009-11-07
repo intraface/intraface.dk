@@ -2,10 +2,14 @@
 class Intraface_Controller_Index extends k_Component
 {
     protected $registry;
+    protected $kernel_gateway;
+    protected $user_gateway;
 
-    function __construct(k_Registry $registry)
+    function __construct(k_Registry $registry, Intraface_KernelGateway $gateway, Intraface_UserGateway $user_gateway)
     {
         $this->registry = $registry;
+        $this->kernel_gateway = $gateway;
+        $this->user_gateway = $user_gateway;
     }
 
     protected function map($name)
@@ -36,8 +40,7 @@ class Intraface_Controller_Index extends k_Component
 
     function getKernel()
     {
-        $registry = $this->registry->create();
-    	return $registry->get('kernel');
+        return $this->kernel_gateway->findByUserobject($this->user_gateway->findByUsername($this->identity()->user()));
     }
 
     function getModules()

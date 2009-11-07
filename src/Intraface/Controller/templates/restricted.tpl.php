@@ -7,7 +7,7 @@
 <?php if ($context->getKernel()->setting->get('user', 'homepage.message') == 'view'): ?>
 <div class="message">
 	<p><?php e(t('welcome, you are on the dashboard', 'dashboard')); ?></p>
-	<p><a href="<?php e($context->url()); ?>?message=hide"><?php e(t('hide message forever')); ?></a></p>
+	<p><a href="<?php e(url(null, array('message' => 'hide'))); ?>"><?php e(t('hide message forever')); ?></a></p>
 </div>
 <?php endif; ?>
 
@@ -64,7 +64,7 @@ if (Intraface_ModuleHandler::exists(MDB2::singleton(DB_DSN), 'modulepackage') &&
     <?php
     $module_modulepackage = $context->getKernel()->useModule('modulepackage');
     ?>
-    <p><a href="<?php e($module_modulepackage->getPath()); ?>"><?php e(t('view and change your intraface account')); ?></a></p>
+    <p><a href="<?php e(url('module/modulepackage')); ?>"><?php e(t('view and change your intraface account')); ?></a></p>
 <?php endif; ?>
 </div>
 

@@ -142,13 +142,13 @@ class FileHandlerHTML
         }
 
         echo '<div class="formrow">';
-        echo '<label for="'.$upload_field_name.'">'.$this->file_handler->kernel->translation->get($options['field_description'], 'filehandler').'</label>';
+        echo '<label for="'.$upload_field_name.'">'.t($options['field_description'], 'filehandler').'</label>';
         echo '<input name="'.$upload_field_name.'" type="file" id="'.$upload_field_name.'" />';
         if ($options['include_submit_button_name'] != '') {
-            echo ' <input type="submit" name="'.$options['include_submit_button_name'].'" value="'.$this->file_handler->kernel->translation->get('upload', 'filehandler') . '" /> <br />';
+            echo ' <input type="submit" name="'.$options['include_submit_button_name'].'" value="'.t('upload', 'filehandler') . '" /> <br />';
         }
         if ($this->file_handler->kernel->user->hasModuleAccess('filemanager') AND $options['filemanager'] === true) {
-            echo ' &nbsp; '.$this->file_handler->kernel->translation->get('or', 'common').' &nbsp; <input type="submit" name="'.$submit_name.'" value="'.$this->file_handler->kernel->translation->get('choose from filemanager', 'filehandler').'" />';
+            echo ' &nbsp; '.t('or', 'common').' &nbsp; <input type="submit" name="'.$submit_name.'" value="'.t('choose from filemanager', 'filehandler').'" />';
         }
         echo '</div>';
     }
@@ -171,7 +171,7 @@ class FileHandlerHTML
             }
             echo '<div class="show_file" style="'.$options['div_style'].'"><img src="'.$this->file_handler->instance->get('file_uri').'" style="width: '.$this->file_handler->instance->get('width').'px; height: '.$this->file_handler->instance->get('height').'px" /> '.$this->file_handler->get('file_name');
             if ($delete_link != '') {
-                echo ' <a class="delete" href="'.$delete_link.'">'.$this->file_handler->kernel->translation->get('delete', 'common').'</a>';
+                echo ' <a class="delete" href="'.$delete_link.'">'.t('delete', 'common').'</a>';
             }
             echo '</div>';
         } else {
@@ -180,7 +180,7 @@ class FileHandlerHTML
             }
             echo '<div class="show_file" style="'.$options['div_style'].'";><img src="'.$this->file_handler->get('icon_uri').'" style="width: 75px; height: 75px; float: left;" /> '.$this->file_handler->get('file_name');
             if ($delete_link != '') {
-                echo ' <a class="delete" href="'.$delete_link.'">'.$this->file_handler->kernel->translation->get('delete', 'common').'</a>';
+                echo ' <a class="delete" href="'.$delete_link.'">'.t('delete', 'common').'</a>';
             }
             echo '</div>';
         }

@@ -48,11 +48,12 @@ class Intraface_Page
             $name = $this->primary_module->getName();
         }
 
+        /*
         // brugermenuen
         // Unforntunately the usermenuen has to be before the cache as it is printed in bottom.php.
         $this->usermenu = array();
         $this->usermenu[0]['name'] = $this->t('logout', 'common');
-        $this->usermenu[0]['url'] = url('/main/logout.php');
+        $this->usermenu[0]['url'] = url('/core/logout');
         if (method_exists('getIntranetList', $this->kernel->user)) {
         if (count($this->kernel->user->getIntranetList()) > 1) {
             $this->usermenu[1]['name'] = $this->t('change intranet', 'common');
@@ -60,8 +61,8 @@ class Intraface_Page
         }
         }
         $this->usermenu[2]['name'] = $this->t('control panel', 'common');;
-        $this->usermenu[2]['url'] = url('/main/controlpanel/');
-
+        $this->usermenu[2]['url'] = url('/core/restricted/module/controlpanel/');
+		*/
         if (!is_dir(PATH_CACHE)) {
             if (!mkdir(PATH_CACHE)) {
                 trigger_error('Unable to create dir "'.PATH_CACHE.'" from constant PATH_CACHE', E_USER_ERROR);
@@ -78,8 +79,7 @@ class Intraface_Page
 
         // unfortunately cache has to be deactivated (true or) as there is problems with titel and javascript. solution: only caching of menu and nothing else.
         // If you activate again remeber to activate $cache->end() in the end of this method
-        if (true OR !USE_CACHE OR !($cache->start('page_' . $this->kernel->user->get('id') . '_' . $name))) {
-
+        if (true or defined('USE_CACHE') AND !USE_CACHE OR !($cache->start('page_' . $this->kernel->user->get('id') . '_' . $name))) {
             if (!is_object($this->kernel->translation)) $this->kernel->getTranslation();
 
             $intranet_name = $this->kernel->intranet->get('name');
@@ -100,14 +100,14 @@ class Intraface_Page
             $this->menu = array();
             $i = 0;
             $this->menu[$i]['name'] = $this->t('dashboard', 'dashboard');;
-            $this->menu[$i]['url'] = url('/main/');
+            $this->menu[$i]['url'] = url('/core/restricted/');
             $i++;
             $this->db->query("SELECT name, menu_label, name FROM module WHERE active = 1 AND show_menu = 1 ORDER BY menu_index");
             while ($this->db->nextRecord()) {
 
                 if ($this->kernel->user->hasModuleAccess($this->db->f('name'))) {
                     $this->menu[$i]['name'] = $this->t($this->db->f('name'), $this->db->f('name'));
-                    $this->menu[$i]['url'] = url('/modules/' . $this->db->f("name") . '/');
+                    $this->menu[$i]['url'] = url('/core/restricted/module/' . $this->db->f("name") . '/');
                     $i++;
                 }
             }
@@ -202,15 +202,17 @@ class Intraface_Page
     {
         $this->usermenu = array();
         $this->usermenu[0]['name'] = $this->t('logout', 'common');
-        $this->usermenu[0]['url'] = url('/main/logout.php');
-        if (method_exists('getIntranetList', $this->kernel->user)) {
-        if (count($this->kernel->user->getIntranetList()) > 1) {
+        $this->usermenu[0]['url'] = url('/core/logout');
+
+        if (method_exists($this->kernel->user, 'getIntranetList')) {
+            if (count($this->kernel->user->getIntranetList()) > 1) {
+
             $this->usermenu[1]['name'] = $this->t('change intranet', 'common');
-            $this->usermenu[1]['url'] = url('/main/change_intranet.php');
+            $this->usermenu[1]['url'] = url('/core/restricted/switchintranet');
         }
         }
         $this->usermenu[2]['name'] = $this->t('control panel', 'common');;
-        $this->usermenu[2]['url'] = url('/main/controlpanel/');
+        $this->usermenu[2]['url'] = url('/core/restricted/module/controlpanel');
 
         include(PATH_INCLUDE_IHTML.'/intraface/bottom.php');
     }

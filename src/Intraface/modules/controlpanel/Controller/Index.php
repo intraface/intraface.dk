@@ -1,7 +1,6 @@
 <?php
 class Intraface_modules_controlpanel_Controller_Index extends k_Component
 {
-    protected $registry;
     protected $intranetmaintenance;
 
     protected function map($name)
@@ -15,6 +14,8 @@ class Intraface_modules_controlpanel_Controller_Index extends k_Component
 
     function renderHtml()
     {
+        $this->getKernel()->module('controlpanel');
+
         $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
         return $smarty->render($this);
     }

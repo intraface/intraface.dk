@@ -1,3 +1,8 @@
+<?php
+$values = $intranet->get();
+$address = $intranet->address->get();
+?>
+
 <h1><?php e(t('edit intranet')); ?></h1>
 
 <?php echo $intranet->error->view(); ?>
@@ -5,7 +10,7 @@
 
 <?php if (isset($filehandler)) echo $filehandler->error->view(); ?>
 
-<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post" enctype="multipart/form-data">
+<form action="<?php e(url()); ?>" method="post" enctype="multipart/form-data">
 	<fieldset>
 		<legend><?php e(t('information about the intranet')); ?></legend>
 		<div class="formrow">

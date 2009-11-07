@@ -13,7 +13,7 @@ class MainControlpanel extends Intraface_Main
     {
         $this->module_name = 'controlpanel';
         $this->menu_label = 'controlpanel';
-        $this->show_menu = 0;
+        $this->show_menu = 1;
         $this->active = 1;
         $this->menu_index = 340;
         $this->frontpage_index = 8;

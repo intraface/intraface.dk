@@ -68,7 +68,7 @@ $standardaccounts[$i]['vat_key']	= '0';
 $i++;
 
 $standardaccounts[$i]['number']	= '4100';
-$standardaccounts[$i]['name']			= 'EU-varekøb';
+$standardaccounts[$i]['name']			= 'EU-purchases';
 $standardaccounts[$i]['type_key']			= '2';
 $standardaccounts[$i]['use_key']			= '3';
 $standardaccounts[$i]['vat_key']	= '0';

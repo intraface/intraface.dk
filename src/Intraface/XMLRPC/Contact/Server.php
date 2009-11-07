@@ -48,6 +48,37 @@ class Intraface_XMLRPC_Contact_Server
     }
 
     /**
+     * DEPRECATED: Authenticates a contact
+     *
+     * @deprecated
+     * @see authenticateByKey()
+     *
+     * @param  struct  $credentials Credentials provided by intraface
+     * @param  string  $contact_key The contact's key
+     *
+     * @return array
+     */
+    public function authenticateContact($credentials, $contact_key)
+    {
+        $this->checkCredentials($credentials);
+
+        $contact = Contact::factory($this->kernel, 'code', $contact_key);
+        if (!is_object($contact) OR !$contact->get('id') > 0) {
+            return false;
+        }
+
+        $contact_info = array_merge($contact->get(), $contact->address->get());
+        $contact_info['id'] = $contact->get('id');
+
+        if (!$contact_info) {
+            return array();
+        }
+
+        return $contact_info;
+    }
+
+
+    /**
      * Authenticates a contact
      *
      * @param  struct  $credentials Credentials provided by intraface

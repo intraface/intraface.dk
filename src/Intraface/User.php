@@ -471,7 +471,6 @@ class Intraface_User extends Intraface_Standard
             INNER JOIN permission
                 ON permission.intranet_id = intranet.id
             WHERE permission.user_id = ".$this->id);
-        $i = 0;
 
         if (PEAR::isError($result)) {
             trigger_error($result->getUserInfo(), E_USER_ERROR);

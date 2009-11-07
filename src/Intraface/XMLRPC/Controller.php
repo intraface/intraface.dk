@@ -3,7 +3,7 @@ class Intraface_XMLRPC_Controller extends k_Component
 {
     protected $registry;
 
-    protected function map($name)
+    function map($name)
     {
         if ($name == 'admin') {
             return 'Intraface_XMLRPC_Admin_Controller';
@@ -35,7 +35,7 @@ class Intraface_XMLRPC_Controller extends k_Component
         </ul>
         <h2>New servers</h2>
         <ul>
-            <li><a href="admin">Admin</a></li>
+            <li><a href="'.$this->url('admin').'">Admin</a></li>
         	<li><a href="cms">CMS</a></li>
             <li><a href="contact">Contact</a></li>
             <li><a href="debtor">Debtor</a></li>

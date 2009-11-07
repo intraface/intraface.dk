@@ -27,21 +27,14 @@ class IntranetAdministration extends Intraface_Intranet
 
     function __construct($kernel)
     {
-        if (!is_object($kernel)) {
-            trigger_error('IntranetAdministration kræver kernel', E_USER_ERROR);
-        }
-
         $this->kernel = $kernel;
         $this->id = $kernel->intranet->get('id');
         $this->id = $this->load();
         $this->error = new Intraface_Error;
     }
 
-    function update($input)
+    function update(array $input)
     {
-        if (!is_array($input)) {
-            trigger_error('Input er ikke et array', E_USER_ERROR);
-        }
         $input = safeToDb($input);
         settype($input['pdf_header_file_id'], 'integer');
 

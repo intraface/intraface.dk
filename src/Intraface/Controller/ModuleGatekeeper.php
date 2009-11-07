@@ -1,13 +1,6 @@
 <?php
 class Intraface_Controller_ModuleGatekeeper extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     /*
     function dispatch()
     {
@@ -36,7 +29,7 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
 
     function renderHtml()
     {
-        $primary_module = $this->getKernel()->module("intranetmaintenance");
+        require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/modulegatekeeper.tpl.php');
         return $smarty->render($this);
@@ -59,7 +52,7 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
 
     function getModules()
     {
-        $primary_module = $this->getKernel()->module("intranetmaintenance");
+        require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
 
         $module = new ModuleMaintenance;
         return $module->getList();

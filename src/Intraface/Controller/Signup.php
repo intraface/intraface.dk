@@ -32,6 +32,7 @@ class Intraface_Controller_Signup extends k_Component
         return $smarty->render($this);
     }
 
+    /*
     function getKernel()
     {
         if (is_object($this->kernel)) {
@@ -40,8 +41,9 @@ class Intraface_Controller_Signup extends k_Component
         $registry = $this->registry->create();
     	return $this->kernel = $registry->get('kernel');
     }
+    */
 
-    function POST()
+    function postForm()
     {
         if (!Validate::email($this->body('email'))) {
             $error[] = 'E-mail ugyldig';
