@@ -5,6 +5,8 @@ class Intraface_modules_debtor_Controller_Index extends k_Component
     {
         if ($name == 'reminders') {
             return 'Intraface_modules_debtor_Controller_Reminders';
+        } elseif ($name == 'settings') {
+            return 'Intraface_modules_debtor_Controller_Settings';
         }
         return 'Intraface_modules_debtor_Controller_Typenegotiator';
     }

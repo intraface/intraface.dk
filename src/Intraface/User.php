@@ -174,6 +174,7 @@ class Intraface_User extends Intraface_Standard
         }
 
         $this->permissions_loaded = true;
+
         return true;
     }
 

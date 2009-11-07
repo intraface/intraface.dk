@@ -30,6 +30,7 @@ class Intraface_Controller_Login extends k_Component
         return $smarty->render($this);
     }
 
+    /*
     function getKernel()
     {
         if (is_object($this->kernel)) {
@@ -37,6 +38,7 @@ class Intraface_Controller_Login extends k_Component
         }
     	return $this->kernel = $this->registry->get('kernel');
     }
+    */
 
     function postForm()
     {
@@ -61,6 +63,7 @@ class Intraface_Controller_Login extends k_Component
             throw new Exception('Could not login with those credentials');
         }
 
+        /*
         $this->getKernel()->user = $auth->getIdentity(MDB2::singleton(DB_DSN));
 
         if (!$intranet_id = $this->getKernel()->user->getActiveIntranetId()) {
@@ -76,6 +79,7 @@ class Intraface_Controller_Login extends k_Component
         $this->session()->set('kernel', $this->getKernel());
         $this->session()->set('user', $this->getKernel()->user);
         $this->session()->set('intranet', $this->getKernel()->intranet);
+		*/
 
         return new k_AuthenticatedUser($username);
     }

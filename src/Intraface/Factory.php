@@ -118,29 +118,39 @@ class Intraface_Factory
     function new_k_Registry($container)
     {
     	$registry = new k_Registry();
-        $registry->registerConstructor('doctrine', create_function(
+        /*
+    	$registry->registerConstructor('doctrine', create_function(
             '$className, $args, $registry',
             'return Doctrine_Manager::connection(DB_DSN);'
         ));
+        */
+        /*
         $registry->registerConstructor('category_gateway', create_function(
           '$className, $args, $registry',
           'return new Intraface_modules_shop_Shop_Gateway;'
         ));
+        */
 
+        /*
         $registry->registerConstructor('kernel', create_function(
           '$className, $args, $registry',
           'return $GLOBALS["kernel"];'
         ));
+        */
 
+        /*
         $registry->registerConstructor('intranet', create_function(
           '$className, $args, $registry',
           'return $GLOBALS["intranet"];'
         ));
+        */
 
+        /*
         $registry->registerConstructor('db', create_function(
           '$className, $args, $registry',
           'return $GLOBALS["db"];'
         ));
+        */
         /*
         $registry->registerConstructor('page', create_function(
           '$className, $args, $registry',

@@ -31,6 +31,8 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             }
         } elseif ($name == 'item') {
             return 'Intraface_modules_debtor_Controller_Items';
+        } elseif ($name == 'onlinepayment') {
+            return 'Intraface_modules_onlinepayment_Controller_Index';
         }
     }
 

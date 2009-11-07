@@ -15,6 +15,8 @@ class Intraface_KernelGateway
         if (!$intranet_id = $kernel->user->getActiveIntranetId()) {
             throw new Exception('no active intranet_id');
         }
+        // hack to avoid having to set it everywhere
+        Intraface_Doctrine_Intranet::singleton($intranet_id);
 
         $kernel->intranet = new Intraface_Intranet($intranet_id);
         $kernel->translation = $this->translation;

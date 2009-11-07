@@ -117,7 +117,7 @@ class Intraface_ModuleHandler
         }
 
         if ($access !== true) {
-            throw new Exception('You need access to a required module to see this page');
+            throw new Exception('You need access to a required module to see this page, maybe it is ' . $module_name);
         }
 
         $main_class_name = "Main".ucfirst($module_name);

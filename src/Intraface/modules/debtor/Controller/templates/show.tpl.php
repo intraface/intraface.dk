@@ -566,14 +566,14 @@ if (isset($onlinepayment)) {
                                         foreach ($actions AS $a) {
                                             if ($a['action'] != 'capture' || ($context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") == "sent")) {
                                                 ?>
-                                                <a href="view.php?id=<?php e($context->getDebtor()->get('id')); ?>&amp;onlinepayment_id=<?php e($p['id']); ?>&amp;onlinepayment_action=<?php e($a['action']); ?>" class="confirm"><?php e($a['label']); ?></a>
+                                                <a href="<?php e(url(null, array('onlinepayment_id' => $p['id'], 'onlinepayment_action' => $a['action']))); ?>" class="confirm"><?php e($a['label']); ?></a>
                                                 <?php
                                             }
                                         }
                                         ?>
                                     <?php endif; ?>
                                     <?php if ($p['status'] == 'authorized'): ?>
-                                        <a href="<?php e($onlinepayment_module->getPath()); ?>payment.php?id=<?php e($p['id']); ?>" class="edit"><?php e(t('Edit payment')); ?></a>
+                                        <a href="<?php e(url('onlinepayment/' . $p['id'])); ?>" class="edit"><?php e(t('Edit payment')); ?></a>
                                     <?php endif; ?>
                                 </td>
                             </tr>
