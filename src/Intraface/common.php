@@ -12,6 +12,9 @@
 
 // required files
 require_once 'Ilib/ClassLoader.php';
+require_once 'ErrorHandler.php';
+require_once 'ErrorHandler/Observer/BlueScreen.php';
+require_once 'Log.php';
 require_once 'Doctrine/lib/Doctrine.php';
 spl_autoload_register(array('Doctrine', 'autoload'));
 require_once 'k/urlbuilder.php';
@@ -43,8 +46,8 @@ if (defined('NET_SCHEME') && defined('NET_HOST') && defined('NET_DIRECTORY')) {
 if (!defined('ERROR_HANDLE_LEVEL')) {
     define('ERROR_HANDLE_LEVEL', E_ALL);
 }
-set_error_handler('intrafaceBackendErrorhandler', ERROR_HANDLE_LEVEL);
-set_exception_handler('intrafaceBackendExceptionhandler');
+//set_error_handler('intrafaceBackendErrorhandler', ERROR_HANDLE_LEVEL);
+//set_exception_handler('intrafaceBackendExceptionhandler');
 
 // wiring
 $bucket = new bucket_Container(new Intraface_Factory());

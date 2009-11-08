@@ -13,7 +13,17 @@ class Intraface_Factory
         return new Intraface_Kernel(session_id());
     }
 
+    /**
+     * @deprecated when everything i konstrukt2
+     * @param $container
+     * @return MDB2_Driver_Common
+     */
     function new_MDB2($container)
+    {
+        return $this->new_MDB2_Driver_Common($container);
+    }
+
+    function new_MDB2_Driver_Common($container)
     {
         $db = MDB2::singleton(DB_DSN, array('persistent' => true));
         if (PEAR::isError($db)) {
@@ -161,14 +171,13 @@ class Intraface_Factory
         return $registry;
     }
 
-    /*
-    function new_Doctrine()
+    function new_Doctrine_Connection_Common()
     {
         Doctrine_Manager::getInstance()->setAttribute("use_dql_callbacks", true);
         Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
-        Doctrine_Manager::connection(DB_DSN);
+        return Doctrine_Manager::connection(DB_DSN);
     }
-
+    /*
     function new_Intraface_Doctrine_Intranet()
     {
         Intraface_Doctrine_Intranet::singleton($kernel->intranet->getId());
