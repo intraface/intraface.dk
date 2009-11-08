@@ -172,7 +172,7 @@ $systemmessage = $kernel->useShared('systemmessage');
 $intranetnews = new IntranetNews($kernel);
 
 $some_days_ago = date('Y-m-d', time() - 7 * 24 * 60 * 60);
-$last_view_split = split(' ', $last_view); // vil kun bruge datoen og ikke klokkeslettet
+$last_view_split = explode(' ', $last_view); // vil kun bruge datoen og ikke klokkeslettet
 
 
 if ($last_view_split[0] > $some_days_ago) {
