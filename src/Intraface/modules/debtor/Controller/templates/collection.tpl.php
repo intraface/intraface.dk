@@ -20,7 +20,7 @@
         <?php
         $module_administration = $context->getKernel()->useModule('administration');
         ?>
-        <a href="<?php e($module_administration->getPath().'intranet_edit.php'); ?>">Udfyld adresse</a>.
+        <a href="<?php e($module_administration->getPath().'intranet_edit.php'); ?>"><?php e(t('Fill in address')); ?></a>.
     <?php else: ?>
         Du har ikke adgang til at rette adresseoplysningerne, det må du bede din administrator om at gøre.
     <?php endif; ?>

@@ -4,7 +4,7 @@
 
 <?php if (!$context->getContact()->isFilledIn()): ?>
 
-	<p><?php e(t('No contacts has been created')); ?>. <a href="<?php e(url(null, array('add' => 1))); ?>"><?php e(t('Create contact')); ?></a>.</p>
+	<p><?php e(t('No contacts has been created')); ?>. <a href="<?php e(url(null, array('create'))); ?>"><?php e(t('Create contact')); ?></a>.</p>
 
 <?php else: ?>
     <ul class="options">
