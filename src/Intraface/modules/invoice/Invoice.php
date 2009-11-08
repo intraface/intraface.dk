@@ -32,7 +32,7 @@ class Invoice extends Debtor
     {
         $db = new DB_Sql;
         $sql = "SELECT id FROM debtor
-            WHERE type=3 AND status=1 AND due_date < NOW() AND intranet_id = ".$this->kernel->intranet->get("id")." AND contact_id = " . $contact_id;
+            WHERE type=3 AND status=1 AND active = 1 AND due_date < NOW() AND intranet_id = ".$this->kernel->intranet->get("id")." AND contact_id = " . $contact_id;
         $db->query($sql);
 
         return $db->numRows();

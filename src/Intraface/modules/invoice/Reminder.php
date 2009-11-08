@@ -487,7 +487,7 @@ class Reminder extends Intraface_Standard
         }
         $db = new DB_Sql;
         $db->query("SELECT id
-            FROM invoice_reminder WHERE intranet_id = ".$this->kernel->intranet->get("id")." AND contact_id=" . $contact_id);
+            FROM invoice_reminder WHERE intranet_id = ".$this->kernel->intranet->get("id")." AND active = 1 AND contact_id=" . $contact_id);
         return $db->numRows();
     }
 
