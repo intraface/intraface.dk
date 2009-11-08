@@ -801,7 +801,7 @@ class Contact extends Intraface_Standard
     */
     private function loadMessage($id = 0)
     {
-        return $this->message = & new ContactMessage($this, (int)$id);
+        return $this->message = new ContactMessage($this, (int)$id);
     }
 
     /**
@@ -813,7 +813,7 @@ class Contact extends Intraface_Standard
      */
     function loadContactPerson($id = 0)
     {
-        return ($this->contactperson = & new ContactPerson($this, (int)$id));
+        return ($this->contactperson = new ContactPerson($this, (int)$id));
     }
 
     /**
