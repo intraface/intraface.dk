@@ -46,7 +46,7 @@ class Intraface_Kernel
 
     function getPage()
     {
-        return new Intraface_Page($this, new DB_Sql);
+        return new Intraface_Page($this, MDB2::singleton(DB_DSN));
     }
 
     /**
