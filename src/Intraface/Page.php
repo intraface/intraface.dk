@@ -1,6 +1,6 @@
 <?php
 /**
- * Page.php
+ * Page
  *
  * @author Sune Jensen <sj@sunet.dk>
  * @author Lars Olesen <lars@legestue.net>
@@ -17,14 +17,11 @@ class Intraface_Page
     public $javascript_path = array();
     public $primary_module;
 
-    function __construct(Intraface_Kernel $object_kernel, DB_Sql $db = null)
+    function __construct(Intraface_Kernel $object_kernel, MDB2_Driver_Common $db = null)
     {
-        if (!is_object($object_kernel)) {
-            trigger_error('Page requires Kernel', E_USER_ERROR);
-        }
         $this->kernel = $object_kernel;
         if ($this->db == null) {
-            $this->db = new DB_Sql;
+            $this->db = MDB2::singleton(DB_DSN);
         } else {
             $this->db = $db;
         }
@@ -63,6 +60,7 @@ class Intraface_Page
         $this->usermenu[2]['name'] = $this->t('control panel', 'common');;
         $this->usermenu[2]['url'] = url('/core/restricted/module/controlpanel/');
 		*/
+/*
         if (!is_dir(PATH_CACHE)) {
             if (!mkdir(PATH_CACHE)) {
                 trigger_error('Unable to create dir "'.PATH_CACHE.'" from constant PATH_CACHE', E_USER_ERROR);
@@ -81,7 +79,7 @@ class Intraface_Page
         // If you activate again remeber to activate $cache->end() in the end of this method
         if (true or defined('USE_CACHE') AND !USE_CACHE OR !($cache->start('page_' . $this->kernel->user->get('id') . '_' . $name))) {
             if (!is_object($this->kernel->translation)) $this->kernel->getTranslation();
-
+*/
             $intranet_name = $this->kernel->intranet->get('name');
 
             if (empty($title)) {
@@ -102,12 +100,11 @@ class Intraface_Page
             $this->menu[$i]['name'] = $this->t('dashboard', 'dashboard');;
             $this->menu[$i]['url'] = url('/core/restricted/');
             $i++;
-            $this->db->query("SELECT name, menu_label, name FROM module WHERE active = 1 AND show_menu = 1 ORDER BY menu_index");
-            while ($this->db->nextRecord()) {
-
-                if ($this->kernel->user->hasModuleAccess($this->db->f('name'))) {
-                    $this->menu[$i]['name'] = $this->t($this->db->f('name'), $this->db->f('name'));
-                    $this->menu[$i]['url'] = url('/core/restricted/module/' . $this->db->f("name") . '/');
+            $res = $this->db->query("SELECT name, menu_label, name FROM module WHERE active = 1 AND show_menu = 1 ORDER BY menu_index");
+            foreach ($res->fetchAll() as $row) {
+                if ($this->kernel->user->hasModuleAccess($row['name'])) {
+                    $this->menu[$i]['name'] = $this->t($row['name'], $row['name']);
+                    $this->menu[$i]['url'] = url('/core/restricted/module/' . $row["name"]);
                     $i++;
                 }
             }
@@ -194,7 +191,7 @@ class Intraface_Page
             include(PATH_INCLUDE_IHTML.'/intraface/top.php');
 
             // $cache->end();
-        }
+        //}
 
     }
 
