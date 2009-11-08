@@ -1,6 +1,6 @@
 <h1><?php e(t('Choose provider')); ?></h1>
 
-<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e(url()); ?>" method="post">
 
 	<fieldset>
 		<legend><?php e(t('Provider')); ?></legend>

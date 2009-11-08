@@ -4,6 +4,11 @@ $title = $reminder->get('title');
 $value = $reminder->get();
 $contact = $context->getContact();
 $kernel = $context->getKernel();
+if ($value['number'] == 0) {
+    $value['number'] = $reminder->getMaxNumber() + 1;
+    $value['dk_this_date'] = date('d-m-Y');
+    $value['dk_due_date'] = date('d-m-Y');
+}
 ?>
 
 <h1><?php e(t('Edit reminder')); ?></h1>

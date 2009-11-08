@@ -150,10 +150,10 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
 
         if ($reminder->save($_POST)) {
              if ($_POST['send_as'] == 'email') {
-                 header("Location: reminder_email.php?id=".$reminder->get("id"));
+                 return new k_SeeOther($this->url($reminder->get("id"), array('email', 'flare' => 'Reminder has been created')));
                  exit;
              } else {
-                 return new k_SeeOther($this->url($reminder->get("id")), array('flare' => 'Reminder has been created'));
+                 return new k_SeeOther($this->url($reminder->get("id"), array('flare' => 'Reminder has been created')));
              }
         }
 
@@ -183,4 +183,40 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
     {
         return $this->url(null, array('create'));
     }
+
+    /*
+    function _postForm()
+    {
+        $module = $this->getKernel()->module("debtor");
+
+        $translation = $this->getKernel()->getTranslation('debtor');
+
+        $mainInvoice = $this->getKernel()->useModule("invoice");
+        $mainInvoice->includeFile("Reminder.php");
+        $mainInvoice->includeFile("ReminderItem.php");
+
+        $reminder = new Reminder($this->getKernel());
+
+        if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
+            $contact = new Contact($this->getKernel(), $_POST["contact_id"]);
+            $contact_person = new ContactPerson($contact);
+            $person["name"] = $_POST['contact_person_name'];
+            $person["email"] = $_POST['contact_person_email'];
+            $contact_person->save($person);
+            $contact_person->load();
+            $_POST["contact_person_id"] = $contact_person->get("id");
+        }
+
+        if ($reminder->save($_POST)) {
+
+            if ($_POST['send_as'] == 'email') {
+                return new k_SeeOther($this->url($reminder->get('id')), array('email', 'flare' => 'Reminder has been updated'));
+            } else {
+                return new k_SeeOther($this->url($reminder->get('id')), array('flare' => 'Reminder has been updated'));
+            }
+        }
+        return $this->render();
+
+    }
+    */
 }

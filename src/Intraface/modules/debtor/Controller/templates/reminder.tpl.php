@@ -18,7 +18,7 @@ $reminder = $context->getReminder();
         	<?php
         	if ($reminder->get("send_as") == "email" AND $reminder->get('status_key') < 1) {
         		?>
-        		<li><a href="reminder_email.php?id=<?php e($reminder->get("id")); ?>"><?php e(__('Send email')); ?></a></li>
+        		<li><a href="<?php e(url(null, array('email'))); ?>"><?php e(__('Send email')); ?></a></li>
         		<?php
         	}
         	?>

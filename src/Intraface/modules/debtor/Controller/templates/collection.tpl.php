@@ -14,6 +14,8 @@
     ?>
 </h1>
 
+
+
 <?php if ($context->getKernel()->intranet->address->get('id') == 0): ?>
     <p>Du mangler at udfylde adresse til dit intranet. Det skal du gøre, før du kan oprette en <?php e(strtolower(__($context->getDebtor()->get('type')))); ?>.
     <?php if ($context->getKernel()->user->hasModuleAccess('administration')): ?>
@@ -30,7 +32,9 @@
     <?php if ($context->getDebtor()->get('type') == 'credit_note'): ?>
         <p>Du har endnu ikke oprettet nogen. Kreditnotaer oprettes fra en fakturaer.</p>
     <?php else: ?>
+
         <p><?php e(t('None has been created yet')); ?>. <a href="<?php e(url(null, array('create'))); ?>"><?php e(__('Create '.$context->getDebtor()->get('type'))); ?></a>.</p>
+
     <?php endif; ?>
 <?php else: ?>
 

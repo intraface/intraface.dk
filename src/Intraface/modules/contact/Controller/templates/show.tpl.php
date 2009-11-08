@@ -47,7 +47,7 @@ $delivery_address = $context->getDeliveryAddressValues();
             <?php if ($context->getReminder()->any($context->getContact()->get("id"))): ?>
                 <li><a href="<?php e(url('../../debtor/reminders', array('contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('reminders', 'debtor')); ?></a></li>
             <?php elseif ($context->getInvoice()->anyDue($context->getContact()->get("id"))): ?>
-                <li class="inactive"><a href="<?php e($context->getDebtorModule()->getPath()); ?>reminder_edit.php?contact_id=<?php e($context->getContact()->get("id")); ?>"><?php e(t('create reminder', 'debtor')); ?></a></li>
+                <li class="inactive"><a href="<?php e(url('../../debtor/reminders', array('create', 'contact_id' => $context->getContact()->get("id")))); ?>"><?php e(t('create reminder', 'debtor')); ?></a></li>
             <?php endif; ?>
         <?php endif; ?>
 

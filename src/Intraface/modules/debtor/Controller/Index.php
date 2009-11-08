@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_debtor_Controller_Index extends k_Component
 {
+    protected $registry;
+
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     function map($name)
     {
         if ($name == 'reminders') {
@@ -42,4 +49,5 @@ class Intraface_modules_debtor_Controller_Index extends k_Component
     {
          return $phrase;
     }
+
 }

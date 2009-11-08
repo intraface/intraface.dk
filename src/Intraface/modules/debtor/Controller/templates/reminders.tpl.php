@@ -8,8 +8,8 @@ $reminders = $context->getReminders();
 
 <?php if ($contact_id): ?>
 	<ul class="options">
-		<li><a href="reminder_edit.php?contact_id=<?php e($contact_id); ?>"><?php e(__('Create')); ?></a></li>
-		<li><a href="/modules/contact/contact.php?id=<?php e($contact_id); ?>"><?php e(__('Go to contact')); ?></a>
+		<li><a href="<?php e(url(null, array('create', 'contact_id' => $contact_id))); ?>"><?php e(__('Create')); ?></a></li>
+		<li><a href="<?php e(url('../../contact/' . $contact_id)); ?>"><?php e(__('Go to contact')); ?></a>
 	</ul>
 <?php endif; ?>
 

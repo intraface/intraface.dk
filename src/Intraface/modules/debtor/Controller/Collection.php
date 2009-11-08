@@ -2,6 +2,7 @@
 class Intraface_modules_debtor_Controller_Collection extends k_Component
 {
     protected $registry;
+    protected $error;
     protected $debtor;
 
     function __construct(k_Registry $registry)
@@ -9,7 +10,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $this->registry = $registry;
     }
 
-    function map($name)
+   function map($name)
     {
         if (is_numeric($name)) {
             return 'Intraface_modules_debtor_Controller_Show';
@@ -20,7 +21,6 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
 
     function getDebtor()
     {
-        Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
         $module = $this->getKernel()->module('debtor');
 
         if (is_object($this->debtor)) {
@@ -32,8 +32,6 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
 
     function getPosts()
     {
-        Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
-
         return $this->getDebtor()->getList();
     }
 
@@ -75,7 +73,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
 
         $status_types = array(
             -3 => 'Afskrevet',
-            -2 => 'Åbne',
+            -2 => 'ï¿½bne',
             -1 => 'Alle',
             0 => 'Oprettet',
             1 => 'Sendt',
@@ -86,7 +84,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $worksheet->write($i, 1, $status_types[$debtor->getDbQuery()->getFilter('status')], $format_italic);
         $i++;
 
-        $worksheet->write($i, 0, 'Søgetekst', $format_italic);
+        $worksheet->write($i, 0, 'Sï¿½getekst', $format_italic);
         $worksheet->write($i, 1, $debtor->getDbQuery()->getFilter('text'), $format_italic);
         $i++;
 
@@ -106,7 +104,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
             $i++;
         }
 
-        $worksheet->write($i, 0, "Antal i søgningen", $format_italic);
+        $worksheet->write($i, 0, "Antal i sï¿½gningen", $format_italic);
         $worksheet->write($i, 1, count($posts), $format_italic);
         $i++;
 
@@ -115,16 +113,16 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $worksheet->write($i, 1, 'Kontakt nummer', $format_bold);
         $worksheet->write($i, 2, 'Kontakt navn', $format_bold);
         $worksheet->write($i, 3, 'Beskrivelse', $format_bold);
-        $worksheet->write($i, 4, 'Beløb', $format_bold);
+        $worksheet->write($i, 4, 'Belï¿½b', $format_bold);
         $worksheet->write($i, 5, 'Oprettet', $format_bold);
         $worksheet->write($i, 6, 'Sendt', $format_bold);
         //$worksheet->write($i, 7, __("due_date"), $format_bold);
         $c = 8;
         if ($debtor->get('type') == 'invoice') {
-            $worksheet->write($i, $c, 'Forfaldsbeløb', $format_bold);
+            $worksheet->write($i, $c, 'Forfaldsbelï¿½b', $format_bold);
             $c++;
         }
-        $worksheet->write($i, $c, 'Kontaktnøgleord', $format_bold);
+        $worksheet->write($i, $c, 'Kontaktnï¿½gleord', $format_bold);
         $c++;
 
         if (!empty($product) && is_object($product) && get_class($product) == 'product') {
@@ -217,7 +215,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $worksheet->write($i, 1, number_format($due_total, 2, ",","."), $format_italic);
         $i++;
 
-        $worksheet->write($i, 0, 'Udestående (sendt):', $format_italic);
+        $worksheet->write($i, 0, 'Udestï¿½ende (sendt):', $format_italic);
         $worksheet->write($i, 1, number_format($sent_total, 2, ",","."), $format_italic);
         $i++;
 
@@ -266,7 +264,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
             }
         }
 
-        // søgning
+        // sï¿½gning
             // if (isset($_POST['submit'])
             if (isset($_GET["text"]) && $_GET["text"] != "") {
                 $debtor->getDBQuery()->setFilter("text", $_GET["text"]);
@@ -296,7 +294,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
                 $debtor->getDBQuery()->setFilter("not_stated", true);
             }
 
-        // er der ikke noget galt herunder (LO) - brude det ikke være order der bliver sat?
+        // er der ikke noget galt herunder (LO) - brude det ikke vï¿½re order der bliver sat?
         if (isset($_GET['sorting']) && $_GET['sorting'] != 0) {
             $debtor->getDBQuery()->setFilter("sorting", $_GET['sorting']);
         }
@@ -337,6 +335,15 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
     {
          return $phrase;
     }
+
+    function getError()
+    {
+        if (is_object($this->error)) {
+            return $this->error;
+        }
+        return ($this->error = new Intraface_Error());
+    }
+
 
     function postForm()
     {
