@@ -26,11 +26,11 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
 
     function postForm()
     {
-    	$validator = new Intraface_Validator($contact->error);
+    	$validator = new Intraface_Validator($this->getContact()->error);
     	$validator->isString($_POST['subject'], 'error in subject');
     	$validator->isString($_POST['text'], 'error in text');
 
-    	if (!$contact->error->isError()) {
+    	if (!$this->getContact()->error->isError()) {
     		// valideret subject og body
     		$j = 0;
 
@@ -59,7 +59,7 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
     			$email->send(Intraface_Mail::factory(), 'queue');
     			$j++;
     		}
-    		$this->msg = 'Emailen blev i alt sendt til ' . $j . ' kontakter. <a href="">Tilbage til kontakter</a>.';
+    		$this->msg = 'Emailen blev i alt sendt til ' . $j . ' kontakter. <a href="'.$this->url('../').'">Tilbage til kontakter</a>.';
     	} else {
     		$value = $_POST;
     	}

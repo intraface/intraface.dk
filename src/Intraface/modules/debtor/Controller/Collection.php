@@ -374,7 +374,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
     	    return new k_SeeOther($this->url('../list/' . $debtor->get('id')));
     	}
 
-    	return $this->renderHtmlCreate();
+    	return $this->render();
     }
 
     function getReturnUrl($contact_id)

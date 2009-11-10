@@ -246,7 +246,7 @@ endif;
 <div id="keywords" class="box <?php if (!empty($_GET['from']) AND $_GET['from'] == 'keywords') echo ' fade'; ?>">
  <h2><?php e(t('keywords', 'keyword')); ?></h2>
     <?php if ($context->getContact()->get('locked') == 0) { ?>
-    <ul class="button"><li><a href="<?php e(url('/shared/keyword/connect.php', array('contact_id' => $context->getContact()->get('id')))); ?>"><?php e(t('add keywords', 'keyword')); ?></a></li></ul>
+    <ul class="button"><li><a href="<?php e(url('keyword/connect')); ?>"><?php e(t('Add keywords', 'keyword')); ?></a></li></ul>
     <?php } ?>
     <?php
         $keyword = $context->getContact()->getKeywordAppender();

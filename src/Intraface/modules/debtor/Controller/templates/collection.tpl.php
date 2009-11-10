@@ -22,7 +22,7 @@
         <?php
         $module_administration = $context->getKernel()->useModule('administration');
         ?>
-        <a href="<?php e($module_administration->getPath().'intranet_edit.php'); ?>"><?php e(t('Fill in address')); ?></a>.
+        <a href="<?php e(url('../../../administration/intranet/'.$context->getKernel()->intranet->getId(), array('edit'))); ?>"><?php e(t('Fill in address')); ?></a>.
     <?php else: ?>
         Du har ikke adgang til at rette adresseoplysningerne, det må du bede din administrator om at gøre.
     <?php endif; ?>
@@ -227,7 +227,7 @@
                         ?>
                         <a class="edit" href="<?php e(url($post["id"], array('edit'))); ?>"><?php e(__('Edit')); ?></a>
                         <?php if ($post["status"] == "created"): ?>
-                        <a class="delete" title="<?php e(__('Are you sure?')); ?>" href="list.php?id=<?php e($post["id"]); ?>&amp;action=delete&amp;use_stored=true"><?php e(__('Delete')); ?></a>
+                        <a class="delete" title="<?php e(__('Are you sure?')); ?>" href="<?php e(url($post["id"], array('delete'))); ?>"><?php e(__('Delete')); ?></a>
                         <?php endif; ?>
                         &nbsp;
                         <?php

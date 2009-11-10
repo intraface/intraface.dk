@@ -36,7 +36,7 @@ class Intraface_modules_product_Controller_Selectproduct extends k_Component
         if (!empty($_GET['select_variation'])) {
             $variation_redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
             $variation_redirect->setIdentifier('select_variation');
-            $url = $variation_redirect->setDestination($product_module->getPath().'select_product_variation.php?product_id='.intval($_GET['select_variation']).'&set_quantity='.$this->quantity, $product_module->getPath().'select_product.php?'.$redirect->get('redirect_query_string').'&set_quantity='.$this->quantity);
+            $url = $variation_redirect->setDestination($product_module->getPath().'select_product_variation.php?product_id='.intval($_GET['select_variation']).'&set_quantity='.$this->quantity, $product_module->getPath().'select_product.php?'.$this->getRedirect()->get('redirect_query_string').'&set_quantity='.$this->quantity);
             $type = ($this->multiple) ? 'multiple' : 'single';
             $variation_redirect->askParameter('product_variation_id', $type);
             header('location: '.$url);

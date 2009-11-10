@@ -1,5 +1,9 @@
 <h1><?php e(t('Send email')); ?></h1>
 
+	<ul class="options">
+		<li><a href="<?php e(url('../')); ?>"><?php e(__('Close', 'common')); ?></a></li>
+	</ul>
+
 <?php if ($context->getMessage()): ?>
 
 <p><?php echo $context->getMessage(); ?></p>

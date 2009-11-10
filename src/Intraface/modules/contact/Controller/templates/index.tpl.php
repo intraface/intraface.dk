@@ -9,6 +9,8 @@
 	<li><a class="excel" href="<?php e(url(null . '.xls', array('use_stored' => 'true'))); ?>"><?php e(__('Excel', 'common')); ?></a></li>
 	<li><a href="<?php e(url('sendemail', array('use_stored' => true))); ?>"><?php e(__('Email to contacts in search')); ?></a></li>
     <li><a href="<?php e(url('import')); ?>"><?php e(__('Import contacts')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
+
 </ul>
 
 <?php if (!$context->getContact()->isFilledIn()): ?>

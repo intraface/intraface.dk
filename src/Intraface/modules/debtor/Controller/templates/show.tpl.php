@@ -26,7 +26,7 @@ if (isset($onlinepayment)) {
 ?>
 <?php if ($context->getKernel()->intranet->get("pdf_header_file_id") == 0 && $context->getKernel()->user->hasModuleAccess('administration')): ?>
     <div class="message-dependent">
-        <p><a href="<?php e(url('/main/controlpanel/intranet.php')); ?>"><?php e(t('Upload a logo for your pdf\'s')); ?></a> </p>
+        <p><a href="<?php e(url('../../../../controlpanel/intranet')); ?>"><?php e(t('Upload a logo for your pdf\'s')); ?></a> </p>
     </div>
 <?php endif; ?>
 
@@ -207,13 +207,10 @@ if (isset($onlinepayment)) {
                 <th><?php e(t($context->getDebtor()->get('type').' due date')); ?></th>
                 <td>
                     <?php e($context->getDebtor()->get("dk_due_date")); ?>
-                    <?php if ($context->getDebtor()->get('type')=='invoice' && $context->getDebtor()->anyDue($context->getDebtor()->contact->get('id')) && $context->getDebtor()->get("status") != 'executed') echo '<a href="'.url('../../../reminders', array('create', 'contact_id' => intval($context->getDebtor()->contact->get('id')))).'">'.t('Create reminder').'</a>'; ?>
+                    <?php if ($context->getDebtor()->get('type')=='invoice' && count($context->getDebtor()->anyDue($context->getDebtor()->contact->get('id'))) > 0 && $context->getDebtor()->get("status") != 'executed') echo '<a href="'.url('../../../reminders', array('create', 'contact_id' => intval($context->getDebtor()->contact->get('id')))).'">'.t('Create reminder').'</a>'; ?>
                 </td>
             </tr>
             <?php endif; ?>
-
-
-
             <?php if ($context->getKernel()->getSetting()->get('intranet', 'debtor.sender') == 'user' || $context->getKernel()->getSetting()->get('intranet', 'debtor.sender') == 'defined'): ?>
                 <tr>
                     <th><?php e(t('Our contact')); ?></th>
@@ -229,7 +226,7 @@ if (isset($onlinepayment)) {
                             }
 
                             if ($context->getKernel()->user->hasModuleAccess('administration')) { ?>
-                                <a href="<?php e(url('settings')); ?>" class="edit"><?php e(__('Change', 'common')); ?></a>
+                                <a href="<?php e(url('../../../settings')); ?>" class="edit"><?php e(__('Change', 'common')); ?></a>
                             <?php
                             }
                             ?>

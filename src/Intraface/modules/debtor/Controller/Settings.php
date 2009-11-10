@@ -39,11 +39,9 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
         $values['invoice_text'] = $this->context->getKernel()->setting->get('intranet', 'debtor.invoice.text');
         $values['order_email_text'] = $this->context->getKernel()->setting->get('intranet', 'debtor.order.email.text');
 
-
         if ($this->context->getKernel()->setting->get('intranet', 'debtor.scan_in_contact') > 0) {
             $scan_in_contact = new Contact($this->context->getKernel(), $this->context->getKernel()->setting->get('intranet', 'debtor.scan_in_contact'));
         }
-
 
         $string = 'Det er gratis for små og mellemstore virksomheder at bruge Læs-ind bureauer. <a href="http://www.eogs.dk/sw7483.asp">Tjek her om det gælder for din virksomhed</a>.';
         $smarty = new k_Template(dirname(__FILE__) . '/templates/settings.tpl.php');
@@ -58,24 +56,19 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
 
         if (!empty($_POST)) {
 
-
             $error = new Intraface_Error;
             $validator = new Intraface_Validator($error);
 
             if ($_POST['debtor_sender'] == 'defined') {
                 $validator->isEmail($_POST['debtor_sender_email'], 'Invalid e-mail in Sender e-mail');
                 $validator->isString($_POST['debtor_sender_name'], 'Error in Sender name');
-            }
-            else {
+            } else {
                 $validator->isEmail($_POST['debtor_sender_email'], 'Invalid e-mail in Sender e-mail', 'allow_empty');
                 $validator->isString($_POST['debtor_sender_name'], 'Error in Sender name', '', 'allow_empty');
-
             }
 
             if (!$error->isError()) {
-
                 $this->context->getKernel()->setting->set('intranet', 'debtor.sender', $_POST['debtor_sender']);
-
                 $this->context->getKernel()->setting->set('intranet', 'debtor.sender.email', $_POST['debtor_sender_email']);
                 $this->context->getKernel()->setting->set('intranet', 'debtor.sender.name', $_POST['debtor_sender_name']);
             }
@@ -84,7 +77,6 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
             $this->context->getKernel()->setting->set('intranet', 'reminder.first.text', $_POST['reminder_text']);
             $this->context->getKernel()->setting->set('intranet', 'debtor.invoice.text', $_POST['invoice_text']);
             $this->context->getKernel()->setting->set('intranet', 'debtor.order.email.text', $_POST['order_email_text']);
-
 
             // bank
             $this->context->getKernel()->setting->set('intranet', 'bank_name', $_POST['bank_name']);
@@ -95,12 +87,8 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
 
         if (!empty($_POST['delete_scan_in_contact'])) {
             $this->context->getKernel()->setting->set('intranet', 'debtor.scan_in_contact', 0);
-
-            header('Location: setting.php');
-            exit;
-        }
-
-        elseif (isset($_POST['add_scan_in_contact'])) {
+            return new k_SeeOther($this->url());
+        } elseif (isset($_POST['add_scan_in_contact'])) {
             if ($this->context->getKernel()->user->hasModuleAccess('contact')) {
                 $contact_module = $this->context->getKernel()->useModule('contact');
 
@@ -110,40 +98,32 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
                 $redirect->setIdentifier('contact');
 
                 if ($this->context->getKernel()->setting->get('intranet', 'debtor.scan_in_contact') > 0) {
-                    header("Location: ".$url . '?contact_id='.$this->context->getKernel()->setting->get('intranet', 'debtor.scan_in_contact'));
+                    return new k_SeeOther(url($url, array('contact_id' => $this->context->getKernel()->setting->get('intranet', 'debtor.scan_in_contact'))));
+                } else {
+                    return new k_SeeOther($url);
                 }
-                else {
-                    header("Location: ".$url );
-                }
-                exit;
+            } else {
+                throw new Exception("Du har ikke adgang til modulet contact");
             }
-            else {
-                trigger_error("Du har ikke adgang til modulet contact", E_ERROR_ERROR);
-            }
-        }
-
-
-        elseif (isset($_POST['edit_scan_in_contact'])) {
+        } elseif (isset($_POST['edit_scan_in_contact'])) {
             if ($this->context->getKernel()->user->hasModuleAccess('contact')) {
                 $contact_module = $this->context->getKernel()->useModule('contact');
 
                 $redirect = Intraface_Redirect::factory($this->context->getKernel(), 'go');
                 $url = $redirect->setDestination($contact_module->getPath()."contact_edit.php?id=".intval($_POST['scan_in_contact']), $debtor_module->getPath()."setting.php");
-                header("location: ".$url );
-                exit;
 
+                return new k_SeeOther($url);
 
-            }
-            else {
-                trigger_error("Du har ikke adgang til modulet contact", E_ERROR_ERROR);
+            } else {
+                throw new Exception("Du har ikke adgang til modulet contact");
             }
         }
 
         if (!$error->isError()) {
-            header('Location: index.php'); // Changed from setting.php, but don't know what is most right /SJ (14/1 2007)
-            exit;
+            return new k_SeeOther($this->url('../'));
         }
         $values = $_POST;
+        return $this->render();
     }
 
     function t($phrase)

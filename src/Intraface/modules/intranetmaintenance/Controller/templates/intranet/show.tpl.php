@@ -187,18 +187,18 @@ $address_value = $context->getValues();
 	$module = new ModuleMaintenance;
 	$modules = $module->getList();
 
-	for ($i = 0; $i < count($modules); $i++) {
+	foreach ($modules as $module) {
 		?>
 		<div style="float: left; width: 210px; ">
-			<input type="checkbox" name="module[]" id="module_<?php e($modules[$i]["name"]); ?>" value="<?php e($modules[$i]["name"]); ?>"<?php if ($context->getIntranet()->hasModuleAccess(intval($modules[$i]["id"]))) print("checked=\"checked\""); ?> />
-			<label for="module_<?php e($modules[$i]["name"]); ?>"><?php e($modules[$i]["menu_label"]); ?></label>
+			<input type="checkbox" name="module[]" id="module_<?php e($module["name"]); ?>" value="<?php e($module["name"]); ?>"<?php if ($context->getIntranet()->hasModuleAccess(intval($module["id"]))) print("checked=\"checked\""); ?> />
+			<label for="module_<?php e($module["name"]); ?>"><?php e($module["name"]); ?></label>
 		</div>
 		<?php
 	}
 	?>
     </div>
     <div style="clear:both;">
-        <input type="submit" name="change_permission" value="Gem" />
+        <input type="submit" name="change_permission" value="<?php e(t('Save')); ?>" />
     </div>
 </fieldset>
 

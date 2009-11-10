@@ -80,12 +80,12 @@ if ($context->getIntranet()->getId() > 0) {
                 ?>
                 <div>
                     <input type="checkbox" name="module[]" id="module_<?php e($module["name"]); ?>" value="<?php e($module["name"]); ?>" <?php if ($context->getUser()->hasModuleAccess(intval($module["id"]))) print("checked=\"checked\""); ?> />
-                    <label for="module_<?php e($module["name"]); ?>"><?php e($module["menu_label"]); ?></label>
+                    <label for="module_<?php e($module["name"]); ?>"><?php e($module["name"]); ?></label>
                     <?php if (!empty($module["sub_access"]) AND count($module["sub_access"]) > 0): ?>
                       <ol>
                       <?php for ($j = 0; $j < count($module["sub_access"]); $j++): ?>
                           <li><input type="checkbox" name="sub_access[<?php e($module["name"]); ?>][]" id="sub_<?php e($module["sub_access"][$j]["name"]); ?>" value="<?php e($module["sub_access"][$j]["name"]); ?>"<?php if ($context->getUser()->hasSubAccess(intval($module["id"]), intval($module["sub_access"][$j]["id"]))) print(" checked=\"checked\""); ?> />
-                          <label for="sub_<?php e($module["sub_access"][$j]["name"]); ?>"><?php e($module["sub_access"][$j]["description"]); ?></label></li>
+                          <label for="sub_<?php e($module["sub_access"][$j]["name"]); ?>"><?php e($module["sub_access"][$j]["name"]); ?></label></li>
                       <?php endfor; ?>
                       </ol>
                       <?php endif; ?>

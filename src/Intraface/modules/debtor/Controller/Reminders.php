@@ -151,7 +151,6 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
         if ($reminder->save($_POST)) {
              if ($_POST['send_as'] == 'email') {
                  return new k_SeeOther($this->url($reminder->get("id"), array('email', 'flare' => 'Reminder has been created')));
-                 exit;
              } else {
                  return new k_SeeOther($this->url($reminder->get("id"), array('flare' => 'Reminder has been created')));
              }
@@ -177,11 +176,6 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
         }
 
         return $this->render();
-    }
-
-    function getFormUrl()
-    {
-        return $this->url(null, array('create'));
     }
 
     /*

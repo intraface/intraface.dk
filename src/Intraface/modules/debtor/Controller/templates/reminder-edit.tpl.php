@@ -9,6 +9,7 @@ if ($value['number'] == 0) {
     $value['dk_this_date'] = date('d-m-Y');
     $value['dk_due_date'] = date('d-m-Y');
 }
+$checked_invoice = array();
 ?>
 
 <h1><?php e(t('Edit reminder')); ?></h1>
@@ -17,7 +18,7 @@ if ($value['number'] == 0) {
 echo $reminder->error->view("html");
 ?>
 
-<form action="<?php e($context->getFormUrl()); ?>" method="post">
+<form action="<?php e(url(null, array($context->subview()))); ?>" method="post">
 
 <fieldset>
     <legend><?php e(__('Information about the reminder')); ?></legend>
@@ -123,17 +124,9 @@ echo $reminder->error->view("html");
             </tr>
             <?php
             $invoice = new Invoice($kernel);
-      /*
-            $invoice_listfilter = new Listfilter;
-      $invoice_listfilter->setCondition("contact_id = ".$contact->get("id")." AND status = 1 AND due_date < NOW()"); // status: 1 = sent
-            $invoice_listfilter->setSorting("this_date");
-            $invoices = $invoice->getList($invoice_listfilter);
-            */
-      $invoice->getDBQuery()->setCondition("contact_id = ".$contact->get("id")." AND status = 1 AND due_date < NOW()"); // status: 1 = sent
-      $invoice->getDBQuery()->setSorting('this_date');
-
-      $invoices = $invoice->getList();
-
+            $invoice->getDBQuery()->setCondition("contact_id = ".$contact->get("id")." AND status = 1 AND due_date < NOW()"); // status: 1 = sent
+            $invoice->getDBQuery()->setSorting('this_date');
+            $invoices = $invoice->getList();
             $total = 0;
             for ($i = 0, $max = count($invoices); $i < $max; $i++) {
                 $total += $invoices[$i]["arrears"];
@@ -148,13 +141,6 @@ echo $reminder->error->view("html");
                 </tr>
                 <?php
             }
-      /*
-            $reminder_listfilter = new Listfilter;
-            $reminder_listfilter->setCondition("id != ".$reminder->get("id"));
-            $reminder_listfilter->setCondition("contact_id = ".$contact->get("id")." AND status = 1 AND due_date < NOW() AND reminder_fee > 0"); // status: 1 = sent
-            $reminder_listfilter->setSorting("this_date");
-      */
-      //$reminder->getDBQuery()->setCondition("id != ".(int)$reminder->get("id"));
       $reminder->getDBQuery()->setCondition("contact_id = ".$contact->get("id")." AND status = 1 AND due_date < NOW() AND reminder_fee > 0"); // status: 1 = sent
       $reminder->getDBQuery()->setSorting('this_date');
 

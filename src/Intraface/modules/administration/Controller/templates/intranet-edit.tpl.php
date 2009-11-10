@@ -10,7 +10,7 @@ $address = $intranet->address->get();
 
 <?php if (isset($filehandler)) echo $filehandler->error->view(); ?>
 
-<form action="<?php e(url()); ?>" method="post" enctype="multipart/form-data">
+<form action="<?php e(url(null, array($context->subview()))); ?>" method="post" enctype="multipart/form-data">
 	<fieldset>
 		<legend><?php e(t('information about the intranet')); ?></legend>
 		<div class="formrow">
@@ -21,12 +21,8 @@ $address = $intranet->address->get();
   		<div class="formrow">
 			<label for="identifier"><?php e(t('identifier', 'common')); ?></label>
 			<input type="text" name="identifier" id="identifier" value="<?php if (isset($values['identifier'])) e($values["identifier"]); ?>" size="50" />
-
 		</div>
-
 	</fieldset>
-
-
 
 	<fieldset>
 		<legend><?php e(t('address information')); ?></legend>
@@ -78,6 +74,7 @@ $address = $intranet->address->get();
 	</fieldset>
 
 	<div style="clear:both;">
-		<input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" /> <a href="/main/controlpanel/intranet.php"><?php e(t('Cancel', 'common')); ?></a>
+		<input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />
+		<a href="<?php e(url('../')); ?>"><?php e(t('Cancel', 'common')); ?></a>
 	</div>
 </form>

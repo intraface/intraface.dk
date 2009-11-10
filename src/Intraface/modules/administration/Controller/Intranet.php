@@ -1,7 +1,6 @@
 <?php
 class Intraface_modules_administration_Controller_Intranet extends k_Component
 {
-    protected $registry;
     protected $intranetmaintenance;
 
     function renderHtml()
@@ -42,11 +41,11 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
         return $smarty->render($this, array('intranet' => $intranet, 'kernel' => $this->getKernel()));
     }
 
-    function postForm()
+    function postMultipart()
     {
 
-        if (isset($_POST['submit']) || isset($_POST['choose_file'])) {
-
+        $modul = $this->getKernel()->module('administration');
+        $shared_filehandler = $this->getKernel()->useShared('filehandler');
         	$intranet = new IntranetAdministration($this->getKernel());
         	$values = $_POST;
 
@@ -86,7 +85,8 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
         		$values = $_POST;
         		$address = $_POST;
         	}
-        }
+
+        	return $this->render();
     }
 
     function getKernel()

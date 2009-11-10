@@ -15,17 +15,17 @@
         $module = new ModuleMaintenance;
         $modules = $module->getList();
 
-        for ($i = 0; $i < count($modules); $i++) {
-            if ($context->getIntranet()->hasModuleAccess(intval($modules[$i]["id"]))) {
+        foreach ($modules as $module) {
+            if ($context->getIntranet()->hasModuleAccess(intval($module["id"]))) {
                 ?>
                 <div>
-                    <input type="checkbox" name="module[]" id="module_<?php e($modules[$i]["name"]); ?>" value="<?php e($modules[$i]["name"]); ?>" <?php if ($context->getUser()->hasModuleAccess(intval($modules[$i]["id"]))) print("checked=\"checked\""); ?> />
-                    <label for="module_<?php e($modules[$i]["name"]); ?>"><?php e($modules[$i]["menu_label"]); ?></label>
-                    <?php if (!empty($modules[$i]["sub_access"]) AND count($modules[$i]["sub_access"]) > 0): ?>
+                    <input type="checkbox" name="module[]" id="module_<?php e($module["name"]); ?>" value="<?php e($module["name"]); ?>" <?php if ($context->getUser()->hasModuleAccess(intval($module["id"]))) print("checked=\"checked\""); ?> />
+                    <label for="module_<?php e($module["name"]); ?>"><?php e(t($module["name"])); ?></label>
+                    <?php if (!empty($module["sub_access"]) AND count($module["sub_access"]) > 0): ?>
                       <ol>
-                      <?php for ($j = 0; $j < count($modules[$i]["sub_access"]); $j++): ?>
-                          <li><input type="checkbox" name="sub_access[<?php e($modules[$i]["name"]); ?>][]" id="sub_<?php e($modules[$i]["sub_access"][$j]["name"]); ?>" value="<?php e($modules[$i]["sub_access"][$j]["name"]); ?>"<?php if ($context->getUser()->hasSubAccess(intval($modules[$i]["id"]), intval($modules[$i]["sub_access"][$j]["id"]))) print(" checked=\"checked\""); ?> />
-                          <label for="sub_<?php e($modules[$i]["sub_access"][$j]["name"]); ?>"><?php e($modules[$i]["sub_access"][$j]["description"]); ?></label></li>
+                      <?php for ($j = 0; $j < count($module["sub_access"]); $j++): ?>
+                          <li><input type="checkbox" name="sub_access[<?php e($module["name"]); ?>][]" id="sub_<?php e($module["sub_access"][$j]["name"]); ?>" value="<?php e($module["sub_access"][$j]["name"]); ?>"<?php if ($context->getUser()->hasSubAccess(intval($module["id"]), intval($module["sub_access"][$j]["id"]))) print(" checked=\"checked\""); ?> />
+                          <label for="sub_<?php e($module["sub_access"][$j]["name"]); ?>"><?php e(t($module["sub_access"][$j]["name"])); ?></label></li>
                       <?php endfor; ?>
                       </ol>
                       <?php endif; ?>

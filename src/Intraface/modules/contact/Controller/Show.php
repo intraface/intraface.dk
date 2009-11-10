@@ -16,6 +16,8 @@ class Intraface_modules_contact_Controller_Show extends k_Component
             return 'Intraface_modules_contact_Controller_Memos';
         } elseif ($name == 'contactperson') {
             return 'Intraface_modules_contact_Controller_Contactpersons';
+        } elseif ($name == 'keyword') {
+            return 'Intraface_Keyword_Controller_Index';
         }
     }
 
@@ -37,7 +39,6 @@ class Intraface_modules_contact_Controller_Show extends k_Component
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/edit.tpl.php');
         return $smarty->render($this);
-
     }
 
     function getRedirect()
@@ -115,6 +116,7 @@ class Intraface_modules_contact_Controller_Show extends k_Component
 
     function getContact()
     {
+        $this->getKernel()->module('contact');
         $contact = new Contact($this->getKernel(), $this->name());
         $value = $contact->get();
 
@@ -335,5 +337,10 @@ class Intraface_modules_contact_Controller_Show extends k_Component
         header('Connection: close');
 
         return $output;
+    }
+
+    function getObject()
+    {
+        return $this->getContact();
     }
 }

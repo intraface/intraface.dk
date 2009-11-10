@@ -1,5 +1,5 @@
 <?php
-class Intraface_modules_debtor_Controller_Payment extends k_Component
+class Intraface_modules_debtor_Controller_Payments extends k_Component
 {
     protected $registry;
 
@@ -10,7 +10,7 @@ class Intraface_modules_debtor_Controller_Payment extends k_Component
 
     function map($name)
     {
-        return 'Intraface_modules_accounting_Controller_State_Payment';
+        return 'Intraface_modules_debtor_Controller_Payment';
     }
 
     function getKernel()
@@ -18,11 +18,16 @@ class Intraface_modules_debtor_Controller_Payment extends k_Component
         return $this->context->getKernel();
     }
 
+    function getDebtor()
+    {
+        return $this->context->getDebtor();
+    }
+
     function postForm()
     {
         $debtor_module = $this->getKernel()->module('debtor');
         $translation = $this->getKernel()->getTranslation('debtor');
-        $object = $this->getModel();
+        $object = $this->getDebtor();
             $payment = $this->getPayment();
             if ($id = $payment->update($_POST)) {
                     if ($this->getKernel()->user->hasModuleAccess('accounting')) {

@@ -785,6 +785,11 @@ class Contact extends Intraface_Standard
         return $this->keywords = new Keyword($this);
     }
 
+    function getKeyword()
+    {
+        return $this->getKeywords();
+    }
+
     function getKeywordAppender()
     {
         return new Intraface_Keyword_Appender($this);

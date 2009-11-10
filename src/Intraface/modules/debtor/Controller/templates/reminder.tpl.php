@@ -190,18 +190,16 @@ $reminder = $context->getReminder();
     			<strong>Vigtigt</strong>: Registering af betaling her vedrører indtil videre KUN rukkergebyret på DENNE rykker. Dvs. du skal registere betalingen for fakturaer og tidligere rykkere på de respektive fakturaer og rykkere!
     		</div>
 
-            <form method="post" action="register_payment.php">
+            <form method="post" action="<?php e(url('payment')); ?>">
                 <?php
                 /**
                  * @TODO: hack as long as the payment types are not the same as on the reminder
                  */
                 if ($reminder->get('payment_method') == 2 || $reminder->get('payment_method') == 3) {
                     $payment_method = 1; // giro
-                }
-                elseif ($reminder->get('round_off')) {
+                } elseif ($reminder->get('round_off')) {
                     $payment_method = 3; // cash
-                }
-                else {
+                } else {
                     $payment_method = 0; // bank_transfer
                 }
 
@@ -225,10 +223,10 @@ $reminder = $context->getReminder();
                 <div style="clear: both;">
                     <input class="confirm" type="submit" name="payment" value="Registrér" title="Dette vil registrere betalingen" />
                     <?php e(t('or', 'common')); ?>
-                    <a href="register_payment.php?for=reminder&amp;id=<?php e($reminder->get('id')); ?>"><?php e(t('Give me more choices')); ?></a>.
+                    <a href="<?php e(url('payment')); ?>"><?php e(t('Give me more choices')); ?></a>.
                 </div>
             </form>
-            <p><a href="register_depreciation.php?for=reminder&amp;id=<?php e($reminder->get('id')); ?>"><?php e(t('I am not going to recieve the full payment...')); ?></a></p>
+            <p><a href="<?php e(url('depreciation')); ?>"><?php e(t('I am not going to recieve the full payment...')); ?></a></p>
         </div>
     <?php endif; ?>
 
