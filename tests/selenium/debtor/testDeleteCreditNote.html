@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=debtor,invoice,contact,product&amp;helper_function=Administration:fillInIntranetAddress,Contact:create,Product:create&amp;login=true</td>
+	<td>install/reset-staging-server.php?modules=onlinepayment,debtor,invoice,contact,product&amp;helper_function=Administration:fillInIntranetAddress,Contact:create,Product:create&amp;login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -28,32 +28,22 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=create invoice</td>
+	<td>link=Create invoice</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>search</td>
-	<td>tes</td>
+	<td>query</td>
+	<td>test</td>
 </tr>
 <tr>
-	<td>keyUp</td>
-	<td>search</td>
-	<td>t</td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>1000</td>
+	<td>click</td>
+	<td>contact_1</td>
 	<td></td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>contact_select</td>
-	<td>label=Contact 1</td>
-</tr>
-<tr>
 	<td>clickAndWait</td>
-	<td>go_search</td>
+	<td>submit</td>
 	<td></td>
 </tr>
 <tr>
@@ -119,16 +109,6 @@
 <tr>
 	<td>verifyTextNotPresent</td>
 	<td>credit_note #1</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>credit_notes</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertConfirmation</td>
-	<td>Are you sure?</td>
 	<td></td>
 </tr>
 <tr>

@@ -1,16 +1,19 @@
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>testAddProductWithVariation</title>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>procurement:testAddProductWithVariation</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">testAddProductWithVariation</td></tr>
+<tr><td rowspan="1" colspan="3">procurement:testAddProductWithVariation</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=product,shop,procurement,administration&helper_function=Product:createWithVariations,Administration:fillInIntranetAddress&login=true</td>
+	<td>install/reset-staging-server.php?modules=product,shop,procurement,administration&amp;helper_function=Product:createWithVariations,Administration:fillInIntranetAddress&amp;login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -20,7 +23,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=you can create new procurements</td>
+	<td>link=procurement</td>
 	<td></td>
 </tr>
 <tr>
@@ -65,7 +68,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//img[@title="See the product's variations"]</td>
+	<td>//img[@title=&quot;See the product's variations&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -150,7 +153,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[contains(@href, 'item_edit.php?procurement_id=1&id=1')]</td>
+	<td>//a[contains(@href, 'item_edit.php?procurement_id=1&amp;id=1')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -175,7 +178,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[contains(@href, 'item_edit.php?procurement_id=1&id=3')]</td>
+	<td>//a[contains(@href, 'item_edit.php?procurement_id=1&amp;id=3')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -185,7 +188,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//img[@title="See the product's variations"]</td>
+	<td>//img[@title=&quot;See the product's variations&quot;]</td>
 	<td></td>
 </tr>
 <tr>

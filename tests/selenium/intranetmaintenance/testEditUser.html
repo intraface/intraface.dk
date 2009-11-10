@@ -1,93 +1,95 @@
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>04EditUser</title>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>intranetmaintenance:testEditUser</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">04EditUser</td></tr>
+<tr><td rowspan="1" colspan="3">intranetmaintenance:testEditUser</td></tr>
 </thead><tbody>
 <tr>
-    <td>open</td>
-    <td>install/reset-staging-server.php?modules=intranetmaintenance&login=true</td>
-    <td></td>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=intranetmaintenance&amp;login=true</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=login</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=intranetmaintenance</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=intranetmaintenance</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=users</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=Users</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>search</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>search</td>
+	<td></td>
 </tr>
 <tr>
-    <td>assertTextPresent</td>
-    <td>start@intraface.dk</td>
-    <td></td>
+	<td>assertTextPresent</td>
+	<td>start@intraface.dk</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=[not filled in]</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=[not filled in]</td>
+	<td></td>
 </tr>
 <tr>
-    <td>assertTextPresent</td>
-    <td>User: start@intraface.dk</td>
-    <td></td>
+	<td>assertTextPresent</td>
+	<td>User: start@intraface.dk</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>//a[contains(@href, 'user.php?id=1&intranet_id=1')]</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>//a[contains(@href, 'user.php?id=1&amp;intranet_id=1')]</td>
+	<td></td>
 </tr>
 <tr>
-    <td>assertTextPresent</td>
-    <td>User: start@intraface.dk, intranet: Welcome to Intraface</td>
-    <td></td>
+	<td>assertTextPresent</td>
+	<td>User: start@intraface.dk, intranet: Welcome to Intraface</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=edit</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=edit</td>
+	<td></td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>address_name</td>
-    <td>start@intraface.dk</td>
+	<td>type</td>
+	<td>address_name</td>
+	<td>start@intraface.dk</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>password</td>
-    <td>password</td>
+	<td>type</td>
+	<td>password</td>
+	<td>password</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>confirm_password</td>
-    <td>password</td>
-</tr>
-
-<tr>
-    <td>clickAndWait</td>
-    <td>submit-save-address</td>
-    <td></td>
+	<td>type</td>
+	<td>confirm_password</td>
+	<td>password</td>
 </tr>
 <tr>
-    <td>assertTextPresent</td>
-    <td>User: start@intraface.dk, intranet: Welcome to Intraface</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>submit-save-address</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>User: start@intraface.dk, intranet: Welcome to Intraface</td>
+	<td></td>
 </tr>
 
 </tbody></table>

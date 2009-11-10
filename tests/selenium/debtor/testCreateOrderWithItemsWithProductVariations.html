@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=order,debtor,contact,product,shop,administration&amp;helper_function=Product:createWithVariations,Administration:fillInIntranetAddress,Contact:create&amp;login=true</td>
+	<td>install/reset-staging-server.php?modules=order,debtor,contact,product,shop,administration,onlinepayment&amp;helper_function=Product:createWithVariations,Administration:fillInIntranetAddress,Contact:create&amp;login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -23,37 +23,32 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=you can create new orders under debtor</td>
+	<td>link=debtor</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=create order</td>
+	<td>link=Create order</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>search</td>
-	<td>Con</td>
+	<td>query</td>
+	<td>Cont</td>
 </tr>
 <tr>
-	<td>keyUp</td>
-	<td>search</td>
-	<td>t</td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>2000</td>
+	<td>click</td>
+	<td>contact_1</td>
 	<td></td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>contact_select</td>
-	<td>label=Contact 1</td>
-</tr>
-<tr>
 	<td>clickAndWait</td>
-	<td>go_search</td>
+	<td>submit</td>
 	<td></td>
 </tr>
 <tr>

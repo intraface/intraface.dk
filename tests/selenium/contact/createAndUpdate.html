@@ -1,122 +1,125 @@
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>010createAndUpdate</title>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>contact:createAndUpdate</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">010createAndUpdate</td></tr>
+<tr><td rowspan="1" colspan="3">contact:createAndUpdate</td></tr>
 </thead><tbody>
 <tr>
-    <td>open</td>
-    <td>install/reset-staging-server.php?modules=contact&helper_function=&login=true</td>
-    <td></td>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=contact&amp;helper_function=&amp;login=true</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=login</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=contact</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=contact</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=create contact</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=Create contact</td>
+	<td></td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>name</td>
-    <td>Test Person</td>
+	<td>type</td>
+	<td>name</td>
+	<td>Test Person</td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>contact-type</td>
-    <td>label=private</td>
+	<td>select</td>
+	<td>contact-type</td>
+	<td>label=private</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>address</td>
-    <td>Test Adresse</td>
+	<td>type</td>
+	<td>address</td>
+	<td>Test Adresse</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>postalcode</td>
-    <td>8000</td>
+	<td>type</td>
+	<td>postalcode</td>
+	<td>8000</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>town</td>
-    <td>Testby</td>
+	<td>type</td>
+	<td>town</td>
+	<td>Testby</td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>save</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>save</td>
+	<td></td>
 </tr>
 <tr>
-    <td>assertTextPresent</td>
-    <td>vcard</td>
-    <td></td>
+	<td>assertTextPresent</td>
+	<td>Vcard</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=edit</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=Edit</td>
+	<td></td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>name</td>
-    <td>Test Person - rettet</td>
+	<td>type</td>
+	<td>name</td>
+	<td>Test Person - rettet</td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>email</td>
-    <td>test@email.dk</td>
+	<td>type</td>
+	<td>email</td>
+	<td>test@email.dk</td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>save</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>save</td>
+	<td></td>
 </tr>
 <tr>
-    <td>assertTextPresent</td>
-    <td>Test Person - rettet</td>
-    <td></td>
+	<td>assertTextPresent</td>
+	<td>Test Person - rettet</td>
+	<td></td>
 </tr>
 <tr>
-    <td>assertTextPresent</td>
-    <td>test@email.dk</td>
-    <td></td>
+	<td>assertTextPresent</td>
+	<td>test@email.dk</td>
+	<td></td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>link=close</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>link=Close</td>
+	<td></td>
 </tr>
 <tr>
-    <td>click</td>
-    <td>selected[]</td>
-    <td></td>
+	<td>click</td>
+	<td>selected[]</td>
+	<td></td>
 </tr>
 <tr>
-    <td>select</td>
-    <td>action</td>
-    <td>label=Slet valgte</td>
+	<td>select</td>
+	<td>action</td>
+	<td>label=Delete</td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>//input[@value='Udfør']</td>
-    <td></td>
+	<td>clickAndWait</td>
+	<td>//input[@value='Execute']</td>
+	<td></td>
 </tr>
 <tr>
-    <td>assertTextNotPresent</td>
-    <td>Test Person - rettet</td>
-    <td></td>
+	<td>assertTextNotPresent</td>
+	<td>Test Person - rettet</td>
+	<td></td>
 </tr>
 
 </tbody></table>
