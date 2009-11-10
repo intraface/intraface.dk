@@ -1,28 +1,18 @@
 <?php
 class Intraface_Controller_ModuleGatekeeper extends k_Component
 {
-    /*
-    function dispatch()
-    {
-        if ($this->name() == 'module') {
-            throw new Exception('No module chosen');
-        }
-
-        try {
-            $this->getKernel()->module($this->name());
-        } catch (Exception $e) {
-            throw new Exception('No access to module ' . $this->name());
-        }
-
-        return parent::dispatch();
-    }
-    */
-
     function map($name)
     {
         foreach ($this->getModules() as $module) {
-            if ($module['name'] == $name);
-            return 'Intraface_modules_'.$name.'_Controller_Index';
+            if ($module['name'] == $name) {
+                try {
+                    $this->getKernel()->module($name);
+                } catch (Exception $e) {
+                    throw new Exception('No access to module ' . $name);
+                }
+                return 'Intraface_modules_'.$name.'_Controller_Index';
+            }
+
         }
         return parent::map($name);
     }
