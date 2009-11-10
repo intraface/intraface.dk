@@ -1,7 +1,9 @@
-
+<?php
+$values = $context->getValues();
+?>
 <h1><?php e(__('Settings')); ?></h1>
 
-<?php if (isset($error)) echo $error->view(); ?>
+<?php echo $context->getError()->view(); ?>
 
 <form action="<?php e(url()); ?>" method="post">
 

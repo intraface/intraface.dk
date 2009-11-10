@@ -4,6 +4,7 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
     protected $product;
     public $multiple;
     public $quantity;
+    public $selected_products;
 
     function renderHtml()
     {
@@ -18,8 +19,7 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
             $add_redirect->setIdentifier('add_new');
             $url = $add_redirect->setDestination($product_module->getPath().'product_edit.php', $product_module->getPath().'select_product.php?'.$this->getRedirect()->get('redirect_query_string').'&set_quantity='.$this->quantity);
             $add_redirect->askParameter('product_id');
-            header('location: '.$url);
-            exit;
+            return new k_SeeOther($url);
         }
 
         if (!empty($_GET['select_variation'])) {
@@ -28,8 +28,7 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
             $url = $variation_redirect->setDestination($product_module->getPath().'select_product_variation.php?product_id='.intval($_GET['select_variation']).'&set_quantity='.$this->quantity, $product_module->getPath().'select_product.php?'.$this->getRedirect()->get('redirect_query_string').'&set_quantity='.$this->quantity);
             $type = ($this->multiple) ? 'multiple' : 'single';
             $variation_redirect->askParameter('product_variation_id', $type);
-            header('location: '.$url);
-            exit;
+            return new k_SeeOther($url);
         }
 
         if (isset($_GET['return_redirect_id'])) {
@@ -65,20 +64,19 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
 
         $list = $product->getList();
 
-        /*
+
         $product_values = array();
-        $selected_products = array();
+        $this->selected_products = array();
         if (is_array($product_values)) {
             if ($this->multiple) {
                 foreach ($product_values AS $selection) {
                     $selection['value'] = unserialize($selection['value']);
-                    $selected_products[$selection['value']['product_id']] = $selection['extra_value'];
+                    $this->selected_products[$selection['value']['product_id']] = $selection['extra_value'];
                 }
             } else {
-                $selected_products[$product_values['value']['product_id']] = $product_values['extra_value'];
+                $this->selected_products[$product_values['value']['product_id']] = $product_values['extra_value'];
             }
         }
-        */
 
         $smarty = new k_Template(dirname(__FILE__) . '/tpl/selectproduct.tpl.php');
         return $smarty->render($this);

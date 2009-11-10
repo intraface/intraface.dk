@@ -12,8 +12,8 @@ $address_value = $context->getValues();
 <?php echo $context->getUser()->error->view(); ?>
 <?php echo $context->getUser()->getAddress()->error->view(); ?>
 
-<form action="<?php e(url(null)); ?>" method="post">
-
+<form action="<?php e(url(null, array($context->subview()))); ?>" method="post">
+	<input type="hidden" name="_method" value="put" />
 <fieldset>
     <legend><?php e(t('information about user')); ?></legend>
     <div class="formrow">

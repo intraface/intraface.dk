@@ -58,7 +58,7 @@ class MainDebtor extends Intraface_Main
         // Så skal der i stedet laves et felt mere der hedder bogført (booked)
         // Så skal der nok være felter status_1_date, status_2_date ... som angiver hvilken dato at det er kommet i hver status.
 
-         $this->includeSettingFile('settings.php');
+        $this->includeSettingFile('settings.php');
 
         /*
         // Følgende er et nyt forslag til status:
@@ -87,12 +87,15 @@ class MainDebtor extends Intraface_Main
         // $this->addPreloadFile('debtorFactory.php');
         // $this->addPreloadFile('DebtorSetting.php');
 
-        $this->addControlpanelFile('debtor settings', 'modules/debtor/setting.php');
+        $this->addControlpanelFile('debtor settings', 'core/restricted/module/debtor/settings');
 
         $this->addDependentModule('contact');
         $this->addDependentModule('product');
 
     }
 
+    function getPath()
+    {
+        return url('/core/restricted/module/debtor/');
+    }
 }
-?>

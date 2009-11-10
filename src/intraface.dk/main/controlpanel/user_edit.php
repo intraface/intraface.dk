@@ -36,7 +36,7 @@ $page->start(t('edit user'));
 <h1><?php e(t('edit user')); ?></h1>
 
 <ul class="options">
-    <li><a href="index.php"><?php e(t('close')); ?></a></li>
+    <li><a href=""><?php e(t('close')); ?></a></li>
 </ul>
 
 <?php echo $user->error->view(); ?>

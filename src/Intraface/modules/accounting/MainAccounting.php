@@ -101,4 +101,9 @@ class MainAccounting extends Intraface_Main
         $this->addPreloadFile('VoucherFile.php');
         $this->addPreloadFile('VatPeriod.php');
     }
+
+    function getPath()
+    {
+        return url('/core/restricted/module/accounting/');
+    }
 }

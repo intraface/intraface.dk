@@ -7,9 +7,9 @@
  * @since	1.0
  * @version	1.0
  */
-class MainContact extends Intraface_Main 
+class MainContact extends Intraface_Main
 {
-    function __construct() 
+    function __construct()
     {
         $this->module_name = 'contact';
         $this->menu_label = 'Kontakter'; // Navnet der vil stå i menuen
@@ -75,6 +75,8 @@ class MainContact extends Intraface_Main
 
     }
 
+    function getPath()
+    {
+        return url('/core/restricted/module/contact/');
+    }
 }
-
-?>

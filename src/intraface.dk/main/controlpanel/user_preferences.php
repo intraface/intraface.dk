@@ -97,7 +97,7 @@ $page->start(t('user preferences'));
 <h1><?php e(t('user preferences')); ?></h1>
 
 <ul class="options">
-    <li><a href="index.php"><?php e(t('close', 'common')); ?></a></li>
+    <li><a href=""><?php e(t('close', 'common')); ?></a></li>
     <li><a href="user.php"><?php e(t('user')); ?></a></li>
 </ul>
 

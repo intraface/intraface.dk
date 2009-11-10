@@ -38,6 +38,8 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             return 'Intraface_modules_debtor_Controller_Items';
         } elseif ($name == 'onlinepayment') {
             return 'Intraface_modules_onlinepayment_Controller_Index';
+        } elseif ($name == 'send') {
+            return 'Intraface_modules_debtor_Controller_Send';
         }
     }
 
@@ -53,9 +55,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
     function renderHtml()
     {
-        $debtor_module = $this->getKernel()->module('debtor');
         $contact_module = $this->getKernel()->useModule('onlinepayment');
-        $translation = $this->getKernel()->getTranslation('debtor');
         $contact_module = $this->getKernel()->getModule('contact');
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/show.tpl.php');
@@ -81,13 +81,10 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
     {
         $smarty = new k_Template(dirname(__FILE__) . '/templates/edit.tpl.php');
         return $smarty->render($this);
-
     }
 
     function postForm()
     {
-        $debtor_module = $this->getKernel()->module('debtor');
-        $translation = $this->getKernel()->getTranslation('debtor');
         $contact_module = $this->getKernel()->getModule('contact');
 
         // slet debtoren
@@ -96,12 +93,9 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             $this->getDebtor()->delete();
             return new k_SeeOther($this->url('../', array('use_stored' => 'true')));
         } elseif (!empty($_POST['send_electronic_invoice'])) {
-            header('Location: send.php?send=electronic_email&id=' . intval($this->getDebtor()->get('id')));
-            exit;
+            return new k_SeeOther($this->url('send', array('send' => 'electronic_email')));
         } elseif (!empty($_POST['send_email'])) {
-            header('Location: send.php?send=email&id=' . intval($this->getDebtor()->get('id')));
-            exit;
-
+            return new k_SeeOther($this->url('send', array('send' => 'email')));
         }
 
         // annuller ordre tilbud eller order
@@ -425,8 +419,6 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
     function getDebtor()
     {
-        $debtor_module = $this->getKernel()->module('debtor');
-        $translation = $this->getKernel()->getTranslation('debtor');
         $contact_module = $this->getKernel()->getModule('contact');
 
         if (is_object($this->debtor)) {

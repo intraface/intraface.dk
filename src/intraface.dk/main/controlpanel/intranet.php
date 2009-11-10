@@ -17,7 +17,7 @@ $page->start(t('about the intranet'));
 <h1><?php e(t('about the intranet')); ?></h1>
 
 <ul class="options">
-	<li><a href="index.php"><?php e(t('close', 'common')); ?></a></li>
+	<li><a href=""><?php e(t('close', 'common')); ?></a></li>
 <?php if ($kernel->user->hasModuleAccess('administration')): $administration_module = $kernel->useModule('administration'); ?>
 	<li><a href="<?php e($administration_module->getPath()); ?>intranet_edit.php"><?php e(t('edit', 'common')); ?></a></li>
 <?php endif; ?>

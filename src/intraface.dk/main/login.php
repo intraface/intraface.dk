@@ -14,7 +14,7 @@ if (isset($_POST['email']) AND isset($_POST['password'])) {
     $user = $auth->authenticate($adapter);
 
 	if (is_object($user)) {
-	    header('Location: '.url('/main/index.php'));
+	    header('Location: '.url('/main/'));
         exit;
     } else {
 		$msg = 'wrong credentials';

@@ -37,9 +37,12 @@ class MainProduct extends Intraface_Main
         //$this->addControlpanelFile('Produkter', '/modules/product/setting.php');
 
         $this->addFrontpageFile('include_frontpage.php');
-        
+
         // $this->addSubmenuItem('attributes', 'attributes.php', 'module:webshop');
     }
 
+    function getPath()
+    {
+        return url('/core/restricted/module/product/');
+    }
 }
-?>

@@ -1,6 +1,4 @@
 <?php
-
-
 require_once dirname(__FILE__) . '/../../include_first.php';
 ini_set('include_path', PATH_INCLUDE_PATH);
 

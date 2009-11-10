@@ -22,7 +22,7 @@
         <?php
         $module_administration = $context->getKernel()->useModule('administration');
         ?>
-        <a href="<?php e(url('../../../administration/intranet/'.$context->getKernel()->intranet->getId(), array('edit'))); ?>"><?php e(t('Fill in address')); ?></a>.
+        <a href="<?php e(url('../../../administration/intranet', array('edit'))); ?>"><?php e(t('Fill in address')); ?></a>.
     <?php else: ?>
         Du har ikke adgang til at rette adresseoplysningerne, det må du bede din administrator om at gøre.
     <?php endif; ?>

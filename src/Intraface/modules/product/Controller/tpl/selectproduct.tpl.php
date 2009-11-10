@@ -1,6 +1,7 @@
 <?php
 $quantity = $context->quantity;
 $multiple = $context->multiple;
+$selected_products = $context->selected_products;
 ?>
 <h1><?php e(t('select product')); ?></h1>
 

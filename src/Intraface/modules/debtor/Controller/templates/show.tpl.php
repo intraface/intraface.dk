@@ -37,13 +37,12 @@ if (isset($onlinepayment)) {
         $module_administration = $context->getKernel()->useModule('administration');
     }
     $valid_sender = true;
-
     switch ($context->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
         case 'intranet':
             if ($context->getKernel()->intranet->address->get('name') == '' || $context->getKernel()->intranet->address->get('email') == '') {
                 $valid_sender = false;
                 if ($context->getKernel()->user->hasModuleAccess('administration')) {
-                    echo '<div class="message-dependent"><p>'.__('You need to fill in an e-mail address to send e-mail').'. <a href="'.$module_administration->getPath().'intranet_edit.php">'.__('do it now').'</a>.</p></div>';
+                    echo '<div class="message-dependent"><p>'.__('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../administration/intranet', array('edit')) . '">'.t('do it now').'</a>.</p></div>';
                 }
                 else {
                     echo '<div class="message-dependent"><p>'.__('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
@@ -54,7 +53,7 @@ if (isset($onlinepayment)) {
         case 'user':
             if ($context->getKernel()->user->getAddress()->get('name') == '' || $context->getKernel()->user->getAddress()->get('email') == '') {
                 $valid_sender = false;
-                echo '<div class="message-dependent"><p>'.__('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('/main/controlpanel/user_edit.php').'">'.__('do it now').'</a>.</p></div>';
+                echo '<div class="message-dependent"><p>'.__('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../controlpanel/user', array('edit')).'">'.__('do it now').'</a>.</p></div>';
             }
             break;
         case 'defined':

@@ -58,9 +58,9 @@ $page->start('Kommentarer');
 		<td><a href="/modules/contact/contact.php?id=<?php e($comment['contact_id']); ?>"><?php e($comment['contact_name']); ?></a></td>
 		<td class="options">
 			<?php if ($comment['approved'] == 0): ?>
-			<a class="approve" href="index.php?approve=<?php e($comment['code']); ?>">Godkend</a>
+			<a class="approve" href="?approve=<?php e($comment['code']); ?>">Godkend</a>
 			<?php endif; ?>
-			<a class="delete" href="index.php?delete=<?php e($comment['id']); ?>">Slet</a>
+			<a class="delete" href="?delete=<?php e($comment['id']); ?>">Slet</a>
 		</td>
 	</tr>
 <?php endforeach; ?>

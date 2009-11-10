@@ -24,7 +24,6 @@ class UserAdministration extends Intraface_User
      */
     function update($input)
     {
-        $this->validate($input);
         $validator = new Intraface_Validator($this->error);
 
         if (!empty($input["password"])) {
