@@ -22,9 +22,9 @@ class Intraface_Date
             $default_year = date("Y");
         }
 
-        if (ereg("/^".$d.$s.$m.$s.$y."$/", $this->date, $parts)) {
+        if (ereg("^".$d.$s.$m.$s.$y."$", $this->date, $parts)) {
             // true
-        } elseif (ereg("/^".$d.$s.$m."$/", $this->date, $parts)) {
+        } elseif (ereg("^".$d.$s.$m."$", $this->date, $parts)) {
             $parts[5] = $default_year;
             // true
         } else {
