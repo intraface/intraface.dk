@@ -1,7 +1,7 @@
-<h1><?php e(t('user preferences')); ?></h1>
+<h1><?php e(t('User preferences')); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url('../')); ?>"><?php e(t('close', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
 </ul>
 
 <form action="<?php e(url()); ?>" method="post">

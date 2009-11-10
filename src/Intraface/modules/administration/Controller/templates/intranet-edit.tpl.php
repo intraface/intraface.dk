@@ -75,6 +75,6 @@ $address = $intranet->address->get();
 
 	<div style="clear:both;">
 		<input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />
-		<a href="<?php e(url('../')); ?>"><?php e(t('Cancel', 'common')); ?></a>
+		<a href="<?php e(url(null)); ?>"><?php e(t('Cancel', 'common')); ?></a>
 	</div>
 </form>

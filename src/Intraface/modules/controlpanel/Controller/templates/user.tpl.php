@@ -6,10 +6,9 @@ $address_value = $context->getValues();
 <h1><?php e(t('user settings')); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url('../')); ?>"><?php e(t('close')); ?></a></li>
-    <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('edit', 'common')); ?></a></li>
-    <li><a href="<?php e(url('preferences')); ?>"><?php e(t('preferences', 'controlpanel')); ?></a></li>
-    <li><a href="<?php e(url('changepassword')); ?>"><?php e(t('change password')); ?></a></li>
+    <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></li>
+    <li><a href="<?php e(url('changepassword')); ?>"><?php e(t('Change password')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 <table class="vcard">

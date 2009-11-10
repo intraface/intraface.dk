@@ -2,13 +2,12 @@
 $values = $context->getValues();
 $address = $context->getValues();
 ?>
-<h1><?php e(t('About the intranet')); ?></h1>
+
+<h1><?php e(t('about the intranet')); ?></h1>
 
 <ul class="options">
-	<li><a href="<?php e(url('../')); ?>"><?php e(t('close', 'common')); ?></a></li>
-<?php if ($context->getKernel()->user->hasModuleAccess('administration')): $administration_module = $context->getKernel()->useModule('administration'); ?>
-	<li><a href="<?php e(url('../../administration/intranet/' . $context->getKernel()->intranet->getId(), array('edit'))); ?>"><?php e(t('edit', 'common')); ?></a></li>
-<?php endif; ?>
+	<li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
+	<li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></li>
 </ul>
 
 <?php echo $context->getKernel()->intranet->error->view(); ?>

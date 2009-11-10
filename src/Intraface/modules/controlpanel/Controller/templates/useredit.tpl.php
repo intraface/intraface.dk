@@ -3,10 +3,10 @@ $value = $context->getValues();
 $address_value = $context->getValues();
 ?>
 
-<h1><?php e(t('edit user')); ?></h1>
+<h1><?php e(t('Edit user')); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url(null)); ?>"><?php e(t('close')); ?></a></li>
+    <li><a href="<?php e(url(null)); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 <?php echo $context->getUser()->error->view(); ?>

@@ -5,7 +5,8 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
 
     function renderHtml()
     {
-        return 'Intentionally left blank';
+        $smarty = new k_Template(dirname(__FILE__) . '/templates/intranet.tpl.php');
+        return $smarty->render($this);
     }
 
     function renderHtmlEdit()
@@ -36,57 +37,54 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
     	$values = $intranet->get();
     	$address = $intranet->address->get();
 
-
         $smarty = new k_Template(dirname(__FILE__) . '/templates/intranet-edit.tpl.php');
         return $smarty->render($this, array('intranet' => $intranet, 'kernel' => $this->getKernel()));
     }
 
     function postMultipart()
     {
-
         $modul = $this->getKernel()->module('administration');
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
-        	$intranet = new IntranetAdministration($this->getKernel());
-        	$values = $_POST;
+      	$intranet = new IntranetAdministration($this->getKernel());
+       	$values = $_POST;
 
-        	$filehandler = new FileHandler($this->getKernel());
-        	$filehandler->createUpload();
-        	if ($filehandler->upload->isUploadFile('new_pdf_header_file') && $id = $filehandler->upload->upload('new_pdf_header_file')) {
-                $filehandler->load();
+       	$filehandler = new FileHandler($this->getKernel());
+       	$filehandler->createUpload();
+       	if ($filehandler->upload->isUploadFile('new_pdf_header_file') && $id = $filehandler->upload->upload('new_pdf_header_file')) {
+            $filehandler->load();
 
-                $type = $filehandler->get('file_type');
-                if ($type['mime_type'] == 'image/jpeg' || $type['mime_type'] == 'image/pjpeg') {
-                    $values['pdf_header_file_id'] = $id;
-                } else {
-                    $intranet->error->set('Header should be a .jpg image - got ' . $type['mime_type']);
-                    $filehandler->delete();
-                }
-        	}
+            $type = $filehandler->get('file_type');
+            if ($type['mime_type'] == 'image/jpeg' || $type['mime_type'] == 'image/pjpeg') {
+                $values['pdf_header_file_id'] = $id;
+            } else {
+                $intranet->error->set('Header should be a .jpg image - got ' . $type['mime_type']);
+                $filehandler->delete();
+            }
+       	}
 
-        	if ($intranet->update($values)) {
-        		$address_values = $_POST;
-                $address_values['name'] = $_POST['address_name'];
-        		if ($intranet->address->validate($address_values) && $intranet->address->save($address_values)) {
-        			if (isset($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
-        				$module_filemanager = $this->getKernel()->useModule('filemanager');
-        				$redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-        	 			$url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1');
-        				$redirect->askParameter('file_handler_id');
-        				header('Location: ' . $url);
-        				exit;
-        			} else {
-        				header('Location: '.url('/main/controlpanel/intranet.php'));
-        			}
+        if ($intranet->update($values)) {
+            $address_values = $_POST;
+            $address_values['name'] = $_POST['address_name'];
+        	if ($intranet->address->validate($address_values) && $intranet->address->save($address_values)) {
+        		if (isset($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
+        			$module_filemanager = $this->getKernel()->useModule('filemanager');
+        			$redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
+        			$url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1');
+        			$redirect->askParameter('file_handler_id');
+        			header('Location: ' . $url);
+        			exit;
+        		} else {
+        			header('Location: '.$this->url('/main/controlpanel/intranet.php'));
         		}
-                $values = $_POST;
-                $address = $_POST;
-
-        	} else {
-        		$values = $_POST;
-        		$address = $_POST;
         	}
+            $values = $_POST;
+            $address = $_POST;
+        } else {
+       		$values = $_POST;
+       		$address = $_POST;
+       	}
 
-        	return $this->render();
+       	return $this->render();
     }
 
     function getKernel()
@@ -97,5 +95,18 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
     function t($phrase)
     {
         return $phrase;
+    }
+
+    function getValues()
+    {
+        $this->getKernel()->useShared('filehandler');
+
+        $translation = $this->getKernel()->getTranslation('controlpanel');
+
+
+        $values = $this->getKernel()->intranet->get();
+        $address = $this->getKernel()->intranet->address->get();
+
+        return array_merge($values, $address);
     }
 }
