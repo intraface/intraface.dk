@@ -31,7 +31,7 @@ class Intraface_modules_currency_Currency_Type
     public function getByIsoCode($iso_code)
     {
         $iso_code = ucfirst(strtolower($iso_code));
-        if (!ereg("^[A-Z][a-z]{2}$", $iso_code)) {
+        if (!preg_match("/^[A-Z][a-z]{2}$/", $iso_code)) {
             throw new Exception('Invalid iso code '.$iso_code);
         }
 
