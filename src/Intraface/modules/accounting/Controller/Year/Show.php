@@ -1,8 +1,6 @@
 <?php
 class Intraface_modules_accounting_Controller_Year_Show extends k_Component
 {
-    protected $registry;
-
     protected function map($name)
     {
         if ($name == 'edit') {
@@ -20,11 +18,6 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
         } elseif ($name == 'end') {
             return 'Intraface_modules_accounting_Controller_Year_End';
         }
-    }
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
     }
 
     function renderHtml()

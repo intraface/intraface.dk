@@ -10,10 +10,9 @@ if ($kernel->user->hasModuleAccess('debtor') AND $kernel->user->hasModuleAccess(
 
     if (!$invoice->isFilledIn()) {
         $_advice[] = array(
-            'msg' => 'you can create new invoices in the invoice module',
-            'link' => $debtor_module->getPath(),
+            'msg' => 'You can create new invoices in the invoice module',
+            'link' => $this->url('module/debtor/invoice/list'),
             'module' => 'debtor'
         );
     }
 }
-?>

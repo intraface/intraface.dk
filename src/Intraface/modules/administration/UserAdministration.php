@@ -14,12 +14,8 @@
  */
 class UserAdministration extends Intraface_User
 {
-    function __construct($kernel,$id)
+    function __construct($kernel, $id)
     {
-        if (!is_object($kernel)) {
-            trigger_error('UserAdministration kræver Kernel', E_USER_ERROR);
-        }
-
         parent::__construct($id);
     }
 
@@ -31,10 +27,12 @@ class UserAdministration extends Intraface_User
         $this->validate($input);
         $validator = new Intraface_Validator($this->error);
 
-        if ($this->id == 0) {
-            $validator->isPassword($input["password"], 6, 16, "Ugyldig adgangskode. Den skal være mellem 6 og 16 tegn, og må indeholde store og små bogstaver samt tal");
-        } else {
-            $validator->isPassword($input["password"], 6, 16, "Ugyldig adgangskode. Den skal være mellem 6 og 16 tegn, og må indeholde store og små bogstaver samt tal", "allow_empty");
+        if (!empty($input["password"])) {
+            if ($this->id == 0) {
+                $validator->isPassword($input["password"], 6, 16, "Ugyldig adgangskode. Den skal være mellem 6 og 16 tegn, og må indeholde store og små bogstaver samt tal");
+            } else {
+                $validator->isPassword($input["password"], 6, 16, "Ugyldig adgangskode. Den skal være mellem 6 og 16 tegn, og må indeholde store og små bogstaver samt tal", "allow_empty");
+            }
         }
 
         $sql = "email = \"".$input["email"]."\"";
@@ -48,18 +46,18 @@ class UserAdministration extends Intraface_User
         }
 
         if ($this->error->isError()) {
-            return(false);
+            return false;
         }
 
         if ($this->id) {
             $this->db->exec("UPDATE user SET ".$sql." WHERE id = ".$this->id);
             $this->load();
-            return($this->id);
+            return $this->id;
         } else {
             $this->db->exec("INSERT INTO user SET ".$sql);
             $this->id = $this->db->lastInsertId();
             $this->load();
-            return($this->id);
+            return $this->id;
         }
     }
 }

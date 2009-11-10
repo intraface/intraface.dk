@@ -14,4 +14,3 @@ if (!$product->isFilledIn()):
         'module' => $product_module->getName()
     );
 endif;
-?>

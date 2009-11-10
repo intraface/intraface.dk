@@ -24,6 +24,8 @@ class Intraface_modules_product_Controller_Show extends k_Component
         } elseif ($name == 'attributes') {
             // @todo check whether product has attributes
             return 'Intraface_modules_product_Controller_Attributegroup';
+        } elseif ($name == 'selectvariation') {
+            return 'Intraface_modules_product_Controller_Selectproductvariation';
         }
     }
 

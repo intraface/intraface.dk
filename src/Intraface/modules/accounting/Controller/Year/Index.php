@@ -3,6 +3,11 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
 {
     protected $registry;
 
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     protected function map($name)
     {
         if ($name == 'create') {
@@ -10,11 +15,6 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
         } elseif (is_numeric($name)) {
         	return 'Intraface_modules_accounting_Controller_Year_Show';
         }
-    }
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
     }
 
     function renderHtml()
@@ -45,9 +45,6 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
 
     function postForm()
     {
-
-        $module = $this->getKernel()->module('accounting');
-        // her sætter vi et år
         if (!empty($_POST['id']) AND is_numeric($_POST['id'])) {
         	$year = new Year($this->getKernel(), $_POST['id']);
 
@@ -74,8 +71,6 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
 
     function getYearGateway()
     {
-        $gateway = $this->context->getYearGateway();
-        return $gateway;
+        return new Year($this->getKernel());
     }
-
 }

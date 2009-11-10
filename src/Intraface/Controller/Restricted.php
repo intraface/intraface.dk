@@ -42,10 +42,47 @@ class Intraface_Controller_Restricted extends k_Component
 			$this->getKernel()->setting->set('user', 'homepage.message', 'hide');
 		}
 
-        //echo $this->user_gateway->findByUsername($this->identity()->user())->getId();
+		$kernel = $this->getKernel();
 
+        // Adds link for id user details is filled in. They are going to be in the top.
+        if ($this->getKernel()->user->hasModuleAccess('controlpanel')) {
+            if (!$this->getKernel()->user->isFilledIn()) {
+            	$_advice[] = array(
+            		'msg' => 'all information about you has not been filled in',
+            		'link' => url('core/restricted/module/controlpanel/user', array('edit')),
+            		'module' => 'dashboard'
+            	);
+            }
+        }
+
+        // getting stuff to show on the dashboard
+        $modules = $this->getKernel()->getModules();
+
+        foreach ($modules as $module) {
+
+        	if (!$this->getKernel()->intranet->hasModuleAccess(intval($module['id']))) {
+        		continue;
+        	}
+        	if (!$this->getKernel()->user->hasModuleAccess(intval($module['id']))) {
+        		continue;
+        	}
+
+        	$module = $this->getKernel()->useModule($module['name']);
+        	$frontpage_files = $module->getFrontpageFiles();
+
+        	if (!is_array($frontpage_files) OR count($frontpage_files) == 0) {
+        		continue;
+        	}
+
+        	foreach ($frontpage_files AS $file) {
+        		$file = PATH_INCLUDE_MODULE . $module->getName() . '/' .$file;
+        		if (file_exists($file)) {
+        			include($file);
+        		}
+        	}
+        }
 		$smarty = new k_Template(dirname(__FILE__) . '/templates/restricted.tpl.php');
-        return $smarty->render($this);
+        return $smarty->render($this, array('_attention_needed' => $_attention_needed, '_advice' => $_advice));
     }
 
     /*

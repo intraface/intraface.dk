@@ -255,6 +255,6 @@ class Intraface_ModuleHandler
 
     private static function isValidModuleName($name)
     {
-        return ereg("^[a-z0-9]+$", $name);
+        return preg_match("/^[a-z0-9]+$/", $name);
     }
 }

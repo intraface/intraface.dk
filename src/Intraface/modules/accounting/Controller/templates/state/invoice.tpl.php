@@ -15,7 +15,7 @@ $items = $context->getItems();
     <p>Gï¿½ til <a href="<?php e($this->url('../../../../../accounting/')); ?>">regnskabet</a></p>
 <?php else: ?>
 
-    <p class="message">Nï¿½r du bogfï¿½rer fakturaerne vil det skyldige belï¿½b blive sat pï¿½ debitorkontoen. Nï¿½r kunden har betalt, skal betalingen bogfï¿½res for at overfï¿½re belï¿½bet fra debitorkontoen til din indkomst konto (fx Bankkonto).</p>
+    <p class="message">Når du bogfører fakturaerne vil det skyldige beløb blive sat på debitorkontoen. Når kunden har betalt, skal betalingen bogføres for at overføre beløbet fra debitorkontoen til din indkomst konto (fx Bankkonto).</p>
 
     <?php $context->getDebtor()->readyForState($context->getYear(), 'skip_check_products'); ?>
     <?php echo $context->getDebtor()->error->view(); ?>
@@ -38,14 +38,14 @@ $items = $context->getItems();
 
     <?php if ($context->getDebtor()->readyForState($context->getYear(), 'skip_check_products')): ?>
         <fieldset>
-            <legend>Oplysninger der bogfï¿½res</legend>
+            <legend>Oplysninger der bogføres</legend>
             <table>
                 <tr>
                     <th>Bilagsnummer</th>
                     <td><input type="text" name="voucher_number" value="<?php e($context->getVoucher()->getMaxNumber() + 1); ?>" /></td>
                 </tr>
                 <tr>
-                    <th>Bogfï¿½r pï¿½ dato</th>
+                    <th>Bogfør på dato</th>
                     <td><input type="text" name="date_state" value="<?php e($context->getDebtor()->get("dk_this_date")); ?>" /></td>
                 </tr>
             </table>

@@ -12,18 +12,17 @@ if ($kernel->user->hasModuleAccess('debtor') AND $kernel->user->hasModuleAccess(
     if (!$order->isFilledIn()) {
         $_advice[] = array(
             'msg' => 'you can create new orders under debtor',
-            'link' => $debtor_module->getPath() . 'list.php?type=order',
+            'link' => $this->url('module/debtor/order/list?create'),
             'module' => 'debtor'
         );
-    }
-    else {
+    } else {
         $db = new DB_Sql;
         $db->query("SELECT * FROM debtor WHERE type = 2 AND status = 0 AND active = 1 AND intranet_id = " . $kernel->intranet->get('id'));
         $orders = $db->numRows();
         if ($orders > 0) {
             $_attention_needed[] = array(
                 'msg' => 'you have unprocessed orders',
-                'link' => $debtor_module->getPath() . 'list.php?type=order',
+                'link' => $this->url('module/debtor/order/list'),
                 'module' => 'debtor'
             );
         }

@@ -1,22 +1,8 @@
 <?php
 class Intraface_modules_accounting_Controller_State extends k_Component
 {
-    protected $registry;
-
-    protected function map($name)
-    {
-    }
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function renderHtml()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
             $this->getKernel()->setting->set('user', 'accounting.state.message', 'hide');
         } elseif (!empty($_GET['message2']) AND in_array($_GET['message2'], array('hide'))) {
@@ -44,9 +30,6 @@ class Intraface_modules_accounting_Controller_State extends k_Component
 
     function getYear()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         $year = $this->context->getYear();
         $year->checkYear();
         return $year;
@@ -59,9 +42,6 @@ class Intraface_modules_accounting_Controller_State extends k_Component
 
     function postForm()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         $voucher = new Voucher($this->getYear());
         // denne funktion v�lger automatisk alle poster i kassekladden
         if (!$voucher->stateDraft()) {
@@ -101,6 +81,4 @@ class Intraface_modules_accounting_Controller_State extends k_Component
     {
     	return new Post($this->getVoucher());
     }
-
 }
-

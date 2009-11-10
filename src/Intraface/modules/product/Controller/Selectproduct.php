@@ -1,20 +1,9 @@
 <?php
-class Intraface_modules_product_Controller_Selectproduct extends k_Component
+class Intraface_modules_product_Controller_Selectproduct extends Intraface_modules_product_Controller_Index
 {
     protected $product;
-
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
     public $multiple;
     public $quantity;
-
-    function getRedirect()
-    {
-        return $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
-    }
 
     function renderHtml()
     {
@@ -95,6 +84,16 @@ class Intraface_modules_product_Controller_Selectproduct extends k_Component
         return $smarty->render($this);
     }
 
+    function getRedirect()
+    {
+        return $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
     function getProducts()
     {
         if (isset($_GET["search"]) || isset($_GET["keyword_id"])) {
@@ -137,8 +136,7 @@ class Intraface_modules_product_Controller_Selectproduct extends k_Component
         return $phrase;
     }
 
-
-    function postForm()
+    function putForm()
     {
         $this->multiple = $this->query('multiple');
         $this->quantity = $this->query('set_quantity');

@@ -33,7 +33,7 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
         		}
         	}
         }
-    	$intranet = new IntranetAdministration($this->getKernel());
+    	$intranet = $this->getIntranetMaintenance();
     	$values = $intranet->get();
     	$address = $intranet->address->get();
 
@@ -41,11 +41,20 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
         return $smarty->render($this, array('intranet' => $intranet, 'kernel' => $this->getKernel()));
     }
 
+    function getIntranetMaintenance()
+    {
+        if (is_object($this->intranetmaintenance)) {
+            return $this->intranetmaintenance;
+        }
+
+        return $this->intranetmaintenance = new IntranetAdministration($this->getKernel());
+    }
+
     function postMultipart()
     {
         $modul = $this->getKernel()->module('administration');
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
-      	$intranet = new IntranetAdministration($this->getKernel());
+      	$intranet = $this->getIntranetMaintenance();
        	$values = $_POST;
 
        	$filehandler = new FileHandler($this->getKernel());
@@ -76,6 +85,8 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
         		} else {
         			header('Location: '.$this->url('/main/controlpanel/intranet.php'));
         		}
+                return new k_SeeOther($this->url());
+
         	}
             $values = $_POST;
             $address = $_POST;

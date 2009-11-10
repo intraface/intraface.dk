@@ -1,5 +1,5 @@
 <?php
-class Intraface_modules_product_Controller_Selectproduct extends k_Component
+class Intraface_modules_product_Controller_Selectproductvariation extends k_Component
 {
     protected $product;
 
@@ -26,22 +26,31 @@ class Intraface_modules_product_Controller_Selectproduct extends k_Component
         } else {
             $quantity = 0;
         }
-
-        if (empty($_GET['product_id'])) {
-            throw new Exception('You need to provide a product_id');
-        }
-
-        $product = new Product($kernel, intval($_GET['product_id']));
+        $product = new Product($this->getKernel(), intval($this->context->name()));
 
         if (isset($_GET['edit_product_variation'])) {
-            $add_redirect = Intraface_Redirect::factory($kernel, 'go');
+            $add_redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
             $add_redirect->setIdentifier('add_new');
             $url = $add_redirect->setDestination($product_module->getPath().'product_edit.php', $product_module->getPath().'select_product.php?'.$redirect->get('redirect_query_string').'&set_quantity='.$quantity);
             header('location: '.$url);
             exit;
         }
+
+        if (!$product->get('has_variation')) {
+            throw new Exception('The product is not with variations');
+        }
+
+        try {
+            $variations = $product->getVariations();
+        } catch(Exception $e) {
+            if ($e->getMessage() == 'No groups is added to the product') {
+                $variations = array();
+            } else {
+                throw $e;
+            }
+        }
         $smarty = new k_Template(dirname(__FILE__) . '/tpl/selectproductvariation.tpl.php');
-        return $smarty->render($this);
+        return $smarty->render($this, array('variations' => $variations));
     }
 
     function getProducts()
@@ -99,7 +108,7 @@ class Intraface_modules_product_Controller_Selectproduct extends k_Component
             throw new Exception('You need to provide a product_id');
         }
 
-        $product = new Product($kernel, intval($_POST['product_id']));
+        $product = new Product($this->getKernel(), intval($_POST['product_id']));
 
         if (isset($_POST['submit']) || isset($_POST['submit_close'])) {
             if ($multiple && is_array($_POST['selected'])) {

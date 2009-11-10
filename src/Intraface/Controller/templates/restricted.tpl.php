@@ -6,7 +6,7 @@
 
 <?php if ($context->getKernel()->setting->get('user', 'homepage.message') == 'view'): ?>
 <div class="message">
-	<p><?php e(t('welcome, you are on the dashboard', 'dashboard')); ?></p>
+	<p><?php e(t('Welcome, you are on the dashboard', 'dashboard')); ?></p>
 	<p><a href="<?php e(url(null, array('message' => 'hide'))); ?>"><?php e(t('hide message forever')); ?></a></p>
 </div>
 <?php endif; ?>

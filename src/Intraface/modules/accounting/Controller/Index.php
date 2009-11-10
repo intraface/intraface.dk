@@ -3,6 +3,11 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
 {
     protected $registry;
 
+    function __construct(k_Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     protected function map($name)
     {
         if ($name == 'year') {
@@ -16,11 +21,6 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
         } elseif ($name == 'voucher') {
             return 'Intraface_modules_accounting_Controller_Voucher_Index';
         }
-    }
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
     }
 
     function getKernel()
@@ -40,17 +40,11 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
 
     function getYear()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         return new Year($this->getKernel());
     }
 
     function getYearGateway()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         return new Year($this->getKernel());
     }
 

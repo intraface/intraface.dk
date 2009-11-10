@@ -5,12 +5,6 @@ if ($context->getProduct()->getId() > 0) {
 ?>
 <h1><?php e(t('Edit product')); ?></h1>
 
-<?php /* if ($product->get('locked') == 1) { ?>
-    <ul class="formerrors">
-      <li>Produktet er låst og kan ikke opdateres. <a href="edit_product.php?unlock=<?php e($product->get('id')); ?>&amp;id=<?php e($product->get('id')); ?>">Lås op</a>.</li>
-   </ul>
-<?php } */ ?>
-
 <?php if (isset($error)) echo $error->view(); ?>
 
 <form action="<?php e(url()); ?>" method="post">
@@ -180,9 +174,7 @@ if ($context->getProduct()->getId() > 0) {
     <?php endif; ?>
 
     <div>
-        <?php /* if ($product->get('locked') == 0):  */ ?>
-            <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" class="save" /> <?php e(t('or', 'common')); ?>
-        <?php /* endif; */ ?>
+        <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" class="save" />
         <a href="<?php $return = 'index.php'; if (isset($product) && $product->getId() != 0) $return = 'product.php?id='.intval($product->getId()); //e($redirect->getRedirect($return)); ?>"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 

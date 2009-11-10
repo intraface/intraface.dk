@@ -38,11 +38,11 @@ class Intraface_modules_debtor_Controller_Item extends k_Component
 
     function getValues()
     {
-        	$debtor = $this->context->getDebtor();
-        	$debtor->loadItem(intval($this->name()));
-        	$values = $debtor->item->get();
-        	$values["quantity"] = number_format($debtor->item->get('quantity'), 2, ",", ".");
-            $values['description'] = $debtor->item->get('description');
+        $debtor = $this->context->getDebtor();
+        $debtor->loadItem(intval($this->name()));
+        $values = $debtor->item->get();
+        $values["quantity"] = number_format($debtor->item->get('quantity'), 2, ",", ".");
+        $values['description'] = $debtor->item->get('description');
         return $values;
     }
 
@@ -58,7 +58,6 @@ class Intraface_modules_debtor_Controller_Item extends k_Component
 
     function postForm()
     {
-
         	$debtor = $this->context->getDebtor();
         	$debtor->loadItem(intval($_POST["id"]));
 

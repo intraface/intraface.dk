@@ -1,7 +1,6 @@
 <?php
 class Intraface_modules_accounting_Controller_Daybook extends k_Component
 {
-    protected $registry;
     protected $post;
     protected $voucher;
     protected $year;
@@ -11,11 +10,6 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
         if ($name == 'state') {
             return 'Intraface_modules_accounting_Controller_State';
         }
-    }
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
     }
 
     function renderHtml()
@@ -48,9 +42,6 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
 
     function getYear()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         if (is_object($this->year)) {
             return $this->year;
         }
@@ -67,7 +58,6 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
 
     function postForm()
     {
-        require_once dirname(__FILE__) . '/../Voucher.php';
         // tjek om debet og credit account findes
         //$voucher = Voucher::factory($this->getYear(), $_POST['voucher_number']);
         $voucher = $this->getVoucher($_POST['voucher_number']);
@@ -79,8 +69,6 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
 
     function getVoucher($voucher_number = null)
     {
-        require_once dirname(__FILE__) . '/../Voucher.php';
-
         if (is_object($this->voucher)) {
     	    return $this->voucher;
     	}

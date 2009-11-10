@@ -4,7 +4,7 @@ $values = $context->getValues();
 
 <h1>Regnskabsår</h1>
 
-<form action="<?php e($context->url()); ?>" method="post">
+<form action="<?php e($context->url(null, array($context->subview()))); ?>" method="post">
     <input type="hidden" name="id" value="<?php if (!empty($values['id'])) e($values['id']); ?>" />
 
     <?php echo $context->getYear()->error->view(); ?>

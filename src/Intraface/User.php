@@ -109,6 +109,7 @@ class Intraface_User extends Intraface_Standard
     protected function load()
     {
         $result = $this->db->query("SELECT id, email, disabled FROM user WHERE id = " . $this->db->quote($this->id, 'integer'));
+
         if (PEAR::isError($result)) {
             trigger_error($result->getUserInfo(), E_USER_ERROR);
         }

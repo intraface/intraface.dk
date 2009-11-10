@@ -7,6 +7,7 @@ $values = $context->getYear()->get();
 <ul class="options">
     <li><a class="edit" href="<?php e(url('edit')); ?>">Ret</a></li>
     <li><a class="setting" href="<?php e('../settings'); ?>">Indstillinger</a></li>
+    <li><a class="edit" href="<?php e(url('../')); ?>">Close</a></li>
 </ul>
 
 <form action="<?php e(url('./')); ?>" method="post">

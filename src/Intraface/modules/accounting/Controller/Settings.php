@@ -1,18 +1,11 @@
 <?php
 class Intraface_modules_accounting_Controller_Settings extends k_Component
 {
-    protected $registry;
-
     protected function map($name)
     {
         if ($name == 'year') {
             return 'Intraface_modules_accounting_Controller_Year_Index';
         }
-    }
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
     }
 
     function renderHtml()

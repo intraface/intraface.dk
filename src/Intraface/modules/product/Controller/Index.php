@@ -1,32 +1,9 @@
 <?php
-class Intraface_GatewayFactory
-{
-    function create($kernel)
-    {
-        Intraface_Doctrine_Intranet::singleton($kernel->intranet->getId());
-
-        return new Intraface_modules_product_Gateway($kernel);
-    }
-}
-
-
 class Intraface_modules_product_Controller_Index extends k_Component
 {
     protected $gateway;
     protected $product;
 
-    /**
-     * @todo should be made withe a factory instead
-     */
-    function __construct(Intraface_GatewayFactory $factory)
-    {
-        $this->factory = $factory;
-    }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 
     function renderHtml()
     {
@@ -41,6 +18,12 @@ class Intraface_modules_product_Controller_Index extends k_Component
     {
         return $this->context->getKernel();
     }
+
+    function t($phrase)
+    {
+        return $phrase;
+    }
+
 
     function putForm()
     {
@@ -91,7 +74,7 @@ class Intraface_modules_product_Controller_Index extends k_Component
 
     function getGateway()
     {
-        return $gateway = $this->factory->create($this->getKernel());
+        return new Intraface_modules_product_Gateway($this->getKernel());
 
     }
 
@@ -156,7 +139,6 @@ class Intraface_modules_product_Controller_Index extends k_Component
     function postForm()
     {
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
-        Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
 
         $product = new Intraface_modules_product_ProductDoctrine;
 

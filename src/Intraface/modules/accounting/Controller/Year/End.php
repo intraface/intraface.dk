@@ -16,9 +16,6 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
 
 	function POST()
 	{
-	    $accounting_module = $this->getKernel()->module('accounting');
-        $accounting_module->includeFile('YearEnd.php');
-        $translation = $this->getKernel()->getTranslation('accounting');
         $year = $this->getYear();
         $account = new Account($year);
         $year_end = new YearEnd($year);
@@ -111,10 +108,6 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
 
 	function renderHtml()
 	{
-        $accounting_module = $this->getKernel()->module('accounting');
-        $accounting_module->includeFile('YearEnd.php');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         $year = new Year($this->getKernel());
         $year->checkYear();
 

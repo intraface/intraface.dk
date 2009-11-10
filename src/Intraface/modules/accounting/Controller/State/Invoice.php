@@ -4,14 +4,19 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
     protected $registry;
     protected $year;
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
     function __construct(k_Registry $registry)
     {
         $this->registry = $registry;
+    }
+
+    function map()
+    {
+        return 'Intraface_modules_accounting_Controller_State_SelectYear';
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 
     function getDebtor()
@@ -21,6 +26,7 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
 
     function getYear()
     {
+        $accounting_module = $this->getKernel()->useModule('accounting');
         if (is_object($this->year)) {
             return $this->year;
         }
@@ -31,7 +37,6 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
     function getVoucher()
     {
         return $voucher = new Voucher($this->getYear());
-
     }
 
     function getModule()
@@ -51,15 +56,23 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
 
         $debtor = $this->getDebtor();
         if ($debtor->get('type') != 'invoice') {
-            trigger_error('You can only state invoice from this page', E_USER_ERROR);
-            exit;
+            throw new Exception('You can only state invoice from this page');
         }
         $debtor->loadItem();
         $items = $debtor->item->getList();
 
+        if (!$this->getYear()->readyForState($this->getDebtor()->get('this_date'))) {
+            return new k_SeeOther($this->url('selectyear'));
+        }
+
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/invoice.tpl.php');
         return $smarty->render($this);
 
+    }
+
+    function getYears()
+    {
+        return $this->getYear()->getList();
     }
 
     function getItems()
@@ -86,22 +99,23 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
         $debtor = $this->getDebtor();
 
         if ($debtor->get('type') != 'invoice') {
-            trigger_error('You can only state invoice from this page', E_USER_ERROR);
-            exit;
+            throw new Exception('You can only state invoice from this page');
         }
 
-        foreach ($_POST['state_account_id'] as $product_id => $state_account_id) {
-            if (empty($state_account_id)) {
-                $debtor->error->set('Mindst et produkt ved ikke hvor det skal bogf�res.');
-                continue;
-            }
+        if (!empty($_POST['state_account_id'])) {
+            foreach ($_POST['state_account_id'] as $product_id => $state_account_id) {
+                if (empty($state_account_id)) {
+                    $debtor->error->set('At least one product has no state account');
+                    continue;
+                }
 
-            $product = new Product($this->getKernel(), $product_id);
-            $product->getDetails()->setStateAccountId($state_account_id);
+                $product = new Product($this->getKernel(), $product_id);
+                $product->getDetails()->setStateAccountId($state_account_id);
+            }
         }
 
         if (!$debtor->state($year, $_POST['voucher_number'], $_POST['date_state'], $translation)) {
-            $debtor->error->set('Kunne ikke bogf�re posten');
+            $debtor->error->set('Could nt state');
         } else {
             return new k_SeeOther($this->url('../', array('flare' => 'Invoice has been stated')));
         }

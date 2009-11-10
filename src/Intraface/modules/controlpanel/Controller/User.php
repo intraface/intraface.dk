@@ -29,7 +29,8 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
 
     function postForm()
     {
-        $user = new Intraface_User($this->getKernel()->user->get('id'));
+        require_once 'Intraface/modules/administration/UserAdministration.php';
+        $user = new UserAdministration($this->getKernel(), $this->getKernel()->user->get('id'));
 
         $value = $_POST;
         $address_value = $_POST;

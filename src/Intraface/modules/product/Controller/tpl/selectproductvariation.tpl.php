@@ -1,9 +1,13 @@
 <h1><?php e(t('Select product variation')); ?></h1>
 
+<ul class="options">
+    <li><a href="<?php e(url('../../')); ?>"><?php e(t('Close')); ?></a></li>
+</ul>
+
 <?php if (count($variations) == 0): ?>
-    <p><?php e(t('No variations created for the product')); ?></p>
+    <p><?php e(t('No variations created for the product')); ?>.</p>
 <?php else: ?>
-    <form action="<?php e($_SERVER['PHP_SELF']); ?>?set_quantity=<?php e($quantity); ?>" method="post">
+    <form action="<?php e(url(null, array('set_quantity'=>$quantity))); ?>" method="post">
         <input type="hidden" name="product_id" value="<?php e($product->getId()); ?>" />
         <input type="hidden" name="set_quantity" value="<?php e($quantity); ?>" />
         <table summary="<?php e(t('Variations')); ?>" id="variations_table" class="stripe">
