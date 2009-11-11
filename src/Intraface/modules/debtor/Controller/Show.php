@@ -25,7 +25,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         } elseif ($name == 'payment') {
             return 'Intraface_modules_debtor_Controller_Payments';
         } elseif ($name == 'depreciation') {
-            return 'Intraface_modules_debtor_Controller_Depreciation';
+            return 'Intraface_modules_debtor_Controller_Depreciations';
         } elseif ($name == 'state') {
             if ($this->getType() == 'credit_note') {
                 return 'Intraface_modules_accounting_Controller_State_Creditnote';

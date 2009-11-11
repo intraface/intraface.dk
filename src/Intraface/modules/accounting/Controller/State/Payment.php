@@ -6,19 +6,14 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
 
     function renderHtml()
     {
-        $debtor_module = $this->context->getKernel()->module('debtor');
         $accounting_module = $this->context->getKernel()->useModule('accounting');
         $this->context->getKernel()->useModule('invoice');
         $translation = $this->context->getKernel()->getTranslation('debtor');
-
         $year = new Year($this->context->getKernel());
         $voucher = new Voucher($year);
-
         $object = $this->context->context->context->getObject();
-
-
-    $payment = new Payment($object, $this->context->name());
-                $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/payment.tpl.php');
+        $payment = new Payment($object, $this->context->name());
+        $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/payment.tpl.php');
         return $smarty->render($this, array('payment' => $payment, 'object' => $object, 'year' => $year));
 
     }
@@ -30,7 +25,6 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
 
     function postForm()
     {
-        $debtor_module = $this->context->getKernel()->module('debtor');
         $accounting_module = $this->context->getKernel()->useModule('accounting');
         $this->context->getKernel()->useModule('invoice');
         $translation = $this->context->getKernel()->getTranslation('debtor');

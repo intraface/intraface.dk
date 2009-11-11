@@ -1,15 +1,9 @@
 <?php
 class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Component
 {
-    protected $registry;
     protected $user;
     public $method = 'put';
     protected $intranetmaintenance;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
 
     protected function map($name)
     {
@@ -20,10 +14,9 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
 
     function renderHtml()
     {
-        $module = $this->getKernel()->module("intranetmaintenance");
-        $translation = $this->getKernel()->getTranslation('intranetmaintenance');
-
         $user_id = intval($this->name());
+        $edit_intranet_id = $this->query('intranet_id');
+        $user = $this->getUser();
 
         if (isset($_GET['return_redirect_id'])) {
             if (isset($_GET['intranet_id'])) {
@@ -48,13 +41,11 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         }
 
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/user/show.tpl.php');
-        return $smarty->render($this);
+        return $smarty->render($this, array('intranet' => $intranet));
     }
 
     function putForm()
     {
-        $module = $this->getKernel()->module("intranetmaintenance");
-
         $user = new UserMaintenance(intval($this->name()));
         if ($this->context->getIntranet()->get('id') != 0) {
             $intranet = new Intraface_Intranet($this->context->getIntranet()->get('id'));
@@ -244,9 +235,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
 
     function renderHtmlEdit()
     {
-        $module = $this->getKernel()->module("intranetmaintenance");
-        $translation = $this->getKernel()->getTranslation('intranetmaintenance');
-
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/user/edit.tpl.php');
         return $smarty->render($this);
     }

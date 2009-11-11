@@ -1,14 +1,8 @@
 <?php
 class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Component
 {
-    protected $registry;
     protected $user;
     public $method = 'post';
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
 
     protected function map($name)
     {
@@ -26,9 +20,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
 
     function renderHtml()
     {
-        $module = $this->getKernel()->module("intranetmaintenance");
-        $translation = $this->getKernel()->getTranslation('intranetmaintenance');
-
         $user = new UserMaintenance();
 
         if (isset($_GET['add_user_id']) && $_GET['add_user_id'] != 0) {
@@ -37,6 +28,12 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
         }
 
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/user/index.tpl.php');
+        return $smarty->render($this);
+    }
+
+    function renderHtmlCreate()
+    {
+        $smarty = new k_Template(dirname(__FILE__) . '/../templates/user/edit.tpl.php');
         return $smarty->render($this);
     }
 
@@ -100,9 +97,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
 
     function postForm()
     {
-        $module = $this->getKernel()->module("intranetmaintenance");
-
-        $user = new UserMaintenance(intval($this->context->name()));
+        $user = $this->getUser();
 
         if (isset($_POST["intranet_id"]) && intval($_POST["intranet_id"]) != 0) {
             $intranet = new Intraface_Intranet($_POST["intranet_id"]);
@@ -124,13 +119,13 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
                 if (is_numeric($this->context->name())) {
                     return new k_SeeOther($this->url('../', array('intranet_id' => $intranet->get("id"))));
                 } else {
-                    return new k_SeeOther($this->url('../' . $user->getId(), array('intranet_id' => $intranet->get("id"))));
+                    return new k_SeeOther($this->url($user->getId(), array('intranet_id' => $intranet->get("id"))));
                 }
             } else {
                 if (is_numeric($this->context->name())) {
                     return new k_SeeOther($this->url('../'));
                 } else {
-                    return new k_SeeOther($this->url('../' . $user->getId()));
+                    return new k_SeeOther($this->url($user->getId()));
                 }
 
             }
@@ -140,6 +135,9 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
 
     function getValues()
     {
+        if ($this->body()) {
+            return $this->body();
+        }
         $user = new UserMaintenance();
         $intranet_id = intval($_REQUEST["intranet_id"]);
         $value = array();

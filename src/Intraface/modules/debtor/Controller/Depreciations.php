@@ -1,9 +1,9 @@
 <?php
-class Intraface_modules_debtor_Controller_Depreciation extends k_Component
+class Intraface_modules_debtor_Controller_Depreciations extends k_Component
 {
     function map($name)
     {
-        return 'Intraface_modules_accounting_Controller_State_Depreciation';
+        return 'Intraface_modules_debtor_Controller_Depreciation';
     }
 
     function getDebtor()
@@ -49,9 +49,9 @@ class Intraface_modules_debtor_Controller_Depreciation extends k_Component
         $invoice_module = $this->getKernel()->useModule('invoice');
 
         $depreciation = $this->getDepreciation();
-        if ($depreciation->update($_POST)) {
+        if ($id = $depreciation->update($_POST)) {
             if ($this->getKernel()->user->hasModuleAccess('accounting')) {
-                return new k_SeeOther($this->url('state'));
+                return new k_SeeOther($this->url($id . '/state'));
             } else {
                 return new k_SeeOther($this->url('../'));
             }

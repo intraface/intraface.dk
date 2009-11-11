@@ -10,8 +10,8 @@ $address_values = $context->getValues();
 
 <?php echo $context->getUser()->error->view(); ?>
 
-<form action="<?php e(url(null)); ?>" method="post">
-<input type="hidden" value="put" name="_method" />
+<form action="<?php e(url(null, array($context->subview()))); ?>" method="post">
+<input type="hidden" value="<?php e($context->method); ?>" name="_method" />
 
 <fieldset>
     <legend>Oplysninger om bruger</legend>

@@ -1,36 +1,3 @@
-<?php
-require '../../include_first.php';
-
-$debtor_module = $kernel->module('debtor');
-$accounting_module = $kernel->useModule('invoice');
-$accounting_module = $kernel->useModule('accounting');
-$product_module = $kernel->useModule('product');
-$translation = $kernel->getTranslation('debtor');
-
-$year = new Year($kernel);
-$voucher = new Voucher($year);
-
-if (!empty($_POST)) {
-    $reminder = new Reminder($kernel, intval($_POST["id"]));
-
-    if ($reminder->error->isError()) {
-        $reminder->loadItem();
-    } elseif (!$reminder->state($year, $_POST['voucher_number'], $_POST['date_state'], $_POST['state_account_id'], $translation)) {
-        $reminder->error->set('unable to state the reminder');
-        $reminder->loadItem();
-    } else {
-        header('Location: reminder.php?id='.$reminder->get('id'));
-        exit;
-    }
-} else {
-    $reminder = new Reminder($kernel, intval($_GET["id"]));
-    $value = $reminder->get();
-}
-
-$page = new Intraface_Page($kernel);
-$page->start(__('State invoice'));
-
-?>
 <h1><?php e(t('state reminder')) ?> #<?php e($reminder->get('number')); ?></h1>
 
 <ul class="options">
@@ -117,6 +84,3 @@ $page->start(__('State invoice'));
     <?php endif;  ?>
     </form>
 <?php endif; ?>
-<?php
-$page->end();
-?>
