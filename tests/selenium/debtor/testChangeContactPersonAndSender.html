@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=debtor,invoice,contact,product,administration,onlinepayment&amp;login=true</td>
+	<td>install/reset-staging-server.php?modules=controlpanel,debtor,invoice,contact,product,administration,onlinepayment&amp;login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -108,12 +108,12 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=create invoice</td>
+	<td>link=Create invoice</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>new_contact</td>
+	<td>link=Create contact</td>
 	<td></td>
 </tr>
 <tr>
@@ -192,9 +192,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>assertTextPresent</td>
-	<td>not a valid e-mail</td>
-	<td></td>
+	<td>type</td>
+	<td>address_name</td>
+	<td>start</td>
 </tr>
 <tr>
 	<td>type</td>
