@@ -1,17 +1,15 @@
 <?php
 class Intraface_modules_debtor_Controller_Show extends k_Component
 {
-    protected $registry;
     protected $debtor;
 
-    function __construct(k_Registry $registry)
+    function dispatch()
     {
-        $this->registry = $registry;
-    }
+        if ($this->getDebtor()->getId() == 0) {
+            throw new k_PageNotFound();
+        }
 
-    function getObject()
-    {
-        return $this->getDebtor();
+        return parent::dispatch();
     }
 
     function map($name)
@@ -44,6 +42,11 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
     }
 
     function getModel()
+    {
+        return $this->getDebtor();
+    }
+
+    function getObject()
     {
         return $this->getDebtor();
     }
@@ -85,8 +88,6 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
     function postForm()
     {
-        $contact_module = $this->getKernel()->getModule('contact');
-
         // slet debtoren
         if (!empty($_POST['delete'])) {
             $type = $this->getDebtor()->get("type");
@@ -425,7 +426,6 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             return $this->debtor;
         }
 
-        Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
         return $this->debtor = Debtor::factory($this->getKernel(), intval($this->name()));
     }
 

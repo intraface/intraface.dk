@@ -1,16 +1,20 @@
 <?php
 class Intraface_modules_contact_Controller_Index extends k_Component
 {
-    protected $registry;
+    function map($name)
+    {
+        if (is_numeric($name)) {
+            return 'Intraface_modules_contact_Controller_Show';
+        } elseif ($name == 'sendemail') {
+            return 'Intraface_modules_contact_Controller_Sendemail';
+        } elseif ($name == 'import') {
+            return 'Intraface_modules_contact_Controller_Import';
+        }
+    }
 
     function getRedirect()
     {
         return Intraface_Redirect::factory($this->getKernel(), 'receive');
-    }
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
     }
 
     function getContact()
@@ -54,8 +58,6 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
     function putForm()
     {
-        $this->getKernel()->module("contact");
-        // delete
         if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
         	$deleted = array();
         	if (!empty($_POST['selected']) AND is_array($_POST['selected'])) {
@@ -88,25 +90,14 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
     function renderHtml()
     {
-        $this->getKernel()->module("contact");
-        $translation = $this->getKernel()->getTranslation('contact');
-
-        $module = $this->getKernel()->module('contact');
-        $translation = $this->getKernel()->getTranslation('contact');
-
-        // settings
         if (!empty($_GET['search']) AND in_array($_GET['search'], array('hide', 'view'))) {
         	$this->getKernel()->setting->set('user', 'contact.search', $_GET['search']);
-        }
-
-        if (!empty($_GET['import'])) {
+        } elseif (!empty($_GET['import'])) {
             $redirect = Intraface_Redirect::go($this->getKernel());
             $shared_fileimport = $this->getKernel()->useShared('fileimport');
-            $url = $redirect->setDestination($shared_fileimport->getPath().'index.php', $module->getPath().'import.php');
+            $url = $redirect->setDestination($shared_fileimport->getPath().'index.php', NET_SCHEME . NET_HOST . $this->url('import'));
             $redirect->askParameter('session_variable_name');
-            header('location: '.$url);
-            exit;
-
+            return new k_SeeOther($url);
         }
 
         /*
@@ -132,18 +123,6 @@ class Intraface_modules_contact_Controller_Index extends k_Component
     function t($phrase)
     {
          return $phrase;
-    }
-
-    function map($name)
-    {
-        if (is_numeric($name)) {
-            return 'Intraface_modules_contact_Controller_Show';
-        } elseif ($name == 'sendemail') {
-            return 'Intraface_modules_contact_Controller_Sendemail';
-        } elseif ($name == 'import') {
-            return 'Intraface_modules_contact_Controller_Import';
-        }
-
     }
 
     function renderPdf()
@@ -349,7 +328,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
     function getValues()
     {
-        return array();
+        return array('number' => $this->getContact()->getMaxNumber()+1);
     }
 
     function getAddressValues()

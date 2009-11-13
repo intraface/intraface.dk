@@ -25,19 +25,8 @@
  */
 class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function _renderHtml()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
-
         $year = new Year($this->getKernel());
         $year->checkYear();
 
@@ -48,7 +37,6 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
     function getError()
     {
         return $error = new Intraface_Error;
-
     }
 
     function getYear()
@@ -79,13 +67,11 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
         	exit;
         }
         */
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
         if (!empty($_POST['state']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
         	$vat_period = new VatPeriod($this->getYear(), $_POST['id']);
 
         	if (!$vat_period->state($_POST['date'], $_POST['voucher_number'])) {
-        		trigger_error('Kunne ikke bogf�re bel�bene', E_USER_ERROR);
+        		throw new Exception('Could not state');
         	}
 
         	return new k_SeeOther($this->url());
@@ -100,16 +86,13 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
 
     function GET()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
-        	$vat_period = new VatPeriod($this->getYear(), $this->name());
-        	$vat_period->loadAmounts();
-        	$account_vat_in = $vat_period->get('account_vat_in');
-        	$account_vat_out = $vat_period->get('account_vat_out');
-        	$account_vat_abroad = $vat_period->get('account_vat_abroad');
-        	$saldo_rubrik_a = $vat_period->get('saldo_rubrik_a');
-        	$saldo_total = $vat_period->get('saldo_total');
+     	$vat_period = new VatPeriod($this->getYear(), $this->name());
+       	$vat_period->loadAmounts();
+       	$account_vat_in = $vat_period->get('account_vat_in');
+       	$account_vat_out = $vat_period->get('account_vat_out');
+       	$account_vat_abroad = $vat_period->get('account_vat_abroad');
+       	$saldo_rubrik_a = $vat_period->get('saldo_rubrik_a');
+       	$saldo_total = $vat_period->get('saldo_total');
 
         return parent::GET();
     }
@@ -117,17 +100,12 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
 
     function getVoucher()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
         return new Voucher($this->getYear());
     }
 
     function getVatPeriod()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
-        return   	$vat_period = new VatPeriod($this->getYear(), $this->name());
+        return $vat_period = new VatPeriod($this->getYear(), $this->name());
 
     }
 

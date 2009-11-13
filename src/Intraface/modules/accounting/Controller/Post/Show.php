@@ -1,13 +1,6 @@
 <?php
 class Intraface_modules_accounting_Controller_Post_Show extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     protected function map($name)
     {
         if ($name == 'edit') {
@@ -32,9 +25,6 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
 
     function getYear()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         return new Year($this->getKernel(), $this->name());
     }
 
@@ -103,5 +93,4 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
         $gateway = $this->context->getYearGateway();
         return $gateway;
     }
-
 }

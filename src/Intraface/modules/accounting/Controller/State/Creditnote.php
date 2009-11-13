@@ -1,15 +1,14 @@
 <?php
 class Intraface_modules_accounting_Controller_State_Creditnote extends k_Component
 {
-    protected $registry;
     protected $year;
 
-    function __construct(k_Registry $registry)
+    function map()
     {
-        $this->registry = $registry;
+        return 'Intraface_modules_accounting_Controller_State_SelectYear';
     }
 
-    function getDebtor()
+    function getModel()
     {
         return $this->context->getDebtor();
     }
@@ -26,12 +25,16 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
         $product_module = $this->getKernel()->useModule('product');
         $translation = $this->getKernel()->getTranslation('debtor');
 
-        $debtor = $this->getDebtor();
+        $debtor = $this->getModel();
 
         if ($debtor->get('type') != 'credit_note') {
-            trigger_error('You can only state credit notes from this page', E_USER_ERROR);
-            exit;
+            throw new Exception('You can only state credit notes from this page');
         }
+
+        if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
+            return new k_SeeOther($this->url('selectyear'));
+        }
+
 
         $debtor->loadItem();
 
@@ -45,11 +48,11 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
 
     function getItems()
     {
-        $debtor = $this->getDebtor();
+        $debtor = $this->getModel();
 
-        $this->getDebtor()->loadItem();
+        $this->getModel()->loadItem();
 
-        return $items = $this->getDebtor()->item->getList();
+        return $items = $this->getModel()->item->getList();
     }
 
     function getVoucher()
@@ -65,7 +68,6 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
         $debtor_module = $this->getKernel()->module('debtor');
         $accounting_module = $this->getKernel()->useModule('accounting');
         $product_module = $this->getKernel()->useModule('product');
-        $translation = $this->getKernel()->getTranslation('debtor');
 
         $year = new Year($this->getKernel());
         $voucher = new Voucher($year);
@@ -101,6 +103,8 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
 
     function getYear()
     {
+        $accounting_module = $this->getKernel()->useModule('accounting');
+
         if (is_object($this->year)) {
             return $this->year;
         }

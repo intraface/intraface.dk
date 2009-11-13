@@ -25,12 +25,10 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
                 echo '1';
                 exit;
             }
+        } elseif (!empty($_GET['view']) AND in_array($_GET['view'], array('income', 'expenses', 'classic', 'debtor'))) {
+            $this->getKernel()->getSetting->set('user', 'accounting.daybook_view', $_GET['view']);
         }
-        /*
-        elseif (!empty($_GET['view']) AND in_array($_GET['view'], array('income', 'expenses', 'classic', 'debtor'))) {
-            $this->getKernel()->setting->set('user', 'accounting.daybook_view', $_GET['view']);
-        }
-        */
+
         $tpl = new k_Template(dirname(__FILE__) . '/templates/daybook.tpl.php');
         return $tpl->render($this);
     }

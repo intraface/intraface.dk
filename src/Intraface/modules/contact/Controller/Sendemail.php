@@ -1,13 +1,7 @@
 <?php
 class Intraface_modules_contact_Controller_Sendemail extends k_Component
 {
-    protected $registry;
     protected $msg;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
 
     function getMessage()
     {
@@ -69,9 +63,7 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
 
     function renderHtml()
     {
-        $this->getKernel()->module('contact');
         $this->getKernel()->useShared('email');
-        $translation = $this->getKernel()->getTranslation('contact');
 
         $_GET['use_stored'] = true;
 
@@ -88,9 +80,7 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
 
     function getContact()
     {
-        $this->getKernel()->module('contact');
         $this->getKernel()->useShared('email');
-        $translation = $this->getKernel()->getTranslation('contact');
 
         $_GET['use_stored'] = true;
 
@@ -99,9 +89,7 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
 
     function getContacts()
     {
-        $this->getKernel()->module('contact');
         $this->getKernel()->useShared('email');
-        $translation = $this->getKernel()->getTranslation('contact');
 
         $_GET['use_stored'] = true;
 

@@ -16,22 +16,11 @@
  */
 class Intraface_modules_contact_Controller_Merge extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function renderHtml()
     {
-        $contact_module = $this->getKernel()->module('contact');
-
         if ($this->getKernel()->user->hasModuleAccess('debtor')) {
             $invoice_module = $this->getKernel()->useModule('debtor');
         }
-
-        $translation = $this->getKernel()->getTranslation('contact');
 
         $contact = new Contact($this->getKernel(), $this->context->name());
         $similar_contacts = $contact->getSimilarContacts();
@@ -75,11 +64,8 @@ class Intraface_modules_contact_Controller_Merge extends k_Component
 
     function postForm()
     {
-        $contact_module = $this->getKernel()->module('contact');
-
         $gateways = $this->getGateways();
 
-        // this contact
         $new_contact = new Contact($this->getKernel(), intval($this->context->name()));
         $chosen_contacts = $this->body('contact');
 

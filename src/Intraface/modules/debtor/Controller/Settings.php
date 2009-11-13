@@ -18,7 +18,6 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
 
     function renderHtml()
     {
-        $debtor_module = $this->context->getKernel()->module('debtor');
         $this->context->getKernel()->useModule('invoice');
 
         if (isset($_GET['return_redirect_id'])) {
@@ -49,7 +48,6 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
 
     function postForm()
     {
-        $debtor_module = $this->context->getKernel()->module('debtor');
         $this->context->getKernel()->useModule('invoice');
 
         if (!empty($_POST)) {
@@ -148,5 +146,3 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
         return $phrase;
     }
 }
-
-

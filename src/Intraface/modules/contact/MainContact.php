@@ -21,6 +21,7 @@ class MainContact extends Intraface_Main
         $this->addPreloadFile('Contact.php');
         $this->addPreloadFile('ContactMessage.php'); // kan måske slettes
         $this->addPreloadFile('ContactPerson.php');
+         $this->addPreloadFile('ContactReminder.php');
 
         $this->addRequiredShared('email');
         $this->addRequiredShared('keyword');

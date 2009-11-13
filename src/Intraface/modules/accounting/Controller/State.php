@@ -43,7 +43,7 @@ class Intraface_modules_accounting_Controller_State extends k_Component
     function postForm()
     {
         $voucher = new Voucher($this->getYear());
-        // denne funktion v�lger automatisk alle poster i kassekladden
+
         if (!$voucher->stateDraft()) {
             // $post->error->set('Posterne kunne ikke bogf�res');
         }

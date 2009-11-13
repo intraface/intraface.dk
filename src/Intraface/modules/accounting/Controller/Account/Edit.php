@@ -1,13 +1,6 @@
 <?php
 class Intraface_modules_accounting_Controller_Account_Edit extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function renderHtml()
     {
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/account/edit.tpl.php');
@@ -68,10 +61,7 @@ class Intraface_modules_accounting_Controller_Account_Edit extends k_Component
 
     function getYear()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
-        if (!is_numeric($this->name())) {
+         if (!is_numeric($this->name())) {
         	return new Year($this->getKernel());
         } else {
         	return new Year ($this->getKernel(), $this->name());
@@ -82,5 +72,4 @@ class Intraface_modules_accounting_Controller_Account_Edit extends k_Component
     {
         return $this->context->getYearGateway();
     }
-
 }

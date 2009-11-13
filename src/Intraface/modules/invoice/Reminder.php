@@ -116,7 +116,7 @@ class Reminder extends Intraface_Standard
     {
         $this->db->query("SELECT MAX(number) AS max_number FROM invoice_reminder WHERE intranet_id = ".$this->kernel->intranet->get("id"));
         $this->db->nextRecord(); // Hvis der ikke er nogle poster er dette bare den første
-        $number = $this->db->f("max_number") + 1;
+        $number = $this->db->f("max_number");
         return $number;
     }
 

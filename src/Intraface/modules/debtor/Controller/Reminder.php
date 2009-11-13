@@ -4,7 +4,6 @@
  */
 class Intraface_modules_debtor_Controller_Reminder extends k_Component
 {
-    protected $registry;
     protected $debtor;
 
     function getFormUrl()
@@ -22,17 +21,14 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
         return $this->getReminder();
     }
 
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function map($name)
     {
         if ($name == 'payment') {
             return 'Intraface_modules_debtor_Controller_Payment';
         } elseif ($name == 'payment') {
             return 'Intraface_modules_debtor_Controller_Depreciation';
+        } elseif ($name == 'email') {
+            return 'Intraface_modules_debtor_Controller_ReminderEmail';
         }
     }
 
@@ -43,7 +39,6 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
 
     function getReminder()
     {
-
         $mainInvoice = $this->getKernel()->useModule("invoice");
         $mainInvoice = $this->getKernel()->useModule("contact");
 
@@ -90,11 +85,6 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
 
     function renderHtmlEdit()
     {
-
-        $module = $this->getKernel()->module("debtor");
-
-        $translation = $this->getKernel()->getTranslation('debtor');
-
         $mainInvoice = $this->getKernel()->useModule("invoice");
         $mainInvoice->includeFile("Reminder.php");
         $mainInvoice->includeFile("ReminderItem.php");

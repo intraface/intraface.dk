@@ -1,15 +1,9 @@
 <?php
 class Intraface_modules_debtor_Controller_Reminders extends k_Component
 {
-    protected $registry;
     protected $debtor;
     protected $contact;
     protected $reminder;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
 
     function map($name)
     {
@@ -23,11 +17,7 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
 
     function getReminder()
     {
-        $kernel = $this->getKernel();
-        $module = $kernel->module("debtor");
-
-        $mainInvoice = $kernel->useModule("invoice");
-        $translation = $kernel->getTranslation('debtor');
+        $mainInvoice = $this->getKernel()->useModule("invoice");
 
         if (is_object($this->reminder)) {
             return $this->reminder;
@@ -68,17 +58,17 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
 
         $value["dk_this_date"] = date("d-m-Y");
         $value["dk_due_date"] = date("d-m-Y", time()+3*24*60*60);
-        /*
+
         if ($contact->address->get("name") != $contact->address->get("contactname")) {
             $value["attention_to"] = $contact->address->get("contactname");
         }
-        */
+
         //$value["text"] = $this->getKernel()->setting->get('intranet', 'reminder.first.text');
         $value["payment_method_key"] = 1;
         $value["number"] = $reminder->getMaxNumber();
         $smarty = new k_Template(dirname(__FILE__) . '/templates/reminder-edit.tpl.php');
 
-        return $smarty->render($this);
+        return $smarty->render($this, array('value' => $value));
 
     }
 
@@ -128,10 +118,6 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
 
     function postForm()
     {
-        $module = $this->getKernel()->module("debtor");
-
-        $translation = $this->getKernel()->getTranslation('debtor');
-
         $mainInvoice = $this->getKernel()->useModule("invoice");
         $mainInvoice->includeFile("Reminder.php");
         $mainInvoice->includeFile("ReminderItem.php");

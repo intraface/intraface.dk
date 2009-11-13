@@ -3,15 +3,11 @@ class Intraface_modules_contact_Controller_Contactperson extends k_Component
 {
     function renderHtml()
     {
+        return 'Intentionally left blank';
     }
 
     function renderHtmlEdit()
     {
-        $contact_module = $this->context->getKernel()->module('contact');
-        $translation = $this->context->getKernel()->getTranslation('contact');
-        $contact_module->includeFile('ContactReminder.php');
-
-
     	$contact = new Contact($this->context->getKernel(), $this->context->context->name());
     	$person = $contact->loadContactPerson($this->name());
 
@@ -22,9 +18,6 @@ class Intraface_modules_contact_Controller_Contactperson extends k_Component
 
     function postForm()
     {
-        $this->context->getKernel()->module('contact');
-        $translation = $this->context->getKernel()->getTranslation('contact');
-
     	$contact = new Contact($this->context->getKernel(), $this->context->context->name());
     	$person = $contact->loadContactPerson($this->name());
     	if ($id = $person->save($_POST)) {

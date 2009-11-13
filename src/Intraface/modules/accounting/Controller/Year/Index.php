@@ -1,13 +1,6 @@
 <?php
 class Intraface_modules_accounting_Controller_Year_Index extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     protected function map($name)
     {
         if ($name == 'create') {
@@ -30,9 +23,6 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
 
     function getYear()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         return new Year($this->getKernel());
     }
 

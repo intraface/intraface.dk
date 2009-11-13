@@ -1,13 +1,7 @@
 <?php
 class Intraface_modules_debtor_Controller_Create extends k_Component
 {
-    protected $registry;
     protected $debtor;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
 
     function map($name)
     {
@@ -20,9 +14,6 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
 
     function getDebtor()
     {
-        Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
-        $module = $this->getKernel()->module('debtor');
-
         if (is_object($this->debtor)) {
             return $this->debtor;
         }
@@ -32,16 +23,11 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
 
     function getPosts()
     {
-        Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
-
         return $this->getDebtor()->getList();
     }
 
     function renderExcel()
     {
-        $translation = $kernel->getTranslation('debtor');
-        $debtor_module = $kernel->module('debtor');
-
         if (empty($_GET['id'])) $_GET['id'] = '';
         if (empty($_GET['type'])) $_GET['type'] = '';
 
@@ -236,12 +222,6 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
     function getKernel()
     {
         return $this->context->getKernel();
-    }
-
-    function getLists()
-    {
-        $list = new NewsletterList($this->getKernel());
-        return $list->getList();
     }
 
     function t($phrase)

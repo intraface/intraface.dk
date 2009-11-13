@@ -3,50 +3,50 @@ $accounting_module = $context->getModule();
 $items = $context->getItems();
 ?>
 
-<h1>Bogfï¿½r faktura #<?php e($context->getDebtor()->get('number')); ?></h1>
+<h1>Bogfï¿½r faktura #<?php e($context->getModel()->get('number')); ?></h1>
 
 <ul class="options">
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
     <li><a href="<?php e(url('../../', array('use_stored' => true))); ?>"><?php e(t('To invoices')); ?></a></li>
 </ul>
 
-<?php if (!$context->getYear()->readyForState($context->getDebtor()->get('this_date'))): ?>
+<?php if (!$context->getYear()->readyForState($context->getModel()->get('this_date'))): ?>
     <?php echo $context->getYear()->error->view(); ?>
     <p>Gï¿½ til <a href="<?php e($this->url('../../../../../accounting/')); ?>">regnskabet</a></p>
 <?php else: ?>
 
-    <p class="message">Når du bogfører fakturaerne vil det skyldige beløb blive sat på debitorkontoen. Når kunden har betalt, skal betalingen bogføres for at overføre beløbet fra debitorkontoen til din indkomst konto (fx Bankkonto).</p>
+    <p class="message">Nï¿½r du bogfï¿½rer fakturaerne vil det skyldige belï¿½b blive sat pï¿½ debitorkontoen. Nï¿½r kunden har betalt, skal betalingen bogfï¿½res for at overfï¿½re belï¿½bet fra debitorkontoen til din indkomst konto (fx Bankkonto).</p>
 
-    <?php $context->getDebtor()->readyForState($context->getYear(), 'skip_check_products'); ?>
-    <?php echo $context->getDebtor()->error->view(); ?>
+    <?php $context->getModel()->readyForState($context->getYear(), 'skip_check_products'); ?>
+    <?php echo $context->getModel()->error->view(); ?>
 
     <form action="<?php e(url()); ?>" method="post">
-    <input type="hidden" value="<?php e($context->getDebtor()->get('id')); ?>" name="id" />
+    <input type="hidden" value="<?php e($context->getModel()->get('id')); ?>" name="id" />
     <fieldset>
         <legend>Faktura</legend>
         <table>
             <tr>
                 <th><?php e(__("invoice number")); ?></th>
-                <td><?php e($context->getDebtor()->get("number")); ?></td>
+                <td><?php e($context->getModel()->get("number")); ?></td>
             </tr>
             <tr>
                 <th>Dato</th>
-                <td><?php e($context->getDebtor()->get("dk_this_date")); ?></td>
+                <td><?php e($context->getModel()->get("dk_this_date")); ?></td>
             </tr>
         </table>
     </fieldset>
 
-    <?php if ($context->getDebtor()->readyForState($context->getYear(), 'skip_check_products')): ?>
+    <?php if ($context->getModel()->readyForState($context->getYear(), 'skip_check_products')): ?>
         <fieldset>
-            <legend>Oplysninger der bogføres</legend>
+            <legend>Oplysninger der bogfï¿½res</legend>
             <table>
                 <tr>
                     <th>Bilagsnummer</th>
                     <td><input type="text" name="voucher_number" value="<?php e($context->getVoucher()->getMaxNumber() + 1); ?>" /></td>
                 </tr>
                 <tr>
-                    <th>Bogfør på dato</th>
-                    <td><input type="text" name="date_state" value="<?php e($context->getDebtor()->get("dk_this_date")); ?>" /></td>
+                    <th>Bogfï¿½r pï¿½ dato</th>
+                    <td><input type="text" name="date_state" value="<?php e($context->getModel()->get("dk_this_date")); ?>" /></td>
                 </tr>
             </table>
         </fieldset>
@@ -83,7 +83,7 @@ $items = $context->getItems();
                         <td><?php e($items[$i]["name"]); ?></td>
                         <td><?php e(amountToOutput($items[$i]["quantity"]*$items[$i]["price"]->getAsIso(2))); ?></td>
                         <td>
-                            <?php if (!$context->getDebtor()->isStated()):
+                            <?php if (!$context->getModel()->isStated()):
                                 $year = new Year($context->getKernel());
                                 $context->getYear()->loadActiveYear();
                                 $accounts =  $account->getList('sale');

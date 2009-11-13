@@ -1,16 +1,8 @@
 <?php
 class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function renderHtml()
     {
-        $module = $this->getKernel()->module('accounting');
         if (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
             $post = Post::factory($this->getYear(), (int)$_GET['id']);
             $values = $post->get();
@@ -74,9 +66,6 @@ class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
 
     function getYear()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         return new Year($this->getKernel());
 
     }

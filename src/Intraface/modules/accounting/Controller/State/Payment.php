@@ -1,8 +1,17 @@
 <?php
 class Intraface_modules_accounting_Controller_State_Payment extends k_Component
 {
-    protected $registry;
     protected $year;
+
+    function getModel()
+    {
+        return $object = $this->context->context->context->getObject();
+    }
+
+    function map()
+    {
+        return 'Intraface_modules_accounting_Controller_State_SelectYear';
+    }
 
     function renderHtml()
     {
@@ -13,6 +22,11 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
         $voucher = new Voucher($year);
         $object = $this->context->context->context->getObject();
         $payment = new Payment($object, $this->context->name());
+
+        if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
+            return new k_SeeOther($this->url('selectyear'));
+        }
+
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/payment.tpl.php');
         return $smarty->render($this, array('payment' => $payment, 'object' => $object, 'year' => $year));
 
@@ -32,30 +46,21 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
         $year = new Year($this->context->getKernel());
         $voucher = new Voucher($year);
 
-      $object = $this->context->context->context->getObject();
+        $object = $this->context->context->context->getObject();
 
+        $payment = new Payment($object, intval($this->context->name()));
 
-          $payment = new Payment($object, intval($this->context->name()));
+        $this->context->getKernel()->getSetting->set('intranet', 'payment.state.'.$payment->get('type').'.account', intval($_POST['state_account_id']));
 
-
-    $this->context->getKernel()->setting->set('intranet', 'payment.state.'.$payment->get('type').'.account', intval($_POST['state_account_id']));
-
-    if ($payment->error->isError()) {
-        // nothing, we continue
-    } elseif (!$payment->state($year, $_POST['voucher_number'], $_POST['date_state'], $_POST['state_account_id'], $translation)) {
-        $payment->error->set('Kunne ikke bogf�re posten');
-    } else {
-
-        if ($for == 'invoice') {
-            header('Location: view.php?id='.$object->get('id'));
-            exit;
-        } elseif ($for == 'reminder') {
-            header('Location: reminder.php?id='.$object->get('id'));
-            exit;
+        if ($payment->error->isError()) {
+            // nothing, we continue
+        } elseif (!$payment->state($year, $_POST['voucher_number'], $_POST['date_state'], $_POST['state_account_id'], $translation)) {
+            $payment->error->set('Could not state');
+        } else {
+            return new k_SeeOther($this->url('../'));
         }
-    }
 
-    return $this->render();
+        return $this->render();
 
     }
 }

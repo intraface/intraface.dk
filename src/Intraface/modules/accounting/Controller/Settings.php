@@ -33,7 +33,7 @@ class Intraface_modules_accounting_Controller_Settings extends k_Component
         return new Intraface_modules_accounting_YearGateway($this->getKernel());
     }
 
-    function POST()
+    function postForm()
     {
         $this->getYear()->setSettings($_POST);
         return k_SeeOther($this->url());

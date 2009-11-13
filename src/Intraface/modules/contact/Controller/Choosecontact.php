@@ -1,13 +1,6 @@
 <?php
 class Intraface_modules_contact_Controller_Choosecontact extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function renderHtml()
     {
         $module = $this->getKernel()->module("contact");

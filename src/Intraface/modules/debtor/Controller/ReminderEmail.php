@@ -1,10 +1,7 @@
 <?php
 /**
  * Vi skal have den til at markere e-mailen som sendt, når den er sendt.
- *
  */
-require('../../include_first.php');
-
 class Reminder_Text {
     private $output;
     function __construct() {}
@@ -66,7 +63,7 @@ class Reminder_Text {
                     $this->output .= "\nBesked til modtager: " . "Kunde #" . $reminder->contact->get("number");
                 break;
                 case 3:
-                    $this->output .= "\n\nBetaling via homebanking\n+71< ".str_repeat("0", 15 - strlen($parameter["girocode"])).$parameter["girocode"]." +".$kernel->setting->get('intranet', 'giro_account_number')."<";
+                    $this->output .= "\n\nBetaling via homebanking\n+71< ".str_repeat("0", 15 - strlen($parameter["girocode"])).$parameter["girocode"]." +".$this->context->getKernel()->setting->get('intranet', 'giro_account_number')."<";
                 break;
             }
 
@@ -81,67 +78,72 @@ class Reminder_Text {
 
 }
 
-$kernel->module('debtor');
-$kernel->useShared('email');
+class Intraface_modules_debtor_Controller_ReminderEmail extends k_Component
+{
+    function renderHtml()
+    {
+        $this->context->getKernel()->module('debtor');
+        $this->context->getKernel()->useShared('email');
 
-$module_invoice = $kernel->useModule('invoice');
-$module_invoice->includeFile('Reminder.php');
-$module_invoice->includeFile('ReminderItem.php');
+        $module_invoice = $this->context->getKernel()->useModule('invoice');
+        $module_invoice->includeFile('Reminder.php');
+        $module_invoice->includeFile('ReminderItem.php');
 
-$module_debtor = $kernel->useModule('debtor');
+        $module_debtor = $this->context->getKernel()->useModule('debtor');
 
-$kernel->useModule('contact');
-$kernel->useModule('product');
+        $this->context->getKernel()->useModule('contact');
+        $this->context->getKernel()->useModule('product');
 
-$reminder = new Reminder($kernel, intval($_REQUEST['id']));
+        $reminder = new Reminder($this->context->getKernel(), intval($_REQUEST['id']));
 
-if ($reminder->contact->address->get("email") == '') {
-  trigger_error('Kontaktpersonen har ikke nogen email', E_USER_ERROR);
-  exit;
+        if ($reminder->contact->address->get("email") == '') {
+          trigger_error('Kontaktpersonen har ikke nogen email', E_USER_ERROR);
+          exit;
+        }
+
+        $subject  =	"Påmindelse om betaling";
+
+        $reminder_text = new Reminder_Text();
+        $reminder_text->visit($reminder);
+
+        $body = $reminder_text->getText();
+
+        switch($this->context->getKernel()->setting->get('intranet', 'debtor.sender')) {
+            case 'intranet':
+                $from_email = '';
+                $from_name = '';
+                break;
+            case 'user':
+                $from_email = $this->context->getKernel()->user->getAddress()->get('email');
+                $from_name = $this->context->getKernel()->user->getAddress()->get('name');
+                break;
+            case 'defined':
+                $from_email = $this->context->getKernel()->setting->get('intranet', 'debtor.sender.email');
+                $from_name = $this->context->getKernel()->setting->get('intranet', 'debtor.sender.name');
+                break;
+            default:
+                trigger_error("Invalid sender!", E_USER_ERROR);
+        }
+
+        $email = new Email($this->context->getKernel());
+        $var = array(
+            'body' => $body,
+            'subject' => $subject,
+            'contact_id' => $reminder->contact->get('id'),
+            'from_email' => $from_email,
+            'from_name' => $from_name,
+            'type_id' => 5, // type_id 5 er reminder
+            'belong_to' => $reminder->get('id')
+        );
+
+        if ($id = $email->save($var)) {
+            $redirect = new Intraface_Redirect($this->context->getKernel());
+            $shared_email = $this->context->getKernel()->useShared('email');
+            $url = $redirect->setDestination($shared_email->getPath().'email.php?id='.$id, NET_SCHME . NET_HOST . $this->context->url());
+            $redirect->setIdentifier('send_email');
+            $redirect->askParameter('send_email_status');
+            return new k_SeeOther($url);
+        }
+
+    }
 }
-
-$subject  =	"Påmindelse om betaling";
-
-$reminder_text = new Reminder_Text();
-$reminder_text->visit($reminder);
-
-$body = $reminder_text->getText();
-
-switch($kernel->setting->get('intranet', 'debtor.sender')) {
-    case 'intranet':
-        $from_email = '';
-        $from_name = '';
-        break;
-    case 'user':
-        $from_email = $kernel->user->getAddress()->get('email');
-        $from_name = $kernel->user->getAddress()->get('name');
-        break;
-    case 'defined':
-        $from_email = $kernel->setting->get('intranet', 'debtor.sender.email');
-        $from_name = $kernel->setting->get('intranet', 'debtor.sender.name');
-        break;
-    default:
-        trigger_error("Invalid sender!", E_USER_ERROR);
-}
-
-$email = new Email($kernel);
-$var = array(
-    'body' => $body,
-    'subject' => $subject,
-    'contact_id' => $reminder->contact->get('id'),
-    'from_email' => $from_email,
-    'from_name' => $from_name,
-    'type_id' => 5, // type_id 5 er reminder
-    'belong_to' => $reminder->get('id')
-);
-
-if ($id = $email->save($var)) {
-    $redirect = new Intraface_Redirect($kernel);
-    $shared_email = $kernel->useShared('email');
-    $url = $redirect->setDestination($shared_email->getPath().'email.php?id='.$id, $module_debtor->getPath().'reminder.php?id='.$reminder->get('id'));
-    $redirect->setIdentifier('send_email');
-    $redirect->askParameter('send_email_status');
-    header('Location: ' . $url);
-    exit;
-}
-?>

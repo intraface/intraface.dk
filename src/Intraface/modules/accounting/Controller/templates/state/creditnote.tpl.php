@@ -2,22 +2,22 @@
 $items = $context->getItems();
 ?>
 
-<h1>Bogf�r kreditnota #<?php e($context->getDebtor()->get('number')); ?></h1>
+<h1>Bogf�r kreditnota #<?php e($context->getModel()->get('number')); ?></h1>
 
 <ul class="options">
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
     <li><a href="<?php e(url('../../', array('use_stored' => true))); ?>"><?php e('Back to credit notes'); ?></a></li>
 </ul>
 
-<?php if (!$context->getYear()->readyForState($context->getDebtor()->get('this_date'))): ?>
+<?php if (!$context->getYear()->readyForState($context->getModel()->get('this_date'))): ?>
     <?php echo $context->getYear()->error->view(); ?>
     <p>G� til <a href="<?php e($this->url('../../../../../accounting/')); ?>">regnskabet</a></p>
 <?php else: ?>
 
     <p class="message">N�r du bogf�rer en kreditnota vil bel�bet bliver trukket fra debitorkontoen.</p>
 
-    <?php $context->getDebtor()->readyForState($context->getYear(), 'skip_check_products'); ?>
-    <?php echo $context->getDebtor()->error->view(); ?>
+    <?php $context->getModel()->readyForState($context->getYear(), 'skip_check_products'); ?>
+    <?php echo $context->getModel()->error->view(); ?>
 
     <form action="<?php e(url()); ?>" method="post">
     <input type="hidden" value="<?php e($value['id']); ?>" name="id" />
@@ -27,41 +27,41 @@ $items = $context->getItems();
         <table>
             <tr>
                 <th><?php e(__("credit note number")); ?></th>
-                <td><?php e($context->getDebtor()->get("number")); ?></td>
+                <td><?php e($context->getModel()->get("number")); ?></td>
             </tr>
             <tr>
                 <th>Dato</th>
-                <td><?php e($context->getDebtor()->get("dk_this_date")); ?></td>
+                <td><?php e($context->getModel()->get("dk_this_date")); ?></td>
             </tr>
         </table>
     </fieldset>
 
-    <?php if ($context->getDebtor()->readyForState($context->getYear(), 'skip_check_products')): ?>
+    <?php if ($context->getModel()->readyForState($context->getYear(), 'skip_check_products')): ?>
         <fieldset>
             <legend>Oplysninger der bogf�res</legend>
             <table>
                 <tr>
                     <th>Bilagsnummer</th>
                     <td>
-                        <?php if (!$context->getDebtor()->isStated()): ?>
+                        <?php if (!$context->getModel()->isStated()): ?>
                         <input type="text" name="voucher_number" value="<?php e($context->getVoucher()->getMaxNumber() + 1); ?>" />
                         <?php else: ?>
-                        <a href="<?php e($accounting_module->getPath()); ?>voucher.php?id=<?php e($context->getDebtor()->get("voucher_id")); ?>">Se bilag</a>
+                        <a href="<?php e($accounting_module->getPath()); ?>voucher.php?id=<?php e($context->getModel()->get("voucher_id")); ?>">Se bilag</a>
                         <?php endif; ?>
                     </td>
                 </tr>
-                <?php if ($context->getDebtor()->isStated()): ?>
+                <?php if ($context->getModel()->isStated()): ?>
                     <tr>
                         <th>Bogf�rt</th>
                         <td>
-                                <?php e($context->getDebtor()->get("dk_date_stated")); ?>
+                                <?php e($context->getModel()->get("dk_date_stated")); ?>
                         </td>
                     </tr>
                 <?php else: ?>
                     <tr>
                         <th>Bogf�r p� dato</th>
                         <td>
-                            <input type="text" name="date_state" value="<?php e($context->getDebtor()->get("dk_this_date")); ?>" />
+                            <input type="text" name="date_state" value="<?php e($context->getModel()->get("dk_this_date")); ?>" />
                         </td>
                     </tr>
                 <?php endif; ?>
@@ -89,7 +89,7 @@ $items = $context->getItems();
                 }
 
                 for ($i = 0, $max = count($items); $i<$max; $i++) {
-                    $product = new Product($kernel, $items[$i]['product_id']);
+                    $product = new Product($context->getKernel(), $items[$i]['product_id']);
                     $account = Account::factory($context->getYear(), $product->get('state_account_id'));
 
                     $total += $items[$i]["quantity"] * $items[$i]["price"]->getAsIso(2);
@@ -100,8 +100,8 @@ $items = $context->getItems();
                         <td><?php e($items[$i]["name"]); ?></td>
                         <td><?php e(amountToOutput($items[$i]["quantity"]*$items[$i]["price"]->getAsIso(2))); ?></td>
                         <td>
-                            <?php if (!$context->getDebtor()->isStated()):
-                                $year = new Year($kernel);
+                            <?php if (!$context->getModel()->isStated()):
+                                $year = new Year($context->getKernel());
                                 $year->loadActiveYear();
                                 $accounts =  $account->getList('sale');
                                 ?>

@@ -1,13 +1,9 @@
 <?php
 class Intraface_modules_contact_Controller_Import extends k_Component
 {
-    protected $registry;
     protected $msg;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
+    public $errors;
+    public $success;
 
     function getMessage()
     {
@@ -26,22 +22,19 @@ class Intraface_modules_contact_Controller_Import extends k_Component
 
     function postForm()
     {
-        throw new Exception('not implemented');
-        /*
         $data = $_SESSION['shared_fileimport_data'];
 
         if (!is_array($data) || count($data) == 0) {
-            trigger_error('This is not a valid dataset!', E_USER_ERROR);
-            exit;
+            throw new Exception('This is not a valid dataset!');
         }
 
-        $errors = array();
+        $this->errors = array();
         $e = 0;
-        $success = 0;
+        $this->success = 0;
 
         foreach ($data AS $line => $contact) {
 
-            $contact_object = new Contact($kernel);
+            $contact_object = new Contact($this->getKernel());
 
             if ($contact_object->save($contact)) {
 
@@ -49,42 +42,40 @@ class Intraface_modules_contact_Controller_Import extends k_Component
                 $string_appender = new Intraface_Keyword_StringAppender($contact_object->getKeywords(), $appender);
 
                 $string_appender->addKeywordsByString($_POST['keyword']);
-                $success++;
-            }
-            else {
-                $errors[$e]['line'] = $line+1; // line starts at 0
-                $errors[$e]['name'] = $contact['name'];
-                $errors[$e]['email'] = $contact['email'];
-                $errors[$e]['error'] = $contact_object->error;
+                $this->success++;
+            } else {
+                $this->errors[$e]['line'] = $line+1; // line starts at 0
+                $this->errors[$e]['name'] = $contact['name'];
+                $this->errors[$e]['email'] = $contact['email'];
+                $this->errors[$e]['error'] = $contact_object->error;
                 $e++;
             }
         }
 
         unset($_SESSION['shared_fileimport_data']);
-    	*/
+
+        if (empty($this->errors)) {
+            return new k_SeeOther($this->url('../', array('flare' => $this->success . ' contacts imported successfully')));
+        }
+
+        return $this->render();
     }
 
     function renderHtml()
     {
-        return '<h1>Contact import</h1><p>Not implemented yet. Write to support@intraface.dk if you need it. <a href="'.$this->url('../').'">Go back</a>.</p>';
+        $redirect = Intraface_Redirect::returns($this->getKernel());
+        if ($redirect->getId('id') == 0) {
+            throw new Exception('We did not recive a redirect');
+        }
 
-/*
-    $redirect = Intraface_Redirect::returns($kernel);
-    if ($redirect->getId('id') == 0) {
-        trigger_error('we did not recive a redirect', E_USER_ERROR);
-        exit;
-    }
+        $translation = $this->getKernel()->getTranslation('contact');
 
-    if ($redirect->getParameter('session_variable_name') != 'shared_fileimport_data') {
-        trigger_error('the session variable name must have been changed as it is not the same anymore: "'.$redirect->getParameter('session_variable_name').'"', E_USER_ERROR);
-        exit;
-    }
+        if ($redirect->getParameter('session_variable_name') != 'shared_fileimport_data') {
+            throw new Exception('the session variable name must have been changed as it is not the same anymore: "'.$redirect->getParameter('session_variable_name').'"');
+        }
 
-    $data = $_SESSION['shared_fileimport_data'];
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/sendemail.tpl.php');
-        return $smarty->render($this);
-*/
-
+        $data = $_SESSION['shared_fileimport_data'];
+        $smarty = new k_Template(dirname(__FILE__) . '/templates/import.tpl.php');
+        return $smarty->render($this, array('translation' => $translation));
     }
 }
-

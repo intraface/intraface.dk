@@ -24,8 +24,6 @@
  */
 class Intraface_modules_accounting_Controller_Vat_Index extends k_Component
 {
-    protected $registry;
-
     protected function map($name)
     {
         if ($name) {
@@ -33,16 +31,8 @@ class Intraface_modules_accounting_Controller_Vat_Index extends k_Component
         }
     }
 
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function renderHtml()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         $allowed_periods = $module->getSetting('vat_periods');
 
         $year = new Year($this->getKernel());
@@ -67,9 +57,6 @@ class Intraface_modules_accounting_Controller_Vat_Index extends k_Component
 
     function getAllowedPeriods()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         return $allowed_periods = $module->getSetting('vat_periods');
     }
 

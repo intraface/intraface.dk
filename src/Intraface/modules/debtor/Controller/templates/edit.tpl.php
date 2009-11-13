@@ -19,7 +19,7 @@ $value = $context->getValues();
 
 <?php echo $context->getDebtor()->error->view(); ?>
 
-<form action="<?php e(url(null, array('contact_id' => $context->getContact()->get('id')))); ?>" method="post">
+<form action="<?php e(url(null, array($context->subview(), 'contact_id' => $context->getContact()->get('id')))); ?>" method="post">
 
 <fieldset>
 	<legend><?php e(__($context->getDebtor()->get('type').' data')); ?></legend>

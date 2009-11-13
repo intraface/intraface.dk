@@ -1,7 +1,6 @@
 <?php
 $GLOBALS['konstrukt_content_types']['application/vnd.ms-excel'] = 'xls';
 
-
 class k_XlsResponse extends k_ComplexResponse {
   function contentType() {
     return 'application/vnd.ms-excel';
@@ -14,8 +13,6 @@ class k_XlsResponse extends k_ComplexResponse {
 
 class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
 {
-    protected $registry;
-
     protected function map($name)
     {
         if ($name == 'create') {
@@ -27,24 +24,14 @@ class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
         }
     }
 
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function renderHtml()
     {
-        $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/voucher/index.tpl.php');
         return $smarty->render($this);
     }
 
     function renderXls()
     {
-        $module = $this->getKernel()->module('accounting');
-
         $year = new Year($this->getKernel());
         $year->checkYear();
 
@@ -125,9 +112,6 @@ class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
 
     function getYear($id = 0)
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         return new Year($this->getKernel(), $id);
     }
 
@@ -136,5 +120,4 @@ class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
         $gateway = $this->context->getYearGateway();
         return $gateway;
     }
-
 }

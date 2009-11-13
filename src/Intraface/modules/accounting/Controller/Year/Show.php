@@ -17,6 +17,8 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
             return 'Intraface_modules_accounting_Controller_Voucher_Index';
         } elseif ($name == 'end') {
             return 'Intraface_modules_accounting_Controller_Year_End';
+        } elseif ($name == 'primosaldo') {
+            return 'Intraface_modules_accounting_Controller_Year_Primosaldo';
         }
     }
 

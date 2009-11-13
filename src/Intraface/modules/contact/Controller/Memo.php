@@ -3,24 +3,15 @@ class Intraface_modules_contact_Controller_Memo extends k_Component
 {
     function renderHtml()
     {
-        $contact_module = $this->context->getKernel()->module('contact');
-        $translation = $this->context->getKernel()->getTranslation('contact');
-        $contact_module->includeFile('ContactReminder.php');
-
     	$reminder = ContactReminder::factory($this->context->getKernel(), (int)$this->name());
         $contact = $reminder->contact;
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/memo.tpl.php');
         return $smarty->render($this, array('reminder' => $reminder));
-
     }
 
     function renderHtmlEdit()
     {
-        $contact_module = $this->context->getKernel()->module('contact');
-        $translation = $this->context->getKernel()->getTranslation('contact');
-        $contact_module->includeFile('ContactReminder.php');
-
     	$reminder = ContactReminder::factory($this->context->getKernel(), (int)$this->name());
         $contact = $reminder->contact;
 
@@ -31,10 +22,6 @@ class Intraface_modules_contact_Controller_Memo extends k_Component
 
     function postForm()
     {
-        $contact_module = $this->context->getKernel()->module('contact');
-        $translation = $this->context->getKernel()->getTranslation('contact');
-        $contact_module->includeFile('ContactReminder.php');
-
     	$reminder = ContactReminder::factory($this->context->getKernel(), (int)$this->name());
 
     	if (isset($_POST['mark_as_seen'])) {

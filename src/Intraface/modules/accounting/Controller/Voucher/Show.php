@@ -1,13 +1,6 @@
 <?php
 class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     protected function map($name)
     {
         if ($name == 'post') {
@@ -155,9 +148,6 @@ $voucher_files = $voucher_file->getList();
 
     function getYear()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         $year = new Year($this->getKernel());
         $year->checkYear();
         return $year;
@@ -165,9 +155,6 @@ $voucher_files = $voucher_file->getList();
 
     function getValues()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         return $this->getVoucher()->get();
     }
 
@@ -194,10 +181,6 @@ $voucher_files = $voucher_file->getList();
 
     function t($phrase)
     {
-        $translation = $this->getKernel()->getTranslation('accounting');
-
-        global $translation;
-
         return $phrase;
     }
 
@@ -209,13 +192,6 @@ $voucher_files = $voucher_file->getList();
 
     function postForm()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
-        global $translation;
-
-        $module = $this->getKernel()->module('accounting');
-
         if (!empty($_POST) AND !empty($_POST['action']) && $_POST['action'] == 'counter_entry' ) {
 
         	$voucher = new Voucher($this->getYear(), $this->name());
@@ -230,7 +206,6 @@ $voucher_files = $voucher_file->getList();
 
         	return new k_SeeOther($this->url());
         }
-
 
         $voucher = new Voucher($this->getYear(), $this->name());
     	if ($voucher->save($_POST)) {

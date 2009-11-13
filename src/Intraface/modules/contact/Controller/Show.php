@@ -1,11 +1,12 @@
 <?php
 class Intraface_modules_contact_Controller_Show extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
+    function dispatch()
     {
-        $this->registry = $registry;
+        if ($this->getContact()->getId() == 0) {
+            throw new k_PageNotFound();
+        }
+        return parent::dispatch();
     }
 
     function map($name)
@@ -23,20 +24,12 @@ class Intraface_modules_contact_Controller_Show extends k_Component
 
     function renderHtml()
     {
-        $contact_module = $this->getKernel()->module("contact");
-        $translation = $this->getKernel()->getTranslation('contact');
-        $contact_module->includeFile('ContactReminder.php');
-
         $smarty = new k_Template(dirname(__FILE__) . '/templates/show.tpl.php');
         return $smarty->render($this, array('persons' => $this->getContactPersons()));
     }
 
     function renderHtmlEdit()
     {
-        $contact_module = $this->getKernel()->module("contact");
-        $translation = $this->getKernel()->getTranslation('contact');
-        $contact_module->includeFile('ContactReminder.php');
-
         $smarty = new k_Template(dirname(__FILE__) . '/templates/edit.tpl.php');
         return $smarty->render($this);
     }
@@ -48,10 +41,6 @@ class Intraface_modules_contact_Controller_Show extends k_Component
 
     function postForm()
     {
-        $contact_module = $this->getKernel()->module("contact");
-        $translation = $this->getKernel()->getTranslation('contact');
-        $contact_module->includeFile('ContactReminder.php');
-
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
 
         if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
@@ -116,17 +105,9 @@ class Intraface_modules_contact_Controller_Show extends k_Component
 
     function getContact()
     {
-        $this->getKernel()->module('contact');
         $contact = new Contact($this->getKernel(), $this->name());
         $value = $contact->get();
 
-        if ($value['type'] == "corporation") {
-            $persons = $contact->contactperson->getList();
-        }
-
-        // The compare function has been removed from the class
-        // $similar_contacts = $contact->compare();
-        $similar_contacts = array();
         return $contact;
     }
 
@@ -135,7 +116,7 @@ class Intraface_modules_contact_Controller_Show extends k_Component
         $contact = new Contact($this->getKernel(), $this->name());
         $value = $contact->get();
 
-        if ($value['type'] == "corporation") {
+        if ($this->getContact()->get('type') == "corporation") {
             return $persons = $contact->contactperson->getList();
         }
         return array();
@@ -293,9 +274,7 @@ class Intraface_modules_contact_Controller_Show extends k_Component
 
     function renderVcard()
     {
-        $this->getKernel()->module('contact');
-
-        $contact = new Contact($this->getKernel(), (int)$this->name());
+        $contact = $this->getContact();
 
 
         // instantiate a builder object

@@ -1,9 +1,9 @@
 <?php
 class Intraface_modules_accounting_Controller_State_Depreciation extends k_Component
 {
-    function getType()
+    function map()
     {
-        return $this->context->context->context->getType();
+        return 'Intraface_modules_accounting_Controller_State_SelectYear';
     }
 
     function renderHtml()
@@ -13,23 +13,6 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/depreciation.tpl.php');
         return $smarty->render($this, array('voucher' => $voucher, 'year' => $this->getYear(), 'depreciation' => $this->context->getDepreciation(), 'object' => $this->getObject(), 'year' => $year));
 
-    }
-
-    function getObject()
-    {
-        return $this->context->getObject();
-    }
-
-    function getYear()
-    {
-        $year = new Year($this->context->getKernel());
-        $year->loadActiveYear();
-        return $year;
-    }
-
-    function getVoucher()
-    {
-        return $voucher = new Voucher($this->getYear());
     }
 
     function postForm()
@@ -42,6 +25,10 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
 
         $year = new Year($this->context->getKernel());
         $voucher = new Voucher($year);
+
+        if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
+            return new k_SeeOther($this->url('selectyear'));
+        }
 
         if (!empty($_POST)) {
 
@@ -91,6 +78,29 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
                 }
             }
         }
+    }
+
+    function getType()
+    {
+        return $this->context->context->context->getType();
+    }
+
+
+    function getModel()
+    {
+        return $this->context->getObject();
+    }
+
+    function getYear()
+    {
+        $year = new Year($this->context->getKernel());
+        $year->loadActiveYear();
+        return $year;
+    }
+
+    function getVoucher()
+    {
+        return $voucher = new Voucher($this->getYear());
     }
 
     function t($phrase)

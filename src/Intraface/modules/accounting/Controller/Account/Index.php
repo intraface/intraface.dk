@@ -1,8 +1,6 @@
 <?php
 class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 {
-    protected $registry;
-
     protected function map($name)
     {
         if ($name == 'create') {
@@ -12,11 +10,6 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
         } elseif ($name == 'popup') {
         	return 'Intraface_modules_accounting_Controller_Account_Popup';
         }
-    }
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
     }
 
     function GET()
@@ -45,7 +38,6 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
         return $smarty->render($this);
     }
 
-
     function getAccount()
     {
     	return new Account($this->getYear());
@@ -63,8 +55,6 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
     function getYear($id = 0)
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
         $year = $this->context->getYear();
         $year->checkYear();
 
@@ -78,8 +68,6 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
     function renderXls()
     {
-        $module = $kernel->module('accounting');
-
         $year = new Year($kernel);
         $year->checkYear();
 
@@ -137,6 +125,5 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
         // Let's send the file
         $workbook->close();
-
     }
 }

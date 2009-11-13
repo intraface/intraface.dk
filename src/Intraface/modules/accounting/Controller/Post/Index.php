@@ -1,8 +1,6 @@
 <?php
 class Intraface_modules_accounting_Controller_Post_Index extends k_Component
 {
-    protected $registry;
-
     protected function map($name)
     {
         if ($name == 'create') {
@@ -10,11 +8,6 @@ class Intraface_modules_accounting_Controller_Post_Index extends k_Component
         } elseif (is_numeric($name)) {
         	return 'Intraface_modules_accounting_Controller_Post_Show';
         }
-    }
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
     }
 
     function renderExcel()
@@ -87,9 +80,6 @@ class Intraface_modules_accounting_Controller_Post_Index extends k_Component
 
     function getYear($id = 0)
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         return new Year($this->getKernel(), $id);
     }
 

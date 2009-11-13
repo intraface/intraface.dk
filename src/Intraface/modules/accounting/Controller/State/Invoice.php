@@ -1,13 +1,7 @@
 <?php
 class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
 {
-    protected $registry;
     protected $year;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
 
     function map()
     {
@@ -19,7 +13,7 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
         return $this->context->getKernel();
     }
 
-    function getDebtor()
+    function getModel()
     {
         return $this->context->getDebtor();
     }
@@ -61,9 +55,10 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
         $debtor->loadItem();
         $items = $debtor->item->getList();
 
-        if (!$this->getYear()->readyForState($this->getDebtor()->get('this_date'))) {
+        if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
             return new k_SeeOther($this->url('selectyear'));
         }
+
 
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/invoice.tpl.php');
         return $smarty->render($this);

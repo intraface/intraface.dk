@@ -1,13 +1,6 @@
 <?php
 class Intraface_modules_accounting_Controller_Year_End extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function getAccount()
     {
         $year = $this->getYear();
@@ -21,7 +14,6 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
         $year_end = new YearEnd($year);
         $post = new Post(new Voucher($year));
         $vat_period = new VatPeriod($year);
-
 
 	    // disse g�r det muligt let at skifte mellem trinene
         if (!empty($_POST['previous'])) {

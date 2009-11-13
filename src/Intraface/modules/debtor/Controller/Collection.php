@@ -1,16 +1,10 @@
 <?php
 class Intraface_modules_debtor_Controller_Collection extends k_Component
 {
-    protected $registry;
     protected $error;
     protected $debtor;
 
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
-   function map($name)
+    function map($name)
     {
         if (is_numeric($name)) {
             return 'Intraface_modules_debtor_Controller_Show';

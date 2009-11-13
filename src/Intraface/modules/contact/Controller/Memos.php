@@ -13,10 +13,6 @@ class Intraface_modules_contact_Controller_Memos extends k_Component
 
     function renderHtmlCreate()
     {
-        $contact_module = $this->context->getKernel()->module('contact');
-        $translation = $this->context->getKernel()->getTranslation('contact');
-        $contact_module->includeFile('ContactReminder.php');
-
     	$reminder = new ContactReminder($this->context->getKernel());
         $contact = $reminder->contact;
 
@@ -36,16 +32,11 @@ class Intraface_modules_contact_Controller_Memos extends k_Component
 
     function postForm()
     {
-        $contact_module = $this->context->getKernel()->module('contact');
-        $translation = $this->context->getKernel()->getTranslation('contact');
-        $contact_module->includeFile('ContactReminder.php');
-
         $contact = new Contact($this->context->getKernel(), (int)$this->context->name());
    		$reminder = new ContactReminder($contact);
 
     	if ($id = $reminder->update($_POST)) {
     		return new k_SeeOther($this->url('../'));
     	}
-
     }
 }

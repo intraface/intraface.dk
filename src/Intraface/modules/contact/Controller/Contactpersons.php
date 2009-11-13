@@ -13,10 +13,6 @@ class Intraface_modules_contact_Controller_Contactpersons extends k_Component
 
     function renderHtmlCreate()
     {
-        $contact_module = $this->context->getKernel()->module('contact');
-        $translation = $this->context->getKernel()->getTranslation('contact');
-        $contact_module->includeFile('ContactReminder.php');
-
         $contact = new Contact($this->context->getKernel(), $this->context->name());
     	$person = $contact->loadContactPerson(0);
 
@@ -36,9 +32,6 @@ class Intraface_modules_contact_Controller_Contactpersons extends k_Component
 
     function postForm()
     {
-        $this->context->getKernel()->module('contact');
-        $translation = $this->context->getKernel()->getTranslation('contact');
-
     	$contact = new Contact($this->context->getKernel(), $this->context->name());
     	$person = $contact->loadContactPerson(0);
     	if ($id = $person->save($_POST)) {

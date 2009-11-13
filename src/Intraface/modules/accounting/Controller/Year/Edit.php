@@ -1,13 +1,6 @@
 <?php
 class Intraface_modules_accounting_Controller_Year_Edit extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function renderHtml()
     {
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/year/edit.tpl.php');

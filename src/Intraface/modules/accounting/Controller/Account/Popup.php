@@ -1,13 +1,6 @@
 <?php
 class Intraface_modules_accounting_Controller_Account_Popup extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function getAccountingModule()
     {
         $accounting_module = $this->getKernel()->module('accounting');
@@ -16,8 +9,6 @@ class Intraface_modules_accounting_Controller_Account_Popup extends k_Component
 
     function getAccounts()
     {
-        $accounting_module = $this->getKernel()->module('accounting');
-
         $account = new Account(new Year($this->getKernel()));
         return $account->getList();
     }
@@ -45,9 +36,6 @@ class Intraface_modules_accounting_Controller_Account_Popup extends k_Component
 
     function getYear($id = 0)
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-
         return new Year($this->getKernel(), $id);
     }
 }

@@ -8,10 +8,14 @@
 	<li><a class="pdf" href="<?php e(url(null . '.pdf', array('use_stored' => 'true'))); ?>" target="_blank"><?php e(__('Pdf-labels')); ?></a></li>
 	<li><a class="excel" href="<?php e(url(null . '.xls', array('use_stored' => 'true'))); ?>"><?php e(__('Excel', 'common')); ?></a></li>
 	<li><a href="<?php e(url('sendemail', array('use_stored' => true))); ?>"><?php e(__('Email to contacts in search')); ?></a></li>
-    <li><a href="<?php e(url('import')); ?>"><?php e(__('Import contacts')); ?></a></li>
+    <li><a href="<?php e(url(null, array('import' => true))); ?>"><?php e(__('Import contacts')); ?></a></li>
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 
 </ul>
+
+<?php if ($context->query('flare')): ?>
+	<p class="message"><?php e($context->query('flare')); ?></p>
+<?php endif; ?>
 
 <?php if (!$context->getContact()->isFilledIn()): ?>
 
@@ -34,7 +38,7 @@
 		<label for="keyword_id"><?php e(__('show with keywords', 'common')); ?>
 			<select name="keyword_id" id="keyword_id">
 				<option value=""><?php e(t('All')); ?></option>
-				<?php foreach ($$context->getUsedKeywords() AS $k) { ?>
+				<?php foreach ($context->getUsedKeywords() AS $k) { ?>
 					<option value="<?php e($k['id']); ?>" <?php if ($k['id'] == $context->getContact()->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php e($k['keyword']); ?></option>
 				<?php } ?>
 			</select>
