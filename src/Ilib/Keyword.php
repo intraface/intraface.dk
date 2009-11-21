@@ -126,4 +126,29 @@ class Ilib_Keyword
         return $this->id;
     }
 
+    function getAllKeywords()
+    {
+        $keywords = array();
+
+        $condition = $this->extra_conditions;
+        $condition['keyword.type'] = $this->type;
+        $condition['keyword.active'] = 1;
+        foreach ($condition as $column => $value) {
+            $c[] = $column . " = '" . $value . "'";
+        }
+
+        $db = new DB_Sql;
+        $db->query("SELECT * FROM keyword
+            WHERE " . implode(' AND ', $c) . "
+            ORDER BY keyword ASC");
+
+        $i = 0;
+        while ($db->nextRecord()) {
+            $keywords[$i]['id'] = $db->f('id');
+            $keywords[$i]['keyword'] = $db->f('keyword');
+            $i++;
+        }
+
+        return $keywords;
+    }
 }
