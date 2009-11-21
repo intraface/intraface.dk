@@ -9,16 +9,17 @@ class Common_AllTests {
         $suite = new PHPUnit_Framework_TestSuite('Intraface_Common');
 
         $tests = array(
-            'Kernel', 
-            'ModuleHandler', 
-            'Setting', 
-            'User', 
-            'Redirect', 
-            'DBQuery', 
-            'Error', 
-            'Intranet', 
-            'Address', 
-            'Amount', 
+            'Kernel',
+            'ModuleHandler',
+            'Setting',
+            'Date',
+            'User',
+            'Redirect',
+            'DBQuery',
+            'Error',
+            'Intranet',
+            'Address',
+            'Amount',
             'Validator');
 
         foreach ($tests AS $test) {
@@ -29,4 +30,3 @@ class Common_AllTests {
         return $suite;
     }
 }
-?>
