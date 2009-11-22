@@ -17,8 +17,8 @@
     </fieldset>
 
     <div>
-        <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" class="save" /> <?php e(t('or', 'common')); ?>
-        <a href="attribute_groups.php"><?php e(t('Cancel', 'common')); ?></a>
+        <input type="submit" name="save" value="<?php e(t('Save', 'common')); ?>" class="save" />
+        <a href="<?php e(url('.')); ?>"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 
 </form>

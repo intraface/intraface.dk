@@ -37,11 +37,6 @@
              <?php endforeach; ?>
         </tbody>
     </table>
-    <select name="action">
-        <option value=""><?php e(t('Choose...', 'common')); ?></option>
-        <option value="delete"><?php e(t('Delete selected', 'common')); ?></option>
-    </select>
-
-    <input type="submit" value="<?php e(t('Go', 'common')); ?>" />
+    <input type="submit" name="select" value="<?php e(t('Select', 'common')); ?>" />
 <?php endif; ?>
 </form>

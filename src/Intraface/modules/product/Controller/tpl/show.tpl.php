@@ -17,7 +17,7 @@
 <table>
     <?php if (!$product->hasVariation()): ?>
         <tr>
-            <td><?php e(t('price')); ?></td>
+            <td><?php e(t('Price')); ?></td>
             <td><?php e(number_format($product->get('price'), 2, ",", ".")); ?> <?php e(t('excl. vat')); ?></td>
         </tr>
         <?php if ($kernel->user->hasModuleAccess('webshop') || $kernel->user->hasModuleAccess('shop')): ?>
@@ -28,13 +28,13 @@
                 </tr>
             <?php endif; ?>
             <tr>
-                <td><?php e(t('weight')); ?></td>
+                <td><?php e(t('Weight')); ?></td>
                 <td><?php e($product->get('weight')); ?> gram</td>
             </tr>
         <?php endif; ?>
     <?php endif; ?>
     <tr>
-        <td><?php e(t('unit type')); ?></td>
+        <td><?php e(t('Unit type')); ?></td>
         <td>
             <?php
                 // getting settings
@@ -47,7 +47,7 @@
     <?php if ($kernel->user->hasModuleAccess("webshop") || $kernel->user->hasModuleAccess("shop")): ?>
 
     <tr>
-        <td><?php e(t('show in webshop')); ?></td>
+        <td><?php e(t('Show in webshop')); ?></td>
         <td>
             <?php
                 $show_choises = array(0=>"Nej", 1=>"Ja");
@@ -61,7 +61,7 @@
     <?php endif; ?>
 
     <tr>
-        <td><?php e(t('vat')); ?></td>
+        <td><?php e(t('Vat')); ?></td>
         <td>
             <?php
                 $vat_choises = array(0=>"Nej", 1=>"Ja");
@@ -71,10 +71,10 @@
     </tr>
     <?php if ($kernel->intranet->hasModuleAccess('stock')): ?>
     <tr>
-        <td><?php e(t('stock product')); ?></td><td>
+        <td><?php e(t('Stock product')); ?></td><td>
             <?php
-                $stock_choises = array(0=>"Nej", 1=>"Ja");
-                e($stock_choises[$product->get('stock')]);
+                $stock_choises = array(0=>"No", 1=>"Yes");
+                e($stock_choises[$product->get('stock')], 'common');
             ?>
         </td>
     </tr>
@@ -84,7 +84,7 @@
         $mainAccounting = $kernel->useModule("accounting");
         ?>
         <tr>
-            <td><?php e(t('state on')); ?></td><td>
+            <td><?php e(t('State on')); ?></td><td>
             <?php
                 $year = new Year($kernel);
                 if ($year->get('id') == 0) {
@@ -94,7 +94,7 @@
                     if ($account->get('name')) {
                         e($account->get('number') . ' ' . $account->get('name'));
                     } else {
-                        echo t('not set');
+                        echo t('Not set');
                     }
                 }
             ?>
@@ -125,7 +125,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
     ?>
     <?php if (count($groups) == 0): ?>
         <ul class="options">
-            <li><a href="<?php e(url('attributes')); ?>"><?php e(t('Select attributes for product')); ?></a></li>
+            <li><a href="<?php e(url('variations')); ?>"><?php e(t('Select attributes for product')); ?></a></li>
         </ul>
     <?php else: ?>
         <?php

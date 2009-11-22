@@ -107,6 +107,4 @@ class Intraface_modules_product_ProductDoctrineGateway
             return $collection->getLast()->getDetails()->getNumber();
         }
     }
-    
-    
 }

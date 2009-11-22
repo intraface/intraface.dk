@@ -1,8 +1,11 @@
 <?php
 class Intraface_modules_product_Controller_Index extends k_Component
 {
+    protected $gateway_doctrine;
     protected $gateway;
     protected $product;
+    protected $product_doctrine;
+    private $error;
 
 
     function renderHtml()
@@ -63,12 +66,22 @@ class Intraface_modules_product_Controller_Index extends k_Component
         return 'Intraface_modules_product_Controller_Attributegroups';
     }
 
+    function getProductDoctrine()
+    {
+        if (is_object($this->product_doctrine)) {
+            return $this->product_doctrine;
+        }
+
+        return $this->product_doctrine = new Intraface_modules_product_ProductDoctrine;
+    }
+    
     function getProduct()
     {
         if (is_object($this->product)) {
             return $this->product;
         }
-
+        
+        require_once 'Intraface/modules/product/Product.php';
         return $this->product = new Product($this->getKernel());
     }
 
@@ -86,11 +99,21 @@ class Intraface_modules_product_Controller_Index extends k_Component
         // $characters = $product->getCharacters();
         return $keywords = $product->getKeywordAppender();
     }
+    
+    function getError()
+    {
+        if(!is_object($this->error)) {
+            $this->error = new Intraface_Doctrine_ErrorRender($this->getTranslation());
+        }
+        
+        return $this->error;
+    }
 
     function getProducts()
     {
-        $gateway = $this->factory->create($this->getKernel());
-
+        // $gateway = $this->factory->create($this->getKernel());
+        $gateway = $this->getGateway();
+        
         $product = $gateway->getById(0);
         // $characters = $product->getCharacters();
         $keywords = $product->getKeywordAppender();
@@ -128,9 +151,14 @@ class Intraface_modules_product_Controller_Index extends k_Component
         $translation = $kernel->getTranslation('product');
         $filehandler = new FileHandler($kernel);
 
-        $data = array(
-            'gateway' => $this->getGateway(), 'translation' => $translation, 'kernel' => $kernel, 'filehandler' => $filehandler
-        );
+        /*$data = array(
+            'gateway' => $this->getGateway(), 
+            'translation' => $translation, 
+            'kernel' => $kernel, 
+            'filehandler' => $filehandler,
+            'error' => $this->error,
+            'product' => $this->getProduct()
+        );*/
 
         $smarty = new k_Template(dirname(__FILE__) . '/tpl/edit.tpl.php');
         return $smarty->render($this);
@@ -140,7 +168,7 @@ class Intraface_modules_product_Controller_Index extends k_Component
     {
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
 
-        $product = new Intraface_modules_product_ProductDoctrine;
+        $product = &$this->getProductDoctrine();
 
         $product->getDetails()->number = $_POST['number'];
         $product->getDetails()->Translation['da']->name = $_POST['name'];
@@ -164,9 +192,8 @@ class Intraface_modules_product_Controller_Index extends k_Component
             }
             return new k_SeeOther($this->url($product->getId()));
         } catch (Doctrine_Validator_Exception $e) {
-            $error = new Intraface_Doctrine_ErrorRender($this->getTranslation());
-            $error->attachErrorStack($product->getErrorStack());
-            $error->attachErrorStack($product->getDetails()->getErrorStack());
+            $this->getError()->attachErrorStack($product->getErrorStack());
+            $this->getError()->attachErrorStack($product->getDetails()->getErrorStack());
         }
         return $this->render();
     }

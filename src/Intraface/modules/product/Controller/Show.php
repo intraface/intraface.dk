@@ -21,9 +21,8 @@ class Intraface_modules_product_Controller_Show extends k_Component
         } elseif ($name == 'stock') {
             // @todo check whether product is stock product
             return 'Intraface_modules_stock_Controller_Product';
-        } elseif ($name == 'attributes') {
-            // @todo check whether product has attributes
-            return 'Intraface_modules_product_Controller_Attributegroup';
+        } elseif ($name == 'variations') {
+            return 'Intraface_modules_product_Controller_Show_Variations';
         } elseif ($name == 'selectvariation') {
             return 'Intraface_modules_product_Controller_Selectproductvariation';
         }
@@ -33,8 +32,13 @@ class Intraface_modules_product_Controller_Show extends k_Component
     {
     	$kernel = $this->context->getKernel();
 
-        $gateway = $this->getGateway();
-        return $gateway->findById($this->name());
+        /* $gateway = $this->getGateway();
+        // when doctrine is implemented
+        return $gateway->findById($this->name()); */
+    	
+    	require_once 'Intraface/modules/product/Product.php';
+    	return new Product($kernel, $this->name());
+    	
     }
 
     function getGateway()
@@ -74,7 +78,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
         if(isset($_POST['has_variation'])) $product->has_variation = $_POST['has_variation'];
         if(isset($_POST['stock'])) $product->stock = $_POST['stock'];
-
+print_r($product->asArray(true)); die('AA');
         try {
             $product->save();
 

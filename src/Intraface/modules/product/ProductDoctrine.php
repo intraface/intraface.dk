@@ -49,10 +49,10 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
     public function preInsert($event)
     {
         $this->changed_date = new Doctrine_Expression('NOW()');
-        
         # If details are not valid, we do not want to save the product.
         if(is_object($this->active_details)) {
-            # We validate the details
+            
+            # We validate the details for errors before we insert
             $this->active_details->isValid();
             $errors =& $this->active_details->getErrorStack();
             if($errors->count() > 1 && $errors->contains('product_id')) {
@@ -60,6 +60,24 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
                 throw new Doctrine_Validator_Exception(array());
                 // $event->skipOperation();
             }
+            
+            # We make sure translation is added before insert as name is required
+            if($this->active_details->Translation->count() == 0) {
+                $this->getErrorStack()->add('name', 'must be filled in');
+                throw new Doctrine_Validator_Exception(array());
+            }
+            
+            # We make sure there is no errors in translations before we insert
+            foreach($this->active_details->Translation AS $translation) {
+                $translation->isValid();
+                if($translation->getErrorStack()->count() > 0) {
+                    throw new Doctrine_Validator_Exception(array());
+                }
+            }
+        } else {
+            # We make sure, that the details is loaded, as they are required to insert product.
+            $this->getErrorStack()->add('name', 'must be filled in');
+            throw new Doctrine_Validator_Exception(array());
         }
         
     }

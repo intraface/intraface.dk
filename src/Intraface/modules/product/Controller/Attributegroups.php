@@ -40,10 +40,10 @@ class Intraface_modules_product_Controller_Attributegroups extends k_Component
 
         $gateway = new Intraface_modules_product_Attribute_Group_Gateway();
 
-        if (!empty($_POST['action']) && $_POST['action'] == 'delete') {
+        if ($this->body('action') == 'delete') {
             $deleted = array();
-            if (is_array($_POST['selected'])) {
-                foreach ($_POST['selected'] AS $id) {
+            if (is_array($this->body('selected'))) {
+                foreach ($this->body('selected') AS $id) {
                     try {
                         $group = $gateway->findById($id);
                         $group->delete();
@@ -64,18 +64,21 @@ class Intraface_modules_product_Controller_Attributegroups extends k_Component
             }
         }
 
-        $group = new Intraface_modules_product_Attribute_Group;
-
-        $group->name = $_POST['name'];
-        $group->description = $_POST['description'];
-        try {
-            $group->save();
-            $group->load();
-            return new k_SeeOther($this->url($group->getId()));
-        } catch(Doctrine_Validator_Exception $e) {
-            $error = new Intraface_Doctrine_ErrorRender($translation);
-            $error->attachErrorStack($group->getErrorStack());
+        if($this->body('save') != '') {
+            $group = new Intraface_modules_product_Attribute_Group;
+            $group->name = $_POST['name'];
+            $group->description = $_POST['description'];
+            try {
+                $group->save();
+                $group->load();
+                return new k_SeeOther($this->url($group->getId()));
+            } catch(Doctrine_Validator_Exception $e) {
+                $error = new Intraface_Doctrine_ErrorRender($this->getKernel()->getTranslation('product'));
+                $error->attachErrorStack($group->getErrorStack());
+            }
         }
+        
+        return $this->render();
     }
 
     function renderHtmlCreate()

@@ -83,7 +83,30 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($name, $product->getDetails()->getTranslation('da')->name);
         $this->assertEquals($price, $product->getDetails()->getPrice()->getAsIso());
     }
-
+    
+    function testSaveThrowsExceptionOnEmptyProduct()
+    {
+        $product = $this->createProductObject();
+        
+        $this->setExpectedException('Doctrine_Validator_Exception');
+        $product->save();
+    }
+    
+    function testSaveThrowsExceptionOnEmptyName()
+    {
+        $product = $this->createProductObject();
+        $product->getDetails()->Translation['da']->name = '';
+        $this->setExpectedException('Doctrine_Validator_Exception');
+        $product->save();
+    }
+    
+    function testSaveThrowsExceptionOnNoNameButFilledInPrice()
+    {
+        $product = $this->createProductObject();
+        $product->getDetails()->price = new Ilib_Variable_Float(20);
+        $this->setExpectedException('Doctrine_Validator_Exception');
+        $product->save();
+    }
     
     function testSaveIncreasesNumberOnNewProduct()
     {

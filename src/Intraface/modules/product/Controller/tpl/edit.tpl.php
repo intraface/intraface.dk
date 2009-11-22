@@ -1,30 +1,30 @@
 <?php
-if ($context->getProduct()->getId() > 0) {
-    $product = $context->getProduct();
+if ($context->getProductDoctrine()->getId() > 0) {
+    $product = $context->getProductDoctrine();
 }
 ?>
 <h1><?php e(t('Edit product')); ?></h1>
 
-<?php if (isset($error)) echo $error->view(); ?>
+<?php echo $context->getError()->view(); ?>
 
-<form action="<?php e(url()); ?>" method="post">
+<form action="<?php e(url(null, array('create'))); ?>" method="post">
 <fieldset>
-    <legend><?php e(t('product information')); ?></legend>
+    <legend><?php e(t('Product information')); ?></legend>
         <div class="formrow">
-            <label for="number"><?php e(t('product number')); ?></label>
+            <label for="number"><?php e(t('Product number')); ?></label>
             <input type="text" name="number" id="number" value="<?php if (isset($product)): e($product->getDetails()->getNumber()); else: e($context->getGateway()->getMaxNumber() + 1); endif; ?>" />
         </div>
         <div class="formrow">
-            <label for="name"><?php e(t('name')); ?></label>
+            <label for="name"><?php e(t('Name')); ?></label>
             <input type="text" size="50" name="name" id="name" value="<?php if(isset($product)) e($product->getDetails()->getTranslation('da')->name); ?>" />
         </div>
         <div class="formrow">
-            <label for="description"><?php e(t('description')); ?></label>
+            <label for="description"><?php e(t('Description')); ?></label>
             <textarea class="resizable" rows="8" cols="60" name="description" id="description"><?php if (isset($product)) e($product->getDetails()->getTranslation('da')->description); ?></textarea>
         </div>
 
         <div class="formrow">
-            <label for="unit"><?php e(t('unit type')); ?></label>
+            <label for="unit"><?php e(t('Unit type')); ?></label>
             <select name="unit" id="unit">
                 <?php foreach (Intraface_modules_product_Product_Details::getUnits() AS $key=>$unit): ?>
                     <option value="<?php e($key); ?>" <?php if (isset($product) && ($units = $product->getDetails()->getUnit()) && $units['singular'] == $unit['singular']) e(' selected="selected"'); ?> ><?php if(!empty($unit['combined'])) e(t($unit['combined'])); ?></option>
@@ -34,14 +34,14 @@ if ($context->getProduct()->getId() > 0) {
     </fieldset>
 
     <fieldset>
-        <legend><?php e(t('price information')); ?></legend>
+        <legend><?php e(t('Price information')); ?></legend>
         <div class="formrow">
-            <label for="price"><?php e(t('price')); ?></label>
+            <label for="price"><?php e(t('Price')); ?></label>
             <input type="text" name="price" id="price" value="<?php if (isset($product)) e($product->getDetails()->getPrice()->getAsLocal('da_dk')); ?>" /> <?php e(t('excl. vat')); ?>
         </div>
 
         <div class="formrow">
-            <label for="vat"><?php e(t('vat')); ?></label>
+            <label for="vat"><?php e(t('Vat')); ?></label>
             <select name="vat" id="vat">
                 <?php foreach (array(0 => 'No', 1 => 'Yes') AS $key=>$v): ?>
                     <option value="<?php e($key); ?>" <?php if (isset($product) && ($key == 1 &&  $product->getDetails()->getVatPercent()->getAsIso() > 0 || $key == 0 && $product->getDetails()->getVatPercent()->getAsIso() == 0)) e(' selected="selected"'); ?> ><?php e(t($v, 'common')); ?></option>
@@ -56,7 +56,7 @@ if ($context->getProduct()->getId() > 0) {
         <legend><?php e(t('Information for shop')); ?></legend>
 
         <div class="formrow">
-            <label for="weight"><?php e(t('weight')); ?></label>
+            <label for="weight"><?php e(t('Weight')); ?></label>
             <input type="text" name="weight" id="weight" value="<?php if (isset($product)) e($product->getDetails()->getWeight()->getAsLocal('da_dk')); ?>" /> <?php e(t('grams')); ?>
         </div>
 
@@ -93,7 +93,7 @@ if ($context->getProduct()->getId() > 0) {
         <?php endif; ?>
 
         <div class="formrow">
-            <label for="do_show"><?php e(t('show in webshop')); ?></label>
+            <label for="do_show"><?php e(t('Show in webshop')); ?></label>
             <select name="do_show" id="do_show">
 
                 <?php foreach (array(0 => 'No', 1 => 'Yes') AS $key=>$v): ?>
@@ -107,9 +107,9 @@ if ($context->getProduct()->getId() > 0) {
 
     <?php if ($context->getKernel()->user->hasModuleAccess('stock')): ?>
     <fieldset>
-        <legend><?php e(t('stock')); ?></legend>
+        <legend><?php e(t('Stock')); ?></legend>
         <div class="formrow">
-            <label for="stock"><?php e(t('stock product')); ?></label>
+            <label for="stock"><?php e(t('Stock product')); ?></label>
             <select name="stock" id="stock">
                 <?php foreach (array(0 => 'No', 1 => 'Yes') AS $key=>$v): ?>
                     <option value="<?php e($key); ?>" <?php if (isset($product) AND $product->hasStock() == $key) e('selected="selected"'); ?> ><?php e(t($v, 'common')); ?></option>
@@ -121,7 +121,7 @@ if ($context->getProduct()->getId() > 0) {
 
     <?php if ($context->getKernel()->user->hasModuleAccess('accounting')): ?>
     <?php
-        $context->getKernel()->useModule('accounting');
+        $mainAccounting = $context->getKernel()->useModule('accounting');
         $x = 0;
         $year = new Year($context->getKernel());
         $year->loadActiveYear();
@@ -131,16 +131,16 @@ if ($context->getProduct()->getId() > 0) {
 
     ?>
     <fieldset>
-        <legend><?php e(t('accounting')); ?></legend>
+        <legend><?php e(t('Accounting')); ?></legend>
 
         <?php if (count($accounts) == 0): ?>
             <p><?php e(__('You will need to create an accounting year and create accounts for that year, to be able to set the account for which this product will be stated.')); ?> <a href="<?php e($mainAccounting->getPath()); ?>"><?php e(__('Create accounting year and accounts')); ?></a></p>
         <?php else: ?>
 
         <div class="formrow">
-            <label for="state_account"><?php e(t('state on account')); ?></label>
+            <label for="state_account"><?php e(t('State on account')); ?></label>
             <select id="state_account" name="state_account_id">
-                <option value=""><?php e(t('choose...', 'common')); ?></option>
+                <option value=""><?php e(t('Choose...', 'common')); ?></option>
                 <?php
                     $x = 0;
                     $optgroup = 0;
@@ -174,8 +174,8 @@ if ($context->getProduct()->getId() > 0) {
     <?php endif; ?>
 
     <div>
-        <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" class="save" />
-        <a href="<?php $return = 'index.php'; if (isset($product) && $product->getId() != 0) $return = 'product.php?id='.intval($product->getId()); //e($redirect->getRedirect($return)); ?>"><?php e(t('Cancel', 'common')); ?></a>
+        <input type="submit" name="submit" value="<?php e(t('Save', 'common')); ?>" class="save" />
+        <a href="<?php e(url('.')); ?>"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 
 </form>
