@@ -18,6 +18,11 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
         return $this->context->getDebtor();
     }
 
+    function getDebtor()
+    {
+        return $this->context->getDebtor();
+    }
+
     function getYear()
     {
         $accounting_module = $this->getKernel()->useModule('accounting');

@@ -80,7 +80,6 @@ class Intraface_modules_debtor_Pdf
     function addRecieverAndSender($contact, $intranet = array(), $title = "", $docinfo = array())
     {
         // $pointX = $this->doc->get("margin_left");
-
         if (!is_array($contact)) {
             trigger_error("Første parameter skal være et array med konkaktoplysninger i PdfDebtor->addRecieverAndSender", E_USER_ERROR);
         }
@@ -95,9 +94,9 @@ class Intraface_modules_debtor_Pdf
         // Udskrivning af modtager
         $this->doc->setY('-'.$this->doc->get("font_spacing")); // $pointY -= $box_padding_top;
         $this->doc->addText($this->doc->get('x') + $box_width - 40, $this->doc->get('y') + 4, $this->doc->get("font_size") - 4, "Modtager");
-
         $this->doc->setY('-'.$box_padding_top);
         $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), "<b>".$contact["name"]."</b>");
+
         $this->doc->setY('-'.$this->doc->get("font_spacing")); // $pointY -= $this->doc->get("font_spacing");
 
         if (isset($contact["attention_to"]) && $contact["attention_to"] != "") {
@@ -120,9 +119,9 @@ class Intraface_modules_debtor_Pdf
             $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), $contact["country"]);
             $this->doc->setY('-'.$this->doc->get('font_spacing')); // $pointY -= $this->doc->get("font_spacing");
         }
-        
+
         $this->doc->setY('-'.$this->doc->get("font_spacing"));
-        
+
         if ($contact["cvr"] != "") {
             $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), "CVR.:");
             $this->doc->addText($this->doc->get('x') + 10 + 60, $this->doc->get('y'), $this->doc->get("font_size"), $contact["cvr"]);

@@ -16,11 +16,11 @@ class MainDebtor extends Intraface_Main
         $this->menu_index = 60;
         $this->frontpage_index = 50;
 
-        $this->addSubmenuItem('quotations', 'list.php?type=quotation', 'module:quotation');
-        $this->addSubmenuItem('orders', 'list.php?type=order', 'module:order');
-        $this->addSubmenuItem('invoices', 'list.php?type=invoice', 'module:invoice');
-        $this->addSubmenuItem('credit notes', 'list.php?type=credit_note', 'module:invoice');
-        $this->addSubmenuItem('reminders', 'reminders.php', 'module:invoice');
+        $this->addSubmenuItem('quotations', 'quotation/list', 'module:quotation');
+        $this->addSubmenuItem('orders', 'order/list', 'module:order');
+        $this->addSubmenuItem('invoices', 'invoice/list', 'module:invoice');
+        $this->addSubmenuItem('credit notes', 'credit_note/list', 'module:invoice');
+        $this->addSubmenuItem('reminders', 'reminders', 'module:invoice');
         $this->addSubmenuItem('onlinepayments', '../onlinepayment/', 'module:onlinepayment');
         $this->addSubmenuItem('currency', '../currency/', 'module:currency');
         //$this->addSubmenuItem('Indstillinger', 'setting.php');
@@ -96,6 +96,6 @@ class MainDebtor extends Intraface_Main
 
     function getPath()
     {
-        return url('/core/restricted/module/debtor/');
+        return url('/restricted/module/debtor') . '/';
     }
 }

@@ -32,7 +32,7 @@ $reminder = $context->getReminder();
 
     <?php echo $reminder->error->view(); ?>
 
-    <form method="post" action="<?php e(url()); ?>">
+    <form method="post" action="<?php e(url(null)); ?>">
 
         <input type="hidden" name="id" value="<?php e($reminder->get('id')); ?>" />
         <?php if (($reminder->get("status") == "created" AND $reminder->get("send_as") != "email")):  ?>
@@ -120,7 +120,7 @@ $reminder = $context->getReminder();
                     } else {
                         e(__('Not stated'));
                         if ($reminder->get('status') == 'sent' || $reminder->get('status') == 'executed') { ?>
-                            <a href="state_reminder.php?id=<?php e($reminder->get("id")); ?>"><?php e(__('state reminder')); ?></a>
+                            <a href="<?php e(url('state')); ?>"><?php e(__('state reminder')); ?></a>
                         <?php
                         }
                     }

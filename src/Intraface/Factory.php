@@ -8,6 +8,10 @@ class Intraface_Factory
         $this->config = $config;
     }
 
+    /**
+     * @deprecated Cannot really be used
+     * @return object
+     */
     function new_Intraface_Kernel()
     {
         return new Intraface_Kernel(session_id());
@@ -31,6 +35,7 @@ class Intraface_Factory
         }
 
         $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
+        $db->query('SET NAMES utf8');
         $db->setOption('debug', MDB2_DEBUG);
         $db->setOption('portability', MDB2_PORTABILITY_NONE);
         $res = $db->setCharset('latin1');
@@ -53,7 +58,9 @@ class Intraface_Factory
 
     function new_DB_Sql($container)
     {
-        return new DB_Sql(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        $db = new DB_Sql(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        $db->query("SET NAMES utf8");
+        return $db;
     }
 
     function new_Translation2($container)

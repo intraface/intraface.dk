@@ -8,7 +8,14 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
     {
         if (is_numeric($name)) {
             return 'Intraface_modules_newsletter_Controller_Subscriber';
+        } elseif ($name == 'addcontact') {
+            return 'Intraface_modules_contact_Controller_Choosecontact';
         }
+    }
+
+    function getReturnUrl($contact_id)
+    {
+        return $this->url(null, array('contact_id' => $contact_id, 'add_contact' => 1));
     }
 
     function getList()
@@ -59,12 +66,17 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
             }
             $contact_module = $this->getKernel()->useModule('contact');
 
+            /*
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-            $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", NET_SCHEME . NET_HOST . $this->url());
+            $url = $redirect->setDestination($contact_module->getPath()."choosecontact", NET_SCHEME . NET_HOST . $this->url());
             $redirect->askParameter('contact_id');
             $redirect->setIdentifier('contact');
 
-            return new k_SeeOther($url);
+
+
+            */
+            $subscriber->addContact(new Contact($this->getKernel(), $this->query('contact_id')));
+            return new k_SeeOther($this->url(null, array('flare' => 'Contact has been added')));
         } elseif (isset($_GET['remind']) AND $_GET['remind'] == 'true') {
             $subscriber = new NewsletterSubscriber($this->getList(), intval($_GET['id']));
             if (!$subscriber->sendOptInEmail(Intraface_Mail::factory())) {
@@ -73,13 +85,13 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
         } elseif (isset($_GET['optin'])) {
             $subscriber->getDBQuery()->setFilter('optin', intval($_GET['optin']));
             $subscriber->getDBQuery()->setFilter('q', $_GET['q']);
-        } elseif (isset($_GET['return_redirect_id'])) {
+        } /*elseif (isset($_GET['return_redirect_id'])) {
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
             if ($redirect->get('identifier') == 'contact') {
                 $subscriber->addContact(new Contact($this->getKernel(), $redirect->getParameter('contact_id')));
             }
 
-        }
+        }*/
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/subscribers.tpl.php');
         return $smarty->render($this);

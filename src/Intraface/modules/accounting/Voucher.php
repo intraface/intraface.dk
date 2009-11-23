@@ -29,13 +29,13 @@ class Voucher extends Intraface_Standard
     function __construct($year_object, $id = 0)
     {
         if (!is_object($year_object)) {
-            trigger_error('Klassen Voucher kræver objektet Year', E_USER_ERROR);
+            trigger_error('Klassen Voucher krï¿½ver objektet Year', E_USER_ERROR);
             exit;
         }
         $this->error      = new Intraface_Error;
         $this->year       = $year_object;
         $this->id         = (int)$id;
-        $this->vatpercent = $this->year->kernel->setting->get('intranet', 'vatpercent');
+        $this->vatpercent = $this->year->kernel->getSetting()->get('intranet', 'vatpercent');
 
         if ($this->id > 0) {
             $this->load();
@@ -43,8 +43,9 @@ class Voucher extends Intraface_Standard
     }
 
     /**
-     * Creates a voucher
+     * Creates a voucher for the voucher number
      *
+     * @deprecated
      * @param object $year
      * @param string $voucher_number
      *
@@ -54,19 +55,6 @@ class Voucher extends Intraface_Standard
     {
         $gateway = new Intraface_modules_accounting_VoucherGateway($year);
         return $gateway->findFromVoucherNumber($voucher_number);
-        /*
-        if (!is_object($year)) {
-            trigger_error('Voucher::factory must have year object', E_USER_ERROR);
-        }
-
-        $db = new DB_Sql;
-        $db->query("SELECT id FROM accounting_voucher WHERE number = '".safeToDb($voucher_number)."' AND year_id = '".$year->get('id')."' AND intranet_id = " . $year->kernel->intranet->get('id'));
-        if (!$db->nextRecord()) {
-            return new Voucher($year);
-        }
-
-        return new Voucher($year, $db->f('id'));
-        */
     }
 
     private function load()
@@ -113,7 +101,7 @@ class Voucher extends Intraface_Standard
         if (!empty($var['reference'])) {
             $validator->isString($var['reference'], 'Reference er ikke en streng', '', 'allow_empty');
         }
-        $validator->isString($var['text'], 'Beskrivelsen skal være en tekststreng');
+        $validator->isString($var['text'], 'Beskrivelsen skal vï¿½re en tekststreng');
 
         if ($this->error->isError()) {
             return false;
@@ -124,8 +112,8 @@ class Voucher extends Intraface_Standard
     /**
      * Public: Opdaterer bilaget
      *
-     * Det er muligt at opdatere et bilag, selv når det er bogført. Derimod må
-     * selve posterne på bilaget ikke røres, når de er bogført og ikke bare i kassekladden.
+     * Det er muligt at opdatere et bilag, selv nï¿½r det er bogfï¿½rt. Derimod mï¿½
+     * selve posterne pï¿½ bilaget ikke rï¿½res, nï¿½r de er bogfï¿½rt og ikke bare i kassekladden.
      *
      * @param $var (array) med oplysninger
      *
@@ -193,16 +181,16 @@ class Voucher extends Intraface_Standard
         $validator = new Intraface_Validator($this->error);
         $validator->isNumeric($var['debet_account_number'], 'Debetkontoen er ikke et tal');
         $validator->isNumeric($var['credit_account_number'], 'Kreditkontoen er ikke et tal');
-        $validator->isDouble($var['amount'], 'Beløbet skal være et tal');
+        $validator->isDouble($var['amount'], 'Belï¿½bet skal vï¿½re et tal');
         settype($var['vat_off'], 'integer');
         if ($var['vat_off'] != 0 AND $var['vat_off'] != 1) {
             $this->error->set('vat_off');
         }
 
         if (!$this->year->isYearOpen()) {
-            $this->error->set('Dette år er ikke åbent til bogføring');
+            $this->error->set('Dette ï¿½r er ikke ï¿½bent til bogfï¿½ring');
         } elseif (!$this->year->isDateInYear($post_date->get())) {
-            $this->error->set('Denne dato er ikke i det pågældende år');
+            $this->error->set('Denne dato er ikke i det pï¿½gï¿½ldende ï¿½r');
         }
 
         if (empty($var['vat_off'])) {
@@ -217,11 +205,11 @@ class Voucher extends Intraface_Standard
 
         $amount = new Intraface_Amount($var['amount']);
         if (!$amount->convert2db()) {
-            $this->error->set('Beløbet kunne ikke konverteres');
+            $this->error->set('Belï¿½bet kunne ikke konverteres');
         }
         $var['amount'] = $amount->get();
 
-        // behandle værdierne og gøre dem klar til at gemme
+        // behandle vï¿½rdierne og gï¿½re dem klar til at gemme
         $var = safeToDb($var);
 
         if (!$this->validate($var)) {
@@ -231,20 +219,20 @@ class Voucher extends Intraface_Standard
         $debetaccount = $this->getAccount($var['debet_account_number']);
 
         if (!$debetaccount->validForState()) {
-            $this->error->set('Du kan ikke bogføre på den valgte debetkonto');
+            $this->error->set('Du kan ikke bogfï¿½re pï¿½ den valgte debetkonto');
         }
 
         $creditaccount = $this->getAccount($var['credit_account_number']);
 
         if (!$creditaccount->validForState()) {
-            $this->error->set('Du kan ikke bogføre på den valgte kreditkonto');
+            $this->error->set('Du kan ikke bogfï¿½re pï¿½ den valgte kreditkonto');
         }
 
         if ($this->error->isError()) {
             return 0;
         }
 
-        // hvis den allerede findes, skal den ikke gemmes først
+        // hvis den allerede findes, skal den ikke gemmes fï¿½rst
         if ($this->id == 0) {
             $this->save($var);
         }
@@ -286,7 +274,7 @@ class Voucher extends Intraface_Standard
             return 0;
         }
 
-        trigger_error('HER SKAL VI LIGE HAVE LAVET ET TJEK PÅ OM BILAGET MÅ SLETTES IFT. OM BILAG ER BOGFØRT', E_USER_NOTICE);
+        trigger_error('HER SKAL VI LIGE HAVE LAVET ET TJEK Pï¿½ OM BILAGET Mï¿½ SLETTES IFT. OM BILAG ER BOGFï¿½RT', E_USER_NOTICE);
 
         $db = new DB_Sql;
         $sql = "UPDATE accounting_voucher SET active = 0 WHERE id = " . (int)$this->id . " AND year_id = " . $this->year->get('id') . " AND intranet_id=" . $this->year->kernel->intranet->get('id');
@@ -339,15 +327,15 @@ class Voucher extends Intraface_Standard
     /**
      * Funktionen skal have et id.
      *
-     * Funktionen bruger oplysninger fra $this->value som sættes under save() på
+     * Funktionen bruger oplysninger fra $this->value som sï¿½ttes under save() pï¿½
      * bilaget.
      *
      * @param $skip_draft (hvis kasssekladden skal springes over)
      */
     function state($skip_draft = false)
     {
-        // Bogføring af almindeligt køb i Danmark
-        // Ifølge det dobbelte bogholderis princip skal alle poster bogføres på mindst to
+        // Bogfï¿½ring af almindeligt kï¿½b i Danmark
+        // Ifï¿½lge det dobbelte bogholderis princip skal alle poster bogfï¿½res pï¿½ mindst to
         // konti.
 
         // debetkontoen
@@ -356,9 +344,9 @@ class Voucher extends Intraface_Standard
         // kreditkontoen
         $this->_stateHelper($this->get('date'), $this->get("text"), $this->get('credit_account_id'), 0, $this->get('amount'), $this->get('vat_off'), $skip_draft);
 
-        // Varekøb i udlandet
-        // Der skal udregnes moms af alle varekøb i udlandet, og de skal bogføres
-        // på den tilhørende konto
+        // Varekï¿½b i udlandet
+        // Der skal udregnes moms af alle varekï¿½b i udlandet, og de skal bogfï¿½res
+        // pï¿½ den tilhï¿½rende konto
 
         $buy_abroad = unserialize($this->year->getSetting('buy_abroad_accounts'));
         $buy_eu = unserialize($this->year->getSetting('buy_eu_accounts'));
@@ -374,24 +362,24 @@ class Voucher extends Intraface_Standard
         $amount = $this->get('amount') * ($this->vatpercent / 100);
 
         // I det omfang du har fradragsret for momsen, kan du medregne det beregnede
-        // momsbeløb til konto for indgående moms. Det beregnede momsbeløb af EU-varekøb
-        // behandles dermed på samme måde som momsen af varekøb foretaget i Danmark.
+        // momsbelï¿½b til konto for indgï¿½ende moms. Det beregnede momsbelï¿½b af EU-varekï¿½b
+        // behandles dermed pï¿½ samme mï¿½de som momsen af varekï¿½b foretaget i Danmark.
 
         if ($this->get('vat_off') == 0) {
-            // gemme moms hvis det er nødvendigt
+            // gemme moms hvis det er nï¿½dvendigt
             if (isset($buy_all_abroad) && is_array($buy_all_abroad) AND in_array($this->get('debet_account_id'), $buy_all_abroad)) {
-                // så skal beløbet ganges med momsprocenten og smides på moms af varekøb i udlandet
+                // sï¿½ skal belï¿½bet ganges med momsprocenten og smides pï¿½ moms af varekï¿½b i udlandet
                 $credit = new Post($this);
-                $credit->save($this->get('date'), $this->year->getSetting('vat_abroad_account_id'), 'Moms af varekøb i udland', 0, $amount, $skip_draft);
+                $credit->save($this->get('date'), $this->year->getSetting('vat_abroad_account_id'), 'Moms af varekï¿½b i udland', 0, $amount, $skip_draft);
                 $debet = new Post($this);
-                $debet->save($this->get('date'), $this->year->getSetting('vat_in_account_id'), 'Moms af varekøb i udland', $amount, 0, $skip_draft);
+                $debet->save($this->get('date'), $this->year->getSetting('vat_in_account_id'), 'Moms af varekï¿½b i udland', $amount, 0, $skip_draft);
             } elseif (!empty($buy_all_abroad) AND is_array($buy_all_abroad) AND in_array($this->get('credit_account_id'), $buy_all_abroad)) {
-                // tilbageføring af moms hvis nødevndigt
-                // så skal beløbet ganges med momsprocenten og smides på moms af varekøb i udlandet
+                // tilbagefï¿½ring af moms hvis nï¿½devndigt
+                // sï¿½ skal belï¿½bet ganges med momsprocenten og smides pï¿½ moms af varekï¿½b i udlandet
                 $debet = new Post($this);
-                $debet->save($this->get('date'), $this->year->getSetting('vat_abroad_account_id'), 'Tilbageført: Moms af varekøb i udland', $amount, 0, $skip_draft);
+                $debet->save($this->get('date'), $this->year->getSetting('vat_abroad_account_id'), 'Tilbagefï¿½rt: Moms af varekï¿½b i udland', $amount, 0, $skip_draft);
                 $credit = new Post($this);
-                $credit->save($this->get('date'), $this->year->getSetting('vat_in_account_id'), 'Tilbageført: Moms af varekøb i udland', 0, $amount, $skip_draft);
+                $credit->save($this->get('date'), $this->year->getSetting('vat_in_account_id'), 'Tilbagefï¿½rt: Moms af varekï¿½b i udland', 0, $amount, $skip_draft);
             }
         }
         return 1;
@@ -399,9 +387,9 @@ class Voucher extends Intraface_Standard
 
 
     /**
-     * Private: Metode til at klargøre beløb til bogføring.
+     * Private: Metode til at klargï¿½re belï¿½b til bogfï¿½ring.
      *
-     * Metoden regner bl.a. ud om, der er moms på de forskellige konti.
+     * Metoden regner bl.a. ud om, der er moms pï¿½ de forskellige konti.
      *
      * @param $year_id (int)
      * @param $date (string)
@@ -415,7 +403,7 @@ class Voucher extends Intraface_Standard
      */
     private function _stateHelper($date, $text, $account_id, $debet, $credit, $vat_off = 0, $skip_draft = false) {
 
-        // validering og behandling af værdier
+        // validering og behandling af vï¿½rdier
 
         $text = safeToDb($text);
         $vat_percent = $this->vatpercent;
@@ -433,55 +421,55 @@ class Voucher extends Intraface_Standard
         } elseif ($vat_off == 0) {
             // Konti med moms
 
-            // Hvis der er moms på kontoen skal den trækkes fra beløbet først
+            // Hvis der er moms pï¿½ kontoen skal den trï¿½kkes fra belï¿½bet fï¿½rst
             switch ($account->get('vat')) {
-                case 'in': // indgående moms - købsmoms
-                        if ($debet > 0) { // bogfør til momskonto hvis det er et debet-beløb
+                case 'in': // indgï¿½ende moms - kï¿½bsmoms
+                        if ($debet > 0) { // bogfï¿½r til momskonto hvis det er et debet-belï¿½b
                             $vat_amount = $this->calculateVat($debet, $vat_percent);
                             $debet = $debet - $vat_amount;
-                            // bogfør momsen
+                            // bogfï¿½r momsen
                             $post = new Post($this);
-                            $post->save($date, $vat_account_id, $text . " - købsmoms", $vat_amount, 0, $skip_draft);
+                            $post->save($date, $vat_account_id, $text . " - kÃ¸bsmoms", $vat_amount, 0, $skip_draft);
                         } else {
                             $vat_amount = $this->calculateVat($credit, $vat_percent);
                             $credit = $credit - $vat_amount;
-                            // bogføre udgående moms
+                            // bogfï¿½re udgï¿½ende moms
                             $post = new Post($this);
-                            $post->save($date, $vat_account_id, $text . " - tilbageført moms", 0, $vat_amount, $skip_draft);
+                            $post->save($date, $vat_account_id, $text . " - tilbagefÃ¸rt moms", 0, $vat_amount, $skip_draft);
                         }
 
-                        // bogføre selve posten
+                        // bogfï¿½re selve posten
                         $post = new Post($this);
                         $post->save($date, $account_id, $text, $debet, $credit, $skip_draft);
 
                     break;
 
-                // udgående moms
-                case 'out': // Bogfør til momskonto hvis det er et credit beløb
+                // udgï¿½ende moms
+                case 'out': // Bogfï¿½r til momskonto hvis det er et credit belï¿½b
                         if ($credit > 0) {
                             $vat_amount = $this->calculateVat($credit, $vat_percent);
                             $credit = $credit - $vat_amount;
-                            // bogføre udgående moms
+                            // bogfï¿½re udgï¿½ende moms
                             $post = new Post($this);
                             $post->save($date, $vat_account_id, $text . " - salgsmoms", 0, $vat_amount, $skip_draft);
                         } else {
-                            // tilbagefører momsen hvis det er et debet beløb
+                            // tilbagefï¿½rer momsen hvis det er et debet belï¿½b
                             $vat_amount = $this->calculateVat($debet, $vat_percent);
                             $debet = $debet - $vat_amount;
 
-                            // bogføre momsen
+                            // bogfï¿½re momsen
                             $post = new Post($this);
-                            $post->save($date, $vat_account_id, "Tilbageført moms", $vat_amount, 0, $skip_draft);
+                            $post->save($date, $vat_account_id, "TilbagefÃ¸rt moms", $vat_amount, 0, $skip_draft);
                         }
 
-                        // bogføre selve posten
+                        // bogfï¿½re selve posten
                         $post = new Post($this);
                         $post->save($date, $account_id, $text, $debet, $credit, $skip_draft);
                     break;
 
                 // hvis kontoen ikke er en momskonto
                 default:
-                        // bogføre bilaget hvor der ikke er moms
+                        // bogfï¿½re bilaget hvor der ikke er moms
                         $post = new Post($this);
                         $post->save($date, $account_id, $text, $debet, $credit, $skip_draft);
                     break;
@@ -493,18 +481,18 @@ class Voucher extends Intraface_Standard
     }
 
     /**
-     * Bogfører de poster, der er i kassekladden
+     * Bogfï¿½rer de poster, der er i kassekladden
      *
-     * Klassen vælger automatisk alle poster i kladden og bogfører dem en efter en.
-     * De poster der kan bogføres, mens de resterende ikke bogføres.
-     * Der laves igen tjek på, om året er åbent og om datoen for posten er i året.
+     * Klassen vï¿½lger automatisk alle poster i kladden og bogfï¿½rer dem en efter en.
+     * De poster der kan bogfï¿½res, mens de resterende ikke bogfï¿½res.
+     * Der laves igen tjek pï¿½, om ï¿½ret er ï¿½bent og om datoen for posten er i ï¿½ret.
      *
      * @return boolean
      */
     public function stateDraft()
     {
         if (!$this->year->vatAccountIsSet()) {
-            $this->error->set('Du skal først sætte momskonti, inden du kan bogføre.');
+            $this->error->set('Du skal fï¿½rst sï¿½tte momskonti, inden du kan bogfï¿½re.');
         }
 
         if ($this->error->isError()) {
@@ -514,7 +502,7 @@ class Voucher extends Intraface_Standard
         $post = new Post($this);
         $posts = $post->getList('draft');
         if (!is_array($posts) OR count($posts) == 0) {
-            $this->error->set('Der var ikke nogen poster at bogføre');
+            $this->error->set('Der var ikke nogen poster at bogfï¿½re');
             return false;
         }
 
@@ -522,11 +510,11 @@ class Voucher extends Intraface_Standard
             $post = new Post($this, $p['id']);
 
             if (!$post->setStated()) {
-                $this->error->set('id#' .$p['id'] . ': Det lykkedes ikke at bogføre denne post.');
+                $this->error->set('id#' .$p['id'] . ': Det lykkedes ikke at bogfï¿½re denne post.');
 
             }
 
-            // tjekker om der har været nogle fejl i bogføringen
+            // tjekker om der har vï¿½ret nogle fejl i bogfï¿½ringen
             if ($this->error->isError()) {
                 //$this->error->view();
                 return false;
@@ -540,15 +528,15 @@ class Voucher extends Intraface_Standard
     function stateVoucher()
     {
         if (!$this->year->vatAccountIsSet()) {
-            $this->error->set('Du skal først sætte momskonti, inden du kan bogføre.');
+            $this->error->set('Du skal fï¿½rst sï¿½tte momskonti, inden du kan bogfï¿½re.');
         }
 
         if ($this->id == 0) {
-            $this->error->set('Kan kun bogføre et bilag, hvis den har et id');
+            $this->error->set('Kan kun bogfï¿½re et bilag, hvis den har et id');
         }
 
         if ($this->get('saldo') <> 0) {
-            $this->error->set('Du kan kun bogføre et bilag, hvis det stemmer. Saldoen på dette bilag er ' . $this->get('saldo') . '.');
+            $this->error->set('Du kan kun bogfï¿½re et bilag, hvis det stemmer. Saldoen pï¿½ dette bilag er ' . $this->get('saldo') . '.');
         }
 
         if ($this->error->isError()) {
@@ -562,11 +550,11 @@ class Voucher extends Intraface_Standard
             if ($post->get('stated') == 1) continue;
 
             if (!$post->setStated()) {
-                $this->error->set('id#' .$p['id'] . ': Det lykkedes ikke at bogføre denne post.');
+                $this->error->set('id#' .$p['id'] . ': Det lykkedes ikke at bogfï¿½re denne post.');
 
             }
         }
-        // tjekker om der har været nogle fejl i bogføringen
+        // tjekker om der har vï¿½ret nogle fejl i bogfï¿½ringen
         if ($this->error->isError()) {
             //$this->error->view();
             return false;
@@ -606,12 +594,12 @@ class Voucher extends Intraface_Standard
     }
 
     /**
-     * Udregner momsbeløbet
+     * Udregner momsbelï¿½bet
      *
      * @param $amount (float)
      * @param $vat_percent (float)
      *
-     * @return (float) Momsbeløbet
+     * @return (float) Momsbelï¿½bet
      */
     public function calculateVat($amount, $vat_percent)
     {
@@ -624,7 +612,7 @@ class Voucher extends Intraface_Standard
     }
 
     /**
-     * Returnerer det højeste bilagsnummer
+     * Returnerer det hï¿½jeste bilagsnummer
      *
      * @return (int) maks vouchernumber
      */

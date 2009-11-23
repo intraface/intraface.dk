@@ -161,7 +161,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
 
     function getContactModule()
     {
-        return        $contact_module = $this->getKernel()->module("contact");
+        return $this->getKernel()->module("contact");
 
     }
 

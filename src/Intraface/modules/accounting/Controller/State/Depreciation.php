@@ -8,11 +8,24 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
 
     function renderHtml()
     {
-        $debtor_module = $this->context->getKernel()->module('accounting');
+        $accounting_module = $this->context->getKernel()->module('accounting');
 
+        if (!$this->getYear()->readyForState($this->getDepreciation()->get('payment_date'))) {
+            return new k_SeeOther($this->url('selectyear'));
+        }
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/depreciation.tpl.php');
-        return $smarty->render($this, array('voucher' => $voucher, 'year' => $this->getYear(), 'depreciation' => $this->context->getDepreciation(), 'object' => $this->getObject(), 'year' => $year));
+        return $smarty->render($this, array('accounting_module' => $accounting_module, 'voucher' => $voucher, 'year' => $this->getYear(), 'depreciation' => $this->context->getDepreciation(), 'object' => $this->getModel(), 'year' => $year));
 
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getDepreciation()
+    {
+        return $this->context->getDepreciation();
     }
 
     function postForm()
@@ -26,58 +39,23 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
         $year = new Year($this->context->getKernel());
         $voucher = new Voucher($year);
 
-        if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
+        if (!$this->getYear()->readyForState($this->getDepreciation()->get('payment_date'))) {
             return new k_SeeOther($this->url('selectyear'));
         }
 
-        if (!empty($_POST)) {
+        $depreciation = $this->context->getDepreciation();
 
-            if (empty($_POST['for'])) {
-                trigger_error('you need to provide what the depreciation is for', E_USER_ERROR);
-                exit;
-            }
 
-            switch($_POST['for']) {
-                case 'invoice':
-                    $object = new Invoice($this->context->getKernel(), intval($_POST["id"]));
-                    $for = 'invoice';
-                break;
-                case 'reminder':
-                    $object = new Reminder($this->context->getKernel(), intval($_POST['id']));
-                    $for = 'reminder';
-                break;
-                default:
-                    trigger_error('Invalid for', E_USER_ERROR);
-                    exit;
-            }
-
-            if ($object->get('id') == 0) {
-                trigger_error('Invalid '.$for.' #'. $_POST["id"], E_USER_ERROR);
-                exit;
-            }
-            $depreciation = new Depreciation($object, intval($_POST['depreciation_id']));
-            if ($depreciation->get('id') == 0) {
-                trigger_error('Invalid depreciation #'. $_POST["depreciation_id"], E_USER_ERROR);
-                exit;
-            }
-
-            $this->context->getKernel()->setting->set('intranet', 'depreciation.state.account', intval($_POST['state_account_id']));
+            $this->context->getKernel()->getSetting()->set('intranet', 'depreciation.state.account', intval($_POST['state_account_id']));
 
             if ($depreciation->error->isError()) {
                 // nothing, we continue
             } elseif (!$depreciation->state($year, $_POST['voucher_number'], $_POST['date_state'], $_POST['state_account_id'], $translation)) {
                 $depreciation->error->set('Kunne ikke bogf�re posten');
             } else {
-
-                if ($for == 'invoice') {
-                    header('Location: view.php?id='.$object->get('id'));
-                    exit;
-                } elseif ($for == 'reminder') {
-                    header('Location: reminder.php?id='.$object->get('id'));
-                    exit;
-                }
+                return new k_SeeOther($this->url('../../'));
             }
-        }
+            return $this->render();
     }
 
     function getType()
@@ -88,7 +66,7 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
 
     function getModel()
     {
-        return $this->context->getObject();
+        return $this->context->getModel();
     }
 
     function getYear()

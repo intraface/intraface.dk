@@ -1,10 +1,10 @@
 <?php
 /**
- * Håndterer poster i kladden
+ * Hï¿½ndterer poster i kladden
  *
- * Det er lovmæssigt bestemt, at man ikke må lave om i selve
- * de bogførte poster, så der skal ikke være metoder til at ændre eller
- * slette i bogføringen.
+ * Det er lovmï¿½ssigt bestemt, at man ikke mï¿½ lave om i selve
+ * de bogfï¿½rte poster, sï¿½ der skal ikke vï¿½re metoder til at ï¿½ndre eller
+ * slette i bogfï¿½ringen.
  *
  * @package Intraface_Accounting
  * @author Lars Olesen
@@ -27,10 +27,6 @@ class Post extends Intraface_Standard
      */
     function __construct($voucher, $post_id = 0)
     {
-        if (!is_object($voucher)) {
-            trigger_error('Klassen Post kræver objektet Voucher', E_USER_ERROR);
-            exit;
-        }
         $this->voucher = $voucher;
         $this->id      = (int)$post_id;
         $this->error   = new Intraface_Error;
@@ -84,14 +80,14 @@ class Post extends Intraface_Standard
     {
         $validator = new Intraface_Validator($this->error);
 
-        // Mærkeligt at denne ikke validerer korrekt - isDate accepterer ikke: 2006-07-15
+        // Mï¿½rkeligt at denne ikke validerer korrekt - isDate accepterer ikke: 2006-07-15
         // $validator->isDate($date, 'Datoen ' . $date .  ' er ikke en gyldig dato');
         $validator->isNumeric($account_id, 'Kontoen er ikke et tal');
         $validator->isString($text, 'Teksten er ikke gyldig');
 
         // Validerer 29.5 forkert
-        //$validator->isDouble($debet, 'Debetbeløbet '.$debet.' er ikke gyldigt');
-        //$validator->isDouble($credit, 'Kreditbeløbet '.$credit .' er ikke gyldigt');
+        //$validator->isDouble($debet, 'Debetbelï¿½bet '.$debet.' er ikke gyldigt');
+        //$validator->isDouble($credit, 'Kreditbelï¿½bet '.$credit .' er ikke gyldigt');
 
         if ($this->error->isError()) {
             return 0;
@@ -101,7 +97,7 @@ class Post extends Intraface_Standard
     }
 
     /**
-     * Bogfører selve posterne
+     * Bogfï¿½rer selve posterne
      *
      * @param integer $year_id
      * @param string  $date
@@ -119,7 +115,7 @@ class Post extends Intraface_Standard
         $credit = (float)$credit;
 
         if ($this->get('stated') == 1) {
-            $this->error->set('Du kan ikke opdatere en bogført post');
+            $this->error->set('Du kan ikke opdatere en bogfï¿½rt post');
             return false;
         }
 
@@ -207,7 +203,7 @@ class Post extends Intraface_Standard
     public function setStated()
     {
         if ($this->id == 0) {
-            $this->error->set('Kan ikke sætte stated, når id = o');
+            $this->error->set('Kan ikke sï¿½tte stated, nï¿½r id = o');
             return false;
         }
 

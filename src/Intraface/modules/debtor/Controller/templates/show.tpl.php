@@ -540,7 +540,7 @@ if (isset($onlinepayment)) {
                                         }
                                         e(")");
                                     } elseif ($p['status'] == 'authorized') { ?>
-                                        (Ikke <acronym title="Betaling kan først hæves når faktura er sendt">hævet</acronym>)
+                                        (<acronym title="<?php e(t('Payment cannot be captured before the invoice has been sent')); ?>"><?php e(t('not captured')); ?></acronym>)
                                     <?php
                                     }
                                     ?>
@@ -590,7 +590,7 @@ if (isset($onlinepayment)) {
             }
             if ($shop AND $shop->getPaymentUrl()): ?>
                 <div class="warning">
-                    Der burde være en onlinebetaling knyttet hertil. Måske har kunden fortrudt sit køb, eller også er der sket en fejl hos PBS under købet. Kunden kan betale på følgende link <?php e($payment_url); ?>. <a href="<?php e($_SERVER['PHP_SELF']); ?>?id=<?php e($context->getDebtor()->getId()); ?>&amp;action=send_onlinepaymentlink">Skriv e-mail</a>.
+                    Der burde være en onlinebetaling knyttet hertil. Måske har kunden fortrudt sit køb, eller også er der sket en fejl hos PBS under købet. Kunden kan betale på følgende link <?php e($payment_url); ?>. <a href="<?php e(url(null, array('action' => 'send_onlinepaymentlink'))); ?>">Skriv e-mail</a>.
                 </div>
             <?php elseif ($shop === false AND $this->getKernel()->user->hasModuleAccess('shop')): ?>
                 <div class="warning">

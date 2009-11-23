@@ -67,6 +67,7 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
 
     function getVoucher($voucher_number = null)
     {
+        $this->getKernel()->useModule('accounting');
         if (is_object($this->voucher)) {
     	    return $this->voucher;
     	}

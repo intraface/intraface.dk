@@ -23,7 +23,7 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
         $object = $this->context->context->context->getObject();
         $payment = new Payment($object, $this->context->name());
 
-        if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
+        if (!$this->getYear()->readyForState($this->getModel()->get('payment_date'))) {
             return new k_SeeOther($this->url('selectyear'));
         }
 

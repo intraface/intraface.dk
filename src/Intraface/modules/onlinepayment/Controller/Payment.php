@@ -16,7 +16,8 @@ class Intraface_modules_onlinepayment_Controller_Payment extends k_Component
 
     function postForm()
     {
-    	// $onlinepayment = new OnlinePayment($this->context->getKernel(), $_POST['id']);
+    	$module = $this->context->getKernel()->module("onlinepayment");
+        // $onlinepayment = new OnlinePayment($this->context->getKernel(), $_POST['id']);
     	// $implemented_providers = $onlinepayment_module->getSetting('implemented_providers');
     	// $implemented_providers[$this->context->getKernel()->setting->get('intranet', 'onlinepayment.provider_key')]
     	$onlinepayment = OnlinePayment::factory($this->context->getKernel(), 'id',  $this->name());

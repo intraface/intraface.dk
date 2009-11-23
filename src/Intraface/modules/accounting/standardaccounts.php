@@ -9,16 +9,16 @@
  * @version 1.0
  */
 
-$i = 0; // integer til automatisk tælling
+$i = 0; // integer for automatic counting
 
 /**********************************************/
 
-$standardaccounts[$i]['number']	= '1000';
-$standardaccounts[$i]['name']			= 'Indtægter';
-$standardaccounts[$i]['type_key']			= '1';
-$standardaccounts[$i]['use_key']			= '1';
-$standardaccounts[$i]['vat_key']	= '0';
-$standardaccounts[$i]['result_account_id_start']			= true;
+$standardaccounts[$i]['number']	                 = '1000';
+$standardaccounts[$i]['name']			         = 'IndtÃ¦gter';
+$standardaccounts[$i]['type_key']			     = '1';
+$standardaccounts[$i]['use_key']			     = '1';
+$standardaccounts[$i]['vat_key']	             = '0';
+$standardaccounts[$i]['result_account_id_start'] = true;
 
 
 $i++;
@@ -40,7 +40,7 @@ $standardaccounts[$i]['vat_key']	= '0';
 $i++;
 
 $standardaccounts[$i]['number']	= '1990';
-$standardaccounts[$i]['name']			= 'Nettoomsætning';
+$standardaccounts[$i]['name']			= 'NettoomsÃ¦tning';
 $standardaccounts[$i]['type_key']			= '5';
 $standardaccounts[$i]['vat_key']	= '0';
 $standardaccounts[$i]['sum_from']	= '2';
@@ -77,7 +77,7 @@ $standardaccounts[$i]['buy_eu']	= 1;
 $i++;
 
 $standardaccounts[$i]['number']	= '4700';
-$standardaccounts[$i]['name']			= 'Varekøb uden for EU';
+$standardaccounts[$i]['name']			= 'VarekÃ¸b uden for EU';
 $standardaccounts[$i]['type_key']			= '2';
 $standardaccounts[$i]['use_key']			= '3';
 $standardaccounts[$i]['vat_key']	= '0';
@@ -86,7 +86,7 @@ $standardaccounts[$i]['buy_abroad']	= 1;
 $i++;
 
 $standardaccounts[$i]['number']	= '4990';
-$standardaccounts[$i]['name']			= 'Dækningsbidrag';
+$standardaccounts[$i]['name']			= 'DÃ¦kningsbidrag';
 $standardaccounts[$i]['type_key']			= '5';
 $standardaccounts[$i]['vat_key']	= '0';
 $standardaccounts[$i]['sum_from']	= '1';
@@ -112,7 +112,7 @@ $standardaccounts[$i]['vat_key']	= '0';
 $i++;
 
 $standardaccounts[$i]['number']	= '7400';
-$standardaccounts[$i]['name']			= 'Småanskaffelser';
+$standardaccounts[$i]['name']			= 'SmÃ¥anskaffelser';
 $standardaccounts[$i]['type_key']			= '2';
 $standardaccounts[$i]['use_key']			= '3';
 $standardaccounts[$i]['vat_key']	= '1';
@@ -153,7 +153,7 @@ $i++;
 
 
 $standardaccounts[$i]['number']	= '39990';
-$standardaccounts[$i]['name']			= 'Resultat før renter';
+$standardaccounts[$i]['name']			= 'Resultat fÃ¸r renter';
 $standardaccounts[$i]['type_key']			= '5';
 $standardaccounts[$i]['vat_key']	= '0';
 $standardaccounts[$i]['sum_from']	= '1';
@@ -165,7 +165,7 @@ $i++;
 /**********************************************/
 
 $standardaccounts[$i]['number']	= '40000';
-$standardaccounts[$i]['name']			= 'Finansieringsindtægter';
+$standardaccounts[$i]['name']			= 'FinansieringsindtÃ¦gter';
 $standardaccounts[$i]['type_key']			= '1';
 $standardaccounts[$i]['use_key']			= '1';
 $standardaccounts[$i]['vat_key']	= '0';
@@ -174,7 +174,7 @@ $standardaccounts[$i]['vat_key']	= '0';
 $i++;
 
 $standardaccounts[$i]['number']	= '41000';
-$standardaccounts[$i]['name']			= 'Renteindtægter';
+$standardaccounts[$i]['name']			= 'RenteindtÃ¦gter';
 $standardaccounts[$i]['type_key']			= '2';
 $standardaccounts[$i]['use_key']			= '1';
 $standardaccounts[$i]['vat_key']	= '0';
@@ -259,7 +259,7 @@ $standardaccounts[$i]['use_key']			= '1';
 $i++;
 
 $standardaccounts[$i]['number']	= '50810';
-$standardaccounts[$i]['name']			= 'Tilgang i årets løb';
+$standardaccounts[$i]['name']			= 'Tilgang i Ã¥rets lÃ¸b';
 $standardaccounts[$i]['type_key']			= '3';
 $standardaccounts[$i]['vat_key']	= '1';
 $standardaccounts[$i]['use_key']			= '1';
@@ -267,7 +267,7 @@ $standardaccounts[$i]['use_key']			= '1';
 $i++;
 
 $standardaccounts[$i]['number']	= '50820';
-$standardaccounts[$i]['name']			= 'Afgang i året';
+$standardaccounts[$i]['name']			= 'Afgang i Ã¥ret';
 $standardaccounts[$i]['type_key']			= '3';
 $standardaccounts[$i]['vat_key']	= '2';
 $standardaccounts[$i]['use_key']			= '1';
@@ -275,7 +275,7 @@ $standardaccounts[$i]['use_key']			= '1';
 $i++;
 
 $standardaccounts[$i]['number']	= '50830';
-$standardaccounts[$i]['name']			= 'Akkumulerede afskrivning på driftssmidler';
+$standardaccounts[$i]['name']			= 'Akkumulerede afskrivning pÃ¥ driftssmidler';
 $standardaccounts[$i]['type_key']			= '3';
 $standardaccounts[$i]['vat_key']	= '0';
 $standardaccounts[$i]['use_key']			= '1';
@@ -360,7 +360,7 @@ $standardaccounts[$i]['capital_account'] = 1;
 $i++;
 
 $standardaccounts[$i]['number']	= '60800';
-$standardaccounts[$i]['name']			= 'Årets resultat';
+$standardaccounts[$i]['name']			= 'Ã…rets resultat';
 $standardaccounts[$i]['type_key']			= '4';
 $standardaccounts[$i]['vat_key']	= '0';
 $standardaccounts[$i]['use_key']			= '1';
@@ -378,7 +378,7 @@ $i++;
 
 
 $standardaccounts[$i]['number']	= '63100';
-$standardaccounts[$i]['name']			= 'Kortfristet gæld';
+$standardaccounts[$i]['name']			= 'Kortfristet gÃ¦ld';
 $standardaccounts[$i]['type_key']			= '4';
 $standardaccounts[$i]['vat_key']	= '0';
 $standardaccounts[$i]['use_key']			= '1';
@@ -386,7 +386,7 @@ $standardaccounts[$i]['use_key']			= '1';
 $i++;
 
 $standardaccounts[$i]['number']	= '65100';
-$standardaccounts[$i]['name']			= 'Langfristet gæld';
+$standardaccounts[$i]['name']			= 'Langfristet gÃ¦ld';
 $standardaccounts[$i]['type_key']			= '4';
 $standardaccounts[$i]['vat_key']	= '0';
 $standardaccounts[$i]['use_key']			= '1';
@@ -405,7 +405,7 @@ $standardaccounts[$i]['use_key']			= '1';
 $i++;
 
 $standardaccounts[$i]['number']	= '66100';
-$standardaccounts[$i]['name']			= 'Moms, indgående, køb';
+$standardaccounts[$i]['name']			= 'Moms, indgÃ¥ende, kÃ¸b';
 $standardaccounts[$i]['type_key']			= '4';
 $standardaccounts[$i]['vat_key']	= '0';
 $standardaccounts[$i]['use_key']			= '1';
@@ -414,7 +414,7 @@ $standardaccounts[$i]['setting']			= 'vat_in';
 $i++;
 
 $standardaccounts[$i]['number']	= '66150';
-$standardaccounts[$i]['name']			= 'Moms af varekøb i udlandet';
+$standardaccounts[$i]['name']			= 'Moms af varekÃ¸b i udlandet';
 $standardaccounts[$i]['type_key']			= '4';
 $standardaccounts[$i]['vat_key']	= '0';
 $standardaccounts[$i]['use_key']			= '1';
@@ -423,7 +423,7 @@ $standardaccounts[$i]['setting']			= 'vat_abroad';
 $i++;
 
 $standardaccounts[$i]['number']	= '66200';
-$standardaccounts[$i]['name']			= 'Moms, udgående, salg';
+$standardaccounts[$i]['name']			= 'Moms, udgÃ¥ende, salg';
 $standardaccounts[$i]['type_key']			= '4';
 $standardaccounts[$i]['vat_key']	= '0';
 $standardaccounts[$i]['use_key']			= '1';
@@ -481,4 +481,3 @@ $standardaccounts[$i]['sum_to']	= '99990';
 $standardaccounts[$i]['use_key']			= '1';
 
 $i++;
-?>

@@ -5,7 +5,7 @@ $posts = $context->getPostsInDraft();
 <h1><?php e(t('Daybook for')); ?> <a href="<?php e(url('../year/' . $context->getYear()->getId())); ?>"><?php e($context->getYear()->get('label')); ?></a></h1>
 
 <?php if (!$context->getAccount()->anyAccounts()): ?>
-    <p class="message-dependent">Du skal f�rst oprette nogle konti, inden du kan taste poster ind i regnskabet. Du kan oprette en standardkontoplan under <a href="<?php e($context->url('../year/' . $context->getYear()->get('id'))); ?>">regnskabs�ret</a>.</p>
+    <p class="message-dependent">Du skal først oprette nogle konti, inden du kan taste poster ind i regnskabet. Du kan oprette en standardkontoplan under <a href="<?php e($context->url('../year/' . $context->getYear()->get('id'))); ?>">regnskabsåret</a>.</p>
 <?php elseif ($context->getYear()->get('vat') == 1 AND !$context->getYear()->vatAccountIsSet()): ?>
     <p class="message-dependent">Du har ikke sat momskonti.
     <a href="<?php e(url('../settings')); ?>">Gå til indstillingerne</a>.
@@ -14,9 +14,9 @@ $posts = $context->getPostsInDraft();
     <?php if ($context->getKernel()->getSetting()->get('user', 'accounting.daybook.message') == 'view'): ?>
     <div class="message">
     <p>
-        <strong>Kassekladde</strong>. Her opretter du poster til dit regnskab. I f�rste omgang figurerer bel�bene kun i kassekladden og under <a href="<?php e($context->url('state')); ?>">afstemningen</a>. Indtil du bogf�rer posterne, kan du stadig n� at redigere dem.
+        <strong>Kassekladde</strong>. Her opretter du poster til dit regnskab. I første omgang figurerer beløbene kun i kassekladden og under <a href="<?php e($context->url('state')); ?>">afstemningen</a>. Indtil du bogfører posterne, kan du stadig nå at redigere dem.
     </p>
-    <p><strong>Hjælp</strong>. Du kan bogføre ved at indtaste kontonumrene i standardvisningen, men du kan ogs� bruge vores hj�lpefunktioner ved at klikke p� vores links nedenunder.</p>
+    <p><strong>Hjælp</strong>. Du kan bogføre ved at indtaste kontonumrene i standardvisningen, men du kan også bruge vores hjælpefunktioner ved at klikke på vores links nedenunder.</p>
     <p><a href="<?php e($context->url(null, array('message' => 'hide'))); ?>">Skjul</a></p>
     </div>
     <?php endif; ?>
@@ -27,7 +27,7 @@ $posts = $context->getPostsInDraft();
 
     <ul class="options">
         <li><a href="<?php e(url(null, array('view' => 'classic'))); ?>">Standard</a></li>
-        <li><a href="<?php e(url(null, array('view' => 'income'))); ?>">Indt�gter</a></li>
+        <li><a href="<?php e(url(null, array('view' => 'income'))); ?>">Indtægter</a></li>
         <li><a href="<?php e(url(null, array('view' => 'expenses'))); ?>">Udgifter</a></li>
         <li><a href="<?php e(url(null, array('view' => 'debtor'))); ?>">Betalende debitor</a></li>
     </ul>
@@ -43,9 +43,9 @@ $posts = $context->getPostsInDraft();
                     <th><label for="date">Dato</label></th>
                     <th><label for="voucher_number">Bilag</label></th>
                     <th><label for="text">Bilagstekst</label></th>
-                    <th><label for="buy_account_number">K�bskonto</label></th>
+                    <th><label for="buy_account_number">Købskonto</label></th>
                     <th><label for="buy_balance_account">Modpost</label></th>
-                    <th><label for="amount">Bel�b</label></th>
+                    <th><label for="amount">Beløb</label></th>
                     <th><label for="reference">Reference</label></th>
                     <?php if ($context->getYear()->get('vat') > 0): ?>
                     <th><label for="vat_on">U. moms</label></th>
@@ -66,7 +66,7 @@ $posts = $context->getPostsInDraft();
                     </td>
                     <td>
                         <select name="debet_account_number" id="buy_account_number_select" tabindex="4">
-                            <option value="">V�lg</option>
+                            <option value=""><?php e(t('Choose')); ?></option>
                             <?php foreach ($context->getAccount()->getList('expenses') AS $a): ?>
                                 <option value="<?php e($a['number']); ?>"
                                     <?php if ($values['debet_account_number'] == $a['number']) echo ' selected="selected"'; ?>
@@ -76,7 +76,7 @@ $posts = $context->getPostsInDraft();
                     </td>
                     <td>
                         <select name="credit_account_number" id="balance_account_number_select" tabindex="4">
-                            <option value="">V�lg</option>
+                            <option value=""><?php e(t('Choose')); ?></option>
                             <?php foreach ($context->getAccount()->getList('finance') AS $a): ?>
                              <option value="<?php e($a['number']); ?>"
                                  <?php if ($values['credit_account_number'] == $a['number']) echo ' selected="selected"'; ?>
@@ -102,7 +102,7 @@ $posts = $context->getPostsInDraft();
             </tbody>
         <?php //elseif ($context->getKernel()->setting->get('user', 'accounting.daybook_view') == 'income'): ?>
         <?php elseif ($context->query('view') == 'income'): ?>
-            <caption>Indt�gter</caption>
+            <caption>Indtægter</caption>
             <thead>
                 <tr>
                     <th><label for="date">Dato</label></th>
@@ -110,7 +110,7 @@ $posts = $context->getPostsInDraft();
                     <th><label for="text">Bilagstekst</label></th>
                     <th><label for="sales_balance_account">Modkonto</label></th>
                     <th><label for="sales_account_number">Salgskonto</label></th>
-                    <th><label for="amount">Bel�b</label></th>
+                    <th><label for="amount">Beløb</label></th>
                     <th><label for="reference">Reference</label></th>
                     <?php if ($context->getYear()->get('vat') > 0): ?>
                     <th><label for="vat_on">U. moms</label></th>
@@ -131,7 +131,7 @@ $posts = $context->getPostsInDraft();
                     </td>
                     <td>
                         <select name="debet_account_number" id="balance_account_number_select" tabindex="4">
-                            <option value="">V�lg</option>
+                            <option value=""><?php e(t('Choose')); ?></option>
                             <?php foreach ($context->getAccount()->getList('finance') AS $a): ?>
                                 <option value="<?php e($a['number']); ?>"
                                     <?php if ($values['debet_account_number'] == $a['number']) echo ' selected="selected"'; ?>
@@ -141,7 +141,7 @@ $posts = $context->getPostsInDraft();
                     </td>
                     <td>
                         <select name="credit_account_number" id="sales_account_number_select" tabindex="5">
-                            <option value="">V�lg</option>
+                            <option value=""><?php e(t('Choose')); ?></option>
                             <?php foreach ($context->getAccount()->getList('income') AS $a): ?>
                                 <option value="<?php e($a['number']); ?>"
                                     <?php if ($values['credit_account_number'] == $a['number']) echo ' selected="selected"'; ?>
@@ -176,7 +176,7 @@ $posts = $context->getPostsInDraft();
                     <th><label for="text">Bilagstekst</label></th>
                     <th><label for="debitor_balance_account">Finanskonto</label></th>
                     <th><label for="debitor_account_number">Debitorkonto</label></th>
-                    <th><label for="amount">Bel�b</label></th>
+                    <th><label for="amount">Beløb</label></th>
                     <th><label for="reference">Reference</label></th>
                     <!--
                     <?php if ($context->getYear()->get('vat') > 0): ?>
@@ -199,7 +199,7 @@ $posts = $context->getPostsInDraft();
                     </td>
                     <td>
                         <select name="debet_account_number" id="debitor_account_number_select" tabindex="4">
-                            <option value="">V�lg</option>
+                            <option value=""><?php e(t('Choose')); ?></option>
                             <?php foreach ($context->getAccount()->getList('finance') AS $a): ?>
                                     <?php if ($context->getYear()->getSetting('debtor_account_id') == $a['id']) continue; ?>
                                     <option value="<?php e($a['number']); ?>"
@@ -241,7 +241,7 @@ $posts = $context->getPostsInDraft();
                     <th><label for="text">Bilagstekst</label></th>
                     <th><label for="debet_account_number">Debet</label></th>
                     <th><label for="credit_acount_number">Kredit</label></th>
-                    <th><label for="amount">Bel�b</label></th>
+                    <th><label for="amount">Beløb</label></th>
                     <th><label for="reference">Reference</label></th>
                     <th><label for="vat_on">U. moms</label></th>
                     <th></th>
@@ -324,7 +324,7 @@ $posts = $context->getPostsInDraft();
 <?php if (round($context->getPost()->get('list_saldo'), 2) == 0.00): // this is a hack - can be removed when the database uses mindste enhed ?>
     <p class="advice"><a href="<?php e(url('state')); ?>">Bogfør posterne</a></p>
 <?php else: ?>
-    <p class="error">Kassekladden stemmer ikke. Der er en difference p� <?php e(amountToOutput($post->get('list_saldo'))); ?>.</p>
+    <p class="error">Kassekladden stemmer ikke. Der er en difference på <?php e(amountToOutput($post->get('list_saldo'))); ?>.</p>
 <?php endif; ?>
 
 <?php else: ?>
@@ -335,14 +335,14 @@ $posts = $context->getPostsInDraft();
 <?php if ($context->getKernel()->setting->get('user', 'accounting.daybook_cheatsheet')== 'true'): ?>
 
 <table summary="" id="accounting-cheatsheet">
-    <caption>Hj�lp - hvad er nu debet og kredit? <a href="<?php e($context->url(null, array('quickhelp' => 'false'))); ?>" id="accounting-cheatsheet-link">(Skjul)</a></caption>
+    <caption>Hjælp - hvad er nu debet og kredit? <a href="<?php e($context->url(null, array('quickhelp' => 'false'))); ?>" id="accounting-cheatsheet-link">(Skjul)</a></caption>
     <tr>
         <th></th>
         <th>Debet</th>
         <th>Kredit</th>
     </tr>
     <tr>
-        <th>Indt�gter</th>
+        <th>Indtægter</th>
         <td>Debitor, kasse, bank</td>
         <td>Varekonto</td>
     </tr>
@@ -359,7 +359,7 @@ $posts = $context->getPostsInDraft();
 </table>
 <?php else: ?>
     <ul class="options">
-    	<li><a href="<?php e(url(null, array('quickhelp' => 'true'))); ?>">Sl� hurtighj�lp til</a></li>
+    	<li><a href="<?php e(url(null, array('quickhelp' => 'true'))); ?>">Slå hurtighjælp til</a></li>
     </ul>
 
 

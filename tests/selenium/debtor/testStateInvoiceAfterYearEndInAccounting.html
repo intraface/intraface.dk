@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=debtor,invoice,contact,product,administration,accounting&amp;helper_function=Administration:fillInIntranetAddress,Contact:create,Product:create&amp;login=true</td>
+	<td>install/reset-staging-server.php?modules=onlinepayment,debtor,invoice,contact,product,administration,accounting&amp;helper_function=Administration:fillInIntranetAddress,Contact:create,Product:create&amp;login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -73,32 +73,27 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=create invoice</td>
+	<td>link=Create invoice</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>search</td>
-	<td>Tes</td>
-</tr>
-<tr>
-	<td>keyUp</td>
-	<td>search</td>
-	<td>t</td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>1000</td>
-	<td></td>
-</tr>
-<tr>
-	<td>select</td>
-	<td>contact_select</td>
-	<td>label=Contact 1</td>
+	<td>query</td>
+	<td>Test</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>go_search</td>
+	<td>//input[@value='Search']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>contact_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Choose']</td>
 	<td></td>
 </tr>
 <tr>
@@ -158,12 +153,12 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//input[@value='Bogfør']</td>
+	<td>//input[@value='State']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Se bilag</td>
+	<td>link=See voucher</td>
 	<td></td>
 </tr>
 <tr>

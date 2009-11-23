@@ -129,7 +129,7 @@ $value = $context->getValues();
 			<?php e(__('Wire transfer')); ?></label>
 		</div>
     <?php } else { ?>
-        <p><?php e(t('In order to receive money through wire transfer, you have to put in your account number')); ?>. <a href="setting.php"><?php e(t('Put in bank account number')); ?></a>.</p>
+        <p><?php e(t('In order to receive money through wire transfer, you have to put in your account number')); ?>. <a href="<?php e(url('../../../settings')); ?>"><?php e(t('Put in bank account number')); ?></a>.</p>
     <?php } ?>
     <?php if ($context->getKernel()->setting->get('intranet', 'giro_account_number')) { ?>
 		<div>

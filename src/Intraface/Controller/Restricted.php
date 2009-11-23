@@ -1,14 +1,16 @@
 <?php
 class Intraface_Controller_Restricted extends k_Component
 {
-    //protected $registry;
+    protected $mdb2;
+    protected $db_sql;
     protected $kernel;
     protected $user_gateway;
     protected $kernel_gateway;
 
-    function __construct(Intraface_UserGateway $gateway, Intraface_KernelGateway $kernel_gateway /*k_Registry $registry*/)
+    function __construct(DB_Sql $db_sql, MDB2_Driver_Common $mdb2, Intraface_UserGateway $gateway, Intraface_KernelGateway $kernel_gateway /*k_Registry $registry*/)
     {
-        /*$this->registry = $registry;*/
+        $this->mdb2 = $mdb2; // this is here to make sure set names utf8 is run as the first thing in the app
+        $this->db_sql = $db_sql;
         $this->user_gateway = $gateway;
         $this->kernel_gateway = $kernel_gateway;
     }

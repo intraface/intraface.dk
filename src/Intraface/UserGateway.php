@@ -16,7 +16,6 @@ class Intraface_UserGateway
         return new Intraface_User($this->db->f('id'));
     }
 
-
     function findById($id)
     {
         return new Intraface_User($id);

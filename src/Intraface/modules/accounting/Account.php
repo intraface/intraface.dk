@@ -25,8 +25,8 @@ class Account extends Intraface_Standard
         2 => 'out'
     );
 
-    // Disse bør laves om til engelske termer med småt og så oversættes
-    // husk at ændre tilsvarende i validForState() - Status bør
+    // Disse bï¿½r laves om til engelske termer med smï¿½t og sï¿½ oversï¿½ttes
+    // husk at ï¿½ndre tilsvarende i validForState() - Status bï¿½r
     // splittes op i to konti (aktiver og passiver)
     // husk at opdatere databasen til alle sum-konti skal have nummer 5 i stedet
 
@@ -46,12 +46,7 @@ class Account extends Intraface_Standard
     );
 
     /**
-     * Account objektet repræsenterer _en_ konto.
-     * Man kan finde kontonummeret ud fra kontonummeret også.
-     *
-     * Der laves en særlig metode til at hente saldoen, for den kræver en
-     * del udregningskraft. Værdierne smides imidlertid også bare i values,
-     * så man kan hente dem med $this->get()
+     * Represents an account
      *
      * @param object  $year
      * @param integer $account_id
@@ -60,27 +55,21 @@ class Account extends Intraface_Standard
      */
     function __construct($year, $account_id = 0)
     {
-        if (empty($year) OR !is_object($year)) {
-            trigger_error('Account::Account kræver objektet Year.', E_USER_ERROR);
-            exit;
-        }
-
         $this->error = new Intraface_Error;
         $this->year = $year;
         $this->id = (int)$account_id;
 
-        $this->vatpercent = $this->year->kernel->setting->get('intranet', 'vatpercent');
+        $this->vatpercent = $this->year->kernel->getSetting()->get('intranet', 'vatpercent');
 
         if ($this->id > 0) {
             $this->load();
         }
-
     }
 
     /**
-     * Denne funktion bruges bl.a. under bogføringen, så man bare taster kontonummer
-     * og så sættes den rigtige konto.
+     * Finds an account from number
      *
+     * @deprecated
      * @param integer $account_number
      *
      * @return object
@@ -89,32 +78,10 @@ class Account extends Intraface_Standard
     {
         $gateway = new Intraface_modules_accounting_AccountGateway($year);
         return $gateway->findFromNumber($account_number);
-        /*
-        $account_number = (int)$account_number;
-
-        if ($year->get('id') == 0) {
-            return 0;
-        }
-
-        $sql = "SELECT id FROM accounting_account
-            WHERE number = '".$account_number."'
-                AND intranet_id = ".$year->kernel->intranet->get('id')."
-                AND year_id = ".$year->get('id')." AND active = 1
-            LIMIT 1";
-
-        $db = new Db_Sql;
-        $db->query($sql);
-
-        if (!$db->nextRecord()) {
-            return new Account($year);
-        }
-
-        return new Account($year, $db->f('id'));
-        */
     }
 
     /**
-     * Henter detaljer om konti - sætter lokale variable i klassen
+     * Loads details about an account
      *
      * @return integer id
      */
@@ -166,14 +133,14 @@ class Account extends Intraface_Standard
             $this->value['vat_key'] = $db->f('vat_key');
             $this->value['active'] = $db->f('active');
 
-            // hvis der ikke er moms på året skal alle momsindstillinger nulstilles
+            // hvis der ikke er moms pï¿½ ï¿½ret skal alle momsindstillinger nulstilles
             if ($this->year->get('vat') == 0) {
                 $this->value['vat_key'] = 0;
                 $this->value['vat'] = $this->vat[$db->f('vat_key')];
                 $this->value['vat_percent'] = 0;
                 $this->value['vat_shorthand'] = 'ingen';
 
-            } else { // hvis der er moms på året
+            } else { // hvis der er moms pï¿½ ï¿½ret
                 $this->value['vat_key'] = $db->f('vat_key');
                 $this->value['vat'] = $this->vat[$db->f('vat_key')];
                 if ($this->value['vat'] == 'none') {
@@ -235,7 +202,7 @@ class Account extends Intraface_Standard
             $this->error->set('Ikke en tilladt brug af kontoen');
         }
 
-        $validator->isString($var['name'], 'Kontonavnet kan kune være en tekststreng.');
+        $validator->isString($var['name'], 'Kontonavnet kan kune vï¿½re en tekststreng.');
         $validator->isNumeric($var['vat_key'], 'Ugyldig moms', 'allow_empty');
         $validator->isNumeric($var['sum_to'], 'sum_to' , 'allow_empty');
         $validator->isNumeric($var['sum_from'], 'sum_from' , 'allow_empty');
@@ -288,10 +255,7 @@ class Account extends Intraface_Standard
     }
 
     /**
-     * Funktion til at gemme primosaldoen
-     *
-     * Denne opdatering af primosaldoen bør ikke gemmes i save(), da det ikke
-     * skal være let at ændre primosaldoen.
+     * Saves the primo saldo
      *
      * @param float $debet
      * @param float $credit
@@ -306,13 +270,13 @@ class Account extends Intraface_Standard
 
         $amount = new Intraface_Amount($debet);
         if (!$amount->convert2db()) {
-            $this->error->set('Beløbet kunne ikke konverteres');
+            $this->error->set('Amount could not be converted');
         }
         $debet = $amount->get();
 
         $amount = new Intraface_Amount($credit);
         if (!$amount->convert2db()) {
-            $this->error->set('Beløbet kunne ikke konverteres');
+            $this->error->set('Amount could not be converted');
         }
         $credit = $amount->get();
 
@@ -330,21 +294,21 @@ class Account extends Intraface_Standard
     }
 
     /**
-     * Funktion til at slette en konto
+     * Deletes an account
      *
-     * Skal tjekke om der er poster i året på kontoen.
+     * @todo Skal tjekke om der er poster i ï¿½ret pï¿½ kontoen.
      *
      * @return boolean
      */
     public function delete()
     {
         if ($this->anyPosts()) {
-            $this->error->set('Der er poster på kontoen for dette år, så du kan ikke slette den. Næste år kan du lade være med at bogføre på kontoen, og så kan du slette den.');
+            $this->error->set('Der er poster pï¿½ kontoen for dette ï¿½r, sï¿½ du kan ikke slette den. Nï¿½ste ï¿½r kan du lade vï¿½re med at bogfï¿½re pï¿½ kontoen, og sï¿½ kan du slette den.');
             return false;
         }
         $this->getSaldo();
         if ($this->get('saldo') != 0) {
-            $this->error->set('Der er registreret noget på primosaldoen på kontoen, så du kan ikke slette den. Du kan slette kontoen, hvis du nulstiller primosaldoen.');
+            $this->error->set('Der er registreret noget pï¿½ primosaldoen pï¿½ kontoen, sï¿½ du kan ikke slette den. Du kan slette kontoen, hvis du nulstiller primosaldoen.');
             return false;
         }
 
@@ -359,7 +323,7 @@ class Account extends Intraface_Standard
      ************************************************************************************/
 
     /**
-     * Metoden tjekker om kontoen har den rigtige type, så vi må bogføre på den.
+     * Metoden tjekker om kontoen har den rigtige type, sï¿½ vi mï¿½ bogfï¿½re pï¿½ den.
      *
      * @return boolean
      */
@@ -444,16 +408,16 @@ class Account extends Intraface_Standard
     /**
      * Public: Metoden returnerer en saldo for en konto
      *
-     * Klassen tager højde for primobalancen og den skal også tage højde for
-     * sumkonti, se i første omgang getSaldoList().
+     * Klassen tager hï¿½jde for primobalancen og den skal ogsï¿½ tage hï¿½jde for
+     * sumkonti, se i fï¿½rste omgang getSaldoList().
      *
-     * Det vil være for voldsomt at putte
-     * den her under get, for så skal saldoen
+     * Det vil vï¿½re for voldsomt at putte
+     * den her under get, for sï¿½ skal saldoen
      * udregnes hver gang jeg skal have fat i
      * et eller andet ved en konto!
      *
-     * @param $date_from (date) yyyy-mm-dd Der søges jo kun i indeværende år
-     * @param $date_to (date) yyyy-mm-dd   Der søges kun i indeværende år
+     * @param $date_from (date) yyyy-mm-dd Der sï¿½ges jo kun i indevï¿½rende ï¿½r
+     * @param $date_to (date) yyyy-mm-dd   Der sï¿½ges kun i indevï¿½rende ï¿½r
      *
      * @return (array) med debet, credit og total saldo
      *
@@ -477,7 +441,7 @@ class Account extends Intraface_Standard
             'saldo' => ''
         );
 
-        // Tjekker på om datoerne er i indeværende år
+        // Tjekker pï¿½ om datoerne er i indevï¿½rende ï¿½r
 
         $db = new DB_Sql;
             // henter primosaldoen for kontoen
@@ -540,14 +504,14 @@ class Account extends Intraface_Standard
                     }
                 }
                 // Det her kan sikkert laves lidt smartere. Den skal egentlig laves inden
-                // alt det ovenover tror jeg - alstå if-sætningen
+                // alt det ovenover tror jeg - alstï¿½ if-sï¿½tningen
             }
 
             return true;
     }
 
     /***************************************************************************
-     * ØVRIGE METODER
+     * ï¿½VRIGE METODER
      **************************************************************************/
 
     /**

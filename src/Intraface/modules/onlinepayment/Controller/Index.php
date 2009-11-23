@@ -3,10 +3,10 @@ class Intraface_modules_onlinepayment_Controller_Index extends k_Component
 {
     function map($name)
     {
-        if ($name == 'payment') {
-            return 'Intraface_modules_onlinepayment_Controller_Payment';
-        } elseif ($name == 'settings') {
+        if ($name == 'settings') {
             return 'Intraface_modules_onlinepayment_Controller_Settings';
+        } elseif (is_numeric($name)) {
+            return 'Intraface_modules_onlinepayment_Controller_Payment';
         }
     }
 

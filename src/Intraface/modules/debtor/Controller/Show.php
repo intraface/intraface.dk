@@ -2,6 +2,12 @@
 class Intraface_modules_debtor_Controller_Show extends k_Component
 {
     protected $debtor;
+    protected $translation;
+
+    function __construct(Translation2 $translation)
+    {
+        $this->translation = $translation;
+    }
 
     function dispatch()
     {
@@ -109,7 +115,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             $this->getDebtor()->setStatus('sent');
 
             if (($this->getDebtor()->get("type") == 'credit_note' || $this->getDebtor()->get("type") == 'invoice') AND $this->getKernel()->user->hasModuleAccess('accounting')) {
-                header('location: state_'.$this->getDebtor()->get('type').'.php?id=' . intval($this->getDebtor()->get("id")));
+                return new k_SeeOther($this->url('state'));
             }
         }
 
@@ -196,15 +202,13 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             if ($this->getDebtor()->getPaymentMethodKey() == 5 AND $this->getDebtor()->getWhereToId() == 0) {
                 try {
                     // echo $this->getDebtor()->getWhereFromId();
-                    /**
-                     * @todo We should use a shop gateway here instead
-                     */
+                    // @todo We should use a shop gateway here instead
                     $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById($this->getDebtor()->getWhereFromId());
                     if ($shop) {
                         $payment_url = $this->getDebtor()->getPaymentLink($shop->getPaymentUrl());
                     }
                 } catch (Doctrine_Record_Exeption $e) {
-                    trigger_error('Could not send an e-mail with onlinepayment-link', E_USER_ERROR);
+                    throw new Exception('Could not send an e-mail with onlinepayment-link');
                 }
             }
 
@@ -224,7 +228,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
             // gem debtoren som en fil i filsystemet
             $filehandler = new FileHandler($this->getKernel());
-            $tmp_file = $filehandler->createTemporaryFile(__($this->getDebtor()->get("type")).$this->getDebtor()->get('number').'.pdf');
+            $tmp_file = $filehandler->createTemporaryFile($this->t($this->getDebtor()->get("type")).$this->getDebtor()->get('number').'.pdf');
 
             if (($this->getDebtor()->get("type") == "order" || $this->getDebtor()->get("type") == "invoice") && $this->getKernel()->intranet->hasModuleAccess('onlinepayment')) {
                 $this->getKernel()->useModule('onlinepayment', true); // true: ignore_user_access
@@ -233,22 +237,28 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 $onlinepayment = NULL;
             }
 
+            // @todo the language on an invoice should be decided by the contacts preference
+            $translation = $this->translation;
+            $translation->setLang('dk');
+
             // Her gemmes filen
             $report = new Intraface_modules_debtor_Visitor_Pdf($translation, $file);
             $report->visit($this->getDebtor(), $onlinepayment);
+
             $report->output('file', $tmp_file->getFilePath());
+
 
             // gem filen med filehandleren
             $filehandler = new FileHandler($this->getKernel());
             if (!$file_id = $filehandler->save($tmp_file->getFilePath(), $tmp_file->getFileName(), 'hidden', 'application/pdf')) {
                 echo $filehandler->error->view();
-                trigger_error('Filen kunne ikke gemmes', E_USER_ERROR);
+                throw new Exception('Filen kunne ikke gemmes');
             }
 
             $input['accessibility'] = 'intranet';
             if (!$file_id = $filehandler->update($input)) {
                 echo $filehandler->error->view();
-                trigger_error('Oplysninger om filen kunne ikke opdateres', E_USER_ERROR);
+                throw new Exception('Oplysninger om filen kunne ikke opdateres');
             }
 
             switch($this->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
@@ -265,7 +275,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                     $from_name = $this->getKernel()->getSetting()->get('intranet', 'debtor.sender.name');
                     break;
                 default:
-                    trigger_error("Invalid sender!", E_USER_ERROR);
+                    throw new Exception("Invalid sender!");
                     exit;
             }
             $contact = new Contact($this->getKernel(), $this->getDebtor()->get('contact_id'));
@@ -281,27 +291,24 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                     'belong_to' => $this->getDebtor()->get('id')
                 ))) {
                 echo $email->error->view();
-                exit;
-                trigger_error('E-mailen kunne ikke gemmes', E_USER_ERROR);
+                throw new Exception('E-mailen kunne ikke gemmes');
             }
 
             // tilknyt fil
             if (!$email->attachFile($file_id, $filehandler->get('file_name'))) {
                 echo $email->error->view();
-                trigger_error('Filen kunne ikke vedhæftes', E_USER_ERROR);
+                throw new Exception('Filen kunne ikke vedhæftes');
             }
 
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
             $shared_email = $this->getKernel()->useShared('email');
 
             // First vi set the last, because we need this id to the first.
-            $url = $redirect->setDestination($shared_email->getPath().'edit.php?id='.$email->get('id'), $debtor_module->getPath().'view.php?id='.$this->getDebtor()->get('id'));
+            $url = $redirect->setDestination($shared_email->getPath().'edit.php?id='.$email->get('id'), NET_SCHEME . NET_HOST . $this->url());
             $redirect->setIdentifier('send_onlinepaymentlink');
             $redirect->askParameter('send_onlinepaymentlink_status');
 
-            header('Location: ' . $url);
-            exit;
-
+            return k_SeeOther($url);
         }
 
 
@@ -339,8 +346,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 // en tilbagebetaling eller hvad?
                 if ($this->getDebtor()->get("type") == "invoice" && $this->getDebtor()->get("status") == "sent" AND !$onlinepayment->error->isError()) {
                     if ($this->getKernel()->user->hasModuleAccess('accounting')) {
-                        header('location: state_payment.php?for=invoice&id=' . intval($this->getDebtor()->get("id")).'&payment_id='.$onlinepayment->get('created_payment_id'));
-                        exit;
+                        return new k_SeeOther($this->url('payment/' . $onlinepayment->get('created_payment_id') . '/state'));
                     }
                 }
             }
@@ -351,7 +357,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             $debtor_module = $this->getKernel()->module('debtor');
             $contact_module = $this->getKernel()->getModule('contact');
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-            $url = $redirect->setDestination($contact_module->getPath().'contact_edit.php?id='.intval($this->getDebtor()->contact->get('id')), NET_SCHEME . NET_HOST . $this->url());
+            $url = $redirect->setDestination($contact_module->getPath().'/'.intval($this->getDebtor()->contact->get('id') . '&edit'), NET_SCHEME . NET_HOST . $this->url());
             return new k_SeeOther($url);
         }
 
@@ -393,7 +399,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                     $return_redirect->delete();
 
                     if (($this->getDebtor()->get("type") == 'credit_note' || $this->getDebtor()->get("type") == 'invoice') AND !$this->getDebtor()->isStated() AND $this->getKernel()->user->hasModuleAccess('accounting')) {
-                        header('location: state_'.$this->getDebtor()->get('type').'.php?id=' . intval($this->getDebtor()->get("id")));
+                        return new k_SeeOther($this->url('state'));
                     }
                 }
 

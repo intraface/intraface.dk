@@ -24,7 +24,7 @@
 					case "invoice":
 						if ($kernel->user->hasModuleAccess('invoice')) {
 							$debtor_module = $kernel->useModule('debtor');
-							print("<a href=\"".$debtor_module->getPath()."view.php?id=".$onlinepayment->get('belong_to_id')."\">Faktura</a>");
+							print("<a href=\"".$debtor_module->getPath().$onlinepayment->get('belong_to') . '/list/' . $onlinepayment->get('belong_to_id')."\">Faktura</a>");
 						} else {
 							e("Faktura");
 						}
@@ -32,7 +32,7 @@
 					case "order":
 						if ($kernel->user->hasModuleAccess('order')) {
 							$debtor_module = $kernel->useModule('debtor');
-							print("<a href=\"".$debtor_module->getPath()."view.php?id=".$onlinepayment->get('belong_to_id')."\">Ordre</a>");
+							print("<a href=\"".$debtor_module->getPath().$onlinepayment->get('belong_to') . '/list/' . $onlinepayment->get('belong_to_id')."\">Ordre</a>");
 						} else {
 							e("Ordre");
 						}

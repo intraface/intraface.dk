@@ -29,6 +29,10 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
             return 'Intraface_modules_debtor_Controller_Depreciation';
         } elseif ($name == 'email') {
             return 'Intraface_modules_debtor_Controller_ReminderEmail';
+        } elseif ($name == 'state') {
+            return 'Intraface_modules_accounting_Controller_State_Reminder';
+        } elseif ($name == 'depreciation') {
+            return 'Intraface_modules_debtor_Controller_Depreciation';
         }
     }
 
@@ -65,8 +69,7 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
                     $return_redirect->delete();
 
                     if ($this->getKernel()->user->hasModuleAccess('accounting') && $reminder->somethingToState()) {
-                        header('location: state_reminder.php?id=' . intval($reminder->get("id")));
-                        exit;
+                        return new k_SeeOther($this->url('state'));
                     }
 
                 }
@@ -187,8 +190,8 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
                 $reminder->setStatus("sent");
 
                 if ($this->getKernel()->user->hasModuleAccess('accounting') && $reminder->somethingToState()) {
-                    header('location: state_reminder.php?id=' . intval($reminder->get("id")));
-                    exit;
+                    return new k_SeeOther($this->url('state'));
+
                 }
             }
         }
@@ -210,11 +213,9 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
             if ($reminder->save($_POST)) {
 
                 if ($_POST['send_as'] == 'email') {
-                    header("Location: reminder_email.php?id=".$reminder->get("id"));
-                    exit;
+                    return new k_SeeOther($this->url(null, array('email')));
                 } else {
-                    header("Location: reminder.php?id=".$reminder->get("id"));
-                    exit;
+                    return new k_SeeOther($this->url());
                 }
             } else {
                 if (intval($_POST["id"]) != 0) {

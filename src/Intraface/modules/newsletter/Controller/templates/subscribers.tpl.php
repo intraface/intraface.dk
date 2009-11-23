@@ -1,7 +1,7 @@
 <h1><?php e(t('Subscribers to the list')); ?> <?php e($context->getList()->get('title')); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url(null, array('add_contact' => true))); ?>"><?php e(t('Add contact')); ?></a></li>
+    <li><a href="<?php e(url('addcontact')); ?>"><?php e(t('Add contact')); ?></a></li>
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 

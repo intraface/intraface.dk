@@ -16,7 +16,7 @@
     echo $depreciation->error->view();
     ?>
 
-    <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+    <form action="<?php e(url()); ?>" method="post">
     <input type="hidden" value="<?php e($object->get('id')); ?>" name="id" />
     <input type="hidden" value="<?php e($for); ?>" name="for" />
     <input type="hidden" value="<?php e($depreciation->get('id')); ?>" name="depreciation_id" />
@@ -39,7 +39,7 @@
 
         <div class="formrow">
             <label for="voucher_number">Bilagsnummer</label>
-            <input type="text" name="voucher_number" id="voucher_number" value="<?php e($voucher->getMaxNumber() + 1); ?>" />
+            <input type="text" name="voucher_number" id="voucher_number" value="<?php e($context->getVoucher()->getMaxNumber() + 1); ?>" />
         </div>
 
         <div class="formrow">
@@ -60,7 +60,7 @@
                 <option value="">V�lg...</option>
                 <?php
                 $x = 0;
-                $default_account_id = $kernel->setting->get('intranet', 'depreciation.state.account');
+                $default_account_id = $context->getKernel()->setting->get('intranet', 'depreciation.state.account');
 
                 foreach ($accounts AS $a):
                     if (strtolower($a['type']) == 'sum') continue;
@@ -78,8 +78,8 @@
 
     <?php  if ($depreciation->readyForState()): ?>
         <div>
-            <input type="submit" value="Bogf�r" /> eller
-            <a href="view.php?id=<?php e($object->get('id')); ?>">fortryd</a>
+            <input type="submit" value="<?php e(t('State')); ?>" />
+            <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
         </div>
     <?php endif;  ?>
     </form>

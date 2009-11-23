@@ -52,8 +52,10 @@ class Intraface_modules_accounting_Controller_State_SelectYear extends Intraface
     {
         $accounting_module = $this->getKernel()->useModule('accounting');
         $year = new Year($this->getKernel(), $this->body('year_id'));
-        $year->setYear();
-        return new k_SeeOther($this->url('../'));
+        if ($year->setYear()) {
+            return new k_SeeOther($this->url('../'));
+        }
+        throw new Exception('Could not set the year');
     }
 
     function getYears()

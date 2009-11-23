@@ -78,6 +78,6 @@ class MainContact extends Intraface_Main
 
     function getPath()
     {
-        return url('/core/restricted/module/contact/');
+        return url('/core/restricted/module/contact') . '/';
     }
 }

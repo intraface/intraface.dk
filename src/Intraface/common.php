@@ -10,6 +10,9 @@
  * @version @package-version@
  */
 
+// HACK to have SET NAMES utf8
+require_once dirname (__FILE__) . '/Sql.php';
+
 // required files
 require_once 'Ilib/ClassLoader.php';
 require_once 'ErrorHandler.php';
@@ -95,6 +98,7 @@ putenv("TZ=".TIMEZONE);
 if (defined('TIMEZONE')) {
     $db->exec('SET time_zone=\''.TIMEZONE.'\'');
 }
+$db->exec('SET NAMES utf8');
 
 // Initializes Doctrine
 Doctrine_Manager::getInstance()->setAttribute("use_dql_callbacks", true);

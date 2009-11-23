@@ -30,7 +30,7 @@ class Intraface_modules_debtor_Controller_Depreciation extends k_Component
     {
         $invoice_module = $this->getKernel()->useModule('invoice');
         require_once 'Intraface/modules/invoice/Depreciation.php';
-        return new Depreciation($this->getModel());
+        return new Depreciation($this->getModel(), $this->name());
     }
 
     function t($phrase)
