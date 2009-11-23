@@ -1,16 +1,19 @@
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>testCreateAccountWithIngoingVat</title>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>accounting:testCreateAccountWithIngoingVat</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">testCreateAccountWithIngoingVat</td></tr>
+<tr><td rowspan="1" colspan="3">accounting:testCreateAccountWithIngoingVat</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=accounting,administration&helper_function=Accounting:createYearWithVatAndStandardAccounts&login=true</td>
+	<td>install/reset-staging-server.php?modules=accounting,administration&amp;helper_function=Accounting:createYearWithVatAndStandardAccounts&amp;login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -71,16 +74,6 @@
 <tr>
 	<td>assertTextPresent</td>
 	<td>7100</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>Some buyes</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=Some buyes</td>
 	<td></td>
 </tr>
 <tr>

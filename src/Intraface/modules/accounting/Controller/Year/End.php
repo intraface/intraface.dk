@@ -7,6 +7,11 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
         return $account = new Account($year);
     }
 
+    function t($phrase)
+    {
+        return $phrase;
+    }
+
 	function POST()
 	{
         $year = $this->getYear();

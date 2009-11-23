@@ -9,22 +9,21 @@ class Intraface_modules_accounting_Controller_Account_Edit extends k_Component
 
     function postForm()
     {
-        $year = new Year($kernel);
+        $year = new Year($this->getKernel());
         $year->checkYear();
 
-        $account = new Account($year, (int)$_POST['id']);
+        $account = new Account($year, $this->name());
 
         if (isset($_POST['vat_key']) && $_POST['vat_key'] != 0) {
             $_POST['vat_percent'] = 25;
         }
 
         if ($id = $account->save($_POST)) {
-            header('Location: accounts.php');
-            exit;
+            return new k_SeeOther($this->url());
         } else {
             $values = $_POST;
         }
-
+        return $this->render();
         /*
         if ($id = $this->getYear()->save($_POST)) {
             return new k_SeeOther($this->url('../'));

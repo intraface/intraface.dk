@@ -1,4 +1,4 @@
-<h1>Konti <?php e($context->getYear()->get('label')); ?></h1>
+<h1>Konti <a href="<?php e(url('../year/' . $context->getYear()->getId())); ?>"><?php e($context->getYear()->get('label')); ?></a></h1>
 
 <div class="message">
 	<p><strong>Kontoplan</strong>. Dette er en oversigt over alle dine konti, hvor du kan se saldoen, rette de enkelte konti og slette dem. Hvis du vil se bevægelserne på den enkelte konto, kan du klikke på kontonavnet.</p>
@@ -65,7 +65,7 @@
 			<?php if ($account['type'] != 'headline') { ?>
 			<td><?php e(__($account['type'])); ?></td>
 			<td><?php if ($account['type'] == 'balance, asset' OR $account['type'] == 'balance, liability' OR $account['type'] == 'operating') e(__($account['vat_shorthand'])); ?></td>
-			<td class="amount"><?php if (!empty($account['saldo'])) e(amountToOutput($account['saldo'], 2, ",", ".")); ?></td>
+			<td class="amount"><?php if (isset($account['saldo'])) e(number_format($account['saldo'], 2, ",", ".")); ?></td>
 			<?php } ?>
 			<td class="options">
 				<a class="edit" href="<?php e(url($account['id'], array('edit'))); ?>">Ret</a>

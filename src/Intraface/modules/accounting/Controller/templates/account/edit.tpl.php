@@ -3,7 +3,7 @@ $values = $context->getValues();
 ?>
 <h1>Rediger konto</h1>
 
-<form id="account" action="<?php e(url()); ?>" method="post">
+<form id="account" action="<?php e(url(), array($context->subview())); ?>" method="post">
 	<input type="hidden" name="id" value="<?php if (!empty($values['id'])) e($values['id']); ?>" />
 	<?php echo $context->getAccount()->error->view(); ?>
 
@@ -20,7 +20,7 @@ $values = $context->getValues();
 		<div class="formrow">
 			<label for="account_type">Type</label>
 			<select name="type_key" id="account_type">
-				<option value="">Vælg</option>
+				<option value="">Vï¿½lg</option>
 				<?php foreach ($context->getAccount()->types as $type_key=>$type) { ?>
 					<option value="<?php e($type_key); ?>"<?php if (!empty($values['type_key']) AND $type_key == $values['type_key']) { echo ' selected="selected"'; } ?>><?php e(__($type)); ?></option>
 				<?php } ?>
@@ -29,7 +29,7 @@ $values = $context->getValues();
 	</fieldset>
 	<fieldset id="use_fieldset">
 		<legend>Kontoen er beregnet til</legend>
-		<p>Denne konto bruges i forbindelse med indtastningen i kassekladden til at vise de relevante konti. Den har ikke nogen direkte indvirkning på selve regnskabet.</p>
+		<p>Denne konto bruges i forbindelse med indtastningen i kassekladden til at vise de relevante konti. Den har ikke nogen direkte indvirkning pï¿½ selve regnskabet.</p>
 		<div class="formrow">
 			<label for="account_usage">Brug</label>
 			<select name="use_key" id="account_usage">
@@ -55,7 +55,7 @@ $values = $context->getValues();
 	<?php endif; ?>
 
 	<fieldset id="sum_fieldset">
-	<legend>Summen på kontoen udregnes på følgende konti</legend>
+	<legend>Summen pï¿½ kontoen udregnes pï¿½ fï¿½lgende konti</legend>
 		<div>
 			<label for="sum_from">Fra kontonummer</label>
 			<input type="text" name="sum_from" id="sum_from" value="<?php if (!empty($values['sum_from'])) e($values['sum_from']); ?>" />

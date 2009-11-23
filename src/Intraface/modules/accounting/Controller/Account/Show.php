@@ -30,7 +30,7 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         $posts = array_merge($posts, $account->getPosts());
 
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/account/show.tpl.php');
-        return $smarty->render($this);
+        return $smarty->render($this, array('posts' => $posts));
     }
 
     function getKernel()

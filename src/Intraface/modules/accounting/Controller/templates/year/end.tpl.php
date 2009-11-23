@@ -50,15 +50,15 @@ switch($context->getYearEnd()->get('step') + 1):
 
 			foreach ($vat_periods as $period) {
 				$vat_period = new VatPeriod($context->getYear(), $period['id']);
-				if (!$context->getVatPeriod()->get('voucher_id')) {
-					echo '<p class="warning">Momsperiode ' . $context->getVatPeriod()->get('label') . ' er ikke bogf�rt. <a href="vat_view.php?id='.$context->getVatPeriod()->get('id').'">G� til momsperioden</a>.</p>';
+				if (!$vat_period->get('voucher_id')) {
+					echo '<p class="warning">Momsperiode ' . $vat_period->get('label') . ' er ikke bogf�rt. <a href="'.url('../vat/' . $vat_period->get('id')).'">Fix it at the vat period</a>.</p>';
 				} elseif (!$context->getVatPeriod()->compareAmounts()) {
-					echo '<p class="warning">Momsperiode ' . $context->getVatPeriod()->get('label') . ' stemmer ikke. <a href="vat_view.php?id='.$context->getVatPeriod()->get('id').'">G� til momsperioden</a>.</p>';
+					echo '<p class="warning">Momsperiode ' . $vat_period->get('label') . ' stemmer ikke. <a href="'.url('../vat/' . $vat_period->get('id')).'">Fix it at the vat period</a>.</p>';
 				}
 			}
 		?>
 
-			<input type="submit" value="N�ste" name="step_things_stated" />
+			<input type="submit" value="<?php e(t('Next')); ?>" name="step_things_stated" />
 		</fieldset>
 		<?php
 	break;
@@ -74,7 +74,7 @@ switch($context->getYearEnd()->get('step') + 1):
 				<p>Resultatopg�relsen er allerede gemt. Du kan f�re posterne tilbage, hvis du vil gemme igen.</p>
 				<input type="submit" name="previous" value="Forrige" />
 				<input type="submit" name="step_reverse_result_reset" value="Tilbagef�r posterne" class="confirm" />
-				<input type="submit" name="next" value="N�ste" class="confirm" />
+				<input type="submit" name="next" value="<?php e(t('Next')); ?>" class="confirm" />
 			<?php endif; ?>
 		</fieldset>
 
@@ -176,7 +176,7 @@ $status_accounts = $context->getAccount()->getList('status');
 			<legend>Trin 5: �rsregnskabet</legend>
 			<p>�rsregnskabet er f�rdig. Du kan se det nedenunder - og du kan skrive det ud som et excel-ark. God forn�jelse.</p>
 			<input name="previous" type="submit" value="Forrige" />
-			<input name="next" type="submit" value="N�ste" />
+			<input name="next" type="submit" value="<?php e(t('Next')); ?>" />
 		</fieldset>
 
 		<ul class="options">
@@ -287,7 +287,7 @@ $status_accounts = $context->getAccount()->getList('status');
 			<fieldset>
 				<legend>Trin 6: �rets resultat</legend>
 			<?php if (count($context->getYearEnd()->getStatedActions('result_account_reset')) == 0): ?>
-				<p>�rets resultat skal overf�res til kapitalkontoen, s� dine konti er klar til n�ste �rs regnskab.</p>
+				<p>�rets resultat skal overf�res til kapitalkontoen, s� dine konti er klar til <?php e(t('Next')); ?> �rs regnskab.</p>
 				<input type="submit" value="Forrige" name="previous" />
 				<input type="submit" value="Gem" name="step_transfer_result" class="confirm" />
 			<?php else: ?>
@@ -295,7 +295,7 @@ $status_accounts = $context->getAccount()->getList('status');
 				<input type="submit" value="Forrige" name="previous" />
 				<input type="submit" name="step_reverse_result_account_reset" value="Tilbagef�r posterne" />
 
-				<input type="submit" name="next" value="N�ste" />
+				<input type="submit" name="next" value="<?php e(t('Next')); ?>" />
 			<?php endif; ?>
 
 			</fieldset>
@@ -311,7 +311,7 @@ $status_accounts = $context->getAccount()->getList('status');
 					<label><input type="radio" name="lock" value="0"<?php if ($context->getYear()->get('locked') == 0) echo ' checked="checked"'; ?> /> L�s ikke</label>
 				</div>
 				<input type="submit" name="previous" value="Forrige" />
-				<input type="submit" name="step_lock_year" value="N�ste" />
+				<input type="submit" name="step_lock_year" value="<?php e(t('Next')); ?>" />
 			</fieldset>
 		<?php
 	break;
@@ -349,7 +349,7 @@ endswitch;
 	<li>Overf�r poster til resultatkontoen. Der skal nok laves en tabel til det - s� kan det evt. ogs� fortrydes igen.</li>
 	<li>Viser resultatkontoen.</li>
 	<li>Der sp�rges om hvilken konto resultatet skal overf�res til - hvilket ofte vil v�re �rets resultat.</li>
-	<li>Det er det �rsafslutningen skal kunne, men n�ste �r skal s� kunne starte med f�lgende:
+	<li>Det er det �rsafslutningen skal kunne, men <?php e(t('Next')); ?> �r skal s� kunne starte med f�lgende:
 		<ul>
 			<li>Et nyt regnskab med samme kontoplan og indstillinger oprettes.</li>
 			<li>Der sp�rges om statuskonti skal overf�res til nye regnskab som primosaldo.</li>

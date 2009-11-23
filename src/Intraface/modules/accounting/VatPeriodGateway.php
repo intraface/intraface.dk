@@ -50,17 +50,17 @@ class Intraface_modules_accounting_VatPeriodGateway
         return array(
                 // halvï¿½rlig
                 0 => array(
-                    'name' => 'Halvårlig',
+                    'name' => 'Half-yearly',
                     'periods' => array(
                         // 1. halvï¿½r
                         1 => array(
-                            'name' => '1. halvår',
+                            'name' => '1st half year',
                             'date_from' => '01-01',
                             'date_to' => '06-30'
                         ),
                         // 2. halvï¿½r
                         2 => array(
-                            'name' => '2. halvår',
+                            'name' => '2nd half year',
                             'date_from' => '07-01',
                             'date_to' => '12-31'
                         )
@@ -68,29 +68,29 @@ class Intraface_modules_accounting_VatPeriodGateway
                 ),
                 // kvartalsvis
                 1 => array(
-                    'name' => 'Kvartalsvis',
+                    'name' => 'Quarterly',
                     'periods' => array(
                         // januarkvartal
                         1 => array(
-                            'name' => '1. kvartal',
+                            'name' => '1st quarter',
                             'date_from' => '01-01',
                             'date_to' => '03-31'
                         ),
                         // februarkvartal
                         2 => array(
-                            'name' => '2. kvartal',
+                            'name' => '2nd quarter',
                             'date_from' => '04-01',
                             'date_to' => '06-30'
                         ),
                         // februarkvartal
                         3 => array(
-                            'name' => '3. kvartal',
+                            'name' => '3rd quarter',
                             'date_from' => '07-01',
                             'date_to' => '09-30'
                         ),
                         // februarkvartal
                         4 => array(
-                            'name' => '4. kvartal',
+                            'name' => '4th quarter',
                             'date_from' => '10-01',
                             'date_to' => '12-31'
                         )

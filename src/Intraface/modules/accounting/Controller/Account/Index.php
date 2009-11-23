@@ -45,7 +45,7 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
     function getAccounts()
     {
-    	return $this->getAccount()->getList();
+    	return $this->getAccount()->getList('stated', true);
     }
 
     function getKernel()
@@ -76,7 +76,7 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
         $values['from_date'] = $year->get('from_date_dk');
         $values['to_date'] = $year->get('to_date_dk');
 
-        $accounts = $account->getList('stated', true);
+        $accounts = $this->getAccounts();
 
         $workbook = new Spreadsheet_Excel_Writer();
 
@@ -125,5 +125,45 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
         // Let's send the file
         $workbook->close();
+    }
+
+    function renderHtmlCreate()
+    {
+        $smarty = new k_Template(dirname(__FILE__) . '/../templates/account/edit.tpl.php');
+        return $smarty->render($this);
+    }
+
+    function postForm()
+    {
+        $year = new Year($this->getKernel());
+        $year->checkYear();
+
+        $account = new Account($year);
+
+        if (isset($_POST['vat_key']) && $_POST['vat_key'] != 0) {
+            $_POST['vat_percent'] = 25;
+        }
+
+        if ($id = $account->save($_POST)) {
+            return new k_SeeOther($this->url($id));
+        } else {
+            $values = $_POST;
+        }
+        return $this->render();
+        /*
+        if ($id = $this->getYear()->save($_POST)) {
+            return new k_SeeOther($this->url('../'));
+        } else {
+            $values = $_POST;
+            $values['from_date_dk'] = $_POST['from_date'];
+            $values['to_date_dk'] = $_POST['to_date'];
+            return $this->render();
+        }
+        */
+    }
+
+    function getValues()
+    {
+        return $this->body();
     }
 }

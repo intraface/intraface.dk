@@ -33,8 +33,6 @@ class Intraface_modules_accounting_Controller_Vat_Index extends k_Component
 
     function renderHtml()
     {
-        $allowed_periods = $module->getSetting('vat_periods');
-
         $year = new Year($this->getKernel());
         $year->checkYear();
 
@@ -52,12 +50,11 @@ class Intraface_modules_accounting_Controller_Vat_Index extends k_Component
         $vat_period = new VatPeriod($this->getYear());
 
         return $periods = $vat_period->getList();
-
     }
 
     function getAllowedPeriods()
     {
-        return $allowed_periods = $module->getSetting('vat_periods');
+        return $allowed_periods = $this->getKernel()->getModule('accounting')->getSetting('vat_periods');
     }
 
     function getPost()

@@ -20,19 +20,19 @@ class MainAccounting extends Intraface_Main
         $this->frontpage_index = 10;
 
         // Tilfï¿½j undermenu punkter.
-        $this->addSubMenuItem('accounting year', 'years.php');
-        $this->addSubMenuItem('daybook', 'daybook.php');
+        $this->addSubMenuItem('accounting year', 'year');
+        $this->addSubMenuItem('daybook', 'daybook');
         //$this->addSubMenuItem('state', 'state.php');
-        $this->addSubMenuItem('accounts', 'accounts.php');
-        $this->addSubMenuItem('vouchers', 'vouchers.php');
-        $this->addSubMenuItem('vat', 'vat_period.php', 'sub_access:vat_report');
-        $this->addSubMenuItem('end year', 'end.php', 'sub_access:endyear');
-        $this->addSubMenuItem('search', 'search.php');
+        $this->addSubMenuItem('accounts', 'account');
+        $this->addSubMenuItem('vouchers', 'voucher');
+        //$this->addSubMenuItem('vat', 'vat', 'sub_access:vat_report');
+        //$this->addSubMenuItem('end year', 'end', 'sub_access:endyear');
+        $this->addSubMenuItem('search', 'search');
         //$this->addSubMenuItem('settings', 'setting.php', 'sub_access:setting');
         //$this->addSubMenuItem('Hjï¿½lp', 'help.php');
 
         // Tilfï¿½j subaccess punkter
-        $this->addSubAccessItem('endyear', 'ï¿½rsafslutning');
+        $this->addSubAccessItem('endyear', 'Årsafslutning');
         $this->addSubAccessItem('vat_report', 'Momsopgivelse');
         $this->addSubAccessItem('setting', 'Indstillinger');
 
@@ -42,19 +42,19 @@ class MainAccounting extends Intraface_Main
 
         $this->addSetting('vat_periods',
             array(
-                // halvï¿½rlig
+                // halvårlig
                 0 => array(
-                    'name' => 'Halvårlig',
+                    'name' => 'Half-yearly',
                     'periods' => array(
                         // 1. halvï¿½r
                         1 => array(
-                            'name' => '1. halvår',
+                            'name' => '1st half year',
                             'date_from' => '01-01',
                             'date_to' => '06-30'
                         ),
                         // 2. halvï¿½r
                         2 => array(
-                            'name' => '2. halvår',
+                            'name' => '2nd half year',
                             'date_from' => '07-01',
                             'date_to' => '12-31'
                         )
@@ -62,29 +62,29 @@ class MainAccounting extends Intraface_Main
                 ),
                 // kvartalsvis
                 1 => array(
-                    'name' => 'Kvartalsvis',
+                    'name' => 'Quarterly',
                     'periods' => array(
                         // januarkvartal
                         1 => array(
-                            'name' => '1. kvartal',
+                            'name' => '1st quarter',
                             'date_from' => '01-01',
                             'date_to' => '03-31'
                         ),
                         // februarkvartal
                         2 => array(
-                            'name' => '2. kvartal',
+                            'name' => '2nd quarter',
                             'date_from' => '04-01',
                             'date_to' => '06-30'
                         ),
                         // februarkvartal
                         3 => array(
-                            'name' => '3. kvartal',
+                            'name' => '3rd quarter',
                             'date_from' => '07-01',
                             'date_to' => '09-30'
                         ),
                         // februarkvartal
                         4 => array(
-                            'name' => '4. kvartal',
+                            'name' => '4th quarter',
                             'date_from' => '10-01',
                             'date_to' => '12-31'
                         )
@@ -96,7 +96,7 @@ class MainAccounting extends Intraface_Main
         $this->addPreloadFile('Account.php');
         $this->addPreloadFile('Year.php');
         $this->addPreloadFile('Post.php');
-        //$this->addPreloadFile('PostDraft.php');
+        $this->addPreloadFile('YearEnd.php');
         $this->addPreloadFile('Voucher.php');
         $this->addPreloadFile('VoucherFile.php');
         $this->addPreloadFile('VatPeriod.php');
@@ -104,6 +104,6 @@ class MainAccounting extends Intraface_Main
 
     function getPath()
     {
-        return url('/core/restricted/module/accounting/');
+        return url('/core/restricted/module/accounting') . '/';
     }
 }

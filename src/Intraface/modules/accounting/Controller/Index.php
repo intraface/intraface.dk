@@ -13,6 +13,8 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
             return 'Intraface_modules_accounting_Controller_Account_Index';
         } elseif ($name == 'voucher') {
             return 'Intraface_modules_accounting_Controller_Voucher_Index';
+        } elseif ($name == 'search') {
+            return 'Intraface_modules_accounting_Controller_Search';
         }
     }
 

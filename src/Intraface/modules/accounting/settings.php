@@ -41,4 +41,3 @@ $_setting['accounting.balance_account_id_start'] = 0;
 $_setting['accounting.balance_account_id_end'] = 0;
 
 $_setting['accounting.capital_account_id'] = 0;
-?>

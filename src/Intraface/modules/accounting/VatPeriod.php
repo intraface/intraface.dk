@@ -16,10 +16,6 @@ class VatPeriod extends Intraface_Standard
 
     public function __construct($year_object, $id = 0)
     {
-        if (!is_object($year_object)) {
-            trigger_error('Vat::Vat skal have Year', E_USER_ERROR);
-        }
-
         $this->year  = $year_object;
         $this->id    = (int) $id;
         $this->error = new Intraface_Error;
