@@ -59,6 +59,12 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
         return $smarty->render($this);
     }
 
+    function t($phrase)
+    {
+        return $phrase;
+    }
+
+
     function getYearGateway()
     {
         return new Year($this->getKernel());

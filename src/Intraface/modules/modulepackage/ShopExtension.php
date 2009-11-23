@@ -19,7 +19,7 @@ class Intraface_modules_modulepackage_ShopExtension {
      * @var object debtor client
      */
     private $debtor;
-    
+
     /**
      * @var object onlinepayment client
      */
@@ -66,13 +66,13 @@ class Intraface_modules_modulepackage_ShopExtension {
             $this->shop = NULL;
             trigger_error('Unable to connect to the intranet maintenance webshop '.$e->getMessage(), E_USER_ERROR);
         }
-        
-        
+
+
         $this->debtor = new IntrafacePublic_Debtor_XMLRPC_Client(
             array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()),
             INTRAFACE_XMLRPC_DEBUG,
             $xmlrpc_debtor_url);
-            
+
         $this->onlinepayment = new IntrafacePublic_OnlinePayment_Client_XMLRPC(
             array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()),
             INTRAFACE_XMLRPC_DEBUG,
@@ -177,7 +177,7 @@ class Intraface_modules_modulepackage_ShopExtension {
         if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
-        
+
         if (!isset($this->shop)) {
             // should we provide an errormessage?
             return false;
@@ -238,9 +238,9 @@ class Intraface_modules_modulepackage_ShopExtension {
      */
     public function addPaymentToOrder($order_identifier, $postprocess)
     {
-        
+
         return $this->onlinepayment->saveOnlinePayment(
-            $order_identifier, 
+            $order_identifier,
             $postprocess->getTransactionNumber(),
             $postprocess->getTransactionStatus(),
             $postprocess->getPbsStatus(),
@@ -249,15 +249,15 @@ class Intraface_modules_modulepackage_ShopExtension {
         );
 
     }
-    
+
     /**
      * Returns order details from order identifier
-     * 
+     *
      * @param string $order_identifier
      * @return array
      */
     public function getOrderDetails($order_identification)
     {
         return $this->onlinepayment->getPaymentTarget($order_identification);
-    } 
+    }
 }
