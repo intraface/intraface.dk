@@ -2,7 +2,7 @@
 $items = $context->getItems();
 ?>
 
-<h1>Bogf�r kreditnota #<?php e($context->getModel()->get('number')); ?></h1>
+<h1>Bogfør kreditnota #<?php e($context->getModel()->get('number')); ?></h1>
 
 <ul class="options">
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
@@ -11,10 +11,10 @@ $items = $context->getItems();
 
 <?php if (!$context->getYear()->readyForState($context->getModel()->get('this_date'))): ?>
     <?php echo $context->getYear()->error->view(); ?>
-    <p>G� til <a href="<?php e($this->url('../../../../../accounting/')); ?>">regnskabet</a></p>
+    <p>Gå til <a href="<?php e($this->url('../../../../../accounting/')); ?>">regnskabet</a></p>
 <?php else: ?>
 
-    <p class="message">N�r du bogf�rer en kreditnota vil bel�bet bliver trukket fra debitorkontoen.</p>
+    <p class="message">Når du bogfører en kreditnota vil beløbet bliver trukket fra debitorkontoen.</p>
 
     <?php $context->getModel()->readyForState($context->getYear(), 'skip_check_products'); ?>
     <?php echo $context->getModel()->error->view(); ?>
@@ -38,7 +38,7 @@ $items = $context->getItems();
 
     <?php if ($context->getModel()->readyForState($context->getYear(), 'skip_check_products')): ?>
         <fieldset>
-            <legend>Oplysninger der bogf�res</legend>
+            <legend>Oplysninger der bogføres</legend>
             <table>
                 <tr>
                     <th>Bilagsnummer</th>
@@ -52,14 +52,14 @@ $items = $context->getItems();
                 </tr>
                 <?php if ($context->getModel()->isStated()): ?>
                     <tr>
-                        <th>Bogf�rt</th>
+                        <th>Bogført</th>
                         <td>
                                 <?php e($context->getModel()->get("dk_date_stated")); ?>
                         </td>
                     </tr>
                 <?php else: ?>
                     <tr>
-                        <th>Bogf�r p� dato</th>
+                        <th>Bogfør på dato</th>
                         <td>
                             <input type="text" name="date_state" value="<?php e($context->getModel()->get("dk_this_date")); ?>" />
                         </td>
@@ -68,15 +68,13 @@ $items = $context->getItems();
             </table>
         </fieldset>
 
-
-
         <table class="stripe">
             <thead>
                 <tr>
                     <th>Varenr.</th>
                     <th>Beskrivelse</th>
-                    <th>Bel�b</th>
-                    <th>Krediteres p�</th>
+                    <th>Beløb</th>
+                    <th>Krediteres på</th>
                 </tr>
             </thead>
             <tbody>

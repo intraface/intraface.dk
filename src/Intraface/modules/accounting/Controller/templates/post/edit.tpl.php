@@ -1,7 +1,7 @@
 <?php
 $values = $post->get();
 ?>
-<h1>Post p� bilag #<?php e($post->voucher->get('number')); ?></h1>
+<h1>Post på bilag #<?php e($post->voucher->get('number')); ?></h1>
 
 <form method="post" action="<?php e(url()); ?>">
     <input type="hidden" name="id" value="<?php e($post->get('id')); ?>" />
@@ -32,7 +32,7 @@ $values = $post->get();
                     </td>
                     <td>
                         <select name="account" tabindex="3">
-                            <option value="">V�lg</option>
+                            <option value=""><?php e(t('Choose')); ?></option>
                             <?php
                                 foreach ($account->getList() AS $a):
                                     echo '<option value="'.$a['number'].'"';

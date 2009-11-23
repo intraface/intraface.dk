@@ -7,5 +7,5 @@
 <?php if (count($context->getYear()->getList()) == 0): ?>
     <p>Du skal <a href="<?php e($context->url('year', array('create'))); ?>">oprette et regnskab</a> for at komme i gang med at bruge regnskabsmodulet.</p>
 <?php else: ?>
-    <p><a href="<?php e($context->url('year')); ?>">Vælg et regnskab</a> du vil se eller ændre i.</p>
+    <p><a href="<?php e($context->url('year')); ?>">VÃ¦lg et regnskab</a> du vil se eller Ã¦ndre i.</p>
 <?php endif; ?>

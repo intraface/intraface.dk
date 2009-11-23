@@ -1,8 +1,8 @@
 <h1>Primosaldo <?php e($year->get('label')); ?></h1>
 
 <ul class="options">
-    <li><a href="year.php?id=<?php e($year->get('id')); ?>">G� tilbage til regnskabs�ret</a></li>
-    <li><a class="edit" href="primosaldo_edit.php?id=<?php e($year->get('id')); ?>">Ret</a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
+    <li><a class="edit" href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
 </ul>
 
 <table>
@@ -48,12 +48,12 @@
 
 <?php if ($year->get('last_year_id') > 0): ?>
 
-<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>">
+<form method="post" action="<?php e(url()); ?>">
     <input type="hidden" name="id" value="<?php e($year->get('id')); ?>" />
     <fieldset>
         <legend>Oplysninger til primosaldo</legend>
 
-        <p>Du kan hente primobalancen fra sidste �rs regnskab. Du skal bare v�re opm�rksom p�, at tallene i din nuv�rende primobalance overskrives - og at handlingen ikke kan fortrydes.</p>
+        <p>Du kan hente primobalancen fra sidste års regnskab. Du skal bare være opmærksom på, at tallene i din nuværende primobalance overskrives - og at handlingen ikke kan fortrydes.</p>
         <div>
             <input type="submit" name="get_last_year" value="Hent saldoen fra sidste �rs regnskab" onclick="return confirm('V�r opm�rksom p� at denne funktion stadig er under udvikling, og sikkert ikke virker helt efter hensigten. \n\nEr du sikker p�, at du vil opdatere din primobalance? Handlingen kan ikke fortrydes!')" />
         </div>

@@ -20,7 +20,7 @@ $values = $context->getValues();
 		<div class="formrow">
 			<label for="account_type">Type</label>
 			<select name="type_key" id="account_type">
-				<option value="">V�lg</option>
+				<option value=""><?php e(t('Choose')); ?></option>
 				<?php foreach ($context->getAccount()->types as $type_key=>$type) { ?>
 					<option value="<?php e($type_key); ?>"<?php if (!empty($values['type_key']) AND $type_key == $values['type_key']) { echo ' selected="selected"'; } ?>><?php e(__($type)); ?></option>
 				<?php } ?>
@@ -55,7 +55,7 @@ $values = $context->getValues();
 	<?php endif; ?>
 
 	<fieldset id="sum_fieldset">
-	<legend>Summen p� kontoen udregnes p� f�lgende konti</legend>
+	<legend>Summen på kontoen udregnes på følgende konti</legend>
 		<div>
 			<label for="sum_from">Fra kontonummer</label>
 			<input type="text" name="sum_from" id="sum_from" value="<?php if (!empty($values['sum_from'])) e($values['sum_from']); ?>" />
@@ -64,7 +64,7 @@ $values = $context->getValues();
 		</div>
 	</fieldset>
 	<div>
-		<input type="submit" value="Gem" />
-		<a href="<?php e(url('../')); ?>">Fortryd</a>
+		<input type="submit" value="<?php e(t('Save')); ?>" />
+		<a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
 	</div>
 </form>

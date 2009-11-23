@@ -1,11 +1,11 @@
 <h1><?php e($context->getAccount()->get('number')); ?>: <?php e($context->getAccount()->get('name')); ?></h1>
 
 <ul class="options">
-	<li><a href="<?php e(url(null, array('edit'))); ?>">Ret</a></li>
-	<li><a href="<?php e(url('../')); ?>">Luk</a></li>
+	<li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
+	<li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
-<!-- F�lgende b�r vises her, men kunne skjules med en indstilling
+<!-- Følgende bør vises her, men kunne skjules med en indstilling
 <table>
 	<tr>
 		<th rowspan="2">Beskrivelse</th>
@@ -51,5 +51,5 @@
 	</table>
 
 <?php } else { ?>
-	<p>Der er endnu ikke bogf�rt nogle poster p� denne konto.</p>
+	<p>Der er endnu ikke bogført nogle poster på denne konto.</p>
 <?php } // else ?>

@@ -5,12 +5,12 @@ $values = $context->getYear()->get();
 <h1>Regnskab <?php e($context->getYear()->get('label')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="<?php e(url('edit')); ?>">Ret</a></li>
-    <li><a class="setting" href="<?php e('../settings'); ?>">Indstillinger</a></li>
-    <li><a class="edit" href="<?php e(url('../')); ?>">Close</a></li>
+    <li><a class="edit" href="<?php e(url('edit')); ?>"><?php e(t('Edit')); ?></a></li>
+    <li><a class="setting" href="<?php e('../settings'); ?>"><?php e(t('Settings')); ?></a></li>
+    <li><a class="edit" href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
-<form action="<?php e(url('./')); ?>" method="post">
+<form action="<?php e(url(null)); ?>" method="post">
 
     <?php echo $context->getYear()->error->view(); ?>
 
@@ -24,7 +24,7 @@ $values = $context->getYear()->get();
     </fieldset>
 <?php endif; ?>
 <table>
-    <caption>Oplysninger om regnskabsæret</caption>
+    <caption>Oplysninger om regnskabsåret</caption>
     <tr>
         <th>Navn</th>
         <td><?php e($values['label']); ?></td>
@@ -81,7 +81,7 @@ $values = $context->getYear()->get();
 <?php if (!$context->getAccount()->anyAccounts()): ?>
     <fieldset>
         <legend>Kontoplan</legend>
-        <p>Du skal oprette en kontoplan for æret. Du kan færst begynde at gemme poster i kassekladden, nær du har oprettet en kontoplan.</p>
+        <p>Du skal oprette en kontoplan for æret. Du kan først begynde at gemme poster i kassekladden, når du har oprettet en kontoplan.</p>
 
         <div>
             <input type="submit" name="manual_accountplan" value="Jeg vil oprette kontoplanen manuelt" class="confirm" />
@@ -92,9 +92,9 @@ $values = $context->getYear()->get();
         </div>
         <?php if (count($context->getYearGateway()->getList()) - 1 > 0): // der skal trækkes en fra, for man kan ikke oprette kontoplaner fra sig selv ?>
         <div>
-            <label for="accountplan_years">Jeg vil overfære kontoplanen fra</label>
+            <label for="accountplan_years">Jeg vil overføre kontoplanen fra</label>
             <select name="accountplan_year" id="accountplan_years">
-                <option value="">Vælg...</option>
+                <option value=""><?php e(t('Choose')); ?></option>
                 <?php
                     foreach ($context->getYearGateway()->getList() as $y) {
                         if ($y['id'] == $context->getYear()->get('id')) continue;

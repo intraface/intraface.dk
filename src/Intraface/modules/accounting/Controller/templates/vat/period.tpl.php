@@ -3,22 +3,22 @@
 <?php echo $context->getVatPeriod()->error->view(); ?>
 
 <?php if ($context->getYear()->get('vat') == 0): ?>
-	<p class="message">Dit regnskab bruger ikke moms, s� du kan ikke se momsangivelserne.</p>
+	<p class="message">Dit regnskab bruger ikke moms, så du kan ikke se momsangivelserne.</p>
 <?php elseif (count($context->getPost()->getList('draft')) > 0): ?>
-	<p class="warning">Der er stadig poster i kassekladden. De b�r bogf�res, inden du opg�r momsen. <a href="daybook.php">G� til kassekladden</a>.</p>
+	<p class="warning">Der er stadig poster i kassekladden. De bør bogføres, inden du opgør momsen. <a href="daybook.php">G� til kassekladden</a>.</p>
 <?php elseif (!$context->getYear()->vatAccountIsSet()): ?>
 	<p class="message-dependent">Der er ikke angivet nogen momskonti. Du kan angive momskonti under <a href="setting.php">indstillingerne</a>.</p>
 <?php elseif (!$context->getVatPeriod()->periodsCreated()): ?>
 	<div class="message">
-		<p><strong>Moms</strong>. P� denne side kan du f� hj�lp til at afregne moms. Inden du g�r noget, skal du s�rge for at alle bel�bene for den p�g�ldende periode, er tastet ind i systemet.</p>
+		<p><strong>Moms</strong>. På denne side kan du få hjælp til at afregne moms. Inden du gør noget, skal du s�rge for at alle bel�bene for den p�g�ldende periode, er tastet ind i systemet.</p>
 	</div>
 
-	<p class="message-dependent">Der er ikke oprettet nogen momsperioder for dette �r.</p>
+	<p class="message-dependent">Der er ikke oprettet nogen momsperioder for dette år.</p>
 	<form action="<?php e(url()); ?>" method="post">
 		<fieldset>
 			<label for="vat_period_key">Hvor ofte skal du afregne moms</label>
 			<select name="vat_period_key" id="vat_period_key">
-			<option value="">V�lg</option>
+			<option value=""><?php e(t('Choose')); ?></option>
 			<?php foreach ($context->getAllowedPeriods() AS $key=>$value): ?>
 				<option value="<?php e($key); ?>"<?php if ($key == $context->getYear()->getSetting('vat_period')) echo ' selected="selected"'; ?>><?php e($value['name']); ?></option>
 			<?php endforeach; ?>

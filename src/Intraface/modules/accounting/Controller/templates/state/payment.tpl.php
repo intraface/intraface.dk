@@ -6,7 +6,7 @@
 
 <?php if (!$year->readyForState($payment->get('payment_date'))): ?>
     <?php echo $year->error->view(); ?>
-    <p>G� til <a href="<?php e($accounting_module->getPath().'years.php'); ?>">regnskabet</a></p>
+    <p>Gå til <a href="<?php e($accounting_module->getPath().'years.php'); ?>">regnskabet</a></p>
 <?php elseif ($payment->isStated()): ?>
     <p><?php e(t('the payment is alredy stated')); ?>. <a href="<?php e($accounting_module->getPath()).'voucher.php?id='.$payment->get('voucher_id'); ?>"><?php e(t('see the voucher')); ?></a>.</p>
 <?php else: ?>
@@ -16,7 +16,7 @@
     echo $payment->error->view();
     ?>
 
-    <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+    <form action="<?php e(url()); ?>" method="post">
     <input type="hidden" value="<?php e($object->get('id')); ?>" name="id" />
     <input type="hidden" value="<?php e($for); ?>" name="for" />
     <input type="hidden" value="<?php e($payment->get('id')); ?>" name="payment_id" />
@@ -39,7 +39,7 @@
     </fieldset>
 
     <fieldset>
-        <legend>Oplysninger der bogf�res</legend>
+        <legend>Oplysninger der bogføres</legend>
 
         <div class="formrow">
             <label for="voucher_number">Bilagsnummer</label>
@@ -47,11 +47,11 @@
         </div>
 
         <div class="formrow">
-            <label for="date_stated">Bogf�r p� dato</label>
+            <label for="date_stated">Bogfør på dato</label>
             <input type="text" name="date_state" id="date_stated" value="<?php e($payment->get("dk_payment_date")); ?>" />
         </div>
 
-        <p>Bel�bet vil blive trukket fra debitorkontoen og blive sat p� kontoen, du v�lger herunder:</p>
+        <p>Beløbet vil blive trukket fra debitorkontoen og blive sat på kontoen, du vælger herunder:</p>
 
         <div class="formrow">
             <label for="state_account"><?php e(__("state on account")); ?></label>
@@ -63,7 +63,7 @@
             $accounts =  $account->getList('finance');
             ?>
             <select id="state_account" name="state_account_id">
-                <option value="">V�lg...</option>
+                <option value=""><?php e(t('Choose')); ?></option>
                 <?php
                 $x = 0;
                 $default_account_id = $kernel->setting->get('intranet', 'payment.state.'.$payment->get('type').'.account');
@@ -83,8 +83,8 @@
 
     <?php  if ($payment->readyForState()): ?>
         <div>
-            <input type="submit" value="Bogf�r" /> eller
-            <a href="view.php?id=<?php e($object->get('id')); ?>">fortryd</a>
+            <input type="submit" value="<?php e(t('State')); ?>" />
+            <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
         </div>
     <?php endif;  ?>
     </form>

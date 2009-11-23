@@ -1,7 +1,7 @@
-<h1><?php e(t('state reminder')) ?> #<?php e($reminder->get('number')); ?></h1>
+<h1><?php e(t('State reminder')) ?> #<?php e($reminder->get('number')); ?></h1>
 
 <ul class="options">
-    <li><a href="reminder.php?id=<?php e($reminder->get("id")); ?>"><?php e(t('close', 'common')) ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')) ?></a></li>
 </ul>
 
 <?php if (!$year->readyForState($reminder->get('this_date'))): ?>
@@ -29,7 +29,7 @@
     </fieldset>
 
     <?php  if ($reminder->readyForState($year)): ?>
-        <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+        <form action="<?php e(url()); ?>" method="post">
         <input type="hidden" value="<?php e($reminder->get('id')); ?>" name="id" />
         <fieldset>
             <legend><?php e(t('Information to state')); ?></legend>
@@ -79,7 +79,7 @@
         </fieldset>
         <div>
             <input type="submit" value="<?php e(t('State')); ?>" /> <?php e(t('or')); ?>
-            <a href="view.php?id=<?php e($value['id']); ?>"><?php e(t('cancel')); ?></a>
+            <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
         </div>
     <?php endif;  ?>
     </form>

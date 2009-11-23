@@ -1,4 +1,4 @@
-<h1>Bilag #<?php e($context->getVoucher()->get('number')); ?> p� <?php e($context->getYear()->get('label')); ?></h1>
+<h1>Bilag #<?php e($context->getVoucher()->get('number')); ?> på <?php e($context->getYear()->get('label')); ?></h1>
 
 <ul class="options">
 	<li><a class="edit" href="<?php e(url(null, array('edit'))); ?>"><?php e(__('Edit')); ?></a></li>
@@ -12,7 +12,7 @@
 <?php endif; ?>
 
 <?php if (count($context->getPosts()) == 0): ?>
-	<p class="warning">Der er ikke nogen poster p� bilaget. <a href="post_edit.php?voucher_id=<?php e($context->getVoucher()->get('id')); ?>">Indtast poster</a>.</p>
+	<p class="warning">Der er ikke nogen poster på bilaget. <a href="<?php e(url('../post?create', array('voucher_id' => $context->getVoucher()->get('id')))); ?>">Indtast poster</a>.</p>
 <?php else: ?>
 	<form action="<?php e(url(null)); ?>" method="post">
 	<table>
@@ -41,7 +41,7 @@
 				<a class="edit" href="<?php e(url('post/'. $post['id'] . '/edit')); ?>">Ret</a>
 				<a class="delete" href="<?php e(url('post/'.$post['id'], array('delete'))); ?>">Slet</a>
 				<?php else: ?>
-				Bogf�rt
+				Bogført
 				<?php endif; ?>
 			</td>
 		</tr>
@@ -61,13 +61,13 @@
 	<p><a href="<?php e(url('post', array('create'))); ?>">Indtast poster</a></p>
 
 	<?php if (round($context->getVoucher()->get('saldo'), 2) <> 0.00): ?>
-		<p class="error">Bilaget stemmer ikke. Der er en difference p� <?php e(round($context->getVoucher()->get('saldo'), 2)); ?> kroner.</p>
+		<p class="error">Bilaget stemmer ikke. Der er en difference på <?php e(round($context->getVoucher()->get('saldo'), 2)); ?> kroner.</p>
 	<?php elseif (isset($not_all_stated)): ?>
 	<form action="<?php e(url(null)); ?>" method="post">
 		<input name="id" type="hidden" value="<?php e($context->getVoucher()->get('id')); ?>" />
 		<fieldset>
-			<legend>Bogf�r bilaget</legend>
-			<input type="submit" name="state" value="Bogf�r" />
+			<legend>Bogfør bilaget</legend>
+			<input type="submit" name="state" value="Bogfør" />
 		</fieldset>
 	</form>
 	<?php endif; ?>
@@ -109,5 +109,5 @@
         $context->getFilehandlerHtml()->printFormUploadTag('file_id', 'new_file', 'choose_file');
         ?>
 	</fieldset>
-	<p><input type="submit" value="Upload" /></p>
+	<p><input type="submit" value="<?php e(t('Upload')); ?>" /></p>
 </form>

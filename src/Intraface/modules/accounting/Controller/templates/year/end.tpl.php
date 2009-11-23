@@ -4,13 +4,13 @@
 <?php /*if (!$year->get('locked') == 1): ?>
 	<p class="warning">�ret er lukket for bogf�ring. Du kan l�se det op under <a href="year_edit.php<?php e($context->getYear()->get('id')); ?>">�ret</a>.</p>
 <?php */ if (!$context->getYear()->isSettingsSet()): ?>
-	<p class="error">Kontoplanen er ikke delt op i resultatopg�relse og balance, eller der er ikke valgt en kapitalkonto. <a href="setting.php">G� til indstillingerne</a>.</p>
+	<p class="error">Kontoplanen er ikke delt op i resultatopgørelse og balance, eller der er ikke valgt en kapitalkonto. <a href="<?php e(url('../../../settings')); ?>">Gå til indstillingerne</a>.</p>
 <?php elseif (count($context->getPost()->getList('draft')) > 0): ?>
-	<p class="warning">Der er stadig poster i kassekladden. De skal bogf�res, f�r du kan afslutte �ret. <a href="daybook.php">G� til kassekladden</a>.</p>
+	<p class="warning">Der er stadig poster i kassekladden. De skal bogføres, før du kan afslutte året. <a href="<?php e(url('../../../daybook')); ?>">Gå til kassekladden</a>.</p>
 <?php elseif ($context->getYear()->get('vat') == 1 AND count($context->getVatPeriod()->getList()) == 0): ?>
-	<p class="warning">Du har ikke oprettet nogen momsperioder. <a href="vat_period.php">Opret perioder</a>.</p>
+	<p class="warning">Du har ikke oprettet nogen momsperioder. <a href="<?php e(url('../vat')); ?>">Opret perioder</a>.</p>
 <?php elseif (!$context->getYear()->isBalanced()): ?>
-	<p class="error">Balancen for �ret er <?php e(amountToOutput($context->getYear()->get('year_saldo'))); ?>. I et dobbelt bogholderi skal saldoen altid v�re 0, for ellers er der ikke er bogf�rt lige meget p� debet og credit. Du kan f�rst lave �rsafslutning n�r regnskabet stemmer. <a href="daybook.php">G� til kassekladden</a>.</p>
+	<p class="error">Balancen for året er <?php e(amountToOutput($context->getYear()->get('year_saldo'))); ?>. I et dobbelt bogholderi skal saldoen altid være 0, for ellers er der ikke er bogført lige meget på debet og credit. Du kan først lave årsafslutning når regnskabet stemmer. <a href="<?php e(url('../../../daybook')); ?>">Gå til kassekladden</a>.</p>
 <?php else: ?>
 
 
@@ -24,24 +24,26 @@ switch($context->getYearEnd()->get('step') + 1):
 		?>
 
 	<div class="message">
-		<p><strong>�rsafslutning</strong>. Her kan du f�lge en guide til at afslutte dit �rsregnskab.</p>
+		<p><strong>Årsafslutning</strong>. Her kan du følge en guide til at afslutte dit årsregnskab.</p>
 	</div>
 		<fieldset>
-			<legend>Trin 1: Sikre sig at alle poster er bogf�rt</legend>
-			<p>Det f�rste du skal g�re, er at kigge en ekstra gang p� alle dine bilag.</p>
+			<legend>Trin 1: Sikre sig at alle poster er bogført</legend>
+			<p>Det første du skal gøre, er at kigge en ekstra gang på alle dine bilag.</p>
 			<ul>
-				<li>Er alle bilag bogf�rt - fakturaer, indk�b, kreditnotaer og rykkere?</li>
-				<li>Har du bogf�rt alle afskrivninger?</li>
+				<li>Er alle bilag bogført - fakturaer, indkøb, kreditnotaer og rykkere?</li>
+				<li>Har du bogført alle afskrivninger?</li>
 				<li>Har du afstemt banken og kassen?</li>
 			</ul>
 
 
 		<?php if (!$context->getYear()->isStated('invoice', $context->getYear()->get('from_date'), $context->getYear()->get('to_date'))): ?>
-			<p class="warning">Alle fakturaer i perioden er ikke bogf�rt. <a href="/modules/debtor/list.php?type=invoice&amp;status=-1&amp;not_stated=true&amp;from_date=<?php e($context->getYear()->get('from_date_dk')) ?>&amp;to_date=<?php e($context->getYear()->get('to_date_dk')); ?>">G� til ikke bogf�rte fakturaer</a>.</p>
+			<p class="warning">Alle fakturaer i perioden er ikke bogført.
+			<a href="/modules/debtor/list.php?type=invoice&amp;status=-1&amp;not_stated=true&amp;from_date=<?php e($context->getYear()->get('from_date_dk')) ?>&amp;to_date=<?php e($context->getYear()->get('to_date_dk')); ?>">Gå til ikke bogførte fakturaer</a>.</p>
 		<?php endif; ?>
 
 		<?php if (!$context->getYear()->isStated('credit_note', $context->getYear()->get('from_date'), $context->getYear()->get('to_date'))): ?>
-			<p class="warning">Alle kreditnotaer i perioden er ikke bogf�rt. <a href="/modules/debtor/list.php?type=credit_note&amp;status=-1&amp;not_stated=true&amp;from_date=<?php e($context->getYear()->get('from_date_dk')); ?>&amp;to_date=<?php e($context->getYear()->get('to_date_dk')); ?>">G� til ikke bogf�rte kreditnotaer</a>.</p>
+			<p class="warning">Alle kreditnotaer i perioden er ikke bogført.
+			<a href="/modules/debtor/list.php?type=credit_note&amp;status=-1&amp;not_stated=true&amp;from_date=<?php e($context->getYear()->get('from_date_dk')); ?>&amp;to_date=<?php e($context->getYear()->get('to_date_dk')); ?>">G� til ikke bogf�rte kreditnotaer</a>.</p>
 		<?php endif; ?>
 
 		<?php
@@ -66,14 +68,14 @@ switch($context->getYearEnd()->get('step') + 1):
 		// her skal resultatopg�relsen gemmes.
 		?>
 		<fieldset>
-			<legend>Trin 2: Gem resultatopg�relsen</legend>
+			<legend>Trin 2: Gem resultatopgørelsen</legend>
 			<?php if (count($context->getYearEnd()->getStatedActions('operating_reset')) == 0): ?>
 			<input type="submit" name="previous" value="Forrige" />
 			<input type="submit" name="step_save_result" value="Gem resultatopg�relsen" class="confirm" />
 			<?php else: ?>
-				<p>Resultatopg�relsen er allerede gemt. Du kan f�re posterne tilbage, hvis du vil gemme igen.</p>
+				<p>Resultatopgørelsen er allerede gemt. Du kan føre posterne tilbage, hvis du vil gemme igen.</p>
 				<input type="submit" name="previous" value="Forrige" />
-				<input type="submit" name="step_reverse_result_reset" value="Tilbagef�r posterne" class="confirm" />
+				<input type="submit" name="step_reverse_result_reset" value="Tilbagefør posterne" class="confirm" />
 				<input type="submit" name="next" value="<?php e(t('Next')); ?>" class="confirm" />
 			<?php endif; ?>
 		</fieldset>
@@ -87,8 +89,8 @@ switch($context->getYearEnd()->get('step') + 1):
 
 		<?php if (count($context->getYearEnd()->getStatement('operating')) == 0): ?>
 			<fieldset>
-			<legend>Trin 3: Poster overf�res til resultatopg�relseskontoen</legend>
-			<p class="warning">Du er endnu ikke helt klar til dette trin, for resultatopg�relsen er ikke gemt.</p>
+			<legend>Trin 3: Poster overføres til resultatopgørelseskontoen</legend>
+			<p class="warning">Du er endnu ikke helt klar til dette trin, for resultatopgørelsen er ikke gemt.</p>
 			<input type="submit" value="Forrige" name="previous" />
 			</fieldset>
 		<?php else: ?>
@@ -96,14 +98,14 @@ switch($context->getYearEnd()->get('step') + 1):
 $status_accounts = $context->getAccount()->getList('status');
 ?>
 
-	<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+	<form action="<?php e(url()); ?>" method="post">
 		<fieldset>
-			<legend>Trin 3: Poster overf�res til resultatopg�relseskontoen</legend>
-			<p>Her kan du automatisk overf�re alle poster fra driftskonti til resultatopg�relsen. Derved nulstilles alle driftskonti. Lad v�re at trykke p� knappen, hvis du ikke er helt sikker p�, hvad du g�r.</p>
+			<legend>Trin 3: Poster overføres til resultatopgørelseskontoen</legend>
+			<p>Her kan du automatisk overføre alle poster fra driftskonti til resultatopgørelsen. Derved nulstilles alle driftskonti. Lad være at trykke på knappen, hvis du ikke er helt sikker på, hvad du gør.</p>
 			<div class="formrow">
-			<label for="result_account">Poster overf�res til</label>
+			<label for="result_account">Poster overføres til</label>
 			<select id="result_account" name="result_account_id">
-				<option value="">V�lg</option>
+				<option value=""><?php e(t('Choose')); ?></option>
 				<?php foreach ($status_accounts as $a) { ?>
 					<option value="<?php e($a['id']); ?>"<?php if ($context->getYear()->getSetting('result_account_id')==$a['id']) { echo ' selected="selected"'; } ?>><?php e($a['number']); ?> <?php e($a['name']); ?></option>
 				<?php } ?>
@@ -112,7 +114,7 @@ $status_accounts = $context->getAccount()->getList('status');
 
 			<div>
 				<input type="submit" name="previous" value="Forrige" />
-				<input type="submit" name="step_result" value="Overf�r poster" class="confirm" />
+				<input type="submit" name="step_result" value="Overfør poster" class="confirm" />
 			</div>
 		</fieldset>
 	</form>
@@ -131,7 +133,7 @@ $status_accounts = $context->getAccount()->getList('status');
 		<tbody>
 		<?php foreach ($context->getAccount()->getList('drift', true) AS $a): ?>
 			<tr>
-				<td><a href="account.php?id=<?php e($a['id']); ?>"><?php e($a['number']); ?></a></td>
+				<td><a href="<?php e(url('../../../../account/' . $a['id'])); ?>"><?php e($a['number']); ?></a></td>
 				<td><?php e($a['name']); ?></td>
 				<td><?php e(amountToOutput($a['debet'])); ?></td>
 				<td><?php e(amountToOutput($a['credit'])); ?></td>
@@ -148,7 +150,7 @@ $status_accounts = $context->getAccount()->getList('status');
 		// her skal statusopg�relsen gemmes.
 		?>
 		<fieldset>
-			<legend>Trin 4: Gem statusopg�relsen</legend>
+			<legend>Trin 4: Gem statusopgørelsen</legend>
 			<input type="submit" name="previous" value="Forrige" />
 			<input type="submit" name="step_save_balance" value="Gem balancen" class="confirm" />
 		</fieldset>
@@ -164,8 +166,8 @@ $status_accounts = $context->getAccount()->getList('status');
 		if (count($result_statements) == 0 OR count($balance_statements) == 0):
 			?>
 			<fieldset>
-			<legend>Trin 5: �rsregnskabet</legend>
-			<p class="warning">Du er ikke helt klar til dette trin endnu, for �rsregnskabet er endnu ikke gemt.</p>
+			<legend>Trin 5: Årsregnskabet</legend>
+			<p class="warning">Du er ikke helt klar til dette trin endnu, for årsregnskabet er endnu ikke gemt.</p>
 			<input name="previous" type="submit" value="Forrige" />
 			</fieldset>
 
@@ -173,22 +175,22 @@ $status_accounts = $context->getAccount()->getList('status');
 		else:
 		?>
 		<fieldset>
-			<legend>Trin 5: �rsregnskabet</legend>
-			<p>�rsregnskabet er f�rdig. Du kan se det nedenunder - og du kan skrive det ud som et excel-ark. God forn�jelse.</p>
+			<legend>Trin 5: Årsregnskabet</legend>
+			<p>Årsregnskabet er færdig. Du kan se det nedenunder - og du kan skrive det ud som et excel-ark. God fornøjelse.</p>
 			<input name="previous" type="submit" value="Forrige" />
 			<input name="next" type="submit" value="<?php e(t('Next')); ?>" />
 		</fieldset>
 
 		<ul class="options">
-			<li><a class="excel" href="end_excel.php">Excel</a></li>
+			<li><a class="excel" href="<?php e(url(null) . '.xls'); ?>">Excel</a></li>
 		</ul>
 		<table>
-			<caption>Resultatopg�relse</caption>
+			<caption>Resultatopgørelse</caption>
 			<thead>
 				<tr>
 					<th>Kontonummer</th>
 					<th>Konto</th>
-					<th>Bel�b</th>
+					<th>Beløb</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -210,7 +212,7 @@ $status_accounts = $context->getAccount()->getList('status');
 				<tr>
 					<th>Kontonummer</th>
 					<th>Konto</th>
-					<th>Bel�b</th>
+					<th>Beløb</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -285,13 +287,13 @@ $status_accounts = $context->getAccount()->getList('status');
 		?>
 
 			<fieldset>
-				<legend>Trin 6: �rets resultat</legend>
+				<legend>Trin 6: Årets resultat</legend>
 			<?php if (count($context->getYearEnd()->getStatedActions('result_account_reset')) == 0): ?>
-				<p>�rets resultat skal overf�res til kapitalkontoen, s� dine konti er klar til <?php e(t('Next')); ?> �rs regnskab.</p>
+				<p>Årets resultat skal overføres til kapitalkontoen, så dine konti er klar til <?php e(t('Next')); ?> års regnskab.</p>
 				<input type="submit" value="Forrige" name="previous" />
 				<input type="submit" value="Gem" name="step_transfer_result" class="confirm" />
 			<?php else: ?>
-				<p>�rets resultat er allerede nulstillet. Du kan f�re posterne tilbage, hvis du vil gemme igen.</p>
+				<p>Årets resultat er allerede nulstillet. Du kan føre posterne tilbage, hvis du vil gemme igen.</p>
 				<input type="submit" value="Forrige" name="previous" />
 				<input type="submit" name="step_reverse_result_account_reset" value="Tilbagef�r posterne" />
 
@@ -304,8 +306,8 @@ $status_accounts = $context->getAccount()->getList('status');
 	case 7:
 		?>
 			<fieldset>
-			<legend>Trin 7: L�s �ret?</legend>
-				<p>Efter en �rsafslutning kan det v�re en god ide at l�se �ret, s� der ikke l�ngere kan bogf�res i det.</p>
+			<legend>Trin 7: Lås året?</legend>
+				<p>Efter en årsafslutning kan det være en god ide at låse året, så der ikke længere kan bogføres i det.</p>
 				<div>
 					<label><input type="radio" name="lock" value="1" <?php if ($context->getYear()->get('locked') == 1) echo ' checked="checked"'; ?>/> L�s</label>
 					<label><input type="radio" name="lock" value="0"<?php if ($context->getYear()->get('locked') == 0) echo ' checked="checked"'; ?> /> L�s ikke</label>
@@ -322,7 +324,7 @@ $status_accounts = $context->getAccount()->getList('status');
 			<fieldset>
 				<legend>Trin 8: Fyraften</legend>
 				<p>Det er godt arbejde. Nu har du fortjent en pause. H�ber ikke det var for vanskeligt. Vi h�rer naturligvis altid gerne om dine oplevelser med programmet, s� vi kan forbedre det mest muligt.</p>
-				<p><a class="excel" href="end_excel.php">Hent �rsregnskabet i et regneark</a></p>
+				<p><a class="excel" href="<?php e(url(null) . '.xls'); ?>">Hent årsregnskabet i et regneark</a></p>
 				<input type="submit" value="Forrige" name="previous" />
 			</fieldset>
 		<?php

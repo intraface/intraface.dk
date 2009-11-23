@@ -2,7 +2,7 @@
 $value = $context->getValues();
 ?>
 
-<h1>Rediger bilag #<?php e($context->getVoucher()->get('number')); ?> på <?php e($context->getYear()->get('label')); ?></h1>
+<h1>Rediger bilag #<?php e($context->getVoucher()->get('number')); ?> pï¿½ <?php e($context->getYear()->get('label')); ?></h1>
 
 <?php echo $context->getVoucher()->error->view(); ?>
 
@@ -29,8 +29,8 @@ $value = $context->getValues();
 	</fieldset>
 
 	<div>
-		<input type="submit" value="Gem" />
-		<a href="<?php e(url('../')); ?>">fortryd</a>
+		<input type="submit" value="<?php e(t('Save')); ?>" />
+		<a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
 	</div>
 
 </form>

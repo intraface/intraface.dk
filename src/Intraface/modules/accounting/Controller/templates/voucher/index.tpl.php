@@ -1,4 +1,3 @@
-
 <h1>Bilag</h1>
 
 <ul class="options">

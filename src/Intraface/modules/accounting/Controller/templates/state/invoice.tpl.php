@@ -3,7 +3,7 @@ $accounting_module = $context->getModule();
 $items = $context->getItems();
 ?>
 
-<h1>Bogf�r faktura #<?php e($context->getModel()->get('number')); ?></h1>
+<h1>Bogfør faktura #<?php e($context->getModel()->get('number')); ?></h1>
 
 <ul class="options">
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
@@ -12,10 +12,10 @@ $items = $context->getItems();
 
 <?php if (!$context->getYear()->readyForState($context->getModel()->get('this_date'))): ?>
     <?php echo $context->getYear()->error->view(); ?>
-    <p>G� til <a href="<?php e($this->url('../../../../../accounting/')); ?>">regnskabet</a></p>
+    <p>Gå til <a href="<?php e($this->url('../../../../../accounting/')); ?>">regnskabet</a></p>
 <?php else: ?>
 
-    <p class="message">N�r du bogf�rer fakturaerne vil det skyldige bel�b blive sat p� debitorkontoen. N�r kunden har betalt, skal betalingen bogf�res for at overf�re bel�bet fra debitorkontoen til din indkomst konto (fx Bankkonto).</p>
+    <p class="message">Når du bogfører fakturaerne vil det skyldige beløb blive sat på debitorkontoen. Når kunden har betalt, skal betalingen bogføres for at overføre beløbet fra debitorkontoen til din indkomst konto (fx Bankkonto).</p>
 
     <?php $context->getModel()->readyForState($context->getYear(), 'skip_check_products'); ?>
     <?php echo $context->getModel()->error->view(); ?>
@@ -38,28 +38,26 @@ $items = $context->getItems();
 
     <?php if ($context->getModel()->readyForState($context->getYear(), 'skip_check_products')): ?>
         <fieldset>
-            <legend>Oplysninger der bogf�res</legend>
+            <legend>Oplysninger der bogføres</legend>
             <table>
                 <tr>
                     <th>Bilagsnummer</th>
                     <td><input type="text" name="voucher_number" value="<?php e($context->getVoucher()->getMaxNumber() + 1); ?>" /></td>
                 </tr>
                 <tr>
-                    <th>Bogf�r p� dato</th>
+                    <th>Bogfør på dato</th>
                     <td><input type="text" name="date_state" value="<?php e($context->getModel()->get("dk_this_date")); ?>" /></td>
                 </tr>
             </table>
         </fieldset>
-
-
 
         <table class="stripe">
             <thead>
                 <tr>
                     <th>Varenr.</th>
                     <th>Beskrivelse</th>
-                    <th>Bel�b</th>
-                    <th>Bogf�res p�</th>
+                    <th>Beløb</th>
+                    <th>Bogføres på</th>
                 </tr>
             </thead>
             <tbody>

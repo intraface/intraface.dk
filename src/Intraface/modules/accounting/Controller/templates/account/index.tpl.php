@@ -1,7 +1,7 @@
 <h1>Konti <a href="<?php e(url('../year/' . $context->getYear()->getId())); ?>"><?php e($context->getYear()->get('label')); ?></a></h1>
 
 <div class="message">
-	<p><strong>Kontoplan</strong>. Dette er en oversigt over alle dine konti, hvor du kan se saldoen, rette de enkelte konti og slette dem. Hvis du vil se bevægelserne på den enkelte konto, kan du klikke på kontonavnet.</p>
+	<p><strong>Kontoplan</strong>. Dette er en oversigt over alle dine konti, hvor du kan se saldoen, rette de enkelte konti og slette dem. Hvis du vil se bevï¿½gelserne pï¿½ den enkelte konto, kan du klikke pï¿½ kontonavnet.</p>
 </div>
 
 <ul class="options">
@@ -30,7 +30,7 @@
 <?php if (count($context->getAccounts()) == 0): ?>
 	<div class="message-dependent">
 		<p>Der er endnu ikke oprettet nogen konti.</p>
-		<p>Du kan oprette en standardkontoplan under <a href="year.php?id=<?php e($year->get('id')); ?>">regnskabsåret</a>, eller du kan taste dem manuelt ind ved at klikke på opret konto ovenfor.</p>
+		<p>Du kan oprette en standardkontoplan under <a href="<?php e(url('../year/' . $year->get('id'))); ?>">regnskabsÃ¥ret</a>, eller du kan taste dem manuelt ind ved at klikke pÃ¥ opret konto ovenfor.</p>
 	</div>
 <?php else: ?>
 <table>

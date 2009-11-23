@@ -2,7 +2,7 @@
 $values = $context->getValues();
 ?>
 
-<h1>Regnskabsår</h1>
+<h1>RegnskabsÃ¥r</h1>
 
 <form action="<?php e($context->url(null, array($context->subview()))); ?>" method="post">
     <input type="hidden" name="id" value="<?php if (!empty($values['id'])) e($values['id']); ?>" />
@@ -10,7 +10,7 @@ $values = $context->getValues();
     <?php echo $context->getYear()->error->view(); ?>
 
     <fieldset>
-        <legend>Oplysninger om regnskabsåret</legend>
+        <legend>Oplysninger om regnskabsÃ¥ret</legend>
 
         <div class="formrow">
             <label for="label">Navn</label>
@@ -26,9 +26,9 @@ $values = $context->getValues();
             <label for="to_date">Til dato</label>
             <input type="text" name="to_date" id="to_date" value="<?php if (!empty($values['to_date_dk'])) e($values['to_date_dk']); ?>" />
         </div>
-        <br /> <!-- Mærkelig nok skal denne være der for det ser ordentlig ud!!! /Sune -->
+        <br /> <!-- Mï¿½rkelig nok skal denne vï¿½re der for det ser ordentlig ud!!! /Sune -->
         <div class="formrow">
-            <label for="last_year_id">Sidste års regnskab</label>
+            <label for="last_year_id">Sidste Ã¥rs regnskab</label>
             <select name="last_year_id" id="last_year_id">
                     <option value="0">Ingen</option>
                     <?php
@@ -41,7 +41,7 @@ $values = $context->getValues();
         </div>
 
         <div class="formrow">
-            <label for="locked">Låst</label>
+            <label for="locked">LÃ¥st</label>
             <select name="locked" id="locked">
                     <option value="0"<?php if (!empty($values['locked']) AND $values['locked'] == '0') { echo ' selected="selected"'; } ?>>Nej</option>
                     <option value="1"<?php if (!empty($values['locked']) AND $values['locked'] == '1') { echo ' selected="selected"'; } ?>>Ja</option>
@@ -54,9 +54,8 @@ $values = $context->getValues();
         </div>
 
     <div style="clear:both;">
-        <input type="submit" value="Gem" name="submit" id="submit" />
-        eller
-        <a href="<?php e($context->url('../')); ?>">Fortryd</a>
+        <input type="submit" value="<?php e(t('Save')); ?>" name="submit" id="submit" />
+        <a href="<?php e($context->url('../')); ?>"><?php e(t('Cancel')); ?></a>
     </div>
     </fieldset>
 </form>

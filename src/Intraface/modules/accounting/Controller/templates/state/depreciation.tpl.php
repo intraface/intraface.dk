@@ -6,7 +6,7 @@
 
 <?php if (!$context->getYear()->readyForState($depreciation->get('payment_date'))): ?>
     <?php echo $context->getYear()->error->view(); ?>
-    <p>G� til <a href="<?php e($accounting_module->getPath().'years.php'); ?>">regnskabet</a></p>
+    <p>Gå til <a href="<?php e($accounting_module->getPath().'years.php'); ?>">regnskabet</a></p>
 <?php elseif ($depreciation->isStated()): ?>
     <p><?php e(t('the depreciation is alredy stated')); ?>. <a href="<?php e($accounting_module->getPath()).'voucher.php?id='.$depreciation->get('voucher_id'); ?>"><?php e(t('see the voucher')); ?></a>.</p>
 <?php else: ?>
@@ -35,7 +35,7 @@
     </fieldset>
 
     <fieldset>
-        <legend>Oplysninger der bogf�res</legend>
+        <legend>Oplysninger der bogføres</legend>
 
         <div class="formrow">
             <label for="voucher_number">Bilagsnummer</label>
@@ -43,11 +43,11 @@
         </div>
 
         <div class="formrow">
-            <label for="date_stated">Bogf�r p� dato</label>
+            <label for="date_stated">Bogfør på dato</label>
             <input type="text" name="date_state" id="date_stated" value="<?php e($depreciation->get("dk_payment_date")); ?>" />
         </div>
 
-        <p>Bel�bet vil blive trukket fra debitorkontoen og blive sat p� kontoen, du v�lger herunder:</p>
+        <p>Beløbet vil blive trukket fra debitorkontoen og blive sat på kontoen, du vælger herunder:</p>
 
         <div class="formrow">
             <label for="state_account"><?php e(__("state on account")); ?></label>
@@ -57,7 +57,7 @@
             $accounts =  $account->getList('operating');
             ?>
             <select id="state_account" name="state_account_id">
-                <option value="">V�lg...</option>
+                <option value=""><?php e(t('Choose')); ?></option>
                 <?php
                 $x = 0;
                 $default_account_id = $context->getKernel()->setting->get('intranet', 'depreciation.state.account');

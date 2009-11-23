@@ -1,23 +1,23 @@
-<h1>Regnskabsår</h1>
+<h1>RegnskabsÃ¥r</h1>
 
 <div class="message">
-    <p><strong>Regnskabsår</strong>. På denne side kan du enten oprette et nyt regnskab eller vælge hvilket regnskab, du vil begynde at indtaste poster i. Du vælger regnskabet på listen nedenunder.</p>
+    <p><strong>RegnskabsÃ¥r</strong>. PÃ¥ denne side kan du enten oprette et nyt regnskab eller vÃ¦lge hvilket regnskab, du vil begynde at indtaste poster i. Du vÃ¦lger regnskabet pÃ¥ listen nedenunder.</p>
 </div>
 
 <ul class="options">
-    <li><a class="new" href="<?php e(url('create')); ?>">Opret regnskabsår</a></li>
+    <li><a class="new" href="<?php e(url('create')); ?>">Opret regnskabsï¿½r</a></li>
 </ul>
 
 <?php if (!$context->getYearGateway()->getList()): ?>
-    <p>Der er ikke oprettet nogen regnskabsår. Du kan oprette et ved at klikke på knappen ovenover.</p>
+    <p>Der er ikke oprettet nogen regnskabsÃ¥r. Du kan oprette et ved at klikke pï¿½ knappen ovenover.</p>
 <?php else: ?>
     <form action="<?php e(url('./')); ?>" method="post">
     <table>
-        <caption>Regnskabsår</caption>
+        <caption>RegnskabsÃ¥r</caption>
         <thead>
             <tr>
                 <th></th>
-                <th>År</th>
+                <th>Ã…r</th>
                 <th></th>
             </tr>
         </thead>
@@ -33,6 +33,6 @@
         <?php endforeach; ?>
         </tbody>
     </table>
-    <input type="submit" value="Vælg" />
+    <input type="submit" value="<?php e(t('Choose')); ?>" />
     </form>
 <?php endif; ?>
