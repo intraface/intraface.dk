@@ -37,8 +37,6 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
     function getGateway()
     {
-        Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
-
         return new Intraface_modules_product_ProductDoctrineGateway(Doctrine_Manager::connection(), $this->getKernel()->user);
     }
 
@@ -50,9 +48,10 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
         if (isset($_POST['append_file_submit'])) {
 
-            $append_file = new AppendFile($this->getKernel(), 'product', $product->get('id'));
+            $append_file = new Appender($this->getKernel(), 'product', $product->get('id'));
 
             if (isset($_FILES['new_append_file'])) {
+
                 $filehandler = new FileHandler($this->getKernel());
 
                 $filehandler->createUpload();
@@ -63,7 +62,10 @@ class Intraface_modules_product_Controller_Show extends k_Component
                     $filehandler->upload->setSetting('file_accessibility', 'public');
                 }
                 if ($id = $filehandler->upload->upload('new_append_file')) {
-                    $append_file->addFile(new FileHandler($this->getKernel(), $id));
+                    if (!$append_file->addFile(new FileHandler($this->getKernel(), $id))) {
+                        throw new Exception('Could not add file');
+                    }
+
                 }
             }
             if (!$filehandler->error->isError()) {
