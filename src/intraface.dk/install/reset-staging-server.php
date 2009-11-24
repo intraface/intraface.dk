@@ -36,7 +36,12 @@ if ($install->resetServer()) {
 
     delete_cache_files_from_demo(dirname(__FILE__) . '/../demo/');
 
-    echo 'staging server reset. Go to <a href="../core/testlogin">login</a>.';
+    if (!empty($_GET['login'])) {
+        echo 'staging server reset. Go to <a href="../core/testlogin">login</a>.';
+    } else {
+        echo 'staging server reset. Go to <a href="../core/login">login</a>.';
+    }
+
 } else {
     echo 'error';
 }
