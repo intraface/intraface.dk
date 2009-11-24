@@ -7,7 +7,6 @@ class Intraface_modules_product_Controller_Index extends k_Component
     protected $product_doctrine;
     private $error;
 
-
     function renderHtml()
     {
         $module = $this->getKernel()->module('product');
@@ -74,13 +73,13 @@ class Intraface_modules_product_Controller_Index extends k_Component
 
         return $this->product_doctrine = new Intraface_modules_product_ProductDoctrine;
     }
-    
+
     function getProduct()
     {
         if (is_object($this->product)) {
             return $this->product;
         }
-        
+
         require_once 'Intraface/modules/product/Product.php';
         return $this->product = new Product($this->getKernel());
     }
@@ -93,19 +92,18 @@ class Intraface_modules_product_Controller_Index extends k_Component
 
     function getKeywords()
     {
-        $gateway = $this->factory->create($this->getKernel());
-
+        $gateway = $this->getGateway();
         $product = $gateway->getById(0);
         // $characters = $product->getCharacters();
         return $keywords = $product->getKeywordAppender();
     }
-    
+
     function getError()
     {
         if(!is_object($this->error)) {
             $this->error = new Intraface_Doctrine_ErrorRender($this->getTranslation());
         }
-        
+
         return $this->error;
     }
 
@@ -113,7 +111,7 @@ class Intraface_modules_product_Controller_Index extends k_Component
     {
         // $gateway = $this->factory->create($this->getKernel());
         $gateway = $this->getGateway();
-        
+
         $product = $gateway->getById(0);
         // $characters = $product->getCharacters();
         $keywords = $product->getKeywordAppender();
@@ -152,9 +150,9 @@ class Intraface_modules_product_Controller_Index extends k_Component
         $filehandler = new FileHandler($kernel);
 
         /*$data = array(
-            'gateway' => $this->getGateway(), 
-            'translation' => $translation, 
-            'kernel' => $kernel, 
+            'gateway' => $this->getGateway(),
+            'translation' => $translation,
+            'kernel' => $kernel,
             'filehandler' => $filehandler,
             'error' => $this->error,
             'product' => $this->getProduct()

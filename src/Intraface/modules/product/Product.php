@@ -87,9 +87,6 @@ class Product extends Intraface_Standard
      */
     function __construct($kernel, $product_id = 0, $old_product_detail_id = 0)
     {
-        if (!is_object($kernel)) {
-            trigger_error('Produkt-objektet kræver et Kernel-objekt.', E_USER_ERROR);
-        }
         $this->kernel                = $kernel;
         $this->user                  = $kernel->user;
         $this->intranet              = $kernel->intranet;
@@ -103,7 +100,7 @@ class Product extends Intraface_Standard
             $this->id = $this->load();
         }
     }
-    
+
     /*
     Did not seem to have any effect
     function __destruct()
@@ -281,7 +278,7 @@ class Product extends Intraface_Standard
         $appendix_list = $append_file->getList();
 
         $this->value['pictures'] = array();
-        
+
         if (count($appendix_list) > 0) {
             foreach ($appendix_list AS $key => $appendix) {
                 $tmp_filehandler = new FileHandler($this->kernel, $appendix['file_handler_id']);
@@ -307,7 +304,7 @@ class Product extends Intraface_Standard
                 $tmp_filehandler->__destruct();
                 unset($tmp_filehandler);
             }
-            
+
         }
         return $this->value['pictures'];
     }
@@ -593,12 +590,25 @@ class Product extends Intraface_Standard
     /**
      * Get keywords object
      *
+     * @deprecated
+     *
      * @return object
      */
     public function getKeywords()
     {
         return ($this->keywords = new Keyword($this));
     }
+
+    /**
+     * Get keywords object
+     *
+     * @return object
+     */
+    public function getKeyword()
+    {
+        return ($this->keywords = new Keyword($this));
+    }
+
 
     public function getKeywordAppender()
     {
