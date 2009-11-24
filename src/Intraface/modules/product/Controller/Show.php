@@ -1,9 +1,9 @@
 <?php
 class Appender extends Ilib_Filehandler_AppendFile
 {
-	function __construct($kernel, $belong_to, $belong_to_id)
+    function __construct($kernel, $belong_to, $belong_to_id)
     {
-    	$this->registerBelongTo(4, 'product');
+        $this->registerBelongTo(4, 'product');
         parent::__construct($kernel, $belong_to, $belong_to_id);
     }
 }
@@ -30,23 +30,58 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
     function getObject()
     {
-    	$kernel = $this->context->getKernel();
+        require_once 'Intraface/modules/product/Product.php';
+        return new Product($this->getKernel(), $this->name());
 
-        /* $gateway = $this->getGateway();
-        // when doctrine is implemented
-        return $gateway->findById($this->name()); */
-    	
-    	require_once 'Intraface/modules/product/Product.php';
-    	return new Product($kernel, $this->name());
-    	
     }
 
     function getGateway()
     {
-    	$kernel = $this->context->getKernel();
-    	Intraface_Doctrine_Intranet::singleton($kernel->intranet->getId());
+        Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
 
-    	return new Intraface_modules_product_ProductDoctrineGateway(Doctrine_Manager::connection(), $kernel->user);
+        return new Intraface_modules_product_ProductDoctrineGateway(Doctrine_Manager::connection(), $this->getKernel()->user);
+    }
+
+    function postMultipart()
+    {
+        $module = $this->getKernel()->useShared('filehandler');
+        require_once 'Intraface/shared/filehandler/AppendFile.php';
+        $product = new Product($this->getKernel(), $this->name());
+
+        if (isset($_POST['append_file_submit'])) {
+
+            $append_file = new AppendFile($this->getKernel(), 'product', $product->get('id'));
+
+            if (isset($_FILES['new_append_file'])) {
+                $filehandler = new FileHandler($this->getKernel());
+
+                $filehandler->createUpload();
+                $filehandler->upload->setSetting('max_file_size', 5000000);
+
+                // @todo: It is not enough validation if we have shop to make it public. Should probably be possible to set on the image if it should be public.
+                if ($this->getKernel()->user->hasModuleAccess('shop')) { // if shown i webshop $product->get('do_show') == 1
+                    $filehandler->upload->setSetting('file_accessibility', 'public');
+                }
+                if ($id = $filehandler->upload->upload('new_append_file')) {
+                    $append_file->addFile(new FileHandler($this->getKernel(), $id));
+                }
+            }
+            if (!$filehandler->error->isError()) {
+                return new k_SeeOther($this->url());
+            }
+
+        }
+
+        if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
+            $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
+            $module_filemanager = $this->getKernel()->useModule('filemanager');
+            $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', $module->getPath().'product.php?id='.$product->get('id'));
+            $redirect->setIdentifier('product');
+            $redirect->askParameter('file_handler_id', 'multiple');
+
+            header('Location: '.$url);
+            exit;
+        }
     }
 
     function getProduct()
@@ -57,9 +92,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
     function postForm()
     {
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
-
-        $kernel = $this->getKernel();
-        if (!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
+        if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
             return new k_SeeOther($this->url('filehandler/selectfile'));
         }
 
@@ -78,7 +111,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
         if(isset($_POST['has_variation'])) $product->has_variation = $_POST['has_variation'];
         if(isset($_POST['stock'])) $product->stock = $_POST['stock'];
-print_r($product->asArray(true)); die('AA');
+        print_r($product->asArray(true)); die('AA');
         try {
             $product->save();
 
@@ -95,14 +128,16 @@ print_r($product->asArray(true)); die('AA');
 
     function renderHtml()
     {
-        $kernel = $this->context->getKernel();
-        $kernel->module('product');
-        $kernel->useShared('filehandler');
-        $translation = $kernel->getTranslation('product');
-        $product = new Product($kernel, $this->name());
-        $filehandler = new FileHandler($kernel);
+        $this->getKernel()->module('product');
+        $this->getKernel()->useShared('filehandler');
+        $translation = $this->getKernel()->getTranslation('product');
+        $product = new Product($this->getKernel(), $this->name());
+        $filehandler = new FileHandler($this->getKernel());
         $data = array(
-            'gateway' => $this->getGateway(), 'product' => $product, 'translation' => $translation, 'kernel' => $kernel, 'filehandler' => $filehandler
+            'gateway' => $this->getGateway(), 'product' => $product,
+            'translation' => $translation,
+            'kernel' => $this->getKernel(),
+            'filehandler' => $filehandler
         );
 
         $smarty = new k_Template(dirname(__FILE__) . '/tpl/show.tpl.php');
@@ -111,15 +146,14 @@ print_r($product->asArray(true)); die('AA');
 
     function renderHtmlEdit()
     {
-        $kernel = $this->context->getKernel();
-        $kernel->module('product');
-        $kernel->useShared('filehandler');
-        $translation = $kernel->getTranslation('product');
-        $product = new Product($kernel, $this->name());
-        $filehandler = new FileHandler($kernel);
+        $this->getKernel()->module('product');
+        $this->getKernel()->useShared('filehandler');
+        $translation = $this->getKernel()->getTranslation('product');
+        $product = new Product($this->getKernel(), $this->name());
+        $filehandler = new FileHandler($this->getKernel());
 
         $data = array(
-            'gateway' => $this->getGateway(), 'product' => $this->getProduct(), 'translation' => $translation, 'kernel' => $kernel, 'filehandler' => $filehandler
+            'gateway' => $this->getGateway(), 'product' => $this->getProduct(), 'translation' => $translation, 'kernel' => $this->getKernel(), 'filehandler' => $filehandler
         );
 
         $smarty = new k_Template(dirname(__FILE__) . '/tpl/edit.tpl.php');
@@ -133,10 +167,9 @@ print_r($product->asArray(true)); die('AA');
 
     function getFileAppender()
     {
-    	$kernel = $this->context->getKernel();
-        $kernel->module('product');
-        $product = new Product($kernel, $this->name);
-        return new Appender($kernel, 'product', $product->get('id'));
+        $this->getKernel()->module('product');
+        $product = new Product($this->getKernel(), $this->name);
+        return new Appender($this->getKernel(), 'product', $product->get('id'));
     }
 
     function renderHtmlDelete()
@@ -149,8 +182,7 @@ print_r($product->asArray(true)); die('AA');
 
     function DELETE()
     {
-        $kernel = $this->getKernel();
-        $kernel->module('product');
+        $this->getKernel()->module('product');
         $product = new Product($this->getKernel(), $this->name());
         if ($id = $product->delete()) {
             return new k_SeeOther($this->url('../'));
@@ -164,8 +196,7 @@ print_r($product->asArray(true)); die('AA');
 
     function renderHtmlCopy()
     {
-        $kernel = $this->getKernel();
-        $kernel->module('product');
+        $this->getKernel()->module('product');
         $product = new Product($this->getKernel(), $this->name());
         if ($id = $product->copy()) {
             return new k_SeeOther($this->url('../' . $id));

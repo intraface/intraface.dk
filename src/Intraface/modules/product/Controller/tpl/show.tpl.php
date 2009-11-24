@@ -212,7 +212,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         <?php
         //$appendix_list = $append_file->getList();
         $pictures = $product->getNewPictures();
-        if ($pictures > 0) {
+        if (count($pictures) > 0) {
             foreach ($pictures as $appendix) {
                 echo '<div class="appendix">
                         <img src="'.$appendix['system-square']['file_uri'].'" />'.$appendix['original']['name'].'
