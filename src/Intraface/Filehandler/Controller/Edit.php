@@ -23,7 +23,7 @@ class Intraface_Filehandler_Controller_Edit extends k_Component
     function postMultipart()
     {
         $gateway = new Ilib_Filehandler_Gateway($this->getKernel());
-        $filemanager = $gateway->getFromId(intval($this->context->name));
+        $filemanager = $gateway->getFromId(intval($this->context->name()));
 
         $uploader = $filemanager->getUploader();
         $uploader->setSetting('max_file_size', '1000000');
@@ -41,7 +41,7 @@ class Intraface_Filehandler_Controller_Edit extends k_Component
         }
 
         $data = array('filemanager' => $filemanager,
-                      'values' => $this->POST->getArrayCopy());
+                      'values' => $this->body());
 
 
         $tpl = new k_Template(dirname(__FILE__) . '/../templates/edit.tpl.php');
