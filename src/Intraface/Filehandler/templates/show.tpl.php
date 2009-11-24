@@ -144,7 +144,7 @@
         </ul>
 
     <?php
-        $keyword = $filemanager->getKeywordAppender();
+        $keyword = new Intraface_Keyword_Appender($filemanager);
         $keywords = $keyword->getConnectedKeywords();
         if (is_array($keywords) AND count($keywords) > 0) {
             echo '<ul>';

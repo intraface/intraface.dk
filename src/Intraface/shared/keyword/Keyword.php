@@ -346,8 +346,12 @@ class Intraface_Keyword_Appender extends Keyword
                     $this->type = 'file_handler';
                     $this->object = $object;
                     break;
+                case 'ilib_filehandler':
+                    $this->type = 'file_handler';
+                    $this->object = $object;
+                    break;
                 default:
-                    trigger_error(get_class($this) . ' kræver enten Customer, CMSPage, Product eller FileManager som object', E_USER_ERROR);
+                    throw new Exception(get_class($this) . ' got invalid object ' . get_class($object));
                     break;
             }
 
@@ -574,7 +578,7 @@ class Intraface_Keyword_StringAppender
             foreach ($keywords AS $key => $value) {
                 $keyword = $this->cloneKeyword();
                 if ($keyword->save(array('keyword' => $value))) {
-                    $this->appender->addKeyword($keyword);
+                    $res = $this->appender->addKeyword($keyword);
                 }
             }
         }

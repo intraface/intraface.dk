@@ -20,7 +20,7 @@ class Intraface_Keyword_Controller_Connect extends k_Component
             $keyword->delete();
         }
 
-        $keyword = $this->context->getObject()->getKeywordAppender(); // starter objektet
+        $keyword = new Intraface_Keyword_Appender($this->context->getObject());
         $keywords = $keyword->getAllKeywords(); // henter alle keywords
         $keyword_string = $keyword->getConnectedKeywordsAsString();
 
@@ -42,7 +42,7 @@ class Intraface_Keyword_Controller_Connect extends k_Component
     function postForm()
     {
         $this->getKernel()->useShared('keyword');
-        $appender = $this->context->getObject()->getKeywordAppender(); // starter keyword objektet
+        $appender = new Intraface_Keyword_Appender($this->context->getObject());
 
         if (!$appender->deleteConnectedKeywords()) {
             $appender->error->set('Kunne ikke slette keywords.');
@@ -50,24 +50,24 @@ class Intraface_Keyword_Controller_Connect extends k_Component
 
         // strengen med keywords
         if (!empty($_POST['keywords'])) {
-            $string_appender = new Intraface_Keyword_StringAppender($this->context->getObject()->getKeyword(), $appender);
+            $string_appender = new Intraface_Keyword_StringAppender(new Keyword($this->context->getObject()), $appender);
             $string_appender->addKeywordsByString($_POST['keywords']);
         }
 
         // listen med keywords
         if (!empty($_POST['keyword']) AND is_array($_POST['keyword']) AND count($_POST['keyword']) > 0) {
-            for ($i=0, $max = count($_POST['keyword']); $i < $max; $i++) {
-                $appender->addKeyword(new Keyword($this->context->getObject(), $_POST['keyword'][$i]));
+            foreach ($_POST['keyword'] as $k) {
+                $appender->addKeyword(new Keyword($this->context->getObject(), $k));
             }
         }
 
         if (!empty($_POST['close'])) {
             return new k_SeeOther($this->url('../../'));
         }
-          if (!$appender->error->isError()) {
-            //header('Location: connect.php?'.$id_name.'='.$this->context->getObject()->get('id'));
-            //exit;
+        if (!$appender->error->isError()) {
+            return new k_SeeOther($this->url());
         }
+        echo $appender->error->view();
 
         return $this->render();
     }
