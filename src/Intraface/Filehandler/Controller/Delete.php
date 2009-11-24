@@ -3,13 +3,13 @@ class Intraface_Filehandler_Controller_Delete extends k_Component
 {
     function renderHtml()
     {
-        $kernel = $this->registry->get('intraface:kernel');
+        $kernel = $this->context->getKernel();
         $module = $kernel->module('filemanager');
         $translation = $kernel->getTranslation('filemanager');
 
-        $filemanager = new Ilib_Filehandler($kernel, $this->context->name);
+        $filemanager = new Ilib_Filehandler($kernel, $this->context->name());
         if (!$filemanager->delete()) {
-            trigger_error($this->__('could not delete file'), E_USER_ERROR);
+            throw new Exception('Could not delete file');
         }
         return new k_SeeOther($this->context->url('../'));
     }
