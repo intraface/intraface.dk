@@ -73,8 +73,12 @@ class Keyword extends Ilib_Keyword
                     $this->type = 'file_handler';
                     $this->object = $object;
                     break;
+                case 'ilib_filehandler':
+                    $this->type = 'file_handler';
+                    $this->object = $object;
+                    break;
                 default:
-                    trigger_error('Keyword kræver enten Customer, CMSPage, Product eller FileManager som object', E_USER_ERROR);
+                    throw new Exception('Invalid object - got ' . get_class($this->object));
                     break;
             }
 
