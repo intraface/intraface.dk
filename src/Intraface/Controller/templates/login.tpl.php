@@ -4,8 +4,8 @@
 
     <fieldset>
     <?php
-        if (!empty($msg)) { ?>
-            <p><?php e($msg); ?></p>
+        if ($context->query('flare')) { ?>
+            <p><?php e($context->query('flare')); ?></p>
         <?php }
         /*
         else {

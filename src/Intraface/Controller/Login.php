@@ -46,6 +46,8 @@ class Intraface_Controller_Login extends k_Component
         if ($user) {
             $this->session()->set('identity', $user);
             return new k_SeeOther($this->query('continue'));
+        } else {
+            return new k_SeeOther($this->url(null, array('flare' => 'Wrong credentials')));
         }
         return $this->render();
     }
@@ -60,7 +62,7 @@ class Intraface_Controller_Login extends k_Component
         $auth->authenticate($adapter);
 
         if (!$auth->hasIdentity()) {
-            throw new Exception('Could not login with those credentials');
+            return false;
         }
 
         /*
