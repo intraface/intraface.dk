@@ -12,7 +12,7 @@
 <?php endif; ?>
 
 
-<?php if (!empty($_attention_needed) AND is_array($_attention_needed) AND count($_attention_needed) > 0): ?>
+<?php if (!empty($_attention_needed)): ?>
     <ul class="message-dependent">
 
 	<?php foreach ($_attention_needed AS $advice): ?>
@@ -40,7 +40,7 @@
 	<?php endif;
 ?>
 
-<?php if (!empty($_advice) AND is_array($_advice) AND count($_advice) > 0): ?>
+<?php if (!empty($_advice)): ?>
     <ul class="advice">
         <?php foreach ($_advice AS $advice): ?>
         <li>
@@ -137,7 +137,7 @@ if ($last_view_split[0] > $some_days_ago) {
 	<dd><strong><?php e($news[$i]['area']); ?>:</strong>
         <?php autohtml($news[$i]['description']); ?>
     </dd>
-	<?php } // slut på for ?>
+	<?php } // slut pï¿½ for ?>
 </dl>
 </div>
 

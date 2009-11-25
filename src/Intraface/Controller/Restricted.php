@@ -40,6 +40,8 @@ class Intraface_Controller_Restricted extends k_Component
 
     function renderHtml()
     {
+        $_advice[] = array();
+        $_attention_needed[] = array();
         if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
 			$this->getKernel()->setting->set('user', 'homepage.message', 'hide');
 		}
