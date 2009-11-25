@@ -14,7 +14,7 @@ class Intraface_Controller_Index extends k_Component
 
     protected function map($name)
     {
-        if ($name == 'logout') { // skal sikkert være fra restricted controller i stedet
+        if ($name == 'logout') { // skal sikkert vï¿½re fra restricted controller i stedet
             return 'Intraface_Controller_Logout';
         } elseif ($name == 'login') {
             return 'Intraface_Controller_Login';
@@ -62,43 +62,22 @@ class Intraface_Controller_Index extends k_Component
     {
         return $phrase;
     }
+
+    function wrapHtml($content)
+    {
+        ob_start();
+        include dirname(__FILE__) . '/../ihtml/outside/top.php';
+        $header = ob_get_contents();
+        ob_end_clean();
+        ob_start();
+        include dirname(__FILE__) . '/../ihtml/outside/bottom.php';
+        $footer = ob_get_contents();
+        ob_end_clean();
+        return new k_HttpResponse(200, $header . $content . $footer);
+    }
+
+    function execute()
+    {
+        return $this->wrap(parent::execute());
+    }
 }
-
-/*
-
-// Adds link for id user details is filled in. They are going to be in the top.
-if (!$kernel->user->isFilledIn()) {
-	$_advice[] = array(
-		'msg' => 'all information about you has not been filled in',
-		'link' => url('/main/controlpanel/user_edit.php'),
-		'module' => 'dashboard'
-	);
-}
-
-// getting stuff to show on the dashboard
-
-
-for ($i = 0, $max = count($modules); $i < $max; $i++) {
-
-	if (!$kernel->intranet->hasModuleAccess(intval($modules[$i]['id']))) {
-		continue;
-	}
-	if (!$kernel->user->hasModuleAccess(intval($modules[$i]['id']))) {
-		continue;
-	}
-
-	$module = $kernel->useModule($modules[$i]['name']);
-	$frontpage_files = $module->getFrontpageFiles();
-
-	if (!is_array($frontpage_files) OR count($frontpage_files) == 0) {
-		continue;
-	}
-
-	foreach ($frontpage_files AS $file) {
-		$file = PATH_INCLUDE_MODULE . $module->getName() . '/' .$file;
-		if (file_exists($file)) {
-			include($file);
-		}
-	}
-}
-*/

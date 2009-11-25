@@ -152,7 +152,7 @@ class Intraface_Controller_Restricted extends k_Component
 
     /**
      * Hvad med at flytte det hele over i et userobject, der implementerer getIntranet()
-     * I $intranet har vi så de transiente gateways.
+     * I $intranet har vi sï¿½ de transiente gateways.
      *
 
 class component_ShowProduct {
@@ -346,7 +346,7 @@ class component_ShowProduct {
 
     function wrapHtml($content)
     {
-        return $this->getHeader() . $content . $this->getFooter();
+        return new k_HttpResponse(200, $this->getHeader() . $content . $this->getFooter());
 
     }
 
