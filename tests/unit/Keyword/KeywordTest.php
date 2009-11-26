@@ -4,29 +4,6 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/shared/keyword/Keyword.php';
 
-class FakeKeywordIntranet
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-class FakeKeywordKernel
-{
-    public $intranet;
-
-    function __construct()
-    {
-        $this->intranet = new FakeKeywordIntranet;
-    }
-
-    function useModule()
-    {
-        return true;
-    }
-}
-
 if (!class_exists('FakeKeywordObject')) {
 class FakeKeywordObject
 {
@@ -34,7 +11,7 @@ class FakeKeywordObject
 
     function __construct()
     {
-        $this->kernel = new FakeKeywordKernel;
+        $this->kernel = new Stub_Kernel;
     }
 
     function get()

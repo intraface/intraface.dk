@@ -12,7 +12,7 @@ class FakeObjectToPutIntoParameter
 
     function __construct()
     {
-        $this->kernel = new FakeParameterKernel;
+        $this->kernel = new Stub_Kernel;
     }
 
     function get($type)
@@ -26,23 +26,6 @@ class FakeObjectToPutIntoParameter
                 exit;
         }
 
-    }
-}
-
-class FakeParameterIntranet
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-class FakeParameterKernel
-{
-    public $intranet;
-    function __construct()
-    {
-        $this->intranet = new FakeParameterIntranet;
     }
 }
 

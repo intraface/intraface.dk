@@ -5,23 +5,6 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/XMLRPC/Contact/Server.php';
 
-class ContactXMLRPCServerIntranet
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-class ContactXMLRPCServerKernel
-{
-    public $intranet;
-    function __construct()
-    {
-        $this->intranet = new ContactXMLRPCServerIntranet;
-    }
-}
-
 class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
 {
     private $server;
@@ -98,7 +81,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         $client = $this->getClient();
         $credentials = array('private_key' => 'privatekeyshouldbereplaced', 'session_id' => 'something');
 
-        $contact = new Contact(new ContactXMLRPCServerKernel);
+        $contact = new Contact(new Stub_Kernel);
         $data = array('name' => 'Tester æøå');
         $contact->save($data);
 
@@ -114,7 +97,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         $client = $this->getClient();
         $credentials = array('private_key' => 'privatekeyshouldbereplaced', 'session_id' => 'something');
 
-        $contact = new Contact(new ContactXMLRPCServerKernel);
+        $contact = new Contact(new Stub_Kernel);
         $data = array('name' => 'Tester');
         $contact->save($data);
 
@@ -122,7 +105,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         $data = array('id' => $contact->getId(), 'name' => $new_name);
         $this->assertTrue($client->saveContact($credentials, $data));
 
-        $saved_contact = new Contact(new ContactXMLRPCServerKernel, $contact->getId());
+        $saved_contact = new Contact(new Stub_Kernel, $contact->getId());
         $this->assertEquals($new_name, $saved_contact->get('name'));
 
     }

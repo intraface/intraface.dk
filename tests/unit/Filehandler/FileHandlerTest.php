@@ -3,54 +3,14 @@ require_once dirname(__FILE__) . '/../config.test.php';
 
 require_once 'Intraface/functions.php';
 require_once 'Intraface/shared/filehandler/FileHandler.php';
-
-class FakeFileHandlerKernel {
-    public $intranet;
-    public $user;
-    /*
-    function randomKey() {
-        return 'thisisnotreallyarandomkey'.microtime();
-    }*/
-}
-
-
-class FakeFileHandlerIntranet
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-class FakeFileHandlerUser
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-function fht_deltree( $f ){
-
-    if ( is_dir( $f ) ){
-        foreach ( scandir( $f ) as $item ){
-            if ( !strcmp( $item, '.' ) || !strcmp( $item, '..' ) )
-                continue;
-            fht_deltree( $f . "/" . $item );
-        }
-        rmdir( $f );
-    }
-    else{
-        @unlink( $f );
-    }
-}
-
+require_once 'file_functions.php';
 
 class FileHandlerTest extends PHPUnit_Framework_TestCase
 {
     private $file_name = 'tester.jpg';
 
-    function setUp() {
+    function setUp()
+    {
         $db = MDB2::factory(DB_DSN);
         $db->query('TRUNCATE file_handler');
         fht_deltree(PATH_UPLOAD . '1');
@@ -58,9 +18,7 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
 
     function createKernel()
     {
-        $kernel = new FakeFileHandlerKernel;
-        $kernel->intranet = new FakeFileHandlerIntranet;
-        $kernel->user = new FakeFileHandlerUser;
+        $kernel = new Stub_Kernel;
         return $kernel;
     }
 
@@ -127,7 +85,7 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
         $fh->error->view();
         $this->assertTrue($id > 0);
     }
-    
+
     function testAccessKeyIsValid()
     {
         $fh = new FileHandler($this->createKernel());

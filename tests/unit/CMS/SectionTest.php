@@ -25,13 +25,13 @@ class FakeThisSectionTemplate
 }
 
 class Testable_CMS_Section extends CMS_Section {
-    
+
     protected function getTemplateSection($template_section_id)
     {
         return new FakeCMSTemplateSection(NULL);
         // return CMS_TemplateSection::factory($this->kernel, 'id', $template_section_id);
     }
-    
+
 }
 
 class SectionTest extends PHPUnit_Framework_TestCase
@@ -42,11 +42,7 @@ class SectionTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->kernel = new Intraface_Kernel;
-        $this->kernel->user = new FakeCMSUser;
-        $this->kernel->intranet = new FakeCMSIntranet;
-        $this->kernel->setting = new FakeCMSSetting;
-        $this->kernel->module('cms');
+        $this->kernel = new Stub_Kernel;
         $this->site = new FakeCMSSite($this->kernel);
         $this->page = new FakeCMSPage($this->site);
 

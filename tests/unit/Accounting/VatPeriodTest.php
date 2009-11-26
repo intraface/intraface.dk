@@ -6,50 +6,13 @@ require_once 'Intraface/modules/accounting/Account.php';
 require_once 'Intraface/modules/accounting/Voucher.php';
 require_once 'Intraface/Kernel.php';
 
-class FakeVatPeriodIntranet
-{
-    function get()
-    {
-        return 1;
-    }
-
-    function hasModuleAccess()
-    {
-        return true;
-    }
-}
-
-class FakeVatPeriodUser
-{
-    function hasModuleAccess()
-    {
-        return true;
-    }
-
-    function get()
-    {
-        return 1;
-    }
-}
-
-class FakeVatPeriodSetting
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
 class FakeVatPeriodYear
 {
     public $kernel;
     function __construct()
     {
-        $this->kernel = new Intraface_Kernel;
-        $this->kernel->user = new FakeVatPeriodUser;
-        $this->kernel->module('accounting');
-        $this->kernel->intranet = new FakeVatPeriodIntranet;
-        $this->kernel->setting = new FakeVatPeriodSetting;
+        $this->kernel = new Stub_Kernel;
+                $this->kernel->setting->set('intranet', 'vatpercent', 25);
 
     }
     function get()

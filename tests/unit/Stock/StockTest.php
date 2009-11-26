@@ -1,34 +1,11 @@
 <?php
-
 require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/DBQuery.php';
 require_once 'Intraface/modules/stock/Stock.php';
-
-error_reporting(E_ALL);
-
-class FakeStockUser {
-    function get() {
-        return 1;
-    }
-    function hasModuleAccess()
-    {
-        return true;
-    }
-}
-
-class FakeStockIntranet {
-    function get() {
-        return 1;
-    }
-    function hasModuleAccess()
-    {
-        return true;
-    }
-}
-
+require_once 'DB/Sql.php';
 class FakeStockProduct
 {
     public $kernel;
@@ -48,9 +25,7 @@ class StockTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->kernel = new Intraface_Kernel();
-        $this->kernel->user = new FakeStockUser;
-        $this->kernel->intranet = new FakeStockIntranet;
+        $this->kernel = new Stub_Kernel();
         /*
         $db = MDB2::factory(DB_DSN);
         $db->query('TRUNCATE product');

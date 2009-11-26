@@ -19,7 +19,7 @@ class FakeContactContact
 class FakeContactIntranet
 {
     public $address;
-    
+
     public function get()
     {
         return 1;
@@ -35,12 +35,12 @@ class FakeContactKernel
     {
         return new FakeContactModule;
     }
-    
+
     function useModule()
     {
         return new FakeContactModule;
     }
-    
+
     function useShared($shared)
     {
         switch($shared) {
@@ -48,6 +48,11 @@ class FakeContactKernel
                 require_once 'Intraface/shared/email/Email.php';
                 break;
         }
+    }
+
+    function getSetting()
+    {
+        return $this->setting;
     }
 }
 

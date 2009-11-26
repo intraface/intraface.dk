@@ -4,9 +4,7 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/onlinepayment/OnlinePayment.php';
 require_once 'Intraface/functions.php';
-require_once dirname(__FILE__) .'/../stubs/Kernel.php';
-require_once dirname(__FILE__) .'/../stubs/Intranet.php';
-require_once dirname(__FILE__) .'/../stubs/Setting.php';
+require_once 'DB/Sql.php';
 
 class OnlinePaymentTest extends PHPUnit_Framework_TestCase
 {
@@ -20,12 +18,10 @@ class OnlinePaymentTest extends PHPUnit_Framework_TestCase
 
     function createKernel()
     {
-        $kernel = new FakeKernel;
-        $kernel->setting = new FakeSetting;
+        $kernel = new Stub_Kernel;
         $kernel->setting->set('intranet', 'onlinepayment.provider_key', 1);
         $kernel->setting->set('intranet', 'onlinepayment.quickpay.md5_secret', 'abc');
         $kernel->setting->set('intranet', 'onlinepayment.quickpay.merchant_id', 12345678);
-        $kernel->intranet = new FakeIntranet();
         return $kernel;
     }
 

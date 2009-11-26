@@ -1,13 +1,12 @@
 <?php
-class FakeSetting
+class Stub_Setting
 {
     public $setting;
 
     function get($type, $setting)
     {
         if (!isset($this->setting[$type][$setting])) {
-            trigger_error('You need to create the setting '.$type.':'.$setting.' in with set(type, key, value) before use', E_USER_ERROR);
-            exit;
+            throw new Exception('You need to create the setting '.$type.':'.$setting.' in with set(type, key, value) before use');
         }
 
         return $this->setting[$type][$setting];

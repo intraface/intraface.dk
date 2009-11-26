@@ -4,51 +4,10 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'Intraface/functions.php';
 require_once 'Intraface/shared/filehandler/FileHandler.php';
 require_once 'Intraface/shared/filehandler/InstanceManager.php';
-
-class FakeInstanceHandlerKernel {
-    public $intranet;
-    public $user;
-
-    function randomKey() {
-        return 'thisisnotreallyarandomkey'.microtime();
-    }
-}
-
-
-class FakeInstanceHandlerIntranet
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-class FakeInstanceHandlerUser
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-function iht_deltree( $f ){
-
-    if ( is_dir( $f ) ){
-        foreach ( scandir( $f ) as $item ){
-            if ( !strcmp( $item, '.' ) || !strcmp( $item, '..' ) )
-                continue;
-            iht_deltree( $f . "/" . $item );
-        }
-        rmdir( $f );
-    }
-    else{
-        @unlink( $f );
-    }
-}
+require_once 'file_functions.php';
 
 class InstanceHandlerTest extends PHPUnit_Framework_TestCase
 {
-
     function setUp()
     {
         $db = MDB2::factory(DB_DSN);
@@ -64,9 +23,7 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
 
     function createKernel()
     {
-        $kernel = new FakeInstanceHandlerKernel;
-        $kernel->intranet = new FakeInstanceHandlerIntranet;
-        $kernel->user = new FakeInstanceHandlerUser;
+        $kernel = new Stub_Kernel;
         return $kernel;
     }
 
@@ -120,10 +77,10 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
         $filehandler->createInstance('square', $crop);
         // we add 10 bytes delta
         $this->assertEquals(3644, filesize($filehandler->instance->get('file_path')), '', 10);
-        $size = getimagesize($filehandler->instance->get('file_path')); 
+        $size = getimagesize($filehandler->instance->get('file_path'));
         $this->assertEquals(75, $size[0]);
         $this->assertEquals(75, $size[1]);
-        
+
         // $this->assertEquals('c6fc157c4d2d56ad8be50a71af684fab', md5(file_get_contents($filehandler->instance->get('file_path'))));
 
         // instance handler does not return the crop parameter, so we just find it in the database!
@@ -133,18 +90,18 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($crop, unserialize($row['crop_parameter']));
 
     }
-    
+
     function testCreateCustomInstanceCreaterThanImage() {
-        
+
         $im = new InstanceManager($this->createKernel());
-        
+
         $this->assertEquals(1000, $im->save(array('name' => 'wide', 'max_height' => 280, 'max_width' => 720, 'resize_type' => 'strict')));
-        
+
         $filehandler = $this->createFile('idraetshoejskolen9.jpg');
         $filehandler->createInstance('wide');
         // we add 10 bytes delta
         $this->assertEquals(54498, filesize($filehandler->instance->get('file_path')), '', 10);
-        $size = getimagesize($filehandler->instance->get('file_path')); 
+        $size = getimagesize($filehandler->instance->get('file_path'));
         $this->assertEquals(720, $size[0]);
         $this->assertEquals(280, $size[1]);
     }

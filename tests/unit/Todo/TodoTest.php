@@ -9,18 +9,13 @@ require_once 'Intraface/modules/todo/TodoList.php';
 
 error_reporting(E_ALL);
 
-class FakeKernelTest
-{
-
-}
-
 class TodoTest extends PHPUnit_Framework_TestCase
 {
     private $todo;
 
     function setUp()
     {
-        $this->todo = new TodoList(new FakeKernelTest);
+        $this->todo = new TodoList(new Stub_Kernel);
     }
 
     function testConstruction()

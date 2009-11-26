@@ -28,11 +28,7 @@ class SectionLongTextTest extends PHPUnit_Framework_TestCase {
         $db->exec('TRUNCATE cms_template');
         $db->exec('TRUNCATE cms_template_section');
 
-        $this->kernel = new Intraface_Kernel;
-        $this->kernel->user = new FakeCMSUser;
-        $this->kernel->intranet = new FakeCMSIntranet;
-        $this->kernel->setting = new FakeCMSSetting;
-        $this->kernel->module('cms');
+        $this->kernel = new Stub_Kernel;
         $this->site = new FakeCMSSite($this->kernel);
         $this->page = new FakeCMSPage($this->site);
     }

@@ -6,6 +6,7 @@ require_once 'Intraface/Standard.php';
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/shared/filehandler/FileHandler.php';
 require_once 'Intraface/shared/filehandler/AppendFile.php';
+require_once 'file_functions.php';
 
 class FakeFileHandler
 {
@@ -15,19 +16,14 @@ class FakeFileHandler
     }
 }
 
-class FakeAppendFileIntranet
-{
-    function get() { return 1; }
-}
-
 class FakeAppendFileFile
 {
-    
+
     public $id;
     function __construct($id = 1) {
         $this->id = $id;
     }
-    
+
     function getId()
     {
         return $this->id;
@@ -44,8 +40,7 @@ class AppendFileTest extends PHPUnit_Framework_TestCase
 
     function createAppendFile($id = 0)
     {
-        $kernel = new Intraface_Kernel;
-        $kernel->intranet = new FakeAppendFileIntranet;
+        $kernel = new Stub_Kernel;
         return new AppendFile($kernel, 'product', 1, $id);
     }
 
@@ -83,24 +78,24 @@ class AppendFileTest extends PHPUnit_Framework_TestCase
         $append->delete($id);
         $this->assertTrue($append->undelete(1));
     }
-    
+
     function testCreateDBQuery() {
         $append = $this->createAppendFile();
         $append->getDBQuery();
-        
+
         $this->assertTrue(isset($append->dbquery));
-        
-        
+
+
     }
-    
+
     function testGetList() {
         $append = $this->createAppendFile();
         $append->addFile(new FakeAppendFileFile(1));
         $append->addFile(new FakeAppendFileFile(2));
         $append->addFile(new FakeAppendFileFile(3));
-        
+
         $append->getDBQuery();
-        
+
         $expected = array(
             0 => array(
                 'id' => 1,
@@ -115,10 +110,10 @@ class AppendFileTest extends PHPUnit_Framework_TestCase
                 'file_handler_id' => 3,
                 'description' => '')
         );
-        
-        
+
+
         $this->assertEquals($expected, $append->getList());
-        
+
     }
 
 }

@@ -10,7 +10,7 @@ class PageElementTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $kernel = new FakeCMSKernel();
+        $kernel = new Stub_Intranet();
         $site = new FakeCMSSite($kernel);
         $page = new FakeCMSPage($site);
         $section = new FakeCMSSection($page);

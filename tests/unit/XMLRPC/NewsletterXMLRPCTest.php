@@ -5,23 +5,6 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/XMLRPC/Newsletter/Server.php';
 
-class NewsletterXMLRPCServerIntranet
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-class NewsletterXMLRPCServerKernel
-{
-    public $intranet;
-    function __construct()
-    {
-        $this->intranet = new NewsletterXMLRPCServerIntranet;
-    }
-}
-
 class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
 {
     private $server;
@@ -32,7 +15,7 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
         $db = MDB2::factory(DB_DSN);
         $db->exec('TRUNCATE contact');
         $db->exec('TRUNCATE newsletter_subscriber');
-        $this->kernel = new NewsletterXMLRPCServerKernel;
+        $this->kernel = new Stub_Kernel;
 
     }
 

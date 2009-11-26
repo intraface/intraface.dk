@@ -5,49 +5,13 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/accounting/Account.php';
 
-class FakeAccountSetting
-{
-    function get()
-    {
-        return 25;
-    }
-}
-
-class FakeAccountIntranet
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-class FakeAccountUser
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-class FakeAccountKernel
-{
-    public $intranet;
-    public $user;
-    public $setting;
-    function __construct()
-    {
-        $this->intranet = new FakeAccountIntranet;
-        $this->user = new FakeAccountUser;
-        $this->setting = new FakeAccountSetting;
-    }
-}
-
 class FakeAccountYear
 {
     public $kernel;
     function __construct()
     {
-        $this->kernel = new FakeAccountKernel;
+        $this->kernel = new Stub_Kernel;
+        $this->kernel->setting->set('intranet', 'vatpercent', 25);
     }
     function get()
     {

@@ -4,33 +4,6 @@ require_once dirname(__FILE__) . './../config.test.php';
 require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/modules/accounting/Post.php';
 
-class FakePostSetting {
-    function get() {}
-}
-
-class FakePostIntranet {
-    function get() { return 1; }
-    function getId() {
-    	return $this->get();
-    }
-}
-class FakePostUser {
-    function get() { return 1; }
-}
-
-class FakePostKernel
-{
-    public $setting;
-    public $intranet;
-    public $user;
-    function __construct()
-    {
-        $this->setting = new FakePostSetting;
-        $this->intranet = new FakePostIntranet;
-        $this->user = new FakePostUser;
-    }
-}
-
 class FakePostVoucher
 {
 	public $year;
@@ -49,10 +22,15 @@ class FakePostYear
     public $kernel;
     function __construct()
     {
-        $this->kernel = new FakePostKernel;
+        $this->kernel = new Stub_Kernel;
+        $this->kernel->setting->set('intranet', 'vatpercent', 25);
     }
     function get() { return 1; }
     function vatAccountIsSet() { return true; }
+    function getSetting()
+    {
+        return 1;
+    }
 }
 
 class PostTest extends PHPUnit_Framework_TestCase

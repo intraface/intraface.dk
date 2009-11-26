@@ -1,25 +1,26 @@
 <?php
 require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
+require_once 'DB/Sql.php';
 
 class Common_AllTests {
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Intraface_Common');
+        $suite = new PHPUnit_Framework_TestSuite('Intraface_Common_Tests');
 
         $tests = array(
-            'Kernel',
-            'ModuleHandler',
-            'Setting',
+           	'Address',
+            'Amount',
             'Date',
-            'User',
-            'Redirect',
             'DBQuery',
             'Error',
             'Intranet',
-            'Address',
-            'Amount',
+            'Kernel',
+            'ModuleHandler',
+            'Redirect',
+            'Setting',
+            'User',
             'Validator');
 
         foreach ($tests AS $test) {

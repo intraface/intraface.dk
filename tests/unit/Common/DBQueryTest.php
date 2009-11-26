@@ -7,48 +7,10 @@ require_once 'Intraface/DBQuery.php';
 require_once 'Ilib/DBQuery.php';
 require_once 'Intraface/Error.php';
 
-/** 
+/**
  * Notice this should only be tests to ensure that the extend from Ilib_DBQuery works
  * The actual tests of DBQuery should be in Intraface_3Party
  */
-
-class FakeDBQueryKernel {
-
-    public $user;
-
-    public function __construct($session_id = '')
-    {
-        $this->user = new FakeDBQueryUser;
-        $this->intranet = new FakeDBQueryIntranet;
-        if ($session_id == '') {
-            $this->session_id = 'dkm30dekcmek3dk30dkqdlfrjdi3i2jdnft';
-        }
-        else {
-            $this->session_id = $session_id;
-        }
-
-    }
-
-    public function getSessionId() {
-        return $this->session_id;
-    }
-
-}
-
-class FakeDBQueryUser {
-    public function get()
-    {
-        return 1;
-    }
-}
-
-class FakeDBQueryIntranet {
-    public function get()
-    {
-        return 1;
-    }
-}
-
 class DBQueryTest extends PHPUnit_Framework_TestCase
 {
     private $db;
@@ -87,7 +49,7 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
 
     function createDBQuery($session_id = '')
     {
-        $kernel = new FakeDBQueryKernel($session_id);
+        $kernel = new Stub_Kernel;
         return new Intraface_DBQuery($kernel, $this->table);
     }
 
@@ -124,7 +86,7 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
     function testRequiredConditions()
     {
         $condition = 'name = 1';
-        $kernel = new FakeDBQueryKernel;
+        $kernel = new Stub_Kernel;
         $dbquery = new Intraface_DBQuery($kernel, $this->table, $condition);
         $this->assertEquals($condition, $dbquery->required_conditions);
     }

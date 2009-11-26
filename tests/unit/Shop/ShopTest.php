@@ -1,21 +1,7 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-require_once dirname(__FILE__) .'/../stubs/PhpMailer.php';
 
 Intraface_Doctrine_Intranet::singleton(1);
-
-class FakeShopIntranet
-{
-    public $address;
-    function __construct() {
-        $this->address = new FakeShopAddress;
-    }
-    function hasModuleAccess() { return true; }
-    function get() { return '1'; }
-    function getId() {
-        return 1;
-    }
-}
 
 class FakeShopShop
 {
@@ -60,15 +46,6 @@ class FakeShopWeblogin {
     function get() { return 1; }
 }
 
-class FakeShopAddress
-{
-    function get($key = '') { if ($key == 'email') return 'lars@legestue.net'; else return 1; }
-}
-
-class FakeShopSetting {
-    function get() { return 1; }
-}
-
 class ShopTest extends PHPUnit_Framework_TestCase
 {
     private $webshop;
@@ -84,12 +61,9 @@ class ShopTest extends PHPUnit_Framework_TestCase
         $result = $db->query('TRUNCATE address');
         $result = $db->query('TRUNCATE debtor');
         $result = $db->query('TRUNCATE email');
-        
-        
-        $this->kernel = new Intraface_Kernel;
-        $this->kernel->intranet = new FakeShopIntranet;
-        $this->kernel->weblogin = new FakeShopWeblogin;
-        $this->kernel->setting = new FakeShopSetting;
+
+
+        $this->kernel = new Stub_Kernel;
         $this->webshop = new Intraface_modules_shop_Coordinator($this->kernel, new FakeShopShop, 'thissession');
     }
 
@@ -104,7 +78,7 @@ class ShopTest extends PHPUnit_Framework_TestCase
     function testPlaceOrderReturnsAnOrderNumber()
     {
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 'private', 'description' => 'test', 'internal_note' => '', 'message' => '');
-        $mailer = new FakePhpMailer;
+        $mailer = new Stub_PhpMailer;
         $order_id = $this->webshop->placeOrder($data, $mailer);
         $this->assertTrue($order_id > 0);
         $this->assertTrue($mailer->isSend(), 'Mail is not send');
@@ -128,12 +102,12 @@ class ShopTest extends PHPUnit_Framework_TestCase
         $type = new Intraface_modules_currency_Currency_Type;
         $currency->setType($type->getByIsoCode('EUR'));
         $currency->save();
-        
+
         $rate = new Intraface_modules_currency_Currency_ExchangeRate_ProductPrice;
         $rate->setRate(new Ilib_Variable_Float('745,21', 'da_dk'));
         $rate->setCurrency($currency);
         $rate->save();
-        
+
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'currency' => 'EUR');
         $mailer = new FakePhpMailer;
         $order_id = $this->webshop->placeOrder($data, $mailer);

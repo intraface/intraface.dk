@@ -3,38 +3,23 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/shared/email/Email.php';
 
-class FakeEmailIntranet {
-    function get() {
-        return 1;
-    }
-}
-
-class FakeEmailUser {
-    function get() {
-        return 1;
-    }
-}
-class FakeEmailKernel {
-    public $intranet;
-    public $user;
-}
-
 class EmailTest extends PHPUnit_Framework_TestCase {
 
     private $kernel;
 
-    function setUp() {
-        $this->kernel = new FakeEmailKernel;
-        $this->kernel->intranet = new FakeEmailIntranet;
-        $this->kernel->user = new FakeEmailUser;
+    function setUp()
+    {
+        $this->kernel = new Stub_Kernel;
     }
 
-    function testConstruction() {
+    function testConstruction()
+    {
         $email = new Email($this->kernel);
         $this->assertTrue(is_object($email));
     }
-    /*
-    function testSave() {
+
+    function testSave()
+    {
         $belong_to_id = rand(1, 100000);
         $type_id = rand(1,5);
         $contact_id = rand(1, 100000);
@@ -62,7 +47,8 @@ class EmailTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($email->get('user_id'), $this->kernel->user->get('id'));
     }
 
-    function _testSaveWithEmptyFrom() {
+    function _testSaveWithEmptyFrom()
+    {
         $belong_to_id = rand(1, 100000);
         $type_id = rand(1,5);
         $contact_id = rand(1, 100000);
@@ -89,9 +75,9 @@ class EmailTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($email->get('from_email'), $data['from_email']);
         $this->assertEquals($email->get('user_id'), $this->kernel->user->get('id'));
     }
-    */
 
-    function testALotOfSaveEmails() {
+    function testALotOfSaveEmails()
+    {
         $number = 200;
         for ($i = 0; $i<$number; $i++) {
             $belong_to_id = rand(1, 100000);
@@ -112,6 +98,4 @@ class EmailTest extends PHPUnit_Framework_TestCase {
         }
         $this->assertEquals($i, $number);
     }
-
 }
-?>

@@ -69,9 +69,7 @@ class NewsletterTest extends PHPUnit_Framework_TestCase
     function testQueuingOf10000Subscribers()
     {
         $list = new FakeNewsletterList();
-        $list->kernel = new FakeNewsletterKernel;
-        $list->kernel->intranet = new FakeNewsletterIntranet;
-        $list->kernel->user = new FakeNewsletterUser;
+        $list->kernel = new Stub_Kernel;
         $newsletter = new TestableNewsletter($list);
         $this->assertTrue($newsletter->queue());
     }

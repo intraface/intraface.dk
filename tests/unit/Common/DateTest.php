@@ -1,10 +1,12 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
+
 require_once 'PHPUnit/Framework.php';
+require_once 'Intraface/Date.php';
 
 date_default_timezone_set('Europe/Berlin');
 
-class Common_DateTest extends PHPUnit_Framework_TestCase
+class DateTest extends PHPUnit_Framework_TestCase
 {
     function testDateIsConvertedToDatabaseFormat()
     {

@@ -8,21 +8,13 @@ require_once 'MDB2.php';
 
 error_reporting(E_ALL);
 
-class FakeProjectUser
-{
-    function getActiveIntranetId()
-    {
-        return 1;
-    }
-}
-
 class ProjectTest extends PHPUnit_Framework_TestCase
 {
     private $project;
 
     function setUp()
     {
-        $this->project = new Intraface_Project(MDB2::singleton(DB_DSN), new FakeProjectUser);
+        $this->project = new Intraface_Project(MDB2::singleton(DB_DSN), new Stub_User);
     }
 
     function testConstruction()

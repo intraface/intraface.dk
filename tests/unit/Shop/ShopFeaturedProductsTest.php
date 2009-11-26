@@ -1,14 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
 
-class FakeShopFeaturedProductsIntranet
-{
-    function getId()
-    {
-        return 1;
-    }
-}
-
 class FakeShopFeaturedProductsKeyword
 {
     function getId()
@@ -26,7 +18,7 @@ class ShopFeaturedProductsTest extends PHPUnit_Framework_TestCase
     {
         $db = MDB2::factory(DB_DSN);
         $db->exec('TRUNCATE shop_featuredproducts');
-        $this->featured = new Intraface_modules_shop_FeaturedProducts(new FakeShopFeaturedProductsIntranet, new FakeShopFeaturedProductsIntranet, $db);
+        $this->featured = new Intraface_modules_shop_FeaturedProducts(new Stub_Intranet, new Stub_Intranet, $db);
     }
 
     function testConstruction()

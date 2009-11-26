@@ -5,24 +5,6 @@ require_once 'Intraface/modules/webshop/BasketEvaluation.php';
 require_once 'Intraface/modules/webshop/Basket.php';
 
 error_reporting(E_ALL);
-
-class FakeEvaluationIntranet {
-    function get() {
-        return 1;
-    }
-    function hasModuleAccess() {
-        return true;
-    }
-    function getId() {
-        return 1;
-    }
-}
-
-class FakeEvaluationUser {
-    function hasModuleAccess() { return true; }
-    function get() { return 1; }
-    function getActiveIntranetId() { return 1; }
-}
 class FakeEvaluationWebshop {
     public $kernel;
 }
@@ -49,9 +31,7 @@ class BasketEvaluationTest extends PHPUnit_Framework_TestCase
 
     function createKernel()
     {
-        $kernel = new Intraface_Kernel;
-        $kernel->intranet = new FakeEvaluationIntranet;
-        $kernel->user = new FakeEvaluationUser;
+        $kernel = new Stub_Kernel;
         return $kernel;
     }
 

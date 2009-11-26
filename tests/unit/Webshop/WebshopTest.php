@@ -9,30 +9,10 @@ require_once 'Intraface/Kernel.php';
 require_once 'Intraface/modules/webshop/Webshop.php';
 require_once 'Intraface/modules/webshop/Basket.php';
 require_once 'Intraface/modules/product/ProductDetail.php';
-require_once dirname(__FILE__) .'/../stubs/PhpMailer.php';
 
 error_reporting(E_ALL);
 
-class FakeWebshopIntranet
-{
-    public $address;
-    function __construct() {
-        $this->address = new FakeWebshopAddress;
-    }
-    function hasModuleAccess() { return true; }
-    function get() { return '1'; }
-}
-
 class FakeWebshopWeblogin {
-    function get() { return 1; }
-}
-
-class FakeWebshopAddress
-{
-    function get($key = '') { if ($key == 'email') return 'lars@legestue.net'; else return 1; }
-}
-
-class FakeWebshopSetting {
     function get() { return 1; }
 }
 
@@ -43,10 +23,7 @@ class WebshopTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->kernel = new Intraface_Kernel;
-        $this->kernel->intranet = new FakeWebshopIntranet;
-        $this->kernel->weblogin = new FakeWebshopWeblogin;
-        $this->kernel->setting = new FakeWebshopSetting;
+        $this->kernel = new Stub_Kernel;
         $this->webshop = new Webshop($this->kernel, 'thissession');
     }
 
@@ -61,11 +38,11 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     function testPlaceOrderReturnsAnOrderNumber()
     {
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 'private', 'description' => 'test', 'internal_note' => '', 'message' => '');
-        $mailer = new FakePhpMailer;
+        $mailer = new Stub_PhpMailer;
         $order_id = $this->webshop->placeOrder($data, $mailer);
         $this->assertTrue($order_id > 0);
         $this->assertTrue($mailer->isSend(), 'Mail is not send');
-        
+
     }
 
     function testPlaceOrderResetsBasketSoThereIsNoProductsInBasket()
@@ -88,7 +65,7 @@ class WebshopTest extends PHPUnit_Framework_TestCase
         $order_id = $this->webshop->placeOrder($data, $mailer);
         $this->assertTrue($order_id > 0);
         $this->assertTrue($mailer->isSend(), 'Mail is not send');
-        
+
         $order = new Order($this->kernel, $order_id);
         $this->assertEquals($ean, $order->getContact()->getAddress()->get('ean'));
         $this->assertEquals(1, $order->getContact()->get('type_key'));

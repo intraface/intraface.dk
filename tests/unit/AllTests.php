@@ -23,10 +23,7 @@ class AllTests
 {
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Intraface');
-
-        //'FileHandler',
-        //'FileManager',
+        $suite = new PHPUnit_Framework_TestSuite('Intraface_Testsuite');
 
         $tests = array('Product',
                        'Email',
@@ -40,6 +37,8 @@ class AllTests
                        'Debtor',
                        'Shared',
                        'Newsletter',
+                       'Filehandler',
+        			   'Filemanager',
                        'Keyword',
                        'Stock',
                        'Onlinepayment',

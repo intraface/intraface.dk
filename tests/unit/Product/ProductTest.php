@@ -4,55 +4,18 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'Intraface/functions.php';
 require_once 'Intraface/modules/product/Product.php';
 require_once 'Intraface/modules/product/ProductDetail.php';
+require_once 'Intraface/shared/keyword/Keyword.php';
 
 error_reporting(E_ALL);
 
-class FakeProductUser {
-    function get() {
-        return 1;
-    }
-    function hasModuleAccess()
-    {
-        return true;
-    }
-    function getActiveIntranetId()
-    {
-        return 1;
-    }
-}
-
-class FakeProductIntranet {
-    function get() {
-        return 1;
-    }
-    function hasModuleAccess()
-    {
-        return true;
-    }
-    function getId() {
-        return 1;
-    }
-}
-
 Intraface_Doctrine_Intranet::singleton(1);
-
-class FakeProductKernel {
-    public $intranet;
-    public $user;
-    public $setting;
-    function useShared() {}
-}
 
 class ProductTest extends PHPUnit_Framework_TestCase
 {
 
     function setUp()
     {
-        $this->kernel = new Intraface_Kernel();
-        $this->kernel->user = new FakeProductUser;
-        $this->kernel->intranet = new FakeProductIntranet;
-        $this->kernel->setting = new FakeProductIntranet;
-        $this->kernel->module('product', 1);
+        $this->kernel = new Stub_Kernel();
 
         $db = MDB2::factory(DB_DSN);
         $db->query('TRUNCATE product');
@@ -64,7 +27,6 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $db->query('TRUNCATE product_variation_detail');
         $db->query('TRUNCATE product_variation_x_attribute');
         $db->query('TRUNCATE product_x_attribute_group');
-        
     }
 
     function createProductObject($id = 0)
@@ -78,7 +40,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $product->save(array('name' => 'Test', 'price' => 20, 'unit' => 1));
         return $product;
     }
-    
+
     function createNewProductWithVariations()
     {
         $product = $this->createProductObject();
@@ -315,8 +277,8 @@ class ProductTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, count($product->getRelatedProducts()));
     }
-    
-    function testSetAttributeGroupThrowsExceptionOnWhenNotSavedWithVariations() 
+
+    function testSetAttributeGroupThrowsExceptionOnWhenNotSavedWithVariations()
     {
         $product = $this->createNewProduct();
         try {
@@ -327,37 +289,37 @@ class ProductTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('You can not set attribute group for a product without variations!', $e->getMessage());
         }
     }
-    
+
     function testSetAttributeGroup()
     {
         $product = $this->createNewProductWithVariations();
         $this->assertTrue($product->setAttributeGroup(1));
     }
-    
+
     function testRemoveAttributeGroup()
     {
         $product = $this->createNewProductWithVariations();
         $product->setAttributeGroup(1);
         $this->assertTrue($product->removeAttributeGroup(1));
     }
-    
+
     function testGetAttributeGroups()
     {
         $product = $this->createNewProductWithVariations();
-        
+
         $group = new Intraface_modules_product_Attribute_Group;
         $group->name = 'Test1';
         $group->save();
         $group->load();
         $product->setAttributeGroup($group->getId());
-        
+
         $group = new Intraface_modules_product_Attribute_Group;
         $group->name = 'Test2';
         $group->save();
         $group->load();
         $product->setAttributeGroup($group->getId());
-        
-        
+
+
         $expected = array(
             0 => array(
                 'id' => 1,
@@ -378,7 +340,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expected, $product->getAttributeGroups());
     }
-    
+
     function testGetVariationThrowsExceptionWhenNoGroupsAdded()
     {
         $product = $this->createNewProductWithVariations();
@@ -389,9 +351,9 @@ class ProductTest extends PHPUnit_Framework_TestCase
         catch (Exception $e) {
             $this->assertTrue(true);
         }
-        
+
     }
-    
+
     function testGetVariation()
     {
         $product = $this->createNewProductWithVariations();
@@ -400,13 +362,13 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $group->save();
         $group->load();
         $product->setAttributeGroup($group->getId());
-        
+
         $this->assertTrue(is_object($product->getVariation()));
-        
-        
+
+
     }
-    
-    function testGetVariations() 
+
+    function testGetVariations()
     {
         $product = $this->createNewProductWithVariations();
         $group = new Intraface_modules_product_Attribute_Group;
@@ -415,15 +377,15 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $group->attribute[1]->name = 'blue';
         $group->save();
         $product->setAttributeGroup($group->getId());
-        
-        
+
+
         $group = new Intraface_modules_product_Attribute_Group;
         $group->name = 'size';
         $group->attribute[0]->name = 'small';
         $group->attribute[1]->name = 'medium';
         $group->save();
         $product->setAttributeGroup($group->getId());
-        
+
         $variation = $product->getVariation();
         $variation->product_id = 1;
         $variation->setAttributesFromArray(array('attribute1' => 1, 'attribute2' => 3));
@@ -432,7 +394,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $detail->price_difference = 0;
         $detail->weight_difference = 0;
         $detail->save();
-        
+
         $variation = $product->getVariation();
         $variation->product_id = 1;
         $variation->setAttributesFromArray(array('attribute1' => 2, 'attribute2' => 4));
@@ -441,39 +403,39 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $detail->price_difference = 0;
         $detail->weight_difference = 0;
         $detail->save();
-        
-        
+
+
         $variations = $product->getVariations();
-        
+
         $this->assertEquals(2, $variations->count());
         $variation = $variations->getFirst();
         $this->assertEquals(1, $variation->getId());
         $this->assertEquals('red', $variation->attribute1->attribute->getName());
         $this->assertEquals('color', $variation->attribute1->attribute->group->getName());
-        
+
         $this->assertEquals('small', $variation->attribute2->attribute->getName());
         $this->assertEquals('size', $variation->attribute2->attribute->group->getName());
-        
+
     }
-    
+
     function testGetPriceInCurrency()
     {
-        require_once dirname(__FILE__) .'/../stubs/Fake/Intraface/modules/currency/Currency.php';
+        require_once dirname(__FILE__) .'/../Stub/Fake/Intraface/modules/currency/Currency.php';
         $currency = new Fake_Intraface_modules_currency_Currency;
-        require_once dirname(__FILE__) .'/../stubs/Fake/Intraface/modules/currency/Currency/ExchangeRate.php';
+        require_once dirname(__FILE__) .'/../Stub/Fake/Intraface/modules/currency/Currency/ExchangeRate.php';
         $currency->product_price_exchange_rate = new Fake_Intraface_modules_currency_Currency_ExchangeRate;
-        require_once dirname(__FILE__) .'/../stubs/Fake/Ilib/Variable/Float.php';
+        require_once dirname(__FILE__) .'/../Stub/Fake/Ilib/Variable/Float.php';
         $currency->product_price_exchange_rate->rate = new Fake_Ilib_Variable_Float;
         $currency->product_price_exchange_rate->rate->iso = 745.23;
-        
+
         $product = new Product($this->kernel);
         $product->save(array('name' => 'test', 'price' => 200, 'unit' => 1));
         $product->load();
-        
+
         $this->assertEquals(26.84, $product->getDetails()->getPriceInCurrency($currency)->getAsIso());
-        
-        
-        
+
+
+
     }
-    
+
 }

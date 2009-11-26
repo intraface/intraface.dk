@@ -3,12 +3,6 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/invoice/CreditNote.php';
-require_once dirname(__FILE__) .'/../stubs/Kernel.php';
-require_once dirname(__FILE__) .'/../stubs/User.php';
-require_once dirname(__FILE__) .'/../stubs/Intranet.php';
-require_once dirname(__FILE__) .'/../stubs/Setting.php';
-require_once dirname(__FILE__) .'/../stubs/Address.php';
-require_once dirname(__FILE__) .'/../stubs/Translation.php';
 require_once 'Intraface/modules/product/Product.php';
 require_once 'Intraface/modules/contact/Contact.php';
 require_once 'Intraface/functions.php';
@@ -33,11 +27,7 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
     }
 
     function createKernel() {
-        $kernel = new FakeKernel;
-        $kernel->user = new FakeUser;
-        $kernel->intranet = new FakeIntranet;
-        $kernel->setting = new FakeSetting;
-        $kernel->intranet->address = new FakeAddress;
+        $kernel = new Stub_Kernel;
         $kernel->setting->set('intranet', 'onlinepayment.provider_key', '1');
         $kernel->setting->set('user', 'accounting.active_year', '1');
         $kernel->setting->set('intranet', 'vatpercent', 25);
@@ -137,7 +127,7 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
         $creditnote = $this->createAnCreditNoteWithOneItem();
         $creditnote->setStatus('sent');
         $year = $this->createAccountingYear();
-        $this->assertTrue($creditnote->state($year, 1, '10-01-' . date('Y'), new FakeTranslation), 'state: '.$creditnote->error->view());
+        $this->assertTrue($creditnote->state($year, 1, '10-01-' . date('Y'), new Stub_Translation), 'state: '.$creditnote->error->view());
 
         $voucher = Voucher::factory($year, 1);
 
@@ -214,7 +204,7 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
         $creditnote = $this->createAnCreditNoteWithOneItem(array('product_vat' => 0, 'product_state_account_id' => 1120));
         $creditnote->setStatus('sent');
         $year = $this->createAccountingYear();
-        $this->assertTrue($creditnote->state($year, 1, '10-01-' . date('Y'), new FakeTranslation), 'state: '.$creditnote->error->view());
+        $this->assertTrue($creditnote->state($year, 1, '10-01-' . date('Y'), new Stub_Translation), 'state: '.$creditnote->error->view());
 
         $voucher = Voucher::factory($year, 1);
 

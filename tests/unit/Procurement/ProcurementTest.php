@@ -1,15 +1,9 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
-
-require_once dirname(__FILE__) .'/../stubs/Kernel.php';
-require_once dirname(__FILE__) .'/../stubs/Intranet.php';
-require_once dirname(__FILE__) .'/../stubs/Address.php';
-require_once dirname(__FILE__) .'/../stubs/User.php';
-require_once dirname(__FILE__) .'/../stubs/Setting.php';
-require_once dirname(__FILE__) .'/../stubs/Translation.php';
 require_once 'Intraface/functions.php';
 require_once 'Intraface/modules/procurement/Procurement.php';
+require_once 'DB/Sql.php';
 
 class ProcurementTest extends PHPUnit_Framework_TestCase
 {
@@ -29,11 +23,7 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
 
     function createKernel()
     {
-        $kernel = new FakeKernel;
-        $kernel->user = new FakeUser;
-        $kernel->intranet = new FakeIntranet;
-        $kernel->intranet->address = new FakeAddress;
-        $kernel->setting = new FakeSetting;
+        $kernel = new Stub_Kernel;
         $kernel->setting->set('user', 'accounting.active_year', '1');
         $kernel->setting->set('intranet', 'vatpercent', 25);
         $kernel->setting->set('intranet', 'accounting.vat_out_account_id', 46);
@@ -152,7 +142,7 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
 
         );
 
-        $this->assertTrue($procurement->state($year, 1, '05-01-'.date('Y'), $state,  58000, new FakeTranslation), $procurement->error->view());
+        $this->assertTrue($procurement->state($year, 1, '05-01-'.date('Y'), $state,  58000, new Stub_Translation), $procurement->error->view());
 
         $voucher = Voucher::factory($year, 1);
         $expected = array(
@@ -252,6 +242,6 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
         );
 
 
-        $this->assertTrue($procurement->state($year, 1, '05-01-'.date('Y'), $state,  58000, new FakeTranslation), $procurement->error->view());
+        $this->assertTrue($procurement->state($year, 1, '05-01-'.date('Y'), $state,  58000, new Stub_Translation), $procurement->error->view());
     }
 }

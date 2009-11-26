@@ -17,10 +17,7 @@ class TemplateSectionTest extends PHPUnit_Framework_TestCase
 
     function createKernel()
     {
-        $this->kernel = new Intraface_Kernel;
-        $this->kernel->intranet = new FakeCMSIntranet;
-        $this->kernel->setting = new FakeCMSSetting;
-        $this->kernel->module('cms');
+        $this->kernel = new Stub_Intranet;
 
         return $this->kernel;
     }

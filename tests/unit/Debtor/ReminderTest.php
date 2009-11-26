@@ -1,13 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
-
-require_once dirname(__FILE__) .'/../stubs/Kernel.php';
-require_once dirname(__FILE__) .'/../stubs/Setting.php';
-require_once dirname(__FILE__) .'/../stubs/Intranet.php';
-require_once dirname(__FILE__) .'/../stubs/User.php';
-require_once dirname(__FILE__) .'/../stubs/Address.php';
-require_once dirname(__FILE__) .'/../stubs/Translation.php';
 require_once 'Intraface/modules/invoice/Reminder.php';
 require_once 'Intraface/modules/invoice/Invoice.php';
 require_once 'Intraface/functions.php';
@@ -31,11 +24,7 @@ class ReminderTest extends PHPUnit_Framework_TestCase
     }
 
     function createKernel() {
-        $kernel = new FakeKernel;
-        $kernel->intranet = new FakeIntranet;
-        $kernel->intranet->address = new FakeAddress;
-        $kernel->setting = new FakeSetting;
-        $kernel->user = new FakeUser;
+        $kernel = new Stub_Kernel;
         $kernel->setting->set('user', 'accounting.active_year', '1');
         $kernel->setting->set('intranet', 'vatpercent', 25);
         return $kernel;
@@ -226,7 +215,7 @@ class ReminderTest extends PHPUnit_Framework_TestCase
                 'checked_invoice' => array($this->createAnInvoice($contact_id))));
         $reminder->setStatus('sent');
         $year = $this->createAccountingYear();
-        $this->assertTrue($reminder->state($year, 1, '10-01-' . date('Y'), 1120, new FakeTranslation), $reminder->error->view());
+        $this->assertTrue($reminder->state($year, 1, '10-01-' . date('Y'), 1120, new Stub_Translation), $reminder->error->view());
 
         $voucher = Voucher::factory($year, 1);
 

@@ -1,51 +1,7 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-
-class FakeShopBasketKernel
-{
-    public $intranet;
-    public $user;
-    function useModule()
-    {
-        return true;
-    }
-    function useShared()
-    {
-        return true;
-    }
-}
-class FakeShopBasketIntranet
-{
-    function get()
-    {
-        return 1;
-    }
-    function hasModuleAccess()
-    {
-        return true;
-    }
-
-    function getId()
-    {
-        return 1;
-    }
-}
-
-class FakeShopBasketUser
-{
-    function hasModuleAccess()
-    {
-        return true;
-    }
-    function get()
-    {
-        return 1;
-    }
-    function getActiveIntranetId() {
-        return 1;
-    }
-
-} // used for DBQuery
+require_once 'Intraface/modules/product/Product.php';
+require_once 'Intraface/functions.php';
 
 class FakeShopBasketCoordinator
 {
@@ -70,7 +26,6 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
     {
         $this->emptyBasketTable();
         $kernel = $this->createKernel();
-        $kernel->module('product');
         $this->kernel = $kernel;
         $this->product = new Product($kernel);
         $this->product->save(array('name' => 'test', 'price' => 200, 'weight' => 200));
@@ -109,9 +64,7 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
 
     function createKernel()
     {
-        $kernel = new Intraface_Kernel;
-        $kernel->intranet = new FakeShopBasketIntranet;
-        $kernel->user = new FakeShopBasketUser;
+        $kernel = new Stub_Kernel;
         return $kernel;
     }
 
@@ -121,7 +74,7 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $coordinator = new FakeShopBasketCoordinator();
         $shop = new FakeShopBasketWebshop;
         $coordinator->kernel = $kernel;
-        $basket = new Intraface_modules_shop_Basket(MDB2::factory(DB_DSN), new FakeShopBasketIntranet, $coordinator, $shop, 'somesessionid');
+        $basket = new Intraface_modules_shop_Basket(MDB2::factory(DB_DSN), new Stub_Intranet, $coordinator, $shop, 'somesessionid');
         return $basket;
     }
 

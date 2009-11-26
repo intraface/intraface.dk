@@ -4,12 +4,6 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/modules/invoice/Invoice.php';
 require_once 'Intraface/Date.php';
-require_once dirname(__FILE__) .'/../stubs/Kernel.php';
-require_once dirname(__FILE__) .'/../stubs/User.php';
-require_once dirname(__FILE__) .'/../stubs/Intranet.php';
-require_once dirname(__FILE__) .'/../stubs/Setting.php';
-require_once dirname(__FILE__) .'/../stubs/Address.php';
-require_once dirname(__FILE__) .'/../stubs/Translation.php';
 require_once 'Intraface/modules/product/Product.php';
 require_once 'Intraface/modules/contact/Contact.php';
 require_once 'Intraface/functions.php';
@@ -34,11 +28,7 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
     }
 
     function createKernel() {
-        $kernel = new FakeKernel;
-        $kernel->user = new FakeUser;
-        $kernel->intranet = new FakeIntranet;
-        $kernel->setting = new FakeSetting;
-        $kernel->intranet->address = new FakeAddress;
+        $kernel = new Stub_Kernel;
         $kernel->setting->set('intranet', 'onlinepayment.provider_key', '1');
         $kernel->setting->set('user', 'accounting.active_year', '1');
         $kernel->setting->set('intranet', 'vatpercent', 25);
@@ -128,7 +118,7 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
         $invoice = $this->createAnInvoiceWithOneItem();
         $invoice->setStatus('sent');
         $year = $this->createAccountingYear();
-        $this->assertTrue($invoice->state($year, 1, '10-01-' . date('Y'), new FakeTranslation), $invoice->error->view());
+        $this->assertTrue($invoice->state($year, 1, '10-01-' . date('Y'), new Stub_Translation), $invoice->error->view());
 
         $voucher = Voucher::factory($year, 1);
 
@@ -205,7 +195,7 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
         $invoice = $this->createAnInvoiceWithOneItem(array('product_vat' => 0, 'product_state_account_id' => 1120));
         $invoice->setStatus('sent');
         $year = $this->createAccountingYear();
-        $this->assertTrue($invoice->state($year, 1, '10-01-' . date('Y'), new FakeTranslation), $invoice->error->view());
+        $this->assertTrue($invoice->state($year, 1, '10-01-' . date('Y'), new Stub_Translation), $invoice->error->view());
 
         $voucher = Voucher::factory($year, 1);
 

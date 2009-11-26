@@ -5,50 +5,13 @@ require_once 'Intraface/modules/accounting/Account.php';
 require_once 'Intraface/modules/accounting/YearEnd.php';
 require_once 'Intraface/Kernel.php';
 
-class FakeYearEndIntranet
-{
-    function get()
-    {
-        return 1;
-    }
-
-    function hasModuleAccess()
-    {
-        return true;
-    }
-}
-
-class FakeYearEndUser
-{
-    function hasModuleAccess()
-    {
-        return true;
-    }
-
-    function get()
-    {
-        return 1;
-    }
-}
-
-class FakeYearEndSetting
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
 class FakeYearEndYear
 {
     public $kernel;
     function __construct()
     {
-        $this->kernel = new Intraface_Kernel;
-        $this->kernel->user = new FakeYearEndUser;
-        $this->kernel->module('accounting');
-        $this->kernel->intranet = new FakeYearEndIntranet;
-        $this->kernel->setting = new FakeYearEndSetting;
+        $this->kernel = new Stub_Kernel;
+                $this->kernel->setting->set('intranet', 'vatpercent', 25);
 
     }
     function get()

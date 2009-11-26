@@ -3,7 +3,7 @@ require_once dirname(__FILE__) . './../config.test.php';
 
 require_once 'PHPUnit/Framework.php';
 require_once 'CMSStubs.php';
-require_once 'Intraface/Kernel.php';
+require_once 'Intraface/modules/cms/Navigation.php';
 
 class FakeCMSPageSite
 {
@@ -36,12 +36,7 @@ class PageTest extends PHPUnit_Framework_TestCase
 
     function createKernel()
     {
-        $this->kernel = new Intraface_Kernel;
-        $this->kernel->intranet = new FakeCMSIntranet;
-        $this->kernel->user = new FakeCMSIntranet;
-        $this->kernel->setting = new FakeCMSSetting;
-        $this->kernel->module('cms');
-
+        $this->kernel = new Stub_Kernel;
         return $this->kernel;
     }
 

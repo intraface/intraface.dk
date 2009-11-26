@@ -8,14 +8,6 @@ require_once 'MDB2.php';
 
 error_reporting(E_ALL);
 
-class FakeTaskUser
-{
-    function getActiveIntranetId()
-    {
-        return 1;
-    }
-}
-
 class FakeTaskProject
 {
     function getId()
@@ -25,7 +17,7 @@ class FakeTaskProject
 
     function getUser()
     {
-        return new FakeTaskUser;
+        return new Stub_User;
     }
 }
 

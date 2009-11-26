@@ -1,19 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
 
-class FakeShopEvaluationIntranet {
-    function getId() {
-        return 1;
-    }
-    function get()
-    {
-        return 1;
-    }
-    function hasModuleAccess() {
-        return true;
-    }
-}
-
 class FakeShopEvaluationCoordinator
 {
     public $kernel;
@@ -31,11 +18,6 @@ class FakeShopEvaluationShop
     }
 }
 
-class FakeShopEvaluationUser {
-    function hasModuleAccess() { return true; }
-    function get() { return 1; }
-    function getActiveIntranetId() { return 1; }
-}
 class FakeShopEvaluationWebshop {
     public $kernel;
 }
@@ -63,15 +45,13 @@ class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
 
     function createKernel()
     {
-        $kernel = new Intraface_Kernel;
-        $kernel->intranet = new FakeShopEvaluationIntranet;
-        $kernel->user = new FakeShopEvaluationUser;
+        $kernel = new Stub_Kernel;
         return $kernel;
     }
 
     function createBasketEvaluation($id = 0)
     {
-        return new Intraface_modules_shop_BasketEvaluation(MDB2::singleton(DB_DSN), new FakeShopEvaluationIntranet, new FakeShopEvaluationShop, $id);
+        return new Intraface_modules_shop_BasketEvaluation(MDB2::singleton(DB_DSN), new Stub_Intranet, new FakeShopEvaluationShop, $id);
     }
 
     function createBasket()
@@ -81,7 +61,7 @@ class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
         $webshop->kernel = $kernel;
 
         return new Intraface_modules_shop_Basket(MDB2::singleton(DB_DSN),
-            new FakeShopEvaluationIntranet,
+            new Stub_Intranet,
             new FakeShopEvaluationCoordinator($this->createKernel()),
             new FakeShopEvaluationShop, 'some session');
     }

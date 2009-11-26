@@ -16,7 +16,7 @@ class NewsletterListTest extends PHPUnit_Framework_TestCase
 
     function createEmptyList()
     {
-        return new Newsletterlist(new FakeNewsletterKernel);
+        return new Newsletterlist(new Stub_Kernel);
     }
 
     function testConstruction()

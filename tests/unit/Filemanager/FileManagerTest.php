@@ -5,22 +5,7 @@ require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/modules/filemanager/FileManager.php';
-
-class FakeFileManagerIntranet
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-class FakeFileManagerUser
-{
-    function get()
-    {
-        return 1;
-    }
-}
+require_once 'DB/Sql.php';
 
 class FileManagerTest extends PHPUnit_Framework_TestCase
 {
@@ -28,9 +13,7 @@ class FileManagerTest extends PHPUnit_Framework_TestCase
 
     function createKernel()
     {
-        $kernel = new Intraface_Kernel;
-        $kernel->intranet = new FakeFileManagerIntranet;
-        $kernel->user = new FakeFileManagerUser;
+        $kernel = new Stub_Kernel;
         return $kernel;
     }
 

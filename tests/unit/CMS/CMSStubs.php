@@ -3,47 +3,6 @@ require_once 'Intraface/Kernel.php';
 require_once 'Intraface/DBQuery.php';
 require_once 'Intraface/modules/cms/Page.php';
 
-class FakeCMSKernel extends Intraface_Kernel {
-    public $intranet;
-    public $user;
-    function __construct() {
-        $this->intranet = new FakeCMSIntranet;
-        $this->user = new FakeCMSUser;
-    }
-
-    function getSessionId() {
-        return 'shouldbeatleast10char';
-    }
-}
-
-
-class FakeCMSUser {
-    function get() {
-        return 1;
-    }
-    function hasModuleAccess() {
-        return true;
-    }
-}
-
-class FakeCMSIntranet {
-    function get() {
-        return 1;
-    }
-    function hasModuleAccess() {
-        return true;
-    }
-}
-
-class FakeCMSSetting {
-    function get() {
-        return 1;
-    }
-    function set() {
-        return true;
-    }
-}
-
 class FakeCMSPage extends CMS_Page {
     public $kernel;
     public $cmssite;
@@ -86,7 +45,7 @@ class FakeCMSTemplate
 
     function __construct()
     {
-        $this->kernel = new FakeCMSKernel;
+        $this->kernel = new Stub_Kernel;
         $this->cmssite = new FakeCMSSite($this->kernel);
     }
 

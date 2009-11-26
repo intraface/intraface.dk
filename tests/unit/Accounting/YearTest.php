@@ -4,57 +4,18 @@ require_once dirname(__FILE__) . './../config.test.php';
 require_once 'Intraface/modules/accounting/Year.php';
 require_once 'Intraface/functions.php';
 
-class FakeYearSetting
-{
-    private $setting = array();
-    function get($none, $key)
-    {
-        if (!isset($this->setting[$key])) {
-            return '';
-        }
-        return $this->setting[$key];
-    }
-    function set($none, $key, $value)
-    {
-        $this->setting[$key] = $value;
-    }
-}
-
-class FakeYearIntranet
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-class FakeYearUser
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-class FakeYearKernel
-{
-    public $setting;
-    public $intranet;
-    public $user;
-
-    function __construct()
-    {
-        $this->setting = new FakeYearSetting;
-        $this->intranet = new FakeYearIntranet;
-        $this->user = new FakeYearUser;
-    }
-}
-
 class YearTest extends PHPUnit_Framework_TestCase
 {
     function setUp()
     {
-        $this->kernel = new FakeYearKernel();
+        $this->kernel = new Stub_Kernel();
+                $this->kernel->setting->set('intranet', 'vatpercent', 25);
+     $this->kernel->setting->set('user', 'accounting.active_year', 1);
+     $this->kernel->setting->set('intranet', 'accounting.result_account_id', 25);
+$this->kernel->setting->set('intranet', 'accounting.debtor_account_id', 25);
+$this->kernel->setting->set('intranet', 'accounting.credit_account_id', 25);
+$this->kernel->setting->set('intranet', 'accounting.balance_accounts', serialize(array()));
+
     }
 
     function testSetYearReturnsFalseWhenYearObjectIsNotSet()

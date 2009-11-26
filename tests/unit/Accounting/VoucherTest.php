@@ -3,37 +3,15 @@ require_once dirname(__FILE__) . './../config.test.php';
 
 require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/modules/accounting/Voucher.php';
-
-class FakeVoucherSetting {
-    function get() {}
-}
-
-class FakeVoucherIntranet {
-    function get() { return 1; }
-}
-class FakeVoucherUser {
-    function get() { return 1; }
-}
-
-class FakeVoucherKernel
-{
-    public $setting;
-    public $intranet;
-    public $user;
-    function __construct()
-    {
-        $this->setting = new FakeVoucherSetting;
-        $this->intranet = new FakeVoucherIntranet;
-        $this->user = new FakeVoucherUser;
-    }
-}
+require_once 'Intraface/modules/accounting/VoucherFile.php';
 
 class FakeVoucherYear
 {
     public $kernel;
     function __construct()
     {
-        $this->kernel = new FakeVoucherKernel;
+        $this->kernel = new Stub_Kernel;
+                $this->kernel->setting->set('intranet', 'vatpercent', 25);
     }
     function get() { return 1; }
     function vatAccountIsSet() { return true; }

@@ -4,51 +4,10 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'Intraface/functions.php';
 require_once 'Intraface/shared/filehandler/FileHandler.php';
 require_once 'Intraface/shared/filehandler/ImageHandler.php';
-
-class FakeImageHandlerKernel {
-    public $intranet;
-    public $user;
-
-}
-
-
-class FakeImageHandlerIntranet
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-class FakeImageHandlerUser
-{
-    function get()
-    {
-        return 1;
-    }
-}
-
-if (!function_exists('iht_deltree')) {
-    
-    function iht_deltree( $f ){
-    
-        if ( is_dir( $f ) ){
-            foreach ( scandir( $f ) as $item ){
-                if ( !strcmp( $item, '.' ) || !strcmp( $item, '..' ) )
-                    continue;
-                iht_deltree( $f . "/" . $item );
-            }
-            rmdir( $f );
-        }
-        else{
-            @unlink( $f );
-        }
-    }
-}
+require_once 'file_functions.php';
 
 class ImageHandlerTest extends PHPUnit_Framework_TestCase
 {
-
     private $file_name = 'wideonball.jpg';
 
     function setUp()
@@ -64,15 +23,13 @@ class ImageHandlerTest extends PHPUnit_Framework_TestCase
 
     function createKernel()
     {
-        $kernel = new FakeImageHandlerKernel;
-        $kernel->intranet = new FakeImageHandlerIntranet;
-        $kernel->user = new FakeImageHandlerUser;
+        $kernel = new Stub_Kernel;
         return $kernel;
     }
 
     function createFileHandler()
     {
-        
+
         $data = array('file_name' => $this->file_name);
         $filehandler = new FileHandler($this->createKernel());
         copy(dirname(__FILE__) . '/'.$this->file_name, PATH_UPLOAD.$this->file_name);
@@ -98,7 +55,7 @@ class ImageHandlerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $size[0]);
         $this->assertEquals(50, $size[1]);
     }
-    
+
     function testResizeWithStrictSize() {
 
         $image = new ImageHandler($this->createFileHandler());
@@ -116,20 +73,20 @@ class ImageHandlerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(100, $size[1]);
 
     }
-    
+
     function testQualityAfterRepeatedResize() {
-        
+
         $image = new ImageHandler($this->createFileHandler());
         $image->resize(500, 200);
         $image->resize(300, 200);
         $file1 = $image->resize(200, 200);
-        
+
         $image = new ImageHandler($this->createFileHandler());
         $file2 = $image->resize(200, 200);
-        
+
         // we accept 10% fall in quality! after several resize
         $this->assertEquals(filesize($file2), filesize($file1), '', filesize($file2)/100*10);
-        
+
     }
 
 
