@@ -8,10 +8,10 @@ class Intraface_Filehandler_Controller_SelectFile extends k_Component
 
     function postForm()
     {
-        $kernel = $this->registry->get('intraface:kernel');
+        $kernel = $this->context->getKernel();
         $module_filemanager = $kernel->module('filemanager');
         $translation = $kernel->getTranslation('filemanager');
-        $gateway = $this->registry->get('intraface:filehandler:gateway');
+        $gateway = new Ilib_Filehandler_Gateway($this->context->getKernel());
         /*
         if (isset($this->POST['ajax'])) {
 
@@ -59,9 +59,8 @@ class Intraface_Filehandler_Controller_SelectFile extends k_Component
         }
         */
 
-        $gateway = $this->registry->get('intraface:filehandler:gateway');
         $appender = $this->getFileAppender();
-        foreach ($this->POST['selected'] as $file_id) {
+        foreach ($this->body('selected') as $file_id) {
             $file = $gateway->getFromId($file_id);
         	$appender->addFile($file);
         }
@@ -113,23 +112,23 @@ class Intraface_Filehandler_Controller_SelectFile extends k_Component
 
     function renderHtml()
     {
-        $kernel = $this->registry->get('intraface:kernel');
+        $kernel = $this->context->getKernel();
         $module_filemanager = $kernel->module('filemanager');
         $translation = $kernel->getTranslation('filemanager');
 
-        if (isset($this->GET['delete'])) {
+        if ($this->query('delete')) {
             $appender = $this->getFileAppender();
-            $appender->delete((int)$this->GET['delete']);
+            $appender->delete((int)$this->query('delete'));
             return new k_SeeOther($this->url('../../'));
-        } elseif (isset($this->GET['moveup'])) {
+        } elseif ($this->query('moveup')) {
             $appender = $this->getFileAppender();
-            $file = $appender->findById(intval($this->GET['moveup']));
+            $file = $appender->findById($this->query('moveup'));
             try {
                 $file->moveUp();
             } catch (Exception $e) {
             }
             return new k_SeeOther($this->url('../../'));
-        } elseif (isset($this->GET['movedown'])) {
+        } elseif ($this->query('movedown')) {
             $appender = $this->getFileAppender();
             $file = $appender->findById(intval($_GET['movedown']));
             try {
@@ -152,6 +151,7 @@ class Intraface_Filehandler_Controller_SelectFile extends k_Component
             $multiple_choice = false;
         }
         */
+
         $filemanager = new Ilib_Filehandler_Manager($kernel); // has to be loaded here, while it should be able to set an error just below.
 
         /*
@@ -231,19 +231,19 @@ class Intraface_Filehandler_Controller_SelectFile extends k_Component
 
         $files = $filemanager->getList();
 
-        $this->document->scripts[] = $this->url('/scripts/select_file.js');
-
-        $this->document->scripts[] = $this->url('/yui/connection/connection-min.js');
+        $this->document->addScript($this->url('/scripts/select_file.js'));
+        $this->document->addScript($this->url('/yui/connection/connection-min.js'));
 
         $this->document->setTitle('Files');
 
         $data = array('filemanager' => $filemanager,
                       'multiple_choice' => $multiple_choice,
-                      //'receive_redirect' => $receive_redirect,
+                      'receive_redirect' => $receive_redirect,
                       'files' => $files,
                       'selected_files' =>  $selected_files
         );
 
-        return $this->render(dirname(__FILE__) . '/../templates/selectfile.tpl.php', $data);
+        $tpl = new k_Template(dirname(__FILE__) . '/../templates/selectfile.tpl.php');
+        return $tpl->render($this, $data);
     }
 }

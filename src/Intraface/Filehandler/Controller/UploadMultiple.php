@@ -58,9 +58,4 @@ class Intraface_Filehandler_Controller_UploadMultiple extends k_Component
         $location = $redirect->getRedirect($this->url('../'));
         return new k_SeeOther($location);
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

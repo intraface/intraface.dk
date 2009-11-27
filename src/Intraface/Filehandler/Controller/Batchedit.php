@@ -53,10 +53,4 @@ class Intraface_Filehandler_Controller_Batchedit extends k_Component
         $tpl = new k_Template(dirname(__FILE__) . '/../templates/batchedit.tpl.php');
         return $tpl->render($this, $data);
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
 }

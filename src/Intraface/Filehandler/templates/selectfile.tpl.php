@@ -1,10 +1,10 @@
 <h1><?php e(__('files')); ?></h1>
 
 <ul class="options">
-    <li><a href="select_file.php?upload=single" onclick="location.href='select_file.php?upload=multiple'; return false;"><?php e(__('upload file')); ?></a></li>
+    <li><a href="<?php e(url(null, array('upload' => 'single'))); ?>" onclick="location.href='select_file.php?upload=multiple'; return false;"><?php e(__('upload file')); ?></a></li>
 </ul>
 
-<?php echo $filemanager->error->view('html'); ?>
+<?php // echo $filemanager->error->view('html'); ?>
 
 <form method="get" action="<?php e($this->url(null, array('use_stored' => true))); ?>">
     <fieldset>
@@ -94,7 +94,6 @@
         ?>
     </tbody>
 </table>
-<input type="hidden" name="redirect_id" id="redirect_id" value="<?php e($receive_redirect->get('id')); ?>" />
 
 <div>
 
@@ -103,7 +102,7 @@
     <?php endif; ?>
 
     <input type="submit" name="submit_close" id="submit_close-select_file" value="<?php e(__('save and transfer')); ?>" />
-    eller <a href="<?php e($receive_redirect->getRedirect($this->url())); ?>"><?php e(__('Cancel' ,'common')); ?></a>
+    <a href="<?php e(url('../../')); ?>"><?php e(__('Cancel' ,'common')); ?></a>
 </div>
 
 </form>

@@ -29,9 +29,4 @@ class Intraface_Filehandler_Controller_UploadScript extends k_Component
 
         return new k_HttpResponse(200, $tpl->render($this, $data));
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

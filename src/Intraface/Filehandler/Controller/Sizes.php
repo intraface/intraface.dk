@@ -52,9 +52,4 @@ class Intraface_Filehandler_Controller_Sizes extends k_Component
             return 'Intraface_Filehandler_Controller_Sizes_Edit';
         }
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

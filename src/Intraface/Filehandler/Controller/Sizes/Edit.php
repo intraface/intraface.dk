@@ -42,9 +42,4 @@ class Intraface_Filehandler_Controller_Sizes_Edit extends k_Component
         $tpl = new k_Template(dirname(__FILE__) . '/../../templates/sizes-edit.tpl.php');
         return $tpl->render($this, $data);
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

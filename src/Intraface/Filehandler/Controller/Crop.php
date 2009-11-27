@@ -121,9 +121,4 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
        throw new Exception($filemanager->error->view());
 
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

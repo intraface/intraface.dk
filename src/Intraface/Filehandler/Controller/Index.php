@@ -110,9 +110,4 @@ class Intraface_Filehandler_Controller_Index extends k_Component
         }
         return 'Intraface_Filehandler_Controller_Show';
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

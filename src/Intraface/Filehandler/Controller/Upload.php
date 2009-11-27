@@ -48,9 +48,4 @@ class Intraface_Filehandler_Controller_Upload extends k_Component
 
         return $this->render();
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }
