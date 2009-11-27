@@ -32,11 +32,6 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
 
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function postForm()
     {
         $accounting_module = $this->context->getKernel()->useModule('accounting');

@@ -1,7 +1,6 @@
 <?php
 class Intraface_modules_accounting_Controller_Year_Primosaldo extends k_Component
 {
-
     function postForm()
     {
         $year = new Year($kernel, $_POST['id']);

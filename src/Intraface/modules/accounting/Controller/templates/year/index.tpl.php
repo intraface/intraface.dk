@@ -5,13 +5,14 @@
 </div>
 
 <ul class="options">
-    <li><a class="new" href="<?php e(url('create')); ?>">Opret regnskabs�r</a></li>
+    <li><a class="new" href="<?php e(url('create')); ?>">Opret regnskabsår</a></li>
 </ul>
 
 <?php if (!$context->getYearGateway()->getList()): ?>
-    <p>Der er ikke oprettet nogen regnskabsår. Du kan oprette et ved at klikke p� knappen ovenover.</p>
+    <p>Der er ikke oprettet nogen regnskabsår. Du kan oprette et ved at klikke på knappen ovenover.</p>
 <?php else: ?>
     <form action="<?php e(url('./')); ?>" method="post">
+    <input type="hidden" name="_method" value="put" />
     <table>
         <caption>Regnskabsår</caption>
         <thead>

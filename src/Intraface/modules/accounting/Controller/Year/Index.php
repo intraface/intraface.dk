@@ -33,20 +33,22 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
         return $values;
     }
 
+    function putForm()
+    {
+        $year = new Year($this->getKernel(), $_POST['id']);
+
+        if (!$year->setYear()) {
+        	throw new Exception('Could not set the year');
+        }
+        return new k_SeeOther($this->url($year->getId()));
+    }
+
     function postForm()
     {
-        if (!empty($_POST['id']) AND is_numeric($_POST['id'])) {
-        	$year = new Year($this->getKernel(), $_POST['id']);
-
-        	if (!$year->setYear()) {
-        		throw new Exception('Could not set the year');
-        	}
-        	return new k_SeeOther($this->url());
-        }
-
         if ($id = $this->getYear()->save($_POST)) {
             return new k_SeeOther($this->url($id));
         }
+
         $values = $_POST;
         $values['from_date_dk'] = $_POST['from_date'];
         $values['to_date_dk'] = $_POST['to_date'];
@@ -58,12 +60,6 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/year/edit.tpl.php');
         return $smarty->render($this);
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
 
     function getYearGateway()
     {

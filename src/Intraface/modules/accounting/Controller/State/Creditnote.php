@@ -13,11 +13,6 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
         return $this->context->getDebtor();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function renderHtml()
     {
         $debtor_module = $this->getKernel()->module('debtor');

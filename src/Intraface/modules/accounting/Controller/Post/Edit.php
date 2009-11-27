@@ -79,9 +79,4 @@ class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
     {
         return $this->context->getYearGateway();
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

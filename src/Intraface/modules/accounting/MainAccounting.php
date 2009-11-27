@@ -32,7 +32,7 @@ class MainAccounting extends Intraface_Main
         //$this->addSubMenuItem('Hjï¿½lp', 'help.php');
 
         // Tilfï¿½j subaccess punkter
-        $this->addSubAccessItem('endyear', 'Årsafslutning');
+        $this->addSubAccessItem('endyear', 'ï¿½rsafslutning');
         $this->addSubAccessItem('vat_report', 'Momsopgivelse');
         $this->addSubAccessItem('setting', 'Indstillinger');
 
@@ -42,7 +42,7 @@ class MainAccounting extends Intraface_Main
 
         $this->addSetting('vat_periods',
             array(
-                // halvårlig
+                // halvï¿½rlig
                 0 => array(
                     'name' => 'Half-yearly',
                     'periods' => array(
@@ -104,6 +104,9 @@ class MainAccounting extends Intraface_Main
 
     function getPath()
     {
-        return url('/core/restricted/module/accounting') . '/';
+        if (defined('INTRAFACE_K2')) {
+            return url('/core/restricted/module/accounting') . '/';
+        }
+        return parent::getPath();
     }
 }

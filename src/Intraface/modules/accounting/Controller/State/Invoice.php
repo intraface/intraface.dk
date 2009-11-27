@@ -81,11 +81,6 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
         return $this->getDebtor()->item->getList();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function postForm()
     {
         $debtor_module = $this->getKernel()->module('debtor');

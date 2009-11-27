@@ -108,9 +108,4 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
         $gateway = $this->context->getYearGateway();
         return $gateway;
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

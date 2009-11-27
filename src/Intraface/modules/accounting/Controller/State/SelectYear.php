@@ -62,9 +62,4 @@ class Intraface_modules_accounting_Controller_State_SelectYear extends Intraface
     {
         return $this->getYear()->getList();
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

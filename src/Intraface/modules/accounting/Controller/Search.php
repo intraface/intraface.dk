@@ -64,9 +64,4 @@ class Intraface_modules_accounting_Controller_Search extends k_Component
         $tpl = new k_Template(dirname(__FILE__) . '/templates/search.tpl.php');
         return $tpl->render($this, array('error' => $error, 'posts' => $posts));
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

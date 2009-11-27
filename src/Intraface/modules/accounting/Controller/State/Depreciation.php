@@ -80,9 +80,4 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
     {
         return $voucher = new Voucher($this->getYear());
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

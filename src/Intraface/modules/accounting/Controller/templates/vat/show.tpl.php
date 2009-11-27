@@ -16,7 +16,7 @@
 </ul>
 
 <?php if (!$context->getYear()->vatAccountIsSet()): ?>
-	<p class="message-dependent">Der er ikke angivet nogen momskonti. Du kan angive momskonti under <a href="setting.php">indstillingerne</a>.</p>
+	<p class="message-dependent">Der er ikke angivet nogen momskonti. Du kan angive momskonti under <a href="<?php e(url('../../settings')); ?>">indstillingerne</a>.</p>
 <?php else: ?>
 
 	<?php echo $context->getError()->view(); ?>

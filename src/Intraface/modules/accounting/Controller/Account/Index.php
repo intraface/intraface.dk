@@ -61,11 +61,6 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
         return $year;
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function renderXls()
     {
         $year = new Year($kernel);

@@ -82,9 +82,4 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         $translation = $this->getKernel()->getTranslation('accounting');
         return new Account($this->getYear(), $this->name());
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

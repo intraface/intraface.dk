@@ -19,7 +19,7 @@ $values = $context->getYear()->get();
     <fieldset>
         <legend>Vælg og gæ til regnskabet</legend>
         <div>
-            <input type="submit" name="start" id="start" value="Vælg og gæ til regnskabet" />
+            <input type="submit" name="start" id="start" value="Vælg regnskabet" />
         </div>
     </fieldset>
 <?php endif; ?>

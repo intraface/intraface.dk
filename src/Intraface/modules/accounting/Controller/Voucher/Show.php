@@ -179,11 +179,6 @@ $voucher_files = $voucher_file->getList();
         return $gateway;
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function renderHtmlEdit()
     {
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/voucher/edit.tpl.php');

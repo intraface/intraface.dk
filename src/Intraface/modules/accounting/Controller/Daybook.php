@@ -108,9 +108,4 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
     {
         return $this->getPost()->getList('draft');
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }
