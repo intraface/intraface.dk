@@ -103,11 +103,6 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
     	return $this->context->getKernel();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function getValues()
     {
         $this->getKernel()->useShared('filehandler');
