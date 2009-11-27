@@ -111,7 +111,7 @@ $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'phemto', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'bucket', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'bucket', 'public.intraface.dk', '0.1.1');
 
 
 // Doctrine
