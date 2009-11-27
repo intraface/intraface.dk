@@ -47,6 +47,7 @@
 
 
 <form action="<?php e(url()); ?>" method="post">
+<input type="hidden" value="put" name="_method" />
 <?php if (!empty($deleted)): ?>
         <p class="message"><?php e(t('products has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('Cancel', 'common')); ?>" /></p>
 <?php endif; ?>
@@ -118,10 +119,11 @@
                     <a href="index.php?lock=<?php e($p['id']); ?>&amp;use_stored=true"><?php e(t('lock', 'common')); ?></a>
                     -->
                     <a class="button edit" href="<?php e(url($p['id'], array('edit'))); ?>"><?php e(t('edit', 'common')); ?></a>
-                    <!--<a class="button delete ajaxdelete" title="Dette sletter produktet" id="delete<?php e($p['id']); ?>" href="index.php?use_stored=true&amp;delete=<?php e($p['id']); ?>">Slet</a>--></td>
+                    <!--<a class="button delete ajaxdelete" title="Dette sletter produktet" id="delete<?php e($p['id']); ?>" href="index.php?use_stored=true&amp;delete=<?php e($p['id']); ?>">Slet</a>-->
        <?php } else { ?>
           <a href="<?php e(url($p['id'], array('unlock' => true))); ?>"><?php e(t('unlock', 'common')); ?></a>
        <?php } ?>
+       </td>
             </tr>
             <?php } // end foreach ?>
         </tbody>

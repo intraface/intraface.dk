@@ -23,6 +23,7 @@ class Intraface_modules_product_Controller_Index extends k_Component
 
     function putForm()
     {
+        $gateway = $this->getGateway();
         if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
             $deleted = array();
             if (!empty($_POST['selected']) AND is_array($_POST['selected'])) {
