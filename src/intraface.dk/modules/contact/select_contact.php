@@ -9,7 +9,7 @@ $redirect = Intraface_Redirect::factory($kernel, 'receive');
 if (!empty($_GET['add'])) {
 
 	$add_redirect = Intraface_Redirect::factory($kernel, 'go');
-	$url = $add_redirect->setDestination($module->getPath()."contact_edit.php", $module->getPath()."select_contact.php?".$redirect->get('redirect_query_string'));
+	$url = $add_redirect->setDestination(PATH_WWW."modules/contact/contact_edit.php", PATH_WWW."modules/contact/select_contact.php?".$redirect->get('redirect_query_string'));
 	$add_redirect->askParameter("contact_id");
 	//$add_redirect->setParameter("selected_contact_id", intval($_GET['add']));
 	header("Location: ".$url);
