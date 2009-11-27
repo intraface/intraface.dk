@@ -43,7 +43,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[contains(@href, 'product_variation.php?id=5&amp;product_id=1')]</td>
+	<td>//a[contains(@href, 'variation/5')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -78,32 +78,27 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=create invoice</td>
+	<td>link=Create invoice</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>search</td>
+	<td>query</td>
 	<td>Con</td>
 </tr>
 <tr>
-	<td>keyUp</td>
-	<td>search</td>
-	<td>t</td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>clickAndWait</td>
+	<td>//input[@value='Search']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>contact_select</td>
-	<td>label=Contact 1</td>
+	<td>click</td>
+	<td>contact_1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>go_search</td>
+	<td>//input[@value='Choose']</td>
 	<td></td>
 </tr>
 <tr>
