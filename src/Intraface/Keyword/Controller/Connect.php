@@ -6,11 +6,6 @@ class Intraface_Keyword_Controller_Connect extends k_Component
         return $this->context->getKernel();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function renderHtml()
     {
         $this->getKernel()->useShared('keyword');
