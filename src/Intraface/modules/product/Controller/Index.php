@@ -21,12 +21,6 @@ class Intraface_modules_product_Controller_Index extends k_Component
         return $this->context->getKernel();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
-
     function putForm()
     {
         if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
@@ -61,8 +55,12 @@ class Intraface_modules_product_Controller_Index extends k_Component
     {
         if (is_numeric($name)) {
             return 'Intraface_modules_product_Controller_Show';
-        } elseif ($name == 'attributegroups')
-        return 'Intraface_modules_product_Controller_Attributegroups';
+        } elseif ($name == 'attributegroups') {
+            return 'Intraface_modules_product_Controller_Attributegroups';
+        } elseif ($name == 'batchedit') {
+            return 'Intraface_modules_product_Controller_BatchEdit';
+        }
+
     }
 
     function getProductDoctrine()

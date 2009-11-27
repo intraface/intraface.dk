@@ -2,18 +2,23 @@
 class Intraface_modules_product_Controller_Selectproductvariation extends k_Component
 {
     protected $product;
+    public $multiple;
+    public $quantity;
 
     function getKernel()
     {
         return $this->context->getKernel();
     }
 
-    public $multiple;
-    public $quantity;
-
     function getRedirect()
     {
-        return $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
+        $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
+        if ($redirect->get('id') != 0) {
+            $multiple = $redirect->isMultipleParameter('product_variation_id');
+        } else {
+            trigger_error("Der mangler en gyldig redirect", E_USER_ERROR);
+        }
+        return $redirect;
     }
 
     function renderHtml()
@@ -21,19 +26,16 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
         $product_module = $this->getKernel()->module("product");
         $translation = $this->getKernel()->getTranslation('product');
 
-        if (isset($_GET['set_quantity']) && (int)$_GET['set_quantity'] == 1) {
-            $quantity = 1;
-        } else {
-            $quantity = 0;
-        }
+        $this->quantity = $this->query('set_quantity');
+        $this->multiple = $this->query('multiple');
+
         $product = new Product($this->getKernel(), intval($this->context->name()));
 
         if (isset($_GET['edit_product_variation'])) {
             $add_redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
             $add_redirect->setIdentifier('add_new');
             $url = $add_redirect->setDestination($product_module->getPath().'product_edit.php', $product_module->getPath().'select_product.php?'.$redirect->get('redirect_query_string').'&set_quantity='.$quantity);
-            header('location: '.$url);
-            exit;
+            return new k_SeeOther($url);
         }
 
         if (!$product->get('has_variation')) {
@@ -49,8 +51,14 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
                 throw $e;
             }
         }
+
+        $data = array(
+        	'variations' => $variations,
+            'product' => $product
+        );
+
         $smarty = new k_Template(dirname(__FILE__) . '/tpl/selectproductvariation.tpl.php');
-        return $smarty->render($this, array('variations' => $variations));
+        return $smarty->render($this, $data);
     }
 
     function getProducts()
@@ -73,7 +81,7 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
         $this->getProduct()->getDBQuery()->storeResult("use_stored", "select_product", "sublevel");
         $this->getProduct()->getDBQuery()->setExtraUri('set_quantity='.$this->quantity);
 
-        return  $list = $this->getProduct()->getList();
+        return $this->getProduct()->getList();
     }
 
     function getProduct()
@@ -81,8 +89,7 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
         if (is_object($this->product)) {
             return $this->product;
         }
-        return $this->product = new Product($this->getKernel());
-
+        return $this->product = new Product($this->getKernel(), $this->context->name());
     }
 
     function getKeywords()
@@ -90,19 +97,17 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
         return $keywords = $this->getProduct()->getKeywordAppender();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
-
     function postForm()
     {
+        $redirect = $this->getRedirect();
+
         if (isset($_POST['set_quantity']) && (int)$_POST['set_quantity'] == 1) {
             $quantity = 1;
         } else {
             $quantity = 0;
         }
+
+        $this->quantity = $quantity;
 
         if (empty($_POST['product_id'])) {
             throw new Exception('You need to provide a product_id');
@@ -115,7 +120,7 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
                 foreach ($_POST['selected'] AS $selected_id => $selected_value) {
                     if ((int)$selected_value > 0) {
                         $selected = serialize(array('product_id' => $product->getId(), 'product_variation_id' => $selected_id));
-                        // Hvis der allerede er gemt en værdi, så starter vi med at fjerne den, så der ikke kommer flere på.
+                        // Hvis der allerede er gemt en værdi, så starter vi med at fjerne den, så der ikke kommer flere på
                         $redirect->removeParameter('product_variation_id', $selected);
                         if ($quantity) {
                             $redirect->setParameter('product_variation_id', $selected, $selected_value);

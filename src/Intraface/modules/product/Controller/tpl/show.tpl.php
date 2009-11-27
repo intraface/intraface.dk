@@ -139,7 +139,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         <?php if ($variation_is_present): ?>
         <?php if ($variations->count() == 0): ?>
             <ul class="options">
-                <li><a href="product_variations_edit.php?id=<?php e($product->get('id')); ?>"><?php e(t('Create variations for the product')); ?></a></li>
+                <li><a href="<?php e(url('variations', array('edit'))); ?>"><?php e(t('Create variations for the product')); ?></a></li>
             </ul>
         <?php else: ?>
 
@@ -167,7 +167,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                         <td><?php e($product->get('weight')+$variation->getDetail()->getWeightDifference()); ?></td>
                         <?php if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
                             <td><?php e($variation->getStock($product)->get('actual_stock')); ?></td>
-                            <td><a href="product_variation.php?id=<?php e($variation->getId()); ?>&amp;product_id=<?php e($product->getId()); ?>"><?php e(t('Details', 'common')); ?></a></td>
+                            <td><a href="<?php e(url('variation/' . $variation->getId())); ?>"><?php e(t('Details', 'common')); ?></a></td>
                         <?php endif; ?>
 
                     </tr>
@@ -176,7 +176,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         <?php endif; ?>
         <?php endif; ?>
             <ul class="options">
-                <li><a href="product_variations_edit.php?id=<?php e($product->get('id')); ?>"><?php e(t('Edit variations for the product')); ?></a></li>
+                <li><a href="<?php e(url('variations', array('edit'))); ?>"><?php e(t('Edit variations for the product')); ?></a></li>
             </ul>
 
     <?php endif; ?>

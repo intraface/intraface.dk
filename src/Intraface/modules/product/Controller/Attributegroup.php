@@ -50,9 +50,4 @@ class Intraface_modules_product_Controller_Attributegroup extends k_Component
         $smarty = new k_Template(dirname(__FILE__) . '/tpl/attributegroup.tpl.php');
         return $smarty->render($this, $data);
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

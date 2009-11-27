@@ -7,11 +7,6 @@ class Intraface_modules_product_Controller_Attributegroups extends k_Component
         return $this->context->getKernel();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function renderHtml()
     {
         $module = $this->getKernel()->module('product');
@@ -77,7 +72,7 @@ class Intraface_modules_product_Controller_Attributegroups extends k_Component
                 $error->attachErrorStack($group->getErrorStack());
             }
         }
-        
+
         return $this->render();
     }
 

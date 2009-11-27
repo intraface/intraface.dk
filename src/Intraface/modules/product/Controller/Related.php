@@ -22,10 +22,6 @@ class Intraface_modules_product_Controller_Related extends k_Component
         $smarty = new k_Template(dirname(__FILE__) . '/tpl/related.tpl.php');
         return $smarty->render($this);
     }
-    function t($phrase)
-    {
-        return $phrase;
-    }
 
     function getKernel()
     {

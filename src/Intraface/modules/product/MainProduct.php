@@ -43,6 +43,9 @@ class MainProduct extends Intraface_Main
 
     function getPath()
     {
-        return url('/core/restricted/module/product/');
+        if (defined('INTRAFACE_K2')) {
+            return url('/core/restricted/module/product/');
+        }
+        return parent::getPath();
     }
 }

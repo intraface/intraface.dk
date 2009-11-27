@@ -145,7 +145,7 @@ class Product extends Intraface_Standard
     public function load()
     {
         $this->db->query("SELECT id, active, locked, changed_date, ".implode(',', $this->fields)." FROM product
-                WHERE intranet_id = " . $this->intranet->getId() . "
+                WHERE intranet_id = " . $this->kernel->intranet->getId() . "
                     AND id = " . $this->id . " LIMIT 1");
 
         if (!$this->db->nextRecord()) {

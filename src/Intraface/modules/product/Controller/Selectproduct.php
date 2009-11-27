@@ -6,13 +6,16 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
     public $quantity;
     public $selected_products;
 
+    function __construct()
+    {
+        $this->multiple = $this->query('multiple');
+        $this->quantity = $this->query('set_quantity');
+    }
+
     function renderHtml()
     {
         $product_module = $this->getKernel()->module("product");
         $translation = $this->getKernel()->getTranslation('product');
-
-        $this->multiple = $this->query('multiple');
-        $this->quantity = $this->query('set_quantity');
 
         if (isset($_GET['add_new'])) {
             $add_redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
@@ -129,16 +132,8 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
         return $keywords = $this->getProduct()->getKeywordAppender();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function putForm()
     {
-        $this->multiple = $this->query('multiple');
-        $this->quantity = $this->query('set_quantity');
-
         if (isset($_POST['submit']) || isset($_POST['submit_close'])) {
             if ($this->multiple) {
                 if (isset($_POST['selected']) && is_array($_POST['selected'])) {

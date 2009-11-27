@@ -49,11 +49,6 @@ class Intraface_modules_product_Controller_Productattributegroup extends k_Compo
         return $this->context->getKernel();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function getProduct()
     {
 
