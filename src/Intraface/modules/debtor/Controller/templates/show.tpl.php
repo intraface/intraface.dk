@@ -608,7 +608,7 @@ if (isset($onlinepayment)) {
 <div style="clear:both;">
     <?php if ($context->getDebtor()->get("locked") == false) { ?>
         <ul class="options" style="clear: both;">
-            <li><a href="<?php e(url('selectproduct', array('set_quantity' => true, 'multiple' => true))); ?>"><?php e(t('Add item')); ?></a></li>
+            <li><a href="<?php e(url('selectmultipleproductwithquantity', array('set_quantity' => true, 'multiple' => true))); ?>"><?php e(t('Add item')); ?></a></li>
         </ul>
     <?php } ?>
 

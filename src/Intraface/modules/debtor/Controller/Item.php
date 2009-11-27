@@ -47,11 +47,6 @@ class Intraface_modules_debtor_Controller_Item extends k_Component
         return $this->context->getDebtor();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function postForm()
     {
        	$debtor = $this->context->getDebtor();

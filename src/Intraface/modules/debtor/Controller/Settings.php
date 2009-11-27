@@ -140,9 +140,4 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
         $values['order_email_text'] = $this->context->getKernel()->getSetting()->get('intranet', 'debtor.order.email.text');
         return $values;
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

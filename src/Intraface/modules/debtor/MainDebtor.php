@@ -96,6 +96,9 @@ class MainDebtor extends Intraface_Main
 
     function getPath()
     {
-        return url('/restricted/module/debtor') . '/';
+        if (defined('INTRAFACE_K2')) {
+            return url('/core/restricted/module/debtor') . '/';
+        }
+        return parent::getPath();
     }
 }

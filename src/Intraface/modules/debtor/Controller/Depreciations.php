@@ -33,11 +33,6 @@ class Intraface_modules_debtor_Controller_Depreciations extends k_Component
         return new Depreciation($this->getModel());
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function getType()
     {
         return $this->context->getType();

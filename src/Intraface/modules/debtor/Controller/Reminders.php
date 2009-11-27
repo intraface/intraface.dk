@@ -111,11 +111,6 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
         return $reminders = $reminder->getList();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function postForm()
     {
         $mainInvoice = $this->getKernel()->useModule("invoice");

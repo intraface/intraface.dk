@@ -34,10 +34,4 @@ class Intraface_modules_debtor_Controller_Index extends k_Component
     {
         return $this->context->getKernel();
     }
-
-    function t($phrase)
-    {
-         return $phrase;
-    }
-
 }

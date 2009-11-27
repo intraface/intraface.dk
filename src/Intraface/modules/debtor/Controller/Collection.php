@@ -325,11 +325,6 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         return $list->getList();
     }
 
-    function t($phrase)
-    {
-         return $phrase;
-    }
-
     function getError()
     {
         if (is_object($this->error)) {

@@ -51,9 +51,4 @@ class Intraface_modules_debtor_Controller_Payments extends k_Component
         $smarty = new k_Template(dirname(__FILE__) . '/templates/payment.tpl.php');
         return $smarty->render($this);
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

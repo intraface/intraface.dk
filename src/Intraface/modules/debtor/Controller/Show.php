@@ -14,6 +14,9 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         if ($this->getDebtor()->getId() == 0) {
             throw new k_PageNotFound();
         }
+        if ($this->context->getType() != $this->getType()) {
+            return new k_SeeOther($this->url('../../../' . $this->getType() . '/list/' . $this->getDebtor()->getId()));
+        }
 
         return parent::dispatch();
     }
@@ -24,6 +27,8 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             return 'Intraface_modules_contact_Controller_Choosecontact';
         } elseif ($name == 'selectproduct') {
             return 'Intraface_modules_product_Controller_Selectproduct';
+        } elseif ($name == 'selectmultipleproductwithquantity') {
+            return 'Intraface_modules_product_Controller_Selectmultipleproductwithquantity';
         } elseif ($name == 'selectproductvariation') {
             return 'Intraface_modules_product_Controller_Selectproductvariation';
         } elseif ($name == 'payment') {
@@ -64,7 +69,10 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
     function renderHtml()
     {
-        $contact_module = $this->getKernel()->useModule('onlinepayment');
+        if ($this->getKernel()->user->hasModuleAccess('onlinepayment')) {
+            $online_module = $this->getKernel()->useModule('onlinepayment');
+        }
+
         $contact_module = $this->getKernel()->getModule('contact');
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/show.tpl.php');
@@ -357,8 +365,8 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             $debtor_module = $this->getKernel()->module('debtor');
             $contact_module = $this->getKernel()->getModule('contact');
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-            $url = $redirect->setDestination($contact_module->getPath().'/'.intval($this->getDebtor()->contact->get('id') . '&edit'), NET_SCHEME . NET_HOST . $this->url());
-            return new k_SeeOther($url);
+            $url = $redirect->setDestination($contact_module->getPath().intval($this->getDebtor()->contact->get('id') . '&edit'), NET_SCHEME . NET_HOST . $this->url());
+            return new k_SeeOther($url . '&edit');
         }
 
         // Redirect til tilføj produkt
@@ -417,11 +425,6 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
     function getKernel()
     {
         return $this->context->getKernel();
-    }
-
-    function t($phrase)
-    {
-         return $phrase;
     }
 
     function getDebtor()

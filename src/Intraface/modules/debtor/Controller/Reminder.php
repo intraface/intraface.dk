@@ -81,11 +81,6 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
         return $smarty->render($this);
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function renderHtmlEdit()
     {
         $mainInvoice = $this->getKernel()->useModule("invoice");

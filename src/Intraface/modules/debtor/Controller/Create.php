@@ -224,11 +224,6 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
         return $this->context->getKernel();
     }
 
-    function t($phrase)
-    {
-         return $phrase;
-    }
-
     function postForm()
     {
     	$debtor = $this->getDebtor();
