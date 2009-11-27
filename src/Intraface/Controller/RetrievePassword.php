@@ -37,9 +37,4 @@ class Intraface_Controller_RetrievePassword extends k_Component
     	}
     	return new k_SeeOther($this->query('continue'));
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

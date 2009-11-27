@@ -48,17 +48,6 @@ class Intraface_Controller_Restricted extends k_Component
 
 		$kernel = $this->getKernel();
 
-        // Adds link for id user details is filled in. They are going to be in the top.
-        if ($this->getKernel()->user->hasModuleAccess('controlpanel')) {
-            if (!$this->getKernel()->user->isFilledIn()) {
-            	$_advice[] = array(
-            		'msg' => 'all information about you has not been filled in',
-            		'link' => url('core/restricted/module/controlpanel/user', array('edit')),
-            		'module' => 'dashboard'
-            	);
-            }
-        }
-
         // getting stuff to show on the dashboard
         $modules = $this->getKernel()->getModules();
 
@@ -85,7 +74,18 @@ class Intraface_Controller_Restricted extends k_Component
         		}
         	}
         }
-		$smarty = new k_Template(dirname(__FILE__) . '/templates/restricted.tpl.php');
+        // Adds link for id user details is filled in. They are going to be in the top.
+        if ($this->getKernel()->user->hasModuleAccess('controlpanel')) {
+            if (!$this->getKernel()->user->isFilledIn()) {
+            	$_advice[] = array(
+            		'msg' => 'all information about you has not been filled in',
+            		'link' => url('core/restricted/module/controlpanel/user', array('edit')),
+            		'module' => 'dashboard'
+            	);
+            }
+        }
+
+        $smarty = new k_Template(dirname(__FILE__) . '/templates/restricted.tpl.php');
         return $smarty->render($this, array('_attention_needed' => $_attention_needed, '_advice' => $_advice));
     }
 
@@ -238,10 +238,6 @@ class component_ShowProduct {
         return $this->wrap(parent::execute());
     }
 	*/
-    function t($phrase)
-    {
-        return $phrase;
-    }
 
     /*
     function getUserMenu()

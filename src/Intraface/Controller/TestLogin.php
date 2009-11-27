@@ -84,11 +84,6 @@ class Intraface_Controller_TestLogin extends k_Component
         $this->session()->set('user', $this->getKernel()->user);
         $this->session()->set('intranet', $this->getKernel()->intranet);
 		*/
-        return new k_AuthenticatedUser($username);
-    }
-
-    function t($phrase)
-    {
-        return $phrase;
+        return new Intraface_AuthenticatedUser($username, $this->language());
     }
 }

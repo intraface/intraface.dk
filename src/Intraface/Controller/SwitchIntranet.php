@@ -1,6 +1,6 @@
 <?php
 /**
- * Logout
+ * Switch intranet
  *
  * @package Intraface
  * @author  Lars Olesen <lars@legestue.net>
@@ -9,13 +9,6 @@
  */
 class Intraface_Controller_SwitchIntranet extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     function renderHtml()
     {
         if (isset($_GET["id"]) && $this->getKernel()->user->hasIntranetAccess($_GET['id'])) {
@@ -26,17 +19,12 @@ class Intraface_Controller_SwitchIntranet extends k_Component
         	if ($this->getKernel()->user->setActiveIntranetId(intval($_GET['id']))) {
         		return new k_SeeOther($this->url('../'));
         	} else {
-        		throw new Exception($this->context->getTranslation()->get('could not change intranet'));
+        		throw new Exception('Could not change intranet');
         	}
         }
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/switchintranet.tpl.php');
         return $smarty->render($this);
-    }
-
-    function t($phrase)
-    {
-        return $phrase;
     }
 
     function getIntranets()
@@ -53,11 +41,6 @@ class Intraface_Controller_SwitchIntranet extends k_Component
         }
 
         return $accessible_intranets;
-    }
-
-    function getAuth()
-    {
-		return $this->context->getAuth();
     }
 
     function getKernel()

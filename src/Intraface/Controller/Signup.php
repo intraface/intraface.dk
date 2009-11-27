@@ -121,9 +121,4 @@ class Intraface_Controller_Signup extends k_Component
             return $this->render();
         }
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

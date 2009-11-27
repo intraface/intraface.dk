@@ -25,11 +25,6 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
         return $smarty->render($this);
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     public function getKernel()
     {
         return $this->context->getKernel();

@@ -14,11 +14,6 @@ class Intraface_Controller_ModuleManager extends k_Component
         );
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function renderHtml()
     {
         $pear_user_config = '/etc/pear/pear.conf';

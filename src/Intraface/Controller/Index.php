@@ -1,13 +1,11 @@
 <?php
 class Intraface_Controller_Index extends k_Component
 {
-    protected $registry;
     protected $kernel_gateway;
     protected $user_gateway;
 
-    function __construct(k_Registry $registry, Intraface_KernelGateway $gateway, Intraface_UserGateway $user_gateway)
+    function __construct(Intraface_Auth $auth, Intraface_KernelGateway $gateway, Intraface_UserGateway $user_gateway)
     {
-        $this->registry = $registry;
         $this->kernel_gateway = $gateway;
         $this->user_gateway = $user_gateway;
     }
@@ -46,21 +44,6 @@ class Intraface_Controller_Index extends k_Component
     function getModules()
     {
         return $this->getKernel()->getModules();
-    }
-
-    function getTranslation()
-    {
-    	return $this->getKernel()->getTranslation();
-    }
-
-    function getAuth()
-    {
-        return new Intraface_Auth(session_id());
-    }
-
-    function t($phrase)
-    {
-        return $phrase;
     }
 
     function wrapHtml($content)
