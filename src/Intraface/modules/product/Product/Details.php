@@ -22,10 +22,10 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
     public function setTableDefinition()
     {
         $this->setTableName('product_detail');
-        $this->hasColumn('product_id', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
+        $this->hasColumn('product_id', 'integer', 4, array('type' => 'integer', 'length' => 4)); // , 'default' => '0', 'notnull' => true
         $this->hasColumn('number', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
         $this->hasColumn('name', 'string', 255, array('type' => 'string', 'length' => 255, 'default' => '', 'notnull' => true, 'notblank' => true));
-        $this->hasColumn('description', 'string', null, array('type' => 'string', 'notnull' => true, 'default' => ''));
+        $this->hasColumn('description', 'string', null, array('type' => 'string', 'notnull' => true, 'default' => '', 'nohtml' => ''));
         $this->hasColumn('price', 'float', 11, array('type' => 'float', 'length' => 11, 'default' => '0.00', 'notnull' => true));
         $this->hasColumn('before_price', 'float', 11, array('type' => 'float', 'length' => 11, 'default' => '0.00', 'notnull' => true));
         $this->hasColumn('weight', 'integer', 4, array('type' => 'integer', 'length' => 4, 'default' => '0', 'notnull' => true));
@@ -47,6 +47,7 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
     public function setUp()
     {
         $this->actAs('Intraface_Doctrine_Template_Intranet');
+        // $this->hasOne('Intraface_modules_product_ProductDoctrine as product', array('local' => 'product_id', 'foreign' => 'id'));
         
         $this->actAs('I18n', array(
                 'fields' => array('name', 'description'),
@@ -58,7 +59,7 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         $this->hasMutator('before_price', 'setBeforePrice');
         $this->hasMutator('weight', 'setWeight');
         
-        // $this->hasOne('Intraface_modules_product_ProductDoctrine as product', array('local' => 'product_id', 'foreign' => 'id'));
+        
     }
     
     function validate()

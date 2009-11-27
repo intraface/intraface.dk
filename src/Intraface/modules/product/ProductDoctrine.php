@@ -52,34 +52,59 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
         # If details are not valid, we do not want to save the product.
         if(is_object($this->active_details)) {
             
-            # We validate the details for errors before we insert
-            $this->active_details->isValid();
-            $errors =& $this->active_details->getErrorStack();
-            if($errors->count() > 1 && $errors->contains('product_id')) {
-                $errors->remove('product_id');
-                throw new Doctrine_Validator_Exception(array());
-                // $event->skipOperation();
-            }
-            
             # We make sure translation is added before insert as name is required
             if($this->active_details->Translation->count() == 0) {
-                $this->getErrorStack()->add('name', 'must be filled in');
-                throw new Doctrine_Validator_Exception(array());
+                throw new Exception('Details Translations needs to be set. Use getDetails()->Translation');
             }
             
-            # We make sure there is no errors in translations before we insert
+            # We make sure translations is valid
             foreach($this->active_details->Translation AS $translation) {
-                $translation->isValid();
-                if($translation->getErrorStack()->count() > 0) {
+                if(!$translation->isValid()) {
+                    throw new Doctrine_Validator_Exception(array());
+                }
+            }
+            
+            # We validate the details for errors before we insert
+            if(!$this->active_details->isValid(true)) {
+                # It must contain errors in more than product_id for us to respond.
+                if($this->active_details->getErrorStack()->count() > 1 && $this->active_details->getErrorStack()->contains('product_id')) {
                     throw new Doctrine_Validator_Exception(array());
                 }
             }
         } else {
+            throw new Exception('Product details needs to be filled! use getDetails()');
+            /*
             # We make sure, that the details is loaded, as they are required to insert product.
             $this->getErrorStack()->add('name', 'must be filled in');
             throw new Doctrine_Validator_Exception(array());
+            */
         }
         
+    }
+    
+    public function getCollectedErrorStack()
+    {
+        $stack =& $this->getErrorStack();
+        if(is_object($this->active_details)) {
+            foreach($this->active_details->getErrorStack() AS $field => $errors) {
+                foreach($errors AS $error) {
+                    $stack->add($field, $error);
+                }
+            }
+            foreach($this->active_details->Translation AS $language => $translation) {
+                foreach($translation->getErrorStack() AS $field => $errors) {
+                    foreach($errors AS $error) {
+                        $stack->add($field.'_'.$language, $error);
+                    }
+                }
+            }
+        }
+        
+        if($stack->count() > 1 && $stack->contains('product_id')) {
+            $stack->remove('product_id');
+        }
+        
+        return $stack;
     }
    
     public function setUp()

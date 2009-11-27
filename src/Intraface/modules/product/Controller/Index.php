@@ -189,8 +189,8 @@ class Intraface_modules_product_Controller_Index extends k_Component
             }
             return new k_SeeOther($this->url($product->getId()));
         } catch (Doctrine_Validator_Exception $e) {
-            $this->getError()->attachErrorStack($product->getErrorStack());
-            $this->getError()->attachErrorStack($product->getDetails()->getErrorStack());
+            $this->getError()->attachErrorStack($product->getCollectedErrorStack());
+            // $this->getError()->attachErrorStack($product->getDetails()->getErrorStack());
         }
         return $this->render();
     }
