@@ -26,9 +26,4 @@ class Intraface_modules_contact_Controller_Contactperson extends k_Component
     		$value = $_POST;
     	}
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

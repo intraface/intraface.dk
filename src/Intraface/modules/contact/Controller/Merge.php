@@ -45,11 +45,6 @@ class Intraface_modules_contact_Controller_Merge extends k_Component
         return $contact = new Contact($this->getKernel(), intval($this->context->name()));
     }
 
-    function t($phrase)
-    {
-         return $phrase;
-    }
-
     function getGateways()
     {
         if ($this->getKernel()->user->hasModuleAccess('debtor')) {

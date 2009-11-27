@@ -20,11 +20,6 @@ class Intraface_modules_contact_Controller_Memos extends k_Component
         return $smarty->render($this, array('reminder' => $reminder, 'contact' => $contact));
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function getKernel()
     {
         return $this->context->getKernel();

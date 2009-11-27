@@ -13,11 +13,6 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
         return $this->context->getKernel();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function postForm()
     {
     	$validator = new Intraface_Validator($this->getContact()->error);

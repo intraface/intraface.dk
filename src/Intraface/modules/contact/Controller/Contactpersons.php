@@ -20,11 +20,6 @@ class Intraface_modules_contact_Controller_Contactpersons extends k_Component
         return $smarty->render($this, array('person' => $person, 'contact' => $contact));
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function getKernel()
     {
         return $this->context->getKernel();

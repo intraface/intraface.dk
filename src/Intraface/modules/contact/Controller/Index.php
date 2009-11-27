@@ -1,6 +1,8 @@
 <?php
 class Intraface_modules_contact_Controller_Index extends k_Component
 {
+    protected $eniro;
+
     function map($name)
     {
         if (is_numeric($name)) {
@@ -118,11 +120,6 @@ class Intraface_modules_contact_Controller_Index extends k_Component
     function getKernel()
     {
         return $this->context->getKernel();
-    }
-
-    function t($phrase)
-    {
-         return $phrase;
     }
 
     function renderPdf()
@@ -258,7 +255,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
     function getContactModule()
     {
-        return        $contact_module = $this->getKernel()->module("contact");
+        return $contact_module = $this->getKernel()->module("contact");
 
     }
 
@@ -277,6 +274,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
             $value = $_POST;
 
             if ($oplysninger = $eniro->query('telefon', $_POST['eniro_phone'])) {
+
                 // skal kun bruges så længe vi ikke er utf8
                 // $oplysninger = array_map('utf8_decode', $oplysninger);
                 $address['name'] = $oplysninger['navn'];
@@ -285,6 +283,8 @@ class Intraface_modules_contact_Controller_Index extends k_Component
                 $address['city'] = $oplysninger['postby'];
                 $address['phone'] = $_POST['eniro_phone'];
             }
+            $this->eniro = $address;
+            $this->render();
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // for a new contact we want to check if similar contacts alreade exists
@@ -328,6 +328,9 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
     function getValues()
     {
+        if (!empty($this->eniro)) {
+            return $this->eniro;
+        }
         return array('number' => $this->getContact()->getMaxNumber()+1);
     }
 

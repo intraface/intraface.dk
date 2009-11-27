@@ -143,11 +143,6 @@ class Intraface_modules_contact_Controller_Show extends k_Component
         return $contact_module = $this->getKernel()->module('contact');
     }
 
-    function t($phrase)
-    {
-         return $phrase;
-    }
-
     function getInvoice()
     {
         if ($this->getKernel()->user->hasModuleAccess('debtor')) {

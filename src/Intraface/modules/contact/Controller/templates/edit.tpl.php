@@ -15,7 +15,7 @@ if ($context->getContact()->getId() > 0) {
 
 <form action="<?php e($url); ?>" method="post">
 
-<?php /* if (empty($value['id'])): ?>
+<?php if (empty($value['id'])): ?>
 
     <fieldset>
         <legend><?php e(t('Find address at Eniro')); ?></legend>
@@ -25,7 +25,7 @@ if ($context->getContact()->getId() > 0) {
         <input type="submit" name="eniro" value="<?php e(t('Find address')); ?>" />
     </fieldset>
 
-<?php endif; */ ?>
+<?php endif; ?>
 
 <?php if (!empty($similar_contacts) AND count($similar_contacts) > 0): ?>
 

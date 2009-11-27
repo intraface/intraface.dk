@@ -79,11 +79,6 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
         return $used_keywords = $keywords->getUsedKeywords();
     }
 
-    function t($phrase)
-    {
-         return $phrase;
-    }
-
     function map($name)
     {
         if (is_numeric($name)) {
