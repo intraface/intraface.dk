@@ -1,5 +1,5 @@
 <?php
-class Stub_Kernel
+class Stub_Kernel extends Intraface_Kernel
 {
     public $intranet;
     public $user;
@@ -11,8 +11,14 @@ class Stub_Kernel
         $this->intranet = new Stub_Intranet;
         $this->user = new Stub_User;
         $this->setting = new Stub_Setting;
+        $this->setting->set('intranet', 'contact.login_url', 'http://localhost/');
+        $this->setting->set('intranet', 'webshop.confirmation_text', 'sometext');
+        $this->setting->set('intranet', 'webshop.show_online', true);
+        $this->setting->set('intranet', 'contact.login_email_text', 'sometext');
+        $this->setting->set('intranet', 'cms.stylesheet.site', 'something');
+        $this->session_id = 'notreallyauniquesessionid';
     }
-
+    /*
     function useShared()
     {
         throw new Exception('kernel->useShared should not be used in classes. Please rewrite the method');
@@ -32,6 +38,7 @@ class Stub_Kernel
     {
         throw new Exception('kernel->getModule should not be used in classes. Please rewrite the method!');
     }
+    */
 
     public function getSessionId()
     {

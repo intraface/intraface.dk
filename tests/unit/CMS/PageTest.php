@@ -37,6 +37,8 @@ class PageTest extends PHPUnit_Framework_TestCase
     function createKernel()
     {
         $this->kernel = new Stub_Kernel;
+        $this->kernel->setting->set('intranet', 'cms.stylesheet.default', 'some.css');
+
         return $this->kernel;
     }
 
@@ -45,9 +47,9 @@ class PageTest extends PHPUnit_Framework_TestCase
         return new FakeCMSPageSite($this->createKernel());
     }
 
-    function createTemplate() {
-        $kernel = new FakeCMSKernel();
-        $site = new FakeCMSSite($kernel);
+    function createTemplate()
+    {
+        $site = new FakeCMSSite($this->createKernel());
         $template = new CMS_Template($site);
 
         $template->save(array('name' => 'test', 'identifier' => 'test', 'for_page_type' => array(1, 2, 4)));

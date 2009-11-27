@@ -10,6 +10,11 @@ class FakeObserver
     function update() {}
 }
 
+class FakeSubscriberContact
+{
+    function getId() { return 1000; }
+}
+
 class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
 {
     function setUp()
@@ -25,6 +30,7 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
     {
         $list = new FakeNewsletterList();
         $list->kernel = new Stub_Kernel;
+        $list->kernel->setting->set('intranet', 'contact.login_url', 'http://localhost/');
         return new NewsletterSubscriber($list);
     }
 
@@ -118,9 +124,4 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($list));
         $this->assertEquals('test2@intraface.dk', $list[0]['contact_email']);
     }
-}
-
-class FakeSubscriberContact
-{
-    function getId() { return 1000; }
 }

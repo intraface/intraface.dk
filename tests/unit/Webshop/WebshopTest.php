@@ -48,7 +48,7 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     function testPlaceOrderResetsBasketSoThereIsNoProductsInBasket()
     {
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 'private', 'description' => 'test', 'internal_note' => '', 'message' => '');
-        $mailer = new FakePhpMailer;
+        $mailer = new Stub_PhpMailer;
         $order_id = $this->webshop->placeOrder($data, $mailer);
         $this->assertTrue($order_id > 0);
         $this->assertTrue($mailer->isSend(), 'Mail is not send');
@@ -61,7 +61,7 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     {
         $ean = '2222222222222';
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
-        $mailer = new FakePhpMailer;
+        $mailer = new Stub_PhpMailer;
         $order_id = $this->webshop->placeOrder($data, $mailer);
         $this->assertTrue($order_id > 0);
         $this->assertTrue($mailer->isSend(), 'Mail is not send');
@@ -75,7 +75,7 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     {
         $ean = '2222222222222';
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
-        $mailer = new FakePhpMailer;
+        $mailer = new Stub_PhpMailer;
         $order_id = $this->webshop->placeManualOrder($data, array(), $mailer);
         $this->assertTrue($order_id > 0);
         $this->assertTrue($mailer->isSend(), 'Mail is not send');
@@ -86,7 +86,7 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     {
         $ean = '2222222222222';
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
-        $mailer = new FakePhpMailer;
+        $mailer = new Stub_PhpMailer;
         $order_id = $this->webshop->placeOrder($data, $mailer);
         $transaction_number = 1000;
         $transaction_status = 'captured';

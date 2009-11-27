@@ -29,6 +29,7 @@ class SectionLongTextTest extends PHPUnit_Framework_TestCase {
         $db->exec('TRUNCATE cms_template_section');
 
         $this->kernel = new Stub_Kernel;
+        $this->kernel->setting->set('user', 'htmleditor', 'someeditor');
         $this->site = new FakeCMSSite($this->kernel);
         $this->page = new FakeCMSPage($this->site);
     }
@@ -41,7 +42,6 @@ class SectionLongTextTest extends PHPUnit_Framework_TestCase {
 
     function testSaveReturnsTrue()
     {
-
         $section = new Testable_CMS_Section_LongText($this->page);
         $section->getParameter();
         $data = array('type_key' => 1, 'template_section_id' => 1);

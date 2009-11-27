@@ -87,7 +87,7 @@ class ShopTest extends PHPUnit_Framework_TestCase
     function testPlaceOrderResetsBasketSoThereIsNoProductsInBasket()
     {
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 'private', 'description' => 'test', 'internal_note' => '', 'message' => '');
-        $mailer = new FakePhpMailer;
+        $mailer = new Stub_PhpMailer;
         $order_id = $this->webshop->placeOrder($data, $mailer);
         $this->assertTrue($order_id > 0);
         $this->assertTrue($mailer->isSend(), 'Mail is not send');
@@ -109,7 +109,7 @@ class ShopTest extends PHPUnit_Framework_TestCase
         $rate->save();
 
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'currency' => 'EUR');
-        $mailer = new FakePhpMailer;
+        $mailer = new Stub_PhpMailer;
         $order_id = $this->webshop->placeOrder($data, $mailer);
         $this->assertTrue($order_id > 0);
 
@@ -121,7 +121,7 @@ class ShopTest extends PHPUnit_Framework_TestCase
     {
         $ean = '2222222222222';
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'ean' => $ean);
-        $mailer = new FakePhpMailer;
+        $mailer = new Stub_PhpMailer;
         $order_id = $this->webshop->placeManualOrder($data, array(), $mailer);
         $this->assertTrue($order_id > 0);
         $this->assertTrue($mailer->isSend(), 'Mail is not send');
@@ -132,7 +132,7 @@ class ShopTest extends PHPUnit_Framework_TestCase
     {
         $ean = '2222222222222';
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'ean' => $ean);
-        $mailer = new FakePhpMailer;
+        $mailer = new Stub_PhpMailer;
         $order_id = $this->webshop->placeOrder($data, $mailer);
         $transaction_number = 1000;
         $transaction_status = 'captured';

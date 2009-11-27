@@ -49,10 +49,12 @@ class FileViewerTest extends PHPUnit_Framework_TestCase
     }
     */
 
+    /*
     function testFetch()
     {
         $querystring = '?/QH4X9sbRgRyPApgS/Ci7emeihjcJ3WdNyDMz7vspLq5CeT3QEb5IE9SMBUEKHHrnckM/MountKosciuszko_frontpage.jpg';
         $fileviewer = new FileViewer();
         $fileviewer->fetch($querystring);
     }
+    */
 }

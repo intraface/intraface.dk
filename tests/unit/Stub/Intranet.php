@@ -10,7 +10,7 @@ class Stub_Intranet
 
     function get($key = '')
     {
-        $info = array('name' => 'Intranetname', 'contact_person' => '','id' => 1);
+        $info = array('name' => 'Intranetname', 'contact_person' => '','id' => 1, 'public_key' => 'somepublickey', 'identifier' => 'intraface');
         if (empty($key)) return $info;
         else return $info[$key];
     }

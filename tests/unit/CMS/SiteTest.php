@@ -20,6 +20,7 @@ class SiteTest extends PHPUnit_Framework_TestCase
     function createKernel()
     {
         $this->kernel = new Stub_Kernel;
+        $this->kernel->setting->set('intranet', 'cms.stylesheet.default', 'some.css');
         return $this->kernel;
     }
 
