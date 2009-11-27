@@ -56,11 +56,6 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
         return $this->render();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function getValues()
     {
         if ($this->body()) {

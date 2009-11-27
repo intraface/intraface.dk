@@ -12,11 +12,6 @@ class Intraface_modules_controlpanel_Controller_ChangePassword extends k_Compone
         return $smarty->render($this);
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function getValues()
     {
         $translation = $this->getKernel()->getTranslation('controlpanel');
