@@ -24,9 +24,4 @@ class Intraface_modules_project_Controller_Index extends k_Component
         $template = new k_Template(dirname(__FILE__) . '/tpl/index.tpl.php');
         return $template->render($this, $data);
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }
