@@ -172,11 +172,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
     	return $this->context->getKernel();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     /*
     function postForm()
     {

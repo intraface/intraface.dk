@@ -24,11 +24,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Permission extends k
         return ($this->context->getUser());
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function getIntranet()
     {
         return $this->context->getIntranet();

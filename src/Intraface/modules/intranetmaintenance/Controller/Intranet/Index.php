@@ -57,11 +57,6 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Index extends k_
     	return $this->context->getKernel();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function getIntranet()
     {
         return $this->getKernel()->intranet;

@@ -107,11 +107,6 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
         return $this->context->getKernel();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function getIntranet()
     {
         return new IntranetMaintenance($this->name());

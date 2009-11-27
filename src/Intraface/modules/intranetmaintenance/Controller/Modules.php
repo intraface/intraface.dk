@@ -40,11 +40,6 @@ class Intraface_modules_intranetmaintenance_Controller_Modules extends k_Compone
     	return $this->context->getKernel();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function getModuleMaintenance()
     {
         $primary_module = $this->getKernel()->module("intranetmaintenance");

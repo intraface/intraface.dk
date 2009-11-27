@@ -1,7 +1,6 @@
 <?php
 class Intraface_modules_intranetmaintenance_Controller_User_Edit extends k_Component
 {
-    protected $registry;
     protected $user;
 
     function renderHtml()
@@ -32,16 +31,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Edit extends k_Compo
     function getKernel()
     {
     	return $this->context->getKernel();
-    }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
-    function __construct(WireFactory $registry)
-    {
-        $this->registry = $registry;
     }
 
     function getIntranet()

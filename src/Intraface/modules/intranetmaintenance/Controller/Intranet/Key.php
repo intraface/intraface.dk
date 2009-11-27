@@ -40,11 +40,6 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Key extends k_Co
     	return $this->context->getKernel();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function POST()
     {
         $modul = $this->getKernel()->module("intranetmaintenance");

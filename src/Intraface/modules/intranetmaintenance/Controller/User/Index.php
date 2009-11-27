@@ -85,11 +85,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
     	return $this->context->getKernel();
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function getIntranet()
     {
         return $this->getKernel()->intranet;
