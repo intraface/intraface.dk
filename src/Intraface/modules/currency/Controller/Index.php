@@ -13,17 +13,6 @@ class Intraface_modules_currency_Controller_Index extends k_Component
         return $this->registry->get('kernel')->getTranslation('currency');
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
-    function __($phrase)
-    {
-        return $phrase;
-    }
-
-
     function GET()
     {
         return new k_SeeOther($this->url('../../../../modules/currency'));
