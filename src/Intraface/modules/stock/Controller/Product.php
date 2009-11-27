@@ -13,20 +13,14 @@ class Intraface_modules_stock_Controller_Product extends k_Component
 
     function getProduct()
     {
-        $module = $this->getKernel()->module("product");
-        return new Product($this->getKernel(), $this->context->name());
-    }
-
-    function t($phrase)
-    {
-        return $phrase;
+        return $this->context->getProduct();
     }
 
     function getVariation()
     {
         $product_object = $this->getProduct();
-        if (!empty($_GET['product_variation_id'])) {
-            $variation = $product_object->getVariation($_GET['product_variation_id']);
+        if ($product_object->hasVariation()) {
+            $variation = $product_object->getVariation($this->context->name());
         } else {
             $variation = NULL;
         }
@@ -41,12 +35,12 @@ class Intraface_modules_stock_Controller_Product extends k_Component
 
     function postForm()
     {
-        $product_object = $this->context->getProduct();
+        $product_object = $this->getProduct();
 
-        if (!empty($_POST['product_variation_id'])) {
-            $variation = $product_object->getVariation(intval($_POST['product_variation_id']));
+        if ($product_object->hasVariation()) {
+            $variation = $this->getVariation();
             if (!$variation->getId()) {
-                throw new Exception('Invalid variation. '.intval($_POST['product_variation_id']));
+                throw new Exception('Invalid variation.');
             }
             if ($variation->getStock($product_object)->regulate($_POST)) {
                 return new k_SeeOther($this->url('../'));
@@ -59,6 +53,7 @@ class Intraface_modules_stock_Controller_Product extends k_Component
 
         $values = $_POST;
 
+        return $this->render();
     }
 
     function getKernel()

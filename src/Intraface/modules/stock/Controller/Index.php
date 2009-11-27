@@ -7,11 +7,6 @@ class Intraface_modules_stock_Controller_Index extends k_Component
         return $smarty->render($this);
     }
 
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
     function getStock()
     {
         $this->getKernel()->useModule('product');
