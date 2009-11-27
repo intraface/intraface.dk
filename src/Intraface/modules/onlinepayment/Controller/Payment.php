@@ -33,9 +33,4 @@ class Intraface_modules_onlinepayment_Controller_Payment extends k_Component
     	}
     	return $this->render();
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }

@@ -27,10 +27,4 @@ class Intraface_modules_onlinepayment_Controller_ChooseProvider extends k_Compon
     	}
         return $this->render();
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
-
 }

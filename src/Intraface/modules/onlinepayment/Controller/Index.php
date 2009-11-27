@@ -42,9 +42,4 @@ class Intraface_modules_onlinepayment_Controller_Index extends k_Component
         $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
         return $smarty->render($this, array('kernel' => $this->context->getKernel(), 'payments' => $payments, 'onlinepayment' => $onlinepayment));
     }
-
-    function t($phrase)
-    {
-        return $phrase;
-    }
 }
