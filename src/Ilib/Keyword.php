@@ -21,6 +21,8 @@ class Ilib_Keyword
      */
     protected $value = array();
 
+    public $error;
+
     /**
      * Constructor
      *
