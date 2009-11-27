@@ -1,21 +1,35 @@
 <?php
 // common settings
-require_once dirname(__FILE__) . '/../common.php';
+define('INTRAFACE_K2', true);
+
+// HACK to have SET NAMES utf8
+require_once dirname(__FILE__) . '/../config.local.php';
 ini_set('include_path', PATH_INCLUDE_PATH);
+require_once 'Intraface/Sql.php';
+require_once dirname(__FILE__) . '/../common.php';
 require_once 'Ilib/ClassLoader.php';
 require_once 'konstrukt/konstrukt.inc.php';
 //set_error_handler('k_exceptions_error_handler');
 spl_autoload_register('k_autoload');
-/*
-require_once 'phemto.php';
-function create_container() {
-  $injector = new Phemto();
-  // put application wiring here
-  $template_dir = realpath(dirname(__FILE__) . '/../../../Intraface/modules/accounting/Controller/templates');
-  $injector->whenCreating('TemplateFactory')->forVariable('template_dir')->willUse(new Value($template_dir));
-  return $injector;
+
+
+class Intraface_AuthenticatedUser extends k_AuthenticatedUser
+{
+    protected $language;
+    function __construct($name, k_Language $lang)
+    {
+        $this->language = $lang;
+        parent::__construct($name);
+    }
+
+    function language()
+    {
+        return $this->language;
+    }
 }
 
+
+/*
 class TemplateFactory {
   protected $template_dir;
   function __construct($template_dir) {
@@ -27,9 +41,80 @@ class TemplateFactory {
   }
 }*/
 session_start();
-$kernel = new Intraface_Kernel(session_id());
 
-$kernel->translation = $bucket->get('translation2');
+
+class DanishLanguage implements k_Language {
+  function name() {
+    return 'Danish';
+  }
+  function isoCode() {
+    return 'da';
+  }
+}
+
+class EnglishLanguage implements k_Language {
+  function name() {
+    return 'English';
+  }
+  function isoCode() {
+    return 'uk';
+  }
+}
+
+class Intraface_LanguageLoader implements k_LanguageLoader {
+  // @todo The language will often not be set on runtime, e.g. an
+  //       intranet where the user can chose him or her own language?
+  //       How could one accommodate for this?
+  function load(k_Context $context) {
+    require_once 'PEAR.php';
+    require_once 'HTTP.php';
+
+    if ($context->identity()->anonymous()) {
+        $supported = array("da" => true, "en-US" => true);
+        $language = HTTP::negotiateLanguage($supported);
+        if (PEAR::isError($language)) {
+          // fallback language in case of unable to negotiate
+          return new DanishLanguage();
+        }
+
+        if ($language == 'en-US') {
+            return new EnglishLanguage();
+        }
+
+    } elseif ($context->identity()->language() == 'da') {
+        return new DanishLanguage();
+    }
+
+    return new EnglishLanguage();
+  }
+}
+
+class k_Translation2Translator implements k_Translator {
+  protected $translation2;
+  function __construct($lang) {
+    $factory = new Intraface_Factory;
+    $this->translation2 = $factory->new_Translation2();
+    $res = $this->translation2->setLang($lang);
+    if (PEAR::isError($res)) {
+        throw new Exception('Could not setLang()');
+    }
+  }
+
+  function translate($phrase, k_Language $language = null) {
+    // Translation2 groups translations with pageID(). This can
+    // be accommodated like this
+    if (is_array($phrase) && count($phrase) == 2) {
+        return $this->translation2->get($phrase[0], $phrase[1]);
+    }
+    return $this->translation2->get($phrase, 'basic');
+  }
+}
+
+class Intraface_TranslatorLoader implements k_TranslatorLoader {
+  function load(k_Context $context) {
+    return new k_Translation2Translator($context->language()->isoCode());
+  }
+}
 
 $config->template_dir = realpath(dirname(__FILE__) . '/../../../Intraface/modules/accounting/Controller/templates');
 
@@ -108,56 +193,6 @@ class NotAuthorizedComponent extends k_Component {
   }
 }
 
-$GLOBALS['kernel'] = $kernel;
-//$GLOBALS['intranet'] = $kernel->intranet;
-//$db = MDB2::singleton();
-//$db->setCharset('utf8');
-
-$GLOBALS['db'] = $db;
-/*
-class WireFactory {
-    function __construct()
-    {
-    }
-
-    function create()
-    {
-    	$registry = new k_Registry();
-        $registry->registerConstructor('doctrine', create_function(
-            '$className, $args, $registry',
-            'return Doctrine_Manager::connection(DB_DSN);'
-        ));
-        $registry->registerConstructor('category_gateway', create_function(
-          '$className, $args, $registry',
-          'return new Intraface_modules_shop_Shop_Gateway;'
-        ));
-
-        $registry->registerConstructor('kernel', create_function(
-          '$className, $args, $registry',
-          'return $GLOBALS["kernel"];'
-        ));
-
-        $registry->registerConstructor('intranet', create_function(
-          '$className, $args, $registry',
-          'return $GLOBALS["intranet"];'
-        ));
-
-        $registry->registerConstructor('db', create_function(
-          '$className, $args, $registry',
-          'return $GLOBALS["db"];'
-        ));
-
-        $registry->registerConstructor('page', create_function(
-          '$className, $args, $registry',
-          'return new Intraface_Page($registry->get("kernel"));'
-        ));
-
-        return $registry;
-    }
-}
-*/
-
-//$components = new k_InjectorAdapter(create_container());
 $components = new k_InjectorAdapter($bucket);
 $components->setImplementation('k_DefaultNotAuthorizedComponent', 'NotAuthorizedComponent');
 
@@ -170,5 +205,6 @@ k()
   //->setDebug(K2_DEBUG)
   // Dispatch request
   ->setIdentityLoader(new k_SessionIdentityLoader())
+  ->setLanguageLoader(new Intraface_LanguageLoader())->setTranslatorLoader(new Intraface_TranslatorLoader())
   ->run('Intraface_Controller_Index')
   ->out();
