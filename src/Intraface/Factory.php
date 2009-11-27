@@ -8,10 +8,6 @@ class Intraface_Factory
         $this->config = $config;
     }
 
-    /**
-     * @deprecated Cannot really be used
-     * @return object
-     */
     function new_Intraface_Kernel()
     {
         return new Intraface_Kernel(session_id());
@@ -35,7 +31,12 @@ class Intraface_Factory
         }
 
         $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
-        $db->query('SET NAMES utf8');
+        if (defined('INTRAFACE_K2')) {
+            $db->query('SET NAMES utf8');
+        } else {
+            $db->query('SET NAMES latin1');
+        }
+
         $db->setOption('debug', MDB2_DEBUG);
         $db->setOption('portability', MDB2_PORTABILITY_NONE);
         $res = $db->setCharset('latin1');
@@ -59,11 +60,15 @@ class Intraface_Factory
     function new_DB_Sql($container)
     {
         $db = new DB_Sql(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-        $db->query("SET NAMES utf8");
+        if (defined('INTRAFACE_K2')) {
+            $db->query('SET NAMES utf8');
+        } else {
+            $db->query('SET NAMES latin1');
+        }
         return $db;
     }
 
-    function new_Translation2($container)
+    function new_Translation2()
     {
         // set the parameters to connect to your db
         $dbinfo = array(
@@ -117,65 +122,10 @@ class Intraface_Factory
         return new Intraface_Auth(session_id());
     }
 
-    /*
-    function new_Intraface_Page($container)
-    {
-        return new Intraface_Page($this->config->kernel, $this->new_DB_Sql($container));
-    }
-    */
-
-    /////////////////////////////////////////////////////////////////////
-
     function new_k_Template($container)
     {
         $smarty = new k_Template($this->config->template_dir);
         return $smarty;
-    }
-
-    function new_k_Registry($container)
-    {
-    	$registry = new k_Registry();
-        /*
-    	$registry->registerConstructor('doctrine', create_function(
-            '$className, $args, $registry',
-            'return Doctrine_Manager::connection(DB_DSN);'
-        ));
-        */
-        /*
-        $registry->registerConstructor('category_gateway', create_function(
-          '$className, $args, $registry',
-          'return new Intraface_modules_shop_Shop_Gateway;'
-        ));
-        */
-
-        /*
-        $registry->registerConstructor('kernel', create_function(
-          '$className, $args, $registry',
-          'return $GLOBALS["kernel"];'
-        ));
-        */
-
-        /*
-        $registry->registerConstructor('intranet', create_function(
-          '$className, $args, $registry',
-          'return $GLOBALS["intranet"];'
-        ));
-        */
-
-        /*
-        $registry->registerConstructor('db', create_function(
-          '$className, $args, $registry',
-          'return $GLOBALS["db"];'
-        ));
-        */
-        /*
-        $registry->registerConstructor('page', create_function(
-          '$className, $args, $registry',
-          'return new Intraface_Page($registry->get("kernel"));'
-        ));
-        */
-
-        return $registry;
     }
 
     function new_Doctrine_Connection_Common()
@@ -184,18 +134,4 @@ class Intraface_Factory
         Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
         return Doctrine_Manager::connection(DB_DSN);
     }
-    /*
-    function new_Intraface_Doctrine_Intranet()
-    {
-        Intraface_Doctrine_Intranet::singleton($kernel->intranet->getId());
-    }
-
-
-    ///////////////////////////////////////////////////////////////////////
-
-    function new_Intraface_modules_product_Gateway($container)
-    {
-        return new Intraface_modules_product_Gateway($GLOBALS["kernel"]);
-    }
-    */
 }

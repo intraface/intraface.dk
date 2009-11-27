@@ -9,10 +9,6 @@
  * @since   0.1.0
  * @version @package-version@
  */
-
-// HACK to have SET NAMES utf8
-require_once dirname (__FILE__) . '/Sql.php';
-
 // required files
 require_once 'Ilib/ClassLoader.php';
 require_once 'ErrorHandler.php';
@@ -65,6 +61,7 @@ if (!defined('MDB2_DEBUG')) {
 }
 $db = $bucket->get('mdb2');
 
+
 /*
 $db = MDB2::singleton(DB_DSN, array('persistent' => true));
 if (PEAR::isError($db)) {
@@ -98,7 +95,12 @@ putenv("TZ=".TIMEZONE);
 if (defined('TIMEZONE')) {
     $db->exec('SET time_zone=\''.TIMEZONE.'\'');
 }
-$db->exec('SET NAMES utf8');
+        if (defined('INTRAFACE_K2') AND INTRAFACE_K2 === true) {
+            $db->query('SET NAMES utf8');
+        } else {
+
+            $db->query('SET NAMES latin1');
+        }
 
 // Initializes Doctrine
 Doctrine_Manager::getInstance()->setAttribute("use_dql_callbacks", true);

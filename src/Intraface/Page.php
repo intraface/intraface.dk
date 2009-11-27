@@ -27,16 +27,6 @@ class Intraface_Page
         }
     }
 
-    function t($phrase, $pageid = null)
-    {
-        /*
-        // This seems to give problem with bucket? And translation is in kernel so we skip it /sune 12/10 2009
-        if (!method_exists('get', $this->kernel->translation)) {
-            return $phrase;
-        }*/
-        return $this->kernel->getTranslation()->get($phrase, $pageid);
-    }
-
     function start($title = '')
     {
         $this->primary_module = $this->kernel->getPrimaryModule();
@@ -254,5 +244,10 @@ class Intraface_Page
                     'description' => 'Det gamle tema. Nydeligt og kedeligt.'
             )
         );
+    }
+
+    function t($phrase, $page_id = null)
+    {
+        return $this->kernel->translation->get($phrase, $page_id);
     }
 }

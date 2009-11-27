@@ -472,7 +472,12 @@ class Intraface_Kernel
 
     function getSetting()
     {
-        return new Intraface_Setting($this->intranet->getId(), $this->user->getId());
+        if (is_object($this->user)) {
+            $user_id = $this->user->getId();
+        } else {
+            $user_id = 0;
+        }
+        return new Intraface_Setting($this->intranet->getId(), $user_id);
         //return $this->setting;
     }
 }

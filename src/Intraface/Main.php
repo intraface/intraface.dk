@@ -15,6 +15,7 @@ class Intraface_Main
     public $sub_access = array();
     public $sub_access_description = array();
     public $module_name;
+    public $all_has_access;
     protected $show_menu;
     protected $frontpage_index;
     protected $submenu = array();
