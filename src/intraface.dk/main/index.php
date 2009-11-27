@@ -54,8 +54,7 @@ if ($kernel->user->countModuleAccess() == 1) {
 }
 */
 
-$page = $bucket->get('Intraface_Page');
-//$page = new Intraface_Page($kernel);
+$page = new Intraface_Page($kernel);
 $page->start(__('dashboard', 'dashboard'));
 ?>
 <div id="colOne">
