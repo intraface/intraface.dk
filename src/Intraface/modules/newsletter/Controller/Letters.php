@@ -77,9 +77,4 @@ class Intraface_modules_newsletter_Controller_Letters extends k_Component
     	}
     	return $this->render();
     }
-
-    function t($phrase)
-    {
-         return $phrase;
-    }
 }

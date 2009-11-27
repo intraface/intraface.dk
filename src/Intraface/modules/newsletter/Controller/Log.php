@@ -27,11 +27,5 @@ class Intraface_modules_newsletter_Controller_Log extends k_Component
         $list = $this->context->getList();
 
         return $log->getAllUnsubscribersForList($list);
-
-    }
-
-    function t($phrase)
-    {
-         return $phrase;
     }
 }

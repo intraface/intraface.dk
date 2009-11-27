@@ -62,11 +62,6 @@ class Intraface_modules_newsletter_Controller_Letter extends k_Component
         return $this->getLetter()->getList();
     }
 
-    function t($phrase)
-    {
-         return $phrase;
-    }
-
     function renderHtmlEdit()
     {
         $module = $this->getKernel()->module("newsletter");

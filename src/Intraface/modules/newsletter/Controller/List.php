@@ -54,11 +54,6 @@ class Intraface_modules_newsletter_Controller_List extends k_Component
         return $list->getList();
     }
 
-    function t($phrase)
-    {
-         return $phrase;
-    }
-
     function DELETE()
     {
     	$list = new NewsletterList($this->getKernel(), $this->name());

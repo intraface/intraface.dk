@@ -37,11 +37,6 @@ class Intraface_modules_newsletter_Controller_Send extends k_Component
         return $this->context->getLetter();
     }
 
-    function t($phrase)
-    {
-         return $phrase;
-    }
-
     function postForm()
     {
         if ($this->context->getLetter()->queue()) {

@@ -121,7 +121,7 @@ class NewsletterSubscriber extends Intraface_Standard
             break;
 
             default:
-                trigger_error('NewsletterSubscriber::factory: Ulovlig Type');
+                throw new Exception('NewsletterSubscriber::factory: Ulovlig Type');
             break;
         }
     }
@@ -169,7 +169,6 @@ class NewsletterSubscriber extends Intraface_Standard
      */
     public function getContact($contact_id)
     {
-        // $contact_module = $this->list->kernel->getModule('contact', true); // true: tjekker kun intranet_access
         require_once 'Intraface/modules/contact/Contact.php';
         return new Contact($this->list->kernel, $contact_id);
     }

@@ -55,11 +55,6 @@ class Intraface_modules_newsletter_Controller_Lists extends k_Component
         return $list = new NewsletterList($this->getKernel());
     }
 
-    function t($phrase)
-    {
-         return $phrase;
-    }
-
     function getValues()
     {
         return array();

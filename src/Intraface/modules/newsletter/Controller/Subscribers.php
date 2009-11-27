@@ -107,9 +107,4 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
         $list = new NewsletterList($this->getKernel());
         return $list->getList();
     }
-
-    function t($phrase)
-    {
-         return $phrase;
-    }
 }
