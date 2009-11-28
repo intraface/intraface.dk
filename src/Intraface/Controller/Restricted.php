@@ -344,13 +344,11 @@ class component_ShowProduct {
 
     function wrapHtml($content)
     {
-        return new k_HttpResponse(200, $this->getHeader() . $content . $this->getFooter());
-
+        return new k_HttpResponse(200, $this->getHeader() . $content . $this->getFooter(), true);
     }
 
     function execute()
     {
         return $this->wrap(parent::execute());
     }
-
 }

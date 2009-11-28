@@ -12,7 +12,7 @@ class Intraface_Controller_Index extends k_Component
 
     protected function map($name)
     {
-        if ($name == 'logout') { // skal sikkert v�re fra restricted controller i stedet
+        if ($name == 'logout') { // skal sikkert være fra restricted controller i stedet
             return 'Intraface_Controller_Logout';
         } elseif ($name == 'login') {
             return 'Intraface_Controller_Login';
@@ -56,7 +56,7 @@ class Intraface_Controller_Index extends k_Component
         include dirname(__FILE__) . '/../ihtml/outside/bottom.php';
         $footer = ob_get_contents();
         ob_end_clean();
-        return new k_HttpResponse(200, $header . $content . $footer);
+        return new k_HttpResponse(200, $header . $content . $footer, true);
     }
 
     function execute()
