@@ -95,12 +95,12 @@ putenv("TZ=".TIMEZONE);
 if (defined('TIMEZONE')) {
     $db->exec('SET time_zone=\''.TIMEZONE.'\'');
 }
-        if (defined('INTRAFACE_K2') AND INTRAFACE_K2 === true) {
-            $db->query('SET NAMES utf8');
-        } else {
 
-            $db->query('SET NAMES latin1');
-        }
+if (defined('INTRAFACE_K2')) {
+    $db->query('SET NAMES utf8');
+} else {
+    $db->query('SET NAMES latin1');
+}
 
 // Initializes Doctrine
 Doctrine_Manager::getInstance()->setAttribute("use_dql_callbacks", true);
