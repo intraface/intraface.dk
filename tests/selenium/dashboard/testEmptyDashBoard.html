@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=cms,filemanager,accounting,debtor,quotation,order,invoice,onlinepayment,procurement,contact,product,stock,webshop,newsletter,email,todo,comment,administration&amp;login=true</td>
+	<td>install/reset-staging-server.php?modules=controlpanel,cms,filemanager,accounting,debtor,quotation,order,invoice,onlinepayment,procurement,contact,product,stock,webshop,newsletter,email,todo,comment,administration&amp;login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -163,12 +163,12 @@
 </tr>
 <tr>
 	<td>assertTextPresent</td>
-	<td>no contacts has been created. create contact.</td>
+	<td>No contacts has been created. Create contact.</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=create contact</td>
+	<td>link=Create contact</td>
 	<td></td>
 </tr>
 <tr>
@@ -213,7 +213,7 @@
 </tr>
 <tr>
 	<td>assertTextPresent</td>
-	<td>no products has been created.</td>
+	<td>No products has been created.</td>
 	<td></td>
 </tr>
 <tr>
@@ -243,7 +243,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=close</td>
+	<td>link=Close</td>
 	<td></td>
 </tr>
 <tr>
@@ -262,19 +262,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=create order</td>
-	<td></td>
-</tr>
-<tr>
 	<td>type</td>
-	<td>search</td>
-	<td>fir</td>
-</tr>
-<tr>
-	<td>keyUp</td>
-	<td>search</td>
-	<td>s</td>
+	<td>query</td>
+	<td>firs</td>
 </tr>
 <tr>
 	<td>waitForTextPresent</td>
@@ -282,18 +272,18 @@
 	<td></td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>contact_select</td>
-	<td>label=First contact</td>
+	<td>click</td>
+	<td>contact_1</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>go_search</td>
+	<td>submit</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertTextPresent</td>
-	<td>create order</td>
+	<td>Create order</td>
 	<td></td>
 </tr>
 <tr>
@@ -378,12 +368,12 @@
 </tr>
 <tr>
 	<td>assertTextPresent</td>
-	<td>You have not created any</td>
+	<td>None have been yet</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=create invoice</td>
+	<td>link=Create invoice</td>
 	<td></td>
 </tr>
 <tr>
