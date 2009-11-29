@@ -1,6 +1,13 @@
 <?php
-class Intraface_modules_shop_Controller_Categories_Edit extends k_Controller
+class Intraface_modules_shop_Controller_Categories_Edit extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function getShopId()
     {
         return $this->context->context->getShopId();
@@ -9,7 +16,7 @@ class Intraface_modules_shop_Controller_Categories_Edit extends k_Controller
     function getModel()
     {
         /*
-        return new Ilib_Category($this->registry->get('db'),
+        return new Ilib_Category($this->registry->renderHtml('db'),
             new Intraface_Category_Type('shop', $this->getShopId()),
             $this->getId());
         */
@@ -18,42 +25,38 @@ class Intraface_modules_shop_Controller_Categories_Edit extends k_Controller
 
     function getId()
     {
-        if (is_numeric($this->context->name)) {
+        if (is_numeric($this->context->name())) {
             return $this->context->name;
         } else {
             return 0;
         }
     }
 
-    function GET()
+    function renderHtml()
     {
-        $kernel = $this->registry->get('kernel');
-        $redirect = Intraface_Redirect::factory($kernel, 'receive');
-
-        $this->document->title = $this->__('Edit category');
-        $kernel = $this->registry->get('kernel');
-        $redirect = Intraface_Redirect::factory($kernel, 'receive');
+        $this->document->setTitle('Edit category');
+        $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
 
         $data = array(
             'category_object' => $this->getModel(),
             'regret_link' => $redirect->getRedirect($this->url('../'))
         );
-        return $this->render(dirname(__FILE__) . '/../tpl/categories-edit.tpl.php', $data);
+        $tpl = $this->template->create(dirname(__FILE__) . '/../tpl/categories-edit');
+        return $tpl->render($this, $data);
     }
 
-    function POST()
+    function postForm()
     {
-        $kernel = $this->registry->get('kernel');
-        $redirect = Intraface_Redirect::factory($kernel, 'receive');
+        $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
 
         if (!$this->isValid()) {
             throw new Exception('Values not valid');
         }
         try {
             $category = $this->getModel();
-            $category->setIdentifier($this->POST['identifier']);
-            $category->setName($this->POST['name']);
-            $category->setParentId($this->POST['parent_id']);
+            $category->setIdentifier($this->body('identifier'));
+            $category->setName($this->body('name'));
+            $category->setParentId($this->body('parent_id'));
             $category->save();
         } catch (Exception $e) {
             throw $e;
@@ -64,19 +67,21 @@ class Intraface_modules_shop_Controller_Categories_Edit extends k_Controller
             $url = $redirect->getRedirect($this->context->context->url());
         }
 
-        $kernel = $this->registry->get('kernel');
-        $redirect = Intraface_Redirect::factory($kernel, 'receive');
-
-        throw new k_http_Redirect($redirect->getRedirect($url));
+        return new k_SeeOther($redirect->getRedirect($url));
     }
 
     function isValid()
     {
         $error = new Intraface_Error();
         $validator = new Intraface_Validator($error);
-        $validator->isString($this->POST['name'], 'category name is not valid');
-        $validator->isString($this->POST['identifier'], 'category identifier is not valid');
-        $validator->isNumeric($this->POST['parent_id'], 'category parent id has to be numeric');
+        $validator->isString($this->body('name'), 'category name is not valid');
+        $validator->isString($this->body('identifier'), 'category identifier is not valid');
+        $validator->isNumeric($this->body('parent_id'), 'category parent id has to be numeric');
         return !$error->isError();
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

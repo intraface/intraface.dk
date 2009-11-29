@@ -32,7 +32,7 @@
                         <td><?php e($evaluation['go_to_index_after']); ?></td>
                         <td>
                             <a href="<?php e(url($evaluation['id'].'/edit')); ?>" class="edit"><?php e(t('Edit', 'common')); ?></a>
-                            <a href="<?php e(url($evaluation['id'].'/delete')); ?>" class="delete"><?php e(t('Delete', 'common')); ?>
+                            <a href="<?php e(url($evaluation['id'].'/delete')); ?>" class="delete"><?php e(t('Delete', 'common')); ?></a>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

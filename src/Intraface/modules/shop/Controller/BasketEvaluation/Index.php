@@ -1,37 +1,50 @@
 <?php
-class Intraface_modules_shop_Controller_BasketEvaluation_Index extends k_Controller
+class Intraface_modules_shop_Controller_BasketEvaluation_Index extends k_Component
 {
     public $map = array('edit' => 'Intraface_modules_shop_Controller_BasketEvaluation_Edit');
 
-    function getShop() {
-        $doctrine = $this->registry->get('doctrine');
-        return Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->context->name);
+    protected $template;
+    protected $mdb2;
+
+    function __construct(k_TemplateFactory $template, MDB2_Driver_Common $mdb2)
+    {
+        $this->template = $template;
+        $this->mdb2 = $mdb2;
     }
 
-    function GET()
+    function getShop()
+    {
+        return Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->context->name());
+    }
+
+    function renderHtml()
     {
         $shop = $this->getShop();
 
-        $this->document->title = $this->__('Basket evaluation for') . ' ' . $shop->name;
+        $this->document->setTitle('Basket evaluation for' . ' ' . $shop->name);
 
         $this->document->options = array($this->url('../') => 'Close');
 
-        $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $shop);
+        $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->mdb2, $this->getKernel()->intranet, $shop);
         $evaluations = $basketevaluation->getList();
 
         $data = array('shop' => $shop, 'evaluations' => $evaluations);
 
-        return $this->render(dirname(__FILE__) . '/../tpl/evaluation-index.tpl.php', $data);
+        $tpl = $this->template->create(dirname(__FILE__) . '/../tpl/evaluation-index');
+        return $tpl->render($this, $data);
     }
 
-    function forward($name)
+    function map($name)
     {
         if ($name == 'edit') {
-            $next = new Intraface_modules_shop_Controller_BasketEvaluation_Edit($this, $name);
-            return $next->handleRequest();
-        } 
+            return 'Intraface_modules_shop_Controller_BasketEvaluation_Edit';
+        }
 
-        $next = new Intraface_modules_shop_Controller_BasketEvaluation_Show($this, $name);
-        return $next->handleRequest();
+        return 'Intraface_modules_shop_Controller_BasketEvaluation_Show';
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

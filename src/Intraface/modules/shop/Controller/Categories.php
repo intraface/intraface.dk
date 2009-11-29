@@ -1,25 +1,34 @@
 <?php
-class Intraface_modules_shop_Controller_Categories extends k_Controller
+class Intraface_modules_shop_Controller_Categories extends k_Component
 {
+    protected $template;
+    protected $mdb2;
+
+    function __construct(MDB2_Driver_Common $mdb2, k_TemplateFactory $template)
+    {
+        $this->mdb2 = $mdb2;
+        $this->template = $template;
+    }
+
     function getShopId()
     {
         return $this->context->getShopId();
     }
 
-    function GET()
+    function renderHtml()
     {
-        $kernel = $this->registry->get('kernel');
-        $webshop_module = $kernel->module('shop');
-        $translation = $kernel->getTranslation('shop');
-        $db = $this->registry->get('db');
+        $webshop_module = $this->getKernel()->module('shop');
+        $translation = $this->getKernel()->getTranslation('shop');
+        $db = $this->mdb2;
 
-        $redirect = Intraface_Redirect::factory($kernel, 'receive');
+        $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
 
-        $shop = $this->registry->get('category_gateway')->findById($this->context->name);
+        $category_gateway = $this->getCategoryGateway();
+        $shop = $category_gateway->findById($this->context->name());
 
-        $this->document->title = __('Categories for shop').' '.$shop->getName();
+        $this->document->setTitle('Categories for shop' . $shop->getName());
         $this->document->options = array(
-            $redirect->getRedirect($this->url('../')) => __('Close', 'common'), $this->url('create') => __('Add new category')
+            $redirect->getRedirect($this->url('../')) => 'Close', $this->url('create') => 'Add new category'
         );
 
         $category = $this->getModel();
@@ -29,71 +38,72 @@ class Intraface_modules_shop_Controller_Categories extends k_Controller
             $data['product_id'] = $this->GET['product_id'];
         }
 
-        return $this->render('Intraface/modules/shop/Controller/tpl/categories.tpl.php', $data);
+        $tpl = $this->template->create('Intraface/modules/shop/Controller/tpl/categories');
+        return $tpl->render($this, $data);
     }
 
-    function getModel($id = 0)
+    function getCategoryGateway()
+    {
+        return $category_gateway = new Intraface_modules_shop_Shop_Gateway();
+    }
+
+    function _getModel($id = 0)
     {
         // @todo - cannot find the categories when using this one
-        $db = $this->registry->get('db');
-        $kernel = $this->registry->get('kernel');
-        $shop = $this->registry->get('category_gateway')->findById($this->context->name);
-        return new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()), $id);
+        return new Intraface_Category($this->getKernel(), $this->mdb2, new Intraface_Category_Type('shop', $shop->getId()), $id);
     }
 
-    function _getModel()
+    function getModel()
     {
-        return new Ilib_Category($this->registry->get('db'),
+        return new Ilib_Category($this->mdb2,
             new Intraface_Category_Type('shop', $this->getShopId()));
     }
 
-    function POST()
+    function postForm()
     {
-        $kernel = $this->registry->get('kernel');
-        $webshop_module = $kernel->module('shop');
-        $translation = $kernel->getTranslation('shop');
-        $db = $this->registry->get('db');
+        $webshop_module = $this->getKernel()->module('shop');
+        $translation = $this->getKernel()->getTranslation('shop');
+        $db = $this->mdb2;
 
+        $shop = $this->getCategoryGateway()->findById($this->context->name());
+        $category = new Intraface_Category($this->getKernel(), $db, new Intraface_Category_Type('shop', $shop->getId()));
 
-
-        $shop = $this->registry->get('category_gateway')->findById($this->context->name);
-        $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()));
-
-        if(!empty($this->POST['append_product'])) {
+        if($this->body('append_product')) {
             // Append category to product
-            $appender = $category->getAppender($this->POST['product_id']);
-            foreach ($this->POST['category'] AS $category) {
-                $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()), $category);
+            $appender = $category->getAppender($this->body('product_id'));
+            foreach ($this->body('category') AS $category) {
+                $category = new Intraface_Category($this->getKernel(), $db, new Intraface_Category_Type('shop', $shop->getId()), $category);
                 $appender->add($category);
             }
-            $redirect = Intraface_Redirect::factory($kernel, 'receive');
-            throw new k_http_Redirect($redirect->getRedirect($this->url('../')));
-        } elseif (!empty($this->POST['action']) && $this->POST['action'] == 'delete') {
+            $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
+            return new k_SeeOther($redirect->getRedirect($this->url('../')));
+        } elseif ($this->body('action') == 'delete') {
             // delete category
-            if(isset($this->POST['category']) && is_array($this->POST['category'])) {
-                foreach ($this->POST['category'] AS $category) {
-                    $category = new Intraface_Category($kernel, $db, new Intraface_Category_Type('shop', $shop->getId()), $category);
+            if(is_array($this->body('category'))) {
+                foreach ($this->body('category') AS $category) {
+                    $category = new Intraface_Category($this->getKernel(), $db, new Intraface_Category_Type('shop', $shop->getId()), $category);
                     $category->delete();
                 }
             }
 
-            return $this->GET();
+            return $this->render();
         }
 
         throw new exception('Invalid action');
 
     }
 
-    function forward($name)
+    function map($name)
     {
         if ($name == 'create') {
-            $next = new Intraface_modules_shop_Controller_Categories_Edit($this, $name);
-            return $next->handleRequest();
+            return 'Intraface_modules_shop_Controller_Categories_Edit';
         } elseif (is_numeric($name)) {
-            $next = new Intraface_modules_shop_Controller_Categories_Show($this, $name);
-            return $next->handleRequest();
+            return 'Intraface_modules_shop_Controller_Categories_Show';
         }
+    }
 
-        throw new Exception('Unknown forward');
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

@@ -1,7 +1,15 @@
 <?php
-class Intraface_modules_shop_Controller_Edit extends k_Controller
+class Intraface_modules_shop_Controller_Edit extends k_Component
 {
     private $error;
+    protected $doctrine;
+    protected $template;
+
+    function __construct(Doctrine_Connection_Common $doctrine, k_TemplateFactory $template)
+    {
+        $this->doctrine = $doctrine;
+        $this->template = $template;
+    }
 
     function getError()
     {
@@ -13,36 +21,35 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
 
     function isValid()
     {
-        if (!$this->POST->getArrayCopy()) {
+        if (!$this->body()) {
         	return true;
         }
         $validator = new Intraface_Validator($this->getError());
-        $validator->isNumeric($this->POST['show_online'], 'show_online skal være et tal');
+        $validator->isNumeric($this->body('show_online'), 'show_online skal være et tal');
         // $validator->isString($this->POST['description'], 'description text is not valid');
-        $validator->isString($this->POST['confirmation_subject'], 'confirmation subject is not valid', '', 'allow_empty');
-        $validator->isString($this->POST['confirmation'], 'confirmation text is not valid', '', 'allow_empty');
-        $validator->isString($this->POST['confirmation_greeting'], 'confirmation greeting is not valid', '', 'allow_empty');
-        $validator->isString($this->POST['terms_of_trade_url'], 'terms of trade is not valid', '', 'allow_empty');
-        $validator->isString($this->POST['receipt'], 'shop receipt is not valid', '<p><br/><div><ul><ol><li><h2><h3><h4>');
+        $validator->isString($this->body('confirmation_subject'), 'confirmation subject is not valid', '', 'allow_empty');
+        $validator->isString($this->body('confirmation'), 'confirmation text is not valid', '', 'allow_empty');
+        $validator->isString($this->body('confirmation_greeting'), 'confirmation greeting is not valid', '', 'allow_empty');
+        $validator->isString($this->body('terms_of_trade_url'), 'terms of trade is not valid', '', 'allow_empty');
+        $validator->isString($this->body('receipt'), 'shop receipt is not valid', '<p><br/><div><ul><ol><li><h2><h3><h4>');
 
         return !$this->getError()->isError();
     }
 
     function getModel()
     {
-        $doctrine = $this->registry->get('doctrine');
-        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->context->name);
+        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->context->name());
         return $shop;
     }
 
-    function GET()
+    function renderHtml()
     {
-        $this->document->title = 'Edit shop';
+        $this->document->setTitle('Edit shop');
 
         $data = array();
 
-        if (is_numeric($this->context->name)) {
-            $post = $this->POST->getArrayCopy();
+        if (is_numeric($this->context->name())) {
+            $post = $this->body();
             if (!empty($post)) {
                 $data = $post;
             } else {
@@ -50,14 +57,14 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
                 $data = $shop->toArray();
             }
         } elseif (!$this->isValid()) {
-            $data = $this->POST->getArrayCopy();
+            $data = $this->body();
         } else {
-            $data['receipt'] = $this->registry->get('kernel')->setting->get('intranet','webshop.webshop_receipt');
+            $data['receipt'] = $this->getKernel()->setting->get('intranet','webshop.webshop_receipt');
         }
 
-        if ($this->registry->get('kernel')->intranet->hasModuleAccess('currency')) {
-            $this->registry->get('kernel')->useModule('currency', true); // true: ignore user access
-            $gateway = new Intraface_modules_currency_Currency_Gateway($this->registry->get('doctrine'));
+        if ($this->getKernel()->intranet->hasModuleAccess('currency')) {
+            $this->getKernel()->useModule('currency', true); // true: ignore user access
+            $gateway = new Intraface_modules_currency_Currency_Gateway($this->doctrine);
             try {
                 $currencies = $gateway->findAllWithExchangeRate();
             } catch (Intraface_Gateway_Exception $e) {
@@ -67,7 +74,7 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
             $currencies = false;
         }
 
-        $webshop_module = $this->registry->get('kernel')->module('shop');
+        $webshop_module = $this->getKernel()->module('shop');
         $settings = $webshop_module->getSetting('show_online');
         $languages = new Intraface_modules_language_Languages;
         $langs = $languages->getChosenAsArray();
@@ -77,36 +84,35 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
             'settings' => $settings,
             'currencies' => $currencies,
             'languages' => $langs);
-        return $this->getError()->view() . $this->render(dirname(__FILE__) . '/tpl/edit.tpl.php', $data);
+        $tpl = $this->template->create(dirname(__FILE__) . '/tpl/edit');
+        return $this->getError()->view() . $tpl->render($this, $data);
     }
 
-    function POST()
+    function postForm()
     {
         if (!$this->isValid()) {
-            return $this->GET();
+            return $this->render();
         }
 
-        $doctrine = $this->registry->get('doctrine');
-
         try {
-            if (is_numeric($this->context->name)) {
+            if (is_numeric($this->context->name())) {
                 $shop = $this->getModel();
             } else {
                 $shop = new Intraface_modules_shop_Shop;
-                $shop->intranet_id = $this->registry->get('kernel')->intranet->getId();
+                $shop->intranet_id = $this->getKernel()->intranet->getId();
             }
-            $shop->fromArray($this->POST->getArrayCopy());
-            if (isset($this->POST['confirmation_add_contact_url']) AND $this->POST['confirmation_add_contact_url'] == 1) {
+            $shop->fromArray($this->body());
+            if ($this->body('confirmation_add_contact_url') == 1) {
                 $shop->confirmation_add_contact_url = 1;
             } else {
                 $shop->confirmation_add_contact_url = 0;
             }
-            if (isset($this->POST['payment_link_add']) AND $this->POST['payment_link_add'] == 1) {
+            if ($this->body('payment_link_add') == 1) {
                 $shop->payment_link_add = 1;
             } else {
                 $shop->payment_link_add = 0;
             }
-            if (isset($this->POST['send_confirmation']) AND $this->POST['send_confirmation'] == 1) {
+            if ($this->body('send_confirmation') == 1) {
                 $shop->send_confirmation = 1;
             } else {
                 $shop->send_confirmation = 0;
@@ -116,6 +122,11 @@ class Intraface_modules_shop_Controller_Edit extends k_Controller
             throw $e;
         }
 
-        throw new k_http_Redirect($this->url('../'));
+        return new k_SeeOther($this->url('../'));
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

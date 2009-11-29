@@ -1,16 +1,15 @@
 <?php
-class Intraface_modules_shop_Controller_Categories_Show extends k_Controller
+class Intraface_modules_shop_Controller_Categories_Show extends k_Component
 {
     function getModel($id = 0)
     {
         return $this->context->getModel($id);
     }
-    
-    function forward($name) 
+
+    function map($name)
     {
         if ($name == 'edit') {
-            $next = new Intraface_modules_shop_Controller_Categories_Edit($this, $name);
-            return $next->handleRequest();
+            return 'Intraface_modules_shop_Controller_Categories_Edit';
         }
     }
 }

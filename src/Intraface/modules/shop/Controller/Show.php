@@ -1,18 +1,30 @@
 <?php
-class Intraface_modules_shop_Controller_Show extends k_Controller
+class Intraface_modules_shop_Controller_Show extends k_Component
 {
-    
-    function getShopId()
+    protected $mdb2;
+    protected $template;
+
+    function __construct(MDB2_Driver_Common $db, k_TemplateFactory $template)
     {
-        return $this->name;
+        $this->mdb2 = $db;
+        $this->template = $template;
     }
 
-    function GET()
+    function getKernel()
     {
-        $doctrine = $this->registry->get('doctrine');
+        return $this->context->getKernel();
+    }
+
+    function getShopId()
+    {
+        return $this->name();
+    }
+
+    function renderHtml()
+    {
         $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->getShopId());
 
-        $this->document->title = $shop->name;
+        $this->document->setTitle($shop->name);
 
         $this->document->options = array($this->url('../') => 'Close',
                                          $this->url('edit') => 'Edit',
@@ -21,33 +33,26 @@ class Intraface_modules_shop_Controller_Show extends k_Controller
                                          $this->url('basketevaluation') => 'Basket evaluation',
                                          $this->url('paymentmethods') => 'Payment methods');
 
-        $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $shop);
+        $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->mdb2, $this->getKernel()->intranet, $shop);
         $evaluations = $basketevaluation->getList();
 
         $data = array('shop' => $shop, 'evaluations' => $evaluations);
-
-        return $this->render(dirname(__FILE__) . '/tpl/show.tpl.php', $data);
+        $tpl = $this->template->create(dirname(__FILE__) . '/tpl/show');
+        return $tpl->render($this, $data);
     }
 
-    function forward($name)
+    function map($name)
     {
         if ($name == 'edit') {
-            $next = new Intraface_modules_shop_Controller_Edit($this, $name);
-            return $next->handleRequest();
+            return 'Intraface_modules_shop_Controller_Edit';
         } elseif ($name == 'basketevaluation') {
-            $next = new Intraface_modules_shop_Controller_BasketEvaluation_Index($this, $name);
-            return $next->handleRequest();
+            return 'Intraface_modules_shop_Controller_BasketEvaluation_Index';
         } elseif ($name == 'featuredproducts') {
-            $next = new Intraface_modules_shop_Controller_FeaturedProducts($this, $name);
-            return $next->handleRequest();
+            return 'Intraface_modules_shop_Controller_FeaturedProducts';
         } elseif ($name == 'categories') {
-            $next = new Intraface_modules_shop_Controller_Categories($this, $name);
-            return $next->handleRequest();
+            return 'Intraface_modules_shop_Controller_Categories';
         } elseif ($name == 'paymentmethods') {
-            $next = new Intraface_modules_shop_Controller_PaymentMethods_Index($this, $name);
-            return $next->handleRequest();
+            return 'Intraface_modules_shop_Controller_PaymentMethods_Index';
         }
-
-        throw new Exception('Unknown forward');
     }
 }

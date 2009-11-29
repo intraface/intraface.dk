@@ -1,17 +1,23 @@
 <?php
-class Intraface_modules_shop_Controller_PaymentMethods_Index extends k_Controller
+class Intraface_modules_shop_Controller_PaymentMethods_Index extends k_Component
 {
-    function getShopId()
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
     {
-        return $this->context->name;
+        $this->template = $template;
     }
 
-    function GET()
+    function getShopId()
     {
-        $doctrine = $this->registry->get('doctrine');
+        return $this->context->name();
+    }
+
+    function renderHtml()
+    {
         $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->getShopId());
 
-        $this->document->title = $this->__('Payment methods for') . ' ' . $shop->name;
+        $this->document->setTitle('Payment methods for') . ' ' . $shop->name;
 
         $this->document->options = array($this->url('../') => 'Close');
 
@@ -21,13 +27,12 @@ class Intraface_modules_shop_Controller_PaymentMethods_Index extends k_Controlle
         $chosen = $this->getPaymentMethodsForShop();
 
         $data = array('shop' => $shop, 'methods' => $methods, 'chosen' => $chosen);
-
-        return $this->render(dirname(__FILE__) . '/../tpl/paymentmethods-index.tpl.php', $data);
+        $tpl = $this->template->create(dirname(__FILE__) . '/../tpl/paymentmethods-index');
+        return $tpl->render($this, $data);
     }
 
     function getPaymentMethodsForShop()
     {
-        $doctrine = $this->registry->get('doctrine');
         $methods = Doctrine::getTable('Intraface_modules_shop_PaymentMethods')->findByShopId($this->getShopId());
         $m = array();
         foreach ($methods as $method) {
@@ -39,41 +44,40 @@ class Intraface_modules_shop_Controller_PaymentMethods_Index extends k_Controlle
 
     function flushPaymentMethods()
     {
-        $doctrine = $this->registry->get('doctrine');
         $methods = Doctrine::getTable('Intraface_modules_shop_PaymentMethods')->findByShopId($this->getShopId());
         foreach ($methods as $method) {
             $method->delete();
         }
     }
 
-    function POST()
+    function postForm()
     {
-        $doctrine = $this->registry->get('doctrine');
         $paymentmethods = $this->getPaymentMethodsForShop();
         $this->flushPaymentMethods();
 
-        foreach ($this->POST['method'] as $key => $value) {
-            if (!empty($paymentmethods[$this->POST['method'][$key]])) {
-                $method = Doctrine::getTable('Intraface_modules_shop_PaymentMethods')->findOneById($paymentmethods[$this->POST['method'][$key]]['id']);
+        $post = $this->body();
+        foreach ($post['method'] as $key => $value) {
+            if (!empty($paymentmethods[$post['method'][$key]])) {
+                $method = Doctrine::getTable('Intraface_modules_shop_PaymentMethods')->findOneById($paymentmethods[$post['method'][$key]]['id']);
                 if (!$method) {
                     $method = new Intraface_modules_shop_PaymentMethods();
-                    $method->paymentmethod_key = $this->POST['method'][$key];
-                    $method->text = $this->POST['text'][$key];
+                    $method->paymentmethod_key = $post['method'][$key];
+                    $method->text = $post['text'][$key];
                     $method->shop_id = $this->getShopId();
                     $method->save();
                 } else {
-                    $method->text = $this->POST['text'][$key];
+                    $method->text = $post['text'][$key];
                     $method->save();
                 }
             } else {
                 $method = new Intraface_modules_shop_PaymentMethods();
-                $method->paymentmethod_key = $this->POST['method'][$key];
-                $method->text = $this->POST['text'][$key];
+                $method->paymentmethod_key = $post['method'][$key];
+                $method->text = $post['text'][$key];
                 $method->shop_id = $this->getShopId();
                 $method->save();
             }
         }
 
-        throw new k_http_Redirect($this->url());
+        return new k_SeeOther($this->url());
     }
 }

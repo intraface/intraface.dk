@@ -1,34 +1,34 @@
 <?php
-class Intraface_modules_shop_Controller_BasketEvaluation_Show extends k_Controller
+class Intraface_modules_shop_Controller_BasketEvaluation_Show extends k_Component
 {
-    
     function getShop()
     {
         return $this->context->getShop();
     }
-    
-    function GET()
+
+    function renderHtml()
     {
-        
-        $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->get('db'), $this->registry->get('intranet'), $this->getShop(), $this->name);
+        /*
+        $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->renderHtml('db'), $this->getKernel()->intranet, $this->getShop(), $this->name());
         if ($basketevaluation->getId() == 0) {
-            throw new Exception('Invalid basket evaluation '.$this->name);
-        }    
-        
-        
-        throw new Exception('No content on this page!');
+            throw new Exception('Invalid basket evaluation '.$this->name());
+        }
+        */
+        return 'No content on this page!';
     }
 
-    function forward($name)
+    function map($name)
     {
         if ($name == 'edit') {
-            $next = new Intraface_modules_shop_Controller_BasketEvaluation_Edit($this, $name);
-            return $next->handleRequest();
+            return 'Intraface_modules_shop_Controller_BasketEvaluation_Edit';
         } elseif ($name == 'delete') {
-            $next = new Intraface_modules_shop_Controller_BasketEvaluation_Delete($this, $name);
-            return $next->handleRequest();
+            return 'Intraface_modules_shop_Controller_BasketEvaluation_Delete';
         }
-
-        throw new Exception('Unknown forward');
     }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
 }
