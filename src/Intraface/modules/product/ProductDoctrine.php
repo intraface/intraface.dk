@@ -52,6 +52,7 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
         # If details are not valid, we do not want to save the product.
         if(is_object($this->active_details)) {
             
+            /*
             # We make sure translation is added before insert as name is required
             if($this->active_details->Translation->count() == 0) {
                 throw new Exception('Details Translations needs to be set. Use getDetails()->Translation');
@@ -62,7 +63,7 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
                 if(!$translation->isValid()) {
                     throw new Doctrine_Validator_Exception(array());
                 }
-            }
+            }*/
             
             # We validate the details for errors before we insert
             if(!$this->active_details->isValid(true)) {

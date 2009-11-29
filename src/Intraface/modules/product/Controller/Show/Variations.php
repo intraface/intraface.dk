@@ -24,30 +24,17 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
          return new k_TemporaryRedirect($this->url('select_attribute_groups'));
          }*/
 
-        $product = new Product($this->getKernel(), $this->context->name());
         $existing_groups = array();
-        $groups = $product->getAttributeGroups();
-
-        return 'not finished yet';
-    }
-
-    function renderHtmlEdit()
-    {
-        $module = $this->getKernel()->module('product');
-        $translation = $this->getKernel()->getTranslation('product');
-
-        $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway();
-
-        $product = new Product($this->getKernel(), $this->context->name());
-        $existing_groups = array();
-        $groups = $product->getAttributeGroups();
+        // $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway();
+        
         $data = array(
-        	'product' => $product,
-        	'group_gateway' => $group_gateway,
+            'product' => $product,
             'existing_groups' => $existing_groups,
             'groups' => $groups);
+        
         $tpl = new k_Template(dirname(__FILE__) . '/../tpl/variations-edit.tpl.php');
         return $tpl->render($this, $data);
+
     }
 
     function getProduct()
@@ -60,9 +47,7 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
         $module = $this->getKernel()->module('product');
         $translation = $this->getKernel()->getTranslation('product');
 
-        $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway();
-
-        $product = new Product($this->getKernel(), $this->context->name());
+        $product = $this->getProduct();
 
         if (!empty($_POST['save']) || !empty($_POST['save_and_close'])) {
 

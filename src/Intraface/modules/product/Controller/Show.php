@@ -11,6 +11,8 @@ class Appender extends Ilib_Filehandler_AppendFile
 class Intraface_modules_product_Controller_Show extends k_Component
 {
     protected $error;
+    private $product;
+    private $product_doctrine;
 
     function map($name)
     {
@@ -32,13 +34,11 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
     function getError()
     {
-        return $this->error;
-    }
+        if(!is_object($this->error)) {
+            $this->error = new Intraface_Doctrine_ErrorRender($this->getTranslation());
+        }
 
-    function getObject()
-    {
-        require_once 'Intraface/modules/product/Product.php';
-        return new Product($this->getKernel(), $this->name());
+        return $this->error;
     }
 
     function getGateway()
@@ -93,12 +93,21 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
     function getProduct()
     {
-        return $this->getObject();
+        if (is_object($this->product)) {
+            return $this->product;
+        }
+        
+        require_once 'Intraface/modules/product/Product.php';
+        return $this->product = new Product($this->getKernel(), $this->name());
     }
-
+    
     function getProductDoctrine()
     {
-        return $product = $this->getGateway()->findById((int)$this->name());
+        if (is_object($this->product_doctrine)) {
+            return $this->product_doctrine;
+        }
+
+        return $this->product_doctrine = $this->getGateway()->findById((int)$this->name());
     }
 
     function postForm()
@@ -108,7 +117,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
             return new k_SeeOther($this->url('filehandler/selectfile'));
         }
 
-        $product = $this->getGateway()->findById((int)$this->name());
+        $product = $this->getProductDoctrine();
 
         $product->getDetails()->number = $_POST['number'];
         $product->getDetails()->Translation['da']->name = $_POST['name'];
@@ -132,10 +141,11 @@ class Intraface_modules_product_Controller_Show extends k_Component
             }
             return new k_SeeOther($this->url());
         } catch (Doctrine_Validator_Exception $e) {
-            $error = new Intraface_Doctrine_ErrorRender($translation);
-            $error->attachErrorStack($product->getErrorStack());
-            $error->attachErrorStack($product->getDetails()->getErrorStack());
+            $this->product = $product;
+            $this->getError()->attachErrorStack($product->getCollectedErrorStack());
         }
+        
+        return $this->render();
     }
 
     function renderHtml()
@@ -183,20 +193,13 @@ class Intraface_modules_product_Controller_Show extends k_Component
         $this->getKernel()->module('product');
         $this->getKernel()->useShared('filehandler');
         $translation = $this->getKernel()->getTranslation('product');
-        $product = new Product($this->getKernel(), $this->name());
-        $this->error = $product->error;
-        $filehandler = new FileHandler($this->getKernel());
-
+        
         $data = array(
-            'gateway' => $this->getGateway(),
-            'product' => $this->getProduct(),
-            'translation' => $translation,
-            'kernel' => $this->getKernel(),
-            'filehandler' => $filehandler
+            'product' => $this->getProductDoctrine(),
         );
 
         $smarty = new k_Template(dirname(__FILE__) . '/tpl/edit.tpl.php');
-        return $smarty->render($this);
+        return $smarty->render($this, $data);
     }
 
     function getFileAppender()
@@ -226,6 +229,11 @@ class Intraface_modules_product_Controller_Show extends k_Component
     function getKernel()
     {
         return $this->context->getKernel();
+    }
+    
+    function getTranslation()
+    {
+        return $translation = $this->getKernel()->getTranslation('product');
     }
 
     function renderHtmlCopy()

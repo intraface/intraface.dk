@@ -1,8 +1,8 @@
 <h1><?php e(t('Edit attribute group')); ?></h1>
 
-<?php if (isset($error)) echo $error->view(); ?>
+<?php echo $context->getError()->view(); ?>
 
-<form action="<?php e(url()); ?>" method="post">
+<form action="<?php e(url(null, array($context->subview()))); ?>" method="post">
 <fieldset>
     <legend><?php e(t('Attribute group information')); ?></legend>
         <input type="hidden" name="id" value="<?php if (isset($group)) e($group->getId()); ?>" />

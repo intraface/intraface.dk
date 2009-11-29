@@ -1,10 +1,20 @@
 <?php
-class Intraface_modules_product_Controller_Attributegroups extends k_Component
+class Intraface_modules_product_Controller_AttributeGroups extends k_Component
 {
-
+    private $error;
+    
     function getKernel()
     {
         return $this->context->getKernel();
+    }
+    
+    function getError()
+    {
+        if(!is_object($this->error)) {
+            $this->error = new Intraface_Doctrine_ErrorRender($this->getKernel()->getTranslation('product'));
+        }
+
+        return $this->error;
     }
 
     function renderHtml()
@@ -26,7 +36,7 @@ class Intraface_modules_product_Controller_Attributegroups extends k_Component
 
     function map($name)
     {
-        return 'Intraface_modules_product_Controller_Attributegroup';
+        return 'Intraface_modules_product_Controller_AttributeGroups_Show';
     }
 
     function postForm()
@@ -34,30 +44,6 @@ class Intraface_modules_product_Controller_Attributegroups extends k_Component
         Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
 
         $gateway = new Intraface_modules_product_Attribute_Group_Gateway();
-
-        if ($this->body('action') == 'delete') {
-            $deleted = array();
-            if (is_array($this->body('selected'))) {
-                foreach ($this->body('selected') AS $id) {
-                    try {
-                        $group = $gateway->findById($id);
-                        $group->delete();
-                        $deleted[] = $id;
-                    } catch (Intraface_Gateway_Exception $e) {/* we do nothing */ }
-                }
-            }
-        }
-
-        if (!empty($_POST['undelete'])) {
-            $undelete = (array)unserialize(base64_decode($_POST['deleted']));
-            foreach ($undelete AS $id) {
-                try {
-                    $group = $gateway->findDeletedById($id);
-                    $group->undelete();
-                }
-                catch (Intraface_Gateway_Exception $e) { }
-            }
-        }
 
         if($this->body('save') != '') {
             $group = new Intraface_modules_product_Attribute_Group;
@@ -68,8 +54,7 @@ class Intraface_modules_product_Controller_Attributegroups extends k_Component
                 $group->load();
                 return new k_SeeOther($this->url($group->getId()));
             } catch(Doctrine_Validator_Exception $e) {
-                $error = new Intraface_Doctrine_ErrorRender($this->getKernel()->getTranslation('product'));
-                $error->attachErrorStack($group->getErrorStack());
+                $this->getError()->attachErrorStack($group->getErrorStack());
             }
         }
 

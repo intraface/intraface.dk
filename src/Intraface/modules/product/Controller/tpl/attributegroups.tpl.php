@@ -20,7 +20,7 @@
         <caption><?php e(t('Attribute groups')); ?></caption>
         <thead>
             <tr>
-                <th></th>
+                <!-- <th></th>  -->
                 <th><?php e(t('Group')); ?></th>
                 <th></th>
             </tr>
@@ -28,20 +28,18 @@
         <tbody>
             <?php foreach ($groups as $group): ?>
                 <tr>
-                    <td>
-                        <input type="checkbox" value="<?php e($group->getId()); ?>" id="product-attribute-<?php e($group->getId()); ?>" name="selected[]" />
-                    </td>
+                    <!--<td> <input type="checkbox" value="<?php e($group->getId()); ?>" id="product-attribute-<?php e($group->getId()); ?>" name="selected[]" /></td> -->
                     <td><a href="<?php e(url($group->getId())); ?>"><?php e($group->getName()); if($group->getDescription() != '') e(' ('.$group->getDescription().')'); ?></a></td>
                     <td class="options"><a class="edit" href="<?php e(url($group->getId(), array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></td>
                 </tr>
              <?php endforeach; ?>
         </tbody>
     </table>
-    <select name="action">
+    <!-- <select name="action">
         <option value=""><?php e(t('Choose...', 'common')); ?></option>
         <option value="delete"><?php e(t('Delete selected', 'common')); ?></option>
     </select>
 
-    <input type="submit" value="<?php e(t('Go', 'common')); ?>" />
+    <input type="submit" value="<?php e(t('Go', 'common')); ?>" /> -->
 <?php endif; ?>
 </form>

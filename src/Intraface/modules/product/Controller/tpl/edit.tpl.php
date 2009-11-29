@@ -1,13 +1,13 @@
 <?php
-if ($context->getProductDoctrine()->getId() > 0) {
+/*if ($context->getProductDoctrine()->getId() > 0) {
     $product = $context->getProductDoctrine();
-}
+}*/
 ?>
 <h1><?php e(t('Edit product')); ?></h1>
 
 <?php echo $context->getError()->view(); ?>
 
-<form action="<?php e(url(null, array('create'))); ?>" method="post">
+<form action="<?php e(url(null, array($context->subview()))); ?>" method="post">
 <fieldset>
     <legend><?php e(t('Product information')); ?></legend>
         <div class="formrow">
@@ -37,7 +37,7 @@ if ($context->getProductDoctrine()->getId() > 0) {
         <legend><?php e(t('Price information')); ?></legend>
         <div class="formrow">
             <label for="price"><?php e(t('Price')); ?></label>
-            <input type="text" name="price" id="price" value="<?php if (isset($product)) e($product->getDetails()->getPrice()->getAsLocal('da_dk')); ?>" /> <?php e(t('excl. vat')); ?>
+            <input type="text" name="price" id="price" value="<?php if (isset($product)) e($product->getDetails()->getPrice()->getAsLocal('da_dk', 2)); ?>" /> <?php e(t('excl. vat')); ?>
         </div>
 
         <div class="formrow">
@@ -62,7 +62,7 @@ if ($context->getProductDoctrine()->getId() > 0) {
 
         <div class="formrow">
             <label for="before_price"><?php e(t('Before price')); ?></label>
-            <input type="text" name="before_price" id="before_price" value="<?php if (isset($product) && $product->getDetails()->getBeforePrice()->getAsIso() != 0) e($product->getDetails()->getBeforePrice()->getAsLocal('da_dk')); ?>" />
+            <input type="text" name="before_price" id="before_price" value="<?php if (isset($product) && $product->getDetails()->getBeforePrice()->getAsIso() != 0) e($product->getDetails()->getBeforePrice()->getAsLocal('da_dk', 2)); ?>" />
         </div>
 
         <?php if ($context->getKernel()->user->hasModuleAccess('shop')): ?>

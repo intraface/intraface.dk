@@ -125,7 +125,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
     ?>
     <?php if (count($groups) == 0): ?>
         <ul class="options">
-            <li><a href="<?php e(url('variations')); ?>"><?php e(t('Select attributes for product')); ?></a></li>
+            <li><a href="<?php e(url('variations/select_attribute_groups')); ?>"><?php e(t('Select attributes for product')); ?></a></li>
         </ul>
     <?php else: ?>
         <?php

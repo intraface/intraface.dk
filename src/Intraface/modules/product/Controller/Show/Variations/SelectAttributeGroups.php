@@ -69,7 +69,7 @@ class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups
                 $product->setAttributeGroup($id);
             }
 
-            header('location: product_variations_edit.php?id='.$product->getId());
+            return new k_SeeOther($this->url('..'));
         }
     }
 

@@ -3,8 +3,10 @@
 <p><?php e($group->getDescription()); ?></p>
 
 <ul class="options">
-    <li><a class="new" href="attribute_edit.php?group_id=<?php e($group->getId()); ?>"><?php e(t('Create attribute')); ?></a></li>
-    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
+    <li><a class="new" href="<?php e(url('.', array('create'))); ?>"><?php e(t('Create attribute')); ?></a></li>
+    <li><a class="edit" href="<?php e(url('.', array('edit'))); ?>"><?php e(t('Edit group')); ?></a></li>
+    <li><a class="delete" href="<?php e(url('.', array('delete'))); ?>"><?php e(t('Delete group')); ?></a></li>
+    <li><a class="close" href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
 </ul>
 
 <?php if (!empty($deleted)): ?>
@@ -24,7 +26,7 @@
         <caption><?php e(t('Attributes')); ?></caption>
         <thead>
             <tr>
-                <th></th>
+                <!-- <th></th>  -->
                 <th><?php e(t('Name')); ?></th>
                 <th></th>
             </tr>
@@ -32,20 +34,21 @@
         <tbody>
             <?php foreach ($attributes as $attribute): ?>
                 <tr>
-                    <td>
-                        <input type="checkbox" value="<?php e($attribute->get('id')); ?>" name="selected[]" />
-                    </td>
+                    <!-- <td><input type="checkbox" value="<?php e($attribute->get('id')); ?>" name="selected[]" /></td>  -->
                     <td><?php e($attribute->getName()); ?></td>
-                    <td class="options"><a class="edit" href="attribute_edit.php?group_id=<?php e($group->getId()); ?>&amp;id=<?php e($attribute->getId()); ?>"><?php e(t('edit', 'common')); ?></a></td>
+                    <td class="options">
+                        <a class="edit" href="<?php e(url($attribute->getId(), array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a>
+                        <a class="delete" href="<?php e(url($attribute->getId(), array('delete'))); ?>"><?php e(t('Delete', 'common')); ?></a>
+                    </td>
                 </tr>
              <?php endforeach; ?>
         </tbody>
     </table>
-    <select name="action">
+    <!-- <select name="action">
         <option value=""><?php e(t('choose...', 'common')); ?></option>
         <option value="delete"><?php e(t('delete selected', 'common')); ?></option>
     </select>
 
-    <input type="submit" value="<?php e(t('go', 'common')); ?>" />
+    <input type="submit" value="<?php e(t('go', 'common')); ?>" />  -->
 <?php endif; ?>
 </form>

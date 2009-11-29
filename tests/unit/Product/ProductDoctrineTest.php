@@ -73,7 +73,7 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         try {
             $product->save();
         } catch (Exception $e) {
-            $this->fail('Exception thrown '.$e->__toString());
+            $this->fail($e);
         }
 
         $product->refresh(true);
@@ -86,8 +86,17 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
     function testSaveThrowsExceptionOnEmptyProduct()
     {
         $product = $this->createProductObject();
-
-        $this->setExpectedException('Doctrine_Validator_Exception');
+        
+        $this->setExpectedException('Exception');
+        $product->save();
+    }
+    
+    function testSaveThrowsExceptionOnEmptyProductDetails()
+    {
+        $product = $this->createProductObject();
+        $product->getDetails();
+        
+        $this->setExpectedException('Exception');
         $product->save();
     }
 
@@ -103,7 +112,7 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
     {
         $product = $this->createProductObject();
         $product->getDetails()->price = new Ilib_Variable_Float(20);
-        $this->setExpectedException('Doctrine_Validator_Exception');
+        $this->setExpectedException('Exception');
         $product->save();
     }
 
@@ -273,6 +282,37 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $product->getDetails()->getId());
         $this->assertEquals(30, $product->getDetails()->getPrice()->getAsIso());
     }
+    
+    function testDetailsIsNotUpdatedWhenErrorInTranslation()
+    {
+        $product = $this->createProductObject();
+        $product->getDetails()->Translation['da']->name = 'Test';
+        $product->getDetails()->price = new Ilib_Variable_Float(20);
+
+        try {
+            $product->save();
+        } catch (Exception $e) {
+            $this->fail('Exception thrown '.$e->__toString());
+        }
+        
+        $product->refresh(true);
+        $this->assertEquals(1, $product->getDetails()->getId());
+        $this->assertEquals(20, $product->getDetails()->getPrice()->getAsIso());
+
+        $product->getDetails()->Translation['da']->name = '';
+        $product->getDetails()->price = new Ilib_Variable_Float(30);
+        try {
+            $product->save();
+        } catch (Exception $e) {
+            // we excpect error.
+            // $this->fail('Exception thrown '.$e->__toString());
+        }
+        $product->refresh(true);
+        // $product = $this->createProductObject($product->get('id'));
+
+        $this->assertEquals(1, $product->getDetails()->getId());
+        $this->assertEquals(20, $product->getDetails()->getPrice()->getAsIso());
+    }
 
     public function testLoadEarlierDetails()
     {
@@ -309,7 +349,13 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         $product->getDetails()->Translation['da']->description = '';
         $product->getDetails()->price = new Ilib_Variable_Float(20);
         $product->do_show = 1;
-        $product->save();
+        try {
+            $product->save();
+        } catch (Exception $e) {
+            foreach($product->getErrorStack() AS $field => $error) {
+                echo $field; var_dump($error);
+            }
+        }
 
         $product = $this->createProductObject(1);
         $this->assertEquals(1, $product->showInShop());

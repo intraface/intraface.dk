@@ -1,6 +1,9 @@
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
 <title>testDeleteAndUndeleteAttributeGroup</title>
 </head>
 <body>
@@ -10,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=product,shop&login=true</td>
+	<td>install/reset-staging-server.php?modules=product,shop&amp;login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -40,7 +43,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>submit</td>
+	<td>save</td>
 	<td></td>
 </tr>
 <tr>
@@ -49,32 +52,27 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>selected[]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>select</td>
-	<td>action</td>
-	<td>label=delete selected</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>//input[@value='go']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
+	<td>assertTextPresent</td>
 	<td>Sizes</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>undelete</td>
+	<td>link=Sizes</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertTextPresent</td>
+	<td>clickAndWait</td>
+	<td>link=Delete group</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>delete</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextNotPresent</td>
 	<td>Sizes</td>
 	<td></td>
 </tr>

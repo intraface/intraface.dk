@@ -89,6 +89,18 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
     
     public function preSave($event)
     {
+        # We make sure translation is added before insert as name is required
+        if($this->Translation->count() == 0) {
+            throw new Exception('Details Translations needs to be set. Use getDetails()->Translation');
+        }
+        
+        # We make sure translations is valid
+        foreach($this->Translation AS $translation) {
+            if(!$translation->isValid()) {
+                throw new Doctrine_Validator_Exception(array());
+            }
+        }
+        
         # If we update details and translation fields are changed, we do not want to
         # update translation, but instead want to update this record, so the changes are
         # saved.
@@ -114,8 +126,9 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         
         $this->active = 1;
         $this->set('changed_date', new Doctrine_Expression('NOW()'));
-        
     }
+    
+    
     
     public function preUpdate($event)
     {

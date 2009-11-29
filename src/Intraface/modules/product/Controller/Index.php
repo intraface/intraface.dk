@@ -57,7 +57,7 @@ class Intraface_modules_product_Controller_Index extends k_Component
         if (is_numeric($name)) {
             return 'Intraface_modules_product_Controller_Show';
         } elseif ($name == 'attributegroups') {
-            return 'Intraface_modules_product_Controller_Attributegroups';
+            return 'Intraface_modules_product_Controller_AttributeGroups';
         } elseif ($name == 'batchedit') {
             return 'Intraface_modules_product_Controller_BatchEdit';
         }
@@ -148,17 +148,14 @@ class Intraface_modules_product_Controller_Index extends k_Component
         $translation = $kernel->getTranslation('product');
         $filehandler = new FileHandler($kernel);
 
-        /*$data = array(
-            'gateway' => $this->getGateway(),
-            'translation' => $translation,
-            'kernel' => $kernel,
-            'filehandler' => $filehandler,
-            'error' => $this->error,
-            'product' => $this->getProduct()
-        );*/
+        $data = array();
+        if(is_object($this->product_doctrine)) {
+            $data['product'] = $this->product_doctrine;
+        }
+        
 
         $smarty = new k_Template(dirname(__FILE__) . '/tpl/edit.tpl.php');
-        return $smarty->render($this);
+        return $smarty->render($this, $data);
     }
 
     function postForm()
@@ -189,9 +186,10 @@ class Intraface_modules_product_Controller_Index extends k_Component
             }
             return new k_SeeOther($this->url($product->getId()));
         } catch (Doctrine_Validator_Exception $e) {
+            $this->product_doctrine = $product;
             $this->getError()->attachErrorStack($product->getCollectedErrorStack());
-            // $this->getError()->attachErrorStack($product->getDetails()->getErrorStack());
         }
+        
         return $this->render();
     }
 }
