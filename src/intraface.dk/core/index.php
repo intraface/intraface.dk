@@ -2,10 +2,8 @@
 // common settings
 define('INTRAFACE_K2', true);
 
-// HACK to have SET NAMES utf8
 require_once dirname(__FILE__) . '/../config.local.php';
 ini_set('include_path', PATH_INCLUDE_PATH);
-require_once 'Intraface/Sql.php';
 require_once dirname(__FILE__) . '/../common.php';
 require_once 'Ilib/ClassLoader.php';
 require_once 'konstrukt/konstrukt.inc.php';
@@ -28,20 +26,7 @@ class Intraface_AuthenticatedUser extends k_AuthenticatedUser
     }
 }
 
-
-/*
-class TemplateFactory {
-  protected $template_dir;
-  function __construct($template_dir) {
-    $this->template_dir = $template_dir;
-  }
-  function create() {
-    $smarty = new k_Template($this->template_dir);
-    return $smarty;
-  }
-}*/
 session_start();
-
 
 class DanishLanguage implements k_Language {
   function name() {
