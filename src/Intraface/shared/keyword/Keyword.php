@@ -600,7 +600,7 @@ class Intraface_Keyword_StringAppender
     public static function quotesplit($s, $splitter=',')
     {
         //First step is to split it up into the bits that are surrounded by quotes and the bits that aren't. Adding the delimiter to the ends simplifies the logic further down
-        $getstrings = split('\"', $splitter.$s.$splitter);
+        $getstrings = explode('\"', $splitter.$s.$splitter);
         //$instring toggles so we know if we are in a quoted string or not
         $delimlen = strlen($splitter);
         $instring = 0;
@@ -616,7 +616,7 @@ class Intraface_Keyword_StringAppender
             } else {
                 //Break up the string according to the delimiter character
                 //Each string has extraneous delimiters around it (inc the ones we added above), so they need to be stripped off
-                $temparray = split($splitter, substr($val, $delimlen, strlen($val)-$delimlen-$delimlen ) );
+                $temparray = explode($splitter, substr($val, $delimlen, strlen($val)-$delimlen-$delimlen ) );
 
                 while (list($iarg, $ival) = each($temparray)) {
                     if (!empty($ival)) $result[] = trim($ival);
