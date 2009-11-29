@@ -16,10 +16,8 @@ if (count($year->getList()) == 0):
 
     $_advice[] = array(
         'msg' => 'no accounting year has been created',
-        'link' => $year_module->getPath() . 'year_edit.php',
+        'link' => $year_module->getPath() . 'year?create',
         'module' => $year_module->getName()
     );
 
 endif;
-
-?>

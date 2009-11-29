@@ -1,6 +1,7 @@
 <?php
 $accounts = $context->getAccounts();
 ?>
+<html>
 <head>
 	<title>Kontooversigt</title>
 	<style type="text/css" media="all">

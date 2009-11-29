@@ -28,10 +28,6 @@ class Voucher extends Intraface_Standard
      */
     function __construct($year_object, $id = 0)
     {
-        if (!is_object($year_object)) {
-            trigger_error('Klassen Voucher kr�ver objektet Year', E_USER_ERROR);
-            exit;
-        }
         $this->error      = new Intraface_Error;
         $this->year       = $year_object;
         $this->id         = (int)$id;
@@ -370,16 +366,16 @@ class Voucher extends Intraface_Standard
             if (isset($buy_all_abroad) && is_array($buy_all_abroad) AND in_array($this->get('debet_account_id'), $buy_all_abroad)) {
                 // s� skal bel�bet ganges med momsprocenten og smides p� moms af varek�b i udlandet
                 $credit = new Post($this);
-                $credit->save($this->get('date'), $this->year->getSetting('vat_abroad_account_id'), 'Moms af varek�b i udland', 0, $amount, $skip_draft);
+                $credit->save($this->get('date'), $this->year->getSetting('vat_abroad_account_id'), 'Moms af varekøb i udland', 0, $amount, $skip_draft);
                 $debet = new Post($this);
-                $debet->save($this->get('date'), $this->year->getSetting('vat_in_account_id'), 'Moms af varek�b i udland', $amount, 0, $skip_draft);
+                $debet->save($this->get('date'), $this->year->getSetting('vat_in_account_id'), 'Moms af varekøb i udland', $amount, 0, $skip_draft);
             } elseif (!empty($buy_all_abroad) AND is_array($buy_all_abroad) AND in_array($this->get('credit_account_id'), $buy_all_abroad)) {
                 // tilbagef�ring af moms hvis n�devndigt
                 // s� skal bel�bet ganges med momsprocenten og smides p� moms af varek�b i udlandet
                 $debet = new Post($this);
-                $debet->save($this->get('date'), $this->year->getSetting('vat_abroad_account_id'), 'Tilbagef�rt: Moms af varek�b i udland', $amount, 0, $skip_draft);
+                $debet->save($this->get('date'), $this->year->getSetting('vat_abroad_account_id'), 'Tilbageført: Moms af varekøb i udland', $amount, 0, $skip_draft);
                 $credit = new Post($this);
-                $credit->save($this->get('date'), $this->year->getSetting('vat_in_account_id'), 'Tilbagef�rt: Moms af varek�b i udland', 0, $amount, $skip_draft);
+                $credit->save($this->get('date'), $this->year->getSetting('vat_in_account_id'), 'Tilbageført: Moms af varekøb i udland', 0, $amount, $skip_draft);
             }
         }
         return 1;

@@ -29,7 +29,7 @@ $values = $context->getValues();
 	</fieldset>
 	<fieldset id="use_fieldset">
 		<legend>Kontoen er beregnet til</legend>
-		<p>Denne konto bruges i forbindelse med indtastningen i kassekladden til at vise de relevante konti. Den har ikke nogen direkte indvirkning p� selve regnskabet.</p>
+		<p>Denne konto bruges i forbindelse med indtastningen i kassekladden til at vise de relevante konti. Den har ikke nogen direkte indvirkning på selve regnskabet.</p>
 		<div class="formrow">
 			<label for="account_usage">Brug</label>
 			<select name="use_key" id="account_usage">

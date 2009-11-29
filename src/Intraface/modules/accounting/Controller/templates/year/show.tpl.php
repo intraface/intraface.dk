@@ -17,7 +17,7 @@ $values = $context->getYear()->get();
     <input type="hidden" name="id" value="<?php e($values['id']); ?>" />
 <?php if ($context->getAccount()->anyAccounts()): ?>
     <fieldset>
-        <legend>Vælg og gæ til regnskabet</legend>
+        <legend>Vælg og gå til regnskabet</legend>
         <div>
             <input type="submit" name="start" id="start" value="Vælg regnskabet" />
         </div>

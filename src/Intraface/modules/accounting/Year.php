@@ -9,7 +9,7 @@
  */
 class Year extends Intraface_Standard
 {
-    public $id; // årsid
+    public $id; // ï¿½rsid
     public $kernel; // object
     public $value; // array
     public $error; // error object
@@ -19,7 +19,7 @@ class Year extends Intraface_Standard
      *
      * @param $kernel
      * @param $year_id (integer)
-     * @param $load_acttive (booelean) bruges fx når et nyt år skal oprettes
+     * @param $load_acttive (booelean) bruges fx nï¿½r et nyt ï¿½r skal oprettes
      *
      * @return void
      */
@@ -39,7 +39,7 @@ class Year extends Intraface_Standard
     }
 
     /**
-     * Funktion til at sætte et regnskabsår, som brugeren redigerer i.
+     * Funktion til at sï¿½tte et regnskabsï¿½r, som brugeren redigerer i.
      *
      * @return true
      */
@@ -56,7 +56,7 @@ class Year extends Intraface_Standard
     }
 
     /**
-     * Finder det aktive år.
+     * Finder det aktive ï¿½r.
      *
      * @todo should be deprecated in favor of getActiveYear
      *
@@ -86,7 +86,7 @@ class Year extends Intraface_Standard
      */
     function checkYear($redirect = true)
     {
-        // hvis ikke der er sat noget aktivt år, skal det sættes
+        // hvis ikke der er sat noget aktivt ï¿½r, skal det sï¿½ttes
         $active_year = $this->getActiveYear();
         if (!$this->_isValid()) {
             $active_year = 0;
@@ -104,7 +104,7 @@ class Year extends Intraface_Standard
 
     function isYearSet()
     {
-        // hvis ikke der er sat noget aktivt år, skal det sættes
+        // hvis ikke der er sat noget aktivt ï¿½r, skal det sï¿½ttes
         $active_year = $this->loadActiveYear();
         if (!$this->_isValid()) {
             return false;
@@ -114,7 +114,7 @@ class Year extends Intraface_Standard
     }
 
     /**
-     * Metode til at resette det aktive år for den enkelte bruger.
+     * Metode til at resette det aktive ï¿½r for den enkelte bruger.
      *
      * @return boolean
      */
@@ -177,7 +177,7 @@ class Year extends Intraface_Standard
         // I could not find any use of the following, so i commented it out /SJ (22-01-2007)
         // $validator->isNumeric($var['year'], "year", "allow_empty");
         $validator->isNumeric($var['last_year_id'], "last_year_id", "allow_empty");
-        $validator->isString($var['label'], "Du skal skrive et navn til året");
+        $validator->isString($var['label'], "Du skal skrive et navn til ï¿½ret");
         $validator->isNumeric($var['locked'], "locked");
         settype($var['vat'], 'integer');
         $validator->isNumeric($var['vat'], "vat", 'allow_empty');
@@ -190,9 +190,9 @@ class Year extends Intraface_Standard
 
 
     /**
-     * Public: Metode til at opdatere året
+     * Public: Metode til at opdatere ï¿½ret
      *
-     * @param $var (array) Oplysninger om året
+     * @param $var (array) Oplysninger om ï¿½ret
      */
     function save($var)
     {
@@ -256,7 +256,7 @@ class Year extends Intraface_Standard
     }
 
     /**
-     * Metode til at tjekke om året findes
+     * Metode til at tjekke om ï¿½ret findes
      *
      * @return 1 = year set; 0 = year NOT set
      */
@@ -281,7 +281,7 @@ class Year extends Intraface_Standard
     function vatAccountIsSet()
     {
         if ($this->get('vat') == 0) {
-            return true; // vi lader som om de er sat, når der ikke er moms på selve regnskabet
+            return true; // vi lader som om de er sat, nï¿½r der ikke er moms pï¿½ selve regnskabet
         }
         if ($this->getSetting('vat_in_account_id') > 0 AND $this->getSetting('vat_out_account_id') > 0 AND $this->getSetting('vat_balance_account_id') > 0) {
             return true;
@@ -291,7 +291,7 @@ class Year extends Intraface_Standard
 
 
     /**
-     * Funktion til at tjekke om året er låst?
+     * Funktion til at tjekke om ï¿½ret er lï¿½st?
      *
      * @return boolean
      */
@@ -308,7 +308,7 @@ class Year extends Intraface_Standard
     }
 
     /**
-     * Public: funktion til at tjekke om datoen er i aktuelle år?
+     * Public: funktion til at tjekke om datoen er i aktuelle ï¿½r?
      *
      * @param (date) 0000-00-00
      *
@@ -346,13 +346,13 @@ class Year extends Intraface_Standard
         $return = true;
 
         if (!$this->get('id')) {
-            $this->error->set('Der er ikke sat noget år.');
+            $this->error->set('Der er ikke sat noget ï¿½r.');
             $return = false;
         } elseif (!$this->isDateInYear($date)) {
-            $this->error->set('Datoen er ikke i det år, der er sat i regnskabsmodulet.');
+            $this->error->set('Datoen er ikke i det ï¿½r, der er sat i regnskabsmodulet.');
             $return = false;
         } elseif ($this->get('locked') == 1) {
-            $this->error->set('Året er ikke åbent for bogføring.');
+            $this->error->set('ï¿½ret er ikke ï¿½bent for bogfï¿½ring.');
             $return = false;
         }
 
@@ -360,7 +360,7 @@ class Year extends Intraface_Standard
     }
 
     /**************************************************************************
-        ØVRIGE METODER
+        ï¿½VRIGE METODER
     **************************************************************************/
 
 
@@ -375,7 +375,7 @@ class Year extends Intraface_Standard
         return $gateway->getList();
         /*
         if (!is_object($this->kernel)) {
-            trigger_error('Du kan ikke køre Year::getList() uden at have instatieret klassen', FATAL);
+            trigger_error('Du kan ikke kï¿½re Year::getList() uden at have instatieret klassen', FATAL);
         }
         $sql = "SELECT id, label FROM accounting_year
             WHERE intranet_id = ".$this->kernel->intranet->get('id')."
@@ -413,7 +413,7 @@ class Year extends Intraface_Standard
                 $sql_where .= "id = " . $account . " OR ";
             }
         }
-        // hvis der ikke er nogen balance_accounts skal den ikke vælge nogen poster
+        // hvis der ikke er nogen balance_accounts skal den ikke vï¿½lge nogen poster
         $sql_where .= "id=0";
 
 
@@ -427,7 +427,7 @@ class Year extends Intraface_Standard
             $oAccount = new Account($this, $db->f('id'));
             $oAccount->getSaldo('stated');
             $saldo = $oAccount->get('saldo');
-            $oAccount->getSaldo('draft'); // får et array
+            $oAccount->getSaldo('draft'); // fï¿½r et array
 
             $accounts[$i]['id'] = $oAccount->get('id');
             $accounts[$i]['name'] = $oAccount->get('name');
@@ -487,6 +487,10 @@ class Year extends Intraface_Standard
                     $buy_eu = array();
 
                     foreach ($standardaccounts AS $input) {
+                        if (!defined('INTRAFACE_K2')) {
+                        // hack as long as everything is not utf8
+                            $input = array_map('utf8_decode',$input);
+                        }
                         require_once 'Intraface/modules/accounting/Account.php';
                         $account = new Account($this);
                         $input['vat_percent'] = $this->kernel->getSetting()->get('intranet', 'vatpercent');
@@ -531,7 +535,7 @@ class Year extends Intraface_Standard
                     $this->setSetting('buy_eu_accounts', serialize($buy_eu));
 
                     // oprette indstillinger
-                    // Hvilke indstillinger skal overføres?
+                    // Hvilke indstillinger skal overfï¿½res?
 
                   break;
             case 'transfer_from_last_year':
@@ -550,8 +554,8 @@ class Year extends Intraface_Standard
                         $new_account = new Account($this);
                         $new_account->save($input);
                     }
-                    // overføre indstillinger
-                    // dette skal gennemløbes stille og roligt, da jeg skal tage de gamle kontiid
+                    // overfï¿½re indstillinger
+                    // dette skal gennemlï¿½bes stille og roligt, da jeg skal tage de gamle kontiid
                     // og knytte dem an til den nye konto
                     if ($this->get('vat') > 0) {
                         $this->transferAccountSetting($last_year, 'vat_in_account_id');
@@ -621,7 +625,7 @@ class Year extends Intraface_Standard
 
                 break;
             default:
-                    trigger_error('Der skal vælges en måde at lave kontoplanen på', FATAL);
+                    trigger_error('Der skal vï¿½lges en mï¿½de at lave kontoplanen pï¿½', FATAL);
                 break;
         }
         return true;
@@ -772,7 +776,7 @@ class Year extends Intraface_Standard
             $i++;
         }
 
-        // HACK midlertidigt hack round() indtil alle beløb er integers i stedet for floats
+        // HACK midlertidigt hack round() indtil alle belï¿½b er integers i stedet for floats
         if (round($this->value['year_saldo']) == 0) {
             return true;
         } else {
@@ -781,13 +785,13 @@ class Year extends Intraface_Standard
     }
 
     /**************************************************************************
-     * VALIDATE FUNCTIONS - IKKE EGENTLIG ÅRSRELATEREDE
+     * VALIDATE FUNCTIONS - IKKE EGENTLIG ï¿½RSRELATEREDE
      **************************************************************************/
 
     /**
-     * Bruges i momsafregning og årsafslutning
+     * Bruges i momsafregning og ï¿½rsafslutning
      *
-     * Mærkeligt nok ser den ud til ike at returnere rigtigt!
+     * Mï¿½rkeligt nok ser den ud til ike at returnere rigtigt!
      *
      * @return boolean
      */

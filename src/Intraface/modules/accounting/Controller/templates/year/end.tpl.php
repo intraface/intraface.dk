@@ -94,11 +94,10 @@ switch($context->getYearEnd()->get('step') + 1):
 			<input type="submit" value="Forrige" name="previous" />
 			</fieldset>
 		<?php else: ?>
-<?php
-$status_accounts = $context->getAccount()->getList('status');
-?>
+        <?php
+        $status_accounts = $context->getAccount()->getList('status');
+        ?>
 
-	<form action="<?php e(url()); ?>" method="post">
 		<fieldset>
 			<legend>Trin 3: Poster overføres til resultatopgørelseskontoen</legend>
 			<p>Her kan du automatisk overføre alle poster fra driftskonti til resultatopgørelsen. Derved nulstilles alle driftskonti. Lad være at trykke på knappen, hvis du ikke er helt sikker på, hvad du gør.</p>
@@ -117,7 +116,6 @@ $status_accounts = $context->getAccount()->getList('status');
 				<input type="submit" name="step_result" value="Overfør poster" class="confirm" />
 			</div>
 		</fieldset>
-	</form>
 
 	<table>
 		<caption>Driftskonti</caption>
