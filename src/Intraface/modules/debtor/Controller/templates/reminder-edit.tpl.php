@@ -84,7 +84,7 @@ echo $reminder->error->view("html");
                     <?php
                 }
                 ?>
-                <option value="-1"><?php e(__('Create new')); ?> >></option>
+                <option value="-1"><?php e(__('Create new') . ' >>'); ?></option>
             </select>
         </div>
 

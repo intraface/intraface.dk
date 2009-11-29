@@ -40,11 +40,10 @@
 
 <ul class="options">
     <?php if (!empty($contact) AND is_object($contact) AND $context->getDebtor()->get("type") != "credit_note"): ?>
-        <li><a href="edit.php?type=<?php e($context->getDebtor()->get("type")); ?>&amp;contact_id=<?php e($contact->get("id")); ?>"><?php e(__('Create')); ?></a></li>
-        <li><a href="<?php e($contact_module->getPath()); ?>contact.php?id=<?php e($contact->get('id')); ?>">Vis kontakten</a>
+        <li><a href="<?php e(url(null, array('create', 'contact_id' => $contact->get("id")))); ?>"><?php e(__('Create')); ?></a></li>
     <?php else: ?>
         <?php if (!empty($_GET['product_id'])): ?>
-            <li><a href="<?php e($product_module->getPath()); ?>product.php?id=<?php e($product->get('id')); ?>">Vis produktet</a>
+            <li><a href="<?php e($product_module->getPath() . $product->get('id')); ?>"><?php e(t('Show product')); ?></a></li>
         <?php endif; ?>
         <li><a href="<?php e(url(null, array('create'))); ?>"><?php e(__('Create')); ?></a></li>
     <?php endif; ?>

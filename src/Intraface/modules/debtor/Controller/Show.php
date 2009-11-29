@@ -171,32 +171,32 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         }
 
         else {
-            	$debtor = $this->getDebtor();
-    	$contact = new Contact($this->getKernel(), $_POST["contact_id"]);
+            $debtor = $this->getDebtor();
+            $contact = new Contact($this->getKernel(), $_POST["contact_id"]);
 
-    	if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
-    		$contact_person = new ContactPerson($contact);
-    		$person["name"] = $_POST['contact_person_name'];
-    		$person["email"] = $_POST['contact_person_email'];
-    		$contact_person->save($person);
-    		$contact_person->load();
-    		$_POST["contact_person_id"] = $contact_person->get("id");
-    	}
-
-        if ($this->getKernel()->intranet->hasModuleAccess('currency') && !empty($_POST['currency_id'])) {
-            $currency_module = $this->getKernel()->useModule('currency', false); // false = ignore user access
-            $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
-            $currency = $gateway->findById($_POST['currency_id']);
-            if ($currency == false) {
-                throw new Exception('Invalid currency');
+            if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
+                $contact_person = new ContactPerson($contact);
+                $person["name"] = $_POST['contact_person_name'];
+                $person["email"] = $_POST['contact_person_email'];
+                $contact_person->save($person);
+                $contact_person->load();
+                $_POST["contact_person_id"] = $contact_person->get("id");
             }
 
-            $_POST['currency'] = $currency;
-        }
+            if ($this->getKernel()->intranet->hasModuleAccess('currency') && !empty($_POST['currency_id'])) {
+                $currency_module = $this->getKernel()->useModule('currency', false); // false = ignore user access
+                $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
+                $currency = $gateway->findById($_POST['currency_id']);
+                if ($currency == false) {
+                    throw new Exception('Invalid currency');
+                }
 
-    	if ($debtor->update($_POST)) {
-    	    return new k_SeeOther($this->url(null));
-    	}
+                $_POST['currency'] = $currency;
+            }
+
+            if ($debtor->update($_POST)) {
+                return new k_SeeOther($this->url(null));
+            }
         }
 
         return new k_SeeOther($this->url());
@@ -204,7 +204,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
     function GET()
     {
-         if (isset($_GET["action"]) && $_GET["action"] == "send_onlinepaymentlink") {
+        if (isset($_GET["action"]) && $_GET["action"] == "send_onlinepaymentlink") {
 
             $shared_email = $this->getKernel()->useShared('email');
             if ($this->getDebtor()->getPaymentMethodKey() == 5 AND $this->getDebtor()->getWhereToId() == 0) {
@@ -297,7 +297,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                     'from_name' => $from_name,
                     'type_id' => 10, // electronic invoice
                     'belong_to' => $this->getDebtor()->get('id')
-                ))) {
+            ))) {
                 echo $email->error->view();
                 throw new Exception('E-mailen kunne ikke gemmes');
             }
@@ -316,7 +316,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             $redirect->setIdentifier('send_onlinepaymentlink');
             $redirect->askParameter('send_onlinepaymentlink_status');
 
-            return k_SeeOther($url);
+            return new k_SeeOther($url);
         }
 
 
@@ -413,7 +413,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
             }
         }
-         return parent::GET();
+        return parent::GET();
     }
 
     function addItem($product, $quantity)

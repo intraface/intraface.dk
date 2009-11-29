@@ -94,7 +94,7 @@ $value = $context->getValues();
 					<?php
 				}
 				?>
-				<option value="-1"><?php e(t('Create new', 'debtor')); ?> >></option>
+				<option value="-1"><?php e(t('Create new', 'debtor') . ' >>'); ?></option>
 			</select>
 		</div>
 		<fieldset id="contactperson">
