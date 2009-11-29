@@ -29,4 +29,10 @@ class MainAdministration extends Intraface_Main
         $this->addSubMenuItem("Registrér moduler", "register_modules.php");
         */
     }
+
+    function getPath()
+    {
+        return url('/core/restricted/module/administration/') . '/';
+    }
 }
+
