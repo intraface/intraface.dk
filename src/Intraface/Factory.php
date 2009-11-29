@@ -8,22 +8,34 @@ class Intraface_Factory
         $this->config = $config;
     }
 
-    function new_k_TemplateFactory($c)
+    /**
+     * @deprecated use k_TemplateFactory instead
+     * @param $container
+     *
+     * @return object
+     */
+    function new_k_Template($container)
     {
-        // @todo is it possible know which script the template factory is
-        //       instantiated from. Would be clever when our code is in
-        //       modules. Otherwise we need to create a special template
-        //       directory?
-        return new k_DefaultTemplateFactory('templates');
+        $smarty = new k_Template($this->config->template_dir);
+        return $smarty;
     }
 
+    function new_k_TemplateFactory($c)
+    {
+        return new Intraface_TemplateFactory(null);
+    }
+
+    /**
+     * @deprecated when everything is in konstrukt2
+     * @return object
+     */
     function new_Intraface_Kernel()
     {
         return new Intraface_Kernel(session_id());
     }
 
     /**
-     * @deprecated when everything i konstrukt2
+     * @deprecated when everything is in konstrukt2
      * @param $container
      * @return MDB2_Driver_Common
      */
@@ -131,12 +143,6 @@ class Intraface_Factory
     function new_Intraface_Auth($container)
     {
         return new Intraface_Auth(session_id());
-    }
-
-    function new_k_Template($container)
-    {
-        $smarty = new k_Template($this->config->template_dir);
-        return $smarty;
     }
 
     function new_Doctrine_Connection_Common()
