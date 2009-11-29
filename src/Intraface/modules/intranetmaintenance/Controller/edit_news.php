@@ -39,8 +39,6 @@ $page->start("Intranet nyhed");
 <fieldset>
 	<legend>Opret nyhed</legend>
 
-	<form action="messages.php" method="post">
-
 	<div class="formrow">
 		<label for="area">Område</label>
 		<input type="text" name="area" id="area" value="<?php if (isset($values['area'])) e($values['area']); ?>" />
