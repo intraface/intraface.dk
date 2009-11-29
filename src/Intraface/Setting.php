@@ -103,7 +103,7 @@ class Intraface_Setting
         if ($this->user_id != 0) {
             return true;
         } else {
-            trigger_error('Du kan ikke udføre denne handling fra et weblogin', E_USER_ERROR);
+            throw new Exception('This action cannot be performed when no user has logged in');
         }
     }
 
