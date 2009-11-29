@@ -2,6 +2,12 @@
 class Intraface_modules_controlpanel_Controller_User extends k_Component
 {
     protected $user;
+    protected $user_gateway;
+
+    function __construct(Intraface_UserGateway $user_gateway)
+    {
+        $this->user_gateway = $user_gateway;
+    }
 
     function map($name)
     {
@@ -34,7 +40,7 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
         if (is_object($this->user)) {
             return $this->user;
         }
-        return $this->user = new Intraface_User($this->getKernel()->user->getId());
+        return ($this->user = $this->user_gateway->findByUsername($this->identity()->user()));
 
     }
 
@@ -59,7 +65,10 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
     function getValues()
     {
         if ($this->body()) {
-            return $this->body();
+            $values = $this->body();
+            $values['name'] = $this->body('address_name');
+            $values['email'] = $this->body('address_email');
+            return $values;
         }
         $user = $this->getUser();
         $value = $user->get();
