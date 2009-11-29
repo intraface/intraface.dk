@@ -12,7 +12,7 @@ if ($kernel->user->hasModuleAccess('debtor') AND $kernel->user->hasModuleAccess(
     if (!$order->isFilledIn()) {
         $_advice[] = array(
             'msg' => 'you can create new orders under debtor',
-            'link' => $this->url('core/restricted/module/debtor/order/list?create'),
+            'link' => $this->url('module/debtor/order/list?create'),
             'module' => 'debtor'
         );
     } else {
@@ -22,7 +22,7 @@ if ($kernel->user->hasModuleAccess('debtor') AND $kernel->user->hasModuleAccess(
         if ($orders > 0) {
             $_attention_needed[] = array(
                 'msg' => 'you have unprocessed orders',
-                'link' => url('core/restricted/module/debtor/order/list'),
+                'link' => $this->url('module/debtor/order/list'),
                 'module' => 'debtor'
             );
         }

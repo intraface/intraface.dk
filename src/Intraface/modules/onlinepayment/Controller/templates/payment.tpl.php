@@ -160,3 +160,4 @@ if ($onlinepayment->get('status') == "authorized") {
 	<?php
 }
 ?>
+</div>
