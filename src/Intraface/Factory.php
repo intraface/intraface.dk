@@ -8,6 +8,15 @@ class Intraface_Factory
         $this->config = $config;
     }
 
+    function new_k_TemplateFactory($c)
+    {
+        // @todo is it possible know which script the template factory is
+        //       instantiated from. Would be clever when our code is in
+        //       modules. Otherwise we need to create a special template
+        //       directory?
+        return new k_DefaultTemplateFactory('templates');
+    }
+
     function new_Intraface_Kernel()
     {
         return new Intraface_Kernel(session_id());
@@ -27,19 +36,21 @@ class Intraface_Factory
     {
         $db = MDB2::singleton(DB_DSN, array('persistent' => true));
         if (PEAR::isError($db)) {
-            throw new Exception($db->getMessage());
+            throw new Exception($db->getMessage() . $db->getUserInfo());
         }
 
         $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
         if (defined('INTRAFACE_K2')) {
             $db->query('SET NAMES utf8');
+            $res = $db->setCharset('utf8');
         } else {
             $db->query('SET NAMES latin1');
+            $res = $db->setCharset('latin1');
         }
 
         $db->setOption('debug', MDB2_DEBUG);
         $db->setOption('portability', MDB2_PORTABILITY_NONE);
-        $res = $db->setCharset('latin1');
+
         if (PEAR::isError($res)) {
             throw new Exception($res->getUserInfo());
         }
