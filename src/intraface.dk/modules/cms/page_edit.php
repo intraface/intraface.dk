@@ -189,7 +189,6 @@ $page->start(__('edit page'));
                             <?php if (!empty($value['child_of_id']) AND $value['child_of_id'] == $p['id']) echo ' selected="selected"'; ?>
                             ><?php e($p['title']); ?></option>
                         <?php } ?>
-                    ?>
                 </select>
             </div>
             <?php endif; ?>

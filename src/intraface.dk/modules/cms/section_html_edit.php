@@ -371,7 +371,7 @@ switch ($value['type']) {
         $keywords = $keyword->getUsedKeywords();
 
         if (count($keywords) > 0) { ?>
-            <div><?php e(__('keywords', 'keyword')); ?>: <ul style="display: inline;">';
+            <div><?php e(__('keywords', 'keyword')); ?>: <ul style="display: inline;">
             <?php foreach ($keywords as $v) {
                 if (in_array($v['id'], $selected_keywords) === true) {
                     $checked = 'checked="checked"';
