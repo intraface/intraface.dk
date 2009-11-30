@@ -1,6 +1,13 @@
 <?php
-class Intraface_modules_language_Controller_Index extends k_Controller
+class Intraface_modules_language_Controller_Index extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function renderHtml()
     {
         $this->document->setTitle('Languages');
@@ -40,4 +47,10 @@ class Intraface_modules_language_Controller_Index extends k_Controller
     {
         return $this->wrap(parent::execute());
     }
+
+    function document()
+    {
+        return $this->document;
+    }
+
 }

@@ -20,9 +20,9 @@ class Intraface_modules_currency_Controller_Add extends k_Component
 
     function renderHtml()
     {
-        $this->document->title = 'Add currency';
+        $this->document->setTitle('Add currency');
 
-        if (is_numeric($this->context->name)) {
+        if (is_numeric($this->context->name())) {
 
         }
 
@@ -43,7 +43,7 @@ class Intraface_modules_currency_Controller_Add extends k_Component
         $currency->setType($type);
         try {
             $currency->save();
-            throw new k_SeeOther($this->url('../'));
+            return new k_SeeOther($this->url('../'));
         } catch (Doctrine_Validator_Exception $e) {
             $this->getError()->attachErrorStack($currency->getErrorStack(), array('type' => 'currency'));
             return $this->render();

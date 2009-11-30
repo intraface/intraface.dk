@@ -1,9 +1,18 @@
 <?php
 class Intraface_modules_currency_Controller_Index extends k_Component
 {
+    protected $template;
+    protected $doctrine;
+
+    function __construct(Doctrine_Connection_Common $doctrine, k_TemplateFactory $template)
+    {
+        $this->doctrine = $doctrine;
+        $this->template = $template;
+    }
+
     public function getTranslation()
     {
-        return $this->context->getKernel()->translation('currency');
+        return $this->context->getKernel()->getTranslation('currency');
     }
 
     function renderHtml()
@@ -11,7 +20,7 @@ class Intraface_modules_currency_Controller_Index extends k_Component
         $this->document->options = array($this->url('add') => 'Add new');
 
         try {
-            $gateway = new Intraface_modules_currency_Currency_Gateway($doctrine);
+            $gateway = new Intraface_modules_currency_Currency_Gateway($this->doctrine);
             $currencies = $gateway->findAll();
         } catch (Intraface_Gateway_Exception $e) {
             $currencies = NULL;
@@ -35,5 +44,21 @@ class Intraface_modules_currency_Controller_Index extends k_Component
         }
         return 'Intraface_modules_currency_Controller_Show';
 
+    }
+
+    function wrapHtml($content)
+    {
+        $tpl = $this->template->create(dirname(__FILE__) . '/tpl/content');
+        return $tpl->render($this, array('content' => $content));
+    }
+
+    function execute()
+    {
+        return $this->wrap(parent::execute());
+    }
+
+    function document()
+    {
+        return $this->document;
     }
 }
