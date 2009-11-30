@@ -1,0 +1,155 @@
+<?php
+class Intraface_modules_cms_Controller_Page extends k_Component
+{
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
+    function map($name)
+    {
+        if ($name == 'edit') {
+            return 'Intraface_modules_cms_Controller_PageEdit';
+        } elseif ($name == 'section') {
+            return 'Intraface_modules_cms_Controller_Section';
+        }
+
+    }
+
+    function renderHtml()
+    {
+        $module_cms = $this->getKernel()->module('cms');
+        $module_cms->includeFile('HTML_Editor.php');
+        $translation = $this->getKernel()->getTranslation('cms');
+
+        $error = array();
+
+        if (isset($_GET['return_redirect_id'])) {
+            $redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
+            $identifier_parts = explode(':', $redirect->get('identifier'));
+            if ($identifier_parts[0] == 'picture') {
+                $section = CMS_Section::factory($this->getKernel(), 'id', $identifier_parts[1]);
+                $section->save(array('pic_id' => $redirect->getParameter('file_handler_id')));
+            }
+        }
+
+        $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_GET['id']);
+        $sections = $cmspage->getSections();
+
+        if (!empty($sections) AND count($sections) == 1 AND array_key_exists(0, $sections) AND $sections[0]->get('type') == 'mixed') {
+            return new k_SeeOther($this->url('section/' . $sections[0]->get('id')));
+        };
+        if ($this->getKernel()->setting->get('user', 'htmleditor') == 'tinymce') {
+            $this->document->addScript($this->url('tinymce/jscripts/tiny_mce/tiny_mce.js'));
+        }
+
+        $data = array();
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/page');
+        return $tpl->render($this, $data);
+    }
+
+    function postForm()
+    {
+        $module_cms = $this->getKernel()->module('cms');
+        $module_cms->includeFile('HTML_Editor.php');
+        $translation = $this->getKernel()->getTranslation('cms');
+
+        $error = array();
+
+        if (!empty($_POST['publish'])) {
+            $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_POST['id']);
+            if ($cmspage->publish()) {
+                header('Location: page.php?id='.$cmspage->get('id'));
+                exit;
+            }
+        } elseif (!empty($_POST['unpublish'])) {
+            $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_POST['id']);
+            if ($cmspage->unpublish()) {
+                header('Location: page.php?id='.$cmspage->get('id'));
+                exit;
+            }
+        }
+
+        $files = '';
+        if (isset($_POST['section']) && is_array($_POST['section'])) {
+            foreach ($_POST['section'] AS $key=>$value) {
+                $section = CMS_Section::factory($this->getKernel(), 'id', $key);
+
+                if ($section->get('type') == 'picture') {
+
+                    if (!empty($_FILES) && !is_array($files)) {
+                        $filehandler = new FileHandler($this->getKernel());
+                        $filehandler->createUpload();
+                        $files = $filehandler->upload->getFiles();
+                    }
+
+                    if (is_array($files)) {
+                        foreach ($files AS $file) {
+                            if ($file->getProp('form_name') == 'new_picture_'.$key) {
+
+                                $filehandler = new FileHandler($this->getKernel());
+                                $filehandler->createUpload();
+                                $filehandler->upload->setSetting('file_accessibility', 'public');
+                                $pic_id = $filehandler->upload->upload($file);
+
+                                if ($pic_id != 0) {
+                                    $value['pic_id'] = $pic_id;
+                                }
+
+                                // Vi har fundet filen til som passer til dette felt, så er der ikke nogen grund til at køre videre.
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!isset($value['pic_id'])) $value['pic_id'] = 0;
+                }
+                if (!$section->save($value)) {
+                    $error[$section->get('id')] = __('error in section') . ' ' . strtolower(implode($section->error->message, ', '));
+                }
+            }
+        }
+        if (empty($error) AND count($error) == 0) {
+            if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
+
+                // jeg skal bruge array_key, når der er klikket på choose_file, for den indeholder section_id. Der bør
+                // kun kunne være en post i arrayet, så key 0 må være $section_id for vores fil
+                $keys = array_keys($_POST['choose_file']);
+                $section_id = $keys[0];
+
+                $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
+                $module_filemanager = $this->getKernel()->useModule('filemanager');
+                $redirect->setIdentifier('picture:'.$section_id);
+                $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $module_cms->getPath().'page.php?id='.$section->cmspage->get('id') . '&from_section_id=' . $section_id);
+
+                $redirect->askParameter('file_handler_id');
+                header('Location: '.$url);
+                exit;
+            } elseif (!empty($_POST['edit_html'])) {
+                $keys = array_keys($_POST['edit_html']);
+                header('Location: section_html.php?id='. $keys[0]);
+                exit;
+            } elseif (!empty($_POST['close'])) {
+                header('Location: pages.php?type='.$section->cmspage->get('type').'&id='.$section->cmspage->cmssite->get('id'));
+                exit;
+            } else {
+                header('Location: page.php?id='.$section->cmspage->get('id'));
+                exit;
+            }
+        } else {
+            $cmspage = $section->cmspage;
+            $sections = $cmspage->getSections();
+
+            $value = $_POST;
+        }
+        return $this->render();
+    }
+
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+}
