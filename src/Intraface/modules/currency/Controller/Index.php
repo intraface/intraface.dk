@@ -1,24 +1,14 @@
 <?php
 class Intraface_modules_currency_Controller_Index extends k_Component
 {
-    protected $registry;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
-
     public function getTranslation()
     {
-        return $this->registry->get('kernel')->getTranslation('currency');
+        return $this->context->getKernel()->translation('currency');
     }
 
-    function GET()
+    function renderHtml()
     {
-        return new k_SeeOther($this->url('../../../../modules/currency'));
-        //$this->document->options = array($this->url('add') => 'Add new');
-
-        $doctrine = $this->registry->get('doctrine');
+        $this->document->options = array($this->url('add') => 'Add new');
 
         try {
             $gateway = new Intraface_modules_currency_Currency_Gateway($doctrine);

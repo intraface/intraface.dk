@@ -1,18 +1,18 @@
 <?php
-class Intraface_modules_currency_Controller_Show extends k_Controller
+class Intraface_modules_currency_Controller_Show extends k_Component
 {
-    
+
     /**
      * Returns translations object
-     * 
+     *
      * @return object Translation
      */
     public function getTranslation()
     {
         return $this->context->getTranslation();
     }
-    
-    public function getCurrency() 
+
+    public function getCurrency()
     {
         $gateway = new Intraface_modules_currency_Currency_Gateway($this->registry->get('doctrine'));
         $currency = $gateway->findById($this->name);
@@ -21,20 +21,16 @@ class Intraface_modules_currency_Controller_Show extends k_Controller
         }
         return $currency;
     }
-    
-    function GET()
+
+    function renderHtml()
     {
         return 'No content';
     }
 
-    function forward($name)
+    function map($name)
     {
         if ($name == 'exchangerate') {
-            $next = new Intraface_modules_currency_Controller_ExchangeRate_Index($this, $name);
-            return $next->handleRequest();
+            return 'Intraface_modules_currency_Controller_ExchangeRate_Index';
         }
-        
-        throw new Exception('No valid forwards was found!');
-
     }
 }

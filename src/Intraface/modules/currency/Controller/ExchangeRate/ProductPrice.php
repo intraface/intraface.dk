@@ -1,35 +1,20 @@
 <?php
-class Intraface_modules_currency_Controller_ExchangeRate_ProductPrice extends k_Controller
+class Intraface_modules_currency_Controller_ExchangeRate_ProductPrice extends k_Component
 {
-    
-    /**
-     * Returns translations object
-     * 
-     * @return object Translation
-     */
-    public function getTranslation()
-    {
-        return $this->context->getTranslation();
-    }
-    
     public function getCurrency()
     {
         return $this->context->getCurrency();
     }
-    
-    function GET()
+
+    function renderHtml()
     {
         return 'Intentionally left blank';
     }
 
-    function forward($name)
+    function map($name)
     {
         if ($name == 'update') {
-            $next = new Intraface_modules_currency_Controller_ExchangeRate_Update($this, $name);
-            return $next->handleRequest();
+            return 'Intraface_modules_currency_Controller_ExchangeRate_Update';
         }
-        
-        throw new Exception('No valid forwards was found!');
-
     }
 }
