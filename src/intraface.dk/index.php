@@ -1,4 +1,4 @@
 <?php
-header('Location: main/');
+header('Location: core/');
 exit;
 ?>
