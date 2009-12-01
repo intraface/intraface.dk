@@ -26,6 +26,8 @@ class Intraface_Controller_Index extends k_Component
             return 'Intraface_Controller_Restricted';
         } elseif ($name == 'signup') {
             return 'Intraface_Controller_Signup';
+        } elseif ($name == 'payment') {
+            return 'Intraface_Controller_Payment';
         }
     }
 

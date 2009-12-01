@@ -1,4 +1,4 @@
-<?php //echo $basketevaluation->error->view($translation); ?>
+<?php echo $basketevaluation->error->view($translation); ?>
 
 <form action="<?php e(url(null)); ?>" method="post">
     <fieldset>
@@ -83,6 +83,5 @@
     </fieldset>
 
     <input type="submit" class="save" name="submit" value="<?php e(t('save', 'common')); ?>" />
-    <?php e(t('or', 'common')); ?> <a href="<?php e(url('../')); ?>">
-    <?php e(t('cancel', 'common')); ?></a>
+    <a href="<?php e(url('../')); ?>"><?php e(t('cancel', 'common')); ?></a>
 </form>

@@ -19,7 +19,7 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Edit extends k_Componen
     {
         if (is_numeric($this->context->name())) {
             $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->mdb2, $this->getKernel()->intranet, (int)$this->context->name());
-            $value = $basketevaluation->renderHtml();
+            $value = $basketevaluation->get();
             $this->document->setTitle('Edit basket evaluation');
         } else {
             $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->mdb2, $this->getKernel()->intranet, $this->getShop());
@@ -44,7 +44,6 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Edit extends k_Componen
         } else {
             $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->mdb2, $this->getKernel()->intranet, $this->getShop());
         }
-
         if (!$basketevaluation->save($this->body())) {
             throw new Exception('Could not save values');
         }
