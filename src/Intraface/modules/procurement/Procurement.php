@@ -239,8 +239,11 @@ class Procurement extends Intraface_Standard
         return true;
     }
 
+    /*
     function getList()
     {
+        
+        
         $list = array();
 
         if ($this->dbquery->checkFilter("contact_id")) {
@@ -289,7 +292,7 @@ class Procurement extends Intraface_Standard
                     // Hvis der ikke er nogen dato så tager vi alle dem som på nuværende tidspunkt har status under
                     $this->dbquery->setCondition("status_key < 2");
                 }
-                */
+                /
                 $this->dbquery->setCondition("status_key < 1 OR paid_date = \"0000-00-00\"");
 
             } else {
@@ -318,6 +321,7 @@ class Procurement extends Intraface_Standard
                     $this->dbquery->setCondition("status_key = ".intval($this->dbquery->getFilter("status")));
                 }
             }
+            
         }
 
         $i = 0;
@@ -352,9 +356,10 @@ class Procurement extends Intraface_Standard
         }
 
         return $list;
-    }
+       
+    }*/ 
 
-    function getMaxNumber()
+    /*function getMaxNumber()
     {
         $db = new DB_sql;
 
@@ -362,7 +367,7 @@ class Procurement extends Intraface_Standard
         $db->nextRecord();
 
         return $db->f("max_number");
-    }
+    }*/
 
     function setStatus($status)
     {
@@ -481,20 +486,21 @@ class Procurement extends Intraface_Standard
 
         return $list;
     }
-
+    
+    /*
     function isFilledIn()
     {
         $db = new DB_Sql;
         $db->query("SELECT id FROM procurement WHERE intranet_id = " . $this->kernel->intranet->get('id'));
         return $db->numRows();
-    }
+    }*/
 
-    function any($contact_id)
+    /*function any($contact_id)
     {
         $db = new DB_Sql;
         $db->query("SELECT id FROM procurement WHERE intranet_id = " . $this->kernel->intranet->get('id')." AND contact_id = ".$contact_id." AND active = 1");
         return $db->numRows();
-    }
+    }*/
 
     /**
      * State procurement
@@ -806,6 +812,7 @@ class Procurement extends Intraface_Standard
 
     /**
      * returns possible status types
+     * @todo: duplicate in Procurement class
      *
      * @return array status types
      */
@@ -820,6 +827,7 @@ class Procurement extends Intraface_Standard
 
     /**
      * returns the possible regions where procurement is bought
+     * @todo: duplicate in Procurement class
      *
      * @return array possible regions
      */

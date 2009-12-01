@@ -9,17 +9,20 @@ class Intraface_modules_procurement_ProcurementGateway
     {
         $this->kernel = $kernel;
         $this->error = new Intraface_Error;
-        $this->dbquery = $this->getDBQuery();
-
     }
 
     function getDBQuery()
     {
-        $this->dbquery = new Intraface_DBQuery($this->kernel, "procurement", "active = 1 AND intranet_id = ".$this->kernel->intranet->get("id"));
-        return $this->dbquery->useErrorObject($this->error);
+        if(!is_object($this->dbquery)) {
+            $this->dbquery = new Intraface_DBQuery($this->kernel, "procurement", "active = 1 AND intranet_id = ".$this->kernel->intranet->get("id"));
+            $this->dbquery->useErrorObject($this->error);    
+        }
+        
+        return $this->dbquery;
+        
     }
 
-    function getByContactId($id)
+    function findByContactId($id)
     {
         $this->getDBQuery()->setFilter('contact_id', $id);
         $this->getDBQuery()->setCondition('newsletter_subscriber.contact_id = '.$this->getDBQuery()->getFilter('contact_id'));
@@ -38,7 +41,7 @@ class Intraface_modules_procurement_ProcurementGateway
     }
 
 
-    function getList()
+    function find()
     {
         $list = array();
 
@@ -150,6 +153,61 @@ class Intraface_modules_procurement_ProcurementGateway
         }
 
         return $list;
+    }
+    
+    function any()
+    {
+        $db = new DB_Sql;
+        $db->query("SELECT id FROM procurement WHERE intranet_id = " . $this->kernel->intranet->get('id'));
+        return $db->numRows();
+    }
+
+    function anyByContact($contact_id)
+    {
+        $db = new DB_Sql;
+        $db->query("SELECT id FROM procurement WHERE intranet_id = " . $this->kernel->intranet->get('id')." AND contact_id = ".$contact_id." AND active = 1");
+        return $db->numRows();
+    }
+    
+    function getMaxNumber()
+    {
+        $db = new DB_sql;
+
+        $db->query("SELECT MAX(number) as max_number FROM procurement WHERE intranet_id = ".$this->kernel->intranet->get("id"));
+        $db->nextRecord();
+
+        return $db->f("max_number");
+    }
+    
+    /**
+     * returns possible status types
+     * @todo: duplicate in Procurement class
+     *  
+     * @return array status types
+     */
+    public function getStatusTypes()
+    {
+        return array(
+            0=>'ordered',
+            1=>'recieved',
+            2=>'canceled'
+        );
+    }
+
+    /**
+     * returns the possible regions where procurement is bought
+     * @todo: duplicate in Procurement class
+     *
+     * @return array possible regions
+     */
+    public function getRegionTypes()
+    {
+        return array(
+            0=>'denmark',
+            1=>'eu',
+            2=>'eu_vat_registered',
+            3=>'outside_eu'
+        );
     }
 
 }
