@@ -5,20 +5,19 @@
 	<style type="text/css">
 		@import "<?php e(url('/css/stylesheet.php', array('theme' => $context->getThemeKey(), 'fontsize' => $context->getFontSize()))); ?>";
 	</style>
-	<link rel="stylesheet" href="<?php e(url('/css/print.css')); ?>" type="text/css" media="print" title="Printvenlig" />
-
+	<link rel="stylesheet" href="<?php e(url('../css/print.css')); ?>" type="text/css" media="print" title="Printvenlig" />
 
 	<script type="text/javascript" src="<?php e(url('/javascript/yui/yahoo/yahoo-min.js')); ?>"></script>
 	<script type="text/javascript" src="<?php e(url('/javascript/yui/event/event-min.js')); ?>"></script>
 	<script type="text/javascript" src="<?php e(url('/javascript/yui/dom/dom-min.js')); ?>"></script>
 	<script type="text/javascript" src="<?php e(url('/javascript/main.js')); ?>"></script>
-	<script type="text/javascript" src="<?php e(url('/javascript/stripe.js')); ?>"></script>
+	<script type="text/javascript" src="<?php e(url('../javascript/stripe.js')); ?>"></script>
 	<!--[if lt IE 7.]>
 	<script defer type="text/javascript" src="<?php e(url('/javascript/pngfix.js')); ?>"></script>
 	<![endif]-->
 
 	<?php foreach($context->document()->scripts() as $url): ?>
-	<script type="text/javascript" src="<?php e($url); ?>"></script>
+	<script type="text/javascript" src="<?php e('/javascript/' . $url); ?>"></script>
 	<?php endforeach; ?>
 
 	<link rel="start" href="<?php e(url('/')); ?>" title="Home" />
@@ -65,8 +64,9 @@
 
 	<div id="content" class="clearfix">
 		<div id="content-main">
-		</div><!-- content-main -->
 <?php echo $content; ?>
+		</div><!-- content-main -->
+
 	</div><!-- pagebody -->
 
 
