@@ -24,15 +24,13 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
     function map($name)
     {
         if ($name == 'payment') {
-            return 'Intraface_modules_debtor_Controller_Payment';
-        } elseif ($name == 'payment') {
-            return 'Intraface_modules_debtor_Controller_Depreciation';
+            return 'Intraface_modules_debtor_Controller_Payments';
         } elseif ($name == 'email') {
             return 'Intraface_modules_debtor_Controller_ReminderEmail';
         } elseif ($name == 'state') {
             return 'Intraface_modules_accounting_Controller_State_Reminder';
         } elseif ($name == 'depreciation') {
-            return 'Intraface_modules_debtor_Controller_Depreciation';
+            return 'Intraface_modules_debtor_Controller_Depreciations';
         }
     }
 

@@ -116,7 +116,7 @@ $reminder = $context->getReminder();
                     } elseif ($reminder->isStated()) {
                         $module_accounting = $context->getKernel()->useModule('accounting');
                         e($reminder->get('dk_date_stated'));
-                        echo ' <a href="'.$module_accounting->getPath().'voucher.php?id='.$reminder->get('voucher_id').'">'.__('See voucher').'</a>';
+                        echo ' <a href="'.$module_accounting->getPath().'voucher/'.$reminder->get('voucher_id').'">'.__('See voucher').'</a>';
                     } else {
                         e(__('Not stated'));
                         if ($reminder->get('status') == 'sent' || $reminder->get('status') == 'executed') { ?>
@@ -279,9 +279,9 @@ $reminder = $context->getReminder();
                                 <?php $module_accounting = $context->getKernel()->useModule('accounting'); ?>
                                 <a href="<?php e($module_accounting->getPath().'voucher.php?id='.$payments[$i]['voucher_id']); ?>"><?php e(__('voucher')); ?></a>
                             <?php elseif ($payments[$i]['type'] == 'depreciation'): ?>
-                                <a href="state_depreciation.php?for=reminder&amp;id=<?php e($reminder->get('id')); ?>&amp;depreciation_id=<?php e($payments[$i]['id']) ?>"><?php e(__('state depreciation')); ?></a>
+                                <a href="<?php e(url('depreciation/' . $payments[$i]['id'] . '/state')); ?>"><?php e(__('state depreciation')); ?></a>
                             <?php else: ?>
-                                <a href="state_payment.php?for=reminder&amp;id=<?php e($reminder->get('id')); ?>&amp;payment_id=<?php e($payments[$i]['id']) ?>"><?php e(__('state payment')); ?></a>
+                                <a href="<?php e(url('payment/' . $payments[$i]['id'] . '/state')); ?>"><?php e(__('state payment')); ?></a>
                             <?php endif; ?>
                         </td>
                     <?php endif; ?>

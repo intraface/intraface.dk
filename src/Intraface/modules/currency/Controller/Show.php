@@ -33,4 +33,9 @@ class Intraface_modules_currency_Controller_Show extends k_Component
             return 'Intraface_modules_currency_Controller_ExchangeRate_Index';
         }
     }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
 }

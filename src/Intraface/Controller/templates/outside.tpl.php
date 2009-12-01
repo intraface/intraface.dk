@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
       <html xmlns="http://www.w3.org/1999/xhtml" lang="da" xml:lang="da">
         <head>
-	<title><?php e($this->document()->title()); ?></title>
+	<title><?php e($context->document()->title()); ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<style type="text/css">
 		@import "<?php e(url('/css/outside_system.css')); ?>";

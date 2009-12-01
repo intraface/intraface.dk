@@ -11,14 +11,9 @@ class Intraface_modules_debtor_Controller_Payments extends k_Component
         return $this->context->getKernel();
     }
 
-    function getDebtor()
-    {
-        return $this->context->getDebtor();
-    }
-
     function postForm()
     {
-        $object = $this->getDebtor();
+        $object = $this->getModel();
         $payment = $this->getPayment();
         if ($id = $payment->update($_POST)) {
              if ($this->getKernel()->user->hasModuleAccess('accounting')) {

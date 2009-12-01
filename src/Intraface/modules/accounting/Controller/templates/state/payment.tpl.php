@@ -1,4 +1,5 @@
-<h1><?php e(__('state payment for '.$for)); ?> #<?php e($object->get('number')); ?></h1>
+<?php // @todo should have state payment for xxxxxx $context->getType() ?>
+<h1><?php e(__('state payment for ')); ?> #<?php e($object->get('number')); ?></h1>
 
 <ul class="options">
         <li><a href="<?php e(url('../../../')); ?>">Luk</a></li>

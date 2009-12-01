@@ -66,9 +66,12 @@ class Payment extends Intraface_Standard
         }
 
         $this->value['type_key'] = $this->value['type'];
+
+        // used for stating
+        $this->value['this_date'] = $this->value['payment_date'];
         $types = $this->getTypes();
         $this->value['type'] = $types[$this->value['type_key']];
-
+        return true;
     }
 
     function update($input = "")

@@ -55,7 +55,7 @@
                 <?php
                 $account = new Account($year); // $product->get('state_account_id')
 
-                $year = new Year($kernel);
+                $year = new Year($context->getKernel());
                 $year->loadActiveYear();
                 $accounts =  $account->getList('operating');
                 ?>
@@ -63,7 +63,7 @@
                     <option value=""><?php e(t('Choose')); ?>...</option>
                     <?php
                     $x = 0;
-                    $default_account_id = $kernel->setting->get('intranet', 'reminder.state.account');
+                    $default_account_id = $context->getKernel()->setting->get('intranet', 'reminder.state.account');
 
                     foreach ($accounts AS $a):
                         if (strtolower($a['type']) == 'sum') continue;
@@ -78,7 +78,7 @@
             </div>
         </fieldset>
         <div>
-            <input type="submit" value="<?php e(t('State')); ?>" /> <?php e(t('or')); ?>
+            <input type="submit" value="<?php e(t('State')); ?>" />
             <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
         </div>
     <?php endif;  ?>

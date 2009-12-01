@@ -10,7 +10,7 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
 
     function getModel()
     {
-        return $this->context->getDebtor();
+        return $this->context->getModel();
     }
 
     function renderHtml()
@@ -67,7 +67,7 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
         $year = new Year($this->getKernel());
         $voucher = new Voucher($year);
 
-            $debtor = $this->getDebtor();
+            $debtor = $this->getModel();
             if ($debtor->get('type') != 'credit_note') {
                 trigger_error('You can only state credit notes from this page', E_USER_ERROR);
                 exit;
@@ -86,8 +86,8 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
 
             if ($debtor->error->isError()) {
                 $debtor->loadItem();
-            } elseif (!$debtor->state($year, $_POST['voucher_number'], $_POST['date_state'], $translation)) {
-                $debtor->error->set('Kunne ikke bogfï¿½re posten');
+            } elseif (!$debtor->state($year, $_POST['voucher_number'], $_POST['date_state'], $this->getKernel()->getTranslation('accounting'))) {
+                $debtor->error->set('Kunne ikke bogføre posten');
                 $debtor->loadItem();
             } else {
                 return new k_SeeOther($this->url('../'));

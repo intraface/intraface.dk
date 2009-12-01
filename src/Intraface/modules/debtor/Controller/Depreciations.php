@@ -26,16 +26,16 @@ class Intraface_modules_debtor_Controller_Depreciations extends k_Component
         return $this->context->getObject();
     }
 
+    function getType()
+    {
+        return $this->context->getType();
+    }
+
     function getDepreciation()
     {
         $invoice_module = $this->getKernel()->useModule('invoice');
         require_once 'Intraface/modules/invoice/Depreciation.php';
         return new Depreciation($this->getModel());
-    }
-
-    function getType()
-    {
-        return $this->context->getType();
     }
 
     function postForm()

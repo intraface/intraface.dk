@@ -61,4 +61,9 @@ class Intraface_modules_currency_Controller_Index extends k_Component
     {
         return $this->document;
     }
+
+    function getKernel()
+    {
+        return $this->getKernel();
+    }
 }

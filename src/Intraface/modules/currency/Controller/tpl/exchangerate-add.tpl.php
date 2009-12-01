@@ -1,4 +1,4 @@
-<form action="<?php e(url('.')); ?>" method="post">
+<form action="<?php e(url()); ?>" method="post">
     <fieldset>
         <div class="formrow">
             <label for="rate"><?php e(t('Rate')); ?></label>
@@ -9,5 +9,4 @@
         <input type="submit" value="<?php e(t('save', 'common')); ?>" />
         <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
     </p>
-
 </form>

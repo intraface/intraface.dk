@@ -22,10 +22,6 @@ class MainAdministration extends Intraface_Main
         $this->addPreloadFile('UserAdministration.php');
 
         $this->addFrontpageFile('include_frontpage.php');
-
-        $this->addSubMenuItem("Intranet", "intranets");
-        $this->addSubMenuItem("Brugere", "users");
-        $this->addSubMenuItem("Registrér moduler", "modules");
     }
 }
 

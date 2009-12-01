@@ -13,6 +13,11 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
         if (!$this->getYear()->readyForState($this->getDepreciation()->get('payment_date'))) {
             return new k_SeeOther($this->url('selectyear'));
         }
+
+        $year = new Year($this->context->getKernel());
+        $depreciation = $this->context->getDepreciation();
+        $voucher = new Voucher($year);
+
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/depreciation.tpl.php');
         return $smarty->render($this, array('accounting_module' => $accounting_module, 'voucher' => $voucher, 'year' => $this->getYear(), 'depreciation' => $this->context->getDepreciation(), 'object' => $this->getModel(), 'year' => $year));
 
@@ -45,17 +50,16 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
 
         $depreciation = $this->context->getDepreciation();
 
+        $this->context->getKernel()->getSetting()->set('intranet', 'depreciation.state.account', intval($_POST['state_account_id']));
 
-            $this->context->getKernel()->getSetting()->set('intranet', 'depreciation.state.account', intval($_POST['state_account_id']));
-
-            if ($depreciation->error->isError()) {
-                // nothing, we continue
-            } elseif (!$depreciation->state($year, $_POST['voucher_number'], $_POST['date_state'], $_POST['state_account_id'], $translation)) {
-                $depreciation->error->set('Kunne ikke bogfï¿½re posten');
-            } else {
-                return new k_SeeOther($this->url('../../'));
-            }
-            return $this->render();
+        if ($depreciation->error->isError()) {
+            // nothing, we continue
+        } elseif (!$depreciation->state($year, $_POST['voucher_number'], $_POST['date_state'], $_POST['state_account_id'], $this->getKernel()->getTranslation('accounting'))) {
+            $depreciation->error->set('Kunne ikke bogføre posten');
+        } else {
+            return new k_SeeOther($this->url('../../../'));
+        }
+        return $this->render();
     }
 
     function getType()

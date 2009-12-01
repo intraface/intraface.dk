@@ -37,18 +37,18 @@ class Intraface_modules_currency_Controller_ExchangeRate_Update extends k_Compon
     {
         $rate =  new Intraface_modules_currency_Currency_ExchangeRate;
         $types = $rate->getUsedForTypes();
-        if (false === ($used_for_key = array_search($this->context->name, $types))) {
-            throw new Exception('Invalid used for '.$this->context->name);
+        if (false === ($used_for_key = array_search($this->context->name(), $types))) {
+            throw new Exception('Invalid used for '.$this->context->name());
         }
 
-        if ($this->context->name == 'payment') {
+        if ($this->context->name() == 'payment') {
             $this->document->title = 'Update exchange rate for payments';
-        } elseif ($this->context->name == 'productprice') {
-            $this->document->title = 'Update exchange rate for product prices';
+        } elseif ($this->context->name() == 'productprice') {
+            $this->document->setTitle('Update exchange rate for product prices');
         } else {
             throw new Exception('Invalid context');
         }
-        $tpl = $this->template->create('Intraface/modules/currency/Controller/tpl/exchangerate-add');
+        $tpl = $this->template->create(dirname(__FILE__) . '/../tpl/exchangerate-add');
         return $this->getError()->view() . $tpl->render($this);
     }
 
@@ -70,7 +70,7 @@ class Intraface_modules_currency_Controller_ExchangeRate_Update extends k_Compon
             throw new k_SeeOther($this->url('../../../../'));
         } catch (Doctrine_Validator_Exception $e) {
             $this->getError()->attachErrorStack($currency->getErrorStack(), array('rate' => 'rate'));
-            return $this->renderHtml();
         }
+        return $this->render();
     }
 }

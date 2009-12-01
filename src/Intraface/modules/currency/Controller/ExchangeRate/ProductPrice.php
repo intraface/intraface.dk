@@ -17,4 +17,14 @@ class Intraface_modules_currency_Controller_ExchangeRate_ProductPrice extends k_
             return 'Intraface_modules_currency_Controller_ExchangeRate_Update';
         }
     }
+
+    function getTranslation()
+    {
+        return $this->getKernel()->getTranslation('currency');
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
 }

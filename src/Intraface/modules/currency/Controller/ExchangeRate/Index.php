@@ -29,4 +29,9 @@ class Intraface_modules_currency_Controller_ExchangeRate_Index extends k_Compone
             return 'Intraface_modules_currency_Controller_ExchangeRate_Payment';
         }
     }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
 }

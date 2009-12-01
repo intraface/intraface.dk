@@ -97,7 +97,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         } elseif (!empty($_GET['import'])) {
             $redirect = Intraface_Redirect::go($this->getKernel());
             $shared_fileimport = $this->getKernel()->useShared('fileimport');
-            $url = $redirect->setDestination($shared_fileimport->getPath().'index.php', NET_SCHEME . NET_HOST . $this->url('import'));
+            $url = $redirect->setDestination($shared_fileimport->getPath(), NET_SCHEME . NET_HOST . $this->url('import'));
             $redirect->askParameter('session_variable_name');
             return new k_SeeOther($url);
         }

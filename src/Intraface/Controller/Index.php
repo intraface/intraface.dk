@@ -53,11 +53,17 @@ class Intraface_Controller_Index extends k_Component
     function wrapHtml($content)
     {
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/outside');
-        return new k_HttpResponse(200, $tpl->render($this, array('content' => $content)), true);
+        $content = $tpl->render($this, array('content' => $content));
+        return new k_HttpResponse(200, $content, true);
     }
 
     function execute()
     {
         return $this->wrap(parent::execute());
+    }
+
+    function document()
+    {
+        return $this->document;
     }
 }
