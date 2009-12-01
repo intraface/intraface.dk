@@ -3,6 +3,7 @@
 <?php echo $context->getError()->view(); ?>
 
 <form action="<?php e(url(null, array($context->subview()))); ?>" method="POST">
+<intput type="hidden" name="_method" value="<?php e($context->method); ?>" />
 <fieldset>
     <legend><?php e(t('Information'))?></legend>
 
@@ -52,7 +53,7 @@
 
     <div class="formrow">
         <label for="dk_price_items"><?php e(t('Price for items (excl shipment, fees etc.)'))?></label>
-        <input type="text" name="dk_price_items" id="dk_price_items" value="<?php if (isset($values['dk_price_items'])) e($values["dk_price_items"]); ?>" size="10" /> DKK <?php e(t('(excl vat)')); ?> 
+        <input type="text" name="dk_price_items" id="dk_price_items" value="<?php if (isset($values['dk_price_items'])) e($values["dk_price_items"]); ?>" size="10" /> DKK <?php e(t('(excl vat)')); ?>
     </div>
 
     <div class="formrow">
