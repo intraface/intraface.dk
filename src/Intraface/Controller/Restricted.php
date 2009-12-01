@@ -6,13 +6,15 @@ class Intraface_Controller_Restricted extends k_Component
     protected $kernel;
     protected $user_gateway;
     protected $kernel_gateway;
+    protected $template;
 
-    function __construct(DB_Sql $db_sql, MDB2_Driver_Common $mdb2, Intraface_UserGateway $gateway, Intraface_KernelGateway $kernel_gateway /*k_Registry $registry*/)
+    function __construct(DB_Sql $db_sql, MDB2_Driver_Common $mdb2, Intraface_UserGateway $gateway, Intraface_KernelGateway $kernel_gateway, k_TemplateFactory $template /*k_Registry $registry*/)
     {
         $this->mdb2 = $mdb2; // this is here to make sure set names utf8 is run as the first thing in the app
         $this->db_sql = $db_sql;
         $this->user_gateway = $gateway;
         $this->kernel_gateway = $kernel_gateway;
+        $this->template = $template;
     }
 
     function document()
@@ -188,58 +190,6 @@ class component_ShowProduct {
     	return $last_view;
     }
 
-    /*
-    function wrapHtml($content)
-    {
-        return sprintf('<html><body><ul><li><a href="'.$this->url('/restricted/module').'">Moduler</a></li><li><a href="'.$this->url('/logout').'">Logout</a></li><li><a href="'.$this->url('/restricted/switchintranet').'">Switch Intranet</a></li></ul>%s</body></html>', $content);
-    }
-    */
-    /*
-    function wrapHtml($content)
-    {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/wrapper.tpl.php');
-        return $smarty->render($this, array('content' => $content));
-    }
-    */
-
-    /*
-    function getPage()
-    {
-    	return $this->registry->create('page');
-    }
-
-    function getHeader()
-    {
-        return;
-        ob_start();
-        $this->getPage()->start('Newsletter');
-        $data = ob_get_contents();
-        ob_end_clean();
-        return $data;
-    }
-
-    function getFooter()
-    {
-        return;
-        ob_start();
-        $this->getPage()->end();
-        $data = ob_get_contents();
-        ob_end_clean();
-        return $data;
-    }
-
-    function wrapHtml($content)
-    {
-        return $this->getHeader() . $content . $this->getFooter();
-    }
-
-    function execute()
-    {
-        return $this->wrap(parent::execute());
-    }
-	*/
-
-    /*
     function getUserMenu()
     {
         $this->usermenu = array();
@@ -316,39 +266,37 @@ class component_ShowProduct {
 
         return $this->submenu;
     }
-    */
 
-
-    function getPage()
+    function getIntranetName()
     {
-        return $this->getKernel()->getPage();
-    }
-
-    function getHeader()
-    {
-        ob_start();
-        $this->getPage()->start('Newsletter');
-        $data = ob_get_contents();
-        ob_end_clean();
-        return $data;
-    }
-
-    function getFooter()
-    {
-        ob_start();
-        $this->getPage()->end();
-        $data = ob_get_contents();
-        ob_end_clean();
-        return $data;
+        return $this->getKernel()->intranet->get('name');;
     }
 
     function wrapHtml($content)
     {
-        return new k_HttpResponse(200, $this->getHeader() . $content . $this->getFooter(), true);
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/main');
+        $content = $tpl->render($this, array('content' => $content));
+        return new k_HttpResponse(200, $content, true);
+        // return new k_HttpResponse(200, $this->getHeader() . $content . $this->getFooter(), true);
     }
 
     function execute()
     {
         return $this->wrap(parent::execute());
+    }
+
+    function getTranslation()
+    {
+        return $this->getKernel()->getTranslation();
+    }
+
+    function getThemeKey()
+    {
+        return $this->getKernel()->setting->get('user', 'theme');
+    }
+
+    function getFontSize()
+    {
+         return $this->getKernel()->setting->get('user', 'ptextsize');
     }
 }

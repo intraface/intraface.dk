@@ -3,11 +3,13 @@ class Intraface_Controller_Index extends k_Component
 {
     protected $kernel_gateway;
     protected $user_gateway;
+    protected $template;
 
-    function __construct(Intraface_Auth $auth, Intraface_KernelGateway $gateway, Intraface_UserGateway $user_gateway)
+    function __construct(k_TemplateFactory $template, Intraface_Auth $auth, Intraface_KernelGateway $gateway, Intraface_UserGateway $user_gateway)
     {
         $this->kernel_gateway = $gateway;
         $this->user_gateway = $user_gateway;
+        $this->template = $template;
     }
 
     protected function map($name)
@@ -48,15 +50,8 @@ class Intraface_Controller_Index extends k_Component
 
     function wrapHtml($content)
     {
-        ob_start();
-        include dirname(__FILE__) . '/../ihtml/outside/top.php';
-        $header = ob_get_contents();
-        ob_end_clean();
-        ob_start();
-        include dirname(__FILE__) . '/../ihtml/outside/bottom.php';
-        $footer = ob_get_contents();
-        ob_end_clean();
-        return new k_HttpResponse(200, $header . $content . $footer, true);
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/outside');
+        return new k_HttpResponse(200, $tpl->render($this, array('content' => $content)), true);
     }
 
     function execute()
