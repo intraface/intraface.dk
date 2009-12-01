@@ -1,0 +1,157 @@
+
+<h1><?php e(t('your account')); ?></h1>
+
+<?php if (isset($modulepackagemanager)) echo $modulepackagemanager->error->view(); ?>
+
+<div class="message">
+    <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
+        <?php
+        // TODO: This is not really a good text
+        ?>
+        <h3><?php e(t('success!')); ?></h3>
+        <p><?php e(t('if everything went as it should, you can see your packages below, and you should be able to use them now.')); ?></p>
+    <?php else: ?>
+        <p><?php e(t('on this page you have an overview of your intraface account')); ?></p>
+    <?php endif; ?>
+</div>
+
+<?php
+$modulepackagemanager = new Intraface_modules_modulepackage_Manager($context->getKernel()->intranet);
+$modulepackagemanager->getDBQuery($context->getKernel())->setFilter('status', 'created_and_active');
+$packages = $modulepackagemanager->getList();
+
+if (count($packages) > 0) {
+    ?>
+    <h2><?php e(t('your subscription')); ?></h2>
+    <table class="stribe">
+        <caption><?php e(t('modulepackages')); ?></caption>
+        <thead>
+            <tr>
+                <th><?php e(t('modulepackage')); ?></th>
+                <th><?php e(t('start date')); ?></th>
+                <th><?php e(t('end date')); ?></th>
+                <th><?php e(t('status')); ?></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($packages AS $package): ?>
+            <tr>
+                <td><?php e(t($package['plan']).' '.t($package['group'])); ?></td>
+                <td><?php e($package['dk_start_date']); ?></td>
+                <td><?php e($package['dk_end_date']); ?></td>
+                <td><?php e(t($package['status'])); ?></td>
+                <td><a href="index.php?unsubscribe_id=<?php e($package['id']); ?>" class="delete"><?php e(t('unsubscribe')); ?></a></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php
+}
+?>
+
+<h2><?php e(t('subscribe to new package')); ?></h2>
+
+<?php
+$modulepackage = new Intraface_modules_modulepackage_ModulePackage;
+$plans = $modulepackage->getPlans();
+$groups = $modulepackage->getGroups();
+$modulepackage->getDBQuery($context->getKernel());
+$packages = $modulepackage->getList('matrix');
+?>
+
+<table class="stribe">
+    <thead>
+        <tr>
+            <th><?php e(t('select your package')); ?></th>
+            <?php foreach ($plans AS $plan): ?>
+                <th style="width: <?php echo floor(100/(2 + count($plans))); ?>%;"><?php e(t($plan['plan'])); ?></th>
+            <?php endforeach; ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        // we make sure it is arrays to avoid errors.
+        settype($groups, 'array');
+        settype($plans, 'array');
+
+        foreach ($groups AS $group) { ?>
+
+
+            <tr>
+            <th style="vertical-align: top;">
+            <strong><?php e(t($group['group'])); ?></strong>
+            <?php
+            if (isset($plans[0]['id']) && isset($packages[$group['id']][$plans[0]['id']]) && is_array($packages[$group['id']][$plans[0]['id']])) {
+                $modules = $packages[$group['id']][$plans[0]['id']]['modules'];
+            } else {
+                $modules = array();
+            }
+            $row_modules = array();
+            if (is_array($modules) && count($modules) > 0) { ?>
+                <div>
+                <?php
+                echo t('gives you access to: <br /> - ');
+                for ($j = 0, $max = count($modules); $j < $max; $j++) {
+                    if ($j != 0) {
+                        echo ', ';
+                    }
+                    e(t($modules[$j]['module']));
+                    $row_modules[] = $modules[$j]['module'];
+                } ?>
+                </div>
+                <?php
+            }
+            ?>
+            </th>
+            <?php
+            foreach ($plans AS $plan) { ?>
+                <td style="vertical-align: bottom;">
+                <?php if (isset($packages[$group['id']][$plan['id']]) && is_array($packages[$group['id']][$plan['id']])) {
+
+                    $modules = array();
+                    $limiters = array();
+                    if (isset($packages[$group['id']][$plan['id']]['modules']) && is_array($packages[$group['id']][$plan['id']]['modules'])) {
+                        foreach ($packages[$group['id']][$plan['id']]['modules'] AS $module) {
+                            $modules[] = $module['module'];
+                            if (is_array($module['limiters']) && count($module['limiters']) > 0) {
+                                $limiters = array_merge($limiters, $module['limiters']);
+                            }
+                        }
+                    }
+
+                    $display_modules = array_diff($modules, $row_modules);
+                    if (is_array($display_modules) && count($display_modules) > 0) { ?>
+                        <p><?php e(t('plus the modules')); ?>: <br />
+                        <?php echo implode(', ', $display_modules); ?>
+                        </p>
+                    <?php
+                    }
+
+                    if (is_array($limiters) && count($limiters) > 0) { ?>
+                        <p><?php e(t('gives you')); ?>:
+
+                        <?php foreach ($limiters AS $limiter) { ?>
+                            <br /><?php e(t($limiter['description']).' ');
+                            if (isset($limiter['limit_readable'])) {
+                                e($limiter['limit_readable']);
+                            } else {
+                                e($limiter['limit']);
+                            }
+                        } ?>
+                        </p>
+                    <?php }
+
+                    if (is_array($packages[$group['id']][$plan['id']]['product']) && count($packages[$group['id']][$plan['id']]['product']) > 0) { ?>
+                        <p> DKK <?php e($packages[$group['id']][$plan['id']]['product']['price_incl_vat'].' '.t('per').' '.t($packages[$group['id']][$plan['id']]['product']['unit']['singular'])); ?></p>
+                    <?php } ?>
+
+                    <a href="add_package.php?id=<?php e($packages[$group['id']][$plan['id']]['id']); ?>"><?php e(t('choose', 'common')); ?></a>
+
+                <?php } ?>
+                </td>
+                <?php
+            }
+        }
+        ?>
+    </tbody>
+</table>

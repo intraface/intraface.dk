@@ -1,8 +1,52 @@
 <?php
 class Intraface_modules_modulepackage_Controller_Index extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function renderHtml()
     {
-        return new k_SeeOther($this->url('../../../../modules/modulepackage'));
+        $module = $this->getKernel()->module('modulepackage');
+        $module->includeFile('Manager.php');
+
+        // temp test
+        // require('Intraface/ModulePackage/AccessUpdate.php');
+        // $access_update = new Intraface_modules_modulepackage_AccessUpdate();
+        // $access_update->run($this->getKernel()->intranet->get('id'));
+        $modulepackagemanager = null;
+
+        if (isset($_GET['unsubscribe_id']) && intval($_GET['unsubscribe_id']) != 0) {
+            $modulepackagemanager = new Intraface_modules_modulepackage_Manager($this->getKernel()->intranet, (int)$_GET['unsubscribe_id']);
+            if ($modulepackagemanager->get('id') != 0) {
+                if ($modulepackagemanager->get('status') == 'created') {
+                    $modulepackagemanager->delete();
+                } elseif ($modulepackagemanager->get('status') == 'active') {
+                    $modulepackagemanager->terminate();
+
+                    $module->includeFile('AccessUpdate.php');
+                    $access_update = new Intraface_modules_modulepackage_AccessUpdate();
+                    $access_update->run($this->getKernel()->intranet->get('id'));
+                    $this->getKernel()->user->clearCachedPermission();
+
+                } else {
+                    $modulepackagemanager->error->set('it is not possible to unsubscribe module packages which is not either created or active');
+                }
+            }
+        }
+
+        $translation = $this->getKernel()->getTranslation('modulepackage');
+
+        $data = array('modulepackagemanager' => $modulepackagemanager);
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/index');
+        return $tpl->render($this, $data);
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }
