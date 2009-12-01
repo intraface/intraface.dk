@@ -10,7 +10,7 @@
  * @version 1.0.
  */
 
-require '../common.php';
+require '../../common.php';
 
 $themes = Intraface_Page::themes();
 
