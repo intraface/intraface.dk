@@ -1,5 +1,5 @@
 <?php
-class Intraface_modules_modulepackage_Controller_Index extends k_Component
+class Intraface_modules_modulepackage_Controller_Process extends k_Component
 {
     protected $template;
 
@@ -11,7 +11,6 @@ class Intraface_modules_modulepackage_Controller_Index extends k_Component
     function renderHtml()
     {
         // Here we are logged in so we can use the normal way to acccess files.
-        require('../../include_first.php');
 
         $module = $this->getKernel()->module('modulepackage');
         $module->includeFile('Manager.php');
@@ -43,10 +42,8 @@ class Intraface_modules_modulepackage_Controller_Index extends k_Component
             $access_update = new Intraface_modules_modulepackage_AccessUpdate();
             $access_update->run($this->getKernel()->intranet->get('id'));
 
-            header('location: index.php?status=success');
-            exit;
-        }
-        else {
+            return new k_SeeOther($this->url('../', array('status' => 'success')));
+        } else {
             // TODO: we need to find a better solution for this
             echo 'Failure:';
             $action->error->view();
@@ -60,9 +57,7 @@ class Intraface_modules_modulepackage_Controller_Index extends k_Component
 
     function postForm()
     {
-        // When we recieve from Quickpay payment
-        require('../../common.php');
-        session_start();
+        // When we recieve from Quickpay payment not being logged in
 
         $action = Intraface_modules_modulepackage_ActionStore::restoreFromIdentifier(MDB2::singleton(DB_DSN), $_GET['action_store_identifier']);
         if(!$action) {
@@ -76,7 +71,6 @@ class Intraface_modules_modulepackage_Controller_Index extends k_Component
             throw new Exception("Unable to log in to the intranet with public key: ".$action->getIntranetPrivateKey());
         }
 
-        $this->getKernel() = new Intraface_Kernel();
         $this->getKernel()->weblogin = $weblogin;
         $this->getKernel()->intranet = new Intraface_Intranet($intranet_id);
         $this->getKernel()->setting = new Intraface_Setting($this->getKernel()->intranet->get('id'));
@@ -118,20 +112,17 @@ class Intraface_modules_modulepackage_Controller_Index extends k_Component
                     $access_update->run($this->getKernel()->intranet->get('id'));
 
                     echo 'SUCCESS!';
-                }
-                else {
+                } else {
                     echo 'Failure:';
                     echo $action->error->view();
                 }
-            }
-            else {
+            } else {
 
                 // TODO: Here we can send an e-mail that says they still need to pay some more OR?
                 trigger_error('Failure: Not sufficient payment', E_USER_ERROR);
                 exit;
             }
-        }
-        else {
+        } else {
             echo 'Payment attempt registered. Not authorized';
         }
 

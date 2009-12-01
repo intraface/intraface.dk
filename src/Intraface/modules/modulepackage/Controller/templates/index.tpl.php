@@ -145,7 +145,7 @@ $packages = $modulepackage->getList('matrix');
                         <p> DKK <?php e($packages[$group['id']][$plan['id']]['product']['price_incl_vat'].' '.t('per').' '.t($packages[$group['id']][$plan['id']]['product']['unit']['singular'])); ?></p>
                     <?php } ?>
 
-                    <a href="add_package.php?id=<?php e($packages[$group['id']][$plan['id']]['id']); ?>"><?php e(t('choose', 'common')); ?></a>
+                    <a href="<?php e(url('package/' . $packages[$group['id']][$plan['id']]['id'])); ?>"><?php e(t('choose', 'common')); ?></a>
 
                 <?php } ?>
                 </td>

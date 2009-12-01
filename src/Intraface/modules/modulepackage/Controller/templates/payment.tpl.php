@@ -20,7 +20,7 @@
         <p><?php e(t('the paymend is carried out on a secure connection.')); ?></p>
 
         <?php
-        $lang = tLang();
+        $lang = $translation->getLang();
         $language = (isset($lang) && $lang == 'dansk') ? 'da' : 'en';
 
         $payment_provider = 'Ilib_Payment_Authorize_Provider_'.INTRAFACE_ONLINEPAYMENT_PROVIDER;
@@ -31,10 +31,10 @@
             $order['arrears'][$order['default_currency']],
             $order['default_currency'],
             $language,
-            NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/index.php?status=success',
-            NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/payment.php?action_store_identifier='.$action_store->getIdentifier().'&payment_error=true',
-            NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/process.php?action_store_identifier='.$action_store->getIdentifier(),
-            NET_SCHEME.NET_HOST.NET_DIRECTORY.'payment/html/cci.php?language='.$language,
+            url('../', array('status' => 'success')),
+            url('../payment', array('action_store_identifier'=>$action_store->getIdentifier(), 'payment_error'=>true)),
+            url('../process', array('action_store_identifier'=>$action_store->getIdentifier())),
+            url('/payment', array('language'=>$language)),
             $_GET,
             $_POST
         );

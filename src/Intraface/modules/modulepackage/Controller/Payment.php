@@ -28,7 +28,13 @@ class Intraface_modules_modulepackage_Controller_Payment extends k_Component
         $shop = new Intraface_modules_modulepackage_ShopExtension();
         $order = $shop->getOrderDetails($action->getOrderIdentifier());
 
-        $data = array('modulepackagemanager' => $modulepackagemanager);
+        $data = array(
+        	'shop' => $shop,
+            'order' => $order,
+            'action' => $action,
+            'translation' => $translation,
+            'action_store' => $action_store);
+
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/payment');
         return $tpl->render($this, $data);
     }

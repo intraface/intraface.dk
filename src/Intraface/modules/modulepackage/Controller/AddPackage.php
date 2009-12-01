@@ -16,7 +16,7 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
         $module->includeFile('ActionStore.php');
 
         $translation = $this->getKernel()->getTranslation('modulepackage');
-        $modulepackage = new Intraface_modules_modulepackage_ModulePackage(intval($_GET['id']));
+        $modulepackage = new Intraface_modules_modulepackage_ModulePackage(intval($this->name()));
         $modulepackagemanager = new Intraface_modules_modulepackage_Manager($this->getKernel()->intranet);
         if ($modulepackage->get('id') == 0) {
             trigger_error("Invalid id", E_USER_ERROR);
@@ -26,7 +26,12 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
         $add_type = $modulepackagemanager->getAddType($modulepackage);
         $modulepackageshop = new Intraface_modules_modulepackage_ShopExtension();
 
-        $data = array('modulepackagemanager' => $modulepackagemanager);
+        $data = array(
+        	'modulepackagemanager' => $modulepackagemanager,
+            'add_type' => $add_type,
+            'modulepackageshop' => $modulepackageshop,
+            'modulepackage' => $modulepackage,
+            'kernel' => $this->getKernel());
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/add-package');
         return $tpl->render($this, $data);
     }
@@ -38,14 +43,13 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
 
     function postForm()
     {
-
         $module = $this->getKernel()->module('modulepackage');
         $module->includeFile('Manager.php');
         $module->includeFile('ShopExtension.php');
         $module->includeFile('ActionStore.php');
 
         $translation = $this->getKernel()->getTranslation('modulepackage');
-        $modulepackage = new Intraface_modules_modulepackage_ModulePackage(intval($_POST['id']));
+        $modulepackage = new Intraface_modules_modulepackage_ModulePackage(intval($this->name()));
         $modulepackagemanager = new Intraface_modules_modulepackage_Manager($this->getKernel()->intranet);
 
         $add_type = $modulepackagemanager->getAddType($modulepackage);
@@ -55,12 +59,10 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
             // Here we need to know the errors from address, but it does not validate now!
             $modulepackagemanager->error->set('there was an error in your address informations');
             $modulepackagemanager->error->merge($this->getKernel()->intranet->address->error->getMessage());
-        }
-        else {
+        } else {
             if (!isset($_POST['accept_conditions']) || $_POST['accept_conditions'] != '1') {
                 $modulepackagemanager->error->set('You need to accept the conditions of sale and use');
-            }
-            else {
+            } else {
 
                 // we are now ready to create the order.
                 switch($add_type) {
@@ -107,8 +109,7 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
 
                         $total_price = $action->getTotalPrice();
 
-                    }
-                    else {
+                    } else {
                         $total_price = 0;
                     }
 
@@ -124,14 +125,10 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
 
                     // Notice: Only if the price is more than zero we continue to the payment page, otherwise we contibue to the process page further down.
                     if (!empty($action_store_identifier) && $total_price > 0) {
-                        header('location: payment.php?action_store_identifier='.$action_store_identifier);
-                        exit;
-                    }
-                    elseif (!empty($action_store_identifier)) {
-                        header('location: process.php?action_store_identifier='.$action_store_identifier);
-                        exit;
-                    }
-                    else {
+                        return new k_SeeOther($this->url('../../payment', array('action_store_identifier' => $action_store_identifier)));
+                    } elseif (!empty($action_store_identifier)) {
+                        return new k_SeeOther($this->url('../../process', array('action_store_identifier' => $action_store_identifier)));
+                    } else {
                         trigger_error('We did not end up having an action store id!', E_USER_ERROR);
                         exit;
                     }

@@ -8,6 +8,18 @@ class Intraface_modules_modulepackage_Controller_Index extends k_Component
         $this->template = $template;
     }
 
+    function map($name)
+    {
+        if ($name == 'package') {
+            return 'Intraface_modules_modulepackage_Controller_Package';
+        } elseif ($name == 'payment') {
+            return 'Intraface_modules_modulepackage_Controller_Payment';
+        } elseif ($name == 'process') {
+            return 'Intraface_modules_modulepackage_Controller_Process';
+        }
+
+    }
+
     function renderHtml()
     {
         $module = $this->getKernel()->module('modulepackage');

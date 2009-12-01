@@ -55,9 +55,7 @@ class Intraface_modules_modulepackage_Controller_PostForm extends k_Component
 
             // die($process->http_response_body);
 
-            header('location:'. $url);
-            exit;
+            return new k_SeeOther($url);
         }
-
     }
 }
