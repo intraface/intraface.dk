@@ -23,16 +23,9 @@ class MainAdministration extends Intraface_Main
 
         $this->addFrontpageFile('include_frontpage.php');
 
-        /*
-        $this->addSubMenuItem("Intranet", "intranets.php");
-        $this->addSubMenuItem("Brugere", "users.php");
-        $this->addSubMenuItem("Registrér moduler", "register_modules.php");
-        */
-    }
-
-    function getPath()
-    {
-        return url('/core/restricted/module/administration/') . '/';
+        $this->addSubMenuItem("Intranet", "intranets");
+        $this->addSubMenuItem("Brugere", "users");
+        $this->addSubMenuItem("Registrér moduler", "modules");
     }
 }
 

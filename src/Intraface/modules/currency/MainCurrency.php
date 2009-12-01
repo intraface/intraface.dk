@@ -17,12 +17,12 @@ class MainCurrency extends Intraface_Main
         $this->menu_index = 80;
         $this->frontpage_index = 55;
 
-        
-        $this->addSubmenuItem('quotations', '../debtor/list.php?type=quotation', 'module:quotation');
-        $this->addSubmenuItem('orders', '../debtor/list.php?type=order', 'module:order');
-        $this->addSubmenuItem('invoices', '../debtor/list.php?type=invoice', 'module:invoice');
-        $this->addSubmenuItem('credit notes', '../debtor/list.php?type=credit_note', 'module:invoice');
-        $this->addSubmenuItem('reminders', '../debtor/reminders.php', 'module:invoice');
+
+        $this->addSubmenuItem('quotations', '../debtor/quotation/list', 'module:quotation');
+        $this->addSubmenuItem('orders', '../debtor/order/list', 'module:order');
+        $this->addSubmenuItem('invoices', '../debtor/invoice/list', 'module:invoice');
+        $this->addSubmenuItem('credit notes', '../debtor/credit_note/list', 'module:invoice');
+        $this->addSubmenuItem('reminders', '../debtor/reminders', 'module:invoice');
         $this->addSubmenuItem('onlinepayments', '../onlinepayment/', 'module:onlinepayment');
 
         // $this->addControlpanelFile('OnlinePayment settings', 'modules/onlinepayment/settings.php');

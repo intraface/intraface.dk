@@ -20,9 +20,9 @@ class MainCMS extends Intraface_Main
 
         // Tilføj undermenu punkter.
         $this->addSubMenuItem('choose site', '');
-        $this->addSubMenuItem('pages', 'pages.php?type=page');
-        $this->addSubMenuItem('articles', 'pages.php?type=article');
-        $this->addSubMenuItem('news', 'pages.php?type=news');
+        $this->addSubMenuItem('pages', 'pages?type=page');
+        $this->addSubMenuItem('articles', 'pages?type=article');
+        $this->addSubMenuItem('news', 'pages?type=news');
 
         // Tilføj subaccess punkter
         $this->addSubAccessItem('edit_stylesheet', 'stylesheet');

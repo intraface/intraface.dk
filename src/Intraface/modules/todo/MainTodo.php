@@ -3,7 +3,7 @@
  * @package Intraface_Todo
  */
 
-class MainTodo extends Intraface_Main 
+class MainTodo extends Intraface_Main
 {
     function __construct()
     {
@@ -22,7 +22,7 @@ class MainTodo extends Intraface_Main
 
         $this->includeSettingFile("settings.php");
 
-        $this->addControlpanelFile('todo', '/modules/todo/setting.php');
+        $this->addControlpanelFile('todo', '/module/todo/setting.php');
 
         $this->addFrontpageFile('include_frontpage.php');
     }

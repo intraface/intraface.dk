@@ -26,7 +26,7 @@ class MainContact extends Intraface_Main
         $this->addRequiredShared('email');
         $this->addRequiredShared('keyword');
 
-        $this->addControlPanelFile('contact', '/modules/contact/setting.php');
+        $this->addControlPanelFile('contact', '/module/contact/setting.php');
 
         $this->addFrontpageFile('include_frontpage.php');
 

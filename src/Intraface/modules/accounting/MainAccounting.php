@@ -32,11 +32,11 @@ class MainAccounting extends Intraface_Main
         //$this->addSubMenuItem('Hjï¿½lp', 'help.php');
 
         // Tilfï¿½j subaccess punkter
-        $this->addSubAccessItem('endyear', 'ï¿½rsafslutning');
+        $this->addSubAccessItem('endyear', 'Årsafslutning');
         $this->addSubAccessItem('vat_report', 'Momsopgivelse');
         $this->addSubAccessItem('setting', 'Indstillinger');
 
-        $this->addControlPanelFile('accounting settings', 'modules/accounting/setting.php');
+        $this->addControlPanelFile('accounting settings', 'module/accounting/setting');
 
         $this->addFrontpageFile('include_frontpage.php');
 
@@ -100,13 +100,5 @@ class MainAccounting extends Intraface_Main
         $this->addPreloadFile('Voucher.php');
         $this->addPreloadFile('VoucherFile.php');
         $this->addPreloadFile('VatPeriod.php');
-    }
-
-    function getPath()
-    {
-        if (defined('INTRAFACE_K2')) {
-            return url('/core/restricted/module/accounting') . '/';
-        }
-        return parent::getPath();
     }
 }
