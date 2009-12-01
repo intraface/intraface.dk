@@ -1,0 +1,17 @@
+body {
+	margin: auto;
+}
+
+label {
+	display: block;
+}
+
+table, tbody, tr, td, th { 
+	display: block; 
+}
+
+img {
+	max-width: 100%;
+}
+
+ul li { float: none; }

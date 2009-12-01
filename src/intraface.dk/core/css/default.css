@@ -1,0 +1,788 @@
+#system_message {
+    padding: 0.5em 0.5em 0.5em 35px;
+    background: orange url(../images/icons/silk/error.png) 10px center no-repeat;
+    font-weight: bold;
+}
+
+html {
+    font-size: 85%;
+}
+
+body {
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 1em;
+}
+
+h1 {
+    font-size: 1.6em;
+}
+
+h2 {
+    font-size: 1.4em;
+}
+
+h3 {
+    font-size: 1.2em;
+}
+
+h4 {
+    font-size: 1em;
+}
+
+table {
+    width: 100%;
+    font-size: inherit;
+}
+
+caption {
+    border: 1px solid #ccc;
+    background: #ddd;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    padding: 0.2em;
+}
+
+thead th {
+
+    text-align: left;
+    letter-spacing: 0.2em;
+    font-weight: bold;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #C1DAD7;
+    border-bottom: 1px solid #C1DAD7;
+    border-top: 1px solid #C1DAD7;
+    letter-spacing: 2px;
+    color: black;
+
+}
+
+tbody th {
+    border-right: 1px solid #C1DAD7;
+    border-bottom: 1px solid #C1DAD7;
+
+    text-align: left;
+
+}
+
+tbody td {
+    vertical-align: top;
+    font-size: 100%;
+    letter-spacing: 0.05em;
+    border-right: 1px solid #C1DAD7;
+    border-bottom: 1px solid #C1DAD7;
+
+}
+
+th, td {
+    padding: 6px 6px 6px 12px;
+}
+
+fieldset table th, fieldset table td {
+    border: none;
+    background: none;
+}
+
+a img,:link img,:visited img {
+    border:none;
+}
+
+address {
+    font-style:normal;
+}
+
+dt {
+    font-weight: bold;
+}
+strong { font-weight: bold; }
+
+#branding {
+    margin: 0;
+    padding: 1% 1.3%;
+}
+
+.vcard h1 {
+    margin: 0 2%;
+}
+
+.vcard .street-address {
+    margin: 0 0 0 20px ;
+}
+
+.vcard * * {
+    margin: 0;
+}
+
+#navigation-user {
+    position: absolute;
+    top: 0.5em;
+    right: 1em;
+}
+
+#navigation-user li {
+    display: inline;
+    float: right;
+    display: block;
+    padding: 0.3em 0.3em 0 0.3em;
+    font-size: 0.8em;
+}
+
+#navigation-user li a {
+    color: black;
+}
+
+#navigation-site {
+    margin: 0;
+    float: left;
+    width: 100%;
+    list-style: none;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+#navigation-site li {
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+#navigation-site li:first-child, #navigation-site li.first-child {
+    padding-left: 2%;
+}
+
+#navigation-site a {
+    float: left;
+    display: block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    font-size: 90%;
+}
+
+#navigation-sub {
+    clear: both;
+    float: left;
+    width: 100%;
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+
+}
+
+#navigation-sub li {
+    float: left;
+}
+
+#navigation-sub a {
+    float: left;
+    display: block;
+    padding: 0.5em 1em 0.5em 1em;
+    text-decoration: none;
+    font-size: 90%;
+}
+
+#navigation-sub li:first-child {
+    padding-left: 2%;
+}
+
+#content {
+    clear: both;
+    padding: 1em 0;
+    margin: 0 4%;
+}
+
+#content-main * {
+    margin: 0.5em auto 0.3em auto;
+}
+
+#content-main div.characterNav, #content-main div.pagingNav {
+    text-align: center;
+    margin: 1em;
+}
+
+a.edit {
+    /*
+    background:#F60;
+    border:1px solid;
+    border-color:#FC9 #630 #330 #F96;
+    padding:0 3px;
+    font:bold 10px verdana,sans-serif;
+    color:#FFF;
+    text-decoration:none;
+    margin:4px;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    */
+}
+
+a.delete {
+    /*
+    background:red;
+    border:1px solid;
+    border-color:#FC9 #630 #330 #F96;
+    padding:0 3px;
+    font:bold 10px verdana,sans-serif;
+    color:#FFF;
+    text-decoration:none;
+    margin:4px;
+    text-transform: uppercase;
+    letter-spacing: 0;
+     */
+}
+
+li a.edit {
+}
+
+a.setting{
+}
+
+a.new {
+}
+
+a.stylesheet {
+}
+
+a.template {
+}
+
+
+tbody td.number {
+    text-align: right;
+}
+
+tbody td.date {
+    white-space: nowrap;
+}
+
+td.amount, th.amount {
+    text-align: right;
+      white-space: nowrap;
+}
+
+tbody td.options {
+    text-align: right;
+    white-space: nowrap;
+}
+
+p.highlight {
+    color: red;
+}
+
+/* Accounting
+ ***************************/
+tr.headline {
+    background: #eee;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+tr.sum {
+    background: #f4f4f4;
+}
+
+/* Choose intranet
+ *****************************/
+
+#choose_intranet div {
+    margin: 0.5em 0 0.5em 0;
+    padding: 0.3em;
+}
+
+#choose_intranet .selected {
+    border: 1px solid #ccc;
+    background: #f4f4f4;
+}
+
+#choose_intranet .selected label {
+    font-weight: bold;
+}
+
+/* Preferences
+ *****************************/
+
+.radiobuttons label, .specialcase {
+    display: block;
+    border: 1px solid #eee;
+    padding: 0.5em;
+}
+
+#ptheme label {
+    font-weight: bold;
+}
+
+#ptheme label span {
+    font-weight: normal;
+}
+
+#ptextsize label {
+    display: block;
+    padding: 0.1em;
+}
+
+.radiobuttons label.selected, label.selected {
+    border: 1px solid #ccc;
+}
+
+.radiobuttons .specialcase  label.selected, label.selected {
+    border: none;
+}
+
+.radiobuttons .specialcase label {
+    display: inline;
+    border: none;
+    padding: 0;
+}
+
+.small {
+    font-size: small;
+}
+
+.medium {
+    font-size: medium;
+}
+
+.large {
+    font-size: large;
+}
+
+.xlarge {
+    font-size: x-large;
+}
+
+/* Footer
+ *****************************************************/
+#footer {
+    margin: auto 3em auto 3em;
+    clear: both;
+}
+
+#footer p#modulecontrols {
+    text-align: right;
+}
+
+/* Cols
+ ***********************************************/
+
+
+/* Disse burde altså hedde content-main og content-sub eller sådan noget */
+#colOne {
+    float: left;
+    width: 60%;
+}
+
+#colTwo {
+    float: right;
+    width: 35%;
+}
+
+.box {
+    border: 2px solid #ccc;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding: 1em;
+}
+
+/* Debtor
+ ***********************************/
+
+#debtor-info {
+    border: 1px solid #ccc;
+}
+
+#debtor-info h2 {
+    margin: 1em 1em 0 1em;
+    font-size: 100%;
+}
+#debtor-info div.hcard {
+    float: left;
+    width: 40%;
+    margin: 1em;
+}
+
+#debtor-info table {
+    position:relative;
+    top: 0;
+    right: 0;
+    margin: 1em;
+    width: 50%;
+}
+
+
+#debtor-info ul.options {
+    float: left;
+    width: 40%;
+    clear: both;
+    border: none;
+    padding: 0;
+    margin: 1em;
+}
+
+.due {
+    background: url(../images/icons/silk/hourglass.png) no-repeat;
+    padding-left: 20px;
+    color: red;
+}
+
+/* products
+ *************************************/
+
+ tr.selected {
+     background: #e3f6f9;
+ }
+
+/* todo */
+label.completed {
+    font-size: 0.8em; color: #bbb;
+}
+.hiddenbox {
+    border: 1px solid #ccc;
+    margin: 1em 0;
+    background: #eee;
+}
+.hiddenbox * {
+    margin: 0.5em !important;
+}
+
+/* hcard */
+
+div.hcard div.adr span.street-address {
+    display: block;
+}
+
+/* stripe.js */
+.even {
+    background: #f1f1f1;
+}
+.ruled {
+    background: #eee;
+}
+
+div#picturepreview {
+    clear: both;
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    margin: 1em 0;
+}
+
+ul.todo-list {
+    list-style-type: square;
+}
+
+ul.options {
+    border-left: 8px solid #ccc;
+    padding-left: 1em;
+    clear: both;
+}
+
+ul.options li {
+    display: inline;
+    padding-right: 0.5em;
+}
+
+table#accounting-cheatsheet {
+    background: #ddd;
+    border: 3px solid #ccc;
+    padding: 0.5em;
+    margin-top: 1em;
+}
+
+table#accounting-cheatsheet caption {
+    border: 3px solid #ccc;
+    background: #ccc;
+    padding: 0.5em;
+}
+
+table#accounting-cheatsheet td {
+    border: none;
+}
+
+table#accounting-cheatsheet th {
+    font-weight: bold;
+}
+
+.message {
+    padding: 0.5em;
+    border: 2px solid #eee;
+}
+
+.message-dependent {
+    margin-top: 1em;
+    margin-bottom: 1em;
+
+    background: #FFFF99;
+    padding: 0.5em;
+    border: 2px solid #FFFF11;
+}
+
+.message ul {
+    list-style-type: disc;
+    padding-left: 1em;
+    list-style-position: inside;
+    
+}
+
+
+
+.advice {
+    background: #fff6bf url(../images/icons/silk/information.png) center no-repeat;
+    background-position: 15px 50%; /* x-pos y-pos http://www.w3.org/TR/CSS21/colors.html */
+    text-align: left;
+    padding: 5px 20px 5px 45px;
+    border-top: 2px solid #ffd324;
+    border-bottom: 2px solid #ffd324;
+}
+
+
+.warning, .alert {
+    background: #FFFF99 url(../images/icons/silk/exclamation.png) center no-repeat;
+    background-position: 15px 50%; /* x-pos y-pos */
+    text-align: left;
+    padding: 5px 20px 5px 45px;
+    border: 2px solid #ffd324;
+}
+
+.error {
+    background: #FF6666 url(../images/icons/silk/error.png) center no-repeat;
+    background-position: 15px 50%; /* x-pos y-pos */
+    text-align: left;
+    padding: 5px 20px 5px 45px;
+    border: 2px solid #FF2929;
+}
+
+
+#accounting-vat .vat-buy {
+    background: #ddd;
+}
+#accounting-vat .vat-sale {
+    background: #eee;
+}
+#accounting-vat .vat-rubrik {
+    background: #eee;
+}
+
+#accounting-vat .vat-amount {
+    font-weight: bold;
+}
+#accounting-vat .vat-amount td,  #accounting-vat .vat-amount th {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+
+td.debet, td.credit {
+    width: 5em;
+}
+
+.pdf {
+    background: url(../images/icons/silk/page_white_acrobat.png) no-repeat;
+    padding-left: 20px;
+}
+.excel {
+    background: url(../images/icons/silk/page_excel.png) no-repeat 0 0;
+    padding-left: 23px;
+    line-height: 20px;
+    margin-left: 1em;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+.controlpanel-item {
+    border: 1px solid #ccc;
+    margin: 1em;
+    padding: 1em;
+}
+
+.controlpanel-item h2 {
+    font-size: 1em;
+}
+
+/* cms */
+ul.adminbar {
+    position: absolute;
+    background: yellow;
+    margin: 0;
+    padding: 0.1em;
+    border: 1px solid black;
+    z-index:10;
+}
+.adminbar ul {
+    display: inline;
+    background: yellow;
+    margin: 0;
+    padding: 0;
+    z-index: 10;
+}
+.adminbar li {
+    display: inline;
+    padding-right: 0.5em;
+}
+
+
+/*
+cms-vistning
+*/
+
+.cms-float-left {
+    float: left;
+    margin-right: 0.5em;
+}
+
+.cms-float-center {
+    /* float: center; udkommenteret af sune (18-10-2006) */
+}
+
+.cms-float-right {
+    float: right;
+    margin-left: 0.5em;
+    text-align: left;
+}
+
+.cms-align-left {
+    text-align: left;
+}
+
+.cms-align-right {
+    text-align: right;
+}
+
+.cms-align-center {
+    text-align: center;
+}
+
+.cms-box {
+    border: 2px solid #ccc;
+    background: #eee;
+    padding: 1em;
+}
+
+/* Filupload */
+
+iframe {
+    border: none;
+    height: 30px;
+    width: 92%;
+    margin-bottom: 0;
+}
+iframe.hidden {
+    visibility: hidden;
+    width:0px;
+    height:0px;
+}
+
+#images {
+    width: 80%;
+    margin: 1em;
+}
+
+#images div {
+    margin: 10px;
+    height: 108px;
+    width: 100px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: #DEDFDE;
+    float: left;
+    overflow: hidden;
+    text-align: center;
+}
+
+#images div:hover {
+    border-color: #529EBD;
+}
+
+#images img.load {
+    margin: 36px;
+}
+
+.cms-gallery-item {
+    float: left;
+}
+
+.flickr-photo {
+    float: left;
+    margin: 1em;
+
+}
+
+
+/* procurement box */
+
+div.appendix {
+    border-style: solid;
+    border-width: 5px;
+    border-color: #DEDFDE;
+    padding: 5px;
+}
+
+div.appendix:hover {
+    border-color: #529EBD;
+}
+
+div.appendix img {
+    width: 75px;
+    height: 75px;
+    padding-right: 1em;
+    margin-right: 1em;
+    vertical-align: middle;
+}
+
+/* filehandlerHTML showfile */
+
+
+div.show_file {
+    border-style: solid;
+    border-width: 5px;
+    border-color: #DEDFDE;
+    padding: 5px;
+    /* float: left; */
+    margin: 10px;
+}
+
+div.show_file:hover {
+    border-color: #529EBD;
+}
+
+div.show_file img {
+    padding-right: 1em;
+    margin-right: 1em;
+    vertical-align: middle;
+}
+
+#cmspage ul {
+    margin: 0 1em;
+    list-style-type: square;
+
+}
+
+#cmspage li {
+    padding: 0 1em;
+}
+
+#publish-form {
+    margin-top: -5em;
+    width: 15em;
+    float: right;
+}
+
+#publish-form fieldset.published {
+    background: green;
+}
+
+#publish-form fieldset.draft {
+    background: red;
+}
+
+/* product with variations */
+
+img.variation {
+    height: 16px;
+    width: 16px;
+    border: 0px;
+    vertical-align: middle;
+}

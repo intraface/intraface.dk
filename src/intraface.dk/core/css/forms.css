@@ -1,0 +1,104 @@
+/* Forms */
+/* http://alistapart.com/articles/prettyaccessibleforms/ */
+
+form {
+	width: 100%;
+}
+
+fieldset {
+	background: none;
+	border: 1px solid #ccc;
+	margin: 1% 0;
+	padding: 0.5em 1em;
+
+}
+
+input {
+	padding: 0.2em;
+}
+
+
+fieldset fieldset {
+	background: none;
+}
+
+legend {
+	font-weight: bold;
+}
+
+label:hover, label:hover+input { 
+	background: #eee; 
+}
+
+div.formrow {
+	clear: both;
+	display: block;
+}
+
+div.formrow label {
+	/* display: inline-block; */ /* If only moz knew */
+	display: block;
+	line-height: 1.8em;
+	vertical-align: top;
+	width: 13em;
+	float: left; 
+	padding-left: 0.2em;
+	margin-bottom: 0.7em;
+}
+
+div.formrow div.formrow-description {
+    padding-left: 15em;
+    font-size: 0.9em;
+}
+
+/* Hvad bruges den her til */
+div.formrow label.tight {
+	display: block;
+	width: 6em;
+	float: left;
+	margin-bottom: 0.7em;
+}
+	
+div.formrow input, div.formrow textarea {
+	/*
+	display: block;
+	float: left;
+	margin-bottom: 10px;
+	margin-left: 5px;
+	*/
+}
+
+div.formrow input {
+	margin-right: 0.7em;
+}
+
+fieldset.select {
+	/*
+	height: 250px;
+	overflow: auto;
+	*/
+}
+
+.formerrors {
+	list-style-type: none;
+	margin: 0 0 1em 0;
+	border: 1px solid red; 
+	padding: 0.5em;
+}
+	
+.formerrors li {
+	padding-left: 20px; 
+	background: url(/images/icons/silk/exclamation.png) no-repeat; 
+}
+
+input[type="text"], input.text { 
+}
+input[type="radio"], input.radio { 
+	margin:0 20px; 
+}
+input[type="checkbox"], input.checkbox { 
+	/* Ser ikke ud til at dette kan styles */
+}
+input[type="submit"],input.submit { 
+
+}

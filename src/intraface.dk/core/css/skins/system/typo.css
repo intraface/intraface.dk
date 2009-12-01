@@ -1,0 +1,41 @@
+#branding div {
+	display: none;
+}
+
+thead th {
+	background: #DF3985;
+}
+
+#branding {
+	background: #DF3985;
+	color: white;
+}
+
+#navigation-site {
+	background: #b6e5ff;  
+}
+
+#navigation-site a {
+	color: #666;
+}
+
+#navigation-site a:hover {
+	color: black;
+}
+
+#navigation-sub {
+ 	background: #e6f4ff;
+}
+
+#navigation-sub a {
+	color: #666;
+}
+
+#navigation-sub a:hover {
+	color: black;
+}
+
+#content-main h1, #content-main h2, #content-main h3 {
+ 	color: #333;
+	font-family: Verdana, Arial, sans-serif;  /* Georgia, sans-serif; */
+}

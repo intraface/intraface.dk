@@ -1,0 +1,97 @@
+body { 
+	font-family: Verdana, sans-serif; 
+	font-size: 0.8em; 
+	background:  white; 
+	color: #000; 
+	margin: 0; 
+	padding: 0;
+	text-align: center;
+}
+		
+div#container { 
+	padding: 2em;
+	margin: 5em auto; 
+	background: white; 
+	width: 40em; 
+	text-align: left; 
+	color: black;
+	border: 10px solid #ddd; 
+} 
+
+fieldset {
+	border: none;
+	width: 32em;
+	margin: auto;
+}
+
+a { 
+	color: black; 
+}    
+
+p#system_message { 
+	background: yellow; 
+	margin: 0; 
+	padding: 0.2em; 
+	text-align: center; 
+}
+
+h1 {
+	text-align: center; 
+	height: 105px;
+	background: url(../images/logo.jpg) no-repeat center center;
+	font-family: Georgia, sans-serif; 
+	font-size: 1.8em;
+	margin: 0;
+}
+    
+h1 span { 
+	display: none;
+}
+
+form { 
+	margin: 1em auto; 
+	padding: 0.5em; 
+	margin: 2em; 
+}
+
+legend { 
+	font-weight: bold; 
+}
+
+label { 
+	display: block; 
+	padding: 0.5em 0; 
+}
+
+fieldset { 
+	padding: 0 1em; 
+}
+
+
+div.align-left { 
+	float: left; width: 13em; 
+}
+
+div { 
+	margin-bottom: 1em; 
+}
+    
+p { 
+	display: block; 
+	clear: both; 
+}
+
+.failure { 
+	color: red; 
+}
+
+.success {
+}
+
+a {
+	text-decoration: none;
+	font-size: 0.8em;
+}
+a:hover {
+	text-decoration: underline;
+}
