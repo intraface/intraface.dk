@@ -1,8 +1,8 @@
 <h1><?php e(__('template')); ?> <?php e($template->get('name')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="template_edit.php?id=<?php e($template->get('id')); ?>"><?php e(__('edit', 'common')); ?></a></li>
-    <li><a href="templates.php?site_id=<?php e($template->cmssite->get('id')); ?>"><?php e(__('close', 'common')); ?></a></li>
+    <li><a class="edit" href="<?php e(url('edit')); ?>"><?php e(__('edit', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(__('close', 'common')); ?></a></li>
 </ul>
 
     <?php
@@ -28,10 +28,10 @@
             <td><?php e($s['name']); ?></td>
             <td><?php e($s['identifier']); ?></td>
             <td><?php e($s['type']); ?></td>
-            <td class="options"><a href="<?php e($_SERVER['PHP_SELF']); ?>?moveup=<?php e($s['id']); ?>"><?php e(__('up','common')); ?></a>
-            <a href="<?php e($_SERVER['PHP_SELF']); ?>?movedown=<?php e($s['id']); ?>"><?php e(__('down', 'common')); ?></a>
+            <td class="options"><a href="<?php e(url(null, array('moveup' =>  $s['id']))); ?>"><?php e(__('up','common')); ?></a>
+            <a href="<?php e(url(null, array('movedown' =>  $s['id']))); ?>"><?php e(__('down', 'common')); ?></a>
             <a class="edit" href="template_section_edit.php?id=<?php e($s['id']); ?>"><?php e(__('edit settings', 'common')); ?></a>
-            <a class="delete" href="template.php?delete=<?php e($s['id']); ?>"><?php e(__('delete', 'common')); ?></a></td>
+            <a class="delete" href="<?php e(url(null, array('delete' =>  $s['id']))); ?>"><?php e(__('delete', 'common')); ?></a></td>
         </tr>
     <?php endforeach; ?>
         </tbody>
@@ -39,7 +39,7 @@
 <?php endif; ?>
 
 
-<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e(url()); ?>" method="post">
     <input type="hidden" value="<?php e($template->get('id')); ?>" name="id" />
     <fieldset>
         <legend><?php e(__('create section')); ?></legend>

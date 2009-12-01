@@ -1,14 +1,14 @@
 <h1><?php e(__('content on page').' '.$cmspage->get('title')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="page_edit.php?id=<?php e($cmspage->get('id')); ?>"><?php e(__('edit settings', 'common')); ?></a></li>
-    <li><a href="pages.php?type=<?php e($cmspage->get('type')); ?>&amp;id=<?php e($cmspage->cmssite->get('id')); ?>"><?php e(__('close', 'common')); ?></a></li>
+    <li><a class="edit" href="<?php e(url('edit')); ?>"><?php e(__('edit settings', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../', array('type' => $cmspage->get('type')))); ?>"><?php e(__('close', 'common')); ?></a></li>
     <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-    <li><a href="template.php?id=<?php e($cmspage->get('template_id')); ?>"><?php e(__('edit template')); ?></a></li>
+    <li><a href="<?php e(url('../../template/' . $cmspage->get('template_id'))); ?>"><?php e(__('edit template')); ?></a></li>
     <?php endif; ?>
 </ul>
 
-<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>" id="publish-form">
+<form method="post" action="<?php e(url()); ?>" id="publish-form">
     <fieldset class="<?php e($cmspage->getStatus()); ?>">
     <?php if (!$cmspage->isPublished()): ?>
     <?php e(t('this page is not published')); ?>
@@ -17,7 +17,7 @@
     <?php e(t('this page is published')); ?>
     <input type="submit" value="<?php e(t('set as draft')); ?>" name="unpublish" />
     <?php endif; ?>
-    <input type="hidden" value="<?php e($_GET['id']); ?>" name="id" />
+    <input type="hidden" value="<?php e($context->name()); ?>" name="id" />
     </fieldset>
 </form>
 
@@ -27,7 +27,7 @@
     <p class="warning">
         <?php echo e(__('no sections added to the template')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="template.php?id=<?php e($cmspage->get('template_id')); ?>"><?php e(__('edit template')); ?></a>.
+            <a href="<?php e(url('../../template/' . $cmspage->get('template_id'))); ?>"><?php e(__('edit template')); ?></a>.
         <?php else: ?>
             <strong><?php echo e(__('you cannot edit templates')); ?></strong>
         <?php endif; ?>
@@ -41,7 +41,7 @@
     }
 ?>
 
-<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>" enctype="multipart/form-data" id="myform">
+<form method="post" action="<?php e(url()); ?>" enctype="multipart/form-data" id="myform">
     <?php $test = ''; foreach ($sections AS $section):  ?>
         <?php
             // hvis value section ikke er sat, så er det en ny post, så vi henter den bare fra section->get()
@@ -178,7 +178,7 @@
     <div>
         <input type="submit" value="<?php e(__('save', 'common')); ?>" />
         <input type="submit" name="close" value="<?php e(__('save and close', 'common')); ?>" />
-        <a href="pages.php?type=<?php e($cmspage->get('type')); ?>&amp;id=<?php e($cmspage->cmssite->get('id')); ?>"><?php e(__('Cancel', 'common')); ?></a>
+        <a href="<?php e(url('../', array('type' => $cmspage->get('type')))); ?>"><?php e(__('Cancel', 'common')); ?></a>
     </div>
 
 </form>

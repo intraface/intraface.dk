@@ -5,7 +5,7 @@
     <p class="message-dependent">
         <?php e(__('you have to create a template')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="template_edit.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e(__('create template')); ?></a>.
+            <a href="<?php e(url('../template/create')); ?>"><?php e(__('create template')); ?></a>.
         <?php else: ?>
             <strong><?php e(__('you cannot create templates')); ?></strong>
         <?php endif; ?>
@@ -19,19 +19,19 @@
             <?php if ($page_type == $type): ?>
                 <strong><?php e(t($page_types_plural[$page_type])); ?></strong>
             <?php else: ?>
-                <a  href="pages.php?type=<?php e($page_type); ?>&amp;id=<?php e($cmssite->get('id')); ?>"><?php e(t($page_types_plural[$page_type])); ?></a>
+                <a  href="<?php e(url(null, array('type' => $page_type))); ?>"><?php e(t($page_types_plural[$page_type])); ?></a>
             <?php endif; ?>
         </li>
     <?php endforeach; ?>
 </ul>
 
 <ul class="options">
-    <li><a class="new" href="page_edit.php?type=<?php e($type); ?>&amp;site_id=<?php e($cmssite->get('id')); ?>"><?php e(__('create '.$type)); ?></a></li>
-    <li><a  href="site.php?id=<?php e($cmssite->get('id')); ?>"><?php e(__('go to site overview')); ?></a></li>
+    <li><a class="new" href="<?php e(url('create', array('type' => $type)));?>"><?php e(__('create '.$type)); ?></a></li>
+    <li><a  href="<?php e(url('../')); ?>"><?php e(__('go to site overview')); ?></a></li>
 </ul>
 
 
-<form id="form-site" action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+<form id="form-site" action="<?php e(url()); ?>" method="post">
 <input type="hidden" id="site" name="id" value="<?php e($cmssite->get('id')); ?>" />
 <input type="hidden" id="type" name="type" value="<?php e($type); ?>" />
 
@@ -58,7 +58,7 @@
             </thead>
             <?php foreach ($pages AS $p):?>
                 <tr>
-                    <td><a href="page.php?id=<?php e($p['id']); ?>"><?php e(str_repeat("- ", $p['level']) . $p['navigation_name']); ?></a></td>
+                    <td><a href="<?php e(url($p['id'])); ?>"><?php e(str_repeat("- ", $p['level']) . $p['navigation_name']); ?></a></td>
                     <td><?php e($p['identifier']); ?></td>
                     <td>
                         <input type="hidden" name="page[<?php e($p['id']); ?>]" value="<?php e($p['id']); ?>" />
@@ -70,10 +70,10 @@
                         <?php endif; ?>
                     </td>
                     <td class="options">
-                        <a class="moveup" href="<?php e($_SERVER['PHP_SELF']); ?>?id=<?php e($cmssite->get("id")); ?>&amp;moveup=<?php e($p['id']); ?>&amp;type=<?php e($type); ?>"><?php e(__('up', 'common')); ?></a>
-                        <a class="moveup" href="<?php e($_SERVER['PHP_SELF']); ?>?id=<?php e($cmssite->get("id")); ?>&amp;movedown=<?php e($p['id']); ?>&amp;type=<?php e($type); ?>"><?php e(__('down', 'common')); ?></a>
-                        <a class="edit" href="page_edit.php?id=<?php e($p['id']); ?>"><?php e(__('edit settings', 'common')); ?></a>
-                        <a class="delete" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($p['id']); ?>&amp;type=<?php e($type); ?>"><?php e(__('delete', 'common')); ?></a>
+                        <a class="moveup" href="<?php e(url(null, array('moveup' => $p['id'], 'type' => $type))); ?>"><?php e(__('up', 'common')); ?></a>
+                        <a class="moveup" href="<?php e(url(null, array('movedown' => $p['id'], 'type' => $type))); ?>"><?php e(__('down', 'common')); ?></a>
+                        <a class="edit" href="<?php e(url($p['id']. '/edit')); ?>"><?php e(__('edit settings', 'common')); ?></a>
+                        <a class="delete" href="<?php e(url(null, array('delete' => $p['id'], 'type' => $type))); ?>"><?php e(__('delete', 'common')); ?></a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -100,7 +100,7 @@
             </thead>
             <?php foreach ($articles AS $p):?>
                 <tr>
-                    <td><a href="page.php?id=<?php e($p['id']); ?>"><?php e($p['title']); ?></a></td>
+                    <td><a href="<?php e(url($p['id'])); ?>"><?php e($p['title']); ?></a></td>
                     <td><?php e($p['identifier']); ?></td>
                     <td>
                         <input type="hidden" name="page[<?php e($p['id']); ?>]" value="<?php e($p['id']); ?>" />
@@ -111,8 +111,8 @@
                         <a href="<?php e($p['url']); ?>" target="_blank"><?php e(__('show page', 'common')); ?></a>
                     <?php endif; ?>
                     </td>
-                    <td class="options"><a class="edit" href="page_edit.php?id=<?php e($p['id']); ?>"><?php e(__('edit settings', 'common')); ?></a>
-                    <a class="delete" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($p['id']); ?>"><?php e(__('delete', 'common')); ?></a></td>
+                    <td class="options"><a class="edit" href="<?php e(url($p['id'].'/edit')); ?>"><?php e(__('edit settings', 'common')); ?></a>
+                    <a class="delete" href="<?php e(url(null, array('delete' => $p['id'], 'type' => $type))); ?>"><?php e(__('delete', 'common')); ?></a></td>
                 </tr>
             <?php endforeach; ?>
         </table>
@@ -140,7 +140,7 @@
             <?php foreach ($news AS $p):?>
                 <tr>
                     <td><?php e($p['date_publish_dk']); ?></td>
-                    <td><a href="page.php?id=<?php e($p['id']); ?>"><?php e($p['title']); ?></a></td>
+                    <td><a href="<?php e(url($p['id'])); ?>"><?php e($p['title']); ?></a></td>
                     <td><?php e($p['identifier']); ?></td>
                     <td>
                         <input type="hidden" name="page[<?php e($p['id']); ?>]" value="<?php e($p['id']); ?>" />
@@ -152,8 +152,8 @@
                         <?php endif; ?>
                     </td>
 
-                    <td class="options"><a class="edit" href="page_edit.php?id=<?php e($p['id']); ?>"><?php e(__('edit settings', 'common')); ?></a>
-                        <a class="delete" href="<?php e($_SERVER['PHP_SELF']); ?>?delete=<?php e($p['id']); ?>"><?php e(__('delete', 'common')); ?></a>
+                    <td class="options"><a class="edit" href="<?php e(url($p['id'] . '/edit')); ?>"><?php e(__('edit settings', 'common')); ?></a>
+                        <a class="delete" href="<?php e(url(null, array('delete' => $p['id']))); ?>"><?php e(__('delete', 'common')); ?></a>
                     </td>
                 </tr>
             <?php endforeach; ?>

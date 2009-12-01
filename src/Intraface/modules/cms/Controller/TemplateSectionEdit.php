@@ -14,27 +14,32 @@ class Intraface_modules_cms_Controller_TemplateSectionEdit extends k_Component
         $translation = $this->getKernel()->getTranslation('cms');
 
         if (!empty ($_GET['id']) AND is_numeric($_GET['id'])) {
-            $section = CMS_TemplateSection :: factory($this->getKernel(), 'id', $_GET['id']);
+            $section = CMS_TemplateSection :: factory($this->getKernel(), 'id', $this->name());
             $value = $section->get();
 
-        } elseif (!empty ($_GET['template_id']) AND is_numeric($_GET['template_id'])) {
+        } else {
             // der skal valideres noget på typen også.
 
-            $template = CMS_Template :: factory($this->getKernel(), 'id', $_GET['template_id']);
+            $template = CMS_Template :: factory($this->getKernel(), 'id', $this->context->getTemplateId());
             $section = CMS_TemplateSection :: factory($template, 'type', $_GET['type']);
 
             $value['type'] = $section->get('type');
             $value['template_id'] = $section->get('template_id');
 
-        } else {
-            trigger_error('not allowed', E_USER_ERROR);
         }
 
+        $data = array(
+            'value' => $value,
+            'section' => $section,
+            'translation' => $this->getKernel()->getTranslation('cms'),
+            'cms_module' => $cms_module
+        );
+
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/template-section-edit');
-        return $tpl->render($this);
+        return $tpl->render($this, $data);
     }
 
-    function postForm()
+    function postMultipart()
     {
         $cms_module = $this->getKernel()->module('cms');
         $translation = $this->getKernel()->getTranslation('cms');
@@ -49,11 +54,9 @@ class Intraface_modules_cms_Controller_TemplateSectionEdit extends k_Component
 
         if ($section->save($_POST)) {
             if (!empty ($_POST['close'])) {
-                header('Location: template.php?id=' . $section->template->get('id'));
-                exit;
+                return new k_SeeOther($this->url('../../'));
             } else {
-                header('Location: template_section_edit.php?id=' . $section->get('id'));
-                exit;
+                return new k_SeeOther($this->url());
             }
         } else {
             $value = $_POST;

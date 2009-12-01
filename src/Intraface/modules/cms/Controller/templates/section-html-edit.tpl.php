@@ -4,7 +4,7 @@
 echo $element->error->view($translation);
 ?>
 
-<form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>"  enctype="multipart/form-data">
+<form method="post" action="<?php e(url()); ?>"  enctype="multipart/form-data">
     <input name="id" type="hidden" value="<?php e(intval($element->get('id'))); ?>" />
     <input name="section_id" type="hidden" value="<?php e(intval($element->section->get('id'))); ?>" />
     <input name="type" type="hidden" value="<?php e($element->get('type')); ?>" />
@@ -601,7 +601,7 @@ switch ($value['type']) {
     <div class="">
         <input type="submit" value="<?php e(t('save', 'common')); ?>" />
         <input type="submit" name="close" value="<?php e(t('save and close', 'common')); ?>" />
-        <a href="section_html.php?id=<?php e($element->section->get('id')); ?>"><?php e(t('Cancel', 'common')); ?></a>
+        <a href="<?php e(url('../')); ?>"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 
 </form>

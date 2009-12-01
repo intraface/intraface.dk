@@ -8,6 +8,15 @@ class Intraface_modules_cms_Controller_Section extends k_Component
         $this->template = $template;
     }
 
+    function map($name)
+    {
+        if ($name == 'edit') {
+            return 'Intraface_modules_cms_Controller_SectionEdit';
+        } elseif ($name == 'element') {
+            return 'Intraface_modules_cms_Controller_Elements';
+        }
+    }
+
     function renderHtml()
     {
         $cms_module = $this->getKernel()->module('cms');
@@ -21,9 +30,7 @@ class Intraface_modules_cms_Controller_Section extends k_Component
             }
             $element->getPosition(MDB2::singleton(DB_DSN))->moveToPosition($_GET['moveto']);
             $section = $element->section;
-            header('Location: section_html.php?id='.$section->get('id'));
-            exit;
-
+            return new k_SeeOther($this->url());
         } elseif (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
             $element = CMS_Element::factory($this->getKernel(), 'id', $_GET['delete']);
             if (!is_object($element)) {
@@ -31,9 +38,7 @@ class Intraface_modules_cms_Controller_Section extends k_Component
             }
             $element->delete();
             $section = $element->section;
-            header('Location: section_html.php?id='.$section->get('id'));
-            exit;
-
+            return new k_SeeOther($this->url());
         } elseif (!empty($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
             $element = CMS_Element::factory($this->getKernel(), 'id', $_GET['undelete']);
             if (!is_object($element)) {
@@ -41,17 +46,22 @@ class Intraface_modules_cms_Controller_Section extends k_Component
             }
             $element->undelete();
             $section = $element->section;
-            header('Location: section_html.php?id='.$section->get('id'));
-            exit;
-        } elseif (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
-            $section = CMS_Section::factory($this->getKernel(), 'id', $_GET['id']);
+            return new k_SeeOther($this->url());
         }
-        $this->document->addScripts($this->url('/getElementsBySelector.js'));
-        $this->document->addScripts($this->url('/cms/section_html.js'));
 
+        $section = CMS_Section::factory($this->getKernel(), 'id', $this->name());
+
+        $this->document->addScript($this->url('/getElementsBySelector.js'));
+        $this->document->addScript($this->url('/cms/section_html.js'));
+
+        $data = array(
+            'section' => $section,
+            'translation' => $translation,
+            'element_types' => $element_types
+        );
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/section-html');
-        return $tpl->render($this);
+        return $tpl->render($this, $data);
     }
 
     function postForm()
@@ -59,20 +69,16 @@ class Intraface_modules_cms_Controller_Section extends k_Component
         if (!empty($_POST['publish'])) {
             $section = CMS_Section::factory($this->getKernel(), 'id', $_POST['id']);
             if ($section->cmspage->publish()) {
-                header('location: section_html.php?id='.$section->get('id'));
-                exit;
+                return new k_SeeOther($this->url());
             }
         } elseif (!empty($_POST['unpublish'])) {
             $section = CMS_Section::factory($this->getKernel(), 'id', $_POST['id']);
             if ($section->cmspage->unpublish()) {
-                header('location: section_html.php?id='.$section->get('id'));
-                exit;
+                return new k_SeeOther($this->url());
             }
-
         } elseif (!empty($_POST['add_element'])) {
             $section = CMS_Section::factory($this->getKernel(), 'id', $_POST['id']);
-            header('Location: section_html_edit.php?section_id='.$section->get('id').'&type='.$_POST['new_element_type_id']);
-            exit;
+            return new k_SeeOther($this->url('edit', array('type' => $_POST['new_element_type_id'])));
         }
 
         return $this->render();

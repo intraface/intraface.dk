@@ -13,7 +13,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         if ($name == 'edit') {
             return 'Intraface_modules_cms_Controller_PageEdit';
         } elseif ($name == 'section') {
-            return 'Intraface_modules_cms_Controller_Section';
+            return 'Intraface_modules_cms_Controller_Sections';
         }
 
     }
@@ -33,9 +33,11 @@ class Intraface_modules_cms_Controller_Page extends k_Component
                 $section = CMS_Section::factory($this->getKernel(), 'id', $identifier_parts[1]);
                 $section->save(array('pic_id' => $redirect->getParameter('file_handler_id')));
             }
+            return new k_SeeOther($this->url());
+
         }
 
-        $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_GET['id']);
+        $cmspage = CMS_Page::factory($this->getKernel(), 'id', $this->name());
         $sections = $cmspage->getSections();
 
         if (!empty($sections) AND count($sections) == 1 AND array_key_exists(0, $sections) AND $sections[0]->get('type') == 'mixed') {
@@ -45,7 +47,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
             $this->document->addScript($this->url('tinymce/jscripts/tiny_mce/tiny_mce.js'));
         }
 
-        $data = array();
+        $data = array('cmspage' => $cmspage, 'sections' => $sections);
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/page');
         return $tpl->render($this, $data);
     }
@@ -61,14 +63,12 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         if (!empty($_POST['publish'])) {
             $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_POST['id']);
             if ($cmspage->publish()) {
-                header('Location: page.php?id='.$cmspage->get('id'));
-                exit;
+                return new k_SeeOther($this->url());
             }
         } elseif (!empty($_POST['unpublish'])) {
             $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_POST['id']);
             if ($cmspage->unpublish()) {
-                header('Location: page.php?id='.$cmspage->get('id'));
-                exit;
+                return new k_SeeOther($this->url());
             }
         }
 
@@ -129,14 +129,11 @@ class Intraface_modules_cms_Controller_Page extends k_Component
                 exit;
             } elseif (!empty($_POST['edit_html'])) {
                 $keys = array_keys($_POST['edit_html']);
-                header('Location: section_html.php?id='. $keys[0]);
-                exit;
+                return new k_SeeOther($this->url('../' . $id . '/section/' . $keys[0]));
             } elseif (!empty($_POST['close'])) {
-                header('Location: pages.php?type='.$section->cmspage->get('type').'&id='.$section->cmspage->cmssite->get('id'));
-                exit;
+                return new k_SeeOther($this->url('../', array('type' => $section->cmspage->get('type'), 'id' => $section->cmspage->cmssite->get('id'))));
             } else {
-                header('Location: page.php?id='.$section->cmspage->get('id'));
-                exit;
+                return new k_SeeOther($this->url('../' . $section->cmspage->get('id')));
             }
         } else {
             $cmspage = $section->cmspage;

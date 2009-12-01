@@ -1,9 +1,9 @@
 <h1><?php e(t('edit '.$type)); ?></h1>
 
 <ul class="options">
-    <li><a href="pages.php?type=<?php e($type); ?>&amp;id=<?php e($cmspage->cmssite->get('id')); ?>"><?php e(t('close', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../../')); ?>"><?php e(t('close', 'common')); ?></a></li>
     <?php if ($cmspage->get('id') > 0): ?>
-    <li><a href="page.php?id=<?php e($cmspage->get('id')); ?>"><?php e(t('view page')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('view page')); ?></a></li>
     <?php endif; ?>
 </ul>
 
@@ -14,7 +14,7 @@
     <p class="message-dependent">
         <?php e(t('you have to create a template for this page type')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="template_edit.php?site_id=<?php e($cmssite->get('id')); ?>"><?php e(t('create template')); ?></a>.
+            <a href="<?php e(url('../../template/create')); ?>"><?php e(t('create template')); ?></a>.
         <?php else: ?>
             <strong><?php e(t('please ask your administrator to do create a template')); ?></strong>
         <?php endif; ?>
@@ -22,7 +22,7 @@
 
 <?php else: ?>
 
-    <form method="post" action="<?php e($_SERVER['PHP_SELF']); ?>"  enctype="multipart/form-data">
+    <form method="post" action="<?php e(url()); ?>"  enctype="multipart/form-data">
         <input name="id" type="hidden" value="<?php if (!empty($value['id'])) e($value['id']); ?>" />
         <input name="site_id" type="hidden" value="<?php if (!empty($value['site_id'])) e($value['site_id']); ?>" />
 

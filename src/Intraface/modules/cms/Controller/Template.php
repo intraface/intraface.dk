@@ -12,6 +12,10 @@ class Intraface_modules_cms_Controller_Template extends k_Component
     {
         if ($name == 'edit') {
             return 'Intraface_modules_cms_Controller_TemplateEdit';
+        } elseif ($name == 'section') {
+            return 'Intraface_modules_cms_Controller_TemplateSections';
+        } elseif ($name == 'keyword') {
+            return 'Intraface_Keyword_Controller_Index';
         }
     }
 
@@ -52,6 +56,11 @@ class Intraface_modules_cms_Controller_Template extends k_Component
         return $tpl->render($this, $data);
     }
 
+    function getObject()
+    {
+        return $template = CMS_Template::factory($this->getKernel(), 'id', $this->name());
+    }
+
     function postForm()
     {
         $this->getKernel()->module('cms');
@@ -60,13 +69,12 @@ class Intraface_modules_cms_Controller_Template extends k_Component
 
         if (!empty($_POST['add_section']) AND !empty($_POST['new_section_type'])) {
             $template = CMS_Template::factory($this->getKernel(), 'id', $_POST['id']);
-            header('Location: template_section_edit.php?template_id='.$template->get('id').'&type='.$_POST['new_section_type']);
+            return new k_SeeOther($this->url('section/create', array('type' => $_POST['new_section_type'])));
             exit;
         } elseif (!empty($_POST['add_keywords'])) {
             $shared_keyword = $this->getKernel()->useShared('keyword');
             $template = CMS_Template::factory($this->getKernel(), 'id', $_POST['id']);
-            header('Location: '.$shared_keyword->getPath().'/connect.php?template_id='.$template->get('id'));
-            exit;
+            return new k_SeeOther($this->url('keyword/connect'));
         }
 
         return $this->render();

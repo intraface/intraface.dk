@@ -10,14 +10,17 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
 
     function map($name)
     {
-        return 'Intraface_modules_cms_Controller_Page';
+        if ($name == 'create') {
+            return 'Intraface_modules_cms_Controller_PageEdit';
+        } elseif (is_numeric($name)) {
+            return 'Intraface_modules_cms_Controller_Page';
+        }
     }
 
     function renderHtml()
     {
         $cms_module = $this->getKernel()->module('cms');
         $translation = $this->getKernel()->getTranslation('cms');
-
 
         if (!empty($_GET['moveup']) AND is_numeric($_GET['moveup'])) {
             $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_GET['moveup']);
@@ -41,18 +44,18 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
                 $type = $_GET['type'];
             }
 
-            if (!empty($_GET['id'])) {
-                $cmssite = new CMS_Site($this->getKernel(), (int)$_GET['id']);
+            if (is_numeric($this->context->name())) {
+                $cmssite = new CMS_Site($this->getKernel(), (int)$this->context->name());
                 $cmspage = new CMS_Page($cmssite);
-                $this->getKernel()->setting->set('user', 'cms.active.site_id', (int)$_GET['id']);
+                $this->getKernel()->setting->set('user', 'cms.active.site_id', (int)$this->name());
+
             } else {
                 $site_id = $this->getKernel()->setting->get('user', 'cms.active.site_id');
                 if ($site_id != 0) {
                     $cmssite = new CMS_Site($this->getKernel(), $site_id);
                     $cmspage = new CMS_Page($cmssite);
                 } else {
-                    header('location: index.php');
-                    exit;
+                    return new k_SeeOther($this->url('../'));
                 }
             }
 
@@ -64,7 +67,11 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
         $this->document->addScript($this->url('/cms/checkboxes.js'));
         $this->document->addScript($this->url('/cms/publish.js'));
 
-        $data = array();
+        $data = array(
+        	'type' => $type,
+        	'page_types_plural' => $page_types_plural,
+            'cmssite' => $cmssite,
+            'cmspage' => $cmspage);
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/pages');
         return $tpl->render($this, $data);
@@ -99,5 +106,10 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
     function getKernel()
     {
         return $this->context->getKernel();
+    }
+
+    function getSiteId()
+    {
+        return $this->context->name();
     }
 }

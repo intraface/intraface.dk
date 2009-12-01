@@ -44,7 +44,7 @@ class Intraface_modules_cms_Controller_TemplateEdit extends k_Component
 
         if ($id = $template->save($_POST)) {
             if (!empty($_POST['close'])) {
-                return new k_SeeOther($this->url('../'));
+                return new k_SeeOther($this->url('../' . $id));
             } else {
                 return new k_SeeOther($this->url('../' . $id));
             }

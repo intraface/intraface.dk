@@ -14,8 +14,8 @@ class Intraface_modules_cms_Controller_PageEdit extends k_Component
         $translation = $this->getKernel()->getTranslation('cms');
 
         $this->getKernel()->useShared('filehandler');
-        if (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
-            $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_GET['id']);
+        if (is_numeric($this->context->name())) {
+            $cmspage = CMS_Page::factory($this->getKernel(), 'id', $this->context->name());
             $cmssite = $cmspage->cmssite;
 
             $value = $cmspage->get();
@@ -27,16 +27,13 @@ class Intraface_modules_cms_Controller_PageEdit extends k_Component
                 $redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
                 $value['pic_id'] = $redirect->getParameter('file_handler_id');
             }
-        } elseif (!empty($_GET['site_id']) AND is_numeric($_GET['site_id'])) {
-            if (empty($_GET['type'])) {
-                trigger_error('you need to provide at page type for what you want to create', E_USER_ERROR);
-                exit;
-            }
+        } elseif (!empty($_GET['type'])) {
+
             $type = $_GET['type'];
             $value['type'] = $type;
-            $cmssite = new CMS_Site($this->getKernel(), $_GET['site_id']);
+            $cmssite = new CMS_Site($this->getKernel(), $this->context->getSiteId());
             $cmspage = new CMS_Page($cmssite);
-            $value['site_id'] = $_GET['site_id'];
+            $value['site_id'] = $this->context->getSiteId();
             $template = new CMS_Template($cmssite);
         } else {
             trigger_error(__('not allowed', 'common'), E_USER_ERROR);
@@ -58,13 +55,21 @@ class Intraface_modules_cms_Controller_PageEdit extends k_Component
         $this->document->addScript('/cms/page_edit.js');
         $this->document->addScript('/cms/parseUrlIdentifier.js');
 
-        $data = array();
+        $data = array('value' => $value,
+        	'type' => $type,
+        	'cmspage' => $cmspage,
+        	'template' => $template,
+            'translation' => $this->getKernel()->getTranslation('cms'),
+            'templates' => $templates,
+            'cmssite' => $cmssite,
+            'kernel' => $this->getKernel(),
+            'cmspages' => $cmspages);
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/page-edit');
         return $tpl->render($this, $data);
     }
 
-    function postForm()
+    function postMultipart()
     {
         $module_cms = $this->getKernel()->module('cms');
         $translation = $this->getKernel()->getTranslation('cms');
@@ -91,18 +96,19 @@ class Intraface_modules_cms_Controller_PageEdit extends k_Component
                 $module_filemanager = $this->getKernel()->useModule('filemanager');
                 $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $module_cms->getPath().'page_edit.php?id='.$cmspage->get('id'));
                 $redirect->askParameter('file_handler_id');
-                header('Location: '.$url);
-                exit;
+                return new k_SeeOther($url);
             } elseif (!empty($_POST['close'])) {
-                header('Location: page.php?id='.$cmspage->get('id'));
-                exit;
+                if (is_numeric($this->context->name())) {
+                    return new k_SeeOther($this->url('../../' . $cmspage->get('id')));
+                } else {
+                    return new k_SeeOther($this->url('../' . $cmspage->get('id')));
+                }
+
             } elseif (!empty($_POST['add_keywords'])) {
                 $keyword_shared = $this->getKernel()->useShared('keyword');
-                header('Location: '.$keyword_shared->getPath().'connect.php?page_id='.$cmspage->get('id'));
-                exit;
+                return new k_SeeOther($this->url('../' . $cmspage->get('id') . '/keyword/connect'));
             } else {
-                header('Location: page_edit.php?id='.$cmspage->get('id'));
-                exit;
+                return new k_SeeOther($this->url(null));
             }
         } else {
             $value = $_POST;

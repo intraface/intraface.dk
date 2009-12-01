@@ -14,8 +14,8 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
         $shared_filehandler->includeFile('AppendFile.php');
         $translation = $this->getKernel()->getTranslation('cms');
-        if (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
-            $element = CMS_Element::factory($this->getKernel(), 'id', $_GET['id']);
+        if (is_numeric($this->name())) {
+            $element = CMS_Element::factory($this->getKernel(), 'id', $this->name());
             $value = $element->get();
 
             // til select - denne kan uden problemer fortrydes ved blot at have et link til samme side
@@ -41,17 +41,13 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
                     $element->load();
                     $value = $element->get();
                 }
-            }
-
-            if (isset($_GET['delete_gallery_append_file_id'])) {
+            } else if (isset($_GET['delete_gallery_append_file_id'])) {
 
                 $append_file = new AppendFile($this->getKernel(), 'cms_element_gallery', $element->get('id'));
                 $append_file->delete((int)$_GET['delete_gallery_append_file_id']);
                 $element->load();
                 $value = $element->get();
-            }
-
-            if (isset($_GET['delete_filelist_append_file_id'])) {
+            } else if (isset($_GET['delete_filelist_append_file_id'])) {
 
                 $append_file = new AppendFile($this->getKernel(), 'cms_element_filelist', $element->get('id'));
                 $append_file->delete((int)$_GET['delete_filelist_append_file_id']);
@@ -59,13 +55,13 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
                 $element->load();
                 $value = $element->get();
             }
-        } elseif (!empty($_GET['section_id']) AND is_numeric($_GET['section_id'])) {
+        } else {
             // der skal valideres noget på typen også.
 
             // FIXME ud fra section bliver cms_site loaded flere gange?
             // formentlig har det noget med Template at gøre
             // i øvrigt er tingene alt for tæt koblet i page
-            $section = CMS_Section::factory($this->getKernel(), 'id', $_GET['section_id']);
+            $section = CMS_Section::factory($this->getKernel(), 'id', $this->context->name());
             $element = CMS_Element::factory($section, 'type', $_GET['type']);
             if (!is_object($element)) {
                 throw new Exception('Unable to create a valid element object');
@@ -80,12 +76,19 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
             $this->document->addScript('/tiny_mce/tiny_mce.js');
         }
 
+        $data = array(
+            'value' => $value,
+            'element' => $element,
+            'kernel' => $this->getKernel(),
+            'translation' => $this->getKernel()->getTranslation('cms')
+        );
+
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/section-html-edit');
-        return $tpl->render($this);
+        return $tpl->render($this, $data);
 
     }
 
-    function postForm()
+    function postMultipart()
     {
         $module_cms = $this->getKernel()->module('cms');
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
@@ -177,14 +180,11 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
                 } else {
                     trigger_error("Det er ikke en gyldig elementtype til at lave redirect fra", E_USER_ERROR);
                 }
-                header('Location: '.$url);
-                exit;
+                return new k_SeeOther($url);
             } elseif (!empty($_POST['close'])) {
-                header('Location: section_html.php?id='.$element->section->get('id'));
-                exit;
+                return new k_SeeOther($this->url('../' . $element->section->get('id')));
             } else {
-                header('Location: section_html_edit.php?id='.$element->get('id'));
-                exit;
+                return new k_SeeOther($this->url());
             }
         } else {
             $value = $_POST;

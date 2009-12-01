@@ -16,6 +16,8 @@ class Intraface_modules_cms_Controller_Site extends k_Component
             return 'Intraface_modules_cms_Controller_Templates';
         } elseif ($name == 'edit') {
             return 'Intraface_modules_cms_Controller_SiteEdit';
+        }  elseif ($name == 'pages') {
+            return 'Intraface_modules_cms_Controller_Pages';
         }
 
     }
