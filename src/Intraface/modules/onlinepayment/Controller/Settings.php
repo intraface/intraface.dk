@@ -35,8 +35,16 @@ class Intraface_modules_onlinepayment_Controller_Settings extends k_Component
         }
         $value = $onlinepayment->getSettings();
 
+        $data = array(
+            'kernel' => $this->getKernel(),
+            'implemented_providers' => $implemented_providers,
+            'settings' => $settings,
+            'language' => $language,
+            'value' => $value
+        );
+
         $smarty = new k_Template(dirname(__FILE__) . '/templates/settings.tpl.php');
-        return $smarty->render($this);
+        return $smarty->render($this, $data);
     }
 
     function postForm()

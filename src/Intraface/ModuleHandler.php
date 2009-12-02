@@ -128,10 +128,9 @@ class Intraface_ModuleHandler
             $object = new $main_class_name;
             $object->load($this);
             $this->modules[$module_name] = $object;
-             return $object;
+            return $object;
         } else {
-            trigger_error('ModuleHandler: ' . $main_class_path . ' does not exist', E_USER_ERROR);
-            return false;
+            throw new Exception('ModuleHandler: ' . $main_class_path . ' does not exist');
         }
     }
 

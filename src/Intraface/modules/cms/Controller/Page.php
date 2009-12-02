@@ -1,7 +1,9 @@
+
 <?php
 class Intraface_modules_cms_Controller_Page extends k_Component
 {
     protected $template;
+    public $error = array();
 
     function __construct(k_TemplateFactory $template)
     {
@@ -47,12 +49,16 @@ class Intraface_modules_cms_Controller_Page extends k_Component
             $this->document->addScript($this->url('tinymce/jscripts/tiny_mce/tiny_mce.js'));
         }
 
-        $data = array('cmspage' => $cmspage, 'sections' => $sections);
+        $data = array(
+        	'cmspage' => $cmspage,
+        	'sections' => $sections,
+            'kernel' => $this->getKernel()
+        );
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/page');
         return $tpl->render($this, $data);
     }
 
-    function postForm()
+    function postMultipart()
     {
         $module_cms = $this->getKernel()->module('cms');
         $module_cms->includeFile('HTML_Editor.php');
@@ -97,21 +103,22 @@ class Intraface_modules_cms_Controller_Page extends k_Component
                                 if ($pic_id != 0) {
                                     $value['pic_id'] = $pic_id;
                                 }
-
                                 // Vi har fundet filen til som passer til dette felt, så er der ikke nogen grund til at køre videre.
                                 break;
                             }
                         }
                     }
 
-                    if (!isset($value['pic_id'])) $value['pic_id'] = 0;
+                    if (!isset($value['pic_id'])) {
+                         $value['pic_id'] = 0;
+                    }
                 }
                 if (!$section->save($value)) {
-                    $error[$section->get('id')] = __('error in section') . ' ' . strtolower(implode($section->error->message, ', '));
+                    $this->error[$section->get('id')] = __('error in section') . ' ' . strtolower(implode($section->error->message, ', '));
                 }
             }
         }
-        if (empty($error) AND count($error) == 0) {
+        if (empty($this->error) AND count($this->error) == 0) {
             if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
 
                 // jeg skal bruge array_key, når der er klikket på choose_file, for den indeholder section_id. Der bør
@@ -125,8 +132,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
                 $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $module_cms->getPath().'page.php?id='.$section->cmspage->get('id') . '&from_section_id=' . $section_id);
 
                 $redirect->askParameter('file_handler_id');
-                header('Location: '.$url);
-                exit;
+                return new k_SeeOther($url);
             } elseif (!empty($_POST['edit_html'])) {
                 $keys = array_keys($_POST['edit_html']);
                 return new k_SeeOther($this->url('../' . $id . '/section/' . $keys[0]));
@@ -138,7 +144,6 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         } else {
             $cmspage = $section->cmspage;
             $sections = $cmspage->getSections();
-
             $value = $_POST;
         }
         return $this->render();

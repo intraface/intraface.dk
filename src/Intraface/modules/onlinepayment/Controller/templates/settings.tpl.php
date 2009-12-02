@@ -4,7 +4,8 @@
 
 	<fieldset>
 		<legend><?php e(t('Provider')); ?></legend>
-		<p><?php e(t('You have chosen')); ?> <strong><?php e($implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]); ?></strong>. <a href="choose_provider.php"><?php e(t('Select another provider')); ?></a>.</p>
+		<p><?php e(t('You have chosen')); ?> <strong><?php e($implemented_providers[$kernel->setting->get('intranet', 'onlinepayment.provider_key')]); ?></strong>.
+		<a href="<?php e(url('chooseprovider')); ?>"><?php e(t('Select another provider')); ?></a>.</p>
 	</fieldset>
 
 	<?php
@@ -61,7 +62,7 @@
         </fieldset>
         <?php foreach ($language->getChosenAsArray() as $lang): ?>
             <fieldset>
-        <legend>Tekst på e-mail på <?php e($lang->getDescription()); ?></legend>
+        <legend>Tekst pï¿½ e-mail pï¿½ <?php e($lang->getDescription()); ?></legend>
             <label for="language_da_subject"><?php e(t('Subject')); ?></label><br />
             <input type="text" id="language_<?php e($lang->getIsoCode()); ?>_subject" name="subject[<?php e($lang->getIsoCode()); ?>]" value="<?php e($settings->Translation[$lang->getIsoCode()]->subject); ?>" />
             <br>

@@ -96,11 +96,24 @@ class Intraface_modules_product_Controller_Show extends k_Component
         if (is_object($this->product)) {
             return $this->product;
         }
-        
+
         require_once 'Intraface/modules/product/Product.php';
         return $this->product = new Product($this->getKernel(), $this->name());
     }
-    
+
+    /**
+     * Gets the model
+     *
+     * @see Intraface_Keyword_Controller
+     * @see Intraface_Filehandler_Controller
+     *
+     * @return object
+     */
+    function getModel()
+    {
+        return $this->getProduct();
+    }
+
     function getProductDoctrine()
     {
         if (is_object($this->product_doctrine)) {
@@ -144,7 +157,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
             $this->product = $product;
             $this->getError()->attachErrorStack($product->getCollectedErrorStack());
         }
-        
+
         return $this->render();
     }
 
@@ -193,7 +206,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
         $this->getKernel()->module('product');
         $this->getKernel()->useShared('filehandler');
         $translation = $this->getKernel()->getTranslation('product');
-        
+
         $data = array(
             'product' => $this->getProductDoctrine(),
         );
@@ -230,7 +243,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
     {
         return $this->context->getKernel();
     }
-    
+
     function getTranslation()
     {
         return $translation = $this->getKernel()->getTranslation('product');

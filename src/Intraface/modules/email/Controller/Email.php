@@ -1,9 +1,20 @@
 <?php
 class Intraface_modules_email_Controller_Email extends k_Component
 {
+    protected $email;
+
     function getKernel()
     {
         return $this->context->getKernel();
+    }
+
+    function getEmail()
+    {
+        if (is_object($this->email)) {
+            return $this->email;
+        }
+
+        return ($this->email = new Email($this->getKernel(), $this->name()));
     }
 
     function renderHtml()
@@ -11,7 +22,7 @@ class Intraface_modules_email_Controller_Email extends k_Component
         $this->getKernel()->useShared('email');
         $translation = $this->getKernel()->getTranslation('email');
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
-        $email = new Email($this->getKernel(), (int)$this->name());
+        $email = $this->getEmail();
         $value = $email->get();
         $contact = $email->getContact();
 
@@ -31,41 +42,37 @@ class Intraface_modules_email_Controller_Email extends k_Component
         $this->getKernel()->useShared('email');
         $translation = $this->getKernel()->getTranslation('email');
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
+        $email = $this->getEmail();
 
-        // hvordan skal denne laves helt præcist?
-        if (!empty($_POST)) {
-            $email = new Email($this->getKernel(), $_POST['id']);
+        if (!empty($_POST['submit'])) {
+            if ($email->send(Intraface_Mail::factory())) {
 
-            if (!empty($_POST['submit'])) {
-                if ($email->send(Intraface_Mail::factory())) {
-
-                    $email->load();
-                    // This status can be used to change status where the email is coming from.
-                    if ($redirect->get('id') != 0) {
-                        $redirect->setParameter('send_email_status', $email->get('status'));
-                    }
-
-                    /*
-                     // Moved to reminder.php triggered on return_redirect_id
-                     switch($email->get('type_id')) {
-                     case 5: // rykkere
-                     if (!$this->getKernel()->user->hasModuleAccess('debtor') OR !$this->getKernel()->user->hasModuleAccess('invoice')) {
-                     break;
-                     }
-
-                     $this->getKernel()->useModule('debtor');
-                     $this->getKernel()->useModule('invoice');
-                     $reminder = new Reminder($this->getKernel(), $email->get('belong_to_id'));
-                     $reminder->setStatus('sent');
-
-                     break;
-
-                     default:
-                     break;
-                     }
-                     */
-                    return new k_SeeOther($redirect->getRedirect($this->url()));
+                $email->load();
+                // This status can be used to change status where the email is coming from.
+                if ($redirect->get('id') != 0) {
+                    $redirect->setParameter('send_email_status', $email->get('status'));
                 }
+
+                /*
+                 // Moved to reminder.php triggered on return_redirect_id
+                 switch($email->get('type_id')) {
+                 case 5: // rykkere
+                 if (!$this->getKernel()->user->hasModuleAccess('debtor') OR !$this->getKernel()->user->hasModuleAccess('invoice')) {
+                 break;
+                 }
+
+                 $this->getKernel()->useModule('debtor');
+                 $this->getKernel()->useModule('invoice');
+                 $reminder = new Reminder($this->getKernel(), $email->get('belong_to_id'));
+                 $reminder->setStatus('sent');
+
+                 break;
+
+                 default:
+                 break;
+                 }
+                 */
+                return new k_SeeOther($redirect->getRedirect($this->url()));
             }
         }
         return $this->render();
@@ -93,7 +100,7 @@ class Intraface_modules_email_Controller_Email extends k_Component
     {
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
 
-        $email = new Email($this->getKernel(), $this->name());
+        $email = $this->getEmail();
 
         if ($this->getKernel()->user->hasModuleAccess('email')) {
             $email_module = $this->getKernel()->useModule('email');

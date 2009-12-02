@@ -17,7 +17,7 @@
     <?php e(t('this page is published')); ?>
     <input type="submit" value="<?php e(t('set as draft')); ?>" name="unpublish" />
     <?php endif; ?>
-    <input type="hidden" value="<?php e($context->name()); ?>" name="id" />
+    <input type="hidden" value="<?php e($cmspage->get('id')); ?>" name="id" />
     </fieldset>
 </form>
 
@@ -36,7 +36,7 @@
 <?php else: ?>
 
 <?php
-    if (!empty($error) AND is_array($error) AND array_key_exists($section->get('id'), $error)) {
+    if (!empty($context->error) AND is_array($context->error) AND array_key_exists($section->get('id'), $context->error)) {
         echo '<p class="error">'.e(__('error in a section - please see below')).'</p>';
     }
 ?>
@@ -56,7 +56,7 @@
         ?>
         <?php switch($section->get('type')) {
             case 'shorttext':
-                if (!array_key_exists($section->get('id'), $error) AND !empty($test) AND $test != 'shorttext') echo '</fieldset>';
+                if (!array_key_exists($section->get('id'), $context->error) AND !empty($test) AND $test != 'shorttext') echo '</fieldset>';
                 if ($test != 'shorttext') echo '<fieldset>';
                 ?>
                 <div class="formrow">

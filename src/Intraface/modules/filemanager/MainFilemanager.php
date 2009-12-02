@@ -6,7 +6,7 @@
  * @version	1.0
  *
  */
-class MainFileManager extends Intraface_Main
+class MainFilemanager extends Intraface_Main
 {
     function __construct()
     {
@@ -16,6 +16,7 @@ class MainFileManager extends Intraface_Main
         $this->active = 1; // Er modullet aktivt
         $this->menu_index = 20;
         $this->frontpage_index = 80;
+        $this->shared = true;
 
         // Tilføjer et undermenupunkt
         // $this->addSubMenuItem("Underside", "underside.php");

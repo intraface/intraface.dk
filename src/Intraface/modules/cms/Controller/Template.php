@@ -56,7 +56,7 @@ class Intraface_modules_cms_Controller_Template extends k_Component
         return $tpl->render($this, $data);
     }
 
-    function getObject()
+    function getModel()
     {
         return $template = CMS_Template::factory($this->getKernel(), 'id', $this->name());
     }
@@ -83,5 +83,10 @@ class Intraface_modules_cms_Controller_Template extends k_Component
     function getKernel()
     {
         return $this->context->getKernel();
+    }
+
+    function getSiteId()
+    {
+        return $this->context->getSiteId();
     }
 }

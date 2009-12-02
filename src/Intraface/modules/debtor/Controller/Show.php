@@ -3,6 +3,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 {
     protected $debtor;
     protected $translation;
+    public $email_send_with_success;
 
     function __construct(Translation2 $translation)
     {
@@ -309,10 +310,10 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             }
 
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-            $shared_email = $this->getKernel()->useShared('email');
+            $shared_email = $this->getKernel()->useModule('email');
 
             // First vi set the last, because we need this id to the first.
-            $url = $redirect->setDestination($shared_email->getPath().'edit.php?id='.$email->get('id'), NET_SCHEME . NET_HOST . $this->url());
+            $url = $redirect->setDestination($shared_email->getPath().$email->get('id') . '?edit', NET_SCHEME . NET_HOST . $this->url());
             $redirect->setIdentifier('send_onlinepaymentlink');
             $redirect->askParameter('send_onlinepaymentlink_status');
 
@@ -399,7 +400,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 $this->getDebtor()->load();
             } elseif ($return_redirect->get('identifier') == 'send_email') {
                 if ($return_redirect->getParameter('send_email_status') == 'sent' OR $return_redirect->getParameter('send_email_status') == 'outbox') {
-                    $email_send_with_success = true;
+                    $this->email_send_with_success = true;
                     // hvis faktura er genfremsendt skal den ikke sætte status igen
                     if ($this->getDebtor()->get('status') != 'sent') {
                         $this->getDebtor()->setStatus('sent');

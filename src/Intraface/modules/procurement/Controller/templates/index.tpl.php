@@ -15,11 +15,11 @@
     <fieldset>
         <legend><?php e(t('Search', 'common')); ?></legend>
         <label><?php e(t('Text', 'common')); ?>
-            <input type="text" name="text" value="<?php e($gateway->dbquery->getFilter("text")); ?>" />
+            <input type="text" name="text" value="<?php e($gateway->getDBQuery()->getFilter("text")); ?>" />
         </label>
         <label><?php e(t('Status', 'common')); ?>
         <select name="status">
-            <?php 
+            <?php
             $status_list = array(
                 '-1' => 'All',
                 '-2' => 'Open',
@@ -29,15 +29,15 @@
             );
             ?>
             <?php foreach($status_list AS $status => $text): ?>
-                <option value="<?php e($status); ?>" <?php if ($gateway->dbquery->getFilter("status") == $status) echo ' selected="selected"';?>><?php e(t($text, 'common'))?></option>
+                <option value="<?php e($status); ?>" <?php if ($gateway->getDBQuery()->getFilter("status") == $status) echo ' selected="selected"';?>><?php e(t($text, 'common'))?></option>
             <?php endforeach; ?>
          </select>
         </label>
         <label><?php e(t('From date')); ?>
-            <input type="text" name="from_date" id="date-from" value="<?php e($gateway->dbquery->getFilter("from_date")); ?>" /> <span id="calender"></span>
+            <input type="text" name="from_date" id="date-from" value="<?php e($gateway->getDBQuery()->getFilter("from_date")); ?>" /> <span id="calender"></span>
         </label>
         <label><?php e(t('To date')); ?>
-            <input type="text" name="to_date" value="<?php e($gateway->dbquery->getFilter("to_date")); ?>" />
+            <input type="text" name="to_date" value="<?php e($gateway->getDBQuery()->getFilter("to_date")); ?>" />
         </label>
         <span>
         <input type="submit" name="search" value="<?php e(t('Find', 'common')); ?>" />
@@ -99,7 +99,7 @@
             <?php endforeach; ?>
         </tbody>
     </table>
-    
-    <?php echo $gateway->dbquery->display('paging'); ?>
+
+    <?php echo $gateway->getDBQuery()->display('paging'); ?>
 
 <?php endif; ?>

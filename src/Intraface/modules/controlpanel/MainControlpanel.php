@@ -18,6 +18,7 @@ class MainControlpanel extends Intraface_Main
         $this->active = 1;
         $this->menu_index = 340;
         $this->frontpage_index = 8;
+        $this->shared = true;
 
         $this->addPreloadFile('IntranetAdministration.php');
         $this->addPreloadFile('UserAdministration.php');

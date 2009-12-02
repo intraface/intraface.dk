@@ -20,7 +20,7 @@
 if (isset($onlinepayment)) {
     echo $onlinepayment->error->view();
     if (isset($onlinepayment_show_cancel_option) && $onlinepayment_show_cancel_option == true) {
-        echo '<form method="post" action="'.url(null).'"><ul class="formerrors"><li>Ønsker du i stedet at <input type="submit" name="onlinepayment_cancel" value="Annullere" /><input type="hidden" name="id" value="'.$context->getDebtor()->get('id').'" /><input type="hidden" name="onlinepayment_id" value="'.$onlinepayment->id.'" /> registreringen af betalingen.</li></ul></form>';
+        echo '<form method="post" action="'.url(null).'"><ul class="formerrors"><li>ï¿½nsker du i stedet at <input type="submit" name="onlinepayment_cancel" value="Annullere" /><input type="hidden" name="id" value="'.$context->getDebtor()->get('id').'" /><input type="hidden" name="onlinepayment_id" value="'.$onlinepayment->id.'" /> registreringen af betalingen.</li></ul></form>';
     }
 }
 ?>
@@ -112,7 +112,7 @@ if (isset($onlinepayment)) {
 <?php endif; ?>
 
 
-<?php if (isset($email_send_with_success) && $email_send_with_success): ?>
+<?php if (isset($context->email_send_with_success) && $context->email_send_with_success): ?>
     <div class="message-dependent"><p><?php e(__('Your email was sent').'.'); ?></p></div>
 <?php endif; ?>
 
@@ -123,7 +123,7 @@ if (isset($onlinepayment)) {
     <?php elseif ($context->getDebtor()->contact->get('preferred_invoice') == 2 AND $context->getDebtor()->get('status') == 'sent' AND isset($valid_sender) AND $valid_sender == true): ?>
         <input type="submit" value="<?php e(t('Resend on email')); ?>" name="send_email" title="<?php e(t('Are you sure?')); ?>" />
     <?php elseif ($context->getDebtor()->get("type") == 'invoice' AND $context->getDebtor()->contact->get('preferred_invoice') == 3 AND $context->getDebtor()->contact->address->get('ean') AND $context->getDebtor()->get('status') == 'created' AND isset($valid_scan_in_contact) AND $valid_scan_in_contact == true): ?>
-        <input type="submit" value="<?php e(t('Send electronic invoice')); ?>" name="send_electronic_invoice" title="<?php e(t('Are you sure you want to send the invoice to the Læs-ind-bureau?')); ?>" />
+        <input type="submit" value="<?php e(t('Send electronic invoice')); ?>" name="send_electronic_invoice" title="<?php e(t('Are you sure you want to send the invoice to the Lï¿½s-ind-bureau?')); ?>" />
     <?php elseif ($context->getDebtor()->get("type") == 'invoice' AND $context->getDebtor()->contact->get('preferred_invoice') == 3 AND $context->getDebtor()->contact->address->get('ean') AND $context->getDebtor()->get('status') == 'sent' AND isset($valid_scan_in_contact) AND $valid_scan_in_contact == true): ?>
         <input type="submit" value="<?php e(t('Resend electronic invoice')); ?>" name="send_electronic_invoice" title="<?php e(t('Are you sure?')); ?>" />
     <?php endif; ?>
@@ -158,8 +158,8 @@ if (isset($onlinepayment)) {
 <?php /* ?>
     <?php if (count($context->getDebtor()->contact->compare()) > 0 && $context->getDebtor()->get('locked') == false) {	?>
         <div style="border: 2px orange solid; padding: 1.5em; margin: 1em 0;">
-        <h2 style="margin-top: 0; border-left: 10px solid green; padding-left: 0.5em; font-size: 1em; font-weight: strong;">Kunden eksisterer måske allerede i databasen?</h2>
-        <p>Kunden ligner nogle af de andre kunder i kundekartoteket (baseret på e-mail og postnummer). Du kan ændre kunde på ordren ved at vælge en i listen nedenunder.</p>
+        <h2 style="margin-top: 0; border-left: 10px solid green; padding-left: 0.5em; font-size: 1em; font-weight: strong;">Kunden eksisterer mï¿½ske allerede i databasen?</h2>
+        <p>Kunden ligner nogle af de andre kunder i kundekartoteket (baseret pï¿½ e-mail og postnummer). Du kan ï¿½ndre kunde pï¿½ ordren ved at vï¿½lge en i listen nedenunder.</p>
         <table>
             <thead>
               <tr>
@@ -182,7 +182,7 @@ if (isset($onlinepayment)) {
                     <td><?php e($contact->address->get('postcode')); ?> <?php e($contact->address->get('city')); ?></td>
                     <td><?php e($contact->address->get('phone')); ?></td>
                     <td><?php e($contact->address->get('email')); ?></td>
-                    <td><a href="<?php e($_SERVER['PHP_SELF']); ?>?action=changecontact&amp;new_id=<?php e($contact->get('id')); ?>&amp;id=<?php e($context->getDebtor()->get('id')); ?>" onclick="return confirm('Er du sikker på at du vil erstatte den nuværende kunde med den der er fundet i det eksisterende adressekartotek?');">[Vælg]</a></td>
+                    <td><a href="<?php e($_SERVER['PHP_SELF']); ?>?action=changecontact&amp;new_id=<?php e($contact->get('id')); ?>&amp;id=<?php e($context->getDebtor()->get('id')); ?>" onclick="return confirm('Er du sikker pï¿½ at du vil erstatte den nuvï¿½rende kunde med den der er fundet i det eksisterende adressekartotek?');">[Vï¿½lg]</a></td>
                 </tr>
                 <?php
             }
@@ -590,15 +590,16 @@ if (isset($onlinepayment)) {
             }
             if ($shop AND $shop->getPaymentUrl()): ?>
                 <div class="warning">
-                    Der burde være en onlinebetaling knyttet hertil. Måske har kunden fortrudt sit køb, eller også er der sket en fejl hos PBS under købet. Kunden kan betale på følgende link <?php e($payment_url); ?>. <a href="<?php e(url(null, array('action' => 'send_onlinepaymentlink'))); ?>">Skriv e-mail</a>.
+                	<?php e(t('An online payment should be present. Maybe the customer cancelled the buy, or an error occurred at your online payment provider. The customer can pay on the following link')); ?>:
+                    <?php e($payment_url); ?>. <a href="<?php e(url(null, array('action' => 'send_onlinepaymentlink'))); ?>"><?php e('Write email'); ?></a>.
                 </div>
             <?php elseif ($shop === false AND $this->getKernel()->user->hasModuleAccess('shop')): ?>
                 <div class="warning">
-                    Der burde være en onlinebetaling knyttet hertil, den den er ikke oprettet via en butik. Hvis du i fremtiden ønsker at sende et betalingslink ud til en kunde, så kan du oprette selve ordren via din butik, rette den til og til sidst sende den.
+                    <?php e(t('An online payment should be present. However it has not been created from the shop. If you want to make it possible to pay online, you should create the order from your shop, edit it, and then return to this page and send the payment link to the customer')); ?>.
                 </div>
             <?php else: ?>
                 <div class="warning">
-                    Der burde være en onlinebetaling knyttet hertil. Hvis du skriver et betalingslink ind under shoppen, kan du automatisk sende en e-mail til vedkommende.
+                    <?php e(t('An onlinepayment should be present. You can supply a payment link from the shop. Supplying a link would make it possible to automatically writing an email to the contact with the payment link')); ?>.
                 </div>
             <?php endif;
         }
@@ -636,7 +637,7 @@ if (isset($onlinepayment)) {
             $total = 0;
             $total_currency = 0;
             if (isset($items[0]["vat"])) {
-                $vat = $items[0]["vat"]; // Er der moms på det første produkt
+                $vat = $items[0]["vat"]; // Er der moms pï¿½ det fï¿½rste produkt
             } else {
                 $vat = 0;
             }
@@ -700,7 +701,7 @@ if (isset($onlinepayment)) {
                 <?php
 
                 if (($vat == 1 && isset($items[$i+1]["vat"]) && $items[$i+1]["vat"] == 0) || ($vat == 1 && $i+1 >= $max)) {
-                    // Hvis der er moms på nuværende produkt, men næste produkt ikke har moms, eller hvis vi har moms og det er sidste produkt
+                    // Hvis der er moms pï¿½ nuvï¿½rende produkt, men nï¿½ste produkt ikke har moms, eller hvis vi har moms og det er sidste produkt
                     ?>
                     <tr>
                         <td>&nbsp;</td>

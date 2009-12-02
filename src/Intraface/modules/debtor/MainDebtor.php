@@ -93,12 +93,4 @@ class MainDebtor extends Intraface_Main
         $this->addDependentModule('product');
 
     }
-
-    function getPath()
-    {
-        if (defined('INTRAFACE_K2')) {
-            return url('/restricted/module/debtor') . '/';
-        }
-        return parent::getPath();
-    }
 }

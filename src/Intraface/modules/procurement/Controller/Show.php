@@ -3,6 +3,17 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
 {
     protected $template;
     public $method = 'put';
+    protected $error;
+
+    function getProcurement()
+    {
+         return $procurement = new Procurement($this->getKernel(), $this->name());
+    }
+
+    function getError()
+    {
+        return $this->getProcurement()->error;
+    }
 
     function __construct(k_TemplateFactory $template)
     {
@@ -19,24 +30,17 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         $filehandler = new FileHandler($this->getKernel());
         $append_file = new AppendFile($this->getKernel(), 'procurement_procurement', $procurement->get('id'));
 
-        # set status
         if (isset($_GET['status'])) {
             $procurement->setStatus($_GET['status']);
-        }
-
-        # slet item
-        if (isset($_GET['delete_item_id'])) {
+        } elseif (isset($_GET['delete_item_id'])) {
             $procurement->loadItem((int)$_GET['delete_item_id']);
             $procurement->item->delete();
-        }
-
-        # tilføj kontakt
-        if (isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
+        } elseif (isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
             if ($this->getKernel()->user->hasModuleAccess('contact')) {
                 $contact_module = $this->getKernel()->useModule('contact');
 
                 $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-                $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", $module_procurement->getPath()."view.php?id=".$procurement->get('id'));
+                $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", NET_SCHEME . NET_HOST . $this->url());
                 $redirect->askParameter('contact_id');
                 $redirect->setIdentifier('contact');
 
@@ -45,20 +49,13 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                 } else {
                     return new k_SeeOther($url);
                 }
-            }
-            else {
+            } else {
                 trigger_error("Du har ikke adgang til modulet contact", E_ERROR_ERROR);
             }
-        }
-
-
-        # slet bilag
-        if (isset($_GET['delete_appended_file_id'])) {
+        } elseif (isset($_GET['delete_appended_file_id'])) {
             $append_file->delete((int)$_GET['delete_appended_file_id']);
-        }
-
-        # tilføj produkt
-        if (isset($_GET['add_item'])) {
+            return new k_SeeOther($this->url());
+        } elseif (isset($_GET['add_item'])) {
             if ($this->getKernel()->user->hasModuleAccess('product')) {
                 $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
                 $module_product = $this->getKernel()->useModule('product');
@@ -69,10 +66,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                 trigger_error('You need access to the product module to do this!', E_USER_ERROR);
                 exit;
             }
-        }
-
-        #retur
-        if (isset($_GET['return_redirect_id'])) {
+        } elseif (isset($_GET['return_redirect_id'])) {
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
             if ($redirect->get('identifier') == 'contact') {
                 if ($this->getKernel()->user->hasModuleAccess('contact')) {
@@ -107,13 +101,13 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
     {
         $module = $this->getKernel()->module("procurement");
         $translation = $this->getKernel()->getTranslation('procurement');
-        $procurement = new Procurement($this->getKernel(), intval($_GET["id"]));
+        $procurement = new Procurement($this->getKernel(), intval($this->name()));
         $values = $procurement->get();
         $title = "Ret indkøb";
 
         $this->document->addScript($this->url('procurement/edit.js'));
-        $data = array();
-        $tpl = $this->template->create(dirname(__FILE__) . '/templates/show');
+        $data = array('procurement' => $procurement, 'kernel' => $this->getKernel(), 'title' => $title);
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/procurement-edit');
         return $tpl->render($this, $data);
     }
 

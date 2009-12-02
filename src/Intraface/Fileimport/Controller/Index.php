@@ -51,18 +51,15 @@ class Intraface_Fileimport_Controller_Index extends k_Component
                 $fileimport->error->merge($parser->error->getMessage());
             }
             $fileimport->error->merge($filehandler->error->getMessage());
-        }
-        elseif (isset($_POST['save'])) {
+        } elseif (isset($_POST['save'])) {
             $filehandler = new Filehandler($this->getKernel(), $_POST['file_id']);
             if ($filehandler->get('id') == 0) {
                 trigger_error('unable to load data file', E_USER_ERROR);
                 exit;
-            }
-            elseif (empty($_POST['fields']) || !is_array($_POST['fields'])) {
+            } elseif (empty($_POST['fields']) || !is_array($_POST['fields'])) {
                 trigger_error('there was no fields!', E_USER_ERROR);
                 exit;
-            }
-            else {
+            } else {
                 $parser = $fileimport->createParser('CSV');
                 $parser->assignFieldNames($_POST['fields']);
                 if (!empty($_POST['header'])) {
@@ -80,8 +77,7 @@ class Intraface_Fileimport_Controller_Index extends k_Component
                     $redirect->setParameter('session_variable_name', 'shared_fileimport_data');
                     if ($url = $redirect->getRedirect('')) {
                         return new k_SeeOther($url);
-                    }
-                    else {
+                    } else {
                         trigger_error('No redirect url was found.');
                         exit;
                     }
@@ -103,10 +99,19 @@ class Intraface_Fileimport_Controller_Index extends k_Component
         $redirect = Intraface_Redirect::receive($this->getKernel());
 
         if ($redirect->get('id') == 0) {
-            trigger_error('we did not find a redirect, which is needed', E_USER_ERROR);
-            exit;
+            throw new Exception('we did not find a redirect, which is needed');
         }
+
+        $data = array(
+            'fileimport' => $fileimport
+        );
+
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/index');
-        return $tpl->render($this);
+        return $tpl->render($this, $data);
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

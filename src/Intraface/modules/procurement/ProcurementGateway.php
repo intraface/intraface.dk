@@ -15,11 +15,11 @@ class Intraface_modules_procurement_ProcurementGateway
     {
         if(!is_object($this->dbquery)) {
             $this->dbquery = new Intraface_DBQuery($this->kernel, "procurement", "active = 1 AND intranet_id = ".$this->kernel->intranet->get("id"));
-            $this->dbquery->useErrorObject($this->error);    
+            $this->dbquery->useErrorObject($this->error);
         }
-        
+
         return $this->dbquery;
-        
+
     }
 
     function findByContactId($id)
@@ -154,7 +154,7 @@ class Intraface_modules_procurement_ProcurementGateway
 
         return $list;
     }
-    
+
     function any()
     {
         $db = new DB_Sql;
@@ -168,7 +168,7 @@ class Intraface_modules_procurement_ProcurementGateway
         $db->query("SELECT id FROM procurement WHERE intranet_id = " . $this->kernel->intranet->get('id')." AND contact_id = ".$contact_id." AND active = 1");
         return $db->numRows();
     }
-    
+
     function getMaxNumber()
     {
         $db = new DB_sql;
@@ -178,11 +178,11 @@ class Intraface_modules_procurement_ProcurementGateway
 
         return $db->f("max_number");
     }
-    
+
     /**
      * returns possible status types
      * @todo: duplicate in Procurement class
-     *  
+     *
      * @return array status types
      */
     public function getStatusTypes()

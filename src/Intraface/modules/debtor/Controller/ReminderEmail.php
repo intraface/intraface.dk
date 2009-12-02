@@ -1,6 +1,6 @@
 <?php
 /**
- * Vi skal have den til at markere e-mailen som sendt, når den er sendt.
+ * Vi skal have den til at markere e-mailen som sendt, nï¿½r den er sendt.
  */
 class Reminder_Text {
     private $output;
@@ -16,7 +16,7 @@ class Reminder_Text {
         $this->output .= $reminder->get("text") . "\n\n";
 
         // Overskrifter - Vareudskrivning
-        $this->output .= "Beskrivelse          Dato        Forfaldsdato    Beløb\n";
+        $this->output .= "Beskrivelse          Dato        Forfaldsdato    BelÃ¸b\n";
         // vareoversigt
         $reminder->loadItem();
         $items = $reminder->item->getList("invoice");
@@ -50,13 +50,13 @@ class Reminder_Text {
                 "amount" => $total,
                 "due_date" => $reminder->get("dk_due_date"),
                 "girocode" => $reminder->get("girocode"));
-            $this->output .= "\n\nDet skyldige beløb betales senest: " . $parameter['due_date'];
+            $this->output .= "\n\nDet skyldige belÃ¸b betales senest: " . $parameter['due_date'];
 
             // TODO: change to payment_method
             switch ($reminder->get('payment_method_key')) {
                 case 1: // fall through - ingen valgt
-                case 2: // kontooverførsel
-                    $this->output .= "\n\nBetales på konto:";
+                case 2: // kontooverfÃ¸rsel
+                    $this->output .= "\n\nBetales pÃ¥ konto:";
                     $this->output .= "\nBank:                ".$reminder->kernel->setting->get('intranet', 'bank_name');
                     $this->output .= "\nRegnr.:              ".$reminder->kernel->setting->get('intranet', 'bank_reg_number');
                     $this->output .= "\nKontonr.:            ".$reminder->kernel->setting->get('intranet', 'bank_account_number');
@@ -94,14 +94,13 @@ class Intraface_modules_debtor_Controller_ReminderEmail extends k_Component
         $this->context->getKernel()->useModule('contact');
         $this->context->getKernel()->useModule('product');
 
-        $reminder = new Reminder($this->context->getKernel(), intval($_REQUEST['id']));
+        $reminder = new Reminder($this->context->getKernel(), intval($this->context->name()));
 
         if ($reminder->contact->address->get("email") == '') {
-          trigger_error('Kontaktpersonen har ikke nogen email', E_USER_ERROR);
-          exit;
+            throw new Exception('Kontaktpersonen har ikke nogen email');
         }
 
-        $subject  =	"Påmindelse om betaling";
+        $subject  =	"PÃ¥mindelse om betaling";
 
         $reminder_text = new Reminder_Text();
         $reminder_text->visit($reminder);
@@ -122,7 +121,7 @@ class Intraface_modules_debtor_Controller_ReminderEmail extends k_Component
                 $from_name = $this->context->getKernel()->setting->get('intranet', 'debtor.sender.name');
                 break;
             default:
-                trigger_error("Invalid sender!", E_USER_ERROR);
+                throw new Exception("Invalid sender!");
         }
 
         $email = new Email($this->context->getKernel());
@@ -138,12 +137,11 @@ class Intraface_modules_debtor_Controller_ReminderEmail extends k_Component
 
         if ($id = $email->save($var)) {
             $redirect = new Intraface_Redirect($this->context->getKernel());
-            $shared_email = $this->context->getKernel()->useShared('email');
-            $url = $redirect->setDestination($shared_email->getPath().'email.php?id='.$id, NET_SCHME . NET_HOST . $this->context->url());
+            $shared_email = $this->context->getKernel()->useModule('email');
+            $url = $redirect->setDestination($shared_email->getPath().$id . '?edit', NET_SCHME . NET_HOST . $this->context->url());
             $redirect->setIdentifier('send_email');
             $redirect->askParameter('send_email_status');
             return new k_SeeOther($url);
         }
-
     }
 }

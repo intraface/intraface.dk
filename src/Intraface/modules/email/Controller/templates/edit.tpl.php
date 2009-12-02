@@ -1,6 +1,6 @@
 <h1>Skriv e-mail</h1>
 
-<?php echo $email->error->view(); ?>
+<?php echo $context->getEmail()->error->view(); ?>
 
 <form action="<?php e(url(null, array($context->subview()))); ?>" method="post">
 	<input type="hidden" name="_method" value="post" />

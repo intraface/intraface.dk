@@ -110,7 +110,7 @@ class Intraface_Intranet extends Intraface_Standard
      */
     function hasModuleAccess($module)
     {
-        $filename = 'Intraface/modules/' . $module . '/Main' . ucfirst($module) . '.php';
+        $filename = PATH_INCLUDE_MODULE . $module . '/Main' . ucfirst($module) . '.php';
         if (file_exists($filename)) {
             require_once $filename;
             $module_class = 'Main'.ucfirst($module);

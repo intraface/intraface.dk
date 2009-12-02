@@ -75,12 +75,4 @@ class MainContact extends Intraface_Main
         );
 
     }
-
-    function getPath()
-    {
-        if (defined('INTRAFACE_K2')) {
-            return url('/core/restricted/module/contact') . '/';
-        }
-        return parent::getPath();
-    }
 }

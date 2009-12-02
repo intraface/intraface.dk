@@ -96,8 +96,8 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         	$this->getKernel()->setting->set('user', 'contact.search', $_GET['search']);
         } elseif (!empty($_GET['import'])) {
             $redirect = Intraface_Redirect::go($this->getKernel());
-            $shared_fileimport = $this->getKernel()->useShared('fileimport');
-            $url = $redirect->setDestination($shared_fileimport->getPath(), NET_SCHEME . NET_HOST . $this->url('import'));
+            $module_fileimport = $this->getKernel()->useModule('fileimport');
+            $url = $redirect->setDestination($module_fileimport->getPath(), NET_SCHEME . NET_HOST . $this->url('import'));
             $redirect->askParameter('session_variable_name');
             return new k_SeeOther($url);
         }

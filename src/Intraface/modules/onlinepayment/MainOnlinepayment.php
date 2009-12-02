@@ -11,7 +11,7 @@ class MainOnlinepayment extends Intraface_Main
     function __construct()
     {
         $this->module_name = 'onlinepayment';
-        $this->menu_label = 'onlinepayment'; // Navnet der vil stå i menuen
+        $this->menu_label = 'onlinepayment'; // Navnet der vil stï¿½ i menuen
         $this->show_menu = 0; // Skal modulet vises i menuen.
         $this->active = 1; // Er modulet aktivt.
         $this->menu_index = 70;
@@ -27,7 +27,7 @@ class MainOnlinepayment extends Intraface_Main
         $this->addSubmenuItem('onlinepayments', '../onlinepayment/', 'module:onlinepayment');
         // $this->addSubmenuItem('settings', '../debtor/setting.php', 'module:debtor');
 
-        $this->addControlpanelFile('OnlinePayment settings', 'module/onlinepayment/settings.php');
+        $this->addControlpanelFile('OnlinePayment settings', 'core/restricted/module/onlinepayment/settings');
 
         $this->includeSettingFile('settings.php');
 
@@ -50,7 +50,7 @@ class MainOnlinepayment extends Intraface_Main
 
         $this->addSetting('implemented_providers',  array(
             0 => '_invalid_',
-            1 => 'default', // reserveret for en custom (altså en hvor det hele kører uden for systemet
+            1 => 'default', // reserveret for en custom (altsï¿½ en hvor det hele kï¿½rer uden for systemet
             2 => 'quickpay',
             3 => 'dandomain'
         ));

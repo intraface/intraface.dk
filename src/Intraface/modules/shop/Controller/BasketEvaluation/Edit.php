@@ -31,7 +31,9 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Edit extends k_Componen
 
         $data = array('basketevaluation' => $basketevaluation,
                       'value' => $value,
-                      'settings' => $settings);
+                      'settings' => $settings,
+                   	  'translation' => $this->getKernel()->getTranslation('shop')
+        );
         $tpl = $this->template->create('Intraface/modules/shop/Controller/tpl/evaluation');
         return $tpl->render($this, $data);
 

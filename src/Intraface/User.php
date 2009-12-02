@@ -261,7 +261,7 @@ class Intraface_User extends Intraface_Standard
      */
     public function hasModuleAccess($module, $intranet_id = 0)
     {
-      $filename = 'Intraface/modules/' . $module . '/Main' . ucfirst($module) . '.php';
+        $filename = PATH_INCLUDE_MODULE . $module . '/Main' . ucfirst($module) . '.php';
         if (file_exists($filename)) {
             require_once $filename;
             $module_class = 'Main'.ucfirst($module);

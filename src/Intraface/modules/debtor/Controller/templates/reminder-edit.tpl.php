@@ -154,7 +154,7 @@ echo $reminder->error->view("html");
               for ($i = 0, $max = count($reminders); $i < $max; $i++) {
                   $total += $reminders[$i]["reminder_fee"];
                   if ($reminder->get("id") == $reminders[$i]["id"]) {
-                      // Hvis man retter en reminder skal den selv ikke med på listen over mulige remindere!
+                      // Hvis man retter en reminder skal den selv ikke med pï¿½ listen over mulige remindere!
                       continue;
                   }
                   ?>
@@ -226,7 +226,7 @@ if ($contact->address->get('email')) {
 
 <fieldset>
     <legend><?php e(__('Payment information')); ?></legend>
-    <p>Hvilke betalingsoplysninger skal vises på rykkeren</p>
+    <p>Hvilke betalingsoplysninger skal vises pÃ¥ rykkeren</p>
     <div>
         <input class="input" id="none" type="radio" name="payment_method_key" value="0" <?php if (isset($value["payment_method_key"]) && $value["payment_method_key"] == 0) print("checked=\"CHECKED\""); ?> />
         <label for="none">Ingen</label>
@@ -234,7 +234,7 @@ if ($contact->address->get('email')) {
     <?php if ($kernel->setting->get('intranet', 'bank_account_number')): ?>
     <div>
         <input class="input" id="account" type="radio" name="payment_method_key" value="1" <?php if (isset($value["payment_method_key"]) && $value["payment_method_key"] == 1) print("checked=\"CHECKED\""); ?> />
-        <label for="account">Kontooverførsel</label>
+        <label for="account">KontooverfÃ¸rsel</label>
     </div>
     <?php endif; ?>
     <?php if ($kernel->setting->get('intranet', 'giro_account_number')): ?>

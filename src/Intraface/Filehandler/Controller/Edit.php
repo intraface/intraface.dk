@@ -9,7 +9,7 @@ class Intraface_Filehandler_Controller_Edit extends k_Component
     function renderHtml()
     {
         $gateway = new Ilib_Filehandler_Gateway($this->getKernel());
-        $filemanager = $gateway->getFromId(intval($this->context->name));
+        $filemanager = $gateway->getFromId(intval($this->context->name()));
         $values = $filemanager->get();
         $this->document->setTitle('edit file');
 

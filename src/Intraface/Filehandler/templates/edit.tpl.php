@@ -31,7 +31,7 @@
 
 </fieldset>
 
-<p></p><input type="submit" class="save" name="submit" value="<?php e(__('save', 'common')); ?>" />
+<p><input type="submit" class="save" name="submit" value="<?php e(__('save', 'common')); ?>" />
 <a href="<?php e(url('../')); ?>"><?php e(__('Cancel', 'common')); ?></a></p>
 <input type="hidden" name="id" value="<?php e($filemanager->get("id")); ?>" />
 

@@ -48,7 +48,6 @@
     </fieldset>
 
     <input type="submit" class="save" name="upload_file" value="<?php e(__('analyze file').'...'); ?>" />
-    <?php e(__('or', 'common')); ?>
-    <a href="<?php echo 'index.php'; ?>"><?php e(__('Cancel', 'common')); ?></a>
+    <a href="<?php e(url('../')); ?>"><?php e(__('Cancel', 'common')); ?></a>
 <?php endif; ?>
 </form>

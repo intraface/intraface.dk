@@ -14,9 +14,9 @@ class Intraface_Keyword_Controller_Index extends k_Component
         return get_class($this) . ': intentionally left blank';
     }
 
-    function getObject()
+    function getModel()
     {
-    	return $this->context->getObject();
+    	return $this->context->getModel();
     }
 
     function getKernel()

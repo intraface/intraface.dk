@@ -149,10 +149,10 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
         switch ($send_as) {
             case 'email':
                     $redirect = Intraface_Redirect::factory($this->context->getKernel(), 'go');
-                    $shared_email = $this->context->getKernel()->useShared('email');
+                    $shared_email = $this->context->getKernel()->useModule('email');
 
                     // First vi set the last, because we need this id to the first.
-                    $url = $redirect->setDestination($shared_email->getPath().'edit.php?id='.$email->get('id'), NET_SCHEME . NET_HOST . $this->url('../'));
+                    $url = $redirect->setDestination($shared_email->getPath().$email->get('id') . '?edit', NET_SCHEME . NET_HOST . $this->url('../'));
                     $redirect->setIdentifier('send_email');
                     $redirect->askParameter('send_email_status');
 
