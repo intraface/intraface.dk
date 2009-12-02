@@ -12,6 +12,7 @@ class MainEmail extends Intraface_Main
         $this->active = 1; // Er modulet aktivt.
         $this->menu_index = 210;
         $this->frontpage_index = 200;
+        $this->shared = true;
 
         $this->addRequiredShared('email');
     }
