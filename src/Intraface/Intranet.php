@@ -110,11 +110,14 @@ class Intraface_Intranet extends Intraface_Standard
      */
     function hasModuleAccess($module)
     {
-        require_once 'Intraface/modules/' . $module . '/Main' . ucfirst($module) . '.php';
-        $module_class = 'Main'.ucfirst($module);
-        $module_object = new $module_class;
-        if (isset($module_object->shared) and $module_object->shared === true) {
-            return true;
+        $filename = 'Intraface/modules/' . $module . '/Main' . ucfirst($module) . '.php';
+        if (file_exists($filename)) {
+            require_once $filename;
+            $module_class = 'Main'.ucfirst($module);
+            $module_object = new $module_class;
+            if (isset($module_object->shared) and $module_object->shared === true) {
+                return true;
+            }
         }
 
         if (is_string($module)) {
