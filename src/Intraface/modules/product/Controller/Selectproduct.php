@@ -6,11 +6,14 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
     public $quantity;
     public $selected_products;
 
-    function renderHtml()
+    function __construct()
     {
         $this->multiple = $this->query('multiple');
         $this->quantity = $this->query('set_quantity');
+    }
 
+    function renderHtml()
+    {
         $product_module = $this->getKernel()->module("product");
         $translation = $this->getKernel()->getTranslation('product');
 
@@ -63,10 +66,10 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
 
         $list = $product->getList();
 
-
+        // @todo where should this get its values from
         $product_values = array();
         $this->selected_products = array();
-        if (is_array($product_values)) {
+        if (!empty($product_values) AND is_array($product_values)) {
             if ($this->multiple) {
                 foreach ($product_values AS $selection) {
                     $selection['value'] = unserialize($selection['value']);
@@ -130,9 +133,6 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
 
     function putForm()
     {
-        $this->multiple = $this->query('multiple');
-        $this->quantity = $this->query('set_quantity');
-
         if (isset($_POST['submit']) || isset($_POST['submit_close'])) {
             if ($this->multiple) {
                 if (isset($_POST['selected']) && is_array($_POST['selected'])) {

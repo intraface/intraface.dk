@@ -43,7 +43,7 @@ $selected_products = $context->selected_products;
             <caption><?php e(t('products')); ?></caption>
             <thead>
                 <tr>
-                    <th><?php if ($multiple && $quantity): e(t('Quantity')); else: echo e(t('Choose')); endif; ?></th>
+                    <th><?php if ($context->multiple && $context->quantity): e(t('Quantity')); else: echo e(t('Choose')); endif; ?></th>
                     <th><?php e(t('Product number')); ?></th>
                     <th><?php e(t('Name')); ?></th>
                     <th><?php e(t('Unit type')); ?></th>
@@ -60,11 +60,11 @@ $selected_products = $context->selected_products;
                     <td>
                         <?php if ($p['has_variation']): ?>
                             <a href="<?php e(url($p['id'] . '/selectvariation', array('set_quantity' => $quantity))); ?>" /><?php echo '<img class="variation" src="/images/icons/silk/table_multiple.png" title="'.t("See the product's variations").'"/> '; ?></a>
-                        <?php elseif ($multiple && $quantity): ?>
+                        <?php elseif ($context->multiple && $context->quantity): ?>
                             <input id="<?php e($p['id']); ?>" type="text" name="selected[<?php e($p['id']); ?>]" value="<?php if (isset($selected_products[$p['id']])): e($selected_products[$p['id']]); else: e('0'); endif; ?>" size="2" />
-                        <?php elseif ($multiple && !$quantity): ?>
+                        <?php elseif ($context->multiple && !$context->quantity): ?>
                             <input id="<?php e($p['id']); ?>" type="checkbox" name="selected[<?php e($p['id']); ?>]" value="1" <?php if (array_key_exists($p['id'], $selected_products)) echo ' checked="checked"'; ?> />
-                        <?php elseif (!$multiple): ?>
+                        <?php elseif (!$context->multiple): ?>
                             <input id="<?php e($p['id']); ?>" type="radio" name="selected" value="<?php e($p['id']); ?>" <?php if (array_key_exists($p['id'], $selected_products)) echo ' checked="checked"'; ?> />
                         <?php endif; ?>
                     </td>
@@ -82,10 +82,10 @@ $selected_products = $context->selected_products;
             </tbody>
         </table>
       <p>
-        <?php if (!$multiple && $quantity): ?>
+        <?php if (!$context->multiple && $context->quantity): ?>
             <?php e(t('quantity')); ?>: <input type="text" name="quantity" value="1" />
         <?php endif; ?>
-        <?php if ($multiple): ?>
+        <?php if ($context->multiple): ?>
         <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />
         <?php endif; ?>
         <input type="submit" name="submit_close" value="<?php e(t('save and close', 'common')); ?>" /></p>
