@@ -1,23 +1,18 @@
-<h1>Bogfør indkøb #<?php e($procurement->get('number')); ?></h1>
+<h1><?php e(t('State procurement')); ?> #<?php e($procurement->get('number')); ?></h1>
 
 <ul class="options">
-    <li><a href="view.php?id=<?php e($procurement->get("id")); ?>">Luk</a></li>
-    <li><a href="index.php?id=<?php e($procurement->get("id")); ?>&amp;use_stored=true">Tilbage til indkøbslisten</a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
+    <li><a href="<?php e(url('../', array('use_stored'=>'true'))); ?>"><?php e(t('To procurements')); ?></a></li>
 </ul>
 
 <div class="message">
-    <p>Du bedes manuelt kontrollere at indkøbet bliver bogført korrekt.</p>
+    <p><?php e(t('Please verify manually whether the amounts has been stated correctly')); ?>.</p>
 </div>
 
-<?php if (!$year->readyForState($procurement->get('paid_date'))): ?>
-    <?php echo $year->error->view(); ?>
-    <p>Gå til <a href="<?php e($accounting_module->getPath().'years.php'); ?>">regnskabet</a></p>
-
-<?php else: ?>
 
     <?php echo $procurement->error->view(); ?>
 
-    <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+    <form action="<?php e(url()); ?>" method="post">
     <input type="hidden" value="<?php e($value['id']); ?>" name="id" />
 
     <fieldset>
@@ -68,7 +63,7 @@
 
 
     <fieldset>
-        <legend>Oplysninger der bogføres</legend>
+        <legend><?php e(t('Information')); ?></legend>
 
         <div class="formrow">
             <label for="voucher_number"><?php e(t('voucher number')) ?></label>
@@ -83,7 +78,7 @@
         <div class="formrow">
             <label for="credit_account_id"><?php e(t('paid from account')) ?></label>
             <select name="credit_account_number">
-                <option value="">Vælg</option>
+                <option value=""><?php e(t('Choose')); ?></option>
                 <?php
                 $account = new Account($year);
                 $accounts = $account->getList('finance');
@@ -103,9 +98,9 @@
         <thead>
             <tr>
                 <th>&nbsp;</th>
-                <th>Beskrivelse</th>
-                <th>Beløb</th>
-                <th>Bogføres på</th>
+                <th><?php e(t('Description')); ?></th>
+                <th><?php e(t('Amount')); ?></th>
+                <th><?php e(t('State on')); ?>...</th>
                 <th>&nbsp;</th>
             </tr>
         </thead>
@@ -126,7 +121,7 @@
                             $accounts =  $account->getList('expenses');
                             ?>
                             <select id="state_account" name="debet_account[<?php e($key); ?>][state_account_id]">
-                                <option value="">Vælg...</option>
+                                <option value=""><?php e(t('Choose')); ?></option>
                                 <?php
                                 foreach ($accounts AS $a):
                                     if (strtolower($a['type']) == 'sum') continue;
@@ -167,10 +162,9 @@
     </div>
 
     <div>
-         <input type="submit" name="state" value="<?php e(t('state')); ?>" /> eller
-         <a href="view.php?id=<?php e($value['id']); ?>">fortryd</a>
+         <input type="submit" name="state" value="<?php e(t('State')); ?>" />
+         <a href="<?php url('../'); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 
 </form>
 
-<?php endif; ?>

@@ -5,9 +5,37 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
     public $method = 'put';
     protected $error;
 
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
+    function map($name)
+    {
+        if ('choosecontact' == $name) {
+            return 'Intraface_modules_contact_Controller_Choosecontact';
+        } elseif ('selectproduct' == $name) {
+            return 'Intraface_modules_product_Controller_Selectmultipleproductwithquantity';
+        } elseif ('state' == $name) {
+            return 'Intraface_modules_accounting_Controller_State_Procurement';
+        }
+    }
+
     function getProcurement()
     {
          return $procurement = new Procurement($this->getKernel(), $this->name());
+    }
+
+    /**
+     * Used by state
+     *
+     * @see Intraface_modules_accounting_Controller_State_Procurement
+     *
+     * @return object
+     */
+    function getModel()
+    {
+        return $this->getProcurement();
     }
 
     function getError()
@@ -15,10 +43,6 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         return $this->getProcurement()->error;
     }
 
-    function __construct(k_TemplateFactory $template)
-    {
-        $this->template = $template;
-    }
     function renderHtml()
     {
         $module_procurement = $this->getKernel()->module("procurement");
@@ -40,7 +64,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                 $contact_module = $this->getKernel()->useModule('contact');
 
                 $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-                $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", NET_SCHEME . NET_HOST . $this->url());
+                $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('choosecontact'), NET_SCHEME . NET_HOST . $this->url());
                 $redirect->askParameter('contact_id');
                 $redirect->setIdentifier('contact');
 
@@ -50,7 +74,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                     return new k_SeeOther($url);
                 }
             } else {
-                trigger_error("Du har ikke adgang til modulet contact", E_ERROR_ERROR);
+                throw new Exception("Du har ikke adgang til modulet contact");
             }
         } elseif (isset($_GET['delete_appended_file_id'])) {
             $append_file->delete((int)$_GET['delete_appended_file_id']);
@@ -103,9 +127,10 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         $translation = $this->getKernel()->getTranslation('procurement');
         $procurement = new Procurement($this->getKernel(), intval($this->name()));
         $values = $procurement->get();
-        $title = "Ret indkøb";
+        $title = "Ret indkÃ¸b";
 
         $this->document->addScript($this->url('procurement/edit.js'));
+
         $data = array('procurement' => $procurement, 'kernel' => $this->getKernel(), 'title' => $title);
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/procurement-edit');
         return $tpl->render($this, $data);
@@ -124,7 +149,28 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
             return new k_SeeOther($this->url());
         } else {
             $values = $_POST;
-            $title = "Ret indkøb";
+            $title = "Ret indkÃ¸b";
+        }
+
+        return $this->render();
+    }
+
+    function postForm()
+    {
+        $module_procurement = $this->getKernel()->module("procurement");
+        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler->includeFile('AppendFile.php');
+        $translation = $this->getKernel()->getTranslation('procurement');
+
+        $procurement = new Procurement($this->getKernel(), $this->name());
+        $filehandler = new FileHandler($this->getKernel());
+        $append_file = new AppendFile($this->getKernel(), 'procurement_procurement', $procurement->get('id'));
+
+        if (isset($_POST['dk_paid_date'])) {
+            $procurement->setPaid($_POST['dk_paid_date']);
+            if ($this->getKernel()->user->hasModuleAccess('accounting')) {
+                return new k_SeeOther($this->url('state'));
+            }
         }
 
         return $this->render();
@@ -141,24 +187,20 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         $filehandler = new FileHandler($this->getKernel());
         $append_file = new AppendFile($this->getKernel(), 'procurement_procurement', $procurement->get('id'));
 
-        # set betalt
         if (isset($_POST['dk_paid_date'])) {
             $procurement->setPaid($_POST['dk_paid_date']);
             if ($this->getKernel()->user->hasModuleAccess('accounting')) {
-                header('location: state.php?id=' . intval($procurement->get("id")));
-                exit;
+                return new k_SeeOther($this->url('state'));
             }
         }
 
-        // tilføj bilag med redirect til filemanager
         if (isset($_POST['append_file_choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
             $redirect = new Intraface_Redirect($this->getKernel());
             $module_filemanager = $this->getKernel()->useModule('filemanager');
-            $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $module_procurement->getPath().'view.php?id='.$procurement->get('id'));
+            $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('selectfile'), NET_SCHEME . NET_HOST . $this->url());
             $redirect->setIdentifier('file_handler');
             $redirect->askParameter('file_handler_id', 'multiple');
-            header("Location: ".$url);
-            exit;
+            return new k_SeeOther($url);
         }
 
         // upload billag
@@ -171,7 +213,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                     $append_file->addFile(new FileHandler($this->getKernel(), $id));
                 }
                 $procurement->error->merge($filehandler->error->getMessage());
-
+                return new k_SeeOther($this->url());
             }
         }
 

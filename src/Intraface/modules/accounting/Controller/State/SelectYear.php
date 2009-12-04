@@ -35,10 +35,7 @@ class Intraface_modules_accounting_Controller_State_SelectYear extends Intraface
 
     function renderHtml()
     {
-        $debtor_module = $this->getKernel()->module('debtor');
         $accounting_module = $this->getKernel()->useModule('accounting');
-        $product_module = $this->getKernel()->useModule('product');
-        $translation = $this->getKernel()->getTranslation('debtor');
 
         if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
             $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/year-not-ready.tpl.php');

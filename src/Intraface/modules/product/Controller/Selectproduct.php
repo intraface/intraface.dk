@@ -6,14 +6,11 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
     public $quantity;
     public $selected_products;
 
-    function __construct()
+    function renderHtml()
     {
         $this->multiple = $this->query('multiple');
         $this->quantity = $this->query('set_quantity');
-    }
 
-    function renderHtml()
-    {
         $product_module = $this->getKernel()->module("product");
         $translation = $this->getKernel()->getTranslation('product');
 
@@ -51,7 +48,6 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
                         }
                     }
                 } else {
-
                     $redirect->removeParameter('product_id', $product_variations['value']);
                     if ($this->quantity) {
                         $redirect->setParameter('product_id', $product_variations['value'], $product_variations['extra_value']);
@@ -134,6 +130,9 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
 
     function putForm()
     {
+        $this->multiple = $this->query('multiple');
+        $this->quantity = $this->query('set_quantity');
+
         if (isset($_POST['submit']) || isset($_POST['submit_close'])) {
             if ($this->multiple) {
                 if (isset($_POST['selected']) && is_array($_POST['selected'])) {

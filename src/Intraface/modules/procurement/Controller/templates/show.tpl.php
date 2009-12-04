@@ -1,12 +1,12 @@
 <div id="colOne">
 
-    <h1>Indkøb</h1>
+    <h1><?php e(t('Procurement')); ?></h1>
 
     <?php echo $procurement->error->view(); ?>
 
     <ul class="options">
-        <li><a href="<?php e(url(null, array('edit'))); ?>">Ret</a></li>
-        <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>">Luk</a></li>
+        <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
+        <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close')); ?></a></li>
     </ul>
 
     <p><?php e($procurement->get("description")); ?></p>
@@ -24,7 +24,7 @@
             <td><?php e($procurement->get("dk_invoice_date")); ?></td>
         </tr>
         <tr>
-            <td>Leverandør</td>
+            <td><?php e(t('Supplier')); ?></td>
             <td><?php e($procurement->get("vendor")) ?></td>
         </tr>
         <?php
@@ -49,7 +49,7 @@
                             echo 'Ugyldig kontakt';
                         }
                         ?>
-                        <a class="edit" href="<?php e(url(null, array('add_contact' => 1))); ?>">Ændre</a>
+                        <a class="edit" href="<?php e(url('choosecontact')); ?>"><?php e(t('Change')); ?></a>
                         <?php
                     }
                     ?>
@@ -59,7 +59,7 @@
         }
         ?>
         <tr>
-            <td>Køb fra</td>
+            <td><?php e(t('Buy from')); ?></td>
             <td><?php e(__($procurement->get('from_region'), 'procurement')); ?>
             </td>
         </tr>
@@ -81,15 +81,15 @@
         </tr>
         <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
             <tr>
-                <th>Bogført</th>
+                <th><?php e(t('Stated')); ?></th>
                 <td>
                     <?php
                         if ($procurement->isStated()) {
                             $module_accounting = $kernel->useModule('accounting');
                             e($procurement->get('dk_date_stated'));
-                            echo ' <a href="'.$module_accounting->getPath().'voucher.php?id='.$procurement->get('voucher_id').'">Se bilag</a>';
+                            echo ' <a href="'.$module_accounting->getPath().'voucher/'.$procurement->get('voucher_id').'">Se bilag</a>';
                         } else {
-                            e('Ikke bogført');
+                            e('Ikke bogfï¿½rt');
                             if ($procurement->get('paid_date') != '0000-00-00') { ?>
                                 <a href="<?php e(url('state')); ?>"><?php e(__('state')); ?></a>
                             <?php }
@@ -128,7 +128,7 @@
             ?>
             <ul class="options">
                 <li><a href="<?php e(url(null, array('status'=>'recieved'))); ?>" class="confirm">Varen er modtaget</a></li>
-                <li><a href="<?php e(url(null, array('status'=>'canceled'))); ?>" class="confirm">Annullér bestillingen</a></li>
+                <li><a href="<?php e(url(null, array('status'=>'canceled'))); ?>" class="confirm">Annullï¿½r bestillingen</a></li>
             </ul>
             <?php
         }
@@ -136,7 +136,7 @@
             ?>
             <p>Varen er modtaget <?php e($procurement->get("dk_date_recieved")); ?>.</p>
             <ol class="options">
-                <li><a href="<?php e(url(null, array('status'=>'canceled'))); ?>" class="confirm">Annullér bestillingen</a></li>
+                <li><a href="<?php e(url(null, array('status'=>'canceled'))); ?>" class="confirm">Annullï¿½r bestillingen</a></li>
             </ol>
 
             <?php
@@ -178,7 +178,7 @@
                     <?php
                 }
                 ?>
-                <form method="POST" action="view.php?id=<?php e($procurement->get('id')); ?>">
+                <form method="POST" action="<?php e(url()); ?>">
                 <label for="dk_paid_date">Betalt dato <input type="text" name="dk_paid_date" id="dk_paid_date" value="<?php e(date("d-m-Y")); ?>" size="10" /></label>
                 <input type="submit" name="paid" value="Betalt" />
                 </form>
@@ -222,7 +222,7 @@
     if ($procurement->get("locked") == false) {
         ?>
         <ul class="options">
-            <li><a href="<?php e(url(null, array('add_item' => 1))); ?>">Registrer varer til lager</a></li>
+            <li><a href="<?php e(url('selectproduct')); ?>">Registrer varer til lager</a></li>
         </ul>
         <?php
     }
@@ -242,7 +242,7 @@
                 <th>Beskrivelse</th>
                 <th style="text-align: right">Antal</th>
                 <th>&nbsp;</th>
-                <th style="text-align: right">Indkøbspris</th>
+                <th style="text-align: right">Indkï¿½bspris</th>
                 <th style="text-align: right">I alt</th>
                 <th style="text-align: right">Kostpris</th>
                 <th>&nbsp;</th>
@@ -290,7 +290,7 @@
     if ($total > $procurement->get("price_items")) {
         ?>
         <div class="box">
-            <p>Prisen for varerne registreret på lageret overstiger prisen for varerne angivet på indkøbet.</p>
+            <p>Prisen for varerne registreret pÃ¥ lageret overstiger prisen for varerne angivet pÃ¥ indkÃ¸bet.</p>
         </div>
         <?php
     }

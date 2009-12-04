@@ -1,7 +1,7 @@
 var confirmboxes = {
 
 	init: function() {
-		// confirmboxes.apply("delete", "a"); /* Removed for K2 system */
+		confirmboxes.apply("delete", "a"); // should be removed for k2-systems later
 		confirmboxes.apply("delete", "input");
 		confirmboxes.apply("confirm", "a");	
 		confirmboxes.apply("confirm", "input");
