@@ -125,9 +125,8 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
             $value = $reminder->get();
             $contact = new Contact($this->getKernel(), $reminder->get('contact_id'));
 
-            $reminder->loadItem();
-            $invoices = $reminder->item->getList("invoice");
-            $reminders = $reminder->item->getList("reminder");
+            $invoices = $reminder->getItems("invoice");
+            $reminders = $reminder->getItems("reminder");
 
             for ($i = 0, $max = count($invoices); $i < $max; $i++) {
                 $checked_invoice[] = $invoices[$i]["invoice_id"];
@@ -349,8 +348,7 @@ class Reminder_Text {
         // Overskrifter - Vareudskrivning
         $this->output .= "Beskrivelse          Dato        Forfaldsdato    Bel�b\n";
         // vareoversigt
-        $reminder->loadItem();
-        $items = $reminder->item->getList("invoice");
+        $items = $reminder->getItems("invoice");
         $total = 0;
         for ($i = 0, $max = count($items); $i < $max; $i++) {
             $this->output .= "\nFak# ".$items[$i]["number"];

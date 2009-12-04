@@ -18,8 +18,7 @@ class Reminder_Text {
         // Overskrifter - Vareudskrivning
         $this->output .= "Beskrivelse          Dato        Forfaldsdato    Beløb\n";
         // vareoversigt
-        $reminder->loadItem();
-        $items = $reminder->item->getList("invoice");
+        $items = $reminder->getItems("invoice");
         $total = 0;
         for ($i = 0, $max = count($items); $i < $max; $i++) {
             $this->output .= "\nFak# ".$items[$i]["number"];

@@ -632,8 +632,7 @@ if (isset($onlinepayment)) {
 
         <tbody>
             <?php
-            $context->getDebtor()->loadItem();
-            $items = $context->getDebtor()->item->getList();
+            $items = $context->getDebtor()->getItems();
             $total = 0;
             $total_currency = 0;
             if (isset($items[0]["vat"])) {

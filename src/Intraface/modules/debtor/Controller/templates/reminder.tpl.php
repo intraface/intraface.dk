@@ -187,7 +187,7 @@ $reminder = $context->getReminder();
     	<div class="box">
             <h2><?php e(__('Register payment')); ?></h2>
     		<div style="border: 2px solid red; padding: 5px; margin: 10px;">
-    			<strong>Vigtigt</strong>: Registering af betaling her vedrører indtil videre KUN rukkergebyret på DENNE rykker. Dvs. du skal registere betalingen for fakturaer og tidligere rykkere på de respektive fakturaer og rykkere!
+    			<strong>Vigtigt</strong>: Registering af betaling her vedrï¿½rer indtil videre KUN rukkergebyret pï¿½ DENNE rykker. Dvs. du skal registere betalingen for fakturaer og tidligere rykkere pï¿½ de respektive fakturaer og rykkere!
     		</div>
 
             <form method="post" action="<?php e(url('payment')); ?>">
@@ -221,7 +221,7 @@ $reminder = $context->getReminder();
                 </div>
 
                 <div style="clear: both;">
-                    <input class="confirm" type="submit" name="payment" value="Registrér" title="Dette vil registrere betalingen" />
+                    <input class="confirm" type="submit" name="payment" value="Registrï¿½r" title="Dette vil registrere betalingen" />
                     <?php e(t('or', 'common')); ?>
                     <a href="<?php e(url('payment')); ?>"><?php e(t('Give me more choices')); ?></a>.
                 </div>
@@ -325,8 +325,7 @@ $reminder = $context->getReminder();
 		</thead>
 		<tbody>
 			<?php
-			$reminder->loadItem();
-			$items = $reminder->item->getList("invoice");
+			$items = $reminder->getItems("invoice");
 			$total = 0;
 
 			if (count($items) > 0) {

@@ -37,6 +37,12 @@ class Reminder extends Intraface_Standard
 
     }
 
+    function getItems($type = NULL)
+    {
+        $this->loadItem();
+        return $this->item->getList($type);
+    }
+
     function load()
     {
         $this->db->query("SELECT *,
@@ -62,7 +68,7 @@ class Reminder extends Intraface_Standard
         $this->value["user_id"] = $this->db->f("user_id");
         $status_types = $this->getStatusTypes();
         $this->value["status"] = $status_types[$this->db->f("status")]; // skal laves om til db->f('status_key')
-        $this->value["status_id"] = $this->db->f("status"); // skal slettes i næste version
+        $this->value["status_id"] = $this->db->f("status"); // skal slettes i nï¿½ste version
         $this->value["status_key"] = $this->db->f("status");
         $this->value["this_date"] = $this->db->f("this_date");
         $this->value["dk_this_date"] = $this->db->f("dk_this_date");
@@ -78,7 +84,7 @@ class Reminder extends Intraface_Standard
         $payment_methods = $this->getPaymentMethods();
         $this->value["payment_method"] = $payment_methods[$this->db->f("payment_method")];
         $this->value["reminder_fee"] = $this->db->f("reminder_fee");
-        // Denne skal laves, så den udregner hele værdien af hele rykkeren
+        // Denne skal laves, sï¿½ den udregner hele vï¿½rdien af hele rykkeren
         $this->value["total"] = $this->db->f("reminder_fee");
         $this->value["text"] = $this->db->f("text");
         $this->value["girocode"] = $this->db->f("girocode");
@@ -115,7 +121,7 @@ class Reminder extends Intraface_Standard
     function getMaxNumber()
     {
         $this->db->query("SELECT MAX(number) AS max_number FROM invoice_reminder WHERE intranet_id = ".$this->kernel->intranet->get("id"));
-        $this->db->nextRecord(); // Hvis der ikke er nogle poster er dette bare den første
+        $this->db->nextRecord(); // Hvis der ikke er nogle poster er dette bare den fï¿½rste
         $number = $this->db->f("max_number");
         return $number;
     }
@@ -150,7 +156,7 @@ class Reminder extends Intraface_Standard
         $validator = new Intraface_Validator($this->error);
 
         if (!isset($input['number'])) $input['number'] = 0;
-        if ($validator->isNumeric($input["number"], "Rykkernummer skal være et tal større end nul", "greater_than_zero")) {
+        if ($validator->isNumeric($input["number"], "Rykkernummer skal vï¿½re et tal stï¿½rre end nul", "greater_than_zero")) {
             if (!$this->isNumberFree($input["number"])) {
                 $this->error->set("Rykkernummer er allerede brugt");
             }
@@ -189,11 +195,11 @@ class Reminder extends Intraface_Standard
         }
 
         if (!isset($input['reminder_fee'])) $input['reminder_fee'] = 0;
-        $validator->isNumeric($input["reminder_fee"], "Rykkerbebyr skal være et tal");
+        $validator->isNumeric($input["reminder_fee"], "Rykkerbebyr skal vï¿½re et tal");
         if (!isset($input['text'])) $input['text'] = '';
         $validator->isString($input["text"], "Fejl i teksten", "<b><i>", "allow_empty");
         if (!isset($input['send_as'])) $input['send_as'] = '';
-        $validator->isString($input["send_as"], "Ugyldig måde at sende rykkeren på");
+        $validator->isString($input["send_as"], "Ugyldig mï¿½de at sende rykkeren pï¿½");
 
         if (!isset($input['payment_method_key'])) $input['payment_method_key'] = 0;
         $validator->isNumeric($input["payment_method_key"], "Du skal angive en betalingsmetode");
@@ -278,7 +284,7 @@ class Reminder extends Intraface_Standard
     */
 
     /**
-     * Sætter status for rykkeren
+     * Sï¿½tter status for rykkeren
      *
      * @return true / false
      */
@@ -300,7 +306,7 @@ class Reminder extends Intraface_Standard
         }
 
         if ($status_id <= $this->get("status_id")) {
-            $this->error->set('Du kan ikke sætte status til samme som/lavere end den er i forvejen');
+            $this->error->set('Du kan ikke sï¿½tte status til samme som/lavere end den er i forvejen');
             trigger_error("Tried to set status the same or lower than it was before. Can be because of reload. In Reminder->setStatus", E_USER_NOTICE);
             return false;
 
@@ -320,7 +326,7 @@ class Reminder extends Intraface_Standard
                 break;
 
             default:
-                trigger_error("Dette kan ikke lade sig gøre! Reminder->setStatus()", FATAL);
+                trigger_error("Dette kan ikke lade sig gï¿½re! Reminder->setStatus()", FATAL);
         }
 
         $db = new Db_Sql;
@@ -399,7 +405,7 @@ class Reminder extends Intraface_Standard
             }
         }
 
-        // Poster med fakturadato før slutdato.
+        // Poster med fakturadato fï¿½r slutdato.
         if ($this->dbquery->checkFilter("to_date")) {
             $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
             if ($date->convert2db()) {
@@ -411,18 +417,18 @@ class Reminder extends Intraface_Standard
 
         if ($this->dbquery->checkFilter("status")) {
             if ($this->dbquery->getFilter("status") == "-1") {
-                // Behøves ikke, den tager alle.
+                // Behï¿½ves ikke, den tager alle.
                 // $this->dbquery->setCondition("status >= 0");
             } elseif ($this->dbquery->getFilter("status") == "-2") {
-                // Not executed = åbne
+                // Not executed = ï¿½bne
                 if ($this->dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
                     if ($date->convert2db()) {
-                        // Poster der er executed eller cancelled efter dato, og sikring at executed stadig er det, da faktura kan sættes tilbage.
+                        // Poster der er executed eller cancelled efter dato, og sikring at executed stadig er det, da faktura kan sï¿½ttes tilbage.
                         $this->dbquery->setCondition("(date_executed >= \"".$date->get()."\" AND status = 2) OR (date_cancelled >= \"".$date->get()."\") OR status < 2");
                     }
                 } else {
-                    // Hvis der ikke er nogen dato så tager vi alle dem som på nuværende tidspunkt har status under
+                    // Hvis der ikke er nogen dato sï¿½ tager vi alle dem som pï¿½ nuvï¿½rende tidspunkt har status under
                     $this->dbquery->setCondition("status < 2");
                 }
 
@@ -451,7 +457,7 @@ class Reminder extends Intraface_Standard
                         $this->dbquery->setCondition($to_date_field." <= \"".$date->get()."\"");
                     }
                 } else {
-                    // tager dem som på nuværende tidspunkt har den angivet status
+                    // tager dem som pï¿½ nuvï¿½rende tidspunkt har den angivet status
                     $this->dbquery->setCondition("status = ".intval($this->dbquery->getFilter("status")));
                 }
             }
@@ -718,7 +724,7 @@ class Reminder extends Intraface_Standard
     {
         return array(
             0=>'Ingen',
-            1=>'Kontooverførsel',
+            1=>'Kontooverfï¿½rsel',
             2=>'Girokort +01',
             3=>'Girokort +71'
         );

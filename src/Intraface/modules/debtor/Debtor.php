@@ -2,10 +2,10 @@
 /**
  * Debtor = debitor
  *
- * Debitorklassen bruges til både tilbud og ordrer. Den bruges fra et modul,
- * og så bygges de andre på som moduler, der benytter det overordnede modul.
+ * Debitorklassen bruges til bï¿½de tilbud og ordrer. Den bruges fra et modul,
+ * og sï¿½ bygges de andre pï¿½ som moduler, der benytter det overordnede modul.
  *
- * Klassen kan også bruges til at styre fakturaer.
+ * Klassen kan ogsï¿½ bruges til at styre fakturaer.
  *
  * @package Intraface_Debtor
  * @author Lars Olesen <lars@legestue.net>
@@ -83,10 +83,10 @@ class Debtor extends Intraface_Standard
      */
     public function __construct($kernel, $type, $id = 0)
     {
-        // sørger for at vi har det rigtige objekt
-        // denne bør ikke have brug for typen.
+        // sï¿½rger for at vi har det rigtige objekt
+        // denne bï¿½r ikke have brug for typen.
         if (!is_object($kernel)) {
-            trigger_error('Debtor kræver Kernel som objekt', E_USER_ERROR);
+            trigger_error('Debtor krï¿½ver Kernel som objekt', E_USER_ERROR);
         }
 
         $this->kernel = $kernel;
@@ -96,12 +96,12 @@ class Debtor extends Intraface_Standard
             trigger_error('Debtor: Ugyldig type', E_USER_ERROR);
         }
 
-        // Her sætter vi lige type selvom den ikke er loaded, da man nogle
+        // Her sï¿½tter vi lige type selvom den ikke er loaded, da man nogle
         // gange skal bruge type med id = 0 i getList
         $this->value["type"] = $this->type;
         $this->value["type_key"] = $this->type_key;
 
-        // sætter variable
+        // sï¿½tter variable
         $this->id = (int)$id;
         $this->db = new DB_Sql;
         $this->error = new Intraface_Error;
@@ -144,7 +144,7 @@ class Debtor extends Intraface_Standard
     /**
      * Creates a debtor
      *
-     * TODO vi bør vende det her om og finde ud af en standard factory måde at gøre det på
+     * TODO vi bï¿½r vende det her om og finde ud af en standard factory mï¿½de at gï¿½re det pï¿½
      * mit forslag: factory($kernel, $type, $id)
      *
      * @param object  $kernel Kernel
@@ -275,7 +275,7 @@ class Debtor extends Intraface_Standard
         $this->value["internal_note"] = $this->db->f("internal_note");
         $this->value["active"] = $this->db->f("active");
 
-        // Bruges til at afgøre, hvor debtor er sendt hent til
+        // Bruges til at afgï¿½re, hvor debtor er sendt hent til
         $db = new DB_Sql;
         $db->query("SELECT id, type FROM debtor WHERE where_from > 2 AND where_from_id = " . $this->id . " AND active = 1");
         if ($db->nextRecord()) {
@@ -304,9 +304,8 @@ class Debtor extends Intraface_Standard
             $this->contact_person = new ContactPerson($this->contact, $this->db->f("contact_person_id"));
         }
 
-        // henter items på debtoren
-        $this->loadItem();
-        $item = $this->item->getList();
+        // henter items pï¿½ debtoren
+        $item = $this->getItems();
         $this->value['items'] = $item;
 
         // @todo Currency is always loaded, should be done with left join. Oh give me more doctrine!
@@ -349,7 +348,7 @@ class Debtor extends Intraface_Standard
         }
 
         if ($this->get('locked') == true) {
-            $this->error->set('Posten er låst og kan ikke opdateres');
+            $this->error->set('Posten er lï¿½st og kan ikke opdateres');
             return 0;
         }
 
@@ -359,7 +358,7 @@ class Debtor extends Intraface_Standard
      * update()
      *
      * @param array   $input
-     * @param string  $from    Bruges til at fortælle, hvor debtoren kommer fra, fx webshop eller quotation
+     * @param string  $from    Bruges til at fortï¿½lle, hvor debtoren kommer fra, fx webshop eller quotation
      * @param integer $from_id Hvis debtoren kommer fra en anden debtor.
      */
     public function update($input, $from = 'manuel', $from_id = 0)
@@ -380,7 +379,7 @@ class Debtor extends Intraface_Standard
         // starte validatoren
         $validator = new Intraface_Validator($this->error);
 
-        $validator->isNumeric($input["number"], "Nummeret (".$input["number"].")  skal være et tal", "greater_than_zero");
+        $validator->isNumeric($input["number"], "Nummeret (".$input["number"].")  skal vï¿½re et tal", "greater_than_zero");
         if (!$this->isNumberFree($input["number"])) {
             $this->error->set("Nummeret er allerede benyttet");
         }
@@ -452,7 +451,7 @@ class Debtor extends Intraface_Standard
             $input["round_off"] = 0;
         }
 
-      // user_id = ".$this->kernel->user->get('id').", // skal puttes på, men kun hvis det ikke er fra webshop.
+      // user_id = ".$this->kernel->user->get('id').", // skal puttes pï¿½, men kun hvis det ikke er fra webshop.
         $db = new DB_Sql;
         if ($this->id == 0) {
 
@@ -509,14 +508,14 @@ class Debtor extends Intraface_Standard
     }
 
     /**
-     * Må kun bruges hvis hele ordren skal slettes
+     * Mï¿½ kun bruges hvis hele ordren skal slettes
      *
      * @return boolean
      */
     public function delete()
     {
         if ($this->id > 0 AND $this->get("locked") == true) {
-            $this->error->set('Posten er låst og kan ikke slettes');
+            $this->error->set('Posten er lï¿½st og kan ikke slettes');
             return false;
         }
         $db = new DB_Sql;
@@ -530,11 +529,11 @@ class Debtor extends Intraface_Standard
 
     /**
      * Funktionen bruges til at gemme et debitorobjekt som et andet.
-     * Denne funktion er nyttig, når jeg fx skal transformere et tilbud til en ordre. Så smider
-     * jeg bare et objekt med tilbuddet ind i et nyt objekt jeg skaber med ordre, og så går
+     * Denne funktion er nyttig, nï¿½r jeg fx skal transformere et tilbud til en ordre. Sï¿½ smider
+     * jeg bare et objekt med tilbuddet ind i et nyt objekt jeg skaber med ordre, og sï¿½ gï¿½r
      * det hele automatisk.
      *
-     * TODO Kunne være vakst om den lige gav det nye objekt en beskrivelse.
+     * TODO Kunne vï¿½re vakst om den lige gav det nye objekt en beskrivelse.
      *
      * <code>
      * $quot_id = 10;
@@ -545,7 +544,7 @@ class Debtor extends Intraface_Standard
      *
      * @param $object $debtor_object Debtor object
      *
-     * @return int = id på den nye debtor, der skabes.
+     * @return int = id pï¿½ den nye debtor, der skabes.
      */
     public function create($debtor_object)
     {
@@ -554,21 +553,21 @@ class Debtor extends Intraface_Standard
         }
 
         if ($debtor_object->get("type") == "invoice") {
-            // Faktura kan godt krediteres selvom den er låst.
+            // Faktura kan godt krediteres selvom den er lï¿½st.
             if ($debtor_object->get("status") == "created" || $debtor_object->get("status") == "cancelled") {
-                $this->error->set('Debtor::Created kan ikke lave kreditnota fra faktura, når fakturaen ikke er sendt eller færdigbehandlet', E_USER_ERROR);
+                $this->error->set('Debtor::Created kan ikke lave kreditnota fra faktura, nï¿½r fakturaen ikke er sendt eller fï¿½rdigbehandlet', E_USER_ERROR);
                 return false;
             }
         } else {
             if ($debtor_object->get('locked') == true) {
-                $this->error->set('Objektet er låst, så du kan ikke lave et nyt objekt fra det.', E_USER_ERROR);
+                $this->error->set('Objektet er lï¿½st, sï¿½ du kan ikke lave et nyt objekt fra det.', E_USER_ERROR);
                 return false;
             }
         }
 
         $values = $debtor_object->get();
         $values['this_date'] = date('d-m-Y');
-        $values['number'] = ''; // nulstiller nummeret ellers vil den få samme nummer
+        $values['number'] = ''; // nulstiller nummeret ellers vil den fï¿½ samme nummer
         $values['currency'] = $debtor_object->getCurrency();
 
         switch ($this->type) {
@@ -585,8 +584,7 @@ class Debtor extends Intraface_Standard
         }
 
         if ($new_debtor_id = $this->update($values, $debtor_object->get("type"), $debtor_object->get('id'))) {
-            $debtor_object->loadItem();
-            $items = $debtor_object->item->getList();
+            $items = $debtor_object->getItems();
 
             foreach ($items AS $item) {
                 $this->loadItem();
@@ -597,11 +595,11 @@ class Debtor extends Intraface_Standard
             }
 
             if ($this->type != "credit_note") {
-                // Hvis det er en credit_note, så skal fakturanet ikke låses, da man ikke ved om kreditnotaen er på hele fakturaen
+                // Hvis det er en credit_note, sï¿½ skal fakturanet ikke lï¿½ses, da man ikke ved om kreditnotaen er pï¿½ hele fakturaen
                 $debtor_object->setStatus('executed');
             }
 
-            // Overførsel af onlinebetaling fra ordre til faktura.
+            // Overfï¿½rsel af onlinebetaling fra ordre til faktura.
             if ($debtor_object->get('type') == "order" && $this->kernel->intranet->hasModuleAccess('onlinepayment')) {
                 $onlinepayment_module = $this->kernel->useModule('onlinepayment', true); // true: ignore user permisssion
                 $onlinepayment = OnlinePayment::factory($this->kernel);
@@ -624,7 +622,7 @@ class Debtor extends Intraface_Standard
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Sætter status for debtoren
+     * Sï¿½tter status for debtoren
      *
      * @return true / false
      */
@@ -646,11 +644,11 @@ class Debtor extends Intraface_Standard
         }
 
         if ($status_id == $this->get("status_id")) {
-            trigger_error("Du kan ikke sætte status til samme som den er i forvejen", E_USER_ERROR);
+            trigger_error("Du kan ikke sï¿½tte status til samme som den er i forvejen", E_USER_ERROR);
         }
         if (($this->get("type") != "invoice" && $status_id < $this->get("status_id")) || ($this->get("type") == "invoice" && $this->get("status") != "executed" && $status_id < $this->get("status_id"))) {
-            // Man kan godt gå fra executed til sent, hvis f.eks. en betalt faktura bliver efterfølgende bliver krediteret
-            trigger_error("Du kan ikke sætte status lavere end den er i forvejen", E_USER_ERROR);
+            // Man kan godt gï¿½ fra executed til sent, hvis f.eks. en betalt faktura bliver efterfï¿½lgende bliver krediteret
+            trigger_error("Du kan ikke sï¿½tte status lavere end den er i forvejen", E_USER_ERROR);
         }
 
         switch ($status) {
@@ -667,7 +665,7 @@ class Debtor extends Intraface_Standard
                 break;
 
             default:
-                trigger_error("Dette kan ikke lade sig gøre! Debtor->setStatus()", E_USER_ERROR);
+                trigger_error("Dette kan ikke lade sig gï¿½re! Debtor->setStatus()", E_USER_ERROR);
         }
 
         $db = new Db_Sql;
@@ -678,7 +676,7 @@ class Debtor extends Intraface_Standard
     }
 
     /**
-     * Sætter hvorfra debtoren er indtastet. Bør kun bruges, hvis ikke det stammer fra modulet selv,
+     * Sï¿½tter hvorfra debtoren er indtastet. Bï¿½r kun bruges, hvis ikke det stammer fra modulet selv,
      *  fx fra en webshop, eller hvor de bliver skabt fra et andet sted, fx en ordre skabt fra et tilbud-
      *
      * @param string  $from    Where from
@@ -704,9 +702,9 @@ class Debtor extends Intraface_Standard
 
     /**
      * setNewContact();
-     * Bruges til at skifte kunden på en debtor, er fx nyttig ved webshopordrene, hvis
+     * Bruges til at skifte kunden pï¿½ en debtor, er fx nyttig ved webshopordrene, hvis
      * kunden allerede findes i systemet.
-     * Måske den burde indholde en kontrol af at kunden overhovedet findes og tilhøre dette intranet /Sune (21/3 2005)
+     * Mï¿½ske den burde indholde en kontrol af at kunden overhovedet findes og tilhï¿½re dette intranet /Sune (21/3 2005)
      *
      * @param $contact_id int
      *
@@ -735,10 +733,10 @@ class Debtor extends Intraface_Standard
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Bruges til at lave en menu på kontakten eller produktet
+     * Bruges til at lave en menu pï¿½ kontakten eller produktet
      *
      * @param string  $type    contact eller product
-     * @param integer $type_id id på contact eller product.
+     * @param integer $type_id id pï¿½ contact eller product.
      *
      * @return integer
      */
@@ -835,7 +833,7 @@ class Debtor extends Intraface_Standard
             }
         }
 
-        // Poster med fakturadato før slutdato.
+        // Poster med fakturadato fï¿½r slutdato.
         if ($this->dbquery->checkFilter("to_date")) {
             $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
             if ($date->convert2db()) {
@@ -844,7 +842,7 @@ class Debtor extends Intraface_Standard
                 $this->error->set("Til dato er ikke gyldig");
             }
         }
-        // alle ikke bogførte skal findes
+        // alle ikke bogfï¿½rte skal findes
         if ($this->dbquery->checkFilter("not_stated")) {
             $this->dbquery->setCondition("voucher_id = 0");
 
@@ -853,24 +851,24 @@ class Debtor extends Intraface_Standard
 
         if ($this->dbquery->checkFilter("status")) {
             if ($this->dbquery->getFilter("status") == "-1") {
-                // Behøves ikke, den tager alle.
+                // Behï¿½ves ikke, den tager alle.
                 // $this->dbquery->setCondition("status >= 0");
 
             } elseif ($this->dbquery->getFilter("status") == "-2") {
-                // Not executed = åbne
+                // Not executed = ï¿½bne
                 if ($this->dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
                     if ($date->convert2db()) {
-                        // Poster der er executed eller cancelled efter dato, og sikring at executed stadig er det, da faktura kan sættes tilbage.
+                        // Poster der er executed eller cancelled efter dato, og sikring at executed stadig er det, da faktura kan sï¿½ttes tilbage.
                         $this->dbquery->setCondition("(debtor.date_executed >= \"".$date->get()."\" AND debtor.status = 2) OR (debtor.date_cancelled >= \"".$date->get()."\") OR debtor.status < 2");
                     }
                 } else {
-                    // Hvis der ikke er nogen dato så tager vi alle dem som på nuværende tidspunkt har status under
+                    // Hvis der ikke er nogen dato sï¿½ tager vi alle dem som pï¿½ nuvï¿½rende tidspunkt har status under
                     $this->dbquery->setCondition("debtor.status < 2");
                 }
 
             } elseif ($this->dbquery->getFilter("status") == "-3") {
-                //  Afskrevne. Vi tager først alle sendte og executed.
+                //  Afskrevne. Vi tager fï¿½rst alle sendte og executed.
 
                 if ($this->get("type") != "invoice") {
                     trigger_error("Afskrevne kan kun benyttes ved faktura", E_USER_ERROR);
@@ -882,12 +880,12 @@ class Debtor extends Intraface_Standard
                 if ($this->dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
                     if ($date->convert2db()) {
-                        // alle som er sendte på datoen og som ikke er cancelled
+                        // alle som er sendte pï¿½ datoen og som ikke er cancelled
                         $this->dbquery->setCondition("debtor.date_sent <= '".$date->get()."' AND debtor.status != 3");
                         $this->dbquery->setCondition("invoice_payment.payment_date <= '".$date->get()."'");
                     }
                 } else {
-                    // Hvis der ikke er nogen dato så tager vi alle dem som på nuværende tidspunkt har status under
+                    // Hvis der ikke er nogen dato sï¿½ tager vi alle dem som pï¿½ nuvï¿½rende tidspunkt har status under
                     $this->dbquery->setCondition("status = 1 OR status = 2");
                 }
             } else {
@@ -926,7 +924,7 @@ class Debtor extends Intraface_Standard
                         $this->dbquery->setCondition("debtor.status = ".intval($this->dbquery->getFilter("status")));
                     }
                 } else {
-                    // tager dem som på nuværende tidspunkt har den angivet status
+                    // tager dem som pï¿½ nuvï¿½rende tidspunkt har den angivet status
                     $this->dbquery->setCondition("debtor.status = ".intval($this->dbquery->getFilter("status")));
                 }
                 */
@@ -961,7 +959,7 @@ class Debtor extends Intraface_Standard
                 $list[$i]['contact'] = $debtor->contact->get();
                 $list[$i]['contact']['address'] = $debtor->contact->address->get();
 
-                // følgende skal væk
+                // fï¿½lgende skal vï¿½k
                 $list[$i]['contact_id'] = $debtor->contact->get('id');
                 $list[$i]['name'] = $debtor->contact->address->get('name');
                 $list[$i]['address'] = $debtor->contact->address->get('address');
@@ -1045,7 +1043,7 @@ class Debtor extends Intraface_Standard
         throw new Exception('Add item not implemented yet');
     }
 
-    /* FUNKTIONER TIL BOGFØRING ***********************************************************/
+    /* FUNKTIONER TIL BOGFï¿½RING ***********************************************************/
 
     /**
      * Dummy method to checks whether the debtor can be stated
@@ -1055,7 +1053,7 @@ class Debtor extends Intraface_Standard
      */
     public function readyForState()
     {
-        $this->error->set('Denne type kan ikke bogføres');
+        $this->error->set('Denne type kan ikke bogfï¿½res');
         return false;
 
     }
@@ -1288,7 +1286,7 @@ class Debtor extends Intraface_Standard
         /*
         return array(
             0 => 'Ingen',
-            1 => 'Kontooverførsel',
+            1 => 'Kontooverfï¿½rsel',
             2 => 'Girokort +01',
             3 => 'Girokort +71',
             4 => 'Efterkrav',
