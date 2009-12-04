@@ -16,7 +16,9 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
     function map($name)
     {
-        if ($name == 'filehandler') {
+        if ($name == 'selectvariation') {
+            return 'Intraface_modules_product_Controller_Selectproductvariationwithquantity';
+        } elseif ($name == 'filehandler') {
             return 'Intraface_Filehandler_Controller_Index';
         } elseif ($name == 'keyword') {
             return 'Intraface_Keyword_Controller_Index';
@@ -27,8 +29,6 @@ class Intraface_modules_product_Controller_Show extends k_Component
             return 'Intraface_modules_stock_Controller_Product';
         } elseif ($name == 'variations' or $name = 'variation') {
             return 'Intraface_modules_product_Controller_Show_Variations';
-        } elseif ($name == 'selectvariation') {
-            return 'Intraface_modules_product_Controller_Selectproductvariation';
         }
     }
 

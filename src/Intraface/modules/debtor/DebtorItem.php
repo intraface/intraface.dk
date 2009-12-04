@@ -71,10 +71,6 @@ class DebtorItem extends Intraface_Standard
      */
     public function __construct($debtor, $id = 0)
     {
-        if (!is_object($debtor)) {
-            trigger_error('Debtor: Item kræver debtor', E_USER_ERROR);
-        }
-
         $this->debtor = $debtor;
         $this->db = new DB_Sql;
         $this->error = new Intraface_Error;
@@ -272,7 +268,7 @@ class DebtorItem extends Intraface_Standard
     public function save($input)
     {
         if ($this->debtor->get("locked") == 1) {
-            $this->error->set('Posten er låst er låst og der kan ikke opdateres varer på den');
+            $this->error->set('Posten er lï¿½st er lï¿½st og der kan ikke opdateres varer pï¿½ den');
             return 0;
         }
 
@@ -281,7 +277,7 @@ class DebtorItem extends Intraface_Standard
         $validator = new Intraface_Validator($this->error);
 
         settype($input["product_id"], 'integer');
-        if ($validator->isNumeric($input["product_id"], "Du skal vælge et produkt", "greater_than_zero")) {
+        if ($validator->isNumeric($input["product_id"], "Du skal vï¿½lge et produkt", "greater_than_zero")) {
             if (!isset($input['product_detail_id'])) {
                 $input['product_detail_id'] = 0;
             }
@@ -416,7 +412,7 @@ class DebtorItem extends Intraface_Standard
     public function delete()
     {
         if ($this->debtor->get("locked") == true) {
-            $this->error->set('Du kan ikke slette vare til en låst post');
+            $this->error->set('Du kan ikke slette vare til en lï¿½st post');
             return false;
         }
         $this->db->query("UPDATE debtor_item SET active = 0 WHERE id = ".$this->id." AND debtor_id = ".$this->debtor->get("id"));
@@ -533,7 +529,7 @@ class DebtorItem extends Intraface_Standard
         */
 
         if (!in_array($sent, array("", "not_sent"))) {
-            trigger_error("Ugyldig værdi i 3. parameter til debtor->item->getQuantity()", E_USER_ERROR);
+            trigger_error("Ugyldig vï¿½rdi i 3. parameter til debtor->item->getQuantity()", E_USER_ERROR);
         }
 
         if ($this->debtor->get('type') == "quotation") {
@@ -543,16 +539,16 @@ class DebtorItem extends Intraface_Standard
             $status_sql = "debtor.status = 0 OR debtor.status = 1"; // ordre der er oprettet eller sent.
             $date_sql = "";
         } elseif ($this->debtor->get('type') == "invoice" && $sent == "") {
-            $status_sql = "debtor.status = 1 OR debtor.status = 2"; // fakturaer der er sent eller færdigbehandlet
+            $status_sql = "debtor.status = 1 OR debtor.status = 2"; // fakturaer der er sent eller fï¿½rdigbehandlet
             $date_sql = "AND debtor.date_sent > \"".$from_date."\"";
         } elseif ($this->debtor->get('type') == "invoice" && $sent == "not_sent") {
             $status_sql = "debtor.status = 0"; // fakturaer der er oprettet.
             $date_sql = "";
         } elseif ($this->debtor->get('type') == "credit_note") {
-            $status_sql = "debtor.status = 2"; // kredit notaer der er færdigbehandlet
+            $status_sql = "debtor.status = 2"; // kredit notaer der er fï¿½rdigbehandlet
             $date_sql = "AND debtor.date_executed > \"".$from_date."\"";
         } else {
-            trigger_error("Der er opstået en fejl i Debtor->item->getQuantity()", E_USER_ERROR);
+            trigger_error("Der er opstï¿½et en fejl i Debtor->item->getQuantity()", E_USER_ERROR);
         }
 
         $db = new DB_sql;
@@ -566,7 +562,7 @@ class DebtorItem extends Intraface_Standard
                 AND debtor_item.product_id = ".intval($product_id)."
                 AND debtor_item.product_variation_id = ".intval($product_variation_id)." ".$date_sql;
         $db->query($sql);
-        $db->nextRecord(); // Der vil altid være en post
+        $db->nextRecord(); // Der vil altid vï¿½re en post
         return intval($db->f("sum_quantity"));
     }
 
