@@ -102,7 +102,7 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
 
     function postForm()
     {
-        $redirect = $this->getRedirect();
+        //$redirect = $this->getRedirect();
 
         $product = $this->getProduct();
 
@@ -110,6 +110,14 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
             if ($this->multiple && is_array($_POST['selected'])) {
                 foreach ($_POST['selected'] AS $selected_id => $selected_value) {
                     if ((int)$selected_value > 0) {
+                        $selected = array('product_id' => $product->getId(), 'product_variation_id' => $selected_id);
+                        //$this->context->context->removeItem($selected);
+                        if ($this->quantity) {
+                            $this->context->context->addItem($selected, $selected_value);
+                        } else {
+                            $this->context->context->addItem($selected);
+                        }
+                        /*
                         $selected = serialize(array('product_id' => $product->getId(), 'product_variation_id' => $selected_id));
                         // Hvis der allerede er gemt en v�rdi, s� starter vi med at fjerne den, s� der ikke kommer flere p�
                         $redirect->removeParameter('product_variation_id', $selected);
@@ -118,19 +126,30 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
                         } else {
                             $redirect->setParameter('product_variation_id', $selected);
                         }
+                        */
                     }
                 }
             } elseif (!$this->multiple && !empty($_POST['selected'])) {
+                $selected = array('product_id' => $product->getId(), 'product_variation_id' => (int)$_POST['selected']);
+                if ($this->quantity) {
+                    $this->context->context->addItem($selected, (int)$_POST['quantity']);
+                } else {
+                    $this->context->context->addItem($selected);
+                }
+
+                /*
                 $selected = serialize(array('product_id' => $product->getId(), 'product_variation_id' => (int)$_POST['selected']));
                 if ($this->quantity) {
                     $redirect->setParameter('product_variation_id', $selected, (int)$_POST['quantity']);
                 } else {
                     $redirect->setParameter('product_variation_id', $selected);
                 }
+                */
             }
 
             if (isset($_POST['submit_close'])) {
-                return new k_SeeOther($redirect->getRedirect($this->url('../../')));
+                //return new k_SeeOther($redirect->getRedirect($this->url('../../')));
+                return new k_SeeOther($this->url('../../'));
             }
             return new k_SeeOther($this->url());
 

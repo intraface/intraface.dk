@@ -3,7 +3,7 @@
 <?php echo $context->getError()->view(); ?>
 
 <form action="<?php e(url(null, array($context->subview()))); ?>" method="POST">
-<intput type="hidden" name="_method" value="<?php e($context->method); ?>" />
+<input type="hidden" name="_method" value="<?php e($context->method); ?>" />
 <fieldset>
     <legend><?php e(t('Information'))?></legend>
 

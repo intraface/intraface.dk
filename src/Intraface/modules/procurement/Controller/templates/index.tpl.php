@@ -66,7 +66,7 @@
                     <td>
                         <?php if ($context->getKernel()->user->hasModuleAccess('contact') && $procurement["contact_id"] != 0): ?>
                             <?php $ModuleContact = $context->getKernel()->getModule('contact'); ?>
-                            <a href="<?php e($ModuleContact->getPath()."contact.php?id=".$procurement["contact_id"]); ?>"><?php e($procurement["contact"]); ?></a>
+                            <a href="<?php e($ModuleContact->getPath().$procurement["contact_id"]); ?>"><?php e($procurement["contact"]); ?></a>
                         <?php else: ?>
                             <?php e($procurement["vendor"]); ?>
                         <?php endif; ?>

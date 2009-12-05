@@ -62,7 +62,7 @@ class Intraface_modules_procurement_ProcurementGateway
             }
         }
 
-        // Poster med fakturadato før slutdato.
+        // Poster med fakturadato fï¿½r slutdato.
         if ($this->dbquery->checkFilter("to_date")) {
             $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
             if ($date->convert2db()) {
@@ -74,20 +74,20 @@ class Intraface_modules_procurement_ProcurementGateway
 
         if ($this->dbquery->checkFilter("status")) {
             if ($this->dbquery->getFilter("status") == "-1") {
-                // Behøves ikke, den tager alle.
+                // Behï¿½ves ikke, den tager alle.
 
             } elseif ($this->dbquery->getFilter("status") == "-2") {
-                // Not executed = åbne
+                // Not executed = ï¿½bne
                 /*
                 if ($this->dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
                     if ($date->convert2db()) {
-                        // Poster der er executed eller canceled efter dato, og sikring at executed stadig er det, da faktura kan sættes tilbage.
+                        // Poster der er executed eller canceled efter dato, og sikring at executed stadig er det, da faktura kan sï¿½ttes tilbage.
                         $this->dbquery->setCondition("(date_executed >= \"".$date->get()."\" AND status_key = 2) OR (date_canceled >= \"".$date->get()."\") OR status_key < 2");
                     }
                 }
                 else {
-                    // Hvis der ikke er nogen dato så tager vi alle dem som på nuværende tidspunkt har status under
+                    // Hvis der ikke er nogen dato sï¿½ tager vi alle dem som pï¿½ nuvï¿½rende tidspunkt har status under
                     $this->dbquery->setCondition("status_key < 2");
                 }
                 */
@@ -115,7 +115,7 @@ class Intraface_modules_procurement_ProcurementGateway
                     }
                 }
                 else {
-                    // tager dem som på nuværende tidspunkt har den angivet status
+                    // tager dem som pï¿½ nuvï¿½rende tidspunkt har den angivet status
                     $this->dbquery->setCondition("status_key = ".intval($this->dbquery->getFilter("status")));
                 }
             }
@@ -147,6 +147,16 @@ class Intraface_modules_procurement_ProcurementGateway
             $list[$i]["paid_date"] = $db->f("paid_date");
             $list[$i]["dk_paid_date"] = $db->f("dk_paid_date");
             $list[$i]["contact_id"] = $db->f("contact_id");
+
+            if ($list[$i]["contact_id"] > 0) {
+                $contact = new Contact($this->kernel, $list[$i]["contact_id"]);
+                $list[$i]["contact"] = $contact->get('name');
+            } else {
+                $list[$i]["contact"] = 'Unknown';
+            }
+
+            $list[$i]["contact_id"] = $db->f("contact_id");
+
             $list[$i]["total_price"] = round($db->f("price_items") + $db->f("price_shipment_etc") + $db->f("vat"), 2);;
 
             $i++;

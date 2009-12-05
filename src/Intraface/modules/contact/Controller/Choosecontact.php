@@ -1,6 +1,8 @@
 <?php
 class Intraface_modules_contact_Controller_Choosecontact extends k_Component
 {
+    protected $contact;
+
     function renderHtml()
     {
         $module = $this->getKernel()->module("contact");
@@ -34,7 +36,8 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
 
     function getContact()
     {
-        return $contact = new Contact($this->getKernel());
+        if (is_object($this->contact)) return $this->contact;
+        return $this->contact = new Contact($this->getKernel());
     }
 
     function getContacts()
@@ -100,13 +103,13 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
 
         if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
-            $contact = new Contact($this->getKernel(), $_POST['id']);
+            $contact = $this->getContact();
 
             $eniro = new Services_Eniro();
             $value = $_POST;
 
             if ($oplysninger = $eniro->query('telefon', $_POST['eniro_phone'])) {
-                // skal kun bruges så længe vi ikke er utf8
+                // skal kun bruges sï¿½ lï¿½nge vi ikke er utf8
                 // $oplysninger = array_map('utf8_decode', $oplysninger);
                 $address['name'] = $oplysninger['navn'];
                 $address['address'] = $oplysninger['adresse'];
@@ -118,7 +121,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
 
             // for a new contact we want to check if similar contacts alreade exists
             if (empty($_POST['id'])) {
-                $contact = new Contact($this->getKernel());
+                $contact = $this->getContact();
                 if (!empty($_POST['phone'])) {
                     $contact->getDBQuery()->setCondition("address.phone = '".$_POST['phone']."' AND address.phone <> ''");
                     $similar_contacts = $contact->getList();
@@ -157,23 +160,26 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
     function getContactModule()
     {
         return $this->getKernel()->module("contact");
-
     }
 
     function getValues()
     {
-        return array();
+        if ($this->body()) return $this->body();
+        return array('number' => $this->getContact()->getMaxNumber() + 1);
     }
 
     function getAddressValues()
     {
+        if ($this->body()) return $this->body();
         return array();
     }
 
     function getDeliveryAddressValues()
     {
+        if ($this->body()) return $this->body();
         return array();
     }
+
     function renderHtmlCreate()
     {
         $contact_module = $this->getKernel()->module("contact");
@@ -193,7 +199,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
     	if ($contact->get('id') != 0) {
     	    return new k_SeeOther($this->getRedirectUrl($contact->get('id')));
     	} else {
-    		$contact->error->set("Du skal vælge en kontakt");
+    		$contact->error->set("Du skal vÃ¦lge en kontakt");
     	}
 
     	return $this->render();
@@ -234,7 +240,7 @@ if (isset($_POST['submit'])) {
 		header("Location: ".$redirect->getRedirect('index.php'));
 		exit;
 	} else {
-		$contact->error->set("Du skal vælge en kontakt");
+		$contact->error->set("Du skal vï¿½lge en kontakt");
 	}
 } else {
 	$contact = new Contact($kernel);
@@ -274,7 +280,7 @@ if (isset($_GET['contact_id']) && intval($_GET['contact_id']) != 0) {
 $contacts = $contact->getList();
 
 $page = new Intraface_Page($kernel);
-$page->start('Vælg kontakt');
+$page->start('Vï¿½lg kontakt');
 ?>
 <h1><?php e(t('Choose contact')); ?></h1>
 

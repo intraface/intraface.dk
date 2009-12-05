@@ -119,7 +119,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             $this->getDebtor()->setStatus('cancelled');
         }
 
-        // sæt status til sendt
+        // sï¿½t status til sendt
         elseif (!empty($_POST['sent'])) {
             $this->getDebtor()->setStatus('sent');
 
@@ -129,7 +129,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         }
 
 
-        // Overføre tilbud til ordre
+        // Overfï¿½re tilbud til ordre
         elseif (!empty($_POST['order'])) {
             if ($this->getKernel()->user->hasModuleAccess('order') && $this->getDebtor()->get("type") == "quotation") {
                 $this->getKernel()->useModule("order");
@@ -140,7 +140,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             }
         }
 
-        // Overføre ordre til faktura
+        // Overfï¿½re ordre til faktura
         elseif (!empty($_POST['invoice'])) {
             if ($this->getKernel()->user->hasModuleAccess('invoice') && ($this->getDebtor()->get("type") == "quotation" || $this->getDebtor()->get("type") == "order")) {
                 $this->getKernel()->useModule("invoice");
@@ -151,7 +151,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             }
         }
 
-        // Overfør til kreditnota
+        // Overfï¿½r til kreditnota
         elseif (!empty($_POST['credit_note'])) {
             if ($this->getKernel()->user->hasModuleAccess('invoice') && $this->getDebtor()->get("type") == "invoice") {
                 $credit_note = new CreditNote($this->getKernel());
@@ -229,8 +229,8 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
             $body = 'Tak for din bestilling i vores onlineshop. Vi har ikke registreret nogen onlinebetaling sammen med bestillingen, hvilket kan skyldes flere ting.
 
-    1) Du fortrudt bestillingen, da du skulle til at betale. I så fald må du meget gerne skrive tilbage og annullere din bestilling.
-    2) Der er sket en fejl under betalingen. I det tilfælde må du gerne betale ved at gå ind på nedenstående link:
+    1) Du fortrudt bestillingen, da du skulle til at betale. I sï¿½ fald mï¿½ du meget gerne skrive tilbage og annullere din bestilling.
+    2) Der er sket en fejl under betalingen. I det tilfï¿½lde mï¿½ du gerne betale ved at gï¿½ ind pï¿½ nedenstï¿½ende link:
 
     ' .  $payment_url;
             $subject = 'Betaling ikke modtaget';
@@ -306,7 +306,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             // tilknyt fil
             if (!$email->attachFile($file_id, $filehandler->get('file_name'))) {
                 echo $email->error->view();
-                throw new Exception('Filen kunne ikke vedhæftes');
+                throw new Exception('Filen kunne ikke vedhÃ¦ftes');
             }
 
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
@@ -370,7 +370,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             return new k_SeeOther($url . '&edit');
         }
 
-        // Redirect til tilføj produkt
+        // Redirect til tilfï¿½j produkt
         if (isset($_GET['add_item'])) {
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
             $product_module = $this->getKernel()->useModule('product');
@@ -384,7 +384,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         }
 
 
-        // Return fra tilføj produkt og send email
+        // Return fra tilfï¿½j produkt og send email
         if (isset($_GET['return_redirect_id'])) {
 
             $return_redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
@@ -401,7 +401,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             } elseif ($return_redirect->get('identifier') == 'send_email') {
                 if ($return_redirect->getParameter('send_email_status') == 'sent' OR $return_redirect->getParameter('send_email_status') == 'outbox') {
                     $this->email_send_with_success = true;
-                    // hvis faktura er genfremsendt skal den ikke sætte status igen
+                    // hvis faktura er genfremsendt skal den ikke sï¿½tte status igen
                     if ($this->getDebtor()->get('status') != 'sent') {
                         $this->getDebtor()->setStatus('sent');
                     }
@@ -417,7 +417,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         return parent::GET();
     }
 
-    function addItem($product, $quantity)
+    function addItem($product, $quantity = 1)
     {
         $this->getDebtor()->loadItem();
         $this->getDebtor()->item->save(array('product_id' => $product['product_id'], 'product_variation_id' => $product['product_variation_id'], 'quantity' => $quantity, 'description' => ''));

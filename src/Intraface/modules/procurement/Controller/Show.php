@@ -18,12 +18,16 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
             return 'Intraface_modules_product_Controller_Selectmultipleproductwithquantity';
         } elseif ('state' == $name) {
             return 'Intraface_modules_accounting_Controller_State_Procurement';
+        } elseif ($name == 'purchaseprice') {
+            return 'Intraface_modules_procurement_Controller_PurchasePrice';
+        } elseif ($name == 'item') {
+            return 'Intraface_modules_procurement_Controller_Items';
         }
     }
 
     function getProcurement()
     {
-         return $procurement = new Procurement($this->getKernel(), $this->name());
+        return $procurement = new Procurement($this->getKernel(), $this->name());
     }
 
     /**
@@ -92,6 +96,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
             }
         } elseif (isset($_GET['return_redirect_id'])) {
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
+            /*
             if ($redirect->get('identifier') == 'contact') {
                 if ($this->getKernel()->user->hasModuleAccess('contact')) {
                     $contact_module = $this->getKernel()->useModule('contact');
@@ -106,7 +111,9 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                     trigger_error('You need access to the contact module!', E_USER_ERROR);
                     exit;
                 }
-            } elseif ($redirect->get('identifier') == 'file_handler') {
+            }
+            */
+            if ($redirect->get('identifier') == 'file_handler') {
 
                 $file_handler_id = $redirect->getParameter('file_handler_id');
                 foreach ($file_handler_id as $id) {
@@ -114,6 +121,23 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                 }
 
             }
+        } elseif ($this->query('contact_id')) {
+            if ($this->getKernel()->user->hasModuleAccess('contact')) {
+                $contact_module = $this->getKernel()->useModule('contact');
+                $contact = new Contact($this->getKernel(), $this->query('contact_id'));
+                if ($contact->get('id') != 0) {
+                    $procurement->setContact($contact);
+                } else {
+                    $procurement->error->set('Ingen gyldig kontakt blev valgt');
+                }
+
+            } else {
+                trigger_error('You need access to the contact module!', E_USER_ERROR);
+                exit;
+            }
+
+        } elseif ($this->query('from') == 'select_product') {
+            return new k_SeeOther($this->url('purchaseprice'));
         }
 
         $data = array('procurement' => $procurement, 'kernel' => $this->getKernel(), 'append_file' => $append_file, 'filehandler' => $filehandler);
@@ -131,7 +155,12 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
 
         $this->document->addScript($this->url('procurement/edit.js'));
 
-        $data = array('procurement' => $procurement, 'kernel' => $this->getKernel(), 'title' => $title);
+        $data = array(
+        	'procurement' => $procurement,
+        	'kernel' => $this->getKernel(),
+        	'title' => $title,
+            'gateway' => new Intraface_modules_procurement_ProcurementGateway($this->getKernel()),
+            'values' => $values);
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/procurement-edit');
         return $tpl->render($this, $data);
     }
@@ -223,5 +252,21 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
     function getKernel()
     {
         return $this->context->getKernel();
+    }
+
+    function getReturnUrl($contact_id)
+    {
+        return $this->url(null, array('contact_id' => $contact_id));
+    }
+
+    function addItem($product, $quantity = 1)
+    {
+       	$procurement = new Procurement($this->getKernel(), $this->name());
+        $procurement->loadItem();
+        $procurement->item->save(array(
+        	'product_id' => $product['product_id'],
+        	'product_variation_id' => $product['product_variation_id'],
+        	'quantity' => intval($quantity)));
+
     }
 }

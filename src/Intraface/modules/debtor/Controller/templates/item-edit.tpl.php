@@ -6,7 +6,7 @@ $values = $context->getValues();
 
 <?php echo $context->getDebtor()->item->error->view(); ?>
 
-<form method="POST" action="item_edit.php" id="form_items">
+<form method="POST" action="<?php e(url()); ?>" id="form_items">
 <fieldset>
 	<legend><?php e(__('Product')); ?></legend>
 	<div class="formrow">

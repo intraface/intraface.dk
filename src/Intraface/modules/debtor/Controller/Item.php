@@ -1,9 +1,16 @@
 <?php
 class Intraface_modules_debtor_Controller_Item extends k_Component
 {
+    function map($name)
+    {
+        if ($name == 'selectproduct') {
+            return 'Intraface_modules_product_Controller_Selectproduct';
+        }
+    }
+
     function renderHtml()
     {
-        return 'Intentionally left blank';
+        return $this->renderHtmlEdit();
     }
 
     function getKernel()
@@ -17,10 +24,9 @@ class Intraface_modules_debtor_Controller_Item extends k_Component
 
         if (isset($_GET['change_product'])) {
         	$redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-        	$url = $redirect->setDestination($product_module->getPath().'select_product.php', $debtor_module->getPath().'item_edit.php?debtor_id='.$debtor->get('id').'&id='.$debtor->item->get('id'));
+        	$url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('selectproduct'), NET_SCHEME . NET_HOST . $this->url());
         	$redirect->askParameter('product_id');
-        	header('location: '.$url);
-        	exit;
+        	return new k_SeeOther($url);
         } elseif (isset($_GET['return_redirect_id'])) {
         	$redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
             $returned_values = unserialize($redirect->getParameter('product_id'));

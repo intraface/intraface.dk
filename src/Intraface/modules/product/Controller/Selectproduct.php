@@ -2,14 +2,16 @@
 class Intraface_modules_product_Controller_Selectproduct extends Intraface_modules_product_Controller_Index
 {
     protected $product;
-    public $multiple;
-    public $quantity;
+    public $multiple = false;
+    public $quantity = false;
     public $selected_products;
 
     function __construct()
     {
+        /*
         $this->multiple = $this->query('multiple');
         $this->quantity = $this->query('set_quantity');
+        */
     }
 
     function renderHtml()
@@ -131,6 +133,11 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
         return $keywords = $this->getProduct()->getKeywordAppender();
     }
 
+    function addItem(array $product, $quantity)
+    {
+        $this->context->addItem($product, $quantity);
+    }
+
     function putForm()
     {
         if (isset($_POST['submit']) || isset($_POST['submit_close'])) {
@@ -142,19 +149,20 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
                             	'product_id' => $selected_id,
                             	'product_variation_id' => 0);
 
-                            $this->context->addItem($product, $selected_value);
-                        }
+                            $this->addItem($product, $selected_value);                        }
                     }
                 }
             } else {
                 if (isset($_POST['selected']) && (int)$_POST['selected'] != 0) {
-                    $product = array('product_id' => (int)$_POST['selected'], 'product_variation_id' => 0);
-                    $this->context->addItem($product, (int)$_POST['quantity']);
+                    $product = array(
+                    	'product_id' => (int)$_POST['selected'],
+                    	'product_variation_id' => 0);
+                    $this->addItem($product, (int)$_POST['quantity']);
                 }
             }
 
             if (isset($_POST['submit_close'])) {
-                return new k_SeeOther($this->url('../'));
+                return new k_SeeOther($this->url('../', array('from' => 'select_product')));
             }
 
             return new k_SeeOther($this->url(null, array('use_stored' => true, 'set_quantity' => $this->quantity, 'multiple' => $this->multiple)));

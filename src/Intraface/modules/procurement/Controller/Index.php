@@ -40,6 +40,7 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
         // $this->document->title = $this->__('Procurement');
 
         $module = $this->getKernel()->module('procurement');
+        $module = $this->getKernel()->useModule('contact');
         $translation = $this->getKernel()->getTranslation('procurement');
 
         $gateway = $this->getProcurementGateway();
@@ -118,7 +119,7 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
             return new k_SeeOther($this->url($procurement->get("id")));
         } else {
             $values = $_POST;
-            $title = "Ret indkøb";
+            $title = "Ret indkï¿½b";
         }
     }
 }
