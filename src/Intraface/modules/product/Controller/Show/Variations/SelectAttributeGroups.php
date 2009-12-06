@@ -1,5 +1,5 @@
 <?php
-class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups extends Intraface_modules_product_Controller_Attributegroups
+class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups extends Intraface_modules_product_Controller_AttributeGroups
 {
 
     function getKernel()
