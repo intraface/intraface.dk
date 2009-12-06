@@ -63,9 +63,9 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
 
         $page_types_plural = CMS_Page::getTypesPlural();
 
-        $this->document->addScript($this->url('/yui/connection/connection-min.js'));
-        $this->document->addScript($this->url('/cms/checkboxes.js'));
-        $this->document->addScript($this->url('/cms/publish.js'));
+        $this->document->addScript('yui/connection/connection-min.js');
+        $this->document->addScript('cms/checkboxes.js');
+        $this->document->addScript('cms/publish.js');
 
         $data = array(
         	'type' => $type,

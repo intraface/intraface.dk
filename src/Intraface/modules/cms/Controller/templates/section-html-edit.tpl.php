@@ -4,7 +4,7 @@
 echo $element->error->view($translation);
 ?>
 
-<form method="post" action="<?php e(url()); ?>"  enctype="multipart/form-data">
+<form method="post" action="<?php e(url(null, array('type' => $element->get('type')))); ?>"  enctype="multipart/form-data">
     <input name="id" type="hidden" value="<?php e(intval($element->get('id'))); ?>" />
     <input name="section_id" type="hidden" value="<?php e(intval($element->section->get('id'))); ?>" />
     <input name="type" type="hidden" value="<?php e($element->get('type')); ?>" />
@@ -264,7 +264,7 @@ switch ($value['type']) {
 
             <div class="formrow">
                 <?php if ($kernel->user->hasModuleAccess('filemanager')): ?>
-                    <!-- hvad bruges den her egentlig til? - hvorfor kan man ikke vælge uden administration -->
+                    <!-- hvad bruges den her egentlig til? - hvorfor kan man ikke vï¿½lge uden administration -->
                     <input type="hidden" name="filelist_select_method" value="single_file" />
                 <?php endif; ?>
 

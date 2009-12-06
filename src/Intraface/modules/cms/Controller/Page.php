@@ -1,4 +1,3 @@
-
 <?php
 class Intraface_modules_cms_Controller_Page extends k_Component
 {
@@ -16,8 +15,18 @@ class Intraface_modules_cms_Controller_Page extends k_Component
             return 'Intraface_modules_cms_Controller_PageEdit';
         } elseif ($name == 'section') {
             return 'Intraface_modules_cms_Controller_Sections';
+        } elseif ($name == 'keyword') {
+            return 'Intraface_Keyword_Controller_Index';
         }
+    }
 
+    /**
+     * @see Intraface_Keyword_Controller_Index
+     * @return object
+     */
+    function getModel()
+    {
+        return $cmspage = CMS_Page::factory($this->getKernel(), 'id', $this->name());
     }
 
     function renderHtml()
@@ -25,8 +34,6 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         $module_cms = $this->getKernel()->module('cms');
         $module_cms->includeFile('HTML_Editor.php');
         $translation = $this->getKernel()->getTranslation('cms');
-
-        $error = array();
 
         if (isset($_GET['return_redirect_id'])) {
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
@@ -52,19 +59,18 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         $data = array(
         	'cmspage' => $cmspage,
         	'sections' => $sections,
-            'kernel' => $this->getKernel()
+            'kernel' => $this->getKernel(),
+            'error' => $this->error
         );
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/page');
         return $tpl->render($this, $data);
     }
 
-    function postMultipart()
+    function postForm()
     {
         $module_cms = $this->getKernel()->module('cms');
         $module_cms->includeFile('HTML_Editor.php');
         $translation = $this->getKernel()->getTranslation('cms');
-
-        $error = array();
 
         if (!empty($_POST['publish'])) {
             $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_POST['id']);
@@ -77,6 +83,14 @@ class Intraface_modules_cms_Controller_Page extends k_Component
                 return new k_SeeOther($this->url());
             }
         }
+        return $this->render();
+    }
+
+    function postMultipart()
+    {
+        $module_cms = $this->getKernel()->module('cms');
+        $module_cms->includeFile('HTML_Editor.php');
+        $translation = $this->getKernel()->getTranslation('cms');
 
         $files = '';
         if (isset($_POST['section']) && is_array($_POST['section'])) {
@@ -103,7 +117,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
                                 if ($pic_id != 0) {
                                     $value['pic_id'] = $pic_id;
                                 }
-                                // Vi har fundet filen til som passer til dette felt, så er der ikke nogen grund til at køre videre.
+                                // Vi har fundet filen til som passer til dette felt, sï¿½ er der ikke nogen grund til at kï¿½re videre.
                                 break;
                             }
                         }
@@ -121,8 +135,8 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         if (empty($this->error) AND count($this->error) == 0) {
             if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
 
-                // jeg skal bruge array_key, når der er klikket på choose_file, for den indeholder section_id. Der bør
-                // kun kunne være en post i arrayet, så key 0 må være $section_id for vores fil
+                // jeg skal bruge array_key, nï¿½r der er klikket pï¿½ choose_file, for den indeholder section_id. Der bï¿½r
+                // kun kunne vï¿½re en post i arrayet, sï¿½ key 0 mï¿½ vï¿½re $section_id for vores fil
                 $keys = array_keys($_POST['choose_file']);
                 $section_id = $keys[0];
 
@@ -135,7 +149,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
                 return new k_SeeOther($url);
             } elseif (!empty($_POST['edit_html'])) {
                 $keys = array_keys($_POST['edit_html']);
-                return new k_SeeOther($this->url('../' . $id . '/section/' . $keys[0]));
+                return new k_SeeOther($this->url('../' . $section->cmspage->get('id') . '/section/' . $keys[0]));
             } elseif (!empty($_POST['close'])) {
                 return new k_SeeOther($this->url('../', array('type' => $section->cmspage->get('type'), 'id' => $section->cmspage->cmssite->get('id'))));
             } else {

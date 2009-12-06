@@ -24,7 +24,6 @@ class Intraface_modules_cms_Controller_Templates extends k_Component
 
     function renderHtml()
     {
-
         $cms_module = $this->getKernel()->module('cms');
         $translation = $this->getKernel()->getTranslation('cms');
 

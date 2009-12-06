@@ -33,20 +33,20 @@ class Intraface_modules_cms_Controller_TemplateEdit extends k_Component
 
     function postForm()
     {
-
-        // det kunne godt være, at der skulle laves noget så hvis det er første gang
-        // man gemmer et template, så ryger man på template.php
         $module = $this->getKernel()->module('cms');
-        $translation = $this->getKernel()->getTranslation('cms');
 
         $cmssite = new CMS_Site($this->getKernel(), $this->context->getSiteId());
         $template = new CMS_Template($cmssite, $_POST['id']);
 
         if ($id = $template->save($_POST)) {
             if (!empty($_POST['close'])) {
-                return new k_SeeOther($this->url('../' . $id));
+                if (is_numeric($this->context->name())) {
+                    return new k_SeeOther($this->context->url());
+                } else {
+                    return new k_SeeOther($this->context->url($id));
+                }
             } else {
-                return new k_SeeOther($this->url('../' . $id));
+                return new k_SeeOther($this->url());
             }
         } else {
             $value = $_POST;

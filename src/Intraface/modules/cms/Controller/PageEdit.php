@@ -52,8 +52,8 @@ class Intraface_modules_cms_Controller_PageEdit extends k_Component
         $templates = $template->getList($binary_bage_type);
         $cmspages = $cmspage->getList();
 
-        $this->document->addScript('/cms/page_edit.js');
-        $this->document->addScript('/cms/parseUrlIdentifier.js');
+        $this->document->addScript('cms/page_edit.js');
+        $this->document->addScript('cms/parseUrlIdentifier.js');
 
         $data = array('value' => $value,
         	'type' => $type,
@@ -106,7 +106,11 @@ class Intraface_modules_cms_Controller_PageEdit extends k_Component
 
             } elseif (!empty($_POST['add_keywords'])) {
                 $keyword_shared = $this->getKernel()->useShared('keyword');
-                return new k_SeeOther($this->url('../' . $cmspage->get('id') . '/keyword/connect'));
+                if (is_numeric($this->context->name())) {
+                    return new k_SeeOther($this->url('../keyword/connect'));
+                } else {
+                    return new k_SeeOther($this->url('../' . $cmspage->get('id') . '/keyword/connect'));
+                }
             } else {
                 return new k_SeeOther($this->url(null));
             }

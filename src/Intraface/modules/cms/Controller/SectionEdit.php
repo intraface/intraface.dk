@@ -56,11 +56,11 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
                 $value = $element->get();
             }
         } else {
-            // der skal valideres noget på typen også.
+            // der skal valideres noget pï¿½ typen ogsï¿½.
 
             // FIXME ud fra section bliver cms_site loaded flere gange?
-            // formentlig har det noget med Template at gøre
-            // i øvrigt er tingene alt for tæt koblet i page
+            // formentlig har det noget med Template at gï¿½re
+            // i ï¿½vrigt er tingene alt for tï¿½t koblet i page
             $section = CMS_Section::factory($this->getKernel(), 'id', $this->context->name());
             $element = CMS_Element::factory($section, 'type', $_GET['type']);
             if (!is_object($element)) {
@@ -73,7 +73,7 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
             $value['page_id'] = $element->get('page_id');
         }
         if ($this->getKernel()->setting->get('user', 'htmleditor') == 'tinymce') {
-            $this->document->addScript('/tiny_mce/tiny_mce.js');
+            $this->document->addScript('tiny_mce/tiny_mce.js');
         }
 
         $data = array(
@@ -93,13 +93,15 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
         $module_cms = $this->getKernel()->module('cms');
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
         $shared_filehandler->includeFile('AppendFile.php');
-        $translation = $this->getKernel()->getTranslation('cms');
+
+        $old = true;
 
         if (!empty($_POST['id'])) {
             $element = CMS_Element::factory($this->getKernel(), 'id', $_POST['id']);
         } else {
             $section = CMS_Section::factory($this->getKernel(), 'id', $_POST['section_id']);
             $element = CMS_Element::factory($section, 'type', $_POST['type']);
+            $old = false;
         }
 
         if ($element->get('type') == 'picture') {
@@ -178,13 +180,22 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
                     $redirect->setIdentifier('filelist');
                     $redirect->askParameter('file_handler_id', 'multiple');
                 } else {
-                    trigger_error("Det er ikke en gyldig elementtype til at lave redirect fra", E_USER_ERROR);
+                    throw new Exception("Det er ikke en gyldig elementtype til at lave redirect fra");
                 }
                 return new k_SeeOther($url);
             } elseif (!empty($_POST['close'])) {
-                return new k_SeeOther($this->url('../' . $element->section->get('id')));
+                if ($old) {
+                    return new k_SeeOther($this->url('../../'));
+                } else {
+                    return new k_SeeOther($this->url('../../' . $element->section->get('id')));
+                }
+
             } else {
-                return new k_SeeOther($this->url());
+                if ($old) {
+                    return new k_SeeOther($this->url('../../element/' . $element->get('id')));
+                } else {
+                    return new k_SeeOther($this->url('../element/' . $element->get('id')));
+                }
             }
         } else {
             $value = $_POST;

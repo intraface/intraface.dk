@@ -18,7 +18,7 @@ class Intraface_modules_cms_Controller_TemplateSectionEdit extends k_Component
             $value = $section->get();
 
         } else {
-            // der skal valideres noget på typen også.
+            // der skal valideres noget pï¿½ typen ogsï¿½.
 
             $template = CMS_Template :: factory($this->getKernel(), 'id', $this->context->getTemplateId());
             $section = CMS_TemplateSection :: factory($template, 'type', $_GET['type']);
@@ -32,7 +32,8 @@ class Intraface_modules_cms_Controller_TemplateSectionEdit extends k_Component
             'value' => $value,
             'section' => $section,
             'translation' => $this->getKernel()->getTranslation('cms'),
-            'cms_module' => $cms_module
+            'cms_module' => $cms_module,
+            'kernel' => $this->getKernel()
         );
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/template-section-edit');

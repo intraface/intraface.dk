@@ -9,8 +9,8 @@ class MainCMS extends Intraface_Main
 {
     function __construct()
     {
-        $this->module_name     = 'cms'; // Navnet der vil stå i menuen
-        $this->menu_label      = 'CMS'; // Navnet der vil stå i menuen
+        $this->module_name     = 'cms'; // Navnet der vil stï¿½ i menuen
+        $this->menu_label      = 'CMS'; // Navnet der vil stï¿½ i menuen
         $this->show_menu       = 1; // Skal modulet vises i menuen.
         $this->active          = 1; // Er modulet aktivt.
         $this->menu_index      = 10;
@@ -18,13 +18,13 @@ class MainCMS extends Intraface_Main
 
         //$this->addControlPanelFile('accounting', $this->getPath() . 'settings.php');
 
-        // Tilføj undermenu punkter.
+        // Tilfï¿½j undermenu punkter.
         $this->addSubMenuItem('choose site', '');
-        $this->addSubMenuItem('pages', 'pages?type=page');
-        $this->addSubMenuItem('articles', 'pages?type=article');
-        $this->addSubMenuItem('news', 'pages?type=news');
+        //$this->addSubMenuItem('pages', 'pages?type=page');
+        //$this->addSubMenuItem('articles', 'pages?type=article');
+        //$this->addSubMenuItem('news', 'pages?type=news');
 
-        // Tilføj subaccess punkter
+        // Tilfï¿½j subaccess punkter
         $this->addSubAccessItem('edit_stylesheet', 'stylesheet');
         $this->addSubAccessItem('edit_templates', 'templates');
 
@@ -74,7 +74,7 @@ class MainCMS extends Intraface_Main
             2 => 'longtext',
             3 => 'picture',
             4 => 'mixed',
-            5 => 'gallery' // måske skal man sætte allowed elements?
+            5 => 'gallery' // mï¿½ske skal man sï¿½tte allowed elements?
         ));
 
         $this->addSetting('htmleditors', array(
