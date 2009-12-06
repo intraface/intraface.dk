@@ -18,10 +18,10 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         $db->exec('TRUNCATE accounting_post');
         $db->exec('TRUNCATE accounting_year');
         $db->exec('TRUNCATE accounting_voucher');
-
     }
 
-    function createKernel() {
+    function createKernel()
+    {
         $kernel = new Stub_Kernel;
         $kernel->setting->set('intranet', 'onlinepayment.provider_key', 1);
         $kernel->setting->set('user', 'accounting.active_year', 1);
@@ -46,15 +46,16 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         return $debtor;
     }
 
-    function createContact() {
-
+    function createContact()
+    {
         require_once 'Intraface/modules/contact/Contact.php';
         $contact = new Contact($this->createKernel());
         $contact->save(array('name' => 'Test', 'email' => 'lars@legestue.net', 'phone' => '98468269'));
         return $contact;
     }
 
-    function createAccountingYear() {
+    function createAccountingYear()
+    {
         require_once 'Intraface/modules/accounting/Year.php';
         $year = new Year($this->createKernel());
         $year->save(array('from_date' => date('Y').'-01-01', 'to_date' => date('Y').'-12-31', 'label' => 'test', 'locked' => 0));
@@ -62,13 +63,14 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         return $year;
     }
 
-    function testConstruct() {
-
+    function testConstruct()
+    {
         $payment = new Payment($this->createDebtor());
         $this->assertEquals('Payment', get_class($payment));
     }
 
-    function testUpdateWithEmptyArray() {
+    function testUpdateWithEmptyArray()
+    {
         $payment = new Payment($this->createDebtor());
 
         $this->assertFalse($payment->update(array()));
@@ -76,12 +78,14 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function testUpdateWithValidInput() {
+    function testUpdateWithValidInput()
+    {
         $payment = new Payment($this->createDebtor());
         $this->assertTrue($payment->update(array('payment_date' => '01-01-2007', 'amount' => 100, 'type' => 1)));
     }
 
-    function testLoad() {
+    function testLoad()
+    {
         $debtor = $this->createDebtor();
         $payment = new Payment($debtor);
         $this->assertTrue($payment->update(array('payment_date' => '01-01-2007', 'amount' => 100, 'type' => 1)));
@@ -97,30 +101,35 @@ class PaymentTest extends PHPUnit_Framework_TestCase
             'dk_payment_date' => '01-01-2007',
             'date_stated' => '0000-00-00',
             'voucher_id' => 0,
-            'type_key' => 1
+            'type_key' => 1,
+        	'this_date' => '2007-01-01'
         );
 
         $this->assertEquals($expected, $payment->get());
 
     }
 
-    function testReadyForStateBeforeSaved() {
+    function testReadyForStateBeforeSaved()
+    {
         $payment = new Payment($this->createDebtor());
         $this->assertFalse($payment->readyForState());
     }
 
-    function testReadyForStateWhenReady() {
+    function testReadyForStateWhenReady()
+    {
         $payment = new Payment($this->createDebtor());
         $payment->update(array('payment_date' => '01-01-2007', 'amount' => 100, 'type' => 1));
         $this->assertTrue($payment->readyForState());
     }
 
-    function testIsStateBeforeStated() {
+    function testIsStateBeforeStated()
+    {
         $payment = new Payment($this->createDebtor());
         $this->assertFalse($payment->isStated());
     }
 
-    function testState() {
+    function testState()
+    {
         $payment = new Payment($this->createDebtor());
         $payment->update(array('payment_date' => '01-01-'.date('Y'), 'amount' => 100, 'type' => 0));
         $year = $this->createAccountingYear();
@@ -132,7 +141,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
                 'id' => 1,
                 'date_dk' => date('d-m-Y'),
                 'date' => date('Y-m-d'),
-                'text' => 'payment for invoice #1',
+            	'text' => 'payment for invoice #1',
                 'debet' => '100.00',
                 'credit' => '0.00',
                 'voucher_number' => 1,
@@ -165,6 +174,5 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($payment->isStated());
         $this->assertFalse($payment->readyForState());
     }
-
 }
-?>
+

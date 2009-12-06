@@ -97,7 +97,8 @@ class DepreciationTest extends PHPUnit_Framework_TestCase
             'dk_payment_date' => '01-01-2007',
             'date_stated' => '0000-00-00',
             'voucher_id' => 0,
-            'type_key' => -1
+            'type_key' => -1,
+        	'this_date' => '2007-01-01'
         );
 
         $this->assertEquals($expected, $depreciation->get());
