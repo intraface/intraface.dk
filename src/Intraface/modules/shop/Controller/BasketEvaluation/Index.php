@@ -14,7 +14,7 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Index extends k_Compone
 
     function getShop()
     {
-        return Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->context->name());
+        return $this->context->getShop();
     }
 
     function renderHtml()

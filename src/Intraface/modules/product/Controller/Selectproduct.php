@@ -167,6 +167,10 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
 
             return new k_SeeOther($this->url(null, array('use_stored' => true, 'set_quantity' => $this->quantity, 'multiple' => $this->multiple)));
         }
+    }
 
+    function getPostRedirectUrl()
+    {
+        return $this->url();
     }
 }

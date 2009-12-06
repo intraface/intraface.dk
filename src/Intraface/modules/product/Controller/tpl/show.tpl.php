@@ -56,7 +56,7 @@
         </td>
     </tr>
 
-    <!-- her bør være en tidsangivelse -->
+    <!-- her bï¿½r vï¿½re en tidsangivelse -->
 
     <?php endif; ?>
 
@@ -260,7 +260,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                 ?>
                 <ul>
                     <?php foreach ($appender->getCategories() AS $category): ?>
-                        <li><?php e($category['name']); ?> <a href="<?php e(url(null, array('shop_id' => $shop->getId(), 'remove_appended_category' => $category['id']))); ?>" class="delete"><?php e(t('Remove', 'common')); ?></a></li>
+                        <li><?php e($category['name']); ?> <a href="<?php e(url(null, array('shop_id' => $shop->getId(), 'remove_appended_category' => $category['id']))); ?>" class="delete" id="remove_category_<?php e($category['id']); ?>"><?php e(t('Remove', 'common')); ?></a></li>
                     <?php endforeach; ?>
                 </ul>
 

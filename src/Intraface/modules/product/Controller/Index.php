@@ -152,7 +152,7 @@ class Intraface_modules_product_Controller_Index extends k_Component
         if(is_object($this->product_doctrine)) {
             $data['product'] = $this->product_doctrine;
         }
-        
+
 
         $smarty = new k_Template(dirname(__FILE__) . '/tpl/edit.tpl.php');
         return $smarty->render($this, $data);
@@ -184,12 +184,17 @@ class Intraface_modules_product_Controller_Index extends k_Component
             if ($redirect->get('id') != 0) {
                 $redirect->setParameter('product_id', $product->getId());
             }
-            return new k_SeeOther($this->url($product->getId()));
+            return new k_SeeOther($this->getPostRedirectUrl($product));
         } catch (Doctrine_Validator_Exception $e) {
             $this->product_doctrine = $product;
             $this->getError()->attachErrorStack($product->getCollectedErrorStack());
         }
-        
+
         return $this->render();
+    }
+
+    function getPostRedirectUrl($product)
+    {
+        return $this->url($product->getId());
     }
 }

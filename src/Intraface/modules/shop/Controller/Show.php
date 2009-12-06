@@ -20,9 +20,15 @@ class Intraface_modules_shop_Controller_Show extends k_Component
         return $this->name();
     }
 
-    function renderHtml()
+    function getShop()
     {
         $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->getShopId());
+        return $shop;
+    }
+
+    function renderHtml()
+    {
+        $shop = $this->getShop();
 
         $this->document->setTitle($shop->name);
 
@@ -37,6 +43,7 @@ class Intraface_modules_shop_Controller_Show extends k_Component
         $evaluations = $basketevaluation->getList();
 
         $data = array('shop' => $shop, 'evaluations' => $evaluations);
+
         $tpl = $this->template->create(dirname(__FILE__) . '/tpl/show');
         return $tpl->render($this, $data);
     }
