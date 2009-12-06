@@ -138,8 +138,8 @@ class Intraface_Filehandler_Controller_SelectFile extends k_Component
             return new k_SeeOther($this->url('../../'));
         }
 
-        //$multiple_choice = $this->GET['multiple'];
-        $multiple_choice = false;
+        //$multiple_choice = ;
+        $multiple_choice = $this->query('multiple');
         $selected_files = array();
 
         /*
@@ -231,14 +231,14 @@ class Intraface_Filehandler_Controller_SelectFile extends k_Component
 
         $files = $filemanager->getList();
 
-        $this->document->addScript($this->url('/scripts/select_file.js'));
-        $this->document->addScript($this->url('/yui/connection/connection-min.js'));
+        $this->document->addScript('scripts/select_file.js');
+        $this->document->addScript('yui/connection/connection-min.js');
 
         $this->document->setTitle('Files');
 
         $data = array('filemanager' => $filemanager,
                       'multiple_choice' => $multiple_choice,
-                      'receive_redirect' => $receive_redirect,
+                      //'receive_redirect' => $receive_redirect,
                       'files' => $files,
                       'selected_files' =>  $selected_files
         );

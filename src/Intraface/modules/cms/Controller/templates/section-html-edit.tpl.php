@@ -275,7 +275,7 @@ switch ($value['type']) {
                     foreach ($value['files'] AS $file) {
                         $filehandler = new Filehandler($kernel, $file['id']);
                         $filehandlerHTML = new FilehandlerHTML($filehandler);
-                        $filehandlerHTML->showFile('section_html_edit.php?id='.$element->get('id').'&delete_filelist_append_file_id='.$file['append_file_id']);
+                        $filehandlerHTML->showFile($this->url(null, array('delete_filelist_append_file_id' => $file['append_file_id'])));
                         /*
                         ?>
                         <div style="border: 3px solid blue; padding: 5px;"><img src="<?php e($filehandler->instance->get('file_uri')); ?>" width="<?php e($filehandler->instance->get('width')); ?>" height="<?php e($filehandler->instance->get('height')); ?>" /> <a class="delete" href="">Slet</a></div>
@@ -517,7 +517,7 @@ switch ($value['type']) {
 
                         $filehandler = new Filehandler($kernel, $file['id']);
                         $filehandlerHTML = new FilehandlerHTML($filehandler);
-                        $filehandlerHTML->showFile('section_html_edit.php?id='.$element->get('id').'&delete_gallery_append_file_id='.$file['append_file_id'], array('image_size' => 'small'));
+                        $filehandlerHTML->showFile($this->url(null, array('delete_gallery_append_file_id'=>$file['append_file_id'])), array('image_size' => 'small'));
 
                         // This means that if there is an error in uploading a new file or other fields, the files will be shown anyway.
                         echo '<input type="hidden" name="pictures['.$key.'][id]" value="'.$file['id'].'" />';

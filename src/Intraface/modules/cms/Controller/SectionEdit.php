@@ -8,6 +8,30 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
         $this->template = $template;
     }
 
+    function map($name)
+    {
+        if ($name == 'filehandler') {
+            return 'Intraface_Filehandler_Controller_Index';
+        }
+    }
+
+    function getElement()
+    {
+        return $element = CMS_Element::factory($this->getKernel(), 'id', $this->name());
+    }
+
+    function getFileAppender()
+    {
+        $this->getKernel()->useShared('filehandler');
+        require_once 'Intraface/shared/filehandler/AppendFile.php';
+        if ($this->getElement()->get('type') == 'gallery') {
+            return $append_file = new AppendFile($this->getKernel(), 'cms_element_gallery', $this->getElement()->get('id'));
+        } elseif ($this->getElement()->get('type') == 'filelist') {
+            return $append_file = new AppendFile($this->getKernel(), 'cms_element_filelist', $this->getElement()->get('id'));
+        }
+        throw new Exception('No valid fileappender present');
+    }
+
     function renderHtml()
     {
         $module_cms = $this->getKernel()->module('cms');
@@ -42,18 +66,18 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
                     $value = $element->get();
                 }
             } else if (isset($_GET['delete_gallery_append_file_id'])) {
-
                 $append_file = new AppendFile($this->getKernel(), 'cms_element_gallery', $element->get('id'));
                 $append_file->delete((int)$_GET['delete_gallery_append_file_id']);
                 $element->load();
                 $value = $element->get();
+                return new k_SeeOther($this->url());
             } else if (isset($_GET['delete_filelist_append_file_id'])) {
-
                 $append_file = new AppendFile($this->getKernel(), 'cms_element_filelist', $element->get('id'));
                 $append_file->delete((int)$_GET['delete_filelist_append_file_id']);
 
                 $element->load();
                 $value = $element->get();
+                return new k_SeeOther($this->url());
             }
         } else {
             // der skal valideres noget p� typen ogs�.
@@ -168,15 +192,15 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
                 $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
                 $module_filemanager = $this->getKernel()->useModule('filemanager');
                 if ($element->get('type') == 'picture') {
-                    $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', $module_cms->getPath().'section_html_edit.php?id='.$element->get('id'));
+                    $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images' => 1)), NET_SCHEME . NET_HOST . $this->url());
                     $redirect->setIdentifier('picture');
                     $redirect->askParameter('file_handler_id');
                 } elseif ($element->get('type') == 'gallery') {
-                    $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', $module_cms->getPath().'section_html_edit.php?id='.$element->get('id'));
+                    $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images' => 1, 'multiple' => true)), NET_SCHEME . NET_HOST . $this->url());
                     $redirect->setIdentifier('gallery');
                     $redirect->askParameter('file_handler_id', 'multiple');
                 } elseif ($element->get('type') == 'filelist') {
-                    $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?', $module_cms->getPath().'section_html_edit.php?id='.$element->get('id'));
+                    $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('multiple' => true)), NET_SCHEME . NET_HOST . $this->url());
                     $redirect->setIdentifier('filelist');
                     $redirect->askParameter('file_handler_id', 'multiple');
                 } else {

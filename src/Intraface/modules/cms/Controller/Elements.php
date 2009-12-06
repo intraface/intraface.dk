@@ -13,7 +13,6 @@ class Intraface_modules_cms_Controller_Elements extends k_Component
     function renderHtml()
     {
         return new k_SeeOther($this->url('../'));
-
     }
 
     function getKernel()
