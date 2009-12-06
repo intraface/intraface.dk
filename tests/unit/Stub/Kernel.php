@@ -6,7 +6,7 @@ class Stub_Kernel extends Intraface_Kernel
     public $setting;
     public $session_id;
 
-    function __construct()
+    function __construct($session_id = 'notreallyauniquesessionid')
     {
         $this->intranet = new Stub_Intranet;
         $this->user = new Stub_User;
@@ -16,7 +16,7 @@ class Stub_Kernel extends Intraface_Kernel
         $this->setting->set('intranet', 'webshop.show_online', true);
         $this->setting->set('intranet', 'contact.login_email_text', 'sometext');
         $this->setting->set('intranet', 'cms.stylesheet.site', 'something');
-        $this->session_id = 'notreallyauniquesessionid';
+        $this->session_id = $session_id;
     }
     /*
     function useShared()
@@ -42,7 +42,7 @@ class Stub_Kernel extends Intraface_Kernel
 
     public function getSessionId()
     {
-        return $this->session_id = 'notreallyauniquesessionid';
+        return $this->session_id;
     }
 
     function getSetting()

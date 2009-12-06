@@ -6,6 +6,7 @@ require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/DBQuery.php';
 require_once 'Ilib/DBQuery.php';
 require_once 'Intraface/Error.php';
+require_once 'DB/Sql.php';
 
 /**
  * Notice this should only be tests to ensure that the extend from Ilib_DBQuery works
@@ -49,7 +50,7 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
 
     function createDBQuery($session_id = '')
     {
-        $kernel = new Stub_Kernel;
+        $kernel = new Stub_Kernel($session_id);
         return new Intraface_DBQuery($kernel, $this->table);
     }
 
@@ -208,7 +209,8 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(11, count($result));
     }
 
-    function testUseStoreWithTwoDifferentUsers() {
+    function testUseStoreWithTwoDifferentUsers()
+    {
         // the first page
         $dbquery = $this->createDBQuery();
         $dbquery->setCondition('id > 10');
@@ -233,6 +235,4 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         }
         $this->assertEquals(11, count($result));
     }
-
 }
-?>
