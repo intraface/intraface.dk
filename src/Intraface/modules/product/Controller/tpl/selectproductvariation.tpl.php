@@ -7,7 +7,7 @@
 <?php if (count($variations) == 0): ?>
     <p><?php e(t('No variations created for the product')); ?>.</p>
 <?php else: ?>
-    <form action="<?php e(url(null, array('set_quantity'=>$context->quantity))); ?>" method="post">
+    <form action="<?php e(url(null)); ?>" method="post">
         <input type="hidden" name="product_id" value="<?php e($product->getId()); ?>" />
         <input type="hidden" name="set_quantity" value="<?php e($context->quantity); ?>" />
         <table summary="<?php e(t('Variations')); ?>" id="variations_table" class="stripe">

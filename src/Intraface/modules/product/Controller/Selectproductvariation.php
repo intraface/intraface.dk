@@ -2,13 +2,17 @@
 class Intraface_modules_product_Controller_Selectproductvariation extends k_Component
 {
     protected $product;
-    public $multiple;
-    public $quantity;
+    public $multiple = false;
+    public $quantity = false;
 
-    function __construct()
+    function dispatch()
     {
-        $this->quantity = false;
-        $this->multiple = false;
+        $this->quantity = $this->query('set_quantity');
+        $this->multiple = $this->query('multiple');
+        $this->url_state->set('set_quantity', $this->query('set_quantity'));
+        $this->url_state->set('multiple', $this->query('multiple'));
+        $this->url_state->set('use_stored', 'true');
+        return parent::dispatch();
     }
 
     function getKernel()

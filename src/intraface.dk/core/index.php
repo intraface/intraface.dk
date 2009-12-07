@@ -101,8 +101,6 @@ class Intraface_TranslatorLoader implements k_TranslatorLoader {
     }
 }
 
-$config->template_dir = realpath(dirname(__FILE__) . '/../../../Intraface/modules/accounting/Controller/templates');
-
 class k_SessionIdentityLoader implements k_IdentityLoader {
     function load(k_Context $context) {
         if ($context->session('identity')) {
@@ -136,7 +134,7 @@ class Intraface_TemplateFactory extends k_DefaultTemplateFactory
         $filename = $filename . '.tpl.php';
         $__template_filename__ = self::searchIncludePath($filename);
         if (!is_file($__template_filename__)) {
-            throw new Exception("Failed opening '".$dir."' for inclusion. (include_path=".ini_get('include_path').")");
+            throw new Exception("Failed opening '".$filename."' for inclusion. (include_path=".ini_get('include_path').")");
         }
         return new k_Template($__template_filename__);
     }

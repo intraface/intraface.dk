@@ -15,7 +15,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         if ('choosecontact' == $name) {
             return 'Intraface_modules_contact_Controller_Choosecontact';
         } elseif ('selectproduct' == $name) {
-            return 'Intraface_modules_product_Controller_Selectmultipleproductwithquantity';
+            return 'Intraface_modules_product_Controller_Selectproduct';
         } elseif ('state' == $name) {
             return 'Intraface_modules_accounting_Controller_State_Procurement';
         } elseif ($name == 'purchaseprice') {

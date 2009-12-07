@@ -37,7 +37,7 @@ $selected_products = $context->selected_products;
     <?php
     echo $context->getProduct()->getDBQuery()->display('character');
     ?>
-    <form action="<?php e(url(null, array('set_quantity' => $context->quantity, 'multiple' => $context->multiple, 'use_stored' => 'true'))); ?>" method="post">
+    <form action="<?php e(url(null)); ?>" method="post">
     	<input name="_method" value="put" type="hidden" />
         <table summary="Produkter" class="stripe">
             <caption><?php e(t('products')); ?></caption>
@@ -59,7 +59,7 @@ $selected_products = $context->selected_products;
                 <tr>
                     <td>
                         <?php if ($p['has_variation']): ?>
-                            <a href="<?php e(url($p['id'] . '/selectvariation', array('set_quantity' => $quantity))); ?>" /><?php echo '<img class="variation" src="/images/icons/silk/table_multiple.png" title="'.t("See the product's variations").'"/> '; ?></a>
+                            <a href="<?php e(url($p['id'] . '/selectvariation', array('set_quantity' => $context->quantity, 'multiple' => $context->multiple))); ?>" /><?php echo '<img class="variation" src="/images/icons/silk/table_multiple.png" title="'.t("See the product's variations").'"/> '; ?></a>
                         <?php elseif ($context->multiple && $context->quantity): ?>
                             <input id="<?php e($p['id']); ?>" type="text" name="selected[<?php e($p['id']); ?>]" value="<?php if (isset($selected_products[$p['id']])): e($selected_products[$p['id']]); else: e('0'); endif; ?>" size="2" />
                         <?php elseif ($context->multiple && !$context->quantity): ?>

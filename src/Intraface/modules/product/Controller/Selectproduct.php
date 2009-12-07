@@ -5,13 +5,16 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
     public $multiple = false;
     public $quantity = false;
     public $selected_products;
+    protected $init_url;
 
-    function __construct()
+    function dispatch()
     {
-        /*
-        $this->multiple = $this->query('multiple');
         $this->quantity = $this->query('set_quantity');
-        */
+        $this->multiple = $this->query('multiple');
+        $this->url_state->set('set_quantity', $this->query('set_quantity'));
+        $this->url_state->set('multiple', $this->query('multiple'));
+        $this->url_state->set('use_stored', 'true');
+        return parent::dispatch();
     }
 
     function renderHtml()
@@ -148,7 +151,6 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
                             $product = array(
                             	'product_id' => $selected_id,
                             	'product_variation_id' => 0);
-
                             $this->addItem($product, $selected_value);                        }
                     }
                 }

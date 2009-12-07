@@ -65,4 +65,11 @@ class Intraface_modules_debtor_Controller_Item extends k_Component
        	}
        	return $this->render();
     }
+
+    function addItem($returned_values)
+    {
+        $this->getDebtor()->loadItem($this->name());
+        $this->getDebtor()->item->changeProduct($returned_values['product_id'], $returned_values['product_variation_id']);
+        return true;
+    }
 }

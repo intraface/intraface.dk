@@ -222,15 +222,14 @@
     if ($procurement->get("locked") == false) {
         ?>
         <ul class="options">
-            <li><a href="<?php e(url('selectproduct')); ?>">Registrer varer til lager</a></li>
+            <li><a href="<?php e(url('selectproduct', array('set_quantity' => 1, 'multiple' => 1))); ?>">Registrer varer til lager</a></li>
         </ul>
         <?php
     }
     ?>
 
     <?php
-    $procurement->loadItem();
-    $items = $procurement->item->getList();
+    $items = $procurement->getItems();
 
     if (count($items) > 0):
     ?>
@@ -242,7 +241,7 @@
                 <th>Beskrivelse</th>
                 <th style="text-align: right">Antal</th>
                 <th>&nbsp;</th>
-                <th style="text-align: right">Indk�bspris</th>
+                <th style="text-align: right">Indkøbspris</th>
                 <th style="text-align: right">I alt</th>
                 <th style="text-align: right">Kostpris</th>
                 <th>&nbsp;</th>

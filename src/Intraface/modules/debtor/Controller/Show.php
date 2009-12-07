@@ -29,7 +29,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         } elseif ($name == 'selectproduct') {
             return 'Intraface_modules_product_Controller_Selectproduct';
         } elseif ($name == 'selectmultipleproductwithquantity') {
-            return 'Intraface_modules_product_Controller_Selectmultipleproductwithquantity';
+            return 'Intraface_modules_product_Controller_Selectproduct';
         } elseif ($name == 'selectproductvariation') {
             return 'Intraface_modules_product_Controller_Selectproductvariation';
         } elseif ($name == 'payment') {

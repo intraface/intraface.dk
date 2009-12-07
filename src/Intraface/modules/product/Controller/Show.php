@@ -17,7 +17,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
     function map($name)
     {
         if ($name == 'selectvariation') {
-            return 'Intraface_modules_product_Controller_Selectproductvariationwithquantity';
+            return 'Intraface_modules_product_Controller_Selectproductvariation';
         } elseif ($name == 'filehandler') {
             return 'Intraface_Filehandler_Controller_Index';
         } elseif ($name == 'keyword') {
