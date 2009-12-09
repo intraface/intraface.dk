@@ -35,12 +35,14 @@ class Intraface_modules_todo_Controller_Edit extends k_Component
     function postForm()
     {
         $module = $this->getKernel()->module('todo');
-        $translation = $this->getKernel()->getTranslation('todo');
-        $todo = new TodoList($this->getKernel(), $_POST['id']);
-        if ($todo->save(array(
+
+        $data = array(
             'list_name' => $_POST['list_name'],
             'list_description' => $_POST['list_description']
-        ))) {
+        );
+
+        $todo = new TodoList($this->getKernel(), $_POST['id']);
+        if ($todo->save($data)) {
 
             foreach ($_POST['todo'] AS $key=>$value) {
                 if (isset($_POST['item_id'])) {

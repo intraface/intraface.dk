@@ -53,7 +53,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
             return new k_SeeOther($this->url('section/' . $sections[0]->get('id')));
         };
         if ($this->getKernel()->setting->get('user', 'htmleditor') == 'tinymce') {
-            $this->document->addScript($this->url('tinymce/jscripts/tiny_mce/tiny_mce.js'));
+            $this->document->addScript('tinymce/jscripts/tiny_mce/tiny_mce.js');
         }
 
         $data = array(

@@ -97,7 +97,7 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
             $value['page_id'] = $element->get('page_id');
         }
         if ($this->getKernel()->setting->get('user', 'htmleditor') == 'tinymce') {
-            $this->document->addScript('tiny_mce/tiny_mce.js');
+            $this->document->addScript('tinymce/jscripts/tiny_mce/tiny_mce.js');
         }
 
         $data = array(

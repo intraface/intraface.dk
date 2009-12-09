@@ -136,7 +136,7 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
         return $keywords = $this->getProduct()->getKeywordAppender();
     }
 
-    function addItem(array $product, $quantity)
+    function addItem(array $product, $quantity = 1)
     {
         $this->context->addItem($product, $quantity);
     }

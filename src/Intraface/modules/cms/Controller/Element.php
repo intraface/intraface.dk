@@ -57,7 +57,7 @@ class Intraface_modules_cms_Controller_Element extends k_Component
             }
         }
         if ($this->getKernel()->setting->get('user', 'htmleditor') == 'tinymce') {
-            $this->document->addScript('/tiny_mce/tiny_mce.js');
+            $this->document->addScript('tiny_mce/tiny_mce.js');
         }
 
         $data = array(

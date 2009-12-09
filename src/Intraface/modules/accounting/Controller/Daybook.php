@@ -14,8 +14,8 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
 
     function renderHtml()
     {
-        $this->document->addScript($this->url('/../../javascript/focusField.js'));
-        $this->document->addScript($this->url('/../accounting/javascript/daybook.js'));
+        $this->document->addScript('focusField.js');
+        $this->document->addScript('accounting/daybook.js');
 
         if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
             $this->getKernel()->getSetting()->set('user', 'accounting.daybook.message', 'hide');

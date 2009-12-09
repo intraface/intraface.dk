@@ -13,26 +13,43 @@ class Intraface_modules_procurement_Controller_Item extends k_Component
         return 'Intraface_modules_product_Controller_Selectproduct';
     }
 
+    function getProcurement()
+    {
+        return $this->context->getProcurement();
+    }
+
     function postForm()
     {
         $procurement_module = $this->getKernel()->module("procurement");
         $product_module = $this->getKernel()->useModule('product');
-        $translation = $this->getKernel()->getTranslation('procurement');
 
-        settype($_GET['id'], "integer");
+        $procurement = $this->getProcurement();
+        $procurement->loadItem(intval($this->name()));
 
-        if (!empty($_POST)) {
-            $procurement = new Procurement($this->getKernel(), intval($this->context->context->name()));
-            $procurement->loadItem(intval($this->name()));
-
-            if ($id = $procurement->item->save($_POST)) {
-                return new k_SeeOther($this->context->context->url());
-            } else {
-                $values = $_POST;
-            }
-
-            return $this->render();
+        if ($id = $procurement->item->save($_POST)) {
+            return new k_SeeOther($this->context->context->url());
+        } else {
+            $values = $_POST;
         }
+
+        return $this->render();
+    }
+
+    /**
+     * Used to change a product
+     *
+     * @see Product_Controller_SelectProduct
+     *
+     * @param $product
+     * @param $quantity
+     *
+     * @return boolean
+     */
+    function addItem($product, $quantity)
+    {
+        $this->getProcurement()->loadItem(intval($this->name()));
+        $this->getProcurement()->item->changeProduct($product['product_id'], $product['product_variation_id']);
+        return true;
     }
 
     function renderHtml()
@@ -40,7 +57,6 @@ class Intraface_modules_procurement_Controller_Item extends k_Component
         $procurement_module = $this->getKernel()->module("procurement");
         $product_module = $this->getKernel()->useModule('product');
         $translation = $this->getKernel()->getTranslation('procurement');
-
 
         $procurement = new Procurement($this->getKernel(), intval($this->context->context->name()));
         $procurement->loadItem(intval($this->name()));

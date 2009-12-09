@@ -57,11 +57,11 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
         $size_ratio = str_replace(',', '.', $size_ratio);
 
         $this->document->setTitle('Crop image: ' . $filemanager->get('file_name'));
-        $this->document->addScript($this->url('/javascript/cropper/lib/prototype.js'));
+        $this->document->addScript('cropper/lib/prototype.js');
         // @todo HACK only way I can get the link to be correct with a comma
-        $this->document->addScript($this->url('/javascript/cropper/lib/scriptaculous.js') . '?load=builder,dragdrop');
-        $this->document->addScript($this->url('/javascript/cropper/cropper.js'));
-        $this->document->addScript($this->url('/javascript/crop_image.js.php',
+        $this->document->addScript('cropper/lib/scriptaculous.js' . '?load=builder,dragdrop');
+        $this->document->addScript('cropper/cropper.js');
+        $this->document->addScript('crop_image.js.php',
             array(
                   'size_ratio' => $size_ratio,
                   'max_width' => round($editor_min_width),
@@ -70,7 +70,7 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
                   'x1' => $params['crop_offset_x'],
                   'y1' => $params['crop_offset_y'],
                   'x2' => $params['crop_offset_x'] + $params['crop_width'],
-                  'y2' => $params['crop_offset_y'] + $params['crop_height'])));
+                  'y2' => $params['crop_offset_y'] + $params['crop_height']));
 
         $data = array('translation' => $translation,
                       'type' => $type,

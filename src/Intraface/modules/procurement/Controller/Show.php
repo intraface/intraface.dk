@@ -4,6 +4,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
     protected $template;
     public $method = 'put';
     protected $error;
+    protected $procurement;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -27,7 +28,10 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
 
     function getProcurement()
     {
-        return $procurement = new Procurement($this->getKernel(), $this->name());
+        if (is_object($this->procurement)) {
+            return $this->procurement;
+        }
+        return $this->procurement = new Procurement($this->getKernel(), $this->name());
     }
 
     /**
@@ -149,11 +153,11 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
     {
         $module = $this->getKernel()->module("procurement");
         $translation = $this->getKernel()->getTranslation('procurement');
-        $procurement = new Procurement($this->getKernel(), intval($this->name()));
+        $procurement = $this->getProcurement();
         $values = $procurement->get();
-        $title = "Ret indkøb";
+        $this->document->setTitle("Ret indk�b");
 
-        $this->document->addScript($this->url('procurement/edit.js'));
+        $this->document->addScript('procurement/edit.js');
 
         $data = array(
         	'procurement' => $procurement,
@@ -167,7 +171,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
 
     function putForm()
     {
-        $procurement = new Procurement($this->getKernel(), intval($this->name()));
+        $procurement = $this->getProcurement();
 
         if ($procurement->update($_POST)) {
 
@@ -178,7 +182,6 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
             return new k_SeeOther($this->url());
         } else {
             $values = $_POST;
-            $title = "Ret indkøb";
         }
 
         return $this->render();
@@ -189,9 +192,8 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         $module_procurement = $this->getKernel()->module("procurement");
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
         $shared_filehandler->includeFile('AppendFile.php');
-        $translation = $this->getKernel()->getTranslation('procurement');
 
-        $procurement = new Procurement($this->getKernel(), $this->name());
+        $procurement = $this->getProcurement();
         $filehandler = new FileHandler($this->getKernel());
         $append_file = new AppendFile($this->getKernel(), 'procurement_procurement', $procurement->get('id'));
 
@@ -210,9 +212,8 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         $module_procurement = $this->getKernel()->module("procurement");
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
         $shared_filehandler->includeFile('AppendFile.php');
-        $translation = $this->getKernel()->getTranslation('procurement');
 
-        $procurement = new Procurement($this->getKernel(), $this->name());
+        $procurement = $this->getProcurement();
         $filehandler = new FileHandler($this->getKernel());
         $append_file = new AppendFile($this->getKernel(), 'procurement_procurement', $procurement->get('id'));
 

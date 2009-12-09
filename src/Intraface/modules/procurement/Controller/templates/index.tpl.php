@@ -1,7 +1,7 @@
 <h1><?php e(t('Procurement')); if (!empty($contact) AND is_object($contact)) e(": ".$contact->address->get('name')); ?></h1>
 
 <ul class="options">
-    <li><a class="new" href="<?php e(url(NULL, array('create'))); ?>"><?php e(t('Create procurement')); ?></a></li>
+    <li><a class="new" href="<?php e(url(NULL, array('create'))); ?>"><?php e(t('Create')); ?></a></li>
     <?php if (!empty($contact) AND is_object($contact)): ?>
         <li><a href="<?php e(t('../')); ?>"><?php e(t('Go to contact')); ?></a></li>
     <?php endif; ?>

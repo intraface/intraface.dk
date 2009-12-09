@@ -47,7 +47,7 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
 
     function renderHtmlEdit()
     {
-        $this->document->addScript($this->url('/../accounting/javascript/edit_account.js'));
+        $this->document->addScript($this->url('accounting/edit_account.js'));
 
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/account/edit.tpl.php');
         return $smarty->render($this);

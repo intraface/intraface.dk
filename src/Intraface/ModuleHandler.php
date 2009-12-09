@@ -42,7 +42,7 @@ class Intraface_ModuleHandler
     function setPrimaryModule($module_name)
     {
         if (!empty($this->primary_module_object) AND is_object($this->primary_module_object)) {
-            trigger_error('Det primære modul er allerede sat', E_USER_ERROR);
+            throw new Exception('Det primære modul er allerede sat');
         } else {
             $module = $this->useModule($module_name);
 
@@ -59,8 +59,7 @@ class Intraface_ModuleHandler
                 return $module;
             } else {
                 // @todo Den fejlmeddelse er egentlig irrelevant, da useModul ikke enten returnere et objekt eller trigger_error.
-                trigger_error('Du har ikke adgang til modulet', E_USER_ERROR);
-                return false;
+                throw new Exception('Du har ikke adgang til modulet');
             }
         }
 

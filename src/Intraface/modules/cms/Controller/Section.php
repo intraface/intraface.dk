@@ -51,8 +51,8 @@ class Intraface_modules_cms_Controller_Section extends k_Component
 
         $section = CMS_Section::factory($this->getKernel(), 'id', $this->name());
 
-        $this->document->addScript($this->url('/getElementsBySelector.js'));
-        $this->document->addScript($this->url('/cms/section_html.js'));
+        $this->document->addScript('getElementsBySelector.js');
+        $this->document->addScript('cms/section_html.js');
 
         $data = array(
             'section' => $section,

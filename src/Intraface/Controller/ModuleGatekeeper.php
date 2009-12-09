@@ -8,7 +8,7 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
                 try {
                     $this->getKernel()->module($name);
                 } catch (Exception $e) {
-                    throw new Exception('No access to module ' . $name);
+                    throw new Exception('No access to module ' . $name . ': ' . $e->getMessage());
                 }
                 return 'Intraface_modules_'.$name.'_Controller_Index';
             }

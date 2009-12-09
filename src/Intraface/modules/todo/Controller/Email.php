@@ -39,7 +39,6 @@ class Intraface_modules_todo_Controller_Email extends k_Component
     {
 
         $this->getKernel()->module('todo');
-        $translation = $this->getKernel()->getTranslation('todo');
         $this->getKernel()->useModule('contact');
         $this->getKernel()->useShared('email');
 

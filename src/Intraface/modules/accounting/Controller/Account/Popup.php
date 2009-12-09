@@ -15,7 +15,7 @@ class Intraface_modules_accounting_Controller_Account_Popup extends k_Component
 
     function renderHtml()
     {
-        $this->document->addStyle($this->url('/../accounting/javascript/daybook_list_account.js'));
+        $this->document->addStyle($this->url('accounting/daybook_list_account.js'));
 
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/account/popup.tpl.php');
 
