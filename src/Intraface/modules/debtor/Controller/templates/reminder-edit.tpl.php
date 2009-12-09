@@ -1,14 +1,8 @@
 <?php
 $reminder = $context->getReminder();
 $title = $reminder->get('title');
-$value = $reminder->get();
 $contact = $context->getContact();
 $kernel = $context->getKernel();
-if ($value['number'] == 0) {
-    $value['number'] = $reminder->getMaxNumber() + 1;
-    $value['dk_this_date'] = date('d-m-Y');
-    $value['dk_due_date'] = date('d-m-Y');
-}
 $checked_invoice = array();
 ?>
 
@@ -18,7 +12,7 @@ $checked_invoice = array();
 echo $reminder->error->view("html");
 ?>
 
-<form action="<?php e(url(null, array($context->subview()))); ?>" method="post">
+<form action="<?php e(url(null, array($context->subview(), 'contact_id' => $context->query('contact_id')))); ?>" method="post">
 
 <fieldset>
     <legend><?php e(__('Information about the reminder')); ?></legend>

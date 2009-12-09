@@ -458,7 +458,7 @@ if (isset($onlinepayment)) {
                             <?php if ($context->getKernel()->user->hasModuleAccess('accounting')): ?>
                                 <td>
                                     <?php if ($payment['is_stated']): ?>
-                                        <a href="<?php e($module_accounting->getPath().'voucher.php?id='.$payment['voucher_id']); ?>"><?php e(__('voucher')); ?></a>
+                                        <a href="<?php e($module_accounting->getPath().'voucher/'.$payment['voucher_id']); ?>"><?php e(__('voucher')); ?></a>
                                     <?php elseif ($payment['type'] == 'credit_note'): ?>
                                         <a href="<?php e(url('../' . $payment['id'] . '/state')); ?>"><?php e(t('state credit note')); ?></a>
                                     <?php elseif ($payment['type'] == 'depreciation'): ?>

@@ -7,9 +7,9 @@
 
 <?php if (!$year->readyForState($payment->get('payment_date'))): ?>
     <?php echo $year->error->view(); ?>
-    <p>Gå til <a href="<?php e($accounting_module->getPath().'years.php'); ?>">regnskabet</a></p>
+    <p>Gå til <a href="<?php e($accounting_module->getPath().'years'); ?>">regnskabet</a></p>
 <?php elseif ($payment->isStated()): ?>
-    <p><?php e(t('the payment is alredy stated')); ?>. <a href="<?php e($accounting_module->getPath()).'voucher.php?id='.$payment->get('voucher_id'); ?>"><?php e(t('see the voucher')); ?></a>.</p>
+    <p><?php e(t('the payment is alredy stated')); ?>. <a href="<?php e($context->getKernel()->useModule('accounting')->getPath()).'voucher/'.$payment->get('voucher_id'); ?>"><?php e(t('see the voucher')); ?></a>.</p>
 <?php else: ?>
     <?php
     // need to be executed to generate errors!

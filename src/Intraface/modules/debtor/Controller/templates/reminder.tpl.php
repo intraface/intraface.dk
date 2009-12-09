@@ -115,8 +115,9 @@ $reminder = $context->getReminder();
                         e(__('Nothing to state'));
                     } elseif ($reminder->isStated()) {
                         $module_accounting = $context->getKernel()->useModule('accounting');
-                        e($reminder->get('dk_date_stated'));
-                        echo ' <a href="'.$module_accounting->getPath().'voucher/'.$reminder->get('voucher_id').'">'.__('See voucher').'</a>';
+                        e($reminder->get('dk_date_stated')); ?>
+                        <a href="<?php  e($module_accounting->getPath().'voucher/'.$reminder->get('voucher_id')); ?>"><?php e(t('See voucher')); ?></a>
+                    	<?php
                     } else {
                         e(__('Not stated'));
                         if ($reminder->get('status') == 'sent' || $reminder->get('status') == 'executed') { ?>

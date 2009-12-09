@@ -81,7 +81,12 @@ class Intraface_modules_email_Controller_Email extends k_Component
     function renderHtmlEdit()
     {
         $email = new Email($this->getKernel(), $this->name());
-        $value = $email->get();
+        if ($this->body()) {
+            $value = $this->body();
+        } else {
+            $value = $email->get();
+        }
+
         $contact = $email->getContact();
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
 

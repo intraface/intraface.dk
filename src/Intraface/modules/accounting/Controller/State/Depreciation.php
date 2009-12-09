@@ -55,7 +55,7 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
         if ($depreciation->error->isError()) {
             // nothing, we continue
         } elseif (!$depreciation->state($year, $_POST['voucher_number'], $_POST['date_state'], $_POST['state_account_id'], $this->getKernel()->getTranslation('accounting'))) {
-            $depreciation->error->set('Kunne ikke bogføre posten');
+            $depreciation->error->set('Kunne ikke bogfÃ¸re posten');
         } else {
             return new k_SeeOther($this->url('../../../'));
         }

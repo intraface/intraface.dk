@@ -9,7 +9,14 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
     {
         return 'Intraface_modules_debtor_Controller_Reminder';
     }
+    /*
+    function dispatch()
+    {
+        $this->url_state->set('contact_id', $this->query('contact_id'));
 
+        return parent::dispatch();
+    }
+	*/
     function getKernel()
     {
         return $this->context->getKernel();
@@ -65,11 +72,12 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
 
         $value["text"] = $this->getKernel()->getSetting()->get('intranet', 'reminder.first.text');
         $value["payment_method_key"] = 1;
-        $value["number"] = $reminder->getMaxNumber();
+        $value["number"] = $reminder->getMaxNumber() + 1;
+
+        $data = array('value' => $value);
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/reminder-edit.tpl.php');
-        return $smarty->render($this, array('value' => $value));
-
+        return $smarty->render($this, $data);
     }
 
     function getReminders()
