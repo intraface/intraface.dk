@@ -234,7 +234,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $mDebtor = $this->getKernel()->module('debtor');
         $contact_module = $this->getKernel()->useModule('contact');
         $product_module = $this->getKernel()->useModule('product');
-
+        
         if (empty($_GET['id'])) $_GET['id'] = '';
         if (empty($_GET['type'])) $_GET['type'] = '';
         if (empty($_GET["contact_id"])) $_GET['contact_id'] = '';
@@ -298,11 +298,13 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $debtor->getDBQuery()->setExtraUri('&amp;type='.$debtor->get("type"));
 
         $posts = $debtor->getList();
+        $data = array();
 
         if (intval($debtor->getDBQuery()->getFilter('product_id')) != 0) {
-            $product = new Product($this->getKernel(), $debtor->getDBQuery()->getFilter('product_id'));
+            $data['product'] = new Product($this->getKernel(), $debtor->getDBQuery()->getFilter('product_id'));
             if (intval($debtor->getDBQuery()->getFilter('product_variation_id')) != 0) {
-                $variation = $product->getVariation($debtor->getDBQuery()->getFilter('product_variation_id'));
+                $data['variation'] = $data['product']->getVariation($debtor->getDBQuery()->getFilter('product_variation_id'));
+                
             }
         }
 
@@ -311,7 +313,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         }
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/collection.tpl.php');
-        return $smarty->render($this);
+        return $smarty->render($this, $data);
     }
 
     function getKernel()

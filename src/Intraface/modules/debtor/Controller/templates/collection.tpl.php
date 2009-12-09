@@ -6,7 +6,8 @@
         <?php }
 
         if (!empty($product) AND is_object($product) && $product->get('name') != '') { ?>
-            med produkt: <?php e($product->get('name')); ?>
+            <?php e(t('with product'))?>:  
+            <?php e($product->get('name')); ?>
             <?php if (!empty($variation) AND is_object($variation) AND $variation->getName() != '') { ?>
                 - <?php e($variation->getName()); ?>
             <?php }
@@ -42,8 +43,12 @@
     <?php if (!empty($contact) AND is_object($contact) AND $context->getDebtor()->get("type") != "credit_note"): ?>
         <li><a href="<?php e(url(null, array('create', 'contact_id' => $contact->get("id")))); ?>"><?php e(__('Create')); ?></a></li>
     <?php else: ?>
-        <?php if (!empty($_GET['product_id'])): ?>
-            <li><a href="<?php e($product_module->getPath() . $product->get('id')); ?>"><?php e(t('Show product')); ?></a></li>
+        <?php if (isset($variation) && isset($product)): ?>
+            <?php $module_product = $context->getKernel()->useModule('product'); ?>
+            <li><a href="<?php e(url($module_product->getPath().$product->get('id').'/variation/'.$variation->getId()));  ?>"><?php e(t('Show product')); ?></a></li>
+        <?php elseif(isset($product)): ?>
+            <?php $module_product = $context->getKernel()->useModule('product'); ?>
+           <li><a href="<?php e(url($module_product->getPath().$product->get('id')));  ?>"><?php e(t('Show product')); ?></a></li>
         <?php endif; ?>
         <li><a href="<?php e(url(null, array('create'))); ?>"><?php e(__('Create')); ?></a></li>
     <?php endif; ?>
