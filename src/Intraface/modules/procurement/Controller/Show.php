@@ -31,7 +31,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         if (is_object($this->procurement)) {
             return $this->procurement;
         }
-        return $this->procurement = new Procurement($this->getKernel(), $this->name());
+        return ($this->procurement = new Procurement($this->getKernel(), $this->name()));
     }
 
     /**
@@ -144,7 +144,11 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
             return new k_SeeOther($this->url('purchaseprice'));
         }
 
-        $data = array('procurement' => $procurement, 'kernel' => $this->getKernel(), 'append_file' => $append_file, 'filehandler' => $filehandler);
+        $data = array(
+        	'procurement' => $procurement,
+        	'kernel' => $this->getKernel(),
+        	'append_file' => $append_file,
+        	'filehandler' => $filehandler);
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/show');
         return $tpl->render($this, $data);
     }

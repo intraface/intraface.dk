@@ -545,8 +545,10 @@ class Intraface_User extends Intraface_Standard
             $this->load();
             return $this->id;
         } else {
-            trigger_error("An id is needed to update user details in User->Update()", E_USER_ERROR);
+            throw new Exception("An id is needed to update user details in User->Update()");
         }
+
+        return true;
     }
 
     /**

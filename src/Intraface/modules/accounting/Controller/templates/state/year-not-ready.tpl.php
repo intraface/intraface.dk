@@ -19,7 +19,7 @@
 	<select name="year_id">
 		<option value=""><?php e(t('Choose')); ?></option>
 		<?php foreach ($context->getYears() as $year): ?>
-			<option value="<?php e($year['id']); ?>"><?php e($year['label']); ?></option>
+			<option value="<?php e($year['id']); ?>" <?php if ($context->getYear()->getId() == $year['id']) echo 'selected="selected"'; ?>><?php e($year['label']); ?></option>
 		<?php endforeach; ?>
 	</select>
 	</label>

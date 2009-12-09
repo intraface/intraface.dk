@@ -20,7 +20,9 @@ class Intraface_modules_accounting_Controller_State_SelectYear extends Intraface
             return $this->year;
         }
 
-        return $this->year = new Year($this->getKernel());
+        $this->year = new Year($this->getKernel());
+        $this->year->loadActiveYear();
+        return $this->year;
     }
 
     function getVoucher()

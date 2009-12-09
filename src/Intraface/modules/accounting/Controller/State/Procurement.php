@@ -26,13 +26,12 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
 
         $year = new Year($this->getKernel());
         $voucher = new Voucher($year);
-        if (!$this->getYear()->readyForState($this->getModel()->get('payment_date'))) {
+        if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
             return new k_SeeOther($this->url('selectyear'));
         }
-        $procurement = new Procurement($this->getKernel(), intval($this->context->name()));
+        $procurement = $this->getProcurement();
         $value = $procurement->get();
-        $procurement->loadItem();
-        $items = $procurement->item->getList();
+        $items = $procurement->getItems();
         $i = 0;
         $items_amount = 0;
 
@@ -49,7 +48,12 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         }
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/procurement.tpl.php');
 
-        $data = array('procurement' => $procurement, 'year' => $year, 'voucher' => $voucher, 'items' => $items, 'value' => $value);
+        $data = array(
+        	'procurement' => $procurement,
+        	'year' => $year,
+        	'voucher' => $voucher,
+        	'items' => $items,
+        	'value' => $value);
 
         return $smarty->render($this, $data);
 
@@ -60,16 +64,20 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         return $year = new Year($this->getKernel());
     }
 
+    function getProcurement()
+    {
+        return $this->context->getProcurement();
+    }
+
     function postForm()
     {
         $procurement_module = $this->getKernel()->module('procurement');
         $accounting_module = $this->getKernel()->useModule('accounting');
-        $translation = $this->getKernel()->getTranslation('procurement');
 
         $year = new Year($this->getKernel());
         $voucher = new Voucher($year);
 
-        $procurement = new Procurement($this->getKernel(), intval($this->context->name()));
+        $procurement = $this->getProcurement();
 
         if (isset($_POST['state'])) {
 

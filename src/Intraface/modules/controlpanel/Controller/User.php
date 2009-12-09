@@ -53,8 +53,12 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
 
         // @todo hvis man ændrer e-mail skal man have en e-mail som en sikkerhedsforanstaltning
         // på den gamle e-mail
-        if ($this->getUser()->update($value)) {
-            if ($this->getUser()->getAddress()->validate($address_value) && $this->getUser()->getAddress()->save($address_value)) {
+        require_once 'Intraface/modules/administration/UserAdministration.php';
+        $user = new UserAdministration($this->getKernel(), $this->getUser()->getId());
+        //$user->setActiveIntranetId($this->getUser()->getActiveIntranet());
+
+        if ($user->update($value)) {
+            if ($user->getAddress()->validate($address_value) && $user->getAddress()->save($address_value)) {
                 return new k_SeeOther($this->url(null));
             }
         }

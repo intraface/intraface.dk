@@ -241,7 +241,7 @@
                 <th>Beskrivelse</th>
                 <th style="text-align: right">Antal</th>
                 <th>&nbsp;</th>
-                <th style="text-align: right">IndkÃ¸bspris</th>
+                <th style="text-align: right">Indkøbspris</th>
                 <th style="text-align: right">I alt</th>
                 <th style="text-align: right">Kostpris</th>
                 <th>&nbsp;</th>
@@ -289,7 +289,7 @@
     if ($total > $procurement->get("price_items")) {
         ?>
         <div class="box">
-            <p>Prisen for varerne registreret pÃ¥ lageret overstiger prisen for varerne angivet pÃ¥ indkÃ¸bet.</p>
+            <p>Prisen for varerne registreret på lageret overstiger prisen for varerne angivet på indkøbet.</p>
         </div>
         <?php
     }

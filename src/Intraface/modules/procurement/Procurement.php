@@ -18,11 +18,6 @@ class Procurement extends Intraface_Standard
 
     function __construct($kernel, $id = 0)
     {
-
-        if (!is_object($kernel)) {
-            trigger_error("Procurement requires kernel", E_USER_ERROR);
-        }
-
         $this->kernel = $kernel;
         $this->error = new Intraface_Error;
         $this->id = intval($id);
@@ -37,7 +32,7 @@ class Procurement extends Intraface_Standard
 
     function load()
     {
-        $db = new DB_sql;
+        $db = new DB_Sql;
 
         $db->query("SELECT *,
             DATE_FORMAT(invoice_date, '%d-%m-%Y') AS dk_invoice_date,
@@ -71,6 +66,7 @@ class Procurement extends Intraface_Standard
         }
 
         $this->value["payment_date"] = $db->f("payment_date");
+
         if ($db->f("payment_date") != "0000-00-00") {
             $this->value["dk_payment_date"] = $db->f("dk_payment_date");
         } else {
@@ -95,6 +91,10 @@ class Procurement extends Intraface_Standard
         $this->value["dk_date_stated"] = $db->f('dk_date_stated');
 
         $this->value["paid_date"] = $db->f("paid_date");
+        // this is used when stating
+        $this->value['this_date'] = $this->value["paid_date"];
+
+
         $this->value["dk_paid_date"] = $db->f("dk_paid_date");
         $this->value["number"] = $db->f("number");
         $this->value["contact_id"] = $db->f("contact_id");
@@ -121,7 +121,6 @@ class Procurement extends Intraface_Standard
 
         $this->value["state_account_id"] = $db->f("state_account_id");
         $this->value["voucher_id"] = $db->f("voucher_id");
-
         return true;
 
     }
@@ -844,6 +843,7 @@ class Procurement extends Intraface_Standard
     function getItems()
     {
         $this->loadItem();
+        $items = $this->item->getList();
         return $items = $this->item->getList();
     }
 }

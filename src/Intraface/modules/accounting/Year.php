@@ -56,7 +56,7 @@ class Year extends Intraface_Standard
     }
 
     /**
-     * Finder det aktive �r.
+     * Finder det aktive år.
      *
      * @todo should be deprecated in favor of getActiveYear
      *
@@ -64,7 +64,8 @@ class Year extends Intraface_Standard
      */
     public function loadActiveYear()
     {
-        return($this->id = $this->kernel->getSetting()->get('user', 'accounting.active_year'));
+        $this->id = $this->kernel->getSetting()->get('user', 'accounting.active_year');
+        return $this->id;
     }
 
     /**
