@@ -38,7 +38,7 @@ if (defined('NET_SCHEME') && defined('NET_HOST') && defined('NET_DIRECTORY')) {
     define('PATH_WWW_MODULE', PATH_WWW.'modules/');
     define('PATH_WWW_SHARED', PATH_WWW.'shared/');
     // filehandler
-    define('FILE_VIEWER', PATH_WWW . 'main/file/');
+    define('FILE_VIEWER', PATH_WWW . 'file');
 }
 
 // errorhandling
