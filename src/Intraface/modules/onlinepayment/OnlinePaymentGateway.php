@@ -3,6 +3,7 @@ class Intraface_modules_onlinepayment_OnlinePaymentGateway
 {
     protected $kernel;
     protected $fallback_provider;
+    protected $implemented_providers;
 
     function __construct($kernel)
     {
@@ -34,7 +35,7 @@ class Intraface_modules_onlinepayment_OnlinePaymentGateway
 
     public function findByProvider($provider)
     {
-        if (!in_array($value, $this->implemented_providers)) {
+        if (!in_array($provider, $this->implemented_providers)) {
             throw new Exception('Ikke en gyldig provider i OnlinePayment->factory case: provider');
         }
 

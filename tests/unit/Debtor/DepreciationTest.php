@@ -68,7 +68,8 @@ class DepreciationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Depreciation', get_class($depreciation));
     }
 
-    function testUpdateWithEmptyArray() {
+    function testUpdateWithEmptyArrayReturnsFalse()
+    {
         $depreciation = new Depreciation($this->createDebtor());
 
         $this->assertFalse($depreciation->update(array()));
@@ -76,15 +77,18 @@ class DepreciationTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function testUpdateWithValidInput() {
+    function testUpdateWithValidInputReturnsId()
+    {
         $depreciation = new Depreciation($this->createDebtor());
-        $this->assertTrue($depreciation->update(array('payment_date' => '01-01-2007', 'amount' => 100)));
+        $expected_id = 1;
+        $this->assertEquals($expected_id, $depreciation->update(array('payment_date' => '01-01-2007', 'amount' => 100)));
     }
 
-    function testLoad() {
+    function testLoad()
+    {
         $debtor = $this->createDebtor();
         $depreciation = new Depreciation($debtor);
-        $this->assertTrue($depreciation->update(array('payment_date' => '01-01-2007', 'amount' => 100)));
+        $depreciation->update(array('payment_date' => '01-01-2007', 'amount' => 100));
 
         $depreciation = new Depreciation($debtor, 1);
         $expected = array(
@@ -105,7 +109,8 @@ class DepreciationTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function testReadyForStateBeforeSaved() {
+    function testReadyForStateBeforeSaved()
+    {
         $depreciation = new Depreciation($this->createDebtor());
         $this->assertFalse($depreciation->readyForState());
     }

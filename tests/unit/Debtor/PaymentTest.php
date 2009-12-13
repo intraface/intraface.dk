@@ -69,7 +69,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Payment', get_class($payment));
     }
 
-    function testUpdateWithEmptyArray()
+    function testUpdateWithEmptyArrayReturnsFalse()
     {
         $payment = new Payment($this->createDebtor());
 
@@ -78,17 +78,18 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function testUpdateWithValidInput()
+    function testUpdateWithValidInputReturnsId()
     {
         $payment = new Payment($this->createDebtor());
-        $this->assertTrue($payment->update(array('payment_date' => '01-01-2007', 'amount' => 100, 'type' => 1)));
+        $expected_id = 1;
+        $this->assertEquals($expected_id, $payment->update(array('payment_date' => '01-01-2007', 'amount' => 100, 'type' => 1)));
     }
 
     function testLoad()
     {
         $debtor = $this->createDebtor();
         $payment = new Payment($debtor);
-        $this->assertTrue($payment->update(array('payment_date' => '01-01-2007', 'amount' => 100, 'type' => 1)));
+        $payment->update(array('payment_date' => '01-01-2007', 'amount' => 100, 'type' => 1));
 
         $payment = new Payment($debtor, 1);
         $expected = array(

@@ -84,6 +84,7 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
             'date_stated' => '00-00-0000',
             'dk_date_stated' => '00-00-0000',
             'paid_date' => '0000-00-00',
+        	'this_date' => '0000-00-00',
             'dk_paid_date' => '00-00-0000',
             'number' => 1,
             'contact_id' => 0,
