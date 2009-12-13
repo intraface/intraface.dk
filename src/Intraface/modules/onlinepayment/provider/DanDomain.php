@@ -15,7 +15,7 @@ class OnlinePaymentDanDomain extends OnlinePayment
         '' => 'Ingen kontakt til Dandomin',
         '0' => 'Forretningsnummer ugyldigt',
         '1' => 'Ugyldigt kreditkortnummer',
-        '2' => 'Ugyldigt beløb',
+        '2' => 'Ugyldigt belÃ¸b',
         '3' => 'OrderID mangler eller er ugyldig',
         '4' => 'PBS afvisning',
         '5' => 'Intern server fejl hos DanDomain eller PBS',
@@ -38,10 +38,10 @@ class OnlinePaymentDanDomain extends OnlinePayment
     /*
     var $msg_types = array(
         '1100' => 'authorize', // tjekker
-        '1220' => 'capture', // hæver
+        '1220' => 'capture', // hï¿½ver
         'credit' => 'credit', // tilbagebetaler
-        '1420' => 'reversal', // ophæver reservationen
-        'status' => 'status' // ophæver reservationen
+        '1420' => 'reversal', // ophï¿½ver reservationen
+        'status' => 'status' // ophï¿½ver reservationen
 
     );
     */
@@ -60,7 +60,7 @@ class OnlinePaymentDanDomain extends OnlinePayment
         return array(
             0 => array(
                 'action' => 'capture',
-                'label' => 'Hæv'),
+                'label' => 'Hï¿½v'),
             1 => array(
                 'action' => 'reverse',
                 'label' => 'Tilbagebetal')
@@ -96,17 +96,17 @@ class OnlinePaymentDanDomain extends OnlinePayment
                 exit;
             }
 
-            if (substr(trim($http_request->getResponseBody()), 0, 11) == 'Transaktion') { // hmm ikke helt godt, men vel ok. Response er "Transanktion #1111111 er hævet"
+            if (substr(trim($http_request->getResponseBody()), 0, 11) == 'Transaktion') { // hmm ikke helt godt, men vel ok. Response er "Transanktion #1111111 er hï¿½vet"
 
                 if ($this->addAsPayment()) {
                     $this->setStatus("captured");
                 } else {
-                    trigger_error("Onlinebetalingen er hævet, men kunne ikke overføres som betaling til fakturaen", E_USER_ERROR);
+                    trigger_error("Onlinebetalingen er hï¿½vet, men kunne ikke overfï¿½res som betaling til fakturaen", E_USER_ERROR);
                 }
                 return 1;
             } else {
                 // fiasko
-                $this->error->set('Vi kunne ikke hæve betalingen, vi fik følgende fejl: '.$http_request->getResponseBody());
+                $this->error->set('Vi kunne ikke hï¿½ve betalingen, vi fik fï¿½lgende fejl: '.$http_request->getResponseBody());
                 return 0;
             }
         } elseif ($action == "reverse") {
@@ -127,7 +127,7 @@ class OnlinePaymentDanDomain extends OnlinePayment
                 return 1;
             } else {
                 // fiasko
-                $this->error->set('Vi kunne ikke tilbagebetale betalingen, vi fik følgende fejl: '.$http_request->getResponseBody());
+                $this->error->set('Vi kunne ikke tilbagebetale betalingen, vi fik fï¿½lgende fejl: '.$http_request->getResponseBody());
                 return 0;
             }
 

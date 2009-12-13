@@ -24,6 +24,8 @@ class Intraface_modules_product_Controller_Show extends k_Component
             return 'Intraface_Keyword_Controller_Index';
         } elseif ($name == 'related') {
             return 'Intraface_modules_product_Controller_Related';
+        } elseif ($name == 'shop') {
+            return 'Intraface_modules_shop_Controller_Index';
         } elseif ($name == 'stock') {
             // @todo check whether product is stock product
             return 'Intraface_modules_stock_Controller_Product';
@@ -83,7 +85,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
         if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
             $module_filemanager = $this->getKernel()->useModule('filemanager');
-            $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', NET_SCHEME . NET_HOST . $this->url());
+            $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images'=>1, 'multiple_choice' => 1)), NET_SCHEME . NET_HOST . $this->url());
             $redirect->setIdentifier('product');
             $redirect->askParameter('file_handler_id', 'multiple');
 
@@ -196,7 +198,6 @@ class Intraface_modules_product_Controller_Show extends k_Component
             return new k_SeeOther($this->url());
         }
 
-
         $smarty = new k_Template(dirname(__FILE__) . '/tpl/show.tpl.php');
         return $smarty->render($this, $data);
     }
@@ -218,7 +219,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
     function getFileAppender()
     {
         $this->getKernel()->module('product');
-        $product = new Product($this->getKernel(), $this->name);
+        $product = new Product($this->getKernel(), $this->name());
         return new Appender($this->getKernel(), 'product', $product->get('id'));
     }
 

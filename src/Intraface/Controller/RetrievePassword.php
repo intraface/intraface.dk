@@ -9,22 +9,18 @@
  */
 class Intraface_Controller_RetrievePassword extends k_Component
 {
-    protected $registry;
     public $msg;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
 
     function execute()
     {
-        $this->url_state->init("continue", $this->url('/login', array('flare' => 'Vi har sendt en e-mail til dig med en ny adgangskode, som du bør gå ind og lave om med det samme.')));
+        $this->url_state->init("continue", $this->url('/login', array('flare' => 'Vi har sendt en e-mail til dig med en ny adgangskode, som du bï¿½r gï¿½ ind og lave om med det samme.')));
         return parent::execute();
     }
 
     function renderHtml()
     {
+        $this->document->setTitle('Retrieve forgotten password');
+
         $smarty = new k_Template(dirname(__FILE__) . '/templates/retrievepassword.tpl.php');
         return $smarty->render($this);
     }
@@ -32,7 +28,7 @@ class Intraface_Controller_RetrievePassword extends k_Component
     function postForm()
     {
     	if (!Intraface_User::sendForgottenPasswordEmail($this->body('email'))) {
-    	    $this->msg = '<p>Det gik <strong>ikke</strong> godt. E-mailen kunne ikke sendes. Du kan prøve igen senere.</p>';
+    	    $this->msg = '<p>Det gik <strong>ikke</strong> godt. E-mailen kunne ikke sendes. Du kan prï¿½ve igen senere.</p>';
     	    return $this->render();
     	}
     	return new k_SeeOther($this->query('continue'));

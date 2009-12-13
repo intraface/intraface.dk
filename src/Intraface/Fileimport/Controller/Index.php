@@ -2,6 +2,12 @@
 class Intraface_Fileimport_Controller_Index extends k_Component
 {
     protected $template;
+    public $values;
+    public $fields;
+    public $translation_page_id;
+    public $mode;
+    protected $fileimport;
+    public $filehandler;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -14,73 +20,72 @@ class Intraface_Fileimport_Controller_Index extends k_Component
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
         $translation = $this->getKernel()->getTranslation('fileimport');
 
-        $fileimport = new FileImport;
+        $this->fileimport = new FileImport;
 
+        /*
         $redirect = Intraface_Redirect::receive($this->getKernel());
 
         if ($redirect->get('id') == 0) {
             trigger_error('we did not find a redirect, which is needed', E_USER_ERROR);
             exit;
         }
+        */
 
         if (isset($_POST['upload_file'])) {
 
+            $this->filehandler = new Filehandler($this->getKernel());
+            $this->filehandler->createUpload();
 
-            $filehandler = new Filehandler($this->getKernel());
-            $filehandler->createUpload();
-
-            if ($file_id = $filehandler->upload->upload('userfile', 'temporary')) {
-                $filehandler = new FileHandler($this->getKernel(), $file_id);
-                if ($filehandler->get('id') == 0) {
-                    trigger_error('unable to load file after upload', E_USER_ERROR);
-                    exit;
+            if ($file_id = $this->filehandler->upload->upload('userfile', 'temporary')) {
+                $this->filehandler = new FileHandler($this->getKernel(), $file_id);
+                if ($this->filehandler->get('id') == 0) {
+                    throw new Exception('unable to load file after upload');
                 }
-                $parser = $fileimport->createParser('CSV');
-                if ($values = $parser->parse($filehandler->get('file_path'), 0, 1)) {
-                    if (empty($values) || empty($values[0])) {
-                        $fileimport->error->set('there was found no data in the file');
-                    }
-                    else {
+                $parser = $this->fileimport->createParser('CSV');
+                if ($this->values = $parser->parse($this->filehandler->get('file_path'), 0, 1)) {
+                    if (empty($this->values) || empty($this->values[0])) {
+                        $fileimport->error->set('No data was found in the file');
+                    } else {
                         // This is now only for contact!
-                        $fields = array('number', 'name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'ean', 'type', 'paymentcondition', 'preferred_invoice', 'openid_url');
-                        $translation_page_id = 'contact';
-                        $mode = 'select_fields';
+                        $this->fields = array('number', 'name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'ean', 'type', 'paymentcondition', 'preferred_invoice', 'openid_url');
+                        $this->translation_page_id = 'contact';
+                        $this->mode = 'select_fields';
                     }
 
                 }
-                $fileimport->error->merge($parser->error->getMessage());
+                $this->fileimport->error->merge($parser->error->getMessage());
             }
-            $fileimport->error->merge($filehandler->error->getMessage());
+            $this->fileimport->error->merge($this->filehandler->error->getMessage());
         } elseif (isset($_POST['save'])) {
-            $filehandler = new Filehandler($this->getKernel(), $_POST['file_id']);
-            if ($filehandler->get('id') == 0) {
-                trigger_error('unable to load data file', E_USER_ERROR);
-                exit;
+            $this->filehandler = new Filehandler($this->getKernel(), $_POST['file_id']);
+            if ($this->filehandler->get('id') == 0) {
+                throw new Exception('unable to load data file');
             } elseif (empty($_POST['fields']) || !is_array($_POST['fields'])) {
-                trigger_error('there was no fields!', E_USER_ERROR);
-                exit;
+                throw new Exception('there was no fields!');
             } else {
-                $parser = $fileimport->createParser('CSV');
+                $parser = $this->fileimport->createParser('CSV');
                 $parser->assignFieldNames($_POST['fields']);
                 if (!empty($_POST['header'])) {
                     $offset = 1;
-                }
-                else {
+                } else {
                     $offset = 0;
                 }
 
-                if ($data = $parser->parse($filehandler->get('file_path'), $offset)) {
+                if ($data = $parser->parse($this->filehandler->get('file_path'), $offset)) {
 
-                    //
+                    $this->session()->set('fileimport_data', $data);
+                    return new k_SeeOther($this->url('../'));
+
+                    /*
                     $_SESSION['shared_fileimport_data'] = $data;
 
                     $redirect->setParameter('session_variable_name', 'shared_fileimport_data');
                     if ($url = $redirect->getRedirect('')) {
                         return new k_SeeOther($url);
                     } else {
-                        trigger_error('No redirect url was found.');
-                        exit;
+                        throw new Exception('No redirect url was found.');
                     }
+                    */
                 }
 
             }
@@ -94,16 +99,21 @@ class Intraface_Fileimport_Controller_Index extends k_Component
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
         $translation = $this->getKernel()->getTranslation('fileimport');
 
-        $fileimport = new FileImport;
+        if (!is_object($this->fileimport)) {
+            $this->fileimport = new FileImport;
+        }
 
+
+        /*
         $redirect = Intraface_Redirect::receive($this->getKernel());
 
         if ($redirect->get('id') == 0) {
             throw new Exception('we did not find a redirect, which is needed');
         }
+		*/
 
         $data = array(
-            'fileimport' => $fileimport
+            'fileimport' => $this->fileimport
         );
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/index');

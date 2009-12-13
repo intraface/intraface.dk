@@ -4,6 +4,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
     protected $debtor;
     protected $translation;
     public $email_send_with_success;
+    public $onlinepayment_show_cancel_option;
 
     function __construct(Translation2 $translation)
     {
@@ -229,8 +230,8 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
             $body = 'Tak for din bestilling i vores onlineshop. Vi har ikke registreret nogen onlinebetaling sammen med bestillingen, hvilket kan skyldes flere ting.
 
-    1) Du fortrudt bestillingen, da du skulle til at betale. I s� fald m� du meget gerne skrive tilbage og annullere din bestilling.
-    2) Der er sket en fejl under betalingen. I det tilf�lde m� du gerne betale ved at g� ind p� nedenst�ende link:
+    1) Du fortrudt bestillingen, da du skulle til at betale. I så fald må du meget gerne skrive tilbage og annullere din bestilling.
+    2) Der er sket en fejl under betalingen. I det tilfælde må du gerne betale ved at gå ind på nedenstående link:
 
     ' .  $payment_url;
             $subject = 'Betaling ikke modtaget';
@@ -346,16 +347,15 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 $onlinepayment = OnlinePayment::factory($this->getKernel(), 'id', intval($_GET['onlinepayment_id']));
 
                 if (!$onlinepayment->transactionAction($_GET['onlinepayment_action'])) {
-                    $onlinepayment_show_cancel_option = true;
+                    $this->onlinepayment_show_cancel_option = true;
                 }
 
                 $this->getDebtor()->load();
 
-                // @todo vi skulle faktisk kun videre, hvis det ikke er
-                // en tilbagebetaling eller hvad?
+                // @todo vi skulle faktisk kun videre, hvis det ikke er en tilbagebetaling eller hvad?
                 if ($this->getDebtor()->get("type") == "invoice" && $this->getDebtor()->get("status") == "sent" AND !$onlinepayment->error->isError()) {
                     if ($this->getKernel()->user->hasModuleAccess('accounting')) {
-                        return new k_SeeOther($this->url('payment/' . $onlinepayment->get('created_payment_id') . '/state'));
+                        return new k_SeeOther($this->url('payment/' . $onlinepayment->get('create_payment_id') . '/state'));
                     }
                 }
             }

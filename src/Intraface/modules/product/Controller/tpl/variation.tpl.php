@@ -4,7 +4,7 @@
         <h2><?php e(t('Product')); ?> #<?php e($product->get('number'));  ?> <?php e($product->get('name')); ?></h2>
         <h2><?php e(t('Variation')); ?> #<?php e($variation->getNumber());  ?> <?php e($variation->getName()); ?></h2>
         <ul class="options">
-            <li><a href="product.php?id=<?php e($product->get('id')); ?>"><?php e(__('close', 'common')); ?></a></li>
+            <li><a href="<?php e(url('../../')); ?>"><?php e(__('close', 'common')); ?></a></li>
         </ul>
     </div>
 

@@ -16,6 +16,8 @@ class Intraface_modules_modulepackage_Controller_Index extends k_Component
             return 'Intraface_modules_modulepackage_Controller_Payment';
         } elseif ($name == 'process') {
             return 'Intraface_modules_modulepackage_Controller_Process';
+        } elseif ($name == 'postform') {
+            return 'Intraface_modules_modulepackage_Controller_Postform';
         }
 
     }

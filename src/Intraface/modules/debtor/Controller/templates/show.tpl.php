@@ -19,8 +19,8 @@
 // onlinepayment error viewing, also with showing cancel onlinepayment button.
 if (isset($onlinepayment)) {
     echo $onlinepayment->error->view();
-    if (isset($onlinepayment_show_cancel_option) && $onlinepayment_show_cancel_option == true) {
-        echo '<form method="post" action="'.url(null).'"><ul class="formerrors"><li>�nsker du i stedet at <input type="submit" name="onlinepayment_cancel" value="Annullere" /><input type="hidden" name="id" value="'.$context->getDebtor()->get('id').'" /><input type="hidden" name="onlinepayment_id" value="'.$onlinepayment->id.'" /> registreringen af betalingen.</li></ul></form>';
+    if (isset($context->onlinepayment_show_cancel_option) && $context->onlinepayment_show_cancel_option == true) {
+        echo '<form method="post" action="'.url(null).'"><ul class="formerrors"><li>Ønsker du i stedet at <input type="submit" name="onlinepayment_cancel" value="Annullere" /><input type="hidden" name="id" value="'.$context->getDebtor()->get('id').'" /><input type="hidden" name="onlinepayment_id" value="'.$onlinepayment->id.'" /> registreringen af betalingen.</li></ul></form>';
     }
 }
 ?>
@@ -97,7 +97,7 @@ if (isset($onlinepayment)) {
         echo '<div class="message-dependent"><p>';
         e(__('A contact for the scan in bureau is needed to send electronic invoices').'. ');
         if ($context->getKernel()->user->hasModuleAccess('administration')) {
-            echo '<a href="'.$debtor_module->getPath().'setting.php">'.__('Add it now').'</a>.';
+            echo '<a href="'.$debtor_module->getPath().'settings">'.__('Add it now').'</a>.';
         }
         echo '</p></div>';
 
@@ -105,7 +105,7 @@ if (isset($onlinepayment)) {
         $valid_scan_in_contact = false;
         echo '<div class="message-dependent"><p>';
         e(__('You need to provide a valid e-mail address to the contact for the scan in bureau').'.');
-        echo ' <a href="'.$contact_module->getPath().'contact.php?id='.$scan_in_contact->get('id').'">'.__('Add it now').'</a>.';
+        echo ' <a href="'.$contact_module->getPath().$scan_in_contact->get('id').'">'.__('Add it now').'</a>.';
         echo '</p></div>';
     }
     ?>

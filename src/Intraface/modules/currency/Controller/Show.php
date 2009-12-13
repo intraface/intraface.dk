@@ -1,7 +1,6 @@
 <?php
 class Intraface_modules_currency_Controller_Show extends k_Component
 {
-
     /**
      * Returns translations object
      *

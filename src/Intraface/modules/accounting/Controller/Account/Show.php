@@ -1,6 +1,8 @@
 <?php
 class Intraface_modules_accounting_Controller_Account_Show extends k_Component
 {
+    protected $account;
+
     protected function map($name)
     {
         if ($name == 'edit') {
@@ -10,6 +12,8 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
 
     function renderHtml()
     {
+        $this->document->setTitle('Account');
+
         $year = new Year($this->getKernel());
         $year->checkYear();
 

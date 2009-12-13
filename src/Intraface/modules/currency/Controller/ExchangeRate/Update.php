@@ -67,7 +67,7 @@ class Intraface_modules_currency_Controller_ExchangeRate_Update extends k_Compon
 
         try {
             $exchangerate->save();
-            throw new k_SeeOther($this->url('../../../../'));
+            return new k_SeeOther($this->url('../../../../'));
         } catch (Doctrine_Validator_Exception $e) {
             $this->getError()->attachErrorStack($currency->getErrorStack(), array('rate' => 'rate'));
         }

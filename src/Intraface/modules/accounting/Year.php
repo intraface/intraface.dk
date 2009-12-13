@@ -184,9 +184,9 @@ class Year extends Intraface_Standard
         $validator->isNumeric($var['vat'], "vat", 'allow_empty');
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
     }
 
 
@@ -210,7 +210,7 @@ class Year extends Intraface_Standard
         }
 
         if (!$this->validate($var)) {
-            return 0;
+            return false;
         }
 
 
@@ -272,11 +272,10 @@ class Year extends Intraface_Standard
 
 
         if (!$db->nextRecord()) {
-            return 0;
+            return false;
         }
 
-        return 1;
-
+        return true;
     }
 
     function vatAccountIsSet()

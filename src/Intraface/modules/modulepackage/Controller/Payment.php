@@ -21,8 +21,7 @@ class Intraface_modules_modulepackage_Controller_Payment extends k_Component
         $action = $action_store->restore($_GET['action_store_identifier']);
 
         if (!is_object($action)) {
-            trigger_error("Problem restoring action from identifier ".$_GET['action_store_identifier'], E_USER_ERROR);
-            exit;
+            throw new Exception("Problem restoring action from identifier ".$_GET['action_store_identifier']);
         }
 
         $shop = new Intraface_modules_modulepackage_ShopExtension();

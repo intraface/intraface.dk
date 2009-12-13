@@ -1,7 +1,7 @@
 <h1><?php e(__('files')); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url(null, array('upload' => 'single'))); ?>" onclick="location.href='select_file.php?upload=multiple'; return false;"><?php e(__('upload file')); ?></a></li>
+    <li><a href="<?php e(url('upload')); ?>" onclick="location.href='<?php e(url('uploadmultiple')); ?>'; return false;"><?php e(__('upload file')); ?></a></li>
 </ul>
 
 <?php // echo $filemanager->error->view('html'); ?>
@@ -37,7 +37,7 @@
     $keywords = $keyword->getUsedKeywords();
 
     if(count($keywords) > 0) {
-        echo '<div>Nøgleord: <ul style="display: inline;">';
+        echo '<div>NÃ¸gleord: <ul style="display: inline;">';
       foreach ($keywords AS $value) {
             if(in_array($value['id'], $selected_keywords) === true) {
                     $checked = 'checked="checked"';
@@ -78,7 +78,7 @@
             ?>
             <tr>
                 <td>
-                    <input type="<?php if($multiple_choice): e('checkbox'); else: print('radio'); endif; ?>" value="<?php echo $files[$i]["id"]; ?>" id="<?php echo $files[$i]["id"]; ?>" class="input-select_file" name="selected[]" <?php if(in_array($files[$i]['id'], $selected_files)) print("checked=\"checked\""); ?> />
+                    <input type="<?php if($context->multiple_choice): e('checkbox'); else: print('radio'); endif; ?>" value="<?php echo $files[$i]["id"]; ?>" id="<?php echo $files[$i]["id"]; ?>" class="input-select_file" name="selected[]" <?php if(in_array($files[$i]['id'], $selected_files)) print("checked=\"checked\""); ?> />
                 </td>
                 <td style="height: 67px;"><img src="<?php e($files[$i]["icon_uri"]); ?>" style="height: <?php e($files[$i]["icon_height"]); ?>px; width: <?php e($files[$i]["icon_width"]); ?>px;" /></td>
 
@@ -97,7 +97,7 @@
 
 <div>
 
-    <?php if($multiple_choice): ?>
+    <?php if($context->multiple_choice): ?>
         <input type="submit" name="submit" id="submit-select_file" value="<?php e(__('save', 'common')); ?>" />
     <?php endif; ?>
 

@@ -19,6 +19,8 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
 
     function renderHtml()
     {
+        $this->document->setTitle('Module gatekeeper');
+
         require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
 
         $smarty = new k_Template(dirname(__FILE__) . '/templates/modulegatekeeper.tpl.php');

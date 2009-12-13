@@ -5,6 +5,11 @@ class Intraface_modules_contact_Controller_Import extends k_Component
     public $errors;
     public $success;
 
+    function map($name)
+    {
+        return 'Intraface_Fileimport_Controller_Index';
+    }
+
     function getMessage()
     {
         return $this->msg;
@@ -17,7 +22,7 @@ class Intraface_modules_contact_Controller_Import extends k_Component
 
     function postForm()
     {
-        $data = $_SESSION['shared_fileimport_data'];
+        $data = $this->session()->get('fileimport_data');
 
         if (!is_array($data) || count($data) == 0) {
             throw new Exception('This is not a valid dataset!');
@@ -47,7 +52,8 @@ class Intraface_modules_contact_Controller_Import extends k_Component
             }
         }
 
-        unset($_SESSION['shared_fileimport_data']);
+        //unset($_SESSION['shared_fileimport_data']);
+        $data = $this->session()->set('fileimport_data', null);
 
         if (empty($this->errors)) {
             return new k_SeeOther($this->url('../', array('flare' => $this->success . ' contacts imported successfully')));
@@ -58,18 +64,23 @@ class Intraface_modules_contact_Controller_Import extends k_Component
 
     function renderHtml()
     {
+        /*
         $redirect = Intraface_Redirect::returns($this->getKernel());
         if ($redirect->getId('id') == 0) {
             throw new Exception('We did not recive a redirect');
         }
+        */
 
         $translation = $this->getKernel()->getTranslation('contact');
 
+        /*
         if ($redirect->getParameter('session_variable_name') != 'shared_fileimport_data') {
             throw new Exception('the session variable name must have been changed as it is not the same anymore: "'.$redirect->getParameter('session_variable_name').'"');
         }
+        */
 
-        $data = $_SESSION['shared_fileimport_data'];
+        //$data = $_SESSION['shared_fileimport_data'];
+        $data = $this->session()->get('fileimport_data');
         $smarty = new k_Template(dirname(__FILE__) . '/templates/import.tpl.php');
         return $smarty->render($this, array('translation' => $translation));
     }

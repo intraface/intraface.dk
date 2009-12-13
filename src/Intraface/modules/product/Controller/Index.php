@@ -52,7 +52,7 @@ class Intraface_modules_product_Controller_Index extends k_Component
         return $this->render();
     }
 
-    function map($name)
+    protected function map($name)
     {
         if (is_numeric($name)) {
             return 'Intraface_modules_product_Controller_Show';
@@ -61,7 +61,6 @@ class Intraface_modules_product_Controller_Index extends k_Component
         } elseif ($name == 'batchedit') {
             return 'Intraface_modules_product_Controller_BatchEdit';
         }
-
     }
 
     function getProductDoctrine()

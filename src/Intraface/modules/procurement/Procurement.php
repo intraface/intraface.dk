@@ -175,7 +175,7 @@ class Procurement extends Intraface_Standard
         }
 
         if (!isset($input['vendor'])) $input['vendor'] = '';
-        $validator->isString($input["vendor"], "Fejl i leverand�r", "", "allow_empty");
+        $validator->isString($input["vendor"], "Fejl i leverandï¿½r", "", "allow_empty");
 
         if (!isset($input['description'])) $input['description'] = '';
         $validator->isString($input["description"], "Fejl i beskrivelse", "", "");
@@ -183,25 +183,25 @@ class Procurement extends Intraface_Standard
         if (!isset($input['from_region_key'])) $input['from_region_key'] = 0;
         $region_types = $this->getRegionTypes();
         if (!isset($region_types[$input["from_region_key"]])) {
-            $this->error->set("Ugyldig k�bsregion");
+            $this->error->set("Ugyldig kï¿½bsregion");
         }
 
         if (!isset($input['dk_price_items'])) $input['dk_price_items'] = 0;
-        $validator->isDouble($input["dk_price_items"], "Varerpris er ikke et gyldigt bel�b", 'zero_or_greater');
+        $validator->isDouble($input["dk_price_items"], "Varerpris er ikke et gyldigt belï¿½b", 'zero_or_greater');
         $amount = new Intraface_Amount($input["dk_price_items"]);
         if ($amount->convert2db()) {
             $input["price_items"] = $amount->get();
         }
 
         if (!isset($input['dk_price_shipment_etc'])) $input['dk_price_shipment_etc'] = 0;
-        $validator->isDouble($input["dk_price_shipment_etc"], "Pris for forsendelse og andet er ikke et gyldigt bel�b", 'zero_or_greater');
+        $validator->isDouble($input["dk_price_shipment_etc"], "Pris for forsendelse og andet er ikke et gyldigt belï¿½b", 'zero_or_greater');
         $amount = new Intraface_Amount($input["dk_price_shipment_etc"]);
         if ($amount->convert2db()) {
             $input["price_shipment_etc"] = $amount->get();
         }
 
         if (!isset($input['dk_vat'])) $input['dk_vat'] = 0;
-        $validator->isDouble($input["dk_vat"], "Moms er ikke et gyldigt bel�b", 'zero_or_greater');
+        $validator->isDouble($input["dk_vat"], "Moms er ikke et gyldigt belï¿½b", 'zero_or_greater');
         $amount = new Intraface_Amount($input["dk_vat"]);
         if ($amount->convert2db()) {
             $input["vat"] = $amount->get();
@@ -263,7 +263,7 @@ class Procurement extends Intraface_Standard
         }
 
 
-        // Poster med fakturadato f�r slutdato.
+        // Poster med fakturadato fï¿½r slutdato.
         if ($this->dbquery->checkFilter("to_date")) {
             $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
             if ($date->convert2db()) {
@@ -275,20 +275,20 @@ class Procurement extends Intraface_Standard
 
         if ($this->dbquery->checkFilter("status")) {
             if ($this->dbquery->getFilter("status") == "-1") {
-                // Beh�ves ikke, den tager alle.
+                // Behï¿½ves ikke, den tager alle.
 
             } elseif ($this->dbquery->getFilter("status") == "-2") {
-                // Not executed = �bne
+                // Not executed = ï¿½bne
                 /*
                 if ($this->dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
                     if ($date->convert2db()) {
-                        // Poster der er executed eller canceled efter dato, og sikring at executed stadig er det, da faktura kan s�ttes tilbage.
+                        // Poster der er executed eller canceled efter dato, og sikring at executed stadig er det, da faktura kan sï¿½ttes tilbage.
                         $this->dbquery->setCondition("(date_executed >= \"".$date->get()."\" AND status_key = 2) OR (date_canceled >= \"".$date->get()."\") OR status_key < 2");
                     }
                 }
                 else {
-                    // Hvis der ikke er nogen dato s� tager vi alle dem som p� nuv�rende tidspunkt har status under
+                    // Hvis der ikke er nogen dato sï¿½ tager vi alle dem som pï¿½ nuvï¿½rende tidspunkt har status under
                     $this->dbquery->setCondition("status_key < 2");
                 }
                 /
@@ -316,7 +316,7 @@ class Procurement extends Intraface_Standard
                     }
                 }
                 else {
-                    // tager dem som p� nuv�rende tidspunkt har den angivet status
+                    // tager dem som pï¿½ nuvï¿½rende tidspunkt har den angivet status
                     $this->dbquery->setCondition("status_key = ".intval($this->dbquery->getFilter("status")));
                 }
             }
@@ -462,7 +462,7 @@ class Procurement extends Intraface_Standard
                 AND procurement_item.intranet_id = ".$this->kernel->intranet->get("id")." AND procurement.intranet_id = ".$this->kernel->intranet->get("id")."
                 AND procurement_item.product_id = ".$product_id." AND procurement.status_key = 1 ORDER BY procurement.invoice_date DESC, procurement_item.id ASC");
 
-        while ($db->nextRecord() && $over_quantity < 3) { // $over_quantity < 3 angiver hvor mange gange mere end det antal som er p� lageret man skal k�rer over.
+        while ($db->nextRecord() && $over_quantity < 3) { // $over_quantity < 3 angiver hvor mange gange mere end det antal som er pï¿½ lageret man skal kï¿½rer over.
 
             $procurement = new Procurement($this->kernel, $db->f('id'));
             $procurement->loadItem();
@@ -522,7 +522,7 @@ class Procurement extends Intraface_Standard
         }
 
         if (!$this->readyForState($year)) {
-            $this->error->set('Ikke klar til bogf�ring');
+            $this->error->set('Ikke klar til bogfï¿½ring');
             return false;
         }
 
@@ -537,12 +537,12 @@ class Procurement extends Intraface_Standard
         }
 
         if (!$year->isDateInYear($voucher_date_object->get())) {
-            $this->error->set('Datoen er ikke i det �r, der er sat i regnskabsmodulet.');
+            $this->error->set('Datoen er ikke i det år, der er sat i regnskabsmodulet.');
         }
 
         $credit_account = Account::factory($year, $credit_account_id);
         if (!$credit_account->validForState()) {
-            $this->error->set('Ugyldig konto hvor indk�bet er betalt fra');
+            $this->error->set('Ugyldig konto hvor indkøbet er betalt fra');
             return false;
         }
 
@@ -648,7 +648,7 @@ class Procurement extends Intraface_Standard
         }
 
         if ($this->error->isError()) {
-            $this->error->set('Der er opst�et en fejl under bogf�ringen af indk�bet. Det kan betyde at dele af den er bogf�rt, men ikke det hele. Du bedes manuelt tjekke bilaget');
+            $this->error->set('Der er opstået en fejl under bogføringen af indkøbet. Det kan betyde at dele af den er bogført, men ikke det hele. Du bedes manuelt tjekke bilaget');
             // I am not quite sure if the procurement should be set as stated, but it can give trouble to state it again, if some of it was stated...
             $this->setStated($voucher->get('id'), $voucher_date);
             return false;
@@ -697,21 +697,21 @@ class Procurement extends Intraface_Standard
         }
 
         if (!$year->readyForState($this->get('paid_date'))) {
-            $this->error->set('Regnskab�ret er ikke klar til bogf�ring.');
+            $this->error->set('Regnskabï¿½ret er ikke klar til bogfï¿½ring.');
             return false;
         }
 
         if ($this->get('id') == 0) {
-            $this->error->set('Indk�bet er ikke gemt');
+            $this->error->set('Indkï¿½bet er ikke gemt');
             return false;
         }
 
         if ($this->get("paid_date") == "0000-00-00") {
-            $this->error->set('Indk�bet skal v�re betalt for at det kan bogf�res.');
+            $this->error->set('Indkï¿½bet skal vï¿½re betalt for at det kan bogfï¿½res.');
         }
 
         if ($this->isStated()) {
-            $this->error->set('Indk�bet er allerede bogf�rt');
+            $this->error->set('Indkï¿½bet er allerede bogfï¿½rt');
             return false;
         }
 
@@ -752,7 +752,7 @@ class Procurement extends Intraface_Standard
         $total = 0;
         $vat = 0;
         foreach ($debet_accounts AS $key => $debet_account) {
-            if ($validator->isNumeric($debet_account['amount'], 'Ugyldig bel�b i linje '.($key+1).' "'.$debet_account['text'].'"', 'greater_than_zero')) {
+            if ($validator->isNumeric($debet_account['amount'], 'Ugyldig belï¿½b i linje '.($key+1).' "'.$debet_account['text'].'"', 'greater_than_zero')) {
 
                 $amount = new Intraface_Amount($debet_account['amount']);
                 $amount->convert2db();
@@ -761,15 +761,15 @@ class Procurement extends Intraface_Standard
                 $validator->isString($debet_account['text'], 'Ugyldig tekst i linje '.($key+1).' "'.$debet_account['text'].'"', '', 'allow_empty');
 
                 if (empty($debet_account['state_account_id']) ) {
-                    $this->error->set('Linje '.($key+1).' "'.$debet_account['text'].'" ved ikke hvor den skal bogf�res');
+                    $this->error->set('Linje '.($key+1).' "'.$debet_account['text'].'" ved ikke hvor den skal bogfï¿½res');
                 } else {
                     require_once 'Intraface/modules/accounting/Account.php';
                     $account = Account::factory($year, $debet_account['state_account_id']);
 
-                    // @todo check this. I changed it to make sure that we are able to state varek�b til videresalg
+                    // @todo check this. I changed it to make sure that we are able to state varekï¿½b til videresalg
                     // || $account->get('type') != 'operating'
                     if ($account->get('id') == 0) {
-                        $this->error->set('Ugyldig konto for bogf�ring af linje '.($key+1).' "'.$debet_account['text'].'"');
+                        $this->error->set('Ugyldig konto for bogfï¿½ring af linje '.($key+1).' "'.$debet_account['text'].'"');
                     } elseif ($account->get('vat') == 'in') {
 
                         $vat += $amount->get()/100*$account->get('vat_percent');
@@ -784,11 +784,11 @@ class Procurement extends Intraface_Standard
 
         if ($skip_amount_check == 'do_amount_check') {
             if (round($total + $this->get('vat'), 2) != $this->get('total_price')) {
-                $this->error->set('Det samlede bel�b ('.number_format($total + $this->get('vat'), 2, ',', '.').') til bogf�ring stemmer ikke overens med det samlede bel�b p� indk�bet. Har du f�et alle varer p� indk�bet med?');
+                $this->error->set('Det samlede beløb ('.number_format($total + $this->get('vat'), 2, ',', '.').') til bogføring stemmer ikke overens med det samlede beløb på indkøbet. Har du fået alle varer på indkøbet med?');
             }
 
             if (round($vat, 2) != $this->get('vat')) {
-                $this->error->set('Momsen af de bel�b du bogf�re p� konti med moms stemmer ('.number_format($vat, 2, ',', '.').') ikke overens med momsen p� det samlede indk�b. Har du f�et alle vare med? Har du husket at skrive bel�bet uden moms for varerne?');
+                $this->error->set('Momsen af de beløb du bogfører på konti med moms stemmer ('.number_format($vat, 2, ',', '.').') ikke overens med momsen på det samlede indkøb. Har du fået alle varer med? Har du husket at skrive beløbet uden moms for varerne?');
             }
 
         }

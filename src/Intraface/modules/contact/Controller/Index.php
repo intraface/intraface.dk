@@ -94,13 +94,16 @@ class Intraface_modules_contact_Controller_Index extends k_Component
     {
         if (!empty($_GET['search']) AND in_array($_GET['search'], array('hide', 'view'))) {
         	$this->getKernel()->setting->set('user', 'contact.search', $_GET['search']);
-        } elseif (!empty($_GET['import'])) {
+        }
+        /*
+        elseif (!empty($_GET['import'])) {
             $redirect = Intraface_Redirect::go($this->getKernel());
             $module_fileimport = $this->getKernel()->useModule('fileimport');
             $url = $redirect->setDestination($module_fileimport->getPath(), NET_SCHEME . NET_HOST . $this->url('import'));
             $redirect->askParameter('session_variable_name');
             return new k_SeeOther($url);
         }
+        */
 
         /*
         if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
@@ -132,7 +135,6 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         $contact->getDBQuery()->defineCharacter('character', 'address.name');
         $contact->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
         $contacts = $contact->getList("use_address");
-
 
         $doc = new Intraface_modules_contact_PdfLabel($this->getKernel()->setting->get("user", "label"));
         $used_keyword = array();
@@ -176,9 +178,9 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
         }
 
-        $keywords = 'Nøgleord' . implode(' ', $used_keyword);
-        $search = 'Søgetekst' . $contact->getDBQuery()->getFilter('search');
-        $count = 'Kontakter i søgning' . count($contacts);
+        $keywords = 'Nï¿½gleord' . implode(' ', $used_keyword);
+        $search = 'Sï¿½getekst' . $contact->getDBQuery()->getFilter('search');
+        $count = 'Kontakter i sï¿½gning' . count($contacts);
 
         $i = 1;
 
@@ -275,7 +277,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
             if ($oplysninger = $eniro->query('telefon', $_POST['eniro_phone'])) {
 
-                // skal kun bruges så længe vi ikke er utf8
+                // skal kun bruges sï¿½ lï¿½nge vi ikke er utf8
                 // $oplysninger = array_map('utf8_decode', $oplysninger);
                 $address['name'] = $oplysninger['navn'];
                 $address['address'] = $oplysninger['adresse'];

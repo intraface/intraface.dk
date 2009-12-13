@@ -49,13 +49,13 @@ class Intraface_Filehandler_Controller_UploadMultiple extends k_Component
                 $filemanager->update(array('accessibility' => $_POST['accessibility']));
 
                 if ($filemanager->moveFromTemporary()) {
-                    // $msg = 'Filerne er uploadet. <a href="'.$redirect->getRedirect('/modules/filemanager/').'">Åbn filarkivet</a>.';
+                    // $msg = 'Filerne er uploadet. <a href="'.$redirect->getRedirect('/modules/filemanager/').'">ï¿½bn filarkivet</a>.';
                 } else {
                     throw new Exception('Could not move the files from temporary to uploaded.');
                 }
             }
         }
-        $location = $redirect->getRedirect($this->url('../'));
+        $location = $redirect->getRedirect($this->context->url());
         return new k_SeeOther($location);
     }
 }

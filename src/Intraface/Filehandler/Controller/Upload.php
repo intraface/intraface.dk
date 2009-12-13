@@ -1,4 +1,4 @@
-<?php
+    <?php
 class Intraface_Filehandler_Controller_Upload extends k_Component
 {
     protected $mdb2;

@@ -8,7 +8,7 @@
     <?php echo $context->getYear()->error->view(); ?>
     <p>Gå til <a href="<?php e($accounting_module->getPath().'years.php'); ?>">regnskabet</a></p>
 <?php elseif ($depreciation->isStated()): ?>
-    <p><?php e(t('the depreciation is alredy stated')); ?>. <a href="<?php e($accounting_module->getPath()).'voucher.php?id='.$depreciation->get('voucher_id'); ?>"><?php e(t('see the voucher')); ?></a>.</p>
+    <p><?php e(t('the depreciation is alredy stated')); ?>. <a href="<?php e($accounting_module->getPath().'voucher/'.$depreciation->get('voucher_id')); ?>"><?php e(t('see the voucher')); ?></a>.</p>
 <?php else: ?>
     <?php
     // need to be executed to generate errors!

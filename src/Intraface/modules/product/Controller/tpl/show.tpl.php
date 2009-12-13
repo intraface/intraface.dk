@@ -224,7 +224,6 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         }
         ?>
 
-
         <form action="<?php e(url(null)); ?>" method="POST"  enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?php e($product->get('id')); ?>" />
         <input type="hidden" name="detail_id" value="<?php e($product->get('detail_id')); ?>" />
@@ -232,7 +231,6 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         <?php
         $filehandler_html = new Ilib_Filehandler_HTML($filehandler);
         $filehandler_html->printFormUploadTag('pic_id', 'new_append_file', 'choose_file', array('include_submit_button_name' => 'append_file_submit', 'filemanager' => true));
-
         //$filehandler_html->printFormUploadTag('pic_id', 'new_pic', 'choose_file', array('image_size' => 'small'));'
         ?>
         </form>
@@ -252,7 +250,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                 <?php $category_type = new Intraface_Category_Type('shop', $shop->getId()); ?>
                 <h3><?php e($shop->getName()); ?></h3>
                 <ul class="options">
-                    <li><a href="<?php e(url(null, array('shop_id' => $shop->getId(), 'append_category' => 1))); ?>"><?php e(t('Add product to categories')); ?></a></li>
+                    <li><a href="<?php e(url('shop/'. $shop->getId() . '/categories/', array('product_id' => $product->getId()))); ?>"><?php e(t('Add product to categories')); ?></a></li>
                 </ul>
                 <?php
                 $category = new Intraface_Category($kernel, $db, $category_type);

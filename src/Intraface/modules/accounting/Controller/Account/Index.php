@@ -34,6 +34,8 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
     function renderHtml()
     {
+        $this->document->setTitle('Accounts');
+
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/account/index.tpl.php');
         return $smarty->render($this);
     }

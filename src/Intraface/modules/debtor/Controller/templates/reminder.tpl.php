@@ -278,7 +278,7 @@ $reminder = $context->getReminder();
                         <td>
                             <?php if ($payments[$i]['is_stated']): ?>
                                 <?php $module_accounting = $context->getKernel()->useModule('accounting'); ?>
-                                <a href="<?php e($module_accounting->getPath().'voucher.php?id='.$payments[$i]['voucher_id']); ?>"><?php e(__('voucher')); ?></a>
+                                <a href="<?php e($module_accounting->getPath().'voucher/'.$payments[$i]['voucher_id']); ?>"><?php e(__('voucher')); ?></a>
                             <?php elseif ($payments[$i]['type'] == 'depreciation'): ?>
                                 <a href="<?php e(url('depreciation/' . $payments[$i]['id'] . '/state')); ?>"><?php e(__('state depreciation')); ?></a>
                             <?php else: ?>

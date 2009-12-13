@@ -67,7 +67,6 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
         return $this->context->context->context->getType();
     }
 
-
     function getModel()
     {
         return $this->context->getModel();

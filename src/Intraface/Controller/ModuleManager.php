@@ -16,6 +16,8 @@ class Intraface_Controller_ModuleManager extends k_Component
 
     function renderHtml()
     {
+        $this->document->setTitle('Module manager');
+
         $pear_user_config = '/etc/pear/pear.conf';
 
         PEAR_Frontend::setFrontendClass('PEAR_Frontend_Web');

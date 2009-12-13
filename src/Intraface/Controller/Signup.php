@@ -2,7 +2,7 @@
 /**
  * Signup
  *
- * @todo Kunne let laves så man kunne oprette sig på et intranet, man havde fået lov til med en eller anden kode.
+ * @todo Kunne let laves sï¿½ man kunne oprette sig pï¿½ et intranet, man havde fï¿½et lov til med en eller anden kode.
  *
  * @package Intraface
  * @author  Lars Olesen <lars@legestue.net>
@@ -11,14 +11,8 @@
  */
 class Intraface_Controller_Signup extends k_Component
 {
-    protected $registry;
     protected $kernel;
     public $msg;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
 
     function execute()
     {
@@ -28,6 +22,8 @@ class Intraface_Controller_Signup extends k_Component
 
     function renderHtml()
     {
+        $this->document->setTitle('Signup');
+
         $smarty = new k_Template(dirname(__FILE__) . '/templates/signup.tpl.php');
         return $smarty->render($this);
     }

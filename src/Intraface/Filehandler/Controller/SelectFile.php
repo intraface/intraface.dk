@@ -1,9 +1,19 @@
 <?php
-class Intraface_Filehandler_Controller_SelectFile extends k_Component
+class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_Controller_Index
 {
+    public $multiple_choice;
+
     function getFileAppender()
     {
     	return $this->context->context->getFileAppender();
+    }
+
+    function dispatch()
+    {
+        $this->multiple_choice = $this->query('multiple_choice');
+        $this->url_state->set('multiple_choice', $this->query('multiple_choice'));
+        $this->url_state->set('use_stored', 'true');
+        return parent::dispatch();
     }
 
     function postForm()
@@ -177,7 +187,7 @@ class Intraface_Filehandler_Controller_SelectFile extends k_Component
             }
         }
         */
-        if (isset($this->GET['images'])) {
+        if ($this->query('images')) {
             $filemanager->getDBQuery()->setFilter('images', 1);
         }
 
@@ -186,7 +196,7 @@ class Intraface_Filehandler_Controller_SelectFile extends k_Component
         }
 
         if (isset($this->GET["filtration"]) && intval($this->GET["filtration"]) != 0) {
-            // Kun for at filtration igen vises i søgeboksen
+            // Kun for at filtration igen vises i sï¿½geboksen
             $filemanager->getDBQuery()->setFilter("filtration", $this->GET["filtration"]);
             switch($this->GET["filtration"]) {
                 case 1:

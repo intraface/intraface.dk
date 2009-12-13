@@ -34,11 +34,6 @@ class NewsletterSubscriber extends Intraface_Standard
     public function __construct($list, $id = 0)
     {
         $this->error = new Intraface_Error;
-
-        if (!is_object($list)) {
-            trigger_error('subscriber Kræver en liste', E_USER_ERROR);
-        }
-
         $this->list = $list;
 
         $this->id = (int)$id;
@@ -70,7 +65,7 @@ class NewsletterSubscriber extends Intraface_Standard
     /**
      * Starter NewsletterSubscriber ud fra alt andet end list
      *
-     * @todo Skal laves til at have følgende parameter: $kernel, $from_what (code, email, id), $id
+     * @todo Skal laves til at have fï¿½lgende parameter: $kernel, $from_what (code, email, id), $id
      *
      * @param object $object Different objects
      * @param string $type   What type to create the object from
@@ -189,7 +184,7 @@ class NewsletterSubscriber extends Intraface_Standard
             return $db->f('id');
         }
 
-        // Spørgsmålet er om vedkommende bør få en e-mail, hvor man kan acceptere?
+        // Spï¿½rgsmï¿½let er om vedkommende bï¿½r fï¿½ en e-mail, hvor man kan acceptere?
         $db->query("INSERT INTO newsletter_subscriber SET
                     contact_id = '".$contact->getId()."',
                     list_id = " . $this->list->get("id") . ",
@@ -235,7 +230,7 @@ class NewsletterSubscriber extends Intraface_Standard
         // Det er smartere hvis vi bare loader fra e-mail
         $db = new DB_Sql;
 
-        // jeg kan dog ikke få lov at reassigne i php5 - så hvad skal jeg gøre i stedet?
+        // jeg kan dog ikke fï¿½ lov at reassigne i php5 - sï¿½ hvad skal jeg gï¿½re i stedet?
         $which_subscriber_has_email = NewsletterSubscriber::factory($this->list, 'email', $input['email']);
         if (is_object($which_subscriber_has_email)) {
             $this->id = $which_subscriber_has_email->get('id');
@@ -262,7 +257,7 @@ class NewsletterSubscriber extends Intraface_Standard
                 $this->error->set('Kunne ikke gemme kontaktpersonen');
             }
             */
-            // name og e-mail bør vel ikke nødv. gemmes?
+            // name og e-mail bï¿½r vel ikke nï¿½dv. gemmes?
 
             $db->query("UPDATE newsletter_subscriber
                 SET
@@ -409,17 +404,17 @@ class NewsletterSubscriber extends Intraface_Standard
      * The subscriber must receive an e-mail so the subscribtion can be confirmed
      * The e-mail should say that the subscription should be confirmed within a week.
      *
-     * E-mailen skal indeholde følgende:
-     * - url til privacy policy på sitet
+     * E-mailen skal indeholde fï¿½lgende:
+     * - url til privacy policy pï¿½ sitet
      * - en kort beskrivelse af mailinglisten
-     * - url som brugeren følger for at bekræfte tilmeldingen
+     * - url som brugeren fï¿½lger for at bekrï¿½fte tilmeldingen
      *
-     * - I virkeligheden skal den nok nøjes med lige at logge ind i ens personlige webinterface
-     *   hvor man så kan lave bekræftelsen fra. Det skal altså bare være loginkoden fra
-     *   den personlige konto, der står der, og så skal nyhedsbreve på forsiden (hvis dette sted
+     * - I virkeligheden skal den nok nï¿½jes med lige at logge ind i ens personlige webinterface
+     *   hvor man sï¿½ kan lave bekrï¿½ftelsen fra. Det skal altsï¿½ bare vï¿½re loginkoden fra
+     *   den personlige konto, der stï¿½r der, og sï¿½ skal nyhedsbreve pï¿½ forsiden (hvis dette sted
      *   har nogle nyhedsbreve).
      *
-     * @see tilføj cleanUp();
+     * @see tilfï¿½j cleanUp();
      *
      * @return boolean
      */
@@ -437,7 +432,7 @@ class NewsletterSubscriber extends Intraface_Standard
         // @todo hack for legacy purposes, could also just update the db
         $subscribe_subject = $this->list->get('subscribe_subject');
         if (empty($subscribe_subject)) {
-            $subscribe_subject = 'Bekræft tilmelding';
+            $subscribe_subject = 'Bekrï¿½ft tilmelding';
         }
 
         $this->load();

@@ -4,15 +4,15 @@
 
 <form action="<?php e(url()); ?>" method="post" enctype="multipart/form-data">
 
-<?php if (isset($mode) && $mode = 'select_fields'): ?>
+<?php if (isset($context->mode) && $context->mode = 'select_fields'): ?>
     <fieldset>
         <legend><?php e(t('select the fields for import')); ?></legend>
-        <?php foreach ($values[0] AS $key => $value): ?>
+        <?php foreach ($context->values[0] AS $key => $value): ?>
             <div class="formrow">
                 <label for="fields_<?php e($key); ?>"><?php e($value); ?></label>
                 <select name="fields[<?php e($key); ?>]" id="fields_<?php e($key); ?>">
                     <option value="">[<?php e(__('ignore', 'common')); ?>]</option>
-                    <?php foreach ($fields AS $field): ?>
+                    <?php foreach ($context->fields AS $field): ?>
                         <option value="<?php e($field); ?>"><?php e(__($field, $translation_page_id)); ?></option>
                     <?php endforeach; ?>
                 </select>
@@ -29,11 +29,11 @@
         <div style="clear:both;"><?php e(__('tip: if the fieldnames you see in the left column above is the first data record you want to import, your dataset does not have a header')); ?>.</div>
     </fieldset>
 
-    <input type="hidden" name="file_id" value="<?php e($filehandler->get('id')); ?>" />
+    <input type="hidden" name="file_id" value="<?php e($context->filehandler->get('id')); ?>" />
 
     <input type="submit" class="save" name="save" value="<?php e(__('select', 'common').'...'); ?>" />
     <?php e(__('or', 'common')); ?>
-    <a href="<?php echo 'index.php'; ?>"><?php e(__('Cancel', 'common')); ?></a>
+    <a href="<?php url(null); ?>"><?php e(__('Cancel', 'common')); ?></a>
 
 <?php else: ?>
     <fieldset>

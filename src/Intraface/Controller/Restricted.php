@@ -42,6 +42,8 @@ class Intraface_Controller_Restricted extends k_Component
 
     function renderHtml()
     {
+        $this->document->setTitle('Dashboard');
+
         $_advice[] = array();
         $_attention_needed[] = array();
         if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
@@ -274,6 +276,8 @@ class component_ShowProduct {
 
     function wrapHtml($content)
     {
+        $this->document->setTitle('Intraface.dk');
+
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/main');
         $content = $tpl->render($this, array('content' => $content));
         return new k_HttpResponse(200, $content, true);

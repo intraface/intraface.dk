@@ -13,7 +13,7 @@ class Intraface_Controller_Payment
         if (!empty($_GET['language']) && $_GET['language'] == 'da') {
             $text[0] = 'Intraface Betaling';
             $text[1] = 'Du er nu ved at betale for ordre nummer';
-            $text[2] = 'I alt hæves %s på fra dit kort';
+            $text[2] = 'I alt hÃ¦ves %s pÃ¥ fra dit kort';
             $text[3] = 'Betalingen foretages over Quickpay\'s sikker betalingsserver.';
 
         } else {
@@ -22,6 +22,8 @@ class Intraface_Controller_Payment
             $text[2] = '%s is withdrawed from your card';
             $text[3] = 'The payment is carried out via Quickpay\'s secure server.';
         }
+
+        $this->document->setTitle('Payment');
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/payment');
         $content = $tpl-render($this, array('text' => $text));

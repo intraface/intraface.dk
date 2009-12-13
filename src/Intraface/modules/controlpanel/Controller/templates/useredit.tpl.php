@@ -23,7 +23,6 @@ $address_value = $context->getValues();
     </div>
 </fieldset>
 
-
 <fieldset>
     <legend><?php e(t('address information')); ?></legend>
     <div class="formrow">
@@ -58,6 +57,6 @@ $address_value = $context->getValues();
 </fieldset>
 
 <p><input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />
-<a href="user.php"><?php e(t('Cancel', 'common')); ?></a></p>
+<a href="<?php e(url(null)); ?>"><?php e(t('Cancel', 'common')); ?></a></p>
 
 </form>

@@ -2,6 +2,7 @@
 class Intraface_modules_accounting_Controller_State_Procurement extends k_Component
 {
     protected $year;
+    protected $value = array();
 
     function getKernel()
     {
@@ -30,7 +31,7 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
             return new k_SeeOther($this->url('selectyear'));
         }
         $procurement = $this->getProcurement();
-        $value = $procurement->get();
+        //$this->value = $procurement->get();
         $items = $procurement->getItems();
         $i = 0;
         $items_amount = 0;
@@ -38,14 +39,15 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         if (count($items) > 0) {
             // implement to a line for each item
         }
+        /*
+         if ($procurement->get('price_items') - $items_amount > 0) {
+         $this->value['debet_account'][$i++] = array('text' => '', 'amount' => number_format($procurement->get('price_items') - $items_amount, 2, ',', '.'));
+         }
 
-        if ($procurement->get('price_items') - $items_amount > 0) {
-            $value['debet_account'][$i++] = array('text' => '', 'amount' => number_format($procurement->get('price_items') - $items_amount, 2, ',', '.'));
-        }
-
-        if ($procurement->get('price_shipment_etc') > 0) {
-            $value['debet_account'][$i++] = array('text' => $this->t('shipment etc'), 'amount' => $procurement->get('dk_price_shipment_etc'));
-        }
+         if ($procurement->get('price_shipment_etc') > 0) {
+         $this->value['debet_account'][$i++] = array('text' => $this->t('shipment etc'), 'amount' => $procurement->get('dk_price_shipment_etc'));
+         }
+         */
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/procurement.tpl.php');
 
         $data = array(
@@ -53,7 +55,7 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         	'year' => $year,
         	'voucher' => $voucher,
         	'items' => $items,
-        	'value' => $value);
+        	'value' => $this->getValues());
 
         return $smarty->render($this, $data);
 
@@ -69,6 +71,36 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         return $this->context->getProcurement();
     }
 
+    function getValues()
+    {
+        if ($this->body()) {
+            $this->value = $this->body();
+            if (isset($_POST['add_line'])) {
+                array_push($this->value['debet_account'], array('text' => '', 'amount' => '0,00'));
+                return $this->value;
+            } elseif (isset($_POST['remove_line'])) {
+                foreach ($_POST['remove_line'] AS $key => $void) {
+                    array_splice($this->value['debet_account'], $key, 1);
+                }
+                return $this->value;
+            }
+
+        } else {
+            $i = 0;
+            $procurement = $this->getProcurement();
+            $this->value = $procurement->get();
+            if ($procurement->get('price_items') - $items_amount > 0) {
+                $this->value['debet_account'][$i++] = array('text' => '', 'amount' => number_format($procurement->get('price_items') - $items_amount, 2, ',', '.'));
+            }
+
+            if ($procurement->get('price_shipment_etc') > 0) {
+                $this->value['debet_account'][$i++] = array('text' => $this->t('shipment etc'), 'amount' => $procurement->get('dk_price_shipment_etc'));
+            }
+        }
+
+        return $this->value;
+    }
+
     function postForm()
     {
         $procurement_module = $this->getKernel()->module('procurement');
@@ -80,28 +112,14 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         $procurement = $this->getProcurement();
 
         if (isset($_POST['state'])) {
-
             if ($procurement->checkStateDebetAccounts($year, $_POST['debet_account'])) {
-                if ($procurement->state($year, $_POST['voucher_number'], $_POST['voucher_date'], $_POST['debet_account'], (int)$_POST['credit_account_number'], $translation)) {
+                if ($procurement->state($year, $_POST['voucher_number'], $_POST['voucher_date'], $_POST['debet_account'], (int)$_POST['credit_account_number'], $this->getKernel()->getTranslation('procurement'))) {
                     return new k_SeeOther($this->url('../'));
                 }
                 $procurement->error->set('Kunne ikke bogføre posten');
             }
         }
 
-        $value = $_POST;
-
-        if (isset($_POST['add_line'])) {
-            array_push($value['debet_account'], array('text' => '', 'amount' => '0,00'));
-        }
-
-        if (isset($_POST['remove_line'])) {
-            foreach ($_POST['remove_line'] AS $key => $void) {
-                array_splice($value['debet_account'], $key, 1);
-            }
-        }
-
         return $this->render();
-
     }
 }

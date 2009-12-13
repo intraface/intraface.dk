@@ -23,10 +23,6 @@ class Intraface_modules_accounting_YearGateway
      */
     function __construct($kernel)
     {
-        if (!is_object($kernel)) {
-            trigger_error('Klassen Year kræver et Kernel-objekt', E_USER_ERROR);
-            exit;
-        }
         $this->kernel = $kernel;
     }
 

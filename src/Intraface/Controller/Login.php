@@ -29,6 +29,7 @@ class Intraface_Controller_Login extends k_Component
 
     function renderHtml()
     {
+        $this->document->setTitle('Login');
         $smarty = new k_Template(dirname(__FILE__) . '/templates/login.tpl.php');
         return $smarty->render($this);
     }

@@ -11,6 +11,8 @@ class Intraface_Controller_SwitchIntranet extends k_Component
 {
     function renderHtml()
     {
+        $this->document->setTitle('Switch intranet');
+
         if (isset($_GET["id"]) && $this->getKernel()->user->hasIntranetAccess($_GET['id'])) {
             // @todo make sure a new user is stored in Auth, otherwise
             //       the access to the modules are not correctly maintained.
@@ -29,7 +31,7 @@ class Intraface_Controller_SwitchIntranet extends k_Component
 
     function getIntranets()
     {
-        // @todo bør hente en liste vha. intranethalløjsaen
+        // @todo bï¿½r hente en liste vha. intranethallï¿½jsaen
         $db = new DB_Sql;
         $db->query("SELECT * FROM intranet ORDER BY name");
         $accessible_intranets = array();

@@ -31,13 +31,13 @@ $level = 0;
             <?php
             # If there is subcategories to the category
             if (is_array($category['categories']) && count($category['categories']) > 0) {
-                
+
                 # We make the items for the next level the sub categories of this category
                 $level_categories[$level+1] = $category['categories'];
-                
+
                 # We move to next level
                 $level++;
-                
+
                 # We break this foreach as we are ready to go next level_categories for new level.
                 # Notice that the last code in the while loop will be executed anyway
                 break;

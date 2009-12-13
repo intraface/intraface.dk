@@ -85,8 +85,8 @@ class Payment extends Intraface_Standard
             return false;
         }
 
-        // Man har mulighed for at køre $payment->update() bare for at få den til at
-        // sætte invoice eller reminder til executed
+        // Man har mulighed for at kï¿½re $payment->update() bare for at fï¿½ den til at
+        // sï¿½tte invoice eller reminder til executed
         if (!is_array($input)) {
             if (is_object($this->payment_for)) {
                 $this->payment_for->updateStatus();
@@ -104,7 +104,7 @@ class Payment extends Intraface_Standard
         }
 
         if (!isset($input["amount"])) $input["amount"] = 0;
-        if ($validator->isDouble($input["amount"], "Ugyldig beløb")) {
+        if ($validator->isDouble($input["amount"], "Ugyldig belï¿½b")) {
             $amount = new Intraface_Amount($input["amount"]);
             $amount->convert2db();
             $amount = $amount->get();
@@ -141,12 +141,11 @@ class Payment extends Intraface_Standard
             $this->payment_for->load();
             $this->payment_for->updateStatus();
         }
-        return true;
+        return $this->id;
     }
 
     function getList()
     {
-
         $db = new DB_sql;
         $i = 0;
         $payment = array();
@@ -237,13 +236,13 @@ class Payment extends Intraface_Standard
                 $debtor->dbquery->setCondition("where_from = 5 AND where_from_id = ".$this->payment_for->get("id"));
                 $debtor->dbquery->setSorting("this_date");
             } else {
-                // Hvis det ikke er faktura, så er det en søgning på alle betalinger for kontakt.
+                // Hvis det ikke er faktura, sï¿½ er det en sï¿½gning pï¿½ alle betalinger for kontakt.
                 trigger_error("Betalinger for en contact er ikke implementeret", E_USER_ERROR);
-                // Følgende kan vist kun være noget lort. contact_id og intranet_id
+                // Fï¿½lgende kan vist kun vï¿½re noget lort. contact_id og intranet_id
                 $debtor->dbquery->setCondition("contact_id = ".$this->kernel->intranet->get("id"));
                 $debtor->dbquery->setSorting("this_date");
             }
-            // Det er ret krævende at køre debtor->getList(), måske det burde gøres med direkte sql-udtræk.
+            // Det er ret krï¿½vende at kï¿½re debtor->getList(), mï¿½ske det burde gï¿½res med direkte sql-udtrï¿½k.
             $credit_note = $debtor->getList();
         }
 
@@ -328,7 +327,7 @@ class Payment extends Intraface_Standard
         }
 
         if ($this->isStated()) {
-            $this->error->set('Betalingen er allerede bogført');
+            $this->error->set('Betalingen er allerede bogfï¿½rt');
             return false;
         }
 
@@ -385,7 +384,7 @@ class Payment extends Intraface_Standard
         }
 
         $validator->isNumeric($voucher_number, 'Ugyldigt bilagsnummer', 'greater_than_zero');
-        $validator->isNumeric($state_account_number, 'Ugyldig bogføringskonto', 'greater_than_zero');
+        $validator->isNumeric($state_account_number, 'Ugyldig bogfï¿½ringskonto', 'greater_than_zero');
 
         if (!$this->readyForState()) {
             return false;
@@ -400,14 +399,14 @@ class Payment extends Intraface_Standard
         require_once 'Intraface/modules/accounting/Account.php';
         $credit_account = new Account($year, $year->getSetting('debtor_account_id'));
         if (!$credit_account->validForState()) {
-            $this->error->set('Den gemte debitorkonto er ikke gyldig til bogføring');
+            $this->error->set('Den gemte debitorkonto er ikke gyldig til bogfï¿½ring');
             return false;
         }
         $credit_account_number = $credit_account->get('number');
 
         $debet_account = Account::factory($year, $state_account_number);
         if (!$debet_account->validForState()) {
-            $this->error->set('Den valgte konto for bogføring er ikke gyldig');
+            $this->error->set('Den valgte konto for bogfï¿½ring er ikke gyldig');
             return false;
         }
         $debet_account_number = $debet_account->get('number');
@@ -416,7 +415,7 @@ class Payment extends Intraface_Standard
         $voucher = Voucher::factory($year, $voucher_number);
         $amount = $this->get('amount');
 
-        // hvis beløbet er mindre end nul, skal konti byttes om og beløbet skal gøres positivt
+        // hvis belï¿½bet er mindre end nul, skal konti byttes om og belï¿½bet skal gï¿½res positivt
         if ($amount < 0) {
             $debet_account_number = $credit_account->get('number');
             $credit_account_number = $debet_account->get('number');

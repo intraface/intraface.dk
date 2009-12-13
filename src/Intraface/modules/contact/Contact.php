@@ -5,106 +5,106 @@
  * I think we should distinguish between company and contact
  *
 
-// www, email, cvr, ean hoerer ikke hertil
-abstract class Address
-{
-    private $types;
+ // www, email, cvr, ean hoerer ikke hertil
+ abstract class Address
+ {
+ private $types;
 
-    // istedet for belong_to og belong_to_id
-    // skal vaere den samme maade som tags
+ // istedet for belong_to og belong_to_id
+ // skal vaere den samme maade som tags
 
-    public function __construct($data) {
-        $this->init();
-        // data is put into variables
-        // this can be done either from a database or from some form input (remember to validate from forminput)
-    }
+ public function __construct($data) {
+ $this->init();
+ // data is put into variables
+ // this can be done either from a database or from some form input (remember to validate from forminput)
+ }
 
-    function registerType($id, $type)
-    {
-        // some rules for id and type
-        $this->types[$id] = $type;
-    }
+ function registerType($id, $type)
+ {
+ // some rules for id and type
+ $this->types[$id] = $type;
+ }
 
-    function getTypes()
-    {
-        return $this->types;
-    }
+ function getTypes()
+ {
+ return $this->types;
+ }
 
-    abstract function init();
+ abstract function init();
 
-}
+ }
 
-// this is the one we use for our application
-class MyAddress extends Address
-{
-    function init()
-    {
-        $this->registerType(1, 'intranet');
-    }
-}
+ // this is the one we use for our application
+ class MyAddress extends Address
+ {
+ function init()
+ {
+ $this->registerType(1, 'intranet');
+ }
+ }
 
-class Contact
-{
-    public $name;
-    public $occupation:
-    public $birthday;
+ class Contact
+ {
+ public $name;
+ public $occupation:
+ public $birthday;
 
-    // et eller andet med et keyword
-    // work, home, delivery, billing etc.
-    function addAddress() {}
+ // et eller andet med et keyword
+ // work, home, delivery, billing etc.
+ function addAddress() {}
 
-    function setPrimaryAddress() {}
+ function setPrimaryAddress() {}
 
-    function getPrimaryAddress() {}
+ function getPrimaryAddress() {}
 
-    function getAddresses() {}
+ function getAddresses() {}
 
-    ////////////////////////////
+ ////////////////////////////
 
-    function addEmail() {}
+ function addEmail() {}
 
-    function getEmails() {}
+ function getEmails() {}
 
-    function setPrimaryEmail() {}
+ function setPrimaryEmail() {}
 
-    function getPrimaryEmail() {}
+ function getPrimaryEmail() {}
 
-    ////////////////////////////
+ ////////////////////////////
 
-    function getBirthday() { // return date object }
+ function getBirthday() { // return date object }
 
-    /////////////////////////////
+ /////////////////////////////
 
-    function addPicture() {}
+ function addPicture() {}
 
-    function setPrimaryPicture() {}
+ function setPrimaryPicture() {}
 
-    function getPictures() {}
+ function getPictures() {}
 
-    ///////////////////////////////
+ ///////////////////////////////
 
-    function addWebsite() {}
+ function addWebsite() {}
 
-    function getWebsites() {}
+ function getWebsites() {}
 
-    ////////////////////////////////
+ ////////////////////////////////
 
-    // maaske med mobile eller landline, work
-    function addPhone() {}
+ // maaske med mobile eller landline, work
+ function addPhone() {}
 
-    function getPhones() {}
+ function getPhones() {}
 
-}
+ }
 
-class Company extends Contact
-{
-    public $ean;
-    public $cvr;
+ class Company extends Contact
+ {
+ public $ean;
+ public $cvr;
 
-    function addContact() {}
+ function addContact() {}
 
-    function getContacts()
-}
+ function getContacts()
+ }
 
 
 
@@ -178,14 +178,14 @@ class Contact extends Intraface_Standard
      * @var array
      */
     private $addresses = array(0 => 'standard',
-                           1 => 'delivery',
-                           2 => 'invoice');
+    1 => 'delivery',
+    2 => 'invoice');
 
     /**
      * @var array
      */
     private $types = array(0 => 'private',
-                       1 => 'corporation');
+    1 => 'corporation');
 
     /**
      * @todo has to be made private
@@ -203,7 +203,7 @@ class Contact extends Intraface_Standard
     public function __construct($kernel, $id = 0)
     {
         if (!is_object($kernel)) {
-            trigger_error('Contact kræver kernel - fik ' . get_class($kernel), E_USER_ERROR);
+            trigger_error('Contact krï¿½ver kernel - fik ' . get_class($kernel), E_USER_ERROR);
         }
         $this->kernel = $kernel;
         //$contact_module = $this->kernel->getModule('contact');
@@ -248,31 +248,54 @@ class Contact extends Intraface_Standard
     public function factory($kernel, $type, $value)
     {
         // Husk noget validering af de forskellige values og typer
-        $db = new DB_Sql;
-        switch($type) {
-            case 'email':
-                $db->query("SELECT address.belong_to_id AS id FROM contact INNER JOIN address ON address.belong_to_id = contact.id WHERE address.email = '".$value."' AND contact.intranet_id = " . $kernel->intranet->get('id') . " AND address.active = 1 AND contact.active = 1");
-                break;
-            case 'code':
-                $db->query("SELECT id FROM contact WHERE code  = '".$value."' AND contact.intranet_id = " . $kernel->intranet->get('id'));
-                break;
-            case 'username':
-                $db->query("SELECT id FROM contact WHERE username  = '".$value['username']."' AND password  = '".$value['password']."' AND contact.intranet_id = " . $kernel->intranet->get('id'));
-                break;
-            case 'openid_url':
-                $db->query("SELECT id FROM contact WHERE openid_url  = '".$value."' AND contact.intranet_id = " . $kernel->intranet->get('id'));
-                // Her bør vel være et tjek på hvor mange - og hvis mange give en fejl
-                break;
-            default:
-                trigger_error('Contact::factory() skal bruge en type');
-                break;
-        }
-        if (!$db->nextRecord()) {
+        $gateway = new Intraface_modules_contact_ContactGateway($kernel, new DB_Sql);
+        try {
+            switch($type) {
+                case 'email':
+                    return $gateway->findByEmail($value);
+                case 'code':
+                    return $gateway->findByEmail($value);
+                case 'username':
+                    return $gateway->findByUsername($value);
+                case 'openid_url':
+                    return $gateway->findByOpenId($value);
+                    // Her bï¿½r vel vï¿½re et tjek pï¿½ hvor mange - og hvis mange give en fejl
+                    break;
+                default:
+                    trigger_error('Contact::factory() skal bruge en type');
+                    break;
+            }
+        } catch (Exception $e) {
             return $contact = new Contact($kernel);
         }
-        $id = $db->f('id');
 
-        return ($contact = new Contact($kernel, $id));
+        /*
+         $db = new DB_Sql;
+         switch($type) {
+         case 'email':
+         $db->query("SELECT address.belong_to_id AS id FROM contact INNER JOIN address ON address.belong_to_id = contact.id WHERE address.email = '".$value."' AND contact.intranet_id = " . $kernel->intranet->get('id') . " AND address.active = 1 AND contact.active = 1");
+         break;
+         case 'code':
+         $db->query("SELECT id FROM contact WHERE code  = '".$value."' AND contact.intranet_id = " . $kernel->intranet->get('id'));
+         break;
+         case 'username':
+         $db->query("SELECT id FROM contact WHERE username  = '".$value['username']."' AND password  = '".$value['password']."' AND contact.intranet_id = " . $kernel->intranet->get('id'));
+         break;
+         case 'openid_url':
+         $db->query("SELECT id FROM contact WHERE openid_url  = '".$value."' AND contact.intranet_id = " . $kernel->intranet->get('id'));
+         // Her bï¿½r vel vï¿½re et tjek pï¿½ hvor mange - og hvis mange give en fejl
+         break;
+         default:
+         trigger_error('Contact::factory() skal bruge en type');
+         break;
+         }
+         if (!$db->nextRecord()) {
+         return $contact = new Contact($kernel);
+         }
+         $id = $db->f('id');
+
+         return ($contact = new Contact($kernel, $id));
+         */
     }
 
     /**
@@ -315,11 +338,11 @@ class Contact extends Intraface_Standard
         $this->address = Intraface_Address::factory('contact', $db->f('id'));
         $this->delivery_address = Intraface_Address::factory('contact_delivery', $db->f('id'));
 
-        // name må ikke fjernes - bruges af keywords
+        // name mï¿½ ikke fjernes - bruges af keywords
         $this->value['name'] = $this->address->get('name');
         $this->value['openid_url'] = $this->get('openid_url');
 
-        $this->value['id'] = $db->f('id'); // må ikke fjernes
+        $this->value['id'] = $db->f('id'); // mï¿½ ikke fjernes
 
         return true;
     }
@@ -404,7 +427,7 @@ class Contact extends Intraface_Standard
         }
 
         if (!empty($var['ean']) AND strlen($var['ean']) != 13) {
-            $this->error->set('EAN-nummeret skal præcis være 13 tal');
+            $this->error->set('EAN-nummeret skal prï¿½cis vï¿½re 13 tal');
         }
 
         //deliveryaddress
@@ -441,14 +464,14 @@ class Contact extends Intraface_Standard
         settype($var['preferred_invoice'], 'integer');
         $validator->isNumeric($var['preferred_invoice'], 'Fejl i preferred_invoice', 'allow_empty');
         /*
-        if ($var['preferred_invoice'] == 3 AND empty($var['ean'])) {
-            // @todo this creates problems from the shop when EAN has been chosen
-            $this->error->set('Du skal udfylde EAN-nummeret, hvis du vælger en elektronisk faktura');
-        }
-        */
+         if ($var['preferred_invoice'] == 3 AND empty($var['ean'])) {
+         // @todo this creates problems from the shop when EAN has been chosen
+         $this->error->set('Du skal udfylde EAN-nummeret, hvis du vï¿½lger en elektronisk faktura');
+         }
+         */
 
         if ($var['preferred_invoice'] == 2 AND empty($var['email'])) {
-            $this->error->set('E-mailen skal udfyldes, hvis kontakten foretrækker e-mail.');
+            $this->error->set('E-mailen skal udfyldes, hvis kontakten foretrï¿½kker e-mail.');
         }
 
         if ($this->error->isError()) {
@@ -482,8 +505,8 @@ class Contact extends Intraface_Standard
     public function save($var)
     {
         $sql_items = '';
-        // safe db må ikke være her, for den køres igen i address
-        // vi skal søreg for blot at køre den på selve feltet.
+        // safe db mï¿½ ikke vï¿½re her, for den kï¿½res igen i address
+        // vi skal sï¿½reg for blot at kï¿½re den pï¿½ selve feltet.
         //$var = safeToDb($var);
 
         if ($this->id == 0 AND empty($var['number'])) {
@@ -531,44 +554,44 @@ class Contact extends Intraface_Standard
             "date_changed = NOW()
             $sql_after";
 
-        $db = new DB_Sql;
-        $db->query($sql);
-        if ($this->id == 0) {
-            $this->id = $db->insertedId();
-        }
-
-        // Standardadresse
-        $address_object = Intraface_Address::factory('contact', $this->id);
-        $address_fields = $address_object->fields;
-
-        foreach ($address_fields AS $key=>$value) {
-            if (array_key_exists($value, $var)) {
-                $standard_address_to_save[$value] = $var[$value];
+            $db = new DB_Sql;
+            $db->query($sql);
+            if ($this->id == 0) {
+                $this->id = $db->insertedId();
             }
-        }
-        if (!empty($standard_address_to_save)) {
-            if (!$address_object->save($standard_address_to_save)) {
-                return 0;
+
+            // Standardadresse
+            $address_object = Intraface_Address::factory('contact', $this->id);
+            $address_fields = $address_object->fields;
+
+            foreach ($address_fields AS $key=>$value) {
+                if (array_key_exists($value, $var)) {
+                    $standard_address_to_save[$value] = $var[$value];
+                }
             }
-        }
-
-        // Delivery Address
-        foreach ($address_fields AS $key=>$value) {
-            if (array_key_exists('delivery_'.$value, $var)) {
-                $delivery_address_to_save[$value] = $var['delivery_' . $value];
+            if (!empty($standard_address_to_save)) {
+                if (!$address_object->save($standard_address_to_save)) {
+                    return 0;
+                }
             }
-        }
 
-        $delivery_address_object = Intraface_Address::factory('contact_delivery', $this->id);
-
-        if (!empty($delivery_address_to_save)) {
-            if (!$delivery_address_object->save($delivery_address_to_save)) {
-                return 0;
+            // Delivery Address
+            foreach ($address_fields AS $key=>$value) {
+                if (array_key_exists('delivery_'.$value, $var)) {
+                    $delivery_address_to_save[$value] = $var['delivery_' . $value];
+                }
             }
-        }
-        $this->load();
 
-        return $this->id;
+            $delivery_address_object = Intraface_Address::factory('contact_delivery', $this->id);
+
+            if (!empty($delivery_address_to_save)) {
+                if (!$delivery_address_object->save($delivery_address_to_save)) {
+                    return 0;
+                }
+            }
+            $this->load();
+
+            return $this->id;
     }
 
     /**
@@ -581,11 +604,11 @@ class Contact extends Intraface_Standard
     public function delete()
     {
         if ($this->get('locked') == 1) {
-            $this->error->set('Posten er låst og kan ikke slettes');
+            $this->error->set('Posten er lï¿½st og kan ikke slettes');
             return false;
         }
         if ($this->id == 0) {
-            $this->error->set('Kender ikke id, så kan ikke slette kunden');
+            $this->error->set('Kender ikke id, sï¿½ kan ikke slette kunden');
             return false;
         }
         $db = new DB_Sql;
@@ -601,11 +624,11 @@ class Contact extends Intraface_Standard
     public function undelete()
     {
         if ($this->get('locked') == 1) {
-            $this->error->set('Posten er låst og kan ikke slettes');
+            $this->error->set('Posten er lï¿½st og kan ikke slettes');
             return false;
         }
         if ($this->id == 0) {
-            $this->error->set('Kender ikke id, så kan ikke slette kunden');
+            $this->error->set('Kender ikke id, sï¿½ kan ikke slette kunden');
             return false;
         }
         $db = new DB_Sql;
@@ -707,19 +730,19 @@ class Contact extends Intraface_Standard
      *
      * @return boolean
      */
-     public function hasSimilarContacts()
-     {
+    public function hasSimilarContacts()
+    {
         $contacts = $this->getSimilarContacts();
         return (count($contacts) > 0);
-     }
+    }
 
     /**
      * Return an array with similar contacts
      *
      * @return array
      */
-     public function getSimilarContacts()
-     {
+    public function getSimilarContacts()
+    {
         $this->address = $this->getAddress();
 
         $similar_contacts = array();
@@ -755,7 +778,7 @@ class Contact extends Intraface_Standard
         }
 
         return $result->fetchAll();
-     }
+    }
 
     /**
      * Merges a contact to one contact
@@ -774,9 +797,9 @@ class Contact extends Intraface_Standard
 
     /**
      * Start keywordmodulet op
-     * Denne metode kræves af keyword
+     * Denne metode krï¿½ves af keyword
      *
-     * TODO Måske burde denne metode hedde loadKeywords()?
+     * TODO Mï¿½ske burde denne metode hedde loadKeywords()?
      *
      * @return object
      */
@@ -795,15 +818,15 @@ class Contact extends Intraface_Standard
         return new Intraface_Keyword_Appender($this);
     }
 
-   /**
-    * Start message op
-    *
-    * @deprecated
-    *
-    * @param integer $id Optional id for the message
-    *
-    * @return object
-    */
+    /**
+     * Start message op
+     *
+     * @deprecated
+     *
+     * @param integer $id Optional id for the message
+     *
+     * @return object
+     */
     private function loadMessage($id = 0)
     {
         return $this->message = new ContactMessage($this, (int)$id);
@@ -823,7 +846,7 @@ class Contact extends Intraface_Standard
 
     /**
      * Funktionen skal tjekke om der er tastet nogen kontaktpersoner ind overhovedet.
-     * Funktionen er tiltænkt et tjek, så man hurtigt kan tjekke om brugeren har nogen.
+     * Funktionen er tiltï¿½nkt et tjek, sï¿½ man hurtigt kan tjekke om brugeren har nogen.
      *
      * @return integer
      */
@@ -865,7 +888,7 @@ class Contact extends Intraface_Standard
         }
 
         if ($this->id == 0) {
-            $this->error->set('Der er ikke noget id, så kunne ikke sende en e-mail');
+            $this->error->set('Der er ikke noget id, sï¿½ kunne ikke sende en e-mail');
             return false;
         }
         // opretter en kode, hvis kunden ikke har en kode
@@ -879,7 +902,7 @@ class Contact extends Intraface_Standard
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
         if (!$email->save(
-            array(
+        array(
                 'subject' => 'Loginoplysninger',
                 'body' => $this->kernel->setting->get('intranet', 'contact.login_email_text') . "\n\n" . $this->getLoginUrl() . "\n\nMed venlig hilsen\nEn venlig e-mail-robot\n" . $this->kernel->intranet->get('name'),
                 'contact_id' => $this->id,
@@ -887,7 +910,7 @@ class Contact extends Intraface_Standard
                 'from_name' => $this->kernel->intranet->get('name'),
                 'type_id' => 9,
                 'belong_to' => $this->get('id')
-            )
+        )
         )) {
             $this->error->set('Kunne ikke gemme emailen');
             return false;
@@ -938,8 +961,8 @@ class Contact extends Intraface_Standard
 
     /**
      * Kontakten kan slettes, hvis man kun er indskrevet i nyhedsbrevet.
-     * Der bør sikkert også være en indstilling som ejeren af intranettet kan sætte
-     * efter al sandsynlighed skal denne være med som tjek i delete
+     * Der bï¿½r sikkert ogsï¿½ vï¿½re en indstilling som ejeren af intranettet kan sï¿½tte
+     * efter al sandsynlighed skal denne vï¿½re med som tjek i delete
      *
      * @return boolean
      */
@@ -954,7 +977,7 @@ class Contact extends Intraface_Standard
     }
 
     /**
-     * skal tage højde for om intranettet tillader kundelogin
+     * skal tage hï¿½jde for om intranettet tillader kundelogin
      *
      * @return boolean
      */

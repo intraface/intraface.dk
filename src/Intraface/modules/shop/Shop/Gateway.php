@@ -31,6 +31,5 @@ class Intraface_modules_shop_Shop_Gateway
     {
         return Doctrine::getTable('Intraface_modules_shop_Shop')
             ->find(intval($id));
-
     }
 }

@@ -3,6 +3,8 @@ class Intraface_modules_accounting_Controller_Account_Edit extends k_Component
 {
     function renderHtml()
     {
+        $this->document->setTitle('Edit account');
+
         $smarty = new k_Template(dirname(__FILE__) . '/../templates/account/edit.tpl.php');
         return $smarty->render($this);
     }
