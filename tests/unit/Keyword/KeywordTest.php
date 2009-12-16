@@ -3,23 +3,7 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/shared/keyword/Keyword.php';
-
-if (!class_exists('FakeKeywordObject')) {
-class FakeKeywordObject
-{
-    public $kernel;
-
-    function __construct()
-    {
-        $this->kernel = new Stub_Kernel;
-    }
-
-    function get()
-    {
-        return 1;
-    }
-}
-}
+require_once dirname(__FILE__) . '/../Stub/Keyword.php';
 
 class MyKeyword extends Keyword
 {

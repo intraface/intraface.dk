@@ -3,44 +3,7 @@ require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Intraface/shared/keyword/Keyword.php';
-
-class FakeKeywordAppendObject
-{
-    public $kernel;
-
-    function __construct()
-    {
-        $this->kernel = new Stub_Kernel;
-    }
-
-    function get()
-    {
-        return 1;
-    }
-}
-
-class FakeKeywordAppendKeyword
-{
-    public $id;
-    public $keyword;
-
-    function __construct($id = 1, $keyword = 'test')
-    {
-        $this->id = $id;
-        $this->keyword = $keyword;
-    }
-
-    function getId()
-    {
-        return $this->id;
-    }
-
-    function getKeyword()
-    {
-        return $this->keyword;
-    }
-}
-
+require_once dirname(__FILE__) . '/../Stub/Keyword.php';
 
 class KeywordAppendTest extends PHPUnit_Framework_TestCase
 {
