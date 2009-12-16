@@ -2,6 +2,12 @@
 class Intraface_modules_email_Controller_Email extends k_Component
 {
     protected $email;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function getKernel()
     {
@@ -26,7 +32,7 @@ class Intraface_modules_email_Controller_Email extends k_Component
         $value = $email->get();
         $contact = $email->getContact();
 
-        $tpl = new k_Template(dirname(__FILE__) . '/templates/show.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/show.tpl.php');
         $data = array(
         	'contact' => $contact,
         	'value' => $value,
