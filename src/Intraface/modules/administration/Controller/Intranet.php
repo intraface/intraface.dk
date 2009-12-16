@@ -80,10 +80,9 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
         			$redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
         			$url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1');
         			$redirect->askParameter('file_handler_id');
-        			header('Location: ' . $url);
-        			exit;
+        			return new k_SeeOther($url);
         		} else {
-        			header('Location: '.$this->url('/main/controlpanel/intranet.php'));
+        			return new k_SeeOther($this->url('/main/controlpanel/intranet.php'));
         		}
                 return new k_SeeOther($this->url());
 
