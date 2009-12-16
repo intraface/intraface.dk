@@ -29,11 +29,9 @@ class Intraface_modules_cms_Controller_Stylesheet extends k_Component
         $cmssite = new CMS_Site($this->getKernel(), $_POST['site_id']);
         if ($cmssite->stylesheet->save($_POST)) {
             if (!empty($_POST['close'])) {
-                header('Location: index.php?id='.$cmssite->get('id'));
-                exit;
+                return new k_SeeOther($this->url('../'));
             } else {
-                header('Location: stylesheet_edit.php?site_id='.$cmssite->get('id'));
-                exit;
+                return new k_SeeOther($this->url());
             }
         } else {
             $value = $_POST;

@@ -95,8 +95,7 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
             echo 1;
             exit;
         } else {
-            header('Location: site.php?id='.$cmssite->get('id'));
-            exit;
+            return new k_SeeOther($this->url($cmssite->get('id')));
         }
 
         return $this->render();
