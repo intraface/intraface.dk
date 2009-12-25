@@ -305,7 +305,7 @@ class Intraface_User extends Intraface_Standard
      *
      * @param integer $module
      * @param integer $sub_access
-     * @param integer intranet_id (når den skal tilgås fra intranetmaintenance (til hvad?)
+     * @param integer intranet_id (nï¿½r den skal tilgï¿½s fra intranetmaintenance (til hvad?)
      *
      * @return boolean
      */
@@ -339,8 +339,8 @@ class Intraface_User extends Intraface_Standard
         // If the permissions are not loaded, we will do that.
         if (empty($this->permissions['intranet']['module'])) {
             // Vi tjekker om intranettet har adgang til modullet.
-            // er den ikke unødvendig - det kan vi vel lave i den næste
-            // sql-sætning?
+            // er den ikke unï¿½dvendig - det kan vi vel lave i den nï¿½ste
+            // sql-sï¿½tning?
             $result = $this->db->query("SELECT module.id
                 FROM permission
                 INNER JOIN module
@@ -478,7 +478,7 @@ class Intraface_User extends Intraface_Standard
      */
     public function getIntranetList()
     {
-        // Skal denne funktion være her? Måske den istedet skulle være i intranet.
+        // Skal denne funktion vï¿½re her? Mï¿½ske den istedet skulle vï¿½re i intranet.
         $result = $this->db->query("SELECT DISTINCT(intranet.id), intranet.name FROM intranet
             INNER JOIN permission
                 ON permission.intranet_id = intranet.id
@@ -577,7 +577,7 @@ class Intraface_User extends Intraface_Standard
 
         $subject = 'Tsk, glemt din adgangskode?';
 
-        $body  = "Huha, det var heldigt, at vi stod på spring i kulissen, så vi kan hjælpe dig med at lave en ny adgangskode.\n\n";
+        $body  = "Huha, det var heldigt, at vi stod pÃ¥ spring i kulissen, sÃ¥ vi kan hjÃ¦lpe dig med at lave en ny adgangskode.\n\n";
         $body .= "Din nye adgangskode er: " . $new_password . "\n\n";
         $body .= "Du kan logge ind fra:\n\n";
         $body .= "<".url(null).">\n\n";
@@ -618,7 +618,7 @@ class Intraface_User extends Intraface_Standard
     }
 
     /**
-     * TODO Måske kan det gøres enklere, så der ikke skal bruges så mange tabeller
+     * TODO Mï¿½ske kan det gï¿½res enklere, sï¿½ der ikke skal bruges sï¿½ mange tabeller
      */
     public function getList()
     {

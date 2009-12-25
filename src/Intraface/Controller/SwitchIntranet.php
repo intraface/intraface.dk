@@ -9,6 +9,13 @@
  */
 class Intraface_Controller_SwitchIntranet extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function renderHtml()
     {
         $this->document->setTitle('Switch intranet');
@@ -25,7 +32,7 @@ class Intraface_Controller_SwitchIntranet extends k_Component
         	}
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/switchintranet.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/switchintranet');
         return $smarty->render($this);
     }
 
@@ -50,4 +57,3 @@ class Intraface_Controller_SwitchIntranet extends k_Component
         return $this->context->getKernel();
     }
 }
-

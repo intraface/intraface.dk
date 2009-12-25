@@ -2,10 +2,16 @@
 class Intraface_modules_administration_Controller_Intranet extends k_Component
 {
     protected $intranetmaintenance;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/intranet.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/intranet');
         return $smarty->render($this);
     }
 
@@ -37,7 +43,7 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
     	$values = $intranet->get();
     	$address = $intranet->address->get();
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/intranet-edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/intranet-edit');
         return $smarty->render($this, array('intranet' => $intranet, 'kernel' => $this->getKernel()));
     }
 
@@ -78,11 +84,9 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
         		if (isset($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
         			$module_filemanager = $this->getKernel()->useModule('filemanager');
         			$redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-        			$url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1');
+        			$url = $redirect->setDestination($module_filemanager->getPath().'select_file?images=1');
         			$redirect->askParameter('file_handler_id');
         			return new k_SeeOther($url);
-        		} else {
-        			return new k_SeeOther($this->url('/main/controlpanel/intranet.php'));
         		}
                 return new k_SeeOther($this->url());
 

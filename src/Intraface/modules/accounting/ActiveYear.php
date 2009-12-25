@@ -2,6 +2,8 @@
 /**
  * Year
  *
+ * @todo use this implementation for the active year
+ *
  * @package Intraface_Accounting
  * @author	Lars Olesen
  * @since	1.0

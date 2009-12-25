@@ -40,7 +40,7 @@ class Intraface_Auth_User
         $result = $this->db->query("SELECT id FROM user WHERE email = ".$this->db->quote($this->email, 'text')." AND password = ".$this->db->quote(md5($this->password), 'text'));
 
         if (PEAR::isError($result)) {
-            throw Exception('result is an error' . $result->getMessage() . $result->getUserInfo());
+            throw new Exception('result is an error' . $result->getMessage() . $result->getUserInfo());
         }
 
         if ($result->numRows() != 1) {
@@ -52,17 +52,17 @@ class Intraface_Auth_User
         if (PEAR::isError($result)) {
             throw new Exception('could not update user ' . $result->getMessage() . $result->getUserInfo());
         }
-        
+
         $user = new Intraface_User($row['id']);
 		if (!is_object($user) || $user->get('id') != $row['id']) {
 		    throw new Exception('Unable to return a valid user object on login');
 		}
-        
+
         $_SESSION['intraface_logged_in_user_id'] = $user->getId();
-        
+
         return $user;
     }
-    
+
     function isLoggedIn()
     {
         $result = $this->db->query("SELECT id FROM user WHERE session_id = ".$this->db->quote($this->session_id, 'text'));
@@ -92,15 +92,15 @@ class Intraface_Auth_User
         }
         return true;
     }
-    
+
     /**
      * Returns an identification string on the user
-     * 
+     *
      * @return string identification (email)
      */
-    public function getIdentification() 
+    public function getIdentification()
     {
         return $this->email;
     }
-    
+
 }

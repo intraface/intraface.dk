@@ -103,8 +103,8 @@ class Intraface_TranslatorLoader implements k_TranslatorLoader {
 
 class k_SessionIdentityLoader implements k_IdentityLoader {
     function load(k_Context $context) {
-        if ($context->session('identity')) {
-            return $context->session('identity');
+        if ($context->session('intraface_identity')) {
+            return $context->session('intraface_identity');
         }
         return new k_Anonymous();
     }

@@ -148,19 +148,19 @@ class Intraface_modules_cms_Controller_Element extends k_Component
                 $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
                 $module_filemanager = $this->getKernel()->useModule('filemanager');
                 if ($element->get('type') == 'picture') {
-                    $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', $module_cms->getPath().'section_html_edit.php?id='.$element->get('id'));
+                    $url = $redirect->setDestination($module_filemanager->getPath().'select_file?images=1', NET_SCHEME . NET_HOST . $this->url());
                     $redirect->setIdentifier('picture');
                     $redirect->askParameter('file_handler_id');
                 } elseif ($element->get('type') == 'gallery') {
-                    $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', $module_cms->getPath().'section_html_edit.php?id='.$element->get('id'));
+                    $url = $redirect->setDestination($module_filemanager->getPath().'select_file?images=1', NET_SCHEME . NET_HOST . $this->url());
                     $redirect->setIdentifier('gallery');
                     $redirect->askParameter('file_handler_id', 'multiple');
                 } elseif ($element->get('type') == 'filelist') {
-                    $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?', $module_cms->getPath().'section_html_edit.php?id='.$element->get('id'));
+                    $url = $redirect->setDestination($module_filemanager->getPath().'select_file?', NET_SCHEME . NET_HOST . $this->url());
                     $redirect->setIdentifier('filelist');
                     $redirect->askParameter('file_handler_id', 'multiple');
                 } else {
-                    trigger_error("Det er ikke en gyldig elementtype til at lave redirect fra", E_USER_ERROR);
+                    throw new Exception("Det er ikke en gyldig elementtype til at lave redirect fra");
                 }
                 return new k_SeeOther($url);
             } elseif (!empty($_POST['close'])) {

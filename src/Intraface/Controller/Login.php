@@ -14,8 +14,9 @@ class Intraface_Controller_Login extends k_Component
     protected $auth;
     protected $mdb2;
 
-    function __construct(Intraface_Auth $auth, MDB2_Driver_Common $mdb2, Intraface_Log $log)
+    function __construct(k_TemplateFactory $template, Intraface_Auth $auth, MDB2_Driver_Common $mdb2, Intraface_Log $log)
     {
+        $this->template = $template;
         $this->auth = $auth;
         $this->mdb2 = $mdb2;
         $this->log = $log;
@@ -30,25 +31,15 @@ class Intraface_Controller_Login extends k_Component
     function renderHtml()
     {
         $this->document->setTitle('Login');
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/login.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/login');
         return $smarty->render($this);
     }
-
-    /*
-    function getKernel()
-    {
-        if (is_object($this->kernel)) {
-            return $this->kernel;
-        }
-    	return $this->kernel = $this->registry->get('kernel');
-    }
-    */
 
     function postForm()
     {
         $user = $this->selectUser($this->body('email'), $this->body('password'));
         if ($user) {
-            $this->session()->set('identity', $user);
+            $this->session()->set('intraface_identity', $user);
             return new k_SeeOther($this->query('continue'));
         } else {
             return new k_SeeOther($this->url(null, array('flare' => 'Wrong credentials')));

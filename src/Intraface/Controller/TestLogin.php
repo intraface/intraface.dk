@@ -9,14 +9,8 @@
  */
 class Intraface_Controller_TestLogin extends k_Component
 {
-    protected $registry;
     protected $template;
     protected $kernel;
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
-    }
 
     function execute()
     {
@@ -28,7 +22,7 @@ class Intraface_Controller_TestLogin extends k_Component
     {
         $user = $this->selectUser('start@intraface.dk', 'startup');
         if ($user) {
-            $this->session()->set('identity', $user);
+            $this->session()->set('intraface_identity', $user);
             return new k_SeeOther($this->query('continue'));
         }
 
@@ -49,7 +43,7 @@ class Intraface_Controller_TestLogin extends k_Component
     {
         $user = $this->selectUser($this->body('email'), $this->body('password'));
         if ($user) {
-            $this->session()->set('identity', $user);
+            $this->session()->set('intraface_identity', $user);
             return new k_SeeOther($this->query('continue'));
         }
         return $this->render();

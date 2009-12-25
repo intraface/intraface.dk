@@ -32,7 +32,7 @@ class Intraface_modules_email_Controller_Email extends k_Component
         $value = $email->get();
         $contact = $email->getContact();
 
-        $tpl = $this->template->create(dirname(__FILE__) . '/templates/show.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/show');
         $data = array(
         	'contact' => $contact,
         	'value' => $value,

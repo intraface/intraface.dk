@@ -1,12 +1,28 @@
 <?php
+/**
+ * @todo If user changes e-mail we need to do something special
+ *       if we will continue using this - so I have disabled
+ *       e-mail change
+ *
+ *
+ * @category
+ * @package
+ * @author     lsolesen
+ * @copyright
+ * @license   http://www.opensource.org/licenses/lgpl-license.php LGPL
+ * @version
+ *
+ */
 class Intraface_modules_controlpanel_Controller_User extends k_Component
 {
     protected $user;
     protected $user_gateway;
+    protected $template;
 
-    function __construct(Intraface_UserGateway $user_gateway)
+    function __construct(Intraface_UserGateway $user_gateway, k_TemplateFactory $template)
     {
         $this->user_gateway = $user_gateway;
+        $this->template = $template;
     }
 
     function map($name)
@@ -20,13 +36,13 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
 
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/user.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/user');
         return $smarty->render($this);
     }
 
     function renderHtmlEdit()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/useredit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/useredit');
         return $smarty->render($this);
     }
 
@@ -40,7 +56,7 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
         // @todo hvis man ændrer e-mail skal man have en e-mail som en sikkerhedsforanstaltning
         // på den gamle e-mail
 
-        //$user->setActiveIntranetId($this->getUser()->getActiveIntranet());
+        //$this->getUser()->setActiveIntranetId($this->getUser()->getActiveIntranet());
 
         if ($this->getUser()->update($value)) {
             if ($this->getUser()->getAddress()->save($address_value)) {
@@ -81,6 +97,6 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
         }
         $user = $this->user_gateway->findByUsername($this->identity()->user());
         require_once 'Intraface/modules/administration/UserAdministration.php';
-        return $this->user = new UserAdministration($this->getKernel(), $user->get('id'));
+        return $this->user = new UserAdministration($this->getKernel(), $user->getId());
     }
 }

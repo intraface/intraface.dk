@@ -9,13 +9,43 @@ class YearTest extends PHPUnit_Framework_TestCase
     function setUp()
     {
         $this->kernel = new Stub_Kernel();
-                $this->kernel->setting->set('intranet', 'vatpercent', 25);
-     $this->kernel->setting->set('user', 'accounting.active_year', 1);
-     $this->kernel->setting->set('intranet', 'accounting.result_account_id', 25);
-$this->kernel->setting->set('intranet', 'accounting.debtor_account_id', 25);
-$this->kernel->setting->set('intranet', 'accounting.credit_account_id', 25);
-$this->kernel->setting->set('intranet', 'accounting.balance_accounts', serialize(array()));
+        $this->kernel->setting->set('intranet', 'vatpercent', 25);
+        $this->kernel->setting->set('user', 'accounting.active_year', 0);
+        $this->kernel->setting->set('intranet', 'accounting.result_account_id', 25);
+        $this->kernel->setting->set('intranet', 'accounting.debtor_account_id', 25);
+        $this->kernel->setting->set('intranet', 'accounting.credit_account_id', 25);
+        $this->kernel->setting->set('intranet', 'accounting.balance_accounts', serialize(array()));
+        $this->kernel->setting->set('intranet', 'accounting.result_account_id_start', 0);
+        $this->kernel->setting->set('intranet', 'accounting.result_account_id_end', 0);
+        $this->kernel->setting->set('intranet', 'accounting.balance_account_id_start', 0);
+        $this->kernel->setting->set('intranet', 'accounting.balance_account_id_end', 0);
+        $this->kernel->setting->set('intranet', 'accounting.capital_account_id', 0);
 
+        $this->kernel->setting->set('intranet', 'accounting.vat_in_account_id', 0);
+        $this->kernel->setting->set('intranet', 'accounting.vat_out_account_id', 0);
+        $this->kernel->setting->set('intranet', 'accounting.vat_abroad_account_id', 0);
+        $this->kernel->setting->set('intranet', 'accounting.vat_balance_account_id', 0);
+        $this->kernel->setting->set('intranet', 'accounting.vat_free_account_id', 0);
+        $this->kernel->setting->set('intranet', 'accounting.eu_sale_account_id', 0);
+        $this->kernel->setting->set('intranet', 'accounting.result_account_id', 0);
+        $this->kernel->setting->set('intranet', 'accounting.debtor_account_id', 0);
+        $this->kernel->setting->set('intranet', 'accounting.credit_account_id', 0);
+        $this->kernel->setting->set('intranet', 'accounting.balance_accounts', serialize(array()));
+        $this->kernel->setting->set('intranet', 'accounting.buy_eu_accounts', serialize(array()));
+        $this->kernel->setting->set('intranet', 'accounting.buy_abroad_accounts', serialize(array()));
+
+        $this->kernel->setting->set('intranet', 'accounting.result_account_id_start', 0);
+        $this->kernel->setting->set('intranet', 'accounting.result_account_id_end', 0);
+        $this->kernel->setting->set('intranet', 'accounting.balance_account_id_start', 0);
+        $this->kernel->setting->set('intranet', 'accounting.balance_account_id_end', 0);
+
+        $this->kernel->setting->set('intranet', 'accounting.capital_account_id', 0);
+    }
+
+    function tearDown()
+    {
+        $db = MDB2::singleton(DB_DSN);
+        $db->exec('TRUNCATE accounting_year');
     }
 
     function testSetYearReturnsFalseWhenYearObjectIsNotSet()
@@ -65,10 +95,11 @@ $this->kernel->setting->set('intranet', 'accounting.balance_accounts', serialize
         $this->assertFalse($year->get('id') > 0);
         $this->assertTrue($year->save(array('label' => '2000', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0)) > 0);
         $this->assertEquals('2000', $year->get('label'));
+
         $new_year = new Year($this->kernel, $year->get('id'), false);
         $this->assertTrue($new_year->save(array('label' => '2000 - edited', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0)) > 0);
-        $this->assertTrue($new_year->get('id') == $year->get('id'));
-        $this->assertTrue($new_year->get('label') == '2000 - edited');
+        $this->assertEquals($new_year->get('id'), $year->get('id'));
+        $this->assertEquals($new_year->get('label'), '2000 - edited');
     }
 
     function testIsBalancedReturnsTrueWhenNoPostsHasBeenAdded()

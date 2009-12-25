@@ -26,4 +26,9 @@ class Intraface_UserGateway
         $user = new Intraface_User();
         return $user->getAll();
     }
+
+    function findByEmail($email)
+    {
+        // @todo @see User::sendForgottenPassword()
+    }
 }

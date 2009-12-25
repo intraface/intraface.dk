@@ -196,11 +196,11 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
                     $redirect->setIdentifier('picture');
                     $redirect->askParameter('file_handler_id');
                 } elseif ($element->get('type') == 'gallery') {
-                    $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images' => 1, 'multiple' => true)), NET_SCHEME . NET_HOST . $this->url());
+                    $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images' => 1, 'multiple_choice' => true)), NET_SCHEME . NET_HOST . $this->url());
                     $redirect->setIdentifier('gallery');
                     $redirect->askParameter('file_handler_id', 'multiple');
                 } elseif ($element->get('type') == 'filelist') {
-                    $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('multiple' => true)), NET_SCHEME . NET_HOST . $this->url());
+                    $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('multiple_choice' => true)), NET_SCHEME . NET_HOST . $this->url());
                     $redirect->setIdentifier('filelist');
                     $redirect->askParameter('file_handler_id', 'multiple');
                 } else {

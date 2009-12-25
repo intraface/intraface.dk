@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_Settings extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     protected function map($name)
     {
         if ($name == 'year') {
@@ -10,7 +17,7 @@ class Intraface_modules_accounting_Controller_Settings extends k_Component
 
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/settings.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/settings');
         return $smarty->render($this);
     }
 

@@ -13,6 +13,12 @@ class Intraface_Controller_Signup extends k_Component
 {
     protected $kernel;
     public $msg;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function execute()
     {
@@ -24,7 +30,7 @@ class Intraface_Controller_Signup extends k_Component
     {
         $this->document->setTitle('Signup');
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/signup.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/signup');
         return $smarty->render($this);
     }
 

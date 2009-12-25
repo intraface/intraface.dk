@@ -7,9 +7,11 @@
  * @since	1.0
  * @version	1.0
  */
+require_once 'Intraface/modules/accounting/Account.php';
+
 class Year extends Intraface_Standard
 {
-    public $id; // �rsid
+    public $id; // årsid
     public $kernel; // object
     public $value; // array
     public $error; // error object
@@ -87,7 +89,7 @@ class Year extends Intraface_Standard
      */
     function checkYear($redirect = true)
     {
-        // hvis ikke der er sat noget aktivt �r, skal det s�ttes
+        // hvis ikke der er sat noget aktivt år, skal det sættes
         $active_year = $this->getActiveYear();
         if (!$this->_isValid()) {
             $active_year = 0;
@@ -178,7 +180,7 @@ class Year extends Intraface_Standard
         // I could not find any use of the following, so i commented it out /SJ (22-01-2007)
         // $validator->isNumeric($var['year'], "year", "allow_empty");
         $validator->isNumeric($var['last_year_id'], "last_year_id", "allow_empty");
-        $validator->isString($var['label'], "Du skal skrive et navn til �ret");
+        $validator->isString($var['label'], "Du skal skrive et navn til året");
         $validator->isNumeric($var['locked'], "locked");
         settype($var['vat'], 'integer');
         $validator->isNumeric($var['vat'], "vat", 'allow_empty');

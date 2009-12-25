@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_Search extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function renderHtml()
     {
         $module = $this->context->getKernel()->module('accounting');
@@ -61,7 +68,7 @@ class Intraface_modules_accounting_Controller_Search extends k_Component
 
         }
 
-        $tpl = new k_Template(dirname(__FILE__) . '/templates/search.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/search');
         return $tpl->render($this, array('error' => $error, 'posts' => $posts));
     }
 }

@@ -8,12 +8,12 @@ class Intraface_modules_onlinepayment_OnlinePaymentGateway
     function __construct($kernel)
     {
         $this->kernel = $kernel;
-        $implemented_providers = OnlinePayment::getImplementedProviders();
+        $this->implemented_providers = OnlinePayment::getImplementedProviders();
         // we set the fallback from settings
-        if (!isset($implemented_providers[$kernel->getSetting()->get('intranet', 'onlinepayment.provider_key')])) {
+        if (!isset($this->implemented_providers[$kernel->getSetting()->get('intranet', 'onlinepayment.provider_key')])) {
             throw new Exception('Ikke en gyldig provider fra settings i OnlinePayment->factory');
         }
-        $this->fallback_provider = $implemented_providers[$kernel->getSetting()->get('intranet', 'onlinepayment.provider_key')];
+        $this->fallback_provider = $this->implemented_providers[$kernel->getSetting()->get('intranet', 'onlinepayment.provider_key')];
     }
 
     public function findBySettings()
@@ -25,7 +25,7 @@ class Intraface_modules_onlinepayment_OnlinePaymentGateway
     {
         $type = 'id';
         $db = new DB_Sql;
-        $db->query("SELECT provider_key FROM onlinepayment WHERE id = ".(int)$value. " AND intranet_id = " . $kernel->intranet->get('id'));
+        $db->query("SELECT provider_key FROM onlinepayment WHERE id = ".(int)$value. " AND intranet_id = " . $this->kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
             throw new Exception('OnlinePayment::factory: Ikke et gyldigt id');
         }

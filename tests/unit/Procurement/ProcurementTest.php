@@ -151,7 +151,7 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
                 'id' => 1,
                 'date_dk' => '05-01-' . date('Y'),
                 'date' => date('Y') . '-01-05',
-                'text' => 'procurement# 1: test - købsmoms',
+                'text' => 'procurement# 1: test - kÃ¸bsmoms',
                 'debet' => '25.00',
                 'credit' => '0.00',
                 'voucher_number' => 1,
@@ -160,7 +160,7 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
                 'account_id' => 44,
                 'stated' => 1,
                 'account_number' => '66100',
-                'account_name' => 'Moms, indgående, køb'
+                'account_name' => 'Moms, indgÃ¥ende, kÃ¸b'
             ),
             1 => array(
                 'id' => 2,

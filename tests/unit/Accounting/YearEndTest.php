@@ -11,7 +11,7 @@ class FakeYearEndYear
     function __construct()
     {
         $this->kernel = new Stub_Kernel;
-                $this->kernel->setting->set('intranet', 'vatpercent', 25);
+        $this->kernel->setting->set('intranet', 'vatpercent', 25);
 
     }
     function get()

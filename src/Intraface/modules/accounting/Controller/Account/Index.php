@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     protected function map($name)
     {
         if ($name == 'create') {
@@ -36,7 +43,7 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
     {
         $this->document->setTitle('Accounts');
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/account/index.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/account/index');
         return $smarty->render($this);
     }
 

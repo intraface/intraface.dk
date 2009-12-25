@@ -10,6 +10,12 @@
 class Intraface_Controller_RetrievePassword extends k_Component
 {
     public $msg;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function execute()
     {
@@ -21,7 +27,7 @@ class Intraface_Controller_RetrievePassword extends k_Component
     {
         $this->document->setTitle('Retrieve forgotten password');
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/retrievepassword.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/retrievepassword');
         return $smarty->render($this);
     }
 

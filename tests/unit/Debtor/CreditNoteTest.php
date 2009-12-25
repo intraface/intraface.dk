@@ -166,7 +166,7 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
                 'id' => 3,
                 'date_dk' => '10-01-' . date('Y'),
                 'date' => date('Y') . '-01-10',
-                'text' => 'credit note #1 - Moms, udgående, salg',
+                'text' => 'credit note #1 - Moms, udgÃ¥ende, salg',
                 'debet' => 50.00,
                 'credit' => 0.00,
                 'voucher_number' => 1,
@@ -175,13 +175,13 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
                 'account_id' => 46,
                 'stated' => 1,
                 'account_number' => 66200,
-                'account_name' => 'Moms, udgående, salg'
+                'account_name' => 'Moms, udgÃ¥ende, salg'
             ),
             3 => array(
                 'id' => 4,
                 'date_dk' => '10-01-' . date('Y'),
                 'date' => date('Y'). '-01-10',
-                'text' => 'credit note #1 - Moms, udgående, salg',
+                'text' => 'credit note #1 - Moms, udgÃ¥ende, salg',
                 'debet' => 0,
                 'credit' => 50,
                 'voucher_number' => 1,

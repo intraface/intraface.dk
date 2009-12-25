@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_Index extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     protected function map($name)
     {
         if ($name == 'year') {
@@ -29,7 +36,7 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
             return new k_SeeOther($this->url('daybook'));
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/index');
         return $smarty->render($this);
     }
 

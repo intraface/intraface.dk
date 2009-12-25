@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_State extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function renderHtml()
     {
         if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
@@ -9,7 +16,7 @@ class Intraface_modules_accounting_Controller_State extends k_Component
             $this->getKernel()->setting->set('user', 'accounting.state.message2', 'hide');
         }
 
-        $tpl = new k_Template(dirname(__FILE__) . '/templates/state.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/state');
         return $tpl->render($this);
     }
 
