@@ -44,11 +44,6 @@ class Intraface_Kernel
         }
     }
 
-    function getPage()
-    {
-        return new Intraface_Page($this, MDB2::singleton(DB_DSN));
-    }
-
     /**
      * returns an unique user id for this login
      *
@@ -58,113 +53,6 @@ class Intraface_Kernel
     {
         return $this->_session;
     }
-
-    /**
-     * @param integer $id The user id to created
-     *
-     * @return User object
-     */
-    /*
-    function createUser($id)
-    {
-        return new Intraface_User($id);
-    }
-    */
-
-    /**
-     * @param integer $id The intranet id to created
-     *
-     * @return Intranet object
-     */
-    /*
-    function createIntranet($id)
-    {
-        return new Intraface_Intranet($id);
-    }
-    */
-
-    /**
-     * @param integer $intranet_id The intranet id
-     * @param integer $user_id     The user id
-     *
-     * @return Setting object
-     */
-    /*
-    function createSetting($intranet_id, $user_id = 0)
-    {
-        return new Intraface_Setting($intranet_id, $user_id);
-
-    }
-    */
-
-    /**
-     * @param string $session_id The session id
-     *
-     * @return Weblogin object
-     */
-    /*
-    function createWeblogin($session_id)
-    {
-        return new Intraface_Weblogin($session_id);
-    }
-    */
-
-    /**
-     * Should not be used anymore
-     *
-     * @param string $type       Type for the login
-     * @param string $key        The key for the login
-     * @param string $session_id Session id
-     *
-     * @deprecated
-     */
-    /*
-    function weblogin($type, $key, $session_id)
-    {
-        require_once 'Weblogin.php';
-
-        if ($type == 'private') {
-
-            $result = $this->db->query("SELECT id FROM intranet WHERE private_key = " . $this->db->quote($key, 'text'));
-            if (PEAR::isError($result)) {
-                trigger_error($result->getUserInfo(), E_USER_ERROR);
-            }
-            if ($result->numRows() == 0) {
-                return ($intranet_id = false);
-            }
-            $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-            $intranet_id = $row['id'];
-
-        } elseif ($type == 'public') {
-
-            $result = $this->db->query("SELECT id FROM intranet WHERE public_key = '".$key."'");
-            if (PEAR::isError($result)) {
-                trigger_error($result->getUserInfo(), E_USER_ERROR);
-            }
-            if ($result->numRows() == 0) {
-                return ($intranet_id = false);
-            }
-            $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-            $intranet_id = $row['id'];
-
-        } else {
-            trigger_error('Ugyldig type weblogin', E_USER_ERROR);
-        }
-
-        if ($intranet_id === false) {
-            return false;
-        } else {
-            $this->intranet = $this->createIntranet($intranet_id);
-            $this->setting = $this->createSetting($this->intranet->get('id'));
-        }
-        $this->weblogin = $this->createWeblogin($session_id);
-
-        $this->_session = $session_id;
-
-        return true;
-
-    }
-    */
 
     function getModuleHandler()
     {
@@ -183,30 +71,6 @@ class Intraface_Kernel
      */
     function module($module_name)
     {
-        /*
-        if (!empty($this->primary_module_object) AND is_object($this->primary_module_object)) {
-            trigger_error('Primary module is already set', E_USER_ERROR);
-        } else {
-
-            $module = $this->useModule($module_name);
-            if (is_object($module)) {
-                $this->primary_module_name = $module_name;
-
-                // @todo Finder dependent moduller - Dette kunne flyttes til useModule, hvorfor er den egentlig ikke det? /Sune 06-07-2006
-                $dependent_modules = $module->getDependentModules();
-
-                for ($i = 0, $max = count($dependent_modules); $i < $max; $i++) {
-                    $no_use = $this->useModule($dependent_modules[$i]);
-                }
-
-                return $module;
-            } else {
-                // @todo Den fejlmeddelse er egentlig irrelevant, da useModul ikke enten returnere et objekt eller trigger_error.
-                trigger_error('Du har ikke adgang til modulet', E_USER_ERROR);
-                return false;
-            }
-        }
-        */
         return $this->getModuleHandler()->setPrimaryModule($module_name);
     }
 
@@ -219,13 +83,6 @@ class Intraface_Kernel
      */
     function getPrimaryModule()
     {
-        /*
-        if (!empty($this->modules[$this->primary_module_name]) AND is_object($this->modules[$this->primary_module_name])) {
-            return($this->modules[$this->primary_module_name]);
-        } else {
-            return false;
-        }
-        */
         return $this->getModuleHandler()->getPrimaryModule();
     }
 
@@ -238,13 +95,6 @@ class Intraface_Kernel
      */
     function getModule($name)
     {
-        /*
-        if (!empty($this->modules[$name]) AND is_object($this->modules[$name])) {
-            return($this->modules[$name]);
-        } else {
-            trigger_error('Ugyldigt modulnavn '.$name.' eller modulet er ikke loadet i funktionen getModule: '.$name, E_USER_ERROR);
-        }
-        */
         return $this->getModuleHandler()->getModule($name);
     }
 
@@ -257,54 +107,6 @@ class Intraface_Kernel
      */
     function getModules($order_by = 'frontpage_index')
     {
-        /*
-        $modules = array();
-
-        if ($order_by != '') {
-            $order_by = "ORDER BY ".$this->db->quoteIdentifier($order_by);
-        }
-
-        $i = 0;
-        $result = $this->db->query("SELECT id, menu_label, name, show_menu FROM module WHERE active = 1 ".$order_by);
-        if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
-        }
-        while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-            $modules[$i]['id'] = $row['id'];
-            $modules[$i]['name'] = $row['name'];
-            $modules[$i]['menu_label'] = $row['menu_label'];
-            $modules[$i]['show_menu'] = $row['show_menu'];
-
-            $j = 0;
-
-            if (!isset($sub_modules)) {
-                $sub_modules = array();
-
-                //$result_sub = $db->query("SELECT id, description, module_id FROM module_sub_access WHERE active = 1 AND module_id = ".$db->quote($row["id"], 'integer')." ORDER BY description");
-                $result_sub = $this->db->query("SELECT id, description, module_id FROM module_sub_access WHERE active = 1 ORDER BY description");
-                if (PEAR::isError($result_sub)) {
-                    trigger_error($result_sub->getUserInfo(), E_USER_ERROR);
-                }
-                // $modules[$i]['sub_access'] = $result_sub->fetchAll();
-
-                while ($row_sub = $result_sub->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-                    $sub_modules[$row_sub['module_id']][$row_sub['id']]['id'] = $row_sub['id'];
-                    $sub_modules[$row_sub['module_id']][$row_sub['id']]['description'] = $row_sub['description'];
-                }
-            }
-            // $row['id'] er module_id
-            if (!empty($sub_modules[$row['id']]) AND count($sub_modules[$row['id']]) > 0) {
-                foreach ($sub_modules[$row['id']] AS $sub_module) {
-                    $modules[$i]['sub_access'][$j]['id'] = $sub_module['id'];
-                    $modules[$i]['sub_access'][$j]['description'] = $sub_module['description'];
-                    $j++;
-                }
-            }
-
-            $i++;
-        }
-        return $modules;
-        */
         return $this->getModuleHandler()->getModules($this->db, $order_by);
     }
 
@@ -318,60 +120,6 @@ class Intraface_Kernel
      */
     function useModule($module_name, $ignore_user_access = false)
     {
-        /*
-        if (!ereg("^[a-z0-9]+$", $module_name)) {
-            trigger_error('kernel says invalid module name '.$module_name, E_USER_ERROR);
-            return false;
-        }
-
-        // Tjekker om modullet allerede er loaded
-        if (!empty($this->modules[$module_name]) AND is_object($this->modules[$module_name])) {
-            return $this->modules[$module_name];
-        }
-
-        $access = false;
-
-        if (!is_object($this->user)) {
-            if (!is_object($this->intranet)) {
-                throw new Exception('Cannot use a module when no intranet is available');
-            }
-            // Det er et weblogin.
-            if ($this->intranet->hasModuleAccess($module_name)) {
-                $access = true;
-            }
-        } elseif ($ignore_user_access) {
-            if (!is_object($this->intranet)) {
-                throw new Exception('Cannot use a module when no intranet is available');
-            }
-            // Skal kun kontrollere om intranettet har adgang, for at benytte modullet
-            if ($this->intranet->hasModuleAccess($module_name)) {
-                $access = true;
-            }
-        } else {
-            // Almindelig login
-            if ($this->user->hasModuleAccess($module_name)) {
-                $access = true;
-            }
-        }
-
-        if ($access == true) {
-            $main_class_name = 'Main' . ucfirst($module_name);
-            $main_class_path = PATH_INCLUDE_MODULE . $module_name . '/' . $main_class_name . '.php';
-
-            if (file_exists($main_class_path)) {
-                require_once $main_class_path;
-                $object = new $main_class_name;
-                $object->load($this);
-                $this->modules[$module_name] = $object;
-                return $object;
-            } else {
-                trigger_error($main_class_path.' do not exist', E_USER_ERROR);
-            }
-        } else {
-            throw new Exception('You need access to the required module '.$module_name.' to see this page');
-            trigger_error('Du mangler adgang til et modul for at kunne se denne side: '.$module_name, E_USER_ERROR);
-        }
-        */
         return $this->getModuleHandler()->useModule($module_name, $ignore_user_access = false);
     }
 
@@ -385,29 +133,6 @@ class Intraface_Kernel
     function useShared($shared_name)
     {
         return $this->getModuleHandler()->useShared($shared_name);
-        /*
-        if (!ereg("^[a-z0-9]+$", $shared_name)) {
-            trigger_error('Ugyldig shared '.$shared_name, E_USER_ERROR);
-        }
-
-        // Tjekker om shared allerede er loaded
-        if (!empty($this->shared[$shared_name]) AND is_object($this->shared[$shared_name])) {
-            return $this->shared[$shared_name];
-        }
-
-        $main_shared_name = 'Shared' . ucfirst($shared_name);
-        $main_shared_path = PATH_INCLUDE_SHARED . $shared_name . '/' . $main_shared_name . '.php';
-
-        if (file_exists($main_shared_path)) {
-            require_once $main_shared_path;
-            $object = new $main_shared_name;
-            $object->load();
-            $this->shared[$shared_name] = $object;
-            return $object;
-        } else {
-            trigger_error($shared_name . ' cannot be found on ' . $main_shared_path . ' with PATH_INCLUDE_SHARED: ' . PATH_INCLUDE_SHARED, E_USER_ERROR);
-        }
-        */
     }
 
     /**
@@ -447,22 +172,6 @@ class Intraface_Kernel
     {
         $random = new Ilib_RandomKeyGenerator();
         return $random->generate($length);
-        /*
-        // Legal characters
-        $chars = 'abcdefghijkmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ23456789';
-        $how_many = strlen($chars);
-        srand((double)microtime()*1000000);
-        $i = 0;
-        $pass = '' ;
-
-        while ($i < $length) {
-            $num = rand() % $how_many;
-            $tmp = substr($chars, $num, 1);
-            $pass = $pass . $tmp;
-            $i++;
-        }
-        return $pass;
-        */
     }
 
     function getIntranet()
