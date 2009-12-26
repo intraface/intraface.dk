@@ -1,8 +1,4 @@
 <?php
-interface Debtor_Visitor {
-    function visit(Debtor $debtor);
-}
-
 /**
  * Return OIOXML files when given a Debtor
  *
@@ -34,24 +30,26 @@ interface Debtor_Visitor {
  * @see     http://www.oio.dk/dataudveksling/ehandel/eFaktura/eksempler
  */
 
-class Debtor_Report_OIOXML implements Debtor_Visitor {
-
-    private $debtor;
-
-    private static function httpHeader() {
+class Debtor_Report_OIOXML
+{
+    private static function httpHeader()
+    {
         header('Content-Type: text/xml; charset=iso-8859-1');
     }
 
-    private function start() {
+    private function start()
+    {
         $this->output .= '<?xml version="1.0" encoding="iso-8859-1"?>' . "\n";
         $this->output .= '<Invoice xmlns="http://rep.oio.dk/ubl/xml/schemas/0p71/pie/" xmlns:com="http://rep.oio.dk/ubl/xml/schemas/0p71/common/" xmlns:main="http://rep.oio.dk/ubl/xml/schemas/0p71/maindoc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://rep.oio.dk/ubl/xml/schemas/0p71/pie/ http://rep.oio.dk/ubl/xml/schemas/0p71/pie/pieStrict.xsd">' . "\n";
     }
 
-    private function end() {
+    private function end()
+    {
         $this->output .= '</Invoice>';
     }
 
-    public function visit(Debtor $debtor) {
+    public function output($debtor)
+    {
         $this->start();
         $this->output .= '<com:ID>'.$debtor->get('id').'</com:ID>' . "\n";
         $this->output .= '<com:IssueDate>'.$debtor->get('date_due').'</com:IssueDate>';
@@ -109,8 +107,8 @@ class Debtor_Report_OIOXML implements Debtor_Visitor {
         // payment
         $this->output .= '<com:PaymentMeans>';
         $this->output .= '	<com:TypeCodeID>null</com:TypeCodeID>';
-        $this->output .= '	<com:PaymentDueDate>'.$this->debtor->get('date_due').'</com:PaymentDueDate>';
-        $this->output .= '	<com:PaymentChannelCode>KONTOOVERFØRSEL</com:PaymentChannelCode>';
+        $this->output .= '	<com:PaymentDueDate>'.$debtor->get('date_due').'</com:PaymentDueDate>';
+        $this->output .= '	<com:PaymentChannelCode>KONTOOVERFÃ˜RSEL</com:PaymentChannelCode>';
         $this->output .= '	<com:PayeeFinancialAccount>';
         $this->output .= '		<com:ID>1111111111</com:ID>';
         $this->output .= '		<com:TypeCode>BANK</com:TypeCode>';
@@ -171,9 +169,7 @@ class Debtor_Report_OIOXML implements Debtor_Visitor {
         }
 
         $this->end();
-    }
 
-    public function display() {
         $this->httpHeader();
         return $this->output;
     }
@@ -207,7 +203,7 @@ http://rep.oio.dk/ubl/xml/schemas/0p71/pie/pieStrict.xsd">
       <com:Street>Holsteinsgade</com:Street>
 
       <com:HouseNumber>63</com:HouseNumber>
-      <com:CityName>København Ø.</com:CityName>
+      <com:CityName>Kï¿½benhavn ï¿½.</com:CityName>
       <com:PostalZone>2100</com:PostalZone>
       <com:Country>
         <com:Code>DK</com:Code>
@@ -240,7 +236,7 @@ http://rep.oio.dk/ubl/xml/schemas/0p71/pie/pieStrict.xsd">
     <com:TypeCodeID>null</com:TypeCodeID>
     <com:PaymentDueDate>2004-11-01</com:PaymentDueDate>
 
-    <com:PaymentChannelCode>KONTOOVERFØRSEL</com:PaymentChannelCode>
+    <com:PaymentChannelCode>KONTOOVERFï¿½RSEL</com:PaymentChannelCode>
     <com:PayeeFinancialAccount>
       <com:ID>1111111111</com:ID>
       <com:TypeCode>BANK</com:TypeCode>

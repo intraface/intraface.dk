@@ -1,13 +1,13 @@
 <?php
 class Intraface_modules_intranetmaintenance_Controller_User_Permission extends k_Component
 {
-    protected $registry;
     protected $user;
     public $method = 'put';
+    protected $template;
 
-    function __construct(k_Registry $registry)
+    function __construct(k_TemplateFactory $template)
     {
-        $this->registry = $registry;
+        $this->template = $template;
     }
 
     function renderHtml()
@@ -15,18 +15,8 @@ class Intraface_modules_intranetmaintenance_Controller_User_Permission extends k
         $module = $this->getKernel()->module("intranetmaintenance");
         $translation = $this->getKernel()->getTranslation('intranetmaintenance');
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/user/permission.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/user/permission');
         return $smarty->render($this);
-    }
-
-    function getUser()
-    {
-        return ($this->context->getUser());
-    }
-
-    function getIntranet()
-    {
-        return $this->context->getIntranet();
     }
 
     function postForm()
@@ -58,10 +48,10 @@ class Intraface_modules_intranetmaintenance_Controller_User_Permission extends k
             unset($user);
             unset($intranet);
         } else {
-            // Sætter adgang til det redigerede intranet. Id kommer tidligere ved setIntranetId
+            // Sï¿½tter adgang til det redigerede intranet. Id kommer tidligere ved setIntranetId
             $user->setIntranetAccess();
 
-            // Hvis en bruger retter sig selv, i det aktive intranet, sætter vi adgang til dette modul
+            // Hvis en bruger retter sig selv, i det aktive intranet, sï¿½tter vi adgang til dette modul
             if ($this->getKernel()->user->get("id") == $user->get("id") && $this->getKernel()->intranet->get("id") == $intranet->get("id")) {
                 // Finder det aktive intranet
                 $active_module = $this->getKernel()->getPrimaryModule();
@@ -80,10 +70,20 @@ class Intraface_modules_intranetmaintenance_Controller_User_Permission extends k
             $user_id = $user->get('id');
             $edit_intranet_id = $intranet->get('id');
 
-            return new k_SeeOther($this->url('../', array('flare' => 'Permissions has been updated')));
+            return new k_SeeOther($this->url('../', array('intranet_id' => $intranet->get('id'), 'flare' => 'Permissions has been updated')));
         }
 
         return $this->render();
+    }
+
+    function getUser()
+    {
+        return ($this->context->getUser());
+    }
+
+    function getIntranet()
+    {
+        return $this->context->getIntranet();
     }
 
     function getKernel()

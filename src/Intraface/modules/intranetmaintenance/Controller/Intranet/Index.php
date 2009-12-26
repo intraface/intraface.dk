@@ -1,13 +1,13 @@
 <?php
 class Intraface_modules_intranetmaintenance_Controller_Intranet_Index extends k_Component
 {
-    protected $registry;
     protected $intranetmaintenance;
     public $method = 'post';
+    protected $template;
 
-    function __construct(k_Registry $registry)
+    function __construct(k_TemplateFactory $template)
     {
-        $this->registry = $registry;
+        $this->template = $template;
     }
 
     protected function map($name)
@@ -24,8 +24,37 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Index extends k_
         $module = $this->getKernel()->module("intranetmaintenance");
         $translation = $this->getKernel()->getTranslation('intranetmaintenance');
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/intranet/index.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/intranet/index');
         return $smarty->render($this);
+    }
+
+    function renderHtmlNew()
+    {
+        $this->document->setTitle('Create intranet');
+
+        $modul = $this->getKernel()->module("intranetmaintenance");
+        $translation = $this->getKernel()->getTranslation('intranetmaintenance');
+
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/intranet/edit');
+        return $smarty->render($this);
+    }
+
+    function postForm()
+    {
+        $modul = $this->getKernel()->module("intranetmaintenance");
+        $translation = $this->getKernel()->getTranslation('intranetmaintenance');
+        $intranet = new IntranetMaintenance();
+
+    	$value = $_POST;
+    	$address_value = $_POST;
+    	$address_value["name"] = $_POST["address_name"];
+
+    	if ($intranet->save($_POST) && $intranet->setMaintainedByUser($_POST['maintained_by_user_id'], $this->getKernel()->intranet->get('id'))) {
+    		if ($intranet->address->save($address_value)) {
+    			return new k_SeeOther($this->url($intranet->getId()));
+    		}
+    	}
+    	return $this->render();
     }
 
     function getIntranets()
@@ -62,24 +91,6 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Index extends k_
         return $this->getKernel()->intranet;
     }
 
-    function postForm()
-    {
-        $modul = $this->getKernel()->module("intranetmaintenance");
-        $translation = $this->getKernel()->getTranslation('intranetmaintenance');
-        $intranet = new IntranetMaintenance();
-
-    	$value = $_POST;
-    	$address_value = $_POST;
-    	$address_value["name"] = $_POST["address_name"];
-
-    	if ($intranet->save($_POST) && $intranet->setMaintainedByUser($_POST['maintained_by_user_id'], $this->getKernel()->intranet->get('id'))) {
-    		if ($intranet->address->save($address_value)) {
-    			return new k_SeeOther($this->url($intranet->getId()));
-    		}
-    	}
-    	return $this->render();
-    }
-
     function getValues()
     {
    		$intranet = new IntranetMaintenance();
@@ -88,16 +99,5 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Index extends k_
 
         $array = array_merge($value, $address_value);
         return $array;
-    }
-
-    function renderHtmlNew()
-    {
-        $this->document->setTitle('Create intranet');
-
-        $modul = $this->getKernel()->module("intranetmaintenance");
-        $translation = $this->getKernel()->getTranslation('intranetmaintenance');
-
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/intranet/edit.tpl.php');
-        return $smarty->render($this);
     }
 }

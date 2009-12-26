@@ -1,13 +1,12 @@
 <?php
 class Intraface_modules_intranetmaintenance_Controller_Intranet_Key extends k_Component
 {
-    protected $registry;
     protected $intranetmaintenance;
+    protected $template;
 
-    function __construct(k_Registry $registry)
+    function __construct(k_TemplateFactory $template)
     {
-        $this->registry = $registry;
-
+        $this->template = $template;
     }
 
     function renderHtml()
@@ -15,8 +14,27 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Key extends k_Co
         $modul = $this->getKernel()->module("intranetmaintenance");
         $translation = $this->getKernel()->getTranslation('intranetmaintenance');
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/intranet/edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/intranet/edit');
         return $smarty->render($this);
+    }
+
+    function postForm()
+    {
+        $modul = $this->getKernel()->module("intranetmaintenance");
+        $translation = $this->getKernel()->getTranslation('intranetmaintenance');
+        $intranet = new IntranetMaintenance(intval($_POST["id"]));
+
+    	$value = $_POST;
+    	$address_value = $_POST;
+    	$address_value["name"] = $_POST["address_name"];
+
+    	if ($intranet->save($_POST) && $intranet->setMaintainedByUser($_POST['maintained_by_user_id'], $this->getKernel()->intranet->get('id'))) {
+    		if ($intranet->address->save($address_value)) {
+    			return new k_SeeOther($this->url('../'));
+    		}
+    	}
+
+    	return $this->render();
     }
 
     function getValues()
@@ -38,23 +56,6 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Key extends k_Co
     function getKernel()
     {
     	return $this->context->getKernel();
-    }
-
-    function POST()
-    {
-        $modul = $this->getKernel()->module("intranetmaintenance");
-        $translation = $this->getKernel()->getTranslation('intranetmaintenance');
-        $intranet = new IntranetMaintenance(intval($_POST["id"]));
-
-    	$value = $_POST;
-    	$address_value = $_POST;
-    	$address_value["name"] = $_POST["address_name"];
-
-    	if ($intranet->save($_POST) && $intranet->setMaintainedByUser($_POST['maintained_by_user_id'], $this->getKernel()->intranet->get('id'))) {
-    		if ($intranet->address->save($address_value)) {
-    			return new k_SeeOther($this->url('../'));
-    		}
-    	}
     }
 
     function getIntranet()

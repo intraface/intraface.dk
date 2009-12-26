@@ -1,29 +1,12 @@
 <?php
 class Intraface_modules_intranetmaintenance_Controller_Intranet_Permission extends k_Component
 {
-    protected $registry;
+    protected $template;
     protected $intranetmaintenance;
 
-    function __construct(k_Registry $registry)
+    function __construct(k_TemplateFactory $template)
     {
-        $this->registry = $registry;
-    }
-
-    function getUsers()
-    {
-        $user = new UserMaintenance();
-        $user->setIntranetId($this->getIntranet()->getId());
-        return $user->getList($this->getKernel());
-    }
-
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
-    function getIntranet()
-    {
-        return $this->context->getIntranet();
+        $this->template = $template;
     }
 
     function putForm()
@@ -60,6 +43,23 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Permission exten
         }
 
         throw new Exception('Did not validate');
+    }
+
+    function getUsers()
+    {
+        $user = new UserMaintenance();
+        $user->setIntranetId($this->getIntranet()->getId());
+        return $user->getList($this->getKernel());
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getIntranet()
+    {
+        return $this->context->getIntranet();
     }
 }
 

@@ -4,6 +4,20 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
     protected $user;
     public $method = 'put';
     protected $intranetmaintenance;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
+    function execute()
+    {
+        if ($this->query('intranet_id')) {
+            $this->url_state->set("intranet_id", $this->query('intranet_id'));
+        }
+        return parent::execute();
+    }
 
     protected function map($name)
     {
@@ -40,7 +54,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
             }
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/user/show.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/user/show');
         return $smarty->render($this, array('intranet' => $intranet));
     }
 
@@ -68,23 +82,13 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
             return new k_SeeOther($this->url(null));
         }
 
-        return $this->renderHtmlEdit();
+        return $this->render();
     }
 
-    function getValues()
+    function renderHtmlEdit()
     {
-        $user = $this->getUser();
-        $value = $user->get();
-        if ($this->context->getIntranet()->get('id') > 0) {
-            $intranet_id = intval($this->context->getIntranet()->get('id'));
-            $user->setIntranetId($intranet_id);
-            $address_value = $user->getAddress()->get();
-        } else {
-            $intranet_id = 0;
-            $address_value = array();
-        }
-
-        return array_merge($address_value, $value);
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/user/edit');
+        return $smarty->render($this);
     }
 
     function renderVcard()
@@ -141,6 +145,22 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         return array_merge($value, $value_address);
     }
     */
+
+    function getValues()
+    {
+        $user = $this->getUser();
+        $value = $user->get();
+        if ($this->context->getIntranet()->get('id') > 0) {
+            $intranet_id = intval($this->context->getIntranet()->get('id'));
+            $user->setIntranetId($intranet_id);
+            $address_value = $user->getAddress()->get();
+        } else {
+            $intranet_id = 0;
+            $address_value = array();
+        }
+
+        return array_merge($address_value, $value);
+    }
 
     function getUser()
     {
@@ -201,10 +221,10 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
             unset($user);
             unset($intranet);
         } else {
-            // Sætter adgang til det redigerede intranet. Id kommer tidligere ved setIntranetId
+            // Sï¿½tter adgang til det redigerede intranet. Id kommer tidligere ved setIntranetId
             $user->setIntranetAccess();
 
-            // Hvis en bruger retter sig selv, i det aktive intranet, sætter vi adgang til dette modul
+            // Hvis en bruger retter sig selv, i det aktive intranet, sï¿½tter vi adgang til dette modul
             if ($this->getKernel()->user->get("id") == $user->get("id") && $this->getKernel()->intranet->get("id") == $intranet->get("id")) {
                 // Finder det aktive intranet
                 $active_module = $this->getKernel()->getPrimaryModule();
@@ -227,12 +247,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         }
     }
     */
-
-    function renderHtmlEdit()
-    {
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/user/edit.tpl.php');
-        return $smarty->render($this);
-    }
 
     function getIntranets()
     {

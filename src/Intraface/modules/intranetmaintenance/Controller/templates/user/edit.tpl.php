@@ -5,7 +5,7 @@ $address_values = $context->getValues();
 <h1><?php e('User'); ?></h1>
 
 <ul>
-	<li><a href="<?php e(url('../')); ?>"><?php e(__('Close')); ?></a></li>
+	<li><a href="<?php e(url(null)); ?>"><?php e(__('Close')); ?></a></li>
 </ul>
 
 <?php echo $context->getUser()->error->view(); ?>
@@ -18,7 +18,7 @@ $address_values = $context->getValues();
     <div class="formrow">
         <label for="name">E-mail</label>
         <input type="text" name="email" id="email" value="<?php if (isset($value['email'])) e($value["email"]); ?>" />
-        <p style="clear:both;">Din e-mail er også dit brugernavn</p>
+        <p style="clear:both;"><?php e(t('Your email is also your username')); ?></p>
     </div>
     <div class="formrow">
         <label for="disabled">Deaktiveret</label>
@@ -30,7 +30,7 @@ $address_values = $context->getValues();
         // hvis en bruger er valgt skal teksten vises, ellers ikke
         if ($context->query('id') != 0) {
             ?>
-            <p>Du kan vælge at angive en ny adgangskode.</p>
+            <p><?php e(t('You can choose a new password')); ?></p>
             <?php
         }
         ?>
@@ -38,12 +38,12 @@ $address_values = $context->getValues();
         <input type="password" name="password" id="password" />
     </div>
     <div class="formrow">
-        <label for="confirm_password">Bekræft adgangskode</label>
+        <label for="confirm_password"><?php e(t('Confirm password')); ?></label>
         <input type="password" name="confirm_password" id="confirm_password" />
     </div>
 </fieldset>
 <input type="submit" name="submit" value="<?php e(t('Save')); ?>" id="submit-save-password" />
-or <a href="<?php e(url('../')); ?>">Cancel</a>
+<a href="<?php e(url(null)); ?>"><?php e(t('Cancel')); ?></a>
 
 <?php
 
@@ -82,7 +82,7 @@ if ($context->getIntranet()->getId() != 0) {
         </div>
     </fieldset>
     <input type="submit" name="submit" value="<?php e(t('Save')); ?>" id="submit-save-address" />
-    or <a href="<?php e(url('../')); ?>">Cancel</a>
+    <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
     <?php
 }
 ?>

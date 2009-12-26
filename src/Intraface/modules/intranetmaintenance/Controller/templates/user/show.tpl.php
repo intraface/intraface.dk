@@ -118,7 +118,7 @@ if ($context->getIntranet()->getId() > 0) {
     <?php foreach ($context->getIntranets() as $intranet_value) { ?>
         <tr>
             <td><a href="<?php e(url('../../intranet/' . $intranet_value['id'])); ?>"><?php e($intranet_value['name']); ?></a></td>
-            <td><a href="<?php e(url('../../intranet/' . $intranet_value['id'] . '/user/' . $context->getUser()->getId())); ?>"><?php e(__('Show contact information')); ?></a></td>
+            <td><a href="<?php e(url(null, array('intranet_id' => $intranet_value['id']))); ?>"><?php e(__('Show contact information')); ?></a></td>
         </tr>
         <?php } ?>
     </tbody>

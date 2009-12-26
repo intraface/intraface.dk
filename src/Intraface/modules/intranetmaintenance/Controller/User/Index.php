@@ -3,6 +3,12 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
 {
     protected $user;
     public $method = 'post';
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     protected function map($name)
     {
@@ -11,11 +17,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
         } elseif (is_numeric($name)) {
             return 'Intraface_modules_intranetmaintenance_Controller_User_Show';
         }
-    }
-
-    function getRedirect()
-    {
-        return Intraface_Redirect::factory($this->getKernel(), 'receive');
     }
 
     function renderHtml()
@@ -27,14 +28,57 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
         	return new k_SeeOther($this->getRedirect()->getRedirect($this->url(null)));
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/user/index.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/user/index');
         return $smarty->render($this);
     }
 
     function renderHtmlCreate()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/user/edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/user/edit');
         return $smarty->render($this);
+    }
+
+    function postForm()
+    {
+        $user = $this->getUser();
+
+        if (isset($_POST["intranet_id"]) && intval($_POST["intranet_id"]) != 0) {
+            $intranet = new Intraface_Intranet($_POST["intranet_id"]);
+            $intranet_id = $intranet->get("id");
+            $address_value = $_POST;
+            $address_value["name"] = $_POST["address_name"];
+        } else {
+            $intranet_id = 0;
+            $address_value = array();
+        }
+
+        $value = $_POST;
+
+        if ($user->update($_POST)) {
+            if (isset($intranet)) {
+                $user->setIntranetAccess($intranet->get('id'));
+                $user->setIntranetId($intranet->get('id'));
+                $user->getAddress()->save($address_value);
+                if (is_numeric($this->context->name())) {
+                    return new k_SeeOther($this->url('../', array('intranet_id' => $intranet->get("id"))));
+                } else {
+                    return new k_SeeOther($this->url($user->getId(), array('intranet_id' => $intranet->get("id"))));
+                }
+            } else {
+                if (is_numeric($this->context->name())) {
+                    return new k_SeeOther($this->url('../'));
+                } else {
+                    return new k_SeeOther($this->url($user->getId()));
+                }
+
+            }
+        }
+        return $this->render();
+    }
+
+    function getRedirect()
+    {
+        return Intraface_Redirect::factory($this->getKernel(), 'receive');
     }
 
     function isAddUserTrue()
@@ -88,44 +132,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
     function getIntranet()
     {
         return $this->getKernel()->intranet;
-    }
-
-    function postForm()
-    {
-        $user = $this->getUser();
-
-        if (isset($_POST["intranet_id"]) && intval($_POST["intranet_id"]) != 0) {
-            $intranet = new Intraface_Intranet($_POST["intranet_id"]);
-            $intranet_id = $intranet->get("id");
-            $address_value = $_POST;
-            $address_value["name"] = $_POST["address_name"];
-        } else {
-            $intranet_id = 0;
-            $address_value = array();
-        }
-
-        $value = $_POST;
-
-        if ($user->update($_POST)) {
-            if (isset($intranet)) {
-                $user->setIntranetAccess($intranet->get('id'));
-                $user->setIntranetId($intranet->get('id'));
-                $user->getAddress()->save($address_value);
-                if (is_numeric($this->context->name())) {
-                    return new k_SeeOther($this->url('../', array('intranet_id' => $intranet->get("id"))));
-                } else {
-                    return new k_SeeOther($this->url($user->getId(), array('intranet_id' => $intranet->get("id"))));
-                }
-            } else {
-                if (is_numeric($this->context->name())) {
-                    return new k_SeeOther($this->url('../'));
-                } else {
-                    return new k_SeeOther($this->url($user->getId()));
-                }
-
-            }
-        }
-        return $this->render();
     }
 
     function getValues()

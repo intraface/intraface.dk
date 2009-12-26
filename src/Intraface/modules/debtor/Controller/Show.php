@@ -466,4 +466,26 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         $this->getDebtor()->delete();
         return new k_SeeOther($this->url('../', array('use_stored' => true)));
     }
+
+    function renderOioxml()
+    {
+        require_once dirname(__FILE__) . '/../Visitor/OIOXML.php';
+        $render = new Debtor_Report_OIOXML;
+        return $render->output($this->getDebtor());
+    }
+}
+
+$GLOBALS['konstrukt_content_types']['xml/oioxml'] = 'oioxml';
+
+class k_OioxmlResponse extends k_ComplexResponse
+{
+    function contentType()
+    {
+        return 'xml/oioxml';
+    }
+
+    protected function marshal()
+    {
+        return $this->content;
+    }
 }

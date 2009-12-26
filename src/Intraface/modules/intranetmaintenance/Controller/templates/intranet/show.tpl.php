@@ -15,7 +15,7 @@ $address_value = $context->getValues();
 </ul>
 
 <?php if ($context->query('flare')): ?>
-<p class="message"><?php e(__($context->query('flare')));?></p>
+ <p class="message"><?php e(__($context->query('flare')));?></p>
 <?php endif; ?>
 
 <?php echo $context->getIntranet()->error->view(); ?>
@@ -29,11 +29,11 @@ $address_value = $context->getValues();
 			<?php if (!empty($value['contact_id']) AND $context->getIntranet()->get('id') > 0 && isset($contact_module)): ?>
 				<?php
 					$contact = new Contact($context->getKernel(), $value['contact_id']);
-					echo '<a href="'.$contact_module->getPath() .'contact.php?id='.$contact->get('id').'">'.$contact->get('name').'</a>';
-					echo ' <a href="'.basename($_SERVER['PHP_SELF']).'?id='.$context->getIntranet()->get('id').'&amp;add_contact=1">'.__('change contact').'</a>';
+					echo '<a href="'.$contact_module->getPath() . $contact->get('id').'">'.$contact->get('name').'</a>';
+					echo ' <a href="'.url(null, array('add_contact'=>1)).'">'.__('change contact').'</a>';
 				?>
 			<?php elseif (isset($contact_module)): ?>
-				<a href="<?php e($_SERVER['PHP_SELF']); ?>?id=<?php e($context->getIntranet()->get('id')); ?>&amp;add_contact=1"><?php e(__('add contact')); ?></a>
+				<a href="<?php e(url(null, array('add_contact' => 1))); ?>"><?php e(__('add contact')); ?></a>
 			<?php endif; ?>
 		</td>
 	</tr>
@@ -135,7 +135,7 @@ $address_value = $context->getValues();
 
 
 <fieldset>
-    <legend>Tilføj modulpakke</legend>
+    <legend>TilfÃ¸j modulpakke</legend>
     <?php if (!$context->getKernel()->intranet->hasModuleAccess('shop')): ?>
         This intranet needs to have access to shop for modulepackage to work!
     <?php else: ?>
@@ -146,7 +146,7 @@ $address_value = $context->getValues();
         $packages = $modulepackage->getList();
         ?>
         <div class="formrow">
-            <label for="module_package_id">Vælg pakke</label>
+            <label for="module_package_id">VÃ¦lg pakke</label>
             <select name="module_package_id" id="module_package_id">
                 <?php
 
@@ -164,7 +164,7 @@ $address_value = $context->getValues();
         </div>
 
         <div class="formrow">
-            <label for="duration_month">Varighed i måneder</label>
+            <label for="duration_month">Varighed i mÃ¥neder</label>
             <select name="duration_month" id="duration_month">
                 <?php
                 for ($i = 1; $i < 25; $i++) {
@@ -173,7 +173,7 @@ $address_value = $context->getValues();
                 ?>
             </select>
         </div>
-        <input type="submit" name="add_module_package" value="Tilføj" class="save" />
+        <input type="submit" name="add_module_package" value="TilfÃ¸j" class="save" />
     <?php endif; ?>
 
 </fieldset>
@@ -210,35 +210,29 @@ $address_value = $context->getValues();
 <div id="colTwo">
 
 <table class="stribe">
-	<caption>Users</caption>
+	<caption><?php e(t('Users')); ?></caption>
 	<thead>
 	<tr>
-		<th>Navn</th>
-		<th>E-mail</th>
+		<th><?php e(t('Name')); ?></th>
+		<th><?php e(t('Email')); ?></th>
 	</tr>
 	</thead>
 	<tbody>
-	<?php
-	foreach ($context->getUsers() as $user_list) {
-		?>
+	<?php foreach ($context->getUsers() as $user_list) { ?>
 		<tr>
 			<?php
 			if ($user_list['name'] == '') $user_list['name'] = '[not filled in]';
 			?>
-			<td><a href="<?php e(url('../../intranet/' . $context->getIntranet()->get('id') . '/user/' . $user_list['id'])); ?>"><?php e($user_list['name']); ?></a></td>
+			<td><a href="<?php e(url('../../user/'. $user_list['id'], array('intranet_id' => $context->getIntranet()->get('id')))); ?>"><?php e($user_list['name']); ?></a></td>
 			<td><?php e($user_list['email']); ?></td>
 		</tr>
-		<?php
-	}
-	?>
+	<?php } ?>
 	</tbody>
 </table>
 
 <p><a href="<?php e(url('../../user', array('create', 'intranet_id' => $context->getIntranet()->get('id')))); ?>">Create new user</a></p>
 
-<p><a href="<?php e(url(null, array('add_user' => 1))); ?>">Add existing user</a></p>
-
-
+<p><a href="<?php e(url(null, array('add_user' => 1))); ?>"><?php e(t('Add existing user')); ?></a></p>
 
 </div>
 <?php endif; ?>

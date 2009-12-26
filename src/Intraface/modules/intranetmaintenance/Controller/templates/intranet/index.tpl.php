@@ -21,7 +21,7 @@
 <table>
 <thead>
     <tr>
-        <th><?php e(__('name')); ?></th>
+        <th><?php e(__('Name')); ?></th>
         <th>&nbsp;</th>
     </tr>
 </thead>
