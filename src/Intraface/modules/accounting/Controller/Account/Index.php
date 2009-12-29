@@ -47,29 +47,6 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
         return $smarty->render($this);
     }
 
-    function getAccount()
-    {
-    	return new Account($this->getYear());
-    }
-
-    function getAccounts()
-    {
-    	return $this->getAccount()->getList('stated', true);
-    }
-
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
-    function getYear($id = 0)
-    {
-        $year = $this->context->getYear();
-        $year->checkYear();
-
-        return $year;
-    }
-
     function renderXls()
     {
         $year = new Year($kernel);
@@ -169,5 +146,29 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
     function getValues()
     {
         return $this->body();
+    }
+
+    function getAccount()
+    {
+    	return new Account($this->getYear());
+    }
+
+    function getAccounts()
+    {
+        $gateway = new Intraface_modules_accounting_AccountGateway($this->getYear());
+    	return $gateway->findByType('stated', true);
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getYear($id = 0)
+    {
+        $year = $this->context->getYear();
+        $year->checkYear();
+
+        return $year;
     }
 }

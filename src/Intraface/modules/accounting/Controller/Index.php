@@ -25,11 +25,6 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
         }
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
     function renderHtml()
     {
         if ($this->getYear()->getId() > 0) {
@@ -38,6 +33,11 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/index');
         return $smarty->render($this);
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 
     function getYear()
@@ -58,15 +58,5 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
     function getAccount($id = 0)
     {
         return new Account($this->getYear(), $id);
-    }
-
-    function wrapHtml($content)
-    {
-        $scripts = '';
-        foreach ($this->document->scripts() as $script) {
-            $scripts .= '<script src="'.$script.'" type="text/javascript"></script>';
-        }
-        return $scripts . $content;
-        //return $this->getHeader() . $scripts . $content . $this->getFooter();
     }
 }

@@ -1,13 +1,18 @@
-<h1>Flet kontakter</h1>
+<h1><?php e(t('Merge contacts')); ?></h1>
+
+<ul class="options">
+	<li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
+</ul>
 
 <?php if (count($context->getSimilarContacts()) == 0) {	?>
 
-<p>Denne kontakt ligner ikke andre, så du kan ikke flette den med nogen.</p>
+<p><?php e(t('This contact does not look like anyone else.')); ?></p>
 
 <?php } else { ?>
 
-    <p><strong>Bemærk</strong>: For at flette kontakter skal du gå ind under den kontakt, du gerne vil beholde. Når du har valgt kontakten, som har alle de rigtige kontaktoplysninger, kan du vælge hvilke kontakter, du gerne vil sammenflette kontakten med. Alle oplysninger om den oprindelige kontakt mistes.</p>
-
+    <p><strong><?php e(t('Attention')); ?></strong>:
+    <?php e(t('When merging contacts, you need to select the contact you want to keep. When you have chosen the correct contact, you can choose which other contacts to merge. All the information about the original contact will be lost.')); ?>
+	</p>
     <table style="font-size: 0.8em;">
         <caption>Denne kontakt</caption>
         <thead>
@@ -35,9 +40,8 @@
     </table>
 
     <form method="post" action="<?php e(url()); ?>">
-    <input type="hidden" value="<?php e($context->getContact()->get('id')); ?>" name="id" />
     <table style="font-size: 0.8em;">
-        <caption>Ligner følgende kontakter</caption>
+        <caption><?php e(t('Similar to the following contacts')); ?></caption>
         <thead>
           <tr>
             <th></th>
@@ -47,13 +51,11 @@
             <th>Postby</th>
             <th>Telefon</th>
             <th>E-mail</th>
-            <th>Fakturaer</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        <?php
-            foreach ($context->getSimilarContacts() as $c) {
-            ?>
+        <?php foreach ($context->getSimilarContacts() as $c) { ?>
             <tr>
                 <td><input type="checkbox" value="<?php e($c['id']); ?>" name="contact[]" /></td>
                 <td><a href="<?php e(url('../../' . $c['id'])); ?>"><?php e($c['number']); ?></a></td>
@@ -64,11 +66,15 @@
                 <td><?php e($c['email']); ?></td>
                 <td><a href="<?php e(url('../../' . $c['id'] . '/merge')); ?>"><?php e(t('Switch to')); ?></a></td>
             </tr>
-            <?php
-        }
-        ?>
+        <?php } ?>
         </tbody>
     </table>
-    <p><input type="submit" value="Flet kontakter" /></p>
+
+	<label>
+    <input type="checkbox" value="yes" name="delete_merged_contacts" />
+	<?php e(t('Delete merged contacts')); ?>
+	</label>
+
+    <p><input type="submit" value="<?php e(t('Merge contacts')); ?>" /></p>
     </form>
 <?php } ?>

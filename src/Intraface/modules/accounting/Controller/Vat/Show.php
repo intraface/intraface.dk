@@ -25,13 +25,11 @@
  */
 class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
 {
-    function _renderHtml()
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
     {
-        $year = new Year($this->getKernel());
-        $year->checkYear();
-
-        $voucher = new Voucher($year);
-
+        $this->template = $template;
     }
 
     function getError()
@@ -80,7 +78,7 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
 
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/vat/show.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/vat/show');
         return $smarty->render($this);
     }
 

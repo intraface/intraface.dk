@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_contact_Controller_Show extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function dispatch()
     {
         if ($this->getContact()->getId() == 0) {
@@ -24,13 +31,13 @@ class Intraface_modules_contact_Controller_Show extends k_Component
 
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/show.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/show');
         return $smarty->render($this, array('persons' => $this->getContactPersons()));
     }
 
     function renderHtmlEdit()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
         return $smarty->render($this);
     }
 
@@ -50,7 +57,7 @@ class Intraface_modules_contact_Controller_Show extends k_Component
             $value = $_POST;
 
             if ($oplysninger = $eniro->query('telefon', $_POST['eniro_phone'])) {
-                // skal kun bruges så længe vi ikke er utf8
+                // skal kun bruges sï¿½ lï¿½nge vi ikke er utf8
                 // $oplysninger = array_map('utf8_decode', $oplysninger);
                 $address['name'] = $oplysninger['navn'];
                 $address['address'] = $oplysninger['adresse'];
@@ -143,22 +150,14 @@ class Intraface_modules_contact_Controller_Show extends k_Component
         return $contact_module = $this->getKernel()->module('contact');
     }
 
+    /*
     function getInvoice()
     {
         if ($this->getKernel()->user->hasModuleAccess('debtor')) {
             $debtor = $this->getKernel()->useModule('debtor');
-            if ($this->getKernel()->user->hasModuleAccess("quotation")) {
-                $quotation = new Debtor($this->getKernel(), 'quotation');
-            }
-            if ($this->getKernel()->user->hasModuleAccess('order')) {
-                $this->getKernel()->useModule('order');
-                $order = new Debtor($this->getKernel(), 'order');
-            }
             if ($this->getKernel()->user->hasModuleAccess('invoice')) {
                 $this->getKernel()->useModule('invoice');
                 return $invoice = new Invoice($this->getKernel());
-                $creditnote = new CreditNote($this->getKernel());
-                $reminder = new Reminder($this->getKernel());
             }
         }
     }
@@ -171,19 +170,9 @@ class Intraface_modules_contact_Controller_Show extends k_Component
     function getOrder()
     {
         if ($this->getKernel()->user->hasModuleAccess('debtor')) {
-            $debtor = $this->getKernel()->useModule('debtor');
-            if ($this->getKernel()->user->hasModuleAccess("quotation")) {
-                $quotation = new Debtor($this->getKernel(), 'quotation');
-            }
             if ($this->getKernel()->user->hasModuleAccess('order')) {
                 $this->getKernel()->useModule('order');
                 return $order = new Debtor($this->getKernel(), 'order');
-            }
-            if ($this->getKernel()->user->hasModuleAccess('invoice')) {
-                $this->getKernel()->useModule('invoice');
-                $invoice = new Invoice($this->getKernel());
-                $creditnote = new CreditNote($this->getKernel());
-                $reminder = new Reminder($this->getKernel());
             }
         }
     }
@@ -192,18 +181,9 @@ class Intraface_modules_contact_Controller_Show extends k_Component
     {
         if ($this->getKernel()->user->hasModuleAccess('debtor')) {
             $debtor = $this->getKernel()->useModule('debtor');
-            if ($this->getKernel()->user->hasModuleAccess("quotation")) {
-                $quotation = new Debtor($this->getKernel(), 'quotation');
-            }
-            if ($this->getKernel()->user->hasModuleAccess('order')) {
-                $this->getKernel()->useModule('order');
-                $order = new Debtor($this->getKernel(), 'order');
-            }
             if ($this->getKernel()->user->hasModuleAccess('invoice')) {
                 $this->getKernel()->useModule('invoice');
-                $invoice = new Invoice($this->getKernel());
                 return $creditnote = new CreditNote($this->getKernel());
-                $reminder = new Reminder($this->getKernel());
             }
         }
     }
@@ -212,17 +192,8 @@ class Intraface_modules_contact_Controller_Show extends k_Component
     {
          if ($this->getKernel()->user->hasModuleAccess('debtor')) {
             $debtor = $this->getKernel()->useModule('debtor');
-            if ($this->getKernel()->user->hasModuleAccess("quotation")) {
-                $quotation = new Debtor($this->getKernel(), 'quotation');
-            }
-            if ($this->getKernel()->user->hasModuleAccess('order')) {
-                $this->getKernel()->useModule('order');
-                $order = new Debtor($this->getKernel(), 'order');
-            }
             if ($this->getKernel()->user->hasModuleAccess('invoice')) {
                 $this->getKernel()->useModule('invoice');
-                $invoice = new Invoice($this->getKernel());
-                $creditnote = new CreditNote($this->getKernel());
                 return $reminder = new Reminder($this->getKernel());
             }
         }
@@ -235,30 +206,47 @@ class Intraface_modules_contact_Controller_Show extends k_Component
             if ($this->getKernel()->user->hasModuleAccess("quotation")) {
                 return $quotation = new Debtor($this->getKernel(), 'quotation');
             }
-            if ($this->getKernel()->user->hasModuleAccess('order')) {
-                $this->getKernel()->useModule('order');
-                $order = new Debtor($this->getKernel(), 'order');
-            }
-            if ($this->getKernel()->user->hasModuleAccess('invoice')) {
-                $this->getKernel()->useModule('invoice');
-                $invoice = new Invoice($this->getKernel());
-                $creditnote = new CreditNote($this->getKernel());
-                $reminder = new Reminder($this->getKernel());
-            }
         }
     }
+    */
 
     function putForm()
     {
         $contact_module = $this->getKernel()->module("contact");
         $translation = $this->getKernel()->getTranslation('contact');
 
-        $contact = new Contact($this->getKernel(), $this->name());
-
         if (!empty($_POST['send_email'])) {
-            $contact->sendLoginEmail(Intraface_Mail::factory());
-            return new k_SeeOther($this->url(null, array('flare' => 'Login e-mail has been sent')));
+            // opretter en kode, hvis kunden ikke har en kode
+            if (!$this->getContact()->get('password')) {
+                $this->getContact()->generatePassword();
+            }
+            if (!$this->getContact()->get('code')) {
+                $this->getContact()->generateCode();
+            }
 
+            $this->getKernel()->useShared('email');
+            $email = new Email($this->getKernel());
+            if (!$email->save(
+            array(
+                    'subject' => 'Loginoplysninger',
+                    'body' => $this->getKernel()->setting->get('intranet', 'contact.login_email_text') . "\n\n" . $this->getContact()->getLoginUrl() . "\n\nMed venlig hilsen\nEn venlig e-mail-robot\n" . $this->getKernel()->intranet->get('name'),
+                    'contact_id' => $this->getContact()->get('id'),
+                    'from_email' => $this->getKernel()->intranet->address->get('email'),
+                    'from_name' => $this->getKernel()->intranet->get('name'),
+                    'type_id' => 9,
+                    'belong_to' => $this->getContact()->get('id')
+            )
+            )) {
+                return new k_SeeOther($this->url(null, array('flare' => 'Kunne ikke gemme e-mailen')));
+            }
+
+            if ($email->send(Intraface_Mail::factory())) {
+                return new k_SeeOther($this->url(null, array('flare' => 'Login e-mail has been sent')));
+
+            }
+            return new k_SeeOther($this->url(null, array('flare' => 'Kunne ikke sende e-mailen')));
+
+            //$contact->sendLoginEmail(Intraface_Mail::factory());
         } elseif (!empty($_POST['new_password'])) {
             if ($contact->generatePassword()) {
                 return new k_SeeOther($this->url(null, array('flare' => 'New code has been generated')));
@@ -311,6 +299,91 @@ class Intraface_modules_contact_Controller_Show extends k_Component
         header('Connection: close');
 
         return $output;
+    }
+
+    function getDependencies()
+    {
+        $dependencies = array();
+
+        if ($this->getKernel()->user->hasModuleAccess("quotation")):
+
+        $dependencies['quotation'] = array(
+            'gateway' => new Intraface_modules_quotation_QuotationGateway($this->getKernel()),
+            'url' =>  $this->url('../../debtor/quotation', array('contact_id' => $this->getContact()->get("id"))),
+            'url_create' =>  $this->url('../../debtor/quotation/create', array('contact_id' => $this->getContact()->get("id"))),
+        	'label' => 'invoice'
+        );
+
+        endif;
+
+        if ($this->getKernel()->user->hasModuleAccess("order")):
+
+        $dependencies['order'] = array(
+            'gateway' => new Intraface_modules_order_OrderGateway($this->getKernel()),
+            'url' =>  $this->url('../../debtor/order', array('contact_id' => $this->getContact()->get("id"))),
+            'url_create' =>  $this->url('../../debtor/order/create', array('contact_id' => $this->getContact()->get("id"))),
+        	'label' => 'invoice'
+        );
+
+        endif;
+
+        if ($this->getKernel()->user->hasModuleAccess("invoice")):
+
+        $dependencies['invoice'] = array(
+            'gateway' => new Intraface_modules_invoice_InvoiceGateway($this->getKernel()),
+            'url' =>  $this->url('../../debtor/invoice', array('contact_id' => $this->getContact()->get("id"))),
+            'url_create' =>  $this->url('../../debtor/invoice/create', array('contact_id' => $this->getContact()->get("id"))),
+        	'label' => 'invoice'
+        );
+
+
+        $dependencies['creditnote'] = array(
+            'gateway' => new Intraface_modules_invoice_CreditnoteGateway($this->getKernel()),
+            'url' =>  $this->url('../../debtor/creditnote', array('contact_id' => $this->getContact()->get("id"))),
+            'url_create' =>  '',
+        	'label' => 'creditnote'
+        );
+
+        $dependencies['reminder'] = array(
+            'gateway' => new Intraface_modules_invoice_ReminderGateway($this->getKernel()),
+            'url' =>  $this->url('../../debtor/reminder', array('contact_id' => $this->getContact()->get("id"))),
+            'url_create' =>  '',
+        	'label' => 'reminder'
+        );
+
+        endif;
+
+        if ($this->getKernel()->user->hasModuleAccess("newsletter")):
+
+        $dependencies['newsletter'] = array(
+            'gateway' => new Intraface_modules_newsletter_SubscribersGateway($this->getKernel()),
+            'url' =>  $this->url('../../newsletter', array('contact_id' => $this->getContact()->get("id"))),
+            'url_create' =>  '',
+        	'label' => 'invoice'
+        );
+
+        endif;
+
+
+        if ($this->getKernel()->user->hasModuleAccess("procurement")):
+
+        $dependencies['procurement'] = array(
+            'gateway' => new Intraface_modules_procurement_ProcurementGateway($this->getKernel()),
+            'url' =>  $this->url('../../procurement', array('contact_id' => $this->getContact()->get("id"))),
+            'url_create' =>  '',
+        	'label' => 'procurement'
+        );
+
+        endif;
+
+        $dependencies['email'] = array(
+            'gateway' => new Intraface_shared_email_EmailGateway($this->getKernel()),
+            'url' =>  $this->url('../../email', array('contact_id' => $this->getContact()->get("id"))),
+            'url_create' =>  '',
+        	'label' => 'email'
+        );
+
+        return $dependencies;
     }
 
     function getObject()

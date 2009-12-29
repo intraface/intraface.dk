@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_Year_Show extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     protected function map($name)
     {
         if ($name == 'edit') {
@@ -28,7 +35,7 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
             throw new Exception('Year is not valid');
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/year/show.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/year/show');
         return $smarty->render($this);
     }
 

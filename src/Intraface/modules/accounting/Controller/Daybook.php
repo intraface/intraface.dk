@@ -94,6 +94,17 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
         	'view' => $view_tpl->render($this)));
     }
 
+    function postForm()
+    {
+        // tjek om debet og credit account findes
+        //$voucher = Voucher::factory($this->getYear(), $_POST['voucher_number']);
+        $voucher = $this->getVoucher($_POST['voucher_number']);
+        if ($id = $voucher->saveInDaybook($_POST)) {
+            return new k_SeeOther($this->url(null, array('flare' => 'Post has been added', 'view' => $this->query('view'))));
+        }
+        return $this->render();
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
@@ -114,17 +125,6 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
     function getYearGateway()
     {
         return new Intraface_modules_accounting_YearGateway($this->getKernel());
-    }
-
-    function postForm()
-    {
-        // tjek om debet og credit account findes
-        //$voucher = Voucher::factory($this->getYear(), $_POST['voucher_number']);
-        $voucher = $this->getVoucher($_POST['voucher_number']);
-        if ($id = $voucher->saveInDaybook($_POST)) {
-            return new k_SeeOther($this->url(null, array('flare' => 'Post has been added', 'view' => $this->query('view'))));
-        }
-        return $this->render();
     }
 
     function getVoucher($voucher_number = null)

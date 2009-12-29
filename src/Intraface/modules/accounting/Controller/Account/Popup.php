@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_Account_Popup extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function getAccountingModule()
     {
         $accounting_module = $this->getKernel()->module('accounting');
@@ -9,8 +16,8 @@ class Intraface_modules_accounting_Controller_Account_Popup extends k_Component
 
     function getAccounts()
     {
-        $account = new Account(new Year($this->getKernel()));
-        return $account->getList();
+        $gateway = new Intraface_modules_accounting_AccountGateway($this->getYear());
+    	return $gateway->getAll();
     }
 
     function renderHtml()
@@ -19,7 +26,7 @@ class Intraface_modules_accounting_Controller_Account_Popup extends k_Component
 
         $this->document->addStyle($this->url('accounting/daybook_list_account.js'));
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/account/popup.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/account/popup');
 
         $response = new k_HttpResponse(200, $smarty->render($this), true);
         $response->setContentType('text/html');
@@ -36,8 +43,8 @@ class Intraface_modules_accounting_Controller_Account_Popup extends k_Component
         return $this->context->getKernel();
     }
 
-    function getYear($id = 0)
+    function getYear()
     {
-        return new Year($this->getKernel(), $id);
+        return $this->context->getYear();
     }
 }

@@ -1,9 +1,16 @@
 <?php
 class Intraface_modules_accounting_Controller_Year_Edit extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/year/edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/year/edit');
         return $smarty->render($this);
     }
 

@@ -46,7 +46,7 @@ class Intraface_modules_accouting_ActiveYear
      *
      * @return integer
      */
-    function getActiveYear()
+    function get()
     {
         return $this->kernel->setting->get('user', 'accounting.active_year');
     }

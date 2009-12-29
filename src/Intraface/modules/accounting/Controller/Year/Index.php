@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_Year_Index extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     protected function map($name)
     {
         if ($name == 'create') {
@@ -12,7 +19,7 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
 
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/year/index.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/year/index');
         return $smarty->render($this);
     }
 
@@ -57,7 +64,7 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
 
     function renderHtmlCreate()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/year/edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/year/edit');
         return $smarty->render($this);
     }
 

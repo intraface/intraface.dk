@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_Year_End extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function getAccount()
     {
         $year = $this->getYear();
@@ -108,7 +115,7 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
         $post = new Post(new Voucher($year));
         $vat_period = new VatPeriod($year);
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/year/end.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/year/end');
         return $smarty->render($this);
 	}
 

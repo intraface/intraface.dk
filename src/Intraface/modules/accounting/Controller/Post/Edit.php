@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function renderHtml()
     {
         if (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
@@ -23,7 +30,7 @@ class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
             $values['id'] = '';
         }
         $account = new Account($this->getYear());
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/post/edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/post/edit.tpl.php');
         return $smarty->render($this, array('post' => $post, 'account' => $account));
     }
 

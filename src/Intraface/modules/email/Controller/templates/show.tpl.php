@@ -1,19 +1,21 @@
 <h1><?php e(t('Email')); ?></h1>
 
-<?php
-if ($email->get('status') == 'sent') {
-	echo '<p class="message">E-mailen er sendt.';
-	if ($kernel->user->hasModuleAccess('email')) {
-		$email_module = $kernel->useModule('email');
-		echo ' <a href="'.$email_module->getPath().'">Gå til e-mails</a>.';
-	}
-	echo '</p>';
-}
-else { ?>
 <ul class="options">
-  <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></li>
+  	<li><a href="<?php e(url('../', array('use_stored' => true))); ?>"><?php e(t('Close')); ?></a></li>
+    <?php if ($email->get('status') != 'sent'): ?>
+  	<li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></li>
+    <?php endif; ?>
+  	<li><a class="pdf" href="<?php e(url(null . '.pdf')); ?>"><?php e(t('Pdf')); ?></a></li>
 </ul>
-<?php } ?>
+
+<?php if ($email->get('status') == 'sent'): ?>
+	<p class="message">
+	    <?php
+	        // @todo make it possible to resend e-mail
+	        e(t('Email has been sent.'));
+	    ?>
+	</p>
+<?php endif; ?>
 
 <?php echo $email->error->view(); ?>
 
@@ -27,12 +29,10 @@ else { ?>
                 $contact->loadContactPerson($email->get('contact_person_id'));
                 if ($contact->contactperson->get('email') != '') {
                     e($contact->contactperson->get('name')." <".$contact->contactperson->get('email').">");
-                }
-                else {
+                } else {
                     e($contact->address->get('name')." <".$contact->address->get('email').">");
                 }
-            }
-            else {
+            } else {
                e($contact->address->get('name')." <".$contact->address->get('email').">");
             }
             ?></pre>

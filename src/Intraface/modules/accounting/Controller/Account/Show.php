@@ -2,6 +2,12 @@
 class Intraface_modules_accounting_Controller_Account_Show extends k_Component
 {
     protected $account;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     protected function map($name)
     {
@@ -12,12 +18,7 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
 
     function renderHtml()
     {
-        $this->document->setTitle('Account');
-
-        $year = new Year($this->getKernel());
-        $year->checkYear();
-
-        $account = new Account($year, (int)$this->name());
+        $account = $this->getAccount();
 
         $saldo = 0;
         $posts = array();
@@ -33,20 +34,15 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
 
         $posts = array_merge($posts, $account->getPosts());
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/account/show.tpl.php');
+        $this->document->setTitle('Account');
+
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/account/show');
         return $smarty->render($this, array('posts' => $posts, 'saldo' => $saldo));
     }
 
     function getKernel()
     {
         return $this->context->getKernel();
-    }
-
-    function getYear()
-    {
-        $year = new Year($this->getKernel());
-        $year->checkYear();
-        return $year;
     }
 
     function renderHtmlEdit()
@@ -59,10 +55,7 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
 
     function postForm()
     {
-        $year = new Year($this->getKernel());
-        $year->checkYear();
-
-        $account = new Account($year, $this->name());
+        $account = $this->getAccount();
 
         if (isset($_POST['vat_key']) && $_POST['vat_key'] != 0) {
             $_POST['vat_percent'] = 25;
@@ -73,6 +66,7 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         } else {
             $values = $_POST;
         }
+        return $this->render();
     }
 
     function getValues()
@@ -85,5 +79,12 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         $module = $this->getKernel()->module('accounting');
         $translation = $this->getKernel()->getTranslation('accounting');
         return new Account($this->getYear(), $this->name());
+    }
+
+    function getYear()
+    {
+        $year = new Year($this->getKernel());
+        $year->checkYear();
+        return $year;
     }
 }

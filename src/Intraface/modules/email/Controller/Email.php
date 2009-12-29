@@ -43,6 +43,21 @@ class Intraface_modules_email_Controller_Email extends k_Component
         return $tpl->render($this, $data);
     }
 
+    function renderPdf()
+    {
+        $pdf = new Intraface_Pdf;
+
+        // udskriv adressehoved
+
+        // uskriv subject
+
+        // udskriv body
+
+        // udskriv greeting
+
+        return $pdf->output('stream');
+    }
+
     function putForm()
     {
         $this->getKernel()->useShared('email');

@@ -177,16 +177,16 @@ class Voucher extends Intraface_Standard
         $validator = new Intraface_Validator($this->error);
         $validator->isNumeric($var['debet_account_number'], 'Debetkontoen er ikke et tal');
         $validator->isNumeric($var['credit_account_number'], 'Kreditkontoen er ikke et tal');
-        $validator->isDouble($var['amount'], 'Bel�bet skal v�re et tal');
+        $validator->isDouble($var['amount'], 'Beløbet skal være et tal');
         settype($var['vat_off'], 'integer');
         if ($var['vat_off'] != 0 AND $var['vat_off'] != 1) {
             $this->error->set('vat_off');
         }
 
         if (!$this->year->isYearOpen()) {
-            $this->error->set('Dette �r er ikke �bent til bogf�ring');
+            $this->error->set('Dette år er ikke åbent til bogføring');
         } elseif (!$this->year->isDateInYear($post_date->get())) {
-            $this->error->set('Denne dato er ikke i det p�g�ldende �r');
+            $this->error->set('Denne dato er ikke i det pågældende år');
         }
 
         if (empty($var['vat_off'])) {
@@ -215,7 +215,7 @@ class Voucher extends Intraface_Standard
         $debetaccount = $this->getAccount($var['debet_account_number']);
 
         if (!$debetaccount->validForState()) {
-            $this->error->set('Du kan ikke bogf�re p� den valgte debetkonto');
+            $this->error->set('Du kan ikke bogføre på den valgte debetkonto');
         }
 
         $creditaccount = $this->getAccount($var['credit_account_number']);
@@ -614,6 +614,9 @@ class Voucher extends Intraface_Standard
      */
     function getMaxNumber()
     {
+        $gateway = new Intraface_modules_accounting_VoucherGateway($this->year);
+        return $gateway->getMaxNumber();
+        /*
         $db = new DB_Sql;
 
         $db->query("SELECT MAX(number) AS max_voucher_number
@@ -624,6 +627,7 @@ class Voucher extends Intraface_Standard
             return 0;
         }
         return $db->f('max_voucher_number');
+    	*/
     }
 
     public function getId()

@@ -17,7 +17,17 @@ $delivery_address = $context->getDeliveryAddressValues();
         <li><a class="vcard" href="<?php e(url(null . '.vcard')); ?>"><?php e(t('Vcard')); ?></a></li>
     </ul>
 
-    <?php if ($context->getKernel()->user->hasModuleAccess("debtor")): ?>
+	<?php foreach ($context->getDependencies() as $dependency): ?>
+        <ul class="options">
+            <?php if ($dependency['gateway']->findCountByContactId($context->getContact()->get("id")) > 0): ?>
+            <li><a href="<?php e($dependency['url']); ?>"><?php e(t(ucfirst($dependency['label']))); ?></a></li>
+            <?php elseif (!empty($dependency['url_create'])): ?>
+            <li class="inactive"><a href="<?php e($dependency['url_create']); ?>"><?php e(t('Create') . ' ' . t($dependency['label'])); ?></a></li>
+            <?php endif; ?>
+		</ul>
+	<?php endforeach; ?>
+
+    <?php /*if ($context->getKernel()->user->hasModuleAccess("debtor")): ?>
         <ul class="options">
         <?php if ($context->getKernel()->user->hasModuleAccess("quotation")): ?>
             <?php if ($context->getQuotation()->any('contact', $context->getContact()->get("id"))): ?>
@@ -57,21 +67,21 @@ $delivery_address = $context->getDeliveryAddressValues();
             $procurement = new Procurement($context->getKernel());
             if ($procurement->any($context->getContact()->get('id'))) {
                 ?>
-                <li><a href="<?php e($procurement_module->getPath()."index.php?contact_id=".$context->getContact()->get('id')); ?>"><?php e(t('procurement', 'procurement')); ?></a></li>
+                <li><a href="<?php e($procurement_module->getPath()."?contact_id=".$context->getContact()->get('id')); ?>"><?php e(t('procurement', 'procurement')); ?></a></li>
                 <?php
             }
             ?>
         <?php endif; ?>
 
         </ul>
-    <?php endif; ?>
+    <?php endif; */ ?>
 </div>
 
-<?php /* Put in next version if (!empty($similar_contacts) AND is_array($similar_contacts) AND count($similar_contacts) > 0): ?>
+<?php if ($context->getContact()->hasSimilarContacts()): ?>
 
-    <p class="message">Der er kontakter, der ligner denne kontakt. <a href="contact_merge.php?id=<?php e($context->getContact()->get('id')); ?>">Videre</a></p>
+    <p class="message">Der er kontakter, der ligner denne kontakt. <a href="<?php e(url('merge')); ?>">Videre</a></p>
 
-<?php endif; */?>
+<?php endif; ?>
 
     <form action="<?php e(url()); ?>" method="post">
     <input type="hidden" name="_method" value="put" />
@@ -123,7 +133,7 @@ $delivery_address = $context->getDeliveryAddressValues();
                     <?php e($context->getContact()->get('code')); ?>
                     <input type="submit" value="<?php e(t('new', 'common')); ?>" class="confirm" name="new_password" />
                     <?php if (!empty($address['email'])): ?>
-                        <input type="submit" name="send_email" value="<?php e(t('send e-mail with login')); ?>" class="confirm" title="Er du sikker på, at du vil sende e-mail?" />
+                        <input type="submit" name="send_email" value="<?php e(t('send e-mail with login')); ?>" class="confirm" title="Er du sikker pï¿½, at du vil sende e-mail?" />
                     <?php endif; ?>
                 </td>
             </tr>
@@ -263,7 +273,7 @@ endif;
 
 </div>
 <?php /*
-<!-- Det her fjerner vi lige og så ser vi om nogen opdager det
+<!-- Det her fjerner vi lige og sï¿½ ser vi om nogen opdager det
 <div id="messages" class="box">
 
 <h2>Meddelelser</h2>
@@ -277,7 +287,7 @@ endif;
     <li<?php if ($m['important'] == 1) echo ' style="color: blue"'; if (!empty($_GET['from_msg_id']) AND $_GET['from_msg_id']==$m['id']) echo ' id="message_'.$m['id'].'" class="fade"'; ?>>
       <?php echo nl2br($m['message']); ?>
       <a class="edit" href="message_edit.php?contact_id=<?php e($_GET['id']); ?>&amp;id=<?php e($m['id']);  ?>">Ret</a>
-        <a href="contact.php?id=<?php e($_GET['id']); ?>&amp;delete_msg=<?php e($m['id']); ?>" class="delete" title="Er du sikker på, at du vil slette beskeden?">Slet</a>
+        <a href="contact.php?id=<?php e($_GET['id']); ?>&amp;delete_msg=<?php e($m['id']); ?>" class="delete" title="Er du sikker pï¿½, at du vil slette beskeden?">Slet</a>
     </li>
 <?php endforeach; ?>
 </ol>
@@ -292,3 +302,4 @@ endif;
 </ul>
 </div>
 <?php endif; ?>
+</div>

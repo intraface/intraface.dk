@@ -173,6 +173,7 @@ k()
 //->setDebug(K2_DEBUG)
 // Dispatch request
 ->setIdentityLoader(new k_SessionIdentityLoader())
-->setLanguageLoader(new Intraface_LanguageLoader())->setTranslatorLoader(new Intraface_TranslatorLoader())
+->setLanguageLoader(new Intraface_LanguageLoader())
+->setTranslatorLoader(new Intraface_TranslatorLoader())
 ->run('Intraface_Controller_Index')
 ->out();

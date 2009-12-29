@@ -20,6 +20,17 @@ class Intraface_modules_accounting_Controller_State extends k_Component
         return $tpl->render($this);
     }
 
+    function postForm()
+    {
+        $voucher = new Voucher($this->getYear());
+
+        if (!$voucher->stateDraft()) {
+            $post->error->set('Posterne kunne ikke bogføres');
+        }
+
+        return new k_SeeOther($this->url());
+    }
+
     function getPosts()
     {
         return $this->getPost()->getList('draft');
@@ -45,17 +56,6 @@ class Intraface_modules_accounting_Controller_State extends k_Component
     function getYearGateway()
     {
         return new Intraface_modules_accounting_YearGateway($this->getKernel());
-    }
-
-    function postForm()
-    {
-        $voucher = new Voucher($this->getYear());
-
-        if (!$voucher->stateDraft()) {
-            // $post->error->set('Posterne kunne ikke bogf�res');
-        }
-
-        return new k_SeeOther($this->url());
     }
 
     function getVoucher()

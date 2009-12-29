@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_Post_Index extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     protected function map($name)
     {
         if ($name == 'create') {
@@ -10,7 +17,7 @@ class Intraface_modules_accounting_Controller_Post_Index extends k_Component
         }
     }
 
-    function renderExcel()
+    function renderXls()
     {
         $year = $this->getYear();
         $year->checkYear();

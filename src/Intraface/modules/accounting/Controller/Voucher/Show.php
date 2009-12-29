@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     protected function map($name)
     {
         if ($name == 'post') {
@@ -108,7 +115,7 @@ $voucher_files = $voucher_file->getList();
         $voucher_file = new VoucherFile($voucher);
         $voucher_files = $voucher_file->getList();
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/voucher/show.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/voucher/show');
         return $smarty->render($this);
     }
 

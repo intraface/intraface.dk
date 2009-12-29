@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_Year_Primosaldo extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function postForm()
     {
         $year = new Year($kernel, $_POST['id']);
@@ -57,7 +64,7 @@ class Intraface_modules_accounting_Controller_Year_Primosaldo extends k_Componen
 
         $data = array('total_debet' => $total_debet, 'total_credit' => $total_credit, 'account' => $account, 'year' => $year, 'accounts' => $accounts);
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/year/index.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/year/index');
         return $smarty->render($this, $data);
 
     }

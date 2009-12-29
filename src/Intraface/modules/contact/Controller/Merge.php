@@ -16,6 +16,13 @@
  */
 class Intraface_modules_contact_Controller_Merge extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function renderHtml()
     {
         if ($this->getKernel()->user->hasModuleAccess('debtor')) {
@@ -25,8 +32,48 @@ class Intraface_modules_contact_Controller_Merge extends k_Component
         $contact = new Contact($this->getKernel(), $this->context->name());
         $similar_contacts = $contact->getSimilarContacts();
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/merge.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/merge');
         return $smarty->render($this);
+    }
+
+    function postForm()
+    {
+        $new_contact = $this->getContact();
+        $chosen_contacts = $this->body('contact');
+
+        foreach ($chosen_contacts as $c) {
+            $old_contact = new Contact($this->getKernel(), $c);
+            foreach ($this->context->getDependencies() as $dependency) {
+                $dependency['gateway']->setNewContactId($old_contact->getId(), $new_contact->getId());
+            }
+
+            $this->setNewContactId($old_contact->getId(), $new_contact->getId());
+
+            if ($this->body('delete_merged_contacts') == 'yes') {
+                $old_contact->delete();
+            }
+        }
+
+        if (count($context->getSimilarContacts()) == 0) {
+            return new k_SeeOther($this->url('../'));
+        }
+
+        return new k_SeeOther($this->url(null));
+    }
+
+    /**
+     * @todo --> maybe this should just be used on merge?
+     *
+     * @param $old_contact_id
+     * @param $new_contact_id
+     *
+     * @return boolean
+     */
+    function setNewContactId($old_contact_id, $new_contact_id)
+    {
+        $db = new DB_Sql;
+        $db->query('UPDATE contact_person SET contact_id = ' . $new_contact_id . ' WHERE contact_id = ' . $old_contact_id);
+        return true;
     }
 
     function getSimilarContacts()
@@ -43,35 +90,5 @@ class Intraface_modules_contact_Controller_Merge extends k_Component
     function getContact()
     {
         return $contact = new Contact($this->getKernel(), intval($this->context->name()));
-    }
-
-    function getGateways()
-    {
-        if ($this->getKernel()->user->hasModuleAccess('debtor')) {
-            $invoice_module = $this->getKernel()->useModule('debtor');
-        }
-
-        return $gateways = array(
-            'newsletter' => new Intraface_modules_newsletter_SubscribersGateway(),
-        	'procurement' => new Intraface_modules_procurement_ProcurementGateway(),
-        );
-    }
-
-    function postForm()
-    {
-        $gateways = $this->getGateways();
-
-        $new_contact = new Contact($this->getKernel(), intval($this->context->name()));
-        $chosen_contacts = $this->body('contact');
-
-        foreach ($chosen_contacts as $c) {
-            $old_contact = new Contact($this->getKernel(), $c);
-            foreach ($gateways as $gateway) {
-                $gateway->setNewContactId($old_contact->getId(), $new_contact->getId());
-            }
-        }
-        // @todo what to do with the contact?
-
-        return new k_SeeOther($this->url(null));
     }
 }

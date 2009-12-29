@@ -84,4 +84,18 @@ class Intraface_modules_accounting_VoucherGateway
         }
         return $list;
      }
+
+     function getMaxNumber()
+     {
+         $db = new DB_Sql;
+
+         $db->query("SELECT MAX(number) AS max_voucher_number
+            FROM accounting_voucher
+            WHERE intranet_id = " . $this->year->kernel->intranet->get('id') . "
+                AND year_id = " . $this->year->get('id'));
+         if (!$db->nextRecord()) {
+             return 0;
+         }
+         return $db->f('max_voucher_number');
+     }
 }

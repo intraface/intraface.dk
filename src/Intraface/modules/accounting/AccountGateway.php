@@ -30,8 +30,8 @@ class Intraface_modules_accounting_AccountGateway
     }
 
    /**
-     * Denne funktion bruges bl.a. under bogføringen, så man bare taster kontonummer
-     * og så sættes den rigtige konto.
+     * Denne funktion bruges bl.a. under bogfï¿½ringen, sï¿½ man bare taster kontonummer
+     * og sï¿½ sï¿½ttes den rigtige konto.
      *
      * @param integer $account_number
      *
@@ -65,6 +65,16 @@ class Intraface_modules_accounting_AccountGateway
     {
         require_once dirname (__FILE__) . '/Account.php';
     	return new Account($this->year, $id);
+    }
+
+    function findByType($type, $saldo = false)
+    {
+        return $this->getList($type, $saldo);
+    }
+
+    function getAll()
+    {
+        return $this->getList();
     }
 
     /**

@@ -17,10 +17,9 @@ class CreditNote extends Debtor
 
     function setStatus($status)
     {
-
         $return = parent::setStatus($status);
         if ($status == "sent") {
-            // Er den sendt, bliver den også låst
+            // Er den sendt, bliver den ogsï¿½ lï¿½st
             return parent::setStatus("executed");
         } else {
             return $return;
@@ -51,26 +50,26 @@ class CreditNote extends Debtor
         }
 
         if (!$year->readyForState($this->get('this_date'))) {
-            $this->error->set('Regnskabåret er ikke klar til bogføring');
+            $this->error->set('Regnskabï¿½ret er ikke klar til bogfï¿½ring');
             return false;
         }
 
 
         if ($this->type != 'credit_note') {
-            $this->error->set('Du kan kun bogføre kreditnotaer');
+            $this->error->set('Du kan kun bogfï¿½re kreditnotaer');
             return false;
         }
 
         if ($this->isStated()) {
-            $this->error->set('Kreditnotaen er allerede bogført');
+            $this->error->set('Kreditnotaen er allerede bogfï¿½rt');
             return false;
         }
 
         if ($this->get('status') != 'sent' && $this->get('status') != 'executed') {
-            $this->error->set('Kreditnotaen skal være sendt eller afsluttet for at den kan bogføres');
+            $this->error->set('Kreditnotaen skal vï¿½re sendt eller afsluttet for at den kan bogfï¿½res');
             return false;
         }
-        
+
         $return = true;
 
         if ($check_products == 'check_products') {
@@ -79,13 +78,13 @@ class CreditNote extends Debtor
             for ($i = 0, $max = count($items); $i < $max; $i++) {
                 $product = new Product($this->kernel, $items[$i]['product_id']);
                 if ($product->get('state_account_id') == 0) {
-                    $this->error->set('Produktet ' . $product->get('name') . ' ved ikke hvor den skal bogføres');
+                    $this->error->set('Produktet ' . $product->get('name') . ' ved ikke hvor den skal bogfï¿½res');
                 }
                 else {
                     require_once 'Intraface/modules/accounting/Account.php';
                     $account = Account::factory($year, $product->get('state_account_id'));
                     if ($account->get('id') == 0 || $account->get('type') != 'operating') {
-                        $this->error->set('Ugyldig konto for bogføring af produktet ' . $product->get('name'));
+                        $this->error->set('Ugyldig konto for bogfï¿½ring af produktet ' . $product->get('name'));
                         $return = false;
                     }
                 }
@@ -121,11 +120,11 @@ class CreditNote extends Debtor
         }
 
         if (!$this->readyForState($year)) {
-            $this->error->set('Kreditnotaen er ikke klar til bogføring');
+            $this->error->set('Kreditnotaen er ikke klar til bogfï¿½ring');
             return false;
         }
 
-        // hente alle produkterne på debtor
+        // hente alle produkterne pï¿½ debtor
         $this->loadItem();
         $items = $this->item->getList();
 
@@ -143,7 +142,7 @@ class CreditNote extends Debtor
         foreach ($items AS $item) {
 
             // produkterne
-            // bemærk at denne går ud fra at alt skal overføres til debtorkontoen som standard
+            // bemï¿½rk at denne gï¿½r ud fra at alt skal overfï¿½res til debtorkontoen som standard
             $product = new Product($this->kernel, $item['product_id']);
             $debet_account = Account::factory($year, $product->get('state_account_id'));
             $debet_account_number = $debet_account->get('number');
@@ -153,7 +152,7 @@ class CreditNote extends Debtor
 
             $amount = $item['quantity'] * $item['price']->getAsIso(2);
 
-            // hvis beløbet er mindre end nul, skal konti byttes om og beløbet skal gøres positivt
+            // hvis belï¿½bet er mindre end nul, skal konti byttes om og belï¿½bet skal gï¿½res positivt
             if ($amount < 0) {
                 $debet_account_number = $credit_account->get('number');
                 $credit_account_number = $debet_account->get('number');
@@ -178,8 +177,8 @@ class CreditNote extends Debtor
                 $voucher->error->view();
             }
         }
-        
-        // samlet moms på fakturaen
+
+        // samlet moms pï¿½ fakturaen
         if ($total_with_vat != 0) {
             $voucher = Voucher::factory($year, $voucher_number);
             $debet_account = new Account($year, $year->getSetting('vat_out_account_id'));
@@ -188,7 +187,7 @@ class CreditNote extends Debtor
                     'voucher_number' => $voucher_number,
                     'reference' => $this->get('number'),
                     'date' => $voucher_date,
-                    'amount' => number_format($total_with_vat * $this->kernel->setting->get('intranet', 'vatpercent') / 100, 2, ",", "."), // opmærksom på at vat bliver rigtig defineret
+                    'amount' => number_format($total_with_vat * $this->kernel->setting->get('intranet', 'vatpercent') / 100, 2, ",", "."), // opmï¿½rksom pï¿½ at vat bliver rigtig defineret
                     'debet_account_number' => $debet_account->get('number'),
                     'credit_account_number' => $credit_account->get('number'),
                     'vat_off' => 1,
@@ -207,7 +206,7 @@ class CreditNote extends Debtor
         }
 
         if ($this->error->isError()) {
-            $this->error->set('Der er opstået en fejl under bogføringen af kreditnotaen. Det kan betyde at dele af den er bogført, men ikke det hele. Du bedes manuelt tjekke bilaget');
+            $this->error->set('Der er opstï¿½et en fejl under bogfï¿½ringen af kreditnotaen. Det kan betyde at dele af den er bogfï¿½rt, men ikke det hele. Du bedes manuelt tjekke bilaget');
             // I am not quite sure if the credit note should be set as stated, but it can give trouble to state it again, if some of it was stated...
             $this->setStated($voucher->get('id'), $this_date->get());
             return false;

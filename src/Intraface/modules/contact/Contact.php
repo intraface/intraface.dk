@@ -865,15 +865,34 @@ class Contact extends Intraface_Standard
      *
      * @return boolean
      */
-    function generatePassword()
+    function generateCode()
     {
         if ($this->id == 0) {
             return false;
         }
         $db = new DB_Sql;
         $db->query("UPDATE contact SET code = '".md5($this->id . date('Y-m-d H:i:s') . $this->kernel->intranet->get('id'))."' WHERE id = " . $this->id);
+        $this->load();
         return true;
     }
+
+
+    /**
+     * Generates a password for the contact
+     *
+     * @return boolean
+     */
+    function generatePassword()
+    {
+        if ($this->id == 0) {
+            return false;
+        }
+        $db = new DB_Sql;
+        $db->query("UPDATE contact SET password = '".md5($this->id . date('Y-m-d H:i:s') . $this->kernel->intranet->get('id'))."' WHERE id = " . $this->id);
+        $this->load();
+        return true;
+    }
+
 
     /**
      * Sends the login email for the contact
@@ -881,6 +900,7 @@ class Contact extends Intraface_Standard
      * @param object mailer
      * @return boolean
      */
+    /*
     function sendLoginEmail($mailer)
     {
         if (!is_object($mailer)) {
@@ -923,6 +943,7 @@ class Contact extends Intraface_Standard
         $this->error->set('Kunne ikke sende emailen');
         return false;
     }
+    */
 
     /**
      * Gets the contacts newsletter subscriptions

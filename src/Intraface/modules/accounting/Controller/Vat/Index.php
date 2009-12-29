@@ -24,6 +24,13 @@
  */
 class Intraface_modules_accounting_Controller_Vat_Index extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     protected function map($name)
     {
         if ($name) {
@@ -41,7 +48,7 @@ class Intraface_modules_accounting_Controller_Vat_Index extends k_Component
         $periods = $vat_period->getList();
         $post = new Post(new Voucher($year));
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/vat/period.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/vat/period');
         return $smarty->render($this);
     }
 
