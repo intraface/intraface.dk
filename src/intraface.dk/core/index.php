@@ -11,6 +11,20 @@ require_once 'konstrukt/konstrukt.inc.php';
 spl_autoload_register('k_autoload');
 
 
+class k_PdfResponse extends k_ComplexResponse
+{
+    function contentType()
+    {
+        return 'application/pdf';
+    }
+
+    protected function marshal()
+    {
+        return $this->content;
+    }
+}
+
+
 class Intraface_AuthenticatedUser extends k_AuthenticatedUser
 {
     protected $language;

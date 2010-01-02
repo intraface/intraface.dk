@@ -45,13 +45,23 @@ class Intraface_modules_email_Controller_Email extends k_Component
 
     function renderPdf()
     {
-        $pdf = new Intraface_Pdf;
+        $pdf = new Document_Cezpdf;
+
+        $size = 12; // font size
 
         // udskriv adressehoved
+        $text = $this->getEmail()->getContact()->address->get('name') .
+            "\n" . $this->getEmail()->getContact()->address->get('adress') .
+            "\n" . $this->getEmail()->getContact()->address->get('postalcode') .
+        	"  " . $this->getEmail()->getContact()->address->get('town') . "\n\n";
+
+        $pdf->ezText($text, $size);
 
         // uskriv subject
+        $pdf->ezText($this->getEmail()->get('subject') . "\n", $size);
 
         // udskriv body
+        $pdf->ezText($this->getEmail()->get('body') . "\n", $size);
 
         // udskriv greeting
 
