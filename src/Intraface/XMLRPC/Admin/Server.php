@@ -19,12 +19,11 @@ class Intraface_XMLRPC_Admin_Server extends Intraface_XMLRPC_Server
      */
     public function getPrivateKey($master_password, $intranet_identifier)
     {
-
         if (!$this->checkMasterpassword($master_password)) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('master password not accepted', -2);
         }
-        
+
         $intranet_identifier = $this->processRequestData($intranet_identifier);
 
         $db = MDB2::singleton(DB_DSN);
@@ -52,20 +51,20 @@ class Intraface_XMLRPC_Admin_Server extends Intraface_XMLRPC_Server
 
         return $this->prepareResponseData($row['private_key']);
     }
-    
+
     /**
      * Checks whether an intranet has access to module
-     * 
+     *
      * @param struct $credentials credentials containing 'private_key' and 'session_id'
      * @param string $module the module to check for
      * @return boolean true or false
      */
-    public function hasModuleAccess($credentials, $module) 
+    public function hasModuleAccess($credentials, $module)
     {
         if (!$this->checkCredentials($credentials)) {
             throw new XML_RPC2_Exception('error in credentials');
         }
-        
+
         return $this->prepareResponseData(
             $this->kernel->intranet->hasModuleAccess($this->processRequestData($module))
         );
