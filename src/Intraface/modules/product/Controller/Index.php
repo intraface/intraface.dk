@@ -84,8 +84,10 @@ class Intraface_modules_product_Controller_Index extends k_Component
 
     function getGateway()
     {
-        return new Intraface_modules_product_Gateway($this->getKernel());
-
+        if(empty($this->gateway)) {
+            $this->gateway = new Intraface_modules_product_Gateway($this->getKernel());
+        }
+        return $this->gateway;
     }
 
     function getKeywords()
@@ -130,6 +132,7 @@ class Intraface_modules_product_Controller_Index extends k_Component
         $gateway->getDBQuery()->defineCharacter("character", "detail_translation.name");
         $gateway->getDBQuery()->usePaging("paging");
         $gateway->getDBQuery()->storeResult("use_stored", "products", "toplevel");
+        $gateway->getDBQuery()->setUri($this->url('.'));
 
         return $products = $gateway->getAllProducts();
     }
