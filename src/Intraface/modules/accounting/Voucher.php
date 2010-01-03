@@ -53,6 +53,11 @@ class Voucher extends Intraface_Standard
         return $gateway->findFromVoucherNumber($voucher_number);
     }
 
+    /**
+     * Loads data
+     *
+     * @return boolean
+     */
     private function load()
     {
         $sql = "SELECT
