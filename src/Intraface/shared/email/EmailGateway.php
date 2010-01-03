@@ -5,19 +5,29 @@ class Intraface_shared_email_EmailGateway
     protected $dbquery;
 
     /**
-     * Bruges til at s�tte den �vre gr�nse for hvor mange e-mails der sendes i timen
+     * Sets upper limit for how many e-mails can be sent an hour
+     *
+     * @var integer
      */
     public $allowed_limit = 180;
 
     /**
-     * Bruges til at s�tte en buffer i systemet, s� den automatiske udsendelse af
-     * emails der er bagefter ikke optager hele kapaciteten for udsendelse af e-mails.
+     * A buffer to make sure that automatic sending does not take up all
+     * the systems capacity fore sending e-mails.
+     *
+     * @var integer
      */
-
     public $system_buffer = 50;
     public $error;
     protected $status;
 
+    /**
+     * Constructor
+     *
+     * @param object $kernel
+     *
+     * @return void
+     */
     function __construct($kernel)
     {
         $this->kernel = $kernel;
