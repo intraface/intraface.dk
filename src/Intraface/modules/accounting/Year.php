@@ -41,7 +41,7 @@ class Year extends Intraface_Standard
     }
 
     /**
-     * Funktion til at s�tte et regnskabs�r, som brugeren redigerer i.
+     * Funktion til at sætte et regnskabsår, som brugeren redigerer i.
      *
      * @return true
      */
@@ -191,7 +191,6 @@ class Year extends Intraface_Standard
         return true;
     }
 
-
     /**
      * Public: Metode til at opdatere �ret
      *
@@ -214,7 +213,6 @@ class Year extends Intraface_Standard
         if (!$this->validate($var)) {
             return false;
         }
-
 
         if ($this->id > 0) {
             $sql="UPDATE accounting_year ";
@@ -245,14 +243,11 @@ class Year extends Intraface_Standard
         $this->load();
 
         return $this->id;
-
     }
-
 
     /****************************************************************************
     VALIDERINGSFUNKTIONER
     ****************************************************************************/
-
     public function isValid()
     {
         return $this->_isValid();
@@ -290,7 +285,6 @@ class Year extends Intraface_Standard
         }
         return false;
     }
-
 
     /**
      * Funktion til at tjekke om �ret er l�st?
@@ -348,13 +342,13 @@ class Year extends Intraface_Standard
         $return = true;
 
         if (!$this->get('id')) {
-            $this->error->set('Der er ikke sat noget �r.');
+            $this->error->set('Der er ikke sat noget år.');
             $return = false;
         } elseif (!$this->isDateInYear($date)) {
-            $this->error->set('Datoen er ikke i det �r, der er sat i regnskabsmodulet.');
+            $this->error->set('Datoen er ikke i det år, der er sat i regnskabsmodulet.');
             $return = false;
         } elseif ($this->get('locked') == 1) {
-            $this->error->set('�ret er ikke �bent for bogf�ring.');
+            $this->error->set('Året er ikke åbent for bogføring.');
             $return = false;
         }
 
@@ -418,10 +412,11 @@ class Year extends Intraface_Standard
         // hvis der ikke er nogen balance_accounts skal den ikke v�lge nogen poster
         $sql_where .= "id=0";
 
-
         $db = new DB_Sql;
         $db->query("SELECT id FROM accounting_account
-            WHERE (".$sql_where.") AND intranet_id = " . $this->kernel->intranet->get('id') . " AND year_id = " . $this->get('id'));
+            WHERE (".$sql_where.")
+            	AND intranet_id = " . $this->kernel->intranet->get('id') . "
+            	AND year_id = " . $this->get('id'));
 
         $accounts = array(); // afstemningskonti
         $i = 0;

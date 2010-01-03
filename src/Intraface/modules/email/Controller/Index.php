@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_email_Controller_Index extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function map($name)
     {
         if (is_numeric($name)) {
@@ -15,6 +22,7 @@ class Intraface_modules_email_Controller_Index extends k_Component
         $email_shared = $this->getKernel()->useShared('email');
         $translation = $this->getKernel()->getTranslation('email');
 
+        // @todo move to Email
         if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
             $email = new Email($this->getKernel(), $_GET['delete']);
             if (!$email->delete()) {
@@ -22,25 +30,29 @@ class Intraface_modules_email_Controller_Index extends k_Component
             }
         }
 
-        $email_object = new Email($this->getKernel());
-        $email_object->getDBQuery()->useCharacter();
-        $email_object->getDBQuery()->defineCharacter('character', 'email.subject');
-        $email_object->getDBQuery()->usePaging('paging');
+        $emails = $this->getGateway();
+        $emails->getDBQuery()->useCharacter();
+        $emails->getDBQuery()->defineCharacter('character', 'email.subject');
+        $emails->getDBQuery()->usePaging('paging');
         //$email->dbquery->storeResult('use_stored', 'emails', 'toplevel');
 
-        $emails = $email_object->getList();
-        $queue = $email_object->countQueue();
+        $queue = $emails->countQueue();
 
         $data = array(
             'queue' => $queue,
-            'emails' => $emails,
-            'email_object' => $email_object,
+            'emails' => $emails->getAll(),
+            'gateway' => $emails,
             'contact_module' => $contact_module,
         	'email_shared' => $email_shared
         );
 
-        $tpl = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/index');
         return $tpl->render($this, $data);
+    }
+
+    function getGateway()
+    {
+        return new Intraface_shared_email_EmailGateway($this->getKernel());
     }
 
     function getKernel()

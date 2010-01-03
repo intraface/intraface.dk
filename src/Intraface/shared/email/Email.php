@@ -25,19 +25,19 @@ class Email extends Intraface_Standard
     protected $dbquery;
 
     /**
-     * Bruges til at sætte den øvre grænse for hvor mange e-mails der sendes i timen
+     * Bruges til at sï¿½tte den ï¿½vre grï¿½nse for hvor mange e-mails der sendes i timen
      */
-    public $allowed_limit = 180;
+    //public $allowed_limit = 180;
 
     /**
-     * Bruges til at sætte en buffer i systemet, så den automatiske udsendelse af
+     * Bruges til at sï¿½tte en buffer i systemet, sï¿½ den automatiske udsendelse af
      * emails der er bagefter ikke optager hele kapaciteten for udsendelse af e-mails.
      */
 
-    public $system_buffer = 50;
+    //public $system_buffer = 50;
 
     /**
-     * Konstruktør
+     * Konstruktï¿½r
      *
      * @param object  $kernel Kernel object
      * @param integer $id     E-mail id
@@ -45,7 +45,7 @@ class Email extends Intraface_Standard
     function __construct($kernel, $id=0)
     {
         if (!is_object($kernel)) {
-            trigger_error('E-mail kræver kernel', E_USER_ERROR);
+            trigger_error('E-mail krï¿½ver kernel', E_USER_ERROR);
         }
         $this->kernel = $kernel;
 
@@ -289,12 +289,16 @@ class Email extends Intraface_Standard
      */
     function sentThisHour()
     {
+        $gateway = new Intraface_shared_email_EmailGateway($this->kernel);
+        return $gateway->sentThisHour();
+        /*
         $db = new DB_Sql;
         $db->query("SELECT COUNT(*) AS antal FROM email WHERE DATE_SUB(NOW(), INTERVAL 1 HOUR) < date_sent");
         if (!$db->nextRecord()) {
             return 0;
         }
         return $db->f('antal');
+        */
     }
 
     /**
@@ -319,8 +323,8 @@ class Email extends Intraface_Standard
 
     /**
      * Hvis der er en aktuel e-mail puttes den i outbox'en.
-     * Derefter sendes alle e-mails fra outboxen, så længe der ikke er sendt
-     * over den timelige grænse.
+     * Derefter sendes alle e-mails fra outboxen, sï¿½ lï¿½nge der ikke er sendt
+     * over den timelige grï¿½nse.
      *
      * @param string $what_to_do Can be either send og queue
      *
@@ -331,7 +335,7 @@ class Email extends Intraface_Standard
         if (!is_object($phpmailer)) {
             throw new Exception('A valid mailer is not provided to the send method');
         }
-        
+
         if (!$this->isReadyToSend()) {
             return false;
         }
@@ -349,23 +353,24 @@ class Email extends Intraface_Standard
         }
 
         //
-        // Sørger for at tjekke om der er sendt for mange e-mails. Hvis der er
-        // returneres blot, og så sendes e-mailen senere. Vi lader som om det gik godt.
+        // Sï¿½rger for at tjekke om der er sendt for mange e-mails. Hvis der er
+        // returneres blot, og sï¿½ sendes e-mailen senere. Vi lader som om det gik godt.
         //
 
-        $sent_this_hour = $this->sentThisHour();
+        $gateway = new Intraface_shared_email_EmailGateway($this->kernel);
 
-        if ($sent_this_hour >= $this->allowed_limit) {
-            $this->error->set('Der er i øjeblikket kø i e-mail-systemet. Vi sender så hurtigt som muligt.');
+        $sent_this_hour = $gateway->sentThisHour();
+
+        if ($sent_this_hour >= $gateway->allowed_limit) {
+            $this->error->set('Der er i Ã¸jeblikket kÃ¸ i e-mail-systemet. Vi sender sÃ¥ hurtigt som muligt.');
             return 1;
         }
-        
+
         // Make sure it is cleared from earlier use.
-        $phpmailer->ClearReplyTos(); 
+        $phpmailer->ClearReplyTos();
         $phpmailer->ClearAllRecipients();
         $phpmailer->ClearAttachments();
-        
-        
+
         // Sender
         if ($this->get('from_email')) {
             $phpmailer->From = $this->get('from_email');
@@ -378,7 +383,7 @@ class Email extends Intraface_Standard
             $phpmailer->From = $this->kernel->intranet->address->get('email');
             $phpmailer->FromName = $this->kernel->intranet->address->get('name');
         }
-        
+
         $phpmailer->Sender = $phpmailer->From;
         $phpmailer->AddReplyTo($phpmailer->From);
 
@@ -404,7 +409,6 @@ class Email extends Intraface_Standard
             $phpmailer->addBCC($this->kernel->user->getAddress()->get('email'), $this->kernel->user->getAddress()->get('name'));
         }
 
-
         // E-mail
         $phpmailer->Subject = $this->get('subject');
         $phpmailer->Body    = $this->get('body');
@@ -416,10 +420,10 @@ class Email extends Intraface_Standard
             foreach ($attachments AS $file) {
 
                 $filehandler = new FileHandler($this->kernel, $file['id']);
-                // lille hack med at sætte uploadpath på
+                // lille hack med at sï¿½tte uploadpath pï¿½
 
                 if (!$phpmailer->addAttachment($filehandler->getUploadPath() . $filehandler->get('server_file_name'), $file['filename'])) {
-                    $this->error->set('Kunne ikke vedhæfte filen til e-mailen');
+                    $this->error->set('Kunne ikke vedhï¿½fte filen til e-mailen');
                 }
             }
         }
@@ -443,7 +447,7 @@ class Email extends Intraface_Standard
     }
 
     /**
-     * Der er ingen grund til at man kan ændre en attachment
+     * Der er ingen grund til at man kan ï¿½ndre en attachment
      * Man kan gemme og slette
      *
      * Der skal knyttes flere attachments til en e-mail
@@ -456,10 +460,10 @@ class Email extends Intraface_Standard
     function attachFile($file_id, $filename)
     {
         if (!is_numeric($file_id)) {
-            $this->error->set('Fil-id skal være et tal');
+            $this->error->set('Fil-id skal vï¿½re et tal');
         }
         if (empty($filename)) {
-            $this->error->set('Navnet skal være en streng');
+            $this->error->set('Navnet skal vï¿½re en streng');
         }
 
         if ($this->error->isError()) {
@@ -496,17 +500,20 @@ class Email extends Intraface_Standard
     }
 
     /**
-     * @todo Denne funktion bør nok erstatte det meste af funktionen send(), så send()
+     * @todo Denne funktion bï¿½r nok erstatte det meste af funktionen send(), sï¿½ send()
      *       netop kun sender en e-mail!
      *
      * @return boolean
      */
     function sendAll($mailer)
     {
+        $gateway = new Intraface_shared_email_EmailGateway($this->getKernel());
+        return $gateway->sendAll($mailer);
+        /*
         if (!is_object($mailer)) {
             throw new Exception('A valid mailer object is needed');
         }
-        
+
         $sent_this_hour = $this->sentThisHour();
 
         $limit_query = abs($this->allowed_limit-$sent_this_hour-$this->system_buffer);
@@ -528,7 +535,7 @@ class Email extends Intraface_Standard
             $email->send($mailer);
         }
         return 1;
-
+		*/
     }
 
     function delete()
@@ -544,6 +551,10 @@ class Email extends Intraface_Standard
 
     function getList()
     {
+        $gateway = new Intraface_shared_email_EmailGateway($this->getKernel());
+        return $gateway->getAll();
+
+        /*
         $db = new DB_Sql;
         $this->getDBQuery()->setSorting("email.date_created DESC");
         $db = $this->getDBQuery()->getRecordset("email.id, email.subject, email.status, email.contact_id", "", false);
@@ -566,6 +577,7 @@ class Email extends Intraface_Standard
             $i++;
         }
         return $list;
+    	*/
     }
 
     /**
@@ -573,6 +585,10 @@ class Email extends Intraface_Standard
      */
     function countQueue()
     {
+        $gateway = new Intraface_shared_email_EmailGateway($this->getKernel());
+        return $gateway->countQueue();
+
+        /*
         $db = new DB_Sql;
         $db->query("SELECT COUNT(*) AS antal FROM email WHERE status = 2 AND intranet_id = " . $this->kernel->intranet->get('id'));
         $this->value['outbox'] = 0;
@@ -580,5 +596,6 @@ class Email extends Intraface_Standard
             $this->value['outbox'] = $db->f('antal');
         }
         return $this->value['outbox'];
+        */
     }
 }

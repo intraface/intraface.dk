@@ -7,7 +7,7 @@
 <?php else: ?>
 
 	<?php
-		//til test af sentThisHour(). Bør ikke vises når vi er i produktion.
+		//til test af sentThisHour(). Bï¿½r ikke vises nï¿½r vi er i produktion.
 		//echo $email_object->sentThisHour();
 	?>
 
@@ -15,7 +15,7 @@
 		<p><?php e(__('e-mails are in queue - the will be sent soon')); ?></p>
 	<?php endif; ?>
 
-	<?php echo $email_object->getDBQuery()->display('character'); ?>
+	<?php echo $gateway->getDBQuery()->display('character'); ?>
 
 	<table>
 	<caption><?php e(__('e-mails')); ?></caption>
@@ -44,6 +44,6 @@
 	</tbody>
 	</table>
 
-	<?php echo $email_object->getDBQuery()->display('paging'); ?>
+	<?php echo $gateway->getDBQuery()->display('paging'); ?>
 
 <?php endif; ?>

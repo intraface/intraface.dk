@@ -27,7 +27,7 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
                 }
 
                 if ($debtor->contact->get('preferred_invoice') <> 2) { // email
-                    trigger_error('Kunden foretrækker ikke post på e-mail', E_USER_ERROR);
+                    trigger_error('Kunden foretrÃ¦kker ikke post pÃ¥ e-mail', E_USER_ERROR);
                 }
 
                 // vi skal lige have oversat den her rigtigt
@@ -48,24 +48,24 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
             case 'electronic_email':
 
                 // find ud af hvem der er scan in contact
-                // måske skal vi lige tjekke om det overhovedet er en faktura
+                // mÃ¥ske skal vi lige tjekke om det overhovedet er en faktura
                 $scan_in_contact_id = $this->context->getKernel()->getSetting()->get('intranet', 'debtor.scan_in_contact');
 
                 $contact = new Contact($this->context->getKernel(), $scan_in_contact_id);
                 if (!$contact->get('id') > 0) {
                     trigger_error('Der er ikke angivet nogen kontakt at sende de elektroniske fakturaer til', E_USER_ERROR);
                 } elseif (!$contact->address->get('email')) {
-                    trigger_error('Der er ikke angivet nogen e-mail til Læs-Ind bureauet', E_USER_ERROR);
+                    trigger_error('Der er ikke angivet nogen e-mail til LÃ¦s-Ind bureauet', E_USER_ERROR);
                 }
 
                 if ($debtor->contact->get('preferred_invoice') <> 3) { // elektronisk faktura
-                    trigger_error('Kunden foretrækker ikke elektronisk faktura!', E_USER_ERROR);
+                    trigger_error('Kunden foretrÃ¦kker ikke elektronisk faktura!', E_USER_ERROR);
                 } elseif (!$debtor->contact->address->get('ean')) {
                     trigger_error('EAN-nummeret er ikke sat', E_USER_ERROR);
                 }
 
                 $subject = 'Elektronisk faktura';
-                $body = 'Hermed faktura #' . $debtor->get('number') . ' til at læse ind';
+                $body = 'Hermed faktura #' . $debtor->get('number') . ' til at lï¿½se ind';
 
                 break;
 
@@ -143,7 +143,7 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
         // tilknyt fil
         if (!$email->attachFile($file_id, $filehandler->get('file_name'))) {
             echo $email->error->view();
-            trigger_error('Filen kunne ikke vedhæftes', E_USER_ERROR);
+            trigger_error('Filen kunne ikke vedhÃ¦ftes', E_USER_ERROR);
         }
 
         switch ($send_as) {
@@ -176,7 +176,7 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
                     trigger_error('not valid send as', E_USER_ERROR);
                 break;
         }
-        exit;
+        throw new Exception('Something went wrong');
     }
 
 }

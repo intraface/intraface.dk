@@ -20,7 +20,7 @@ class Intraface_modules_email_Controller_Email extends k_Component
             return $this->email;
         }
 
-        return ($this->email = new Email($this->getKernel(), $this->name()));
+        return ($this->email = $this->context->getGateway()->findById($this->name()));
     }
 
     function renderHtml()
@@ -176,5 +176,15 @@ class Intraface_modules_email_Controller_Email extends k_Component
             throw new Exception("Invalid action to perform on email");
         }
         return $this->render();
+    }
+
+    function DELETE()
+    {
+        $email = new Email($this->getKernel(), $this->name());
+        if (!$email->delete()) {
+            throw new Exception(__('could not delete e-mail', 'email'));
+        }
+        return $this->context->url();
+
     }
 }
