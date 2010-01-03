@@ -1,6 +1,6 @@
 <?php
 /**
- * Account
+ * Represents an account
  *
  * @package Intraface_Accounting
  *
@@ -12,13 +12,46 @@ require_once 'Intraface/functions.php';
 
 class Account extends Intraface_Standard
 {
-    protected $id; // kontoid
-    public $year; // object
-    public $value; // holds values for account if loaded
-    public $error; // errorobject
+    /**
+     * Account id
+     *
+     * @var integer
+     */
+    protected $id;
 
+    /**
+     * Year object
+     *
+     * @var object
+     */
+    public $year;
+
+    /**
+     * Account values
+     *
+     * @var array
+     */
+    public $value;
+
+    /**
+     * Error object
+     *
+     * @var object
+     */
+    public $error;
+
+    /**
+     * Vat percent
+     *
+     * @var float
+     */
     public $vat_percent;
 
+    /**
+     * Direction of vat
+     *
+     * @var array
+     */
     public $vat = array(
         0 => 'none',
         1 => 'in',
@@ -46,7 +79,7 @@ class Account extends Intraface_Standard
     );
 
     /**
-     * Represents an account
+     * Constructor
      *
      * @param object  $year
      * @param integer $account_id
