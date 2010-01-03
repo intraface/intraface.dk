@@ -116,8 +116,8 @@ $pfm->addPackageDepWithChannel('required', 'bucket', 'public.intraface.dk', '0.1
 
 // Doctrine
 $pfm->addPackageDepWithChannel('required', 'Doctrine', 'pear.phpdoctrine.org', '1.1.1');
-$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Nohtml', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Greaterthan', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Nohtml', 'public.intraface.dk', '0.1.1');
+$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Greaterthan', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Template_Positionable', 'public.intraface.dk', '0.2.0');
 
 // Ilib

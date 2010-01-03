@@ -16,11 +16,18 @@ class Intraface_shared_email_EmailGateway
 
     public $system_buffer = 50;
     public $error;
+    protected $status;
 
     function __construct($kernel)
     {
         $this->kernel = $kernel;
         $this->error = new Intraface_Error();
+
+        $this->status = array(
+            1 => 'draft',
+            2 => 'outbox',
+            3 => 'sent'
+        );
     }
 
     /**

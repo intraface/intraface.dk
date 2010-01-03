@@ -40,7 +40,7 @@ class Intraface_AuthenticatedUser extends k_AuthenticatedUser
     }
 }
 
-session_start();
+// session_start();
 
 class DanishLanguage implements k_Language {
     function name() {

@@ -311,7 +311,7 @@ class Intraface_modules_contact_Controller_Show extends k_Component
             'gateway' => new Intraface_modules_quotation_QuotationGateway($this->getKernel()),
             'url' =>  $this->url('../../debtor/quotation', array('contact_id' => $this->getContact()->get("id"))),
             'url_create' =>  $this->url('../../debtor/quotation/create', array('contact_id' => $this->getContact()->get("id"))),
-        	'label' => 'invoice'
+        	'label' => 'quotation'
         );
 
         endif;
@@ -322,7 +322,7 @@ class Intraface_modules_contact_Controller_Show extends k_Component
             'gateway' => new Intraface_modules_order_OrderGateway($this->getKernel()),
             'url' =>  $this->url('../../debtor/order', array('contact_id' => $this->getContact()->get("id"))),
             'url_create' =>  $this->url('../../debtor/order/create', array('contact_id' => $this->getContact()->get("id"))),
-        	'label' => 'invoice'
+        	'label' => 'order'
         );
 
         endif;

@@ -20,7 +20,7 @@ class Intraface_Filehandler_Controller_Viewer extends k_Component
             return new k_PageNotFound();
         }
 
-        $auth_adapter = new Intraface_Auth_PublicKeyLogin($this->mdb2, session_id(), $query_parts[1]);
+        $auth_adapter = new Intraface_Auth_PublicKeyLogin($this->mdb2, $this->session()->sessionId(), $query_parts[1]);
         $weblogin = $auth_adapter->auth();
 
         if (!$weblogin) {
@@ -47,13 +47,13 @@ class Intraface_Filehandler_Controller_Viewer extends k_Component
         $fileviewer = new FileViewer($filehandler, $query_parts[3]);
 
         if ($fileviewer->needLogin()) {
-            session_start();
-            $auth = new Intraface_Auth(session_id());
+            // session_start();
+            $auth = new Intraface_Auth($this->session()->sessionId());
             if (!$auth->hasIdentity()) {
                 throw new Exception('You need to be logged in to view the file');
             }
 
-            $user = $auth->getIdentity(MDB2::singleton(DB_DSN));
+            $user = $auth->getIdentity($this->mdb2);
             $intranet = new Intraface_Intranet($user->getActiveIntranetId());
             if ($intranet->getId() != $kernel->intranet->getId()) {
                 throw new Exception('You where not logged into the correct intranet to view the file');

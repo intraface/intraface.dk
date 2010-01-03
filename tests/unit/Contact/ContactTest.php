@@ -62,23 +62,24 @@ class ContactTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($similar_contacts));
     }
 
+    /*
+     * @deprecated not in the controller instead
     function testSendLoginEmail()
     {
         $contact = new Contact($this->getKernel());
         $data = array('name' => 'Test', 'email' => 'lars@legestue.net', 'phone' => '98468269');
         $contact->save($data);
 
-        /*
-        This could be good, but unable to create
-        $phpmailer = $this->getMock('Phpmailer', array('AddAddress', 'send', '__get'));
-        $phpmailer->expects($this->atLeastOnce())->method('AddAddress')->with($this->equalTo('lars@legestue.net'), $this->equalTo('Test'));
-        $phpmailer->expects($this->once())->method('AddAddress');
-        $phpmailer->expects($this->once())->method('__get')->with($this->equalTo('ErrorInfo'));
-        */
+        // This could be good, but unable to create
+        // $phpmailer = $this->getMock('Phpmailer', array('AddAddress', 'send', '__get'));
+        // $phpmailer->expects($this->atLeastOnce())->method('AddAddress')->with($this->equalTo('lars@legestue.net'), $this->equalTo('Test'));
+        // $phpmailer->expects($this->once())->method('AddAddress');
+        // $phpmailer->expects($this->once())->method('__get')->with($this->equalTo('ErrorInfo'));
+
         $mailer = new Stub_PhpMailer;
         $this->assertTrue($contact->sendLoginEmail($mailer));
         $this->assertTrue($mailer->isSend(), 'Mail is not send');
 
     }
+    */
 }
-?>

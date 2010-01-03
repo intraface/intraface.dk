@@ -118,7 +118,9 @@ class YearTest extends PHPUnit_Framework_TestCase
     function testGetBalanceAccountsThrowsEceptionIfBalanceAccountsIsNotAnArray()
     {
     	$year = new Year($this->kernel);
-        try {
+        $id = $year->save(array('label' => '2000', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0));
+
+    	try {
         	$year->getBalanceAccounts();
             $this->assertTrue(false);
         } catch (Exception $e) {

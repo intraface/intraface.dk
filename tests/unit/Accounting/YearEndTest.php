@@ -59,11 +59,16 @@ class YearEndTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
+        $this->end = $this->createYearEnd();
+    }
+
+    function tearDown()
+    {
         $db = MDB2::singleton(DB_DSN);
         $db->exec('TRUNCATE accounting_year_end');
         $db->exec('TRUNCATE accounting_year_end_action');
         $db->exec('TRUNCATE accounting_year_end_statement');
-        $this->end = $this->createYearEnd();
+        $db->exec('TRUNCATE setting');
     }
 
     function createYearEnd()

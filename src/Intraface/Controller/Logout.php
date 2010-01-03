@@ -26,6 +26,7 @@ class Intraface_Controller_Logout extends k_Component
     {
         if ($this->auth->clearIdentity()) {
             $this->session()->set('identity', null);
+            $this->session()->destroy();
             return new k_SeeOther($this->query('continue'));
         } else {
             throw new Exception('Could not logout');

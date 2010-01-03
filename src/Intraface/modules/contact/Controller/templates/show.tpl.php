@@ -17,15 +17,15 @@ $delivery_address = $context->getDeliveryAddressValues();
         <li><a class="vcard" href="<?php e(url(null . '.vcard')); ?>"><?php e(t('Vcard')); ?></a></li>
     </ul>
 
-	<?php foreach ($context->getDependencies() as $dependency): ?>
-        <ul class="options">
+    <ul class="options">
+	<?php foreach ($context->getDependencies() as $key => $dependency): ?>
             <?php if ($dependency['gateway']->findCountByContactId($context->getContact()->get("id")) > 0): ?>
-            <li><a href="<?php e($dependency['url']); ?>"><?php e(t(ucfirst($dependency['label']))); ?></a></li>
+            <li><a href="<?php e($dependency['url']); ?>"><?php e(t(ucfirst($dependency['label'] . 's'))); ?></a></li>
             <?php elseif (!empty($dependency['url_create'])): ?>
             <li class="inactive"><a href="<?php e($dependency['url_create']); ?>"><?php e(t('Create') . ' ' . t($dependency['label'])); ?></a></li>
             <?php endif; ?>
-		</ul>
 	<?php endforeach; ?>
+	</ul>
 
     <?php /*if ($context->getKernel()->user->hasModuleAccess("debtor")): ?>
         <ul class="options">

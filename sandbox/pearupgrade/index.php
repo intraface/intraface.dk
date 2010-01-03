@@ -5,7 +5,7 @@
  */
 
 // $pear_dir must point to a valid PEAR install (=contains PEAR.php)
-$pear_dir = '/usr/share/php'; // default of install
+//$pear_dir = '/usr/share/php'; // default of install
 
 // OPTIONAL: If you have a config file at a non-standard location,
 // uncomment and supply it here:
@@ -19,17 +19,19 @@ $pear_user_config = '/etc/pear/pear.conf';
 /***********************************************************
  * Following code tests $pear_dir and loads the webfrontend:
  */
+/*
 if (!file_exists($pear_dir.'/PEAR.php')) {
     trigger_error('No PEAR.php in supplied PEAR directory: '.$pear_dir,
                     E_USER_ERROR);
 }
 ini_set('include_path', $pear_dir);
-require_once('PEAR.php');
+*/
+//require_once('PEAR.php');
 
 // Include WebInstaller
-putenv('PHP_PEAR_INSTALL_DIR='.$pear_dir); // needed if unexisting config
-define('PEAR_Frontend_Web',1);
-@session_start();
+//putenv('PHP_PEAR_INSTALL_DIR='.$pear_dir); // needed if unexisting config
+//define('PEAR_Frontend_Web',1);
+//@session_start();
 
 /**
  * base frontend class
@@ -40,7 +42,7 @@ require_once 'PEAR/Frontend.php';
 require_once 'PEAR/Command.php';
 
 // for the open_basedir prisoners, don't allow PEAR to search for a temp dir (would use /tmp), see bug #13167
-putenv('TMPDIR='.dirname(__FILE__).'/temp');
+//putenv('TMPDIR='.dirname(__FILE__).'/temp');
 
 /*
 // set $pear_user_config if it isn't set yet
@@ -114,7 +116,7 @@ if (isset($_GET["css"])) {
 if (isset($_GET["js"])) {
     $ui->outputFrontendFile($_GET["js"], 'js');
 }
-*/
+
 if (isset($_GET["img"])) {
     $ui->outputFrontendFile($_GET["img"], 'image');
 }
@@ -124,6 +126,7 @@ $verbose = $config->get("verbose");
 $cmdopts = array();
 $opts    = array();
 $params  = array();
+*/
 /*
 // create $pear_user_config if it doesn't exit yet
 if (!file_exists($pear_user_config)) {

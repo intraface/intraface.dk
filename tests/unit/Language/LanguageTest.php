@@ -3,6 +3,18 @@ require_once dirname(__FILE__) . '/../config.test.php';
 
 class LanguageTest extends PHPUnit_Framework_TestCase
 {
+    function setUp()
+    {
+        $this->tearDown();
+    }
+
+    function tearDown()
+    {
+        $db = MDB2::singleton(DB_DSN);
+        $db->exec('TRUNCATE onlinepayment_settings');
+        $db->exec('TRUNCATE onlinepayment_settings_translation');
+    }
+
     function testLanguageSave()
     {
         $intranet_id = 1;

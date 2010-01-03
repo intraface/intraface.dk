@@ -107,7 +107,7 @@ class Root extends k_Component {
 class RestrictedController extends k_Component {
   protected function map($name) {
     if ($name == "modulehandler") {
-      return 'ModuleHandler';
+      return 'ModuleGateway';
     }
   }
   function dispatch() {
@@ -124,7 +124,7 @@ class RestrictedController extends k_Component {
   }
 }
 
-class ModuleHandler extends k_Component
+class ModuleGateway extends k_Component
 {
   protected function map($name) {
     if ($name == "dojo") {
@@ -164,6 +164,10 @@ class DojoController extends k_Component {
   function renderHtml() {
     return "Welcome to the dojo, where only ninjas are allowed";
   }
+}
+
+class ModuleGateway
+{
 }
 
 if (realpath($_SERVER['SCRIPT_FILENAME']) == __FILE__) {

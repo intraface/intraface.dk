@@ -63,7 +63,7 @@ class Intraface_Auth
     {
         $_SESSION['user'] = '';
         unset($_SESSION['user']);
-        session_destroy();
+        //session_destroy();
         return true;
     }
 

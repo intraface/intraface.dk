@@ -49,7 +49,7 @@ class Intraface_Controller_Login extends k_Component
 
     protected function selectUser($username, $password)
     {
-        $adapter = new Intraface_Auth_User($this->mdb2, session_id(), $username, $password);
+        $adapter = new Intraface_Auth_User($this->mdb2, $this->session()->sessionId(), $username, $password);
 
         $this->auth->attachObserver($this->log);
         $this->auth->authenticate($adapter);
