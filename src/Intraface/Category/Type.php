@@ -4,6 +4,14 @@
  */
 class Intraface_Category_Type extends Ilib_Category_Type
 {
+    /**
+     * Constructor
+     *
+     * @param string  $type
+     * @param integer $id
+     *
+     * @return void
+     */
     public function __construct($type, $id = 0)
     {
         switch($type) {
