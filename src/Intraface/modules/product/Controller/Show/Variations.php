@@ -8,6 +8,14 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
         $this->template = $template;
     }
 
+    function dispatch()
+    {
+        if (!$this->context->hasVariation()) {
+            return new k_PageNotFound();
+        }
+        return parent::dispatch();
+    }
+
     function map($name)
     {
         if ($name == 'stock') {
