@@ -1,5 +1,3 @@
-<h1><?php e(__('files')); ?></h1>
-
 <ul class="options">
     <li><a href="<?php e(url('upload')); ?>" onclick="location.href='<?php e(url('uploadmultiple')); ?>'; return false;"><?php e(__('upload file')); ?></a></li>
 </ul>
