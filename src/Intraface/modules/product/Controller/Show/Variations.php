@@ -1,9 +1,18 @@
 <?php
 class Intraface_modules_product_Controller_Show_Variations extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function map($name)
     {
-        if ($name == 'select_attribute_groups') {
+        if ($name == 'stock') {
+            return 'Intraface_modules_stock_Controller_Variations';
+        } elseif ($name == 'select_attribute_groups') {
             // @todo check whether product has attributes
             return 'Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups';
         } else if (is_numeric($name)) {
@@ -26,13 +35,13 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
 
         $existing_groups = array();
         // $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway();
-        
+
         $data = array(
             'product' => $product,
             'existing_groups' => $existing_groups,
             'groups' => $groups);
-        
-        $tpl = new k_Template(dirname(__FILE__) . '/../tpl/variations-edit.tpl.php');
+
+        $tpl = $this->template->create(dirname(__FILE__) . '/../tpl/variations');
         return $tpl->render($this, $data);
 
     }

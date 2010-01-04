@@ -12,23 +12,23 @@ class Stock extends Intraface_Standard
     function __construct($product, $variation = NULL)
     {
         if (!is_object($product) AND strtolower(get_class($product)) == "product") {
-            trigger_error("Stock kræver product", E_USER_ERROR);
+            trigger_error("Stock krï¿½ver product", E_USER_ERROR);
         }
 
         $this->product = &$product;
-        
+
         if ($variation) {
             $this->product_variation_id = $variation->getId();
         }
         else {
             $this->product_variation_id = 0;
         }
-        
+
         if ($this->product->get("id") > 0) {
             $this->load();
         }
     }
-    
+
     public function getError()
     {
         return $this->error;
@@ -38,7 +38,7 @@ class Stock extends Intraface_Standard
     {
         $db = new DB_sql;
 
-        // Hvornår var blev produktet sidst afstemt. Vi tager derfra.
+        // Hvornï¿½r var blev produktet sidst afstemt. Vi tager derfra.
         $db->query("SELECT id, quantity, adaptation_date_time, DATE_FORMAT(adaptation_date_time, '%d-%m-%Y %H:%i') AS dk_adaptation_date_time
             FROM stock_adaptation WHERE intranet_id = ".$this->product->kernel->intranet->get("id")." AND product_id = ".$this->product->get("id")." AND product_variation_id = ".$this->product_variation_id." ORDER BY adaptation_date_time DESC");
         if ($db->nextRecord()) {
@@ -88,7 +88,7 @@ class Stock extends Intraface_Standard
         $db->query("SELECT SUM(quantity) AS regulated
             FROM stock_regulation
             WHERE intranet_id = ".$this->product->kernel->intranet->get('id')." AND product_id = ".$this->product->get('id')." AND product_variation_id = ".$this->product_variation_id." AND regulation_date_time > \"".$basis_date."\"");
-        $db->nextRecord(); // Der vil altid være en post
+        $db->nextRecord(); // Der vil altid vï¿½re en post
         $regulated = intval($db->f('regulated'));
         $this->value["actual_stock"] = $basis + $stock_in - $stock_out + $stock_out_reduced + $regulated;
 
@@ -120,7 +120,7 @@ class Stock extends Intraface_Standard
             $this->value["on_quotation"] = 0;
         }
 
-        // er den her realistisk, eller skal man tage quotation med inden det udløber?
+        // er den her realistisk, eller skal man tage quotation med inden det udlï¿½ber?
         $this->value['for_sale'] = $this->value['actual_stock'] - $this->value['reserved'];
     }
 
@@ -132,11 +132,6 @@ class Stock extends Intraface_Standard
      */
     function regulate($input)
     {
-
-        if (!is_array($input)) {
-            trigger_error("Stock->regulate() input er ikke et array", FATAL);
-        }
-
         $input = safeToDb($input);
 
         $validator = new Intraface_Validator($this->product->error);
@@ -158,7 +153,6 @@ class Stock extends Intraface_Standard
             regulation_date_time = NOW(),
             comment = \"".$input['description']."\",
             quantity = ".$input['quantity']."");
-
 
         return true;
     }
