@@ -118,12 +118,12 @@ if (isset($onlinepayment)) {
 
 <form method="post" action="<?php e(url()); ?>">
     <input type="hidden" name="id" value="<?php e($context->getDebtor()->get('id')); ?>" />
-    <?php if ($context->getDebtor()->contact->get('preferred_invoice') == 2 AND  $context->getDebtor()->get('status') == 'created' AND isset($valid_sender) AND $valid_sender == true): ?>
+    <?php if ($context->getDebtor()->contact->get('preferred_invoice') == 2 OR $context->getDebtor()->contact->get('preferred_invoice') == 3 AND  $context->getDebtor()->get('status') == 'created' AND isset($valid_sender) AND $valid_sender == true): ?>
         <input type="submit" value="<?php e(t('Send on email')); ?>" name="send_email" title="<?php e(t('Are you sure?')); ?>" />
     <?php elseif ($context->getDebtor()->contact->get('preferred_invoice') == 2 AND $context->getDebtor()->get('status') == 'sent' AND isset($valid_sender) AND $valid_sender == true): ?>
         <input type="submit" value="<?php e(t('Resend on email')); ?>" name="send_email" title="<?php e(t('Are you sure?')); ?>" />
     <?php elseif ($context->getDebtor()->get("type") == 'invoice' AND $context->getDebtor()->contact->get('preferred_invoice') == 3 AND $context->getDebtor()->contact->address->get('ean') AND $context->getDebtor()->get('status') == 'created' AND isset($valid_scan_in_contact) AND $valid_scan_in_contact == true): ?>
-        <input type="submit" value="<?php e(t('Send electronic invoice')); ?>" name="send_electronic_invoice" title="<?php e(t('Are you sure you want to send the invoice to the L�s-ind-bureau?')); ?>" />
+        <input type="submit" value="<?php e(t('Send electronic invoice')); ?>" name="send_electronic_invoice" title="<?php e(t('Are you sure you want to send the invoice to the Læs-ind-bureau?')); ?>" />
     <?php elseif ($context->getDebtor()->get("type") == 'invoice' AND $context->getDebtor()->contact->get('preferred_invoice') == 3 AND $context->getDebtor()->contact->address->get('ean') AND $context->getDebtor()->get('status') == 'sent' AND isset($valid_scan_in_contact) AND $valid_scan_in_contact == true): ?>
         <input type="submit" value="<?php e(t('Resend electronic invoice')); ?>" name="send_electronic_invoice" title="<?php e(t('Are you sure?')); ?>" />
     <?php endif; ?>

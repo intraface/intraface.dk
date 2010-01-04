@@ -22,7 +22,7 @@ class Intraface_modules_debtor_Controller_Index extends k_Component
             return new k_SeeOther($this->url('invoice/list', array('type' => 'invoice')));
         } elseif ($this->getKernel()->user->hasModuleAccess("order")) {
             return new k_SeeOther($this->url('order/list', array('type' => 'order')));
-        } elseif ($this->getKernel()->user->hasModulesAccess("quotation")) {
+        } elseif ($this->getKernel()->user->hasModuleAccess("quotation")) {
 	        return new k_SeeOther($this->url('quotation/list', array('type' => 'quotation')));
         }
 

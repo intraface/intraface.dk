@@ -6,7 +6,7 @@
         <?php }
 
         if (!empty($product) AND is_object($product) && $product->get('name') != '') { ?>
-            <?php e(t('with product'))?>:  
+            <?php e(t('with product'))?>:
             <?php e($product->get('name')); ?>
             <?php if (!empty($variation) AND is_object($variation) AND $variation->getName() != '') { ?>
                 - <?php e($variation->getName()); ?>
@@ -18,20 +18,24 @@
 
 
 <?php if ($context->getKernel()->intranet->address->get('id') == 0): ?>
-    <p>Du mangler at udfylde adresse til dit intranet. Det skal du gøre, før du kan oprette en <?php e(strtolower(__($context->getDebtor()->get('type')))); ?>.
+    <p>
+     <?php e(t('You have not filled in the address for your intranet. Do that before you can create your first')); ?>
+     <?php e(strtolower(__($context->getDebtor()->get('type')))); ?>.
     <?php if ($context->getKernel()->user->hasModuleAccess('administration')): ?>
         <?php
         $module_administration = $context->getKernel()->useModule('administration');
         ?>
         <a href="<?php e(url('../../../administration/intranet', array('edit'))); ?>"><?php e(t('Fill in address')); ?></a>.
     <?php else: ?>
-        Du har ikke adgang til at rette adresseoplysningerne, det må du bede din administrator om at gøre.
+    	<?php e(t('You do not have access to edit the address information. Please ask your administrator to do that.')); ?>
+    	<?php e(strtolower(__($context->getDebtor()->get('type')))); ?>.
     <?php endif; ?>
     </p>
 <?php elseif (!$context->getDebtor()->isFilledIn()): ?>
 
     <?php if ($context->getDebtor()->get('type') == 'credit_note'): ?>
-        <p>Du har endnu ikke oprettet nogen. Kreditnotaer oprettes fra en fakturaer.</p>
+        <p>
+        	<?php e(t('You have not created any. Credit notes is created from invoices.')); ?>
     <?php else: ?>
 
         <p><?php e(t('None has been created yet')); ?>. <a href="<?php e(url(null, array('create'))); ?>"><?php e(__('Create '.$context->getDebtor()->get('type'))); ?></a>.</p>
@@ -69,7 +73,7 @@
         <label><?php e(__('Status')); ?>
         <select name="status">
             <option value="-1">Alle</option>
-            <option value="-2"<?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == -2) echo ' selected="selected"';?>>Åbne</option>
+            <option value="-2"<?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == -2) echo ' selected="selected"';?>>ï¿½bne</option>
             <?php if ($context->getDebtor()->get("type") == "invoice"): ?>
             <option value="-3"<?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == -3) echo ' selected="selected"';?>>Afskrevet</option>
             <?php endif; ?>
@@ -79,7 +83,7 @@
             <option value="3"<?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == 3) echo ' selected="selected"';?>>Annulleret</option>
         </select>
         </label>
-        <!-- sortering bør være placeret ved at man klikker på en overskrift i stedet - og så bør man kunne sortere på det hele -->
+        <!-- sortering bï¿½r vï¿½re placeret ved at man klikker pï¿½ en overskrift i stedet - og sï¿½ bï¿½r man kunne sortere pï¿½ det hele -->
         <label><?php e(__('Sorting')); ?>
         <select name="sorting">
             <?php foreach(array(0 => ucfirst($context->getDebtor()->get('type')).' number descending', 1 => ucfirst($context->getDebtor()->get('type')).' number ascending', 2 => 'Contact number', 3 => 'Contact name') AS $key => $description): ?>
@@ -162,7 +166,7 @@
         <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
-            <td colspan="2">Udestående (sendt):</td>
+            <td colspan="2">Udestï¿½ende (sendt):</td>
             <td class="amount"><?php e(number_format($sent_total, 2, ",",".")); ?> &nbsp; </td>
             <td colspan="4">&nbsp;</td>
         </tr>

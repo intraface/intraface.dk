@@ -115,7 +115,8 @@ class Intraface_TranslatorLoader implements k_TranslatorLoader {
     }
 }
 
-class k_SessionIdentityLoader implements k_IdentityLoader {
+class Intraface_IdentityLoader implements k_IdentityLoader
+{
     function load(k_Context $context) {
         if ($context->session('intraface_identity')) {
             return $context->session('intraface_identity');
@@ -186,7 +187,7 @@ k()
 // Uncomment the next line to enable in-browser debugging
 //->setDebug(K2_DEBUG)
 // Dispatch request
-->setIdentityLoader(new k_SessionIdentityLoader())
+->setIdentityLoader(new Intraface_IdentityLoader())
 ->setLanguageLoader(new Intraface_LanguageLoader())
 ->setTranslatorLoader(new Intraface_TranslatorLoader())
 ->run('Intraface_Controller_Index')
