@@ -36,4 +36,13 @@ class Intraface_modules_debtor_DebtorGateway
         $db->query('UPDATE debtor SET contact_id = ' . $new_contact_id . ' WHERE contact_id = ' . $old_contact_id);
         return true;
     }
+
+    function anyNew()
+    {
+        $db = new DB_Sql;
+        $db->query('SELECT * FROM debtor WHERE date_created >=
+        	DATE_SUB(NOW(),INTERVAL 1 DAY)
+        	AND type = ' .$this->type_key . ' AND intranet_id = ' .$this->kernel->intranet->get('id'));
+        return $db->numRows();
+    }
 }

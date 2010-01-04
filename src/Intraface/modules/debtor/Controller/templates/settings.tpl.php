@@ -8,7 +8,7 @@ $values = $context->getValues();
 <form action="<?php e(url()); ?>" method="post">
 
     <fieldset>
-        <legend>Kontaktperson på PDF og afsender af e-mail</legend>
+        <legend><?php e(t('Contact to show on correspondance')); ?></legend>
 
             <div class="formrow">
                 <label for="debtor_sender">Konaktperson/Afsender</label>
@@ -57,35 +57,45 @@ $values = $context->getValues();
     </fieldset>
 
     <fieldset>
-        <legend>E-mail til Læs-ind bureau</legend>
+        <legend><?php e(t('E-mail to data scanning agency')); ?></legend>
         <p><?php e($string); ?></p>
 
         <?php if (!empty($scan_in_contact) AND is_object($scan_in_contact) AND !$scan_in_contact->address->get('email')): ?>
-        <p class="warning">Der er ikke angivet nogen e-mail-adresse på Læs-ind bureauet.</p>
+        <p class="warning"><?php e(t('You have not supplied an email for the data scanning agency.')); ?></p>
         <strong>Kontakt</strong>: <?php e($scan_in_contact->get('name')); ?>
-        <input type="submit" name="edit_scan_in_contact" value="Rediger" />
+        <input type="submit" name="edit_scan_in_contact" value="<?php e(t('Edit')); ?>" />
         <input type="hidden" name="scan_in_contact" value="<?php e($scan_in_contact->get('id')); ?>" />
         <?php elseif (empty($scan_in_contact) OR !is_object($scan_in_contact)): ?>
-        <input type="submit" name="add_scan_in_contact" value="Vælg kontakt" />
+        <input type="submit" name="add_scan_in_contact" value="<?php e(t('Choose contact')); ?>" />
         <?php else: ?>
         <strong>Kontakt</strong>: <?php e($scan_in_contact->get('name') . ' <'.$scan_in_contact->address->get('email').'>'); ?> <input type="submit" name="delete_scan_in_contact" value="Slet kontakt" />
         <?php endif; ?>
     </fieldset>
 
     <fieldset>
-        <legend>Fast tekst på ordre e-mail</legend>
+        <legend><?php e(t('Default text on order emails')); ?></legend>
         <textarea name="order_email_text" cols="80" rows="8"><?php e($values['order_email_text']); ?></textarea>
     </fieldset>
 
     <fieldset>
-        <legend>Fast tekst på fakturaer</legend>
+        <legend><?php e(t('Default text on invoice emails')); ?></legend>
         <textarea name="invoice_text" cols="80" rows="8"><?php e($values['invoice_text']); ?></textarea>
     </fieldset>
 
     <fieldset>
-        <legend>Tekst på rykker</legend>
+        <legend><?php e(t('Default text on reminders')); ?></legend>
         <textarea name="reminder_text" cols="80" rows="8"><?php e($values['reminder_text']); ?></textarea>
     </fieldset>
+
+	<!--
+    <fieldset>
+        <legend><?php e(t('Notifications')); ?></legend>
+        <label>
+        <input name="notify_order" value="1" type="checkbox" />
+        	<?php e(t('Notify me via email on new orders')); ?>
+        </label>
+    </fieldset>
+ 	-->
 
     <div>
         <input type="submit" name="submit" value="<?php e(t('Save')); ?>" />
