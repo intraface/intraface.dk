@@ -62,7 +62,7 @@
         </fieldset>
         <?php foreach ($language->getChosenAsArray() as $lang): ?>
             <fieldset>
-        <legend>Tekst p� e-mail p� <?php e($lang->getDescription()); ?></legend>
+        <legend><?php e(t('Text on ')); ?> <?php e($lang->getDescription()); ?> <?php e(t('email')); ?></legend>
             <label for="language_da_subject"><?php e(t('Subject')); ?></label><br />
             <input type="text" id="language_<?php e($lang->getIsoCode()); ?>_subject" name="subject[<?php e($lang->getIsoCode()); ?>]" value="<?php e($settings->Translation[$lang->getIsoCode()]->subject); ?>" />
             <br>
