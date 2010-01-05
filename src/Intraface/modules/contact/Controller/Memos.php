@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_contact_Controller_Memos extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function map($name)
     {
         return 'Intraface_modules_contact_Controller_Memo';
@@ -8,7 +15,12 @@ class Intraface_modules_contact_Controller_Memos extends k_Component
 
     function renderHtml()
     {
-        return new k_SeeOther($this->context->url());
+        $gateway = new Intraface_modules_contact_MemosGateway($this->getKernel());
+
+        $this->document->setTitle('Memos');
+
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/memos');
+        return $tpl->render($this, array('memos' => $gateway->getAll()));
     }
 
     function renderHtmlCreate()
@@ -16,7 +28,7 @@ class Intraface_modules_contact_Controller_Memos extends k_Component
     	$reminder = new ContactReminder($this->context->getKernel());
         $contact = $reminder->contact;
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/memo-edit.tpl.php');
+        $smarty = $this->templates->create(dirname(__FILE__) . '/templates/memo-edit');
         return $smarty->render($this, array('reminder' => $reminder, 'contact' => $contact));
     }
 

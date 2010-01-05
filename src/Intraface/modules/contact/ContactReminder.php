@@ -13,20 +13,20 @@
 
 Princip:
 
-Det skal bestå af 2 dele:
+Det skal bestï¿½ af 2 dele:
 
 1) Engangs reminder
 2) Tilbagevendende reminder
 
-Engangsreminder sættes med en dato (og klokkesæt) ud i fremtiden. Der kan være et emne og
-en beskrivelse af handlingen. Reminderen skal vises på forsiden i en tid (en måned måske)
-i forvejen. På dagen kan man bestemme at der bliver sendt en e-mail, og på sigt en
-daglig/ugelig/månedlig summary. En reminder kan enten markeres som Set, eller udsættes til
-en ny dato (Datoen ændres blot). Samt man kan klikke på Opret ny, på reminderen, når den er
-set kan man let oprette en ny, fx et år efter.
+Engangsreminder sï¿½ttes med en dato (og klokkesï¿½t) ud i fremtiden. Der kan vï¿½re et emne og
+en beskrivelse af handlingen. Reminderen skal vises pï¿½ forsiden i en tid (en mï¿½ned mï¿½ske)
+i forvejen. Pï¿½ dagen kan man bestemme at der bliver sendt en e-mail, og pï¿½ sigt en
+daglig/ugelig/mï¿½nedlig summary. En reminder kan enten markeres som Set, eller udsï¿½ttes til
+en ny dato (Datoen ï¿½ndres blot). Samt man kan klikke pï¿½ Opret ny, pï¿½ reminderen, nï¿½r den er
+set kan man let oprette en ny, fx et ï¿½r efter.
 
-På en reminder kan der sættes en faktura-/ordreskabelon (På sigt) (Skal laves som en
-del af debtor). Ved et enkelt klik bliver fakturaen oprettet/på sigt automatisk oprettet
+Pï¿½ en reminder kan der sï¿½ttes en faktura-/ordreskabelon (Pï¿½ sigt) (Skal laves som en
+del af debtor). Ved et enkelt klik bliver fakturaen oprettet/pï¿½ sigt automatisk oprettet
 og sendt.
 
 Tabelstruktur (udkast):
@@ -47,19 +47,19 @@ active
 
 Tilbagevendende reminder:
 Jeg er lidt i tvivl om hvordan vi lettest laver et tilbagevendende reminder system, som
-gør det rimelig let at bestemme en periode, og som ikke kræver alt for meget databasearbejde.
-En mulighed er måske at kigge lidt på cron - den er meget fleksibel, men kræver måske lidt
-for meget databasearbejde (Det skal gerne kunne lade sig gøre bare med et enkelt databasekald
+gï¿½r det rimelig let at bestemme en periode, og som ikke krï¿½ver alt for meget databasearbejde.
+En mulighed er mï¿½ske at kigge lidt pï¿½ cron - den er meget fleksibel, men krï¿½ver mï¿½ske lidt
+for meget databasearbejde (Det skal gerne kunne lade sig gï¿½re bare med et enkelt databasekald
 at hente alle remindere inden for en tidsperiode). Tilbagevende reminder opretter
-engangsreminder efterhånden som de bliver efterpurgt (efterhånden som man nærmer sig tiden,
-eller man efterspørger remindere ud i fremtiden), både ved natlig kørsel, og ved konkrete
-efterspørgsler (fx alle remindere hos en contact det næste år). Engangsreminderne bliver
+engangsreminder efterhï¿½nden som de bliver efterpurgt (efterhï¿½nden som man nï¿½rmer sig tiden,
+eller man efterspï¿½rger remindere ud i fremtiden), bï¿½de ved natlig kï¿½rsel, og ved konkrete
+efterspï¿½rgsler (fx alle remindere hos en contact det nï¿½ste ï¿½r). Engangsreminderne bliver
 knyttet til den "tilbagevendende reminder" som har oprettet den. Derved kan engangsreminderne
-blive ændret, hvis "Tilbagevende reminder" ændres.
+blive ï¿½ndret, hvis "Tilbagevende reminder" ï¿½ndres.
 
-Debtor template kan også tilknyttes tilbagevendende reminder.
+Debtor template kan ogsï¿½ tilknyttes tilbagevendende reminder.
 
-Først udkast til hvordan tilbagevende reminder gemmes:
+Fï¿½rst udkast til hvordan tilbagevende reminder gemmes:
 Tabeludkast:
 id
 intranet_id
@@ -72,23 +72,23 @@ description
 active
 
 (Udkast til hvordan gentagende reminder gemmes:)
-reminder_day (0: hver dag, >0: dag i måneden hvor reminder aktiveres)
-reminder_month (0: hver måned, >0: måned hvor reminder aktiveres)
+reminder_day (0: hver dag, >0: dag i mï¿½neden hvor reminder aktiveres)
+reminder_month (0: hver mï¿½ned, >0: mï¿½ned hvor reminder aktiveres)
 reminder_week (0: hver uge, >0: uge den skal aktiveres)
 date_start
 date_end
 
-Denne måde er rimelig let at finde fremtidige poster, men den er ikke særlig fleksibel. Det
-kan fx ikke lade sig gøre at lave en reminder det kører både den 1. og 15 i en måned. Det skal
-laves som 2 forskellige tilbagevendende remindere. Måske cron metoden er værd at udforske.
+Denne mï¿½de er rimelig let at finde fremtidige poster, men den er ikke sï¿½rlig fleksibel. Det
+kan fx ikke lade sig gï¿½re at lave en reminder det kï¿½rer bï¿½de den 1. og 15 i en mï¿½ned. Det skal
+laves som 2 forskellige tilbagevendende remindere. Mï¿½ske cron metoden er vï¿½rd at udforske.
 
-LO: Ja, jeg synes vi skal lave det efter den måde et cronjob sættes på!
+LO: Ja, jeg synes vi skal lave det efter den mï¿½de et cronjob sï¿½ttes pï¿½!
 
 Arbejdsgang:
 Fordelen ved denne metode er at vi kan starte med at lave en rimelig simpel reminder, blot
 med engangsreminder.
 
-1) Engangsreminder med beskrivelse, og mulighed for at markere som set, og udsættelse af reminder.
+1) Engangsreminder med beskrivelse, og mulighed for at markere som set, og udsï¿½ttelse af reminder.
 2) E-mail notification - SKAL LAVES SOM EN OBSERVER
 3) Gengtagende reminder
 4) Fakturaskabelon
@@ -126,6 +126,9 @@ class ContactReminder extends Intraface_Standard
 
     public function factory($kernel, $id)
     {
+        $gateway = new Intraface_modules_contact_MemosGateway($kernel);
+        return $gateway->findById($id);
+        /*
         if ($id == 0) {
             trigger_error("Invalid id in ContactReminder->factory", E_USER_ERROR);
             return false;
@@ -145,6 +148,7 @@ class ContactReminder extends Intraface_Standard
         }
 
         return new self($contact, $id);
+		*/
     }
 
     /**
@@ -256,8 +260,8 @@ class ContactReminder extends Intraface_Standard
     public function upcomingReminders($kernel)
     {
         // Please write me.
-        // Navnet må gerne ændres!
-        // Tænker den skal kaldes således
+        // Navnet mï¿½ gerne ï¿½ndres!
+        // Tï¿½nker den skal kaldes sï¿½ledes
         // $upcomingreminders = ContactReminder::upcomingreminders();
         // da der ikke skal hverken contact eller noget id for at finde dem.
 
@@ -309,12 +313,15 @@ class ContactReminder extends Intraface_Standard
         $this->dbquery = new Intraface_DBQuery($this->contact->kernel, "contact_reminder_single", "contact_reminder_single.active = 1 AND contact_reminder_single.intranet_id = ".$this->db->quote($this->contact->kernel->intranet->get("id"), 'integer'));
         $this->dbquery->setJoin("INNER", "contact", "contact_reminder_single.contact_id = contact.id", "contact.active = 1 AND contact.intranet_id = ".$this->db->quote($this->contact->kernel->intranet->get("id"), 'integer'));
         $this->dbquery->useErrorObject($this->error);
-        
+
         return $this->dbquery;
     }
 
     public function getList()
     {
+        $gateway = new Intraface_modules_contact_MemosGateway($this->contact->kernel);
+        return $gateway->findByContactId($this->contact->get('id'));
+        /*
         $this->getDBQuery()->setSorting('reminder_date');
         $this->getDBQuery()->setCondition('contact_id = '.$this->db->quote($this->contact->get('id'), 'integer'));
         $this->getDBQuery()->setCondition('status_key = '.$this->db->quote(1, 'integer'));
@@ -332,5 +339,6 @@ class ContactReminder extends Intraface_Standard
             $i++;
         }
         return $reminders;
+        */
     }
 }
