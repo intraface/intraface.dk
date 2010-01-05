@@ -7,12 +7,7 @@ class Intraface_XMLRPC_Shop_Controller extends Intraface_XMLRPC_Controller_Serve
         '0.4.0' => 'Intraface_XMLRPC_Shop_Server0004'
     );
 
-    function getServer()
-    {
-        $options = array(
-            'prefix' => 'shop.',
-            'encoding' => 'utf-8');
+    protected $prefix = 'shop';
 
-        return XML_RPC2_Server::create(new Intraface_XMLRPC_Shop_Server0004(), $options);
-    }
+    protected $default_server_version = '0.4.0';
 }

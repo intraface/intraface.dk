@@ -2,7 +2,7 @@
 /**
  * Product
  *
- * Bruges til at holde styr på varerne.
+ * Bruges til at holde styr pï¿½ varerne.
  *
  * @package Intraface_Product
  * @author Lars Olesen <lars@legestue.net>
@@ -155,9 +155,9 @@ class Product extends Intraface_Standard
 
         // TODO HACK::HACK::HACK::HACK::HACK::HACK::HACK*
         //
-        //  Vi bliver nødt til at hente value['id'] både før og efter,
-        //  for når jeg kører arrayet fra produktdetaljerne ind i value
-        //  så sletter det gamle array. Derfor hentes det før og efter
+        //  Vi bliver nï¿½dt til at hente value['id'] bï¿½de fï¿½r og efter,
+        //  for nï¿½r jeg kï¿½rer arrayet fra produktdetaljerne ind i value
+        //  sï¿½ sletter det gamle array. Derfor hentes det fï¿½r og efter
         //
         // HACK::HACK::HACK::HACK::HACK::HACK::HACK*
 
@@ -167,13 +167,13 @@ class Product extends Intraface_Standard
         // hente produktdetaljerne
         $this->detail = $this->getDetails();
         $this->value  = $this->detail->get();
-        // hente id igen for ovenstående har overskrevet det
+        // hente id igen for ovenstï¿½ende har overskrevet det
         $this->value['id']           = $this->db->f('id');
         $this->value['locked']       = $this->db->f('locked');
         $this->value['changed_date'] = $this->db->f('changed_date');
         $this->value['active']       = $this->db->f('active');
 
-        // udtræk af produktdetaljer
+        // udtrï¿½k af produktdetaljer
         for ($i = 0, $max = count($this->fields); $i < $max; $i++) {
             $this->value[$this->fields[$i]] = $this->db->f($this->fields[$i]);
         }
@@ -182,8 +182,8 @@ class Product extends Intraface_Standard
         // $this->getStock();
 
         // desuden skal copy lige opdateres!
-        // hvad med at vi bruger det øverste billede som primary. Det betyder dog, at
-        // der skal laves noget position på AppendFile, men det er jo også smart nok.
+        // hvad med at vi bruger det ï¿½verste billede som primary. Det betyder dog, at
+        // der skal laves noget position pï¿½ AppendFile, men det er jo ogsï¿½ smart nok.
 
         $this->value['id'] = $this->db->f('id');
 
@@ -230,8 +230,9 @@ class Product extends Intraface_Standard
      */
     function getNewPictures()
     {
+        require_once 'Intraface/shared/filehandler/AppendFile.php';
         //$filehandler = new Ilib_Filehandler($this->kernel);
-        $append_file = new Appender($this->kernel, 'product', $this->get('id'));
+        $append_file = new AppendFile($this->kernel, 'product', $this->get('id'));
         $appendix_list = $append_file->getList();
 
         $this->value['pictures'] = array();
@@ -328,7 +329,7 @@ class Product extends Intraface_Standard
             $this->error->set('Produktnummeret er ikke frit');
         }
 
-        $validator->isNumeric($array_var['number'], 'Produktnummeret skal være et tal');
+        $validator->isNumeric($array_var['number'], 'Produktnummeret skal vï¿½re et tal');
         settype($array_var['stock'], 'integer');
         $validator->isNumeric($array_var['stock'], 'stock', 'allow_empty');
         settype($array_var['do_show'], 'integer');
@@ -351,7 +352,7 @@ class Product extends Intraface_Standard
     public function save($array_var)
     {
         if ($this->id > 0 AND $this->get('locked') == 1) {
-            $this->error->set('Produktet er låst og kan ikke opdateres');
+            $this->error->set('Produktet er lï¿½st og kan ikke opdateres');
             return 0;
         }
 
@@ -367,7 +368,7 @@ class Product extends Intraface_Standard
             return 0;
         }
 
-        // lave sql-sætningen
+        // lave sql-sï¿½tningen
         $sql = '';
         /*
         for ($i=0, $max = sizeof($this->fields); $i<$max; $i++) {
@@ -455,7 +456,7 @@ class Product extends Intraface_Standard
             }
         }
 
-        // Nøgleord
+        // Nï¿½gleord
         $appender = $this->getKeywordAppender();
         $this->getKeywords();
         $keywords = $appender->getConnectedKeywords();
@@ -499,7 +500,7 @@ class Product extends Intraface_Standard
             return false;
         }
         if ($this->get('locked') == 1) {
-            $this->error->set('Produktet kan ikke slettes, for det er låst.');
+            $this->error->set('Produktet kan ikke slettes, for det er lï¿½st.');
             return false;
         }
 
@@ -538,7 +539,7 @@ class Product extends Intraface_Standard
     }
 
     /**
-     * Returnerer det højeste produktnummer
+     * Returnerer det hï¿½jeste produktnummer
      *
      * @return integer produktnummer
      */
@@ -683,7 +684,7 @@ class Product extends Intraface_Standard
         $sql      = "SELECT related_product_id FROM product_related WHERE product_id = " . $this->id . " AND intranet_id = " . $this->intranet->getId();
         $db->query($sql);
 
-        // rækkefølgen er vigtig - først hente fra product og bagefter tilføje nye værdier til arrayet
+        // rï¿½kkefï¿½lgen er vigtig - fï¿½rst hente fra product og bagefter tilfï¿½je nye vï¿½rdier til arrayet
         while ($db->nextRecord()) {
             $product                      = new Product($this->kernel, $db->f('related_product_id'));
             if($product->get('id') == 0 || $product->get('active') == 0 || ($show == 'webshop' && $product->get('do_show') == 0)) {
@@ -718,7 +719,7 @@ class Product extends Intraface_Standard
                     $products[$key]['stock_status'] = array();
                 }
             }
-            // den her skal vist lige kigges igennem, for den tager jo alt med på nettet?
+            // den her skal vist lige kigges igennem, for den tager jo alt med pï¿½ nettet?
             // 0 = only stock
             if ($this->kernel->setting->get('intranet', 'webshop.show_online') == 0 AND !empty($which) AND $which=='webshop') { // only stock
                 if (array_key_exists('for_sale', $products[$key]['stock_status']) AND $products[$key]['stock_status']['for_sale'] <= 0) {
@@ -897,15 +898,15 @@ class Product extends Intraface_Standard
     /**
      * Public: Finde data til en liste
      *
-     * Hvis den er fra webshop bør den faktisk opsamle oplysninger om søgningen
-     * så man kan se, hvad folk er interesseret i.
-     * Søgemaskinen skal være tolerant for stavefejl
+     * Hvis den er fra webshop bï¿½r den faktisk opsamle oplysninger om sï¿½gningen
+     * sï¿½ man kan se, hvad folk er interesseret i.
+     * Sï¿½gemaskinen skal vï¿½re tolerant for stavefejl
      *
      * @todo It is wrong to give currencies as parameter. Instead the list should
      *       be given as an object collection, and then currency should be given
      *       to the getPrice method.
      *
-     * @param string $which valgfri søgeparameter - ikke aktiv endnu
+     * @param string $which valgfri sï¿½geparameter - ikke aktiv endnu
      * @param object $currencies Collection of valid currencies.
      * @return array indeholdende kundedata til liste
      */
@@ -1012,7 +1013,7 @@ class Product extends Intraface_Standard
 
             }
 
-            // den her skal vist lige kigges igennem, for den tager jo alt med på nettet?
+            // den her skal vist lige kigges igennem, for den tager jo alt med pï¿½ nettet?
             // 0 = only stock
             if ($this->kernel->setting->get('intranet', 'webshop.show_online') == 0 AND $which=='webshop') { // only stock
                 if (array_key_exists('for_sale', $products[$i]['stock_status']) AND $products[$i]['stock_status']['for_sale'] <= 0) {

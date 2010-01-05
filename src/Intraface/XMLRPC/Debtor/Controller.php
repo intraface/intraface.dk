@@ -1,9 +1,11 @@
 <?php
 class Intraface_XMLRPC_Debtor_Controller extends Intraface_XMLRPC_Controller_Server
 {
-    function getServer()
-    {
-        $options = array('prefix' => 'debtor.');
-        return XML_RPC2_Server::create(new Intraface_XMLRPC_Debtor_Server(), $options);
-    }
+    protected $available_servers = array(
+        '0.1.0' => 'Intraface_XMLRPC_Debtor_Server'
+    );
+
+    protected $prefix = 'debtor';
+
+    protected $default_server_version = '0.1.0';
 }

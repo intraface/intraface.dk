@@ -348,6 +348,8 @@ class Intraface_modules_shop_Coordinator
             $body .=  "\n\n" . $this->shop->getPaymentUrl() . $this->order->getIdentifier();
         }
 
+        // @todo improve this table
+        //       mabye we should write a couple of outputters of an invoice
         $table = new Console_Table;
         foreach ($this->order->getItems() as $item) {
             if ($this->order->getCurrency()) {

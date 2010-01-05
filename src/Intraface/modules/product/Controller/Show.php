@@ -1,13 +1,4 @@
 <?php
-class Appender extends Ilib_Filehandler_AppendFile
-{
-    function __construct($kernel, $belong_to, $belong_to_id)
-    {
-        $this->registerBelongTo(4, 'product');
-        parent::__construct($kernel, $belong_to, $belong_to_id);
-    }
-}
-
 class Intraface_modules_product_Controller_Show extends k_Component
 {
     protected $error;
@@ -56,7 +47,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
         if (isset($_POST['append_file_submit'])) {
 
-            $append_file = new Appender($this->getKernel(), 'product', $product->get('id'));
+            $append_file = $this->getFileAppender();
 
             if (isset($_FILES['new_append_file'])) {
 
@@ -220,7 +211,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
     {
         $this->getKernel()->module('product');
         $product = new Product($this->getKernel(), $this->name());
-        return new Appender($this->getKernel(), 'product', $product->get('id'));
+        return new AppendFile($this->getKernel(), 'product', $product->get('id'));
     }
 
     function renderHtmlDelete()

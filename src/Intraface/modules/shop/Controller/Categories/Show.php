@@ -1,13 +1,4 @@
 <?php
-class Category_Appender extends Ilib_Filehandler_AppendFile
-{
-    function __construct($kernel, $belong_to, $belong_to_id)
-    {
-        $this->registerBelongTo(9, 'category');
-        parent::__construct($kernel, $belong_to, $belong_to_id);
-    }
-}
-
 class Intraface_modules_shop_Controller_Categories_Show extends k_Component
 {
     protected $template;
@@ -49,7 +40,7 @@ class Intraface_modules_shop_Controller_Categories_Show extends k_Component
 
     function getFileAppender()
     {
-        return new Category_Appender($this->getKernel(), 'category', $this->getModel()->getId());
+        return new AppendFile($this->getKernel(), 'category', $this->getModel()->getId());
     }
 
     function getPictures()

@@ -1,12 +1,11 @@
 <?php
 class Intraface_XMLRPC_OnlinePayment_Controller extends Intraface_XMLRPC_Controller_Server
 {
-    function getServer()
-    {
-        $options = array(
-            'prefix' => 'onlinepayment.',
-            'encoding' => 'utf-8');
+    protected $available_servers = array(
+        '0.2.0' => 'Intraface_XMLRPC_OnlinePayment_Server0002'
+    );
 
-        return XML_RPC2_Server::create(new Intraface_XMLRPC_OnlinePayment_Server0002(), $options);
-    }
+    protected $prefix = 'newsletter';
+
+    protected $default_server_version = '0.2.0';
 }

@@ -1,12 +1,10 @@
 <?php
 class Intraface_XMLRPC_Admin_Controller extends Intraface_XMLRPC_Controller_Server
 {
-    function getServer()
-    {
-        $options = array(
-            'prefix' => 'intraface.',
-            'encoding' => 'utf-8');
+    protected $available_servers = array(
+        '0.1.0' => 'Intraface_XMLRPC_Admin_Server'
+    );
+    protected $prefix = 'admin';
 
-    	return $server = XML_RPC2_Server::create(new Intraface_XMLRPC_Admin_Server(), $options);
-    }
+    protected $default_server_version = '0.1.0';
 }

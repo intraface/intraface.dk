@@ -1,11 +1,10 @@
 <?php
 class Intraface_XMLRPC_CMS_Controller extends Intraface_XMLRPC_Controller_Server
 {
-    function getServer()
-    {
-        $options = array('prefix' => 'cms.',
-                 'encoding' => 'utf-8');
+    protected $available_servers = array(
+        '0.3.0' => 'Intraface_XMLRPC_CMS_Server0300'
+    );
+    protected $prefix = 'cms';
 
-        return XML_RPC2_Server::create(new Intraface_XMLRPC_CMS_Server0300(), $options);
-    }
+    protected $default_server_version = '0.3.0';
 }

@@ -1,7 +1,14 @@
 <?php
 class Intraface_XMLRPC_Controller extends k_Component
 {
-    protected $registry;
+
+    function dispatch()
+    {
+        if ($this->identity()->anonymous()) {
+            throw new k_NotAuthorized();
+        }
+        return parent::dispatch();
+    }
 
     function map($name)
     {
@@ -24,6 +31,17 @@ class Intraface_XMLRPC_Controller extends k_Component
 
     function renderHtml()
     {
+        $servers = array(
+            'admin' => 'Admin',
+            'cms' => 'CMS',
+            'contact' => 'Contact',
+            'debtor' => 'Debtor',
+            'newsletter' => 'Newsletter',
+            'onlinepayment' => 'Onlinepayment',
+            'shop' => 'Shop'
+        );
+
+
         return '
         <h2>Intraface xmlrpc servers</h2>
         <ul>

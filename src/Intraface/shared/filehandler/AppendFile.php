@@ -39,7 +39,7 @@ class AppendFile
         $this->registerBelongTo(2, 'procurement_procurement');
         $this->registerBelongTo(3, 'product');
         $this->registerBelongTo(4, 'cms_element_filelist');
-
+        $this->registerBelongTo(5, 'category');
         if (!in_array($belong_to, $this->belong_to_types)) {
             trigger_error("AppendFile->__construct unknown type", E_USER_ERROR);
         }
