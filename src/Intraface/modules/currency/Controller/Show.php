@@ -13,10 +13,10 @@ class Intraface_modules_currency_Controller_Show extends k_Component
 
     public function getCurrency()
     {
-        $gateway = new Intraface_modules_currency_Currency_Gateway($this->registry->get('doctrine'));
-        $currency = $gateway->findById($this->name);
+        $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
+        $currency = $gateway->findById($this->name());
         if ($currency === false) {
-            throw new Exception('Invalid currency '.$this->name);
+            throw new Exception('Invalid currency '.$this->name());
         }
         return $currency;
     }

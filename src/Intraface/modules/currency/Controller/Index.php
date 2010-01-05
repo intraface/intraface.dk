@@ -33,8 +33,8 @@ class Intraface_modules_currency_Controller_Index extends k_Component
 
             return $smarty->render($this, array('message' => 'No currencies has been added yet.'));
         }
-        $smarty = new k_Template('Intraface/modules/currency/Controller/tpl/currencies.tpl.php');
-        return $smarty->render($this, array('currencies' => $currencies));
+        $tpl = $this->template->create('Intraface/modules/currency/Controller/tpl/currencies');
+        return $tpl->render($this, array('currencies' => $currencies));
     }
 
     function map($name)
@@ -64,6 +64,6 @@ class Intraface_modules_currency_Controller_Index extends k_Component
 
     function getKernel()
     {
-        return $this->getKernel();
+        return $this->context->getKernel();
     }
 }

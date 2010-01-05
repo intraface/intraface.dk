@@ -42,7 +42,7 @@ class Intraface_modules_currency_Controller_ExchangeRate_Update extends k_Compon
         }
 
         if ($this->context->name() == 'payment') {
-            $this->document->title = 'Update exchange rate for payments';
+            $this->document->setTitle('Update exchange rate for payments');
         } elseif ($this->context->name() == 'productprice') {
             $this->document->setTitle('Update exchange rate for product prices');
         } else {
@@ -54,9 +54,9 @@ class Intraface_modules_currency_Controller_ExchangeRate_Update extends k_Compon
 
     function postForm()
     {
-        if ($this->context->name == 'payment') {
+        if ($this->context->name() == 'payment') {
             $exchangerate = new Intraface_modules_currency_Currency_ExchangeRate_Payment;
-        } elseif ($this->context->name == 'productprice') {
+        } elseif ($this->context->name() == 'productprice') {
             $exchangerate = new Intraface_modules_currency_Currency_ExchangeRate_ProductPrice;
         } else {
             throw new Exception('Invalid context');
