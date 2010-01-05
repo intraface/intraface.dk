@@ -11,11 +11,14 @@
 <?php endif; ?>
 </form>
 
+<?php echo $context->getError()->view(); ?>
+
 <?php if ($groups->count() == 0): ?>
     <p><?php e(t('No attribute groups has been created.')); ?> <a href="<?php e(url(null, array('create'))); ?>"><?php e(t('Create attribute group')); ?></a>.</p>
 <?php else: ?>
 
 <form action="<?php e(url()); ?>" method="post">
+   	<input type="hidden" name="_method" value="put" />
     <table summary="<?php e(t('Attribute groups')); ?>" id="attribute_group_table" class="stripe">
         <caption><?php e(t('Attribute groups')); ?></caption>
         <thead>
@@ -29,7 +32,7 @@
             <?php foreach ($groups as $group): ?>
                 <tr>
                     <td>
-                        <input type="checkbox" value="<?php e($group->getId()); ?>" id="product-attribute-<?php e($group->getId()); ?>" name="selected[]" />
+                        <input type="checkbox" value="<?php e($group->getId()); ?>" id="product-attribute-<?php e($group->getId()); ?>" <?php if(in_array($group->getId(), $context->existing_groups)) echo 'checked="checked"'; ?> name="selected[]" />
                     </td>
                     <td><a href="<?php e(url($group->getId())); ?>"><?php e($group->getName()); if($group->getDescription() != '') e(' ('.$group->getDescription().')'); ?></a></td>
                     <td class="options"><a class="edit" href="<?php e(url($group->getId(), array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></td>

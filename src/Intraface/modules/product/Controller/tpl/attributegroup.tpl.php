@@ -10,7 +10,7 @@
 </ul>
 
 <?php if (!empty($deleted)): ?>
-    <form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+    <form action="<?php e(url()); ?>" method="post">
     <input type="hidden" name="id" value="<?php e($group->getId()); ?>" />
         <p class="message"><?php e(t('An attribute has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('Cancel', 'common')); ?>" /></p>
     </form>

@@ -1,18 +1,13 @@
-<h1><?php e(t('Edit variations for product').' '.$product->get('name')); ?></h1>
+<h1><?php e(t('Variations for product').' '.$product->get('name')); ?></h1>
 
 <ul class="options">
+    <li><a class="new" href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
     <li><a class="new" href="<?php e(url('select_attribute_groups')); ?>"><?php e(t('Choose attribute groups')); ?></a></li>
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
 </ul>
 
 
-<?php if (count($groups) == 0): ?>
-    <p><?php e(t('No attribute groups has been selected.')); ?> <a href="<?php e(url('select_attribute_group')); ?>"><?php e(t('Choose attribute groups')); ?></a>.</p>
-<?php else: ?>
-
-<form action="<?php e(url(null, array($context->subview()))); ?>" method="post">
-<input type="hidden" name="id" value="<?php e($product->getId()); ?>" />
-    <table summary="<?php e(t('Variations')); ?>" id="variations_table" class="stripe">
+  <table summary="<?php e(t('Variations')); ?>" id="variations_table" class="stripe">
         <caption><?php e(t('Variations')); ?></caption>
         <thead>
             <tr>
@@ -54,10 +49,7 @@
                                 $variation = NULL;
                             }
                             ?>
-                            <input type="checkbox" name="variation[<?php e($count); ?>][used]" value="1" <?php if ($variation !== NULL) echo 'checked="checked"'; ?> />
-                            <input type="hidden" name="variation[<?php e($count); ?>][id]" value="<?php if ($variation !== NULL) e($variation->getId()); ?>" />
-                            <input type="hidden" name="variation[<?php e($count); ?>][attributes][attribute1]" value="<?php e($a1->getId()); ?>" />
-                            <?php if ($a2 != NULL): ?> <input type="hidden" name="variation[<?php e($count); ?>][attributes][attribute2]" value="<?php e($a2->getId()); ?>" /><?php endif; ?>
+						<?php if ($variation !== NULL) echo '&bull;'; ?>
                         </td>
                         <td><?php if ($variation !== NULL): e($variation->getNumber()); else: e('-'); endif; ?>
                         </td>
@@ -68,7 +60,7 @@
                             ?>
                         </td>
                         <?php /* can be reimplemented: <td><input type="text" name="variation[<?php e($count); ?>][price_difference]" value="<?php if ($variation !== NULL) e($variation->getDetail()->getPriceDifference()); ?>" size="4"/></td> */ ?>
-                        <td><input type="text" name="variation[<?php e($count); ?>][weight_difference]" value="<?php if ($variation !== NULL) e($variation->getDetail()->getWeightDifference()); ?>" size="4" /></td>
+                        <td><?php if ($variation !== NULL) e($variation->getDetail()->getWeightDifference()); ?></td>
                     </tr>
                     <?php
                     $count++;
@@ -77,6 +69,3 @@
             <?php endforeach; ?>
         </tbody>
     </table>
-    <input type="submit" name="save" value="<?php e(t('Save', 'common')); ?>" /> <input type="submit" name="save_and_close" value="<?php e(t('Save and close', 'common')); ?>" />
-<?php endif; ?>
-</form>

@@ -10,7 +10,7 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
 
     function dispatch()
     {
-        if (!$this->context->hasVariation()) {
+        if (!$this->context->getProduct()->hasVariation()) {
             return new k_PageNotFound();
         }
         return parent::dispatch();
@@ -51,7 +51,26 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
 
         $tpl = $this->template->create(dirname(__FILE__) . '/../tpl/variations');
         return $tpl->render($this, $data);
+    }
 
+    function renderHtmlEdit()
+    {
+        $product = $this->context->getProduct();
+        $groups = $product->getAttributeGroups();
+        /*if(count($groups) == 0) {
+         return new k_TemporaryRedirect($this->url('select_attribute_groups'));
+         }*/
+
+        $existing_groups = array();
+        // $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway();
+
+        $data = array(
+            'product' => $product,
+            'existing_groups' => $existing_groups,
+            'groups' => $groups);
+
+        $tpl = $this->template->create(dirname(__FILE__) . '/../tpl/variations-edit');
+        return $tpl->render($this, $data);
     }
 
     function getProduct()
@@ -62,7 +81,6 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
     function postForm()
     {
         $module = $this->getKernel()->module('product');
-        $translation = $this->getKernel()->getTranslation('product');
 
         $product = $this->getProduct();
 
@@ -102,6 +120,8 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
 
             return new k_SeeOther($this->url());
         }
+
+        return $this->render();
 
     }
 

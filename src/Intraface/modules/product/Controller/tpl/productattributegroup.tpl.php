@@ -2,7 +2,7 @@
 
 <ul class="options">
     <li><a class="new" href="attribute_group_edit.php"><?php e(t('Create attribute group')); ?></a></li>
-    <li><a href="product.php?id=<?php e($product->get('id')); ?>"><?php e(t('Close', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
 </ul>
 
 <?php if (isset($error)) echo $error->view('html'); ?>
@@ -11,7 +11,7 @@
     <p><?php e(t('No attribute groups has been created.')); ?> <a href="attribute_group_edit.php"><?php e(t('Create attribute group')); ?></a>.</p>
 <?php else: ?>
 
-<form action="<?php e($_SERVER['PHP_SELF']); ?>" method="post">
+<form action="<?php e(url()); ?>" method="post">
 <input type="hidden" name="id" value="<?php e($product->getId()); ?>" />
     <table summary="<?php e(t('Attribute groups')); ?>" id="attribute_group_table" class="stripe">
         <caption><?php e(t('Attribute groups')); ?></caption>

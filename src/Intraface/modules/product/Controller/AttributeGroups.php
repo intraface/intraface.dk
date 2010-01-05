@@ -1,16 +1,22 @@
 <?php
 class Intraface_modules_product_Controller_AttributeGroups extends k_Component
 {
-    private $error;
-    
+    public $error;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
     }
-    
+
     function getError()
     {
-        if(!is_object($this->error)) {
+        if (!is_object($this->error)) {
             $this->error = new Intraface_Doctrine_ErrorRender($this->getKernel()->getTranslation('product'));
         }
 
@@ -29,7 +35,7 @@ class Intraface_modules_product_Controller_AttributeGroups extends k_Component
 
         $data = array('groups' => $groups);
 
-        $smarty = new k_Template(dirname(__FILE__) . '/tpl/attributegroups.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/tpl/attributegroups');
         return $smarty->render($this, $data);
 
     }
@@ -45,7 +51,7 @@ class Intraface_modules_product_Controller_AttributeGroups extends k_Component
 
         $gateway = new Intraface_modules_product_Attribute_Group_Gateway();
 
-        if($this->body('save') != '') {
+        if ($this->body('save') != '') {
             $group = new Intraface_modules_product_Attribute_Group;
             $group->name = $_POST['name'];
             $group->description = $_POST['description'];
@@ -64,7 +70,7 @@ class Intraface_modules_product_Controller_AttributeGroups extends k_Component
     function renderHtmlCreate()
     {
         $data = array();
-        $smarty = new k_Template(dirname(__FILE__) . '/tpl/attributegroup-edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/tpl/attributegroup-edit');
         return $smarty->render($this, $data);
 
     }
