@@ -1,14 +1,14 @@
 <?php
 /**
- * Webshop sørger for at holde styr webshoppen.
+ * Webshop sï¿½rger for at holde styr webshoppen.
  *
- * @todo Indstilling af porto - skal det være et standardprodukt på alle ordrer?
+ * @todo Indstilling af porto - skal det vï¿½re et standardprodukt pï¿½ alle ordrer?
  *
- * @todo Standardprodukter på ordrer.
+ * @todo Standardprodukter pï¿½ ordrer.
  *
- * @todo Opførsel ift. lager i onlineshoppen.
+ * @todo Opfï¿½rsel ift. lager i onlineshoppen.
  *
- * @todo Bør kunne tage højde for en tidsangivelse på produkterne
+ * @todo Bï¿½r kunne tage hï¿½jde for en tidsangivelse pï¿½ produkterne
  *
  * @todo traekke send email ud.
  *
@@ -132,7 +132,7 @@ class Intraface_modules_shop_Coordinator
             $this->contact = new Contact($this->kernel);
             $contact_person_id = 0;
 
-            // sørger for at tjekke om det er et firma
+            // sï¿½rger for at tjekke om det er et firma
             if (isset($input['contactperson']) && $input['contactperson'] != '') {
                 $input['type'] = 'corporation'; // firma
             }
@@ -339,7 +339,7 @@ class Intraface_modules_shop_Coordinator
         if ($this->shop->getConfirmationSubject()) {
             $subject = $this->shop->getConfirmationSubject() . ' (#' . $order_id . ')';
         } else {
-            $subject = 'Bekræftelse på bestilling (#' . $order_id . ')';
+            $subject = 'BekrÃ¦ftelse pÃ¥ bestilling (#' . $order_id . ')';
         }
 
         $body = $this->shop->getConfirmationText();
@@ -449,7 +449,7 @@ class Intraface_modules_shop_Coordinator
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
-        $subject = 'Bekræftelse på betaling (#' . $payment_id . ')';
+        $subject = 'Bekrï¿½ftelse pï¿½ betaling (#' . $payment_id . ')';
         $body = 'Vi har modtaget din betaling. Hvis din ordre var afsendt inden kl. 12.00, sender vi den allerede i dag.';
         $body .= "\n\nVenlig hilsen\n".  $this->kernel->intranet->address->get('name');
 
