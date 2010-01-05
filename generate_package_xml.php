@@ -110,8 +110,7 @@ $pfm->addPackageDepWithChannel('required', 'MDB2_Debug_ExplainQueries', 'public.
 $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk', '0.3.0');
-$pfm->addPackageDepWithChannel('required', 'phemto', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'bucket', 'public.intraface.dk', '0.1.1');
+$pfm->addPackageDepWithChannel('required', 'bucket', 'pearhub.org', '1.0.0');
 
 
 // Doctrine
@@ -201,7 +200,7 @@ $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC',
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '1.0.4');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Client_XMLRPC', 'public.intraface.dk', '1.0.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Controller', 'public.intraface.dk', '1.1.0');
-$pfm->addPackageDepWithChannel('required', 'konstrukt', 'public.intraface.dk', '0.4.0');
+$pfm->addPackageDepWithChannel('required', 'konstrukt', 'pearhub.org', '2.2.0');
 $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.intraface.dk', '0.1.0');
 
 // tools
