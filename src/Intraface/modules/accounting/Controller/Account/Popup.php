@@ -24,7 +24,7 @@ class Intraface_modules_accounting_Controller_Account_Popup extends k_Component
     {
         $this->document->setTitle('Accounts');
 
-        $this->document->addStyle($this->url('accounting/daybook_list_account.js'));
+        $this->document->addStyle($this->url('/javascript/accounting/daybook_list_account.js'));
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/account/popup');
 

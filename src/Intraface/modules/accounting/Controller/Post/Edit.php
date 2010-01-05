@@ -30,7 +30,7 @@ class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
             $values['id'] = '';
         }
         $account = new Account($this->getYear());
-        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/post/edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/post/edit');
         return $smarty->render($this, array('post' => $post, 'account' => $account));
     }
 
@@ -48,7 +48,7 @@ class Intraface_modules_accounting_Controller_Post_Edit extends k_Component
 
         $debet = new Intraface_Amount($_POST['debet']);
         if (!$debet->convert2db()) {
-            $this->error->set('Bel�bet kunne ikke konverteres');
+            $this->error->set('Beløbet kunne ikke konverteres');
         }
         $debet = $debet->get();
 
