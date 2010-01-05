@@ -40,12 +40,14 @@ class Intraface_Controller_SwitchIntranet extends k_Component
     {
         // @todo b�r hente en liste vha. intranethall�jsaen
         $db = new DB_Sql;
-        $db->query("SELECT * FROM intranet ORDER BY name");
+        $db->query("SELECT DISTINCT(intranet.id), name FROM intranet INNER JOIN permission ON permission.intranet_id = intranet.id WHERE permission.user_id = " . $this->getKernel()->user->getId() . " ORDER BY name");
         $accessible_intranets = array();
         while ($db->nextRecord()) {
+            /*
             if (!$this->getKernel()->user->hasIntranetAccess($db->f("id"))) {
                 continue;
             }
+            */
             $accessible_intranets[$db->f('id')] = $db->f('name');
         }
 
