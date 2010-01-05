@@ -1,8 +1,3 @@
-<?php
-$value = $context->getValues();
-$address_value = $context->getValues();
-?>
-
 <h1><?php e(t('Edit user')); ?></h1>
 
 <ul class="options">
@@ -18,7 +13,7 @@ $address_value = $context->getValues();
     <legend><?php e(t('information about user')); ?></legend>
     <div class="formrow">
         <label for="name"><?php e(t('e-mail', 'address')); ?></label>
-        <input type="text" name="email" id="email" value="<?php e($value["email"]); ?>" disabled="disabled" />
+        <input type="text" name="email" id="email" value="<?php e($value["email"]); ?>" />
         <p style="clear:both;"><?php e(t('your e-mail is also your username','controlpanel')); ?></p>
     </div>
 </fieldset>
@@ -44,7 +39,7 @@ $address_value = $context->getValues();
     </div>
     <div class="formrow">
         <label for="address_email"><?php e(t('e-mail', 'address')); ?></label>
-        <input type="text" name="address_email" id="address_email" value="<?php if (!empty($address_value["email"])) e($address_value["email"]); ?>"  disabled="disabled" />
+        <input type="text" name="address_email" id="address_email" value="<?php if (!empty($address_value["email"])) e($address_value["email"]); ?>" />
     </div>
     <div class="formrow">
         <label for="website"><?php e(t('website', 'address')); ?></label>

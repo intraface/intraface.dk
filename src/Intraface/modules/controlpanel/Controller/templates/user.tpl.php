@@ -1,8 +1,3 @@
-<?php
-$value = $context->getValues();
-$address_value = $context->getValues();
-?>
-
 <h1><?php e(t('user settings')); ?></h1>
 
 <ul class="options">

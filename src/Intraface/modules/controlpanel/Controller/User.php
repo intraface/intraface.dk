@@ -37,13 +37,13 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
     function renderHtml()
     {
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/user');
-        return $smarty->render($this);
+        return $smarty->render($this, $this->getValues());
     }
 
     function renderHtmlEdit()
     {
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/useredit');
-        return $smarty->render($this);
+        return $smarty->render($this, $this->getValues());
     }
 
     function putForm()
@@ -52,13 +52,21 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
         $address_value = $_POST;
         $address_value['name'] = $_POST['address_name'];
         $address_value['email'] = $_POST['address_email'];
+        
+        $old_email = $this->getUser()->get('email');
 
         // @todo hvis man ændrer e-mail skal man have en e-mail som en sikkerhedsforanstaltning
         // på den gamle e-mail
 
         //$this->getUser()->setActiveIntranetId($this->getUser()->getActiveIntranet());
+        
 
         if ($this->getUser()->update($value)) {
+            if($this->getUser()->get('email') != $old_email) {
+                $user = new Intraface_AuthenticatedUser($this->getUser()->get('email'), $this->language());
+                $this->session()->set('intraface_identity', $user);
+            }
+            
             if ($this->getUser()->getAddress()->save($address_value)) {
                 return new k_SeeOther($this->url(null));
             }
@@ -69,19 +77,16 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
 
     function getValues()
     {
-        if ($this->body()) {
-            $values = $this->body();
-            $values['name'] = $this->body('address_name');
-            $values['email'] = $this->body('address_email');
-            return $values;
+         if ($this->body()) {
+            $value = $this->body();
+            $address_value['name'] = $this->body('address_name');
+            $address_value['email'] = $this->body('address_email');
+            return array('value' => $value, 'address_value' => $address_value);
         }
         $user = $this->getUser();
         $value = $user->get();
         $address_value = $user->getAddress()->get();
-        $address_value['address_name'] = $address_value['name'];
-        $address_value['address_email'] = $address_value['email'];
-
-        return array_merge($value, $address_value);
+        return array('value' => $value, 'address_value' => $address_value);
     }
 
 
