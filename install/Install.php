@@ -192,7 +192,7 @@ class Intraface_Install
      */
     function loginUser()
     {
-        session_start();
+        /* session_start(); */ // session_start is in reset_staging_server. Should only be one place.
 
         $adapter = new Intraface_Auth_User($this->db, session_id(), 'start@intraface.dk', 'startup');
         $auth = new Intraface_Auth(session_id());
