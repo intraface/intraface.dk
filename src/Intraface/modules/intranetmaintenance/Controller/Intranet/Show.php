@@ -71,6 +71,12 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
             if ($redirect->get('identifier') == 'contact') {
                 $intranet->setContact($redirect->getParameter('contact_id'));
             }
+            if ($redirect->get('identifier') == 'add_user') {
+                $user = new UserMaintenance($redirect->getParameter('user_id'));
+                $user->setIntranetAccess($intranet->get('id'));
+                $user_id = $user->get('id');
+                return new k_SeeOther($this->url('../../user/' . $user->get('id'), array('intranet_id' => $this->name())));
+            }
         }
 
         if (isset($_GET['delete_intranet_module_package_id']) && (int)$_GET['delete_intranet_module_package_id'] != 0) {

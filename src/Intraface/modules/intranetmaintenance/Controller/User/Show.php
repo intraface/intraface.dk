@@ -31,6 +31,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         $user_id = intval($this->name());
         $edit_intranet_id = $this->query('intranet_id');
         $user = $this->getUser();
+        $intranet = null;
 
         if (isset($_GET['return_redirect_id'])) {
             if (isset($_GET['intranet_id'])) {
@@ -53,6 +54,9 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
                 $value_address = $user->getAddress()->get();
             }
         }
+
+        // @todo a little hacky
+        $this->intranetmaintenance = $intranet;
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/user/show');
         return $smarty->render($this, array('intranet' => $intranet));
