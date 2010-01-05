@@ -67,7 +67,7 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
                 $this->session()->set('intraface_identity', $user);
             }
             
-            if ($this->getUser()->getAddress()->save($address_value)) {
+            if ($this->getUser()->getAddress()->validate($address_value) && $this->getUser()->getAddress()->save($address_value)) {
                 return new k_SeeOther($this->url(null));
             }
         }

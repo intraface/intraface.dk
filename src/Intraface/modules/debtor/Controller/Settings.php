@@ -34,7 +34,7 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
 
         $string = 'Det er gratis for små og mellemstore virksomheder at bruge Læs-ind bureauer. <a href="http://www.eogs.dk/sw7483.asp">Tjek her om det gælder for din virksomhed</a>.';
         $smarty = new k_Template(dirname(__FILE__) . '/templates/settings.tpl.php');
-        return $smarty->render($this, array('string' => $string, 'values' => $values, 'kernel' => $this->context->getKernel()));
+        return $smarty->render($this, array('string' => $string, 'kernel' => $this->context->getKernel()));
     }
 
     function getError()
