@@ -25,15 +25,7 @@ class Intraface_XMLRPC_Controller extends k_Component
     function renderHtml()
     {
         return '
-        <h2>Old servers</h2>
-        <ul>
-            <li><a href="cms/server2.php">CMS</a></li>
-            <li><a href="contact/server.php">Contact</a></li>
-            <li><a href="debtor/server.php">Debtor</a></li>
-            <li><a href="newsletter/server.php">Newsletter</a></li>
-            <li><a href="shop/server3.php">Shop</a></li>
-        </ul>
-        <h2>New servers</h2>
+        <h2>Intraface xmlrpc servers</h2>
         <ul>
             <li><a href="'.$this->url('admin').'">Admin</a></li>
         	<li><a href="cms">CMS</a></li>

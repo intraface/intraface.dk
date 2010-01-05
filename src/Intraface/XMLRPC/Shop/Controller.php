@@ -1,7 +1,7 @@
 <?php
-class Intraface_XMLRPC_Shop_Controller extends k_Component
+class Intraface_XMLRPC_Shop_Controller extends Intraface_XMLRPC_Controller_Server
 {
-    private $available_servers = array(
+    protected $available_servers = array(
         '0.1.0' => 'Intraface_XMLRPC_Shop_Server',
         '0.2.0' => 'Intraface_XMLRPC_Shop_Server2',
         '0.4.0' => 'Intraface_XMLRPC_Shop_Server0004'
