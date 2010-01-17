@@ -148,6 +148,7 @@ class Intraface_modules_cms_HTML_Editor
                 $output .= '    verify_html : true,'."\n";
                 $output .= '    apply_source_formatting : true,'."\n";
                 $output .= '    relative_urls : false,'."\n";
+                $output .= '    convert_urls : false,'."\n";
                 $output .= '    entity_encoding : "raw",'."\n";
                 $output .= '    remove_linebreaks : true'."\n";
                 //$output .= '  spellchecker_languages : "+Danish=da, English=en"';
