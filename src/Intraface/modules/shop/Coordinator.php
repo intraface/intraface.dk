@@ -337,9 +337,9 @@ class Intraface_modules_shop_Coordinator
         $email = new Email($this->kernel);
 
         if ($this->shop->getConfirmationSubject()) {
-            $subject = $this->shop->getConfirmationSubject() . ' (#' . $order_id . ')';
+            $subject = $this->shop->getConfirmationSubject() . ' (#' . $this->order->get('number') . ')';
         } else {
-            $subject = 'BekrÃ¦ftelse pÃ¥ bestilling (#' . $order_id . ')';
+            $subject = 'Bekræftelse på bestilling (#' . $this->order->get('number') . ')';
         }
 
         $body = $this->shop->getConfirmationText();
