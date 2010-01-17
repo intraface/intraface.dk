@@ -9,6 +9,9 @@ require_once 'Ilib/ClassLoader.php';
 require_once 'konstrukt/konstrukt.inc.php';
 //set_error_handler('k_exceptions_error_handler');
 spl_autoload_register('k_autoload');
+error_reporting(E_ALL);
+
+set_error_handler('k_exceptions_error_handler');
 
 
 class k_PdfResponse extends k_ComplexResponse
@@ -147,48 +150,41 @@ class Intraface_TemplateFactory extends k_DefaultTemplateFactory
     function create($filename)
     {
         $filename = $filename . '.tpl.php';
-        $__template_filename__ = self::searchIncludePath($filename);
+        $__template_filename__ = k_search_include_path($filename);
         if (!is_file($__template_filename__)) {
             throw new Exception("Failed opening '".$filename."' for inclusion. (include_path=".ini_get('include_path').")");
         }
         return new k_Template($__template_filename__);
-    }
-
-    /**
-     * Searches the include-path for a filename.
-     * Returns the absolute path (realpath) if found or FALSE
-     * @return mixed
-     */
-    static function SearchIncludePath($filename) {
-        if (is_file($filename)) {
-            return $filename;
-        }
-        foreach (explode(PATH_SEPARATOR, ini_get("include_path")) as $path) {
-            if (strlen($path) > 0 && $path{strlen($path)-1} != DIRECTORY_SEPARATOR) {
-                $path .= DIRECTORY_SEPARATOR;
-            }
-            $f = realpath($path . $filename);
-            if ($f && is_file($f)) {
-                return $f;
-            }
-        }
-        return FALSE;
     }
 }
 
 $components = new k_InjectorAdapter($bucket, new Intraface_Document);
 $components->setImplementation('k_DefaultNotAuthorizedComponent', 'NotAuthorizedComponent');
 
-k()
-// Use container for wiring of components
-->setComponentCreator($components)
-// Enable file logging
-->setLog(K2_LOG)
-// Uncomment the next line to enable in-browser debugging
-//->setDebug(K2_DEBUG)
-// Dispatch request
-->setIdentityLoader(new Intraface_IdentityLoader())
-->setLanguageLoader(new Intraface_LanguageLoader())
-->setTranslatorLoader(new Intraface_TranslatorLoader())
-->run('Intraface_Controller_Index')
-->out();
+if (realpath($_SERVER['SCRIPT_FILENAME']) == __FILE__) {
+    try {
+        k()
+        // Use container for wiring of components
+        ->setComponentCreator($components)
+        // Enable file logging
+        ->setLog(K2_LOG)
+        // Uncomment the next line to enable in-browser debugging
+        //->setDebug(K2_DEBUG)
+        // Dispatch request
+        ->setIdentityLoader(new Intraface_IdentityLoader())
+        ->setLanguageLoader(new Intraface_LanguageLoader())
+        ->setTranslatorLoader(new Intraface_TranslatorLoader())
+        ->run('Intraface_Controller_Index')
+        ->out();
+    } catch (ErrorException $e) {
+
+        // hvordan granulerer man når der nu bliver smidt en exception altid?
+        // vi kan sikkert køre out, når vi har lyst - og exception bliver
+        // kastet inden out?
+
+        $render = new Ilib_Errorhandler_Handler_Echo();
+        $render->handle($e);
+        $render = new Ilib_Errorhandler_Handler_File(Log::factory('file', './error.log', 'INTRAFACE'));
+        $render->handle($e);
+    }
+}
