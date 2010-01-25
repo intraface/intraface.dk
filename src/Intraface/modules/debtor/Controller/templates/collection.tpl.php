@@ -184,7 +184,7 @@
         $total = 0;
         $due_total = 0;
         $sent_total = 0;
-        foreach ($context->getPosts() as $post) {
+        foreach ($posts as $post) {
             ?>
             <tr id="i<?php e($post["id"]); ?>">
                 <td><?php e($post["number"]); ?></td>
@@ -249,6 +249,6 @@
     </tbody>
 </table>
 
-<?php echo $context->getDebtor()->getDBQuery()->display('paging'); ?>
+<?php echo $debtor->getDBQuery()->display('paging'); ?>
 
 <?php endif; ?>

@@ -2,6 +2,13 @@
 class Intraface_modules_contact_Controller_Index extends k_Component
 {
     protected $eniro;
+    protected $contact;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function map($name)
     {
@@ -21,12 +28,15 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
     function getContact()
     {
-        return $contact = new Contact($this->getKernel());
+        if (is_object($this->contact)) {
+            return $this->contact;
+        }
+        return $this->contact = new Contact($this->getKernel());
     }
 
     function getUsedKeywords()
     {
-        $contact = new Contact($this->getKernel());
+        $contact = $this->getContact();
         $keywords = $contact->getKeywordAppender();
         $used_keywords = $keywords->getUsedKeywords();
         return $used_keywords;
@@ -34,28 +44,27 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
     function getContacts()
     {
-        $contact = new Contact($this->getKernel());
-        $keywords = $contact->getKeywordAppender();
+        $keywords = $this->getContact()->getKeywordAppender();
         $used_keywords = $keywords->getUsedKeywords();
 
         if (isset($_GET['query']) || isset($_GET['keyword_id'])) {
 
         	if (isset($_GET['query'])) {
-        		$contact->getDBQuery()->setFilter('search', $_GET['query']);
+        		$this->getContact()->getDBQuery()->setFilter('search', $_GET['query']);
         	}
 
         	if (isset($_GET['keyword_id'])) {
-        		$contact->getDBQuery()->setKeyword($_GET['keyword_id']);
+        		$this->getContact()->getDBQuery()->setKeyword($_GET['keyword_id']);
         	}
         } else {
-        	$contact->getDBQuery()->useCharacter();
+        	$this->getContact()->getDBQuery()->useCharacter();
         }
 
-        $contact->getDBQuery()->defineCharacter('character', 'address.name');
-        $contact->getDBQuery()->usePaging('paging');
-        $contact->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
+        $this->getContact()->getDBQuery()->defineCharacter('character', 'address.name');
+        $this->getContact()->getDBQuery()->usePaging('paging');
+        $this->getContact()->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
 
-        return $contacts = $contact->getList();
+        return $contacts = $this->getContact()->getList();
     }
 
     function putForm()
@@ -116,7 +125,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         }
         */
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/index');
         return $smarty->render($this);
     }
 
@@ -129,7 +138,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
     {
         $module = $this->getKernel()->module('contact');
 
-        $contact = new Contact($this->getKernel());
+        $contact = $this->getContact();
         $keyword = $contact->getKeywords();
         $keywords = $keyword->getAllKeywords();
         $contact->getDBQuery()->defineCharacter('character', 'address.name');
@@ -153,7 +162,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
     function renderXls()
     {
         $module = $this->getKernel()->module('contact');
-        $contact = new Contact($this->getKernel());
+        $contact = $this->getContact();
 
         $keyword = $contact->getKeywords();
         $keywords = $keyword->getAllKeywords();
@@ -178,9 +187,9 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
         }
 
-        $keywords = 'N�gleord' . implode(' ', $used_keyword);
-        $search = 'S�getekst' . $contact->getDBQuery()->getFilter('search');
-        $count = 'Kontakter i s�gning' . count($contacts);
+        $keywords = 'Nøgleord' . implode(' ', $used_keyword);
+        $search = 'Søgetekst' . $contact->getDBQuery()->getFilter('search');
+        $count = 'Kontakter i søgning' . count($contacts);
 
         $i = 1;
 
@@ -237,11 +246,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         $worksheet->hideGridLines();
 
         // Let's send the file
-
-
         $workbook->close();
-
-        exit;
     }
 
     function renderHtmlCreate()
@@ -250,7 +255,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         $translation = $this->getKernel()->getTranslation('contact');
         $contact_module->includeFile('ContactReminder.php');
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
         return $smarty->render($this);
 
     }

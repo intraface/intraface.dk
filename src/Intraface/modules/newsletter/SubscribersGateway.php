@@ -2,6 +2,12 @@
 class Intraface_modules_newsletter_SubscribersGateway
 {
     protected $dbquery;
+    protected $kernel;
+
+    function __construct($kernel = null)
+    {
+        $this->kernel = $kernel;
+    }
 
     function getDBQuery()
     {
@@ -36,5 +42,18 @@ class Intraface_modules_newsletter_SubscribersGateway
         // @todo - make sure to delete old ones
         $db = MDB2::singleton();
         $db->query('UPDATE newsletter_subscriber SET contact_id = ' . $new_id . ' WHERE contact_id = ' . $old_id);
+    }
+
+    public function findCountByContactId($contact_id)
+    {
+        $sql = "SELECT id
+                FROM newsletter_subscriber
+                    WHERE intranet_id = " . $this->kernel->intranet->get("id") . "
+                        AND contact_id = ".(int)$contact_id."
+              AND active = 1";
+
+        $db = new DB_Sql;
+        $db->query($sql);
+        return $db->numRows();
     }
 }

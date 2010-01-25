@@ -219,5 +219,16 @@ class Intraface_modules_procurement_ProcurementGateway
             3=>'outside_eu'
         );
     }
+    public function findCountByContactId($contact_id)
+    {
+                $sql = "SELECT id
+                FROM procurement
+                    WHERE intranet_id = " . $this->kernel->intranet->get("id") . "
+                        AND contact_id = ".(int)$contact_id."
+              AND active = 1";
 
+        $db = new DB_Sql;
+        $db->query($sql);
+        return $db->numRows();
+    }
 }

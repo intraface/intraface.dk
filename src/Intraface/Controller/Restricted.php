@@ -15,6 +15,7 @@ class Intraface_Controller_Restricted extends k_Component
         $this->user_gateway = $gateway;
         $this->kernel_gateway = $kernel_gateway;
         $this->template = $template;
+        $this->translation = $translation;
     }
 
     function document()
@@ -89,7 +90,7 @@ class Intraface_Controller_Restricted extends k_Component
             }
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/restricted.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/restricted');
         return $smarty->render($this, array('_attention_needed' => $_attention_needed, '_advice' => $_advice));
     }
 
@@ -217,7 +218,7 @@ class component_ShowProduct {
         $this->db->query("SELECT name, menu_label, name FROM module WHERE active = 1 AND show_menu = 1 ORDER BY menu_index");
         while ($this->db->nextRecord()) {
             if ($this->getKernel()->user->hasModuleAccess($this->db->f('name'))) {
-                $this->menu[$i]['name'] = $this->getKernel()->translation->get($this->db->f('name'), $this->db->f('name'));
+                $this->menu[$i]['name'] = $this->t($this->db->f('name'), $this->db->f('name'));
                 $this->menu[$i]['url'] = $this->url('/restricted/module/' . $this->db->f("name"));
                 $i++;
             }
@@ -258,7 +259,7 @@ class component_ShowProduct {
                     }
 
                     if ($access) {
-                       $this->submenu[$j]['name'] = $this->getKernel()->translation->get($all_submenu[$i]['label'], $this->primary_module->getName());
+                       $this->submenu[$j]['name'] = $this->t($all_submenu[$i]['label'], $this->primary_module->getName());
                        $this->submenu[$j]['url'] = $this->primary_module->getPath(). $all_submenu[$i]['url'];
                             $j++;
                     }

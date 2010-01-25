@@ -32,7 +32,6 @@ error_reporting(E_ALL);
 
 set_error_handler('intraface_exceptions_error_handler');
 
-
 class k_PdfResponse extends k_ComplexResponse
 {
     function contentType()
@@ -124,6 +123,7 @@ class k_Translation2Translator implements k_Translator {
     function translate($phrase, k_Language $language = null) {
         // Translation2 groups translations with pageID(). This can
         // be accommodated like this
+
         if (is_array($phrase) && count($phrase) == 2) {
             return $this->translation2->get($phrase[0], $phrase[1]);
         }

@@ -106,4 +106,6 @@
 
 </form>
 
+<?php echo $context->getContact()->getDBQuery()->display('paging'); ?>
+
 <?php endif; ?>
