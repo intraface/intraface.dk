@@ -11,12 +11,12 @@
 </ul>
 
 
-<?php if (!empty($this->GET['delete']) AND is_numeric($this->GET['delete'])): ?>
-    <p class="message"><?php e(__('File has been deleted')); ?>. <a href="<?php e(url('./', array('undelete' => (int)$this->GET['delete']))); ?>"><?php e(__('Cancel')); ?></a></p>
+<?php if (is_numeric($this->query('delete'))): ?>
+    <p class="message"><?php e(__('File has been deleted')); ?>. <a href="<?php e(url('./', array('undelete' => (int)$this->query('delete')))); ?>"><?php e(__('Cancel')); ?></a></p>
 <?php endif; ?>
 
 
-<?php if (empty($files) and (empty($this->GET['search']))): ?>
+<?php if (empty($files) and !$this->query('search')): ?>
     <p><?php e(__('No files uploaded')); ?></p>
 <?php else: ?>
 
@@ -72,8 +72,6 @@
 
 <?php echo $filemanager->getDBQuery()->display('character'); ?>
 
-
-
 <table class="stripe">
     <caption><?php e(__('files')); ?></caption>
     <thead>
@@ -90,20 +88,20 @@
 
     <tbody>
         <?php
-        for($i = 0, $max = count($files); $i < $max; $i++) {
+        foreach ($files as $file) {
             ?>
             <tr>
-                <td style="height: 67px;"><a href="<?php e($files[$i]['file_uri']); ?>"><img src="<?php e($files[$i]["icon_uri"]); ?>" style="height: <?php e($files[$i]["icon_height"]); ?>px; width: <?php e($files[$i]["icon_width"]); ?>px;" /></a></td>
-                <td><a href="<?php e(url($files[$i]["id"])); ?>"><?php e($files[$i]["file_name"]); ?></a>
-                    <br /><i><?php e(substr(strip_tags($files[$i]["description"]), 0, 100)); if(strlen(strip_tags($files[$i]["description"])) > 100) print('...'); ?></i>
+                <td style="height: 67px;"><a href="<?php e($file['file_uri']); ?>"><img src="<?php e($file["icon_uri"]); ?>" style="height: <?php e($file["icon_height"]); ?>px; width: <?php e($file["icon_width"]); ?>px;" /></a></td>
+                <td><a href="<?php e(url($file["id"])); ?>"><?php e($file["file_name"]); ?></a>
+                    <br /><i><?php e(substr(strip_tags($file["description"]), 0, 100)); if(strlen(strip_tags($file["description"])) > 100) print('...'); ?></i>
                 </td>
-                <td style="white-space: nowrap;"><?php e($files[$i]["file_type"]['description']); ?></td>
-                <td style="white-space: nowrap;"><?php e(__($files[$i]["accessibility"])); ?></td>
-                <td style="white-space: nowrap;"><?php e($files[$i]["dk_file_size"]); ?></td>
-                <td style="white-space: nowrap;"><?php e($files[$i]["dk_date_created"]); ?></td>
+                <td style="white-space: nowrap;"><?php e($file["file_type"]['description']); ?></td>
+                <td style="white-space: nowrap;"><?php e(__($file["accessibility"])); ?></td>
+                <td style="white-space: nowrap;"><?php e($file["dk_file_size"]); ?></td>
+                <td style="white-space: nowrap;"><?php e($file["dk_date_created"]); ?></td>
                 <td style="width: 120px;" class="options">
-                    <a class="edit" href="<?php e(url($files[$i]['id'] . '/edit')); ?>"><?php e(__('edit', 'common')); ?></a>
-                    <a class="delete" href="<?php e(url($files[$i]['id'] . '/delete')); ?>"><?php e(__('delete', 'common')); ?></a></td>
+                    <a class="edit" href="<?php e(url($file['id'] . '/edit')); ?>"><?php e(__('edit', 'common')); ?></a>
+                    <a class="delete" href="<?php e(url($file['id'] . '/delete')); ?>"><?php e(__('delete', 'common')); ?></a></td>
             </tr>
             <?php
         }

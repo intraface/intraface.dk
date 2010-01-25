@@ -40,6 +40,8 @@ class Intraface_modules_shop_Controller_Categories_Show extends k_Component
 
     function getFileAppender()
     {
+        $module = $this->getKernel()->useShared('filehandler');
+        require_once 'Intraface/shared/filehandler/AppendFile.php';
         return new AppendFile($this->getKernel(), 'category', $this->getModel()->getId());
     }
 
@@ -51,7 +53,7 @@ class Intraface_modules_shop_Controller_Categories_Show extends k_Component
         require_once 'Intraface/shared/filehandler/AppendFile.php';
 
         $pictures = array();
-        $append_file = new Category_Appender($this->getKernel(), 'category', $this->getModel()->getId());
+        $append_file = new AppendFile($this->getKernel(), 'category', $this->getModel()->getId());
         $appendix_list = $append_file->getList();
         foreach ($appendix_list as $picture) {
             $pictures[] = new Ilib_Filehandler($this->getKernel(), $picture['file_handler_id']);

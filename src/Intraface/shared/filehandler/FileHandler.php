@@ -2,11 +2,11 @@
 /**
  * FileHandler
  *
- * Har grundlæggende kontrol over filer der uploades til systemet.
- * FileHandler i include/3party omdøbes til fileModifier
+ * Har grundlï¿½ggende kontrol over filer der uploades til systemet.
+ * FileHandler i include/3party omdï¿½bes til fileModifier
  * Filehandler benytter FileUpload og FileModifier.
  *
- * FileManager er modullet hvor man også kan se browse og ændre filerne.
+ * FileManager er modullet hvor man ogsï¿½ kan se browse og ï¿½ndre filerne.
  * Dette vil benytte FileHandler.
  *
  * @package Intraface
@@ -84,9 +84,9 @@ class FileHandler extends Intraface_Standard
 
 
     /**
-     * @todo der er muligt, at der kun skal være en getList i filemanager,
-     *       men så skal vi have cms til at have filemanager som dependent. Foreløbig
-     *       har jeg lavet keywordsøgning i denne LO
+     * @todo der er muligt, at der kun skal vï¿½re en getList i filemanager,
+     *       men sï¿½ skal vi have cms til at have filemanager som dependent. Forelï¿½big
+     *       har jeg lavet keywordsï¿½gning i denne LO
      * @var object
      */
     public $dbquery;
@@ -111,9 +111,6 @@ class FileHandler extends Intraface_Standard
      */
     public function __construct($kernel, $file_id = 0)
     {
-        if (!is_object($kernel)) {
-            trigger_error('FileHandler kræver kernel', E_USER_ERROR);
-        }
         $this->kernel = $kernel;
         $this->id = (int)$file_id;
         $this->error = new Ilib_Error;
@@ -134,11 +131,12 @@ class FileHandler extends Intraface_Standard
             $this->load();
         }
     }
-    
+
     /**
      * desctructor
      */
-    public function __destruct() {
+    public function __destruct()
+    {
         unset($this->kernel);
         if(isset($this->instance)) $this->instance->__destruct();
         unset($this->instance);
@@ -260,7 +258,7 @@ class FileHandler extends Intraface_Standard
         }
 
         $this->value['file_uri'] = $this->file_viewer.'?/'.$this->kernel->intranet->get('public_key').'/'.$this->get('access_key').'/'.urlencode($this->get('file_name'));
-        // nedenstående bruges til pdf-er
+        // nedenstï¿½ende bruges til pdf-er
         //$this->value['file_uri_pdf'] = PATH_UPLOAD.$this->kernel->intranet->get('id').'/'.$this->value['server_file_name'];
         $this->value['file_uri_pdf'] = $this->upload_path.$this->value['server_file_name'];
 
@@ -357,10 +355,10 @@ class FileHandler extends Intraface_Standard
     /**
      * Delete
      *
-     * Sletter fil: Sætter active = 0 og sætter _deleted_ foran filen.
+     * Sletter fil: Sï¿½tter active = 0 og sï¿½tter _deleted_ foran filen.
      *
-     * Her bør sikkert være et tjek på om filen bruges nogen steder i systemet.
-     * Hvis den bruges skal man måske have at vide hvor?
+     * Her bï¿½r sikkert vï¿½re et tjek pï¿½ om filen bruges nogen steder i systemet.
+     * Hvis den bruges skal man mï¿½ske have at vide hvor?
      *
      * @return boolean
      */
@@ -375,7 +373,7 @@ class FileHandler extends Intraface_Standard
         if ($this->get('server_file_name') != '' && file_exists($this->get('file_path'))) {
 
             if (!rename($this->get('file_path'), $this->upload_path.'_deleted_'.$this->get('server_file_name'))) {
-                trigger_error("Kunne ikke omdøbe filen i FileHandler->delete()", E_USER_ERROR);
+                trigger_error("Kunne ikke omdï¿½be filen i FileHandler->delete()", E_USER_ERROR);
             }
         }
 
@@ -399,7 +397,7 @@ class FileHandler extends Intraface_Standard
         if (file_exists($deleted_file_name)) {
 
             if (!rename($deleted_file_name, $this->upload_path.$this->get('server_file_name'))) {
-                trigger_error("Kunne ikke omdøbe filen i FileHandler->delete()", E_USER_ERROR);
+                trigger_error("Kunne ikke omdï¿½be filen i FileHandler->delete()", E_USER_ERROR);
             }
         }
 
@@ -408,12 +406,12 @@ class FileHandler extends Intraface_Standard
     }
 
     /**
-     * Benyttes til at sætte en uploadet fil ind i systemet
+     * Benyttes til at sï¿½tte en uploadet fil ind i systemet
      *
      * @todo should be called something else
      *
      * @param string $file      stien til filen @todo what exactly is this?
-     * @param string $file_name det originale filnavn, hvis ikke sat, tages der efter det nuværende navn
+     * @param string $file_name det originale filnavn, hvis ikke sat, tages der efter det nuvï¿½rende navn
      * @param string $status    @todo hvad er det
      * @param string $mime_type @todo hvad er det
      *
@@ -443,7 +441,7 @@ class FileHandler extends Intraface_Standard
 
         $random_key_generator = $this->getRandomKeyGenerator();
 
-        // Vi sikre os at ingen andre har den nøgle
+        // Vi sikre os at ingen andre har den nï¿½gle
         $i = 0;
         do {
             $access_key = $random_key_generator->generate(50);
@@ -549,7 +547,7 @@ class FileHandler extends Intraface_Standard
         $db = new DB_Sql;
 
         if (!is_array($input)) {
-            trigger_error("Input skal være et array i FileHandler->updateInstance", E_USER_ERROR);
+            trigger_error("Input skal vï¿½re et array i FileHandler->updateInstance", E_USER_ERROR);
         }
 
         $input = safeToDb($input);
@@ -559,7 +557,7 @@ class FileHandler extends Intraface_Standard
 
         $sql[] = 'date_changed = NOW()';
 
-        // følgende må ikke slettes - bruges i electronisk faktura
+        // fï¿½lgende mï¿½ ikke slettes - bruges i electronisk faktura
         if (isset($input['file_name'])) {
             $sql[] = 'file_name = "'.$input['file_name'].'"';
         }
@@ -618,7 +616,7 @@ class FileHandler extends Intraface_Standard
 
         if ($from == 'key') {
             if (!is_integer($key)) {
-                trigger_error("Når der skal findes mimetype fra key (default), skal første parameter til FileHandler->_getMimeType være en integer", E_USER_ERROR);
+                trigger_error("Nï¿½r der skal findes mimetype fra key (default), skal fï¿½rste parameter til FileHandler->_getMimeType vï¿½re en integer", E_USER_ERROR);
             }
             return $this->file_types[$key];
         }

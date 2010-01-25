@@ -1,14 +1,9 @@
 <?php
-
-class Intraface_Category extends Ilib_Category 
+class Intraface_Category extends Ilib_Category
 {
-    
-    
     public function __construct($kernel, $db, $type, $id = NULL)
     {
         $options = array('extra_condition' => array('intranet_id = '.$kernel->intranet->getId()));
         parent::__construct($db, $type, $id, $options);
     }
 }
-
-?>
