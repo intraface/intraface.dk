@@ -339,7 +339,7 @@ class Intraface_modules_shop_Coordinator
         if ($this->shop->getConfirmationSubject()) {
             $subject = $this->shop->getConfirmationSubject() . ' (#' . $this->order->get('number') . ')';
         } else {
-            $subject = 'Bekræftelse på bestilling (#' . $this->order->get('number') . ')';
+            $subject = 'BekrÃ¦ftelse pÃ¥ bestilling (#' . $this->order->get('number') . ')';
         }
 
         $body = $this->shop->getConfirmationText();
@@ -350,6 +350,7 @@ class Intraface_modules_shop_Coordinator
 
         // @todo improve this table
         //       mabye we should write a couple of outputters of an invoice
+        //       we should use a calculator so we can get vat and total easily on
         $table = new Console_Table;
         foreach ($this->order->getItems() as $item) {
             if ($this->order->getCurrency()) {

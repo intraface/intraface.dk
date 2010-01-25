@@ -19,4 +19,16 @@ class Intraface_Debtor_PriceCalculator
         }
         return $price;
     }
+    /*
+    function getVat()
+    {
+        $vat = 0;
+        foreach ($this->items as $item) {
+            if (isset($item['vat']) AND $item['vat'] == 1) {
+            }
+            $price += $item->getPrice();
+        }
+        return $price;
+    }
+    */
 }

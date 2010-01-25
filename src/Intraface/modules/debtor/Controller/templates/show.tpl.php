@@ -632,6 +632,7 @@ if (isset($onlinepayment)) {
 
         <tbody>
             <?php
+            // @todo we should do all the calculations with a calculator
             $items = $context->getDebtor()->getItems();
             $total = 0;
             $total_currency = 0;
