@@ -111,13 +111,23 @@ class Intraface_LanguageLoader implements k_LanguageLoader {
 
 class k_Translation2Translator implements k_Translator {
     protected $translation2;
-    function __construct($lang) {
+    function __construct($lang, $page_id = NULL) {
         $factory = new Intraface_Factory;
         $this->translation2 = $factory->new_Translation2();
         $res = $this->translation2->setLang($lang);
         if (PEAR::isError($res)) {
             throw new Exception('Could not setLang()');
         }
+        
+        if($page_id != NULL) {
+            $res = $this->translation2->setPageID($page_id);
+        } else {
+            $res = $this->translation2->setPageID('common');
+        }
+        if (PEAR::isError($res)) {
+            throw new Exception('Could not setPageID()');
+        }
+        
     }
 
     function translate($phrase, k_Language $language = null) {
@@ -127,13 +137,20 @@ class k_Translation2Translator implements k_Translator {
         if (is_array($phrase) && count($phrase) == 2) {
             return $this->translation2->get($phrase[0], $phrase[1]);
         }
-        return $this->translation2->get($phrase, 'basic');
+        return $this->translation2->get($phrase);
     }
 }
 
 class Intraface_TranslatorLoader implements k_TranslatorLoader {
     function load(k_Context $context) {
-        return new k_Translation2Translator($context->language()->isoCode());
+        $subspace = explode('/', $context->subspace());
+        if(count($subspace) > 3 && $subspace[1] == 'restricted' && $subspace[2] == 'module' && !empty($subspace[3])) {
+            $module = $subspace[3];
+        } else {
+            $module = NULL;
+        }    
+        
+        return new k_Translation2Translator($context->language()->isoCode(), $module);
     }
 }
 
