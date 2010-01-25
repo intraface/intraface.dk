@@ -1,16 +1,16 @@
 <?php
 class Intraface_modules_newsletter_Controller_Log extends k_Component
 {
-    protected $registry;
+    protected $template;
 
-    function __construct(k_Registry $registry)
+    function __construct(k_TemplateFactory $template)
     {
-        $this->registry = $registry;
+        $this->template = $template;
     }
 
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/log.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/log');
         return $smarty->render($this);
     }
 

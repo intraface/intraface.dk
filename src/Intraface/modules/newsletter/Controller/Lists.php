@@ -1,11 +1,11 @@
 <?php
 class Intraface_modules_newsletter_Controller_Lists extends k_Component
 {
-    protected $registry;
+    protected $template;
 
-    function __construct(k_Registry $registry)
+    function __construct(k_TemplateFactory $template)
     {
-        $this->registry = $registry;
+        $this->template = $template;
     }
 
     protected function map($name)
@@ -19,13 +19,13 @@ class Intraface_modules_newsletter_Controller_Lists extends k_Component
     {
         $module = $this->getKernel()->module("newsletter");
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/lists.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/lists');
         return $smarty->render($this);
     }
 
     function renderHtmlCreate()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/list-edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/list-edit');
         return $smarty->render($this);
     }
 

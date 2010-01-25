@@ -1,7 +1,7 @@
 <?php
 class Intraface_modules_newsletter_Controller_List extends k_Component
 {
-    protected $registry;
+    protected $template;
 
     protected function map($name)
     {
@@ -14,9 +14,9 @@ class Intraface_modules_newsletter_Controller_List extends k_Component
         }
     }
 
-    function __construct(k_Registry $registry)
+    function __construct(k_TemplateFactory $template)
     {
-        $this->registry = $registry;
+        $this->template = $template;
     }
 
     function renderHtml()
@@ -28,7 +28,7 @@ class Intraface_modules_newsletter_Controller_List extends k_Component
         $letter = new Newsletter($list);
         $letters = $letter->getList();
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/list.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/list');
         return $smarty->render($this);
     }
 
@@ -62,7 +62,7 @@ class Intraface_modules_newsletter_Controller_List extends k_Component
 
     function renderHtmlEdit()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/list-edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/list-edit');
         return $smarty->render($this);
     }
 

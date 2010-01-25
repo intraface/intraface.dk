@@ -1,7 +1,7 @@
 <?php
 class Intraface_modules_newsletter_Controller_Letters extends k_Component
 {
-    protected $registry;
+    protected $template;
 
     function getValues()
     {
@@ -15,23 +15,17 @@ class Intraface_modules_newsletter_Controller_Letters extends k_Component
         }
     }
 
-    function __construct(k_Registry $registry)
+    function __construct(k_TemplateFactory $template)
     {
-        $this->registry = $registry;
+        $this->template = $template;
     }
 
     function renderHtml()
     {
         $module = $this->getKernel()->module("newsletter");
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/letters.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/letters');
         return $smarty->render($this);
-    }
-
-    function DELETE()
-    {
-        $letter = new Newsletter($list, $_GET['delete']);
-        $letter->delete();
     }
 
     function getKernel()
@@ -61,7 +55,7 @@ class Intraface_modules_newsletter_Controller_Letters extends k_Component
     {
         $module = $this->getKernel()->module("newsletter");
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/letter-edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/letter-edit');
         return $smarty->render($this);
     }
 

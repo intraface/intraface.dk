@@ -1,25 +1,19 @@
 <?php
 class Intraface_modules_newsletter_Controller_Send extends k_Component
 {
-    protected $registry;
+    protected $template;
 
-    function __construct(k_Registry $registry)
+    function __construct(k_TemplateFactory $template)
     {
-        $this->registry = $registry;
+        $this->template = $template;
     }
 
     function renderHtml()
     {
         $module = $this->getKernel()->module("newsletter");
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/send.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/send');
         return $smarty->render($this);
-    }
-
-    function DELETE()
-    {
-        $letter = new Newsletter($list, $_GET['delete']);
-        $letter->delete();
     }
 
     function getKernel()

@@ -1,8 +1,13 @@
 <?php
 class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
 {
-    protected $registry;
     protected $subscriber;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     protected function map($name)
     {
@@ -21,11 +26,6 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
     function getList()
     {
         return $this->context->getList();
-    }
-
-    function __construct(k_Registry $registry)
-    {
-        $this->registry = $registry;
     }
 
     function getSubscriber()
@@ -93,7 +93,7 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
 
         }*/
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/subscribers.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/subscribers');
         return $smarty->render($this);
     }
 
