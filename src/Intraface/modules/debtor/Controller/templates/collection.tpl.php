@@ -56,7 +56,7 @@
         <?php endif; ?>
         <li><a href="<?php e(url(null, array('create'))); ?>"><?php e(__('Create')); ?></a></li>
     <?php endif; ?>
-    <li><a class="excel" href="<?php e(url(null . '.excel', array('use_stored' => 'true'))); ?>"><?php e(t('Excel')); ?></a></li>
+    <li><a class="excel" href="<?php e(url(null . '.xls', array('use_stored' => 'true'))); ?>"><?php e(t('Excel')); ?></a></li>
 </ul>
 
 
@@ -249,6 +249,6 @@
     </tbody>
 </table>
 
-<?php echo $debtor->getDBQuery()->display('paging'); ?>
+<?php echo $context->getDebtor()->getDBQuery()->display('paging'); ?>
 
 <?php endif; ?>

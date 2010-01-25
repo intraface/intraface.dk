@@ -14,7 +14,7 @@ $delivery_address = $context->getDeliveryAddressValues();
     <ul class="options">
         <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></li>
         <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close', 'common')); ?></a></li>
-        <li><a class="vcard" href="<?php e(url(null . '.vcard')); ?>"><?php e(t('Vcard')); ?></a></li>
+        <li><a class="vcard" href="<?php e(url(null . '.vcf')); ?>"><?php e(t('Vcard')); ?></a></li>
     </ul>
 
     <ul class="options">

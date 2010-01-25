@@ -33,15 +33,15 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         return $this->getDebtor()->getList();
     }
 
-    function renderExcel()
+    function renderXls()
     {
-        $translation = $kernel->getTranslation('debtor');
-        $debtor_module = $kernel->module('debtor');
+        $translation = $this->getKernel()->getTranslation('debtor');
+        $debtor_module = $this->getKernel()->module('debtor');
 
         if (empty($_GET['id'])) $_GET['id'] = '';
         if (empty($_GET['type'])) $_GET['type'] = '';
 
-        $debtor = Debtor::factory($kernel, intval($_GET["id"]), $this->context->getType());
+        $debtor = Debtor::factory($this->getKernel(), intval($_GET["id"]), $this->context->getType());
         $debtor->getDbQuery()->storeResult("use_stored", $debtor->get("type"), "toplevel");
 
         $posts = $debtor->getList();
@@ -63,15 +63,15 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $format->setSize(8);
 
         // Creating a worksheet
-        $worksheet = $workbook->addWorksheet(ucfirst(__('title')));
+        $worksheet = $workbook->addWorksheet(ucfirst($this->t($this->getType())));
 
         $i = 1;
-        $worksheet->write($i, 0, $kernel->intranet->get('name'), $format_bold);
+        $worksheet->write($i, 0, $this->getKernel()->intranet->get('name'), $format_bold);
         $i++;
 
         $status_types = array(
             -3 => 'Afskrevet',
-            -2 => '�bne',
+            -2 => 'Åbne',
             -1 => 'Alle',
             0 => 'Oprettet',
             1 => 'Sendt',
@@ -82,12 +82,12 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $worksheet->write($i, 1, $status_types[$debtor->getDbQuery()->getFilter('status')], $format_italic);
         $i++;
 
-        $worksheet->write($i, 0, 'S�getekst', $format_italic);
+        $worksheet->write($i, 0, 'Søgetekst', $format_italic);
         $worksheet->write($i, 1, $debtor->getDbQuery()->getFilter('text'), $format_italic);
         $i++;
 
         if ($debtor->getDbQuery()->checkFilter('product_id')) {
-            $product = new Product($kernel, $debtor->getDbQuery()->getFilter('product_id'));
+            $product = new Product($this->getKernel(), $debtor->getDbQuery()->getFilter('product_id'));
 
             $worksheet->write($i, 0, 'Produkt', $format_italic);
             $worksheet->write($i, 1, $product->get('name'), $format_italic);
@@ -95,14 +95,14 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         }
 
         if ($debtor->getDbQuery()->checkFilter('contact_id')) {
-            $contact = new Contact($kernel, $debtor->getDbQuery()->getFilter('contact_id'));
+            $contact = new Contact($this->getKernel(), $debtor->getDbQuery()->getFilter('contact_id'));
 
             $worksheet->write($i, 0, 'Kontakt', $format_italic);
             $worksheet->write($i, 1, $contact->address->get('name'), $format_italic);
             $i++;
         }
 
-        $worksheet->write($i, 0, "Antal i s�gningen", $format_italic);
+        $worksheet->write($i, 0, "Antal i søgningen", $format_italic);
         $worksheet->write($i, 1, count($posts), $format_italic);
         $i++;
 
@@ -111,16 +111,16 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $worksheet->write($i, 1, 'Kontakt nummer', $format_bold);
         $worksheet->write($i, 2, 'Kontakt navn', $format_bold);
         $worksheet->write($i, 3, 'Beskrivelse', $format_bold);
-        $worksheet->write($i, 4, 'Bel�b', $format_bold);
+        $worksheet->write($i, 4, 'Beløb', $format_bold);
         $worksheet->write($i, 5, 'Oprettet', $format_bold);
         $worksheet->write($i, 6, 'Sendt', $format_bold);
         //$worksheet->write($i, 7, __("due_date"), $format_bold);
         $c = 8;
         if ($debtor->get('type') == 'invoice') {
-            $worksheet->write($i, $c, 'Forfaldsbel�b', $format_bold);
+            $worksheet->write($i, $c, 'Forfaldsbeløb', $format_bold);
             $c++;
         }
-        $worksheet->write($i, $c, 'Kontaktn�gleord', $format_bold);
+        $worksheet->write($i, $c, 'Kontaktnøgleord', $format_bold);
         $c++;
 
         if (!empty($product) && is_object($product) && get_class($product) == 'product') {
@@ -175,7 +175,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
                 }
 
                 $keywords = array();
-                $contact = new Contact($kernel, $posts[$j]['contact']['id']);
+                $contact = new Contact($this->getKernel(), $posts[$j]['contact']['id']);
                 $appender = $contact->getKeywordAppender();
                 $keyword_ids = $appender->getConnectedKeywords();
                 if (count($keyword_ids) > 0) {
@@ -213,7 +213,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $worksheet->write($i, 1, number_format($due_total, 2, ",","."), $format_italic);
         $i++;
 
-        $worksheet->write($i, 0, 'Udest�ende (sendt):', $format_italic);
+        $worksheet->write($i, 0, 'Udestående (sendt):', $format_italic);
         $worksheet->write($i, 1, number_format($sent_total, 2, ",","."), $format_italic);
         $i++;
 
@@ -221,10 +221,9 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $worksheet->write($i, 1, number_format($total, 2, ",","."), $format_italic);
         $i++;
 
-
         $worksheet->hideGridLines();
 
-        $workbook->close();
+        return $workbook->close();
     }
 
     function renderHtml()

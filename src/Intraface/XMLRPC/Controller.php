@@ -1,7 +1,6 @@
 <?php
 class Intraface_XMLRPC_Controller extends k_Component
 {
-
     function dispatch()
     {
         if ($this->identity()->anonymous()) {

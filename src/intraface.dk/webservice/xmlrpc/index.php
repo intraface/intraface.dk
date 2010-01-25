@@ -5,7 +5,7 @@ require_once 'konstrukt/konstrukt.inc.php';
 
 class MyIdentityLoader extends k_BasicHttpIdentityLoader {
 
-    function selectUser($private_key, $session_id)
+    function selectUser($session_id, $private_key)
     {
         $auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $session_id, $private_key);
         $weblogin = $auth_adapter->auth();

@@ -2,8 +2,6 @@
 // common settings
 define('INTRAFACE_K2', true);
 
-
-
 /**
  * An error-handler which converts all errors (regardless of level) into exceptions.
  * It respects error_reporting settings.
@@ -12,11 +10,16 @@ function intraface_exceptions_error_handler($severity, $message, $filename, $lin
   if (error_reporting() == 0) {
     return;
   }
+  $e = new ErrorException($message, 0, $severity, $filename, $lineno);
   if (error_reporting() && $severity) {
       if ($severity == 8 or $severity = 20482048) {
-          return;
+        /*
+        $render = new Ilib_Errorhandler_Handler_File(Log::factory('file', ERROR_LOG, 'INTRAFACE'));
+        $render->handle($e);
+        */
+        return;
       }
-    throw new ErrorException($message, 0, $severity, $filename, $lineno);
+    throw $e;
   }
 }
 
@@ -37,6 +40,36 @@ class k_PdfResponse extends k_ComplexResponse
     function contentType()
     {
         return 'application/pdf';
+    }
+
+    protected function marshal()
+    {
+        return $this->content;
+    }
+}
+
+$GLOBALS['konstrukt_content_types']['application/ms-excel'] = 'xls';
+
+$GLOBALS['konstrukt_content_types']['text/x-vcard'] = 'vcf';
+
+class k_XlsResponse extends k_ComplexResponse
+{
+    function contentType()
+    {
+        return 'application/excel';
+    }
+
+    protected function marshal()
+    {
+        return $this->content;
+    }
+}
+
+class k_VcfResponse extends k_ComplexResponse
+{
+    function contentType()
+    {
+        return 'text/x-vcard';
     }
 
     protected function marshal()
@@ -118,16 +151,6 @@ class k_Translation2Translator implements k_Translator {
         if (PEAR::isError($res)) {
             throw new Exception('Could not setLang()');
         }
-        
-        if($page_id != NULL) {
-            $res = $this->translation2->setPageID($page_id);
-        } else {
-            $res = $this->translation2->setPageID('common');
-        }
-        if (PEAR::isError($res)) {
-            throw new Exception('Could not setPageID()');
-        }
-        
     }
 
     function translate($phrase, k_Language $language = null) {
@@ -148,8 +171,8 @@ class Intraface_TranslatorLoader implements k_TranslatorLoader {
             $module = $subspace[3];
         } else {
             $module = NULL;
-        }    
-        
+        }
+
         return new k_Translation2Translator($context->language()->isoCode(), $module);
     }
 }
@@ -218,12 +241,10 @@ if (realpath($_SERVER['SCRIPT_FILENAME']) == __FILE__) {
         // vi kan sikkert køre out, når vi har lyst - og exception bliver
         // kastet inden out?
 
-        $render = new Ilib_Errorhandler_Handler_File(Log::factory('file', './error.log', 'INTRAFACE'));
+        $render = new Ilib_Errorhandler_Handler_File(Log::factory('file', ERROR_LOG, 'INTRAFACE'));
         $render->handle($e);
 
-        if ($e->getSeverity() > 8) {
-            $render = new Ilib_Errorhandler_Handler_Echo();
-            $render->handle($e);
-        }
+        $render = new Ilib_Errorhandler_Handler_Echo();
+        $render->handle($e);
     }
 }

@@ -44,7 +44,7 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
 
         $options = array(
             'prefix' => $this->prefix . '.',
-            'encoding' => 'utf-8' /*$this->encoding*/,
+            'encoding' => 'utf-8', // $this->encoding
             'backend' => $backend);
 
         return XML_RPC2_Server::create(new $server($this->encoding), $options);
@@ -54,7 +54,7 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
     {
         switch ($this->query('backend')) {
             case 'xmlrpcext':
-                // @todo tests består ikke med denne slået til.
+                // @todo tests bestï¿½r ikke med denne slï¿½et til.
                 XML_RPC2_Backend::setBackend('xmlrpcext');
                 $this->backend = 'xmlrpcext';
                 break;
