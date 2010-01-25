@@ -85,7 +85,7 @@ class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups
                 }
             }
 
-            return new k_SeeOther($this->url('..'));
+            return new k_SeeOther($this->url('../', array('edit')));
         }
         return $this->render();
     }

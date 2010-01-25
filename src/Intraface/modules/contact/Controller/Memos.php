@@ -28,7 +28,7 @@ class Intraface_modules_contact_Controller_Memos extends k_Component
     	$reminder = new ContactReminder($this->context->getKernel());
         $contact = $reminder->contact;
 
-        $smarty = $this->templates->create(dirname(__FILE__) . '/templates/memo-edit');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/memo-edit');
         return $smarty->render($this, array('reminder' => $reminder, 'contact' => $contact));
     }
 

@@ -1,10 +1,12 @@
 <?php
-class Intraface_Tools_Controller_Phpinfo extends k_Controller
+class Intraface_Tools_Controller_Phpinfo extends k_Component
 {
-    function GET()
+    function renderHtml()
     {
-        phpinfo(); /* phpinfo echoes result; */
-        die;
-    }
+        ob_start();
 
+        phpinfo(); // phpinfo echoes result;
+        $content = ob_end_flush();
+        return $content;
+    }
 }

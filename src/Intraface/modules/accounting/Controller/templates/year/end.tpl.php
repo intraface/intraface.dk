@@ -307,8 +307,8 @@ switch($context->getYearEnd()->get('step') + 1):
 			<legend>Trin 7: Lås året?</legend>
 				<p>Efter en årsafslutning kan det være en god ide at låse året, så der ikke længere kan bogføres i det.</p>
 				<div>
-					<label><input type="radio" name="lock" value="1" <?php if ($context->getYear()->get('locked') == 1) echo ' checked="checked"'; ?>/> L�s</label>
-					<label><input type="radio" name="lock" value="0"<?php if ($context->getYear()->get('locked') == 0) echo ' checked="checked"'; ?> /> L�s ikke</label>
+					<label><input type="radio" name="lock" value="1" <?php if ($context->getYear()->get('locked') == 1) echo ' checked="checked"'; ?>/> Lås</label>
+					<label><input type="radio" name="lock" value="0"<?php if ($context->getYear()->get('locked') == 0) echo ' checked="checked"'; ?> /> Lås ikke</label>
 				</div>
 				<input type="submit" name="previous" value="Forrige" />
 				<input type="submit" name="step_lock_year" value="<?php e(t('Next')); ?>" />
@@ -321,7 +321,7 @@ switch($context->getYearEnd()->get('step') + 1):
 		?>
 			<fieldset>
 				<legend>Trin 8: Fyraften</legend>
-				<p>Det er godt arbejde. Nu har du fortjent en pause. H�ber ikke det var for vanskeligt. Vi h�rer naturligvis altid gerne om dine oplevelser med programmet, s� vi kan forbedre det mest muligt.</p>
+				<p>Det er godt arbejde. Nu har du fortjent en pause. Håber ikke det var for vanskeligt. Vi hører naturligvis altid gerne om dine oplevelser med programmet, så vi kan forbedre det mest muligt.</p>
 				<p><a class="excel" href="<?php e(url(null) . '.xls'); ?>">Hent årsregnskabet i et regneark</a></p>
 				<input type="submit" value="Forrige" name="previous" />
 			</fieldset>

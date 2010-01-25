@@ -14,10 +14,12 @@ class k_XlsResponse extends k_ComplexResponse {
 class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
 {
     protected $template;
+    protected $db_sql;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, DB_Sql $db_sql)
     {
         $this->template = $template;
+        $this->db_sql = $db_sql;
     }
 
     protected function map($name)
@@ -42,12 +44,11 @@ class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
         $year = new Year($this->getKernel());
         $year->checkYear();
 
-        $db = new DB_Sql;
-        $db->query("SELECT * FROM accounting_voucher WHERE intranet_id = " . $year->kernel->intranet->get('id') . " AND year_id = " . $year->get('id') . " ORDER BY number ASC");
+        $this->db_sql->query("SELECT * FROM accounting_voucher WHERE intranet_id = " . $year->kernel->intranet->get('id') . " AND year_id = " . $year->get('id') . " ORDER BY number ASC");
         //$i++;
         $posts = array();
-        while ($db->nextRecord()) {
-            $voucher = new Voucher($year, $db->f('id'));
+        while ($this->db_sql->nextRecord()) {
+            $voucher = new Voucher($year, $this->db_sql->f('id'));
             $posts = array_merge($voucher->getPosts(), $posts);
             //$i++;
         }

@@ -4,6 +4,12 @@ class Intraface_modules_product_Controller_Show extends k_Component
     protected $error;
     private $product;
     private $product_doctrine;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function map($name)
     {
@@ -42,7 +48,6 @@ class Intraface_modules_product_Controller_Show extends k_Component
     function postMultipart()
     {
         $module = $this->getKernel()->useShared('filehandler');
-        require_once 'Intraface/shared/filehandler/AppendFile.php';
         $product = new Product($this->getKernel(), $this->name());
 
         if (isset($_POST['append_file_submit'])) {
@@ -189,7 +194,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
             return new k_SeeOther($this->url());
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/tpl/show.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/tpl/show');
         return $smarty->render($this, $data);
     }
 
@@ -203,12 +208,14 @@ class Intraface_modules_product_Controller_Show extends k_Component
             'product' => $this->getProductDoctrine(),
         );
 
-        $smarty = new k_Template(dirname(__FILE__) . '/tpl/edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/tpl/edit');
         return $smarty->render($this, $data);
     }
 
     function getFileAppender()
     {
+        require_once 'Intraface/shared/filehandler/AppendFile.php';
+
         $this->getKernel()->module('product');
         $product = new Product($this->getKernel(), $this->name());
         return new AppendFile($this->getKernel(), 'product', $product->get('id'));

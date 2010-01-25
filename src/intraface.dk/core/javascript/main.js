@@ -18,7 +18,7 @@ var confirmboxes = {
 				if(this.title) {
 					var title = this.title;
 				} else {
-					var title = "Er du sikker?";
+					var title = "Are you sure?";
 				}
 				if (!confirm(title)) {
 					YAHOO.util.Event.stopEvent(e);

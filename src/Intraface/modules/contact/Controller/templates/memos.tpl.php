@@ -1,4 +1,10 @@
 <h1><?php e(t('Memos')); ?></h1>
+
+
+	<ul class="options">
+		<li><a href="<?php e(url(null, array('create'))); ?>"><?php e(t('Add memo')); ?></a></li>
+	</ul>
+
 <table>
 	<caption><?php e(t('Memos')); ?></caption>
 <?php foreach ($memos as $memo): ?>

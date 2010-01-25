@@ -70,6 +70,7 @@ class YearEndTest extends PHPUnit_Framework_TestCase
         $db->exec('TRUNCATE accounting_year_end_statement');
         $db->exec('TRUNCATE setting');
         $db->exec('TRUNCATE accounting_year');
+        $db->exec('TRUNCATE accounting_account');
     }
 
     function createYearEnd()

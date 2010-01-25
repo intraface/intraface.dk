@@ -73,7 +73,7 @@
         <label><?php e(__('Status')); ?>
         <select name="status">
             <option value="-1">Alle</option>
-            <option value="-2"<?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == -2) echo ' selected="selected"';?>>�bne</option>
+            <option value="-2"<?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == -2) echo ' selected="selected"';?>><?php e(t('Open')); ?></option>
             <?php if ($context->getDebtor()->get("type") == "invoice"): ?>
             <option value="-3"<?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == -3) echo ' selected="selected"';?>>Afskrevet</option>
             <?php endif; ?>

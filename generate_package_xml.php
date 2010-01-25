@@ -7,7 +7,7 @@
  * @version @package-version@
  */
 
-$version = '1.18.1';
+$version = '2.0.0';
 $stability = 'stable';
 $notes = '
 * translation changes
@@ -81,6 +81,9 @@ $pfm->addRelease();
 $pfm->resetUsesRole();
 $pfm->addUsesRole('web', 'Role_Web', 'pearified.com');
 $pfm->addPackageDepWithChannel('required', 'Role_Web', 'pearified.com', '1.1.1');
+
+$pfm->addPackageDepWithChannel('required', 'HTTP', 'pear.php.net', '1.4.1');
+
 
 // $pfm->addGlobalReplacement('package-info', '@package-version@', 'version');
 $pfm->addReplacement('intraface.php', 'pear-config', '@php-dir@', 'php_dir');

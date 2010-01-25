@@ -53,6 +53,14 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         return $smarty->render($this);
     }
 
+    function renderHtmlDelete()
+    {
+        $account = $this->getAccount();
+        $account->delete();
+
+        return new k_SeeOther($this->context->url());
+    }
+
     function postForm()
     {
         $account = $this->getAccount();

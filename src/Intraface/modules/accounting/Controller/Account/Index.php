@@ -24,6 +24,7 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
         $year = $this->getYear();
         $year->checkYear();
 
+        /*
         if (!empty($_GET['action']) AND $_GET['action'] == 'delete' AND is_numeric($_GET['id'])) {
             $account = new Account($year, $_GET['id']);
             $account->delete();
@@ -32,10 +33,12 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
             $values['from_date'] = $year->get('from_date_dk');
             $values['to_date'] = $year->get('to_date_dk');
         }
+        */
 
+        /*
         //$accounts = $account->getSaldoList($values['from_date'], $values['to_date']);
         $accounts = $account->getList('stated', true);
-
+		*/
         return parent::GET();
     }
 
@@ -51,8 +54,6 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
     {
         $year = new Year($kernel);
         $year->checkYear();
-
-        $account = new Account($year);
 
         $values['from_date'] = $year->get('from_date_dk');
         $values['to_date'] = $year->get('to_date_dk');

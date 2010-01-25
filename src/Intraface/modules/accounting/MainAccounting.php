@@ -32,7 +32,7 @@ class MainAccounting extends Intraface_Main
         //$this->addSubMenuItem('Hjï¿½lp', 'help.php');
 
         // Tilfï¿½j subaccess punkter
-        $this->addSubAccessItem('endyear', 'Årsafslutning');
+        $this->addSubAccessItem('endyear', 'Ã…rsafslutning');
         $this->addSubAccessItem('vat_report', 'Momsopgivelse');
         $this->addSubAccessItem('setting', 'Indstillinger');
 

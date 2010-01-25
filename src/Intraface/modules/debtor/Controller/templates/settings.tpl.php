@@ -11,7 +11,7 @@ $values = $context->getValues();
         <legend><?php e(t('Contact to show on correspondance')); ?></legend>
 
             <div class="formrow">
-                <label for="debtor_sender">Konaktperson/Afsender</label>
+                <label for="debtor_sender"><?php e(t('Contactperson / Sender')); ?></label>
                 <select name="debtor_sender">
                     <option value="intranet" <?php if (isset($values['debtor_sender']) && $values['debtor_sender'] == 'intranet') echo 'selected="selected"'; ?> >Intranetoplysninger (<?php e($kernel->intranet->address->get('name').' / '.$kernel->intranet->address->get('email')); ?>)</option>
                     <option value="user" <?php if (isset($values['debtor_sender']) && $values['debtor_sender'] == 'user') echo 'selected="selected"'; ?> >Aktuel brugers oplysninger (<?php e($kernel->user->getAddress()->get('name').' / '.$kernel->user->getAddress()->get('email')); ?>)</option>

@@ -12,7 +12,7 @@
 <?php echo $context->getVoucher()->error->view(); ?>
 
 <form method="post" action="<?php e(url(null, array('view' => $context->query('view')))); ?>" id="accounting-form-state">
- 	<input type="hidden" name="id" value="<?php e($values['id']); ?>" />
+ 	<input type="hidden" name="id" value="<?php if (isset($values['id'])) e($values['id']); ?>" />
 
     <fieldset>
         <legend>Indtast</legend>

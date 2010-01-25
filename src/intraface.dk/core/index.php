@@ -2,6 +2,25 @@
 // common settings
 define('INTRAFACE_K2', true);
 
+
+
+/**
+ * An error-handler which converts all errors (regardless of level) into exceptions.
+ * It respects error_reporting settings.
+ */
+function intraface_exceptions_error_handler($severity, $message, $filename, $lineno) {
+  if (error_reporting() == 0) {
+    return;
+  }
+  if (error_reporting() && $severity) {
+      if ($severity == 8 or $severity = 20482048) {
+          return;
+      }
+    throw new ErrorException($message, 0, $severity, $filename, $lineno);
+  }
+}
+
+
 require_once dirname(__FILE__) . '/../config.local.php';
 ini_set('include_path', PATH_INCLUDE_PATH);
 require_once dirname(__FILE__) . '/../common.php';
@@ -11,7 +30,7 @@ require_once 'konstrukt/konstrukt.inc.php';
 spl_autoload_register('k_autoload');
 error_reporting(E_ALL);
 
-set_error_handler('k_exceptions_error_handler');
+set_error_handler('intraface_exceptions_error_handler');
 
 
 class k_PdfResponse extends k_ComplexResponse
@@ -182,9 +201,12 @@ if (realpath($_SERVER['SCRIPT_FILENAME']) == __FILE__) {
         // vi kan sikkert køre out, når vi har lyst - og exception bliver
         // kastet inden out?
 
-        $render = new Ilib_Errorhandler_Handler_Echo();
-        $render->handle($e);
         $render = new Ilib_Errorhandler_Handler_File(Log::factory('file', './error.log', 'INTRAFACE'));
         $render->handle($e);
+
+        if ($e->getSeverity() > 8) {
+            $render = new Ilib_Errorhandler_Handler_Echo();
+            $render->handle($e);
+        }
     }
 }

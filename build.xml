@@ -20,7 +20,7 @@
     	<mkdir dir="${reports.dir}" />
     </target>
 
-	<target name="test" depends="phpunit,selenium,merge"></target>
+	<target name="test" depends="phpunit,merge"></target>
 	
     <target name="phpunit">
         <exec dir="${tests.dir}" command="phpunit
@@ -29,7 +29,7 @@
            --log-metrics ${reports.phpunit.dir}/phpunit.metrics.xml 	
            --coverage-xml ${reports.phpunit.dir}/phpunit.coverage.xml
            --coverage-html ${reports.coverage.dir}/
-           AllTests" passthru="true" checkreturn="false" />
+           ." passthru="true" checkreturn="false" />
     </target>
 	
     <target name="selenium">

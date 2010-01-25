@@ -60,7 +60,7 @@ class OnlinePaymentDanDomain extends OnlinePayment
         return array(
             0 => array(
                 'action' => 'capture',
-                'label' => 'H�v'),
+                'label' => 'Hæv'),
             1 => array(
                 'action' => 'reverse',
                 'label' => 'Tilbagebetal')
@@ -101,12 +101,12 @@ class OnlinePaymentDanDomain extends OnlinePayment
                 if ($this->addAsPayment()) {
                     $this->setStatus("captured");
                 } else {
-                    trigger_error("Onlinebetalingen er h�vet, men kunne ikke overf�res som betaling til fakturaen", E_USER_ERROR);
+                    trigger_error("Onlinebetalingen er hævet, men kunne ikke overføres som betaling til fakturaen", E_USER_ERROR);
                 }
                 return 1;
             } else {
                 // fiasko
-                $this->error->set('Vi kunne ikke h�ve betalingen, vi fik f�lgende fejl: '.$http_request->getResponseBody());
+                $this->error->set('Vi kunne ikke hæve betalingen, vi fik følgende fejl: '.$http_request->getResponseBody());
                 return 0;
             }
         } elseif ($action == "reverse") {
