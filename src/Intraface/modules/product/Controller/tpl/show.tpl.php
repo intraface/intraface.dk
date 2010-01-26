@@ -273,7 +273,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
     <div id="keywords" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'keywords') echo ' fade'; ?>">
       <h2><?php e(t('Keywords')); ?></h2>
     <?php if ($product->get('locked') == 0) { $shared_keyword = $kernel->useShared('keyword'); ?>
-    <ul class="button"><li><a href="<?php e($this->url('keyword/connect')); ?>"><?php e(__('Add keywords')); ?></a></li></ul>
+    <ul class="button"><li><a href="<?php e(url('keyword/connect')); ?>"><?php e(__('Add keywords')); ?></a></li></ul>
     <?php } ?>
     <?php
         $keyword = $product->getKeywordAppender();
