@@ -35,6 +35,12 @@ error_reporting(E_ALL);
 
 set_error_handler('intraface_exceptions_error_handler');
 
+
+$GLOBALS['konstrukt_content_types']['application/ms-excel'] = 'xls';
+$GLOBALS['konstrukt_content_types']['text/x-vcard'] = 'vcf';
+$GLOBALS['konstrukt_content_types']['text/plain'] = 'txt';
+$GLOBALS['konstrukt_content_types']['xml/oioxml'] = 'oioxml';
+
 class k_PdfResponse extends k_ComplexResponse
 {
     function contentType()
@@ -47,10 +53,6 @@ class k_PdfResponse extends k_ComplexResponse
         return $this->content;
     }
 }
-
-$GLOBALS['konstrukt_content_types']['application/ms-excel'] = 'xls';
-
-$GLOBALS['konstrukt_content_types']['text/x-vcard'] = 'vcf';
 
 class k_XlsResponse extends k_ComplexResponse
 {
@@ -65,6 +67,20 @@ class k_XlsResponse extends k_ComplexResponse
     }
 }
 
+class k_TxtResponse extends k_ComplexResponse
+{
+    function contentType()
+    {
+        return 'text/plain';
+    }
+
+    protected function marshal()
+    {
+        return $this->content;
+    }
+}
+
+
 class k_VcfResponse extends k_ComplexResponse
 {
     function contentType()
@@ -77,8 +93,6 @@ class k_VcfResponse extends k_ComplexResponse
         return $this->content;
     }
 }
-
-$GLOBALS['konstrukt_content_types']['xml/oioxml'] = 'oioxml';
 
 class k_OioxmlResponse extends k_ComplexResponse
 {

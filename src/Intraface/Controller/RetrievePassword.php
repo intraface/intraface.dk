@@ -11,10 +11,14 @@ class Intraface_Controller_RetrievePassword extends k_Component
 {
     public $msg;
     protected $template;
+    protected $email;
+    protected $mailer;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, Swift_Message $email, Swift_Mailer $mailer)
     {
         $this->template = $template;
+        $this->email = $email;
+        $this->mailer = $mailer;
     }
 
     function execute()
@@ -33,7 +37,21 @@ class Intraface_Controller_RetrievePassword extends k_Component
 
     function postForm()
     {
-    	if (!Intraface_User::sendForgottenPasswordEmail($this->body('email'))) {
+        $new_password = Intraface_User::generateNewPassword($this->body('email'));
+
+        $body  = "Huha, det var heldigt, at vi stod på spring i kulissen, så vi kan hjælpe dig med at lave en ny adgangskode.\n\n";
+        $body .= "Din nye adgangskode er: " . $new_password . "\n\n";
+        $body .= "Du kan logge ind fra:\n\n";
+        $body .= "<".PATH_WWW . 'login'.">\n\n";
+        $body .= "Med venlig hilsen\nDin hengivne webserver";
+
+        $this->email
+            ->setSubject('Tsk, glemt din adgangskode?')
+            ->setFrom(array('robot@intraface.dk' => 'Intraface.dk'))
+            ->setTo(array($this->body('email')))
+            ->setBody($body);
+
+    	if (!$this->mailer->send($this->email)) {
     	    $this->msg = '<p>Det gik <strong>ikke</strong> godt. E-mailen kunne ikke sendes. Du kan prøve igen senere.</p>';
     	    return $this->render();
     	}

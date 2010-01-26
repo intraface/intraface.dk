@@ -551,6 +551,27 @@ class Intraface_User extends Intraface_Standard
         return true;
     }
 
+    function generateNewPassword($email)
+    {
+        if (!Validate::email($email)) {
+            return false;
+        }
+        $db = MDB2::singleton(DB_DSN);
+        $result = $db->query("SELECT id FROM user WHERE email = '".$email."'");
+        if (PEAR::isError($result)) {
+            trigger_error($result->getUserInfo(), E_USER_ERROR);
+        }
+        if ($result->numRows() != 1) {
+            return false;
+        }
+        $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
+        $new_password = Intraface_Kernel::randomKey(8);
+
+        $db->exec("UPDATE user SET password = '".md5($new_password)."' WHERE id =" . $row['id']);
+
+        return $new_password;
+    }
+
     /**
      * Ved ikke om der skal bygges noget mere sikkerhed ind i denne?
      *
