@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_product_Controller_BatchEdit extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function postForm()
     {
         $module = $this->context->getKernel()->module("product");
@@ -19,7 +26,7 @@ class Intraface_modules_product_Controller_BatchEdit extends k_Component
             'stock' => $product->get('stock'),
             'state_account_id' => $product->get('state_account_id')
             ))) {
-                // 'quantity' => $_POST['quantity'][$key], gammelt lager - udgår
+                // 'quantity' => $_POST['quantity'][$key], gammelt lager - udgï¿½r
 
                 $string_appender = new Intraface_Keyword_StringAppender($product->getKeywords(), $product->getKeywordAppender());
                 $string_appender->addKeywordsByString($_POST['keywords'][$key]);
@@ -44,7 +51,7 @@ class Intraface_modules_product_Controller_BatchEdit extends k_Component
         $product->getDBQuery()->storeResult("use_stored", "products", "toplevel");
         $products = $product->getList();
 
-        $tpl = new k_Template(dirname(__FILE__) . '/tpl/batchedit.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/tpl/batchedit');
         return $tpl->render($this, array('products' => $products, 'product' => $product));
     }
 }

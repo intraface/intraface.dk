@@ -192,7 +192,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
         $translation = $this->getKernel()->getTranslation('contact');
         $contact_module->includeFile('ContactReminder.php');
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
         return $smarty->render($this);
 
     }

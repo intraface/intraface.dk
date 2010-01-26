@@ -2,8 +2,6 @@
 
 <h1><?php e(t('Dashboard')); ?></h1>
 
-<p><a href="<?php e(url('module')); ?>"><?php e(__('Modules')); ?></a></p>
-
 <?php if ($context->getKernel()->setting->get('user', 'homepage.message') == 'view'): ?>
 <div class="message">
 	<p><?php e(t('Welcome, you are on the dashboard', 'dashboard')); ?></p>

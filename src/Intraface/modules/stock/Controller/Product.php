@@ -5,9 +5,16 @@
  */
 class Intraface_modules_stock_Controller_Product extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/product.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/product');
         return $smarty->render($this);
     }
 

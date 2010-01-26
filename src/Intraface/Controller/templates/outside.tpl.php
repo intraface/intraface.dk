@@ -37,7 +37,7 @@
 			}
 
 			var clickhandler = function(e) {
-				form.value = "Vi prøver";
+				form.value = "<?php e(t('We will try')); ?>";
 				// form.disabled = true;
 				return true;
 			}

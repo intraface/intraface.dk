@@ -1,17 +1,24 @@
 <?php
 /**
- * Kan kun vælge gyldige providers
- * Svare på spørgsmål om pbsadgangen
+ * Kan kun vï¿½lge gyldige providers
+ * Svare pï¿½ spï¿½rgsmï¿½l om pbsadgangen
  *
  */
 class Intraface_modules_onlinepayment_Controller_ChooseProvider extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function renderHtml()
     {
         $onlinepayment_module = $this->context->getKernel()->module('onlinepayment');
     	$onlinepayment = OnlinePayment::factory($this->context->getKernel());
     	$value = $onlinepayment->getProvider();
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/chooseprovider.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/chooseprovider');
         return $smarty->render($this, array('value' => $value));
     }
 

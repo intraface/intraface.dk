@@ -5,6 +5,12 @@
 class Intraface_modules_debtor_Controller_Reminder extends k_Component
 {
     protected $debtor;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function getFormUrl()
     {
@@ -75,7 +81,7 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
             }
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/reminder.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/reminder');
         return $smarty->render($this);
     }
 
@@ -152,7 +158,7 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
             $value["number"] = $reminder->getMaxNumber();
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/reminder-edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/reminder-edit');
         return $smarty->render($this);
     }
 

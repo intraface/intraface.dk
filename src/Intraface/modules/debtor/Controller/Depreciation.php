@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_debtor_Controller_Depreciation extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function map($name)
     {
         return 'Intraface_modules_accounting_Controller_State_Depreciation';
@@ -57,7 +64,7 @@ class Intraface_modules_debtor_Controller_Depreciation extends k_Component
     {
         $invoice_module = $this->getKernel()->useModule('invoice');
         $depreciation = $this->getDepreciation();
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/depreciation.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/depreciation');
         return $smarty->render($this);
     }
 }

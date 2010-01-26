@@ -14,6 +14,7 @@ class Intraface_Controller_Signup extends k_Component
     protected $kernel;
     public $msg;
     protected $template;
+    public $error;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -48,14 +49,14 @@ class Intraface_Controller_Signup extends k_Component
     function postForm()
     {
         if (!Validate::email($this->body('email'))) {
-            $error[] = 'E-mail ugyldig';
+            $this->error[] = 'E-mail ugyldig';
         }
         if (!Validate::string($this->body('password'), VALIDATE_ALPHA . VALIDATE_NUM)) {
-            $error[] = 'Password ugyldigt';
+            $this->error[] = 'Password ugyldigt';
         }
         if (!empty($error) AND count($error) > 0) {
-            $msg = 'Vi kunne ikke oprette dig';
-            return new k_seeOther($this->url());
+            $this->msg = 'Vi kunne ikke oprette dig';
+            return $this->render();
         } else {
             $db = MDB2::singleton(DB_DSN);
             $res = $db->query("SELECT id FROM user WHERE email = ".$db->quote($this->body('email'), 'text'));
@@ -66,17 +67,18 @@ class Intraface_Controller_Signup extends k_Component
                 $res = $db->query("INSERT INTO user SET email = ".$db->quote($this->body('email'), 'text').", password=".$db->quote(md5($this->body('password')), 'text'));
                 $user_id = $db->lastInsertID('user');
             } else {
-                $error[] = 'Du er allerede oprettet';
+                $this->error[] = 'Du er allerede oprettet';
             }
 
             if (!empty($error) AND count($error) > 0) {
-                $content->msg = 'Du er allerede oprettet. <a href="'.url('/login').'">Login</a>.';
+                $this->msg = 'Du er allerede oprettet. <a href="'.url('/login').'">Login</a>.';
+                return $this->render();
             } else {
                 require_once 'Intraface/modules/intranetmaintenance/IntranetMaintenance.php';
                 $intranet = new IntranetMaintenance();
                 $data = array('identifier' => $this->body('identifier'), 'name' => $this->body('name'));
                 if (!$intranet->save($data)) {
-                    $content->msg = $intranet->error->view();
+                    $this->msg = $intranet->error->view();
                 } else {
                     $intranet_id = $intranet->getId(); // betatest intranet for forskellige brugere
 
@@ -98,8 +100,6 @@ class Intraface_Controller_Signup extends k_Component
                                 user_id = ".$db->quote(0, 'integer').",
                                 module_id = ".$db->quote($row['id'], 'integer'));
                         }
-
-
                     }
 
                     $sub_access = array('edit_templates', 'setting', 'vat_report', 'endyear');
@@ -110,7 +110,8 @@ class Intraface_Controller_Signup extends k_Component
 
                             $res = $db->query("INSERT INTO permission SET intranet_id = ".$db->quote($intranet_id, 'integer').", module_sub_access_id = ".$db->quote($row['id'], 'integer').", module_id = ".$db->quote($row['module_id'], 'integer').", user_id = ".$db->quote($user_id, 'integer'));
                             if (PEAR::isError($res)) {
-                                trigger_error('Kunne ikke oprette nogle af rettighederne', E_USER_ERROR);
+                                throw new Exception($res->getUserInfo());
+                                $this->error[] = 'Kunne ikke oprette nogle af rettighederne';
                             }
                         }
                     }
@@ -120,7 +121,7 @@ class Intraface_Controller_Signup extends k_Component
                     return new k_SeeOther($this->url('../login'));
                 }
             }
-            return $this->render();
         }
+        return $this->render();
     }
 }

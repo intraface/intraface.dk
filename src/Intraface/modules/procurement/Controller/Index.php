@@ -4,6 +4,12 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
     private $gateway;
     private $error;
     public $method = 'post';
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function map($name)
     {
@@ -81,13 +87,12 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
         // $gateway->getDBQuery()->setExtraUri('&amp;type='.$gateway->get("type"));
         $procurements = $gateway->find();
 
-
         $data = array(
             'gateway' => $gateway,
             'procurements' => $procurements
         );
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/index');
         return $smarty->render($this, $data);
     }
 
@@ -102,13 +107,12 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
             'gateway' => $this->getProcurementGateway()
         );
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/procurement-edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/procurement-edit');
         return $smarty->render($this, $data);
     }
 
     public function postForm()
     {
-
         $procurement = new Procurement($this->getKernel(), intval($_POST["id"]));
 
         if ($procurement->update($_POST)) {
@@ -119,7 +123,9 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
             return new k_SeeOther($this->url($procurement->get("id")));
         } else {
             $values = $_POST;
-            $title = "Ret indk�b";
+            $title = "Ret indkøb";
         }
+
+        return $this->render();
     }
 }

@@ -78,10 +78,25 @@ class k_VcfResponse extends k_ComplexResponse
     }
 }
 
+$GLOBALS['konstrukt_content_types']['xml/oioxml'] = 'oioxml';
+
+class k_OioxmlResponse extends k_ComplexResponse
+{
+    function contentType()
+    {
+        return 'xml/oioxml';
+    }
+
+    protected function marshal()
+    {
+        return $this->content;
+    }
+}
 
 class Intraface_AuthenticatedUser extends k_AuthenticatedUser
 {
     protected $language;
+
     function __construct($name, k_Language $lang)
     {
         $this->language = $lang;
@@ -96,20 +111,28 @@ class Intraface_AuthenticatedUser extends k_AuthenticatedUser
 
 // session_start();
 
-class DanishLanguage implements k_Language {
-    function name() {
+class DanishLanguage implements k_Language
+{
+    function name()
+    {
         return 'Danish';
     }
-    function isoCode() {
-        return 'da';
+
+    function isoCode()
+    {
+        return 'dk';
     }
 }
 
-class EnglishLanguage implements k_Language {
-    function name() {
+class EnglishLanguage implements k_Language
+{
+    function name()
+    {
         return 'English';
     }
-    function isoCode() {
+
+    function isoCode()
+    {
         return 'uk';
     }
 }
@@ -118,68 +141,95 @@ class Intraface_LanguageLoader implements k_LanguageLoader {
     // @todo The language will often not be set on runtime, e.g. an
     //       intranet where the user can chose him or her own language?
     //       How could one accommodate for this?
-    function load(k_Context $context) {
-        require_once 'PEAR.php';
-        require_once 'HTTP.php';
+    function load(k_Context $context)
+    {
+        $supported = array("da" => true, "en-US" => true);
 
         if ($context->identity()->anonymous()) {
-            $supported = array("da" => true, "en-US" => true);
             $language = HTTP::negotiateLanguage($supported);
             if (PEAR::isError($language)) {
                 // fallback language in case of unable to negotiate
                 return new DanishLanguage();
             }
 
-            if ($language == 'en-US') {
-                return new EnglishLanguage();
+            if ($language == 'da') {
+                return new DanishLanguage();
             }
 
         } elseif ($context->identity()->language() == 'da') {
             return new DanishLanguage();
         }
 
+        // @todo at the moment the system does not take the
+        //       settings in the system into account - only
+        //       the way the browser is setup.
+        $language = HTTP::negotiateLanguage($supported);
+        if (PEAR::isError($language)) {
+            // fallback language in case of unable to negotiate
+            return new DanishLanguage();
+        }
+
+        if ($language == 'da') {
+            return new DanishLanguage();
+        }
+
+        // fallback language
         return new EnglishLanguage();
     }
 }
 
-class k_Translation2Translator implements k_Translator {
+class k_Translation2Translator implements k_Translator
+{
     protected $translation2;
-    function __construct($lang, $page_id = NULL) {
+    protected $page_id;
+
+    function __construct($lang, $page_id = NULL)
+    {
         $factory = new Intraface_Factory;
         $this->translation2 = $factory->new_Translation2();
         $res = $this->translation2->setLang($lang);
         if (PEAR::isError($res)) {
             throw new Exception('Could not setLang()');
         }
+        $this->page_id = $page_id;
     }
 
-    function translate($phrase, k_Language $language = null) {
-        // Translation2 groups translations with pageID(). This can
-        // be accommodated like this
-
-        if (is_array($phrase) && count($phrase) == 2) {
-            return $this->translation2->get($phrase[0], $phrase[1]);
+    function translate($phrase, k_Language $language = null)
+    {
+        /*
+        $lang = $this->translation2->getLang();
+        if (PEAR::isError($lang)) {
+            $res = $this->translation2->setLang($language->isoCode());
         }
-        return $this->translation2->get($phrase);
+        */
+        if ($this->page_id !== null) {
+            if ($phrase != $this->translation2->get($phrase, $this->page_id)) {
+                return utf8_encode($this->translation2->get($phrase, $this->page_id));
+            }
+        }
+
+        return utf8_encode($this->translation2->get($phrase, 'common'));
     }
 }
 
-class Intraface_TranslatorLoader implements k_TranslatorLoader {
-    function load(k_Context $context) {
+class Intraface_TranslatorLoader implements k_TranslatorLoader
+{
+    function load(k_Context $context)
+    {
         $subspace = explode('/', $context->subspace());
-        if(count($subspace) > 3 && $subspace[1] == 'restricted' && $subspace[2] == 'module' && !empty($subspace[3])) {
+        if (count($subspace) > 3 && $subspace[1] == 'restricted' && $subspace[2] == 'module' && !empty($subspace[3])) {
             $module = $subspace[3];
         } else {
             $module = NULL;
         }
-
         return new k_Translation2Translator($context->language()->isoCode(), $module);
     }
 }
 
 class Intraface_IdentityLoader implements k_IdentityLoader
 {
-    function load(k_Context $context) {
+    function load(k_Context $context)
+    {
         if ($context->session('intraface_identity')) {
             return $context->session('intraface_identity');
         }

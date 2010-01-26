@@ -4,6 +4,12 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
     protected $debtor;
     protected $contact;
     protected $reminder;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function map($name)
     {
@@ -44,7 +50,7 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
         	$reminder->delete();
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/reminders.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/reminders');
 
         return $smarty->render($this);
     }
@@ -76,7 +82,7 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
 
         $data = array('value' => $value);
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/reminder-edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/reminder-edit');
         return $smarty->render($this, $data);
     }
 

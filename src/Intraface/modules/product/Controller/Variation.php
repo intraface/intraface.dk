@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_product_Controller_Variation extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function map()
     {
         return 'Intraface_modules_stock_Controller_Product';
@@ -41,7 +48,7 @@ class Intraface_modules_product_Controller_Variation extends k_Component
             'kernel' => $this->getKernel()
         );
 
-        $tpl = new k_Template(dirname(__FILE__) . '/tpl/variation.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/tpl/variation');
         return $tpl->render($this, $data);
     }
 
@@ -82,8 +89,7 @@ class Intraface_modules_product_Controller_Variation extends k_Component
             $redirect->setIdentifier('product');
             $redirect->askParameter('file_handler_id', 'multiple');
 
-            header('Location: '.$url);
-            exit;
+            return new k_SeeOther($url);
         }
 
         // this has to be moved to post

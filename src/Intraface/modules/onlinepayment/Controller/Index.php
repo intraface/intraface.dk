@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_onlinepayment_Controller_Index extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function map($name)
     {
         if ($name == 'settings') {
@@ -39,7 +46,7 @@ class Intraface_modules_onlinepayment_Controller_Index extends k_Component
 
         $payments = $onlinepayment->getList();
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/index');
         return $smarty->render($this, array('kernel' => $this->context->getKernel(), 'payments' => $payments, 'onlinepayment' => $onlinepayment));
     }
 }

@@ -16,12 +16,12 @@ class Intraface_modules_shop_Controller_Index extends k_Component
         $shops = Doctrine::getTable('Intraface_modules_shop_Shop')->findByIntranetId($this->getKernel()->intranet->getId());
 
         if (count($shops) == 0) {
-            $tpl = new k_Template(dirname(__FILE__) . '/tpl/empty-table.tpl.php');
+            $tpl = $this->template->create(dirname(__FILE__) . '/tpl/empty-table');
             return $tpl->render($this, array('message' => 'No shops has been created yet.'));
         }
 
         $data = array('shops' => $shops);
-        $tpl = new k_Template(dirname(__FILE__) . '/tpl/shops.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/tpl/shops');
         return $tpl->render($this, $data);
     }
 

@@ -5,10 +5,12 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
     protected $translation;
     public $email_send_with_success;
     public $onlinepayment_show_cancel_option;
+    protected $template;
 
-    function __construct(Translation2 $translation)
+    function __construct(k_TemplateFactory $template, Translation2 $translation)
     {
         $this->translation = $translation;
+        $this->template = $template;
     }
 
     function dispatch()
@@ -77,7 +79,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
         $contact_module = $this->getKernel()->getModule('contact');
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/show.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/show');
         return $smarty->render($this);
     }
 
@@ -98,7 +100,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
     function renderHtmlEdit()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
         return $smarty->render($this);
     }
 
@@ -472,20 +474,5 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         require_once dirname(__FILE__) . '/../Visitor/OIOXML.php';
         $render = new Debtor_Report_OIOXML;
         return $render->output($this->getDebtor());
-    }
-}
-
-$GLOBALS['konstrukt_content_types']['xml/oioxml'] = 'oioxml';
-
-class k_OioxmlResponse extends k_ComplexResponse
-{
-    function contentType()
-    {
-        return 'xml/oioxml';
-    }
-
-    protected function marshal()
-    {
-        return $this->content;
     }
 }

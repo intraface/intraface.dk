@@ -1,9 +1,16 @@
 <?php
 class Intraface_modules_stock_Controller_Index extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/index');
         return $smarty->render($this);
     }
 
@@ -19,9 +26,9 @@ class Intraface_modules_stock_Controller_Index extends k_Component
         foreach ($_POST['id'] AS $key=>$values) {
             /*
             NOTE!!!
-            Pointen i det hele er man udvælger et array, som man gennemløber - i dette tilfælde
-            date - det kunne lige så godt være amount - det eneste der skal bruges er $key for vi
-            ved hvilken position den nuværende værdi har i POST arrayed på det enkelte element.
+            Pointen i det hele er man udvï¿½lger et array, som man gennemlï¿½ber - i dette tilfï¿½lde
+            date - det kunne lige sï¿½ godt vï¿½re amount - det eneste der skal bruges er $key for vi
+            ved hvilken position den nuvï¿½rende vï¿½rdi har i POST arrayed pï¿½ det enkelte element.
             */
             $stock = new Stock(new Product($kernel, $_POST['id'][$key]));
             $stock->set($_POST['quantity'][$key]);

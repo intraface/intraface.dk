@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_product_Controller_Productattributegroup extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function postForm()
     {
         $product = new Product($this->getKernel(), $this->context->name());
@@ -41,7 +48,7 @@ class Intraface_modules_product_Controller_Productattributegroup extends k_Compo
                 header('location: product_variations_edit.php?id='.$product->getId());
             }
         }
-
+        return $this->render();
     }
 
     function getKernel()
@@ -86,10 +93,7 @@ class Intraface_modules_product_Controller_Productattributegroup extends k_Compo
 
         $data = array('product' => $product, 'groups' => $groups);
 
-        $smarty = new k_Template(dirname(__FILE__) . '/tpl/productattributegroup.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/tpl/productattributegroup');
         return $smarty->render($this, $data);
-
     }
-
 }
-

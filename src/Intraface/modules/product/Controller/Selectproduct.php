@@ -6,6 +6,12 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
     public $quantity = false;
     public $selected_products;
     protected $init_url;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function dispatch()
     {
@@ -85,7 +91,7 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
             }
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/tpl/selectproduct.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/tpl/selectproduct');
         return $smarty->render($this);
     }
 

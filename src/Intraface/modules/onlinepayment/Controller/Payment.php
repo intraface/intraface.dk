@@ -1,6 +1,12 @@
 <?php
 class Intraface_modules_onlinepayment_Controller_Payment extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function renderHtml()
     {
@@ -10,7 +16,7 @@ class Intraface_modules_onlinepayment_Controller_Payment extends k_Component
 
         $value['dk_amount'] = $onlinepayment->get('dk_amount');
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/payment.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/payment');
         return $smarty->render($this, array('value' => $value, 'kernel' => $this->context->getKernel(), 'onlinepayment' => $onlinepayment));
     }
 

@@ -4,6 +4,12 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
     protected $product;
     public $multiple = false;
     public $quantity = false;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function dispatch()
     {
@@ -64,7 +70,7 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
             'product' => $product
         );
 
-        $smarty = new k_Template(dirname(__FILE__) . '/tpl/selectproductvariation.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/tpl/selectproductvariation');
         return $smarty->render($this, $data);
     }
 

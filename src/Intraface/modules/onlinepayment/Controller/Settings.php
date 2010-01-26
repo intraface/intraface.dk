@@ -1,11 +1,13 @@
 <?php
 class Intraface_modules_onlinepayment_Controller_Settings extends k_Component
 {
+    protected $template;
     protected $doctrine;
 
-    function __construct(Doctrine_Connection_Common $doctrine)
+    function __construct(k_TemplateFactory $template, Doctrine_Connection_Common $doctrine)
     {
         $this->doctrine = $doctrine;
+        $this->template = $template;
     }
 
     function getKernel()
@@ -43,7 +45,7 @@ class Intraface_modules_onlinepayment_Controller_Settings extends k_Component
             'value' => $value
         );
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/settings.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/settings');
         return $smarty->render($this, $data);
     }
 

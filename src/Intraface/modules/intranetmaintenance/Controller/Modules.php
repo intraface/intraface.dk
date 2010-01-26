@@ -1,12 +1,12 @@
 <?php
 class Intraface_modules_intranetmaintenance_Controller_Modules extends k_Component
 {
-    protected $registry;
     protected $module_msg;
+    protected $template;
 
-    function __construct(k_Registry $registry)
+    function __construct(k_TemplateFactory $template)
     {
-        $this->registry = $registry;
+        $this->template = $template;
     }
 
     function renderHtml()
@@ -16,12 +16,12 @@ class Intraface_modules_intranetmaintenance_Controller_Modules extends k_Compone
 
         if (isset($_GET["do"]) && $_GET["do"] == "register") {
             $this->module_msg = $this->getModuleMaintenance()->register();
-            $this->getKernel()->user->clearCachedPermission(); // Sørger for at permissions bliver reloaded.
+            $this->getKernel()->user->clearCachedPermission(); // Sï¿½rger for at permissions bliver reloaded.
         } else {
             $this->module_msg = array();
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/modules.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/modules');
         return $smarty->render($this);
     }
 

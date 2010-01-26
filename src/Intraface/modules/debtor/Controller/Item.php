@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_debtor_Controller_Item extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function map($name)
     {
         if ($name == 'selectproduct') {
@@ -34,7 +41,7 @@ class Intraface_modules_debtor_Controller_Item extends k_Component
             $debtor->loadItem(intval($_GET["id"]));
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/item-edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/item-edit');
         return $smarty->render($this);
     }
 

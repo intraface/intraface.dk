@@ -1,12 +1,12 @@
 <?php
 /**
  * Her skal kunne indstilles hvilke betalingsformer der kan bruges i forbindelse
- * med debtor-modulet. Det skal altså være noget, man tilføjer.
+ * med debtor-modulet. Det skal altsï¿½ vï¿½re noget, man tilfï¿½jer.
  *
- * Dvs. man tilføjer fx girokontobetaling - og så skal man indtaste oplysninger om det
- * Tilføjer man bankoverførsel, skal man indtaste bankoplysninger
- * Der skal laves noget lidt smartere med læs-ind-bureau og elektronisk faktura
- * Tekst på rykkere skal måske differentieres, så der er standardtekster til forskellige rykkere
+ * Dvs. man tilfï¿½jer fx girokontobetaling - og sï¿½ skal man indtaste oplysninger om det
+ * Tilfï¿½jer man bankoverfï¿½rsel, skal man indtaste bankoplysninger
+ * Der skal laves noget lidt smartere med lï¿½s-ind-bureau og elektronisk faktura
+ * Tekst pï¿½ rykkere skal mï¿½ske differentieres, sï¿½ der er standardtekster til forskellige rykkere
  *
  * @author		Lars Olesen <lars@legestue.net>
  * @version	1.0
@@ -15,6 +15,12 @@
 class Intraface_modules_debtor_Controller_Settings extends k_Component
 {
     protected $error;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function renderHtml()
     {
@@ -32,8 +38,8 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
             $scan_in_contact = new Contact($this->context->getKernel(), $this->context->getKernel()->getSetting()->get('intranet', 'debtor.scan_in_contact'));
         }
 
-        $string = 'Det er gratis for små og mellemstore virksomheder at bruge Læs-ind bureauer. <a href="http://www.eogs.dk/sw7483.asp">Tjek her om det gælder for din virksomhed</a>.';
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/settings.tpl.php');
+        $string = 'Det er ikke lÃ¦ngere gratis for smÃ¥ og mellemstore virksomheder at bruge LÃ¦s-ind bureauer.';
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/settings');
         return $smarty->render($this, array('string' => $string, 'kernel' => $this->context->getKernel()));
     }
 

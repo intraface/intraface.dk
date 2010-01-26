@@ -1,6 +1,10 @@
-<h1>Signup</h1>
+<h1><?php e(t('Signup')); ?></h1>
 
 <form id="form-login" method="post" action="<?php e(url(null)); ?>">
+
+	<?php foreach ($context->errors as $error): ?>
+		<li><?php e($error); ?></li>
+	<?php endforeach; ?>
 
     <fieldset>
         <legend><?php e(t('Please create a user for me')); ?></legend>
