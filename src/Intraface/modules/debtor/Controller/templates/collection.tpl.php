@@ -36,7 +36,8 @@
     <?php if ($context->getDebtor()->get('type') == 'credit_note'): ?>
         <p>
         	<?php e(t('You have not created any. Credit notes is created from invoices.')); ?>
-    <?php else: ?>
+    	</p>
+        	<?php else: ?>
 
         <p><?php e(t('None has been created yet')); ?>. <a href="<?php e(url(null, array('create'))); ?>"><?php e(__('Create '.$context->getDebtor()->get('type'))); ?></a>.</p>
 
