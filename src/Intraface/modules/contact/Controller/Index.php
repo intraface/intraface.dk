@@ -63,8 +63,9 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         $this->getContact()->getDBQuery()->defineCharacter('character', 'address.name');
         $this->getContact()->getDBQuery()->usePaging('paging');
         $this->getContact()->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
+        $this->getContact()->getDBQuery()->setUri($this->url());
 
-        return $contacts = $this->getContact()->getList();
+        return ($contacts = $this->getContact()->getList());
     }
 
     function putForm()
@@ -126,7 +127,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         */
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/index');
-        return $smarty->render($this);
+        return $smarty->render($this, array('contacts' => $this->getContacts()));
     }
 
     function getKernel()

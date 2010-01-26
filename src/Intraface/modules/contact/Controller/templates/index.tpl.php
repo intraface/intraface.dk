@@ -77,7 +77,7 @@
 			</tr>
 		</tfoot>
 		<tbody>
-			<?php foreach ($context->getContacts() as $c) { ?>
+			<?php foreach ($contacts as $c) { ?>
 			<tr class="vcard">
 
 				<td>
