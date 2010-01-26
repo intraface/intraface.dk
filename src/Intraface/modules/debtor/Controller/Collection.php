@@ -229,9 +229,6 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
     function renderHtml()
     {
         Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
-
-        $translation = $this->getKernel()->getTranslation('debtor');
-
         $mDebtor = $this->getKernel()->module('debtor');
         $contact_module = $this->getKernel()->useModule('contact');
         $product_module = $this->getKernel()->useModule('product');

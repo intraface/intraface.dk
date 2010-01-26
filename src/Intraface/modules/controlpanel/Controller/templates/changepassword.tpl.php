@@ -7,7 +7,7 @@
 <?php echo $context->getUser()->error->view(); ?>
 
 <form action="<?php e(url(null)); ?>" method="post">
-
+<input type="hidden" name="_method" value="put" />
 <fieldset>
 	<legend><?php e(t('change password')); ?></legend>
 	<div class="formrow">

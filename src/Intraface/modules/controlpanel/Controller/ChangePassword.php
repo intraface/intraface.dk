@@ -29,12 +29,12 @@ class Intraface_modules_controlpanel_Controller_ChangePassword extends k_Compone
         return array_merge($value, $address_value);
     }
 
-    function renderHtmlForm()
+    function putForm()
     {
     	$user = new Intraface_User($this->getKernel()->user->get('id'));
 
     	if ($user->updatePassword($_POST['old_password'], $_POST['new_password'], $_POST['repeat_password'])) {
-    		return k_SeeOther($this->url('../'));
+    		return new k_SeeOther($this->url('../'));
     	}
     	return render();
     }
