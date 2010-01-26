@@ -294,6 +294,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $debtor->getDBQuery()->usePaging("paging", $this->getKernel()->setting->get('user', 'rows_pr_page'));
         $debtor->getDBQuery()->storeResult("use_stored", $debtor->get("type"), "toplevel");
         $debtor->getDBQuery()->setExtraUri('&amp;type='.$debtor->get("type"));
+        $debtor->getDBQuery()->setUri($this->url());
 
         $data = array('posts' => $debtor->getList(), 'debtor' => $debtor);
 

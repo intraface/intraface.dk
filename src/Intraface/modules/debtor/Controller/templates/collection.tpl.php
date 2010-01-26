@@ -250,6 +250,6 @@
     </tbody>
 </table>
 
-<?php echo $context->getDebtor()->getDBQuery()->display('paging'); ?>
+<?php echo $debtor->getDBQuery()->display('paging'); ?>
 
 <?php endif; ?>
