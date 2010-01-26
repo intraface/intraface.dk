@@ -54,7 +54,7 @@ class Intraface_modules_contact_Controller_Merge extends k_Component
             }
         }
 
-        if (count($context->getSimilarContacts()) == 0) {
+        if (!$this->context->getContact()->hasSimilarContacts()) {
             return new k_SeeOther($this->url('../'));
         }
 

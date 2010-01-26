@@ -296,8 +296,6 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $debtor->getDBQuery()->setExtraUri('&amp;type='.$debtor->get("type"));
         $debtor->getDBQuery()->setUri($this->url());
 
-        $data = array('posts' => $debtor->getList(), 'debtor' => $debtor);
-
         if (intval($debtor->getDBQuery()->getFilter('product_id')) != 0) {
             $data['product'] = new Product($this->getKernel(), $debtor->getDBQuery()->getFilter('product_id'));
             if (intval($debtor->getDBQuery()->getFilter('product_variation_id')) != 0) {
@@ -309,6 +307,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         if (intval($debtor->getDBQuery()->getFilter('contact_id')) != 0) {
             $contact = new Contact($this->getKernel(), $debtor->getDBQuery()->getFilter('contact_id'));
         }
+        $data = array('posts' => $debtor->getList(), 'debtor' => $debtor, 'contact' => $contact);
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/collection');
         return $smarty->render($this, $data);

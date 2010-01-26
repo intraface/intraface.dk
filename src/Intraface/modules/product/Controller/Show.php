@@ -31,6 +31,15 @@ class Intraface_modules_product_Controller_Show extends k_Component
         }
     }
 
+    function dispatch()
+    {
+        if ($this->getProduct()->getId() == 0) {
+            throw new k_PageNotFound();
+        }
+
+        return parent::dispatch();
+    }
+
     function getError()
     {
         if(!is_object($this->error)) {

@@ -7,7 +7,7 @@
  * @version @package-version@
  */
 
-$version = '2.0.0';
+$version = '2.0.1';
 $stability = 'stable';
 $notes = '
 * translation changes
@@ -203,7 +203,7 @@ $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC',
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '1.0.4');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Client_XMLRPC', 'public.intraface.dk', '1.0.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Controller', 'public.intraface.dk', '1.1.0');
-$pfm->addPackageDepWithChannel('required', 'konstrukt', 'pearhub.org', '2.2.0');
+$pfm->addPackageDepWithChannel('required', 'konstrukt', 'pearhub.org', '2.3.0');
 $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.intraface.dk', '0.1.0');
 
 // tools
