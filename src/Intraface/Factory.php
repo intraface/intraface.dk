@@ -9,40 +9,9 @@ class Intraface_Factory
         $this->config = $config;
     }
 
-    /**
-     * @deprecated use k_TemplateFactory instead
-     * @param $container
-     *
-     * @return object
-     */
-    function new_k_Template($container)
-    {
-        $smarty = new k_Template($this->config->template_dir);
-        return $smarty;
-    }
-
     function new_k_TemplateFactory($c)
     {
         return new Intraface_TemplateFactory(null);
-    }
-
-    /**
-     * @deprecated when everything is in konstrukt2
-     * @return object
-     */
-    function new_Intraface_Kernel()
-    {
-        return new Intraface_Kernel(session_id());
-    }
-
-    /**
-     * @deprecated when everything is in konstrukt2
-     * @param $container
-     * @return MDB2_Driver_Common
-     */
-    function new_MDB2($container)
-    {
-        return $this->new_MDB2_Driver_Common($container);
     }
 
     function new_MDB2_Driver_Common($container)
