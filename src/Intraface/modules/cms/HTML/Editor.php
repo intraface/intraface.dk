@@ -128,7 +128,7 @@ class Intraface_modules_cms_HTML_Editor
                 $button[] = 'code';
                 $button[] = 'pasteword';
 
-                $output = '<textarea'.$this->_parseTextareaAttributes($textarea_attributes).'>'.htmlentities($initial_value).'</textarea>'."\n";
+                $output = '<textarea'.$this->_parseTextareaAttributes($textarea_attributes).'>'.htmlentities(utf8_decode($initial_value)).'</textarea>'."\n";
                 $output .= '<script language="javascript" type="text/javascript">'."\n";
                 $output .= 'tinyMCE.init({'."\n";
                 $output .= '    mode : "exact",'."\n";

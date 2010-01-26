@@ -56,6 +56,7 @@ switch ($value['type']) {
                         if (!isset($value['text'])) $value['text'] = '';
                         $text = $value['text'];
                     }
+
                 echo $editor->get($textarea_attr, $text, $editor_configuration);
 
             ?>
