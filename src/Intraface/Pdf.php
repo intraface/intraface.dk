@@ -17,7 +17,7 @@ class Intraface_Pdf extends Document_Cpdf
         $this->page_width = 595;
         $this->page_height = 841;
 
-        // Foruddefineret værdier
+        // Foruddefineret vï¿½rdier
         $this->value['margin_top'] = 50;
         $this->value['margin_right'] = 42;
         $this->value['margin_left'] = 42; // Fra 0 til kanten i venstre side
@@ -36,11 +36,11 @@ class Intraface_Pdf extends Document_Cpdf
         // Opretter en nyt A4 dokument
         parent::__construct(array(0, 0, $this->page_width, $this->page_height));
 
-        // Omskrivning af placering på specielle tegn: æ, ø, å, Æ, Ø, Å
+        // Omskrivning af placering pï¿½ specielle tegn: ï¿½, ï¿½, ï¿½, ï¿½, ï¿½, ï¿½
         // Efter Cpdf dokumentation
         // Tabel for tegnenes placering fundet her: http://www.fingertipsoft.com/3dkbd/ansitable.html
         // Tabel for deres navn fundet her: http://www.gust.org.pl/fonty/qx-table2.htm
-        // Bemærk at placeringen af tegnene er forskellige fra de 2 tabeller. Den øverste har den rigtige placering.
+        // Bemï¿½rk at placeringen af tegnene er forskellige fra de 2 tabeller. Den ï¿½verste har den rigtige placering.
 
         $diff = array(230 => 'ae',
                       198 => 'AE',
@@ -64,11 +64,11 @@ class Intraface_Pdf extends Document_Cpdf
      */
     private function calculateDynamicValues()
     {
-        // Sætter værdier på baggrund af faste værdier
-        $this->value['right_margin_position'] = $this->page_width - $this->value['margin_right']; // content_width fra 0 til højre-margin
+        // Sï¿½tter vï¿½rdier pï¿½ baggrund af faste vï¿½rdier
+        $this->value['right_margin_position'] = $this->page_width - $this->value['margin_right']; // content_width fra 0 til hï¿½jre-margin
         $this->value['top_margin_position'] = $this->page_height - $this->value['margin_top']; // content_height
 
-        $this->value['content_width'] = $this->page_width - $this->value['margin_right'] - $this->value['margin_left']; // content_width fra 0 til højre-margin
+        $this->value['content_width'] = $this->page_width - $this->value['margin_right'] - $this->value['margin_left']; // content_width fra 0 til hï¿½jre-margin
         $this->value['content_height'] = $this->page_height - $this->value['margin_bottom'] - $this->value['margin_top']; // content_height
 
         $this->value['font_spacing'] = $this->value['font_size'] + $this->value['font_padding_top'] + $this->value['font_padding_bottom'];
@@ -111,7 +111,7 @@ class Intraface_Pdf extends Document_Cpdf
         } elseif (is_string($value) && substr($value, 0, 1) == "-") {
             $this->value['x'] -= intval(substr($value, 1));
         } else {
-            trigger_error('Ugyldig værdi i setX: '.$value, E_USER_ERROR);
+            trigger_error('Ugyldig vÃ¦rdi i setX: '.$value, E_USER_ERROR);
         }
     }
 
@@ -132,7 +132,7 @@ class Intraface_Pdf extends Document_Cpdf
         } elseif (is_string($value) && substr($value, 0, 1) == "-") {
             $this->value['y'] -= intval(substr($value, 1));
         } else {
-            trigger_error("Ugyldig værdi i setY: ".$value, E_USER_ERROR);
+            trigger_error("Ugyldig vÃ¦rdi i setY: ".$value, E_USER_ERROR);
         }
     }
 
@@ -216,11 +216,11 @@ class Intraface_Pdf extends Document_Cpdf
     public function nextPage($sub_text = false)
     {
         if ($sub_text == true) {
-            parent::addText($this->value['right_margin_position'] - parent::getTextWidth($this->value['font_size'], "<i>Fortsættes på næste side...</i>") - 30, $this->value["margin_bottom"] - $this->value['font_padding_top'] - $this->value['font_size'], $this->value['font_size'], "<i>Fortsættes på næste side...</i>");
+            parent::addText($this->value['right_margin_position'] - parent::getTextWidth($this->value['font_size'], "<i>FortsÃ¦ttes pÃ¥ nÃ¦ste side...</i>") - 30, $this->value["margin_bottom"] - $this->value['font_padding_top'] - $this->value['font_size'], $this->value['font_size'], "<i>Fortsï¿½ttes pï¿½ nï¿½ste side...</i>");
         }
         parent::newPage();
         $this->setY(0);
-        // $pointY = $this->value["page_height"] - 30;  // lige lidt afstand på næste side til starten
+        // $pointY = $this->value["page_height"] - 30;  // lige lidt afstand pï¿½ nï¿½ste side til starten
         $this->page++;
         return $this->get('y');
     }
