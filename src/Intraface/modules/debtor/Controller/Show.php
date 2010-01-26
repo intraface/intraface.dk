@@ -475,4 +475,11 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         $render = new Debtor_Report_OIOXML;
         return $render->output($this->getDebtor());
     }
+
+    function renderTxt()
+    {
+        require_once dirname(__FILE__) . '/../Visitor/Text.php';
+        $render = new Debtor_Report_Text;
+        return $render->output($this->getDebtor());
+    }
 }

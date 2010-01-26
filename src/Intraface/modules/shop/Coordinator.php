@@ -452,7 +452,7 @@ class Intraface_modules_shop_Coordinator
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
-        $subject = 'Bekr�ftelse p� betaling (#' . $payment_id . ')';
+        $subject = 'Bekræftelse på betaling (#' . $payment_id . ')';
         $body = 'Vi har modtaget din betaling. Hvis din ordre var afsendt inden kl. 12.00, sender vi den allerede i dag.';
         $body .= "\n\nVenlig hilsen\n".  $this->kernel->intranet->address->get('name');
 
