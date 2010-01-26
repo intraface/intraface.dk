@@ -2,12 +2,14 @@
 
 <h1><?php e(t('Dashboard')); ?></h1>
 
+
 <?php if ($context->getKernel()->setting->get('user', 'homepage.message') == 'view'): ?>
 <div class="message">
 	<p><?php e(t('Welcome, you are on the dashboard', 'dashboard')); ?></p>
 	<p><a href="<?php e(url(null, array('message' => 'hide'))); ?>"><?php e(t('hide message forever')); ?></a></p>
 </div>
 <?php endif; ?>
+
 
 
 <?php if (!empty($_attention_needed)): ?>
@@ -140,6 +142,9 @@ if ($last_view_split[0] > $some_days_ago) {
 </div>
 
 <?php endif; ?>
+
+
+
 
 </div>
 

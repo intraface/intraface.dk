@@ -84,7 +84,7 @@ class Intraface_Controller_Restricted extends k_Component
             if (!$this->getKernel()->user->isFilledIn()) {
             	$_advice[] = array(
             		'msg' => 'all information about you has not been filled in',
-            		'link' => url('core/restricted/module/controlpanel/user', array('edit')),
+            		'link' => $this->url('core/restricted/module/controlpanel/user', array('edit')),
             		'module' => 'dashboard'
             	);
             }
@@ -203,7 +203,7 @@ class component_ShowProduct {
             $this->usermenu[1]['url'] = $this->url('/restricted/switchintranet');
         }
         $this->usermenu[2]['name'] = $this->t('Modules');
-        $this->usermenu[2]['url'] = url('/restricted/module');
+        $this->usermenu[2]['url'] = $this->url('/restricted/module');
         return $this->usermenu;
     }
 
@@ -212,7 +212,7 @@ class component_ShowProduct {
         $this->menu = array();
         $i = 0;
         $this->menu[$i]['name'] = $this->getTranslation()->get('dashboard');
-        $this->menu[$i]['url'] = url('/restricted/');
+        $this->menu[$i]['url'] = $this->url('/restricted/');
         $i++;
         $this->db = new DB_Sql;
         $this->db->query("SELECT name, menu_label, name FROM module WHERE active = 1 AND show_menu = 1 ORDER BY menu_index");

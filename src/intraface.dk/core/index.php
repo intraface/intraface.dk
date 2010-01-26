@@ -270,6 +270,39 @@ class Intraface_TemplateFactory extends k_DefaultTemplateFactory
 $components = new k_InjectorAdapter($bucket, new Intraface_Document);
 $components->setImplementation('k_DefaultNotAuthorizedComponent', 'NotAuthorizedComponent');
 
+/**
+ * Translates a string.
+ */
+function __($str) {
+  return $GLOBALS['k_current_context']->translator()->translate($str);
+}
+/*
+$translation = $bucket->get('translation2');
+$translation->setLang('dk');
+
+if (!function_exists('__')) {
+  function __($args) {
+    $args = func_get_args();
+    return call_user_func_array($GLOBALS['_global_function_callback___'], $args);
+  }
+  if (!isset($GLOBALS['_global_function_callback___'])) {
+    $GLOBALS['_global_function_callback___'] = NULL;
+  }
+}
+
+$GLOBALS['_global_function_callback___'] = 'intraface_t';
+
+function intraface_t($string, $page = NULL)
+{
+    global $translation;
+    if ($page !== NULL) {
+        return $translation->get($string, $page);
+    } else {
+        return $translation->get($string);
+    }
+}
+*/
+
 if (realpath($_SERVER['SCRIPT_FILENAME']) == __FILE__) {
     try {
         k()

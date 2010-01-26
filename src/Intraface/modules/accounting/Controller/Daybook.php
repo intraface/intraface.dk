@@ -47,7 +47,7 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
             $tpl = $this->template->create('Intraface/Controller/templates/message');
             return $tpl->render($this, array(
             	'type' => 'dependent',
-            	'content' => 'Du har ikke sat momskonti. <a href="' . url('../settings') . '">Gå til indstillingerne</a>.'));
+            	'content' => 'Du har ikke sat momskonti. <a href="' . $this->url('../settings') . '">Gå til indstillingerne</a>.'));
         }
 
         // the view to use
@@ -81,7 +81,7 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
             $cheatsheet = $cheat_tpl->render($this);
         } else {
             $cheatsheet = '<ul class="options">
-    			<li><a href="' . url(null, array('quickhelp' => 'true')) . '">Slå hurtighjælp til</a></li>
+    			<li><a href="' . $this->url(null, array('quickhelp' => 'true')) . '">Slå hurtighjælp til</a></li>
     			</ul>';
         }
 

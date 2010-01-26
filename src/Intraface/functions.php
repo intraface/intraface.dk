@@ -1,28 +1,4 @@
 <?php
-// url
-if (!function_exists('url')) {
-    /**
-     * This function is dynamically redefinable.
-     * @see $GLOBALS['_global_function_callback_e']
-     */
-    function url($args = NULL)
-    {
-        $args = func_get_args();
-        return call_user_func_array($GLOBALS['_global_function_callback_url'], $args);
-    }
-    if (!isset($GLOBALS['_global_function_callback_url'])) {
-        $GLOBALS['_global_function_callback_url'] = NULL;
-    }
-}
-
-$GLOBALS['_global_function_callback_url'] = 'intraface_url';
-
-function intraface_url($url, $args = array())
-{
-    $builder = new k_UrlBuilder(PATH_WWW);
-    return $builder->url($url, $args);
-}
-
 // isAjax()
 if (!function_exists('isAjax')) {
     /**
@@ -58,29 +34,6 @@ function intraface_isAjax()
     return false;
 }
 
-// e()
-if (!function_exists('e')) {
-    /**
-     * This function is dynamically redefinable.
-     * @see $GLOBALS['_global_function_callback_e']
-     */
-    function e($args)
-    {
-        $args = func_get_args();
-        return call_user_func_array($GLOBALS['_global_function_callback_e'], $args);
-    }
-    if (!isset($GLOBALS['_global_function_callback_e'])) {
-        $GLOBALS['_global_function_callback_e'] = NULL;
-    }
-}
-
-$GLOBALS['_global_function_callback_e'] = 'intraface_e';
-
-function intraface_e($string)
-{
-    echo htmlentities($string);
-}
-
 // amountToOutput
 if (!function_exists('amountToOutput')) {
     /**
@@ -100,8 +53,8 @@ if (!function_exists('amountToOutput')) {
 $GLOBALS['_global_function_callback_amountToOutput'] = 'intraface_AmountToOutput';
 
 /**
- * Funktion til at outputte et beløb landespecifik notation
- * Det kunne jo være gavnligt om metoden også indeholdte noget om,
+ * Funktion til at outputte et belï¿½b landespecifik notation
+ * Det kunne jo vï¿½re gavnligt om metoden ogsï¿½ indeholdte noget om,
  * hvilket land der er tale om.
  */
 function amountToOutput($amount)
@@ -129,7 +82,7 @@ $GLOBALS['_global_function_callback_amountToForm'] = 'intraface_AmountToForm';
 
 
 /**
- * Funktion til at outputte et beløb landespecifik notation i en formular
+ * Funktion til at outputte et belï¿½b landespecifik notation i en formular
  */
 function intraface_amountToForm($amount)
 {
@@ -156,15 +109,15 @@ $GLOBALS['_global_function_callback_amountToDb'] = 'intraface_AmountToDb';
 
 
 /**
- * Funktion til at konvertere beløb så de kan gemmes i databasen
+ * Funktion til at konvertere belï¿½b sï¿½ de kan gemmes i databasen
  *
- * Funktionen skal konvertere til den mindste enhed af beløbet
- * i vores tilfælde ofte ører
+ * Funktionen skal konvertere til den mindste enhed af belï¿½bet
+ * i vores tilfï¿½lde ofte ï¿½rer
  */
 function intraface_amountToDb($amount)
 {
-    // dette konverterer fra dansk til engelsk format - men så bør den også være landespecifik
-    // spørgsmålet er hvordan vi gør dem landespecifikke på en smart måde?
+    // dette konverterer fra dansk til engelsk format - men sï¿½ bï¿½r den ogsï¿½ vï¿½re landespecifik
+    // spï¿½rgsmï¿½let er hvordan vi gï¿½r dem landespecifikke pï¿½ en smart mï¿½de?
     $amount = str_replace(".", "", $amount);
     $amount = str_replace(",", ".", $amount);
 
@@ -299,49 +252,6 @@ function intraface_filesize_readable($size, $retstring = null)
         }
         if ($sizestring == $sizes[0]) { $retstring = '%01d %s'; } // Bytes aren't normally fractional
         return sprintf($retstring, $size, $sizestring);
-}
-
-if (!function_exists('t')) {
-  /**
-   * This function is dynamically redefinable.
-   * @see $GLOBALS['_global_function_callback_e']
-   */
-  function t($args) {
-    $args = func_get_args();
-    return call_user_func_array($GLOBALS['_global_function_callback_t'], $args);
-  }
-  if (!isset($GLOBALS['_global_function_callback_t'])) {
-    $GLOBALS['_global_function_callback_t'] = NULL;
-  }
-}
-
-$GLOBALS['_global_function_callback_t'] = 'intraface_t';
-
-if (!function_exists('__')) {
-  /**
-   * This function is dynamically redefinable.
-   * @see $GLOBALS['_global_function_callback_e']
-   */
-  function __($args) {
-    $args = func_get_args();
-    return call_user_func_array($GLOBALS['_global_function_callback___'], $args);
-  }
-  if (!isset($GLOBALS['_global_function_callback___'])) {
-    $GLOBALS['_global_function_callback___'] = NULL;
-  }
-}
-
-$GLOBALS['_global_function_callback_t'] = 'intraface_t';
-$GLOBALS['_global_function_callback___'] = 'intraface_t';
-
-function intraface_t($string, $page = NULL)
-{
-    global $translation;
-    if ($page !== NULL) {
-        return $translation->get($string, $page);
-    } else {
-        return $translation->get($string);
-    }
 }
 
 function intrafaceBackendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext)

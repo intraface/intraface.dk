@@ -242,7 +242,7 @@ class Intraface_Main
      */
     public function getPath()
     {
-        return url('/restricted/module/' . $this->module_name) . '/';
+        return PATH_WWW . '/restricted/module/' . $this->module_name . '/';
     }
 
     /**
