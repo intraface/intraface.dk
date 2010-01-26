@@ -1,6 +1,13 @@
 <?php
 class Intraface_Filehandler_Controller_Sizes extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
@@ -14,7 +21,7 @@ class Intraface_Filehandler_Controller_Sizes extends k_Component
     function renderHtml()
     {
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
-        if (!empty($this->GET['delete_instance_type_key'])) {
+        if ($this->query('delete_instance_type_key')) {
             $instance_manager = new Ilib_Filehandler_InstanceManager($this->getKernel(), (int)$this->GET['delete_instance_type_key']);
             $instance_manager->delete();
         }
@@ -30,7 +37,7 @@ class Intraface_Filehandler_Controller_Sizes extends k_Component
 
         $data = array('instance_manager' => $instance_manager, 'instances' => $instances);
 
-        $tpl = new k_Template(dirname(__FILE__) . '/../templates/sizes.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/sizes');
         return $tpl->render($this, $data);
     }
 

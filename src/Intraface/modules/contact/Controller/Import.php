@@ -4,6 +4,12 @@ class Intraface_modules_contact_Controller_Import extends k_Component
     protected $msg;
     public $errors;
     public $success;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function map($name)
     {
@@ -81,7 +87,7 @@ class Intraface_modules_contact_Controller_Import extends k_Component
 
         //$data = $_SESSION['shared_fileimport_data'];
         $data = $this->session()->get('fileimport_data');
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/import.tpl.php');
+        $smarty = new $this->template->create(dirname(__FILE__) . '/templates/import');
         return $smarty->render($this, array('translation' => $translation));
     }
 }

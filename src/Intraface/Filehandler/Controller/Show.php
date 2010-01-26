@@ -1,6 +1,13 @@
 <?php
 class Intraface_Filehandler_Controller_Show extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function getKernel()
     {
     	return $this->context->getKernel();
@@ -19,7 +26,7 @@ class Intraface_Filehandler_Controller_Show extends k_Component
         $data = array('filemanager' => $filemanager,
                       'kernel'      => $this->getKernel());
 
-        $tpl = new k_Template(dirname(__FILE__) . '/../templates/show.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/show');
         return $tpl->render($this, $data);
     }
 

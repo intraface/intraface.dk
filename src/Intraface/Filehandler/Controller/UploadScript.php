@@ -1,6 +1,13 @@
 <?php
 class Intraface_Filehandler_Controller_UploadScript extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
@@ -13,7 +20,7 @@ class Intraface_Filehandler_Controller_UploadScript extends k_Component
 
         $data = array('kernel' => $kernel);
 
-        $tpl = new k_Template(dirname(__FILE__) . '/../templates/uploadscript.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/uploadscript');
 
         return new k_HttpResponse(200, $tpl->render($this, $data));
     }
@@ -25,7 +32,7 @@ class Intraface_Filehandler_Controller_UploadScript extends k_Component
 
         $data = array('kernel' => $kernel, 'filemanager' => new Ilib_Filehandler($kernel));
 
-        $tpl = new k_Template(dirname(__FILE__) . '/../templates/uploadscript-post.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/uploadscript-post');
 
         return new k_HttpResponse(200, $tpl->render($this, $data));
     }

@@ -1,12 +1,19 @@
 <?php
 class Intraface_modules_contact_Controller_Memo extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function renderHtml()
     {
     	$reminder = ContactReminder::factory($this->context->getKernel(), (int)$this->name());
         $contact = $reminder->contact;
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/memo.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/memo');
         return $smarty->render($this, array('reminder' => $reminder));
     }
 
@@ -15,7 +22,7 @@ class Intraface_modules_contact_Controller_Memo extends k_Component
     	$reminder = ContactReminder::factory($this->context->getKernel(), (int)$this->name());
         $contact = $reminder->contact;
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/memo-edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/memo-edit');
         return $smarty->render($this, array('reminder' => $reminder));
 
     }

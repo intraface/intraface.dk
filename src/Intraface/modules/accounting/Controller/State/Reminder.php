@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_State_Reminder extends k_Component
 {
+    protected $template;
+
+    function __(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function map()
     {
         return 'Intraface_modules_accounting_Controller_State_SelectYear';
@@ -29,8 +36,7 @@ class Intraface_modules_accounting_Controller_State_Reminder extends k_Component
             return new k_SeeOther($this->url('selectyear'));
         }
 
-
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/reminder.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/reminder');
         return $smarty->render($this, array('voucher' => $voucher, 'year' => $this->getYear(), 'reminder' => $reminder, 'value' => $value, 'year' => $year));
     }
 

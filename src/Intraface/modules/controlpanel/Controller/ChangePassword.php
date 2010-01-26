@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_controlpanel_Controller_ChangePassword extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
@@ -8,7 +15,7 @@ class Intraface_modules_controlpanel_Controller_ChangePassword extends k_Compone
 
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/changepassword.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/changepassword');
         return $smarty->render($this);
     }
 
@@ -22,14 +29,14 @@ class Intraface_modules_controlpanel_Controller_ChangePassword extends k_Compone
         return array_merge($value, $address_value);
     }
 
-    function renderForm()
+    function renderHtmlForm()
     {
     	$user = new Intraface_User($this->getKernel()->user->get('id'));
 
     	if ($user->updatePassword($_POST['old_password'], $_POST['new_password'], $_POST['repeat_password'])) {
     		return k_SeeOther($this->url('../'));
     	}
-    	return renderHtml();
+    	return render();
     }
 
     function getUser()

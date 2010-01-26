@@ -6,13 +6,19 @@ class Intraface_modules_product_Controller_Index extends k_Component
     protected $product;
     protected $product_doctrine;
     private $error;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function renderHtml()
     {
         $module = $this->getKernel()->module('product');
         $translation = $this->getKernel()->getTranslation('product');
 
-        $smarty = new k_Template(dirname(__FILE__) . '/tpl/index.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/tpl/index');
         return $smarty->render($this);
     }
 
@@ -155,8 +161,7 @@ class Intraface_modules_product_Controller_Index extends k_Component
             $data['product'] = $this->product_doctrine;
         }
 
-
-        $smarty = new k_Template(dirname(__FILE__) . '/tpl/edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/tpl/edit');
         return $smarty->render($this, $data);
     }
 

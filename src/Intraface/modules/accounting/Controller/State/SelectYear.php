@@ -2,6 +2,12 @@
 class Intraface_modules_accounting_Controller_State_SelectYear extends Intraface_modules_accounting_Controller_Year_Index
 {
     protected $year;
+    protected $template;
+
+    function __(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function getKernel()
     {
@@ -40,7 +46,7 @@ class Intraface_modules_accounting_Controller_State_SelectYear extends Intraface
         $accounting_module = $this->getKernel()->useModule('accounting');
 
         if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
-            $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/year-not-ready.tpl.php');
+            $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/year-not-ready');
             return $smarty->render($this);
         }
 

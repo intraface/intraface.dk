@@ -2,6 +2,12 @@
 class Intraface_modules_contact_Controller_Sendemail extends k_Component
 {
     protected $msg;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function getMessage()
     {
@@ -25,7 +31,7 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
 
     		for ($i = 0, $max = count($contacts); $i < $max; $i++) {
     			if (!$validator->isEmail($contacts[$i]['email'], "")) {
-    				// Hvis de ikke har en mail, kører vi videre med næste.
+    				// Hvis de ikke har en mail, kï¿½rer vi videre med nï¿½ste.
     				continue;
     			}
 
@@ -39,11 +45,11 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
     				'from_name' => $this->getKernel()->user->get('name'),
     				'contact_id' => $contact->get('id'),
     				'type_id' => 11, // email til search
-    				'belong_to' => 0 // der er ikke nogen specifik id at sætte
+    				'belong_to' => 0 // der er ikke nogen specifik id at sï¿½tte
     			);
 
     			$email->save($input);
-    			// E-mailen sættes i kø - hvis vi sender den med det samme tager det
+    			// E-mailen sï¿½ttes i kï¿½ - hvis vi sender den med det samme tager det
     			// alt for lang tid.
     			$email->send(Intraface_Mail::factory(), 'queue');
     			$j++;
@@ -69,7 +75,7 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
         $contact->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
         $contacts = $contact->getList("use_address");
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/sendemail.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/sendemail');
         return $smarty->render($this);
     }
 

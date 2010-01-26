@@ -1,6 +1,13 @@
 <?php
 class Intraface_Filehandler_Controller_Sizes_Edit extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
@@ -39,7 +46,7 @@ class Intraface_Filehandler_Controller_Sizes_Edit extends k_Component
 
         $data = array('instance_manager' => $instance_manager, 'value' => $value);
 
-        $tpl = new k_Template(dirname(__FILE__) . '/../../templates/sizes-edit.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/../../templates/sizes-edit');
         return $tpl->render($this, $data);
     }
 }

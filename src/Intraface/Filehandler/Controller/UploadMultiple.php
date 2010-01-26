@@ -2,10 +2,12 @@
 class Intraface_Filehandler_Controller_UploadMultiple extends k_Component
 {
     private $mdb2;
+    protected $template;
 
-    function __construct(MDB2_Driver_Common $mdb2)
+    function __construct(k_TemplateFactory $template, MDB2_Driver_Common $mdb2)
     {
         $this->mdb2 = $mdb2;
+        $this->template = $template;
     }
 
     function getKernel()
@@ -25,7 +27,7 @@ class Intraface_Filehandler_Controller_UploadMultiple extends k_Component
 
         $data = array('filemanager' => $filemanager, 'redirect' => $redirect);
 
-        $tpl = new k_Template(dirname(__FILE__) . '/../templates/uploadmultiple.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/uploadmultiple');
         return $tpl->render($this, $data);
     }
 

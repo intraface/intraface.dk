@@ -2,6 +2,13 @@
 class Intraface_modules_accounting_Controller_State_Creditnote extends k_Component
 {
     protected $year;
+    protected $kernel;
+    protected $template;
+
+    function __(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function map()
     {
@@ -30,13 +37,12 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
             return new k_SeeOther($this->url('selectyear'));
         }
 
-
         $debtor->loadItem();
 
         $items = $debtor->item->getList();
         $value = $debtor->get();
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/creditnote.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/creditnote');
         return $smarty->render($this);
 
     }
@@ -87,7 +93,7 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
             if ($debtor->error->isError()) {
                 $debtor->loadItem();
             } elseif (!$debtor->state($year, $_POST['voucher_number'], $_POST['date_state'], $this->getKernel()->getTranslation('accounting'))) {
-                $debtor->error->set('Kunne ikke bogføre posten');
+                $debtor->error->set('Kunne ikke bogfï¿½re posten');
                 $debtor->loadItem();
             } else {
                 return new k_SeeOther($this->url('../'));

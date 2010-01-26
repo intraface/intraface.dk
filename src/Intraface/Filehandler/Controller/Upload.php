@@ -1,11 +1,13 @@
-    <?php
+<?php
 class Intraface_Filehandler_Controller_Upload extends k_Component
 {
     protected $mdb2;
+    protected $template;
 
-    function __construct(MDB2_Driver_Common $mdb2)
+    function __construct(k_TemplateFactory $template, MDB2_Driver_Common $mdb2)
     {
         $this->mdb2 = $mdb2;
+        $this->template = $template;
     }
 
     function getKernel()
@@ -25,7 +27,7 @@ class Intraface_Filehandler_Controller_Upload extends k_Component
 
         $data = array('filemanager' => $filemanager, 'redirect' => $redirect);
 
-        $tpl = new k_Template(dirname(__FILE__) . '/../templates/upload.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/upload');
         return $tpl->render($this, $data);
     }
 

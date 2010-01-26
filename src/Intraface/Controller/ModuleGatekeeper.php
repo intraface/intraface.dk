@@ -1,6 +1,13 @@
 <?php
 class Intraface_Controller_ModuleGatekeeper extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function map($name)
     {
         foreach ($this->getModules() as $module) {
@@ -23,7 +30,7 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
 
         require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/modulegatekeeper.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/modulegatekeeper');
         return $smarty->render($this);
     }
 

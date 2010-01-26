@@ -1,8 +1,13 @@
 <?php
 class Intraface_modules_controlpanel_Controller_UserPreferences extends k_Component
 {
-    protected $registry;
     protected $error;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     protected function map($name)
     {
@@ -30,7 +35,7 @@ class Intraface_modules_controlpanel_Controller_UserPreferences extends k_Compon
 
     function renderHtml()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/userpreferences.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/userpreferences');
         return $smarty->render($this);
     }
 

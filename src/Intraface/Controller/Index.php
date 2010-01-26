@@ -36,10 +36,6 @@ class Intraface_Controller_Index extends k_Component
     function renderHtml()
     {
         return new k_SeeOther($this->url('restricted'));
-        /*
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/index.tpl.php');
-        return $smarty->render($this);
-        */
     }
 
     function getKernel()

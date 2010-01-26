@@ -1,6 +1,13 @@
 <?php
 class Intraface_Filehandler_Controller_Edit extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
@@ -16,7 +23,7 @@ class Intraface_Filehandler_Controller_Edit extends k_Component
         $data = array('filemanager' => $filemanager,
                       'values' => $values);
 
-        $tpl = new k_Template(dirname(__FILE__) . '/../templates/edit.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/edit');
         return $tpl->render($this, $data);
     }
 
@@ -44,7 +51,7 @@ class Intraface_Filehandler_Controller_Edit extends k_Component
                       'values' => $this->body());
 
 
-        $tpl = new k_Template(dirname(__FILE__) . '/../templates/edit.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/edit');
         return $tpl->render($this, $data);
     }
 }

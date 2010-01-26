@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_contact_Controller_Contactpersons extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function map($name)
     {
         return 'Intraface_modules_contact_Controller_Contactperson';
@@ -16,7 +23,7 @@ class Intraface_modules_contact_Controller_Contactpersons extends k_Component
         $contact = new Contact($this->context->getKernel(), $this->context->name());
     	$person = $contact->loadContactPerson(0);
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/contactperson-edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/contactperson-edit');
         return $smarty->render($this, array('person' => $person, 'contact' => $contact));
     }
 
@@ -34,6 +41,6 @@ class Intraface_modules_contact_Controller_Contactpersons extends k_Component
     	} else {
     		$value = $_POST;
     	}
-
+    	return $this->render();
     }
 }

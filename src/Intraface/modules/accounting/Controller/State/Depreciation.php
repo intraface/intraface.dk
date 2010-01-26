@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_accounting_Controller_State_Depreciation extends k_Component
 {
+    protected $template;
+
+    function __(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function map()
     {
         return 'Intraface_modules_accounting_Controller_State_SelectYear';
@@ -18,7 +25,7 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
         $depreciation = $this->context->getDepreciation();
         $voucher = new Voucher($year);
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/depreciation.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/depreciation');
         return $smarty->render($this, array('accounting_module' => $accounting_module, 'voucher' => $voucher, 'year' => $this->getYear(), 'depreciation' => $this->context->getDepreciation(), 'object' => $this->getModel(), 'year' => $year));
 
     }

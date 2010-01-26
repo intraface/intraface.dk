@@ -28,6 +28,27 @@ class Intraface_modules_newsletter_Controller_Letters extends k_Component
         return $smarty->render($this);
     }
 
+    function renderHtmlNew()
+    {
+        $module = $this->getKernel()->module("newsletter");
+
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/letter-edit');
+        return $smarty->render($this);
+    }
+
+    function postForm()
+    {
+    	$module = $this->getKernel()->module("newsletter");
+        $letter = new Newsletter($this->getList());
+
+    	if ($id = $letter->save($_POST)) {
+    		return new k_SeeOther($this->url($id));
+    	} else {
+    		$value = $_POST;
+    	}
+    	return $this->render();
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
@@ -49,26 +70,5 @@ class Intraface_modules_newsletter_Controller_Letters extends k_Component
         $translation = $this->getKernel()->getTranslation('newsletter');
 
         return $this->getLetter()->getList();
-    }
-
-    function renderHtmlNew()
-    {
-        $module = $this->getKernel()->module("newsletter");
-
-        $smarty = $this->template->create(dirname(__FILE__) . '/templates/letter-edit');
-        return $smarty->render($this);
-    }
-
-    function postForm()
-    {
-    	$module = $this->getKernel()->module("newsletter");
-        $letter = new Newsletter($this->getList());
-
-    	if ($id = $letter->save($_POST)) {
-    		return new k_SeeOther($this->url($id));
-    	} else {
-    		$value = $_POST;
-    	}
-    	return $this->render();
     }
 }

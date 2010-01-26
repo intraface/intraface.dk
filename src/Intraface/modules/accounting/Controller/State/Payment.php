@@ -4,6 +4,12 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
     protected $year;
     protected $voucher;
     protected $payment;
+    protected $template;
+
+    function __(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function getModel()
     {
@@ -48,7 +54,7 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
             return new k_SeeOther($this->url('selectyear'));
         }
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/payment.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/payment');
         return $smarty->render($this, array('kernel' => $this->getKernel(), 'voucher' => $voucher, 'payment' => $payment, 'object' => $object, 'year' => $year));
 
     }

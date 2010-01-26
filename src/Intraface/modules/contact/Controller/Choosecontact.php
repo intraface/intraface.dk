@@ -2,6 +2,12 @@
 class Intraface_modules_contact_Controller_Choosecontact extends k_Component
 {
     protected $contact;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function renderHtml()
     {
@@ -25,7 +31,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
         }
         */
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/choosecontact.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/choosecontact');
         return $smarty->render($this);
     }
 

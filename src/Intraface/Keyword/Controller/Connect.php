@@ -1,6 +1,13 @@
 <?php
 class Intraface_Keyword_Controller_Connect extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
@@ -30,7 +37,7 @@ class Intraface_Keyword_Controller_Connect extends k_Component
         	'keywords' => $keywords,
         	'checked' => $checked);
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/connect.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/connect');
         return $smarty->render($this, $data);
     }
 

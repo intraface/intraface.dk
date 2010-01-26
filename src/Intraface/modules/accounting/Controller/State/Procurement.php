@@ -3,6 +3,12 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
 {
     protected $year;
     protected $value = array();
+    protected $template;
+
+    function __(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function getKernel()
     {
@@ -48,7 +54,7 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
          $this->value['debet_account'][$i++] = array('text' => $this->t('shipment etc'), 'amount' => $procurement->get('dk_price_shipment_etc'));
          }
          */
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/procurement.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/procurement');
 
         $data = array(
         	'procurement' => $procurement,

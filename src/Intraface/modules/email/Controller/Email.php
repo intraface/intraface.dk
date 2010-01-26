@@ -121,7 +121,7 @@ class Intraface_modules_email_Controller_Email extends k_Component
         $contact = $email->getContact();
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
 
-        $tpl = new k_Template(dirname(__FILE__) . '/templates/edit.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/edit');
         $data = array(
         	'contact' => $contact,
         	'value' => $value,

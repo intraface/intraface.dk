@@ -3,11 +3,13 @@ class Intraface_Filehandler_Controller_Index extends k_Component
 {
     protected $kernel_gateway;
     protected $user_gateway;
+    protected $template;
 
-    function __construct(Intraface_KernelGateway $kernel_gateway, Intraface_UserGateway $user_gateway)
+    function __construct(k_TemplateFactory $template, Intraface_KernelGateway $kernel_gateway, Intraface_UserGateway $user_gateway)
     {
         $this->kernel_gateway = $kernel_gateway;
         $this->user_gateway = $user_gateway;
+        $this->template = $template;
     }
 
     function getKernel()
@@ -19,28 +21,28 @@ class Intraface_Filehandler_Controller_Index extends k_Component
     {
         $gateway = new Ilib_Filehandler_Gateway($this->getKernel());
 
-        if (!empty($this->GET['delete']) AND is_numeric($this->GET['delete'])) {
-            $filehandler = $gateway->getFromId($this->GET['delete']);
+        if (is_numeric($this->query('delete'))) {
+            $filehandler = $gateway->getFromId($this->query('delete'));
             if (!$filemanager->delete()) {
                 throw new Exception($this->__('Could not delete file'));
             }
-        } elseif (!empty($this->GET['undelete']) AND is_numeric($this->GET['undelete'])) {
-            $filehandler = $gateway->getFromId($this->GET['delete']);
+        } elseif (is_numeric($this->query('undelete'))) {
+            $filehandler = $gateway->getFromId($this->query('delete'));
             if (!$filemanager->undelete()) {
                 throw new Exception($this->__('Could not undelete file'));
             }
         }
 
-        if (isset($this->GET['search'])) {
+        if ($this->query('search')) {
 
-            if (isset($this->GET['text']) && $this->GET['text'] != '') {
-                $gateway->getDBQuery()->setFilter('text', $this->GET['text']);
+            if ($this->query('text') != '') {
+                $gateway->getDBQuery()->setFilter('text', $this->query('text'));
             }
 
-            if (isset($this->GET['filtration']) && intval($this->GET['filtration']) != 0) {
-                $gateway->getDBQuery()->setFilter('filtration', $this->GET['filtration']);
+            if (intval($this->query('filtration')) != 0) {
+                $gateway->getDBQuery()->setFilter('filtration', $this->query('filtration'));
 
-                switch($this->GET['filtration']) {
+                switch($this->query('filtration')) {
                     case 1:
                         $gateway->getDBQuery()->setFilter('uploaded_from_date', date('d-m-Y').' 00:00');
                         break;
@@ -70,11 +72,11 @@ class Intraface_Filehandler_Controller_Index extends k_Component
                 }
             }
 
-            if (isset($this->GET['keyword']) && is_array($this->GET['keyword']) && count($this->GET['keyword']) > 0) {
-                $gateway->getDBQuery()->setKeyword($this->GET['keyword']);
+            if (is_array($this->query('keyword')) && count($this->query('keyword')) > 0) {
+                $gateway->getDBQuery()->setKeyword($this->query('keyword'));
             }
 
-        } elseif (isset($this->GET['character'])) {
+        } elseif ($this->query('character')) {
             $gateway->getDBQuery()->useCharacter();
         } else {
             $gateway->getDBQuery()->setSorting('file_handler.date_created DESC');
@@ -89,7 +91,7 @@ class Intraface_Filehandler_Controller_Index extends k_Component
         $data = array('files' => $files,
                       'filemanager' => $gateway);
 
-        $tpl = new k_Template(dirname(__FILE__) . '/../templates/index.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/index');
         return $tpl->render($this, $data);
     }
 

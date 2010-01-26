@@ -1,6 +1,13 @@
 <?php
 class Intraface_modules_contact_Controller_Contactperson extends k_Component
 {
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
+
     function renderHtml()
     {
         return 'Intentionally left blank';
@@ -11,7 +18,7 @@ class Intraface_modules_contact_Controller_Contactperson extends k_Component
     	$contact = new Contact($this->context->getKernel(), $this->context->context->name());
     	$person = $contact->loadContactPerson($this->name());
 
-        $smarty = new k_Template(dirname(__FILE__) . '/templates/contactperson-edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/contactperson-edit');
         return $smarty->render($this, array('contact' => $contact, 'person' => $person));
 
     }

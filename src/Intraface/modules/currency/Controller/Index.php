@@ -26,10 +26,10 @@ class Intraface_modules_currency_Controller_Index extends k_Component
             $currencies = NULL;
         }
 
-        $smarty = new k_Template('Intraface/modules/currency/Controller/tpl/empty-table.tpl.php');
+        $smarty = $this->template->create('Intraface/modules/currency/Controller/tpl/empty-table');
 
         if ($currencies == NULL) {
-            $smarty = new k_Template('Intraface/modules/currency/Controller/tpl/empty-table.tpl.php');
+            $smarty = $this->template->create('Intraface/modules/currency/Controller/tpl/empty-table');
 
             return $smarty->render($this, array('message' => 'No currencies has been added yet.'));
         }

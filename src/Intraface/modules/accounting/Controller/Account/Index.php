@@ -111,7 +111,7 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
     function renderHtmlCreate()
     {
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/account/edit.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/account/edit');
         return $smarty->render($this);
     }
 

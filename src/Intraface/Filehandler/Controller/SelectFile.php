@@ -2,6 +2,12 @@
 class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_Controller_Index
 {
     public $multiple_choice;
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function getFileAppender()
     {
@@ -191,14 +197,14 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
             $filemanager->getDBQuery()->setFilter('images', 1);
         }
 
-        if (isset($this->GET["text"]) && $this->GET["text"] != "") {
-            $filemanager->getDBQuery()->setFilter("text", $this->GET["text"]);
+        if ($this->query("text") != "") {
+            $filemanager->getDBQuery()->setFilter("text", $this->query("text"));
         }
 
-        if (isset($this->GET["filtration"]) && intval($this->GET["filtration"]) != 0) {
+        if (intval($this->query("filtration")) != 0) {
             // Kun for at filtration igen vises i s�geboksen
-            $filemanager->getDBQuery()->setFilter("filtration", $this->GET["filtration"]);
-            switch($this->GET["filtration"]) {
+            $filemanager->getDBQuery()->setFilter("filtration", $this->query("filtration"));
+            switch($this->query("filtration")) {
                 case 1:
                     $filemanager->getDBQuery()->setFilter("uploaded_from_date", date("d-m-Y")." 00:00");
                     break;
@@ -221,15 +227,15 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
             }
         }
 
-        if (isset($this->GET['keyword']) && is_array($this->GET['keyword']) && count($this->GET['keyword']) > 0) {
-            $filemanager->getDBQuery()->setKeyword($this->GET['keyword']);
+        if (is_array($this->query('keyword')) && count($this->query('keyword')) > 0) {
+            $filemanager->getDBQuery()->setKeyword($this->query('keyword'));
         }
 
-        if (isset($this->GET['character'])) {
+        if ($this->query('character')) {
             $filemanager->getDBQuery()->useCharacter();
         }
 
-        if (!isset($this->GET['search'])) {
+        if ($this->query('search')) {
             $filemanager->getDBQuery()->setSorting('file_handler.date_created DESC');
         }
 
@@ -253,7 +259,7 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
                       'selected_files' =>  $selected_files
         );
 
-        $tpl = new k_Template(dirname(__FILE__) . '/../templates/selectfile.tpl.php');
+        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/selectfile');
         return $tpl->render($this, $data);
     }
 }

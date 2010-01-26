@@ -2,6 +2,12 @@
 class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
 {
     protected $year;
+    protected $template;
+
+    function __(k_TemplateFactory $template)
+    {
+        $this->template = $template;
+    }
 
     function map()
     {
@@ -65,7 +71,7 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
         }
 
 
-        $smarty = new k_Template(dirname(__FILE__) . '/../templates/state/invoice.tpl.php');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/invoice');
         return $smarty->render($this);
 
     }
