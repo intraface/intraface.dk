@@ -11,12 +11,12 @@
 </ul>
 
 
-<?php if (is_numeric($this->query('delete'))): ?>
-    <p class="message"><?php e(__('File has been deleted')); ?>. <a href="<?php e(url('./', array('undelete' => (int)$this->query('delete')))); ?>"><?php e(__('Cancel')); ?></a></p>
+<?php if (is_numeric($context->query('delete'))): ?>
+    <p class="message"><?php e(__('File has been deleted')); ?>. <a href="<?php e(url('./', array('undelete' => (int)$context->query('delete')))); ?>"><?php e(__('Cancel')); ?></a></p>
 <?php endif; ?>
 
 
-<?php if (empty($files) and !$this->query('search')): ?>
+<?php if (empty($files) and !$context->query('search')): ?>
     <p><?php e(__('No files uploaded')); ?></p>
 <?php else: ?>
 
