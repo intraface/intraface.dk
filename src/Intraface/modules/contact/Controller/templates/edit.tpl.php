@@ -32,7 +32,7 @@ if ($context->getContact()->getId() > 0) {
     <p class="warning">Vi har fundet kontakter, der ligner den kontakt, du er ved at gemme. V�lg en af dem, hvis kontakten er den samme.</p>
 
     <table>
-        <caption>Kontakter der ligner denne kontakt - baseret p� telefonnummeret</caption>
+        <caption>Kontakter der ligner denne kontakt - baseret på telefonnummeret</caption>
         <thead>
         <tr>
             <th>Navn</th>
@@ -51,7 +51,7 @@ if ($context->getContact()->getId() > 0) {
                 <td><?php e($c['postcode'] . ' ' . $c['city']); ?></td>
                 <td><?php e($c['phone']); ?></td>
                 <td><?php e($c['email']); ?></td>
-                <td><a href="contact.php?id=<?php e($c['id']); ?>">V�lg</a></td>
+                <td><a href="<?php e(url($c['id'])); ?>"><?php e(t('Choose')); ?></a></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
