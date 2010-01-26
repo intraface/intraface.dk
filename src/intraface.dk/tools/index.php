@@ -1,5 +1,5 @@
 <?php
-require 'config.local.php';
+require '../config.local.php';
 require_once 'Ilib/ClassLoader.php';
 require_once 'konstrukt/konstrukt.inc.php';
 require_once 'bucket.inc.php';
@@ -119,7 +119,7 @@ function create_container() {
   $factory = new ToolsFactory();
   $container = new bucket_Container($factory);
   $factory->db_dsn = 'mysql://' . DB_USER . ':' . DB_PASS . '@' . DB_HOST . '/' . DB_NAME;
-  $factory->error_log = '/home/lsolesen/log/intraface/error.log';
+  $factory->error_log = ERROR_LOG;
   return $container;
 }
 
