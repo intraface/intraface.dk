@@ -219,9 +219,9 @@ if ($kernel->user->hasModuleAccess('invoice')) {
             foreach ($pictures as $appendix) {
                 echo '<div class="appendix">
                         <img src="'.$appendix['system-square']['file_uri'].'" />'.$appendix['original']['name'].'
-                                <a class="delete" href="'.$this->url('filehandler/selectfile', array('delete' => $appendix['appended_file_id'])).'">Fjern</a>
-                                <a class="moveup" href="'.$this->url('filehandler/selectfile', array('moveup' => $appendix['appended_file_id'])).'">Moveup</a>
-                                <a class="movedown" href="'.$this->url('filehandler/selectfile', array('movedown' => $appendix['appended_file_id'])).'">Movedown</a>
+                                <a class="delete" href="'.url('filehandler/selectfile', array('delete' => $appendix['appended_file_id'])).'">Fjern</a>
+                                <a class="moveup" href="'.url('filehandler/selectfile', array('moveup' => $appendix['appended_file_id'])).'">Moveup</a>
+                                <a class="movedown" href="'.url('filehandler/selectfile', array('movedown' => $appendix['appended_file_id'])).'">Movedown</a>
                                 </div>';
             }
         }
