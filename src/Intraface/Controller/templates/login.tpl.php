@@ -1,6 +1,6 @@
 <h1><span>Intraface.dk</span></h1>
 
-<form id="form-login" method="post" action="<?php e($context->url()); ?>">
+<form id="form-login" method="post" action="<?php e(url()); ?>">
 
     <fieldset>
     <?php
