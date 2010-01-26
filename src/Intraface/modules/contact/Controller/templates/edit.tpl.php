@@ -3,9 +3,9 @@ $value = $context->getValues();
 $address = $context->getAddressValues();
 $delivery_address = $context->getDeliveryAddressValues();
 if ($context->getContact()->getId() > 0) {
-    $url = $this->url(null, array('edit'));
+    $url = url(null, array('edit'));
 } else {
-    $url = $this->url(null, array('create'));
+    $url = url(null, array('create'));
 }
 ?>
 
@@ -29,10 +29,10 @@ if ($context->getContact()->getId() > 0) {
 
 <?php if (!empty($similar_contacts) AND count($similar_contacts) > 0): ?>
 
-    <p class="warning">Vi har fundet kontakter, der ligner den kontakt, du er ved at gemme. Vælg en af dem, hvis kontakten er den samme.</p>
+    <p class="warning">Vi har fundet kontakter, der ligner den kontakt, du er ved at gemme. Vï¿½lg en af dem, hvis kontakten er den samme.</p>
 
     <table>
-        <caption>Kontakter der ligner denne kontakt - baseret på telefonnummeret</caption>
+        <caption>Kontakter der ligner denne kontakt - baseret pï¿½ telefonnummeret</caption>
         <thead>
         <tr>
             <th>Navn</th>
@@ -51,7 +51,7 @@ if ($context->getContact()->getId() > 0) {
                 <td><?php e($c['postcode'] . ' ' . $c['city']); ?></td>
                 <td><?php e($c['phone']); ?></td>
                 <td><?php e($c['email']); ?></td>
-                <td><a href="contact.php?id=<?php e($c['id']); ?>">Vælg</a></td>
+                <td><a href="contact.php?id=<?php e($c['id']); ?>">Vï¿½lg</a></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -213,6 +213,6 @@ if ($context->getContact()->getId() > 0) {
             $url = url('./');
         }
         ?>
-        <a href="<?php e($context->getRedirect()->getCancelUrl($url)); ?>" title="Dette vil slette alle dine ændringer"><?php e(t('Cancel', 'common')); ?></a>
+        <a href="<?php e($context->getRedirect()->getCancelUrl($url)); ?>" title="Dette vil slette alle dine ï¿½ndringer"><?php e(t('Cancel', 'common')); ?></a>
     </div>
 </form>
