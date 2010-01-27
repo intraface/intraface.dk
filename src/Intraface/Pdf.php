@@ -1,4 +1,7 @@
 <?php
+
+
+
 /**
  * PdfMaker for Intraface
  *
@@ -36,11 +39,11 @@ class Intraface_Pdf extends Document_Cpdf
         // Opretter en nyt A4 dokument
         parent::__construct(array(0, 0, $this->page_width, $this->page_height));
 
-        // Omskrivning af placering p� specielle tegn: �, �, �, �, �, �
+        // Omskrivning af placering p� specielle tegn: æ, ø, å, Æ, Ø, Å�
         // Efter Cpdf dokumentation
         // Tabel for tegnenes placering fundet her: http://www.fingertipsoft.com/3dkbd/ansitable.html
         // Tabel for deres navn fundet her: http://www.gust.org.pl/fonty/qx-table2.htm
-        // Bem�rk at placeringen af tegnene er forskellige fra de 2 tabeller. Den �verste har den rigtige placering.
+        // Bemærk at placeringen af tegnene er forskellige fra de 2 tabeller. Den �verste har den rigtige placering.
 
         $diff = array(230 => 'ae',
                       198 => 'AE',
@@ -49,7 +52,7 @@ class Intraface_Pdf extends Document_Cpdf
                       229 => 'aring',
                       197 => 'Aring');
 
-        parent::selectFont('Helvetica.afm', array('differences'=>$diff));
+        parent::selectFont('Helvetica.afm', array('differences' => $diff));
 
         $this->calculateDynamicValues();
     }
@@ -206,6 +209,17 @@ class Intraface_Pdf extends Document_Cpdf
         fclose($file);
     }
 
+    protected $utf8;
+
+    function addText($x, $y, $size, $text, $angle = 0, $wordSpaceAdjust = 0) {
+        //if (!isset($this->utf8[$text])) {
+        //    $this->utf8[$text] = true;
+            $text = utf8_decode($text);
+        //}
+
+        parent::addText($x, $y, $size, $text, $angle = 0, $wordSpaceAdjust = 0);
+    }
+
     /**
      * Changes to next page
      *
@@ -216,7 +230,7 @@ class Intraface_Pdf extends Document_Cpdf
     public function nextPage($sub_text = false)
     {
         if ($sub_text == true) {
-            parent::addText($this->value['right_margin_position'] - parent::getTextWidth($this->value['font_size'], "<i>Fortsættes på næste side...</i>") - 30, $this->value["margin_bottom"] - $this->value['font_padding_top'] - $this->value['font_size'], $this->value['font_size'], "<i>Forts�ttes p� n�ste side...</i>");
+            $this->addText($this->value['right_margin_position'] - $this->getTextWidth($this->value['font_size'], "<i>Fortsættes på næste side...</i>") - 30, $this->value["margin_bottom"] - $this->value['font_padding_top'] - $this->value['font_size'], $this->value['font_size'], "<i>Fortsættes på næste side...</i>");
         }
         parent::newPage();
         $this->setY(0);

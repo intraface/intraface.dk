@@ -71,7 +71,7 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
             $this->docinfo[2]["value"] = $debtor->get("dk_due_date");
         }
 
-        $this->addRecieverAndSender($contact, $intranet, $this->translation->get($debtor->get('type').' title'), $this->docinfo);
+        $this->addRecieverAndSender($contact, $intranet, $this->translation->get($debtor->get('type')), $this->docinfo);
 
         $this->doc->setY('-'.$this->doc->get("font_spacing"));
 
@@ -118,7 +118,7 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
         $this->doc->addText($apointX["antal"] - $this->doc->getTextWidth($this->doc->get("font_size"), "Antal"), $this->doc->get('y'), $this->doc->get("font_size"), "Antal");
         // $this->doc->addText($apointX["enhed"], $this->doc->get('y'), $this->doc->get("font_size"), "Enhed");
         $this->doc->addText($apointX["pris"] - $this->doc->getTextWidth($this->doc->get("font_size"), "Pris"), $this->doc->get('y'), $this->doc->get("font_size"), "Pris");
-        $this->doc->addText($apointX["beloeb"] - $this->doc->getTextWidth($this->doc->get("font_size"), "Beløb") -3, $this->doc->get('y'), $this->doc->get("font_size"), "Beløb");
+        $this->doc->addText($apointX["beloeb"] - $this->doc->getTextWidth($this->doc->get("font_size"), "BelÃ¸b") -3, $this->doc->get('y'), $this->doc->get("font_size"), "BelÃ¸b");
 
         $this->doc->setY('-'.($this->doc->get("font_spacing") - $this->doc->get("font_size")));
 
@@ -244,10 +244,10 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
                 $this->doc->nextPage(true);
             }
 
-            // Hvis der har været poster med VAT, og næste post er uden, så tilskriver vi moms.
+            // Hvis der har vï¿½ret poster med VAT, og nï¿½ste post er uden, sï¿½ tilskriver vi moms.
             // if ($vat == 1 && $items[$i+1]["vat"] == 0) {
             if (($vat == 1 && isset($items[$i+1]["vat"]) && $items[$i+1]["vat"] == 0) || ($vat == 1 && $i+1 >= $max)) {
-                // Hvis der er moms på nuværende produkt, men næste produkt ikke har moms, eller hvis vi har moms og det er sidste produkt
+                // Hvis der er moms pï¿½ nuvï¿½rende produkt, men nï¿½ste produkt ikke har moms, eller hvis vi har moms og det er sidste produkt
 
                 ($bg_color == 1) ? $bg_color = 0 : $bg_color = 1;
 
