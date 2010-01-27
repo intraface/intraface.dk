@@ -90,6 +90,11 @@ class Email extends Intraface_Standard
         return $this->dbquery;
     }
 
+    function getKernel()
+    {
+        return $this->kernel;
+    }
+
     /**
      * @return boolean
      */
