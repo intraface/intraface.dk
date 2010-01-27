@@ -359,7 +359,7 @@ class Intraface_modules_contact_Controller_Show extends k_Component
             'gateway' => new Intraface_modules_newsletter_SubscribersGateway($this->getKernel()),
             'url' =>  $this->url('../../newsletter', array('contact_id' => $this->getContact()->get("id"))),
             'url_create' =>  '',
-        	'label' => 'invoice'
+        	'label' => 'newsletter'
         );
 
         endif;
