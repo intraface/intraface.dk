@@ -3,7 +3,7 @@ class Intraface_modules_accounting_Controller_State_Reminder extends k_Component
 {
     protected $template;
 
-    function __(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template)
     {
         $this->template = $template;
     }

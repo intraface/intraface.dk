@@ -5,7 +5,7 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
     protected $value = array();
     protected $template;
 
-    function __(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template)
     {
         $this->template = $template;
     }

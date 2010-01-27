@@ -4,7 +4,7 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
     protected $year;
     protected $template;
 
-    function __(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template)
     {
         $this->template = $template;
     }
