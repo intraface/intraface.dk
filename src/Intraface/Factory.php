@@ -14,6 +14,11 @@ class Intraface_Factory
         return new Intraface_TemplateFactory(null);
     }
 
+    function new_MDB2($c)
+    {
+        return $this->new_MDB2_Driver_Common($c);
+    }
+
     function new_MDB2_Driver_Common($container)
     {
         $db = MDB2::singleton(DB_DSN, array('persistent' => true));
