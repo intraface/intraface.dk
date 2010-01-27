@@ -78,8 +78,13 @@ $values = $context->getValues();
     </fieldset>
 
     <fieldset>
-        <legend><?php e(t('Default text on invoice emails')); ?></legend>
+        <legend><?php e(t('Default text on invoices')); ?></legend>
         <textarea name="invoice_text" cols="80" rows="8"><?php e($values['invoice_text']); ?></textarea>
+    </fieldset>
+
+    <fieldset>
+        <legend><?php e(t('Default text on invoice emails')); ?></legend>
+        <textarea name="invoice_email_text" cols="80" rows="8"><?php e($values['invoice_email_text']); ?></textarea>
     </fieldset>
 
     <fieldset>

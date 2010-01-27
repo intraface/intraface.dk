@@ -78,6 +78,7 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
             // reminder
             $this->context->getKernel()->getSetting()->set('intranet', 'reminder.first.text', $_POST['reminder_text']);
             $this->context->getKernel()->getSetting()->set('intranet', 'debtor.invoice.text', $_POST['invoice_text']);
+            $this->context->getKernel()->getSetting()->set('intranet', 'debtor.invoice.email.text', $_POST['invoice_email_text']);
             $this->context->getKernel()->getSetting()->set('intranet', 'debtor.order.email.text', $_POST['order_email_text']);
 
             // bank
