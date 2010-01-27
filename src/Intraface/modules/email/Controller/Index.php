@@ -20,7 +20,6 @@ class Intraface_modules_email_Controller_Index extends k_Component
         $this->getKernel()->module('email');
         $contact_module = $this->getKernel()->useModule('contact');
         $email_shared = $this->getKernel()->useShared('email');
-        $translation = $this->getKernel()->getTranslation('email');
 
         // @todo move to Email
         if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
