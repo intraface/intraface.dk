@@ -15,6 +15,13 @@ class Intraface_modules_email_Controller_Index extends k_Component
         }
     }
 
+    function dispatch()
+    {
+        $this->url_state->set('contact_id', $this->query('contact_id'));
+
+        return parent::dispatch();
+    }
+
     function renderHtml()
     {
         $this->getKernel()->module('email');
@@ -34,6 +41,11 @@ class Intraface_modules_email_Controller_Index extends k_Component
         $emails->getDBQuery()->defineCharacter('character', 'email.subject');
         $emails->getDBQuery()->usePaging('paging');
         //$email->dbquery->storeResult('use_stored', 'emails', 'toplevel');
+        $emails->getDBQuery()->setUri($this->url());
+
+        if ($this->query("contact_id")) {
+            $emails->getDBQuery()->setCondition("email.contact_id = ".intval($this->query("contact_id")));
+        }
 
         $queue = $emails->countQueue();
 

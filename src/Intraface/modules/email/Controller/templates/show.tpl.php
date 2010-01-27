@@ -70,6 +70,6 @@
 		<?php echo $email->error->view(); /* errors is first set in isReadyToSend, therefor we show the errors here */  ?>
 	<?php elseif ($email->get('status') != 'sent'): ?>
 		<input type="submit" name="submit" value="<?php e(t('Send', 'common')); ?>" class="confirm" />
-		<a href="<?php e($redirect->getRedirect($this->url())); ?>"><?php e(t('Cancel', 'common')); ?></a>
+		<a href="<?php e($redirect->getRedirect(url())); ?>"><?php e(t('Cancel', 'common')); ?></a>
 	<?php endif; ?>
 </form>

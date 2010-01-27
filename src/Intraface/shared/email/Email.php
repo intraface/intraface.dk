@@ -368,7 +368,7 @@ class Email extends Intraface_Standard
 
         if ($sent_this_hour >= $gateway->allowed_limit) {
             $this->error->set('Der er i øjeblikket kø i e-mail-systemet. Vi sender så hurtigt som muligt.');
-            return 1;
+            return true;
         }
 
         // Make sure it is cleared from earlier use.
@@ -465,10 +465,10 @@ class Email extends Intraface_Standard
     function attachFile($file_id, $filename)
     {
         if (!is_numeric($file_id)) {
-            $this->error->set('Fil-id skal v�re et tal');
+            $this->error->set('Fil-id skal være et tal');
         }
         if (empty($filename)) {
-            $this->error->set('Navnet skal v�re en streng');
+            $this->error->set('Navnet skal være en streng');
         }
 
         if ($this->error->isError()) {
