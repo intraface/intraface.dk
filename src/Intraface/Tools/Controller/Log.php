@@ -12,8 +12,8 @@ class Intraface_Tools_Controller_Log extends k_Component
 
     function renderHtml()
     {
-        $res = &$this->mdb2->query("SELECT logtime, ident, message FROM log_table ORDER BY logtime DESC");
+        $res = $this->mdb2->query("SELECT logtime, ident, message FROM log_table ORDER BY logtime DESC");
         $tpl = $this->template->create('Intraface/Tools/templates/log');
-        return $this->render($this, array('res' => $res));
+        return $tpl->render($this, array('res' => $res));
     }
 }
