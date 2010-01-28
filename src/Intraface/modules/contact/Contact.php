@@ -254,7 +254,7 @@ class Contact extends Intraface_Standard
                 case 'email':
                     return $gateway->findByEmail($value);
                 case 'code':
-                    return $gateway->findByEmail($value);
+                    return $gateway->findByCode($value);
                 case 'username':
                     return $gateway->findByUsername($value);
                 case 'openid_url':

@@ -26,7 +26,7 @@ class Intraface_modules_contact_ContactGateway
 
     function findByCode($value)
     {
-        $this->db->query("SELECT id FROM contact WHERE code  = '".$value."' AND contact.intranet_id = " . $kernel->intranet->get('id'));
+        $this->db->query("SELECT id FROM contact WHERE code  = '".$value."' AND contact.intranet_id = " . $this->kernel->intranet->get('id'));
         if (!$this->db->nextRecord()) {
             throw new Exception('Contact not found');
         }
