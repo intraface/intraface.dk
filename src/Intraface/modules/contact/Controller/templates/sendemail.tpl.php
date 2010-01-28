@@ -1,7 +1,7 @@
 <h1><?php e(t('Send email')); ?></h1>
 
 	<ul class="options">
-		<li><a href="<?php e(url('../')); ?>"><?php e(__('Close', 'common')); ?></a></li>
+		<li><a href="<?php e(url('../', array('use_stored' => true))); ?>"><?php e(__('Close', 'common')); ?></a></li>
 	</ul>
 
 <?php if ($context->getMessage()): ?>
@@ -10,9 +10,9 @@
 
 <?php else: ?>
 
-	<?php echo $context->getContact()->error->view(); ?>
+	<?php echo $contact->error->view(); ?>
 
-<p class="message">Du er ved at sende en e-mail til <?php e(count($context->getContacts())); ?> kontakter. Vi sender naturligvis kun til de kontakter, der har en e-mail-adresse.</p>
+<p class="message">Du er ved at sende en e-mail til <?php e(count($contacts)); ?> kontakter. Vi sender naturligvis kun til de kontakter, der har en e-mail-adresse.</p>
 
 <form action="<?php e(url()); ?>" method="post">
 	<fieldset>

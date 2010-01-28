@@ -1,9 +1,9 @@
 <h1><?php e(__('Import contacts')); ?></h1>
 
-<?php if (!empty($this->errors)): ?>
-    <?php if (count($this->errors) > 0): ?>
+<?php if (!empty($context->errors)): ?>
+    <?php if (count($context->errors) > 0): ?>
     <h3><?php e(__('Errors')); ?></h3>
-        <?php foreach ($this->errors AS $error): ?>
+        <?php foreach ($context->errors AS $error): ?>
             <div><?php e(sprintf(__('error in line %d. unable to import %s <%s>'), $error['line'], $error['name'], $error['email'])); ?></div>
             <?php echo $error['error']->view($translation); ?>
         <?php endforeach; ?>

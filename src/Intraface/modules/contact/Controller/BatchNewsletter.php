@@ -1,5 +1,5 @@
 <?php
-class Intraface_modules_contact_Controller_Sendemail extends k_Component
+class Intraface_modules_contact_Controller_BatchNewsletter extends k_Component
 {
     protected $msg;
     protected $template;
@@ -21,9 +21,10 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
 
     function postForm()
     {
-    	$validator = new Intraface_Validator($this->getContact()->error);
-    	$validator->isString($_POST['subject'], 'error in subject');
-    	$validator->isString($_POST['text'], 'error in text');
+        $this->getKernel()->useModule('newsletter');
+
+        $validator = new Intraface_Validator($this->getContact()->error);
+    	$validator->isNumeric($_POST['newsletter_id'], 'error in newsletter');
 
     	$contact = new Contact($this->getKernel());
         $keyword = $contact->getKeywords();
@@ -37,31 +38,19 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
     		$j = 0;
 
     		for ($i = 0, $max = count($contacts); $i < $max; $i++) {
-    			if (!$validator->isEmail($contacts[$i]['email'], "")) {
-    				// Hvis de ikke har en mail, k�rer vi videre med n�ste.
-    				continue;
-    			}
-
     			$contact = new Contact($this->getKernel(), $contacts[$i]['id']);
 
-    			$email = new Email($this->getKernel());
-    			$input = array(
-    				'subject' => $_POST['subject'],
-    				'body' => $_POST['text'] . "\n\nLogin: " . $contact->get('login_url'),
-    				'from_email' => $this->getKernel()->user->get('email'),
-    				'from_name' => $this->getKernel()->user->get('name'),
-    				'contact_id' => $contact->get('id'),
-    				'type_id' => 11, // email til search
-    				'belong_to' => 0 // der er ikke nogen specifik id at s�tte
-    			);
+    			$newsletter = new NewsletterList($this->getKernel(), $_POST['newsletter_id']);
+    			if ($newsletter->get('id') == 0) {
+    			    throw new Exception('Invalid newsletter list');
+    			}
 
-    			$email->save($input);
-    			// E-mailen s�ttes i k� - hvis vi sender den med det samme tager det
-    			// alt for lang tid.
-    			$email->send(Intraface_Mail::factory(), 'queue');
+    			$subscriber = new NewsletterSubscriber($newsletter);
+    			$subscriber->addContact($contact);
+
     			$j++;
     		}
-    		$this->msg = 'Emailen blev i alt sendt til ' . $j . ' kontakter. <a href="'.$this->url('../').'">Tilbage til kontakter</a>.';
+    		$this->msg = 'I alt blev ' . $j . ' kontakter tilmeldt nyhedsbrevet. <a href="'.$this->url('../', array('use_stored' => 'true')).'">Tilbage til kontakter</a>.';
     	} else {
     		$value = $_POST;
     	}
@@ -72,6 +61,7 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
     function renderHtml()
     {
         $this->getKernel()->useShared('email');
+        $this->getKernel()->useModule('newsletter');
 
         $_GET['use_stored'] = true;
 
@@ -82,12 +72,15 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
         $contact->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
         $contacts = $contact->getList("use_address");
 
+        $newsletter = new NewsletterList($this->getKernel());
+
         $data = array(
             'contacts' => $contacts,
+            'newsletters' => $newsletter->getList(),
             'contact' => $contact
         );
 
-        $smarty = $this->template->create(dirname(__FILE__) . '/templates/sendemail');
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/batchnewsletter');
         return $smarty->render($this, $data);
     }
 
