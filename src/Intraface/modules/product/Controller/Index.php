@@ -13,6 +13,19 @@ class Intraface_modules_product_Controller_Index extends k_Component
         $this->template = $template;
     }
 
+    protected function map($name)
+    {
+        if (is_numeric($name)) {
+            return 'Intraface_modules_product_Controller_Show';
+        } elseif ($name == 'attributegroups') {
+            return 'Intraface_modules_product_Controller_AttributeGroups';
+        } elseif ($name == 'batchedit') {
+            return 'Intraface_modules_product_Controller_BatchEdit';
+        }  elseif ($name == 'batchprice') {
+            return 'Intraface_modules_product_Controller_BatchPriceChanger';
+        }
+    }
+
     function renderHtml()
     {
         $module = $this->getKernel()->module('product');
@@ -56,17 +69,6 @@ class Intraface_modules_product_Controller_Index extends k_Component
             }
         }
         return $this->render();
-    }
-
-    protected function map($name)
-    {
-        if (is_numeric($name)) {
-            return 'Intraface_modules_product_Controller_Show';
-        } elseif ($name == 'attributegroups') {
-            return 'Intraface_modules_product_Controller_AttributeGroups';
-        } elseif ($name == 'batchedit') {
-            return 'Intraface_modules_product_Controller_BatchEdit';
-        }
     }
 
     function getProductDoctrine()

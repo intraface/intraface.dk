@@ -1,9 +1,10 @@
 <h1><?php e(t('products')); ?></h1>
 
 <ul class="options">
-    <li><a class="new" href="<?php e(url(null, array('create'))); ?>"><?php e(t('create product')); ?></a></li>
+    <li><a class="new" href="<?php e(url(null, array('create'))); ?>"><?php e(t('Create')); ?></a></li>
     <?php if (count($context->getProducts()) > 0): ?>
-    <li><a href="<?php e(url('batchedit', array('use_stored' => 'true'))); ?>"><?php e(t('batch edit search')); ?></a></li>
+    <li><a href="<?php e(url('batchedit', array('use_stored' => 'true'))); ?>"><?php e(t('Batch edit search')); ?></a></li>
+    <li><a href="<?php e(url('batchprice', array('use_stored' => 'true'))); ?>"><?php e(t('Batch edit prices')); ?></a></li>
     <?php endif; ?>
     <?php if ($context->getKernel()->intranet->hasModuleAccess('shop')): ?>
         <li><a href="<?php e(url('attributegroups')); ?>"><?php e(t('Edit attributes')); ?></a></li>
@@ -16,7 +17,7 @@
 
 <form action="<?php e(url()); ?>" method="get" class="search-filter">
     <fieldset>
-        <legend><?php e(t('search', 'common')); ?></legend>
+        <legend><?php e(t('Search')); ?></legend>
         <!--
         <label for="filter">Filter
             <select name="filter" id="filter">
@@ -27,20 +28,20 @@
             </select>
         </label>
         -->
-        <label for="search"><?php e(t('search for', 'common')); ?>
+        <label for="search"><?php e(t('Search for')); ?>
             <input name="search" id="search" type="text" value="<?php e($context->getProduct()->getDBQuery()->getFilter("search")); ?>" />
         </label>
 
-        <label for="keyword_id"><?php e(t('show with keywords', 'common')); ?>
+        <label for="keyword_id"><?php e(t('Show with keywords')); ?>
             <select name="keyword_id" id="keyword_id">
-                <option value=""><?php e(t('none', 'common')); ?></option>
+                <option value=""><?php e(t('None')); ?></option>
                 <?php foreach ($context->getKeywords()->getUsedKeywords() AS $k) { ?>
                 <option value="<?php e($k['id']); ?>" <?php if ($k['id'] == $context->getProduct()->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php e($k['keyword']); ?></option>
                 <?php } ?>
             </select>
         </label>
         <span>
-            <input type="submit" value="<?php e(t('go', 'common')); ?>" />	<input type="reset" value="<?php e(t('reset', 'common')); ?>" />
+            <input type="submit" value="<?php e(t('Go')); ?>" />	<input type="reset" value="<?php e(t('reset', 'common')); ?>" />
         </span>
     </fieldset>
 </form>
@@ -115,7 +116,7 @@
 
                 <td class="options">
           <?php if ($p['locked'] == 0) { ?>
-                  <!-- nedenstående bør sættes på produktsiden - muligheden skal ikke findes her
+                  <!-- nedenstï¿½ende bï¿½r sï¿½ttes pï¿½ produktsiden - muligheden skal ikke findes her
                     <a href="index.php?lock=<?php e($p['id']); ?>&amp;use_stored=true"><?php e(t('lock', 'common')); ?></a>
                     -->
                     <a class="button edit" href="<?php e(url($p['id'], array('edit'))); ?>"><?php e(t('edit', 'common')); ?></a>

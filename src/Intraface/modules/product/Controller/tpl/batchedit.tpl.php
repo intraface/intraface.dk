@@ -34,7 +34,7 @@
 <br />
 <?php $i++; } // end foreach ?>
 <div>
-    <input type="submit" class="save" value="<?php e(t('Save', 'common')); ?>" />
-    <a href="index.php?use_stored=true"><?php e(t('Cancel', 'common')); ?></a>
+    <input type="submit" class="save" value="<?php e(t('Save')); ?>" />
+    <a href="<?php e(url('../', array('use_stored' => true))); ?>"><?php e(t('Cancel')); ?></a>
 </div>
 </form>
