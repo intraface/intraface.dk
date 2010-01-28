@@ -33,7 +33,6 @@ class Intraface_modules_cms_Controller_Page extends k_Component
     {
         $module_cms = $this->getKernel()->module('cms');
         $module_cms->includeFile('HTML_Editor.php');
-        $translation = $this->getKernel()->getTranslation('cms');
 
         if (isset($_GET['return_redirect_id'])) {
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
@@ -70,7 +69,6 @@ class Intraface_modules_cms_Controller_Page extends k_Component
     {
         $module_cms = $this->getKernel()->module('cms');
         $module_cms->includeFile('HTML_Editor.php');
-        $translation = $this->getKernel()->getTranslation('cms');
 
         if (!empty($_POST['publish'])) {
             $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_POST['id']);
@@ -90,7 +88,6 @@ class Intraface_modules_cms_Controller_Page extends k_Component
     {
         $module_cms = $this->getKernel()->module('cms');
         $module_cms->includeFile('HTML_Editor.php');
-        $translation = $this->getKernel()->getTranslation('cms');
 
         $files = '';
         if (isset($_POST['section']) && is_array($_POST['section'])) {
@@ -143,17 +140,17 @@ class Intraface_modules_cms_Controller_Page extends k_Component
                 $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
                 $module_filemanager = $this->getKernel()->useModule('filemanager');
                 $redirect->setIdentifier('picture:'.$section_id);
-                $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $module_cms->getPath().'page.php?id='.$section->cmspage->get('id') . '&from_section_id=' . $section_id);
+                $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $this->url());
 
                 $redirect->askParameter('file_handler_id');
                 return new k_SeeOther($url);
             } elseif (!empty($_POST['edit_html'])) {
                 $keys = array_keys($_POST['edit_html']);
-                return new k_SeeOther($this->url('../' . $section->cmspage->get('id') . '/section/' . $keys[0]));
+                return new k_SeeOther($this->url('section/' . $keys[0]));
             } elseif (!empty($_POST['close'])) {
-                return new k_SeeOther($this->url('../', array('type' => $section->cmspage->get('type'), 'id' => $section->cmspage->cmssite->get('id'))));
+                return new k_SeeOther($this->url('../', array('type' => $this->getModel()->get('type'), 'id' => $this->getModel()->cmssite->get('id'))));
             } else {
-                return new k_SeeOther($this->url('../' . $section->cmspage->get('id')));
+                return new k_SeeOther($this->url('../' . $this->getModel()->get('id')));
             }
         } else {
             $cmspage = $section->cmspage;
