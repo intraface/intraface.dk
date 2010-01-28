@@ -457,6 +457,8 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             $filehandler = NULL;
         }
 
+        $this->translation->setPageId('debtor');
+
         $report = new Intraface_modules_debtor_Visitor_Pdf($this->translation, $filehandler);
         $report->visit($this->getDebtor(), $onlinepayment);
 
