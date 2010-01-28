@@ -26,7 +26,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Permission extends k
         $user = $this->getUser();
         $intranet = $this->getIntranet();
 
-        $user->setIntranetId($intranet->get("id"));
+        $user->setIntranetId($this->query('intranet_id'));
 
         $modules = array();
         if (isset($_POST['module'])) {
@@ -48,7 +48,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Permission extends k
             unset($user);
             unset($intranet);
         } else {
-            // S�tter adgang til det redigerede intranet. Id kommer tidligere ved setIntranetId
+            // Sætter adgang til det redigerede intranet. Id kommer tidligere ved setIntranetId
             $user->setIntranetAccess();
 
             // Hvis en bruger retter sig selv, i det aktive intranet, s�tter vi adgang til dette modul
@@ -59,18 +59,18 @@ class Intraface_modules_intranetmaintenance_Controller_User_Permission extends k
                 $user->setModuleAccess($active_module->getId());
             }
 
-            for ($i = 0, $max = count($modules); $i < $max; $i++) {
-                $user->setModuleAccess($modules[$i]);
-                if (!empty($sub_access[$modules[$i]])) {
-                    for ($j = 0, $max1 = count($sub_access[$modules[$i]]); $j < $max1; $j++) {
-                        $user->setSubAccess($modules[$i], $sub_access[$modules[$i]][$j]);
+            foreach ($modules as $module) {
+                $user->setModuleAccess($module);
+                if (!empty($sub_access[$module])) {
+                    foreach ($sub_access[$module] as $subaccess) {
+                        $user->setSubAccess($module, $subaccess);
                     }
                 }
             }
             $user_id = $user->get('id');
-            $edit_intranet_id = $intranet->get('id');
+            $edit_intranet_id = $this->query('intranet_id');
 
-            return new k_SeeOther($this->url('../', array('intranet_id' => $intranet->get('id'), 'flare' => 'Permissions has been updated')));
+            return new k_SeeOther($this->url('../', array('intranet_id' => $this->query('intranet_id'), 'flare' => 'Permissions has been updated')));
         }
 
         return $this->render();

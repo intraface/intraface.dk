@@ -112,6 +112,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
         $this->getUser()->getDBQuery($this->getKernel())->defineCharacter('character', 'name');
         $this->getUser()->getDBQuery($this->getKernel())->usePaging("paging", $this->getKernel()->setting->get('user', 'rows_pr_page'));
         $this->getUser()->getDBQuery($this->getKernel())->storeResult("use_stored", "intranetmainenance_user", "sublevel");
+        $this->getUser()->getDBQuery($this->getKernel())->setUri($this->url());
 
         return $this->getUser()->getList();
     }

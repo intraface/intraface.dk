@@ -70,6 +70,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Index extends k_
         $this->getIntranetmaintenance()->getDBQuery($this->getKernel())->defineCharacter('character', 'name');
         $this->getIntranetmaintenance()->getDBQuery($this->getKernel())->usePaging("paging", $this->getKernel()->setting->get('user', 'rows_pr_page'));
         $this->getIntranetmaintenance()->getDBQuery($this->getKernel())->storeResult("use_stored", "intranetmainenance_intranet", "toplevel");
+        $this->getIntranetmaintenance()->getDBQuery()->setUri($this->url());
         return $this->getIntranetmaintenance()->getList();
     }
 

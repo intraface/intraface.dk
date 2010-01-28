@@ -29,8 +29,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
     function renderHtml()
     {
         $user_id = intval($this->name());
-        $edit_intranet_id = $this->query('intranet_id');
-        $user = $this->getUser();
+        $user = new UserMaintenance($this->name());
         $intranet = null;
 
         if (isset($_GET['return_redirect_id'])) {
@@ -46,9 +45,11 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
             }
         }
 
+        $edit_intranet_id = $this->query('intranet_id');
+
         if (isset($edit_intranet_id)) {
             $intranet = new IntranetMaintenance(intval($edit_intranet_id));
-            $user->setIntranetId(intval($intranet->get('id')));
+            $user->setIntranetId(intval($edit_intranet_id));
             $address = $user->getAddress();
             if (isset($address)) {
                 $value_address = $user->getAddress()->get();
@@ -58,8 +59,10 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         // @todo a little hacky
         $this->intranetmaintenance = $intranet;
 
+        $data = array('intranet' => $intranet, 'user' => $user);
+
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/user/show');
-        return $smarty->render($this, array('intranet' => $intranet));
+        return $smarty->render($this, $data);
     }
 
     function putForm()
