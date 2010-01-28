@@ -4,7 +4,7 @@
     <li><a href="<?php e(url('../')); ?>"><?php e(__('Go back')); ?></a></li>
 </ul>
 
-<form action="<?php e($this->url(null)); ?>" method="post">
+<form action="<?php e(url(null)); ?>" method="post">
     <input type="submit" name="all_files" value="<?php e(__('Delete all instances of all files')); ?>" />
 </form>
 

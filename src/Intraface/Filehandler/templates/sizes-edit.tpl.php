@@ -40,8 +40,7 @@
     </fieldset>
 
     <p>
-        <input type="submit" class="submit" name="submit" value="<?php e(__('Save', 'common')); ?>" />
-        <?php e(__('or', 'common')); ?>
-        <a href="<?php e(url('../')); ?>"><?php e(__('Cancel', 'common')); ?></a>
+        <input type="submit" class="submit" name="submit" value="<?php e(__('Save')); ?>" />
+        <a href="<?php e(url('../')); ?>"><?php e(__('Cancel')); ?></a>
     </p>
 </form>
