@@ -1,6 +1,6 @@
 <h1>
     <?php
-        e(ucfirst(t($context->getDebtor()->get("type").'s')));
+        e(ucfirst(t($debtor->get("type").'s')));
         if (!empty($contact) AND is_object($contact) && $contact->address->get('name') != '') { ?>
             : <?php e($contact->address->get('name')); ?>
         <?php }
@@ -20,7 +20,7 @@
 <?php if ($context->getKernel()->intranet->address->get('id') == 0): ?>
     <p>
      <?php e(t('You have not filled in the address for your intranet. Do that before you can create your first')); ?>
-     <?php e(strtolower(__($context->getDebtor()->get('type')))); ?>.
+     <?php e(strtolower(__($debtor->get('type')))); ?>.
     <?php if ($context->getKernel()->user->hasModuleAccess('administration')): ?>
         <?php
         $module_administration = $context->getKernel()->useModule('administration');
@@ -28,24 +28,24 @@
         <a href="<?php e(url('../../../administration/intranet', array('edit'))); ?>"><?php e(t('Fill in address')); ?></a>.
     <?php else: ?>
     	<?php e(t('You do not have access to edit the address information. Please ask your administrator to do that.')); ?>
-    	<?php e(strtolower(__($context->getDebtor()->get('type')))); ?>.
+    	<?php e(strtolower(__($debtor->get('type')))); ?>.
     <?php endif; ?>
     </p>
-<?php elseif (!$context->getDebtor()->isFilledIn()): ?>
+<?php elseif (!$debtor->isFilledIn()): ?>
 
-    <?php if ($context->getDebtor()->get('type') == 'credit_note'): ?>
+    <?php if ($debtor->get('type') == 'credit_note'): ?>
         <p>
         	<?php e(t('You have not created any. Credit notes is created from invoices.')); ?>
     	</p>
         	<?php else: ?>
 
-        <p><?php e(t('None has been created yet')); ?>. <a href="<?php e(url(null, array('create'))); ?>"><?php e(__('Create '.$context->getDebtor()->get('type'))); ?></a>.</p>
+        <p><?php e(t('None has been created yet')); ?>. <a href="<?php e(url(null, array('create'))); ?>"><?php e(__('Create '.$debtor->get('type'))); ?></a>.</p>
 
     <?php endif; ?>
 <?php else: ?>
 
 <ul class="options">
-    <?php if (!empty($contact) AND is_object($contact) AND $context->getDebtor()->get("type") != "credit_note"): ?>
+    <?php if (!empty($contact) AND is_object($contact) AND $debtor->get("type") != "credit_note"): ?>
         <li><a href="<?php e(url(null, array('create', 'contact_id' => $contact->get("id")))); ?>"><?php e(__('Create')); ?></a></li>
     <?php else: ?>
         <?php if (isset($variation) && isset($product)): ?>
@@ -61,7 +61,7 @@
 </ul>
 
 
-<?php echo $context->getDebtor()->error->view(); ?>
+<?php echo $debtor->error->view(); ?>
 
 <?php if (!isset($_GET['$contact_id'])): ?>
 
@@ -69,26 +69,26 @@
         <legend><?php e(__('Advanced search')); ?></legend>
         <form method="get" action="<?php e(url(null)); ?>">
         <label><?php e(__('Text')); ?>
-            <input type="text" name="text" value="<?php e($context->getDebtor()->getDBQuery()->getFilter("text")); ?>" />
+            <input type="text" name="text" value="<?php e($debtor->getDBQuery()->getFilter("text")); ?>" />
         </label>
         <label><?php e(__('Status')); ?>
         <select name="status">
             <option value="-1">Alle</option>
-            <option value="-2"<?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == -2) echo ' selected="selected"';?>><?php e(t('Open')); ?></option>
-            <?php if ($context->getDebtor()->get("type") == "invoice"): ?>
-            <option value="-3"<?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == -3) echo ' selected="selected"';?>>Afskrevet</option>
+            <option value="-2"<?php if ($debtor->getDBQuery()->getFilter("status") == -2) echo ' selected="selected"';?>><?php e(t('Open')); ?></option>
+            <?php if ($debtor->get("type") == "invoice"): ?>
+            <option value="-3"<?php if ($debtor->getDBQuery()->getFilter("status") == -3) echo ' selected="selected"';?>>Afskrevet</option>
             <?php endif; ?>
-            <option value="0"<?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == 0) echo ' selected="selected"';?>>Oprettet</option>
-            <option value="1"<?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == 1) echo ' selected="selected"';?>>Sendt</option>
-            <option value="2"<?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == 2) echo ' selected="selected"';?>>Afsluttet</option>
-            <option value="3"<?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == 3) echo ' selected="selected"';?>>Annulleret</option>
+            <option value="0"<?php if ($debtor->getDBQuery()->getFilter("status") == 0) echo ' selected="selected"';?>>Oprettet</option>
+            <option value="1"<?php if ($debtor->getDBQuery()->getFilter("status") == 1) echo ' selected="selected"';?>>Sendt</option>
+            <option value="2"<?php if ($debtor->getDBQuery()->getFilter("status") == 2) echo ' selected="selected"';?>>Afsluttet</option>
+            <option value="3"<?php if ($debtor->getDBQuery()->getFilter("status") == 3) echo ' selected="selected"';?>>Annulleret</option>
         </select>
         </label>
         <!-- sortering b�r v�re placeret ved at man klikker p� en overskrift i stedet - og s� b�r man kunne sortere p� det hele -->
         <label><?php e(__('Sorting')); ?>
         <select name="sorting">
-            <?php foreach(array(0 => ucfirst($context->getDebtor()->get('type')).' number descending', 1 => ucfirst($context->getDebtor()->get('type')).' number ascending', 2 => 'Contact number', 3 => 'Contact name') AS $key => $description): ?>
-                <option value="<?php e($key); ?>"<?php if ($context->getDebtor()->getDBQuery()->getFilter("sorting") == $key) echo ' selected="selected"';?>><?php e(t($description)); ?></option>
+            <?php foreach(array(0 => ucfirst($debtor->get('type')).' number descending', 1 => ucfirst($debtor->get('type')).' number ascending', 2 => 'Contact number', 3 => 'Contact name') AS $key => $description): ?>
+                <option value="<?php e($key); ?>"<?php if ($debtor->getDBQuery()->getFilter("sorting") == $key) echo ' selected="selected"';?>><?php e(t($description)); ?></option>
             <?php endforeach; ?>
         </select>
         </label>
@@ -96,23 +96,23 @@
 
         <label><?php e(t('Date interval'))?>
             <select name="date_field">
-                <?php foreach(array('this_date' => ucfirst($context->getDebtor()->get('type')).' date', 'date_created' => 'Date created', 'date_sent' => 'Date sent', 'date_executed' => 'Date executed', 'data_cancelled' => 'Date cancelled') AS $field => $description): ?>
-                    <option value="<?php e($field); ?>" <?php if ($context->getDebtor()->getDBQuery()->getFilter("date_field") == $field) echo ' selected="selected"';?>><?php e(t($description)) ?></option>
+                <?php foreach(array('this_date' => ucfirst($debtor->get('type')).' date', 'date_created' => 'Date created', 'date_sent' => 'Date sent', 'date_executed' => 'Date executed', 'data_cancelled' => 'Date cancelled') AS $field => $description): ?>
+                    <option value="<?php e($field); ?>" <?php if ($debtor->getDBQuery()->getFilter("date_field") == $field) echo ' selected="selected"';?>><?php e(t($description)) ?></option>
                 <?php endforeach; ?>
             </select>
         </label>
 
         <label><?php e(t('From', 'common'))?>
-            <input type="text" name="from_date" id="date-from" value="<?php e($context->getDebtor()->getDBQuery()->getFilter("from_date")); ?>" /> <span id="calender"></span>
+            <input type="text" name="from_date" id="date-from" value="<?php e($debtor->getDBQuery()->getFilter("from_date")); ?>" /> <span id="calender"></span>
         </label>
         <label><?php e(t('To', 'common'))?>
-            <input type="text" name="to_date" value="<?php e($context->getDebtor()->getDBQuery()->getFilter("to_date")); ?>" />
+            <input type="text" name="to_date" value="<?php e($debtor->getDBQuery()->getFilter("to_date")); ?>" />
         </label>
 
         <span>
-        <input type="hidden" name="type" value="<?php e($context->getDebtor()->get("type")); ?>" />
-        <input type="hidden" name="contact_id" value="<?php e($context->getDebtor()->getDBQuery()->getFilter('contact_id')); ?>" />
-        <input type="hidden" name="product_id" value="<?php e($context->getDebtor()->getDBQuery()->getFilter('product_id')); ?>" />
+        <input type="hidden" name="type" value="<?php e($debtor->get("type")); ?>" />
+        <input type="hidden" name="contact_id" value="<?php e($debtor->getDBQuery()->getFilter('contact_id')); ?>" />
+        <input type="hidden" name="product_id" value="<?php e($debtor->getDBQuery()->getFilter('product_id')); ?>" />
         <input type="submit" name="search" value="Find" />
         </span>
         </form>
@@ -121,18 +121,18 @@
 <?php endif; ?>
 
 <table class="stripe">
-    <caption><?php e(__($context->getDebtor()->get("type"))); ?></caption>
+    <caption><?php e(__($debtor->get("type"))); ?></caption>
     <thead>
         <tr>
             <th><?php e(__('No.')); ?></th>
             <th colspan="2"><?php e(__('Contact')); ?></th>
             <th><?php e(__('Description')); ?></th>
             <th class="amount"><?php e(__('Amount')); ?></th>
-            <?php if ($context->getDebtor()->getDBQuery()->getFilter("status") == -3): ?>
+            <?php if ($debtor->getDBQuery()->getFilter("status") == -3): ?>
                 <th class="amount"><?php e(__('Depreciated')); ?></th>
             <?php endif; ?>
             <th><?php e(__('Sent')); ?></th>
-            <th><?php e(__($context->getDebtor()->get('type').' due date')); ?></th>
+            <th><?php e(__($debtor->get('type').' due date')); ?></th>
             <th>&nbsp;</th>
         </tr>
     </thead>
@@ -152,7 +152,7 @@
             }
             $total += $posts[$i]["total"];
         }
-        if ($context->getDebtor()->get("type") == "invoice") {
+        if ($debtor->get("type") == "invoice") {
             ?>
             <tr>
                 <td>&nbsp;</td>
@@ -196,7 +196,7 @@
 
 
                 <?php
-                if ($context->getDebtor()->getDBQuery()->getFilter("status") == -3) {
+                if ($debtor->getDBQuery()->getFilter("status") == -3) {
                     ?>
                     <td class="amount"><?php if ($post["deprication"]) e(number_format($post["deprication"], 2, ",",".")); ?> &nbsp; </td>
                     <?php
@@ -214,7 +214,7 @@
                 <td class="date">
                     <?php
 
-                    if ($context->getDebtor()->get('type') == "invoice" && $post['status'] == "sent" && $post['arrears'] != 0) {
+                    if ($debtor->get('type') == "invoice" && $post['status'] == "sent" && $post['arrears'] != 0) {
                         $arrears = " (".number_format($post['arrears'], 2, ",", ".").")";
                     } else {
                         $arrears = "";
