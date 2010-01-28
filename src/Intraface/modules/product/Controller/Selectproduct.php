@@ -75,7 +75,7 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
         $product = new Product($this->getKernel());
         $keywords = $product->getKeywordAppender();
 
-        $list = $product->getList();
+        $list = $this->getProducts();
 
         // @todo where should this get its values from
         $product_values = array();
@@ -91,8 +91,10 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
             }
         }
 
+        $data = array('products' => $list);
+
         $smarty = $this->template->create(dirname(__FILE__) . '/tpl/selectproduct');
-        return $smarty->render($this);
+        return $smarty->render($this, $data);
     }
 
     function getRedirect()
@@ -124,7 +126,7 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
         $this->getProduct()->getDBQuery()->usePaging("paging");
         $this->getProduct()->getDBQuery()->storeResult("use_stored", "select_product", "sublevel");
         $this->getProduct()->getDBQuery()->setExtraUri('set_quantity='.$this->quantity);
-
+        $this->getProduct()->getDBQuery()->setUri($this->url());
         return  $list = $this->getProduct()->getList();
     }
 

@@ -40,7 +40,6 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
     function renderHtml()
     {
         $product_module = $this->getKernel()->module("product");
-        $translation = $this->getKernel()->getTranslation('product');
 
         $product = new Product($this->getKernel(), intval($this->context->name()));
 

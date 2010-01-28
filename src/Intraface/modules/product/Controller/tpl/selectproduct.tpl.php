@@ -3,10 +3,10 @@ $quantity = $context->quantity;
 $multiple = $context->multiple;
 $selected_products = $context->selected_products;
 ?>
-<h1><?php e(t('select product')); ?></h1>
+<h1><?php e(t('Select product')); ?></h1>
 
 <?php if ($context->getProduct()->isFilledIn() == 0): ?>
-    <p><?php e(t('no products to select.')); ?> <a href="<?php e(url(null, array('create'))); ?>"><?php e(t('Create product')); ?></a>.</p>
+    <p><?php e(t('No products to select.')); ?> <a href="<?php e(url(null, array('create'))); ?>"><?php e(t('Create product')); ?></a>.</p>
 <?php else: ?>
 
     <ul class="options">
@@ -16,20 +16,20 @@ $selected_products = $context->selected_products;
 
     <form action="<?php e(url()); ?>" method="get">
         <fieldset>
-            <legend><?php e(t('search', 'common')); ?></legend>
-            <label><?php e(t('search for')); ?>
+            <legend><?php e(t('Search')); ?></legend>
+            <label><?php e(t('Search for')); ?>
             <input type="text" value="<?php e($context->getProduct()->getDBQuery()->getFilter("search")); ?>" name="search" id="search" />
         </label>
         <label>
             <?php e(t('show with keywords')); ?>
             <select name="keyword_id" id="keyword_id">
-                <option value=""><?php e(t('none', 'common')); ?></option>
+                <option value=""><?php e(t('None')); ?></option>
                 <?php foreach ($context->getKeywords()->getUsedKeywords() AS $k) { ?>
                 <option value="<?php e($k['id']); ?>" <?php if ($k['id'] == $context->getProduct()->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php e($k['keyword']); ?></option>
                 <?php } ?>
             </select>
         </label>
-        <span><input type="submit" value="<?php e(t('search', 'common')); ?>" class="search" /><input type="hidden" name="set_quantity" value="<?php e($quantity); ?>" /></span>
+        <span><input type="submit" value="<?php e(t('Search')); ?>" class="search" /><input type="hidden" name="set_quantity" value="<?php e($quantity); ?>" /></span>
         </fieldset>
         <br style="clear: both;" />
     </form>
@@ -39,8 +39,8 @@ $selected_products = $context->selected_products;
     ?>
     <form action="<?php e(url(null)); ?>" method="post">
     	<input name="_method" value="put" type="hidden" />
-        <table summary="Produkter" class="stripe">
-            <caption><?php e(t('products')); ?></caption>
+        <table summary="<?php e(t('Products')); ?>" class="stripe">
+            <caption><?php e(t('Products')); ?></caption>
             <thead>
                 <tr>
                     <th><?php if ($context->multiple && $context->quantity): e(t('Quantity')); else: echo e(t('Choose')); endif; ?></th>
@@ -55,7 +55,7 @@ $selected_products = $context->selected_products;
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($context->getProducts() AS $p): ?>
+                <?php foreach ($products AS $p): ?>
                 <tr>
                     <td>
                         <?php if ($p['has_variation']): ?>
@@ -86,9 +86,9 @@ $selected_products = $context->selected_products;
             <?php e(t('quantity')); ?>: <input type="text" name="quantity" value="1" />
         <?php endif; ?>
         <?php if ($context->multiple): ?>
-        <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />
+        <input type="submit" name="submit" value="<?php e(t('Save')); ?>" />
         <?php endif; ?>
-        <input type="submit" name="submit_close" value="<?php e(t('save and close', 'common')); ?>" /></p>
+        <input type="submit" name="submit_close" value="<?php e(t('Save and close')); ?>" /></p>
 
       <?php echo $context->getProduct()->getDBQuery()->display('paging'); ?>
     </form>
