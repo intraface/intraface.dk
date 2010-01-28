@@ -39,12 +39,11 @@
             <label for="price"><?php e(t('Price')); ?></label>
             <input type="text" name="price" id="price" value="<?php if (isset($product)) e($product->getDetails()->getPrice()->getAsLocal('da_dk', 2)); ?>" /> <?php e(t('excl. vat')); ?>
         </div>
-
         <div class="formrow">
             <label for="vat"><?php e(t('Vat')); ?></label>
             <select name="vat" id="vat">
                 <?php foreach (array(0 => 'No', 1 => 'Yes') AS $key=>$v): ?>
-                    <option value="<?php e($key); ?>" <?php if (isset($product) && ($key == 1 &&  $product->getDetails()->getVatPercent()->getAsIso() > 0 || $key == 0 && $product->getDetails()->getVatPercent()->getAsIso() == 0)) e(' selected="selected"'); ?> ><?php e(t($v, 'common')); ?></option>
+                    <option value="<?php e($key); ?>" <?php if (isset($product) && ($key == 1 &&  $product->getDetails()->getVatPercent()->getAsIso() > 0 || $key == 0 && $product->getDetails()->getVatPercent()->getAsIso() == 0)) echo ' selected="selected"'; ?> ><?php e(t($v)); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -149,7 +148,7 @@
 
                         if (strtolower($a['type']) == 'headline') {
 
-                            // det er lidt svært at få optgroupperne til at passe, hvis man har flere overskrifter i træk
+                            // det er lidt svï¿½rt at fï¿½ optgroupperne til at passe, hvis man har flere overskrifter i trï¿½k
                             if ($optgroup == 1) echo '</optgroup>';
                             echo '<optgroup label="'.$a['name'].'">';
                             $optgroup = 1;
@@ -158,8 +157,8 @@
                         ?>
                         <option value="<?php e($a['number']); ?>"
                         <?php
-                        // @todo er det korrekt at det er number? og måske skal et produkt i virkeligheden snarere
-                        // gemmes med nummeret en med id - for så er det noget lettere at opdatere fra år til år
+                        // @todo er det korrekt at det er number? og mï¿½ske skal et produkt i virkeligheden snarere
+                        // gemmes med nummeret en med id - for sï¿½ er det noget lettere at opdatere fra ï¿½r til ï¿½r
                         if (isset($product) && $product->getDetails()->getStateAccountId() == $a['number']) echo ' selected="selected"';
                         ?>
                         ><?php e($a['name']); ?></option>

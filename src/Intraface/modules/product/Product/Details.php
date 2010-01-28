@@ -71,11 +71,12 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         $dql = $this->getTable()
             ->createQuery()
             ->select('id')
-            ->innerJoin('Intraface_modules_product_ProductDoctrine.details AS details')
+            //->innerJoin('Intraface_modules_product_ProductDoctrine.details AS details')
+            //->addWhere('active = 1')
             ->addWhere('active = 1')
-            ->addWhere('details.active = 1')
-            ->addWhere('details.number = ?', $this->number)
-            ->addWhere('details.product_id <> '. $product_id);
+            ->addWhere('number = ' . $this->number)
+            ->addWhere('intranet_id = ' . $this->intranet_id)
+            ->addWhere('product_id <> ' . $product_id);
 
         // not necessary to execute query when counting
         //$collection = $dql->execute();
