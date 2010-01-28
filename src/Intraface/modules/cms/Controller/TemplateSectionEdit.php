@@ -13,19 +13,18 @@ class Intraface_modules_cms_Controller_TemplateSectionEdit extends k_Component
         $cms_module = $this->getKernel()->module('cms');
         $translation = $this->getKernel()->getTranslation('cms');
 
-        if (!empty ($_GET['id']) AND is_numeric($_GET['id'])) {
-            $section = CMS_TemplateSection :: factory($this->getKernel(), 'id', $this->name());
+        if (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
+            $section = CMS_TemplateSection::factory($this->getKernel(), 'id', $this->name());
             $value = $section->get();
 
         } else {
             // der skal valideres noget p� typen ogs�.
 
-            $template = CMS_Template :: factory($this->getKernel(), 'id', $this->context->getTemplateId());
-            $section = CMS_TemplateSection :: factory($template, 'type', $_GET['type']);
+            $template = CMS_Template::factory($this->getKernel(), 'id', $this->context->getTemplateId());
+            $section = CMS_TemplateSection::factory($template, 'type', $_GET['type']);
 
             $value['type'] = $section->get('type');
             $value['template_id'] = $section->get('template_id');
-
         }
 
         $data = array(

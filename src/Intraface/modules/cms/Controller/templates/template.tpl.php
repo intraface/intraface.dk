@@ -30,7 +30,7 @@
             <td><?php e($s['type']); ?></td>
             <td class="options"><a href="<?php e(url(null, array('moveup' =>  $s['id']))); ?>"><?php e(__('up','common')); ?></a>
             <a href="<?php e(url(null, array('movedown' =>  $s['id']))); ?>"><?php e(__('down', 'common')); ?></a>
-            <a class="edit" href="template_section_edit.php?id=<?php e($s['id']); ?>"><?php e(__('edit settings', 'common')); ?></a>
+            <a class="edit" href="<?php e(url('edit')); ?>"><?php e(__('edit settings', 'common')); ?></a>
             <a class="delete" href="<?php e(url(null, array('delete' =>  $s['id']))); ?>"><?php e(__('delete', 'common')); ?></a></td>
         </tr>
     <?php endforeach; ?>

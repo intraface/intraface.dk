@@ -1,6 +1,6 @@
 <?php
 /**
- * Der skal kun kunne være en section pr. template_section_id pr. side.
+ * Der skal kun kunne vï¿½re en section pr. template_section_id pr. side.
  *
  * TODO make this abstract so the extending classes does it properly
  *
@@ -21,9 +21,9 @@ class CMS_TemplateSection extends Intraface_Standard
     /**
      * Constructor:
      * Construktor skal enten have cmspage eller en kernel.
-     * Hvis den får kernel skal den have et id.
-     * Fordelen er, at man ikke behøver at vide hvilken side elementet hører til,
-     * men blot behøver, at have elementid.
+     * Hvis den fï¿½r kernel skal den have et id.
+     * Fordelen er, at man ikke behï¿½ver at vide hvilken side elementet hï¿½rer til,
+     * men blot behï¿½ver, at have elementid.
      */
     function __construct($template, $id = 0)
     {
@@ -72,8 +72,8 @@ class CMS_TemplateSection extends Intraface_Standard
         $class_prefix = 'Intraface_modules_cms_templatesection_';
         switch ($type) {
             case 'type':
-                // validering på value
-                // kun være gyldige elementtyper
+                // validering pï¿½ value
+                // kun vï¿½re gyldige elementtyper
                 // object skal vre cmspage
                 $class = $class_prefix . ucfirst($value);
                 return new $class($object);
