@@ -10,7 +10,7 @@ $level_categories = array(0 => $categories);
 $level = 0;
 ?>
 
-<form action="<?php e($this->url()); ?>" method="post">
+<form action="<?php e(url()); ?>" method="post">
 <table>
     <caption><?php e(t('Categories')); ?></caption>
     <thead>

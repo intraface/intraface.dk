@@ -484,6 +484,57 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
     }
 
     /**
+     * Returns the pictures for the product categories for the shop
+     *
+     * @param struct  $credentials Credentials to use the server
+     * @param integer $shop_id     Id for the shop
+     * @param integer $category_id Categori id
+     *
+     * @return array with pictures for categories
+     */
+    public function getProductCategoryPicture($credentials, $shop_id, $category_id)
+    {
+        if (is_object($return = $this->checkCredentials($credentials))) {
+            return $return;
+        }
+
+        $this->_factoryWebshop($shop_id);
+
+        $module = $this->kernel->useShared('filehandler');
+        require_once 'Intraface/shared/filehandler/AppendFile.php';
+
+        $pictures = array();
+
+            $append_file = new AppendFile($this->kernel, 'category', $category_id);
+            $appendix_list = $append_file->getList();
+            foreach ($appendix_list as $key => $appendix) {
+                $tmp_filehandler = new FileHandler($this->kernel, $appendix['file_handler_id']);
+                $pictures[$key]['id']                   = $appendix['file_handler_id'];
+                $pictures[$key]['original']['icon_uri'] = $tmp_filehandler->get('icon_uri');
+                $pictures[$key]['original']['name']     = $tmp_filehandler->get('file_name');
+                $pictures[$key]['original']['width']    = $tmp_filehandler->get('width');
+                $pictures[$key]['original']['height']   = $tmp_filehandler->get('height');
+                $pictures[$key]['original']['file_uri'] = $tmp_filehandler->get('file_uri');
+                $pictures[$key]['appended_file_id']     = $appendix['id'];
+
+                if ($tmp_filehandler->get('is_image')) {
+                    $tmp_filehandler->createInstance();
+                    $instances = $tmp_filehandler->instance->getList('include_hidden');
+                    foreach ($instances AS $instance) {
+                        $pictures[$key][$instance['name']]['file_uri'] = $instance['file_uri'];
+                        $pictures[$key][$instance['name']]['name']     = $instance['name'];
+                        $pictures[$key][$instance['name']]['width']    = $instance['width'];
+                        $pictures[$key][$instance['name']]['height']   = $instance['height'];
+                    }
+                }
+                $tmp_filehandler->__destruct();
+                unset($tmp_filehandler);
+           }
+
+        return $this->prepareResponseData($pictures);
+    }
+
+    /**
      * Add product to basket
      *
      * @param struct  $credentials       Credentials to use the server
