@@ -6,7 +6,7 @@
  * @version 001
  * @author Lars Olesen <lars@legestue.net>
  *
- * TODO Lige nu gemmer den altid en ny produktdetalje uanset, hvad jeg gør.
+ * TODO Lige nu gemmer den altid en ny produktdetalje uanset, hvad jeg gï¿½r.
  */
 class ProductDetail extends Intraface_Standard
 {
@@ -51,7 +51,7 @@ class ProductDetail extends Intraface_Standard
     public function __construct($product, $old_detail_id = 0)
     {
         if (!is_object($product)) {
-            trigger_error('ProductDetail-objektet kræver et Product-objekt.', E_USER_ERROR);
+            trigger_error('ProductDetail-objektet krï¿½ver et Product-objekt.', E_USER_ERROR);
         }
 
         $this->product       = $product;
@@ -87,7 +87,7 @@ class ProductDetail extends Intraface_Standard
         if ($this->db->numRows() > 1) {
             trigger_error('Der er mere end en aktiv produktdetalje', E_USER_ERROR);
         } elseif ($this->db->nextRecord()) {
-            // hardcoded udtræk af nogle vigtige oplysnigner, som vi ikke kan have i feltlisten
+            // hardcoded udtrï¿½k af nogle vigtige oplysnigner, som vi ikke kan have i feltlisten
             for ($i = 0, $max = count($this->fields); $i<$max; $i++) {
                 $this->value[$this->fields[$i]] = $this->db->f($this->fields[$i]);
             }
@@ -107,7 +107,7 @@ class ProductDetail extends Intraface_Standard
             $this->value['unit_id']   = $this->db->f('unit_key');
             $this->value['unit']     = $unit;
 
-            // udregne moms priser ud fra prisen, men kun hvis der er moms på den
+            // udregne moms priser ud fra prisen, men kun hvis der er moms pï¿½ den
             if ($this->db->f('vat') == 1) {
                 $this->value['vat_percent'] = 25;
                 $this->value['price_incl_vat'] = round((float)$this->db->f('price') + ((float)$this->db->f('price') * 0.25), 2);
@@ -139,10 +139,10 @@ class ProductDetail extends Intraface_Standard
         $validator->isNumeric($array_var['do_show'], 'Fejl i do_show', 'allow_empty');
         $validator->isNumeric($array_var['vat'], 'Fejl i vat');
         $validator->isNumeric($array_var['pic_id'], 'Fejl i billedid', 'allow_empty');
-        $validator->isNumeric($array_var['weight'], 'Fejl i vægt - skal være et helt tal', 'allow_empty');
+        $validator->isNumeric($array_var['weight'], 'Fejl i vï¿½gt - skal vï¿½re et helt tal', 'allow_empty');
 
         if (isset($array_var['price'])) $validator->isNumeric($array_var['price'], 'Fejl i pris', 'allow_empty');
-        if (isset($array_var['before_price'])) $validator->isNumeric($array_var['before_price'], 'Fejl i førpris', 'allow_empty');
+        if (isset($array_var['before_price'])) $validator->isNumeric($array_var['before_price'], 'Fejl i fï¿½rpris', 'allow_empty');
 
         if ($this->product->error->isError()) {
             return false;
@@ -163,7 +163,6 @@ class ProductDetail extends Intraface_Standard
      */
     public function save($array_var)
     {
-
         $array_var = safeToDb($array_var);
 
         if (isset($array_var['price'])) {
@@ -181,7 +180,7 @@ class ProductDetail extends Intraface_Standard
 
         if ($this->old_detail_id != 0) {
             // save kan ikke bruges hvis man skal opdatere et gammelt produkt
-            // men så bør den vel bare automatisk kalde update(), som i øjeblikket
+            // men sï¿½ bï¿½r den vel bare automatisk kalde update(), som i ï¿½jeblikket
             // er udkommenteret.
             return false;
         } elseif (count($array_var) == 0) {
@@ -193,7 +192,7 @@ class ProductDetail extends Intraface_Standard
         //         AND product_id = " . $this->product->get('id') . ' AND intranet_id = ' . $this->product->intranet->getId());
 
         if ($this->detail_id != 0) { // $this->db->nextRecord()
-            // her skal vi sørge for at få billedet med
+            // her skal vi sï¿½rge for at fï¿½ billedet med
             $do_update = 0;
             $sql       = '';
 
@@ -237,7 +236,7 @@ class ProductDetail extends Intraface_Standard
 
 
         } else {
-            // der er ikke nogen tidligere poster, så vi opdatere selvfølgelig
+            // der er ikke nogen tidligere poster, sï¿½ vi opdatere selvfï¿½lgelig
             $do_update = 1;
             $sql       = '';
             // we make sure that unit is set to a valid unit.
@@ -262,7 +261,7 @@ class ProductDetail extends Intraface_Standard
         }
 
         if ($do_update == 0) {
-            // Hmmmmm, der er slet ikke nogen felter der er ændret! Så gemmer vi ikke, men siger at det gik godt :-)
+            // Hmmmmm, der er slet ikke nogen felter der er ï¿½ndret! Sï¿½ gemmer vi ikke, men siger at det gik godt :-)
             return true;
         } else {
 

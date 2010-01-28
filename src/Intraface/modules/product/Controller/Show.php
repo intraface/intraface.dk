@@ -2,13 +2,15 @@
 class Intraface_modules_product_Controller_Show extends k_Component
 {
     protected $error;
-    private $product;
-    private $product_doctrine;
+    protected $product;
+    protected $product_doctrine;
     protected $template;
+    protected $doctrine_connection;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, Doctrine_Connection_Common $connection)
     {
         $this->template = $template;
+        $this->doctrine_connection = $connection;
     }
 
     function map($name)
@@ -51,7 +53,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
     function getGateway()
     {
-        return new Intraface_modules_product_ProductDoctrineGateway(Doctrine_Manager::connection(), $this->getKernel()->user);
+        return new Intraface_modules_product_ProductDoctrineGateway($this->doctrine_connection, $this->getKernel()->user);
     }
 
     function postMultipart()
@@ -127,7 +129,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
             return $this->product_doctrine;
         }
 
-        return $this->product_doctrine = $this->getGateway()->findById((int)$this->name());
+        return ($this->product_doctrine = $this->getGateway()->findById((int)$this->name()));
     }
 
     function postForm()
@@ -143,15 +145,31 @@ class Intraface_modules_product_Controller_Show extends k_Component
         $product->getDetails()->Translation['da']->name = $_POST['name'];
         $product->getDetails()->Translation['da']->description = $_POST['description'];
         $product->getDetails()->price = new Ilib_Variable_Float($_POST['price'], 'da_dk');
-        if(isset($_POST['before_price'])) $product->getDetails()->before_price = new Ilib_Variable_Float($_POST['before_price'], 'da_dk');
-        if(isset($_POST['weight'])) $product->getDetails()->weight = new Ilib_Variable_Float($_POST['weight'], 'da_dk');
-        if(isset($_POST['unit'])) $product->getDetails()->unit = $_POST['unit'];
-        if(isset($_POST['vat'])) $product->getDetails()->vat = $_POST['vat'];
-        if(isset($_POST['do_show'])) $product->do_show = $_POST['do_show'];
-        if(isset($_POST['state_account_id'])) $product->getDetails()->state_account_id = (int)$_POST['state_account_id'];
+        if (isset($_POST['before_price'])) {
+            $product->getDetails()->before_price = new Ilib_Variable_Float($_POST['before_price'], 'da_dk');
+        }
+        if (isset($_POST['weight'])) {
+            $product->getDetails()->weight = new Ilib_Variable_Float($_POST['weight'], 'da_dk');
+        }
+        if (isset($_POST['unit'])) {
+            $product->getDetails()->unit = $_POST['unit'];
+        }
+        if (isset($_POST['vat'])) {
+            $product->getDetails()->vat = $_POST['vat'];
+        }
+        if (isset($_POST['do_show'])) {
+            $product->do_show = $_POST['do_show'];
+        }
+        if (isset($_POST['state_account_id'])) {
+            $product->getDetails()->state_account_id = (int)$_POST['state_account_id'];
+        }
 
-        if(isset($_POST['has_variation'])) $product->has_variation = $_POST['has_variation'];
-        if(isset($_POST['stock'])) $product->stock = $_POST['stock'];
+        if (isset($_POST['has_variation'])) {
+            $product->has_variation = $_POST['has_variation'];
+        }
+        if (isset($_POST['stock'])) {
+            $product->stock = $_POST['stock'];
+        }
         //print_r($product->asArray(true)); die('AA');
         try {
             $product->save();
