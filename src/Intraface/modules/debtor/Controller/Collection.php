@@ -38,10 +38,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $translation = $this->getKernel()->getTranslation('debtor');
         $debtor_module = $this->getKernel()->module('debtor');
 
-        if (empty($_GET['id'])) $_GET['id'] = '';
-        if (empty($_GET['type'])) $_GET['type'] = '';
-
-        $debtor = Debtor::factory($this->getKernel(), intval($_GET["id"]), $this->context->getType());
+        $debtor = Debtor::factory($this->getKernel(), 0, $this->context->getType());
         $debtor->getDbQuery()->storeResult("use_stored", $debtor->get("type"), "toplevel");
 
         $posts = $debtor->getList();
@@ -139,43 +136,43 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $sent_total = 0;
         $total = 0;
 
-        if (count($posts) > 0) {
-            for ($j = 0, $max = count($posts); $j < $max; $j++) {
+            foreach ($posts as $post) {
 
-                if ($posts[$j]["due_date"] < date("Y-m-d") && ($posts[$j]["status"] == "created" OR $posts[$j]["status"] == "sent")) {
-                    $due_total += $posts[$i]["total"];
+                if ($post["due_date"] < date("Y-m-d") && ($post["status"] == "created" OR $post["status"] == "sent")) {
+                    $due_total += $post["total"];
                 }
-                if ($posts[$j]["status"] == "sent") {
-                    $sent_total += $posts[$j]["total"];
+                if ($post["status"] == "sent") {
+                    $sent_total += $post["total"];
                 }
-                $total += $posts[$j]["total"];
+                $total += $post["total"];
 
-                $worksheet->write($i, 0, $posts[$j]["number"]);
-                $worksheet->write($i, 1, $posts[$j]['contact']['number']);
-                $worksheet->write($i, 2, $posts[$j]["name"]);
-                $worksheet->write($i, 3, $posts[$j]["description"]);
-                $worksheet->writeNumber($i, 4, $posts[$j]["total"]);
-                $worksheet->write($i, 5, $posts[$j]["dk_this_date"]);
+                $worksheet->write($i, 0, $post["number"]);
+                $worksheet->write($i, 1, $post['contact']['number']);
+                $worksheet->write($i, 2, $post["name"]);
+                $worksheet->write($i, 3, $post["description"]);
+                $worksheet->writeNumber($i, 4, $post["total"]);
+                $worksheet->write($i, 5, $post["dk_this_date"]);
 
                 if ($posts[$j]["status"] != "created") {
-                    $worksheet->write($i, 6, $posts[$j]["dk_date_sent"]);
+                    $worksheet->write($i, 6, $post["dk_date_sent"]);
                 } else {
                     $worksheet->write($i, 6, "Nej");
                 }
 
-                if ($posts[$j]["status"] == "executed" || $posts[$j]["status"] == "canceled") {
-                    $worksheet->write($i, 7, __($posts[$j]["status"], 'debtor'));
+                if ($posts[$j]["status"] == "executed" || $post["status"] == "canceled") {
+                    $worksheet->write($i, 7, $this->t($post["status"], 'debtor'));
                 } else {
-                    $worksheet->write($i, 7, $posts[$j]["dk_due_date"]);
+                    $worksheet->write($i, 7, $post["dk_due_date"]);
                 }
                 $c = 8;
                 if ($type == 'invoice') {
-                    $worksheet->write($i, $c, $posts[$j]['arrears']);
+                    $worksheet->write($i, $c, $post['arrears']);
                     $c++;
                 }
 
+                /*
                 $keywords = array();
-                $contact = new Contact($this->getKernel(), $posts[$j]['contact']['id']);
+                $contact = new Contact($this->getKernel(), $post['contact']['id']);
                 $appender = $contact->getKeywordAppender();
                 $keyword_ids = $appender->getConnectedKeywords();
                 if (count($keyword_ids) > 0) {
@@ -189,8 +186,8 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
 
                 if (!empty($product) && is_object($product) && get_class($product) == 'product') {
                     $quantity_product = 0;
-                    if (count($posts[$j]['items']) > 0) {
-                        foreach ($posts[$j]['items'] AS $item) {
+                    if (count($post['items']) > 0) {
+                        foreach ($post['items'] AS $item) {
                             if ($item['product_id'] == $product->get('id')) {
                                 $quantity_product += $item['quantity'];
                             }
@@ -199,12 +196,11 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
                     $worksheet->write($i, $c, $quantity_product);
                     $c++;
                 }
+				*/
 
                 $i++;
 
             }
-        }
-
 
         $i++;
         $i++;
