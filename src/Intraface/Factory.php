@@ -124,7 +124,9 @@ class Intraface_Factory
     {
         Doctrine_Manager::getInstance()->setAttribute("use_dql_callbacks", true);
         Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
-        return Doctrine_Manager::connection(DB_DSN);
+        $connection = Doctrine_Manager::connection(DB_DSN);
+        $connection->setCharset('utf8');
+        return $connection;
     }
 
     function new_Swift_Message($c)
