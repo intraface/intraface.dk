@@ -50,8 +50,8 @@
         <td><?php e(t('Show in webshop')); ?></td>
         <td>
             <?php
-                $show_choises = array(0=>"Nej", 1=>"Ja");
-                e($show_choises[$product->get('do_show')]);
+                $show_choises = array(0=>"No", 1=>"Yes");
+                e(t($show_choises[$product->get('do_show')]));
             ?>
         </td>
     </tr>
@@ -64,8 +64,8 @@
         <td><?php e(t('Vat')); ?></td>
         <td>
             <?php
-                $vat_choises = array(0=>"Nej", 1=>"Ja");
-                e($vat_choises[$product->get('vat')]);
+                $vat_choises = array(0=>"No", 1=>"Yes");
+                e(t($vat_choises[$product->get('vat')]));
             ?>
         </td>
     </tr>
@@ -74,7 +74,7 @@
         <td><?php e(t('Stock product')); ?></td><td>
             <?php
                 $stock_choises = array(0=>"No", 1=>"Yes");
-                e($stock_choises[$product->get('stock')], 'common');
+                e(t($stock_choises[$product->get('stock')]));
             ?>
         </td>
     </tr>
