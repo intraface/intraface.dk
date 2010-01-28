@@ -146,7 +146,7 @@ function intraface_autoop($text)
 
     $text = MarkDown($text);
     $text = SmartyPants($text);
-    return $text;
+    return utf8_decode($text);
 }
 
 $GLOBALS['_global_function_callback_autoop'] = 'intraface_autoop';
@@ -174,7 +174,7 @@ function intraface_autohtml($text)
     $text = nl2br($text);
     $text = MarkDown($text);
     $text = SmartyPants($text);
-    echo $text;
+    echo utf8_decode($text);
 }
 
 $GLOBALS['_global_function_callback_autohtml'] = 'intraface_autohtml';
