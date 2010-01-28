@@ -46,7 +46,12 @@ class Intraface_modules_onlinepayment_Controller_Index extends k_Component
 
         $payments = $onlinepayment->getList();
 
+        $data = array(
+        	'kernel' => $this->getKernel(),
+        	'payments' => $payments,
+        	'onlinepayment' => $onlinepayment);
+
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/index');
-        return $smarty->render($this, array('kernel' => $this->context->getKernel(), 'payments' => $payments, 'onlinepayment' => $onlinepayment));
+        return $smarty->render($this, $data);
     }
 }

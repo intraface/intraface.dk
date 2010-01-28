@@ -2,7 +2,7 @@
 /**
  * List
  *
- * Skal håndtere de forskellige lister, man kan tilmelde sig på hjemmesiden.
+ * Skal hï¿½ndtere de forskellige lister, man kan tilmelde sig pï¿½ hjemmesiden.
  *
  * TODO    Burde nok finde et andet navn end liste.
  *
@@ -31,7 +31,7 @@ class NewsletterList extends Intraface_Standard
     public function __construct($kernel, $id = 0)
     {
         if (!is_object($kernel)) {
-            trigger_error('Listadministration kræver Kernel', E_USER_ERROR);
+            trigger_error('Listadministration krï¿½ver Kernel', E_USER_ERROR);
         }
         $this->kernel = $kernel;
 
@@ -106,11 +106,11 @@ class NewsletterList extends Intraface_Standard
     {
         $validator = new Intraface_Validator($this->error);
         $validator->isString($var['title'], 'Titel er ikke ufdyldt korrekt');
-        $validator->isString($var['sender_name'], 'Navn på afsender er ikke ufdyldt korrekt', '', 'allow_empty');
+        $validator->isString($var['sender_name'], 'Navn pÃ¥ afsender er ikke ufdyldt korrekt', '', 'allow_empty');
         $validator->isEmail($var['reply_email'], 'E-mail er ikke en gyldig e-mail', 'allow_empty');
         $validator->isString($var['description'], 'Beskrivelse er ikke gyldig', '<strong><em>', 'allow_empty');
-        $validator->isString($var['subscribe_subject'], 'Subject til bekræftelse på tilmelding er ikke udfyldt korrekt', '', 'allow_empty');
-        $validator->isString($var['subscribe_message'], 'Bekræftelse på tilmelding er ikke udfyldt korrekt', '', 'allow_empty');
+        $validator->isString($var['subscribe_subject'], 'Subject til bekrÃ¦ftelse pÃ¥ tilmelding er ikke udfyldt korrekt', '', 'allow_empty');
+        $validator->isString($var['subscribe_message'], 'BekrÃ¦ftelse pÃ¥ tilmelding er ikke udfyldt korrekt', '', 'allow_empty');
 
         if ($this->error->isError()) {
             return false;
@@ -178,7 +178,7 @@ class NewsletterList extends Intraface_Standard
     /**
      * Deletes
      *
-     * TODO Bør kun kunne slette lister hvor der ikke er breve der ikke er sendt
+     * TODO Bï¿½r kun kunne slette lister hvor der ikke er breve der ikke er sendt
      *
      * @return boolean
      */

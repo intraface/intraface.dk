@@ -72,12 +72,13 @@ class Intraface_Fileimport_Controller_Index extends k_Component
                 }
 
                 if ($data = $parser->parse($this->filehandler->get('file_path'), $offset)) {
-
+                    $_SESSION['shared_fileimport_data'] = $data;
                     $this->session()->set('fileimport_data', $data);
-                    return new k_SeeOther($this->url('../'));
+
+                    return new k_SeeOther($this->url('../', array('header' => $this->body('header'),'file_id' => $this->filehandler->get('id'), 'fields' => $this->body('fields'))));
 
                     /*
-                    $_SESSION['shared_fileimport_data'] = $data;
+
 
                     $redirect->setParameter('session_variable_name', 'shared_fileimport_data');
                     if ($url = $redirect->getRedirect('')) {

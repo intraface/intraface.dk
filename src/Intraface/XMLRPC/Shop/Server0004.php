@@ -248,7 +248,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $return = array();
 
         $product = new Product($this->kernel, $id);
-        if($product->get('id') == 0 || $product->get('do_show') == 0 || $product->get('active') == 0) {
+        if ($product->get('id') == 0 || $product->get('do_show') == 0 || $product->get('active') == 0) {
             return array('product' => array('id' => 0));
         }
 
@@ -268,7 +268,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             }
         }
 
-        if (!$product->get('has_variation') && $product->get('stock')) {
+        if (!$product->hasVariation() && $product->get('stock')) {
             $return['stock'] = $product->getStock()->get();
         }
 
@@ -277,7 +277,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             $variations = $product->getVariations();
             foreach ($variations as $variation) {
 
-                if($product->get('stock')) {
+                if ($product->get('stock')) {
                     $stock = $variation->getStock($product)->get();
                 } else {
                     $stock = false;

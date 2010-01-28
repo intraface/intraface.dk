@@ -2,11 +2,11 @@
 
 <?php if (!$onlinepayment->isProviderSet()): ?>
 
-	<p>For at bruge onlinebetalinger, skal du have valgt en udbyder. <a href="choose_provider.php">Vælg udbyder</a>.</p>
+	<p>For at bruge onlinebetalinger, skal du have valgt en udbyder. <a href="choose_provider.php">Vï¿½lg udbyder</a>.</p>
 
 <?php elseif (!$onlinepayment->isSettingsSet()): ?>
 
-	<p>For at bruge onlinebetalinger, skal du have sat nogle indstillinger. <a href="settings.php">Sæt indstillinger</a>.</p>
+	<p>For at bruge onlinebetalinger, skal du have sat nogle indstillinger. <a href="settings.php">Sï¿½t indstillinger</a>.</p>
 
 
 <?php elseif (!$onlinepayment->isFilledIn()): ?>
@@ -78,7 +78,7 @@
 						case "invoice":
 							if ($kernel->user->hasModuleAccess('invoice')) {
 								$debtor_module = $kernel->useModule('debtor');
-								print("<a href=\"".$debtor_module->getPath().$onlinepayment->get('belong_to') . '/list/' . $payment['belong_to_id']."\">Faktura</a>");
+								print("<a href=\"".$debtor_module->getPath().$payment['belong_to'] . '/list/' . $payment['belong_to_id']."\">Faktura</a>");
 							}
 							else {
 								e("Faktura");
@@ -87,7 +87,7 @@
 						case "order":
 							if ($kernel->user->hasModuleAccess('order')) {
 								$debtor_module = $kernel->useModule('debtor');
-								print("<a href=\"".$debtor_module->getPath().$onlinepayment->get('belong_to') . '/list/' . $payment['belong_to_id']."\">Ordre</a>");
+								print("<a href=\"".$debtor_module->getPath().$payment['belong_to'] . '/list/' . $payment['belong_to_id']."\">Ordre</a>");
 							}
 							else {
 								e("Ordre");
@@ -122,7 +122,7 @@
                         }
                         e(")");
 					} elseif ($payment['status'] == 'authorized') {
-						print(" (Ikke <acronym title=\"Betaling kan først hæves når faktura er sendt\">hævet</acronym>)");
+						print(" (Ikke <acronym title=\"Betaling kan fï¿½rst hï¿½ves nï¿½r faktura er sendt\">hï¿½vet</acronym>)");
 					}
 					?>
 				</td>
