@@ -15,17 +15,15 @@ class Intraface_Filehandler_Controller_Sizes_Edit extends k_Component
 
     function postForm()
     {
-        $kernel = $this->getKernel();
-        $shared_filehandler = $kernel->useShared('filehandler');
-        $translation = $kernel->getTranslation('filehandler');
+        $shared_filehandler = $this->getKernel()->useShared('filehandler');
 
-        $instance_manager = new Ilib_Filehandler_InstanceManager($kernel, (int)$this->POST['type_key']);
+        $instance_manager = new Ilib_Filehandler_InstanceManager($this->getKernel(), (int)$this->body('type_key'));
 
-        if($instance_manager->save($this->body())) {
+        if ($instance_manager->save($this->body())) {
             return new k_SeeOther($this->context->url());
         }
 
-        throw new Exception('An error occured when trying to save');
+        return $this->render();
     }
 
     function renderHtml()
@@ -34,8 +32,8 @@ class Intraface_Filehandler_Controller_Sizes_Edit extends k_Component
         $shared_filehandler = $kernel->useShared('filehandler');
         $translation = $kernel->getTranslation('filehandler');
 
-        if (!empty($this->GET['type_key'])) {
-            $instance_manager = new Ilib_Filehandler_InstanceManager($kernel, (int)$this->GET['type_key']);
+        if ($this->query('type_key')) {
+            $instance_manager = new Ilib_Filehandler_InstanceManager($kernel, (int)$this->query('type_key'));
             $value = $instance_manager->get();
         } else {
             $instance_manager = new Ilib_Filehandler_InstanceManager($kernel);
@@ -44,7 +42,9 @@ class Intraface_Filehandler_Controller_Sizes_Edit extends k_Component
 
         $this->document->setTitle('edit instance type');
 
-        $data = array('instance_manager' => $instance_manager, 'value' => $value);
+        $data = array(
+        	'instance_manager' => $instance_manager,
+        	'value' => $value);
 
         $tpl = $this->template->create(dirname(__FILE__) . '/../../templates/sizes-edit');
         return $tpl->render($this, $data);

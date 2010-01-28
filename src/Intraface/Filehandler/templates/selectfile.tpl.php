@@ -1,10 +1,10 @@
 <ul class="options">
-    <li><a href="<?php e(url('upload')); ?>" onclick="location.href='<?php e(url('uploadmultiple')); ?>'; return false;"><?php e(__('upload file')); ?></a></li>
+    <li><a href="<?php e(url('Upload')); ?>" onclick="location.href='<?php e(url('uploadmultiple')); ?>'; return false;"><?php e(__('upload file')); ?></a></li>
 </ul>
 
 <?php // echo $filemanager->error->view('html'); ?>
 
-<form method="get" action="<?php e($this->url(null, array('use_stored' => true))); ?>">
+<form method="get" action="<?php e(url(null, array('use_stored' => true))); ?>">
     <fieldset>
         <legend><?php e(__('search')); ?></legend>
         <label><?php e(__('text')); ?>:
@@ -53,18 +53,18 @@
 </form>
 
 <?php echo $filemanager->getDBQuery()->display('character'); ?>
-<form method="POST" action="<?php e($this->url(null)); ?>">
+<form method="POST" action="<?php e(url(null)); ?>">
 <table class="stripe">
-    <caption><?php e(__('files')); ?></caption>
+    <caption><?php e(t('Files')); ?></caption>
     <thead>
         <tr>
             <th></th>
             <th></th>
-            <th><?php e(__('file name')); ?></th>
-            <th><?php e(__('file type')); ?></th>
-            <th><?php e(__('accessibility')); ?></th>
-            <th><?php e(__('file size')); ?></th>
-            <th><?php e(__('file date')); ?></th>
+            <th><?php e(t('File name')); ?></th>
+            <th><?php e(t('File type')); ?></th>
+            <th><?php e(t('Accessibility')); ?></th>
+            <th><?php e(t('File size')); ?></th>
+            <th><?php e(t('File date')); ?></th>
             <!--<th></th>-->
         </tr>
     </thead>

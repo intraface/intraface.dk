@@ -75,11 +75,13 @@
 
         <table class="stribe">
             <thead>
+            	<tr>
                 <th><?php e(__('Identifier', 'common')); ?></th>
                 <th><?php e(__('Image width')); ?></th>
                 <th><?php e(__('Image height')); ?></th>
                 <th><?php e(__('File size')); ?></th>
                 <th></th>
+                </tr>
             </thead>
             <tbody>
                 <?php
