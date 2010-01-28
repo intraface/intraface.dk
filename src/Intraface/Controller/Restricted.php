@@ -182,7 +182,12 @@ class component_ShowProduct {
         if (is_object($this->kernel)) {
             return $this->kernel;
         }
-        return $this->kernel = $this->kernel_gateway->findByUserobject($this->user_gateway->findByUsername($this->identity()->user()));
+        try {
+            return $this->kernel = $this->kernel_gateway->findByUserobject($this->user_gateway->findByUsername($this->identity()->user()));
+        } catch (Exception $e) {
+            return new k_SeeOther($this->url('/logout'));
+        }
+
     }
 
 
