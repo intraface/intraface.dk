@@ -1,36 +1,37 @@
 <?php
 /**
  * Main XMLRPC server class to extend all other Serves from
- * 
+ *
  * Gives ability to encode and decode data correct.
  * @category XMLRPC_Server
  * @package  Intraface_XMLRPC
  * @author   Sune Jensen <sj@sunet.dk>
  * @version  @package-version@
- */ 
+ */
 
 /**
  * Main XMLRPC server class to extend all other Serves from
- * 
+ *
  * Gives ability to encode and decode data correct.
  * @category XMLRPC_Server
  * @package  Intraface_XMLRPC
  * @author   Sune Jensen <sj@sunet.dk>
  * @version  @package-version@
- */ 
-class Intraface_XMLRPC_Server 
+ */
+class Intraface_XMLRPC_Server
 {
     /**
      * @var struct $credentials
      */
     protected $credentials;
-    
+
     /**
      * @var object $kernel intraface kernel
      */
     protected $kernel;
-    
-    
+
+    protected $valid_encodings = array('utf-8', 'iso-8859-1');
+
     /**
      * Constructor
      *
@@ -40,13 +41,12 @@ class Intraface_XMLRPC_Server
      */
     public function __construct($encoding = 'utf-8')
     {
-        
-        if(!in_array($encoding, array('utf-8', 'iso-8859-1'))) {
+        if (!in_array($encoding, $this->valid_encodings)) {
             throw new Exception('Invalid encoding: '.$encoding.'. Should either be utf-8 or iso-8859');
         }
         $this->encoding = $encoding;
     }
-    
+
     /**
      * Checks credentials
      *
@@ -83,13 +83,13 @@ class Intraface_XMLRPC_Server
         $this->kernel->weblogin = $weblogin;
         $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
         $this->kernel->setting = new Intraface_Setting($this->kernel->intranet->get('id'));
-        
+
         // makes intranet_id accessable in Doctrine
         Intraface_Doctrine_Intranet::singleton($this->kernel->intranet->getId());
 
         return true;
     }
-    
+
     /**
      * Prepares response to be sent with the correct UTF-8 encoding.
      *
@@ -103,7 +103,7 @@ class Intraface_XMLRPC_Server
         }
         return $values;
     }
-    
+
     /**
      * Process data from client, so that data is returned with the correct encoding.
      *
@@ -117,8 +117,8 @@ class Intraface_XMLRPC_Server
         }
         return $values;
     }
-    
-    protected function recursiveMap($function, $values) 
+
+    protected function recursiveMap($function, $values)
     {
         if (is_string($values)) {
             return call_user_func($function, $values);
@@ -131,5 +131,5 @@ class Intraface_XMLRPC_Server
             return $values;
         }
     }
-    
+
 }
