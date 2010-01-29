@@ -47,7 +47,6 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
     function getYear()
     {
         $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
 
         return new Year($this->getKernel(), $this->name());
     }

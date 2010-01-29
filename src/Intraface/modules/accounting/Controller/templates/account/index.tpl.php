@@ -27,7 +27,7 @@
 ?>
 <?php echo $context->getAccount()->error->view(); ?>
 
-<?php if (count($context->getAccounts()) == 0): ?>
+<?php if (count($accounts) == 0): ?>
 	<div class="message-dependent">
 		<p>Der er endnu ikke oprettet nogen konti.</p>
 		<p>Du kan oprette en standardkontoplan under <a href="<?php e(url('../year/' . $year->get('id'))); ?>">regnskabsåret</a>, eller du kan taste dem manuelt ind ved at klikke på opret konto ovenfor.</p>
@@ -46,7 +46,7 @@
 		</tr>
 	</thead>
 	<tbody>
-	<?php foreach ($context->getAccounts() as $account): ?>
+	<?php foreach ($accounts as $account): ?>
 
 		<tr<?php if ($account['type'] == 'headline') { echo ' class="headline"'; } elseif ($account['type'] == 'sum') { echo ' class="sum"';} ?><?php if (!empty($_GET['from_account_id']) AND $_GET['from_account_id'] == $account['id']) { echo ' id="'.$account['id'].'" class="fade"'; } ?>>
 	  		<?php if ($account['type'] != 'headline' AND $account['type'] != 'sum'): ?>

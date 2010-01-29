@@ -46,12 +46,19 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
     {
         $this->document->setTitle('Accounts');
 
+        $accounts = $this->getAccount()->getList('saldo', true);
+
+        $data = array(
+            'accounts' => $accounts
+        );
+
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/account/index');
-        return $smarty->render($this);
+        return $smarty->render($this, $data);
     }
 
     function renderXls()
     {
+        $kernel = $this->getKernel();
         $year = new Year($kernel);
         $year->checkYear();
 
@@ -107,6 +114,7 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
         // Let's send the file
         $workbook->close();
+        exit;
     }
 
     function renderHtmlCreate()

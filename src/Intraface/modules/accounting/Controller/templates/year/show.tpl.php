@@ -42,7 +42,7 @@ $values = $context->getYear()->get();
         <td>
             <?php
                 if (!empty($values['last_year_id']) AND $values['last_year_id'] > 0) {
-                    $last_year = new Year($kernel, $values['last_year_id']);
+                    $last_year = new Year($context->getKernel(), $values['last_year_id']);
                     e($last_year->get('label'));
                 } else {
                     e('Ingen');
