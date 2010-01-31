@@ -37,7 +37,9 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
 
     function getPayment()
     {
-        if (is_object($this->payment)) return $this->payment;
+        if (is_object($this->payment)) {
+            return $this->payment;
+        }
         return $this->payment = new Payment($this->getModel(), $this->context->name());
     }
 
@@ -54,8 +56,16 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
             return new k_SeeOther($this->url('selectyear'));
         }
 
+        $data = array(
+        	'kernel' => $this->getKernel(),
+        	'voucher' => $voucher,
+        	'payment' => $payment,
+        	'object' => $object,
+        	'year' => $year,
+            'accounting_module' => $accounting_module);
+
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/payment');
-        return $smarty->render($this, array('kernel' => $this->getKernel(), 'voucher' => $voucher, 'payment' => $payment, 'object' => $object, 'year' => $year));
+        return $smarty->render($this, $data);
 
     }
 
