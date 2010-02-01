@@ -1,11 +1,13 @@
 <?php
 class Intraface_Keyword_Controller_Index extends k_Component
 {
-    public $map = array('connect' => 'Intraface_Keyword_Controller_Connect',
-                        'edit'    => 'Intraface_Keyword_Controller_Edit');
+    public $map = array('connect' => 'Intraface_Keyword_Controller_Connect');
 
     function map($name)
     {
+        if (is_numeric($name)) {
+            return 'Intraface_Keyword_Controller_Show';
+        }
         return $this->map[$name];
     }
 

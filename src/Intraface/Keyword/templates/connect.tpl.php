@@ -16,7 +16,9 @@
                     print ' checked="checked" ';
                 } ?>
                 />
-                <label for="k<?php e($k["id"]); ?>"><a href="edit.php?<?php e($id_name); ?>=<?php e($object->get('id')); ?>&amp;id=<?php e($k['id']); ?>"><?php e($k['keyword']); ?> (#<?php e($k["id"]); ?>)</a></label> - <a href="<?php e($_SERVER['PHP_SELF']); ?>?<?php e($id_name); ?>=<?php e($object->get('id')); ?>&amp;delete=<?php e($k["id"]); ?>" class="confirm"><?php e(t('delete', 'common')); ?></a><br />
+                <label for="k<?php e($k["id"]); ?>">
+                	<a href="<?php e(url('../' . $k['id'])); ?>"><?php e($k['keyword']); ?> (#<?php e($k["id"]); ?>)</a></label>
+                	- <a href="<?php e(url('../'. $k["id"], array('delete'))); ?>" class="confirm"><?php e(t('delete')); ?></a><br />
         <?php }
         ?>
     </fieldset>
@@ -32,6 +34,6 @@
         <input type="hidden" name="<?php e($id_name); ?>" value="<?php e($object->get('id')); ?>" />
         <label for="keyword"><?php e(t('keywords')); ?></label>
         <input type="text" name="keywords" id="keyword" value="<?php //e($keyword_string); ?>" />
-        <input type="submit" value="<?php e(t('save', 'common')); ?>" name="submit" id="submit-save-new" />
+        <input type="submit" value="<?php e(t('save')); ?>" name="submit" id="submit-save-new" />
     </fieldset>
 </form>

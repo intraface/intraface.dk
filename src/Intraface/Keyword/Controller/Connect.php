@@ -17,11 +17,6 @@ class Intraface_Keyword_Controller_Connect extends k_Component
     {
         $this->getKernel()->useShared('keyword');
 
-        if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
-            $keyword = new Keyword($this->context->getModel(), $_GET['delete']);
-            $keyword->delete();
-        }
-
         $keyword = new Intraface_Keyword_Appender($this->context->getModel());
         $keywords = $keyword->getAllKeywords(); // henter alle keywords
         $keyword_string = $keyword->getConnectedKeywordsAsString();
