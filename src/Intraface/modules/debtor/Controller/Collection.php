@@ -132,6 +132,8 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
     function renderXls()
     {
         if ($this->query('simple')) {
+            Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
+
             $debtor = Debtor::factory($this->getKernel(), intval($_GET["id"]), $this->getType());
             $dbquery = $debtor->getDbQuery();
             $type = $this->getType();
@@ -140,7 +142,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
             $dbquery->storeResult("use_stored", $type, "toplevel");
             $dbquery->loadStored();
 
-            $gateway = new Intraface_modules_debtor_DebtorDoctrineGateway(Doctrine_Manager::connection(), $kernel->user);
+            $gateway = new Intraface_modules_debtor_DebtorDoctrineGateway(Doctrine_Manager::connection(), $this->getKernel()->user);
             // echo number_format(memory_get_usage())." After gateway initializd<br />"; die;
             $posts = $gateway->findByDbQuerySearch($dbquery);
 
