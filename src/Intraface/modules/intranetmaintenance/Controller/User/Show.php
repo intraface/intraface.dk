@@ -159,8 +159,8 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
     {
         $user = $this->getUser();
         $value = $user->get();
-        if ($this->context->getIntranet()->get('id') > 0) {
-            $intranet_id = intval($this->context->getIntranet()->get('id'));
+        if ($this->query('intranet_id') > 0) {
+            $intranet_id = intval($this->query('intranet_id'));
             $user->setIntranetId($intranet_id);
             $address_value = $user->getAddress()->get();
         } else {
@@ -180,7 +180,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
             return $this->user;
         }
         $this->user = new UserMaintenance($this->name());
-        $this->user->setIntranetId($this->getIntranet()->get('id'));
+        $this->user->setIntranetId($this->query('intranet_id'));
         return ($this->user);
     }
 
