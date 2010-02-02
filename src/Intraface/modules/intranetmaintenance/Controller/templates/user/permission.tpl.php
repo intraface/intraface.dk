@@ -35,6 +35,6 @@
     </fieldset>
 
     <input type="hidden" name="id" value="<?php e($context->getUser()->get("id")); ?>" />
-    <input type="hidden" name="intranet_id" value="<?php e($intranet->get("id")); ?>" />
+    <input type="hidden" name="intranet_id" value="<?php e($context->getIntranet()->get("id")); ?>" />
     <input type="submit" name="submit" value="Gem" />
     </form>
