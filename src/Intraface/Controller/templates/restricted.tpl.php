@@ -5,8 +5,8 @@
 
 <?php if ($context->getKernel()->setting->get('user', 'homepage.message') == 'view'): ?>
 <div class="message">
-	<p><?php e(t('Welcome, you are on the dashboard', 'dashboard')); ?></p>
-	<p><a href="<?php e(url(null, array('message' => 'hide'))); ?>"><?php e(t('hide message forever')); ?></a></p>
+	<p><?php e(t('Welcome, you are on the dashboard')); ?></p>
+	<p><a href="<?php e(url(null, array('message' => 'hide'))); ?>"><?php e(t('Hide message forever')); ?></a></p>
 </div>
 <?php endif; ?>
 
@@ -24,7 +24,7 @@
 				if (isset($advice['no_translation']) && $advice['no_translation'] == true) {
 					e($advice['msg']);
 				} else {
-					e(__($advice['msg'], $advice['module']));
+					e(t($advice['msg'], $advice['module']));
 				}
 			}
             ?>
@@ -47,7 +47,7 @@
 			<?php if (!empty($advice['link'])): ?>
                 <a href="<?php e($advice['link']); ?>">
             <?php endif; ?>
-			<?php if (!empty($advice['msg'])) e(__($advice['msg'], $advice['module'])); ?>
+			<?php if (!empty($advice['msg'])) e(t($advice['msg'])); ?>
 			<?php if (!empty($advice['link'])): ?>
                 </a>
 			<?php endif; ?>
@@ -96,7 +96,7 @@ if (is_array($now) AND count($now) > 0) {
 if (is_array($disturbance) AND count($disturbance) > 0) {
 	?>
 	<div class="box">
-	<h2><?php e(__('future disturbance', 'common')); ?></h2>
+	<h2><?php e(t('Future disturbance')); ?></h2>
 	<dl>
 		<?php for ($i = 0, $max = count($disturbance); $i < $max; $i++) { ?>
 			<dt>Fra <?php e($disturbance[$i]['dk_from_date_time']); ?> til <?php e($disturbance[$i]['dk_to_date_time']); ?></dt>
@@ -128,7 +128,7 @@ if ($last_view_split[0] > $some_days_ago) {
 <?php if (count($news) > 0): ?>
 <div class="box">
 
-<h2><?php e(__('news', 'common')); ?></h2>
+<h2><?php e(t('News')); ?></h2>
 
 
 <dl>

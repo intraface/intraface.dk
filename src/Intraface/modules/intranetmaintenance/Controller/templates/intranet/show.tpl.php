@@ -7,15 +7,15 @@ $address_value = $context->getValues();
 <?php else: ?>
 <div id="colOne">
 
-<h1><?php e(__('Intranet')); ?>: <?php e($context->getIntranet()->get('name')); ?></h1>
+<h1><?php e(t('Intranet')); ?>: <?php e($context->getIntranet()->get('name')); ?></h1>
 
 <ul class="options">
-	<li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(__('edit', 'common')); ?></a></li>
-	<li><a href="<?php e(url('../', array('use_stored' => true))); ?>"><?php e(__('close', 'common')); ?></a></li>
+	<li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('edit')); ?></a></li>
+	<li><a href="<?php e(url('../', array('use_stored' => true))); ?>"><?php e(t('close')); ?></a></li>
 </ul>
 
 <?php if ($context->query('flare')): ?>
- <p class="message"><?php e(__($context->query('flare')));?></p>
+ <p class="message"><?php e(t($context->query('flare')));?></p>
 <?php endif; ?>
 
 <?php echo $context->getIntranet()->error->view(); ?>
@@ -23,72 +23,72 @@ $address_value = $context->getValues();
 
 <table>
 	<tr>
-		<th><?php e(__('name', 'address')); ?></th>
+		<th><?php e(t('name')); ?></th>
 		<td>
 			<?php if (isset($value['name'])) e($value["name"]); ?>
 			<?php if (!empty($value['contact_id']) AND $context->getIntranet()->get('id') > 0 && isset($contact_module)): ?>
 				<?php
 					$contact = new Contact($context->getKernel(), $value['contact_id']);
 					echo '<a href="'.$contact_module->getPath() . $contact->get('id').'">'.$contact->get('name').'</a>';
-					echo ' <a href="'.url(null, array('add_contact'=>1)).'">'.__('change contact').'</a>';
+					echo ' <a href="'.url(null, array('add_contact'=>1)).'">'.t('change contact').'</a>';
 				?>
 			<?php elseif (isset($contact_module)): ?>
-				<a href="<?php e(url(null, array('add_contact' => 1))); ?>"><?php e(__('add contact')); ?></a>
+				<a href="<?php e(url(null, array('add_contact' => 1))); ?>"><?php e(t('add contact')); ?></a>
 			<?php endif; ?>
 		</td>
 	</tr>
 	<!--
 	<tr>
-		<th><?php e(__('maintained by')); ?></th>
+		<th><?php e(t('maintained by')); ?></th>
 		<td></td>
 	</tr>
 	-->
 
 
 	<tr>
-		<th><?php e(__('name', 'address')); ?></th>
+		<th><?php e(t('Name')); ?></th>
 		<td><?php if (isset($address_value["name"])) e($address_value["name"]); ?></td>
 	</tr>
 
 	<tr>
-		<th><?php e(__('address', 'address')); ?></th>
+		<th><?php e(t('Address')); ?></th>
 		<td><?php if (isset($address_value["address"])) e($address_value["address"]); ?></td>
 	</tr>
 
 	<tr>
-		<th><?php e(__('postal code and city', 'address')); ?></th>
+		<th><?php e(t('Postal code and city')); ?></th>
 		<td><?php if (isset($address_value["postcode"])) e($address_value["postcode"]); ?> <?php if (isset($address_value["city"])) e($address_value["city"]); ?></td>
 	</tr>
 	<tr>
-		<th><?php e(__('country', 'address')); ?></th>
+		<th><?php e(t('Country')); ?></th>
 		<td><?php if (isset($address_value["country"])) e($address_value["country"]); ?></td>
 	</tr>
 	<tr>
-		<th><?php e(__('cvr number', 'address')); ?></th>
+		<th><?php e(t('CVR-number')); ?></th>
 		<td><?php if (isset($address_value["cvr"])) e($address_value["cvr"]); ?></td>
 	</tr>
 	<tr>
-		<th><?php e(__('e-mail', 'address')); ?></th>
+		<th><?php e(t('Email')); ?></th>
 		<td><?php if (isset($address_value["email"])) e($address_value["email"]); ?></td>
 	</tr>
 
 	<tr>
-		<th><?php e(__('website', 'address')); ?></th>
+		<th><?php e(t('Website')); ?></th>
 		<td><?php if (isset($address_value["website"])) e($address_value["website"]); ?></td>
 	</tr>
 
 	<tr>
-		<th><?php e(__('phone', 'address')); ?></th>
+		<th><?php e(t('phone', 'address')); ?></th>
 		<td><?php if (isset($address_value["phone"])) e($address_value["phone"]); ?></td>
 	</tr>
 
 		<tr>
-		<th><?php e(__('private key')); ?></th>
+		<th><?php e(t('Private key')); ?></th>
 		<td><?php e($context->getIntranet()->get("private_key")); ?></td>
 	</tr>
 
 	<tr>
-		<th><?php e(__('public key')); ?></th>
+		<th><?php e(t('Public key')); ?></th>
 		<td><?php e($context->getIntranet()->get("public_key")); ?></td>
 	</tr>
 
@@ -122,7 +122,7 @@ $address_value = $context->getValues();
                     <td><?php e($package['plan'].' '.$package['group']); ?></td>
                     <td><?php e($package['start_date']); ?></td>
                     <td><?php e($package['end_date']); ?></td>
-                    <td><?php e(__($package['status'])); ?></td>
+                    <td><?php e(t($package['status'])); ?></td>
                     <td><a href="edit_module_package.php?id=<?php e($package['id']); ?>" class="edit">Ret</a> <a href="intranet.php?id=<?php e($context->getIntranet()->get('id')); ?>&amp;delete_intranet_module_package_id=<?php e($package['id']); ?>" class="delete">Slet</a></td>
                 </tr>
             <?php endforeach; ?>

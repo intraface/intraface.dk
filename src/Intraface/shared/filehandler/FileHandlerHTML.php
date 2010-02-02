@@ -1,6 +1,6 @@
 <?php
 /**
- * Her skal der indsættes en række funktioner, som gør det lettere at indsætte filer og filuploads forskellige steder
+ * Her skal der indsï¿½ttes en rï¿½kke funktioner, som gï¿½r det lettere at indsï¿½tte filer og filuploads forskellige steder
  *
  * Den mangler stadig at blive udviklet!!!
  *
@@ -10,42 +10,42 @@
 
 /*
 
-Den skal fungere sådan nogenlunde sådan her:
+Den skal fungere sï¿½dan nogenlunde sï¿½dan her:
 
 
 // Ved udskrivning af upload felt
-$filehandler = new FileHandler($kernel); Der kan sættes id som sidste parameter
+$filehandler = new FileHandler($kernel); Der kan sï¿½ttes id som sidste parameter
 $filehandler_html = new FileHandlerHtml($filehandler); // Denne klasse er ikke skrevet
 $filehandler_html->getUploadField("userfile", array([indstillinger se herunder]));
 
 # Indstillinger (noget i retning af):
-# Dem med * stjerne skal være sat som default, og sætter man ikke indstillingen benyttes den.
+# Dem med * stjerne skal vï¿½re sat som default, og sï¿½tter man ikke indstillingen benyttes den.
 #
 # type: *full (inklusiv <form>) all_input (med submit knap), only_upload_field (kun upload feltet
 # number_of_fields: *1 (Antallet af upload felter. Benyttes der flere kan filehandler->upload->multipleUpload() med fordel benyttes.
 # allow_images: *1 (1 eller 0, om man kan uploade billeder)
 # allow_documents: *1 (1 eller 0, om man kan uploade dokumenter)
 
-Jeg har ikke helt fundet ud af hvor mange muligheder man skal have når man uploader filer.
-Har man ikke adgang til FileManager modullet, så skal man nok ikke have adgang til andet end at uploade en fil, vise et lille billede, hvis det er et billede, samt at slette billedet.
-Har man adgang til FileManager modullet, så skal der ved siden af upload feltet også være et link til "Tilføj eksisterende fil" som (nok med Redirect) skal gå til en filemanager/select_file.php, som skal give mulighed på samme måde som contact/select_contact.php at vælge en eksisterende kontakt.
-Har man adgang til FileManager modullet, så skal man måske også have mulgighed for at tilføje nøgleord med det samme ved upload. Evt. bare med et tekstfelt, hvor man skriver hvilke nøgleord. Det har du jo lavet :-) Det skal måske også være muligt at afgøre accesssibility (der afgører hvem der må tilgå filerne. Mulighederne er: personal (kun den bruger som uploader den (er ikke implemeteret)), intranet (kun inden for intranettet), public (uden for intranettet, denne skal nok sættes automatisk, når man uploader fra cms.))
-Bemærk at filerne altid (også når accessibility er public) er beskyttet med en access_key (bestående af intranet public_key og fil access_key), så det kun er hvis man får stien til filen, at den kan hentes. Det vil sige, hvis CMS f.eks. giver stien til billedet.
+Jeg har ikke helt fundet ud af hvor mange muligheder man skal have nï¿½r man uploader filer.
+Har man ikke adgang til FileManager modullet, sï¿½ skal man nok ikke have adgang til andet end at uploade en fil, vise et lille billede, hvis det er et billede, samt at slette billedet.
+Har man adgang til FileManager modullet, sï¿½ skal der ved siden af upload feltet ogsï¿½ vï¿½re et link til "Tilfï¿½j eksisterende fil" som (nok med Redirect) skal gï¿½ til en filemanager/select_file.php, som skal give mulighed pï¿½ samme mï¿½de som contact/select_contact.php at vï¿½lge en eksisterende kontakt.
+Har man adgang til FileManager modullet, sï¿½ skal man mï¿½ske ogsï¿½ have mulgighed for at tilfï¿½je nï¿½gleord med det samme ved upload. Evt. bare med et tekstfelt, hvor man skriver hvilke nï¿½gleord. Det har du jo lavet :-) Det skal mï¿½ske ogsï¿½ vï¿½re muligt at afgï¿½re accesssibility (der afgï¿½rer hvem der mï¿½ tilgï¿½ filerne. Mulighederne er: personal (kun den bruger som uploader den (er ikke implemeteret)), intranet (kun inden for intranettet), public (uden for intranettet, denne skal nok sï¿½ttes automatisk, nï¿½r man uploader fra cms.))
+Bemï¿½rk at filerne altid (ogsï¿½ nï¿½r accessibility er public) er beskyttet med en access_key (bestï¿½ende af intranet public_key og fil access_key), sï¿½ det kun er hvis man fï¿½r stien til filen, at den kan hentes. Det vil sige, hvis CMS f.eks. giver stien til billedet.
 
 // Ved upload af fil
 $filehandler = new FileHandler($kernel);
 $filehandler->loadUpload();
-$filehandler->upload->setSetting('accessibility', 'public'); // Der er en række forskellige indstillinger der kan sættes. Se shared/filehandler/UploadHandler.php)
+$filehandler->upload->setSetting('accessibility', 'public'); // Der er en rï¿½kke forskellige indstillinger der kan sï¿½ttes. Se shared/filehandler/UploadHandler.php)
 if ($filehandler->upload->upload("userfile")) {
-    // upload retunere id på filen. Den kan også efterfølgende tilgås med $filehandler->get('id');
+    // upload retunere id pï¿½ filen. Den kan ogsï¿½ efterfï¿½lgende tilgï¿½s med $filehandler->get('id');
     // noget redirect eller noget andet til den rigtige side
 }
 else {
     echo $filehandler->error->view();
 }
 
-// indsætte billede
-$filehandler = new FileHandler($kernel); Der kan sættes id som sidste parameter
+// indsï¿½tte billede
+$filehandler = new FileHandler($kernel); Der kan sï¿½ttes id som sidste parameter
 
 echo $filehandler->get('file_uri') returnere url'en til filen. (img-tag ser herunder)
 
@@ -54,7 +54,7 @@ echo $filehandler->instance->get('file_uri');
 $filehandler->loadInstance('big')
 echo $filehandler->instance->get('file_uri');
 
-// Instances er forskellige størrelser af et billede. Se størrelserne i shared/filehandler/InstanceHandler.
+// Instances er forskellige stï¿½rrelser af et billede. Se stï¿½rrelserne i shared/filehandler/InstanceHandler.
 
 // Udskrivelse af img-tag (er ikke skrevet endnu)
 $filehandler_html = new FileHandlerHtml($filehandler); // Denne klasse er ikke skrevet
@@ -81,18 +81,6 @@ class FileHandlerHTML
 
     function __construct($file_handler)
     {
-
-        if (!is_object($file_handler)) {
-            trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (1)", E_USER_ERROR);
-        }
-
-        if (strtolower(get_class($file_handler)) == 'filehandler' || strtolower(get_class($file_handler)) == 'filemanager') {
-            // HJÆLP MIG, jeg kan ikke vende denne if-sætning rigtigt.
-            // Men her er det ok.
-        } else {
-            trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (2)", E_USER_ERROR);
-        }
-
         $this->file_handler = $file_handler;
     }
 
@@ -100,14 +88,14 @@ class FileHandlerHTML
     /**
     * Denne funktion skal printe et upload field.
     *
-    * Det skal på en eller anden måde være muligt at sætte følgende parameter:
-    * @param checkbox_name: navnet på den checkboks, som indsættes, når der er uploadet et billede
-    * @param upload_field_name: navnet på type="file" input-felttet.
-    * @param submit_name: navnet på submit-knappen, som fører til "Vælg fra filarkiv"
+    * Det skal pï¿½ en eller anden mï¿½de vï¿½re muligt at sï¿½tte fï¿½lgende parameter:
+    * @param checkbox_name: navnet pï¿½ den checkboks, som indsï¿½ttes, nï¿½r der er uploadet et billede
+    * @param upload_field_name: navnet pï¿½ type="file" input-felttet.
+    * @param submit_name: navnet pï¿½ submit-knappen, som fï¿½rer til "Vï¿½lg fra filarkiv"
     * @param options: array:
-    * 		image_attr (mulighed for at sætte attributer på img-tag);
-    *			field_description: (det som står foran upload feltet, standard 'Fil')
-    *			image_size: (størrelsen på billedet. Standard original
+    * 		image_attr (mulighed for at sï¿½tte attributer pï¿½ img-tag);
+    *			field_description: (det som stï¿½r foran upload feltet, standard 'Fil')
+    *			image_size: (stï¿½rrelsen pï¿½ billedet. Standard original
     *			type: full/only_upload
     *			include_submit_button_name: hvis sat bliver der indsat en "Upload" knap efter fil-felt, men strengen som navn
     */
@@ -148,7 +136,7 @@ class FileHandlerHTML
             echo ' <input type="submit" name="'.$options['include_submit_button_name'].'" value="'.t('upload', 'filehandler') . '" /> <br />';
         }
         if ($this->file_handler->kernel->user->hasModuleAccess('filemanager') AND $options['filemanager'] === true) {
-            echo ' &nbsp; '.t('or', 'common').' &nbsp; <input type="submit" name="'.$submit_name.'" value="'.t('choose from filemanager', 'filehandler').'" />';
+            echo ' &nbsp; '.t('or').' &nbsp; <input type="submit" name="'.$submit_name.'" value="'.t('choose from filemanager', 'filehandler').'" />';
         }
         echo '</div>';
     }
@@ -171,7 +159,7 @@ class FileHandlerHTML
             }
             echo '<div class="show_file" style="'.$options['div_style'].'"><img src="'.$this->file_handler->instance->get('file_uri').'" style="width: '.$this->file_handler->instance->get('width').'px; height: '.$this->file_handler->instance->get('height').'px" /> '.$this->file_handler->get('file_name');
             if ($delete_link != '') {
-                echo ' <a class="delete" href="'.$delete_link.'">'.t('delete', 'common').'</a>';
+                echo ' <a class="delete" href="'.$delete_link.'">'.t('delete').'</a>';
             }
             echo '</div>';
         } else {
@@ -180,7 +168,7 @@ class FileHandlerHTML
             }
             echo '<div class="show_file" style="'.$options['div_style'].'";><img src="'.$this->file_handler->get('icon_uri').'" style="width: 75px; height: 75px; float: left;" /> '.$this->file_handler->get('file_name');
             if ($delete_link != '') {
-                echo ' <a class="delete" href="'.$delete_link.'">'.t('delete', 'common').'</a>';
+                echo ' <a class="delete" href="'.$delete_link.'">'.t('delete').'</a>';
             }
             echo '</div>';
         }

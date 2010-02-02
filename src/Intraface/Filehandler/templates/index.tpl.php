@@ -1,47 +1,47 @@
-<h1><?php e(__('File manager')); ?></h1>
+<h1><?php e(t('File manager')); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url('upload')); ?>" onclick="location.href='<?php e(url('uploadmultiple')); ?>'; return false;"><?php e(__('Upload file')); ?></a></li>
+    <li><a href="<?php e(url('upload')); ?>" onclick="location.href='<?php e(url('uploadmultiple')); ?>'; return false;"><?php e(t('Upload file')); ?></a></li>
     <!-- <li><a href="upload_multiple.php">Upload billeder</a></li> -->
-    <li><a href="<?php e(url('sizes')); ?>"><?php e(__('Edit image sizes')); ?></a></li>
+    <li><a href="<?php e(url('sizes')); ?>"><?php e(t('Edit image sizes')); ?></a></li>
     <?php if (count($files) > 0): ?>
-    <li><a href="<?php e(url('batchedit', array('use_stored' => 'true'))); ?>"><?php e(__('Batch edit files')); ?></a></li>
+    <li><a href="<?php e(url('batchedit', array('use_stored' => 'true'))); ?>"><?php e(t('Batch edit files')); ?></a></li>
     <?php endif; ?>
-    <!--<li><a href="import.php"><?php e(__('Import files')); ?></a></li>-->
+    <!--<li><a href="import.php"><?php e(t('Import files')); ?></a></li>-->
 </ul>
 
 
 <?php if (is_numeric($context->query('delete'))): ?>
-    <p class="message"><?php e(__('File has been deleted')); ?>. <a href="<?php e(url('./', array('undelete' => (int)$context->query('delete')))); ?>"><?php e(__('Cancel')); ?></a></p>
+    <p class="message"><?php e(t('File has been deleted')); ?>. <a href="<?php e(url('./', array('undelete' => (int)$context->query('delete')))); ?>"><?php e(t('Cancel')); ?></a></p>
 <?php endif; ?>
 
 
 <?php if (empty($files) and !$context->query('search')): ?>
-    <p><?php e(__('No files uploaded')); ?></p>
+    <p><?php e(t('No files uploaded')); ?></p>
 <?php else: ?>
 
 
 <form method="get" action="<?php e(url('./')); ?>">
     <fieldset>
-        <legend><?php e(__('Search')); ?></legend>
-        <label><?php e(__('Search text')); ?>:
+        <legend><?php e(t('Search')); ?></legend>
+        <label><?php e(t('Search text')); ?>:
             <input type="text" name="text" value="<?php e($filemanager->getDBQuery()->getFilter("text")); ?>" />
         </label>
-        <label><?php e(__('Search filter')); ?>:
+        <label><?php e(t('Search filter')); ?>:
         <select name="filtration">
-            <option value="0"><?php e(__('all', 'filehandler')); ?></option>
-            <option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) e(' selected="selected"');?>><?php e(__('uploaded today', 'filehandler')); ?></option>
-            <option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) e(' selected="selected"');?>><?php e(__('uploaded yesterday', 'filehandler')); ?></option>
-            <option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) e(' selected="selected"');?>><?php e(__('uploaded this week', 'filehandler')); ?></option>
-            <option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) e(' selected="selected"');?>><?php e(__('edited today', 'filehandler')); ?></option>
-            <option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) e(' selected="selected"');?>><?php e(__('edited yesterday', 'filehandler')); ?></option>
-            <option value="6"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 6) e(' selected="selected"');?>><?php e(__('public accessible', 'filemanager')); ?></option>
-            <option value="7"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 7) e(' selected="selected"');?>><?php e(__('only accessible from intranet', 'filemanager')); ?></option>
+            <option value="0"><?php e(t('all', 'filehandler')); ?></option>
+            <option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) e(' selected="selected"');?>><?php e(t('uploaded today', 'filehandler')); ?></option>
+            <option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) e(' selected="selected"');?>><?php e(t('uploaded yesterday', 'filehandler')); ?></option>
+            <option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) e(' selected="selected"');?>><?php e(t('uploaded this week', 'filehandler')); ?></option>
+            <option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) e(' selected="selected"');?>><?php e(t('edited today', 'filehandler')); ?></option>
+            <option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) e(' selected="selected"');?>><?php e(t('edited yesterday', 'filehandler')); ?></option>
+            <option value="6"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 6) e(' selected="selected"');?>><?php e(t('public accessible', 'filemanager')); ?></option>
+            <option value="7"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 7) e(' selected="selected"');?>><?php e(t('only accessible from intranet', 'filemanager')); ?></option>
 
         </select>
         </label>
         <span>
-        <input type="submit" name="search" value="<?php e(__('Search')); ?>" />
+        <input type="submit" name="search" value="<?php e(t('Search')); ?>" />
         </span>
 
         <?php
@@ -52,7 +52,7 @@
     $keywords = $appender->getUsedKeywords();
 
     if(count($keywords) > 0) {
-        echo '<div>'. e(__('keywords', 'keyword')) . ': <ul style="display: inline;">';
+        echo '<div>'. e(t('keywords', 'keyword')) . ': <ul style="display: inline;">';
         foreach ($keywords as $value) {
              if(in_array($value['id'], $selected_keywords) === true) {
                     $checked = 'checked="checked"';
@@ -73,15 +73,15 @@
 <?php echo $filemanager->getDBQuery()->display('character'); ?>
 
 <table class="stripe">
-    <caption><?php e(__('files')); ?></caption>
+    <caption><?php e(t('files')); ?></caption>
     <thead>
         <tr>
             <th></th>
-            <th><?php e(__('file name')); ?></th>
-            <th><?php e(__('file type')); ?></th>
-            <th><?php e(__('file accessibility')); ?></th>
-            <th><?php e(__('file size')); ?></th>
-            <th><?php e(__('file date')); ?></th>
+            <th><?php e(t('file name')); ?></th>
+            <th><?php e(t('file type')); ?></th>
+            <th><?php e(t('file accessibility')); ?></th>
+            <th><?php e(t('file size')); ?></th>
+            <th><?php e(t('file date')); ?></th>
             <th></th>
         </tr>
     </thead>
@@ -96,12 +96,12 @@
                     <br /><i><?php e(substr(strip_tags($file["description"]), 0, 100)); if(strlen(strip_tags($file["description"])) > 100) print('...'); ?></i>
                 </td>
                 <td style="white-space: nowrap;"><?php e($file["file_type"]['description']); ?></td>
-                <td style="white-space: nowrap;"><?php e(__($file["accessibility"])); ?></td>
+                <td style="white-space: nowrap;"><?php e(t($file["accessibility"])); ?></td>
                 <td style="white-space: nowrap;"><?php e($file["dk_file_size"]); ?></td>
                 <td style="white-space: nowrap;"><?php e($file["dk_date_created"]); ?></td>
                 <td style="width: 120px;" class="options">
-                    <a class="edit" href="<?php e(url($file['id'] . '/edit')); ?>"><?php e(__('edit', 'common')); ?></a>
-                    <a class="delete" href="<?php e(url($file['id'] . '/delete')); ?>"><?php e(__('delete', 'common')); ?></a></td>
+                    <a class="edit" href="<?php e(url($file['id'] . '/edit')); ?>"><?php e(t('edit')); ?></a>
+                    <a class="delete" href="<?php e(url($file['id'] . '/delete')); ?>"><?php e(t('delete')); ?></a></td>
             </tr>
             <?php
         }

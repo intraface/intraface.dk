@@ -1,11 +1,11 @@
-<h1><?php e(__('Filehandler settings')); ?></h1>
+<h1><?php e(t('Filehandler settings')); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url('../')); ?>"><?php e(__('Go back')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Go back')); ?></a></li>
 </ul>
 
 <form action="<?php e(url(null)); ?>" method="post">
-    <input type="submit" name="all_files" value="<?php e(__('Delete all instances of all files')); ?>" />
+    <input type="submit" name="all_files" value="<?php e(t('Delete all instances of all files')); ?>" />
 </form>
 
 <?php $instance_manager->error->view(); ?>
@@ -13,12 +13,12 @@
 <?php
 if (!empty($instances) AND count($instances) > 0): ?>
     <table class="stripe">
-        <caption><?php e(__('Instance types')); ?></caption>
+        <caption><?php e(t('Instance types')); ?></caption>
         <thead>
             <tr>
-                <th><?php e(__('Name')); ?></th>
-                <th><?php e(__('Maximum width')); ?></th>
-                <th><?php e(__('Maximum height')); ?></th>
+                <th><?php e(t('Name')); ?></th>
+                <th><?php e(t('Maximum width')); ?></th>
+                <th><?php e(t('Maximum height')); ?></th>
                 <th></th>
             </tr>
         </thead>
@@ -29,11 +29,11 @@ if (!empty($instances) AND count($instances) > 0): ?>
                     <td><?php e($instance['max_width']); ?></td>
                     <td><?php e($instance['max_height']); ?></td>
                     <td>
-                        <a class="edit" href="<?php e(url('edit', array('type_key' => intval($instance['type_key'])))); ?>"><?php e(__('edit')); ?></a>
+                        <a class="edit" href="<?php e(url('edit', array('type_key' => intval($instance['type_key'])))); ?>"><?php e(t('edit')); ?></a>
                       <?php if($instance['origin'] == 'overwritten') { ?>
-                          <a class="delete" href="<?php e(url('./', array('delete_instance_type_key' => intval($instance['type_key'])))); ?>"><?php e(__('reset to standard')); ?></a>
+                          <a class="delete" href="<?php e(url('./', array('delete_instance_type_key' => intval($instance['type_key'])))); ?>"><?php e(t('reset to standard')); ?></a>
                       <?php } elseif($instance['origin'] == 'custom') { ?>
-                          <a class="delete" href="<?php e(url('./', array('delete_instance_type_key' => intval($instance['type_key'])))); ?>"><?php e(__('delete', 'common')); ?></a>
+                          <a class="delete" href="<?php e(url('./', array('delete_instance_type_key' => intval($instance['type_key'])))); ?>"><?php e(t('delete')); ?></a>
                       <?php }?>
                     </td>
                 </tr>
@@ -43,5 +43,5 @@ if (!empty($instances) AND count($instances) > 0): ?>
 <?php endif; ?>
 
 <ul class="options">
-    <li><a href="<?php e(url('add')); ?>"><?php e(__('Add new instance type')); ?></a></li>
+    <li><a href="<?php e(url('add')); ?>"><?php e(t('Add new instance type')); ?></a></li>
 </ul>

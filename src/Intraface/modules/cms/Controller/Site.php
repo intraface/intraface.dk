@@ -19,7 +19,19 @@ class Intraface_modules_cms_Controller_Site extends k_Component
         }  elseif ($name == 'pages') {
             return 'Intraface_modules_cms_Controller_Pages';
         }
+    }
 
+    function getSite()
+    {
+        return $cmssite = new CMS_Site($this->getKernel(), (int)$this->name());
+    }
+
+    function dispatch()
+    {
+        if ($this->getSite()->get('id') == 0) {
+            throw new k_PageNotFound();
+        }
+        return parent::dispatch();
     }
 
     function renderHtml()

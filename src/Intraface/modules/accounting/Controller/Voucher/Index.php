@@ -1,16 +1,4 @@
 <?php
-$GLOBALS['konstrukt_content_types']['application/vnd.ms-excel'] = 'xls';
-
-class k_XlsResponse extends k_ComplexResponse {
-  function contentType() {
-    return 'application/vnd.ms-excel';
-  }
-  protected function marshal() {
-    return $this->content;
-  }
-}
-
-
 class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
 {
     protected $template;

@@ -1,7 +1,7 @@
 <h1><?php e(t('edit '.$type)); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url('../../')); ?>"><?php e(t('close', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../../')); ?>"><?php e(t('close')); ?></a></li>
     <?php if ($cmspage->get('id') > 0): ?>
     <li><a href="<?php e(url('../')); ?>"><?php e(t('view page')); ?></a></li>
     <?php endif; ?>
@@ -87,7 +87,7 @@
             <div class="formrow" id="childof">
                 <label for="child_of_id"><?php e(t('choose page is child of')); ?></label>
                 <select name="child_of_id" id="child_of_id">
-                    <option value="0"><?php e(t('none', 'common')); ?></option>
+                    <option value="0"><?php e(t('None')); ?></option>
                     <?php foreach ($cmspages AS $p) { ?>
                         <?php if (!empty($value['id']) AND $p['id'] == $value['id']) continue; ?>
                         <option value="<?php e($p['id']); ?>"
@@ -152,7 +152,7 @@
 
             <!--
             <div class="formrow">
-                <label for="password"><?php e(t('password', 'common')); ?></label>
+                <label for="password"><?php e(t('Password')); ?></label>
                 <input type="text" value="<?php if (!empty($value['password'])) e($value['password']); ?>" name="password" />
             </div>
             -->
@@ -161,9 +161,9 @@
         </fieldset>
 
         <div style="clear: both;">
-            <input type="submit" value="<?php e(t('save', 'common')); ?>" />
-            <input type="submit" name="close" value="<?php e(t('save and close', 'common')); ?>" />
-            <input type="submit" name="add_keywords" value="<?php e(t('save and add keywords')); ?>" />
+            <input type="submit" value="<?php e(t('Save')); ?>" />
+            <input type="submit" name="close" value="<?php e(t('Save and close')); ?>" />
+            <input type="submit" name="add_keywords" value="<?php e(t('Save and add keywords')); ?>" />
         </div>
     </form>
 <?php endif; ?>

@@ -12,10 +12,10 @@
             <input type="text" name="name" id="name" value="<?php if (isset($attribute)) e($attribute->getName()); ?>" />
         </div>
     </fieldset>
-    
+
     <div>
-        <input type="submit" name="submit" value="<?php e(t('Save', 'common')); ?>" class="save" />
-        <a href="<?php e(url()); ?>"><?php e(t('Cancel', 'common')); ?></a>
+        <input type="submit" name="submit" value="<?php e(t('Save')); ?>" class="save" />
+        <a href="<?php e(url()); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 
 </form>

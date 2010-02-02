@@ -438,7 +438,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             return $this->debtor;
         }
 
-        return $this->debtor = Debtor::factory($this->getKernel(), intval($this->name()));
+        return ($this->debtor = $this->context->getGateway()->findById(intval($this->name())));
     }
 
     function renderPdf()

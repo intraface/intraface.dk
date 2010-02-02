@@ -37,7 +37,7 @@
         <select name="from_region" id="from_region">
             <?php $from_region = $gateway->getRegionTypes(); ?>
             <?php foreach ($from_region as $key => $region): ?>
-                <option value="<?php e($key); ?>" <?php if (!empty($values["from_region"]) AND $values["from_region"] == $key) print("selected='selected'"); ?> ><?php e(__($region)); ?></option>
+                <option value="<?php e($key); ?>" <?php if (!empty($values["from_region"]) AND $values["from_region"] == $key) print("selected='selected'"); ?> ><?php e(t($region)); ?></option>
             <?php endforeach; ?>
         </select>
     </div>

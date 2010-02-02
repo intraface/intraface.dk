@@ -79,9 +79,9 @@ if ($context->getContact()->getId() > 0) {
     <div class="formrow">
         <label for="contact-type"><?php e(t('Type')); ?></label>
         <select id="contact-type" name="type_key">
-            <option value=""><?php e(t('Choose', 'common')); ?></option>
+            <option value=""><?php e(t('Choose')); ?></option>
             <?php foreach ($context->getContactModule()->getSetting('type') AS $key=>$v): ?>
-                <option value="<?php e($key); ?>"<?php if (isset($value['type_key']) AND $value['type_key'] == $key) { echo ' selected="selected"'; } ?>><?php e(__($v)); ?></option>
+                <option value="<?php e($key); ?>"<?php if (isset($value['type_key']) AND $value['type_key'] == $key) { echo ' selected="selected"'; } ?>><?php e(t($v)); ?></option>
             <?php endforeach; ?>
         </select>
     </div>
@@ -188,7 +188,7 @@ if ($context->getContact()->getId() > 0) {
                     ?>
                     <option value="<?php e($key); ?>"
                     <?php if (isset($value['preferred_invoice']) AND $key == $value['preferred_invoice']) { echo ' selected="selected"'; } ?>
-                    ><?php e(__($v)); ?></option>
+                    ><?php e(t($v)); ?></option>
                 <?php }
             ?>
         </select>
@@ -205,7 +205,7 @@ if ($context->getContact()->getId() > 0) {
 <?php endif; ?>
 
     <div>
-        <input type="submit" name="submit" value="<?php e(t('Save', 'common')); ?>" id="save" class="save" />
+        <input type="submit" name="submit" value="<?php e(t('Save')); ?>" id="save" class="save" />
         <?php
         if ($context->getContact()->get('id') != 0) {
             $url = url();
@@ -213,6 +213,6 @@ if ($context->getContact()->getId() > 0) {
             $url = url('./');
         }
         ?>
-        <a href="<?php e($context->getRedirect()->getCancelUrl($url)); ?>" title="Dette vil slette alle dine �ndringer"><?php e(t('Cancel', 'common')); ?></a>
+        <a href="<?php e($context->getRedirect()->getCancelUrl($url)); ?>" title="<?php e(t('This will delete all your changes')); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 </form>

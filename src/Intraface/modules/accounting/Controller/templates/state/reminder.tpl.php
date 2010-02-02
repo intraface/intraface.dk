@@ -1,7 +1,7 @@
 <h1><?php e(t('State reminder')) ?> #<?php e($reminder->get('number')); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')) ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')) ?></a></li>
 </ul>
 
 <?php if (!$year->readyForState($reminder->get('this_date'))): ?>
@@ -9,20 +9,20 @@
     <p><?php e(t('go to the')); ?> <a href="<?php e($accounting_module->getPath().'years.php'); ?>"><?php e(t('accounts')); ?></a></p>
 <?php else: ?>
 
-    <p class="message"><?php e(t('this function will only state the reminder fee on this reminder. all invoices and earlier reminder fees on the reminder should be stated on the corresponding invoices and reminders.')); ?></p>
+    <p class="message"><?php e(t('This function will only state the reminder fee on this reminder. all invoices and earlier reminder fees on the reminder should be stated on the corresponding invoices and reminders.')); ?></p>
 
     <?php $reminder->readyForState($year); ?>
     <?php echo $reminder->error->view(); ?>
 
     <fieldset>
-        <legend><?php e(t('reminder')); ?></legend>
+        <legend><?php e(t('Reminder')); ?></legend>
         <table>
             <tr>
-                <th><?php e(__("reminder number")); ?></th>
+                <th><?php e(t("reminder number")); ?></th>
                 <td><?php e($reminder->get("number")); ?></td>
             </tr>
             <tr>
-                <th><?php e(t('reminder date', 'common')); ?></th>
+                <th><?php e(t('reminder date')); ?></th>
                 <td><?php e($reminder->get("dk_this_date")); ?></td>
             </tr>
         </table>
@@ -51,7 +51,7 @@
 
 
             <div class="formrow">
-                <label for="state_account"><?php e(__("State on account")); ?></label>
+                <label for="state_account"><?php e(t("State on account")); ?></label>
                 <?php
                 $account = new Account($year); // $product->get('state_account_id')
 

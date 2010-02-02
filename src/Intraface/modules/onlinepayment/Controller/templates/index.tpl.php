@@ -15,32 +15,32 @@
 
 
 <fieldset class="hide_on_print">
-	<legend><?php e(t('Search', 'common')); ?></legend>
+	<legend><?php e(t('Search')); ?></legend>
 	<form method="get" action="<?php e(url(null)); ?>">
-		<label><?php e(t('Text', 'common')); ?>
+		<label><?php e(t('Text')); ?>
 			<input type="text" name="text" value="<?php e($onlinepayment->getDBQuery()->getFilter("text")); ?>" />
 		</label>
-		<label><?php e(t('Status', 'common')); ?>
+		<label><?php e(t('Status')); ?>
 		<select name="status">
-			<option value="-1"><?php e(t('All', 'common')); ?></option>
+			<option value="-1"><?php e(t('All')); ?></option>
 			<?php
 			$status_types = OnlinePayment::getStatusTypes();
 			for ($i = 1, $max = count($status_types); $i < $max; $i++) {
 				?>
-				<option value="<?php e($i); ?>" <?php if ($onlinepayment->getDBQuery()->getFilter("status") == $i) echo ' selected="selected"';?>><?php e(__($status_types[$i])); ?></option>
+				<option value="<?php e($i); ?>" <?php if ($onlinepayment->getDBQuery()->getFilter("status") == $i) echo ' selected="selected"';?>><?php e(t($status_types[$i])); ?></option>
 				<?php
 			}
 			?>
 			</select>
 		</label>
-        <label><?php e(t('From date', 'common')); ?>
+        <label><?php e(t('From date')); ?>
             <input type="text" name="from_date" id="date-from" value="<?php e($onlinepayment->getDBQuery()->getFilter("from_date")); ?>" /> <span id="calender"></span>
         </label>
-        <label><?php e(t('To date', 'common')); ?>
+        <label><?php e(t('To date')); ?>
             <input type="text" name="to_date" value="<?php e($onlinepayment->getDBQuery()->getFilter("to_date")); ?>" />
         </label>
 		<span>
-		<input type="submit" value="<?php e(t('Search', 'common')); ?>" />
+		<input type="submit" value="<?php e(t('Search')); ?>" />
 		</span>
 	</form>
 </fieldset>
@@ -49,11 +49,11 @@
 	<caption><?php e(t('Online payments')); ?></caption>
 	<thead>
 		<tr>
-			<th><?php e(t('Date', 'common')); ?></th>
+			<th><?php e(t('Date')); ?></th>
 			<th><?php e(t('Transaction number')); ?></th>
 			<th><?php e(t('Related to')); ?></th>
-			<th><?php e(t('Amount', 'common')); ?></th>
-			<th><?php e(t('Status', 'common')); ?></th>
+			<th><?php e(t('Amount')); ?></th>
+			<th><?php e(t('Status')); ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -113,7 +113,7 @@
 						$saldo += $payment["amount"];
 					}
 
-					e(__($payment["status"]));
+					e(t($payment["status"]));
 
 					if ($payment['user_transaction_status_translated'] != "") {
 						e(" (".$payment['user_transaction_status_translated']);

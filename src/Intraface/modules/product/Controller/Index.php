@@ -35,11 +35,6 @@ class Intraface_modules_product_Controller_Index extends k_Component
         return $smarty->render($this);
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
     function putForm()
     {
         $gateway = $this->getGateway();
@@ -71,6 +66,11 @@ class Intraface_modules_product_Controller_Index extends k_Component
         return $this->render();
     }
 
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
     function getProductDoctrine()
     {
         if (is_object($this->product_doctrine)) {
@@ -92,7 +92,7 @@ class Intraface_modules_product_Controller_Index extends k_Component
 
     function getGateway()
     {
-        if(empty($this->gateway)) {
+        if (empty($this->gateway)) {
             $this->gateway = new Intraface_modules_product_Gateway($this->getKernel());
         }
         return $this->gateway;

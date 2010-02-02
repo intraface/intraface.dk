@@ -22,7 +22,7 @@
             <div class="formrow">
                 <label for="default_currency_id"><?php e(t('Default currency')); ?></label>
                 <select name="default_currency_id" id="default_currency_id">
-                    <option value="0" >DKK (<?php e(t('standard', 'common')); ?>)</option>
+                    <option value="0" >DKK (<?php e(t('standard')); ?>)</option>
                     <?php
                     foreach ($currencies AS $currency) { ?>
                         <option value="<?php e($currency->getId()); ?>"
@@ -42,7 +42,7 @@
             <div class="formrow">
                 <label for="language_key"><?php e(t('Language')); ?></label>
                 <select name="language_key" id="language key">
-                    <option value="0" >Danish (<?php e(t('standard', 'common')); ?>)</option>
+                    <option value="0" >Danish (<?php e(t('standard')); ?>)</option>
                     <?php
                     foreach ($languages as $lang) { ?>
                         <option value="<?php e($lang->getKey()); ?>"
@@ -65,7 +65,7 @@
                  foreach ($settings as $k=>$v) { ?>
                     <option value="<?php e($k); ?>"
                     <?php if (!empty($data['show_online']) AND $k == $data['show_online']) echo ' selected="selected"'; ?>
-                    ><?php e(__($v)); ?></option>
+                    ><?php e(t($v)); ?></option>
                 <?php }
             ?>
             </select>
@@ -124,7 +124,7 @@
     </fieldset>
 -->
     <p>
-        <input type="submit" value="<?php e(t('save', 'common')); ?>" />
+        <input type="submit" value="<?php e(t('save')); ?>" />
         <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
     </p>
 

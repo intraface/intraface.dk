@@ -178,7 +178,7 @@ class Intraface_Page
 
             //contentNegotiation(CONTENTNEGOTIATION);
 
-            include(PATH_INCLUDE_IHTML.'/intraface/top.php');
+            //include(PATH_INCLUDE_IHTML.'/intraface/top.php');
 
             // $cache->end();
         //}
@@ -201,13 +201,13 @@ class Intraface_Page
         $this->usermenu[2]['name'] = $this->t('control panel', 'common');;
         $this->usermenu[2]['url'] = url('/core/restricted/module/controlpanel');
 
-        include(PATH_INCLUDE_IHTML.'/intraface/bottom.php');
+        //include(PATH_INCLUDE_IHTML.'/intraface/bottom.php');
     }
 
     function includeJavascript($scope, $filename)
     {
         if (!in_array($scope, array('global', 'module'), true)) {
-            trigger_error("Første parameter er ikke enten 'global' eller 'module' i Page->includeJavascript", E_USER_ERROR);
+            trigger_error("Fï¿½rste parameter er ikke enten 'global' eller 'module' i Page->includeJavascript", E_USER_ERROR);
         }
 
         if ($scope == 'global') {
@@ -229,7 +229,7 @@ class Intraface_Page
               'label' => 'system',
               'dir' => '/system/',
                     'name' => 'Web 2.0',
-                    'description' => 'Sprælsk, vildt og pastel.'
+                    'description' => 'Sprï¿½lsk, vildt og pastel.'
             ),
             2 => array(
               'label' => 'newsystem',

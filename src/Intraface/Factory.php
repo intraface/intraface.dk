@@ -1,5 +1,4 @@
 <?php
-require_once 'swift_required.php';
 class Intraface_Factory
 {
     protected $config;

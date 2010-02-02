@@ -2,7 +2,7 @@
 
 <ul class="options">
     <li><a class="new" href="attribute_group_edit.php"><?php e(t('Create attribute group')); ?></a></li>
-    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 <?php if (isset($error)) echo $error->view('html'); ?>
@@ -32,6 +32,6 @@
              <?php endforeach; ?>
         </tbody>
     </table>
-    <input type="submit" name="select" value="<?php e(t('Select', 'common')); ?>" />
+    <input type="submit" name="select" value="<?php e(t('Select')); ?>" />
 <?php endif; ?>
 </form>

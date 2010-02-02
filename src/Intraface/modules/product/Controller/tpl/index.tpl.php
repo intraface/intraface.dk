@@ -41,7 +41,7 @@
             </select>
         </label>
         <span>
-            <input type="submit" value="<?php e(t('Go')); ?>" />	<input type="reset" value="<?php e(t('reset', 'common')); ?>" />
+            <input type="submit" value="<?php e(t('Go')); ?>" />	<input type="reset" value="<?php e(t('reset')); ?>" />
         </span>
     </fieldset>
 </form>
@@ -50,7 +50,7 @@
 <form action="<?php e(url()); ?>" method="post">
 <input type="hidden" value="put" name="_method" />
 <?php if (!empty($deleted)): ?>
-        <p class="message"><?php e(t('products has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('Cancel', 'common')); ?>" /></p>
+        <p class="message"><?php e(t('products has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('Cancel')); ?>" /></p>
 <?php endif; ?>
 
 <?php echo $context->getGateway()->getDBQuery()->display('character'); ?>
@@ -94,7 +94,7 @@
                 </td>
                 <td><?php if($p['unit']['combined'] != '') e(t($p['unit']['combined'])); ?></td>
                 <?php if ($context->getKernel()->user->hasModuleAccess("webshop")): ?>
-                    <td><?php if ($p['do_show'] == 1) e(t('yes', 'common')); else e(t('no', 'common')); ?></td>
+                    <td><?php if ($p['do_show'] == 1) e(t('yes')); else e(t('no')); ?></td>
                 <?php endif; ?>
                 <?php if ($context->getKernel()->user->hasModuleAccess('stock')) { ?>
                     <td>
@@ -111,18 +111,18 @@
                         ?>
                     </td>
                 <?php } ?>
-                <td><?php if ($p['vat'] == 1) e(t('yes', 'common')); else e(t('no', 'common')); ?></td>
+                <td><?php if ($p['vat'] == 1) e(t('yes')); else e(t('no')); ?></td>
                 <td class="amount"><?php echo number_format($p['price'], 2, ",", "."); ?></td>
 
                 <td class="options">
           <?php if ($p['locked'] == 0) { ?>
                   <!-- nedenst�ende b�r s�ttes p� produktsiden - muligheden skal ikke findes her
-                    <a href="index.php?lock=<?php e($p['id']); ?>&amp;use_stored=true"><?php e(t('lock', 'common')); ?></a>
+                    <a href="index.php?lock=<?php e($p['id']); ?>&amp;use_stored=true"><?php e(t('lock')); ?></a>
                     -->
-                    <a class="button edit" href="<?php e(url($p['id'], array('edit'))); ?>"><?php e(t('edit', 'common')); ?></a>
+                    <a class="button edit" href="<?php e(url($p['id'], array('edit'))); ?>"><?php e(t('edit')); ?></a>
                     <!--<a class="button delete ajaxdelete" title="Dette sletter produktet" id="delete<?php e($p['id']); ?>" href="index.php?use_stored=true&amp;delete=<?php e($p['id']); ?>">Slet</a>-->
        <?php } else { ?>
-          <a href="<?php e(url($p['id'], array('unlock' => true))); ?>"><?php e(t('unlock', 'common')); ?></a>
+          <a href="<?php e(url($p['id'], array('unlock' => true))); ?>"><?php e(t('unlock')); ?></a>
        <?php } ?>
        </td>
             </tr>
@@ -130,11 +130,11 @@
         </tbody>
     </table>
     <select name="action">
-        <option value=""><?php e(t('choose...', 'common')); ?></option>
-        <option value="delete"><?php e(t('delete selected', 'common')); ?></option>
+        <option value=""><?php e(t('choose...')); ?></option>
+        <option value="delete"><?php e(t('delete selected')); ?></option>
     </select>
 
-    <input type="submit" value="<?php e(t('go', 'common')); ?>" />
+    <input type="submit" value="<?php e(t('go')); ?>" />
 </form>
 
     <?php endif; ?>

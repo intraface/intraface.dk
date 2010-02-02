@@ -6,13 +6,13 @@
     <li><a class="new" href="<?php e(url('.', array('create'))); ?>"><?php e(t('Create attribute')); ?></a></li>
     <li><a class="edit" href="<?php e(url('.', array('edit'))); ?>"><?php e(t('Edit group')); ?></a></li>
     <li><a class="delete" href="<?php e(url('.', array('delete'))); ?>"><?php e(t('Delete group')); ?></a></li>
-    <li><a class="close" href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
+    <li><a class="close" href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 <?php if (!empty($deleted)): ?>
     <form action="<?php e(url()); ?>" method="post">
     <input type="hidden" name="id" value="<?php e($group->getId()); ?>" />
-        <p class="message"><?php e(t('An attribute has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('Cancel', 'common')); ?>" /></p>
+        <p class="message"><?php e(t('An attribute has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('Cancel')); ?>" /></p>
     </form>
 <?php endif; ?>
 
@@ -37,18 +37,18 @@
                     <!-- <td><input type="checkbox" value="<?php e($attribute->get('id')); ?>" name="selected[]" /></td>  -->
                     <td><?php e($attribute->getName()); ?></td>
                     <td class="options">
-                        <a class="edit" href="<?php e(url($attribute->getId(), array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a>
-                        <a class="delete" href="<?php e(url($attribute->getId(), array('delete'))); ?>"><?php e(t('Delete', 'common')); ?></a>
+                        <a class="edit" href="<?php e(url($attribute->getId(), array('edit'))); ?>"><?php e(t('Edit')); ?></a>
+                        <a class="delete" href="<?php e(url($attribute->getId(), array('delete'))); ?>"><?php e(t('Delete')); ?></a>
                     </td>
                 </tr>
              <?php endforeach; ?>
         </tbody>
     </table>
     <!-- <select name="action">
-        <option value=""><?php e(t('choose...', 'common')); ?></option>
-        <option value="delete"><?php e(t('delete selected', 'common')); ?></option>
+        <option value=""><?php e(t('choose...')); ?></option>
+        <option value="delete"><?php e(t('delete selected')); ?></option>
     </select>
 
-    <input type="submit" value="<?php e(t('go', 'common')); ?>" />  -->
+    <input type="submit" value="<?php e(t('go')); ?>" />  -->
 <?php endif; ?>
 </form>

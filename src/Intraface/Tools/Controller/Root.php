@@ -19,12 +19,13 @@ class Intraface_Tools_Controller_Root extends k_Component
         return 'dashboard';
     }
 
-  function dispatch() {
-    if ($this->identity()->anonymous()) {
-      throw new k_NotAuthorized();
+    function dispatch()
+    {
+        if ($this->identity()->anonymous()) {
+            throw new k_NotAuthorized();
+        }
+        return parent::dispatch();
     }
-    return parent::dispatch();
-  }
 
     function map($name)
     {

@@ -23,10 +23,10 @@ $items = $context->getItems();
     <input type="hidden" value="<?php e($value['id']); ?>" name="id" />
 
     <fieldset>
-        <legend><?php e(__('Credit note')); ?></legend>
+        <legend><?php e(t('Credit note')); ?></legend>
         <table>
             <tr>
-                <th><?php e(__("credit note number")); ?></th>
+                <th><?php e(t("credit note number")); ?></th>
                 <td><?php e($context->getModel()->get("number")); ?></td>
             </tr>
             <tr>

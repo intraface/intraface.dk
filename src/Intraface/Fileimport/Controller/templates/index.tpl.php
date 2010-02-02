@@ -11,9 +11,9 @@
             <div class="formrow">
                 <label for="fields_<?php e($key); ?>"><?php e($value); ?></label>
                 <select name="fields[<?php e($key); ?>]" id="fields_<?php e($key); ?>">
-                    <option value="">[<?php e(__('ignore', 'common')); ?>]</option>
+                    <option value="">[<?php e(t('ignore')); ?>]</option>
                     <?php foreach ($context->fields AS $field): ?>
-                        <option value="<?php e($field); ?>"><?php e(__($field, $translation_page_id)); ?></option>
+                        <option value="<?php e($field); ?>"><?php e(t($field, $translation_page_id)); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -21,33 +21,32 @@
     </fieldset>
 
     <fieldset>
-        <legend><?php e(__('column header')); ?></legend>
+        <legend><?php e(t('column header')); ?></legend>
         <div class="formrow">
-            <label for="header"><?php e(__('dataset has column header')); ?></label>
+            <label for="header"><?php e(t('dataset has column header')); ?></label>
             <input type="checkbox" name="header" id="header" value="1" />
         </div>
-        <div style="clear:both;"><?php e(__('tip: if the fieldnames you see in the left column above is the first data record you want to import, your dataset does not have a header')); ?>.</div>
+        <div style="clear:both;"><?php e(t('tip: if the fieldnames you see in the left column above is the first data record you want to import, your dataset does not have a header')); ?>.</div>
     </fieldset>
 
     <input type="hidden" name="file_id" value="<?php e($context->filehandler->get('id')); ?>" />
 
-    <input type="submit" class="save" name="save" value="<?php e(__('select', 'common').'...'); ?>" />
-    <?php e(__('or', 'common')); ?>
-    <a href="<?php url(null); ?>"><?php e(__('Cancel', 'common')); ?></a>
+    <input type="submit" class="save" name="save" value="<?php e(t('select').'...'); ?>" />
+    <a href="<?php url(null); ?>"><?php e(t('Cancel')); ?></a>
 
 <?php else: ?>
     <fieldset>
-        <legend><?php e(__('file')); ?></legend>
+        <legend><?php e(t('file')); ?></legend>
 
-        <div><?php e(__('currently files in the CSV format are supported')); ?></div>
+        <div><?php e(t('currently files in the CSV format are supported')); ?></div>
 
         <div class="formrow">
-            <label for="userfile"><?php e(__('choose your file')); ?></label>
+            <label for="userfile"><?php e(t('choose your file')); ?></label>
             <input name="userfile" type="file" id="userfile" />
         </div>
     </fieldset>
 
-    <input type="submit" class="save" name="upload_file" value="<?php e(__('analyze file').'...'); ?>" />
-    <a href="<?php e(url('../')); ?>"><?php e(__('Cancel', 'common')); ?></a>
+    <input type="submit" class="save" name="upload_file" value="<?php e(t('analyze file').'...'); ?>" />
+    <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
 <?php endif; ?>
 </form>

@@ -29,6 +29,7 @@ class Intraface_modules_debtor_Controller_Item extends k_Component
     {
         $product_module = $this->getKernel()->useModule('product');
 
+        /*
         if (isset($_GET['change_product'])) {
         	$redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
         	$url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('selectproduct'), NET_SCHEME . NET_HOST . $this->url());
@@ -40,6 +41,7 @@ class Intraface_modules_debtor_Controller_Item extends k_Component
         	$debtor->item->changeProduct($returned_values['product_id'], $returned_values['product_variation_id']);
             $debtor->loadItem(intval($_GET["id"]));
         }
+        */
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/item-edit');
         return $smarty->render($this);

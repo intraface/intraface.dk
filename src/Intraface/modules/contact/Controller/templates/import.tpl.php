@@ -1,10 +1,10 @@
-<h1><?php e(__('Import contacts')); ?></h1>
+<h1><?php e(t('Import contacts')); ?></h1>
 
 <?php if (!empty($context->errors)): ?>
     <?php if (count($context->errors) > 0): ?>
-    <h3><?php e(__('Errors')); ?></h3>
+    <h3><?php e(t('Errors')); ?></h3>
         <?php foreach ($context->errors AS $error): ?>
-            <div><?php e(sprintf(__('error in line %d. unable to import %s <%s>'), $error['line'], $error['name'], $error['email'])); ?></div>
+            <div><?php e(sprintf(t('error in line %d. unable to import %s <%s>'), $error['line'], $error['name'], $error['email'])); ?></div>
             <?php echo $error['error']->view($translation); ?>
         <?php endforeach; ?>
     <?php endif; ?>
@@ -15,18 +15,18 @@
 
 
     <fieldset>
-        <legend><?php e(__('data')); ?></legend>
+        <legend><?php e(t('data')); ?></legend>
 
-        <div><?php e(sprintf(__('there are %d records to import'), count($data))); ?></div>
+        <div><?php e(sprintf(t('there are %d records to import'), count($data))); ?></div>
 
     </fieldset>
 
     <fieldset>
-        <legend><?php e(__('keywords')); ?></legend>
+        <legend><?php e(t('keywords')); ?></legend>
 
         <div class="formrow">
-            <label for="keyword"><?php e(__('keywords')); ?></label>
-            <input type="text" name="keyword" id="keyword" value="" /> <?php e(__('separated by comma')); ?>
+            <label for="keyword"><?php e(t('keywords')); ?></label>
+            <input type="text" name="keyword" id="keyword" value="" /> <?php e(t('separated by comma')); ?>
         </div>
     </fieldset>
 
@@ -37,7 +37,7 @@
         $list = $newsletter_list->getList();
         ?>
         <fieldset>
-            <legend><?php e(__('newsletter')); ?></legend>
+            <legend><?php e(t('newsletter')); ?></legend>
 
             <?php foreach ($list AS $newsletter): ?>
                 <div id="formrow">
@@ -48,8 +48,8 @@
         </fieldset>
     <?php endif; */ ?>
 
-    <input type="submit" class="save" name="submit" value="<?php e(__('import')); ?>" />
-    <a href="<?php e(url('../')); ?>"><?php e(__('Cancel', 'common')); ?></a>
+    <input type="submit" class="save" name="submit" value="<?php e(t('import')); ?>" />
+    <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
 
     </form>
 <?php endif; ?>

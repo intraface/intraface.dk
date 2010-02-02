@@ -6,18 +6,18 @@
 <fieldset>
     <legend><?php e(t('payment')); ?></legend>
     <div class="formrow">
-        <label for="payment_date">Dato</label>
+        <label for="payment_date"><?php e(t('Date')); ?></label>
         <input type="text" name="payment_date" id="payment_date" value="<?php e(date("d-m-Y")); ?>" />
     </div>
 
     <div class="formrow">
-        <label for="type">Type</label>
+        <label for="type"><?php e(t('Type')); ?></label>
         <select name="type" id="type">
             <?php
             $types = $context->getPayment()->getTypes();
             foreach ($types AS $key => $value) {
                 ?>
-                <option value="<?php e($key); ?>" <?php if ($key == 0) print("selected='selected'"); ?> ><?php e(__($value)); ?></option>
+                <option value="<?php e($key); ?>" <?php if ($key == 0) print("selected='selected'"); ?> ><?php e(t($value)); ?></option>
                 <?php
             }
             ?>
@@ -25,10 +25,10 @@
     </div>
 
     <div class="formrow">
-        <label for="amount">Beløb</label>
+        <label for="amount"><?php e(t('Amount')); ?></label>
         <input type="text" name="amount" id="amount" value="<?php e(number_format($context->getModel()->get("arrears"), 2, ",", ".")); ?>" />
     </div>
 </fieldset>
-<input type="submit" name="payment" value="Registrér" />
-<a href="<?php e(url('../')); ?>"><?php e(t('Cancel', 'common')); ?></a>
+<input type="submit" name="payment" value="<?php e(t('Register')); ?>" />
+<a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
 </form>

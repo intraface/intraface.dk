@@ -34,7 +34,6 @@ class Reminder extends Intraface_Standard
         $this->dbquery = new Intraface_DBQuery($this->kernel, "invoice_reminder", "intranet_id = ".$this->kernel->intranet->get("id")." AND active = 1");
         $this->dbquery->useErrorObject($this->error);
         return $this->dbquery;
-
     }
 
     function getItems($type = NULL)

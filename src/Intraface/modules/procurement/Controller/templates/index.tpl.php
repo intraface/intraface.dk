@@ -13,11 +13,11 @@
 
     <form method="get" action="<?php e(url()); ?>">
     <fieldset>
-        <legend><?php e(t('Search', 'common')); ?></legend>
-        <label><?php e(t('Text', 'common')); ?>
+        <legend><?php e(t('Search')); ?></legend>
+        <label><?php e(t('Text')); ?>
             <input type="text" name="text" value="<?php e($gateway->getDBQuery()->getFilter("text")); ?>" />
         </label>
-        <label><?php e(t('Status', 'common')); ?>
+        <label><?php e(t('Status')); ?>
         <select name="status">
             <?php
             $status_list = array(
@@ -29,7 +29,7 @@
             );
             ?>
             <?php foreach($status_list AS $status => $text): ?>
-                <option value="<?php e($status); ?>" <?php if ($gateway->getDBQuery()->getFilter("status") == $status) echo ' selected="selected"';?>><?php e(t($text, 'common'))?></option>
+                <option value="<?php e($status); ?>" <?php if ($gateway->getDBQuery()->getFilter("status") == $status) echo ' selected="selected"';?>><?php e(t($text))?></option>
             <?php endforeach; ?>
          </select>
         </label>
@@ -40,7 +40,7 @@
             <input type="text" name="to_date" value="<?php e($gateway->getDBQuery()->getFilter("to_date")); ?>" />
         </label>
         <span>
-        <input type="submit" name="search" value="<?php e(t('Find', 'common')); ?>" />
+        <input type="submit" name="search" value="<?php e(t('Find')); ?>" />
         </span>
     </fieldset>
     </form>

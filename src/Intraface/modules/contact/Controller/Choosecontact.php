@@ -42,14 +42,16 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
 
     function getContact()
     {
-        if (is_object($this->contact)) return $this->contact;
+        if (is_object($this->contact)) {
+            return $this->contact;
+        }
         return $this->contact = new Contact($this->getKernel());
     }
 
     function getContacts()
     {
         $contact = $this->getContact();
-        if (isset($_GET['contact_id'])) {
+        if (!empty($_GET['contact_id'])) {
         	$contact->getDBQuery()->setCondition("contact.id = ".intval($_GET['contact_id']));
         } elseif (isset($_GET['query']) || isset($_GET['keyword_id'])) {
 
@@ -170,19 +172,25 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
 
     function getValues()
     {
-        if ($this->body()) return $this->body();
+        if ($this->body()) {
+            return $this->body();
+        }
         return array('number' => $this->getContact()->getMaxNumber() + 1);
     }
 
     function getAddressValues()
     {
-        if ($this->body()) return $this->body();
+        if ($this->body()) {
+            return $this->body();
+        }
         return array();
     }
 
     function getDeliveryAddressValues()
     {
-        if ($this->body()) return $this->body();
+        if ($this->body()) {
+            return $this->body();
+        }
         return array();
     }
 
@@ -361,7 +369,7 @@ $page->start('V�lg kontakt');
     		</tbody>
     	</table>
 
-    	<input type="submit" name="submit" value="<?php e(__('Choose')); ?>" /> <?php e(t('or')); ?> <a href="<?php e($redirect->getRedirect("index.php")); ?>"><?php e(t('cancel')); ?></a>
+    	<input type="submit" name="submit" value="<?php e(t('Choose')); ?>" /> <?php e(t('or')); ?> <a href="<?php e($redirect->getRedirect("index.php")); ?>"><?php e(t('cancel')); ?></a>
     </form>
 
 <?php endif; ?>

@@ -1,7 +1,7 @@
 <h1><?php e(t('Products')); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 <form action="<?php e(url()); ?>" method="post">

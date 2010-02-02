@@ -6,7 +6,7 @@
         </div>
     </fieldset>
     <p>
-        <input type="submit" value="<?php e(t('save', 'common')); ?>" />
+        <input type="submit" value="<?php e(t('save')); ?>" />
         <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
     </p>
 </form>

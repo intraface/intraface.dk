@@ -1,7 +1,6 @@
 <h1><?php e(t('Edit template section')); ?></h1>
 
 <?php
-
 echo $section->error->view($translation);
 ?>
 
@@ -16,7 +15,7 @@ echo $section->error->view($translation);
             <input type="text" name="name" value="<?php if (!empty($value['name'])) e($value['name']); ?>" />
         </div>
         <div class="formrow">
-            <label for=""><?php e(t('Identifier', 'common')); ?></label>
+            <label for=""><?php e(t('Identifier')); ?></label>
             <input type="text" name="identifier" value="<?php  if (!empty($value['identifier'])) e($value['identifier']); ?>" />
         </div>
     </fieldset>
@@ -70,7 +69,7 @@ switch ($value['type']) {
         <fieldset>
             <legend><?php e(t('Information about picture')); ?></legend>
             <div class="formrow">
-                <label for="pic_size"><?php e(__('Picture size')); ?></label>
+                <label for="pic_size"><?php e(t('Picture size')); ?></label>
                 <select name="pic_size">
                     <option value="original"<?php if (!empty($value['pic_size']) AND $value['pic_size'] == 'original') echo ' selected="selected"'; ?>>original</option>
                     <?php foreach ($instances AS $instance): ?>
@@ -99,7 +98,7 @@ switch ($value['type']) {
             }
             ?>
             />
-            <label for="allowed_element_<?php e($key); ?>"><?php e(__($v)); ?></label>
+            <label for="allowed_element_<?php e($key); ?>"><?php e(t($v)); ?></label>
             </div>
         <?php endforeach; ?>
 
@@ -116,9 +115,9 @@ switch ($value['type']) {
 ?>
 
     <div class="">
-        <input type="submit" value="<?php e(t('Save', 'common')); ?>" />
-        <input type="submit" name="close" value="<?php e(t('Save and close', 'common')); ?>" />
-        <a href="template.php?id=<?php e($section->template->get('id')); ?>"><?php e(t('Cancel', 'common')); ?></a>
+        <input type="submit" value="<?php e(t('Save')); ?>" />
+        <input type="submit" name="close" value="<?php e(t('Save and close')); ?>" />
+        <a href="<?php e(url('../../')); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 
 </form>

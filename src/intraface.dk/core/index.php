@@ -2,6 +2,8 @@
 // common settings
 define('INTRAFACE_K2', true);
 
+error_reporting(E_ALL);
+
 /**
  * An error-handler which converts all errors (regardless of level) into exceptions.
  * It respects error_reporting settings.
@@ -12,28 +14,33 @@ function intraface_exceptions_error_handler($severity, $message, $filename, $lin
   }
   $e = new ErrorException($message, 0, $severity, $filename, $lineno);
   if (error_reporting() && $severity) {
-      if ($severity == 8 or $severity = 20482048) {
-        /*
-        $render = new Ilib_Errorhandler_Handler_File(Log::factory('file', ERROR_LOG, 'INTRAFACE'));
-        $render->handle($e);
-        */
+      if ($severity == 8 or $severity == 2048) {
+        //$render = new Ilib_Errorhandler_Handler_File(Log::factory('file', ERROR_LOG, 'INTRAFACE'));
+        //$render->handle($e);
         return;
       }
-    throw $e;
+      throw $e;
   }
 }
 
 
-require_once dirname(__FILE__) . '/../config.local.php';
-ini_set('include_path', PATH_INCLUDE_PATH);
-require_once dirname(__FILE__) . '/../common.php';
+$config_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . '/../config.local.php';
+
+if (!file_exists($config_file)) {
+    die('The config.local.php file is missing. Please create it.');
+}
+
+require_once $config_file;
+
+require_once 'Intraface/common.php';
 require_once 'Ilib/ClassLoader.php';
 require_once 'konstrukt/konstrukt.inc.php';
+require_once 'swift_required.php';
+require_once 'Ilib/Errorhandler/Handler/File.php';
 //set_error_handler('k_exceptions_error_handler');
-spl_autoload_register('k_autoload');
-error_reporting(E_ALL);
 
 set_error_handler('intraface_exceptions_error_handler');
+spl_autoload_register('k_autoload');
 
 
 $GLOBALS['konstrukt_content_types']['application/ms-excel'] = 'xls';

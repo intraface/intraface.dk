@@ -1,7 +1,7 @@
 <?php
 $values = $context->getValues();
 ?>
-<h1><?php e(__('Settings')); ?></h1>
+<h1><?php e(t('Settings')); ?></h1>
 
 <?php echo $context->getError()->view(); ?>
 
@@ -21,29 +21,29 @@ $values = $context->getValues();
 
 
             <div class="formrow">
-                <label for="debtor_sender_name">Afsendernavn</label>
+                <label for="debtor_sender_name"><?php e(t('Sender name')); ?></label>
                 <input type="text" name="debtor_sender_name" id="debtor_sender_name" value="<?php if (!empty($values['debtor_sender_name'])) e($values['debtor_sender_name']); ?>" />
             </div>
             <div class="formrow">
-                <label for="debtor_sender_email">Afsender e-mail</label>
+                <label for="debtor_sender_email"><?php e(t('Sender email')); ?></label>
                 <input type="text" name="debtor_sender_email" id="debtor_sender_email" value="<?php if (!empty($values['debtor_sender_email'])) e($values['debtor_sender_email']); ?>" />
             </div>
     </fieldset>
 
     <fieldset>
-        <legend>Bankoplysninger</legend>
+        <legend><?php e(t('Bank information')); ?></legend>
         <fieldset>
-            <legend>Kontobetaling:</legend>
+            <legend><?php e(t('Wire transfer')); ?></legend>
             <div class="formrow">
-                <label for="bankname">Bank</label>
+                <label for="bankname"><?php e(t('Bank')); ?></label>
                 <input type="text" name="bank_name" id="bankname" value="<?php e($values['bank_name']); ?>" />
             </div>
             <div class="formrow">
-                <label for="regnumber">Registreringsnummer</label>
+                <label for="regnumber"><?php e(t('Registration number')); ?></label>
                 <input type="text" name="bank_reg_number" id="regnumber" value="<?php e($values['bank_reg_number']); ?>" />
             </div>
             <div class="formrow">
-                <label for="accountnumber">Kontonummer</label>
+                <label for="accountnumber"><?php e(t('Account number')); ?></label>
                 <input type="text" name="bank_account_number" id="accountnumber" value="<?php e($values['bank_account_number']); ?>" />
             </div>
         </fieldset>

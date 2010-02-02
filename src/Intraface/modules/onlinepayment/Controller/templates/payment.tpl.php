@@ -4,7 +4,7 @@
 <h1><?php e(t('Online payment')); ?></h1>
 
 <ul class="options">
-	<li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
+	<li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 <?php echo $onlinepayment->error->view(); ?>
@@ -13,7 +13,7 @@
 	<caption><?php e(t('Payment information')); ?></caption>
 	<tbody>
 		<tr>
-			<th><?php e(t('Date', 'common')); ?></th>
+			<th><?php e(t('Date')); ?></th>
 			<td><?php e($onlinepayment->get("dk_date_created")); ?></td>
 		</tr>
 		<tr>
@@ -44,13 +44,13 @@
 			</td>
 		</tr>
 		<tr>
-			<th><?php e(t('Status', 'common')); ?></th>
+			<th><?php e(t('Status')); ?></th>
 			<td>
 				<?php
-				e(__($onlinepayment->get("status")));
+				e(t($onlinepayment->get("status")));
 
 				if ($onlinepayment->get('status') == 'authorized') {
-					print(" (Ikke <acronym title=\"Betaling kan først hæves når faktura er sendt\">hævet</acronym>)");
+					print(" (Ikke <acronym title=\"Betaling kan fï¿½rst hï¿½ves nï¿½r faktura er sendt\">hï¿½vet</acronym>)");
 				}
 				?>
 			</td>
@@ -88,7 +88,7 @@
             <td><?php e($onlinepayment->get("pbs_status")); ?></td>
         </tr>
 		<tr>
-			<th><?php e(t('Amount', 'common')); ?></th>
+			<th><?php e(t('Amount')); ?></th>
 			<td>
                 <?php
                 if(false !== ($currency = $onlinepayment->getCurrency())) {
@@ -148,11 +148,11 @@ if ($onlinepayment->get('status') == "authorized") {
 		<p<?php e(t('You can make the amount you withdraw smaller.')); ?>></p>
 
 		<div class="formrow">
-			<label for="dk_amount" class="tight"><?php e(t('Amount', 'common')); ?></label>
+			<label for="dk_amount" class="tight"><?php e(t('Amount')); ?></label>
 	    <input type="text" name="dk_amount" id="dk_amount" value="<?php e($value["dk_amount"]); ?>" />
 		</div>
 
-		<input type="submit" class="save" name="submit" value="<?php e(t('Save', 'common')); ?>" />
+		<input type="submit" class="save" name="submit" value="<?php e(t('Save')); ?>" />
 		<input type="hidden" name="id" value="<?php e($onlinepayment->get("id")); ?>" />
 		</form>
 

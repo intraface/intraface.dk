@@ -34,7 +34,6 @@
         <?php endforeach; ?>
 
     </select>
-    <input type="submit" class="save" name="submit" value="<?php e(t('save', 'common')); ?>" />
-    <?php e(t('or', 'common')); ?>
-    <a href="./"><?php e(t('cancel', 'common')); ?></a>
+    <input type="submit" class="save" name="submit" value="<?php e(t('save')); ?>" />
+    <a href="./"><?php e(t('cancel')); ?></a>
 </form>

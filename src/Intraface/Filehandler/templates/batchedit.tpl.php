@@ -1,10 +1,8 @@
-<h1><?php e(__('files')); ?></h1>
+<h1><?php e(t('files')); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(__('Cancel', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Cancel')); ?></a></li>
 </ul>
-
-
 
 <form action="<?php e(url('./')); ?>" method="post">
 <?php
@@ -19,7 +17,7 @@ foreach ($files as $file) {
     $file['keywords'] = $keyword_object->getConnectedKeywordsAsString();
     ?>
     <table class="stripe">
-    <caption><?php e(__('File')); ?></caption>
+    <caption><?php e(t('File')); ?></caption>
         <tbody>
             <tr>
                 <td rowspan="5" style="width: 280px;">
@@ -32,20 +30,20 @@ foreach ($files as $file) {
                 </td>
             </tr>
             <tr>
-                <th><?php e(__('file')); ?></th>
+                <th><?php e(t('file')); ?></th>
                 <td><?php e($file['file_name']); ?></td>
             </tr>
             <tr>
-                <th><?php e(__('file description')); ?></th>
+                <th><?php e(t('file description')); ?></th>
                 <td><textarea style="width: 400px; height; 100px;" name="description[<?php e($file['id']); ?>]"><?php e($file['description']); ?></textarea></td>
             </tr>
             <tr>
-                <th><?php e(__('keywords', 'keyword')); ?></th>
+                <th><?php e(t('keywords', 'keyword')); ?></th>
                 <td><input type="text" name="keywords[<?php e($file['id']); ?>]" value="<?php e($file['keywords']); ?>" /></td>
             </tr>
             <tr>
-                <th><?php e(__('file accessibility')); ?></th>
-                <td><input type="radio" id="accessibility[<?php e($file['id']); ?>]_public" name="accessibility[<?php e($file['id']); ?>]" value="public" <?php if(isset($file['accessibility']) && $file['accessibility'] == 'public') e('checked="checked"'); ?> /><label for="accessibility[<?php e($file['id']); ?>]_public"><?php e(__('public')); ?></label> &nbsp; &nbsp; <input type="radio" id="accessibility[<?php e($file['id']); ?>]_intranet" name="accessibility[<?php e($file['id']); ?>]" value="intranet" <?php if(isset($file['accessibility']) && $file['accessibility'] == 'intranet') e('checked="checked"'); ?> /><label for="accessibility[<?php e($file['id']); ?>]_intranet"><?php e(__('intranet')); ?></label></td>
+                <th><?php e(t('file accessibility')); ?></th>
+                <td><input type="radio" id="accessibility[<?php e($file['id']); ?>]_public" name="accessibility[<?php e($file['id']); ?>]" value="public" <?php if(isset($file['accessibility']) && $file['accessibility'] == 'public') e('checked="checked"'); ?> /><label for="accessibility[<?php e($file['id']); ?>]_public"><?php e(t('public')); ?></label> &nbsp; &nbsp; <input type="radio" id="accessibility[<?php e($file['id']); ?>]_intranet" name="accessibility[<?php e($file['id']); ?>]" value="intranet" <?php if(isset($file['accessibility']) && $file['accessibility'] == 'intranet') e('checked="checked"'); ?> /><label for="accessibility[<?php e($file['id']); ?>]_intranet"><?php e(t('intranet')); ?></label></td>
             </tr>
         </tbody>
     </table>
@@ -53,7 +51,7 @@ foreach ($files as $file) {
 }
 ?>
 <p>
-<input type="submit" value="<?php e(__('save', 'common')); ?>" />
-<a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(__('Cancel', 'common')); ?></a>
+<input type="submit" value="<?php e(t('save')); ?>" />
+<a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Cancel')); ?></a>
 </p>
 </form>

@@ -25,7 +25,7 @@
 	<?php foreach ($context->getLetters() AS $letter): ?>
 	<tr>
 		<td><a href="<?php e(url($letter['id'])); ?>"><?php e($letter['subject']); ?></a></td>
-		<td><?php e(__($letter['status'])); ?></td>
+		<td><?php e(t($letter['status'])); ?></td>
 		<td>
 			<?php
 				if ($letter['status'] == 'sent'):

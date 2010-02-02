@@ -18,11 +18,6 @@ class Intraface_modules_debtor_Controller_Index extends k_Component
         return 'Intraface_modules_debtor_Controller_Typenegotiator';
     }
 
-    function getRedirectUrl()
-    {
-        return $this->url();
-    }
-
     function renderHtml()
     {
         if ($this->getKernel()->user->hasModuleAccess("invoice")) {
@@ -35,6 +30,11 @@ class Intraface_modules_debtor_Controller_Index extends k_Component
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/index');
         return $smarty->render($this);
+    }
+
+    function getRedirectUrl()
+    {
+        return $this->url();
     }
 
     function getKernel()

@@ -63,8 +63,8 @@
 			<?php endif; ?>
 
 			<?php if ($account['type'] != 'headline') { ?>
-			<td><?php e(__($account['type'])); ?></td>
-			<td><?php if ($account['type'] == 'balance, asset' OR $account['type'] == 'balance, liability' OR $account['type'] == 'operating') e(__($account['vat_shorthand'])); ?></td>
+			<td><?php e(t($account['type'])); ?></td>
+			<td><?php if ($account['type'] == 'balance, asset' OR $account['type'] == 'balance, liability' OR $account['type'] == 'operating') e(t($account['vat_shorthand'])); ?></td>
 			<td class="amount"><?php if (isset($account['saldo'])) e(number_format($account['saldo'], 2, ",", ".")); ?></td>
 			<?php } ?>
 			<td class="options">

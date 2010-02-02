@@ -1,12 +1,12 @@
-<p><?php e(__('Choose payment method. If you choose more than one payment method, your customers will be able to choose between them when using your online shop.')); ?></p>
+<p><?php e(t('Choose payment method. If you choose more than one payment method, your customers will be able to choose between them when using your online shop.')); ?></p>
 
 <form action="<?php e(url('./')); ?>" method="post">
 <table>
 <thead>
 	<tr>
 		<th></th>
-		<th><?php e(__('Payment method')); ?></th>
-		<th><?php e(__('Alternative text')); ?></th>
+		<th><?php e(t('Payment method')); ?></th>
+		<th><?php e(t('Alternative text')); ?></th>
 	</tr>
 </thead>
 <tbody>
@@ -19,5 +19,5 @@
 <?php endforeach; ?>
 </tbody>
 </table>
-<p><input type="submit" value="<?php e(__('Save')); ?>" /></p>
+<p><input type="submit" value="<?php e(t('Save')); ?>" /></p>
 </form>

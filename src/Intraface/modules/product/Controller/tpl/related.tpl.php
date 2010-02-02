@@ -3,15 +3,15 @@ $related_product_ids = $context->getRelatedProductIds();
 ?>
 
 <h1><?php e(t('Add related products')); ?></h1>
-<p>... <?php e(t('to', 'common')); ?> <?php e($context->getProduct()->get('name')); ?></p>
+<p>... <?php e(t('to')); ?> <?php e($context->getProduct()->get('name')); ?></p>
 
 <ul class="options">
-    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 <form action="<?php e(url()); ?>" method="get">
     <fieldset>
-        <legend><?php e(t('search', 'common')); ?></legend>
+        <legend><?php e(t('search')); ?></legend>
         <!--
         <label>Filter
         <select name="filter" id="filter">
@@ -26,16 +26,16 @@ $related_product_ids = $context->getRelatedProductIds();
         <input type="text" value="<?php e($context->getProduct()->getDBQuery()->getFilter("search")); ?>" name="search" id="search" />
     </label>
     <label>
-        Vis med nøgleord
+        <?php e(t('Show with keywords')); ?>
         <select name="keyword_id" id="keyword_id">
-            <option value=""><?php e(t('none', 'common')); ?></option>
+            <option value=""><?php e(t('none')); ?></option>
             <?php foreach ($context->getKeywords()->getUsedKeywords() AS $k) { ?>
             <option value="<?php e($k['id']); ?>" <?php if ($k['id'] == $context->getProduct()->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php e($k['keyword']); ?></option>
             <?php } ?>
         </select>
     </label>
     <span>
-        <input type="submit" value="<?php e(t('Go', 'common')); ?>" class="search" />
+        <input type="submit" value="<?php e(t('Go')); ?>" class="search" />
         <input type="hidden" value="<?php e($context->getProduct()->get('id')); ?>" name="id" />
     </span>
     </fieldset>
@@ -51,7 +51,7 @@ echo $context->getProduct()->getDBQuery()->display('character');
         <caption><?php e(t('products')); ?></caption>
         <thead>
             <tr>
-                <th><?php e(t('choose', 'common')); ?></th>
+                <th><?php e(t('choose')); ?></th>
                 <th><?php e(t('product number')); ?></th>
                 <th><?php e(t('name')); ?></th>
             </tr>
@@ -70,8 +70,8 @@ echo $context->getProduct()->getDBQuery()->display('character');
         </tbody>
     </table>
       <p>
-          <input type="submit" value="<?php e(t('Save', 'common')); ?>" />
-          <input type="submit" value="<?php e(t('Save and close', 'common')); ?>" name="close" />
+          <input type="submit" value="<?php e(t('Save')); ?>" />
+          <input type="submit" value="<?php e(t('Save and close')); ?>" name="close" />
       </p>
 
   <?php echo $context->getProduct()->getDBQuery()->display('paging'); ?>

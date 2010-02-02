@@ -1,5 +1,5 @@
 <?php // @todo should have state payment for xxxxxx $context->getType() ?>
-<h1><?php e(__('state payment for ')); ?> #<?php e($object->get('number')); ?></h1>
+<h1><?php e(t('state payment for ')); ?> #<?php e($object->get('number')); ?></h1>
 
 <ul class="options">
         <li><a href="<?php e(url('../../../')); ?>">Luk</a></li>
@@ -25,15 +25,15 @@
         <legend><?php e('payment'); ?></legend>
         <table>
             <tr>
-                <th><?php e(__("payment type")); ?></th>
-                <td><?php e(__($payment->get("type"))); ?></td>
+                <th><?php e(t("payment type")); ?></th>
+                <td><?php e(t($payment->get("type"))); ?></td>
             </tr>
             <tr>
-                <th><?php e(__("date")); ?></th>
+                <th><?php e(t("date")); ?></th>
                 <td><?php e($payment->get("dk_payment_date")); ?></td>
             </tr>
             <tr>
-                <th><?php e(__("amount")); ?></th>
+                <th><?php e(t("amount")); ?></th>
                 <td><?php e(number_format($payment->get("amount"), 2, ',', '.')); ?></td>
             </tr>
         </table>
@@ -55,7 +55,7 @@
         <p>Beløbet vil blive trukket fra debitorkontoen og blive sat på kontoen, du vælger herunder:</p>
 
         <div class="formrow">
-            <label for="state_account"><?php e(__("state on account")); ?></label>
+            <label for="state_account"><?php e(t("state on account")); ?></label>
             <?php
             $account = new Account($year); // $product->get('state_account_id')
 

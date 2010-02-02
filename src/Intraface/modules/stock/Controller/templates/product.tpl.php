@@ -31,6 +31,6 @@ $values = $context->getValues();
 
 <input type="hidden" name="product_id" value="<?php e($context->getProduct()->get('id')); ?>" />
 <input type="hidden" name="product_variation_id" value="<?php if ($context->getVariation()) e($context->getVariation()->getId()); ?>" />
-<input type="submit" name="submit" value="<?php e(t('Save', 'common')); ?>" />
-<a href="<?php e(url('../')); ?>"><?php e(t('Cancel', 'common')); ?></a>
+<input type="submit" name="submit" value="<?php e(t('Save')); ?>" />
+<a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
 </form>

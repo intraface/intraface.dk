@@ -59,7 +59,9 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         // @todo a little hacky
         $this->intranetmaintenance = $intranet;
 
-        $data = array('intranet' => $intranet, 'user' => $user);
+        $data = array(
+        	'intranet' => $intranet,
+        	'user' => $user);
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/user/show');
         return $smarty->render($this, $data);

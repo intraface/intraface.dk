@@ -1,11 +1,11 @@
-<h1><?php e(__('edit section')); ?> <?php e($section->get('section_name')); ?> <?php echo e(t('on page')); ?> <?php e($section->cmspage->get('title')); ?></h1>
+<h1><?php e(t('edit section')); ?> <?php e($section->get('section_name')); ?> <?php echo e(t('on page')); ?> <?php e($section->cmspage->get('title')); ?></h1>
 
 <ul class="options">
     <?php if (count($section->cmspage->getSections()) > 1): ?>
-    <li><a href="<?php e(url('../')); ?>"><?php e(__('close', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('close')); ?></a></li>
     <?php else: ?>
-    <li><a class="edit" href="<?php e(url('../../edit')); ?>"><?php e(__('edit page settings')); ?></a></li>
-    <li><a href="<?php e(url('../../../', array('type' =>$section->cmspage->get('type')))); ?>"><?php e(__('close')); ?></a></li>
+    <li><a class="edit" href="<?php e(url('../../edit')); ?>"><?php e(t('edit page settings')); ?></a></li>
+    <li><a href="<?php e(url('../../../', array('type' =>$section->cmspage->get('type')))); ?>"><?php e(t('close')); ?></a></li>
     <?php endif; ?>
 </ul>
 
@@ -41,19 +41,19 @@
 <form action="<?php e(url()); ?>" method="post">
     <input type="hidden" value="<?php e($section->get('id')); ?>" name="id" />
     <fieldset>
-        <legend><?php e(__('create new element')); ?></legend>
-        <p><?php e(__('place content on the section by adding elements')); ?></p>
+        <legend><?php e(t('create new element')); ?></legend>
+        <p><?php e(t('place content on the section by adding elements')); ?></p>
         <select name="new_element_type_id" id="new_element_type_id">
-            <option value=""><?php e(__('choose', 'common')); ?></option>
+            <option value=""><?php e(t('choose')); ?></option>
             <?php
                 foreach ($element_types AS $key=>$type):
                     if (!in_array($key, $section->template_section->get('allowed_element'))) continue; ?>
-                     <option value="<?php e($type); ?>"><?php e(__($type)); ?></option>
+                     <option value="<?php e($type); ?>"><?php e(t($type)); ?></option>
                 <?php endforeach;
             ?>
         </select>
-        <input type="submit" value="<?php e(__('add element')); ?>" name="add_element" />
-        <a href="<?php e(url('../')); ?>"><?php e(__('Cancel', 'common')); ?></a>
+        <input type="submit" value="<?php e(t('add element')); ?>" name="add_element" />
+        <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
 
     </fieldset>
 </form>

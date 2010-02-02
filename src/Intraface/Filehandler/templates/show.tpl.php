@@ -1,50 +1,50 @@
 <div id="colOne">
 
-    <h1><?php e(__('File')); ?></h1>
+    <h1><?php e(t('File')); ?></h1>
 
     <?php $filemanager->error->view(); ?>
 
     <ul class="options">
-        <li><a href="<?php e(url('edit')); ?>"><?php e(__('Edit', 'common')); ?></a></li>
-        <li><a href="<?php e($filemanager->get('file_uri')); ?>"><?php e(__('Get file')); ?></a></li>
-        <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(__('Close', 'common')); ?></a></li>
+        <li><a href="<?php e(url('edit')); ?>"><?php e(t('Edit')); ?></a></li>
+        <li><a href="<?php e($filemanager->get('file_uri')); ?>"><?php e(t('Get file')); ?></a></li>
+        <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close')); ?></a></li>
     </ul>
 
     <table>
-        <caption><?php e(__('Information')); ?></caption>
+        <caption><?php e(t('Information')); ?></caption>
         <tbody>
         <tr>
-            <th><?php e(__('File name')); ?></th>
+            <th><?php e(t('File name')); ?></th>
             <td><?php e($filemanager->get('file_name')); ?></td>
         </tr>
         <tr>
-            <th><?php e(__('Created', 'common')); ?></th>
+            <th><?php e(t('Created')); ?></th>
             <td><?php e($filemanager->get("dk_date_created")); ?></td>
         </tr>
         <tr>
-            <th><?php e(__('File size')); ?></th>
+            <th><?php e(t('File size')); ?></th>
             <td><?php e($filemanager->get("dk_file_size")); ?></td>
         </tr>
         <tr>
-            <th><?php e(__('File type')); ?></th>
+            <th><?php e(t('File type')); ?></th>
             <?php
             $file_type = $filemanager->get("file_type");
             ?>
             <td><?php e($file_type['description']); ?></td>
         </tr>
         <tr>
-            <th><?php e(__('Accessibility')); ?></th>
+            <th><?php e(t('Accessibility')); ?></th>
             <td><?php e($filemanager->get("accessibility")); ?></td>
         </tr>
         <?php
         if($filemanager->get('is_image') == 1) {
             ?>
             <tr>
-                <th><?php e(__('Image width')); ?></th>
+                <th><?php e(t('Image width')); ?></th>
                 <td><?php e($filemanager->get('width')); ?>px</td>
             </tr>
             <tr>
-                <th><?php e(__('Image height')); ?></th>
+                <th><?php e(t('Image height')); ?></th>
                 <td><?php e($filemanager->get('height')); ?>px</td>
             </tr>
             <?php
@@ -52,12 +52,12 @@
         ?>
         </tbody>
     </table>
-    <h3><?php e(__('File description')); ?></h3>
+    <h3><?php e(t('File description')); ?></h3>
 
     <?php
     if($filemanager->get('description') == '') {
         ?>
-        <p><a href="edit.php?id=<?php print($filemanager->get('id')); ?>"><?php e(__('add description')); ?></a></p>
+        <p><a href="edit.php?id=<?php print($filemanager->get('id')); ?>"><?php e(t('add description')); ?></a></p>
         <?php
     }
     else {
@@ -71,15 +71,15 @@
         $instances = $filemanager->instance->getList();
 
         ?>
-        <h3><?php e(__('File sizes')); ?></h3>
+        <h3><?php e(t('File sizes')); ?></h3>
 
         <table class="stribe">
             <thead>
             	<tr>
-                <th><?php e(__('Identifier', 'common')); ?></th>
-                <th><?php e(__('Image width')); ?></th>
-                <th><?php e(__('Image height')); ?></th>
-                <th><?php e(__('File size')); ?></th>
+                <th><?php e(t('Identifier')); ?></th>
+                <th><?php e(t('Image width')); ?></th>
+                <th><?php e(t('Image height')); ?></th>
+                <th><?php e(t('File size')); ?></th>
                 <th></th>
                 </tr>
             </thead>
@@ -89,7 +89,7 @@
                     if($instance['name'] == 'manual') continue;
                     ?>
                     <tr>
-                        <td><a href="<?php e($instance['file_uri']); ?>"><?php e(__($instance['name'], 'filehandler')); ?></a></td>
+                        <td><a href="<?php e($instance['file_uri']); ?>"><?php e(t($instance['name'], 'filehandler')); ?></a></td>
                         <td><?php e($instance['width']); ?>px</td>
                         <td><?php e($instance['height']); ?>px</td>
                         <td>
@@ -102,7 +102,7 @@
                             }
                             ?>
                         </td>
-                        <td><a href="<?php e(url('crop', array('instance_type' => $instance['name']))); ?>"><?php e(__('custom cropping')); ?></a>
+                        <td><a href="<?php e(url('crop', array('instance_type' => $instance['name']))); ?>"><?php e(t('custom cropping')); ?></a>
                     </tr>
                     <?php
                 }
@@ -114,7 +114,7 @@
             $shared_filehandler = $kernel->useShared('filehandler');
             ?>
             <ul class="options">
-                <li><a href="<?php e(url('../sizes')); ?>"><?php e(__('manage your image sizes')); ?></a></li>
+                <li><a href="<?php e(url('../sizes')); ?>"><?php e(t('manage your image sizes')); ?></a></li>
             </ul>
         <?php endif; ?>
         <?php
@@ -140,9 +140,9 @@
 
 
     <div id="keywords" class="box">
-      <h2><?php e(__('Keywords', 'keyword')); ?></h2>
+      <h2><?php e(t('Keywords', 'keyword')); ?></h2>
        <ul class="options">
-            <li><a href="<?php e(url('keyword/connect')); ?>"><?php e(__('Add keywords', 'keyword')); ?></a></li>
+            <li><a href="<?php e(url('keyword/connect')); ?>"><?php e(t('Add keywords', 'keyword')); ?></a></li>
         </ul>
 
     <?php

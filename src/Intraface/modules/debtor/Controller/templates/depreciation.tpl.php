@@ -17,10 +17,10 @@
     </div>
 
     <div class="formrow">
-        <label for="amount">Beløb</label>
+        <label for="amount"><?php e(t('Amount')); ?></label>
         <input type="text" name="amount" id="amount" value="<?php e(number_format($context->getModel()->get("arrears"), 2, ",", ".")); ?>" />
     </div>
 </fieldset>
-<input type="submit" name="depreciation" value="Registrér" />
+<input type="submit" name="depreciation" value="<?php e(t('Register')); ?>" />
     <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
 </form>

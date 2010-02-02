@@ -3,7 +3,7 @@
 <ul class="options">
     <li><a class="new" href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
     <li><a class="new" href="<?php e(url('select_attribute_groups')); ?>"><?php e(t('Choose attribute groups')); ?></a></li>
-    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 

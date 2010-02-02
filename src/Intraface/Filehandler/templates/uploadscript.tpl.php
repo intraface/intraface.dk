@@ -69,7 +69,7 @@ body {
 <body>
         <form name="iform" action="<?php e(url(null)); ?>" method="post" enctype="multipart/form-data">
             <div class="formrow">
-                <label><?php e(__('File')); ?></label>
+                <label><?php e(t('File')); ?></label>
                 <input id="file" type="file" name="file" onchange="upload()" />
                 <input type="hidden" name="imgnum" />
             </div>

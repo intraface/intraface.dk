@@ -1,30 +1,30 @@
 <ul class="options">
-    <li><a href="<?php e(url('Upload')); ?>" onclick="location.href='<?php e(url('uploadmultiple')); ?>'; return false;"><?php e(__('upload file')); ?></a></li>
+    <li><a href="<?php e(url('Upload')); ?>" onclick="location.href='<?php e(url('uploadmultiple')); ?>'; return false;"><?php e(t('upload file')); ?></a></li>
 </ul>
 
 <?php // echo $filemanager->error->view('html'); ?>
 
 <form method="get" action="<?php e(url(null, array('use_stored' => true))); ?>">
     <fieldset>
-        <legend><?php e(__('search')); ?></legend>
-        <label><?php e(__('text')); ?>:
+        <legend><?php e(t('search')); ?></legend>
+        <label><?php e(t('text')); ?>:
             <input type="text" name="text" value="<?php echo $filemanager->getDBQuery()->getFilter("text"); ?>" />
         </label>
         <label>Filtrering:
         <select name="filtration">
             <option value="0">Alle</option>
-            <option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) echo ' selected="selected"';?>><?php e(__('uploaded today')); ?></option>
-            <option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) echo ' selected="selected"';?>><?php e(__('uploaded yesterday')); ?></option>
-            <option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) echo ' selected="selected"';?>><?php e(__('uploaded this week')); ?></option>
-            <option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) echo ' selected="selected"';?>><?php e(__('edited today')); ?></option>
-            <option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) echo ' selected="selected"';?>><?php e(__('edited yesterday')); ?></option>
+            <option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) echo ' selected="selected"';?>><?php e(t('uploaded today')); ?></option>
+            <option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) echo ' selected="selected"';?>><?php e(t('uploaded yesterday')); ?></option>
+            <option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) echo ' selected="selected"';?>><?php e(t('uploaded this week')); ?></option>
+            <option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) echo ' selected="selected"';?>><?php e(t('edited today')); ?></option>
+            <option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) echo ' selected="selected"';?>><?php e(t('edited yesterday')); ?></option>
         </select>
         </label>
-        <label><?php e(__('only pictures')); ?>:
+        <label><?php e(t('only pictures')); ?>:
             <input type="checkbox" name="images" value="1" <?php if($filemanager->getDBQuery()->getFilter("images") == 1) echo 'checked="checked"'; ?> />
         </label>
         <span>
-        <input type="submit" name="search" value="<?php e(__('find')); ?>" />
+        <input type="submit" name="search" value="<?php e(t('find')); ?>" />
         </span>
 
         <?php
@@ -96,11 +96,11 @@
 <div>
 
     <?php if($context->multiple_choice): ?>
-        <input type="submit" name="submit" id="submit-select_file" value="<?php e(__('save', 'common')); ?>" />
+        <input type="submit" name="submit" id="submit-select_file" value="<?php e(t('save')); ?>" />
     <?php endif; ?>
 
-    <input type="submit" name="submit_close" id="submit_close-select_file" value="<?php e(__('save and transfer')); ?>" />
-    <a href="<?php e(url('../../')); ?>"><?php e(__('Cancel' ,'common')); ?></a>
+    <input type="submit" name="submit_close" id="submit_close-select_file" value="<?php e(t('save and transfer')); ?>" />
+    <a href="<?php e(url('../../')); ?>"><?php e(t('Cancel')); ?></a>
 </div>
 
 </form>

@@ -15,29 +15,29 @@ echo $reminder->error->view("html");
 <form action="<?php e(url(null, array($context->subview(), 'contact_id' => $context->query('contact_id')))); ?>" method="post">
 
 <fieldset>
-    <legend><?php e(__('Information about the reminder')); ?></legend>
+    <legend><?php e(t('Information about the reminder')); ?></legend>
 
     <div class="formrow">
-        <label for="number"><?php e(__('Number')); ?></label>
+        <label for="number"><?php e(t('Number')); ?></label>
     <input type="text" name="number" id="number" value="<?php e($value["number"]); ?>" />
     </div>
 
 
     <div class="formrow">
-        <label for="description"><?php e(__('Description')); ?></label>
+        <label for="description"><?php e(t('Description')); ?></label>
        <input type="text" name="description" value="<?php if (isset($value['description'])) e($value["description"]); ?>" size="60" />
     </div>
 
     <div class="formrow">
-        <label for="date"><?php e(__('Date')); ?></label>
+        <label for="date"><?php e(t('Date')); ?></label>
         <input class="input" name="this_date" id="this_date" value="<?php if (isset($value['dk_this_date'])) e($value["dk_this_date"]); ?>" size="10" />
     </div>
     <div class="formrow">
-        <label for="due_date"><?php e(__('Due date')); ?></label>
+        <label for="due_date"><?php e(t('Due date')); ?></label>
         <input class="input" name="due_date" id="due_date" value="<?php if (isset($value['dk_due_date'])) e($value["dk_due_date"]); ?>" size="10" />
     </div>
     <div class="formrow">
-        <label for="reminder_fee"><?php e(__('Reminder fee')); ?></label>
+        <label for="reminder_fee"><?php e(t('Reminder fee')); ?></label>
         <select id="reminder_fee" name="reminder_fee">
             <option value="0" <?php if (isset($value["reminder_fee"]) && $value["reminder_fee"] == 0) print("selected=\"selected\""); ?> >Ingen</option>
             <option value="50" <?php if (isset($value["reminder_fee"]) && $value["reminder_fee"] == 50) print("selected=\"selected\""); ?> >50 kr.</option>
@@ -49,16 +49,16 @@ echo $reminder->error->view("html");
     </div>
 
     <div class="formrow">
-        <label for="text"><?php e(__('Text for the contact')); ?></label>
+        <label for="text"><?php e(t('Text for the contact')); ?></label>
            <textarea name="text" id="text" style="width: 400px; height: 100px;"><?php if (isset($value['text'])) e($value["text"]); ?></textarea>
     </div>
 
 </fieldset>
 
 <fieldset>
-    <legend><?php e(__('Customer information')); ?></legend>
+    <legend><?php e(t('Customer information')); ?></legend>
     <div class="formrow">
-        <label><?php e(__('Customer')); ?></label>
+        <label><?php e(t('Customer')); ?></label>
         <span><?php e($contact->address->get("name")); ?></span>
     </div>
 
@@ -78,18 +78,18 @@ echo $reminder->error->view("html");
                     <?php
                 }
                 ?>
-                <option value="-1"><?php e(__('Create new') . ' >>'); ?></option>
+                <option value="-1"><?php e(t('Create new') . ' >>'); ?></option>
             </select>
         </div>
 
         <fieldset id="contactperson">
-            <legend><?php e(__('New contact person')); ?></legend>
+            <legend><?php e(t('New contact person')); ?></legend>
             <div class="formrow">
-                <label for="contact_person_name"><?php e(__('Name')); ?></label>
+                <label for="contact_person_name"><?php e(t('Name')); ?></label>
                 <input type="text" name="contact_person_name" value="" />
             </div>
             <div class="formrow">
-                <label for="contact_person_email"><?php e(__('Email')); ?></label>
+                <label for="contact_person_email"><?php e(t('Email')); ?></label>
                 <input type="text" name="contact_person_email" value="" />
             </div>
         </fieldset>
@@ -100,21 +100,21 @@ echo $reminder->error->view("html");
 </fieldset>
 
 <fieldset>
-    <legend><?php e(__('Content')); ?></legend>
+    <legend><?php e(t('Content')); ?></legend>
 
     <table>
         <thead>
             <tr>
                 <th>&nbsp;</th>
-                <th><?php e(__('No.')); ?></th>
-                <th><?php e(__('Description')); ?></th>
-                <th><?php e(__('Due date')); ?></th>
-                <th><?php e(__('Amount')); ?></th>
+                <th><?php e(t('No.')); ?></th>
+                <th><?php e(t('Description')); ?></th>
+                <th><?php e(t('Due date')); ?></th>
+                <th><?php e(t('Amount')); ?></th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td colspan="5"><b><?php e(__('Invoices with no payments')); ?></b></td>
+                <td colspan="5"><b><?php e(t('Invoices with no payments')); ?></b></td>
             </tr>
             <?php
             $invoice = new Invoice($kernel);
@@ -142,7 +142,7 @@ echo $reminder->error->view("html");
         if (!empty($reminders)) {
        ?>
             <tr>
-                <td colspan="5"><b><?php e(__('Reminders with no payments')); ?></b></td>
+                <td colspan="5"><b><?php e(t('Reminders with no payments')); ?></b></td>
             </tr>
             <?php
               for ($i = 0, $max = count($reminders); $i < $max; $i++) {
@@ -171,7 +171,7 @@ echo $reminder->error->view("html");
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td>Total:</td>
+                <td><?php e(t('Total')); ?></td>
                 <td class="amount"><?php e(number_format($total, 2, ",",".")); ?></td>
             </tr>
         </tfoot>
@@ -219,7 +219,7 @@ if ($contact->address->get('email')) {
 
 
 <fieldset>
-    <legend><?php e(__('Payment information')); ?></legend>
+    <legend><?php e(t('Payment information')); ?></legend>
     <p>Hvilke betalingsoplysninger skal vises på rykkeren</p>
     <div>
         <input class="input" id="none" type="radio" name="payment_method_key" value="0" <?php if (isset($value["payment_method_key"]) && $value["payment_method_key"] == 0) print("checked=\"CHECKED\""); ?> />
@@ -244,11 +244,11 @@ if ($contact->address->get('email')) {
     <?php endif; ?>
 </fieldset>
 
-<input type="submit" name="submit" value="<?php e(__('Save')); ?>" class="save" />
+<input type="submit" name="submit" value="<?php e(t('Save')); ?>" class="save" />
 <?php if ($reminder->get('id') > 0): ?>
-<a href="<?php e(url()); ?>"><?php e(__('Cancel')); ?></a>
+<a href="<?php e(url()); ?>"><?php e(t('Cancel')); ?></a>
 <?php else: ?>
-<a href="<?php e(url('../../contact/' . $contact->get('id'))); ?>"><?php e(__('Cancel')); ?></a>
+<a href="<?php e(url('../../contact/' . $contact->get('id'))); ?>"><?php e(t('Cancel')); ?></a>
 <?php endif; ?>
 
 <input type="hidden" name="id" value="<?php e($reminder->get("id")); ?>" />

@@ -16,6 +16,31 @@ if (!file_exists($config_file)) {
 
 require $config_file;
 
+if (!function_exists('__')) {
+    function __($phrase) {
+        return $phrase;
+    }
+}
+
+if (!function_exists('t')) {
+    function t($phrase) {
+        return $phrase;
+    }
+}
+
+
+if (!function_exists('url')) {
+    function url($url) {
+        return PATH_WWW . $url;
+    }
+}
+
+if (!function_exists('e')) {
+    function e($text) {
+        return htmlentities($text);
+    }
+}
+
 require_once dirname(__FILE__) . '/common.php';
 
 // error handling

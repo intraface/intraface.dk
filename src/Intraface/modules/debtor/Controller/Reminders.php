@@ -5,6 +5,7 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
     protected $contact;
     protected $reminder;
     protected $template;
+    protected $gateway;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -28,6 +29,15 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
         return $this->context->getKernel();
     }
 
+    function getGateway()
+    {
+        if (is_object($this->gateway)) {
+            return $this->gateway;
+        }
+
+        return ($this->gateway = new Intraface_modules_invoice_ReminderGateway($this->getKernel()));
+    }
+
     function getReminder()
     {
         $mainInvoice = $this->getKernel()->useModule("invoice");
@@ -43,15 +53,8 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
     {
         $kernel = $this->getKernel();
         $contact_id = $this->query('contact_id');
-        $reminder = $this->getReminder();
-
-        if (isset($_GET["delete"])) {
-        	$reminder = new Reminder($kernel, (int)$_GET["delete"]);
-        	$reminder->delete();
-        }
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/reminders');
-
         return $smarty->render($this);
     }
 
@@ -66,7 +69,6 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
     function renderHtmlCreate()
     {
         $title = "Ny rykker";
-        $reminder = $this->getReminder();
         $contact = new Contact($this->getKernel(), $this->query('contact_id'));
 
         $value["dk_this_date"] = date("d-m-Y");
@@ -78,7 +80,7 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
 
         $value["text"] = $this->getKernel()->getSetting()->get('intranet', 'reminder.first.text');
         $value["payment_method_key"] = 1;
-        $value["number"] = $reminder->getMaxNumber() + 1;
+        $value["number"] = $this->getGateway()->getMaxNumber() + 1;
 
         $data = array('value' => $value);
 
@@ -88,41 +90,40 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
 
     function getReminders()
     {
-        $reminder = $this->getReminder();
         $contact_id = $this->query('contact_id');
 
         if ($contact_id) {
         	$contact = new Contact($this->getKernel(), $contact_id);
-        	$reminder->getDBQuery()->setFilter("contact_id", $contact->get("id"));
+        	$this->getGateway()->getDBQuery()->setFilter("contact_id", $contact->get("id"));
         }
 
         if (isset($_GET["search"])) {
         	if (isset($_GET["text"]) && $_GET["text"] != "") {
-        		$reminder->getDBQuery()->setFilter("text", $_GET["text"]);
+        		$this->getGateway()->getDBQuery()->setFilter("text", $_GET["text"]);
         	}
 
         	if (isset($_GET["from_date"]) && $_GET["from_date"] != "") {
-        		$reminder->getDBQuery()->setFilter("from_date", $_GET["from_date"]);
+        		$this->getGateway()->getDBQuery()->setFilter("from_date", $_GET["from_date"]);
         	}
 
         	if (isset($_GET["to_date"]) && $_GET["to_date"] != "") {
-        		$reminder->getDBQuery()->setFilter("to_date", $_GET["to_date"]);
+        		$this->getGateway()->getDBQuery()->setFilter("to_date", $_GET["to_date"]);
         	}
 
         	if (isset($_GET["status"])) {
-        		$reminder->getDBQuery()->setFilter("status", $_GET["status"]);
+        		$this->getGateway()->getDBQuery()->setFilter("status", $_GET["status"]);
         	}
         } else {
-        	if ($reminder->getDBQuery()->checkFilter("contact_id")) {
-                $reminder->getDBQuery()->setFilter("status", "-1");
+        	if ($this->getGateway()->getDBQuery()->checkFilter("contact_id")) {
+                $this->getGateway()->getDBQuery()->setFilter("status", "-1");
             } else {
-        		$reminder->getDBQuery()->setFilter("status", "-2");
+        		$this->getGateway()->getDBQuery()->setFilter("status", "-2");
         	}
         }
 
-        $reminder->getDBQuery()->usePaging("paging");
-        $reminder->getDBQuery()->storeResult("use_stored", "reminder", "toplevel");
-        return $reminders = $reminder->getList();
+        $this->getGateway()->getDBQuery()->usePaging("paging");
+        $this->getGateway()->getDBQuery()->storeResult("use_stored", "reminder", "toplevel");
+        return $this->getGateway()->findAll();
     }
 
     function postForm()

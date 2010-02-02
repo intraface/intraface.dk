@@ -1,7 +1,7 @@
 <h1><?php e(t('Send email')); ?></h1>
 
 	<ul class="options">
-		<li><a href="<?php e(url('../', array('use_stored' => true))); ?>"><?php e(__('Close', 'common')); ?></a></li>
+		<li><a href="<?php e(url('../', array('use_stored' => true))); ?>"><?php e(t('Close')); ?></a></li>
 	</ul>
 
 <?php if ($context->getMessage()): ?>

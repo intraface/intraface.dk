@@ -5,10 +5,10 @@
 
     <ul class="options">
         <?php if ($context->getDebtor()->get("locked") == false): ?>
-            <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></li>
+            <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
         <?php endif; ?>
         <li><a class="pdf" href="<?php e($context->getDebtor()->getId() . '.pdf'); ?>" target="_blank"><?php e(t('Pdf')); ?></a></li>
-        <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close', 'common')); ?></a></li>
+        <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close')); ?></a></li>
     </ul>
 
     <p><?php e($context->getDebtor()->get('description')); ?></p>
@@ -42,10 +42,10 @@ if (isset($onlinepayment)) {
             if ($context->getKernel()->intranet->address->get('name') == '' || $context->getKernel()->intranet->address->get('email') == '') {
                 $valid_sender = false;
                 if ($context->getKernel()->user->hasModuleAccess('administration')) {
-                    echo '<div class="message-dependent"><p>'.__('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../administration/intranet', array('edit')) . '">'.t('do it now').'</a>.</p></div>';
+                    echo '<div class="message-dependent"><p>'.t('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../administration/intranet', array('edit')) . '">'.t('do it now').'</a>.</p></div>';
                 }
                 else {
-                    echo '<div class="message-dependent"><p>'.__('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
+                    echo '<div class="message-dependent"><p>'.t('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
 
                 }
             }
@@ -53,17 +53,17 @@ if (isset($onlinepayment)) {
         case 'user':
             if ($context->getKernel()->user->getAddress()->get('name') == '' || $context->getKernel()->user->getAddress()->get('email') == '') {
                 $valid_sender = false;
-                echo '<div class="message-dependent"><p>'.__('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../controlpanel/user', array('edit')).'">'.__('do it now').'</a>.</p></div>';
+                echo '<div class="message-dependent"><p>'.t('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../controlpanel/user', array('edit')).'">'.t('do it now').'</a>.</p></div>';
             }
             break;
         case 'defined':
             if ($context->getKernel()->getSetting()->get('intranet', 'debtor.sender.name') == '' || $context->getKernel()->getSetting()->get('intranet', 'debtor.sender.email') == '') {
                 $valid_sender = false;
                 if ($context->getKernel()->user->hasModuleAccess('administration')) {
-                    echo '<div class="message-dependent"><p>'.__('You need to fill in an e-mail address to send e-mail').'. <a href="'.$module_debtor->getPath().'settings.php">'.__('do it now').'</a>.</p></div>';
+                    echo '<div class="message-dependent"><p>'.t('You need to fill in an e-mail address to send e-mail').'. <a href="'.$module_debtor->getPath().'settings.php">'.t('do it now').'</a>.</p></div>';
                 }
                 else {
-                    echo '<div class="message-dependent"><p>'.__('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
+                    echo '<div class="message-dependent"><p>'.t('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
                 }
 
             }
@@ -77,7 +77,7 @@ if (isset($onlinepayment)) {
 
     if ($context->getDebtor()->contact->address->get('email') == '') {
         $valid_sender = false;
-        echo '<div class="message-dependent"><p>'.__('You need to register an e-mail to the contact, so you can send e-mails').'</p></div>';
+        echo '<div class="message-dependent"><p>'.t('You need to register an e-mail to the contact, so you can send e-mails').'</p></div>';
 
     }
     ?>
@@ -85,7 +85,7 @@ if (isset($onlinepayment)) {
     <?php
 
     if ($context->getDebtor()->contact->address->get('ean') == '') {
-        echo '<div class="message-dependent"><p>'.__('To be able to send electronic e-mails you need to fill out the EAN location number for the contact').'</p></div>';
+        echo '<div class="message-dependent"><p>'.t('To be able to send electronic e-mails you need to fill out the EAN location number for the contact').'</p></div>';
     }
 
     $scan_in_contact_id = $context->getKernel()->getSetting()->get('intranet', 'debtor.scan_in_contact');
@@ -95,17 +95,17 @@ if (isset($onlinepayment)) {
     if ($scan_in_contact->get('id') == 0) {
         $valid_scan_in_contact = false;
         echo '<div class="message-dependent"><p>';
-        e(__('A contact for the scan in bureau is needed to send electronic invoices').'. ');
+        e(t('A contact for the scan in bureau is needed to send electronic invoices').'. ');
         if ($context->getKernel()->user->hasModuleAccess('administration')) {
-            echo '<a href="'.$debtor_module->getPath().'settings">'.__('Add it now').'</a>.';
+            echo '<a href="'.$debtor_module->getPath().'settings">'.t('Add it now').'</a>.';
         }
         echo '</p></div>';
 
     } elseif (!$scan_in_contact->address->get('email')) {
         $valid_scan_in_contact = false;
         echo '<div class="message-dependent"><p>';
-        e(__('You need to provide a valid e-mail address to the contact for the scan in bureau').'.');
-        echo ' <a href="'.$contact_module->getPath().$scan_in_contact->get('id').'">'.__('Add it now').'</a>.';
+        e(t('You need to provide a valid e-mail address to the contact for the scan in bureau').'.');
+        echo ' <a href="'.$contact_module->getPath().$scan_in_contact->get('id').'">'.t('Add it now').'</a>.';
         echo '</p></div>';
     }
     ?>
@@ -113,7 +113,7 @@ if (isset($onlinepayment)) {
 
 
 <?php if (isset($context->email_send_with_success) && $context->email_send_with_success): ?>
-    <div class="message-dependent"><p><?php e(__('Your email was sent').'.'); ?></p></div>
+    <div class="message-dependent"><p><?php e(t('Your email was sent').'.'); ?></p></div>
 <?php endif; ?>
 
 <form method="post" action="<?php e(url()); ?>">
@@ -132,11 +132,11 @@ if (isset($onlinepayment)) {
     <?php endif; ?>
 
     <?php if (($context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") == "created") || ($context->getDebtor()->get("type") != "invoice" && $context->getDebtor()->get("locked") == false)): ?>
-        <input type="submit" value="<?php e(t('Delete', 'common')); ?>" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="delete" />
+        <input type="submit" value="<?php e(t('Delete')); ?>" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="delete" />
     <?php endif; ?>
 
     <?php if (($context->getDebtor()->get("type") == "quotation" || $context->getDebtor()->get("type") == "order") && ($context->getDebtor()->get('status') == "created" || $context->getDebtor()->get('status') == "sent")): ?>
-        <input type="submit" value="<?php e(t('Cancel', 'common')); ?>" name="cancel" class="confirm" title="<?php e(t('Are you sure?')); ?>" />
+        <input type="submit" value="<?php e(t('Cancel')); ?>" name="cancel" class="confirm" title="<?php e(t('Are you sure?')); ?>" />
     <?php endif; ?>
 
     <?php if ($context->getDebtor()->get("type") == "quotation" && $context->getDebtor()->get('status') == "sent" && $context->getKernel()->user->hasModuleAccess('order')): ?>
@@ -225,7 +225,7 @@ if (isset($onlinepayment)) {
                             }
 
                             if ($context->getKernel()->user->hasModuleAccess('administration')) { ?>
-                                <a href="<?php e(url('../../../settings')); ?>" class="edit"><?php e(__('Change', 'common')); ?></a>
+                                <a href="<?php e(url('../../../settings')); ?>" class="edit"><?php e(t('Change')); ?></a>
                             <?php
                             }
                             ?>
@@ -288,7 +288,7 @@ if (isset($onlinepayment)) {
                         } else {
                             e(t('Not stated'));
                             if ($context->getDebtor()->get('status') == 'sent' || $context->getDebtor()->get('status') == 'executed') { ?>
-                                <a href="<?php e(url('state')); ?>"><?php e(__('State')); ?></a>
+                                <a href="<?php e(url('state')); ?>"><?php e(t('State')); ?></a>
                             <?php
                             }
 
@@ -326,7 +326,7 @@ if (isset($onlinepayment)) {
         <tbody>
             <tr>
                 <th><?php e(t('Number')); ?></th>
-                <td><?php e($context->getDebtor()->contact->get("number")); ?> <a href="<?php e(url(null, array('edit_contact' => $context->getDebtor()->contact->get('id')))); ?>" class="edit"><?php e(t('Edit', 'common')); ?></a></td>
+                <td><?php e($context->getDebtor()->contact->get("number")); ?> <a href="<?php e(url(null, array('edit_contact' => $context->getDebtor()->contact->get('id')))); ?>" class="edit"><?php e(t('Edit')); ?></a></td>
             </tr>
             <tr>
                 <th><?php e(t('Contact')); ?></th>
@@ -458,7 +458,7 @@ if (isset($onlinepayment)) {
                             <?php if ($context->getKernel()->user->hasModuleAccess('accounting')): ?>
                                 <td>
                                     <?php if ($payment['is_stated']): ?>
-                                        <a href="<?php e($module_accounting->getPath().'voucher/'.$payment['voucher_id']); ?>"><?php e(__('voucher')); ?></a>
+                                        <a href="<?php e($module_accounting->getPath().'voucher/'.$payment['voucher_id']); ?>"><?php e(t('voucher')); ?></a>
                                     <?php elseif ($payment['type'] == 'credit_note'): ?>
                                         <a href="<?php e(url('../' . $payment['id'] . '/state')); ?>"><?php e(t('state credit note')); ?></a>
                                     <?php elseif ($payment['type'] == 'depreciation'): ?>
@@ -689,10 +689,10 @@ if (isset($onlinepayment)) {
                         <?php
                         if ($context->getDebtor()->get("locked") == false) {
                             ?>
-                            <a class="moveup" href="<?php e(url(null, array('action' => 'moveup', 'item_id' => $items[$i]["id"]))); ?>"><?php e(t('Up', 'common')); ?></a>
-                            <a class="movedown" href="<?php e(url(null, array('action' => 'movedown', 'item_id' => $items[$i]["id"]))); ?>"><?php e(t('Down', 'common')); ?></a>
-                            <a class="edit" href="<?php e(url('item/' . $items[$i]["id"], array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a>
-                            <a class="delete" title="Dette vil slette varen!" href="<?php e(url(null, array('action' => 'delete_item', 'item_id' => $items[$i]["id"]))); ?>"><?php e(t('Delete', 'common')); ?></a>
+                            <a class="moveup" href="<?php e(url(null, array('action' => 'moveup', 'item_id' => $items[$i]["id"]))); ?>"><?php e(t('Up')); ?></a>
+                            <a class="movedown" href="<?php e(url(null, array('action' => 'movedown', 'item_id' => $items[$i]["id"]))); ?>"><?php e(t('Down')); ?></a>
+                            <a class="edit" href="<?php e(url('item/' . $items[$i]["id"], array('edit'))); ?>"><?php e(t('Edit')); ?></a>
+                            <a class="delete" title="Dette vil slette varen!" href="<?php e(url(null, array('action' => 'delete_item', 'item_id' => $items[$i]["id"]))); ?>"><?php e(t('Delete')); ?></a>
                             <?php
                         }
                         ?>&nbsp;
@@ -727,7 +727,7 @@ if (isset($onlinepayment)) {
             <tr>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td colspan="3">I alt:</td>
+                <td colspan="3"><?php e(t('Total')); ?></td>
                 <td class="amount"><?php e(number_format($total, 2, ",", ".")); ?></td>
                 <?php if ($context->getDebtor()->getCurrency()): ?>
                     <td class="amount"><?php e(number_format($total_currency, 2, ",", ".")); ?></td>
@@ -779,14 +779,14 @@ if (count($reminders) > 0):
         <tr id="i<?php e($reminder["id"]); ?>"<?php if (isset($_GET['id']) && $_GET['id'] == $reminder['id']) print(" class=\"fade\""); ?>>
             <td class="number"><?php e($reminder["number"]); ?></td>
             <td><a href="reminders.php?contact_id=<?php e($reminder["contact_id"]); ?>"><?php e($reminder["name"]); ?></a></td>
-            <td><a href="reminder.php?id=<?php e($reminder["id"]); ?>"><?php (trim($reminder["description"] != "")) ? e($reminder["description"]) : e('['.t("No description", 'common').']'); ?></a></td>
+            <td><a href="reminder.php?id=<?php e($reminder["id"]); ?>"><?php (trim($reminder["description"] != "")) ? e($reminder["description"]) : e('['.t("No description").']'); ?></a></td>
             <td class="date">
                 <?php
                 if ($reminder["status"] != "created") {
                     e($reminder["dk_date_sent"]);
                 }
                 else {
-                    e(t('No', 'common'));
+                    e(t('No'));
                 }
                 ?>
       </td>
@@ -807,9 +807,9 @@ if (count($reminders) > 0):
                 <?php
                 if ($reminder["locked"] == 0) {
                     ?>
-                    <a class="edit" href="reminder_edit.php?id=<?php e($reminder["id"]); ?>"><?php e(t('Edit', 'common')); ?></a>
+                    <a class="edit" href="reminder_edit.php?id=<?php e($reminder["id"]); ?>"><?php e(t('Edit')); ?></a>
                     <?php if ($reminder["status"] == "created"): ?>
-                    <a class="delete" href="reminders.php?delete=<?php e($reminder["id"]); ?>"><?php e(t('Delete', 'common')); ?></a>
+                    <a class="delete" href="reminders.php?delete=<?php e($reminder["id"]); ?>"><?php e(t('Delete')); ?></a>
                     <?php endif; ?>
                     <?php
                 }

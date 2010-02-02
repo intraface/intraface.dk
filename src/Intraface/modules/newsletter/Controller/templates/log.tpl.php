@@ -2,14 +2,14 @@
 $logs = $context->getLog();
 ?>
 
-<h1><?php e(__('Log')); ?></h1>
+<h1><?php e(t('Log')); ?></h1>
 
 <table class="stripe">
-	<caption><?php e(__('Unsubscribed')); ?></caption>
+	<caption><?php e(t('Unsubscribed')); ?></caption>
 	<thead>
 	<tr>
-		<th><?php e(__('Date')); ?></th>
-		<th><?php e(__('Contact #id')); ?></th>
+		<th><?php e(t('Date')); ?></th>
+		<th><?php e(t('Contact #id')); ?></th>
 	</tr>
 	</thead>
 	<tbody>

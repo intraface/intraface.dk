@@ -36,7 +36,7 @@ class Intraface_modules_cms_Controller_PageEdit extends k_Component
             $value['site_id'] = $this->context->getSiteId();
             $template = new CMS_Template($cmssite);
         } else {
-            trigger_error(__('not allowed', 'common'), E_USER_ERROR);
+            trigger_error(('Not allowed'), E_USER_ERROR);
         }
 
 

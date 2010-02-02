@@ -1,4 +1,4 @@
-<h1><?php e(__('Modules')); ?></h1>
+<h1><?php e(t('Modules')); ?></h1>
 <ul>
 <?php foreach ($context->getModules() as $module): ?>
 <?php if (!$context->getKernel()->user->hasModuleAccess(intval($module["id"]))) continue; ?>

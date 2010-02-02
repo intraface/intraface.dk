@@ -15,7 +15,6 @@ class Intraface_Controller_Restricted extends k_Component
         $this->user_gateway = $gateway;
         $this->kernel_gateway = $kernel_gateway;
         $this->template = $template;
-        $this->translation = $translation;
     }
 
     function document()
@@ -94,84 +93,20 @@ class Intraface_Controller_Restricted extends k_Component
         return $smarty->render($this, array('_attention_needed' => $_attention_needed, '_advice' => $_advice));
     }
 
-    /*
-    function getTranslation()
-    {
-        $language = $this->getKernel()->getSetting->get('user', 'language');
-
-        // set the parameters to connect to your db
-        $dbinfo = array(
-            'hostspec' => DB_HOST,
-            'database' => DB_NAME,
-            'phptype'  => 'mysql',
-            'username' => DB_USER,
-            'password' => DB_PASS
-        );
-
-        if (!defined('LANGUAGE_TABLE_PREFIX')) {
-            define('LANGUAGE_TABLE_PREFIX', 'core_translation_');
-        }
-
-        $params = array(
-            'langs_avail_table' => LANGUAGE_TABLE_PREFIX.'langs',
-            'strings_default_table' => LANGUAGE_TABLE_PREFIX.'i18n'
-        );
-
-        $translation = Translation2::factory('MDB2', $dbinfo, $params);
-        //always check for errors. In this examples, error checking is omitted
-        //to make the example concise.
-        if (PEAR::isError($translation)) {
-            trigger_error('Could not start Translation ' . $translation->getMessage(), E_USER_ERROR);
-        }
-
-        // set primary language
-        $set_language = $translation->setLang($language);
-
-        if (PEAR::isError($set_language)) {
-            trigger_error($set_language->getMessage(), E_USER_ERROR);
-        }
-
-        // set the group of strings you want to fetch from
-        // $translation->setPageID($page_id);
-
-        // add a Lang decorator to provide a fallback language
-        $translation = $translation->getDecorator('Lang');
-        $translation->setOption('fallbackLang', 'uk');
-        $translation = $translation->getDecorator('LogMissingTranslation');
-        require_once("ErrorHandler/Observer/File.php");
-        $translation->setOption('logger', array(new ErrorHandler_Observer_File(ERROR_LOG), 'update'));
-        $translation = $translation->getDecorator('DefaultText');
-
-        // %stringID% will be replaced with the stringID
-        // %pageID_url% will be replaced with the pageID
-        // %stringID_url% will replaced with a urlencoded stringID
-        // %url% will be replaced with the targeted url
-        //$this->translation->outputString = '%stringID% (%pageID_url%)'; //default: '%stringID%'
-        $translation->outputString = '%stringID%';
-        $translation->url = '';           //same as default
-        $translation->emptyPrefix  = '';  //default: empty string
-        $translation->emptyPostfix = '';  //default: empty string
-
-        $this->getKernel()->translation = $translation;
-        return $translation;
-    }
-    */
-
     /**
      * Hvad med at flytte det hele over i et userobject, der implementerer getIntranet()
      * I $intranet har vi s� de transiente gateways.
      *
-
-class component_ShowProduct {
-  protected $user_gateway;
-  function __construct(UserGateway $user_gateway) {
-    $this->user_gateway = $user_gateway;
-  }
-  function GET() {
-    $user = $user_gateway->getByUsername($this->identity()->getUsername());
-    return $this->render('product.tpl.php', array('product' => $user->getIntranet()->getProduct()));
-  }
-}
+     * class component_ShowProduct {
+  	 *   protected $user_gateway;
+     *   function __construct(UserGateway $user_gateway) {
+     *     $this->user_gateway = $user_gateway;
+     *   }
+     *   function GET() {
+     *     $user = $user_gateway->getByUsername($this->identity()->getUsername());
+     *     return $this->render('product.tpl.php', array('product' => $user->getIntranet()->getProduct()));
+     *   }
+     * }
      *
      * http://pastie.org/683209
      *
@@ -187,9 +122,7 @@ class component_ShowProduct {
         } catch (Exception $e) {
             return new k_SeeOther($this->url('/logout'));
         }
-
     }
-
 
     function getLastView()
     {
@@ -216,14 +149,14 @@ class component_ShowProduct {
     {
         $this->menu = array();
         $i = 0;
-        $this->menu[$i]['name'] = $this->getTranslation()->get('dashboard');
+        $this->menu[$i]['name'] = $this->t('dashboard');
         $this->menu[$i]['url'] = $this->url('/restricted/');
         $i++;
         $this->db = new DB_Sql;
         $this->db->query("SELECT name, menu_label, name FROM module WHERE active = 1 AND show_menu = 1 ORDER BY menu_index");
         while ($this->db->nextRecord()) {
             if ($this->getKernel()->user->hasModuleAccess($this->db->f('name'))) {
-                $this->menu[$i]['name'] = $this->t($this->db->f('name'), $this->db->f('name'));
+                $this->menu[$i]['name'] = $this->t($this->db->f('name'));
                 $this->menu[$i]['url'] = $this->url('/restricted/module/' . $this->db->f("name"));
                 $i++;
             }
@@ -264,9 +197,9 @@ class component_ShowProduct {
                     }
 
                     if ($access) {
-                       $this->submenu[$j]['name'] = $this->t($all_submenu[$i]['label'], $this->primary_module->getName());
+                       $this->submenu[$j]['name'] = $this->t($all_submenu[$i]['label']);
                        $this->submenu[$j]['url'] = $this->primary_module->getPath(). $all_submenu[$i]['url'];
-                            $j++;
+                       $j++;
                     }
                 }
             }
@@ -294,11 +227,12 @@ class component_ShowProduct {
     {
         return $this->wrap(parent::execute());
     }
-
+    /*
     function getTranslation()
     {
         return $this->getKernel()->getTranslation();
     }
+    */
 
     function getThemeKey()
     {

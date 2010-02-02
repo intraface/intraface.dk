@@ -31,7 +31,7 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
     {
         return $this->getDebtor()->getList();
     }
-
+    /*
     function renderXls()
     {
         if (empty($_GET['id'])) $_GET['id'] = '';
@@ -224,6 +224,7 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
 
         exit;
     }
+    */
 
     function getKernel()
     {

@@ -63,8 +63,8 @@ $level = 0;
     </fieldset>
 
     <div>
-        <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" class="save" />
-        <a href="<?php e($regret_link); ?>"><?php e(t('Cancel', 'common')); ?></a>
+        <input type="submit" name="submit" value="<?php e(t('save')); ?>" class="save" />
+        <a href="<?php e($regret_link); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 
 </form>

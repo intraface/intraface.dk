@@ -2,7 +2,7 @@
 
 <ul class="options">
     <li><a class="new" href="<?php e(url('select_attribute_groups')); ?>"><?php e(t('Choose attribute groups')); ?></a></li>
-    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 
@@ -77,6 +77,7 @@
             <?php endforeach; ?>
         </tbody>
     </table>
-    <input type="submit" name="save" value="<?php e(t('Save', 'common')); ?>" /> <input type="submit" name="save_and_close" value="<?php e(t('Save and close', 'common')); ?>" />
+    <input type="submit" name="save" value="<?php e(t('Save')); ?>" />
+    <input type="submit" name="save_and_close" value="<?php e(t('Save and close')); ?>" />
 <?php endif; ?>
 </form>

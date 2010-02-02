@@ -1,20 +1,16 @@
 <?php
 class Intraface_Filehandler_Controller_Index extends k_Component
 {
-    protected $kernel_gateway;
-    protected $user_gateway;
     protected $template;
 
-    function __construct(k_TemplateFactory $template, Intraface_KernelGateway $kernel_gateway, Intraface_UserGateway $user_gateway)
+    function __construct(k_TemplateFactory $template)
     {
-        $this->kernel_gateway = $kernel_gateway;
-        $this->user_gateway = $user_gateway;
         $this->template = $template;
     }
 
     function getKernel()
     {
-        return $this->kernel_gateway->findByUserobject($this->user_gateway->findByUsername($this->identity()->user()));
+        return $this->context->getKernel();
     }
 
     public function renderHtml()

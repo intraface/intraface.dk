@@ -1,13 +1,13 @@
-<h1><?php e(__($page_types_plural[$type])); ?> <?php e(__('on', 'common')); ?> "<?php e($cmssite->get('name')); ?>"</h1>
+<h1><?php e(t($page_types_plural[$type])); ?> <?php e(t('on')); ?> "<?php e($cmssite->get('name')); ?>"</h1>
 
 <?php if (count($cmspage->getTemplate()->getList()) == 0): ?>
 
     <p class="message-dependent">
-        <?php e(__('you have to create a template')); ?>
+        <?php e(t('you have to create a template')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="<?php e(url('../template/create')); ?>"><?php e(__('create template')); ?></a>.
+            <a href="<?php e(url('../template/create')); ?>"><?php e(t('create template')); ?></a>.
         <?php else: ?>
-            <strong><?php e(__('you cannot create templates')); ?></strong>
+            <strong><?php e(t('you cannot create templates')); ?></strong>
         <?php endif; ?>
     </p>
 
@@ -26,8 +26,8 @@
 </ul>
 
 <ul class="options">
-    <li><a class="new" href="<?php e(url('create', array('type' => $type)));?>"><?php e(__('create '.$type)); ?></a></li>
-    <li><a  href="<?php e(url('../')); ?>"><?php e(__('go to site overview')); ?></a></li>
+    <li><a class="new" href="<?php e(url('create', array('type' => $type)));?>"><?php e(t('create '.$type)); ?></a></li>
+    <li><a  href="<?php e(url('../')); ?>"><?php e(t('go to site overview')); ?></a></li>
 </ul>
 
 
@@ -43,16 +43,16 @@
     $pages = $cmspage->getList('page', 'alllevels');
 
     if (!is_array($pages) OR count($pages) == 0): ?>
-        <p><?php e(__('no pages found')); ?></p>
+        <p><?php e(t('no pages found')); ?></p>
     <?php else: ?>
         <table>
-            <caption><?php e(__('pages')); ?></caption>
+            <caption><?php e(t('pages')); ?></caption>
             <thead>
                 <tr>
-                    <th><?php e(__('navigation name')); ?></th>
-                    <th><?php e(__('unique page address')); ?></th>
-                    <th><?php e(__('published', 'common')); ?></th>
-                    <th><?php e(__('show', 'common')); ?></th>
+                    <th><?php e(t('navigation name')); ?></th>
+                    <th><?php e(t('unique page address')); ?></th>
+                    <th><?php e(t('published')); ?></th>
+                    <th><?php e(t('show')); ?></th>
                     <th colspan="4"></th>
                 </tr>
             </thead>
@@ -65,15 +65,15 @@
                         <input class="input-publish" id="<?php e($p['id']); ?>" type="checkbox" name="status[<?php e($p['id']); ?>]" value="published" <?php if ($p['status'] == 'published') echo ' checked="checked"'; ?> />
                     </td>
                     <td>
-                        <?php if ($p['status'] == 'published'): // hack siden kan kun vises, hvis den er udgivet. Der bør laves et eller andet, så det er muligt anyways - fx en hemmelig kode på siden ?>
-                            <a href="<?php e($p['url']); ?>" target="_blank"><?php e(__('show page')); ?></a>
+                        <?php if ($p['status'] == 'published'): // hack siden kan kun vises, hvis den er udgivet. Der bï¿½r laves et eller andet, sï¿½ det er muligt anyways - fx en hemmelig kode pï¿½ siden ?>
+                            <a href="<?php e($p['url']); ?>" target="_blank"><?php e(t('show page')); ?></a>
                         <?php endif; ?>
                     </td>
                     <td class="options">
-                        <a class="moveup" href="<?php e(url(null, array('moveup' => $p['id'], 'type' => $type))); ?>"><?php e(__('up', 'common')); ?></a>
-                        <a class="moveup" href="<?php e(url(null, array('movedown' => $p['id'], 'type' => $type))); ?>"><?php e(__('down', 'common')); ?></a>
-                        <a class="edit" href="<?php e(url($p['id']. '/edit')); ?>"><?php e(__('edit settings', 'common')); ?></a>
-                        <a class="delete" href="<?php e(url(null, array('delete' => $p['id'], 'type' => $type))); ?>"><?php e(__('delete', 'common')); ?></a>
+                        <a class="moveup" href="<?php e(url(null, array('moveup' => $p['id'], 'type' => $type))); ?>"><?php e(t('up')); ?></a>
+                        <a class="moveup" href="<?php e(url(null, array('movedown' => $p['id'], 'type' => $type))); ?>"><?php e(t('down')); ?></a>
+                        <a class="edit" href="<?php e(url($p['id']. '/edit')); ?>"><?php e(t('edit settings')); ?></a>
+                        <a class="delete" href="<?php e(url(null, array('delete' => $p['id'], 'type' => $type))); ?>"><?php e(t('delete')); ?></a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -85,16 +85,16 @@
     $cmsarticles->getDBQuery()->setFilter('type', 'article');
     $articles = $cmsarticles->getList();
     if (!is_array($articles) OR count($articles) == 0): ?>
-        <p><?php e(__('no articles found')); ?></p>
+        <p><?php e(t('no articles found')); ?></p>
     <?php else: ?>
         <table>
-            <caption><?php e(__('articles')); ?></caption>
+            <caption><?php e(t('articles')); ?></caption>
             <thead>
                 <tr>
-                    <th><?php e(__('title')); ?></th>
-                    <th><?php e(__('unique page address')); ?></th>
-                    <th><?php e(__('published', 'common')); ?></th>
-                    <th><?php e(__('show', 'common')); ?></th>
+                    <th><?php e(t('title')); ?></th>
+                    <th><?php e(t('unique page address')); ?></th>
+                    <th><?php e(t('published')); ?></th>
+                    <th><?php e(t('show')); ?></th>
                     <th colspan="2"></th>
                 </tr>
             </thead>
@@ -107,12 +107,12 @@
                         <input class="input-publish" id="<?php e($p['id']); ?>" type="checkbox" name="status[<?php e($p['id']); ?>]" value="published" <?php if ($p['status'] == 'published') echo ' checked="checked"'; ?> />
                     </td>
                     <td>
-                    <?php if ($p['status'] == 'published'): // hack siden kan kun vises, hvis den er udgivet. Der bør laves et eller andet, så det er muligt anyways - fx en hemmelig kode på siden ?>
-                        <a href="<?php e($p['url']); ?>" target="_blank"><?php e(__('show page', 'common')); ?></a>
+                    <?php if ($p['status'] == 'published'): // hack siden kan kun vises, hvis den er udgivet. Der bï¿½r laves et eller andet, sï¿½ det er muligt anyways - fx en hemmelig kode pï¿½ siden ?>
+                        <a href="<?php e($p['url']); ?>" target="_blank"><?php e(t('show page')); ?></a>
                     <?php endif; ?>
                     </td>
-                    <td class="options"><a class="edit" href="<?php e(url($p['id'].'/edit')); ?>"><?php e(__('edit settings', 'common')); ?></a>
-                    <a class="delete" href="<?php e(url(null, array('delete' => $p['id'], 'type' => $type))); ?>"><?php e(__('delete', 'common')); ?></a></td>
+                    <td class="options"><a class="edit" href="<?php e(url($p['id'].'/edit')); ?>"><?php e(t('edit settings')); ?></a>
+                    <a class="delete" href="<?php e(url(null, array('delete' => $p['id'], 'type' => $type))); ?>"><?php e(t('delete')); ?></a></td>
                 </tr>
             <?php endforeach; ?>
         </table>
@@ -123,17 +123,17 @@
     $cmsnews->getDBQuery()->setFilter('type', 'news');
     $news = $cmsnews->getList();
     if (!is_array($news) OR count($news) == 0): ?>
-        <p><?php e(__('no news found')); ?></p>
+        <p><?php e(t('no news found')); ?></p>
     <?php else: ?>
         <table>
-            <caption><?php e(__('news')); ?></caption>
+            <caption><?php e(t('news')); ?></caption>
             <thead>
                 <tr>
-                    <th><?php e(__('date', 'common')); ?></th>
-                    <th><?php e(__('title')); ?></th>
-                    <th><?php e(__('unique page address')); ?></th>
-                    <th><?php e(__('published', 'common')); ?></th>
-                    <th><?php e(__('show', 'common')); ?></th>
+                    <th><?php e(t('date')); ?></th>
+                    <th><?php e(t('title')); ?></th>
+                    <th><?php e(t('unique page address')); ?></th>
+                    <th><?php e(t('published')); ?></th>
+                    <th><?php e(t('show')); ?></th>
                     <th colspan="2"></th>
                 </tr>
             </thead>
@@ -147,13 +147,13 @@
                         <input class="input-publish" id="<?php e($p['id']); ?>" type="checkbox" name="status[<?php e($p['id']); ?>]" value="published" <?php if ($p['status'] == 'published') echo ' checked="checked"'; ?> />
                     </td>
                     <td>
-                        <?php if ($p['status'] == 'published'): // hack siden kan kun vises, hvis den er udgivet. Der bør laves et eller andet, så det er muligt anyways - fx en hemmelig kode på siden ?>
-                            <a href="<?php e($p['url']); ?>" target="_blank"><?php e(__('show page')); ?></a>
+                        <?php if ($p['status'] == 'published'): // hack siden kan kun vises, hvis den er udgivet. Der bï¿½r laves et eller andet, sï¿½ det er muligt anyways - fx en hemmelig kode pï¿½ siden ?>
+                            <a href="<?php e($p['url']); ?>" target="_blank"><?php e(t('show page')); ?></a>
                         <?php endif; ?>
                     </td>
 
-                    <td class="options"><a class="edit" href="<?php e(url($p['id'] . '/edit')); ?>"><?php e(__('edit settings', 'common')); ?></a>
-                        <a class="delete" href="<?php e(url(null, array('delete' => $p['id']))); ?>"><?php e(__('delete', 'common')); ?></a>
+                    <td class="options"><a class="edit" href="<?php e(url($p['id'] . '/edit')); ?>"><?php e(t('edit settings')); ?></a>
+                        <a class="delete" href="<?php e(url(null, array('delete' => $p['id']))); ?>"><?php e(t('delete')); ?></a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -161,7 +161,7 @@
     <?php endif; ?>
 <?php endif; ?>
 
-<p><input type="submit" value="<?php e(__('save', 'common')); ?>" id="submit-publish" /></p>
+<p><input type="submit" value="<?php e(t('save')); ?>" id="submit-publish" /></p>
 <?php endif; ?>
 
 </form>

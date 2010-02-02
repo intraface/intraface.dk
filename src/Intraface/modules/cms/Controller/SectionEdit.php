@@ -28,6 +28,8 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
             return $append_file = new AppendFile($this->getKernel(), 'cms_element_gallery', $this->getElement()->get('id'));
         } elseif ($this->getElement()->get('type') == 'filelist') {
             return $append_file = new AppendFile($this->getKernel(), 'cms_element_filelist', $this->getElement()->get('id'));
+        } elseif ($this->getElement()->get('type') == 'picture') {
+             return new AppendFile($this->getKernel(), 'cms_element_picture', $this->getElement()->get('id'));
         }
         throw new Exception('No valid fileappender present');
     }
@@ -192,15 +194,16 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
                 $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
                 $module_filemanager = $this->getKernel()->useModule('filemanager');
                 if ($element->get('type') == 'picture') {
-                    $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images' => 1)), NET_SCHEME . NET_HOST . $this->url());
+                    $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images' => 1)), NET_SCHEME . NET_HOST . $this->url('element/' . $element->get('id')));
                     $redirect->setIdentifier('picture');
                     $redirect->askParameter('file_handler_id');
+                    return new k_SeeOther($this->url('../element/' . $element->get('id') . '/filehandler/selectfile', array('images' => 1)));
                 } elseif ($element->get('type') == 'gallery') {
-                    $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images' => 1, 'multiple_choice' => true)), NET_SCHEME . NET_HOST . $this->url());
+                    $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images' => 1, 'multiple_choice' => true)), NET_SCHEME . NET_HOST . $this->url('element/' . $element->get('id')));
                     $redirect->setIdentifier('gallery');
                     $redirect->askParameter('file_handler_id', 'multiple');
                 } elseif ($element->get('type') == 'filelist') {
-                    $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('multiple_choice' => true)), NET_SCHEME . NET_HOST . $this->url());
+                    $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('multiple_choice' => true)), NET_SCHEME . NET_HOST . $this->url('element/' . $element->get('id')));
                     $redirect->setIdentifier('filelist');
                     $redirect->askParameter('file_handler_id', 'multiple');
                 } else {

@@ -1,7 +1,7 @@
 <h1><?php e(t('user settings')); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></li>
+    <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
     <li><a href="<?php e(url('changepassword')); ?>"><?php e(t('Change password')); ?></a></li>
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>

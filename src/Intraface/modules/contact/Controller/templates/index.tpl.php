@@ -1,14 +1,14 @@
-<h1><?php e(__('Contacts')); ?></h1>
+<h1><?php e(t('Contacts')); ?></h1>
 
 <ul class="options">
-	<li><a class="new" href="<?php e(url(null, array('create'))); ?>"><?php e(__('Create contact')); ?></a></li>
+	<li><a class="new" href="<?php e(url(null, array('create'))); ?>"><?php e(t('Create contact')); ?></a></li>
 	<?php if ($context->getKernel()->getSetting()->get('user', 'contact.search') == 'hide' AND count($context->getContacts()) > 0): ?>
-	<li><a href="<?php e(url(null, array('search' => 'view'))); ?>"><?php e(__('show search')); ?></a></li>
+	<li><a href="<?php e(url(null, array('search' => 'view'))); ?>"><?php e(t('show search')); ?></a></li>
 	<?php endif; ?>
-	<li><a class="pdf" href="<?php e(url(null . '.pdf', array('use_stored' => 'true'))); ?>" target="_blank"><?php e(__('Pdf-labels')); ?></a></li>
-	<li><a class="excel" href="<?php e(url(null . '.xls', array('use_stored' => 'true'))); ?>"><?php e(__('Excel', 'common')); ?></a></li>
-	<li><a href="<?php e(url('sendemail', array('use_stored' => true))); ?>"><?php e(__('Email to contacts in search')); ?></a></li>
-    <li><a href="<?php e(url('import/file')); ?>"><?php e(__('Import contacts')); ?></a></li>
+	<li><a class="pdf" href="<?php e(url(null . '.pdf', array('use_stored' => 'true'))); ?>" target="_blank"><?php e(t('Pdf-labels')); ?></a></li>
+	<li><a class="excel" href="<?php e(url(null . '.xls', array('use_stored' => 'true'))); ?>"><?php e(t('Excel')); ?></a></li>
+	<li><a href="<?php e(url('sendemail', array('use_stored' => true))); ?>"><?php e(t('Email to contacts in search')); ?></a></li>
+    <li><a href="<?php e(url('import/file')); ?>"><?php e(t('Import contacts')); ?></a></li>
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 
 </ul>
@@ -19,7 +19,7 @@
 
 <?php if (!$context->getContact()->isFilledIn()): ?>
 
-	<p><?php e(__('No contacts has been created')); ?>. <a href="<?php e(url(null, array('create'))); ?>"><?php e(__('Create contact')); ?></a>.</p>
+	<p><?php e(t('No contacts has been created')); ?>. <a href="<?php e(url(null, array('create'))); ?>"><?php e(t('Create contact')); ?></a>.</p>
 
 <?php else: ?>
 
@@ -28,14 +28,14 @@
 
 <form action="<?php e(url()); ?>" method="get" class="search-filter">
 	<fieldset>
-		<legend><?php e(__('search', 'common')); ?></legend>
+		<legend><?php e(t('search')); ?></legend>
 
-		<label for="query"><?php e(__('search for', 'common')); ?>
+		<label for="query"><?php e(t('search for')); ?>
 			<input name="query" id="query" type="text" value="<?php e($context->getContact()->getDBQuery()->getFilter('search')); ?>" />
 		</label>
 
 		<?php if (count($context->getUsedKeywords())): ?>
-		<label for="keyword_id"><?php e(__('show with keywords', 'common')); ?>
+		<label for="keyword_id"><?php e(t('show with keywords')); ?>
 			<select name="keyword_id" id="keyword_id">
 				<option value=""><?php e(t('All')); ?></option>
 				<?php foreach ($context->getUsedKeywords() AS $k) { ?>
@@ -44,7 +44,7 @@
 			</select>
 		</label>
 		<?php endif; ?>
-		<span><input type="submit" value="<?php e(t('go', 'common')); ?>" /></span>
+		<span><input type="submit" value="<?php e(t('go')); ?>" /></span>
 		<!-- <a href="<?php e(url(null, array('search' => 'hide'))); ?>"><?php e(t('Hide search')); ?></a>  -->
 	</fieldset>
 </form>
@@ -59,15 +59,15 @@
 		<p class="message">Du har slettet kontakter. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="Fortryd" /></p>
 	<?php endif; ?>
 
-	<table summary="<?php e(__('contacts')); ?>" class="stripe">
-		<caption><?php e(__('contacts')); ?></caption>
+	<table summary="<?php e(t('contacts')); ?>" class="stripe">
+		<caption><?php e(t('contacts')); ?></caption>
 		<thead>
 			<tr>
 				<th>&nbsp;</th>
-				<th><?php e(__('number')); ?></th>
-				<th><?php e(__('name', 'address')); ?></th>
-				<th><?php e(__('phone', 'address')); ?></th>
-				<th><?php e(__('e-mail', 'address')); ?></th>
+				<th><?php e(t('number')); ?></th>
+				<th><?php e(t('name', 'address')); ?></th>
+				<th><?php e(t('phone', 'address')); ?></th>
+				<th><?php e(t('e-mail', 'address')); ?></th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>
@@ -88,9 +88,9 @@
 				<td class="tel"><?php e($c['phone']); ?></td>
 				<td class="email"><?php e($c['email']); ?></td>
 				<td class="options">
-					<a class="edit" href="<?php e(url($c['id'], array('edit'))); ?>"><?php e(__('edit', 'common')); ?></a>
+					<a class="edit" href="<?php e(url($c['id'], array('edit'))); ?>"><?php e(t('edit')); ?></a>
 					<?php /*
-					<a class="delete" href="index.php?delete=<?php e($c['id']); ?>&amp;use_stored=true"><?php e(__('delete', 'common')); ?></a> */ ?>
+					<a class="delete" href="index.php?delete=<?php e($c['id']); ?>&amp;use_stored=true"><?php e(t('delete')); ?></a> */ ?>
 				</td>
 			</tr>
 			<?php } // end foreach ?>

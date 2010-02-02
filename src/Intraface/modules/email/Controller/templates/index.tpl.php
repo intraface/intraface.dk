@@ -1,8 +1,8 @@
-<h1><?php e(__('e-mails')); ?></h1>
+<h1><?php e(t('e-mails')); ?></h1>
 
 <?php if (count($emails) == 0): ?>
 
-	<p><?php e(__('no e-mails has been sent')); ?></p>
+	<p><?php e(t('no e-mails has been sent')); ?></p>
 
 <?php else: ?>
 
@@ -12,17 +12,17 @@
 	?>
 
 	<?php if ($queue > 0): ?>
-		<p><?php e(__('e-mails are in queue - the will be sent soon')); ?></p>
+		<p><?php e(t('e-mails are in queue - the will be sent soon')); ?></p>
 	<?php endif; ?>
 
 	<?php echo $gateway->getDBQuery()->display('character'); ?>
 
 	<table>
-	<caption><?php e(__('e-mails')); ?></caption>
+	<caption><?php e(t('e-mails')); ?></caption>
 	<thead>
 	<tr>
-		<th><?php e(__('subject')); ?></th>
-		<th><?php e(__('contact')); ?></th>
+		<th><?php e(t('subject')); ?></th>
+		<th><?php e(t('contact')); ?></th>
 		<th></th>
 	</tr>
 	</thead>
@@ -33,10 +33,10 @@
 		<td><a href="<?php e($contact_module->getPath()); ?><?php e($email['contact_id']); ?>"><?php e($email['contact_name']); ?></a></td>
 		<td>
 		<?php if (!empty($email['status']) AND $email['status'] != 'sent'): ?>
-			<a class="edit" href="<?php e(url($email['id'], array('edit'))); ?>"><?php e(__('edit', 'common')); ?></a>
-			<a class="delete" href="<?php e(url(null, array('delete' => $email['id']))); ?>"><?php e(__('delete', 'common')); ?></a>
+			<a class="edit" href="<?php e(url($email['id'], array('edit'))); ?>"><?php e(t('edit')); ?></a>
+			<a class="delete" href="<?php e(url(null, array('delete' => $email['id']))); ?>"><?php e(t('delete')); ?></a>
 		<?php else: ?>
-			<?php e(__($email['status'], 'email')); ?>
+			<?php e(t($email['status'])); ?>
 		<?php endif; ?>
 		</td>
 	</tr>

@@ -70,7 +70,7 @@
                     <label for="has_variation"><?php e(t('Product has variations')); ?></label>
                     <select name="has_variation" id="has_variation">
                         <?php foreach (array(0 => 'No', 1 => 'Yes') AS $key=>$v): ?>
-                            <option value="<?php e($key); ?>"><?php e(t($v, 'common')); ?></option>
+                            <option value="<?php e($key); ?>"><?php e(t($v)); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -81,9 +81,9 @@
                     <span id="has_variation">
                         <?php
                         if ($product->hasVariation() == 1) {
-                            e('Yes', 'common');
+                            e('Yes');
                         } else {
-                            e('No', 'common');
+                            e('No');
                         }
                         ?>
                     </span>
@@ -96,7 +96,7 @@
             <select name="do_show" id="do_show">
 
                 <?php foreach (array(0 => 'No', 1 => 'Yes') AS $key=>$v): ?>
-                    <option value="<?php e($key); ?>" <?php if (isset($product) && $product->showInShop() == $key) e('selected="selected"'); ?> ><?php e(t($v, 'common')); ?></option>
+                    <option value="<?php e($key); ?>" <?php if (isset($product) && $product->showInShop() == $key) e('selected="selected"'); ?> ><?php e(t($v)); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -111,7 +111,7 @@
             <label for="stock"><?php e(t('Stock product')); ?></label>
             <select name="stock" id="stock">
                 <?php foreach (array(0 => 'No', 1 => 'Yes') AS $key=>$v): ?>
-                    <option value="<?php e($key); ?>" <?php if (isset($product) AND $product->hasStock() == $key) e('selected="selected"'); ?> ><?php e(t($v, 'common')); ?></option>
+                    <option value="<?php e($key); ?>" <?php if (isset($product) AND $product->hasStock() == $key) e('selected="selected"'); ?> ><?php e(t($v)); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -133,13 +133,13 @@
         <legend><?php e(t('Accounting')); ?></legend>
 
         <?php if (count($accounts) == 0): ?>
-            <p><?php e(__('You will need to create an accounting year and create accounts for that year, to be able to set the account for which this product will be stated.')); ?> <a href="<?php e($mainAccounting->getPath()); ?>"><?php e(__('Create accounting year and accounts')); ?></a></p>
+            <p><?php e(t('You will need to create an accounting year and create accounts for that year, to be able to set the account for which this product will be stated.')); ?> <a href="<?php e($mainAccounting->getPath()); ?>"><?php e(t('Create accounting year and accounts')); ?></a></p>
         <?php else: ?>
 
         <div class="formrow">
             <label for="state_account"><?php e(t('State on account')); ?></label>
             <select id="state_account" name="state_account_id">
-                <option value=""><?php e(t('Choose...', 'common')); ?></option>
+                <option value=""><?php e(t('Choose...')); ?></option>
                 <?php
                     $x = 0;
                     $optgroup = 0;
@@ -173,8 +173,8 @@
     <?php endif; ?>
 
     <div>
-        <input type="submit" name="submit" value="<?php e(t('Save', 'common')); ?>" class="save" />
-        <a href="<?php e(url('.')); ?>"><?php e(t('Cancel', 'common')); ?></a>
+        <input type="submit" name="submit" value="<?php e(t('Save')); ?>" class="save" />
+        <a href="<?php e(url('.')); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 
 </form>

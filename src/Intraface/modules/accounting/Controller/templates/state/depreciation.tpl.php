@@ -1,4 +1,4 @@
-<h1><?php e(__('State depreciation for '.$context->getType())); ?> #<?php e($object->get('number')); ?></h1>
+<h1><?php e(t('State depreciation for '.$context->getType())); ?> #<?php e($object->get('number')); ?></h1>
 
 <ul class="options">
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
@@ -24,11 +24,11 @@
         <legend><?php e('depreciation'); ?></legend>
         <table>
             <tr>
-                <th><?php e(__("date")); ?></th>
+                <th><?php e(t("date")); ?></th>
                 <td><?php e($depreciation->get("dk_payment_date")); ?></td>
             </tr>
             <tr>
-                <th><?php e(__("amount")); ?></th>
+                <th><?php e(t("amount")); ?></th>
                 <td><?php e(number_format($depreciation->get("amount"), 2, ',', '.')); ?></td>
             </tr>
         </table>
@@ -50,7 +50,7 @@
         <p>Beløbet vil blive trukket fra debitorkontoen og blive sat på kontoen, du vælger herunder:</p>
 
         <div class="formrow">
-            <label for="state_account"><?php e(__("state on account")); ?></label>
+            <label for="state_account"><?php e(t("state on account")); ?></label>
             <?php
             $account = new Account($context->getYear()); // $product->get('state_account_id')
 

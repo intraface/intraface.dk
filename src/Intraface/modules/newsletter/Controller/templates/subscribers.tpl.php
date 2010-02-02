@@ -9,19 +9,19 @@
 
 <form action="<?php e(url(null)); ?>" method="get" class="search-filter">
     <fieldset>
-        <legend><?php e(t('Search', 'common')); ?></legend>
+        <legend><?php e(t('Search')); ?></legend>
 
-		<label for="q">Søgning
+		<label for="q"><?php e(t('Search')); ?>
 			<input type="text" id="q" name="q" value="<?php e($context->getSubscriber()->getDBQuery()->getFilter('q')); ?>" />
 		</label>
-        <label for="optin"><?php e(t('Filter', 'common')); ?>:
+        <label for="optin"><?php e(t('Filter')); ?>:
             <select name="optin" id="optin">
                 <option value="1" <?php if($context->getSubscriber()->getDBQuery()->getFilter('optin') == 1) echo 'selected="selected"'; ?> ><?php e(t('Opted in')); ?></option>
                 <option value="0" <?php if($context->getSubscriber()->getDBQuery()->getFilter('optin') == 0) echo 'selected="selected"'; ?> ><?php e(t('Not opted in')); ?></option>
             </select>
         </label>
         <span>
-            <input type="submit" value="<?php e(t('go', 'common')); ?>" />
+            <input type="submit" value="<?php e(t('Go')); ?>" />
         </span>
     </fieldset>
 </form>

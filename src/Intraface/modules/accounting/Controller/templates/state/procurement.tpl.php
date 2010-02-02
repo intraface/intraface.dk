@@ -19,7 +19,7 @@
         <legend><?php e(t('procurement')); ?></legend>
         <table>
             <tr>
-                <th><?php e(__("number")); ?></th>
+                <th><?php e(t("number")); ?></th>
                 <td><?php e($procurement->get("number")); ?></td>
             </tr>
             <tr>
@@ -53,7 +53,7 @@
             </tr>
             <tr>
                 <td><?php e(t('buy from')) ?></td>
-                <td><?php e(__($procurement->get('from_region'), 'procurement')); ?>
+                <td><?php e(t($procurement->get('from_region'), 'procurement')); ?>
             </td>
         </tr>
 

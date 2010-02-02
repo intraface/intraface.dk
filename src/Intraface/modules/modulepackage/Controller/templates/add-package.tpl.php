@@ -177,7 +177,7 @@ endif;
 
 <p>
     <input type="submit" name="submit" value="<?php e(t('yes, i am ready to pay')); ?>" />
-    <a href="<?php e(url('../')); ?>"><?php e(t('Cancel', 'common')); ?></a>
+    <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
 </p>
 
 </form>

@@ -174,7 +174,6 @@ class Intraface_modules_cms_Controller_Element extends k_Component
         return $this->render();
     }
 
-
     function getKernel()
     {
         return $this->context->getKernel();

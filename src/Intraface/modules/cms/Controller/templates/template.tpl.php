@@ -1,8 +1,8 @@
-<h1><?php e(__('template')); ?> <?php e($template->get('name')); ?></h1>
+<h1><?php e(t('template')); ?> <?php e($template->get('name')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="<?php e(url('edit')); ?>"><?php e(__('edit', 'common')); ?></a></li>
-    <li><a href="<?php e(url('../')); ?>"><?php e(__('close', 'common')); ?></a></li>
+    <li><a class="edit" href="<?php e(url('edit')); ?>"><?php e(t('edit')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('close')); ?></a></li>
 </ul>
 
     <?php
@@ -13,12 +13,12 @@
 
 <?php if (is_array($sections) AND count($sections) > 0): ?>
     <table>
-        <caption><?php e(__('sections')); ?></caption>
+        <caption><?php e(t('sections')); ?></caption>
         <thead>
             <tr>
-                <th><?php e(__('name', 'common')); ?></th>
-                <th><?php e(__('identifier', 'common')); ?></th>
-                <th><?php e(__('type', 'common')); ?></th>
+                <th><?php e(t('name')); ?></th>
+                <th><?php e(t('identifier')); ?></th>
+                <th><?php e(t('type')); ?></th>
                 <th colspan="4">&nbsp;</th>
             </tr>
         </thead>
@@ -28,10 +28,10 @@
             <td><?php e($s['name']); ?></td>
             <td><?php e($s['identifier']); ?></td>
             <td><?php e($s['type']); ?></td>
-            <td class="options"><a href="<?php e(url(null, array('moveup' =>  $s['id']))); ?>"><?php e(__('up','common')); ?></a>
-            <a href="<?php e(url(null, array('movedown' =>  $s['id']))); ?>"><?php e(__('down', 'common')); ?></a>
-            <a class="edit" href="<?php e(url('edit')); ?>"><?php e(__('edit settings', 'common')); ?></a>
-            <a class="delete" href="<?php e(url(null, array('delete' =>  $s['id']))); ?>"><?php e(__('delete', 'common')); ?></a></td>
+            <td class="options"><a href="<?php e(url(null, array('moveup' =>  $s['id']))); ?>"><?php e(t('up')); ?></a>
+            <a href="<?php e(url(null, array('movedown' =>  $s['id']))); ?>"><?php e(t('down')); ?></a>
+            <a class="edit" href="<?php e(url('edit')); ?>"><?php e(t('edit settings')); ?></a>
+            <a class="delete" href="<?php e(url(null, array('delete' =>  $s['id']))); ?>"><?php e(t('delete')); ?></a></td>
         </tr>
     <?php endforeach; ?>
         </tbody>
@@ -42,20 +42,21 @@
 <form action="<?php e(url()); ?>" method="post">
     <input type="hidden" value="<?php e($template->get('id')); ?>" name="id" />
     <fieldset>
-        <legend><?php e(__('create section')); ?></legend>
+        <legend><?php e(t('create section')); ?></legend>
         <select name="new_section_type">
-            <option value=""><?php e(__('choose', 'common')); ?></option>
-                <option value="shorttext"><?php e(__('shorttext')); ?></option>
-                <option value="longtext"><?php e(__('longtext')); ?></option>
-                <option value="picture"><?php e(__('picture', 'common')); ?></option>					<option value="mixed"><?php e(__('mixed')); ?></option>
+            <option value=""><?php e(t('choose')); ?></option>
+                <option value="shorttext"><?php e(t('shorttext')); ?></option>
+                <option value="longtext"><?php e(t('longtext')); ?></option>
+                <option value="picture"><?php e(t('picture')); ?></option>
+                <option value="mixed"><?php e(t('mixed')); ?></option>
         </select>
         <div>
-            <input type="submit" value="<?php e(__('add section')); ?>" name="add_section" />
+            <input type="submit" value="<?php e(t('add section')); ?>" name="add_section" />
         </div>
     </fieldset>
     <fieldset>
-        <legend><?php e(__('standard keywords')); ?></legend>
-        <p><?php e(__('keywords on a template are automatically transferred to the new pages created with the template')); ?></p>
-        <input type="submit" value="<?php e(__('add keywords', 'keyword')); ?>" name="add_keywords" />
+        <legend><?php e(t('standard keywords')); ?></legend>
+        <p><?php e(t('keywords on a template are automatically transferred to the new pages created with the template')); ?></p>
+        <input type="submit" value="<?php e(t('add keywords')); ?>" name="add_keywords" />
     </fieldset>
 </form>

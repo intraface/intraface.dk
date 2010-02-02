@@ -17,8 +17,8 @@
     </fieldset>
 
     <div>
-        <input type="submit" name="save" value="<?php e(t('Save', 'common')); ?>" class="save" />
-        <a href="<?php e(url('.')); ?>"><?php e(t('Cancel', 'common')); ?></a>
+        <input type="submit" name="save" value="<?php e(t('Save')); ?>" class="save" />
+        <a href="<?php e(url('.')); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 
 </form>

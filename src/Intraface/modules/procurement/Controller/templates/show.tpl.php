@@ -60,7 +60,7 @@
         ?>
         <tr>
             <td><?php e(t('Buy from')); ?></td>
-            <td><?php e(__($procurement->get('from_region'), 'procurement')); ?>
+            <td><?php e(t($procurement->get('from_region'), 'procurement')); ?>
             </td>
         </tr>
         <tr>
@@ -91,7 +91,7 @@
                         } else {
                             e('Ikke bogf�rt');
                             if ($procurement->get('paid_date') != '0000-00-00') { ?>
-                                <a href="<?php e(url('state')); ?>"><?php e(__('state')); ?></a>
+                                <a href="<?php e(url('state')); ?>"><?php e(t('state')); ?></a>
                             <?php }
 
                         }
@@ -259,7 +259,7 @@
                     <td><?php e($items[$i]["number"]); ?></td>
                     <td><?php e($items[$i]["name"]); ?></td>
                     <td class="amount"><?php e(number_format($items[$i]["quantity"], 2, ",", ".")); ?></td>
-                    <td><?php e(__($items[$i]["unit"])); ?></td>
+                    <td><?php e(t($items[$i]["unit"])); ?></td>
                     <td class="amount"><?php e(number_format($items[$i]["unit_purchase_price"], 2, ",", ".")); ?></td>
                     <td class="amount"><?php e(number_format($items[$i]["quantity"]*$items[$i]["unit_purchase_price"], 2, ",", ".")); ?></td>
                     <td class="amount"><?php e(number_format($items[$i]["calculated_unit_price"], 2, ",", ".")); ?></td>

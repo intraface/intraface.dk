@@ -1,10 +1,10 @@
-<h1><?php e(__('content on page').' '.$cmspage->get('title')); ?></h1>
+<h1><?php e(t('content on page').' '.$cmspage->get('title')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="<?php e(url('edit')); ?>"><?php e(__('edit settings', 'common')); ?></a></li>
-    <li><a href="<?php e(url('../', array('type' => $cmspage->get('type')))); ?>"><?php e(__('close', 'common')); ?></a></li>
+    <li><a class="edit" href="<?php e(url('edit')); ?>"><?php e(t('edit settings')); ?></a></li>
+    <li><a href="<?php e(url('../', array('type' => $cmspage->get('type')))); ?>"><?php e(t('close')); ?></a></li>
     <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-    <li><a href="<?php e(url('../../template/' . $cmspage->get('template_id'))); ?>"><?php e(__('edit template')); ?></a></li>
+    <li><a href="<?php e(url('../../template/' . $cmspage->get('template_id'))); ?>"><?php e(t('edit template')); ?></a></li>
     <?php endif; ?>
 </ul>
 
@@ -25,11 +25,11 @@
 
 <?php if (count($sections) == 0): ?>
     <p class="warning">
-        <?php echo e(__('no sections added to the template')); ?>
+        <?php echo e(t('no sections added to the template')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="<?php e(url('../../template/' . $cmspage->get('template_id'))); ?>"><?php e(__('edit template')); ?></a>.
+            <a href="<?php e(url('../../template/' . $cmspage->get('template_id'))); ?>"><?php e(t('edit template')); ?></a>.
         <?php else: ?>
-            <strong><?php echo e(__('you cannot edit templates')); ?></strong>
+            <strong><?php echo e(t('you cannot edit templates')); ?></strong>
         <?php endif; ?>
 
     </p>
@@ -37,19 +37,19 @@
 
 <?php
     if (!empty($context->error) AND is_array($context->error) AND array_key_exists($section->get('id'), $context->error)) {
-        echo '<p class="error">'.e(__('error in a section - please see below')).'</p>';
+        echo '<p class="error">'.e(t('error in a section - please see below')).'</p>';
     }
 ?>
 
 <form method="post" action="<?php e(url()); ?>" enctype="multipart/form-data" id="myform">
     <?php $test = ''; foreach ($sections AS $section):  ?>
         <?php
-            // hvis value section ikke er sat, så er det en ny post, så vi henter den bare fra section->get()
+            // hvis value section ikke er sat, sï¿½ er det en ny post, sï¿½ vi henter den bare fra section->get()
             if (empty($value['section'][$section->get('id')])) {
                 $value['section'][$section->get('id')] = $section->get();
             }
             if (!empty($error) AND is_array($error) AND array_key_exists($section->get('id'), $error)) {
-                if (!empty($test) AND $section->get('type') != $test) echo '</fieldset>'; // Udkommenteret af sune, da den gav problemer. </fieldset> udskrives hver gang ny sektion indsættes, derfor kan jeg ikke se hvorfor den skal være der, og det betød at der kom en </fieldset> for meget.
+                if (!empty($test) AND $section->get('type') != $test) echo '</fieldset>'; // Udkommenteret af sune, da den gav problemer. </fieldset> udskrives hver gang ny sektion indsï¿½ttes, derfor kan jeg ikke se hvorfor den skal vï¿½re der, og det betï¿½d at der kom en </fieldset> for meget.
                 echo '<p class="error">'.$error[$section->get('id')].$test.$section->get('type').'</p>';
             }
 
@@ -76,7 +76,7 @@
                         $editor->setEditor($kernel->setting->get('user', 'htmleditor'));
                         $textarea_attr = array(
                             //'id' => 'section_'.$section->get('id'),
-                            'id' => 'section['.$section->get('id').'][text]', // læg mærke til at ugyldigt id, men nødvendigt, fordi tinymce kræver at id og name er ens for at sende post rigtigt
+                            'id' => 'section['.$section->get('id').'][text]', // lï¿½g mï¿½rke til at ugyldigt id, men nï¿½dvendigt, fordi tinymce krï¿½ver at id og name er ens for at sende post rigtigt
                             'name' => 'section['.$section->get('id').'][text]',
                             'cols' => 80,
                             'rows' => 10,
@@ -157,8 +157,8 @@
                     <?php } ?>
                     <fieldset>
                         <legend><?php e($section->get('section_name')); ?></legend>
-                        <p><?php e(__('There is a html section on the page')); ?></p>
-                        <input type="submit" value="<?php e(__('edit section')); ?>" name="edit_html[<?php e($section->get('id')); ?>]" />
+                        <p><?php e(t('There is a html section on the page')); ?></p>
+                        <input type="submit" value="<?php e(t('edit section')); ?>" name="edit_html[<?php e($section->get('id')); ?>]" />
 
                 <?php
                 break;
@@ -173,12 +173,12 @@
     <?php endforeach; ?>
 
     </fieldset>
-    <!-- sektionerne kan lige så godt blive vist direkte - på nær html-elementet men hvorfor ikke også html elementet? -->
+    <!-- sektionerne kan lige sï¿½ godt blive vist direkte - pï¿½ nï¿½r html-elementet men hvorfor ikke ogsï¿½ html elementet? -->
 
     <div>
-        <input type="submit" value="<?php e(__('save', 'common')); ?>" />
-        <input type="submit" name="close" value="<?php e(__('save and close', 'common')); ?>" />
-        <a href="<?php e(url('../', array('type' => $cmspage->get('type')))); ?>"><?php e(__('Cancel', 'common')); ?></a>
+        <input type="submit" value="<?php e(t('save')); ?>" />
+        <input type="submit" name="close" value="<?php e(t('save and close')); ?>" />
+        <a href="<?php e(url('../', array('type' => $cmspage->get('type')))); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 
 </form>

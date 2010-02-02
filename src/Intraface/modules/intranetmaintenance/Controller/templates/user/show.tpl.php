@@ -5,58 +5,57 @@ $value_address = $context->getValues();
 <div id="ColOne">
 
 <h1>
-    <?php e(__('User')); ?>: <?php e($value['email']); ?><?php if (isset($intranet)) { ?>, intranet: <?php e($intranet->get('name')); ?><?php } ?>
+    <?php e(t('User')); ?>: <?php e($value['email']); ?><?php if (isset($intranet)) { ?>, intranet: <?php e($intranet->get('name')); ?><?php } ?>
 </h1>
 
 <ul class="options">
     <?php if (isset($intranet)) { ?>
-        <li><a href="<?php e(url(null, array('edit', 'intranet_id' => $intranet->get('id')))); ?>"><?php e(__('edit', 'common')); ?></a></li>
+        <li><a href="<?php e(url(null, array('edit', 'intranet_id' => $intranet->get('id')))); ?>"><?php e(t('edit')); ?></a></li>
     <?php } else { ?>
-        <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(__('edit', 'common')); ?></a></li>
+        <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('edit')); ?></a></li>
     <?php } ?>
-    <li><a href="<?php e(url('../')); ?>"><?php e(__('close', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('close')); ?></a></li>
 </ul>
 
 <?php if ($context->query('flare')): ?>
-	<p class="message"><?php e(__($context->query('flare'))); ?></p>
+	<p class="message"><?php e(t($context->query('flare'))); ?></p>
 <?php endif; ?>
 
 
 <?php echo $context->getUser()->error->view(); ?>
 
 <?php
-if ($context->getIntranet()->getId() > 0) {
-        $edit_intranet_id = $context->getIntranet()->getId();
+if (isset($intranet)) {
     ?>
     <table>
         <tr>
-            <th><?php e(__('name', 'address')); ?></th>
+            <th><?php e(t('name', 'address')); ?></th>
             <td><?php if (isset($value_address['name'])) e($value_address["name"]); ?></td>
         </tr>
         <tr>
-            <th><?php e(__('address', 'address')); ?></th>
+            <th><?php e(t('address', 'address')); ?></th>
             <td><?php if (isset($value_address['address'])) autohtml($value_address["address"]); ?></td>
         </tr>
 
         <tr>
-            <th><?php e(__('postal code and city', 'address')); ?></th>
+            <th><?php e(t('postal code and city', 'address')); ?></th>
             <td><?php if (isset($value_address['postcode'])) e($value_address["postcode"]); ?> <?php if (isset($value_address['city'])) e($value_address["city"]); ?></td>
         </tr>
         <tr>
-            <th><?php e(__('country', 'address')); ?></th>
+            <th><?php e(t('country', 'address')); ?></th>
             <td><?php if (isset($value_address['country'])) e($value_address["country"]); ?></td>
         </tr>
         <tr>
-            <th><?php e(__('e-mail', 'address')); ?></th>
+            <th><?php e(t('e-mail', 'address')); ?></th>
             <td><?php if (isset($value_address['email'])) e($value_address["email"]); ?></td>
         </tr>
         <tr>
-            <th><?php e(__('website', 'address')); ?></th>
+            <th><?php e(t('website', 'address')); ?></th>
             <td><?php if (isset($value_address['website'])) e($value_address["website"]); ?></td>
         </tr>
 
         <tr>
-            <th><?php e(__('phone', 'address')); ?></th>
+            <th><?php e(t('phone', 'address')); ?></th>
             <td><?php if (isset($value_address['phone'])) e($value_address["phone"]); ?></td>
         </tr>
     </table>
@@ -118,7 +117,7 @@ if ($context->getIntranet()->getId() > 0) {
     <?php foreach ($context->getIntranets() as $intranet_value) { ?>
         <tr>
             <td><a href="<?php e(url('../../intranet/' . $intranet_value['id'])); ?>"><?php e($intranet_value['name']); ?></a></td>
-            <td><a href="<?php e(url(null, array('intranet_id' => $intranet_value['id']))); ?>"><?php e(__('Show contact information')); ?></a></td>
+            <td><a href="<?php e(url(null, array('intranet_id' => $intranet_value['id']))); ?>"><?php e(t('Show contact information')); ?></a></td>
         </tr>
         <?php } ?>
     </tbody>

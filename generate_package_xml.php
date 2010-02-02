@@ -7,7 +7,7 @@
  * @version @package-version@
  */
 
-$version = '2.0.1';
+$version = '2.0.2';
 $stability = 'stable';
 $notes = '
 * translation changes
@@ -98,6 +98,9 @@ $pfm->setPearinstallerDep('1.8.1');
 $pfm->addPackageDepWithChannel('required', 'Config', 'pear.php.net', '1.10.11');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Schema', 'pear.php.net', '0.8.5');
 
+
+$pfm->addPackageDepWithChannel('required', 'Swift', 'pear.swiftmailer.org', '4.0.6');
+
 // Kernel
 $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.1');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Driver_mysql', 'pear.php.net', '1.4.1');
@@ -124,7 +127,7 @@ $pfm->addPackageDepWithChannel('required', 'Doctrine_Template_Positionable', 'pu
 
 // Ilib
 $pfm->addPackageDepWithChannel('required', 'Ilib_Category', 'public.intraface.dk', '0.1.4');
-$pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.1.4');
+$pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.1.6');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Error', 'public.intraface.dk', '0.0.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Redirect', 'public.intraface.dk', '0.2.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.dk', '0.1.0');

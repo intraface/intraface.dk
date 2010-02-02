@@ -12,8 +12,8 @@ $delivery_address = $context->getDeliveryAddressValues();
     <?php echo $context->getContact()->error->view(); ?>
 
     <ul class="options">
-        <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></li>
-        <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close', 'common')); ?></a></li>
+        <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
+        <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close')); ?></a></li>
         <li><a class="vcard" href="<?php e(url(null . '.vcf')); ?>"><?php e(t('Vcard')); ?></a></li>
     </ul>
 
@@ -131,7 +131,7 @@ $delivery_address = $context->getDeliveryAddressValues();
                 <th><?php e(t('code')); ?></th>
                 <td>
                     <?php e($context->getContact()->get('code')); ?>
-                    <input type="submit" value="<?php e(t('new', 'common')); ?>" class="confirm" name="new_password" />
+                    <input type="submit" value="<?php e(t('new')); ?>" class="confirm" name="new_password" />
                     <?php if (!empty($address['email'])): ?>
                         <input type="submit" name="send_email" value="<?php e(t('send e-mail with login')); ?>" class="confirm" title="Er du sikker p�, at du vil sende e-mail?" />
                     <?php endif; ?>
@@ -201,7 +201,7 @@ if (count($reminders) > 0):
                     ?>
                 </td>
                 <td><a href="<?php e(url('memo/' . $reminder_item['id'])); ?>"><?php e($reminder_item['subject']); ?></a></td>
-                <td class="buttons"><a href="<?php e(url('memo/' .$reminder_item['id'], array('edit'))); ?>" class="edit"><?php e(t('edit', 'common')); ?></a></td>
+                <td class="buttons"><a href="<?php e(url('memo/' .$reminder_item['id'], array('edit'))); ?>" class="edit"><?php e(t('edit')); ?></a></td>
             </tr>
             <?php
         }

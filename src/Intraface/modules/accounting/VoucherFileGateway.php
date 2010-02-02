@@ -42,14 +42,14 @@ class Intraface_modules_accounting_VoucherFileGateway
                         $files[$i]['description'] = 'Faktura';
                     }
                     $files[$i]['name'] = 'Faktura';
-                    $files[$i]['file_uri'] = url('/modules/debtor/pdf.php', array('id' => $db->f('belong_to_id')));
+                    $files[$i]['file_uri'] = $this->url('/modules/debtor/pdf.php', array('id' => $db->f('belong_to_id')));
                 break;
                 case 'vat':
                     if (empty($files[$i]['description'])) {
                         $files[$i]['description'] = 'Momsperiode';
                     }
                     $files[$i]['name'] = 'Momsperiode';
-                    $files[$i]['file_uri'] = url('/modules/accounting/vat_view.php', array('id' => $db->f('belong_to_id')));
+                    $files[$i]['file_uri'] = $this->url('/modules/accounting/vat_view.php', array('id' => $db->f('belong_to_id')));
                 break;
 
                 case 'file':
@@ -64,21 +64,21 @@ class Intraface_modules_accounting_VoucherFileGateway
                         $files[$i]['description'] = 'Kreditnota';
                     }
                     $files[$i]['name'] = 'Kreditnota';
-                    $files[$i]['file_uri'] = url('/modules/debtor/pdf.php', array('id' => $db->f('belong_to_id')));
+                    $files[$i]['file_uri'] = $this->url('/modules/debtor/pdf.php', array('id' => $db->f('belong_to_id')));
                 break;
                 case 'reminder':
                     if (empty($files[$i]['description'])) {
                         $files[$i]['description'] = 'Rykker';
                     }
                     $files[$i]['name'] = 'Rykker';
-                    $files[$i]['file_uri'] = url('/modules/debtor/reminder_pdf.php', array('id' => $db->f('belong_to_id')));
+                    $files[$i]['file_uri'] = $this->url('/modules/debtor/reminder_pdf.php', array('id' => $db->f('belong_to_id')));
                 break;
                 case 'procurement':
                     if (empty($files[$i]['description'])) {
-                        $files[$i]['description'] = 'Indkøb';
+                        $files[$i]['description'] = 'IndkÃ¸b';
                     }
-                    $files[$i]['name'] = 'Indkøb';
-                    $files[$i]['file_uri'] = url('/modules/procurement/view.php', array('id' => $db->f('belong_to_id')));
+                    $files[$i]['name'] = 'IndkÃ¸b';
+                    $files[$i]['file_uri'] = $this->url('/modules/procurement/view.php', array('id' => $db->f('belong_to_id')));
                 break;
                 default:
                     trigger_error('VoucherFile::getList: ugyldig belong to');
@@ -88,5 +88,10 @@ class Intraface_modules_accounting_VoucherFileGateway
             $i++;
         }
         return $files;
+    }
+
+    function url($url)
+    {
+        return PATH_WWW . $url;
     }
 }

@@ -4,12 +4,12 @@
     <h2>#<?php e($product->get('number'));  ?> <?php e($product->get('name')); ?></h2>
     <ul class="options">
         <?php if ($product->get('locked') != 1) { ?>
-        <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(__('Edit', 'common')); ?></a></li>
+        <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
 
-        <li><a class="confirm" href="<?php e(url(null, array('delete'))); ?>"><?php e(__('Delete', 'common')); ?></a></li>
+        <li><a class="confirm" href="<?php e(url(null, array('delete'))); ?>"><?php e(t('Delete')); ?></a></li>
         <?php } ?>
-        <li><a href="<?php e(url(null, array('copy'))); ?>"><?php e(t('Copy', 'common')); ?></a></li>
-        <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close', 'common')); ?></a></li>
+        <li><a href="<?php e(url(null, array('copy'))); ?>"><?php e(t('Copy')); ?></a></li>
+        <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close')); ?></a></li>
     </ul>
     <div><?php autohtml($product->get('description')); ?></div>
 </div>
@@ -167,7 +167,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                         <td><?php e($product->get('weight')+$variation->getDetail()->getWeightDifference()); ?></td>
                         <?php if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
                             <td><?php e($variation->getStock($product)->get('actual_stock')); ?></td>
-                            <td><a href="<?php e(url('variation/' . $variation->getId())); ?>"><?php e(t('Details', 'common')); ?></a></td>
+                            <td><a href="<?php e(url('variation/' . $variation->getId())); ?>"><?php e(t('Details')); ?></a></td>
                         <?php endif; ?>
 
                     </tr>
@@ -261,7 +261,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                 ?>
                 <ul>
                     <?php foreach ($appender->getCategories() AS $category): ?>
-                        <li><?php e($category['name']); ?> <a href="<?php e(url(null, array('shop_id' => $shop->getId(), 'remove_appended_category' => $category['id']))); ?>" class="delete" id="remove_category_<?php e($category['id']); ?>"><?php e(t('Remove', 'common')); ?></a></li>
+                        <li><?php e($category['name']); ?> <a href="<?php e(url(null, array('shop_id' => $shop->getId(), 'remove_appended_category' => $category['id']))); ?>" class="delete" id="remove_category_<?php e($category['id']); ?>"><?php e(t('Remove')); ?></a></li>
                     <?php endforeach; ?>
                 </ul>
 
@@ -273,7 +273,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
     <div id="keywords" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'keywords') echo ' fade'; ?>">
       <h2><?php e(t('Keywords')); ?></h2>
     <?php if ($product->get('locked') == 0) { $shared_keyword = $kernel->useShared('keyword'); ?>
-    <ul class="button"><li><a href="<?php e(url('keyword/connect')); ?>"><?php e(__('Add keywords')); ?></a></li></ul>
+    <ul class="button"><li><a href="<?php e(url('keyword/connect')); ?>"><?php e(t('Add keywords')); ?></a></li></ul>
     <?php } ?>
     <?php
         $keyword = $product->getKeywordAppender();

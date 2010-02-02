@@ -26,7 +26,7 @@ $items = $context->getItems();
         <legend>Faktura</legend>
         <table>
             <tr>
-                <th><?php e(__("invoice number")); ?></th>
+                <th><?php e(t("invoice number")); ?></th>
                 <td><?php e($context->getModel()->get("number")); ?></td>
             </tr>
             <tr>

@@ -5,7 +5,7 @@ $address_values = $context->getValues();
 <h1><?php e('User'); ?></h1>
 
 <ul>
-	<li><a href="<?php e(url(null)); ?>"><?php e(__('Close')); ?></a></li>
+	<li><a href="<?php e(url(null)); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 <?php echo $context->getUser()->error->view(); ?>

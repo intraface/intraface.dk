@@ -72,7 +72,7 @@
     		</tbody>
     	</table>
 
-    	<input type="submit" name="submit" value="<?php e(__('Choose')); ?>" />
+    	<input type="submit" name="submit" value="<?php e(t('Choose')); ?>" />
     	<a href="<?php e(url('../../')); ?>"><?php e(t('Cancel')); ?></a>
     </form>
 

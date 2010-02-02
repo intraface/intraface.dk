@@ -85,7 +85,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         if (intval($this->getGateway()->getDBQuery()->getFilter('product_id')) != 0) {
             $data['product'] = new Product($this->getKernel(), $this->getGateway()->getDBQuery()->getFilter('product_id'));
             if (intval($this->getGateway()->getDBQuery()->getFilter('product_variation_id')) != 0) {
-                $data['variation'] = $product->getVariation($this->getGateway()->getDBQuery()->getFilter('product_variation_id'));
+                $data['variation'] = $data['product']->getVariation($this->getGateway()->getDBQuery()->getFilter('product_variation_id'));
 
             }
         }

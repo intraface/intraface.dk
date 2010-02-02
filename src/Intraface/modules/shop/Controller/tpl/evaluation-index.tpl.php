@@ -31,8 +31,8 @@
                         <td><?php e(t($evaluation['action_action']).' '.$evaluation['action_value'].' '.t('at').' '.$evaluation['action_quantity'].' '.t($evaluation['action_unit'])); ?></td>
                         <td><?php e($evaluation['go_to_index_after']); ?></td>
                         <td>
-                            <a href="<?php e(url($evaluation['id'].'/edit')); ?>" class="edit"><?php e(t('Edit', 'common')); ?></a>
-                            <a href="<?php e(url($evaluation['id'].'/delete')); ?>" class="delete"><?php e(t('Delete', 'common')); ?></a>
+                            <a href="<?php e(url($evaluation['id'].'/edit')); ?>" class="edit"><?php e(t('Edit')); ?></a>
+                            <a href="<?php e(url($evaluation['id'].'/delete')); ?>" class="delete"><?php e(t('Delete')); ?></a>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

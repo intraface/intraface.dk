@@ -99,8 +99,8 @@ switch ($value['type']) {
     case 'wikitext':
         ?>
         <fieldset>
-            <legend><?php e(__('html text')); ?></legend>
-            <label for="cms-wiki-editor"><?php e(__('wiki text')); ?></label>
+            <legend><?php e(t('html text')); ?></legend>
+            <label for="cms-wiki-editor"><?php e(t('wiki text')); ?></label>
             <br />
             <textarea id="cms-wiki-editor" tabindex="1" name="text" cols="100" rows="15" style="width: 100%"><?php if (!empty($value['text'])) e($value['text']); ?></textarea>
         </fieldset>
@@ -112,7 +112,7 @@ switch ($value['type']) {
         ?>
         <fieldset>
 
-            <legend><?php e(t('choose picture', 'common')); ?></legend>
+            <legend><?php e(t('choose picture')); ?></legend>
 
             <?php
                 if (empty($value['pic_id'])) $value['pic_id'] = 0;
@@ -123,19 +123,18 @@ switch ($value['type']) {
         </fieldset>
         <fieldset>
             <div class="formrow">
-                <label for="pic_size"><?php e(t('size', 'common')); ?></label>
+                <label for="pic_size"><?php e(t('size')); ?></label>
 
                 <?php
                 $filehandler = new Filehandler($kernel);
                 $filehandler->createInstance();
                 $instances = $filehandler->instance->getList();
-
                 ?>
 
                 <select name="pic_size">
                     <option value="original"<?php if (!empty($value['pic_size']) AND $value['pic_size'] == 'original') echo ' selected="selected"'; ?>><?php e(t('original', 'filehandler')); ?></option>
                     <?php foreach ($instances AS $instance): ?>
-                    <option value="<?php e($instance['name']); ?>"<?php if (!empty($value['pic_size']) AND $value['pic_size'] == $instance['name']) echo ' selected="selected"'; ?>><?php e(__($instance['name'], 'filehandler')); ?></option>
+                    <option value="<?php e($instance['name']); ?>"<?php if (!empty($value['pic_size']) AND $value['pic_size'] == $instance['name']) echo ' selected="selected"'; ?>><?php e(t($instance['name'], 'filehandler')); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -173,9 +172,9 @@ switch ($value['type']) {
             <div class="formrow">
                 <label for="show_type_id"><?php e(t('show the following pages')); ?></label>
                 <select name="show_type" id="show_type_id">
-                    <option value="all"<?php if (!empty($value['show_type']) AND $value['show_type'] == 'all') echo ' selected="selected"'; ?>><?php e(__('all pages')); ?></option>
+                    <option value="all"<?php if (!empty($value['show_type']) AND $value['show_type'] == 'all') echo ' selected="selected"'; ?>><?php e(t('all pages')); ?></option>
                     <?php foreach ($element->section->cmspage->getTypes() AS $page_type): ?>
-                        <option value="<?php e($page_type); ?>"<?php if (isset($value['show_type']) AND $value['show_type'] == $page_type) echo ' selected="selected"'; ?>><?php e(__($page_type)); ?></option>
+                        <option value="<?php e($page_type); ?>"<?php if (isset($value['show_type']) AND $value['show_type'] == $page_type) echo ' selected="selected"'; ?>><?php e(t($page_type)); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -190,7 +189,7 @@ switch ($value['type']) {
         $keywords = $keyword->getUsedKeywords();
 
         if (count($keywords) > 0) { ?>
-            <div><?php e(__('keywords', 'keyword')); ?>: <ul style="display: inline;">
+            <div><?php e(t('keywords', 'keyword')); ?>: <ul style="display: inline;">
             <?php foreach ($keywords as $v) {
                 if (in_array($v['id'], $selected_keywords) === true) {
                     $checked = 'checked="checked"';
@@ -259,7 +258,7 @@ switch ($value['type']) {
                 </div>
             <?php endif; */ ?>
             <div class="formrow">
-                <label for="caption"><?php e(t('headline', 'common')); ?></label>
+                <label for="caption"><?php e(t('headline')); ?></label>
                 <input value="<?php if (!empty($value['caption'])) e($value['caption']); ?>" name="caption" id="caption" type="text" />
             </div>
 
@@ -276,7 +275,7 @@ switch ($value['type']) {
                     foreach ($value['files'] AS $file) {
                         $filehandler = new Filehandler($kernel, $file['id']);
                         $filehandlerHTML = new FilehandlerHTML($filehandler);
-                        $filehandlerHTML->showFile($this->url(null, array('delete_filelist_append_file_id' => $file['append_file_id'])));
+                        $filehandlerHTML->showFile(url(null, array('delete_filelist_append_file_id' => $file['append_file_id'])));
                         /*
                         ?>
                         <div style="border: 3px solid blue; padding: 5px;"><img src="<?php e($filehandler->instance->get('file_uri')); ?>" width="<?php e($filehandler->instance->get('width')); ?>" height="<?php e($filehandler->instance->get('height')); ?>" /> <a class="delete" href="">Slet</a></div>
@@ -317,7 +316,7 @@ switch ($value['type']) {
             <div class="formrow">
                 <label><?php e(t('photo album service')); ?></label>
                 <select name="service">
-                    <option value=""><?php e(t('choose', 'common')); ?></option>
+                    <option value=""><?php e(t('choose')); ?></option>
                     <?php foreach ($element->services AS $key => $service): ?>
                     <option value="<?php e($key); ?>"<?php if (!empty($value['service']) AND $value['service'] == $key) echo ' selected="selected"'; ?>><?php e($service); ?></option>
                     <?php endforeach; ?>
@@ -333,7 +332,7 @@ switch ($value['type']) {
             <label>St�rrelse</label>
                 <select name="size">
                     <?php foreach ($element->allowed_sizes AS $key => $size): ?>
-                    <option value="<?php e($key); ?>"<?php if (!empty($value['size']) AND $value['size'] == $key) echo ' selected="selected"'; ?>><?php e(__($size)); ?></option>
+                    <option value="<?php e($key); ?>"<?php if (!empty($value['size']) AND $value['size'] == $key) echo ' selected="selected"'; ?>><?php e(t($size)); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -365,7 +364,7 @@ switch ($value['type']) {
             <div class="formrow">
                 <label><?php e(t('video service')); ?></label>
                 <select name="service">
-                    <option value=""><?php e(t('choose', 'common')); ?></option>
+                    <option value=""><?php e(t('choose')); ?></option>
                     <?php foreach ($element->services AS $key => $service): ?>
                     <option value="<?php e($key); ?>"<?php if (!empty($value['service']) AND $value['service'] == $key) echo ' selected="selected"'; ?>><?php e(t($service)); ?></option>
                     <?php endforeach; ?>
@@ -386,7 +385,7 @@ switch ($value['type']) {
             <div class="formrow">
                 <label><?php e(t('map service')); ?></label>
                 <select name="service">
-                    <option value=""><?php e(t('choose', 'common')); ?></option>
+                    <option value=""><?php e(t('choose')); ?></option>
                     <?php foreach ($element->services AS $service): ?>
                     <option value="<?php e($service); ?>"<?php if (!empty($value['service']) AND $value['service'] == $service) echo ' selected="selected"'; ?>><?php e(t($service)); ?></option>
                     <?php endforeach; ?>
@@ -468,7 +467,7 @@ switch ($value['type']) {
                 ?>
                 <select name="thumbnail_size">
                     <?php foreach ($instances AS $key => $instance): ?>
-                    <option value="<?php e($key); ?>"<?php if (!empty($value['thumbnail_size']) AND $value['thumbnail_size'] == $key) echo ' selected="selected"'; ?>><?php e(__($instance['name'], 'filehandler')); ?></option>
+                    <option value="<?php e($key); ?>"<?php if (!empty($value['thumbnail_size']) AND $value['thumbnail_size'] == $key) echo ' selected="selected"'; ?>><?php e(t($instance['name'], 'filehandler')); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -485,7 +484,7 @@ switch ($value['type']) {
 
                 <select name="popup_size">
                     <?php foreach ($instances AS $key => $instance): ?>
-                    <option value="<?php e($key); ?>"<?php if (!empty($value['popup_size']) AND $value['popup_size'] == $key) echo ' selected="selected"'; ?>><?php e(__($instance['name'], 'filehandler')); ?></option>
+                    <option value="<?php e($key); ?>"<?php if (!empty($value['popup_size']) AND $value['popup_size'] == $key) echo ' selected="selected"'; ?>><?php e(t($instance['name'], 'filehandler')); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -499,7 +498,7 @@ switch ($value['type']) {
 
                 <select name="show_description">
                     <?php foreach ($instances AS $instance): ?>
-                    <option value="<?php e($instance); ?>"<?php if (!empty($value['show_description']) AND $value['show_description'] == $instance) echo ' selected="selected"'; ?>><?php e(__($instance, 'cms')); ?></option>
+                    <option value="<?php e($instance); ?>"<?php if (!empty($value['show_description']) AND $value['show_description'] == $instance) echo ' selected="selected"'; ?>><?php e(t($instance, 'cms')); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -518,7 +517,7 @@ switch ($value['type']) {
 
                         $filehandler = new Filehandler($kernel, $file['id']);
                         $filehandlerHTML = new FilehandlerHTML($filehandler);
-                        $filehandlerHTML->showFile($this->url(null, array('delete_gallery_append_file_id'=>$file['append_file_id'])), array('image_size' => 'small'));
+                        $filehandlerHTML->showFile(url(null, array('delete_gallery_append_file_id'=>$file['append_file_id'])), array('image_size' => 'small'));
 
                         // This means that if there is an error in uploading a new file or other fields, the files will be shown anyway.
                         echo '<input type="hidden" name="pictures['.$key.'][id]" value="'.$file['id'].'" />';
@@ -535,7 +534,7 @@ switch ($value['type']) {
                 $filehandler_html = new FileHandlerHTML($filehandler);
                 $filehandler_html->printFormUploadTag('', 'new_pic', 'choose_file', array('type' => 'only_upload', 'include_submit_button_name' => 'upload_new'));
                 ?>
-                <p><?php e(__('Pictures are sorted by picture name.')); ?></p>
+                <p><?php e(t('Pictures are sorted by picture name.')); ?></p>
             </div>
         </fieldset>
         <?php
@@ -600,9 +599,9 @@ switch ($value['type']) {
     </fieldset>
 
     <div class="">
-        <input type="submit" value="<?php e(t('save', 'common')); ?>" />
-        <input type="submit" name="close" value="<?php e(t('save and close', 'common')); ?>" />
-        <a href="<?php e(url('../')); ?>"><?php e(t('Cancel', 'common')); ?></a>
+        <input type="submit" value="<?php e(t('save')); ?>" />
+        <input type="submit" name="close" value="<?php e(t('save and close')); ?>" />
+        <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 
 </form>

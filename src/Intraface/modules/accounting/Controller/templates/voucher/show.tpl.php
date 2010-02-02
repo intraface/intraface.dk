@@ -1,8 +1,8 @@
 <h1>Bilag #<?php e($context->getVoucher()->get('number')); ?> på <?php e($context->getYear()->get('label')); ?></h1>
 
 <ul class="options">
-	<li><a class="edit" href="<?php e(url(null, array('edit'))); ?>"><?php e(__('Edit')); ?></a></li>
-	<li><a href="<?php e(url('../')); ?>"><?php e(__('Close')); ?></a></li>
+	<li><a class="edit" href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
+	<li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 <p><?php e($context->getVoucher()->get('text')); ?></p>
@@ -50,11 +50,11 @@
 	</table>
 
 	<select name="action">
-       <option value=""><?php e(t('Choose...', 'common'))?></option>
+       <option value=""><?php e(t('Choose...'))?></option>
        <option value="counter_entry"><?php e(t('Create counter entry'))?></option>
     </select>
     <input name="id" type="hidden" value="<?php e($context->getVoucher()->get('id')); ?>" />
-    <input type="submit" value="<?php e(t('go', 'common')); ?>" />
+    <input type="submit" value="<?php e(t('Go')); ?>" />
 
     </form>
 

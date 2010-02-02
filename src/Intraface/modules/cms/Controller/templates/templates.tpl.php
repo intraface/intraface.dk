@@ -1,20 +1,20 @@
-<h1><?php e(__('templates')); ?></h1>
+<h1><?php e(t('templates')); ?></h1>
 
 <ul class="options">
-    <li><a class="new" href="<?php e(url('create')); ?>"><?php e(__('create template')); ?></a></li>
-    <li><a href="<?php e(url('../')); ?>"><?php e(__('close', 'common')); ?></a></li>
+    <li><a class="new" href="<?php e(url('create')); ?>"><?php e(t('create template')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('close')); ?></a></li>
 </ul>
 
 <?php if (count($templates) == 0): ?>
-    <p><?php e(__('No templates found')); ?></p>
+    <p><?php e(t('No templates found')); ?></p>
 <?php else: ?>
 <table>
-<caption><?php e(__('Templates')); ?></caption>
+<caption><?php e(t('Templates')); ?></caption>
 <thead>
 <tr>
-    <th><?php e(__('Template name')); ?></th>
-    <th><?php e(__('Identifier', 'common')); ?></th>
-    <th><?php e(__('For page type')); ?></th>
+    <th><?php e(t('Template name')); ?></th>
+    <th><?php e(t('Identifier')); ?></th>
+    <th><?php e(t('For page type')); ?></th>
     <th></th>
 </tr>
 </thead>
@@ -42,8 +42,8 @@ $page_types = CMS_Page::getTypesWithBinaryIndex();
 
         </td>
         <td class="options">
-            <a class="edit" href="<?php e($s['id'] . '/edit'); ?>"><?php e(__('edit settings', 'common')); ?></a>
-            <a class="delete" href="<?php e(url(null, array('delete' => $s['id']))); ?>"><?php e(__('delete', 'common')); ?></a>
+            <a class="edit" href="<?php e($s['id'] . '/edit'); ?>"><?php e(t('edit settings')); ?></a>
+            <a class="delete" href="<?php e(url(null, array('delete' => $s['id']))); ?>"><?php e(t('delete')); ?></a>
         </td>
     </tr>
 <?php endforeach; ?>

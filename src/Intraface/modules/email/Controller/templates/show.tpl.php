@@ -3,7 +3,7 @@
 <ul class="options">
   	<li><a href="<?php e(url('../', array('use_stored' => true))); ?>"><?php e(t('Close')); ?></a></li>
     <?php if ($email->get('status') != 'sent'): ?>
-  	<li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit', 'common')); ?></a></li>
+  	<li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
     <?php endif; ?>
   	<li><a class="pdf" href="<?php e(url(null . '.pdf')); ?>"><?php e(t('Pdf')); ?></a></li>
 </ul>
@@ -23,7 +23,7 @@
 	<input type="hidden" value="put" name="_method" />
 
 	<fieldset>
-		<pre><?php e(t('To', 'common')); ?>: <?php
+		<pre><?php e(t('To')); ?>: <?php
             if ($contact->get('type') == 'corporation' && $email->get('contact_person_id') != 0) {
 
                 $contact->loadContactPerson($email->get('contact_person_id'));
@@ -36,7 +36,7 @@
                e($contact->address->get('name')." <".$contact->address->get('email').">");
             }
             ?></pre>
-		<pre><?php e(t('From', 'common')); ?>: <?php if (isset($value['from_email']) && $value['from_email'] != ''): e($value['from_name']." <".$value['from_email'].">"); else: e($kernel->intranet->address->get('name')." <".$kernel->intranet->address->get('email').">"); endif; ?></pre>
+		<pre><?php e(t('From')); ?>: <?php if (isset($value['from_email']) && $value['from_email'] != ''): e($value['from_name']." <".$value['from_email'].">"); else: e($kernel->intranet->address->get('name')." <".$kernel->intranet->address->get('email').">"); endif; ?></pre>
 
 		<pre><?php e($value['subject']); ?></pre>
 	</fieldset>
@@ -69,7 +69,7 @@
 	<?php if (!$email->isReadyToSend()): ?>
 		<?php echo $email->error->view(); /* errors is first set in isReadyToSend, therefor we show the errors here */  ?>
 	<?php elseif ($email->get('status') != 'sent'): ?>
-		<input type="submit" name="submit" value="<?php e(t('Send', 'common')); ?>" class="confirm" />
-		<a href="<?php e($redirect->getRedirect(url())); ?>"><?php e(t('Cancel', 'common')); ?></a>
+		<input type="submit" name="submit" value="<?php e(t('Send')); ?>" class="confirm" />
+		<a href="<?php e($redirect->getRedirect(url())); ?>"><?php e(t('Cancel')); ?></a>
 	<?php endif; ?>
 </form>

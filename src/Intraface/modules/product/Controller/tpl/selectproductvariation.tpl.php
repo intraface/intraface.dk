@@ -43,8 +43,8 @@
             <?php e(t('Quantity')); ?>: <input type="text" name="quantity" value="1" />
         <?php endif; ?>
         <?php if ($context->multiple): ?>
-        <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />
+        <input type="submit" name="submit" value="<?php e(t('save')); ?>" />
         <?php endif; ?>
-        <input type="submit" name="submit_close" value="<?php e(t('save and close', 'common')); ?>" /></p>
+        <input type="submit" name="submit_close" value="<?php e(t('save and close')); ?>" /></p>
     </form>
 <?php endif; ?>

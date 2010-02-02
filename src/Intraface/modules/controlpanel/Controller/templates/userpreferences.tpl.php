@@ -1,7 +1,7 @@
 <h1><?php e(t('User preferences')); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close', 'common')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 <form action="<?php e(url()); ?>" method="post">
@@ -21,7 +21,7 @@
     </fieldset>
 
     <fieldset id="ptextsize" class="radiobuttons">
-        <legend>Tekststørrelse</legend>
+        <legend>Tekststï¿½rrelse</legend>
             <?php foreach ($textsizes AS $key => $v): ?>
                 <label for="<?php e($key); ?>" class="<?php e($key); if ($value['ptextsize'] == $key) echo ' selected'; ?>">
                     <input type="radio" name="ptextsize" id="<?php e($key); ?>" value="<?php e($key); ?>" <?php if ($value['ptextsize'] == $key) echo ' checked="checked"'; ?> /> <?php e($v); ?>
@@ -32,7 +32,7 @@
     <fieldset>
         <legend>Visning</legend>
         <div>
-            <label for="rows_pr_page">Rækker pr. side</label>
+            <label for="rows_pr_page">Rï¿½kker pr. side</label>
             <input type="text" name="rows_pr_page" id="rows_pr_page" value="<?php e($value["rows_pr_page"]); ?>" />
         </div>
     </fieldset>
@@ -59,7 +59,7 @@
             <?php foreach ($editors AS $k=>$v) { ?>
                 <option value="<?php e($k); ?>"
                     <?php if (!empty($value['htmleditor']) AND $k == $value['htmleditor']) echo ' selected="selected"'; ?>
-                    ><?php e(__($v)); ?></option>
+                    ><?php e(t($v)); ?></option>
             <?php } ?>
             </select>
 
@@ -80,8 +80,8 @@
 
 
     <div>
-        <input type="submit" name="submit" value="<?php e(t('save', 'common')); ?>" />
-        <a href="<?php e(url('../')); ?>"><?php e(t('Cancel', 'common')); ?></a>
+        <input type="submit" name="submit" value="<?php e(t('save')); ?>" />
+        <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 
 </form>

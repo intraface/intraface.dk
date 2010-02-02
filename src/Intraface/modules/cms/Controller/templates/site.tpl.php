@@ -1,23 +1,23 @@
-<h1><?php e(__('site')); ?> <?php e($cmssite->get('name')); ?></h1>
+<h1><?php e(t('site')); ?> <?php e($cmssite->get('name')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="<?php e(url('edit')); ?>"><?php e(__('edit site settings')); ?></a></li>
+    <li><a class="edit" href="<?php e(url('edit')); ?>"><?php e(t('edit site settings')); ?></a></li>
     <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-    <li><a class="template" href="<?php e(url('templates')); ?>"><?php e(__('templates')); ?></a></li>
+    <li><a class="template" href="<?php e(url('templates')); ?>"><?php e(t('templates')); ?></a></li>
     <?php endif; ?>
     <?php if ($kernel->user->hasSubAccess('cms', 'edit_stylesheet')): ?>
-    <li><a class="stylesheet" href="<?php e(url('stylesheet')); ?>"><?php e(__('stylesheet')); ?></a></li>
+    <li><a class="stylesheet" href="<?php e(url('stylesheet')); ?>"><?php e(t('stylesheet')); ?></a></li>
     <?php endif; ?>
 </ul>
 
 <?php if (count($cmspage->getTemplate()->getList()) == 0): ?>
 
     <p class="message-dependent">
-        <?php e(__('you have to create a template')); ?>
+        <?php e(t('you have to create a template')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="<?php e(url('templates/create')); ?>"><?php e(__('create template')); ?></a>.
+            <a href="<?php e(url('templates/create')); ?>"><?php e(t('create template')); ?></a>.
         <?php else: ?>
-            <strong><?php e(__('please ask your administrator to do that')); ?></strong>
+            <strong><?php e(t('please ask your administrator to do that')); ?></strong>
         <?php endif; ?>
     </p>
 

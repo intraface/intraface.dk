@@ -22,10 +22,10 @@ $value = $context->getValues();
 <form action="<?php e(url(null, array($context->subview(), 'contact_id' => $context->getContact()->get('id')))); ?>" method="post">
 
 <fieldset>
-	<legend><?php e(__($context->getDebtor()->get('type').' data')); ?></legend>
+	<legend><?php e(t($context->getDebtor()->get('type').' data')); ?></legend>
 
 	<div class="formrow">
-		<label for="number"><?php e(__($context->getDebtor()->get('type').' number')); ?></label>
+		<label for="number"><?php e(t($context->getDebtor()->get('type').' number')); ?></label>
     <input type="text" name="number" id="number" value="<?php e($value["number"]); ?>" />
 	</div>
 	<div class="formrow">
@@ -37,7 +37,7 @@ $value = $context->getValues();
 		<input class="input" name="this_date" id="this_date" value="<?php if (isset($value["dk_this_date"])) e($value["dk_this_date"]); ?>" size="10" />
 	</div>
 	<div class="formrow">
-		<label for="due_date"><?php e(__($context->getDebtor()->get('type').' due date')); ?></label>
+		<label for="due_date"><?php e(t($context->getDebtor()->get('type').' due date')); ?></label>
 		<input class="input" name="due_date" id="due_date" value="<?php if (isset($value["dk_due_date"])) e($value["dk_due_date"]); ?>" size="10" />
 	</div>
 	<?php if ($context->getDebtor()->get("type") == "invoice") { ?>
@@ -118,15 +118,15 @@ $value = $context->getValues();
 <?php if ($context->getDebtor()->get("type") == "invoice" || $context->getDebtor()->get("type") == "order") { ?>
 	<fieldset class="radiobuttons">
 		<legend><?php e(t('Payment information')); ?></legend>
-		<p><?php e(__('Which payment method do you want to show on the '.$context->getDebtor()->get("type"))); ?></p>
+		<p><?php e(t('Which payment method do you want to show on the '.$context->getDebtor()->get("type"))); ?></p>
 		<div>
 			<label<?php if (isset($value['payment_method']) && $value['payment_method'] == 0) print(" class=\"selected\""); ?>><input class="input" id="none" type="radio" name="payment_method" value="0" <?php if (isset($value['payment_method']) && $value['payment_method'] == 0) print("checked=\"CHECKED\""); ?> />
-			<?php e(__('None', 'common')); ?></label>
+			<?php e(t('None')); ?></label>
 		</div>
     <?php if ($context->getKernel()->setting->get('intranet', 'bank_account_number')) { ?>
 		<div>
 			<label<?php if (isset($value['payment_method']) AND $value['payment_method'] == 1) print(' class="selected"'); ?>><input class="input" id="account" type="radio" name="payment_method" value="1" <?php if (isset($value['payment_method']) AND $value['payment_method'] == 1) print("checked=\"CHECKED\""); ?> />
-			<?php e(__('Wire transfer')); ?></label>
+			<?php e(t('Wire transfer')); ?></label>
 		</div>
     <?php } else { ?>
         <p><?php e(t('In order to receive money through wire transfer, you have to put in your account number')); ?>. <a href="<?php e(url('../../../settings')); ?>"><?php e(t('Put in bank account number')); ?></a>.</p>
@@ -161,9 +161,9 @@ $value = $context->getValues();
 <div>
 <input type="submit" class="save" name="submit" value="<?php e(t('Continue')); ?>" />
 <?php if (!$context->getDebtor()->get("id")) { ?>
-<a href="<?php e(url('../	')); ?>"><?php e(t('Cancel', 'common')); ?></a>
+<a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
 <?php } else { ?>
-<a href="view.php?id=<?php e($context->getDebtor()->get("id")); ?>"><?php e(t('Cancel', 'common')); ?></a>
+<a href="<?php e(url()); ?>"><?php e(t('Cancel')); ?></a>
 <?php } ?>
 </div>
 
