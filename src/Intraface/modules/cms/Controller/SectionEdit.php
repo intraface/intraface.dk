@@ -2,6 +2,7 @@
 class Intraface_modules_cms_Controller_SectionEdit extends k_Component
 {
     protected $template;
+    protected $element;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -17,7 +18,15 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
 
     function getElement()
     {
-        return $element = CMS_Element::factory($this->getKernel(), 'id', $this->name());
+        if (is_object($this->element)) {
+            return $this->element;
+        }
+
+        if (is_numeric($this->name())) {
+            return $this->element = CMS_Element::factory($this->getKernel(), 'id', $this->name());
+        } else {
+            return $this->element = CMS_Element::factory($this->context->getSection(), 'type', $this->query('type'));
+        }
     }
 
     function getFileAppender()
@@ -32,6 +41,18 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
              return new AppendFile($this->getKernel(), 'cms_element_picture', $this->getElement()->get('id'));
         }
         throw new Exception('No valid fileappender present');
+    }
+
+    function appendFiles($files)
+    {
+        if ($this->getElement()->get('type') == 'picture') {
+            $value = $this->getElement()->get();
+            $value['pic_id'] = $files;
+            if (!$this->getElement()->save($value)) {
+                echo $this->getElement()->error->view();
+            }
+        }
+        return true;
     }
 
     function renderHtml()
@@ -197,7 +218,11 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
                     $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images' => 1)), NET_SCHEME . NET_HOST . $this->url('element/' . $element->get('id')));
                     $redirect->setIdentifier('picture');
                     $redirect->askParameter('file_handler_id');
-                    return new k_SeeOther($this->url('../element/' . $element->get('id') . '/filehandler/selectfile', array('images' => 1)));
+                    if ($this->getElement()->get('id') > 0) {
+                         return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 1)));
+                    } else {
+                        return new k_SeeOther($this->url('../element/' . $element->get('id') . '/filehandler/selectfile', array('images' => 1)));
+                    }
                 } elseif ($element->get('type') == 'gallery') {
                     $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images' => 1, 'multiple_choice' => true)), NET_SCHEME . NET_HOST . $this->url('element/' . $element->get('id')));
                     $redirect->setIdentifier('gallery');
@@ -230,9 +255,14 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
         return $this->render();
     }
 
-
     function getKernel()
     {
         return $this->context->getKernel();
+    }
+
+    function renderHtmlDelete()
+    {
+        $this->getElement()->delete();
+        return new k_SeeOther($this->url('../'));
     }
 }

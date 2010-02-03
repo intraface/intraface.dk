@@ -75,12 +75,18 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
         }
         */
 
-        $appender = $this->getFileAppender();
-        foreach ($this->body('selected') as $file_id) {
-            $file = $gateway->getFromId($file_id);
-        	$appender->addFile($file);
-        }
+        if (method_exists($this->context->context, 'appendFiles')) {
+            foreach ($this->body('selected') as $file_id) {
+                $file = $this->context->context->appendFiles($file_id);
+            }
+        } else {
 
+            $appender = $this->getFileAppender();
+            foreach ($this->body('selected') as $file_id) {
+                $file = $gateway->getFromId($file_id);
+            	$appender->addFile($file);
+            }
+        }
         return new k_SeeOther($this->url('../../'));
         /*
         $filemanager = new Ilib_Filehandler_Manager($kernel); // has to be loaded here, while it should be able to set an error just below.

@@ -17,6 +17,11 @@ class Intraface_modules_cms_Controller_Section extends k_Component
         }
     }
 
+    function getSection()
+    {
+        return $section = CMS_Section::factory($this->getKernel(), 'id', $this->name());
+    }
+
     function renderHtml()
     {
         $cms_module = $this->getKernel()->module('cms');
