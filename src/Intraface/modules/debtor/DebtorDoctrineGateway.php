@@ -2,7 +2,7 @@
 /**
  * Doctrine Gateway to DebtorDoctrine
  *
- * Bruges til at holde styr på debtor.
+ * Bruges til at holde styr pï¿½ debtor.
  *
  * @package Intraface_Debtor
  * @author Sune Jensen
@@ -73,9 +73,9 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
     /**
      * Finds all products
      *
-     * Hvis den er fra webshop bør den faktisk opsamle oplysninger om søgningen
-     * så man kan se, hvad folk er interesseret i.
-     * Søgemaskinen skal være tolerant for stavefejl
+     * Hvis den er fra webshop bï¿½r den faktisk opsamle oplysninger om sï¿½gningen
+     * sï¿½ man kan se, hvad folk er interesseret i.
+     * Sï¿½gemaskinen skal vï¿½re tolerant for stavefejl
      *
      * @param object $search
      *
@@ -99,7 +99,8 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
             ->leftJoin('item_product_variation.detail item_product_variation_detail')
             ->addWhere('active = 1')
             ->addWhere('item.active = 1')
-            ->addWhere('type = ?', $this->type_key);
+            ->addWhere('type = ?', $this->type_key)
+            ->addWhere('intranet_id = ?', $this->user->getActiveIntranetId());
 
         if ($dbquery->checkFilter("contact_id")) {
             $query = $query->addWhere("contact_id = ?",intval($dbquery->getFilter("contact_id")));
@@ -140,7 +141,7 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
             }
         }
 
-        // Poster med fakturadato før slutdato.
+        // Poster med fakturadato fï¿½r slutdato.
         if ($dbquery->checkFilter("to_date")) {
             $date = new Intraface_Date($dbquery->getFilter("to_date"));
             if ($date->convert2db()) {
@@ -149,31 +150,31 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
                 $this->error->set("Til dato er ikke gyldig");
             }
         }
-        // alle ikke bogførte skal findes
+        // alle ikke bogfï¿½rte skal findes
         if ($dbquery->checkFilter("not_stated")) {
             $query = $query->addWhere("voucher_id = 0");
         }
 
         if ($dbquery->checkFilter("status")) {
             if ($dbquery->getFilter("status") == "-1") {
-                // Behøves ikke, den tager alle.
+                // Behï¿½ves ikke, den tager alle.
                 // $query = $query->addWhere("status >= 0");
 
             } elseif ($dbquery->getFilter("status") == "-2") {
-                // Not executed = åbne
+                // Not executed = ï¿½bne
                 if ($dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($dbquery->getFilter("to_date"));
                     if ($date->convert2db()) {
-                        // Poster der er executed eller cancelled efter dato, og sikring at executed stadig er det, da faktura kan sættes tilbage.
+                        // Poster der er executed eller cancelled efter dato, og sikring at executed stadig er det, da faktura kan sï¿½ttes tilbage.
                         $query = $query->addWhere("(date_executed >= \"".$date->get()."\" AND status = 2) OR (date_cancelled >= \"".$date->get()."\") OR status < 2");
                     }
                 } else {
-                    // Hvis der ikke er nogen dato så tager vi alle dem som på nuværende tidspunkt har status under
+                    // Hvis der ikke er nogen dato sï¿½ tager vi alle dem som pï¿½ nuvï¿½rende tidspunkt har status under
                     $query = $query->addWhere("status < 2");
                 }
 
             } elseif ($dbquery->getFilter("status") == "-3") {
-                //  Afskrevne. Vi tager først alle sendte og executed.
+                //  Afskrevne. Vi tager fï¿½rst alle sendte og executed.
 
                 if ($this->get("type") != "invoice") {
                     trigger_error("Afskrevne kan kun benyttes ved faktura", E_USER_ERROR);
@@ -186,12 +187,12 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
                 if ($dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($dbquery->getFilter("to_date"));
                     if ($date->convert2db()) {
-                        // alle som er sendte på datoen og som ikke er cancelled
+                        // alle som er sendte pï¿½ datoen og som ikke er cancelled
                         $query = $query->addWhere("debtor.date_sent <= '".$date->get()."' AND debtor.status != 3");
                         $query = $query->addWhere("invoice_payment.payment_date <= '".$date->get()."'");
                     }
                 } else {
-                    // Hvis der ikke er nogen dato så tager vi alle dem som på nuværende tidspunkt har status under
+                    // Hvis der ikke er nogen dato sï¿½ tager vi alle dem som pï¿½ nuvï¿½rende tidspunkt har status under
                     $query = $query->addWhere("status = 1 OR status = 2");
                 }
             } else {
