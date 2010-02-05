@@ -85,6 +85,7 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
         $gateway->getDBQuery()->usePaging("paging", $this->getKernel()->setting->get('user', 'rows_pr_page'));
         $gateway->getDBQuery()->storeResult("use_stored", "procurement", "toplevel");
         // $gateway->getDBQuery()->setExtraUri('&amp;type='.$gateway->get("type"));
+        $gateway->getDBQuery()->setUri($this->url());
         $procurements = $gateway->find();
 
         $data = array(
