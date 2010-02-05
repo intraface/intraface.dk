@@ -242,8 +242,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
             $sent_total = 0;
             $total = 0;
 
-            if (count($posts) > 0) {
-                foreach($posts AS $debtor) {
+            foreach($posts AS $debtor) {
 
                     if (strtotime($debtor->getDueDate()->getAsIso()) < time() && ($debtor->getStatus() == "created" OR $debtor->getStatus() == "sent")) {
                         $due_total += $debtor->getTotal()->getAsIso(2);
@@ -271,7 +270,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
                     }
 
                     if ($debtor->getStatus() == "executed" || $debtor->getStatus() == "canceled") {
-                        $worksheet->write($i, 7, __($debtor->getStatus(), 'debtor'));
+                        $worksheet->write($i, 7, $this->t($debtor->getStatus(), 'debtor'));
                     } else {
                         $worksheet->write($i, 7, $debtor->getDueDate()->getAsLocal('da_DK'));
                     }
@@ -314,7 +313,6 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
                     $i++;
 
                 }
-            }
 
 
             $i++;
@@ -336,9 +334,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
 
             $worksheet->hideGridLines();
 
-            $workbook->close();
-
-            exit;
+            return $workbook->close();
         }
 
         $debtor_module = $this->getKernel()->module('debtor');
@@ -430,7 +426,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         }
 
         // HACK unsetting debtor which is actually ok to avoid memory problems //
-        $type = $debtor->get('type');
+        $type = $this->getType();
         unset($debtor);
         // HACK end //
 
