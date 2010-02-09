@@ -4,10 +4,13 @@ class Intraface_modules_contact_Controller_Index extends k_Component
     protected $eniro;
     protected $contact;
     protected $template;
+    protected $db_sql;
+    protected $contact_gateway;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, DB_Sql $db)
     {
         $this->template = $template;
+        $this->db_sql = $db;
     }
 
     function map($name)
@@ -21,85 +24,6 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         } elseif ($name == 'batchnewsletter') {
             return 'Intraface_modules_contact_Controller_BatchNewsletter';
         }
-    }
-
-    function getRedirect()
-    {
-        return Intraface_Redirect::factory($this->getKernel(), 'receive');
-    }
-
-    function getContact()
-    {
-        if (is_object($this->contact)) {
-            return $this->contact;
-        }
-        return $this->contact = new Contact($this->getKernel());
-    }
-
-    function getUsedKeywords()
-    {
-        $contact = $this->getContact();
-        $keywords = $contact->getKeywordAppender();
-        $used_keywords = $keywords->getUsedKeywords();
-        return $used_keywords;
-    }
-
-    function getContacts()
-    {
-        $keywords = $this->getContact()->getKeywordAppender();
-        $used_keywords = $keywords->getUsedKeywords();
-
-        if (isset($_GET['query']) || isset($_GET['keyword_id'])) {
-
-        	if (isset($_GET['query'])) {
-        		$this->getContact()->getDBQuery()->setFilter('search', $_GET['query']);
-        	}
-
-        	if (isset($_GET['keyword_id'])) {
-        		$this->getContact()->getDBQuery()->setKeyword($_GET['keyword_id']);
-        	}
-        } else {
-        	$this->getContact()->getDBQuery()->useCharacter();
-        }
-
-        $this->getContact()->getDBQuery()->defineCharacter('character', 'address.name');
-        $this->getContact()->getDBQuery()->usePaging('paging');
-        $this->getContact()->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
-        $this->getContact()->getDBQuery()->setUri($this->url());
-
-        return ($contacts = $this->getContact()->getList());
-    }
-
-    function putForm()
-    {
-        if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
-        	$deleted = array();
-        	if (!empty($_POST['selected']) AND is_array($_POST['selected'])) {
-        		foreach ($_POST['selected'] AS $key=>$id) {
-        			$contact = new Contact($this->getKernel(), intval($id));
-        			if ($contact->delete()) {
-        				$deleted[] = $id;
-        			}
-        		}
-        	}
-        } elseif (!empty($_POST['undelete'])) {
-
-        	if (!empty($_POST['deleted']) AND is_string($_POST['deleted'])) {
-        		$undelete = unserialize(base64_decode($_POST['deleted']));
-        	} else {
-        		throw new Exception('Could not undelete');
-        	}
-        	if (!empty($undelete) AND is_array($undelete)) {
-        		foreach ($undelete AS $key=>$id) {
-        			$contact = new Contact($this->getKernel(), intval($id));
-        			if (!$contact->undelete()) {
-        			// void
-        			}
-        		}
-        	}
-        }
-
-        return new k_SeeOther($this->url());
     }
 
     function renderHtml()
@@ -132,9 +56,36 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         return $smarty->render($this, array('contacts' => $this->getContacts()));
     }
 
-    function getKernel()
+    function putForm()
     {
-        return $this->context->getKernel();
+        if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
+        	$deleted = array();
+        	if (!empty($_POST['selected']) AND is_array($_POST['selected'])) {
+        		foreach ($_POST['selected'] AS $key=>$id) {
+        			$contact = new Contact($this->getKernel(), intval($id));
+        			if ($contact->delete()) {
+        				$deleted[] = $id;
+        			}
+        		}
+        	}
+        } elseif (!empty($_POST['undelete'])) {
+
+        	if (!empty($_POST['deleted']) AND is_string($_POST['deleted'])) {
+        		$undelete = unserialize(base64_decode($_POST['deleted']));
+        	} else {
+        		throw new Exception('Could not undelete');
+        	}
+        	if (!empty($undelete) AND is_array($undelete)) {
+        		foreach ($undelete AS $key=>$id) {
+        			$contact = new Contact($this->getKernel(), intval($id));
+        			if (!$contact->undelete()) {
+        			// void
+        			}
+        		}
+        	}
+        }
+
+        return new k_SeeOther($this->url());
     }
 
     function renderPdf()
@@ -354,5 +305,65 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         return array();
     }
 
+    function getGateway()
+    {
+        if (is_object($this->contact_gateway)) {
+            return $this->contact_gateway;
+        }
 
+        return $this->contact_gateway = new Intraface_modules_contact_ContactGateway($this->getKernel(), $this->db_sql);
+    }
+
+    function getRedirect()
+    {
+        return Intraface_Redirect::factory($this->getKernel(), 'receive');
+    }
+
+    function getContact()
+    {
+        if (is_object($this->contact)) {
+            return $this->contact;
+        }
+        return $this->contact = new Contact($this->getKernel());
+    }
+
+    function getUsedKeywords()
+    {
+        $contact = $this->getContact();
+        $keywords = $contact->getKeywordAppender();
+        $used_keywords = $keywords->getUsedKeywords();
+        return $used_keywords;
+    }
+
+    function getContacts()
+    {
+        $keywords = $this->getContact()->getKeywordAppender();
+        $used_keywords = $keywords->getUsedKeywords();
+
+        if (isset($_GET['query']) || isset($_GET['keyword_id'])) {
+
+        	if (isset($_GET['query'])) {
+        		$this->getContact()->getDBQuery()->setFilter('search', $_GET['query']);
+        	}
+
+        	if (isset($_GET['keyword_id'])) {
+        		$this->getContact()->getDBQuery()->setKeyword($_GET['keyword_id']);
+        	}
+        } else {
+        	$this->getContact()->getDBQuery()->useCharacter();
+        }
+
+        $this->getContact()->getDBQuery()->defineCharacter('character', 'address.name');
+        $this->getContact()->getDBQuery()->usePaging('paging');
+        $this->getContact()->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
+        $this->getContact()->getDBQuery()->setUri($this->url());
+
+        return ($contacts = $this->getContact()->getList());
+    }
+
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
 }

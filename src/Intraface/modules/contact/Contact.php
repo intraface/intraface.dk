@@ -202,9 +202,6 @@ class Contact extends Intraface_Standard
      */
     public function __construct($kernel, $id = 0)
     {
-        if (!is_object($kernel)) {
-            trigger_error('Contact kr�ver kernel - fik ' . get_class($kernel), E_USER_ERROR);
-        }
         $this->kernel = $kernel;
         //$contact_module = $this->kernel->getModule('contact');
         //$this->types = $contact_module->getSetting('type');
@@ -665,6 +662,8 @@ class Contact extends Intraface_Standard
     /**
      * Hente det maksimale kundenummer
      *
+     * @deprecated moved to gateway
+     *
      * @return integer
      */
     public function getMaxNumber()
@@ -679,6 +678,8 @@ class Contact extends Intraface_Standard
 
     /**
      * Public: Finde data til en liste
+     *
+     * @deprecated moved to gateway
      *
      * @param string $parameter hvad er det?
      *

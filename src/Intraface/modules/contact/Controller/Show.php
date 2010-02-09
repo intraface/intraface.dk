@@ -2,6 +2,7 @@
 class Intraface_modules_contact_Controller_Show extends k_Component
 {
     protected $template;
+    protected $contact;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -39,11 +40,6 @@ class Intraface_modules_contact_Controller_Show extends k_Component
     {
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
         return $smarty->render($this);
-    }
-
-    function getRedirect()
-    {
-        return Intraface_Redirect::factory($this->getKernel(), 'receive');
     }
 
     function postForm()
@@ -105,6 +101,11 @@ class Intraface_modules_contact_Controller_Show extends k_Component
         return $this->render();
     }
 
+    function getRedirect()
+    {
+        return Intraface_Redirect::factory($this->getKernel(), 'receive');
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
@@ -112,22 +113,22 @@ class Intraface_modules_contact_Controller_Show extends k_Component
 
     function getContact()
     {
-        $contact = new Contact($this->getKernel(), $this->name());
-        $value = $contact->get();
-
+        if (is_object($this->contact)) {
+            return $this->contact;
+        }
+        return ($this->contact = $this->context->getGateway()->findById($this->name()));
+        /*
+        $contact = new Contact($this->getKernel(), );
         return $contact;
+        */
     }
 
     function getContactPersons()
     {
-        $contact = new Contact($this->getKernel(), $this->name());
-        $value = $contact->get();
-
         if ($this->getContact()->get('type') == "corporation") {
-            return $persons = $contact->contactperson->getList();
+            return $persons = $this->getContact()->contactperson->getList();
         }
         return array();
-
     }
 
     function getValues()
