@@ -11,5 +11,5 @@ $_setting['onlinepayment.quickpay.md5_secret'] = '';
 $_setting['onlinepayment.dandomain.merchant_id'] = '';
 $_setting['onlinepayment.dandomain.password'] = '';
 
-$_setting['onlinepayment.email.subject'] = 'Betalingsbekræftelse';
+$_setting['onlinepayment.email.subject'] = 'BetalingsbekrÃ¦ftelse';
 $_setting['onlinepayment.email.body'] = 'Vi har modtaget din betaling.';
