@@ -4,7 +4,7 @@
     <li><a class="edit" href="<?php e(url('edit')); ?>"><?php e(t('edit settings')); ?></a></li>
     <li><a href="<?php e(url('../', array('type' => $cmspage->get('type')))); ?>"><?php e(t('close')); ?></a></li>
     <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-    <li><a href="<?php e(url('../../template/' . $cmspage->get('template_id'))); ?>"><?php e(t('edit template')); ?></a></li>
+    <li><a href="<?php e(url('../../templates/' . $cmspage->get('template_id'))); ?>"><?php e(t('edit template')); ?></a></li>
     <?php endif; ?>
 </ul>
 
