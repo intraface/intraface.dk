@@ -69,7 +69,7 @@ class Intraface_modules_cms_section_Longtext extends CMS_Section
 
         require_once 'HTMLPurifier/Bootstrap.php';
         $config = HTMLPurifier_Config::createDefault();
-        $config->set('Core.Encoding', 'ISO-8859-1');
+        $config->set('Core.Encoding', 'UTF-8');
         $purifier_cache_dir = PATH_CACHE.'htmlpurifier/';
         if (!is_dir($purifier_cache_dir)) {
             mkdir($purifier_cache_dir);
