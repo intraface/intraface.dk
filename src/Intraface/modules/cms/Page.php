@@ -129,8 +129,12 @@ class CMS_Page extends Intraface_Standard
 
     function factory($kernel, $type, $value)
     {
+        $gateway = new Intraface_modules_cms_PageGateway($kernel, new DB_Sql);
+
         switch ($type) {
             case 'id':
+                return $gateway->findById($value);
+                /*
                 $db = new DB_Sql;
                 $db->query("SELECT id, site_id FROM cms_page WHERE id = " . (int)$value . " AND intranet_id = " . $kernel->intranet->get('id'));
 
@@ -140,10 +144,14 @@ class CMS_Page extends Intraface_Standard
                 $site = new CMS_Site($kernel, $db->f('site_id'));
                 $object = new CMS_Page($site, (int)$value);
                 return $object;
+                */
                 break;
             case 'identifier':
                 $value['identifier'] = safeToDb($value['identifier']);
                 $value['identifier'] = strip_tags($value['identifier']);
+                return $gateway->findByIdentifier($value['identifier']);
+
+                /*
                 $db = new DB_Sql;
 
                 if (!empty($value['identifier'])) {
@@ -159,6 +167,7 @@ class CMS_Page extends Intraface_Standard
                     }
                 }
                 return new CMS_Page(new CMS_Site($kernel, $db->f('site_id')), $db->f('id'));
+                */
                 break;
             default:
                 trigger_error('CMS_Page::factory unknown type', E_USER_ERROR);

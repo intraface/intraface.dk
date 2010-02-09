@@ -1,6 +1,6 @@
 <?php
 /**
- * Spørgsmålet er hvornår stylesheet og sitemap skal loades
+ * Spï¿½rgsmï¿½let er hvornï¿½r stylesheet og sitemap skal loades
  * - Vi kan loade dem pï¿½ request i load()?
  * Navigation skal vel fï¿½lge den enkelte side?
  *
@@ -23,10 +23,6 @@ class CMS_Site extends Intraface_Standard
 
     function __construct($kernel, $id = 0)
     {
-        if (!is_object($kernel)) {
-            trigger_error('CMS_Site::__construct needs kernel', E_USER_ERROR);
-        }
-
         $this->kernel = $kernel;
         $this->id = (int)$id;
         $this->error = new Intraface_Error;

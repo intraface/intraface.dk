@@ -26,7 +26,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
      */
     function getModel()
     {
-        return $cmspage = CMS_Page::factory($this->getKernel(), 'id', $this->name());
+        return $cmspage = $this->context->getPageGateway()->findById($this->name());
     }
 
     function renderHtml()
@@ -45,7 +45,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
 
         }
 
-        $cmspage = CMS_Page::factory($this->getKernel(), 'id', $this->name());
+        $cmspage = $this->getModel();
         $sections = $cmspage->getSections();
 
         if (!empty($sections) AND count($sections) == 1 AND array_key_exists(0, $sections) AND $sections[0]->get('type') == 'mixed') {
@@ -68,16 +68,13 @@ class Intraface_modules_cms_Controller_Page extends k_Component
     function postForm()
     {
         $module_cms = $this->getKernel()->module('cms');
-        $module_cms->includeFile('HTML_Editor.php');
 
         if (!empty($_POST['publish'])) {
-            $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_POST['id']);
-            if ($cmspage->publish()) {
+            if ($this->getModel()->publish()) {
                 return new k_SeeOther($this->url());
             }
         } elseif (!empty($_POST['unpublish'])) {
-            $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_POST['id']);
-            if ($cmspage->unpublish()) {
+            if ($this->getModel()->unpublish()) {
                 return new k_SeeOther($this->url());
             }
         }

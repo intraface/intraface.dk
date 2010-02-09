@@ -36,7 +36,7 @@ class Intraface_modules_cms_section_Mixed extends CMS_Section
     }
 
     /**
-     * @todo - tror den her er med til at forårsage mange sql kald - 
+     * @todo - tror den her er med til at forï¿½rsage mange sql kald -
      *         could probably be optimized quite a bit.
      */
     function getElements()
@@ -61,7 +61,6 @@ class Intraface_modules_cms_section_Mixed extends CMS_Section
             $element[$i] = CMS_Element::factory($this, 'section_and_id', $db->f('id'));
             $i++;
         }
-
         return $element;
     }
 }

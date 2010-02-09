@@ -2,10 +2,15 @@
 class Intraface_modules_cms_Controller_Template extends k_Component
 {
     protected $template;
+    protected $mdb2;
+    protected $cms_template;
+    protected $db_sql;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, MDB2_Driver_Common $mdb2, DB_Sql $db)
     {
         $this->template = $template;
+        $this->mdb2 = $mdb2;
+        $this->db_sql = $db;
     }
 
     function map($name)
@@ -22,15 +27,14 @@ class Intraface_modules_cms_Controller_Template extends k_Component
     function renderHtml()
     {
         $this->getKernel()->module('cms');
-        $translation = $this->getKernel()->getTranslation('cms');
 
         if (!empty($_GET['movedown']) AND is_numeric($_GET['movedown'])) {
             $section = CMS_TemplateSection::factory($this->getKernel(), 'id', $_GET['movedown']);
-            $section->getPosition(MDB2::singleton(DB_DSN))->moveDown();
+            $section->getPosition($this->mdb2)->moveDown();
             $template = $section->template;
         } elseif (!empty($_GET['moveup']) AND is_numeric($_GET['moveup'])) {
             $section = CMS_TemplateSection::factory($this->getKernel(), 'id', $_GET['moveup']);
-            $section->getPosition(MDB2::singleton(DB_DSN))->moveUp();
+            $section->getPosition($this->mdb2)->moveUp();
             $template = $section->template;
         }
 
@@ -43,22 +47,27 @@ class Intraface_modules_cms_Controller_Template extends k_Component
             $section->undelete();
             $template = $section->template;
         }
-        $template = CMS_Template::factory($this->getKernel(), 'id', $this->name());
-
-        $sections = $template->getSections();
 
         $data = array(
-            'template'=> $template,
-            'sections' => $sections
+            'template'=> $this->getModel(),
+            'sections' => $this->getModel()->getSections()
         );
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/template');
         return $tpl->render($this, $data);
     }
 
+    function getTemplateGateway()
+    {
+        return new Intraface_modules_cms_TemplateGateway($this->getKernel(), $this->db_sql);
+    }
+
     function getModel()
     {
-        return $template = CMS_Template::factory($this->getKernel(), 'id', $this->name());
+        if ($this->cms_template) {
+            return $this->cms_template;
+        }
+        return $this->cms_template = $this->getTemplateGateway()->findById($this->name());
     }
 
     function postForm()

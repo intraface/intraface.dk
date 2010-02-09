@@ -2,10 +2,15 @@
 class Intraface_modules_cms_Controller_Pages extends k_Component
 {
     protected $template;
+    protected $page_gateway;
+    protected $db_sql;
+    protected $mdb2;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, DB_Sql $db, MDB2_Driver_Common $mdb2)
     {
         $this->template = $template;
+        $this->db_sql = $db;
+        $this->mdb2 = $mdb2;
     }
 
     function map($name)
@@ -17,23 +22,32 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
         }
     }
 
+    function getPageGateway()
+    {
+        if (is_object($this->page_gateway)) {
+            return $this->page_gateway;
+        }
+
+        return $this->page_gateway = new Intraface_modules_cms_PageGateway($this->getKernel(), $this->db_sql);
+    }
+
     function renderHtml()
     {
         $cms_module = $this->getKernel()->module('cms');
         $translation = $this->getKernel()->getTranslation('cms');
 
         if (!empty($_GET['moveup']) AND is_numeric($_GET['moveup'])) {
-            $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_GET['moveup']);
-            $cmspage->getPosition(MDB2::singleton(DB_DSN))->moveUp();
+            $cmspage = $this->getPageGateway()->findById($_GET['moveup']);
+            $cmspage->getPosition($this->mdb2)->moveUp();
             $cmssite = $cmspage->cmssite;
             $type = $cmspage->get('type');
         } elseif (!empty($_GET['movedown']) AND is_numeric($_GET['movedown'])) {
-            $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_GET['movedown']);
-            $cmspage->getPosition(MDB2::singleton(DB_DSN))->moveDown();
+            $cmspage = $this->getPageGateway()->findById($_GET['movedown']);
+            $cmspage->getPosition($this->mdb2)->moveDown();
             $cmssite = $cmspage->cmssite;
             $type = $cmspage->get('type');
         } elseif (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
-            $cmspage = CMS_Page::factory($this->getKernel(), 'id', $_GET['delete']);
+            $cmspage = $this->getPageGateway()->findById($_GET['delete']);
             $cmspage->delete();
             $cmssite = $cmspage->cmssite;
             $type = $cmspage->get('type');
@@ -80,7 +94,6 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
     function postForm()
     {
         $cms_module = $this->getKernel()->module('cms');
-        $translation = $this->getKernel()->getTranslation('cms');
 
         foreach ($_POST['page'] AS $key=>$value) {
 

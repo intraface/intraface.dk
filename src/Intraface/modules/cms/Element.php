@@ -41,9 +41,6 @@ class CMS_Element extends Intraface_Standard
      */
     function __construct($section, $id = 0)
     {
-        if (!is_object($section)) {
-            trigger_error('CMS_Element::CMS_Element needs CMS_Section - got ' . get_class($section), E_USER_ERROR);
-        }
         $this->value['identify_as'] = 'cms_element';  // bruges af parameter
 
         $this->id        = (int) $id;
@@ -92,13 +89,20 @@ class CMS_Element extends Intraface_Standard
      */
     function factory($object, $type, $value)
     {
+        $gateway = new Intraface_modules_cms_ElementGateway(new DB_Sql);
+
         $class_prefix = 'Intraface_modules_cms_element_';
         switch ($type) {
             case 'type':
+                return $gateway->findBySectionAndType($object, $value);
+                /*
                 $class = $class_prefix . ucfirst($value);
                 return new $class($object);
+                */
                 break;
             case 'id':
+                return $gateway->findByKernelAndId($object, $value);
+                /*
                 // skal bruge kernel og numerisk value
                 $cms_module = $object->getModule('cms');
                 $element_types = $cms_module->getSetting('element_types');
@@ -114,9 +118,11 @@ class CMS_Element extends Intraface_Standard
                     return false;
                 }
                 return new $class(CMS_Section::factory($object, 'id', $db->f('section_id')), $db->f('id'));
-
+				*/
                 break;
             case 'section_and_id':
+                return $gateway->findBySectionAndId($object, $value);
+                /*
                 // FIXME - jeg tror den her kan skabe en del
                 // af problemerne med mange kald
                 // skal bruge cmspage-object og numerisk value id
@@ -134,10 +140,8 @@ class CMS_Element extends Intraface_Standard
                     return false;
                 }
                 return new $class($object, $db->f('id'));
-
-
+				*/
                 break;
-
             default:
                 trigger_error('Element::factory:: Invalid type', E_USER_ERROR);
                 break;

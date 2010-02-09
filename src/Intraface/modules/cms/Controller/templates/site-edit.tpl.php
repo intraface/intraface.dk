@@ -2,10 +2,9 @@
 
 <?php echo $cmssite->error->view($translation); ?>
 
-<form action="<?php e(url()); ?>" method="POST">
+<form action="<?php e(url(null, array($context->subview()))); ?>" method="POST">
 	<fieldset>
 		<legend><?php e(t('info about the site')); ?></legend>
-		<input type="hidden" name="id" value="<?php if (!empty($value['id'])) e($value['id']); ?>" />
 		<div class="formrow">
 			<label><?php e(t('website name')); ?></label>
 			<input type="text" name="name" size="30" value="<?php if (!empty($value['name'])) e($value['name']); ?>" />
