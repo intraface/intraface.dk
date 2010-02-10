@@ -75,12 +75,11 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
         }
         */
 
-        if (method_exists($this->context->context, 'appendFiles')) {
+        if (method_exists($this->context->context, 'appendFile')) {
             foreach ($this->body('selected') as $file_id) {
-                $file = $this->context->context->appendFiles($file_id);
+                $file = $this->context->context->appendFile($file_id);
             }
         } else {
-
             $appender = $this->getFileAppender();
             foreach ($this->body('selected') as $file_id) {
                 $file = $gateway->getFromId($file_id);
