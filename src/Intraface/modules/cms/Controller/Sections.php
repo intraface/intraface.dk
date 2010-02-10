@@ -2,6 +2,12 @@
 class Intraface_modules_cms_Controller_Sections extends k_Component
 {
     protected $section_gateway;
+    protected $db_sql;
+
+    function __construct(DB_Sql $db)
+    {
+        $this->db_sql = $db;
+    }
 
     function map($name)
     {
@@ -28,6 +34,6 @@ class Intraface_modules_cms_Controller_Sections extends k_Component
         if ($this->section_gateway) {
             return $this->section_gateway;
         }
-        return $this->section_gateway = new Intraface_modules_cms_SectionGateway($this->getKernel());
+        return $this->section_gateway = new Intraface_modules_cms_SectionGateway($this->getKernel(), $this->db_sql);
     }
 }
