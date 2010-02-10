@@ -1,7 +1,7 @@
-<h1><?php e(t('templates')); ?></h1>
+<h1><?php e(t('Templates')); ?></h1>
 
 <ul class="options">
-    <li><a class="new" href="<?php e(url('create')); ?>"><?php e(t('create template')); ?></a></li>
+    <li><a class="new" href="<?php e(url(null, array('create'))); ?>"><?php e(t('create template')); ?></a></li>
     <li><a href="<?php e(url('../')); ?>"><?php e(t('close')); ?></a></li>
 </ul>
 
@@ -42,8 +42,8 @@ $page_types = CMS_Page::getTypesWithBinaryIndex();
 
         </td>
         <td class="options">
-            <a class="edit" href="<?php e($s['id'] . '/edit'); ?>"><?php e(t('edit settings')); ?></a>
-            <a class="delete" href="<?php e(url(null, array('delete' => $s['id']))); ?>"><?php e(t('delete')); ?></a>
+            <a class="edit" href="<?php e(url($s['id'], array('edit'))); ?>"><?php e(t('edit settings')); ?></a>
+            <a class="delete" href="<?php e(url($s['id'], array('delete'))); ?>"><?php e(t('delete')); ?></a>
         </td>
     </tr>
 <?php endforeach; ?>

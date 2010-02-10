@@ -1,7 +1,7 @@
-<h1><?php e(t('template')); ?> <?php e($template->get('name')); ?></h1>
+<h1><?php e(t('Template')); ?> <?php e($template->get('name')); ?></h1>
 
 <ul class="options">
-    <li><a class="edit" href="<?php e(url('edit')); ?>"><?php e(t('edit')); ?></a></li>
+    <li><a class="edit" href="<?php e(url(null, array('edit'))); ?>"><?php e(t('edit')); ?></a></li>
     <li><a href="<?php e(url('../')); ?>"><?php e(t('close')); ?></a></li>
 </ul>
 
@@ -13,17 +13,17 @@
 
 <?php if (is_array($sections) AND count($sections) > 0): ?>
     <table>
-        <caption><?php e(t('sections')); ?></caption>
+        <caption><?php e(t('Sections')); ?></caption>
         <thead>
             <tr>
-                <th><?php e(t('name')); ?></th>
-                <th><?php e(t('identifier')); ?></th>
-                <th><?php e(t('type')); ?></th>
+                <th><?php e(t('Name')); ?></th>
+                <th><?php e(t('Identifier')); ?></th>
+                <th><?php e(t('Type')); ?></th>
                 <th colspan="4">&nbsp;</th>
             </tr>
         </thead>
         <tbody>
-    <?php foreach ($sections AS $s): ?>
+    <?php foreach ($sections as $s): ?>
         <tr>
             <td><?php e($s['name']); ?></td>
             <td><?php e($s['identifier']); ?></td>
@@ -40,11 +40,11 @@
 
 
 <form action="<?php e(url()); ?>" method="post">
-    <input type="hidden" value="<?php e($template->get('id')); ?>" name="id" />
+    <input type="hidden" value="put" name="_method" />
     <fieldset>
-        <legend><?php e(t('create section')); ?></legend>
+        <legend><?php e(t('Create section')); ?></legend>
         <select name="new_section_type">
-            <option value=""><?php e(t('choose')); ?></option>
+            <option value=""><?php e(t('Choose')); ?></option>
                 <option value="shorttext"><?php e(t('shorttext')); ?></option>
                 <option value="longtext"><?php e(t('longtext')); ?></option>
                 <option value="picture"><?php e(t('picture')); ?></option>

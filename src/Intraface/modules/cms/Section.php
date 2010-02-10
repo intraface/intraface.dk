@@ -1,6 +1,6 @@
 <?php
 /**
- * Der skal kun kunne være en section pr. template_section_id pr. side.
+ * Der skal kun kunne vï¿½re en section pr. template_section_id pr. side.
  *
  * TODO make this abstract so we make sure that the classes extending this does it correctly
  *
@@ -21,16 +21,12 @@ class CMS_Section extends Intraface_Standard
     /**
      * Constructor:
      * Construktor skal enten have cmspage eller en kernel.
-     * Hvis den får kernel skal den have et id.
-     * Fordelen er, at man ikke behøver at vide hvilken side elementet hører til,
-     * men blot behøver, at have elementid.
+     * Hvis den fï¿½r kernel skal den have et id.
+     * Fordelen er, at man ikke behï¿½ver at vide hvilken side elementet hï¿½rer til,
+     * men blot behï¿½ver, at have elementid.
      */
     public function __construct($cmspage, $id = 0)
     {
-        if (!is_object($cmspage)) {
-            trigger_error('Section::__construct needs CMS_Page', E_USER_ERROR);
-        }
-
         $this->db = MDB2::singleton(DB_DSN);
         $this->cmspage = $cmspage;
         $this->kernel = $cmspage->kernel;
@@ -72,13 +68,20 @@ class CMS_Section extends Intraface_Standard
         $class_prefix = 'Intraface_modules_cms_section_';
         switch ($type) {
             case 'type':
-                // validering på value // kun være gyldige elementtyper
+                // validering pï¿½ value // kun vï¿½re gyldige elementtyper
                 // object skal vre cmspage
+                /*
                 $class = $class_prefix . ucfirst($value);
                 return new $class($object);
+                */
+                $gateway = new Intraface_modules_cms_SectionGateway($object->kernel, new DB_Sql);
+                return $gateway->findByType($value);
+
                 break;
             case 'id':
-
+                $gateway = new Intraface_modules_cms_SectionGateway($object, new DB_Sql);
+                return $gateway->findById($value);
+                /*
                 // skal bruge kernel og numerisk value
                 $cms_module = $object->getModule('cms');
                 $section_types = $cms_module->getSetting('section_types');
@@ -92,9 +95,12 @@ class CMS_Section extends Intraface_Standard
 
                 $class = $class_prefix . ucfirst($section_types[$db->f('type_key')]);
                 return new $class(CMS_Page::factory($object, 'id', $db->f('page_id')), $db->f('id'));
-
+				*/
                 break;
             case 'cmspage_and_id':
+                $gateway = new Intraface_modules_cms_SectionGateway($object->kernel, new DB_Sql);
+                return $gateway->findByPageAndId($object, $value);
+                /*
                 // skal bruge cmspage-object og numerisk value id
                 $cms_module = $object->kernel->getModule('cms');
                 $section_types = $cms_module->getSetting('section_types');
@@ -106,7 +112,7 @@ class CMS_Section extends Intraface_Standard
                 }
                 $class = $class_prefix . ucfirst($section_types[$db->f('type_key')]);
                 return new $class($object, $db->f('id'));
-
+				*/
                 break;
             default:
                 trigger_error('Section::factory() type not known', E_USER_ERROR);
