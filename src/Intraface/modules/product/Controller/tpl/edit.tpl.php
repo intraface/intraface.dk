@@ -43,7 +43,7 @@
             <label for="vat"><?php e(t('Vat')); ?></label>
             <select name="vat" id="vat">
                 <?php foreach (array(0 => 'No', 1 => 'Yes') AS $key=>$v): ?>
-                    <option value="<?php e($key); ?>" <?php if (isset($product) && ($key == 1 &&  $product->getDetails()->getVatPercent()->getAsIso() > 0 || $key == 0 && $product->getDetails()->getVatPercent()->getAsIso() == 0)) echo ' selected="selected"'; ?> ><?php e(t($v)); ?></option>
+                    <option value="<?php e($key); ?>" <?php if (isset($product) && ($key == 1 && $product->getDetails()->getVatPercent()->getAsIso() > 0 || $key == 0 && $product->getDetails()->getVatPercent()->getAsIso() == 0)) echo ' selected="selected"'; ?> ><?php e(t($v)); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>

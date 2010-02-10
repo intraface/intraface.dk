@@ -155,12 +155,12 @@ class Intraface_modules_product_Controller_Index extends k_Component
         $kernel = $this->context->getKernel();
         $kernel->module('product');
         $kernel->useShared('filehandler');
-        $translation = $kernel->getTranslation('product');
-        $filehandler = new FileHandler($kernel);
 
         $data = array();
-        if(is_object($this->product_doctrine)) {
+        if (is_object($this->product_doctrine)) {
             $data['product'] = $this->product_doctrine;
+        } else {
+            $data['product'] = &$this->getProductDoctrine();
         }
 
         $smarty = $this->template->create(dirname(__FILE__) . '/tpl/edit');
