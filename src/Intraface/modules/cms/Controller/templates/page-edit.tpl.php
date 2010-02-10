@@ -1,7 +1,7 @@
 <h1><?php e(t('edit '.$type)); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url('../../')); ?>"><?php e(t('close')); ?></a></li>
+    <li><a href="<?php e(url('../../', array('type' => $type))); ?>"><?php e(t('close')); ?></a></li>
     <?php if ($cmspage->get('id') > 0): ?>
     <li><a href="<?php e(url('../')); ?>"><?php e(t('view page')); ?></a></li>
     <?php endif; ?>
