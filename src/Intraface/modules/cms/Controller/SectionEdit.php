@@ -43,14 +43,27 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
         throw new Exception('No valid fileappender present');
     }
 
-    function appendFiles($files)
+    /**
+     * @see Intraface_Filehandler_Controller_SelectFile::postForm
+     *
+     * @param integer $file_id
+     *
+     * @return boolean
+     */
+    function appendFile($file_id)
     {
         if ($this->getElement()->get('type') == 'picture') {
             $value = $this->getElement()->get();
-            $value['pic_id'] = $files;
+            $value['pic_id'] = $file_id;
             if (!$this->getElement()->save($value)) {
                 echo $this->getElement()->error->view();
             }
+        } elseif ($this->getElement()->get('type') == 'gallery') {
+            $append_file = new AppendFile($this->getKernel(), 'cms_element_gallery', $this->getElement()->get('id'));
+            $append_file->addFile(new FileHandler($this->getKernel(), $file_id));
+        } elseif ($this->getElement()->get('type')) {
+            $append_file = new AppendFile($this->getKernel(), 'cms_element_filelist', $this->getElement()->get('id'));
+            $append_file->addFile(new FileHandler($this->getKernel(), $file_id));
         }
         return true;
     }
@@ -66,8 +79,9 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
             $value = $element->get();
 
             // til select - denne kan uden problemer fortrydes ved blot at have et link til samme side
-            if (isset($_GET['return_redirect_id'])) {
-                $redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
+            //if (isset($_GET['return_redirect_id'])) {
+                //$redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
+                /*
                 if ($redirect->get('identifier') == 'picture') {
                     $value['pic_id'] = $redirect->getParameter('file_handler_id');
                 } elseif ($redirect->get('identifier') == 'gallery') {
@@ -88,7 +102,9 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
                     $element->load();
                     $value = $element->get();
                 }
-            } else if (isset($_GET['delete_gallery_append_file_id'])) {
+                */
+            //} else
+            if (isset($_GET['delete_gallery_append_file_id'])) {
                 $append_file = new AppendFile($this->getKernel(), 'cms_element_gallery', $element->get('id'));
                 $append_file->delete((int)$_GET['delete_gallery_append_file_id']);
                 $element->load();
@@ -150,10 +166,9 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
             $element = CMS_Element::factory($section, 'type', $_POST['type']);
             $old = false;
         }
-
+        /*
         if ($element->get('type') == 'picture') {
             if (!empty($_FILES['new_pic'])) {
-
                 $filehandler = new FileHandler($this->getKernel());
                 $filehandler->createUpload();
                 $filehandler->upload->setSetting('file_accessibility', 'public');
@@ -166,7 +181,9 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
                 }
                 $element->error->merge($filehandler->error->getMessage());
             }
-        } elseif ($element->get('type') == 'gallery') {
+        } else
+
+        if ($element->get('type') == 'gallery') {
 
             if (!empty($_FILES['new_pic']) && isset($_POST['upload_new'])) {
 
@@ -209,28 +226,45 @@ class Intraface_modules_cms_Controller_SectionEdit extends k_Component
                 $element->error->merge($filehandler->error->getMessage());
             }
         }
-
+*/
         if ($element->save($_POST)) {
             if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
                 $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
                 $module_filemanager = $this->getKernel()->useModule('filemanager');
                 if ($element->get('type') == 'picture') {
+                    /*
                     $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images' => 1)), NET_SCHEME . NET_HOST . $this->url('element/' . $element->get('id')));
                     $redirect->setIdentifier('picture');
                     $redirect->askParameter('file_handler_id');
+                    */
                     if ($this->getElement()->get('id') > 0) {
                          return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 1)));
                     } else {
                         return new k_SeeOther($this->url('../element/' . $element->get('id') . '/filehandler/selectfile', array('images' => 1)));
                     }
                 } elseif ($element->get('type') == 'gallery') {
+                    /*
                     $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images' => 1, 'multiple_choice' => true)), NET_SCHEME . NET_HOST . $this->url('element/' . $element->get('id')));
                     $redirect->setIdentifier('gallery');
                     $redirect->askParameter('file_handler_id', 'multiple');
+                    */
+                    if ($this->getElement()->get('id') > 0) {
+                         return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 1, 'multiple_choice' => 'trupe')));
+                    } else {
+                        return new k_SeeOther($this->url('../element/' . $element->get('id') . '/filehandler/selectfile', array('images' => 1, 'multiple_choice' => 'true')));
+                    }
                 } elseif ($element->get('type') == 'filelist') {
+                    /*
                     $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('multiple_choice' => true)), NET_SCHEME . NET_HOST . $this->url('element/' . $element->get('id')));
                     $redirect->setIdentifier('filelist');
                     $redirect->askParameter('file_handler_id', 'multiple');
+                    */
+                    if ($this->getElement()->get('id') > 0) {
+                         return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 1, 'multiple_choice' => 'true')));
+                    } else {
+                        return new k_SeeOther($this->url('../element/' . $element->get('id') . '/filehandler/selectfile', array('images' => 1, 'multiple_choice' => 'true')));
+                    }
+
                 } else {
                     throw new Exception("Det er ikke en gyldig elementtype til at lave redirect fra");
                 }

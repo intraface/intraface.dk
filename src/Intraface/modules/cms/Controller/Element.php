@@ -1,4 +1,5 @@
 <?php
+/*
 class Intraface_modules_cms_Controller_Element extends k_Component
 {
     protected $template;
@@ -179,3 +180,4 @@ class Intraface_modules_cms_Controller_Element extends k_Component
         return $this->context->getKernel();
     }
 }
+*/
