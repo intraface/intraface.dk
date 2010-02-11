@@ -9,13 +9,6 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         $this->template = $template;
     }
 
-    protected function map($name)
-    {
-        if ($name == 'edit') {
-            return 'Intraface_modules_accounting_Controller_Account_Edit';
-        }
-    }
-
     function renderHtml()
     {
         $account = $this->getAccount();

@@ -10,9 +10,7 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
     protected function map($name)
     {
-        if ($name == 'create') {
-            return 'Intraface_modules_accounting_Controller_Account_Edit';
-        } elseif (is_numeric($name)) {
+        if (is_numeric($name)) {
         	return 'Intraface_modules_accounting_Controller_Account_Show';
         } elseif ($name == 'popup') {
         	return 'Intraface_modules_accounting_Controller_Account_Popup';
@@ -90,7 +88,6 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
         $worksheet->write($i, 0, $kernel->intranet->get('name'), $format_bold);
 
         $i = 2;
-        if (count($accounts) > 0) {
         	foreach ($accounts AS $account) {
         		$style = '';
         		if ($account['type'] == 'headline') {
@@ -109,7 +106,7 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
         		}
         		$i++;
         	}
-        }
+
         $worksheet->hideGridLines();
 
         // Let's send the file

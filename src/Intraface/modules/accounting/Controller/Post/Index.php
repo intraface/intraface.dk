@@ -63,7 +63,6 @@ class Intraface_modules_accounting_Controller_Post_Index extends k_Component
         $worksheet->write($i, 5, 'Kredit', $format);
 
         $i = 3;
-        if (count($posts) > 0) {
             foreach ($posts AS $post) {
                 $worksheet->write($i, 0, $post['date_dk'], $format);
                 $worksheet->write($i, 1, $post['voucher_number'], $format);
@@ -73,7 +72,7 @@ class Intraface_modules_accounting_Controller_Post_Index extends k_Component
                 $worksheet->write($i, 5, round($post['credit'], 2), $format);
                 $i++;
             }
-        }
+
         $worksheet->hideGridLines();
 
         // Let's send the file

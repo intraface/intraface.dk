@@ -26,6 +26,8 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
             return 'Intraface_modules_accounting_Controller_Year_End';
         } elseif ($name == 'primosaldo') {
             return 'Intraface_modules_accounting_Controller_Year_Primosaldo';
+        } elseif ($name == 'search') {
+            return 'Intraface_modules_accounting_Controller_Search';
         }
     }
 
@@ -87,6 +89,7 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
             }
             $values = $year->get();
         }
+        return $this->render();
     }
 
     function getValues()
