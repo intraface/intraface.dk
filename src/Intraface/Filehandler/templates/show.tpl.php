@@ -146,12 +146,13 @@
         </ul>
 
     <?php
+            $context->getKernel()->useShared('keyword');
         $keyword = new Intraface_Keyword_Appender($filemanager);
         $keywords = $keyword->getConnectedKeywords();
         if (is_array($keywords) AND count($keywords) > 0) {
             echo '<ul>';
             foreach ($keywords as $k) {
-                echo '<li>' . htmlentities($k['keyword']) . '</li>';
+                echo '<li>' . e($k['keyword']) . '</li>';
             }
             echo '</ul>';
         }
