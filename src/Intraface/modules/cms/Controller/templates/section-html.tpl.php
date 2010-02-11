@@ -4,7 +4,7 @@
     <?php if (count($section->cmspage->getSections()) > 1): ?>
     <li><a href="<?php e(url('../')); ?>"><?php e(t('close')); ?></a></li>
     <?php else: ?>
-    <li><a class="edit" href="<?php e(url('../../edit')); ?>"><?php e(t('edit page settings')); ?></a></li>
+    <li><a class="edit" href="<?php e(url('../../', array('edit'))); ?>"><?php e(t('edit page settings')); ?></a></li>
     <li><a href="<?php e(url('../../../', array('type' =>$section->cmspage->get('type')))); ?>"><?php e(t('close')); ?></a></li>
     <?php endif; ?>
 </ul>

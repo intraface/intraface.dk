@@ -1,4 +1,4 @@
-<h1><?php e(t('edit '.$type)); ?></h1>
+<h1><?php e(t('Edit '.$type)); ?></h1>
 
 <ul class="options">
     <li><a href="<?php e(url('../../', array('type' => $type))); ?>"><?php e(t('close')); ?></a></li>
@@ -22,9 +22,7 @@
 
 <?php else: ?>
 
-    <form method="post" action="<?php e(url()); ?>"  enctype="multipart/form-data">
-        <input name="id" type="hidden" value="<?php if (!empty($value['id'])) e($value['id']); ?>" />
-        <input name="site_id" type="hidden" value="<?php if (!empty($value['site_id'])) e($value['site_id']); ?>" />
+    <form method="post" action="<?php e(url(null, array($context->subview(), 'type' => $type))); ?>">
 
         <fieldset>
             <legend><?php e(t('about the behavior of the page')); ?></legend>
@@ -103,11 +101,15 @@
         <fieldset>
                 <legend><?php e(t('choose picture')); ?></legend>
                 <?php
-                    if (empty($value['pic_id'])) $value['pic_id'] = 0;
+                    if (empty($value['pic_id'])) {
+                        $value['pic_id'] = 0;
+                    }
                     $filehandler = new FileHandler($kernel, $value['pic_id']);
-                    $filehandler_html = new FileHandlerHTML($filehandler);
-                    $filehandler_html->printFormUploadTag('pic_id', 'new_pic', 'choose_file', array('image_size' => 'small'));
+                    e('file_id ' . $filehandler->get('id') . ' chosen');
+                    //$filehandler_html = new FileHandlerHTML($filehandler);
+                    //$filehandler_html->printFormUploadTag('pic_id', 'new_pic', 'choose_file', array('image_size' => 'small'));
                 ?>
+                <input type="submit" value="<?php e(t('Choose file')); ?>" name="choose_file"  />
             </fieldset>
 
         <fieldset id="searchengine-info">

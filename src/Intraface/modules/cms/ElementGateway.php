@@ -2,17 +2,35 @@
 class Intraface_modules_cms_ElementGateway
 {
     protected $class_prefix = 'Intraface_modules_cms_element_';
+    protected $kernel;
     protected $db;
 
-    function __construct(DB_Sql $db)
+    function __construct($kernel, DB_Sql $db)
     {
         $this->db = $db;
+        $this->kernel = $kernel;
     }
 
     function findBySectionAndType($section, $type)
     {
         $class = $this->class_prefix . ucfirst($type);
         return new $class($section);
+    }
+
+    function findById($id)
+    {
+        $cms_module = $this->kernel->getModule('cms');
+        $element_types = $cms_module->getSetting('element_types');
+
+        $this->db->query("SELECT id, section_id, type_key FROM cms_element WHERE id = " . $id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
+        if (!$this->db->nextRecord()) {
+            return false;
+        }
+        $class = $this->class_prefix . ucfirst($element_types[$this->db->f('type_key')]);
+        if (!class_exists($class)) {
+            return false;
+        }
+        return new $class(CMS_Section::factory($this->kernel, 'id', $this->db->f('section_id')), $this->db->f('id'));
     }
 
     function findByKernelAndId($kernel, $id)

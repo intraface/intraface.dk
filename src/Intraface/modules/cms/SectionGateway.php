@@ -15,7 +15,7 @@ class Intraface_modules_cms_SectionGateway
     {
         // validering p� value // kun v�re gyldige elementtyper
         // object skal vre cmspage
-        $class = $this->class_prefix . ucfirst($page);
+        $class = $this->class_prefix . ucfirst($type);
         return new $class($page);
     }
 

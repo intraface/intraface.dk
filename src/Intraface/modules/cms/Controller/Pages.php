@@ -15,9 +15,7 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
 
     function map($name)
     {
-        if ($name == 'create') {
-            return 'Intraface_modules_cms_Controller_PageEdit';
-        } elseif (is_numeric($name)) {
+        if (is_numeric($name)) {
             return 'Intraface_modules_cms_Controller_Page';
         }
     }
@@ -46,14 +44,14 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
             $cmspage->getPosition($this->mdb2)->moveDown();
             $cmssite = $cmspage->cmssite;
             $type = $cmspage->get('type');
-        } elseif (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
+        } /*elseif (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
             $cmspage = $this->getPageGateway()->findById($_GET['delete']);
             $cmspage->delete();
             $cmssite = $cmspage->cmssite;
             $type = $cmspage->get('type');
-        } else {
+        } */else {
             if (empty($_GET['type']) || !in_array($_GET['type'], CMS_Page::getTypes())) {
-                trigger_error('A valid type of page is needed', E_USER_ERROR);
+                return new k_SeeOther($this->url(null, array('type' => 'page', 'flare'=>'A valid type of page is needed')));
             } else {
                 $type = $_GET['type'];
             }
@@ -81,39 +79,98 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
         $this->document->addScript('cms/checkboxes.js');
         $this->document->addScript('cms/publish.js');
 
+        $cmspage = new CMS_Page($cmssite);
+        $cmspage->getDBQuery()->setFilter('type', 'page');
+        $cmspage->getDBQuery()->setFilter('level', 'alllevels');
+        $pages = $cmspage->getList('page', 'alllevels');
+
+        $cmsarticles = new CMS_Page($cmssite);
+        $cmsarticles->getDBQuery()->setFilter('type', 'article');
+        $articles = $cmsarticles->getList();
+
+        $cmsnews = new CMS_Page($cmssite);
+        $cmsnews->getDBQuery()->setFilter('type', 'news');
+        $news = $cmsnews->getList();
+
         $data = array(
         	'type' => $type,
         	'page_types_plural' => $page_types_plural,
             'cmssite' => $cmssite,
-            'cmspage' => $cmspage);
+            'cmspage' => $cmspage,
+            'pages' => $pages,
+            'articles' => $articles,
+            'news' => $news
+        );
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/pages');
         return $tpl->render($this, $data);
     }
 
-    function postForm()
+    function renderHtmlCreate()
     {
-        $cms_module = $this->getKernel()->module('cms');
+        $module_cms = $this->getKernel()->module('cms');
 
-        foreach ($_POST['page'] AS $key=>$value) {
+        $type = $_GET['type'];
+        $value['type'] = $type;
+        $cmssite = $this->context->getSite();
+        $cmspage = new CMS_Page($cmssite);
+        $value['site_id'] = $this->context->getSite()->get('id');
+        $template = new CMS_Template($cmssite);
 
-            $cmssite = new CMS_Site($this->getKernel(), $_POST['id']);
-            $cmspage = new CMS_Page($cmssite, $_POST['page'][$key]);
-            if ($cmspage->setStatus($_POST['status'][$key])) {
-            }
 
-        }
-
-        if (isAjax()) {
-            echo 1;
-            exit;
+        if (!empty($type)) {
+            $page_types = CMS_Page::getTypesWithBinaryIndex();
+            $binary_bage_type = array_search($type, $page_types);
         } else {
-            return new k_SeeOther($this->url($cmssite->get('id')));
+            trigger_error('no type is given!', E_USER_ERROR);
+            exit;
         }
 
-        return $this->render();
+        $templates = $template->getList($binary_bage_type);
+        $cmspages = $cmspage->getList();
+
+        $this->document->addScript('cms/page_edit.js');
+        $this->document->addScript('cms/parseUrlIdentifier.js');
+
+        $data = array('value' => $value,
+        	'type' => $type,
+        	'cmspage' => $cmspage,
+        	'template' => $template,
+            'translation' => $this->getKernel()->getTranslation('cms'),
+            'templates' => $templates,
+            'cmssite' => $cmssite,
+            'kernel' => $this->getKernel(),
+            'cmspages' => $cmspages);
+
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/page-edit');
+        return $tpl->render($this, $data);
     }
 
+    function postForm()
+    {
+        $module_cms = $this->getKernel()->module('cms');
+
+        $cmssite = $this->context->getSite();
+        $cmspage = new CMS_Page($cmssite);
+
+        if ($cmspage->save($_POST)) {
+            if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
+                return new k_SeeOther($this->url($cmspage->get('id') . '/filehandler/selectfile', array('images' => 1)));
+            } elseif (!empty($_POST['close'])) {
+                return new k_SeeOther($this->url($cmspage->get('id')));
+            } elseif (!empty($_POST['add_keywords'])) {
+                $keyword_shared = $this->getKernel()->useShared('keyword');
+                return new k_SeeOther($this->url($cmspage->get('id') . '/keyword/connect'));
+            } else {
+                return new k_SeeOther($this->url(null, array('type' => $cmspage->get('type'))));
+            }
+        } else {
+            $value = $_POST;
+            $type = $_POST['page_type'];
+            $template = $cmspage->template;
+        }
+        return $this->render();
+    }
 
     function getKernel()
     {

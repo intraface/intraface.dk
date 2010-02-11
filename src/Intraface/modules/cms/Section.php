@@ -75,7 +75,7 @@ class CMS_Section extends Intraface_Standard
                 return new $class($object);
                 */
                 $gateway = new Intraface_modules_cms_SectionGateway($object->kernel, new DB_Sql);
-                return $gateway->findByType($value);
+                return $gateway->findByPageAndType($object, $value);
 
                 break;
             case 'id':

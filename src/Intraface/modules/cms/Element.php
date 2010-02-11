@@ -89,7 +89,13 @@ class CMS_Element extends Intraface_Standard
      */
     function factory($object, $type, $value)
     {
-        $gateway = new Intraface_modules_cms_ElementGateway(new DB_Sql);
+        if (get_class($object) == 'Intraface_Kernel') {
+            $kernel = $object;
+        } else {
+            $kernel = $object->kernel;
+        }
+
+        $gateway = new Intraface_modules_cms_ElementGateway($kernel, new DB_Sql);
 
         $class_prefix = 'Intraface_modules_cms_element_';
         switch ($type) {

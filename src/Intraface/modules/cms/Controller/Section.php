@@ -13,9 +13,7 @@ class Intraface_modules_cms_Controller_Section extends k_Component
 
     function map($name)
     {
-        if ($name == 'edit') {
-            return 'Intraface_modules_cms_Controller_SectionEdit';
-        } elseif ($name == 'element') {
+        if ($name == 'element') {
             return 'Intraface_modules_cms_Controller_Elements';
         }
     }
@@ -78,8 +76,7 @@ class Intraface_modules_cms_Controller_Section extends k_Component
                 return new k_SeeOther($this->url());
             }
         } elseif (!empty($_POST['add_element'])) {
-            $section = $this->getSection();
-            return new k_SeeOther($this->url('edit', array('type' => $_POST['new_element_type_id'])));
+            return new k_SeeOther($this->url('element', array('create', 'type' => $_POST['new_element_type_id'])));
         }
 
         return $this->render();

@@ -3,6 +3,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
 {
     protected $template;
     public $error = array();
+    protected $cmspage;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -11,12 +12,12 @@ class Intraface_modules_cms_Controller_Page extends k_Component
 
     function map($name)
     {
-        if ($name == 'edit') {
-            return 'Intraface_modules_cms_Controller_PageEdit';
-        } elseif ($name == 'section') {
+        if ($name == 'section') {
             return 'Intraface_modules_cms_Controller_Sections';
         } elseif ($name == 'keyword') {
             return 'Intraface_Keyword_Controller_Index';
+        } elseif ($name == 'filehandler') {
+            return 'Intraface_Filehandler_Controller_Index';
         }
     }
 
@@ -26,7 +27,19 @@ class Intraface_modules_cms_Controller_Page extends k_Component
      */
     function getModel()
     {
-        return $cmspage = $this->context->getPageGateway()->findById($this->name());
+        if ($this->cmspage) {
+            return $this->cmspage;
+        }
+        return $this->cmspage = $this->context->getPageGateway()->findById($this->name());
+    }
+
+    function appendFile($file_id)
+    {
+        $value = $this->getModel()->get();
+        $value['pic_id'] = $file_id;
+        $value['page_type'] = $value['type'];
+        $this->getModel()->save($value);
+        return true;
     }
 
     function renderHtml()
@@ -65,6 +78,53 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         return $tpl->render($this, $data);
     }
 
+    function renderHtmlEdit()
+    {
+        $module_cms = $this->getKernel()->module('cms');
+        $cmspage = CMS_Page::factory($this->getKernel(), 'id', $this->name());
+        $cmssite = $cmspage->cmssite;
+
+        $value = $cmspage->get();
+        $type = $value['type'];
+        $template = $cmspage->template;
+
+        if (!empty($type)) {
+            $page_types = CMS_Page::getTypesWithBinaryIndex();
+            $binary_bage_type = array_search($type, $page_types);
+        } else {
+            trigger_error('no type is given!', E_USER_ERROR);
+            exit;
+        }
+
+        $templates = $template->getList($binary_bage_type);
+        $cmspages = $cmspage->getList();
+
+        $this->document->addScript('cms/page_edit.js');
+        $this->document->addScript('cms/parseUrlIdentifier.js');
+
+        $data = array('value' => $value,
+        	'type' => $type,
+        	'cmspage' => $cmspage,
+        	'template' => $template,
+            'translation' => $this->getKernel()->getTranslation('cms'),
+            'templates' => $templates,
+            'cmssite' => $cmssite,
+            'kernel' => $this->getKernel(),
+            'cmspages' => $cmspages);
+
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/page-edit');
+        return $tpl->render($this, $data);
+    }
+
+    function renderHtmlDelete()
+    {
+        $cmspage = $this->context->getPageGateway()->findById($this->name());
+        $cmspage->delete();
+        $cmssite = $cmspage->cmssite;
+        $type = $cmspage->get('type');
+        return new k_SeeOther($this->url('../', array('type' => $type)));
+    }
+
     function postForm()
     {
         $module_cms = $this->getKernel()->module('cms');
@@ -78,6 +138,28 @@ class Intraface_modules_cms_Controller_Page extends k_Component
                 return new k_SeeOther($this->url());
             }
         }
+        $module_cms = $this->getKernel()->module('cms');
+
+        $cmssite = $this->context->context->getSite();
+        $cmspage = new CMS_Page($cmssite, $this->name());
+
+        if ($cmspage->save($_POST)) {
+            if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
+                return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 1)));
+            } elseif (!empty($_POST['close'])) {
+                return new k_SeeOther($this->url(null));
+            } elseif (!empty($_POST['add_keywords'])) {
+                $keyword_shared = $this->getKernel()->useShared('keyword');
+                return new k_SeeOther($this->url('keyword/connect'));
+            } else {
+                return new k_SeeOther($this->url(null, array($context->subview())));
+            }
+        } else {
+            $value = $_POST;
+            $type = $_POST['page_type'];
+            $template = $cmspage->template;
+        }
+
         return $this->render();
     }
 
