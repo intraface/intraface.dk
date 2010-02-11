@@ -80,7 +80,7 @@
                 </td>
                 <td style="height: 67px;"><img src="<?php e($files[$i]["icon_uri"]); ?>" style="height: <?php e($files[$i]["icon_height"]); ?>px; width: <?php e($files[$i]["icon_width"]); ?>px;" /></td>
 
-                <td><a href="file.php?id=<?php e($files[$i]["id"]); ?>"><?php e($files[$i]["file_name"]); ?></a></td>
+                <td><a href="<?php e(url($files[$i]["id"])); ?>"><?php e($files[$i]["file_name"]); ?></a></td>
                 <td><?php e($files[$i]["file_type"]['description']); ?></td>
                 <td><?php e($files[$i]["accessibility"]); ?></td>
                 <td><?php e($files[$i]["dk_file_size"]); ?></td>
