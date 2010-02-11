@@ -1,4 +1,7 @@
+<h1><?php e(t('Choose file')); ?></h1>
+
 <ul class="options">
+    <li><a href="<?php e(url('../../')); ?>"><?php e(t('Close')); ?></a></li>
     <li><a href="<?php e(url('Upload')); ?>" onclick="location.href='<?php e(url('uploadmultiple')); ?>'; return false;"><?php e(t('upload file')); ?></a></li>
 </ul>
 
