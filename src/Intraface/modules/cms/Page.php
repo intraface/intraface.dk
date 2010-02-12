@@ -525,6 +525,11 @@ class CMS_Page extends Intraface_Standard
 
     function getList()
     {
+        $gateway = new Intraface_modules_cms_PageGateway($this->kernel, new DB_Sql);
+        $gateway->setDBQuery($this->getDBQuery());
+        return $gateway->findAllBySite($this->cmssite);
+
+        /*
         $pages = array();
 
         if ($this->getDBQuery()->checkFilter('type') && $this->getDBQuery()->getFilter('page') == 'all') {
@@ -685,7 +690,7 @@ class CMS_Page extends Intraface_Standard
         }
 
         return $pages;
-
+		*/
     }
 
     function getPicture($pic_id)
@@ -792,10 +797,7 @@ class CMS_Page extends Intraface_Standard
      */
     public function getTypes()
     {
-        return array(
-            1 => 'page',
-            2 => 'article',
-            3 => 'news');
+        return Intraface_modules_cms_PageGateway::getTypes();
     }
 
     /**
@@ -805,10 +807,7 @@ class CMS_Page extends Intraface_Standard
      */
     static public function getTypesWithBinaryIndex()
     {
-        return array(
-            1 => 'page',
-            2 => 'article',
-            4 => 'news');
+        return Intraface_modules_cms_PageGateway::getTypesWithBinaryIndex();
     }
 
     /**
