@@ -104,6 +104,7 @@
                     if (empty($value['pic_id'])) {
                         $value['pic_id'] = 0;
                     }
+                    $context->getKernel()->useShared('filehandler');
                     $filehandler = new FileHandler($kernel, $value['pic_id']);
                     e('file_id ' . $filehandler->get('id') . ' chosen');
                     //$filehandler_html = new FileHandlerHTML($filehandler);

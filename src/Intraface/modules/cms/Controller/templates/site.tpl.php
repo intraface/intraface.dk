@@ -16,7 +16,7 @@
     <p class="message-dependent">
         <?php e(t('you have to create a template')); ?>
         <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
-            <a href="<?php e(url('templates/create')); ?>"><?php e(t('create template')); ?></a>.
+            <a href="<?php e(url('templates', array('create'))); ?>"><?php e(t('create template')); ?></a>.
         <?php else: ?>
             <strong><?php e(t('please ask your administrator to do that')); ?></strong>
         <?php endif; ?>
@@ -37,21 +37,21 @@
 
 <ul class="options">
     <li><a href="<?php e(url('pages', array('type' => 'page'))); ?>"><?php e(t('go to pages'));  ?></a></li>
-    <li><a href="<?php e(url('pages/create', array('type' => 'page'))); ?>"><?php e(t('create a new page'));  ?></a></li>
+    <li><a href="<?php e(url('pages', array('create', 'type' => 'page'))); ?>"><?php e(t('create a new page'));  ?></a></li>
 </ul>
 
 <h2><?php e(t('articles')); ?></h2>
 
 <ul class="options">
     <li><a href="<?php e(url('pages', array('type' => 'article'))); ?>"><?php e(t('go to articles'));  ?></a></li>
-    <li><a href="<?php e(url('pages/create', array('type' => 'article'))); ?>"><?php e(t('create a new article')); ?></a></li>
+    <li><a href="<?php e(url('pages', array('create', 'type' => 'article'))); ?>"><?php e(t('create a new article')); ?></a></li>
 </ul>
 
 <h2><?php e(t('news')); ?></h2>
 
 <ul class="options">
     <li><a href="<?php e(url('pages', array('type' => 'news'))); ?>"><?php e(t('go to news'));  ?></a></li>
-    <li><a href="<?php e(url('pages/create', array('type' => 'news'))); ?>"><?php e(t('create a news'));  ?></a></li>
+    <li><a href="<?php e(url('pages', array('create', 'type' => 'news'))); ?>"><?php e(t('create a news'));  ?></a></li>
 </ul>
 
 <?php endif; ?>

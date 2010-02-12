@@ -6,7 +6,7 @@
  */
 require_once 'Intraface/modules/cms/Parameter.php';
 
-class CMS_Element extends Intraface_Standard
+abstract class CMS_Element extends Intraface_Standard
 {
     public $id;
     public $section;
@@ -61,7 +61,7 @@ class CMS_Element extends Intraface_Standard
         }
     }
 
-    function getPosition($db)
+    function getPosition(MDB2_Driver_Common $db)
     {
         return new Ilib_Position($db, "cms_element", $this->id, "section_id=".$this->section->get('id')." AND active = 1 AND intranet_id = " . $this->kernel->intranet->get('id'), "position", "id");
     }
@@ -97,56 +97,15 @@ class CMS_Element extends Intraface_Standard
 
         $gateway = new Intraface_modules_cms_ElementGateway($kernel, new DB_Sql);
 
-        $class_prefix = 'Intraface_modules_cms_element_';
         switch ($type) {
             case 'type':
                 return $gateway->findBySectionAndType($object, $value);
-                /*
-                $class = $class_prefix . ucfirst($value);
-                return new $class($object);
-                */
                 break;
             case 'id':
                 return $gateway->findByKernelAndId($object, $value);
-                /*
-                // skal bruge kernel og numerisk value
-                $cms_module = $object->getModule('cms');
-                $element_types = $cms_module->getSetting('element_types');
-
-                $db = new DB_Sql;
-
-                $db->query("SELECT id, section_id, type_key FROM cms_element WHERE id = " . $value . " AND intranet_id = " . $object->intranet->get('id'));
-                if (!$db->nextRecord()) {
-                    return false;
-                }
-                $class = $class_prefix . ucfirst($element_types[$db->f('type_key')]);
-                if (!class_exists($class)) {
-                    return false;
-                }
-                return new $class(CMS_Section::factory($object, 'id', $db->f('section_id')), $db->f('id'));
-				*/
                 break;
             case 'section_and_id':
                 return $gateway->findBySectionAndId($object, $value);
-                /*
-                // FIXME - jeg tror den her kan skabe en del
-                // af problemerne med mange kald
-                // skal bruge cmspage-object og numerisk value id
-                $cms_module = $object->kernel->getModule('cms');
-                $element_types = $cms_module->getSetting('element_types');
-
-                $db = new DB_Sql;
-                $db->query("SELECT id, section_id, type_key FROM cms_element WHERE id = " . $value . " AND intranet_id = " . $object->kernel->intranet->get('id'));
-                if (!$db->nextRecord()) {
-                    return false;
-                }
-
-                $class = $class_prefix . ucfirst($element_types[$db->f('type_key')]);
-                if (!class_exists($class)) {
-                    return false;
-                }
-                return new $class($object, $db->f('id'));
-				*/
                 break;
             default:
                 trigger_error('Element::factory:: Invalid type', E_USER_ERROR);
@@ -161,7 +120,6 @@ class CMS_Element extends Intraface_Standard
      */
     function load()
     {
-
         if ($this->id == 0) {
             return 0;
         }
@@ -243,10 +201,10 @@ class CMS_Element extends Intraface_Standard
         }
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
 
-        return 1;
+        return true;
     }
 
     /**
@@ -264,7 +222,7 @@ class CMS_Element extends Intraface_Standard
         }
 
         if (!$this->validate($var)) {
-            return 0;
+            return false;
         }
 
         if (empty($var['date_publish']) OR $var['date_publish'] == '0000-00-00 00:00:00') {
@@ -317,7 +275,7 @@ class CMS_Element extends Intraface_Standard
         $this->parameter->save('elm_adjust', $var['elm_adjust']);
 
         if (!$this->validate_element($var)) {
-            return 0;
+            return false;
         }
 
         $this->save_element($var);
@@ -332,7 +290,6 @@ class CMS_Element extends Intraface_Standard
      */
     public function delete()
     {
-        // Husk kun at deaktivere
         $db = new DB_Sql;
         $db->query("UPDATE cms_element SET active = 0 WHERE id = " . $this->id);
         return true;
@@ -354,4 +311,8 @@ class CMS_Element extends Intraface_Standard
     {
         return $this->id;
     }
+
+    abstract protected function validate_element($var);
+    abstract protected function save_element($var);
+    abstract protected function load_element();
 }

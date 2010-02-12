@@ -62,8 +62,8 @@ class MainCMS extends Intraface_Main
             7 => 'gallery',
             8 => 'video', // revver og google
             9 => 'map',
-            //10 => 'shorttext',
-            //11 => 'longtext',
+            10 => 'shorttext',
+            11 => 'longtext',
             12 => 'wikitext'
             )
         );
