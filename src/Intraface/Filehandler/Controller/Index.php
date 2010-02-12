@@ -105,6 +105,8 @@ class Intraface_Filehandler_Controller_Index extends k_Component
             return 'Intraface_Filehandler_Controller_Sizes';
         } elseif ($name == 'selectfile') {
             return 'Intraface_Filehandler_Controller_SelectFile';
+        } elseif ($name == 'ckeditor') {
+            return 'Intraface_Filehandler_Controller_CKEditor';
         }
         return 'Intraface_Filehandler_Controller_Show';
     }

@@ -1,5 +1,5 @@
 <?php
-class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_Controller_Index
+class Intraface_Filehandler_Controller_CKEditor extends Intraface_Filehandler_Controller_Index
 {
     public $multiple_choice;
     protected $template;
@@ -19,6 +19,10 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
         $this->multiple_choice = $this->query('multiple_choice');
         $this->url_state->set('multiple_choice', $this->query('multiple_choice'));
         $this->url_state->set('use_stored', 'true');
+        $this->url_state->set('CKEditor', $this->query('CKEditor'));
+        $this->url_state->set('CKEditorFuncNum', $this->query('CKEditorFuncNum'));
+        $this->url_state->set('langCode', $this->query('langCode'));
+
         return parent::dispatch();
     }
 
@@ -265,7 +269,7 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
                       'selected_files' =>  $selected_files
         );
 
-        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/selectfile');
-        return $tpl->render($this, $data);
+        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/ckeditor');
+        return new k_HttpResponse(200, $tpl->render($this, $data));
     }
 }
