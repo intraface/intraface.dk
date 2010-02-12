@@ -70,27 +70,25 @@ class Intraface_modules_cms_Controller_Element extends k_Component
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
         $shared_filehandler->includeFile('AppendFile.php');
 
-            $element = $this->getElement();
+        $element = $this->getElement();
+        $value = $element->get();
+
+        if (isset($_GET['delete_gallery_append_file_id'])) {
+            $append_file = new AppendFile($this->getKernel(), 'cms_element_gallery', $element->get('id'));
+            $append_file->delete((int)$_GET['delete_gallery_append_file_id']);
+            $element->load();
             $value = $element->get();
-
-            if (isset($_GET['delete_gallery_append_file_id'])) {
-                $append_file = new AppendFile($this->getKernel(), 'cms_element_gallery', $element->get('id'));
-                $append_file->delete((int)$_GET['delete_gallery_append_file_id']);
-                $element->load();
-                $value = $element->get();
-                return new k_SeeOther($this->url());
-            } else if (isset($_GET['delete_filelist_append_file_id'])) {
-                $append_file = new AppendFile($this->getKernel(), 'cms_element_filelist', $element->get('id'));
-                $append_file->delete((int)$_GET['delete_filelist_append_file_id']);
-
-                $element->load();
-                $value = $element->get();
-                return new k_SeeOther($this->url());
-            }
-
-        if ($this->getKernel()->setting->get('user', 'htmleditor') == 'tinymce') {
-            $this->document->addScript('tiny_mce/tiny_mce.js');
+            return new k_SeeOther($this->url());
+        } else if (isset($_GET['delete_filelist_append_file_id'])) {
+            $append_file = new AppendFile($this->getKernel(), 'cms_element_filelist', $element->get('id'));
+            $append_file->delete((int)$_GET['delete_filelist_append_file_id']);
+            $element->load();
+            $value = $element->get();
+            return new k_SeeOther($this->url());
         }
+
+        $this->document->addScript('ckeditor/ckeditor.js');
+        $this->document->addScript('ckeditor/lang/_languages.js');
 
         $data = array(
             'value' => $value,

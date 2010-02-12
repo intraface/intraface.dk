@@ -28,25 +28,28 @@ class Intraface_modules_cms_Controller_Elements extends k_Component
         $module_cms = $this->getKernel()->module('cms');
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
         $shared_filehandler->includeFile('AppendFile.php');
-        $translation = $this->getKernel()->getTranslation('cms');
-            // der skal valideres noget p� typen ogs�.
+        // der skal valideres noget p� typen ogs�.
 
-            // FIXME ud fra section bliver cms_site loaded flere gange?
-            // formentlig har det noget med Template at g�re
-            // i �vrigt er tingene alt for t�t koblet i page
-            $element = $this->getElement();
-            if (!is_object($element)) {
-                throw new Exception('Unable to create a valid element object');
-            }
+        // FIXME ud fra section bliver cms_site loaded flere gange?
+        // formentlig har det noget med Template at g�re
+        // i �vrigt er tingene alt for t�t koblet i page
+        $element = $this->getElement();
+        if (!is_object($element)) {
+            throw new Exception('Unable to create a valid element object');
+        }
 
-            $value = $element->get();
+        $value = $element->get();
+        $value['type'] = $element->get('type');
+        $value['page_id'] = $element->get('page_id');
 
-            $value['type'] = $element->get('type');
-            $value['page_id'] = $element->get('page_id');
-
+        /*
         if ($this->getKernel()->setting->get('user', 'htmleditor') == 'tinymce') {
             $this->document->addScript('tiny_mce/tiny_mce.js');
         }
+        */
+
+        $this->document->addScript('ckeditor/ckeditor.js');
+        $this->document->addScript('ckeditor/lang/_languages.js');
 
         $data = array(
             'value' => $value,
