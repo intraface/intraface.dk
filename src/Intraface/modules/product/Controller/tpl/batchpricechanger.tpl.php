@@ -11,8 +11,20 @@
 <fieldset>
 	<legend><?php e(t('Change price')); ?></legend>
 	<label>
-		<?php e(t('Price change')); ?>
+		<select name="change_type">
+			<option value=""><?php e(t('Choose')); ?></option>
+			<option value="percent"><?php e(t('Percent')); ?></option>
+			<option value="amount"><?php e(t('Amount')); ?></option>
+			<option value="fixed_amount"><?php e(t('Fixed amount')); ?></option>
+		</select>
+	</label>
+	<label>
+		<?php e(t('Change price')); ?>
 		<input type="text" name="price_change" value="" />
+	</label>
+	<label>
+		<?php e(t('Round off')); ?>
+		<input type="checkbox" name="round_off" value="yes" checked="checked" />
 	</label>
 </fieldset>
 

@@ -13,7 +13,6 @@ class Intraface_modules_product_Controller_BatchPriceChanger extends k_Component
         $module = $this->context->getKernel()->module("product");
 
         $product = new Product($this->context->getKernel());
-        $product->getDBQuery()->usePaging("paging");
         $product->getDBQuery()->storeResult("use_stored", "products", "toplevel");
         $products = $product->getList();
 
@@ -29,10 +28,38 @@ class Intraface_modules_product_Controller_BatchPriceChanger extends k_Component
 
         foreach ($_POST['product_id'] AS $key => $product_id) {
             $product = new Product($this->context->getKernel(), $product_id);
-            if ($product->save(array(
-            	'price' => $product->get('price') + intval($_POST['price_change'])
-            ))) {
-                // 'quantity' => $_POST['quantity'][$key], gammelt lager - udg�r
+            if ($this->body('change_type') == 'percent') {
+                $new_price = $product->get('price') + intval($product->get('price') * ($_POST['price_change'] / 100));
+                if ($this->body('round_off') == 'yes') {
+                    $new_price = round($new_price, 0);
+                }
+                if ($product->save(array(
+            		'price' => $new_price,
+                    'before_price' => (float)$product->get('price')
+                ))) {
+                }
+            } elseif ($this->body('change_type') == 'amount') {
+                $new_price = $product->get('price') + intval($_POST['price_change']);
+                if ($this->body('round_off') == 'yes') {
+                    $new_price = round($new_price, 0);
+                }
+                if ($product->save(array(
+            		'price' => $new_price,
+                    'before_price' => (float)$product->get('price')
+                ))) {
+                }
+            } elseif ($this->body('change_type') == 'fixed_amount') {
+                $new_price = intval($_POST['price_change']);
+                if ($this->body('round_off') == 'yes') {
+                    $new_price = round($new_price, 0);
+                }
+                if ($product->save(array(
+            		'price' => $new_price,
+                    'before_price' => (float)$product->get('price')
+                ))) {
+                }
+            } else {
+                throw new Exception('Invalid change type');
             }
             echo $product->error->view();
         }
