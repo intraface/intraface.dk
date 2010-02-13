@@ -30,6 +30,16 @@ class Intraface_Filehandler_Controller_Show extends k_Component
         return $tpl->render($this, $data);
     }
 
+    /**
+     * @see Keywords
+     *
+     * @return object
+     */
+    function getModel()
+    {
+        return $this->getObject();
+    }
+
     function getObject()
     {
     	$gateway = new Ilib_Filehandler_Gateway($this->getKernel());
