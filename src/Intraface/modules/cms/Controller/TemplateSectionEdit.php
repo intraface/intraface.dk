@@ -13,7 +13,7 @@ class Intraface_modules_cms_Controller_TemplateSectionEdit extends k_Component
         $cms_module = $this->getKernel()->module('cms');
         $translation = $this->getKernel()->getTranslation('cms');
 
-        if (!empty($_GET['id']) AND is_numeric($_GET['id'])) {
+        if (is_numeric($this->name())) {
             $section = CMS_TemplateSection::factory($this->getKernel(), 'id', $this->name());
             $value = $section->get();
 

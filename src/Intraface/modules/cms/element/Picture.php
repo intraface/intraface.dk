@@ -1,9 +1,9 @@
 <?php
 /**
- * Hvordan skal vi lige lave det med størrelser. Skal man ikke bare kunne vælge størrelse
- * fra FileHandler-størrelserne?
+ * @todo Hvordan skal vi lige lave det med stï¿½rrelser. Skal man ikke bare kunne vï¿½lge stï¿½rrelse
+ * fra FileHandler-stï¿½rrelserne?
  *
- * Hvis skal følgende ændres section_html_edit.php, hvor den skal tage størrelserne.
+ * Hvis skal fï¿½lgende ï¿½ndres section_html_edit.php, hvor den skal tage stï¿½rrelserne.
  * Validering af i validate_element();
  *
  * @package Intraface_CMS
@@ -53,7 +53,7 @@ class Intraface_modules_cms_element_Picture extends CMS_Element
         if (!empty($var['pic_id'])) $validator->isNumeric($var['pic_id'], 'error in pic_id', 'allow_empty');
         if (!empty($var['pic_url'])) $validator->isString($var['pic_url'], 'error in pic_url', 'allow_empty');
 
-        // størrelsen skal også valideres
+        // stï¿½rrelsen skal ogsï¿½ valideres
 
         if ($this->error->isError()) {
             return false;

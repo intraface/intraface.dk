@@ -9,8 +9,6 @@ echo $element->error->view($translation);
 ?>
 
 <form method="post" action="<?php e(url(null, array('type' => $element->get('type')))); ?>"  enctype="multipart/form-data">
-    <input name="id" type="hidden" value="<?php e(intval($element->get('id'))); ?>" />
-    <input name="section_id" type="hidden" value="<?php e(intval($element->section->get('id'))); ?>" />
     <input name="type" type="hidden" value="<?php e($element->get('type')); ?>" />
 
 <?php
@@ -48,7 +46,10 @@ switch ($value['type']) {
     case 'gallery':
         include 'element/gallery.tpl.php';
         break;
-    default:
+    case 'randompicture':
+        include 'element/randompicture.tpl.php';
+        break;
+        default:
         trigger_error(t('not a valid type'), E_USER_ERROR);
     break;
 

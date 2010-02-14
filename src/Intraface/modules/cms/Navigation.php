@@ -2,7 +2,7 @@
 /**
  *
  * TODO Vi skal finde ud af hvordan vi kan sikre os at undermenuerne
- *       bliver der på undersiderne til en undermenu.
+ *       bliver der pï¿½ undersiderne til en undermenu.
  * @package Intraface_CMS
  */
 class CMS_Navigation extends Intraface_Standard
@@ -12,15 +12,11 @@ class CMS_Navigation extends Intraface_Standard
 
     function __construct($cmspage)
     {
-        if (!is_object($cmspage) OR strtolower(get_class($cmspage)) != 'cms_page') {
-            trigger_error('CMS_Navigation::__construct needs CMS_Page', E_USER_ERROR);
-        }
         $this->cmspage = $cmspage;
     }
 
     function build($level = 'toplevel')
-    { // 'toplevel'
-
+    {
         $i = 0;
         $this->cmspage->getDBQuery()->clearAll();
         $this->cmspage->getDBQuery()->setFilter('type', 'page');

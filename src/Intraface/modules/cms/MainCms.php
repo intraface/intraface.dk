@@ -64,7 +64,8 @@ class MainCMS extends Intraface_Main
             9 => 'map',
             10 => 'shorttext',
             11 => 'longtext',
-            12 => 'wikitext'
+            12 => 'wikitext',
+            13 => 'randompicture'
             )
         );
 

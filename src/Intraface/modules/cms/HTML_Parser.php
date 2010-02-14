@@ -21,6 +21,11 @@ class CMS_HTML_Parser extends Intraface_modules_cms_HTML_Parser
         $this->translation = $translation;
     }
 
+    function parseRandompictureElement($element)
+    {
+        return '<img src="'.$element['uri'].'" height="'.$element['height'].'" width="'.$element['width'].'">';
+    }
+
     function parseElements($elements)
     {
         $display = '';

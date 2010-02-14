@@ -61,7 +61,7 @@ abstract class CMS_Element extends Intraface_Standard
         }
     }
 
-    function getPosition(MDB2_Driver_Common $db)
+    function getPosition(DB_Sql $db)
     {
         return new Ilib_Position($db, "cms_element", $this->id, "section_id=".$this->section->get('id')." AND active = 1 AND intranet_id = " . $this->kernel->intranet->get('id'), "position", "id");
     }

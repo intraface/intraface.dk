@@ -263,6 +263,19 @@ class Intraface_modules_cms_PageGateway
             return $this->value['picture'];
     }
 
+    /**
+     * Returns the possible page types but with a binary index
+     *
+     * @return array possible page types with binary index
+     */
+    static public function getTypesWithBinaryIndex()
+    {
+        return array(
+            1 => 'page',
+            2 => 'article',
+            4 => 'news');
+    }
+
     function get($key)
     {
         return $this->values[$key];
