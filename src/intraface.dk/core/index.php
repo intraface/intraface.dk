@@ -203,16 +203,38 @@ class k_Translation2Translator implements k_Translator
 {
     protected $translation2;
     protected $page_id;
+    protected $page;
 
     function __construct($lang, $page_id = NULL)
     {
         $factory = new Intraface_Factory;
-        $this->translation2 = $factory->new_Translation2();
-        $res = $this->translation2->setLang($lang);
-        if (PEAR::isError($res)) {
-            throw new Exception('Could not setLang()');
+        $cache = $factory->new_Translation2_Cache();
+        
+        if($page_id == NULL) {
+            $cache_key = 'common';
+        } else {
+            $cache_key = $page_id;
         }
+        
+        if($data = $cache->get($cache_key, 'translation-'.$lang)) {
+            $this->page = unserialize($data);
+        } else {
+            $translation2 = $factory->new_Translation2();
+            $res = $translation2->setLang($lang);
+            if (PEAR::isError($res)) {
+                throw new Exception('Could not setLang()');
+            }
+            
+            $this->page = $translation2->getPage('common');
+            if($page_id != NULL) {
+                $this->page = array_merge($this->page, $translation2->getPage($page_id));
+            }
+            
+            $cache->save(serialize($this->page), $cache_key, 'translation-'.$lang);
+        }
+        
         $this->page_id = $page_id;
+        $this->lang = $lang;
     }
 
     function translate($phrase, k_Language $language = null)
@@ -223,6 +245,7 @@ class k_Translation2Translator implements k_Translator
             $res = $this->translation2->setLang($language->isoCode());
         }
         */
+        /*
         if ($this->page_id !== null) {
             if ($phrase != $this->translation2->get($phrase, $this->page_id)) {
                 return utf8_encode($this->translation2->get($phrase, $this->page_id));
@@ -230,6 +253,25 @@ class k_Translation2Translator implements k_Translator
         }
 
         return utf8_encode($this->translation2->get($phrase, 'common'));
+        */
+        
+        if(isset($this->page[$phrase])) {
+            return utf8_encode($this->page[$phrase]);
+        }
+        
+        $logger = new ErrorHandler_Observer_File(ERROR_LOG);
+        $details = array(
+                'date' => date('r'),
+                'type' => 'Translation2',
+                'message' => 'Missing translation for "'.$phrase.'" on pageID: "'.$this->page_id.'", LangID: "'.$this->lang.'"',
+                'file' => '[unknown]',
+                'line' => '[unknown]'
+            );
+        
+        $logger->update($details);
+        
+        return $phrase;
+        
     }
 }
 

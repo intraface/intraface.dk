@@ -96,11 +96,11 @@ class Intraface_Factory
         // $translation->setPageID($page_id);
 
         // add a Lang decorator to provide a fallback language
-        $translation = $translation->getDecorator('Lang');
-        $translation->setOption('fallbackLang', 'uk');
-        $translation = $translation->getDecorator('LogMissingTranslation');
-        $translation->setOption('logger', array(new ErrorHandler_Observer_File(ERROR_LOG), 'update'));
-        $translation = $translation->getDecorator('DefaultText');
+        // $translation = $translation->getDecorator('Lang');
+        // $translation->setOption('fallbackLang', 'uk');
+        // $translation = $translation->getDecorator('LogMissingTranslation');
+        // $translation->setOption('logger', array(new ErrorHandler_Observer_File(ERROR_LOG), 'update'));
+        // $translation = $translation->getDecorator('DefaultText');
 
         // %stringID% will be replaced with the stringID
         // %pageID_url% will be replaced with the pageID
@@ -112,6 +112,15 @@ class Intraface_Factory
         $translation->emptyPrefix  = '';  //default: empty string
         $translation->emptyPostfix = '';  //default: empty string
         return $translation;
+    }
+    
+    function new_Translation2_Cache()
+    {
+        $options = array(
+            "cacheDir" => PATH_CACHE.'translation/',
+            "lifeTime" => 3600
+        );
+        return new Cache_Lite($options);
     }
 
     function new_Intraface_Auth($container)
