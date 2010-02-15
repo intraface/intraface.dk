@@ -9,11 +9,10 @@ set_error_handler('k_exceptions_error_handler');
 class MyIdentityLoader extends k_BasicHttpIdentityLoader {
   function selectUser($username, $password) {
     $users = array(
-      'ninja' => 'supersecret',
-      'pirate' => 'arrr',
-      'robot' => '*blip*',
+      'sune@intraface.dk' => '7f5c04fb811783c71d951302e3314d62',
+      'lars@intraface.dk' => 'e9127ee5efd3a78a5837f22a5bc4ef10'
     );
-    if (isset($users[$username]) && $users[$username] == $password) {
+    if (isset($users[$username]) && $users[$username] == md5($password)) {
       return new k_AuthenticatedUser($username);
     }
   }
