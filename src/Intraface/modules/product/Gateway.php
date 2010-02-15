@@ -2,7 +2,7 @@
 /**
  * Product
  *
- * Bruges til at holde styr på varerne.
+ * Bruges til at holde styr pï¿½ varerne.
  *
  * @package Intraface_Product
  * @author Lars Olesen <lars@legestue.net>
@@ -94,15 +94,15 @@ class Intraface_modules_product_Gateway
     /**
      * Finds all products
      *
-     * Hvis den er fra webshop bør den faktisk opsamle oplysninger om søgningen
-     * så man kan se, hvad folk er interesseret i.
-     * Søgemaskinen skal være tolerant for stavefejl
+     * Hvis den er fra webshop bï¿½r den faktisk opsamle oplysninger om sï¿½gningen
+     * sï¿½ man kan se, hvad folk er interesseret i.
+     * Sï¿½gemaskinen skal vï¿½re tolerant for stavefejl
      *
      * @todo It is wrong to give currencies as parameter. Instead the list should
      *       be given as an object collection, and then currency should be given
      *       to the getPrice method.
      *
-     * @param string $which valgfri søgeparameter - ikke aktiv endnu
+     * @param string $which valgfri sï¿½geparameter - ikke aktiv endnu
      * @param object $currencies Collection of valid currencies.
      *
      * @return array indeholdende kundedata til liste
@@ -205,7 +205,7 @@ class Intraface_modules_product_Gateway
 
             }
 
-            // den her skal vist lige kigges igennem, for den tager jo alt med på nettet?
+            // den her skal vist lige kigges igennem, for den tager jo alt med pï¿½ nettet?
             // 0 = only stock
             if ($this->kernel->setting->get('intranet', 'webshop.show_online') == 0 AND $which=='webshop') { // only stock
                 if (array_key_exists('for_sale', $products[$i]['stock_status']) AND $products[$i]['stock_status']['for_sale'] <= 0) {
@@ -216,6 +216,27 @@ class Intraface_modules_product_Gateway
         }
         $db->free();
         return $products;
+    }
+    
+    /**
+     * Returns product ids with given keyword for webshop.
+     * 
+     * @param mixed $keyword_id integer or array with keyword ids
+     * @return array
+     */
+    public function getProductIdsWithKeywordForShop($keyword_id) {
+        
+        $this->getDBQuery()->setKeyword($keyword_id);
+        $this->getDBQuery()->setCondition("product.do_show = 1");
+        
+        $db       = $this->getDBQuery()->getRecordset("product.id", "", false);
+        $products = array();
+        while ($db->nextRecord()) {
+            $products[] = $db->f("id");
+        }
+        
+        return $products;
+        
     }
 
     function getMaxNumber()
