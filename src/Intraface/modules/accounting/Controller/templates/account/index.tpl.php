@@ -1,4 +1,4 @@
-<h1>Konti <a href="<?php e(url('../year/' . $context->getYear()->getId())); ?>"><?php e($context->getYear()->get('label')); ?></a></h1>
+<h1>Konti <a href="<?php e(url('../')); ?>"><?php e($context->getYear()->get('label')); ?></a></h1>
 
 <div class="message">
 	<p><strong>Kontoplan</strong>. Dette er en oversigt over alle dine konti, hvor du kan se saldoen, rette de enkelte konti og slette dem. Hvis du vil se bevægelserne på den enkelte konto, kan du klikke på kontonavnet.</p>

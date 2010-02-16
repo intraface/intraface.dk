@@ -69,7 +69,7 @@ class Intraface_modules_cms_Controller_Templates extends k_Component
             if (empty($_POST['close'])) {
                 return new k_SeeOther($this->url($id));
             } else {
-                return new k_SeeOther($this->url());
+                return new k_SeeOther($this->url($id));
             }
         } else {
             $value = $_POST;

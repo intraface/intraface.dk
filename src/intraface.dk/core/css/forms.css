@@ -50,14 +50,6 @@ div.formrow div.formrow-description {
     padding-left: 15em;
     font-size: 0.9em;
 }
-
-/* Hvad bruges den her til */
-div.formrow label.tight {
-	display: block;
-	width: 6em;
-	float: left;
-	margin-bottom: 0.7em;
-}
 	
 div.formrow input, div.formrow textarea {
 	/*
