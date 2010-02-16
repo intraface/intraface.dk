@@ -4,7 +4,7 @@
     echo $template->error->view($translation);
 ?>
 
-<form method="post" action="<?php e(url()); ?>">
+<form method="post" action="<?php e(url(null, array($context->subview()))); ?>">
     <input name="id" type="hidden" value="<?php if (!empty($value['id'])) e($value['id']); ?>" />
     <input name="site_id" type="hidden" value="<?php if (!empty($value['site_id'])) e($value['site_id']); ?>" />
 

@@ -38,6 +38,15 @@ class Intraface_modules_cms_Controller_TemplateSectionEdit extends k_Component
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/template-section-edit');
         return $tpl->render($this, $data);
     }
+    
+    function renderHtmlDelete()
+    {
+        $template = CMS_Template :: factory($this->getKernel(), 'id', $this->context->context->name());
+        $section = CMS_TemplateSection :: factory($template, 'template_and_id', $this->name());
+        $section->delete();
+        
+        return new k_SeeOther($this->url('../../'));
+    }
 
     function postMultipart()
     {
