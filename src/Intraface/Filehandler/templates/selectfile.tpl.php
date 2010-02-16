@@ -94,10 +94,10 @@
 <div>
 
     <?php if($context->multiple_choice): ?>
-        <input type="submit" name="submit" id="submit-select_file" value="<?php e(t('save')); ?>" />
+        <input type="submit" name="submit" id="submit-select_file" value="<?php e(t('Transfer selection')); ?>" />
     <?php endif; ?>
 
-    <input type="submit" name="submit_close" id="submit_close-select_file" value="<?php e(t('save and transfer')); ?>" />
+    <input type="submit" name="submit_close" id="submit_close-select_file" value="<?php e(t('Transfer selection and close')); ?>" />
     <a href="<?php e(url('../../')); ?>"><?php e(t('Cancel')); ?></a>
 </div>
 
