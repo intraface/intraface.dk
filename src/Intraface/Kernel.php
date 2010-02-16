@@ -23,6 +23,7 @@ class Intraface_Kernel
     public $translation;
     private $observers = array();
     private $modulehandler;
+    public $setting;
 
     /**
      * Constructor
@@ -181,12 +182,18 @@ class Intraface_Kernel
 
     function getSetting()
     {
-        if (is_object($this->user)) {
-            $user_id = $this->user->getId();
-        } else {
-            $user_id = 0;
+        /**
+         * Very important to store setting, as getSetting is called many times in some scripts
+         */
+        if(empty($this->setting)) {
+            if (is_object($this->user)) {
+                $user_id = $this->user->getId();
+            } else {
+                $user_id = 0;
+            }
+            $this->setting = new Intraface_Setting($this->intranet->getId(), $user_id);
         }
-        return new Intraface_Setting($this->intranet->getId(), $user_id);
-        //return $this->setting;
+        
+        return $this->setting;
     }
 }
