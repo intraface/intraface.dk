@@ -58,7 +58,8 @@ class Intraface_modules_cms_Controller_Site extends k_Component
         $data = array(
             'cmssite' => $this->getSite(),
             'value' => $value,
-            'cms_module' => $cms_module
+            'cms_module' => $cms_module,
+            'translation' => $this->getKernel()->getTranslation('cms')
         );
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/site-edit');
