@@ -2,7 +2,7 @@
 $accounts = $context->getAccounts();
 ?>
 
-<h1>Bogfør <a href="<?php e(url('../../year/' . $context->getYear()->getId())); ?>"><?php e($context->getYear()->get('label')); ?></a></h1>
+<h1>Bogfør <a href="<?php e(url('../../')); ?>"><?php e($context->getYear()->get('label')); ?></a></h1>
 
 <?php if ($context->getKernel()->setting->get('user', 'accounting.state.message') == 'view'): ?>
 <div class="message">
