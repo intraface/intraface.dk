@@ -17,10 +17,10 @@
 <?php echo $context->getDebtor()->error->view(); ?>
 <?php
 // onlinepayment error viewing, also with showing cancel onlinepayment button.
-if (isset($onlinepayment)) {
-    echo $onlinepayment->error->view();
+if (isset($context->onlinepayment)) {
+    echo $context->onlinepayment->error->view();
     if (isset($context->onlinepayment_show_cancel_option) && $context->onlinepayment_show_cancel_option == true) {
-        echo '<form method="post" action="'.url(null).'"><ul class="formerrors"><li>Ønsker du i stedet at <input type="submit" name="onlinepayment_cancel" value="Annullere" /><input type="hidden" name="id" value="'.$context->getDebtor()->get('id').'" /><input type="hidden" name="onlinepayment_id" value="'.$onlinepayment->id.'" /> registreringen af betalingen.</li></ul></form>';
+        echo '<form method="post" action="'.url(null).'"><ul class="formerrors"><li>Ønsker du i stedet at <input type="submit" name="onlinepayment_cancel" value="Annullere" /><input type="hidden" name="id" value="'.$context->getDebtor()->get('id').'" /><input type="hidden" name="onlinepayment_id" value="'.$context->onlinepayment->id.'" /> registreringen af betalingen.</li></ul></form>';
     }
 }
 ?>

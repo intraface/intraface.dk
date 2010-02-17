@@ -6,6 +6,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
     public $email_send_with_success;
     public $onlinepayment_show_cancel_option;
     protected $template;
+    public $onlinepayment;
 
     function __construct(k_TemplateFactory $template, Translation2 $translation)
     {
@@ -168,9 +169,9 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         // cancel onlinepayment
         elseif (isset($_POST['onlinepayment_cancel']) && $this->getKernel()->user->hasModuleAccess('onlinepayment')) {
             $onlinepayment_module = $this->getKernel()->useModule('onlinepayment');
-            $onlinepayment = OnlinePayment::factory($this->getKernel(), 'id', intval($_POST['onlinepayment_id']));
+            $this->onlinepayment = OnlinePayment::factory($this->getKernel(), 'id', intval($_POST['onlinepayment_id']));
 
-            $onlinepayment->setStatus('cancelled');
+            $this->onlinepayment->setStatus('cancelled');
             $this->getDebtor()->load();
         }
 
@@ -346,18 +347,18 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         if ($this->getKernel()->user->hasModuleAccess('onlinepayment') && isset($_GET['onlinepayment_action']) && $_GET['onlinepayment_action'] != "") {
             if ($_GET['onlinepayment_action'] != 'capture' || ($this->getDebtor()->get("type") == "invoice" && $this->getDebtor()->get("status") == "sent")) {
                 $onlinepayment_module = $this->getKernel()->useModule('onlinepayment'); // true: ignore user permisssion
-                $onlinepayment = OnlinePayment::factory($this->getKernel(), 'id', intval($_GET['onlinepayment_id']));
+                $this->onlinepayment = OnlinePayment::factory($this->getKernel(), 'id', intval($_GET['onlinepayment_id']));
 
-                if (!$onlinepayment->transactionAction($_GET['onlinepayment_action'])) {
+                if (!$this->onlinepayment->transactionAction($_GET['onlinepayment_action'])) {
                     $this->onlinepayment_show_cancel_option = true;
                 }
 
                 $this->getDebtor()->load();
 
                 // @todo vi skulle faktisk kun videre, hvis det ikke er en tilbagebetaling eller hvad?
-                if ($this->getDebtor()->get("type") == "invoice" && $this->getDebtor()->get("status") == "sent" AND !$onlinepayment->error->isError()) {
+                if ($this->getDebtor()->get("type") == "invoice" && $this->getDebtor()->get("status") == "sent" AND !$this->onlinepayment->error->isError()) {
                     if ($this->getKernel()->user->hasModuleAccess('accounting')) {
-                        return new k_SeeOther($this->url('payment/' . $onlinepayment->get('create_payment_id') . '/state'));
+                        return new k_SeeOther($this->url('payment/' . $this->onlinepayment->get('create_payment_id') . '/state'));
                     }
                 }
             }
@@ -416,6 +417,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
             }
         }
+        
         return parent::GET();
     }
 

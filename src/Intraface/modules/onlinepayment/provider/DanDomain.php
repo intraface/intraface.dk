@@ -106,7 +106,7 @@ class OnlinePaymentDanDomain extends OnlinePayment
                 return 1;
             } else {
                 // fiasko
-                $this->error->set('Vi kunne ikke hæve betalingen, vi fik følgende fejl: '.$http_request->getResponseBody());
+                $this->error->set('Vi kunne ikke hæve betalingen, vi fik følgende fejl: '.utf8_encode($http_request->getResponseBody()));
                 return 0;
             }
         } elseif ($action == "reverse") {
