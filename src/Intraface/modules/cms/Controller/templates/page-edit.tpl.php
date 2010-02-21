@@ -1,9 +1,9 @@
 <h1><?php e(t('Edit '.$type)); ?></h1>
 
 <ul class="options">
-    <li><a href="<?php e(url('../../', array('type' => $type))); ?>"><?php e(t('close')); ?></a></li>
+    <li><a href="<?php e(url('../../', array('type' => $type))); ?>"><?php e(t('Close')); ?></a></li>
     <?php if ($cmspage->get('id') > 0): ?>
-    <li><a href="<?php e(url('../')); ?>"><?php e(t('view page')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('View page')); ?></a></li>
     <?php endif; ?>
 </ul>
 
@@ -42,7 +42,7 @@
                 <input type="hidden" name="template_id" value="<?php  if (!empty($value['template_id'])) e($value['template_id']); ?>" />
             <?php elseif (is_array($templates) AND count($templates) > 1): ?>
                 <div class="formrow">
-                    <label><?php e(t('choose template')); ?></label>
+                    <label><?php e(t('Choose template')); ?></label>
                     <select name="template_id">
                     <?php foreach ($templates as $template): ?>
                         <option value="<?php e($template['id']); ?>"><?php e($template['name']); ?></option>
@@ -56,15 +56,15 @@
 
         <fieldset>
 
-            <legend><?php e(t('page information')); ?></legend>
+            <legend><?php e(t('Page information')); ?></legend>
 
             <div class="formrow" id="titlerow">
-                <label for="title"><?php e(t('title')); ?></label>
+                <label for="title"><?php e(t('Title')); ?></label>
                 <input name="title" type="text" id="title" value="<?php if (!empty($value['title'])) e($value['title']); ?>" size="50" maxlength="50" onBlur="page_edit.fill_shortlink();" />
             </div>
 
             <div class="formrow">
-                <label for="shortlink"><?php e(t('unique page address')); ?></label>
+                <label for="shortlink"><?php e(t('Unique page address')); ?></label>
                 <?php e($cmssite->get('url')); ?><input name="identifier" type="text" id="shortlink" value="<?php if (!empty($value['identifier'])) e($value['identifier']); ?>" size="35" maxlength="50" /> (<?php e(t('only the characters').': a-z 0-9 _ -'); ?>)
                 <div class="formrow-description"></div>
 

@@ -5,6 +5,7 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
     protected $page_gateway;
     protected $db_sql;
     protected $mdb2;
+    private $cmspage;
 
     function __construct(k_TemplateFactory $template, DB_Sql $db, MDB2_Driver_Common $mdb2)
     {
@@ -105,16 +106,30 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/pages');
         return $tpl->render($this, $data);
     }
+    
+    private function getCMSPage()
+    {
+        if(empty($this->cmspage)) {
+            $cmssite = $this->context->getSite();
+            $this->cmspage = new CMS_Page($cmssite);
+        }
+        
+        return $this->cmspage;
+    }
 
     function renderHtmlCreate()
     {
         $module_cms = $this->getKernel()->module('cms');
 
+        if($this->body()) {
+            $value = $this->body();
+        }
+        
         $type = $_GET['type'];
         $value['type'] = $type;
-        $cmssite = $this->context->getSite();
-        $cmspage = new CMS_Page($cmssite);
-        $value['site_id'] = $this->context->getSite()->get('id');
+        $cmspage = $this->getCMSPage();
+        $cmssite = $cmspage->cmssite; 
+        $value['site_id'] = $cmssite->get('id');
         $template = new CMS_Template($cmssite);
 
 
@@ -150,9 +165,8 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
     {
         $module_cms = $this->getKernel()->module('cms');
 
-        $cmssite = $this->context->getSite();
-        $cmspage = new CMS_Page($cmssite);
-
+        $cmspage = $this->getCMSPage();
+        
         if ($cmspage->save($_POST)) {
             if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
                 return new k_SeeOther($this->url($cmspage->get('id') . '/filehandler/selectfile', array('images' => 1)));

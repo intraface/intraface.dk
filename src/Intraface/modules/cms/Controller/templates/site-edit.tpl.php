@@ -1,6 +1,5 @@
 <h1><?php e(t('edit site')); ?></h1>
-
-<?php echo $cmssite->error->view($translation); ?>
+<?php echo $cmssite->error->view(array($context, 't')); ?>
 
 <form action="<?php e(url(null, array($context->subview()))); ?>" method="POST">
 	<fieldset>

@@ -81,11 +81,15 @@ class Intraface_modules_cms_Controller_Page extends k_Component
     function renderHtmlEdit()
     {
         $module_cms = $this->getKernel()->module('cms');
-        $cmspage = CMS_Page::factory($this->getKernel(), 'id', $this->name());
+        $cmspage = $this->getModel();
         $cmssite = $cmspage->cmssite;
 
         $value = $cmspage->get();
         $type = $value['type'];
+        
+        if($this->body()) {
+            $value = $this->body();
+        }
         $template = $cmspage->template;
 
         if (!empty($type)) {
@@ -105,8 +109,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         $data = array('value' => $value,
         	'type' => $type,
         	'cmspage' => $cmspage,
-        	'template' => $template,
-            'translation' => $this->getKernel()->getTranslation('cms'),
+        	'translation' => $this->getKernel()->getTranslation('cms'),
             'templates' => $templates,
             'cmssite' => $cmssite,
             'kernel' => $this->getKernel(),
@@ -140,9 +143,9 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         }
         $module_cms = $this->getKernel()->module('cms');
 
-        $cmssite = $this->context->context->getSite();
-        $cmspage = new CMS_Page($cmssite, $this->name());
-
+        
+        $cmspage = $this->getModel();
+        
         if ($cmspage->save($_POST)) {
             if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
                 return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 1)));
@@ -152,12 +155,8 @@ class Intraface_modules_cms_Controller_Page extends k_Component
                 $keyword_shared = $this->getKernel()->useShared('keyword');
                 return new k_SeeOther($this->url('keyword/connect'));
             } else {
-                return new k_SeeOther($this->url(null, array($context->subview())));
+                return new k_SeeOther($this->url(null, array($this->subview())));
             }
-        } else {
-            $value = $_POST;
-            $type = $_POST['page_type'];
-            $template = $cmspage->template;
         }
 
         return $this->render();

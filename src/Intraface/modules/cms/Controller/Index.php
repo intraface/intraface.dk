@@ -47,8 +47,7 @@ class Intraface_modules_cms_Controller_Index extends k_Component
         $data = array(
             'cmssite' => $this->getEmptySite(),
             'value' => $value,
-            'cms_module' => $cms_module,
-            'translation' => $this->getKernel()->getTranslation('cms')
+            'cms_module' => $cms_module
         );
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/site-edit');
