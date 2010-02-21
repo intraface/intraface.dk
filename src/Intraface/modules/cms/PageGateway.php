@@ -6,6 +6,15 @@ class Intraface_modules_cms_PageGateway
     protected $dbquery;
     protected $cmssite;
     protected $values;
+    
+    /**
+     * 
+     * @var array page status types
+     */
+    public $status_types = array(
+        0 => 'draft',
+        1 => 'published'
+    );
 
     function __construct($kernel, DB_Sql $db)
     {
@@ -179,7 +188,7 @@ class Intraface_modules_cms_PageGateway
                     $pages[$i]['navigation_name'] = $pages[$i]['title'];
                 }
 
-                $pages[$i]['status'] = $this->status[$cmspage[$n]->f('status_key')];
+                $pages[$i]['status'] = $this->status_types[$cmspage[$n]->f('status_key')];
 
                 // @todo hvad er det her til
                 $pages[$i]['new_status'] = 'published';
