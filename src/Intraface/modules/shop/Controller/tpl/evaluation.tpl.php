@@ -1,4 +1,4 @@
-<?php echo $basketevaluation->error->view($translation); ?>
+<?php echo $basketevaluation->error->view(array($context, 't')); ?>
 
 <form action="<?php e(url(null)); ?>" method="post">
     <fieldset>

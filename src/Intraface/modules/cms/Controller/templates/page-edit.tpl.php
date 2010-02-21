@@ -7,7 +7,7 @@
     <?php endif; ?>
 </ul>
 
-<?php echo $cmspage->error->view($translation); ?>
+<?php echo $cmspage->error->view(array($context, 't')); ?>
 
 <?php if (!is_array($templates) OR count($templates) == 0): ?>
 

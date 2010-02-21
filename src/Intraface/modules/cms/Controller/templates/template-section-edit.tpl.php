@@ -1,7 +1,7 @@
 <h1><?php e(t('Edit template section')); ?></h1>
 
 <?php
-echo $section->error->view($translation);
+echo $section->error->view(array($context, 't'));
 ?>
 
 <form method="post" action="<?php e(url()); ?>"  enctype="multipart/form-data">

@@ -5,7 +5,7 @@
 </ul>
 
 <?php
-echo $element->error->view($translation);
+echo $element->error->view(array($context, 't'));
 ?>
 
 <form method="post" action="<?php e(url(null, array('type' => $element->get('type')))); ?>"  enctype="multipart/form-data">

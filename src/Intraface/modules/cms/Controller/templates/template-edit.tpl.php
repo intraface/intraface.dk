@@ -1,7 +1,7 @@
 <h1><?php e(t('Edit template')); ?></h1>
 
 <?php
-    echo $template->error->view($translation);
+    echo $template->error->view(array($context, 't'));
 ?>
 
 <form method="post" action="<?php e(url(null, array($context->subview()))); ?>">

@@ -5,7 +5,7 @@
 </ul>
 
 <?php
-    echo $cmssite->stylesheet->error->view($translation);
+    echo $cmssite->stylesheet->error->view(array($context, 't'));
 ?>
 
 <form method="post" action="<?php e(url()); ?>">
