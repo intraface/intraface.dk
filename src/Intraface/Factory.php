@@ -100,7 +100,7 @@ class Intraface_Factory
         // $translation->setOption('fallbackLang', 'uk');
         // $translation = $translation->getDecorator('LogMissingTranslation');
         // $translation->setOption('logger', array(new ErrorHandler_Observer_File(ERROR_LOG), 'update'));
-        // $translation = $translation->getDecorator('DefaultText');
+        $translation = $translation->getDecorator('DefaultText');
 
         // %stringID% will be replaced with the stringID
         // %pageID_url% will be replaced with the pageID
