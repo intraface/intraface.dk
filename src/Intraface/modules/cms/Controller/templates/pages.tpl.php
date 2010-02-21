@@ -49,7 +49,7 @@
     if (!is_array($news) OR count($news) == 0): ?>
         <p><?php e(t('No news found')); ?></p>
     <?php else: ?>
-    	<?php include 'page/articles.tpl.php'; ?>
+    	<?php include 'page/news.tpl.php'; ?>
     <?php endif; ?>
 <?php endif; ?>
 
