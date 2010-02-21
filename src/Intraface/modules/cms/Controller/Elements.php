@@ -116,7 +116,7 @@ class Intraface_modules_cms_Controller_Elements extends k_Component
 
     function getElement()
     {
-        if ($this->element) {
+        if (!empty($this->element)) {
             return $this->element;
         }
 
