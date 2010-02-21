@@ -68,7 +68,7 @@ class Voucher extends Intraface_Standard
                     voucher.date,
                     voucher.reference
             FROM accounting_voucher voucher
-            WHERE voucher.id = " . $this->id;
+            WHERE voucher.id = " . $this->id. " AND intranet_id = ". $this->year->kernel->intranet->getId();
 
         $db = new DB_Sql;
         $db->query($sql);
