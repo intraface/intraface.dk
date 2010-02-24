@@ -144,7 +144,7 @@ class ShopTest extends PHPUnit_Framework_TestCase
     function testSaveShop()
     {
         $shop = new Intraface_modules_shop_Shop();
-        $shop->name = 'Øer er noget værre noget';
+        $shop->name = 'Ã˜er er noget vÃ¦rre noget';
         $shop->save();
     }
 }
