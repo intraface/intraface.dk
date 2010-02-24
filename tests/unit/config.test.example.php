@@ -43,6 +43,6 @@ if ($db->getOption('debug')) {
     register_shutdown_function(array($my_debug_handler, 'dumpInfo'));
 }
 
-Doctrine_Manager::getInstance()->setAttribute("use_dql_callbacks", true);
+Doctrine_Manager::getInstance()->setAttribute(Doctrine_Core::ATTR_USE_DQL_CALLBACKS, true);
 Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
 Doctrine_Manager::connection(DB_DSN);
