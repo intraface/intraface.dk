@@ -38,9 +38,8 @@ require_once 'swift_required.php';
 require_once 'Ilib/Errorhandler/Handler/File.php';
 //set_error_handler('k_exceptions_error_handler');
 
-set_error_handler('intraface_exceptions_error_handler');
+set_error_handler('intraface_exceptions_error_handler', E_ALL); // Setting E_ALL leaves out E_STRICT which generates many errors
 spl_autoload_register('k_autoload');
-
 
 $GLOBALS['konstrukt_content_types']['application/ms-excel'] = 'xls';
 $GLOBALS['konstrukt_content_types']['text/x-vcard'] = 'vcf';
