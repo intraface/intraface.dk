@@ -17,7 +17,6 @@ require_once 'Log.php';
 require_once 'Doctrine/lib/Doctrine.php';
 spl_autoload_register(array('Doctrine', 'autoload'));
 require_once 'Intraface/functions.php';
-require_once 'Intraface/shared/systemmessage/SystemDisturbance.php';
 require_once 'bucket.inc.php';
 
 // paths
