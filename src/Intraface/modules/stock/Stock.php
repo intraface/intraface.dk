@@ -11,16 +11,11 @@ class Stock extends Intraface_Standard
 
     function __construct($product, $variation = NULL)
     {
-        if (!is_object($product) AND strtolower(get_class($product)) == "product") {
-            trigger_error("Stock kr�ver product", E_USER_ERROR);
-        }
-
-        $this->product = &$product;
+        $this->product = $product;
 
         if ($variation) {
             $this->product_variation_id = $variation->getId();
-        }
-        else {
+        } else {
             $this->product_variation_id = 0;
         }
 
@@ -50,7 +45,6 @@ class Stock extends Intraface_Standard
             $basis_date = 0;
             $this->value["dk_adaptation_date_time"] = 'Ej afstemt';
         }
-
 
         if ($this->product->kernel->intranet->hasModuleAccess('procurement')) {
             $this->product->kernel->useModule('procurement', true); // true: vi ignorere brugeradgang.
@@ -151,8 +145,8 @@ class Stock extends Intraface_Standard
             product_variation_id = ".$this->product_variation_id.",
             user_id = ".$this->product->kernel->user->get('id').",
             regulation_date_time = NOW(),
-            comment = \"".$input['description']."\",
-            quantity = ".$input['quantity']."");
+            comment = '".$input['description']."',
+            quantity = '".$input['quantity']."'");
 
         return true;
     }
