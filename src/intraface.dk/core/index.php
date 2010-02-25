@@ -12,15 +12,16 @@ function intraface_exceptions_error_handler($severity, $message, $filename, $lin
   if (error_reporting() == 0) {
     return;
   }
-  $e = new ErrorException($message, 0, $severity, $filename, $lineno);
   if (error_reporting() && $severity) {
       if ($severity == 8 or $severity == 2048) {
         //$render = new Ilib_Errorhandler_Handler_File(Log::factory('file', ERROR_LOG, 'INTRAFACE'));
         //$render->handle($e);
         return;
       }
-      throw $e;
   }
+
+  $e = new ErrorException($message, 0, $severity, $filename, $lineno);
+  throw $e;
 }
 
 
@@ -209,13 +210,13 @@ class k_Translation2Translator implements k_Translator
     {
         $factory = new Intraface_Factory;
         $cache = $factory->new_Translation2_Cache();
-        
+
         if($page_id == NULL) {
             $cache_key = 'common';
         } else {
             $cache_key = $page_id;
         }
-        
+
         if($data = $cache->get($cache_key, 'translation-'.$lang)) {
             $this->page = unserialize($data);
         } else {
@@ -224,15 +225,15 @@ class k_Translation2Translator implements k_Translator
             if (PEAR::isError($res)) {
                 throw new Exception('Could not setLang()');
             }
-            
+
             $this->page = $translation2->getPage('common');
             if($page_id != NULL) {
                 $this->page = array_merge($this->page, $translation2->getPage($page_id));
             }
-            
+
             $cache->save(serialize($this->page), $cache_key, 'translation-'.$lang);
         }
-        
+
         $this->page_id = $page_id;
         $this->lang = $lang;
     }
@@ -254,11 +255,11 @@ class k_Translation2Translator implements k_Translator
 
         return utf8_encode($this->translation2->get($phrase, 'common'));
         */
-        
+
         if(isset($this->page[$phrase])) {
             return utf8_encode($this->page[$phrase]);
         }
-        
+
         $logger = new ErrorHandler_Observer_File(ERROR_LOG);
         $details = array(
                 'date' => date('r'),
@@ -267,11 +268,11 @@ class k_Translation2Translator implements k_Translator
                 'file' => '[unknown]',
                 'line' => '[unknown]'
             );
-        
+
         $logger->update($details);
-        
+
         return $phrase;
-        
+
     }
 }
 
