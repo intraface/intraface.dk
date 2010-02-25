@@ -42,6 +42,16 @@ class Intraface_modules_product_Controller_Variation extends k_Component
             }
         }
 
+        // this has to be moved to post
+        if (isset($_GET['delete_appended_file_id'])) {
+            $product = new Product($this->getKernel(), $_GET['id']);
+            $append_file = new AppendFile($this->getKernel(), 'product', $product->get('id'));
+            $append_file->delete((int)$_GET['delete_appended_file_id']);
+            header('Location: product.php?id='.$product->get('id'));
+            exit;
+
+        }
+
         $data = array(
             'product' => $product,
             'variation' => $variation,
@@ -78,8 +88,6 @@ class Intraface_modules_product_Controller_Variation extends k_Component
                     $append_file->addFile(new FileHandler($this->getKernel(), $id));
                 }
             }
-
-
         }
 
         if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
@@ -92,16 +100,7 @@ class Intraface_modules_product_Controller_Variation extends k_Component
             return new k_SeeOther($url);
         }
 
-        // this has to be moved to post
-        if (isset($_GET['delete_appended_file_id'])) {
-            $product = new Product($this->getKernel(), $_GET['id']);
-            $append_file = new AppendFile($this->getKernel(), 'product', $product->get('id'));
-            $append_file->delete((int)$_GET['delete_appended_file_id']);
-            header('Location: product.php?id='.$product->get('id'));
-            exit;
-
-        }
-
+        return $this->render();
     }
 
     function getKernel()
