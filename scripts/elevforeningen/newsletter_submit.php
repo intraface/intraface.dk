@@ -1,4 +1,7 @@
 <?php
+/**
+ * Submit everybody to the newsletter for elevforeningen
+ */
 require('config.local.php');
 require('common.php');
 

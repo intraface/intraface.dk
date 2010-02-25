@@ -1,13 +1,6 @@
 <?php
 /**
- * cronjob som skal sende e-mails for nyhedsbrevsudsenderen.
- *
- * VIGTIGT:
- * Dreamhost har et maksimalt antal afsendte e-mails på en time på 150.
- * Derfor må der ikke sendes flere end det.
- *
- * Det styres ved at cronjobbet kun sættes i gang en gang i timen - og
- * at der kun sendes 125 e-mails ad gangen.
+ * @todo what is this used for?
  *
  * @author Lars Olesen <lars@legestue.net>
  */
@@ -31,10 +24,10 @@ while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 
     $auth_adapter = new Intraface_Auth_PublicKeyLogin(MDB2::singleton(DB_DSN), md5(session_id()), $row['public_key']);
     $weblogin = $auth_adapter->auth();
-        
+
     if (!$weblogin) {
         throw new Exception('Access to the intranet denied. The private key is probably wrong.');
-    } 
+    }
 
     $kernel = new Intraface_Kernel();
     $kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
@@ -103,7 +96,7 @@ while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 
             $i++;
             $j++;
-       
+
 
 
     }

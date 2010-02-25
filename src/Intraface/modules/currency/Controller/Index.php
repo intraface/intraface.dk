@@ -10,9 +10,13 @@ class Intraface_modules_currency_Controller_Index extends k_Component
         $this->template = $template;
     }
 
-    public function getTranslation()
+    function map($name)
     {
-        return $this->context->getKernel()->getTranslation('currency');
+        if ($name == 'add') {
+            return 'Intraface_modules_currency_Controller_Add';
+        }
+        return 'Intraface_modules_currency_Controller_Show';
+
     }
 
     function renderHtml()
@@ -37,15 +41,6 @@ class Intraface_modules_currency_Controller_Index extends k_Component
         return $tpl->render($this, array('currencies' => $currencies));
     }
 
-    function map($name)
-    {
-        if ($name == 'add') {
-            return 'Intraface_modules_currency_Controller_Add';
-        }
-        return 'Intraface_modules_currency_Controller_Show';
-
-    }
-
     function wrapHtml($content)
     {
         $tpl = $this->template->create(dirname(__FILE__) . '/tpl/content');
@@ -65,5 +60,11 @@ class Intraface_modules_currency_Controller_Index extends k_Component
     function getKernel()
     {
         return $this->context->getKernel();
+    }
+
+
+    public function getTranslation()
+    {
+        return $this->context->getKernel()->getTranslation('currency');
     }
 }

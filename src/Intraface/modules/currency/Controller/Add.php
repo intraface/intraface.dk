@@ -1,21 +1,12 @@
 <?php
 class Intraface_modules_currency_Controller_Add extends k_Component
 {
-    private $error;
+    protected $error;
     protected $template;
 
     function __construct(k_TemplateFactory $template)
     {
         $this->template = $template;
-    }
-
-    public function getError()
-    {
-        if (!$this->error) {
-            $this->error = new Intraface_Doctrine_ErrorRender($this->context->getTranslation());
-        }
-
-        return $this->error;
     }
 
     function renderHtml()
@@ -46,7 +37,17 @@ class Intraface_modules_currency_Controller_Add extends k_Component
             return new k_SeeOther($this->url('../'));
         } catch (Doctrine_Validator_Exception $e) {
             $this->getError()->attachErrorStack($currency->getErrorStack(), array('type' => 'currency'));
-            return $this->render();
         }
+        return $this->render();
+    }
+
+
+    public function getError()
+    {
+        if (!$this->error) {
+            $this->error = new Intraface_Doctrine_ErrorRender($this->context->getTranslation());
+        }
+
+        return $this->error;
     }
 }

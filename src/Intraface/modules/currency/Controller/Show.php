@@ -1,6 +1,18 @@
 <?php
 class Intraface_modules_currency_Controller_Show extends k_Component
 {
+    function renderHtml()
+    {
+        return 'No content';
+    }
+
+    function map($name)
+    {
+        if ($name == 'exchangerate') {
+            return 'Intraface_modules_currency_Controller_ExchangeRate_Index';
+        }
+    }
+
     /**
      * Returns translations object
      *
@@ -19,18 +31,6 @@ class Intraface_modules_currency_Controller_Show extends k_Component
             throw new Exception('Invalid currency '.$this->name());
         }
         return $currency;
-    }
-
-    function renderHtml()
-    {
-        return 'No content';
-    }
-
-    function map($name)
-    {
-        if ($name == 'exchangerate') {
-            return 'Intraface_modules_currency_Controller_ExchangeRate_Index';
-        }
     }
 
     function getKernel()

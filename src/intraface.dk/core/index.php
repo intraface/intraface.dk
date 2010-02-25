@@ -14,8 +14,6 @@ function intraface_exceptions_error_handler($severity, $message, $filename, $lin
   }
   if (error_reporting() && $severity) {
       if ($severity == 8 or $severity == 2048) {
-        //$render = new Ilib_Errorhandler_Handler_File(Log::factory('file', ERROR_LOG, 'INTRAFACE'));
-        //$render->handle($e);
         return;
       }
   }

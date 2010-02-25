@@ -113,7 +113,7 @@ class Intraface_Factory
         $translation->emptyPostfix = '';  //default: empty string
         return $translation;
     }
-    
+
     function new_Translation2_Cache()
     {
         $options = array(
@@ -130,7 +130,7 @@ class Intraface_Factory
 
     function new_Doctrine_Connection_Common()
     {
-        Doctrine_Manager::getInstance()->setAttribute(Doctrine_Core::ATTR_USE_DQL_CALLBACKS, true);
+        Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_USE_DQL_CALLBACKS, true);
         Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
         $connection = Doctrine_Manager::connection(DB_DSN);
         $connection->setCharset('utf8');
