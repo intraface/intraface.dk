@@ -17,31 +17,11 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
         }
     }
 
-    function GET()
+    function renderHtml()
     {
         $year = $this->getYear();
         $year->checkYear();
 
-        /*
-        if (!empty($_GET['action']) AND $_GET['action'] == 'delete' AND is_numeric($_GET['id'])) {
-            $account = new Account($year, $_GET['id']);
-            $account->delete();
-        } else {
-            $account = new Account($year);
-            $values['from_date'] = $year->get('from_date_dk');
-            $values['to_date'] = $year->get('to_date_dk');
-        }
-        */
-
-        /*
-        //$accounts = $account->getSaldoList($values['from_date'], $values['to_date']);
-        $accounts = $account->getList('stated', true);
-		*/
-        return parent::GET();
-    }
-
-    function renderHtml()
-    {
         $this->document->setTitle('Accounts');
 
         $accounts = $this->getAccount()->getList('saldo', true);
