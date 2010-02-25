@@ -26,6 +26,16 @@ class CMS_HTML_Parser extends Intraface_modules_cms_HTML_Parser
         return '<img src="'.$element['uri'].'" height="'.$element['height'].'" width="'.$element['width'].'">';
     }
 
+    function parseTwitterElement($element)
+    {
+        $out = '';
+        foreach ($element['results']['results'] as $result) {
+            $out .= '<p><img src="'.$result['profile_image_url'].'">'.$result['text'].'</p>';
+        }
+
+        return $out;
+    }
+
     function parseElements($elements)
     {
         $display = '';

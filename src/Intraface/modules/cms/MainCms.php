@@ -65,7 +65,8 @@ class MainCMS extends Intraface_Main
             10 => 'shorttext',
             11 => 'longtext',
             12 => 'wikitext',
-            13 => 'randompicture'
+            13 => 'randompicture',
+            14 => 'twitter'
             )
         );
 

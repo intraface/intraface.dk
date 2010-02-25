@@ -49,7 +49,10 @@ switch ($value['type']) {
     case 'randompicture':
         include 'element/randompicture.tpl.php';
         break;
-        default:
+    case 'twitter':
+        include 'element/twitter.tpl.php';
+        break;
+    default:
         trigger_error(t('not a valid type'), E_USER_ERROR);
     break;
 
