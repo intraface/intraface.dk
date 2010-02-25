@@ -108,7 +108,7 @@
     <fieldset>
         <legend><?php e(t('Stock')); ?></legend>
         <div class="formrow">
-            <label for="stock"><?php e(t('Stock product')); ?></label>
+            <label for="stock"><?php e(t('Use stock')); ?></label>
             <select name="stock" id="stock">
                 <?php foreach (array(0 => 'No', 1 => 'Yes') AS $key=>$v): ?>
                     <option value="<?php e($key); ?>" <?php if (isset($product) AND $product->hasStock() == $key) e('selected="selected"'); ?> ><?php e(t($v)); ?></option>
