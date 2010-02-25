@@ -151,4 +151,14 @@ class Intraface_Factory
     {
         return Swift_MailTransport::newInstance();
     }
+
+    function new_Cache_Lite()
+    {
+        $options = array(
+    		'cacheDir' => '/tmp/',
+    		'lifeTime' => 3600
+        );
+
+        return new Cache_Lite($options);
+    }
 }

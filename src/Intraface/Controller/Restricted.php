@@ -7,14 +7,16 @@ class Intraface_Controller_Restricted extends k_Component
     protected $user_gateway;
     protected $kernel_gateway;
     protected $template;
+    protected $cache;
 
-    function __construct(DB_Sql $db_sql, MDB2_Driver_Common $mdb2, Intraface_UserGateway $gateway, Intraface_KernelGateway $kernel_gateway, k_TemplateFactory $template /*k_Registry $registry*/)
+    function __construct(Cache_Lite $cache, DB_Sql $db_sql, MDB2_Driver_Common $mdb2, Intraface_UserGateway $gateway, Intraface_KernelGateway $kernel_gateway, k_TemplateFactory $template /*k_Registry $registry*/)
     {
         $this->mdb2 = $mdb2; // this is here to make sure set names utf8 is run as the first thing in the app
         $this->db_sql = $db_sql;
         $this->user_gateway = $gateway;
         $this->kernel_gateway = $kernel_gateway;
         $this->template = $template;
+        $this->cache = $cache;
     }
 
     function document()
@@ -89,8 +91,28 @@ class Intraface_Controller_Restricted extends k_Component
             }
         }
 
+        $data = array(
+        	'_attention_needed' => $_attention_needed,
+        	'_advice' => $_advice,
+            'tweets' => $this->getTweets());
+
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/restricted');
-        return $smarty->render($this, array('_attention_needed' => $_attention_needed, '_advice' => $_advice));
+        return $smarty->render($this, $data);
+    }
+
+    function getTweets()
+    {
+        if (!$data = $this->cache->get($id)) { // cache hit !
+            try {
+                $twitterSearch = new Zend_Service_Twitter_Search('json');
+                $data = $twitterSearch->search('#intraface', array('rpp' => 5));
+            } catch (Exception $e) {
+                return array();
+            }
+
+            $this->cache->save($data);
+        }
+        return $data['results'];
     }
 
     /**
@@ -227,12 +249,6 @@ class Intraface_Controller_Restricted extends k_Component
     {
         return $this->wrap(parent::execute());
     }
-    /*
-    function getTranslation()
-    {
-        return $this->getKernel()->getTranslation();
-    }
-    */
 
     function getThemeKey()
     {

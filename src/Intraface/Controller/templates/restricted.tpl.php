@@ -69,5 +69,11 @@ if (Intraface_ModuleHandler::exists(MDB2::singleton(DB_DSN), 'modulepackage') &&
 </div>
 
 <div id="colTwo">
+	<?php foreach ($tweets as $tweet): ?>
+		<p style="clear: both;">
+		<img src="<?php e($tweet['profile_image_url']); ?>" style="border:1px solid black; float: left; margin-right: 5px; " />
+		<span style=" padding-top: 5px; "><?php e($tweet['text']); ?></span>
+		</p>
+	<?php endforeach; ?>
 </div>
 
