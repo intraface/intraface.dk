@@ -92,7 +92,7 @@
 
                         $filehandler = new Filehandler($kernel, $file['id']);
                         $filehandlerHTML = new FilehandlerHTML($filehandler);
-                        $filehandlerHTML->showFile(url(null, array('delete_gallery_append_file_id'=>$file['append_file_id'])), array('image_size' => 'small'));
+                        $filehandlerHTML->showFile(url(null, array('remove_gallery_append_file_id'=>$file['append_file_id'])), array('image_size' => 'small'));
 
                         // This means that if there is an error in uploading a new file or other fields, the files will be shown anyway.
                         echo '<input type="hidden" name="pictures['.$key.'][id]" value="'.$file['id'].'" />';

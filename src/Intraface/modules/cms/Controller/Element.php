@@ -16,6 +16,14 @@ class Intraface_modules_cms_Controller_Element extends k_Component
         }
     }
 
+    function dispatch()
+    {
+        if (!$this->getElement()) {
+            throw new k_PageNotFound();
+        }
+        return parent::dispatch();
+    }
+
     function getElement()
     {
         if (is_object($this->element)) {
@@ -70,22 +78,18 @@ class Intraface_modules_cms_Controller_Element extends k_Component
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
         $shared_filehandler->includeFile('AppendFile.php');
 
-        $element = $this->getElement();
-        $value = $element->get();
-
-        if (isset($_GET['delete_gallery_append_file_id'])) {
-            $append_file = new AppendFile($this->getKernel(), 'cms_element_gallery', $element->get('id'));
-            $append_file->delete((int)$_GET['delete_gallery_append_file_id']);
-            $element->load();
-            $value = $element->get();
+        if (isset($_GET['remove_gallery_append_file_id'])) {
+            $append_file = new AppendFile($this->getKernel(), 'cms_element_gallery', $this->getElement()->get('id'));
+            $append_file->delete((int)$_GET['remove_gallery_append_file_id']);
             return new k_SeeOther($this->url());
-        } else if (isset($_GET['delete_filelist_append_file_id'])) {
-            $append_file = new AppendFile($this->getKernel(), 'cms_element_filelist', $element->get('id'));
-            $append_file->delete((int)$_GET['delete_filelist_append_file_id']);
-            $element->load();
-            $value = $element->get();
+        } else if (isset($_GET['remove_filelist_append_file_id'])) {
+            $append_file = new AppendFile($this->getKernel(), 'cms_element_filelist', $this->getElement()->get('id'));
+            $append_file->delete((int)$_GET['remove_filelist_append_file_id']);
             return new k_SeeOther($this->url());
         }
+
+        $element = $this->getElement();
+        $value = $element->get();
 
         $this->document->addScript('ckeditor/ckeditor.js');
         $this->document->addScript('ckeditor/lang/_languages.js');
@@ -142,6 +146,7 @@ class Intraface_modules_cms_Controller_Element extends k_Component
 
     function renderHtmlDelete()
     {
+        throw new Exception('her');
         $this->getElement()->delete();
         return new k_SeeOther($this->url('../'));
     }

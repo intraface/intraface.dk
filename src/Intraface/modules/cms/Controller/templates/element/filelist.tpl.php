@@ -46,7 +46,7 @@
                     foreach ($value['files'] AS $file) {
                         $filehandler = new Filehandler($kernel, $file['id']);
                         $filehandlerHTML = new FilehandlerHTML($filehandler);
-                        $filehandlerHTML->showFile(url(null, array('delete_filelist_append_file_id' => $file['append_file_id'])));
+                        $filehandlerHTML->showFile(url(null, array('remove_filelist_append_file_id' => $file['append_file_id'])));
                         /*
                         ?>
                         <div style="border: 3px solid blue; padding: 5px;"><img src="<?php e($filehandler->instance->get('file_uri')); ?>" width="<?php e($filehandler->instance->get('width')); ?>" height="<?php e($filehandler->instance->get('height')); ?>" /> <a class="delete" href="">Slet</a></div>
