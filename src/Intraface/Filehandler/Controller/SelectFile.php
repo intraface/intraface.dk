@@ -19,6 +19,7 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
         $this->multiple_choice = $this->query('multiple_choice');
         $this->url_state->set('multiple_choice', $this->query('multiple_choice'));
         $this->url_state->set('use_stored', 'true');
+        $this->url_state->set('images', $this->query('images'));
         return parent::dispatch();
     }
 
@@ -76,8 +77,10 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
         */
 
         if (method_exists($this->context->context, 'appendFile')) {
-            foreach ($this->body('selected') as $file_id) {
-                $file = $this->context->context->appendFile($file_id);
+            if (is_array($this->body('selected'))) {
+                foreach ($this->body('selected') as $file_id) {
+                    $file = $this->context->context->appendFile($file_id);
+                }
             }
         } else {
             $appender = $this->getFileAppender();

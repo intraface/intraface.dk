@@ -115,24 +115,11 @@ class Intraface_modules_cms_Controller_Element extends k_Component
                 $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
                 $module_filemanager = $this->getKernel()->useModule('filemanager');
                 if ($element->get('type') == 'picture') {
-                    if ($this->getElement()->get('id') > 0) {
-                         return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 1)));
-                    } else {
-                        return new k_SeeOther($this->url('../element/' . $element->get('id') . '/filehandler/selectfile', array('images' => 1)));
-                    }
+                    return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 1)));
                 } elseif ($element->get('type') == 'gallery') {
-                    if ($this->getElement()->get('id') > 0) {
-                         return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 1, 'multiple_choice' => 'trupe')));
-                    } else {
-                        return new k_SeeOther($this->url('../element/' . $element->get('id') . '/filehandler/selectfile', array('images' => 1, 'multiple_choice' => 'true')));
-                    }
+                     return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 1, 'multiple_choice' => 1)));
                 } elseif ($element->get('type') == 'filelist') {
-                    if ($this->getElement()->get('id') > 0) {
-                         return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 1, 'multiple_choice' => 'true')));
-                    } else {
-                        return new k_SeeOther($this->url('../element/' . $element->get('id') . '/filehandler/selectfile', array('images' => 1, 'multiple_choice' => 'true')));
-                    }
-
+                     return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 0, 'multiple_choice' => 1)));
                 } else {
                     throw new Exception("Det er ikke en gyldig elementtype til at lave redirect fra");
                 }

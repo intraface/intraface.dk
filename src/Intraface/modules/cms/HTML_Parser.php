@@ -28,6 +28,7 @@ class CMS_HTML_Parser extends Intraface_modules_cms_HTML_Parser
 
     function parseTwitterElement($element)
     {
+        $element = unserialize($element);
         $out = '';
         foreach ($element['results']['results'] as $result) {
             $out .= '<p><img src="'.$result['profile_image_url'].'">'.$result['text'].'</p>';

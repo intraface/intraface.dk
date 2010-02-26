@@ -49,28 +49,58 @@
     <td></td>
 </tr>
 <tr>
-    <td>type</td>
-    <td>new_file</td>
+	<td>clickAndWait</td>
+	<td>choose_file</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=upload file</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>file</td>
     <td>##path_test_root##@@dirctory_separator@@cms@@dirctory_separator@@example1.doc</td>
 </tr>
 <tr>
-    <td>clickAndWait</td>
-    <td>upload_new</td>
-    <td></td>
+	<td>pause</td>
+	<td>11000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>file</td>
+    <td>##path_test_root##@@dirctory_separator@@cms@@dirctory_separator@@example2.doc</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>11000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Save']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit_close-select_file</td>
+	<td></td>
 </tr>
 <tr>
     <td>assertTextPresent</td>
     <td>example1.doc</td>
-    <td></td>
-</tr>
-<tr>
-    <td>type</td>
-    <td>new_file</td>
-    <td>##path_test_root##@@dirctory_separator@@cms@@dirctory_separator@@example2.doc</td>
-</tr>
-<tr>
-    <td>clickAndWait</td>
-    <td>upload_new</td>
     <td></td>
 </tr>
 <tr>

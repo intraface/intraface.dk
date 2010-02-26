@@ -15,7 +15,7 @@ class Intraface_modules_cms_element_Twitter extends CMS_Element
         $this->value['search'] = $this->parameter->get('search');
         $this->value['number'] = $this->parameter->get('number');
         $twitterSearch  = new Zend_Service_Twitter_Search('json');
-        $this->value['results'] = $twitterSearch->search($this->parameter->get('search'), array('rpp' => $this->parameter->get('number')));
+        $this->value['results'] = serialize($twitterSearch->search($this->parameter->get('search'), array('rpp' => $this->parameter->get('number'))));
     }
 
     /**
