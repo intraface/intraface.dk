@@ -149,7 +149,7 @@ class CMS_Page extends Intraface_Standard
             case 'identifier':
                 $value['identifier'] = safeToDb($value['identifier']);
                 $value['identifier'] = strip_tags($value['identifier']);
-                return $gateway->findByIdentifier($value['identifier']);
+                return $gateway->findBySiteIdAndIdentifier($value['site_id'], $value['identifier']);
 
                 /*
                 $db = new DB_Sql;
@@ -182,9 +182,9 @@ class CMS_Page extends Intraface_Standard
     function validate($var)
     {
         $validator = new Intraface_Validator($this->error);
-        
+
         $validator->isString($var['title'], 'Error in title', '', '');
-        
+
         if (!empty($var['navigation_name'])) {
             $validator->isString($var['navigation_name'], 'error in navigation_name - has to be a string', '', 'allow_empty');
         }

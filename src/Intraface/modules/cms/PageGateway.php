@@ -6,9 +6,9 @@ class Intraface_modules_cms_PageGateway
     protected $dbquery;
     protected $cmssite;
     protected $values;
-    
+
     /**
-     * 
+     *
      * @var array page status types
      */
     public $status_types = array(
@@ -59,18 +59,18 @@ class Intraface_modules_cms_PageGateway
         return $object;
     }
 
-    function findByIdentifier($identifier)
+    function findBySiteIdAndIdentifier($site_id, $identifier)
     {
         $identifier = strip_tags($identifier);
 
         if (!empty($identifier)) {
-            $this->db->query("SELECT site_id, id FROM cms_page WHERE identifier = '" . $value['identifier'] . "' AND intranet_id = " . $kernel->intranet->get('id') . " AND active = 1 AND site_id = " . $value['site_id']);
+            $this->db->query("SELECT site_id, id FROM cms_page WHERE identifier = '" . $identifier . "' AND intranet_id = " . $this->kernel->intranet->get('id') . " AND active = 1 AND site_id = " . $site_id);
         } else {
             // @todo choose the default page - vi skal lige have noget med publish og expire date her ogs�
-            $this->db->query("SELECT site_id, id FROM cms_page WHERE intranet_id = " . $kernel->intranet->get('id') . " AND active = 1 AND status_key = 1 AND site_id = " . $value['site_id'] . " ORDER BY position ASC LIMIT 1");
+            $this->db->query("SELECT site_id, id FROM cms_page WHERE intranet_id = " . $this->kernel->intranet->get('id') . " AND active = 1 AND status_key = 1 AND site_id = " . $site_id . " ORDER BY position ASC LIMIT 1");
         }
         if (!$this->db->nextRecord()) {
-            $this->db->query("SELECT site_id, id FROM cms_page WHERE id = " . (int)$value['identifier'] . " AND intranet_id = " . $kernel->intranet->get('id') . " AND active = 1 AND site_id = " . $value['site_id']);
+            $this->db->query("SELECT site_id, id FROM cms_page WHERE id = " . (int)$value['identifier'] . " AND intranet_id = " . $this->kernel->intranet->get('id') . " AND active = 1 AND site_id = " . $site_id);
             if (!$this->db->nextRecord()) {
                 return false;
             }
