@@ -6,6 +6,7 @@ $delivery_address = $context->getDeliveryAddressValues();
 <div id="colOne">
 
 <div class="box">
+	<img style="float: right;" src="<?php e('http://www.gravatar.com/avatar/'.md5($address['email']).'?s=80')?>" height="80" width="80" />
 
     <h1>#<?php e($value['number']); ?> <?php e($address['name']); ?></h1>
 
