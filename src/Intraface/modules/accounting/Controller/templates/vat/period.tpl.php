@@ -5,9 +5,9 @@
 <?php if ($context->getYear()->get('vat') == 0): ?>
 	<p class="message">Dit regnskab bruger ikke moms, så du kan ikke se momsangivelserne.</p>
 <?php elseif (count($context->getPost()->getList('draft')) > 0): ?>
-	<p class="warning">Der er stadig poster i kassekladden. De bør bogføres, inden du opgør momsen. <a href="daybook.php">Gå til kassekladden</a>.</p>
+	<p class="warning">Der er stadig poster i kassekladden. De bør bogføres, inden du opgør momsen. <a href="<?php e(url('../daybook')); ?>">Gå til kassekladden</a>.</p>
 <?php elseif (!$context->getYear()->vatAccountIsSet()): ?>
-	<p class="message-dependent">Der er ikke angivet nogen momskonti. Du kan angive momskonti under <a href="setting.php">indstillingerne</a>.</p>
+	<p class="message-dependent">Der er ikke angivet nogen momskonti. Du kan angive momskonti under <a href="<?php e(url('../settings')); ?>">indstillingerne</a>.</p>
 <?php elseif (!$context->getVatPeriod()->periodsCreated()): ?>
 	<div class="message">
 		<p><strong>Moms</strong>. På denne side kan du få hjælp til at afregne moms. Inden du gør noget, skal du sørge for at alle beløbene for den pågældende periode, er tastet ind i systemet.</p>

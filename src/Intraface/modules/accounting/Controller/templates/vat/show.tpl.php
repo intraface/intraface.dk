@@ -26,15 +26,15 @@
 	<?php endif; ?>
 
 	<?php if (!$context->getVatPeriod()->compareAmounts() AND $context->getVatPeriod()->get('status_key') > 0): // beløb skal vøre gemt ?>
-		<p class="warning">Det ser ud til, at du ikke har fået bogført alle momsbeløbene korrekt. Denne momsangivelse burde vøre 0, nør den er bogført.</p>
+		<p class="warning">Det ser ud til, at du ikke har fået bogført alle momsbeløbene korrekt. Denne momsangivelse burde være 0, når den er bogført.</p>
 	<?php endif; ?>
 
 	<?php if (!$context->getYear()->isStated('invoice', $context->getVatPeriod()->get('date_start'), $context->getVatPeriod()->get('date_end'))): ?>
-		<p class="warning">Alle fakturaer i perioden er ikke bogført. <a href="/modules/debtor/list.php?type=invoice&amp;status=-1&amp;not_stated=true&amp;from_date=<?php e($context->getVatPeriod()->get('date_start_dk')); ?>&amp;to_date=<?php e($context->getVatPeriod()->get('date_end_dk')); ?>">Gø til fakturaer</a>.</p>
+		<p class="warning">Alle fakturaer i perioden er ikke bogført. <a href="<?php e(url('/restricted/module/debtor/invoice/list/', array('type' => 'credit_note', 'status' => -1, 'not_stated' => 'true', 'from_date' => $context->getVatPeriod()->get('date_start_dk'), 'to_date' => $context->getVatPeriod()->get('date_end_dk')))); ?>">Gå til fakturaer</a>.</p>
 	<?php endif; ?>
 
 	<?php if (!$context->getYear()->isStated('credit_note', $context->getVatPeriod()->get('date_start'), $context->getVatPeriod()->get('date_end'))): ?>
-		<p class="warning">Alle kreditnotaer i perioden er ikke bogført. <a href="/modules/debtor/list.php?type=credit_note&amp;status=-1&amp;not_stated=true&amp;from_date=<?php e($context->getVatPeriod()->get('date_start_dk')); ?>&amp;to_date=<?php e($context->getVatPeriod()->get('date_end_dk')); ?>">Gø til kreditnotaer</a>.</p>
+		<p class="warning">Alle kreditnotaer i perioden er ikke bogført. <a href="<?php e(url('/restricted/module/debtor/credit_note/list/', array('type' => 'credit_note', 'status' => -1, 'not_stated' => 'true', 'from_date' => $context->getVatPeriod()->get('date_start_dk'), 'to_date' => $context->getVatPeriod()->get('date_end_dk')))); ?>">Gå til kreditnotaer</a>.</p>
 	<?php endif; ?>
 
 	<table id="accounting-vat">
@@ -74,7 +74,7 @@
 			<td class="amount debet"><?php echo amountToOutput($saldo_total, 0); ?></td>
 		</tr>
 		<tr class="vat-rubrik">
-			<td colspan="2">Rubrik A. Vørdien uden moms af varekøb i andre <acronym title="Europøiske Union">EU</acronym>-lande</td>
+			<td colspan="2">Rubrik A. Værdien uden moms af varekøb i andre <acronym title="Europæiske Union">EU</acronym>-lande</td>
 			<!--<td class="amount credit"><?php e($saldo_rubrik_a); ?></td>-->
 			<td class="amount debet"><?php e($saldo_rubrik_a); ?></td>
 			<td></td>
@@ -85,7 +85,7 @@
 			<td></td>
 		</tr>
 		<tr class="vat-rubrik">
-			<td colspan="2">Rubrik C. Vørdien af varer og ydelser, som sølges momsfrit til udlandet efter lovens ø14-21 og 34, bortset fra varesalg til andre EU-lande, jf. rubrik B.</td>
+			<td colspan="2">Rubrik C. Værdien af varer og ydelser, som sælges momsfrit til udlandet efter lovens §14-21 og 34, bortset fra varesalg til andre EU-lande, jf. rubrik B.</td>
 			<td class="amount debet">Ikke understøttet</td>
 			<td></td>
 		</tr>
@@ -94,7 +94,7 @@
 
 	<?php if ($context->getKernel()->user->hasSubaccess('accounting', 'vat_report')): ?>
 		<?php if ($context->getVatPeriod()->get('date_end') > date('Y-m-d')): ?>
-			<p class="warning">Du er endnu ikke ude af perioden for momsafregningen, sø det er en god ide at vente med at bogføre til du er sikker pø alle beløbene.</p>
+			<p class="warning">Du er endnu ikke ude af perioden for momsafregningen, så det er en god ide at vente med at bogføre til du er sikker på alle beløbene.</p>
 		<?php endif; ?>
 
 		<?php if ($context->getVatPeriod()->get('status') != 'stated' OR !$context->getVatPeriod()->compareAmounts()): ?>
@@ -103,13 +103,13 @@
 				<input type="hidden" name="id" value="<?php e($context->getVatPeriod()->get('id')); ?>" />
 			<fieldset>
 				<legend>Bogfør momsen</legend>
-				<p>Du kan overføre beløbene til kassekladden ved at trykke pø knappen nedenunder. Du bør først trykke pø knappen, nør du har opgivet beløbene hos Skat.</p>
+				<p>Du kan overføre beløbene til kassekladden ved at trykke på knappen nedenunder. Du bør først trykke på knappen, når du har opgivet beløbene til Skat.</p>
 				<div class="formrow">
 					<label for="date">Dato</label> <input type="text" name="date" id="date" value="<?php e($context->getVatPeriod()->get('date_end_dk')); ?>" />
 				</div>
 				<div class="formrow">
 		        <?php if ($context->getVatPeriod()->get('status') == 'stated'): ?>
-					<label for="voucher_number">Bilagsnummer</label> <input type="text" name="voucher_number" id="voucher_number" value="<?php e($context->getVatPeriod()->get('voucher_number')); ?>" /> Perioden er tidligere bogført pø dette bilag
+					<label for="voucher_number">Bilagsnummer</label> <input type="text" name="voucher_number" id="voucher_number" value="<?php e($context->getVatPeriod()->get('voucher_number')); ?>" /> Perioden er tidligere bogført på dette bilag
 				</div>
 				<?php else: ?>
 				<div class="formrow">
