@@ -593,7 +593,7 @@ if (isset($context->onlinepayment)) {
                 	<?php e(t('An online payment should be present. Maybe the customer cancelled the buy, or an error occurred at your online payment provider. The customer can pay on the following link')); ?>:
                     <?php e($payment_url); ?>. <a href="<?php e(url(null, array('action' => 'send_onlinepaymentlink'))); ?>"><?php e('Write email'); ?></a>.
                 </div>
-            <?php elseif ($shop === false AND $this->getKernel()->user->hasModuleAccess('shop')): ?>
+            <?php elseif ($shop === false AND $context->getKernel()->user->hasModuleAccess('shop')): ?>
                 <div class="warning">
                     <?php e(t('An online payment should be present. However it has not been created from the shop. If you want to make it possible to pay online, you should create the order from your shop, edit it, and then return to this page and send the payment link to the customer')); ?>.
                 </div>
