@@ -249,15 +249,10 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // for a new contact we want to check if similar contacts alreade exists
-            if (empty($_POST['id'])) {
-                $contact = new Contact($this->getKernel());
-                if (!empty($_POST['phone'])) {
-                    $contact->getDBQuery()->setCondition("address.phone = '".$_POST['phone']."' AND address.phone <> ''");
-                    $similar_contacts = $contact->getList();
-                }
-
-            } else {
-                $contact = new Contact($this->getKernel(), $_POST['id']);
+            $contact = new Contact($this->getKernel());
+            if (!empty($_POST['phone'])) {
+                $contact->getDBQuery()->setCondition("address.phone = '".$_POST['phone']."' AND address.phone <> ''");
+                $similar_contacts = $contact->getList();
             }
 
             // checking if similiar contacts exists

@@ -17,7 +17,9 @@ class Intraface_modules_email_Controller_Index extends k_Component
 
     function dispatch()
     {
-        $this->url_state->set('contact_id', $this->query('contact_id'));
+        if ($this->query('contact_id')) {
+            $this->url_state->set('contact_id', $this->query('contact_id'));
+        }
 
         return parent::dispatch();
     }
@@ -27,14 +29,6 @@ class Intraface_modules_email_Controller_Index extends k_Component
         $this->getKernel()->module('email');
         $contact_module = $this->getKernel()->useModule('contact');
         $email_shared = $this->getKernel()->useShared('email');
-
-        // @todo move to Email
-        if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
-            $email = new Email($this->getKernel(), $_GET['delete']);
-            if (!$email->delete()) {
-                throw new Exception(__('could not delete e-mail', 'email'));
-            }
-        }
 
         $emails = $this->getGateway();
         $emails->getDBQuery()->useCharacter();

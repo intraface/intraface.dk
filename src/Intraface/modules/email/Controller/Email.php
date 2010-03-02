@@ -9,24 +9,9 @@ class Intraface_modules_email_Controller_Email extends k_Component
         $this->template = $template;
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
-    function getEmail()
-    {
-        if (is_object($this->email)) {
-            return $this->email;
-        }
-
-        return ($this->email = $this->context->getGateway()->findById($this->name()));
-    }
-
     function renderHtml()
     {
         $this->getKernel()->useShared('email');
-        $translation = $this->getKernel()->getTranslation('email');
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
         $email = $this->getEmail();
         $value = $email->get();
@@ -71,7 +56,6 @@ class Intraface_modules_email_Controller_Email extends k_Component
     function putForm()
     {
         $this->getKernel()->useShared('email');
-        $translation = $this->getKernel()->getTranslation('email');
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
         $email = $this->getEmail();
 
@@ -178,13 +162,31 @@ class Intraface_modules_email_Controller_Email extends k_Component
         return $this->render();
     }
 
+    function renderHtmlDelete()
+    {
+        $this->DELETE();
+        return new k_SeeOther($this->url('../'));
+    }
+
     function DELETE()
     {
-        $email = new Email($this->getKernel(), $this->name());
-        if (!$email->delete()) {
-            throw new Exception(__('could not delete e-mail', 'email'));
+        if (!$this->getEmail()->delete()) {
+            throw new Exception($this->t('could not delete e-mail', 'email'));
         }
         return $this->context->url();
+    }
 
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getEmail()
+    {
+        if (is_object($this->email)) {
+            return $this->email;
+        }
+
+        return ($this->email = $this->context->getGateway()->findById($this->name()));
     }
 }

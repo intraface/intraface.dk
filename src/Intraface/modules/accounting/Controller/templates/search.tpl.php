@@ -45,8 +45,8 @@
 		<legend>Søg</legend>
 		<p>Foreløbig kan du lave følgende søgning: <samp>Bilag: 1-2</samp>, og vi skynder os at finde bilag 1 til 2 til dig.</p>
 		<div>
-			<label for="search">Søg</label>
-			<input type="text" name="search" id="search" value="<?php if (!empty($search_string)) e($search_string); ?>" />
+			<label for="search"><?php e(t('Search')); ?></label>
+			<input type="text" name="search" id="search" value="<?php e($context->query('search')); ?>" />
 		</div>
 
 		<div>

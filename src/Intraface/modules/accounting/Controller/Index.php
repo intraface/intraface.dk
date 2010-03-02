@@ -13,7 +13,9 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
         // make it possible to keep the menu, but have a proper controller hierarchy
         $next = array('daybook', 'search', 'voucher', 'account');
 
-        if (in_array($this->next(), $next) and $this->next() != 'year') {
+        $available_from_index = array('year', 'search');
+
+        if (in_array($this->next(), $next) and !in_array($this->next(), $available_from_index)) {
             return new k_SeeOther($this->url('year/' . $this->getYear()->get('id') . '/' . $this->next()));
         }
 
@@ -24,6 +26,8 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
     {
         if ($name == 'year') {
             return 'Intraface_modules_accounting_Controller_Year_Index';
+        } elseif ($name == 'search') {
+            return 'Intraface_modules_accounting_Controller_Search';
         }
     }
 

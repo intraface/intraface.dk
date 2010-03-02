@@ -87,7 +87,7 @@ $items = $context->getItems();
                                 $accounts =  $account->getList('sale');
                                 ?>
                                 <select id="state_account" name="state_account_id[<?php e($product->get('id')); ?>]">
-                                    <option value="">V�lg...</option>
+                                    <option value=""><?php e(t('Choose')); ?></option>
                                     <?php
                                     $x = 0;
                                     $optgroup = 1;

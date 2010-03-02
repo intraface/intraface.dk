@@ -87,7 +87,7 @@
                         if ($procurement->isStated()) {
                             $module_accounting = $kernel->useModule('accounting');
                             e($procurement->get('dk_date_stated'));
-                            echo ' <a href="'.$module_accounting->getPath().'voucher/'.$procurement->get('voucher_id').'">Se bilag</a>';
+                            echo ' <a href="'.url('../../accounting/search', array('voucher_id' => $procurement->get('voucher_id'))).'">Se bilag</a>';
                         } else {
                             e('Ikke bogf�rt');
                             if ($procurement->get('paid_date') != '0000-00-00') { ?>

@@ -26,7 +26,7 @@ class Intraface_modules_accounting_YearGateway
         $this->kernel = $kernel;
     }
 
-    function findFromId($id, $load_active = true)
+    function findById($id, $load_active = true)
     {
     	return new Year($this->kernel, $id, $load_active);
     }
@@ -55,5 +55,23 @@ class Intraface_modules_accounting_YearGateway
         }
 
         return $account_years;
+    }
+
+    function findByVoucherId($voucher_id)
+    {
+        $sql = "SELECT id FROM accounting_voucher
+            WHERE intranet_id = ".$this->kernel->intranet->get('id')."
+            AND id = " . (int)$voucher_id . "
+            LIMIT 1";
+
+        $db = new DB_Sql;
+        $db->query($sql);
+
+        if ($db->numRows() == 0) {
+
+            return false;
+        }
+
+        return $this->findById($db->f('year_id'));
     }
 }

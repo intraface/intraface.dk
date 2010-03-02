@@ -84,21 +84,6 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         return $smarty->render($this);
     }
 
-    function getValues()
-    {
-        return $this->getDebtor()->get();
-    }
-
-    function getAction()
-    {
-        return 'Update';
-    }
-
-    function getContact()
-    {
-        return $this->getDebtor()->getContact();
-    }
-
     function renderHtmlEdit()
     {
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
@@ -417,9 +402,25 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
             }
         }
-        
+
         return parent::GET();
     }
+
+    function getValues()
+    {
+        return $this->getDebtor()->get();
+    }
+
+    function getAction()
+    {
+        return 'Update';
+    }
+
+    function getContact()
+    {
+        return $this->getDebtor()->getContact();
+    }
+
 
     function addItem($product, $quantity = 1)
     {

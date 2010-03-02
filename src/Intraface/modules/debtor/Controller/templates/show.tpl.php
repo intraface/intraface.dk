@@ -284,7 +284,7 @@ if (isset($context->onlinepayment)) {
                         if ($context->getDebtor()->isStated()) {
                             $module_accounting = $context->getKernel()->useModule('accounting');
                             e($context->getDebtor()->get('dk_date_stated'));
-                            echo ' <a href="'.url('../../../../accounting/voucher/' . $context->getDebtor()->get('voucher_id')).'">'.t('See voucher').'</a>';
+                            echo ' <a href="'.url('../../../../accounting/search', array('voucher_id' => $context->getDebtor()->get('voucher_id'))).'">'.t('See voucher').'</a>';
                         } else {
                             e(t('Not stated'));
                             if ($context->getDebtor()->get('status') == 'sent' || $context->getDebtor()->get('status') == 'executed') { ?>
@@ -458,7 +458,7 @@ if (isset($context->onlinepayment)) {
                             <?php if ($context->getKernel()->user->hasModuleAccess('accounting')): ?>
                                 <td>
                                     <?php if ($payment['is_stated']): ?>
-                                        <a href="<?php e($module_accounting->getPath().'voucher/'.$payment['voucher_id']); ?>"><?php e(t('voucher')); ?></a>
+                                        <a href="<?php e(url('../../../../accounting/search', array('voucher_id' => $payment['voucher_id']))); ?>"><?php e(t('voucher')); ?></a>
                                     <?php elseif ($payment['type'] == 'credit_note'): ?>
                                         <a href="<?php e(url('../' . $payment['id'] . '/state')); ?>"><?php e(t('state credit note')); ?></a>
                                     <?php elseif ($payment['type'] == 'depreciation'): ?>

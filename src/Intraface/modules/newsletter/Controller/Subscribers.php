@@ -77,11 +77,6 @@ class Intraface_modules_newsletter_Controller_Subscribers extends k_Component
             */
             $subscriber->addContact(new Contact($this->getKernel(), $this->query('contact_id')));
             return new k_SeeOther($this->url(null, array('flare' => 'Contact has been added')));
-        } elseif (isset($_GET['remind']) AND $_GET['remind'] == 'true') {
-            $subscriber = new NewsletterSubscriber($this->getList(), intval($_GET['id']));
-            if (!$subscriber->sendOptInEmail(Intraface_Mail::factory())) {
-            	throw new Exception('Could not send the optin e-mail');
-            }
         } elseif (isset($_GET['optin'])) {
             $subscriber->getDBQuery()->setFilter('optin', intval($_GET['optin']));
             $subscriber->getDBQuery()->setFilter('q', $_GET['q']);
