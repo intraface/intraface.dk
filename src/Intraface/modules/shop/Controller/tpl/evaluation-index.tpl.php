@@ -1,5 +1,3 @@
-<h2><?php e(t('Basket evaluations')); ?></h2>
-
 <table summary="<?php e(t('Basket evaluation')); ?>" class="stripe">
             <caption><?php e(t('Basket evaluation')); ?></caption>
             <thead>
