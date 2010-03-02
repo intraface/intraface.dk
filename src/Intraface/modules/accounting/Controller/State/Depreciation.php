@@ -16,7 +16,7 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
     function renderHtml()
     {
         $accounting_module = $this->context->getKernel()->module('accounting');
-        if (!$this->getYear()->readyForState($this->getDepreciation()->get('payment_date'))) {
+        if (!$this->getYear()->readyForState($this->getDepreciation()->get('this_date'))) {
             return new k_SeeOther($this->url('selectyear'));
         }
 
@@ -24,18 +24,16 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
         $depreciation = $this->context->getDepreciation();
         $voucher = new Voucher($year);
 
+        $data = array(
+        	'accounting_module' => $accounting_module,
+        	'voucher' => $voucher,
+        	'year' => $this->getYear(),
+        	'depreciation' => $this->context->getDepreciation(),
+        	'object' => $this->getModel(),
+        	'year' => $year);
+
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/depreciation');
-        return $smarty->render($this, array('accounting_module' => $accounting_module, 'voucher' => $voucher, 'year' => $this->getYear(), 'depreciation' => $this->context->getDepreciation(), 'object' => $this->getModel(), 'year' => $year));
-    }
-
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
-    function getDepreciation()
-    {
-        return $this->context->getDepreciation();
+        return $smarty->render($this, $data);
     }
 
     function postForm()
@@ -74,6 +72,16 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
     function getModel()
     {
         return $this->context->getModel();
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getDepreciation()
+    {
+        return $this->context->getDepreciation();
     }
 
     function getYear()

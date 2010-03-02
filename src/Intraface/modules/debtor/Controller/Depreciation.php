@@ -13,6 +13,29 @@ class Intraface_modules_debtor_Controller_Depreciation extends k_Component
         return 'Intraface_modules_accounting_Controller_State_Depreciation';
     }
 
+    function renderHtml()
+    {
+        $invoice_module = $this->getKernel()->useModule('invoice');
+        $depreciation = $this->getDepreciation();
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/depreciation');
+        return $smarty->render($this);
+    }
+
+    function postForm()
+    {
+        $invoice_module = $this->getKernel()->useModule('invoice');
+
+        $depreciation = $this->getDepreciation();
+        if ($depreciation->update($_POST)) {
+            if ($this->getKernel()->user->hasModuleAccess('accounting')) {
+                return new k_SeeOther($this->url('state'));
+            } else {
+                return new k_SeeOther($this->url('../'));
+            }
+        }
+        return $this->render();
+    }
+
     function getDebtor()
     {
         return $this->context->getDebtor();
@@ -43,28 +66,5 @@ class Intraface_modules_debtor_Controller_Depreciation extends k_Component
     function getType()
     {
         return $this->context->getType();
-    }
-
-    function postForm()
-    {
-        $invoice_module = $this->getKernel()->useModule('invoice');
-
-        $depreciation = $this->getDepreciation();
-        if ($depreciation->update($_POST)) {
-            if ($this->getKernel()->user->hasModuleAccess('accounting')) {
-                return new k_SeeOther($this->url('state'));
-            } else {
-                return new k_SeeOther($this->url('../'));
-            }
-        }
-        return $this->render();
-    }
-
-    function renderHtml()
-    {
-        $invoice_module = $this->getKernel()->useModule('invoice');
-        $depreciation = $this->getDepreciation();
-        $smarty = $this->template->create(dirname(__FILE__) . '/templates/depreciation');
-        return $smarty->render($this);
     }
 }

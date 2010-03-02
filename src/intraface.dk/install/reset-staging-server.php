@@ -41,9 +41,10 @@ if ($install->resetServer()) {
     } else {
         echo 'staging server reset. Go to <a href="../core/login">login</a>.';
     }
-    
+
     echo '<p>Year: <span id="year">'.date('Y').'</span></p>';
     echo '<p>Date (da): <span id="date_da">'.date('d-m-Y').'</span></p>';
+    echo '<p>Shortyear: <span id="short_year">'.substr(date('Y'), -2).'</span></p>';
 
 } else {
     echo 'error';
