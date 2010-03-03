@@ -38,8 +38,8 @@ class Intraface_modules_shop_Controller_Categories extends k_Component
         $data['categories'] = $category->getAllCategories();
         $data['product_id'] = $this->query('product_id');
 
-        if (isset($this->GET['product_id'])) {
-            $data['product_id'] = $this->GET['product_id'];
+        if ($this->query('product_id')) {
+            $data['product_id'] = $this->query('product_id');
         }
 
         $tpl = $this->template->create('Intraface/modules/shop/Controller/tpl/categories');
