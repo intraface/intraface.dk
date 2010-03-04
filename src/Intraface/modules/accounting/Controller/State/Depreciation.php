@@ -8,9 +8,11 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
         $this->template = $template;
     }
 
-    function map()
+    function map($name)
     {
-        return 'Intraface_modules_accounting_Controller_State_SelectYear';
+        if($name == 'selectyear') {
+            return 'Intraface_modules_accounting_Controller_State_SelectYear';
+        }
     }
 
     function renderHtml()
@@ -71,7 +73,8 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
 
     function getModel()
     {
-        return $this->context->getModel();
+        return $this->getDepreciation();
+        // return $this->context->getModel();
     }
 
     function getKernel()
