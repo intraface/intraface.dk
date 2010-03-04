@@ -57,11 +57,6 @@ class Intraface_modules_accounting_Controller_State_SelectYear extends Intraface
         return $this->year;
     }
 
-    function getVoucher()
-    {
-        return $voucher = new Voucher($this->getYear());
-    }
-
     function getModule()
     {
         return $accounting_module = $this->getKernel()->useModule('accounting');

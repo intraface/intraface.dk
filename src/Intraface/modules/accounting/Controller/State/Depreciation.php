@@ -18,20 +18,20 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
     function renderHtml()
     {
         $accounting_module = $this->context->getKernel()->module('accounting');
-        if (!$this->getYear()->readyForState($this->getDepreciation()->get('this_date'))) {
+        if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
             return new k_SeeOther($this->url('selectyear'));
         }
 
         $year = new Year($this->context->getKernel());
-        $depreciation = $this->context->getDepreciation();
+        $depreciation = $this->context->getModel();
         $voucher = new Voucher($year);
 
         $data = array(
         	'accounting_module' => $accounting_module,
         	'voucher' => $voucher,
         	'year' => $this->getYear(),
-        	'depreciation' => $this->context->getDepreciation(),
-        	'object' => $this->getModel(),
+        	'depreciation' => $this->getModel(),
+        	'object' => $this->getDebtor(),
         	'year' => $year);
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/depreciation');
@@ -48,11 +48,11 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
 
         $voucher = new Voucher($this->getYear());
 
-        if (!$this->getYear()->readyForState($this->getDepreciation()->get('payment_date'))) {
+        if (!$this->getYear()->readyForState($this->getModel()->get('payment_date'))) {
             return new k_SeeOther($this->url('selectyear'));
         }
 
-        $depreciation = $this->context->getDepreciation();
+        $depreciation = $this->getModel();
 
         $this->context->getKernel()->getSetting()->set('intranet', 'depreciation.state.account', intval($_POST['state_account_id']));
 
@@ -73,18 +73,18 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
 
     function getModel()
     {
-        return $this->getDepreciation();
-        // return $this->context->getModel();
+        // return $this->getDepreciation();
+        return $this->context->getModel();
+    }
+    
+    function getDebtor()
+    {
+        return $this->context->getDebtor();
     }
 
     function getKernel()
     {
         return $this->context->getKernel();
-    }
-
-    function getDepreciation()
-    {
-        return $this->context->getDepreciation();
     }
 
     function getYear()
