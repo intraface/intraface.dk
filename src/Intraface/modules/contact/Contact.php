@@ -501,10 +501,10 @@ class Contact extends Intraface_Standard
      */
     public function save($var)
     {
+        // safeToDb must not be run on all the values, as it is run
+        // again in Address. Make sure to run it on the fields being saved here.
+
         $sql_items = '';
-        // safe db m� ikke v�re her, for den k�res igen i address
-        // vi skal s�reg for blot at k�re den p� selve feltet.
-        //$var = safeToDb($var);
 
         if ($this->id == 0 AND empty($var['number'])) {
             $var['number'] = $this->getMaxNumber() + 1;
