@@ -10,7 +10,7 @@ class Intraface_modules_debtor_Controller_Typenegotiator extends k_Component
 
     function dispatch()
     {
-        if ($this->query('contact_id')) {
+        if ($this->query('contact_id') > 0) {
             $this->url_state->set('contact_id', $this->query('contact_id'));
         }
         return parent::dispatch();
