@@ -7,7 +7,7 @@
         <?php if ($context->getDebtor()->get("locked") == false): ?>
             <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
         <?php endif; ?>
-        <li><a class="pdf" href="<?php e($context->getDebtor()->getId() . '.pdf'); ?>" target="_blank"><?php e(t('Pdf')); ?></a></li>
+        <li><a class="pdf" href="<?php e(url('.pdf')); ?>" target="_blank"><?php e(t('Pdf')); ?></a></li>
         <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close')); ?></a></li>
     </ul>
 
