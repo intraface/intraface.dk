@@ -778,8 +778,8 @@ if (count($reminders) > 0):
         ?>
         <tr id="i<?php e($reminder["id"]); ?>"<?php if (isset($_GET['id']) && $_GET['id'] == $reminder['id']) print(" class=\"fade\""); ?>>
             <td class="number"><?php e($reminder["number"]); ?></td>
-            <td><a href="reminders.php?contact_id=<?php e($reminder["contact_id"]); ?>"><?php e($reminder["name"]); ?></a></td>
-            <td><a href="reminder.php?id=<?php e($reminder["id"]); ?>"><?php (trim($reminder["description"] != "")) ? e($reminder["description"]) : e('['.t("No description").']'); ?></a></td>
+            <td><a href="<?php e(url('../../../reminders', array('contact_id' => $reminder["contact_id"]))); ?>"><?php e($reminder["name"]); ?></a></td>
+            <td><a href="<?php e(url('../../../reminders/' . $reminder["id"])); ?>"><?php (trim($reminder["description"] != "")) ? e($reminder["description"]) : e('['.t("No description").']'); ?></a></td>
             <td class="date">
                 <?php
                 if ($reminder["status"] != "created") {
@@ -807,9 +807,9 @@ if (count($reminders) > 0):
                 <?php
                 if ($reminder["locked"] == 0) {
                     ?>
-                    <a class="edit" href="reminder_edit.php?id=<?php e($reminder["id"]); ?>"><?php e(t('Edit')); ?></a>
+                    <a class="edit" href="<?php e(url('../../../reminders/' . $reminder["id"], array('edit'))); ?>"><?php e(t('Edit')); ?></a>
                     <?php if ($reminder["status"] == "created"): ?>
-                    <a class="delete" href="reminders.php?delete=<?php e($reminder["id"]); ?>"><?php e(t('Delete')); ?></a>
+                    <a class="delete" href="<?php e(url('../../../reminders/' . $reminder["id"], array('delete'))); ?>"><?php e(t('Delete')); ?></a>
                     <?php endif; ?>
                     <?php
                 }
