@@ -149,7 +149,7 @@ $pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'pear.php.net', '1.0.5');
 // filehandler
 $pfm->addPackageDepWithChannel('required', 'MIME_Type', 'pear.php.net', '1.0.0');
 $pfm->addPackageDepWithChannel('required', 'System_Command', 'pear.php.net', '1.0.6');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler', 'public.intraface.dk', '0.3.0');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler', 'public.intraface.dk', '0.3.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Keyword', 'public.intraface.dk', '0.4.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler_Controller', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Keyword_Controller', 'public.intraface.dk', '0.3.0');
