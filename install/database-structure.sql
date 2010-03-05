@@ -1457,11 +1457,11 @@ CREATE TABLE `onlinepayment_settings` (
 --
 
 CREATE TABLE `onlinepayment_settings_translation` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL,
   `email` text,
   `lang` varchar(20) default NULL,
   `subject` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`, `lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
