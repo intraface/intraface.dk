@@ -10,7 +10,7 @@ class OnlinePayment_AllTests
     public static function suite() {
         $suite = new PHPUnit_Framework_TestSuite('Intraface_Onlinepayment');
 
-        $suite->addTestSuite('OnlinePaymentTest');
+        $suite->addTestSuite('OnlinePaymentTest', 'LanguageTest');
         return $suite;
     }
 }
