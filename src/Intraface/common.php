@@ -101,6 +101,6 @@ if (defined('INTRAFACE_K2')) {
 }
 
 // Initializes Doctrine
-Doctrine_Manager::getInstance()->setAttribute("use_dql_callbacks", true);
+Doctrine_Manager::getInstance()->setAttribute(Doctrine_Core::ATTR_USE_DQL_CALLBACKS, true);
 Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
 Doctrine_Manager::connection(DB_DSN);
