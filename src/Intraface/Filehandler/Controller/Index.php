@@ -13,6 +13,11 @@ class Intraface_Filehandler_Controller_Index extends k_Component
         return $this->context->getKernel();
     }
 
+    function getGateway()
+    {
+        return new Ilib_Filehandler_Gateway($this->getKernel());
+    }
+
     public function renderHtml()
     {
         $gateway = new Ilib_Filehandler_Gateway($this->getKernel());
@@ -20,12 +25,12 @@ class Intraface_Filehandler_Controller_Index extends k_Component
         if (is_numeric($this->query('delete'))) {
             $filehandler = $gateway->getFromId($this->query('delete'));
             if (!$filemanager->delete()) {
-                throw new Exception($this->__('Could not delete file'));
+                throw new Exception($this->t('Could not delete file'));
             }
         } elseif (is_numeric($this->query('undelete'))) {
             $filehandler = $gateway->getFromId($this->query('delete'));
             if (!$filemanager->undelete()) {
-                throw new Exception($this->__('Could not undelete file'));
+                throw new Exception($this->t('Could not undelete file'));
             }
         }
 
