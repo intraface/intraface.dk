@@ -12,7 +12,7 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
     {
         return $this->context->getKernel();
     }
-
+    
     function renderHtml()
     {
         $kernel = $this->getKernel();
@@ -22,7 +22,7 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
         $translation = $kernel->getTranslation('filemanager');
 
         $filemanager = $gateway->getFromId($this->context->name());
-        $instance_type = $this->GET['instance_type'];
+        $instance_type = $this->query('instance_type');
 
         $img_height = $filemanager->get('height');
         $img_width = $filemanager->get('width');
@@ -52,7 +52,7 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
             $editor_min_width = ($editor_img_height/$editor_min_height)*$editor_min_width;
         }
 
-        if ($type['resize_type'] != 'strict' && !empty($this->GET['unlock_ratio'])) {
+        if ($type['resize_type'] != 'strict' && $this->query('unlock_ratio') == '1') {
             $unlock_ratio = 1;
         } else {
             $unlock_ratio = 0;
@@ -64,20 +64,20 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
         $size_ratio = str_replace(',', '.', $size_ratio);
 
         $this->document->setTitle('Crop image: ' . $filemanager->get('file_name'));
-        $this->document->addScript('cropper/lib/prototype.js');
+        $this->document->addScript('filehandler/cropper/lib/prototype.js');
         // @todo HACK only way I can get the link to be correct with a comma
-        $this->document->addScript('cropper/lib/scriptaculous.js' . '?load=builder,dragdrop');
-        $this->document->addScript('cropper/cropper.js');
-        $this->document->addScript('crop_image.js.php',
-            array(
-                  'size_ratio' => $size_ratio,
-                  'max_width' => round($editor_min_width),
-                  'max_height' => round($editor_min_height),
-                  'unlock_ratio' => $unlock_ratio,
-                  'x1' => $params['crop_offset_x'],
-                  'y1' => $params['crop_offset_y'],
-                  'x2' => $params['crop_offset_x'] + $params['crop_width'],
-                  'y2' => $params['crop_offset_y'] + $params['crop_height']));
+        $this->document->addScript('filehandler/cropper/lib/scriptaculous.js?load=builder,dragdrop');
+        $this->document->addScript('filehandler/cropper/cropper.js');
+        $this->document->addScript('filehandler/crop_image.js.php'.
+            '?size_ratio=' . $size_ratio .
+            '&max_width=' . round($editor_min_width) .
+            '&max_height=' . round($editor_min_height) .
+            '&unlock_ratio=' . $unlock_ratio .
+            '&x1=' . $params['crop_offset_x'] .
+            '&y1=' . $params['crop_offset_y'] .
+            '&x2=' . ($params['crop_offset_x'] + $params['crop_width']) .
+            '&y2=' . ($params['crop_offset_y'] + $params['crop_height'])
+        );
 
         $data = array('translation' => $translation,
                       'type' => $type,
@@ -102,22 +102,22 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
         $translation = $kernel->getTranslation('filemanager');
 
         $filemanager = $gateway->getFromId($this->context->name());
-        $instance_type = $this->POST['instance_type'];
+        $instance_type = $this->body('instance_type');
 
         $validator = new Ilib_Validator($filemanager->error);
-        //$validator->isNumeric((int)$this->POST['width'], 'invalid width', 'greater_than_zero,integer');
-        //$validator->isNumeric((int)$this->POST['height'], 'invalid width', 'greater_than_zero,integer');
-        //$validator->isNumeric((int)$this->POST['x'], 'invalid width', 'zero_or_greater,integer');
-        //$validator->isNumeric((int)$this->POST['y'], 'invalid width', 'zero_or_greater,integer');
+        $validator->isNumeric((int)$this->body('width'), 'Invalid width', 'greater_than_zero,integer');
+        $validator->isNumeric((int)$this->body('height'), 'Invalid width', 'greater_than_zero,integer');
+        $validator->isNumeric((int)$this->body('x'), 'Invalid x', 'zero_or_greater,integer');
+        $validator->isNumeric((int)$this->body('y'), 'Invalid y', 'zero_or_greater,integer');
 
         if (!$filemanager->error->isError()) {
             $filemanager->createInstance($instance_type);
             $filemanager->instance->delete();
 
-            $param['crop_width'] = (int)$this->POST['width'];
-            $param['crop_height'] = (int)$this->POST['height'];
-            $param['crop_offset_x'] = (int)$this->POST['x'];
-            $param['crop_offset_y'] = (int)$this->POST['y'];
+            $param['crop_width'] = (int)$this->body('width');
+            $param['crop_height'] = (int)$this->body('height');
+            $param['crop_offset_x'] = (int)$this->body('x');
+            $param['crop_offset_y'] = (int)$this->body('y');
 
             $filemanager->createInstance($instance_type, $param);
 
