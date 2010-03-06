@@ -11,12 +11,12 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         $this->template = $template;
     }
 
-    function execute()
+    function dispatch()
     {
-        if ($this->query('intranet_id')) {
+        if ($this->query('intranet_id') > 0) {
             $this->url_state->set("intranet_id", $this->query('intranet_id'));
         }
-        return parent::execute();
+        return parent::dispatch();
     }
 
     protected function map($name)
@@ -47,7 +47,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
 
         $edit_intranet_id = $this->query('intranet_id');
 
-        if (isset($edit_intranet_id)) {
+        if (!empty($edit_intranet_id)) {
             $intranet = new IntranetMaintenance(intval($edit_intranet_id));
             $user->setIntranetId(intval($edit_intranet_id));
             $address = $user->getAddress();
@@ -180,7 +180,9 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
             return $this->user;
         }
         $this->user = new UserMaintenance($this->name());
-        $this->user->setIntranetId($this->query('intranet_id'));
+        if ($this->query('intranet') > 0) {
+            $this->user->setIntranetId($this->query('intranet_id'));
+        }
         return ($this->user);
     }
 
