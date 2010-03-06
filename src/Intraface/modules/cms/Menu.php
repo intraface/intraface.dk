@@ -1,8 +1,8 @@
 <?php
 class Intraface_modules_cms_Menu
 {
-    function findBySite($site)
+    function findBySite()
     {
-        return array();
+
     }
 }
