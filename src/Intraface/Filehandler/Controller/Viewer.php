@@ -59,6 +59,12 @@ class Intraface_Filehandler_Controller_Viewer extends k_Component
                 throw new Exception('You where not logged into the correct intranet to view the file');
             }
         }
+        
+        /**
+         * TODO: This generates an error as $fileviewer->out() outputs file and returns number of bytes.
+         * k_httpResponse expects a string. But if there is not a k_httpResponse, then an error is triggered
+         * of sending headers after output (?).
+         */
         return new k_HttpResponse(200, $fileviewer->out());
     }
 }
