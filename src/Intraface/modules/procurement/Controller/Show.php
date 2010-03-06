@@ -159,10 +159,9 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         $translation = $this->getKernel()->getTranslation('procurement');
         $procurement = $this->getProcurement();
         $values = $procurement->get();
-        $this->document->setTitle("Ret indkøb");
-
+        $this->document->setTitle("Ret indkÃ¸b");
         $this->document->addScript('procurement/edit.js');
-
+        
         $data = array(
         	'procurement' => $procurement,
         	'kernel' => $this->getKernel(),
