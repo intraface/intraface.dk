@@ -1,5 +1,5 @@
 <?php
-// der skal gøre sådan at man får en bekræftelse på, at e-mailen er sendt, hvis man sender e-mail
+// der skal gï¿½re sï¿½dan at man fï¿½r en bekrï¿½ftelse pï¿½, at e-mailen er sendt, hvis man sender e-mail
 class Intraface_modules_todo_Controller_Todo extends k_Component
 {
     protected $template;
@@ -39,11 +39,12 @@ class Intraface_modules_todo_Controller_Todo extends k_Component
         $value = $todo->get();
         $value['todo'] = $todo->getAllItems();
 
-
         $data = array(
             'value' => $value,
             'kernel' => $this->getKernel()
         );
+
+        $this->document()->addScript('todo/todo.js');
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/todo');
         return $tpl->render($this, $data);

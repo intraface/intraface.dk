@@ -11,7 +11,6 @@ class Intraface_modules_todo_Controller_Edit extends k_Component
     function renderHtml()
     {
         $module = $this->getKernel()->module('todo');
-        $translation = $this->getKernel()->getTranslation('todo');
 
         if (is_numeric($this->context->name())) {
             $todo = new TodoList($this->getKernel(), $this->context->name());
@@ -41,9 +40,8 @@ class Intraface_modules_todo_Controller_Edit extends k_Component
             'list_description' => $_POST['list_description']
         );
 
-        $todo = new TodoList($this->getKernel(), $_POST['id']);
+        $todo = new TodoList($this->getKernel(), $this->name());
         if ($todo->save($data)) {
-
             foreach ($_POST['todo'] AS $key=>$value) {
                 if (isset($_POST['item_id'])) {
                     $item_id = $_POST['item_id'];
@@ -53,7 +51,7 @@ class Intraface_modules_todo_Controller_Edit extends k_Component
                     $item_id = 0;
                 }
             }
-            return new k_SeeOther($this->url('../' . $_POST['id']));
+            return new k_SeeOther($this->url('../' . $todo->get('id')));
         }
         return $this->render();
     }
