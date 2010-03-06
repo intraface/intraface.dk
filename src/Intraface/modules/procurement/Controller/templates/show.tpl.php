@@ -89,9 +89,9 @@
                             e($procurement->get('dk_date_stated'));
                             echo ' <a href="'.url('../../accounting/search', array('voucher_id' => $procurement->get('voucher_id'))).'">Se bilag</a>';
                         } else {
-                            e('Ikke bogf�rt');
+                            e(t('Not stated'));
                             if ($procurement->get('paid_date') != '0000-00-00') { ?>
-                                <a href="<?php e(url('state')); ?>"><?php e(t('state')); ?></a>
+                                <a href="<?php e(url('state')); ?>"><?php e(t('State')); ?></a>
                             <?php }
 
                         }
@@ -128,7 +128,7 @@
             ?>
             <ul class="options">
                 <li><a href="<?php e(url(null, array('status'=>'recieved'))); ?>" class="confirm">Varen er modtaget</a></li>
-                <li><a href="<?php e(url(null, array('status'=>'canceled'))); ?>" class="confirm">Annull�r bestillingen</a></li>
+                <li><a href="<?php e(url(null, array('status'=>'canceled'))); ?>" class="confirm">Annullér bestillingen</a></li>
             </ul>
             <?php
         }
@@ -136,7 +136,7 @@
             ?>
             <p>Varen er modtaget <?php e($procurement->get("dk_date_recieved")); ?>.</p>
             <ol class="options">
-                <li><a href="<?php e(url(null, array('status'=>'canceled'))); ?>" class="confirm">Annull�r bestillingen</a></li>
+                <li><a href="<?php e(url(null, array('status'=>'canceled'))); ?>" class="confirm">Annullér bestillingen</a></li>
             </ol>
 
             <?php
@@ -241,7 +241,7 @@
                 <th>Beskrivelse</th>
                 <th style="text-align: right">Antal</th>
                 <th>&nbsp;</th>
-                <th style="text-align: right">Indk�bspris</th>
+                <th style="text-align: right">Indkøbspris</th>
                 <th style="text-align: right">I alt</th>
                 <th style="text-align: right">Kostpris</th>
                 <th>&nbsp;</th>

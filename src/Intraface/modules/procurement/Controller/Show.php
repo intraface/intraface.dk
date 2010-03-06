@@ -159,13 +159,13 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         $translation = $this->getKernel()->getTranslation('procurement');
         $procurement = $this->getProcurement();
         $values = $procurement->get();
-        $this->document->setTitle("Ret indkøb");
+        $this->document->setTitle($this->t("Edit procurement"));
         $this->document->addScript('procurement/edit.js');
         
         $data = array(
         	'procurement' => $procurement,
         	'kernel' => $this->getKernel(),
-        	'title' => $title,
+        	'title' => $this->t("Edit procurement"),
             'gateway' => new Intraface_modules_procurement_ProcurementGateway($this->getKernel()),
             'values' => $values);
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/procurement-edit');
