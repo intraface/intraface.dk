@@ -30,7 +30,7 @@ class CMS_TemplateSection extends Intraface_Standard
         if (!is_object($template)) {
             trigger_error('TemplateSection::__construct skal bruge CMS_Template', E_USER_ERROR);
         }
-        $this->error    = new intraface_Error;
+        $this->error    = new Intraface_Error;
         $this->id       = (int) $id;
         $this->template = $template;
         $this->kernel   = $template->kernel;
