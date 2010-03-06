@@ -7,7 +7,7 @@
  * @version @package-version@
  */
 
-$version = '2.0.2';
+$version = '2.0.3';
 $stability = 'stable';
 $notes = '
 * translation changes
@@ -79,9 +79,6 @@ $pfm->setNotes($notes);
 $pfm->addRelease();
 
 $pfm->resetUsesRole();
-$pfm->addUsesRole('web', 'Role_Web', 'pearified.com');
-$pfm->addPackageDepWithChannel('required', 'Role_Web', 'pearified.com', '1.1.1');
-
 $pfm->addPackageDepWithChannel('required', 'HTTP', 'pear.php.net', '1.4.1');
 
 
@@ -96,15 +93,12 @@ $pfm->setPearinstallerDep('1.8.1');
 
 // installer
 $pfm->addPackageDepWithChannel('required', 'Config', 'pear.php.net', '1.10.11');
-$pfm->addPackageDepWithChannel('required', 'MDB2_Schema', 'pear.php.net', '0.8.5');
-
-
 $pfm->addPackageDepWithChannel('required', 'Swift', 'pear.swiftmailer.org', '4.0.6');
 
 // Kernel
 $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.1');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Driver_mysql', 'pear.php.net', '1.4.1');
-$pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '2.0.0');
+$pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '2.0.1');
 $pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTranslation', 'public.intraface.dk', '0.1.3');
 $pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.12.0');
 $pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.8.3');
@@ -117,11 +111,11 @@ $pfm->addPackageDepWithChannel('required', 'MDB2_Debug_ExplainQueries', 'public.
 $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk', '0.4.0');
-$pfm->addPackageDepWithChannel('required', 'bucket', 'pearhub.org', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'bucket', 'pearhub.org', '1.1.1');
 
 
 // Doctrine
-$pfm->addPackageDepWithChannel('required', 'Doctrine', 'pear.doctrine-project.org', '1.1.5');
+$pfm->addPackageDepWithChannel('required', 'Doctrine', 'pear.phpdoctrine.org', '1.2.1');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Nohtml', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Greaterthan', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Template_Positionable', 'public.intraface.dk', '0.2.0');
@@ -153,7 +147,6 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler', 'public.intraface
 $pfm->addPackageDepWithChannel('required', 'Ilib_Keyword', 'public.intraface.dk', '0.4.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler_Controller', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Keyword_Controller', 'public.intraface.dk', '0.3.0');
-
 
 // email
 $pfm->addPackageDepWithChannel('required', 'phpmailer', 'public.intraface.dk', '1.73.1');
@@ -207,13 +200,16 @@ $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC',
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '1.0.4');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Client_XMLRPC', 'public.intraface.dk', '1.0.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Controller', 'public.intraface.dk', '1.1.0');
-$pfm->addPackageDepWithChannel('required', 'konstrukt', 'pearhub.org', '2.3.0');
+$pfm->addPackageDepWithChannel('required', 'konstrukt', 'pearhub.org', '2.3.1');
 $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.intraface.dk', '0.1.0');
 
 // tools
 $pfm->addPackageDepWithChannel('required', 'Ilib_SimpleLogin', 'public.intraface.dk', '1.0.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Observer_File_ErrorList', 'public.intraface.dk', '1.0.1');
 $pfm->addPackageDepWithChannel('required', 'Translation2_Frontend', 'public.intraface.dk', '1.0.0');
+
+$pfm->addPackageDepWithChannel('required', 'Zend', 'zend.googlecode.com/svn', '1.10.2');
+
 
 foreach ($ignore AS $file) {
     // $pfm->addIgnoreToRelease($file);
