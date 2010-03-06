@@ -30,6 +30,13 @@ class Intraface_modules_shop_Controller_Index extends k_Component
         if ($name == 'create') {
             return 'Intraface_modules_shop_Controller_Edit';
         }
+        
+        /**
+         * Not finished. Can be removed if no costumers no longer interested 
+        if ($name == 'discount-campaigns') {
+            return 'Intraface_modules_shop_Controller_DiscountCampaigns';
+        } */
+        
         return 'Intraface_modules_shop_Controller_Show';
     }
 
