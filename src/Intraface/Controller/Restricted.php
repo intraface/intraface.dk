@@ -237,7 +237,9 @@ class Intraface_Controller_Restricted extends k_Component
 
     function wrapHtml($content)
     {
-        $this->document->setTitle('Intraface.dk');
+        if ($this->document()->title() == 'No Title') {
+            $this->document->setTitle('Intraface.dk');
+        }
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/main');
         $content = $tpl->render($this, array('content' => $content));
