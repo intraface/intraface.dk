@@ -5,7 +5,7 @@
  * @since	1.0
  * @version	1.0
  */
-class MainCMS extends Intraface_Main
+class MainCms extends Intraface_Main
 {
     function __construct()
     {
