@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>testStatedProcurementGivesCorrectLinkToProcurementInAccounting</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testStatedProcurementGivesCorrectLinkToProcurementInAccounting</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=contact,procurement,product,accounting&amp;helper_function=Procurement:create,Accounting:createYearWithVatAndStandardAccounts&amp;login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=procurement</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>paid</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>credit_account_number</td>
+	<td>label=Bank, folio</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>state_account</td>
+	<td>label=Kontorartikler (vat: in)</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//option[@value='7000']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>debet_account[1][state_account_id]</td>
+	<td>label=Porto (vat: none)</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//tr[2]/td[4]/select/option[6]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>state</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Varen er betalt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Se bilag</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=procurement# 1: test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Procurement</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[@id='colOne']/table/tbody/tr[1]/td[2]</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Varen er betalt</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
