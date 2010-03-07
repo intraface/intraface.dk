@@ -5,5 +5,4 @@ php_flag register_globals off
 	php_flag session.use_trans_sid off
 </IfModule>
 
-ErrorDocument 404 /errorpages/404.php
 Options -Indexes
