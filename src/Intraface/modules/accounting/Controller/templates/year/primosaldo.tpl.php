@@ -55,7 +55,7 @@
 
         <p>Du kan hente primobalancen fra sidste års regnskab. Du skal bare være opmærksom på, at tallene i din nuværende primobalance overskrives - og at handlingen ikke kan fortrydes.</p>
         <div>
-            <input type="submit" name="get_last_year" value="Hent saldoen fra sidste �rs regnskab" onclick="return confirm('V�r opm�rksom p� at denne funktion stadig er under udvikling, og sikkert ikke virker helt efter hensigten. \n\nEr du sikker p�, at du vil opdatere din primobalance? Handlingen kan ikke fortrydes!')" />
+            <input type="submit" name="get_last_year" value="Hent saldoen fra sidste års regnskab" onclick="return confirm('Vær opmærksom på at denne funktion stadig er under udvikling, og sikkert ikke virker helt efter hensigten. \n\nEr du sikker på, at du vil opdatere din primobalance? Handlingen kan ikke fortrydes!')" />
         </div>
 
     </fieldset>
