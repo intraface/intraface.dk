@@ -122,6 +122,7 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
 
         // Creating a worksheet
         $worksheet =& $workbook->addWorksheet('Konti ' . $year->get('label'));
+        $worksheet->setInputEncoding('UTF-8');
 
         $format_bold =& $workbook->addFormat();
         $format_bold->setBold();
@@ -136,7 +137,7 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
         $i = 0;
         $worksheet->write($i, 0, $kernel->intranet->get('name'), $format_bold);
         $i += 2;
-        $worksheet->write($i, 0, 'Resultatopg�relse', $format_bold);
+        $worksheet->write($i, 0, 'Resultatopgørelse', $format_bold);
 
 
         $accounts = $year_end->getStatement('operating');
@@ -162,11 +163,7 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
         		}
         		$i++;
         	}
-
-
         }
-
-
 
         $accounts = $year_end->getStatement('balance');
         $i += 2;
