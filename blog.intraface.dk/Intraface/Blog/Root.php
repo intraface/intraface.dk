@@ -15,4 +15,9 @@ class Intraface_Blog_Root extends k_Dispatcher
     {
         throw new k_http_Redirect($this->url('cms'));
     }
+
+    function getCMS()
+    {
+        return $this->registry->get('cms:client');
+    }
 }
