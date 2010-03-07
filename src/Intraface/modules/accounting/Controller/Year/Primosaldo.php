@@ -62,7 +62,6 @@ class Intraface_modules_accounting_Controller_Year_Primosaldo extends k_Componen
 
             $account = new Account($year, $a['id']);
             $account->savePrimosaldo(number_format($saldo['debet'], 2, ',', ''), number_format($saldo['credit'], 2, ',', ''));
-            return new k_SeeOther($this->url());
         }
         return $this->render();
     }
