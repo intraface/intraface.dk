@@ -28,12 +28,12 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
 
         $this->getGateway()->setType($this->getType());
 
-        if (isset($_GET["contact_id"]) && intval($_GET["contact_id"]) != 0) {
-            $this->getGateway()->getDBQuery()->setFilter("contact_id", $_GET["contact_id"]);
+        if (intval($this->query("contact_id")) != 0) {
+            $this->getGateway()->getDBQuery()->setFilter("contact_id", $this->query("contact_id"));
         }
 
-        if (isset($_GET["product_id"]) && intval($_GET["product_id"]) != 0) {
-            $this->getGateway()->getDBQuery()->setFilter("product_id", $_GET["product_id"]);
+        if (intval($this->query("product_id")) != 0) {
+            $this->getGateway()->getDBQuery()->setFilter("product_id", $this->query("product_id"));
             if (isset($_GET['product_variation_id'])) {
                 $this->getGateway()->getDBQuery()->setFilter("product_variation_id", $_GET["product_variation_id"]);
             }
