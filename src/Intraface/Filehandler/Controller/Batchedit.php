@@ -8,9 +8,31 @@ class Intraface_Filehandler_Controller_Batchedit extends k_Component
         $this->template = $template;
     }
 
-    function getKernel()
+    function renderHtml()
     {
-        return $this->context->getKernel();
+        $kernel = $this->getKernel();
+        $gateway = new Ilib_Filehandler_Gateway($this->getKernel());
+        $module = $kernel->module('filemanager');
+        $translation = $kernel->getTranslation('filemanager');
+
+        if (!$this->query('use_stored')) {
+            throw new Exception('you cannot batch edit files with no save results');
+        }
+
+        $gateway->getDBQuery()->storeResult('use_stored', 'filemanager', 'toplevel');
+
+        $files = $gateway->getList();
+
+        $this->document->setTitle('files');
+
+        $data = array(
+        	'gateway' => $gateway,
+        	'files' => $files,
+        	'kernel' => $kernel,
+            'gateway' => $gateway);
+
+        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/batchedit');
+        return $tpl->render($this, $data);
     }
 
     function postForm()
@@ -38,26 +60,8 @@ class Intraface_Filehandler_Controller_Batchedit extends k_Component
         return new k_SeeOther($this->context->url(), array('use_stored' => 'true'));
     }
 
-    function renderHtml()
+    function getKernel()
     {
-        $kernel = $this->getKernel();
-        $gateway = new Ilib_Filehandler_Gateway($this->getKernel());
-        $module = $kernel->module('filemanager');
-        $translation = $kernel->getTranslation('filemanager');
-
-        if (!$this->query('use_stored')) {
-            throw new Exception('you cannot batch edit files with no save results');
-        }
-
-        $gateway->getDBQuery()->storeResult('use_stored', 'filemanager', 'toplevel');
-
-        $files = $gateway->getList();
-
-        $this->document->setTitle('files');
-
-        $data = array('gateway' => $gateway, 'files' => $files, 'kernel' => $kernel);
-
-        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/batchedit');
-        return $tpl->render($this, $data);
+        return $this->context->getKernel();
     }
 }

@@ -4,7 +4,7 @@
                 <script type="text/javascript">
                     var par = window.parent.document;
                     var images = par.getElementById('images');
-                    var imgdiv = images.getElementsByTagName('div')[<?php echo (int)$_POST['imgnum']; ?>];
+                    var imgdiv = images.getElementsByTagName('div')[<?php e((int)$_POST['imgnum']); ?>];
                     var image = imgdiv.getElementsByTagName('img')[0];
                     imgdiv.removeChild(image);
                     var image_new = par.createElement('img');
@@ -33,7 +33,7 @@
                         imgdiv.appendChild(input_new);
 
                         /* IE HACK */
-                        // IE forstår ikke set attribute, så derfor må vi gøre det uden for DOM bagefter!
+                        // IE forstï¿½r ikke set attribute, sï¿½ derfor mï¿½ vi gï¿½re det uden for DOM bagefter!
                         input_new.checked = true;
                         input_new.value = <?php e($filemanager->get('id')); ?>;
 

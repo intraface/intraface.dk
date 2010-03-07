@@ -8,24 +8,6 @@ class Intraface_Filehandler_Controller_Sizes_Edit extends k_Component
         $this->template = $template;
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
-    function postForm()
-    {
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
-
-        $instance_manager = new Ilib_Filehandler_InstanceManager($this->getKernel(), (int)$this->body('type_key'));
-
-        if ($instance_manager->save($this->body())) {
-            return new k_SeeOther($this->context->url());
-        }
-
-        return $this->render();
-    }
-
     function renderHtml()
     {
         $kernel = $this->getKernel();
@@ -48,5 +30,23 @@ class Intraface_Filehandler_Controller_Sizes_Edit extends k_Component
 
         $tpl = $this->template->create(dirname(__FILE__) . '/../../templates/sizes-edit');
         return $tpl->render($this, $data);
+    }
+
+    function postForm()
+    {
+        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+
+        $instance_manager = new Ilib_Filehandler_InstanceManager($this->getKernel(), (int)$this->body('type_key'));
+
+        if ($instance_manager->save($this->body())) {
+            return new k_SeeOther($this->context->url());
+        }
+
+        return $this->render();
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

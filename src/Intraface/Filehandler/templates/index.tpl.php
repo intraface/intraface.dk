@@ -100,8 +100,8 @@
                 <td style="white-space: nowrap;"><?php e($file["dk_file_size"]); ?></td>
                 <td style="white-space: nowrap;"><?php e($file["dk_date_created"]); ?></td>
                 <td style="width: 120px;" class="options">
-                    <a class="edit" href="<?php e(url($file['id'] . '/edit')); ?>"><?php e(t('edit')); ?></a>
-                    <a class="delete" href="<?php e(url($file['id'] . '/delete')); ?>"><?php e(t('delete')); ?></a></td>
+                    <a class="edit" href="<?php e(url($file['id'], array('edit'))); ?>"><?php e(t('edit')); ?></a>
+                    <a class="delete" href="<?php e(url($file['id'], array('delete'))); ?>"><?php e(t('delete')); ?></a></td>
             </tr>
             <?php
         }

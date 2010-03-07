@@ -8,11 +8,6 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
         $this->template = $template;
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-    
     function renderHtml()
     {
         $kernel = $this->getKernel();
@@ -126,5 +121,10 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
             }
        }
        throw new Exception($filemanager->error->view());
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

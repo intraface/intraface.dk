@@ -8,9 +8,17 @@ class Intraface_Filehandler_Controller_Show extends k_Component
         $this->template = $template;
     }
 
-    function getKernel()
+    function map($name)
     {
-    	return $this->context->getKernel();
+        if ($name == 'crop') {
+            return 'Intraface_Filehandler_Controller_Crop';
+        } elseif ($name == 'undelete') {
+            return 'Intraface_Filehandler_Controller_Undelete';
+        } elseif ($name == 'delete') {
+            return 'Intraface_Filehandler_Controller_Delete';
+        } elseif ($name == 'keyword') {
+            return 'Intraface_Keyword_Controller_Index';
+        }
     }
 
     function renderHtml()
@@ -81,7 +89,7 @@ class Intraface_Filehandler_Controller_Show extends k_Component
         return new k_SeeOther($this->context->url());
     }
 
-    function renderHtmlUndelete()
+    function renderHtmlRestore()
     {
         $kernel = $this->getKernel();
         $module = $kernel->module('filemanager');
@@ -108,16 +116,8 @@ class Intraface_Filehandler_Controller_Show extends k_Component
         return $this->context->getGateway()->getFromId($this->name());
     }
 
-    function map($name)
+    function getKernel()
     {
-        if ($name == 'crop') {
-            return 'Intraface_Filehandler_Controller_Crop';
-        } elseif ($name == 'undelete') {
-            return 'Intraface_Filehandler_Controller_Undelete';
-        } elseif ($name == 'delete') {
-            return 'Intraface_Filehandler_Controller_Delete';
-        } elseif ($name == 'keyword') {
-            return 'Intraface_Keyword_Controller_Index';
-        }
+    	return $this->context->getKernel();
     }
 }

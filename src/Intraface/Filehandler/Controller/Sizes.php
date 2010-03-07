@@ -17,16 +17,6 @@ class Intraface_Filehandler_Controller_Sizes extends k_Component
         }
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
-    function getFilehandler()
-    {
-    	return new Ilib_Filehandler($this->getKernel());
-    }
-
     function renderHtml()
     {
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
@@ -60,5 +50,15 @@ class Intraface_Filehandler_Controller_Sizes extends k_Component
     	}
 
         return new k_SeeOther($this->url());
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getFilehandler()
+    {
+    	return new Ilib_Filehandler($this->getKernel());
     }
 }

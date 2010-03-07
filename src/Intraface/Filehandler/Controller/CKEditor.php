@@ -9,11 +9,6 @@ class Intraface_Filehandler_Controller_CKEditor extends Intraface_Filehandler_Co
         $this->template = $template;
     }
 
-    function getFileAppender()
-    {
-    	return $this->context->context->getFileAppender();
-    }
-
     function dispatch()
     {
         $this->multiple_choice = $this->query('multiple_choice');
@@ -24,115 +19,6 @@ class Intraface_Filehandler_Controller_CKEditor extends Intraface_Filehandler_Co
         $this->url_state->set('langCode', $this->query('langCode'));
 
         return parent::dispatch();
-    }
-
-    function postForm()
-    {
-        $kernel = $this->context->getKernel();
-        $module_filemanager = $kernel->module('filemanager');
-        $translation = $kernel->getTranslation('filemanager');
-        $gateway = new Ilib_Filehandler_Gateway($this->context->getKernel());
-        /*
-        if (isset($this->POST['ajax'])) {
-
-            if (!isset($this->POST['redirect_id'])) {
-                print('0');
-            }
-
-            $options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
-            $redirect = new Ilib_Redirect($kernel->getSessionId(), MDB2::facotory(DB_DSN), intval($this->POST['redirect_id']), $options);
-            if (isset($this->POST['add_file_id'])) {
-                $filemanager = $gateway->getFromId(intval($this->POST['add_file_id']));
-                if ($filemanager->get('id') != 0) {
-                    $redirect->setParameter("file_handler_id", $filemanager->get('id'));
-                    print('1');
-                    exit;
-                }
-            }
-            if (isset($this->POST['remove_file_id'])) {
-                $redirect->removeParameter('file_handler_id', (int)$this->POST['remove_file_id']);
-                print('1');
-                exit;
-            }
-            print('0');
-            exit;
-        }
-
-
-        $options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
-
-        $receive_redirect = Ilib_Redirect::factory($kernel->getSessionId(), MDB2::singleton(DB_DSN), 'receive', $options);
-
-        $multiple_choice = false;
-        */
-        /*
-        if ($receive_redirect->isMultipleParameter('file_handler_id')) {
-            $multiple_choice = true;
-        } else {
-            $multiple_choice = false;
-        }
-        */
-        /*
-        if (isset($this->POST['return'])) {
-            // Return is when AJAX is active, and then the checked files is already saved and should not be saved again.
-            return new k_SeeOther($receive_redirect->getRedirect($this->url()));
-        }
-        */
-
-        if (method_exists($this->context->context, 'appendFile')) {
-            foreach ($this->body('selected') as $file_id) {
-                $file = $this->context->context->appendFile($file_id);
-            }
-        } else {
-            $appender = $this->getFileAppender();
-            foreach ($this->body('selected') as $file_id) {
-                $file = $gateway->getFromId($file_id);
-            	$appender->addFile($file);
-            }
-        }
-        return new k_SeeOther($this->url('../../'));
-        /*
-        $filemanager = new Ilib_Filehandler_Manager($kernel); // has to be loaded here, while it should be able to set an error just below.
-
-        if (isset($this->POST['submit_close']) || isset($this->POST['submit'])) {
-            settype($this->POST['selected'], 'array');
-            $selected = $this->POST['selected'];
-
-            $number_of_files = 0;
-            foreach($selected as $id) {
-                $tmp_f = $gateway->getFromId((int)$id);
-                if ($tmp_f->get('id') != 0) {
-                    $receive_redirect->setParameter("file_handler_id", $tmp_f->get('id'));
-                    $number_of_files++;
-                }
-            }
-
-            if ($number_of_files == 0) {
-                $filemanager->error->set("you have to choose a file");
-            } elseif ($multiple_choice == false || isset($this->POST['submit_close'])) {
-                return new k_SeeOther($receive_redirect->getRedirect($this->url()));
-            }
-        }
-        */
-        /*
-        if ($multiple_choice) {
-            $selected_files = $receive_redirect->getParameter('file_handler_id');
-        } else {
-            if (isset($this->GET['selected_file_id'])) {
-                $selected_files[] = (int)$this->GET['selected_file_id'];
-            } else {
-                $selected_files = array();
-            }
-        }
-        */
-
-        /*
-        $filemanager->getDBQuery()->defineCharacter('character', 'file_handler.file_name');
-        $filemanager->getDBQuery()->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
-        $filemanager->getDBQuery()->storeResult("use_stored", "filemanager", "sublevel");
-
-        $files = $filemanager->getList();
-        */
     }
 
     function renderHtml()
@@ -272,4 +158,119 @@ class Intraface_Filehandler_Controller_CKEditor extends Intraface_Filehandler_Co
         $tpl = $this->template->create(dirname(__FILE__) . '/../templates/ckeditor');
         return new k_HttpResponse(200, $tpl->render($this, $data));
     }
+
+    function postForm()
+    {
+        $kernel = $this->context->getKernel();
+        $module_filemanager = $kernel->module('filemanager');
+        $translation = $kernel->getTranslation('filemanager');
+        $gateway = new Ilib_Filehandler_Gateway($this->context->getKernel());
+        /*
+        if (isset($this->POST['ajax'])) {
+
+            if (!isset($this->POST['redirect_id'])) {
+                print('0');
+            }
+
+            $options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
+            $redirect = new Ilib_Redirect($kernel->getSessionId(), MDB2::facotory(DB_DSN), intval($this->POST['redirect_id']), $options);
+            if (isset($this->POST['add_file_id'])) {
+                $filemanager = $gateway->getFromId(intval($this->POST['add_file_id']));
+                if ($filemanager->get('id') != 0) {
+                    $redirect->setParameter("file_handler_id", $filemanager->get('id'));
+                    print('1');
+                    exit;
+                }
+            }
+            if (isset($this->POST['remove_file_id'])) {
+                $redirect->removeParameter('file_handler_id', (int)$this->POST['remove_file_id']);
+                print('1');
+                exit;
+            }
+            print('0');
+            exit;
+        }
+
+
+        $options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
+
+        $receive_redirect = Ilib_Redirect::factory($kernel->getSessionId(), MDB2::singleton(DB_DSN), 'receive', $options);
+
+        $multiple_choice = false;
+        */
+        /*
+        if ($receive_redirect->isMultipleParameter('file_handler_id')) {
+            $multiple_choice = true;
+        } else {
+            $multiple_choice = false;
+        }
+        */
+        /*
+        if (isset($this->POST['return'])) {
+            // Return is when AJAX is active, and then the checked files is already saved and should not be saved again.
+            return new k_SeeOther($receive_redirect->getRedirect($this->url()));
+        }
+        */
+
+        if (method_exists($this->context->context, 'appendFile')) {
+            foreach ($this->body('selected') as $file_id) {
+                $file = $this->context->context->appendFile($file_id);
+            }
+        } else {
+            $appender = $this->getFileAppender();
+            foreach ($this->body('selected') as $file_id) {
+                $file = $gateway->getFromId($file_id);
+            	$appender->addFile($file);
+            }
+        }
+        return new k_SeeOther($this->url('../../'));
+        /*
+        $filemanager = new Ilib_Filehandler_Manager($kernel); // has to be loaded here, while it should be able to set an error just below.
+
+        if (isset($this->POST['submit_close']) || isset($this->POST['submit'])) {
+            settype($this->POST['selected'], 'array');
+            $selected = $this->POST['selected'];
+
+            $number_of_files = 0;
+            foreach($selected as $id) {
+                $tmp_f = $gateway->getFromId((int)$id);
+                if ($tmp_f->get('id') != 0) {
+                    $receive_redirect->setParameter("file_handler_id", $tmp_f->get('id'));
+                    $number_of_files++;
+                }
+            }
+
+            if ($number_of_files == 0) {
+                $filemanager->error->set("you have to choose a file");
+            } elseif ($multiple_choice == false || isset($this->POST['submit_close'])) {
+                return new k_SeeOther($receive_redirect->getRedirect($this->url()));
+            }
+        }
+        */
+        /*
+        if ($multiple_choice) {
+            $selected_files = $receive_redirect->getParameter('file_handler_id');
+        } else {
+            if (isset($this->GET['selected_file_id'])) {
+                $selected_files[] = (int)$this->GET['selected_file_id'];
+            } else {
+                $selected_files = array();
+            }
+        }
+        */
+
+        /*
+        $filemanager->getDBQuery()->defineCharacter('character', 'file_handler.file_name');
+        $filemanager->getDBQuery()->usePaging("paging", $kernel->setting->get('user', 'rows_pr_page'));
+        $filemanager->getDBQuery()->storeResult("use_stored", "filemanager", "sublevel");
+
+        $files = $filemanager->getList();
+        */
+    }
+
+    function getFileAppender()
+    {
+    	return $this->context->context->getFileAppender();
+    }
+
 }

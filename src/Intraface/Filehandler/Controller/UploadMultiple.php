@@ -10,11 +10,6 @@ class Intraface_Filehandler_Controller_UploadMultiple extends k_Component
         $this->template = $template;
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
     function renderHtml()
     {
         $kernel = $this->getKernel();
@@ -59,5 +54,10 @@ class Intraface_Filehandler_Controller_UploadMultiple extends k_Component
         }
         $location = $redirect->getRedirect($this->context->url());
         return new k_SeeOther($location);
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

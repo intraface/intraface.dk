@@ -13,9 +13,9 @@
         <label><?php e(t('text')); ?>:
             <input type="text" name="text" value="<?php echo $filemanager->getDBQuery()->getFilter("text"); ?>" />
         </label>
-        <label>Filtrering:
+        <label><?php e(t('Filter')); ?>
         <select name="filtration">
-            <option value="0">Alle</option>
+            <option value="0"><?php e(t('All')); ?></option>
             <option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) echo ' selected="selected"';?>><?php e(t('uploaded today')); ?></option>
             <option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) echo ' selected="selected"';?>><?php e(t('uploaded yesterday')); ?></option>
             <option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) echo ' selected="selected"';?>><?php e(t('uploaded this week')); ?></option>
@@ -23,7 +23,7 @@
             <option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) echo ' selected="selected"';?>><?php e(t('edited yesterday')); ?></option>
         </select>
         </label>
-        <label><?php e(t('only pictures')); ?>:
+        <label><?php e(t('Only pictures')); ?>:
             <input type="checkbox" name="images" value="1" <?php if($filemanager->getDBQuery()->getFilter("images") == 1) echo 'checked="checked"'; ?> />
         </label>
         <span>

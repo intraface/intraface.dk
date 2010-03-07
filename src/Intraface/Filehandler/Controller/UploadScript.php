@@ -8,11 +8,6 @@ class Intraface_Filehandler_Controller_UploadScript extends k_Component
         $this->template = $template;
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
     function renderHtml()
     {
         $kernel = $this->getKernel();
@@ -35,5 +30,10 @@ class Intraface_Filehandler_Controller_UploadScript extends k_Component
         $tpl = $this->template->create(dirname(__FILE__) . '/../templates/uploadscript-post');
 
         return new k_HttpResponse(200, $tpl->render($this, $data));
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

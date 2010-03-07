@@ -8,26 +8,31 @@ class Intraface_Filehandler_Controller_Index extends k_Component
         $this->template = $template;
     }
 
-    function getKernel()
+    protected function map($name)
     {
-        return $this->context->getKernel();
-    }
-
-    function getGateway()
-    {
-        return new Ilib_Filehandler_Gateway($this->getKernel());
+        if ($name == 'batchedit') {
+            return 'Intraface_Filehandler_Controller_Batchedit';
+        } elseif ($name == 'uploadmultiple') {
+            return 'Intraface_Filehandler_Controller_UploadMultiple';
+        } elseif ($name == 'uploadscript') {
+            return 'Intraface_Filehandler_Controller_UploadScript';
+        } elseif ($name == 'upload') {
+            return 'Intraface_Filehandler_Controller_Upload';
+        } elseif ($name == 'sizes') {
+            return 'Intraface_Filehandler_Controller_Sizes';
+        } elseif ($name == 'selectfile') {
+            return 'Intraface_Filehandler_Controller_SelectFile';
+        } elseif ($name == 'ckeditor') {
+            return 'Intraface_Filehandler_Controller_CKEditor';
+        }
+        return 'Intraface_Filehandler_Controller_Show';
     }
 
     public function renderHtml()
     {
-        $gateway = new Ilib_Filehandler_Gateway($this->getKernel());
+        $gateway = $this->getGateway();
 
-        if (is_numeric($this->query('delete'))) {
-            $filehandler = $gateway->getFromId($this->query('delete'));
-            if (!$filemanager->delete()) {
-                throw new Exception($this->t('Could not delete file'));
-            }
-        } elseif (is_numeric($this->query('undelete'))) {
+        if (is_numeric($this->query('undelete'))) {
             $filehandler = $gateway->getFromId($this->query('delete'));
             if (!$filemanager->undelete()) {
                 throw new Exception($this->t('Could not undelete file'));
@@ -96,23 +101,14 @@ class Intraface_Filehandler_Controller_Index extends k_Component
         return $tpl->render($this, $data);
     }
 
-    protected function map($name)
+    function getKernel()
     {
-        if ($name == 'batchedit') {
-            return 'Intraface_Filehandler_Controller_Batchedit';
-        } elseif ($name == 'uploadmultiple') {
-            return 'Intraface_Filehandler_Controller_UploadMultiple';
-        } elseif ($name == 'uploadscript') {
-            return 'Intraface_Filehandler_Controller_UploadScript';
-        } elseif ($name == 'upload') {
-            return 'Intraface_Filehandler_Controller_Upload';
-        } elseif ($name == 'sizes') {
-            return 'Intraface_Filehandler_Controller_Sizes';
-        } elseif ($name == 'selectfile') {
-            return 'Intraface_Filehandler_Controller_SelectFile';
-        } elseif ($name == 'ckeditor') {
-            return 'Intraface_Filehandler_Controller_CKEditor';
-        }
-        return 'Intraface_Filehandler_Controller_Show';
+        return $this->context->getKernel();
     }
+
+    function getGateway()
+    {
+        return new Ilib_Filehandler_Gateway($this->getKernel());
+    }
+
 }

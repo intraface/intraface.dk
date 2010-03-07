@@ -1,4 +1,4 @@
-<h1><?php e(t('files')); ?></h1>
+<h1><?php e(t('Files')); ?></h1>
 
 <ul class="options">
     <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Cancel')); ?></a></li>
@@ -6,12 +6,9 @@
 
 <form action="<?php e(url('./')); ?>" method="post">
 <?php
-
 foreach ($files as $file) {
-    $gateway = new Ilib_Filehandler_Gateway($kernel);
     $this_filemanager = $gateway->getFromId($file['id']);
     if ($this_filemanager->get('is_picture')) {
-
     }
     $keyword_object = $this_filemanager->getKeywordAppender();
     $file['keywords'] = $keyword_object->getConnectedKeywordsAsString();

@@ -1,10 +1,10 @@
-<h1><?php e(t('edit file')); ?></h1>
+<h1><?php e(t('Edit file')); ?></h1>
 
 <?php echo $filemanager->error->view(); ?>
 
 <form action="<?php e(url(null, array($context->subview()))); ?>" method="POST" enctype="multipart/form-data">
 <fieldset>
-    <legend><?php e(t('file information')); ?></legend>
+    <legend><?php e(t('File information')); ?></legend>
 
     <div class="formrow">
         <label for="accessibility"><?php e(t('file accessibility')); ?></label>

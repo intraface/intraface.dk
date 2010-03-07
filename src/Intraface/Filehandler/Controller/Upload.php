@@ -10,11 +10,6 @@ class Intraface_Filehandler_Controller_Upload extends k_Component
         $this->template = $template;
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
     function renderHtml()
     {
         $kernel = $this->getKernel();
@@ -49,5 +44,10 @@ class Intraface_Filehandler_Controller_Upload extends k_Component
         }
 
         return $this->render();
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

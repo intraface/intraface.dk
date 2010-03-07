@@ -5,7 +5,7 @@
 <?php endif; ?>
 
 <fieldset>
-    <legend><?php e(t('select files to upload')); ?></legend>
+    <legend><?php e(t('Select files to upload')); ?></legend>
     <div id="iframe">
         <iframe frameborder="0" src="<?php e(url('../uploadscript')); ?>"></iframe>
     </div>
