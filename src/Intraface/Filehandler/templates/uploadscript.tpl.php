@@ -36,7 +36,7 @@ function upload() {
 }
 </script>
 
-<style>
+<style type="text/css">
 .formrow label {
     width: 8em;
     float: left;
@@ -74,4 +74,5 @@ body {
                 <input type="hidden" name="imgnum" />
             </div>
         </form>
+</body>
 </html>
