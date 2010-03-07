@@ -4,19 +4,14 @@
     <li><a href="<?php e(url('../../')); ?>"><?php e(t('close')); ?></a></li>
 </ul>
 
-<?php
-    echo $cmssite->stylesheet->error->view(array($context, 't'));
-?>
+<?php echo $cmssite->stylesheet->error->view(array($context, 't')); ?>
 
 <form method="post" action="<?php e(url()); ?>">
-    <input name="site_id" type="hidden" value="<?php e($cmssite->get('id')); ?>" />
-
     <fieldset id="stylesheet">
-
         <legend><?php e(t('Stylesheet')); ?></legend>
 
         <label for="css">
-            <textarea cols="80" rows="20" name="css"><?php e($value['css']); ?></textarea>
+            <textarea cols="80" rows="20" name="css"><?php e($css); ?></textarea>
          </label>
 
      </fieldset>

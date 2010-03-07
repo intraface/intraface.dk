@@ -11,32 +11,36 @@ class Intraface_modules_cms_Controller_Stylesheet extends k_Component
     function renderHtml()
     {
         $module = $this->getKernel()->module('cms');
-        $translation = $this->getKernel()->getTranslation('cms');
-        $cmssite = new CMS_Site($this->getKernel(), $_GET['site_id']);
-        $value['site_id'] = $cmssite->get('id');
-        $value['css'] = $cmssite->stylesheet->get('css_own');
+        $cmssite = $this->getSite();
+
+        $data = array(
+            'site_id' => $cmssite->get('id'),
+            'css' =>  $cmssite->stylesheet->get('css_own'),
+            'cmssite' => $cmssite
+        );
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/stylesheet-edit');
-        return $tpl->render($this);
-        return new k_SeeOther($this->url('../../../../modules/cms/'));
+        return $tpl->render($this, $data);
     }
 
     function postForm()
     {
         $module = $this->getKernel()->module('cms');
-        $translation = $this->getKernel()->getTranslation('cms');
 
-        $cmssite = new CMS_Site($this->getKernel(), $_POST['site_id']);
+        $cmssite = $this->getSite();
         if ($cmssite->stylesheet->save($_POST)) {
             if (!empty($_POST['close'])) {
                 return new k_SeeOther($this->url('../'));
             } else {
                 return new k_SeeOther($this->url());
             }
-        } else {
-            $value = $_POST;
         }
         return $this->render();
+    }
+
+    function getSite()
+    {
+        return new CMS_Site($this->getKernel(), $this->context->name());
     }
 
     function getKernel()
