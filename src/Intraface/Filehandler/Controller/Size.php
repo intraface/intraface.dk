@@ -1,5 +1,5 @@
 <?php
-class Intraface_Filehandler_Controller_Sizes_Edit extends k_Component
+class Intraface_Filehandler_Controller_Size extends k_Component
 {
     protected $template;
 
@@ -12,23 +12,17 @@ class Intraface_Filehandler_Controller_Sizes_Edit extends k_Component
     {
         $kernel = $this->getKernel();
         $shared_filehandler = $kernel->useShared('filehandler');
-        $translation = $kernel->getTranslation('filehandler');
 
-        if ($this->query('type_key')) {
-            $instance_manager = new Ilib_Filehandler_InstanceManager($kernel, (int)$this->query('type_key'));
-            $value = $instance_manager->get();
-        } else {
-            $instance_manager = new Ilib_Filehandler_InstanceManager($kernel);
-            $value = $instance_manager->get();
-        }
+        $instance_manager = new Ilib_Filehandler_InstanceManager($kernel, (int)$this->name());
+        $value = $instance_manager->get();
 
-        $this->document->setTitle('edit instance type');
+        $this->document->setTitle('Edit instance type');
 
         $data = array(
         	'instance_manager' => $instance_manager,
         	'value' => $value);
 
-        $tpl = $this->template->create(dirname(__FILE__) . '/../../templates/sizes-edit');
+        $tpl = $this->template->create(dirname(__FILE__) . '/../templates/sizes-edit');
         return $tpl->render($this, $data);
     }
 
@@ -36,13 +30,20 @@ class Intraface_Filehandler_Controller_Sizes_Edit extends k_Component
     {
         $shared_filehandler = $this->getKernel()->useShared('filehandler');
 
-        $instance_manager = new Ilib_Filehandler_InstanceManager($this->getKernel(), (int)$this->body('type_key'));
+        $instance_manager = new Ilib_Filehandler_InstanceManager($this->getKernel(), (int)$this->name());
 
         if ($instance_manager->save($this->body())) {
             return new k_SeeOther($this->context->url());
         }
 
         return $this->render();
+    }
+
+    function renderHtmlDelete()
+    {
+        $instance_manager = new Ilib_Filehandler_InstanceManager($this->getKernel(), (int)$this->name());
+        $instance_manager->delete();
+        return new k_SeeOther($this->url('../'));
     }
 
     function getKernel()
