@@ -68,12 +68,11 @@ class Intraface_Filehandler_Controller_Viewer extends k_Component
     function GET()
     {
         $response = new k_HttpResponse(200, $this->fileviewer->fetch());
-        $response->setHeader('Content-Type', $this->fileviewer->getMimeType());
-        $response->setHeader('Last-Modified', gmdate('D, d M Y H:i:s', $this->getLastModified()).' GMT');
+        $response->setContentType($this->fileviewer->getMimeType());
+        $response->setHeader('Last-Modified', gmdate('D, d M Y H:i:s', $this->fileviewer->getLastModified()).' GMT');
         $response->setHeader('Cache-Control', 'private');
-        $response->setHeader('Content-Disposition', 'inline;filename='.$this->getFileName());
+        $response->setHeader('Content-Disposition', 'inline;filename='.$this->fileviewer->getFileName());
         $response->setHeader('Pragma', 'cache');
-        $response->setContent();
         return $response;
       }
 }

@@ -63,9 +63,24 @@ class FileViewer {
         return $this->filehandler->get('accessibility') != 'public';
     }
 
+    function getMimeType()
+    {
+        return $this->mime_type;
+    }
+
+    function getFileName()
+    {
+        return $this->file_name;
+    }
+
+    function getLastModified()
+    {
+        return $last_modified = filemtime($this->file_path);
+    }
+
     function fetch()
     {
-        return readfile($this->file_path);
+        return file_get_contents($this->file_path);
     }
 
     public function out() {
@@ -81,9 +96,7 @@ class FileViewer {
         header('Cache-Control:');
         header('Content-Disposition: inline; filename='.$this->file_name);
         header('Pragma:');
-        return $this->fetch();
+        return readfile($this->file_path);
     }
 
 }
-
-?>
