@@ -41,18 +41,6 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
         return $smarty->render($this);
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
-    function getYear()
-    {
-        $module = $this->getKernel()->module('accounting');
-
-        return new Year($this->getKernel(), $this->name());
-    }
-
     function postForm()
     {
         if (!empty($_POST['start']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
@@ -62,7 +50,7 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
         } elseif (!empty($_POST['primobalance']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
             $year = $this->getYear();
             $year->setYear();
-            return new k_SeeOther($this->url('daybook'));
+            return new k_SeeOther($this->url('primosaldo'));
         } elseif (!empty($_POST['manual_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
             $year = $this->getYear();
             $year->setYear();
@@ -117,4 +105,17 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
         $gateway = $this->context->getYearGateway();
         return $gateway;
     }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getYear()
+    {
+        $module = $this->getKernel()->module('accounting');
+
+        return new Year($this->getKernel(), $this->name());
+    }
+
 }

@@ -8,16 +8,33 @@ class Intraface_modules_accounting_Controller_Year_Primosaldo extends k_Componen
         $this->template = $template;
     }
 
+    function renderHtml()
+    {
+        $year = new Year($this->getKernel(), $this->context->name());
+        $account = new Account($year);
+
+        $accounts = $account->getList('balance');
+
+
+        $total_debet = 0;
+        $total_credit = 0;
+
+        $data = array('total_debet' => $total_debet, 'total_credit' => $total_credit, 'account' => $account, 'year' => $year, 'accounts' => $accounts);
+
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/year/index');
+        return $smarty->render($this, $data);
+    }
+
     function postForm()
     {
-        $year = new Year($kernel, $_POST['id']);
+        $year = new Year($this->getKernel(), $this->context->name());
 
         if ($year->get('last_year_id') == 0) {
             throw new Exception('No last year set');
         }
 
         // oprette objekt til at holde sidste �r
-        $last_year = new Year($kernel, $year->get('last_year_id'));
+        $last_year = new Year($this->getKernel(), $year->get('last_year_id'));
 
         // hente konti hvor de nye har created_from_id
         $account = new Account($year);
@@ -49,23 +66,5 @@ class Intraface_modules_accounting_Controller_Year_Primosaldo extends k_Componen
             $account->savePrimosaldo(number_format($saldo['debet'], 2, ',', ''), number_format($saldo['credit'], 2, ',', ''));
 
         }
-    }
-
-    function renderHtml()
-    {
-        $year = new Year($kernel, $_GET['id']);
-        $account = new Account($year);
-
-        $accounts = $account->getList('balance');
-
-
-        $total_debet = 0;
-        $total_credit = 0;
-
-        $data = array('total_debet' => $total_debet, 'total_credit' => $total_credit, 'account' => $account, 'year' => $year, 'accounts' => $accounts);
-
-        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/year/index');
-        return $smarty->render($this, $data);
-
     }
 }
