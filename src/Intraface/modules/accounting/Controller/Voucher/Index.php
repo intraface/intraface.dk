@@ -29,8 +29,7 @@ class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
 
     function renderXls()
     {
-        $year = new Year($this->getKernel());
-        $year->checkYear();
+        $year = $this->getYear();
 
         $this->db_sql->query("SELECT * FROM accounting_voucher WHERE intranet_id = " . $year->kernel->intranet->get('id') . " AND year_id = " . $year->get('id') . " ORDER BY number ASC");
         //$i++;
@@ -42,12 +41,14 @@ class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
         }
 
         $workbook = new Spreadsheet_Excel_Writer();
+        $workbook->setVersion(8);
 
         // sending HTTP headers
         $workbook->send($this->getKernel()->intranet->get('name') . ' - poster ' . $year->get('label'));
 
         // Creating a worksheet
         $worksheet = $workbook->addWorksheet('Konti ' . $year->get('label'));
+        $worksheet->setInputEncoding('UTF-8');
 
         $format_bold = $workbook->addFormat();
         $format_bold->setBold();
@@ -101,19 +102,13 @@ class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
         return $posts = $voucher->getList();
     }
 
+    function getYear()
+    {
+        return $this->context->getYear();
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
-    }
-
-    function getYear($id = 0)
-    {
-        return new Year($this->getKernel(), $id);
-    }
-
-    function getAccountsGateway()
-    {
-        $gateway = $this->context->getYearGateway();
-        return $gateway;
     }
 }

@@ -155,9 +155,7 @@ $voucher_files = $voucher_file->getList();
 
     function getYear()
     {
-        $year = new Year($this->getKernel());
-        $year->checkYear();
-        return $year;
+        return $this->context->getYear();
     }
 
     function getValues()

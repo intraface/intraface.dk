@@ -53,9 +53,15 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
 
     function getYearGateway()
     {
-        return new Year($this->getKernel());
+        return new Intraface_modules_accounting_YearGateway($this->getKernel());
     }
 
+    function getAccountGateway()
+    {
+        return new Intraface_modules_accounting_AccountGateway($this->getKernel());
+    }
+
+    /*
     function getAccounts()
     {
         return $this->getAccount()->getList();
@@ -65,4 +71,5 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
     {
         return new Account($this->getYear(), $id);
     }
+    */
 }

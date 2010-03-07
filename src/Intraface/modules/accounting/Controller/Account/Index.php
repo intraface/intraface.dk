@@ -19,9 +19,6 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
     function renderHtml()
     {
-        $year = $this->getYear();
-        $year->checkYear();
-
         $this->document->setTitle('Accounts');
 
         $accounts = $this->getAccount()->getList('saldo', true);
@@ -37,8 +34,7 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
     function renderXls()
     {
         $kernel = $this->getKernel();
-        $year = new Year($kernel);
-        $year->checkYear();
+        $year = $this->getYear();
 
         $values['from_date'] = $year->get('from_date_dk');
         $values['to_date'] = $year->get('to_date_dk');
@@ -46,12 +42,14 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
         $accounts = $this->getAccounts();
 
         $workbook = new Spreadsheet_Excel_Writer();
+        $workbook->setVersion(8);
 
         // sending HTTP headers
         $workbook->send($kernel->intranet->get('name') . ' - konti ' . $year->get('label'));
 
         // Creating a worksheet
         $worksheet =& $workbook->addWorksheet('Konti ' . $year->get('label'));
+        $worksheet->setInputEncoding('UTF-8');
 
         $format_bold =& $workbook->addFormat();
         $format_bold->setBold();
@@ -102,10 +100,7 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
     function postForm()
     {
-        $year = new Year($this->getKernel());
-        $year->checkYear();
-
-        $account = new Account($year);
+        $account = new Account($this->getYear());
 
         if (isset($_POST['vat_key']) && $_POST['vat_key'] != 0) {
             $_POST['vat_percent'] = 25;
@@ -113,25 +108,18 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
         if ($id = $account->save($_POST)) {
             return new k_SeeOther($this->url($id));
-        } else {
-            $values = $_POST;
         }
         return $this->render();
-        /*
-        if ($id = $this->getYear()->save($_POST)) {
-            return new k_SeeOther($this->url('../'));
-        } else {
-            $values = $_POST;
-            $values['from_date_dk'] = $_POST['from_date'];
-            $values['to_date_dk'] = $_POST['to_date'];
-            return $this->render();
-        }
-        */
     }
 
     function getValues()
     {
         return $this->body();
+    }
+
+    function getAccountGateway()
+    {
+        return $gateway = new Intraface_modules_accounting_AccountGateway($this->getYear());
     }
 
     function getAccount()
@@ -141,8 +129,7 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
     function getAccounts()
     {
-        $gateway = new Intraface_modules_accounting_AccountGateway($this->getYear());
-    	return $gateway->findByType('stated', true);
+    	return $this->getAccountGateway()->findByType('stated', true);
     }
 
     function getKernel()

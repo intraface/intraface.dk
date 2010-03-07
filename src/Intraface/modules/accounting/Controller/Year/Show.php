@@ -31,12 +31,20 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
         }
     }
 
-    function renderHtml()
+    function dispatch()
     {
+        if ($this->getYear() == 0) {
+            throw new k_PageNotFound();
+        }
         if (!$this->getYear()->isValid()) {
             throw new Exception('Year is not valid');
         }
 
+        return parent::dispatch();
+    }
+
+    function renderHtml()
+    {
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/year/show');
         return $smarty->render($this);
     }
@@ -106,16 +114,24 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
         return $gateway;
     }
 
+    function getYear()
+    {
+        return $this->getYearGateway()->findById($this->name());
+    }
+
+    function getVoucherGateway()
+    {
+        return new Intraface_modules_accounting_VoucherGateway($this->getYear());
+    }
+
+    function getAccountGateway()
+    {
+        return new Intraface_modules_accounting_AccountGateway($this->getYear());
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
-    }
-
-    function getYear()
-    {
-        $module = $this->getKernel()->module('accounting');
-
-        return new Year($this->getKernel(), $this->name());
     }
 
 }

@@ -23,23 +23,6 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
         return $smarty->render($this);
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
-    function getYear()
-    {
-        return new Year($this->getKernel());
-    }
-
-    function getValues()
-    {
-        $values['from_date_dk'] = '01-01-' . date('Y');
-        $values['to_date_dk'] = '31-12-' . date('Y');
-        return $values;
-    }
-
     function putForm()
     {
         $year = new Year($this->getKernel(), $_POST['id']);
@@ -70,6 +53,23 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
 
     function getYearGateway()
     {
+        return new Intraface_modules_accounting_YearGateway($this->getKernel());
+    }
+
+    function getYear()
+    {
         return new Year($this->getKernel());
+    }
+
+    function getValues()
+    {
+        $values['from_date_dk'] = '01-01-' . date('Y');
+        $values['to_date_dk'] = '31-12-' . date('Y');
+        return $values;
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

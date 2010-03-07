@@ -16,7 +16,7 @@ $values = $context->getYear()->get();
     <?php echo $context->getYear()->error->view(); ?>
 
     <input type="hidden" name="id" value="<?php e($values['id']); ?>" />
-<?php if ($context->getAccount()->anyAccounts()): ?>
+<?php if ($context->getAccountGateway()->anyAccounts()): ?>
     <fieldset>
         <legend>Vælg og gå til regnskabet</legend>
         <div>
@@ -79,7 +79,7 @@ $values = $context->getYear()->get();
     </tr>
 </table>
 
-<?php if (!$context->getAccount()->anyAccounts()): ?>
+<?php if (!$context->getAccountGateway()->anyAccounts()): ?>
     <fieldset>
         <legend>Kontoplan</legend>
         <p>Du skal oprette en kontoplan for æret. Du kan først begynde at gemme poster i kassekladden, når du har oprettet en kontoplan.</p>

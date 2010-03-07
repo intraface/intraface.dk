@@ -25,19 +25,18 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
         $this->document->addScript('focusField.js');
         $this->document->addScript('accounting/daybook.js');
 
-        if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
+        // set settings for viewing
+        if (in_array($this->query('message'), array('hide'))) {
             $this->getKernel()->getSetting()->set('user', 'accounting.daybook.message', 'hide');
-        } elseif (!empty($_GET['quickhelp']) AND in_array($_GET['quickhelp'], array('true', 'false'))) {
-            $this->getKernel()->getSetting()->set('user', 'accounting.daybook_cheatsheet', $_GET['quickhelp']);
-            if (isAjax()) {
-                echo '1';
-                exit;
-            }
-        } elseif (!empty($_GET['view']) AND in_array($_GET['view'], array('income', 'expenses', 'classic', 'debtor'))) {
-            $this->getKernel()->getSetting->set('user', 'accounting.daybook_view', $_GET['view']);
+        } elseif (in_array($this->query('quickhelp'), array('true', 'false'))) {
+            $this->getKernel()->getSetting()->set('user', 'accounting.daybook_cheatsheet', $this->query('quickhelp'));
+        } elseif (in_array($this->query('view'), array('income', 'expenses', 'classic', 'debtor'))) {
+            $this->getKernel()->getSetting->set('user', 'accounting.daybook_view', $this->query('view'));
         }
 
-        // tests for the setup
+        // tests whether you are ready to state anything in the daybook
+        // @todo this should probably be moved to the dispatch method and
+        //       you will be redirected to the year
         if (!$this->getAccount()->anyAccounts()) {
             $tpl = $this->template->create('Intraface/Controller/templates/message');
             return $tpl->render($this, array(
@@ -76,7 +75,7 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
         }
 
         // cheatsheet
-        if ($this->getKernel()->setting->get('user', 'accounting.daybook_cheatsheet')== 'true') {
+        if ($this->getKernel()->getSetting()->get('user', 'accounting.daybook_cheatsheet')== 'true') {
             $cheat_tpl = $this->template->create(dirname(__FILE__) . '/templates/daybook/cheatsheet');
             $cheatsheet = $cheat_tpl->render($this);
         } else {
@@ -117,7 +116,7 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
         }
         require_once 'Intraface/modules/accounting/Year.php';
 
-        $year = new Year($this->getKernel());
+        $year = $this->getYearGateway()->findById($this->name());
         $year->checkYear();
         return $this->year = $year;
     }

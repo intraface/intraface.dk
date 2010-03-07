@@ -38,12 +38,12 @@ switch($context->getYearEnd()->get('step') + 1):
 
 		<?php if (!$context->getYear()->isStated('invoice', $context->getYear()->get('from_date'), $context->getYear()->get('to_date'))): ?>
 			<p class="warning">Alle fakturaer i perioden er ikke bogført.
-			<a href="/modules/debtor/list.php?type=invoice&amp;status=-1&amp;not_stated=true&amp;from_date=<?php e($context->getYear()->get('from_date_dk')) ?>&amp;to_date=<?php e($context->getYear()->get('to_date_dk')); ?>">Gå til ikke bogførte fakturaer</a>.</p>
+			<a href="<?php e(url('../../../debtor/invoice/list', array('type' => 'invoice', 'status' => -1, 'not_stated' => 'true', 'from_date' => $context->getYear()->get('from_date_dk'), 'to_date' => $context->getYear()->get('to_date_dk')))); ?>">Gå til ikke bogførte fakturaer</a>.</p>
 		<?php endif; ?>
 
 		<?php if (!$context->getYear()->isStated('credit_note', $context->getYear()->get('from_date'), $context->getYear()->get('to_date'))): ?>
 			<p class="warning">Alle kreditnotaer i perioden er ikke bogført.
-			<a href="/modules/debtor/list.php?type=credit_note&amp;status=-1&amp;not_stated=true&amp;from_date=<?php e($context->getYear()->get('from_date_dk')); ?>&amp;to_date=<?php e($context->getYear()->get('to_date_dk')); ?>">G� til ikke bogf�rte kreditnotaer</a>.</p>
+			<a href="<?php e(url('../../../debtor/credit_note/list', array('type' => 'credit_note', 'status' => -1, 'not_stated' => 'true', 'from_date' => $context->getYear()->get('from_date_dk'), 'to_date' => $context->getYear()->get('to_date_dk')))); ?>">Gå til ikke bogførte kreditnotaer</a>.</p>
 		<?php endif; ?>
 
 		<?php
@@ -53,7 +53,7 @@ switch($context->getYearEnd()->get('step') + 1):
 			foreach ($vat_periods as $period) {
 				$vat_period = new VatPeriod($context->getYear(), $period['id']);
 				if (!$vat_period->get('voucher_id')) {
-					echo '<p class="warning">Momsperiode ' . $vat_period->get('label') . ' er ikke bogf�rt. <a href="'.url('../vat/' . $vat_period->get('id')).'">Fix it at the vat period</a>.</p>';
+					echo '<p class="warning">Momsperiode ' . $vat_period->get('label') . ' er ikke bogført. <a href="'.url('../vat/' . $vat_period->get('id')).'">Fix it at the vat period</a>.</p>';
 				} elseif (!$context->getVatPeriod()->compareAmounts()) {
 					echo '<p class="warning">Momsperiode ' . $vat_period->get('label') . ' stemmer ikke. <a href="'.url('../vat/' . $vat_period->get('id')).'">Fix it at the vat period</a>.</p>';
 				}
@@ -71,7 +71,7 @@ switch($context->getYearEnd()->get('step') + 1):
 			<legend>Trin 2: Gem resultatopgørelsen</legend>
 			<?php if (count($context->getYearEnd()->getStatedActions('operating_reset')) == 0): ?>
 			<input type="submit" name="previous" value="Forrige" />
-			<input type="submit" name="step_save_result" value="Gem resultatopg�relsen" class="confirm" />
+			<input type="submit" name="step_save_result" value="Gem resultatopgørelsen" class="confirm" />
 			<?php else: ?>
 				<p>Resultatopgørelsen er allerede gemt. Du kan føre posterne tilbage, hvis du vil gemme igen.</p>
 				<input type="submit" name="previous" value="Forrige" />
@@ -293,7 +293,7 @@ switch($context->getYearEnd()->get('step') + 1):
 			<?php else: ?>
 				<p>Årets resultat er allerede nulstillet. Du kan føre posterne tilbage, hvis du vil gemme igen.</p>
 				<input type="submit" value="Forrige" name="previous" />
-				<input type="submit" name="step_reverse_result_account_reset" value="Tilbagef�r posterne" />
+				<input type="submit" name="step_reverse_result_account_reset" value="Tilbagefør posterne" />
 
 				<input type="submit" name="next" value="<?php e(t('Next')); ?>" />
 			<?php endif; ?>

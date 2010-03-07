@@ -33,11 +33,6 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         return $smarty->render($this, array('posts' => $posts, 'saldo' => $saldo));
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
     function renderHtmlEdit()
     {
         $this->document->addScript($this->url('accounting/edit_account.js'));
@@ -77,15 +72,19 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
 
     function getAccount()
     {
-        $module = $this->getKernel()->module('accounting');
-        $translation = $this->getKernel()->getTranslation('accounting');
-        return new Account($this->getYear(), $this->name());
+        if (is_object($this->account)) {
+            return $this->account;
+        }
+        return $this->account = $this->context->getAccountGateway()->findById($this->name());
     }
 
     function getYear()
     {
-        $year = new Year($this->getKernel());
-        $year->checkYear();
-        return $year;
+        return $this->context->getYear();
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

@@ -10,7 +10,7 @@ class Intraface_modules_accounting_Controller_Year_Primosaldo extends k_Componen
 
     function renderHtml()
     {
-        $year = new Year($this->getKernel(), $this->context->name());
+        $year = $this->getYear();
         $account = new Account($year);
 
         $accounts = $account->getList('balance');
@@ -94,16 +94,20 @@ class Intraface_modules_accounting_Controller_Year_Primosaldo extends k_Componen
 
     function putForm()
     {
-        	$year = new Year($this->getKernel(), $this->context->name());
-        	foreach ($_POST['id'] AS $key=>$values) {
-        		$account = new Account($year, $_POST['id'][$key]);
-        		$account->savePrimosaldo($_POST['debet'][$key], $_POST['credit'][$key]);
-        	}
-        	if (!$account->error->isError()) {
-        		return new k_SeeOther($this->url());
-
-        	}
+        $year = $this->getYear();
+        foreach ($_POST['id'] AS $key=>$values) {
+        	$account = new Account($year, $_POST['id'][$key]);
+        	$account->savePrimosaldo($_POST['debet'][$key], $_POST['credit'][$key]);
+        }
+        if (!$account->error->isError()) {
+        	return new k_SeeOther($this->url());
+       	}
         return $this->render();
+    }
+
+    function getYear()
+    {
+        return $this->context->getYear();
     }
 
     function getKernel()

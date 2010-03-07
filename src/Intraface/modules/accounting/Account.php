@@ -649,6 +649,7 @@ class Account extends Intraface_Standard
 
     public function anyAccounts()
     {
+        /*
         $db = new DB_Sql;
         $sql = "SELECT id
             FROM accounting_account
@@ -656,7 +657,9 @@ class Account extends Intraface_Standard
         $db->query($sql);
 
         return $db->numRows();
-
+		*/
+        $gateway = new Intraface_modules_accounting_AccountGateway($this->year);
+        return $gateway->anyAccounts();
     }
 
     public function anyPosts()

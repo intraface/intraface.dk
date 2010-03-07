@@ -61,7 +61,18 @@ class Intraface_modules_accounting_AccountGateway
         return new Account($this->year, $db->f('id'));
 
     }
+
+    /**
+     * @deprecated
+     * @param $id
+     * @return unknown_type
+     */
     function findFromId($id)
+    {
+        return $this->findById($id);
+    }
+
+    function findById($id)
     {
         require_once dirname (__FILE__) . '/Account.php';
     	return new Account($this->year, $id);
@@ -170,5 +181,16 @@ class Intraface_modules_accounting_AccountGateway
             $i++;
         }
         return $accounts;
+    }
+
+    function anyAccounts()
+    {
+        $db = new DB_Sql;
+        $sql = "SELECT id
+            FROM accounting_account
+            WHERE intranet_id = " . $this->year->kernel->intranet->get("id") . " AND year_id = ".$this->year->get('id')." AND active = 1";
+        $db->query($sql);
+
+        return $db->numRows();
     }
 }

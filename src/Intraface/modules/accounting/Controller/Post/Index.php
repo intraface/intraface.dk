@@ -33,12 +33,14 @@ class Intraface_modules_accounting_Controller_Post_Index extends k_Component
         }
 
         $workbook = new Spreadsheet_Excel_Writer();
+        $workbook->setVersion(8);
 
         // sending HTTP headers
         $workbook->send($kernel->intranet->get('name') . ' - poster ' . $year->get('label'));
 
         // Creating a worksheet
         $worksheet = $workbook->addWorksheet('Konti ' . $year->get('label'));
+        $worksheet->setInputEncoding('UTF-8');
 
         $format_bold = $workbook->addFormat();
         $format_bold->setBold();
