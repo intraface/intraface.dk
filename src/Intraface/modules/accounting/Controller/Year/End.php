@@ -8,12 +8,6 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
         $this->template = $template;
     }
 
-    function getAccount()
-    {
-        $year = $this->getYear();
-        return $account = new Account($year);
-    }
-
 	function POST()
 	{
         $year = $this->getYear();
@@ -38,7 +32,7 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
         	$year_end = new YearEnd($year);
 
         	if (!$year_end->saveStatement('operating')) {
-        		trigger_error('Kunne ikke gemme resultatopg�relsen', E_USER_ERROR);
+        		throw new Exception('Kunne ikke gemme resultatopgørelsen');
         	}
         	// her skal den s� gemme resultatopg�relsen.
 
@@ -49,7 +43,7 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
         	$year_end = new YearEnd($year);
 
         	if (!$year_end->saveStatement('balance')) {
-        		trigger_error('Kunne ikke gemme balancen', E_USER_ERROR);
+        		throw new Exception('Kunne ikke gemme balancen');
         	}
 
         	$year_end->setStep($_POST['step']);
@@ -58,7 +52,7 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
         	$year_end = new YearEnd($year);
 
         	if (!$year_end->resetYearResult()) {
-        		trigger_error('Kunne ikke nulstille �rets resultat', E_USER_ERROR);
+        		throw new Exception('Kunne ikke nulstille årets resultat');
         	}
 
         	$year_end->setStep($_POST['step']);
@@ -67,11 +61,10 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
         	$year_end = new YearEnd($year);
         	if (!$year_end->resetYearResult('reverse')) {
         		echo $year_end->error->view();
-        		trigger_error('Kunne ikke tilbagef�re �rets resultat �rets resultat', E_USER_ERROR);
+        		throw new Exception('Kunne ikke tilbageføre årets resultat');
         	}
         	$year_end->setStep($_POST['step'] - 1);
         }
-
 
         // step 1
         elseif (!empty($_POST['step_things_stated'])) {
@@ -107,53 +100,137 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
 
 	function renderHtml()
 	{
-        $year = new Year($this->getKernel());
-        $year->checkYear();
-
-        $account = new Account($year);
-        $year_end = new YearEnd($year);
-        $post = new Post(new Voucher($year));
-        $vat_period = new VatPeriod($year);
-
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/year/end');
         return $smarty->render($this);
 	}
 
+    function renderXls()
+    {
+    	$module = $this->getKernel()->module('accounting');
+        $module->includeFile('YearEnd.php');
+
+        $kernel = $this->getKernel();
+
+        $year = $this->getYear();
+
+        $year_end = new YearEnd($year);
+
+        $workbook = new Spreadsheet_Excel_Writer();
+
+        // sending HTTP headers
+        $workbook->send($kernel->intranet->get('name') . ' - konti ' . $year->get('label') . '.xls');
+
+        // Creating a worksheet
+        $worksheet =& $workbook->addWorksheet('Konti ' . $year->get('label'));
+
+        $format_bold =& $workbook->addFormat();
+        $format_bold->setBold();
+        $format_bold->setSize(8);
+
+        $format_italic =& $workbook->addFormat();
+        $format_italic->setItalic();
+        $format_italic->setSize(8);
+
+        $format =& $workbook->addFormat();
+        $format->setSize(8);
+        $i = 0;
+        $worksheet->write($i, 0, $kernel->intranet->get('name'), $format_bold);
+        $i += 2;
+        $worksheet->write($i, 0, 'Resultatopg�relse', $format_bold);
+
+
+        $accounts = $year_end->getStatement('operating');
+
+        $i += 2;
+        if (count($accounts) > 0) {
+        	foreach ($accounts AS $account) {
+        		$style = '';
+        		if ($account['type'] == 'headline') {
+        			$style = $format_bold;
+        		}
+        		elseif ($account['type'] == 'sum') {
+        			$style = $format_italic;
+        		}
+        		else {
+        			$style = $format;
+        		}
+
+        		$worksheet->write($i, 0, $account['number'], $style);
+        		$worksheet->write($i, 1, $account['name'], $style);
+        		if ($account['type'] != 'headline') {
+        			$worksheet->write($i, 2, abs(round($account['saldo'])), $style);
+        		}
+        		$i++;
+        	}
+
+
+        }
+
+
+
+        $accounts = $year_end->getStatement('balance');
+        $i += 2;
+        $worksheet->write($i, 0, 'Balancen', $format_bold);
+
+        $i += 2;
+        if (count($accounts) > 0) {
+        	foreach ($accounts AS $account) {
+        		$style = '';
+        		if ($account['type'] == 'headline') {
+        			$style = $format_bold;
+        		}
+        		elseif ($account['type'] == 'sum') {
+        			$style = $format_italic;
+        		}
+        		else {
+        			$style = $format;
+        		}
+
+        		$worksheet->write($i, 0, $account['number'], $style);
+        		$worksheet->write($i, 1, $account['name'], $style);
+        		if ($account['type'] != 'headline') {
+        			$worksheet->write($i, 2, abs(round($account['saldo'])), $style);
+        		}
+        		$i++;
+        	}
+
+
+        }
+
+
+
+
+        $worksheet->hideGridLines();
+
+        // Let's send the file
+        $workbook->close();
+
+    }
+
+    function getAccount()
+    {
+        $year = $this->getYear();
+        return $account = new Account($year);
+    }
+
 	function getPost()
 	{
-        $year = new Year($this->getKernel());
-        $year->checkYear();
-
-        $account = new Account($year);
-        $year_end = new YearEnd($year);
-        return $post = new Post(new Voucher($year));
+        return $post = new Post(new Voucher($this->getYear()));
 	}
 
 	function getVatPeriod()
 	{
-        $year = new Year($this->getKernel());
-        $year->checkYear();
-
-        $account = new Account($year);
-        $year_end = new YearEnd($year);
-        $post = new Post(new Voucher($year));
-        return $vat_period = new VatPeriod($year);
+        return $vat_period = new VatPeriod($this->getYear());
 	}
 
 	function getYearEnd()
 	{
-        $year = new Year($this->getKernel());
-        $year->checkYear();
-
-        $account = new Account($year);
-        return $year_end = new YearEnd($year);
+        return $year_end = new YearEnd($this->getYear());
 	}
 
 	function getYear()
 	{
-	    $year = new Year($this->getKernel());
-        $year->checkYear();
-	    return $year;
+	    return $this->context->getYear();
 	}
 
 	function getKernel()
