@@ -116,6 +116,7 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
         $year_end = new YearEnd($year);
 
         $workbook = new Spreadsheet_Excel_Writer();
+        $workbook->setVersion(8);
 
         // sending HTTP headers
         $workbook->send($kernel->intranet->get('name') . ' - konti ' . $year->get('label') . '.xls');
