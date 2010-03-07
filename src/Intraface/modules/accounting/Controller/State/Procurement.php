@@ -10,16 +10,6 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         $this->template = $template;
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
-    function getModel()
-    {
-        return $object = $this->context->getModel();
-    }
-
     function map()
     {
         return 'Intraface_modules_accounting_Controller_State_SelectYear';
@@ -29,9 +19,8 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
     {
         $procurement_module = $this->getKernel()->module('procurement');
         $accounting_module = $this->getKernel()->useModule('accounting');
-        $translation = $this->getKernel()->getTranslation('procurement');
 
-        $year = new Year($this->getKernel());
+        $year = $this->getYear();
         $voucher = new Voucher($year);
         if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
             return new k_SeeOther($this->url('selectyear'));
@@ -65,6 +54,25 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
 
         return $smarty->render($this, $data);
 
+    }
+
+    function postForm()
+    {
+        $procurement_module = $this->getKernel()->module('procurement');
+        $accounting_module = $this->getKernel()->useModule('accounting');
+
+        $procurement = $this->getProcurement();
+
+        if (isset($_POST['state'])) {
+            if ($procurement->checkStateDebetAccounts($this->getYear(), $_POST['debet_account'])) {
+                if ($procurement->state($this->getYear(), $_POST['voucher_number'], $_POST['voucher_date'], $_POST['debet_account'], (int)$_POST['credit_account_number'], $this->getKernel()->getTranslation('procurement'))) {
+                    return new k_SeeOther($this->url('../'));
+                }
+                $procurement->error->set('Kunne ikke bogføre posten');
+            }
+        }
+
+        return $this->render();
     }
 
     function getYear()
@@ -107,25 +115,13 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         return $this->value;
     }
 
-    function postForm()
+    function getKernel()
     {
-        $procurement_module = $this->getKernel()->module('procurement');
-        $accounting_module = $this->getKernel()->useModule('accounting');
+        return $this->context->getKernel();
+    }
 
-        $year = new Year($this->getKernel());
-        $voucher = new Voucher($year);
-
-        $procurement = $this->getProcurement();
-
-        if (isset($_POST['state'])) {
-            if ($procurement->checkStateDebetAccounts($year, $_POST['debet_account'])) {
-                if ($procurement->state($year, $_POST['voucher_number'], $_POST['voucher_date'], $_POST['debet_account'], (int)$_POST['credit_account_number'], $this->getKernel()->getTranslation('procurement'))) {
-                    return new k_SeeOther($this->url('../'));
-                }
-                $procurement->error->set('Kunne ikke bogføre posten');
-            }
-        }
-
-        return $this->render();
+    function getModel()
+    {
+        return $object = $this->context->getModel();
     }
 }

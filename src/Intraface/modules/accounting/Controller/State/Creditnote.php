@@ -25,7 +25,6 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
         $debtor_module = $this->getKernel()->module('debtor');
         $accounting_module = $this->getKernel()->useModule('accounting');
         $product_module = $this->getKernel()->useModule('product');
-        $translation = $this->getKernel()->getTranslation('debtor');
 
         $debtor = $this->getModel();
 
@@ -37,31 +36,9 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
             return new k_SeeOther($this->url('selectyear'));
         }
 
-        $debtor->loadItem();
-
-        $items = $debtor->item->getList();
-        $value = $debtor->get();
-
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/creditnote');
         return $smarty->render($this);
 
-    }
-
-    function getItems()
-    {
-        $debtor = $this->getModel();
-
-        $this->getModel()->loadItem();
-
-        return $items = $this->getModel()->item->getList();
-    }
-
-    function getVoucher()
-    {
-        $year = new Year($this->getKernel());
-        $voucher = new Voucher($year);
-
-        return $voucher;
     }
 
     function postForm()
@@ -70,7 +47,7 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
         $accounting_module = $this->getKernel()->useModule('accounting');
         $product_module = $this->getKernel()->useModule('product');
 
-        $year = new Year($this->getKernel());
+        $year = $this->getYear();
         $voucher = new Voucher($year);
 
             $debtor = $this->getModel();
@@ -93,13 +70,26 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
             if ($debtor->error->isError()) {
                 $debtor->loadItem();
             } elseif (!$debtor->state($year, $_POST['voucher_number'], $_POST['date_state'], $this->getKernel()->getTranslation('accounting'))) {
-                $debtor->error->set('Kunne ikke bogf�re posten');
+                $debtor->error->set('Kunne ikke bogføre posten');
                 $debtor->loadItem();
             } else {
                 return new k_SeeOther($this->url('../'));
             }
 
         return $this->render();
+    }
+
+    function getItems()
+    {
+        $debtor = $this->getModel();
+        $this->getModel()->loadItem();
+        return $items = $this->getModel()->item->getList();
+    }
+
+    function getVoucher()
+    {
+        $voucher = new Voucher($this->getYear());
+        return $voucher;
     }
 
     function getYear()

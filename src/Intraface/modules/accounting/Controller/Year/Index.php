@@ -53,6 +53,7 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
 
     function getYearGateway()
     {
+        $this->getKernel()->useModule('accounting');
         return new Intraface_modules_accounting_YearGateway($this->getKernel());
     }
 

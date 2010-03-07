@@ -26,13 +26,12 @@ class Intraface_modules_accounting_Controller_Year_Primosaldo extends k_Componen
 
     function postForm()
     {
-        $year = new Year($this->getKernel(), $this->context->name());
+        $year = $this->getYear();
 
         if ($year->get('last_year_id') == 0) {
             throw new Exception('No last year set');
         }
 
-        // oprette objekt til at holde sidste �r
         $last_year = new Year($this->getKernel(), $year->get('last_year_id'));
 
         // hente konti hvor de nye har created_from_id

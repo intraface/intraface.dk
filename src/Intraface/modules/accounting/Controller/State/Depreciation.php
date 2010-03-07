@@ -22,13 +22,9 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
             return new k_SeeOther($this->url('selectyear'));
         }
 
-        $year = new Year($this->context->getKernel());
-        $depreciation = $this->context->getModel();
-        $voucher = new Voucher($year);
-
         $data = array(
         	'accounting_module' => $accounting_module,
-        	'voucher' => $voucher,
+        	'voucher' => $this->getVoucher(),
         	'year' => $this->getYear(),
         	'depreciation' => $this->getModel(),
         	'object' => $this->getDebtor(),
@@ -45,8 +41,6 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
         $debtor_module = $this->context->getKernel()->module('debtor');
         $accounting_module = $this->context->getKernel()->useModule('accounting');
         $this->context->getKernel()->useModule('invoice');
-
-        $voucher = new Voucher($this->getYear());
 
         if (!$this->getYear()->readyForState($this->getModel()->get('payment_date'))) {
             return new k_SeeOther($this->url('selectyear'));
@@ -76,7 +70,7 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
         // return $this->getDepreciation();
         return $this->context->getModel();
     }
-    
+
     function getDebtor()
     {
         return $this->context->getDebtor();
