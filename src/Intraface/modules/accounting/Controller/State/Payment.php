@@ -13,7 +13,7 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
 
     function getModel()
     {
-        return $object = $this->context->context->context->getModel();
+        return $this->context->getModel();
     }
 
     function getVoucher()
@@ -35,14 +35,6 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
         return 'Intraface_modules_accounting_Controller_State_SelectYear';
     }
 
-    function getPayment()
-    {
-        if (is_object($this->payment)) {
-            return $this->payment;
-        }
-        return $this->payment = new Payment($this->getModel(), $this->context->name());
-    }
-
     function renderHtml()
     {
         $accounting_module = $this->context->getKernel()->useModule('accounting');
@@ -50,8 +42,8 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
         $translation = $this->context->getKernel()->getTranslation('debtor');
         $year = new Year($this->context->getKernel());
         $voucher = $this->getVoucher();
-        $object = $this->context->context->context->getModel();
-        $payment = $this->getPayment();
+        $object = $this->context->getDebtor();
+        $payment = $this->getModel();
         if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
             return new k_SeeOther($this->url('selectyear'));
         }
@@ -77,9 +69,7 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
         $year = new Year($this->context->getKernel());
         $voucher = $this->getVoucher();
 
-        $object = $this->context->context->context->getModel();
-
-        $payment = $this->getPayment();
+        $payment = $this->getModel();
 
         $this->context->getKernel()->getSetting()->set('intranet', 'payment.state.'.$payment->get('type').'.account', intval($_POST['state_account_id']));
 

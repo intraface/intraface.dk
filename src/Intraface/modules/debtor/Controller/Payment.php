@@ -2,6 +2,7 @@
 class Intraface_modules_debtor_Controller_Payment extends k_Component
 {
     protected $template;
+    private $payment;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -20,8 +21,7 @@ class Intraface_modules_debtor_Controller_Payment extends k_Component
 
     function postForm()
     {
-        $object = $this->getModel();
-        $payment = $this->getPayment();
+        $payment = $this->getModel();
         if ($id = $payment->update($_POST)) {
             if ($this->getKernel()->user->hasModuleAccess('accounting')) {
                 return new k_SeeOther($this->url($id . '/state'));
@@ -33,15 +33,18 @@ class Intraface_modules_debtor_Controller_Payment extends k_Component
         return $this->render();
     }
 
-    function getModel()
+    function getDebtor()
     {
         return $this->context->getModel();
     }
 
-    function getPayment()
+    function getModel()
     {
-        $object = $this->getModel();
-        return $payment = new Payment($object);
+        if (is_object($this->payment)) {
+            return $this->payment;
+        }
+        
+        return $this->payment = new Payment($this->getDebtor(), $this->name());
     }
 
     function getType()
