@@ -149,6 +149,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
         // spreadsheet
         $workbook = new Spreadsheet_Excel_Writer();
+        $workbook->setVersion(8);
 
         $workbook->send('kontakter.xls');
 
@@ -165,7 +166,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
         // Creating a worksheet
         $worksheet = $workbook->addWorksheet('Kontakter');
-
+        $worksheet->setInputEncoding('UTF-8');
 
         $worksheet->write($i, 0, $this->getKernel()->intranet->get('name'), $format_bold);
         $i = $i + 1;

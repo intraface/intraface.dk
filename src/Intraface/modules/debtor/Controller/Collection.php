@@ -156,6 +156,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
 
             // spreadsheet
             $workbook = new Spreadsheet_Excel_Writer();
+            $workbook->setVersion(8);
 
             $workbook->send('debtor.xls');
 
@@ -172,6 +173,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
 
             // Creating a worksheet
             $worksheet = $workbook->addWorksheet(ucfirst($this->t($this->getType())));
+            $worksheet->setInputEncoding('UTF-8');
 
             $i = 1;
             $worksheet->write($i, 0, $this->getKernel()->intranet->get('name'), $format_bold);
