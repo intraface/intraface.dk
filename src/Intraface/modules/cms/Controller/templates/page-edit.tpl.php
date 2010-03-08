@@ -3,7 +3,7 @@
 <ul class="options">
     <li><a href="<?php e(url('../../', array('type' => $type))); ?>"><?php e(t('Close')); ?></a></li>
     <?php if ($cmspage->get('id') > 0): ?>
-    <li><a href="<?php e(url('../')); ?>"><?php e(t('View page')); ?></a></li>
+    <li><a href="<?php e(url('.')); ?>"><?php e(t('View page')); ?></a></li>
     <?php endif; ?>
 </ul>
 
