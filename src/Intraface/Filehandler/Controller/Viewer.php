@@ -39,7 +39,10 @@ class Intraface_Filehandler_Controller_Viewer extends k_Component
         $filehandler_shared = $kernel->useShared('filehandler');
         $filehandler_shared->includeFile('FileViewer.php');
 
-        $this->file = FileHandler::factory($kernel, $query_parts[2]);
+        $access_key = $query_parts[2];
+
+        $gateway = new Ilib_Filehandler_Gateway($kernel);
+        $this->file = $gateway->findByAccesskey($access_key);
 
         if (!is_object($this->file) || $this->file->get('id') == 0) {
             throw new k_PageNotFound();
