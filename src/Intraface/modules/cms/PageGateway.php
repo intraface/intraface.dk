@@ -70,7 +70,7 @@ class Intraface_modules_cms_PageGateway
             $this->db->query("SELECT site_id, id FROM cms_page WHERE intranet_id = " . $this->kernel->intranet->get('id') . " AND active = 1 AND status_key = 1 AND site_id = " . $site_id . " ORDER BY position ASC LIMIT 1");
         }
         if (!$this->db->nextRecord()) {
-            $this->db->query("SELECT site_id, id FROM cms_page WHERE id = " . (int)$value['identifier'] . " AND intranet_id = " . $this->kernel->intranet->get('id') . " AND active = 1 AND site_id = " . $site_id);
+            $this->db->query("SELECT site_id, id FROM cms_page WHERE id = " . (int)$identifier . " AND intranet_id = " . $this->kernel->intranet->get('id') . " AND active = 1 AND site_id = " . $site_id);
             if (!$this->db->nextRecord()) {
                 return false;
             }
