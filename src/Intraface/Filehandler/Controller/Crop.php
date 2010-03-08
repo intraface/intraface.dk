@@ -11,28 +11,27 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
     function renderHtml()
     {
         $kernel = $this->getKernel();
-        $gateway = new Ilib_Filehandler_Gateway($this->getKernel());
 
         $module = $kernel->module('filemanager');
         $translation = $kernel->getTranslation('filemanager');
 
-        $filemanager = $gateway->getFromId($this->context->name());
+        $filemanager = $this->getFile();
         $instance_type = $this->query('instance_type');
 
         $img_height = $filemanager->get('height');
         $img_width = $filemanager->get('width');
 
-        $filemanager->createInstance('system-large');
-        $editor_img_uri = $filemanager->instance->get('file_uri');
-        $editor_img_height = $filemanager->instance->get('height');
-        $editor_img_width = $filemanager->instance->get('width');
+        $instance = $filemanager->getInstance('system-large');
+        $editor_img_uri = $instance->get('file_uri');
+        $editor_img_height = $instance->get('height');
+        $editor_img_width = $instance->get('width');
 
         $size_ratio = $editor_img_width / $img_width;
 
-        $filemanager->createInstance($instance_type);
-        $type = $filemanager->instance->get('instance_properties');
+        $instance = $filemanager->getInstance($instance_type);
+        $type = $instance->get('instance_properties');
 
-        $params = unserialize($filemanager->instance->get('crop_parameter'));
+        $params = unserialize($instance->get('crop_parameter'));
 
         $editor_min_width = $type['max_width'] * $size_ratio;
         $editor_min_height = $type['max_height'] * $size_ratio;
@@ -91,12 +90,9 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
     function postForm()
     {
         $kernel = $this->getKernel();
-        $gateway = new Ilib_Filehandler_Gateway($this->getKernel());
-
         $module = $kernel->module('filemanager');
-        $translation = $kernel->getTranslation('filemanager');
 
-        $filemanager = $gateway->getFromId($this->context->name());
+        $filemanager = $this->getFile();
         $instance_type = $this->body('instance_type');
 
         $validator = new Ilib_Validator($filemanager->error);
@@ -106,21 +102,26 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
         $validator->isNumeric((int)$this->body('y'), 'Invalid y', 'zero_or_greater,integer');
 
         if (!$filemanager->error->isError()) {
-            $filemanager->createInstance($instance_type);
-            $filemanager->instance->delete();
+            $instance = $filemanager->getInstance($instance_type);
+            $instance->delete();
 
             $param['crop_width'] = (int)$this->body('width');
             $param['crop_height'] = (int)$this->body('height');
             $param['crop_offset_x'] = (int)$this->body('x');
             $param['crop_offset_y'] = (int)$this->body('y');
 
-            $filemanager->createInstance($instance_type, $param);
+            $instance = $filemanager->getInstance($instance_type, $param);
 
             if (!$filemanager->error->isError()) {
                 return new k_SeeOther($this->context->url());
             }
        }
        throw new Exception($filemanager->error->view());
+    }
+
+    function getFile()
+    {
+        return $this->context->getFile();
     }
 
     function getKernel()

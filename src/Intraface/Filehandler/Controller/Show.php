@@ -12,10 +12,6 @@ class Intraface_Filehandler_Controller_Show extends k_Component
     {
         if ($name == 'crop') {
             return 'Intraface_Filehandler_Controller_Crop';
-        } elseif ($name == 'undelete') {
-            return 'Intraface_Filehandler_Controller_Undelete';
-        } elseif ($name == 'delete') {
-            return 'Intraface_Filehandler_Controller_Delete';
         } elseif ($name == 'keyword') {
             return 'Intraface_Keyword_Controller_Index';
         }
@@ -114,6 +110,11 @@ class Intraface_Filehandler_Controller_Show extends k_Component
     function getObject()
     {
         return $this->context->getGateway()->getFromId($this->name());
+    }
+
+    function getFile()
+    {
+        return $this->getObject();
     }
 
     function getKernel()

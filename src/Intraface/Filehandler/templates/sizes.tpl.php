@@ -5,6 +5,7 @@
 </ul>
 
 <form action="<?php e(url(null)); ?>" method="post">
+	<input type="hidden" name="_method" value="delete" />
     <input type="submit" name="all_files" value="<?php e(t('Delete all instances of all files')); ?>" />
 </form>
 
@@ -29,11 +30,11 @@ if (!empty($instances) AND count($instances) > 0): ?>
                     <td><?php e($instance['max_width']); ?></td>
                     <td><?php e($instance['max_height']); ?></td>
                     <td>
-                        <a class="edit" href="<?php e(url('edit', array('type_key' => intval($instance['type_key'])))); ?>"><?php e(t('edit')); ?></a>
+                        <a class="edit" href="<?php e(url(intval($instance['type_key']), array('edit'))); ?>"><?php e(t('edit')); ?></a>
                       <?php if($instance['origin'] == 'overwritten') { ?>
-                          <a class="delete" href="<?php e(url('./', array('delete_instance_type_key' => intval($instance['type_key'])))); ?>"><?php e(t('reset to standard')); ?></a>
+                          <a class="delete" href="<?php e(url(intval($instance['type_key']), array('delete'))); ?>"><?php e(t('reset to standard')); ?></a>
                       <?php } elseif($instance['origin'] == 'custom') { ?>
-                          <a class="delete" href="<?php e(url('./', array('delete_instance_type_key' => intval($instance['type_key'])))); ?>"><?php e(t('delete')); ?></a>
+                          <a class="delete" href="<?php e(url(intval($instance['type_key']), array('delete'))); ?>"><?php e(t('delete')); ?></a>
                       <?php }?>
                     </td>
                 </tr>
@@ -43,5 +44,5 @@ if (!empty($instances) AND count($instances) > 0): ?>
 <?php endif; ?>
 
 <ul class="options">
-    <li><a href="<?php e(url('add')); ?>"><?php e(t('Add new instance type')); ?></a></li>
+    <li><a href="<?php e(url(null, array('add'))); ?>"><?php e(t('Add new instance type')); ?></a></li>
 </ul>
