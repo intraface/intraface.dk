@@ -30,7 +30,6 @@ class Intraface_modules_cms_Controller_Section extends k_Component
                 throw new Exception('Unable to create a valid element object');
             }
             $element->getPosition($this->mdb2)->moveToPosition($_GET['moveto']);
-            $section = $element->section;
             return new k_SeeOther($this->url());
         } elseif (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
             $element = CMS_Element::factory($this->getKernel(), 'id', $_GET['delete']);
@@ -38,7 +37,6 @@ class Intraface_modules_cms_Controller_Section extends k_Component
                 throw new Exception('Unable to create a valid element object');
             }
             $element->delete();
-            $section = $element->section;
             return new k_SeeOther($this->url());
         } elseif (!empty($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
             $element = CMS_Element::factory($this->getKernel(), 'id', $_GET['undelete']);
@@ -46,7 +44,6 @@ class Intraface_modules_cms_Controller_Section extends k_Component
                 throw new Exception('Unable to create a valid element object');
             }
             $element->undelete();
-            $section = $element->section;
             return new k_SeeOther($this->url());
         }
 
