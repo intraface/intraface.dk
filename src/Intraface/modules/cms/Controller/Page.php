@@ -86,7 +86,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
 
         $value = $cmspage->get();
         $type = $value['type'];
-        
+
         if($this->body()) {
             $value = $this->body();
         }
@@ -143,9 +143,9 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         }
         $module_cms = $this->getKernel()->module('cms');
 
-        
+
         $cmspage = $this->getModel();
-        
+
         if ($cmspage->save($_POST)) {
             if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
                 return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 1)));
@@ -171,9 +171,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         if (isset($_POST['section']) && is_array($_POST['section'])) {
             foreach ($_POST['section'] AS $key=>$value) {
                 $section = CMS_Section::factory($this->getKernel(), 'id', $key);
-
                 if ($section->get('type') == 'picture') {
-
                     if (!empty($_FILES) && !is_array($files)) {
                         $filehandler = new FileHandler($this->getKernel());
                         $filehandler->createUpload();
@@ -218,7 +216,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
                 $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
                 $module_filemanager = $this->getKernel()->useModule('filemanager');
                 $redirect->setIdentifier('picture:'.$section_id);
-                $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $this->url());
+                $url = $redirect->setDestination($module_filemanager->getPath().'selectfile', NET_SCHEME . NET_HOST . $this->url());
 
                 $redirect->askParameter('file_handler_id');
                 return new k_SeeOther($url);
