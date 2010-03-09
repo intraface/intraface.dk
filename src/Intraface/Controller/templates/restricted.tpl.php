@@ -69,13 +69,17 @@ if (Intraface_ModuleHandler::exists(MDB2::singleton(DB_DSN), 'modulepackage') &&
 </div>
 
 <div id="colTwo">
-	<img src="<?php e(url('/images/icons/twitter2.jpg')); ?>" height="133" width="200" />
-	<?php foreach ($tweets as $tweet): ?>
-	<?php $date = new DateTime($tweet['created_at']); ?>
-		<p style="clear: both;">
-		<img src="<?php e($tweet['profile_image_url']); ?>" style="border:1px solid black; float: left; margin-right: 5px; " />
-		<span style=" padding-top: 5px; "><?php e($tweet['text']); ?></span><span>- <?php e($date->format('d-m-Y H:i')); ?> via <a href="http://twitter.com/<?php e($tweet['from_user']); ?>/status/<?php e($tweet['id']); ?>">Twitter</a></span>
-		</p>
-	<?php endforeach; ?>
+	<div class="tweets">
+    	<img src="<?php e(url('/images/icons/twitter2.jpg')); ?>" height="100" width="150" />
+    	<ul>
+        <?php foreach ($tweets as $tweet): ?>
+    	<?php $date = new DateTime($tweet['created_at']); ?>
+    		<li>
+    		<img src="<?php e($tweet['profile_image_url']); ?>" style="border:1px solid black; float: left; margin-right: 5px; " />
+    		<?php e($tweet['text']); ?><br /><span style="font-size:80%;">— <?php e($date->format('d-m-Y H:i')); ?> via <a href="http://twitter.com/<?php e($tweet['from_user']); ?>/status/<?php e($tweet['id']); ?>">Twitter</a></span>
+    		</li>
+    	<?php endforeach; ?>
+    	</ul>
+	</div>
 </div>
 
