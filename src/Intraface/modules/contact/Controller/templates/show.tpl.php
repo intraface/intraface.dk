@@ -6,11 +6,9 @@ $delivery_address = $context->getDeliveryAddressValues();
 <div id="colOne">
 
 <div class="box">
-	<img style="float: right;" src="<?php e('http://www.gravatar.com/avatar/'.md5($address['email']).'?s=80')?>" height="80" width="80" />
+	<img style="float: right;" src="<?php e('http://www.gravatar.com/avatar/'.md5($address['email']).'?s=50&d=wavatar'); ?>" height="50" width="50" />
 
     <h1>#<?php e($value['number']); ?> <?php e($address['name']); ?></h1>
-
-    <?php echo $context->getContact()->error->view(); ?>
 
     <ul class="options">
         <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
@@ -77,6 +75,8 @@ $delivery_address = $context->getDeliveryAddressValues();
         </ul>
     <?php endif; */ ?>
 </div>
+
+<?php echo $context->getContact()->error->view(); ?>
 
 <?php if ($context->getContact()->hasSimilarContacts()): ?>
 
