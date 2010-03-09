@@ -38,10 +38,10 @@ class OnlinePaymentDanDomain extends OnlinePayment
     /*
     var $msg_types = array(
         '1100' => 'authorize', // tjekker
-        '1220' => 'capture', // h�ver
+        '1220' => 'capture', // hæver
         'credit' => 'credit', // tilbagebetaler
-        '1420' => 'reversal', // oph�ver reservationen
-        'status' => 'status' // oph�ver reservationen
+        '1420' => 'reversal', // ophæver reservationen
+        'status' => 'status' // ophæver reservationen
 
     );
     */
@@ -127,7 +127,7 @@ class OnlinePaymentDanDomain extends OnlinePayment
                 return 1;
             } else {
                 // fiasko
-                $this->error->set('Vi kunne ikke tilbagebetale betalingen, vi fik f�lgende fejl: '.$http_request->getResponseBody());
+                $this->error->set('Vi kunne ikke tilbagebetale betalingen, vi fik følgende fejl: '.$http_request->getResponseBody());
                 return 0;
             }
 
