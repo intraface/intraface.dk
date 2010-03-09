@@ -184,7 +184,7 @@ class NewsletterSubscriber extends Intraface_Standard
             return $db->f('id');
         }
 
-        // Sp�rgsm�let er om vedkommende b�r f� en e-mail, hvor man kan acceptere?
+        // Spørgsmålet er om vedkommende bør få en e-mail, hvor man kan acceptere?
         $db->query("INSERT INTO newsletter_subscriber SET
                     contact_id = '".$contact->getId()."',
                     list_id = " . $this->list->get("id") . ",
@@ -230,7 +230,7 @@ class NewsletterSubscriber extends Intraface_Standard
         // Det er smartere hvis vi bare loader fra e-mail
         $db = new DB_Sql;
 
-        // jeg kan dog ikke f� lov at reassigne i php5 - s� hvad skal jeg g�re i stedet?
+        // jeg kan dog ikke få lov at reassigne i php5 - så hvad skal jeg gøre i stedet?
         $which_subscriber_has_email = NewsletterSubscriber::factory($this->list, 'email', $input['email']);
         if (is_object($which_subscriber_has_email)) {
             $this->id = $which_subscriber_has_email->get('id');
@@ -259,7 +259,7 @@ class NewsletterSubscriber extends Intraface_Standard
                 $this->error->set('Kunne ikke gemme kontaktpersonen');
             }
             */
-            // name og e-mail b�r vel ikke n�dv. gemmes?
+            // name og e-mail bør vel ikke nødv. gemmes?
 
             $db->query("UPDATE newsletter_subscriber
                 SET
@@ -406,17 +406,17 @@ class NewsletterSubscriber extends Intraface_Standard
      * The subscriber must receive an e-mail so the subscribtion can be confirmed
      * The e-mail should say that the subscription should be confirmed within a week.
      *
-     * E-mailen skal indeholde f�lgende:
-     * - url til privacy policy p� sitet
+     * E-mailen skal indeholde følgende:
+     * - url til privacy policy på sitet
      * - en kort beskrivelse af mailinglisten
-     * - url som brugeren f�lger for at bekr�fte tilmeldingen
+     * - url som brugeren følger for at bekræfte tilmeldingen
      *
-     * - I virkeligheden skal den nok n�jes med lige at logge ind i ens personlige webinterface
-     *   hvor man s� kan lave bekr�ftelsen fra. Det skal alts� bare v�re loginkoden fra
-     *   den personlige konto, der st�r der, og s� skal nyhedsbreve p� forsiden (hvis dette sted
+     * - I virkeligheden skal den nok nøjes med lige at logge ind i ens personlige webinterface
+     *   hvor man så kan lave bekræftelsen fra. Det skal altså bare være loginkoden fra
+     *   den personlige konto, der står der, og så skal nyhedsbreve på forsiden (hvis dette sted
      *   har nogle nyhedsbreve).
      *
-     * @see tilf�j cleanUp();
+     * @see tilføj cleanUp();
      *
      * @return boolean
      */
@@ -434,7 +434,7 @@ class NewsletterSubscriber extends Intraface_Standard
         // @todo hack for legacy purposes, could also just update the db
         $subscribe_subject = $this->list->get('subscribe_subject');
         if (empty($subscribe_subject)) {
-            $subscribe_subject = 'Bekr�ft tilmelding';
+            $subscribe_subject = 'Bekræft tilmelding';
         }
 
         $this->load();
