@@ -330,7 +330,7 @@ class Intraface_modules_contact_Controller_Show extends k_Component
 
         $dependencies['creditnote'] = array(
             'gateway' => new Intraface_modules_invoice_CreditnoteGateway($this->getKernel()),
-            'url' =>  $this->url('../../debtor/creditnote', array('contact_id' => $this->getContact()->get("id"))),
+            'url' =>  $this->url('../../debtor/credit_note', array('contact_id' => $this->getContact()->get("id"))),
             'url_create' =>  '',
         	'label' => 'creditnote'
         );
