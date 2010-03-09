@@ -40,7 +40,7 @@ class Intraface_modules_cms_Controller_Sections extends k_Component
         $sections = $cmspage->getSections();
 
         if (!empty($sections) AND count($sections) == 1 AND array_key_exists(0, $sections) AND $sections[0]->get('type') == 'mixed') {
-            return new k_SeeOther($this->url('section/' . $sections[0]->get('id')));
+            return new k_SeeOther($this->url($sections[0]->get('id')));
         };
         if ($this->getKernel()->setting->get('user', 'htmleditor') == 'tinymce') {
             $this->document->addScript('tinymce/jscripts/tiny_mce/tiny_mce.js');
