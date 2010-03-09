@@ -59,15 +59,15 @@
 		<p class="message">Du har slettet kontakter. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="Fortryd" /></p>
 	<?php endif; ?>
 
-	<table summary="<?php e(t('contacts')); ?>" class="stripe">
-		<caption><?php e(t('contacts')); ?></caption>
+	<table summary="<?php e(t('Contacts')); ?>" class="stripe">
+		<caption><?php e(t('Contacts')); ?></caption>
 		<thead>
 			<tr>
 				<th>&nbsp;</th>
-				<th><?php e(t('number')); ?></th>
-				<th><?php e(t('name', 'address')); ?></th>
-				<th><?php e(t('phone', 'address')); ?></th>
-				<th><?php e(t('e-mail', 'address')); ?></th>
+				<th><?php e(t('Number')); ?></th>
+				<th><?php e(t('Name')); ?></th>
+				<th><?php e(t('Phone')); ?></th>
+				<th><?php e(t('Email')); ?></th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>
@@ -84,7 +84,7 @@
 					<input type="checkbox" value="<?php e($c['id']); ?>" name="selected[]" />
 				</td>
 				<td><?php e($c['number']); ?></td>
-				<td class="fn"><a href="<?php e(url($c['id'])); ?>"><?php e($c['name']); ?></a></td>
+				<td><img style="border: none; vertical-align:middle" src="<?php e('http://www.gravatar.com/avatar/'.md5($c['email']).'?s=20&d=wavatar'); ?>" height="20" width="20" /> <a class="fn" href="<?php e(url($c['id'])); ?>"><?php e($c['name']); ?></a></td>
 				<td class="tel"><?php e($c['phone']); ?></td>
 				<td class="email"><?php e($c['email']); ?></td>
 				<td class="options">
