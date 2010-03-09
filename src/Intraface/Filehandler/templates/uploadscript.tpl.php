@@ -32,7 +32,7 @@ function upload() {
     var imgnum = images.getElementsByTagName('div').length - 1;
     document.iform.imgnum.value = imgnum;
 
-    setTimeout('document.iform.submit()', 10000);
+    setTimeout('document.iform.submit()', 5000);
 }
 </script>
 
