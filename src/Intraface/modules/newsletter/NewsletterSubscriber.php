@@ -239,6 +239,8 @@ class NewsletterSubscriber extends Intraface_Standard
 
         if ($this->id > 0) {
             if ($this->get('contact_id') == 0) {
+                // @todo cannot be sure that only one has e-mail, so this should be
+                //       made differently
                 $contact = Contact::factory($this->list->kernel, 'email', $input['email']);
             } else {
                 $contact = new Contact($this->list->kernel, $this->get('contact_id'));
