@@ -6,17 +6,17 @@ $delivery_address = $context->getDeliveryAddressValues();
 <div id="colOne">
 
 <div class="box">
-	<img style="float: right;" src="<?php e('http://www.gravatar.com/avatar/'.md5($address['email']).'?s=50&d=wavatar'); ?>" height="50" width="50" />
+	<img style="float: right;" src="<?php e('http://www.gravatar.com/avatar/'.md5($address['email']).'?s=60&d='.url('/core/images/icons/gravatar.png')); ?>" height="60" width="60" />
 
     <h1>#<?php e($value['number']); ?> <?php e($address['name']); ?></h1>
 
-    <ul class="options">
+    <ul class="options" style="clear: none;">
         <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
         <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close')); ?></a></li>
         <li><a class="vcard" href="<?php e(url(null . '.vcf')); ?>"><?php e(t('Vcard')); ?></a></li>
     </ul>
 
-    <ul class="options">
+    <ul class="options" style="clear: none;">
 	<?php foreach ($context->getDependencies() as $key => $dependency): ?>
             <?php if ($dependency['gateway']->findCountByContactId($context->getContact()->get("id")) > 0): ?>
             <li><a href="<?php e($dependency['url']); ?>"><?php e(t(ucfirst($dependency['label'] . 's'))); ?></a></li>
