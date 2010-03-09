@@ -39,7 +39,6 @@ class Intraface_modules_accounting_Controller_State_Invoice extends k_Component
         $product_module = $this->getKernel()->useModule('product');
 
         $year = $this->getYear();
-        echo $year->get('id');
 
         $debtor = $this->getDebtor();
 
