@@ -147,6 +147,8 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler', 'public.intraface
 $pfm->addPackageDepWithChannel('required', 'Ilib_Keyword', 'public.intraface.dk', '0.4.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler_Controller', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Keyword_Controller', 'public.intraface.dk', '0.3.0');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Date', 'public.intraface.dk', '0.1.0');
+
 
 // email
 $pfm->addPackageDepWithChannel('required', 'phpmailer', 'public.intraface.dk', '1.73.1');
