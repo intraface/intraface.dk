@@ -50,7 +50,7 @@
 				e(t($onlinepayment->get("status")));
 
 				if ($onlinepayment->get('status') == 'authorized') {
-					print(" (Ikke <acronym title=\"Betaling kan f�rst h�ves n�r faktura er sendt\">h�vet</acronym>)");
+					print(" (Ikke <acronym title=\"Betaling kan færst hæves når faktura er sendt\">hævet</acronym>)");
 				}
 				?>
 			</td>

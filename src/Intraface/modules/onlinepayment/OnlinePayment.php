@@ -5,12 +5,12 @@
 /**
  * Onlinebetaling
  *
- * Onlinebetalingerne skal kunne knytte betalinger til debtor. M�ske
- * kan den fungere lidt ligesom elementer i CMS, og s� kan vi skrive nogle enkelte
- * udbydere, hvor vi starter med QuickPay - hvis det hele da skal k�re over vores
- * system. Det kan ogs� v�re, at kodningen skal foretages hos den enkelte?
+ * Onlinebetalingerne skal kunne knytte betalinger til debtor. Måske
+ * kan den fungere lidt ligesom elementer i CMS, og så kan vi skrive nogle enkelte
+ * udbydere, hvor vi starter med QuickPay - hvis det hele da skal køre over vores
+ * system. Det kan også være, at kodningen skal foretages hos den enkelte?
  *
- * S� det grundl�ggende sp�rgsm�l er om selve betalingsl�sningen skal programmeres p�
+ * Så det grundlæggende spørgsmål er om selve betalingsløsningen skal programmeres på
  * klienten eller i systemet.
  */
 class OnlinePayment extends Intraface_Standard
@@ -43,7 +43,7 @@ class OnlinePayment extends Intraface_Standard
         $this->id = $id;
         $this->error = new Intraface_Error;
 
-        // @todo lidt usikker p� om det her er det smarteste sted at have den, men den skal v�re til stede, n�r der skal gemmes
+        // @todo lidt usikker på om det her er det smarteste sted at have den, men den skal være til stede, når der skal gemmes
         $this->provider_key = $kernel->getSetting()->get('intranet', 'onlinepayment.provider_key');
 
         //$this->dbquery = new Intraface_DBQuery($this->kernel, "onlinepayment", "intranet_id = ".$this->kernel->intranet->get("id"));
@@ -257,13 +257,7 @@ class OnlinePayment extends Intraface_Standard
         if (!isset($input['text'])) {
         	$input['text'] = '';
         }
-
-        // V�R LIGE OPM�RKSOM HER: INDTIL VIDERE KAN KUN ACCEPTEREDE TRANSAKTIONER GEMMES
-        // Hermed �ndret, s� alle transaktioner kan gemmes.
-        // if ($input['transaction_status'] != $this->transaction_status_authorized) {
-        //     $this->error->set("Transactionen er ikke godkendt, s� den kan ikke gemmes");
-        // }
-
+        
         if ($input['transaction_status'] == $this->transaction_status_authorized) {
              $status_key = 2;
         } else {
@@ -298,7 +292,7 @@ class OnlinePayment extends Intraface_Standard
 
         $validator->isString($input['text'], 'text er ikke en gyldig streng', '', 'allow_empty');
 
-        if ($validator->isDouble($input['amount'], 'amount er ikke et gyldigt bel�b')) {
+        if ($validator->isDouble($input['amount'], 'amount er ikke et gyldigt beløb')) {
             $amount = new Intraface_Amount($input['amount']);
             if ($amount->convert2db()) {
                 $input['amount'] = $amount->get();
@@ -371,18 +365,18 @@ class OnlinePayment extends Intraface_Standard
     function update($input)
     {
         if ($this->id == 0) {
-            trigger_error("OnlinePayment->update kan kun k�res p� en allerede oprettet betaling", E_USER_ERROR);
+            trigger_error("OnlinePayment->update kan kun køres på en allerede oprettet betaling", E_USER_ERROR);
         }
 
         if ($this->getStatus() != 'authorized') {
-            trigger_error("OnlinePayment->update kan kun k�res p� betaling der er authorized", E_USER_ERROR);
+            trigger_error("OnlinePayment->update kan kun køres på betaling der er authorized", E_USER_ERROR);
         }
 
         $input = safeToDb($input);
 
         $validator = new Intraface_Validator($this->error);
 
-        if ($validator->isDouble($input['dk_amount'], 'Bel�b er ikke et gyldigt bel�b', 'greater_than_zero')) {
+        if ($validator->isDouble($input['dk_amount'], 'Beløb er ikke et gyldigt beløb', 'greater_than_zero')) {
             $amount = new Intraface_Amount($input['dk_amount']);
             if ($amount->convert2db()) {
                 $input['amount'] = $amount->get();
@@ -392,7 +386,7 @@ class OnlinePayment extends Intraface_Standard
         }
 
         if ($input['amount'] > $this->get('original_amount')) {
-            $this->error->set("Du kan ikke s�tte bel�bet h�jere end hvad kunden har godkendt: ".$this->get('dk_original_amount'));
+            $this->error->set("Du kan ikke sætte beløbet højere end hvad kunden har godkendt: ".$this->get('dk_original_amount'));
         }
 
         if ($this->error->isError()) {
@@ -407,7 +401,7 @@ class OnlinePayment extends Intraface_Standard
     function changeBelongTo($belong_to, $belong_to_id)
     {
         if ($this->id == 0) {
-            trigger_error("OnlinePayment->setBelongTo kan kun �ndre eksisterende betalinger", FATAL);
+            trigger_error("OnlinePayment->setBelongTo kan kun ændre eksisterende betalinger", FATAL);
         }
 
         $belong_to = safeToDb($belong_to);
@@ -430,7 +424,7 @@ class OnlinePayment extends Intraface_Standard
     function setStatus($status)
     {
         if ($this->id == 0) {
-            trigger_error("OnlinePayment->setStatus kan kun �ndre eksisterende betalinger", E_USER_ERROR);
+            trigger_error("OnlinePayment->setStatus kan kun ændre eksisterende betalinger", E_USER_ERROR);
         }
         $status = safeToDb($status);
 
@@ -475,12 +469,12 @@ class OnlinePayment extends Intraface_Standard
     function addAsPayment()
     {
         if ($this->get('status') != 'authorized') {
-            $this->error->set("Der kan kun udf�res handlinger p� betalinger der er godkendt");
+            $this->error->set("Der kan kun udføres handlinger på betalinger der er godkendt");
             return 0;
         }
 
         if ($this->get('belong_to') != 'invoice') {
-            $this->error->set("Der kan kun udf�res handlinger p� betalinger der er tilknyttet en faktura");
+            $this->error->set("Der kan kun udføres handlinger på betalinger der er tilknyttet en faktura");
             return 0;
         }
 
@@ -536,7 +530,7 @@ class OnlinePayment extends Intraface_Standard
         return array(
             0 => array(
                 'action' => 'capture',
-                'label' => 'H�v')
+                'label' => 'Hæv')
         );
         /*
         return array(
@@ -597,7 +591,7 @@ class OnlinePayment extends Intraface_Standard
             }
         }
 
-        // Poster med fakturadato f�r slutdato.
+        // Poster med fakturadato før slutdato.
         if ($this->getDBQuery()->checkFilter("to_date")) {
             $date = new Intraface_Date($this->getDBQuery()->getFilter("to_date"));
             if ($date->convert2db()) {
@@ -785,7 +779,7 @@ class OnlinePayment extends Intraface_Standard
 
     function setProvider($input)
     {
-        // der skal nok laves et tjek p� om alle poster er f�rdigbehandlet inden man kan skifte
+        // der skal nok laves et tjek på om alle poster er færdigbehandlet inden man kan skifte
         // udbyder
         $this->kernel->getSetting()->set('intranet', 'onlinepayment.provider_key', $input['provider_key']);
         return true;
