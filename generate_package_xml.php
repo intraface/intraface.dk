@@ -7,7 +7,7 @@
  * @version @package-version@
  */
 
-$version = '2.0.3';
+$version = '2.0.5';
 $stability = 'stable';
 $notes = '
 * translation changes
@@ -178,7 +178,7 @@ $pfm->addPackageDepWithChannel('required', 'Validate_Finance_CreditCard', 'pear.
 
 // accounting
 $pfm->addPackageDepWithChannel('required', 'OLE', 'pear.php.net', '0.6.1');
-$pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php.net', '0.9.1');
+$pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php.net', '0.9.2');
 
 // modulepackage
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Debtor_XMLRPC', 'public.intraface.dk', '0.1.0');

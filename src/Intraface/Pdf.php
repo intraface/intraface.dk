@@ -1,7 +1,4 @@
 <?php
-
-
-
 /**
  * PdfMaker for Intraface
  *
@@ -56,8 +53,6 @@ class Intraface_Pdf extends Document_Cpdf
 
         $this->calculateDynamicValues();
     }
-
-
 
     /**
      * Calculates all the dynamic values
@@ -209,14 +204,9 @@ class Intraface_Pdf extends Document_Cpdf
         fclose($file);
     }
 
-    protected $utf8;
-
-    function addText($x, $y, $size, $text, $angle = 0, $wordSpaceAdjust = 0) {
-        //if (!isset($this->utf8[$text])) {
-        //    $this->utf8[$text] = true;
-            $text = utf8_decode($text);
-        //}
-
+    function addText($x, $y, $size, $text, $angle = 0, $wordSpaceAdjust = 0)
+    {
+        $text = utf8_decode($text);
         parent::addText($x, $y, $size, $text, $angle = 0, $wordSpaceAdjust = 0);
     }
 

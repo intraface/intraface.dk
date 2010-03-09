@@ -8,11 +8,6 @@ class Intraface_Keyword_Controller_Connect extends k_Component
         $this->template = $template;
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
     function renderHtml()
     {
         $this->getKernel()->useShared('keyword');
@@ -67,5 +62,10 @@ class Intraface_Keyword_Controller_Connect extends k_Component
         echo $appender->error->view();
 
         return $this->render();
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

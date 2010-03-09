@@ -36,14 +36,14 @@ class Intraface_modules_email_Controller_Email extends k_Component
 
         // udskriv adressehoved
         $text = $this->getEmail()->getContact()->address->get('name') .
-            "\n" . $this->getEmail()->getContact()->address->get('adress') .
-            "\n" . $this->getEmail()->getContact()->address->get('postalcode') .
-        	"  " . $this->getEmail()->getContact()->address->get('town') . "\n\n";
+            "\n" . $this->getEmail()->getContact()->address->get('address') .
+            "\n" . $this->getEmail()->getContact()->address->get('postcode') .
+        	"  " . $this->getEmail()->getContact()->address->get('city') . "\n\n\n";
 
         $pdf->ezText($text, $size);
 
         // uskriv subject
-        $pdf->ezText($this->getEmail()->get('subject') . "\n", $size);
+        $pdf->ezText($this->getEmail()->get('subject') . "\n\n", $size);
 
         // udskriv body
         $pdf->ezText($this->getEmail()->get('body') . "\n", $size);

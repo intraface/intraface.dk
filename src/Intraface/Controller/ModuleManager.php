@@ -3,14 +3,12 @@ ini_set('memory_limit', '32M');
 
 class Intraface_Controller_ModuleManager extends k_Component
 {
-    protected $registry;
     protected $channels;
 
-    function __construct(k_Registry $registry)
+    function __construct()
     {
-        $this->registry = $registry;
         $this->channels = array(
-            'pear.php.net'          => 'PEAR'
+            'pear.php.net' => 'PEAR'
         );
     }
 

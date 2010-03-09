@@ -5,7 +5,7 @@
     <?php $filemanager->error->view(); ?>
 
     <ul class="options">
-        <li><a href="<?php e(url('edit')); ?>"><?php e(t('Edit')); ?></a></li>
+        <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
         <li><a href="<?php e($filemanager->get('file_uri')); ?>"><?php e(t('Get file')); ?></a></li>
         <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close')); ?></a></li>
     </ul>
