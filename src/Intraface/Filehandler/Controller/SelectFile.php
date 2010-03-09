@@ -215,12 +215,14 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
                     $file = $this->context->context->appendFile($file_id);
                 }
             }
-        } else {
+        } else if (method_exists($this->context->context, 'getFileAppender')) {
             $appender = $this->getFileAppender();
             foreach ($this->body('selected') as $file_id) {
                 $file = $gateway->getFromId($file_id);
             	$appender->addFile($file);
             }
+        } else {
+            throw new Exception('No valid fileappender found');
         }
         return new k_SeeOther($this->url('../../'));
         /*
