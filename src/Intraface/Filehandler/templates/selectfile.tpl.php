@@ -31,27 +31,23 @@
         </span>
 
         <?php
-
         $selected_keywords = $filemanager->getDBQuery()->getKeyword();
+        $keyword = $filemanager->getKeywordAppender();
+        $keywords = $keyword->getUsedKeywords();
 
-    $keyword = $filemanager->getKeywordAppender();
-    $keywords = $keyword->getUsedKeywords();
-
-    if(count($keywords) > 0) {
-        echo '<div>Nøgleord: <ul style="display: inline;">';
-      foreach ($keywords AS $value) {
-            if(in_array($value['id'], $selected_keywords) === true) {
+        if(count($keywords) > 0) {
+            echo '<div>Nøgleord: <ul style="display: inline;">';
+            foreach ($keywords AS $value) {
+                if(in_array($value['id'], $selected_keywords) === true) {
                     $checked = 'checked="checked"';
-                }
-                else {
+                } else {
                     $checked = "";
                 }
                 echo '<li style="display: inline; margin-left: 20px;"><label for="keyword_'.$value['id'].'"><input type="checkbox" name="keyword[]" value="'.$value['id'].'" id="keyword_'.$value['id'].'" '.$checked.' />&nbsp;'.$value['keyword'].'</label></li>';
+            }
+        echo '</ul></div>';
         }
-      echo '</ul></div>';
-    }
-    ?>
-
+        ?>
     </fieldset>
 </form>
 

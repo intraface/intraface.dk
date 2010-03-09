@@ -29,14 +29,14 @@
         </label>
         <label><?php e(t('Search filter')); ?>:
         <select name="filtration">
-            <option value="0"><?php e(t('all', 'filehandler')); ?></option>
-            <option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) e(' selected="selected"');?>><?php e(t('uploaded today', 'filehandler')); ?></option>
-            <option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) e(' selected="selected"');?>><?php e(t('uploaded yesterday', 'filehandler')); ?></option>
-            <option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) e(' selected="selected"');?>><?php e(t('uploaded this week', 'filehandler')); ?></option>
-            <option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) e(' selected="selected"');?>><?php e(t('edited today', 'filehandler')); ?></option>
-            <option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) e(' selected="selected"');?>><?php e(t('edited yesterday', 'filehandler')); ?></option>
-            <option value="6"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 6) e(' selected="selected"');?>><?php e(t('public accessible', 'filemanager')); ?></option>
-            <option value="7"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 7) e(' selected="selected"');?>><?php e(t('only accessible from intranet', 'filemanager')); ?></option>
+            <option value="0"><?php e(t('all')); ?></option>
+            <option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) e(' selected="selected"');?>><?php e(t('uploaded today')); ?></option>
+            <option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) e(' selected="selected"');?>><?php e(t('uploaded yesterday')); ?></option>
+            <option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) e(' selected="selected"');?>><?php e(t('uploaded this week')); ?></option>
+            <option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) e(' selected="selected"');?>><?php e(t('edited today')); ?></option>
+            <option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) e(' selected="selected"');?>><?php e(t('edited yesterday')); ?></option>
+            <option value="6"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 6) e(' selected="selected"');?>><?php e(t('public accessible')); ?></option>
+            <option value="7"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 7) e(' selected="selected"');?>><?php e(t('only accessible from intranet')); ?></option>
 
         </select>
         </label>
@@ -45,26 +45,23 @@
         </span>
 
         <?php
-
         $selected_keywords = $filemanager->getDBQuery()->getKeyword();
+        $appender = $filemanager->getKeywordAppender();
+        $keywords = $appender->getUsedKeywords();
 
-    $appender = $filemanager->getKeywordAppender();
-    $keywords = $appender->getUsedKeywords();
-
-    if(count($keywords) > 0) {
-        echo '<div>'. e(t('keywords', 'keyword')) . ': <ul style="display: inline;">';
-        foreach ($keywords as $value) {
-             if(in_array($value['id'], $selected_keywords) === true) {
-                    $checked = 'checked="checked"';
-                }
-                else {
-                    $checked = "";
-                }
-                echo '<li style="display: inline; margin-left: 20px;"><label for="keyword_'.$value['id'].'"><input type="checkbox" name="keyword[]" value="'.$value['id'].'" id="keyword_'.$value['id'].'" '.$checked.' />&nbsp;'.$value['keyword'].'</label></li>';
+        if (count($keywords) > 0) {
+            echo '<div>'. e(t('keywords', 'keyword')) . ': <ul style="display: inline;">';
+            foreach ($keywords as $value) {
+                 if(in_array($value['id'], $selected_keywords) === true) {
+                     $checked = 'checked="checked"';
+                 } else {
+                     $checked = "";
+                 }
+                 echo '<li style="display: inline; margin-left: 20px;"><label for="keyword_'.$value['id'].'"><input type="checkbox" name="keyword[]" value="'.$value['id'].'" id="keyword_'.$value['id'].'" '.$checked.' />&nbsp;'.$value['keyword'].'</label></li>';
+            }
+            echo '</ul></div>';
         }
-        echo '</ul></div>';
-    }
-    ?>
+        ?>
 
     </fieldset>
 </form>
