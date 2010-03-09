@@ -73,7 +73,10 @@ if (Intraface_ModuleHandler::exists(MDB2::singleton(DB_DSN), 'modulepackage') &&
     	<img src="<?php e(url('/images/icons/twitter2.jpg')); ?>" height="100" width="150" />
     	<ul>
         <?php foreach ($tweets as $tweet): ?>
-    	<?php $date = new DateTime($tweet['created_at']); ?>
+    	<?php
+    	    $date = new DateTime($tweet['created_at'], new DateTimeZone('Europe/Copenhagen'));
+    	    $date->modify("+ 1 hour"); // needed as created_at does not show correct time zone
+    	?>
     		<li>
     		<img src="<?php e($tweet['profile_image_url']); ?>" style="border:1px solid black; float: left; margin-right: 5px; " />
     		<?php e($tweet['text']); ?><br /><span style="font-size:80%;">— <?php e($date->format('d-m-Y H:i')); ?> via <a href="http://twitter.com/<?php e($tweet['from_user']); ?>/status/<?php e($tweet['id']); ?>">Twitter</a></span>
