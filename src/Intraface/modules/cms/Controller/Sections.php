@@ -122,7 +122,7 @@ class Intraface_modules_cms_Controller_Sections extends k_Component
                 return new k_SeeOther($this->url($section_id . '/filehandler/selectfile'));
             } elseif (!empty($_POST['edit_html'])) {
                 $keys = array_keys($_POST['edit_html']);
-                return new k_SeeOther($this->url('section/' . $keys[0]));
+                return new k_SeeOther($this->url($keys[0]));
             } elseif (!empty($_POST['close'])) {
                 return new k_SeeOther($this->url('../../', array('type' => $this->context->getModel()->get('type'), 'id' => $this->context->getModel()->cmssite->get('id'))));
             } else {

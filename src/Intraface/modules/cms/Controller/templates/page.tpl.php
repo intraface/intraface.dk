@@ -1,16 +1,16 @@
 <h1><?php e(t('Content on page').' '.$cmspage->get('title')); ?></h1>
 
 <ul class="options">
-	<li><a class="edit" href="<?php e(url(null, array('edit'))); ?>"><?php e(t('edit settings')); ?></a></li>
+	<li><a class="edit" href="<?php e(url('../', array('edit'))); ?>"><?php e(t('edit settings')); ?></a></li>
 	<li><a
-		href="<?php e(url('../', array('type' => $cmspage->get('type')))); ?>"><?php e(t('close')); ?></a></li>
+		href="<?php e(url('../../', array('type' => $cmspage->get('type')))); ?>"><?php e(t('close')); ?></a></li>
 		<?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
 	<li><a
-		href="<?php e(url('../../templates/' . $cmspage->get('template_id'))); ?>"><?php e(t('edit template')); ?></a></li>
+		href="<?php e(url('../../../templates/' . $cmspage->get('template_id'))); ?>"><?php e(t('edit template')); ?></a></li>
 		<?php endif; ?>
 </ul>
 
-<form method="post" action="<?php e(url()); ?>" id="publish-form">
+<form method="post" action="<?php e(url('../')); ?>" id="publish-form">
 <fieldset class="<?php e($cmspage->getStatus()); ?>"><?php if (!$cmspage->isPublished()): ?>
 		<?php e(t('this page is not published')); ?> <input type="submit"
 	value="<?php e(t('publish now')); ?>" name="publish" /> <?php else: ?>
