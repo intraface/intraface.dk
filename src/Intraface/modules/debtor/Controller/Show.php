@@ -390,7 +390,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 if ($return_redirect->getParameter('send_email_status') == 'sent' OR $return_redirect->getParameter('send_email_status') == 'outbox') {
                     $this->email_send_with_success = true;
                     // hvis faktura er genfremsendt skal den ikke s�tte status igen
-                    if ($this->getDebtor()->get('status') != 'sent') {
+                    if ($this->getDebtor()->get('status') != 'sent' && $this->getDebtor()->get('status') != 'executed') {
                         $this->getDebtor()->setStatus('sent');
                     }
                     $return_redirect->delete();
