@@ -644,11 +644,11 @@ class Debtor extends Intraface_Standard
         }
 
         if ($status_id == $this->get("status_id")) {
-            trigger_error("Du kan ikke s�tte status til samme som den er i forvejen", E_USER_ERROR);
+            trigger_error("Du kan ikke sætte status til samme som den er i forvejen", E_USER_ERROR);
         }
         if (($this->get("type") != "invoice" && $status_id < $this->get("status_id")) || ($this->get("type") == "invoice" && $this->get("status") != "executed" && $status_id < $this->get("status_id"))) {
-            // Man kan godt g� fra executed til sent, hvis f.eks. en betalt faktura bliver efterf�lgende bliver krediteret
-            trigger_error("Du kan ikke s�tte status lavere end den er i forvejen", E_USER_ERROR);
+            // Man kan godt gå fra executed til sent, hvis f.eks. en betalt faktura bliver efterfølgende bliver krediteret
+            trigger_error("Du kan ikke sætte status lavere end den er i forvejen", E_USER_ERROR);
         }
 
         switch ($status) {
@@ -665,7 +665,7 @@ class Debtor extends Intraface_Standard
                 break;
 
             default:
-                trigger_error("Dette kan ikke lade sig g�re! Debtor->setStatus()", E_USER_ERROR);
+                trigger_error("Dette kan ikke lade sig gøre! Debtor->setStatus()", E_USER_ERROR);
         }
 
         $db = new Db_Sql;
