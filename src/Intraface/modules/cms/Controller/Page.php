@@ -2,7 +2,7 @@
 class Intraface_modules_cms_Controller_Page extends k_Component
 {
     protected $template;
-    public $error = array();
+    //public $error = array();
     protected $cmspage;
 
     function __construct(k_TemplateFactory $template)
@@ -44,6 +44,8 @@ class Intraface_modules_cms_Controller_Page extends k_Component
 
     function renderHtml()
     {
+        return new k_SeeOther($this->url('section'));
+        /*
         $module_cms = $this->getKernel()->module('cms');
         $module_cms->includeFile('HTML_Editor.php');
 
@@ -55,7 +57,6 @@ class Intraface_modules_cms_Controller_Page extends k_Component
                 $section->save(array('pic_id' => $redirect->getParameter('file_handler_id')));
             }
             return new k_SeeOther($this->url());
-
         }
 
         $cmspage = $this->getModel();
@@ -76,6 +77,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         );
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/page');
         return $tpl->render($this, $data);
+        */
     }
 
     function renderHtmlEdit()
@@ -161,7 +163,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
 
         return $this->render();
     }
-
+    /*
     function postMultipart()
     {
         $module_cms = $this->getKernel()->module('cms');
@@ -235,7 +237,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         }
         return $this->render();
     }
-
+    */
 
     function getKernel()
     {

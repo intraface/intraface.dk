@@ -15,7 +15,16 @@ class Intraface_modules_cms_Controller_Section extends k_Component
     {
         if ($name == 'element') {
             return 'Intraface_modules_cms_Controller_Elements';
+        } elseif ($name == 'filehandler') {
+            return 'Intraface_Filehandler_Controller_Index';
         }
+    }
+
+    function appendFile($file_id)
+    {
+        $section = CMS_Section::factory($this->getKernel(), 'id', $this->name());
+        $section->save(array('pic_id' => $file_id));
+        return true;
     }
 
     function renderHtml()
@@ -23,6 +32,10 @@ class Intraface_modules_cms_Controller_Section extends k_Component
         $cms_module = $this->getKernel()->module('cms');
         $element_types = $cms_module->getSetting('element_types');
         $translation = $this->getKernel()->getTranslation('cms');
+
+        if ($this->getSection()->get('type') != 'mixed') {
+            return new k_SeeOther($this->context->url());
+        }
 
         if (!empty($_GET['moveto']) AND is_numeric($_GET['moveto'])) {
             $element = CMS_Element::factory($this->getKernel(), 'id', $_GET['element_id']);
