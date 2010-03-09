@@ -249,7 +249,8 @@ class Contact extends Intraface_Standard
         try {
             switch($type) {
                 case 'email':
-                    return $gateway->findByEmail($value);
+                    $emails = $gateway->findByEmail($value);
+                    return $emails[0];
                 case 'code':
                     return $gateway->findByCode($value);
                 case 'username':

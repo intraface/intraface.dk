@@ -33,10 +33,14 @@ class Intraface_modules_contact_ContactGateway
     function findByEmail($value)
     {
         $this->db->query("SELECT address.belong_to_id AS id FROM contact INNER JOIN address ON address.belong_to_id = contact.id WHERE address.email = '".$value."' AND contact.intranet_id = " . $this->kernel->intranet->get('id') . " AND address.active = 1 AND contact.active = 1");
-        if (!$this->db->nextRecord()) {
-            throw new Exception('Contact not found');
+        if ($this->db->numRows() == 0) {
+            return array();
         }
-        return $this->findById($this->db->f('id'));
+        $contacts = array();
+        while ($this->db->nextRecord()) {
+            $contacts[] = $this->findById($this->db->f('id'));
+        }
+        return $contacts;
     }
 
     function findByCode($value)

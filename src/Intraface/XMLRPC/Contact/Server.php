@@ -77,6 +77,25 @@ class Intraface_XMLRPC_Contact_Server
         return $contact_info;
     }
 
+    /**
+     * Get contacts by e-mail
+     *
+     * @param  struct  $credentials Credentials provided by intraface
+     * @param  string  $email       E-mail for the contact
+     *
+     * @return array
+     */
+    public function getContactsByEmail($credentials, $email)
+    {
+        $this->checkCredentials($credentials);
+
+        $contacts = array();
+        $gateway = new Intraface_modules_contact_ContactGateway($this->kernel, new DB_Sql);
+        foreach ($gateway->findByEmail($email) as $contact) {
+            $contacts[] = $contact->get();
+        }
+        return $contacts;
+    }
 
     /**
      * Authenticates a contact
