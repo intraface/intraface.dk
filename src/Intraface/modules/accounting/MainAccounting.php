@@ -36,7 +36,7 @@ class MainAccounting extends Intraface_Main
         $this->addSubAccessItem('vat_report', 'Momsopgivelse');
         $this->addSubAccessItem('setting', 'Indstillinger');
 
-        $this->addControlPanelFile('accounting settings', 'module/accounting/setting');
+        $this->addControlPanelFile('accounting settings', 'core/restricted/module/accounting/setting');
 
         $this->addFrontpageFile('include_frontpage.php');
 

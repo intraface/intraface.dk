@@ -43,7 +43,7 @@ class Intraface_modules_accounting_Controller_Settings extends k_Component
     function postForm()
     {
         $this->getYear()->setSettings($_POST);
-        return k_SeeOther($this->url());
+        return new k_SeeOther($this->url());
     }
 
     function getVoucher()

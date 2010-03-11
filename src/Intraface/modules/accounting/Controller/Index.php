@@ -28,6 +28,8 @@ class Intraface_modules_accounting_Controller_Index extends k_Component
             return 'Intraface_modules_accounting_Controller_Year_Index';
         } elseif ($name == 'search') {
             return 'Intraface_modules_accounting_Controller_Search';
+        } elseif ($name == 'setting') {
+            return 'Intraface_modules_accounting_Controller_Settings';
         }
     }
 
