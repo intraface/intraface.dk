@@ -530,7 +530,12 @@ class CMS_Page extends Intraface_Standard
     {
         $gateway = new Intraface_modules_cms_PageGateway($this->kernel, new DB_Sql);
         $gateway->setDBQuery($this->getDBQuery());
-        return $gateway->findAllBySite($this->cmssite);
+        
+        /**
+         * @todo: $this (Page) should not be added to the method, but this is the
+         * only way to be able to generate submenu as it works now.
+         */
+        return $gateway->findAllBySite($this->cmssite, $this);
 
         /*
         $pages = array();

@@ -78,7 +78,14 @@ class Intraface_modules_cms_PageGateway
         return new CMS_Page(new CMS_Site($this->kernel, $this->db->f('site_id')), $this->db->f('id'));
     }
 
-    function findAllBySite($site)
+    /**
+     * 
+     * @param $site
+     * @param object $page CMS_Page used when finding submenu in XMLRPC/shop/Server0030.php method getPage
+     * @todo remove $page parameter and find another way to generate submenu
+     * @return unknown_type
+     */
+    function findAllBySite($site, $page = null)
     {
         $this->cmssite = $site;
         $pages = array();
@@ -150,7 +157,7 @@ class Intraface_modules_cms_PageGateway
         } elseif ($this->getDBQuery()->checkFilter('level') && $type == 'page') { // $level == 'sublevel' &&
 
             // Til at finde hele menuen p� valgt level.
-            $page_tree = $this->get('page_tree');
+            $page_tree = $page->get('page_tree');
             $level = (int)$this->getDBQuery()->getFilter('level');
             if (isset($page_tree[$level - 1]) && is_array($page_tree[$level - 1])) {
                 $child_of_id = $page_tree[$level - 1]['id'];
