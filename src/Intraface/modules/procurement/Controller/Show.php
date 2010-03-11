@@ -26,6 +26,14 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         }
     }
 
+    function dispatch()
+    {
+        if ($this->getProcurement()->get('id') == 0) {
+            throw new k_PageNotFound();
+        }
+        return parent::dispatch();
+    }
+
     function getProcurement()
     {
         if (is_object($this->procurement)) {
@@ -161,7 +169,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         $values = $procurement->get();
         $this->document->setTitle($this->t("Edit procurement"));
         $this->document->addScript('procurement/edit.js');
-        
+
         $data = array(
         	'procurement' => $procurement,
         	'kernel' => $this->getKernel(),
