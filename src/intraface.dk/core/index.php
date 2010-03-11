@@ -271,6 +271,11 @@ class k_Translation2Translator implements k_Translator
         return $phrase;
 
     }
+    
+    public function get($phrase) 
+    {
+        return $this->translate($phrase);
+    }
 }
 
 class Intraface_TranslatorLoader implements k_TranslatorLoader
