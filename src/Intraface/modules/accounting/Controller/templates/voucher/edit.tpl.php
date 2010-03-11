@@ -2,7 +2,7 @@
 $value = $context->getValues();
 ?>
 
-<h1>Rediger bilag #<?php e($context->getVoucher()->get('number')); ?> p� <?php e($context->getYear()->get('label')); ?></h1>
+<h1>Rediger bilag #<?php e($context->getVoucher()->get('number')); ?> på <?php e($context->getYear()->get('label')); ?></h1>
 
 <?php echo $context->getVoucher()->error->view(); ?>
 
