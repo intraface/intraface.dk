@@ -11,7 +11,7 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
         $this->context->getKernel()->useShared('filehandler');
         $this->context->getKernel()->useShared('email');
 
-        $translation = $this->context->getKernel()->getTranslation('debtor');
+        $translation = $this->translator();
 
         $send_as = $_GET['send'];
 
@@ -65,13 +65,13 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
                 }
 
                 $subject = 'Elektronisk faktura';
-                $body = 'Hermed faktura #' . $debtor->get('number') . ' til at l�se ind';
+                $body = 'Hermed faktura #' . $debtor->get('number') . ' til at læse ind';
 
                 break;
 
         }
 
-        if (($debtor->  get("type") == "order" || $debtor->get("type") == "invoice") && $this->context->getKernel()->intranet->hasModuleAccess('onlinepayment')) {
+        if (($debtor->get("type") == "order" || $debtor->get("type") == "invoice") && $this->context->getKernel()->intranet->hasModuleAccess('onlinepayment')) {
             $this->context->getKernel()->useModule('onlinepayment');
             $onlinepayment = OnlinePayment::factory($this->context->getKernel());
         } else {
