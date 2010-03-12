@@ -75,10 +75,11 @@ class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server
      * @param struct  $credentials Must include private_key and session_id
      * @param integer $list_id     List would you unsubscribe from
      * @param string  $email       Email to unsubscribe
+     * @param string  $comment     (optional) Comment of the unsubscription
      *
      * @return boolean
      */
-    public function unsubscribe($credentials, $list_id, $email)
+    public function unsubscribe($credentials, $list_id, $email, $comment = '')
     {
         $this->checkCredentials($credentials);
 
@@ -87,9 +88,9 @@ class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server
         
         $this->factoryList($list_id);
 
-        if (!$this->subscriber->unsubscribe($email)) {
+        if (!$this->subscriber->unsubscribe($email, $comment)) {
             require_once 'XML/RPC2/Exception.php';
-            throw new XML_RPC2_FaultException('you could not unsubscribe with ' .$email, -4);
+            throw new XML_RPC2_FaultException('you could not unsubscribe ('. implode(', ', $this->subscriber->error->getMessage()).')', -4);
         }
 
         return $this->prepareResponseData(true);

@@ -215,10 +215,6 @@ class NewsletterSubscriber extends Intraface_Standard
         $validator = new Intraface_Validator($this->error);
         $validator->isEmail($input['email'], $input['email'] . ' er ikke en gyldig e-mail');
 
-        if (empty($input['name'])) {
-            $input['name'] = $input['email'];
-        }
-
         if (!empty($input['name'])) {
             $validator->isString($input['name'], 'Der er brugt ulovlige tegn i navnet', '', 'allow_empty');
         }
@@ -234,33 +230,44 @@ class NewsletterSubscriber extends Intraface_Standard
         $which_subscriber_has_email = NewsletterSubscriber::factory($this->list, 'email', $input['email']);
         if (is_object($which_subscriber_has_email)) {
             $this->id = $which_subscriber_has_email->get('id');
+            $this->load();
         }
-        $this->load();
+        
+        if (is_object($this->contact) && $this->contact->get('id') != 0) {
+            $contact = $this->contact;
+        } else {
+            $gateway = new Intraface_modules_contact_ContactGateway($this->list->kernel, new DB_Sql);
+            $contacts = $gateway->findByEmail($input['email']);
+            if(count($contacts) > 0) {
+                $contact = $contacts[0];
+            } else {
+                require_once 'Intraface/modules/contact/Contact.php';
+                $contact = new Contact($this->list->kernel);
+                if (empty($input['name'])) {
+                    $input['name'] = $input['email'];
+                }
+                
+                if (!$contact->save($input)) {
+                    $this->error->set('Kunne ikke gemme kontaktpersonen');
+                    $this->error->merge($contact->error->getMessage());
+                    return false;
+                }
+            }
+        }
+        
+        
+        if (!empty($input['name']) && $input['name'] != $contact->get('name')) {
+            $save = $contact->address->get();
+            $save['name'] = $input['name'];
+            unset($save['id']);
+            unset($save['type']);
+            unset($save['address_id']);
+            unset($save['belong_to_id']);
+            $contact->save($save);
+        }
 
         if ($this->id > 0) {
-            if ($this->get('contact_id') == 0) {
-                // @todo cannot be sure that only one has e-mail, so this should be
-                //       made differently
-                $contact = Contact::factory($this->list->kernel, 'email', $input['email']);
-            } else {
-                $contact = new Contact($this->list->kernel, $this->get('contact_id'));
-            }
-            // because of the NewsletterSubscriber::factory($, 'email') we should be sure there actually is a valid contact. But maybe we should do a check anyway.
-
-            /*
-            if (!$contact->get('name')) {
-                $save_array['name'] = $input['name'];
-            }
-
-            $save_array['email'] = $input['email'];
-
-            if (!$contact_id = $contact->save($save_array)) {
-                $contact->error->view();
-                $this->error->set('Kunne ikke gemme kontaktpersonen');
-            }
-            */
-            // name og e-mail bør vel ikke nødv. gemmes?
-
+            // name og e-mail bør ikke nødv. gemmes?
             $db->query("UPDATE newsletter_subscriber
                 SET
                     contact_id = '".$contact->get('id')."',
@@ -274,20 +281,6 @@ class NewsletterSubscriber extends Intraface_Standard
             //code =  '" . md5($input['email'] . date('Y-m-d H:i:s') . $input['ip'])."'
 
         } else {
-            $contact = Contact::factory($this->list->kernel, 'email', $input['email']);
-
-            if ($contact->get('id') == 0) {
-                if (empty($input['name'])) {
-                    $name = $input['email'];
-                } else {
-                    $name = $input['name'];
-                }
-                if (!$contact_id = $contact->save(array('name' => $name, 'email' => $input['email']))) {
-                    //$contact->error->view();
-                    $this->error->set('Kunne ikke gemme kontaktpersonen');
-                }
-            }
-
             $db->query("INSERT INTO newsletter_subscriber
                 SET
                     contact_id = '".$contact->get('id')."',
@@ -299,10 +292,8 @@ class NewsletterSubscriber extends Intraface_Standard
                     code= '" . md5($input['email'] . date('Y-m-d H:i:s') . $input['ip'])."',
                     intranet_id = ".$this->list->kernel->intranet->get('id'));
 
-        }
-
-        if ($this->id == 0) {
             $this->id = $db->insertedId();
+            $this->load();
         }
 
         // sender kun optinbrev, hvis man ikke er opted in
@@ -310,7 +301,7 @@ class NewsletterSubscriber extends Intraface_Standard
 
             // TODO replace by observer
             if (!$this->sendOptInEmail($mailer)) {
-                $this->error->set('could not send optin email');
+                $this->error->set('Could not send optin email');
                 return false;
             }
 
@@ -352,13 +343,15 @@ class NewsletterSubscriber extends Intraface_Standard
      *
      * @return boolean
      */
-    public function unsubscribe($email)
+    public function unsubscribe($email, $comment = '')
     {
         $email = strip_tags($email);
+        $comment = strip_tags($comment);
 
         $validator = new Intraface_Validator($this->error);
         $validator->isEmail($email, 'E-mailen er ikke gyldig');
-
+        // $validator->isString($comment, 'Comment is not valid', '', 'allow_empty');
+        
         if ($this->error->isError()) {
             return false;
         }
@@ -370,7 +363,7 @@ class NewsletterSubscriber extends Intraface_Standard
         $this->load();
 
         $db = new DB_Sql;
-        $db->query("UPDATE newsletter_subscriber SET active = 0, date_unsubscribe = '".date('Y-m-d H:i:s')."' WHERE id=".$this->id." AND list_id = " . $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id'));
+        $db->query("UPDATE newsletter_subscriber SET active = 0, date_unsubscribe = '".date('Y-m-d H:i:s')."', unsubscribe_comment = \"".$comment."\" WHERE id=".$this->id." AND list_id = " . $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id'));
         return true;
     }
 

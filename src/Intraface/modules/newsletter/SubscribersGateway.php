@@ -25,7 +25,7 @@ class Intraface_modules_newsletter_SubscribersGateway
         $this->dbquery->setCondition('newsletter_subscriber.optin = '.$this->getDBQuery()->getFilter('optin'));
         $this->dbquery->setCondition('newsletter_subscriber.active = '.$this->getDBQuery()->getFilter('active'));
         $this->dbquery->setSorting("newsletter_subscriber.date_unsubscribe DESC");
-        return $this->getDBQuery()->getRecordset("newsletter_subscriber.id, date_unsubscribe, contact_id, address.name, DATE_FORMAT(date_unsubscribe, '%d-%m-%Y %H-%i-%s') AS dk_date_unsubscribe", "", false);
+        return $this->getDBQuery()->getRecordset("newsletter_subscriber.id, date_unsubscribe, unsubscribe_comment, contact_id, address.name, DATE_FORMAT(date_unsubscribe, '%d-%m-%Y') AS dk_date_unsubscribe", "", false);
     }
 
     function getByContactId($list, $id)
