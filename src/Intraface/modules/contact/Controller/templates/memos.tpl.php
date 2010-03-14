@@ -1,7 +1,7 @@
 <h1><?php e(t('Memos')); ?></h1>
 
-
 	<ul class="options">
+        <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 		<li><a href="<?php e(url(null, array('create'))); ?>"><?php e(t('Add memo')); ?></a></li>
 	</ul>
 
