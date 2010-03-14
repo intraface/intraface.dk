@@ -11,7 +11,7 @@ $value = $reminder->get();
 	<legend><?php e(t('Reminder date')); ?></legend>
 	<div class="formrow">
 		<label for="reminder_date"><?php e(t('Reminder date')); ?></label>
-		<input type="text" name="reminder_date" id="reminder_date" value="<?php if (!empty($value['reminder_date'])) e($value['reminder_date']); ?>" />
+		<input type="text" name="reminder_date" id="reminder_date" value="<?php if (!empty($value['dk_reminder_date'])) e($value['dk_reminder_date']); ?>" />
 	</div>
 </fieldset>
 

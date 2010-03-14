@@ -2,6 +2,7 @@
 class Intraface_modules_contact_Controller_Memo extends k_Component
 {
     protected $template;
+    protected $memo;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -10,67 +11,48 @@ class Intraface_modules_contact_Controller_Memo extends k_Component
 
     function renderHtml()
     {
-    	$reminder = ContactReminder::factory($this->context->getKernel(), (int)$this->name());
-        $contact = $reminder->contact;
-
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/memo');
-        return $smarty->render($this, array('reminder' => $reminder));
+        return $smarty->render($this, array('reminder' => $this->getMemo()));
     }
 
     function renderHtmlEdit()
     {
-    	$reminder = ContactReminder::factory($this->context->getKernel(), (int)$this->name());
-        $contact = $reminder->contact;
-
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/memo-edit');
-        return $smarty->render($this, array('reminder' => $reminder));
-
+        return $smarty->render($this, array('reminder' => $this->getMemo()));
     }
 
     function postForm()
     {
-    	$reminder = ContactReminder::factory($this->context->getKernel(), (int)$this->name());
-
     	if (isset($_POST['mark_as_seen'])) {
-    		$reminder->setStatus('seen');
+    		$this->getMemo()->setStatus('seen');
     	} elseif (isset($_POST['cancel'])) {
-    		$reminder->setStatus('cancelled');
+    		$this->getMemo()->setStatus('cancelled');
     	} elseif (isset($_POST['postpone_1_day'])) {
-    		$date = new Date($reminder->get('reminder_date'));
+    		$date = new Date($this->getMemo()->get('reminder_date'));
     		$next_day = $date->getNextDay();
-    		$reminder->postponeUntil($next_day->getDate());
+    		$this->getMemo()->postponeUntil($next_day->getDate());
     	} elseif (isset($_POST['postpone_1_week'])) {
-    		$date = new Date($reminder->get('reminder_date'));
+    		$date = new Date($this->getMemo()->get('reminder_date'));
     		$date_span = new Date_Span();
     		$date_span->setFromDays(7);
     		$date->addSpan($date_span);
-    		$reminder->postponeUntil($date->getDate());
+    		$this->getMemo()->postponeUntil($date->getDate());
     	} elseif (isset($_POST['postpone_1_month'])) {
-    		$date = new Date($reminder->get('reminder_date'));
+    		$date = new Date($this->getMemo()->get('reminder_date'));
     		$date_span = new Date_Span();
             $date_calc = new Date_Calc();
-    		$date_parts = explode('-', $reminder->get('reminder_date'));
+    		$date_parts = explode('-', $this->getMemo()->get('reminder_date'));
             $date_span->setFromDays($date_calc->daysInMonth($date_parts[1], $date_parts[0]));
     		$date->addSpan($date_span);
-    		$reminder->postponeUntil($date->getDate());
+    		$this->getMemo()->postponeUntil($date->getDate());
     	} elseif (isset($_POST['postpone_1_year'])) {
-    		$date = new Date($reminder->get('reminder_date'));
+    		$date = new Date($this->getMemo()->get('reminder_date'));
     		$date_span = new Date_Span();
     		$date_span->setFromDays(365); // does not take account of leap year
     		$date->addSpan($date_span);
-    		$reminder->postponeUntil($date->getDate());
+    		$this->getMemo()->postponeUntil($date->getDate());
     	} else {
-        	// for a new contact we want to check if similar contacts alreade exists
-        	if (empty($_POST['id'])) {
-        		$contact = new Contact($this->context->getKernel(), (int)$this->context->context->name());
-        		$reminder = new ContactReminder($contact);
-
-        	} else {
-        		$reminder = ContactReminder::factory($this->context->getKernel(), (int)$this->name());
-        		$contact = $reminder->contact;
-        	}
-
-        	if ($id = $reminder->update($_POST)) {
+        	if ($id = $this->getMemo()->update($_POST)) {
         		return new k_SeeOther($this->url('../'));
         	}
 
@@ -78,7 +60,14 @@ class Intraface_modules_contact_Controller_Memo extends k_Component
 
     	}
 
-
     	return $this->render();
+    }
+
+    function getMemo()
+    {
+        if (is_object($this->memo)) {
+            return $this->memo;
+        }
+        return $this->memo = ContactReminder::factory($this->context->getKernel(), (int)$this->name());
     }
 }
