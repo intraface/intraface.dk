@@ -9,10 +9,16 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
         $this->template = $template;
     }
 
+    function map($name)
+    {
+        if (is_numeric($name)) {
+            return 'Intraface_modules_contact_Controller_Show';
+        }
+    }
+
     function renderHtml()
     {
         $module = $this->getKernel()->module("contact");
-        $translation = $this->getKernel()->getTranslation('contact');
         /*
         $redirect = $this->getRedirect();
 
@@ -32,69 +38,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
         */
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/choosecontact');
-        return $smarty->render($this);
-    }
-
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
-    function getContact()
-    {
-        if (is_object($this->contact)) {
-            return $this->contact;
-        }
-        return $this->contact = new Contact($this->getKernel());
-    }
-
-    function getContacts()
-    {
-        $contact = $this->getContact();
-        if (!empty($_GET['contact_id'])) {
-        	$contact->getDBQuery()->setCondition("contact.id = ".intval($_GET['contact_id']));
-        } elseif (isset($_GET['query']) || isset($_GET['keyword_id'])) {
-
-        	if (isset($_GET['query'])) {
-        		$contact->getDBQuery()->setFilter('search', $_GET['query']);
-        	}
-
-        	if (isset($_GET['keyword_id'])) {
-        		$contact->getDBQuery()->setKeyword($_GET['keyword_id']);
-        	}
-        } else {
-        	$contact->getDBQuery()->useCharacter();
-        }
-
-        $contact->getDBQuery()->defineCharacter('character', 'address.name');
-        $contact->getDBQuery()->usePaging('paging');
-        $contact->getDBQuery()->storeResult('use_stored', 'select_contact', 'sublevel');
-
-        if (isset($_GET['contact_id']) && intval($_GET['contact_id']) != 0) {
-        	$contact->getDBQuery()->setExtraUri("&last_contact_id=".intval($_GET['contact_id']));
-        } elseif (isset($_GET['last_contact_id']) && intval($_GET['last_contact_id']) != 0) {
-        	$contact->getDBQuery()->setExtraUri("&last_contact_id=".intval($_GET['last_contact_id']));
-        }
-
-        return $contacts = $contact->getList();
-    }
-
-    function getRedirect()
-    {
-        return $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
-    }
-
-    function getUsedKeywords()
-    {
-        $keywords = $this->getContact()->getKeywordAppender();
-        return $used_keywords = $keywords->getUsedKeywords();
-    }
-
-    function map($name)
-    {
-        if (is_numeric($name)) {
-            return 'Intraface_modules_contact_Controller_Show';
-        }
+        return $smarty->render($this, array('contacts' => $this->getContacts()));
     }
 
     function getRedirectUrl($contact_id = 0)
@@ -105,7 +49,6 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
     function postForm()
     {
         $contact_module = $this->getKernel()->module("contact");
-        $translation = $this->getKernel()->getTranslation('contact');
         $contact_module->includeFile('ContactReminder.php');
 
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
@@ -165,6 +108,58 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
         return $this->render();
     }
 
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getContact()
+    {
+        if (is_object($this->contact)) {
+            return $this->contact;
+        }
+        return $this->contact = new Contact($this->getKernel());
+    }
+
+    function getContacts()
+    {
+        if (!empty($_GET['contact_id'])) {
+            $this->getContact()->getDBQuery()->setCondition("contact.id = ".intval($_GET['contact_id']));
+        } elseif (isset($_GET['query']) || isset($_GET['keyword_id'])) {
+            if (isset($_GET['query'])) {
+                $this->getContact()->getDBQuery()->setFilter('search', $_GET['query']);
+            }
+            if (isset($_GET['keyword_id'])) {
+                $this->getContact()->getDBQuery()->setKeyword($_GET['keyword_id']);
+            }
+        } else {
+            $this->getContact()->getDBQuery()->useCharacter();
+        }
+
+        $this->getContact()->getDBQuery()->defineCharacter('character', 'address.name');
+        $this->getContact()->getDBQuery()->usePaging('paging');
+        $this->getContact()->getDBQuery()->storeResult('use_stored', 'select_contact', 'sublevel');
+
+        if (isset($_GET['contact_id']) && intval($_GET['contact_id']) != 0) {
+            $this->getContact()->getDBQuery()->setExtraUri("&last_contact_id=".intval($_GET['contact_id']));
+        } elseif (isset($_GET['last_contact_id']) && intval($_GET['last_contact_id']) != 0) {
+            $this->getContact()->getDBQuery()->setExtraUri("&last_contact_id=".intval($_GET['last_contact_id']));
+        }
+
+        return $contacts = $this->getContact()->getList();
+    }
+
+    function getRedirect()
+    {
+        return $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
+    }
+
+    function getUsedKeywords()
+    {
+        $keywords = $this->getContact()->getKeywordAppender();
+        return $used_keywords = $keywords->getUsedKeywords();
+    }
+
     function getContactModule()
     {
         return $this->getKernel()->module("contact");
@@ -197,12 +192,10 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
     function renderHtmlCreate()
     {
         $contact_module = $this->getKernel()->module("contact");
-        $translation = $this->getKernel()->getTranslation('contact');
         $contact_module->includeFile('ContactReminder.php');
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
         return $smarty->render($this);
-
     }
 
     function putForm()

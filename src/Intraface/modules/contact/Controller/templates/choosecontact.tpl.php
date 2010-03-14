@@ -58,7 +58,7 @@
     			</tr>
     		</tfoot>
     		<tbody>
-    			<?php foreach ($context->getContacts() as $c) { ?>
+    			<?php foreach ($contacts as $c) { ?>
     			<tr>
     				<td>
     					<input id="contact_<?php e($c['id']); ?>" type="radio" value="<?php e($c['id']); ?>" name="selected" />
