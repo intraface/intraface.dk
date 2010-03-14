@@ -54,6 +54,7 @@ class Newsletter extends Intraface_Standard
      */
     public static function factory($kernel, $id)
     {
+        /*
         $db = new DB_Sql;
         $db->query("SELECT list_id FROM newsletter_archieve WHERE intranet_id = ".$kernel->intranet->get('id')." AND active = 1 AND id = ".intval($id));
         if ($db->nextRecord()) {
@@ -63,6 +64,9 @@ class Newsletter extends Intraface_Standard
         }
         trigger_error('Ugyldigt id', E_USER_ERROR);
         return false;
+        */
+        $gateway = new Intraface_modules_newsletter_NewsletterGateway($kernel);
+        return $gateway->findById($id);
     }
 
     /**
@@ -111,7 +115,7 @@ class Newsletter extends Intraface_Standard
     function delete()
     {
         if ($this->get('locked') == 1) {
-            $this->error->set('Nyhedsbrevet er låst');
+            $this->error->set('Nyhedsbrevet er lï¿½st');
             return false;
         }
         $db = new DB_Sql;

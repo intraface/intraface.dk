@@ -77,6 +77,9 @@ class NewsletterSubscriber extends Intraface_Standard
     {
         switch ($type) {
             case 'code':
+                $gateway = new Intraface_modules_newsletter_SubscribersGateway($object);
+                return $gateway->findByCode($value);
+                /*
                 // kernel og kode
                 $code = trim($value);
                 $code = mysql_escape_string($code);
@@ -89,10 +92,13 @@ class NewsletterSubscriber extends Intraface_Standard
                 }
 
                 return new NewsletterSubscriber(new NewsletterList($object, $db->f('list_id')), $db->f('id'));
-
+				*/
             break;
 
             case 'email':
+                $gateway = new Intraface_modules_newsletter_SubscribersGateway($object->kernel);
+                return $gateway->findByListAndEmail($object, $value);
+                /*
                 // email og list
                 $email = safeToDb($value);
                 $db = new DB_Sql;
@@ -112,7 +118,7 @@ class NewsletterSubscriber extends Intraface_Standard
                 }
 
                 return new NewsletterSubscriber($object, $db->f('id'));
-
+				*/
             break;
 
             default:
@@ -215,6 +221,10 @@ class NewsletterSubscriber extends Intraface_Standard
         $validator = new Intraface_Validator($this->error);
         $validator->isEmail($input['email'], $input['email'] . ' er ikke en gyldig e-mail');
 
+        if (empty($input['name'])) {
+            $input['name'] = $input['email'];
+        }
+
         if (!empty($input['name'])) {
             $validator->isString($input['name'], 'Der er brugt ulovlige tegn i navnet', '', 'allow_empty');
         }
@@ -232,7 +242,7 @@ class NewsletterSubscriber extends Intraface_Standard
             $this->id = $which_subscriber_has_email->get('id');
             $this->load();
         }
-        
+
         if (is_object($this->contact) && $this->contact->get('id') != 0) {
             $contact = $this->contact;
         } else {
@@ -265,9 +275,10 @@ class NewsletterSubscriber extends Intraface_Standard
             unset($save['belong_to_id']);
             $contact->save($save);
         }
-
+        
         if ($this->id > 0) {
-            // name og e-mail bør ikke nødv. gemmes?
+            // name og e-mail bør vel ikke nødv. gemmes?
+
             $db->query("UPDATE newsletter_subscriber
                 SET
                     contact_id = '".$contact->get('id')."',
@@ -281,6 +292,20 @@ class NewsletterSubscriber extends Intraface_Standard
             //code =  '" . md5($input['email'] . date('Y-m-d H:i:s') . $input['ip'])."'
 
         } else {
+            $contact = Contact::factory($this->list->kernel, 'email', $input['email']);
+
+            if ($contact->get('id') == 0) {
+                if (empty($input['name'])) {
+                    $name = $input['email'];
+                } else {
+                    $name = $input['name'];
+                }
+                if (!$contact_id = $contact->save(array('name' => $name, 'email' => $input['email']))) {
+                    //$contact->error->view();
+                    $this->error->set('Kunne ikke gemme kontaktpersonen');
+                }
+            }
+
             $db->query("INSERT INTO newsletter_subscriber
                 SET
                     contact_id = '".$contact->get('id')."',
@@ -292,8 +317,10 @@ class NewsletterSubscriber extends Intraface_Standard
                     code= '" . md5($input['email'] . date('Y-m-d H:i:s') . $input['ip'])."',
                     intranet_id = ".$this->list->kernel->intranet->get('id'));
 
+        }
+
+        if ($this->id == 0) {
             $this->id = $db->insertedId();
-            $this->load();
         }
 
         // sender kun optinbrev, hvis man ikke er opted in
@@ -301,7 +328,7 @@ class NewsletterSubscriber extends Intraface_Standard
 
             // TODO replace by observer
             if (!$this->sendOptInEmail($mailer)) {
-                $this->error->set('Could not send optin email');
+                $this->error->set('could not send optin email');
                 return false;
             }
 
@@ -343,15 +370,13 @@ class NewsletterSubscriber extends Intraface_Standard
      *
      * @return boolean
      */
-    public function unsubscribe($email, $comment = '')
+    public function unsubscribe($email)
     {
         $email = strip_tags($email);
-        $comment = strip_tags($comment);
 
         $validator = new Intraface_Validator($this->error);
         $validator->isEmail($email, 'E-mailen er ikke gyldig');
-        // $validator->isString($comment, 'Comment is not valid', '', 'allow_empty');
-        
+
         if ($this->error->isError()) {
             return false;
         }
@@ -363,7 +388,7 @@ class NewsletterSubscriber extends Intraface_Standard
         $this->load();
 
         $db = new DB_Sql;
-        $db->query("UPDATE newsletter_subscriber SET active = 0, date_unsubscribe = '".date('Y-m-d H:i:s')."', unsubscribe_comment = \"".$comment."\" WHERE id=".$this->id." AND list_id = " . $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id'));
+        $db->query("UPDATE newsletter_subscriber SET active = 0, date_unsubscribe = '".date('Y-m-d H:i:s')."' WHERE id=".$this->id." AND list_id = " . $this->list->get("id") . " AND intranet_id = " . $this->list->kernel->intranet->get('id'));
         return true;
     }
 

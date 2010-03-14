@@ -56,4 +56,43 @@ class Intraface_modules_newsletter_SubscribersGateway
         $db->query($sql);
         return $db->numRows();
     }
+
+    function findByCode($code)
+    {
+        // kernel og kode
+        $code = trim($code);
+        $code = mysql_escape_string($code);
+        $code = strip_tags($code);
+
+        $db = new DB_Sql;
+        $db->query("SELECT id, list_id FROM newsletter_subscriber WHERE code = '".$code."' AND intranet_id = " . $this->kernel->intranet->get('id')." and active = 1");
+        if (!$db->nextRecord()) {
+            return false;
+        }
+
+        return new NewsletterSubscriber(new NewsletterList($this->kernel, $db->f('list_id')), $db->f('id'));
+    }
+
+    function findByListAndEmail($list, $email)
+    {
+        $email = safeToDb($email);
+        $db = new DB_Sql;
+        $db->query("SELECT newsletter_subscriber.id
+                    FROM newsletter_subscriber
+                    LEFT JOIN contact
+                        ON newsletter_subscriber.contact_id = contact.id
+                    LEFT JOIN address
+                        ON address.belong_to_id = contact.id
+                    WHERE address.email = '".$email."'
+                        AND newsletter_subscriber.list_id = " . $list->get('id') . "
+                        AND newsletter_subscriber.intranet_id = " . $this->kernel->intranet->get('id') . "
+                        AND newsletter_subscriber.active = 1
+                        AND contact.active = 1");
+        if (!$db->nextRecord()) {
+            return 0;
+        }
+
+        return new NewsletterSubscriber($list, $db->f('id'));
+
+    }
 }
