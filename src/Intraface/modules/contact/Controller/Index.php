@@ -207,31 +207,20 @@ class Intraface_modules_contact_Controller_Index extends k_Component
     function renderHtmlCreate()
     {
         $contact_module = $this->getKernel()->module("contact");
-        $translation = $this->getKernel()->getTranslation('contact');
         $contact_module->includeFile('ContactReminder.php');
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
         return $smarty->render($this);
-
-    }
-
-    function getContactModule()
-    {
-        return $contact_module = $this->getKernel()->module("contact");
-
     }
 
     function postForm()
     {
         $contact_module = $this->getKernel()->module("contact");
-        $translation = $this->getKernel()->getTranslation('contact');
         $contact_module->includeFile('ContactReminder.php');
 
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
 
         if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
-            $contact = new Contact($this->getKernel(), $_POST['id']);
-
             $eniro = new Services_Eniro();
             $value = $_POST;
 
@@ -250,15 +239,14 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // for a new contact we want to check if similar contacts alreade exists
-            $contact = new Contact($this->getKernel());
             if (!empty($_POST['phone'])) {
                 $contact->getDBQuery()->setCondition("address.phone = '".$_POST['phone']."' AND address.phone <> ''");
-                $similar_contacts = $contact->getList();
+                $similar_contacts = $this->getContact()->getList();
             }
 
             // checking if similiar contacts exists
             if (!empty($similar_contacts) AND count($similar_contacts) > 0 AND empty($_POST['force_save'])) {
-            } elseif ($id = $contact->save($_POST)) {
+            } elseif ($id = $this->getContact()->save($_POST)) {
 
                 // $redirect->addQueryString('contact_id='.$id);
                 if ($redirect->get('id') != 0) {
@@ -268,18 +256,14 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
                 //$contact->lock->unlock_post($id);
             }
-
-            $value = $_POST;
-            $address = $_POST;
-            $delivery_address = array();
-            $delivery_address['name'] = $_POST['delivery_name'];
-            $delivery_address['address'] = $_POST['delivery_address'];
-            $delivery_address['postcode'] = $_POST['delivery_postcode'];
-            $delivery_address['city'] = $_POST['delivery_city'];
-            $delivery_address['country'] = $_POST['delivery_country'];
         }
 
         return $this->render();
+    }
+
+    function getContactModule()
+    {
+        return $contact_module = $this->getKernel()->module("contact");
 
     }
 
@@ -288,16 +272,33 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         if (!empty($this->eniro)) {
             return $this->eniro;
         }
+        if ($this->body()) {
+            return $value = $_POST;
+        }
         return array('number' => $this->getContact()->getMaxNumber()+1);
     }
 
     function getAddressValues()
     {
+        if ($this->body()) {
+            return $address = $_POST;
+        }
         return array();
     }
 
     function getDeliveryAddressValues()
     {
+
+        if ($this->body()) {
+            $delivery_address = array();
+            $delivery_address['name'] = $_POST['delivery_name'];
+            $delivery_address['address'] = $_POST['delivery_address'];
+            $delivery_address['postcode'] = $_POST['delivery_postcode'];
+            $delivery_address['city'] = $_POST['delivery_city'];
+            $delivery_address['country'] = $_POST['delivery_country'];
+            return $delivery_address;
+        }
+
         return array();
     }
 
