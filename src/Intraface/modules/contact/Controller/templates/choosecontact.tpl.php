@@ -27,7 +27,7 @@
 		<label for="keyword_id"><?php e(t('Show with keywords')); ?>
 			<select name="keyword_id" id="keyword_id">
 				<option value=""><?php e(t('None')); ?></option>
-				<?php foreach ($used_keywords AS $k) { ?>
+				<?php foreach ($context->getUsedKeywords() AS $k) { ?>
 					<option value="<?php e($k['id']); ?>" <?php if ($k['id'] == $context->getContact()->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php e($k['keyword']); ?></option>
 				<?php } ?>
 			</select>
