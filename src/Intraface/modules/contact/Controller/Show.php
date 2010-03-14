@@ -38,6 +38,8 @@ class Intraface_modules_contact_Controller_Show extends k_Component
 
     function renderHtmlEdit()
     {
+        $this->document->addScript('contact/contact_edit.js');
+
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
         return $smarty->render($this);
     }
