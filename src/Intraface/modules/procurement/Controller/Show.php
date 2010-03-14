@@ -15,6 +15,8 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
     {
         if ('choosecontact' == $name) {
             return 'Intraface_modules_contact_Controller_Choosecontact';
+        } elseif ('filehandler' == $name) {
+            return 'Intraface_Filehandler_Controller_Index';
         } elseif ('selectproduct' == $name) {
             return 'Intraface_modules_product_Controller_Selectproduct';
         } elseif ('state' == $name) {
@@ -32,6 +34,18 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
             throw new k_PageNotFound();
         }
         return parent::dispatch();
+    }
+
+    function appendFile($file_id)
+    {
+        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler->includeFile('AppendFile.php');
+
+        $procurement = new Procurement($this->getKernel(), $this->name());
+        $filehandler = new FileHandler($this->getKernel());
+        $append_file = new AppendFile($this->getKernel(), 'procurement_procurement', $procurement->get('id'));
+        $append_file->addFile(new FileHandler($this->getKernel(), $file_id));
+        return true;
     }
 
     function getProcurement()
@@ -106,8 +120,8 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                 trigger_error('You need access to the product module to do this!', E_USER_ERROR);
                 exit;
             }
-        } elseif (isset($_GET['return_redirect_id'])) {
-            $redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
+        } //elseif (isset($_GET['return_redirect_id'])) {
+            //$redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
             /*
             if ($redirect->get('identifier') == 'contact') {
                 if ($this->getKernel()->user->hasModuleAccess('contact')) {
@@ -125,6 +139,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                 }
             }
             */
+            /*
             if ($redirect->get('identifier') == 'file_handler') {
 
                 $file_handler_id = $redirect->getParameter('file_handler_id');
@@ -133,7 +148,9 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                 }
 
             }
-        } elseif ($this->query('contact_id')) {
+            */
+        //}
+        elseif ($this->query('contact_id')) {
             if ($this->getKernel()->user->hasModuleAccess('contact')) {
                 $contact_module = $this->getKernel()->useModule('contact');
                 $contact = new Contact($this->getKernel(), $this->query('contact_id'));
@@ -205,9 +222,10 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         $shared_filehandler->includeFile('AppendFile.php');
 
         $procurement = $this->getProcurement();
+        /*
         $filehandler = new FileHandler($this->getKernel());
         $append_file = new AppendFile($this->getKernel(), 'procurement_procurement', $procurement->get('id'));
-
+        */
         if (isset($_POST['dk_paid_date'])) {
             $procurement->setPaid($_POST['dk_paid_date']);
             if ($this->getKernel()->user->hasModuleAccess('accounting')) {
@@ -236,12 +254,15 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         }
 
         if (isset($_POST['append_file_choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
+            /*
             $redirect = new Intraface_Redirect($this->getKernel());
             $module_filemanager = $this->getKernel()->useModule('filemanager');
             $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('selectfile'), NET_SCHEME . NET_HOST . $this->url());
             $redirect->setIdentifier('file_handler');
             $redirect->askParameter('file_handler_id', 'multiple');
             return new k_SeeOther($url);
+            */
+            return new k_SeeOther($this->url('filehandler/selectfile', array('multiple_choice' => true)));
         }
 
         // upload billag
