@@ -50,7 +50,7 @@ class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
         $cmspage = CMS_Page::factory($this->cmssite->kernel, 'identifier', $send_array);
         if (!isset($cmspage) OR !is_object($cmspage) OR !$cmspage->get('id') > 0) {
             // det er muligt at dette kan have fejlsideindhold
-            // måske skal man kunne vælge en side til en 404 mv., som så bare hentes i stedet.
+            // mï¿½ske skal man kunne vï¿½lge en side til en 404 mv., som sï¿½ bare hentes i stedet.
             $values['http_header_status'] = 'HTTP/1.0 404 Not Found';
             $values['content'] = 'Siden er ikke fundet';
             $values['navigation-main'] = '';
@@ -63,11 +63,11 @@ class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
 
             $cmspage->value['http_header_status'] = 'HTTP/1.0 200 OK';
 
-            /**
-             * HACK HACK HACK
-             * niveau 9999 gør at den ikke kan genkende den, og tager top_level.
-             * 0 der ellers skulle være topmenu virker af en mærkelig grund ikke. Variablen er ikke registeret som sat!
-             */
+            //
+            // HACK HACK HACK
+            // niveau 9999 gï¿½r at den ikke kan genkende den, og tager top_level.
+            // 0 der ellers skulle vï¿½re topmenu virker af en mï¿½rkelig grund ikke. Variablen er ikke registeret som sat!
+            //
             $cmspage->value['navigation_toplevel'] = $cmspage->navigation->build(9999, 'array');	// 'toplevel'
             $cmspage->value['navigation_sublevel'] = $cmspage->navigation->build(1, 'array'); // 'sublevel'
             $cmspage->value['sections'] = $cmspage->collect();
@@ -133,5 +133,28 @@ class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
         $sitemap = new CMS_SiteMap($this->cmssite);
         return $this->prepareResponseData($sitemap->build());
 
+    }
+
+
+    /**
+     * Get pagetree
+     *
+     * @param struct $credentials
+     * @param integer $site_id
+     * @return array
+     */
+    public function getPageTree($credentials, $site_id)
+    {
+        $this->checkCredentials($credentials);
+
+        $site_id = intval($site_id);
+
+        $this->factory($site_id);
+
+        $cmspage = new CMS_Page($this->site);
+        $value['toplevel'] = $cmspage->navigation->build(9999, 'array');    // 'toplevel'
+        $value['sublevel'] = $cmspage->navigation->build(1, 'array'); // 'sublevel'
+
+        return $this->prepareResponseData($value);
     }
 }
