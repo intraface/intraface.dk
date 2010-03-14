@@ -86,21 +86,25 @@ if ($db->getOption('debug')) {
 */
 
 // timezone and local
-if (!defined('COUNTRY_LOCAL')) define('COUNTRY_LOCAL', 'da_DK');
-if (!defined('TIMEZONE')) define('TIMEZONE', 'Europe/Copenhagen');
+if (!defined('COUNTRY_LOCAL')) {
+    define('COUNTRY_LOCAL', 'da_DK');
+}
+if (!defined('TIMEZONE')) {
+    define('TIMEZONE', 'Europe/Copenhagen');
+}
 setlocale(LC_CTYPE, COUNTRY_LOCAL);
 putenv("TZ=".TIMEZONE);
 if (defined('TIMEZONE')) {
     $db->exec('SET time_zone=\''.TIMEZONE.'\'');
 }
+$db->query('SET NAMES utf8');
 
-if (defined('INTRAFACE_K2')) {
-    $db->query('SET NAMES utf8');
-} else {
-    $db->query('SET NAMES latin1');
-}
-
+Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_USE_DQL_CALLBACKS, true);
+Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
+$doctrine_connection = $bucket->get('Doctrine_Connection_Common');
+/*
 // Initializes Doctrine
 Doctrine_Manager::getInstance()->setAttribute(Doctrine_Core::ATTR_USE_DQL_CALLBACKS, true);
 Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
 Doctrine_Manager::connection(DB_DSN);
+*/
