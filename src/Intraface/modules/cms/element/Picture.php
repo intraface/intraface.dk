@@ -50,7 +50,7 @@ class Intraface_modules_cms_element_Picture extends CMS_Element
         $validator = new Intraface_Validator($this->error);
 
         if (!empty($var['pic_text'])) $validator->isString($var['pic_text'], 'error in pic_text', '', 'allow_empty');
-        if (!empty($var['pic_id'])) $validator->isNumeric($var['pic_id'], 'error in pic_id', 'allow_empty');
+        //if (!empty($var['pic_id'])) $validator->isNumeric($var['pic_id'], 'error in pic_id', 'allow_empty');
         if (!empty($var['pic_url'])) $validator->isString($var['pic_url'], 'error in pic_url', 'allow_empty');
 
         // st�rrelsen skal ogs� valideres
@@ -91,8 +91,9 @@ class Intraface_modules_cms_element_Picture extends CMS_Element
         }
         */
 
-        if (!isset($var['pic_id'])) $var['pic_id'] = 0;
-        $this->parameter->save('pic_id', $var['pic_id']);
+        if (isset($var['pic_id'])) {
+            $this->parameter->save('pic_id', $var['pic_id']);
+        }
         if (!empty($var['pic_size'])) $this->parameter->save('pic_size', $var['pic_size']);
         if (!empty($var['pic_text'])) $this->parameter->save('pic_text', $var['pic_text']);
         if (!empty($var['pic_url'])) $this->parameter->save('pic_url', $var['pic_url']);
