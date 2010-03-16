@@ -174,7 +174,7 @@ if ($context->getContact()->getId() > 0) {
     </div>
 </fieldset>
 
-<?php if ($context->getKernel()->user->hasModuleAccess('invoice')): ?>
+<?php if ($context->getKernel()->user->hasModuleAccess('debtor')): ?>
 <fieldset>
     <legend><?php e(t('Invoice settings')); ?></legend>
     <div class="formrow">
