@@ -45,7 +45,7 @@
     <tbody>
     <?php foreach ($context->getSubscribers() AS $s): ?>
     <tr>
-        <td><?php e($s['contact_name']); ?></td>
+        <td><a href="<?php e(url('../../../../contact/' . $s['contact_id'])); ?>"><?php e($s['contact_name']); ?></a></td>
         <td><?php e($s['contact_email']); ?></td>
         <td><?php e($s['dk_date_submitted']); ?></td>
         <td>
