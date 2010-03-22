@@ -59,9 +59,9 @@ class UserMaintenance extends Intraface_User
         $validator = new Intraface_Validator($this->error);
 
         if ($this->id == 0) {
-            $validator->isPassword($input["password"], 6, 16, "Ugyldig adgangskode. Den skal vÊre mellem 6 og 16 tegn, og mÂ indeholde store og smÂ bogstaver samt tal");
+            $validator->isPassword($input["password"], 6, 16, "Ugyldig adgangskode. Den skal v√¶re mellem 6 og 16 tegn, og m√• indeholde store og sm√• bogstaver samt tal");
         } else {
-            $validator->isPassword($input["password"], 6, 16, "Ugyldig adgangskode. Den skal vÊre mellem 6 og 16 tegn, og mÂ indeholde store og smÂ bogstaver samt tal", "allow_empty");
+            $validator->isPassword($input["password"], 6, 16, "Ugyldig adgangskode. Den skal v√¶re mellem 6 og 16 tegn, og m√• indeholde store og sm√• bogstaver samt tal", "allow_empty");
         }
 
         $sql = "email = \"".$input["email"]."\",
