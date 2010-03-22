@@ -12,14 +12,14 @@ class MainAccounting extends Intraface_Main
 {
     function __construct()
     {
-        $this->module_name = 'accounting'; // Navnet der vil st� i menuen
-        $this->menu_label = 'Regnskab'; // Navnet der vil st� i menuen
+        $this->module_name = 'accounting'; // Navnet der vil stå i menuen
+        $this->menu_label = 'Regnskab'; // Navnet der vil stå i menuen
         $this->show_menu = 1; // Skal modulet vises i menuen.
         $this->active = 1; // Er modulet aktivt.
         $this->menu_index = 40;
         $this->frontpage_index = 10;
 
-        // Tilf�j undermenu punkter.
+        // Tilføj undermenu punkter.
         $this->addSubMenuItem('accounting year', 'year');
         $this->addSubMenuItem('daybook', 'daybook');
         //$this->addSubMenuItem('state', 'state.php');
@@ -29,9 +29,9 @@ class MainAccounting extends Intraface_Main
         //$this->addSubMenuItem('end year', 'end', 'sub_access:endyear');
         $this->addSubMenuItem('search', 'search');
         //$this->addSubMenuItem('settings', 'setting.php', 'sub_access:setting');
-        //$this->addSubMenuItem('Hj�lp', 'help.php');
+        //$this->addSubMenuItem('Hjælp', 'help.php');
 
-        // Tilf�j subaccess punkter
+        // Tilføj subaccess punkter
         $this->addSubAccessItem('endyear', 'Årsafslutning');
         $this->addSubAccessItem('vat_report', 'Momsopgivelse');
         $this->addSubAccessItem('setting', 'Indstillinger');
@@ -42,17 +42,17 @@ class MainAccounting extends Intraface_Main
 
         $this->addSetting('vat_periods',
             array(
-                // halv�rlig
+                // halvårlig
                 0 => array(
                     'name' => 'Half-yearly',
                     'periods' => array(
-                        // 1. halv�r
+                        // 1. halvår
                         1 => array(
                             'name' => '1st half year',
                             'date_from' => '01-01',
                             'date_to' => '06-30'
                         ),
-                        // 2. halv�r
+                        // 2. halvår
                         2 => array(
                             'name' => '2nd half year',
                             'date_from' => '07-01',
