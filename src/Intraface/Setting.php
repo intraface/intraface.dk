@@ -1,9 +1,9 @@
 <?php
 /**
- * Håndterer Settings i systemet
+ * Handles Settings in the system
  *
- * Tabelfelter: id, intranet_id, user_id, setting, value, sub_id
- * Settingniveauer: System, Intranet, User
+ * Tabel fields: id, intranet_id, user_id, setting, value, sub_id
+ * Settings levels: System, Intranet, User
  *
  * @author Sune Jensen <sj@sunet.dk>
  */
@@ -124,7 +124,7 @@ class Intraface_Setting
 
             switch ($type) {
                 case 'system':
-                    throw new Exception('Du kan ikke ændre på systemsetting');
+                    throw new Exception('Du kan ikke Ã¦ndre pÃ¥ systemsetting');
                     break;
                 case 'intranet':
                     $this->db->query("SELECT id FROM setting WHERE setting = ".$this->db->quote($setting, 'text')." AND intranet_id = ".$this->intranet_id." AND user_id = 0 AND sub_id = ".intval($sub_id));
@@ -208,8 +208,8 @@ class Intraface_Setting
             switch ($type) {
                 case 'user':
                     if ($this->checkLogin()) {
-                        // hvis der ikke er nogen intranet-indstillinger på posten vil den stadig
-                        // blive ved med at lave opslaget. Hvordan undgår vi lige det på en god og sikker måde?
+                        // hvis der ikke er nogen intranet-indstillinger pÃ¥ posten vil den stadig
+                        // blive ved med at lave opslaget. Hvordan undgÃ¸r vi lige det pÃ¥ en god og sikker mÃ¥de?
                         /*
                         if (!isset($this->settings['user'])) {
                             $this->settings['user'] = array();
@@ -220,7 +220,7 @@ class Intraface_Setting
 
                         }
                         */
-                        if (!empty($this->settings[$this->intranet_id][$this->user_id][$setting][intval($sub_id)])) {
+                        if (isset($this->settings[$this->intranet_id][$this->user_id][$setting][intval($sub_id)])) {
                             return $this->settings[$this->intranet_id][$this->user_id][$setting][intval($sub_id)];
                         }
 
@@ -228,8 +228,8 @@ class Intraface_Setting
                     }
                     // no break because it has to fall through if user is not set
                 case 'intranet':
-                    // hvis der ikke er nogen intranet-indstillinger på posten vil den stadig
-                    // blive ved med at lave opslaget. Hvordan undgår vi lige det.
+                    // hvis der ikke er nogen intranet-indstillinger pï¿½ posten vil den stadig
+                    // blive ved med at lave opslaget. Hvordan undgï¿½r vi lige det.
                     /*
                     if (!isset($this->settings['intranet'])) {
                         $this->settings['intranet'] = array();
@@ -241,7 +241,7 @@ class Intraface_Setting
 
                     }
                     */
-                    if (!empty($this->settings[$this->intranet_id][0][$setting][intval($sub_id)])) {
+                    if (isset($this->settings[$this->intranet_id][0][$setting][intval($sub_id)])) {
                         return $this->settings[$this->intranet_id][0][$setting][intval($sub_id)];
                     }
                     // no break because it has to fall through if intranet is not set
