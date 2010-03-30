@@ -124,13 +124,15 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
                 trigger_error("Invalid sender!", E_USER_ERROR);
                 exit;
         }
+        
+        $signature = new Intraface_shared_email_Signature($this->context->getKernel()->user, $this->context->getKernel()->intranet, $this->context->getKernel()->getSetting());
 
         // opret e-mailen
         $email = new Email($this->context->getKernel());
         if (!$email->save(array(
                 'contact_id' => $contact->get('id'),
                 'subject' => $subject,
-                'body' => $body . "\n\n--\n" . $this->context->getKernel()->user->getAddress()->get('name') . "\n" . $this->context->getKernel()->intranet->get('name'),
+                'body' => $body . "\n\n" . $signature->getAsText(),
                 'from_email' => $from_email,
                 'from_name' => $from_name,
                 'type_id' => 10, // electronic invoice

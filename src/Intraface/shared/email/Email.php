@@ -23,21 +23,21 @@ class Email extends Intraface_Standard
     public $id;
     public $contact;
     protected $dbquery;
-
+    
     /**
-     * Bruges til at s�tte den �vre gr�nse for hvor mange e-mails der sendes i timen
+     * Bruges til at sætte den øvre grænse for hvor mange e-mails der sendes i timen
      */
     //public $allowed_limit = 180;
 
     /**
-     * Bruges til at s�tte en buffer i systemet, s� den automatiske udsendelse af
+     * Bruges til at sætte en buffer i systemet, så den automatiske udsendelse af
      * emails der er bagefter ikke optager hele kapaciteten for udsendelse af e-mails.
      */
 
     //public $system_buffer = 50;
 
     /**
-     * Konstrukt�r
+     * Constructor
      *
      * @param object  $kernel Kernel object
      * @param integer $id     E-mail id
@@ -45,7 +45,7 @@ class Email extends Intraface_Standard
     function __construct($kernel, $id=0)
     {
         if (!is_object($kernel)) {
-            trigger_error('E-mail kr�ver kernel', E_USER_ERROR);
+            trigger_error('E-mail kræver kernel', E_USER_ERROR);
         }
         $this->kernel = $kernel;
 
@@ -177,7 +177,7 @@ class Email extends Intraface_Standard
 
         return 1;
     }
-
+    
     /**
      * @param struct $var Values to save
      *
@@ -197,7 +197,7 @@ class Email extends Intraface_Standard
             $sql_end = ", date_created = NOW(),
                 belong_to_id = ".(int)$var['belong_to'] . ",
                 type_id = ".(int)$var['type_id'] . ",
-                contact_id=".$var['contact_id'];
+                contact_id=".$var['contact_id'];            
         } else {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;

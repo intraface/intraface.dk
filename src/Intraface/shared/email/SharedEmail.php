@@ -11,9 +11,10 @@ class SharedEmail extends Intraface_Shared
 {
     function __construct()
     {
-        $this->shared_name = 'email'; // Navn på på mappen med modullet
+        $this->shared_name = 'email'; // Navn pï¿½ pï¿½ mappen med modullet
         $this->active = 1; // Er shared aktivt
 
         $this->addPreloadFile('Email.php');
+        $this->includeSettingFile('settings.php');
     }
 }

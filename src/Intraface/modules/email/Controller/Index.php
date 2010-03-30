@@ -10,7 +10,9 @@ class Intraface_modules_email_Controller_Index extends k_Component
 
     function map($name)
     {
-        if (is_numeric($name)) {
+        if($name == 'settings') {
+            return 'Intraface_modules_email_Controller_Settings';
+        } elseif (is_numeric($name)) {
             return 'Intraface_modules_email_Controller_Email';
         }
     }
