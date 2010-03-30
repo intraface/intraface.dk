@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://intraface.asterix/" />
+<title>testCustomSignatureOnSendInvoice</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">testCustomSignatureOnSendInvoice</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>install/reset-staging-server.php?modules=controlpanel,debtor,invoice,contact,product,email&amp;helper_function=Administration:fillInIntranetAddress,Contact:create,Debtor:createInvoice&amp;login=true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=controlpanel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=debtor settings</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>debtor_sender_name</td>
+	<td>Tester</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>debtor_sender_email</td>
+	<td>start@intraface.dk</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=controlpanel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=E-mail settings</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>signature_type</td>
+	<td>label=Custom</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>custom_signature</td>
+	<td>This is a test of custom signature</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=debtor</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Test invoice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Contact 1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>preferred-invoice</td>
+	<td>label=email</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Invoices</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Test invoice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>send_email</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>body</td>
+	<td>This is a test of custom signature</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
