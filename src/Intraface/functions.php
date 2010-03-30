@@ -216,7 +216,7 @@ function intraface_safetodb($data)
         $data = stripslashes($data);
     }
 
-    return mysql_escape_string(trim($data));
+    return mysql_escape_string($data);
 }
 
 //Dynamic global functions
