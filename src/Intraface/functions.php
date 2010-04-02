@@ -1,39 +1,4 @@
 <?php
-// isAjax()
-if (!function_exists('isAjax')) {
-    /**
-     * This function is dynamically redefinable.
-     * @see $GLOBALS['_global_function_callback_e']
-     */
-    function isAjax($args = NULL)
-    {
-        $args = func_get_args();
-        return call_user_func_array($GLOBALS['_global_function_callback_isAjax'], $args);
-    }
-    if (!isset($GLOBALS['_global_function_callback_isAjax'])) {
-        $GLOBALS['_global_function_callback_isAjax'] = NULL;
-    }
-}
-
-$GLOBALS['_global_function_callback_isAjax'] = 'intraface_isAjax';
-
-function intraface_isAjax()
-{
-    if (!empty($_REQUEST['ajax']) AND $_REQUEST['ajax'] == true) {
-        return true;
-    }
-
-    if (!empty($_SERVER['HTTP_ACCEPT']) AND $_SERVER['HTTP_ACCEPT'] == 'message/x-jl-formresult') {
-        return true;
-    }
-
-    if (!empty($_SERVER['X-Requested-With']) AND $_SERVER['X-Requested-With'] == 'XMLHttpRequest') {
-        return true;
-    }
-
-    return false;
-}
-
 // amountToOutput
 if (!function_exists('amountToOutput')) {
     /**
@@ -87,41 +52,6 @@ $GLOBALS['_global_function_callback_amountToForm'] = 'intraface_AmountToForm';
 function intraface_amountToForm($amount)
 {
     return number_format($amount, 2, ',', '');
-}
-
-// amountToDb
-if (!function_exists('amountToDb')) {
-    /**
-     * This function is dynamically redefinable.
-     * @see $GLOBALS['_global_function_callback_e']
-     */
-    function amountToDb($args)
-    {
-        $args = func_get_args();
-        return call_user_func_array($GLOBALS['_global_function_callback_amountToDb'], $args);
-    }
-    if (!isset($GLOBALS['_global_function_callback_amountToDb'])) {
-        $GLOBALS['_global_function_callback_amountToDb'] = NULL;
-    }
-}
-
-$GLOBALS['_global_function_callback_amountToDb'] = 'intraface_AmountToDb';
-
-
-/**
- * Funktion til at konvertere bel�b s� de kan gemmes i databasen
- *
- * Funktionen skal konvertere til den mindste enhed af bel�bet
- * i vores tilf�lde ofte �rer
- */
-function intraface_amountToDb($amount)
-{
-    // dette konverterer fra dansk til engelsk format - men s� b�r den ogs� v�re landespecifik
-    // sp�rgsm�let er hvordan vi g�r dem landespecifikke p� en smart m�de?
-    $amount = str_replace(".", "", $amount);
-    $amount = str_replace(",", ".", $amount);
-
-    return $amount;
 }
 
 // autoop()
