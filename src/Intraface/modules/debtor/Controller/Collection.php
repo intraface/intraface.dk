@@ -272,7 +272,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
                     }
 
                     if ($debtor->getStatus() == "executed" || $debtor->getStatus() == "canceled") {
-                        $worksheet->write($i, 7, $this->t($debtor->getStatus(), 'debtor'));
+                        $worksheet->write($i, 7, $this->t($debtor->getStatus()));
                     } else {
                         $worksheet->write($i, 7, $debtor->getDueDate()->getAsLocal('da_DK'));
                     }
