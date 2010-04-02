@@ -4,7 +4,12 @@
         $context->getKernel()->useShared('filehandler');
         $context->getKernel()->useModule('filemanager');
         $filemanager = new Filemanager($context->getKernel());
-        $selected_keywords = $value['keywords'];
+        if (!empty($value['keywords'])) {
+            $selected_keywords = $value['keywords'];
+        } else {
+            $selected_keywords = array();
+        }
+
         $appender = $filemanager->getKeywordAppender();
         $keywords = $appender->getUsedKeywords();
         if (count($keywords) > 0) {

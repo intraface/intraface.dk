@@ -10,18 +10,25 @@ class Intraface_modules_cms_element_Randompicture extends CMS_Element
     {
         $this->value['type'] = 'randompicture';
         parent::__construct($section, $id);
-        $this->section->kernel->useShared('filehandler');
     }
 
     function load_element()
     {
-        $this->section->kernel->useShared('filehandler');
-        $this->section->kernel->useModule('filemanager');
-        $this->value['keywords'] = unserialize($this->parameter->get('keywords'));
+        $keywords = $this->parameter->get('keywords');
+        if (!empty($keywords)) {
+            $this->value['keywords'] = unserialize($keywords);
+        } else {
+            $this->value['keywords'] = array();
+        }
+
         $this->value['size'] = $this->parameter->get('size');
         if (!$size = $this->get('size')) {
             $size = 'medium';
         }
+
+        $this->section->kernel->useShared('filehandler');
+        $this->section->kernel->useModule('filemanager');
+
         $filemanager = new Filemanager($this->section->kernel);
         try {
             $img = new Ilib_Filehandler_ImageRandomizer($filemanager, $this->get('keywords'));
