@@ -8,7 +8,6 @@
     <?php endif; ?>
 </ul>
 
-
 <form method="get" action="<?php e(url(null)); ?>">
 	<fieldset>
 		<legend><?php e(t('search')); ?></legend>

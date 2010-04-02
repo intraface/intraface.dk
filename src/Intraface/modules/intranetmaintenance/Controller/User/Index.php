@@ -4,6 +4,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
     protected $user;
     public $method = 'post';
     protected $template;
+    protected $redirect = null;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -78,7 +79,10 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
 
     function getRedirect()
     {
-        return Intraface_Redirect::factory($this->getKernel(), 'receive');
+        if (!is_null($this->redirect)) {
+            return $this->redirect;
+        }
+         return $this->redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
     }
 
     function isAddUserTrue()

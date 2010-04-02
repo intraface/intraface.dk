@@ -13,7 +13,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
 
     function dispatch()
     {
-        if ($this->query('intranet_id') > 0) {
+        if ($this->query('intranet_id')) {
             $this->url_state->set("intranet_id", $this->query('intranet_id'));
         }
         return parent::dispatch();
@@ -33,8 +33,8 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         $intranet = null;
 
         if (isset($_GET['return_redirect_id'])) {
-            if (isset($_GET['intranet_id'])) {
-                $intranet = new IntranetMaintenance($_GET['intranet_id']);
+            if ($this->query('intranet_id')) {
+                $intranet = new IntranetMaintenance($this->query('intranet_id'));
                 $edit_intranet_id = $intranet->get('id');
             }
             $redirect = Intraface_Redirect::factory($kernel, 'return');
@@ -195,7 +195,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
             return $this->intranetmaintenance = new IntranetMaintenance($this->context->getIntranet()->getId());
         }
 
-        return $this->intranetmaintenance = new IntranetMaintenance();
+        return $this->intranetmaintenance = new IntranetMaintenance($this->query('intranet_id'));
     }
 
     function getKernel()
