@@ -192,7 +192,11 @@ $voucher_files = $voucher_file->getList();
 
     function postForm()
     {
-        if (!empty($_POST) AND !empty($_POST['action']) && $_POST['action'] == 'counter_entry' ) {
+        if ($this->body('state')) {
+            $voucher = new Voucher($this->getYear(), $this->name());
+            $voucher->stateVoucher();
+            return new k_SeeOther($this->url());
+        } elseif (!empty($_POST) AND !empty($_POST['action']) && $_POST['action'] == 'counter_entry' ) {
 
         	$voucher = new Voucher($this->getYear(), $this->name());
         	$posts = $voucher->getPosts();
