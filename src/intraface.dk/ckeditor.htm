@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\"><html xmlns="http://www.w3.org/1999/xhtml" lang="da">
+<head>
+    <title>Intraface.dk</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        @import "/core/css/stylesheet.php?theme=1&amp;fontsize=small";
+    </style>
+    <link rel="stylesheet" href="/core/css/print.css" type="text/css" media="print" title="Printvenlig" />
+
+    <script type="text/javascript" src="/core/javascript/yui/yahoo/yahoo-min.js"></script>
+    <script type="text/javascript" src="/core/javascript/yui/event/event-min.js"></script>
+
+    <script type="text/javascript" src="/core/javascript/yui/dom/dom-min.js"></script>
+    <script type="text/javascript" src="/core/javascript/main.js"></script>
+    <script type="text/javascript" src="/core/javascript/stripe.js"></script>
+    <!--[if lt IE 7.]>
+    <script defer type="text/javascript" src="/core/javascript/pngfix.js"></script>
+    <![endif]-->
+
+        <script type="text/javascript" src="/core/javascript/ckeditor/ckeditor.js"></script>
+        <script type="text/javascript" src="/core/javascript/ckeditor/lang/_languages.js"></script>
+
+    
+    <link rel="start" href="/core/restricted" title="Home" />
+
+    <link href="/core/images/favicon.ico" rel="icon" />
+    <link href="/core/images/favicon.ico" rel="shortcut icon"/>
+    <link rel="shortcut icon" href="/core/images/favicon.ico" type="image/x-icon" />
+
+</head>
+
+<body id="onlinefaktura-dk">
+
+    <div id="container" class="clearfix">
+
+        
+        <div id="branding" class="vcard">
+            <h1 id="head" class="fn">Fodboldens Legestue</h1>
+            <div><span class="street-address">Ørnebjergvej 6
+, co/ Lars Olesen</span>
+                        &bull; <span class="postal-code">7100</span>
+            <span class="location">Vejle</span>
+                                        &bull; <span>CVR 21720402 </span>
+
+                        </div>
+        </div>
+
+        <ul id="navigation-site" class="clearfix">
+                            <li class="first-child"><a href="/core/restricted/">Dashboard</a></li>
+                            <li><a href="/core/restricted/module/cms">Website</a></li>
+                            <li><a href="/core/restricted/module/filemanager">Files</a></li>
+                            <li><a href="/core/restricted/module/accounting">Accounting</a></li>
+
+                            <li><a href="/core/restricted/module/debtor">Sales</a></li>
+                            <li><a href="/core/restricted/module/procurement">Procurement</a></li>
+                            <li><a href="/core/restricted/module/contact">Contacts</a></li>
+                            <li><a href="/core/restricted/module/product">Products</a></li>
+                            <li><a href="/core/restricted/module/webshop">webshop</a></li>
+                            <li><a href="/core/restricted/module/newsletter">newsletter</a></li>
+
+                            <li><a href="/core/restricted/module/email">E-mails</a></li>
+                            <li><a href="/core/restricted/module/fileimport">fileimport</a></li>
+                            <li><a href="/core/restricted/module/todo">Todo</a></li>
+                            <li><a href="/core/restricted/module/controlpanel">controlpanel</a></li>
+                    </ul>
+
+                    <ul id="navigation-sub" class="clearfix">
+
+                            <li class="first-child"><a href="http://www.intraface.dk/core/restricted/module/cms/">Choose site</a></li>
+                        </ul>
+        
+
+    <div id="content" class="clearfix">
+        <div id="content-main">
+<h1>Edit element</h1>
+
+<ul>
+    <li><a href="/core/restricted/module/cms/12/pages/91/section/141/element/">Close</a></li>
+</ul>
+
+
+<form method="post" action="/core/restricted/module/cms/12/pages/91/section/141/element/270?type=htmltext"  enctype="multipart/form-data">
+    <input name="type" type="hidden" value="htmltext" />
+
+<fieldset>
+    <textarea name="text" rows="8" cols="60">&lt;h1&gt;Tricks &lt;/h1&gt;&lt;br /&gt;</textarea>
+<script type="text/javascript">//<![CDATA[
+window.CKEDITOR_BASEPATH='traface/modules/cms/CKEditor.php';
+//]]></script>
+<script type="text/javascript" src="traface/modules/cms/CKEditor.phpckeditor.js?t=A06B"></script>
+<script type="text/javascript">//<![CDATA[
+CKEDITOR.replace('text');
+//]]></script>
+</fieldset>
+
+    <fieldset>
+        <legend>Element settings</legend>
+
+        <div class="formrow">
+            <label for="elm-properties">Properties</label>
+            <select name="elm_properties">
+                                <option value="none" selected="selected">None</option>
+                                <option value="newline">Line break before element</option>
+
+                                <option value="float">Floating</option>
+                            </select>
+        </div>
+
+        <div class="formrow">
+            <label for="elm-adjust">Adjustment</label>
+            <select name="elm_adjust">
+                                <option value="left" selected="selected">Left</option>
+
+                                <option value="center">Center</option>
+                                <option value="right">Right</option>
+                            </select>
+        </div>
+
+
+        <div class="formrow">
+            <label for="elm-width">Width</label>
+
+            <input name="elm_width" id="elm-width" type="text" value="" size="3" maxlength="10" /> use either %, em or px        </div>
+
+
+        <div class="radiorow">
+            <p>
+                <input name="elm_box" id="elm-box" value="box" type="checkbox" /> <label for="elm-box">Show element in a box</label>
+            </p>
+        </div>
+
+
+    </fieldset>
+
+    <fieldset>
+        <legend>Publish settings</legend>
+
+        <div class="formrow">
+            <label for="dateFieldPublish">Publish date</label>
+            <input name="date_publish" id="dateFieldPublish" type="text" value="2006-10-27 19:17:18" size="30" maxlength="225" /> <span id="dateFieldMsg1">empty = today</span>
+
+        </div>
+
+        <div class="formrow">
+            <label for="dateFieldExpire">Expire date</label>
+            <input name="date_expire" id="dateFieldExpire" type="text" value="0000-00-00 00:00:00" size="30" maxlength="225" /> <span id="dateFieldMsg2">empty = never expires</span>
+        </div>
+    </fieldset>
+
+    <div class="">
+        <input type="submit" value="Save" />
+        <input type="submit" name="close" value="Save and close" />
+        <a href="/core/restricted/module/cms/12/pages/91/section/141/element/">Cancel</a>
+    </div>
+
+</form>     </div><!-- content-main -->
+
+    </div><!-- pagebody -->
+
+
+    <ul id="navigation-user" class="clearfix">
+
+                            <li><a href="/core/logout">Logout</a></li>
+                    <li><a href="/core/restricted/switchintranet">Switch intranet</a></li>
+                    <li><a href="/core/restricted/module">Modules</a></li>
+                    </ul>
+
+    <div id="footer" class="clearfix">
+    </div>
+
+    </div><!-- container -->
+
+
+
+</body>
+</html>
