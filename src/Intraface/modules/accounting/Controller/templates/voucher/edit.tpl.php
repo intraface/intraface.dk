@@ -9,7 +9,6 @@ $value = $context->getValues();
 <form action="<?php e(url()); ?>" method="post">
 
 	<fieldset>
-		<input type="hidden" value="<?php e($value['id']); ?>" name="id" />
 		<div class="formrow">
 			<label for="date">Dato</label>
 			<input type="text" value="<?php if (!empty($value['date'])) e($value['date']); ?>" name="date" />

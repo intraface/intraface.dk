@@ -38,7 +38,7 @@
 			<td class="amount"><?php e(amountToOutput($post['credit'])); ?></td>
 			<td class="options">
 				<?php if ($post['stated'] == 0): $not_all_stated = true; ?>
-				<a class="edit" href="<?php e(url('post/'. $post['id'] . '/edit')); ?>">Ret</a>
+				<a class="edit" href="<?php e(url('post/'. $post['id'], array('edit'))); ?>">Ret</a>
 				<a class="delete" href="<?php e(url('post/'.$post['id'], array('delete'))); ?>">Slet</a>
 				<?php else: ?>
 				Bogført

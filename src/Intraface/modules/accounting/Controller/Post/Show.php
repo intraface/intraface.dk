@@ -8,13 +8,6 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
         $this->template = $template;
     }
 
-    protected function map($name)
-    {
-        if ($name == 'edit') {
-            return 'Intraface_modules_accounting_Controller_Post_Edit';
-        }
-    }
-
     function renderHtml()
     {
         if (!$this->getYear()->isValid()) {
@@ -25,46 +18,53 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
         return $smarty->render($this);
     }
 
+    function renderHtmlEdit()
+    {
+        $post = Post::factory($this->getYear(), (int)$this->name());
+        $values = $post->get();
+        $values['date'] = $post->get('date_dk');
+        $values['debet'] = $post->get('debet');
+        $values['credit'] = $post->get('credit');
+        $account = new Account($this->getYear());
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/post/edit');
+        return $smarty->render($this, array('post' => $post, 'account' => $account));
+    }
+
+    function renderHtmlDelete()
+    {
+        $post = Post::factory($this->getYear(), (int)$this->name());
+        $post->delete();
+        return new k_SeeOther($this->url('../../'));
+    }
+
     function postForm()
     {
-        if (!empty($_POST['start']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
-            $year = $this->getYear();
-            $year->setYear();
+        $year = $this->getYear();
+        $this->getYear()->checkYear();
 
-            return k_SeeOther($this->url('../../daybook'));
+        // tjek om debet og credit account findes
+        $post = Post::factory($this->getYear(), (int)$this->name());
+        $account = Account::factory($this->getYear(), $_POST['account']);
+
+        $date = new Intraface_Date($_POST['date']);
+        $date->convert2db();
+
+        $debet = new Intraface_Amount($_POST['debet']);
+        if (!$debet->convert2db()) {
+            $this->error->set('Beløbet kunne ikke konverteres');
         }
-        if (!empty($_POST['primobalance']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
-            $year = $this->getYear();
-            $year->setYear();
+        $debet = $debet->get();
 
-            return k_SeeOther($this->url('../../primosaldo'));
-        } elseif (!empty($_POST['manual_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
-            $year = $this->getYear();
-            $year->setYear();
-            return k_SeeOther($this->url('../../accounts'));
+        $credit = new Intraface_Amount($_POST['credit']);
+        if (!$credit->convert2db()) {
+            $this->error->set('Beløbet kunne ikke konverteres');
+        }
+        $credit = $credit->get();
 
-        } elseif (!empty($_POST['standard_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
-            $this->getYear()->setYear();
-            if (!$this->getYear()->createAccounts('standard')) {
-                throw new Exception('Kunne ikke oprette standardkontoplanen', E_USER_ERROR);
-            }
-
-            $values = $this->getYear()->get();
-
-            return new k_SeeOther($this->url());
-
-        } elseif (!empty($_POST['transfer_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
-            // kontoplanen fra sidste �r hentes
-            $year = $this->getYear();
-            $year->setYear();
-            if (empty($_POST['accountplan_year']) OR !is_numeric($_POST['accountplan_year'])) {
-                $year->error->set('Du kan ikke oprette kontoplanen, for du har ikke valgt et �r at g�re det fra');
-            } else {
-                if (!$year->createAccounts('transfer_from_last_year', $_POST['accountplan_year'])) {
-                    throw new Exception('Kunne ikke oprette standardkontoplanen', E_USER_ERROR);
-                }
-            }
-            $values = $year->get();
+        if ($id = $post->save($date->get(), $account->get('id'), $_POST['text'], $debet, $credit)) {
+            return new k_SeeOther($this->url('../../'));
+        } else {
+            $values = $_POST;
         }
         return $this->render();
     }

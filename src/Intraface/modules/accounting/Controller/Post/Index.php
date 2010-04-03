@@ -10,11 +10,56 @@ class Intraface_modules_accounting_Controller_Post_Index extends k_Component
 
     protected function map($name)
     {
-        if ($name == 'create') {
-            return 'Intraface_modules_accounting_Controller_Post_Edit';
-        } elseif (is_numeric($name)) {
+        if (is_numeric($name)) {
         	return 'Intraface_modules_accounting_Controller_Post_Show';
         }
+    }
+
+    function renderHtml()
+    {
+        return '<h1>Poster</h1><p><a href="'.$this->url(null . '.xls').'">Excel</a></p>';
+    }
+
+    function renderHtmlCreate()
+    {
+        $post = new Post(new Voucher($this->getYear(), $this->context->name()));
+        $values['date'] = $post->voucher->get('date_dk');
+
+        $account = new Account($this->getYear());
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/post/edit');
+        return $smarty->render($this, array('post' => $post, 'account' => $account));
+    }
+
+    function postForm()
+    {
+        $year = $this->getYear();
+        $this->getYear()->checkYear();
+
+        // tjek om debet og credit account findes
+        $post = new Post(new Voucher($this->getYear(), $this->context->name()));
+        $account = Account::factory($this->getYear(), $_POST['account']);
+
+        $date = new Intraface_Date($_POST['date']);
+        $date->convert2db();
+
+        $debet = new Intraface_Amount($_POST['debet']);
+        if (!$debet->convert2db()) {
+            $this->error->set('Beløbet kunne ikke konverteres');
+        }
+        $debet = $debet->get();
+
+        $credit = new Intraface_Amount($_POST['credit']);
+        if (!$credit->convert2db()) {
+            $this->error->set('Beløbet kunne ikke konverteres');
+        }
+        $credit = $credit->get();
+
+        if ($id = $post->save($date->get(), $account->get('id'), $_POST['text'], $debet, $credit)) {
+            return new k_SeeOther($this->url('../'));
+        } else {
+            $values = $_POST;
+        }
+        return $this->render();
     }
 
     function renderXls()
@@ -36,7 +81,7 @@ class Intraface_modules_accounting_Controller_Post_Index extends k_Component
         $workbook->setVersion(8);
 
         // sending HTTP headers
-        $workbook->send($kernel->intranet->get('name') . ' - poster ' . $year->get('label'));
+        $workbook->send($this->getKernel()->intranet->get('name') . ' - poster ' . $year->get('label'));
 
         // Creating a worksheet
         $worksheet = $workbook->addWorksheet('Konti ' . $year->get('label'));
