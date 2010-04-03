@@ -2,7 +2,7 @@
 
 <ul class="options">
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
-    <li><a href="<?php e(url('../', array('use_stored'=>'true'))); ?>"><?php e(t('To procurements')); ?></a></li>
+    <li><a href="<?php e(url('../../', array('use_stored'=>'true'))); ?>"><?php e(t('To procurements')); ?></a></li>
 </ul>
 
 <div class="message">
