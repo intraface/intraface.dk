@@ -4,11 +4,13 @@ class Intraface_modules_cms_Controller_Section extends k_Component
     protected $template;
     protected $mdb2;
     protected $section;
+    protected $db_sql;
 
-    function __construct(k_TemplateFactory $template, MDB2_Driver_Common $mdb2)
+    function __construct(k_TemplateFactory $template, MDB2_Driver_Common $mdb2, DB_Sql $db)
     {
         $this->template = $template;
         $this->mdb2 = $mdb2;
+        $this->db_sql = $db;
     }
 
     function map($name)
@@ -42,7 +44,7 @@ class Intraface_modules_cms_Controller_Section extends k_Component
             if (!is_object($element)) {
                 throw new Exception('Unable to create a valid element object');
             }
-            $element->getPosition($this->mdb2)->moveToPosition($_GET['moveto']);
+            $element->getPosition($this->db_sql)->moveToPosition($_GET['moveto']);
             return new k_SeeOther($this->url());
         } elseif (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
             $element = CMS_Element::factory($this->getKernel(), 'id', $_GET['delete']);

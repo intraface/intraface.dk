@@ -1,7 +1,4 @@
 <fieldset>
-	<legend><?php e(t('HTML-formatted text')); ?></legend>
-    <label for="cms-html-editor"><?php e(t('HTML-text')); ?></label>
-    <br />
     <?php
         /*
         // TODO we should tell the user which editor is chosen
@@ -36,10 +33,10 @@
         }
 
         echo $editor->get($textarea_attr, $text, $editor_configuration);
-        */
+
     ?>
 
-        <textarea class="html-editor" id="html-editor" name="text" cols="100" rows="15" style="width: 100%"><?php if (!empty($value['text'])) e($value['text']); ?></textarea>
+        <textarea id="html-editor" name="text" cols="100" rows="15"><?php if (!empty($value['text'])) e($value['text']); ?></textarea>
 			<script type="text/javascript">
 			//<![CDATA[
 					editor = CKEDITOR.replace( 'html-editor',
@@ -66,4 +63,16 @@
 
 			//]]>
 			</script>
+			    */
+if (!isset($value['text'])) $value['text'] = '';
+    require_once dirname(__FILE__) . '/../../../CKEditor.php';
+    $config['language'] = 'da';
+    $config['toolbar'] = array(
+         array( 'Source', '-', 'Cut','Copy','Paste','PasteText','PasteFromWord', '', 'Undo','Redo', '-', 'Bold', 'Italic', 'Strike' ),
+         array( 'Image', 'Link', 'Unlink', 'NumberedList', 'BulletedList', 'Blockquote', 'Outdent', 'Indent', '-', 'Maximize' )
+     );
+    $config['filebrowserBrowseUrl'] = url('/restricted/module/filemanager/ckeditor', array('images' => 1));
+    $CKEditor = new CKEditor();
+    echo $CKEditor->editor("text", $value['text'], $config);
+    ?>
 </fieldset>

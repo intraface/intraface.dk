@@ -1,6 +1,6 @@
 <h1><?php e(t('Edit element')); ?></h1>
 
-<ul>
+<ul class="options">
 	<li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 

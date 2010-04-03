@@ -21,6 +21,11 @@ class CMS_HTML_Parser extends Intraface_modules_cms_HTML_Parser
         $this->translation = $translation;
     }
 
+    function t($phrase)
+    {
+        return utf8_encode($this->translation->get($phrase));
+    }
+
     function parseRandompictureElement($element)
     {
         return '<img src="'.$element['uri'].'" height="'.$element['height'].'" width="'.$element['width'].'">';
@@ -58,20 +63,20 @@ class CMS_HTML_Parser extends Intraface_modules_cms_HTML_Parser
 
             $display .= '<div id="element-'.$element['id'].'"'.$element['extra_class'].$element['extra_style'].'>';
             $display .= '	<ul class="adminbar" id="admin'.$element['id'].'">';
-            $display .= '		<li><a href="'.url('element/'.$element['id']).'" title="'.$this->translation->get('edit element').'">'.$this->translation->get('edit').'</a></li>';
+            $display .= '		<li><a href="'.url('element/'.$element['id']).'" title="'.$this->t('edit element').'">'.$this->t('edit').'</a></li>';
 
             if (!empty($_GET['action']) AND $_GET['action'] == 'move') {
                 if ($element['id'] != $_GET['element_id']) {
-                    $display .= '		<li><a href="'.url(null).'?moveto='.$element['position'].'&amp;element_id='.(int)$_GET['element_id'].'&amp;id='.$element['section_id'].'">'.$this->translation->get('insert before').'</a></li>';
+                    $display .= '		<li><a href="'.url(null).'?moveto='.$element['position'].'&amp;element_id='.(int)$_GET['element_id'].'&amp;id='.$element['section_id'].'">'.$this->t('insert before').'</a></li>';
                     $position_after = $element['position'] + 1;
-                    $display .= '		<li><a href="'.url(null).'?moveto='.$position_after.'&amp;element_id='.(int)$_GET['element_id'].'&amp;id='.$element['section_id'].'">'.$this->translation->get('insert after').'</a></li>';
+                    $display .= '		<li><a href="'.url(null).'?moveto='.$position_after.'&amp;element_id='.(int)$_GET['element_id'].'&amp;id='.$element['section_id'].'">'.$this->t('insert after').'</a></li>';
                 } else {
-                    $display .= '		<li><a href="'.url(null).'?id='.$element['section_id'].'">'.$this->translation->get('Cancel').'</a></li>';
+                    $display .= '		<li><a href="'.url(null).'?id='.$element['section_id'].'">'.$this->t('Cancel').'</a></li>';
                 }
             } else {
-                $display .= '		<li><a href="'.url(null).'?action=move&amp;element_id='.$element['id'].'&amp;id='.$element['section_id'].'">'.$this->translation->get('move').'</a></li>';
+                $display .= '		<li><a href="'.url(null).'?action=move&amp;element_id='.$element['id'].'&amp;id='.$element['section_id'].'">'.$this->t('move').'</a></li>';
             }
-            $display .= '		<li><a class="confirm" href="' . url(null) . '?delete='.$element['id'].'">'.$this->translation->get('delete').'</a></li>';
+            $display .= '		<li><a class="confirm" href="' . url(null) . '?delete='.$element['id'].'">'.$this->t('delete').'</a></li>';
             $display .=	'	</ul>';
             $display .= '<div>' . 			$output . '</div>';
             $display .= '</div>';
