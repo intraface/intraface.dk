@@ -363,7 +363,7 @@ tr.sum {
  ***********************************************/
 
 
-/* Disse burde altså hedde content-main og content-sub eller sådan noget */
+/* Disse burde altsï¿½ hedde content-main og content-sub eller sï¿½dan noget */
 #colOne {
     float: left;
     width: 60%;
@@ -785,4 +785,15 @@ img.variation {
     width: 16px;
     border: 0px;
     vertical-align: middle;
+}
+
+.cke_skin_kama *, .cke_skin_kama a:hover, .cke_skin_kama a:link, .cke_skin_kama
+a:visited, .cke_skin_kama a:active {
+    margin:0!important
+}
+.cke_skin_kama .cke_browser_gecko .cke_toolbar, .cke_skin_kama
+.cke_browser_gecko .cke_button .cke_icon, .cke_skin_kama .cke_browser_gecko
+.cke_button .cke_buttonarrow, .cke_skin_kama .cke_browser_gecko .cke_separator,
+.cke_skin_kama .cke_browser_gecko .cke_toolbar_start {
+    margin:0 1px 2px 0!important;
 }
