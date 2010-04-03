@@ -802,7 +802,7 @@ class Year extends Intraface_Standard
         $types = Debtor::getDebtorTypes();
         $type_key = array_search($type, $types);
         if (empty($type_key)) {
-            trigger_error('Ugyldig type', E_USER_ERROR);
+            throw new Exception('Ugyldig type');
         }
         $db = new DB_Sql;
         $sql = "SELECT id FROM debtor
