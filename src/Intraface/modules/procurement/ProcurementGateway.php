@@ -49,7 +49,7 @@ class Intraface_modules_procurement_ProcurementGateway
         }
 
         if ($this->dbquery->checkFilter("text")) {
-            $this->dbquery->setCondition("(description LIKE \"%".$this->dbquery->getFilter("text")."%\" OR number = \"".$this->dbquery->getFilter("text")."\")");
+            $this->dbquery->setCondition("(description LIKE \"%".$this->dbquery->getFilter("text")."%\" OR number = \"".$this->dbquery->getFilter("text")."\" OR vendor LIKE \"%".$this->dbquery->getFilter("text")."%\")");
         }
 
         if ($this->dbquery->checkFilter("from_date")) {
