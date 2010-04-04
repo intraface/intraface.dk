@@ -23,9 +23,9 @@ class Intraface_modules_modulepackage_Controller_PostForm extends k_Component
             $_POST['amount'],
             $_POST['currency'],
             $language,
-            NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/index?status=success',
-            NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/payment?action_store_identifier='.$_POST['action_store_identifier'].'&payment_error=true',
-            NET_SCHEME.NET_HOST.NET_DIRECTORY.'modules/modulepackage/process?action_store_identifier='.$_POST['action_store_identifier'],
+            NET_SCHEME.NET_HOST. $this->url('../', array('status' => 'success')),
+            NET_SCHEME.NET_HOST. $this->url('../payment', array('action_store_identifier' => $_POST['action_store_identifier'], 'payment_error' => 'true')),
+            NET_SCHEME.NET_HOST. $this->url('/process', array('action_store_identifier' => $_POST['action_store_identifier'])),
             $_GET,
             $_POST
         );
@@ -53,11 +53,9 @@ class Intraface_modules_modulepackage_Controller_PostForm extends k_Component
         $payment_authorize = new $payment_provider(INTRAFACE_ONLINEPAYMENT_MERCHANT, INTRAFACE_ONLINEPAYMENT_MD5SECRET);
         $language = (isset($lang) && $lang == 'dansk') ? 'da' : 'en';
 
-        if(!empty($_POST['pay'])) {
+        if (!empty($_POST['pay'])) {
             $process = $payment_authorize->getPaymentProcess();
             $url = $process->process($_POST, $_SESSION);
-
-            // die($process->http_response_body);
 
             return new k_SeeOther($url);
         }

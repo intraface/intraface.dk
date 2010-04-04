@@ -58,7 +58,7 @@ class Intraface_modules_modulepackage_ShopExtension {
 
         try {
             $this->shop = new IntrafacePublic_Shop_Client_XMLRPC(
-                array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()),
+                array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => uniqid()),
                 INTRAFACE_INTRANETMAINTENANCE_SHOP_ID,
                 INTRAFACE_XMLRPC_DEBUG,
                 $xmlrpc_shop_url);
@@ -69,12 +69,12 @@ class Intraface_modules_modulepackage_ShopExtension {
 
 
         $this->debtor = new IntrafacePublic_Debtor_XMLRPC_Client(
-            array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()),
+            array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => uniqid()),
             INTRAFACE_XMLRPC_DEBUG,
             $xmlrpc_debtor_url);
 
         $this->onlinepayment = new IntrafacePublic_OnlinePayment_Client_XMLRPC(
-            array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => session_id()),
+            array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => uniqid()),
             INTRAFACE_XMLRPC_DEBUG,
             $xmlrpc_onlinepayment_url);
 
