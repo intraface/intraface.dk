@@ -47,6 +47,9 @@ class CMS_Site extends Intraface_Standard
             $this->error->set('error in url - start with http');
         }
         $validator->isNumeric($var['cc_license'], 'error in cc license');
+        if((int)$var['cc_license'] == 0) {
+            $this->error->set('You have not selected a valid value for cc_license!');
+        }
 
 
         if ($this->error->isError()) {
@@ -59,7 +62,9 @@ class CMS_Site extends Intraface_Standard
     {
         $var = safeToDb($var);
 
-        settype($var['cc_license'], 'integer');
+        if(!isset($var['cc_license'])) {
+            $var['cc_license'] = 99; // None;
+        }
         if (!$this->validate($var)) {
             return 0;
         }
