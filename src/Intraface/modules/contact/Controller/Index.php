@@ -242,7 +242,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
             // for a new contact we want to check if similar contacts alreade exists
             if (!empty($_POST['phone'])) {
-                $contact->getDBQuery()->setCondition("address.phone = '".$_POST['phone']."' AND address.phone <> ''");
+                $this->getContact()->getDBQuery()->setCondition("address.phone = '".$_POST['phone']."' AND address.phone <> ''");
                 $similar_contacts = $this->getContact()->getList();
             }
 
