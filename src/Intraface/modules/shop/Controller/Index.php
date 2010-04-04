@@ -8,6 +8,21 @@ class Intraface_modules_shop_Controller_Index extends k_Component
          $this->template = $template;
     }
 
+    function map($name)
+    {
+        if ($name == 'create') {
+            return 'Intraface_modules_shop_Controller_Edit';
+        }
+
+        /**
+         * Not finished. Can be removed if no costumers no longer interested
+        if ($name == 'discount-campaigns') {
+            return 'Intraface_modules_shop_Controller_DiscountCampaigns';
+        } */
+
+        return 'Intraface_modules_shop_Controller_Show';
+    }
+
     function renderHtml()
     {
         $this->document->setTitle('Shops');
@@ -23,21 +38,6 @@ class Intraface_modules_shop_Controller_Index extends k_Component
         $data = array('shops' => $shops);
         $tpl = $this->template->create(dirname(__FILE__) . '/tpl/shops');
         return $tpl->render($this, $data);
-    }
-
-    function map($name)
-    {
-        if ($name == 'create') {
-            return 'Intraface_modules_shop_Controller_Edit';
-        }
-        
-        /**
-         * Not finished. Can be removed if no costumers no longer interested 
-        if ($name == 'discount-campaigns') {
-            return 'Intraface_modules_shop_Controller_DiscountCampaigns';
-        } */
-        
-        return 'Intraface_modules_shop_Controller_Show';
     }
 
     function getKernel()

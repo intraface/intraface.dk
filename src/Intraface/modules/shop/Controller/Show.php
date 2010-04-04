@@ -10,20 +10,19 @@ class Intraface_modules_shop_Controller_Show extends k_Component
         $this->template = $template;
     }
 
-    function getKernel()
+    function map($name)
     {
-        return $this->context->getKernel();
-    }
-
-    function getShopId()
-    {
-        return $this->name();
-    }
-
-    function getShop()
-    {
-        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->getShopId());
-        return $shop;
+        if ($name == 'edit') {
+            return 'Intraface_modules_shop_Controller_Edit';
+        } elseif ($name == 'basketevaluation') {
+            return 'Intraface_modules_shop_Controller_BasketEvaluation_Index';
+        } elseif ($name == 'featuredproducts') {
+            return 'Intraface_modules_shop_Controller_FeaturedProducts';
+        } elseif ($name == 'categories') {
+            return 'Intraface_modules_shop_Controller_Categories';
+        } elseif ($name == 'paymentmethods') {
+            return 'Intraface_modules_shop_Controller_PaymentMethods_Index';
+        }
     }
 
     function renderHtml()
@@ -48,18 +47,19 @@ class Intraface_modules_shop_Controller_Show extends k_Component
         return $tpl->render($this, $data);
     }
 
-    function map($name)
+    function getKernel()
     {
-        if ($name == 'edit') {
-            return 'Intraface_modules_shop_Controller_Edit';
-        } elseif ($name == 'basketevaluation') {
-            return 'Intraface_modules_shop_Controller_BasketEvaluation_Index';
-        } elseif ($name == 'featuredproducts') {
-            return 'Intraface_modules_shop_Controller_FeaturedProducts';
-        } elseif ($name == 'categories') {
-            return 'Intraface_modules_shop_Controller_Categories';
-        } elseif ($name == 'paymentmethods') {
-            return 'Intraface_modules_shop_Controller_PaymentMethods_Index';
-        }
+        return $this->context->getKernel();
+    }
+
+    function getShopId()
+    {
+        return $this->name();
+    }
+
+    function getShop()
+    {
+        $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->getShopId());
+        return $shop;
     }
 }
