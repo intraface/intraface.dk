@@ -512,17 +512,16 @@ class Procurement extends Intraface_Standard
     function state($year, $voucher_number, $voucher_date, $debet_accounts, $credit_account_id, $translation)
     {
         if (!is_object($year)) {
-            trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
-            return false;
+            throw new Exception('First parameter to state needs to be a Year object!');
         }
 
-        if (!is_object($year)) {
-            trigger_error('Sixth parameter to state needs to be a Translation object!', E_USER_ERROR);
+        if (!is_object($translation)) {
+            throw new Exception('Sixth parameter to state needs to be a Translation object!');
             return false;
         }
 
         if (!$this->readyForState($year)) {
-            $this->error->set('Ikke klar til bogfï¿½ring');
+            $this->error->set('Ikke klar til bogføring');
             return false;
         }
 
@@ -563,7 +562,7 @@ class Procurement extends Intraface_Standard
         ));
 
         $credit_total = 0;
-        foreach ($debet_accounts AS $key => $line) {
+        foreach ($debet_accounts as $key => $line) {
             $debet_account = Account::factory($year, $line['state_account_id']);
 
             $amount = new Intraface_Amount($line['amount']);
@@ -784,11 +783,15 @@ class Procurement extends Intraface_Standard
 
         if ($skip_amount_check == 'do_amount_check') {
             if (round($total + $this->get('vat'), 2) != $this->get('total_price')) {
-                $this->error->set('Det samlede beløb ('.number_format($total + $this->get('vat'), 2, ',', '.').') til bogføring stemmer ikke overens med det samlede beløb på indkøbet. Har du fået alle varer på indkøbet med?');
+                $delta = $this->get('total_price') - ($total + $this->get('vat'));
+                $this->error->set('Det samlede beløb ('.number_format($total + $this->get('vat'), 2, ',', '.').') til bogføring stemmer ikke overens med det samlede beløb på indkøbet ('.number_format($this->get('total_price'), 2, ',', '.').'). Der er en forskel på '.number_format($delta, 2, ',', '.').'. Har du fået alle varer på indkøbet med?');
             }
 
+
+
             if (round($vat, 2) != $this->get('vat')) {
-                $this->error->set('Momsen af de beløb du bogfører på konti med moms stemmer ('.number_format($vat, 2, ',', '.').') ikke overens med momsen på det samlede indkøb. Har du fået alle varer med? Har du husket at skrive beløbet uden moms for varerne?');
+                $expected = number_format($this->get('vat') * 4, 2, ',', '.');
+                $this->error->set('Momsen af de beløb du bogfører på konti med moms stemmer (vi forventede '.number_format($vat, 2, ',', '.').') ikke overens med momsen på det samlede indkøb (det samlede beløb burde have været '.$expected.'). Har du fået alle varer med? Har du husket at skrive beløbet uden moms for varerne?');
             }
 
         }
