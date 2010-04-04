@@ -94,6 +94,8 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
     function renderHtmlCreate()
     {
+        $this->document->addScript($this->url('accounting/edit_account.js'));
+
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/account/edit');
         return $smarty->render($this);
     }
