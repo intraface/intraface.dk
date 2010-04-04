@@ -131,9 +131,12 @@ class Intraface_modules_accounting_Controller_Post_Index extends k_Component
         return $this->context->getKernel();
     }
 
-    function getYear($id = 0)
+
+    function getYear()
     {
-        return new Year($this->getKernel(), $id);
+        $this->year = new Year($this->getKernel());
+        $this->year->checkYear();
+        return $this->year;
     }
 
     function getYearGateway()

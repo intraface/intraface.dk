@@ -40,7 +40,6 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
     function postForm()
     {
         $year = $this->getYear();
-        $this->getYear()->checkYear();
 
         // tjek om debet og credit account findes
         $post = Post::factory($this->getYear(), (int)$this->name());
@@ -69,11 +68,6 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
         return $this->render();
     }
 
-    function getYears()
-    {
-    	return $this->getYear()->getList();
-    }
-
     function getAccount()
     {
     	return new Account($this->getYear());
@@ -97,6 +91,8 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
 
     function getYear()
     {
-        return new Year($this->getKernel(), $this->name());
+        $this->year = new Year($this->getKernel());
+        $this->year->checkYear();
+        return $this->year;
     }
 }
