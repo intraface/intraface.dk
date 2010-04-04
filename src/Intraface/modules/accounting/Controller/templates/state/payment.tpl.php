@@ -1,8 +1,8 @@
 <?php // @todo should have state payment for xxxxxx $context->getType() ?>
-<h1><?php e(t('state payment for ')); ?> #<?php e($object->get('number')); ?></h1>
+<h1><?php e(t('State payment for ')); ?> #<?php e($payment->get('id')); ?></h1>
 
 <ul class="options">
-        <li><a href="<?php e(url('../../../')); ?>">Luk</a></li>
+    <li><a href="<?php e(url('../../../')); ?>">Luk</a></li>
 </ul>
 
 <?php if (!$year->readyForState($payment->get('payment_date'))): ?>
@@ -18,7 +18,6 @@
     ?>
 
     <form action="<?php e(url()); ?>" method="post">
-    <input type="hidden" value="<?php e($object->get('id')); ?>" name="id" />
     <input type="hidden" value="<?php e($for); ?>" name="for" />
     <input type="hidden" value="<?php e($payment->get('id')); ?>" name="payment_id" />
     <fieldset>

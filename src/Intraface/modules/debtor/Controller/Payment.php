@@ -43,8 +43,14 @@ class Intraface_modules_debtor_Controller_Payment extends k_Component
         if (is_object($this->payment)) {
             return $this->payment;
         }
-        require_once 'Intraface/modules/invoice/Payment.php';
-        return $this->payment = new Payment($this->getDebtor(), $this->name());
+
+        $gateway = new Intraface_modules_invoice_PaymentGateway($this->getKernel());
+        return $this->payment = $gateway->findById($this->name());
+    }
+
+    function getPayment()
+    {
+        return $this->getModel();
     }
 
     function getType()

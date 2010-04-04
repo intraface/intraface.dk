@@ -19,6 +19,24 @@ class Intraface_modules_invoice_PaymentGateway
         $this->dbquery = $this->getDBQuery();
     }
 
+    function findById($id)
+    {
+        $db = new DB_Sql;
+        $db->query('SELECT * FROM invoice_payment WHERE id = ' . $id);
+
+        if (!$db->nextRecord()) {
+            return false;
+        }
+
+        require_once 'Intraface/modules/invoice/Payment.php';
+
+        $debtor_gateway = new Intraface_modules_debtor_DebtorGateway($this->kernel);
+        $debtor = $debtor_gateway->findById((int)$db->f('payment_for_id'));
+
+        $payment = new Payment($debtor, $id);
+        return $payment;
+    }
+
     function findByType()
     {
 
@@ -49,7 +67,7 @@ class Intraface_modules_invoice_PaymentGateway
         }
 
         $this->dbquery->setSorting("payment_date ASC");
-        $db = $this->dbquery->getRecordset("id, amount, type, description, payment_date, payment_for_id, DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date, date_stated, voucher_id", "", false);
+        $db = $this->dbquery->getRecordset("id, amount, payment_for, type, description, payment_date, payment_for_id, DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date, date_stated, voucher_id", "", false);
         while($db->nextRecord()) {
             $payment[$i]["id"] = $db->f("id");
             $types = $this->getTypes();
@@ -61,6 +79,8 @@ class Intraface_modules_invoice_PaymentGateway
             $payment[$i]["is_stated"] = ($db->f('date_stated') > '0000-00-00');
             $payment[$i]["voucher_id"] = $db->f("voucher_id");
             $payment[$i]["payment_for_id"] = $db->f("payment_for_id");
+            $payment_for_types = $this->getPaymentForTypes();
+            $payment[$i]['payment_for'] = $payment_for_types[$db->f('payment_for')];
             $i++;
         }
 
