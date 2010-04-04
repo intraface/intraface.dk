@@ -24,7 +24,7 @@ class Intraface_modules_invoice_PaymentGateway
 
     function findAll()
     {
-        $db = new DB_sql;
+        $db = new DB_Sql;
         $i = 0;
         $payment = array();
         $credit_note = array();
