@@ -22,8 +22,22 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
     {
         $this->getKernel()->useModule('accounting');
 
+        $this->document->addScript('XMLHttp.js');
         $this->document->addScript('focusField.js');
         $this->document->addScript('accounting/daybook.js');
+
+        // used by daybook.js
+        if ($this->query('s')) {
+            $year = new Year($this->getKernel());
+            $account = Account::factory($year, $this->query('s'));
+
+            if ($account->get('id') > 0) {
+                $content = $account->get('name');
+            } else {
+                $content = 'Konto findes ikke';
+            }
+            return new k_HttpResponse(200, $content);
+        }
 
         // set settings for viewing
         if (in_array($this->query('message'), array('hide'))) {

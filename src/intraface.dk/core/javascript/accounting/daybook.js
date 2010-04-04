@@ -12,21 +12,21 @@ var daybook = {
 			return;
 		}
 
-		// sætter fokus til det første felt
+		// sets focus to the first field
 		var o = document.getElementById("date");
 		if (o) {
 			focusField(o);
 		}
 
-		// laver hjælpetekst, hvis man klikker mellem felterne i stedet for at bruge tab
+		// creates help text if you click between the fields instead of using tab
 		var o = document.getElementById("voucher_number");
 		if (o) {
 			YAHOO.util.Event.addListener(o, "click", daybook.help_tab);
 		}
 
 		/*
-		// laver hjælpetekst, hvis man klikker på Gem i stedet for at at trykke på enter
-		// men vi skal lige være ikker på at det er et museklik
+		// creates help text if you click Save instead of using enter
+		// @todo but we need to make sure it is a mouse click
 		var oSubmit = document.getElementById("submit");
 		if (oSubmit) {
 			YAHOO.util.Event.addListener(oSubmit, "click", daybook.help_enter);
@@ -63,23 +63,15 @@ var daybook = {
 
 		}
 
-		// denne kunne sagtens laves mere generelt, så den gjaldt for alle links, der havde fx class hide
+		// @todo Could be made more general so it is true for all links with class hide
+		/*
 		var sUrl = YAHOO.util.Dom.get('accounting-cheatsheet-link');
 		if (!sUrl) return;
 		YAHOO.util.Event.addListener(sUrl, "click", function(e) {
 			var request = YAHOO.util.Connect.asyncRequest('GET', sUrl + "&ajax=true", {
 				success: function(o) {
 					if (o.responseText == '1') {
-						//sUrl.innerHTML = 'Næste gang du loader siden er denne boks skjult';
 						YAHOO.util.Dom.get('accounting-cheatsheet').style.display = "none";
-						/*
-						var myAnim = new YAHOO.util.Anim('accounting-cheatsheet', {
-							width: {to: 0},
-							height: {to: 0},
-							fontSize: {from: 100, to: 0, unit: '%'},
-							opacity: { to: 0.0 } }, 1, YAHOO.util.Easing.easeOut);
-						myAnim.animate();
-						*/
 					}
 				}
 
@@ -88,6 +80,7 @@ var daybook = {
 				YAHOO.util.Event.stopEvent(e);
 			}
 		});
+		*/
 	},
 
 	find_account: function(inputField) {
@@ -103,7 +96,7 @@ var daybook = {
 
 		var xmlhttp = XMLHttp();
   		if (xmlhttp && account && elem) {
-			url = "ajax_find_account.php?s="+account.value;
+			url = "?s="+account.value;
 			if (!xmlhttp) return;
 			xmlhttp.open("GET",url,true);
 			xmlhttp.onreadystatechange = function() {
@@ -116,7 +109,7 @@ var daybook = {
 				}
 			}
 
-			xmlhttp.setRequestHeader('Accept','message/x-formresult');
+			//xmlhttp.setRequestHeader('Accept','message/x-formresult');
 			xmlhttp.send(null);
 			return false;
 		}
@@ -150,7 +143,7 @@ var daybook = {
 		while (oMessage.hasChildNodes()) {
 			oMessage.removeChild(oMessage.lastChild);
 		}
-		var text = document.createTextNode("Det er lettere at trykke på tabulator-tasten, når du vil skifte felt");
+		var text = document.createTextNode("Det er lettere at trykke pï¿½ tabulator-tasten, nï¿½r du vil skifte felt");
 		oMessage.appendChild(text);
 		oForm.appendChild(oMessage);
 
@@ -168,7 +161,7 @@ var daybook = {
 		while (oMessage.hasChildNodes()) {
 			oMessage.removeChild(oMessage.lastChild);
 		}
-		var text = document.createTextNode("Det er lettere at trykke på enter-tasten, når du vil gemme en post");
+		var text = document.createTextNode("Det er lettere at trykke pï¿½ enter-tasten, nï¿½r du vil gemme en post");
 		oMessage.appendChild(text);
 		oForm.appendChild(oMessage);
 	},
