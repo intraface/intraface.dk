@@ -79,7 +79,6 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
 
     public function renderHtmlCreate()
     {
-        $
         $this->document->setTitle($this->t("Create procurement"));
         $this->document->addScript('procurement/edit.js');
         $values["number"] = $this->getProcurementGateway()->getMaxNumber() + 1;
