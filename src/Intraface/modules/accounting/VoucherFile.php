@@ -57,7 +57,7 @@ class VoucherFile
         if ($db->nextRecord()) {
             // hvis filen allerede er tilknyttet lader vi som om alt gik godt, og vi siger go
             // dette skal naturligvis laves lidt anderledes, hvis vi skal have en description med
-            return 1;
+            return $db->f('id');
         }
 
         if ($this->id > 0) {
@@ -152,9 +152,9 @@ class VoucherFile
                 break;
                 case 'procurement':
                     if (empty($files[$i]['description'])) {
-                        $files[$i]['description'] = 'Indkøb';
+                        $files[$i]['description'] = 'Indkï¿½b';
                     }
-                    $files[$i]['name'] = 'Indkøb';
+                    $files[$i]['name'] = 'Indkï¿½b';
                     $files[$i]['file_uri'] = url('/modules/procurement/view.php', array('id' => $db->f('belong_to_id')));
                 break;
                 default:
