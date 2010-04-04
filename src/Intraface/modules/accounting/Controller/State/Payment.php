@@ -42,7 +42,7 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
         $translation = $this->context->getKernel()->getTranslation('debtor');
         $year = new Year($this->context->getKernel());
         $voucher = $this->getVoucher();
-        $object = $this->context->getDebtor();
+        //$object = $this->context->getDebtor();
         $payment = $this->getModel();
         if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
             return new k_SeeOther($this->url('selectyear'));
@@ -52,7 +52,7 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
         	'kernel' => $this->getKernel(),
         	'voucher' => $voucher,
         	'payment' => $payment,
-        	'object' => $object,
+        	//'object' => $object,
         	'year' => $year,
             'accounting_module' => $accounting_module);
 
