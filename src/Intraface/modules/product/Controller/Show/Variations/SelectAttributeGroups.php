@@ -3,6 +3,7 @@ class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups
 {
     protected $template;
     public $existing_groups;
+    public $error;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -27,13 +28,14 @@ class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups
                 $variations = $product->getVariations();
                 if ($variations->count() > 0) {
                     $this->error->set('You cannot change the attached attribute groups when variations has been created');
+                    return true;
                 }
             } catch (Intraface_Gateway_Exception $e) {
 
             }
         }
 
-        return $this->error;
+        return true;
     }
 
     function renderHtml()
@@ -48,9 +50,22 @@ class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups
 
         $res = $this->checkForAddedVariations();
 
+        if ($res === true) {
+            $tpl = $this->template->create('Intraface/modules/product/Controller/tpl/select-attribute-groups-table');
+        } else {
+            $tpl = $this->template->create('Intraface/modules/product/Controller/tpl/select-attribute-groups-form');
+        }
+
+        $data = array(
+            'groups' => $groups,
+        );
+
+        $content = $tpl->render($this, $data);
+
         $data = array(
         	'groups' => $groups,
-            'error' => $res
+            'error' => $this->error,
+            'content' => $content
         );
 
         $smarty = $this->template->create('Intraface/modules/product/Controller/tpl/select-attribute-groups');
@@ -60,7 +75,7 @@ class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups
 
     function putForm()
     {
-        $this->error = $this->checkForAddedVariations();
+        $this->checkForAddedVariations();
 
         if ($this->error->isError() == 0) {
             if (isset($_POST['selected']) && is_array($_POST['selected'])) {
