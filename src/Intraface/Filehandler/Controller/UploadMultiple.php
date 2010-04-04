@@ -37,12 +37,18 @@ class Intraface_Filehandler_Controller_UploadMultiple extends k_Component
 
         if (!empty($_POST['addfile'])) {
             foreach ($_POST['addfile'] as $key => $value) {
-                $gateway = new Ilib_Filehandler_Gateway($kernel);
+                $gateway = $this->context->getGateway();
                 $filemanager = $gateway->getFromId($value);
-                $appender = $filemanager->getKeywordAppender();
+
+                $appender = new Intraface_Keyword_Appender($filemanager);
+
                 $string_appender = new Intraface_Keyword_StringAppender(new Keyword($filemanager), $appender);
                 $string_appender->addKeywordsByString($_POST['keywords']);
 
+                /*
+                $string_appender = new Intraface_Keyword_StringAppender(new Keyword($filemanager), $appender);
+                $string_appender->addKeywordsByString($_POST['keywords']);
+				*/
                 $filemanager->update(array('accessibility' => $_POST['accessibility']));
 
                 if ($filemanager->moveFromTemporary()) {
