@@ -14,7 +14,11 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
     function dispatch()
     {
         if ($this->query('intranet_id')) {
-            $this->url_state->set("intranet_id", $this->query('intranet_id'));
+            if ($this->getUser()->hasIntranetAccess($this->query('intranet_id'))) {
+                $this->url_state->set("intranet_id", $this->query('intranet_id'));
+            } else {
+                $this->url_state->set("intranet_id", 0);
+            }
         }
         return parent::dispatch();
     }
@@ -49,10 +53,12 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
 
         if (!empty($edit_intranet_id)) {
             $intranet = new IntranetMaintenance(intval($edit_intranet_id));
-            $user->setIntranetId(intval($edit_intranet_id));
-            $address = $user->getAddress();
-            if (isset($address)) {
-                $value_address = $user->getAddress()->get();
+            if ($user->hasIntranetAccess($edit_intranet_id)) {
+                $user->setIntranetId(intval($edit_intranet_id));
+                $address = $user->getAddress();
+                if (isset($address)) {
+                    $value_address = $user->getAddress()->get();
+                }
             }
         }
 
@@ -159,7 +165,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
     {
         $user = $this->getUser();
         $value = $user->get();
-        if ($this->query('intranet_id') > 0) {
+        if ($this->query('intranet_id') > 0 and $user->hasIntranetAccess($this->query('intranet_id'))) {
             $intranet_id = intval($this->query('intranet_id'));
             $user->setIntranetId($intranet_id);
             $address_value = $user->getAddress()->get();
@@ -180,7 +186,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
             return $this->user;
         }
         $this->user = new UserMaintenance($this->name());
-        if ($this->query('intranet') > 0) {
+        if ($this->query('intranet') > 0 AND $this->user->hasIntranetAccess($this->query('intranet'))) {
             $this->user->setIntranetId($this->query('intranet_id'));
         }
         return ($this->user);

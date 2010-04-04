@@ -43,8 +43,8 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
     {
         $user = $this->getUser();
 
-        if (isset($_POST["intranet_id"]) && intval($_POST["intranet_id"]) != 0) {
-            $intranet = new Intraface_Intranet($_POST["intranet_id"]);
+        if (intval($this->body("intranet_id")) != 0) {
+            $intranet = new Intraface_Intranet($this->body("intranet_id"));
             $intranet_id = $intranet->get("id");
             $address_value = $_POST;
             $address_value["name"] = $_POST["address_name"];
@@ -126,7 +126,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
         if (is_object($this->intranetmaintenance)) {
             return $this->intranetmaintenance;
         }
-        return $this->intranetmaintenance = new IntranetMaintenance();
+        return $this->intranetmaintenance = new IntranetMaintenance($this->query('intranet_id'));
     }
 
     function getKernel()

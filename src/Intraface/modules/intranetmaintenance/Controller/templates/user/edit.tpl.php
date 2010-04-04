@@ -4,7 +4,7 @@ $address_values = $context->getValues();
 ?>
 <h1><?php e('User'); ?></h1>
 
-<ul>
+<ul class="options">
 	<li><a href="<?php e(url(null)); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
@@ -89,6 +89,6 @@ if ($context->getIntranet()->getId() != 0) {
 
 
 <input type="hidden" name="id" id="id" value="<?php e($context->getUser()->get("id")); ?>" />
-<input type="hidden" name="intranet_id" value="<?php e($context->getIntranet()->get('id')); ?>" />
+<input type="hidden" name="intranet_id" value="<?php e($context->query('intranet_id')); ?>" />
 
 </form>

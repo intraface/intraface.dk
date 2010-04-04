@@ -47,6 +47,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Permission extends k
             $user_id = intval($this->context->name());
             unset($user);
             unset($intranet);
+            return new k_SeeOther($this->context->url());
         } else {
             // Sætter adgang til det redigerede intranet. Id kommer tidligere ved setIntranetId
             $user->setIntranetAccess();
