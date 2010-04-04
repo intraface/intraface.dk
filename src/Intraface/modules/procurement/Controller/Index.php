@@ -18,29 +18,6 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
         }
     }
 
-    public function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
-    function getError()
-    {
-        if(!is_object($this->error)) {
-            $this->error = new Intraface_Error();
-        }
-
-        return $this->error;
-    }
-
-    public function getProcurementGateway()
-    {
-        if(!is_object($this->gateway)) {
-            $this->gateway = new Intraface_modules_procurement_ProcurementGateway($this->getKernel());
-        }
-
-        return $this->gateway;
-    }
-
     function renderHtml()
     {
         // $this->document->title = $this->__('Procurement');
@@ -51,11 +28,11 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
 
         $gateway = $this->getProcurementGateway();
 
-        if (isset($_GET["contact_id"]) && intval($_GET["contact_id"]) != 0 && $this->getKernel()->user->hasModuleAccess('contact')) {
-            # We need some way to identify this controller i used from contact? /Sune 29-11-2009
+        if (intval($this->query("contact_id")) != 0 && $this->getKernel()->user->hasModuleAccess('contact')) {
+            // @todo We need some way to identify this controller i used from contact? /Sune 29-11-2009
             $contact_module = $this->getKernel()->useModule('contact');
-            $contact = new Contact($this->getKernel(), $_GET['contact_id']);
-            $gateway->getDBQuery()->setFilter("contact_id", $_GET["contact_id"]);
+            $contact = new Contact($this->getKernel(), $this->query('contact_id'));
+            $gateway->getDBQuery()->setFilter("contact_id", $this->query("contact_id"));
         }
 
         if ($this->query("search") != '') {
@@ -73,6 +50,10 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
 
             if ($this->query("status")) {
                 $gateway->getDBQuery()->setFilter("status", $this->query("status"));
+            }
+
+            if ($this->query('not_stated')) {
+                $gateway->getDBQuery()->setFilter("not_stated", "1");
             }
         } else {
             if ($gateway->getDBQuery()->checkFilter("contact_id")) {
@@ -99,6 +80,7 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
 
     public function renderHtmlCreate()
     {
+        $
         $this->document->setTitle($this->t("Create procurement"));
         $this->document->addScript('procurement/edit.js');
         $values["number"] = $this->getProcurementGateway()->getMaxNumber() + 1;
@@ -123,11 +105,32 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
                 $procurement->setStatus("recieved");
             }
             return new k_SeeOther($this->url($procurement->get("id")));
-        } else {
-            $values = $_POST;
-            $title = "Ret indkøb";
         }
 
         return $this->render();
+    }
+
+
+    public function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getError()
+    {
+        if (!is_object($this->error)) {
+            $this->error = new Intraface_Error();
+        }
+
+        return $this->error;
+    }
+
+    public function getProcurementGateway()
+    {
+        if (!is_object($this->gateway)) {
+            $this->gateway = new Intraface_modules_procurement_ProcurementGateway($this->getKernel());
+        }
+
+        return $this->gateway;
     }
 }

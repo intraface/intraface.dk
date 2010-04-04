@@ -40,7 +40,6 @@ class Intraface_modules_procurement_ProcurementGateway
         $db->query('UPDATE procurement SET contact_id = ' . $new_id . ' WHERE contact_id = ' . $old_id);
     }
 
-
     function find()
     {
         $list = array();
@@ -119,6 +118,10 @@ class Intraface_modules_procurement_ProcurementGateway
                     $this->dbquery->setCondition("status_key = ".intval($this->dbquery->getFilter("status")));
                 }
             }
+        }
+
+        if ($this->dbquery->getFilter('not_stated') == 1) {
+            $this->dbquery->setCondition("voucher_id = 0");
         }
 
         $i = 0;

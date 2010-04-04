@@ -29,7 +29,7 @@
                 '3' => 'Canceled'
             );
             ?>
-            <?php foreach($status_list AS $status => $text): ?>
+            <?php foreach($status_list as $status => $text): ?>
                 <option value="<?php e($status); ?>" <?php if ($gateway->getDBQuery()->getFilter("status") == $status) echo ' selected="selected"';?>><?php e(t($text))?></option>
             <?php endforeach; ?>
          </select>
@@ -39,6 +39,9 @@
         </label>
         <label><?php e(t('To date')); ?>
             <input type="text" name="to_date" value="<?php e($gateway->getDBQuery()->getFilter("to_date")); ?>" />
+        </label>
+        <label><?php e(t('Not stated')); ?>
+            <input type="checkbox" name="not_stated" value="1" <?php if ($gateway->getDBQuery()->getFilter("not_stated") == 1) { echo ' checked="checked"'; } ?> />
         </label>
         <span>
         <input type="submit" name="search" value="<?php e(t('Find')); ?>" />
