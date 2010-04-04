@@ -12,15 +12,15 @@
     <p><?php e($procurement->get("description")); ?></p>
 
     <table>
-        <caption>Oplysninger</caption>
+        <caption><?php e(t('Information')); ?></caption>
         <tbody>
         <tr>
-            <td>Nummer</td>
+            <td><?php e(t('Number')); ?></td>
             <td><?php e($procurement->get("number")); ?></td>
         </tr>
 
         <tr>
-            <td>Fakturadato</td>
+            <td><?php e(t('Invoice date')); ?></td>
             <td><?php e($procurement->get("dk_invoice_date")); ?></td>
         </tr>
         <tr>
@@ -31,7 +31,7 @@
         if ($kernel->user->hasModuleAccess('contact')) {
             ?>
             <tr>
-                <td>Kontakt</td>
+                <td><?php e(t('Contact')); ?></td>
                 <td>
                     <?php
                     if ($procurement->get('contact_id') == 0) {
@@ -64,19 +64,19 @@
             </td>
         </tr>
         <tr>
-            <td>Pris samlet</td>
-            <td><?php e($procurement->get("dk_total_price")); ?> (incl. moms)</td>
+            <td><?php e(t('Total amount')); ?></td>
+            <td><?php e($procurement->get("dk_total_price")); ?> (<?php e(t('incl. VAT')); ?>)</td>
         </tr>
         <tr>
-            <td>Pris for varer (eks. administrationsgebyr og forsendelse)</td>
-            <td><?php e($procurement->get("dk_price_items")); ?> (excl. moms)</td>
+            <td><?php e(t('Amount goods (without fees and shipment)')); ?></td>
+            <td><?php e($procurement->get("dk_price_items")); ?> (<?php e(t('excl. VAT')); ?>)</td>
         </tr>
         <tr>
-            <td>Pris for forsendelse, gebyr osv</td>
+            <td><?php e(t('Amount shipment and fees')); ?></td>
             <td><?php e($procurement->get("dk_price_shipment_etc")); ?></td>
         </tr>
         <tr>
-            <td>Moms</td>
+            <td><?php e(t('VAT')); ?></td>
             <td><?php e($procurement->get("dk_vat")); ?></td>
         </tr>
         <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
@@ -108,7 +108,7 @@
 <div id="colTwo">
 
     <div class="box">
-        <h2>Status</h2>
+        <h2><?php e(t('Status')); ?></h2>
 
         <?php
         if ($procurement->get("status") == "ordered") {
@@ -151,7 +151,7 @@
         if ($procurement->get('status') != 'canceled') {
             ?>
 
-            <h2>Betaling</h2>
+            <h2><?php e(t('Payment')); ?></h2>
 
             <?php
             if ($procurement->get("paid_date") != "0000-00-00") {
@@ -188,7 +188,7 @@
         ?>
     </div>
     <div class="box">
-        <h2>Bilag</h2>
+        <h2><?php e(t('Vouchers')); ?></h2>
 
         <?php
         $appendix_list = $append_file->getList();
@@ -234,15 +234,15 @@
     if (count($items) > 0):
     ?>
     <table class="stripe">
-        <caption>Varer</caption>
+        <caption><?php e(t('Products')); ?></caption>
         <thead>
             <tr>
-                <th>Varenr.</th>
-                <th>Beskrivelse</th>
-                <th style="text-align: right">Antal</th>
+                <th><?php e(t('Number')); ?></th>
+                <th><?php e(t('Description')); ?></th>
+                <th style="text-align: right"><?php e(t('Quantity')); ?></th>
                 <th>&nbsp;</th>
-                <th style="text-align: right">Indkøbspris</th>
-                <th style="text-align: right">I alt</th>
+                <th style="text-align: right"><?php e(t('Purchase price')); ?></th>
+                <th style="text-align: right"><?php e(t('Total')); ?></th>
                 <th style="text-align: right">Kostpris</th>
                 <th>&nbsp;</th>
             </tr>
@@ -277,7 +277,7 @@
             <tr>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td colspan="3">Total:</td>
+                <td colspan="3"><?php e(t('Total')); ?></td>
                 <td class="amount"><?php e(number_format($total, 2, ",", ".")); ?></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
