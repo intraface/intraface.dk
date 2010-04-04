@@ -18,6 +18,82 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
         return parent::map($name);
     }
 
+    function renderHtml()
+    {
+        if ($this->query('contact_id') == '') {
+            return new k_SeeOther($this->url('contact'));
+        }
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
+        return $smarty->render($this);
+    }
+
+    function postForm()
+    {
+    	$debtor = $this->getDebtor();
+    	$contact = new Contact($this->getKernel(), $_POST["contact_id"]);
+
+    	if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
+    		$contact_person = new ContactPerson($contact);
+    		$person["name"] = $_POST['contact_person_name'];
+    		$person["email"] = $_POST['contact_person_email'];
+    		$contact_person->save($person);
+    		$contact_person->load();
+    		$_POST["contact_person_id"] = $contact_person->get("id");
+    	}
+
+        if ($this->getKernel()->intranet->hasModuleAccess('currency') && !empty($_POST['currency_id'])) {
+            $currency_module = $this->getKernel()->useModule('currency', false); // false = ignore user access
+            $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
+            $currency = $gateway->findById($_POST['currency_id']);
+            if ($currency == false) {
+                throw new Exception('Invalid currency');
+            }
+
+            $_POST['currency'] = $currency;
+        }
+
+    	if ($debtor->update($_POST)) {
+    	    return new k_SeeOther($this->url('../' . $debtor->get('id')));
+    	}
+
+    	return $this->render();
+    }
+
+    function getValues()
+    {
+        if ($this->body()) {
+            return $this->body();
+        }
+
+        return array(
+            'number' => $this->getDebtor()->getMaxNumber() + 1,
+            'dk_this_date' => date('d-m-Y'),
+            'dk_due_date' => date('d-m-Y')
+        );
+    }
+
+    function getReturnUrl($contact_id)
+    {
+        return $this->url(null, array('create', 'contact_id' => $contact_id));
+    }
+
+    function getAction()
+    {
+        return 'Create';
+    }
+
+    function getType()
+    {
+        return $this->context->context->getType();
+    }
+
+    function getContact()
+    {
+        $module = $this->getKernel()->module('contact');
+        return new Contact($this->getKernel(), $this->query('contact_id'));
+    }
+
+
     function getDebtor()
     {
         if (is_object($this->debtor)) {
@@ -231,74 +307,4 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
         return $this->context->getKernel();
     }
 
-    function postForm()
-    {
-    	$debtor = $this->getDebtor();
-    	$contact = new Contact($this->getKernel(), $_POST["contact_id"]);
-
-    	if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
-    		$contact_person = new ContactPerson($contact);
-    		$person["name"] = $_POST['contact_person_name'];
-    		$person["email"] = $_POST['contact_person_email'];
-    		$contact_person->save($person);
-    		$contact_person->load();
-    		$_POST["contact_person_id"] = $contact_person->get("id");
-    	}
-
-        if ($this->getKernel()->intranet->hasModuleAccess('currency') && !empty($_POST['currency_id'])) {
-            $currency_module = $this->getKernel()->useModule('currency', false); // false = ignore user access
-            $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
-            $currency = $gateway->findById($_POST['currency_id']);
-            if ($currency == false) {
-                throw new Exception('Invalid currency');
-            }
-
-            $_POST['currency'] = $currency;
-        }
-
-    	if ($debtor->update($_POST)) {
-    	    return new k_SeeOther($this->url('../' . $debtor->get('id')));
-    	}
-
-    	return $this->render();
-    }
-
-    function getReturnUrl($contact_id)
-    {
-        return $this->url(null, array('create', 'contact_id' => $contact_id));
-    }
-
-    function renderHtml()
-    {
-        if ($this->query('contact_id') == '') {
-            return new k_SeeOther($this->url('contact'));
-        }
-        $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
-        return $smarty->render($this);
-    }
-
-    function getValues()
-    {
-        return array(
-            'number' => $this->getDebtor()->getMaxNumber() + 1,
-            'dk_this_date' => date('d-m-Y'),
-            'dk_due_date' => date('d-m-Y')
-        );
-    }
-
-    function getAction()
-    {
-        return 'Create';
-    }
-
-    function getType()
-    {
-        return $this->context->context->getType();
-    }
-
-    function getContact()
-    {
-        $module = $this->getKernel()->module('contact');
-        return new Contact($this->getKernel(), $this->query('contact_id'));
-    }
 }
