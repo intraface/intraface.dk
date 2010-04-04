@@ -20,57 +20,56 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
 
     function renderHtml()
     {
-        // $this->document->title = $this->__('Procurement');
+        $this->document->setTitle($this->t('Procurement'));
 
         $module = $this->getKernel()->module('procurement');
         $module = $this->getKernel()->useModule('contact');
         $translation = $this->getKernel()->getTranslation('procurement');
 
-        $gateway = $this->getProcurementGateway();
+        //$gateway = $this->getProcurementGateway();
 
         if (intval($this->query("contact_id")) != 0 && $this->getKernel()->user->hasModuleAccess('contact')) {
             // @todo We need some way to identify this controller i used from contact? /Sune 29-11-2009
             $contact_module = $this->getKernel()->useModule('contact');
             $contact = new Contact($this->getKernel(), $this->query('contact_id'));
-            $gateway->getDBQuery()->setFilter("contact_id", $this->query("contact_id"));
+            $this->getProcurementGateway()->getDBQuery()->setFilter("contact_id", $this->query("contact_id"));
         }
 
         if ($this->query("search") != '') {
             if ($this->query("text") != "") {
-                $gateway->getDBQuery()->setFilter("text", $this->query("text"));
+                $this->getProcurementGateway()->getDBQuery()->setFilter("text", $this->query("text"));
             }
 
             if ($this->query("from_date") != "") {
-                $gateway->getDBQuery()->setFilter("from_date", $this->query("from_date"));
+                $this->getProcurementGateway()->getDBQuery()->setFilter("from_date", $this->query("from_date"));
             }
 
             if ($this->query("to_date") != "") {
-                $gateway->getDBQuery()->setFilter("to_date", $this->query("to_date"));
+                $this->getProcurementGateway()->getDBQuery()->setFilter("to_date", $this->query("to_date"));
             }
 
             if ($this->query("status")) {
-                $gateway->getDBQuery()->setFilter("status", $this->query("status"));
+                $this->getProcurementGateway()->getDBQuery()->setFilter("status", $this->query("status"));
             }
 
             if ($this->query('not_stated')) {
-                $gateway->getDBQuery()->setFilter("not_stated", "1");
+                $this->getProcurementGateway()->getDBQuery()->setFilter("not_stated", "1");
             }
         } else {
-            if ($gateway->getDBQuery()->checkFilter("contact_id")) {
-              $gateway->getDBQuery()->setFilter("status", "-1");
+            if ($this->getProcurementGateway()->getDBQuery()->checkFilter("contact_id")) {
+              $this->getProcurementGateway()->getDBQuery()->setFilter("status", "-1");
             } else {
-                $gateway->getDBQuery()->setFilter("status", "-2");
+                $this->getProcurementGateway()->getDBQuery()->setFilter("status", "-2");
             }
         }
 
-        $gateway->getDBQuery()->usePaging("paging", $this->getKernel()->setting->get('user', 'rows_pr_page'));
-        $gateway->getDBQuery()->storeResult("use_stored", "procurement", "toplevel");
-        // $gateway->getDBQuery()->setExtraUri('&amp;type='.$gateway->get("type"));
-        $gateway->getDBQuery()->setUri($this->url());
-        $procurements = $gateway->find();
+        $this->getProcurementGateway()->getDBQuery()->usePaging("paging", $this->getKernel()->setting->get('user', 'rows_pr_page'));
+        $this->getProcurementGateway()->getDBQuery()->storeResult("use_stored", "procurement", "toplevel");
+        $this->getProcurementGateway()->getDBQuery()->setUri($this->url(null, array('use_stored' => 'true')));
+        $procurements = $this->getProcurementGateway()->find();
 
         $data = array(
-            'gateway' => $gateway,
+            'gateway' => $this->getProcurementGateway(),
             'procurements' => $procurements
         );
 
