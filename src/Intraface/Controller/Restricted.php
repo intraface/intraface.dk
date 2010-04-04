@@ -164,6 +164,9 @@ class Intraface_Controller_Restricted extends k_Component
         }
         $this->usermenu[2]['name'] = $this->t('Modules');
         $this->usermenu[2]['url'] = $this->url('/restricted/module');
+        $this->usermenu[3]['name'] = $this->t('Control panel');
+        $this->usermenu[3]['url'] = $this->url('/restricted/module/controlpanel');
+
         return $this->usermenu;
     }
 
