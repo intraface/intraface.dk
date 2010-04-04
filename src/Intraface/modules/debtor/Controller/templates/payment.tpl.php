@@ -1,5 +1,12 @@
 <h1><?php e(t('Register payment for').' '.t($context->getType()).' #'.$context->getModel()->get('number')); ?></h1>
 
+<ul class="options">
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
+    <?php if ($context->getKernel()->user->hasModuleAccess('accounting')): ?>
+    <li><a href="<?php e(url('state')); ?>"><?php e(t('State')); ?></a></li>
+    <?php endif; ?>
+</ul>
+
 <?php echo $context->getPayment()->error->view(); ?>
 
 <form method="post" action="<?php e(url()); ?>">
