@@ -89,7 +89,7 @@
 		<tbody>
 		<?php foreach ($context->getFiles() as $file): ?>
 			<tr>
-				<td><a target="_blank" href="<?php e($file['file_uri']); ?>"><?php e($file['description']); ?></a></td>
+				<td><a href="<?php e($file['file_uri']); ?>"><?php e($file['description']); ?></a></td>
 				<td class="options">
 					<a class="delete" href="<?php e(url(null)); ?>?delete_file=<?php e($file['id']); ?>&amp;id=<?php e($context->getVoucher()->get('id')); ?>">Slet</a>
 				</td>
