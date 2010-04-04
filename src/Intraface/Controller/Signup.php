@@ -12,9 +12,9 @@
 class Intraface_Controller_Signup extends k_Component
 {
     protected $kernel;
-    public $msg;
+    public $msg = '';
     protected $template;
-    public $error;
+    public $errors = array();
 
     function __construct(k_TemplateFactory $template)
     {

@@ -2,7 +2,7 @@
 
 <form id="form-login" method="post" action="<?php e(url(null)); ?>">
 
-	<?php foreach ($context->errors as $error): ?>
+	<?php foreach ($context->error as $error): ?>
 		<li><?php e($error); ?></li>
 	<?php endforeach; ?>
 
