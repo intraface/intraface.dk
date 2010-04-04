@@ -27,6 +27,6 @@ class Intraface_Controller_Payment
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/payment');
         $content = $tpl-render($this, array('text' => $text));
-        return new k_HttpResponse(200, $content, true);
+        return new k_HttpResponse(200, $content);
     }
 }
