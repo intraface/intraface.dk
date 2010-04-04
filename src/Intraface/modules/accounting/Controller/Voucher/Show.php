@@ -12,11 +12,34 @@ class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
     {
         if ($name == 'post') {
             return 'Intraface_modules_accounting_Controller_Post_Index';
+        } elseif ($name == 'filehandler') {
+            return 'Intraface_Filehandler_Controller_Index';
         }
+    }
+
+    function appendFile($selected_file_id)
+    {
+        $voucher = new Voucher($this->getYear(), intval($this->name()));
+        $voucher_file = new VoucherFile($voucher);
+        $var['belong_to'] = 'file';
+        $var['belong_to_id'] = intval($selected_file_id);
+        $voucher_file->save($var);
+        return true;
     }
 
     function renderHtml()
     {
+        if (!empty($_GET['delete_file']) AND is_numeric($_GET['delete_file'])) {
+
+            $voucher = new Voucher($this->getYear(), $this->name());
+            $voucher_file = new VoucherFile($voucher, $_GET['delete_file']);
+            if ($voucher_file->delete()) {
+                return new k_SeeOther($this->url(null, array('flare' => 'File has been removed')));
+            } else {
+                throw new Exception('Kunne ikke slette filen');
+            }
+        }
+
         /*
 $module_accounting = $kernel->module('accounting');
 $kernel->useShared('filehandler');
@@ -188,6 +211,36 @@ $voucher_files = $voucher_file->getList();
     {
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/voucher/edit');
         return $smarty->render($this);
+    }
+
+    function postMultipart()
+    {
+        $this->getKernel()->useShared('filehandler');
+        $voucher = new Voucher($this->getYear(), $this->name());
+        $voucher_file = new VoucherFile($voucher);
+        $var['belong_to'] = 'file';
+
+        if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
+            return new k_SeeOther($this->url('filehandler/selectfile'));
+        } elseif (!empty($_FILES['new_file'])) {
+            $filehandler = new FileHandler($this->getKernel());
+            $filehandler->createUpload();
+            $filehandler->upload->setSetting('max_file_size', 2000000);
+            if ($id = $filehandler->upload->upload('new_file')) {
+                $var['belong_to_id'] = $id;
+                if (!$voucher_file->save($var)) {
+                    $value = $_POST;
+                } else {
+                    return new k_SeeOther($this->url());
+                }
+
+            } else {
+                $filehandler->error->view();
+                $voucher_file->error->set('Kunne ikke uploade filen');
+                $voucher_file->error->view();
+            }
+        }
+        return $this->render();
     }
 
     function postForm()
