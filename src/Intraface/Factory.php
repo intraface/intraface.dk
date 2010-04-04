@@ -153,7 +153,7 @@ class Intraface_Factory
     function new_Cache_Lite()
     {
         $options = array(
-    		'cacheDir' => '/tmp/',
+    		'cacheDir' => PATH_CACHE,
     		'lifeTime' => 3600
         );
 
