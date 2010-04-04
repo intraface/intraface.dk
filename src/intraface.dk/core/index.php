@@ -2,27 +2,6 @@
 // common settings
 define('INTRAFACE_K2', true);
 
-error_reporting(E_ALL);
-
-/**
- * An error-handler which converts all errors (regardless of level) into exceptions.
- * It respects error_reporting settings.
- */
-function intraface_exceptions_error_handler($severity, $message, $filename, $lineno) {
-  if (error_reporting() == 0) {
-    return;
-  }
-  if (error_reporting() && $severity) {
-      if ($severity == 8 or $severity == 2048) {
-        return;
-      }
-  }
-
-  $e = new ErrorException($message, 0, $severity, $filename, $lineno);
-  throw $e;
-}
-
-
 $config_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . '/../config.local.php';
 
 if (!file_exists($config_file)) {
@@ -31,14 +10,21 @@ if (!file_exists($config_file)) {
 
 require_once $config_file;
 
+/**
+ * An error-handler which converts all errors (regardless of level) into exceptions.
+ * It respects error_reporting settings.
+ */
+function intraface_exceptions_error_handler($severity, $message, $filename, $lineno) {
+    throw new ErrorException($message, 0, $severity, $filename, $lineno);
+}
+
+set_error_handler('intraface_exceptions_error_handler', error_reporting());
+
 require_once 'Intraface/common.php';
 require_once 'Ilib/ClassLoader.php';
 require_once 'konstrukt/konstrukt.inc.php';
 require_once 'swift_required.php';
 require_once 'Ilib/Errorhandler/Handler/File.php';
-//set_error_handler('k_exceptions_error_handler');
-
-set_error_handler('intraface_exceptions_error_handler', E_ALL); // Setting E_ALL leaves out E_STRICT which generates many errors
 spl_autoload_register('k_autoload');
 
 $GLOBALS['konstrukt_content_types']['application/ms-excel'] = 'xls';
@@ -384,16 +370,17 @@ if (realpath($_SERVER['SCRIPT_FILENAME']) == __FILE__) {
         ->setTranslatorLoader(new Intraface_TranslatorLoader())
         ->run('Intraface_Controller_Index')
         ->out();
-    } catch (ErrorException $e) {
-
-        // hvordan granulerer man når der nu bliver smidt en exception altid?
-        // vi kan sikkert køre out, når vi har lyst - og exception bliver
-        // kastet inden out?
+    } catch (Exception $e) {
 
         $render = new Ilib_Errorhandler_Handler_File(Log::factory('file', ERROR_LOG, 'INTRAFACE'));
         $render->handle($e);
-
-        $render = new Ilib_Errorhandler_Handler_Echo();
-        $render->handle($e);
+        
+        if(SERVER_STATUS != 'PRODUCTION') {
+            $render = new Ilib_Errorhandler_Handler_Echo();
+            $render->handle($e);
+            die;
+        } 
+       
+        die('<h1>An error orrured!</h1> <P>We have been notified about the problem, but you are always welcome to contact us on support@intraface.dk.</p><p>We apologize for the inconvenience.</p> <pre style="color: white;">'.$e.'</pre>');
     }
 }
