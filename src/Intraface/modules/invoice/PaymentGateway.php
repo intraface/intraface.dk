@@ -10,16 +10,28 @@ class Intraface_modules_invoice_PaymentGateway
 {
     protected $kernel;
     protected $error;
+    protected $dbquery;
 
     function __construct($kernel)
     {
         $this->kernel = $kernel;
         $this->error = new Intraface_Error;
+        $this->dbquery = $this->getDBQuery();
     }
 
     function findByType()
     {
 
+    }
+
+    function getDBQuery()
+    {
+        if (is_object($this->dbquery)) {
+            return $this->dbquery;
+        }
+        $this->dbquery = new Intraface_DBQuery($this->kernel, "invoice_payment", "intranet_id = ".$this->kernel->intranet->get("id"));
+        $this->dbquery->useErrorObject($this->error);
+        return $this->dbquery;
     }
 
     function findAll()
