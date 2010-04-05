@@ -1,6 +1,10 @@
 <h1><?php e(t('Upload file')); ?></h1>
 
-<?php $filemanager->error->view(); ?>
+<ul class="options">
+<li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
+</ul>
+
+<?php echo $filemanager->error->view(); ?>
 
 <form action="<?php e(url('./')); ?>" method="POST" enctype="multipart/form-data">
 <fieldset>
