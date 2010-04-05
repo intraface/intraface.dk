@@ -102,6 +102,7 @@ class Intraface_Controller_Restricted extends k_Component
 
     function getTweets()
     {
+        $id = 'tweets';
         if (!$data = $this->cache->get($id)) { // cache hit !
             try {
                 $twitterSearch = new Zend_Service_Twitter_Search('json');
