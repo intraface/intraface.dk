@@ -116,8 +116,8 @@ $pfm->addPackageDepWithChannel('required', 'bucket', 'pearhub.org', '1.1.1');
 
 // Doctrine
 $pfm->addPackageDepWithChannel('required', 'Doctrine', 'pear.doctrine-project.org', '1.2.2');
-$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Nohtml', 'public.intraface.dk', '0.1.1');
-$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Greaterthan', 'public.intraface.dk', '0.1.1');
+$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Nohtml', 'public.intraface.dk', '0.1.2');
+$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Greaterthan', 'public.intraface.dk', '0.1.2');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Template_Positionable', 'public.intraface.dk', '0.2.0');
 
 // Ilib
