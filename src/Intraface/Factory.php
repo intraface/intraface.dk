@@ -57,11 +57,7 @@ class Intraface_Factory
     function new_DB_Sql($container)
     {
         $db = new DB_Sql(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-        if (defined('INTRAFACE_K2')) {
-            $db->query('SET NAMES utf8');
-        } else {
-            $db->query('SET NAMES latin1');
-        }
+        $db->query('SET NAMES utf8');
         return $db;
     }
 
