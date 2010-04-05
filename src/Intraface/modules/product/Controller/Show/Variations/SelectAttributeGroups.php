@@ -35,7 +35,7 @@ class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups
             }
         }
 
-        return true;
+        return false;
     }
 
     function renderHtml()
