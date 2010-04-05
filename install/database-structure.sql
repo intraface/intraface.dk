@@ -1,12 +1,31 @@
+-- phpMyAdmin SQL Dump
+-- version 3.2.4
+-- http://www.phpmyadmin.net
+--
+-- Vært: localhost
+-- Genereringstid: 05. 04 2010 kl. 12:06:49
+-- Serverversion: 5.0.90
+-- PHP-version: 5.2.6
+
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
+--
+-- Database: `intrafac_intraface`
+--
 
-CREATE TABLE IF NOT EXISTS `accounting_account` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `accounting_account`
+--
+
+CREATE TABLE `accounting_account` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `year_id` int(11) NOT NULL default '0',
@@ -32,7 +51,13 @@ CREATE TABLE IF NOT EXISTS `accounting_account` (
   KEY `intranet_id` (`intranet_id`,`year_id`,`active`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `accounting_post` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `accounting_post`
+--
+
+CREATE TABLE `accounting_post` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -52,7 +77,13 @@ CREATE TABLE IF NOT EXISTS `accounting_post` (
   KEY `stated` (`stated`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `accounting_vat_period` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `accounting_vat_period`
+--
+
+CREATE TABLE `accounting_vat_period` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `year_id` int(11) NOT NULL default '0',
@@ -68,7 +99,13 @@ CREATE TABLE IF NOT EXISTS `accounting_vat_period` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `accounting_voucher` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `accounting_voucher`
+--
+
+CREATE TABLE `accounting_voucher` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -85,7 +122,13 @@ CREATE TABLE IF NOT EXISTS `accounting_voucher` (
   KEY `intranet_id` (`intranet_id`,`year_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `accounting_voucher_file` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `accounting_voucher_file`
+--
+
+CREATE TABLE `accounting_voucher_file` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `voucher_id` int(11) NOT NULL default '0',
@@ -98,7 +141,13 @@ CREATE TABLE IF NOT EXISTS `accounting_voucher_file` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `accounting_year` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `accounting_year`
+--
+
+CREATE TABLE `accounting_year` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -118,7 +167,13 @@ CREATE TABLE IF NOT EXISTS `accounting_year` (
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `accounting_year_end` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `accounting_year_end`
+--
+
+CREATE TABLE `accounting_year_end` (
   `id` int(11) NOT NULL auto_increment,
   `operating_reset_voucher_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -131,7 +186,13 @@ CREATE TABLE IF NOT EXISTS `accounting_year_end` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `accounting_year_end_action` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `accounting_year_end_action`
+--
+
+CREATE TABLE `accounting_year_end_action` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `year_id` int(11) NOT NULL default '0',
@@ -144,7 +205,13 @@ CREATE TABLE IF NOT EXISTS `accounting_year_end_action` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `accounting_year_end_statement` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `accounting_year_end_statement`
+--
+
+CREATE TABLE `accounting_year_end_statement` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `year_id` int(11) NOT NULL default '0',
@@ -154,7 +221,13 @@ CREATE TABLE IF NOT EXISTS `accounting_year_end_statement` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `address` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `address`
+--
+
+CREATE TABLE `address` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `tmp_intranet_id` int(11) NOT NULL default '0',
@@ -183,7 +256,13 @@ CREATE TABLE IF NOT EXISTS `address` (
   KEY `find_address` (`type`,`belong_to_id`,`active`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `basket` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `basket`
+--
+
+CREATE TABLE `basket` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `order_id` int(11) NOT NULL default '0',
@@ -203,7 +282,13 @@ CREATE TABLE IF NOT EXISTS `basket` (
   KEY `intranet_id` (`intranet_id`,`product_id`,`shop_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `basket_details` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `basket_details`
+--
+
+CREATE TABLE `basket_details` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `order_id` int(11) NOT NULL default '0',
@@ -230,7 +315,13 @@ CREATE TABLE IF NOT EXISTS `basket_details` (
   KEY `session_id` (`session_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `cms_element` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `cms_element`
+--
+
+CREATE TABLE `cms_element` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `type_key` int(11) NOT NULL default '0',
@@ -246,7 +337,13 @@ CREATE TABLE IF NOT EXISTS `cms_element` (
   KEY `intranet_id` (`intranet_id`,`section_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `cms_page` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `cms_page`
+--
+
+CREATE TABLE `cms_page` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -276,7 +373,13 @@ CREATE TABLE IF NOT EXISTS `cms_page` (
   KEY `site_id` (`site_id`,`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `cms_parameter` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `cms_parameter`
+--
+
+CREATE TABLE `cms_parameter` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `belong_to_id` int(11) NOT NULL default '0',
@@ -287,7 +390,13 @@ CREATE TABLE IF NOT EXISTS `cms_parameter` (
   KEY `intranet_id` (`intranet_id`,`belong_to_id`,`type_key`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `cms_section` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `cms_section`
+--
+
+CREATE TABLE `cms_section` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `site_id` int(11) NOT NULL default '0',
@@ -300,7 +409,13 @@ CREATE TABLE IF NOT EXISTS `cms_section` (
   KEY `intranet_id` (`intranet_id`,`page_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `cms_site` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `cms_site`
+--
+
+CREATE TABLE `cms_site` (
   `id` int(11) NOT NULL auto_increment,
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -313,7 +428,13 @@ CREATE TABLE IF NOT EXISTS `cms_site` (
   KEY `intranet_id` (`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `cms_template` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `cms_template`
+--
+
+CREATE TABLE `cms_template` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `site_id` int(11) NOT NULL default '0',
@@ -328,7 +449,13 @@ CREATE TABLE IF NOT EXISTS `cms_template` (
   KEY `intranet_id` (`intranet_id`,`site_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `cms_template_section` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `cms_template_section`
+--
+
+CREATE TABLE `cms_template_section` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `template_id` int(11) NOT NULL default '0',
@@ -346,7 +473,13 @@ CREATE TABLE IF NOT EXISTS `cms_template_section` (
   KEY `position` (`position`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `comment` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `comment`
+--
+
+CREATE TABLE `comment` (
   `id` int(11) NOT NULL auto_increment,
   `code` varchar(255) NOT NULL default '',
   `intranet_id` int(11) NOT NULL default '0',
@@ -367,7 +500,13 @@ CREATE TABLE IF NOT EXISTS `comment` (
   KEY `date_created` (`date_created`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `contact` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `contact`
+--
+
+CREATE TABLE `contact` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `number` int(11) NOT NULL default '0',
@@ -387,7 +526,13 @@ CREATE TABLE IF NOT EXISTS `contact` (
   KEY `find contact to newsletter_subscriber` (`id`,`active`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `contact_message` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `contact_message`
+--
+
+CREATE TABLE `contact_message` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -399,7 +544,13 @@ CREATE TABLE IF NOT EXISTS `contact_message` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `contact_person` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `contact_person`
+--
+
+CREATE TABLE `contact_person` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
@@ -412,7 +563,13 @@ CREATE TABLE IF NOT EXISTS `contact_person` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `contact_reminder_single` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `contact_reminder_single`
+--
+
+CREATE TABLE `contact_reminder_single` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
@@ -429,7 +586,13 @@ CREATE TABLE IF NOT EXISTS `contact_reminder_single` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `core_translation_i18n` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `core_translation_i18n`
+--
+
+CREATE TABLE `core_translation_i18n` (
   `page_id` varchar(50) default NULL,
   `id` text NOT NULL,
   `dk` text,
@@ -439,7 +602,13 @@ CREATE TABLE IF NOT EXISTS `core_translation_i18n` (
   KEY `i18n_id_index` (`id`(255))
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `core_translation_langs` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `core_translation_langs`
+--
+
+CREATE TABLE `core_translation_langs` (
   `id` varchar(16) default NULL,
   `name` varchar(200) default NULL,
   `meta` text,
@@ -448,7 +617,13 @@ CREATE TABLE IF NOT EXISTS `core_translation_langs` (
   UNIQUE KEY `langs_id_index` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `currency` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `currency`
+--
+
+CREATE TABLE `currency` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL,
   `type_key` int(11) NOT NULL,
@@ -457,7 +632,13 @@ CREATE TABLE IF NOT EXISTS `currency` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `currency_exchangerate` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `currency_exchangerate`
+--
+
+CREATE TABLE `currency_exchangerate` (
   `id` bigint(20) NOT NULL auto_increment,
   `currency_id` bigint(20) NOT NULL,
   `used_for_key` tinyint(4) NOT NULL,
@@ -468,7 +649,13 @@ CREATE TABLE IF NOT EXISTS `currency_exchangerate` (
   KEY `currency_id_idx` (`currency_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `dbquery_result` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `dbquery_result`
+--
+
+CREATE TABLE `dbquery_result` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -488,7 +675,13 @@ CREATE TABLE IF NOT EXISTS `dbquery_result` (
   KEY `clean_up_posts` (`intranet_id`,`date_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `debtor` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `debtor`
+--
+
+CREATE TABLE `debtor` (
   `id` int(11) NOT NULL auto_increment,
   `where_from` int(11) NOT NULL default '0',
   `where_from_id` int(11) NOT NULL default '0',
@@ -543,7 +736,13 @@ CREATE TABLE IF NOT EXISTS `debtor` (
   KEY `find_debtor_from_item_to_get_quantity_of_product` (`id`,`intranet_id`,`date_sent`,`status`,`type`,`active`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `debtor_item` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `debtor_item`
+--
+
+CREATE TABLE `debtor_item` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `debtor_id` int(11) NOT NULL default '0',
@@ -564,7 +763,13 @@ CREATE TABLE IF NOT EXISTS `debtor_item` (
   KEY `find_quantity_of_product` (`intranet_id`,`product_id`,`product_variation_id`,`active`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `email` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `email`
+--
+
+CREATE TABLE `email` (
   `id` int(11) NOT NULL auto_increment,
   `type_id` int(11) NOT NULL default '0',
   `status` int(11) NOT NULL default '0',
@@ -589,7 +794,13 @@ CREATE TABLE IF NOT EXISTS `email` (
   KEY `search_for_due_mails` (`date_deadline`,`intranet_id`,`status`,`contact_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `email_attachment` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `email_attachment`
+--
+
+CREATE TABLE `email_attachment` (
   `id` int(11) NOT NULL auto_increment,
   `email_id` int(11) NOT NULL default '0',
   `file_id` int(11) NOT NULL default '0',
@@ -599,7 +810,13 @@ CREATE TABLE IF NOT EXISTS `email_attachment` (
   KEY `email_id` (`email_id`,`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `filehandler_append_file` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `filehandler_append_file`
+--
+
+CREATE TABLE `filehandler_append_file` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -614,7 +831,13 @@ CREATE TABLE IF NOT EXISTS `filehandler_append_file` (
   KEY `intranet_id` (`intranet_id`,`belong_to_id`,`file_handler_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `file_handler` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `file_handler`
+--
+
+CREATE TABLE `file_handler` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -636,7 +859,13 @@ CREATE TABLE IF NOT EXISTS `file_handler` (
   KEY `simple_find` (`id`,`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `file_handler_instance` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `file_handler_instance`
+--
+
+CREATE TABLE `file_handler_instance` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `file_handler_id` int(11) NOT NULL default '0',
@@ -653,7 +882,13 @@ CREATE TABLE IF NOT EXISTS `file_handler_instance` (
   KEY `intranet_id` (`intranet_id`,`file_handler_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `file_handler_instance_type` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `file_handler_instance_type`
+--
+
+CREATE TABLE `file_handler_instance_type` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
@@ -666,14 +901,26 @@ CREATE TABLE IF NOT EXISTS `file_handler_instance_type` (
   KEY `intranet_id` (`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `flickr_cache` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `flickr_cache`
+--
+
+CREATE TABLE `flickr_cache` (
   `request` varchar(35) NOT NULL default '',
   `response` mediumtext NOT NULL,
   `expiration` datetime NOT NULL default '0000-00-00 00:00:00',
   KEY `request` (`request`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `ilib_category` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `ilib_category`
+--
+
+CREATE TABLE `ilib_category` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `belong_to` int(11) NOT NULL default '0',
@@ -687,7 +934,13 @@ CREATE TABLE IF NOT EXISTS `ilib_category` (
   KEY `parent_id` (`parent_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `ilib_category_append` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `ilib_category_append`
+--
+
+CREATE TABLE `ilib_category_append` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `object_id` int(11) NOT NULL default '0',
@@ -696,7 +949,13 @@ CREATE TABLE IF NOT EXISTS `ilib_category_append` (
   KEY `intranet_id` (`intranet_id`,`object_id`,`category_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `intraface_modules_onlinepayment__language_translation` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `intraface_modules_onlinepayment__language_translation`
+--
+
+CREATE TABLE `intraface_modules_onlinepayment__language_translation` (
   `id` int(11) NOT NULL,
   `email` text,
   `lang` varchar(20) NOT NULL default '',
@@ -704,7 +963,13 @@ CREATE TABLE IF NOT EXISTS `intraface_modules_onlinepayment__language_translatio
   PRIMARY KEY  (`id`,`lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `intranet` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `intranet`
+--
+
+CREATE TABLE `intranet` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `identifier` varchar(255) NOT NULL default '',
@@ -725,7 +990,13 @@ CREATE TABLE IF NOT EXISTS `intranet` (
   KEY `public_key` (`public_key`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `intranet_module_package` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `intranet_module_package`
+--
+
+CREATE TABLE `intranet_module_package` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `module_package_id` int(11) NOT NULL default '0',
@@ -739,7 +1010,13 @@ CREATE TABLE IF NOT EXISTS `intranet_module_package` (
   KEY `order_debtor_id` (`order_debtor_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `invoice_payment` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `invoice_payment`
+--
+
+CREATE TABLE `invoice_payment` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `payment_date` date NOT NULL default '0000-00-00',
@@ -759,7 +1036,13 @@ CREATE TABLE IF NOT EXISTS `invoice_payment` (
   KEY `payment_for` (`payment_for`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `invoice_reminder` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `invoice_reminder`
+--
+
+CREATE TABLE `invoice_reminder` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `intranet_address_id` int(11) NOT NULL default '0',
@@ -793,7 +1076,13 @@ CREATE TABLE IF NOT EXISTS `invoice_reminder` (
   KEY `invoice_id` (`invoice_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `invoice_reminder_item` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `invoice_reminder_item`
+--
+
+CREATE TABLE `invoice_reminder_item` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `invoice_reminder_id` int(11) NOT NULL default '0',
@@ -802,7 +1091,13 @@ CREATE TABLE IF NOT EXISTS `invoice_reminder_item` (
   KEY `intranet_id` (`intranet_id`,`invoice_reminder_id`,`invoice_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `invoice_reminder_unpaid_reminder` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `invoice_reminder_unpaid_reminder`
+--
+
+CREATE TABLE `invoice_reminder_unpaid_reminder` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `invoice_reminder_id` int(11) NOT NULL default '0',
@@ -811,7 +1106,13 @@ CREATE TABLE IF NOT EXISTS `invoice_reminder_unpaid_reminder` (
   KEY `intranet_id` (`intranet_id`,`invoice_reminder_id`,`unpaid_invoice_reminder_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `kernel_log` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `kernel_log`
+--
+
+CREATE TABLE `kernel_log` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -823,7 +1124,13 @@ CREATE TABLE IF NOT EXISTS `kernel_log` (
   KEY `intranet_id` (`intranet_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `keyword` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `keyword`
+--
+
+CREATE TABLE `keyword` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `keyword` varchar(255) NOT NULL default '',
@@ -834,7 +1141,13 @@ CREATE TABLE IF NOT EXISTS `keyword` (
   KEY `keyword` (`keyword`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `keyword_x_object` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `keyword_x_object`
+--
+
+CREATE TABLE `keyword_x_object` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `belong_to` int(11) NOT NULL default '0',
@@ -845,14 +1158,26 @@ CREATE TABLE IF NOT EXISTS `keyword_x_object` (
   KEY `keyword_id` (`keyword_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `language` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `language`
+--
+
+CREATE TABLE `language` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL,
   `type_key` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `lock_post` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `lock_post`
+--
+
+CREATE TABLE `lock_post` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -862,12 +1187,24 @@ CREATE TABLE IF NOT EXISTS `lock_post` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `log_id_seq` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `log_id_seq`
+--
+
+CREATE TABLE `log_id_seq` (
   `id` int(10) unsigned NOT NULL auto_increment,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `log_table` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `log_table`
+--
+
+CREATE TABLE `log_table` (
   `id` int(11) NOT NULL default '0',
   `logtime` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `ident` varchar(16) NOT NULL default '',
@@ -876,7 +1213,13 @@ CREATE TABLE IF NOT EXISTS `log_table` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `module` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `module`
+--
+
+CREATE TABLE `module` (
   `id` int(11) NOT NULL auto_increment,
   `name` char(255) NOT NULL default '',
   `menu_label` char(255) NOT NULL default '',
@@ -892,7 +1235,13 @@ CREATE TABLE IF NOT EXISTS `module` (
   KEY `active` (`active`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `module_package` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `module_package`
+--
+
+CREATE TABLE `module_package` (
   `id` int(11) NOT NULL auto_increment,
   `module_package_group_id` int(11) NOT NULL default '0',
   `module_package_plan_id` int(11) NOT NULL default '0',
@@ -902,7 +1251,13 @@ CREATE TABLE IF NOT EXISTS `module_package` (
   KEY `module_package_group_id` (`module_package_group_id`,`module_package_plan_id`,`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `module_package_action` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `module_package_action`
+--
+
+CREATE TABLE `module_package_action` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `identifier` varchar(255) NOT NULL default '',
@@ -915,7 +1270,13 @@ CREATE TABLE IF NOT EXISTS `module_package_action` (
   KEY `intranet_id` (`intranet_id`,`order_debtor_identifier`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `module_package_group` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `module_package_group`
+--
+
+CREATE TABLE `module_package_group` (
   `id` int(11) NOT NULL auto_increment,
   `group_name` varchar(255) NOT NULL default '',
   `sorting_index` int(11) NOT NULL default '0',
@@ -924,7 +1285,13 @@ CREATE TABLE IF NOT EXISTS `module_package_group` (
   KEY `sorting_index` (`sorting_index`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `module_package_module` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `module_package_module`
+--
+
+CREATE TABLE `module_package_module` (
   `id` int(11) NOT NULL auto_increment,
   `module_package_id` int(11) NOT NULL default '0',
   `module` varchar(255) NOT NULL default '',
@@ -934,7 +1301,13 @@ CREATE TABLE IF NOT EXISTS `module_package_module` (
   KEY `module_package_id` (`module_package_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `module_package_plan` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `module_package_plan`
+--
+
+CREATE TABLE `module_package_plan` (
   `id` int(11) NOT NULL auto_increment,
   `plan` varchar(255) NOT NULL default '',
   `plan_index` int(11) NOT NULL default '0',
@@ -943,7 +1316,13 @@ CREATE TABLE IF NOT EXISTS `module_package_plan` (
   KEY `plan_index` (`plan_index`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `module_sub_access` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `module_sub_access`
+--
+
+CREATE TABLE `module_sub_access` (
   `id` int(11) NOT NULL auto_increment,
   `module_id` int(11) NOT NULL default '0',
   `name` char(255) NOT NULL default '',
@@ -954,7 +1333,13 @@ CREATE TABLE IF NOT EXISTS `module_sub_access` (
   KEY `module_id` (`module_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `newsletter_archieve` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `newsletter_archieve`
+--
+
+CREATE TABLE `newsletter_archieve` (
   `id` int(11) NOT NULL auto_increment,
   `list_id` int(11) NOT NULL default '0',
   `subject` varchar(255) NOT NULL default '',
@@ -971,7 +1356,13 @@ CREATE TABLE IF NOT EXISTS `newsletter_archieve` (
   KEY `list_id` (`list_id`,`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `newsletter_list` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `newsletter_list`
+--
+
+CREATE TABLE `newsletter_list` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
@@ -994,7 +1385,13 @@ CREATE TABLE IF NOT EXISTS `newsletter_list` (
   KEY `intranet_id` (`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `newsletter_subscriber` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `newsletter_subscriber`
+--
+
+CREATE TABLE `newsletter_subscriber` (
   `id` int(11) NOT NULL auto_increment,
   `code` varchar(255) NOT NULL default '',
   `list_id` int(11) NOT NULL default '0',
@@ -1011,11 +1408,18 @@ CREATE TABLE IF NOT EXISTS `newsletter_subscriber` (
   `intranet_id` int(11) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '1',
   `date_unsubscribe` date NOT NULL,
+  `unsubscribe_comment` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `find_subscribers` (`intranet_id`,`optin`,`active`,`list_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `onlinepayment` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `onlinepayment`
+--
+
+CREATE TABLE `onlinepayment` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `belong_to_key` int(11) NOT NULL default '0',
@@ -1042,13 +1446,25 @@ CREATE TABLE IF NOT EXISTS `onlinepayment` (
   KEY `belong_to_id` (`belong_to_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `onlinepayment_settings` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `onlinepayment_settings`
+--
+
+CREATE TABLE `onlinepayment_settings` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `onlinepayment_settings_translation` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `onlinepayment_settings_translation`
+--
+
+CREATE TABLE `onlinepayment_settings_translation` (
   `id` int(11) NOT NULL,
   `email` text,
   `lang` varchar(20) NOT NULL default '',
@@ -1056,7 +1472,13 @@ CREATE TABLE IF NOT EXISTS `onlinepayment_settings_translation` (
   PRIMARY KEY  (`id`,`lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `permission` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `permission`
+--
+
+CREATE TABLE `permission` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1066,14 +1488,26 @@ CREATE TABLE IF NOT EXISTS `permission` (
   KEY `intranet_id` (`intranet_id`,`user_id`,`module_id`,`module_sub_access_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `php_sessions` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `php_sessions`
+--
+
+CREATE TABLE `php_sessions` (
   `session_id` varchar(40) NOT NULL default '',
   `last_active` int(11) NOT NULL default '0',
   `data` text NOT NULL,
   PRIMARY KEY  (`session_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `procurement` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `procurement`
+--
+
+CREATE TABLE `procurement` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1104,7 +1538,13 @@ CREATE TABLE IF NOT EXISTS `procurement` (
   KEY `intranet_id` (`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `procurement_item` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `procurement_item`
+--
+
+CREATE TABLE `procurement_item` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `procurement_id` int(11) NOT NULL default '0',
@@ -1123,7 +1563,13 @@ CREATE TABLE IF NOT EXISTS `procurement_item` (
   KEY `active` (`active`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `product` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `product`
+--
+
+CREATE TABLE `product` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `do_show` tinyint(1) NOT NULL default '1',
@@ -1137,7 +1583,13 @@ CREATE TABLE IF NOT EXISTS `product` (
   KEY `intranet_id` (`intranet_id`,`active`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `product_attribute` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `product_attribute`
+--
+
+CREATE TABLE `product_attribute` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `attribute_group_id` int(11) NOT NULL default '0',
@@ -1151,7 +1603,13 @@ CREATE TABLE IF NOT EXISTS `product_attribute` (
   KEY `find_attribute_to_variation` (`intranet_id`,`deleted_at`,`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `product_attribute_group` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `product_attribute_group`
+--
+
+CREATE TABLE `product_attribute_group` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
@@ -1163,7 +1621,13 @@ CREATE TABLE IF NOT EXISTS `product_attribute_group` (
   KEY `find_group_to_attribute` (`id`,`intranet_id`,`deleted_at`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `product_detail` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `product_detail`
+--
+
+CREATE TABLE `product_detail` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
@@ -1186,7 +1650,13 @@ CREATE TABLE IF NOT EXISTS `product_detail` (
   KEY `product_id` (`product_id`,`active`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `product_detail_translation` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `product_detail_translation`
+--
+
+CREATE TABLE `product_detail_translation` (
   `id` int(11) NOT NULL,
   `lang` char(2) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -1194,7 +1664,13 @@ CREATE TABLE IF NOT EXISTS `product_detail_translation` (
   PRIMARY KEY  (`id`,`lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `product_related` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `product_related`
+--
+
+CREATE TABLE `product_related` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
@@ -1205,7 +1681,13 @@ CREATE TABLE IF NOT EXISTS `product_related` (
   KEY `related_product_id` (`related_product_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `product_variation` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `product_variation`
+--
+
+CREATE TABLE `product_variation` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
@@ -1216,7 +1698,13 @@ CREATE TABLE IF NOT EXISTS `product_variation` (
   KEY `find_variation` (`intranet_id`,`product_id`,`deleted_at`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `product_variation_detail` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `product_variation_detail`
+--
+
+CREATE TABLE `product_variation_detail` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1229,7 +1717,13 @@ CREATE TABLE IF NOT EXISTS `product_variation_detail` (
   KEY `find_detail_to_variation` (`intranet_id`,`product_variation_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `product_variation_x_attribute` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `product_variation_x_attribute`
+--
+
+CREATE TABLE `product_variation_x_attribute` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_variation_id` int(11) NOT NULL default '0',
@@ -1242,7 +1736,13 @@ CREATE TABLE IF NOT EXISTS `product_variation_x_attribute` (
   KEY `find_attribute_to_variation` (`intranet_id`,`product_variation_id`,`attribute_number`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `product_x_attribute_group` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `product_x_attribute_group`
+--
+
+CREATE TABLE `product_x_attribute_group` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
@@ -1251,7 +1751,13 @@ CREATE TABLE IF NOT EXISTS `product_x_attribute_group` (
   KEY `intranet_id` (`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `project` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `project`
+--
+
+CREATE TABLE `project` (
   `id` int(11) NOT NULL auto_increment,
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1261,7 +1767,13 @@ CREATE TABLE IF NOT EXISTS `project` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `project_task` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `project_task`
+--
+
+CREATE TABLE `project_task` (
   `id` int(11) NOT NULL auto_increment,
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1273,7 +1785,13 @@ CREATE TABLE IF NOT EXISTS `project_task` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `redirect` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `redirect`
+--
+
+CREATE TABLE `redirect` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `session_id` varchar(255) NOT NULL default '',
@@ -1287,7 +1805,13 @@ CREATE TABLE IF NOT EXISTS `redirect` (
   KEY `session_id` (`session_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `redirect_parameter` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `redirect_parameter`
+--
+
+CREATE TABLE `redirect_parameter` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `redirect_id` int(11) NOT NULL default '0',
@@ -1297,7 +1821,13 @@ CREATE TABLE IF NOT EXISTS `redirect_parameter` (
   KEY `intranet_id` (`intranet_id`,`redirect_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `redirect_parameter_value` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `redirect_parameter_value`
+--
+
+CREATE TABLE `redirect_parameter_value` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `redirect_id` int(11) NOT NULL default '0',
@@ -1308,7 +1838,13 @@ CREATE TABLE IF NOT EXISTS `redirect_parameter_value` (
   KEY `intranet_id` (`intranet_id`,`redirect_id`,`redirect_parameter_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `setting` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `setting`
+--
+
+CREATE TABLE `setting` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1322,7 +1858,13 @@ CREATE TABLE IF NOT EXISTS `setting` (
   KEY `sub_id` (`sub_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `shop` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `shop`
+--
+
+CREATE TABLE `shop` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `identifier` varchar(255) NOT NULL default '',
@@ -1345,7 +1887,13 @@ CREATE TABLE IF NOT EXISTS `shop` (
   KEY `intranet_id` (`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `shop_dicount_campaign` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `shop_dicount_campaign`
+--
+
+CREATE TABLE `shop_dicount_campaign` (
   `id` bigint(20) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL,
   `voucher_code_prefix` varchar(255) NOT NULL,
@@ -1354,7 +1902,13 @@ CREATE TABLE IF NOT EXISTS `shop_dicount_campaign` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `shop_dicount_campaign_voucher` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `shop_dicount_campaign_voucher`
+--
+
+CREATE TABLE `shop_dicount_campaign_voucher` (
   `id` bigint(20) NOT NULL auto_increment,
   `shop_discount_campaign_id` int(11) NOT NULL default '0',
   `code` varchar(255) NOT NULL,
@@ -1369,7 +1923,13 @@ CREATE TABLE IF NOT EXISTS `shop_dicount_campaign_voucher` (
   KEY `shop_discount_campaign_id_idx` (`shop_discount_campaign_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `shop_featuredproducts` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `shop_featuredproducts`
+--
+
+CREATE TABLE `shop_featuredproducts` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `headline` varchar(255) NOT NULL default '',
@@ -1380,7 +1940,13 @@ CREATE TABLE IF NOT EXISTS `shop_featuredproducts` (
   KEY `intranet_id` (`intranet_id`,`shop_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `shop_paymentmethods` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `shop_paymentmethods`
+--
+
+CREATE TABLE `shop_paymentmethods` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
@@ -1389,7 +1955,13 @@ CREATE TABLE IF NOT EXISTS `shop_paymentmethods` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `stock_adaptation` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `stock_adaptation`
+--
+
+CREATE TABLE `stock_adaptation` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
@@ -1402,7 +1974,13 @@ CREATE TABLE IF NOT EXISTS `stock_adaptation` (
   KEY `product_variation_id` (`product_variation_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `stock_regulation` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `stock_regulation`
+--
+
+CREATE TABLE `stock_regulation` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
@@ -1417,7 +1995,13 @@ CREATE TABLE IF NOT EXISTS `stock_regulation` (
   KEY `find_quantity_since_last_regulation` (`intranet_id`,`product_id`,`product_variation_id`,`regulation_date_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `systemmessage_disturbance` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `systemmessage_disturbance`
+--
+
+CREATE TABLE `systemmessage_disturbance` (
   `id` int(11) NOT NULL auto_increment,
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `user_name` varchar(255) NOT NULL default '0',
@@ -1431,7 +2015,13 @@ CREATE TABLE IF NOT EXISTS `systemmessage_disturbance` (
   KEY `to_date_time` (`to_date_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `systemmessage_news` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `systemmessage_news`
+--
+
+CREATE TABLE `systemmessage_news` (
   `id` int(11) NOT NULL auto_increment,
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `user_name` varchar(255) NOT NULL default '0',
@@ -1442,7 +2032,13 @@ CREATE TABLE IF NOT EXISTS `systemmessage_news` (
   KEY `date_created` (`date_created`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `todo_contact` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `todo_contact`
+--
+
+CREATE TABLE `todo_contact` (
   `id` int(11) NOT NULL auto_increment,
   `list_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
@@ -1450,7 +2046,13 @@ CREATE TABLE IF NOT EXISTS `todo_contact` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `todo_item` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `todo_item`
+--
+
+CREATE TABLE `todo_item` (
   `id` int(11) NOT NULL auto_increment,
   `todo_list_id` int(11) NOT NULL default '0',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1465,7 +2067,13 @@ CREATE TABLE IF NOT EXISTS `todo_item` (
   KEY `todo_list_id` (`todo_list_id`,`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `todo_list` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `todo_list`
+--
+
+CREATE TABLE `todo_list` (
   `id` int(255) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1478,7 +2086,13 @@ CREATE TABLE IF NOT EXISTS `todo_list` (
   KEY `intranet_id` (`intranet_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `user` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `user`
+--
+
+CREATE TABLE `user` (
   `id` int(11) NOT NULL auto_increment,
   `lastlogin` datetime NOT NULL default '0000-00-00 00:00:00',
   `email` char(255) NOT NULL default '',
@@ -1491,7 +2105,13 @@ CREATE TABLE IF NOT EXISTS `user` (
   KEY `email` (`email`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `webshop_basket_evaluation` (
+-- --------------------------------------------------------
+
+--
+-- Struktur-dump for tabellen `webshop_basket_evaluation`
+--
+
+CREATE TABLE `webshop_basket_evaluation` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `running_index` int(11) NOT NULL default '0',
