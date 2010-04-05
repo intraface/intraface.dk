@@ -102,8 +102,7 @@ class Intraface_Controller_Restricted extends k_Component
 
     function getTweets()
     {
-        $id = 'tweets';
-        if (!$data = $this->cache->get($id)) { // cache hit !
+        if (!$data = $this->cache->get('tweets_frontpage')) { // cache hit !
             try {
                 $twitterSearch = new Zend_Service_Twitter_Search('json');
                 $data = $twitterSearch->search('#intraface', array('rpp' => 5));
@@ -111,8 +110,9 @@ class Intraface_Controller_Restricted extends k_Component
                 return array();
             }
 
-            $this->cache->save($data);
+            $this->cache->save(serialize($data));
         }
+        $data = unserialize($data);
         return $data['results'];
     }
 
