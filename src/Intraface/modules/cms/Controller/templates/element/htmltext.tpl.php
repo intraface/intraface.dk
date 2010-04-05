@@ -68,7 +68,7 @@ if (!isset($value['text'])) $value['text'] = '';
     require_once dirname(__FILE__) . '/../../../CKEditor.php';
     $config['language'] = 'da';
     $config['toolbar'] = array(
-         array( 'Source', '-', 'Cut','Copy','Paste','PasteText','PasteFromWord', '', 'Undo','Redo', '-', 'Bold', 'Italic', 'Strike' ),
+         array( 'Source', '-', 'Cut','Copy','Paste','PasteText','PasteFromWord', '', 'Undo','Redo', '-', 'Format', 'Bold', 'Italic', 'Strike' ),
          array( 'Image', 'Link', 'Unlink', 'NumberedList', 'BulletedList', 'Blockquote', 'Outdent', 'Indent', '-', 'Maximize' )
      );
     $config['filebrowserBrowseUrl'] = url('/restricted/module/filemanager/ckeditor', array('images' => 1));
