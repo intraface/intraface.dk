@@ -7,10 +7,10 @@
  * @version @package-version@
  */
 
-$version = '2.0.5';
+$version = '2.0.6';
 $stability = 'stable';
 $notes = '
-* translation changes
+* small backend changes
 ';
 $web_dir = 'src/intraface.dk';
 
@@ -106,7 +106,7 @@ $pfm->addPackageDepWithChannel('required', 'Net_IDNA', 'pear.php.net', '0.7.3');
 $pfm->addPackageDepWithChannel('required', 'HTTP_Upload', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'Cache_Lite', 'pear.php.net', '1.7.8');
 $pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.3');
-$pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Handler', 'public.intraface.dk', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Handler', 'public.intraface.dk', '1.0.2');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Debug_ExplainQueries', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.intraface.dk', '0.3.0');
@@ -210,7 +210,7 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_SimpleLogin', 'public.intraface
 $pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Observer_File_ErrorList', 'public.intraface.dk', '1.0.1');
 $pfm->addPackageDepWithChannel('required', 'Translation2_Frontend', 'public.intraface.dk', '1.0.0');
 
-$pfm->addPackageDepWithChannel('required', 'Zend', 'zend.googlecode.com/svn', '1.10.2');
+$pfm->addPackageDepWithChannel('required', 'Zend', 'zend.googlecode.com/svn', '1.10.3');
 
 
 foreach ($ignore AS $file) {
