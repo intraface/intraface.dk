@@ -33,7 +33,7 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
 
     function dispatch()
     {
-        if ($this->getYear() == 0) {
+        if ($this->getYear()->getId() == 0) {
             throw new k_PageNotFound();
         }
         if (!$this->getYear()->isValid()) {
