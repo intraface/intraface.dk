@@ -363,18 +363,15 @@ class Payment extends Intraface_Standard
     public function state($year, $voucher_number, $voucher_date, $state_account_number, $translation)
     {
         if (!is_object($year)) {
-            trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
-            return false;
+            throw new Exception('First parameter to state needs to be a Year object!');
         }
 
         if (!is_object($translation)) {
-            trigger_error('5th parameter to state needs to be a translation object!', E_USER_ERROR);
-            return false;
+            throw new Exception('5th parameter to state needs to be a translation object!');
         }
 
         if ($this->payment_for_type_id == 0) {
-            trigger_error('Invalid paymet_for_type_id in Payment->state', E_USER_ERROR);
-            return false;
+            throw new Exception('Invalid paymet_for_type_id in Payment->state');
         }
 
         $validator = new Intraface_Validator($this->error);
@@ -384,7 +381,7 @@ class Payment extends Intraface_Standard
         }
 
         $validator->isNumeric($voucher_number, 'Ugyldigt bilagsnummer', 'greater_than_zero');
-        $validator->isNumeric($state_account_number, 'Ugyldig bogf�ringskonto', 'greater_than_zero');
+        $validator->isNumeric($state_account_number, 'Ugyldig bogføringskonto', 'greater_than_zero');
 
         if (!$this->readyForState()) {
             return false;
@@ -399,14 +396,14 @@ class Payment extends Intraface_Standard
         require_once 'Intraface/modules/accounting/Account.php';
         $credit_account = new Account($year, $year->getSetting('debtor_account_id'));
         if (!$credit_account->validForState()) {
-            $this->error->set('Den gemte debitorkonto er ikke gyldig til bogf�ring');
+            $this->error->set('Den gemte debitorkonto er ikke gyldig til bogføring');
             return false;
         }
         $credit_account_number = $credit_account->get('number');
 
         $debet_account = Account::factory($year, $state_account_number);
         if (!$debet_account->validForState()) {
-            $this->error->set('Den valgte konto for bogf�ring er ikke gyldig');
+            $this->error->set('Den valgte konto for bogføring er ikke gyldig');
             return false;
         }
         $debet_account_number = $debet_account->get('number');
@@ -415,7 +412,7 @@ class Payment extends Intraface_Standard
         $voucher = Voucher::factory($year, $voucher_number);
         $amount = $this->get('amount');
 
-        // hvis bel�bet er mindre end nul, skal konti byttes om og bel�bet skal g�res positivt
+        // if amount is less than zero, accounts has to be switched and amount should be positive. You are not allowed to state a negative amount
         if ($amount < 0) {
             $debet_account_number = $credit_account->get('number');
             $credit_account_number = $debet_account->get('number');
@@ -424,7 +421,7 @@ class Payment extends Intraface_Standard
 
         $types = $this->getPaymentForTypes();
         // translation is needed!
-        $text = $translation->get('payment for').' '.$translation->get($types[$this->payment_for_type_id]).' #'.$this->payment_for->get('number');
+        $text = $translation->get('Payment') . ' ' . $this->get('description') . ' ('.$translation->get($types[$this->payment_for_type_id]).' #'.$this->payment_for->get('number') . ')';
 
         $input_values = array(
             'voucher_number' => $voucher_number,
