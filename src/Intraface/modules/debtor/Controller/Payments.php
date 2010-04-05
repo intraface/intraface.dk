@@ -13,9 +13,10 @@ class Intraface_modules_debtor_Controller_Payments extends k_Component
         return 'Intraface_modules_debtor_Controller_Payment';
     }
 
-    function getKernel()
+    function renderHtml()
     {
-        return $this->context->getKernel();
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/payment');
+        return $smarty->render($this);
     }
 
     function postForm()
@@ -32,6 +33,11 @@ class Intraface_modules_debtor_Controller_Payments extends k_Component
         return $this->render();
     }
 
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
     function getModel()
     {
         return $this->context->getModel();
@@ -46,11 +52,5 @@ class Intraface_modules_debtor_Controller_Payments extends k_Component
     function getType()
     {
         return $this->context->getType();
-    }
-
-    function renderHtml()
-    {
-        $smarty = $this->template->create(dirname(__FILE__) . '/templates/payment');
-        return $smarty->render($this);
     }
 }

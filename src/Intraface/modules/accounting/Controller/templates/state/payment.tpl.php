@@ -18,8 +18,6 @@
     ?>
 
     <form action="<?php e(url()); ?>" method="post">
-    <input type="hidden" value="<?php e($for); ?>" name="for" />
-    <input type="hidden" value="<?php e($payment->get('id')); ?>" name="payment_id" />
     <fieldset>
         <legend><?php e('payment'); ?></legend>
         <table>

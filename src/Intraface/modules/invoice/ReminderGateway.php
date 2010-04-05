@@ -24,6 +24,7 @@ class Intraface_modules_invoice_ReminderGateway
 
     function findById($id)
     {
+        require_once dirname(__FILE__) . '/Reminder.php';
         return new Reminder($this->kernel, $id);
     }
 

@@ -14,9 +14,10 @@ class Intraface_modules_debtor_Controller_Payment extends k_Component
         return 'Intraface_modules_accounting_Controller_State_Payment';
     }
 
-    function getKernel()
+    function renderHtml()
     {
-        return $this->context->getKernel();
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/payment');
+        return $smarty->render($this);
     }
 
     function postForm()
@@ -58,9 +59,9 @@ class Intraface_modules_debtor_Controller_Payment extends k_Component
         return $this->context->getType();
     }
 
-    function renderHtml()
+    function getKernel()
     {
-        $smarty = $this->template->create(dirname(__FILE__) . '/templates/payment');
-        return $smarty->render($this);
+        return $this->context->getKernel();
     }
+
 }

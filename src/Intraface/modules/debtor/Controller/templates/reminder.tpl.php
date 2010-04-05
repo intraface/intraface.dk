@@ -188,7 +188,7 @@ $reminder = $context->getReminder();
     	<div class="box">
             <h2><?php e(t('Register payment')); ?></h2>
     		<div style="border: 2px solid red; padding: 5px; margin: 10px;">
-    			<strong>Vigtigt</strong>: Registering af betaling her vedr�rer indtil videre KUN rukkergebyret p� DENNE rykker. Dvs. du skal registere betalingen for fakturaer og tidligere rykkere p� de respektive fakturaer og rykkere!
+    			<strong>Vigtigt</strong>: Registering af betaling her vedrører indtil videre KUN rukkergebyret på DENNE rykker. Dvs. du skal registere betalingen for fakturaer og tidligere rykkere på de respektive fakturaer og rykkere!
     		</div>
 
             <form method="post" action="<?php e(url('payment')); ?>">

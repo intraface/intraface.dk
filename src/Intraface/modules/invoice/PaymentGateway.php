@@ -28,12 +28,19 @@ class Intraface_modules_invoice_PaymentGateway
             return false;
         }
 
+        switch ($db->f('payment_for')) {
+            case 1:
+                $debtor_gateway = new Intraface_modules_debtor_DebtorGateway($this->kernel);
+                $object = $debtor_gateway->findById((int)$db->f('payment_for_id'));
+                break;
+            case 2:
+                $reminder_gateway = new Intraface_modules_invoice_ReminderGateway($this->kernel);
+                $object = $reminder_gateway->findById((int)$db->f('payment_for_id'));
+                break;
+        }
+
         require_once 'Intraface/modules/invoice/Payment.php';
-
-        $debtor_gateway = new Intraface_modules_debtor_DebtorGateway($this->kernel);
-        $debtor = $debtor_gateway->findById((int)$db->f('payment_for_id'));
-
-        $payment = new Payment($debtor, $id);
+        $payment = new Payment($object, $id);
         return $payment;
     }
 

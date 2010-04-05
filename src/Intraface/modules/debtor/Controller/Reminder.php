@@ -12,21 +12,6 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
         $this->template = $template;
     }
 
-    function getFormUrl()
-    {
-        return $this->url();
-    }
-
-    function getType()
-    {
-        return 'reminder';
-    }
-
-    function getModel()
-    {
-        return $this->getReminder();
-    }
-
     function map($name)
     {
         if ($name == 'payment') {
@@ -38,19 +23,6 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
         } elseif ($name == 'depreciation') {
             return 'Intraface_modules_debtor_Controller_Depreciations';
         }
-    }
-
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
-    function getReminder()
-    {
-        $mainInvoice = $this->getKernel()->useModule("invoice");
-        $mainInvoice = $this->getKernel()->useModule("contact");
-
-        return $reminder = new Reminder($this->getKernel(), intval($this->name()));
     }
 
     function renderHtml()
@@ -335,13 +307,45 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
             $redirect->askParameter('send_email_status');
             return new k_SeeOther($url);
         }
+
+        return $this->render();
+    }
+
+    function getFormUrl()
+    {
+        return $this->url();
+    }
+
+    function getType()
+    {
+        return 'reminder';
+    }
+
+    function getModel()
+    {
+        return $this->getReminder();
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getReminder()
+    {
+        $mainInvoice = $this->getKernel()->useModule("invoice");
+        $mainInvoice = $this->getKernel()->useModule("contact");
+
+        return $reminder = new Reminder($this->getKernel(), intval($this->name()));
     }
 }
 
-class Reminder_Text {
+class Reminder_Text
+{
     private $output;
     function __construct() {}
-    function visit(Reminder $reminder) {
+    function visit(Reminder $reminder)
+    {
         $this->output .= "Dato: " . $reminder->get("dk_this_date") ."\n\n";
         $this->output .= $reminder->contact->address->get("name") . "\n";
         if ($reminder->get("attention_to") != "") {
@@ -407,7 +411,8 @@ class Reminder_Text {
             $this->output .= "\n" . $reminder->kernel->intranet->address->get("postcode") . "  " . $reminder->kernel->intranet->address->get("city");
     }
 
-    public function getText() {
+    public function getText()
+    {
         return $this->output;
     }
 
