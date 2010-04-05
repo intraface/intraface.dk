@@ -95,7 +95,7 @@ var daybook = {
 		}
 
 		var xmlhttp = XMLHttp();
-  		if (xmlhttp && account && elem) {
+  		if (xmlhttp && account && elem && account.value) {
 			url = "?s="+account.value;
 			if (!xmlhttp) return;
 			xmlhttp.open("GET",url,true);
