@@ -10,12 +10,11 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
 
     function renderHtml()
     {
-        if (!$this->getYear()->isValid()) {
-            throw new Exception('Year id ' .$this->getYear()->getId().  ' is not valid');
-        }
-
+        return 'Left blank intentionally';
+        /*
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/post/show');
         return $smarty->render($this);
+        */
     }
 
     function renderHtmlEdit()
@@ -91,8 +90,6 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
 
     function getYear()
     {
-        $this->year = new Year($this->getKernel());
-        $this->year->checkYear();
-        return $this->year;
+        return $this->context->getYear();
     }
 }
