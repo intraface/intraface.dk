@@ -53,7 +53,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         if (is_object($this->procurement)) {
             return $this->procurement;
         }
-        return ($this->procurement = new Procurement($this->getKernel(), $this->name()));
+        return ($this->procurement = $this->context->getProcurementGateway()->findById($this->name()));
     }
 
     /**
@@ -80,7 +80,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         $shared_filehandler->includeFile('AppendFile.php');
         $translation = $this->getKernel()->getTranslation('procurement');
 
-        $procurement = new Procurement($this->getKernel(), $this->name());
+        $procurement = $this->getProcurement();
         $filehandler = new FileHandler($this->getKernel());
         $append_file = new AppendFile($this->getKernel(), 'procurement_procurement', $procurement->get('id'));
 
@@ -294,7 +294,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
 
     function addItem($product, $quantity = 1)
     {
-       	$procurement = new Procurement($this->getKernel(), $this->name());
+       	$procurement = $this->context->getProcurementGateway()->findById($this->name());
         $procurement->loadItem();
         $procurement->item->save(array(
         	'product_id' => $product['product_id'],
