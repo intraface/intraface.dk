@@ -7,41 +7,26 @@
  *
  * @example MainExample.php
  */
-class Intraface_Main
+abstract class Intraface_Main
 {
-    public $menu_label;
-    public $active;
-    public $menu_index;
+    public $menu_label = '';
+    public $active = 0;
+    public $menu_index = 0;
     public $sub_access = array();
     public $sub_access_description = array();
-    public $module_name;
-    public $all_has_access;
-    protected $show_menu;
-    protected $frontpage_index;
+    public $module_name = '';
+    public $all_has_access = 0;
+    protected $show_menu = 0;
+    protected $frontpage_index = 0;
     protected $submenu = array();
     protected $preload_file = array();
     protected $dependent_module = array();
     protected $required_shared = array();
-    protected $setting;
-    protected $controlpanel_files;
-    protected $frontpage_files;
+    protected $setting = array();
+    protected $controlpanel_files = array();
+    protected $frontpage_files = array();
     private $translation; // @todo used for what
     private $kernel; // @todo used for what
-
-    /**
-     * Constructor
-     *
-     * @return void
-     */
-    function __construct()
-    {
-        $this->module_name = '';
-        $this->menu_label = '';
-        $this->show_menu = 0;
-        $this->active = 0;
-        $this->menu_index = 0;
-        $this->frontpage_index = 0;
-    }
 
     /**
      * Loads stuff about the module. Kernel runs it
@@ -61,8 +46,8 @@ class Intraface_Main
             }
         }
 
-        for ($i = 0, $max = count($this->preload_file); $i<$max; $i++) {
-            $this->includeFile($this->preload_file[$i]);
+        foreach ($this->preload_file as $file) {
+            $this->includeFile($file);
         }
 
     }
