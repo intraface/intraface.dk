@@ -7,7 +7,7 @@
  * @author Lars Olesen <lars@legestue.net>
  * @package Intraface_CMS
  */
-class CMS_TemplateSection extends Intraface_Standard
+abstract class CMS_TemplateSection extends Intraface_Standard
 {
     protected $id;
     public $kernel;

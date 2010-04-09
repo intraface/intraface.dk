@@ -6,7 +6,7 @@
  *
  * @package Intraface_CMS
  */
-class CMS_Section extends Intraface_Standard
+abstract class CMS_Section extends Intraface_Standard
 {
     public $id;
     private $db;
