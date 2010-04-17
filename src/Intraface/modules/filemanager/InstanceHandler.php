@@ -313,14 +313,14 @@ class InstanceHandler extends Intraface_Standard
      *
      * @return mixed array with the type or false on failure;
      */
-    public function checkType($type, $compare = 'name') {
-
+    public function checkType($type, $compare = 'name')
+    {
         if (!in_array($compare, array('name', 'type_key'))) {
             trigger_error('Second parameter to InstanceHander->checkType should be either name or type_key', E_USER_ERROR);
             return false;
         }
 
-        require_once 'Intraface/shared/filehandler/InstanceManager.php';
+        require_once 'Intraface/modules/filemanager/InstanceManager.php';
         $instancemanager = new InstanceManager($this->file_handler->kernel);
         $instance_types = $instancemanager->getList('include_hidden');
 
@@ -338,7 +338,8 @@ class InstanceHandler extends Intraface_Standard
      *
      * @return boolean
      */
-    function delete() {
+    function delete()
+    {
         if ($this->id == 0) {
             return false;
         }
@@ -382,8 +383,8 @@ class InstanceHandler extends Intraface_Standard
      * @param string $compare either 'name' or 'type_key'
      *
      */
-    public function deleteInstanceType($instance, $compare = 'name') {
-
+    public function deleteInstanceType($instance, $compare = 'name')
+    {
         trigger_error('so fare not used!', E_USER_ERROR);
         exit;
         $type = $this->checkType($instance, $compare);
@@ -397,4 +398,3 @@ class InstanceHandler extends Intraface_Standard
         return true;
     }
 }
-?>
