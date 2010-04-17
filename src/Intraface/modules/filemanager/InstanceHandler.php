@@ -1,11 +1,11 @@
 <?php
 /**
- * Instance handler. Klarer håndtering af billeder forskellige instancer af billeder.
+ * Instance handler. Klarer hï¿½ndtering af billeder forskellige instancer af billeder.
  *
- * @todo		Der mangler noget der hurtigt kan returnere billedstørrelsen.
+ * @todo		Der mangler noget der hurtigt kan returnere billedstï¿½rrelsen.
  *				Det skal fx bruges i cms, hvor man vil knytte width og height til
- *				billedet, men hvor man også gerne vil have mulighed for at bestemme
- *				hvor bred billedteksten skal være!
+ *				billedet, men hvor man ogsï¿½ gerne vil have mulighed for at bestemme
+ *				hvor bred billedteksten skal vï¿½re!
  *
  * @package Intraface
  * @author		Sune
@@ -39,12 +39,12 @@ class InstanceHandler extends Intraface_Standard
      * @var integer id
      */
     private $id;
-    
+
     /**
      * @var object db MDB2 object
      */
     private $db;
-    
+
     /**
      * Constructor
      *
@@ -56,14 +56,14 @@ class InstanceHandler extends Intraface_Standard
     function __construct($file_handler, $id = 0)
     {
         if (!is_object($file_handler)) {
-            trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (1)", E_USER_ERROR);
+            trigger_error("InstanceHandler krï¿½ver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (1)", E_USER_ERROR);
         }
 
         $this->file_handler = $file_handler;
         $this->id = (int)$id;
         $this->instance_path = $this->file_handler->getUploadPath().'instance/';
 
-        
+
         $this->db = MDB2::singleton(DB_DSN);
 
         if ($this->file_handler->get('is_image') == 0) {
@@ -75,14 +75,14 @@ class InstanceHandler extends Intraface_Standard
             $this->load();
         }
     }
-    
+
     /**
      * desctructor
      */
     public function __destruct() {
         unset($this->file_handler);
         unset($this->instance_path);
-    } 
+    }
 
     /**
      * Factory
@@ -93,10 +93,10 @@ class InstanceHandler extends Intraface_Standard
      *
      * @return object
      */
-    function factory($file_handler, $type_name, $param = array()) 
+    function factory($file_handler, $type_name, $param = array())
     {
         if (!is_object($file_handler)) {
-            trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->factory (1)", E_USER_ERROR);
+            trigger_error("InstanceHandler krï¿½ver et filehandler- eller filemanagerobject i InstanceHandler->factory (1)", E_USER_ERROR);
         }
 
         if ((int)$file_handler->get('id') == 0) {
@@ -104,7 +104,7 @@ class InstanceHandler extends Intraface_Standard
         }
 
         if ($file_handler->get('is_image') == 0) {
-            trigger_error("Filen skal være et billede i IntanceHandler->factory", E_USER_ERROR);
+            trigger_error("Filen skal vï¿½re et billede i IntanceHandler->factory", E_USER_ERROR);
         }
 
         $instancehandler = new InstanceHandler($file_handler);
@@ -119,7 +119,7 @@ class InstanceHandler extends Intraface_Standard
             return new InstanceHandler($file_handler, $db->f('id'));
         } else {
             $file_handler->createImage();
-            
+
             if (!empty($param['crop_width']) && !empty($param['crop_height'])) {
                 settype($param['crop_offset_x'], 'integer');
                 settype($param['crop_offset_y'], 'integer');
@@ -141,7 +141,7 @@ class InstanceHandler extends Intraface_Standard
             $imagesize = getimagesize($file);
             $width = $imagesize[0]; // imagesx($file);
             $height = $imagesize[1]; // imagesy($file);
-            
+
             $db->query("INSERT INTO file_handler_instance SET
                 intranet_id = ".$file_handler->kernel->intranet->get('id').",
                 file_handler_id = ".$file_handler->get('id').",
@@ -152,7 +152,7 @@ class InstanceHandler extends Intraface_Standard
                 width = ".(int)$width.",
                 height = ".(int)$height.", " .
                 "crop_parameter = \"".safeToDb($crop_param_string)."\"");
-            
+
             $id = $db->insertedId();
 
             $mime_type = $file_handler->get('file_type');
@@ -168,7 +168,7 @@ class InstanceHandler extends Intraface_Standard
             if (!rename($file, $instancehandler->instance_path.$server_file_name)) {
                 trigger_error("Det var ikke muligt at flytte fil i InstanceHandler->factory", E_USER_ERROR);
             }
-            
+
             if (!chmod($instancehandler->instance_path.$server_file_name, 0644)) {
                 // please do not stop executing here
                 trigger_error("Unable to chmod file '".$instancehandler->instance_path.$server_file_name."'", E_USER_NOTICE);
@@ -186,7 +186,7 @@ class InstanceHandler extends Intraface_Standard
      *
      * @return boolean true or false
      */
-    private function load() 
+    private function load()
     {
 
         $db = new DB_sql;
@@ -202,7 +202,7 @@ class InstanceHandler extends Intraface_Standard
             $this->value['id'] = 0;
             return false;
         }
-        
+
         $this->value['instance_properties'] = $type;
         $this->value['type'] = $type['name'];
 
@@ -210,7 +210,7 @@ class InstanceHandler extends Intraface_Standard
         $this->value['id'] = $db->f('id');
         $this->value['date_created'] = $db->f('date_created');
         $this->value['date_changed'] = $db->f('date_changed');
-        
+
 
         //$this->value['predefined_size'] = $db->f('predefined_size');
         $this->value['server_file_name'] = $db->f('server_file_name');
@@ -221,8 +221,8 @@ class InstanceHandler extends Intraface_Standard
         // $this->value['file_uri'] = FILE_VIEWER.'?id='.$this->get('id').'&type='.$this->get('type').'&name=/'.urlencode($this->file_handler->get('file_name'));
         $this->value['file_uri'] = FILE_VIEWER.'?/'.$this->file_handler->kernel->intranet->get('public_key').'/'.$this->file_handler->get('access_key').'/'.$this->get('type').'/'.urlencode($this->file_handler->get('file_name'));
 
-        // dette er vel kun i en overgangsperiode? LO 
-        // Det kan lige så godt være der altid. Det gør jo ingen skade /Sune (20/11 2007)
+        // dette er vel kun i en overgangsperiode? LO
+        // Det kan lige sï¿½ godt vï¿½re der altid. Det gï¿½r jo ingen skade /Sune (20/11 2007)
         if ($db->f('width') == 0) {
             $imagesize = getimagesize($this->get('file_path'));
             $this->value['width'] = $imagesize[0]; // imagesx($this->get('file_uri'));
@@ -249,15 +249,15 @@ class InstanceHandler extends Intraface_Standard
      *
      * @return array
      */
-    function getList($show = 'visible') 
+    function getList($show = 'visible')
     {
         if (!in_array($show, array('visible', 'include_hidden'))) {
             trigger_error('First parameter to InstanceManager->getList should either be visibe or include_hidden', E_USER_ERROR);
             exit;
         }
-        
-        $db = new DB_Sql;        
-        require_once('Intraface/shared/filehandler/InstanceManager.php');
+
+        $db = new DB_Sql;
+        require_once('Intraface/modules/filemanager/InstanceManager.php');
         $instancemanager = new InstanceManager($this->file_handler->kernel);
         $types = $instancemanager->getList($show);
         $i = 0;
@@ -286,7 +286,7 @@ class InstanceHandler extends Intraface_Standard
                         break;
                     }
                 }
-                
+
                 if ($match_file_instance_key !== false) {
                     $types[$i]['width'] = $file_instances[$match_file_instance_key]['width'];
                     $types[$i]['height'] = $file_instances[$match_file_instance_key]['height'];
@@ -314,16 +314,16 @@ class InstanceHandler extends Intraface_Standard
      * @return mixed array with the type or false on failure;
      */
     public function checkType($type, $compare = 'name') {
-        
+
         if (!in_array($compare, array('name', 'type_key'))) {
             trigger_error('Second parameter to InstanceHander->checkType should be either name or type_key', E_USER_ERROR);
             return false;
         }
-        
+
         require_once 'Intraface/shared/filehandler/InstanceManager.php';
         $instancemanager = new InstanceManager($this->file_handler->kernel);
         $instance_types = $instancemanager->getList('include_hidden');
-        
+
         for ($i = 0, $max = count($instance_types); $i < $max; $i++) {
             if (isset($instance_types[$i][$compare]) && $instance_types[$i][$compare] == $type) {
                 return $instance_types[$i];
@@ -347,7 +347,7 @@ class InstanceHandler extends Intraface_Standard
 
         if (file_exists($this->get('file_path'))) {
             if (!rename($this->get('file_path'), $this->instance_path.'_deleted_'.$this->get('server_file_name'))) {
-                trigger_error("Kunne ikke omdøbe filen i InstanceHandler->delete()", E_USER_ERROR);
+                trigger_error("Kunne ikke omdï¿½be filen i InstanceHandler->delete()", E_USER_ERROR);
             }
         }
 
@@ -374,19 +374,19 @@ class InstanceHandler extends Intraface_Standard
 
         return true;
     }
-    
+
     /**
      * deletes all instances of a type
-     * 
+     *
      * @param string $instance   instance representation either name or type_key depending on next parameter
      * @param string $compare either 'name' or 'type_key'
-     * 
+     *
      */
     public function deleteInstanceType($instance, $compare = 'name') {
-        
+
         trigger_error('so fare not used!', E_USER_ERROR);
         exit;
-        $type = $this->checkType($instance, $compare);        
+        $type = $this->checkType($instance, $compare);
         $db = new DB_sql;
         $db->query("SELECT id FROM file_handler_instance WHERE intranet_id = ".$this->file_handler->kernel->intranet->get('id')." AND type_key = ".intval($type['type_key'])." AND active = 1");
         while ($db->nextRecord()) {

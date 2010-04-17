@@ -307,7 +307,7 @@ class FileHandler extends Intraface_Standard
      */
     public function createUpload()
     {
-        require_once 'Intraface/shared/filehandler/UploadHandler.php';
+        require_once 'Intraface/modules/filemanager/UploadHandler.php';
         $this->upload = new UploadHandler($this);
     }
 
@@ -319,7 +319,7 @@ class FileHandler extends Intraface_Standard
     public function createInstance($type = "", $param = array())
     {
 
-        require_once 'Intraface/shared/filehandler/InstanceHandler.php';
+        require_once 'Intraface/modules/filemanager/InstanceHandler.php';
         if ($type == "") {
             $this->instance = new InstanceHandler($this);
         } else {
@@ -336,7 +336,7 @@ class FileHandler extends Intraface_Standard
      */
     public function createImage()
     {
-        require_once 'Intraface/shared/filehandler/ImageHandler.php';
+        require_once 'Intraface/modules/filemanager/ImageHandler.php';
         $this->image = new ImageHandler($this);
     }
 
@@ -348,7 +348,7 @@ class FileHandler extends Intraface_Standard
      */
     public function createTemporaryFile($file_name = NULL)
     {
-        require_once 'Intraface/shared/filehandler/TemporaryFile.php';
+        require_once 'Intraface/modules/filemanager/TemporaryFile.php';
         return new TemporaryFile($this, $file_name);
     }
 
@@ -373,7 +373,7 @@ class FileHandler extends Intraface_Standard
         if ($this->get('server_file_name') != '' && file_exists($this->get('file_path'))) {
 
             if (!rename($this->get('file_path'), $this->upload_path.'_deleted_'.$this->get('server_file_name'))) {
-                trigger_error("Kunne ikke omd�be filen i FileHandler->delete()", E_USER_ERROR);
+                throw new Exception("Kunne ikke omdøbe filen i FileHandler->delete()");
             }
         }
 
@@ -397,7 +397,7 @@ class FileHandler extends Intraface_Standard
         if (file_exists($deleted_file_name)) {
 
             if (!rename($deleted_file_name, $this->upload_path.$this->get('server_file_name'))) {
-                trigger_error("Kunne ikke omd�be filen i FileHandler->delete()", E_USER_ERROR);
+                throw new Exception("Kunne ikke omdøbe filen i FileHandler->undelete()");
             }
         }
 
@@ -427,7 +427,7 @@ class FileHandler extends Intraface_Standard
         $file = realpath($file);
 
         if (!in_array($status, $this->status)) {
-            trigger_error("Trejde parameter '".$status."' er ikke gyldig i Filehandler->save", E_USER_ERROR);
+            throw new Exception("Trejde parameter '".$status."' er ikke gyldig i Filehandler->save");
         }
 
         $db = new DB_Sql;
@@ -662,7 +662,7 @@ class FileHandler extends Intraface_Standard
         // $shared_filehandler = $this->kernel->useShared('filehandler');
         // $shared_filehandler->includeFile('FileType.php');
 
-        require_once('Intraface/shared/filehandler/FileType.php');
+        require_once 'Intraface/modules/filemanager/FileType.php';
         $filetype = new FileType();
         $this->file_types = $filetype->getList();
         return true;
