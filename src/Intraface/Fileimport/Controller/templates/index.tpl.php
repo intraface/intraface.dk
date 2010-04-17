@@ -13,7 +13,7 @@
                 <select name="fields[<?php e($key); ?>]" id="fields_<?php e($key); ?>">
                     <option value="">[<?php e(t('ignore')); ?>]</option>
                     <?php foreach ($context->fields AS $field): ?>
-                        <option value="<?php e($field); ?>"><?php e(t($field, $translation_page_id)); ?></option>
+                        <option value="<?php e($field); ?>"><?php e(t($field)); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>

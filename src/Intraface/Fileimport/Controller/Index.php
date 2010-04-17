@@ -17,7 +17,7 @@ class Intraface_Fileimport_Controller_Index extends k_Component
     function postMultipart()
     {
         $shared_fileimport = $this->getKernel()->useShared('fileimport');
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $translation = $this->getKernel()->getTranslation('fileimport');
 
         $this->fileimport = new FileImport;
@@ -97,7 +97,7 @@ class Intraface_Fileimport_Controller_Index extends k_Component
     function renderHtml()
     {
         $shared_fileimport = $this->getKernel()->useShared('fileimport');
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $translation = $this->getKernel()->getTranslation('fileimport');
 
         if (!is_object($this->fileimport)) {
