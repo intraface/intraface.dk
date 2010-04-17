@@ -1,8 +1,6 @@
 <h1><?php e(t('Edit template section')); ?></h1>
 
-<?php
-echo $section->error->view(array($context, 't'));
-?>
+<?php echo $section->error->view(array($context, 't')); ?>
 
 <form method="post" action="<?php e(url()); ?>"  enctype="multipart/form-data">
     <input name="id" type="hidden" value="<?php e($section->get('id')); ?>" />
@@ -61,8 +59,8 @@ switch ($value['type']) {
         break;
 
     case 'picture' :
-        $kernel->useShared('filehandler');
-        require_once ('Intraface/shared/filehandler/InstanceManager.php');
+        $kernel->useModule('filemanager');
+        require_once 'Intraface/modules/filemanager/InstanceManager.php';
         $instancemanager = new InstanceManager($kernel);
         $instances = $instancemanager->getList();
 ?>
