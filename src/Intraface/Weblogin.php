@@ -10,7 +10,7 @@
  * @since   0.1.0
  * @version @package-version@
  */
-class Intraface_Weblogin
+class Intraface_Weblogin implements Intraface_Identity
 {
     /**
      * @var string
@@ -62,5 +62,10 @@ class Intraface_Weblogin
             return true;
         }
         return false;
+    }
+
+    function getId()
+    {
+        return 0;
     }
 }

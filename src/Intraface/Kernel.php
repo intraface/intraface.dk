@@ -8,7 +8,7 @@
  * @since   0.1.0
  * @version @package-version@
  */
-class Intraface_Kernel
+class Intraface_Kernel implements Intraface_Identity
 {
     private $db;
     public $intranet;
@@ -182,9 +182,7 @@ class Intraface_Kernel
 
     function getSetting()
     {
-        /**
-         * Very important to store setting, as getSetting is called many times in some scripts
-         */
+        // Very important to store setting, as getSetting is called many times in some scripts
         if(empty($this->setting)) {
             if (is_object($this->user)) {
                 $user_id = $this->user->getId();
@@ -193,7 +191,17 @@ class Intraface_Kernel
             }
             $this->setting = new Intraface_Setting($this->intranet->getId(), $user_id);
         }
-        
+
         return $this->setting;
+    }
+
+    function getId()
+    {
+        return $this->user->getId();
+    }
+
+    function getActiveIntranetId()
+    {
+        return $this->user->getActiveIntranetId();
     }
 }

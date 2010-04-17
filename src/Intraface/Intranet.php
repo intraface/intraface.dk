@@ -115,7 +115,10 @@ class Intraface_Intranet extends Intraface_Standard
             require_once $filename;
             $module_class = 'Main'.ucfirst($module);
             $module_object = new $module_class;
-            if (isset($module_object->shared) and $module_object->shared === true) {
+            if ($module_object->isShared()) {
+                return true;
+            }
+            if ($module_object->isRequired()) {
                 return true;
             }
         }

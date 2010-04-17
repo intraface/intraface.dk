@@ -24,7 +24,7 @@
  */
 require_once 'Intraface/functions.php';
 
-class Intraface_User extends Intraface_Standard
+class Intraface_User extends Intraface_Standard implements Intraface_Identity
 {
     /**
      * @var db
@@ -266,7 +266,10 @@ class Intraface_User extends Intraface_Standard
             require_once $filename;
             $module_class = 'Main'.ucfirst($module);
             $module_object = new $module_class;
-            if (isset($module_object->shared) and $module_object->shared === true) {
+            if ($module_object->isShared()) {
+                return true;
+            }
+            if ($module_object->isRequired()) {
                 return true;
             }
         }
@@ -577,7 +580,9 @@ class Intraface_User extends Intraface_Standard
      *
      * @todo this should be an observer instead
      *
+     * @deprecated
      */
+    /*
     public static function sendForgottenPasswordEmail($email)
     {
         if (!Validate::email($email)) {
@@ -609,6 +614,7 @@ class Intraface_User extends Intraface_Standard
         }
         throw new Exception('Could not send the e-mail - maybe the mail() function is not working properly');
     }
+    */
 
     public function updatePassword($old_password, $new_password, $repeat_password)
     {
