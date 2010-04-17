@@ -1,7 +1,7 @@
 <?php
 class Intraface_modules_intranetmaintenance_Controller_Modules extends k_Component
 {
-    protected $module_msg;
+    protected $module_msg = array();
     protected $template;
 
     function __construct(k_TemplateFactory $template)
@@ -12,14 +12,6 @@ class Intraface_modules_intranetmaintenance_Controller_Modules extends k_Compone
     function renderHtml()
     {
         $module = $this->getModule();
-        $translation = $this->getKernel()->getTranslation('intranetmaintenance');
-
-        if (isset($_GET["do"]) && $_GET["do"] == "register") {
-            $this->module_msg = $this->getModuleMaintenance()->register();
-            $this->getKernel()->user->clearCachedPermission(); // S�rger for at permissions bliver reloaded.
-        } else {
-            $this->module_msg = array();
-        }
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/modules');
         return $smarty->render($this);
@@ -43,9 +35,8 @@ class Intraface_modules_intranetmaintenance_Controller_Modules extends k_Compone
     function getModuleMaintenance()
     {
         $primary_module = $this->getKernel()->module("intranetmaintenance");
-        $translation = $this->getKernel()->getTranslation("intranetmaintenance");
 
-        return new ModuleMaintenance;
+        return new Intraface_ModuleGateway(MDB2::singleton(DB_DSN));
     }
 
     function getModules()
@@ -56,5 +47,9 @@ class Intraface_modules_intranetmaintenance_Controller_Modules extends k_Compone
     function putForm()
     {
         // @todo should probably be created using put instead of this
+        $this->module_msg = $this->getModuleMaintenance()->registerAll();
+        $this->getKernel()->user->clearCachedPermission(); // S�rger for at permissions bliver reloaded.
+
+        return $this->render();
     }
 }

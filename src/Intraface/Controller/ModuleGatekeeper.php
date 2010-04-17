@@ -48,7 +48,7 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
     {
         require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
 
-        $module = new ModuleMaintenance;
-        return $module->getList();
+        $gateway = new Intraface_ModuleGateway(MDB2::singleton(DB_DSN));
+        return $gateway->getList();
     }
 }

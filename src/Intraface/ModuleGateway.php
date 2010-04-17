@@ -4,7 +4,9 @@
  *          constant pointing to the modules.
 @package Intraface_IntranetMaintenance
  */
-class ModuleMaintenance
+require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
+
+class Intraface_ModuleGateway
 {
     private $id;
     private $db;
@@ -12,85 +14,35 @@ class ModuleMaintenance
     public $error;
     private $sub_access;
 
-    public function __construct($id = 0)
+    public function __construct(MDB2_Driver_Common $db)
     {
-        $this->id = intval($id);
-        $this->db = MDB2::singleton(DB_DSN);
-        if (PEAR::isError($this->db)) {
-            trigger_error("Error in creating db: ".$this->db->getUserInfo(), E_USER_ERROR);
-            exit;
-        }
-
+        $this->db =  $db;
         $this->error = new Intraface_Error;
-        $this->value = array();
-
-        $this->load();
     }
 
-    static function factory($name)
+    function findById($id)
     {
-        $gateway = new Intraface_ModuleGateway(MDB2::singleton(DB_DSN));
-        return $gateway->findByName($name);
-        /*
-        $db = MDB2::singleton(DB_DSN);
-        if (PEAR::isError($db)) {
-            trigger_error("Error in creating db: ".$db->getUserInfo(), E_USER_ERROR);
-            exit;
-        }
-        $result = $db->query("SELECT id FROM module WHERE name = ".$db->quote($name, 'text'));
+        return new ModuleMaintenance($id);
+    }
+
+    function findByName($name)
+    {
+        $result = $this->db->query("SELECT id FROM module WHERE name = ".$this->db->quote($name, 'text'));
         if (PEAR::isError($result)) {
             trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
             exit;
         }
 
         if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-
             return new ModuleMaintenance($row['id']);
         } else {
 
             trigger_error("invalid module name ".$name."!", E_USER_ERROR);
         }
-        */
     }
 
-    private function load()
+    public function registerByName($module_name)
     {
-        // Starter med at nustille
-        $this->value = array();
-        $this->sub_access;
-        if ($this->id != 0) {
-            $result = $this->db->query("SELECT * FROM module WHERE id = ".$this->id);
-            if (PEAR::isError($result)) {
-                trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
-                exit;
-            }
-
-            if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-                $this->value = $row;
-
-                // $this->sub_access = new SubAccessMaintenance($this);
-
-                $j = 0;
-                $result_sub_access = $this->db->query("SELECT id, name, description FROM module_sub_access WHERE active = 1 AND module_id = ".$row["id"]." ORDER BY description");
-                if (PEAR::isError($result_sub_access)) {
-                    trigger_error("Error in query: ".$result_sub_access->getUserInfo(), E_USER_ERROR);
-                    exit;
-                }
-                $i = 0;
-                $this->value["sub_access"] = array();
-                while ($row = $result_sub_access->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-                    $this->value["sub_access"][$i] = $row;
-                    $i++;
-                }
-            }
-        }
-    }
-
-    public function registerModule($module_name)
-    {
-        $gateway = new Intraface_ModuleGateway(MDB2::singleton(DB_DSN));
-        return $gateway->registerByName($name);
-        /*
         $db = new DB_Sql;
         $updated_sub_access_id = array();
         $module_msg = array();
@@ -114,8 +66,7 @@ class ModuleMaintenance
 
                 if (empty($module->menu_label) && empty($module->active) && empty($module->menu_index)) {
                     $this->error->set('Properties for module "'.$module_name.'" er ikke loadet. Kontrol er constructor er sat rigtigt op i modulet');
-                }
-                else {
+                } else {
                     $sql = "menu_label = \"".$module->getMenuLabel()."\",
                                 show_menu = ".$module->getShowMenu().",
                                 active = ".$module->isActive().",
@@ -153,14 +104,10 @@ class ModuleMaintenance
         }
 
         return array('module_msg' => $module_msg, 'updated_module_id' => $updated_module_id, 'updated_sub_access_id' => $updated_sub_access_id);
-        */
     }
 
-    public function register()
+    public function registerAll()
     {
-        $gateway = new Intraface_ModuleGateway(MDB2::singleton(DB_DSN));
-        return $gateway->registerAll();
-        /*
         $msg = array();
         $module_msg = array();
         $db = new DB_Sql;
@@ -186,7 +133,7 @@ class ModuleMaintenance
                     continue; // starter forfra p� n�ste directory
                 }
 
-                $updated = $this->registerModule($module_name);
+                $updated = $this->registerByName($module_name);
 
                 $updated_module_id[] = (int)$updated['updated_module_id'];
                 $updated_sub_access_id = array_merge($updated_sub_access_id, $updated['updated_sub_access_id']);
@@ -206,12 +153,10 @@ class ModuleMaintenance
         }
 
         return $module_msg;
-        */
     }
-    /*
+
     public function getList()
     {
-
         $db = new DB_Sql;
 
         $i = 0;
@@ -236,15 +181,5 @@ class ModuleMaintenance
         }
 
         return $value;
-    }
-    */
-
-    public function get($key = '')
-    {
-        if (!empty($key)) {
-            return($this->value[$key]);
-        } else {
-            return $this->value;
-        }
     }
 }

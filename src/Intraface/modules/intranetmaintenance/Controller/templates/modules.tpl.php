@@ -5,18 +5,22 @@ $module_msg = $context->getModuleMsg();
 
 <ul class="options">
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
-    <li><a href="<?php e(url(null, array('do' => 'register'))); ?>"><?php e(t('Register modules')); ?></a></li>
 </ul>
+
+<form action="<?php e(url()); ?>" method="post">
+    <input type="hidden" value="put" name="_method" />
+    <input type="submit" value="<?php e(t('Register modules')); ?>" />
+</form>
 
 <?php echo $context->getModuleMaintenance()->error->view(); ?>
 
 <table>
     <thead>
         <tr>
-            <th>Navn</th>
-            <th>Subaccess</th>
-            <th>Menupunkt</th>
-            <th>Menu/Frontpage index</th>
+            <th><?php e(t('Name')); ?></th>
+            <th><?php e(t('Sub access')); ?></th>
+            <th><?php e(t('Show in menu')); ?></th>
+            <th><?php e(t('Menu / frontpage index')); ?></th>
             <th></th>
         </tr>
     </thead>

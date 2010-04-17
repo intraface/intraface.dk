@@ -42,18 +42,18 @@ class Intraface_ModuleHandler
     function setPrimaryModule($module_name)
     {
         if (!empty($this->primary_module_object) AND is_object($this->primary_module_object)) {
-            throw new Exception('Det primære modul er allerede sat');
+            throw new Exception('Primary module has been set');
         } else {
             $module = $this->useModule($module_name);
 
             if (is_object($module)) {
                 $this->primary_module_name = $module_name;
 
-                // Finder afhængige moduller - Dette kunne flyttes til useModule, hvorfor er den egentlig ikke det? /Sune 06-07-2006
+                // Finder afhï¿½ngige moduller - Dette kunne flyttes til useModule, hvorfor er den egentlig ikke det? /Sune 06-07-2006
                 $dependent_modules = $module->getDependentModules();
 
-                for ($i = 0, $max = count($dependent_modules); $i < $max; $i++) {
-                    $no_use = $this->useModule($dependent_modules[$i]);
+                foreach ($dependent_modules as $dependent) {
+                    $no_use = $this->useModule($dependent);
                 }
 
                 return $module;
@@ -88,6 +88,8 @@ class Intraface_ModuleHandler
         $this->modules[$module_name] = $module_name;
 
         // @todo check whether a module has any limitations in access here?
+        //       we have not asked for shared
+
 
         // access control here
         $access = false;
