@@ -6,7 +6,6 @@
     <?php if (is_array($keywords) AND count($keywords) > 0): ?>
     <fieldset>
         <legend><?php e(t('choose keywords')); ?></legend>
-        <input type="hidden" name="<?php e($id_name); ?>" value="<?php e($object->get('id')); ?>" />
         <?php
             $i = 0;
             foreach ($keywords AS $k) { ?>
@@ -31,7 +30,6 @@
     <fieldset>
         <legend><?php e(t('create keyword')); ?></legend>
         <p><?php e(t('separate keywords by comma')); ?></p>
-        <input type="hidden" name="<?php e($id_name); ?>" value="<?php e($object->get('id')); ?>" />
         <label for="keyword"><?php e(t('keywords')); ?></label>
         <input type="text" name="keywords" id="keyword" value="<?php //e($keyword_string); ?>" />
         <input type="submit" value="<?php e(t('save')); ?>" name="submit" id="submit-save-new" />
