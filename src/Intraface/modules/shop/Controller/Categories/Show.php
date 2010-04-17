@@ -40,7 +40,7 @@ class Intraface_modules_shop_Controller_Categories_Show extends k_Component
 
     function getFileAppender()
     {
-        $module = $this->getKernel()->useShared('filehandler');
+        $module = $this->getKernel()->useModule('filemanager');
         require_once 'Intraface/shared/filehandler/AppendFile.php';
         return new AppendFile($this->getKernel(), 'category', $this->getModel()->getId());
     }
@@ -49,7 +49,7 @@ class Intraface_modules_shop_Controller_Categories_Show extends k_Component
     {
         // @todo The fileappender should know which files are appended
         //       and know that this only takes one file.
-        $module = $this->getKernel()->useShared('filehandler');
+        $module = $this->getKernel()->useModule('filemanager');
         require_once 'Intraface/shared/filehandler/AppendFile.php';
 
         $pictures = array();

@@ -11,7 +11,7 @@
     <tr>
         <th><a href="<?php e(url($shop->id)); ?>"><?php e($shop->name); ?></a></th>
         <th><?php e($shop->identifier); ?></th>
-        <th><a href="<?php e(url($shop->id. '/edit')); ?>"><?php e(t('Edit')); ?></a></th>
+        <th><a href="<?php e(url($shop->id, array('edit'))); ?>"><?php e(t('Edit')); ?></a></th>
     </tr>
     <?php endforeach; ?>
     </tbody>
