@@ -25,8 +25,10 @@ abstract class Intraface_Main
     protected $setting = array();
     protected $controlpanel_files = array();
     protected $frontpage_files = array();
+    protected $shared = false;
     private $translation; // @todo used for what
     private $kernel; // @todo used for what
+    protected $required = 0;
 
     /**
      * Loads stuff about the module. Kernel runs it
@@ -297,5 +299,15 @@ abstract class Intraface_Main
     function isActive()
     {
         return $this->active;
+    }
+
+    function isShared()
+    {
+        return $this->shared;
+    }
+
+    function isRequired()
+    {
+        return $this->required;
     }
 }

@@ -68,10 +68,11 @@ class Intraface_ModuleGateway
                     $this->error->set('Properties for module "'.$module_name.'" er ikke loadet. Kontrol er constructor er sat rigtigt op i modulet');
                 } else {
                     $sql = "menu_label = \"".$module->getMenuLabel()."\",
-                                show_menu = ".$module->getShowMenu().",
-                                active = ".$module->isActive().",
-                                menu_index = ".intval($module->getMenuIndex()).",
-                                frontpage_index = ".intval($module->getFrontpageIndex());
+                            show_menu = ".$module->getShowMenu().",
+                            active = ".$module->isActive().",
+                            menu_index = ".intval($module->getMenuIndex()).",
+                            frontpage_index = ".intval($module->getFrontpageIndex()).",
+                            required = " . intval($module->isRequired());
 
                     $db->query("SELECT id FROM module WHERE name = \"".$module_name."\"");
                     if ($db->nextRecord()) {
