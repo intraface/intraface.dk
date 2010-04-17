@@ -13,10 +13,11 @@ class MainEmail extends Intraface_Main
         $this->menu_index = 210;
         $this->frontpage_index = 200;
         $this->shared = true;
+        $this->required = true;
 
         $this->addRequiredShared('email');
-        
+
         $this->addControlpanelFile('E-mail settings', 'core/restricted/module/email/settings');
-        
+
     }
 }
