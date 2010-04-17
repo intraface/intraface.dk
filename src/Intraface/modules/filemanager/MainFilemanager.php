@@ -10,41 +10,52 @@ class MainFilemanager extends Intraface_Main
 {
     function __construct()
     {
-        $this->module_name = 'filemanager'; // Navn på på mappen med modullet
-        $this->menu_label = 'Filer'; // Navn er det skal stå i menuen
-        $this->show_menu = 1; // Skal modullet være vist i menuen
+        $this->module_name = 'filemanager'; // Navn pï¿½ pï¿½ mappen med modullet
+        $this->menu_label = 'Filer'; // Navn er det skal stï¿½ i menuen
+        $this->show_menu = 1; // Skal modullet vï¿½re vist i menuen
         $this->active = 1; // Er modullet aktivt
         $this->menu_index = 20;
         $this->frontpage_index = 80;
         $this->shared = true;
+        $this->required = true;
 
-        // Tilføjer et undermenupunkt
+        // Tilfï¿½jer et undermenupunkt
         // $this->addSubMenuItem("Underside", "underside.php");
-        // Tilføjer undermenupunkt, der kun vises når hvis man har sub_acces'en vat_report
+        // Tilfï¿½jer undermenupunkt, der kun vises nï¿½r hvis man har sub_acces'en vat_report
         // $this->addSubMenuItem("Moms", "vat.php", "sub_access:canCreate");
-        // Tilføjer undermenupunkt, der kun vises når hvis man har adgang til modullet backup
-        // $this->addSubMenuItem("Årsafslutning", "end.php", "module:backup");
+        // Tilfï¿½jer undermenupunkt, der kun vises nï¿½r hvis man har adgang til modullet backup
+        // $this->addSubMenuItem("ï¿½rsafslutning", "end.php", "module:backup");
 
-        // Tilføjer en subaccess
+        // Tilfï¿½jer en subaccess
         // $this->addSubAccessItem("canCreate", "Rettighed til at oprette");
 
         // Filer der skal inkluderes ved opstart af modul.
         $this->addPreloadFile('FileManager.php');
+        $this->addPreloadFile('FileHandler.php');
+        $this->addPreloadFile('FileHandlerHTML.php');
 
-        // Fil til med indstillinger man kan sætte i modullet
+        // Fil til med indstillinger man kan sï¿½tte i modullet
         // $this->addControlpanelFile('Regnskab', '/modules/accounting/setting.php');
 
-        // Fil der inkluderes på forsiden.
+        // Fil der inkluderes pï¿½ forsiden.
         // $this->addFrontpageFile('include_front.php');
 
-        // Inkluder fil med definition af indstillinger. Bemærk ikke den sammme indstilling som addSetting(). Filen skal indeholde følgende array: $_setting["modul_navn.setting"] = "Værdi";
+        // Inkluder fil med definition af indstillinger. Bemï¿½rk ikke den sammme indstilling som addSetting(). Filen skal indeholde fï¿½lgende array: $_setting["shared_navn.setting"] = "Vï¿½rdi";
+        $this->includeSettingFile('settings.php');
+        // Fil til med indstillinger man kan sï¿½tte i modullet
+        // $this->addControlpanelFile('Regnskab', '/modules/accounting/setting.php');
+
+        // Fil der inkluderes pï¿½ forsiden.
+        // $this->addFrontpageFile('include_front.php');
+
+        // Inkluder fil med definition af indstillinger. Bemï¿½rk ikke den sammme indstilling som addSetting(). Filen skal indeholde fï¿½lgende array: $_setting["modul_navn.setting"] = "Vï¿½rdi";
         // $this->includeSettingFile("settings.php");
 
-        // Dependent module vil automatisk blive inkluderet på siden. (Hvis man ikke har rettighed til det vil der komme en fejl)
+        // Dependent module vil automatisk blive inkluderet pï¿½ siden. (Hvis man ikke har rettighed til det vil der komme en fejl)
         // $this->addDependentModule("pdf");
 
         // Inkludere et shared i modullet.
-        $this->addRequiredShared("filehandler");
+        //$this->addRequiredShared("filehandler");
         $this->addRequiredShared("keyword");
     }
 }

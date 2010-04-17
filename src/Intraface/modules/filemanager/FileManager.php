@@ -2,7 +2,7 @@
 /**
  * @package Intraface_FileManager
  */
- require_once 'Intraface/shared/filehandler/FileHandler.php';
+require_once 'Intraface/modules/filemanager/FileHandler.php';
 
 class FileManager extends FileHandler
 {
@@ -28,7 +28,7 @@ class FileManager extends FileHandler
     {
         parent::__construct($kernel, $file_id);
     }
-    
+
     /**
      * Creates the dbquery object so it can be used in the class
      *
@@ -42,10 +42,10 @@ class FileManager extends FileHandler
         $this->dbquery = new Ilib_DBQuery("file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->createStore($this->kernel->getSessionId(), 'intranet_id = '.intval($this->kernel->intranet->get('id')));
         $this->dbquery->useErrorObject($this->error);
-        
+
         return $this->dbquery;
     }
-    
+
 
     /**
      * Creates the keywords object
@@ -72,11 +72,11 @@ class FileManager extends FileHandler
      */
     public function getList($debug = '')
     {
-        // we load the mime types as they are going to be used a couple of times 
+        // we load the mime types as they are going to be used a couple of times
         $this->loadMimeTypes();
-        
+
         $this->dbquery = $this->getDBQuery();
-        
+
         if ($this->dbquery->checkFilter("uploaded_from_date")) {
             $date_parts = explode(" ", $this->dbquery->getFilter("uploaded_from_date"));
             // Der kontrolleres ikke for gyldig tidsformat
@@ -204,7 +204,7 @@ class FileManager extends FileHandler
         }
         return $file;
     }
-    
+
     /**
      * Find out whether any fils is uploaded
      *
