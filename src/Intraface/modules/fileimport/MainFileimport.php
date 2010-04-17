@@ -13,6 +13,7 @@ class MainFileimport extends Intraface_Main
         $this->menu_index = 210;
         $this->frontpage_index = 200;
         $this->shared = true;
+        $this->required = true;
 
         $this->addRequiredShared('fileimport');
     }
