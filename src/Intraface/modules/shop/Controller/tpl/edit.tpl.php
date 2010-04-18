@@ -1,4 +1,10 @@
-<form action="<?php e(url(null)); ?>" method="post">
+<?php if (!empty($context->input) and is_object($context->input)): ?>
+<?php foreach ($context->input->getMessages() as $field => $message): ?>
+    <li>'<?php e($field); ?>' has error: <?php e(implode(',', $message)); ?></li>
+<?php endforeach; ?>
+<?php endif; ?>
+
+<form action="<?php e(url(null, array($context->subview()))); ?>" method="post">
     <fieldset>
         <div class="formrow">
             <label for="name"><?php e(t('Name')); ?></label>
@@ -84,7 +90,7 @@
         </div>
         <div>
         <label for="confirmation_text"><?php e(t('Text')); ?></label><br />
-        <textarea id="confirmation_test" name="confirmation" cols="80" rows="10"><?php  if (!empty($data['confirmation'])) e($data['confirmation']); ?></textarea>
+        <textarea id="confirmation_text" name="confirmation" cols="80" rows="10"><?php  if (!empty($data['confirmation'])) e($data['confirmation']); ?></textarea>
         </div>
         <div>
         <label for="description"><?php e(t('Confirmation greeting')); ?></label><br />

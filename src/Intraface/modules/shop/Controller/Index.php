@@ -1,8 +1,78 @@
 <?php
+require_once 'HTMLPurifier.auto.php';
+
+class Intraface_Validate_Html extends Zend_Validate_Abstract
+{
+    public function isValid($value)
+    {
+        $allowed_tags = array('p', 'ul', 'li', 'a', 'ol', 'h3', 'h4');
+        $allowed_attr = array('src');
+        //$filter = new Zend_Filter_StripTags($allowed_tags, $allowed_attr);
+
+        $filtered = strip_tags($value, '<p><ul><a><ol><li><h3><h4>');
+        if ($value == $filtered) {
+            return true;
+        }
+        return false;
+    }
+}
+
+class Intraface_Filter_HTMLPurifier implements Zend_Filter_Interface
+{
+    protected $_htmlPurifier = null;
+
+    public function __construct($options = null)
+    {
+        $config = null;
+        if (!is_null($options)) {
+            $config = HTMLPurifier_Config::createDefault();
+                foreach ($options as $option) {
+                    $config->set($option[0] . '.' . $option[1], $option[2]);
+                }
+        }
+        $this->_htmlPurifier = new HTMLPurifier($config);
+    }
+
+    public function filter($value)
+    {
+        return $this->_htmlPurifier->purify($value);
+    }
+
+}
+
+class Intraface_Filter_HtmlBody extends Intraface_Filter_HTMLPurifier
+{
+    public function __construct($newOptions = null)
+    {
+        $options = array(
+            array('Cache', 'SerializerPath',
+                PATH_CACHE . '/htmlpurifier'
+            ),
+            //array('HTML', 'Doctype', 'XHTML 1.0 Strict'),
+            array('HTML', 'Allowed',
+                'p,em,h1,h2,h3,h4,h5,strong,a[href],ul,ol,li,code,pre,'
+                .'blockquote,img[src|alt|height|width],sub,sup,dl,dd,dt'
+            ),
+            //array('AutoFormat', 'Linkify', 'true'),
+            //array('AutoFormat', 'AutoParagraph', 'true')
+        );
+
+        if (!is_null($newOptions)) {
+            // I'll let HTMLPurifier overwrite original options
+            // with new ones rather than filter them myself
+                $options = array_merge($options, $newOptions);
+        }
+
+        parent::__construct($options);
+    }
+
+}
+
 class Intraface_modules_shop_Controller_Index extends k_Component
 {
     protected $template;
     protected $error;
+    public $input;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -20,29 +90,55 @@ class Intraface_modules_shop_Controller_Index extends k_Component
         return 'Intraface_modules_shop_Controller_Show';
     }
 
-    function getError()
-    {
-        if ($this->error) {
-            return $this->error;
-        }
-        return ($this->error = new Intraface_Error());
-    }
-
     function isValid()
     {
         if (!$this->body()) {
             return true;
         }
-        $validator = new Intraface_Validator($this->getError());
-        $validator->isNumeric($this->body('show_online'), 'show_online skal v�re et tal');
-        // $validator->isString($this->POST['description'], 'description text is not valid');
-        $validator->isString($this->body('confirmation_subject'), 'confirmation subject is not valid', '', 'allow_empty');
-        $validator->isString($this->body('confirmation'), 'confirmation text is not valid', '', 'allow_empty');
-        $validator->isString($this->body('confirmation_greeting'), 'confirmation greeting is not valid', '', 'allow_empty');
-        $validator->isString($this->body('terms_of_trade_url'), 'terms of trade is not valid', '', 'allow_empty');
-        $validator->isString($this->body('receipt'), 'shop receipt is not valid', '<p><br/><div><ul><ol><li><h2><h3><h4>');
 
-        return !$this->getError()->isError();
+        $filters = array(
+            'receipt' => new Intraface_Filter_HtmlBody(), // should probably only be used on outputting
+        );
+        $validators = array(
+            'show_online' => new Zend_Validate_Digits(),
+            'name' => new Zend_Validate_Alnum(true),
+            'identifier' => new Zend_Validate_Alnum(),
+            'language_key' => new Zend_Validate_Alnum(),
+            'show_online' => new Zend_Validate_Alnum(),
+            'send_confirmation' => new Zend_Validate_Digits(),
+            'confirmation_subject' => array(
+                new Zend_Validate_Alnum(),
+                'allowEmpty' => true
+            ),
+            'confirmation' => array(
+                new Zend_Validate_Alnum(),
+                'allowEmpty' => true
+            ),
+            'confirmation_add_contact_url' => new Zend_Validate_Digits(),
+            'payment_link' => array(
+                new Zend_Validate_Callback(array('Zend_Uri', 'check')),
+                'allowEmpty' => true
+
+            ),
+            'payment_link_add' => new Zend_Validate_Digits(),
+            'confirmation_greeting' => array(
+                new Zend_Validate_Alnum(),
+                'allowEmpty' => true
+            ),
+            'terms_of_trade_url' => array(
+                new Zend_Validate_Callback(array('Zend_Uri', 'check')),
+                'allowEmpty' => true
+
+            ),
+            'receipt' => array(
+                new Intraface_Validate_Html(),
+                'allowEmpty' => true
+            )
+        );
+        $data = $this->body();
+
+        $this->input = new Zend_Filter_Input($filters, $validators, $data);
+        return $this->input->isValid();
     }
 
     function renderHtml()
@@ -97,7 +193,7 @@ class Intraface_modules_shop_Controller_Index extends k_Component
             'currencies' => $currencies,
             'languages' => $langs);
         $tpl = $this->template->create(dirname(__FILE__) . '/tpl/edit');
-        return $this->getError()->view() . $tpl->render($this, $data);
+        return $tpl->render($this, $data);
     }
 
     function postForm()
@@ -110,7 +206,7 @@ class Intraface_modules_shop_Controller_Index extends k_Component
             $shop = new Intraface_modules_shop_Shop;
             $shop->intranet_id = $this->getKernel()->intranet->getId();
 
-            $shop->fromArray($this->body());
+            $shop->fromArray($this->input->getUnescaped());
             if ($this->body('confirmation_add_contact_url') == 1) {
                 $shop->confirmation_add_contact_url = 1;
             } else {
