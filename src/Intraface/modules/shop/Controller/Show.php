@@ -4,11 +4,13 @@ class Intraface_modules_shop_Controller_Show extends k_Component
     protected $mdb2;
     protected $template;
     protected $error;
+    protected $doctrine;
 
-    function __construct(MDB2_Driver_Common $db, k_TemplateFactory $template)
+    function __construct(MDB2_Driver_Common $db, k_TemplateFactory $template, Doctrine_Connection_Common $doctrine)
     {
         $this->mdb2 = $db;
         $this->template = $template;
+        $this->doctrine = $doctrine;
     }
 
     function map($name)

@@ -73,10 +73,12 @@ class Intraface_modules_shop_Controller_Index extends k_Component
     protected $template;
     protected $error;
     public $input;
+    protected $doctrine;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, Doctrine_Connection_Common $doctrine)
     {
          $this->template = $template;
+         $this->doctrine = $doctrine;
     }
 
     function map($name)
