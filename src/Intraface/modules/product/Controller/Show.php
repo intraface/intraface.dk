@@ -46,13 +46,12 @@ class Intraface_modules_product_Controller_Show extends k_Component
     {
         $kernel = $this->getKernel();
         $this->getKernel()->module('product');
-        $this->getKernel()->useShared('filehandler');
+        $this->getKernel()->useModule('filemanager');
         $product = new Product($this->getKernel(), $this->name());
         $filehandler = new FileHandler($this->getKernel());
         $data = array(
             'gateway' => $this->getGateway(),
             'product' => $product,
-            'translation' => $translation,
             'kernel' => $this->getKernel(),
             'filehandler' => $filehandler
         );
@@ -83,7 +82,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
     function postMultipart()
     {
-        $module = $this->getKernel()->useShared('filehandler');
+        $module = $this->getKernel()->useModule('filemanager');
         $product = new Product($this->getKernel(), $this->name());
 
         if (isset($_POST['append_file_submit'])) {
@@ -128,7 +127,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
     function renderHtmlEdit()
     {
         $this->getKernel()->module('product');
-        $this->getKernel()->useShared('filehandler');
+        $this->getKernel()->useModule('filemanager');
         $translation = $this->getKernel()->getTranslation('product');
 
         $data = array(
@@ -253,7 +252,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
     function getFileAppender()
     {
-        require_once 'Intraface/shared/filehandler/AppendFile.php';
+        require_once 'Intraface/modules/filemanager/AppendFile.php';
 
         $this->getKernel()->module('product');
         $product = new Product($this->getKernel(), $this->name());

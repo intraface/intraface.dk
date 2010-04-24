@@ -167,7 +167,7 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
                     $product = array(
                     	'product_id' => (int)$_POST['selected'],
                     	'product_variation_id' => 0);
-                    $this->addItem($product, (int)$_POST['quantity']);
+                    $this->addItem($product, (int)$this->body('quantity'));
                 }
             }
 

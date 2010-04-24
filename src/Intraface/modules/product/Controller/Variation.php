@@ -23,7 +23,7 @@ class Intraface_modules_product_Controller_Variation extends k_Component
         $module = $this->getKernel()->module('product');
         $translation = $this->getKernel()->getTranslation('product');
 
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
         $product = new Product($this->getKernel(), $this->context->getProductId());
         $variation = $product->getVariation($this->name());
@@ -67,7 +67,7 @@ class Intraface_modules_product_Controller_Variation extends k_Component
         $module = $this->getKernel()->module('product');
         $translation = $this->getKernel()->getTranslation('product');
 
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
 
         $product = new Product($this->getKernel(), $_POST['id']);

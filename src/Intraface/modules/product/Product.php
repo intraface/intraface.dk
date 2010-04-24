@@ -230,7 +230,7 @@ class Product extends Intraface_Standard
      */
     function getNewPictures()
     {
-        require_once 'Intraface/shared/filehandler/AppendFile.php';
+        require_once 'Intraface/modules/filemanager/AppendFile.php';
         //$filehandler = new Ilib_Filehandler($this->kernel);
         $append_file = new AppendFile($this->kernel, 'product', $this->get('id'));
         $appendix_list = $append_file->getList();
@@ -271,7 +271,7 @@ class Product extends Intraface_Standard
      */
     function getPictures()
     {
-        $shared_filehandler = $this->kernel->useShared('filehandler');
+        $shared_filehandler = $this->kernel->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
 
         $filehandler = new FileHandler($this->kernel);
@@ -470,7 +470,7 @@ class Product extends Intraface_Standard
         }
 
         // Billede
-        $shared_filehandler = $this->kernel->useShared('filehandler');
+        $shared_filehandler = $this->kernel->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
 
         $append_file = new AppendFile($this->kernel, 'product', $product->get('id'));

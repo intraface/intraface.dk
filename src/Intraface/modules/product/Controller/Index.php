@@ -154,7 +154,7 @@ class Intraface_modules_product_Controller_Index extends k_Component
     {
         $kernel = $this->context->getKernel();
         $kernel->module('product');
-        $kernel->useShared('filehandler');
+        $kernel->useModule('filemanager');
 
         $data = array();
         if (is_object($this->product_doctrine)) {
