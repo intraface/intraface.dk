@@ -20,8 +20,6 @@ $items = $context->getItems();
     <?php echo $context->getModel()->error->view(); ?>
 
     <form action="<?php e(url()); ?>" method="post">
-    <input type="hidden" value="<?php e($value['id']); ?>" name="id" />
-
     <fieldset>
         <legend><?php e(t('Credit note')); ?></legend>
         <table>
