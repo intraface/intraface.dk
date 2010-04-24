@@ -30,7 +30,6 @@ class Intraface_Filehandler_Controller_UploadMultiple extends k_Component
     {
         $kernel = $this->getKernel();
         $module = $kernel->module('filemanager');
-        $translation = $kernel->getTranslation('filemanager');
 
         $options = array('extra_db_condition' => 'intranet_id = '.intval($kernel->intranet->get('id')));
         $redirect = Ilib_Redirect::factory($kernel->getSessionId(), $this->mdb2, 'receive', $options);

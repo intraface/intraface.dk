@@ -36,7 +36,7 @@ class Intraface_Filehandler_Controller_Viewer extends k_Component
 
         $kernel = new Intraface_Kernel;
         $kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
-        $filehandler_shared = $kernel->useShared('filehandler');
+        $filehandler_shared = $kernel->useModule('filemanager');
         $filehandler_shared->includeFile('FileViewer.php');
 
         $access_key = $query_parts[2];

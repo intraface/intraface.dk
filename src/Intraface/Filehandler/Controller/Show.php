@@ -8,6 +8,15 @@ class Intraface_Filehandler_Controller_Show extends k_Component
         $this->template = $template;
     }
 
+    function dispatch()
+    {
+        if ($this->getFile()->getId() == 0 AND !$this->query('restore')) {
+            throw new k_PageNotFound();
+        }
+
+        return parent::dispatch();
+    }
+
     function map($name)
     {
         if ($name == 'crop') {
@@ -19,15 +28,9 @@ class Intraface_Filehandler_Controller_Show extends k_Component
 
     function renderHtml()
     {
-        $filemanager = $this->getObject();
+        $this->document->setTitle('file') . ': ' . $this->getFile()->get('file_name');
 
-        if ($filemanager->getId() == 0) {
-            throw new k_PageNotFound();
-        }
-
-        $this->document->setTitle('file') . ': ' . $filemanager->get('file_name');
-
-        $data = array('filemanager' => $filemanager,
+        $data = array('filemanager' => $this->getFile(),
                       'kernel'      => $this->getKernel());
 
         $tpl = $this->template->create(dirname(__FILE__) . '/../templates/show');
@@ -36,15 +39,14 @@ class Intraface_Filehandler_Controller_Show extends k_Component
 
     function renderHtmlEdit()
     {
-        $filemanager = $this->getObject();
         if ($this->body()) {
             $values = $this->body();
         } else {
-            $values = $filemanager->get();
+            $values = $this->getFile()->get();
         }
-        $this->document->setTitle('edit file');
+        $this->document->setTitle('Edit file');
 
-        $data = array('filemanager' => $filemanager,
+        $data = array('filemanager' => $this->getFile(),
                       'values' => $values);
 
         $tpl = $this->template->create(dirname(__FILE__) . '/../templates/edit');
@@ -75,26 +77,23 @@ class Intraface_Filehandler_Controller_Show extends k_Component
 
     function renderHtmlDelete()
     {
-        $kernel = $this->context->getKernel();
-        $module = $kernel->module('filemanager');
+        $module = $this->getKernel()->module('filemanager');
 
-        $filemanager = $this->getObject();
-        if (!$filemanager->delete()) {
+        if (!$this->getFile()->delete()) {
             throw new Exception('Could not delete file');
         }
-        return new k_SeeOther($this->context->url());
+        return new k_SeeOther($this->context->url(null, array('flare' => 'File has been deleted')));
     }
 
     function renderHtmlRestore()
     {
-        $kernel = $this->getKernel();
-        $module = $kernel->module('filemanager');
+        $module = $this->getKernel()->module('filemanager');
 
         $filemanager = $this->getObject();
         if (!$filemanager->undelete()) {
             throw new Exception('Could not undelete file');
         }
-        return new k_SeeOther($this->url());
+        return new k_SeeOther($this->url(null, array('flare' => 'File has been restored')));
     }
 
     /**

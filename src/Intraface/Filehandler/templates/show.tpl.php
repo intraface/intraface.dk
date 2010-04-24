@@ -111,7 +111,7 @@
         </table>
         <?php if($kernel->user->hasModuleAccess('administration')): ?>
             <?php
-            $shared_filehandler = $kernel->useShared('filehandler');
+            $shared_filehandler = $kernel->useModule('filemanager');
             ?>
             <ul class="options">
                 <li><a href="<?php e(url('../sizes')); ?>"><?php e(t('manage your image sizes')); ?></a></li>

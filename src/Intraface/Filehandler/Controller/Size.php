@@ -10,10 +10,9 @@ class Intraface_Filehandler_Controller_Size extends k_Component
 
     function renderHtml()
     {
-        $kernel = $this->getKernel();
-        $shared_filehandler = $kernel->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
 
-        $instance_manager = new Ilib_Filehandler_InstanceManager($kernel, (int)$this->name());
+        $instance_manager = new Ilib_Filehandler_InstanceManager($this->getKernel(), (int)$this->name());
         $value = $instance_manager->get();
 
         $this->document->setTitle('Edit instance type');
@@ -28,7 +27,7 @@ class Intraface_Filehandler_Controller_Size extends k_Component
 
     function postForm()
     {
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
 
         $instance_manager = new Ilib_Filehandler_InstanceManager($this->getKernel(), (int)$this->name());
 

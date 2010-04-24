@@ -10,16 +10,14 @@ class Intraface_Filehandler_Controller_Sizes extends k_Component
 
     function map($name)
     {
-        if ($name == 'add') {
-            return 'Intraface_Filehandler_Controller_Sizes_Edit';
-        } elseif (is_numeric($name)) {
+        if (is_numeric($name)) {
             return 'Intraface_Filehandler_Controller_Size';
         }
     }
 
     function renderHtml()
     {
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
 
         $instance_manager = new Ilib_Filehandler_InstanceManager($this->getKernel());
 
@@ -41,7 +39,7 @@ class Intraface_Filehandler_Controller_Sizes extends k_Component
     function renderHtmlAdd()
     {
         $kernel = $this->getKernel();
-        $shared_filehandler = $kernel->useShared('filehandler');
+        $shared_filehandler = $kernel->useModule('filemanager');
 
         $instance_manager = new Ilib_Filehandler_InstanceManager($kernel);
         $value = $instance_manager->get();
@@ -58,7 +56,7 @@ class Intraface_Filehandler_Controller_Sizes extends k_Component
 
     function postForm()
     {
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
 
         $instance_manager = new Ilib_Filehandler_InstanceManager($this->getKernel(), (int)$this->body('type_key'));
 
