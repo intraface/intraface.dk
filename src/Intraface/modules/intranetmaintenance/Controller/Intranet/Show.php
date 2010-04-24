@@ -88,8 +88,11 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
         $user = new UserMaintenance();
         $user->setIntranetId($intranet->get('id'));
 
+        $gateway = new Intraface_ModuleGateway(MDB2::singleton(DB_DSN));
+        $modules = $gateway->getList();
+
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/intranet/show');
-        return $smarty->render($this);
+        return $smarty->render($this, array('modules' => $modules));
     }
 
     function renderHtmlEdit()

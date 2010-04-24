@@ -275,7 +275,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
 
     function getModules()
     {
-        $module = new ModuleMaintenance;
-        return $module->getList();
+        $gateway = new Intraface_ModuleGateway(MDB2::singleton(DB_DSN));
+        return $gateway->getList();
     }
 }

@@ -182,20 +182,12 @@ $address_value = $context->getValues();
 <fieldset>
 	<legend>Adgang til moduler</legend>
 	<div>
-    <?php
-
-	$module = new ModuleMaintenance;
-	$modules = $module->getList();
-
-	foreach ($modules as $module) {
-		?>
+    <?php foreach ($modules as $module): ?>
 		<div style="float: left; width: 210px; ">
 			<input type="checkbox" name="module[]" id="module_<?php e($module["name"]); ?>" value="<?php e($module["name"]); ?>"<?php if ($context->getIntranet()->hasModuleAccess(intval($module["id"]))) print("checked=\"checked\""); ?> />
 			<label for="module_<?php e($module["name"]); ?>"><?php e($module["name"]); ?></label>
 		</div>
-		<?php
-	}
-	?>
+    <?php endforeach; ?>
     </div>
     <div style="clear:both;">
         <input type="submit" name="change_permission" value="<?php e(t('Save')); ?>" />
