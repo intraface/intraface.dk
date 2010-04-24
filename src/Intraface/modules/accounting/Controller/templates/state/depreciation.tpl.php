@@ -17,9 +17,6 @@
     ?>
 
     <form action="<?php e(url()); ?>" method="post">
-    <input type="hidden" value="<?php e($object->get('id')); ?>" name="id" />
-    <input type="hidden" value="<?php e($for); ?>" name="for" />
-    <input type="hidden" value="<?php e($depreciation->get('id')); ?>" name="depreciation_id" />
     <fieldset>
         <legend><?php e('depreciation'); ?></legend>
         <table>

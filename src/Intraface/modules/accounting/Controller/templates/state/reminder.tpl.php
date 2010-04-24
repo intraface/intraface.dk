@@ -30,7 +30,6 @@
 
     <?php  if ($reminder->readyForState($year)): ?>
         <form action="<?php e(url()); ?>" method="post">
-        <input type="hidden" value="<?php e($reminder->get('id')); ?>" name="id" />
         <fieldset>
             <legend><?php e(t('Information to state')); ?></legend>
 
