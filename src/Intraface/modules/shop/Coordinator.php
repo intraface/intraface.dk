@@ -1,14 +1,14 @@
 <?php
 /**
- * Webshop s�rger for at holde styr webshoppen.
+ * Webshop sørger for at holde styr webshoppen.
  *
- * @todo Indstilling af porto - skal det v�re et standardprodukt p� alle ordrer?
+ * @todo Indstilling af porto - skal det være et standardprodukt på alle ordrer?
  *
- * @todo Standardprodukter p� ordrer.
+ * @todo Standardprodukter på ordrer.
  *
- * @todo Opf�rsel ift. lager i onlineshoppen.
+ * @todo Opførsel ift. lager i onlineshoppen.
  *
- * @todo B�r kunne tage h�jde for en tidsangivelse p� produkterne
+ * @todo Bør kunne tage højde for en tidsangivelse på produkterne
  *
  * @todo traekke send email ud.
  *
