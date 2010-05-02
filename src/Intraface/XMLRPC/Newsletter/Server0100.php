@@ -28,6 +28,7 @@ class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server
     
     private function factoryList($list_id)
     {
+        define('INTRAFACE_K2', true); /* hack to correct encoding */
         $this->list = new NewsletterList($this->kernel, $list_id);
 
         if (!$this->list->doesListExist()) {

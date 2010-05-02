@@ -1068,7 +1068,8 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         }
         $this->kernel->module('shop');
 
-        Doctrine_Manager::connection(DB_DSN);
+        $connection = Doctrine_Manager::connection(DB_DSN);
+        $connection->setCharset('utf8');
         $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById((int)$shop_id);
         if ($shop === false) {
             throw new XML_RPC2_FaultException('Could not find shop', 1);
