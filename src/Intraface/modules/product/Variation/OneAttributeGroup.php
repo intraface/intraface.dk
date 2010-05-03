@@ -10,10 +10,6 @@ class Intraface_modules_product_Variation_OneAttributeGroup extends Intraface_mo
         $this->hasOne('Intraface_modules_product_Variation_X_Attribute as attribute1', 
             array('local' => 'id', 'foreign' => 'product_variation_id'));
         
-        $this->hasMany('Intraface_modules_product_Variation_Detail as detail', 
-            array('local' => 'id', 'foreign' => 'product_variation_id'));
-        
-        
     }
     
     public function setAttributesFromArray($input)
