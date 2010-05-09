@@ -1,6 +1,7 @@
 <?php
 // common settings
 define('INTRAFACE_K2', true);
+error_reporting(E_ALL & ~E_DEPRECATED);
 
 $config_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . '/../config.local.php';
 
@@ -257,8 +258,8 @@ class k_Translation2Translator implements k_Translator
         return $phrase;
 
     }
-    
-    public function get($phrase) 
+
+    public function get($phrase)
     {
         return $this->translate($phrase);
     }
@@ -374,13 +375,13 @@ if (realpath($_SERVER['SCRIPT_FILENAME']) == __FILE__) {
 
         $render = new Ilib_Errorhandler_Handler_File(Log::factory('file', ERROR_LOG, 'INTRAFACE'));
         $render->handle($e);
-        
+
         if(SERVER_STATUS != 'PRODUCTION') {
             $render = new Ilib_Errorhandler_Handler_Echo();
             $render->handle($e);
             die;
-        } 
-       
+        }
+
         die('<h1>An error orrured!</h1> <P>We have been notified about the problem, but you are always welcome to contact us on support@intraface.dk.</p><p>We apologize for the inconvenience.</p> <pre style="color: white;">'.$e.'</pre>');
     }
 }
