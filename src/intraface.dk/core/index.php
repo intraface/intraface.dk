@@ -1,7 +1,6 @@
 <?php
 // common settings
 define('INTRAFACE_K2', true);
-error_reporting(E_ALL & ~E_DEPRECATED);
 
 $config_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . '/../config.local.php';
 
