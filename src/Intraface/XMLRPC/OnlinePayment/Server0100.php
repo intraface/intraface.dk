@@ -8,16 +8,16 @@
  * @author   Sune Jensen <sune@intraface.dk>
  * @version  @package-version@
  */
-class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
+class Intraface_XMLRPC_OnlinePayment_Server0100 extends Intraface_XMLRPC_Server0100
 {
     /**
      * Constructor
      * @param $encoding the encoding used for the XML_RPC2 backend 
      * @return unknown_type
      */
-    public function __construct($encoding = 'utf-8') 
+    public function __construct($bucket, $encoding = 'utf-8') 
     {
-        parent::__construct($encoding);
+        parent::__construct($bucket, $encoding);
     }
     
     
@@ -115,7 +115,7 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
         if ($currency != 'DKK' && $this->kernel->intranet->hasModuleAccess('currency')) {
             $this->kernel->useModule('currency', true); /* true: ignore user access */
 
-            $currency_gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
+            $currency_gateway = new Intraface_modules_currency_Currency_Gateway($this->getBucket()->get('Doctrine_Connection_Common'));
             if (false !== ($currency = $currency_gateway->findByIsoCode($currency))) {
                 $values['currency'] = $currency;
             }
@@ -150,13 +150,16 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
-        $connection = Doctrine_Manager::connection(DB_DSN);
-        $connection->setCharset('utf8');
+        $doctrine = $this->getBucket()->get('Doctrine_Connection_Common');
+        $gateway = new Intraface_modules_shop_ShopGateway($doctrine);
         
         try {
-            $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById($debtor->getFromShopId());
-
-            $settings = Doctrine::getTable('Intraface_modules_onlinepayment_Language')->findOneByIntranetId($kernel->intranet->getId());
+            $shop = $gateway->findById($debtor->getFromShopId());
+            
+            /**
+             * @todo: Change with gateway.
+             */
+            $settings = $doctrine->getTable('Intraface_modules_onlinepayment_Language')->findOneByIntranetId($kernel->intranet->getId());
 
             $subject = $settings->getConfirmationEmailSubject($shop->getLanguage()) . ' (#' . $payment_id . ')';
             $body = $settings->getConfirmationEmailBody($shop->getLanguage()) . "\n\n" . $this->kernel->intranet->address->get('name');

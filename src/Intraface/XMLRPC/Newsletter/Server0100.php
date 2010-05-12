@@ -11,7 +11,7 @@ require_once 'Intraface/modules/contact/Contact.php';
 require_once 'Intraface/modules/newsletter/NewsletterList.php';
 require_once 'Intraface/modules/newsletter/NewsletterSubscriber.php';
 
-class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server
+class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server0100
 {
     private $list;
     private $subscriber;
@@ -21,14 +21,13 @@ class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server
      * @param $encoding the encoding used for the XML_RPC2 backend 
      * @return unknown_type
      */
-    public function __construct($encoding = 'utf-8') 
+    public function __construct($bucket, $encoding = 'utf-8') 
     {
-        parent::__construct($encoding);
+        parent::__construct($bucket, $encoding);
     }
     
     private function factoryList($list_id)
     {
-        define('INTRAFACE_K2', true); /* hack to correct encoding */
         $this->list = new NewsletterList($this->kernel, $list_id);
 
         if (!$this->list->doesListExist()) {

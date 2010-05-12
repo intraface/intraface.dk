@@ -13,13 +13,12 @@
  * @author   Lars Olesen <lars@legestue.net>
  * @version  @package-version@
  */
-class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
+class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 {
     private $webshop;
     private $basket;
     private $product;
-    private $bucket;
-
+    
     /**
      * Constructor
      * @param $encoding the encoding used for the XML_RPC2 backend
@@ -27,8 +26,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
      */
     public function __construct($bucket, $encoding = 'utf-8')
     {
-        $this->bucket = $bucket;
-        parent::__construct($encoding);
+        parent::__construct($bucket, $encoding);
     }
     
     /**
@@ -965,7 +963,6 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $this->checkCredentials($credentials);
 
         $this->_factoryWebshop($shop_id);
-
         return $this->prepareResponseData($this->webshop->getReceiptText());
     }
 
@@ -1010,7 +1007,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
     {
         if ($this->webshop->kernel->intranet->hasModuleAccess('currency')) {
             $this->webshop->kernel->useModule('currency', true); // true: ignore intranet access
-            return new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
+            return new Intraface_modules_currency_Currency_Gateway($this->getBucket()->get('Doctrine_Connection_Common'));
         }
         return false;
     }
@@ -1087,7 +1084,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         }
         $this->kernel->module('shop');
 
-        $doctrine = $this->bucket->get('Doctrine_Connection_Common');
+        $doctrine = $this->getBucket()->get('Doctrine_Connection_Common');
         $gateway = new Intraface_modules_shop_ShopGateway($doctrine);
         $shop = $gateway->findById($shop_id);
         if ($shop === false) {

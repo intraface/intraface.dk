@@ -20,7 +20,7 @@ class Install_Helper_Shop {
         $shop->show_online = 1;
         $shop->payment_link = '/demo/1/shop/1/basket/onlinepayment';
         $shop->confirmation = '';
-        $shop->receipt = '<h3>Vi har modtaget din ordre</h3><p>Nu sker der følgende:</p><p>Vi sender, du pakker du</p>';
+        $shop->receipt = '<h3>Vi har modtaget din ordre</h3><p>Nu sker der fÃ¸lgende:</p><p>Vi sender, du pakker du</p>';
         
         $shop->save();
         
@@ -39,7 +39,7 @@ class Install_Helper_Shop {
         $shop->default_currency_id = 1;
         $shop->show_online = 1;
         $shop->confirmation = '';
-        $shop->receipt = '<h3>Vi har modtaget din ordre</h3><p>Nu sker der følgende:</p><p>Vi sender, du pakker du</p>';
+        $shop->receipt = '<h3>Vi har modtaget din ordre</h3><p>Nu sker der fÃ¸lgende:</p><p>Vi sender, du pakker du</p>';
         
         $shop->save();
         

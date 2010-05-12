@@ -17,5 +17,5 @@ if(isset($_GET['backend']) && $_GET['backend'] == 'xmlrpcext') {
         'backend' => 'php');
 }
 
-$server = XML_RPC2_Server::create(new Intraface_XMLRPC_Shop_Server0004($encoding), $options);
+$server = XML_RPC2_Server::create(new Intraface_XMLRPC_Shop_Server0100($bucket, $encoding), $options);
 $server->handleCall();
