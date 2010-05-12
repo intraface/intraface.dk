@@ -4,16 +4,16 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="" />
-<title>newsletter:testAddNewContactToList</title>
+<title>testAddNewContactToList</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">newsletter:testAddNewContactToList</td></tr>
+<tr><td rowspan="1" colspan="3">testAddNewContactToList</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=contact,newsletter&amp;helper_function=Administration:fillInIntranetAddress,Contact:create,Newsletter:create&amp;login=true</td>
+	<td>install/reset-staging-server.php?modules=contact,newsletter&amp;helper_function=Administration:fillInIntranetAddress,Newsletter:create&amp;login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -42,22 +42,37 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>selected</td>
+	<td>clickAndWait</td>
+	<td>link=Create contact</td>
 	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name</td>
+	<td>Hans Hansen</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>contact-type</td>
+	<td>label=private</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>email</td>
+	<td>test@intraface.dk</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>submit</td>
+	<td>save</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertTextPresent</td>
-	<td>Contact 1</td>
+	<td>verifyTextPresent</td>
+	<td>Subscribers to the list Test</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertTextPresent</td>
+	<td>verifyTextPresent</td>
 	<td>test@intraface.dk</td>
 	<td></td>
 </tr>

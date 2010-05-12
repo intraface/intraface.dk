@@ -90,7 +90,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
                 if ($redirect->get('id') != 0) {
                     $redirect->setParameter('contact_id', $id);
                 }
-                return new k_SeeOther($this->url('../', array('contact_id' => $id)));
+                return new k_SeeOther($this->getRedirectUrl($id));
 
                 //$contact->lock->unlock_post($id);
             }
