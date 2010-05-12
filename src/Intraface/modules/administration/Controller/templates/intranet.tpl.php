@@ -83,21 +83,12 @@ $address = $context->getValues();
 
 <div class="box">
 	<h2><?php e(t('Header to pdf-documents')); ?></h2>
-
 	<?php
-	$filehandler = new FileHandler($context->getKernel(), $context->getKernel()->intranet->get('pdf_header_file_id'));
+	$filehandler = $context->getFilehandler();
 	if ($filehandler->get('id') > 0) {
-
-		$filehandler->createInstance('medium');
-		echo '<img src="'.$filehandler->instance->get('file_uri').'" alt="Sidehoved til breve" style="width: '.$filehandler->instance->get('width').'px; height: '.$filehandler->instance->get('height').'px;" />';
-	} else {
-
-		echo '<p>' . e(t('No picture uploaded'));
-		if ($context->getKernel()->user->hasModuleAccess('administration')) {
-			$module_administration = $context->getKernel()->useModule('administration');
-			echo ' <a href="'.$module_administration->getPath().'intranet_edit.php">'.e(t('upload picture')).'</a>.';
-		}
-		echo '</p>';
-	}
-	?>
+		$filehandler->createInstance('medium'); ?>
+        <img src="<?php  e($filehandler->instance->get('file_uri')); ?>" alt="Sidehoved til breve" style="width: <?php e($filehandler->instance->get('width')); ?>px; height: <?php e($filehandler->instance->get('height')); ?>px;" />
+	<?php } else { ?>
+		<p><?php e(t('No picture uploaded')); ?> <a href="'.'"><?php e(t('upload picture')); ?></a>. </p>
+	<?php } ?>
 </div>

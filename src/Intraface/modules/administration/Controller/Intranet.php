@@ -18,7 +18,7 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
     function renderHtmlEdit()
     {
         $modul = $this->getKernel()->module('administration');
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $translation = $this->getKernel()->getTranslation('administration');
 
         if (isset($_GET['return_redirect_id'])) {
@@ -59,7 +59,7 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
     function postMultipart()
     {
         $modul = $this->getKernel()->module('administration');
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
       	$intranet = $this->getIntranetMaintenance();
        	$values = $_POST;
 
@@ -89,14 +89,8 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
         			return new k_SeeOther($url);
         		}
                 return new k_SeeOther($this->url());
-
         	}
-            $values = $_POST;
-            $address = $_POST;
-        } else {
-       		$values = $_POST;
-       		$address = $_POST;
-       	}
+        }
 
        	return $this->render();
     }
@@ -106,12 +100,19 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
     	return $this->context->getKernel();
     }
 
+    function getFilehandler()
+    {
+        return new FileHandler($this->getKernel(), $this->getKernel()->intranet->get('pdf_header_file_id'));
+    }
+
     function getValues()
     {
-        $this->getKernel()->useShared('filehandler');
+        $this->getKernel()->useModule('filemanager');
 
-        $translation = $this->getKernel()->getTranslation('controlpanel');
+        if ($this->body()) {
+            return $this->body();
 
+        }
 
         $values = $this->getKernel()->intranet->get();
         $address = $this->getKernel()->intranet->address->get();

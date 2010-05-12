@@ -66,7 +66,7 @@ $address = $intranet->address->get();
 	<fieldset>
 		<legend><?php e(t('Header for pdf')); ?></legend>
 		<?php
-		$filehandler = new FileHandler($kernel, $intranet->get('pdf_header_file_id'));
+		$filehandler = $context->getFilehandler();
 		$filehandler_html = new FileHandlerHTML($filehandler);
 		$filehandler_html->printFormUploadTag('pdf_header_file_id','new_pdf_header_file', 'choose_file', array('image_size' => 'small'));
 		?>
