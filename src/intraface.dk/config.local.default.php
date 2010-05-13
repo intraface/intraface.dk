@@ -8,6 +8,8 @@
  * @author Sune Jensen <sj@sunet.dk>
  */
 
+error_reporting(E_ALL & ~E_DEPRECATED);
+
 // database
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
