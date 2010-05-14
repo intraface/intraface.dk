@@ -430,7 +430,7 @@ class Year extends Intraface_Standard
             $accounts[$i]['name'] = $oAccount->get('name');
             $accounts[$i]['number'] = $oAccount->get('number');
             $accounts[$i]['saldo_primo'] = $saldo;
-            $accounts[$i]['saldo_draft'] = $oAccount->get('saldo_draft');
+            $accounts[$i]['saldo_draft'] = (float)$oAccount->get('saldo_draft');
             $accounts[$i]['saldo_ultimo'] = $saldo + $oAccount->get('saldo_draft');
             $i++;
         }
