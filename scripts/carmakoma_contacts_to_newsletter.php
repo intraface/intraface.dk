@@ -50,9 +50,8 @@ while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
         $subscriber = new NewsletterSubscriber($list);
         $contact = new Contact($kernel, $row['id']);
         
-        $subscriber->addContact($contact);
-        
-        echo 'Contact added to danish newsletter';
+        // $subscriber->addContact($contact);
+        // echo 'Contact added to danish newsletter';
     } else {
         echo 'Already in newsletter';
     }
