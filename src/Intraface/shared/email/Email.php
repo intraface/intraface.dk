@@ -23,7 +23,7 @@ class Email extends Intraface_Standard
     public $id;
     public $contact;
     protected $dbquery;
-    
+
     /**
      * Bruges til at sætte den øvre grænse for hvor mange e-mails der sendes i timen
      */
@@ -177,7 +177,7 @@ class Email extends Intraface_Standard
 
         return 1;
     }
-    
+
     /**
      * @param struct $var Values to save
      *
@@ -197,7 +197,7 @@ class Email extends Intraface_Standard
             $sql_end = ", date_created = NOW(),
                 belong_to_id = ".(int)$var['belong_to'] . ",
                 type_id = ".(int)$var['type_id'] . ",
-                contact_id=".$var['contact_id'];            
+                contact_id=".$var['contact_id'];
         } else {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;
@@ -421,7 +421,7 @@ class Email extends Intraface_Standard
         $attachments = $this->getAttachments();
 
         if (is_array($attachments) AND count($attachments) > 0) {
-            $this->kernel->useShared('filehandler');
+            $this->kernel->useModule('filemanager');
             foreach ($attachments AS $file) {
 
                 $filehandler = new FileHandler($this->kernel, $file['id']);
@@ -450,6 +450,46 @@ class Email extends Intraface_Standard
 
         return 1;
     }
+
+    function getTo()
+    {
+        $contact = $this->getContact();
+        if ($contact->get('type') == 'corporation' && $this->get('contact_person_id') != 0) {
+            $contact->loadContactPerson($this->get('contact_person_id'));
+            $validator = new Intraface_Validator($this->error);
+            if ($validator->isEmail($contact->contactperson->get('email'))) {
+                return array($contact->contactperson->get('email') => $contact->contactperson->get('name'));
+            } else {
+                return array($contact->address->get('email') => $contact->address->get('name'));
+            }
+        } else {
+            return array($contact->address->get('email') => $contact->address->get('name'));
+        }
+    }
+
+    function getFrom()
+    {
+        if ($this->get('from_email')) {
+            if ($this->get('from_name')) {
+                return array($this->get('from_email') => $this->get('from_name'));
+            } else {
+                return array($this->get('from_email'));
+            }
+        } else { // Standardafsender
+            return array($this->kernel->intranet->address->get('email') => $this->kernel->intranet->address->get('name'));
+        }
+    }
+
+    function getBody()
+    {
+        return $this->get('body');
+    }
+
+    function getSubject()
+    {
+        return $this->get('subject');
+    }
+
 
     /**
      * Der er ingen grund til at man kan �ndre en attachment
@@ -505,6 +545,8 @@ class Email extends Intraface_Standard
     }
 
     /**
+     * @deprecated
+     *
      * @todo Denne funktion b�r nok erstatte det meste af funktionen send(), s� send()
      *       netop kun sender en e-mail!
      *

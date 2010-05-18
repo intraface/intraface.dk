@@ -1,13 +1,9 @@
 <?php
 /**
- * cronjob som skal sende e-mails for nyhedsbrevsudsenderen.
+ * Sends e-mails from queue
  *
- * VIGTIGT:
- * Dreamhost har et maksimalt antal afsendte e-mails på en time på 150.
- * Derfor må der ikke sendes flere end det.
- *
- * Det styres ved at cronjobbet kun sættes i gang en gang i timen - og
- * at der kun sendes 125 e-mails ad gangen.
+ * Important:
+ * Dreamhost only allows 150 mails pr. hour to be sent
  *
  * @author Lars Olesen <lars@legestue.net>
  */
@@ -18,7 +14,12 @@ session_start();
 require_once 'common.php';
 require_once 'Intraface/Mail.php';
 
-$db = MDB2::singleton(DB_DSN);
+$bucket = new bucket_Container(new Intraface_Factory());
+
+$db = $bucket->get('mdb2');
+
+$mailer = $bucket->get('swift_mailer');
+
 $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
 $result = $db->query("SELECT name, public_key FROM intranet");
 
@@ -26,10 +27,10 @@ while ($row = $result->fetchRow()) {
 
 	$auth_adapter = new Intraface_Auth_PublicKeyLogin(MDB2::singleton(DB_DSN), md5(session_id()), $row['public_key']);
 	$weblogin = $auth_adapter->auth();
-		
+
 	if (!$weblogin) {
 	    throw new Exception('Access to the intranet denied. The private key is probably wrong.');
-	} 
+	}
 
     $kernel = new Intraface_Kernel();
     $kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
@@ -41,11 +42,16 @@ while ($row = $result->fetchRow()) {
 		continue;
 	}
 
-	$email = new Email($kernel);
-	$email->sendAll(Intraface_Mail::factory());
-
-	// $email->error->view();
-
+    $gateway = new Intraface_shared_email_EmailGateway($kernel);
+    foreach ($gateway->getEmailsToSend() as $email) {
+        $message = $bucket->get('swift_message');
+        $message
+            ->setSubject($email->getSubject())
+            ->setFrom($email->getFrom())
+            ->setTo($email->getTo())
+            ->setBody($email->getBody());
+        $mailer->send($message);
+    }
 }
 
 $logger = new ErrorHandler_Observer_File(ERROR_LOG);
@@ -55,5 +61,3 @@ $logger->update(array(
                 'message' => 'Cronjob run successfully!',
                 'file' => __FILE__,
                 'line' => __LINE__));
-exit;
-?>

@@ -158,4 +158,28 @@ class Intraface_shared_email_EmailGateway
         }
         return true;
     }
+
+    function getEmailsToSend()
+    {
+        $sent_this_hour = $this->sentThisHour();
+
+        $limit_query = abs($this->allowed_limit-$sent_this_hour-$this->system_buffer);
+
+        $sql = "SELECT id
+                FROM email
+                WHERE status = 2
+                    AND date_deadline <= NOW()
+                    AND intranet_id = " . $this->kernel->intranet->get('id') . "
+                    AND contact_id > 0
+                LIMIT " . $limit_query;
+        $db = new DB_Sql;
+        $db->query($sql);
+
+        $emails = array();
+        while ($db->nextRecord()) {
+            $emails[] = new Email($this->kernel, $db->f('id'));
+
+        }
+        return $emails;
+    }
 }
