@@ -8,9 +8,6 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 
-// session_start is only used to create a unique id
-session_start();
-
 require_once 'common.php';
 require_once 'Intraface/Mail.php';
 
@@ -25,7 +22,7 @@ $result = $db->query("SELECT name, public_key FROM intranet");
 
 while ($row = $result->fetchRow()) {
 
-	$auth_adapter = new Intraface_Auth_PublicKeyLogin(MDB2::singleton(DB_DSN), md5(session_id()), $row['public_key']);
+	$auth_adapter = new Intraface_Auth_PublicKeyLogin($db, md5(uniqid()), $row['public_key']);
 	$weblogin = $auth_adapter->auth();
 
 	if (!$weblogin) {
