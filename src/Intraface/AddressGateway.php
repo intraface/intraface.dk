@@ -9,8 +9,6 @@ class Intraface_AddressGateway
     }
 
     /**
-     * Factory
-     *
      * Returns an instace of Address from belong_to and belong_to_id
      *
      * @param string  $belong_to    What the address belongs to, corresponding to the ones in Address::getBelongToTypes()
@@ -18,7 +16,7 @@ class Intraface_AddressGateway
      *
      * @return object Address
      */
-    function factory($belong_to, $belong_to_id)
+    public function findByBelongToKeyAndId($belong_to, $belong_to_id)
     {
         $belong_to_types = Intraface_Address::getBelongToTypes();
 
@@ -34,7 +32,7 @@ class Intraface_AddressGateway
 
         $this->db->query("SELECT id FROM address WHERE type = ".$belong_to_key." AND belong_to_id = ".$belong_to_id." AND active = 1");
         if ($this->db->numRows() > 1) {
-            trigger_error('There is more than one active address for '.$belong_to.':'.$belong_to_id.' in Address::facotory', E_USER_ERROR);
+            throw Exception('There is more than one active address for '.$belong_to.':'.$belong_to_id.' in Address::facotory');
         }
         if ($this->db->nextRecord()) {
             return new Intraface_Address($this->db->f('id'));

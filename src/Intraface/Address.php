@@ -2,10 +2,10 @@
 /**
  * Styrer adresser til intranet, bruger, kunde og kontaktperson
  *
- * Klassen kan styrer flere forskellige typer af adresser. Både for intranettet, brugere, kunder og kontaktpersoner.
- * Beskrivelsen af hvilke og med hvilket navn er beskrevet længere nede.
+ * Klassen kan styrer flere forskellige typer af adresser. Bï¿½de for intranettet, brugere, kunder og kontaktpersoner.
+ * Beskrivelsen af hvilke og med hvilket navn er beskrevet lï¿½ngere nede.
  *
- * @todo Skal vi programmere intranet_id ind i klassen? Det kræver at den får Kernel.
+ * @todo Skal vi programmere intranet_id ind i klassen? Det krï¿½ver at den fï¿½r Kernel.
  *
  * @package Intraface
  * @author  Sune Jensen <sj@sunet.dk>
@@ -47,10 +47,10 @@ class Intraface_Address extends Intraface_Standard
     /**
      * Init: loader klassen
      *
-     * Her er angivet de typer af adresser den kan håndtere med arrayet address_type[].
-     * $this-fields er felter i tabellen (db) som overføres til array og omvendt. Måske disse
-     * engang skal differencieres, så man angvier hvad feltet i tabellen skal svare til navnet i arrayet.
-     * Klassen loader også adressens felter
+     * Her er angivet de typer af adresser den kan hï¿½ndtere med arrayet address_type[].
+     * $this-fields er felter i tabellen (db) som overfï¿½res til array og omvendt. Mï¿½ske disse
+     * engang skal differencieres, sï¿½ man angvier hvad feltet i tabellen skal svare til navnet i arrayet.
+     * Klassen loader ogsï¿½ adressens felter
      *
      * @param integer $id Id on address.
      *
@@ -79,6 +79,10 @@ class Intraface_Address extends Intraface_Standard
      */
     function factory($belong_to, $belong_to_id)
     {
+        $gateway = new Intraface_AddressGateway(new DB_Sql);
+        return $gateway->findByBelongToKeyAndId($belong_to, $belong_to_id);
+
+        /*
         $belong_to_types = Intraface_Address::getBelongToTypes();
 
         $belong_to_key = array_search($belong_to, $belong_to_types);
@@ -103,6 +107,7 @@ class Intraface_Address extends Intraface_Standard
             $address->setBelongTo($belong_to, $belong_to_id);
             return $address;
         }
+        */
     }
 
     /**
@@ -265,7 +270,7 @@ class Intraface_Address extends Intraface_Standard
                     }
                 }
             } else {
-                // Kun hvis der rent faktisk gemmes nogle værdier opdaterer vi. hvis count($arra_var) > 0 så må der også være noget at opdatere?
+                // Kun hvis der rent faktisk gemmes nogle vï¿½rdier opdaterer vi. hvis count($arra_var) > 0 sï¿½ mï¿½ der ogsï¿½ vï¿½re noget at opdatere?
                 $do_update = 0;
                 foreach ($this->fields AS $i => $field) {
                     if (array_key_exists($field, $array_var) AND isset($array_var[$field])) {
@@ -295,7 +300,7 @@ class Intraface_Address extends Intraface_Standard
                 return true;
             }
         } else {
-            // Der var slet ikke noget indhold i arrayet, så vi lader være at opdatere, men siger, at vi gjorde.
+            // Der var slet ikke noget indhold i arrayet, sï¿½ vi lader vï¿½re at opdatere, men siger, at vi gjorde.
             return true;
         }
     }
@@ -305,11 +310,11 @@ class Intraface_Address extends Intraface_Standard
      *
      * UPDATE: Metoden er udkommenteret fra 18/10 2007 da den ikke ser ud til at blive benyttet!
      *
-     * Denne funktion overskriver den nuværende adresse. Benyt som udagangspunkt ikke denne, da historikken på adresser skal gemmes.
+     * Denne funktion overskriver den nuvï¿½rende adresse. Benyt som udagangspunkt ikke denne, da historikken pï¿½ adresser skal gemmes.
      *
      * @param array $array_var et array med felter med adressen. Se felterne i init funktionen: $this->fields
      *
-     * @return integer Returnere 1 hvis arrayet er gemt, 0 hvis det ikke er. Man kan ikke gemme på en old_address.
+     * @return integer Returnere 1 hvis arrayet er gemt, 0 hvis det ikke er. Man kan ikke gemme pï¿½ en old_address.
      */
     /*
     function update($array_var) {
