@@ -22,12 +22,12 @@ class Intraface_AddressGateway
 
         $belong_to_key = array_search($belong_to, $belong_to_types);
         if ($belong_to_key === false) {
-            trigger_error("Invalid address type '".$belong_to."' in Address::factory", E_USER_ERROR);
+            throw new Exception("Invalid address type '".$belong_to."' in Address::factory");
         }
 
         settype($belong_to_id, 'integer');
         if ($belong_to_id == 0) {
-            trigger_error("Invalid belong_to_id in Address::factory", E_USER_ERROR);
+            throw new Exception("Invalid belong_to_id in Address::factory");
         }
 
         $this->db->query("SELECT id FROM address WHERE type = ".$belong_to_key." AND belong_to_id = ".$belong_to_id." AND active = 1");
