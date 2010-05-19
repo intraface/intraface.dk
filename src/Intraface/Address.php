@@ -17,17 +17,17 @@ class Intraface_Address extends Intraface_Standard
     /**
      * @var integer
      */
-    private $belong_to_key;
+    protected $belong_to_key;
 
     /**
      * @var integer
      */
-    private $belong_to_id;
+    protected $belong_to_id;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var array
@@ -43,6 +43,8 @@ class Intraface_Address extends Intraface_Standard
      * @var object error
      */
     public $error;
+
+    protected $db;
 
     /**
      * Init: loader klassen
@@ -65,6 +67,12 @@ class Intraface_Address extends Intraface_Standard
 
         $this->belong_to_types = $this->getBelongToTypes();
 
+        $this->db = MDB2::singleton(DB_DSN);
+
+        if (PEAR::isError($this->db)) {
+            throw new Exception("Error db singleton: ".$this->db->getUserInfo());
+        }
+        $this->db->setFetchMode(MDB2_FETCHMODE_ASSOC);
     }
 
     /**
@@ -135,7 +143,6 @@ class Intraface_Address extends Intraface_Standard
      */
     function setBelongTo($belong_to, $belong_to_id)
     {
-
         if ($this->id != 0) {
             // is id already set, then you can not change belong_to
             return;
@@ -144,12 +151,12 @@ class Intraface_Address extends Intraface_Standard
         $belong_to_types = $this->getBelongToTypes();
         $this->belong_to_key = array_search($belong_to, $belong_to_types);
         if ($this->belong_to_key === false) {
-            trigger_error("Invalid address type ".$belong_to." in Address::setBelongTo()", E_USER_ERROR);
+            throw new Exception("Invalid address type ".$belong_to." in Address::setBelongTo()");
         }
 
         $this->belong_to_id = (int)$belong_to_id;
         if ($this->belong_to_id == 0) {
-            trigger_error("Invalid belong_to_id in Address::setBelongTo()", E_USER_ERROR);
+            throw new Exception("Invalid belong_to_id in Address::setBelongTo()");
         }
     }
 
@@ -164,9 +171,7 @@ class Intraface_Address extends Intraface_Standard
             return 0;
         }
 
-        $db = MDB2::singleton(DB_DSN);
-        $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
-        $result = $db->query("SELECT id, type, belong_to_id, ".implode(', ', $this->fields)." FROM address WHERE id = ".(int)$this->id);
+        $result = $this->db->query("SELECT id, type, belong_to_id, ".implode(', ', $this->fields)." FROM address WHERE id = ".(int)$this->id);
 
         if (PEAR::isError($result)) {
             trigger_error($result->getUserInfo(), E_USER_ERROR);
@@ -248,14 +253,9 @@ class Intraface_Address extends Intraface_Standard
     {
         // @todo validate should probably be called. Selenium debtor:testChangeContactPersonAndSender fails.
         if ($this->belong_to_key == 0 || $this->belong_to_id == 0) {
-            trigger_error("belong_to or belong_to_id was not set. Maybe because the provided address id was not valid. In Address::save", E_USER_ERROR);
+            throw new Exception("belong_to or belong_to_id was not set. Maybe because the provided address id was not valid. In Address::save");
         }
 
-        $db = MDB2::singleton(DB_DSN);
-        if (PEAR::isError($db)) {
-            trigger_error("Error db singleton: ".$db->getUserInfo(), E_USER_ERROR);
-            return false;
-        }
         $sql = '';
 
         if (count($array_var) > 0) {
@@ -284,18 +284,16 @@ class Intraface_Address extends Intraface_Standard
                 // There is nothing to save, but that is OK, so we just return 1
                 return true;
             } else {
-                $result = $db->exec("UPDATE address SET active = 0 WHERE type = ".$this->belong_to_key." AND belong_to_id = ".$this->belong_to_id);
+                $result = $this->db->exec("UPDATE address SET active = 0 WHERE type = ".$this->belong_to_key." AND belong_to_id = ".$this->belong_to_id);
                 if (PEAR::isError($result)) {
-                    trigger_error("Error in exec: ".$result->getUserInfo(), E_USER_ERROR);
-                    return false;
+                    throw new Exception("Error in exec: ".$result->getUserInfo());
                 }
 
-                $result = $db->exec("INSERT INTO address SET ".$sql." type = ".$this->belong_to_key.", belong_to_id = ".$this->belong_to_id.", active = 1, changed_date = NOW()");
+                $result = $this->db->exec("INSERT INTO address SET ".$sql." type = ".$this->belong_to_key.", belong_to_id = ".$this->belong_to_id.", active = 1, changed_date = NOW()");
                 if (PEAR::isError($result)) {
-                    trigger_error("Error in exec: ".$result->getUserInfo(), E_USER_ERROR);
-                    return false;
+                    throw new Exception("Error in exec: ".$result->getUserInfo());
                 }
-                $this->id = $db->lastInsertId('address', 'id');
+                $this->id = $this->db->lastInsertId('address', 'id');
                 $this->load();
                 return true;
             }
@@ -304,45 +302,4 @@ class Intraface_Address extends Intraface_Standard
             return true;
         }
     }
-
-    /**
-     * Public: Opdatere en adresse.
-     *
-     * UPDATE: Metoden er udkommenteret fra 18/10 2007 da den ikke ser ud til at blive benyttet!
-     *
-     * Denne funktion overskriver den nuv�rende adresse. Benyt som udagangspunkt ikke denne, da historikken p� adresser skal gemmes.
-     *
-     * @param array $array_var et array med felter med adressen. Se felterne i init funktionen: $this->fields
-     *
-     * @return integer Returnere 1 hvis arrayet er gemt, 0 hvis det ikke er. Man kan ikke gemme p� en old_address.
-     */
-    /*
-    function update($array_var) {
-        if ($this->id == 0) {
-            trigger_error("id has to be set to use Address::update, maybe you want to use Address::save IN Address->update", E_USER_ERROR);
-        }
-
-        $db = MDB2::singleton(DB_DSN);
-        if (PEAR::isError($db)) {
-            trigger_error("Error db singleton: ".$db->getUserInfo(), E_USER_ERROR);
-            return false;
-        }
-
-        foreach ($this->fields AS $i => $field) {
-            $sql = '';
-            if (isset($array_var[$field])) {
-                $sql .= $field." = ".$db->quote($array_var[$field]).", ";
-            }
-        }
-
-        $result = $db->exec("UPDATE address SET ".$sql." changed_date = NOW() WHERE id = ".$this->id);
-        if (PEAR::isError($result)) {
-            trigger_error("Error in exec: ".$result->getUserInfo(), E_USER_ERROR);
-            return false;
-        }
-        $this->load();
-        return 1;
-    }
-    */
 }
-?>
