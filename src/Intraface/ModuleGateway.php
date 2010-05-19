@@ -29,15 +29,13 @@ class Intraface_ModuleGateway
     {
         $result = $this->db->query("SELECT id FROM module WHERE name = ".$this->db->quote($name, 'text'));
         if (PEAR::isError($result)) {
-            trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
-            exit;
+            throw new Exception("Error in query: ".$result->getUserInfo());
         }
 
         if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             return new ModuleMaintenance($row['id']);
         } else {
-
-            trigger_error("invalid module name ".$name."!", E_USER_ERROR);
+            throw new Exception("invalid module name ".$name."!");
         }
     }
 

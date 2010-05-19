@@ -202,7 +202,7 @@ class Intraface_ModuleHandler
         $i = 0;
         $result = $db->query("SELECT id, menu_label, name, show_menu FROM module WHERE active = 1 ".$order_by);
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getUserInfo());
         }
         while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             $modules[$i]['id'] = $row['id'];
@@ -213,7 +213,7 @@ class Intraface_ModuleHandler
             $j = 0;
             $result_sub = $db->query("SELECT id, description FROM module_sub_access WHERE active = 1 AND module_id = ".$db->quote($row["id"], 'integer')." ORDER BY description");
             if (PEAR::isError($result_sub)) {
-                trigger_error($result_sub->getUserInfo(), E_USER_ERROR);
+                throw new Exception($result_sub->getUserInfo());
             }
 
             while ($row_sub = $result_sub->fetchRow(MDB2_FETCHMODE_ASSOC)) {
@@ -240,8 +240,7 @@ class Intraface_ModuleHandler
         } else {
             $result = $db->query('SELECT id FROM module WHERE name = '.$db->quote($module_id, 'text'));
             if (PEAR::isError($result)) {
-                trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
-                exit;
+                throw new Exception('Error in query: '.$result->getUserInfo());
             }
 
             if ($result->numRows() > 0) {
