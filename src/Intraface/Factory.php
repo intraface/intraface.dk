@@ -26,13 +26,8 @@ class Intraface_Factory
         }
 
         $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
-        if (defined('INTRAFACE_K2')) {
-            $db->query('SET NAMES utf8');
-            $res = $db->setCharset('utf8');
-        } else {
-            $db->query('SET NAMES latin1');
-            $res = $db->setCharset('latin1');
-        }
+        $db->query('SET NAMES utf8');
+        $res = $db->setCharset('utf8');
 
         $db->setOption('debug', MDB2_DEBUG);
         $db->setOption('portability', MDB2_PORTABILITY_NONE);
