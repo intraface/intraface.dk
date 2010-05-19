@@ -88,7 +88,7 @@ class Intraface_Address extends Intraface_Standard
     function factory($belong_to, $belong_to_id)
     {
         $gateway = new Intraface_AddressGateway(new DB_Sql);
-        return $gateway->findByBelongToKeyAndId($belong_to, $belong_to_id);
+        return $gateway->findByBelongToAndId($belong_to, $belong_to_id);
 
         /*
         $belong_to_types = Intraface_Address::getBelongToTypes();

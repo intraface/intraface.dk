@@ -16,7 +16,7 @@ class Intraface_AddressGateway
      *
      * @return object Address
      */
-    public function findByBelongToKeyAndId($belong_to, $belong_to_id)
+    public function findByBelongToAndId($belong_to, $belong_to_id)
     {
         $belong_to_types = Intraface_Address::getBelongToTypes();
 
