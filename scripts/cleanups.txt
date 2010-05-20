@@ -1,0 +1,17 @@
+php cleanup_database.php --ft accounting_year_end --fk year_id --t accounting_year --k id
+php cleanup_database.php --ft accounting_year_end_statement --fk year_id --t accounting_year --k id
+php cleanup_database.php --ft debtor_item --fk debtor_id --t debtor --k id
+php cleanup_database.php --ft debtor_item --fk product_id --t product --k id
+php cleanup_database.php --ft email_attachment --fk email_id --t email --k id
+php cleanup_database.php --ft filehandler_append_file --fk file_handler_id --t file_handler --k id
+php cleanup_database.php --ft invoice_reminder_item --fk invoice_reminder_id --t invoice_reminder --k id
+php cleanup_database.php --ft keyword_x_object --fk keyword_id --t keyword --k id
+php cleanup_database.php --ft permission --fk intranet_id --t intranet --k id
+php cleanup_database.php --ft product_detail --fk product_id --t product --k id
+php cleanup_database.php --ft redirect_parameter --fk redirect_id --t redirect --k id
+php cleanup_database.php --ft shop_featuredproducts --fk shop_id --t shop --k id
+php cleanup_database.php --ft webshop_basket_evaluation --fk shop_id --t shop --k id
+php cleanup_database.php --ft todo_item --fk todo_list_id --t todo_list --k id
+php cleanup_database.php --ft newsletter_subscriber --fk contact_id --t contact --k id
+php cleanup_database.php --ft setting --fk intranet_id --t intranet --k id
+
