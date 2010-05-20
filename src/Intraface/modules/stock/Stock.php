@@ -158,7 +158,6 @@ class Stock extends Intraface_Standard
      */
     function adaptation()
     {
-
         $db = new DB_Sql;
 
         $db->query("INSERT INTO stock_adaptation SET
