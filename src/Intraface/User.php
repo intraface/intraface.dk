@@ -111,7 +111,7 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
         $result = $this->db->query("SELECT id, email, disabled FROM user WHERE id = " . $this->db->quote($this->id, 'integer'));
 
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getUserInfo());
         }
         if ($result->numRows() == 1) {
             $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
@@ -164,8 +164,7 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
                 AND permission.user_id = ". $this->db->quote($this->get('id'), 'integer'));
 
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
-            return false;
+            throw new Exception($result->getUserInfo());
         }
 
         while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
@@ -328,12 +327,12 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
         if (is_string($sub_access)) {
             $result = $this->db->query("SELECT id FROM module_sub_access WHERE module_id = ".$module_id." AND name = \"".$sub_access."\"");
             if (PEAR::isError($result)) {
-                trigger_error($result->getUserInfo(), E_USER_ERROR);
+                throw new Exception($result->getUserInfo());
             }
             if ($row = $result->fetchRow()) {
                 $sub_access_id = $row['id'];
             } else {
-                trigger_error("user says unknown subaccess", E_USER_ERROR);
+                throw new Exception("user says unknown subaccess");
             }
         } else {
             $sub_access_id = intval($sub_access);
@@ -383,7 +382,7 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
 
         $result = $this->db->query($sql);
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getUserInfo());
         }
         while ($row = $result->fetchRow()) {
             $this->permissions['user']['module']['subaccess'][$row['id']] = true;
@@ -488,7 +487,7 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
             WHERE permission.user_id = ".$this->id);
 
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getUserInfo());
         }
         return $result->fetchAll();
     }
@@ -511,7 +510,7 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
         $validator->isEmail($input["email"], "Ugyldig E-mail");
         $result = $this->db->query("SELECT id FROM user WHERE email = \"".$input["email"]."\" AND id != ".$this->id);
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getUserInfo());
         }
         if ($result->numRows() > 0) {
             $this->error->set("E-mail-adressen er allerede benyttet");
@@ -562,7 +561,7 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
         $db = MDB2::singleton(DB_DSN);
         $result = $db->query("SELECT id FROM user WHERE email = '".$email."'");
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getUserInfo());
         }
         if ($result->numRows() != 1) {
             return false;
@@ -574,47 +573,6 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
 
         return $new_password;
     }
-
-    /**
-     * Ved ikke om der skal bygges noget mere sikkerhed ind i denne?
-     *
-     * @todo this should be an observer instead
-     *
-     * @deprecated
-     */
-    /*
-    public static function sendForgottenPasswordEmail($email)
-    {
-        if (!Validate::email($email)) {
-            return false;
-        }
-        $db = MDB2::singleton(DB_DSN);
-        $result = $db->query("SELECT id FROM user WHERE email = '".$email."'");
-        if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
-        }
-        if ($result->numRows() != 1) {
-            return false;
-        }
-        $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-        $new_password = Intraface_Kernel::randomKey(8);
-
-        $db->exec("UPDATE user SET password = '".md5($new_password)."' WHERE id =" . $row['id']);
-
-        $subject = 'Tsk, glemt din adgangskode?';
-
-        $body  = "Huha, det var heldigt, at vi stod på spring i kulissen, så vi kan hjælpe dig med at lave en ny adgangskode.\n\n";
-        $body .= "Din nye adgangskode er: " . $new_password . "\n\n";
-        $body .= "Du kan logge ind fra:\n\n";
-        $body .= "<".PATH_WWW . 'login'.">\n\n";
-        $body .= "Med venlig hilsen\nDin hengivne webserver";
-
-        if (mail($email, $subject, $body, "From: Intraface.dk <robot@intraface.dk>\nReturn-Path: robot@intraface.dk")) {
-            return true;
-        }
-        throw new Exception('Could not send the e-mail - maybe the mail() function is not working properly');
-    }
-    */
 
     public function updatePassword($old_password, $new_password, $repeat_password)
     {
