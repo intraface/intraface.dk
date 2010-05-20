@@ -350,6 +350,7 @@ class Email extends Intraface_Standard
         }
 
         $db = new DB_Sql;
+        $db->query('SET NAMES utf8');
 
         //
         // Putter e-mailen i outboxen
@@ -432,7 +433,7 @@ class Email extends Intraface_Standard
                 // lille hack med at s�tte uploadpath p�
 
                 if (!$phpmailer->addAttachment($filehandler->getUploadPath() . $filehandler->get('server_file_name'), $file['filename'])) {
-                    $this->error->set('Kunne ikke vedh�fte filen til e-mailen');
+                    $this->error->set('Kunne ikke vedhæfte filen til e-mailen');
                 }
             }
         }
