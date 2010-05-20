@@ -62,12 +62,12 @@ class Intraface_Address extends Intraface_Standard
     {
         $this->id = $id;
         $this->error = new Intraface_Error;
+        $this->db = MDB2::factory(DB_DSN);
 
         $this->load();
 
         $this->belong_to_types = $this->getBelongToTypes();
 
-        $this->db = MDB2::singleton(DB_DSN);
 
         if (PEAR::isError($this->db)) {
             throw new Exception("Error db singleton: ".$this->db->getUserInfo());
@@ -165,7 +165,7 @@ class Intraface_Address extends Intraface_Standard
      *
      * @return integer
      */
-    private function load()
+    protected function load()
     {
         if ($this->id == 0) {
             return 0;
@@ -174,11 +174,11 @@ class Intraface_Address extends Intraface_Standard
         $result = $this->db->query("SELECT id, type, belong_to_id, ".implode(', ', $this->fields)." FROM address WHERE id = ".(int)$this->id);
 
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getUserInfo());
         }
 
         if ($result->numRows() > 1) {
-            trigger_error('There is more than one active address', E_USER_ERROR);
+            throw new Exception('There is more than one active address');
         }
 
         if ($result->numRows() == 0) {
