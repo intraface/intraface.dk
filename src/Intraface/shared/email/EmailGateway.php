@@ -45,7 +45,9 @@ class Intraface_shared_email_EmailGateway
      */
     function getDBQuery()
     {
-        if ($this->dbquery) return $this->dbquery;
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
         $this->dbquery = new Intraface_DBQuery($this->kernel, "email", "email.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->useErrorObject($this->error);
         return $this->dbquery;
@@ -86,12 +88,13 @@ class Intraface_shared_email_EmailGateway
 
     function getAll()
     {
-        $this->getDBQuery()->setSorting("email.date_created DESC");
-        $db = $this->getDBQuery()->getRecordset("email.id, email.subject, email.status, email.contact_id", "", false);
+        $db = $this->getDBQuery()->getRecordset("email.id, email.subject, email.status, email.date_sent, DATE_FORMAT(date_sent, '%d-%m-%Y') as date_sent_dk, email.contact_id", "", false);
         $i = 0;
         $list = array();
         while ($db->nextRecord()) {
             $list[$i]['id'] = $db->f('id');
+            $list[$i]['date_sent_dk'] = $db->f('date_sent_dk');
+            $list[$i]['date_sent'] = $db->f('date_sent');
             $list[$i]['subject'] = $db->f('subject');
             $list[$i]['status'] = $this->status[$db->f('status')];
 
@@ -101,7 +104,9 @@ class Intraface_shared_email_EmailGateway
             }
             $this->kernel->useModule('contact');
             $contact = new Contact($this->kernel, $db->f('contact_id'));
-            if (!is_object($contact->address)) continue;
+            if (!is_object($contact->address)) {
+                continue;
+            }
             $list[$i]['contact_name'] = $contact->address->get('name');
             $list[$i]['contact_id'] = $contact->get('id');
             $i++;

@@ -14,6 +14,7 @@
 	        // @todo make it possible to resend e-mail
 	        e(t('Email has been sent.'));
 	    ?>
+	    <?php e($email->get('date_sent_dk')); ?>.
 	</p>
 <?php endif; ?>
 
@@ -54,7 +55,7 @@
 			<legend><?php e(t('Attachments')); ?></legend>
 			<ul>
 				<?php
-				$kernel->useShared('filehandler');
+				$kernel->useModule('filemanager');
 				foreach ($attachments as $attachment) {
 				    $file = new FileHandler($kernel, $attachment['id']);
 				    echo '<li><a href="'.$file->get('file_uri').'" target="_blank">'.$attachment['filename'].'</a></li>';

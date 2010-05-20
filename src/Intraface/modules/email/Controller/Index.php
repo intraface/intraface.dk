@@ -10,7 +10,7 @@ class Intraface_modules_email_Controller_Index extends k_Component
 
     function map($name)
     {
-        if($name == 'settings') {
+        if ($name == 'settings') {
             return 'Intraface_modules_email_Controller_Settings';
         } elseif (is_numeric($name)) {
             return 'Intraface_modules_email_Controller_Email';
@@ -33,14 +33,23 @@ class Intraface_modules_email_Controller_Index extends k_Component
         $email_shared = $this->getKernel()->useShared('email');
 
         $emails = $this->getGateway();
-        $emails->getDBQuery()->useCharacter();
-        $emails->getDBQuery()->defineCharacter('character', 'email.subject');
+
+        if (!$this->query()) {
+        }
         $emails->getDBQuery()->usePaging('paging');
-        //$email->dbquery->storeResult('use_stored', 'emails', 'toplevel');
+        $emails->getDBQuery()->storeResult('use_stored', 'emails', 'toplevel');
         $emails->getDBQuery()->setUri($this->url());
 
         if ($this->query("contact_id")) {
             $emails->getDBQuery()->setCondition("email.contact_id = ".intval($this->query("contact_id")));
+        }
+
+        if ($this->query('filter') == 'new') {
+            $emails->getDBQuery()->setSorting("email.date_created DESC");
+        } else {
+            $emails->getDBQuery()->useCharacter();
+            $emails->getDBQuery()->defineCharacter('character', 'email.subject');
+            $emails->getDBQuery()->setSorting("email.date_sent DESC");
         }
 
         $queue = $emails->countQueue();

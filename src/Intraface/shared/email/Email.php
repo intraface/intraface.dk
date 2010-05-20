@@ -22,6 +22,7 @@ class Email extends Intraface_Standard
     public $error;
     public $id;
     public $contact;
+    public $type;
     protected $dbquery;
 
     /**
@@ -41,12 +42,11 @@ class Email extends Intraface_Standard
      *
      * @param object  $kernel Kernel object
      * @param integer $id     E-mail id
+     *
+     * @return void
      */
-    function __construct($kernel, $id=0)
+    function __construct($kernel, $id = 0)
     {
-        if (!is_object($kernel)) {
-            trigger_error('E-mail kræver kernel', E_USER_ERROR);
-        }
         $this->kernel = $kernel;
 
         $this->id = (int)$id;
@@ -84,7 +84,9 @@ class Email extends Intraface_Standard
      */
     function getDBQuery()
     {
-        if ($this->dbquery) return $this->dbquery;
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
         $this->dbquery = new Intraface_DBQuery($this->kernel, "email", "email.intranet_id = ".$this->kernel->intranet->get("id"));
         $this->dbquery->useErrorObject($this->error);
         return $this->dbquery;
@@ -101,14 +103,14 @@ class Email extends Intraface_Standard
     function load()
     {
         if ($this->id == 0) {
-            return 0;
+            return false;
         }
 
         $db = new DB_Sql;
-        $sql = "SELECT id, subject, from_name, from_email, user_id, body, status, contact_id, contact_person_id, type_id, belong_to_id, status, bcc_to_user FROM email WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = " . $this->id;
+        $sql = "SELECT id, email.date_sent, DATE_FORMAT(date_sent, '%d-%m-%Y') as date_sent_dk, subject, from_name, from_email, user_id, body, status, contact_id, contact_person_id, type_id, belong_to_id, status, bcc_to_user FROM email WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = " . $this->id;
         $db->query($sql);
         if (!$db->nextRecord()) {
-            return 0;
+            return false;
         }
 
         $this->value['id'] = $db->f('id');
@@ -125,12 +127,14 @@ class Email extends Intraface_Standard
         $this->value['status_key'] = $db->f('status');
         $this->value['user_id'] = $db->f('user_id');
         $this->value['bcc_to_user'] = $db->f('bcc_to_user');
+        $this->value['date_sent_dk'] = $db->f('date_sent_dk');
+        $this->value['date_sent'] = $db->f('date_sent');
 
         if ($db->f('contact_id') == 0) {
-            return 0;
+            return false;
         }
 
-        return 1;
+        return true;
     }
 
     /**
@@ -172,10 +176,10 @@ class Email extends Intraface_Standard
         $validator->isString($var['from_name'], 'there was and error in from name', '', 'allow_empty');
 
         if ($this->error->isError()) {
-            return 0;
+            return false;
         }
 
-        return 1;
+        return true;
     }
 
     /**
@@ -191,6 +195,7 @@ class Email extends Intraface_Standard
             return 0;
         }
         $db = new DB_Sql;
+        $db->query('SET NAMES utf8');
 
         if ($this->id == 0) {
             $sql_type = "INSERT INTO ";
@@ -222,7 +227,6 @@ class Email extends Intraface_Standard
         if (!isset($var['bcc_to_user'])) {
             $var['bcc_to_user'] = 0;
         }
-
 
         // status 1 = draft
         $sql = $sql_type . " email SET
