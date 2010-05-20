@@ -49,11 +49,11 @@ class Intraface_XMLRPC_Debtor_Server
 
 		$auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
 		$weblogin = $auth_adapter->auth();
-		
+
 		if (!$weblogin) {
 		    require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
-		} 
+		}
 
         $this->kernel = new Intraface_Kernel();
         $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
@@ -185,7 +185,7 @@ class Intraface_XMLRPC_Debtor_Server
         }
 
         if ($this->kernel->intranet->get("pdf_header_file_id") != 0) {
-            $this->kernel->useShared('filehandler');
+            $this->kernel->useModule('filemanager');
             $filehandler = new FileHandler($this->kernel, $this->kernel->intranet->get("pdf_header_file_id"));
         } else {
             $filehandler = NULL;
