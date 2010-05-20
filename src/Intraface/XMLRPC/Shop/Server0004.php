@@ -182,22 +182,22 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
 
         return $this->getProducts($credentials, $shop_id, $search);
     }
-    
+
     /**
      * Returns product ids with keyword id
-     * 
+     *
      * @param struct $credentials Credentials to use the server
      * @param integer $shop_id Id for the shop
      * @param mixed $keyword Integer with keyword id or array with keyword ids.
      * @return array
      */
-    public function getProductIdsWithKeywordId($credentials, $shop_id, $keyword) 
+    public function getProductIdsWithKeywordId($credentials, $shop_id, $keyword)
     {
         $this->checkCredentials($credentials);
         $this->_factoryWebshop($shop_id);
-        
+
         $gateway = new Intraface_modules_product_Gateway($this->webshop->kernel);
-        
+
         return $this->prepareResponseData(
             $gateway->getProductIdsWithKeywordForShop($this->processRequestData($keyword))
         );
@@ -539,7 +539,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
 
         $this->_factoryWebshop($shop_id);
 
-        $module = $this->kernel->useShared('filehandler');
+        $module = $this->kernel->useModule('filemanager');
         require_once 'Intraface/shared/filehandler/AppendFile.php';
 
         $pictures = array();
