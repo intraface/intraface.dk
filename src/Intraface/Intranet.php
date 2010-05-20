@@ -63,8 +63,6 @@ class Intraface_Intranet extends Intraface_Standard
      */
     function load()
     {
-        $this->db = MDB2::singleton(DB_DSN);
-
         $result = $this->db->query("SELECT
                 id,
                 name,
@@ -79,7 +77,7 @@ class Intraface_Intranet extends Intraface_Standard
             WHERE id = ".$this->db->quote($this->id, 'integer'));
 
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getUserInfo());
         }
 
         if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
