@@ -89,7 +89,7 @@ class Intraface_Setting
         if ($type == 'system' || $type == 'intranet' || $type == 'user') {
             return true;
         } else {
-            trigger_error('Ugyldig type setting "'.$type.'"', E_USER_ERROR);
+            throw new Exception('Ugyldig type setting "'.$type.'"');
         }
     }
 
@@ -324,7 +324,7 @@ class Intraface_Setting
                     break;
 
                 default:
-                    trigger_error('Du kan ikke slette en system setting', E_USER_ERROR);
+                    throw new Exception('Du kan ikke slette en system setting');
                     return false;
             }
         }
