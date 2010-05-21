@@ -14,11 +14,10 @@ require_once 'Intraface/Mail.php';
 $bucket = new bucket_Container(new Intraface_Factory());
 
 $db = $bucket->get('mdb2');
+$db->setFetchMode(MDB2_FETCHMODE_ASSOC);
+$result = $db->query("SELECT DISTINCT(public_key), name FROM intranet INNER JOIN email ON intranet.id = email.intranet_id WHERE email.status = 2");
 
 $mailer = $bucket->get('swift_mailer');
-
-$db->setFetchMode(MDB2_FETCHMODE_ASSOC);
-$result = $db->query("SELECT name, public_key FROM intranet INNER JOIN email ON intranet.id = email.intranet_id WHERE email.status = 2");
 
 while ($row = $result->fetchRow()) {
 
