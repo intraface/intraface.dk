@@ -18,7 +18,7 @@ $db = $bucket->get('mdb2');
 $mailer = $bucket->get('swift_mailer');
 
 $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
-$result = $db->query("SELECT name, public_key FROM intranet");
+$result = $db->query("SELECT name, public_key FROM intranet INNER JOIN email ON intranet.id = email.intranet_id WHERE email.status = 2");
 
 while ($row = $result->fetchRow()) {
 
@@ -47,7 +47,9 @@ while ($row = $result->fetchRow()) {
             ->setFrom($email->getFrom())
             ->setTo($email->getTo())
             ->setBody($email->getBody());
-        $mailer->send($message);
+        if ($mailer->send($message)) {
+            $email->setIsSent();
+        }
     }
 }
 
