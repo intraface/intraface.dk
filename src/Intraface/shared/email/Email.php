@@ -107,6 +107,7 @@ class Email extends Intraface_Standard
         }
 
         $db = new DB_Sql;
+        $db->query('SET NAMES utf8'); /* To be removed when everything is in utf-8 */
         $sql = "SELECT id, email.date_sent, DATE_FORMAT(date_sent, '%d-%m-%Y') as date_sent_dk, subject, from_name, from_email, user_id, body, status, contact_id, contact_person_id, type_id, belong_to_id, status, bcc_to_user FROM email WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = " . $this->id;
         $db->query($sql);
         if (!$db->nextRecord()) {
