@@ -17,11 +17,10 @@ class Intraface_XMLRPC_OnlinePayment_Server0100 extends Intraface_XMLRPC_Server0
      * @param $encoding the encoding used for the XML_RPC2 backend
      * @return unknown_type
      */
-    public function __construct($encoding = 'utf-8')
+    public function __construct(Doctrine_Connection_Common $doctrine, $encoding = 'utf-8')
     {
         parent::__construct($encoding);
     }
-
 
     /**
      * Returns target to perform payment on
@@ -117,7 +116,7 @@ class Intraface_XMLRPC_OnlinePayment_Server0100 extends Intraface_XMLRPC_Server0
         if ($currency != 'DKK' && $this->kernel->intranet->hasModuleAccess('currency')) {
             $this->kernel->useModule('currency', true); /* true: ignore user access */
 
-            $currency_gateway = new Intraface_modules_currency_Currency_Gateway($doctrine);
+            $currency_gateway = new Intraface_modules_currency_Currency_Gateway($this->doctrine);
             if (false !== ($currency = $currency_gateway->findByIsoCode($currency))) {
                 $values['currency'] = $currency;
             }
@@ -148,7 +147,7 @@ class Intraface_XMLRPC_OnlinePayment_Server0100 extends Intraface_XMLRPC_Server0
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
-        $doctrine = $this->getBucket()->get('Doctrine_Connection_Common');
+        $doctrine = $this->doctrine;
         $gateway = new Intraface_modules_shop_ShopGateway($doctrine);
 
         try {
