@@ -1,7 +1,7 @@
 <?php
 /**
  * Main XMLRPC server class to extend all other Serves from
- * 
+ *
  * This version 1.0.0 supports utf8 backend.
  *
  * Gives ability to encode and decode data correct.
@@ -37,16 +37,10 @@ class Intraface_XMLRPC_Server0100
     protected $kernel;
 
     /**
-     * 
+     *
      * @var array with valid encodings
      */
     protected $valid_encodings = array('utf-8', 'iso-8859-1');
-    
-    /**
-     * 
-     * @var object $bucket Intraface_Factory
-     */
-    protected $bucket;
 
     /**
      * Constructor
@@ -55,13 +49,12 @@ class Intraface_XMLRPC_Server0100
      *
      * @return void
      */
-    public function __construct($bucket, $encoding = 'utf-8')
+    public function __construct($encoding = 'utf-8')
     {
         if (!in_array($encoding, $this->valid_encodings)) {
             throw new Exception('Invalid encoding: '.$encoding.'. Should either be utf-8 or iso-8859');
         }
         $this->encoding = $encoding;
-        $this->bucket = $bucket;
     }
 
     /**
@@ -148,15 +141,4 @@ class Intraface_XMLRPC_Server0100
             return $values;
         }
     }
-    
-    /**
-     * Returns bucket 
-     * @return object bucket
-     */
-    protected function getBucket() 
-    {
-        return $this->bucket;
-    }
-    
-
 }

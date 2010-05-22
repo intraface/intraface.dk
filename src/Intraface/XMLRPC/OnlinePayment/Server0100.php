@@ -10,17 +10,19 @@
  */
 class Intraface_XMLRPC_OnlinePayment_Server0100 extends Intraface_XMLRPC_Server0100
 {
+    protected $doctrine;
+
     /**
      * Constructor
-     * @param $encoding the encoding used for the XML_RPC2 backend 
+     * @param $encoding the encoding used for the XML_RPC2 backend
      * @return unknown_type
      */
-    public function __construct($bucket, $encoding = 'utf-8') 
+    public function __construct($encoding = 'utf-8')
     {
-        parent::__construct($bucket, $encoding);
+        parent::__construct($encoding);
     }
-    
-    
+
+
     /**
      * Returns target to perform payment on
      *
@@ -115,7 +117,7 @@ class Intraface_XMLRPC_OnlinePayment_Server0100 extends Intraface_XMLRPC_Server0
         if ($currency != 'DKK' && $this->kernel->intranet->hasModuleAccess('currency')) {
             $this->kernel->useModule('currency', true); /* true: ignore user access */
 
-            $currency_gateway = new Intraface_modules_currency_Currency_Gateway($this->getBucket()->get('Doctrine_Connection_Common'));
+            $currency_gateway = new Intraface_modules_currency_Currency_Gateway($doctrine);
             if (false !== ($currency = $currency_gateway->findByIsoCode($currency))) {
                 $values['currency'] = $currency;
             }
@@ -141,24 +143,18 @@ class Intraface_XMLRPC_OnlinePayment_Server0100 extends Intraface_XMLRPC_Server0
         return $this->prepareResponseData($payment_id);
     }
 
-    private function sendEmailOnOnlinePayment($debtor, $payment_id, $mailer = null)
+    private function sendEmailOnOnlinePayment($debtor, $payment_id)
     {
-        if ($mailer === null) {
-            $mailer = Intraface_Mail::factory();
-        }
-
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
         $doctrine = $this->getBucket()->get('Doctrine_Connection_Common');
         $gateway = new Intraface_modules_shop_ShopGateway($doctrine);
-        
+
         try {
             $shop = $gateway->findById($debtor->getFromShopId());
-            
-            /**
-             * @todo: Change with gateway.
-             */
+
+            // @todo: Change with gateway.
             $settings = $doctrine->getTable('Intraface_modules_onlinepayment_Language')->findOneByIntranetId($kernel->intranet->getId());
 
             $subject = $settings->getConfirmationEmailSubject($shop->getLanguage()) . ' (#' . $payment_id . ')';
@@ -186,14 +182,12 @@ class Intraface_XMLRPC_OnlinePayment_Server0100 extends Intraface_XMLRPC_Server0
                       'belong_to'  => $payment_id);
 
         if (!$email->save($data)) {
-            trigger_error('Could not save email to onlinepayment', E_USER_NOTICE);;
-            return false;
+            throw new Exception('Could not save email to onlinepayment');
         }
 
-        if (!$email->send($mailer)) {
+        if (!$email->queue()) {
             $this->error->merge($email->error->getMessage());
-            trigger_error('Could not send email to ' . $debtor->getContact()->getId(), E_USER_NOTICE);;
-            return false;
+            throw new Exception('Could not send email to ' . $debtor->getContact()->getId());
         }
 
         return true;

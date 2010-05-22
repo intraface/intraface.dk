@@ -15,20 +15,21 @@
  */
 class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 {
-    private $webshop;
-    private $basket;
-    private $product;
-    
+    protected $webshop;
+    protected $basket;
+    protected $product;
+    protected $doctrine;
+
     /**
      * Constructor
      * @param $encoding the encoding used for the XML_RPC2 backend
      * @return unknown_type
      */
-    public function __construct($bucket, $encoding = 'utf-8')
+    public function __construct(Doctrine_Connection_Common $doctrine, $encoding = 'utf-8')
     {
-        parent::__construct($bucket, $encoding);
+        parent::__construct($encoding);
     }
-    
+
     /**
      * Gets a list with products
      *
@@ -180,27 +181,27 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
         return $this->getProducts($credentials, $shop_id, $search);
     }
-    
+
     /**
      * Returns product ids with keyword id
-     * 
+     *
      * @param struct $credentials Credentials to use the server
      * @param integer $shop_id Id for the shop
      * @param mixed $keyword Integer with keyword id or array with keyword ids.
      * @return array
      */
-    public function getProductIdsWithKeywordId($credentials, $shop_id, $keyword) 
+    public function getProductIdsWithKeywordId($credentials, $shop_id, $keyword)
     {
         $this->checkCredentials($credentials);
         $this->_factoryWebshop($shop_id);
-        
+
         $gateway = new Intraface_modules_product_Gateway($this->webshop->kernel);
-        
+
         return $this->prepareResponseData(
             $gateway->getProductIdsWithKeywordForShop($this->processRequestData($keyword))
         );
     }
-    
+
     /**
      * Gets a list with products with a given keyword or with given keywords
      *
@@ -215,7 +216,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
      */
     public function getProductsInWithVariationAttribute($credentials, $shop_id, $variation_id, $attribute_id, $results_per_page = 0, $pagging_offset = 0)
     {
-        
+
     }
 
     /**
@@ -712,7 +713,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
             $values['description'] = $this->webshop->getShop()->getName();
         }
 
-        if (!$order_id = $this->webshop->placeOrder($values, Intraface_Mail::factory())) {
+        if (!$order_id = $this->webshop->placeOrder($values)) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('order could not be placed. It returned the following error: ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
         }
@@ -1007,7 +1008,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
     {
         if ($this->webshop->kernel->intranet->hasModuleAccess('currency')) {
             $this->webshop->kernel->useModule('currency', true); // true: ignore intranet access
-            return new Intraface_modules_currency_Currency_Gateway($this->getBucket()->get('Doctrine_Connection_Common'));
+            return new Intraface_modules_currency_Currency_Gateway($this->doctrine);
         }
         return false;
     }
@@ -1084,7 +1085,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         }
         $this->kernel->module('shop');
 
-        $doctrine = $this->getBucket()->get('Doctrine_Connection_Common');
+        $doctrine = $this->doctrine;
         $gateway = new Intraface_modules_shop_ShopGateway($doctrine);
         $shop = $gateway->findById($shop_id);
         if ($shop === false) {

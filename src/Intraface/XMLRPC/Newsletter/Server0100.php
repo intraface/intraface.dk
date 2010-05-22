@@ -18,14 +18,14 @@ class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server0100
 
     /**
      * Constructor
-     * @param $encoding the encoding used for the XML_RPC2 backend 
+     * @param $encoding the encoding used for the XML_RPC2 backend
      * @return unknown_type
      */
-    public function __construct($bucket, $encoding = 'utf-8') 
+    public function __construct($encoding = 'utf-8')
     {
-        parent::__construct($bucket, $encoding);
+        parent::__construct($encoding);
     }
-    
+
     private function factoryList($list_id)
     {
         $this->list = new NewsletterList($this->kernel, $list_id);
@@ -52,15 +52,15 @@ class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server0100
     public function subscribe($credentials, $list_id, $email, $name = '', $ip = '')
     {
         $this->checkCredentials($credentials);
-        
+
         $list_id = $this->processRequestData($list_id);
         $email = $this->processRequestData($email);
         $name = $this->processRequestData($name);
         $ip = $this->processRequestData($ip);
-        
+
         $subscriber = $this->factoryList($list_id);
 
-        if (!$subscriber->subscribe(array('name' => $name, 'email' => $email, 'ip' => $ip), Intraface_Mail::factory())) {
+        if (!$subscriber->subscribe(array('name' => $name, 'email' => $email, 'ip' => $ip))) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('an error occurred when trying to subscribe', -4);
         }
@@ -85,7 +85,7 @@ class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server0100
 
         $list_id = $this->processRequestData($list_id);
         $email = $this->processRequestData($email);
-        
+
         $this->factoryList($list_id);
 
         if (!$this->subscriber->unsubscribe($email, $comment)) {
@@ -113,7 +113,7 @@ class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server0100
         $list_id = $this->processRequestData($list_id);
         $optin_code = $this->processRequestData($optin_code);
         $ip = $this->processRequestData($ip);
-        
+
         $this->factoryList($list_id);
 
         if (!$this->subscriber->optIn($optin_code, $ip)) {
@@ -161,7 +161,7 @@ class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server0100
         $this->checkCredentials($credentials);
 
         $contact_id = $this->processRequestData($contact_id);
-        
+
         $this->kernel->useModule('contact', true);
 
         $contact = new Contact($this->kernel, $contact_id);
@@ -183,7 +183,7 @@ class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server0100
         $this->checkCredentials($credentials);
 
         $contact_id = $this->processRequestData($contact_id);
-        
+
         $this->kernel->useModule('contact', true);
 
         $contact = new Contact($this->kernel, $contact_id);
@@ -206,9 +206,9 @@ class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server0100
     function getListIdFromOptinCode($credentials, $code)
     {
         $this->checkCredentials($credentials);
-        
+
         $code = $this->processRequestData($code);
-        
+
         $db = MDB2::singleton(DB_DSN);
         $result = $db->query('SELECT list_id FROM newsletter_subscriber WHERE code = ' . $db->quote($code, 'text'));
         if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
