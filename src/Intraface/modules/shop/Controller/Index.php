@@ -208,7 +208,10 @@ class Intraface_modules_shop_Controller_Index extends k_Component
             $shop = new Intraface_modules_shop_Shop;
             $shop->intranet_id = $this->getKernel()->intranet->getId();
 
-            $shop->fromArray($this->input->getUnescaped());
+            // should be using input->getUnescaped() if we decide to go with
+            // zend_validate
+            //$shop->fromArray($this->input->getUnescaped());
+            $shop->fromArray($this->body());
             if ($this->body('confirmation_add_contact_url') == 1) {
                 $shop->confirmation_add_contact_url = 1;
             } else {
