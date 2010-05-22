@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=language,onlinepayment&amp;login=true</td>
+	<td>install/reset-staging-server.php?modules=shop,language,onlinepayment&amp;login=true</td>
 	<td></td>
 </tr>
 <tr>
@@ -34,6 +34,71 @@
 <tr>
 	<td>clickAndWait</td>
 	<td>//input[@value='Choose']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Control panel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=OnlinePayment settings</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>language_da_subject</td>
+	<td>Betalingsbekræftelse</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>language_da</td>
+	<td>Tak for din betaling.</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>language_en_subject</td>
+	<td>Payment confirmation</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>language_en</td>
+	<td>Payment confirmation.</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@value='Save']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Control panel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=OnlinePayment settings</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>language_da_subject</td>
+	<td>Betalingsbekræftelse</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>language_en_subject</td>
+	<td>Payment confirmation</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Tak for din betaling.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Payment confirmation.</td>
 	<td></td>
 </tr>
 
