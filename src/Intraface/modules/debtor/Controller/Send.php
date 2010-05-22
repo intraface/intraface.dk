@@ -1,5 +1,4 @@
 <?php
-ini_set('memory_limit', '512M');
 class Intraface_modules_debtor_Controller_Send extends k_Component
 {
     function renderHtml()
@@ -8,26 +7,24 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
 
         $this->context->getKernel()->useModule('contact');
         $this->context->getKernel()->useModule('product');
-        $this->context->getKernel()->useShared('filehandler');
+        $this->context->getKernel()->useModule('filemanager');
         $this->context->getKernel()->useShared('email');
 
         $translation = $this->translator();
 
-        $send_as = $_GET['send'];
-
         // find debtoren
         $debtor = $this->context->getDebtor();
 
-        switch ($send_as) {
+        switch ($this->query('send')) {
 
             case 'email':
                 $contact = $debtor->getContact();
                 if (!$contact->address->get('email')) {
-                    trigger_error('Der er ikke angivet nogen e-mail til kunden', E_USER_ERROR);
+                    throw new Exception('Der er ikke angivet nogen e-mail til kunden');
                 }
 
                 if ($debtor->contact->get('preferred_invoice') <> 2) { // email
-                    trigger_error('Kunden foretrækker ikke post på e-mail', E_USER_ERROR);
+                    throw new Exception('Kunden foretrækker ikke post på e-mail');
                 }
 
                 // vi skal lige have oversat den her rigtigt
@@ -53,15 +50,15 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
 
                 $contact = new Contact($this->context->getKernel(), $scan_in_contact_id);
                 if (!$contact->get('id') > 0) {
-                    trigger_error('Der er ikke angivet nogen kontakt at sende de elektroniske fakturaer til', E_USER_ERROR);
+                    throw new Exception('Der er ikke angivet nogen kontakt at sende de elektroniske fakturaer til');
                 } elseif (!$contact->address->get('email')) {
-                    trigger_error('Der er ikke angivet nogen e-mail til Læs-Ind bureauet', E_USER_ERROR);
+                    throw new Exception('Der er ikke angivet nogen e-mail til Læs-Ind bureauet');
                 }
 
                 if ($debtor->contact->get('preferred_invoice') <> 3) { // elektronisk faktura
-                    trigger_error('Kunden foretrækker ikke elektronisk faktura!', E_USER_ERROR);
+                    throw new Exception('Kunden foretrækker ikke elektronisk faktura!');
                 } elseif (!$debtor->contact->address->get('ean')) {
-                    trigger_error('EAN-nummeret er ikke sat', E_USER_ERROR);
+                    throw new Exception('EAN-nummeret er ikke sat');
                 }
 
                 $subject = 'Elektronisk faktura';
@@ -97,13 +94,13 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
         $filehandler = new FileHandler($this->context->getKernel());
         if (!$file_id = $filehandler->save($tmp_file->getFilePath(), $tmp_file->getFileName(), 'hidden', 'application/pdf')) {
             echo $filehandler->error->view();
-            trigger_error('Filen kunne ikke gemmes', E_USER_ERROR);
+            throw new Exception('Filen kunne ikke gemmes');
         }
 
         $input['accessibility'] = 'intranet';
         if (!$file_id = $filehandler->update($input)) {
             echo $filehandler->error->view();
-            trigger_error('Oplysninger om filen kunne ikke opdateres', E_USER_ERROR);
+            throw new Exception('Oplysninger om filen kunne ikke opdateres');
 
         }
 
@@ -121,10 +118,10 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
                 $from_name = $this->context->getKernel()->getSetting()->get('intranet', 'debtor.sender.name');
                 break;
             default:
-                trigger_error("Invalid sender!", E_USER_ERROR);
+                throw new Exception("Invalid sender!");
                 exit;
         }
-        
+
         $signature = new Intraface_shared_email_Signature($this->context->getKernel()->user, $this->context->getKernel()->intranet, $this->context->getKernel()->getSetting());
 
         // opret e-mailen
@@ -139,16 +136,16 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
                 'belong_to' => $debtor->get('id')
             ))) {
             echo $email->error->view();
-            trigger_error('E-mailen kunne ikke gemmes', E_USER_ERROR);
+            throw new Exception('E-mailen kunne ikke gemmes');
         }
 
         // tilknyt fil
         if (!$email->attachFile($file_id, $filehandler->get('file_name'))) {
             echo $email->error->view();
-            trigger_error('Filen kunne ikke vedhæftes', E_USER_ERROR);
+            throw new Exception('Filen kunne ikke vedhæftes');
         }
 
-        switch ($send_as) {
+        switch ($this->query('send')) {
             case 'email':
                     $redirect = Intraface_Redirect::factory($this->context->getKernel(), 'go');
                     $shared_email = $this->context->getKernel()->useModule('email');
@@ -162,7 +159,7 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
                 break;
             case 'electronic_email':
                 // Sender e-mailen
-                if ($email->send(Intraface_Mail::factory())) {
+                if ($email->queue()) {
                     if ($debtor->get('status') == 'created') {
                         $debtor->setStatus('sent');
                     }
@@ -170,15 +167,14 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
 
                 } else {
                     echo $email->error->view();
-                    trigger_error('E-mailen kunne ikke sendes', E_USER_ERROR);
+                    throw new Exception('E-mailen kunne ikke sendes');
                 }
 
                 break;
             default:
-                    trigger_error('not valid send as', E_USER_ERROR);
+                    throw new Exception('not valid send as');
                 break;
         }
         throw new Exception('Something went wrong');
     }
-
 }

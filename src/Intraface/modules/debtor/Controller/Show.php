@@ -72,12 +72,95 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         return $this->getDebtor()->get('type');
     }
 
+    function getMessageAboutEmail()
+    {
+        $msg = '';
+        switch ($this->getDebtor()->contact->get('preferred_invoice')) {
+            case 2: // if the customer prefers e-mail
+
+                $valid_sender = true;
+                switch ($this->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
+                    case 'intranet':
+                        if ($this->getKernel()->intranet->address->get('name') == '' || $this->getKernel()->intranet->address->get('email') == '') {
+                            $valid_sender = false;
+                            if ($this->getKernel()->user->hasModuleAccess('administration')) {
+                                $msg = '<div class="message-dependent"><p>'.t('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../administration/intranet', array('edit')) . '">'.t('do it now').'</a>.</p></div>';
+                            } else {
+                                $msg = '<div class="message-dependent"><p>'.t('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
+
+                            }
+                        }
+                        break;
+                    case 'user':
+                        if ($this->getKernel()->user->getAddress()->get('name') == '' || $this->getKernel()->user->getAddress()->get('email') == '') {
+                            $valid_sender = false;
+                            $msg = '<div class="message-dependent"><p>'.t('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../controlpanel/user', array('edit')).'">'.t('do it now').'</a>.</p></div>';
+                        }
+                        break;
+                    case 'defined':
+                        if ($this->getKernel()->getSetting()->get('intranet', 'debtor.sender.name') == '' || $this->getKernel()->getSetting()->get('intranet', 'debtor.sender.email') == '') {
+                            $valid_sender = false;
+                            if ($this->getKernel()->user->hasModuleAccess('administration')) {
+                                $msg = '<div class="message-dependent"><p>'.t('You need to fill in an e-mail address to send e-mail').'. <a href="'.$module_debtor->getPath().'settings">'.t('do it now').'</a>.</p></div>';
+                            } else {
+                                $msg = '<div class="message-dependent"><p>'.t('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
+                            }
+
+                        }
+                        break;
+                    default:
+                        $valid_sender = false;
+                        throw new Exception("Invalid sender!");
+
+                }
+
+                if ($this->getDebtor()->contact->address->get('email') == '') {
+                    $valid_sender = false;
+                    $msg = '<div class="message-dependent"><p>'.t('You need to register an e-mail to the contact, so you can send e-mails').'</p></div>';
+
+                }
+
+                break;
+
+            case 3: // electronic email, we make check that everything is as it should be
+                if ($this->getDebtor()->contact->address->get('ean') == '') {
+                    $msg = '<div class="message-dependent"><p>'.t('To be able to send electronic e-mails you need to fill out the EAN location number for the contact').'</p></div>';
+                }
+
+                $scan_in_contact_id = $this->getKernel()->getSetting()->get('intranet', 'debtor.scan_in_contact');
+                $valid_scan_in_contact = true;
+
+                $scan_in_contact = new Contact($this->getKernel(), $scan_in_contact_id);
+                if ($scan_in_contact->get('id') == 0) {
+                    $valid_scan_in_contact = false;
+                    $msg = '<div class="message-dependent"><p>';
+                    $msg .= $this->t('A contact for the scan in bureau is needed to send electronic invoices').'. ';
+                    if ($this->getKernel()->user->hasModuleAccess('administration')) {
+                        $msg .= '<a href="'.$debtor_module->getPath().'settings">'.t('Add it now').'</a>.';
+                    }
+                    $msg .= '</p></div>';
+
+                } elseif (!$scan_in_contact->address->get('email')) {
+                    $valid_scan_in_contact = false;
+                    $msg = '<div class="message-dependent"><p>';
+                    $msg .= $this->t('You need to provide a valid e-mail address to the contact for the scan in bureau').'.';
+                    $msg .= ' <a href="'.$contact_module->getPath().$scan_in_contact->get('id').'">'.t('Add it now').'</a>.';
+                    $msg .= '</p></div>';
+                }
+                break;
+        }
+
+        return $msg;
+    }
+
     function renderHtml()
     {
         if ($this->getKernel()->user->hasModuleAccess('onlinepayment')) {
             $online_module = $this->getKernel()->useModule('onlinepayment');
         }
-
+        if ($this->getKernel()->user->hasModuleAccess('administration')) {
+            $module_administration = $this->getKernel()->useModule('administration');
+        }
         $contact_module = $this->getKernel()->getModule('contact');
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/show');
@@ -194,9 +277,10 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
     function GET()
     {
-        if (isset($_GET["action"]) && $_GET["action"] == "send_onlinepaymentlink") {
+        if ($this->query("action") == "send_onlinepaymentlink") {
 
             $shared_email = $this->getKernel()->useShared('email');
+            $shared_filehandler = $this->getKernel()->useModule('filemanager');
             if ($this->getDebtor()->getPaymentMethodKey() == 5 AND $this->getDebtor()->getWhereToId() == 0) {
                 try {
                     // echo $this->getDebtor()->getWhereFromId();
@@ -278,7 +362,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             }
             $contact = new Contact($this->getKernel(), $this->getDebtor()->get('contact_id'));
             $signature = new Intraface_shared_email_Signature($this->context->getKernel()->user, $this->context->getKernel()->intranet, $this->context->getKernel()->getSetting());
-            
+
             // opret e-mailen
             $email = new Email($this->getKernel());
             if (!$email->save(array(
@@ -456,7 +540,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         }
 
         if ($this->getKernel()->intranet->get("pdf_header_file_id") != 0) {
-            $this->getKernel()->useShared('filehandler');
+            $this->getKernel()->useModule('filemanager');
             $filehandler = new FileHandler($this->getKernel(), $this->getKernel()->intranet->get("pdf_header_file_id"));
         } else {
             $filehandler = NULL;

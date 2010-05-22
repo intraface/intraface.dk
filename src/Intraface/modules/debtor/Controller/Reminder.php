@@ -29,27 +29,23 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
     {
         $module = $this->getKernel()->module("debtor");
 
-        $translation = $this->getKernel()->getTranslation('debtor');
-
         $mainInvoice = $this->getKernel()->useModule("invoice");
         $mainInvoice->includeFile("Reminder.php");
         $mainInvoice->includeFile("ReminderItem.php");
 
         $reminder = new Reminder($this->getKernel(), intval($this->name()));
-        if (isset($_GET['return_redirect_id'])) {
+        if ($this->query('return_redirect_id')) {
             $return_redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
 
             if ($return_redirect->get('identifier') == 'send_email') {
                 if ($return_redirect->getParameter('send_email_status') == 'sent') {
                     $reminder->setStatus('sent');
                     $return_redirect->delete();
-
                     if ($this->getKernel()->user->hasModuleAccess('accounting') && $reminder->somethingToState()) {
                         return new k_SeeOther($this->url('state'));
                     }
-
                 }
-
+                return new k_SeeOther($this->url(null, array('flare' => 'Email has been queued')));
             }
         }
 
@@ -97,41 +93,24 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
         */
 
 
-        if (isset($_GET["id"])) {
-            $title = "Ret rykker";
-            $reminder = new Reminder($this->getKernel(), intval($_GET["id"]));
-            $value = $reminder->get();
-            $contact = new Contact($this->getKernel(), $reminder->get('contact_id'));
 
-            $invoices = $reminder->getItems("invoice");
-            $reminders = $reminder->getItems("reminder");
+        $this->document->setTitle("Ret rykker");
+        $reminder = new Reminder($this->getKernel(), intval($this->name()));
+        $value = $reminder->get();
+        $contact = new Contact($this->getKernel(), $reminder->get('contact_id'));
 
-            for ($i = 0, $max = count($invoices); $i < $max; $i++) {
-                $checked_invoice[] = $invoices[$i]["invoice_id"];
-            }
+        $invoices = $reminder->getItems("invoice");
+        $reminders = $reminder->getItems("reminder");
 
-            for ($i = 0, $max = count($reminders); $i < $max; $i++) {
-                $checked_reminder[] = $reminders[$i]["reminder_id"];
-            }
-        } else {
-            $title = "Ny rykker";
-            $reminder = new Reminder($this->getKernel());
-            $contact = new Contact($this->getKernel(), $this->query('contact_id'));
-
-            $value["dk_this_date"] = date("d-m-Y");
-            $value["dk_due_date"] = date("d-m-Y", time()+3*24*60*60);
-            /*
-            if ($contact->address->get("name") != $contact->address->get("contactname")) {
-                $value["attention_to"] = $contact->address->get("contactname");
-            }
-            */
-            //$value["text"] = $this->getKernel()->setting->get('intranet', 'reminder.first.text');
-            $value["payment_method_key"] = 1;
-            $value["number"] = $reminder->getMaxNumber();
+        for ($i = 0, $max = count($invoices); $i < $max; $i++) {
+            $checked_invoice[] = $invoices[$i]["invoice_id"];
+        }
+        for ($i = 0, $max = count($reminders); $i < $max; $i++) {
+            $checked_reminder[] = $reminders[$i]["reminder_id"];
         }
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/reminder-edit');
-        return $smarty->render($this);
+        return $smarty->render($this, array('checked_invoice' => $checked_invoice, 'checked_reminder' => $checked_reminder));
     }
 
     function renderPdf()
@@ -166,9 +145,8 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
             }
         }
 
-        if (!empty($_POST)) {
 
-            $reminder = new Reminder($this->getKernel(), intval($_POST["id"]));
+            $reminder = new Reminder($this->getKernel(), intval($this->name()));
 
             if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
                 $contact = new Contact($this->getKernel(), $_POST["contact_id"]);
@@ -187,7 +165,11 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
                 } else {
                     return new k_SeeOther($this->url());
                 }
-            } else {
+            }
+
+
+            /*
+            else {
                 if (intval($_POST["id"]) != 0) {
                     $title = "Ret rykker";
                 } else {
@@ -213,9 +195,8 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
                     $checked_reminder = array();
                 }
             }
-        }
-
-        return new k_SeeOther($this->url(), array('flare' => 'Reminder has been updated'));
+        }*/
+        return $this->render();
     }
 
     function getContact()
@@ -260,8 +241,7 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
         $reminder = new Reminder($this->getKernel(), intval($this->name()));
 
         if ($reminder->contact->address->get("email") == '') {
-            trigger_error('Kontaktpersonen har ikke nogen email', E_USER_ERROR);
-            exit;
+            throw new Exception('Kontaktpersonen har ikke nogen email');
         }
 
         $subject  =	"Påmindelse om betaling";
