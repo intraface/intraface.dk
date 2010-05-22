@@ -386,7 +386,7 @@ class Intraface_modules_debtor_DebtorGateway
                 $list[$i]['city'] = $debtor->contact->address->get('city');
 
             }
-            $debtor->__desctruct();
+            $debtor->__destruct();
             unset($debtor);
             $i++;
 

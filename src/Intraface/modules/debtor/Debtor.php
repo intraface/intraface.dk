@@ -83,12 +83,6 @@ class Debtor extends Intraface_Standard
      */
     public function __construct($kernel, $type, $id = 0)
     {
-        // s�rger for at vi har det rigtige objekt
-        // denne b�r ikke have brug for typen.
-        if (!is_object($kernel)) {
-            trigger_error('Debtor kr�ver Kernel som objekt', E_USER_ERROR);
-        }
-
         $this->kernel = $kernel;
         $this->type = $type;
         $this->type_key = array_search($type, self::getDebtorTypes());
@@ -112,7 +106,7 @@ class Debtor extends Intraface_Standard
         }
     }
 
-    public function __desctruct()
+    public function __destruct()
     {
         unset($this->kernel);
         unset($this->db);
@@ -724,7 +718,7 @@ class Debtor extends Intraface_Standard
 
     function getFromShopId()
     {
-    	if ($this->value['where_from'] == 2) {
+    	if ($this->value['where_from'] == 'webshop') {
     		return $this->value['where_from_id'];
     	}
         throw new Exception('Not from a shop');
