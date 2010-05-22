@@ -20,7 +20,7 @@ class Intraface_XMLRPC_OnlinePayment_Server0100 extends Intraface_XMLRPC_Server0
     public function __construct($doctrine, $encoding = 'utf-8')
     {
         $this->doctrine = $doctrine;
-        parent::__construct($$encoding);
+        parent::__construct($encoding);
     }
 
     /**
