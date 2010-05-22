@@ -27,6 +27,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
      */
     public function __construct(Doctrine_Connection_Common $doctrine, $encoding = 'utf-8')
     {
+        $this->doctrine = $doctrine;
         parent::__construct($encoding);
     }
 
@@ -1085,8 +1086,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         }
         $this->kernel->module('shop');
 
-        $doctrine = $this->doctrine;
-        $gateway = new Intraface_modules_shop_ShopGateway($doctrine);
+        $gateway = new Intraface_modules_shop_ShopGateway($this->doctrine);
         $shop = $gateway->findById($shop_id);
         if ($shop === false) {
             throw new XML_RPC2_FaultException('Could not find shop', 1);

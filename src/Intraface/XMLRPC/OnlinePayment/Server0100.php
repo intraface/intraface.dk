@@ -17,9 +17,10 @@ class Intraface_XMLRPC_OnlinePayment_Server0100 extends Intraface_XMLRPC_Server0
      * @param $encoding the encoding used for the XML_RPC2 backend
      * @return unknown_type
      */
-    public function __construct(Doctrine_Connection_Common $doctrine, $encoding = 'utf-8')
+    public function __construct($doctrine, $encoding = 'utf-8')
     {
-        parent::__construct($encoding);
+        $this->doctrine = $doctrine;
+        parent::__construct($$encoding);
     }
 
     /**
