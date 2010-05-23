@@ -14,11 +14,12 @@ class Demo_Newsletter_Show extends k_Controller
 
     function getNewsletter()
     {
+        $debug = false;
         $list_id = $this->name;
         $client = new IntrafacePublic_Newsletter_Client_XMLRPC(
             $this->getCredentials(),
             $list_id,
-            false,
+            $debug,
             INTRAFACE_XMLPRC_SERVER_PATH . "newsletter/server0101.php"); // , 'iso-8859-1', 'xmlrpcext'
         return $client;
     }

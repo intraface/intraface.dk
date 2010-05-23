@@ -38,11 +38,12 @@ class Demo_Shop_Show extends k_Controller
 
     public function getOnlinePayment()
     {
+        $debug = false;
         if ($this->intranetHasOnlinePaymentAccess()) {
             return new IntrafacePublic_OnlinePayment(
                 new IntrafacePublic_OnlinePayment_Client_XMLRPC(
                     $this->getCredentials(),
-                    false,
+                    $debug,
                     INTRAFACE_XMLPRC_SERVER_PATH . "onlinepayment/server0100.php" // , 'iso-8859-1', 'xmlrpcext'
                 ),
                 $this->registry->get("cache")
