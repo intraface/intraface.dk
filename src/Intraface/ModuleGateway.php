@@ -126,7 +126,7 @@ class Intraface_ModuleGateway
                     continue;
                 }
 
-                if (!ereg("^[a-z0-9]+$", $module_name)) {
+                if (!preg_match("/^[a-z0-9]+$/", $module_name)) {
                     $this->error->set($module_name." er et ugyldigt navn");
                     // $msg[] = $module_name." er et ugyldigt navn";
                     continue; // starter forfra p� n�ste directory
