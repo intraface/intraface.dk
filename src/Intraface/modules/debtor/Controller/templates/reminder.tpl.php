@@ -32,6 +32,10 @@ $reminder = $context->getReminder();
 
     <?php echo $reminder->error->view(); ?>
 
+    <?php if ($context->query('flare')): ?>
+        <p class="message"><?php e($context->query('flare')); ?></p>
+    <?php endif;?>
+
     <form method="post" action="<?php e(url(null)); ?>">
 
         <input type="hidden" name="id" value="<?php e($reminder->get('id')); ?>" />

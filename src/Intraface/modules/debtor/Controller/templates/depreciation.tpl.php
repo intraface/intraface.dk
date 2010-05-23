@@ -9,8 +9,6 @@
 <form method="post" action="<?php e(url()); ?>">
 <fieldset>
     <legend><?php e(t('depreciation')); ?></legend>
-
-    <input type="hidden" name="id" value="<?php e($context->getModel()->get('id')); ?>" />
     <div class="formrow">
         <label for="payment_date">Dato</label>
         <input type="text" name="payment_date" id="payment_date" value="<?php e(date("d-m-Y")); ?>" />

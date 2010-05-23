@@ -167,7 +167,6 @@ $value = $context->getValues();
 <?php } ?>
 </div>
 
-<input type="hidden" name="id" value="<?php e($context->getDebtor()->get("id")); ?>" />
 <input type="hidden" name="type" value="<?php e($context->getDebtor()->get("type")); ?>" />
 <input type="hidden" name="contact_id" value="<?php e($context->getContact()->get('id')); ?>" />
 </form>
