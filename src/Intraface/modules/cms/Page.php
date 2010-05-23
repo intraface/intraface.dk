@@ -530,7 +530,7 @@ class CMS_Page extends Intraface_Standard
     {
         $gateway = new Intraface_modules_cms_PageGateway($this->kernel, new DB_Sql);
         $gateway->setDBQuery($this->getDBQuery());
-        
+
         /**
          * @todo: $this (Page) should not be added to the method, but this is the
          * only way to be able to generate submenu as it works now.
@@ -703,7 +703,7 @@ class CMS_Page extends Intraface_Standard
 
     function getPicture($pic_id)
     {
-        $shared_filehandler = $this->kernel->useShared('filehandler');
+        $shared_filehandler = $this->kernel->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
 
                 $tmp_filehandler = new FileHandler($this->kernel, $pic_id);
