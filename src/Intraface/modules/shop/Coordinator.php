@@ -226,12 +226,8 @@ class Intraface_modules_shop_Coordinator
      *
      * @return integer Order id
      */
-    public function placeManualOrder($input = array(), $products = array(), $mailer)
+    public function placeManualOrder($input = array(), $products = array())
     {
-        if (!is_object($mailer)) {
-            throw new Exception('A valid mailer object is needed');
-        }
-
         $order_id = $this->createOrder($input);
 
         if ($order_id == 0) {
@@ -244,7 +240,7 @@ class Intraface_modules_shop_Coordinator
             return false;
         }
 
-        if (!$this->sendEmail($order_id, $mailer)) {
+        if (!$this->sendEmail($order_id)) {
             $this->error->set('unable to send email to the customer');
             return false;
         }
@@ -256,16 +252,11 @@ class Intraface_modules_shop_Coordinator
      * Places the order and utilizes basket
      *
      * @param array $input Array with customer data
-     * @param object $mailer Mailer object to send e-mail
      *
      * @return integer Order id
      */
-    public function placeOrder($input, $mailer)
+    public function placeOrder($input)
     {
-        if (!is_object($mailer)) {
-            throw new Exception('A valid mailer object is needed');
-        }
-
         if (!$order_id = $this->createOrder($input)) {
             $this->error->set('unable to create the order');
             return false;
@@ -280,8 +271,9 @@ class Intraface_modules_shop_Coordinator
 
         $this->getBasket()->reset();
 
+        // @todo is sendConfirmation the optimal name? Is really a getter!
         if ($this->getShop()->sendConfirmation()) {
-            if (!$this->sendEmail($order_id, $mailer)) {
+            if (!$this->sendEmail($order_id)) {
                 $this->error->set('unable to send email to the customer');
                 return false;
             }
@@ -326,12 +318,8 @@ class Intraface_modules_shop_Coordinator
      *
      * @return boolean
      */
-    private function sendEmail($order_id, $mailer)
+    private function sendEmail($order_id)
     {
-        if (!is_object($mailer)) {
-            throw new Exception('A valid mailer object is needed');
-        }
-
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
@@ -386,7 +374,7 @@ class Intraface_modules_shop_Coordinator
             return false;
         }
 
-        if (!$email->send($mailer)) {
+        if (!$email->queue()) {
             $this->error->merge($email->error->getMessage());
             return false;
         }
@@ -442,12 +430,8 @@ class Intraface_modules_shop_Coordinator
         }
     }
 
-    private function sendEmailOnOnlinePayment($payment_id, $mailer = null)
+    private function sendEmailOnOnlinePayment($payment_id)
     {
-        if ($mailer === null) {
-            $mailer = Intraface_Mail::factory();
-        }
-
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
@@ -466,7 +450,7 @@ class Intraface_modules_shop_Coordinator
             return false;
         }
 
-        if (!$email->send($mailer)) {
+        if (!$email->queue()) {
             $this->error->merge($email->error->getMessage());
             return false;
         }
