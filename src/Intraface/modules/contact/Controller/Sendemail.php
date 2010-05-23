@@ -56,9 +56,7 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
     			);
 
     			$email->save($input);
-    			// E-mailen s�ttes i k� - hvis vi sender den med det samme tager det
-    			// alt for lang tid.
-    			$email->send(Intraface_Mail::factory(), 'queue');
+    			$email->queue();
     			$j++;
     		}
     		$this->msg = 'Emailen blev i alt sendt til ' . $j . ' kontakter. <a href="'.$this->url('../').'">Tilbage til kontakter</a>.';
