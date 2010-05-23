@@ -60,7 +60,7 @@ class Intraface_modules_email_Controller_Email extends k_Component
         $email = $this->getEmail();
 
         if (!empty($_POST['submit'])) {
-            if ($email->send(Intraface_Mail::factory())) {
+            if ($email->queue()) {
 
                 $email->load();
                 // This status can be used to change status where the email is coming from.
@@ -139,7 +139,7 @@ class Intraface_modules_email_Controller_Email extends k_Component
             if ($id = $email->save($_POST)) {
 
                 if (isset($_POST['send']) && $_POST['send'] != '' && $email->isReadyToSend()) {
-                    $email->send(Intraface_Mail::factory());
+                    $email->queue();
                     $email->load();
                     if ($redirect->get('id') != 0) {
                         $redirect->setParameter('send_email_status', $email->get('status'));
