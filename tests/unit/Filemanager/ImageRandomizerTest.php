@@ -19,10 +19,6 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
         $db->query('TRUNCATE keyword');
         $db->query('TRUNCATE keyword_x_object');
         iht_deltree(PATH_UPLOAD.'1');
-        if (file_exists(PATH_UPLOAD.'/1/1.jpeg')) {
-            unlink(PATH_UPLOAD.'/1/1.jpeg');
-        }
-
     }
 
     function createKernel()
@@ -78,7 +74,7 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
         $r = $this->createImageRandomizer();
         $file = $r->getRandomImage();
         $this->assertTrue(is_object($file));
-        $this->assertEquals(1, ereg("^file[0-9]{1,2}\.jpg$", $file->get('file_name')), 'file_name "'.$file->get('file_name').'" not valid');
+        $this->assertEquals(1, preg_match("/^file[0-9]{1,2}\.jpg$/", $file->get('file_name')), 'file_name "'.$file->get('file_name').'" not valid');
     }
 
     function testGetRandomImageReturnsDifferentImages() {
