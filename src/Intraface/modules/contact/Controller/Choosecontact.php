@@ -204,7 +204,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
     {
         $module = $this->getKernel()->module('contact');
 
-        $contact = new Contact($this->getKernel(), intval($_POST['selected']));
+        $contact = new Contact($this->getKernel(), intval($this->body('selected')));
     	if ($contact->get('id') != 0) {
     	    return new k_SeeOther($this->getRedirectUrl($contact->get('id')));
     	} else {
