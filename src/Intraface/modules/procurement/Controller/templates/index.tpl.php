@@ -78,7 +78,7 @@
                     <td><?php e($procurement["dk_invoice_date"]); ?></td>
                     <td>
                         <?php if ($procurement["status"] == "recieved" || $procurement["status"] == "canceled"): ?>
-                            <?php e(t(ucfirst($procurement["status"]))); ?>
+                            <?php e(t(ucfirst($procurement["status"]))); ?> <?php e($procurement["dk_delivery_date"]); ?>
                         <?php elseif ($procurement["delivery_date"] != "0000-00-00"): ?>
                             <?php e($procurement["dk_delivery_date"]); ?>
                         <?php else: ?>
@@ -89,7 +89,7 @@
                         <?php if ($procurement["status"] == "canceled"): ?>
                             <?php e("-"); ?>
                         <?php elseif ($procurement['paid_date'] != '0000-00-00'): ?>
-                            <?php e(t('Paid')); ?>
+                            <?php e(t('Paid')); ?> <?php e($procurement['dk_paid_date']); ?>
                         <?php elseif ($procurement["payment_date"] != "0000-00-00"): ?>
                             <?php e($procurement["dk_payment_date"]); ?>
                         <?php else: ?>
