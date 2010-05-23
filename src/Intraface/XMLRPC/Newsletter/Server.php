@@ -47,7 +47,7 @@ class Intraface_XMLRPC_Newsletter_Server
 
         $subscriber = $this->factoryList($list_id);
 
-        if (!$subscriber->subscribe(array('name' => $name, 'email' => $email, 'ip' => $ip), Intraface_Mail::factory())) {
+        if (!$subscriber->subscribe(array('name' => $name, 'email' => $email, 'ip' => $ip))) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('an error occurred when trying to subscribe', -4);
         }
@@ -206,12 +206,12 @@ class Intraface_XMLRPC_Newsletter_Server
 
         $auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
         $weblogin = $auth_adapter->auth();
-        
+
         if (!$weblogin) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('access to intranet denied', -2);
         }
-        
+
         $this->kernel = new Intraface_Kernel();
         $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
         $this->kernel->setting = new Intraface_Setting($this->kernel->intranet->get('id'));

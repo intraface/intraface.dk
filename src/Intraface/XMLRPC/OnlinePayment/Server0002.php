@@ -12,15 +12,15 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
 {
     /**
      * Constructor
-     * @param $encoding the encoding used for the XML_RPC2 backend 
+     * @param $encoding the encoding used for the XML_RPC2 backend
      * @return unknown_type
      */
-    public function __construct($encoding = 'utf-8') 
+    public function __construct($encoding = 'utf-8')
     {
         parent::__construct($encoding);
     }
-    
-    
+
+
     /**
      * Returns target to perform payment on
      *
@@ -141,18 +141,14 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
         return $this->prepareResponseData($payment_id);
     }
 
-    private function sendEmailOnOnlinePayment($debtor, $payment_id, $mailer = null)
+    private function sendEmailOnOnlinePayment($debtor, $payment_id)
     {
-        if ($mailer === null) {
-            $mailer = Intraface_Mail::factory();
-        }
-
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
         $connection = Doctrine_Manager::connection(DB_DSN);
         $connection->setCharset('utf8');
-        
+
         try {
             $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById($debtor->getFromShopId());
 
@@ -183,14 +179,12 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
                       'belong_to'  => $payment_id);
 
         if (!$email->save($data)) {
-            trigger_error('Could not save email to onlinepayment', E_USER_NOTICE);;
-            return false;
+            throw new Exception('Could not save email to onlinepayment');
         }
 
-        if (!$email->send($mailer)) {
+        if (!$email->queue()) {
             $this->error->merge($email->error->getMessage());
-            trigger_error('Could not send email to ' . $debtor->getContact()->getId(), E_USER_NOTICE);;
-            return false;
+            throw new Exception('Could not send email to ' . $debtor->getContact()->getId());
         }
 
         return true;

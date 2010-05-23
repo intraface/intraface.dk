@@ -30,7 +30,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $this->bucket = $bucket;
         parent::__construct($encoding);
     }
-    
+
     /**
      * Gets a list with products
      *
@@ -202,7 +202,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             $gateway->getProductIdsWithKeywordForShop($this->processRequestData($keyword))
         );
     }
-    
+
     /**
      * Gets a list with products with a given keyword or with given keywords
      *
@@ -217,7 +217,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
      */
     public function getProductsInWithVariationAttribute($credentials, $shop_id, $variation_id, $attribute_id, $results_per_page = 0, $pagging_offset = 0)
     {
-        
+
     }
 
     /**
@@ -714,7 +714,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
             $values['description'] = $this->webshop->getShop()->getName();
         }
 
-        if (!$order_id = $this->webshop->placeOrder($values, Intraface_Mail::factory())) {
+        if (!$order_id = $this->webshop->placeOrder($values)) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('order could not be placed. It returned the following error: ' . strtolower(implode(', ', $this->webshop->error->getMessage())), -4);
         }
