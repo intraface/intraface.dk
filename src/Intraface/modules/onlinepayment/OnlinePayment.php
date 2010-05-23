@@ -99,7 +99,7 @@ class OnlinePayment extends Intraface_Standard
                 */
                 return $gateway->findByTransactionNumber($value);
             default:
-                trigger_error('Ikke gyldig type i Onlinebetaling', E_USER_ERROR);
+                throw new Exception('Ikke gyldig type i Onlinebetaling');
                 break;
         }
 
@@ -257,7 +257,7 @@ class OnlinePayment extends Intraface_Standard
         if (!isset($input['text'])) {
         	$input['text'] = '';
         }
-        
+
         if ($input['transaction_status'] == $this->transaction_status_authorized) {
              $status_key = 2;
         } else {
@@ -565,7 +565,6 @@ class OnlinePayment extends Intraface_Standard
             $this->getDBQuery()->setCondition("belong_to_key = ".$belong_to_key." AND belong_to_id = ".$this->dbquery->getFilter('belong_to_id'));
 
             // $this->dbquery->setFilter('status', -1);
-
         }
 
         /*
@@ -602,6 +601,9 @@ class OnlinePayment extends Intraface_Standard
         }
 
         $doctrine = Doctrine_Manager::connection(DB_DSN);
+        $doctrine->setCharset('utf8');
+
+        // @todo this does not work
         $currency_gateway = new Intraface_modules_currency_Currency_Gateway($doctrine);
 
         $this->getDBQuery()->setSorting("date_created DESC");
