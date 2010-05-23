@@ -62,7 +62,7 @@ $address = $context->getValues();
 		<th><?php e(t('CVR-number')); ?></th>
 		<td><?php if (isset($address['cvr'])) e($address["cvr"]); ?>
 			<?php if (!empty($address['cvr']) AND strlen($address['cvr']) == 8): ?>
-				(<a href="http://www.cvr.dk/Site/Forms/PublicService/DisplayCompany.aspx?cvrnr=<?php e($address['cvr']); ?>">se opslaget p� virk.dk</a>)
+				(<a href="http://www.cvr.dk/Site/Forms/PublicService/DisplayCompany.aspx?cvrnr=<?php e($address['cvr']); ?>">se opslaget på virk.dk</a>)
 			<?php endif;?>
 		</td>
 	</tr>
