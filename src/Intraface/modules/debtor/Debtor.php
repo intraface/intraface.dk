@@ -106,7 +106,7 @@ class Debtor extends Intraface_Standard
         }
     }
 
-    public function __destruct()
+    public function destruct()
     {
         unset($this->kernel);
         unset($this->db);
