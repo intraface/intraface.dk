@@ -27,27 +27,20 @@ class OnlinePaymentDefault extends OnlinePayment
 
     function transactionAction($action)
     {
-
         if ($action == "capture") {
-
             // Her kan der laves en capture fra Betalingsudbyder;
-
             if ($this->addAsPayment()) {
                 $this->setStatus("captured");
                 return true;
             } else {
-                trigger_error("Onlinebetalingen kunne ikke overføres til fakturaen", E_USER_ERROR);
-                return false;
+                throw new Exception("Onlinebetalingen kunne ikke overføres til fakturaen");
             }
         } elseif ($action == "reverse") {
-
             // her skal reverse så laves?
-
             $this->setStatus("reversed");
             return true;
         } else {
-            trigger_error("Ugyldig handling i Onlinepayment_Provider_Default->transactionAction()", E_USER_ERROR);
-            return false;
+            throw new Exception("Ugyldig handling i Onlinepayment_Provider_Default->transactionAction()");
         }
     }
 
@@ -63,6 +56,6 @@ class OnlinePaymentDefault extends OnlinePayment
 
     function isSettingsSet()
     {
-        return 1;
+        return true;
     }
 }
