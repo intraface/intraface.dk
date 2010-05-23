@@ -6,7 +6,7 @@ $delivery_address = $context->getDeliveryAddressValues();
 <div id="colOne">
 
 <div class="box">
-	<img style="float: right;" src="<?php e('http://www.gravatar.com/avatar/'.md5($address['email']).'?s=60&d='.url('/core/images/icons/gravatar.png')); ?>" height="60" width="60" />
+	<img style="float: right;" src="<?php e('http://www.gravatar.com/avatar/'.md5($address['email']).'?s=60&d='.NET_SCHEME . NET_HOST . url('/images/icons/gravatar.png')); ?>" height="60" width="60" />
 
     <h1>#<?php e($value['number']); ?> <?php e($address['name']); ?></h1>
 

@@ -45,7 +45,7 @@
 				$user["name"] = '['.t('not filled in').']';
 			}
 			?>
-			<td><img style="border: none;" src="<?php e('http://www.gravatar.com/avatar/'.md5($user['email']).'?s=20&d=wavatar'); ?>" height="20" width="20" /></td>
+			<td><img style="border: none;" src="<?php e('http://www.gravatar.com/avatar/'.md5($user['email']).'?s=20&d=&d='.NET_SCHEME . NET_HOST . url('/images/icons/gravatar.png')); ?>" height="20" width="20" /></td>
 			<td><a href="<?php e(url($user["id"])); ?>"><?php e($user["name"]); ?></a></td>
 			<td><?php e($user["email"]); ?></td>
 			<td class="buttons">

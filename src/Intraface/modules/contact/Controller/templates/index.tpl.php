@@ -84,7 +84,7 @@
 					<input type="checkbox" value="<?php e($c['id']); ?>" name="selected[]" />
 				</td>
 				<td><?php e($c['number']); ?></td>
-				<td><img style="border: none; vertical-align:middle" src="<?php e('http://www.gravatar.com/avatar/'.md5($c['email']).'?s=20&d=wavatar'); ?>" height="20" width="20" /> <a class="fn" href="<?php e(url($c['id'])); ?>"><?php e($c['name']); ?></a></td>
+				<td><img style="border: none; vertical-align:middle" src="<?php e('http://www.gravatar.com/avatar/'.md5($c['email']).'?s=20&d=&d='.NET_SCHEME . NET_HOST . url('/images/icons/gravatar.png')); ?>" height="20" width="20" /> <a class="fn" href="<?php e(url($c['id'])); ?>"><?php e($c['name']); ?></a></td>
 				<td class="tel"><?php e($c['phone']); ?></td>
 				<td class="email"><?php e($c['email']); ?></td>
 				<td class="options">
