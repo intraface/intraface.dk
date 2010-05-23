@@ -17,8 +17,7 @@ class ModuleMaintenance
         $this->id = intval($id);
         $this->db = MDB2::singleton(DB_DSN);
         if (PEAR::isError($this->db)) {
-            trigger_error("Error in creating db: ".$this->db->getUserInfo(), E_USER_ERROR);
-            exit;
+            throw new Exception("Error in creating db: ".$this->db->getUserInfo());
         }
 
         $this->error = new Intraface_Error;
@@ -89,7 +88,7 @@ class ModuleMaintenance
     public function registerModule($module_name)
     {
         $gateway = new Intraface_ModuleGateway(MDB2::singleton(DB_DSN));
-        return $gateway->registerByName($name);
+        return $gateway->registerByName($module_name);
         /*
         $db = new DB_Sql;
         $updated_sub_access_id = array();
