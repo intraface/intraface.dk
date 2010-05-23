@@ -14,6 +14,10 @@ class Intraface_modules_cms_ElementGateway
     function findBySectionAndType($section, $type)
     {
         $class = $this->class_prefix . ucfirst($type);
+
+        if (!class_exists($class)) {
+            throw new Exception('Class does not exist');
+        }
         return new $class($section);
     }
 
