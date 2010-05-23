@@ -22,9 +22,9 @@ class Intraface_modules_shop_Controller_FeaturedProducts extends k_Component
 
         $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->context->name());
 
-        if (!empty($this->GET['delete']) AND is_numeric($this->GET['delete'])) {
+        if (is_numeric($this->query('delete'))) {
             $featured = new Intraface_modules_shop_FeaturedProducts($this->getKernel()->intranet, $shop, $db);
-            if ($featured->delete($this->GET['delete'])) {
+            if ($featured->delete($this->query('delete'))) {
                 return new k_SeeOther($this->url());
             }
         }
@@ -49,7 +49,9 @@ class Intraface_modules_shop_Controller_FeaturedProducts extends k_Component
         $db = $this->mdb2;
         $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->context->name());
         $featured = new Intraface_modules_shop_FeaturedProducts($this->getKernel()->intranet, $shop, $db);
-        if ($featured->add($this->body('headline'), new Keyword(new Product($this->getKernel()), $this->body('keyword_id')))) {
+        $product = new Product($this->getKernel());
+        $keyword = new Keyword($product, $this->body('keyword_id'));
+        if ($featured->add($this->body('headline'), $keyword)) {
             return new k_SeeOther($this->url());
         }
         return $this->render();
