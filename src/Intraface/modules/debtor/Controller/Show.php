@@ -198,6 +198,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             if (($this->getDebtor()->get("type") == 'credit_note' || $this->getDebtor()->get("type") == 'invoice') AND $this->getKernel()->user->hasModuleAccess('accounting')) {
                 return new k_SeeOther($this->url('state'));
             }
+            return new k_SeeOther($this->url());
         }
 
 
@@ -218,8 +219,39 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 $this->getKernel()->useModule("invoice");
                 $invoice = new Invoice($this->getKernel());
                 if ($id = $invoice->create($this->getDebtor())) {
-                    return new k_SeeOther($this->url('../'.$id));
+                    return new k_SeeOther($this->url('../' . $id));
                 }
+            }
+        }
+
+
+        // Overf�re ordre til faktura
+        elseif (!empty($_POST['execute'])) {
+            if ($this->getKernel()->user->hasModuleAccess('invoice')) {
+                $this->getKernel()->useModule("invoice");
+                $this->getDebtor()->setStatus('sent');
+
+                if ($this->getKernel()->user->hasModuleAccess('onlinepayment')) {
+                    $onlinepayment_module = $this->getKernel()->useModule('onlinepayment', true); // true: ignore user permisssion
+                    $onlinepayment = OnlinePayment::factory($this->getKernel());
+                    $onlinepayment->getDBQuery()->setFilter('belong_to', $this->getDebtor()->get("type"));
+                    $onlinepayment->getDBQuery()->setFilter('belong_to_id', $this->getDebtor()->get('id'));
+                    $actions = $onlinepayment->getTransactionActions();
+                    $payment_list = $onlinepayment->getlist();
+
+                    foreach ($payment_list as $payment) {
+                        $onlinepayment = OnlinePayment::factory($this->getKernel(), 'id', $payment['id']);
+                        try {
+                            if (!$onlinepayment->transactionAction('capture')) {
+                            }
+                        } catch (Exception $e) {
+
+                        }
+                    }
+                }
+
+                $this->getDebtor()->setStatus('executed');
+                return new k_SeeOther($this->url(null . '.pdf'));
             }
         }
 
