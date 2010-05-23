@@ -10,8 +10,60 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
     protected $backend = 'php';
     protected $default_server_version = null;
 
+    protected function getBackend()
+    {
+        if ($this->query('backend') != '') {
+            if (in_array($this->query('backend'), array('php', 'xmlrpcext'))) {
+                $backend = $this->query('backend');
+            } else {
+                throw new Exception('Invalid backend. Must be php or xmlrpcext');
+            }
+        } else {
+            $backend = 'xmlrpcext';
+        }
+        return $backend;
+    }
+
+    function getEncoding()
+    {
+        return $this->encoding = $this->backends[$this->getBackend()];
+    }
+
+    protected function getServerOptions()
+    {
+
+        if (!isset($this->prefix)) {
+            throw new Exception('You need to set $this->prefix in class');
+        }
+
+        $options = array(
+            'prefix' => $this->prefix . '.',
+            'encoding' => 'utf-8', // $this->encoding
+            'backend' => $this->getBackend());
+
+        return $options;
+    }
+
+    function getVersion()
+    {
+        if ($this->query('version') != '') {
+            if (isset($this->available_servers[$this->query('version')])) {
+                return $this->query('version');
+            } else {
+                throw new Exception('Invalid server version');
+            }
+        } else {
+            if (isset($this->available_servers[$this->default_server_version])) {
+                return $this->default_server_version;
+            } else {
+                throw new Exception('Invalid default server version');
+            }
+        }
+    }
+
     protected function getServer()
     {
+        /*
         if ($this->query('version') != '') {
             if (isset($this->available_servers[$this->query('version')])) {
                 $server = $this->available_servers[$this->query('version')];
@@ -25,36 +77,17 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
                 throw new Exception('Invalid default server version');
             }
         }
+        */
+        $server = $this->available_servers[$this->getVersion()];
 
-        if ($this->query('backend') != '') {
-            if (in_array($this->query('backend'), array('php', 'xmlrpcext'))) {
-                $backend = $this->query('backend');
-            } else {
-                throw new Exception('Invalid backend. Must be php or xmlrpcext');
-            }
-        } else {
-            $backend = 'xmlrpcext';
-        }
-
-        if (!isset($this->prefix)) {
-            throw new Exception('You need to set $this->prefix in class');
-        }
-
-        $this->encoding = $this->backends[$backend];
-
-        $options = array(
-            'prefix' => $this->prefix . '.',
-            'encoding' => 'utf-8', // $this->encoding
-            'backend' => $backend);
-
-        return XML_RPC2_Server::create(new $server($this->encoding), $options);
+        return XML_RPC2_Server::create(new $server($this->getEncoding()), $this->getServerOptions());
     }
 
     function dispatch()
     {
         switch ($this->query('backend')) {
             case 'xmlrpcext':
-                // @todo tests best�r ikke med denne sl�et til.
+                // @todo tests does not pass with this one
                 XML_RPC2_Backend::setBackend('xmlrpcext');
                 $this->backend = 'xmlrpcext';
                 break;

@@ -36,7 +36,7 @@ $HTTP_RAW_POST_DATA = file_get_contents('php://input');
 k()
   ->setIdentityLoader(new MyIdentityLoader())
   // Use container for wiring of components
-  // ->setComponentCreator(new k_InjectorAdapter(create_container()))
+  ->setComponentCreator(new k_InjectorAdapter(new bucket_Container(new Intraface_Factory)))
   // Enable file logging
   //->setLog(dirname(__FILE__) . '/../log/debug.log')
   // Uncomment the next line to enable in-browser debugging
