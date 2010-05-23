@@ -1,11 +1,9 @@
 <?php
 require_once 'config.local.php';
 
-set_include_path(INTRAFACEPUBLIC_SHOP_INCLUDE_PATH);
-
-/** 
+/**
  * NOTICE: session_start is needed to be executed before Classloader is initialized.
- * Otherwise it gives strange error trying to start MDB2_Driver_mysql 
+ * Otherwise it gives strange error trying to start MDB2_Driver_mysql
  */
 session_start();
 
@@ -15,7 +13,7 @@ require_once 'Ilib/ClassLoader.php';
 $application = new Demo_Root();
 
 $application->registry->registerConstructor('admin', create_function(
-  '$className, $args, $registry',  
+  '$className, $args, $registry',
   'return new IntrafacePublic_Admin_Client_XMLRPC("abcdefghijklmnopqrstuvwxyz123456789#", false, INTRAFACE_XMLPRC_SERVER_PATH . "admin/server.php");'
 ));
 
