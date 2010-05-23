@@ -28,7 +28,7 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
         	'year' => $this->getYear(),
         	'depreciation' => $this->getModel(),
         	'object' => $this->getDebtor(),
-        	'year' => $year);
+        	'year' => $this->getYear());
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/depreciation');
         return $smarty->render($this, $data);
