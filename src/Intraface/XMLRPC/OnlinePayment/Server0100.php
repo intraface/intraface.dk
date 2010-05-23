@@ -143,6 +143,16 @@ class Intraface_XMLRPC_OnlinePayment_Server0100 extends Intraface_XMLRPC_Server0
         return $this->prepareResponseData($payment_id);
     }
 
+    /**
+     * Queues the email
+     *
+     * @todo cleanup. Compare to the code in the shop coordinator.
+     *
+     * @param $debtor
+     * @param $payment_id
+     *
+     * @return boolean
+     */
     private function sendEmailOnOnlinePayment($debtor, $payment_id)
     {
         $this->kernel->useShared('email');
@@ -153,7 +163,6 @@ class Intraface_XMLRPC_OnlinePayment_Server0100 extends Intraface_XMLRPC_Server0
 
         try {
             $shop = $gateway->findById($debtor->getFromShopId());
-
             // @todo: Change with gateway.
             $settings = $doctrine->getTable('Intraface_modules_onlinepayment_Language')->findOneByIntranetId($kernel->intranet->getId());
 
