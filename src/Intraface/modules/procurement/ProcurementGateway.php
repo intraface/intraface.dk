@@ -81,7 +81,7 @@ class Intraface_modules_procurement_ProcurementGateway
                 // Beh�ves ikke, den tager alle.
 
             } elseif ($this->dbquery->getFilter("status") == "-2") {
-                // Not executed = �bne
+                // Not executed = åbne
                 /*
                 if ($this->dbquery->checkFilter("to_date")) {
                     $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
@@ -91,11 +91,11 @@ class Intraface_modules_procurement_ProcurementGateway
                     }
                 }
                 else {
-                    // Hvis der ikke er nogen dato s� tager vi alle dem som p� nuv�rende tidspunkt har status under
+                    // Hvis der ikke er nogen dato så tager vi alle dem som p� nuv�rende tidspunkt har status under
                     $this->dbquery->setCondition("status_key < 2");
                 }
                 */
-                $this->dbquery->setCondition("status_key < 1 OR paid_date = \"0000-00-00\"");
+                $this->dbquery->setCondition("status_key < 1 OR (status_key = 1 AND paid_date = \"0000-00-00\")");
 
             } else {
                 if ($this->dbquery->checkFilter("to_date")) {
