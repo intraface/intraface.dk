@@ -13,12 +13,87 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>install/reset-staging-server.php?modules=debtor,order,contact,product,administration,shop,onlinepayment&amp;helper_function=Administration:fillInIntranetAddress,Product:createVisibleInShop,Shop:create,OnlinePayment:setProvider&amp;login=true</td>
+	<td>install/reset-staging-server.php?modules=debtor,order,contact,product,administration,shop,onlinepayment,language&amp;helper_function=Administration:fillInIntranetAddress,Product:createVisibleInShop,Shop:create,OnlinePayment:setProvider&amp;login=true</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>link=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=language</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>language[]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Choose']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=shop</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>language key</td>
+	<td>label=English</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='save']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Control panel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=OnlinePayment settings</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>language_da_subject</td>
+	<td>Betalingsbekræftelse</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>language_da</td>
+	<td>Bekræftelse</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>language_en_subject</td>
+	<td>Payment confirmation</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>language_en</td>
+	<td>Confirmation</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Save']</td>
 	<td></td>
 </tr>
 <tr>
