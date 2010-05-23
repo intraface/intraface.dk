@@ -79,7 +79,7 @@ class Intraface_modules_cms_PageGateway
     }
 
     /**
-     * 
+     *
      * @param $site
      * @param object $page CMS_Page used when finding submenu in XMLRPC/shop/Server0030.php method getPage
      * @todo remove $page parameter and find another way to generate submenu
@@ -253,7 +253,7 @@ class Intraface_modules_cms_PageGateway
 
     function getPicture($pic_id)
     {
-        $shared_filehandler = $this->kernel->useShared('filehandler');
+        $shared_filehandler = $this->kernel->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
 
                 $tmp_filehandler = new FileHandler($this->kernel, $pic_id);
