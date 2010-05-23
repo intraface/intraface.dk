@@ -1,11 +1,11 @@
 <?php
-
 class Intraface_modules_currency_Currency_Gateway
 {
     private $table;
 
     public function __construct($doctrine)
     {
+        require_once 'Intraface/modules/currency/Currency.php';
         $this->table = $doctrine->getTable('Intraface_modules_currency_Currency');
     }
 
