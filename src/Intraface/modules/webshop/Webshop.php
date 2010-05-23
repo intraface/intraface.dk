@@ -1,14 +1,14 @@
 <?php
 /**
- * Webshop sørger for at holde styr webshoppen.
+ * Webshop sï¿½rger for at holde styr webshoppen.
  *
- * @todo Indstilling af porto - skal det være et standardprodukt på alle ordrer?
+ * @todo Indstilling af porto - skal det vï¿½re et standardprodukt pï¿½ alle ordrer?
  *
- * @todo Standardprodukter på ordrer.
+ * @todo Standardprodukter pï¿½ ordrer.
  *
- * @todo Opførsel ift. lager i onlineshoppen.
+ * @todo Opfï¿½rsel ift. lager i onlineshoppen.
  *
- * @todo Bør kunne tage højde for en tidsangivelse på produkterne
+ * @todo Bï¿½r kunne tage hï¿½jde for en tidsangivelse pï¿½ produkterne
  *
  * @package Intraface_Shop
  * @author Lars Olesen <lars@legestue.net>
@@ -129,7 +129,7 @@ class Webshop
             $this->contact = new Contact($this->kernel);
             $contact_person_id = 0;
 
-            // sørger for at tjekke om det er et firma
+            // sï¿½rger for at tjekke om det er et firma
             if (isset($input['contactperson']) && $input['contactperson'] != '') {
                 $input['type'] = 'corporation'; // firma
             }
@@ -209,11 +209,10 @@ class Webshop
      *
      * @param array $input    Array with customer data
      * @param array $products Array with products
-     * @param object $mailer An mailer object to send e-mails
      *
      * @return integer Order id
      */
-    public function placeManualOrder($input = array(), $products = array(), $mailer)
+    public function placeManualOrder($input = array(), $products = array())
     {
         $order_id = $this->createOrder($input);
         if ($order_id == 0) {
@@ -226,7 +225,7 @@ class Webshop
             return false;
         }
 
-        if (!$this->sendEmail($order_id, $mailer)) {
+        if (!$this->sendEmail($order_id)) {
             $this->error->set('unable to send email to the customer');
             return false;
         }
@@ -241,12 +240,8 @@ class Webshop
      *
      * @return integer Order id
      */
-    public function placeOrder($input, $mailer)
+    public function placeOrder($input)
     {
-        if (!is_object($mailer)) {
-            throw new Exception('A valid mailer object is needed');
-        }
-
         if (!$order_id = $this->createOrder($input)) {
             $this->error->set('unable to create the order');
             return false;
@@ -261,7 +256,7 @@ class Webshop
 
         $this->basket->reset();
 
-        if (!$this->sendEmail($order_id, $mailer)) {
+        if (!$this->sendEmail($order_id)) {
             $this->error->set('unable to send email to the customer');
             return false;
         }
@@ -296,17 +291,13 @@ class Webshop
      *
      * @return boolean
      */
-    private function sendEmail($order_id, $mailer)
+    private function sendEmail($order_id)
     {
-        if (!is_object($mailer)) {
-            throw new Exception('A valid mailer object is needed');
-        }
-
         $this->kernel->useShared('email');
         $email = new Email($this->kernel);
 
         if (!$email->save(array('contact_id' => $this->contact->get('id'),
-                                'subject' => 'Bekræftelse på bestilling #' . $order_id,
+                                'subject' => 'BekrÃ¦ftelse pÃ¥ bestilling #' . $order_id,
                                 'body' => $this->kernel->setting->get('intranet', 'webshop.confirmation_text') . "\n" . $this->contact->getLoginUrl() . "\n\nVenlig hilsen\n" . $this->kernel->intranet->address->get('name'),
                                 'from_email' => $this->kernel->intranet->address->get('email'),
                                 'from_name' => $this->kernel->intranet->address->get('name'),
@@ -316,7 +307,7 @@ class Webshop
             return false;
         }
 
-        if (!$email->send($mailer)) {
+        if (!$email->queue()) {
             $this->error->merge($email->error->message);
             return false;
         }
