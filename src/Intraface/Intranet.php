@@ -63,6 +63,7 @@ class Intraface_Intranet extends Intraface_Standard
      */
     function load()
     {
+        $this->db = MDB2::singleton(DB_DSN);
         $result = $this->db->query("SELECT
                 id,
                 name,
