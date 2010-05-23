@@ -29,7 +29,6 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         //$this->value = $procurement->get();
         $items = $procurement->getItems();
         $i = 0;
-        $items_amount = 0;
 
         if (count($items) > 0) {
             // implement to a line for each item
@@ -87,6 +86,7 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
 
     function getValues()
     {
+        $items_amount = 0; // @todo what is this?
         if ($this->body()) {
             $this->value = $this->body();
             if (isset($_POST['add_line'])) {
@@ -104,7 +104,8 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
             $procurement = $this->getProcurement();
             $this->value = $procurement->get();
             if ($procurement->get('price_items') - $items_amount > 0) {
-                $this->value['debet_account'][$i++] = array('text' => '', 'amount' => number_format($procurement->get('price_items') - $items_amount, 2, ',', '.'));
+                $this->value['debet_account'][$i++] = array('text' => '',
+                    'amount' => number_format($procurement->get('price_items') - $items_amount, 2, ',', '.'));
             }
 
             if ($procurement->get('price_shipment_etc') > 0) {
