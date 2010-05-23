@@ -39,7 +39,6 @@ define('SERVER_STATUS', 'TEST'); // if the system is in PRODUCTION or TEST mode
 // error log
 define('ERROR_LOG', PATH_ROOT.'intraface/log/error.log'); // exact directory and filename
 define('K2_LOG', '/var/lib/wwwrun/intraface/log/k2.log');
-error_reporting(E_ALL ^ E_NOTICE); // E_ALL for development setup.
 
 // timezone and local
 define('TIMEZONE', 'Europe/Copenhagen');
@@ -54,5 +53,3 @@ define('INTRAFACE_XMLRPC_DEBUG', false);
 define('INTRAFACE_ONLINEPAYMENT_PROVIDER', 'Testing');
 define('INTRAFACE_ONLINEPAYMENT_MERCHANT', '123');
 define('INTRAFACE_ONLINEPAYMENT_MD5SECRET', 'fake');
-
-?>
