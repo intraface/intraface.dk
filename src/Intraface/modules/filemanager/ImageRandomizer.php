@@ -1,42 +1,42 @@
 <?php
 class ImageRandomizer
 {
-    
     /**
      * @var object $file_manager file handler
      */
     private $file_manager;
-    
+
     /**
      * @var object $error
      */
     public $error;
-    
+
     /**
      * @var array $file_list to find image from
      */
     private $file_list;
-    
+
     /**
      * constructor
-     * 
+     *
      * @param object $file_manager file handler
      * @param array $keywords array with keywords
+     *
+     * @return void
      */
-    public function __construct($file_manager, $keywords) {
-        
+    public function __construct($file_manager, $keywords)
+    {
         $this->file_manager = $file_manager;
-        
+
         $this->error = new Ilib_Error;
-        
+
         $dbquery = $this->getDBQuery();
-        
+
         require_once 'Intraface/shared/keyword/Keyword.php';
         if (!is_array($keywords)) {
-            trigger_error('second parameter should be an array with keywords', E_USER_ERROR);
-            return false;
+            throw new Exception('second parameter should be an array with keywords');
         }
-        
+
         $keyword_ids = array();
         foreach ($keywords AS $keyword) {
             $keyword_object = new Keyword($this->file_manager);
@@ -45,11 +45,10 @@ class ImageRandomizer
              */
             $keyword_ids[] = $keyword_object->save(array('keyword' => $keyword));
         }
-        
+
         $dbquery->setKeyword((array)$keyword_ids);
-        
-        
-        require_once('Intraface/shared/filehandler/FileType.php');
+
+        require_once 'Intraface/modules/filemanager/FileType.php';
         $filetype = new FileType();
         $types = $filetype->getList();
         $keys = array();
@@ -59,44 +58,38 @@ class ImageRandomizer
             }
         }
         $dbquery->setCondition("file_handler.file_type_key IN (".implode(',', $keys).")");
-        
+
         $this->file_list = array();
         $db = $dbquery->getRecordset("file_handler.id", "", false);
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
             $this->file_list[] = $db->f('id');
         }
-        
+
         if (count($this->file_list) == 0) {
-            trigger_error('No images found with the keywords: '.implode(', ', $keywords), E_USER_ERROR);
-            exit;
+            throw new Exception('No images found with the keywords: '.implode(', ', $keywords));
         }
     }
-    
+
     /**
      * returns dbquery
-     * 
+     *
      * @return object dbquery
      */
-    private function getDBQuery() 
+    private function getDBQuery()
     {
         $dbquery = new Ilib_DBQuery("file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->file_manager->kernel->intranet->get('id'));
         $dbquery->useErrorObject($this->error);
         return $dbquery;
     }
-    
-    
+
     /**
      * return an file object with random image
-     * 
+     *
      * @return object file_manager with random image loaded
      */
-    public function getRandomImage() 
+    public function getRandomImage()
     {
-        
         $key = rand(0, count($this->file_list)-1);
         return new FileHandler($this->file_manager->kernel, $this->file_list[$key]);
-        
     }
-  
 }
-?>
