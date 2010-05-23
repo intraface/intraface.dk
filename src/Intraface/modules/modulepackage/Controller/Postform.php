@@ -31,7 +31,7 @@ class Intraface_modules_modulepackage_Controller_PostForm extends k_Component
         );
 
         $data = array(
-        	'modulepackagemanager' => $modulepackagemanager,
+        	// 'modulepackagemanager' => $modulepackagemanager,
             'form' => $form,
             'language' => $language);
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/postform');

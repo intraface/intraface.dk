@@ -171,13 +171,8 @@ class Intraface_modules_modulepackage_ShopExtension {
      *
      * @return integer order id
      */
-    public function placeOrder($customer, $products, $mailer)
+    public function placeOrder($customer, $products)
     {
-
-        if (!is_object($mailer)) {
-            throw new Exception('A valid mailer object is needed');
-        }
-
         if (!isset($this->shop)) {
             // should we provide an errormessage?
             return false;
@@ -198,29 +193,23 @@ class Intraface_modules_modulepackage_ShopExtension {
                 $product['product_detail_id'] = 0;
             }
             if (!$this->shop->changeProductInBasket($product['product_id'], 0, $product['quantity'], $product['description'], $product['product_detail_id'])) {
-                $this->error->set("unable to add the product to the basket");
-                trigger_error('unable to add the product to the basket', E_USER_NOTICE);
-                return false;
+                throw new Exception('unable to add the product to the basket');
             }
         }
 
         // We get the basket again to get the total price.
         $basket = $this->shop->getBasket();
         if (empty($basket['items'])) {
-            $this->error->set("Error processing the order");
-            trigger_error('There was no products in the basket', E_USER_NOTICE);
-            return false;
+            throw new Exception('There was no products in the basket');
         }
 
         $customer['description'] = 'Intraface Package Add';
 
         // Then we place the order from the basket. At the moment we need to give the customer again - that is not too clever!
-        $order_identifier = $this->shop->placeOrder($customer, $mailer);
+        $order_identifier = $this->shop->placeOrder($customer);
 
         if (empty($order_identifier)) {
-            $this->error->set("unable to place the order");
-            trigger_error('unable to place the order', E_USER_NOTICE);
-            false;
+            throw new Exception('unable to place the order');
         }
 
         return array('order_identifier' => $order_identifier,

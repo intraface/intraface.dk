@@ -102,9 +102,8 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
                         $contact['contact_id'] = (int)$this->getKernel()->intranet->get('contact_id');
 
                         // we place the order.
-                        if (!$action->placeOrder($contact, Intraface_Mail::factory())) {
-                            trigger_error("Unable to place the order", E_USER_ERROR);
-                            exit;
+                        if (!$action->placeOrder($contact)) {
+                            throw new Exception("Unable to place the order");
                         }
 
                         $total_price = $action->getTotalPrice();
