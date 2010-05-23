@@ -895,58 +895,6 @@ class Contact extends Intraface_Standard
         return true;
     }
 
-
-    /**
-     * Sends the login email for the contact
-     *
-     * @param object mailer
-     * @return boolean
-     */
-    /*
-    function sendLoginEmail($mailer)
-    {
-        if (!is_object($mailer)) {
-            throw new Exception('A valid mailer object must be provided');
-        }
-
-        if ($this->id == 0) {
-            $this->error->set('Der er ikke noget id, s� kunne ikke sende en e-mail');
-            return false;
-        }
-        // opretter en kode, hvis kunden ikke har en kode
-        if (!$this->get('password')) {
-            $db = new DB_Sql;
-            $db->query("UPDATE contact SET password = '".md5($this->get('id') . date('Y-m-d H:i:s'))."' WHERE id = " . $this->id . " AND intranet_id=" . $this->kernel->intranet->get('id'));
-        }
-
-        $this->load();
-
-        $this->kernel->useShared('email');
-        $email = new Email($this->kernel);
-        if (!$email->save(
-        array(
-                'subject' => 'Loginoplysninger',
-                'body' => $this->kernel->setting->get('intranet', 'contact.login_email_text') . "\n\n" . $this->getLoginUrl() . "\n\nMed venlig hilsen\nEn venlig e-mail-robot\n" . $this->kernel->intranet->get('name'),
-                'contact_id' => $this->id,
-                'from_email' => $this->kernel->intranet->address->get('email'),
-                'from_name' => $this->kernel->intranet->get('name'),
-                'type_id' => 9,
-                'belong_to' => $this->get('id')
-        )
-        )) {
-            $this->error->set('Kunne ikke gemme emailen');
-            return false;
-        }
-
-        if ($email->send($mailer)) {
-            $this->error->set('E-mailen er sendt');
-            return true;
-        }
-        $this->error->set('Kunne ikke sende emailen');
-        return false;
-    }
-    */
-
     /**
      * Gets the contacts newsletter subscriptions
      *

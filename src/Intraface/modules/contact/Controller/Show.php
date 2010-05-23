@@ -109,10 +109,11 @@ class Intraface_modules_contact_Controller_Show extends k_Component
             return $this->contact;
         }
         return ($this->contact = $this->context->getGateway()->findById($this->name()));
-        /*
-        $contact = new Contact($this->getKernel(), );
-        return $contact;
-        */
+    }
+
+    function getModel()
+    {
+        return $this->getContact();
     }
 
     function getContactPersons()
@@ -233,13 +234,12 @@ class Intraface_modules_contact_Controller_Show extends k_Component
                 return new k_SeeOther($this->url(null, array('flare' => 'Kunne ikke gemme e-mailen')));
             }
 
-            if ($email->send(Intraface_Mail::factory())) {
-                return new k_SeeOther($this->url(null, array('flare' => 'Login e-mail has been sent')));
+            if ($email->queue()) {
+                return new k_SeeOther($this->url(null, array('flare' => 'Login e-mail has been queued')));
 
             }
-            return new k_SeeOther($this->url(null, array('flare' => 'Kunne ikke sende e-mailen')));
+            return new k_SeeOther($this->url(null, array('flare' => 'Could not queue the email')));
 
-            //$contact->sendLoginEmail(Intraface_Mail::factory());
         } elseif (!empty($_POST['new_password'])) {
             if ($contact->generatePassword()) {
                 return new k_SeeOther($this->url(null, array('flare' => 'New code has been generated')));
@@ -251,7 +251,6 @@ class Intraface_modules_contact_Controller_Show extends k_Component
     function renderVcard()
     {
         $contact = $this->getContact();
-
 
         // instantiate a builder object
         // (defaults to version 3.0)
