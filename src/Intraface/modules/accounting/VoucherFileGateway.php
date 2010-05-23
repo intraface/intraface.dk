@@ -54,7 +54,7 @@ class Intraface_modules_accounting_VoucherFileGateway
                 break;
 
                 case 'file':
-                    $this->voucher->year->kernel->useShared('filehandler');
+                    $this->voucher->year->kernel->useModule('filemanager');
                     $filehandler = new FileHandler($this->voucher->year->kernel, $db->f('belong_to_id'));
                     $files[$i]['name'] = $filehandler->get('file_name');
                     $files[$i]['description'] = $filehandler->get('file_name');
