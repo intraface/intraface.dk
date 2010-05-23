@@ -209,12 +209,8 @@ class NewsletterSubscriber extends Intraface_Standard
      *
      * @return boolean
      */
-    public function subscribe($input, $mailer)
+    public function subscribe($input)
     {
-        if (!is_object($mailer)) {
-            throw new Exception('A valid mailer object is needed');
-        }
-
         $input = safeToDb($input);
         $input = array_map('strip_tags', $input);
 
@@ -256,7 +252,7 @@ class NewsletterSubscriber extends Intraface_Standard
                 if (empty($input['name'])) {
                     $input['name'] = $input['email'];
                 }
-                
+
                 if (!$contact->save($input)) {
                     $this->error->set('Kunne ikke gemme kontaktpersonen');
                     $this->error->merge($contact->error->getMessage());
@@ -264,8 +260,8 @@ class NewsletterSubscriber extends Intraface_Standard
                 }
             }
         }
-        
-        
+
+
         if (!empty($input['name']) && $input['name'] != $contact->get('name')) {
             $save = $contact->address->get();
             $save['name'] = $input['name'];
@@ -275,7 +271,7 @@ class NewsletterSubscriber extends Intraface_Standard
             unset($save['belong_to_id']);
             $contact->save($save);
         }
-        
+
         if ($this->id > 0) {
             // name og e-mail bør vel ikke nødv. gemmes?
 
@@ -327,7 +323,7 @@ class NewsletterSubscriber extends Intraface_Standard
         if (!$this->optedIn()) {
 
             // TODO replace by observer
-            if (!$this->sendOptInEmail($mailer)) {
+            if (!$this->sendOptInEmail()) {
                 $this->error->set('could not send optin email');
                 return false;
             }
@@ -438,12 +434,8 @@ class NewsletterSubscriber extends Intraface_Standard
      *
      * @return boolean
      */
-    public function sendOptInEmail($mailer)
+    public function sendOptInEmail()
     {
-        if (!is_object($mailer)) {
-            throw new Exception('A valid mailer object is needed');
-        }
-
         if ($this->id == 0) {
             $this->error->set('no id');
             return false;
@@ -479,7 +471,7 @@ class NewsletterSubscriber extends Intraface_Standard
             return false;
         }
 
-        if ($email->send($mailer)) {
+        if ($email->queue()) {
             $db = new DB_Sql;
             $db->query("UPDATE newsletter_subscriber SET date_optin_email_sent = NOW() WHERE id = " . $this->id);
             return true;
@@ -492,9 +484,9 @@ class NewsletterSubscriber extends Intraface_Standard
      * Resends the optin e-mail to the user again, and adds one to count of resend times.
      *
      */
-    function resendOptInEmail($mailer)
+    function resendOptInEmail()
     {
-        if($this->sendOptInEmail($mailer)) {
+        if ($this->sendOptInEmail()) {
             $db = new DB_Sql;
             $db->query("UPDATE newsletter_subscriber SET resend_optin_email_count = resend_optin_email_count + 1 WHERE id = " . $this->id);
             return true;

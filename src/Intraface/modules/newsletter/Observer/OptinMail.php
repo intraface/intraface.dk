@@ -14,11 +14,6 @@ require_once 'Intraface/shared/email/Email.php';
 class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observer pattern
 {
     private $list;
-    
-    /**
-     * @var object mailer to send emails
-     */
-    private $mailer;
 
     /**
      * Constructor
@@ -27,13 +22,9 @@ class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observ
      *
      * @return void
      */
-    public function __construct($list, $mailer)
+    public function __construct($list)
     {
         $this->list = $list;
-        if (!is_object($mailer)) {
-            throw new Exception('A valid mailer object is needed');
-        }
-        $this->mailer = $mailer;
     }
 
     /**
@@ -52,17 +43,17 @@ class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observ
      * The subscriber must receive an e-mail so the subscribtion can be confirmed
      * The e-mail should say that the subscription should be confirmed within a week.
      *
-     * E-mailen skal indeholde følgende:
-     * - url til privacy policy på sitet
+     * E-mailen skal indeholde fï¿½lgende:
+     * - url til privacy policy pï¿½ sitet
      * - en kort beskrivelse af mailinglisten
-     * - url som brugeren følger for at bekræfte tilmeldingen
+     * - url som brugeren fï¿½lger for at bekrï¿½fte tilmeldingen
      *
-     * - I virkeligheden skal den nok nøjes med lige at logge ind i ens personlige webinterface
-     *   hvor man så kan lave bekræftelsen fra. Det skal altså bare være loginkoden fra
-     *   den personlige konto, der står der, og så skal nyhedsbreve på forsiden (hvis dette sted
+     * - I virkeligheden skal den nok nï¿½jes med lige at logge ind i ens personlige webinterface
+     *   hvor man sï¿½ kan lave bekrï¿½ftelsen fra. Det skal altsï¿½ bare vï¿½re loginkoden fra
+     *   den personlige konto, der stï¿½r der, og sï¿½ skal nyhedsbreve pï¿½ forsiden (hvis dette sted
      *   har nogle nyhedsbreve).
      *
-     * @see tilføj cleanUp();
+     * @see tilfï¿½j cleanUp();
      *
      * @param object $subscriber Subscriber object
      *
@@ -70,10 +61,6 @@ class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observ
      */
     private function sendOptInEmail($subscriber)
     {
-        if (!is_object($mailer)) {
-            throw new Exception('A valid mailer object is needed');
-        }
-        
         $subscriber->load();
 
         $contact = $subscriber->getContact();
@@ -82,7 +69,7 @@ class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observ
 
         $email = new Email($this->list->kernel);
         $data = array(
-            'subject' => 'Bekræft tilmelding',
+            'subject' => 'BekrÃ¦ft tilmelding',
             'body' =>
                 $this->list->get('subscribe_message') . "\n\n" .
                 "\n\nMed venlig hilsen\n".$this->list->get('sender_name'),
@@ -97,7 +84,7 @@ class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observ
             return false;
         }
 
-        if ($email->send($this->mailer)) {
+        if ($email->queue()) {
             $db = new DB_Sql;
             $db->query("UPDATE newsletter_subscriber SET date_optin_email_sent = NOW() WHERE id = " . $subscriber->get('id'));
             return true;
@@ -106,4 +93,3 @@ class Intraface_Module_Newsletter_Observer_OptinMail // must implement an observ
         return false;
     }
 }
-?>
