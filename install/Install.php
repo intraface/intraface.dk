@@ -70,14 +70,12 @@ class Intraface_Install
     {
         $result = $this->db->query("SHOW TABLES FROM " . DB_NAME);
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
-            exit;
+            throw new Exception($result->getUserInfo());
         }
         while ($line = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             $truncate = $this->db->exec('TRUNCATE TABLE ' . $line['Tables_in_'.DB_NAME]);
             if (PEAR::IsError($truncate)) {
-                trigger_error($truncate->getUserInfo(), E_USER_ERROR);
-                exit;
+                throw new Exception($truncate->getUserInfo());
             }
         }
         return true;
@@ -93,8 +91,7 @@ class Intraface_Install
             if (empty($sql)) { continue; }
             $result = $this->db->exec($sql);
             if (PEAR::isError($result)) {
-                trigger_error($result->getUserInfo(), E_USER_ERROR);
-                exit;
+                throw new Exception($result->getUserInfo());
             }
         }
         return true;
