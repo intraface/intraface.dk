@@ -11,6 +11,11 @@ class Intraface_modules_procurement_ProcurementGateway
         $this->error = new Intraface_Error;
     }
 
+    function findById($id)
+    {
+        return new Procurement($this->kernel, $id);
+    }
+
     function getDBQuery()
     {
         if(!is_object($this->dbquery)) {

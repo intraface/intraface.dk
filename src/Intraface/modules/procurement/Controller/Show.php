@@ -38,7 +38,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
 
     function appendFile($file_id)
     {
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
 
         $procurement = new Procurement($this->getKernel(), $this->name());
@@ -76,7 +76,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
     function renderHtml()
     {
         $module_procurement = $this->getKernel()->module("procurement");
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
         $translation = $this->getKernel()->getTranslation('procurement');
 
@@ -218,7 +218,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
     function postForm()
     {
         $module_procurement = $this->getKernel()->module("procurement");
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
 
         $procurement = $this->getProcurement();
@@ -239,7 +239,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
     function postMultipart()
     {
         $module_procurement = $this->getKernel()->module("procurement");
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
 
         $procurement = $this->getProcurement();
