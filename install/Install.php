@@ -20,8 +20,7 @@ class Intraface_Install
         $this->db = MDB2::singleton(DB_DSN);
 
         if (PEAR::isError($this->db)) {
-            trigger_error($this->db->getUserInfo(), E_USER_ERROR);
-            exit;
+            throw Exception($this->db->getUserInfo());
         }
     }
 
@@ -29,15 +28,13 @@ class Intraface_Install
     {
         $result = $this->db->query("SHOW TABLES FROM " . DB_NAME);
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
-            exit;
+            throw Exception($result->getUserInfo());
         }
 
         while ($line = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             $drop = $this->db->exec('DROP TABLE ' . $line['Tables_in_'.DB_NAME]);
             if (PEAR::IsError($drop)) {
-                trigger_error($drop->getUserInfo(), E_USER_ERROR);
-                exit;
+                throw Exception($drop->getUserInfo());
             }
         }
         return true;
@@ -52,8 +49,7 @@ class Intraface_Install
             if (empty($sql)) { continue; }
             $result = $this->db->exec($sql);
             if (PEAR::isError($result)) {
-                trigger_error($result->getUserInfo(), E_USER_ERROR);
-                exit;
+                throw Exception($result->getUserInfo());
             }
         }
 
@@ -64,8 +60,7 @@ class Intraface_Install
             if (empty($sql)) { continue; }
             $result = $this->db->exec($sql);
             if (PEAR::isError($result)) {
-                trigger_error($result->getUserInfo(), E_USER_ERROR);
-                exit;
+                throw Exception($result->getUserInfo());
             }
         }
         return true;
@@ -119,13 +114,11 @@ class Intraface_Install
         */
 
         if (!$this->emptyDatabase()) {
-            trigger_error('could not empty database', E_USER_ERROR);
-            exit;
+            throw new Exception('could not empty database');
         }
 
         if (!$this->createStartingValues()) {
-            trigger_error('could not create values', E_USER_ERROR);
-            exit;
+            throw new Exception('could not create values');
         }
 
         $this->deleteUploadDirectory(PATH_UPLOAD);
@@ -260,8 +253,8 @@ class Intraface_Install
         if (substr($sql, 0, 2) == '--') {
             $sql = substr($sql, strpos($sql, $str_sep));
         }
-        $sql = ereg_replace($str_sep."--[a-zA-Z0-9/\:\`,. _-]*", '', $sql);
-        $parts = split(";( )*".$str_sep, $sql);
+        $sql = preg_replace($str_sep."/--[a-zA-Z0-9\/\:\`,. _-]*/", '', $sql);
+        $parts = preg_split("/;( )*".$str_sep.'/', $sql);
         $parts = array_map('trim', $parts);
         return $parts;
 
