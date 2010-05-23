@@ -64,7 +64,7 @@ class Intraface_modules_todo_Controller_Email extends k_Component
                 );
 
                 if ($id = $email->save($var)) {
-                    $email->send(Intraface_Mail::factory());
+                    $email->queue();
                     return new k_SeeOther($this->url('../'));
                 } else {
                     return new k_SeeOther($this->url());

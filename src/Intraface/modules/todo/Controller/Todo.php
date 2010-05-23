@@ -68,23 +68,7 @@ class Intraface_modules_todo_Controller_Todo extends k_Component
                 }
             }
         }
-        /*
-         if (!empty($_POST['send_list_email'])) {
-         $email = new Phpmailer;
-         $email->Subject = $todo->get('list_name');
-         $email->From = $this->getKernel()->intranet->address->get('email');
-         $email->FromName = $this->getKernel()->intranet->get('name');
-         $email->addAddress($_POST['send_list_email']);
-         $email->Body = $this->getKernel()->setting->get('user', 'todo.email.standardtext') . "\n\n" . $this->getKernel()->setting->get('intranet', 'todo.publiclist') . '?public_key=' . $todo->get('public_key'). "&intranet_key=".$this->getKernel()->intranet->get('private_key')."\n\nMed venlig hilsen\n".$this->getKernel()->user->getAddress()->get('name') . "\n" . $this->getKernel()->intranet->get('name');
 
-         if ($email->Send()) {
-         $email_msg = 'E-mailen er sendt';
-         }
-         else {
-         $email_msg = 'E-mailen blev ikke sendt';
-         }
-         }
-         */
         if ($todo->howManyLeft() > 0) {
             return new k_SeeOther($this->url());
         } else {
