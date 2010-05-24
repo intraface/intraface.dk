@@ -470,16 +470,16 @@ class OnlinePayment extends Intraface_Standard
     {
         if ($this->get('status') != 'authorized') {
             $this->error->set("Der kan kun udføres handlinger på betalinger der er godkendt");
-            return 0;
+            return false;
         }
 
         if ($this->get('belong_to') != 'invoice') {
             $this->error->set("Der kan kun udføres handlinger på betalinger der er tilknyttet en faktura");
-            return 0;
+            return false;
         }
 
         if (!$this->kernel->intranet->hasModuleAccess('invoice')) {
-            return 0;
+            return false;
         }
 
         $invoice_module = $this->kernel->getModule('debtor', true); // true: tjekker kun intranet adgang
@@ -488,7 +488,7 @@ class OnlinePayment extends Intraface_Standard
 
         if ($invoice->get('id') == 0) {
             $this->error->set("Ugyldig faktura");
-            return 0;
+            return false;
         }
 
         $payment = new Payment($invoice);
