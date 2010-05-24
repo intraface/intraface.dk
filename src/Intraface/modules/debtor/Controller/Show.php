@@ -201,7 +201,6 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             return new k_SeeOther($this->url());
         }
 
-
         // Overf�re tilbud til ordre
         elseif (!empty($_POST['order'])) {
             if ($this->getKernel()->user->hasModuleAccess('order') && $this->getDebtor()->get("type") == "quotation") {
@@ -213,7 +212,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             }
         }
 
-        // Overf�re ordre til faktura
+        // Overføre ordre til faktura
         elseif (!empty($_POST['invoice'])) {
             if ($this->getKernel()->user->hasModuleAccess('invoice') && ($this->getDebtor()->get("type") == "quotation" || $this->getDebtor()->get("type") == "order")) {
                 $this->getKernel()->useModule("invoice");
@@ -224,9 +223,47 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             }
         }
 
+        // Quick process order
+        elseif (!empty($_POST['quickprocess_order'])) {
+            if ($this->getKernel()->user->hasModuleAccess('invoice') && ($this->getDebtor()->get("type") == "quotation" || $this->getDebtor()->get("type") == "order")) {
+                $this->getKernel()->useModule("invoice");
+                $invoice = new Invoice($this->getKernel());
+                if ($id = $invoice->create($this->getDebtor())) {
 
-        // Overf�re ordre til faktura
-        elseif (!empty($_POST['execute'])) {
+                }
+            }
+
+            if ($this->getKernel()->user->hasModuleAccess('invoice')) {
+                $this->getKernel()->useModule("invoice");
+                $invoice->setStatus('sent');
+
+                if ($this->getKernel()->user->hasModuleAccess('onlinepayment')) {
+                    $onlinepayment_module = $this->getKernel()->useModule('onlinepayment', true); // true: ignore user permisssion
+                    $onlinepayment = OnlinePayment::factory($this->getKernel());
+                    $onlinepayment->getDBQuery()->setFilter('belong_to', $invoice->get("type"));
+                    $onlinepayment->getDBQuery()->setFilter('belong_to_id', $invoice->get('id'));
+                    $actions = $onlinepayment->getTransactionActions();
+                    $payment_list = $onlinepayment->getlist();
+
+                    foreach ($payment_list as $payment) {
+                        $onlinepayment = OnlinePayment::factory($this->getKernel(), 'id', $payment['id']);
+                        try {
+                            if (!$onlinepayment->transactionAction('capture')) {
+                            }
+                        } catch (Exception $e) {
+
+                        }
+                    }
+                }
+
+                $invoice->setStatus('executed');
+                return new k_SeeOther($this->url('../' . $invoice->get('id')));
+            }
+        }
+
+
+        // Execute invoice
+        elseif (!empty($_POST['quickprocess_invoice'])) {
             if ($this->getKernel()->user->hasModuleAccess('invoice')) {
                 $this->getKernel()->useModule("invoice");
                 $this->getDebtor()->setStatus('sent');

@@ -68,12 +68,16 @@ if (isset($context->onlinepayment)) {
     <?php if ($context->getDebtor()->get("type") == "order" && $context->getDebtor()->get("where_to_id") == 0 && $context->getKernel()->user->hasModuleAccess('invoice')): ?>
         <input type="submit" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="invoice" value="<?php e(t('Invoice this')); ?>" />
     <?php endif; ?>
+    <?php if ($context->getDebtor()->get("type") == "order" && $context->getDebtor()->get("where_to_id") == 0 && $context->getKernel()->user->hasModuleAccess('invoice')): ?>
+        <input type="submit" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="quickprocess_order" value="<?php e(t('Quick process')); ?>" />
+    <?php endif; ?>
+
     <?php if ($context->getDebtor()->get("type") == "invoice" && ($context->getDebtor()->get("status") == "sent" OR $context->getDebtor()->get("status") == 'executed')): // Opret kreditnota fra faktura ?>
         <input type="submit" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="credit_note" value="<?php e(t('Make credit note from invoice')); ?>" />
 
     <?php endif; ?>
     <?php if ($context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") != 'executed'): // Opret kreditnota fra faktura ?>
-        <input type="submit" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="execute" value="<?php e(t('Execute')); ?>" />
+        <input type="submit" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="quickprocess_invoice" value="<?php e(t('Quick process')); ?>" />
 
     <?php endif; ?>
 
