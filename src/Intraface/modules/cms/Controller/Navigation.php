@@ -32,11 +32,6 @@ class Intraface_modules_cms_Controller_Navigation extends k_Component
         return $tpl->render($this, $data);
     }
 
-    function getCategoryGateway()
-    {
-        return $category_gateway = new Intraface_modules_shop_Shop_Gateway();
-    }
-
     function getKernel()
     {
         return $this->context->getKernel();
