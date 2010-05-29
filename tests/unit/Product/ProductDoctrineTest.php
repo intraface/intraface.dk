@@ -39,7 +39,7 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         $product = $this->createProductObject();
         $product->getDetails()->Translation['da']->name = 'Test';
         $product->getDetails()->Translation['da']->description = '';
-        $product->getDetails()->price = Ilib_Variable_Float(20);
+        $product->getDetails()->price = new Ilib_Variable_Float(20);
         $product->getDetails()->unit = 1;
         $product->save();
         $product->refresh(true);
@@ -51,7 +51,7 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
     function createNewProductWithVariations()
     {
         $product = $this->createNewProduct();
-        $product->getDetails()->has_variation = 1;
+        $product->has_variation = 1;
         $product->save();
         $product->refresh(true);
         return $product;
@@ -361,6 +361,80 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $product->showInShop());
 
     }
+    
+    function testSetAttributeGroupThrowsExceptionOnWhenNotSavedWithVariations()
+    {
+        $product = $this->createNewProduct();
+        
+        $group = new Intraface_modules_product_Attribute_Group;
+        $group->name = 'Test1';
+        $group->save();
+        $group->load();
+        
+        try {
+            $product->setAttributeGroup($group);
+            $this->assertTrue(false, 'An excpetion is not thrown');
+        }
+        catch(Exception $e) {
+            $this->assertEquals('You can not set attribute group for a product without variations!', $e->getMessage());
+        }
+    }
+
+    function testSetAttributeGroup()
+    {
+        $product = $this->createNewProductWithVariations();
+        
+        $group = new Intraface_modules_product_Attribute_Group;
+        $group->name = 'Test1';
+        $group->save();
+        $group->load();
+        
+        $this->assertTrue($product->setAttributeGroup($group));
+    }
+    
+    function testGetAttributeGroups()
+    {
+        $product = $this->createNewProductWithVariations();
+
+        $group = new Intraface_modules_product_Attribute_Group;
+        $group->name = 'Test1';
+        $group->save();
+        $group->load();
+        $product->setAttributeGroup($group);
+
+        $group = new Intraface_modules_product_Attribute_Group;
+        $group->name = 'Test2';
+        $group->save();
+        $group->load();
+        $product->setAttributeGroup($group);
+
+        $group = new Intraface_modules_product_Attribute_Group;
+        $group->name = 'Test3';
+        $group->save();
+        $group->load();
+        
+
+        $expected = array(
+            0 => array(
+                'id' => 1,
+                'intranet_id' => 1,
+                'name' => 'Test1',
+                '_old_deleted' => 0,
+                'deleted_at' => NULL
+            ),
+            1 => array(
+                'id' => 2,
+                'intranet_id' => 1,
+                'name' => 'Test2',
+                '_old_deleted' => 0,
+                'deleted_at' => NULL
+            )
+        );
+        
+        $groups = $product->getAttributeGroups();
+        
+        $this->assertEquals(2, $groups->count());
+    }
 
     /*
     function testMaxNumberIncrementsOnePrProductAdded()
@@ -451,23 +525,7 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($product->getRelatedProducts()));
     }
 
-    function testSetAttributeGroupThrowsExceptionOnWhenNotSavedWithVariations()
-    {
-        $product = $this->createNewProduct();
-        try {
-            $product->setAttributeGroup(1);
-            $this->assertTrue(false, 'An excpetion is not thrown');
-        }
-        catch(Exception $e) {
-            $this->assertEquals('You can not set attribute group for a product without variations!', $e->getMessage());
-        }
-    }
-
-    function testSetAttributeGroup()
-    {
-        $product = $this->createNewProductWithVariations();
-        $this->assertTrue($product->setAttributeGroup(1));
-    }
+    
 
     function testRemoveAttributeGroup()
     {
@@ -476,41 +534,7 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($product->removeAttributeGroup(1));
     }
 
-    function testGetAttributeGroups()
-    {
-        $product = $this->createNewProductWithVariations();
-
-        $group = new Intraface_modules_product_Attribute_Group;
-        $group->name = 'Test1';
-        $group->save();
-        $group->load();
-        $product->setAttributeGroup($group->getId());
-
-        $group = new Intraface_modules_product_Attribute_Group;
-        $group->name = 'Test2';
-        $group->save();
-        $group->load();
-        $product->setAttributeGroup($group->getId());
-
-
-        $expected = array(
-            0 => array(
-                'id' => 1,
-                'intranet_id' => 1,
-                'name' => 'Test1',
-                '_old_deleted' => 0,
-                'deleted_at' => NULL
-            ),
-            1 => array(
-                'id' => 2,
-                'intranet_id' => 1,
-                'name' => 'Test2',
-                '_old_deleted' => 0,
-                'deleted_at' => NULL
-            )
-        );
-        $this->assertEquals($expected, $product->getAttributeGroups());
-    }
+    
 
     function testGetVariationThrowsExceptionWhenNoGroupsAdded()
     {

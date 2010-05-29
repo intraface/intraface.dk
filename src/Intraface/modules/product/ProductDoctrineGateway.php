@@ -2,7 +2,7 @@
 /**
  * Doctrine Gateway to ProductDoctrine
  *
- * Bruges til at holde styr på varerne.
+ * Bruges til at holde styr pÃ¥ varerne.
  *
  * @package Intraface_Product
  * @author Sune Jensen
@@ -66,9 +66,9 @@ class Intraface_modules_product_ProductDoctrineGateway
     /**
      * Finds all products
      *
-     * Hvis den er fra webshop bør den faktisk opsamle oplysninger om søgningen
-     * så man kan se, hvad folk er interesseret i.
-     * Søgemaskinen skal være tolerant for stavefejl
+     * Hvis den er fra webshop bÃ¸r den faktisk opsamle oplysninger om sÃ¸gningen
+     * sÃ¥ man kan se, hvad folk er interesseret i.
+     * SÃ¸gemaskinen skal vÃ¦re tolerant for stavefejl
      *
      * @param object $search 
      *
@@ -87,6 +87,25 @@ class Intraface_modules_product_ProductDoctrineGateway
             // ->getSql(); die($collection);
             ->execute(array(), Doctrine::HYDRATE_ARRAY);
     
+        return $collection;
+    }
+    
+    public function findByVariationAttributeId($id) {
+        
+        $collection = $this->table
+            ->createQuery()
+            ->select('*, details.*, details_translation.*, variation.id, variation.*, variation_detail.*')
+            ->innerJoin('Intraface_modules_product_ProductDoctrine.details details')
+            ->innerJoin('details.Translation details_translation')
+            ->leftJoin('Intraface_modules_product_ProductDoctrine.variation variation')
+            ->innerJoin('variation.detail variation_detail')
+            ->leftJoin('variation.attribute1 variation_attribute1')
+            ->leftJoin('variation.attribute2 variation_attribute2')
+            ->addWhere('active = 1')
+            ->addWhere('(variation_attribute1.product_attribute_id = ? OR variation_attribute2.product_attribute_id = ?)', array($id, $id))
+            ->addOrderBy('details_translation.name')
+            // ->getSqlQuery(); die($collection);
+            ->execute();
         return $collection;
     }
     

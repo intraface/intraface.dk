@@ -208,16 +208,177 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
      *
      * @param struct $credentials Credentials to use the server
      * @param integer $shop_id    Id for the shop
-     * @param integer $variation_id      Integer with variation id.
      * @param integer $attribute_id Integer with attribute id.
      * @param integer $results_per_page optional returned products per page
      * @param integer $pagging_offset optional offset for pagging.
      *
      * @return array
      */
-    public function getProductsInWithVariationAttribute($credentials, $shop_id, $variation_id, $attribute_id, $results_per_page = 0, $pagging_offset = 0)
+    public function getProductsWithVariationAttributeId($credentials, $shop_id, $attribute_id, $results_per_page = 0, $pagging_offset = 0)
     {
+        $this->checkCredentials($credentials);
+        $this->_factoryWebshop($shop_id);
+        
+        
+        $gateway = new Intraface_modules_product_Attribute_Group_Gateway($this->getBucket()->get('Doctrine_Connection_Common'));
+        try {
+            $attribute_group = $gateway->findByAttributeId($attribute_id);
+        } catch (Intraface_Gateway_Exception $e) {
+            return $this->prepareResponseData(
+                array(
+                    'http_header_status' => 'HTTP/1.0 404 Not Found',
+                    'products' => array(),
+                    'attribute_group' => array()
+                )
+            );
+        }
+        
+        $gateway = new Intraface_modules_product_ProductDoctrineGateway($this->getBucket()->get('Doctrine_Connection_Common'), NULL);
+        $doctrine_products = $gateway->findByVariationAttributeId($this->processRequestData($attribute_id));
+        
+        return $this->prepareResponseData(
+            array(
+                'http_header_status' => 'HTTP/1.0 200 OK',
+                'products' => $this->createDoctrineProductsListArray($doctrine_products),
+                'attribute_group' => $this->createAttributeGroupArray($attribute_group)
+            )
+            
+        );
+    }
 
+    /**
+     * Formats array to return from product list from Doctrine
+     * 
+     * @param object $doctrine_products Doctrine_Collection
+     * @return array with products
+     */
+    private function createDoctrineProductsListArray($doctrine_products)
+    {
+        if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
+            $currencies = $currency_gateway->findAllWithExchangeRate();
+        } else {
+            $currencies = false;
+        }
+        
+        $shared_filehandler = $this->kernel->useModule('filemanager');
+        $shared_filehandler->includeFile('AppendFile.php');
+
+        $products = array();
+        $key = 0;
+        foreach($doctrine_products AS $p) {
+            $products[$key]['id'] = $p->getId();
+            $products[$key]['number'] = $p->getDetails()->getNumber();
+            $products[$key]['name'] = $p->getDetails()->getTranslation('da')->name;
+            $products[$key]['unit'] = $p->getDetails()->getUnit();
+            $products[$key]['detail_id'] = $p->getDetails()->getId();
+            $products[$key]['vat_percent'] = $p->getDetails()->getVatPercent()->getAsIso(2);
+            $products[$key]['stock'] = $p['stock'];
+            $products[$key]['has_variation'] = $p->hasVariation();
+            
+            // $products[$key]['stock_status'] = $p['stock_status'];
+            
+            $products[$key]['currency']['DKK']['price'] = $p->getDetails()->getPrice()->getAsIso(2);
+            $products[$key]['currency']['DKK']['price_incl_vat'] = $p->getDetails()->getPriceIncludingVat()->getAsIso(2);
+            $products[$key]['currency']['DKK']['before_price'] = $p->getDetails()->getBeforePrice()->getAsIso(2);
+            $products[$key]['currency']['DKK']['before_price_incl_vat'] = $p->getDetails()->getBeforePriceIncludingVat()->getAsIso(2);
+
+            if ($currencies && $currencies->count() > 0) {
+                foreach ($currencies as $currency) {
+                    $products[$key]['currency'][$currency->getType()->getIsoCode()]['price'] = $p->getDetails()->getPriceInCurrency($currency);
+                    $products[$key]['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'] = $p->getDetails()->getPriceIncludingVatInCurrency($currency);
+                    $products[$key]['currency'][$currency->getType()->getIsoCode()]['before_price'] = $p->getDetails()->getBeforePriceInCurrency($currency);
+                    $products[$key]['currency'][$currency->getType()->getIsoCode()]['before_price_incl_vat'] = $p->getDetails()->getBeforePriceIncludingVatInCurrency($currency);
+                }
+            }
+
+            $products[$key]['pictures'] = $this->getProductPictures($p);
+            
+            if($p->hasVariation() && $p->hasStock()) {
+                try {
+                    $variaton_gateway = new Intraface_modules_product_Variation_Gateway($p);
+                    $variations = $variaton_gateway->findAll();
+                } catch (Intraface_Gateway_Exception $e) {
+                    $variations = array();
+                }
+                
+                foreach($variations AS $variation) {
+                    $stock = $variation->getStock($p)->get();
+                
+                }
+                
+                /*
+                $return['variations'][] = array(
+                    'variation' => array(
+                        'id' => $variation->getId(),
+                        'detail_id' => $detail->getId(),
+                        'number' => $variation->getNumber(),
+                        'name' => $variation->getName(),
+                        'attributes' => $attributes_array,
+                        'identifier' => $attribute_string,
+                        'price_incl_vat' => $detail->getPriceIncludingVat($product)->getAsIso(2),
+                        'weight' => $product->get('weight') + $detail->getWeightDifference(2),
+                        'currency' => $variation_currency
+                    ),
+                    'stock' => $stock
+                );
+                */
+            }    
+            $key++;
+        }
+        
+        return $products;
+    }
+    
+    private function getProductPictures($product)
+    {
+        $append_file = new AppendFile($this->kernel, 'product', $product->getId());
+        $appendix_list = $append_file->getList();
+
+        $pictures = array();
+
+        if (count($appendix_list) > 0) {
+            foreach ($appendix_list AS $key => $appendix) {
+                $tmp_filehandler = new FileHandler($this->kernel, $appendix['file_handler_id']);
+                $pictures[$key]['id']                   = $appendix['file_handler_id'];
+                $pictures[$key]['original']['icon_uri'] = $tmp_filehandler->get('icon_uri');
+                $pictures[$key]['original']['name']     = $tmp_filehandler->get('file_name');
+                $pictures[$key]['original']['width']    = $tmp_filehandler->get('width');
+                $pictures[$key]['original']['height']   = $tmp_filehandler->get('height');
+                $pictures[$key]['original']['file_uri'] = $tmp_filehandler->get('file_uri');
+                $pictures[$key]['appended_file_id']     = $appendix['id'];
+
+                if ($tmp_filehandler->get('is_image')) {
+                    $tmp_filehandler->createInstance();
+                    $instances = $tmp_filehandler->instance->getList('include_hidden');
+                    foreach ($instances AS $instance) {
+                        $pictures[$key][$instance['name']]['file_uri'] = $instance['file_uri'];
+                        $pictures[$key][$instance['name']]['name']     = $instance['name'];
+                        $pictures[$key][$instance['name']]['width']    = $instance['width'];
+                        $pictures[$key][$instance['name']]['height']   = $instance['height'];
+
+                    }
+                }
+                $tmp_filehandler->__destruct();
+                unset($tmp_filehandler);
+            }
+        }
+        
+        return $pictures;
+    }
+    
+    private function createAttributeGroupArray($attribute_group)
+    {
+        foreach($attribute_group->attribute AS $attribute) {
+            $attributes[] = array(
+                'id' => $attribute->getId(),
+                'name' => $attribute->getName());
+        }
+        
+        $attribute = $attribute_group->attribute->getFirst();
+        return array(
+            'id' => $attribute_group->getId(),
+            'name' => $attribute_group->getName(),
+            'attributes' => $attributes);
     }
 
     /**

@@ -114,7 +114,10 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
         $this->hasMany('Intraface_modules_product_Product_Details as details',
             array('local' => 'id', 'foreign' => 'product_id'));
 
-        $this->hasMany('Intraface_modules_product_Variation as variation',
+        $this->hasMany('Intraface_modules_product_Variation_UniversalAttributeGroups as variation',
+            array('local' => 'id', 'foreign' => 'product_id'));
+            
+        $this->hasMany('Intraface_modules_product_Product_X_Attribute_Group as x_attribute_group',
             array('local' => 'id', 'foreign' => 'product_id'));
     }
 
@@ -155,10 +158,21 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
 
     /**
      * returns variation
+     * 
+     * @todo The variations should be loaded in the ProductGateway instead of here.
      */
     public function getVariation($id = 0)
     {
-        if ($id != 0) {
+        $gateway = new Intraface_modules_product_Variation_Gateway($this);
+        if (intval($id) > 0) {
+            return $gateway->findById($id);
+        }
+        $object = $gateway->getObject();
+        unset($gateway);
+        $object->product_id = $this->getId();
+        return $object;
+        
+        /*if ($id != 0) {
             foreach ($this->variation AS $variation) {
                 if ($variation->getId() == $id) {
                     return $variation;
@@ -170,6 +184,7 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
         $variation = $this->variation->get(NULL); // returns empty variation;
         $variation->product_id = $this->getId();
         return $variation;
+        */
     }
 
     /**
@@ -239,5 +254,62 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
     {
         $this->active_details = NULL;
         parent::refresh($depth);
+    }
+    
+    /**
+     * Set attribute for product
+     *
+     * @param integer $id     Attribute id to relate to this product
+     *
+     * @return boolean
+     */
+    public function setAttributeGroup(Intraface_modules_product_Attribute_Group $attribute_group)
+    {
+        if (!$this->hasVariation()) {
+            throw new Exception('You can not set attribute group for a product without variations!');
+        }
+        
+        $crosses = $this->x_attribute_group->getTable()
+            ->createQuery()
+            ->select('id')
+            ->where('product_id = ? AND product_attribute_group_id = ?', array($this->getId(), $attribute_group->getId()))
+            ->execute();
+        
+        if ($crosses->count() == 1) {
+            return true;
+        }
+        
+        $cross = $this->x_attribute_group->get(NULL); // returns empty object
+        $cross->product_attribute_group_id = $attribute_group->getId();
+        $cross->save();
+        
+        return true;
+    }
+    
+    /**
+     * Get all attributes related to the product
+     *
+     * @todo Rewrite product_x_attribute_group to Doctrine.
+     * @todo Add a field named attribute_number to product_x_attribute_group, to be sure
+     *       that a attribute always relates to the correct attribute number on the variation.
+     *
+     * @return array
+     */
+    public function getAttributeGroups()
+    {
+        if (!$this->hasVariation()) {
+            throw new Exception('You can not get attribute groups for a product without variations!');
+        }
+        
+        $cross = $this->x_attribute_group->get(NULL);
+        $attribute_groups = $cross->attribute_group->getTable()
+            ->createQuery()
+            ->select('Intraface_modules_product_Attribute_Group.*')
+            ->innerJoin('Intraface_modules_product_Attribute_Group.x_product attribute_group_x_product')
+            ->where('attribute_group_x_product.product_id = ?', $this->getId())
+            ->orderBy('Intraface_modules_product_Attribute_Group.id')
+            ->execute();
+   
+        return $attribute_groups;
     }
 }

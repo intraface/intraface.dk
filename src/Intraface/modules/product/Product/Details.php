@@ -273,7 +273,7 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
      */
     public function getBeforePriceIncludingVat()
     {
-        return new Ilib_Variable_Float($this->getBeforePrice()->getAsIso(2) * (1 + $this->getVatPercent()/100));
+        return new Ilib_Variable_Float($this->getBeforePrice()->getAsIso(2) * (1 + $this->getVatPercent()->getAsIso()/100));
     }
 
     /**

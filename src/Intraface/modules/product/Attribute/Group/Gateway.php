@@ -1,11 +1,36 @@
 <?php
-
+/**
+ * Gateway to find Attribute groups.
+ * 
+ * @todo Should be renamed Intraface_modules_product_AttributeGroupGateway
+ * 
+ * @author sune
+ *
+ */
 class Intraface_modules_product_Attribute_Group_Gateway
 {
+    /**
+     * Doctrine_Table object
+     * @var object
+     */
+    private $table;
     
-    public function __construct() 
+    /**
+     * Constructor
+     * 
+     * @todo $doctrine should not be optional
+     * 
+     * @param object $doctrine Doctrine_Connection 
+     * @return void
+     */
+    public function __construct($doctrine = NULL) 
     {
-        
+        /**
+         * @todo remove id and make $doctrine required 
+         */
+        if($doctrine != NULL) {
+            $this->table = $doctrine->getTable('Intraface_modules_product_Attribute_Group');
+        }
     }
     
     /**
@@ -19,6 +44,29 @@ class Intraface_modules_product_Attribute_Group_Gateway
             ->select('id, name')
             ->from('Intraface_modules_product_Attribute_Group')
             ->orderBy('id')->execute();
+    }
+    
+    /**
+     * Returns attribute group from attribute id
+     * 
+     * @param integer $id attribute id
+     * @return object Doctrine_Record
+     */
+    public function findByAttributeId($id)
+    {
+        
+        $groups = $this->table->createQuery()
+            ->select('id, name')
+            ->innerJoin('Intraface_modules_product_Attribute_Group.attribute attribute')
+            ->where('attribute.id = ?', (int)$id)
+            ->orderBy('id')
+            ->execute();
+        
+        if ($groups->count() == 0) {
+            throw new Intraface_Gateway_Exception('Unable to find group from attribute id "'.$id.'"');
+        }
+        return $groups->getFirst();
+            
     }
     
     /**
@@ -52,6 +100,6 @@ class Intraface_modules_product_Attribute_Group_Gateway
         return $groups->getFirst();
     }
     
+    
+    
 }
-
-?>

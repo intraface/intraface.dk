@@ -2,6 +2,8 @@
 /**
  * Handles attribute groups to products
  *
+ * @todo Should be renamed Intraface_modules_product_AttributeGroup
+ *
  * @package  Intraface
  * @author   Sune Jensen <sj@sunet.dk>
  * @since    
@@ -25,6 +27,10 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
         
         $this->hasMany('Intraface_modules_product_Attribute as attribute', 
             array('local' => 'id', 'foreign' => 'attribute_group_id')
+        );
+        
+        $this->hasMany('Intraface_modules_product_Product_X_Attribute_Group as x_product', 
+            array('local' => 'id', 'foreign' => 'product_attribute_group_id')
         );
         
     }
