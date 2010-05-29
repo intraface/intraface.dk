@@ -2,6 +2,8 @@
 /**
  * Handles attributes to products
  *
+ * @todo should be renamed Intraface_modules_product_AttributeGroup_Attribute
+ *
  * @package  Intraface
  * @author   
  * @since    

@@ -139,10 +139,10 @@ class ProductDetail extends Intraface_Standard
         $validator->isNumeric($array_var['do_show'], 'Fejl i do_show', 'allow_empty');
         $validator->isNumeric($array_var['vat'], 'Fejl i vat');
         $validator->isNumeric($array_var['pic_id'], 'Fejl i billedid', 'allow_empty');
-        $validator->isNumeric($array_var['weight'], 'Fejl i v�gt - skal v�re et helt tal', 'allow_empty');
+        $validator->isNumeric($array_var['weight'], 'Fejl i vægt - skal være et helt tal', 'allow_empty');
 
         if (isset($array_var['price'])) $validator->isNumeric($array_var['price'], 'Fejl i pris', 'allow_empty');
-        if (isset($array_var['before_price'])) $validator->isNumeric($array_var['before_price'], 'Fejl i f�rpris', 'allow_empty');
+        if (isset($array_var['before_price'])) $validator->isNumeric($array_var['before_price'], 'Fejl i førpris', 'allow_empty');
 
         if ($this->product->error->isError()) {
             return false;
