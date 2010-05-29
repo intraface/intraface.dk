@@ -961,7 +961,7 @@ class Debtor extends Intraface_Standard
                 $list[$i]['city'] = $debtor->contact->address->get('city');
 
             }
-            $debtor->__desctruct();
+            $debtor->destruct();
             unset($debtor);
             $i++;
 
