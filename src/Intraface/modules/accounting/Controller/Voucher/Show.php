@@ -8,6 +8,14 @@ class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
         $this->template = $template;
     }
 
+    function dispatch()
+    {
+        if ($this->getVoucher()->get('id') == 0) {
+            throw new k_PageNotFound();
+        }
+        return parent::dispatch();
+    }
+
     protected function map($name)
     {
         if ($name == 'post') {

@@ -32,14 +32,31 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
         $this->template = $template;
     }
 
-    function getError()
+    function dispatch()
     {
-        return $error = new Intraface_Error;
+        if ($this->getVatPeriod()->get('id') == 0) {
+            throw new k_PageNotFound();
+        }
+        return parent::dispatch();
     }
 
-    function getYear()
+    function renderHtml()
     {
-        return $this->context->getYear();
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/vat/show');
+        return $smarty->render($this);
+    }
+
+    function GET()
+    {
+     	$vat_period = new VatPeriod($this->getYear(), $this->name());
+       	$vat_period->loadAmounts();
+       	$account_vat_in = $vat_period->get('account_vat_in');
+       	$account_vat_out = $vat_period->get('account_vat_out');
+       	$account_vat_abroad = $vat_period->get('account_vat_abroad');
+       	$saldo_rubrik_a = $vat_period->get('saldo_rubrik_a');
+       	$saldo_total = $vat_period->get('saldo_total');
+
+        return parent::GET();
     }
 
     function postForm()
@@ -76,25 +93,15 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
         }
     }
 
-    function renderHtml()
+    function getError()
     {
-        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/vat/show');
-        return $smarty->render($this);
+        return $error = new Intraface_Error;
     }
 
-    function GET()
+    function getYear()
     {
-     	$vat_period = new VatPeriod($this->getYear(), $this->name());
-       	$vat_period->loadAmounts();
-       	$account_vat_in = $vat_period->get('account_vat_in');
-       	$account_vat_out = $vat_period->get('account_vat_out');
-       	$account_vat_abroad = $vat_period->get('account_vat_abroad');
-       	$saldo_rubrik_a = $vat_period->get('saldo_rubrik_a');
-       	$saldo_total = $vat_period->get('saldo_total');
-
-        return parent::GET();
+        return $this->context->getYear();
     }
-
 
     function getVoucher()
     {
@@ -104,7 +111,6 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
     function getVatPeriod()
     {
         return $vat_period = new VatPeriod($this->getYear(), $this->name());
-
     }
 
     function getKernel()

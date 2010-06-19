@@ -8,6 +8,14 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
         $this->template = $template;
     }
 
+    function dispatch()
+    {
+        if ($this->getPost()->get('id') == 0) {
+            throw new k_PageNotFound();
+        }
+        return parent::dispatch();
+    }
+
     function renderHtml()
     {
         return 'Left blank intentionally';
@@ -19,7 +27,7 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
 
     function renderHtmlEdit()
     {
-        $post = Post::factory($this->getYear(), (int)$this->name());
+        $post = $this->getPost();
         $values = $post->get();
         $values['date'] = $post->get('date_dk');
         $values['debet'] = $post->get('debet');
@@ -31,7 +39,7 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
 
     function renderHtmlDelete()
     {
-        $post = Post::factory($this->getYear(), (int)$this->name());
+        $post = $this->getPost();
         $post->delete();
         return new k_SeeOther($this->url('../../'));
     }
@@ -41,7 +49,7 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
         $year = $this->getYear();
 
         // tjek om debet og credit account findes
-        $post = Post::factory($this->getYear(), (int)$this->name());
+        $post = $this->getPost();
         $account = Account::factory($this->getYear(), $_POST['account']);
 
         $date = new Intraface_Date($_POST['date']);
@@ -67,29 +75,18 @@ class Intraface_modules_accounting_Controller_Post_Show extends k_Component
         return $this->render();
     }
 
-    function getAccount()
+    function getPost()
     {
-    	return new Account($this->getYear());
-    }
-
-    function getVatPeriod()
-    {
-    	return new VatPeriod($$this->getYear());
-    }
-
-    function getYearGateway()
-    {
-        $gateway = $this->context->getYearGateway();
-        return $gateway;
-    }
-
-    function getKernel()
-    {
-        return $this->context->getKernel();
+        return $post = Post::factory($this->getYear(), (int)$this->name());
     }
 
     function getYear()
     {
         return $this->context->getYear();
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

@@ -9,6 +9,14 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
         $this->template = $template;
     }
 
+    function dispatch()
+    {
+        if ($this->getAccount()->get('id') == 0) {
+            throw new k_PageNotFound();
+        }
+        return parent::dispatch();
+    }
+
     function renderHtml()
     {
         $account = $this->getAccount();
