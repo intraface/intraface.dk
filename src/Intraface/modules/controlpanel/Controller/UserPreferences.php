@@ -39,16 +39,6 @@ class Intraface_modules_controlpanel_Controller_UserPreferences extends k_Compon
         return $smarty->render($this);
     }
 
-    function getKernel()
-    {
-    	return $this->context->getKernel();
-    }
-
-    function getModules()
-    {
-        return $this->getKernel()->getModules();
-    }
-
     function postForm()
     {
         /*
@@ -117,6 +107,16 @@ class Intraface_modules_controlpanel_Controller_UserPreferences extends k_Compon
             return $this->error;
         }
         return ($this->error = new Intraface_Error());
+    }
+
+    function getKernel()
+    {
+    	return $this->context->getKernel();
+    }
+
+    function getModules()
+    {
+        return $this->getKernel()->getModules();
     }
 }
 
