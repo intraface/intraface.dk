@@ -8,39 +8,34 @@ class Intraface_modules_controlpanel_Controller_ChangePassword extends k_Compone
         $this->template = $template;
     }
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
     function renderHtml()
     {
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/changepassword');
         return $smarty->render($this);
     }
 
+    function putForm()
+    {
+    	if ($this->getUser()->updatePassword($_POST['old_password'], $_POST['new_password'], $_POST['repeat_password'])) {
+    		return new k_SeeOther($this->url('../'));
+    	}
+    	return $this->render();
+    }
+
     function getValues()
     {
-        $translation = $this->getKernel()->getTranslation('controlpanel');
-
-        $user = new Intraface_User($this->getKernel()->user->get('id'));
-        $value = $user->get();
-        $address_value = $user->getAddress()->get();
+        $value = $this->getUser()->get();
+        $address_value = $this->getUser()->getAddress()->get();
         return array_merge($value, $address_value);
     }
 
-    function putForm()
+    function getKernel()
     {
-    	$user = new Intraface_User($this->getKernel()->user->get('id'));
-
-    	if ($user->updatePassword($_POST['old_password'], $_POST['new_password'], $_POST['repeat_password'])) {
-    		return new k_SeeOther($this->url('../'));
-    	}
-    	return render();
+        return $this->context->getKernel();
     }
 
     function getUser()
     {
-        return  new Intraface_User($this->getKernel()->user->get('id'));
+        return new Intraface_User($this->getKernel()->user->get('id'));
     }
 }
