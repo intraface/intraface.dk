@@ -22,7 +22,7 @@ class Intraface_Controller_SwitchIntranet extends k_Component
     {
         $this->document->setTitle('Switch intranet');
 
-        if ($this->getKernel()->user->hasIntranetAccess($this->query('id'))) {
+        if ($this->query('id') AND $this->getKernel()->user->hasIntranetAccess($this->query('id'))) {
             // @todo make sure a new user is stored in Auth, otherwise
             //       the access to the modules are not correctly maintained.
             //       Right now I just clear permisions when getting the new user
