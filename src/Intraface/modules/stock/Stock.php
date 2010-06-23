@@ -118,11 +118,12 @@ class Stock extends Intraface_Standard
         $this->value['for_sale'] = $this->value['actual_stock'] - $this->value['reserved'];
     }
 
-    /*
+    /**
      * Til regulering af stock
      *
-     * @input: array: description, quantity
-     * @return: boolean true or false
+     * @param array $input description, quantity
+     *
+     * @return boolean
      */
     function regulate($input)
     {
