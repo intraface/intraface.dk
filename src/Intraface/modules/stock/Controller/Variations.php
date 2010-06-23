@@ -33,7 +33,7 @@ class Intraface_modules_stock_Controller_Variations extends k_Component
                 if (!$variation->getId()) {
                     throw new Exception('Invalid variation.');
                 }
-                if ($value > 0) {
+                if ($value <> 0) {
                     if (!$variation->getStock($this->getProduct())->regulate(array('quantity' => $value, 'description' => 'Batch edited'))) {
                         echo $this->getProduct()->error->view();
                     }
