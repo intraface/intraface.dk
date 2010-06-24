@@ -1,7 +1,10 @@
 
 function parseUrlIdentifier(string) {
     
-    // space replaced with - 
+	// trim string
+	string = string.trim();
+    
+	// space replaced with - 
     string = string.replace(/\s/g, '-'); 
     
     // to lower string
