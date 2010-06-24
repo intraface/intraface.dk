@@ -8,9 +8,9 @@ function parseUrlIdentifier(string) {
     string = string.toLowerCase();
     
     // danish characters
-    string = string.replace(/ø/g, 'oe'); 
-    string = string.replace(/æ/g, 'ae'); 
-    string = string.replace(/å/g, 'aa');
+    string = string.replace(/Ã¸/g, 'oe'); 
+    string = string.replace(/Ã¦/g, 'ae'); 
+    string = string.replace(/Ã¥/g, 'aa');
     
     var return_string = '';
     var pattern = /\w|-|_/g;
