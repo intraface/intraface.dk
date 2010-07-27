@@ -14,5 +14,3 @@ if (!$procurement->any()):
         'module' => $procurement_module->getName()
     );
 endif;
-
-?>
