@@ -233,7 +233,7 @@ class Intraface_modules_contact_Controller_Show extends k_Component
             return new k_SeeOther($this->url(null, array('flare' => 'Could not queue the email')));
 
         } elseif (!empty($_POST['new_password'])) {
-            if ($contact->generatePassword()) {
+            if ($this->getContact()->generatePassword()) {
                 return new k_SeeOther($this->url(null, array('flare' => 'New code has been generated')));
             }
         }
