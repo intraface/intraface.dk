@@ -47,48 +47,41 @@ class Intraface_modules_contact_Controller_Show extends k_Component
     function postForm()
     {
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
+        $contact = $this->getContact();
 
         if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
-            $contact = new Contact($this->getKernel(), $_POST['id']);
 
             $eniro = new Services_Eniro();
             $value = $_POST;
 
             if ($oplysninger = $eniro->query('telefon', $_POST['eniro_phone'])) {
-                // skal kun bruges s� l�nge vi ikke er utf8
-                // $oplysninger = array_map('utf8_decode', $oplysninger);
                 $address['name'] = $oplysninger['navn'];
                 $address['address'] = $oplysninger['adresse'];
                 $address['postcode'] = $oplysninger['postnr'];
                 $address['city'] = $oplysninger['postby'];
                 $address['phone'] = $_POST['eniro_phone'];
             }
-        } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-            $contact = new Contact($this->getKernel(), $this->name());
-
-            // checking if similiar contacts exists
-            if (!empty($similar_contacts) AND count($similar_contacts) > 0 AND empty($_POST['force_save'])) {
-            } elseif ($id = $contact->save($_POST)) {
-
-                // $redirect->addQueryString('contact_id='.$id);
-                if ($redirect->get('id') != 0) {
-                    $redirect->setParameter('contact_id', $id);
-                }
-                return new k_SeeOther($redirect->getRedirect($this->url()));
-
-                //$contact->lock->unlock_post($id);
-            }
-
-            $value = $_POST;
-            $address = $_POST;
-            $delivery_address = array();
-            $delivery_address['name'] = $_POST['delivery_name'];
-            $delivery_address['address'] = $_POST['delivery_address'];
-            $delivery_address['postcode'] = $_POST['delivery_postcode'];
-            $delivery_address['city'] = $_POST['delivery_city'];
-            $delivery_address['country'] = $_POST['delivery_country'];
         }
+
+        // checking if similiar contacts exists
+        if (!empty($similar_contacts) AND count($similar_contacts) > 0 AND empty($_POST['force_save'])) {
+        } elseif ($id = $contact->save($_POST)) {
+
+            // $redirect->addQueryString('contact_id='.$id);
+            if ($redirect->get('id') != 0) {
+                $redirect->setParameter('contact_id', $id);
+            }
+            return new k_SeeOther($redirect->getRedirect($this->url()));
+        }
+
+        $value = $_POST;
+        $address = $_POST;
+        $delivery_address = array();
+        $delivery_address['name'] = $_POST['delivery_name'];
+        $delivery_address['address'] = $_POST['delivery_address'];
+        $delivery_address['postcode'] = $_POST['delivery_postcode'];
+        $delivery_address['city'] = $_POST['delivery_city'];
+        $delivery_address['country'] = $_POST['delivery_country'];
 
         return $this->render();
     }
@@ -207,7 +200,6 @@ class Intraface_modules_contact_Controller_Show extends k_Component
     function putForm()
     {
         $contact_module = $this->getKernel()->module("contact");
-        $translation = $this->getKernel()->getTranslation('contact');
 
         if (!empty($_POST['send_email'])) {
             // opretter en kode, hvis kunden ikke har en kode
@@ -221,7 +213,7 @@ class Intraface_modules_contact_Controller_Show extends k_Component
             $this->getKernel()->useShared('email');
             $email = new Email($this->getKernel());
             if (!$email->save(
-            array(
+                array(
                     'subject' => 'Loginoplysninger',
                     'body' => $this->getKernel()->setting->get('intranet', 'contact.login_email_text') . "\n\n" . $this->getContact()->getLoginUrl() . "\n\nMed venlig hilsen\nEn venlig e-mail-robot\n" . $this->getKernel()->intranet->get('name'),
                     'contact_id' => $this->getContact()->get('id'),
