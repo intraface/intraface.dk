@@ -2,9 +2,6 @@
 /**
  * Queues and saves e-mails
  *
- * Must have an upper limit for how many emails are sent an hour, as Dreamhost only
- * accepts sending 200 mails.
- *
  * Emails must be connected to the module from which they are saved, so you are always
  * able to find an email.
  *
@@ -24,18 +21,7 @@ class Email extends Intraface_Standard
     public $contact;
     public $type;
     protected $dbquery;
-
-    /**
-     * Bruges til at sætte den øvre grænse for hvor mange e-mails der sendes i timen
-     */
-    //public $allowed_limit = 180;
-
-    /**
-     * Bruges til at sætte en buffer i systemet, så den automatiske udsendelse af
-     * emails der er bagefter ikke optager hele kapaciteten for udsendelse af e-mails.
-     */
-
-    //public $system_buffer = 50;
+    protected $db;
 
     /**
      * Constructor
@@ -63,7 +49,7 @@ class Email extends Intraface_Standard
             8 => 'newsletter',
             9 => 'contact',
             10 => 'electronic_invoice',
-            11 => 'email_to_search',  // kan ikke helt huske hvad den her er?
+            11 => 'email_to_search',
             12 => 'webshop',
             13 => 'onlinepayment'
         );
@@ -77,19 +63,6 @@ class Email extends Intraface_Standard
         if ($this->id > 0) {
             $this->load();
         }
-    }
-
-    /**
-     * @return DBQuery object
-     */
-    function getDBQuery()
-    {
-        if ($this->dbquery) {
-            return $this->dbquery;
-        }
-        $this->dbquery = new Intraface_DBQuery($this->kernel, "email", "email.intranet_id = ".$this->kernel->intranet->get("id"));
-        $this->dbquery->useErrorObject($this->error);
-        return $this->dbquery;
     }
 
     function getKernel()
@@ -289,26 +262,6 @@ class Email extends Intraface_Standard
         $db = new DB_Sql;
         $db->query("UPDATE email SET status = 3, date_sent = NOW() WHERE id = " . $this->id);
         return true;
-
-    }
-
-    /**
-     * Checks how many emails has been sent the last hour
-     *
-     * @return integer with numbers of e-mails sent
-     */
-    function sentThisHour()
-    {
-        $gateway = new Intraface_shared_email_EmailGateway($this->kernel);
-        return $gateway->sentThisHour();
-        /*
-        $db = new DB_Sql;
-        $db->query("SELECT COUNT(*) AS antal FROM email WHERE DATE_SUB(NOW(), INTERVAL 1 HOUR) < date_sent");
-        if (!$db->nextRecord()) {
-            return 0;
-        }
-        return $db->f('antal');
-        */
     }
 
     /**
@@ -318,148 +271,36 @@ class Email extends Intraface_Standard
      */
     function isReadyToSend()
     {
-
         if ($this->id == 0) {
             $this->error->set('the message can not be send because it has no id');
-            return 0;
+            return false;
         }
         if ($this->get('from_email') == '' && (!isset($this->kernel->intranet->address) || $this->kernel->intranet->address->get('email') == '')) {
             $this->error->set('you need to fill in an e-mail address for the intranet, to be able to send mails');
-            return 0;
+            return false;
         }
 
-        return 1;
+        return true;
     }
 
-    /**
-     * Hvis der er en aktuel e-mail puttes den i outbox'en.
-     * Derefter sendes alle e-mails fra outboxen, s� l�nge der ikke er sendt
-     * over den timelige gr�nse.
-     *
-     * @param string $what_to_do Can be either send og queue
-     *
-     * @return boolean
-     */
-    function send($phpmailer, $what_to_do = 'send')
+    function queue()
     {
-        if (!is_object($phpmailer)) {
-            throw new Exception('A valid mailer is not provided to the send method');
-        }
-
         if (!$this->isReadyToSend()) {
             return false;
         }
 
         $db = new DB_Sql;
-        $db->query('SET NAMES utf8');
-
-        //
-        // Putter e-mailen i outboxen
-        // status 2 er outbox
-        //
+        // Putter e-mailen i outboxen (status = 2)
         $db->query("UPDATE email SET status = 2 WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = " . $this->id);
-
-        if ($what_to_do == 'queue') {
-            return 1;
-        }
-
-        //
-        // S�rger for at tjekke om der er sendt for mange e-mails. Hvis der er
-        // returneres blot, og s� sendes e-mailen senere. Vi lader som om det gik godt.
-        //
-
-        $gateway = new Intraface_shared_email_EmailGateway($this->kernel);
-
-        $sent_this_hour = $gateway->sentThisHour();
-
-        if ($sent_this_hour >= $gateway->allowed_limit) {
-            $this->error->set('Der er i øjeblikket kø i e-mail-systemet. Vi sender så hurtigt som muligt.');
-            return true;
-        }
-
-        // Make sure it is cleared from earlier use.
-        $phpmailer->ClearReplyTos();
-        $phpmailer->ClearAllRecipients();
-        $phpmailer->ClearAttachments();
-
-        // Sender
-        if ($this->get('from_email')) {
-            $phpmailer->From = $this->get('from_email');
-            if ($this->get('from_name')) {
-                $phpmailer->FromName = $this->get('from_name');
-            } else {
-                $phpmailer->FromName = $this->get('from_email');
-            }
-        } else { // Standardafsender
-            $phpmailer->From = $this->kernel->intranet->address->get('email');
-            $phpmailer->FromName = $this->kernel->intranet->address->get('name');
-        }
-
-        $phpmailer->Sender = $phpmailer->From;
-        $phpmailer->AddReplyTo($phpmailer->From);
-
-        // Reciever
-        $contact = $this->getContact();
-        if ($this->get('contact_id') == 0 OR !is_object($contact)) {
-            $this->error->set('Der kunne ikke sendes e-mail til email #' . $this->get('id') . ' fordi der ikke var nogen kunde sat');
-        }
-
-        if ($contact->get('type') == 'corporation' && $this->get('contact_person_id') != 0) {
-            $contact->loadContactPerson($this->get('contact_person_id'));
-            $validator = new Intraface_Validator($this->error);
-            if ($validator->isEmail($contact->contactperson->get('email'))) {
-                $phpmailer->AddAddress($contact->contactperson->get('email'), $contact->contactperson->get('name'));
-            } else {
-                $phpmailer->AddAddress($contact->address->get('email'), $contact->address->get('name'));
-            }
-        } else {
-            $phpmailer->AddAddress($contact->address->get('email'), $contact->address->get('name'));
-        }
-
-        if ($this->get('bcc_to_user')) {
-            $phpmailer->addBCC($this->kernel->user->getAddress()->get('email'), $this->kernel->user->getAddress()->get('name'));
-        }
-
-        // E-mail
-        $phpmailer->Subject = $this->get('subject');
-        $phpmailer->Body    = $this->get('body');
-
-        $attachments = $this->getAttachments();
-
-        if (is_array($attachments) AND count($attachments) > 0) {
-            $this->kernel->useModule('filemanager');
-            foreach ($attachments AS $file) {
-
-                $filehandler = new FileHandler($this->kernel, $file['id']);
-                // lille hack med at s�tte uploadpath p�
-
-                if (!$phpmailer->addAttachment($filehandler->getUploadPath() . $filehandler->get('server_file_name'), $file['filename'])) {
-                    $this->error->set('Kunne ikke vedhæfte filen til e-mailen');
-                }
-            }
-        }
-
-        if ($this->error->isError()) {
-            return 0;
-        }
-
-        // Sender e-mailen
-        if (!$phpmailer->Send()) {
-            $this->error->set('Der blev ikke sendt en e-mail til ' . $this->contact->address->get('email'));
-            $this->saveErrorMsg($phpmailer->ErrorInfo);
-        } else {
-            $this->setIsSent();
-            $this->saveErrorMsg('success');
-        }
-
-        $phpmailer->clearAddresses();
-
-        return 1;
+        return true;
     }
 
     function getTo()
     {
         $contact = $this->getContact();
+        if ($this->get('contact_id') == 0 OR !is_object($contact)) {
+            $this->error->set('Der kunne ikke sendes e-mail til email #' . $this->get('id') . ' fordi der ikke var nogen kunde sat');
+        }
         if ($contact->get('type') == 'corporation' && $this->get('contact_person_id') != 0) {
             $contact->loadContactPerson($this->get('contact_person_id'));
             $validator = new Intraface_Validator($this->error);
@@ -495,7 +336,6 @@ class Email extends Intraface_Standard
     {
         return $this->get('subject');
     }
-
 
     /**
      * Der er ingen grund til at man kan �ndre en attachment
@@ -550,47 +390,6 @@ class Email extends Intraface_Standard
         return $file;
     }
 
-    /**
-     * @deprecated
-     *
-     * @todo Denne funktion b�r nok erstatte det meste af funktionen send(), s� send()
-     *       netop kun sender en e-mail!
-     *
-     * @return boolean
-     */
-    function sendAll($mailer)
-    {
-        $gateway = new Intraface_shared_email_EmailGateway($this->getKernel());
-        return $gateway->sendAll($mailer);
-        /*
-        if (!is_object($mailer)) {
-            throw new Exception('A valid mailer object is needed');
-        }
-
-        $sent_this_hour = $this->sentThisHour();
-
-        $limit_query = abs($this->allowed_limit-$sent_this_hour-$this->system_buffer);
-
-        $sql = "SELECT id
-                FROM email
-                WHERE status = 2
-                    AND date_deadline <= NOW()
-                    AND intranet_id = " . $this->kernel->intranet->get('id') . "
-                    AND contact_id > 0
-                LIMIT " . $limit_query;
-        $db = new DB_Sql;
-        $db->query($sql);
-
-        while ($db->nextRecord()) {
-            $email = new Email($this->kernel, $db->f('id'));
-            // could be good, but stops sending the rest of the emails if one has an error.
-            // $email->error = &$this->error;
-            $email->send($mailer);
-        }
-        return 1;
-		*/
-    }
-
     function delete()
     {
         if ($this->get('status') == 'sent' OR $this->id == 0) {
@@ -601,54 +400,38 @@ class Email extends Intraface_Standard
         return 1;
     }
 
-
+    /**
+     * @deprecated
+     *
+     * @return array
+     */
     function getList()
     {
         $gateway = new Intraface_shared_email_EmailGateway($this->getKernel());
         return $gateway->getAll();
-
-        /*
-        $db = new DB_Sql;
-        $this->getDBQuery()->setSorting("email.date_created DESC");
-        $db = $this->getDBQuery()->getRecordset("email.id, email.subject, email.status, email.contact_id", "", false);
-        $i = 0;
-        $list = array();
-        while ($db->nextRecord()) {
-            $list[$i]['id'] = $db->f('id');
-            $list[$i]['subject'] = $db->f('subject');
-            $list[$i]['status'] = $this->status[$db->f('status')];
-
-            if ($db->f('contact_id') == 0) {
-                $this->error->set('Kan ikke finde #' . $db->f('id') . ' fordi den ikke har noget kontakt_id');
-                continue;
-            }
-            $this->kernel->useModule('contact');
-            $contact = new Contact($this->kernel, $db->f('contact_id'));
-            if (!is_object($contact->address)) continue;
-            $list[$i]['contact_name'] = $contact->address->get('name');
-            $list[$i]['contact_id'] = $contact->get('id');
-            $i++;
-        }
-        return $list;
-    	*/
     }
 
     /**
+     * @deprecated
+     *
      * @return integer of how many are in queue ot be sent
      */
     function countQueue()
     {
         $gateway = new Intraface_shared_email_EmailGateway($this->getKernel());
         return $gateway->countQueue();
+    }
 
-        /*
-        $db = new DB_Sql;
-        $db->query("SELECT COUNT(*) AS antal FROM email WHERE status = 2 AND intranet_id = " . $this->kernel->intranet->get('id'));
-        $this->value['outbox'] = 0;
-        if ($db->nextRecord()) {
-            $this->value['outbox'] = $db->f('antal');
-        }
-        return $this->value['outbox'];
-        */
+    /**
+     * Checks how many emails has been sent the last hour
+     *
+     * @deprecated
+     *
+     * @return integer with numbers of e-mails sent
+     */
+    function sentThisHour()
+    {
+        $gateway = new Intraface_shared_email_EmailGateway($this->kernel);
+        return $gateway->sentThisHour();
     }
 }
