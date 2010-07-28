@@ -64,6 +64,7 @@ class Intraface_modules_product_Controller_Related extends k_Component
         $product->getDBQuery()->setExtraUri("&amp;id=".(int)$this->context->name());
         $product->getDBQuery()->usePaging("paging");
         $product->getDBQuery()->storeResult("use_stored", "related_products", "sublevel");
+        $product->getDBQuery()->setUri($this->url('.'));
 
         $list = $product->getList();
 
@@ -122,6 +123,7 @@ class Intraface_modules_product_Controller_Related extends k_Component
         $product->getDBQuery()->setExtraUri("&amp;id=".(int)$this->context->name());
         $product->getDBQuery()->usePaging("paging");
         $product->getDBQuery()->storeResult("use_stored", "related_products", "sublevel");
+        $product->getDBQuery()->setUri($this->url('.'));
 
         return $product;
     }
