@@ -2,8 +2,9 @@
 function parseUrlIdentifier(string) {
     
 	// trim string
-	string = string.trim();
-    
+	string = string.replace(/^\s+/, '');
+	string = string.replace(/\s+$/, '');
+	
 	// space replaced with - 
     string = string.replace(/\s/g, '-'); 
     
