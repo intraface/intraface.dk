@@ -220,7 +220,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         $this->_factoryWebshop($shop_id);
         
         
-        $gateway = new Intraface_modules_product_Attribute_Group_Gateway($this->getBucket()->get('Doctrine_Connection_Common'));
+        $gateway = new Intraface_modules_product_Attribute_Group_Gateway($this->getDoctrine());
         try {
             $attribute_group = $gateway->findByAttributeId($attribute_id);
         } catch (Intraface_Gateway_Exception $e) {
@@ -233,7 +233,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
             );
         }
         
-        $gateway = new Intraface_modules_product_ProductDoctrineGateway($this->getBucket()->get('Doctrine_Connection_Common'), NULL);
+        $gateway = new Intraface_modules_product_ProductDoctrineGateway($this->getDoctrine(), NULL);
         $doctrine_products = $gateway->findByVariationAttributeId($this->processRequestData($attribute_id));
         
         return $this->prepareResponseData(
@@ -1253,5 +1253,10 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
             throw new XML_RPC2_FaultException('Could not find shop', 1);
         }
         $this->webshop = new Intraface_modules_shop_Coordinator($this->kernel, $shop, $this->credentials['session_id']);
+    }
+    
+    private function getDoctrine()
+    {
+        return $this->doctrine;
     }
 }
