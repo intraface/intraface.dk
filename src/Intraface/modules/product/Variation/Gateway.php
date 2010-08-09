@@ -141,6 +141,46 @@ class Intraface_modules_product_Variation_Gateway
      */
     public function findAll() {
         
+        $query = $this->findAllQuery();
+        
+        $collection = $query->execute();
+        $query->free(true);
+        
+        if (!$collection || $collection->count() == 0) {
+            throw new Intraface_Gateway_Exception('Unable to find variation');
+        }
+        
+        return $collection;
+    }
+    
+    /**
+     * Finds all variations for product with given attribute
+     * 
+     * @return object Doctrine_Collection
+     */
+    public function findWithAttributeId($attribute_id) {
+        
+        $query = $this->findAllQuery();
+        
+        
+        if (count($this->groups) == 2) {
+            $query = $query->addWhere('a1_attribute.id = ? OR a2_attribute.id = ?', array($attribute_id, $attribute_id));
+        } else {
+            $query = $query->addWhere('a1_attribute.id = ?', $attribute_id);
+        }
+        
+        $collection = $query->execute();
+        $query->free(true);
+        
+        if (!$collection || $collection->count() == 0) {
+            throw new Intraface_Gateway_Exception('Unable to find variation');
+        }
+        
+        return $collection;
+    }
+    
+    private function findAllQuery()
+    {
         $query = $this->variation->getTable()->createQuery();
         
         $select = get_class($this->variation).'.*, detail.*, a1.*, a1_attribute.*, a1_attribute_group.*';
@@ -163,13 +203,8 @@ class Intraface_modules_product_Variation_Gateway
         $query = $query->where(get_class($this->variation).'.product_id = ?', $this->product->getId());
         $query = $query->addOrderBy('number, detail.date_created DESC');
         
-        $collection = $query->execute();
-        $query->free(true);
-        
-        if (!$collection || $collection->count() == 0) {
-            throw new Intraface_Gateway_Exception('Unable to find variation');
-        }
-        
-        return $collection;
-    } 
+        return $query;
+    }
+
+    
 }

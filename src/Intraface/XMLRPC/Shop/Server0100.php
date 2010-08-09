@@ -239,7 +239,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         return $this->prepareResponseData(
             array(
                 'http_header_status' => 'HTTP/1.0 200 OK',
-                'products' => $this->createDoctrineProductsListArray($doctrine_products),
+                'products' => $this->createDoctrineProductsListArray($doctrine_products, $attribute_id),
                 'attribute_group' => $this->createAttributeGroupArray($attribute_group)
             )
             
@@ -252,7 +252,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
      * @param object $doctrine_products Doctrine_Collection
      * @return array with products
      */
-    private function createDoctrineProductsListArray($doctrine_products)
+    private function createDoctrineProductsListArray($doctrine_products, $attribute_id = NULL)
     {
         if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
             $currencies = $currency_gateway->findAllWithExchangeRate();
@@ -293,21 +293,24 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
             $products[$key]['pictures'] = $this->getProductPictures($p);
             
-            if($p->hasVariation() && $p->hasStock()) {
+            if($p->hasVariation() && $p->hasStock() && $attribute_id != NULL) {
                 try {
                     $variaton_gateway = new Intraface_modules_product_Variation_Gateway($p);
-                    $variations = $variaton_gateway->findAll();
+                    $variations = $variaton_gateway->findWithAttributeId($attribute_id);
                 } catch (Intraface_Gateway_Exception $e) {
                     $variations = array();
                 }
                 
-                foreach($variations AS $variation) {
-                    $stock = $variation->getStock($p)->get();
+                $stub_product = new Intraface_XMLRPC_Shop_Server0100_Product($p, $this->webshop->kernel);
+                $products[$key]['attribute_stock_for_sale'] = 0;
                 
+                foreach($variations AS $variation) {
+                    $stock = $variation->getStock($stub_product)->get();
+                    $products[$key]['attribute_stock_for_sale'] += $stock['for_sale'];
                 }
                 
-                /*
-                $return['variations'][] = array(
+                
+                /*$return['variations'][] = array(
                     'variation' => array(
                         'id' => $variation->getId(),
                         'detail_id' => $detail->getId(),
@@ -1258,5 +1261,36 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
     private function getDoctrine()
     {
         return $this->doctrine;
+    }
+}
+
+/**
+ * Stub class used to serve Stock which expects old implementation of product.
+ * @author sune
+ *
+ */
+class Intraface_XMLRPC_Shop_Server0100_Product {
+    
+    public $kernel;
+    private $product;
+    
+    public function __construct($product, $kernel)
+    {
+        $this->kernel = $kernel;
+        $this->product = $product;
+    }
+    
+    public function get($value)
+    {
+        if($value == 'id') {
+            return $this->getId();
+        }
+        
+        throw new Exception('Value '.$value.' not implemented!');
+    }
+    
+    public function getId()
+    {
+        return $this->product->getId();
     }
 }
