@@ -7,7 +7,6 @@ PHPUnit_Util_Filter::addDirectoryToWhitelist(realpath(dirname(__FILE__) . '/../.
 PHPUnit_Util_Filter::removeDirectoryFromWhitelist(realpath(dirname(__FILE__) . '/../../src/Intraface/certificates/'), '.php');
 PHPUnit_Util_Filter::removeDirectoryFromWhitelist(realpath(dirname(__FILE__) . '/../../src/Intraface/'), 'tpl.php');
 PHPUnit_Util_Filter::removeDirectoryFromWhitelist(realpath(dirname(__FILE__) . '/../../src/Intraface/config/'), '.php');
-PHPUnit_Util_Filter::removeDirectoryFromWhitelist(realpath(dirname(__FILE__) . '/../../src/Intraface/ihtml/'), '.php');
 PHPUnit_Util_Filter::removeFileFromWhitelist(realpath(dirname(__FILE__) . '/../../src/Intraface/modules/accounting/include_frontpage.php'));
 PHPUnit_Util_Filter::removeFileFromWhitelist(realpath(dirname(__FILE__) . '/../../src/Intraface/modules/administration/include_frontpage.php'));
 PHPUnit_Util_Filter::removeFileFromWhitelist(realpath(dirname(__FILE__) . '/../../src/Intraface/modules/contact/include_frontpage.php'));
@@ -44,7 +43,6 @@ class AllTests
                        'Onlinepayment',
                        'Procurement',
                        'Project',
-                       'Language',
                        'XMLRPC',
                        'Auth',
                        'Currency'
