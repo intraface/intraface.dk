@@ -67,12 +67,6 @@ class SectionTest extends PHPUnit_Framework_TestCase
         return $t->getId();
     }
 
-    function testConstruction()
-    {
-        $section = new CMS_Section($this->page);
-        $this->assertTrue(is_object($section));
-    }
-
     function testFactory()
     {
         $section = CMS_Section::factory($this->page, 'type', 'shorttext');
