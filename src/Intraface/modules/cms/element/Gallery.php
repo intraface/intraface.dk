@@ -11,7 +11,7 @@ class Intraface_modules_cms_element_Gallery extends CMS_Element
         $this->value['type'] = 'gallery';
 
         parent::__construct($section, $id);
-        $this->section->kernel->useShared('filehandler');
+        $this->section->kernel->useModule('filemanager');
     }
 
     function load_element()
@@ -46,7 +46,7 @@ class Intraface_modules_cms_element_Gallery extends CMS_Element
 
         */
         } else { // Enkeltfiler
-            $shared_filehandler = $this->kernel->useShared('filehandler');
+            $shared_filehandler = $this->kernel->useModule('filemanager');
             $shared_filehandler->includeFile('AppendFile.php');
             $append_file = new AppendFile($this->kernel, 'cms_element_gallery', $this->id);
             $append_file->getDBQuery()->setFilter('order_by', 'name');
