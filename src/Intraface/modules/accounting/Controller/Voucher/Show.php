@@ -178,8 +178,8 @@ $voucher_files = $voucher_file->getList();
 
     function getFilehandlerHtml()
     {
-        require_once 'Intraface/shared/filehandler/FileHandler.php';
-        require_once 'Intraface/shared/filehandler/FileHandlerHTML.php';
+        require_once 'Intraface/modules/filemanager/FileHandler.php';
+        require_once 'Intraface/modules/filemanager/FileHandlerHTML.php';
         $filehandler = new FileHandler($this->getKernel());
         return $filehandler_html = new FileHandlerHTML($filehandler);
     }
