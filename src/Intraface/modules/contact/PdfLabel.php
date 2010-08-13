@@ -49,27 +49,27 @@ class Intraface_modules_contact_PdfLabel extends Intraface_Pdf
     {
         
         // Search info on first label
-        $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top , $this->get('font_size'), "<b>Søgning</b>");
+        $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top , $this->get('font_size'), "<b>SÃ¸gning</b>");
         $line = 1;
         if ($search != "") {
-            $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top - $this->get('font_spacing'), $this->get('font_size'), "Søgetekst: ".$search);
+            $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top - $this->get('font_spacing'), $this->get('font_size'), "SÃ¸getekst: ".$search);
             $line++;
         }
         
         if (is_array($keywords) && count($keywords) > 0) {
-            $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top - $this->get('font_spacing') * $line, $this->get('font_size'), "Nøgleord: ".implode(", ", $keywords));
+            $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top - $this->get('font_spacing') * $line, $this->get('font_size'), "NÃ¸gleord: ".implode(", ", $keywords));
             $line++;
         }
         
-        $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top - $this->get('font_spacing') * $line, $this->get('font_size'), "Antal labels i søgning: ".count($contacts));
+        $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top - $this->get('font_spacing') * $line, $this->get('font_size'), "Antal labels i sÃ¸gning: ".count($contacts));
         
         // The contacts on labels
         
         for ($i = 0, $max = count($contacts); $i < $max; $i++) {
         
             
-            // TODO -- hvorfor bruger vi ikke antallet af labels til at vide, hvornår
-            // vi skifter linje? Vi kender faktisk ikke antallet af labels i en række. Det kunne vi selvfølgelig komme til
+            // TODO -- hvorfor bruger vi ikke antallet af labels til at vide, hvornï¿½r
+            // vi skifter linje? Vi kender faktisk ikke antallet af labels i en rï¿½kke. Det kunne vi selvfï¿½lgelig komme til
             if ($this->get('x') + $this->label_width  > $this->get('right_margin_position')) {
                 // For enden af linjen, ny linje
                 $this->setY("-".$this->label_height);
@@ -77,13 +77,13 @@ class Intraface_modules_contact_PdfLabel extends Intraface_Pdf
         
             }
             else {
-                // Vi rykker en label til højre
+                // Vi rykker en label til hï¿½jre
                 $this->setX("+".$this->label_width);
             }
         
         
             if ($this->get('y') - $this->label_height < $this->get('margin_bottom')) {
-                // Hvis næste labelsrække ikke kan nå at være der tager vi en ny side.
+                // Hvis nï¿½ste labelsrï¿½kke ikke kan nï¿½ at vï¿½re der tager vi en ny side.
                 $this->newPage();
                 $this->setX(0);
                 $this->setY(0);
