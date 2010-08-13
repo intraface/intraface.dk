@@ -14,12 +14,12 @@ class Intraface_modules_cms_element_Picture extends CMS_Element
     {
         $this->value['type'] = 'picture';
         parent::__construct($section, $id);
-        $this->section->kernel->useShared('filehandler');
+        $this->section->kernel->useModule('filemanager');
     }
 
     function load_element()
     {
-        $this->section->kernel->useShared('filehandler');
+        $this->section->kernel->useModule('filemanager');
         $this->value['pic_id'] = $this->parameter->get('pic_id');
         $this->value['pic_size'] = $this->parameter->get('pic_size');
         $this->value['pic_text'] = $this->parameter->get('pic_text');

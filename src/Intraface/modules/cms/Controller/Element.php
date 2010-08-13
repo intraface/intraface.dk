@@ -35,7 +35,7 @@ class Intraface_modules_cms_Controller_Element extends k_Component
 
     function getFileAppender()
     {
-        $this->getKernel()->useShared('filehandler');
+        $this->getKernel()->useModule('filemanager');
         require_once 'Intraface/shared/filehandler/AppendFile.php';
         if ($this->getElement()->get('type') == 'gallery') {
             return $append_file = new AppendFile($this->getKernel(), 'cms_element_gallery', $this->getElement()->get('id'));
@@ -75,7 +75,7 @@ class Intraface_modules_cms_Controller_Element extends k_Component
     function renderHtml()
     {
         $module_cms = $this->getKernel()->module('cms');
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
 
         if (isset($_GET['remove_gallery_append_file_id'])) {
@@ -109,7 +109,7 @@ class Intraface_modules_cms_Controller_Element extends k_Component
     function postMultipart()
     {
         $module_cms = $this->getKernel()->module('cms');
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
 
         $element = $this->getElement();

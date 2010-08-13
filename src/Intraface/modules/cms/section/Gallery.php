@@ -45,7 +45,7 @@ class Intraface_modules_cms_section_Gallery extends CMS_Section
 
         */
         } else { // Enkeltfiler
-            $shared_filehandler = $this->kernel->useShared('filehandler');
+            $shared_filehandler = $this->kernel->useModule('filemanager');
             $shared_filehandler->includeFile('AppendFile.php');
             $append_file = new AppendFile($this->kernel, 'cms_element_gallery', $this->id);
             $append_file->getDBQuery()->setFilter('order_by', 'name');

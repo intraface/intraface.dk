@@ -13,7 +13,7 @@ class Intraface_modules_cms_section_Picture extends CMS_Section
     {
         $this->value['type'] = 'picture';
         parent::__construct($cmspage, $id);
-        $this->cmspage->kernel->useShared('filehandler');
+        $this->cmspage->kernel->useModule('filemanager');
 
     }
 
@@ -21,7 +21,7 @@ class Intraface_modules_cms_section_Picture extends CMS_Section
 
         $this->value['pic_id'] = $this->parameter->get('pic_id');
         $size = $this->template_section->get('pic_size');
-        $this->cmspage->kernel->useShared('filehandler');
+        $this->cmspage->kernel->useModule('filemanager');
         $this->value['picture'] = array();
 
         if ($this->value['pic_id'] == 0) return;
@@ -54,7 +54,7 @@ class Intraface_modules_cms_section_Picture extends CMS_Section
     function save_section($var) {
 
         /*
-        Det gøres nu i page.php
+        Det gï¿½res nu i page.php
         if (!empty($_FILES['new_picture_'.$key])) {
             $filehandler = new FileHandler($kernel);
             $filehandler->loadUpload();

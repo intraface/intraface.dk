@@ -1,7 +1,6 @@
 <fieldset>
 	<legend><?php e(t('Choose keywords')); ?></legend>
     <?php
-        $context->getKernel()->useShared('filehandler');
         $context->getKernel()->useModule('filemanager');
         $filemanager = new Filemanager($context->getKernel());
         if (!empty($value['keywords'])) {

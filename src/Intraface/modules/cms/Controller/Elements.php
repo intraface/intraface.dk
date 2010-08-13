@@ -26,7 +26,7 @@ class Intraface_modules_cms_Controller_Elements extends k_Component
     function renderHtmlCreate()
     {
         $module_cms = $this->getKernel()->module('cms');
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
         // der skal valideres noget p� typen ogs�.
 
@@ -65,7 +65,7 @@ class Intraface_modules_cms_Controller_Elements extends k_Component
     function postMultipart()
     {
         $module_cms = $this->getKernel()->module('cms');
-        $shared_filehandler = $this->getKernel()->useShared('filehandler');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
 
         $element = $this->getElement();

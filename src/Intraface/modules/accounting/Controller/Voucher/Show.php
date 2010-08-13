@@ -223,7 +223,7 @@ $voucher_files = $voucher_file->getList();
 
     function postMultipart()
     {
-        $this->getKernel()->useShared('filehandler');
+        $this->getKernel()->useModule('filemanager');
         $voucher = new Voucher($this->getYear(), $this->name());
         $voucher_file = new VoucherFile($voucher);
         $var['belong_to'] = 'file';

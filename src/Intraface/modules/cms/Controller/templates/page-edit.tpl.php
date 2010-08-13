@@ -104,7 +104,7 @@
                     if (empty($value['pic_id'])) {
                         $value['pic_id'] = 0;
                     }
-                    $context->getKernel()->useShared('filehandler');
+                    $context->getKernel()->useModule('filemanager');
                     $filehandler = new FileHandler($kernel, $value['pic_id']);
                     e('file_id ' . $filehandler->get('id') . ' chosen');
                     //$filehandler_html = new FileHandlerHTML($filehandler);
@@ -127,7 +127,7 @@
             </div>
         </fieldset>
 
-        <?php if ($kernel->intranet->hasModuleAccess('comment')): ?>
+        <?php if (false && $kernel->intranet->hasModuleAccess('comment')): ?>
         <fieldset>
             <legend><?php e(t('comments')); ?></legend>
                 <div class="radiorow">

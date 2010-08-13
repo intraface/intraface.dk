@@ -26,7 +26,6 @@ class Intraface_modules_cms_element_Randompicture extends CMS_Element
             $size = 'medium';
         }
 
-        $this->section->kernel->useShared('filehandler');
         $this->section->kernel->useModule('filemanager');
 
         $filemanager = new Filemanager($this->section->kernel);

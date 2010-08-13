@@ -10,7 +10,7 @@ class Intraface_modules_cms_element_Filelist extends CMS_Element
     {
         $this->value['type'] = 'filelist';
         parent::__construct($section, $id);
-        $this->section->kernel->useShared('filehandler');
+        $this->section->kernel->useModule('filemanager');
     }
 
     function load_element()
@@ -20,8 +20,8 @@ class Intraface_modules_cms_element_Filelist extends CMS_Element
 
         if (false) { // benytter keyword
 
-            // Dette skal lige implementeres, så hvis man har filemanager, og har benyttet nøgleord, så
-            // skal array returneres ved hjælp af Filemanager. Vær opmærksom på hvis en bruger der ikke har
+            // Dette skal lige implementeres, sï¿½ hvis man har filemanager, og har benyttet nï¿½gleord, sï¿½
+            // skal array returneres ved hjï¿½lp af Filemanager. Vï¿½r opmï¿½rksom pï¿½ hvis en bruger der ikke har
             // Filemanager ser elementet, lavet af en der har filemanager. her i vis, skal der nok overrules om
             // brugeren har filemanager.
             $this->value['keyword_id'] = $this->parameter->get('keyword_id');
@@ -32,7 +32,7 @@ class Intraface_modules_cms_element_Filelist extends CMS_Element
 
 
         } else { // Enkeltfiler
-            $shared_filehandler = $this->kernel->useShared('filehandler');
+            $shared_filehandler = $this->kernel->useModule('filemanager');
             $shared_filehandler->includeFile('AppendFile.php');
             $append_file = new AppendFile($this->kernel, 'cms_element_filelist', $this->id);
             $files = $append_file->getList();
@@ -51,7 +51,7 @@ class Intraface_modules_cms_element_Filelist extends CMS_Element
             $filehandler = new FileHandler($this->kernel, $id);
             // @todo this should be avoided
             $filehandler->createInstance();
-            // HACK lille hack - til at undgå at vi får filer med som ikke har beskrivelser (formentlig slettede filer)
+            // HACK lille hack - til at undgï¿½ at vi fï¿½r filer med som ikke har beskrivelser (formentlig slettede filer)
             if (!$filehandler->get('description')) continue;
             $this->value['files'][$i] = $filehandler->get();
             $this->value['files'][$i]['append_file_id'] = $append_file_id;
@@ -77,7 +77,7 @@ class Intraface_modules_cms_element_Filelist extends CMS_Element
             $this->error->set('error in filelist_select_method');
         }
         */
-        // egentlig bør de enkelte værdier i arrayet også valideres
+        // egentlig bï¿½r de enkelte vï¿½rdier i arrayet ogsï¿½ valideres
 
         if ($this->error->isError()) {
             return 0;
