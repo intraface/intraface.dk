@@ -63,7 +63,7 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
         $filehandler = $this->createFile('wideonball.jpg');
         $filehandler->createInstance('square');
 
-        $this->assertEquals(3846, $filehandler->instance->get('file_size'));
+        $this->assertEquals(3846, $filehandler->instance->get('file_size'), '', 10);
     }
 
     function testConstructWithTypeSquareAndCropParams() {
