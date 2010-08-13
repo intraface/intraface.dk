@@ -63,7 +63,7 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
         $filehandler = $this->createFile('wideonball.jpg');
         $filehandler->createInstance('square');
 
-        $this->assertEquals(3844, $filehandler->instance->get('file_size'));
+        $this->assertEquals(3846, $filehandler->instance->get('file_size'));
     }
 
     function testConstructWithTypeSquareAndCropParams() {
@@ -100,7 +100,7 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
         $filehandler = $this->createFile('idraetshoejskolen9.jpg');
         $filehandler->createInstance('wide');
         // we add 10 bytes delta
-        $this->assertEquals(54498, filesize($filehandler->instance->get('file_path')), '', 10);
+        $this->assertEquals(54510, filesize($filehandler->instance->get('file_path')), '', 10);
         $size = getimagesize($filehandler->instance->get('file_path'));
         $this->assertEquals(720, $size[0]);
         $this->assertEquals(280, $size[1]);
