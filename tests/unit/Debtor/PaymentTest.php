@@ -2,6 +2,7 @@
 require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/modules/invoice/Payment.php';
+require_once 'Intraface/functions.php';
 
 class PaymentTest extends PHPUnit_Framework_TestCase
 {
@@ -142,7 +143,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
                 'id' => 1,
                 'date_dk' => date('d-m-Y'),
                 'date' => date('Y-m-d'),
-            	'text' => 'payment for invoice #1',
+            	'text' => 'Payment  (invoice #1)',
                 'debet' => '100.00',
                 'credit' => '0.00',
                 'voucher_number' => 1,
@@ -157,7 +158,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
                 'id' => 2,
                 'date_dk' => date('d-m-Y'),
                 'date' => date('Y-m-d'),
-                'text' => 'payment for invoice #1',
+                'text' => 'Payment  (invoice #1)',
                 'debet' => '0.00',
                 'credit' => '100.00',
                 'voucher_number' => 1,
