@@ -139,6 +139,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
         $this->getContact()->getDBQuery()->defineCharacter('character', 'address.name');
         $this->getContact()->getDBQuery()->usePaging('paging');
         $this->getContact()->getDBQuery()->storeResult('use_stored', 'select_contact', 'sublevel');
+        $this->getContact()->getDBQuery()->setUri($this->url());
 
         if (isset($_GET['contact_id']) && intval($_GET['contact_id']) != 0) {
             $this->getContact()->getDBQuery()->setExtraUri("&last_contact_id=".intval($_GET['contact_id']));
