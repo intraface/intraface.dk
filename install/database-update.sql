@@ -1,6 +1,16 @@
 ## Remeber trailing semicolons on every command ##
 ALTER TABLE `module` ADD `required` TINYINT( 1 ) NOT NULL ;
 
+# Check the server table wether this has already been implemented!
+ALTER TABLE `onlinepayment_settings_translation` CHANGE `id` `id` INT( 11 ) NOT NULL ;
+ALTER TABLE `onlinepayment_settings_translation` DROP PRIMARY KEY ;
+ALTER TABLE `onlinepayment_settings_translation` CHANGE `lang` `lang` VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+ALTER TABLE `onlinepayment_settings_translation` ADD UNIQUE (
+`id` ,
+`lang`
+);
+
+
 # http://www.mysqlperformanceblog.com/2009/01/12/should-you-move-from-myisam-to-innodb/
 
 ALTER TABLE `accounting_account`  DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
