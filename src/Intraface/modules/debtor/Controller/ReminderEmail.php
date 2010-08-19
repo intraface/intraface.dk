@@ -99,7 +99,7 @@ class Intraface_modules_debtor_Controller_ReminderEmail extends k_Component
             throw new Exception('Kontaktpersonen har ikke nogen email');
         }
 
-        $subject  =	"Påmindelse om betaling";
+        $subject  =	"PÃ¥mindelse om betaling";
 
         $reminder_text = new Reminder_Text();
         $reminder_text->visit($reminder);
