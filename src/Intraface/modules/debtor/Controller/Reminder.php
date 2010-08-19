@@ -38,14 +38,16 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
             $return_redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
 
             if ($return_redirect->get('identifier') == 'send_email') {
-                if ($return_redirect->getParameter('send_email_status') == 'sent') {
+                if ($return_redirect->getParameter('send_email_status') == 'sent' || $return_redirect->getParameter('send_email_status') == 'outbox') {
                     $reminder->setStatus('sent');
                     $return_redirect->delete();
                     if ($this->getKernel()->user->hasModuleAccess('accounting') && $reminder->somethingToState()) {
                         return new k_SeeOther($this->url('state'));
                     }
+                    
+                    return new k_SeeOther($this->url(null, array('flare' => 'Email has been queued')));
                 }
-                return new k_SeeOther($this->url(null, array('flare' => 'Email has been queued')));
+                return new k_SeeOther($this->url(null, array('flare' => 'Email could not be send!')));
             }
         }
 
