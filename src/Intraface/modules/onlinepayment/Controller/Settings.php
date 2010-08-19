@@ -57,14 +57,16 @@ class Intraface_modules_onlinepayment_Controller_Settings extends k_Component
 
         $onlinepayment = OnlinePayment::factory($this->context->getKernel());
         $language = new Intraface_modules_language_Languages;
+        /**
+         * @todo: Should be don with gateway instead!
+         */
         $settings = Doctrine::getTable('Intraface_modules_onlinepayment_Language')->findOneByIntranetId($this->context->getKernel()->intranet->getId());
         if (!$settings) {
         	$settings = new Intraface_modules_onlinepayment_Language;
-            $settings->save();
         }
         $settings->Translation['da']->email = $_POST['email']['da'];
         $settings->Translation['da']->subject = $_POST['subject']['da'];
-
+        
         foreach ($language->getChosenAsArray() as $lang) {
             $settings->Translation[$lang->getIsoCode()]->email = $_POST['email'][$lang->getIsoCode()];
             $settings->Translation[$lang->getIsoCode()]->subject = $_POST['subject'][$lang->getIsoCode()];
