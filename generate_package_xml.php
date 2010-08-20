@@ -96,13 +96,13 @@ $pfm->addPackageDepWithChannel('required', 'Config', 'pear.php.net', '1.10.11');
 $pfm->addPackageDepWithChannel('required', 'Swift', 'pear.swiftmailer.org', '4.0.6');
 
 // Kernel
-$pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.1');
+$pfm->addPackageDepWithChannel('required', 'pea', 'pear.php.net', '2.4.1');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Driver_mysql', 'pear.php.net', '1.4.1');
 $pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '2.0.1');
 $pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTranslation', 'public.intraface.dk', '0.1.3');
-$pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.12.0');
+$pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.12.1');
 $pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.8.3');
-$pfm->addPackageDepWithChannel('required', 'Net_IDNA', 'pear.php.net', '0.7.3');
+$pfm->addPackageDepWithChannel('required', 'Net_IDNA', 'pear.php.net', '0.8.1');
 $pfm->addPackageDepWithChannel('required', 'HTTP_Upload', 'pear.php.net', '0.9.1');
 $pfm->addPackageDepWithChannel('required', 'Cache_Lite', 'pear.php.net', '1.7.8');
 $pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.3');
@@ -122,13 +122,13 @@ $pfm->addPackageDepWithChannel('required', 'Doctrine_Template_Positionable', 'pu
 
 // Ilib
 $pfm->addPackageDepWithChannel('required', 'Ilib_Category', 'public.intraface.dk', '0.1.4');
-$pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.1.6');
+$pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.1.8');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Error', 'public.intraface.dk', '1.0.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Redirect', 'public.intraface.dk', '0.2.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Validator', 'public.intraface.dk', '0.0.2');
 $pfm->addPackageDepWithChannel('required', 'Ilib_ClassLoader', 'public.intraface.dk', '0.1.1');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Variable', 'public.intraface.dk', '0.2.2');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Variable', 'public.intraface.dk', '1.0.0');
 
 // other intraface 3_Party packages
 $pfm->addPackageDepWithChannel('required', 'DB_Sql', 'public.intraface.dk', '0.0.1');
@@ -141,7 +141,7 @@ $pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'pear.php.net', '1.0.5');
 // $pfm->addPackageDepWithChannel('required', 'XML_RPC2_Backend_Php_ServerFixedEncodingObject', 'public.intraface.dk', '0.0.1');
 
 // filehandler
-$pfm->addPackageDepWithChannel('required', 'MIME_Type', 'pear.php.net', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'MIME_Type', 'pear.php.net', '1.2.0');
 $pfm->addPackageDepWithChannel('required', 'System_Command', 'pear.php.net', '1.0.6');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler', 'public.intraface.dk', '0.4.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Keyword', 'public.intraface.dk', '0.4.0');
@@ -175,32 +175,32 @@ $pfm->addPackageDepWithChannel('required', 'Date', 'pear.php.net', '1.4.7');
 
 // onlinepayment
 $pfm->addPackageDepWithChannel('required', 'Payment_Quickpay', 'public.intraface.dk', '1.18.3');
-$pfm->addPackageDepWithChannel('required', 'Validate_Finance_CreditCard', 'pear.php.net', '0.5.2');
+// $pfm->addPackageDepWithChannel('required', 'Validate_Finance_CreditCard', 'pear.php.net', '0.5.2');
 
 
 // accounting
-$pfm->addPackageDepWithChannel('required', 'OLE', 'pear.php.net', '0.6.1');
+$pfm->addPackageDepWithChannel('required', 'OLE', 'pear.php.net', '1.0.0RC1');
 $pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php.net', '0.9.2');
 
 // modulepackage
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Debtor_XMLRPC', 'public.intraface.dk', '0.1.0');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Authorize_Provider_Testing', 'public.intraface.dk', '0.1.3');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Payment_Authorize_Provider_Testing', 'public.intraface.dk', '1.0.0');
 
 // shop
 $pfm->addPackageDepWithChannel('required', 'Ilib_Countries', 'public.intraface.dk', '1.0.0');
 
 // demo
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS', 'public.intraface.dk', '0.1.6');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS', 'public.intraface.dk', '0.1.7');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_Client_XMLRPC', 'public.intraface.dk', '0.2.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_Controller', 'public.intraface.dk', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_Controller', 'public.intraface.dk', '2.1.1');
 
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Admin_Client_XMLRPC', 'public.intraface.dk', '0.1.0');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Client_XMLRPC', 'public.intraface.dk', '1.0.0');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Controller', 'public.intraface.dk', '0.5.2');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop', 'public.intraface.dk', '0.5.1');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '1.0.3');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '1.0.4');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Client_XMLRPC', 'public.intraface.dk', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_OnlinePayment_Controller', 'public.intraface.dk', '1.0.1');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop', 'public.intraface.dk', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '1.0.4');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '1.2.2');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Client_XMLRPC', 'public.intraface.dk', '1.1.1');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Controller', 'public.intraface.dk', '1.1.0');
 $pfm->addPackageDepWithChannel('required', 'konstrukt', 'pearhub.org', '2.3.1');
 $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.intraface.dk', '0.1.0');
