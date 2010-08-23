@@ -96,7 +96,7 @@ $pfm->addPackageDepWithChannel('required', 'Config', 'pear.php.net', '1.10.11');
 $pfm->addPackageDepWithChannel('required', 'Swift', 'pear.swiftmailer.org', '4.0.6');
 
 // Kernel
-$pfm->addPackageDepWithChannel('required', 'pea', 'pear.php.net', '2.4.1');
+$pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.1');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Driver_mysql', 'pear.php.net', '1.4.1');
 $pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '2.0.1');
 $pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTranslation', 'public.intraface.dk', '0.1.3');
@@ -201,7 +201,7 @@ $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop', 'public.intra
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Client_XMLRPC', 'public.intraface.dk', '1.0.4');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Shop_Controller', 'public.intraface.dk', '1.2.2');
 $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Client_XMLRPC', 'public.intraface.dk', '1.1.1');
-$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Controller', 'public.intraface.dk', '1.1.0');
+$pfm->addPackageDepWithChannel('required', 'IntrafacePublic_Newsletter_Controller', 'public.intraface.dk', '1.0.1');
 $pfm->addPackageDepWithChannel('required', 'konstrukt', 'pearhub.org', '2.3.1');
 $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.intraface.dk', '0.1.0');
 
