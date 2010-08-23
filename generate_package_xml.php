@@ -207,7 +207,7 @@ $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.i
 
 // tools
 $pfm->addPackageDepWithChannel('required', 'Ilib_SimpleLogin', 'public.intraface.dk', '1.0.0');
-$pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Observer_File_ErrorList', 'public.intraface.dk', '1.0.1');
+$pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Observer_File_ErrorList', 'public.intraface.dk', '1.0.3');
 $pfm->addPackageDepWithChannel('required', 'Translation2_Frontend', 'public.intraface.dk', '1.0.0');
 
 $pfm->addPackageDepWithChannel('required', 'Zend', 'zend.googlecode.com/svn', '1.10.3');
