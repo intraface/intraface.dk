@@ -41,8 +41,8 @@ class Intraface_Tools_Controller_Root extends k_Component
             $this->url('log') => 'Log'
         );
 
-        $tpl = $this->template->create('wrapper');
-        return $tpl->render($this, array('navigation' => $navigation)) . $content;
+        $tpl = $this->template->create('Intraface/Tools/templates/main');
+        return $tpl->render($this, array('navigation' => $navigation, 'content' => $content));
     }
 
     function execute()

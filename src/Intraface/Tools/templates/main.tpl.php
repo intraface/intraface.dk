@@ -98,12 +98,39 @@ div.success p {
     margin: 0 0 0 0;
 }
 
+ul#navigation {
+    margin: 0px 0px 20px 0px;
+    padding: 0px 0px 10px 0px; 
+    border-bottom: 1px solid green;
+}
+
+ul#navigation li {
+    margin: 0px 20px 0px 0px;
+    display: inline;
+    list-style-type: none;
+    
+}
+
+div#content {
+    clear: both;
+    margin-top: 20px;
+}
 
     </style>
 </head>
 
 <body>
 
-<?php echo $content; ?>
+
+ <ul id="navigation">
+    <?php foreach ($navigation as $url => $name): ?>
+        <li><a href="<?php e($url); ?>"><?php e($name); ?></a></li>
+    <?php endforeach; ?>
+</ul>
+
+
+<div id="content">
+    <?php echo $content; ?>
+</div>
 </body>
 </html>
