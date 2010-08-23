@@ -246,8 +246,6 @@ if ($kernel->user->hasModuleAccess('invoice')) {
             <?php
             $gateway = new Intraface_modules_shop_Shop_Gateway();
             $shops = $gateway->findAll();
-            $db = MDB2::factory(DB_DSN);
-
             ?>
             <?php foreach ($shops as $shop): ?>
                 <?php $category_type = new Intraface_Category_Type('shop', $shop->getId()); ?>

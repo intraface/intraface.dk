@@ -55,7 +55,8 @@ class Intraface_modules_product_Controller_Show extends k_Component
             'gateway' => $this->getGateway(),
             'product' => $product,
             'kernel' => $this->getKernel(),
-            'filehandler' => $filehandler
+            'filehandler' => $filehandler,
+            'db' => $this->mdb2
         );
         if (isset($_GET['return_redirect_id'])) {
             $redirect = Intraface_Redirect::factory($kernel, 'return');
