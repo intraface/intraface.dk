@@ -54,4 +54,9 @@ class Intraface_Tools_Controller_Root extends k_Component
     {
         return 'common';
     }
+    
+    function getPathToTranslation()
+    {
+        return '/translation';
+    }
 }
