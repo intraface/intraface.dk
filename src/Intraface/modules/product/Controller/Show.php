@@ -6,11 +6,13 @@ class Intraface_modules_product_Controller_Show extends k_Component
     protected $product_doctrine;
     protected $template;
     protected $doctrine_connection;
+    protected $mdb2;
 
-    function __construct(k_TemplateFactory $template, Doctrine_Connection_Common $connection)
+    function __construct(k_TemplateFactory $template, Doctrine_Connection_Common $connection, MDB2_Driver_Common $mdb2)
     {
         $this->template = $template;
         $this->doctrine_connection = $connection;
+        $this->mdb2 = $mdb2;
     }
 
     function map($name)
@@ -70,7 +72,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
             return new k_SeeOther($this->url());
         } elseif (isset($_GET['remove_appended_category']) && $this->getKernel()->user->hasModuleAccess('shop')) {
             $product = new Product($this->getKernel(), $this->name());
-            $category = new Intraface_Category($this->getKernel(), MDB2::factory(DB_DSN), new Intraface_Category_Type('shop', $_GET['shop_id']), $_GET['remove_appended_category']);
+            $category = new Intraface_Category($this->getKernel(), $this->mdb2, new Intraface_Category_Type('shop', $_GET['shop_id']), $_GET['remove_appended_category']);
             $appender = $category->getAppender($product->getId());
             $appender->delete($category);
             return new k_SeeOther($this->url());
@@ -122,6 +124,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
             return new k_SeeOther($url);
         }
+        return $this->render();
     }
 
     function renderHtmlEdit()
@@ -202,8 +205,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
     function renderHtmlCopy()
     {
         $this->getKernel()->module('product');
-        $product = new Product($this->getKernel(), $this->name());
-        if ($id = $product->copy()) {
+        if ($id = $this->getProduct()->copy()) {
             return new k_SeeOther($this->url('../' . $id));
         }
     }
@@ -211,8 +213,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
     function DELETE()
     {
         $this->getKernel()->module('product');
-        $product = new Product($this->getKernel(), $this->name());
-        if ($id = $product->delete()) {
+        if ($id = $this->getProduct()->delete()) {
             return new k_SeeOther($this->url('../'));
         }
     }
@@ -255,8 +256,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
         require_once 'Intraface/modules/filemanager/AppendFile.php';
 
         $this->getKernel()->module('product');
-        $product = new Product($this->getKernel(), $this->name());
-        return new AppendFile($this->getKernel(), 'product', $product->get('id'));
+        return new AppendFile($this->getKernel(), 'product', $this->getProduct()->get('id'));
     }
 
     function getKernel()
