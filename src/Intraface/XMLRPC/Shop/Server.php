@@ -173,7 +173,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->_factoryWebshop();
 
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
 
         if (PEAR::isError($db)) {
             require_once 'XML/RPC2/Exception.php';

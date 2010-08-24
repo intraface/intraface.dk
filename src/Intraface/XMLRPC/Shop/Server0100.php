@@ -218,8 +218,8 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
     {
         $this->checkCredentials($credentials);
         $this->_factoryWebshop($shop_id);
-        
-        
+
+
         $gateway = new Intraface_modules_product_Attribute_Group_Gateway($this->getDoctrine());
         try {
             $attribute_group = $gateway->findByAttributeId($attribute_id);
@@ -232,23 +232,23 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                 )
             );
         }
-        
+
         $gateway = new Intraface_modules_product_ProductDoctrineGateway($this->getDoctrine(), NULL);
         $doctrine_products = $gateway->findByVariationAttributeId($this->processRequestData($attribute_id));
-        
+
         return $this->prepareResponseData(
             array(
                 'http_header_status' => 'HTTP/1.0 200 OK',
                 'products' => $this->createDoctrineProductsListArray($doctrine_products, $attribute_id),
                 'attribute_group' => $this->createAttributeGroupArray($attribute_group)
             )
-            
+
         );
     }
 
     /**
      * Formats array to return from product list from Doctrine
-     * 
+     *
      * @param object $doctrine_products Doctrine_Collection
      * @return array with products
      */
@@ -259,7 +259,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         } else {
             $currencies = false;
         }
-        
+
         $shared_filehandler = $this->kernel->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
 
@@ -274,9 +274,9 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
             $products[$key]['vat_percent'] = $p->getDetails()->getVatPercent()->getAsIso(2);
             $products[$key]['stock'] = $p['stock'];
             $products[$key]['has_variation'] = $p->hasVariation();
-            
+
             // $products[$key]['stock_status'] = $p['stock_status'];
-            
+
             $products[$key]['currency']['DKK']['price'] = $p->getDetails()->getPrice()->getAsIso(2);
             $products[$key]['currency']['DKK']['price_incl_vat'] = $p->getDetails()->getPriceIncludingVat()->getAsIso(2);
             $products[$key]['currency']['DKK']['before_price'] = $p->getDetails()->getBeforePrice()->getAsIso(2);
@@ -292,7 +292,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
             }
 
             $products[$key]['pictures'] = $this->getProductPictures($p);
-            
+
             if($p->hasVariation() && $p->hasStock() && $attribute_id != NULL) {
                 try {
                     $variaton_gateway = new Intraface_modules_product_Variation_Gateway($p);
@@ -300,16 +300,16 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                 } catch (Intraface_Gateway_Exception $e) {
                     $variations = array();
                 }
-                
+
                 $stub_product = new Intraface_XMLRPC_Shop_Server0100_Product($p, $this->webshop->kernel);
                 $products[$key]['attribute_stock_for_sale'] = 0;
-                
+
                 foreach($variations AS $variation) {
                     $stock = $variation->getStock($stub_product)->get();
                     $products[$key]['attribute_stock_for_sale'] += $stock['for_sale'];
                 }
-                
-                
+
+
                 /*$return['variations'][] = array(
                     'variation' => array(
                         'id' => $variation->getId(),
@@ -325,13 +325,13 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                     'stock' => $stock
                 );
                 */
-            }    
+            }
             $key++;
         }
-        
+
         return $products;
     }
-    
+
     private function getProductPictures($product)
     {
         $append_file = new AppendFile($this->kernel, 'product', $product->getId());
@@ -365,10 +365,10 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                 unset($tmp_filehandler);
             }
         }
-        
+
         return $pictures;
     }
-    
+
     private function createAttributeGroupArray($attribute_group)
     {
         foreach($attribute_group->attribute AS $attribute) {
@@ -376,7 +376,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                 'id' => $attribute->getId(),
                 'name' => $attribute->getName());
         }
-        
+
         $attribute = $attribute_group->attribute->getFirst();
         return array(
             'id' => $attribute_group->getId(),
@@ -612,7 +612,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
         $this->_factoryWebshop($shop_id);
 
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
 
         if (PEAR::isError($db)) {
             require_once 'XML/RPC2/Exception.php';
@@ -1257,7 +1257,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         }
         $this->webshop = new Intraface_modules_shop_Coordinator($this->kernel, $shop, $this->credentials['session_id']);
     }
-    
+
     private function getDoctrine()
     {
         return $this->doctrine;
@@ -1270,25 +1270,25 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
  *
  */
 class Intraface_XMLRPC_Shop_Server0100_Product {
-    
+
     public $kernel;
     private $product;
-    
+
     public function __construct($product, $kernel)
     {
         $this->kernel = $kernel;
         $this->product = $product;
     }
-    
+
     public function get($value)
     {
         if($value == 'id') {
             return $this->getId();
         }
-        
+
         throw new Exception('Value '.$value.' not implemented!');
     }
-    
+
     public function getId()
     {
         return $this->product->getId();

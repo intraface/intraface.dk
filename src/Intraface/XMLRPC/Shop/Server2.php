@@ -253,7 +253,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
 
         $this->_factoryWebshop($shop_id);
 
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
 
         if (PEAR::isError($db)) {
             require_once 'XML/RPC2/Exception.php';
@@ -273,7 +273,6 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
                 'title' => $row['headline'],
                 'products' => $product->getList()
             );
-
         }
 
         return $this->prepareResponseData($related_products);
