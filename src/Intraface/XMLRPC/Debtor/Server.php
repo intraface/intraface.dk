@@ -16,7 +16,7 @@ class Intraface_XMLRPC_Debtor_Server_Translation
     function setPageID() {}
 }
 
-class Intraface_XMLRPC_Debtor_Server  extends Intraface_XMLRPC_Server0100
+class Intraface_XMLRPC_Debtor_Server extends Intraface_XMLRPC_Server0100
 {
     /**
      * @var object
@@ -156,43 +156,4 @@ class Intraface_XMLRPC_Debtor_Server  extends Intraface_XMLRPC_Server0100
         return $encoded;
 
     }
-    /*
-    function setDebtorSent($credentials, $id) {
-        if (is_object($return = $this->checkCredentials($credentials))) {
-            return $return;
-        }
-
-        $debtor = Debtor::factory($this->kernel, $id);
-        if (!$debtor->get('id') > 0) {
-            return '';
-        }
-
-        return $debtor->setStatus('sent');
-    }
-
-        function createInvoice($arg) {
-        if (is_object($return = $this->checkCredentials($arg[0]))) {
-            return $return;
-        }
-
-        $order = Debtor::factory($this->kernel, $arg[1]);
-
-        $invoice = new Invoice($this->kernel);
-        if ($id = $invoice->create($order)) {
-            return $id;
-        }
-        return 0;
-    }
-
-    function capturePayment($arg) {
-        if (is_object($return = $this->checkCredentials($arg[0]))) {
-            return $return;
-        }
-
-        $this->kernel->useModule('onlinepayment');
-
-        $payment = OnlinePayment::factory($this->kernel, 'transactionnumber', $arg[1]);
-        return $payment->transactionAction('capture');
-    }
-    */
 }
