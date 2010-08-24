@@ -98,10 +98,20 @@ class Intraface_XMLRPC_Server
      */
     protected function prepareResponseData($values)
     {
-        if($this->encoding == 'utf-8') {
+        $values = $this->recursiveMap(array($this, 'handleNull'), $values);
+        if ($this->encoding == 'utf-8') {
             return $this->recursiveMap('utf8_encode', $values);
         }
+
         return $values;
+    }
+
+    function handleNull($value)
+    {
+        if ($value === null) {
+            return '';
+       }
+       return $value;
     }
 
     /**
@@ -112,7 +122,7 @@ class Intraface_XMLRPC_Server
      */
     protected function processRequestData($values)
     {
-        if($this->encoding == 'utf-8') {
+        if ($this->encoding == 'utf-8') {
             return $this->recursiveMap('utf8_decode', $values);
         }
         return $values;
@@ -131,5 +141,4 @@ class Intraface_XMLRPC_Server
             return $values;
         }
     }
-
 }

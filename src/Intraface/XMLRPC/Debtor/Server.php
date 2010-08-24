@@ -16,17 +16,17 @@ class Intraface_XMLRPC_Debtor_Server_Translation
     function setPageID() {}
 }
 
-class Intraface_XMLRPC_Debtor_Server
+class Intraface_XMLRPC_Debtor_Server  extends Intraface_XMLRPC_Server0100
 {
     /**
      * @var object
      */
-    private $kernel;
+    protected $kernel;
 
     /**
      * @var object
      */
-    private $debtor;
+    protected $debtor;
 
     /**
      * Checks if user has credentials to ask server
@@ -35,7 +35,7 @@ class Intraface_XMLRPC_Debtor_Server
      *
      * @return true ved succes ellers object med fejlen
      */
-    private function checkCredentials($credentials)
+    protected function checkCredentials($credentials)
     {
         if (count($credentials) != 2) {
             require_once 'XML/RPC2/Exception.php';
@@ -77,7 +77,7 @@ class Intraface_XMLRPC_Debtor_Server
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
-        // die('her'.$arg[1].'gg');
+
         $debtor = Debtor::factory($this->kernel, (int)$debtor_id);
         if (!$debtor->get('id') > 0) {
             return 0;
@@ -88,7 +88,7 @@ class Intraface_XMLRPC_Debtor_Server
             return array();
         }
 
-        return $debtor_info;
+        return $this->prepareResponseData($debtor_info);
     }
 
     /**
@@ -109,8 +109,9 @@ class Intraface_XMLRPC_Debtor_Server
         $debtor = Debtor::factory($this->kernel, 0, $type);
         $debtor->getDBQuery()->setFilter('contact_id', $contact_id);
         $debtor->getDBQuery()->setFilter('status', '-1');
-        return $debtor->getList();
+        $debtors = $debtor->getList();
 
+        return $this->prepareResponseData($debtors);
     }
 
     /**
@@ -126,49 +127,6 @@ class Intraface_XMLRPC_Debtor_Server
         if (is_object($return = $this->checkCredentials($credentials))) {
             return $return;
         }
-
-        /*
-        // set the parameters to connect to your db
-        $dbinfo = array(
-            'hostspec' => DB_HOST,
-            'database' => DB_NAME,
-            'phptype'  => 'mysql',
-            'username' => DB_USER,
-            'password' => DB_PASS
-        );
-
-        if (!defined('LANGUAGE_TABLE_PREFIX')) {
-            define('LANGUAGE_TABLE_PREFIX', 'core_translation_');
-        }
-
-        $params = array(
-            'langs_avail_table' => LANGUAGE_TABLE_PREFIX.'langs',
-            'strings_default_table' => LANGUAGE_TABLE_PREFIX.'i18n'
-        );
-
-        require_once 'Translation2.php';
-
-        $translation = Translation2::factory('MDB2', $dbinfo, $params);
-        if (PEAR::isError($translation)) {
-            trigger_error('Could not start Translation ' . $translation->getMessage(), E_USER_ERROR);
-        }
-
-        $set_language = $translation->setLang($this->kernel->setting->get('user', 'language'));
-
-        if (PEAR::isError($set_language)) {
-            trigger_error($set_language->getMessage(), E_USER_ERROR);
-        }
-
-        $translation = $translation->getDecorator('Lang');
-        $translation->setOption('fallbackLang', 'uk');
-        $translation = $translation->getDecorator('DefaultText');
-        $translation->outputString = '%stringID%';
-        $translation->url = '';           //same as default
-        $translation->emptyPrefix  = '';  //default: empty string
-        $translation->emptyPostfix = '';  //default: empty string
-
-        $this->kernel->translation = $translation;
-        */
 
         $this->kernel->translation = new Intraface_XMLRPC_Debtor_Server_Translation;
 

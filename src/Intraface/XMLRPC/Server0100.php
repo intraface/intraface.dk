@@ -108,7 +108,8 @@ class Intraface_XMLRPC_Server0100
      */
     protected function prepareResponseData($values)
     {
-        if($this->encoding == 'iso-8859-1') {
+        $values = $this->recursiveMap(array($this, 'handleNull'), $values);
+        if ($this->encoding == 'iso-8859-1') {
             return $this->recursiveMap('utf8_decode', $values);
         }
         return $values;
@@ -122,10 +123,19 @@ class Intraface_XMLRPC_Server0100
      */
     protected function processRequestData($values)
     {
-        if($this->encoding == 'iso-8859-1') {
+        if ($this->encoding == 'iso-8859-1') {
             return $this->recursiveMap('utf8_encode', $values);
         }
+
         return $values;
+    }
+
+    function handleNull($value)
+    {
+        if (is_null($value)) {
+            return '';
+       }
+       return $value;
     }
 
     protected function recursiveMap($function, $values)

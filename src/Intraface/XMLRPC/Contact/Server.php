@@ -44,6 +44,12 @@ class Intraface_XMLRPC_Contact_Server
             return array();
         }
 
+        foreach ($contact_info as $key => $value) {
+            if ($value === null) {
+                $contact_info[$key] = '';
+            }
+        }
+
         return $contact_info;
     }
 
@@ -72,6 +78,12 @@ class Intraface_XMLRPC_Contact_Server
 
         if (!$contact_info) {
             return array();
+        }
+
+        foreach ($contact_info as $key => $value) {
+            if ($value === null) {
+                $contact_info[$key] = '';
+            }
         }
 
         return $contact_info;
@@ -121,6 +133,12 @@ class Intraface_XMLRPC_Contact_Server
             return array();
         }
 
+        foreach ($contact_info as $key => $value) {
+            if ($value === null) {
+                $contact_info[$key] = '';
+            }
+        }
+
         return $contact_info;
     }
 
@@ -147,6 +165,12 @@ class Intraface_XMLRPC_Contact_Server
 
         if (!$contact_info) {
             return array();
+        }
+
+        foreach ($contact_info as $key => $value) {
+            if ($value === null) {
+                $contact_info[$key] = '';
+            }
         }
 
         return $contact_info;
