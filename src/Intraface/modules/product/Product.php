@@ -750,7 +750,7 @@ class Product extends Intraface_Standard
             throw new Exception('You can not set attribute group for a product without variations!');
         }
 
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $result = $db->query("SELECT id FROM product_x_attribute_group WHERE intranet_id = ".$db->quote($this->intranet->getId())." AND product_id=" . $this->getId()  . " AND product_attribute_group_id = " . (int)$id );
         if (PEAR::isError($result)) {
             throw new Exception('Error in query :'.$result->getUserInfo());
@@ -778,7 +778,7 @@ class Product extends Intraface_Standard
             throw new Exception('You can not remove attribute group for a product without variations!');
         }
 
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $result = $db->exec("DELETE FROM product_x_attribute_group WHERE intranet_id = ".$db->quote($this->intranet->getId())." AND product_id=" . $this->getId()  . " AND product_attribute_group_id = " . (int)$id );
         if (PEAR::isError($result)) {
             throw new Exception('Error in query :'.$result->getUserInfo());
@@ -806,7 +806,7 @@ class Product extends Intraface_Standard
         // takes groups despite the are deleted. That is probably the best behaviour for now
         // NOTE: Very important that it is ordered by product_attribute_group.id so the groups
         // does always get attached to the correct attribute number on the variation. Se above todo in method doc
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $result = $db->query("SELECT product_attribute_group.* FROM product_x_attribute_group " .
                 "INNER JOIN product_attribute_group " .
                     "ON product_x_attribute_group.product_attribute_group_id = product_attribute_group.id " .
@@ -821,7 +821,6 @@ class Product extends Intraface_Standard
 
         return $result->fetchAll(MDB2_FETCHMODE_ASSOC);
     }
-
 
     /**
      * returns variation
