@@ -9,16 +9,12 @@
  */
 require_once 'Intraface/modules/contact/Contact.php';
 
-class Intraface_XMLRPC_Contact_Server
+class Intraface_XMLRPC_Contact_Server extends Intraface_XMLRPC_Server0100
 {
     /**
      * @var string
      */
-    private $credentials;
-
-    public function __construct()
-    {
-    }
+    protected $credentials;
 
     /**
      * Gets a contact
@@ -44,13 +40,7 @@ class Intraface_XMLRPC_Contact_Server
             return array();
         }
 
-        foreach ($contact_info as $key => $value) {
-            if ($value === null) {
-                $contact_info[$key] = '';
-            }
-        }
-
-        return $contact_info;
+        return $this->prepareResponseData($contact_info);
     }
 
     /**
@@ -80,13 +70,7 @@ class Intraface_XMLRPC_Contact_Server
             return array();
         }
 
-        foreach ($contact_info as $key => $value) {
-            if ($value === null) {
-                $contact_info[$key] = '';
-            }
-        }
-
-        return $contact_info;
+        return $this->prepareResponseData($contact_info);
     }
 
     /**
@@ -106,7 +90,7 @@ class Intraface_XMLRPC_Contact_Server
         foreach ($gateway->findByEmail($email) as $contact) {
             $contacts[] = $contact->get();
         }
-        return $contacts;
+        return $this->prepareResponseData($contacts);
     }
 
     /**
@@ -133,13 +117,7 @@ class Intraface_XMLRPC_Contact_Server
             return array();
         }
 
-        foreach ($contact_info as $key => $value) {
-            if ($value === null) {
-                $contact_info[$key] = '';
-            }
-        }
-
-        return $contact_info;
+        return $this->prepareResponseData($contact_info);
     }
 
     /**
@@ -167,13 +145,7 @@ class Intraface_XMLRPC_Contact_Server
             return array();
         }
 
-        foreach ($contact_info as $key => $value) {
-            if ($value === null) {
-                $contact_info[$key] = '';
-            }
-        }
-
-        return $contact_info;
+        return $this->prepareResponseData($contact_info);
     }
 
     /**
@@ -198,7 +170,7 @@ class Intraface_XMLRPC_Contact_Server
             throw new XML_RPC2_FaultException('input must contain an id key', -5);
         }
 
-        $input = $this->utf8Decode($input);
+        $input = $this->processRequestData($input);
 
         $contact = new Contact($this->kernel, $input['id']);
 
@@ -228,7 +200,7 @@ class Intraface_XMLRPC_Contact_Server
         $contact = new Contact($this->kernel);
         $contact->getKeywords();
 
-        return $contact->keywords->getAllKeywords();
+        return $this->prepareResponseData($contact->keywords->getAllKeywords());
     }
 
     /**
@@ -251,7 +223,7 @@ class Intraface_XMLRPC_Contact_Server
         }
         $keywords = array();
         $keywords = $contact->getKeywordAppender()->getConnectedKeywords();
-        return $keywords;
+        return $this->prepareResponseData($keywords);
     }
 
 
@@ -284,7 +256,7 @@ class Intraface_XMLRPC_Contact_Server
             $permissions[] = 'debtor';
         }
 
-        return $permissions;
+        return $this->prepareResponseData($permissions);
     }
 
     /**
@@ -293,7 +265,7 @@ class Intraface_XMLRPC_Contact_Server
      * @param struct $credentials
      * @return array
      */
-    private function checkCredentials($credentials)
+    protected function checkCredentials($credentials)
     {
         if (count($credentials) != 2) { // -4
             require_once 'XML/RPC2/Exception.php';
@@ -321,24 +293,5 @@ class Intraface_XMLRPC_Contact_Server
         $this->kernel->setting = new Intraface_Setting($this->kernel->intranet->get('id'));
 
         return true;
-    }
-
-    /**
-     * Decodes values
-     *
-     * @param array $values Values
-     *
-     * @return mixed
-     */
-    private function utf8Decode($values)
-    {
-        if (is_array($values)) {
-            return array_map('utf8_decode', $values);
-        } elseif (is_string($values)) {
-            return utf8_decode($values);
-        } else {
-            return $values;
-        }
-
     }
 }
