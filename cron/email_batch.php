@@ -10,6 +10,7 @@
 
 require_once 'common.php';
 require_once 'Intraface/Mail.php';
+require_once 'swift_required.php';
 
 $bucket = new bucket_Container(new Intraface_Factory());
 
@@ -21,7 +22,9 @@ $mailer = $bucket->get('swift_mailer');
 
 while ($row = $result->fetchRow()) {
 
-	$auth_adapter = new Intraface_Auth_PublicKeyLogin($db, md5(uniqid()), $row['public_key']);
+    echo "Sending for intranet ".$row['name'].": ";
+	
+    $auth_adapter = new Intraface_Auth_PublicKeyLogin($db, md5(uniqid()), $row['public_key']);
 	$weblogin = $auth_adapter->auth();
 
 	if (!$weblogin) {
@@ -39,17 +42,42 @@ while ($row = $result->fetchRow()) {
 	}
 
     $gateway = new Intraface_shared_email_EmailGateway($kernel);
+    $mails = $gateway->getEmailsToSend();
+
+    echo count($mails);
+    
     foreach ($gateway->getEmailsToSend() as $email) {
+        $to = $email->getTo();
+        if($to == false) {
+            echo "Mail: ".$email->getSubject()." to ".$email->getTo()." has invalid to address\n";
+            continue;
+        }
+        
         $message = $bucket->get('swift_message');
         $message
             ->setSubject($email->getSubject())
             ->setFrom($email->getFrom())
-            ->setTo($email->getTo())
+            ->setTo($to)
             ->setBody($email->getBody());
+        
+        $attachments = $email->getAttachments();
+        if (is_array($attachments) AND count($attachments) > 0) {
+            $kernel->useModule('filemanager', true);
+            foreach ($attachments AS $file) {
+                $filehandler = new FileHandler($kernel, $file['id']);
+                
+                // lille hack med at s�tte uploadpath p�
+                $attachment = Swift_Attachment::fromPath($filehandler->getUploadPath() . $filehandler->get('server_file_name'), $filehandler->get('file_type'))->setFilename($file['filename']);
+                $message->attach($attachment);
+            }
+        }    
+        
         if ($mailer->send($message)) {
             $email->setIsSent();
         }
     }
+    
+    echo "\n";
 }
 
 $logger = new ErrorHandler_Observer_File(ERROR_LOG);

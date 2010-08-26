@@ -9,7 +9,7 @@ class Intraface_shared_email_EmailGateway
      *
      * @var integer
      */
-    public $allowed_limit = 180;
+    public $allowed_limit = 300;
 
     /**
      * A buffer to make sure that automatic sending does not take up all
