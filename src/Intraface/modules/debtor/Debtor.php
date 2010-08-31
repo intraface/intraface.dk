@@ -1276,18 +1276,6 @@ class Debtor extends Intraface_Standard
      */
     private function getPaymentMethods()
     {
-        /*
-        return array(
-            0 => 'Ingen',
-            1 => 'Kontooverf�rsel',
-            2 => 'Girokort +01',
-            3 => 'Girokort +71',
-            4 => 'Efterkrav',
-            5 => 'Onlinebetaling',
-            6 => 'EAN'
-        );
-        */
-
         $gateway = new Intraface_modules_debtor_PaymentMethod;
         return $gateway->getTypes();
     }
