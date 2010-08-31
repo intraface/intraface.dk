@@ -237,7 +237,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 $this->getKernel()->useModule("invoice");
                 $invoice->setStatus('sent');
 
-                if ($this->getKernel()->user->hasModuleAccess('onlinepayment')) {
+                if ($this->getKernel()->intranet->hasModuleAccess('onlinepayment')) {
                     $onlinepayment_module = $this->getKernel()->useModule('onlinepayment', true); // true: ignore user permisssion
                     $onlinepayment = OnlinePayment::factory($this->getKernel());
                     $onlinepayment->getDBQuery()->setFilter('belong_to', $invoice->get("type"));
@@ -245,18 +245,26 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                     $actions = $onlinepayment->getTransactionActions();
                     $payment_list = $onlinepayment->getlist();
 
+                    $payment_gateway = new Intraface_modules_onlinepayment_OnlinePaymentGateway($this->getKernel());
+
+                    $success_on_all_payments = true;
+
                     foreach ($payment_list as $payment) {
-                        $onlinepayment = OnlinePayment::factory($this->getKernel(), 'id', $payment['id']);
+                        $onlinepayment = $payment_gateway->findById($payment['id']);
                         try {
                             if (!$onlinepayment->transactionAction('capture')) {
+                                $success_on_all_payments = true;
                             }
                         } catch (Exception $e) {
-
+                            $success_on_all_payments = true;
                         }
                     }
                 }
 
-                $invoice->setStatus('executed');
+                if ($success_on_all_payments === true) {
+                    $invoice->setStatus('executed');
+                }
+
                 return new k_SeeOther($this->url('../' . $invoice->get('id')));
             }
         }
