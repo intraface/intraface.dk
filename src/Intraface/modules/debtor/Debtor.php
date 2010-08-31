@@ -538,36 +538,35 @@ class Debtor extends Intraface_Standard
      *
      * @param $object $debtor_object Debtor object
      *
-     * @return int = id p� den nye debtor, der skabes.
+     * @return integer
      */
     public function create($debtor_object)
     {
         if (!is_object($debtor_object)) {
-            trigger_error('Debtor: create() har brug for et debtor-objekt, jeg kan skabe et nyt debtorobjekt med', E_USER_ERROR);
+            throw new Exception('Debtor: create() har brug for et debtor-objekt, jeg kan skabe et nyt debtorobjekt med');
         }
 
         if ($debtor_object->get("type") == "invoice") {
-            // Faktura kan godt krediteres selvom den er l�st.
             if ($debtor_object->get("status") == "created" || $debtor_object->get("status") == "cancelled") {
-                $this->error->set('Debtor::Created kan ikke lave kreditnota fra faktura, n�r fakturaen ikke er sendt eller f�rdigbehandlet', E_USER_ERROR);
+                $this->error->set('Debtor::Created kan ikke lave kreditnota fra faktura, når fakturaen ikke er sendt eller færdigbehandlet');
                 return false;
             }
         } else {
             if ($debtor_object->get('locked') == true) {
-                $this->error->set('Objektet er l�st, s� du kan ikke lave et nyt objekt fra det.', E_USER_ERROR);
+                $this->error->set('Objektet er låst, så du kan ikke lave et nyt objekt fra det.');
                 return false;
             }
         }
 
         $values = $debtor_object->get();
         $values['this_date'] = date('d-m-Y');
-        $values['number'] = ''; // nulstiller nummeret ellers vil den f� samme nummer
+        $values['number'] = ''; // nulstiller nummeret ellers vil den få samme nummer
         $values['currency'] = $debtor_object->getCurrency();
 
         switch ($this->type) {
             case "invoice":
                 $values['due_date'] = date("d-m-Y", time() + 24 * 60 * 60 * $debtor_object->contact->get("paymentcondition"));
-                if ($this->kernel->setting->get('intranet', 'bank_account_number')) {
+                if (empty($values['payment_method']) AND $this->kernel->setting->get('intranet', 'bank_account_number')) {
                     $values['payment_method'] = 1;
                 }
                 break;
@@ -610,7 +609,7 @@ class Debtor extends Intraface_Standard
 
             return $new_debtor_id;
         }
-        return 0;
+        return false;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
