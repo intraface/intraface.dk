@@ -72,6 +72,40 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         return $this->getDebtor()->get('type');
     }
 
+    function isValidSender()
+    {
+        switch ($this->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
+            case 'intranet':
+                if ($this->getKernel()->intranet->address->get('name') == '' || $this->getKernel()->intranet->address->get('email') == '') {
+                    return false;
+                }
+                break;
+            case 'user':
+                if ($this->getKernel()->user->getAddress()->get('name') == '' || $this->getKernel()->user->getAddress()->get('email') == '') {
+                    return false;
+                }
+                break;
+            case 'defined':
+                if ($this->getKernel()->getSetting()->get('intranet', 'debtor.sender.name') == '' || $this->getKernel()->getSetting()->get('intranet', 'debtor.sender.email') == '') {
+                    return false;
+                }
+                break;
+        }
+        return true;
+    }
+
+    function isValidScanInContact()
+    {
+        $scan_in_contact_id = $this->getKernel()->getSetting()->get('intranet', 'debtor.scan_in_contact');
+        $scan_in_contact = new Contact($this->getKernel(), $scan_in_contact_id);
+        if ($scan_in_contact->get('id') == 0) {
+            return false;
+        } elseif (!$scan_in_contact->address->get('email')) {
+            return false;
+        }
+        return true;
+    }
+
     function getMessageAboutEmail()
     {
         $msg = '';
