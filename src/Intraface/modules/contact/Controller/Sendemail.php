@@ -9,14 +9,26 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
         $this->template = $template;
     }
 
-    function getMessage()
+    function renderHtml()
     {
-        return $this->msg;
-    }
+        $this->getKernel()->useShared('email');
 
-    function getKernel()
-    {
-        return $this->context->getKernel();
+        $_GET['use_stored'] = true;
+
+        $contact = new Contact($this->getKernel());
+        $keyword = $contact->getKeywords();
+        $keywords = $keyword->getAllKeywords();
+        $contact->getDBQuery()->defineCharacter('character', 'address.name');
+        $contact->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
+        $contacts = $contact->getList("use_address");
+
+        $data = array(
+            'contacts' => $contacts,
+            'contact' => $contact
+        );
+
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/sendemail');
+        return $smarty->render($this, $data);
     }
 
     function postForm()
@@ -36,13 +48,12 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
     		// valideret subject og body
     		$j = 0;
 
-    		for ($i = 0, $max = count($contacts); $i < $max; $i++) {
-    			if (!$validator->isEmail($contacts[$i]['email'], "")) {
-    				// Hvis de ikke har en mail, k�rer vi videre med n�ste.
+    		foreach ($contacts as $contact) {
+    			if (!$validator->isEmail($contact['email'], "")) {
     				continue;
     			}
 
-    			$contact = new Contact($this->getKernel(), $contacts[$i]['id']);
+    			$contact = new Contact($this->getKernel(), $contact['id']);
 
     			$email = new Email($this->getKernel());
     			$input = array(
@@ -67,28 +78,6 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
     	return $this->render();
     }
 
-    function renderHtml()
-    {
-        $this->getKernel()->useShared('email');
-
-        $_GET['use_stored'] = true;
-
-        $contact = new Contact($this->getKernel());
-        $keyword = $contact->getKeywords();
-        $keywords = $keyword->getAllKeywords();
-        $contact->getDBQuery()->defineCharacter('character', 'address.name');
-        $contact->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
-        $contacts = $contact->getList("use_address");
-
-        $data = array(
-            'contacts' => $contacts,
-            'contact' => $contact
-        );
-
-        $smarty = $this->template->create(dirname(__FILE__) . '/templates/sendemail');
-        return $smarty->render($this, $data);
-    }
-
     function getContact()
     {
         $this->getKernel()->useShared('email');
@@ -111,5 +100,15 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
         $contact->getDBQuery()->storeResult('use_stored', 'contact', 'toplevel');
         $contacts = $contact->getList("use_address");
         return $contact;
+    }
+
+    function getMessage()
+    {
+        return $this->msg;
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }
