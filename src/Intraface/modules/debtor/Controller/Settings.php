@@ -22,6 +22,13 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
         $this->template = $template;
     }
 
+    function map($name)
+    {
+        if ($name == 'contact') {
+            return 'Intraface_modules_contact_Controller_Choosecontact';
+        }
+    }
+
     function renderHtml()
     {
         $this->context->getKernel()->useModule('invoice');
@@ -87,6 +94,7 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
             $this->context->getKernel()->getSetting()->set('intranet', 'bank_account_number', $_POST['bank_account_number']);
             $this->context->getKernel()->getSetting()->set('intranet', 'giro_account_number', $_POST['giro_account_number']);
         }
+        $debtor_module = $this->context->getKernel()->useModule('debtor');
 
         if (!empty($_POST['delete_scan_in_contact'])) {
             $this->context->getKernel()->getSetting()->set('intranet', 'debtor.scan_in_contact', 0);
@@ -96,7 +104,7 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
                 $contact_module = $this->context->getKernel()->useModule('contact');
 
                 $redirect = Intraface_Redirect::factory($this->context->getKernel(), 'go');
-                $url = $redirect->setDestination($contact_module->getPath()."select_contact.php", $debtor_module->getPath()."setting.php");
+                $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('contact'), $debtor_module->getPath()."setting");
                 $redirect->askParameter('contact_id');
                 $redirect->setIdentifier('contact');
 
@@ -146,5 +154,15 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
         $values['invoice_text'] = $this->context->getKernel()->getSetting()->get('intranet', 'debtor.invoice.text');
         $values['order_email_text'] = $this->context->getKernel()->getSetting()->get('intranet', 'debtor.order.email.text');
         return $values;
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getReturnUrl()
+    {
+        return $this->url();
     }
 }
