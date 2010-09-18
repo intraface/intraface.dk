@@ -121,9 +121,9 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                         if ($this->getKernel()->intranet->address->get('name') == '' || $this->getKernel()->intranet->address->get('email') == '') {
                             $valid_sender = false;
                             if ($this->getKernel()->user->hasModuleAccess('administration')) {
-                                $msg = '<div class="message-dependent"><p>'.t('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../administration/intranet', array('edit')) . '">'.t('do it now').'</a>.</p></div>';
+                                $msg = '<div class="message-dependent"><p>'.$this->t('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../administration/intranet', array('edit')) . '">'.t('do it now').'</a>.</p></div>';
                             } else {
-                                $msg = '<div class="message-dependent"><p>'.t('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
+                                $msg = '<div class="message-dependent"><p>'.$this->t('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
 
                             }
                         }
