@@ -131,16 +131,16 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                     case 'user':
                         if ($this->getKernel()->user->getAddress()->get('name') == '' || $this->getKernel()->user->getAddress()->get('email') == '') {
                             $valid_sender = false;
-                            $msg = '<div class="message-dependent"><p>'.t('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../controlpanel/user', array('edit')).'">'.t('do it now').'</a>.</p></div>';
+                            $msg = '<div class="message-dependent"><p>'.$this->t('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../controlpanel/user', array('edit')).'">'.t('do it now').'</a>.</p></div>';
                         }
                         break;
                     case 'defined':
                         if ($this->getKernel()->getSetting()->get('intranet', 'debtor.sender.name') == '' || $this->getKernel()->getSetting()->get('intranet', 'debtor.sender.email') == '') {
                             $valid_sender = false;
                             if ($this->getKernel()->user->hasModuleAccess('administration')) {
-                                $msg = '<div class="message-dependent"><p>'.t('You need to fill in an e-mail address to send e-mail').'. <a href="'.$module_debtor->getPath().'settings">'.t('do it now').'</a>.</p></div>';
+                                $msg = '<div class="message-dependent"><p>'.$this->t('You need to fill in an e-mail address to send e-mail').'. <a href="'.$module_debtor->getPath().'settings">'.t('do it now').'</a>.</p></div>';
                             } else {
-                                $msg = '<div class="message-dependent"><p>'.t('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
+                                $msg = '<div class="message-dependent"><p>'.$this->t('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
                             }
 
                         }
@@ -153,7 +153,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
                 if ($this->getDebtor()->contact->address->get('email') == '') {
                     $valid_sender = false;
-                    $msg = '<div class="message-dependent"><p>'.t('You need to register an e-mail to the contact, so you can send e-mails').'</p></div>';
+                    $msg = '<div class="message-dependent"><p>'.$this->t('You need to register an e-mail to the contact, so you can send e-mails').'</p></div>';
 
                 }
 
