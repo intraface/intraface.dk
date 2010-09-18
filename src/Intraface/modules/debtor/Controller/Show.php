@@ -109,6 +109,9 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
     function getMessageAboutEmail()
     {
         $msg = '';
+        $contact_module = $this->getKernel()->getModule('contact');
+        $debtor_module = $this->getKernel()->getModule('debtor');
+
         switch ($this->getDebtor()->contact->get('preferred_invoice')) {
             case 2: // if the customer prefers e-mail
 
@@ -158,7 +161,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
             case 3: // electronic email, we make check that everything is as it should be
                 if ($this->getDebtor()->contact->address->get('ean') == '') {
-                    $msg = '<div class="message-dependent"><p>'.t('To be able to send electronic e-mails you need to fill out the EAN location number for the contact').'</p></div>';
+                    $msg = '<div class="message-dependent"><p>'.$this->t('To be able to send electronic e-mails you need to fill out the EAN location number for the contact').'</p></div>';
                 }
 
                 $scan_in_contact_id = $this->getKernel()->getSetting()->get('intranet', 'debtor.scan_in_contact');
@@ -170,7 +173,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                     $msg = '<div class="message-dependent"><p>';
                     $msg .= $this->t('A contact for the scan in bureau is needed to send electronic invoices').'. ';
                     if ($this->getKernel()->user->hasModuleAccess('administration')) {
-                        $msg .= '<a href="'.$debtor_module->getPath().'settings">'.t('Add it now').'</a>.';
+                        $msg .= '<a href="'.$debtor_module->getPath().'settings">'.$this->t('Add it now').'</a>.';
                     }
                     $msg .= '</p></div>';
 
