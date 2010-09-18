@@ -41,13 +41,17 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
             }
         }
 
+        if ($this->query('add_contact_id_sa_scan_in')) {
+            $this->context->getKernel()->getSetting()->set('intranet', 'debtor.scan_in_contact', $this->query('add_contact_id_sa_scan_in'));
+        }
+
         if ($this->context->getKernel()->getSetting()->get('intranet', 'debtor.scan_in_contact') > 0) {
             $scan_in_contact = new Contact($this->context->getKernel(), $this->context->getKernel()->getSetting()->get('intranet', 'debtor.scan_in_contact'));
         }
 
         $string = 'Det er ikke længere gratis for små og mellemstore virksomheder at bruge Læs-ind bureauer.';
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/settings');
-        return $smarty->render($this, array('string' => $string, 'kernel' => $this->context->getKernel()));
+        return $smarty->render($this, array('string' => $string, 'kernel' => $this->context->getKernel(), 'scan_in_contact' => $scan_in_contact));
     }
 
     function getError()
@@ -104,7 +108,7 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
                 $contact_module = $this->context->getKernel()->useModule('contact');
 
                 $redirect = Intraface_Redirect::factory($this->context->getKernel(), 'go');
-                $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('contact'), $debtor_module->getPath()."setting");
+                $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('contact'), $debtor_module->getPath()."settings");
                 $redirect->askParameter('contact_id');
                 $redirect->setIdentifier('contact');
 
@@ -121,7 +125,7 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
                 $contact_module = $this->context->getKernel()->useModule('contact');
 
                 $redirect = Intraface_Redirect::factory($this->context->getKernel(), 'go');
-                $url = $redirect->setDestination($contact_module->getPath()."contact_edit.php?id=".intval($_POST['scan_in_contact']), $debtor_module->getPath()."setting.php");
+                $url = $redirect->setDestination($contact_module->getPath()."/".intval($_POST['scan_in_contact']), $debtor_module->getPath()."settings");
 
                 return new k_SeeOther($url);
 
@@ -161,8 +165,8 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
         return $this->context->getKernel();
     }
 
-    function getReturnUrl()
+    function getReturnUrl($contact_id)
     {
-        return $this->url();
+        return $this->url(null, array('add_contact_id_sa_scan_in' => $contact_id));
     }
 }
