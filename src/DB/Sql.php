@@ -22,11 +22,8 @@ class DB_Sql
         if (PEAR::isError($this->db)) {
             die($this->db->getMessage() . ' ' . $this->db->getUserInfo());
         }
-        if (defined('INTRAFACE_K2')) {
-            $this->db->query('SET NAMES utf8');
-        } else {
-            $this->db->query('SET NAMES latin1');
-        }
+        $this->db->query('SET NAMES utf8');
+        $this->db->setOption('portability', MDB2_PORTABILITY_NONE);
     }
 
     function query($SQL)
