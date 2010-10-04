@@ -1,8 +1,0 @@
-
-== Install Selemium Server ==
-
-1) Download selenium server from http://www.openqa.org/selenium-rc/
-2) Sikre dig at java og en browser er installere som angivet i documentation.
-   Note: på linux ligger firefox-bin i /usr/lib/firefox-*/firefox-bin så evt. "ln -s /usr/lib/firexfox-*/firefox-bin /usr/local/firefox-bin" husk at udskifte * med det rigtige versionsnummer.
-3) Udpak filerne. Serveren ligger i selenium-server-*/ og start den som angivet i dokumentationen.
-4) Så er du vist klar.
