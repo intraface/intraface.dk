@@ -302,20 +302,20 @@ class Email extends Intraface_Standard
             $this->error->set('Der kunne ikke sendes e-mail til email #' . $this->get('id') . ' fordi der ikke var nogen kunde sat');
             return false;
         }
-        
+
         $validator = new Intraface_Validator($this->error);
-        
+
         if ($contact->get('type') == 'corporation' && $this->get('contact_person_id') != 0) {
             $contact->loadContactPerson($this->get('contact_person_id'));
             if ($validator->isEmail($contact->contactperson->get('email'))) {
                 return array($contact->contactperson->get('email') => $contact->contactperson->get('name'));
-            } 
+            }
         }
-        
+
         if($validator->isEmail($contact->address->get('email'))) {
             return array($contact->address->get('email') => $contact->address->get('name'));
         }
-        
+
         return false;
     }
 
@@ -395,14 +395,28 @@ class Email extends Intraface_Standard
         return $file;
     }
 
+    /**
+     * @deprecated
+     *
+     * @todo Denne funktion bør nok erstatte det meste af funktionen send(), s� send()
+     *       netop kun sender en e-mail!
+     *
+     * @return boolean
+     */
+    function sendAll($mailer)
+    {
+        $gateway = new Intraface_shared_email_EmailGateway($this->getKernel());
+        return $gateway->sendAll($mailer);
+    }
+
     function delete()
     {
         if ($this->get('status') == 'sent' OR $this->id == 0) {
-            return 0;
+            return false;
         }
         $db = new DB_Sql;
         $db->query("DELETE FROM email WHERE id = " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
-        return 1;
+        return true;
     }
 
     /**
