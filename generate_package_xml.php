@@ -149,10 +149,6 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler_Controller', 'publi
 $pfm->addPackageDepWithChannel('required', 'Ilib_Keyword_Controller', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Date', 'public.intraface.dk', '0.1.0');
 
-
-// email
-$pfm->addPackageDepWithChannel('required', 'phpmailer', 'public.intraface.dk', '1.73.1');
-
 // cms
 $pfm->addPackageDepWithChannel('required', 'XML_Util', 'pear.php.net', '1.2.0');
 $pfm->addPackageDepWithChannel('required', 'XML_Serializer', 'pear.php.net', '0.20.0');
