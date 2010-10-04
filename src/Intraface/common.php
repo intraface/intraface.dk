@@ -39,13 +39,6 @@ if (defined('NET_SCHEME') && defined('NET_HOST') && defined('NET_DIRECTORY')) {
     define('FILE_VIEWER', PATH_WWW . 'file');
 }
 
-// errorhandling
-if (!defined('ERROR_HANDLE_LEVEL')) {
-    define('ERROR_HANDLE_LEVEL', E_ALL);
-}
-//set_error_handler('intrafaceBackendErrorhandler', ERROR_HANDLE_LEVEL);
-//set_exception_handler('intrafaceBackendExceptionhandler');
-
 // wiring
 $bucket = new bucket_Container(new Intraface_Factory());
 
@@ -58,32 +51,6 @@ if (!defined('MDB2_DEBUG')) {
     define('MDB2_DEBUG', false);
 }
 $db = $bucket->get('mdb2');
-
-
-/*
-$db = MDB2::singleton(DB_DSN, array('persistent' => true));
-if (PEAR::isError($db)) {
-    trigger_error($db->getMessage(), E_USER_ERROR);
-}
-
-$db->setFetchMode(MDB2_FETCHMODE_ASSOC);
-$db->setOption('debug', MDB2_DEBUG);
-$db->setOption('portability', MDB2_PORTABILITY_NONE);
-$res = $db->setCharset('latin1');
-if (PEAR::isError($res)) {
-    trigger_error($res->getUserInfo(), E_USER_ERROR);
-}
-
-if ($db->getOption('debug')) {
-    $db->setOption('log_line_break', "\n\n\n\n\t");
-
-    $my_debug_handler = new MDB2_Debug_ExplainQueries($db);
-    $db->setOption('debug_handler', array($my_debug_handler, 'collectInfo'));
-
-    register_shutdown_function(array($my_debug_handler, 'executeAndExplain'));
-    register_shutdown_function(array($my_debug_handler, 'dumpInfo'));
-}
-*/
 
 // timezone and local
 if (!defined('COUNTRY_LOCAL')) {
@@ -102,9 +69,3 @@ $db->query('SET NAMES utf8');
 Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_USE_DQL_CALLBACKS, true);
 Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
 $doctrine_connection = $bucket->get('Doctrine_Connection_Common');
-/*
-// Initializes Doctrine
-Doctrine_Manager::getInstance()->setAttribute(Doctrine_Core::ATTR_USE_DQL_CALLBACKS, true);
-Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
-Doctrine_Manager::connection(DB_DSN);
-*/
