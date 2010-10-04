@@ -81,11 +81,10 @@ class ToolsFactory
 
         $translation = Translation2::factory($driver, $options, $params);
         if (PEAR::isError($translation)) {
-            exit($translation->getMessage());
+            throw new Exception($translation->getMessage());
         }
         $translation->setLang("dk");
         return $translation;
-
     }
 
     function new_k_TemplateFactory($c)
