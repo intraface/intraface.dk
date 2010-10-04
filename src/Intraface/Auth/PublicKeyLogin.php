@@ -32,7 +32,7 @@ class Intraface_Auth_PublicKeyLogin
      *
      * @return void
      */
-    function __construct($db, $session_id, $key)
+    function __construct(MDB2_Driver_Common $db, $session_id, $key)
     {
         $this->db         = $db;
         $this->key        = $key;
@@ -54,7 +54,7 @@ class Intraface_Auth_PublicKeyLogin
            return false;
        }
        $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-       
+
        return new Intraface_Weblogin($this->session_id, new Intraface_Intranet($row['id']));
     }
 }

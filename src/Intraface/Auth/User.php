@@ -22,7 +22,7 @@ class Intraface_Auth_User
      *
      * @return void
      */
-    function __construct($db, $session_id, $email = NULL, $password = NULL)
+    function __construct(MDB2_Driver_Common $db, $session_id, $email = NULL, $password = NULL)
     {
         $this->db         = $db;
         $this->email      = $email;
