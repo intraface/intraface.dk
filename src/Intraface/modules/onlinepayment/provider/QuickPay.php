@@ -7,7 +7,7 @@
  * @author		Lars Olesen <lars@legestue.net>
  * @version	1.0
  *
- * @todo		Skal statuskoderne fra den oprindelige quickpayklasse oversættes
+ * @todo		Skal statuskoderne fra den oprindelige quickpayklasse oversÃ¦ttes
  *				til vores statuskoder?
  */
 require_once 'Payment/Quickpay.php';
@@ -20,9 +20,9 @@ class OnlinePaymentQuickPay extends OnlinePayment
         '000' => 'Godkendt',
         '001' => 'Afvist af PBS',
         '002' => 'Kommunikationsfejl',
-        '003' => 'Kort udløbet',
+        '003' => 'Kort udlÃ¸bet',
         '004' => 'Status er forkert (Ikke autoriseret)',
-        '005' => 'Autorisation er forældet',
+        '005' => 'Autorisation er forÃ¦ldet',
         '006' => 'Fejl hos PBS',
         '007' => 'Fejl hos QuickPay',
         '008' => 'Fejl i parameter sendt til QuickPay'
@@ -35,10 +35,10 @@ class OnlinePaymentQuickPay extends OnlinePayment
 
     public $msg_types = array(
         '1100' => 'authorize', // tjekker
-        '1220' => 'capture', // hæver
+        '1220' => 'capture', // hÃ¦ver
         'credit' => 'credit', // tilbagebetaler
-        '1420' => 'reversal', // ophæver reservationen
-        'status' => 'status' // ophæver reservationen
+        '1420' => 'reversal', // ophÃ¦ver reservationen
+        'status' => 'status'
     );
     protected $dbquery;
 
@@ -56,20 +56,20 @@ class OnlinePaymentQuickPay extends OnlinePayment
 
         // hente settings om quickpay fra settingssystemet
         $this->settings = $this->getSettings();
-        // åbne et quickpay objeckt
+        // ï¿½bne et quickpay objeckt
         $this->quickpay = new quickpay;
         $this->quickpay->set_md5checkword($this->settings['md5_secret']);
         $this->quickpay->set_merchant($this->settings['merchant_id']);
         $this->quickpay->set_curl_certificate(dirname(__FILE__) . '/../../../certificates/cacert.pem');
 
-        // hvordan bliver disse sat - og hvad er det nøjagtigt?
+        // hvordan bliver disse sat - og hvad er det nï¿½jagtigt?
         $this->quickpay->set_posc($this->posc);
 
     }
 
     /**
-     * Denne funktion behøves ikke, for i første omgang i hvert fald sker
-     * autorisationen af dankort mv. uden for systemet. Vi skal kun kunne hæve og reverse fra
+     * Denne funktion behï¿½ves ikke, for i fï¿½rste omgang i hvert fald sker
+     * autorisationen af dankort mv. uden for systemet. Vi skal kun kunne hï¿½ve og reverse fra
      * systemet
      *
     function authorize($cardnumber, $expirationdate, $cvd, $ordernum, $amount) {
@@ -77,12 +77,12 @@ class OnlinePaymentQuickPay extends OnlinePayment
         $this->quickpay->set_expirationdate($expirationdate); // YYMM
         $this->quickpay->set_cvd($cvd);
         $this->quickpay->set_ordernum($ordernum); // MUST at least be of length 4
-        $this->quickpay->set_amount($amount); // skal være i ører
+        $this->quickpay->set_amount($amount); // skal vï¿½re i ï¿½rer
         $this->quickpay->set_currency('DKK');
 
         $this->eval = $this->quickpay->authorize();
 
-        // der skal laves noget if - then - og tingene skal gemmes på en eller anden måde
+        // der skal laves noget if - then - og tingene skal gemmes pï¿½ en eller anden mï¿½de
 
         return $this->eval;
     }
@@ -105,10 +105,10 @@ class OnlinePaymentQuickPay extends OnlinePayment
 
             // Her kan der laves en capture fra QuickPay;
 
-            // henter beløbene fra denne onlinebetaling
+            // henter belï¿½bene fra denne onlinebetaling
             $this->quickpay->set_transaction($this->get('transaction_number'));
             $this->quickpay->set_amount(round($this->get('amount') * 100));
-            
+
             $this->eval = $this->quickpay->capture();
 
             if (!empty($this->eval['qpstat']) AND $this->eval['qpstat'] === '000') {
@@ -117,14 +117,14 @@ class OnlinePaymentQuickPay extends OnlinePayment
                 if ($this->addAsPayment()) {
                     $this->setStatus("captured");
                 } else {
-                    throw new Exception('Onlinebetalingen kunne ikke overføres til fakturaen i Quickpay->transactionAction()');
+                    throw new Exception('Onlinebetalingen kunne ikke overfï¿½res til fakturaen i Quickpay->transactionAction()');
                 }
 
                 return true;
 
             } else {
                 // fiasko
-                $this->error->set('Betalingen kunne ikke hæves: '.$this->eval['qpstatmsg']);
+                $this->error->set('Betalingen kunne ikke hï¿½ves: '.$this->eval['qpstatmsg']);
                 return false;
             }
         } elseif ($action == "reversal") {
@@ -150,7 +150,7 @@ class OnlinePaymentQuickPay extends OnlinePayment
         return array(
             0 => array(
                 'action' => 'capture',
-                'label' => 'Hæv'),
+                'label' => 'Hï¿½v'),
             1 => array(
                 'action' => 'reversal',
                 'label' => 'Tilbagebetal')

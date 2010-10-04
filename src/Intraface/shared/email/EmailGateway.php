@@ -129,41 +129,6 @@ class Intraface_shared_email_EmailGateway
         return $db->f('antal');
     }
 
-    /**
-     * @todo Denne funktion b�r nok erstatte det meste af funktionen send(), s� send()
-     *       netop kun sender en e-mail!
-     *
-     * @return boolean
-     */
-    function sendAll($mailer)
-    {
-        if (!is_object($mailer)) {
-            throw new Exception('A valid mailer object is needed');
-        }
-
-        $sent_this_hour = $this->sentThisHour();
-
-        $limit_query = abs($this->allowed_limit-$sent_this_hour-$this->system_buffer);
-
-        $sql = "SELECT id
-                FROM email
-                WHERE status = 2
-                    AND date_deadline <= NOW()
-                    AND intranet_id = " . $this->kernel->intranet->get('id') . "
-                    AND contact_id > 0
-                LIMIT " . $limit_query;
-        $db = new DB_Sql;
-        $db->query($sql);
-
-        while ($db->nextRecord()) {
-            $email = new Email($this->kernel, $db->f('id'));
-            // could be good, but stops sending the rest of the emails if one has an error.
-            // $email->error = &$this->error;
-            $email->send($mailer);
-        }
-        return true;
-    }
-
     function getEmailsToSend()
     {
         $sent_this_hour = $this->sentThisHour();

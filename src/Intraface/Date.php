@@ -1,16 +1,13 @@
 <?php
-class Intraface_Date
+class Intraface_Date extends Ilib_Date
 {
+    /*
     private $date;
 
     function __construct($date)
     {
         $this->date = $date;
     }
-
-	/**
-     * HUSK AT RETTE I BÅDE VALIDATOR OG DATE
-     */
     function convert2db($default_year = "")
     {
         $d = "([0-3]?[0-9])";
@@ -40,4 +37,5 @@ class Intraface_Date
     {
         return $this->date;
     }
+    */
 }

@@ -50,10 +50,6 @@ class ProductDetail extends Intraface_Standard
      */
     public function __construct($product, $old_detail_id = 0)
     {
-        if (!is_object($product)) {
-            trigger_error('ProductDetail-objektet kr�ver et Product-objekt.', E_USER_ERROR);
-        }
-
         $this->product       = $product;
         $this->db            = new DB_Sql;
         $this->old_detail_id = (int)$old_detail_id;

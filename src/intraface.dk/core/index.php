@@ -1,5 +1,4 @@
 <?php
-// common settings
 define('INTRAFACE_K2', true);
 
 $config_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . '/../config.local.php';

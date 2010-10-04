@@ -11,18 +11,16 @@
 
 class Intraface_modules_product_ProductDoctrineGateway
 {
-    
     /**
      * @var object
      */
     private $user;
 
     /**
-     * 
      * @var object doctrine record table
      */
     private $table;
-    
+
     /**
      * Constructor
      *
@@ -32,7 +30,6 @@ class Intraface_modules_product_ProductDoctrineGateway
      */
     function __construct($doctrine, $user)
     {
-        
         $this->user = $user;
         $this->table = $doctrine->getTable('Intraface_modules_product_ProductDoctrine');
     }
@@ -45,7 +42,6 @@ class Intraface_modules_product_ProductDoctrineGateway
      */
     function findById($id)
     {
-        
         $collection = $this->table
             ->createQuery()
             ->select('*, details.*')
@@ -54,13 +50,13 @@ class Intraface_modules_product_ProductDoctrineGateway
             ->addWhere('id = ?', $id)
             ->addOrderBy('details.id')
             ->execute();
-    
+
         if ($collection == NULL || $collection->count() != 1) {
             throw new Intraface_Gateway_Exception('Error finding product from id '.$id);
         } else {
             return $collection->getLast();
         }
-        
+
     }
 
     /**
@@ -70,7 +66,7 @@ class Intraface_modules_product_ProductDoctrineGateway
      * så man kan se, hvad folk er interesseret i.
      * Søgemaskinen skal være tolerant for stavefejl
      *
-     * @param object $search 
+     * @param object $search
      *
      * @return object collection containing products
      */
@@ -86,12 +82,12 @@ class Intraface_modules_product_ProductDoctrineGateway
             ->addOrderBy('details.number')
             // ->getSql(); die($collection);
             ->execute(array(), Doctrine::HYDRATE_ARRAY);
-    
+
         return $collection;
     }
-    
-    public function findByVariationAttributeId($id) {
-        
+
+    public function findByVariationAttributeId($id) 
+    {
         $collection = $this->table
             ->createQuery()
             ->select('*, details.*, details_translation.*, variation.id, variation.*, variation_detail.*')
@@ -108,8 +104,7 @@ class Intraface_modules_product_ProductDoctrineGateway
             ->execute();
         return $collection;
     }
-    
-    
+        
     public function getMaxNumber()
     {
         $collection = $this->table
@@ -119,7 +114,7 @@ class Intraface_modules_product_ProductDoctrineGateway
             ->addWhere('Intraface_modules_product_ProductDoctrine.active = 0 OR Intraface_modules_product_ProductDoctrine.active = 1')
             ->orderBy('details.number')
             ->execute();
-    
+
         if ($collection == NULL || $collection->count() == 0) {
             return 0;
         } else {

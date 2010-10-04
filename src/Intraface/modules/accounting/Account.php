@@ -78,6 +78,9 @@ class Account extends Intraface_Standard
         4 => 'finance'
     );
 
+    protected $db;
+    protected $mdb2;
+
     /**
      * Constructor
      *
@@ -88,6 +91,12 @@ class Account extends Intraface_Standard
      */
     function __construct($year, $account_id = 0)
     {
+        $this->db = new DB_Sql;
+        $this->mdb2 = MDB2::singleton(DB_DSN);
+        if (PEAR::isError($this->mdb2)) {
+            throw new Exception($this->mdb2->getMessage() . $this->mdb2->getUserInfo());
+        }
+
         $this->error = new Intraface_Error;
         $this->year = $year;
         $this->id = (int)$account_id;
@@ -126,8 +135,6 @@ class Account extends Intraface_Standard
             return 0;
         }
 
-        $db = new DB_Sql;
-
         $sql = "SELECT
                 account.id,
                 account.name,
@@ -148,38 +155,38 @@ class Account extends Intraface_Standard
                 AND year_id = ".$this->year->get('id')."
             LIMIT 1";
 
-        $db->query($sql);
+        $this->db->query($sql);
 
-        if ($db->nextRecord()) {
-            $this->value['id'] = $db->f('id');
-            $this->value['name'] = $db->f('name');
-            //$this->value['comment'] = $db->f('comment');
-            $this->value['number'] = $db->f('number');
-            $this->value['type_key'] = $db->f('type_key');
+        if ($this->db->nextRecord()) {
+            $this->value['id'] = $this->db->f('id');
+            $this->value['name'] = $this->db->f('name');
+            //$this->value['comment'] = $this->db->f('comment');
+            $this->value['number'] = $this->db->f('number');
+            $this->value['type_key'] = $this->db->f('type_key');
             $this->value['type'] = $this->types[$this->value['type_key']];
-            $this->value['sum_from'] = $db->f('sum_from_account_number');
-            $this->value['sum_to'] = $db->f('sum_to_account_number');
-            $this->value['use_key'] = $db->f('use_key');
+            $this->value['sum_from'] = $this->db->f('sum_from_account_number');
+            $this->value['sum_to'] = $this->db->f('sum_to_account_number');
+            $this->value['use_key'] = $this->db->f('use_key');
             $this->value['use'] = $this->use[$this->value['use_key']];
-            $this->value['primosaldo_debet'] = $db->f('primosaldo_debet');
-            $this->value['primosaldo_credit'] = $db->f('primosaldo_credit');
-            $this->value['vat_key'] = $db->f('vat_key');
-            $this->value['active'] = $db->f('active');
+            $this->value['primosaldo_debet'] = $this->db->f('primosaldo_debet');
+            $this->value['primosaldo_credit'] = $this->db->f('primosaldo_credit');
+            $this->value['vat_key'] = $this->db->f('vat_key');
+            $this->value['active'] = $this->db->f('active');
 
             // hvis der ikke er moms p� �ret skal alle momsindstillinger nulstilles
             if ($this->year->get('vat') == 0) {
                 $this->value['vat_key'] = 0;
-                $this->value['vat'] = $this->vat[$db->f('vat_key')];
+                $this->value['vat'] = $this->vat[$this->db->f('vat_key')];
                 $this->value['vat_percent'] = 0;
                 $this->value['vat_shorthand'] = 'ingen';
 
             } else { // hvis der er moms p� �ret
-                $this->value['vat_key'] = $db->f('vat_key');
-                $this->value['vat'] = $this->vat[$db->f('vat_key')];
+                $this->value['vat_key'] = $this->db->f('vat_key');
+                $this->value['vat'] = $this->vat[$this->db->f('vat_key')];
                 if ($this->value['vat'] == 'none') {
                     $this->value['vat_percent'] = 0;
                 } else {
-                    $this->value['vat_percent'] = $db->f('vat_percent');
+                    $this->value['vat_percent'] = $this->db->f('vat_percent');
                 }
 
                 if ($this->value['vat'] == 'in') {
@@ -271,15 +278,14 @@ class Account extends Intraface_Standard
             date_changed = NOW(),
             vat_key=".(int)$var['vat_key']." " . $sql_end;
 
-        $db = new DB_Sql;
-        $db->query($sql);
+        $this->db->query($sql);
 
         if ($this->id == 0) {
-            $this->id = $db->insertedId();
+            $this->id = $this->db->insertedId();
         }
 
         if (!empty($var['created_from_id']) AND is_numeric($var['created_from_id'])) {
-            $db->query("UPDATE accounting_account SET created_from_id = ".$var['created_from_id']." WHERE id = " . $this->id);
+            $this->db->query("UPDATE accounting_account SET created_from_id = ".$var['created_from_id']." WHERE id = " . $this->id);
         }
 
         $this->load();
@@ -317,8 +323,7 @@ class Account extends Intraface_Standard
         $debet = (double)$debet;
         $credit = (double)$credit;
 
-        $db = new DB_Sql;
-        $db->query("UPDATE accounting_account
+        $this->db->query("UPDATE accounting_account
             SET
                 primosaldo_debet = '".$debet."',
                 primosaldo_credit = '".$credit."'
@@ -336,17 +341,16 @@ class Account extends Intraface_Standard
     public function delete()
     {
         if ($this->anyPosts()) {
-            $this->error->set('Der er poster p� kontoen for dette �r, s� du kan ikke slette den. N�ste �r kan du lade v�re med at bogf�re p� kontoen, og s� kan du slette den.');
+            $this->error->set('Der er poster på kontoen for dette år, så du kan ikke slette den. Næste år kan du lade være med at bogføre på kontoen, og så kan du slette den.');
             return false;
         }
         $this->getSaldo();
         if ($this->get('saldo') != 0) {
-            $this->error->set('Der er registreret noget p� primosaldoen p� kontoen, s� du kan ikke slette den. Du kan slette kontoen, hvis du nulstiller primosaldoen.');
+            $this->error->set('Der er registreret noget på primosaldoen på kontoen, så du kan ikke slette den. Du kan slette kontoen, hvis du nulstiller primosaldoen.');
             return false;
         }
 
-        $db = new DB_Sql;
-        $db->query("UPDATE accounting_account SET active = 0, date_changed=NOW() WHERE intranet_id = " . $this->year->kernel->intranet->get('id') . " AND year_id = ".$this->year->get('id')." AND id = " . $this->id);
+        $this->db->query("UPDATE accounting_account SET active = 0, date_changed=NOW() WHERE intranet_id = " . $this->year->kernel->intranet->get('id') . " AND year_id = ".$this->year->get('id')." AND id = " . $this->id);
         $this->value['active'] = 0;
         return true;
     }
@@ -384,10 +388,6 @@ class Account extends Intraface_Standard
     {
         $account_number = (int)$account_number;
 
-        $db = MDB2::singleton(DB_DSN);
-        if (PEAR::isError($db)) {
-            throw new Exception($db->getMessage() . $db->getUserInfo());
-        }
         $sql = "SELECT
                 id
             FROM accounting_account
@@ -395,7 +395,7 @@ class Account extends Intraface_Standard
                 AND intranet_id = " . $this->year->kernel->intranet->get('id') . "
                 AND year_id = " .$this->year->get('id'). "
                 AND id <> " . $this->id . " AND active = 1";
-        $result = $db->query($sql);
+        $result = $this->mdb2->query($sql);
         if (PEAR::isError($result)) {
             throw new Exception('Error in query: '.$result->getUserInfo());
         }
@@ -424,15 +424,14 @@ class Account extends Intraface_Standard
                 AND active = 1
                 AND intranet_id = ".$this->year->kernel->intranet->get('id');
 
-        $db = new Db_Sql;
-        $db->query($sql);
+        $this->db->query($sql);
 
-        if (!$db->nextRecord()) {
+        if (!$this->db->nextRecord()) {
             return array('debet' => 0, 'credit' => 0, 'saldo' => 0);
         }
 
-        $primo['debet'] = $db->f('primosaldo_debet');
-        $primo['credit'] = $db->f('primosaldo_credit');
+        $primo['debet'] = $this->db->f('primosaldo_debet');
+        $primo['credit'] = $this->db->f('primosaldo_credit');
         $primo['saldo'] = $primo['debet'] - $primo['credit'];
 
         return $primo;
@@ -476,7 +475,6 @@ class Account extends Intraface_Standard
 
         // Tjekker p� om datoerne er i indev�rende �r
 
-        $db = new DB_Sql;
             // henter primosaldoen for kontoen
             $primo = $this->getPrimoSaldo();
             $sql = "SELECT
@@ -519,20 +517,20 @@ class Account extends Intraface_Standard
                 $total_saldo = $total_saldo + $total;
             } else {
 
-                $db->query($sql);
-                if (!$db->nextRecord()) {
+                $this->db->query($sql);
+                if (!$this->db->nextRecord()) {
                     $this->value['debet'] = $primo['debet'];
                     $this->value['credit'] = $primo['credit'];
                     $this->value['saldo'] = $this->value['debet'] - $this->value['credit'];
                 } else {
 
                     if ($type == 'draft') {
-                        $this->value['debet_draft'] = $db->f('debet_total');
-                        $this->value['credit_draft'] = $db->f('credit_total');
+                        $this->value['debet_draft'] = $this->db->f('debet_total');
+                        $this->value['credit_draft'] = $this->db->f('credit_total');
                         $this->value['saldo_draft'] = $this->value['debet_draft'] - $this->value['credit_draft'];
                     } else {
-                        $this->value['debet'] = $primo['debet'] + $db->f('debet_total');
-                        $this->value['credit'] = $primo['credit'] + $db->f('credit_total');
+                        $this->value['debet'] = $primo['debet'] + $this->db->f('debet_total');
+                        $this->value['credit'] = $primo['credit'] + $this->db->f('credit_total');
                         $this->value['saldo'] = $this->value['debet'] - $this->value['credit'];
                     }
                 }
@@ -559,120 +557,24 @@ class Account extends Intraface_Standard
     {
         $gateway = new Intraface_modules_accounting_AccountGateway($this->year);
         return $gateway->getList($type, $saldo);
-
-        /*
-        $type = safeToDb($type);
-        $type_sql = '';
-
-        //if ($this->year->get('id') == 0 || $this->id == 0) {
-        if ($this->year->get('id') == 0) {
-            //$this->value['id'] = 0;
-            //$this->id = 0;
-            return array();
-        }
-
-        $db = new DB_Sql;
-        if (!empty($type)) {
-            switch($type) {
-                case 'expenses':
-                        $type_sql = " AND use_key = '".array_search('expenses', $this->use)."'";
-                    break;
-                case 'income':
-                        $type_sql = " AND use_key = '".array_search('income', $this->use)."'";
-                    break;
-                case 'finance':
-                        $type_sql = " AND use_key = '".array_search('finance', $this->use)."'";
-                    break;
-                case 'balance':
-                    // fall through
-                case 'status':
-                        $type_sql = " AND (type_key = '".array_search('balance, liability', $this->types)."' OR type_key = '".array_search('balance, asset', $this->types)."')";
-                    break;
-                case 'drift':
-                    // fall through
-                case 'operating':
-                        $type_sql = " AND type_key = '".array_search('operating', $this->types)."'";
-                    break;
-                default:
-               break;
-            }
-        }
-        $accounts = array();
-        $sql = "SELECT
-                    account.id,
-                    account.number,
-                    account.name,
-                    account.type_key,
-                    account.primosaldo_debet,
-                    account.primosaldo_credit,
-                    account.created_from_id,
-                    account.vat_key,
-                    account.sum_from_account_number,
-                    account.sum_to_account_number
-            FROM accounting_account account
-            WHERE intranet_id = ".$this->year->kernel->intranet->get('id')." ".$type_sql."
-                AND active = 1 AND year_id = ".$this->year->get('id')." ORDER BY number ASC";
-
-        $db->query($sql);
-
-        $i = 0;
-        while ($db->nextRecord()) {
-            $accounts[$i]['id'] = $db->f('id');
-            $accounts[$i]['name'] = $db->f('name');
-            $accounts[$i]['number'] = $db->f('number');
-            $accounts[$i]['type_key'] = $db->f('type_key');
-            $accounts[$i]['type'] = $this->types[$db->f('type_key')];
-            $accounts[$i]['sum_from'] = $db->f('sum_from_account_number');
-            $accounts[$i]['sum_to'] = $db->f('sum_to_account_number');
-
-
-            $accounts[$i]['primosaldo_debet'] = $db->f('primosaldo_debet');
-            $accounts[$i]['primosaldo_credit'] = $db->f('primosaldo_credit');
-            $accounts[$i]['created_from_id'] = $db->f('created_from_id');
-            $accounts[$i]['vat_shorthand'] = $this->vat[$db->f('vat_key')];
-
-            if ($saldo === true) {
-                $account = new Account($this->year, $db->f('id'));
-                $account->getSaldo();
-                $accounts[$i]['debet'] = $account->get('debet');
-                $accounts[$i]['credit'] = $account->get('credit');
-                $accounts[$i]['saldo'] = $account->get('saldo');
-
-            }
-
-
-            $i++;
-        }
-        return $accounts;
-        */
     }
 
     public function anyAccounts()
     {
-        /*
-        $db = new DB_Sql;
-        $sql = "SELECT id
-            FROM accounting_account
-            WHERE intranet_id = " . $this->year->kernel->intranet->get("id") . " AND year_id = ".$this->year->get('id')." AND active = 1";
-        $db->query($sql);
-
-        return $db->numRows();
-		*/
         $gateway = new Intraface_modules_accounting_AccountGateway($this->year);
         return $gateway->anyAccounts();
     }
 
     public function anyPosts()
     {
-        $db = new DB_Sql;
-        $db->query("SELECT
+        $this->db->query("SELECT
                 id
             FROM accounting_post post
             WHERE (post.account_id = ". $this->id . ")
                 AND intranet_id = ".$this->year->kernel->intranet->get('id')."
                 AND year_id = " . $this->year->get('id') . "
                 LIMIT 1");
-        return $db->numRows();
+        return $this->db->numRows();
     }
 
     public function getPosts()
@@ -682,9 +584,7 @@ class Account extends Intraface_Standard
         if ($this->id == 0) {
             return $posts;
         }
-        $db2 = new DB_Sql;
-
-        $db2->query("SELECT
+        $this->db->query("SELECT
                     id,
                     date,
                     DATE_FORMAT(date, '%d-%m-%Y') AS dk_date,
@@ -699,16 +599,16 @@ class Account extends Intraface_Standard
                     AND stated = 1
                     ORDER BY date ASC, id ASC");
         $i = 1;
-        while ($db2->nextRecord()) {
-            $posts[$i]['id'] = $db2->f('id');
-            $posts[$i]['dk_date'] = $db2->f('dk_date');
-            $posts[$i]['date'] = $db2->f('date');
-            $posts[$i]['voucher_id'] = $db2->f('voucher_id');
-            $voucher = new Voucher($this->year, $db2->f('voucher_id'));
+        while ($this->db->nextRecord()) {
+            $posts[$i]['id'] = $this->db->f('id');
+            $posts[$i]['dk_date'] = $this->db->f('dk_date');
+            $posts[$i]['date'] = $this->db->f('date');
+            $posts[$i]['voucher_id'] = $this->db->f('voucher_id');
+            $voucher = new Voucher($this->year, $this->db->f('voucher_id'));
             $posts[$i]['voucher_number'] = $voucher->get('number');
-            $posts[$i]['text'] = $db2->f('text');
-            $posts[$i]['debet'] = $db2->f('debet');
-            $posts[$i]['credit'] = $db2->f('credit');
+            $posts[$i]['text'] = $this->db->f('text');
+            $posts[$i]['debet'] = $this->db->f('debet');
+            $posts[$i]['credit'] = $this->db->f('credit');
             //$posts[$i]['stated'] = $db2->f('stated');
             //$posts[$i]['account_id'] = $db2->f('account_id');
             $i++;

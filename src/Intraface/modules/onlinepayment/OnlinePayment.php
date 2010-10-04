@@ -66,37 +66,10 @@ class OnlinePayment extends Intraface_Standard
                 return $gateway->findBySettings();
                 break;
             case 'id':
-                /*
-                $db = new DB_Sql;
-                $db->query("SELECT provider_key FROM onlinepayment WHERE id = ".(int)$value. " AND intranet_id = " . $kernel->intranet->get('id'));
-                if (!$db->nextRecord()) {
-                    trigger_error('OnlinePayment::factory: Ikke et gyldigt id', E_USER_ERROR);
-                }
-                $provider = $implemented_providers[$db->f('provider_key')];
-                break;
-                */
                 return $gateway->findById($value);
             case 'provider':
-                /*
-                if (!in_array($value, $implemented_providers)) {
-                    trigger_error('Ikke en gyldig provider i OnlinePayment->factory case: provider', E_USER_ERROR);
-                    exit;
-                }
-                $provider = $value;
-                break;
-                */
                 return $gateway->findByProvider($value);
             case 'transactionnumber':
-                /*
-                $db = new DB_Sql;
-                $db->query("SELECT provider_key FROM onlinepayment WHERE transaction_number = '".$value."' AND intranet_id = " . $kernel->intranet->get('id'));
-                if (!$db->nextRecord()) {
-                    trigger_error('OnlinePayment::factory: Ikke et gyldigt transactionnumber', E_USER_ERROR);
-                    exit;
-                }
-                $provider = $implemented_providers[$db->f('provider_key')];
-                break;
-                */
                 return $gateway->findByTransactionNumber($value);
             default:
                 throw new Exception('Ikke gyldig type i Onlinebetaling');
@@ -332,9 +305,7 @@ class OnlinePayment extends Intraface_Standard
         $this->load();
 
         return $this->id;
-
     }
-
 
     /**
      * Creates an onlinepayment to be processed
@@ -354,7 +325,6 @@ class OnlinePayment extends Intraface_Standard
         return $db->insertedId();
     }
 
-
     /**
      * Funktion til at opdatere betaling inden fra intranettet
      *
@@ -365,11 +335,11 @@ class OnlinePayment extends Intraface_Standard
     function update($input)
     {
         if ($this->id == 0) {
-            trigger_error("OnlinePayment->update kan kun køres på en allerede oprettet betaling", E_USER_ERROR);
+            throw new Exception("OnlinePayment->update kan kun køres på en allerede oprettet betaling");
         }
 
         if ($this->getStatus() != 'authorized') {
-            trigger_error("OnlinePayment->update kan kun køres på betaling der er authorized", E_USER_ERROR);
+            throw new Exception("OnlinePayment->update kan kun køres på betaling der er authorized");
         }
 
         $input = safeToDb($input);
@@ -401,18 +371,18 @@ class OnlinePayment extends Intraface_Standard
     function changeBelongTo($belong_to, $belong_to_id)
     {
         if ($this->id == 0) {
-            trigger_error("OnlinePayment->setBelongTo kan kun ændre eksisterende betalinger", FATAL);
+            throw new Exception("OnlinePayment->setBelongTo kan kun ændre eksisterende betalinger");
         }
 
         $belong_to = safeToDb($belong_to);
 
         $belong_to_key = array_search($belong_to, $this->getBelongToTypes());
         if ($belong_to == '' || $belong_to_key === false) {
-            trigger_error("Ugyldig belong_to i OnlinePayment->changeBelongTo()", FATAL);
+            throw new Exception("Ugyldig belong_to i OnlinePayment->changeBelongTo()");
         }
 
         if (!is_int($belong_to_id)) {
-            trigger_error("Belong_to_id er ikke et tal i OnlinePayment->changeBelongTo()", FATAL);
+            throw new Exception("Belong_to_id er ikke et tal i OnlinePayment->changeBelongTo()");
         }
 
         $db = new DB_Sql;
@@ -424,7 +394,7 @@ class OnlinePayment extends Intraface_Standard
     function setStatus($status)
     {
         if ($this->id == 0) {
-            trigger_error("OnlinePayment->setStatus kan kun ændre eksisterende betalinger", E_USER_ERROR);
+            throw new Exception("OnlinePayment->setStatus kan kun ændre eksisterende betalinger");
         }
         $status = safeToDb($status);
 

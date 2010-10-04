@@ -21,7 +21,7 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
     {
         $this->document->setTitle('Accounts');
 
-        $accounts = $this->getAccount()->getList('saldo', true);
+        $accounts = $this->getAccountGateway()->findByType('saldo', true);
 
         $data = array(
             'accounts' => $accounts
@@ -121,7 +121,7 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
     function getAccountGateway()
     {
-        return $gateway = new Intraface_modules_accounting_AccountGateway($this->getYear());
+        return new Intraface_modules_accounting_AccountGateway($this->getYear());
     }
 
     function getAccount()

@@ -28,7 +28,10 @@ class Intraface_modules_cms_Controller_Elements extends k_Component
         $module_cms = $this->getKernel()->module('cms');
         $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
+
         // der skal valideres noget p� typen ogs�.
+
+
 
         // FIXME ud fra section bliver cms_site loaded flere gange?
         // formentlig har det noget med Template at g�re
@@ -41,12 +44,6 @@ class Intraface_modules_cms_Controller_Elements extends k_Component
         $value = $element->get();
         $value['type'] = $element->get('type');
         $value['page_id'] = $element->get('page_id');
-
-        /*
-        if ($this->getKernel()->setting->get('user', 'htmleditor') == 'tinymce') {
-            $this->document->addScript('tiny_mce/tiny_mce.js');
-        }
-        */
 
         $this->document->addScript('ckeditor/ckeditor.js');
         $this->document->addScript('ckeditor/lang/_languages.js');
@@ -93,7 +90,6 @@ class Intraface_modules_cms_Controller_Elements extends k_Component
             $value = $_POST;
         }
         return $this->render();
-
     }
 
     function getKernel()

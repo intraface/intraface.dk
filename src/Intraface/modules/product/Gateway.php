@@ -217,31 +217,53 @@ class Intraface_modules_product_Gateway
         $db->free();
         return $products;
     }
-    
+
     /**
      * Returns product ids with given keyword for webshop.
-     * 
+     *
      * @param mixed $keyword_id integer or array with keyword ids
      * @return array
      */
     public function getProductIdsWithKeywordForShop($keyword_id) {
-        
+
         $this->getDBQuery()->setKeyword($keyword_id);
         $this->getDBQuery()->setCondition("product.do_show = 1");
-        
+
         $db       = $this->getDBQuery()->getRecordset("product.id", "", false);
         $products = array();
         while ($db->nextRecord()) {
             $products[] = $db->f("id");
         }
-        
+
         return $products;
-        
+
     }
 
     function getMaxNumber()
     {
         $product = new Product($this->kernel);
         return $product->getMaxNumber();
+    }
+
+    /**
+     * Finds most popular products
+     *
+     * @return array
+     */
+    public function findMostPopular($limit = 10)
+    {
+        $db = new DB_Sql;
+        $db->query("SELECT product_detail_translation.name, product.id, SUM(debtor_item.quantity) AS quantity FROM product
+            INNER JOIN debtor_item ON debtor_item.product_id = product.id
+            INNER JOIN debtor ON debtor_item.debtor_id = debtor.id
+            INNER JOIN product_detail ON product_detail.product_id = product.id
+            LEFT JOIN product_detail_translation ON product_detail.id = product_detail_translation.id
+            WHERE debtor.type = 3 AND debtor.intranet_id = 34 AND product_detail_translation.lang = 'da' ORDER BY quantity DESC LIMIT " . $limit);
+        while ($db->nextRecord()) {
+            $product[$db->f('id')]['id'] = $db->f('id');
+            $product[$db->f('id')]['name'] = $db->f('name');
+            $product[$db->f('id')]['quantity'] = $db->f('quantity');
+        }
+        return $products;
     }
 }

@@ -1,9 +1,9 @@
 <?php
 /**
- * Nøgleord
+ * Nï¿½gleord
  *
- * @todo Gruppere nøgleord
- * @todo Systemnøgleord
+ * @todo Gruppere nï¿½gleord
+ * @todo Systemnï¿½gleord
  *
  * @author Lars Olesen <lars@legestue.net>
  */
@@ -93,8 +93,8 @@ class Keyword extends Ilib_Keyword
     }
 
     /**
-     * Skal factory bare tage en kernel og en id og så selv lave objektet,
-     * eller skal det være omvendt at factory bruges til at smide et objekt ind i
+     * Skal factory bare tage en kernel og en id og sï¿½ selv lave objektet,
+     * eller skal det vï¿½re omvendt at factory bruges til at smide et objekt ind i
      * klassen - og at Keyword selv laver objektet?
      *
      * @param object  $kernel
@@ -166,7 +166,7 @@ class Keyword extends Ilib_Keyword
             $validator->isNumeric($var['id'], 'id', 'allow_empty');
         }
         if (empty($var['keyword'])) {
-            $this->error->set("Du har ikke skrevet et nøgleord");
+            $this->error->set("Du har ikke skrevet et nï¿½gleord");
         }
 
         if ($this->error->isError()) {
@@ -252,7 +252,7 @@ class Keyword extends Ilib_Keyword
     }
 
     /**
-     * Denne metode sletter et nøgleord i nøgleordsdatabasen
+     * Denne metode sletter et nï¿½gleord i nï¿½gleordsdatabasen
      *
      * @return boolean
      */
@@ -370,7 +370,7 @@ class Intraface_Keyword_Appender extends Keyword
     }
 
     /**
-     * Denne funktion tilføjer et nøgleord til et objekt
+     * Denne funktion tilfï¿½jer et nï¿½gleord til et objekt
      *
      * @param integer $keyword_id
      *
@@ -415,8 +415,8 @@ class Intraface_Keyword_Appender extends Keyword
     }
 
     /**
-     * Returnerer de keywords der bliver brugt på nogle poster
-     * Især anvendelig til søgeoversigter
+     * Returnerer de keywords der bliver brugt pï¿½ nogle poster
+     * Isï¿½r anvendelig til sï¿½geoversigter
      *
      * @return array
      */
@@ -452,9 +452,9 @@ class Intraface_Keyword_Appender extends Keyword
     }
 
     /**
-     * Returnerer de keywords, der er tilføjet til et objekt
+     * Returnerer de keywords, der er tilfï¿½jet til et objekt
      *
-     * Det er meget mærkeligt, men den her funktion returnerer alle keywords på et intranet?
+     * Det er meget mï¿½rkeligt, men den her funktion returnerer alle keywords pï¿½ et intranet?
      *
      * @return array
      */
@@ -527,7 +527,7 @@ class Intraface_Keyword_Appender extends Keyword
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Returnerer de vedhæftede keywords som en streng
+     * Returnerer de vedhï¿½ftede keywords som en streng
      *
      * @return string
      */
@@ -590,12 +590,12 @@ class Intraface_Keyword_StringAppender
      ***************************************************************************/
 
     /**
-     * Funktionen er en hjælpefunktion, så man bare kan skrive nøgleordene i et inputfelt
+     * Funktionen er en hjï¿½lpefunktion, sï¿½ man bare kan skrive nï¿½gleordene i et inputfelt
      *
      * @param string $s        The string to split
      * @param string $splitter What splitter to use to split the string
      *
-     * @return array med nøgleordene
+     * @return array med nï¿½gleordene
      */
     public static function quotesplit($s, $splitter=',')
     {
