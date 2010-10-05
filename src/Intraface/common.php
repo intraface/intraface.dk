@@ -14,7 +14,7 @@ require_once 'Ilib/ClassLoader.php';
 require_once 'ErrorHandler.php';
 require_once 'ErrorHandler/Observer/BlueScreen.php';
 require_once 'Log.php';
-require_once 'Doctrine/lib/Doctrine.php';
+require_once 'Doctrine.php';
 spl_autoload_register(array('Doctrine', 'autoload'));
 require_once 'Intraface/functions.php';
 require_once 'bucket.inc.php';
