@@ -119,5 +119,3 @@ class Intraface_modules_controlpanel_Controller_UserPreferences extends k_Compon
         return $this->getKernel()->getModules();
     }
 }
-
-
