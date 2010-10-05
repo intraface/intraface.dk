@@ -2,10 +2,12 @@
 class Intraface_modules_accounting_Controller_Search extends k_Component
 {
     protected $template;
+    protected $db_sql;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, DB_Sql $db)
     {
         $this->template = $template;
+        $this->db_sql = $db;
     }
 
     function renderHtml()
@@ -47,7 +49,7 @@ class Intraface_modules_accounting_Controller_Search extends k_Component
                         case 'bilag':
                             // fall through
                         case 'voucher':
-                            $db = new DB_Sql;
+                            $db = $this->db_sql;
                             $db->query("SELECT * FROM accounting_voucher WHERE number >= " . $search_real[0] . " AND number <= " . $search_real[1] . " AND intranet_id = " . $year->kernel->intranet->get('id') . " AND year_id = " . $year->get('id'));
                             //$i++;
                             $posts = array();
