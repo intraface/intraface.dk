@@ -14,11 +14,36 @@ class Intraface_Fileimport_Controller_Index extends k_Component
         $this->template = $template;
     }
 
+    function renderHtml()
+    {
+        $shared_fileimport = $this->getKernel()->useShared('fileimport');
+        $shared_filehandler = $this->getKernel()->useModule('filemanager');
+
+        if (!is_object($this->fileimport)) {
+            $this->fileimport = new FileImport;
+        }
+
+
+        /*
+        $redirect = Intraface_Redirect::receive($this->getKernel());
+
+        if ($redirect->get('id') == 0) {
+            throw new Exception('we did not find a redirect, which is needed');
+        }
+        */
+
+        $data = array(
+            'fileimport' => $this->fileimport
+        );
+
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/index');
+        return $tpl->render($this, $data);
+    }
+
     function postMultipart()
     {
         $shared_fileimport = $this->getKernel()->useShared('fileimport');
         $shared_filehandler = $this->getKernel()->useModule('filemanager');
-        $translation = $this->getKernel()->getTranslation('fileimport');
 
         $this->fileimport = new FileImport;
 
@@ -92,33 +117,6 @@ class Intraface_Fileimport_Controller_Index extends k_Component
             }
         }
         return $this->render();
-    }
-
-    function renderHtml()
-    {
-        $shared_fileimport = $this->getKernel()->useShared('fileimport');
-        $shared_filehandler = $this->getKernel()->useModule('filemanager');
-        $translation = $this->getKernel()->getTranslation('fileimport');
-
-        if (!is_object($this->fileimport)) {
-            $this->fileimport = new FileImport;
-        }
-
-
-        /*
-        $redirect = Intraface_Redirect::receive($this->getKernel());
-
-        if ($redirect->get('id') == 0) {
-            throw new Exception('we did not find a redirect, which is needed');
-        }
-		*/
-
-        $data = array(
-            'fileimport' => $this->fileimport
-        );
-
-        $tpl = $this->template->create(dirname(__FILE__) . '/templates/index');
-        return $tpl->render($this, $data);
     }
 
     function getKernel()

@@ -20,7 +20,6 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
     {
         $accounting_module = $this->context->getKernel()->useModule('accounting');
         $this->context->getKernel()->useModule('invoice');
-        $translation = $this->context->getKernel()->getTranslation('debtor');
         $year = new Year($this->context->getKernel());
         $voucher = $this->getVoucher();
         //$object = $this->context->getDebtor();

@@ -78,7 +78,6 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         $module_procurement = $this->getKernel()->module("procurement");
         $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
-        $translation = $this->getKernel()->getTranslation('procurement');
 
         $procurement = $this->getProcurement();
         $filehandler = new FileHandler($this->getKernel());
@@ -181,7 +180,6 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
     function renderHtmlEdit()
     {
         $module = $this->getKernel()->module("procurement");
-        $translation = $this->getKernel()->getTranslation('procurement');
         $procurement = $this->getProcurement();
         $values = $procurement->get();
         $this->document->setTitle($this->t("Edit procurement"));

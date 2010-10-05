@@ -25,7 +25,6 @@ class Intraface_Filehandler_Controller_CKEditor extends Intraface_Filehandler_Co
     {
         $kernel = $this->context->getKernel();
         $module_filemanager = $kernel->module('filemanager');
-        $translation = $kernel->getTranslation('filemanager');
 
         if ($this->query('delete')) {
             $appender = $this->getFileAppender();
@@ -163,7 +162,6 @@ class Intraface_Filehandler_Controller_CKEditor extends Intraface_Filehandler_Co
     {
         $kernel = $this->context->getKernel();
         $module_filemanager = $kernel->module('filemanager');
-        $translation = $kernel->getTranslation('filemanager');
         $gateway = new Ilib_Filehandler_Gateway($this->context->getKernel());
         /*
         if (isset($this->POST['ajax'])) {
