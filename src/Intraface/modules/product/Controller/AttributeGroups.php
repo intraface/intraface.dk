@@ -9,24 +9,14 @@ class Intraface_modules_product_Controller_AttributeGroups extends k_Component
         $this->template = $template;
     }
 
-    function getKernel()
+    function map($name)
     {
-        return $this->context->getKernel();
-    }
-
-    function getError()
-    {
-        if (!is_object($this->error)) {
-            $this->error = new Intraface_Doctrine_ErrorRender($this->getKernel()->getTranslation('product'));
-        }
-
-        return $this->error;
+        return 'Intraface_modules_product_Controller_AttributeGroups_Show';
     }
 
     function renderHtml()
     {
         $module = $this->getKernel()->module('product');
-        $translation = $this->getKernel()->getTranslation('product');
         Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
 
         $gateway = new Intraface_modules_product_Attribute_Group_Gateway();
@@ -37,12 +27,6 @@ class Intraface_modules_product_Controller_AttributeGroups extends k_Component
 
         $smarty = $this->template->create(dirname(__FILE__) . '/tpl/attributegroups');
         return $smarty->render($this, $data);
-
-    }
-
-    function map($name)
-    {
-        return 'Intraface_modules_product_Controller_AttributeGroups_Show';
     }
 
     function postForm()
@@ -73,5 +57,19 @@ class Intraface_modules_product_Controller_AttributeGroups extends k_Component
         $smarty = $this->template->create(dirname(__FILE__) . '/tpl/attributegroup-edit');
         return $smarty->render($this, $data);
 
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getError()
+    {
+        if (!is_object($this->error)) {
+            $this->error = new Intraface_Doctrine_ErrorRender($this->getKernel()->getTranslation('product'));
+        }
+
+        return $this->error;
     }
 }
