@@ -37,17 +37,6 @@ class Intraface_Controller_Signup extends k_Component
         return $smarty->render($this);
     }
 
-    /*
-    function getKernel()
-    {
-        if (is_object($this->kernel)) {
-            return $this->kernel;
-        }
-        $registry = $this->registry->create();
-    	return $this->kernel = $registry->get('kernel');
-    }
-    */
-
     function postForm()
     {
         if (!Validate::email($this->body('email'))) {
