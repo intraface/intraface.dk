@@ -161,7 +161,6 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
 
             } else {
                 throw new Exception('You need access to the contact module!');
-                exit;
             }
 
         } elseif ($this->query('from') == 'select_product') {
