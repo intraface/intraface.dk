@@ -1,5 +1,5 @@
 <?php
-class Intraface_Controller_Payment
+class Intraface_Controller_Payment extends k_Component
 {
     protected $template;
 
