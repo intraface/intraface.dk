@@ -30,7 +30,7 @@
                         <td><?php e($evaluation['go_to_index_after']); ?></td>
                         <td>
                             <a href="<?php e(url($evaluation['id'].'/edit')); ?>" class="edit"><?php e(t('Edit')); ?></a>
-                            <a href="<?php e(url($evaluation['id'].'/delete')); ?>" class="delete"><?php e(t('Delete')); ?></a>
+                            <a href="<?php e(url($evaluation['id'], array('delete'))); ?>" class="delete"><?php e(t('Delete')); ?></a>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

@@ -12,9 +12,13 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Index extends k_Compone
         $this->mdb2 = $mdb2;
     }
 
-    function getShop()
+    function map($name)
     {
-        return $this->context->getShop();
+        if ($name == 'edit') {
+            return 'Intraface_modules_shop_Controller_BasketEvaluation_Edit';
+        }
+
+        return 'Intraface_modules_shop_Controller_BasketEvaluation_Show';
     }
 
     function renderHtml()
@@ -22,7 +26,6 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Index extends k_Compone
         $shop = $this->getShop();
 
         $this->document->setTitle('Basket evaluation for' . ' ' . $shop->name);
-
         $this->document->options = array($this->url('../') => 'Close');
 
         $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->mdb2, $this->getKernel()->intranet, $shop);
@@ -34,13 +37,9 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Index extends k_Compone
         return $tpl->render($this, $data);
     }
 
-    function map($name)
+    function getShop()
     {
-        if ($name == 'edit') {
-            return 'Intraface_modules_shop_Controller_BasketEvaluation_Edit';
-        }
-
-        return 'Intraface_modules_shop_Controller_BasketEvaluation_Show';
+        return $this->context->getShop();
     }
 
     function getKernel()

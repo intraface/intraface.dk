@@ -1,20 +1,11 @@
 <?php
 class Intraface_modules_shop_Controller_BasketEvaluation_Show extends k_Component
 {
-    function getShop()
-    {
-        return $this->context->getShop();
-    }
+    protected $mdb2;
 
-    function renderHtml()
+    function __construct(MDB2_Driver_Common $mdb2)
     {
-        /*
-        $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->registry->renderHtml('db'), $this->getKernel()->intranet, $this->getShop(), $this->name());
-        if ($basketevaluation->getId() == 0) {
-            throw new Exception('Invalid basket evaluation '.$this->name());
-        }
-        */
-        return 'No content on this page!';
+        $this->mdb2 = $mdb2;
     }
 
     function map($name)
@@ -26,9 +17,36 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Show extends k_Componen
         }
     }
 
+    function dispatch()
+    {
+        $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->mdb2, $this->context->getKernel()->intranet, $this->getShop(), (int)$this->name());
+        if ($basketevaluation->getId() == 0) {
+            throw new k_PageNotFound();
+        }
+
+        return parent::dispatch();
+    }
+
+    function renderHtml()
+    {
+        return 'No content on this page!';
+    }
+
+    function renderHtmlDelete()
+    {
+        $basketevaluation = new Intraface_modules_shop_BasketEvaluation($this->mdb2, $this->context->getKernel()->intranet, $this->getShop(), (int)$this->name());
+        $basketevaluation->delete();
+
+        return new k_SeeOther($this->url('../'));
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
     }
 
+    function getShop()
+    {
+        return $this->context->getShop();
+    }
 }
