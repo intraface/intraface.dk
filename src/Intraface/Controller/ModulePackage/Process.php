@@ -13,7 +13,7 @@ class Intraface_Controller_ModulePackage_Process extends k_Component
     {
         // When we recieve from Quickpay payment not being logged in
         $action = Intraface_modules_modulepackage_ActionStore::restoreFromIdentifier($this->mdb2, $_GET['action_store_identifier']);
-        if(!$action) {
+        if (!$action) {
             throw new Exception('Unable to restore action from identifier '. $_GET['action_store_identifier']);
         }
 

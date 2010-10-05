@@ -137,7 +137,7 @@ class FileHandler extends Intraface_Standard
     public function __destruct()
     {
         unset($this->kernel);
-        if(isset($this->instance)) $this->instance->__destruct();
+        if (isset($this->instance)) $this->instance->__destruct();
         unset($this->instance);
         unset($this->image);
     }

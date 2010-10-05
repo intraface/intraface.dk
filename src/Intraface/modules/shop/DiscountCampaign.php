@@ -55,7 +55,7 @@ class Intraface_modules_shop_DiscountCampaign extends Doctrine_Record
      */
     public function getVoucher($id = null)
     {
-        if($id != null) {
+        if ($id != null) {
             return $this->vouchers[$id];
         }
         return $this->vouchers->get(null); // returns empty object

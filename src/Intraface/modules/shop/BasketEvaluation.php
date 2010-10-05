@@ -288,7 +288,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                     settype($customer['country'], 'string');
                     
                     $countries = new Ilib_Countries('iso-8859-1');
-                    if(false !== ($country = $countries->getCountryByName(trim($customer['country'])))) {
+                    if (false !== ($country = $countries->getCountryByName(trim($customer['country'])))) {
                         $evaluate = $country['region'];
                     }
                     else {

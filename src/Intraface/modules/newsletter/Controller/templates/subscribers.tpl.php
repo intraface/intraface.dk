@@ -16,8 +16,8 @@
 		</label>
         <label for="optin"><?php e(t('Filter')); ?>:
             <select name="optin" id="optin">
-                <option value="1" <?php if($context->getSubscriber()->getDBQuery()->getFilter('optin') == 1) echo 'selected="selected"'; ?> ><?php e(t('Opted in')); ?></option>
-                <option value="0" <?php if($context->getSubscriber()->getDBQuery()->getFilter('optin') == 0) echo 'selected="selected"'; ?> ><?php e(t('Not opted in')); ?></option>
+                <option value="1" <?php if ($context->getSubscriber()->getDBQuery()->getFilter('optin') == 1) echo 'selected="selected"'; ?> ><?php e(t('Opted in')); ?></option>
+                <option value="0" <?php if ($context->getSubscriber()->getDBQuery()->getFilter('optin') == 0) echo 'selected="selected"'; ?> ><?php e(t('Not opted in')); ?></option>
             </select>
         </label>
         <span>

@@ -25,7 +25,7 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
 
     function createProductObject($id = 0)
     {
-        if($id != 0) {
+        if ($id != 0) {
             $connection = Doctrine_Manager::connection();
             $connection->clear(); // clear repo, so that we are sure data are loaded again.
             $gateway = new Intraface_modules_product_ProductDoctrineGateway($connection, NULL);
@@ -352,7 +352,7 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         try {
             $product->save();
         } catch (Exception $e) {
-            foreach($product->getErrorStack() AS $field => $error) {
+            foreach ($product->getErrorStack() AS $field => $error) {
                 echo $field; var_dump($error);
             }
         }

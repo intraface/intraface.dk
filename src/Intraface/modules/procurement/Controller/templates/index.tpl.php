@@ -29,7 +29,7 @@
                 '3' => 'Canceled'
             );
             ?>
-            <?php foreach($status_list as $status => $text): ?>
+            <?php foreach ($status_list as $status => $text): ?>
                 <option value="<?php e($status); ?>" <?php if ($gateway->getDBQuery()->getFilter("status") == $status) echo ' selected="selected"';?>><?php e(t($text))?></option>
             <?php endforeach; ?>
          </select>

@@ -272,7 +272,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
     function getError()
     {
-        if(!is_object($this->error)) {
+        if (!is_object($this->error)) {
             $this->error = new Intraface_Doctrine_ErrorRender($this->getTranslation());
         }
 

@@ -18,7 +18,7 @@ class Intraface_modules_product_Controller_AttributeGroups_Show extends k_Compon
 
     function getError()
     {
-        if(!is_object($this->error)) {
+        if (!is_object($this->error)) {
             $this->error = new Intraface_Doctrine_ErrorRender($this->getKernel()->getTranslation('product'));
         }
 
@@ -115,7 +115,7 @@ class Intraface_modules_product_Controller_AttributeGroups_Show extends k_Compon
         $data = array(
             'group' => $this->getGroup(),
         );
-        if(is_object($this->attribute)) {
+        if (is_object($this->attribute)) {
             $data['attribute'] = $this->getAttribute();
         }
 

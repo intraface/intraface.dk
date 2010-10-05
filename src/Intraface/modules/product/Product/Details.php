@@ -96,7 +96,7 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         }
 
         # We make sure translations is valid
-        foreach($this->Translation AS $translation) {
+        foreach ($this->Translation AS $translation) {
             if (!$translation->isValid()) {
                 throw new Doctrine_Validator_Exception(array());
             }
@@ -106,7 +106,7 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         # update translation, but instead want to update this record, so the changes are
         # saved.
         if ($this->state() == Doctrine_Record::STATE_CLEAN || $this->state() == Doctrine_Record::STATE_DIRTY) {
-            foreach($this->Translation AS $translation) {
+            foreach ($this->Translation AS $translation) {
                 if ($translation->state() == Doctrine_Record::STATE_DIRTY) {
                     $translation->state(Doctrine_Record::STATE_CLEAN);
                     $this->state(Doctrine_Record::STATE_DIRTY);
@@ -132,7 +132,7 @@ class Intraface_modules_product_Product_Details extends Doctrine_Record
         $values = $this->toArray();
         unset($values['id']);
         unset($values['changed_date']);
-        foreach($values['Translation'] AS $key => $tmp) {
+        foreach ($values['Translation'] AS $key => $tmp) {
             unset($values['Translation'][$key]['id']);
         }
 

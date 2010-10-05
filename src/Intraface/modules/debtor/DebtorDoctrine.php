@@ -206,8 +206,8 @@ class Intraface_modules_debtor_DebtorDoctrine extends Doctrine_Record
     public function getItemsWithVat()
     {
         $items = $this->getItems();
-        foreach($items AS $item) {
-            if($item->getProduct()->getDetails()->getVatPercent()->getAsIso() == 0) {
+        foreach ($items AS $item) {
+            if ($item->getProduct()->getDetails()->getVatPercent()->getAsIso() == 0) {
                 $items->remove($item->getId());
             }
         }
@@ -239,7 +239,7 @@ class Intraface_modules_debtor_DebtorDoctrine extends Doctrine_Record
     public function getTotal()
     {
         $total = 0;
-        foreach($this->getItems() AS $item) {
+        foreach ($this->getItems() AS $item) {
             $total += $item->getAmount()->getAsIso();
         }
         

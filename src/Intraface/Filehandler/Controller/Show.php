@@ -61,7 +61,7 @@ class Intraface_Filehandler_Controller_Show extends k_Component
         $uploader->setSetting('max_file_size', '1000000');
         if ($uploader->isUploadFile('replace_file')) { //
             $upload_result = $uploader->upload('replace_file');
-        } elseif('' != ($message = $uploader->getUploadFileErrorMessage('replace_file'))) {
+        } elseif ('' != ($message = $uploader->getUploadFileErrorMessage('replace_file'))) {
             $upload_result = false;
             $filemanager->error->set($message);
         } else {

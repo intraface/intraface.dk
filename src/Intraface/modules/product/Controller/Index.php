@@ -108,7 +108,7 @@ class Intraface_modules_product_Controller_Index extends k_Component
 
     function getError()
     {
-        if(!is_object($this->error)) {
+        if (!is_object($this->error)) {
             $this->error = new Intraface_Doctrine_ErrorRender($this->getTranslation());
         }
 
@@ -175,15 +175,15 @@ class Intraface_modules_product_Controller_Index extends k_Component
         $product->getDetails()->Translation['da']->name = $_POST['name'];
         $product->getDetails()->Translation['da']->description = $_POST['description'];
         $product->getDetails()->price = new Ilib_Variable_Float($_POST['price'], 'da_dk');
-        if(isset($_POST['before_price'])) $product->getDetails()->before_price = new Ilib_Variable_Float($_POST['before_price'], 'da_dk');
-        if(isset($_POST['weight'])) $product->getDetails()->weight = new Ilib_Variable_Float($_POST['weight'], 'da_dk');
-        if(isset($_POST['unit'])) $product->getDetails()->unit = $_POST['unit'];
-        if(isset($_POST['vat'])) $product->getDetails()->vat = $_POST['vat'];
-        if(isset($_POST['do_show'])) $product->do_show = $_POST['do_show'];
-        if(isset($_POST['state_account_id'])) $product->getDetails()->state_account_id = (int)$_POST['state_account_id'];
+        if (isset($_POST['before_price'])) $product->getDetails()->before_price = new Ilib_Variable_Float($_POST['before_price'], 'da_dk');
+        if (isset($_POST['weight'])) $product->getDetails()->weight = new Ilib_Variable_Float($_POST['weight'], 'da_dk');
+        if (isset($_POST['unit'])) $product->getDetails()->unit = $_POST['unit'];
+        if (isset($_POST['vat'])) $product->getDetails()->vat = $_POST['vat'];
+        if (isset($_POST['do_show'])) $product->do_show = $_POST['do_show'];
+        if (isset($_POST['state_account_id'])) $product->getDetails()->state_account_id = (int)$_POST['state_account_id'];
 
-        if(isset($_POST['has_variation'])) $product->has_variation = $_POST['has_variation'];
-        if(isset($_POST['stock'])) $product->stock = $_POST['stock'];
+        if (isset($_POST['has_variation'])) $product->has_variation = $_POST['has_variation'];
+        if (isset($_POST['stock'])) $product->stock = $_POST['stock'];
 
         try {
             $product->save();

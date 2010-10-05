@@ -331,8 +331,8 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
                     $attribute_string .= $attribute['id'];
 
                     // We calculate all products which is on stock with this attribute to be able to mark unused attributes in list.
-                    if(!isset($attribute_for_sale[$attribute['id']])) $attribute_for_sale[$attribute['id']] = 0;
-                    if($stock !== false) {
+                    if (!isset($attribute_for_sale[$attribute['id']])) $attribute_for_sale[$attribute['id']] = 0;
+                    if ($stock !== false) {
                         // If for_sale is less than zero we add zero.
                         $attribute_for_sale[$attribute['id']] += (($stock['for_sale'] < 0) ? 0 : $stock['for_sale']);
                     } else {
@@ -378,7 +378,7 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
                 foreach ($attributes AS $attribute) {
 
                     // No products has attribute on stock we remove it from the list.
-                    if(isset($attribute_for_sale[$attribute->getId()]) && $attribute_for_sale[$attribute->getId()] == 0) {
+                    if (isset($attribute_for_sale[$attribute->getId()]) && $attribute_for_sale[$attribute->getId()] == 0) {
                         $is_used = 0;
                     } else {
                         $is_used = 1;

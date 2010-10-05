@@ -92,7 +92,7 @@
                     <?php endif; ?>
                     <a href="<?php e(url($p['id'])); ?>"><?php e($p['name']); ?></a>
                 </td>
-                <td><?php if($p['unit']['combined'] != '') e(t($p['unit']['combined'])); ?></td>
+                <td><?php if ($p['unit']['combined'] != '') e(t($p['unit']['combined'])); ?></td>
                 <?php if ($context->getKernel()->user->hasModuleAccess("webshop")): ?>
                     <td><?php if ($p['do_show'] == 1) e(t('yes')); else e(t('no')); ?></td>
                 <?php endif; ?>

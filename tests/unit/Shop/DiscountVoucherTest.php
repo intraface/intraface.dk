@@ -28,7 +28,7 @@ class DicountVoucherTest extends PHPUnit_Framework_TestCase
     
     function getDicountCampaign($id = 0)
     {
-        if($id != 0) {
+        if ($id != 0) {
             $gateway = new Intraface_modules_shop_DiscountCampaignGateway(Doctrine_Manager::connection(), NULL);
             return $gateway->findById($id);
         }

@@ -52,7 +52,7 @@
         if (count($keywords) > 0) {
             echo '<div>'. e(t('keywords', 'keyword')) . ': <ul style="display: inline;">';
             foreach ($keywords as $value) {
-                 if(in_array($value['id'], $selected_keywords) === true) {
+                 if (in_array($value['id'], $selected_keywords) === true) {
                      $checked = 'checked="checked"';
                  } else {
                      $checked = "";
@@ -90,7 +90,7 @@
             <tr>
                 <td style="height: 67px;"><a href="<?php e($file['file_uri']); ?>"><img src="<?php e($file["icon_uri"]); ?>" style="height: <?php e($file["icon_height"]); ?>px; width: <?php e($file["icon_width"]); ?>px;" /></a></td>
                 <td><a href="<?php e(url($file["id"])); ?>"><?php e($file["file_name"]); ?></a>
-                    <br /><i><?php e(substr(strip_tags($file["description"]), 0, 100)); if(strlen(strip_tags($file["description"])) > 100) print('...'); ?></i>
+                    <br /><i><?php e(substr(strip_tags($file["description"]), 0, 100)); if (strlen(strip_tags($file["description"])) > 100) print('...'); ?></i>
                 </td>
                 <td style="white-space: nowrap;"><?php e($file["file_type"]['description']); ?></td>
                 <td style="white-space: nowrap;"><?php e(t($file["accessibility"])); ?></td>

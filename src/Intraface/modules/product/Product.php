@@ -687,7 +687,7 @@ class Product extends Intraface_Standard
         // r�kkef�lgen er vigtig - f�rst hente fra product og bagefter tilf�je nye v�rdier til arrayet
         while ($db->nextRecord()) {
             $product                      = new Product($this->kernel, $db->f('related_product_id'));
-            if($product->get('id') == 0 || $product->get('active') == 0 || ($show == 'webshop' && $product->get('do_show') == 0)) {
+            if ($product->get('id') == 0 || $product->get('active') == 0 || ($show == 'webshop' && $product->get('do_show') == 0)) {
                 CONTINUE;
             }
             $products[$key]               = $product->get();

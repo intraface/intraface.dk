@@ -91,9 +91,9 @@
 			<th><?php e(t('Amount')); ?></th>
 			<td>
                 <?php
-                if(false !== ($currency = $onlinepayment->getCurrency())) {
+                if (false !== ($currency = $onlinepayment->getCurrency())) {
                     e($currency->getType()->getIsoCode().' ');
-                } elseif($kernel->intranet->hasModuleAccess('currency')) {
+                } elseif ($kernel->intranet->hasModuleAccess('currency')) {
                     e('DKK ');
                 }
                 e($onlinepayment->get("dk_amount"));
@@ -107,9 +107,9 @@
 				<th><?php e(t('Original amount')); ?></th>
 				<td>
                     <?php
-                    if(false !== ($currency = $onlinepayment->getCurrency())) {
+                    if (false !== ($currency = $onlinepayment->getCurrency())) {
                         e($currency->getType()->getIsoCode().' ');
-                    } elseif($kernel->intranet->hasModuleAccess('currency')) {
+                    } elseif ($kernel->intranet->hasModuleAccess('currency')) {
                         e('DKK ');
                     }
                     e($onlinepayment->get("dk_original_amount"));

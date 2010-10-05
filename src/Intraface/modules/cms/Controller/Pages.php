@@ -108,7 +108,7 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
 
     private function getCMSPage()
     {
-        if(empty($this->cmspage)) {
+        if (empty($this->cmspage)) {
             $cmssite = $this->context->getSite();
             $this->cmspage = new CMS_Page($cmssite);
         }
@@ -120,7 +120,7 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
     {
         $module_cms = $this->getKernel()->module('cms');
 
-        if($this->body()) {
+        if ($this->body()) {
             $value = $this->body();
         }
 

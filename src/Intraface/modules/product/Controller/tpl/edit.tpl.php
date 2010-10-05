@@ -16,7 +16,7 @@
         </div>
         <div class="formrow">
             <label for="name"><?php e(t('Name')); ?></label>
-            <input type="text" size="50" name="name" id="name" value="<?php if(isset($product)) e($product->getDetails()->getTranslation('da')->name); ?>" />
+            <input type="text" size="50" name="name" id="name" value="<?php if (isset($product)) e($product->getDetails()->getTranslation('da')->name); ?>" />
         </div>
         <div class="formrow">
             <label for="description"><?php e(t('Description')); ?></label>
@@ -27,7 +27,7 @@
             <label for="unit"><?php e(t('Unit type')); ?></label>
             <select name="unit" id="unit">
                 <?php foreach (Intraface_modules_product_Product_Details::getUnits() AS $key=>$unit): ?>
-                    <option value="<?php e($key); ?>" <?php if (isset($product) && ($units = $product->getDetails()->getUnit()) && $units['singular'] == $unit['singular']) e(' selected="selected"'); ?> ><?php if(!empty($unit['combined'])) e(t($unit['combined'])); ?></option>
+                    <option value="<?php e($key); ?>" <?php if (isset($product) && ($units = $product->getDetails()->getUnit()) && $units['singular'] == $unit['singular']) e(' selected="selected"'); ?> ><?php if (!empty($unit['combined'])) e(t($unit['combined'])); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -77,7 +77,7 @@
             <?php else: ?>
                 <div class="formrow">
                     <label for="has_variation"><?php e(t('Product has variations')); ?></label>
-                    <input type="hidden" name="has_variation" value="<?php if(isset($product)) e($product->hasVariation()); ?>" />
+                    <input type="hidden" name="has_variation" value="<?php if (isset($product)) e($product->hasVariation()); ?>" />
                     <span id="has_variation">
                         <?php
                         if ($product->hasVariation() == 1) {

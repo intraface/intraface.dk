@@ -71,6 +71,6 @@
 <input type="submit" class="save" name="submit" value="<?php e(t('Save'))?>" />
 <a href="<?php e(url(null)); ?>"><?php e(t('Cancel'))?></a>
 
-<input type="hidden" name="id" value="<?php if(isset($values['id'])) e($values['id']); ?>" />
+<input type="hidden" name="id" value="<?php if (isset($values['id'])) e($values['id']); ?>" />
 
 </form>

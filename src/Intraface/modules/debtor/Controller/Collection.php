@@ -246,7 +246,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
             $sent_total = 0;
             $total = 0;
 
-            foreach($posts AS $debtor) {
+            foreach ($posts AS $debtor) {
 
                     if (strtotime($debtor->getDueDate()->getAsIso()) < time() && ($debtor->getStatus() == "created" OR $debtor->getStatus() == "sent")) {
                         $due_total += $debtor->getTotal()->getAsIso(2);

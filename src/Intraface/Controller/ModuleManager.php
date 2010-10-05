@@ -134,7 +134,7 @@ class Intraface_Controller_ModuleManager extends k_Component
 
                 // if this code is reached, the config vars are submitted
                 $set = PEAR_Command::factory('config-set', $config);
-                foreach($GLOBALS['_PEAR_Frontend_Web_Config'] as $var => $value) {
+                foreach ($GLOBALS['_PEAR_Frontend_Web_Config'] as $var => $value) {
                     if ($var == 'Filename') {
                         continue; // I hate obscure bugs
                     }

@@ -89,7 +89,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         $value = $cmspage->get();
         $type = $value['type'];
 
-        if($this->body()) {
+        if ($this->body()) {
             $value = $this->body();
         }
         $template = $cmspage->template;

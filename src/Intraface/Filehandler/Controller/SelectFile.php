@@ -231,7 +231,7 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
             $selected = $this->POST['selected'];
 
             $number_of_files = 0;
-            foreach($selected as $id) {
+            foreach ($selected as $id) {
                 $tmp_f = $gateway->getFromId((int)$id);
                 if ($tmp_f->get('id') != 0) {
                     $receive_redirect->setParameter("file_handler_id", $tmp_f->get('id'));

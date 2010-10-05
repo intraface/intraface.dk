@@ -38,7 +38,7 @@ $result = $db->query('SELECT contact.id, contact.number, contact.date_created, a
     ');
 $i = 0;
 
-if(PEAR::isError($result)) {
+if (PEAR::isError($result)) {
     die($result->toString());
 }
 
@@ -46,7 +46,7 @@ while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
     echo $row['number']. ', ' . $row['id']. ', ' . $row['date_created'] . ', '.$row['email']. ', '. $row['name']. ', ';
     
     $newsletter = $db->query('SELECT id FROM newsletter_subscriber WHERE contact_id = '. $row['id']);
-    if($newsletter->numRows() == 0) {
+    if ($newsletter->numRows() == 0) {
         $subscriber = new NewsletterSubscriber($list);
         $contact = new Contact($kernel, $row['id']);
         

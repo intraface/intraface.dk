@@ -18,7 +18,7 @@ class Intraface_modules_procurement_ProcurementGateway
 
     function getDBQuery()
     {
-        if(!is_object($this->dbquery)) {
+        if (!is_object($this->dbquery)) {
             $this->dbquery = new Intraface_DBQuery($this->kernel, "procurement", "active = 1 AND intranet_id = ".$this->kernel->intranet->get("id"));
             $this->dbquery->useErrorObject($this->error);
         }

@@ -31,9 +31,9 @@ if (!empty($instances) AND count($instances) > 0): ?>
                     <td><?php e($instance['max_height']); ?></td>
                     <td>
                         <a class="edit" href="<?php e(url(intval($instance['type_key']), array('edit'))); ?>"><?php e(t('edit')); ?></a>
-                      <?php if($instance['origin'] == 'overwritten') { ?>
+                      <?php if ($instance['origin'] == 'overwritten') { ?>
                           <a class="delete" href="<?php e(url(intval($instance['type_key']), array('delete'))); ?>"><?php e(t('reset to standard')); ?></a>
-                      <?php } elseif($instance['origin'] == 'custom') { ?>
+                      <?php } elseif ($instance['origin'] == 'custom') { ?>
                           <a class="delete" href="<?php e(url(intval($instance['type_key']), array('delete'))); ?>"><?php e(t('delete')); ?></a>
                       <?php }?>
                     </td>

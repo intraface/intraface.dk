@@ -29,7 +29,7 @@
             <?php foreach ($groups as $group): ?>
                 <tr>
                     <!--<td> <input type="checkbox" value="<?php e($group->getId()); ?>" id="product-attribute-<?php e($group->getId()); ?>" name="selected[]" /></td> -->
-                    <td><a href="<?php e(url($group->getId())); ?>"><?php e($group->getName()); if($group->getDescription() != '') e(' ('.$group->getDescription().')'); ?></a></td>
+                    <td><a href="<?php e(url($group->getId())); ?>"><?php e($group->getName()); if ($group->getDescription() != '') e(' ('.$group->getDescription().')'); ?></a></td>
                     <td class="options"><a class="edit" href="<?php e(url($group->getId(), array('edit'))); ?>"><?php e(t('Edit')); ?></a></td>
                 </tr>
              <?php endforeach; ?>

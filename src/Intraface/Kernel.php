@@ -183,7 +183,7 @@ class Intraface_Kernel implements Intraface_Identity
     function getSetting()
     {
         // Very important to store setting, as getSetting is called many times in some scripts
-        if(empty($this->setting)) {
+        if (empty($this->setting)) {
             if (is_object($this->user)) {
                 $user_id = $this->user->getId();
             } else {

@@ -258,7 +258,7 @@ $pfm->generateContents();
 
 if (isset($_GET['make']) || (isset($_SERVER['argv']) && @$_SERVER['argv'][1] == 'make')) {
     $res = $pfm->writePackageFile();
-    if(PEAR::isError($res)) {
+    if (PEAR::isError($res)) {
         echo $res->toString()."\n";
     }
 
@@ -268,7 +268,7 @@ if (isset($_GET['make']) || (isset($_SERVER['argv']) && @$_SERVER['argv'][1] == 
 } else {
     $res = $pfm->debugPackageFile();
 
-    if(PEAR::isError($res)) {
+    if (PEAR::isError($res)) {
         echo $res->toString()."\n";
     }
 

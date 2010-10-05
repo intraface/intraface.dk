@@ -135,7 +135,7 @@ class Intraface_modules_modulepackage_Action
      */
     public function getOrderIdentifier()
     {
-        if(isset($this->order_identifier)) {
+        if (isset($this->order_identifier)) {
             return $this->order_identifier;
         }
         return '';

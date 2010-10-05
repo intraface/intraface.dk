@@ -12,7 +12,7 @@ class Intraface_modules_product_Controller_AttributeGroups_Attribute extends k_C
 
     function getError()
     {
-        if(!is_object($this->error)) {
+        if (!is_object($this->error)) {
             $this->error = new Intraface_Doctrine_ErrorRender($this->getKernel()->getTranslation('product'));
         }
 
@@ -31,7 +31,7 @@ class Intraface_modules_product_Controller_AttributeGroups_Attribute extends k_C
 
     private function getAttribute()
     {
-        if(!is_object($this->attribute)) {
+        if (!is_object($this->attribute)) {
             $this->attribute = $this->getGroup()->getAttribute($this->name());
         }
 
@@ -40,7 +40,7 @@ class Intraface_modules_product_Controller_AttributeGroups_Attribute extends k_C
 
     function postForm()
     {
-        if($this->subview() == 'edit') {
+        if ($this->subview() == 'edit') {
             $attribute = $this->getAttribute();
 
             $attribute->name = $_POST['name'];

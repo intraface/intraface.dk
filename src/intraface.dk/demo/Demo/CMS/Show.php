@@ -24,7 +24,7 @@ class Demo_CMS_Show extends k_Controller
 
     public function forward($name)
     {
-        if($name == 'enquiry') {
+        if ($name == 'enquiry') {
             $next = new IntrafacePublic_CMS_Controller_Enquiry($this, $name, 'secher@dsa-net.dk', 'sune.t.jensen@gmail.com');
         } else {
             $next = new IntrafacePublic_CMS_Controller_Index($this, $name);
