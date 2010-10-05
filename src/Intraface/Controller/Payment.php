@@ -10,7 +10,7 @@ class Intraface_Controller_Payment
 
     function renderHtml()
     {
-        if (!empty($_GET['language']) && $_GET['language'] == 'da') {
+        if ($this->query('language') == 'da') {
             $text[0] = 'Intraface Betaling';
             $text[1] = 'Du er nu ved at betale for ordre nummer';
             $text[2] = 'I alt hæves %s på fra dit kort';

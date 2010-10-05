@@ -9,8 +9,13 @@
  */
 class Intraface_Controller_TestLogin extends k_Component
 {
-    protected $template;
+    protected $mdb2;
     protected $kernel;
+
+    function __construct(MDB2_Driver_Common $mdb2)
+    {
+        $this->mdb2 = $mdb2;
+    }
 
     function execute()
     {
@@ -51,7 +56,7 @@ class Intraface_Controller_TestLogin extends k_Component
 
     protected function selectUser($username, $password)
     {
-        $adapter = new Intraface_Auth_User(MDB2::singleton(DB_DSN), $this->session()->sessionId(), $username, $password);
+        $adapter = new Intraface_Auth_User($this->mdb2, $this->session()->sessionId(), $username, $password);
 
         $auth = new Intraface_Auth($this->session()->sessionId());
         $auth->attachObserver(new Intraface_Log);

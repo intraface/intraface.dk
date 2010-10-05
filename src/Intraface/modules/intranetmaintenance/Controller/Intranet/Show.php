@@ -1,19 +1,21 @@
 <?php
 class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_Component
 {
-    protected $template;
-    protected $intranetmaintenance;
     public $method = 'put';
     public $error;
+    protected $mdb2;
+    protected $template;
+    protected $intranetmaintenance;
     protected $allowed_delete = array(
         1 => 'Bambus - VIP-betatest',
         21 => 'Bambus - Lars og Sune',
         22 => 'Bambus - betatest for alle brugere'
         );
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, MDB2_Driver_Common $mdb2)
     {
         $this->template = $template;
+        $this->mdb2 = $mdb2;
     }
 
     protected function map($name)
@@ -88,7 +90,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
         $user = new UserMaintenance();
         $user->setIntranetId($intranet->get('id'));
 
-        $gateway = new Intraface_ModuleGateway(MDB2::singleton(DB_DSN));
+        $gateway = new Intraface_ModuleGateway($this->mdb2);
         $modules = $gateway->getList();
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/intranet/show');

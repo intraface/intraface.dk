@@ -11,13 +11,15 @@
  */
 class Intraface_Controller_Signup extends k_Component
 {
-    protected $kernel;
     public $msg = '';
-    protected $template;
     public $errors = array();
+    protected $kernel;
+    protected $template;
+    protected $mdb2;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, MDB2_Driver_Common $mdb2)
     {
+        $this->mdb2 = $mdb2;
         $this->template = $template;
     }
 
@@ -58,7 +60,7 @@ class Intraface_Controller_Signup extends k_Component
             $this->msg = 'Vi kunne ikke oprette dig';
             return $this->render();
         } else {
-            $db = MDB2::singleton(DB_DSN);
+            $db = $this->mdb2;
             $res = $db->query("SELECT id FROM user WHERE email = ".$db->quote($this->body('email'), 'text'));
             if (PEAR::isError($res)) {
                 throw new Exception($res->getMessage());
